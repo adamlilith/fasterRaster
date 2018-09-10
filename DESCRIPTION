@@ -1,0 +1,24 @@
+Package: fasterRaster
+Type: Package
+Title: Faster raster processing using GRASS GIS
+Version: 0.1.0
+Author: Adam B. Smith <adam@earthSkySea.org>
+Maintainer: Adam B. Smith <adam@earthSkySea.org>
+Description: This package is meant as an add-on to the raster
+    package package. It uses GRASS GIS Version 7 to do some of the
+    more laborious raster operations faster than what can be done
+    using the raster package. For smaller rasters functions in the
+    raster package may actually be faster. Note that to use this
+	package you must have GRASS 7 installed on your system.
+Imports:
+	link2GI,
+	raster,
+	rgrass7
+Depends: 
+	sp
+License: GPL (>=3)
+Encoding: UTF-8
+URL: http://www.earthSkySea.org
+LazyData: true
+LazyLoad: yes
+RoxygenNote: 6.1.0

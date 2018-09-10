@@ -1,0 +1,22 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1536549553462.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "3532238996",
+    "id" : "FEC7F35D",
+    "lastKnownWriteTime" : 1536550729,
+    "last_content_update" : 1536550729170,
+    "path" : "C:/Ecology/Drive/R/fasterRaster/R/fasterRasterize.r",
+    "project_path" : "R/fasterRasterize.r",
+    "properties" : {
+        "cursorPosition" : "18,43",
+        "scrollLine" : "2"
+    },
+    "relative_order" : 3,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

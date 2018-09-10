@@ -1,0 +1,5 @@
+importFrom(raster, raster, shapefile)
+importFrom(link2GI, linkGRASS7)
+importFrom(rgrass7, execGRASS, readRAST, readVECT, writeRAST, writeVECT)
+
+export(fasterRasterize)
