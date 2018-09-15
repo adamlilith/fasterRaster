@@ -1,25 +1,19 @@
-#' Rasterize using a call to GRASS GIS.
+#' Convert a raster to a vector (points, lines, or polygons)
 #'
-#' This function is a potentially faster version of the \code{\link[raster]{rasterize}} function in the \pkg{raster} package which converts a spatial points, lines, or polygon into a raster based on a "template" raster. All cells covered by the spatial object can either have values taken from the spatial object or a user-defined.
-#' @param vect SpatialPoints, SpatialPointsDataFrame, SpatialLines, SpatialLinesDataFrame, SpatialPolygons, or SpatialPolygonsDataFrame or the full path and name of such an object.
-#' @param rast Either a raster or the full path and name of a raster object. This serves as a template for the new raster.
-#' @param use Character, indicates the types of values to be "burned" to the raster. Options include
-#' \itemize{
-#' \item \code{value} (default): a user-define value given by \code{value}
-#' \item \code{field}: values directly from a field in \code{vect} named by \code{field}
-#' \item \code{category}: values according to which polygon is covered by a cell named in \code{field}
-#' \item \code{z}: z-coordinate (points or contours only)
-#' \item \code{direction}: flow direction (lines only)
-#' }
-#' @param field Name of column in \code{vect} with values or category labbels to which to burn to the raster.
-#' @param value Numeric, value to burn to each cell overlapped by the spatial object in \code{vect}.
+#' This function is a potentially faster version of the function \code{\link[raster]{rasterToPolygons}} in the \pkg{raster} package. It can convert a raster to points or polygons (conversion to lines is not yet supported, although it is possible using the \code{r.to.vect} function in GRASS).
+#' @param rast Either a raster or the full path and name of a raster object. The raster values must be 1 or 0 (or \code{NA}). The fragmentation index applies to the state of the entity represented by the 1's.
+#' @param vectType Character, Indicates type of output: \code{point}, \code{line} (not supported yet), or \code{area}.
+#' @param agg Logical, if \code{TRUE} (default) then union all points/lines/polygons with the same value into the same "multipart" polygon. This may or may not be desirable. For example, if the raster is vectorized into a polygons object each cell will become a separate polygon. Using this option will merge cells with the same value (even if they are not spatially adjacent one another).
+#' @param smooth Logical, if \code{TRUE} then "round" cell corners by connecting the midpoints of corner cells (which leaves out the corner-most triangle of that cell). This option only applies if \code{vectType} is \code{area}. Default is \code{FALSE}.
+#' @param calcDensity Logical, if \code{TRUE} then calculate density in the moving window. This will create a raster named \code{density} in the GRASS environment if \code{backToR} is \code{FALSE} or return a raster named \code{density} if \code{backToR} is \code{TRUE}. Default is \code{FALSE}.
+#' @param calcConnect Logical, if \code{TRUE} then calculate a connectivity raster (conditional probability a cell with a value of 1 has a value that is also 1) in the moving window. This will create a raster named \code{connect} in the GRASS environment if \code{backToR} is \code{FALSE} or return a raster named \code{connect} if \code{backToR} is \code{TRUE}. Default is \code{FALSE}.
 #' @param grassLoc Either \code{NULL} or a 3-element character vector. If the latter, the first element is the base path to the installation of GRASS, the second the version number, and the third the install type for GRASS.  For example, \code{c('C:/OSGeo4W64/', 'grass-7.4.1', 'osgeo4W')}. See \code{\link[link2GI]{linkGRASS7}} for further help. If \code{NULL} (default) the an installation of GRASS is searched for; this may take several minutes.
 #' @param initGrass Logical, if \code{TRUE} (default) then a new GRASS session is initialized. If \code{FALSE} then it is assumed a GRASS session has been initialized using the raster in \code{rast}. The latter is useful if you are chaining \pkg{fasterRaster} functions together and the first function initializes the session.
-#' @param backToR Logical, if \code{TRUE} (default) then the product of the calculations will be returned to R. If \code{FALSE}, then the product is left in the GRASS session and named \code{vectAsRast}. The latter case is useful (and faster) when chaining several \pkg{fasterRaster} functions together.
-#' @param ... Arguments to pass to \code{\link[rgrass7]{execGRASS}} when used for rasterizing (i.e., function \code{v.to.rast} in GRASS).
-#' @return If \code{backToR} if \code{TRUE}, then a raster with the same extent, resolution, and coordinate reference system as \code{rast}. Otherwise, a raster with the name of \code{vectAsRast} is written into the GRASS session.
-#' @details See (v.to.rast)[https://grass.osgeo.org/grass74/manuals/v.to.rast.html] for more details.  Note that if you get an error saying "", then you should add the EPSG code to the beginning of the raster and vector coordinate reference system string (their "proj4string"). For example, \code{proj4string(x) <- CRS('+init=epsg:32738')}. EPSG codes for various projections, datums, and locales can be found at (Spatial Reference)[http://spatialreference.org/].
-#' @seealso \code{\link[raster]{rasterize}}
+#' @param backToR Logical, if \code{TRUE} (default) then the product of the calculations will be returned to R. If \code{FALSE}, then the product is left in the GRASS session and named \code{rastToVect}. The latter case is useful (and faster) when chaining several \pkg{fasterRaster} functions together.
+#' @param ... Arguments to pass to \code{\link[rgrass7]{execGRASS}} when used for converting a raster to a vector (i.e., function \code{r.to.vect} in GRASS).
+#' @return If \code{backToR} if \code{TRUE}, then a SpatialPointsDataFrame, SpatialLinesDataFrame, or a SpatialPolygonsDataFrame with the same coordinate reference system as \code{rast}. The field named \code{value} will have the raster values. Otherwise, vector object named \code{vectToRast} a  will be written into the GRASS session.
+#' @details See (r.to.vect)[https://grass.osgeo.org/grass74/manuals/r.to.vect.html] for more details.  Note that if you get an error saying "", then you should add the EPSG code to the beginning of the raster and vector coordinate reference system string (their "proj4string"). For example, \code{proj4string(x) <- CRS('+init=epsg:32738')}. EPSG codes for various projections, datums, and locales can be found at (Spatial Reference)[http://spatialreference.org/].
+#' @seealso \code{\link[raster]{rasterToPolygons}}, \code{\link[fasterRaster]{fasterRasterize}} 
 #' @examples
 #' \dontrun{
 #' library(rgeos)
@@ -136,64 +130,47 @@
 #' }
 #' @export
 
-fasterRasterize <- function(
-	vect,
+fasterVectorize <- function(
 	rast,
-	use = 'value',
-	value = 1,
-	field = NULL,
+	vectType,
+	agg = TRUE,
+	smooth = FALSE,
 	grassLoc = NULL,
 	initGrass = TRUE,
 	backToR = TRUE,
 	...
 ) {
 
+	if (!(vectType %in% c('point', 'line', 'area'))) stop('Argument "vectType" in function fasterVectorize() must be either "point", "line", or "area".')
+
 	flags <- c('quiet', 'overwrite')
+	if (smooth & vectType == 'area') flags <- c(flags, 's')
 	
 	# load spatial object and raster
-	if (class(vect) == 'character') vect <- raster::shapefile(vect)
 	if (class(rast) == 'character') rast <- raster::raster(rast)
 
 	# get CRS
 	p4s <- sp::proj4string(rast)
 	
-	# ensure spatial data frame to avert error
-	if (class(vect) == 'SpatialPoints') vect <- as(vect, 'SpatialPointsDataFrame')
-	if (class(vect) == 'SpatialLines') vect <- as(vect, 'SpatialLinesDataFrame')
-	if (class(vect) == 'SpatialPolygons') vect <- as(vect, 'SpatialPolygonsDataFrame')
-
-	# feature type
-	featType <- if (class(vect) == 'SpatialPointsDataFrame') {
-		'point'
-	} else if (class(vect) == 'SpatialLinesDataFrame') {
-		'line'
-	} else if (class(vect) == 'SpatialPolygonsDataFrame') {
-		'area'
-	}
-	
 	# initialize GRASS
 	if (initGrass) link2GI::linkGRASS7(rast, default_GRASS7=grassLoc, gisdbase=raster::tmpDir(), location='temp')
+	
+	exportRastToGrass(rast, vname='rast')
 
-	rgrass7::writeVECT(vect, vname='vect', v.in.ogr_flags=flags)
-
-	# rasterize
-	if (use == 'field') {
-		rgrass7::execGRASS('v.to.rast', input='vect', output='vectAsRast', use='attr', attribute_column=field, type=featType, flags=flags, ...)
-	} else if (use == 'category') {
-		rgrass7::execGRASS('v.to.rast', input='vect', output='vectAsRast', use='cat', label_column=field, type=featType, flags=flags, ...)
-	} else if (use == 'value') {
-		rgrass7::execGRASS('v.to.rast', input='vect', output='vectAsRast', use='val', value=value, type=featType, flags=flags, ...)
-	} else {
-		rgrass7::execGRASS('v.to.rast', input='vect', output='vectAsRast', use=use, flags=flags, type=featType, ...)
-	}
-
+	# vectorize
+	rgrass7::execGRASS('r.to.vect', input='rast', output='rastToVect', type=vectType, flags=flags, ...)
+	
 	# get raster back to R
 	if (backToR) {
 	
-		out <- rgrass7::readRAST('vectAsRast')
-		out <- raster::raster(out)
+		out <- rgrass7::readVECT('rastToVect')
+		
+		# join output with same values
+		if (agg) {
+			out <- raster::aggregate(out, by='value')
+		}
+		
 		sp::proj4string(out) <- p4s
-		names(out) <- 'vectAsRast'
 		out
 		
 	}

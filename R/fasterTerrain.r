@@ -1,25 +1,21 @@
-#' Rasterize using a call to GRASS GIS.
+#' Calculate raster slope, aspect, curvature, and partial slopes.
 #'
-#' This function is a potentially faster version of the \code{\link[raster]{rasterize}} function in the \pkg{raster} package which converts a spatial points, lines, or polygon into a raster based on a "template" raster. All cells covered by the spatial object can either have values taken from the spatial object or a user-defined.
-#' @param vect SpatialPoints, SpatialPointsDataFrame, SpatialLines, SpatialLinesDataFrame, SpatialPolygons, or SpatialPolygonsDataFrame or the full path and name of such an object.
-#' @param rast Either a raster or the full path and name of a raster object. This serves as a template for the new raster.
-#' @param use Character, indicates the types of values to be "burned" to the raster. Options include
-#' \itemize{
-#' \item \code{value} (default): a user-define value given by \code{value}
-#' \item \code{field}: values directly from a field in \code{vect} named by \code{field}
-#' \item \code{category}: values according to which polygon is covered by a cell named in \code{field}
-#' \item \code{z}: z-coordinate (points or contours only)
-#' \item \code{direction}: flow direction (lines only)
-#' }
-#' @param field Name of column in \code{vect} with values or category labbels to which to burn to the raster.
-#' @param value Numeric, value to burn to each cell overlapped by the spatial object in \code{vect}.
+#' This function is a potentially faster version of the \code{\link[raster]{terrain}} function in the \pkg{raster} package for calculating slope and aspect of a raster. It can also calculate profile curvature, tangential curvature, and slope in the east-west or north-south directions.
+#' @param rast Either a raster or the full path and name of a raster object.
+#' @param slope Logical, if \code{TRUE} (default) then calculate slope.
+#' @param slopeUnits Character, "units" in which to calculate slope: either \code{degrees} for degrees or \code{percent}.
+#' @param aspect Logical, if \code{TRUE} then calculate aspect. Aspect is given in degrees from North going clockwise (0 = north, 90 = east, 180 = south, 270 = west).
+#' @param profileCurve Logical, if \code{TRUE}, calculate profile curvature. Default is \code{FALSE}.
+#' @param tanCurve Logical, if \code{TRUE}, calculate tangential curvature. Default is \code{FALSE}.
+#' @param eastWestSlope Logical, if \code{TRUE}, calculate slope in east-west direction. Default is \code{FALSE}.
+#' @param northSouthSlope Logical, if \code{TRUE}, calculate slope in north-south direction. Default is \code{FALSE}.
 #' @param grassLoc Either \code{NULL} or a 3-element character vector. If the latter, the first element is the base path to the installation of GRASS, the second the version number, and the third the install type for GRASS.  For example, \code{c('C:/OSGeo4W64/', 'grass-7.4.1', 'osgeo4W')}. See \code{\link[link2GI]{linkGRASS7}} for further help. If \code{NULL} (default) the an installation of GRASS is searched for; this may take several minutes.
 #' @param initGrass Logical, if \code{TRUE} (default) then a new GRASS session is initialized. If \code{FALSE} then it is assumed a GRASS session has been initialized using the raster in \code{rast}. The latter is useful if you are chaining \pkg{fasterRaster} functions together and the first function initializes the session.
-#' @param backToR Logical, if \code{TRUE} (default) then the product of the calculations will be returned to R. If \code{FALSE}, then the product is left in the GRASS session and named \code{vectAsRast}. The latter case is useful (and faster) when chaining several \pkg{fasterRaster} functions together.
-#' @param ... Arguments to pass to \code{\link[rgrass7]{execGRASS}} when used for rasterizing (i.e., function \code{v.to.rast} in GRASS).
-#' @return If \code{backToR} if \code{TRUE}, then a raster with the same extent, resolution, and coordinate reference system as \code{rast}. Otherwise, a raster with the name of \code{vectAsRast} is written into the GRASS session.
-#' @details See (v.to.rast)[https://grass.osgeo.org/grass74/manuals/v.to.rast.html] for more details.  Note that if you get an error saying "", then you should add the EPSG code to the beginning of the raster and vector coordinate reference system string (their "proj4string"). For example, \code{proj4string(x) <- CRS('+init=epsg:32738')}. EPSG codes for various projections, datums, and locales can be found at (Spatial Reference)[http://spatialreference.org/].
-#' @seealso \code{\link[raster]{rasterize}}
+#' @param backToR Logical, if \code{TRUE} (default) then the product of the calculations will be returned to R. If \code{FALSE}, then the product is left in the GRASS session and named \code{slope}, \code{aspect}, \code{profileCurve}, \code{tanCurve}, \code{eastWestSlope}, or \code{northSouthSlope}. The latter case is useful (and faster) when chaining several \pkg{fasterRaster} functions together.
+#' @param ... Arguments to pass to \code{\link[rgrass7]{execGRASS}} when used for rasterizing (i.e., function \code{r.slope.aspect} in GRASS).
+#' @return If \code{backToR} if \code{TRUE}, then a raster or raster stack with the same extent, resolution, and coordinate reference system as \code{rast}. Otherwise, raster(s) with the name(s) \code{slope}, \code{aspect}, \code{profileCurve}, \code{tanCurve}, \code{eastWestSlope}, or \code{northSouthSlope} are written into the GRASS session.
+#' @details See (r.slope.aspect)[https://grass.osgeo.org/grass74/manuals/r.slope.aspect.html] for more details.  Note that if you get an error saying "", then you should add the EPSG code to the beginning of the raster and vector coordinate reference system string (its "proj4string"). For example, \code{proj4string(x) <- CRS('+init=epsg:32738')}. EPSG codes for various projections, datums, and locales can be found at (Spatial Reference)[http://spatialreference.org/].
+#' @seealso \code{\link[raster]{terrain}}
 #' @examples
 #' \dontrun{
 #' library(rgeos)
@@ -136,12 +132,15 @@
 #' }
 #' @export
 
-fasterRasterize <- function(
-	vect,
+fasterTerrain <- function(
 	rast,
-	use = 'value',
-	value = 1,
-	field = NULL,
+	slope = TRUE,
+	slopeUnits = 'degrees',
+	aspect = FALSE,
+	profileCurve = FALSE,
+	tanCurve = FALSE,
+	eastWestSlope = FALSE,
+	northSouthSlope = FALSE,
 	grassLoc = NULL,
 	initGrass = TRUE,
 	backToR = TRUE,
@@ -150,52 +149,64 @@ fasterRasterize <- function(
 
 	flags <- c('quiet', 'overwrite')
 	
-	# load spatial object and raster
-	if (class(vect) == 'character') vect <- raster::shapefile(vect)
+	# load raster
 	if (class(rast) == 'character') rast <- raster::raster(rast)
 
 	# get CRS
 	p4s <- sp::proj4string(rast)
 	
-	# ensure spatial data frame to avert error
-	if (class(vect) == 'SpatialPoints') vect <- as(vect, 'SpatialPointsDataFrame')
-	if (class(vect) == 'SpatialLines') vect <- as(vect, 'SpatialLinesDataFrame')
-	if (class(vect) == 'SpatialPolygons') vect <- as(vect, 'SpatialPolygonsDataFrame')
-
-	# feature type
-	featType <- if (class(vect) == 'SpatialPointsDataFrame') {
-		'point'
-	} else if (class(vect) == 'SpatialLinesDataFrame') {
-		'line'
-	} else if (class(vect) == 'SpatialPolygonsDataFrame') {
-		'area'
-	}
-	
 	# initialize GRASS
 	if (initGrass) link2GI::linkGRASS7(rast, default_GRASS7=grassLoc, gisdbase=raster::tmpDir(), location='temp')
 
-	rgrass7::writeVECT(vect, vname='vect', v.in.ogr_flags=flags)
-
-	# rasterize
-	if (use == 'field') {
-		rgrass7::execGRASS('v.to.rast', input='vect', output='vectAsRast', use='attr', attribute_column=field, type=featType, flags=flags, ...)
-	} else if (use == 'category') {
-		rgrass7::execGRASS('v.to.rast', input='vect', output='vectAsRast', use='cat', label_column=field, type=featType, flags=flags, ...)
-	} else if (use == 'value') {
-		rgrass7::execGRASS('v.to.rast', input='vect', output='vectAsRast', use='val', value=value, type=featType, flags=flags, ...)
-	} else {
-		rgrass7::execGRASS('v.to.rast', input='vect', output='vectAsRast', use=use, flags=flags, type=featType, ...)
+	# export raster to GRASS
+	exportRastToGrass(rast, vname='rast')
+	
+	# slope
+	if (slope) rgrass7::execGRASS('r.slope.aspect', elevation='rast', slope='slope', format=slopeUnits, flags=flags)
+	
+	# aspect (0 = east and goes counter-clockwise, so convert so 0 = north going clockwise)
+	if (aspect) {
+		rgrass7::execGRASS('r.slope.aspect', elevation='rast', aspect='aspectFromEast', flags=flags)
+		rgrass7::execGRASS('r.mapcalc', expr='aspect = (450 - aspectFromEast) % 360', flasg=flags)
 	}
+	
+	# curvatures
+	if (profileCurve) rgrass7::execGRASS('r.slope.aspect', elevation='rast', pcurvature='profileCurve', flags=flags)
+	if (tanCurve) rgrass7::execGRASS('r.slope.aspect', elevation='rast', tcurvature='tanCurve', flags=flags)
+	
+	# first-derivative slopes
+	if (eastWestSlope) rgrass7::execGRASS('r.slope.aspect', elevation='rast', dx='eastWestSlope', flags=flags)
+	if (northSouthSlope) rgrass7::execGRASS('r.slope.aspect', elevation='rast', dy='northSouthSlope', flags=flags)
 
-	# get raster back to R
+	# return
 	if (backToR) {
 	
-		out <- rgrass7::readRAST('vectAsRast')
-		out <- raster::raster(out)
+		out <- rast
+	
+		if (slope) out <- stack(out, raster::raster(rgrass7::readRAST('slope')))
+		if (aspect) out <- stack(out, raster::raster(rgrass7::readRAST('aspect')))
+		if (profileCurve) out <- stack(out, raster::raster(rgrass7::readRAST('profileCurve')))
+		if (tanCurve) out <- stack(out, raster::raster(rgrass7::readRAST('tanCurve')))
+		if (eastWestSlope) out <- stack(out, raster::raster(rgrass7::readRAST('eastWestSlope')))
+		if (northSouthSlope) out <- stack(out, raster::raster(rgrass7::readRAST('northSouthSlope')))
+
+		name <- c(
+			ifelse(slope, 'slope', NA),
+			ifelse(aspect, 'aspect', NA),
+			ifelse(profileCurve, 'profileCurve', NA),
+			ifelse(tanCurve, 'tanCurve', NA),
+			ifelse(eastWestSlope, 'eastWestSlope', NA),
+			ifelse(northSouthSlope, 'northSouthSlope', NA)
+		)
+		
+		name <- stats::na.omit(name)
+		
+		out <- raster::subset(out, 2:raster::nlayers(out))
 		sp::proj4string(out) <- p4s
-		names(out) <- 'vectAsRast'
+		names(out) <- name
+		
 		out
 		
 	}
-
+	
 }

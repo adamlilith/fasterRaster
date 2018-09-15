@@ -1,25 +1,24 @@
-#' Rasterize using a call to GRASS GIS.
+#' Project and resample a raster
 #'
-#' This function is a potentially faster version of the \code{\link[raster]{rasterize}} function in the \pkg{raster} package which converts a spatial points, lines, or polygon into a raster based on a "template" raster. All cells covered by the spatial object can either have values taken from the spatial object or a user-defined.
-#' @param vect SpatialPoints, SpatialPointsDataFrame, SpatialLines, SpatialLinesDataFrame, SpatialPolygons, or SpatialPolygonsDataFrame or the full path and name of such an object.
-#' @param rast Either a raster or the full path and name of a raster object. This serves as a template for the new raster.
-#' @param use Character, indicates the types of values to be "burned" to the raster. Options include
+#' This function is a potentially faster version of the \code{\link[raster]{projectRaster}} function in the \pkg{raster} package for projecting (and resampling) a raster.
+#' @param rast Either a raster or the full path and name of a raster object. This raster will be projected.
+#' @param template Raster layer \emph{or} full path and file name of a raster to serve as a template for projecting.
+#' @param method Character, method for resampling cells:
 #' \itemize{
-#' \item \code{value} (default): a user-define value given by \code{value}
-#' \item \code{field}: values directly from a field in \code{vect} named by \code{field}
-#' \item \code{category}: values according to which polygon is covered by a cell named in \code{field}
-#' \item \code{z}: z-coordinate (points or contours only)
-#' \item \code{direction}: flow direction (lines only)
+#' 		\item \code{bilinear}: Bilinear interpolation (default; uses values from 4 cells).
+#' 		\item \code{bicubic}: Bicubic interpolation (uses data from 16 cells).
+#' 		\item \code{nearest}: Nearest neighbor (uses data from 1 cell).
+#' 		\item \code{lanczos}: Lanczos interpolation (uses data from 25 cells).
 #' }
-#' @param field Name of column in \code{vect} with values or category labbels to which to burn to the raster.
-#' @param value Numeric, value to burn to each cell overlapped by the spatial object in \code{vect}.
 #' @param grassLoc Either \code{NULL} or a 3-element character vector. If the latter, the first element is the base path to the installation of GRASS, the second the version number, and the third the install type for GRASS.  For example, \code{c('C:/OSGeo4W64/', 'grass-7.4.1', 'osgeo4W')}. See \code{\link[link2GI]{linkGRASS7}} for further help. If \code{NULL} (default) the an installation of GRASS is searched for; this may take several minutes.
-#' @param initGrass Logical, if \code{TRUE} (default) then a new GRASS session is initialized. If \code{FALSE} then it is assumed a GRASS session has been initialized using the raster in \code{rast}. The latter is useful if you are chaining \pkg{fasterRaster} functions together and the first function initializes the session.
-#' @param backToR Logical, if \code{TRUE} (default) then the product of the calculations will be returned to R. If \code{FALSE}, then the product is left in the GRASS session and named \code{vectAsRast}. The latter case is useful (and faster) when chaining several \pkg{fasterRaster} functions together.
-#' @param ... Arguments to pass to \code{\link[rgrass7]{execGRASS}} when used for rasterizing (i.e., function \code{v.to.rast} in GRASS).
-#' @return If \code{backToR} if \code{TRUE}, then a raster with the same extent, resolution, and coordinate reference system as \code{rast}. Otherwise, a raster with the name of \code{vectAsRast} is written into the GRASS session.
-#' @details See (v.to.rast)[https://grass.osgeo.org/grass74/manuals/v.to.rast.html] for more details.  Note that if you get an error saying "", then you should add the EPSG code to the beginning of the raster and vector coordinate reference system string (their "proj4string"). For example, \code{proj4string(x) <- CRS('+init=epsg:32738')}. EPSG codes for various projections, datums, and locales can be found at (Spatial Reference)[http://spatialreference.org/].
-#' @seealso \code{\link[raster]{rasterize}}
+#' @param initGrass Logical, if \code{TRUE} (default) then a new GRASS session is initialized. If \code{FALSE} then it is assumed a GRASS session has been initialized using the raster in \code{resampled}. The latter is useful if you are chaining \pkg{fasterRaster} functions together and the first function initializes the session.
+#' @param backToR Logical, if \code{TRUE} (default) then the product of the calculations will be returned to R. If \code{FALSE}, then the product is left in the GRASS session and named \code{rast}. The latter case is useful (and faster) when chaining several \pkg{fasterRaster} functions together.
+#' @param ... Arguments to pass to \code{\link[rgrass7]{execGRASS}} when used for rasterizing (i.e., function \code{r.resamp.interp} in GRASS).
+#' @return If \code{backToR} if \code{TRUE}, then a raster or raster stack with the same extent, resolution, and coordinate reference system as \code{rast}. Otherwise, a raster with the name \code{resampled} is written into the GRASS session.
+#' @details Note that it is not uncommon to get the warning "Projection of dataset does not appear to match the current mapset" (followed by more information). If the coordinate reference systems match, then the cause is likely due to extra information being stored in one of the spatial object's coordinate reference system slot (e.g., an EPSG code in addition to the other proj4string information), in which case it can probably be safely ignored.  
+#' See (r.slope.aspect)[https://grass.osgeo.org/grass74/manuals/r.resamp.interp.html] for more details.  Note that if you get an error saying "", then you should add the EPSG code to the beginning of the raster and vector coordinate reference system string (its "proj4string"). For example, \code{proj4string(x) <- CRS('+init=epsg:32738')}. EPSG codes for various projections, datums, and locales can be found at (Spatial Reference)[http://spatialreference.org/].  
+#' **Note that the warning "Projection of dataset does not appear to match current location," will almost always appear. It canbe safely ignored.**
+#' @seealso \code{\link[raster]{projectRaster}}
 #' @examples
 #' \dontrun{
 #' library(rgeos)
@@ -136,12 +135,10 @@
 #' }
 #' @export
 
-fasterRasterize <- function(
-	vect,
+fasterProjectRaster <- function(
 	rast,
-	use = 'value',
-	value = 1,
-	field = NULL,
+	template,
+	method = 'bilinear',
 	grassLoc = NULL,
 	initGrass = TRUE,
 	backToR = TRUE,
@@ -150,52 +147,30 @@ fasterRasterize <- function(
 
 	flags <- c('quiet', 'overwrite')
 	
-	# load spatial object and raster
-	if (class(vect) == 'character') vect <- raster::shapefile(vect)
+	# load raster
 	if (class(rast) == 'character') rast <- raster::raster(rast)
+	if (class(template) == 'character') template <- raster::raster(template)
 
-	# get CRS
-	p4s <- sp::proj4string(rast)
-	
-	# ensure spatial data frame to avert error
-	if (class(vect) == 'SpatialPoints') vect <- as(vect, 'SpatialPointsDataFrame')
-	if (class(vect) == 'SpatialLines') vect <- as(vect, 'SpatialLinesDataFrame')
-	if (class(vect) == 'SpatialPolygons') vect <- as(vect, 'SpatialPolygonsDataFrame')
-
-	# feature type
-	featType <- if (class(vect) == 'SpatialPointsDataFrame') {
-		'point'
-	} else if (class(vect) == 'SpatialLinesDataFrame') {
-		'line'
-	} else if (class(vect) == 'SpatialPolygonsDataFrame') {
-		'area'
-	}
+	# get template CRS
+	p4s <- sp::proj4string(template)
 	
 	# initialize GRASS
-	if (initGrass) link2GI::linkGRASS7(rast, default_GRASS7=grassLoc, gisdbase=raster::tmpDir(), location='temp')
+	if (initGrass) link2GI::linkGRASS7(template, default_GRASS7=grassLoc, gisdbase=raster::tmpDir(), location='temp')
 
-	rgrass7::writeVECT(vect, vname='vect', v.in.ogr_flags=flags)
+	exportRastToGrass(rast, vname='rast')
+	
+	# export raster to GRASS
+	rgrass7::execGRASS('r.resamp.interp', input='rast', output='resampled', method=method, flags=flags, ...)
 
-	# rasterize
-	if (use == 'field') {
-		rgrass7::execGRASS('v.to.rast', input='vect', output='vectAsRast', use='attr', attribute_column=field, type=featType, flags=flags, ...)
-	} else if (use == 'category') {
-		rgrass7::execGRASS('v.to.rast', input='vect', output='vectAsRast', use='cat', label_column=field, type=featType, flags=flags, ...)
-	} else if (use == 'value') {
-		rgrass7::execGRASS('v.to.rast', input='vect', output='vectAsRast', use='val', value=value, type=featType, flags=flags, ...)
-	} else {
-		rgrass7::execGRASS('v.to.rast', input='vect', output='vectAsRast', use=use, flags=flags, type=featType, ...)
-	}
-
-	# get raster back to R
+	# return
 	if (backToR) {
 	
-		out <- rgrass7::readRAST('vectAsRast')
+		out <- rgrass7::readRAST('resampled')
 		out <- raster::raster(out)
-		sp::proj4string(out) <- p4s
-		names(out) <- 'vectAsRast'
+		proj4string(out) <- p4s
+		names(out) <- 'resampled'
 		out
 		
 	}
-
+	
 }

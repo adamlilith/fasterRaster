@@ -1,7 +1,7 @@
 Package: fasterRaster
 Type: Package
 Title: Faster raster processing using GRASS GIS
-Version: 0.1.0
+Version: 0.2.0
 Author: Adam B. Smith <adam@earthSkySea.org>
 Maintainer: Adam B. Smith <adam@earthSkySea.org>
 Description: This package is meant as an add-on to the raster
@@ -15,6 +15,7 @@ Imports:
 	raster,
 	rgrass7
 Depends: 
+	rgdal,
 	sp
 License: GPL (>=3)
 Encoding: UTF-8
