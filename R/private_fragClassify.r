@@ -22,7 +22,7 @@
 #'	\item \code{6}: interior (\code{pf} == 1)
 #' }
 #' Note that this differs somewhat from the numbering scheme presented by Riitters et al. (2000) and their errata.
-#' @example
+#' @examples
 #' .fragClassify(c(NA, 1)) # NA
 #' .fragClassify(c(0, 0)) # nothing 0
 #' .fragClassify(c(1, 1)) # interior 6

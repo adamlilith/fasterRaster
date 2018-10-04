@@ -14,12 +14,6 @@
 #' @seealso \code{\link[fasterRaster]{.pf}},  \code{\link[fasterRaster]{.codeClassify}}, \code{\link[fasterRaster]{frag}}, \code{\link[fasterRaster]{fasterFrag}}
 .pfWorker <- compiler::cmpfun(function(x, w, na.rm=FALSE) {
 	
-	# x 	binary matrix possibly with NAs
-	# w 	weights matrix (must have odd number of rows and columns)
-	# na.rm logical
-
-	for (
-	
 	if (all(is.na(x))) return(NA)
 	x <- matrix(x, nrow=round(sqrt(length(x))), byrow=FALSE)
 	

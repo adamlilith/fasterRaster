@@ -4,16 +4,16 @@
 \alias{fasterFocal}
 \title{Multi-core version of the focal() function}
 \usage{
-fasterFocal(x, w = 3, fun = sum, filename = "", na.rm = FALSE,
+fasterFocal(rast, w = 3, fun = sum, filename = "", na.rm = FALSE,
   pad = FALSE, padValue = NA, NAonly = FALSE, progress = FALSE,
-  cores = raster::detectCores(), forceMulti = FALSE, ...)
+  cores = parallel::detectCores(), forceMulti = TRUE, ...)
 }
 \arguments{
-\item{x}{Raster object.}
+\item{rast}{Raster object.}
 
 \item{w}{Matrix of weights (the moving window), e.g. a 3 by 3 matrix with values 1. The matrix does not need to be square, but the sides must be odd numbers. If you need even sides, you can add a column or row with weights of zero. Alternatively, \code{w} can be an odd integer > 0, in which case a weights matrix \code{w} by \code{w} in size is created with every value equal to 1.}
 
-\item{fun}{Function. The function must accept multiple numbers and return a single number. For example \code{mean}, \code{min}, or \code{max}. The function should also accept a \code{na.rm} argument (or ignore it, e.g. as one of the 'dots' arguments). For example, \code{length} will fail, but \code{function(x, ...) { na.omit(length(x)) }} works. The default function is \code{sum}.}
+\item{fun}{Function. The function must accept multiple numbers and return a single number. For example \code{mean}, \code{min}, or \code{max}. The function should also accept a \code{na.rm} argument (or ignore it, e.g. as one of the 'dots' arguments). For example, \code{length} will fail, but \code{function(rast, ...) { na.omit(length(rast)) }} works. The default function is \code{sum}.}
 
 \item{filename}{Character, name of file for a new raster (optional).}
 
@@ -42,4 +42,7 @@ This function applies a function that uses values from a "moving window" across 
 \examples{
 \dontrun{
 }
+}
+\seealso{
+\code{\link[raster]{focal}}
 }

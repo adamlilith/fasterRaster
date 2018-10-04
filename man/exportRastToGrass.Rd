@@ -4,10 +4,10 @@
 \alias{exportRastToGrass}
 \title{Write raster to an existing GRASS session}
 \usage{
-exportRastToGrass(x, vname = "rast", tempDir = raster::tmpDir())
+exportRastToGrass(rast, vname = "rast", tempDir = raster::tmpDir())
 }
 \arguments{
-\item{x}{Raster layer.}
+\item{rast}{Raster layer.}
 
 \item{vname}{Name of raster in GRASS.}
 

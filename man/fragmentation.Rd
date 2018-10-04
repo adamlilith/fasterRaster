@@ -4,12 +4,12 @@
 \alias{fragmentation}
 \title{Calculate fragmentation indices for a raster}
 \usage{
-fragmentation(x, size = 3, pad = FALSE, padValue = NA,
+fragmentation(rast, size = 3, pad = FALSE, padValue = NA,
   calcDensity = TRUE, calcConnect = TRUE, calcClass = TRUE,
   na.rm = FALSE, undet = "undetermined", ...)
 }
 \arguments{
-\item{x}{Raster with binary values (1 or 0 or \code{NA}).}
+\item{rast}{Raster with binary values (1 or 0 or \code{NA}).}
 
 \item{size}{Integer, number of cells wide and high of the window used to calculate fragmentation. This must be an odd integer (default is 3).}
 
@@ -55,121 +55,32 @@ The function calculates a set of fragmentation indices as per Riitters, K., J. W
 }
 \examples{
 \dontrun{
-library(rgeos)
-data(madForest)
-# GRASS location -- change if needed, depending on version number
-# and location!
-grassLoc <- c('C:/OSGeo4W64/', 'grass-7.4.1', 'osgeo4W')
-
-### project raster
-# could also use projectRaster() which
-# may be faster in this example
-elev <- fasterProjectRaster(elev, forest2000, grassLoc=grassLoc)
-# elev <- projectRaster(elev, forest2000)
-plot(elev, main='Elevation')
-plot(mad0, add=TRUE)
-
-### create mask for raster calculations
-# could also use rasterize() or mask() which may
-be faster in this example
-madMask <- fasterRasterize(mad0, elev, grassLoc=grassLoc)
-elev <- madMask * elev
-# alternative #1
-# madMask <- rasterize(mad0, elev)
-# madMask <- 1 + 0 * madMask
-# elev <- madMask * elev
-#
-# alternative #2
-# elev <- mask(elev, mad0)
-plot(elev, main='Elevation (m)')
-plot(mad0, add=TRUE)
-
-### topography
-# could also use terrain() which may be faster
-in this example
-topo <- fasterTerrain(elev, slope = TRUE, aspect=TRUE, grassLoc=grassLoc)
-# slp <- terrain(elev, opt='slope', unit='degrees')
-# asp <- terrain(elev, opt='aspect', unit='degrees')
-# topo <- stack(slp, asp)
-# names(topo) <- c('slope', 'aspect')
-plot(topo)
-
-### distance to coast
-# could also use distance() function which may be
-# faster in this example
-distToCoast <- fasterRastDistance(elev, fillNAs=FALSE, grassLoc=grassLoc)
-# ocean <- calc(elev, function(x) ifelse(is.na(x), 1, NA))
-# distToCoast <- raster::distance(ocean)
-# distToCoast <- madMask * distToCoast
-plot(distToCoast, main='Distance to Coast (m)')
-
-### distance to nearest river (in the study region)
-# could also use distance() function
-# which may be faster in this example
-distToRiver <- fasterRastToVectDistance(
-	elev, madRivers, grassLoc=grassLoc)
-# naRast <- NA * elev
-# distToRiver <- distance(naRast, madRivers)
-# distToRiver <- madMask * distToRiver
-plot(distToRiver, main='Distance to River (m)'
-plot(madRivers, col='blue', add=TRUE)
-
-### convert rivers (lines) to raster
-# could use rasterize() which may be faster in this example
-riverRast <- fasterRasterize(madRivers, elev)
-# riverRast <- rasterize(madRivers, elev)
-# riverRast <- riverRast > 0
-par(mfrow=c(1, 2))
-plot(mad0, main='Rivers as Vector')
-plot(madRivers, col='blue', lwd=2, add=TRUE)
-plot(riverRast, main='Rivers as Raster', col='blue')
-plot(mad0, add=TRUE)
-
 ### forest fragmentation
-# forest = 1, all other is NA so convert NA to 0
-forest2000 <- raster::calc(forest2000, function(x) ifelse(is.na(x), 0, x))
-forest2014 <- raster::calc(forest2014, function(x) ifelse(is.na(x), 0, x))
+data(madagascar)
 
-# make mask to force ocean to NA
-# could use fasterRasterize() or rasterize()
-# rasterize is faster in this example because rasters are small
-maskRast <- fasterRasterize(mad, forest2000, grassLoc=grassLoc)
-# maskRast <- raster::rasterize(mad, forest2000)
-# maskRast <- 1 + 0 * maskRast
-forest2000 <- maskRast * forest2000
-forest2014 <- maskRast * forest2014
-names(forest2000) <- 'forest2000'
-names(forest2014) <- 'forest2014'
+# cells are just 1s or NAs... replace NAs with 0
+forest <- calc(madForest2000, function(x) ifelse(is.na(x), 0, 1))
 
-fragRasts <- fragmentation(forest2000)
-change <- sum(forest2000, forest2014)
+# single-core
+frag <- fragmentation(forest, size=5, pad=TRUE, undet='perforated')
+
+# multi-core
+frag <- fasterFragmentation(forest, size=5, pad=TRUE, undet='perforated')
+
 par(mfrow=c(2, 2))
-plot(change, col=c('gray90', 'red', 'green'), main='Forest Cover')
-legend('topright', legend=c('Forest', 'Loss'), fill=c('green', 'red'))
-plot(fragRasts[['density']], main='Density in 2000')
-plot(fragRasts[['connect']], main='Connectivity in 2000')
-cols <- c('gray90', 'forestgreen', 'lightgreen', 'orange', 'yellow', 'red')
-plot(fragRasts[['class']], main='Fragmentation Class', col=cols)
-legend('topright', fill=cols,
-	legend=c('no forest', 'interior', 'patch',
-	'transitional', 'perforated', 'edge'))
-
-### raster to polygons
-# convert fragmentation class to polygons
-# could also use rasterToPolygons() which is
-probably faster in this example
-fragPoly <- fasterVectorize(fragRasts[['class']],
-	vectType='area', grassLoc=grassLoc)
-# fragPoly <- rasterToPolygons(fragRasts[['class']], dissolve=TRUE)
-plot(fragPoly, main='Fragmentation Class Polygon')
-legend('topright', fill=cols,
-	legend=c('no forest', 'interior', 'patch',
-	'transitional', 'perforated', 'edge'))
+plot(madForest2000, col=c('gray90', 'forestgreen'), main='Forest Cover')
+plot(frag[['density']], main='Density in 2000')
+plot(frag[['connect']], main='Connectivity in 2000')
+cols <- c('gray90', 'blue', 'lightblue', 'yellow', 'orange', 'forestgreen')
+names(cols) <- c('no forest', 'patch', 'transitional',
+		'perforated', 'edge', 'interior')
+plot(frag[['class']], main='Fragmentation Class', col=cols, legend=FALSE)
+legend('topright', fill=cols, legend=names(cols))
 
 }
 }
 \seealso{
-\code{\link[raster]{focal}}
+\code{\link[fasterRaster]{fasterFragmentation}}
 
 \code{\link[fasterRaster]{fasterFragmentation}}
 }
