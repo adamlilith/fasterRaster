@@ -8,19 +8,18 @@
 #' x <- runif(100)
 #' x <- x >= 0.7
 #' x <- matrix(x, nrow=10)
-#' fasterRaster:::.pff(x)
+#' fasterRaster:::.fragConnect(x)
 #' diag(x) <- NA
-#' fasterRaster:::.pff(x)
-#' @seealso \code{\link[fasterRaster]{.pff}}, \code{\link[fasterRaster]{.codeClassify}}, \code{\link[fasterRaster]{frag}}, \code{\link[fasterRaster]{fasterFrag}}
-#' @export
-.pff <- compiler::cmpfun(function(x, na.rm=FALSE) {
+#' fasterRaster:::.fragConnect(x)
+#' @seealso \code{\link[fasterRaster]{fragmentation}}, \code{\link[fasterRaster]{.fragDensity}}, \code{\link[fasterRaster]{.fragClassify}}
+.fragConnect <- compiler::cmpfun(function(x, na.rm=FALSE) {
 
 	# x 	binary matrix possibly with NAs
 	# na.rm	logical
 	
 	if (all(is.na(x))) return(NA)
 	
-	x <- matrix(x, nrow=round(sqrt(length(x))), byrow=TRUE)
+	x <- matrix(x, nrow=round(sqrt(length(x))), byrow=FALSE)
 
 	# get subsections of matrix
 	xUpper <- x[1:(nrow(x) - 1), ]
@@ -43,10 +42,12 @@
 	}
 	possible <- sum(rowsPoss, colsPoss)
 	
-	if (possible == 0) {
+	connect <- if (possible == 0) {
 		0
 	} else {
 		adj / possible
 	}
+	
+	connect
 
 })

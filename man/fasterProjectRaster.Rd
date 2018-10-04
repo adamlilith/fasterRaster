@@ -32,12 +32,12 @@ fasterProjectRaster(rast, template, method = "bilinear",
 If \code{backToR} if \code{TRUE}, then a raster or raster stack with the same extent, resolution, and coordinate reference system as \code{rast}. Otherwise, a raster with the name \code{resampled} is written into the GRASS session.
 }
 \description{
-This function is a potentially faster version of the \code{\link[raster]{projectRaster}} function in the \pkg{raster} package for projecting (and resampling) a raster.
+This function is a potentially faster version of the \code{\link[raster]{projectRaster}} function in the \pkg{raster} package for projecting (and resampling) a raster. It requires the user has GRASS GIS Version 7 installed.
 }
 \details{
 Note that it is not uncommon to get the warning "Projection of dataset does not appear to match the current mapset" (followed by more information). If the coordinate reference systems match, then the cause is likely due to extra information being stored in one of the spatial object's coordinate reference system slot (e.g., an EPSG code in addition to the other proj4string information), in which case it can probably be safely ignored.  
 See (r.slope.aspect)[https://grass.osgeo.org/grass74/manuals/r.resamp.interp.html] for more details.  Note that if you get an error saying "", then you should add the EPSG code to the beginning of the raster and vector coordinate reference system string (its "proj4string"). For example, \code{proj4string(x) <- CRS('+init=epsg:32738')}. EPSG codes for various projections, datums, and locales can be found at (Spatial Reference)[http://spatialreference.org/].  
-**Note that the warning "Projection of dataset does not appear to match current location," will almost always appear. It canbe safely ignored.**
+**Note that the warning "Projection of dataset does not appear to match current location," will almost always appear. It can be safely ignored.**
 }
 \examples{
 \dontrun{
@@ -127,7 +127,7 @@ forest2014 <- maskRast * forest2014
 names(forest2000) <- 'forest2000'
 names(forest2014) <- 'forest2014'
 
-fragRasts <- frag(forest2000)
+fragRasts <- fragmentation(forest2000)
 change <- sum(forest2000, forest2014)
 par(mfrow=c(2, 2))
 plot(change, col=c('gray90', 'red', 'green'), main='Forest Cover')
