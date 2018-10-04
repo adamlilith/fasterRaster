@@ -5,16 +5,18 @@ This package uses [GRASS GIS Version 7](https://grass.osgeo.org/grass7/) to spee
 
 
 ## *Faster* raster processing functions ##
-* `fasterLongLatRasters`: Create rasters with values equal to cell longitude and latitude.
-* `fasterProjectRaster`: Project and resample raster.
-* `fasterRastDistance`: Distance from cells with `NA`s to closest non-`NA` cell (or the inverse of this).
-* `fasterRasterize`: Convert vector to a raster.
-* `fasterTerrain`: Slope, aspect, and curvature.
-* `fasterVectorize`: Convert raster to spatial points, lines, or polygons
-* `fasterVectToRastDistance`: Distance between raster cells and a vector.
+* `fasterFocal`: Faster focal calculations (using multi-core).
+* `fasterFragmentation`: Fragmentation indices following Riitters et al. (2000 Conservation Ecology 4:3; using multi-core).
+* `fasterLongLatRasters`: Create rasters with values equal to cell longitude and latitude (using GRASS).
+* `fasterProjectRaster`: Project and resample raster (using GRASS).
+* `fasterRastDistance`: Distance from cells with `NA`s to closest non-`NA` cell (or the inverse of this) (using GRASS).
+* `fasterRasterize`: Convert vector to a raster (using GRASS).
+* `fasterTerrain`: Slope, aspect, and curvature (using GRASS).
+* `fasterVectorize`: Convert raster to spatial points, lines, or polygons (using GRASS).
+* `fasterVectToRastDistance`: Distance between raster cells and a vector (using GRASS).
 
 ## Normal-speed raster processing ##
-* `frag`: Calculate landscape fragmentation indices as per Riitter et al. (2000 Conservation Ecology 4:3)
+* `fragmentation`: Calculate landscape fragmentation indices as per Riitter et al. (2000 Conservation Ecology 4:3)
 
 ## Utility functions ##
 * `exportRasterToGrass`: Export raster to an open GRASS session with support for large rasters.
