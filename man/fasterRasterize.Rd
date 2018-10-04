@@ -130,7 +130,7 @@ forest2014 <- maskRast * forest2014
 names(forest2000) <- 'forest2000'
 names(forest2014) <- 'forest2014'
 
-fragRasts <- frag(forest2000)
+fragRasts <- fragmentation(forest2000)
 change <- sum(forest2000, forest2014)
 par(mfrow=c(2, 2))
 plot(change, col=c('gray90', 'red', 'green'), main='Forest Cover')
