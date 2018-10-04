@@ -4,7 +4,7 @@
 #' @param x Binary matrix, with values equal to 0, 1, or \code{NA}.
 #' @param na.rm Logical, if \code{FALSE} (default) count \code{NA} cells towards cells that could be occupied.
 #' @return Numeric in the range [0, 1] or \code{NA} if all cells are \code{NA}.
-#' @example
+#' @examples
 #' x <- runif(100)
 #' x <- x >= 0.7
 #' x <- matrix(x, nrow=10)
@@ -14,25 +14,25 @@
 #' @seealso \code{\link[fasterRaster]{fragmentation}}, \code{\link[fasterRaster]{.fragConnect}}, \code{\link[fasterRaster]{.fragClassify}}
 .fragDensity <- compiler::cmpfun(function(x, na.rm=FALSE) {
 	
-	# x 	binary matrix possibly with NAs
-	# na.rm logical
-	
 	if (all(is.na(x))) return(NA)
+
 	x <- matrix(x, nrow=round(sqrt(length(x))), byrow=FALSE)
 	
+	# number of valid cells
 	n <- if (na.rm) {
 		sum(!is.na(x))
 	} else {
-		prod(dim(x))
+		nrow(x) * ncol(x)
 	}
 	
-	dens <- if (n == 0) {
-		NA
+	# density
+	occ <- if (n == 0) {
+		0
 	} else {
-		sum(x, na.rm=TRUE) / n
+		sum(x, na.rm=TRUE)
 	}
 	
-	dens
+	occ / n
 
 })
 

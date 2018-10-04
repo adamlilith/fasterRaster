@@ -1,6 +1,6 @@
 #' Worker function for multi-core focal calculation of rasters.
-#' 
-#' This function is a generic worker function for a multi-core implementation of the \code{\link[raster}{focal}} function in the \[kg{raster} package. It is usually called by another function and is thus not of great use to most users.
+#'
+#' This function is a generic worker function for a multi-core implementation of the \code{\link[raster]{focal}} function in the \pkg{raster} package. It is usually called by another function and is thus not of great use to most users.
 #' @param i Integer > 0, ID number for the node on which calculations are being conducted.
 #' @param blockVals Matrix.
 #' @param w Matrix of weights (the moving window), e.g. a 3 by 3 matrix with values 1. The matrix does not need to be square, but the sides must be odd numbers. If you need even sides, you can add a column or row with weights of zero. Alternatively, \code{w} can be an odd integer > 0, in which case a weights matrix \code{w} by \code{w} in size is created with every value equal to 1.
@@ -15,12 +15,12 @@
 	endRow <- nrow(blockVals) - halfWindowSize
 	startCol <- halfWindowSize + 1
 	endCol <- ncol(blockVals) - halfWindowSize
-	
+
 	out <- NA * blockVals
-	
+
 	for (countRow in startRow:endRow) {
 		for (countCol in startCol:endCol) {
-		
+
 			thisCellVal <- blockVals[countRow, countCol]
 			if ((NAonly & is.na(thisCellVal)) || !is.na(thisCellVal)) {
 				thisMat <- blockVals[(countRow - halfWindowSize):(countRow + halfWindowSize), (countCol - halfWindowSize):(countCol + halfWindowSize)]
@@ -31,5 +31,5 @@
 	}
 
 	out
-	
+
 }

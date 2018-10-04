@@ -1,7 +1,7 @@
 #' Apply a formula to each cell of a raster
 #'
-#' This function applies a user-defined function to each cell in a raster. It functions exactly the same as the \code{\link[raster]{calc}} function in the \pkg{raster} package except that it can use a multi-core implementation to speed processing. **NB**: The code for the multi-core implementation is taken almost verbatim from \code{\link[raster]{cluster}}.
-#' @param x Raster object.
+#' This function applies a user-defined function to each cell in a raster. It functions exactly the same as the \code{\link[raster]{calc}} function in the \pkg{raster} package except that it can use a multi-core implementation to speed processing. **NB**: The code for the multi-core implementation is taken almost verbatim from \code{\link[raster]{clusterR}}.
+#' @param rast Raster object.
 #' @param fun Function. Possibilities include nearly any function in the \pkg{raster} package that operates on a raster and does not require multiple cells to calculate values (i.e., doesn't use a moving window or otherwise summarize values across a raster). Examples include:
 #' \itemize{
 #' 	\item \code{\link[raster]{calc}}
@@ -19,21 +19,37 @@
 #' @param forceapply Logical, useful for debugging. See \code{\link[raster]{calc}}.
 #' @param ... Arguments to pass to \code{\link[raster]{writeRaster}}
 #' @return A raster object, possibly also written to disk.
-#' \dontrun{
-#' }
-fasterRaster <- function(
-	x,
+#' @examples
+#' data(madagascar)
+#' out <- fasterCalc(madForest2000, sum, cores=4)
+fasterCalc <- function(
+	rast,
 	fun,
 	filename = '',
 	na.rm = FALSE,
-	cores = raster::detectCores(),
+	cores = parallel::detectCores(),
 	forceMulti = TRUE,
 	...
 ) {
 
+	# number of cores
+	bs <- raster::blockSize(rast)
+	cores <- if (forceMulti) {
+		min(c(parallel::detectCores(), cores))
+	} else {
+		bs$n
+	}
+
+	# start cores
 	raster::beginCluster(n=cores)
 	on.exit(raster::endCluster())
 	
-	# out <- clusterR(x, fun=fun, args=export=quotes(omnibus::ellipseNames(...))
+	# calculate
+	fx <- function(x, ...) fun(x, ...)
+	out <- clusterR(rast, fun=fx, args=list(fun=fun), export=quote(omnibus::ellipseNames(...)))
+	
+	raster::endCluster()
+	
+	out
 
 }

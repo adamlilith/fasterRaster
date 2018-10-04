@@ -1,9 +1,9 @@
 #' Multi-core version of the focal() function
 #'
 #' This function applies a function that uses values from a "moving window" across a raster. It is exactly the same as the \code{\link[raster]{focal}} function in the \pkg{raster} package except that it can use a multi-core implementation to speed processing.
-#' @param x Raster object.
+#' @param rast Raster object.
 #' @param w Matrix of weights (the moving window), e.g. a 3 by 3 matrix with values 1. The matrix does not need to be square, but the sides must be odd numbers. If you need even sides, you can add a column or row with weights of zero. Alternatively, \code{w} can be an odd integer > 0, in which case a weights matrix \code{w} by \code{w} in size is created with every value equal to 1.
-#' @param fun Function. The function must accept multiple numbers and return a single number. For example \code{mean}, \code{min}, or \code{max}. The function should also accept a \code{na.rm} argument (or ignore it, e.g. as one of the 'dots' arguments). For example, \code{length} will fail, but \code{function(x, ...) { na.omit(length(x)) }} works. The default function is \code{sum}.
+#' @param fun Function. The function must accept multiple numbers and return a single number. For example \code{mean}, \code{min}, or \code{max}. The function should also accept a \code{na.rm} argument (or ignore it, e.g. as one of the 'dots' arguments). For example, \code{length} will fail, but \code{function(rast, ...) { na.omit(length(rast)) }} works. The default function is \code{sum}.
 #' @param filename Character, name of file for a new raster (optional).
 #' @param na.rm Logical, if code{FALSE} (default) the value computed by \code{fun} will be \code{NA} only if all cells in the window are \code{NA}. Using \code{na.rm = TRUE} is usually not a good idea since it can unbalance weights.
 #' @param pad Logical, if \code{TRUE} then add virtual rows and columns around the raster so that there are no edge effects. The virtual rows and columns are set to equal \code{padValue}. Default is \code{FALSE}.
@@ -14,12 +14,13 @@
 #' @param forceMulti Logical, if \code{TRUE} (default) then the function will attempt to use the total number of cores in \code{cores}. (Note that this many not necessarily be faster since each core costs some overhead.)  If \code{FALSE}, then the function will use up to \code{cores} if needed (which also may not be faster... it always depends on the problem being computed).
 #' @param ... Arguments to pass to \code{\link[raster]{writeRaster}}
 #' @return A raster object, possibly also written to disk.
+#' @seealso \code{\link[raster]{focal}}
 #' @examples
 #' \dontrun{
 #' }
 #' @export
 fasterFocal <- function(
-	x,
+	rast,
 	w = 3,
 	fun = sum,
 	filename = '',
@@ -28,22 +29,30 @@ fasterFocal <- function(
 	padValue = NA,
 	NAonly = FALSE,
 	progress = FALSE,
-	cores = raster::detectCores(),
-	forceMulti = FALSE,
+	cores = parallel::detectCores(),
+	forceMulti = TRUE,
 	...
 ) {
 
 	cpus <- parallel::detectCores()
 	minBlocks <- if (forceMulti) { min(cores, cpus) } else { 1 }	
-	blocks <- raster::blockSize(x, minblocks=minBlocks)
+	blocks <- raster::blockSize(rast, minblocks=minBlocks)
 	
 	# single core
 	if (cores == 1 | blocks$n == 1) {
 	
-		out <- raster::focal(x=x, w=w, fun=fun, filename=filename, na.rm=na.rm, pad=pad, padValue=padValue, NAonly=NAonly, ...)
+		out <- raster::focal(x=rast, w=w, fun=fun, filename=filename, na.rm=na.rm, pad=pad, padValue=padValue, NAonly=NAonly, ...)
 		
 	# multi-core
 	} else {
+
+		# number of cores
+		bs <- raster::blockSize(rast)
+		cores <- if (forceMulti) {
+			min(c(parallel::detectCores(), cores))
+		} else {
+			bs$n
+		}
 
 		# weights matrix
 		if (class(w) == 'matrix') {
@@ -75,11 +84,11 @@ fasterFocal <- function(
 
 		# add padding around raster to avoid edge effects
 		if (pad) {
-			origExtent <- raster::extent(x)
-			x <- raster::extend(x, y=halfWindowSize, value=padValue)
+			origExtent <- raster::extent(rast)
+			rast <- raster::extend(rast, y=halfWindowSize, value=padValue)
 		}
 	
-		out <- raster::raster(x)
+		out <- raster::raster(rast)
 
 		# calculate start/end position and size of each block to be sent to a core
 		# and start/end position and size of each section in a block that is processed
@@ -87,9 +96,9 @@ fasterFocal <- function(
 		# rows sent to nodes are "send"
 		# rows which receive values are "process"
 		maxBlockSize <- blocks$nrows[1]
-		startSendRows <- seq(1, nrow(x), by=maxBlockSize - 2 * halfWindowSize)
+		startSendRows <- seq(1, nrow(rast), by=maxBlockSize - 2 * halfWindowSize)
 		endSendRows <- startSendRows + maxBlockSize - 1
-		if (any(endSendRows > nrow(x))) endSendRows[endSendRows > nrow(x)] <- nrow(x)
+		if (any(endSendRows > nrow(rast))) endSendRows[endSendRows > nrow(rast)] <- nrow(rast)
 		numSendRows <- endSendRows - startSendRows + 1
 		if (any(numSendRows < nrow(w))) {
 			tooSmalls <- which(numSendRows < nrow(w))
@@ -109,7 +118,7 @@ fasterFocal <- function(
 		on.exit(raster::endCluster())
 
 		### start nodes calculating
-		xCols <- ncol(x)
+		xCols <- ncol(rast)
 
 		# data frame to track what's been sent to what "tag" node
 		tracker <- data.frame(
@@ -129,7 +138,7 @@ fasterFocal <- function(
 
 		for (tag in 1:nodes) {
 
-			blockVals <- getValues(x, startSendRows[tag], numSendRows[tag])
+			blockVals <- getValues(rast, startSendRows[tag], numSendRows[tag])
 			blockVals <- matrix(blockVals, ncol=xCols, byrow=TRUE)
 			
 			parallel:::sendCall(cluster[[tag]], fun=.workerFocal, args=list(blockVals=blockVals, w=w, fun=fun, na.rm=na.rm, NAonly=NAonly), tag=tag)
@@ -149,7 +158,7 @@ fasterFocal <- function(
 		if (filename != '') {
 			out <- raster::writeStart(out, filename=filename, ... )
 		} else {
-			out <- matrix(nrow=nrow(x), ncol=ncol(x))
+			out <- matrix(nrow=nrow(rast), ncol=ncol(rast))
 		}
 		
 		### get and remember output
@@ -176,14 +185,14 @@ fasterFocal <- function(
 				valsFromClust <- c(t(valsFromClust))
 				out <- raster::writeValues(out, v=valsFromClust, start=startProcessRows[job])
 			} else {
-				out[startProcessRows[job]:endProcessRows[job], 1:ncol(x)] <- valsFromClust
+				out[startProcessRows[job]:endProcessRows[job], 1:ncol(rast)] <- valsFromClust
 			}
 
 			# need to send more data?
 			if (sum(tracker$sent) < nrow(tracker)) {
 
 				job <- which(!tracker$sent & !tracker$done)[1]
-				blockVals <- getValues(x, startSendRows[job], numSendRows[job])
+				blockVals <- getValues(rast, startSendRows[job], numSendRows[job])
 				blockVals <- matrix(blockVals, ncol=xCols, byrow=TRUE)
 				
 				parallel:::sendCall(cluster[[tag]], fun=.workerFocal, args=list(blockVals=blockVals, w=w, fun=fun, na.rm=na.rm, NAonly=NAonly), tag=tag)
@@ -200,17 +209,17 @@ fasterFocal <- function(
 		if (filename != '') {
 			
 			# write NAs to border rows at top and bottom
-			fills <- rep(NA, ncol(x) * halfWindowSize)
+			fills <- rep(NA, ncol(rast) * halfWindowSize)
 			raster::writeValues(out, v=fills, start=1)
-			raster::writeValues(out, v=fills, start=nrow(x) - halfWindowSize + 1)
+			raster::writeValues(out, v=fills, start=nrow(rast) - halfWindowSize + 1)
 
 			out <- writeStop(out)
 
 		} else {
 		
 			out <- raster(out)
-			raster::projection(out) <- raster::projection(x)
-			raster::extent(out) <- raster::extent(x)
+			raster::projection(out) <- raster::projection(rast)
+			raster::extent(out) <- raster::extent(rast)
 		
 		}
 		
