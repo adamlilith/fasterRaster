@@ -1,26 +1,20 @@
-#' Arabidopsis QTL data on gravitropism
+#' Forest cover in 2000 for a portion of Madagascar
 #'
-#' Data from a QTL experiment on gravitropism in
-#' Arabidopsis, with data on 162 recombinant inbred lines (Ler x
-#' Cvi). The outcome is the root tip angle (in degrees) at two-minute
-#' increments over eight hours.
+#' Raster of occurrence/non-occurrence of forest cover in a portion of Madagascar. Cells are 30-m in resolution. Values represent forest (1) or non-forest (\code{NA}).
 #'
 #' @docType data
 #'
-#' @usage data(grav)
+#' @usage data(madForest2000)
 #'
-#' @format An object of class \code{"cross"}; see \code{\link[qtl]{read.cross}}.
+#' @format An object of class \code{'raster'}. See \code{\link[raster]{raster}}.
 #'
 #' @keywords datasets
 #'
-#' @references Moore et al. (2013) Genetics 195:1077-1086
-#' (\href{https://www.ncbi.nlm.nih.gov/pubmed/23979570}{PubMed})
+#' @references Vielledent, G., Grinand, C., Rakotomala, F.A., Ranaivosoa, R., Rakotoarijaona, J-R., Allnutt, T.F., and Achard, F.  2018.  Combining global tree cover loss data with historical national forest cover maps to look at six decades of deforestation and forest fragmentation in Madagascar.  Biological Conservation 222:189-197. (\href{https://www.ncbi.nlm.nih.gov/pubmed/23979570}{PubMed})
 #'
-#' @source \href{https://phenome.jax.org/projects/Moore1b}{QTL Archive}
+#' @source \href{https://doi.org/10.1016/j.biocon.2018.04.008}{Viellendent et al. 2018}
 #'
 #' @examples
-#' data(grav)
-#' times <- attr(grav, "time")
-#' phe <- grav$pheno
-#' \donttest{iplotCurves(phe, times)}
-"grav"
+#' data(madForest2000)
+#' plot(madForest2000)
+'madForest2000'
