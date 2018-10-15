@@ -6,7 +6,7 @@
 \usage{
 fasterFocal(rast, w = 3, fun = sum, filename = "", na.rm = FALSE,
   pad = FALSE, padValue = NA, NAonly = FALSE, progress = FALSE,
-  cores = parallel::detectCores(), forceMulti = TRUE, ...)
+  cores = 2, forceMulti = TRUE, ...)
 }
 \arguments{
 \item{rast}{Raster object.}
@@ -27,7 +27,7 @@ fasterFocal(rast, w = 3, fun = sum, filename = "", na.rm = FALSE,
 
 \item{progress}{Logical, if \code{TRUE} display a progress bar. Only works if using multi-core calculation.}
 
-\item{cores}{Integer >0, number of CPU cores to use to calculate the focal function (default is number of cores available on the system).}
+\item{cores}{Integer >0, number of CPU cores to use to calculate the focal function (default is 2).}
 
 \item{forceMulti}{Logical, if \code{TRUE} (default) then the function will attempt to use the total number of cores in \code{cores}. (Note that this many not necessarily be faster since each core costs some overhead.)  If \code{FALSE}, then the function will use up to \code{cores} if needed (which also may not be faster... it always depends on the problem being computed).}
 

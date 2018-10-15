@@ -6,8 +6,8 @@
 \usage{
 fasterFragmentation(rast, size = 3, pad = FALSE, padValue = NA,
   calcDensity = TRUE, calcConnect = TRUE, calcClass = TRUE,
-  na.rm = FALSE, undet = "undetermined",
-  cores = parallel::detectCores(), forceMulti = TRUE, ...)
+  na.rm = FALSE, undet = "undetermined", cores = 2,
+  forceMulti = TRUE, verbose = FALSE, ...)
 }
 \arguments{
 \item{rast}{Raster with binary values (1 or 0 or \code{NA}).}
@@ -34,9 +34,13 @@ fasterFragmentation(rast, size = 3, pad = FALSE, padValue = NA,
     \item \code{random}: Undetermined cases will be assigned a value of 3 or 4 at random ("perforated" or "edge").
 }}
 
-\item{cores}{Integer >0, number of CPU cores to use to calculate the focal function (default is number of cores available on the system).}
+\item{cores}{Integer >0, number of CPU cores to use to calculate the focal function (default is 2).}
 
 \item{forceMulti}{Logical, if \code{TRUE} (default) then the function will attempt to use the total number of cores in \code{cores}. (Note that this many not necessarily be faster since each core costs some overhead.)  If \code{FALSE}, then the function will use up to \code{cores} if needed (which also may not be faster... it always depends on the problem being computed).}
+
+\item{verbose}{Logical. If \code{TRUE} then print progress indicators. Default is \code{FALSE}.}
+
+\item{...}{Additional arguments to send to \code{\link[fasterRaster]{fragmentation}} (which is used when only one core is used).}
 }
 \value{
 A raster stack with three rasters: a fragmentation classification (named \code{class}), the density of "1" pixels in the window (named \code{density}--called "pf" in Riitter et al. 2000), and a connectivity raster (conditional probability a cell with a value of 1 has a value that is also 1; named \code{connect}--called "pff" in Riitter et al. 2000).
@@ -57,7 +61,7 @@ Calculate fragmentation indices for a raster
 \examples{
 \dontrun{
 ### forest fragmentation
-data(madagascar)
+data(madForest2000)
 
 # cells are just 1s or NAs... replace NAs with 0
 forest <- calc(madForest2000, function(x) ifelse(is.na(x), 0, 1))

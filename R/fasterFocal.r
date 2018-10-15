@@ -10,7 +10,7 @@
 #' @param padValue Value to which to set the values of the virtual cells used to pad the raster if \code{pad} is \code{TRUE}.
 #' @param progress Logical, if \code{TRUE} display a progress bar. Only works if using multi-core calculation.
 #' @param NAonly Logical, if \code{TRUE} then only cells with a value of \code{NA} have values replaced. Default is \code{FALSE}.
-#' @param cores Integer >0, number of CPU cores to use to calculate the focal function (default is number of cores available on the system).
+#' @param cores Integer >0, number of CPU cores to use to calculate the focal function (default is 2).
 #' @param forceMulti Logical, if \code{TRUE} (default) then the function will attempt to use the total number of cores in \code{cores}. (Note that this many not necessarily be faster since each core costs some overhead.)  If \code{FALSE}, then the function will use up to \code{cores} if needed (which also may not be faster... it always depends on the problem being computed).
 #' @param ... Arguments to pass to \code{\link[raster]{writeRaster}}
 #' @return A raster object, possibly also written to disk.
@@ -29,14 +29,14 @@ fasterFocal <- function(
 	padValue = NA,
 	NAonly = FALSE,
 	progress = FALSE,
-	cores = parallel::detectCores(),
+	cores = 2,
 	forceMulti = TRUE,
 	...
 ) {
 
-	cpus <- parallel::detectCores()
-	minBlocks <- if (forceMulti) { min(cores, cpus) } else { 1 }	
-	blocks <- raster::blockSize(rast, minblocks=minBlocks)
+	# get number of cores and chunks of raster
+	cores <- .getCores(rast = rast, cores = cores, forceMulti = forceMulti)
+	blocks <- raster::blockSize(rast, minblocks=cpus)
 	
 	# single core
 	if (cores == 1 | blocks$n == 1) {
@@ -45,14 +45,6 @@ fasterFocal <- function(
 		
 	# multi-core
 	} else {
-
-		# number of cores
-		bs <- raster::blockSize(rast)
-		cores <- if (forceMulti) {
-			min(c(parallel::detectCores(), cores))
-		} else {
-			bs$n
-		}
 
 		# weights matrix
 		if (class(w) == 'matrix') {
@@ -141,7 +133,7 @@ fasterFocal <- function(
 			blockVals <- getValues(rast, startSendRows[tag], numSendRows[tag])
 			blockVals <- matrix(blockVals, ncol=xCols, byrow=TRUE)
 			
-			parallel:::sendCall(cluster[[tag]], fun=.workerFocal, args=list(blockVals=blockVals, w=w, fun=fun, na.rm=na.rm, NAonly=NAonly), tag=tag)
+			parallel::sendCall(cluster[[tag]], fun=.workerFocal, args=list(blockVals=blockVals, w=w, fun=fun, na.rm=na.rm, NAonly=NAonly), tag=tag)
 			
 			tracker$tag[tag] <- tag
 			tracker$sent[tag] <- TRUE
@@ -167,7 +159,7 @@ fasterFocal <- function(
 			thisTag <- tracker$tag[which(!tracker$done)[1]]
 		
 			# receive results from a node
-			outFromClust <- parallel:::recvData(cluster[[thisTag]])
+			outFromClust <- parallel::recvData(cluster[[thisTag]])
 			if (!outFromClust$success) stop('Cluster error.')
 
 			job <- which(outFromClust$tag == tracker$tag & tracker$sent & !tracker$done)
@@ -195,7 +187,7 @@ fasterFocal <- function(
 				blockVals <- getValues(rast, startSendRows[job], numSendRows[job])
 				blockVals <- matrix(blockVals, ncol=xCols, byrow=TRUE)
 				
-				parallel:::sendCall(cluster[[tag]], fun=.workerFocal, args=list(blockVals=blockVals, w=w, fun=fun, na.rm=na.rm, NAonly=NAonly), tag=tag)
+				parallel::sendCall(cluster[[tag]], fun=.workerFocal, args=list(blockVals=blockVals, w=w, fun=fun, na.rm=na.rm, NAonly=NAonly), tag=tag)
 				
 				tracker$tag[job] <- tag
 				tracker$sent[job] <- TRUE

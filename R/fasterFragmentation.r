@@ -16,7 +16,7 @@
 #' 	\item \code{edge}: Undetermined cases will be assigned a value of 4 ("edge").
 #' 	\item \code{random}: Undetermined cases will be assigned a value of 3 or 4 at random ("perforated" or "edge").
 #' }
-#' @param cores Integer >0, number of CPU cores to use to calculate the focal function (default is number of cores available on the system).
+#' @param cores Integer >0, number of CPU cores to use to calculate the focal function (default is 2).
 #' @param forceMulti Logical, if \code{TRUE} (default) then the function will attempt to use the total number of cores in \code{cores}. (Note that this many not necessarily be faster since each core costs some overhead.)  If \code{FALSE}, then the function will use up to \code{cores} if needed (which also may not be faster... it always depends on the problem being computed).
 #' @param verbose Logical. If \code{TRUE} then print progress indicators. Default is \code{FALSE}.
 #' @param ... Additional arguments to send to \code{\link[fasterRaster]{fragmentation}} (which is used when only one core is used).
@@ -35,7 +35,7 @@
 #' @examples
 #' \dontrun{
 #' ### forest fragmentation
-#' data(madagascar)
+#' data(madForest2000)
 #'
 #' # cells are just 1s or NAs... replace NAs with 0
 #' forest <- calc(madForest2000, function(x) ifelse(is.na(x), 0, 1))
@@ -70,7 +70,7 @@ fasterFragmentation <- function(
 	calcClass = TRUE,
 	na.rm = FALSE,
 	undet = 'undetermined',
-	cores = parallel::detectCores(),
+	cores = 2,
 	forceMulti = TRUE,
 	verbose = FALSE,
 	...
@@ -81,6 +81,9 @@ fasterFragmentation <- function(
 		warning('Forcing "calcDensity" and "calcConnect" in function "fragmentation()" to be TRUE since "calcClass" is TRUE.')
 	}
 
+	# number of cores
+	cores <- .getCores(rast = rast, cores = cores, forceMulti = forceMulti)	
+	
 	### single core
 	if (cores == 1) {
 

@@ -6,7 +6,7 @@
 #'
 #' @usage data(madForest2000)
 #'
-#' @format An object of class \code{'raster'}. See \code{\link[raster]{raster}}.
+#' @format An object of class \code{'raster'}. See \code{\link[raster]{raster}}. Values are forest (1) or not forest (\code{NA}).
 #'
 #' @keywords datasets
 #'

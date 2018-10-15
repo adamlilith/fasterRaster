@@ -56,7 +56,7 @@ The function calculates a set of fragmentation indices as per Riitters, K., J. W
 \examples{
 \dontrun{
 ### forest fragmentation
-data(madagascar)
+data(madForest2000)
 
 # cells are just 1s or NAs... replace NAs with 0
 forest <- calc(madForest2000, function(x) ifelse(is.na(x), 0, 1))
@@ -80,7 +80,5 @@ legend('topright', fill=cols, legend=names(cols))
 }
 }
 \seealso{
-\code{\link[fasterRaster]{fasterFragmentation}}
-
 \code{\link[fasterRaster]{fasterFragmentation}}
 }
