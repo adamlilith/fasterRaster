@@ -11,7 +11,7 @@
 #' @details See (r.latlong)[https://grass.osgeo.org/grass74/manuals/r.latlong.html] for more details. Note that if you get an error saying "", then you should add the EPSG code to the beginning of the raster coordinate reference system string (its "proj4string"). For example, \code{proj4string(rast) <- CRS('+init=epsg:32738')}. EPSG codes for various projections, datums, and locales can be found at (Spatial Reference)[http://spatialreference.org/].
 #' @seealso \code{\link[enmSdm]{longLatRasters}}
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' # note that in the example below using enmSdm::longLatRasters()
 #' # will be *much* faster than using fasterLongLatRasters()
 #' # because the template raster is so small

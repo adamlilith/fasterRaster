@@ -20,7 +20,7 @@
 #' **Note that the warning "Projection of dataset does not appear to match current location," will almost always appear. It can be safely ignored.**
 #' @seealso \code{\link[raster]{projectRaster}}
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' # could also use projectRaster() which
 #' # may be faster in this example
 #' # change this according to where GRASS 7 is installed on your system

@@ -16,7 +16,7 @@
 #' @return A raster object, possibly also written to disk.
 #' @seealso \code{\link[raster]{focal}}
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' }
 #' @export
 fasterFocal <- function(

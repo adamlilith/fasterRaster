@@ -34,7 +34,7 @@
 #' }
 #' @seealso \code{\link[fasterRaster]{fragmentation}}
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' ### forest fragmentation
 #' data(madForest2000)
 #'

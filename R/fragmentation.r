@@ -32,7 +32,7 @@
 #' Note that this differs somewhat from the numbering scheme presented by Riitters et al. (2000) and their errata.
 #' @seealso \code{\link[fasterRaster]{fasterFragmentation}}
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' ### forest fragmentation
 #' data(madForest2000)
 #' 
