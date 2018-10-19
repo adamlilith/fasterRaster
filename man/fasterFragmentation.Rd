@@ -44,15 +44,16 @@ fasterFragmentation(rast, size = 3, pad = FALSE, padValue = NA,
 }
 \value{
 A raster stack with three rasters: a fragmentation classification (named \code{class}), the density of "1" pixels in the window (named \code{density}--called "pf" in Riitter et al. 2000), and a connectivity raster (conditional probability a cell with a value of 1 has a value that is also 1; named \code{connect}--called "pff" in Riitter et al. 2000).
-The density and connectivity rasters have values in the range [0, 1], but the classification raster has coded values (from the erratum to Ritter et al. (2000):
+The density and connectivity rasters have values in the range [0, 1], but the classification raster has coded values (from the erratum to Ritter et al. (2000)):
 \itemize{
-	\item \code{0}: No forest (or whatever is being evaluated) in window
-\item \code{1}: interior (\code{pf} == 1)
-\item \code{2}: patch (\code{pf} < 0.4)
-\item \code{3}: transitional (0.4 <= \code{pf} < 0.6)
-\item \code{4}: perforated (\code{pf} >= 0.6 & \code{pf - pff} > 0)
-\item \code{5}: edge (\code{pf} >= 0.6 & \code{pf - pff} < 0)
-\item \code{6}: undetermined (\code{pf} >= 0.6 & \code{pf == pff})
+	\item \code{NA}: \code{NA}
+	\item \code{0}: No forest (or whatever is being evaluated)
+\item \code{1}: patch (\code{pf} < 0.4)
+\item \code{2}: transitional (0.4 <= \code{pf} < 0.6)
+\item \code{3}: perforated (\code{pf} >= 0.6 & \code{pf - pff} > 0)
+\item \code{4}: edge (\code{pf} >= 0.6 & \code{pf - pff} < 0)
+\item \code{5}: undetermined (\code{pf} >= 0.6 & \code{pf == pff})
+\item \code{6}: interior (\code{pf} == 1)
 }
 }
 \description{

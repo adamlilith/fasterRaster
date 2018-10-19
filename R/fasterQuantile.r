@@ -9,17 +9,17 @@
 #' @param ... Arguments to pass to \code{\link[rgrass7]{execGRASS}}.
 #' @return A named vector of the values for each quantile named in \code{probs}.
 #' @details See (r.buffer)[https://grass.osgeo.org/grass74/manuals/r.buffer.html] for more details.  Note that if you get an error saying "", then you should add the EPSG code to the beginning of the raster and vector coordinate reference system string (its "proj4string"). For example, \code{proj4string(x) <- CRS('+init=epsg:32738')}. EPSG codes for various projections, datums, and locales can be found at (Spatial Reference)[http://spatialreference.org/].
-#' @seealso \code{\link[base]{quantile}} in the \pkg{base} package and \code{\link[raster]{quantile}} in the \pkg{raster} package
+#' @seealso \code{\link[stats]{quantile}} in the \pkg{base} package and \code{\link[raster]{quantile}} in the \pkg{raster} package
 #' @examples
 #' \dontrun{
 #' # change this according to where GRASS 7 is installed on your system
 #' grassLoc <- c('C:/OSGeo4W64/', 'grass-7.4.1', 'osgeo4W')
-#' 
+#'
 #' data(madForest2000)
-#' 
+#'
 #' # calculate distance to forest
 #' distToForest <- fasterRastDistance(madForest2000, grassLoc=grassLoc)
-#' 
+#'
 #' # calculate quantiles
 #' probs <- c(0.025, 0.1, 0.25, 0.5, 0.75, 0.9, 0.975)
 #' quants <- fasterQuantile(distToForest, probs=probs, grassLoc=grassLoc)
@@ -35,9 +35,9 @@ fasterQuantile <- function(
 ) {
 
 	flags <- c('quiet', 'overwrite')
-	
+
 	probs <- 100 * probs
-	
+
 	# load raster
 	if (class(rast) == 'character') rast <- raster::raster(rast)
 
@@ -46,16 +46,16 @@ fasterQuantile <- function(
 
 	# export raster to GRASS
 	exportRastToGrass(rast, vname='rast')
-	
+
 	# temp file for output
 	tempFile <- tempfile(pattern = 'file', tmpdir = tempdir(), fileext = '.csv')
-	
+
 	# calculate
 	rgrass7::execGRASS('r.quantile', input='rast', file=tempFile, percentiles=probs, flags=flags)
-	
+
 	# get output
 	grassQuants <- read.csv(tempFile, header=FALSE)
-	
+
 	out <- rep(NA, length(probs))
 	names(out) <- paste0('prob_', probs)
 	for (i in 1:nrow(grassQuants)) {
@@ -63,7 +63,7 @@ fasterQuantile <- function(
 		thisRow <- strsplit(thisRow, split=':')
 		out[i] <- as.numeric(thisRow[[1]][3])
 	}
-	
+
 	out
-		
+
 }

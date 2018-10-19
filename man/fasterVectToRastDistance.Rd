@@ -21,6 +21,7 @@ fasterVectToRastDistance(rast, vect, metric = "euclidean",
 \item \code{maximum}: Maximum Euclidean distance
 \item \code{manhattan}: Manhattan distance (i.e., "taxicab" distance, distance along cells going only north-south and east-west and never along a diagonal).
 }
+
 meters Logical, if \code{TRUE} then distance is in meters. If \code{FALSE} then distance is in map units.
 invert Logical, if \code{TRUE} then calculate distance from any cell covered by a vector object to nearest cell **not** covered by a vector onject.}
 
