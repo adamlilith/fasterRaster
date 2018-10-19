@@ -4,8 +4,8 @@
 \alias{fasterCalc}
 \title{Apply a formula to each cell of a raster}
 \usage{
-fasterCalc(rast, fun, filename = "", na.rm = FALSE,
-  cores = parallel::detectCores(), forceMulti = TRUE, ...)
+fasterCalc(rast, fun, filename = "", na.rm = FALSE, cores = 2,
+  forceMulti = TRUE, ...)
 }
 \arguments{
 \item{rast}{Raster object.}
@@ -24,7 +24,7 @@ fasterCalc(rast, fun, filename = "", na.rm = FALSE,
 
 \item{na.rm}{Logical, if code{TRUE} then remove \code{NA} values (if supported by \code{fun}).}
 
-\item{cores}{Integer >0, number of CPU cores to use to calculate the focal function (default is number of cores available on the system).}
+\item{cores}{Integer >0, number of CPU cores to use to calculate the focal function (default is 2).}
 
 \item{forceMulti}{Logical, if \code{TRUE} (default) then the function will attempt to use the total number of cores in \code{cores}. (Note that this many not necessarily be faster since each core costs some overhead.)  If \code{FALSE}, then the function will use up to \code{cores} if needed (which also may not be faster... it always depends on the problem being computed).}
 

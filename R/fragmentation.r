@@ -34,7 +34,7 @@
 #' @examples
 #' \dontrun{
 #' ### forest fragmentation
-#' data(madagascar)
+#' data(madForest2000)
 #' 
 #' # cells are just 1s or NAs... replace NAs with 0
 #' forest <- calc(madForest2000, function(x) ifelse(is.na(x), 0, 1))
@@ -100,7 +100,7 @@ fragmentation <- function(
 		out <- raster::stack(classification, out)
 	}
 	
-	raster::projection(out) <- projection(rast)
+	raster::projection(out) <- raster::projection(rast)
 	if (pad) out <- raster::crop(out, origExtent)	
 	out
 	

@@ -13,7 +13,7 @@ exportRastToGrass <- function(
 ) {
 
 	tryWrite <- function(rast, vname) {
-		rast <- as(rast, 'SpatialGridDataFrame')
+		rastSGDF <- methods::as(rast, 'SpatialGridDataFrame')
 		rgrass7::writeRAST(rastSGDF, vname=vname)
 	}
 

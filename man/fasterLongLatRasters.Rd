@@ -5,23 +5,23 @@
 \title{Calculate longitude and latitude rasters}
 \usage{
 fasterLongLatRasters(rast, m = NULL, grassLoc = NULL,
-  initGrass = TRUE, backToR = TRUE, ...)
+  grassInit = TRUE, grassToR = TRUE, ...)
 }
 \arguments{
 \item{rast}{Either a raster or the full path and name of a raster object. This serves as a template for calculating longitude and latitude rasters.}
 
-\item{m}{Raster layer, serves as a mask for the longitude/latitude rasters. Cells that have \code{NA}s in \code{m} will also have \code{NA}s in the output rasters. Note that the mask is \emph{only} used if the output is sent back to R (\code{backToR} is \code{TRUE}) and not kept in the GRASS session created for the calculations.}
+\item{m}{Raster layer, serves as a mask for the longitude/latitude rasters. Cells that have \code{NA}s in \code{m} will also have \code{NA}s in the output rasters. Note that the mask is \emph{only} used if the output is sent back to R (\code{grassToR} is \code{TRUE}) and not kept in the GRASS session created for the calculations.}
 
 \item{grassLoc}{Either \code{NULL} or a 3-element character vector. If the latter, the first element is the base path to the installation of GRASS, the second the version number, and the third the install type for GRASS.  For example, \code{c('C:/OSGeo4W64/', 'grass-7.4.1', 'osgeo4W')}. See \code{\link[link2GI]{linkGRASS7}} for further help. If \code{NULL} (default) the an installation of GRASS is searched for; this may take several minutes.}
 
-\item{initGrass}{Logical, if \code{TRUE} (default) then a new GRASS session is initialized. If \code{FALSE} then it is assumed a GRASS session has been initialized using the raster in \code{y}. The latter is useful if you are chaining \pkg{fasterRaster} functions together and the first function initializes the session.}
+\item{grassInit}{Logical, if \code{TRUE} (default) then a new GRASS session is initialized. If \code{FALSE} then it is assumed a GRASS session has been initialized using the raster in \code{y}. The latter is useful if you are chaining \pkg{fasterRaster} functions together and the first function initializes the session.}
 
-\item{backToR}{Logical, if \code{TRUE} (default) then the product of the calculations will be returned to R. If \code{FALSE}, then the product is left in the GRASS session and named \code{longitude} and \code{latitude}. The latter case is useful (and faster) when chaining several \pkg{fasterRaster} functions together.}
+\item{grassToR}{Logical, if \code{TRUE} (default) then the product of the calculations will be returned to R. If \code{FALSE}, then the product is left in the GRASS session and named \code{longitude} and \code{latitude}. The latter case is useful (and faster) when chaining several \pkg{fasterRaster} functions together.}
 
 \item{...}{Arguments to pass to \code{\link[rgrass7]{execGRASS}} when used for rasterizing (i.e., function \code{r.latlong} in GRASS).}
 }
 \value{
-If \code{backToR} if \code{TRUE}, then a raster stack with the same extent, resolution, and coordinate reference system as \code{rast}. Otherwise, a raster with the name of \code{longitude} and \code{latitude} is written into the GRASS session.
+If \code{grassToR} if \code{TRUE}, then a raster stack with the same extent, resolution, and coordinate reference system as \code{rast}. Otherwise, a raster with the name of \code{longitude} and \code{latitude} is written into the GRASS session.
 }
 \description{
 This function is a potentially faster version of the \code{\link[enmSdm]{longLatRasters}} function in the \pkg{enmSdm} package which calculates two rasters, one with cell values equaling the longitude of their centers and the other with cell values equaling the latitude of their centers.
