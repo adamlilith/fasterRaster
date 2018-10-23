@@ -6,11 +6,11 @@
 \usage{
 fasterTerrain(rast, slope = TRUE, slopeUnits = "degrees",
   aspect = FALSE, profileCurve = FALSE, tanCurve = FALSE,
-  eastWestSlope = FALSE, northSouthSlope = FALSE, grassLoc = NULL,
-  grassInit = TRUE, grassToR = TRUE, ...)
+  eastWestSlope = FALSE, northSouthSlope = FALSE, grassDir = NULL,
+  alreadyInGrass = FALSE, grassToR = TRUE, ...)
 }
 \arguments{
-\item{rast}{Either a raster or the full path and name of a raster object.}
+\item{rast}{Either a raster with elevation data or the name of a raster in an existing GRASS session.}
 
 \item{slope}{Logical, if \code{TRUE} (default) then calculate slope.}
 
@@ -26,9 +26,9 @@ fasterTerrain(rast, slope = TRUE, slopeUnits = "degrees",
 
 \item{northSouthSlope}{Logical, if \code{TRUE}, calculate slope in north-south direction. Default is \code{FALSE}.}
 
-\item{grassLoc}{Either \code{NULL} or a 3-element character vector. If the latter, the first element is the base path to the installation of GRASS, the second the version number, and the third the install type for GRASS.  For example, \code{c('C:/OSGeo4W64/', 'grass-7.4.1', 'osgeo4W')}. See \code{\link[link2GI]{linkGRASS7}} for further help. If \code{NULL} (default) the an installation of GRASS is searched for; this may take several minutes.}
+\item{grassDir}{Either \code{NULL} or a 3-element character vector. If the latter, the first element is the base path to the installation of GRASS, the second the version number, and the third the install type for GRASS.  For example, \code{c('C:/OSGeo4W64/', 'grass-7.4.1', 'osgeo4W')}. See \code{\link[link2GI]{linkGRASS7}} for further help. If \code{NULL} (default) the an installation of GRASS is searched for; this may take several minutes.}
 
-\item{grassInit}{Logical, if \code{TRUE} (default) then a new GRASS session is initialized. If \code{FALSE} then it is assumed a GRASS session has been initialized using the raster in \code{rast}. The latter is useful if you are chaining \pkg{fasterRaster} functions together and the first function initializes the session.}
+\item{alreadyInGrass}{Logical, if \code{FALSE} (default) then start a new GRASS session and import the raster named in \code{rast}. If \code{FALSE}, use a raster already in GRASS with the name given by \code{rast}. The latter is useful if you are chaining \pkg{fasterRaster} functions together and the first function initializes the session. The first function should use \code{alreadyInGrass = FALSE} and subsequent functions should use \code{alreadyInGrass = TRUE} then use their \code{rast} (or \code{vect}) arguments to name the raster (or vector) that was made by the previous function.}
 
 \item{grassToR}{Logical, if \code{TRUE} (default) then the product of the calculations will be returned to R. If \code{FALSE}, then the product is left in the GRASS session and named \code{slope}, \code{aspect}, \code{profileCurve}, \code{tanCurve}, \code{eastWestSlope}, or \code{northSouthSlope}. The latter case is useful (and faster) when chaining several \pkg{fasterRaster} functions together.}
 
@@ -44,15 +44,15 @@ This function is a potentially faster version of the \code{\link[raster]{terrain
 See (r.slope.aspect)[https://grass.osgeo.org/grass74/manuals/r.slope.aspect.html] for more details.  Note that if you get an error saying "", then you should add the EPSG code to the beginning of the raster and vector coordinate reference system string (its "proj4string"). For example, \code{proj4string(x) <- CRS('+init=epsg:32738')}. EPSG codes for various projections, datums, and locales can be found at (Spatial Reference)[http://spatialreference.org/].
 }
 \examples{
-\dontrun{
+\donttest{
 # change this according to where GRASS 7 is installed on your system
-grassLoc <- c('C:/OSGeo4W64/', 'grass-7.4.1', 'osgeo4W')
+grassDir <- c('C:/OSGeo4W64/', 'grass-7.4.1', 'osgeo4W')
 
 data(madElev)
 
 # could also use terrain() which may be faster
 # in this example
-topo <- fasterTerrain(madElev, slope = TRUE, aspect=TRUE, grassLoc=grassLoc)
+topo <- fasterTerrain(madElev, slope = TRUE, aspect=TRUE, grassDir=grassDir)
 # slp <- terrain(elev, opt='slope', unit='degrees')
 # asp <- terrain(elev, opt='aspect', unit='degrees')
 # topo <- stack(slp, asp)

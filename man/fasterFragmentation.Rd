@@ -60,7 +60,7 @@ The density and connectivity rasters have values in the range [0, 1], but the cl
 Calculate fragmentation indices for a raster
 }
 \examples{
-\dontrun{
+\donttest{
 ### forest fragmentation
 data(madForest2000)
 

@@ -5,12 +5,12 @@
 \title{Project and resample a raster}
 \usage{
 fasterProjectRaster(rast, template, method = "bilinear", use = "grass",
-  grassLoc = NULL, grassInit = TRUE, grassToR = TRUE, ...)
+  grassDir = NULL, alreadyInGrass = FALSE, grassToR = TRUE, ...)
 }
 \arguments{
-\item{rast}{Either a raster or the full path and name of a raster object. This raster will be projected.}
+\item{rast}{Either a raster or the name of a raster in an existing GRASS session. This raster will be projected.}
 
-\item{template}{Raster layer \emph{or} full path and file name of a raster to serve as a template for projecting.}
+\item{template}{Either a raster or the name of a raster in an existing GRASS session to serve as a template for projecting.}
 
 \item{method}{Character, method for resampling cells:
 \itemize{
@@ -20,9 +20,9 @@ fasterProjectRaster(rast, template, method = "bilinear", use = "grass",
         \item \code{lanczos}: Lanczos interpolation (uses data from 25 cells).
 }}
 
-\item{grassLoc}{Either \code{NULL} or a 3-element character vector. If the latter, the first element is the base path to the installation of GRASS, the second the version number, and the third the install type for GRASS.  For example, \code{c('C:/OSGeo4W64/', 'grass-7.4.1', 'osgeo4W')}. See \code{\link[link2GI]{linkGRASS7}} for further help. If \code{NULL} (default) the an installation of GRASS is searched for; this may take several minutes.}
+\item{grassDir}{Either \code{NULL} or a 3-element character vector. If the latter, the first element is the base path to the installation of GRASS, the second the version number, and the third the install type for GRASS.  For example, \code{c('C:/OSGeo4W64/', 'grass-7.4.1', 'osgeo4W')}. See \code{\link[link2GI]{linkGRASS7}} for further help. If \code{NULL} (default) the an installation of GRASS is searched for; this may take several minutes.}
 
-\item{grassInit}{Logical, if \code{TRUE} (default) then a new GRASS session is initialized. If \code{FALSE} then it is assumed a GRASS session has been initialized using the raster in \code{resampled}. The latter is useful if you are chaining \pkg{fasterRaster} functions together and the first function initializes the session.}
+\item{alreadyInGrass}{Logical, if \code{FALSE} (default) then start a new GRASS session and import the raster named in \code{template} to set the extent, projection, and resolution. If \code{FALSE}, use a raster already in GRASS with the name given by \code{template}. The latter is useful if you are chaining \pkg{fasterRaster} functions together and the first function initializes the session. The first function should use \code{alreadyInGrass = FALSE} and subsequent functions should use \code{alreadyInGrass = TRUE} then use their \code{rast} (or \code{vect}) arguments to name the raster (or vector) that was made by the previous function.}
 
 \item{grassToR}{Logical, if \code{TRUE} (default) then the product of the calculations will be returned to R. If \code{FALSE}, then the product is left in the GRASS session and named \code{rast}. The latter case is useful (and faster) when chaining several \pkg{fasterRaster} functions together.}
 
@@ -40,16 +40,16 @@ See (r.slope.aspect)[https://grass.osgeo.org/grass74/manuals/r.resamp.interp.htm
 **Note that the warning "Projection of dataset does not appear to match current location," will almost always appear. It can be safely ignored.**
 }
 \examples{
-\dontrun{
+\donttest{
 # could also use projectRaster() which
 # may be faster in this example
 # change this according to where GRASS 7 is installed on your system
-grassLoc <- c('C:/OSGeo4W64/', 'grass-7.4.1', 'osgeo4W')
+grassDir <- c('C:/OSGeo4W64/', 'grass-7.4.1', 'osgeo4W')
 
 data(madElev)
 data(madForest2000)
 
-elevResamp <- fasterProjectRaster(madElev, madForest2000, grassLoc=grassLoc)
+elevResamp <- fasterProjectRaster(madElev, madForest2000, grassDir=grassDir)
 # elevResamp <- projectRaster(elev, madForest2000)
 par(mfrow=c(1, 2))
 plot(elev, main='Original')

@@ -1,8 +1,8 @@
 #' Project and resample a raster
 #'
 #' This function is a potentially faster version of the \code{\link[raster]{projectRaster}} function in the \pkg{raster} package for projecting (and resampling) a raster. It requires the user has GRASS GIS Version 7 installed.
-#' @param rast Either a raster or the full path and name of a raster object. This raster will be projected.
-#' @param template Raster layer \emph{or} full path and file name of a raster to serve as a template for projecting.
+#' @param rast Either a raster or the name of a raster in an existing GRASS session. This raster will be projected.
+#' @param template Either a raster or the name of a raster in an existing GRASS session to serve as a template for projecting.
 #' @param method Character, method for resampling cells:
 #' \itemize{
 #' 		\item \code{bilinear}: Bilinear interpolation (default; uses values from 4 cells).
@@ -10,8 +10,8 @@
 #' 		\item \code{nearest}: Nearest neighbor (uses data from 1 cell).
 #' 		\item \code{lanczos}: Lanczos interpolation (uses data from 25 cells).
 #' }
-#' @param grassLoc Either \code{NULL} or a 3-element character vector. If the latter, the first element is the base path to the installation of GRASS, the second the version number, and the third the install type for GRASS.  For example, \code{c('C:/OSGeo4W64/', 'grass-7.4.1', 'osgeo4W')}. See \code{\link[link2GI]{linkGRASS7}} for further help. If \code{NULL} (default) the an installation of GRASS is searched for; this may take several minutes.
-#' @param grassInit Logical, if \code{TRUE} (default) then a new GRASS session is initialized. If \code{FALSE} then it is assumed a GRASS session has been initialized using the raster in \code{resampled}. The latter is useful if you are chaining \pkg{fasterRaster} functions together and the first function initializes the session.
+#' @param grassDir Either \code{NULL} or a 3-element character vector. If the latter, the first element is the base path to the installation of GRASS, the second the version number, and the third the install type for GRASS.  For example, \code{c('C:/OSGeo4W64/', 'grass-7.4.1', 'osgeo4W')}. See \code{\link[link2GI]{linkGRASS7}} for further help. If \code{NULL} (default) the an installation of GRASS is searched for; this may take several minutes.
+#' @param alreadyInGrass Logical, if \code{FALSE} (default) then start a new GRASS session and import the raster named in \code{template} to set the extent, projection, and resolution. If \code{FALSE}, use a raster already in GRASS with the name given by \code{template}. The latter is useful if you are chaining \pkg{fasterRaster} functions together and the first function initializes the session. The first function should use \code{alreadyInGrass = FALSE} and subsequent functions should use \code{alreadyInGrass = TRUE} then use their \code{rast} (or \code{vect}) arguments to name the raster (or vector) that was made by the previous function.
 #' @param grassToR Logical, if \code{TRUE} (default) then the product of the calculations will be returned to R. If \code{FALSE}, then the product is left in the GRASS session and named \code{rast}. The latter case is useful (and faster) when chaining several \pkg{fasterRaster} functions together.
 #' @param ... Arguments to pass to \code{\link[rgrass7]{execGRASS}} when used for rasterizing (i.e., function \code{r.resamp.interp} in GRASS).
 #' @return If \code{grassToR} if \code{TRUE}, then a raster or raster stack with the same extent, resolution, and coordinate reference system as \code{rast}. Otherwise, a raster with the name \code{resampled} is written into the GRASS session.
@@ -24,12 +24,12 @@
 #' # could also use projectRaster() which
 #' # may be faster in this example
 #' # change this according to where GRASS 7 is installed on your system
-#' grassLoc <- c('C:/OSGeo4W64/', 'grass-7.4.1', 'osgeo4W')
+#' grassDir <- c('C:/OSGeo4W64/', 'grass-7.4.1', 'osgeo4W')
 #'
 #' data(madElev)
 #' data(madForest2000)
 #' 
-#' elevResamp <- fasterProjectRaster(madElev, madForest2000, grassLoc=grassLoc)
+#' elevResamp <- fasterProjectRaster(madElev, madForest2000, grassDir=grassDir)
 #' # elevResamp <- projectRaster(elev, madForest2000)
 #' par(mfrow=c(1, 2))
 #' plot(elev, main='Original')
@@ -42,24 +42,21 @@ fasterProjectRaster <- function(
 	template,
 	method = 'bilinear',
 	use = 'grass',
-	grassLoc = NULL,
-	grassInit = TRUE,
+	grassDir = NULL,
+	alreadyInGrass = FALSE,
 	grassToR = TRUE,
 	...
 ) {
 
 	flags <- c('quiet', 'overwrite')
 	
-	# load raster
-	if (class(rast) == 'character') rast <- raster::raster(rast)
-	if (class(template) == 'character') template <- raster::raster(template)
-
 	# get template CRS
 	p4s <- sp::proj4string(template)
 	
 	# initialize GRASS
-	if (grassInit) link2GI::linkGRASS7(template, default_GRASS7=grassLoc, gisdbase=raster::tmpDir(), location='temp')
+	input <- .initGrass(alreadyInGrass, rast=template, vect=NULL, grassDir=grassDir)
 
+	# export raster to project to GRASS (projects it automatically)
 	exportRastToGrass(rast, vname='rast')
 	
 	# export raster to GRASS

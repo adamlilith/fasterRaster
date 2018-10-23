@@ -2,7 +2,7 @@
 % Please edit documentation in R/private_workerFocal.r
 \name{.workerFocal}
 \alias{.workerFocal}
-\title{Worker function for multi-core focal calculation of rasters.}
+\title{Initialize GRASS session and import raster and/or vector(s).}
 \usage{
 .workerFocal(i, blockVals, w, fun = sum, na.rm = TRUE,
   NAonly = FALSE)

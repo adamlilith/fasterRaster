@@ -1,7 +1,7 @@
 #' Apply a formula to each cell of a raster
 #'
 #' This function applies a user-defined function to each cell in a raster. It functions exactly the same as the \code{\link[raster]{calc}} function in the \pkg{raster} package except that it can use a multi-core implementation to speed processing. **NB**: The code for the multi-core implementation is taken almost verbatim from \code{\link[raster]{clusterR}}.
-#' @param rast Raster object.
+#' @param rast Either a raster or the name of a raster in an existing GRASS session.
 #' @param fun Function. Possibilities include nearly any function in the \pkg{raster} package that operates on a raster and does not require multiple cells to calculate values (i.e., doesn't use a moving window or otherwise summarize values across a raster). Examples include:
 #' \itemize{
 #' 	\item \code{\link[raster]{calc}}

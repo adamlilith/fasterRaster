@@ -40,7 +40,7 @@ A raster object, possibly also written to disk.
 This function applies a function that uses values from a "moving window" across a raster. It is exactly the same as the \code{\link[raster]{focal}} function in the \pkg{raster} package except that it can use a multi-core implementation to speed processing.
 }
 \examples{
-\dontrun{
+\donttest{
 }
 }
 \seealso{

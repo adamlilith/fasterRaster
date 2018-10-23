@@ -1,10 +1,10 @@
 #' Compute quantiles for a raster.
 #'
 #' This function is a potentially faster version of the function \code{quantile(raster, probs)} for calculating the quantiles of a raster. This function will also work on rasters too big to load into memory using the \pkg{raster} package.
-#' @param rast Either a raster or the full path and name of a raster object.
+#' @param rast Either a raster or the name of a raster in an existing GRASS session.
 #' @param probs A numeric list of quantiles to calculate.
-#' @param grassLoc Either \code{NULL} or a 3-element character vector. If the latter, the first element is the base path to the installation of GRASS, the second the version number, and the third the install type for GRASS.  For example, \code{c('C:/OSGeo4W64/', 'grass-7.4.1', 'osgeo4W')}. See \code{\link[link2GI]{linkGRASS7}} for further help. If \code{NULL} (default) the an installation of GRASS is searched for; this may take several minutes.
-#' @param grassInit Logical, if \code{TRUE} (default) then a new GRASS session is initialized. If \code{FALSE} then it is assumed a GRASS session has been initialized using the raster in \code{rast}. The latter is useful if you are chaining \pkg{fasterRaster} functions together and the first function initializes the session.
+#' @param grassDir Either \code{NULL} or a 3-element character vector. If the latter, the first element is the base path to the installation of GRASS, the second the version number, and the third the install type for GRASS.  For example, \code{c('C:/OSGeo4W64/', 'grass-7.4.1', 'osgeo4W')}. See \code{\link[link2GI]{linkGRASS7}} for further help. If \code{NULL} (default) the an installation of GRASS is searched for; this may take several minutes.
+#' @param alreadyInGrass Logical, if \code{FALSE} (default) then start a new GRASS session and import the raster named in \code{rast}. If \code{FALSE}, use a raster already in GRASS with the name given by \code{rast}. The latter is useful if you are chaining \pkg{fasterRaster} functions together and the first function initializes the session. The first function should use \code{alreadyInGrass = FALSE} and subsequent functions should use \code{alreadyInGrass = TRUE} then use their \code{rast} (or \code{vect}) arguments to name the raster (or vector) that was made by the previous function.
 #' @param grassToR Logical, if \code{TRUE} (default) then the product of the calculations will be returned to R. If \code{FALSE}, then the product is left in the GRASS session and named \code{slope}, \code{aspect}, \code{profileCurve}, \code{tanCurve}, \code{eastWestSlope}, or \code{northSouthSlope}. The latter case is useful (and faster) when chaining several \pkg{fasterRaster} functions together.
 #' @param ... Arguments to pass to \code{\link[rgrass7]{execGRASS}}.
 #' @return A named vector of the values for each quantile named in \code{probs}.
@@ -13,24 +13,25 @@
 #' @examples
 #' \donttest{
 #' # change this according to where GRASS 7 is installed on your system
-#' grassLoc <- c('C:/OSGeo4W64/', 'grass-7.4.1', 'osgeo4W')
+#' grassDir <- c('C:/OSGeo4W64/', 'grass-7.4.1', 'osgeo4W')
 #'
 #' data(madForest2000)
 #'
 #' # calculate distance to forest
-#' distToForest <- fasterRastDistance(madForest2000, grassLoc=grassLoc)
+#' distToForest <- fasterRastDistance(madForest2000, grassDir=grassDir)
 #'
 #' # calculate quantiles
 #' probs <- c(0.025, 0.1, 0.25, 0.5, 0.75, 0.9, 0.975)
-#' quants <- fasterQuantile(distToForest, probs=probs, grassLoc=grassLoc)
+#' quants <- fasterQuantile(distToForest, probs=probs, grassDir=grassDir)
+#' quants
 #' }
 #' @export
 
 fasterQuantile <- function(
 	rast,
 	probs = c(0.025, 0.25, 0.5, 0.75, 0.975),
-	grassLoc = NULL,
-	grassInit = TRUE,
+	grassDir = NULL,
+	alreadyInGrass = FALSE,
 	...
 ) {
 
@@ -38,26 +39,20 @@ fasterQuantile <- function(
 
 	probs <- 100 * probs
 
-	# load raster
-	if (class(rast) == 'character') rast <- raster::raster(rast)
-
 	# initialize GRASS
-	if (grassInit) link2GI::linkGRASS7(rast, default_GRASS7=grassLoc, gisdbase=raster::tmpDir(), location='temp')
-
-	# export raster to GRASS
-	exportRastToGrass(rast, vname='rast')
+	input <- .initGrass(alreadyInGrass, rast=rast, vect=NULL, grassDir=grassDir)
 
 	# temp file for output
 	tempFile <- tempfile(pattern = 'file', tmpdir = tempdir(), fileext = '.csv')
 
 	# calculate
-	rgrass7::execGRASS('r.quantile', input='rast', file=tempFile, percentiles=probs, flags=flags)
+	rgrass7::execGRASS('r.quantile', input=input, file=tempFile, percentiles=probs, flags=flags)
 
 	# get output
 	grassQuants <- read.csv(tempFile, header=FALSE)
 
 	out <- rep(NA, length(probs))
-	names(out) <- paste0('prob_', probs)
+	names(out) <- paste0('prob_', probs / 100)
 	for (i in 1:nrow(grassQuants)) {
 		thisRow <- grassQuants[i, ]
 		thisRow <- strsplit(thisRow, split=':')
