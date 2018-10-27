@@ -1,4 +1,4 @@
-#' National borders of Madagascar
+#' Spatial data: national borders of Madagascar
 #'
 #' The national borders of Madagascar.
 #'

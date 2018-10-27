@@ -38,11 +38,16 @@ See (r.buffer)[https://grass.osgeo.org/grass74/manuals/r.buffer.html] for more d
 }
 \examples{
 \donttest{
+OS Geo version of GRASS:
 # change this according to where GRASS 7 is installed on your system
 grassDir <- c('C:/OSGeo4W64/', 'grass-7.4.1', 'osgeo4W')
 
+Stand-alone version of GRASS:
+# change this according to where GRASS 7 is installed on your system
+grassDir <- NULL
+
 data(madForest2000)
-rastBuff <- fasterBufferRast(madForest2000, width=2, units='kilometers')
+rastBuff <- fasterBufferRast(madForest2000, width=2, units='kilometers', grassDir=grassDir)
 plot(rastBuff, col=c('green', 'black'))
 legend('topright', legend=c('forest', 'buffer'), fill=c('green', 'black'))
 }

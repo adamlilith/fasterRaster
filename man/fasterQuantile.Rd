@@ -42,6 +42,7 @@ distToForest <- fasterRastDistance(madForest2000, grassDir=grassDir)
 # calculate quantiles
 probs <- c(0.025, 0.1, 0.25, 0.5, 0.75, 0.9, 0.975)
 quants <- fasterQuantile(distToForest, probs=probs, grassDir=grassDir)
+quants
 }
 }
 \seealso{

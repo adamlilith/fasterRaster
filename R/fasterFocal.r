@@ -133,7 +133,7 @@ fasterFocal <- function(
 			blockVals <- getValues(rast, startSendRows[tag], numSendRows[tag])
 			blockVals <- matrix(blockVals, ncol=xCols, byrow=TRUE)
 			
-			parallel::sendCall(cluster[[tag]], fun=.workerFocal, args=list(blockVals=blockVals, w=w, fun=fun, na.rm=na.rm, NAonly=NAonly), tag=tag)
+			snow::sendCall(cluster[[tag]], fun=.workerFocal, args=list(blockVals=blockVals, w=w, fun=fun, na.rm=na.rm, NAonly=NAonly), tag=tag)
 			
 			tracker$tag[tag] <- tag
 			tracker$sent[tag] <- TRUE
@@ -187,7 +187,7 @@ fasterFocal <- function(
 				blockVals <- getValues(rast, startSendRows[job], numSendRows[job])
 				blockVals <- matrix(blockVals, ncol=xCols, byrow=TRUE)
 				
-				parallel::sendCall(cluster[[tag]], fun=.workerFocal, args=list(blockVals=blockVals, w=w, fun=fun, na.rm=na.rm, NAonly=NAonly), tag=tag)
+				snow::sendCall(cluster[[tag]], fun=.workerFocal, args=list(blockVals=blockVals, w=w, fun=fun, na.rm=na.rm, NAonly=NAonly), tag=tag)
 				
 				tracker$tag[job] <- tag
 				tracker$sent[job] <- TRUE
