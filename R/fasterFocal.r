@@ -36,7 +36,7 @@ fasterFocal <- function(
 
 	# get number of cores and chunks of raster
 	cores <- .getCores(rast = rast, cores = cores, forceMulti = forceMulti)
-	blocks <- raster::blockSize(rast, minblocks=cpus)
+	blocks <- raster::blockSize(rast, minblocks=cores)
 	
 	# single core
 	if (cores == 1 | blocks$n == 1) {
