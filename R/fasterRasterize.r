@@ -69,13 +69,13 @@ fasterRasterize <- function(
 
 	# rasterize
 	if (use == 'field') {
-		rgrass7::execGRASS('v.to.rast', input=input[['vectInGrass']], output='vectAsRast', use='attr', attribute_column=field, type=featType, flags=flags, ...)
+		rgrass7::execGRASS('v.to.rast', input=input[['vectNameInGrass']], output='vectAsRast', use='attr', attribute_column=field, type=featType, flags=flags, ...)
 	} else if (use == 'category') {
-		rgrass7::execGRASS('v.to.rast', input=input[['vectInGrass']], output='vectAsRast', use='cat', label_column=field, type=featType, flags=flags, ...)
+		rgrass7::execGRASS('v.to.rast', input=input[['vectNameInGrass']], output='vectAsRast', use='cat', label_column=field, type=featType, flags=flags, ...)
 	} else if (use == 'value') {
-		rgrass7::execGRASS('v.to.rast', input=input[['vectInGrass']], output='vectAsRast', use='val', value=value, type=featType, flags=flags, ...)
+		rgrass7::execGRASS('v.to.rast', input=input[['vectNameInGrass']], output='vectAsRast', use='val', value=value, type=featType, flags=flags, ...)
 	} else {
-		rgrass7::execGRASS('v.to.rast', input=input[['vectInGrass']], output='vectAsRast', use=use, flags=flags, type=featType, ...)
+		rgrass7::execGRASS('v.to.rast', input=input[['vectNameInGrass']], output='vectAsRast', use=use, flags=flags, type=featType, ...)
 	}
 
 	# get raster back to R

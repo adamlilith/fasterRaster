@@ -20,10 +20,11 @@ fasterVectToRastDistance(rast, vect, metric = "euclidean",
 \item \code{squared}: Squared Euclidean distance
 \item \code{maximum}: Maximum Euclidean distance
 \item \code{manhattan}: Manhattan distance (i.e., "taxicab" distance, distance along cells going only north-south and east-west and never along a diagonal).
-}
+}}
 
-meters Logical, if \code{TRUE} then distance is in meters. If \code{FALSE} then distance is in map units.
-invert Logical, if \code{TRUE} then calculate distance from any cell covered by a vector object to nearest cell **not** covered by a vector onject.}
+\item{meters}{Logical, if \code{TRUE} then distance is in meters. If \code{FALSE} then distance is in map units.}
+
+\item{invert}{Logical, if \code{TRUE} then for cells covered by a vector object calculate distance to nearest cell \emph{not} covered by a vector object.}
 
 \item{grassDir}{Either \code{NULL} or a 3-element character vector. If the latter, the first element is the base path to the installation of GRASS, the second the version number, and the third the install type for GRASS.  For example, \code{c('C:/OSGeo4W64/', 'grass-7.4.1', 'osgeo4W')}. See \code{\link[link2GI]{linkGRASS7}} for further help. If \code{NULL} (default) the an installation of GRASS is searched for; this may take several minutes.}
 
