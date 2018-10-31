@@ -3,7 +3,7 @@
 \docType{data}
 \name{mad4}
 \alias{mad4}
-\title{Borders of selected districts of Madagascar}
+\title{Spatial data: borders of selected districts of Madagascar}
 \format{An object of class \code{'SpatialPolygonsDataFrame'}. See \code{\link[sp]{SpatialPolygons}}.}
 \source{
 Database of Global Administrative Areas Version 2.8 or (\href{https://gadm.org/}{GADM})

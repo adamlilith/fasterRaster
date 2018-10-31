@@ -159,7 +159,7 @@ fasterFocal <- function(
 			thisTag <- tracker$tag[which(!tracker$done)[1]]
 		
 			# receive results from a node
-			outFromClust <- parallel::recvData(cluster[[thisTag]])
+			outFromClust <- snow::recvData(cluster[[thisTag]])
 			if (!outFromClust$success) stop('Cluster error.')
 
 			job <- which(outFromClust$tag == tracker$tag & tracker$sent & !tracker$done)
@@ -170,9 +170,7 @@ fasterFocal <- function(
 			valsFromClust <- outFromClust$value
 			valsFromClust <- valsFromClust[(halfWindowSize + 1):(nrow(valsFromClust) - halfWindowSize), ]
 			
-			# # get block
-			# omnibus::say('Received block: ', job)
-
+			# get block
 			if (filename != '') {
 				valsFromClust <- c(t(valsFromClust))
 				out <- raster::writeValues(out, v=valsFromClust, start=startProcessRows[job])

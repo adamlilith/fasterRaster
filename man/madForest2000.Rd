@@ -3,7 +3,7 @@
 \docType{data}
 \name{madForest2000}
 \alias{madForest2000}
-\title{Forest cover in 2000 for a portion of Madagascar}
+\title{Spatial data: forest cover in 2000 for a portion of Madagascar}
 \format{An object of class \code{'raster'}. See \code{\link[raster]{raster}}. Values are forest (1) or not forest (\code{NA}).}
 \source{
 \href{https://doi.org/10.1016/j.biocon.2018.04.008}{Viellendent et al. 2018}
