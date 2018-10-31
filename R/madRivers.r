@@ -1,4 +1,4 @@
-#' Major rivers in a selected portion of Madagascar
+#' Spatial data: major rivers in a selected portion of Madagascar
 #'
 #' Spatial lines object of major rivers in a portion of Madagascar.
 #'

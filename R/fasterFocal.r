@@ -36,7 +36,7 @@ fasterFocal <- function(
 
 	# get number of cores and chunks of raster
 	cores <- .getCores(rast = rast, cores = cores, forceMulti = forceMulti)
-	blocks <- raster::blockSize(rast, minblocks=cpus)
+	blocks <- raster::blockSize(rast, minblocks=cores)
 	
 	# single core
 	if (cores == 1 | blocks$n == 1) {
@@ -133,7 +133,7 @@ fasterFocal <- function(
 			blockVals <- getValues(rast, startSendRows[tag], numSendRows[tag])
 			blockVals <- matrix(blockVals, ncol=xCols, byrow=TRUE)
 			
-			parallel::sendCall(cluster[[tag]], fun=.workerFocal, args=list(blockVals=blockVals, w=w, fun=fun, na.rm=na.rm, NAonly=NAonly), tag=tag)
+			snow::sendCall(cluster[[tag]], fun=.workerFocal, args=list(blockVals=blockVals, w=w, fun=fun, na.rm=na.rm, NAonly=NAonly), tag=tag)
 			
 			tracker$tag[tag] <- tag
 			tracker$sent[tag] <- TRUE
@@ -159,7 +159,7 @@ fasterFocal <- function(
 			thisTag <- tracker$tag[which(!tracker$done)[1]]
 		
 			# receive results from a node
-			outFromClust <- parallel::recvData(cluster[[thisTag]])
+			outFromClust <- snow::recvData(cluster[[thisTag]])
 			if (!outFromClust$success) stop('Cluster error.')
 
 			job <- which(outFromClust$tag == tracker$tag & tracker$sent & !tracker$done)
@@ -170,9 +170,7 @@ fasterFocal <- function(
 			valsFromClust <- outFromClust$value
 			valsFromClust <- valsFromClust[(halfWindowSize + 1):(nrow(valsFromClust) - halfWindowSize), ]
 			
-			# # get block
-			# omnibus::say('Received block: ', job)
-
+			# get block
 			if (filename != '') {
 				valsFromClust <- c(t(valsFromClust))
 				out <- raster::writeValues(out, v=valsFromClust, start=startProcessRows[job])
@@ -187,7 +185,7 @@ fasterFocal <- function(
 				blockVals <- getValues(rast, startSendRows[job], numSendRows[job])
 				blockVals <- matrix(blockVals, ncol=xCols, byrow=TRUE)
 				
-				parallel::sendCall(cluster[[tag]], fun=.workerFocal, args=list(blockVals=blockVals, w=w, fun=fun, na.rm=na.rm, NAonly=NAonly), tag=tag)
+				snow::sendCall(cluster[[tag]], fun=.workerFocal, args=list(blockVals=blockVals, w=w, fun=fun, na.rm=na.rm, NAonly=NAonly), tag=tag)
 				
 				tracker$tag[job] <- tag
 				tracker$sent[job] <- TRUE

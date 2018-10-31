@@ -1,4 +1,4 @@
-#' Borders of selected districts of Madagascar
+#' Spatial data: borders of selected districts of Madagascar
 #'
 #' Borders of selected districts of Madagascar
 #'

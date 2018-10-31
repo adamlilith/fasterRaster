@@ -5,12 +5,12 @@
 \title{Rasterize using a call to GRASS GIS.}
 \usage{
 fasterRasterize(vect, rast, use = "value", value = 1, field = NULL,
-  grassLoc = NULL, grassInit = TRUE, grassToR = TRUE, ...)
+  grassDir = NULL, alreadyInGrass = FALSE, grassToR = TRUE, ...)
 }
 \arguments{
-\item{vect}{SpatialPoints, SpatialPointsDataFrame, SpatialLines, SpatialLinesDataFrame, SpatialPolygons, or SpatialPolygonsDataFrame or the full path and name of such an object.}
+\item{vect}{Either a SpatialPoints, SpatialPointsDataFrame, SpatialLines, SpatialLinesDataFrame, SpatialPolygons, or SpatialPolygonsDataFrame or the name of such a vector dataset already in a GRASS session.}
 
-\item{rast}{Either a raster or the full path and name of a raster object. This serves as a template for the new raster.}
+\item{rast}{Either a raster or the name of a raster in an existing GRASS session. This serves as a template for the new raster.}
 
 \item{use}{Character, indicates the types of values to be "burned" to the raster. Options include
 \itemize{
@@ -25,9 +25,9 @@ fasterRasterize(vect, rast, use = "value", value = 1, field = NULL,
 
 \item{field}{Name of column in \code{vect} with values or category labbels to which to burn to the raster.}
 
-\item{grassLoc}{Either \code{NULL} or a 3-element character vector. If the latter, the first element is the base path to the installation of GRASS, the second the version number, and the third the install type for GRASS.  For example, \code{c('C:/OSGeo4W64/', 'grass-7.4.1', 'osgeo4W')}. See \code{\link[link2GI]{linkGRASS7}} for further help. If \code{NULL} (default) the an installation of GRASS is searched for; this may take several minutes.}
+\item{grassDir}{Either \code{NULL} or a 3-element character vector. If the latter, the first element is the base path to the installation of GRASS, the second the version number, and the third the install type for GRASS.  For example, \code{c('C:/OSGeo4W64/', 'grass-7.4.1', 'osgeo4W')}. See \code{\link[link2GI]{linkGRASS7}} for further help. If \code{NULL} (default) the an installation of GRASS is searched for; this may take several minutes.}
 
-\item{grassInit}{Logical, if \code{TRUE} (default) then a new GRASS session is initialized. If \code{FALSE} then it is assumed a GRASS session has been initialized using the raster in \code{rast}. The latter is useful if you are chaining \pkg{fasterRaster} functions together and the first function initializes the session.}
+\item{alreadyInGrass}{Logical, if \code{FALSE} (default) then start a new GRASS session and import the raster named in \code{rast}. If \code{FALSE}, use a raster already in GRASS with the name given by \code{rast}. The latter is useful if you are chaining \pkg{fasterRaster} functions together and the first function initializes the session. The first function should use \code{alreadyInGrass = FALSE} and subsequent functions should use \code{alreadyInGrass = TRUE} then use their \code{rast} (or \code{vect}) arguments to name the raster (or vector) that was made by the previous function.}
 
 \item{grassToR}{Logical, if \code{TRUE} (default) then the product of the calculations will be returned to R. If \code{FALSE}, then the product is left in the GRASS session and named \code{vectAsRast}. The latter case is useful (and faster) when chaining several \pkg{fasterRaster} functions together.}
 
@@ -43,16 +43,16 @@ This function is a potentially faster version of the \code{\link[raster]{rasteri
 See (v.to.rast)[https://grass.osgeo.org/grass74/manuals/v.to.rast.html] for more details.  Note that if you get an error saying "", then you should add the EPSG code to the beginning of the raster and vector coordinate reference system string (their "proj4string"). For example, \code{proj4string(x) <- CRS('+init=epsg:32738')}. EPSG codes for various projections, datums, and locales can be found at (Spatial Reference)[http://spatialreference.org/].
 }
 \examples{
-\dontrun{
+\donttest{
 # change this according to where GRASS 7 is installed on your system
-grassLoc <- c('C:/OSGeo4W64/', 'grass-7.4.1', 'osgeo4W')
+grassDir <- c('C:/OSGeo4W64/', 'grass-7.4.1', 'osgeo4W')
 
 data(mad0)
 data(madForest2000)
 
 # could also use rasterize() or mask() which may
 # be faster in this example
-madMask <- fasterRasterize(mad0, madForest2000, grassLoc=grassLoc)
+madMask <- fasterRasterize(mad0, madForest2000, grassDir=grassDir)
 # madMask <- rasterize(mad0, madForest2000)
 # madMask <- mask(madForest2000, mad0)
 plot(madMask, main='Portion of Eastern Madagascar')

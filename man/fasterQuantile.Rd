@@ -5,16 +5,16 @@
 \title{Compute quantiles for a raster.}
 \usage{
 fasterQuantile(rast, probs = c(0.025, 0.25, 0.5, 0.75, 0.975),
-  grassLoc = NULL, grassInit = TRUE, ...)
+  grassDir = NULL, alreadyInGrass = FALSE, ...)
 }
 \arguments{
-\item{rast}{Either a raster or the full path and name of a raster object.}
+\item{rast}{Either a raster or the name of a raster in an existing GRASS session.}
 
 \item{probs}{A numeric list of quantiles to calculate.}
 
-\item{grassLoc}{Either \code{NULL} or a 3-element character vector. If the latter, the first element is the base path to the installation of GRASS, the second the version number, and the third the install type for GRASS.  For example, \code{c('C:/OSGeo4W64/', 'grass-7.4.1', 'osgeo4W')}. See \code{\link[link2GI]{linkGRASS7}} for further help. If \code{NULL} (default) the an installation of GRASS is searched for; this may take several minutes.}
+\item{grassDir}{Either \code{NULL} or a 3-element character vector. If the latter, the first element is the base path to the installation of GRASS, the second the version number, and the third the install type for GRASS.  For example, \code{c('C:/OSGeo4W64/', 'grass-7.4.1', 'osgeo4W')}. See \code{\link[link2GI]{linkGRASS7}} for further help. If \code{NULL} (default) the an installation of GRASS is searched for; this may take several minutes.}
 
-\item{grassInit}{Logical, if \code{TRUE} (default) then a new GRASS session is initialized. If \code{FALSE} then it is assumed a GRASS session has been initialized using the raster in \code{rast}. The latter is useful if you are chaining \pkg{fasterRaster} functions together and the first function initializes the session.}
+\item{alreadyInGrass}{Logical, if \code{FALSE} (default) then start a new GRASS session and import the raster named in \code{rast}. If \code{FALSE}, use a raster already in GRASS with the name given by \code{rast}. The latter is useful if you are chaining \pkg{fasterRaster} functions together and the first function initializes the session. The first function should use \code{alreadyInGrass = FALSE} and subsequent functions should use \code{alreadyInGrass = TRUE} then use their \code{rast} (or \code{vect}) arguments to name the raster (or vector) that was made by the previous function.}
 
 \item{...}{Arguments to pass to \code{\link[rgrass7]{execGRASS}}.}
 
@@ -30,18 +30,19 @@ This function is a potentially faster version of the function \code{quantile(ras
 See (r.buffer)[https://grass.osgeo.org/grass74/manuals/r.buffer.html] for more details.  Note that if you get an error saying "", then you should add the EPSG code to the beginning of the raster and vector coordinate reference system string (its "proj4string"). For example, \code{proj4string(x) <- CRS('+init=epsg:32738')}. EPSG codes for various projections, datums, and locales can be found at (Spatial Reference)[http://spatialreference.org/].
 }
 \examples{
-\dontrun{
+\donttest{
 # change this according to where GRASS 7 is installed on your system
-grassLoc <- c('C:/OSGeo4W64/', 'grass-7.4.1', 'osgeo4W')
+grassDir <- c('C:/OSGeo4W64/', 'grass-7.4.1', 'osgeo4W')
 
 data(madForest2000)
 
 # calculate distance to forest
-distToForest <- fasterRastDistance(madForest2000, grassLoc=grassLoc)
+distToForest <- fasterRastDistance(madForest2000, grassDir=grassDir)
 
 # calculate quantiles
 probs <- c(0.025, 0.1, 0.25, 0.5, 0.75, 0.9, 0.975)
-quants <- fasterQuantile(distToForest, probs=probs, grassLoc=grassLoc)
+quants <- fasterQuantile(distToForest, probs=probs, grassDir=grassDir)
+quants
 }
 }
 \seealso{

@@ -8,7 +8,7 @@ fasterCalc(rast, fun, filename = "", na.rm = FALSE, cores = 2,
   forceMulti = TRUE, ...)
 }
 \arguments{
-\item{rast}{Raster object.}
+\item{rast}{Either a raster or the name of a raster in an existing GRASS session.}
 
 \item{fun}{Function. Possibilities include nearly any function in the \pkg{raster} package that operates on a raster and does not require multiple cells to calculate values (i.e., doesn't use a moving window or otherwise summarize values across a raster). Examples include:
 \itemize{

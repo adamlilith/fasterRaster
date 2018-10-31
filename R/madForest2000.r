@@ -1,4 +1,4 @@
-#' Forest cover in 2000 for a portion of Madagascar
+#' Spatial data: forest cover in 2000 for a portion of Madagascar
 #'
 #' Raster of occurrence/non-occurrence of forest cover in a portion of Madagascar. Cells are 30-m in resolution. Values represent forest (1) or non-forest (\code{NA}).
 #'

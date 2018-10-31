@@ -1,4 +1,4 @@
-#' Worker function for multi-core focal calculation of rasters.
+#' Initialize GRASS session and import raster and/or vector(s).
 #'
 #' This function is a generic worker function for a multi-core implementation of the \code{\link[raster]{focal}} function in the \pkg{raster} package. It is usually called by another function and is thus not of great use to most users.
 #' @param i Integer > 0, ID number for the node on which calculations are being conducted.
