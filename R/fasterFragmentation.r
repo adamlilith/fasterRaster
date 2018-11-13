@@ -93,7 +93,15 @@ fasterFragmentation <- function(
 			fush.console()
 		}
 		
-		out <- fasterRaster::fragmentation(rast=rast, size=size, calcDensity=calcDensity, calcConnect=calcConnect, calcClass=calcClass, na.rm=na.rm, ...)
+		out <- fasterRaster::fragmentation(
+			rast=rast,
+			size=size,
+			calcDensity=calcDensity,
+			calcConnect=calcConnect,
+			calcClass=calcClass,
+			na.rm=na.rm,
+			...
+		)
 
 	### multi-core
 	} else {

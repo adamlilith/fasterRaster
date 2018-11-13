@@ -16,12 +16,13 @@ Depends:
 	raster,
 	rgrass7
 Imports:
+	enmSdm,
 	methods,
+	omnibus,
 	parallel,
 	rgdal,
 	sp
 Suggests:
-	enmSdm,
 	knitr,
 	rgeos,
     testthat
