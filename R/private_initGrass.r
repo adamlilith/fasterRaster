@@ -6,6 +6,7 @@
 #' @param rast Either: a SpatialPoints, SpatialPolygons, or SpatialLines object **or** the name of a vector dataset already imported into GRASS **or** \code{NULL} (default) in which case no vector is exported into GRASS. Either \code{rast} or \code{vect} (or both) but be non-\code{NULL}.
 #' @param grassDir Either \code{NULL} or a 3-element character vector. If the latter, the first element is the base path to the installation of GRASS, the second the version number, and the third the install type for GRASS.  For example, \code{c('C:/OSGeo4W64/', 'grass-7.4.1', 'osgeo4W')}. See \code{\link[link2GI]{linkGRASS7}} for further help. If \code{NULL} (default) the an installation of GRASS is searched for; this may take several minutes.
 #' @return One or two-element character list. If the list is one element long then it will be the name of raster **or** vector exported or already in GRASS session. If it is two elements long then it will be the name of the raster **and* the vector exported or aready in the GRASS session (in that order).
+#' @keywords internal
 .initGrass <- function(
 	alreadyInGrass = FALSE,
 	rast = NULL,

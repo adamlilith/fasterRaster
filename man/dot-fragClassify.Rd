@@ -49,3 +49,4 @@ This function classifies fragmentation based on pf (density) and pff (conditiona
 \seealso{
 \code{\link[fasterRaster]{fragmentation}}, \code{\link[fasterRaster]{.fragDensity}}, \code{\link[fasterRaster]{.fragConnect}}
 }
+\keyword{internal}

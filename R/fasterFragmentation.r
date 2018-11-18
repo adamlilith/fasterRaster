@@ -83,7 +83,7 @@ fasterFragmentation <- function(
 	}
 
 	# number of cores
-	cores <- .getCores(rast = rast, cores = cores, forceMulti = forceMulti)	
+	cores <- omnibus::getCores(rast = rast, cores = cores, forceMulti = forceMulti)	
 	
 	### single core
 	if (cores == 1) {
@@ -93,7 +93,15 @@ fasterFragmentation <- function(
 			fush.console()
 		}
 		
-		out <- fasterRaster::fragmentation(rast=rast, size=size, calcDensity=calcDensity, calcConnect=calcConnect, calcClass=calcClass, na.rm=na.rm, ...)
+		out <- fasterRaster::fragmentation(
+			rast=rast,
+			size=size,
+			calcDensity=calcDensity,
+			calcConnect=calcConnect,
+			calcClass=calcClass,
+			na.rm=na.rm,
+			...
+		)
 
 	### multi-core
 	} else {

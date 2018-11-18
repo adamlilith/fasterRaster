@@ -26,3 +26,4 @@ Matrix.
 \description{
 This function is a generic worker function for a multi-core implementation of the \code{\link[raster]{focal}} function in the \pkg{raster} package. It is usually called by another function and is thus not of great use to most users.
 }
+\keyword{internal}

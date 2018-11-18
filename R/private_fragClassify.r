@@ -32,6 +32,7 @@
 #' .fragClassify(c(0.7, 0.9)) # edge 4
 #' .fragClassify(c(0.7, 0.7)) # undetermined 5
 #' @seealso \code{\link[fasterRaster]{fragmentation}}, \code{\link[fasterRaster]{.fragDensity}}, \code{\link[fasterRaster]{.fragConnect}}
+#' @keywords internal
 .fragClassify <- compiler::cmpfun(function(x, undet='undetermined', ...) {
 
 	pf <- x[1]
