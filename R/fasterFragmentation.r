@@ -83,7 +83,7 @@ fasterFragmentation <- function(
 	}
 
 	# number of cores
-	cores <- .getCores(rast = rast, cores = cores, forceMulti = forceMulti)	
+	cores <- omnibus::getCores(rast = rast, cores = cores, forceMulti = forceMulti)	
 	
 	### single core
 	if (cores == 1) {
