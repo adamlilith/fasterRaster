@@ -6,9 +6,13 @@ This package uses OS-Geo's [GRASS GIS Version 7](https://grass.osgeo.org/grass7/
 To install this package and its dependencies, do the following:
 
 `install.packages('devtools') # if you haven't done this already`
+
 `library(devtools)`
+
 `install_github('adamlilith/omnibus')`
+
 `install_github('adamlilith/enmSdm')`
+
 `install_github('adamlilith/fasterRaster')`
 
 ## *Faster* raster processing functions ##
