@@ -28,3 +28,4 @@ fasterRaster:::.fragConnect(x)
 \seealso{
 \code{\link[fasterRaster]{fragmentation}}, \code{\link[fasterRaster]{.fragDensity}}, \code{\link[fasterRaster]{.fragClassify}}
 }
+\keyword{internal}

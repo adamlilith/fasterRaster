@@ -8,6 +8,7 @@
 #' @param #' @param na.rm Logical, if code{FALSE} (default) the value computed by \code{fun} will be \code{NA} only if all cells in the window are \code{NA}. Using \code{na.rm = TRUE} is usually not a good idea since it can unbalance weights.
 #' @param NAonly Logical, if \code{TRUE} then only cells with a value of \code{NA} have values replaced. Default is \code{FALSE}.
 #' @return Matrix.
+#' @keywords internal
 .workerFocal <- function(i, blockVals, w, fun=sum, na.rm=TRUE, NAonly=FALSE) {
 
 	halfWindowSize <- (nrow(w) - 1) / 2

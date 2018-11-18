@@ -12,6 +12,7 @@
 #' diag(x) <- NA
 #' fasterRaster:::.fragConnect(x)
 #' @seealso \code{\link[fasterRaster]{fragmentation}}, \code{\link[fasterRaster]{.fragDensity}}, \code{\link[fasterRaster]{.fragClassify}}
+#' @keywords internal
 .fragConnect <- compiler::cmpfun(function(x, na.rm=FALSE) {
 
 	if (all(is.na(x))) return(NA)

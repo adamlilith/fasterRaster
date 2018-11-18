@@ -22,3 +22,4 @@ One or two-element character list. If the list is one element long then it will 
 \description{
 This is a private function to start a generic GRASS session and import a raster and/or vector into it.
 }
+\keyword{internal}
