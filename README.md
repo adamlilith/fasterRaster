@@ -15,6 +15,13 @@ To install this package and its dependencies, do the following:
 
 `install_github('adamlilith/fasterRaster')`
 
+To install `fasterRaster` and its dependencies, do the following:
+`install.packages('devtools') # if you haven't done this already`  
+`library(devtools)`  
+`install_github('adamlilith/omnibus')`  
+`install_github('adamlilith/enmSdm')`  
+`install_github('adamlilith/fasterRaster')`  
+
 ## *Faster* raster processing functions ##
 * `fasterBufferRast`: Add buffer to cells in a raster (using GRASS).
 * `fasterFocal`: Faster focal calculations (using multi-core).
