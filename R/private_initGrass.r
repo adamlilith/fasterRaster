@@ -47,22 +47,28 @@
 	
 			input <- c(input, 'rast')
 			names(input)[length(input)] <- 'rastNameInGrass'
-			exportRastToGrass(rast, vname=input)
+			exportRastToGrass(rast, vname='rast')
 			
 		}
 		
 		# export vector
 		if (!is.null(vect)) {
 		
-			# ensure spatial data frame to avert error
-			if (class(vect) == 'SpatialPoints') vect <- as(vect, 'SpatialPointsDataFrame')
-			if (class(vect) == 'SpatialLines') vect <- as(vect, 'SpatialLinesDataFrame')
-			if (class(vect) == 'SpatialPolygons') vect <- as(vect, 'SpatialPolygonsDataFrame')
-
-			# export
 			input <- c(input, 'vect')
 			names(input)[length(input)] <- 'vectNameInGrass'
-			rgrass7::writeVECT(vect, vname='vect', v.in.ogr_flags=c('quiet', 'overwrite'))
+			exportVectToGrass(vect, vname='vect')
+
+			# # ensure spatial data frame to avert error
+			# vectClass <- class(vect)
+			# if (vectClass == 'SpatialPoints') vect <- as(vect, 'SpatialPointsDataFrame')
+			# if (vectClass %in% c('SpatialLines', 'SpatialLinesDataFrame')) vect <- as(vect, 'SpatialPolygonsDataFrame')
+			# if (vectClass == 'SpatialPolygons') vect <- as(vect, 'SpatialPolygonsDataFrame')
+
+			# # export
+			# input <- c(input, 'vect')
+			# names(input)[length(input)] <- 'vectNameInGrass'
+			# # rgrass7::writeVECT(SDF=vect, vname='vect', v.in.ogr_flags=c('quiet', 'overwrite'))
+			
 			
 		}
 		

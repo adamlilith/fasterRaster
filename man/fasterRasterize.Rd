@@ -5,7 +5,8 @@
 \title{Rasterize using a call to GRASS GIS.}
 \usage{
 fasterRasterize(vect, rast, use = "value", value = 1, field = NULL,
-  grassDir = NULL, alreadyInGrass = FALSE, grassToR = TRUE, ...)
+  burn = NULL, grassDir = NULL, alreadyInGrass = FALSE,
+  grassToR = TRUE, ...)
 }
 \arguments{
 \item{vect}{Either a SpatialPoints, SpatialPointsDataFrame, SpatialLines, SpatialLinesDataFrame, SpatialPolygons, or SpatialPolygonsDataFrame or the name of such a vector dataset already in a GRASS session.}
@@ -24,6 +25,8 @@ fasterRasterize(vect, rast, use = "value", value = 1, field = NULL,
 \item{value}{Numeric, value to burn to each cell overlapped by the spatial object in \code{vect}.}
 
 \item{field}{Name of column in \code{vect} with values or category labbels to which to burn to the raster.}
+
+\item{burn}{\code{NULL} or any of \code{'point'}, \code{'line'}, \code{'area'}, \code{'boundary'}, or \code{'centroid'}. This determines the manner in which the vector data is "burned" to the raster. If \code{NULL} (default), then SpatialPoints and SpatialPointsDataFrame objects will rasterized as points, SpatialLines and SpatialLinesDataFrame objects as lines, and SpatialPolygons and SpatialPolygonsDataFrame objects as areas. See (v.to.rast)[https://grass.osgeo.org/grass74/manuals/v.to.rast.html] for more details.}
 
 \item{grassDir}{Either \code{NULL} or a 3-element character vector. If the latter, the first element is the base path to the installation of GRASS, the second the version number, and the third the install type for GRASS.  For example, \code{c('C:/OSGeo4W64/', 'grass-7.4.1', 'osgeo4W')}. See \code{\link[link2GI]{linkGRASS7}} for further help. If \code{NULL} (default) the an installation of GRASS is searched for; this may take several minutes.}
 
