@@ -1,11 +1,12 @@
 Package: fasterRaster
 Type: Package
 Title: Faster raster processing in R using GRASS GIS
-Version: 0.4.0
+Version: 0.4.1
+Date: 2018-11-28
 Author: Adam B. Smith <adam@earthSkySea.org>
 Maintainer: Adam B. Smith <adam@earthSkySea.org>
 Description: This package is meant as an add-on to the raster
-    package package. It uses multi-core processing and GRASS GIS
+    package. It uses multi-core processing and GRASS GIS
 	Version 7 to do some of the more laborious raster operations
 	faster than what can be done using the raster package. For
 	smaller rasters functions in the raster package may actually
