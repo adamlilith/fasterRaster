@@ -9,6 +9,8 @@ To install `fasterRaster` and its dependencies, do the following:
 `devtools::install_github('adamlilith/enmSdm')`  
 `devtools::install_github('adamlilith/fasterRaster')`  
 
+NB: If for some reason these commands don't work, you can install the package(s) by downloading the latest zip/tar file from the `zipTarFiles` directory and installing the package(s) manually.
+
 ## *Faster* raster processing functions ##
 * `fasterBufferRast`: Add buffer to cells in a raster (using GRASS).
 * `fasterFocal`: Faster focal calculations (using multi-core).
