@@ -28,7 +28,7 @@ Suggests:
 	knitr,
 	rgeos,
     testthat
-License: GPL (>=3)
+License: GPL (>=3) + file LICENSE
 SystemRequirements: GRASS (>= 7)
 URL: http://www.earthSkySea.org
 BugReports: https://github.com/adamlilith/fasterRaster/issues
