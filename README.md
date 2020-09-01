@@ -53,18 +53,18 @@ That was easy enough. Under the hood, many of the `faster` functions are:
 1) starting a GRASS session;  
 2) writing a raster and/or vector to that session;  
 3) doing the requested operation;  
-4) and then exporting the raster/vector output to R  
+4) and then exporting the raster/vector output to R.  
+
 Note that you really probably aren't interested in steps 1 and 4, but they create a computing overhead.  Thus, it is possible to chain operations together so that they use the same GRASS session by keeping the rasters/vectors in GRASS and then exporting them when you need them in the end.  
 
 Here's an example in which we'll chain the *fasterVectToRastDistance* and *fasterQuantile* functions together. The latter will return
 
-`# calculate and plot distance to rivers`  
 `distToRiver <- fasterVectToRastDistance(madForest2000, madRivers, grassDir=grassDir, grassToR=FALSE)`  
 `quants <- fasterQuantile('distToVect', probs=c(0.05, 0.5, 0.95), grassDir=grassDir, alreadyInGrass=TRUE)`  
 `quants`  
 
-This was faster because we told *fasterVectToRastDistance* *not* to export the raster to **R**. We then told *fasterQuantile* to look in the current GRASS session and use the raster named `distToVect`. How did we know it would be called this?  Because the function *fasterVectToRastDistance* always names its output raster in GRASS this (see help for *fasterVectToRastDistance*). Other functions that use GRASS will have different names for their output vectors/rasters.  You can see that by chaining a series of **faster** functions together, the process can be made faster because all of the operations are done in GRASS with less back-and-forth between GRASS and R.  The one exception to this is that some **faster** functions do not use GRASS (e.g., **fasterFragmentation** and **fasterFocal**), so you can't use this trick.
+This was faster because we told *fasterVectToRastDistance* *not* to export the raster to **R**. We then told *fasterQuantile* to look in the current GRASS session and use the raster named `distToVect`. How did we know it would be called this?  Because the function *fasterVectToRastDistance* always names its output raster in GRASS `distToVect` (see help for *fasterVectToRastDistance*). Other functions that use GRASS will have different names for their output vectors/rasters.
 
-Personally, I have found that most issues with this package revolve around linking GRASS to R. This has been complicated, and it has seemed (to me) to change with new releases of GRASS. I will try to keep abreast!
+You can see that by chaining a series of **faster** functions together, the process can be made faster because all of the operations are done in GRASS with less back-and-forth between GRASS and R.  The one exception to this is that some **faster** functions do not use GRASS (e.g., **fasterFragmentation** and **fasterFocal**), so you can't use this trick.
 
 - Adam
