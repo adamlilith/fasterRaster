@@ -45,18 +45,18 @@
 #' frag <- fragmentation(forest, size=5, pad=TRUE, undet='perforated')
 #'
 #' # multi-core
-#' frag <- fasterFragmentation(forest, size=5, pad=TRUE, undet='perforated')
+#' frag <- fasterFragmentation(forest, size=5, pad=TRUE, undet='perforated',
+#' cores=4)
 #'
 #' par(mfrow=c(2, 2))
 #' plot(madForest2000, col=c('gray90', 'forestgreen'), main='Forest Cover')
-#' plot(frag[['density']], main='Density in 2000')
-#' plot(frag[['connect']], main='Connectivity in 2000')
+#' plot(frag[['density']], main='Density')
+#' plot(frag[['connect']], main='Connectivity')
 #' cols <- c('gray90', 'blue', 'lightblue', 'yellow', 'orange', 'forestgreen')
 #' names(cols) <- c('no forest', 'patch', 'transitional',
 #' 		'perforated', 'edge', 'interior')
 #' plot(frag[['class']], main='Fragmentation Class', col=cols, legend=FALSE)
 #' legend('topright', fill=cols, legend=names(cols))
-#'
 #' }
 #' @seealso \code{\link[fasterRaster]{fragmentation}}
 #' @export
@@ -111,10 +111,10 @@ fasterFragmentation <- function(
 
 			if (verbose) {
 				cat('Calculating density...')
-				fush.console()
+				flush.console()
 			}
 
-			fragDensity <- fasterRaster::fasterFocal(rast=rast, w=size, fun=.fragDensity, na.rm=na.rm, cores=cores, forceMulti=forceMulti, filename='', pad=pad, padValue=padValue, NAonly=FALSE, progress=verbose)
+			fragDensity <- fasterFocal(rast=rast, w=size, fun=.fragDensity, na.rm=na.rm, cores=cores, forceMulti=forceMulti, filename='', pad=pad, padValue=padValue, NAonly=FALSE, progress=verbose)
 
 			names(fragDensity) <- 'density'
 
@@ -125,10 +125,10 @@ fasterFragmentation <- function(
 
 			if (verbose) {
 				cat('Calculating connectivity...')
-				fush.console()
+				flush.console()
 			}
 
-			fragConnect <- fasterRaster::fasterFocal(rast=rast, w=size, fun=.fragConnect, na.rm=na.rm, cores=cores, forceMulti=forceMulti, filename='', pad=pad, padValue=padValue, NAonly=FALSE, progress=verbose)
+			fragConnect <- fasterFocal(rast=rast, w=size, fun=.fragConnect, na.rm=na.rm, cores=cores, forceMulti=forceMulti, filename='', pad=pad, padValue=padValue, NAonly=FALSE, progress=verbose)
 
 			names(fragConnect) <- 'connect'
 
@@ -139,7 +139,7 @@ fasterFragmentation <- function(
 
 			if (verbose) {
 				cat('Calculating fragmentation class...')
-				fush.console()
+				flush.console()
 			}
 
 			densConnect <- raster::stack(fragDensity, fragConnect)
