@@ -28,11 +28,8 @@
 #' data(madForest2000)
 #' data(madRivers)
 #' 
-#' # could also use distance() which is
-#' # probably faster in this example
 #' distToRiver <- fasterVectToRastDistance(madForest2000, madRivers,
 #' 	grassDir=grassDir)
-#' # distToRiver <- distance(madForest2000, madRivers)
 #' plot(distToRiver, main='Distance to Rivers (m)')
 #' plot(madRivers, col='blue', add=TRUE)
 #' }
