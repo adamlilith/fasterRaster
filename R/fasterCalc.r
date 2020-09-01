@@ -36,25 +36,30 @@ fasterCalc <- function(
 ) {
 
 	# number of cores
-	bs <- raster::blockSize(rast)
-	cores <- if (forceMulti) {
-		min(c(parallel::detectCores(), cores))
-	} else {
-		bs$n
-	}
+	cores <- .getCores(rast = rast, cores = cores, forceMulti = forceMulti)
 
-	# start cores
-	raster::beginCluster(n=cores)
-	on.exit(raster::endCluster())
+	# single core
+	if (cores == 1) {
 	
-	# calculate
-	dots <- list(...)
-	fx <- function(x, ...) fun(x, ...)
-	out <- raster::clusterR(rast, fun=calc, args=list(fun=fx), export=names(dots))
-	
-	raster::returnCluster()
-	raster::endCluster()
-	
+		out <- raster::calc(rast, fun=fun, args=list(fun=fx), ...)
+		
+	# multi-core
+	} else {
+		
+		# start cores
+		raster::beginCluster(n=cores)
+		on.exit(raster::endCluster())
+		
+		# calculate
+		dots <- list(...)
+		fx <- function(x, ...) fun(x, ...)
+		out <- raster::clusterR(rast, fun=calc, args=list(fun=fx), export=names(dots))
+		
+		raster::returnCluster()
+		raster::endCluster()
+		
+	}
+		
 	out
 
 }
