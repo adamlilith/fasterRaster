@@ -24,6 +24,7 @@
 #' data(madForest)
 #' ll1 <- enmSdm::longLatRasters(madForest2000)
 #' ll2 <- fasterLongLatRasters(madForest2000, grassDir=grassDir)
+#' plot(ll2)
 #' }
 #' @export
 
