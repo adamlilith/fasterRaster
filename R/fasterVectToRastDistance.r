@@ -1,4 +1,4 @@
-#' Calculate distance between all cells in a raster and nearest spatial point, polyline, or polygon
+#' Distance between raster cells and nearest spatial point, polyline, or polygon
 #'
 #' This function is a potentially faster version of the \code{\link[raster]{distance}} function in the \pkg{raster} package which calculates the distance between each cell and the nearest feature in a spatial points, lines, or polygon object. Alternatively, it can calculate the distance from any cell covered by a vector object and the nearest cell \emph{not} covered by a vector object. Note that the \code{distance} function also calculates distances between rasters, but this functionality is not reproduced in \code{fasterVectToRastDistance} (just distance between a raster and a vector object).
 #' @param rast Either a raster or the name of a raster in an existing GRASS session. This serves as a template for the new raster.
