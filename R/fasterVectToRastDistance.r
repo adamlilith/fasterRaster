@@ -58,7 +58,7 @@ fasterVectToRastDistance <- function(
 	fasterRasterize(vect=vect, rast=rast, use='value', value=1, grassDir=grassDir, alreadyInGrass=alreadyInGrass, grassToR=FALSE)
 	
 	# calculate distance
-	rgrass7::execGRASS('r.grow.distance', input='vectAsRast', distance='distToVect', metric=metric, flags=flags_rGrowDistance, ...)
+	rgrass7::execGRASS('r.grow.distance', input='vectToRast', distance='distToVect', metric=metric, flags=flags_rGrowDistance, ...)
 
 	# return
 	if (grassToR) {
