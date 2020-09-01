@@ -26,10 +26,13 @@
 #' 
 #' data(madForest2000)
 #' 
-#' # could also use distance() function which may be
-#' # faster in this example
-#' distToForest <- fasterRastDistance(madForest2000, fillNAs=TRUE, grassDir=grassDir)
+#' # could also use distance() function from the raster package which is
+#' # slower in this example
+#' distToForest <- fasterRastDistance(madForest2000, fillNAs=TRUE,
+#' grassDir=grassDir)
 #' # distToForest <- distance(madForest2000)
+#' par(mfrow=c(1, 2))
+#' plot(madForest2000, 'Forest', col='forestgreen')
 #' plot(distToForest, main='Distance to Forest (m)')
 #' }
 #' @export
