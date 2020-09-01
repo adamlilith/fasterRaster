@@ -20,8 +20,11 @@
 #' @param ... Arguments to pass to \code{\link[raster]{writeRaster}}
 #' @return A raster object, possibly also written to disk.
 #' @examples
-#' data(madagascar)
-#' out <- fasterCalc(madForest2000, sum, cores=4)
+#' data(madElev)
+#' out <- fasterCalc(madElev, sqrt, cores=4)
+#' par(mfrow=c(1, 2))
+#' plot(madElev)
+#' plot(out)
 fasterCalc <- function(
 	rast,
 	fun,
@@ -45,9 +48,11 @@ fasterCalc <- function(
 	on.exit(raster::endCluster())
 	
 	# calculate
+	dots <- list(...)
 	fx <- function(x, ...) fun(x, ...)
-	out <- raster::clusterR(rast, fun=fx, args=list(fun=fun), export=quote(omnibus::ellipseNames(...)))
+	out <- raster::clusterR(rast, fun=calc, args=list(fun=fx), export=names(dots))
 	
+	raster::returnCluster()
 	raster::endCluster()
 	
 	out
