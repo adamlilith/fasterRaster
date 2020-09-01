@@ -17,6 +17,11 @@
 #' @seealso \code{\link[raster]{focal}}
 #' @examples
 #' \donttest{
+#' data(madElev)
+#' out <- fasterFocal(madElev, fun=max, cores=2)
+#' par(mfrow=c(1, 2))
+#' plot(madElev)
+#' plot(out)
 #' }
 #' @export
 fasterFocal <- function(
@@ -35,7 +40,7 @@ fasterFocal <- function(
 ) {
 
 	# get number of cores and chunks of raster
-	cores <- .getCores(rast = rast, cores = cores, forceMulti = forceMulti)
+	cores <- omnibus::getCores(rast = rast, cores = cores, forceMulti = forceMulti)
 	blocks <- raster::blockSize(rast, minblocks=cores)
 	
 	# single core
