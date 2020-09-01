@@ -19,14 +19,14 @@
 #' @param ... Arguments to pass to \code{\link[rgrass7]{execGRASS}} when used for rasterizing (i.e., function \code{r.proj} in GRASS).
 #' @return If \code{grassToR} if \code{TRUE}, then a raster or raster stack with the same extent, resolution, and coordinate reference system as \code{rast}. Otherwise, a raster with the name \code{resampled} is written into the GRASS session.
 #' @details Note that it is not uncommon to get the warning "Projection of dataset does not appear to match the current mapset" (followed by more information). If the coordinate reference systems match, then the cause is likely due to extra information being stored in one of the spatial object's coordinate reference system slot (e.g., an EPSG code in addition to the other proj4string information), in which case it can probably be safely ignored.  
-#' See (r.proj)[https://grass.osgeo.org/grass78/manuals/r.proj.html] for more details.  Note that if you get an error saying "", then you should add the EPSG code to the beginning of the raster and vector coordinate reference system string (its "proj4string"). For example, \code{proj4string(x) <- CRS('+init=epsg:32738')}. EPSG codes for various projections, datums, and locales can be found at (Spatial Reference)[http://spatialreference.org/].  
+#' See \href{r.proj}{https://grass.osgeo.org/grass78/manuals/r.proj.html} for more details.  Note that if you get an error saying "", then you should add the EPSG code to the beginning of the raster and vector coordinate reference system string (its "proj4string"). For example, \code{proj4string(x) <- CRS('+init=epsg:32738')}. EPSG codes for various projections, datums, and locales can be found at \href{Spatial Reference}{http://spatialreference.org}.  
 #' @seealso \code{\link[raster]{projectRaster}}
 #' @examples
 #' \donttest{
 #' # could also use projectRaster() which
 #' # may be faster in this example
 #' # change this according to where GRASS 7 is installed on your system
-#' grassDir <- c('C:/OSGeo4W64/', 'grass-7.4.1', 'osgeo4W')
+#' grassDir <- 'C:/Program Files/GRASS GIS 7.8'
 #'
 #' data(madElev)
 #' data(madForest2000)

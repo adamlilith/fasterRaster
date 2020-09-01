@@ -7,15 +7,13 @@
 #' @param alreadyInGrass Logical, if \code{FALSE} (default) then start a new GRASS session and import the raster named in \code{rast}. If \code{FALSE}, use a raster already in GRASS with the name given by \code{rast}. The latter is useful if you are chaining \pkg{fasterRaster} functions together and the first function initializes the session. The first function should use \code{alreadyInGrass = FALSE} and subsequent functions should use \code{alreadyInGrass = TRUE} then use their \code{rast} (or \code{vect}) arguments to name the raster (or vector) that was made by the previous function.
 #' @param grassToR Logical, if \code{TRUE} (default) then the product of the calculations will be returned to R. If \code{FALSE}, then the product is left in the GRASS session and named \code{longitude} and \code{latitude}. The latter case is useful (and faster) when chaining several \pkg{fasterRaster} functions together.
 #' @param ... Arguments to pass to \code{\link[rgrass7]{execGRASS}} when used for rasterizing (i.e., function \code{r.latlong} in GRASS).
-#' @return If \code{grassToR} if \code{TRUE}, then a raster stack with the same extent, resolution, and coordinate reference system as \code{rast}. Otherwise, a raster with the name of \code{longitude} and \code{latitude} is written into the GRASS session.
-#' @details See (r.latlong)[https://grass.osgeo.org/grass74/manuals/r.latlong.html] for more details. Note that if you get an error saying "", then you should add the EPSG code to the beginning of the raster coordinate reference system string (its "proj4string"). For example, \code{proj4string(rast) <- CRS('+init=epsg:32738')}. EPSG codes for various projections, datums, and locales can be found at (Spatial Reference)[http://spatialreference.org/].
+#' @return If \code{grassToR} if \code{TRUE}, then a raster stack with the same extent, resolution, and coordinate reference system as \code{rast}. Otherwise, rasters with the names of \code{longitude} and \code{latitude} are written into the GRASS session.
+#' @details See \href{r.latlong}{https://grass.osgeo.org/grass78/manuals/r.latlong.html} for more details. Note that if you get an error saying "", then you should add the EPSG code to the beginning of the raster coordinate reference system string (its "proj4string"). For example, \code{proj4string(rast) <- CRS('+init=epsg:32738')}. EPSG codes for various projections, datums, and locales can be found at \href{Spatial Reference}{http://spatialreference.org}.
 #' @seealso \code{\link[enmSdm]{longLatRasters}}
 #' @examples
 #' \donttest{
-#' # OSGeo installation of GRASS GIS 7 (change accordingly)
-#' grassDir <- c('C:/Program Files/GRASS GIS 7.8', '7.8.3', 'grass78')
-#' # Stand-alone Windows installation of GRASS GIS 7 (change accordingly)
-#' grassDir <- c('C:/Program Files/GRASS GIS 7.8')
+#' # change this to where GRASS 7 is installed on your system
+#' grassDir <- 'C:/Program Files/GRASS GIS 7.8'
 #' 
 #' # note that in the example below using enmSdm::longLatRasters()
 #' # will be *much* faster than using fasterLongLatRasters()
