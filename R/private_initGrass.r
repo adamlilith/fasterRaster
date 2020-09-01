@@ -28,14 +28,14 @@
 	if (alreadyInGrass) {
 		
 		if (!is.null(rast) & !is.null(vect)) {
-			input <- rast
-			names(input) <- 'rastNameInGrass'
+			input <- c(rast, vect)
+			names(input) <- c('rastNameInGrass', 'vectNameInGrass')
 		} else if (is.null(rast) & !is.null(vect)) {
 			input <- vect
 			names(input) <- 'vectNameInGrass'
-		} else {
-			input <- c(rast, vect)
-			names(input) <- c('rastNameInGrass', 'vectNameInGrass')
+		} else if (!is.null(rast) & is.null(vect)) {
+			input <- rast
+			names(input) <- 'rastNameInGrass'
 		}
 		
 	# if vector/raster is NOT already in GRASS then export it to GRASS and return its name
