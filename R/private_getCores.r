@@ -5,8 +5,7 @@
 #' @param cores Integer > 0. Number of cores desired to be used. Default is 2.
 #' @param forceMulti Logical. If \code{TRUE} then force number of cores to be >1 even if the raster processing can be done in one chunk. Default is \code{FALSE}.
 #' @return Integer.
-#' @export
-getCores <- function(rast, cores = 2, forceMulti = FALSE) {
+.getCores <- function(rast, cores = 2, forceMulti = FALSE) {
 
 	cpus <- min(cores, parallel::detectCores())
 	if (!forceMulti) cpus <- min(cpus, raster::blockSize(rast, minblocks = 1)$n)
