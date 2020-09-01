@@ -5,10 +5,13 @@
 #' @param template Either a raster or the name of a raster in an existing GRASS session to serve as a template for projecting.
 #' @param method Character, method for resampling cells:
 #' \itemize{
+#' 		\item \code{nearest}: Nearest neighbor (uses value from 1 cell).
 #' 		\item \code{bilinear}: Bilinear interpolation (default; uses values from 4 cells).
-#' 		\item \code{bicubic}: Bicubic interpolation (uses data from 16 cells).
-#' 		\item \code{nearest}: Nearest neighbor (uses data from 1 cell).
-#' 		\item \code{lanczos}: Lanczos interpolation (uses data from 25 cells).
+#' 		\item \code{bilinear_f}: Bilinear interpolation with fallback.
+#' 		\item \code{bicubic}: Bicubic interpolation (uses values from 16 cells).
+#' 		\item \code{bicubic_f}: Bicubic interpolation with fallback.
+#' 		\item \code{lanczos}: Lanczos interpolation (uses values from 25 cells).
+#' 		\item \code{lanczos_f}: Lanczos interpolation with fallback.
 #' }
 #' @param grassDir Either \code{NULL} or a 3-element character vector. If the latter, the first element is the base path to the installation of GRASS, the second the version number, and the third the install type for GRASS.  For example, \code{c('C:/OSGeo4W64/', 'grass-7.4.1', 'osgeo4W')}. See \code{\link[link2GI]{linkGRASS7}} for further help. If \code{NULL} (default) the an installation of GRASS is searched for; this may take several minutes.
 #' @param alreadyInGrass Logical, if \code{FALSE} (default) then start a new GRASS session and import the raster named in \code{template} to set the extent, projection, and resolution. If \code{FALSE}, use a raster already in GRASS with the name given by \code{template}. The latter is useful if you are chaining \pkg{fasterRaster} functions together and the first function initializes the session. The first function should use \code{alreadyInGrass = FALSE} and subsequent functions should use \code{alreadyInGrass = TRUE} then use their \code{rast} (or \code{vect}) arguments to name the raster (or vector) that was made by the previous function.
@@ -28,14 +31,15 @@
 #'
 #' data(madElev)
 #' data(madForest2000)
+#' projection(madElev)
+#' projection(madForest2000)
 #' 
 #' elevResamp <- fasterProjectRaster(madElev, madForest2000, grassDir=grassDir)
 #' # elevResamp <- projectRaster(elev, madForest2000)
 #' par(mfrow=c(1, 2))
-#' plot(elev, main='Original')
+#' plot(madElev, main='Original')
 #' plot(elevResamp, main='Resampled')
 #' }
-#' @export
 
 fasterProjectRaster <- function(
 	rast,
@@ -54,20 +58,24 @@ fasterProjectRaster <- function(
 	p4s <- sp::proj4string(template)
 	
 	# initialize GRASS
-	input <- .initGrass(alreadyInGrass, rast=template, vect=NULL, grassDir=grassDir)
+	fromRastGrass <- .initGrass(alreadyInGrass, rast=rast, mapset='PERMANENT', location='fromRast', tempDir=tempDir, vect=NULL, grassDir=grassDir)
+	tempDir <- attr(toRastGrass, 'tempDir')
+	exportRastToGrass(rast, vname='rast')
+	toRastGrass <- .initGrass(alreadyInGrass, rast=template, vect=NULL, grassDir=grassDir, location='default', tempDir=tempDir)
+	exportRastToGrass(rast, vname='template')
 
 	# export raster to project to GRASS (projects it automatically)
-	exportRastToGrass(rast, vname='rast')
 	
 	# export raster to GRASS
-	rgrass7::execGRASS('r.resamp.interp', input='rast', output='resampled', method=method, flags=flags, ...)
+	# rgrass7::execGRASS('r.resamp.interp', input='rast', output='resampled', method=method, flags=flags, ...)
+	rgrass7::execGRASS('r.proj', location='toRast', mapset='PERMANENT', input='rast', output='resampled', method=method, flags=flags, ...)
 
 	# return
 	if (grassToR) {
 	
 		out <- rgrass7::readRAST('resampled')
 		out <- raster::raster(out)
-		proj4string(out) <- p4s
+		sp::proj4string(out) <- p4s
 		names(out) <- 'resampled'
 		out
 		
