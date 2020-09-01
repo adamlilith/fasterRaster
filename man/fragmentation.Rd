@@ -4,9 +4,18 @@
 \alias{fragmentation}
 \title{Calculate fragmentation indices for a raster}
 \usage{
-fragmentation(rast, size = 3, pad = FALSE, padValue = NA,
-  calcDensity = TRUE, calcConnect = TRUE, calcClass = TRUE,
-  na.rm = FALSE, undet = "undetermined", ...)
+fragmentation(
+  rast,
+  size = 3,
+  pad = FALSE,
+  padValue = NA,
+  calcDensity = TRUE,
+  calcConnect = TRUE,
+  calcClass = TRUE,
+  na.rm = FALSE,
+  undet = "undetermined",
+  ...
+)
 }
 \arguments{
 \item{rast}{Raster with binary values (1 or 0 or \code{NA}).}
@@ -19,7 +28,7 @@ fragmentation(rast, size = 3, pad = FALSE, padValue = NA,
 
 \item{calcDensity}{Logical, if \code{TRUE} (default) then calculate density raster.}
 
-\item{calcConnect}{Logical, if \code{TRUE} (default) then calculate connectivity raster.}
+\item{calcConnect}{Logical, if \code{TRUE} (default) then calculate classification raster. Note that to calculate the classification raster the density and connectivity rasters must also be calculated (\code{calcDensity} and \code{calcConnect} should both be \code{TRUE}). If they are not then the will be forced to \code{TRUE} with a warning.}
 
 \item{na.rm}{Logical, if \code{FALSE} (default) then \code{NA} cells count as part of the area potentially occupied in a window (i.e., the count in the denominator when calculating density and they are counted as potential links in the connectance calculations if a neighboring cell has a value of 1). If \code{FALSE} then areas that border \code{NA} cells could still be classified as "interior" or otherwise have less apparent fragmentation if the occupied cells are fully surrounded by other occupied cells (except for the \code{NA} cells).}
 
@@ -32,8 +41,6 @@ fragmentation(rast, size = 3, pad = FALSE, padValue = NA,
 }}
 
 \item{...}{Other arguments (not used).}
-
-\item{calcConnect}{Logical, if \code{TRUE} (default) then calculate classification raster. Note that to calculate the classification raster the density and connectivity rasters must also be calculated (\code{calcDensity} and \code{calcConnect} should both be \code{TRUE}). If they are not then the will be forced to \code{TRUE} with a warning.}
 }
 \value{
 A raster stack with four rasters: a fragmentation classification (named \code{class}), the density of "1" pixels in the window (named \code{density}--called "pf" in Riitter et al. 2000), and a connectivity raster (conditional probability a cell with a value of 1 has a value that is also 1; named \code{connect}--called "pff" in Riitter et al. 2000).
@@ -51,7 +58,7 @@ The density and connectivity rasters have values in the range [0, 1], but the cl
 Note that this differs somewhat from the numbering scheme presented by Riitters et al. (2000) and their errata.
 }
 \description{
-The function calculates a set of fragmentation indices as per Riitters, K., J. Wickham, R. O'Neill, B. Jones, and E. Smith. 2000. Global-scale patterns of forest fragmentation. Conservation Ecology 4:3. URL: https://www.jstor.org/stable/26271763. (Also note the erratum to the paper on their classification scheme at https://www.ecologyandsociety.org/vol4/iss2/art3/errata/january26.2001.html). Note that this function does \emph{not} use GRASS but rather the \code{\link[raster]{focal}} function in the \pkg{raster} package, so it is potentially very slow and may not work for very large rasters.
+The function calculates a set of fragmentation indices as per Riitters, K., J. Wickham, R. O'Neill, B. Jones, and E. Smith. 2000. Global-scale patterns of forest fragmentation. Conservation Ecology 4:3. URL: <https://www.jstor.org/stable/26271763>. (Also note the erratum to the paper on their classification scheme at <https://www.ecologyandsociety.org/vol4/iss2/art3/errata/january26.2001.html>). Note that this function does \emph{not} use GRASS but rather the \code{\link[raster]{focal}} function in the \pkg{raster} package, so it is potentially very slow and may not work for very large rasters.
 }
 \examples{
 \donttest{

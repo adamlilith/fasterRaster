@@ -17,6 +17,11 @@
 #' @seealso \code{\link[raster]{focal}}
 #' @examples
 #' \donttest{
+#' data(madElev)
+#' out <- fasterFocal(madElev, fun=max, cores=2)
+#' par(mfrow=c(1, 2))
+#' plot(madElev)
+#' plot(out)
 #' }
 #' @export
 fasterFocal <- function(

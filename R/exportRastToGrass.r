@@ -12,20 +12,25 @@ exportRastToGrass <- function(
 	tempDir = raster::tmpDir()
 ) {
 
-	tryWrite <- function(rast, vname) {
-		rastSGDF <- methods::as(rast, 'SpatialGridDataFrame')
-		rgrass7::writeRAST(rastSGDF, vname=vname)
-	}
+	rgrass7::use_sp()
 
-	# fast export
-	success <- tryCatch(tryWrite(rast), error=function(err) return(FALSE))
+	# # fast export
+	# success <- tryCatch(.tryWrite(rast), error=function(err) return(FALSE))
 	
-	# slow but error-resistant export
-	if (class(success) == 'logical' && !success) {
+	# # slow but error-resistant export
+	# if (class(success) == 'logical' && !success) {
 
-		writeRaster(rast, paste0(tempDir, '/', vname), format='GTiff', overwrite=TRUE)
-		rgrass7::execGRASS('r.import', input=paste0(tempDir, '/', vname, '.tif'), output=vname, flags=c('overwrite', 'quiet'))
+		# raster::writeRaster(rast, paste0(tempDir, '/', vname), format='GTiff', overwrite=TRUE)
+		# rgrass7::execGRASS('r.import', input=paste0(tempDir, '/', vname, '.tif'), output=vname, flags=c('overwrite', 'quiet'))
 		
-	}
+	# }
+
+	rastSGDF <- methods::as(rast, 'SpatialGridDataFrame')
+	rgrass7::writeRAST(rastSGDF, vname=vname, overwrite=TRUE)
 
 }
+
+# .tryWrite <- function(rast, vname) {
+	# rastSGDF <- methods::as(rast, 'SpatialGridDataFrame')
+	# rgrass7::writeRAST(rastSGDF, vname=vname, overwrite=TRUE)
+# }

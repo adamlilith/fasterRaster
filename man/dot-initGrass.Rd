@@ -4,20 +4,31 @@
 \alias{.initGrass}
 \title{Initialize GRASS session and import raster and/or vector(s).}
 \usage{
-.initGrass(alreadyInGrass = FALSE, rast = NULL, vect = NULL,
-  grassDir = NULL)
+.initGrass(
+  alreadyInGrass = FALSE,
+  rast = NULL,
+  vect = NULL,
+  grassDir = NULL,
+  mapset = "PERMANENT",
+  location = "default",
+  tempDir = tempfile()
+)
 }
 \arguments{
 \item{alreadyInGrass}{Logical, if \code{FALSE} (default) then start a new GRASS session and import the raster named in \code{rast} or the vector named in \code{vect}. If \code{FALSE}, use a raster or vector already in GRASS with the name given by \code{rast} or \code{vect}. The latter case is useful if you are chaining \pkg{fasterRaster} functions together and the first function initializes the session. The first function should use \code{alreadyInGrass = FALSE} and subsequent functions should use \code{alreadyInGrass = TRUE} then use their \code{rast} (or \code{vect}) arguments to name the raster (or vector) that was made by the previous function.}
 
-\item{rast}{Either: a raster object **or** the name of a raster already imported into GRASS **or** \code{NULL} (default) in which case no raster is exported into GRASS. Either \code{rast} or \code{vect} (or both) but be non-\code{NULL}.}
+\item{rast}{Either: a SpatialPoints, SpatialPolygons, or SpatialLines object **or** the name of a vector dataset already imported into GRASS **or** \code{NULL} (default) in which case no vector is exported into GRASS. Either \code{rast} or \code{vect} (or both) but be non-\code{NULL}.}
 
 \item{grassDir}{Either \code{NULL} or a 3-element character vector. If the latter, the first element is the base path to the installation of GRASS, the second the version number, and the third the install type for GRASS.  For example, \code{c('C:/OSGeo4W64/', 'grass-7.4.1', 'osgeo4W')}. See \code{\link[link2GI]{linkGRASS7}} for further help. If \code{NULL} (default) the an installation of GRASS is searched for; this may take several minutes.}
 
-\item{rast}{Either: a SpatialPoints, SpatialPolygons, or SpatialLines object **or** the name of a vector dataset already imported into GRASS **or** \code{NULL} (default) in which case no vector is exported into GRASS. Either \code{rast} or \code{vect} (or both) but be non-\code{NULL}.}
+\item{mapset}{Character. Mapset of GRASS location. The default name is \code{'PERMANENT'}. Typically, it is not a good idea to change this, as most functions in the \pkg{fasterRaster} package assume the mapset is named "default".}
+
+\item{location}{Character. Name of GRASS location. The default name is \code{'default'}. Typically, it is not a good idea to change this, as most functions in the \pkg{fasterRaster} package assume the location is named "default".}
+
+\item{tempDir}{Character. Path name of directory in which to create the GRASS mapset. The default is to create a directory in the location for temporary files for the operating system.}
 }
 \value{
-One or two-element character list. If the list is one element long then it will be the name of raster **or** vector exported or already in GRASS session. If it is two elements long then it will be the name of the raster **and* the vector exported or aready in the GRASS session (in that order).
+One or two-element character list. If the list is one element long then it will be the name of raster \emph{or} vector exported or already in GRASS session. If it is two elements long then it will be the name of the raster \emph{and} the vector exported or already in the GRASS session (in that order).
 }
 \description{
 This is a private function to start a generic GRASS session and import a raster and/or vector into it.

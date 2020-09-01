@@ -4,10 +4,21 @@
 \alias{fasterTerrain}
 \title{Calculate raster slope, aspect, curvature, and partial slopes.}
 \usage{
-fasterTerrain(rast, slope = TRUE, slopeUnits = "degrees",
-  aspect = FALSE, profileCurve = FALSE, tanCurve = FALSE,
-  eastWestSlope = FALSE, northSouthSlope = FALSE, grassDir = NULL,
-  alreadyInGrass = FALSE, grassToR = TRUE, ...)
+fasterTerrain(
+  rast,
+  slope = TRUE,
+  slopeUnits = "degrees",
+  aspect = FALSE,
+  northIs0 = TRUE,
+  profileCurve = FALSE,
+  tanCurve = FALSE,
+  eastWestSlope = FALSE,
+  northSouthSlope = FALSE,
+  grassDir = NULL,
+  alreadyInGrass = FALSE,
+  grassToR = TRUE,
+  ...
+)
 }
 \arguments{
 \item{rast}{Either a raster with elevation data or the name of a raster in an existing GRASS session.}
@@ -17,6 +28,8 @@ fasterTerrain(rast, slope = TRUE, slopeUnits = "degrees",
 \item{slopeUnits}{Character, "units" in which to calculate slope: either \code{degrees} for degrees or \code{percent}.}
 
 \item{aspect}{Logical, if \code{TRUE} then calculate aspect. Aspect is given in degrees from North going clockwise (0 = north, 90 = east, 180 = south, 270 = west).}
+
+\item{northIs0}{Logical. If \code{TRUE} (default), aspect will be reported such that 0 is north, and degrees run clockwise (90 is east, 180 south, 270 west). If \code{FALSE}, then aspect will be reported such that 0 is east, and degrees run counterclockwise (90 is north, 180 west, 270 south). The latter is the default in GRASS7.}
 
 \item{profileCurve}{Logical, if \code{TRUE}, calculate profile curvature. Default is \code{FALSE}.}
 
@@ -41,12 +54,12 @@ If \code{grassToR} if \code{TRUE}, then a raster or raster stack with the same e
 This function is a potentially faster version of the \code{\link[raster]{terrain}} function in the \pkg{raster} package for calculating slope and aspect of a raster. It can also calculate profile curvature, tangential curvature, and slope in the east-west or north-south directions.
 }
 \details{
-See (r.slope.aspect)[https://grass.osgeo.org/grass74/manuals/r.slope.aspect.html] for more details.  Note that if you get an error saying "", then you should add the EPSG code to the beginning of the raster and vector coordinate reference system string (its "proj4string"). For example, \code{proj4string(x) <- CRS('+init=epsg:32738')}. EPSG codes for various projections, datums, and locales can be found at (Spatial Reference)[http://spatialreference.org/].
+See \href{r.slope.aspect}{https://grass.osgeo.org/grass78/manuals/r.slope.aspect.html} for more details.  Note that if you get an error saying "", then you should add the EPSG code to the beginning of the raster and vector coordinate reference system string (its "proj4string"). For example, \code{proj4string(x) <- CRS('+init=epsg:32738')}. EPSG codes for various projections, datums, and locales can be found at \href{Spatial Reference}{http://spatialreference.org}.
 }
 \examples{
 \donttest{
 # change this according to where GRASS 7 is installed on your system
-grassDir <- c('C:/OSGeo4W64/', 'grass-7.4.1', 'osgeo4W')
+grassDir <- 'C:/Program Files/GRASS GIS 7.8'
 
 data(madElev)
 

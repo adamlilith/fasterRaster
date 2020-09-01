@@ -4,8 +4,7 @@
 \alias{.workerFocal}
 \title{Initialize GRASS session and import raster and/or vector(s).}
 \usage{
-.workerFocal(i, blockVals, w, fun = sum, na.rm = TRUE,
-  NAonly = FALSE)
+.workerFocal(i, blockVals, w, fun = sum, na.rm = TRUE, NAonly = FALSE)
 }
 \arguments{
 \item{i}{Integer > 0, ID number for the node on which calculations are being conducted.}

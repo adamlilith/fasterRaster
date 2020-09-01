@@ -4,7 +4,9 @@
 \name{madRivers}
 \alias{madRivers}
 \title{Spatial data: major rivers in a selected portion of Madagascar}
-\format{An object of class \code{'SpatialLinesDataFrame'}. See \code{\link[sp]{SpatialLines}}.}
+\format{
+An object of class \code{'SpatialLinesDataFrame'}. See \code{\link[sp]{SpatialLines}}.
+}
 \source{
 \href{http://www.diva-gis.org/gdata}{DIVA-GIS}
 }
