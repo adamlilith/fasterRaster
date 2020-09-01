@@ -5,6 +5,7 @@
 #' @param slope Logical, if \code{TRUE} (default) then calculate slope.
 #' @param slopeUnits Character, "units" in which to calculate slope: either \code{degrees} for degrees or \code{percent}.
 #' @param aspect Logical, if \code{TRUE} then calculate aspect. Aspect is given in degrees from North going clockwise (0 = north, 90 = east, 180 = south, 270 = west).
+#' @param northIs0 Logical. If \code{TRUE} (default), aspect will be reported such that 0 is north, and degrees run clockwise (90 is east, 180 south, 270 west). If \code{FALSE}, then aspect will be reported such that 0 is east, and degrees run counterclockwise (90 is north, 180 west, 270 south). The latter is the default in GRASS7.
 #' @param profileCurve Logical, if \code{TRUE}, calculate profile curvature. Default is \code{FALSE}.
 #' @param tanCurve Logical, if \code{TRUE}, calculate tangential curvature. Default is \code{FALSE}.
 #' @param eastWestSlope Logical, if \code{TRUE}, calculate slope in east-west direction. Default is \code{FALSE}.
@@ -39,6 +40,7 @@ fasterTerrain <- function(
 	slope = TRUE,
 	slopeUnits = 'degrees',
 	aspect = FALSE,
+	northIs0 = TRUE,
 	profileCurve = FALSE,
 	tanCurve = FALSE,
 	eastWestSlope = FALSE,
@@ -63,7 +65,7 @@ fasterTerrain <- function(
 	# aspect (0 = east and goes counter-clockwise, so convert so 0 = north going clockwise)
 	if (aspect) {
 		rgrass7::execGRASS('r.slope.aspect', elevation=input, aspect='aspectFromEast', flags=flags)
-		rgrass7::execGRASS('r.mapcalc', expr='aspect = (450 - aspectFromEast) % 360', flags=flags)
+		if (northIs0) rgrass7::execGRASS('r.mapcalc', expression='aspect = (450 - aspectFromEast) % 360', flags=flags)
 	}
 	
 	# curvatures
