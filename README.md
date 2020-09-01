@@ -6,7 +6,6 @@ This package uses the stand-alone installer of Open Source Geospatial's [GRASS G
 To use **fasterRaster** Version 7.8 of GRASS must be installed on the local system you are using.
 
 To install `fasterRaster` and its dependencies, just do the following:  
-`install.packages('devtools') # if you haven't done this already`  
 `remotes::install_github('adamlilith/fasterRaster')`  
 
 NB: If for some reason this command does not work, you can install the package by downloading the latest zip/tar file from the `zipTarFiles` directory and installing the package manually.
@@ -40,8 +39,6 @@ Let's get started! We'll do a simple operation in which we calculate the distanc
 `library(fasterRaster)`  
 `data(madForest2000)`  
 `data(madRivers)`  
-
-`# declare directory in which GRASS is installed.
 
 `# calculate and plot distance to rivers`  
 `distToRiver <- fasterVectToRastDistance(madForest2000, madRivers, grassDir=grassDir)`  
