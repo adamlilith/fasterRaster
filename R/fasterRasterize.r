@@ -29,7 +29,7 @@
 #' data(mad0)
 #' data(madForest2000)
 #' 
-#' # could also use rasterize() or mask() which may
+#' # could also use rasterize() or mask() from the raster package which may
 #' # be faster in this example
 #' madMask <- fasterRasterize(mad0, madForest2000, grassDir=grassDir)
 #' # madMask <- rasterize(mad0, madForest2000)
