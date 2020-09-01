@@ -4,7 +4,9 @@
 \name{madElev}
 \alias{madElev}
 \title{Spatial data: digital elevation model (DEM) of a portion of Madagascar}
-\format{An object of class \code{'raster'}. See \code{\link[raster]{raster}}. Values are mean meters above sea level.}
+\format{
+An object of class \code{'raster'}. See \code{\link[raster]{raster}}. Values are mean meters above sea level.
+}
 \source{
 \href{https://lta.cr.usgs.gov/GMTED2010}{GMTED2010}
 }

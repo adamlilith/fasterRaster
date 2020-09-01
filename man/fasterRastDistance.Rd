@@ -4,9 +4,16 @@
 \alias{fasterRastDistance}
 \title{Distance distance between cells with \code{NA}s and closest non-\code{NA} cells}
 \usage{
-fasterRastDistance(rast, metric = "euclidean", meters = TRUE,
-  fillNAs = TRUE, grassDir = NULL, alreadyInGrass = FALSE,
-  grassToR = TRUE, ...)
+fasterRastDistance(
+  rast,
+  metric = "euclidean",
+  meters = TRUE,
+  fillNAs = TRUE,
+  grassDir = NULL,
+  alreadyInGrass = FALSE,
+  grassToR = TRUE,
+  ...
+)
 }
 \arguments{
 \item{rast}{Either a raster or the name of a raster in an existing GRASS session.}
@@ -37,19 +44,22 @@ If \code{grassToR} if \code{TRUE}, then a raster with the same extent, resolutio
 This function is a potentially faster version of the \code{\link[raster]{distance}} function in the \pkg{raster} package which it replaces values in all \code{NA} cells with the distance between them and the closest non-\code{NA} cell. Alternatively, it fills in values of non-\code{NA} cells with the distance between them and the closest \code{NA} cell. Note that the \code{distance} function also calculates distances between a raster and a spatial vector object, but this functionality is reproduced in \code{\link[fasterRaster]{fasterVectToRastDistance}}.
 }
 \details{
-See (r.latlong)[https://grass.osgeo.org/grass74/manuals/r.grow.distance.html] for more details.  Note that if you get an error saying "", then you should add the EPSG code to the beginning of the raster and vector coordinate reference system string (its "proj4string"). For example, \code{proj4string(x) <- CRS('+init=epsg:32738')}. EPSG codes for various projections, datums, and locales can be found at (Spatial Reference)[http://spatialreference.org/].
+See \href{r.latlong}{https://grass.osgeo.org/grass78/manuals/r.grow.distance.html} for more details.  Note that if you get an error saying "", then you should add the EPSG code to the beginning of the raster and vector coordinate reference system string (its "proj4string"). For example, \code{proj4string(x) <- CRS('+init=epsg:32738')}. EPSG codes for various projections, datums, and locales can be found at \href{Spatial Reference}{http://spatialreference.org}.
 }
 \examples{
 \donttest{
 # change this according to where GRASS 7 is installed on your system
-grassDir <- c('C:/OSGeo4W64/', 'grass-7.4.1', 'osgeo4W')
+grassDir <- 'C:/Program Files/GRASS GIS 7.8'
 
 data(madForest2000)
 
-# could also use distance() function which may be
-# faster in this example
-distToForest <- fasterRastDistance(madForest2000, fillNAs=TRUE, grassDir=grassDir)
+# could also use distance() function from the raster package which is
+# slower in this example
+distToForest <- fasterRastDistance(madForest2000, fillNAs=TRUE,
+grassDir=grassDir)
 # distToForest <- distance(madForest2000)
+par(mfrow=c(1, 2))
+plot(madForest2000, 'Forest', col='forestgreen')
 plot(distToForest, main='Distance to Forest (m)')
 }
 }

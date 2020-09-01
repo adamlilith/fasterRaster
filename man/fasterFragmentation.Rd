@@ -4,10 +4,21 @@
 \alias{fasterFragmentation}
 \title{Calculate fragmentation indices for a raster}
 \usage{
-fasterFragmentation(rast, size = 3, pad = FALSE, padValue = NA,
-  calcDensity = TRUE, calcConnect = TRUE, calcClass = TRUE,
-  na.rm = FALSE, undet = "undetermined", cores = 2,
-  forceMulti = TRUE, verbose = FALSE, ...)
+fasterFragmentation(
+  rast,
+  size = 3,
+  pad = FALSE,
+  padValue = NA,
+  calcDensity = TRUE,
+  calcConnect = TRUE,
+  calcClass = TRUE,
+  na.rm = FALSE,
+  undet = "undetermined",
+  cores = 2,
+  forceMulti = TRUE,
+  verbose = FALSE,
+  ...
+)
 }
 \arguments{
 \item{rast}{Raster with binary values (1 or 0 or \code{NA}).}
@@ -57,7 +68,7 @@ The density and connectivity rasters have values in the range [0, 1], but the cl
 }
 }
 \description{
-Calculate fragmentation indices for a raster
+
 }
 \examples{
 \donttest{
@@ -71,18 +82,18 @@ forest <- calc(madForest2000, function(x) ifelse(is.na(x), 0, 1))
 frag <- fragmentation(forest, size=5, pad=TRUE, undet='perforated')
 
 # multi-core
-frag <- fasterFragmentation(forest, size=5, pad=TRUE, undet='perforated')
+frag <- fasterFragmentation(forest, size=5, pad=TRUE, undet='perforated',
+cores=4)
 
 par(mfrow=c(2, 2))
 plot(madForest2000, col=c('gray90', 'forestgreen'), main='Forest Cover')
-plot(frag[['density']], main='Density in 2000')
-plot(frag[['connect']], main='Connectivity in 2000')
+plot(frag[['density']], main='Density')
+plot(frag[['connect']], main='Connectivity')
 cols <- c('gray90', 'blue', 'lightblue', 'yellow', 'orange', 'forestgreen')
 names(cols) <- c('no forest', 'patch', 'transitional',
 		'perforated', 'edge', 'interior')
 plot(frag[['class']], main='Fragmentation Class', col=cols, legend=FALSE)
 legend('topright', fill=cols, legend=names(cols))
-
 }
 }
 \seealso{

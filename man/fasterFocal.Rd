@@ -4,9 +4,20 @@
 \alias{fasterFocal}
 \title{Multi-core version of the focal() function}
 \usage{
-fasterFocal(rast, w = 3, fun = sum, filename = "", na.rm = FALSE,
-  pad = FALSE, padValue = NA, NAonly = FALSE, progress = FALSE,
-  cores = 2, forceMulti = TRUE, ...)
+fasterFocal(
+  rast,
+  w = 3,
+  fun = sum,
+  filename = "",
+  na.rm = FALSE,
+  pad = FALSE,
+  padValue = NA,
+  NAonly = FALSE,
+  progress = FALSE,
+  cores = 2,
+  forceMulti = TRUE,
+  ...
+)
 }
 \arguments{
 \item{rast}{Raster object.}
@@ -41,6 +52,11 @@ This function applies a function that uses values from a "moving window" across 
 }
 \examples{
 \donttest{
+data(madElev)
+out <- fasterFocal(madElev, fun=max, cores=2)
+par(mfrow=c(1, 2))
+plot(madElev)
+plot(out)
 }
 }
 \seealso{
