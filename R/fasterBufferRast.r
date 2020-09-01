@@ -24,9 +24,10 @@
 #' grassDir <- NULL
 #'
 #' data(madForest2000)
-#' rastBuff <- fasterBufferRast(madForest2000, width=2, units='kilometers', grassDir=grassDir)
-#' plot(rastBuff, col=c('green', 'black'))
-#' legend('topright', legend=c('forest', 'buffer'), fill=c('green', 'black'))
+#' rastBuff <- fasterBufferRast(madForest2000, width=2, units='kilometers',
+#' grassDir=grassDir)
+#' plot(rastBuff, col=c('green', 'gray'))
+#' legend('topright', legend=c('forest', 'buffer'), fill=c('green', 'gray'))
 #' }
 #' @export
 
