@@ -17,9 +17,6 @@ exportRastToGrass <- function(
 	# # fast export
 	# success <- tryCatch(.tryWrite(rast), error=function(err) return(FALSE))
 	
-	rastSGDF <- methods::as(rast, 'SpatialGridDataFrame')
-	rgrass7::writeRAST(rastSGDF, vname=vname, overwrite=TRUE)
-
 	# # slow but error-resistant export
 	# if (class(success) == 'logical' && !success) {
 
@@ -28,9 +25,12 @@ exportRastToGrass <- function(
 		
 	# }
 
-}
-
-.tryWrite <- function(rast, vname) {
 	rastSGDF <- methods::as(rast, 'SpatialGridDataFrame')
 	rgrass7::writeRAST(rastSGDF, vname=vname, overwrite=TRUE)
+
 }
+
+# .tryWrite <- function(rast, vname) {
+	# rastSGDF <- methods::as(rast, 'SpatialGridDataFrame')
+	# rgrass7::writeRAST(rastSGDF, vname=vname, overwrite=TRUE)
+# }
