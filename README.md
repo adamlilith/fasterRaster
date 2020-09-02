@@ -67,4 +67,4 @@ This was faster because we told *fasterVectToRastDistance* *not* to export the r
 
 You can see that by chaining a series of **faster** functions together, the process can be made faster because all of the operations are done in GRASS with less back-and-forth between GRASS and R.  The one exception to this is that some **faster** functions do not use GRASS (e.g., **fasterFragmentation** and **fasterFocal**), so you can't use this trick.
 
-- Adam
+~ Adam
