@@ -38,9 +38,6 @@ fasterLongLatRasters <- function(
 
 	flags <- c('quiet', 'overwrite')
 	
-	# load spatial object and raster
-	if (class(rast) == 'character') rast <- raster::raster(rast)
-
 	# get CRS
 	p4s <- sp::proj4string(rast)
 	
