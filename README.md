@@ -10,7 +10,7 @@ To install `fasterRaster` and its dependencies, just do the following:
 
 NB: If for some reason this command does not work, you can install the package by downloading the latest zip/tar file from the `zipTarFiles` directory and installing the package manually.
 
-## *Faster* raster processing functions ##
+### *Faster* raster processing functions ##
 * `fasterBufferRast`: Add buffer to cells in a raster (using GRASS).
 * `fasterFocal`: Faster focal calculations (using multi-core).
 * `fasterFragmentation`: Fragmentation indices following Riitters et al. (2000 Conservation Ecology 4:3; using multi-core).
@@ -23,10 +23,10 @@ NB: If for some reason this command does not work, you can install the package b
 * `fasterVectorize`: Convert raster to spatial points, lines, or polygons (using GRASS).
 * `fasterVectToRastDistance`: Distance between raster cells and a vector (using GRASS).
 
-## Normal-speed raster processing ##
+### Normal-speed raster processing ##
 * `fragmentation`: Calculate landscape fragmentation indices as per Riitter et al. (2000 Conservation Ecology 4:3)
 
-## Utility functions ##
+### Utility functions ##
 * `exportRasterToGrass`: Export raster to an open GRASS session with support for large rasters.
 
 ## Getting started ##
@@ -68,6 +68,7 @@ This was faster because we told `fasterVectToRastDistance` *not* to export the r
 
 You can see that by chaining a series of `faster~` functions together, the process can be made faster because all of the operations are done in GRASS with less back-and-forth between GRASS and R.  The one exception to this is that some **faster~** functions do not use GRASS (e.g., `fasterFragmentation`, `fasterFocal`, and `fasterCalc`), so you can't use this trick.
 
+### A generic *faster* function ###
 The `faster` function is a generic wrapper for GRASS modules. You can use it to call many of the modules in GRASS.  It may not always work, but it simplifies the task of initiating a GRASS instance, importing the raster/vector, and executing the call:
 
 `data(madForest2000)`  
