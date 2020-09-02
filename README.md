@@ -68,7 +68,7 @@ This was faster because we told `fasterVectToRastDistance` *not* to export the r
 
 You can see that by chaining a series of `faster~` functions together, the process can be made faster because all of the operations are done in GRASS with less back-and-forth between GRASS and R.  The one exception to this is that some **faster~** functions do not use GRASS (e.g., `fasterFragmentation`, `fasterFocal`, and `fasterCalc`), so you can't use this trick.
 
-### A generic *faster* function ###
+### The generic *faster* function ###
 The `faster` function is a generic wrapper for GRASS modules. You can use it to call many of the modules in GRASS.  It may not always work, but it simplifies the task of initiating a GRASS instance, importing the raster/vector, and executing the call:
 
 `data(madForest2000)`  
