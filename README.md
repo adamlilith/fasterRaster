@@ -49,6 +49,7 @@ Let's get started! We'll do a simple operation in which we calculate the distanc
 `quants <- fasterQuantile(distToRiver, probs=c(0.05, 0.5, 0.95), grassDir=grassDir)`  
 `quants`  
 
+### Chaining functions for speed ###
 That was easy enough. Under the hood, many of the `faster` functions are:  
 1) starting a GRASS session;  
 2) writing a raster and/or vector to that session;  
@@ -57,17 +58,17 @@ That was easy enough. Under the hood, many of the `faster` functions are:
 
 Note that you really probably aren't interested in steps 1 and 4, but they create a computing overhead.  Thus, it is possible to chain operations together so that they use the same GRASS session by keeping the rasters/vectors in GRASS and then exporting them when you need them in the end.  
 
-Here's an example in which we'll chain the *fasterVectToRastDistance* and *fasterQuantile* functions together. The latter will return
+Here's an example in which we'll chain the `fasterVectToRastDistance` and `fasterQuantile` functions together. The latter will return
 
 `distToRiver <- fasterVectToRastDistance(madForest2000, madRivers, grassDir=grassDir, grassToR=FALSE)`  
 `quants <- fasterQuantile('distToVect', probs=c(0.05, 0.5, 0.95), grassDir=grassDir, alreadyInGrass=TRUE)`  
 `quants`  
 
-This was faster because we told *fasterVectToRastDistance* *not* to export the raster to **R**. We then told *fasterQuantile* to look in the current GRASS session and use the raster named `distToVect`. How did we know it would be called this?  Because the function *fasterVectToRastDistance* always names its output raster in GRASS `distToVect` (see help for *fasterVectToRastDistance*). Other functions that use GRASS will have different names for their output vectors/rasters.
+This was faster because we told `fasterVectToRastDistance` *not* to export the raster to **R**. We then told `fasterQuantile` to look in the current GRASS session and use the raster named `distToVect`. How did we know it would be called this?  Because the function *fasterVectToRastDistance* always names its output raster in GRASS `distToVect` (see help for `fasterVectToRastDistance`). Other functions that use GRASS will have different names for their output vectors/rasters.
 
-You can see that by chaining a series of **faster~** functions together, the process can be made faster because all of the operations are done in GRASS with less back-and-forth between GRASS and R.  The one exception to this is that some **faster~** functions do not use GRASS (e.g., **fasterFragmentation**, **fasterFocal**, and **fasterCalc**), so you can't use this trick.
+You can see that by chaining a series of `faster~` functions together, the process can be made faster because all of the operations are done in GRASS with less back-and-forth between GRASS and R.  The one exception to this is that some **faster~** functions do not use GRASS (e.g., `fasterFragmentation`, `fasterFocal`, and `fasterCalc`), so you can't use this trick.
 
-The *faster* function is a generic wrapper for GRASS modules. You can use it to call many of the modules in GRASS.  It may not always work, but it simplifies the task of initiating a GRASS instance, importing the raster/vector, and executing the call:
+The `faster` function is a generic wrapper for GRASS modules. You can use it to call many of the modules in GRASS.  It may not always work, but it simplifies the task of initiating a GRASS instance, importing the raster/vector, and executing the call:
 
 `data(madForest2000)`  
 `latRast <- faster('r.latlong', rast=madForest2000, outType='rast', flags=c('quiet', 'overwrite'), grassDir=grassDir)`  
@@ -81,7 +82,7 @@ This is the same as:
 Here is an example of chaining with the *faster* function. The second function uses the GRASS session initiated by the first function. It then uses the raster created in the GRASS session by the first function as the input for its module.
 
 `latRast <- faster('r.latlong', rast=madForest2000, outType='rast', outName='lat', flags=c('quiet', 'overwrite'), grassDir=grassDir)`  
-`longRast <- faster('r.latlong', input='lat', outType='rast', outName='long', `flags=c('quiet', 'overwrite', 'l'), init=FALSE, grassDir=grassDir)`  
+`longRast <- faster('r.latlong', input='lat', outType='rast', outName='long', flags=c('quiet', 'overwrite', 'l'), init=FALSE, grassDir=grassDir)`  
 `ll3 <- stack(latRast, longRast)`  
 
 ~ Adam
