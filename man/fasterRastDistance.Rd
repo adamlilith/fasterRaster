@@ -29,7 +29,7 @@ fasterRastDistance(
 meters Logical, if \code{TRUE} then distance is in meters. If \code{FALSE} then distance is in map units.
 fillNAs Logical, if \code{TRUE} (default) then fill code{NA} cells with distance between them and closest non-\code{NA}. If \code{TRUE} then replace value in non-{NA} cells with distance between them and nearest \code{NA} cell.}
 
-\item{grassDir}{Either \code{NULL} or a 3-element character vector. If the latter, the first element is the base path to the installation of GRASS, the second the version number, and the third the install type for GRASS.  For example, \code{c('C:/OSGeo4W64/', 'grass-7.4.1', 'osgeo4W')}. See \code{\link[link2GI]{linkGRASS7}} for further help. If \code{NULL} (default) the an installation of GRASS is searched for; this may take several minutes.}
+\item{grassDir}{Character or \code{NULL} (default). Name of the directory in which GRASS is installed. Example: \code{'C:/Program Files/GRASS GIS 7.8'}. If this is \code{NULL}, R will search for the directory in which GRASS is installed. This usually fails, or if it succeeds, takes several minutes.}
 
 \item{alreadyInGrass}{Logical, if \code{FALSE} (default) then start a new GRASS session and import the raster named in \code{rast}. If \code{FALSE}, use a raster already in GRASS with the name given by \code{rast}. The latter is useful if you are chaining \pkg{fasterRaster} functions together and the first function initializes the session. The first function should use \code{alreadyInGrass = FALSE} and subsequent functions should use \code{alreadyInGrass = TRUE} then use their \code{rast} (or \code{vect}) arguments to name the raster (or vector) that was made by the previous function.}
 
@@ -55,8 +55,8 @@ data(madForest2000)
 
 # could also use distance() function from the raster package which is
 # slower in this example
-distToForest <- fasterRastDistance(madForest2000, fillNAs=TRUE,
-grassDir=grassDir)
+distToForest <- fasterRastDistance(rast=madForest2000,
+fillNAs=TRUE, grassDir=grassDir)
 # distToForest <- distance(madForest2000)
 par(mfrow=c(1, 2))
 plot(madForest2000, 'Forest', col='forestgreen')

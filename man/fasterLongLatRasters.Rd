@@ -18,7 +18,7 @@ fasterLongLatRasters(
 
 \item{mask}{Raster layer, serves as a mask for the longitude/latitude rasters. Cells that have \code{NA}s in \code{mask} will also have \code{NA}s in the output rasters. Note that the mask is \emph{only} used if the output is sent back to R (\code{grassToR} is \code{TRUE}) and not kept in the GRASS session created for the calculations.}
 
-\item{grassDir}{Either \code{NULL} or a 3-element character vector. If the latter, the first element is the base path to the installation of GRASS, the second the version number, and the third the install type for GRASS.  For example, \code{c('C:/OSGeo4W64/', 'grass-7.4.1', 'osgeo4W')}. See \code{\link[link2GI]{linkGRASS7}} for further help. If \code{NULL} (default) the an installation of GRASS is searched for; this may take several minutes.}
+\item{grassDir}{Character or \code{NULL} (default). Name of the directory in which GRASS is installed. Example: \code{'C:/Program Files/GRASS GIS 7.8'}. If this is \code{NULL}, R will search for the directory in which GRASS is installed. This usually fails, or if it succeeds, takes several minutes.}
 
 \item{alreadyInGrass}{Logical, if \code{FALSE} (default) then start a new GRASS session and import the raster named in \code{rast}. If \code{FALSE}, use a raster already in GRASS with the name given by \code{rast}. The latter is useful if you are chaining \pkg{fasterRaster} functions together and the first function initializes the session. The first function should use \code{alreadyInGrass = FALSE} and subsequent functions should use \code{alreadyInGrass = TRUE} then use their \code{rast} (or \code{vect}) arguments to name the raster (or vector) that was made by the previous function.}
 
@@ -45,9 +45,10 @@ grassDir <- 'C:/Program Files/GRASS GIS 7.8'
 # because the template raster is so small
 
 data(madForest)
-ll1 <- enmSdm::longLatRasters(madForest2000)
-ll2 <- fasterLongLatRasters(madForest2000, grassDir=grassDir)
-plot(ll2)
+ll1 <- fasterLongLatRasters(rast=madForest2000, grassDir=grassDir)
+# same as (and slower than, for this raster):
+ll2 <- enmSdm::longLatRasters(madForest2000)
+plot(ll1)
 }
 }
 \seealso{
