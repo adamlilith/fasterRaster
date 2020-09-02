@@ -7,7 +7,7 @@
 #' @details
 #' @section Raster-only operations:
 #' 		\code{\link{fasterBufferRast}}: Add buffer to cells in a raster (using GRASS).
-#' 		\code{\link{fasterContour}}: Faster contour lines from a raster (using GRASS).
+#' 		\code{\link{fasterContour}}: Calculate contour vectors from a raster
 #' 		\code{\link{fasterFocal}}: Faster focal calculations (using multi-core).
 #' 		\code{\link{fasterFragmentation}}: Fragmentation indices following Riitters et al. (2000 Conservation Ecology 4:3; using multi-core).
 #' 		\code{\link{fasterHorizon}}: Horizon angle height from a DEM (using GRASS).

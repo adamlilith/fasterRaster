@@ -12,7 +12,7 @@ NB: If for some reason this command does not work, you can install the package b
 
 ### *Faster* raster processing functions ##
 * `fasterBufferRast`: Add buffer to cells in a raster (using GRASS).
-* `fasterContour`: Faster contour lines from a raster (using GRASS).
+* `fasterContour`: Calculate contour vectors from a raster (using GRASS).
 * `fasterFocal`: Faster focal calculations (using multi-core).
 * `fasterFragmentation`: Fragmentation indices following Riitters et al. (2000 Conservation Ecology 4:3; using multi-core).
 * `fasterLongLatRasters`: Create rasters with values equal to cell longitude and latitude (using GRASS).
