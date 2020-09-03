@@ -34,8 +34,6 @@ initGrass <- function(
 	grassDir = NULL
 ) {
 
-	rgrass7::use_sp()
-
 	if (is.null(rast) & is.null(vect)) stop('A raster or a vector already in GRASS must be specified in function "initGrass".')
 
 	# if vector/raster is already in GRASS then just return its name in GRASS
@@ -54,6 +52,8 @@ initGrass <- function(
 		
 	# if vector/raster is NOT already in GRASS then export it to GRASS and return its name
 	} else {
+
+		rgrass7::use_sp()
 
 		dir.create(tempDir, recursive=TRUE, showWarnings=FALSE)
 
@@ -95,7 +95,7 @@ initGrass <- function(
 	
 			input <- c(input, rastName)
 			names(input)[length(input)] <- 'rastNameInGrass'
-			exportRastToGrass(rast, vname=rastName, tempDir=tempDir)
+			exportRastToGrass(rast, grassName=rastName, tempDir=tempDir)
 			
 		}
 		
@@ -104,7 +104,7 @@ initGrass <- function(
 		
 			input <- c(input, vectName)
 			names(input)[length(input)] <- 'vectNameInGrass'
-			exportVectToGrass(vect, vname=vectName)
+			exportVectToGrass(vect, grassName=vectName)
 
 		}
 		
