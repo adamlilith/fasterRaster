@@ -11,8 +11,9 @@
 #' @param grassDir Character or \code{NULL} (default). Name of the directory in which GRASS is installed. Example: \code{'C:/Program Files/GRASS GIS 7.8'}. If this is \code{NULL}, R will search for the directory in which GRASS is installed. This usually fails, or if it succeeds, takes several minutes.
 #' @param alreadyInGrass Logical, if \code{FALSE} (default) then start a new GRASS session and import the raster named in \code{rast}. If \code{FALSE}, use a raster already in GRASS with the name given by \code{rast}. The latter is useful if you are chaining \pkg{fasterRaster} functions together and the first function initializes the session. The first function should use \code{alreadyInGrass = FALSE} and subsequent functions should use \code{alreadyInGrass = TRUE} then use their \code{rast} (or \code{vect}) arguments to name the raster (or vector) that was made by the previous function.
 #' @param grassToR Logical, if \code{TRUE} (default) then the product of the calculations will be returned to R. If \code{FALSE}, then the product is left in the GRASS session and named \code{longitude} and \code{latitude}. The latter case is useful (and faster) when chaining several \pkg{fasterRaster} functions together.
+#' @param outGrassName Character. Name of output in GRASS. This is useful if you want to refer to the output object in GRASS later in a session.
 #' @param ... Arguments to pass to \code{\link[rgrass7]{execGRASS}} when calculating horizon height (i.e., function \code{r.horizon} in GRASS).
-#' @return If \code{grassToR} if \code{TRUE}, then a raster or raster stack stack with the same extent, resolution, and coordinate reference system as \code{rast}. Otherwise, a raster is written into the GRASS session. The name of this raster is as \code{horizAngleHeight_xxx}, where the \code{xxx} is the value(s) of \code{directions}, with 0s padded at the front so the entire value is 3 digits long. For example, if \code{directions} is \code{c(0, 90, 180, 270)}, then four rasters will be written: \code{horizAngleHeight_000}, \code{horizAngleHeight_090}, \code{horizAngleHeight_180}, and \code{horizAngleHeight_270}.
+#' @return If \code{grassToR} if \code{TRUE}, then a raster or raster stack stack with the same extent, resolution, and coordinate reference system as \code{rast}. Otherwise, a raster is written into the GRASS session. The name of this raster is as \code{paste0(outGrassName, '_', xxx)}. For example, if \code{outGrassName = 'horizonAngleHeight'}, and \code{directions} is \code{c(0, 90, 180, 270)}, then four rasters will be written: \code{horizAngleHeight_000}, \code{horizAngleHeight_090}, \code{horizAngleHeight_180}, and \code{horizAngleHeight_270}. Note the padding with zeros before angles <10.
 #' @details See (r.horizon)[https://grass.osgeo.org/grass78/manuals/r.horizon.html] for more details. Note that if you get an error saying "", then you should add the EPSG code to the beginning of the raster coordinate reference system string (its "proj4string"). For example, \code{proj4string(rast) <- CRS('+init=epsg:32738')}. EPSG codes for various projections, datums, and locales can be found at (Spatial Reference)[http://spatialreference.org/].
 #' @seealso
 #' @examples
@@ -36,6 +37,7 @@ fasterHorizon <- function(
 	grassDir = NULL,
 	alreadyInGrass = FALSE,
 	grassToR = TRUE,
+	outGrassName = 'horizonAngleHeight',
 	...
 ) {
 
@@ -49,9 +51,9 @@ fasterHorizon <- function(
 	for (direction in directions) {
 
 		if (is.null(maxDist)) {
-			rgrass7::execGRASS('r.horizon', elevation=input, direction=direction, bufferzone=bufferZone, output='horizAngleHeight', flags=flags, ...)
+			rgrass7::execGRASS('r.horizon', elevation=input, direction=direction, bufferzone=bufferZone, output=outGrassName, flags=flags, ...)
 		} else {
-			rgrass7::execGRASS('r.horizon', elevation=input, direction=direction, bufferzone=bufferZone, maxdistance=maxDist, output='horizAngleHeight', flags=flags, ...)
+			rgrass7::execGRASS('r.horizon', elevation=input, direction=direction, bufferzone=bufferZone, maxdistance=maxDist, output=outGrassName, flags=flags, ...)
 		}
 
 	}
@@ -60,7 +62,7 @@ fasterHorizon <- function(
 
 		for (direction in directions) {
 	
-			thisOut <- rgrass7::readRAST(paste0('horizAngleHeight_', omnibus::prefix(direction, 3)))
+			thisOut <- rgrass7::readRAST(paste0(outGrassName, '_', omnibus::prefix(direction, 3)))
 			thisOut <- raster::raster(thisOut)
 			
 			out <- if (exists('out', inherits=FALSE)) {
@@ -73,7 +75,8 @@ fasterHorizon <- function(
 
 		if (northIs0) directions <- fasterConvertDegree(directions)
 
-		names(out) <- paste0('horizonHeight_', prefix(directions, 3))
+		angles <- paste0(ifelse(directions < 100, '0', ''), ifelse(directions < 10, '0', ''), directions)
+		names(out) <- paste0(outGrassName, '_', angles)
 		out <- out[[order(names(out))]]
 		out
 		

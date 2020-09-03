@@ -13,8 +13,14 @@
 #' @param grassDir Character or \code{NULL} (default). Name of the directory in which GRASS is installed. Example: \code{'C:/Program Files/GRASS GIS 7.8'}. If this is \code{NULL}, R will search for the directory in which GRASS is installed. This usually fails, or if it succeeds, takes several minutes.
 #' @param alreadyInGrass Logical, if \code{FALSE} (default) then start a new GRASS session and import the raster named in \code{rast}. If \code{FALSE}, use a raster already in GRASS with the name given by \code{rast}. The latter is useful if you are chaining \pkg{fasterRaster} functions together and the first function initializes the session. The first function should use \code{alreadyInGrass = FALSE} and subsequent functions should use \code{alreadyInGrass = TRUE} then use their \code{rast} (or \code{vect}) arguments to name the raster (or vector) that was made by the previous function.
 #' @param grassToR Logical, if \code{TRUE} (default) then the product of the calculations will be returned to R. If \code{FALSE}, then the product is left in the GRASS session and named \code{slope}, \code{aspect}, \code{profileCurve}, \code{tanCurve}, \code{eastWestSlope}, or \code{northSouthSlope}. The latter case is useful (and faster) when chaining several \pkg{fasterRaster} functions together.
+#' @param outGrassNameSlope Character. Name of slope raster in GRASS. Useful for referring to later in the same GRASS session.
+#' @param outGrassNameAspect Character. Name of aspect raster in GRASS. Useful for referring to later in the same GRASS session.
+#' @param outGrassNameProfileCurve Character. Name of profile curve raster in GRASS. Useful for referring to later in the same GRASS session.
+#' @param outGrassNameTanCurve Character. Name of tangent curve raster in GRASS. Useful for referring to later in the same GRASS session.
+#' @param outGrassNameEastWestSlope Character. Name of east-west slope raster in GRASS. Useful for referring to later in the same GRASS session.
+#' @param outGrassNameNorthSouthSlope Character. Name of north-south slope raster in GRASS. Useful for referring to later in the same GRASS session.
 #' @param ... Arguments to pass to \code{\link[rgrass7]{execGRASS}} when used for rasterizing (i.e., function \code{r.slope.aspect} in GRASS).
-#' @return If \code{grassToR} if \code{TRUE}, then a raster or raster stack with the same extent, resolution, and coordinate reference system as \code{rast}. Otherwise, raster(s) with the name(s) \code{slope}, \code{aspectNorthIs0} or \code{aspectEastIs0} depending on whether \code{northIs0} is \code{TRUE} or \code{FALSE}), \code{profileCurve}, \code{tanCurve}, \code{eastWestSlope}, or \code{northSouthSlope} are written into the GRASS session.
+#' @param outGrassName Character. Name of output in GRASS. This is useful if you want to refer to the output object in GRASS later in a session.#' @return If \code{grassToR} if \code{TRUE}, then a raster or raster stack with the same extent, resolution, and coordinate reference system as \code{rast}. Otherwise, raster(s) given by the names in the \code{outGrassName*} arguments are used are written into the GRASS session.
 #' @details See \href{r.slope.aspect}{https://grass.osgeo.org/grass78/manuals/r.slope.aspect.html} for more details.  Note that if you get an error saying "", then you should add the EPSG code to the beginning of the raster and vector coordinate reference system string (its "proj4string"). For example, \code{proj4string(x) <- CRS('+init=epsg:32738')}. EPSG codes for various projections, datums, and locales can be found at \href{Spatial Reference}{http://spatialreference.org}.
 #' @seealso \code{\link[raster]{terrain}}
 #' @examples
@@ -51,6 +57,12 @@ fasterTerrain <- function(
 	grassDir = NULL,
 	alreadyInGrass = FALSE,
 	grassToR = TRUE,
+	outGrassNameSlope = 'slope',
+	outGrassNameAspect = ifelse(northIs0, 'aspectNorthIs0', 'aspectEastIs0'),
+	outGrassNameProfileCurve = 'profileCurve',
+	outGrassNameTanCurve = 'tanCurve',
+	outGrassNameEastWestSlope = 'eastWestSlope',
+	outGrassNameNorthSouthSlope = 'northSouthSlope',
 	...
 ) {
 
@@ -60,47 +72,46 @@ fasterTerrain <- function(
 	input <- initGrass(alreadyInGrass, rast=rast, vect=NULL, grassDir=grassDir)
 
 	# slope
-	if (slope) rgrass7::execGRASS('r.slope.aspect', elevation=input, slope='slope', format=slopeUnits, flags=flags)
+	if (slope) rgrass7::execGRASS('r.slope.aspect', elevation=input, slope=outGrassNameSlope, format=slopeUnits, flags=flags)
 	
 	# aspect (0 = east and goes counter-clockwise, so convert so 0 = north going clockwise)
 	if (aspect) {
-		rgrass7::execGRASS('r.slope.aspect', elevation=input, aspect='aspectEastIs0', flags=flags)
-		if (northIs0) rgrass7::execGRASS('r.mapcalc', expression='aspectNorthIs0 = (360 - aspectEastIs0) % 360', flags=flags)
+		rgrass7::execGRASS('r.slope.aspect', elevation=input, aspect=outGrassNameAspect, flags=flags)
+		if (northIs0) rgrass7::execGRASS('r.mapcalc', expression=paste0(outGrassNameAspect, ' = (360 - ', outGrassNameAspect, ') % 360'), flags=flags)
 	}
 	
 	# curvatures
-	if (profileCurve) rgrass7::execGRASS('r.slope.aspect', elevation=input, pcurvature='profileCurve', flags=flags)
-	if (tanCurve) rgrass7::execGRASS('r.slope.aspect', elevation=input, tcurvature='tanCurve', flags=flags)
+	if (profileCurve) rgrass7::execGRASS('r.slope.aspect', elevation=input, pcurvature=outGrassNameProfileCurve, flags=flags)
+	if (tanCurve) rgrass7::execGRASS('r.slope.aspect', elevation=input, tcurvature=outGrassNameTanCurve, flags=flags)
 	
 	# first-derivative slopes
-	if (eastWestSlope) rgrass7::execGRASS('r.slope.aspect', elevation=input, dx='eastWestSlope', flags=flags)
-	if (northSouthSlope) rgrass7::execGRASS('r.slope.aspect', elevation=input, dy='northSouthSlope', flags=flags)
+	if (eastWestSlope) rgrass7::execGRASS('r.slope.aspect', elevation=input, dx=outGrassNameEastWestSlope, flags=flags)
+	if (northSouthSlope) rgrass7::execGRASS('r.slope.aspect', elevation=input, dy=outGrassNameNorthSouthSlope, flags=flags)
 
 	# return
 	if (grassToR) {
 	
-		out <- rast
+		out <- raster::raster(rgrass7::readRAST(rast)))
 	
-		if (slope) out <- raster::stack(out, raster::raster(rgrass7::readRAST('slope')))
-		if (aspect & northIs0) out <- raster::stack(out, raster::raster(rgrass7::readRAST('aspectNorthIs0')))
-		if (aspect & !northIs0) out <- raster::stack(out, raster::raster(rgrass7::readRAST('aspectEastIs0')))
-		if (profileCurve) out <- raster::stack(out, raster::raster(rgrass7::readRAST('profileCurve')))
-		if (tanCurve) out <- raster::stack(out, raster::raster(rgrass7::readRAST('tanCurve')))
-		if (eastWestSlope) out <- raster::stack(out, raster::raster(rgrass7::readRAST('eastWestSlope')))
-		if (northSouthSlope) out <- raster::stack(out, raster::raster(rgrass7::readRAST('northSouthSlope')))
+		if (slope) out <- raster::stack(out, raster::raster(rgrass7::readRAST(outGrassNameSlope)))
+		if (aspect & northIs0) out <- raster::stack(out, raster::raster(rgrass7::readRAST(outGrassNameAspect)))
+		if (profileCurve) out <- raster::stack(out, raster::raster(rgrass7::readRAST(outGrassNameProfileCurve)))
+		if (tanCurve) out <- raster::stack(out, raster::raster(rgrass7::readRAST(outGrassNameTanCurve)))
+		if (eastWestSlope) out <- raster::stack(out, raster::raster(rgrass7::readRAST(outGrassNameEastWestSlope)))
+		if (northSouthSlope) out <- raster::stack(out, raster::raster(rgrass7::readRAST(outGrassNameNorthSouthSlope)))
+
+		out <- raster::subset(out, 2:raster::nlayers(out))
 
 		name <- c(
-			ifelse(slope, 'slope', NA),
-			ifelse(aspect, ifelse(northIs0, 'aspectNorthIs0', 'aspectEastIs0'), NA),
-			ifelse(profileCurve, 'profileCurve', NA),
-			ifelse(tanCurve, 'tanCurve', NA),
-			ifelse(eastWestSlope, 'eastWestSlope', NA),
-			ifelse(northSouthSlope, 'northSouthSlope', NA)
+			ifelse(slope, outGrassNameSlope, NA),
+			ifelse(aspect, outGrassNameAspect, NA),
+			ifelse(profileCurve, outGrassNameProfileCurve, NA),
+			ifelse(tanCurve, outGrassNameTanCurve, NA),
+			ifelse(eastWestSlope, outGrassNameEastWestSlope, NA),
+			ifelse(northSouthSlope, outGrassNameNorthSouthSlope, NA)
 		)
 		
 		name <- stats::na.omit(name)
-		
-		out <- raster::subset(out, 2:raster::nlayers(out))
 		names(out) <- name
 		
 		out

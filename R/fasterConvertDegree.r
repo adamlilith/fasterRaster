@@ -5,8 +5,9 @@
 #' @param grassDir Character or \code{NULL} (default). Name of the directory in which GRASS is installed. Example: \code{'C:/Program Files/GRASS GIS 7.8'}. If this is \code{NULL}, R will search for the directory in which GRASS is installed. This usually fails, or if it succeeds, takes several minutes.
 #' @param alreadyInGrass Logical, if \code{FALSE} (default) then start a new GRASS session and import the raster named in \code{x}. If \code{FALSE}, use a raster already in GRASS with the name given by \code{x}. The latter is useful if you are chaining \pkg{fasterRaster} functions together and the first function initializes the session. The first function should use \code{alreadyInGrass = FALSE} and subsequent functions should use \code{alreadyInGrass = TRUE} then use their \code{rast} (or \code{vect}) arguments to name the raster (or vector) that was made by the previous function.
 #' @param grassToR Logical, if \code{TRUE} (default) then the output will be a raster or raster stack returned to R. If \code{FALSE}, then the rasters are left in the GRASS session and named \code{degreeConvert_1}, \code{degreeConvert_2}, \code{degreeConvert_3} (one per raster in \code{x}). The latter case is useful (and faster) when chaining several \pkg{fasterRaster} functions together.
+#' @param outGrassName Character. Name of output in GRASS. This is useful if you want to refer to the output object in GRASS later in a session.
 #' @param ... Arguments to send to \code{\link[rgrass7]{execGRASS}}.
-#' @return Numeric, raster, or raster stack, or a set of rasters written into the current GRASS session.
+#' @return Numeric, raster, or raster stack. Regardless, a set of rasters will be written into the current GRASS session. The name(s) of the rasters inn GRASS wil be given by \code{outGrassName} with \code{'_', i} appended, where \code{i} starts at 1 for the first raster and increments by 1. For example, if \code{outGrassName = 'degreeConvert'}, then the raster(s) will be named \code{degreeConvert_1}, \code{degreeConvert_2}, etc.
 #' @examples
 #' # examples with scalar values
 #' fasterConvertDegree(0)
@@ -39,6 +40,7 @@ fasterConvertDegree <- function(
 	grassDir = NULL,
 	alreadyInGrass = FALSE,
 	returnToR = TRUE,
+	outGrassName = 'degreeConvert',
 	...
 ) {
 
@@ -66,12 +68,12 @@ fasterConvertDegree <- function(
 				exportRastToGrass(thisRast, grassName=paste0('rast_', i))
 			
 				# execute
-				expression <- paste0('degreeConvert_', i, ' = (360 - ', paste0('rast_', i), ') % 360')
+				expression <- paste0(outGrassName, '_', i, ' = (360 - ', paste0('rast_', i), ') % 360')
 				rgrass7::execGRASS('r.mapcalc', expression=expression, flags=flags, ...)
 				
 				if (grassToR) {
 					
-					thisOut <- rgrass7::readRAST(paste0('degreeConvert_', i))
+					thisOut <- rgrass7::readRAST(paste0(outGrassName, '_', i))
 					thisOut <- raster::raster(thisOut)
 					
 					out <- if (exists('out', inherits = FALSE)) {
@@ -88,12 +90,12 @@ fasterConvertDegree <- function(
 		} else {
 			
 			# execute
-			expression <- 'degreeConvert_1 = (360 - rast) % 360'
+			expression <- paste0(outGrassName, '_1 = (360 - rast) % 360')
 			rgrass7::execGRASS('r.mapcalc', expression=expression, flags=flags, ...)
 			
 			if (grassToR) {
 				
-				out <- rgrass7::readRAST('degreeConvert_1')
+				out <- rgrass7::readRAST(paste0(outGrassName, '_1'))
 				out <- raster::raster(out)
 				
 			}
