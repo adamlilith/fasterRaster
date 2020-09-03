@@ -1,14 +1,13 @@
 #' Generic function to call a GRASS module
 #'
-#' This function is wrapper for \code{\link[grass7]{execGRASS}}, plus code necessary to initiate a GRASS session.  Many of the functions in \pkg{fasterRaster} actually utilize this function.
+#' This function is wrapper for \code{\link[grass7]{execGRASS}}, plus code necessary to initiate a GRASS session. Many of the functions in \pkg{fasterRaster} actually utilize this function.  This function works best for modules that take one raster and/or one vector as input and produce one raster or vector as output.
 #' @param mod Character. Name of GRASS 7 module (e.g., \code{'r.latlong'} or \code{'v.buffer'}.
 #' @param rast Either a raster or the name of a raster in an existing GRASS session. Used as input to the module.
 #' @param vect Either a SpatialPoints, SpatialPointsDataFrame, SpatialLines, SpatialLinesDataFrame, SpatialPolygons, or SpatialPolygonsDataFrame or the name of such a vector dataset already in a GRASS session. Used as input to the module.
 #' @param outType \code{NULL}, \code{'raster'}, or \code{'vector'} (partial string matching is used). Type of output expected from the GRASS module.
-#' @param outName Character. Name of the output (raster or vector).
+#' @param output Character. Name of the output (raster or vector).
 #' @param flags List of flags for the GRASS module. The default (\code{c('quiet', 'overwrite')}) causes the module to report little/no messages and to overwrite existing files of the same name. For more flags, see the help documentation for the respective GRASS module.
 #' @param ... Arguments to pass to the GRASS module through \code{\link[grass7]{execGRASS}}.
-#' @param init Logical. If \code{TRUE} (default), a new GRASS session is initialized.
 #' @param grassDir Character or \code{NULL} (default). Name of the directory in which GRASS is installed. Example: \code{'C:/Program Files/GRASS GIS 7.8'}. If this is \code{NULL}, R will search for the directory in which GRASS is installed. This usually fails, or if it succeeds, takes several minutes.
 #' @param alreadyInGrass Logical, if \code{FALSE} (default) then start a new GRASS session and import the raster named in \code{rast}. If \code{FALSE}, use a raster already in GRASS with the name given by \code{rast}. The latter is useful if you are chaining \pkg{fasterRaster} functions together and the first function initializes the session. The first function should use \code{alreadyInGrass = FALSE} and subsequent functions should use \code{alreadyInGrass = TRUE} then use their \code{rast} (or \code{vect}) arguments to name the raster (or vector) that was made by the previous function.
 #' @param grassToR Logical, if \code{TRUE} (default) then the product of the calculations will be returned to R. If \code{FALSE}, then the product is left in the GRASS session and named \code{vectToRast}. The latter case is useful (and faster) when chaining several \pkg{fasterRaster} functions together.
@@ -35,8 +34,8 @@
 #' # It then uses the raster created in the GRASS session by the first function
 #' # as the input for its module.
 #' latRast <- faster('r.latlong', rast=madForest2000, outType='rast',
-#' outName='lat', flags=c('quiet', 'overwrite'), grassDir=grassDir)
-#' longRast <- faster('r.latlong', input='lat', outType='rast', outName='long',
+#' output='lat', flags=c('quiet', 'overwrite'), grassDir=grassDir)
+#' longRast <- faster('r.latlong', input='lat', outType='rast', output='long',
 #' flags=c('quiet', 'overwrite', 'l'), init=FALSE, grassDir=grassDir)
 #' ll3 <- stack(latRast, longRast)
 #' }
@@ -47,46 +46,37 @@ faster <- function(
 	rast = NULL,
 	vect = NULL,
 	outType = NULL,
-	outName = 'out',
+	output = 'out',
 	flags = c('quiet', 'overwrite'),
 	...,
-	init = TRUE,
 	grassDir = NULL,
 	alreadyInGrass = FALSE,
 	grassToR = TRUE
 ) {
 
-	# get CRS
-	if (!is.null(rast)) {
-		p4s <- sp::proj4string(rast)
-	} else if (!is.null(vect)) {
-		p4s <- sp::proj4string(vect)
-	}
-	
-	# initialize GRASS
-	if (init) input <- initGrass(alreadyInGrass, rast=rast, vect=vect, grassDir=grassDir)
-	
-	if (init) {
-		rgrass7::execGRASS(mod, output=outName, flags=flags, input=input, ...)
+
+	# execute
+	if (!alreadyInGrass) {
+		input <- initGrass(alreadyInGrass, rast=rast, vect=vect, grassDir=grassDir)
+		rgrass7::execGRASS(mod, output=output, flags=flags, input=input, ...)
 	} else {
-		rgrass7::execGRASS(mod, output=outName, flags=flags, ...)
+		rgrass7::execGRASS(mod, output=output, flags=flags, ...)
 	}
 	
 	if (grassToR) {
 
 		if (pmatch(outType, c('raster', 'vector')) == 1) {
 			
-			out <- rgrass7::readRAST(outName)
+			out <- rgrass7::readRAST(output)
 			out <- raster::raster(out)
-			names(out) <- outName
+			names(out) <- output
 		
 		} else if (pmatch(outType, c('raster', 'vector')) == 2) {
 		
-			out <- rgrass7::readVECT(outName)
+			out <- rgrass7::readVECT(output)
 			
 		}
 			
-		sp::proj4string(out) <- p4s
 		out
 		
 	}
