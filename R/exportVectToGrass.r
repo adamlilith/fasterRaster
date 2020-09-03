@@ -2,19 +2,19 @@
 #'
 #' Write a raster to an existing GRASS session with handling for very big rasters.
 #' @param vect Raster layer.
-#' @param vname Name of vector in GRASS.
+#' @param grassName Name of vector in GRASS.
 #' @param tempDir Temporary directory.
 #' @return Nothing (exports a vector to a GRASS session so it can be used by other functions).
 #' @export
 exportVectToGrass <- function(
 	vect,
-	vname = 'vect',
+	grassName = 'vect',
 	tempDir = raster::tmpDir()
 ) {
 
 	rgrass7::use_sp()
 
-	# tryWrite <- function(vect, vname) {
+	# tryWrite <- function(vect, grassName) {
 		
 		# # ensure spatial data frame to avert error
 		# vectClass <- class(vect)
@@ -32,11 +32,11 @@ exportVectToGrass <- function(
 	# # slow but error-resistant export
 	# if (class(success) == 'logical' && !success) {
 
-		# raster::shapefile(vect, paste0(tempDir, '/', vname), overwrite=TRUE)
-		# rgrass7::execGRASS('v.import', input=paste0(tempDir, '/', vname, '.shp'), output=vname, flags=c('overwrite', 'quiet'))
+		# raster::shapefile(vect, paste0(tempDir, '/', grassName), overwrite=TRUE)
+		# rgrass7::execGRASS('v.import', input=paste0(tempDir, '/', grassName, '.shp'), output=grassName, flags=c('overwrite', 'quiet'))
 		
 	# }
 
-	rgrass7::writeVECT(vect, vname=vname, v.in.ogr_flags='overwrite')
+	rgrass7::writeVECT(vect, vname=grassName, v.in.ogr_flags='overwrite')
 	
 }
