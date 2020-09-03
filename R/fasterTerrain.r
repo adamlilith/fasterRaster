@@ -14,7 +14,7 @@
 #' @param alreadyInGrass Logical, if \code{FALSE} (default) then start a new GRASS session and import the raster named in \code{rast}. If \code{FALSE}, use a raster already in GRASS with the name given by \code{rast}. The latter is useful if you are chaining \pkg{fasterRaster} functions together and the first function initializes the session. The first function should use \code{alreadyInGrass = FALSE} and subsequent functions should use \code{alreadyInGrass = TRUE} then use their \code{rast} (or \code{vect}) arguments to name the raster (or vector) that was made by the previous function.
 #' @param grassToR Logical, if \code{TRUE} (default) then the product of the calculations will be returned to R. If \code{FALSE}, then the product is left in the GRASS session and named \code{slope}, \code{aspect}, \code{profileCurve}, \code{tanCurve}, \code{eastWestSlope}, or \code{northSouthSlope}. The latter case is useful (and faster) when chaining several \pkg{fasterRaster} functions together.
 #' @param ... Arguments to pass to \code{\link[rgrass7]{execGRASS}} when used for rasterizing (i.e., function \code{r.slope.aspect} in GRASS).
-#' @return If \code{grassToR} if \code{TRUE}, then a raster or raster stack with the same extent, resolution, and coordinate reference system as \code{rast}. Otherwise, raster(s) with the name(s) \code{slope}, \code{aspect}, \code{profileCurve}, \code{tanCurve}, \code{eastWestSlope}, or \code{northSouthSlope} are written into the GRASS session.
+#' @return If \code{grassToR} if \code{TRUE}, then a raster or raster stack with the same extent, resolution, and coordinate reference system as \code{rast}. Otherwise, raster(s) with the name(s) \code{slope}, \code{aspectNorthIs0} or \code{aspectEastIs0} depending on whether \code{northIs0} is \code{TRUE} or \code{FALSE}), \code{profileCurve}, \code{tanCurve}, \code{eastWestSlope}, or \code{northSouthSlope} are written into the GRASS session.
 #' @details See \href{r.slope.aspect}{https://grass.osgeo.org/grass78/manuals/r.slope.aspect.html} for more details.  Note that if you get an error saying "", then you should add the EPSG code to the beginning of the raster and vector coordinate reference system string (its "proj4string"). For example, \code{proj4string(x) <- CRS('+init=epsg:32738')}. EPSG codes for various projections, datums, and locales can be found at \href{Spatial Reference}{http://spatialreference.org}.
 #' @seealso \code{\link[raster]{terrain}}
 #' @examples
@@ -28,6 +28,8 @@
 #' # in this example
 #' topo <- fasterTerrain(rast=madElev, slope = TRUE, aspect=TRUE,
 #' grassDir=grassDir)
+#'
+#' # terrainn function from the raster package... much slower in this example
 #' # slp <- terrain(elev, opt='slope', unit='degrees')
 #' # asp <- terrain(elev, opt='aspect', unit='degrees')
 #' # topo <- stack(slp, asp)
@@ -62,8 +64,8 @@ fasterTerrain <- function(
 	
 	# aspect (0 = east and goes counter-clockwise, so convert so 0 = north going clockwise)
 	if (aspect) {
-		rgrass7::execGRASS('r.slope.aspect', elevation=input, aspect='aspectFromEast', flags=flags)
-		if (northIs0) rgrass7::execGRASS('r.mapcalc', expression='aspect = (360 - aspectFromEast) % 360', flags=flags)
+		rgrass7::execGRASS('r.slope.aspect', elevation=input, aspect='aspectEastIs0', flags=flags)
+		if (northIs0) rgrass7::execGRASS('r.mapcalc', expression='aspectNorthIs0 = (360 - aspectEastIs0) % 360', flags=flags)
 	}
 	
 	# curvatures
@@ -80,7 +82,8 @@ fasterTerrain <- function(
 		out <- rast
 	
 		if (slope) out <- raster::stack(out, raster::raster(rgrass7::readRAST('slope')))
-		if (aspect) out <- raster::stack(out, raster::raster(rgrass7::readRAST('aspect')))
+		if (aspect & northIs0) out <- raster::stack(out, raster::raster(rgrass7::readRAST('aspectNorthIs0')))
+		if (aspect & !northIs0) out <- raster::stack(out, raster::raster(rgrass7::readRAST('aspectEastIs0')))
 		if (profileCurve) out <- raster::stack(out, raster::raster(rgrass7::readRAST('profileCurve')))
 		if (tanCurve) out <- raster::stack(out, raster::raster(rgrass7::readRAST('tanCurve')))
 		if (eastWestSlope) out <- raster::stack(out, raster::raster(rgrass7::readRAST('eastWestSlope')))
@@ -88,7 +91,7 @@ fasterTerrain <- function(
 
 		name <- c(
 			ifelse(slope, 'slope', NA),
-			ifelse(aspect, 'aspect', NA),
+			ifelse(aspect, ifelse(northIs0, 'aspectNorthIs0', 'aspectEastIs0'), NA),
 			ifelse(profileCurve, 'profileCurve', NA),
 			ifelse(tanCurve, 'tanCurve', NA),
 			ifelse(eastWestSlope, 'eastWestSlope', NA),
