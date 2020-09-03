@@ -16,7 +16,9 @@
 #' 		\code{\link{fasterQuantile}}: Quantiles of values in a raster (using GRASS).
 #' 		\code{\link{fasterRastDistance}}: Distance from cells with \code{NA}s to closest non-\code{NA} cell (or the inverse of this) (using GRASS).
 #' 		\code{\link{fasterRasterize}}: Convert vector to a raster (using GRASS).
+#' 		\code{\link{fasterSurfFractal}}: Generate a raster with a fractal pattern (using GRASS).
 #' 		\code{\link{fasterTerrain}}: Slope, aspect, and curvature (using GRASS).
+#' 		\code{\link{fasterTopidx}}: Topographic wetness index (using GRASS).
 #' 		\code{\link{fasterVectorize}}: Convert raster to spatial points, lines, or polygons (using GRASS).
 #' 		\code{\link{fasterVectToRastDistance}}: Distance between raster cells and a vector (using GRASS).
 
