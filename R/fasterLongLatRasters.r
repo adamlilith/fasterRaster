@@ -38,9 +38,6 @@ fasterLongLatRasters <- function(
 
 	flags <- c('quiet', 'overwrite')
 	
-	# get CRS
-	p4s <- sp::proj4string(rast)
-	
 	# initialize GRASS
 	input <- initGrass(alreadyInGrass, rast=rast, vect=NULL, grassDir=grassDir)
 	
@@ -55,7 +52,6 @@ fasterLongLatRasters <- function(
 		lat <- raster::raster(lat)
 		out <- raster::stack(long, lat)
 		if (!is.null(mask)) out <- (mask * 0L + 1L) * out
-		sp::proj4string(out) <- p4s
 		names(out) <- c('longitude', 'latitude')
 		out
 	}

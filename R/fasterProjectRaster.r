@@ -46,7 +46,6 @@ fasterProjectRaster <- function(
 	rast,
 	template,
 	method = 'bilinear',
-	use = 'grass',
 	grassDir = NULL,
 	alreadyInGrass = FALSE,
 	grassToR = TRUE,
@@ -55,12 +54,9 @@ fasterProjectRaster <- function(
 
 	flags <- c('quiet', 'overwrite')
 	
-	# get template CRS
-	p4s <- sp::proj4string(template)
-	
 	# initialize GRASS
-	fromRastGrass <- initGrass(alreadyInGrass, rast=rast, location='fromRast', tempDir=tempDir, vect=NULL, grassDir=grassDir)
-	tempDir <- attr(toRastGrass, 'tempDir')
+	fromRastGrass <- initGrass(alreadyInGrass, rast=rast, location='fromRast', vect=NULL, grassDir=grassDir)
+	tempDir <- attr(fromRastGrass, 'tempDir')
 	exportRastToGrass(rast, vname='rast')
 	toRastGrass <- initGrass(alreadyInGrass, rast=template, vect=NULL, location='default', tempDir=tempDir, grassDir=grassDir)
 	exportRastToGrass(template, vname='template')
@@ -75,7 +71,6 @@ fasterProjectRaster <- function(
 	
 		out <- rgrass7::readRAST('resampled')
 		out <- raster::raster(out)
-		sp::proj4string(out) <- p4s
 		names(out) <- 'resampled'
 		out
 		

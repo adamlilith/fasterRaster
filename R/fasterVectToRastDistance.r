@@ -51,9 +51,6 @@ fasterVectToRastDistance <- function(
 	if (meters) flags_rGrowDistance <- c(flags_rGrowDistance, 'm')
 	if (invert) flags_rGrowDistance <- c(flags_rGrowDistance)
 	
-	# get CRS
-	p4s <- sp::proj4string(rast)
-	
 	# rasterize vector: creates raster named "distToVect"
 	fasterRasterize(vect=vect, rast=rast, use='value', value=1, grassDir=grassDir, alreadyInGrass=alreadyInGrass, grassToR=FALSE)
 	
@@ -65,7 +62,6 @@ fasterVectToRastDistance <- function(
 	
 		out <- rgrass7::readRAST('distToVect')
 		out <- raster::raster(out)
-		sp::proj4string(out) <- p4s
 		names(out) <- 'distToVect'
 		out
 		

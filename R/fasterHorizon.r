@@ -42,9 +42,6 @@ fasterHorizon <- function(
 	flags <- c('quiet', 'overwrite')
 	if (units == 'degrees') flags <- c(flags, 'd')
 	
-	# get CRS
-	p4s <- sp::proj4string(rast)
-	
 	# initialize GRASS
 	input <- initGrass(alreadyInGrass, rast=rast, vect=NULL, grassDir=grassDir)
 	
@@ -76,7 +73,6 @@ fasterHorizon <- function(
 
 		if (northIs0) directions <- (360 - directions) %% 360
 
-		sp::proj4string(out) <- p4s
 		names(out) <- paste0('horizonHeight_', prefix(directions, 3))
 		out <- out[[order(names(out))]]
 		out

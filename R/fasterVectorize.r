@@ -48,9 +48,6 @@ fasterVectorize <- function(
 	flags <- c('quiet', 'overwrite')
 	if (smooth & vectType == 'area') flags <- c(flags, 's')
 	
-	# get CRS
-	p4s <- sp::proj4string(rast)
-	
 	# initialize GRASS
 	input <- initGrass(alreadyInGrass, rast=rast, vect=NULL, grassDir=grassDir)
 
@@ -67,7 +64,6 @@ fasterVectorize <- function(
 			out <- raster::aggregate(out, by='value')
 		}
 		
-		sp::proj4string(out) <- p4s
 		out
 		
 	}

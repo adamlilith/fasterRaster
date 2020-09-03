@@ -54,9 +54,6 @@ fasterRasterize <- function(
 
 	flags <- c('quiet', 'overwrite')
 	
-	# get CRS
-	p4s <- sp::proj4string(rast)
-	
 	# feature type
 	vectClass <- class(vect)
 	if (is.null(burn)) {
@@ -100,7 +97,6 @@ fasterRasterize <- function(
 	
 		out <- rgrass7::readRAST('vectToRast')
 		out <- raster::raster(out)
-		sp::proj4string(out) <- p4s
 		names(out) <- 'vectToRast'
 		out
 		

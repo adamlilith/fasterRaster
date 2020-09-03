@@ -54,9 +54,6 @@ fasterTerrain <- function(
 
 	flags <- c('quiet', 'overwrite')
 	
-	# get CRS
-	p4s <- sp::proj4string(rast)
-	
 	# initialize GRASS
 	input <- initGrass(alreadyInGrass, rast=rast, vect=NULL, grassDir=grassDir)
 
@@ -101,7 +98,6 @@ fasterTerrain <- function(
 		name <- stats::na.omit(name)
 		
 		out <- raster::subset(out, 2:raster::nlayers(out))
-		sp::proj4string(out) <- p4s
 		names(out) <- name
 		
 		out

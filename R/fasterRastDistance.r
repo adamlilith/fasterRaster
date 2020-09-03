@@ -52,9 +52,6 @@ fasterRastDistance <- function(
 	if (meters) flags <- c(flags, 'm')
 	if (!fillNAs) flags <- c(flags, 'n')
 	
-	# get CRS
-	p4s <- sp::proj4string(rast)
-	
 	# initialize GRASS
 	input <- initGrass(alreadyInGrass, rast=rast, vect=NULL, grassDir=grassDir)
 	
@@ -66,7 +63,6 @@ fasterRastDistance <- function(
 	
 		out <- rgrass7::readRAST('distance')
 		out <- raster::raster(out)
-		sp::proj4string(out) <- p4s
 		names(out) <- 'distance'
 		out
 		
