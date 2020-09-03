@@ -30,7 +30,10 @@ NB: If for some reason this command does not work, you can install the package b
 * `fragmentation`: Calculate landscape fragmentation indices as per Riitter et al. (2000 Conservation Ecology 4:3)
 
 ### Utility functions ##
-* `exportRasterToGrass`: Export raster to an open GRASS session with support for large rasters.
+* `degreeConvert`: Convert degrees (direction) for cases where 0 is north and 0 is east.
+* `exportRastToGrass`: Export raster to an open GRASS session with support for large rasters.
+* `exportVectToGrass`: Export vector to an open GRASS session with support for large rasters.
+* `initGrass`: Initialize a GRASS session using a raster or vector as a template.
 
 ## Getting started ##
 To use **fasterRaster** you will need to install [GRASS version 7.8](https://grass.osgeo.org/) on your operating system. You will need to use the stand-alone installer, not the Open Source Geospatial (OS Geo) installer (as per Roger Bivand, the main developer and maintainer of the **rgrass7** package on which this package depends). You will also need to know the install path for the program. On my machine (Windows), it is `C:/Program Files/GRASS GIS 7.8`, so before running any **faster** functions that need GRASS I need to define:
