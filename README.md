@@ -20,7 +20,9 @@ NB: If for some reason this command does not work, you can install the package b
 * `fasterQuantile`: Quantiles of values in a raster (using GRASS).
 * `fasterRastDistance`: Distance from cells with `NA`s to closest non-`NA` cell (or the inverse of this) (using GRASS).
 * `fasterRasterize`: Convert vector to a raster (using GRASS).
+* `fasterSurfFract`: Generate a raster with a fractal pattern (using GRASS).
 * `fasterTerrain`: Slope, aspect, and curvature (using GRASS).
+* `fasterTopidx`: Topographic wetness index (using GRASS).
 * `fasterVectorize`: Convert raster to spatial points, lines, or polygons (using GRASS).
 * `fasterVectToRastDistance`: Distance between raster cells and a vector (using GRASS).
 
@@ -83,8 +85,9 @@ This is the same as:
 
 Here is an example of chaining with the *faster* function. The second function uses the GRASS session initiated by the first function. It then uses the raster created in the GRASS session by the first function as the input for its module.
 
-`latRast <- faster('r.latlong', rast=madForest2000, outType='rast', outName='lat', flags=c('quiet', 'overwrite'), grassDir=grassDir)`  
-`longRast <- faster('r.latlong', input='lat', outType='rast', outName='long', flags=c('quiet', 'overwrite', 'l'), init=FALSE, grassDir=grassDir)`  
+`latRast <- faster('r.latlong', rast=madForest2000, outType='rast', output='latitude', flags=c('quiet', 'overwrite'), grassDir=grassDir)`  
+`longRast <- faster('r.latlong', input='latitude', outType='rast', output='longitude', flags=c('quiet', 'overwrite', 'l'), grassDir=grassDir, alreadyInGrass=TRUE)`  
 `ll3 <- stack(latRast, longRast)`  
+`plot(ll3)`  
 
 ~ Adam
