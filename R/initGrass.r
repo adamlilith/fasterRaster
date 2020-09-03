@@ -32,7 +32,7 @@ initGrass <- function(
 
 	rgrass7::use_sp()
 
-	if (is.null(rast) & is.null(vect)) stop('A raster or a vector already in GRASS must be specified in private function "initGrass".')
+	if (is.null(rast) & is.null(vect)) stop('A raster or a vector already in GRASS must be specified in function "initGrass".')
 
 	# if vector/raster is already in GRASS then just return its name in GRASS
 	if (alreadyInGrass) {
