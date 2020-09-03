@@ -8,6 +8,7 @@
 #' @section Raster-only operations:
 #' 		\code{\link{fasterBufferRast}}: Add buffer to cells in a raster (using GRASS).
 #' 		\code{\link{fasterContour}}: Calculate contour vectors from a raster
+#' 		\code{\link{fasterConvertDegree}}: Convert degrees from GRASS format (0 = east, 90 = north) to standard (0 = north, 90 = east) (using GRASS).
 #' 		\code{\link{fasterFocal}}: Faster focal calculations (using multi-core).
 #' 		\code{\link{fasterFragmentation}}: Fragmentation indices following Riitters et al. (2000 Conservation Ecology 4:3; using multi-core).
 #' 		\code{\link{fasterHorizon}}: Horizon angle height from a DEM (using GRASS).
@@ -26,7 +27,6 @@
 #' 		\code{\link{fragmentation}}: Calculate landscape fragmentation indices as per Riitter et al. (2000 Conservation Ecology 4:3)
 
 ## Utility functions ##
-#' 		\code{\link{degreeConvert}}: Convert degrees (direction) between cases where 0 is north and 0 is east.
 #' 		\code{\link{exportRasterToGrass}}: Export raster to an open GRASS session with support for large rasters/vectors.
 #' 		\code{\link{exportVectToGrass}}: Export vector object to an open GRASS session with support for large rasters/vectors.
 #' 		\code{\link{initGrass}}: Initialize a GRASS session using a raster or a vector as a template.

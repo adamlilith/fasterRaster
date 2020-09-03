@@ -13,6 +13,7 @@ NB: If for some reason this command does not work, you can install the package b
 ### *Faster* raster processing functions ##
 * `fasterBufferRast`: Add buffer to cells in a raster (using GRASS).
 * `fasterContour`: Calculate contour vectors from a raster (using GRASS).
+* `fasterConvertDegree`: Convert degrees from GRASS format (0 = east, 90 = north) to standard (0 = north, 90 = east) (using GRASS).
 * `fasterFocal`: Faster focal calculations (using multi-core).
 * `fasterFragmentation`: Fragmentation indices following Riitters et al. (2000 Conservation Ecology 4:3; using multi-core).
 * `fasterLongLatRasters`: Create rasters with values equal to cell longitude and latitude (using GRASS).
@@ -30,7 +31,6 @@ NB: If for some reason this command does not work, you can install the package b
 * `fragmentation`: Calculate landscape fragmentation indices as per Riitter et al. (2000 Conservation Ecology 4:3)
 
 ### Utility functions ##
-* `degreeConvert`: Convert degrees (direction) for cases where 0 is north and 0 is east.
 * `exportRastToGrass`: Export raster to an open GRASS session with support for large rasters.
 * `exportVectToGrass`: Export vector to an open GRASS session with support for large rasters.
 * `initGrass`: Initialize a GRASS session using a raster or vector as a template.
