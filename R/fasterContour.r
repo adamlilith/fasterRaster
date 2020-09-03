@@ -1,6 +1,6 @@
 #' Calculate contour vectors from a raster
 #'
-#' This function creates a vector (SpatialLines) object from a raster representing contour lines in the raster. It utilizes the GRASS function \code{r.contour}.
+#' This function creates a vector (\code{SpatialLines} or \code{SpatialLinesDataFrame}) object from a raster representing contour lines in the raster. It utilizes the GRASS function \code{r.contour}.
 #' @param rast Either a raster or the name of a raster in an existing GRASS session with values representing elevation (typically in meters).
 #' @param levels Numeric vector. Levels of values in \code{rast} at which contours should be drawn. You can specify contour levels using this argument or by providing values for \code{step}, \code{minlevel}, and \code{maxlevel}. \code{levels} will override use of \code{step}, if both of them are specified.
 #' @param step Numeric. Increment between contour levels.
@@ -10,7 +10,7 @@
 #' @param alreadyInGrass Logical, if \code{FALSE} (default) then start a new GRASS session and import the raster named in \code{rast}. If \code{FALSE}, use a raster already in GRASS with the name given by \code{rast}. The latter is useful if you are chaining \pkg{fasterRaster} functions together and the first function initializes the session. The first function should use \code{alreadyInGrass = FALSE} and subsequent functions should use \code{alreadyInGrass = TRUE} then use their \code{rast} (or \code{vect}) arguments to name the raster (or vector) that was made by the previous function.
 #' @param grassToR Logical, if \code{TRUE} (default) then the product of the calculations will be returned to R. If \code{FALSE}, then the product is left in the GRASS session and named \code{longitude} and \code{latitude}. The latter case is useful (and faster) when chaining several \pkg{fasterRaster} functions together.
 #' @param ... Arguments to pass to \code{\link[rgrass7]{execGRASS}} when calculating horizon height (i.e., function \code{r.horizon} in GRASS).
-#' @return If \code{grassToR} if \code{TRUE}, then a SpatialLines object with the same coordinate reference system as \code{rast}. Otherwise, a vector is written into the GRASS session. The name of this vector is as \code{contours}.
+#' @return If \code{grassToR} if \code{TRUE}, then a \code{SpatialLines} or \code{SpatialLinesDataFrame} object with the same coordinate reference system as \code{rast}. Otherwise, a vector is written into the GRASS session. The name of this vector is as \code{contours}.
 #' @details See (r.contour)[https://grass.osgeo.org/grass78/manuals/r.contour.html] for more details. Note that if you get an error saying "", then you should add the EPSG code to the beginning of the raster coordinate reference system string (its "proj4string"). For example, \code{proj4string(rast) <- CRS('+init=epsg:32738')}. EPSG codes for various projections, datums, and locales can be found at (Spatial Reference)[http://spatialreference.org/].
 #' @seealso
 #' @examples
@@ -44,9 +44,6 @@ fasterContour <- function(
 
 	flags <- c('quiet', 'overwrite')
 	
-	# get CRS
-	p4s <- sp::proj4string(rast)
-	
 	# initialize GRASS
 	input <- initGrass(alreadyInGrass, rast=rast, vect=NULL, grassDir=grassDir)
 	
@@ -63,7 +60,6 @@ fasterContour <- function(
 	if (grassToR) {
 
 		out <- rgrass7::readVECT('contours')
-		sp::proj4string(out) <- p4s
 		out
 		
 	}
