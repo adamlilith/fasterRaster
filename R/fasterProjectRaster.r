@@ -57,9 +57,9 @@ fasterProjectRaster <- function(
 	# initialize GRASS
 	fromRastGrass <- initGrass(alreadyInGrass, rast=rast, location='fromRast', vect=NULL, grassDir=grassDir)
 	tempDir <- attr(fromRastGrass, 'tempDir')
-	exportRastToGrass(rast, vname='rast')
+	exportRastToGrass(rast, grassName='rast')
 	toRastGrass <- initGrass(alreadyInGrass, rast=template, vect=NULL, location='default', tempDir=tempDir, grassDir=grassDir)
-	exportRastToGrass(template, vname='template')
+	exportRastToGrass(template, grassName='template')
 
 	# export raster to project to GRASS (projects it automatically)
 	
