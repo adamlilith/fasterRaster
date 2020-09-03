@@ -71,7 +71,7 @@ fasterHorizon <- function(
 			
 		}
 
-		if (northIs0) directions <- (360 - directions) %% 360
+		if (northIs0) directions <- degreeConvert(directions)
 
 		names(out) <- paste0('horizonHeight_', prefix(directions, 3))
 		out <- out[[order(names(out))]]
