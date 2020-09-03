@@ -26,9 +26,10 @@
 #' 		\code{\link{fragmentation}}: Calculate landscape fragmentation indices as per Riitter et al. (2000 Conservation Ecology 4:3)
 
 ## Utility functions ##
+#' 		\code{\link{degreeConvert}}: Convert degrees (direction) between cases where 0 is north and 0 is east.
 #' 		\code{\link{exportRasterToGrass}}: Export raster to an open GRASS session with support for large rasters/vectors.
 #' 		\code{\link{exportVectToGrass}}: Export vector object to an open GRASS session with support for large rasters/vectors.
-#'
+#' 		\code{\link{initGrass}}: Initialize a GRASS session using a raster or a vector as a template.
 #'
 #' @docType package
 #' @author Adam B. Smith
