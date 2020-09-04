@@ -27,33 +27,36 @@ fasterConvertDegree(
 \item{grassToR}{Logical, if \code{TRUE} (default) then the output will be a raster or raster stack returned to R. If \code{FALSE}, then the rasters are left in the GRASS session and named \code{degreeConvert_1}, \code{degreeConvert_2}, \code{degreeConvert_3} (one per raster in \code{x}). The latter case is useful (and faster) when chaining several \pkg{fasterRaster} functions together.}
 }
 \value{
-Numeric, raster, or raster stack. Regardless, a set of rasters will be written into the current GRASS session. The name(s) of the rasters inn GRASS wil be given by \code{outGrassName} with \code{'_', i} appended, where \code{i} starts at 1 for the first raster and increments by 1. For example, if \code{outGrassName = 'degreeConvert'}, then the raster(s) will be named \code{degreeConvert_1}, \code{degreeConvert_2}, etc.
+Numeric, raster, or raster stack. Regardless, a set of rasters will be written into the current GRASS session. The name(s) of the rasters inn GRASS will be given by \code{outGrassName} with \code{'_', i} appended, where \code{i} starts at 1 for the first raster and increments by 1. For example, if \code{outGrassName = 'degreeConvert'}, then the raster(s) will be named \code{degreeConvert_1}, \code{degreeConvert_2}, etc.
 }
 \description{
 This function takes either a numeric vector or a raster where values represent degrees (typically in a direction). It then converts between cases where 0 degrees (direction) is intended to point east, with degrees running counterclockwise so 90 is north, 180 is west, and 270 south (this the the default for GRASS 7 modules) and cases where 0 degrees is intended to point north, with degrees running clockwise, so 90 is east, 180 south, and 270 west.
 }
 \examples{
-# examples with scalar values
+# Examples with scalar values:
 fasterConvertDegree(0)
-fasterConvertDegree(seq(0, 360, 90))
+fasterConvertDegree(seq(0, 360, by=90))
 
 \donttest{
 # change this according to where GRASS 7 is installed on your system
 grassDir <- 'C:/Program Files/GRASS GIS 7.8'
 
-# example with a raster
-# first, generate an aspect raster from an elevation raster
+# Example with a raster:
+# First, generate an aspect raster from an elevation raster.
+# This is a contrived example because we could set the argument northIs0 in
+# fasterTerrain() to TRUE and get the raster we will name aspNorthIs0 from
+# that function in one step.
 data(madElev)
-aspect <- fasterTerrain(madElev, slope=FALSE, aspect=TRUE,
-grassDir=grassDir)
-names(aspect) <- 'original'
-aspectNew <- fasterConvertDegree(aspect, grassDir=grassDir)
+aspEastIs0 <- fasterTerrain(madElev, slope=FALSE, aspect=TRUE,
+northIs0=FALSE, grassDir=grassDir)
+aspNorthIs0 <- fasterConvertDegree(aspEastIs0, grassDir=grassDir,
+outGrassName='aspectNorthIs0')
 par(mfrow=c(1, 2))
-plot(aspect, main='0 deg = North')
-plot(aspectNew, main='0 deg = East')
+plot(aspEastIs0, main='0 deg = east')
+plot(aspNorthIs0, main='0 deg = north')
 
 # example with a raster stack
-aspectStack <- stack(aspect, aspect)
+aspectStack <- stack(aspEastIs0, aspNorthIs0)
 aspectStackNew <- fasterConvertDegree(aspectStack, grassDir=grassDir)
 aspectStackNew
 }

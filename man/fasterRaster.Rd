@@ -5,7 +5,7 @@
 \alias{fasterRaster}
 \title{fasterRaster: Faster raster processing in R using GRASS GIS}
 \description{
-This package is meant as an add-on to the \pkg{raster} package. It uses multi-core processing and GRASS GIS Version 7 to do some of the more laborious raster operations faster than what can be done using the raster package. For smaller rasters functions in the raster package may actually be faster. Also, many typical raster processing functions can now be done faster with \pkg{terra}, the successor to the \pkg{raster} package. Note that to use many of the functions in this package you must have open-source (OS-GEO) GRASS 7 installed on your system.
+This package is meant as an add-on to the \pkg{raster} package. It uses GRASS GIS Version 7 and some multi-core processing to do some of the more laborious raster operations potentially faster than what can be done using the raster package. For smaller rasters functions in the raster package may actually be faster. Also, many typical raster processing functions can now be done faster with \pkg{terra}, the successor to the \pkg{raster} package. Note that to use many of the functions in this package you must have the stand-alone version of GRASS 7 installed on your system.
 }
 \details{
 Create an issue on \href{https://github.com/adamlilith/fasterRaster/issues}{GitHub}.
@@ -24,6 +24,7 @@ Create an issue on \href{https://github.com/adamlilith/fasterRaster/issues}{GitH
 		\code{\link{fasterQuantile}}: Quantiles of values in a raster (using GRASS).\cr
 		\code{\link{fasterRastDistance}}: Distance from cells with \code{NA}s to closest non-\code{NA} cell (or the inverse of this) (using GRASS).\cr
 		\code{\link{fasterRasterize}}: Convert vector to a raster (using GRASS).\cr
+		\code{\link{fasterSun}}: Solar irradiance and radiance (using GRASS).\cr
 		\code{\link{fasterSurfFractal}}: Generate a raster with a fractal pattern (using GRASS).\cr
 		\code{\link{fasterTerrain}}: Slope, aspect, and curvature (using GRASS).\cr
 		\code{\link{fasterTopidx}}: Topographic wetness index (using GRASS).\cr

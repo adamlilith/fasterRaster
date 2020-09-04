@@ -6,7 +6,7 @@
 \usage{
 fasterLongLatRasters(
   rast,
-  mask = NULL,
+  mask = TRUE,
   grassDir = NULL,
   alreadyInGrass = FALSE,
   grassToR = TRUE,
@@ -17,7 +17,7 @@ fasterLongLatRasters(
 \arguments{
 \item{rast}{Either a raster or the name of a raster in an existing GRASS session. This serves as a template for calculating longitude and latitude rasters.}
 
-\item{mask}{Raster layer, serves as a mask for the longitude/latitude rasters. Cells that have \code{NA}s in \code{mask} will also have \code{NA}s in the output rasters. Note that the mask is \emph{only} used if the output is sent back to R (\code{grassToR} is \code{TRUE}) and not kept in the GRASS session created for the calculations.}
+\item{mask}{Logical. If \code{TRUE} (default), cells that have \code{NA}s in \code{rast} will also have \code{NA}s in the output rasters.}
 
 \item{grassDir}{Character or \code{NULL} (default). Name of the directory in which GRASS is installed. Example: \code{'C:/Program Files/GRASS GIS 7.8'}. If this is \code{NULL}, R will search for the directory in which GRASS is installed. This usually fails, or if it succeeds, takes several minutes.}
 
@@ -48,10 +48,15 @@ grassDir <- 'C:/Program Files/GRASS GIS 7.8'
 # because the template raster is so small
 
 data(madForest)
-ll1 <- fasterLongLatRasters(rast=madForest2000, grassDir=grassDir)
+unMasked <- fasterLongLatRasters(rast=madForest2000, mask=FALSE,
+grassDir=grassDir)
+plot(unMasked)
+masked <- fasterLongLatRasters(rast=madForest2000, grassDir=grassDir)
+plot(masked)
 # same as (and slower than, for this raster):
-ll2 <- enmSdm::longLatRasters(madForest2000)
-plot(ll1)
+# ll3 <- enmSdm::longLatRasters(madForest2000)
+# plot(ll3)
+
 }
 }
 \seealso{

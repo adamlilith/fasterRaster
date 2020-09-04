@@ -11,6 +11,7 @@ faster(
   rastName = "rast",
   vectName = "vect",
   outType = NULL,
+  output = "output",
   flags = c("quiet", "overwrite"),
   ...,
   grassDir = NULL,

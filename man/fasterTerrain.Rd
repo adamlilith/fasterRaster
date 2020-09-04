@@ -82,10 +82,10 @@ data(madElev)
 
 # could also use terrain() which may be faster
 # in this example
-topo <- fasterTerrain(rast=madElev, slope = TRUE, aspect=TRUE,
+topo <- fasterTerrain(rast=madElev, slope=TRUE, aspect=TRUE,
 grassDir=grassDir)
 
-# terrainn function from the raster package... much slower in this example
+# terrain function from the raster package... much slower in this example
 # slp <- terrain(elev, opt='slope', unit='degrees')
 # asp <- terrain(elev, opt='aspect', unit='degrees')
 # topo <- stack(slp, asp)

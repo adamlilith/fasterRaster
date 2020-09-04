@@ -43,9 +43,6 @@ grassDir <- 'C:/Program Files/GRASS GIS 7.8'
 data(madElev)
 data(madForest2000)
 
-# force 0 values to NA (= ocean)
-madElev <- calc(madElev, fun=function(x) ifelse(x==0, NA, x))
-
 # must first project elevation raster
 madElev_albers <- fasterProjectRaster(madElev, template=madForest2000,
 grassDir=grassDir)

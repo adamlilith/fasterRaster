@@ -64,7 +64,7 @@ projection(madForest2000)
 
 elevResamp <- fasterProjectRaster(rast=madElev,
 template=madForest2000, grassDir=grassDir)
-# elevResamp <- projectRaster(elev, madForest2000)
+# elevResamp <- projectRaster(elev, madForest2000) # raster package
 par(mfrow=c(1, 2))
 plot(madElev, main='Original')
 plot(elevResamp, main='Resampled')

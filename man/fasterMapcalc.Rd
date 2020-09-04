@@ -15,16 +15,16 @@ fasterMapcalc(
 \arguments{
 \item{...}{Arguments to pass to \code{\link[rgrass7]{execGRASS}} when calculating horizon height (i.e., function \code{r.horizon} in GRASS).}
 
-\item{expression}{Character. Formula to evaluate. Here are examples where the input raster is named "rast" in the GRASS session and the output raster will be named "out":
+\item{expression}{Character. Formula to evaluate. Below are examples where the input raster is named "rast" in the GRASS session and the output raster will be named "out". Note that rasters passed as rasters/stacks/bricks must be referred to in formulae using their raster name (not name in R). In other words, in the examples below we could call a raster in R \code{myRast} but \code{names(myRast)} yields \code{rast}, so we need to call it "\code{rast}" in the formulae. The raster "\code{out}" will be created by the function.
 \itemize{
-\item \code{'out = (rast * 0) + 1'} ... Takes the input raster "rast", multiplies each cell by 0, then adds 1 to each cell.
-\item \code{'out = rast^2'} ... Takes the input raster "rast", multiplies each cell by 0, then adds 1 to each cell.
-\item \code{'out = 17'} ... Takes the input raster "rast" and redefines each cell value to 17.
-\item \code{'out = rast[0, 0] + rast[-1, 0] + rast[0, -1] + rast[0, 1] + rast[1, 0]'} ... Takes the input raster "rast" and redefines each cell value to equal the sum of it and the four cells in the rooks's neighborhood (north, south, east, west of it).
-\item \code{'out = (rast[-1, -1] + rast[-1, 0] + rast[-1, 1] + rast[0, -1] + rast[0, 0] + rast[0, 1] + rast[1, -1] + rast[1, 0] + rast[1, 1]) / 9'} ... Low-pass (averaging) filter across a 3x3 neighborhood.
-\item \code{'out = -0.7 * rast[-1, -1] -1 * rast[-1, 0] -0.7 * rast[-1, 1] -1 * rast[0, -1] + 6.8 * rast[0, 0] -1 * rast[0, 1] -0.7 * rast[1, -1] -1 * rast[1, 0] -0.7 * rast[1, 1]'} ... High-pass filter across a 3x3 neighborhood.
+\item Take the input raster "rast", multiplies each cell by 0, then adds 1 to each cell: \code{'out = (rast * 0) + 1'}
+\item Take the input raster "rast", multiplies each cell by 0, then adds 1 to each cell: \code{'out = rast^2'}
+\item Take the input raster "rast" and redefines each cell value to 17: \code{'out = 17'}
+\item Take the input raster "rast" and redefines each cell value to equal the sum of it and the four cells in the rooks's neighborhood (north, south, east, west of it): \code{'out = rast[0, 0] + rast[-1, 0] + rast[0, -1] + rast[0, 1] + rast[1, 0]'}
+\item Low-pass (averaging) filter across a 3x3 neighborhood: \code{'out = (rast[-1, -1] + rast[-1, 0] + rast[-1, 1] + rast[0, -1] + rast[0, 0] + rast[0, 1] + rast[1, -1] + rast[1, 0] + rast[1, 1]) / 9'}
+\item High-pass ("edge-finding") filter across a 3x3 neighborhood: \code{'out = -0.7 * rast[-1, -1] -1 * rast[-1, 0] -0.7 * rast[-1, 1] -1 * rast[0, -1] + 6.8 * rast[0, 0] -1 * rast[0, 1] -0.7 * rast[1, -1] -1 * rast[1, 0] -0.7 * rast[1, 1]'}
 }
-See the documentation for \code{r.mapcalc} at \url{https://grass.osgeo.org/grass78/manuals/r.mapcalc.html} for more information. Note that operations that may make sense in GRASS may not make sense when exported back to R.}
+See the documentation for \code{r.mapcalc} at \url{https://grass.osgeo.org/grass78/manuals/r.mapcalc.html} for more information. Note that some operations that may make sense in GRASS may not make sense when exported back to R (e.g., changing color).}
 
 \item{grassDir}{Character or \code{NULL} (default). Name of the directory in which GRASS is installed. Example: \code{'C:/Program Files/GRASS GIS 7.8'}. If this is \code{NULL}, R will search for the directory in which GRASS is installed. This usually fails, or if it succeeds, takes several minutes.}
 
@@ -66,12 +66,18 @@ ex <- 'highPass = -0.7 * madElev[-1, -1] -1 * madElev[-1, 0] -0.7 * madElev[-1, 
 hp <- fasterMapcalc(madElev, expression=ex, grassDir=grassDir)
 plot(stack(madElev, hp))
 
-# using some rasters already in a GRASS session
-# note we are passing raster "hp" as a raster, not as something already in GRASS (even though it is)
+# Using some rasters already in a GRASS session:
+# Note we are passing raster "hp" as a raster, not as something already in
+# GRASS (even though it is). Also, we need to refer to the "hp" raster by
+# its raster name in the formula (ie, see "names(hp)") since it is passed in
+# as a raster.
+
 input <- initGrass(FALSE, rast=madElev, rastName='madElev', grassDir=grassDir)
 exportRastToGrass(lp, grassName='lp')
-ex <- 'out = (lp * hp) / madElev'
-mapcalc <- fasterMapcalc('madElev', 'lp', hp, expression=ex, grassDir=grassDir, alreadyInGrass=TRUE)
+ex <- 'out = (lp * highPass) / madElev'
+mapcalc <- fasterMapcalc('madElev', 'lp', hp, expression=ex,
+grassDir=grassDir, alreadyInGrass=TRUE)
+mapcalc
 
 # note differences between r.mapcalc and raster function math:
 mapcalc
