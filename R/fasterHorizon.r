@@ -22,8 +22,8 @@
 #' grassDir <- 'C:/Program Files/GRASS GIS 7.8'
 #'
 #' data(madElev)
-#' elevHeight_rad <- fasterHorizon(madElev, grassDir=grassDir)
-#' plot(elevHeight_rad)
+#' elevHeight_deg <- fasterHorizon(madElev, units='degrees', grassDir=grassDir)
+#' plot(elevHeight_deg)
 #' }
 #' @export
 
@@ -34,6 +34,7 @@ fasterHorizon <- function(
 	northIs0 = TRUE,
 	bufferZone = 0,
 	maxDist = NULL,
+	mask = NULL,
 	grassDir = NULL,
 	alreadyInGrass = FALSE,
 	grassToR = TRUE,

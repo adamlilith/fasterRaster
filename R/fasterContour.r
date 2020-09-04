@@ -25,8 +25,14 @@
 #' grassDir=grassDir)
 #' conts3 <- fasterContour(madElev, minlevel=0, maxlevel=500, step=100,
 #' grassDir=grassDir)
+#' par(mfrow=c(1, 3))
 #' plot(madElev)
 #' plot(conts1, add=TRUE)
+#' plot(madElev)
+#' plot(conts2, add=TRUE)
+#' plot(madElev)
+#' plot(conts3, add=TRUE)
+#'
 #' }
 #' @export
 

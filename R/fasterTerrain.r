@@ -32,10 +32,10 @@
 #' 
 #' # could also use terrain() which may be faster
 #' # in this example
-#' topo <- fasterTerrain(rast=madElev, slope = TRUE, aspect=TRUE,
+#' topo <- fasterTerrain(rast=madElev, slope=TRUE, aspect=TRUE,
 #' grassDir=grassDir)
 #'
-#' # terrainn function from the raster package... much slower in this example
+#' # terrain function from the raster package... much slower in this example
 #' # slp <- terrain(elev, opt='slope', unit='degrees')
 #' # asp <- terrain(elev, opt='aspect', unit='degrees')
 #' # topo <- stack(slp, asp)
@@ -77,7 +77,7 @@ fasterTerrain <- function(
 	# aspect (0 = east and goes counter-clockwise, so convert so 0 = north going clockwise)
 	if (aspect) {
 		rgrass7::execGRASS('r.slope.aspect', elevation=input, aspect=outGrassNameAspect, flags=flags)
-		if (northIs0) rgrass7::execGRASS('r.mapcalc', expression=paste0(outGrassNameAspect, ' = (360 - ', outGrassNameAspect, ') % 360'), flags=flags)
+		if (northIs0) fasterConvertDegree(outGrassNameAspect, grassDir=grassDir, alreadyInGrass=TRUE, outGrassName=outGrassNameAspect, returnToR=FALSE)
 	}
 	
 	# curvatures
@@ -91,10 +91,10 @@ fasterTerrain <- function(
 	# return
 	if (grassToR) {
 	
-		out <- raster::raster(rgrass7::readRAST(rast))
+		out <- raster::raster(rgrass7::readRAST(input))
 	
 		if (slope) out <- raster::stack(out, raster::raster(rgrass7::readRAST(outGrassNameSlope)))
-		if (aspect & northIs0) out <- raster::stack(out, raster::raster(rgrass7::readRAST(outGrassNameAspect)))
+		if (aspect) out <- raster::stack(out, raster::raster(rgrass7::readRAST(outGrassNameAspect)))
 		if (profileCurve) out <- raster::stack(out, raster::raster(rgrass7::readRAST(outGrassNameProfileCurve)))
 		if (tanCurve) out <- raster::stack(out, raster::raster(rgrass7::readRAST(outGrassNameTanCurve)))
 		if (eastWestSlope) out <- raster::stack(out, raster::raster(rgrass7::readRAST(outGrassNameEastWestSlope)))

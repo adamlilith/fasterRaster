@@ -35,7 +35,7 @@
 #' 
 #' elevResamp <- fasterProjectRaster(rast=madElev,
 #' template=madForest2000, grassDir=grassDir)
-#' # elevResamp <- projectRaster(elev, madForest2000)
+#' # elevResamp <- projectRaster(elev, madForest2000) # raster package
 #' par(mfrow=c(1, 2))
 #' plot(madElev, main='Original')
 #' plot(elevResamp, main='Resampled')
@@ -56,16 +56,13 @@ fasterProjectRaster <- function(
 	flags <- c('quiet', 'overwrite')
 	
 	# initialize GRASS
-	fromRastGrass <- initGrass(alreadyInGrass, rast=rast, location='fromRast', vect=NULL, grassDir=grassDir)
+	fromRastGrass <- initGrass(alreadyInGrass, rast=rast, location='fromRast', vect=NULL, rastName='rast', grassDir=grassDir)
 	tempDir <- attr(fromRastGrass, 'tempDir')
-	exportRastToGrass(rast, grassName='rast')
 	toRastGrass <- initGrass(alreadyInGrass, rast=template, vect=NULL, location='default', tempDir=tempDir, grassDir=grassDir)
-	exportRastToGrass(template, grassName='template')
-
-	# export raster to project to GRASS (projects it automatically)
 	
-	# export raster to GRASS
-	rgrass7::execGRASS('r.proj', location='fromRast', mapset='PERMANENT', input='rast', output=outGrassName, method=method, flags=flags)
+	# export raster to project to GRASS (projects it automatically)
+	resol <- raster::res(template)[1]
+	rgrass7::execGRASS('r.proj', location='fromRast', mapset='PERMANENT', input='rast', output=outGrassName, method=method, resolution=resol, flags=flags)
 
 	# return
 	if (grassToR) {

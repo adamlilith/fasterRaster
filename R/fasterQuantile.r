@@ -15,17 +15,13 @@
 #' # change this according to where GRASS 7 is installed on your system
 #' grassDir <- 'C:/Program Files/GRASS GIS 7.8'
 #'
-#' data(madForest2000)
-#'
-#' # calculate distance to forest
-#' distToForest <- fasterRastDistance(rast=madForest2000, grassDir=grassDir)
-#'
-#' # calculate quantiles
+#' data(madElev)
 #' probs <- c(0.025, 0.1, 0.25, 0.5, 0.75, 0.9, 0.975)
-#' quants <- fasterQuantile(rast=distToForest, probs=probs, grassDir=grassDir)
+#' quants <- fasterQuantile(rast=madElev, probs=probs, grassDir=grassDir)
 #' quants
-#' # same as quantile() for a raster:
-#' quantile(distToForest, probs=probs, na.rm=TRUE)
+#' # in this case, the raster package is faster:
+#' quantile(madElev, probs=probs, na.rm=TRUE)
+#'
 #' }
 #' @export
 

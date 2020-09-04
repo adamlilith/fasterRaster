@@ -99,7 +99,7 @@
 #' }
 #' @export
 
-fasterHorizon <- function(
+fasterSun <- function(
 	elevation,
 	coeff_bh,
 	coeff_dh,

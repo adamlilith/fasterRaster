@@ -49,6 +49,7 @@ faster <- function(
 	rastName = 'rast',
 	vectName = 'vect',
 	outType = NULL,
+	output = 'output',
 	flags = c('quiet', 'overwrite'),
 	...,
 	grassDir = NULL,
@@ -56,11 +57,15 @@ faster <- function(
 	grassToR = TRUE
 ) {
 
+	args <- list(cmd=mod, flags=flags)
+	args <- c(args, ...)
+	args <- c(args, 'output' = output)
 
 	# execute
 	if (!alreadyInGrass) {
 		input <- initGrass(alreadyInGrass, rast=rast, vect=vect, rastName=rastName, vectName=vectName, grassDir=grassDir)
-		rgrass7::execGRASS(mod, flags=flags, ...)
+		do.call(rgrass7::execGRASS, args=args)
+		# rgrass7::execGRASS(mod, flags=flags, ...)
 	} else {
 		rgrass7::execGRASS(mod, flags=flags, ...)
 	}

@@ -24,6 +24,7 @@
 #' units='kilometers', grassDir=grassDir)
 #' plot(rastBuff, col=c('green', 'gray'))
 #' legend('topright', legend=c('forest', 'buffer'), fill=c('green', 'gray'))
+#'
 #' }
 #' @export
 

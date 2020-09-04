@@ -57,7 +57,7 @@ initGrass <- function(
 
 		dir.create(tempDir, recursive=TRUE, showWarnings=FALSE)
 
-		rgrass7::initGRASS(gisBase=grassDir, home=tempDir, location=location, mapset=mapset, override=TRUE)
+		rgrass7::initGRASS(gisBase=grassDir, home=tempDir, location=location, mapset=mapset, override=TRUE, remove_GISRC=TRUE)
 		
 		if (!is.null(rast)) {
 	

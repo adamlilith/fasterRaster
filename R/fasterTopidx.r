@@ -18,9 +18,6 @@
 #' data(madElev)
 #' data(madForest2000)
 #'
-#' # force 0 values to NA (= ocean)
-#' madElev <- calc(madElev, fun=function(x) ifelse(x==0, NA, x))
-#'
 #' # must first project elevation raster
 #' madElev_albers <- fasterProjectRaster(madElev, template=madForest2000,
 #' grassDir=grassDir)
@@ -40,7 +37,7 @@ fasterTopidx <- function(
 	...
 ) {
 
-	out <- faster(mod='r.topidx', rast=rast, outType = 'raster', output=outGrassName, grassDir=grassDir, alreadyInGrass=alreadyInGrass, grassToR=grassToR)
+	out <- faster(mod='r.topidx', rast=rast, input='rast', outType = 'raster', output=outGrassName, grassDir=grassDir, alreadyInGrass=alreadyInGrass, grassToR=grassToR)
 	
 	out
 	
