@@ -34,7 +34,7 @@ Integer values from the erratum to Ritter et al. (2000):
 Note that this differs somewhat from the numbering scheme presented by Riitters et al. (2000) and their errata.
 }
 \description{
-This function classifies fragmentation based on pf (density) and pff (conditional connectivity) metrics from Riitters, K., J. Wickham, R. O'Neill, B. Jones, and E. Smith. 2000. Global-scale patterns of forest fragmentation. Conservation Ecology 4:3. URL: https://www.jstor.org/stable/26271763. (Also note the erratum to the paper on their classification scheme at https://www.ecologyandsociety.org/vol4/iss2/art3/errata/january26.2001.html).
+This function classifies fragmentation based on pf (density) and pff (conditional connectivity) metrics from Riitters, K., J. Wickham, R. O'Neill, B. Jones, and E. Smith. 2000. Global-scale patterns of forest fragmentation. Conservation Ecology 4:3. URL: <https://www.jstor.org/stable/26271763>. (Also note the erratum to the paper on their classification scheme at <https://www.ecologyandsociety.org/vol4/iss2/art3/errata/january26.2001.html>).
 }
 \examples{
 .fragClassify(c(NA, 1)) # NA
@@ -47,6 +47,6 @@ This function classifies fragmentation based on pf (density) and pff (conditiona
 .fragClassify(c(0.7, 0.7)) # undetermined 5
 }
 \seealso{
-\code{\link[fasterRaster]{fragmentation}}, \code{\link[fasterRaster]{.fragDensity}}, \code{\link[fasterRaster]{.fragConnect}}
+\code{\link[fasterRaster]{fragmentation}}, \code{\link[fasterRaster]{fasterFragmentation}}
 }
 \keyword{internal}

@@ -1,6 +1,6 @@
 #' Classify fragmentation from density (pf) and connectivity (pff)
 #' 
-#' This function classifies fragmentation based on pf (density) and pff (conditional connectivity) metrics from Riitters, K., J. Wickham, R. O'Neill, B. Jones, and E. Smith. 2000. Global-scale patterns of forest fragmentation. Conservation Ecology 4:3. URL: https://www.jstor.org/stable/26271763. (Also note the erratum to the paper on their classification scheme at https://www.ecologyandsociety.org/vol4/iss2/art3/errata/january26.2001.html).
+#' This function classifies fragmentation based on pf (density) and pff (conditional connectivity) metrics from Riitters, K., J. Wickham, R. O'Neill, B. Jones, and E. Smith. 2000. Global-scale patterns of forest fragmentation. Conservation Ecology 4:3. URL: <https://www.jstor.org/stable/26271763>. (Also note the erratum to the paper on their classification scheme at <https://www.ecologyandsociety.org/vol4/iss2/art3/errata/january26.2001.html>).
 #' @param x 2-element numeric vector, first element is pf (density), second is pff (connectivity).
 #' @param undet Character. This defines what is done with "undetermined" cases (when density is >= 0.6 and density == connectivity). Possible values include (partial matching of strings is used):
 #' \itemize{
@@ -31,7 +31,7 @@
 #' .fragClassify(c(0.7, 0.2)) # perforated 3
 #' .fragClassify(c(0.7, 0.9)) # edge 4
 #' .fragClassify(c(0.7, 0.7)) # undetermined 5
-#' @seealso \code{\link[fasterRaster]{fragmentation}}, \code{\link[fasterRaster]{.fragDensity}}, \code{\link[fasterRaster]{.fragConnect}}
+#' @seealso \code{\link[fasterRaster]{fragmentation}}, \code{\link[fasterRaster]{fasterFragmentation}}
 #' @keywords internal
 .fragClassify <- compiler::cmpfun(function(x, undet='undetermined', ...) {
 

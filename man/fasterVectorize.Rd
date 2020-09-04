@@ -12,6 +12,7 @@ fasterVectorize(
   grassDir = NULL,
   alreadyInGrass = FALSE,
   grassToR = TRUE,
+  outGrassName = "rastToVect",
   ...
 )
 }
@@ -24,11 +25,13 @@ fasterVectorize(
 
 \item{smooth}{Logical. If \code{TRUE} then "round" cell corners by connecting the midpoints of corner cells (which leaves out the corner-most triangle of that cell). This option only applies if \code{vectType} is \code{area}. Default is \code{FALSE}.}
 
-\item{grassDir}{Either \code{NULL} or a 3-element character vector. If the latter, the first element is the base path to the installation of GRASS, the second the version number, and the third the install type for GRASS.  For example, \code{c('C:/OSGeo4W64/', 'grass-7.4.1', 'osgeo4W')}. See \code{\link[link2GI]{linkGRASS7}} for further help. If \code{NULL} (default) the an installation of GRASS is searched for; this may take several minutes.}
+\item{grassDir}{Character or \code{NULL} (default). Name of the directory in which GRASS is installed. Example: \code{'C:/Program Files/GRASS GIS 7.8'}. If this is \code{NULL}, R will search for the directory in which GRASS is installed. This usually fails, or if it succeeds, takes several minutes.}
 
 \item{alreadyInGrass}{Logical. If \code{FALSE} (default) then start a new GRASS session and import the raster named in \code{rast}. If \code{FALSE}, use a raster already in GRASS with the name given by \code{rast}. The latter is useful if you are chaining \pkg{fasterRaster} functions together and the first function initializes the session. The first function should use \code{alreadyInGrass = FALSE} and subsequent functions should use \code{alreadyInGrass = TRUE} then use their \code{rast} (or \code{vect}) arguments to name the raster (or vector) that was made by the previous function.}
 
 \item{grassToR}{Logical. If \code{TRUE} (default) then the product of the calculations will be returned to R. If \code{FALSE}, then the product is left in the GRASS session and named \code{rastToVect}. The latter case is useful (and faster) when chaining several \pkg{fasterRaster} functions together.}
+
+\item{outGrassName}{Character. Name of output in GRASS. This is useful if you want to refer to the output object in GRASS later in a session.}
 
 \item{...}{Arguments to pass to \code{\link[rgrass7]{execGRASS}} when used for converting a raster to a vector (i.e., function \code{r.to.vect} in GRASS).}
 
@@ -37,13 +40,13 @@ fasterVectorize(
 \item{calcConnect}{Logical. If \code{TRUE} then calculate a connectivity raster (conditional probability a cell with a value of 1 has a value that is also 1) in the moving window. This will create a raster named \code{connect} in the GRASS environment if \code{grassToR} is \code{FALSE} or return a raster named \code{connect} if \code{grassToR} is \code{TRUE}. Default is \code{FALSE}.}
 }
 \value{
-If \code{grassToR} if \code{TRUE}, then a SpatialPointsDataFrame, SpatialLinesDataFrame, or a SpatialPolygonsDataFrame with the same coordinate reference system as \code{rast}. The field named \code{value} will have the raster values. Otherwise, vector object named \code{rastToVect} a  will be written into the GRASS session.
+If \code{grassToR} if \code{TRUE}, then a SpatialPointsDataFrame, SpatialLinesDataFrame, or a SpatialPolygonsDataFrame with the same coordinate reference system as \code{rast}. The field named \code{value} will have the raster values. Regardless, vector object with the name given by \code{outGrassName} will be written into the GRASS session.
 }
 \description{
 This function is a potentially faster version of the function \code{\link[raster]{rasterToPolygons}} in the \pkg{raster} package. It can convert a raster to points or polygons (conversion to lines is not yet supported, although it is possible using the \code{r.to.vect} module in GRASS).
 }
 \details{
-See \href{r.to.vect}{https://grass.osgeo.org/grass78/manuals/r.to.vect.html} for more details.  Note that if you get an error saying "", then you should add the EPSG code to the beginning of the raster and vector coordinate reference system string (their "proj4string"). For example, \code{proj4string(x) <- CRS('+init=epsg:32738')}. EPSG codes for various projections, datums, and locales can be found at \href{Spatial Reference}{http://spatialreference.org}.
+See the documentation for the GRASS module \code{r.to.vect} at \url{https://grass.osgeo.org/grass78/manuals/r.to.vect.html}.
 }
 \examples{
 \donttest{
@@ -54,7 +57,7 @@ data(madForest2000)
 
 # could also use rasterToPolygons() which is
 # probably faster in this example
-forestPoly <- fasterVectorize(madForest2000,
+forestPoly <- fasterVectorize(rast=madForest2000,
 	vectType='area', grassDir=grassDir)
 # forestPoly <- rasterToPolygons(madForest2000, dissolve=TRUE)
 par(mfrow=c(1, 2))

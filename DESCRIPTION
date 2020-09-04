@@ -1,8 +1,8 @@
 Package: fasterRaster
 Type: Package
 Title: Faster raster processing in R using GRASS GIS
-Version: 0.5.0
-Date: 2020-09-01
+Version: 0.6.0
+Date: 2020-09-04
 Author: Adam B. Smith <adam@earthSkySea.org>
 Maintainer: Adam B. Smith <adam@earthSkySea.org>
 Description: This package is meant as an add-on to the raster
@@ -12,7 +12,7 @@ Description: This package is meant as an add-on to the raster
 	package. For smaller rasters functions in the raster package
 	may actually be faster, and the terra package definitely
 	will. Note that to use many of the functions in this
-	package you must have the stand-alone verison of GRASS 7.8
+	package you must have the stand-alone version of GRASS 7.8
 	installed on your system.
 Depends:
 	link2GI,
@@ -20,12 +20,10 @@ Depends:
 	rgrass7
 Imports:
 	methods,
-	omnibus,
 	parallel,
 	rgdal,
 	sp
 Suggests:
-	enmSdm,
 	knitr,
 	rgeos,
     testthat

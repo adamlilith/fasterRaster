@@ -4,12 +4,12 @@
 \alias{exportVectToGrass}
 \title{Write vector to an existing GRASS session}
 \usage{
-exportVectToGrass(vect, vname = "vect", tempDir = raster::tmpDir())
+exportVectToGrass(vect, grassName = "vect", tempDir = raster::tmpDir())
 }
 \arguments{
 \item{vect}{Raster layer.}
 
-\item{vname}{Name of vector in GRASS.}
+\item{grassName}{Name of vector in GRASS.}
 
 \item{tempDir}{Temporary directory.}
 }

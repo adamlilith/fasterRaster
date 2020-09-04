@@ -1,4 +1,4 @@
-### TEMP.r
+# source('C:/Ecology/Drive/R/fasterRaster/working/TEMP.r')
 
 rm(list=ls())
 library(omnibus)
@@ -24,12 +24,10 @@ wc <- crop(wc, mad)
 ### GRASS ###
 #############
 
-# grassDir <- c('C:/OSGeo4W64/', 'grass78', 'osgeo4W')
-# grassDir <- c('C:/Program Files/GRASS GIS 7.8', '7.8.3', 'grass78')
 grassDir <- c('C:/Program Files/GRASS GIS 7.8')
-
 alreadyInGrass <- FALSE
 
 #################
 ### functions ###
 #################
+
