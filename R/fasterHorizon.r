@@ -13,7 +13,7 @@
 #' @param grassToR Logical, if \code{TRUE} (default) then the product of the calculations will be returned to R. If \code{FALSE}, then the product is left in the GRASS session and named \code{longitude} and \code{latitude}. The latter case is useful (and faster) when chaining several \pkg{fasterRaster} functions together.
 #' @param outGrassName Character. Name of output in GRASS. This is useful if you want to refer to the output object in GRASS later in a session.
 #' @param ... Arguments to pass to \code{\link[rgrass7]{execGRASS}} when calculating horizon height (i.e., function \code{r.horizon} in GRASS).
-#' @return If \code{grassToR} if \code{TRUE}, then a raster or raster stack stack with the same extent, resolution, and coordinate reference system as \code{rast}. Otherwise, a raster is written into the GRASS session. The name of this raster is as \code{paste0(outGrassName, '_', xxx)}. For example, if \code{outGrassName = 'horizonAngleHeight'}, and \code{directions} is \code{c(0, 90, 180, 270)}, then four rasters will be written: \code{horizAngleHeight_000}, \code{horizAngleHeight_090}, \code{horizAngleHeight_180}, and \code{horizAngleHeight_270}. Note the padding with zeros before angles <10.
+#' @return If \code{grassToR} if \code{TRUE}, then a raster or raster stack stack with the same extent, resolution, and coordinate reference system as \code{rast}. Otherwise, a raster is written into the GRASS session. The name of this raster is as \code{paste0(outGrassName, '_', xxx)}. For example, if \code{outGrassName = 'horizonHeight'}, and \code{directions} is \code{c(0, 90, 180, 270)}, then four rasters will be written: \code{horizonHeight_000}, \code{horizonHeight_090}, \code{horizonHeight_180}, and \code{horizonHeight_270}. Note the padding with zeros before angles <10.
 #' @details See the documentation for the GRASS module \code{r.horizon} at \url{https://grass.osgeo.org/grass78/manuals/r.horizon.html}.
 #' @seealso
 #' @examples
@@ -38,7 +38,7 @@ fasterHorizon <- function(
 	grassDir = NULL,
 	alreadyInGrass = FALSE,
 	grassToR = TRUE,
-	outGrassName = 'horizonAngleHeight',
+	outGrassName = 'horizonHeight',
 	...
 ) {
 
@@ -63,7 +63,8 @@ fasterHorizon <- function(
 
 		for (direction in directions) {
 	
-			thisOut <- rgrass7::readRAST(paste0(outGrassName, '_', omnibus::prefix(direction, 3)))
+			degs <- c(ifelse(direction < 100, '0', ''), ifelse(direction < 10, '0', ''), direction)
+			thisOut <- rgrass7::readRAST(paste0(outGrassName, '_', degs))
 			thisOut <- raster::raster(thisOut)
 			
 			out <- if (exists('out', inherits=FALSE)) {
