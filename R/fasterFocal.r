@@ -13,8 +13,9 @@
 #' @param cores Integer >0, number of CPU cores to use to calculate the focal function (default is 2).
 #' @param forceMulti Logical, if \code{TRUE} (default) then the function will attempt to use the total number of cores in \code{cores}. (Note that this many not necessarily be faster since each core costs some overhead.)  If \code{FALSE}, then the function will use up to \code{cores} if needed (which also may not be faster... it always depends on the problem being computed).
 #' @param ... Arguments to pass to \code{\link[raster]{writeRaster}}
+#' @return @details The function \code{\link{fasterMapcalc}} \emph{may} be faster.
 #' @return A raster object, possibly also written to disk.
-#' @seealso \code{\link[raster]{focal}}
+#' @seealso \code{\link[raster]{focal}}, \code{\link{fasterMapcalc}}
 #' @examples
 #' \donttest{
 #' data(madElev)

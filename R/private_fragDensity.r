@@ -11,7 +11,7 @@
 #' fasterRaster:::.fragDensity(x)
 #' diag(x) <- NA
 #' fasterRaster:::.fragDensity(x)
-#' @seealso \code{\link[fasterRaster]{fragmentation}}, \code{\link[fasterRaster]{.fragConnect}}, \code{\link[fasterRaster]{.fragClassify}}
+#' @seealso \code{\link[fasterRaster]{fragmentation}}, \code{\link[fasterRaster]{fasterFragmentation}}
 #' @keywords internal
 .fragDensity <- compiler::cmpfun(function(x, na.rm=FALSE) {
 	

@@ -12,7 +12,7 @@
 #' @param outGrassName Character. Name of output in GRASS. This is useful if you want to refer to the output object in GRASS later in a session.
 #' @param ... Arguments to pass to \code{\link[rgrass7]{execGRASS}} when calculating horizon height (i.e., function \code{r.horizon} in GRASS).
 #' @return If \code{grassToR} if \code{TRUE}, then a \code{SpatialLines} or \code{SpatialLinesDataFrame} object with the same coordinate reference system as \code{rast}. Regardless, a vector is written into the GRASS session. The name of this vector is given by \code{outGrassName}.
-#' @details See (r.contour)[https://grass.osgeo.org/grass78/manuals/r.contour.html] for more details. Note that if you get an error saying "", then you should add the EPSG code to the beginning of the raster coordinate reference system string (its "proj4string"). For example, \code{proj4string(rast) <- CRS('+init=epsg:32738')}. EPSG codes for various projections, datums, and locales can be found at (Spatial Reference)[http://spatialreference.org/].
+#' @details See the documentation for the GRASS module \code{r.contour} at \url{https://grass.osgeo.org/grass78/manuals/r.contour.html}.
 #' @seealso
 #' @examples
 #' \donttest{

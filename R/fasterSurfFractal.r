@@ -7,8 +7,8 @@
 #' @param grassToR Logical, if \code{TRUE} (default) then the product of the calculations will be returned to R. If \code{FALSE}, then the product is left in the GRASS session and named \code{longitude} and \code{latitude}. The latter case is useful (and faster) when chaining several \pkg{fasterRaster} functions together.
 #' @param outGrassName Character. Name of output in GRASS. This is useful if you want to refer to the output object in GRASS later in a session.
 #' @param ... Arguments to pass to \code{\link[rgrass7]{execGRASS}}.
-#' @return If \code{grassToR} if \code{TRUE}, then a raster object with the same coordinate reference system, resolution, and extent as \code{rast}. Otherwise, a raster is written into the GRASS session with the name given by \code{outGrassName}.
-#' @details See (r.surf.fractal)[https://grass.osgeo.org/grass78/manuals/r.surf.fractal.html] for more details. Note that if you get an error saying "", then you should add the EPSG code to the beginning of the raster coordinate reference system string (its "proj4string"). For example, \code{proj4string(rast) <- CRS('+init=epsg:32738')}. EPSG codes for various projections, datums, and locales can be found at (Spatial Reference)[http://spatialreference.org/].
+#' @return If \code{grassToR} if \code{TRUE}, then a raster object with the same coordinate reference system, resolution, and extent as \code{rast}. Regardless, a raster is written into the GRASS session with the name given by \code{outGrassName}.
+#' @details See the documentation for the GRASS module \code{r.surf.fractal} at \url{https://grass.osgeo.org/grass78/manuals/r.surf.fractal.html}.
 #' @seealso
 #' @examples
 #' \donttest{

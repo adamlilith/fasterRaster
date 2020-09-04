@@ -8,6 +8,8 @@ initGrass(
   alreadyInGrass = FALSE,
   rast = NULL,
   vect = NULL,
+  rastName = "rast",
+  vectName = "vect",
   mapset = "PERMANENT",
   location = "default",
   tempDir = tempfile(),
@@ -20,6 +22,10 @@ initGrass(
 \item{rast}{Either: a raster object \emph{or} the name of a raster already imported into GRASS \emph{or} \code{NULL} (default) in which case no raster is exported into GRASS. Either \code{rast} or \code{vect} (or both) must be non-\code{NULL}.}
 
 \item{vect}{Either: a SpatialPoints, SpatialPolygons, or SpatialLines object \emph{or} the name of a vector dataset already imported into GRASS \emph{or} \code{NULL} (default) in which case no vector is exported into GRASS. Either \code{rast} or \code{vect} (or both) must be non-\code{NULL}.}
+
+\item{rastName}{Character. Name of the raster when exported to GRASS. Default is \code{'rast'}.}
+
+\item{vectName}{Character. Name of the vector when exported to GRASS. Default is \code{'vect'}.}
 
 \item{mapset}{Character. Mapset of GRASS location. The default name is \code{'PERMANENT'}. Typically, it is not a good idea to change this, as most functions in the \pkg{fasterRaster} package assume the mapset is named "default".}
 

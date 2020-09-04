@@ -19,3 +19,4 @@ Integer.
 \description{
 This function calculates the number of cores to use for multi-core functions based on user preferences, size of the raster object, number of available cores, and whether or not the user wants to use multi-core functionality even if it's possible to do the entire raster processing in one block.
 }
+\keyword{internal}

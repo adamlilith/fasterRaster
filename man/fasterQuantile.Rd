@@ -32,7 +32,7 @@ A named vector of the values for each quantile named in \code{probs}.
 This function is a potentially faster version of the function \code{quantile(raster, probs)} for calculating the quantiles of a raster. This function will also work on rasters too big to load into memory using the \pkg{raster} package.
 }
 \details{
-See \href{r.quantile}{https://grass.osgeo.org/grass78/manuals/r.quantile.html} for more details.  Note that if you get an error saying "", then you should add the EPSG code to the beginning of the raster and vector coordinate reference system string (its "proj4string"). For example, \code{proj4string(x) <- CRS('+init=epsg:32738')}. EPSG codes for various projections, datums, and locales can be found at \href{Spatial Reference}{http://spatialreference.org/}.
+See the documentation for the GRASS module \code{r.quantile} at \url{https://grass.osgeo.org/grass78/manuals/r.quantile.html}.
 }
 \examples{
 \donttest{

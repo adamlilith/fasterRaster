@@ -20,8 +20,8 @@
 #' @param outGrassNameEastWestSlope Character. Name of east-west slope raster in GRASS. Useful for referring to later in the same GRASS session.
 #' @param outGrassNameNorthSouthSlope Character. Name of north-south slope raster in GRASS. Useful for referring to later in the same GRASS session.
 #' @param ... Arguments to pass to \code{\link[rgrass7]{execGRASS}} when used for rasterizing (i.e., function \code{r.slope.aspect} in GRASS).
-#' @param outGrassName Character. Name of output in GRASS. This is useful if you want to refer to the output object in GRASS later in a session.#' @return If \code{grassToR} if \code{TRUE}, then a raster or raster stack with the same extent, resolution, and coordinate reference system as \code{rast}. Otherwise, raster(s) given by the names in the \code{outGrassName*} arguments are used are written into the GRASS session.
-#' @details See \href{r.slope.aspect}{https://grass.osgeo.org/grass78/manuals/r.slope.aspect.html} for more details.  Note that if you get an error saying "", then you should add the EPSG code to the beginning of the raster and vector coordinate reference system string (its "proj4string"). For example, \code{proj4string(x) <- CRS('+init=epsg:32738')}. EPSG codes for various projections, datums, and locales can be found at \href{Spatial Reference}{http://spatialreference.org}.
+#' @param outGrassName Character. Name of output in GRASS. This is useful if you want to refer to the output object in GRASS later in a session.#' @return If \code{grassToR} if \code{TRUE}, then a raster or raster stack with the same extent, resolution, and coordinate reference system as \code{rast}. Regardless, raster(s) given by the names in the \code{outGrassName*} arguments are used are written into the GRASS session.
+#' @details See the documentation for the GRASS module \code{r.slope.aspect} at \url{https://grass.osgeo.org/grass78/manuals/r.slope.aspect.html}.
 #' @seealso \code{\link[raster]{terrain}}
 #' @examples
 #' \donttest{
@@ -91,7 +91,7 @@ fasterTerrain <- function(
 	# return
 	if (grassToR) {
 	
-		out <- raster::raster(rgrass7::readRAST(rast)))
+		out <- raster::raster(rgrass7::readRAST(rast))
 	
 		if (slope) out <- raster::stack(out, raster::raster(rgrass7::readRAST(outGrassNameSlope)))
 		if (aspect & northIs0) out <- raster::stack(out, raster::raster(rgrass7::readRAST(outGrassNameAspect)))

@@ -8,11 +8,11 @@ faster(
   mod,
   rast = NULL,
   vect = NULL,
+  rastName = "rast",
+  vectName = "vect",
   outType = NULL,
-  outName = "out",
   flags = c("quiet", "overwrite"),
   ...,
-  init = TRUE,
   grassDir = NULL,
   alreadyInGrass = FALSE,
   grassToR = TRUE
@@ -25,15 +25,15 @@ faster(
 
 \item{vect}{Either a SpatialPoints, SpatialPointsDataFrame, SpatialLines, SpatialLinesDataFrame, SpatialPolygons, or SpatialPolygonsDataFrame or the name of such a vector dataset already in a GRASS session. Used as input to the module.}
 
-\item{outType}{\code{NULL}, \code{'raster'}, or \code{'vector'} (partial string matching is used). Type of output expected from the GRASS module.}
+\item{rastName}{Character. Name of the input raster (if any) when exported to GRASS. Default is \code{'rast'}.}
 
-\item{outName}{Character. Name of the output (raster or vector).}
+\item{vectName}{Character. Name of the input vector (if any) when exported to GRASS. Default is \code{'vect'}.}
+
+\item{outType}{\code{NULL}, \code{'raster'}, or \code{'vector'} (partial string matching is used). Type of output expected from the GRASS module.}
 
 \item{flags}{List of flags for the GRASS module. The default (\code{c('quiet', 'overwrite')}) causes the module to report little/no messages and to overwrite existing files of the same name. For more flags, see the help documentation for the respective GRASS module.}
 
 \item{...}{Arguments to pass to the GRASS module through \code{\link[grass7]{execGRASS}}.}
-
-\item{init}{Logical. If \code{TRUE} (default), a new GRASS session is initialized.}
 
 \item{grassDir}{Character or \code{NULL} (default). Name of the directory in which GRASS is installed. Example: \code{'C:/Program Files/GRASS GIS 7.8'}. If this is \code{NULL}, R will search for the directory in which GRASS is installed. This usually fails, or if it succeeds, takes several minutes.}
 
@@ -45,7 +45,7 @@ faster(
 A raster, vector, or some other product of the GRASS module.
 }
 \description{
-This function is wrapper for \code{\link[grass7]{execGRASS}}, plus code necessary to initiate a GRASS session.  Many of the functions in \pkg{fasterRaster} actually utilize this function.
+This function is wrapper for \code{\link[grass7]{execGRASS}}, plus code necessary to initiate a GRASS session. Many of the functions in \pkg{fasterRaster} actually utilize this function.  This function works best for modules that take one raster and/or one vector as input and produce one raster or vector as output.
 }
 \details{
 For a list of vector commands, please see <https://grass.osgeo.org/grass78/manuals/vector.html>. For a list of raster commands, please see <https://grass.osgeo.org/grass78/manuals/raster.html>.
@@ -70,8 +70,8 @@ ll2 <- fasterLongLatRasters(madForest2000, grassDir=grassDir)
 # It then uses the raster created in the GRASS session by the first function
 # as the input for its module.
 latRast <- faster('r.latlong', rast=madForest2000, outType='rast',
-outName='lat', flags=c('quiet', 'overwrite'), grassDir=grassDir)
-longRast <- faster('r.latlong', input='lat', outType='rast', outName='long',
+output='lat', flags=c('quiet', 'overwrite'), grassDir=grassDir)
+longRast <- faster('r.latlong', input='lat', outType='rast', output='long',
 flags=c('quiet', 'overwrite', 'l'), init=FALSE, grassDir=grassDir)
 ll3 <- stack(latRast, longRast)
 }

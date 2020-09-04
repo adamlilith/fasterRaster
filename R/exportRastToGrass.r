@@ -14,23 +14,7 @@ exportRastToGrass <- function(
 
 	rgrass7::use_sp()
 
-	# # fast export
-	# success <- tryCatch(.tryWrite(rast), error=function(err) return(FALSE))
-	
-	# # slow but error-resistant export
-	# if (class(success) == 'logical' && !success) {
-
-		# raster::writeRaster(rast, paste0(tempDir, '/', grassName), format='GTiff', overwrite=TRUE)
-		# rgrass7::execGRASS('r.import', input=paste0(tempDir, '/', grassName, '.tif'), output=grassName, flags=c('overwrite', 'quiet'))
-		
-	# }
-
 	rastSGDF <- methods::as(rast, 'SpatialGridDataFrame')
 	rgrass7::writeRAST(rastSGDF, vname=grassName, overwrite=TRUE)
 
 }
-
-# .tryWrite <- function(rast, vname) {
-	# rastSGDF <- methods::as(rast, 'SpatialGridDataFrame')
-	# rgrass7::writeRAST(rastSGDF, vname=vname, overwrite=TRUE)
-# }

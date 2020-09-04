@@ -45,6 +45,8 @@ fasterFocal(
 \item{...}{Arguments to pass to \code{\link[raster]{writeRaster}}}
 }
 \value{
+@details The function \code{\link{fasterMapcalc}} \emph{may} be faster.
+
 A raster object, possibly also written to disk.
 }
 \description{
@@ -60,5 +62,5 @@ plot(out)
 }
 }
 \seealso{
-\code{\link[raster]{focal}}
+\code{\link[raster]{focal}}, \code{\link{fasterMapcalc}}
 }

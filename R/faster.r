@@ -4,8 +4,9 @@
 #' @param mod Character. Name of GRASS 7 module (e.g., \code{'r.latlong'} or \code{'v.buffer'}.
 #' @param rast Either a raster or the name of a raster in an existing GRASS session. Used as input to the module.
 #' @param vect Either a SpatialPoints, SpatialPointsDataFrame, SpatialLines, SpatialLinesDataFrame, SpatialPolygons, or SpatialPolygonsDataFrame or the name of such a vector dataset already in a GRASS session. Used as input to the module.
+#' @param rastName Character. Name of the input raster (if any) when exported to GRASS. Default is \code{'rast'}.
+#' @param vectName Character. Name of the input vector (if any) when exported to GRASS. Default is \code{'vect'}.
 #' @param outType \code{NULL}, \code{'raster'}, or \code{'vector'} (partial string matching is used). Type of output expected from the GRASS module.
-#' @param output Character. Name of the output (raster or vector).
 #' @param flags List of flags for the GRASS module. The default (\code{c('quiet', 'overwrite')}) causes the module to report little/no messages and to overwrite existing files of the same name. For more flags, see the help documentation for the respective GRASS module.
 #' @param ... Arguments to pass to the GRASS module through \code{\link[grass7]{execGRASS}}.
 #' @param grassDir Character or \code{NULL} (default). Name of the directory in which GRASS is installed. Example: \code{'C:/Program Files/GRASS GIS 7.8'}. If this is \code{NULL}, R will search for the directory in which GRASS is installed. This usually fails, or if it succeeds, takes several minutes.
@@ -45,8 +46,9 @@ faster <- function(
 	mod,
 	rast = NULL,
 	vect = NULL,
+	rastName = 'rast',
+	vectName = 'vect',
 	outType = NULL,
-	output = 'out',
 	flags = c('quiet', 'overwrite'),
 	...,
 	grassDir = NULL,
@@ -57,10 +59,10 @@ faster <- function(
 
 	# execute
 	if (!alreadyInGrass) {
-		input <- initGrass(alreadyInGrass, rast=rast, vect=vect, grassDir=grassDir)
-		rgrass7::execGRASS(mod, output=output, flags=flags, input=input, ...)
+		input <- initGrass(alreadyInGrass, rast=rast, vect=vect, rastName=rastName, vectName=vectName, grassDir=grassDir)
+		rgrass7::execGRASS(mod, flags=flags, ...)
 	} else {
-		rgrass7::execGRASS(mod, output=output, flags=flags, ...)
+		rgrass7::execGRASS(mod, flags=flags, ...)
 	}
 	
 	if (grassToR) {

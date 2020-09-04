@@ -17,6 +17,12 @@ fasterTerrain(
   grassDir = NULL,
   alreadyInGrass = FALSE,
   grassToR = TRUE,
+  outGrassNameSlope = "slope",
+  outGrassNameAspect = ifelse(northIs0, "aspectNorthIs0", "aspectEastIs0"),
+  outGrassNameProfileCurve = "profileCurve",
+  outGrassNameTanCurve = "tanCurve",
+  outGrassNameEastWestSlope = "eastWestSlope",
+  outGrassNameNorthSouthSlope = "northSouthSlope",
   ...
 )
 }
@@ -45,16 +51,27 @@ fasterTerrain(
 
 \item{grassToR}{Logical, if \code{TRUE} (default) then the product of the calculations will be returned to R. If \code{FALSE}, then the product is left in the GRASS session and named \code{slope}, \code{aspect}, \code{profileCurve}, \code{tanCurve}, \code{eastWestSlope}, or \code{northSouthSlope}. The latter case is useful (and faster) when chaining several \pkg{fasterRaster} functions together.}
 
+\item{outGrassNameSlope}{Character. Name of slope raster in GRASS. Useful for referring to later in the same GRASS session.}
+
+\item{outGrassNameAspect}{Character. Name of aspect raster in GRASS. Useful for referring to later in the same GRASS session.}
+
+\item{outGrassNameProfileCurve}{Character. Name of profile curve raster in GRASS. Useful for referring to later in the same GRASS session.}
+
+\item{outGrassNameTanCurve}{Character. Name of tangent curve raster in GRASS. Useful for referring to later in the same GRASS session.}
+
+\item{outGrassNameEastWestSlope}{Character. Name of east-west slope raster in GRASS. Useful for referring to later in the same GRASS session.}
+
+\item{outGrassNameNorthSouthSlope}{Character. Name of north-south slope raster in GRASS. Useful for referring to later in the same GRASS session.}
+
 \item{...}{Arguments to pass to \code{\link[rgrass7]{execGRASS}} when used for rasterizing (i.e., function \code{r.slope.aspect} in GRASS).}
-}
-\value{
-If \code{grassToR} if \code{TRUE}, then a raster or raster stack with the same extent, resolution, and coordinate reference system as \code{rast}. Otherwise, raster(s) with the name(s) \code{slope}, \code{aspect}, \code{profileCurve}, \code{tanCurve}, \code{eastWestSlope}, or \code{northSouthSlope} are written into the GRASS session.
+
+\item{outGrassName}{Character. Name of output in GRASS. This is useful if you want to refer to the output object in GRASS later in a session.#' @return If \code{grassToR} if \code{TRUE}, then a raster or raster stack with the same extent, resolution, and coordinate reference system as \code{rast}. Regardless, raster(s) given by the names in the \code{outGrassName*} arguments are used are written into the GRASS session.}
 }
 \description{
 This function is a potentially faster version of the \code{\link[raster]{terrain}} function in the \pkg{raster} package for calculating slope and aspect of a raster. It can also calculate profile curvature, tangential curvature, and slope in the east-west or north-south directions.
 }
 \details{
-See \href{r.slope.aspect}{https://grass.osgeo.org/grass78/manuals/r.slope.aspect.html} for more details.  Note that if you get an error saying "", then you should add the EPSG code to the beginning of the raster and vector coordinate reference system string (its "proj4string"). For example, \code{proj4string(x) <- CRS('+init=epsg:32738')}. EPSG codes for various projections, datums, and locales can be found at \href{Spatial Reference}{http://spatialreference.org}.
+See the documentation for the GRASS module \code{r.slope.aspect} at \url{https://grass.osgeo.org/grass78/manuals/r.slope.aspect.html}.
 }
 \examples{
 \donttest{
@@ -67,6 +84,8 @@ data(madElev)
 # in this example
 topo <- fasterTerrain(rast=madElev, slope = TRUE, aspect=TRUE,
 grassDir=grassDir)
+
+# terrainn function from the raster package... much slower in this example
 # slp <- terrain(elev, opt='slope', unit='degrees')
 # asp <- terrain(elev, opt='aspect', unit='degrees')
 # topo <- stack(slp, asp)

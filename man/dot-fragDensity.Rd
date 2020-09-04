@@ -26,6 +26,6 @@ diag(x) <- NA
 fasterRaster:::.fragDensity(x)
 }
 \seealso{
-\code{\link[fasterRaster]{fragmentation}}, \code{\link[fasterRaster]{.fragConnect}}, \code{\link[fasterRaster]{.fragClassify}}
+\code{\link[fasterRaster]{fragmentation}}, \code{\link[fasterRaster]{fasterFragmentation}}
 }
 \keyword{internal}

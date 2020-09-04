@@ -12,6 +12,7 @@ fasterVectorize(
   grassDir = NULL,
   alreadyInGrass = FALSE,
   grassToR = TRUE,
+  outGrassName = "rastToVect",
   ...
 )
 }
@@ -30,6 +31,8 @@ fasterVectorize(
 
 \item{grassToR}{Logical. If \code{TRUE} (default) then the product of the calculations will be returned to R. If \code{FALSE}, then the product is left in the GRASS session and named \code{rastToVect}. The latter case is useful (and faster) when chaining several \pkg{fasterRaster} functions together.}
 
+\item{outGrassName}{Character. Name of output in GRASS. This is useful if you want to refer to the output object in GRASS later in a session.}
+
 \item{...}{Arguments to pass to \code{\link[rgrass7]{execGRASS}} when used for converting a raster to a vector (i.e., function \code{r.to.vect} in GRASS).}
 
 \item{calcDensity}{Logical, if \code{TRUE} then calculate density in the moving window. This will create a raster named \code{density} in the GRASS environment if \code{grassToR} is \code{FALSE} or return a raster named \code{density} if \code{grassToR} is \code{TRUE}. Default is \code{FALSE}.}
@@ -37,13 +40,13 @@ fasterVectorize(
 \item{calcConnect}{Logical. If \code{TRUE} then calculate a connectivity raster (conditional probability a cell with a value of 1 has a value that is also 1) in the moving window. This will create a raster named \code{connect} in the GRASS environment if \code{grassToR} is \code{FALSE} or return a raster named \code{connect} if \code{grassToR} is \code{TRUE}. Default is \code{FALSE}.}
 }
 \value{
-If \code{grassToR} if \code{TRUE}, then a SpatialPointsDataFrame, SpatialLinesDataFrame, or a SpatialPolygonsDataFrame with the same coordinate reference system as \code{rast}. The field named \code{value} will have the raster values. Otherwise, vector object named \code{rastToVect} a  will be written into the GRASS session.
+If \code{grassToR} if \code{TRUE}, then a SpatialPointsDataFrame, SpatialLinesDataFrame, or a SpatialPolygonsDataFrame with the same coordinate reference system as \code{rast}. The field named \code{value} will have the raster values. Regardless, vector object with the name given by \code{outGrassName} will be written into the GRASS session.
 }
 \description{
 This function is a potentially faster version of the function \code{\link[raster]{rasterToPolygons}} in the \pkg{raster} package. It can convert a raster to points or polygons (conversion to lines is not yet supported, although it is possible using the \code{r.to.vect} module in GRASS).
 }
 \details{
-See \href{r.to.vect}{https://grass.osgeo.org/grass78/manuals/r.to.vect.html} for more details.  Note that if you get an error saying "", then you should add the EPSG code to the beginning of the raster and vector coordinate reference system string (their "proj4string"). For example, \code{proj4string(x) <- CRS('+init=epsg:32738')}. EPSG codes for various projections, datums, and locales can be found at \href{Spatial Reference}{http://spatialreference.org}.
+See the documentation for the GRASS module \code{r.to.vect} at \url{https://grass.osgeo.org/grass78/manuals/r.to.vect.html}.
 }
 \examples{
 \donttest{
