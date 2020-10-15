@@ -5,7 +5,7 @@
 #' Create an issue on \href{https://github.com/adamlilith/fasterRaster/issues}{GitHub}.
 #'
 #' @details
-#' @section Raster-only operations:
+#' @section Raster operations:
 #' 		\code{\link{fasterBufferRast}}: Add buffer to cells in a raster (using GRASS).\cr
 #' 		\code{\link{fasterContour}}: Calculate contour vectors from a raster.\cr
 #' 		\code{\link{fasterConvertDegree}}: Convert degrees from GRASS format (0 = east, 90 = north) to standard (0 = north, 90 = east) (using GRASS).\cr
@@ -25,6 +25,9 @@
 #' 		\code{\link{fasterVectorize}}: Convert raster to spatial points, lines, or polygons (using GRASS).\cr
 #' 		\code{\link{fasterVectToRastDistance}}: Distance between raster cells and a vector (using GRASS).\cr
 #' 
+#' @section Generic "faster" operations:
+#' 		\code{\link{faster}}: Generic call to a GRASS module.\cr
+#'
 #' @section Normal-speed raster processing:
 #' 		\code{\link{fragmentation}}: Calculate landscape fragmentation indices as per Riitter et al. (2000 Conservation Ecology 4:3)  
 #' 
