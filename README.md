@@ -1,6 +1,8 @@
 # fasterRaster
 Faster raster processing in R using GRASS GIS
 
+<img align="right" src="fasterRaster.png" height="190"/>  
+
 This package uses the stand-alone installer of Open Source Geospatial's [GRASS GIS Version 7](https://grass.osgeo.org/grass7/) to speed up some commonly used raster operations. Most of these operations can be done using the **raster** package by Robert Hijmans.  However, when the input raster is very large in memory, functions in that package can take a long time and fail. The **fasterRaster** package attempts to address these problems by calls to GRASS which is faster for large rasters. The successor to the **raster** package, **terra**, is also much faster and may be the better solution for functions that this package implements.
 
 To use **fasterRaster** Version 7.8 of GRASS must be installed on the local system you are using.
