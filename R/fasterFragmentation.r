@@ -152,7 +152,7 @@ fasterFragmentation <- function(
 
 			fragClass <- raster::clusterR(densConnect, fun=fx, args=list(undet=undet))
 
-			endCluster()
+			raster::endCluster()
 
 			names(fragClass) <- 'class'
 
