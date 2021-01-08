@@ -10,7 +10,7 @@ This package is meant as an add-on to the \pkg{raster} package. It uses GRASS GI
 \details{
 Create an issue on \href{https://github.com/adamlilith/fasterRaster/issues}{GitHub}.
 }
-\section{Raster-only operations}{
+\section{Raster operations}{
 
 		\code{\link{fasterBufferRast}}: Add buffer to cells in a raster (using GRASS).\cr
 		\code{\link{fasterContour}}: Calculate contour vectors from a raster.\cr
@@ -30,6 +30,11 @@ Create an issue on \href{https://github.com/adamlilith/fasterRaster/issues}{GitH
 		\code{\link{fasterTopidx}}: Topographic wetness index (using GRASS).\cr
 		\code{\link{fasterVectorize}}: Convert raster to spatial points, lines, or polygons (using GRASS).\cr
 		\code{\link{fasterVectToRastDistance}}: Distance between raster cells and a vector (using GRASS).\cr
+}
+
+\section{Generic "faster" operations}{
+
+		\code{\link{faster}}: Generic call to a GRASS module.\cr
 }
 
 \section{Normal-speed raster processing}{

@@ -1,3 +1,6 @@
+fasterRaster 0.6.2 (2021-01-08)
+Fix bug with workers not stopping when using fasterFocal() on a Mac
+
 fasterRaster 0.6.0 (2020-09-04)
 Add generic function faster() to call most GRASS modules easily
 Add fasterContour(): Contours from rasters

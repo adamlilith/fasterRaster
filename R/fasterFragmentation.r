@@ -110,7 +110,7 @@ fasterFragmentation <- function(
 		if (calcDensity | calcClass) {
 
 			if (verbose) {
-				cat('Calculating density...')
+				cat('\nCalculating density...')
 				flush.console()
 			}
 
@@ -124,7 +124,7 @@ fasterFragmentation <- function(
 		if (calcConnect | calcClass) {
 
 			if (verbose) {
-				cat('Calculating connectivity...')
+				cat('\nCalculating connectivity...')
 				flush.console()
 			}
 
@@ -138,7 +138,7 @@ fasterFragmentation <- function(
 		if (calcClass) {
 
 			if (verbose) {
-				cat('Calculating fragmentation class...')
+				cat('\nCalculating fragmentation class...')
 				flush.console()
 			}
 
