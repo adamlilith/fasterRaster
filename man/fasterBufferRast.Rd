@@ -50,7 +50,8 @@ See documentation for \code{r.buffer} at \url{https://grass.osgeo.org/grass78/ma
 \examples{
 \donttest{
 # change this to where GRASS 7 is installed on your system
-grassDir <- 'C:/Program Files/GRASS GIS 7.8'
+grassDir <- 'C:/Program Files/GRASS GIS 7.8' # example for a PC
+grassDir <- "/Applications/GRASS-7.8.app/Contents/Resources" # for a Mac
 
 data(madForest2000)
 rastBuff <- fasterBufferRast(rast=madForest2000, width=2,

@@ -26,7 +26,7 @@ fasterHorizon(
 
 \item{directions}{Numeric vector. Direction(s) in which to calculate horizon height for each cell. By default, these are given in degrees clockwise from 0, so 0 is north, 90 east, 180 south, and 270 west. However, if you define \code{northIs0 = FALSE}, then the directions are given degrees counterclockwise from east, so east is 0, north 90, west 180, and south 270. Regardless, the default is to calculate horizon angle in all four directions. One raster is created per direction. Note that the output will be labeled according to the angle of the directions (e.g., \code{horizonHeight_090} will be horizon height facing east if \code{northIs0 = TRUE} (default), but horizon height facing north if \code{northIs0 = FALSE}.}
 
-\item{northIs0}{Logical. If \code{TRUE} (default), argument \code{directions} specifies horizon height clockwise from 0, so 0 is north, 90 east, 180 south, and 270 west. If \code{FALSE}, angles are counterclockwise from east, so east is 0, north 90, west 180, and south 270. The latter is teh default for the GRASS function \code{r.horizon}.}
+\item{northIs0}{Logical. If \code{TRUE} (default), argument \code{directions} specifies horizon height clockwise from 0, so 0 is north, 90 east, 180 south, and 270 west. If \code{FALSE}, angles are counterclockwise from east, so east is 0, north 90, west 180, and south 270. The latter is the default for the GRASS function \code{r.horizon}.}
 
 \item{bufferZone}{Numeric >= 0 (default is 0). A buffer of the specified width will be generated around the raster before calculation of horizon angle. If the coordinate system is in longitude/latitude (e.g., WGS84 or NAD83), then this is specified in degrees. Otherwise units are map units (usually meters).}
 
@@ -56,7 +56,8 @@ See the documentation for the GRASS module \code{r.horizon} at \url{https://gras
 \examples{
 \donttest{
 # change this to where GRASS 7 is installed on your system
-grassDir <- 'C:/Program Files/GRASS GIS 7.8'
+grassDir <- 'C:/Program Files/GRASS GIS 7.8' # example for a PC
+grassDir <- "/Applications/GRASS-7.8.app/Contents/Resources" # for a Mac
 
 data(madElev)
 elevHeight_deg <- fasterHorizon(madElev, units='degrees', grassDir=grassDir)

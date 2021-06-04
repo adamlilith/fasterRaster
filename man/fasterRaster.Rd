@@ -10,7 +10,7 @@ This package is meant as an add-on to the \pkg{raster} package. It uses GRASS GI
 \details{
 Create an issue on \href{https://github.com/adamlilith/fasterRaster/issues}{GitHub}.
 }
-\section{Raster-only operations}{
+\section{Raster operations}{
 
 		\code{\link{fasterBufferRast}}: Add buffer to cells in a raster (using GRASS).\cr
 		\code{\link{fasterContour}}: Calculate contour vectors from a raster.\cr
@@ -32,6 +32,11 @@ Create an issue on \href{https://github.com/adamlilith/fasterRaster/issues}{GitH
 		\code{\link{fasterVectToRastDistance}}: Distance between raster cells and a vector (using GRASS).\cr
 }
 
+\section{Generic "faster" operations}{
+
+		\code{\link{faster}}: Generic call to a GRASS module.\cr
+}
+
 \section{Normal-speed raster processing}{
 
 		\code{\link{fragmentation}}: Calculate landscape fragmentation indices as per Riitter et al. (2000 Conservation Ecology 4:3)
@@ -42,6 +47,15 @@ Create an issue on \href{https://github.com/adamlilith/fasterRaster/issues}{GitH
 		\code{\link{exportRastToGrass}}: Export raster to an open GRASS session with support for large rasters/vectors.\cr
 		\code{\link{exportVectToGrass}}: Export vector object to an open GRASS session with support for large rasters/vectors.\cr
 		\code{\link{initGrass}}: Initialize a GRASS session using a raster or a vector as a template.\cr
+}
+
+\section{Example data}{
+
+	\code{\link{mad0}}: Borders of Madagascar.\cr
+	\code{\link{mad4}}: Borders of selected districts of Madagascar.\cr
+	\code{\link{madElev}}: Elevation raster for a portion of Madagascar.\cr
+	\code{\link{madForest2000}}: Raster of occurrence/non-occurrence of forest in Madagascar.\cr
+	\code{\link{madRivers}}: Major rivers of Madagascar.\cr
 }
 
 \author{

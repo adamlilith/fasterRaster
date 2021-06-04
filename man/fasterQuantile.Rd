@@ -37,7 +37,8 @@ See the documentation for the GRASS module \code{r.quantile} at \url{https://gra
 \examples{
 \donttest{
 # change this according to where GRASS 7 is installed on your system
-grassDir <- 'C:/Program Files/GRASS GIS 7.8'
+grassDir <- 'C:/Program Files/GRASS GIS 7.8' # example for a PC
+grassDir <- "/Applications/GRASS-7.8.app/Contents/Resources" # for a Mac
 
 data(madElev)
 probs <- c(0.025, 0.1, 0.25, 0.5, 0.75, 0.9, 0.975)

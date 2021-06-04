@@ -55,7 +55,8 @@ Note that it is not uncommon to get the warning "Projection of dataset does not 
 # could also use projectRaster() which
 # may be faster in this example
 # change this according to where GRASS 7 is installed on your system
-grassDir <- 'C:/Program Files/GRASS GIS 7.8'
+grassDir <- 'C:/Program Files/GRASS GIS 7.8' # example for a PC
+grassDir <- "/Applications/GRASS-7.8.app/Contents/Resources" # for a Mac
 
 data(madElev)
 data(madForest2000)
