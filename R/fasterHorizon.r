@@ -4,7 +4,7 @@
 #' @param rast Either a raster or the name of a raster in an existing GRASS session with values representing elevation (typically in meters).
 #' @param units Either \code{'radians'} (default) or \code{'degrees'}.
 #' @param directions Numeric vector. Direction(s) in which to calculate horizon height for each cell. By default, these are given in degrees clockwise from 0, so 0 is north, 90 east, 180 south, and 270 west. However, if you define \code{northIs0 = FALSE}, then the directions are given degrees counterclockwise from east, so east is 0, north 90, west 180, and south 270. Regardless, the default is to calculate horizon angle in all four directions. One raster is created per direction. Note that the output will be labeled according to the angle of the directions (e.g., \code{horizonHeight_090} will be horizon height facing east if \code{northIs0 = TRUE} (default), but horizon height facing north if \code{northIs0 = FALSE}.
-#' @param northIs0 Logical. If \code{TRUE} (default), argument \code{directions} specifies horizon height clockwise from 0, so 0 is north, 90 east, 180 south, and 270 west. If \code{FALSE}, angles are counterclockwise from east, so east is 0, north 90, west 180, and south 270. The latter is teh default for the GRASS function \code{r.horizon}.
+#' @param northIs0 Logical. If \code{TRUE} (default), argument \code{directions} specifies horizon height clockwise from 0, so 0 is north, 90 east, 180 south, and 270 west. If \code{FALSE}, angles are counterclockwise from east, so east is 0, north 90, west 180, and south 270. The latter is the default for the GRASS function \code{r.horizon}.
 #' @param bufferZone Numeric >= 0 (default is 0). A buffer of the specified width will be generated around the raster before calculation of horizon angle. If the coordinate system is in longitude/latitude (e.g., WGS84 or NAD83), then this is specified in degrees. Otherwise units are map units (usually meters).
 #' @param maxDist Either \code{NULL} (default) or numeric >= 0. Maximum distance to consider when finding horizon height. If \code{NULL} (default), the maximum distance is the full extent of the raster. Smaller values can decrease run time but also reduce accuracy.
 #' @param distance Numeric in the range [0.5, 1.5] (default is 1). This determines the step size when searching for the horizon from a given point. The default value of 1 goes cell-by-cell (i.e., search distance step size is one cell width).
@@ -19,7 +19,8 @@
 #' @examples
 #' \donttest{
 #' # change this to where GRASS 7 is installed on your system
-#' grassDir <- 'C:/Program Files/GRASS GIS 7.8'
+#' grassDir <- 'C:/Program Files/GRASS GIS 7.8' # example for a PC
+#' grassDir <- "/Applications/GRASS-7.8.app/Contents/Resources" # for a Mac
 #'
 #' data(madElev)
 #' elevHeight_deg <- fasterHorizon(madElev, units='degrees', grassDir=grassDir)

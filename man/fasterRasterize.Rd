@@ -60,7 +60,8 @@ See the documentation for the GRASS module \code{v.to.rast} at \url{https://gras
 \examples{
 \donttest{
 # change this according to where GRASS 7 is installed on your system
-grassDir <- 'C:/Program Files/GRASS GIS 7.8'
+grassDir <- 'C:/Program Files/GRASS GIS 7.8' # example for a PC
+grassDir <- "/Applications/GRASS-7.8.app/Contents/Resources" # for a Mac
 
 data(mad0)
 data(madForest2000)

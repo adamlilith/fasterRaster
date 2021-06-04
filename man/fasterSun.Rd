@@ -93,7 +93,8 @@ See the documentation for the GRASS module \code{r.sun} at \url{https://grass.os
 \examples{
 \donttest{
 # change this to where GRASS 7 is installed on your system
-grassDir <- 'C:/Program Files/GRASS GIS 7.8'
+grassDir <- 'C:/Program Files/GRASS GIS 7.8' # example for a PC
+grassDir <- "/Applications/GRASS-7.8.app/Contents/Resources" # for a Mac
 
 # NB This examples uses "chaining" of a GRASS session between faster
 # functions. That is, rasters are created in GRASS then kept in GRASS

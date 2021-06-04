@@ -29,7 +29,8 @@
 #'	\item \code{5}: undetermined (\code{pf} >= 0.6 & \code{pf == pff})
 #'	\item \code{6}: interior (\code{pf} == 1)
 #' }
-#' Note that this differs somewhat from the numbering scheme presented by Riitters et al. (2000) and their errata.
+#' Note that this differs somewhat from the numbering scheme presented by
+#' Riitters et al. (2000) and their errata.
 #' @seealso \code{\link[fasterRaster]{fasterFragmentation}}
 #' @examples
 #' \donttest{

@@ -1,3 +1,9 @@
+fasterRaster 0.6.4 (2021-06-04)
+Added path to GRASS dir for Mac in examples
+
+fasterRaster 0.6.3 (2021-03-17)
+Updated documentation of example data sets
+
 fasterRaster 0.6.2 (2021-01-08)
 Fix bug with workers not stopping when using fasterFocal() on a Mac
 

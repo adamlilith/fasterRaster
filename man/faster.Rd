@@ -53,8 +53,9 @@ For a list of vector commands, please see <https://grass.osgeo.org/grass78/manua
 }
 \examples{
 \donttest{
-# change this to where GRASS 7 is installed on your system
-grassDir <- 'C:/Program Files/GRASS GIS 7.8'
+# change this to where GRASS 7 is installed on your system:
+grassDir <- 'C:/Program Files/GRASS GIS 7.8' # example for a PC
+grassDir <- "/Applications/GRASS-7.8.app/Contents/Resources" # for a Mac
 
 data(madForest2000)
 latRast <- faster('r.latlong', rast=madForest2000, outType='rast',

@@ -49,6 +49,15 @@ Create an issue on \href{https://github.com/adamlilith/fasterRaster/issues}{GitH
 		\code{\link{initGrass}}: Initialize a GRASS session using a raster or a vector as a template.\cr
 }
 
+\section{Example data}{
+
+	\code{\link{mad0}}: Borders of Madagascar.\cr
+	\code{\link{mad4}}: Borders of selected districts of Madagascar.\cr
+	\code{\link{madElev}}: Elevation raster for a portion of Madagascar.\cr
+	\code{\link{madForest2000}}: Raster of occurrence/non-occurrence of forest in Madagascar.\cr
+	\code{\link{madRivers}}: Major rivers of Madagascar.\cr
+}
+
 \author{
 Adam B. Smith
 }
