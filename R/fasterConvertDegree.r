@@ -43,7 +43,7 @@ fasterConvertDegree <- function(
 	x,
 	grassDir = NULL,
 	alreadyInGrass = FALSE,
-	returnToR = TRUE,
+	grassToR = TRUE,
 	outGrassName = 'degreeConvert',
 	...
 ) {
@@ -123,6 +123,6 @@ fasterConvertDegree <- function(
 	
 	}
 	
-	if (class(x) %in% c('numeric', 'integer') | returnToR) out
+	if (class(x) %in% c('numeric', 'integer') | grassToR) out
 	
 }

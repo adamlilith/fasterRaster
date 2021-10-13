@@ -1,3 +1,6 @@
+fasterRaster 0.6.5 (2021-10-13)
+Fixed bug in fasterTerrain(). Thanks, ankitsagar1!
+
 fasterRaster 0.6.4 (2021-06-04)
 Added path to GRASS dir for Mac in examples
 

@@ -78,7 +78,7 @@ fasterTerrain <- function(
 	# aspect (0 = east and goes counter-clockwise, so convert so 0 = north going clockwise)
 	if (aspect) {
 		rgrass7::execGRASS('r.slope.aspect', elevation=input, aspect=outGrassNameAspect, flags=flags)
-		if (northIs0) fasterConvertDegree(outGrassNameAspect, grassDir=grassDir, alreadyInGrass=TRUE, outGrassName=outGrassNameAspect, returnToR=FALSE)
+		if (northIs0) fasterConvertDegree(outGrassNameAspect, grassDir=grassDir, alreadyInGrass=TRUE, outGrassName=outGrassNameAspect, grassToR=FALSE)
 	}
 	
 	# curvatures
