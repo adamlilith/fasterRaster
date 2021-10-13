@@ -8,7 +8,7 @@ fasterConvertDegree(
   x,
   grassDir = NULL,
   alreadyInGrass = FALSE,
-  returnToR = TRUE,
+  grassToR = TRUE,
   outGrassName = "degreeConvert",
   ...
 )
@@ -20,11 +20,11 @@ fasterConvertDegree(
 
 \item{alreadyInGrass}{Logical, if \code{FALSE} (default) then start a new GRASS session and import the raster named in \code{x}. If \code{FALSE}, use a raster already in GRASS with the name given by \code{x}. The latter is useful if you are chaining \pkg{fasterRaster} functions together and the first function initializes the session. The first function should use \code{alreadyInGrass = FALSE} and subsequent functions should use \code{alreadyInGrass = TRUE} then use their \code{rast} (or \code{vect}) arguments to name the raster (or vector) that was made by the previous function.}
 
+\item{grassToR}{Logical, if \code{TRUE} (default) then the output will be a raster or raster stack returned to R. If \code{FALSE}, then the rasters are left in the GRASS session and named \code{degreeConvert_1}, \code{degreeConvert_2}, \code{degreeConvert_3} (one per raster in \code{x}). The latter case is useful (and faster) when chaining several \pkg{fasterRaster} functions together.}
+
 \item{outGrassName}{Character. Name of output in GRASS. This is useful if you want to refer to the output object in GRASS later in a session.}
 
 \item{...}{Arguments to send to \code{\link[rgrass7]{execGRASS}}.}
-
-\item{grassToR}{Logical, if \code{TRUE} (default) then the output will be a raster or raster stack returned to R. If \code{FALSE}, then the rasters are left in the GRASS session and named \code{degreeConvert_1}, \code{degreeConvert_2}, \code{degreeConvert_3} (one per raster in \code{x}). The latter case is useful (and faster) when chaining several \pkg{fasterRaster} functions together.}
 }
 \value{
 Numeric, raster, or raster stack. Regardless, a set of rasters will be written into the current GRASS session. The name(s) of the rasters inn GRASS will be given by \code{outGrassName} with \code{'_', i} appended, where \code{i} starts at 1 for the first raster and increments by 1. For example, if \code{outGrassName = 'degreeConvert'}, then the raster(s) will be named \code{degreeConvert_1}, \code{degreeConvert_2}, etc.
