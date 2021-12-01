@@ -1,8 +1,8 @@
 Package: fasterRaster
 Type: Package
 Title: Faster raster processing in R using GRASS GIS
-Version: 0.6.5
-Date: 2021-10-13
+Version: 0.6.6
+Date: 2021-11-30
 Author: Adam B. Smith <adam@earthSkySea.org>
 Maintainer: Adam B. Smith <adam@earthSkySea.org>
 Description: This package is meant as an add-on to the raster
@@ -10,7 +10,7 @@ Description: This package is meant as an add-on to the raster
 	Version 7.8 to do some of the more laborious raster
 	operations faster than what can be done using the raster
 	package. For smaller rasters functions in the raster package
-	may actually be faster, and the terra package definitely
+	may actually be faster, and the terra package most likely
 	will. Note that to use many of the functions in this
 	package you must have the stand-alone version  (not the
 	OSGeo version) of GRASS 7.8 installed on your system. It
@@ -37,4 +37,4 @@ VignetteBuilder: knitr
 Encoding: UTF-8
 LazyData: true
 LazyLoad: yes
-RoxygenNote: 7.1.1
+RoxygenNote: 7.1.2
