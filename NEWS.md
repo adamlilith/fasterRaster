@@ -1,3 +1,6 @@
+fasterRaster 0.6.6 (2021-11-30)
+Fixed bug in fasterHorizon(). Thanks, Forest!
+
 fasterRaster 0.6.5 (2021-10-13)
 Fixed bug in fasterTerrain(). Thanks, ankitsagar1!
 
