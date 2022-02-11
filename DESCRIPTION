@@ -3,8 +3,18 @@ Type: Package
 Title: Faster raster processing in R using GRASS GIS
 Version: 0.6.6
 Date: 2021-11-30
-Author: Adam B. Smith <adam@earthSkySea.org>
-Maintainer: Adam B. Smith <adam@earthSkySea.org>
+Authors@R: 
+	c(
+		person(
+			given = 'Adam',
+			family = 'Smith',
+			middle = 'B.',
+			role = c('cre', 'aut'),
+			email = 'adam.smith@mobot.org',
+			comment = c(ORCID = '0000-0002-6420-1659')
+		)
+	)
+Maintainer: Adam B. Smith <adam.smith@mobot.org>
 Description: This package is meant as an add-on to the raster
     package. It uses multi-core processing and GRASS GIS
 	Version 7.8 to do some of the more laborious raster
@@ -14,7 +24,7 @@ Description: This package is meant as an add-on to the raster
 	will. Note that to use many of the functions in this
 	package you must have the stand-alone version  (not the
 	OSGeo version) of GRASS 7.8 installed on your system. It
-	has not been tested with vesions higher than 7.8, but it
+	has not been tested with versions higher than 7.8, but it
 	might work!
 Depends:
 	link2GI,
