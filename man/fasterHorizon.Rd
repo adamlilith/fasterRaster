@@ -64,6 +64,3 @@ elevHeight_deg <- fasterHorizon(madElev, units='degrees', grassDir=grassDir)
 plot(elevHeight_deg)
 }
 }
-\seealso{
-
-}

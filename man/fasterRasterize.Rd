@@ -19,7 +19,7 @@ fasterRasterize(
 )
 }
 \arguments{
-\item{vect}{Either a SpatialPoints, SpatialPointsDataFrame, SpatialLines, SpatialLinesDataFrame, SpatialPolygons, or SpatialPolygonsDataFrame or the name of such a vector dataset already in a GRASS session.}
+\item{vect}{Either a spatial vector object or the name of such a vector dataset already in a GRASS session.}
 
 \item{rast}{Either a raster or the name of a raster in an existing GRASS session. This serves as a template for the new raster.}
 

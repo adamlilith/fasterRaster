@@ -47,7 +47,7 @@ grassDir <- 'C:/Program Files/GRASS GIS 7.8'
 # will be *much* faster than using fasterLongLatRasters()
 # because the template raster is so small
 
-data(madForest)
+data(madForest2000)
 unMasked <- fasterLongLatRasters(rast=madForest2000, mask=FALSE,
 grassDir=grassDir)
 plot(unMasked)

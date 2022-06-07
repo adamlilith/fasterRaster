@@ -7,7 +7,7 @@
 exportRastToGrass(rast, grassName = "rast", tempDir = raster::tmpDir())
 }
 \arguments{
-\item{rast}{Raster layer.}
+\item{rast}{Raster layer. This can be of class \code{raster} (\pkg{raster} package) or \code{SpatRaster} (\pkg{terra} package).}
 
 \item{grassName}{Name of raster in GRASS.}
 

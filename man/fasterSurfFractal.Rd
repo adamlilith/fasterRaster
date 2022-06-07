@@ -49,6 +49,3 @@ alreadyInGrass=TRUE, grassDir=grassDir)
 plot(stack(fract1, fract2))
 }
 }
-\seealso{
-
-}

@@ -3,14 +3,24 @@ Faster raster processing in R using GRASS GIS
 
 <img align="right" src="fasterRaster.png" height="190"/>  
 
-This package uses the stand-alone installer of Open Source Geospatial's [GRASS GIS Version 7](https://grass.osgeo.org/grass7/) to speed up some commonly used raster operations. Most of these operations can be done using the **raster** package by Robert Hijmans.  However, when the input raster is very large in memory, functions in that package can take a long time and fail. The **fasterRaster** package attempts to address these problems by calls to GRASS which is faster for large rasters. The successor to the **raster** package, **terra**, is also much faster and may be the better solution for functions that this package implements.
+This package uses the stand-alone installer of Open Source Geospatial's [GRASS GIS Version 7](https://grass.osgeo.org/grass7/) to speed up some commonly used raster operations. Most of these operations can be done using the **raster** or **terra** packages by Robert Hijmans.  However, when the input raster is very large in memory, in some cases functions in those packages can take a long time and fail. The **fasterRaster** package attempts to address these problems by calls to GRASS which is faster for large rasters. The successor to the **raster** package, **terra**, is much faster and may be the better solution for functions that this package implements. However, in some cases **fasterRaster** is still faster!
 
-To use **fasterRaster** Version 7.8 of GRASS must be installed on the local system you are using.
+To use **fasterRaster** Version 7.8 of GRASS must be installed on the local system you are using. Please note version 8 of GRASS (forthcoming?) has not been tested with this package, but it may work, and that in the meantime you'll get warning messages about that when running many of these functions.
 
 To install `fasterRaster` and its dependencies, just do the following:  
 `remotes::install_github('adamlilith/fasterRaster', dependencies=TRUE)`  
 
 NB: If for some reason this command does not work, you can install the package by downloading the latest zip/tar file from the `zipTarFiles` directory and installing the package manually.
+
+## `raster`, `terra`, `sp`, and `sf` package objects ##
+
+**fasterRaster** "works" using rasters from the **raster** package and vectors from the **sp** package. However, as of June 2022, it now supports objects that are of class `SpatRaster`s or `SpatVector`s (**terra** package), or `sf` (**sf** package). It does this cheaply by converting these kind of objects to `raster` or `sp` objects, then sending them to GRASS. Since most of the processing is done in GRASS anyway, there is not much overhead to accommodate these "advanced" formats. The output, though, is still in `raster` or `sp` format. You can re-covert these back to the desired class using:
+
+`terraRastFromRasterRaster` <- as(terraRastObject, 'raster') # from raster to terra`  
+`terraVectFromSp` <- terra::vect(terraVectorObject) # from raster to terra`  
+`sfVectFromSp` <- sf::st_as_sf(spObject) # from sp to sf`  
+
+## Functions ###
 
 ### *Faster* raster processing functions ##
 * `fasterBufferRast`: Add buffer to cells in a raster (using GRASS).
@@ -37,8 +47,8 @@ NB: If for some reason this command does not work, you can install the package b
 * `fragmentation`: Calculate landscape fragmentation indices as per Riitter et al. (2000 Conservation Ecology 4:3)
 
 ### Utility functions ##
-* `exportRastToGrass`: Export raster to an open GRASS session with support for large rasters.
-* `exportVectToGrass`: Export vector to an open GRASS session with support for large rasters.
+* `exportRastToGrass`: Export raster to an open GRASS session.
+* `exportVectToGrass`: Export vector to an open GRASS session.
 * `initGrass`: Initialize a GRASS session using a raster or vector as a template.
 
 ## Getting started ##
@@ -49,6 +59,9 @@ To use **fasterRaster** you will need to install [GRASS version 7.8](https://gra
 Let's get started! We'll do a simple operation in which we calculate the distance to rivers (represented by a spatial lines vector object) and burn the distance values into a raster. To do this, we'll be using maps representing the middle of the eastern coast of Madagascar.
 
 `library(fasterRaster)`  
+`library(raster)`  
+`library(sp)`  
+
 `data(madForest2000)`  
 `data(madRivers)`  
 
@@ -88,11 +101,13 @@ The `faster` function is a generic wrapper for GRASS modules. You can use it to 
 `longRast <- faster('r.latlong', rast=madForest2000, outType='rast', flags=c('quiet', 'overwrite', 'l'), grassDir=grassDir)`  
 `ll1 <- stack(latRast, longRast)`  
 
-This is the same as:
+Bye the way, this is the same as:
 
 `ll2 <- fasterLongLatRasters(madForest2000, grassDir=grassDir)`
 
-Here is an example of chaining with the *faster* function. The second function uses the GRASS session initiated by the first function. It then uses the raster created in the GRASS session by the first function as the input for its module.
+However, you can use `faster` to call GRASS functions that do not have a dedicated functon in **fasterRaster**, so `faster` is very flexible!
+
+Here is an example of chaining with the `faster` function. The second function uses the GRASS session initiated by the first function. It then uses the raster created in the GRASS session by the first function as the input for its module.
 
 `latRast <- faster('r.latlong', rast=madForest2000, outType='rast', output='latitude', flags=c('quiet', 'overwrite'), grassDir=grassDir)`  
 `longRast <- faster('r.latlong', input='latitude', outType='rast', output='longitude', flags=c('quiet', 'overwrite', 'l'), grassDir=grassDir, alreadyInGrass=TRUE)`  
@@ -100,7 +115,7 @@ Here is an example of chaining with the *faster* function. The second function u
 `plot(ll3)`  
 
 ### Citation ###
-As of October, 2020, there is not a package-specific citation for *fasterRaster*, but the package was first used in:
+As of October, 2020, there is not a package-specific citation for **fasterRaster**, but the package was first used in:
 
 Morelli*, T.L., Smith*, A.B., Mancini, A.N., Balko, E. A., Borgenson, C., Dolch, R., Farris, Z., Federman, S., Golden, C.D., Holmes, S., Irwin, M., Jacobs, R.L., Johnson, S., King, T., Lehman, S., Louis, E.E. Jr., Murphy, A., Randriahaingo, H.N.T., Lucien, Randriannarimanana, H.L.L., Ratsimbazafy, J., Razafindratsima, O.H., and Baden, A.L. 2020. The fate of Madagascar’s rainforest habitat.  Nature Climate Change 10:89-96. * Equal contribution https://doi.org/10.1038/s41558-019-0647-x
 

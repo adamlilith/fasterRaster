@@ -71,5 +71,5 @@ plot(conts3, add=TRUE)
 }
 }
 \seealso{
-
+\code{\link[raster]{contour}}
 }

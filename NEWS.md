@@ -1,3 +1,7 @@
+fasterRaster 0.7.0 (2022-06-07)
+fasterRaster can now use objects from terra and sf
+packages! Thanks for the suggestion, Miika!
+
 fasterRaster 0.6.6 (2021-11-30)
 Fixed bug in fasterHorizon(). Thanks, Forest!
 

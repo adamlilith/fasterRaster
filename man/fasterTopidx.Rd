@@ -49,10 +49,10 @@ madElev_albers <- fasterProjectRaster(madElev, template=madForest2000,
 grassDir=grassDir)
 twi <- fasterTopidx(madElev_albers, grassDir=grassDir)
 par(mfrow=c(1, 2))
-plot(madElev_albers)
-plot(twi)
+plot(madElev_albers, main='Elevation (m)')
+plot(twi, main='TWI')
 }
 }
 \seealso{
-
+\code{\link[raster]{terrain}}
 }

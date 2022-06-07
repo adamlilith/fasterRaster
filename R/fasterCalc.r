@@ -25,6 +25,7 @@
 #' par(mfrow=c(1, 2))
 #' plot(madElev)
 #' plot(out)
+#' @export
 fasterCalc <- function(
 	rast,
 	fun,
@@ -34,6 +35,8 @@ fasterCalc <- function(
 	forceMulti = TRUE,
 	...
 ) {
+
+	if (inherits(rast, 'SpatRaster')) rast <- raster::raster(rast)
 
 	# number of cores
 	cores <- .getCores(rast = rast, cores = cores, forceMulti = forceMulti)

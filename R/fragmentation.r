@@ -78,6 +78,8 @@ fragmentation <- function(
 		warning('Forcing "calcDensity" and "calcConnect" in function "fragmentation()" to be TRUE since "calcClass" is TRUE.')
 	}
 	
+	if (inherits(rast, 'SpatRaster')) rast <- raster::raster(rast)
+	
 	halfWindowSize <- (size - 1) / 2
 	
 	# add padding around raster to avoid edge effects
