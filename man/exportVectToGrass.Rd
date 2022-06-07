@@ -7,7 +7,7 @@
 exportVectToGrass(vect, grassName = "vect", tempDir = raster::tmpDir())
 }
 \arguments{
-\item{vect}{Raster layer.}
+\item{vect}{Vector layer. This can be an object of class \code{Spatial} (\pkg{sp} package, so for example, a \code{SpatialPolygons} object), or \code{SpatVector} (\pkg{terra} package), or \code{sf} (\pkg{sf} package).}
 
 \item{grassName}{Name of vector in GRASS.}
 

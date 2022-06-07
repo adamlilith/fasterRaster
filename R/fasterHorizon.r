@@ -15,7 +15,6 @@
 #' @param ... Arguments to pass to \code{\link[rgrass7]{execGRASS}} when calculating horizon height (i.e., function \code{r.horizon} in GRASS).
 #' @return If \code{grassToR} if \code{TRUE}, then a raster or raster stack stack with the same extent, resolution, and coordinate reference system as \code{rast}. Otherwise, a raster is written into the GRASS session. The name of this raster is as \code{paste0(outGrassName, '_', xxx)}. For example, if \code{outGrassName = 'horizonHeight'}, and \code{directions} is \code{c(0, 90, 180, 270)}, then four rasters will be written: \code{horizonHeight_000}, \code{horizonHeight_090}, \code{horizonHeight_180}, and \code{horizonHeight_270}. Note the padding with zeros before angles <10.
 #' @details See the documentation for the GRASS module \code{r.horizon} at \url{https://grass.osgeo.org/grass78/manuals/r.horizon.html}.
-#' @seealso
 #' @examples
 #' \donttest{
 #' # change this to where GRASS 7 is installed on your system

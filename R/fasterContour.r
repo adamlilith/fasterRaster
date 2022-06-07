@@ -13,7 +13,7 @@
 #' @param ... Arguments to pass to \code{\link[rgrass7]{execGRASS}} when calculating horizon height (i.e., function \code{r.horizon} in GRASS).
 #' @return If \code{grassToR} if \code{TRUE}, then a \code{SpatialLines} or \code{SpatialLinesDataFrame} object with the same coordinate reference system as \code{rast}. Regardless, a vector is written into the GRASS session. The name of this vector is given by \code{outGrassName}.
 #' @details See the documentation for the GRASS module \code{r.contour} at \url{https://grass.osgeo.org/grass78/manuals/r.contour.html}.
-#' @seealso
+#' @seealso \code{\link[raster]{contour}}
 #' @examples
 #' \donttest{
 #' # change this to where GRASS 7 is installed on your system

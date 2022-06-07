@@ -1,7 +1,7 @@
 #' Rasterize using a call to GRASS GIS.
 #'
 #' This function is a potentially faster version of the \code{\link[raster]{rasterize}} function in the \pkg{raster} package which converts a spatial points, lines, or polygon into a raster based on a "template" raster. All cells covered by the spatial object can either have values taken from the spatial object or a user-defined.
-#' @param vect Either a SpatialPoints, SpatialPointsDataFrame, SpatialLines, SpatialLinesDataFrame, SpatialPolygons, or SpatialPolygonsDataFrame or the name of such a vector dataset already in a GRASS session.
+#' @param vect Either a spatial vector object or the name of such a vector dataset already in a GRASS session.
 #' @param rast Either a raster or the name of a raster in an existing GRASS session. This serves as a template for the new raster.
 #' @param use Character, indicates the types of values to be "burned" to the raster. Options include
 #' \itemize{
@@ -58,15 +58,19 @@ fasterRasterize <- function(
 
 	flags <- c('quiet', 'overwrite')
 	
+	if (inherits(rast, 'SpatRaster')) rast <- raster::raster(rast)
+
+	if (inherits(vect, 'SpatVector')) vect <- sf::st_as_sf(vect)
+	if (inherits(vect, 'sf')) vect <- as(vect, 'Spatial')
+
 	# feature type
-	vectClass <- class(vect)
 	if (is.null(burn)) {
 		
-		burn <- if (vectClass %in% c('SpatialPoints', 'SpatialPointsDataFrame')) {
+		burn <- if (inherits(vect, c('SpatialPoints', 'SpatialPointsDataFrame'))) {
 			'point'
-		} else if (vectClass %in% c('SpatialLines', 'SpatialLinesDataFrame')) {
+		} else if (inherits(vect, c('SpatialLines', 'SpatialLinesDataFrame'))) {
 			'line'
-		} else if (vectClass %in% c('SpatialPolygons', 'SpatialPolygonsDataFrame')) {
+		} else if (inherits(vect, c('SpatialPolygons', 'SpatialPolygonsDataFrame'))) {
 			'area'
 		}
 
@@ -76,7 +80,7 @@ fasterRasterize <- function(
 			stop('Argument "burn" must be NULL or one of "point", "line", "area", "boundary",\nor "centroid" and match the type of argument "vect".')
 		}
 		
-		if (burn %in% c('point', 'centroid') & !(vectClass %in% c('SpatialPoints', 'SpatialPointsDataFrame'))) {
+		if (burn %in% c('point', 'centroid') & !(vect %in% c('SpatialPoints', 'SpatialPointsDataFrame'))) {
 			stop('Argument "burn" must be either "point" or "centroid" if\nargument "vect" is a SpatialPoints or SpatialPointsDataFrame.')
 		}
 		

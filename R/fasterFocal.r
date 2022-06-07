@@ -17,13 +17,15 @@
 #' @return A raster object, possibly also written to disk.
 #' @seealso \code{\link[raster]{focal}}, \code{\link{fasterMapcalc}}
 #' @examples
+#'
 #' \donttest{
 #' data(madElev)
-#' out <- fasterFocal(madElev, fun=max, cores=2)
+#' out <- fasterFocal(madElev, fun=sd, cores=2)
 #' par(mfrow=c(1, 2))
-#' plot(madElev)
-#' plot(out)
+#' plot(madElev, main='Elevation')
+#' plot(out, main='SD in focal window')
 #' }
+#'
 #' @export
 fasterFocal <- function(
 	rast,
@@ -39,6 +41,8 @@ fasterFocal <- function(
 	forceMulti = TRUE,
 	...
 ) {
+
+	if (inherits(rast, 'SpatRaster')) rast <- raster::raster(rast)
 
 	# get number of cores and chunks of raster
 	cores <- .getCores(rast = rast, cores = cores, forceMulti = forceMulti)
@@ -76,9 +80,9 @@ fasterFocal <- function(
 			badWeights <- TRUE
 		}
 		
-		if (badWeights) stop('Argument "w" in fasterFocal() function must be a square matrix with an odd number of sides or an odd integer.')
+		if (badWeights) stop('Argument "w" in fasterFocal() function must be an odd integer or a square matrix with an odd number of columns and rows.')
 	
-		halfWindowSize <- (nrow(w) - 1) / 2
+		halfWindowSize <- (nrow(w) - 1L) / 2L
 
 		# add padding around raster to avoid edge effects
 		if (pad) {
@@ -135,7 +139,7 @@ fasterFocal <- function(
 		
 		if (progress) pb <- pbCreate(nrow(tracker))
 
-		for (tag in 1:nodes) {
+		for (tag in 1L:nodes) {
 
 			blockVals <- getValues(rast, startSendRows[tag], numSendRows[tag])
 			blockVals <- matrix(blockVals, ncol=xCols, byrow=TRUE)
@@ -163,7 +167,7 @@ fasterFocal <- function(
 		### get and remember output
 		while (sum(tracker$done) < nrow(tracker)) {
 
-			thisTag <- tracker$tag[which(!tracker$done)[1]]
+			thisTag <- tracker$tag[which(!tracker$done)[1L]]
 		
 			# receive results from a node
 			outFromClust <- snow::recvData(cluster[[thisTag]])

@@ -20,6 +20,7 @@
 #' @details See the documentation for the GRASS module \code{r.mapcalc} at \url{https://grass.osgeo.org/grass78/manuals/r.mapcalc.html}. The function \code{\link{fasterFocal}} \emph{may} be faster for focal calculations.
 #' @seealso \code{\link[raster]{calc}}, \code{\link[raster]{focal}}, \code{\link{fasterFocal}}
 #' @examples
+#'
 #' \donttest{
 #' # change this to where GRASS 7 is installed on your system
 #' grassDir <- 'C:/Program Files/GRASS GIS 7.8' # example for a PC

@@ -9,7 +9,6 @@
 #' @param ... Arguments to pass to \code{\link[rgrass7]{execGRASS}}.
 #' @return If \code{grassToR} if \code{TRUE}, then a raster object with the same coordinate reference system, resolution, and extent as \code{rast}. Regardless, a raster is written into the GRASS session with the name given by \code{outGrassName}.
 #' @details See the documentation for the GRASS module \code{r.surf.fractal} at \url{https://grass.osgeo.org/grass78/manuals/r.surf.fractal.html}.
-#' @seealso
 #' @examples
 #' \donttest{
 #' # change this to where GRASS 7 is installed on your system

@@ -53,13 +53,15 @@ A raster object, possibly also written to disk.
 This function applies a function that uses values from a "moving window" across a raster. It is exactly the same as the \code{\link[raster]{focal}} function in the \pkg{raster} package except that it can use a multi-core implementation to speed processing.
 }
 \examples{
+
 \donttest{
 data(madElev)
-out <- fasterFocal(madElev, fun=max, cores=2)
+out <- fasterFocal(madElev, fun=sd, cores=2)
 par(mfrow=c(1, 2))
-plot(madElev)
-plot(out)
+plot(madElev, main='Elevation')
+plot(out, main='SD in focal window')
 }
+
 }
 \seealso{
 \code{\link[raster]{focal}}, \code{\link{fasterMapcalc}}

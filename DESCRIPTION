@@ -1,31 +1,31 @@
 Package: fasterRaster
 Type: Package
 Title: Faster raster processing in R using GRASS GIS
-Version: 0.6.6
-Date: 2021-11-30
+Version: 0.7.0
+Date: 2022-06-07
 Authors@R: 
 	c(
 		person(
-			given = 'Adam',
+			given = c('Adam', 'B.'),
 			family = 'Smith',
-			middle = 'B.',
-			role = c('cre', 'aut'),
+			role = c('aut', 'cre'),
 			email = 'adam.smith@mobot.org',
 			comment = c(ORCID = '0000-0002-6420-1659')
 		)
 	)
 Maintainer: Adam B. Smith <adam.smith@mobot.org>
-Description: This package is meant as an add-on to the raster
-    package. It uses multi-core processing and GRASS GIS
-	Version 7.8 to do some of the more laborious raster
-	operations faster than what can be done using the raster
-	package. For smaller rasters functions in the raster package
-	may actually be faster, and the terra package most likely
-	will. Note that to use many of the functions in this
-	package you must have the stand-alone version  (not the
-	OSGeo version) of GRASS 7.8 installed on your system. It
-	has not been tested with versions higher than 7.8, but it
-	might work!
+Description: Making raster and vector processing faster using
+	GRASS GIS! This package uses multi-core processing and
+	GRASS GIS Version 7.8 to do some of the more laborious
+	raster/vector operations faster than what can be done
+	using the raster, terra, or sf packages. For smaller
+	rasters or vectors, functions in the raster, terra, or
+	sf packages may actually be faster, but in some cases,
+	fasterRaster will be faster! Note that to use
+	many of the functions in this package you must have the
+	stand-alone version  (not the OSGeo version) of GRASS
+	7.8 installed on your system. It has not been tested
+	with versions higher than 7.8, but it might work!
 Depends:
 	link2GI,
 	raster,
@@ -38,6 +38,8 @@ Imports:
 Suggests:
 	knitr,
 	rgeos,
+	sf,
+	terra,
     testthat
 License: GPL (>=3) + file LICENSE
 SystemRequirements: GRASS (>= 7)
@@ -47,4 +49,4 @@ VignetteBuilder: knitr
 Encoding: UTF-8
 LazyData: true
 LazyLoad: yes
-RoxygenNote: 7.1.2
+RoxygenNote: 7.2.0

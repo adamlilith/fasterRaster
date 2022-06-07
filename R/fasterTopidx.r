@@ -9,7 +9,7 @@
 #' @param ... Arguments to pass to \code{\link[rgrass7]{execGRASS}} when calculating horizon height (i.e., function \code{r.horizon} in GRASS).
 #' @return If \code{grassToR} if \code{TRUE}, then a raster with the same coordinate reference system, extent, and resolution as \code{rast}. Otherwise, a raster is written into the GRASS session. The name of this vector is given by \code{outGrassName}.
 #' @details See the documentation for the GRASS module \code{r.topidx} at \url{https://grass.osgeo.org/grass78/manuals/r.topidx.html}.
-#' @seealso
+#' @seealso \code{\link[raster]{terrain}}
 #' @examples
 #' \donttest{
 #' # change this to where GRASS 7 is installed on your system
@@ -24,8 +24,8 @@
 #' grassDir=grassDir)
 #' twi <- fasterTopidx(madElev_albers, grassDir=grassDir)
 #' par(mfrow=c(1, 2))
-#' plot(madElev_albers)
-#' plot(twi)
+#' plot(madElev_albers, main='Elevation (m)')
+#' plot(twi, main='TWI')
 #' }
 #' @export
 

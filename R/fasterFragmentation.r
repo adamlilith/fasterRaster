@@ -41,11 +41,11 @@
 #' # cells are just 1s or NAs... replace NAs with 0
 #' forest <- calc(madForest2000, function(x) ifelse(is.na(x), 0, 1))
 #'
-#' # single-core
-#' frag <- fragmentation(forest, size=5, pad=TRUE, undet='perforated')
+#' # single-core... can take a while!
+#' frag <- fragmentation(madForest2000, size=5, pad=TRUE, undet='perforated')
 #'
 #' # multi-core
-#' frag <- fasterFragmentation(forest, size=5, pad=TRUE, undet='perforated',
+#' frag <- fasterFragmentation(madForest2000, size=5, pad=TRUE, undet='perforated',
 #' cores=4)
 #'
 #' par(mfrow=c(2, 2))
@@ -81,6 +81,8 @@ fasterFragmentation <- function(
 	if (calcClass & (!calcDensity | !calcConnect)) {
 		warning('Forcing "calcDensity" and "calcConnect" in function "fragmentation()" to be TRUE since "calcClass" is TRUE.')
 	}
+
+	if (inherits(rast, 'SpatRaster')) rast <- raster::raster(rast)
 
 	# number of cores
 	cores <- .getCores(rast = rast, cores = cores, forceMulti = forceMulti)	
