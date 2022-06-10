@@ -16,9 +16,9 @@ NB: If for some reason this command does not work, you can install the package b
 
 **fasterRaster** "works" using rasters from the **raster** package and vectors from the **sp** package. However, as of June 2022, it now supports objects that are of class `SpatRaster`s or `SpatVector`s (**terra** package), or `sf` (**sf** package). It does this cheaply by converting these kind of objects to `raster` or `sp` objects, then sending them to GRASS. Since most of the processing is done in GRASS anyway, there is not much overhead to accommodate these "advanced" formats. The output, though, is still in `raster` or `sp` format. You can re-covert these back to the desired class using:
 
-`terraRastFromRasterRaster` <- as(terraRastObject, 'raster') # from raster to terra`  
-`terraVectFromSp` <- terra::vect(terraVectorObject) # from raster to terra`  
-`sfVectFromSp` <- sf::st_as_sf(spObject) # from sp to sf`  
+`terraRastFromRasterRaster <- as(terraRastObject, 'raster') # from raster to terra`  
+`terraVectFromSp <- terra::vect(terraVectorObject) # from raster to terra`  
+`sfVectFromSp <- sf::st_as_sf(spObject) # from sp to sf`  
 
 ## Functions ###
 
