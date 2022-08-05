@@ -26,6 +26,21 @@
 #' plot(out, main='SD in focal window')
 #' }
 #'
+#' # Using a weights matrix
+#' \donttest{
+#' # example of a "high-pass" weights matrix:
+#' w <- matrix(c(-1, -1, -1, -1, 8, -1, -1, 1, -1), ncol=3)
+#' out <- fasterFocal(madElev, w=w, fun=mean, cores=2)
+#'
+#' # What if your weights matrix has NAs?
+#' # Write a function that returns a value even if there are NAs.
+#' w <- matrix(c(1,NA,1,NA,1,NA,1,1,1,NA,1,1,NA,1,1,NA,1,1,1,NA,1,NA,1,NA,1),
+#' nrow=5, ncol=5)
+#' fx <- function(x) mean(x, na.rm=TRUE)
+#' out <- fasterFocal(madElev, w=w, fun=fx, cores=2, na.rm=TRUE)
+#'
+#' }
+#' 
 #' @export
 fasterFocal <- function(
 	rast,
@@ -57,7 +72,7 @@ fasterFocal <- function(
 	} else {
 
 		# weights matrix
-		if (class(w) == 'matrix') {
+		if (inherits(w, 'matrix')) {
 		
 			badWeights <- if (nrow(w) != ncol(w)) {
 				TRUE
@@ -67,7 +82,7 @@ fasterFocal <- function(
 				FALSE
 			}
 		
-		} else if (class(w) != 'matrix' && length(w) == 1) {
+		} else if (!inherits(w, 'matrix') & length(w) == 1) {
 		
 			if (w %% 2 != 1) {
 				badWeights <- FALSE

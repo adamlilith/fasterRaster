@@ -62,6 +62,21 @@ plot(madElev, main='Elevation')
 plot(out, main='SD in focal window')
 }
 
+# Using a weights matrix
+\donttest{
+# example of a "high-pass" weights matrix:
+w <- matrix(c(-1, -1, -1, -1, 8, -1, -1, 1, -1), ncol=3)
+out <- fasterFocal(madElev, w=w, fun=mean, cores=2)
+
+# What if your weights matrix has NAs?
+# Write a function that returns a value even if there are NAs.
+w <- matrix(c(1,NA,1,NA,1,NA,1,1,1,NA,1,1,NA,1,1,NA,1,1,1,NA,1,NA,1,NA,1),
+nrow=5, ncol=5)
+fx <- function(x) mean(x, na.rm=TRUE)
+out <- fasterFocal(madElev, w=w, fun=fx, cores=2, na.rm=TRUE)
+
+}
+
 }
 \seealso{
 \code{\link[raster]{focal}}, \code{\link{fasterMapcalc}}

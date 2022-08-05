@@ -62,7 +62,7 @@ fasterBufferRast <- function(
 
 		out <- rgrass7::readRAST(outGrassName)
 		names(out) <- outGrassName
-		if (class(out) != 'RasterLayer') out <- raster(out)
+		if (!inherits(out, 'RasterLayer')) out <- raster::raster(out)
 		out
 
 	}
