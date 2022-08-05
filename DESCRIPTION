@@ -1,8 +1,8 @@
 Package: fasterRaster
 Type: Package
 Title: Faster raster processing in R using GRASS GIS
-Version: 0.7.0
-Date: 2022-06-07
+Version: 0.7.1
+Date: 2022-08-05
 Authors@R: 
 	c(
 		person(
@@ -49,4 +49,4 @@ VignetteBuilder: knitr
 Encoding: UTF-8
 LazyData: true
 LazyLoad: yes
-RoxygenNote: 7.2.0
+RoxygenNote: 7.2.1

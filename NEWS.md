@@ -1,3 +1,6 @@
+fasterRaster 0.7.1 (2022-08-05a)
+Changed uses of class() to inherits()... fixes bug in fasterFocal() (and elsewhere?)
+
 fasterRaster 0.7.0 (2022-06-07)
 fasterRaster can now use objects from terra and sf
 packages! Thanks for the suggestion, Miika!

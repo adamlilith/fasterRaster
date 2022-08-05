@@ -49,7 +49,7 @@ fasterConvertDegree <- function(
 ) {
 
 	## scalar
-	if (class(x) %in% c('numeric', 'integer')) {
+	if (inherits(x, c('numeric', 'integer'))) {
 		
 		out <- ((360 - x) %% 360 + 90) %% 360
 	
@@ -62,7 +62,7 @@ fasterConvertDegree <- function(
 		input <- initGrass(alreadyInGrass, rast=x, vect=NULL, grassDir=grassDir)
 		
 		## raster stack/brick
-		if (class(x) %in% c('RasterStack', 'RasterBrick')) {
+		if (inherits(x, c('RasterStack', 'RasterBrick'))) {
 
 			for (i in 1:raster::nlayers(x)) {
 		
@@ -92,7 +92,7 @@ fasterConvertDegree <- function(
 		} else {
 			
 			# execute
-			ex <- if (class(x) == 'character') {
+			ex <- if (inherits(x, 'character')) {
 				paste0(outGrassName, ' = ((360 - ', x, ') % 360 + 90) % 360')
 			} else {
 				paste0(outGrassName, ' = ((360 - rast) % 360 + 90) % 360')
@@ -123,6 +123,6 @@ fasterConvertDegree <- function(
 	
 	}
 	
-	if (class(x) %in% c('numeric', 'integer') | grassToR) out
+	if (inherits(x, c('numeric', 'integer')) | grassToR) out
 	
 }

@@ -155,44 +155,44 @@ fasterSun <- function(
 	if (!is.null(declination)) args <- c(args, declination)
 	
 	# aspect
-	if (class(aspect) == 'RasterLayer') { # raster
+	if (inherits(aspect, 'RasterLayer')) { # raster
 		
 		exportRasterToGrass(aspect, grassName='aspectFromEast')
 		args <- c(args, aspect='aspectFromEast')
 		
-	} else if (class(aspect) == 'numeric') { # constant
+	} else if (inherits(aspect, 'numeric')) { # constant
 		args <- c(args, aspect_value=aspect)
-	} else if (class(aspect) == 'character') { # name in GRASS
+	} else if (inherits(aspect, 'character')) { # name in GRASS
 		args <- c(args, aspect=aspect)
 	}
 	
 	# slope
-	if (class(slope) == 'RasterLayer') {
+	if (inherits(slope, 'RasterLayer')) {
 		exportRasterToGrass(slope, grassName='slope')
 		args <- c(args, slope='slope')
-	} else if (class(slope) == 'numeric') { # constant
+	} else if (inherits(slope, 'numeric')) { # constant
 		args <- c(args, slope_value=slope)
-	} else if (class(slope) == 'character') { # name in GRASS
+	} else if (inherits(slope, 'character')) { # name in GRASS
 		args <- c(args, slope=slope)
 	}
 	
 	# albedo
-	if (class(albedo) == 'RasterLayer') {
+	if (inherits(albedo, 'RasterLayer')) {
 		exportRasterToGrass(albedo, grassName='albedo')
 		args <- c(args, albedo='albedo')
-	} else if (class(albedo) == 'numeric') { # constant
+	} else if (inherits(albedo, 'numeric')) { # constant
 		args <- c(args, albedo_value=albedo)
-	} else if (class(albedo) == 'character') { # name in GRASS
+	} else if (inherits(albedo, 'character')) { # name in GRASS
 		args <- c(args, albedo=albedo)
 	}
 	
 	# linke
-	if (class(linke) == 'RasterLayer') {
+	if (inherits(linke, 'RasterLayer')) {
 		exportRasterToGrass(linke, grassName='aspect')
 		args <- c(args, aspect='aspect')
-	} else if (class(linke) == 'numeric') { # constant
+	} else if (inherits(linke, 'numeric')) { # constant
 		args <- c(args, linke_value=linke)
-	} else if (class(linke) == 'character') { # name in GRASS
+	} else if (inherits(linke, 'character')) { # name in GRASS
 		args <- c(args, linke=linke)
 	}
 
@@ -203,7 +203,7 @@ fasterSun <- function(
 	}
 	
 	# horizon height
-	if (class(horizonHeight) == 'character') {
+	if (inherits(horizonHeight, 'character')) {
 		args <- c(args, 'horizon_basename' = horizonHeight)
 	} else {
 		for (i in 1:raster::nlayers(horizonHeight)) {
