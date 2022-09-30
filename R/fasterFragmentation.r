@@ -92,7 +92,7 @@ fasterFragmentation <- function(
 
 		if (verbose) {
 			cat('Using single-core implementation...')
-			fush.console()
+			flush.console()
 		}
 		
 		out <- fasterRaster::fragmentation(
