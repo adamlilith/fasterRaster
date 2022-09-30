@@ -1,3 +1,6 @@
+fasterRaster 0.7.2 (2022-09-30a)
+Fixed bug in single-core implementation of fasterFragmentation (thank you, Simon C!)
+
 fasterRaster 0.7.1 (2022-08-05a)
 Changed uses of class() to inherits()... fixes bug in fasterFocal() (and elsewhere?)
 
