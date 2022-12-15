@@ -22,6 +22,10 @@ NB: If for some reason this command does not work, you can install the package b
 
 ## Functions ###
 
+### Getting help
+* Typing `?fasterRaster` will pull up a table of package contents (much like this).
+* `fasterLookup`: Find equivalent functions in `fasterRaster`, `GRASS`, and `terra`.
+
 ### *Faster* raster processing functions ##
 * `fasterBufferRast`: Add buffer to cells in a raster (using GRASS).
 * `fasterContour`: Calculate contour vectors from a raster (using GRASS).

@@ -1,4 +1,4 @@
-#' Calculate contour vectors from a raster
+#' Contour vectors from a raster
 #'
 #' This function creates a vector (\code{SpatialLines} or \code{SpatialLinesDataFrame}) object from a raster representing contour lines in the raster. It utilizes the GRASS function \code{r.contour}.
 #' @param rast Either a raster or the name of a raster in an existing GRASS session with values representing elevation (typically in meters).
@@ -6,19 +6,19 @@
 #' @param step Numeric. Increment between contour levels.
 #' @param minlevel,maxlevel Numeric or \code{NULL} (default). Minimum and maximum contour levels. If \code{NULL} and \code{step} is not \code{NULL}, then the minimum and maximum values in the raster will be used.
 #' @param cut Integer >= 0. Minimum number of points necessary to generate a contour line. A value of 0 implies no limit. Default is 2.
-#' @param grassDir Character or \code{NULL} (default). Name of the directory in which GRASS is installed. Example: \code{'C:/Program Files/GRASS GIS 7.8'}. If this is \code{NULL}, R will search for the directory in which GRASS is installed. This usually fails, or if it succeeds, takes several minutes.
+#' @param grassDir Character or \code{NULL} (default). Name of the directory in which GRASS is installed. Example for a Windows system: \code{'C:/Program Files/GRASS GIS 8.2'}. If this is \code{NULL}, R will search for the directory in which GRASS is installed. This usually fails, or if it succeeds, takes several minutes.
 #' @param alreadyInGrass Logical, if \code{FALSE} (default) then start a new GRASS session and import the raster named in \code{rast}. If \code{FALSE}, use a raster already in GRASS with the name given by \code{rast}. The latter is useful if you are chaining \pkg{fasterRaster} functions together and the first function initializes the session. The first function should use \code{alreadyInGrass = FALSE} and subsequent functions should use \code{alreadyInGrass = TRUE} then use their \code{rast} (or \code{vect}) arguments to name the raster (or vector) that was made by the previous function.
-#' @param grassToR Logical, if \code{TRUE} (default) then the product of the calculations will be returned to R. If \code{FALSE}, then the product is left in the GRASS session and named \code{longitude} and \code{latitude}. The latter case is useful (and faster) when chaining several \pkg{fasterRaster} functions together.
+#' @param grassToR Logical, if \code{TRUE} (default) then the output will be returned to R. If \code{FALSE}, then the output is left in the GRASS session and named the value in \code{outGrassName} \code{longitude} and \code{latitude}. The latter case is useful (and faster) when chaining several \pkg{fasterRaster} functions together.
 #' @param outGrassName Character. Name of output in GRASS. This is useful if you want to refer to the output object in GRASS later in a session.
-#' @param ... Arguments to pass to \code{\link[rgrass7]{execGRASS}} when calculating horizon height (i.e., function \code{r.horizon} in GRASS).
+#' @param ... Arguments to pass to \code{\link[rgrass]{execGRASS}} when calculating horizon height (i.e., function \code{r.horizon} in GRASS).
 #' @return If \code{grassToR} if \code{TRUE}, then a \code{SpatialLines} or \code{SpatialLinesDataFrame} object with the same coordinate reference system as \code{rast}. Regardless, a vector is written into the GRASS session. The name of this vector is given by \code{outGrassName}.
-#' @details See the documentation for the GRASS module \code{r.contour} at \url{https://grass.osgeo.org/grass78/manuals/r.contour.html}.
-#' @seealso \code{\link[raster]{contour}}
+#' @details See the documentation for the GRASS module \code{r.contour}{https://grass.osgeo.org/grass82/manuals/r.contour.html}.
+#' @seealso \code{\link[terra]{contour}}
 #' @examples
 #' \donttest{
 #' # change this to where GRASS 7 is installed on your system
-#' grassDir <- 'C:/Program Files/GRASS GIS 7.8' # example for a PC
-#' grassDir <- "/Applications/GRASS-7.8.app/Contents/Resources" # for a Mac
+#' grassDir <- 'C:/Program Files/GRASS GIS 8.2' # example for a PC
+#' grassDir <- "/Applications/GRASS-8.2.app/Contents/Resources" # for a Mac
 #'
 #' data(madElev)
 #' conts1 <- fasterContour(madElev, grassDir=grassDir)
@@ -44,7 +44,7 @@ fasterContour <- function(
 	maxlevel = NULL,
 	levels = seq(minValue(rast), maxValue(rast), length.out=5),
 	cut = 2,
-	grassDir = NULL,
+	grassDir = options('grassDir'),
 	alreadyInGrass = FALSE,
 	grassToR = TRUE,
 	outGrassName = 'contours',
@@ -61,14 +61,14 @@ fasterContour <- function(
 	
 	# execute
 	if (!is.null(levels)) {
-		rgrass7::execGRASS('r.contour', input=input, levels=levels, cut=cut, output=outGrassName, flags=flags, ...)
+		rgrass::execGRASS('r.contour', input=input, levels=levels, cut=cut, output=outGrassName, flags=flags, ...)
 	} else if (!is.null(step) & is.null(minlevel) & is.null(maxlevel)) {
-		rgrass7::execGRASS('r.contour', input=input, step=step, minlevel=minlevel, maxlevel=maxlevel, cut=cut, output=outGrassName, flags=flags, ...)
+		rgrass::execGRASS('r.contour', input=input, step=step, minlevel=minlevel, maxlevel=maxlevel, cut=cut, output=outGrassName, flags=flags, ...)
 	}
 	
 	if (grassToR) {
 
-		out <- rgrass7::readVECT(outGrassName)
+		out <- rgrass::readVECT(outGrassName)
 		out
 		
 	}

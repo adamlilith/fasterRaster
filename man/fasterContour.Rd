@@ -2,7 +2,7 @@
 % Please edit documentation in R/fasterContour.r
 \name{fasterContour}
 \alias{fasterContour}
-\title{Calculate contour vectors from a raster}
+\title{Contour vectors from a raster}
 \usage{
 fasterContour(
   rast,
@@ -29,15 +29,15 @@ fasterContour(
 
 \item{cut}{Integer >= 0. Minimum number of points necessary to generate a contour line. A value of 0 implies no limit. Default is 2.}
 
-\item{grassDir}{Character or \code{NULL} (default). Name of the directory in which GRASS is installed. Example: \code{'C:/Program Files/GRASS GIS 7.8'}. If this is \code{NULL}, R will search for the directory in which GRASS is installed. This usually fails, or if it succeeds, takes several minutes.}
+\item{grassDir}{Character or \code{NULL} (default). Name of the directory in which GRASS is installed. Example for a Windows system: \code{'C:/Program Files/GRASS GIS 8.2'}. If this is \code{NULL}, R will search for the directory in which GRASS is installed. This usually fails, or if it succeeds, takes several minutes.}
 
 \item{alreadyInGrass}{Logical, if \code{FALSE} (default) then start a new GRASS session and import the raster named in \code{rast}. If \code{FALSE}, use a raster already in GRASS with the name given by \code{rast}. The latter is useful if you are chaining \pkg{fasterRaster} functions together and the first function initializes the session. The first function should use \code{alreadyInGrass = FALSE} and subsequent functions should use \code{alreadyInGrass = TRUE} then use their \code{rast} (or \code{vect}) arguments to name the raster (or vector) that was made by the previous function.}
 
-\item{grassToR}{Logical, if \code{TRUE} (default) then the product of the calculations will be returned to R. If \code{FALSE}, then the product is left in the GRASS session and named \code{longitude} and \code{latitude}. The latter case is useful (and faster) when chaining several \pkg{fasterRaster} functions together.}
+\item{grassToR}{Logical, if \code{TRUE} (default) then the output will be returned to R. If \code{FALSE}, then the output is left in the GRASS session and named the value in \code{outGrassName} \code{longitude} and \code{latitude}. The latter case is useful (and faster) when chaining several \pkg{fasterRaster} functions together.}
 
 \item{outGrassName}{Character. Name of output in GRASS. This is useful if you want to refer to the output object in GRASS later in a session.}
 
-\item{...}{Arguments to pass to \code{\link[rgrass7]{execGRASS}} when calculating horizon height (i.e., function \code{r.horizon} in GRASS).}
+\item{...}{Arguments to pass to \code{\link[rgrass]{execGRASS}} when calculating horizon height (i.e., function \code{r.horizon} in GRASS).}
 }
 \value{
 If \code{grassToR} if \code{TRUE}, then a \code{SpatialLines} or \code{SpatialLinesDataFrame} object with the same coordinate reference system as \code{rast}. Regardless, a vector is written into the GRASS session. The name of this vector is given by \code{outGrassName}.
@@ -46,13 +46,13 @@ If \code{grassToR} if \code{TRUE}, then a \code{SpatialLines} or \code{SpatialLi
 This function creates a vector (\code{SpatialLines} or \code{SpatialLinesDataFrame}) object from a raster representing contour lines in the raster. It utilizes the GRASS function \code{r.contour}.
 }
 \details{
-See the documentation for the GRASS module \code{r.contour} at \url{https://grass.osgeo.org/grass78/manuals/r.contour.html}.
+See the documentation for the GRASS module \code{r.contour}{https://grass.osgeo.org/grass82/manuals/r.contour.html}.
 }
 \examples{
 \donttest{
 # change this to where GRASS 7 is installed on your system
-grassDir <- 'C:/Program Files/GRASS GIS 7.8' # example for a PC
-grassDir <- "/Applications/GRASS-7.8.app/Contents/Resources" # for a Mac
+grassDir <- 'C:/Program Files/GRASS GIS 8.2' # example for a PC
+grassDir <- "/Applications/GRASS-8.2.app/Contents/Resources" # for a Mac
 
 data(madElev)
 conts1 <- fasterContour(madElev, grassDir=grassDir)
@@ -71,5 +71,5 @@ plot(conts3, add=TRUE)
 }
 }
 \seealso{
-\code{\link[raster]{contour}}
+\code{\link[terra]{contour}}
 }

@@ -2,7 +2,7 @@
 % Please edit documentation in R/fasterFragmentation.r
 \name{fasterFragmentation}
 \alias{fasterFragmentation}
-\title{Calculate fragmentation indices for a raster}
+\title{Fragmentation indices for a raster (i.e., forest fragmentation)}
 \usage{
 fasterFragmentation(
   rast,

@@ -2,7 +2,7 @@
 % Please edit documentation in R/fasterFocal.r
 \name{fasterFocal}
 \alias{fasterFocal}
-\title{Multi-core version of the focal() function}
+\title{Multi-core focal() function}
 \usage{
 fasterFocal(
   rast,
@@ -42,7 +42,7 @@ fasterFocal(
 
 \item{forceMulti}{Logical, if \code{TRUE} (default) then the function will attempt to use the total number of cores in \code{cores}. (Note that this many not necessarily be faster since each core costs some overhead.)  If \code{FALSE}, then the function will use up to \code{cores} if needed (which also may not be faster... it always depends on the problem being computed).}
 
-\item{...}{Arguments to pass to \code{\link[raster]{writeRaster}}}
+\item{...}{Arguments to pass to \code{\link[terra]{writeRaster}}}
 }
 \value{
 @details The function \code{\link{fasterMapcalc}} \emph{may} be faster.
@@ -50,7 +50,7 @@ fasterFocal(
 A raster object, possibly also written to disk.
 }
 \description{
-This function applies a function that uses values from a "moving window" across a raster. It is exactly the same as the \code{\link[raster]{focal}} function in the \pkg{raster} package except that it can use a multi-core implementation to speed processing.
+This function applies a function that uses values from a "moving window" across a raster. It is exactly the same as the \code{\link[terra]{focal}} function in the \pkg{terra} package except that it can use a multi-core implementation to speed processing.
 }
 \examples{
 
@@ -79,5 +79,5 @@ out <- fasterFocal(madElev, w=w, fun=fx, cores=2, na.rm=TRUE)
 
 }
 \seealso{
-\code{\link[raster]{focal}}, \code{\link{fasterMapcalc}}
+\code{\link[terra]{focal}}, \code{\link{fasterMapcalc}}
 }

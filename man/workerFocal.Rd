@@ -23,6 +23,6 @@ workerFocal(i, blockVals, w, fun = sum, na.rm = TRUE, NAonly = FALSE)
 Matrix.
 }
 \description{
-This function is a generic worker function for a multi-core implementation of the \code{\link[raster]{focal}} function in the \pkg{raster} package. It is usually called by another function and is thus not of great use to most users.
+This function is a generic worker function for a multi-core implementation of the \code{\link[terra]{focal}} function in the \pkg{terra} package. It is usually called by another function and is thus not of great use to most users.
 }
 \keyword{internal}

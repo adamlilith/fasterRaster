@@ -2,7 +2,7 @@
 % Please edit documentation in R/fasterSun.r
 \name{fasterSun}
 \alias{fasterSun}
-\title{Calculate solar radiance and irradiation}
+\title{Rasters of solar radiance and irradiation}
 \usage{
 fasterSun(
   elevation,
@@ -73,11 +73,11 @@ fasterSun(
 
 \item{insol_time}{Logical. If \code{TRUE} (default), generate a raster with total insolation time in hours ("mode 2" of the \code{r.sun} GRASS module).}
 
-\item{grassDir}{Character or \code{NULL} (default). Name of the directory in which GRASS is installed. Example: \code{'C:/Program Files/GRASS GIS 7.8'}. If this is \code{NULL}, R will search for the directory in which GRASS is installed. This usually fails, or if it succeeds, takes several minutes.}
+\item{grassDir}{Character or \code{NULL} (default). Name of the directory in which GRASS is installed. Example for a Windows system: \code{'C:/Program Files/GRASS GIS 8.2'}. If this is \code{NULL}, R will search for the directory in which GRASS is installed. This usually fails, or if it succeeds, takes several minutes.}
 
 \item{alreadyInGrass}{Logical, if \code{FALSE} (default) then start a new GRASS session and import the raster named in \code{rast}. If \code{FALSE}, use a raster already in GRASS with the name given by \code{rast}. The latter is useful if you are chaining \pkg{fasterRaster} functions together and the first function initializes the session. The first function should use \code{alreadyInGrass = FALSE} and subsequent functions should use \code{alreadyInGrass = TRUE} then use their \code{rast} (or \code{vect}) arguments to name the raster (or vector) that was made by the previous function.}
 
-\item{grassToR}{Logical, if \code{TRUE} (default) then the product of the calculations will be returned to R. If \code{FALSE}, then the product is left in the GRASS session and named \code{longitude} and \code{latitude}. The latter case is useful (and faster) when chaining several \pkg{fasterRaster} functions together.}
+\item{grassToR}{Logical, if \code{TRUE} (default) then the output will be returned to R. If \code{FALSE}, then the output is left in the GRASS session and named the value in \code{outGrassName} \code{longitude} and \code{latitude}. The latter case is useful (and faster) when chaining several \pkg{fasterRaster} functions together.}
 
 \item{time}{Positive numeric. Local solar time. Used for "mode 1" in the \code{r.sun} GRASS module. Default is \code{NULL} (i.e., use "mode 2").}
 }
@@ -88,13 +88,13 @@ If \code{grassToR} if \code{TRUE}, then a raster or raster stack stack with the 
 This function calculates beam (direct), diffuse and ground reflected solar irradiation for a given day and set of topographic and atmospheric conditions. It utilizes the GRASS function \code{r.sun}. This function only works in "mode 2" of \code{r.run}.
 }
 \details{
-See the documentation for the GRASS module \code{r.sun} at \url{https://grass.osgeo.org/grass78/manuals/r.sun.html}.
+See the documentation for the GRASS module \code{r.sun}{https://grass.osgeo.org/grass82/manuals/r.sun.html}.
 }
 \examples{
 \donttest{
 # change this to where GRASS 7 is installed on your system
-grassDir <- 'C:/Program Files/GRASS GIS 7.8' # example for a PC
-grassDir <- "/Applications/GRASS-7.8.app/Contents/Resources" # for a Mac
+grassDir <- 'C:/Program Files/GRASS GIS 8.2' # example for a PC
+grassDir <- "/Applications/GRASS-8.2.app/Contents/Resources" # for a Mac
 
 # NB This examples uses "chaining" of a GRASS session between faster
 # functions. That is, rasters are created in GRASS then kept in GRASS

@@ -2,7 +2,7 @@
 % Please edit documentation in R/fragmentation.r
 \name{fragmentation}
 \alias{fragmentation}
-\title{Calculate fragmentation indices for a raster}
+\title{Fragmentation indices for a raster (i.e., forest fragmentation)}
 \usage{
 fragmentation(
   rast,
@@ -59,7 +59,7 @@ Note that this differs somewhat from the numbering scheme presented by
 Riitters et al. (2000) and their errata.
 }
 \description{
-The function calculates a set of fragmentation indices as per Riitters, K., J. Wickham, R. O'Neill, B. Jones, and E. Smith. 2000. Global-scale patterns of forest fragmentation. Conservation Ecology 4:3. URL: <https://www.jstor.org/stable/26271763>. (Also note the erratum to the paper on their classification scheme at <https://www.ecologyandsociety.org/vol4/iss2/art3/errata/january26.2001.html>). Note that this function does \emph{not} use GRASS but rather the \code{\link[raster]{focal}} function in the \pkg{raster} package, so it is potentially very slow and may not work for very large rasters.
+The function calculates a set of fragmentation indices as per Riitters, K., J. Wickham, R. O'Neill, B. Jones, and E. Smith. 2000. Global-scale patterns of forest fragmentation. Conservation Ecology 4:3. URL: <https://www.jstor.org/stable/26271763>. (Also note the erratum to the paper on their classification scheme at <https://www.ecologyandsociety.org/vol4/iss2/art3/errata/january26.2001.html>). Note that this function does \emph{not} use GRASS but rather the \code{\link[terra]{focal}} function in the \pkg{terra} package, so it is potentially very slow and may not work for very large rasters.
 }
 \examples{
 \donttest{

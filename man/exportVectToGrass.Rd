@@ -7,7 +7,7 @@
 exportVectToGrass(vect, grassName = "vect", tempDir = raster::tmpDir())
 }
 \arguments{
-\item{vect}{Vector layer. This can be an object of class \code{Spatial} (\pkg{sp} package, so for example, a \code{SpatialPolygons} object), or \code{SpatVector} (\pkg{terra} package), or \code{sf} (\pkg{sf} package).}
+\item{vect}{A \code{SpatVector} (\pkg{terra} package) or \code{sf} (\pkg{sf} package) spatial vector object.}
 
 \item{grassName}{Name of vector in GRASS.}
 
@@ -17,5 +17,19 @@ exportVectToGrass(vect, grassName = "vect", tempDir = raster::tmpDir())
 Nothing (exports a vector to a GRASS session so it can be used by other functions).
 }
 \description{
-Write a raster to an existing GRASS session with handling for very big rasters.
+Write a raster to an existing GRASS session.
+}
+\examples{
+
+\donttest{
+
+data(madCoast0)
+data(madCoast4)
+
+# start a GRASS session
+initGrass(madCoast0)
+exportVectToGrass(madCoast4)
+
+}
+
 }

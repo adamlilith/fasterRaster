@@ -16,7 +16,7 @@ fasterConvertDegree(
 \arguments{
 \item{x}{Numeric vector or raster. Values should represent degrees. The conversion is symmetric, so \code{x} can represent degrees in the system where 0 is north or 0 is east.}
 
-\item{grassDir}{Character or \code{NULL} (default). Name of the directory in which GRASS is installed. Example: \code{'C:/Program Files/GRASS GIS 7.8'}. If this is \code{NULL}, R will search for the directory in which GRASS is installed. This usually fails, or if it succeeds, takes several minutes.}
+\item{grassDir}{Character or \code{NULL} (default). Name of the directory in which GRASS is installed. Example for a Windows system: \code{'C:/Program Files/GRASS GIS 8.2'}. If this is \code{NULL}, R will search for the directory in which GRASS is installed. This usually fails, or if it succeeds, takes several minutes.}
 
 \item{alreadyInGrass}{Logical, if \code{FALSE} (default) then start a new GRASS session and import the raster named in \code{x}. If \code{FALSE}, use a raster already in GRASS with the name given by \code{x}. The latter is useful if you are chaining \pkg{fasterRaster} functions together and the first function initializes the session. The first function should use \code{alreadyInGrass = FALSE} and subsequent functions should use \code{alreadyInGrass = TRUE} then use their \code{rast} (or \code{vect}) arguments to name the raster (or vector) that was made by the previous function.}
 
@@ -24,7 +24,7 @@ fasterConvertDegree(
 
 \item{outGrassName}{Character. Name of output in GRASS. This is useful if you want to refer to the output object in GRASS later in a session.}
 
-\item{...}{Arguments to send to \code{\link[rgrass7]{execGRASS}}.}
+\item{...}{Arguments to send to \code{\link[rgrass]{execGRASS}}.}
 }
 \value{
 Numeric, raster, or raster stack. Regardless, a set of rasters will be written into the current GRASS session. The name(s) of the rasters inn GRASS will be given by \code{outGrassName} with \code{'_', i} appended, where \code{i} starts at 1 for the first raster and increments by 1. For example, if \code{outGrassName = 'degreeConvert'}, then the raster(s) will be named \code{degreeConvert_1}, \code{degreeConvert_2}, etc.
@@ -39,8 +39,8 @@ fasterConvertDegree(seq(0, 360, by=90))
 
 \donttest{
 # change this according to where GRASS 7 is installed on your system
-grassDir <- 'C:/Program Files/GRASS GIS 7.8' # example for a PC
-grassDir <- "/Applications/GRASS-7.8.app/Contents/Resources" # for a Mac
+grassDir <- 'C:/Program Files/GRASS GIS 8.2' # example for a PC
+grassDir <- "/Applications/GRASS-8.2.app/Contents/Resources" # for a Mac
 
 # Example with a raster:
 # First, generate an aspect raster from an elevation raster.

@@ -2,7 +2,7 @@
 % Please edit documentation in R/faster.r
 \name{faster}
 \alias{faster}
-\title{Generic function to call a GRASS module}
+\title{Generic function to call a GRASS function (module)}
 \usage{
 faster(
   mod,
@@ -36,11 +36,11 @@ faster(
 
 \item{...}{Arguments to pass to the GRASS module through \code{\link[grass7]{execGRASS}}.}
 
-\item{grassDir}{Character or \code{NULL} (default). Name of the directory in which GRASS is installed. Example: \code{'C:/Program Files/GRASS GIS 7.8'}. If this is \code{NULL}, R will search for the directory in which GRASS is installed. This usually fails, or if it succeeds, takes several minutes.}
+\item{grassDir}{Character or \code{NULL} (default). Name of the directory in which GRASS is installed. Example for a Windows system: \code{'C:/Program Files/GRASS GIS 8.2'}. If this is \code{NULL}, R will search for the directory in which GRASS is installed. This usually fails, or if it succeeds, takes several minutes.}
 
 \item{alreadyInGrass}{Logical, if \code{FALSE} (default) then start a new GRASS session and import the raster named in \code{rast}. If \code{FALSE}, use a raster already in GRASS with the name given by \code{rast}. The latter is useful if you are chaining \pkg{fasterRaster} functions together and the first function initializes the session. The first function should use \code{alreadyInGrass = FALSE} and subsequent functions should use \code{alreadyInGrass = TRUE} then use their \code{rast} (or \code{vect}) arguments to name the raster (or vector) that was made by the previous function.}
 
-\item{grassToR}{Logical, if \code{TRUE} (default) then the product of the calculations will be returned to R. If \code{FALSE}, then the product is left in the GRASS session and named \code{vectToRast}. The latter case is useful (and faster) when chaining several \pkg{fasterRaster} functions together.}
+\item{grassToR}{Logical, if \code{TRUE} (default) then the output will be returned to R. If \code{FALSE}, then the output is left in the GRASS session and named the value in \code{outGrassName} \code{vectToRast}. The latter case is useful (and faster) when chaining several \pkg{fasterRaster} functions together.}
 }
 \value{
 A raster, vector, or some other product of the GRASS module.
@@ -49,13 +49,13 @@ A raster, vector, or some other product of the GRASS module.
 This function is wrapper for \code{\link[grass7]{execGRASS}}, plus code necessary to initiate a GRASS session. Many of the functions in \pkg{fasterRaster} actually utilize this function.  This function works best for modules that take one raster and/or one vector as input and produce one raster or vector as output.
 }
 \details{
-For a list of vector commands, please see <https://grass.osgeo.org/grass78/manuals/vector.html>. For a list of raster commands, please see <https://grass.osgeo.org/grass78/manuals/raster.html>.
+For a list of vector commands, please see <https://grass.osgeo.org/grass82/manuals/vector.html>. For a list of raster commands, please see <https://grass.osgeo.org/grass82/manuals/raster.html>.
 }
 \examples{
 \donttest{
 # change this to where GRASS 7 is installed on your system:
-grassDir <- 'C:/Program Files/GRASS GIS 7.8' # example for a PC
-grassDir <- "/Applications/GRASS-7.8.app/Contents/Resources" # for a Mac
+grassDir <- 'C:/Program Files/GRASS GIS 8.2' # example for a PC
+grassDir <- "/Applications/GRASS-8.2.app/Contents/Resources" # for a Mac
 
 data(madForest2000)
 latRast <- faster('r.latlong', rast=madForest2000, outType='rast',

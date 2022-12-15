@@ -3,9 +3,9 @@
 \docType{data}
 \name{madElev}
 \alias{madElev}
-\title{Spatial data: digital elevation model (DEM) of a portion of Madagascar}
+\title{Digital elevation model (DEM) of a portion of the coastline of Madagascar}
 \format{
-An object of class \code{'raster'}. See \code{\link[raster]{raster}}. Values are mean meters above sea level.
+An object of class \code{'SpatRaster'}. Values are mean meters above sea level.
 }
 \source{
 \href{https://lta.cr.usgs.gov/GMTED2010}{GMTED2010}
@@ -17,10 +17,14 @@ data(madElev)
 Rasterized digital elevation model (DEM) of a portion of Madagascar at 7.5-arcmin spatial resolution.
 }
 \examples{
-data(madElev)
+
+library(terra)
+rastFile <- system.file('extdata', 'madElev.tif', package='enmSdmX')
+madElev <- rast(rastFile)
 plot(madElev)
+
 }
 \references{
 Danielson, J.J. and Gesch, D.B. 2010. Global Multi-resolution Terrain Elevation Data 2010 (GMTED2010). US Geological Survey. Open-File Report 2011-1073 (\href{https://pubs.usgs.gov/of/2011/1073/pdf/of2011-1073.pdf}{GMTED2010})
 }
-\keyword{datasets}
+\keyword{elevation}

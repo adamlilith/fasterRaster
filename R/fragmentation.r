@@ -1,6 +1,6 @@
-#' Calculate fragmentation indices for a raster
+#' Fragmentation indices for a raster (i.e., forest fragmentation)
 #'
-#' The function calculates a set of fragmentation indices as per Riitters, K., J. Wickham, R. O'Neill, B. Jones, and E. Smith. 2000. Global-scale patterns of forest fragmentation. Conservation Ecology 4:3. URL: <https://www.jstor.org/stable/26271763>. (Also note the erratum to the paper on their classification scheme at <https://www.ecologyandsociety.org/vol4/iss2/art3/errata/january26.2001.html>). Note that this function does \emph{not} use GRASS but rather the \code{\link[raster]{focal}} function in the \pkg{raster} package, so it is potentially very slow and may not work for very large rasters.
+#' The function calculates a set of fragmentation indices as per Riitters, K., J. Wickham, R. O'Neill, B. Jones, and E. Smith. 2000. Global-scale patterns of forest fragmentation. Conservation Ecology 4:3. URL: <https://www.jstor.org/stable/26271763>. (Also note the erratum to the paper on their classification scheme at <https://www.ecologyandsociety.org/vol4/iss2/art3/errata/january26.2001.html>). Note that this function does \emph{not} use GRASS but rather the \code{\link[terra]{focal}} function in the \pkg{terra} package, so it is potentially very slow and may not work for very large rasters.
 #' @param rast Raster with binary values (1 or 0 or \code{NA}).
 #' @param size Integer, number of cells wide and high of the window used to calculate fragmentation. This must be an odd integer (default is 3).
 #' @param pad Logical, if \code{TRUE} then add virtual rows and columns around the raster so that there are no edge effects. The virtual rows and columns are set to equal \code{padValue}. Default is \code{FALSE}.
@@ -84,7 +84,7 @@ fragmentation <- function(
 	
 	# add padding around raster to avoid edge effects
 	if (pad) {
-		origExtent <- raster::extent(rast)
+		origExtent <- terra::ext(rast)
 		rast <- raster::extend(rast, y=halfWindowSize, value=padValue)
 	}
 
@@ -103,7 +103,7 @@ fragmentation <- function(
 		out <- raster::stack(classification, out)
 	}
 	
-	raster::projection(out) <- raster::projection(rast)
+	terra::crs(out) <- terra::crs(rast)
 	if (pad) out <- raster::crop(out, origExtent)	
 	out
 	

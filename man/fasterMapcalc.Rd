@@ -13,7 +13,7 @@ fasterMapcalc(
 )
 }
 \arguments{
-\item{...}{Arguments to pass to \code{\link[rgrass7]{execGRASS}} when calculating horizon height (i.e., function \code{r.horizon} in GRASS).}
+\item{...}{Arguments to pass to \code{\link[rgrass]{execGRASS}} when calculating horizon height (i.e., function \code{r.horizon} in GRASS).}
 
 \item{expression}{Character. Formula to evaluate. Below are examples where the input raster is named "rast" in the GRASS session and the output raster will be named "out". Note that rasters passed as rasters/stacks/bricks must be referred to in formulae using their raster name (not name in R). In other words, in the examples below we could call a raster in R \code{myRast} but \code{names(myRast)} yields \code{rast}, so we need to call it "\code{rast}" in the formulae. The raster "\code{out}" will be created by the function.
 \itemize{
@@ -24,13 +24,13 @@ fasterMapcalc(
 \item Low-pass (averaging) filter across a 3x3 neighborhood: \code{'out = (rast[-1, -1] + rast[-1, 0] + rast[-1, 1] + rast[0, -1] + rast[0, 0] + rast[0, 1] + rast[1, -1] + rast[1, 0] + rast[1, 1]) / 9'}
 \item High-pass ("edge-finding") filter across a 3x3 neighborhood: \code{'out = -0.7 * rast[-1, -1] -1 * rast[-1, 0] -0.7 * rast[-1, 1] -1 * rast[0, -1] + 6.8 * rast[0, 0] -1 * rast[0, 1] -0.7 * rast[1, -1] -1 * rast[1, 0] -0.7 * rast[1, 1]'}
 }
-See the documentation for \code{r.mapcalc} at \url{https://grass.osgeo.org/grass78/manuals/r.mapcalc.html} for more information. Note that some operations that may make sense in GRASS may not make sense when exported back to R (e.g., changing color).}
+See the documentation for \code{r.mapcalc}{https://grass.osgeo.org/grass82/manuals/r.mapcalc.html} for more information. Note that some operations that may make sense in GRASS may not make sense when exported back to R (e.g., changing color).}
 
-\item{grassDir}{Character or \code{NULL} (default). Name of the directory in which GRASS is installed. Example: \code{'C:/Program Files/GRASS GIS 7.8'}. If this is \code{NULL}, R will search for the directory in which GRASS is installed. This usually fails, or if it succeeds, takes several minutes.}
+\item{grassDir}{Character or \code{NULL} (default). Name of the directory in which GRASS is installed. Example for a Windows system: \code{'C:/Program Files/GRASS GIS 8.2'}. If this is \code{NULL}, R will search for the directory in which GRASS is installed. This usually fails, or if it succeeds, takes several minutes.}
 
 \item{alreadyInGrass}{Logical, if \code{FALSE} (default) then start a new GRASS session and import the raster named in \code{rast}. If \code{FALSE}, use a raster already in GRASS with the name given by \code{rast}. The latter is useful if you are chaining \pkg{fasterRaster} functions together and the first function initializes the session. The first function should use \code{alreadyInGrass = FALSE} and subsequent functions should use \code{alreadyInGrass = TRUE} then use their \code{rast} (or \code{vect}) arguments to name the raster (or vector) that was made by the previous function.}
 
-\item{grassToR}{Logical, if \code{TRUE} (default) then the product of the calculations will be returned to R. If \code{FALSE}, then the product is left in the GRASS session and named \code{longitude} and \code{latitude}. The latter case is useful (and faster) when chaining several \pkg{fasterRaster} functions together.}
+\item{grassToR}{Logical, if \code{TRUE} (default) then the output will be returned to R. If \code{FALSE}, then the output is left in the GRASS session and named the value in \code{outGrassName} \code{longitude} and \code{latitude}. The latter case is useful (and faster) when chaining several \pkg{fasterRaster} functions together.}
 }
 \value{
 If \code{grassToR} if \code{TRUE}, then a raster object with the same coordinate reference system, extent, and resolution as \code{rast}. Regardless, a raster by a name given in \code{expression} (before the "=" symbol) is written into the GRASS session.
@@ -39,14 +39,14 @@ If \code{grassToR} if \code{TRUE}, then a raster object with the same coordinate
 This function creates a raster from another raster based on a user-defined function. It utilizes the GRASS module \code{r.mapcalc}.
 }
 \details{
-See the documentation for the GRASS module \code{r.mapcalc} at \url{https://grass.osgeo.org/grass78/manuals/r.mapcalc.html}. The function \code{\link{fasterFocal}} \emph{may} be faster for focal calculations.
+See the documentation for the GRASS module \code{r.mapcalc}{https://grass.osgeo.org/grass82/manuals/r.mapcalc.html}. The function \code{\link{fasterFocal}} \emph{may} be faster for focal calculations.
 }
 \examples{
 
 \donttest{
 # change this to where GRASS 7 is installed on your system
-grassDir <- 'C:/Program Files/GRASS GIS 7.8' # example for a PC
-grassDir <- "/Applications/GRASS-7.8.app/Contents/Resources" # for a Mac
+grassDir <- 'C:/Program Files/GRASS GIS 8.2' # example for a PC
+grassDir <- "/Applications/GRASS-8.2.app/Contents/Resources" # for a Mac
 
 data(madElev)
 names(madElev) <- 'madElev'
@@ -92,5 +92,5 @@ plot(mapcalc - rast)
 }
 }
 \seealso{
-\code{\link[raster]{calc}}, \code{\link[raster]{focal}}, \code{\link{fasterFocal}}
+\code{\link[terra]{calc}}, \code{\link[terra]{focal}}, \code{\link{fasterFocal}}
 }

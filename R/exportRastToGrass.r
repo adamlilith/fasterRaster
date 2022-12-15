@@ -1,21 +1,33 @@
 #' Write raster to an existing GRASS session
 #'
 #' Write a raster to an existing GRASS session with handling for very big rasters.
-#' @param rast Raster layer. This can be of class \code{raster} (\pkg{raster} package) or \code{SpatRaster} (\pkg{terra} package).
-#' @param grassName Name of raster in GRASS.
-#' @param tempDir Temporary directory.
+#' @param rast A \code{SpatRaster} raster.
+#' @param grassName What to name the raster in GRASS.
 #' @return Nothing (exports a raster to a GRASS session so it can be used by other functions).
+#'
+#' @examples
+#'
+#' \donttest{
+#'
+#' rastFile <- system.file('extdata', 'madForest2000.tif', package='fasterRaster')
+#' madForest2000 <- rast(rastFile)
+#'
+#' rastFile <- system.file('extdata', 'madElev.tif', package='fasterRaster')
+#' madElev <- rast(rastFile)
+#'
+#' # start a GRASS session
+#' initGrass(madForest2000, grassDir = grassDir)
+#' exportRastToGrass(madElev, grassName = 'madElev', grassDir = grassDir)
+#'
+#' }
+#'
 #' @export
 exportRastToGrass <- function(
 	rast,
-	grassName = 'rast',
-	tempDir = raster::tmpDir()
+	grassName = 'rast'
 ) {
 
-	rgrass7::use_sp()
-
-	if (inherits(rast, 'SpatRaster')) rast <- raster::raster(rast)
-	rastSGDF <- methods::as(rast, 'SpatialGridDataFrame')
-	rgrass7::writeRAST(rastSGDF, vname=grassName, overwrite=TRUE)
+	if (inherits(rast, 'Raster')) rast <- terra::rast(rast)
+	rgrass::write_RAST(rast, vname=grassName, overwrite=TRUE, verbose=FALSE)
 
 }

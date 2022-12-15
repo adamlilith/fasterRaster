@@ -1,4 +1,4 @@
-#' Calculate fragmentation indices for a raster
+#' Fragmentation indices for a raster (i.e., forest fragmentation)
 #'
 #' This function uses multiple CPU cores to speed calculation of a set of fragmentation indices as per Riitters, K., J. Wickham, R. O'Neill, B. Jones, and E. Smith. 2000. Global-scale patterns of forest fragmentation. Conservation Ecology 4:3. URL: <https://www.jstor.org/stable/26271763>. (Also note the erratum to the paper on their classification scheme at <https://www.ecologyandsociety.org/vol4/iss2/art3/errata/january26.2001.html>). Unlike many functions in the \pkg{fasterRaster} package this function does \emph{not} use GRASS but rather multiple cores. It is a wrapper for \code{\link[fasterRaster]{fasterFocal}}.
 #' @param rast Raster with binary values (1 or 0 or \code{NA}).
@@ -17,7 +17,6 @@
 #' 	\item \code{random}: Undetermined cases will be assigned a value of 3 or 4 at random ("perforated" or "edge").
 #' }
 #' @param cores Integer >0, number of CPU cores to use to calculate the focal function (default is 2).
-#' @param forceMulti Logical, if \code{TRUE} (default) then the function will attempt to use the total number of cores in \code{cores}. (Note that this many not necessarily be faster since each core costs some overhead.)  If \code{FALSE}, then the function will use up to \code{cores} if needed (which also may not be faster... it always depends on the problem being computed).
 #' @param verbose Logical. If \code{TRUE} then print progress indicators. Default is \code{FALSE}.
 #' @param ... Additional arguments to send to \code{\link[fasterRaster]{fragmentation}} (which is used when only one core is used).
 #' @return A raster stack with three rasters: a fragmentation classification (named \code{class}), the density of "1" pixels in the window (named \code{density}--called "pf" in Riitter et al. 2000), and a connectivity raster (conditional probability a cell with a value of 1 has a value that is also 1; named \code{connect}--called "pff" in Riitter et al. 2000).
@@ -72,7 +71,6 @@ fasterFragmentation <- function(
 	na.rm = FALSE,
 	undet = 'undetermined',
 	cores = 2,
-	forceMulti = TRUE,
 	verbose = FALSE,
 	...
 ) {
@@ -85,7 +83,7 @@ fasterFragmentation <- function(
 	if (inherits(rast, 'SpatRaster')) rast <- raster::raster(rast)
 
 	# number of cores
-	cores <- .getCores(rast = rast, cores = cores, forceMulti = forceMulti)	
+	cores <- .getCores(rast = rast, cores = cores)	
 	
 	### single core
 	if (cores == 1) {
@@ -116,7 +114,7 @@ fasterFragmentation <- function(
 				flush.console()
 			}
 
-			fragDensity <- fasterFocal(rast=rast, w=size, fun=.fragDensity, na.rm=na.rm, cores=cores, forceMulti=forceMulti, filename='', pad=pad, padValue=padValue, NAonly=FALSE, progress=verbose)
+			fragDensity <- fasterFocal(rast=rast, w=size, fun=.fragDensity, na.rm=na.rm, cores=cores, filename='', pad=pad, padValue=padValue, NAonly=FALSE, progress=verbose)
 
 			names(fragDensity) <- 'density'
 
@@ -130,7 +128,7 @@ fasterFragmentation <- function(
 				flush.console()
 			}
 
-			fragConnect <- fasterFocal(rast=rast, w=size, fun=.fragConnect, na.rm=na.rm, cores=cores, forceMulti=forceMulti, filename='', pad=pad, padValue=padValue, NAonly=FALSE, progress=verbose)
+			fragConnect <- fasterFocal(rast=rast, w=size, fun=.fragConnect, na.rm=na.rm, cores=cores, filename='', pad=pad, padValue=padValue, NAonly=FALSE, progress=verbose)
 
 			names(fragConnect) <- 'connect'
 

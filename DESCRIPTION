@@ -1,8 +1,8 @@
 Package: fasterRaster
 Type: Package
 Title: Faster raster processing in R using GRASS GIS
-Version: 0.7.2
-Date: 2022-09-30
+Version: 1.0.0
+Date: 2022-12-13
 Authors@R: 
 	c(
 		person(
@@ -14,35 +14,27 @@ Authors@R:
 		)
 	)
 Maintainer: Adam B. Smith <adam.smith@mobot.org>
-Description: Making raster and vector processing faster using
-	GRASS GIS! This package uses multi-core processing and
-	GRASS GIS Version 7.8 to do some of the more laborious
-	raster/vector operations faster than what can be done
-	using the raster, terra, or sf packages. For smaller
-	rasters or vectors, functions in the raster, terra, or
-	sf packages may actually be faster, but in some cases,
-	fasterRaster will be faster! Note that to use
-	many of the functions in this package you must have the
-	stand-alone version  (not the OSGeo version) of GRASS
-	7.8 installed on your system. It has not been tested
-	with versions higher than 7.8, but it might work!
+Description: Faster raster and spatial vector processing using 'GRASS GIS' and
+	`multi-core	processing. Standard functions include projecting and
+	resampling, rasterizing, cropping, and other usual raster/vector operations.
+	Speciality functions include calculation of landscape (i.e., forest)
+	fragmentation indices (Riitters et al. 2000)<https::https://www.ecologyandsociety.org/vol4/iss2/art3/>,
+	custom focal functions, and generation of fractal landscapes. This package
+	is not a replacement for 'terra' or 'sf', but rather offers support for
+	cases where functions in those packages fail or otherwise are very slow
+	owing to memory requirements. Note that to use many of the functions you
+	must have the stand-alone version (not insalled through the 'OSGeoW4'
+	installer) of 'GRASS GIS' 8.2 or higher.
 Depends:
-	link2GI,
-	raster,
-	rgrass7
+	R (>= 4.0.0)
 Imports:
-	methods,
 	parallel,
-	rgdal,
-	sp
-Suggests:
-	knitr,
-	rgeos,
+	rgrass,
 	sf,
-	terra,
-    testthat
+	terra
+Suggests:
 License: GPL (>=3) + file LICENSE
-SystemRequirements: GRASS (>= 7)
+SystemRequirements: GRASS (>= 8)
 URL: http://www.earthSkySea.org
 BugReports: https://github.com/adamlilith/fasterRaster/issues
 VignetteBuilder: knitr

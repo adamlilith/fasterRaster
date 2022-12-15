@@ -1,6 +1,6 @@
-#' Multi-core version of the focal() function
+#' Multi-core focal() function
 #'
-#' This function applies a function that uses values from a "moving window" across a raster. It is exactly the same as the \code{\link[raster]{focal}} function in the \pkg{raster} package except that it can use a multi-core implementation to speed processing.
+#' This function applies a function that uses values from a "moving window" across a raster. It is exactly the same as the \code{\link[terra]{focal}} function in the \pkg{terra} package except that it can use a multi-core implementation to speed processing.
 #' @param rast Raster object.
 #' @param w Matrix of weights (the moving window), e.g. a 3 by 3 matrix with values 1. The matrix does not need to be square, but the sides must be odd numbers. If you need even sides, you can add a column or row with weights of zero. Alternatively, \code{w} can be an odd integer > 0, in which case a weights matrix \code{w} by \code{w} in size is created with every value equal to 1.
 #' @param fun Function. The function must accept multiple numbers and return a single number. For example \code{mean}, \code{min}, or \code{max}. The function should also accept a \code{na.rm} argument (or ignore it, e.g. as one of the 'dots' arguments). For example, \code{length} will fail, but \code{function(rast, ...) { na.omit(length(rast)) }} works. The default function is \code{sum}.
@@ -11,11 +11,10 @@
 #' @param progress Logical, if \code{TRUE} display a progress bar. Only works if using multi-core calculation.
 #' @param NAonly Logical, if \code{TRUE} then only cells with a value of \code{NA} have values replaced. Default is \code{FALSE}.
 #' @param cores Integer >0, number of CPU cores to use to calculate the focal function (default is 2).
-#' @param forceMulti Logical, if \code{TRUE} (default) then the function will attempt to use the total number of cores in \code{cores}. (Note that this many not necessarily be faster since each core costs some overhead.)  If \code{FALSE}, then the function will use up to \code{cores} if needed (which also may not be faster... it always depends on the problem being computed).
-#' @param ... Arguments to pass to \code{\link[raster]{writeRaster}}
+#' @param ... Arguments to pass to \code{\link[terra]{writeRaster}}
 #' @return @details The function \code{\link{fasterMapcalc}} \emph{may} be faster.
 #' @return A raster object, possibly also written to disk.
-#' @seealso \code{\link[raster]{focal}}, \code{\link{fasterMapcalc}}
+#' @seealso \code{\link[terra]{focal}}, \code{\link{fasterMapcalc}}
 #' @examples
 #'
 #' \donttest{
@@ -53,14 +52,13 @@ fasterFocal <- function(
 	NAonly = FALSE,
 	progress = FALSE,
 	cores = 2,
-	forceMulti = TRUE,
 	...
 ) {
 
 	if (inherits(rast, 'SpatRaster')) rast <- raster::raster(rast)
 
 	# get number of cores and chunks of raster
-	cores <- .getCores(rast = rast, cores = cores, forceMulti = forceMulti)
+	cores <- .getCores(rast = rast, cores = cores)
 	blocks <- raster::blockSize(rast, minblocks=cores)
 	
 	# single core
@@ -101,7 +99,7 @@ fasterFocal <- function(
 
 		# add padding around raster to avoid edge effects
 		if (pad) {
-			origExtent <- raster::extent(rast)
+			origExtent <- terra::ext(rast)
 			rast <- raster::extend(rast, y=halfWindowSize, value=padValue)
 		}
 	
@@ -234,8 +232,8 @@ fasterFocal <- function(
 		} else {
 		
 			out <- raster(out)
-			raster::projection(out) <- raster::projection(rast)
-			raster::extent(out) <- raster::extent(rast)
+			terra::crs(out) <- terra::crs(rast)
+			terra::ext(out) <- terra::ext(rast)
 		
 		}
 		
@@ -250,7 +248,7 @@ fasterFocal <- function(
 
 #' Initialize GRASS session and import raster and/or vector(s).
 #'
-#' This function is a generic worker function for a multi-core implementation of the \code{\link[raster]{focal}} function in the \pkg{raster} package. It is usually called by another function and is thus not of great use to most users.
+#' This function is a generic worker function for a multi-core implementation of the \code{\link[terra]{focal}} function in the \pkg{terra} package. It is usually called by another function and is thus not of great use to most users.
 #' @param i Integer > 0, ID number for the node on which calculations are being conducted.
 #' @param blockVals Matrix.
 #' @param w Matrix of weights (the moving window), e.g. a 3 by 3 matrix with values 1. The matrix does not need to be square, but the sides must be odd numbers. If you need even sides, you can add a column or row with weights of zero. Alternatively, \code{w} can be an odd integer > 0, in which case a weights matrix \code{w} by \code{w} in size is created with every value equal to 1.

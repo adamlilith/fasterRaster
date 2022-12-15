@@ -2,7 +2,7 @@
 % Please edit documentation in R/fasterHorizon.r
 \name{fasterHorizon}
 \alias{fasterHorizon}
-\title{Calculate horizon angle height raster}
+\title{Horizon angle height raster from an elevation raster}
 \usage{
 fasterHorizon(
   rast,
@@ -32,15 +32,15 @@ fasterHorizon(
 
 \item{maxDist}{Either \code{NULL} (default) or numeric >= 0. Maximum distance to consider when finding horizon height. If \code{NULL} (default), the maximum distance is the full extent of the raster. Smaller values can decrease run time but also reduce accuracy.}
 
-\item{grassDir}{Character or \code{NULL} (default). Name of the directory in which GRASS is installed. Example: \code{'C:/Program Files/GRASS GIS 7.8'}. If this is \code{NULL}, R will search for the directory in which GRASS is installed. This usually fails, or if it succeeds, takes several minutes.}
+\item{grassDir}{Character or \code{NULL} (default). Name of the directory in which GRASS is installed. Example for a Windows system: \code{'C:/Program Files/GRASS GIS 8.2'}. If this is \code{NULL}, R will search for the directory in which GRASS is installed. This usually fails, or if it succeeds, takes several minutes.}
 
 \item{alreadyInGrass}{Logical, if \code{FALSE} (default) then start a new GRASS session and import the raster named in \code{rast}. If \code{FALSE}, use a raster already in GRASS with the name given by \code{rast}. The latter is useful if you are chaining \pkg{fasterRaster} functions together and the first function initializes the session. The first function should use \code{alreadyInGrass = FALSE} and subsequent functions should use \code{alreadyInGrass = TRUE} then use their \code{rast} (or \code{vect}) arguments to name the raster (or vector) that was made by the previous function.}
 
-\item{grassToR}{Logical, if \code{TRUE} (default) then the product of the calculations will be returned to R. If \code{FALSE}, then the product is left in the GRASS session and named \code{longitude} and \code{latitude}. The latter case is useful (and faster) when chaining several \pkg{fasterRaster} functions together.}
+\item{grassToR}{Logical, if \code{TRUE} (default) then the output will be returned to R. If \code{FALSE}, then the output is left in the GRASS session and named the value in \code{outGrassName} \code{longitude} and \code{latitude}. The latter case is useful (and faster) when chaining several \pkg{fasterRaster} functions together.}
 
 \item{outGrassName}{Character. Name of output in GRASS. This is useful if you want to refer to the output object in GRASS later in a session.}
 
-\item{...}{Arguments to pass to \code{\link[rgrass7]{execGRASS}} when calculating horizon height (i.e., function \code{r.horizon} in GRASS).}
+\item{...}{Arguments to pass to \code{\link[rgrass]{execGRASS}} when calculating horizon height (i.e., function \code{r.horizon} in GRASS).}
 
 \item{distance}{Numeric in the range [0.5, 1.5] (default is 1). This determines the step size when searching for the horizon from a given point. The default value of 1 goes cell-by-cell (i.e., search distance step size is one cell width).}
 }
@@ -51,13 +51,13 @@ If \code{grassToR} if \code{TRUE}, then a raster or raster stack stack with the 
 This function calculates a raster where values represent the height of the horizon for any cell in a particular direction. Height is given in radians (default) or degrees. It utilizes the GRASS function \code{r.horizon}.
 }
 \details{
-See the documentation for the GRASS module \code{r.horizon} at \url{https://grass.osgeo.org/grass78/manuals/r.horizon.html}.
+See the documentation for the GRASS module \code{r.horizon}{https://grass.osgeo.org/grass82/manuals/r.horizon.html}.
 }
 \examples{
 \donttest{
 # change this to where GRASS 7 is installed on your system
-grassDir <- 'C:/Program Files/GRASS GIS 7.8' # example for a PC
-grassDir <- "/Applications/GRASS-7.8.app/Contents/Resources" # for a Mac
+grassDir <- 'C:/Program Files/GRASS GIS 8.2' # example for a PC
+grassDir <- "/Applications/GRASS-8.2.app/Contents/Resources" # for a Mac
 
 data(madElev)
 elevHeight_deg <- fasterHorizon(madElev, units='degrees', grassDir=grassDir)

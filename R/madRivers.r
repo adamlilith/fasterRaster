@@ -1,18 +1,23 @@
-#' Spatial data: major rivers in a selected portion of Madagascar
+#' @name madRivers
 #'
-#' Spatial lines object of major rivers in a portion of Madagascar.
+#' @title Major rivers in a selected portion of Madagascar
+#'
+#' @description Spatial lines object of major rivers in a portion of Madagascar.
 #'
 #' @docType data
 #'
 #' @usage data(madRivers)
 #'
-#' @format An object of class \code{'SpatialLinesDataFrame'}. See \code{\link[sp]{SpatialLines}}.
+#' @format An object of class \code{'sf'}.
 #'
-#' @keywords datasets
+#' @keywords Madagascar
 #'
 #' @source \href{http://www.diva-gis.org/gdata}{DIVA-GIS}
 #'
 #' @examples
+#'
+#' library(sf)
 #' data(madRivers)
 #' plot(madRivers)
-'madRivers'
+#'
+NULL

@@ -7,9 +7,9 @@
 exportRastToGrass(rast, grassName = "rast", tempDir = raster::tmpDir())
 }
 \arguments{
-\item{rast}{Raster layer. This can be of class \code{raster} (\pkg{raster} package) or \code{SpatRaster} (\pkg{terra} package).}
+\item{rast}{A \code{SpatRaster} raster.}
 
-\item{grassName}{Name of raster in GRASS.}
+\item{grassName}{What to name the raster in GRASS.}
 
 \item{tempDir}{Temporary directory.}
 }
@@ -18,4 +18,21 @@ Nothing (exports a raster to a GRASS session so it can be used by other function
 }
 \description{
 Write a raster to an existing GRASS session with handling for very big rasters.
+}
+\examples{
+
+\donttest{
+
+rastFile <- system.file('extdata', 'madForest2000.tif', package='fasterRaster')
+madForest2000 <- rast(rastFile)
+
+rastFile <- system.file('extdata', 'madElev.tif', package='fasterRaster')
+madElev <- rast(rastFile)
+
+# start a GRASS session
+initGrass(madForest2000, grassDir = grassDir)
+exportRastToGrass(madElev, grassName = 'madElev', grassDir = grassDir)
+
+}
+
 }

@@ -2,12 +2,12 @@
 % Please edit documentation in R/initGrass.r
 \name{initGrass}
 \alias{initGrass}
-\title{Initialize GRASS session and import raster and/or vector(s).}
+\title{Initialize GRASS session and import raster and/or vector(s)}
 \usage{
 initGrass(
-  alreadyInGrass = FALSE,
   rast = NULL,
   vect = NULL,
+  alreadyInGrass = FALSE,
   rastName = "rast",
   vectName = "vect",
   mapset = "PERMANENT",
@@ -17,11 +17,11 @@ initGrass(
 )
 }
 \arguments{
+\item{rast}{Either: a \code{SpatRaster} object \emph{or} the name of a raster already imported into GRASS \emph{or} \code{NULL} (default) in which case no raster is exported into GRASS. Either \code{rast} or \code{vect} (or both) must be non-\code{NULL}.}
+
+\item{vect}{Either: a \code{Spatvector} or \code{sf} object \emph{or} the name of a vector dataset already imported into GRASS \emph{or} \code{NULL} (default) in which case no vector is exported into GRASS. Either \code{rast} or \code{vect} (or both) must be non-\code{NULL}.}
+
 \item{alreadyInGrass}{Logical, if \code{FALSE} (default) then start a new GRASS session and import the raster named in \code{rast} or the vector named in \code{vect}. If \code{FALSE}, use a raster or vector already in GRASS with the name given by \code{rast} or \code{vect}. The latter case is useful if you are chaining \pkg{fasterRaster} functions together and the first function initializes the session. The first function should use \code{alreadyInGrass = FALSE} and subsequent functions should use \code{alreadyInGrass = TRUE} then use their \code{rast} (or \code{vect}) arguments to name the raster (or vector) that was made by the previous function.}
-
-\item{rast}{Either: a raster object \emph{or} the name of a raster already imported into GRASS \emph{or} \code{NULL} (default) in which case no raster is exported into GRASS. Either \code{rast} or \code{vect} (or both) must be non-\code{NULL}. If a raster, it can be of class \code{raster} (\pkg{raster} package) or \code{SpatRaster} (\pkg{terra} package).}
-
-\item{vect}{Either: a spatial vector object \emph{or} the name of a vector dataset already imported into GRASS \emph{or} \code{NULL} (default) in which case no vector is exported into GRASS. Either \code{rast} or \code{vect} (or both) must be non-\code{NULL}. If a vector, this can be an object of class \code{Spatial} (\pkg{sp} package, so for example, a \code{SpatialPolygons} object), or \code{SpatVector} (\pkg{terra} package), or \code{sf} (\pkg{sf} package).}
 
 \item{rastName}{Character. Name of the raster when exported to GRASS. Default is \code{'rast'}.}
 
@@ -33,10 +33,10 @@ initGrass(
 
 \item{tempDir}{Character. Path name of directory in which to create the GRASS mapset. The default is to create a directory in the location for temporary files for the operating system.}
 
-\item{grassDir}{Character or \code{NULL} (default). Name of the directory in which GRASS is installed. Example: \code{'C:/Program Files/GRASS GIS 7.8'}. If this is \code{NULL}, R will search for the directory in which GRASS is installed. This usually fails, or if it succeeds, takes several minutes.}
+\item{grassDir}{Character or \code{NULL} (default). Name of the directory in which GRASS is installed. Example for a Windows system: \code{'C:/Program Files/GRASS GIS 8.2'}. If this is \code{NULL}, R will search for the directory in which GRASS is installed. This usually fails, or if it succeeds, takes several minutes.}
 }
 \value{
-One or two-element character list. If the list is one element long then it will be the name of raster \emph{or} vector exported or already in GRASS session. If it is two elements long then it will be the name of the raster \emph{and} the vector exported or already in the GRASS session (in that order).
+One or two-element character vector. If the vector is one element long then it will be the name of raster \emph{or} vector exported or already in GRASS session. If it is two elements long then it will be the name of the raster \emph{and} the vector exported or already in the GRASS session (in that order).
 }
 \description{
 Initiate a GRASS session and import a raster and/or vector into it.
@@ -45,12 +45,12 @@ Initiate a GRASS session and import a raster and/or vector into it.
 
 \donttest{
 # change this to where GRASS 7 is installed on your system
-grassDir <- 'C:/Program Files/GRASS GIS 7.8'
+grassDir <- 'C:/Program Files/GRASS GIS 8.2'
 
 data(madElev)
 input <- initGrass(rast=madElev, grassDir=grassDir)
-data(mad0)
-input <- initGrass(vect=mad0, grassDir=grassDir)
+data(madCoast0)
+input <- initGrass(vect=madCoast0, grassDir=grassDir)
 }
 
 }

@@ -3,9 +3,9 @@
 \docType{data}
 \name{madRivers}
 \alias{madRivers}
-\title{Spatial data: major rivers in a selected portion of Madagascar}
+\title{Major rivers in a selected portion of Madagascar}
 \format{
-An object of class \code{'SpatialLinesDataFrame'}. See \code{\link[sp]{SpatialLines}}.
+An object of class \code{'sf'}.
 }
 \source{
 \href{http://www.diva-gis.org/gdata}{DIVA-GIS}
@@ -17,7 +17,10 @@ data(madRivers)
 Spatial lines object of major rivers in a portion of Madagascar.
 }
 \examples{
+
+library(sf)
 data(madRivers)
 plot(madRivers)
+
 }
-\keyword{datasets}
+\keyword{Madagascar}
