@@ -1,7 +1,7 @@
 #' Fragmentation indices for a raster (i.e., forest fragmentation)
 #'
-#' The function calculates a set of fragmentation indices as per Riitters, K., J. Wickham, R. O'Neill, B. Jones, and E. Smith. 2000. Global-scale patterns of forest fragmentation. Conservation Ecology 4:3. URL: <https://www.jstor.org/stable/26271763>. (Also note the erratum to the paper on their classification scheme at <https://www.ecologyandsociety.org/vol4/iss2/art3/errata/january26.2001.html>). Note that this function does \emph{not} use GRASS but rather the \code{\link[terra]{focal}} function in the \pkg{terra} package, so it is potentially very slow and may not work for very large rasters.
-#' @param rast Raster with binary values (1 or 0 or \code{NA}).
+#' The function calculates a set of fragmentation indices as per Riitters, K., J. Wickham, \pkg{R}. O'Neill, B. Jones, and E. Smith. 2000. Global-scale patterns of forest fragmentation. Conservation Ecology 4:3. URL: <https://www.jstor.org/stable/26271763>. (Also note the erratum to the paper on their classification scheme at <https://www.ecologyandsociety.org/vol4/iss2/art3/errata/january26.2001.html>). Note that this function does \emph{not} use \code{GRASS} but rather the \code{\link[terra]{focal}} function in the \pkg{terra} package, so it is potentially very slow and may not work for very large rasters.
+#' @param rast A \code{SpatRaster} with binary values (1 or 0 or \code{NA}).
 #' @param size Integer, number of cells wide and high of the window used to calculate fragmentation. This must be an odd integer (default is 3).
 #' @param pad Logical, if \code{TRUE} then add virtual rows and columns around the raster so that there are no edge effects. The virtual rows and columns are set to equal \code{padValue}. Default is \code{FALSE}.
 #' @param padValue Value to which to set the values of the virtual cells used to pad the raster if \code{pad} is \code{TRUE}.
@@ -17,7 +17,8 @@
 #' 	\item \code{random}: Undetermined cases will be assigned a value of 3 or 4 at random ("perforated" or "edge").
 #' }
 #' @param ... Other arguments (not used).
-#' @return A raster stack with four rasters: a fragmentation classification (named \code{class}), the density of "1" pixels in the window (named \code{density}--called "pf" in Riitter et al. 2000), and a connectivity raster (conditional probability a cell with a value of 1 has a value that is also 1; named \code{connect}--called "pff" in Riitter et al. 2000).
+#'
+#' @return A raster stack with four rasters: a fragmentation classification (named \code{class}), the density of "1" pixels in the window (named \code{density}--called "pf" in Riitter et al. 2000), and a connectivity raster (conditional probability a cell with a value of 1 has a value that is also 1; named \code{connect}--called "pff" in Riitter et al. 2000). \cr\cr
 #' The density and connectivity rasters have values in the range [0, 1], but the classification raster has coded values (from the erratum to Ritter et al. (2000):
 #' \itemize{
 #' 	\item \code{NA}: \code{NA}
@@ -29,34 +30,12 @@
 #'	\item \code{5}: undetermined (\code{pf} >= 0.6 & \code{pf == pff})
 #'	\item \code{6}: interior (\code{pf} == 1)
 #' }
-#' Note that this differs somewhat from the numbering scheme presented by
-#' Riitters et al. (2000) and their errata.
+#' Note that this differs somewhat from the numbering scheme presented by Riitters et al. (2000) and their errata.
+#'
 #' @seealso \code{\link[fasterRaster]{fasterFragmentation}}
-#' @examples
-#' \donttest{
-#' ### forest fragmentation
-#' data(madForest2000)
-#' 
-#' # cells are just 1s or NAs... replace NAs with 0
-#' forest <- calc(madForest2000, function(x) ifelse(is.na(x), 0, 1))
-#' 
-#' # single-core
-#' frag <- fragmentation(forest, size=5, pad=TRUE, undet='perforated')
-#' 
-#' # multi-core
-#' frag <- fasterFragmentation(forest, size=5, pad=TRUE, undet='perforated')
-#' 
-#' par(mfrow=c(2, 2))
-#' plot(madForest2000, col=c('gray90', 'forestgreen'), main='Forest Cover')
-#' plot(frag[['density']], main='Density in 2000')
-#' plot(frag[['connect']], main='Connectivity in 2000')
-#' cols <- c('gray90', 'blue', 'lightblue', 'yellow', 'orange', 'forestgreen')
-#' names(cols) <- c('no forest', 'patch', 'transitional',
-#' 		'perforated', 'edge', 'interior')
-#' plot(frag[['class']], main='Fragmentation Class', col=cols, legend=FALSE)
-#' legend('topright', fill=cols, legend=names(cols))
-#' 
-#' }
+#'
+#' @examples man/examples/ex_fragmentation.r
+#'
 #' @export
 
 fragmentation <- function(
@@ -78,33 +57,33 @@ fragmentation <- function(
 		warning('Forcing "calcDensity" and "calcConnect" in function "fragmentation()" to be TRUE since "calcClass" is TRUE.')
 	}
 	
-	if (inherits(rast, 'SpatRaster')) rast <- raster::raster(rast)
+	if (inherits(rast, 'SpatRaster')) rast <- terra::rast(rast)
 	
 	halfWindowSize <- (size - 1) / 2
 	
 	# add padding around raster to avoid edge effects
 	if (pad) {
 		origExtent <- terra::ext(rast)
-		rast <- raster::extend(rast, y=halfWindowSize, value=padValue)
+		rast <- terra::extend(rast, y=halfWindowSize, value=padValue)
 	}
 
 	w <- matrix(1, nrow=size, ncol=size)
 	
 	# calculate fragmentation indices
-	if (calcDensity) pf <- raster::focal(rast, w=w, fun=.fragDensity, na.rm=na.rm)
-	if (calcConnect) pff <- raster::focal(rast, w=w, fun=.fragConnect, na.rm=na.rm)
+	if (calcDensity) pf <- terra::focal(rast, w=w, fun=.fragDensity, na.rm=na.rm)
+	if (calcConnect) pff <- terra::focal(rast, w=w, fun=.fragConnect, na.rm=na.rm)
 	
 	# calculate class
 	if (calcClass) {
-		out <- raster::stack(pf, pff)
+		out <- c(pf, pff)
 		names(out) <- c('density', 'connect')
-		classification <- raster::calc(out, fun=.fragClassify, undet=undet)
+		classification <- terra::app(out, fun=.fragClassify, undet=undet)
 		names(classification) <- 'class'
-		out <- raster::stack(classification, out)
+		out <- c(classification, out)
 	}
 	
 	terra::crs(out) <- terra::crs(rast)
-	if (pad) out <- raster::crop(out, origExtent)	
+	if (pad) out <- terra::crop(out, origExtent)	
 	out
 	
 }

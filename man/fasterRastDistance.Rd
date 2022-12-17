@@ -9,15 +9,14 @@ fasterRastDistance(
   metric = "euclidean",
   meters = TRUE,
   fillNAs = TRUE,
-  grassDir = NULL,
-  alreadyInGrass = FALSE,
+  grassDir = options()$grassDir,
   grassToR = TRUE,
   outGrassName = "distance",
   ...
 )
 }
 \arguments{
-\item{rast}{Either a raster or the name of a raster in an existing GRASS session.}
+\item{rast}{A \code{SpatRaster} or the name of a raster already in an existing \code{GRASS} session.}
 
 \item{metric}{Character, indicates type of distance to calculate:
 \itemize{
@@ -32,42 +31,26 @@ fasterRastDistance(
 
 \item{fillNAs}{Logical, if \code{TRUE} (default) then fill code{NA} cells with distance between them and closest non-\code{NA}. If \code{TRUE} then replace value in non-{NA} cells with distance between them and nearest \code{NA} cell.}
 
-\item{grassDir}{Character or \code{NULL} (default). Name of the directory in which GRASS is installed. Example for a Windows system: \code{'C:/Program Files/GRASS GIS 8.2'}. If this is \code{NULL}, R will search for the directory in which GRASS is installed. This usually fails, or if it succeeds, takes several minutes.}
+\item{grassDir}{Name of the folder path in which \code{GRASS} is installed. For a Windows system, this might be something like \code{'C:/Program Files/GRASS GIS 8.2'}. For a Mac system, this might be like \code{"/Applications/GRASS-8.2.app/Contents/Resources"}. If you are using a lot of \pkg{fasterRaster} functions, it can be easier to set this once using \code{\link{fasterOptions}}. By default, this is \code{NULL}, in which case the install path for \code{GRASS} will be searched for, but if not found, will result in an error.}
 
-\item{alreadyInGrass}{Logical, if \code{FALSE} (default) then start a new GRASS session and import the raster named in \code{rast}. If \code{FALSE}, use a raster already in GRASS with the name given by \code{rast}. The latter is useful if you are chaining \pkg{fasterRaster} functions together and the first function initializes the session. The first function should use \code{alreadyInGrass = FALSE} and subsequent functions should use \code{alreadyInGrass = TRUE} then use their \code{rast} (or \code{vect}) arguments to name the raster (or vector) that was made by the previous function.}
+\item{grassToR}{If \code{TRUE} (default) then the output will be returned to \pkg{R}. If \code{FALSE}, then the output is left in the \code{GRASS} session and named the value in \code{outGrassName}. You can then refer to the output in subsequent \pkg{fasterRaster} functions and avoid the need to re-import it. This is called "chaining" functions together, and it can save a lot of computational time.}
 
-\item{grassToR}{Logical, if \code{TRUE} (default) then the output will be returned to R. If \code{FALSE}, then the output is left in the GRASS session and named the value in \code{outGrassName} \code{distance}. The latter case is useful (and faster) when chaining several \pkg{fasterRaster} functions together.}
+\item{outGrassName}{Character. Name of output in \code{GRASS}. This is useful if you want to refer to the output object in \code{GRASS} later in a session by "chaining" functions.}
 
-\item{outGrassName}{Character. Name of output in GRASS. This is useful if you want to refer to the output object in GRASS later in a session.}
-
-\item{...}{Arguments to pass to \code{\link[rgrass]{execGRASS}} when used for rasterizing (i.e., function \code{r.grow.distance} in GRASS).}
+\item{...}{Arguments to pass to \code{\link[rgrass]{execGRASS}} when used for rasterizing (i.e., function \code{r.grow.distance} in \code{GRASS}).}
 }
 \value{
-If \code{grassToR} if \code{TRUE}, then a raster with the same extent, resolution, and coordinate reference system as \code{vect}. Regardless, a raster with the name given by \code{outGrassName} is written into the GRASS session.
+If \code{grassToR} if \code{TRUE}, then a raster with the same extent and coordinate reference system as \code{vect}. Regardless, a raster with the name given by \code{outGrassName} is written into the \code{GRASS} session.
 }
 \description{
 This function is a potentially faster version of the \code{\link[terra]{distance}} function in the \pkg{terra} package which it replaces values in all \code{NA} cells with the distance between them and the closest non-\code{NA} cell. Alternatively, it fills in values of non-\code{NA} cells with the distance between them and the closest \code{NA} cell. Note that the \code{distance} function also calculates distances between a raster and a spatial vector object, but this functionality is reproduced in \code{\link[fasterRaster]{fasterVectToRastDistance}}.
 }
 \details{
-See the documentation for the GRASS module \code{r.grow.distance}{https://grass.osgeo.org/grass82/manuals/r.grow.distance.html}.
+See the documentation for the \code{GRASS} module \code{r.grow.distance}{https://grass.osgeo.org/grass82/manuals/r.grow.distance.html}.
 }
 \examples{
-\donttest{
-# change this according to where GRASS 7 is installed on your system
-grassDir <- 'C:/Program Files/GRASS GIS 8.2' # example for a PC
-grassDir <- "/Applications/GRASS-8.2.app/Contents/Resources" # for a Mac
+man/examples/ex_fasterRastDistance.r
 
-data(madForest2000)
-
-# could also use distance() function from the raster package which is
-# slower in this example
-distToForest <- fasterRastDistance(rast=madForest2000,
-fillNAs=TRUE, grassDir=grassDir)
-# distToForest <- distance(madForest2000)
-par(mfrow=c(1, 2))
-plot(madForest2000, 'Forest', col='forestgreen')
-plot(distToForest, main='Distance to Forest (m)')
-}
 }
 \seealso{
 \code{\link[terra]{distance}}, \code{\link[fasterRaster]{fasterVectToRastDistance}}

@@ -1,7 +1,7 @@
 #' Multi-core focal() function
 #'
 #' This function applies a function that uses values from a "moving window" across a raster. It is exactly the same as the \code{\link[terra]{focal}} function in the \pkg{terra} package except that it can use a multi-core implementation to speed processing.
-#' @param rast Raster object.
+#' @param rast A \code{SpatRaster}.
 #' @param w Matrix of weights (the moving window), e.g. a 3 by 3 matrix with values 1. The matrix does not need to be square, but the sides must be odd numbers. If you need even sides, you can add a column or row with weights of zero. Alternatively, \code{w} can be an odd integer > 0, in which case a weights matrix \code{w} by \code{w} in size is created with every value equal to 1.
 #' @param fun Function. The function must accept multiple numbers and return a single number. For example \code{mean}, \code{min}, or \code{max}. The function should also accept a \code{na.rm} argument (or ignore it, e.g. as one of the 'dots' arguments). For example, \code{length} will fail, but \code{function(rast, ...) { na.omit(length(rast)) }} works. The default function is \code{sum}.
 #' @param filename Character, name of file for a new raster (optional).
@@ -12,33 +12,14 @@
 #' @param NAonly Logical, if \code{TRUE} then only cells with a value of \code{NA} have values replaced. Default is \code{FALSE}.
 #' @param cores Integer >0, number of CPU cores to use to calculate the focal function (default is 2).
 #' @param ... Arguments to pass to \code{\link[terra]{writeRaster}}
-#' @return @details The function \code{\link{fasterMapcalc}} \emph{may} be faster.
+#'
+#' @details The function \code{\link{fasterMapcalc}} \emph{may} be faster.
+#'
 #' @return A raster object, possibly also written to disk.
+#'
 #' @seealso \code{\link[terra]{focal}}, \code{\link{fasterMapcalc}}
-#' @examples
 #'
-#' \donttest{
-#' data(madElev)
-#' out <- fasterFocal(madElev, fun=sd, cores=2)
-#' par(mfrow=c(1, 2))
-#' plot(madElev, main='Elevation')
-#' plot(out, main='SD in focal window')
-#' }
-#'
-#' # Using a weights matrix
-#' \donttest{
-#' # example of a "high-pass" weights matrix:
-#' w <- matrix(c(-1, -1, -1, -1, 8, -1, -1, 1, -1), ncol=3)
-#' out <- fasterFocal(madElev, w=w, fun=mean, cores=2)
-#'
-#' # What if your weights matrix has NAs?
-#' # Write a function that returns a value even if there are NAs.
-#' w <- matrix(c(1,NA,1,NA,1,NA,1,1,1,NA,1,1,NA,1,1,NA,1,1,1,NA,1,NA,1,NA,1),
-#' nrow=5, ncol=5)
-#' fx <- function(x) mean(x, na.rm=TRUE)
-#' out <- fasterFocal(madElev, w=w, fun=fx, cores=2, na.rm=TRUE)
-#'
-#' }
+#' @examples man/examples/ex_fasterFocal.r
 #' 
 #' @export
 fasterFocal <- function(
@@ -55,7 +36,7 @@ fasterFocal <- function(
 	...
 ) {
 
-	if (inherits(rast, 'SpatRaster')) rast <- raster::raster(rast)
+	if (inherits(rast, 'SpatRaster')) rast <- terra::rast(rast)
 
 	# get number of cores and chunks of raster
 	cores <- .getCores(rast = rast, cores = cores)
@@ -64,7 +45,7 @@ fasterFocal <- function(
 	# single core
 	if (cores == 1 | blocks$n == 1) {
 	
-		out <- raster::focal(x=rast, w=w, fun=fun, filename=filename, na.rm=na.rm, pad=pad, padValue=padValue, NAonly=NAonly, ...)
+		out <- terra::focal(x=rast, w=w, fun=fun, filename=filename, na.rm=na.rm, pad=pad, padValue=padValue, NAonly=NAonly, ...)
 		
 	# multi-core
 	} else {
@@ -100,10 +81,10 @@ fasterFocal <- function(
 		# add padding around raster to avoid edge effects
 		if (pad) {
 			origExtent <- terra::ext(rast)
-			rast <- raster::extend(rast, y=halfWindowSize, value=padValue)
+			rast <- terra::extend(rast, y=halfWindowSize, value=padValue)
 		}
 	
-		out <- raster::raster(rast)
+		out <- terra::rast(rast)
 
 		# calculate start/end position and size of each block to be sent to a core
 		# and start/end position and size of each section in a block that is processed
@@ -165,9 +146,9 @@ fasterFocal <- function(
 		}
 		
 		# initiate file names if needed
-		filename <- raster::trim(filename)
+		filename <- terra::trim(filename)
 		if (!raster::canProcessInMemory(out) & filename == '') {
-			filename <- raster::rasterTmpFile()
+			filename <- terra::rastTmpFile()
 			out <- raster::writeStart(out, filename=filename, ... )
 		}
 
@@ -241,12 +222,12 @@ fasterFocal <- function(
 		
 	} # if multi-core
 
-	if (pad) out <- raster::crop(out, origExtent)
+	if (pad) out <- terra::crop(out, origExtent)
 	out
 
 }
 
-#' Initialize GRASS session and import raster and/or vector(s).
+#' Initialize \code{GRASS} session and import raster and/or vector(s).
 #'
 #' This function is a generic worker function for a multi-core implementation of the \code{\link[terra]{focal}} function in the \pkg{terra} package. It is usually called by another function and is thus not of great use to most users.
 #' @param i Integer > 0, ID number for the node on which calculations are being conducted.

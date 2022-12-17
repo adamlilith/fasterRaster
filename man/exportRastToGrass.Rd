@@ -2,37 +2,22 @@
 % Please edit documentation in R/exportRastToGrass.r
 \name{exportRastToGrass}
 \alias{exportRastToGrass}
-\title{Write raster to an existing GRASS session}
+\title{Export raster to an existing GRASS session}
 \usage{
-exportRastToGrass(rast, grassName = "rast", tempDir = raster::tmpDir())
+exportRastToGrass(rast, grassName = "rast")
 }
 \arguments{
-\item{rast}{A \code{SpatRaster} raster.}
+\item{rast}{A \code{SpatRaster} raster from the \pkg{terra} package.}
 
-\item{grassName}{What to name the raster in GRASS.}
-
-\item{tempDir}{Temporary directory.}
+\item{grassName}{What to name the raster in \pkg{GRASS}.}
 }
 \value{
-Nothing (exports a raster to a GRASS session so it can be used by other functions).
+Nothing (exports a raster to a \code{GRASS} session so it can be used by other functions).
 }
 \description{
-Write a raster to an existing GRASS session with handling for very big rasters.
+Export a raster to an existing \code{GRASS} session.
 }
 \examples{
-
-\donttest{
-
-rastFile <- system.file('extdata', 'madForest2000.tif', package='fasterRaster')
-madForest2000 <- rast(rastFile)
-
-rastFile <- system.file('extdata', 'madElev.tif', package='fasterRaster')
-madElev <- rast(rastFile)
-
-# start a GRASS session
-initGrass(madForest2000, grassDir = grassDir)
-exportRastToGrass(madElev, grassName = 'madElev', grassDir = grassDir)
-
-}
+man/examples/ex_exportXToGrass.r
 
 }

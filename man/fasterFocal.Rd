@@ -15,12 +15,11 @@ fasterFocal(
   NAonly = FALSE,
   progress = FALSE,
   cores = 2,
-  forceMulti = TRUE,
   ...
 )
 }
 \arguments{
-\item{rast}{Raster object.}
+\item{rast}{A \code{SpatRaster}.}
 
 \item{w}{Matrix of weights (the moving window), e.g. a 3 by 3 matrix with values 1. The matrix does not need to be square, but the sides must be odd numbers. If you need even sides, you can add a column or row with weights of zero. Alternatively, \code{w} can be an odd integer > 0, in which case a weights matrix \code{w} by \code{w} in size is created with every value equal to 1.}
 
@@ -40,42 +39,19 @@ fasterFocal(
 
 \item{cores}{Integer >0, number of CPU cores to use to calculate the focal function (default is 2).}
 
-\item{forceMulti}{Logical, if \code{TRUE} (default) then the function will attempt to use the total number of cores in \code{cores}. (Note that this many not necessarily be faster since each core costs some overhead.)  If \code{FALSE}, then the function will use up to \code{cores} if needed (which also may not be faster... it always depends on the problem being computed).}
-
 \item{...}{Arguments to pass to \code{\link[terra]{writeRaster}}}
 }
 \value{
-@details The function \code{\link{fasterMapcalc}} \emph{may} be faster.
-
 A raster object, possibly also written to disk.
 }
 \description{
 This function applies a function that uses values from a "moving window" across a raster. It is exactly the same as the \code{\link[terra]{focal}} function in the \pkg{terra} package except that it can use a multi-core implementation to speed processing.
 }
+\details{
+The function \code{\link{fasterMapcalc}} \emph{may} be faster.
+}
 \examples{
-
-\donttest{
-data(madElev)
-out <- fasterFocal(madElev, fun=sd, cores=2)
-par(mfrow=c(1, 2))
-plot(madElev, main='Elevation')
-plot(out, main='SD in focal window')
-}
-
-# Using a weights matrix
-\donttest{
-# example of a "high-pass" weights matrix:
-w <- matrix(c(-1, -1, -1, -1, 8, -1, -1, 1, -1), ncol=3)
-out <- fasterFocal(madElev, w=w, fun=mean, cores=2)
-
-# What if your weights matrix has NAs?
-# Write a function that returns a value even if there are NAs.
-w <- matrix(c(1,NA,1,NA,1,NA,1,1,1,NA,1,1,NA,1,1,NA,1,1,1,NA,1,NA,1,NA,1),
-nrow=5, ncol=5)
-fx <- function(x) mean(x, na.rm=TRUE)
-out <- fasterFocal(madElev, w=w, fun=fx, cores=2, na.rm=TRUE)
-
-}
+man/examples/ex_fasterFocal.r
 
 }
 \seealso{

@@ -3,7 +3,7 @@
 \docType{data}
 \name{fasterFunctions}
 \alias{fasterFunctions}
-\title{Table of functions in fasterRaster and equivalents in GRASS and terra}
+\title{Table of functions in fasterRaster and equivalents in \pkg{GRASS} and terra}
 \format{
 An object of class \code{'data.table'}.
 }
@@ -11,18 +11,10 @@ An object of class \code{'data.table'}.
 data(fasterFunctions)
 }
 \description{
-Table of functions in \pkg{fasterRaster} and equivalents in GRASS and \pkg{terra}, plus a link to the GRASS function.
+Table of functions in \pkg{fasterRaster} and equivalents in \pkg{GRASS} and \pkg{terra}, plus a link to the \pkg{GRASS} function.
 }
 \examples{
-
-The next two lines return the same thing.
-data(fasterFunctions)
-fasterLookup()
-
-fasterLookup('fasterRasterize') # lookup by fasterRaster name
-fasterLookup('rasterize', terra = TRUE) # lookup by terra name
-fasterLookup('v.to.rast', grass = TRUE) # lookup by GRASS name
-fasterLookup('v.to', grass = TRUE, approx = TRUE) # approximate lookup
+man/examples/ex_fasterHelp.r
 
 }
 \keyword{functions}

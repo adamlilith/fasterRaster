@@ -9,15 +9,14 @@ fasterVectorize(
   vectType,
   agg = TRUE,
   smooth = FALSE,
-  grassDir = NULL,
-  alreadyInGrass = FALSE,
+  grassDir = options()$grassDir,
   grassToR = TRUE,
   outGrassName = "rastToVect",
   ...
 )
 }
 \arguments{
-\item{rast}{Either a raster or the name of a raster in an existing GRASS session.}
+\item{rast}{A \code{SpatRaster} or the name of a raster already in an existing \code{GRASS} session.}
 
 \item{vectType}{Character. Indicates type of output: \code{point}, \code{line} (not supported yet), or \code{area}.}
 
@@ -25,46 +24,30 @@ fasterVectorize(
 
 \item{smooth}{Logical. If \code{TRUE} then "round" cell corners by connecting the midpoints of corner cells (which leaves out the corner-most triangle of that cell). This option only applies if \code{vectType} is \code{area}. Default is \code{FALSE}.}
 
-\item{grassDir}{Character or \code{NULL} (default). Name of the directory in which GRASS is installed. Example for a Windows system: \code{'C:/Program Files/GRASS GIS 8.2'}. If this is \code{NULL}, R will search for the directory in which GRASS is installed. This usually fails, or if it succeeds, takes several minutes.}
+\item{grassDir}{Name of the folder path in which \code{GRASS} is installed. For a Windows system, this might be something like \code{'C:/Program Files/GRASS GIS 8.2'}. For a Mac system, this might be like \code{"/Applications/GRASS-8.2.app/Contents/Resources"}. If you are using a lot of \pkg{fasterRaster} functions, it can be easier to set this once using \code{\link{fasterOptions}}. By default, this is \code{NULL}, in which case the install path for \code{GRASS} will be searched for, but if not found, will result in an error.}
 
-\item{alreadyInGrass}{Logical. If \code{FALSE} (default) then start a new GRASS session and import the raster named in \code{rast}. If \code{FALSE}, use a raster already in GRASS with the name given by \code{rast}. The latter is useful if you are chaining \pkg{fasterRaster} functions together and the first function initializes the session. The first function should use \code{alreadyInGrass = FALSE} and subsequent functions should use \code{alreadyInGrass = TRUE} then use their \code{rast} (or \code{vect}) arguments to name the raster (or vector) that was made by the previous function.}
+\item{grassToR}{If \code{TRUE} (default) then the output will be returned to \pkg{R}. If \code{FALSE}, then the output is left in the \code{GRASS} session and named the value in \code{outGrassName}. You can then refer to the output in subsequent \pkg{fasterRaster} functions and avoid the need to re-import it. This is called "chaining" functions together, and it can save a lot of computational time.}
 
-\item{grassToR}{Logical. If \code{TRUE} (default) then the product of the calculations will be returned to R. If \code{FALSE}, then the output is left in the GRASS session and named the value in \code{outGrassName} \code{rastToVect}. The latter case is useful (and faster) when chaining several \pkg{fasterRaster} functions together.}
+\item{outGrassName}{Character. Name of output in \code{GRASS}. This is useful if you want to refer to the output object in \code{GRASS} later in a session by "chaining" functions.}
 
-\item{outGrassName}{Character. Name of output in GRASS. This is useful if you want to refer to the output object in GRASS later in a session.}
+\item{...}{Arguments to pass to \code{\link[rgrass]{execGRASS}} when used for converting a raster to a vector (i.e., function \code{r.to.vect} in \pkg{GRASS}).}
 
-\item{...}{Arguments to pass to \code{\link[rgrass]{execGRASS}} when used for converting a raster to a vector (i.e., function \code{r.to.vect} in GRASS).}
+\item{calcDensity}{Logical, if \code{TRUE} then calculate density in the moving window. This will create a raster named \code{density} in the \code{GRASS} environment if \code{grassToR} is \code{FALSE} or return a raster named \code{density} if \code{grassToR} is \code{TRUE}. Default is \code{FALSE}.}
 
-\item{calcDensity}{Logical, if \code{TRUE} then calculate density in the moving window. This will create a raster named \code{density} in the GRASS environment if \code{grassToR} is \code{FALSE} or return a raster named \code{density} if \code{grassToR} is \code{TRUE}. Default is \code{FALSE}.}
-
-\item{calcConnect}{Logical. If \code{TRUE} then calculate a connectivity raster (conditional probability a cell with a value of 1 has a value that is also 1) in the moving window. This will create a raster named \code{connect} in the GRASS environment if \code{grassToR} is \code{FALSE} or return a raster named \code{connect} if \code{grassToR} is \code{TRUE}. Default is \code{FALSE}.}
+\item{calcConnect}{Logical. If \code{TRUE} then calculate a connectivity raster (conditional probability a cell with a value of 1 has a value that is also 1) in the moving window. This will create a raster named \code{connect} in the \code{GRASS} environment if \code{grassToR} is \code{FALSE} or return a raster named \code{connect} if \code{grassToR} is \code{TRUE}. Default is \code{FALSE}.}
 }
 \value{
-If \code{grassToR} if \code{TRUE}, then a SpatialPointsDataFrame, SpatialLinesDataFrame, or a SpatialPolygonsDataFrame with the same coordinate reference system as \code{rast}. The field named \code{value} will have the raster values. Regardless, vector object with the name given by \code{outGrassName} will be written into the GRASS session.
+If \code{grassToR} if \code{TRUE}, then a SpatialPointsDataFrame, SpatialLinesDataFrame, or a SpatialPolygonsDataFrame with the same coordinate reference system as \code{rast}. The field named \code{value} will have the raster values. Regardless, vector object with the name given by \code{outGrassName} will be written into the \code{GRASS} session.
 }
 \description{
-This function is a potentially faster version of the function \code{\link[terra]{rasterToPolygons}} in the \pkg{terra} package. It can convert a raster to points or polygons (conversion to lines is not yet supported, although it is possible using the \code{r.to.vect} module in GRASS).
+This function is a potentially faster version of the function \code{\link[terra]{rasterToPolygons}} in the \pkg{terra} package. It can convert a raster to points or polygons (conversion to lines is not yet supported, although it is possible using the \code{r.to.vect} module in \code{GRASS}).
 }
 \details{
-See the documentation for the GRASS module \code{r.to.vect}{https://grass.osgeo.org/grass82/manuals/r.to.vect.html}.
+See the documentation for the \code{GRASS} module \code{r.to.vect}{https://grass.osgeo.org/grass82/manuals/r.to.vect.html}.
 }
 \examples{
-\donttest{
-# change this according to where GRASS 7 is installed on your system
-grassDir <- 'C:/Program Files/GRASS GIS 8.2' # example for a PC
-grassDir <- "/Applications/GRASS-8.2.app/Contents/Resources" # for a Mac
+man/examples/ex_fasterVectorize.r
 
-data(madForest2000)
-
-# could also use rasterToPolygons() which is
-# probably faster in this example
-forestPoly <- fasterVectorize(rast=madForest2000,
-	vectType='area', grassDir=grassDir)
-# forestPoly <- rasterToPolygons(madForest2000, dissolve=TRUE)
-par(mfrow=c(1, 2))
-plot(madForest2000, main='Forest as Raster', col='forestgreen')
-plot(forestPoly, main='Forest as Polygon', col='forestgreen', border=NA)
-}
 }
 \seealso{
 \code{\link[terra]{rasterToPolygons}}, \code{\link[fasterRaster]{fasterRasterize}}

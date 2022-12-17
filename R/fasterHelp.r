@@ -1,28 +1,17 @@
-#' Lookup equivalent functions in fasterRaster, GRASS, and terra
+#' Lookup equivalent functions in fasterRaster, \code{GRASS}, and terra
 #'
-#' Lookup equivalent functions in fasterRaster, \pkg{GRASS}, and terra, plus get the URL of the help file for the GRASS function, if it exists.
+#' Lookup equivalent functions in fasterRaster, \pkg{GRASS}, and terra, plus get the URL of the help file for the \code{GRASS} function, if it exists.
 #'
 #' @param x Name of the function to lookup. This can be a function in \pkg{fasterRaster}, \pkg{terra}, or \pkg{GRASS}. By default, it will be assumed to be the \pkg{fasterRaster} function. If this is \code{NULL} (default), it will return the entire crosswalk table.
 #' @param terra,grass,sf If \code{TRUE}, the function named in \code{x} is from \pkg{terra}, \pkg{GRASS}, or \pkg{sf}. Only one of \code{terra}, \code{grass}, and \code{sf} can be \code{TRUE}.
 #'
 #' @returns Nothing (displays a equivalent functions on the screen).
 #'
-#' @examples
-#'
-#' The next two lines return the same thing.
-#' fasterLookup()
-#' data(fasterFunctions)
-#'
-#' fasterLookup('fasterRasterize') # lookup by fasterRaster name
-#' fasterLookup('rasterize', terra = TRUE) # lookup by terra name
-#' fasterLookup('v.to.rast', grass = TRUE) # lookup by GRASS name
-#' fasterLookup('st_buffer', sf = TRUE) # lookup by sf name
-#' fasterLookup('st_buffer', terra = TRUE, sf = TRUE) # warning
-#' fasterLookup('v.to', grass = TRUE, approx = TRUE) # approximate lookup
+#' @examples man/examples/ex_fasterHelp.r
 #'
 #' @export
 
-fasterLookup <- function(x = NULL, terra = FALSE, grass = FALSE, approx = FALSE) {
+fasterHelp <- function(x = NULL, terra = FALSE, grass = FALSE, approx = FALSE) {
 
 	utils::data('fasterFunctions', envir=environment(), package='fasterRaster')
 	if (is.null(x)) {

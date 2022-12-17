@@ -18,7 +18,7 @@ fragmentation(
 )
 }
 \arguments{
-\item{rast}{Raster with binary values (1 or 0 or \code{NA}).}
+\item{rast}{A \code{SpatRaster} with binary values (1 or 0 or \code{NA}).}
 
 \item{size}{Integer, number of cells wide and high of the window used to calculate fragmentation. This must be an odd integer (default is 3).}
 
@@ -43,7 +43,7 @@ fragmentation(
 \item{...}{Other arguments (not used).}
 }
 \value{
-A raster stack with four rasters: a fragmentation classification (named \code{class}), the density of "1" pixels in the window (named \code{density}--called "pf" in Riitter et al. 2000), and a connectivity raster (conditional probability a cell with a value of 1 has a value that is also 1; named \code{connect}--called "pff" in Riitter et al. 2000).
+A raster stack with four rasters: a fragmentation classification (named \code{class}), the density of "1" pixels in the window (named \code{density}--called "pf" in Riitter et al. 2000), and a connectivity raster (conditional probability a cell with a value of 1 has a value that is also 1; named \code{connect}--called "pff" in Riitter et al. 2000). \cr\cr
 The density and connectivity rasters have values in the range [0, 1], but the classification raster has coded values (from the erratum to Ritter et al. (2000):
 \itemize{
 	\item \code{NA}: \code{NA}
@@ -55,37 +55,14 @@ The density and connectivity rasters have values in the range [0, 1], but the cl
 \item \code{5}: undetermined (\code{pf} >= 0.6 & \code{pf == pff})
 \item \code{6}: interior (\code{pf} == 1)
 }
-Note that this differs somewhat from the numbering scheme presented by
-Riitters et al. (2000) and their errata.
+Note that this differs somewhat from the numbering scheme presented by Riitters et al. (2000) and their errata.
 }
 \description{
-The function calculates a set of fragmentation indices as per Riitters, K., J. Wickham, R. O'Neill, B. Jones, and E. Smith. 2000. Global-scale patterns of forest fragmentation. Conservation Ecology 4:3. URL: <https://www.jstor.org/stable/26271763>. (Also note the erratum to the paper on their classification scheme at <https://www.ecologyandsociety.org/vol4/iss2/art3/errata/january26.2001.html>). Note that this function does \emph{not} use GRASS but rather the \code{\link[terra]{focal}} function in the \pkg{terra} package, so it is potentially very slow and may not work for very large rasters.
+The function calculates a set of fragmentation indices as per Riitters, K., J. Wickham, \pkg{R}. O'Neill, B. Jones, and E. Smith. 2000. Global-scale patterns of forest fragmentation. Conservation Ecology 4:3. URL: <https://www.jstor.org/stable/26271763>. (Also note the erratum to the paper on their classification scheme at <https://www.ecologyandsociety.org/vol4/iss2/art3/errata/january26.2001.html>). Note that this function does \emph{not} use \code{GRASS} but rather the \code{\link[terra]{focal}} function in the \pkg{terra} package, so it is potentially very slow and may not work for very large rasters.
 }
 \examples{
-\donttest{
-### forest fragmentation
-data(madForest2000)
+man/examples/ex_fragmentation.r
 
-# cells are just 1s or NAs... replace NAs with 0
-forest <- calc(madForest2000, function(x) ifelse(is.na(x), 0, 1))
-
-# single-core
-frag <- fragmentation(forest, size=5, pad=TRUE, undet='perforated')
-
-# multi-core
-frag <- fasterFragmentation(forest, size=5, pad=TRUE, undet='perforated')
-
-par(mfrow=c(2, 2))
-plot(madForest2000, col=c('gray90', 'forestgreen'), main='Forest Cover')
-plot(frag[['density']], main='Density in 2000')
-plot(frag[['connect']], main='Connectivity in 2000')
-cols <- c('gray90', 'blue', 'lightblue', 'yellow', 'orange', 'forestgreen')
-names(cols) <- c('no forest', 'patch', 'transitional',
-		'perforated', 'edge', 'interior')
-plot(frag[['class']], main='Fragmentation Class', col=cols, legend=FALSE)
-legend('topright', fill=cols, legend=names(cols))
-
-}
 }
 \seealso{
 \code{\link[fasterRaster]{fasterFragmentation}}

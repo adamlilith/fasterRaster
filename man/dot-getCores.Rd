@@ -4,14 +4,12 @@
 \alias{.getCores}
 \title{Calculate number of cores to use for multi-core functions}
 \usage{
-.getCores(rast, cores = 2, forceMulti = FALSE)
+.getCores(rast, cores = 2)
 }
 \arguments{
 \item{rast}{Raster, RasterStack, or RasterBrick}
 
 \item{cores}{Integer > 0. Number of cores desired to be used. Default is 2.}
-
-\item{forceMulti}{Logical. If \code{TRUE} then force number of cores to be >1 even if the raster processing can be done in one chunk. Default is \code{FALSE}.}
 }
 \value{
 Integer.

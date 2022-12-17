@@ -17,10 +17,7 @@ data(madCoast4)
 Borders of a selected portion of Madagascar
 }
 \examples{
-
-library(sf)
-data(madCoast4)
-plot(madCoast4)
+man/examples/madData.r
 
 }
 \keyword{Madagascar}

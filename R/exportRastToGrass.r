@@ -1,25 +1,13 @@
-#' Write raster to an existing GRASS session
+#' Export raster to an existing GRASS session
 #'
-#' Write a raster to an existing GRASS session with handling for very big rasters.
-#' @param rast A \code{SpatRaster} raster.
-#' @param grassName What to name the raster in GRASS.
-#' @return Nothing (exports a raster to a GRASS session so it can be used by other functions).
+#' Export a raster to an existing \code{GRASS} session.
 #'
-#' @examples
+#' @param rast A \code{SpatRaster} raster from the \pkg{terra} package.
+#' @param grassName What to name the raster in \pkg{GRASS}.
 #'
-#' \donttest{
+#' @return Nothing (exports a raster to a \code{GRASS} session so it can be used by other functions).
 #'
-#' rastFile <- system.file('extdata', 'madForest2000.tif', package='fasterRaster')
-#' madForest2000 <- rast(rastFile)
-#'
-#' rastFile <- system.file('extdata', 'madElev.tif', package='fasterRaster')
-#' madElev <- rast(rastFile)
-#'
-#' # start a GRASS session
-#' initGrass(madForest2000, grassDir = grassDir)
-#' exportRastToGrass(madElev, grassName = 'madElev', grassDir = grassDir)
-#'
-#' }
+#' @examples man/examples/ex_exportXToGrass.r
 #'
 #' @export
 exportRastToGrass <- function(
@@ -27,7 +15,29 @@ exportRastToGrass <- function(
 	grassName = 'rast'
 ) {
 
-	if (inherits(rast, 'Raster')) rast <- terra::rast(rast)
+	if (!inherits(rast, 'SpatRaster')) rast <- terra::rast(rast)
 	rgrass::write_RAST(rast, vname=grassName, overwrite=TRUE, verbose=FALSE)
 
+}
+
+#' Export a spatial vector to an existing GRASS session
+#'
+#' Export a spatial vector to an existing \code{GRASS} session.
+#'
+#' @param vect A \code{SpatVector} (\pkg{terra} package) or \code{sf} (\pkg{sf} package) spatial vector object.
+#' @param grassName Name of vector in \pkg{GRASS}.
+#'
+#' @return Nothing (exports a vector to a \code{GRASS} session so it can be used by other functions).
+#'
+#' @examples man/examples/ex_exportXToGrass.r
+#'
+#' @export
+exportVectToGrass <- function(
+	vect,
+	grassName = 'vect'
+) {
+
+	if (!inherits(vect, 'Spatvector')) vect <- terra::vect(vect)
+	rgrass::write_VECT(vect, vname=grassName, v.in.ogr_flags='overwrite')
+	
 }

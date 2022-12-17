@@ -1,6 +1,6 @@
 #' Calculate pff (connectivity between cells) of a binary matrix
 #' 
-#' Calculates connectivity between cells from a binary raster. Two cells are connected if they both have a value of 1 and are neighbors in a  cardinal direction of one another.  From Riitters, K., J. Wickham, R. O'Neill, B. Jones, and E. Smith. 2000. Global-scale patterns of forest fragmentation. Conservation Ecology 4:3. URL: https://www.jstor.org/stable/26271763. (Also note the erratum to the paper on their classification scheme at https://www.ecologyandsociety.org/vol4/iss2/art3/errata/january26.2001.html).
+#' Calculates connectivity between cells from a binary raster. Two cells are connected if they both have a value of 1 and are neighbors in a  cardinal direction of one another.  From Riitters, K., J. Wickham, \pkg{R}. O'Neill, B. Jones, and E. Smith. 2000. Global-scale patterns of forest fragmentation. Conservation Ecology 4:3. URL: https://www.jstor.org/stable/26271763. (Also note the erratum to the paper on their classification scheme at https://www.ecologyandsociety.org/vol4/iss2/art3/errata/january26.2001.html).
 #' @param x Binary matrix, with values equal to 0, 1, or \code{NA}.
 #' @param na.rm Logical, if \code{FALSE} (default) count \code{NA} cells towards cells that could be occupied/connected.
 #' @return Numeric in the range [0, 1] or \code{NA} if all cells are \code{NA}.

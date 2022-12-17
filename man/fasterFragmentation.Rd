@@ -15,13 +15,12 @@ fasterFragmentation(
   na.rm = FALSE,
   undet = "undetermined",
   cores = 2,
-  forceMulti = TRUE,
   verbose = FALSE,
   ...
 )
 }
 \arguments{
-\item{rast}{Raster with binary values (1 or 0 or \code{NA}).}
+\item{rast}{A \code{SpatRaster} with binary values (1 or 0 or \code{NA}).}
 
 \item{size}{Integer, number of cells wide and high of the window used to calculate fragmentation. This must be an odd integer (default is 3).}
 
@@ -47,8 +46,6 @@ fasterFragmentation(
 
 \item{cores}{Integer >0, number of CPU cores to use to calculate the focal function (default is 2).}
 
-\item{forceMulti}{Logical, if \code{TRUE} (default) then the function will attempt to use the total number of cores in \code{cores}. (Note that this many not necessarily be faster since each core costs some overhead.)  If \code{FALSE}, then the function will use up to \code{cores} if needed (which also may not be faster... it always depends on the problem being computed).}
-
 \item{verbose}{Logical. If \code{TRUE} then print progress indicators. Default is \code{FALSE}.}
 
 \item{...}{Additional arguments to send to \code{\link[fasterRaster]{fragmentation}} (which is used when only one core is used).}
@@ -68,36 +65,12 @@ The density and connectivity rasters have values in the range [0, 1], but the cl
 }
 }
 \description{
-This function uses multiple CPU cores to speed calculation of a set of fragmentation indices as per Riitters, K., J. Wickham, R. O'Neill, B. Jones, and E. Smith. 2000. Global-scale patterns of forest fragmentation. Conservation Ecology 4:3. URL: <https://www.jstor.org/stable/26271763>. (Also note the erratum to the paper on their classification scheme at <https://www.ecologyandsociety.org/vol4/iss2/art3/errata/january26.2001.html>). Unlike many functions in the \pkg{fasterRaster} package this function does \emph{not} use GRASS but rather multiple cores. It is a wrapper for \code{\link[fasterRaster]{fasterFocal}}.
+This function uses multiple CPU cores to speed calculation of a set of fragmentation indices as per Riitters, K., J. Wickham, \pkg{R}. O'Neill, B. Jones, and E. Smith. 2000. Global-scale patterns of forest fragmentation. Conservation Ecology 4:3. URL: <https://www.jstor.org/stable/26271763>. (Also note the erratum to the paper on their classification scheme at <https://www.ecologyandsociety.org/vol4/iss2/art3/errata/january26.2001.html>). Unlike many functions in the \pkg{fasterRaster} package this function does \emph{not} use \code{GRASS} but rather multiple cores. It is a wrapper for \code{\link[fasterRaster]{fasterFocal}}.
 }
 \examples{
-\donttest{
-### forest fragmentation
-data(madForest2000)
+/man/examples/ex_fasterFragmentation.r
 
-# cells are just 1s or NAs... replace NAs with 0
-forest <- calc(madForest2000, function(x) ifelse(is.na(x), 0, 1))
-
-# single-core... can take a while!
-frag <- fragmentation(madForest2000, size=5, pad=TRUE, undet='perforated')
-
-# multi-core
-frag <- fasterFragmentation(madForest2000, size=5, pad=TRUE, undet='perforated',
-cores=4)
-
-par(mfrow=c(2, 2))
-plot(madForest2000, col=c('gray90', 'forestgreen'), main='Forest Cover')
-plot(frag[['density']], main='Density')
-plot(frag[['connect']], main='Connectivity')
-cols <- c('gray90', 'blue', 'lightblue', 'yellow', 'orange', 'forestgreen')
-names(cols) <- c('no forest', 'patch', 'transitional',
-		'perforated', 'edge', 'interior')
-plot(frag[['class']], main='Fragmentation Class', col=cols, legend=FALSE)
-legend('topright', fill=cols, legend=names(cols))
-}
 }
 \seealso{
-\code{\link[fasterRaster]{fragmentation}}
-
 \code{\link[fasterRaster]{fragmentation}}
 }

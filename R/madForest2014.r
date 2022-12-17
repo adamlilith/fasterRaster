@@ -10,13 +10,8 @@
 #'
 #' @keywords Madagascar
 #'
-#' @references Vielledent, G., Grinand, C., Rakotomala, F.A., Ranaivosoa, R., Rakotoarijaona, J-R., Allnutt, T.F., and Achard, F.  2018.  Combining global tree cover loss data with historical national forest cover maps to look at six decades of deforestation and forest fragmentation in Madagascar.  \emph{Biological Conservation} 222:189-197. \doi{10.1016/j.biocon.2018.04.008}.
+#' @references Vielledent, G., Grinand, C., Rakotomala, F.A., Ranaivosoa, \pkg{R}., Rakotoarijaona, J-R., Allnutt, T.F., and Achard, F.  2018.  Combining global tree cover loss data with historical national forest cover maps to look at six decades of deforestation and forest fragmentation in Madagascar.  \emph{Biological Conservation} 222:189-197. \doi{10.1016/j.biocon.2018.04.008}.
 #'
-#' @examples
-#'
-#' library(terra)
-#' rastFile <- system.file('extdata', 'madForest2014.tif', package='enmSdmX')
-#' madForest2014 <- rast(rastFile)
-#' plot(madForest2014)
+#' @examples man/examples/ex_madData.r
 #'
 NULL

@@ -17,11 +17,7 @@ data(madElev)
 Rasterized digital elevation model (DEM) of a portion of Madagascar at 7.5-arcmin spatial resolution.
 }
 \examples{
-
-library(terra)
-rastFile <- system.file('extdata', 'madElev.tif', package='enmSdmX')
-madElev <- rast(rastFile)
-plot(madElev)
+man/examples/madData.r
 
 }
 \references{

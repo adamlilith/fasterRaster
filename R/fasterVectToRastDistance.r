@@ -1,8 +1,10 @@
 #' Distance between raster cells and nearest spatial vector feature
 #'
 #' This function is a potentially faster version of the \code{\link[terra]{distance}} function in the \pkg{terra} package which calculates the distance between each cell and the nearest feature in a spatial points, lines, or polygon object. Alternatively, it can calculate the distance from any cell covered by a vector object and the nearest cell \emph{not} covered by a vector object. Note that the \code{distance} function also calculates distances between rasters, but this functionality is not reproduced in \code{fasterVectToRastDistance} (just distance between a raster and a vector object).
-#' @param rast Either a raster or the name of a raster in an existing GRASS session. This serves as a template for the new raster.
-#' @param vect Either a SpatialPoints, SpatialPointsDataFrame, SpatialLines, SpatialLinesDataFrame, SpatialPolygons, or SpatialPolygonsDataFrame or the name of such a vector data set in an existing GRASS session.
+#'
+#' @inheritParams .sharedArgs_rast
+#' @inheritParams .sharedArgs_vect
+#' @inheritParams .sharedArgs_grassDir_grassToR_outGrassName
 #' @param metric Character, indicates type of distance to calculate:
 #' \itemize{
 #' \item \code{euclidean}: Euclidean distance
@@ -13,28 +15,16 @@
 #' } 
 #' @param meters Logical, if \code{TRUE} then distance is in meters. If \code{FALSE} then distance is in map units.
 #' @param invert Logical, if \code{TRUE} then for cells covered by a vector object calculate distance to nearest cell \emph{not} covered by a vector object.
-#' @param grassDir Character or \code{NULL} (default). Name of the directory in which GRASS is installed. Example for a Windows system: \code{'C:/Program Files/GRASS GIS 8.2'}. If this is \code{NULL}, R will search for the directory in which GRASS is installed. This usually fails, or if it succeeds, takes several minutes.
-#' @param alreadyInGrass Logical, if \code{FALSE} (default) then start a new GRASS session and import the raster named in \code{rast}. If \code{FALSE}, use a raster already in GRASS with the name given by \code{rast}. The latter is useful if you are chaining \pkg{fasterRaster} functions together and the first function initializes the session. The first function should use \code{alreadyInGrass = FALSE} and subsequent functions should use \code{alreadyInGrass = TRUE} then use their \code{rast} (or \code{vect}) arguments to name the raster (or vector) that was made by the previous function.
-#' @param grassToR Logical, if \code{TRUE} (default) then the output will be returned to R. If \code{FALSE}, then the output is left in the GRASS session and named the value in \code{outGrassName} \code{distToVect}. The latter case is useful (and faster) when chaining several \pkg{fasterRaster} functions together.
-#' @param outGrassName Character. Name of output in GRASS. This is useful if you want to refer to the output object in GRASS later in a session.
-#' @param ... Arguments to pass to \code{\link[rgrass]{execGRASS}} when used for rasterizing (i.e., function \code{r.grow.distance} in GRASS).
-#' @return If \code{grassToR} if \code{TRUE}, then a raster with the same extent, resolution, and coordinate reference system as \code{vect}. Regardless, a raster with the name of \code{distToVect} is written into the GRASS session.
+#' @param ... Arguments to pass to \code{\link[rgrass]{execGRASS}} when used for rasterizing (i.e., function \code{r.grow.distance} in \code{GRASS}).
+#'
+#' @return If \code{grassToR} if \code{TRUE}, then a raster with the same extent, resolution, and coordinate reference system as \code{vect}. Regardless, a raster with the name of \code{distToVect} is written into the \code{GRASS} session.
+#'
 #' @details See help for \code{r.grow.distance}{https://grass.osgeo.org/grass82/manuals/r.grow.distance.html} for more details.
+#'
 #' @seealso \code{\link[terra]{distance}}
-#' @examples
-#' \donttest{
-#' # change this according to where GRASS 7 is installed on your system
-#' grassDir <- 'C:/Program Files/GRASS GIS 8.2' # example for a PC
-#' grassDir <- "/Applications/GRASS-8.2.app/Contents/Resources" # for a Mac
-#' 
-#' data(madForest2000)
-#' data(madRivers)
-#' 
-#' distToRiver <- fasterVectToRastDistance(rast=madForest2000,
-#' vect=madRivers, grassDir=grassDir)
-#' plot(distToRiver, main='Distance to Rivers (m)')
-#' plot(madRivers, col='blue', add=TRUE)
-#' }
+#'
+#' @examples man/examples/ex_fasterVectToRastDistance.r
+#'
 #' @export
 
 fasterVectToRastDistance <- function(
@@ -43,8 +33,7 @@ fasterVectToRastDistance <- function(
 	metric = 'euclidean',
 	meters = TRUE,
 	invert = FALSE,
-	grassDir = options('grassDir'),
-	alreadyInGrass = FALSE,
+	grassDir = options()$grassDir,
 	grassToR = TRUE,
 	outGrassName = 'distToVect',
 	...
@@ -55,7 +44,7 @@ fasterVectToRastDistance <- function(
 	if (invert) flags_rGrowDistance <- c(flags_rGrowDistance)
 	
 	# rasterize vector: creates raster named "distToVect"
-	fasterRasterize(vect=vect, rast=rast, use='value', value=1, grassDir=grassDir, alreadyInGrass=alreadyInGrass, grassToR=FALSE, outGrassName='vectToRast', ...)
+	fasterRasterize(vect=vect, rast=rast, use='value', value=1, grassDir=grassDir, grassToR=FALSE, outGrassName='vectToRast', ...)
 	
 	# calculate distance
 	rgrass::execGRASS('r.grow.distance', input='vectToRast', distance=outGrassName, metric=metric, flags=flags_rGrowDistance, ...)
@@ -64,7 +53,7 @@ fasterVectToRastDistance <- function(
 	if (grassToR) {
 	
 		out <- rgrass::read_RAST(outGrassName)
-		out <- raster::raster(out)
+		out <- terra::rast(out)
 		names(out) <- outGrassName
 		out
 		

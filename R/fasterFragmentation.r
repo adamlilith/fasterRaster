@@ -1,7 +1,7 @@
 #' Fragmentation indices for a raster (i.e., forest fragmentation)
 #'
-#' This function uses multiple CPU cores to speed calculation of a set of fragmentation indices as per Riitters, K., J. Wickham, R. O'Neill, B. Jones, and E. Smith. 2000. Global-scale patterns of forest fragmentation. Conservation Ecology 4:3. URL: <https://www.jstor.org/stable/26271763>. (Also note the erratum to the paper on their classification scheme at <https://www.ecologyandsociety.org/vol4/iss2/art3/errata/january26.2001.html>). Unlike many functions in the \pkg{fasterRaster} package this function does \emph{not} use GRASS but rather multiple cores. It is a wrapper for \code{\link[fasterRaster]{fasterFocal}}.
-#' @param rast Raster with binary values (1 or 0 or \code{NA}).
+#' This function uses multiple CPU cores to speed calculation of a set of fragmentation indices as per Riitters, K., J. Wickham, \pkg{R}. O'Neill, B. Jones, and E. Smith. 2000. Global-scale patterns of forest fragmentation. Conservation Ecology 4:3. URL: <https://www.jstor.org/stable/26271763>. (Also note the erratum to the paper on their classification scheme at <https://www.ecologyandsociety.org/vol4/iss2/art3/errata/january26.2001.html>). Unlike many functions in the \pkg{fasterRaster} package this function does \emph{not} use \code{GRASS} but rather multiple cores. It is a wrapper for \code{\link[fasterRaster]{fasterFocal}}.
+#' @param rast A \code{SpatRaster} with binary values (1 or 0 or \code{NA}).
 #' @param size Integer, number of cells wide and high of the window used to calculate fragmentation. This must be an odd integer (default is 3).
 #' @param pad Logical, if \code{TRUE} then add virtual rows and columns around the raster so that there are no edge effects. The virtual rows and columns are set to equal \code{padValue}. Default is \code{FALSE}.
 #' @param padValue Value to which to set the values of the virtual cells used to pad the raster if \code{pad} is \code{TRUE}.
@@ -19,6 +19,7 @@
 #' @param cores Integer >0, number of CPU cores to use to calculate the focal function (default is 2).
 #' @param verbose Logical. If \code{TRUE} then print progress indicators. Default is \code{FALSE}.
 #' @param ... Additional arguments to send to \code{\link[fasterRaster]{fragmentation}} (which is used when only one core is used).
+#'
 #' @return A raster stack with three rasters: a fragmentation classification (named \code{class}), the density of "1" pixels in the window (named \code{density}--called "pf" in Riitter et al. 2000), and a connectivity raster (conditional probability a cell with a value of 1 has a value that is also 1; named \code{connect}--called "pff" in Riitter et al. 2000).
 #' The density and connectivity rasters have values in the range [0, 1], but the classification raster has coded values (from the erratum to Ritter et al. (2000)):
 #' \itemize{
@@ -31,33 +32,11 @@
 #'	\item \code{5}: undetermined (\code{pf} >= 0.6 & \code{pf == pff})
 #'	\item \code{6}: interior (\code{pf} == 1)
 #' }
+#'
 #' @seealso \code{\link[fasterRaster]{fragmentation}}
-#' @examples
-#' \donttest{
-#' ### forest fragmentation
-#' data(madForest2000)
 #'
-#' # cells are just 1s or NAs... replace NAs with 0
-#' forest <- calc(madForest2000, function(x) ifelse(is.na(x), 0, 1))
+#' @examples /man/examples/ex_fasterFragmentation.r
 #'
-#' # single-core... can take a while!
-#' frag <- fragmentation(madForest2000, size=5, pad=TRUE, undet='perforated')
-#'
-#' # multi-core
-#' frag <- fasterFragmentation(madForest2000, size=5, pad=TRUE, undet='perforated',
-#' cores=4)
-#'
-#' par(mfrow=c(2, 2))
-#' plot(madForest2000, col=c('gray90', 'forestgreen'), main='Forest Cover')
-#' plot(frag[['density']], main='Density')
-#' plot(frag[['connect']], main='Connectivity')
-#' cols <- c('gray90', 'blue', 'lightblue', 'yellow', 'orange', 'forestgreen')
-#' names(cols) <- c('no forest', 'patch', 'transitional',
-#' 		'perforated', 'edge', 'interior')
-#' plot(frag[['class']], main='Fragmentation Class', col=cols, legend=FALSE)
-#' legend('topright', fill=cols, legend=names(cols))
-#' }
-#' @seealso \code{\link[fasterRaster]{fragmentation}}
 #' @export
 
 fasterFragmentation <- function(
@@ -80,7 +59,7 @@ fasterFragmentation <- function(
 		warning('Forcing "calcDensity" and "calcConnect" in function "fragmentation()" to be TRUE since "calcClass" is TRUE.')
 	}
 
-	if (inherits(rast, 'SpatRaster')) rast <- raster::raster(rast)
+	if (inherits(rast, 'SpatRaster')) rast <- terra::rast(rast)
 
 	# number of cores
 	cores <- .getCores(rast = rast, cores = cores)	
@@ -142,7 +121,7 @@ fasterFragmentation <- function(
 				flush.console()
 			}
 
-			densConnect <- raster::stack(fragDensity, fragConnect)
+			densConnect <- c(fragDensity, fragConnect)
 
 			fx <- function(x, ...) calc(x, fun=fasterRaster:::.fragClassify, ...)
 
@@ -164,9 +143,9 @@ fasterFragmentation <- function(
 		} else if (!calcDensity & calcConnect & !calcClass) {
 			fragConnect
 		} else if (calcDensity & calcConnect & !calcClass) {
-			raster::stack(fragDensity, fragConnect)
+			c(fragDensity, fragConnect)
 		} else if (calcClass) {
-			raster::stack(fragClass, fragDensity, fragConnect)
+			c(fragClass, fragDensity, fragConnect)
 		}
 
 	} # multi-core

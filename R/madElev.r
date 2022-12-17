@@ -16,11 +16,6 @@
 #'
 #' @source \href{https://lta.cr.usgs.gov/GMTED2010}{GMTED2010}
 #'
-#' @examples
-#'
-#' library(terra)
-#' rastFile <- system.file('extdata', 'madElev.tif', package='enmSdmX')
-#' madElev <- rast(rastFile)
-#' plot(madElev)
+#' @examples man/examples/ex_madData.r
 #'
 NULL

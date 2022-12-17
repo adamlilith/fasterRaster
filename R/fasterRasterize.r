@@ -1,8 +1,10 @@
 #' Rasterize a spatial vector
 #'
 #' This function is a potentially faster version of the \code{\link[terra]{rasterize}} function in the \pkg{terra} package which converts a spatial points, lines, or polygon into a raster based on a "template" raster. All cells covered by the spatial object can either have values taken from the spatial object or a user-defined.
-#' @param vect Either a spatial vector object or the name of such a vector dataset already in a GRASS session.
-#' @param rast Either a raster or the name of a raster in an existing GRASS session. This serves as a template for the new raster.
+#' @inheritParams .sharedArgs_vect
+#' @inheritParams .sharedArgs_rast
+#' @inheritParams .sharedArgs_grassDir_grassToR
+#' @inheritParams .sharedArgs_outGrassName
 #' @param use Character, indicates the types of values to be "burned" to the raster. Options include
 #' \itemize{
 #' \item \code{value} (default): a user-define value given by \code{value}
@@ -14,32 +16,16 @@
 #' @param field Name of column in \code{vect} with values or category labbels to which to burn to the raster.
 #' @param value Numeric, value to burn to each cell overlapped by the spatial object in \code{vect}.
 #' @param burn \code{NULL} or any of \code{'point'}, \code{'line'}, \code{'area'}, \code{'boundary'}, or \code{'centroid'}. This determines the manner in which the vector data is "burned" to the raster. If \code{NULL} (default), then SpatialPoints and SpatialPointsDataFrame objects will rasterized as points, SpatialLines and SpatialLinesDataFrame objects as lines, and SpatialPolygons and SpatialPolygonsDataFrame objects as areas. See \url{https://grass.osgeo.org/grass82/manuals/v.to.rast.html} for more details.
-#' @param grassDir Character or \code{NULL} (default). Name of the directory in which GRASS is installed. Example for a Windows system: \code{'C:/Program Files/GRASS GIS 8.2'}. If this is \code{NULL}, R will search for the directory in which GRASS is installed. This usually fails, or if it succeeds, takes several minutes.
-#' @param alreadyInGrass Logical, if \code{FALSE} (default) then start a new GRASS session and import the raster named in \code{rast}. If \code{FALSE}, use a raster already in GRASS with the name given by \code{rast}. The latter is useful if you are chaining \pkg{fasterRaster} functions together and the first function initializes the session. The first function should use \code{alreadyInGrass = FALSE} and subsequent functions should use \code{alreadyInGrass = TRUE} then use their \code{rast} (or \code{vect}) arguments to name the raster (or vector) that was made by the previous function.
-#' @param grassToR Logical, if \code{TRUE} (default) then the output will be returned to R. If \code{FALSE}, then the output is left in the GRASS session and named the value in \code{outGrassName} \code{vectToRast}. The latter case is useful (and faster) when chaining several \pkg{fasterRaster} functions together.
-#' @param outGrassName Character. Name of output in GRASS. This is useful if you want to refer to the output object in GRASS later in a session.
-#' @param ... Arguments to pass to \code{\link[rgrass]{execGRASS}} when calculating horizon height (i.e., function \code{r.sun} in GRASS).
-#' @param ... Arguments to pass to \code{\link[rgrass]{execGRASS}} when used for rasterizing (i.e., function \code{v.to.rast} in GRASS).
-#' @return If \code{grassToR} if \code{TRUE}, then a raster with the same extent, resolution, and coordinate reference system as \code{rast}. Otherwise, a raster with the name given by \code{outRastName} is written into the GRASS session.
-#' @details See the documentation for the GRASS module \code{v.to.rast}{https://grass.osgeo.org/grass82/manuals/v.to.rast.html}.
+#' @param ... Arguments to pass to \code{\link[rgrass]{execGRASS}} when calculating horizon height (i.e., function \code{r.sun} in \code{GRASS}).
+#' @param ... Arguments to pass to \code{\link[rgrass]{execGRASS}} when used for rasterizing (i.e., function \code{v.to.rast} in \code{GRASS}).
+#'
+#' @return If \code{grassToR} if \code{TRUE}, then a raster with the same extent, resolution, and coordinate reference system as \code{rast}. Otherwise, a raster with the name given by \code{outRastName} is written into the \code{GRASS} session.
+#'
+#' @details See the documentation for the \code{GRASS} module \code{v.to.rast}{https://grass.osgeo.org/grass82/manuals/v.to.rast.html}.
 #' @seealso \code{\link[terra]{rasterize}}
-#' @examples
-#' \donttest{
-#' # change this according to where GRASS 7 is installed on your system
-#' grassDir <- 'C:/Program Files/GRASS GIS 8.2' # example for a PC
-#' grassDir <- "/Applications/GRASS-8.2.app/Contents/Resources" # for a Mac
-#' 
-#' data(madCoast0)
-#' data(madForest2000)
-#' 
-#' # could also use rasterize() or mask() from the raster package which may
-#' # be faster in this example
-#' madMask <- fasterRasterize(vect=madCoast0, rast=madForest2000, grassDir=grassDir)
-#' # madMask <- rasterize(madCoast0, madForest2000)
-#' # madMask <- mask(madForest2000, madCoast0)
-#' plot(madMask, main='Portion of Eastern Madagascar')
-#' plot(madCoast0, add=TRUE)
-#' }
+#'
+#' @examples man/examples/ex_fasterRasterize.r
+#'
 #' @export
 
 fasterRasterize <- function(
@@ -49,8 +35,7 @@ fasterRasterize <- function(
 	value = 1,
 	field = NULL,
 	burn = NULL,
-	grassDir = options('grassDir'),
-	alreadyInGrass = FALSE,
+	grassDir = options()$grassDir,
 	grassToR = TRUE,
 	outGrassName = 'vectToRast',
 	...
@@ -58,19 +43,18 @@ fasterRasterize <- function(
 
 	flags <- c('quiet', 'overwrite')
 	
-	if (inherits(rast, 'SpatRaster')) rast <- raster::raster(rast)
-
-	if (inherits(vect, 'SpatVector')) vect <- sf::st_as_sf(vect)
-	if (inherits(vect, 'sf')) vect <- as(vect, 'Spatial')
+	if (!inherits(rast, 'SpatRaster')) rast <- terra::rast(rast)
+	if (!inherits(vect, 'SpatVector')) vect <- terra::vect(vect)
 
 	# feature type
+	gtype <- terra::geomtype(vect)
 	if (is.null(burn)) {
 		
-		burn <- if (inherits(vect, c('SpatialPoints', 'SpatialPointsDataFrame'))) {
+		burn <- if (gtype == 'polygons') {
 			'point'
-		} else if (inherits(vect, c('SpatialLines', 'SpatialLinesDataFrame'))) {
+		} else if (gtype == 'lines') {
 			'line'
-		} else if (inherits(vect, c('SpatialPolygons', 'SpatialPolygonsDataFrame'))) {
+		} else if (gtype == 'points') {
 			'area'
 		}
 
@@ -80,14 +64,14 @@ fasterRasterize <- function(
 			stop('Argument "burn" must be NULL or one of "point", "line", "area", "boundary",\nor "centroid" and match the type of argument "vect".')
 		}
 		
-		if (burn %in% c('point', 'centroid') & !(vect %in% c('SpatialPoints', 'SpatialPointsDataFrame'))) {
-			stop('Argument "burn" must be either "point" or "centroid" if\nargument "vect" is a SpatialPoints or SpatialPointsDataFrame.')
+		if (burn %in% c('point', 'centroid') & !(gtype != 'points')) {
+			stop('Argument "burn" must be either "point" or "centroid" if\nargument "vect" is a "points" vector.')
 		}
 		
 	}
 		
 	# initialize GRASS
-	input <- initGrass(alreadyInGrass, rast=rast, vect=vect, grassDir=grassDir)
+	input <- initGrass(rast=rast, vect=vect, grassDir=grassDir)
 
 	# rasterize
 	if (use == 'field') {
@@ -104,7 +88,7 @@ fasterRasterize <- function(
 	if (grassToR) {
 	
 		out <- rgrass::read_RAST(outGrassName)
-		out <- raster::raster(out)
+		out <- terra::rast(out)
 		names(out) <- outGrassName
 		out
 		

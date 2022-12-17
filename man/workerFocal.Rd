@@ -2,7 +2,7 @@
 % Please edit documentation in R/fasterFocal.r
 \name{workerFocal}
 \alias{workerFocal}
-\title{Initialize GRASS session and import raster and/or vector(s).}
+\title{Initialize \code{GRASS} session and import raster and/or vector(s).}
 \usage{
 workerFocal(i, blockVals, w, fun = sum, na.rm = TRUE, NAonly = FALSE)
 }

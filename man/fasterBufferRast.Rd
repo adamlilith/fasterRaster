@@ -10,17 +10,16 @@ fasterBufferRast(
   units = "meters",
   ignore = NA,
   lowMemory = FALSE,
-  grassDir = fasterOptions("grassDir"),
-  alreadyInGrass = FALSE,
+  grassDir = options()$grassDir,
   grassToR = TRUE,
   outGrassName = "rastBuffer",
   ...
 )
 }
 \arguments{
-\item{rast}{Either a \code{SpatRaster} or the name of a raster in an existing GRASS session.}
+\item{rast}{A \code{SpatRaster} or the name of a raster already in an existing \code{GRASS} session.}
 
-\item{width}{Numeric. Maximum distance cells must be from focal cells to be within the buffer. Note that this function can only handle one value of \code{width} (unlike the function \code{r.buffer} in GRASS).}
+\item{width}{Numeric. Maximum distance cells must be from focal cells to be within the buffer. Note that this function can only handle one value of \code{width} (unlike the function \code{r.buffer} in \code{GRASS}).}
 
 \item{units}{Either \code{'meters'} (default), \code{'kilometers'}, \code{'feet'}, \code{'miles'}, or \code{'nautmiles'}. Indicates the units of \code{width}.}
 
@@ -28,41 +27,23 @@ fasterBufferRast(
 
 \item{lowMemory}{Logical. If \code{FALSE} (default) use faster, memory-intensive procedure. If \code{TRUE} then use the slower, low-memory version. To help decide, consider using the low-memory version on a system with 1 GB of RAM for a raster larger than about 32000x32000 cells, or for a system with  with 8 GB of RAM a raster larger than about 90000x90000 cells.}
 
-\item{grassDir}{Character or \code{NULL} (default). Name of the directory in which GRASS is installed. Example for a Windows system: \code{'C:/Program Files/GRASS GIS 8.2'}. If this is \code{NULL}, R will search for the directory in which GRASS is installed. This usually fails, or if it succeeds, takes several minutes.}
+\item{grassDir}{Name of the folder path in which \code{GRASS} is installed. For a Windows system, this might be something like \code{'C:/Program Files/GRASS GIS 8.2'}. For a Mac system, this might be like \code{"/Applications/GRASS-8.2.app/Contents/Resources"}. If you are using a lot of \pkg{fasterRaster} functions, it can be easier to set this once using \code{\link{fasterOptions}}. By default, this is \code{NULL}, in which case the install path for \code{GRASS} will be searched for, but if not found, will result in an error.}
 
-\item{alreadyInGrass}{Logical, if \code{FALSE} (default) then start a new GRASS session and import the raster named in \code{rast}. If \code{FALSE}, use a raster already in GRASS with the name given by \code{rast}. The latter is useful if you are chaining \pkg{fasterRaster} functions together and the first function initializes the session. The first function should use \code{alreadyInGrass = FALSE} and subsequent functions should use \code{alreadyInGrass = TRUE} then use their \code{rast} (or \code{vect}) arguments to name the raster (or vector) that was made by the previous function.}
+\item{grassToR}{If \code{TRUE} (default) then the output will be returned to \pkg{R}. If \code{FALSE}, then the output is left in the \code{GRASS} session and named the value in \code{outGrassName}. You can then refer to the output in subsequent \pkg{fasterRaster} functions and avoid the need to re-import it. This is called "chaining" functions together, and it can save a lot of computational time.}
 
-\item{grassToR}{Logical, if \code{TRUE} (default) then the output will be returned to R. If \code{FALSE}, then the output is left in the GRASS session and named the value in \code{outGrassName}. The latter is useful (and faster) when chaining several \pkg{fasterRaster} functions together.}
-
-\item{outGrassName}{Character. Name of output in GRASS. This is useful if you want to refer to the output object in GRASS later in a session.}
+\item{outGrassName}{Character. Name of output in \code{GRASS}. This is useful if you want to refer to the output object in \code{GRASS} later in a session by "chaining" functions.}
 
 \item{...}{Arguments to pass to \code{\link[rgrass]{execGRASS}}.}
 }
 \value{
-If \code{grassToR} if \code{TRUE}, then a raster with the same extent, resolution, and coordinate reference system as \code{rast}. Regardless, a raster with a name given by \code{outGrassName} is written into the GRASS session.
+If \code{grassToR} if \code{TRUE}, then a raster with the same extent, resolution, and coordinate reference system as \code{rast}. Regardless, a raster with a name given by \code{outGrassName} is written into the \code{GRASS} session.
 }
 \description{
-Calculate a buffer around non-\code{NA} cells or cells with values of 0 in a raster. The output will be a raster. This function utilizes the \pkg{GRASS} module \href{https://grass.osgeo.org/grass82/manuals/r.buffer.html}{\code{r.buffer}} and is the same or at least similar to the \pkg{terra} function \code{\link[terra]{buffer}}.
+Calculate a buffer around non-\code{NA} cells or cells with values of 0 in a raster. The output will be a raster. This function utilizes the \code{GRASS} module \href{https://grass.osgeo.org/grass82/manuals/r.buffer.html}{\code{r.buffer}} and is the same or at least similar to the \pkg{terra} function \code{\link[terra]{buffer}}.
 This function is a potentially faster version of the \code{\link[terra]{buffer}} function in the \pkg{terra} package for calculating a buffer around non-\code{NA} cells or cells with values of 0 in a raster. The output will be a raster.
 }
 \examples{
-
-\donttest{
-
-# change this to where GRASS is installed on your system
-grassDir <- 'C:/Program Files/GRASS GIS 8.2' # example for a PC
-grassDir <- "/Applications/GRASS-8.2.app/Contents/Resources" # for a Mac
-
-library(terra)
-rastFile <- system.file('extdata/madForest2000.tif', package='fasterRaster')
-madForest2000 <- rast(rastFile)
-rastBuff <- fasterBufferRast(rast=madForest2000, width=2,
-units='kilometers', grassDir=grassDir)
-
-plot(rastBuff, col=c('green', 'gray'))
-legend('topright', legend=c('forest', 'buffer'), fill=c('green', 'gray'))
-
-}
+man/examples/ex_fasterBufferRast.r
 
 }
 \seealso{

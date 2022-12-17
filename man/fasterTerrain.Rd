@@ -14,8 +14,7 @@ fasterTerrain(
   tanCurve = FALSE,
   eastWestSlope = FALSE,
   northSouthSlope = FALSE,
-  grassDir = NULL,
-  alreadyInGrass = FALSE,
+  grassDir = options()$grassDir,
   grassToR = TRUE,
   outGrassNameSlope = "slope",
   outGrassNameAspect = ifelse(northIs0, "aspectNorthIs0", "aspectEastIs0"),
@@ -27,7 +26,7 @@ fasterTerrain(
 )
 }
 \arguments{
-\item{rast}{Either a raster with elevation data or the name of a raster in an existing GRASS session.}
+\item{rast}{A \code{SpatRaster} or the name of a raster already in an existing \code{GRASS} session.}
 
 \item{slope}{Logical, if \code{TRUE} (default) then calculate slope.}
 
@@ -35,7 +34,7 @@ fasterTerrain(
 
 \item{aspect}{Logical, if \code{TRUE} then calculate aspect. Aspect is given in degrees from North going clockwise (0 = north, 90 = east, 180 = south, 270 = west).}
 
-\item{northIs0}{Logical. If \code{TRUE} (default), aspect will be reported such that 0 is north, and degrees run clockwise (90 is east, 180 south, 270 west). If \code{FALSE}, then aspect will be reported such that 0 is east, and degrees run counterclockwise (90 is north, 180 west, 270 south). The latter is the default in GRASS7.}
+\item{northIs0}{Logical. If \code{TRUE} (default), aspect will be reported such that 0 is north, and degrees run clockwise (90 is east, 180 south, 270 west). If \code{FALSE}, then aspect will be reported such that 0 is east, and degrees run counterclockwise (90 is north, 180 west, 270 south). The latter is the default in \code{GRASS}7.}
 
 \item{profileCurve}{Logical, if \code{TRUE}, calculate profile curvature. Default is \code{FALSE}.}
 
@@ -45,54 +44,36 @@ fasterTerrain(
 
 \item{northSouthSlope}{Logical, if \code{TRUE}, calculate slope in north-south direction. Default is \code{FALSE}.}
 
-\item{grassDir}{Character or \code{NULL} (default). Name of the directory in which GRASS is installed. Example for a Windows system: \code{'C:/Program Files/GRASS GIS 8.2'}. If this is \code{NULL}, R will search for the directory in which GRASS is installed. This usually fails, or if it succeeds, takes several minutes.}
+\item{grassDir}{Name of the folder path in which \code{GRASS} is installed. For a Windows system, this might be something like \code{'C:/Program Files/GRASS GIS 8.2'}. For a Mac system, this might be like \code{"/Applications/GRASS-8.2.app/Contents/Resources"}. If you are using a lot of \pkg{fasterRaster} functions, it can be easier to set this once using \code{\link{fasterOptions}}. By default, this is \code{NULL}, in which case the install path for \code{GRASS} will be searched for, but if not found, will result in an error.}
 
-\item{alreadyInGrass}{Logical, if \code{FALSE} (default) then start a new GRASS session and import the raster named in \code{rast}. If \code{FALSE}, use a raster already in GRASS with the name given by \code{rast}. The latter is useful if you are chaining \pkg{fasterRaster} functions together and the first function initializes the session. The first function should use \code{alreadyInGrass = FALSE} and subsequent functions should use \code{alreadyInGrass = TRUE} then use their \code{rast} (or \code{vect}) arguments to name the raster (or vector) that was made by the previous function.}
+\item{grassToR}{If \code{TRUE} (default) then the output will be returned to \pkg{R}. If \code{FALSE}, then the output is left in the \code{GRASS} session and named the value in \code{outGrassName}. You can then refer to the output in subsequent \pkg{fasterRaster} functions and avoid the need to re-import it. This is called "chaining" functions together, and it can save a lot of computational time.}
 
-\item{grassToR}{Logical, if \code{TRUE} (default) then the output will be returned to R. If \code{FALSE}, then the output is left in the GRASS session and named the value in \code{outGrassName} \code{slope}, \code{aspect}, \code{profileCurve}, \code{tanCurve}, \code{eastWestSlope}, or \code{northSouthSlope}. The latter case is useful (and faster) when chaining several \pkg{fasterRaster} functions together.}
+\item{outGrassNameSlope}{Character. Name of slope raster in \pkg{GRASS}. Useful for referring to later in the same \code{GRASS} session.}
 
-\item{outGrassNameSlope}{Character. Name of slope raster in GRASS. Useful for referring to later in the same GRASS session.}
+\item{outGrassNameAspect}{Character. Name of aspect raster in \pkg{GRASS}. Useful for referring to later in the same \code{GRASS} session.}
 
-\item{outGrassNameAspect}{Character. Name of aspect raster in GRASS. Useful for referring to later in the same GRASS session.}
+\item{outGrassNameProfileCurve}{Character. Name of profile curve raster in \pkg{GRASS}. Useful for referring to later in the same \code{GRASS} session.}
 
-\item{outGrassNameProfileCurve}{Character. Name of profile curve raster in GRASS. Useful for referring to later in the same GRASS session.}
+\item{outGrassNameTanCurve}{Character. Name of tangent curve raster in \pkg{GRASS}. Useful for referring to later in the same \code{GRASS} session.}
 
-\item{outGrassNameTanCurve}{Character. Name of tangent curve raster in GRASS. Useful for referring to later in the same GRASS session.}
+\item{outGrassNameEastWestSlope}{Character. Name of east-west slope raster in \pkg{GRASS}. Useful for referring to later in the same \code{GRASS} session.}
 
-\item{outGrassNameEastWestSlope}{Character. Name of east-west slope raster in GRASS. Useful for referring to later in the same GRASS session.}
+\item{outGrassNameNorthSouthSlope}{Character. Name of north-south slope raster in \pkg{GRASS}. Useful for referring to later in the same \code{GRASS} session.}
 
-\item{outGrassNameNorthSouthSlope}{Character. Name of north-south slope raster in GRASS. Useful for referring to later in the same GRASS session.}
-
-\item{...}{Arguments to pass to \code{\link[rgrass]{execGRASS}} when used for rasterizing (i.e., function \code{r.slope.aspect} in GRASS).}
-
-\item{outGrassName}{Character. Name of output in GRASS. This is useful if you want to refer to the output object in GRASS later in a session.#' @return If \code{grassToR} if \code{TRUE}, then a raster or raster stack with the same extent, resolution, and coordinate reference system as \code{rast}. Regardless, raster(s) given by the names in the \code{outGrassName*} arguments are used are written into the GRASS session.}
+\item{...}{Arguments to pass to \code{\link[rgrass]{execGRASS}} when used for rasterizing (i.e., function \code{r.slope.aspect} in \code{GRASS}).}
+}
+\value{
+If \code{grassToR} if \code{TRUE}, then a raster or raster stack with the same extent, resolution, and coordinate reference system as \code{rast}. Regardless, raster(s) given by the names in the \code{outGrassName*} arguments are used are written into the \code{GRASS} session.
 }
 \description{
 This function is a potentially faster version of the \code{\link[terra]{terrain}} function in the \pkg{terra} package for calculating slope and aspect of a raster. It can also calculate profile curvature, tangential curvature, and slope in the east-west or north-south directions.
 }
 \details{
-See the documentation for the GRASS module \code{r.slope.aspect}{https://grass.osgeo.org/grass82/manuals/r.slope.aspect.html}.
+See the documentation for the \code{GRASS} module \code{r.slope.aspect}{https://grass.osgeo.org/grass82/manuals/r.slope.aspect.html}.
 }
 \examples{
-\donttest{
-# change this according to where GRASS 7 is installed on your system
-grassDir <- 'C:/Program Files/GRASS GIS 8.2' # example for a PC
-grassDir <- "/Applications/GRASS-8.2.app/Contents/Resources" # for a Mac
+man/examples/ex_fasterTerrain.r
 
-data(madElev)
-
-# could also use terrain() which may be faster
-# in this example
-topo <- fasterTerrain(rast=madElev, slope=TRUE, aspect=TRUE,
-grassDir=grassDir)
-
-# terrain function from the raster package... much slower in this example
-# slp <- terrain(elev, opt='slope', unit='degrees')
-# asp <- terrain(elev, opt='aspect', unit='degrees')
-# topo <- stack(slp, asp)
-# names(topo) <- c('slope', 'aspect')
-plot(topo)
-}
 }
 \seealso{
 \code{\link[terra]{terrain}}

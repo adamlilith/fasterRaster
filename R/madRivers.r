@@ -14,10 +14,6 @@
 #'
 #' @source \href{http://www.diva-gis.org/gdata}{DIVA-GIS}
 #'
-#' @examples
-#'
-#' library(sf)
-#' data(madRivers)
-#' plot(madRivers)
+#' @examples man/examples/ex_madData.r
 #'
 NULL

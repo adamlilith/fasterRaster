@@ -2,55 +2,43 @@
 % Please edit documentation in R/initGrass.r
 \name{initGrass}
 \alias{initGrass}
-\title{Initialize GRASS session and import raster and/or vector(s)}
+\title{Initialize \code{GRASS} session and import raster and/or vector(s)}
 \usage{
 initGrass(
   rast = NULL,
   vect = NULL,
-  alreadyInGrass = FALSE,
   rastName = "rast",
   vectName = "vect",
   mapset = "PERMANENT",
   location = "default",
   tempDir = tempfile(),
-  grassDir = NULL
+  grassDir = options()$grassDir
 )
 }
 \arguments{
-\item{rast}{Either: a \code{SpatRaster} object \emph{or} the name of a raster already imported into GRASS \emph{or} \code{NULL} (default) in which case no raster is exported into GRASS. Either \code{rast} or \code{vect} (or both) must be non-\code{NULL}.}
+\item{rast}{Either: a \code{SpatRaster} object \emph{or} the name of a raster already imported into \code{GRASS} \emph{or} \code{NULL} (default) in which case no raster is exported into \pkg{GRASS}. Either \code{rast} or \code{vect} (or both) must be non-\code{NULL}. You cannot set one equal to a name and the other to a raster/vector.}
 
-\item{vect}{Either: a \code{Spatvector} or \code{sf} object \emph{or} the name of a vector dataset already imported into GRASS \emph{or} \code{NULL} (default) in which case no vector is exported into GRASS. Either \code{rast} or \code{vect} (or both) must be non-\code{NULL}.}
+\item{vect}{Either: a \code{Spatvector} or \code{sf} object \emph{or} the name of a vector dataset already imported into \code{GRASS} \emph{or} \code{NULL} (default) in which case no vector is exported into \pkg{GRASS}. Either \code{rast} or \code{vect} (or both) must be non-\code{NULL}. You cannot set one equal to a name and the other to a raster/vector.}
 
-\item{alreadyInGrass}{Logical, if \code{FALSE} (default) then start a new GRASS session and import the raster named in \code{rast} or the vector named in \code{vect}. If \code{FALSE}, use a raster or vector already in GRASS with the name given by \code{rast} or \code{vect}. The latter case is useful if you are chaining \pkg{fasterRaster} functions together and the first function initializes the session. The first function should use \code{alreadyInGrass = FALSE} and subsequent functions should use \code{alreadyInGrass = TRUE} then use their \code{rast} (or \code{vect}) arguments to name the raster (or vector) that was made by the previous function.}
+\item{rastName}{Character. Name of the raster when exported to \pkg{GRASS}. Default is \code{'rast'}.}
 
-\item{rastName}{Character. Name of the raster when exported to GRASS. Default is \code{'rast'}.}
+\item{vectName}{Character. Name of the vector when exported to \pkg{GRASS}. Default is \code{'vect'}.}
 
-\item{vectName}{Character. Name of the vector when exported to GRASS. Default is \code{'vect'}.}
+\item{mapset}{Character. Mapset of \code{GRASS} location. The default name is \code{'PERMANENT'}. Typically, it is not a good idea to change this, as most functions in the \pkg{fasterRaster} package assume the mapset is named "default".}
 
-\item{mapset}{Character. Mapset of GRASS location. The default name is \code{'PERMANENT'}. Typically, it is not a good idea to change this, as most functions in the \pkg{fasterRaster} package assume the mapset is named "default".}
+\item{location}{Character. Name of \code{GRASS} location. The default name is \code{'default'}. Typically, it is not a good idea to change this, as most functions in the \pkg{fasterRaster} package assume the location is named "default".}
 
-\item{location}{Character. Name of GRASS location. The default name is \code{'default'}. Typically, it is not a good idea to change this, as most functions in the \pkg{fasterRaster} package assume the location is named "default".}
+\item{tempDir}{Character. Path name of directory in which to create the \code{GRASS} mapset. The default is to create a directory in the location for temporary files for the operating system.}
 
-\item{tempDir}{Character. Path name of directory in which to create the GRASS mapset. The default is to create a directory in the location for temporary files for the operating system.}
-
-\item{grassDir}{Character or \code{NULL} (default). Name of the directory in which GRASS is installed. Example for a Windows system: \code{'C:/Program Files/GRASS GIS 8.2'}. If this is \code{NULL}, R will search for the directory in which GRASS is installed. This usually fails, or if it succeeds, takes several minutes.}
+\item{grassDir}{Name of the folder path in which \code{GRASS} is installed. For a Windows system, this might be something like \code{'C:/Program Files/GRASS GIS 8.2'}. For a Mac system, this might be like \code{"/Applications/GRASS-8.2.app/Contents/Resources"}. If you are using a lot of \pkg{fasterRaster} functions, it can be easier to set this once using \code{\link{fasterOptions}}. By default, this is \code{NULL}, in which case the install path for \code{GRASS} will be searched for, but if not found, will result in an error.}
 }
 \value{
-One or two-element character vector. If the vector is one element long then it will be the name of raster \emph{or} vector exported or already in GRASS session. If it is two elements long then it will be the name of the raster \emph{and} the vector exported or already in the GRASS session (in that order).
+One or two-element character vector. If one element long, then it will be the name of raster \emph{or} vector exported or already in a \code{GRASS} session. If two elements long, then it will be the name of the raster \emph{and} the vector exported or already in a \code{GRASS} session.
 }
 \description{
-Initiate a GRASS session and import a raster and/or vector into it.
+Initiate a \code{GRASS} session and import a raster and/or vector into it.
 }
 \examples{
-
-\donttest{
-# change this to where GRASS 7 is installed on your system
-grassDir <- 'C:/Program Files/GRASS GIS 8.2'
-
-data(madElev)
-input <- initGrass(rast=madElev, grassDir=grassDir)
-data(madCoast0)
-input <- initGrass(vect=madCoast0, grassDir=grassDir)
-}
+man/examples/ex_initGrass.r
 
 }

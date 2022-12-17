@@ -17,10 +17,7 @@ data(madRivers)
 Spatial lines object of major rivers in a portion of Madagascar.
 }
 \examples{
-
-library(sf)
-data(madRivers)
-plot(madRivers)
+man/examples/madData.r
 
 }
 \keyword{Madagascar}

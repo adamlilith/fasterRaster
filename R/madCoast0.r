@@ -14,10 +14,6 @@
 #'
 #' @source Database of Global Administrative Areas Version 2.8 (\href{https://gadm.org}{GADM})
 #'
-#' @examples
-#'
-#' library(sf)
-#' data(madCoast0)
-#' plot(madCoast0)
+#' @examples man/examples/ex_madData.r
 #'
 NULL

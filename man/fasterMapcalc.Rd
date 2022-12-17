@@ -4,18 +4,12 @@
 \alias{fasterMapcalc}
 \title{User-defined calculations on a single raster}
 \usage{
-fasterMapcalc(
-  ...,
-  expression,
-  grassDir = NULL,
-  alreadyInGrass = FALSE,
-  grassToR = TRUE
-)
+fasterMapcalc(..., expression, grassDir = options()$grassDir, grassToR = TRUE)
 }
 \arguments{
-\item{...}{Arguments to pass to \code{\link[rgrass]{execGRASS}} when calculating horizon height (i.e., function \code{r.horizon} in GRASS).}
+\item{...}{Arguments to pass to \code{\link[rgrass]{execGRASS}} when calculating horizon height (i.e., function \code{r.horizon} in \code{GRASS}).}
 
-\item{expression}{Character. Formula to evaluate. Below are examples where the input raster is named "rast" in the GRASS session and the output raster will be named "out". Note that rasters passed as rasters/stacks/bricks must be referred to in formulae using their raster name (not name in R). In other words, in the examples below we could call a raster in R \code{myRast} but \code{names(myRast)} yields \code{rast}, so we need to call it "\code{rast}" in the formulae. The raster "\code{out}" will be created by the function.
+\item{expression}{Character. Formula to evaluate. Below are examples where the input raster is named "rast" in the \code{GRASS} session and the output raster will be named "out". Note that rasters passed as rasters/stacks/bricks must be referred to in formulae using their raster name (not name in R). In other words, in the examples below we could call a raster in R \code{myRast} but \code{names(myRast)} yields \code{rast}, so we need to call it "\code{rast}" in the formulae. The raster "\code{out}" will be created by the function.
 \itemize{
 \item Take the input raster "rast", multiplies each cell by 0, then adds 1 to each cell: \code{'out = (rast * 0) + 1'}
 \item Take the input raster "rast", multiplies each cell by 0, then adds 1 to each cell: \code{'out = rast^2'}
@@ -24,73 +18,25 @@ fasterMapcalc(
 \item Low-pass (averaging) filter across a 3x3 neighborhood: \code{'out = (rast[-1, -1] + rast[-1, 0] + rast[-1, 1] + rast[0, -1] + rast[0, 0] + rast[0, 1] + rast[1, -1] + rast[1, 0] + rast[1, 1]) / 9'}
 \item High-pass ("edge-finding") filter across a 3x3 neighborhood: \code{'out = -0.7 * rast[-1, -1] -1 * rast[-1, 0] -0.7 * rast[-1, 1] -1 * rast[0, -1] + 6.8 * rast[0, 0] -1 * rast[0, 1] -0.7 * rast[1, -1] -1 * rast[1, 0] -0.7 * rast[1, 1]'}
 }
-See the documentation for \code{r.mapcalc}{https://grass.osgeo.org/grass82/manuals/r.mapcalc.html} for more information. Note that some operations that may make sense in GRASS may not make sense when exported back to R (e.g., changing color).}
+See the documentation for \code{r.mapcalc}{https://grass.osgeo.org/grass82/manuals/r.mapcalc.html} for more information. Note that some operations that may make sense in \code{GRASS} may not make sense when exported back to R (e.g., changing color).}
 
-\item{grassDir}{Character or \code{NULL} (default). Name of the directory in which GRASS is installed. Example for a Windows system: \code{'C:/Program Files/GRASS GIS 8.2'}. If this is \code{NULL}, R will search for the directory in which GRASS is installed. This usually fails, or if it succeeds, takes several minutes.}
+\item{grassDir}{Name of the folder path in which \code{GRASS} is installed. For a Windows system, this might be something like \code{'C:/Program Files/GRASS GIS 8.2'}. For a Mac system, this might be like \code{"/Applications/GRASS-8.2.app/Contents/Resources"}. If you are using a lot of \pkg{fasterRaster} functions, it can be easier to set this once using \code{\link{fasterOptions}}. By default, this is \code{NULL}, in which case the install path for \code{GRASS} will be searched for, but if not found, will result in an error.}
 
-\item{alreadyInGrass}{Logical, if \code{FALSE} (default) then start a new GRASS session and import the raster named in \code{rast}. If \code{FALSE}, use a raster already in GRASS with the name given by \code{rast}. The latter is useful if you are chaining \pkg{fasterRaster} functions together and the first function initializes the session. The first function should use \code{alreadyInGrass = FALSE} and subsequent functions should use \code{alreadyInGrass = TRUE} then use their \code{rast} (or \code{vect}) arguments to name the raster (or vector) that was made by the previous function.}
-
-\item{grassToR}{Logical, if \code{TRUE} (default) then the output will be returned to R. If \code{FALSE}, then the output is left in the GRASS session and named the value in \code{outGrassName} \code{longitude} and \code{latitude}. The latter case is useful (and faster) when chaining several \pkg{fasterRaster} functions together.}
+\item{grassToR}{If \code{TRUE} (default) then the output will be returned to \pkg{R}. If \code{FALSE}, then the output is left in the \code{GRASS} session and named the value in \code{outGrassName}. You can then refer to the output in subsequent \pkg{fasterRaster} functions and avoid the need to re-import it. This is called "chaining" functions together, and it can save a lot of computational time.}
 }
 \value{
-If \code{grassToR} if \code{TRUE}, then a raster object with the same coordinate reference system, extent, and resolution as \code{rast}. Regardless, a raster by a name given in \code{expression} (before the "=" symbol) is written into the GRASS session.
+If \code{grassToR} if \code{TRUE}, then a raster object with the same coordinate reference system, extent, and resolution as \code{rast}. Regardless, a raster by a name given in \code{expression} (before the "=" symbol) is written into the \code{GRASS} session.
 }
 \description{
-This function creates a raster from another raster based on a user-defined function. It utilizes the GRASS module \code{r.mapcalc}.
+This function creates a raster from another raster based on a user-defined function. It utilizes the \code{GRASS} module \code{r.mapcalc}.
 }
 \details{
-See the documentation for the GRASS module \code{r.mapcalc}{https://grass.osgeo.org/grass82/manuals/r.mapcalc.html}. The function \code{\link{fasterFocal}} \emph{may} be faster for focal calculations.
+See the documentation for the \code{GRASS} module \code{r.mapcalc}{https://grass.osgeo.org/grass82/manuals/r.mapcalc.html}. The function \code{\link{fasterFocal}} \emph{may} be faster for focal calculations.
 }
 \examples{
+man/examples/ex_fasterMapcalc.r
 
-\donttest{
-# change this to where GRASS 7 is installed on your system
-grassDir <- 'C:/Program Files/GRASS GIS 8.2' # example for a PC
-grassDir <- "/Applications/GRASS-8.2.app/Contents/Resources" # for a Mac
-
-data(madElev)
-names(madElev) <- 'madElev'
-ex <- 'out = madElev^2'
-madElev2 <- fasterMapcalc(madElev, expression=ex, grassDir=grassDir)
-plot(stack(madElev, madElev2))
-
-ex <- 'madElev_17 = 17'
-m_17 <- fasterMapcalc(madElev, expression=ex, grassDir=grassDir)
-plot(stack(madElev, m_17))
-
-# low-pass filter
-ex <- 'lowPass = (madElev[-1, -1] + madElev[-1, 0] + madElev[-1, 1] + madElev[0, -1] + madElev[0, 0] + madElev[0, 1] + madElev[1, -1] + madElev[1, 0] + madElev[1, 1]) / 9'
-lp <- fasterMapcalc(madElev, expression=ex, grassDir=grassDir)
-plot(stack(madElev, lp))
-
-# high-pass filter
-ex <- 'highPass = -0.7 * madElev[-1, -1] -1 * madElev[-1, 0] -0.7 * madElev[-1, 1] -1 * madElev[0, -1] + 6.8 * madElev[0, 0] -1 * madElev[0, 1] -0.7 * madElev[1, -1] -1 * madElev[1, 0] -0.7 * madElev[1, 1]'
-hp <- fasterMapcalc(madElev, expression=ex, grassDir=grassDir)
-plot(stack(madElev, hp))
-
-# Using some rasters already in a GRASS session:
-# Note we are passing raster "hp" as a raster, not as something already in
-# GRASS (even though it is). Also, we need to refer to the "hp" raster by
-# its raster name in the formula (ie, see "names(hp)") since it is passed in
-# as a raster.
-
-input <- initGrass(FALSE, rast=madElev, rastName='madElev', grassDir=grassDir)
-exportRastToGrass(lp, grassName='lp')
-ex <- 'out = (lp * highPass) / madElev'
-mapcalc <- fasterMapcalc('madElev', 'lp', hp, expression=ex,
-grassDir=grassDir, alreadyInGrass=TRUE)
-mapcalc
-
-# note differences between r.mapcalc and raster function math:
-mapcalc
-rast <- (lp * hp) / madElev
-rast
-
-# but they largely look the same
-plot(stack(mapcalc, rast))
-plot(mapcalc - rast)
-}
 }
 \seealso{
-\code{\link[terra]{calc}}, \code{\link[terra]{focal}}, \code{\link{fasterFocal}}
+\code{\link[terra]{app}}, \code{\link[terra]{focal}}, \code{\link{fasterFocal}}
 }

@@ -3,7 +3,7 @@
 \name{fasterInfoRast}
 \alias{fasterInfoRast}
 \alias{fasterInfoVect}
-\title{Information on a raster or vector in a GRASS session}
+\title{Information on a raster or vector in a \code{GRASS} session}
 \usage{
 fasterInfoRast(rastName, flags = NULL)
 
@@ -21,20 +21,6 @@ Nothing (displays information on the raster or vector).
 Displays information on a raster or vector already in an R session. For further
 }
 \examples{
-
-\donttest{
-
-rastFile <- system.file('extdata', 'madElev.tif', package='fasterRaster')
-madElev <- rast(rastFile)
-
-# start a GRASS session
-initGrass(madElev, rastName = 'elev')
-fasterInfoRast('madElev')
-
-# start a GRASS session
-exportVectToGrass(madCoast0, vectName = 'madCoast0')
-fasterInfoVect('madCoast0')
-
-}
+man/examples/ex_fasterInfoRast.r
 
 }
