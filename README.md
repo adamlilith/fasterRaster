@@ -1,9 +1,9 @@
 # fasterRaster
-Faster raster processing in**R** using **GRASS** GIS
+Faster raster processing in **R** using **GRASS GIS**
 
 <img align="right" src="fasterRaster.png" height="230"/>  
 
-**fasterRaster** uses the stand-alone installer of Open Source Geospatial's [GRASS GIS Version 7](https://grass.osgeo.org/rgrass/) to speed up some commonly used raster and vector operations. Most of these operations can be done using the **raster** or newer **terra** packages by**R**obert Hijmans, or the **rgeos** or newer **sf** packages.  However, when the input raster or vector is very large in memory, in some cases functions in those packages can take a long time and fail. The **fasterRaster** package attempts to address these problems by calls to **GRASS** which is faster. Please note that **terra** and **sf** may be faster and thus the better solution for functions that this package implements. However, in some cases **fasterRaster** is still faster!
+**fasterRaster** uses the stand-alone installer of Open Source Geospatial's [GRASS GIS Version 8](https://grass.osgeo.org/rgrass/) to speed up some commonly used raster and vector operations. Most of these operations can be done using the **raster** or newer **terra** packages by Robert Hijmans, or the **rgeos** or newer **sf** packages.  However, when the input raster or vector is very large in memory, in some cases functions in those packages can take a long time and fail. The **fasterRaster** package attempts to address these problems by calls to **GRASS** which is faster. Please note that **terra** and **sf** may be faster and thus the better solution for functions that this package implements. However, in some cases **fasterRaster** is still faster!
 
 # Getting started #
 
@@ -15,7 +15,7 @@ You can install **fasterRaster** from CRAN.  Alternatively, you can get the late
 
 To use **fasterRaster** you will also need to install [GRASS version 8+](https://grass.osgeo.org/) on your operating system. You will need to use the stand-alone installer, not the Open Source Geospatial (OS Geo) installer.
 
-You will also need to know the install path for **GRASS**. On my machine (Windows), it is `C:/Program Files/GRASS GIS 8.2`. A friend whose computer was infected with Mac OS told me it was `"/Applications/GRASS-8.2.app/Contents/Resources"` for them (note the double quotes). So before running any `faster~` functions that need **GRASS** you need to tell the functions where **GRASS** is. There are two ways to do this.  
+You will also need to know the install path for **GRASS**. On my machine (Windows), it is `C:/Program Files/GRASS GIS 8.2`. A friend whose computer was infected with Mac OS told me it was `"/Applications/GRASS-8.2.app/Contents/Resources"` for them (note the double quotes). So before running any `fasterRaster` functions that need **GRASS** you need to tell the functions where **GRASS** is. There are two ways to do this.  
 
 First, you can pass this to each function that needs it. For example, you can call functions like this:  
 
@@ -76,11 +76,11 @@ Here's an example in which we'll chain the `fasterVectToRastDistance` and `faste
 `quants <- fasterQuantile(rast='distToVect', probs=c(0.05, 0.5, 0.95))`  
 `quants`  
 
-The first function imports the raster and vector, and does its calculations, but does not export the output raster to**R**.**R**ather, the output raster stays in the **GRASS** session and is named `distToVect`. In the second function the first argument is `distToVect`, the name of the raster we just created in the first function. This tells the second function to look in the **GRASS** session for the raster, not in**R**. If we had instead set `rast` in the second function equal to an actual raster, then the function would have imported the raster into a **GRASS**S session, which takes some time to do.
+The first function imports the raster and vector, and does its calculations, but does not export the output raster to **R**. Rather, the output raster stays in the **GRASS** session and is named `distToVect`. In the second function the first argument is `distToVect`, the name of the raster we just created in the first function. This tells the second function to look in the **GRASS** session for the raster, not in**R**. If we had instead set `rast` in the second function equal to an actual raster, then the function would have imported the raster into a **GRASS**S session, which takes some time to do.
 
 You can see that by chaining a series of `faster~` functions together, the process can be made faster because all of the operations are done in **GRASS** with less back-and-forth between **GRASS** and **R**.  The one exception to this is that some `faster~` functions do not use **GRASS** (e.g., `fasterFragmentation` and `fasterFocal`), so you can't use this trick.
 
-## The generic `faster` function ##
+## The generic `faster()` function ##
 The `faster` function is a generic wrapper for **GRASS** modules. You can use it to call many of the modules in **GRASS**.  It may not always work, but it simplifies the task of initiating a **GRASS** instance, importing the raster/vector, and executing the call:
 
 `grassDir <- 'C:/Program Files/GRASS GIS 8.2'`  
@@ -97,7 +97,7 @@ By the way, this is the same as:
 
 However, you can use `faster` to call **GRASS** functions that do not have a dedicated functon in **fasterRaster**, so `faster` is very flexible!
 
-## Chaining with the `faster` function ##
+## Chaining with the `faster()` function ##
 
 Here is an example of chaining with the `faster` function. The second function uses the **GRASS** session initiated by the first function. It then uses the raster created in the **GRASS** session by the first function as the input for its module.
 
