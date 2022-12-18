@@ -1,4 +1,9 @@
 # fasterRaster
+<!-- badges: start -->
+[![R build status](https://github.com/r-lib/rcmdcheck/workflows/R-CMD-check/badge.svg)](https://github.com/r-lib/rcmdcheck/actions)
+[![](https://www.r-pkg.org/badges/version/rcmdcheck)](https://www.r-pkg.org/pkg/rcmdcheck)
+<!-- badges: end -->
+
 Faster raster processing in **R** using **GRASS GIS**
 
 <img align="right" src="fasterRaster.png" height="230"/>  
