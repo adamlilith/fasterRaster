@@ -7,8 +7,9 @@
 #' @section Usage:
 #' To set the \code{grassDir} argument for all \pkg{fasterRaster} functions at once, simply do this: \cr
 #' 
-#' \code{grassDir <- 'C:/Program Files/GRASS GIS 8.2'} # example path for Windows \cr
-#' \code{grassDir <- "/Applications/GRASS-8.2.app/Contents/Resources"} # example path for a Mac \cr
+#' \code{grassDir <- 'C:/Program Files/GRASS GIS 8.2' # example path for Windows} \cr
+#' \code{grassDir <- "/Applications/GRASS-8.2.app/Contents/Resources" # example path for a Mac} \cr
+#' \code{grassDir <- '/usr/local/grass' # Linux... maybe} \cr
 #'
 #' \code{options(grassDir = grassDir)} \cr
 #'
