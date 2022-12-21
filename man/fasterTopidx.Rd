@@ -8,7 +8,8 @@ fasterTopidx(
   rast,
   grassDir = options()$grassDir,
   grassToR = TRUE,
-  outGrassName = "topoWetnessIndex",
+  inRastName = ifelse(is.null(names(rast)), "rast", names(rast)),
+  outGrassName = "twiRast",
   ...
 )
 }
@@ -19,23 +20,44 @@ fasterTopidx(
 
 \item{grassToR}{If \code{TRUE} (default) then the output will be returned to \pkg{R}. If \code{FALSE}, then the output is left in the \code{GRASS} session and named the value in \code{outGrassName}. You can then refer to the output in subsequent \pkg{fasterRaster} functions and avoid the need to re-import it. This is called "chaining" functions together, and it can save a lot of computational time.}
 
+\item{inRastName}{The name of the input raster in \code{GRASS}. This is useful only if you are "chaining" \code{fasterRaster} functions together and wish to refer to the input raster later. The default value is the name of the raster (i.e., \code{names(rast)}).}
+
 \item{outGrassName}{Character. Name of output in \code{GRASS}. This is useful if you want to refer to the output object in \code{GRASS} later in a session by "chaining" functions.}
 
 \item{...}{Arguments to pass to \code{\link[rgrass]{execGRASS}} when calculating horizon height (i.e., function \code{r.horizon} in \code{GRASS}).}
 }
 \value{
-If \code{grassToR} if \code{TRUE}, then a raster with the same coordinate reference system, extent, and resolution as \code{rast}. Otherwise, a raster is written into the \code{GRASS} session. The name of this vector is given by \code{outGrassName}.
+If \code{grassToR} if \code{TRUE}, then a raster with the same coordinate reference system, extent, and resolution as \code{rast}. Regardless, a raster is written into the \code{GRASS} session. The name of this vector is given by \code{outGrassName}.
 }
 \description{
 This function creates a raster where cell values represent the Topographic Wetness Index (TPI), a measure of how much water drains or pools into a cell. It utilizes the \code{GRASS} function \code{r.topidx}.
 }
-\details{
-See the documentation for the \code{GRASS} module \code{r.topidx}{https://grass.osgeo.org/grass82/manuals/r.topidx.html}.
-}
 \examples{
-man/examples/ex_fasterTopidx.r
+\dontrun{
+
+# change this to where GRASS is installed on your system
+# grassDir <- 'C:/Program Files/GRASS GIS 8.2' # example for a PC
+# grassDir <- "/Applications/GRASS-8.2.app/Contents/Resources" # for a Mac
+
+library(terra)
+
+madElev <- fasterData('madElev')
+madForest2000 <- fasterData('madForest2000')
+
+# must first project elevation raster
+madElev_albers <- fasterProjectRast(madElev, template=madForest2000,
+grassDir=grassDir)
+
+twi <- fasterTopidx(madElev_albers, grassDir=grassDir)
+
+par(mfrow=c(1, 2))
+plot(madElev_albers, main='Elevation (m)')
+plot(twi, main='TWI')
+
+}
+
 
 }
 \seealso{
-\code{\link[terra]{terrain}}
+\code{\link[terra]{terrain}} in \pkg{terra}; \href{https://grass.osgeo.org/grass82/manuals/r.topidx.html}{\code{r.topidx}} in \code{GRASS}
 }

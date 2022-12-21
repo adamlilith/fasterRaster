@@ -14,7 +14,8 @@ fasterHorizon(
   mask = NULL,
   grassDir = options()$grassDir,
   grassToR = TRUE,
-  outGrassName = "horizonHeight",
+  inRastName = ifelse(is.null(names(rast)), "rast", names(rast)),
+  outGrassName = "horizonHeightRast",
   ...
 )
 }
@@ -35,6 +36,8 @@ fasterHorizon(
 
 \item{grassToR}{If \code{TRUE} (default) then the output will be returned to \pkg{R}. If \code{FALSE}, then the output is left in the \code{GRASS} session and named the value in \code{outGrassName}. You can then refer to the output in subsequent \pkg{fasterRaster} functions and avoid the need to re-import it. This is called "chaining" functions together, and it can save a lot of computational time.}
 
+\item{inRastName}{The name of the input raster in \code{GRASS}. This is useful only if you are "chaining" \code{fasterRaster} functions together and wish to refer to the input raster later. The default value is the name of the raster (i.e., \code{names(rast)}).}
+
 \item{outGrassName}{Character. Name of output in \code{GRASS}. This is useful if you want to refer to the output object in \code{GRASS} later in a session by "chaining" functions.}
 
 \item{...}{Arguments to pass to \code{\link[rgrass]{execGRASS}} when calculating horizon height (i.e., function \code{r.horizon} in \code{GRASS}).}
@@ -45,12 +48,24 @@ fasterHorizon(
 If \code{grassToR} if \code{TRUE}, then a raster or raster stack stack with the same extent, resolution, and coordinate reference system as \code{rast}. Otherwise, a raster is written into the \code{GRASS} session. The name of this raster is as \code{paste0(outGrassName, '_', xxx)}. For example, if \code{outGrassName = 'horizonHeight'}, and \code{directions} is \code{c(0, 90, 180, 270)}, then four rasters will be written: \code{horizonHeight_000}, \code{horizonHeight_090}, \code{horizonHeight_180}, and \code{horizonHeight_270}. Note the padding with zeros before angles <10.
 }
 \description{
-This function calculates a raster where values represent the height of the horizon for any cell in a particular direction. Height is given in radians (default) or degrees. It utilizes the \code{GRASS} function \code{r.horizon}.
-}
-\details{
-See the documentation for the \code{GRASS} module \code{r.horizon}{https://grass.osgeo.org/grass82/manuals/r.horizon.html}.
+This function calculates a raster where values represent the height of the horizon for any cell in a particular direction. Height is given in radians (default) or degrees.
 }
 \examples{
-man/examples/ex_fasterHorizon.r
+\dontrun{
 
+# change this to where GRASS is installed on your system
+grassDir <- 'C:/Program Files/GRASS GIS 8.2' # example for a PC
+grassDir <- "/Applications/GRASS-8.2.app/Contents/Resources" # for a Mac
+
+library(terra)
+madElev <- fasterData('madElev')
+
+elevHeight_deg <- fasterHorizon(madElev, units='degrees', grassDir=grassDir)
+
+plot(elevHeight_deg)
+
+}
+}
+\seealso{
+\href{https://grass.osgeo.org/grass82/manuals/r.horizon.html}{\code{r.horizon}} in \code{GRASS}
 }

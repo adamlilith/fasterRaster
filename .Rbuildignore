@@ -1,2 +1,8 @@
+^CONDUCT\.md$
+^\.travis\.yml$
+^README-.*\.png$
+^cran-comments\.md$
+^fasterRaster.png
 ^.*\.Rproj$
 ^\.Rproj\.user$
+^\.github

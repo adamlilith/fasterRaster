@@ -8,8 +8,8 @@ fasterConvertDegree(
   x,
   grassDir = options()$grassDir,
   grassToR = TRUE,
-  outGrassName = "degreeConvert",
-  ...
+  inRastName = ifelse(is.null(names(rast)), "rast", names(rast)),
+  outGrassName = "degreeConvertRast"
 )
 }
 \arguments{
@@ -20,16 +20,43 @@ fasterConvertDegree(
 \item{grassToR}{If \code{TRUE} (default) then the output will be returned to \pkg{R}. If \code{FALSE}, then the output is left in the \code{GRASS} session and named the value in \code{outGrassName}. You can then refer to the output in subsequent \pkg{fasterRaster} functions and avoid the need to re-import it. This is called "chaining" functions together, and it can save a lot of computational time.}
 
 \item{outGrassName}{Character. Name of output in \code{GRASS}. This is useful if you want to refer to the output object in \code{GRASS} later in a session by "chaining" functions.}
-
-\item{...}{Arguments to send to \code{\link[rgrass]{execGRASS}}.}
 }
 \value{
-Numeric, raster, or raster stack. Regardless, a set of rasters will be written into the current \code{GRASS} session. The name(s) of the rasters inn \code{GRASS} will be given by \code{outGrassName} with \code{'_', i} appended, where \code{i} starts at 1 for the first raster and increments by 1. For example, if \code{outGrassName = 'degreeConvert'}, then the raster(s) will be named \code{degreeConvert_1}, \code{degreeConvert_2}, etc.
+Numeric, raster, or raster stack. Regardless, a set of rasters will be written into the current \code{GRASS} session. The name(s) of the rasters in \code{GRASS} will be given by \code{outGrassName} with \code{'_', i} appended, where \code{i} starts at 1 for the first raster and increments by 1. For example, if \code{outGrassName = 'degreeConvert'}, then the raster(s) will be named \code{degreeConvert_1}, \code{degreeConvert_2}, etc.
 }
 \description{
 This function takes either a numeric vector or a raster where values represent degrees (typically in a direction). It then converts between cases where 0 degrees (direction) is intended to point east, with degrees running counterclockwise so 90 is north, 180 is west, and 270 south (this the the default for \code{GRASS} 7 modules) and cases where 0 degrees is intended to point north, with degrees running clockwise, so 90 is east, 180 south, and 270 west.
 }
 \examples{
-man/examples/fasterConvertDegree.r
+# Examples with scalar and scalar vector:
+fasterConvertDegree(0, grassDir)
+fasterConvertDegree(seq(0, 360, by=90))
 
+\dontrun{
+
+library(terra)
+
+# change this according to where GRASS is installed on your system
+grassDir <- 'C:/Program Files/GRASS GIS 8.2' # example for a PC
+grassDir <- "/Applications/GRASS-8.2.app/Contents/Resources" # for a Mac
+
+# Example with a raster:
+# First, generate an aspect raster from an elevation raster.
+# This is a contrived example because we could set the argument northIs0 in
+# fasterTerrain() to TRUE and get the raster we will name aspNorthIs0 from
+# that function in one step. Note that this could be done faster by
+# "chaining" fasterTerrain() and fasterConvertDegree().
+madElev <- fasterData('madElev')
+
+aspEastIs0 <- fasterTerrain(madElev, metrics='aspect', northIs0=FALSE,
+grassDir=grassDir)
+
+aspNorthIs0 <- fasterConvertDegree(aspEastIs0, grassDir=grassDir)
+
+oldPar <- par(mfrow=c(1, 2))
+plot(aspEastIs0, main='0 deg = east')
+plot(aspNorthIs0, main='0 deg = north')
+par(oldPar)
+
+}
 }

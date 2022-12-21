@@ -9,6 +9,7 @@ fasterLongLatRasts(
   mask = TRUE,
   grassDir = options()$grassDir,
   grassToR = TRUE,
+  inRastName = ifelse(is.null(names(rast)), "rast", names(rast)),
   outGrassName = c("longitude", "latitude"),
   ...
 )
@@ -22,6 +23,8 @@ fasterLongLatRasts(
 
 \item{grassToR}{If \code{TRUE} (default) then the output will be returned to \pkg{R}. If \code{FALSE}, then the output is left in the \code{GRASS} session and named the value in \code{outGrassName}. You can then refer to the output in subsequent \pkg{fasterRaster} functions and avoid the need to re-import it. This is called "chaining" functions together, and it can save a lot of computational time.}
 
+\item{inRastName}{The name of the input raster in \code{GRASS}. This is useful only if you are "chaining" \code{fasterRaster} functions together and wish to refer to the input raster later. The default value is the name of the raster (i.e., \code{names(rast)}).}
+
 \item{outGrassName}{Character vector with two elements, one for longitude and one for latitude.  Name of output in \pkg{GRASS}. This is useful if you want to refer to the output objects in \code{GRASS} later in a \code{GRASS} session.}
 
 \item{...}{Arguments to pass to \code{\link[rgrass]{execGRASS}} when used for rasterizing (i.e., function \code{r.latlong} in \code{GRASS}).}
@@ -30,12 +33,28 @@ fasterLongLatRasts(
 If \code{grassToR} if \code{TRUE}, then a raster stack with the same extent, resolution, and coordinate reference system as \code{rast}. Regardless, rasters with names given by \code{outGrassName} are written into the \code{GRASS} session.
 }
 \description{
-This function is a potentially faster version of the \code{\link[enmSdm]{longLatRasters}} function in the \pkg{enmSdm} package which calculates two rasters, one with cell values equaling the longitude of their centers and the other with cell values equaling the latitude of their centers. Please note that the raster must be projected (i.e., not in a geographic coordinate system, not in WGS84, NAD83, etc.) for the \code{GRASS}7 \code{r.longlat} module, on which this function is based, to work.
-}
-\details{
-See the documentation for the \code{GRASS} module \code{r.longlat}{https://grass.osgeo.org/grass82/manuals/r.longlat.html}.
+Create two rasters, one with cell values equal to cell latitude and the other cell longitude (in geographic, or unprojected coordinates).
 }
 \examples{
-man/examples/ex_fasterLongLatRasts.r
+\dontrun{
 
+library(terra)
+
+# change this to where GRASS is installed on your system
+grassDir <- 'C:/Program Files/GRASS GIS 8.2' # example for a PC
+grassDir <- "/Applications/GRASS-8.2.app/Contents/Resources" # for a Mac
+
+madForest2000 <- fasterData('madForest2000')
+
+unMasked <- fasterLongLatRasts(rast=madForest2000, mask=FALSE,
+grassDir=grassDir)
+plot(unMasked)
+
+masked <- fasterLongLatRasts(rast=madForest2000, grassDir=grassDir)
+plot(masked)
+
+}
+}
+\seealso{
+\href{https://grass.osgeo.org/grass82/manuals/r.latlong.html}{\code{r.latlong}} in \code{GRASS}
 }

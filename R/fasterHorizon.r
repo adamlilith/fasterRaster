@@ -1,8 +1,9 @@
 #' Horizon angle height raster from an elevation raster
 #'
-#' This function calculates a raster where values represent the height of the horizon for any cell in a particular direction. Height is given in radians (default) or degrees. It utilizes the \code{GRASS} function \code{r.horizon}.
+#' This function calculates a raster where values represent the height of the horizon for any cell in a particular direction. Height is given in radians (default) or degrees.
 #'
 #' @inheritParams .sharedArgs_rast
+#' @inheritParams .sharedArgs_inRastName
 #' @inheritParams .sharedArgs_grassDir_grassToR
 #' @inheritParams .sharedArgs_outGrassName
 #' @param units Either \code{'radians'} (default) or \code{'degrees'}.
@@ -12,10 +13,12 @@
 #' @param maxDist Either \code{NULL} (default) or numeric >= 0. Maximum distance to consider when finding horizon height. If \code{NULL} (default), the maximum distance is the full extent of the raster. Smaller values can decrease run time but also reduce accuracy.
 #' @param distance Numeric in the range [0.5, 1.5] (default is 1). This determines the step size when searching for the horizon from a given point. The default value of 1 goes cell-by-cell (i.e., search distance step size is one cell width).
 #' @param ... Arguments to pass to \code{\link[rgrass]{execGRASS}} when calculating horizon height (i.e., function \code{r.horizon} in \code{GRASS}).
+#'
 #' @return If \code{grassToR} if \code{TRUE}, then a raster or raster stack stack with the same extent, resolution, and coordinate reference system as \code{rast}. Otherwise, a raster is written into the \code{GRASS} session. The name of this raster is as \code{paste0(outGrassName, '_', xxx)}. For example, if \code{outGrassName = 'horizonHeight'}, and \code{directions} is \code{c(0, 90, 180, 270)}, then four rasters will be written: \code{horizonHeight_000}, \code{horizonHeight_090}, \code{horizonHeight_180}, and \code{horizonHeight_270}. Note the padding with zeros before angles <10.
-#' @details See the documentation for the \code{GRASS} module \code{r.horizon}{https://grass.osgeo.org/grass82/manuals/r.horizon.html}.
+#'
+#' @seealso \href{https://grass.osgeo.org/grass82/manuals/r.horizon.html}{\code{r.horizon}} in \code{GRASS}
 #.
-#' @examples man/examples/ex_fasterHorizon.r
+#' @example man/examples/ex_fasterHorizon.r
 #'
 #' @export
 
@@ -29,7 +32,8 @@ fasterHorizon <- function(
 	mask = NULL,
 	grassDir = options()$grassDir,
 	grassToR = TRUE,
-	outGrassName = 'horizonHeight',
+	inRastName = ifelse(is.null(names(rast)), 'rast', names(rast)),
+	outGrassName = 'horizonHeightRast',
 	...
 ) {
 
@@ -41,7 +45,7 @@ fasterHorizon <- function(
 	}
 	
 	# initialize GRASS
-	input <- initGrass(rast=rast, vect=NULL, grassDir=grassDir)
+	input <- initGrass(rast=rast, vect=NULL, inRastName=inRastName, inVectName=NULL, grassDir=grassDir)
 	
 	# calculate horizon height
 	for (direction in directions) {

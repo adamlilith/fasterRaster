@@ -16,7 +16,7 @@
 #'
 #' @seealso \code{\link{madCoast0}}, \code{\link{madCoast4}}, \code{\link{madElev}}, \code{\link{madForest2000}}, \code{\link{madForest2014}}, \code{\link{madRivers}}
 #'
-#' @examples man/examples/ex_madData.r
+#' @example man/examples/ex_madData.r
 #'
 #' @export
 

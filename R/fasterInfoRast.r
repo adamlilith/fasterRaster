@@ -6,7 +6,9 @@
 #' @param flags Either \code{NULL} (default) or flags to affect the information shown. Flags should be in quotes and without the preceeding "-" sign (example: \code{flags = 'e'}).
 #' @return Nothing (displays information on the raster or vector).
 #'
-#' @examples man/examples/ex_fasterInfoRast.r
+#' @seealso \href{https://grass.osgeo.org/grass82/manuals/r.info.html}{\code{r.info}} and \href{https://grass.osgeo.org/grass82/manuals/v.info.html}{\code{v.info}} in \code{GRASS}
+#'
+#' @example man/examples/ex_fasterInfoRast.r
 #'
 #' @export
 fasterInfoRast <- function(rastName, flags = NULL) {

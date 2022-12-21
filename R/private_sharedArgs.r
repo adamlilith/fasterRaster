@@ -9,6 +9,18 @@ NULL
 #' @param vect A \code{Spatvector}, an \code{sf} object, or the name of a spatial vector already in an existing \code{GRASS} session.
 NULL
 
+#' @name .sharedArgs_inRastName
+#' @title Shared argument(s)
+#'
+#' @param inRastName The name of the input raster in \code{GRASS}. This is useful only if you are "chaining" \code{fasterRaster} functions together and wish to refer to the input raster later. The default value is the name of the raster (i.e., \code{names(rast)}).
+NULL
+
+#' @name .sharedArgs_inVectName
+#' @title Shared argument(s)
+#'
+#' @param inVectName The name of the input vector in \code{GRASS}. This is useful only if you are "chaining" \code{fasterRaster} functions together and wish to refer to the input vector later. The default value is \code{'vect'}.
+NULL
+
 #' @name .sharedArgs_grassDir_grassToR_outGrassName
 #' @title Shared argument(s)
 #'

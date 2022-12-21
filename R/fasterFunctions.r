@@ -12,6 +12,6 @@
 #'
 #' @keywords functions
 #'
-#' @examples man/examples/ex_fasterHelp.r
+#' @example man/examples/ex_fasterHelp.r
 #'
 NULL

@@ -9,7 +9,8 @@ fasterSurfFractal(
   dimension = 2.05,
   grassDir = options()$grassDir,
   grassToR = TRUE,
-  outGrassName = "surfFractal",
+  inRastName = ifelse(is.null(names(rast)), "rast", names(rast)),
+  outGrassName = "fractalRast",
   ...
 )
 }
@@ -22,6 +23,8 @@ fasterSurfFractal(
 
 \item{grassToR}{If \code{TRUE} (default) then the output will be returned to \pkg{R}. If \code{FALSE}, then the output is left in the \code{GRASS} session and named the value in \code{outGrassName}. You can then refer to the output in subsequent \pkg{fasterRaster} functions and avoid the need to re-import it. This is called "chaining" functions together, and it can save a lot of computational time.}
 
+\item{inRastName}{The name of the input raster in \code{GRASS}. This is useful only if you are "chaining" \code{fasterRaster} functions together and wish to refer to the input raster later. The default value is the name of the raster (i.e., \code{names(rast)}).}
+
 \item{outGrassName}{Character. Name of output in \code{GRASS}. This is useful if you want to refer to the output object in \code{GRASS} later in a session by "chaining" functions.}
 
 \item{...}{Arguments to pass to \code{\link[rgrass]{execGRASS}}.}
@@ -30,12 +33,26 @@ fasterSurfFractal(
 If \code{grassToR} if \code{TRUE}, then a raster object with the same coordinate reference system, resolution, and extent as \code{rast}. Regardless, a raster is written into the \code{GRASS} session with the name given by \code{outGrassName}.
 }
 \description{
-This function creates a raster with a fractal pattern. It utilizes the \code{GRASS} function \code{r.surf.fractal}.
-}
-\details{
-See the documentation for the \code{GRASS} module \code{r.surf.fractal}{https://grass.osgeo.org/grass82/manuals/r.surf.fractal.html}.
+Create a raster with a fractal pattern.
 }
 \examples{
-man/examples/ex_fasterSurfFractal.r
+\dontrun{
 
+# change this to where GRASS is installed on your system
+# grassDir <- 'C:/Program Files/GRASS GIS 8.2' # example for a PC
+# grassDir <- "/Applications/GRASS-8.2.app/Contents/Resources" # for a Mac
+
+library(terra)
+
+madElev <- fasterData('madElev')
+
+fract1 <- fasterSurfFractal(rast=madElev, dimension=2.1, grassDir=grassDir)
+fract2 <- fasterSurfFractal(rast='rast', dimension=2.9, grassDir=grassDir)
+
+plot(stack(fract1, fract2))
+
+}
+}
+\seealso{
+\href{https://grass.osgeo.org/grass82/manuals/r.surf.fractal.html}{\code{r.surf.fractal}} in \code{GRASS}
 }

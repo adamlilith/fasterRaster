@@ -21,6 +21,24 @@ Nothing (displays information on the raster or vector).
 Displays information on a raster or vector already in an R session. For further
 }
 \examples{
-man/examples/ex_fasterInfoRast.r
+\dontrun{
 
+library(sf)
+library(terra)
+
+# start a GRASS session with a raster and get information on it
+madElev <- fasterData('madElev')
+initGrass(madElev, rastName = 'madElev')
+fasterInfoRast('madElev')
+
+# start a GRASS session with a vector and get information on it
+madCoast0 <- fasterData('madCoast0')
+exportVectToGrass(madCoast0, vectName = 'madCoast0')
+fasterInfoVect('madCoast0')
+
+}
+
+}
+\seealso{
+\href{https://grass.osgeo.org/grass82/manuals/r.info.html}{\code{r.info}} and \href{https://grass.osgeo.org/grass82/manuals/v.info.html}{\code{v.info}} in \code{GRASS}
 }

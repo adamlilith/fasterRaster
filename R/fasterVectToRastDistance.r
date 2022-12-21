@@ -1,9 +1,11 @@
 #' Distance between raster cells and nearest spatial vector feature
 #'
-#' This function is a potentially faster version of the \code{\link[terra]{distance}} function in the \pkg{terra} package which calculates the distance between each cell and the nearest feature in a spatial points, lines, or polygon object. Alternatively, it can calculate the distance from any cell covered by a vector object and the nearest cell \emph{not} covered by a vector object. Note that the \code{distance} function also calculates distances between rasters, but this functionality is not reproduced in \code{fasterVectToRastDistance} (just distance between a raster and a vector object).
+#' Calculate the distance between each cell in a raster and the nearest feature in a spatial points, lines, or polygon object. Alternatively, calculate the distance from any cell covered by a vector object and the nearest cell \emph{not} covered by a vector object.
 #'
 #' @inheritParams .sharedArgs_rast
 #' @inheritParams .sharedArgs_vect
+#' @inheritParams .sharedArgs_inRastName
+#' @inheritParams .sharedArgs_inVectName
 #' @inheritParams .sharedArgs_grassDir_grassToR_outGrassName
 #' @param metric Character, indicates type of distance to calculate:
 #' \itemize{
@@ -19,11 +21,9 @@
 #'
 #' @return If \code{grassToR} if \code{TRUE}, then a raster with the same extent, resolution, and coordinate reference system as \code{vect}. Regardless, a raster with the name of \code{distToVect} is written into the \code{GRASS} session.
 #'
-#' @details See help for \code{r.grow.distance}{https://grass.osgeo.org/grass82/manuals/r.grow.distance.html} for more details.
+#' @seealso \code{\link[terra]{distance}} in \pkg{terra}; \code{\link{fasterRastDistance}} in \pkg{fasterRaster}; \href{https://grass.osgeo.org/grass82/manuals/r.grow.distance.html}{\code{r.grow.distance}} in \code{GRASS}
 #'
-#' @seealso \code{\link[terra]{distance}}
-#'
-#' @examples man/examples/ex_fasterVectToRastDistance.r
+#' @example man/examples/ex_fasterVectToRastDistance.r
 #'
 #' @export
 
@@ -35,7 +35,9 @@ fasterVectToRastDistance <- function(
 	invert = FALSE,
 	grassDir = options()$grassDir,
 	grassToR = TRUE,
-	outGrassName = 'distToVect',
+	inRastName = ifelse(is.null(names(rast)), 'rast', names(rast)),
+	inVectName = 'vect',
+	outGrassName = 'distToVectRast',
 	...
 ) {
 
@@ -44,7 +46,7 @@ fasterVectToRastDistance <- function(
 	if (invert) flags_rGrowDistance <- c(flags_rGrowDistance)
 	
 	# rasterize vector: creates raster named "distToVect"
-	fasterRasterize(vect=vect, rast=rast, use='value', value=1, grassDir=grassDir, grassToR=FALSE, outGrassName='vectToRast', ...)
+	fasterRasterize(vect=vect, rast=rast, use='value', value=1, grassDir=grassDir, grassToR=FALSE, inRastName=inRastName, inVectName=inVectName, outGrassName='vectToRast', ...)
 	
 	# calculate distance
 	rgrass::execGRASS('r.grow.distance', input='vectToRast', distance=outGrassName, metric=metric, flags=flags_rGrowDistance, ...)
@@ -53,7 +55,6 @@ fasterVectToRastDistance <- function(
 	if (grassToR) {
 	
 		out <- rgrass::read_RAST(outGrassName)
-		out <- terra::rast(out)
 		names(out) <- outGrassName
 		out
 		

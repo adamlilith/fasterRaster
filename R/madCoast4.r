@@ -14,6 +14,6 @@
 #'
 #' @source Database of Global Administrative Areas Version 2.8 (\href{https://gadm.org}{GADM})
 #'
-#' @examples man/examples/ex_madData.r
+#' @example man/examples/ex_madData.r
 #'
 NULL

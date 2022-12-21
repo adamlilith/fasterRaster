@@ -1,35 +1,66 @@
-\donttest{
+\dontrun{
 
+library(sf)
 library(terra)
 
 # change this to where GRASS is installed on your system:
 grassDir <- 'C:/Program Files/GRASS GIS 8.2' # example for a PC
 grassDir <- "/Applications/GRASS-8.2.app/Contents/Resources" # for a Mac
 
-madForest2000 <- fasterData('madForest2000')
+madElev <- fasterData('madElev')
 
-latRast <- faster('r.latlong', rast=madForest2000, outType='rast',
+# Example using a raster as input, raster as output:
+# "r.latlong" creates a raster with cell values equal to latitude (WGS84).
+# Note that fasterLongLatRasts() is easier to use.
+lat <- faster('r.latlong', rast=madElev, outType='rast',
 flags=c('quiet', 'overwrite'), grassDir=grassDir)
 
-longRast <- faster('r.latlong', rast=madForest2000, outType='rast',
-flags=c('quiet', 'overwrite', 'l'), grassDir=grassDir)
+plot(lat, add=TRUE)
 
-ll1 <- c(latRast, longRast)
+# example using a raster as input, vector as output
+# "r.contour" creates a vector of contours
+# Note that fasterContour() is easier to use.
+conts <- faster('r.contour', rast=madElev, outType='vect',
+levels=c(100, 200, 300, 400, 500), flags=c('quiet', 'overwrite'),
+grassDir=grassDir)
 
-# In this case, the above is the same as:
-ll2 <- fasterLongLatRasts(madForest2000, grassDir=grassDir)
+plot(madElev)
+plot(conts, add=TRUE)
 
-# Example of chaining (ie, not reinitializing GRASS session):
-# The second function uses the GRASS session initiated by the first function.
-# It then uses the raster created in the GRASS session by the first function
-# as the input for its module.
+# Example using a vector as input, raster as output.
+# "v.to.rast" creates a raster from a vector (i.e., rasterizes it).
+# Note that fasterRasterize() is easier to use.
+rastRivers <- faster('v.to.rast', vect=madRivers, outGrassName='rastRivers',
+use='val', value=1,
+outType='rast', flags=c('quiet', 'overwrite'), grassDir=grassDir)
 
-latRast <- faster('r.latlong', rast=madForest2000, outType='rast',
-output='lat', flags=c('quiet', 'overwrite'), grassDir=grassDir)
+plot(madElev)
+plot(rastRivers, col='blue', add=TRUE)
 
-longRast <- faster('r.latlong', input='lat', outType='rast', output='long',
-flags=c('quiet', 'overwrite', 'l'), init=FALSE, grassDir=grassDir)
+# Example using a vector as input, vector as output.
+# "v.buffer" creates a buffer around avector.
+# Note that fasterBufferVect() is easier to use.
+riverBuff <- faster('v.buffer', vect=madRivers, outGrassName='riverBuff',
+distance = 1000,
+outType='vect', flags=c('quiet', 'overwrite'), grassDir=grassDir)
 
-ll3 <- c(latRast, longRast)
+plot(riverBuff)
+plot(st_geometry(madRivers), col='blue', add=TRUE)
+
+# Example using "chaining".
+# "v.buffer" creates a buffer around avector.
+# "v.to.rast" creates a raster from a vector (i.e., rasterizes it).
+# Note that fasterBufferVect() and fasterRasterize() would be easier to use.
+faster('v.buffer', vect=madRivers, outGrassName='riverBuff',
+distance = 1000,
+outType='vect', flags=c('quiet', 'overwrite'),
+grassDir=grassDir, grassToR=FALSE)
+
+rastBuff <- faster('v.to.rast', vect='riverBuff', outGrassName='rastRivers',
+use='val', value=1,
+outType='rast', flags=c('quiet', 'overwrite'), grassDir=grassDir)
+
+plot(rastBuff)
+plot(st_geometry(madRivers), col='blue', add=TRUE)
 
 }

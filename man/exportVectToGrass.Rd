@@ -4,20 +4,23 @@
 \alias{exportVectToGrass}
 \title{Export a spatial vector to an existing GRASS session}
 \usage{
-exportVectToGrass(vect, grassName = "vect")
+exportVectToGrass(vect, inVectName = "vect")
 }
 \arguments{
 \item{vect}{A \code{SpatVector} (\pkg{terra} package) or \code{sf} (\pkg{sf} package) spatial vector object.}
 
-\item{grassName}{Name of vector in \pkg{GRASS}.}
+\item{inVectName}{Name of vector in \code{GRASS}. By default, this will be \code{'vect'}.}
 }
 \value{
-Nothing (exports a vector to a \code{GRASS} session so it can be used by other functions).
+\code{TRUE} (invisibly, if the vector was successfully exported). The function also exports a vector to a \code{GRASS} session so it can be used by other functions.
 }
 \description{
 Export a spatial vector to an existing \code{GRASS} session.
 }
 \examples{
-man/examples/ex_exportXToGrass.r
+man/examples/ex_exportXToGrass.R
 
+}
+\seealso{
+\code{\link[rgrass]{write_VECT}} in \pkg{rgrass}
 }

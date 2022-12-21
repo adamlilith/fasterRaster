@@ -10,7 +10,8 @@ fasterProjectRast(
   method = "bilinear",
   grassDir = options()$grassDir,
   grassToR = TRUE,
-  outGrassName = "resampled",
+  inRastName = ifelse(is.null(names(rast)), "rast", names(rast)),
+  outGrassName = "projectedRast",
   ...
 )
 }
@@ -34,6 +35,8 @@ fasterProjectRast(
 
 \item{grassToR}{If \code{TRUE} (default) then the output will be returned to \pkg{R}. If \code{FALSE}, then the output is left in the \code{GRASS} session and named the value in \code{outGrassName}. You can then refer to the output in subsequent \pkg{fasterRaster} functions and avoid the need to re-import it. This is called "chaining" functions together, and it can save a lot of computational time.}
 
+\item{inRastName}{The name of the input raster in \code{GRASS}. This is useful only if you are "chaining" \code{fasterRaster} functions together and wish to refer to the input raster later. The default value is the name of the raster (i.e., \code{names(rast)}).}
+
 \item{outGrassName}{Character. Name of output in \code{GRASS}. This is useful if you want to refer to the output object in \code{GRASS} later in a session by "chaining" functions.}
 
 \item{...}{Arguments to pass to \code{\link[rgrass]{execGRASS}} when used for rasterizing (i.e., function \code{r.proj} in \code{GRASS}).}
@@ -42,15 +45,37 @@ fasterProjectRast(
 If \code{grassToR} if \code{TRUE}, then a raster or raster stack with the same extent, resolution, and coordinate reference system as \code{rast}. Regardless, a raster with the name given by \code{outGrassName} is written into the \code{GRASS} session.
 }
 \description{
-This function is a potentially faster version of the \code{\link[terra]{project}} function in the \pkg{terra} package for projecting (and resampling) a raster. It requires the user has \code{GRASS} GIS Version 7 installed.
+Project and resample raster.
 }
 \details{
-Note that it is not uncommon to get the warning "Projection of dataset does not appear to match the current mapset" (followed by more information). If the coordinate reference systems match, then the cause is likely due to extra information being stored in one of the spatial object's coordinate reference system slot (e.g., an EPSG code in addition to the other proj4string information), in which case it can probably be safely ignored. See the documentation for the \code{GRASS} module \code{r.proj}{https://grass.osgeo.org/grass82/manuals/r.proj.html}.
+Note that it is not uncommon to get the warning "Projection of dataset does not appear to match the current mapset" (followed by more information). If the coordinate reference systems match, then the cause is likely due to extra information being stored in one of the spatial object's coordinate reference system slot (e.g., an EPSG code in addition to the other proj4string information), in which case it can probably be safely ignored.
 }
 \examples{
-man/examples/ex_fasterProjectRast.r
+\dontrun{
+
+library(terra)
+
+# change this according to where GRASS is installed on your system
+grassDir <- 'C:/Program Files/GRASS GIS 8.2' # example for a PC
+grassDir <- "/Applications/GRASS-8.2.app/Contents/Resources" # for a Mac
+
+library(terra)
+madElev <- fasterData('madElev')
+madForest2000 <- fasterData('madForest2000')
+
+crs(madElev)
+crs(madForest2000)
+
+elevResamp <- fasterProjectRast(rast=madElev,
+template=madForest2000, grassDir=grassDir)
+
+oldPar <- par(mfrow=c(1, 2))
+plot(madElev, main='Original')
+plot(elevResamp, main='Resampled')
+par(oldPar)
 
 }
+}
 \seealso{
-\code{\link[terra]{project}}
+\code{\link[terra]{project}} in \pkg{terra}; \href{https://grass.osgeo.org/grass82/manuals/r.proj.html}{\code{r.proj}} in \code{GRASS}
 }

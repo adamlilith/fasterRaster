@@ -1,4 +1,4 @@
-\donttest{
+\dontrun{
 
 library(terra)
 
@@ -12,6 +12,7 @@ rastBuff <- fasterBufferRast(rast=madForest2000, width=2,
 units='kilometers', grassDir=grassDir)
 
 plot(rastBuff, col=c('green', 'gray'))
-legend('topright', legend=c('forest', 'buffer'), fill=c('green', 'gray'))
+legend('topright', legend=c('forestgreen', 'buffer'),
+fill=c('green', 'gray'))
 
 }

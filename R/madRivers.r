@@ -14,6 +14,6 @@
 #'
 #' @source \href{http://www.diva-gis.org/gdata}{DIVA-GIS}
 #'
-#' @examples man/examples/ex_madData.r
+#' @example man/examples/ex_madData.r
 #'
 NULL

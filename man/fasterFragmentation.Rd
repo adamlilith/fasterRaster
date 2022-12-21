@@ -8,14 +8,11 @@ fasterFragmentation(
   rast,
   size = 3,
   pad = FALSE,
-  padValue = NA,
   calcDensity = TRUE,
   calcConnect = TRUE,
   calcClass = TRUE,
   na.rm = FALSE,
   undet = "undetermined",
-  cores = 2,
-  verbose = FALSE,
   ...
 )
 }
@@ -24,15 +21,11 @@ fasterFragmentation(
 
 \item{size}{Integer, number of cells wide and high of the window used to calculate fragmentation. This must be an odd integer (default is 3).}
 
-\item{pad}{Logical, if \code{TRUE} then add virtual rows and columns around the raster so that there are no edge effects. The virtual rows and columns are set to equal \code{padValue}. Default is \code{FALSE}.}
-
-\item{padValue}{Value to which to set the values of the virtual cells used to pad the raster if \code{pad} is \code{TRUE}.}
+\item{pad}{Logical, if \code{TRUE} then add virtual rows and columns around the raster so that there are no edge effects. These are remobved after computation. Default is \code{FALSE}.}
 
 \item{calcDensity}{Logical, if \code{TRUE} (default) then calculate density raster.}
 
-\item{calcConnect}{Logical, if \code{TRUE} (default) then calculate connectivity raster.}
-
-\item{calcClass}{Logical, if \code{TRUE} (default) then calculate classification raster. Note that to calculate the classification raster the density and connectivity rasters must also be calculated (\code{calcDensity} and \code{calcConnect} should both be \code{TRUE}). If they are not then the will be forced to \code{TRUE} with a warning.}
+\item{calcConnect}{Logical, if \code{TRUE} (default) then calculate classification raster. Note that to calculate the classification raster the density and connectivity rasters must also be calculated (\code{calcDensity} and \code{calcConnect} should both be \code{TRUE}). If they are not then the will be forced to \code{TRUE} with a warning.}
 
 \item{na.rm}{Logical, if \code{FALSE} (default) then \code{NA} cells count as part of the area potentially occupied in a window (i.e., the count in the denominator when calculating density and they are counted as potential links in the connectance calculations if a neighboring cell has a value of 1). If \code{FALSE} then areas that border \code{NA} cells could still be classified as "interior" or otherwise have less apparent fragmentation if the occupied cells are fully surrounded by other occupied cells (except for the \code{NA} cells).}
 
@@ -44,15 +37,11 @@ fasterFragmentation(
     \item \code{random}: Undetermined cases will be assigned a value of 3 or 4 at random ("perforated" or "edge").
 }}
 
-\item{cores}{Integer >0, number of CPU cores to use to calculate the focal function (default is 2).}
-
-\item{verbose}{Logical. If \code{TRUE} then print progress indicators. Default is \code{FALSE}.}
-
-\item{...}{Additional arguments to send to \code{\link[fasterRaster]{fragmentation}} (which is used when only one core is used).}
+\item{...}{Other arguments (not used).}
 }
 \value{
-A raster stack with three rasters: a fragmentation classification (named \code{class}), the density of "1" pixels in the window (named \code{density}--called "pf" in Riitter et al. 2000), and a connectivity raster (conditional probability a cell with a value of 1 has a value that is also 1; named \code{connect}--called "pff" in Riitter et al. 2000).
-The density and connectivity rasters have values in the range [0, 1], but the classification raster has coded values (from the erratum to Ritter et al. (2000)):
+A raster stack with four rasters: a fragmentation classification (named \code{class}), the density of "1" pixels in the window (named \code{density}--called "pf" in Riitter et al. 2000), and a connectivity raster (conditional probability a cell with a value of 1 has a value that is also 1; named \code{connect}--called "pff" in Riitter et al. 2000). \cr\cr
+The density and connectivity rasters have values in the range [0, 1], but the classification raster has coded values (from the erratum to Ritter et al. (2000):
 \itemize{
 	\item \code{NA}: \code{NA}
 	\item \code{0}: No forest (or whatever is being evaluated)
@@ -63,14 +52,39 @@ The density and connectivity rasters have values in the range [0, 1], but the cl
 \item \code{5}: undetermined (\code{pf} >= 0.6 & \code{pf == pff})
 \item \code{6}: interior (\code{pf} == 1)
 }
+Note that this differs somewhat from the numbering scheme presented by Riitters et al. (2000) and their errata.
 }
 \description{
-This function uses multiple CPU cores to speed calculation of a set of fragmentation indices as per Riitters, K., J. Wickham, \pkg{R}. O'Neill, B. Jones, and E. Smith. 2000. Global-scale patterns of forest fragmentation. Conservation Ecology 4:3. URL: <https://www.jstor.org/stable/26271763>. (Also note the erratum to the paper on their classification scheme at <https://www.ecologyandsociety.org/vol4/iss2/art3/errata/january26.2001.html>). Unlike many functions in the \pkg{fasterRaster} package this function does \emph{not} use \code{GRASS} but rather multiple cores. It is a wrapper for \code{\link[fasterRaster]{fasterFocal}}.
+The "forest fragmentation" index from Riitters et al. (2000). Note that this function does \emph{not} use \code{GRASS} but rather the \code{\link[terra]{focal}} function in the \pkg{terra} package, so it is potentially very slow and may not work for very large rasters.
 }
 \examples{
-/man/examples/ex_fasterFragmentation.r
+\dontrun{
+
+library(terra)
+
+# forest cover (1s and NAs)
+madForest2000 <- fasterData('madForest2000')
+
+# cells are just 1s or NAs... replace NAs with 0
+forest <- app(madForest2000, function(x) ifelse(is.na(x), 0, 1))
+
+# single-core
+frag <- fasterFragmentation(forest, size=5, pad=TRUE, undet='perforated')
+
+oldPar <- par(mfrow=c(2, 2))
+plot(madForest2000, col='forestgreen', main='Forest')
+plot(frag[['density']], main='Density')
+plot(frag[['connect']], main='Connectivity')
+cols <- c('gray90', 'blue', 'lightblue', 'yellow', 'orange', 'forestgreen')
+names(cols) <- c('no forest', 'patch', 'transitional',
+		'perforated', 'edge', 'interior')
+plot(frag[['class']], main='Fragmentation Class', col=cols, legend=FALSE)
+legend('topright', fill=cols, legend=names(cols))
+par(oldPar)
 
 }
-\seealso{
-\code{\link[fasterRaster]{fragmentation}}
+}
+\references{
+Riitters, K., Wickham, J., O'Neill, R., Jones, B., and Smith, E. 2000. Global-scale patterns of forest fragmentation. \emph{Conservation Ecology} 4:3. \href{https://www.jstor.org/stable/26271763}{open access}. \cr
+Also note the double \href{https://www.ecologyandsociety.org/vol4/iss2/art3/errata/january26.2001.html}{erratum} to the paper on their classification scheme.
 }

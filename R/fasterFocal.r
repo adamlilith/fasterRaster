@@ -1,265 +1,220 @@
-#' Multi-core focal() function
+#' Calculations on "neighboring" cells of a raster
 #'
-#' This function applies a function that uses values from a "moving window" across a raster. It is exactly the same as the \code{\link[terra]{focal}} function in the \pkg{terra} package except that it can use a multi-core implementation to speed processing.
-#' @param rast A \code{SpatRaster}.
-#' @param w Matrix of weights (the moving window), e.g. a 3 by 3 matrix with values 1. The matrix does not need to be square, but the sides must be odd numbers. If you need even sides, you can add a column or row with weights of zero. Alternatively, \code{w} can be an odd integer > 0, in which case a weights matrix \code{w} by \code{w} in size is created with every value equal to 1.
-#' @param fun Function. The function must accept multiple numbers and return a single number. For example \code{mean}, \code{min}, or \code{max}. The function should also accept a \code{na.rm} argument (or ignore it, e.g. as one of the 'dots' arguments). For example, \code{length} will fail, but \code{function(rast, ...) { na.omit(length(rast)) }} works. The default function is \code{sum}.
-#' @param filename Character, name of file for a new raster (optional).
-#' @param na.rm Logical, if code{FALSE} (default) the value computed by \code{fun} will be \code{NA} only if all cells in the window are \code{NA}. Using \code{na.rm = TRUE} is usually not a good idea since it can unbalance weights.
-#' @param pad Logical, if \code{TRUE} then add virtual rows and columns around the raster so that there are no edge effects. The virtual rows and columns are set to equal \code{padValue}. Default is \code{FALSE}.
-#' @param padValue Value to which to set the values of the virtual cells used to pad the raster if \code{pad} is \code{TRUE}.
-#' @param progress Logical, if \code{TRUE} display a progress bar. Only works if using multi-core calculation.
-#' @param NAonly Logical, if \code{TRUE} then only cells with a value of \code{NA} have values replaced. Default is \code{FALSE}.
-#' @param cores Integer >0, number of CPU cores to use to calculate the focal function (default is 2).
-#' @param ... Arguments to pass to \code{\link[terra]{writeRaster}}
+#' Calculates statistics on a moving set of cells in a "neighborhood".
 #'
-#' @details The function \code{\link{fasterMapcalc}} \emph{may} be faster.
-#'
-#' @return A raster object, possibly also written to disk.
-#'
-#' @seealso \code{\link[terra]{focal}}, \code{\link{fasterMapcalc}}
-#'
-#' @examples man/examples/ex_fasterFocal.r
+#' @inheritParams .sharedArgs_rast
+#' @inheritParams .sharedArgs_inRastName
+#' @inheritParams .sharedArgs_grassDir_grassToR
+#' @inheritParams .sharedArgs_outGrassName
+#' @param fun Name of the function to calculate on each neighborhood.
+#' \itemize{
+#' 	\item \code{'average'} or \code{'mean'} (default): \code{See note about rounding below!}
+#' 	\item \code{'median'}
+#' 	\item \code{'mode'}
+#' 	\item \code{'minimum'} or \code{'maximum'}
+#' 	\item \code{'range'}
+#' 	\item \code{'stddev'} or \code{'sd'}: Standard deviation. \code{See note about rounding below!} \emph{Also note:} In \code{GRASS} the standard deviation is calculated as the population standard deviation: \deqn{sqrt(\sum((x_i - x_bar)^2) / N}, whereas in \code{base R} and in \pkg{terra}, it is calculated as the sample standard deviation: \deqn{sqrt(\sum((x_i - x_bar)^2) / (N - 1)}, (i.e., the same as in the function \code{sd}). Which is correct?  It depends on whether you considerall of the cells in a neighborhood are the complete statistical "population" of cells in the neighborhood, or represent a random sample thereof.
+#' 	\item \code{'sum'}: Sum of non-\code{NA} cells.
+#' 	\item \code{'count'}: Number of non-\code{NA} cells.
+#' 	\item \code{'variance'} or \code{'var'}: \code{See note about rounding below!}. As with \code{stdev} (above), this is the population variance, not sample variance.
+#' 	\item \code{'diversity'}: Number of unique values.
+#' 	\item \code{'interspersion'}: Percent of cells with values different from focal cell, plus 1 (e.g., if 6 of 8 cells have different values, then the interspersion is 100 * 6/8 + 1 = 76). \code{See note about rounding below! Unlike other functions, rounding is NOT corrected for.}
+#' 	\item \code{'quart1'}, \code{'quart3'}: First and third quarties (i.e., 25th and 75th quantiles).
+#' 	\item \code{'perc90'}: The 90th quantile.
+#' 	\item \code{'quantile'}
+#' }
+#' The center cell value is always included in the calculations.\cr
+#' \emph{Rounding}: Some of the functions noted above normally have outputs rounded to the nearest integer when executed in \code{GRASS}. To obviate this issue, for these functions the raster is first multipled by a large number (given in \code{largeNum}). The operation is performed, then the raster is divided by this large number again. If this is an issue, you can multiply the raster by a large number, do the focal operation, then divide by the same number. You can skip this step by setting \code{largeNum} to \code{NULL} (i.e., so output will be rounded for these functions).
+#' @param w Either the size of each neighborhood in number of cells across (a single, odd integer), \emph{or} a matrix of weights (example: \code{matrix(c(0.5, 1, 0.5, 1, 2, 1, 0.5, 1, 0.5), nrow=3)}). You cannot use a weights matric when \code{circle = TRUE} or \code{weightFx = 'gaussian' or 'exponential'}.
+#' @param circle If \code{FALSE} (default), use a square neighborhood. If \code{TRUE}, then \code{size} will be the diameter of the circle (in the x- or y-direction). Cannot be used with \code{weightFx} or when \code{w} is a matrix.
+#' @param weightFx Either \code{NULL} or the name of a weighting function. Valid values include: \code{'gaussian'} (Gaussian weighting) or \code{'exponential'} (exponential weighting). See also argument \code{weightFactor}. Cannot be used when \code{circle = TRUE} or \code{w} is a matrix.
+#' @param weightFactor Either \code{NULL}, or factor used in the weighting function (if it is Gaussian or exponential). Ignored otherwise. If the weighting function is Gaussian, then this is the value of \eqn{\sigma} (the standard deviation), as in \deqn{exp(-(x*x+y*y)/(2*\sigma^2))/(2*π*σ^2)}. If exponential, this is the value of the decay parameter \eqn{d}, as in \deqn{exp(d*\sqrt(x^2+y^2))}. Negative values cause weights of cells more distant from the center to have less influence.
+#' @param mask Either \code{NULL}, a \code{SpatRaster}, or name of a raster already in \code{GRASS}. This is used to select cells to be used in calculations. If provided, then only cells that are not \code{NA} in the mask are filled in. All others are assigned the value in \code{rast}.
+#' @param quantile Quantile to calculate when \code{method = 'quantile'}. The default value is 0.5 (median), and valid values are in [0, 1].
+#' @param largeNum For functions that normally produce rounded output in \code{GRASS}, multiply the raster first by this value then execute the focal operation, then divide by this number. Note that scientific notation cannot be used. If you wish to skip this step (i.e., round the output), then set this equal to \code{NULL}. The default values is 1000000, so values should be accurate to within 1E-5. This \emph{really should} be an integer (positive or negative).
+#' @param cores Number of cores to use (default is 1).
 #' 
+#' @return if \code{returnToR} is \code{TRUE}, a \code{SpatRaster}. Either way, a raster with the name given by \code{outGrassName} is created in a \code{GRASS} session.
+#'
+#' @seealso \code{\link[terra]{focal}} and \code{\link[terra]{focalCpp}} in package \pkg{terra}; \href{https://grass.osgeo.org/grass82/manuals/r.neighbors.html}{\code{r.neighbors}} in \code{GRASS}
+#'
+#' @example man/examples/ex_fasterFocal.R
+#'
 #' @export
+
 fasterFocal <- function(
 	rast,
+	fun = 'mean',
 	w = 3,
-	fun = sum,
-	filename = '',
-	na.rm = FALSE,
-	pad = FALSE,
-	padValue = NA,
-	NAonly = FALSE,
-	progress = FALSE,
-	cores = 2,
-	...
+	circle = FALSE,
+	weightFx = NULL,
+	weightFactor = NULL,
+	mask = NULL,
+	quantile = 0.5,
+	largeNum = 1E6,
+	cores = 1,
+	grassDir = options()$grassDir,
+	grassToR = TRUE,
+	inRastName = ifelse(is.null(names(rast)), 'rast', names(rast)),
+	outGrassName = 'focalRast'
 ) {
 
-	if (inherits(rast, 'SpatRaster')) rast <- terra::rast(rast)
-
-	# get number of cores and chunks of raster
-	cores <- .getCores(rast = rast, cores = cores)
-	blocks <- raster::blockSize(rast, minblocks=cores)
+	# for debugging
+	if (FALSE) {
 	
-	# single core
-	if (cores == 1 | blocks$n == 1) {
+		fun <- 'mean'
+		w <- 3
+		circle <- FALSE
+		weightFx <- NULL
+		weightFactor <- NULL
+		mask <- NULL
+		quantile <- 0.5
+		largeNum <- 1E6
+		cores <- 2
+		grassToR <- TRUE
+		inRastName <- ifelse(is.null(names(rast)), 'rast', names(rast))
+		outGrassName <- 'focal'
 	
-		out <- terra::focal(x=rast, w=w, fun=fun, filename=filename, na.rm=na.rm, pad=pad, padValue=padValue, NAonly=NAonly, ...)
-		
-	# multi-core
-	} else {
-
-		# weights matrix
-		if (inherits(w, 'matrix')) {
-		
-			badWeights <- if (nrow(w) != ncol(w)) {
-				TRUE
-			} else if (nrow(w) %% 2 != 1 | ncol(w) %% 2 != 1) {
-				TRUE
-			} else {
-				FALSE
-			}
-		
-		} else if (!inherits(w, 'matrix') & length(w) == 1) {
-		
-			if (w %% 2 != 1) {
-				badWeights <- FALSE
-			} else {
-				w <- matrix(1, ncol=w, nrow=w)
-				badWeights <- FALSE
-			}
-		
-		} else {
-			badWeights <- TRUE
-		}
-		
-		if (badWeights) stop('Argument "w" in fasterFocal() function must be an odd integer or a square matrix with an odd number of columns and rows.')
-	
-		halfWindowSize <- (nrow(w) - 1L) / 2L
-
-		# add padding around raster to avoid edge effects
-		if (pad) {
-			origExtent <- terra::ext(rast)
-			rast <- terra::extend(rast, y=halfWindowSize, value=padValue)
-		}
-	
-		out <- terra::rast(rast)
-
-		# calculate start/end position and size of each block to be sent to a core
-		# and start/end position and size of each section in a block that is processed
-		# account for overlap between blocks because of using a window
-		# rows sent to nodes are "send"
-		# rows which receive values are "process"
-		maxBlockSize <- blocks$nrows[1]
-		startSendRows <- seq(1, nrow(rast), by=maxBlockSize - 2 * halfWindowSize)
-		endSendRows <- startSendRows + maxBlockSize - 1
-		if (any(endSendRows > nrow(rast))) endSendRows[endSendRows > nrow(rast)] <- nrow(rast)
-		numSendRows <- endSendRows - startSendRows + 1
-		if (any(numSendRows < nrow(w))) {
-			tooSmalls <- which(numSendRows < nrow(w))
-			startSendRows <- startSendRows[-tooSmalls]
-			endSendRows <- endSendRows[-tooSmalls]
-			numSendRows <- numSendRows[-tooSmalls]
-		}
-		
-		startProcessRows <- startSendRows + halfWindowSize
-		endProcessRows <- endSendRows - halfWindowSize
-		numProcessRows <- endProcessRows - startProcessRows + 1
-		
-		### initiate cluster
-		nodes <- blocks$n
-		raster::beginCluster(nodes)
-		cluster <- raster::getCluster()
-		# on.exit(raster::endCluster())
-		on.exit(snow::stopCluster(cluster))
-
-		### start nodes calculating
-		xCols <- ncol(rast)
-
-		# data frame to track what's been sent to what "tag" node
-		tracker <- data.frame(
-			job = seq_along(startSendRows),
-			tag = NA,
-			sent = FALSE,
-			done = FALSE,
-			startSendRow = startSendRows,
-			endSendRow = endSendRows,
-			numSendRow = numSendRows,
-			startProcessRow = startProcessRows,
-			endProcessRow = endProcessRows,
-			numProcessRow = numProcessRows
-		)
-		
-		if (progress) pb <- pbCreate(nrow(tracker))
-
-		for (tag in 1L:nodes) {
-
-			blockVals <- getValues(rast, startSendRows[tag], numSendRows[tag])
-			blockVals <- matrix(blockVals, ncol=xCols, byrow=TRUE)
-			
-			snow::sendCall(cluster[[tag]], fun=workerFocal, args=list(blockVals=blockVals, w=w, fun=fun, na.rm=na.rm, NAonly=NAonly), tag=tag)
-			
-			tracker$tag[tag] <- tag
-			tracker$sent[tag] <- TRUE
-		
-		}
-		
-		# initiate file names if needed
-		filename <- terra::trim(filename)
-		if (!raster::canProcessInMemory(out) & filename == '') {
-			filename <- terra::rastTmpFile()
-			out <- raster::writeStart(out, filename=filename, ... )
-		}
-
-		if (filename != '') {
-			out <- raster::writeStart(out, filename=filename, ... )
-		} else {
-			out <- matrix(nrow=nrow(rast), ncol=ncol(rast))
-		}
-		
-		### get and remember output
-		while (sum(tracker$done) < nrow(tracker)) {
-
-			thisTag <- tracker$tag[which(!tracker$done)[1L]]
-		
-			# receive results from a node
-			outFromClust <- snow::recvData(cluster[[thisTag]])
-			if (!outFromClust$success) stop('Cluster error.')
-
-			job <- which(outFromClust$tag == tracker$tag & tracker$sent & !tracker$done)
-			tag <- outFromClust$tag
-			tracker$done[job] <- TRUE
-			
-			# trim output to processed region
-			valsFromClust <- outFromClust$value
-			valsFromClust <- valsFromClust[(halfWindowSize + 1):(nrow(valsFromClust) - halfWindowSize), ]
-			
-			# get block
-			if (filename != '') {
-				valsFromClust <- c(t(valsFromClust))
-				out <- raster::writeValues(out, v=valsFromClust, start=startProcessRows[job])
-			} else {
-				out[startProcessRows[job]:endProcessRows[job], 1:ncol(rast)] <- valsFromClust
-			}
-
-			# need to send more data?
-			if (sum(tracker$sent) < nrow(tracker)) {
-
-				job <- which(!tracker$sent & !tracker$done)[1]
-				blockVals <- getValues(rast, startSendRows[job], numSendRows[job])
-				blockVals <- matrix(blockVals, ncol=xCols, byrow=TRUE)
-				
-				snow::sendCall(cluster[[tag]], fun=workerFocal, args=list(blockVals=blockVals, w=w, fun=fun, na.rm=na.rm, NAonly=NAonly), tag=tag)
-				
-				tracker$tag[job] <- tag
-				tracker$sent[job] <- TRUE
-			
-			}
-			
-			if (progress) pbStep(pb)
-			
-		} # while not all chunks have been returned
-
-		if (filename != '') {
-			
-			# write NAs to border rows at top and bottom
-			fills <- rep(NA, ncol(rast) * halfWindowSize)
-			raster::writeValues(out, v=fills, start=1)
-			raster::writeValues(out, v=fills, start=nrow(rast) - halfWindowSize + 1)
-
-			out <- writeStop(out)
-
-		} else {
-		
-			out <- raster(out)
-			terra::crs(out) <- terra::crs(rast)
-			terra::ext(out) <- terra::ext(rast)
-		
-		}
-		
-		if (progress) pbClose(pb)
-		
-	} # if multi-core
-
-	if (pad) out <- terra::crop(out, origExtent)
-	out
-
-}
-
-#' Initialize \code{GRASS} session and import raster and/or vector(s).
-#'
-#' This function is a generic worker function for a multi-core implementation of the \code{\link[terra]{focal}} function in the \pkg{terra} package. It is usually called by another function and is thus not of great use to most users.
-#' @param i Integer > 0, ID number for the node on which calculations are being conducted.
-#' @param blockVals Matrix.
-#' @param w Matrix of weights (the moving window), e.g. a 3 by 3 matrix with values 1. The matrix does not need to be square, but the sides must be odd numbers. If you need even sides, you can add a column or row with weights of zero. Alternatively, \code{w} can be an odd integer > 0, in which case a weights matrix \code{w} by \code{w} in size is created with every value equal to 1.
-#' @param fun Function. The function must accept multiple numbers and return a single number. For example \code{mean}, \code{min}, or \code{max}. The function should also accept a \code{na.rm} argument (or ignore it, e.g. as one of the 'dots' arguments). For example, \code{length} will fail, but \code{function(blockVals, ...) { na.omit(length(blockVals)) }} works. The default function is \code{sum}.
-#' @param na.rm Logical, if code{FALSE} (default) the value computed by \code{fun} will be \code{NA} only if all cells in the window are \code{NA}. Using \code{na.rm = TRUE} is usually not a good idea since it can unbalance weights.
-#' @param NAonly Logical, if \code{TRUE} then only cells with a value of \code{NA} have values replaced. Default is \code{FALSE}.
-#' @return Matrix.
-#' @keywords internal
-workerFocal <- function(i, blockVals, w, fun=sum, na.rm=TRUE, NAonly=FALSE) {
-
-	halfWindowSize <- (nrow(w) - 1) / 2
-	startRow <- halfWindowSize + 1
-	endRow <- nrow(blockVals) - halfWindowSize
-	startCol <- halfWindowSize + 1
-	endCol <- ncol(blockVals) - halfWindowSize
-
-	out <- NA * blockVals
-
-	for (countRow in startRow:endRow) {
-		for (countCol in startCol:endCol) {
-
-			thisCellVal <- blockVals[countRow, countCol]
-			if ((NAonly & is.na(thisCellVal)) || !is.na(thisCellVal)) {
-				thisMat <- blockVals[(countRow - halfWindowSize):(countRow + halfWindowSize), (countCol - halfWindowSize):(countCol + halfWindowSize)]
-				thisMat <- w * thisMat
-				out[countRow, countCol] <- fun(thisMat, na.rm=na.rm)
-			}
-		}
 	}
 
-	out
+	### catch errors
+	if (inherits(w, 'matrix') & circle | inherits(w, 'matrix') & !is.null(weightFx) | circle & !is.null(weightFx)) stop('You can only use a scalar for "w", "circle = TRUE", or specify "weightFx".')
 
+	if (!is.null(weightFx) & is.null(weightFactor)) stop('Please specify "weightFactor" when using "weightFx".')
+
+	if (inherits(w, 'matrix')) {
+		if (nrow(w) != ncol(w) | nrow(w) %% 2 == 0 | ncol(w) %% 2 == 0) stop('Matrix "w" must have the same number of rows and columns, and it must have an odd number of each.')
+	}
+	
+	### size
+	size <- if (inherits(w, 'matrix')) {
+		nrow(w)
+	} else {
+		w
+	}
+
+	if (size %% 2 == 0) stop('Argument "size" must be an odd integer > 0.')
+
+	### initialize GRASS
+	flags <- c('quiet', 'overwrite')
+	
+	input <- initGrass(rast=rast, vect=NULL, inRastName=inRastName, inVectName=NULL, grassDir=grassDir)
+	
+	if (fun == 'mean') fun <- 'average'
+	if (fun == 'sd') fun <- 'stddev'
+	if (fun == 'var') fun <- 'variance'
+	
+	if (fun %in% c('average', 'stddev', 'variance') & !is.null(largeNum)) {
+
+		ex <- paste0('TEMPTEMPmult = ', sprintf('%.0f', largeNum), ' * ', inRastName)
+		fasterApp(inRastName, expression=ex, grassToR=FALSE, outGrassName='TEMPTEMPmult', grassDir=grassDir)
+		input[['rastNameInGrass']] <- 'TEMPTEMPmult'
+
+	}
+
+	theseFlags <- if (circle) {
+		c(flags, 'c')
+	} else {
+		flags
+	}
+	
+	if (inherits(w, 'matrix')) {
+		
+		weight <- as.data.frame(w)
+		colnames(weight) <- NULL
+		weightFx <- 'file'
+		
+		rand <- round(runif(1) * 1E6)
+		tempFileDir <- if (exists('input', inherits = FALSE)) {
+			paste0(attr(input, 'tempDir'), '/TEMP')
+		} else {
+			paste0(tempdir(), '/TEMP')
+		}
+		tempFileDirBack <- if (exists('input', inherits = FALSE)) {
+			paste0(attr(input, 'tempDir'), '\\TEMP')
+		} else {
+			paste0(tempdir(), '\\TEMP')
+		}
+		
+		dir.create(tempFileDir, showWarnings=FALSE, recursive=TRUE)
+		
+		weightFile <- paste0(tempFileDir, '/TEMPTEMPweights', rand, '.txt')
+		weightFileBack <- paste0(tempFileDirBack, '\\TEMPTEMPweights', rand, '.txt')
+		
+		if (file.exists(weightFile)) unlink(weightFile, force=TRUE)
+		if (file.exists(weightFile)) file.remove(weightFile, force=TRUE)
+
+		sink(weightFile)
+		print(weight, row.names=FALSE)
+		sink()
+		
+	}
+		
+
+	# no mask
+	if (is.null(mask)) {
+	
+		# no weight
+		if (!inherits(w, 'matrix')) {
+		
+			# no weighting function
+			if (is.null(weightFx)) {
+				print('A')
+				rgrass::execGRASS('r.neighbors', input=input, size=size, method=fun, output=outGrassName, flags=theseFlags, quantile=quantile, nprocs=cores)
+			# weighting function
+			} else {
+				print('B')
+				weightFx <- tolower(weightFx)
+				rgrass::execGRASS('r.neighbors', input=input, size=size, method=fun, output=outGrassName, flags=theseFlags, weighting_function=weightFx, weighting_factor=weightFactor, quantile=quantile, nprocs=cores)
+			}
+		
+		# weight (will always have weighting function = 'file')
+		} else {
+			print('C')
+			rgrass::execGRASS('r.neighbors', input=input, size=size, method=fun, output=outGrassName, flags=theseFlags, weight=weightFileBack, weighting_function=weightFx, quantile=quantile, nprocs=cores)
+		}
+			
+	# mask
+	} else {
+	
+		maskName <- ifelse(is.null(names(mask)), 'TEMPTEMPmask', names(mask))
+		exportRastToGrass(mask, inRastName=maskName)
+		
+		# no weight
+		if (!inherits(w, 'matrix')) {
+		
+			# no weighting function
+			if (is.null(weightFx)) {
+				print('D')
+				rgrass::execGRASS('r.neighbors', input=input, size=size, method=fun, output=outGrassName, flags=theseFlags, quantile=quantile, nprocs=cores, selection=maskName)
+			# weighting function
+			} else {
+				print('E')
+				weightFx <- tolower(weightFx)
+				rgrass::execGRASS('r.neighbors', input=input, size=size, method=fun, output=outGrassName, flags=theseFlags, weighting_function=weightFx, weighting_factor=weightFactor, quantile=quantile, nprocs=cores, selection=maskName)
+			}
+		
+		# weight (will always have weighting function)
+		} else {
+			print('F')
+			rgrass::execGRASS('r.neighbors', input=input, size=size, method=fun, output=outGrassName, flags=theseFlags, weight='TEMPTEMPweights.txt', weighting_function=weightFx, quantile=quantile, nprocs=cores, selection=maskName)
+		}
+	
+	}
+	
+	if (fun %in% c('average', 'stddev', 'variance') & !is.null(largeNum)) {
+
+		ex <- paste0(outGrassName, ' = ', outGrassName, ' / ', sprintf('%.0f', largeNum))
+		fasterApp(inRastName, expression=ex, grassToR=FALSE, outGrassName=outGrassName, grassDir=grassDir)
+
+	}
+
+	if (grassToR) {
+
+		out <- rgrass::read_RAST(outGrassName)
+		names(out) <- outGrassName
+		out
+		
+	}
+	
 }

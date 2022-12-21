@@ -7,14 +7,14 @@
 fasterData(x)
 }
 \arguments{
-\item{x}{The name of the raster or spatial vector to get. All of these pertain to a portion of the eastern coast of Madagascar. Options include:
+\item{x}{The name of the raster or spatial vector to get. All of these represent a portion of the eastern coast of Madagascar. Options include:
 \itemize{
     \item    \code{'madCoast0'}: Outline of the region (\code{sf} spatial vector).
     \item    \code{'madCoast4'}: Outlines of the Fokontanies (Communes) of the region (\code{sf} spatial vector).
-    \item    \code{'madElev'}: Elevation (raster).
-    \item    \code{'madForest2000'}: Forest cover in year 2000 (raster).
-    \item    \code{'madForest2014'}: Forest cover in year 2014 (raster).
     \item    \code{'madRivers'}: Major rivers (\code{sf} spatial vector).
+    \item    \code{'madElev'}: Elevation (\code{SpatRaster}).
+    \item    \code{'madForest2000'}: Forest cover in year 2000 (\code{SpatRaster}).
+    \item    \code{'madForest2014'}: Forest cover in year 2014 (\code{SpatRaster}).
 }}
 }
 \value{
@@ -24,8 +24,36 @@ A \code{SpatRaster} or \code{sf} spatial vector.
 This function is a simple way to get one the several example rasters or spatial vector datasets that come with \pkg{fasterRaster}. These include.
 }
 \examples{
-man/examples/ex_madData.r
 
+### vector data
+library(sf)
+
+# for vector data, we can use data(*) or fasterData(*):
+data(madCoast0) # same as next line
+madCoast <- fasterData('madCoast0') # same as previous
+plot(madCoast0)
+
+madCoast <- fasterData('madCoast4')
+plot(madCoast4, add = TRUE)
+
+madRivers <- fasterData('madRivers')
+plot(madRivers, add = TRUE)
+
+### raster data
+library(terra)
+
+# for raster data, we can get the file directly or using fasterData(*):
+rastFile <- system.file('extdata/madElev.tif'), package='fasterRaster')
+madElev <- terra::rast(rastFile)
+
+madElev <- fasterData('madElev') # same as previus two lines
+plot(madElev)
+
+madForest2000 <- fasterData('madForest2000')
+plot(madForest2000, col = 'forestgreen', add = TRUE)
+
+madForest2014 <- fasterData('madForest2014')
+plot(madForest2014, col = 'green', add = TRUE)
 }
 \seealso{
 \code{\link{madCoast0}}, \code{\link{madCoast4}}, \code{\link{madElev}}, \code{\link{madForest2000}}, \code{\link{madForest2014}}, \code{\link{madRivers}}

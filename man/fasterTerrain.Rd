@@ -6,75 +6,71 @@
 \usage{
 fasterTerrain(
   rast,
-  slope = TRUE,
+  metrics = "slope",
   slopeUnits = "degrees",
-  aspect = FALSE,
   northIs0 = TRUE,
-  profileCurve = FALSE,
-  tanCurve = FALSE,
-  eastWestSlope = FALSE,
-  northSouthSlope = FALSE,
   grassDir = options()$grassDir,
   grassToR = TRUE,
-  outGrassNameSlope = "slope",
-  outGrassNameAspect = ifelse(northIs0, "aspectNorthIs0", "aspectEastIs0"),
-  outGrassNameProfileCurve = "profileCurve",
-  outGrassNameTanCurve = "tanCurve",
-  outGrassNameEastWestSlope = "eastWestSlope",
-  outGrassNameNorthSouthSlope = "northSouthSlope",
-  ...
+  inRastName = ifelse(is.null(names(rast)), "rast", names(rast)),
+  outGrassName = NULL
 )
 }
 \arguments{
 \item{rast}{A \code{SpatRaster} or the name of a raster already in an existing \code{GRASS} session.}
 
-\item{slope}{Logical, if \code{TRUE} (default) then calculate slope.}
+\item{metrics}{Name of the topographic metric(s) to calculate. Valid values include one or more of:
+\itemize{
+    \item \code{'slope'}: Slope. Units are given by argument \code{slopeUnits}.
+    \item \code{'aspect'}: Aspect. When argument \code{northIs0} is \code{TRUE} (default), then aspect is given in degrees from north going clockwise (0 = north, 90 = east, 180 = south, 270 = west).
+    \item \code{'profileCurve'}: Profile curvature.
+    \item \code{'tanCurve'}: Tangential curvature.
+    \item \code{'ewSlope'}: Slope in east-west direction.
+    \item \code{'nsSlope'}: Slope in north-south direction.
+}}
 
-\item{slopeUnits}{Character, "units" in which to calculate slope: either \code{degrees} for degrees or \code{percent}.}
+\item{slopeUnits}{Character, "units" in which to calculate slope: either \code{'degrees'} for degrees (default) or \code{'percent'}.}
 
-\item{aspect}{Logical, if \code{TRUE} then calculate aspect. Aspect is given in degrees from North going clockwise (0 = north, 90 = east, 180 = south, 270 = west).}
-
-\item{northIs0}{Logical. If \code{TRUE} (default), aspect will be reported such that 0 is north, and degrees run clockwise (90 is east, 180 south, 270 west). If \code{FALSE}, then aspect will be reported such that 0 is east, and degrees run counterclockwise (90 is north, 180 west, 270 south). The latter is the default in \code{GRASS}7.}
-
-\item{profileCurve}{Logical, if \code{TRUE}, calculate profile curvature. Default is \code{FALSE}.}
-
-\item{tanCurve}{Logical, if \code{TRUE}, calculate tangential curvature. Default is \code{FALSE}.}
-
-\item{eastWestSlope}{Logical, if \code{TRUE}, calculate slope in east-west direction. Default is \code{FALSE}.}
-
-\item{northSouthSlope}{Logical, if \code{TRUE}, calculate slope in north-south direction. Default is \code{FALSE}.}
+\item{northIs0}{Logical. If \code{TRUE} (default), aspect will be reported such that 0 is north, and degrees run clockwise (90 is east, 180 south, 270 west). If \code{FALSE}, then aspect will be reported such that 0 is east, and degrees run counterclockwise (90 is north, 180 west, 270 south). The latter is the default in \code{GRASS}, but the former is the default in \pkg{terra}'s \code{\link[terra]{terrain}} function, so is used here as the default.}
 
 \item{grassDir}{Name of the folder path in which \code{GRASS} is installed. For a Windows system, this might be something like \code{'C:/Program Files/GRASS GIS 8.2'}. For a Mac system, this might be like \code{"/Applications/GRASS-8.2.app/Contents/Resources"}. If you are using a lot of \pkg{fasterRaster} functions, it can be easier to set this once using \code{\link{fasterOptions}}. By default, this is \code{NULL}, in which case the install path for \code{GRASS} will be searched for, but if not found, will result in an error.}
 
 \item{grassToR}{If \code{TRUE} (default) then the output will be returned to \pkg{R}. If \code{FALSE}, then the output is left in the \code{GRASS} session and named the value in \code{outGrassName}. You can then refer to the output in subsequent \pkg{fasterRaster} functions and avoid the need to re-import it. This is called "chaining" functions together, and it can save a lot of computational time.}
 
-\item{outGrassNameSlope}{Character. Name of slope raster in \pkg{GRASS}. Useful for referring to later in the same \code{GRASS} session.}
+\item{inRastName}{The name of the input raster in \code{GRASS}. This is useful only if you are "chaining" \code{fasterRaster} functions together and wish to refer to the input raster later. The default value is the name of the raster (i.e., \code{names(rast)}).}
 
-\item{outGrassNameAspect}{Character. Name of aspect raster in \pkg{GRASS}. Useful for referring to later in the same \code{GRASS} session.}
-
-\item{outGrassNameProfileCurve}{Character. Name of profile curve raster in \pkg{GRASS}. Useful for referring to later in the same \code{GRASS} session.}
-
-\item{outGrassNameTanCurve}{Character. Name of tangent curve raster in \pkg{GRASS}. Useful for referring to later in the same \code{GRASS} session.}
-
-\item{outGrassNameEastWestSlope}{Character. Name of east-west slope raster in \pkg{GRASS}. Useful for referring to later in the same \code{GRASS} session.}
-
-\item{outGrassNameNorthSouthSlope}{Character. Name of north-south slope raster in \pkg{GRASS}. Useful for referring to later in the same \code{GRASS} session.}
-
-\item{...}{Arguments to pass to \code{\link[rgrass]{execGRASS}} when used for rasterizing (i.e., function \code{r.slope.aspect} in \code{GRASS}).}
+\item{outGrassName}{Name(s) of the rasters created in the \code{GRASS} session. Useful for chaining functions together. By default, these will be the values given in \code{metrics}.}
 }
 \value{
-If \code{grassToR} if \code{TRUE}, then a raster or raster stack with the same extent, resolution, and coordinate reference system as \code{rast}. Regardless, raster(s) given by the names in the \code{outGrassName*} arguments are used are written into the \code{GRASS} session.
+If \code{grassToR} if \code{TRUE}, then a raster or raster stack with the same extent, resolution, and coordinate reference system as \code{rast}. Regardless, raster(s) given by the names in the \code{outGrassName} arguments are used are written into the \code{GRASS} session.
 }
 \description{
-This function is a potentially faster version of the \code{\link[terra]{terrain}} function in the \pkg{terra} package for calculating slope and aspect of a raster. It can also calculate profile curvature, tangential curvature, and slope in the east-west or north-south directions.
-}
-\details{
-See the documentation for the \code{GRASS} module \code{r.slope.aspect}{https://grass.osgeo.org/grass82/manuals/r.slope.aspect.html}.
+Calculate topographic indices, including slope, aspect, curvature, and partial slopes (slopes in the east-west or north-south directions).
 }
 \examples{
-man/examples/ex_fasterTerrain.r
+\dontrun{
+
+# change this according to where GRASS is installed on your system
+# grassDir <- 'C:/Program Files/GRASS GIS 8.2' # example for a PC
+# grassDir <- "/Applications/GRASS-8.2.app/Contents/Resources" # for a Mac
+
+library(terra)
+
+madElev <- fasterData('madElev')
+
+# could also use terrain() which may be faster
+# in this example
+topo <- fasterTerrain(rast=madElev, slope=TRUE, aspect=TRUE,
+grassDir=grassDir)
+
+# terrain function from the raster package... much slower in this example
+slp <- terrain(elev, opt='slope', unit='degrees')
+asp <- terrain(elev, opt='aspect', unit='degrees')
+topos <- stack(slp, asp)
+names(topos) <- c('slope', 'aspect')
+plot(topos)
 
 }
+}
 \seealso{
-\code{\link[terra]{terrain}}
+\code{\link[terra]{terrain}} in \pkg{terra}; \href{https://grass.osgeo.org/grass82/manuals/r.slope.aspect.html}{\code{r.slope.aspect}} in \code{GRASS}
 }

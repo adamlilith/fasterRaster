@@ -1,8 +1,10 @@
 #' Rasters of solar radiance and irradiation
 #'
-#' This function calculates beam (direct), diffuse and ground reflected solar irradiation for a given day and set of topographic and atmospheric conditions. It utilizes the \code{GRASS} function \code{r.sun}. This function only works in "mode 2" of \code{r.run}.
+#' This function calculates beam (direct), diffuse and ground reflected solar irradiation for a given day and set of topographic and atmospheric conditions. It utilizes the \code{GRASS} function \code{r.sun}. This function only works in "mode 2" of \href{https://grass.osgeo.org/grass82/manuals/r.sun.html}{\code{r.sun}}.
+#'
 #' @inheritParams .sharedArgs_grassDir_grassToR
-#' @param elevation Either a raster or the name of a raster in an existing \code{GRASS} session with values representing elevation (typically in meters).
+#'
+#' @param elevation Either a \code{SpatRaster} or the name of a raster in an existing \code{GRASS} session with values representing elevation (typically in meters).
 #' @param aspect Numeric, character, or a \code{SpatRaster} layer. This is either a raster with values of terrain aspect, the name of such a raster in an existing \code{GRASS} session, or a numeric value. Units are in degrees such that a value of 0 is assumed to point east, 90 north, 180 west, and 270 south. This raster can be created using \code{\link{fasterTerrain}}. If aspect is give in degrees such that 0 is north, 90 east, and so on, then it can be converted to the "east = 0" orientation using \code{\link{fasterConvertDegree}}.
 #' @param slope Numeric, character, or a \code{SpatRaster} layer. This is either a raster with values of terrain slope, the name of such a raster in an existing \code{GRASS} session, or a numeric value. Units are in degrees. It can be created using \code{\link{fasterTerrain}}.
 #' @param linke Numeric, character, or a \code{SpatRaster} layer. This is either a raster with values of the Linke atmospheric turbidity coefficient, the name of such a raster in an existing \code{GRASS} session, or a numeric value. The Linke coefficient is unit-less. The default value is 3.
@@ -24,13 +26,11 @@
 #' @param glob_rad Logical. If \code{TRUE} (default), generate a raster with total irradiance/irradiation with units of Wh * m^2 / day ("mode 2" of the \code{r.sun} \code{GRASS} module).
 #' @param insol_time Logical. If \code{TRUE} (default), generate a raster with total insolation time in hours ("mode 2" of the \code{r.sun} \code{GRASS} module).
 #'
-#' @return If \code{grassToR} if \code{TRUE}, then a raster or raster stack stack with the same extent, resolution, and coordinate reference system as \code{elevation}. Otherwise, a raster or a set of rasters is written into an existing \code{GRASS} session. The names of these rasters are (assuming they are generated): \code{beam_rad}, \code{diff_rad}, \code{refl_rad}, \code{glob_rad}, and/or \code{insol_time}.
+#' @return If \code{grassToR} if \code{TRUE}, then a raster or raster stack stack with the same extent, resolution, and coordinate reference system as \code{elevation}. Regardless, a raster or a set of rasters is written into an existing \code{GRASS} session. The names of these rasters are (assuming they are generated): \code{beam_rad}, \code{diff_rad}, \code{refl_rad}, \code{glob_rad}, and/or \code{insol_time}.
 #'
-#' @details See the documentation for the \code{GRASS} module \code{r.sun}{https://grass.osgeo.org/grass82/manuals/r.sun.html}.
+#' @seealso \code{\link[terra]{terrain}} in \pkg{terra}; \code{\link{fasterHorizon}} and \code{\link{fasterTerrain}} in \pkg{fasterRaster}; \href{https://grass.osgeo.org/grass82/manuals/r.sun.html}{\code{r.sun}} in \code{GRASS}
 #'
-#' @seealso \code{\link{fasterHorizon}}, \code{\link{fasterTerrain}}
-#'
-#' @examples man/examples/ex_fasterSun.r
+#' @example man/examples/ex_fasterSun.R
 #'
 #' @export
 
@@ -62,7 +62,6 @@ fasterSun <- function(
 	glob_rad = TRUE,
 	insol_time = TRUE,
 	
-	
 	grassDir = options()$grassDir,
 	grassToR = TRUE,
 	...
@@ -71,7 +70,7 @@ fasterSun <- function(
 	flags <- c('quiet', 'overwrite')
 	
 	# initialize GRASS
-	input <- initGrass(rast=elevation, vect=NULL, rastName='elevation', grassDir=grassDir)
+	input <- initGrass(rast=elevation, vect=NULL, inRastName='elevation', inVectName=NULL, grassDir=grassDir)
 	
 	## export rasters/collect scalars
 	
@@ -92,9 +91,9 @@ fasterSun <- function(
 	if (!is.null(declination)) args <- c(args, declination)
 	
 	# aspect
-	if (inherits(aspect, 'RasterLayer')) { # raster
+	if (inherits(aspect, 'SpatRaster')) { # raster
 		
-		exportRasterToGrass(aspect, grassName='aspectFromEast')
+		exportRasterToGrass(aspect, inRastName='aspectFromEast')
 		args <- c(args, aspect='aspectFromEast')
 		
 	} else if (inherits(aspect, 'numeric')) { # constant
@@ -104,8 +103,8 @@ fasterSun <- function(
 	}
 	
 	# slope
-	if (inherits(slope, 'RasterLayer')) {
-		exportRasterToGrass(slope, grassName='slope')
+	if (inherits(slope, 'SpatRaster')) {
+		exportRasterToGrass(slope, inRastName='slope')
 		args <- c(args, slope='slope')
 	} else if (inherits(slope, 'numeric')) { # constant
 		args <- c(args, slope_value=slope)
@@ -114,8 +113,8 @@ fasterSun <- function(
 	}
 	
 	# albedo
-	if (inherits(albedo, 'RasterLayer')) {
-		exportRasterToGrass(albedo, grassName='albedo')
+	if (inherits(albedo, 'SpatRaster')) {
+		exportRasterToGrass(albedo, inRastName='albedo')
 		args <- c(args, albedo='albedo')
 	} else if (inherits(albedo, 'numeric')) { # constant
 		args <- c(args, albedo_value=albedo)
@@ -124,8 +123,8 @@ fasterSun <- function(
 	}
 	
 	# linke
-	if (inherits(linke, 'RasterLayer')) {
-		exportRasterToGrass(linke, grassName='aspect')
+	if (inherits(linke, 'SpatRaster')) {
+		exportRasterToGrass(linke, inRastName='aspect')
 		args <- c(args, aspect='aspect')
 	} else if (inherits(linke, 'numeric')) { # constant
 		args <- c(args, linke_value=linke)
@@ -134,8 +133,8 @@ fasterSun <- function(
 	}
 
 	# coefficients of beam and diffuse radiation
-	if (!inherits(coeff_bh, 'character')) exportRastToGrass(coeff_bh, grassName='coeff_bh')
-	if (!inherits(coeff_bh, 'coeff_dh')) exportRastToGrass(coeff_dh, grassName='coeff_dh')
+	if (!inherits(coeff_bh, 'character')) exportRastToGrass(coeff_bh, inRastName='coeff_bh')
+	if (!inherits(coeff_dh, 'character')) exportRastToGrass(coeff_dh, inRastName='coeff_dh')
 	
 	# horizon height
 	if (inherits(horizonHeight, 'character')) {
@@ -148,7 +147,7 @@ fasterSun <- function(
 				ifelse(direction < 10, '0', ''),
 				direction
 			)
-			exportRastToGrass(horizonHeight[[i]], grassName=paste0('horizonHeight_', direction))
+			exportRastToGrass(horizonHeight[[i]], inRastName=paste0('horizonHeight_', direction))
 		}
 		args <- c(args, 'horizon_basename' = 'horizonHeight')
 	}
@@ -176,7 +175,6 @@ fasterSun <- function(
 			if (outValue) {
 
 				thisOut <- rgrass::read_RAST(outName)
-				thisOut <- terra::rast(thisOut)
 				names(thisOut) <- outName
 				out <- if (exists('out', inherits=FALSE)) {
 					c(out, thisOut)

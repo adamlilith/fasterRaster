@@ -4,12 +4,18 @@
 \alias{fasterHelp}
 \title{Lookup equivalent functions in fasterRaster, \code{GRASS}, and terra}
 \usage{
-fasterHelp(x = NULL, terra = FALSE, grass = FALSE, approx = FALSE)
+fasterHelp(x = NULL, what = "fasterRaster", approx = FALSE)
 }
 \arguments{
 \item{x}{Name of the function to lookup. This can be a function in \pkg{fasterRaster}, \pkg{terra}, or \pkg{GRASS}. By default, it will be assumed to be the \pkg{fasterRaster} function. If this is \code{NULL} (default), it will return the entire crosswalk table.}
 
-\item{terra, grass, sf}{If \code{TRUE}, the function named in \code{x} is from \pkg{terra}, \pkg{GRASS}, or \pkg{sf}. Only one of \code{terra}, \code{grass}, and \code{sf} can be \code{TRUE}.}
+\item{what}{Which sofware/package does the function appear in?  Partial matches are OK, and case does not matter. This can be any of:
+\itemize{
+\item \code{'fasterRaster'}: Default
+\item \code{'terra'}
+\item \code{'GRASS'}
+\item \code{'sf'}
+}}
 }
 \value{
 Nothing (displays a equivalent functions on the screen).
@@ -18,6 +24,16 @@ Nothing (displays a equivalent functions on the screen).
 Lookup equivalent functions in fasterRaster, \pkg{GRASS}, and terra, plus get the URL of the help file for the \code{GRASS} function, if it exists.
 }
 \examples{
-man/examples/ex_fasterHelp.r
+fasterHelp('fasterRasterize') # lookup by fasterRaster name
+fasterHelp('rasterize', terra = TRUE) # lookup by terra name
+fasterHelp('v.to.rast', grass = TRUE) # lookup by GRASS name
+fasterHelp('st_buffer', sf = TRUE) # lookup by sf name
+fasterHelp('st_buffer', terra = TRUE, sf = TRUE) # warning
+fasterHelp('v.to', grass = TRUE, approx = TRUE) # approximate lookup
+
+# The next two lines return the same thing, a table with all GRASS functions
+# represented in fasterRaster, and their terra equivalents.
+fasterHelp()
+data(fasterFunctions)
 
 }

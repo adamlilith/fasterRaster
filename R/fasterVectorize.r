@@ -1,8 +1,9 @@
 #' Convert a raster to a vector (points, lines, or polygons)
 #'
-#' This function is a potentially faster version of the function \code{\link[terra]{rasterToPolygons}} in the \pkg{terra} package. It can convert a raster to points or polygons (conversion to lines is not yet supported, although it is possible using the \code{r.to.vect} module in \code{GRASS}).
+#' Convert a raster to a spatial polygons object (points, lines, or polygons).
 #'
 #' @inheritParams .sharedArgs_rast
+#' @inheritParams .sharedArgs_inRastName
 #' @inheritParams .sharedArgs_grassDir_grassToR
 #' @inheritParams .sharedArgs_outGrassName
 #' @param vectType Character. Indicates type of output: \code{point}, \code{line} (not supported yet), or \code{area}.
@@ -14,11 +15,9 @@
 #'
 #' @return If \code{grassToR} if \code{TRUE}, then a SpatialPointsDataFrame, SpatialLinesDataFrame, or a SpatialPolygonsDataFrame with the same coordinate reference system as \code{rast}. The field named \code{value} will have the raster values. Regardless, vector object with the name given by \code{outGrassName} will be written into the \code{GRASS} session.
 #'
-#' @details See the documentation for the \code{GRASS} module \code{r.to.vect}{https://grass.osgeo.org/grass82/manuals/r.to.vect.html}.
+#' @seealso \code{\link[terra]{as.points}}, \code{\link[terra]{as.polygons}}, and \code{\link[terra]{as.lines}} in \pkg{terra}; \code{\link[fasterRaster]{fasterRasterize}} in \code{fasterRaster}; \href{https://grass.osgeo.org/grass82/manuals/r.to.vect.html}{\code{r.to.vect}} in \code{GRASS}
 #'
-#' @seealso \code{\link[terra]{rasterToPolygons}}, \code{\link[fasterRaster]{fasterRasterize}} 
-#'
-#' @examples man/examples/ex_fasterVectorize.r
+#' @example man/examples/ex_fasterVectorize.r
 #'
 #' @export
 
@@ -29,6 +28,7 @@ fasterVectorize <- function(
 	smooth = FALSE,
 	grassDir = options()$grassDir,
 	grassToR = TRUE,
+	inRastName = ifelse(is.null(names(rast)), 'rast', names(rast)),
 	outGrassName = 'rastToVect',
 	...
 ) {
@@ -39,7 +39,7 @@ fasterVectorize <- function(
 	if (smooth & vectType == 'area') flags <- c(flags, 's')
 	
 	# initialize GRASS
-	input <- initGrass(rast=rast, vect=NULL, grassDir=grassDir)
+	input <- initGrass(rast=rast, vect=NULL, inRastName=inRastName, inVectName=NULL, grassDir=grassDir)
 
 	# vectorize
 	rgrass::execGRASS('r.to.vect', input=input, output=outGrassName, type=vectType, flags=flags, ...)
@@ -47,7 +47,7 @@ fasterVectorize <- function(
 	# get raster back to R
 	if (grassToR) {
 	
-		out <- rgrass::readVECT(outGrassName)
+		out <- rgrass::read_VECT(outGrassName)
 		
 		# join output with same values
 		if (agg) out <- terra::aggregate(out, by='value')

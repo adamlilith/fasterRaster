@@ -1,4 +1,4 @@
-\donttest{
+\dontrun{
 
 # change this to where GRASS is installed on your system
 # grassDir <- 'C:/Program Files/GRASS GIS 8.2' # example for a PC

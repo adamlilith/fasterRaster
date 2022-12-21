@@ -7,11 +7,11 @@
 initGrass(
   rast = NULL,
   vect = NULL,
-  rastName = "rast",
-  vectName = "vect",
+  inRastName = ifelse(is.null(names(rast)), "rast", names(rast)),
+  inVectName = "vect",
   mapset = "PERMANENT",
   location = "default",
-  tempDir = tempfile(),
+  tempDir = tempdir(),
   grassDir = options()$grassDir
 )
 }
@@ -20,9 +20,9 @@ initGrass(
 
 \item{vect}{Either: a \code{Spatvector} or \code{sf} object \emph{or} the name of a vector dataset already imported into \code{GRASS} \emph{or} \code{NULL} (default) in which case no vector is exported into \pkg{GRASS}. Either \code{rast} or \code{vect} (or both) must be non-\code{NULL}. You cannot set one equal to a name and the other to a raster/vector.}
 
-\item{rastName}{Character. Name of the raster when exported to \pkg{GRASS}. Default is \code{'rast'}.}
+\item{inRastName}{The name of the input raster in \code{GRASS}. This is useful only if you are "chaining" \code{fasterRaster} functions together and wish to refer to the input raster later. The default value is the name of the raster (i.e., \code{names(rast)}).}
 
-\item{vectName}{Character. Name of the vector when exported to \pkg{GRASS}. Default is \code{'vect'}.}
+\item{inVectName}{The name of the input vector in \code{GRASS}. This is useful only if you are "chaining" \code{fasterRaster} functions together and wish to refer to the input vector later. The default value is \code{'vect'}.}
 
 \item{mapset}{Character. Mapset of \code{GRASS} location. The default name is \code{'PERMANENT'}. Typically, it is not a good idea to change this, as most functions in the \pkg{fasterRaster} package assume the mapset is named "default".}
 
@@ -39,6 +39,24 @@ One or two-element character vector. If one element long, then it will be the na
 Initiate a \code{GRASS} session and import a raster and/or vector into it.
 }
 \examples{
-man/examples/ex_initGrass.r
+\dontrun{
 
+# change this according to where GRASS is installed on your system
+grassDir <- 'C:/Program Files/GRASS GIS 8.2' # example for a PC
+grassDir <- "/Applications/GRASS-8.2.app/Contents/Resources" # for a Mac
+
+# start GRASS session with a raster
+library(terra)
+madElev <- fasterData('madElev')
+input <- initGrass(rast=madElev, grassDir=grassDir)
+
+# start GRASS session with a vector
+madCoast <- fasterData('madCoast0')
+input <- initGrass(vect=madCoast0, grassDir=grassDir)
+
+}
+
+}
+\seealso{
+\code{\link{exportRastToGrass}} and \code{\link{exportVectToGrass}} in \pkg{fasterRaster}
 }

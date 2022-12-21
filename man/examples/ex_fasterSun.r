@@ -1,4 +1,4 @@
-\donttest{
+\dontrun{
 
 # change this to where GRASS 8 is installed on your system
 # grassDir <- 'C:/Program Files/GRASS GIS 8.2' # example for a PC
@@ -15,7 +15,7 @@ library(terra)
 madElev <- fasterData('madElev')
 
 # initialize a GRASS session with the elevation raster
-initGrass(rast=madElev, rastName='elevation',
+initGrass(rast=madElev, inRastName='elevation',
 grassDir=grassDir)
 
 # beam and diffuse radiation fractions... assuming they are both 1

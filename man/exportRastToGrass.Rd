@@ -4,20 +4,26 @@
 \alias{exportRastToGrass}
 \title{Export raster to an existing GRASS session}
 \usage{
-exportRastToGrass(rast, grassName = "rast")
+exportRastToGrass(
+  rast,
+  inRastName = ifelse(is.null(names(rast)), "rast", names(rast))
+)
 }
 \arguments{
 \item{rast}{A \code{SpatRaster} raster from the \pkg{terra} package.}
 
-\item{grassName}{What to name the raster in \pkg{GRASS}.}
+\item{inRastName}{What to name the raster in \pkg{GRASS}. By default, this will be the name of the raster (i.e., \code{names(rast)}).}
 }
 \value{
-Nothing (exports a raster to a \code{GRASS} session so it can be used by other functions).
+\code{TRUE} (invisibly, if the raster was successfully exported). The function also exports a raster to a \code{GRASS} session so it can be used by other functions.
 }
 \description{
 Export a raster to an existing \code{GRASS} session.
 }
 \examples{
-man/examples/ex_exportXToGrass.r
+man/examples/ex_exportXToGrass.R
 
+}
+\seealso{
+\code{\link[rgrass]{write_RAST}} in \pkg{rgrass}
 }

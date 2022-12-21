@@ -1,8 +1,16 @@
 # fasterRaster
 <!-- badges: start -->
-[![R build status](https://github.com/r-lib/rcmdcheck/workflows/R-CMD-check/badge.svg)](https://github.com/r-lib/rcmdcheck/actions)
-[![](https://www.r-pkg.org/badges/version/rcmdcheck)](https://www.r-pkg.org/pkg/rcmdcheck)
+
+[![R-CMD-check](https://github.com/adamlilith/fasterRaster/workflows/R-CMD-check/badge.svg)](https://github.com/adamlilith/fasterRaster/actions)
+[![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
+[![cran version](https://www.r-pkg.org/badges/version/fasterRaster)](https://cran.r-project.org/package=fasterRaster)
+[![CRAN RStudio mirror downloads](https://cranlogs.r-pkg.org/badges/grand-total/fasterRaster?color=yellow)](https://r-pkg.org/pkg/fasterRaster)
+![CRAN RStudio mirror downloads](https://cranlogs.r-pkg.org/badges/fasterRaster?color=lightgrey)
+[![GPLv3 license](https://img.shields.io/badge/License-GPLv3-blue.svg)](http://perso.crans.org/besson/LICENSE.html)
+
 <!-- badges: end -->
+
+
 
 Faster raster processing in **R** using **GRASS GIS**
 
@@ -121,10 +129,10 @@ Here is an example of chaining with the `faster` function. The second function u
 * `fasterBufferRast`: Add buffer to cells in a raster (using **GRASS**).
 * `fasterContour`: Calculate contour vectors from a raster (using **GRASS**).
 * `fasterConvertDegree`: Convert degrees from **GRASS** format (0 = east, 90 = north) to standard (0 = north, 90 = east) (using **GRASS**).
-* `fasterFocal`: Faster focal calculations (using multi-core; see also `fasterMapcalc`).
+* `fasterFocal`: Faster focal calculations (using multi-core; see also `fasterApp`).
 * `fasterFragmentation`: Fragmentation indices following**R**iitters et al. (2000 Conservation Ecology 4:3; using multi-core).
 * `fasterLongLatRasts`: Create rasters with values equal to cell longitude and latitude (using **GRASS**).
-* `fasterMapcalc`: Apply user-defined function to one or more rasters (using **GRASS**; see also `fasterFocal`).
+* `fasterApp`: Apply user-defined function to one or more rasters (using **GRASS**; see also `fasterFocal`).
 * `fasterProjectRast`: Project and resample raster (using **GRASS**).
 * `fasterQuantile`: Quantiles of values in a raster (using **GRASS**).
 * `fasterRastDistance`: Distance from cells with `NA`s to closest non-`NA` cell (or the inverse of this) (using **GRASS**).

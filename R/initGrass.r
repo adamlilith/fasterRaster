@@ -3,13 +3,12 @@
 #' Initiate a \code{GRASS} session and import a raster and/or vector into it.
 #'
 #' @inheritParams .sharedArgs_grassDir
+#' @inheritParams .sharedArgs_inRastName
+#' @inheritParams .sharedArgs_inVectName
 #'
 #' @param rast Either: a \code{SpatRaster} object \emph{or} the name of a raster already imported into \code{GRASS} \emph{or} \code{NULL} (default) in which case no raster is exported into \pkg{GRASS}. Either \code{rast} or \code{vect} (or both) must be non-\code{NULL}. You cannot set one equal to a name and the other to a raster/vector.
 #'
 #' @param vect Either: a \code{Spatvector} or \code{sf} object \emph{or} the name of a vector dataset already imported into \code{GRASS} \emph{or} \code{NULL} (default) in which case no vector is exported into \pkg{GRASS}. Either \code{rast} or \code{vect} (or both) must be non-\code{NULL}. You cannot set one equal to a name and the other to a raster/vector.
-#'
-#' @param rastName Character. Name of the raster when exported to \pkg{GRASS}. Default is \code{'rast'}.
-#' @param vectName Character. Name of the vector when exported to \pkg{GRASS}. Default is \code{'vect'}.
 #'
 #' @param mapset Character. Mapset of \code{GRASS} location. The default name is \code{'PERMANENT'}. Typically, it is not a good idea to change this, as most functions in the \pkg{fasterRaster} package assume the mapset is named "default".
 #'
@@ -19,25 +18,31 @@
 #'
 #' @return One or two-element character vector. If one element long, then it will be the name of raster \emph{or} vector exported or already in a \code{GRASS} session. If two elements long, then it will be the name of the raster \emph{and} the vector exported or already in a \code{GRASS} session.
 #'
-#' @examples man/examples/ex_initGrass.r
+#' @seealso \code{\link{exportRastToGrass}} and \code{\link{exportVectToGrass}} in \pkg{fasterRaster}
+#'
+#' @example man/examples/ex_initGrass.r
 #'
 #' @export
 
 initGrass <- function(
 	rast = NULL,
 	vect = NULL,
-	rastName = 'rast',
-	vectName = 'vect',
+	inRastName = ifelse(is.null(names(rast)), 'rast', names(rast)),
+	inVectName = 'vect',
 	mapset = 'PERMANENT',
 	location = 'default',
-	tempDir = tempfile(),
+	tempDir = tempdir(),
 	grassDir = options()$grassDir
 ) {
 
-	# just in case a \code{GRASS} session is already running
-	rgrass::unset.GIS_LOCK()
-	rgrass::remove_GISRC()
-	rgrass::unlink_.gislock()
+	# for debugging
+	if (FALSE) {
+	
+		mapset <- 'PERMANENT'
+		location <- 'default'
+		tempDir <- tempdir()
+	
+	}
 
 	# NULL and NULL
 	if (is.null(rast) & is.null(vect)) {
@@ -65,22 +70,27 @@ initGrass <- function(
 	# RASTER and/or VECTOR
 	} else {
 		
+		# just in case a \code{GRASS} session is already running
+		rgrass::unset.GIS_LOCK()
+		rgrass::remove_GISRC()
+		rgrass::unlink_.gislock()
+
 		# RASTER and NULL
 		if (inherits(rast, c('SpatRaster', 'Raster')) & is.null(vect)) {
 			
-			input <- rastName
+			input <- inRastName
 			names(input) <- 'rastNameInGrass'
 			
 		# NULL and VECTOR
 		} else if (is.null(rast) & inherits(vect, c('SpatVector', 'sf', 'Spatial'))) {
 			
-			input <- vectName
+			input <- inVectName
 			names(input) <- 'vectNameInGrass'
 
 		# RASTER and VECTOR
 		} else if (inherits(rast, c('SpatRaster', 'Raster')) & inherits(vect, c('SpatVector', 'sf', 'Spatial'))) {
 			
-			input <- c(rastName, vectName)
+			input <- c(inRastName, inVectName)
 			names(input) <- c('rastNameInGrass', 'vectNameInGrass')
 
 		} else {
@@ -89,80 +99,65 @@ initGrass <- function(
 
 		}
 		
-		.makeGrassEnv(rast=rast, vect=vect, rastName=rastName, vectName=vectName, grassDir=grassDir, location=location, mapset=mapset, tempDir=tempDir)
+		# setup session
+		dir.create(tempDir, recursive=TRUE, showWarnings=FALSE)
+
+		# rgrass::initGRASS(gisBase=grassDir, home=tempDir, location=location, mapset=mapset, SG=rast, override=TRUE, remove_GISRC=TRUE, ignore.stderr=TRUE, pid=sample(10000, 1))
+		session <- suppressMessages(rgrass::initGRASS(gisBase=grassDir, home=tempDir, location=location, mapset=mapset, override=TRUE, remove_GISRC=TRUE, ignore.stderr=TRUE, pid=sample(1000, 1)))
+
+		# define parameters of this GRASS session
+		if (!is.null(rast)) {
+
+			if (!inherits(rast, 'SpatRaster')) rast <- terra::rast(rast)
+			ewRes <- as.character(terra::res(rast)[1L])
+			nsRes <- as.character(terra::res(rast)[2L])
+			
+			ext <- terra::ext(rast)
+			xmin <- as.character(ext@ptr$vector[1L])
+			xmax <- as.character(ext@ptr$vector[2L])
+			ymin <- as.character(ext@ptr$vector[3L])
+			ymax <- as.character(ext@ptr$vector[4L])
+		
+			proj <- terra::crs(rast)
+			sink(paste0(tempDir, '/wkt.txt'))
+			cat(proj)
+			sink()
+
+			rgrass::execGRASS('g.proj', flags=c('c','quiet'), wkt=paste0(tempDir, '/wkt.txt'))
+			rgrass::execGRASS('g.region', flags=c('quiet'), n=ymax, s=ymin, e=xmax, w=xmin, nsres=nsRes, ewres=ewRes)
+
+		}
+		
+		if (!is.null(vect)) {
+
+			if (!inherits(vect, 'SpatVector')) vect <- terra::vect(vect)
+
+			proj <- terra::crs(vect)
+			sink(paste0(tempDir, '/wkt.txt'))
+			cat(proj)
+			sink()
+			
+			ext <- terra::ext(vect)
+			xmin <- as.character(ext@ptr$vector[1L])
+			xmax <- as.character(ext@ptr$vector[2L])
+			ymin <- as.character(ext@ptr$vector[3L])
+			ymax <- as.character(ext@ptr$vector[4L])
+		
+			rgrass::execGRASS('g.proj', flags=c('c','quiet'), wkt=paste0(tempDir, '/wkt.txt'))
+			rgrass::execGRASS('g.region', flags=c('quiet'), n=ymax, s=ymin, e=xmax, w=xmin)
+			
+		}
+
+		# export
+		if (!is.null(rast)) exportRastToGrass(rast, inRastName=inRastName)
+		if (!is.null(vect))	exportVectToGrass(vect, inVectName=inVectName)
 		
 	} # if passing a raster and/or vector
 		
 	attr(input, 'mapset') <- mapset
 	attr(input, 'location') <- location
 	attr(input, 'tempDir') <- tempDir
-	input
-	
-}
-
-
-# make \code{GRASS} session		
-.makeGrassEnv <- function(
-	rast,			# raster or NULL
-	vect,			# vector or NULL
-	rastName,		# character or ignored
-	vectName,		# character or ignored
-	grassDir,		# \code{GRASS} install directory
-	location,		# name of location
-	mapset,			# name of mapset
-	tempDir			# temporary directory
-) {
-
-	dir.create(tempDir, recursive=TRUE, showWarnings=FALSE)
-
-	# setup session
-	rgrass::initGRASS(gisBase=grassDir, home=tempDir, location=location, mapset=mapset, SG=rast, override=TRUE, remove_GISRC=TRUE, ignore.stderr=TRUE, pid=1)
-
-	# define parameters of this \code{GRASS} session
-	if (!is.null(rast)) {
-
-		if (inherits(rast, 'Raster')) rast <- terra::rast(rast)
-		resolution <- as.character(terra::res(rast)[1])
-		
-		ext <- terra::ext(rast)
-		xmin <- as.character(ext@ptr$vector[1L])
-		xmax <- as.character(ext@ptr$vector[2L])
-		ymin <- as.character(ext@ptr$vector[3L])
-		ymax <- as.character(ext@ptr$vector[4L])
-	
-		proj <- terra::crs(rast)
-		sink(paste0(tempDir, '/wkt.asc'))
-		cat(proj)
-		sink()
-
-		rgrass::execGRASS('g.proj', flags=c('c','quiet'), wkt=paste0(tempDir, '/wkt.asc'))
-		rgrass::execGRASS('g.region', flags=c('quiet'), n=ymax, s=ymin, e=xmax, w=xmin, res=resolution)
-
-	# note: if no raster, MUST have a vector
-	} else {
-
-		if (!inherits(vect, 'SpatVector')) vect <- terra::vect(vect)
-
-		proj <- terra::crs(vect)
-		sink(paste0(tempDir, '/wkt.asc'))
-		cat(proj)
-		sink()
-		
-		ext <- terra::ext(vect)
-		xmin <- as.character(ext@ptr$vector[1L])
-		xmax <- as.character(ext@ptr$vector[2L])
-		ymin <- as.character(ext@ptr$vector[3L])
-		ymax <- as.character(ext@ptr$vector[4L])
-	
-		rgrass::execGRASS('g.proj', flags=c('c','quiet'), wkt=paste0(tempDir, '/wkt.asc'))
-		rgrass::execGRASS('g.region', flags=c('quiet'), n=ymax, s=ymin, e=xmax, w=xmin)
-		
-	}
-
-	# export
-	if (!is.null(rast)) exportRastToGrass(rast, grassName=rastName)
-	if (!is.null(vect))	exportVectToGrass(vect, grassName=vectName)
-	
-	invisible(TRUE)
+	attr(input, 'session') <- if (exists('session', inherits = FALSE)) { session } else { NA }
+	invisible(input)
 	
 }

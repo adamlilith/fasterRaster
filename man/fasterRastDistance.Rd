@@ -11,7 +11,8 @@ fasterRastDistance(
   fillNAs = TRUE,
   grassDir = options()$grassDir,
   grassToR = TRUE,
-  outGrassName = "distance",
+  inRastName = ifelse(is.null(names(rast)), "rast", names(rast)),
+  outGrassName = "distanceRast",
   ...
 )
 }
@@ -35,6 +36,8 @@ fasterRastDistance(
 
 \item{grassToR}{If \code{TRUE} (default) then the output will be returned to \pkg{R}. If \code{FALSE}, then the output is left in the \code{GRASS} session and named the value in \code{outGrassName}. You can then refer to the output in subsequent \pkg{fasterRaster} functions and avoid the need to re-import it. This is called "chaining" functions together, and it can save a lot of computational time.}
 
+\item{inRastName}{The name of the input raster in \code{GRASS}. This is useful only if you are "chaining" \code{fasterRaster} functions together and wish to refer to the input raster later. The default value is the name of the raster (i.e., \code{names(rast)}).}
+
 \item{outGrassName}{Character. Name of output in \code{GRASS}. This is useful if you want to refer to the output object in \code{GRASS} later in a session by "chaining" functions.}
 
 \item{...}{Arguments to pass to \code{\link[rgrass]{execGRASS}} when used for rasterizing (i.e., function \code{r.grow.distance} in \code{GRASS}).}
@@ -45,13 +48,30 @@ If \code{grassToR} if \code{TRUE}, then a raster with the same extent and coordi
 \description{
 This function is a potentially faster version of the \code{\link[terra]{distance}} function in the \pkg{terra} package which it replaces values in all \code{NA} cells with the distance between them and the closest non-\code{NA} cell. Alternatively, it fills in values of non-\code{NA} cells with the distance between them and the closest \code{NA} cell. Note that the \code{distance} function also calculates distances between a raster and a spatial vector object, but this functionality is reproduced in \code{\link[fasterRaster]{fasterVectToRastDistance}}.
 }
-\details{
-See the documentation for the \code{GRASS} module \code{r.grow.distance}{https://grass.osgeo.org/grass82/manuals/r.grow.distance.html}.
-}
 \examples{
-man/examples/ex_fasterRastDistance.r
+\dontrun{
+
+# change this according to where GRASS is installed on your system
+# grassDir <- 'C:/Program Files/GRASS GIS 8.2' # example for a PC
+# grassDir <- "/Applications/GRASS-8.2.app/Contents/Resources" # for a Mac
+
+library(terra)
+madForest2000 <- fasterData('madForest2000')
+
+# could also use distance() function from the raster package which is
+# slower in this example
+distToForest <- fasterRastDistance(rast=madForest2000,
+fillNAs=TRUE, grassDir=grassDir)
+
+# terra
+# distToForest <- distance(madForest2000)
+
+par(mfrow=c(1, 2))
+plot(madForest2000, 'Forest', col='forestgreen')
+plot(distToForest, main='Distance to Forest (m)')
 
 }
+}
 \seealso{
-\code{\link[terra]{distance}}, \code{\link[fasterRaster]{fasterVectToRastDistance}}
+\code{\link[terra]{distance}} in \pkg{terra}; \code{\link[fasterRaster]{fasterVectToRastDistance}} in \pkg{fasterRaster}; \href{https://grass.osgeo.org/grass82/manuals/r.grow.distance.html}{\code{r.grow.distance}} in \code{GRASS}
 }

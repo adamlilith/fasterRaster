@@ -6,23 +6,17 @@
 \usage{
 fasterContour(
   rast,
-  step = NULL,
-  minlevel = NULL,
-  maxlevel = NULL,
-  levels = seq(minValue(rast), maxValue(rast), length.out = 5),
+  levels = NULL,
   cut = 2,
   grassDir = options()$grassDir,
   grassToR = TRUE,
-  outGrassName = "contours",
+  inRastName = ifelse(is.null(names(rast)), "rast", names(rast)),
+  outGrassName = "contourVect",
   ...
 )
 }
 \arguments{
-\item{rast}{A \code{SpatRaster} or the name of a raster already in an existing \code{GRASS} session, with cell values representing elevation (typically in meters).}
-
-\item{step}{Numeric. Increment between contour levels.}
-
-\item{minlevel, maxlevel}{Numeric or \code{NULL} (default). Minimum and maximum contour levels. If \code{NULL} and \code{step} is not \code{NULL}, then the minimum and maximum values in the raster will be used.}
+\item{rast}{A \code{SpatRaster} or the name of a raster already in an existing \code{GRASS} session.}
 
 \item{levels}{Numeric vector. Levels of values in \code{rast} at which contours should be drawn. You can specify contour levels using this argument or by providing values for \code{step}, \code{minlevel}, and \code{maxlevel}. \code{levels} will override use of \code{step}, if both of them are specified.}
 
@@ -32,6 +26,8 @@ fasterContour(
 
 \item{grassToR}{If \code{TRUE} (default) then the output will be returned to \pkg{R}. If \code{FALSE}, then the output is left in the \code{GRASS} session and named the value in \code{outGrassName}. You can then refer to the output in subsequent \pkg{fasterRaster} functions and avoid the need to re-import it. This is called "chaining" functions together, and it can save a lot of computational time.}
 
+\item{inRastName}{The name of the input raster in \code{GRASS}. This is useful only if you are "chaining" \code{fasterRaster} functions together and wish to refer to the input raster later. The default value is the name of the raster (i.e., \code{names(rast)}).}
+
 \item{outGrassName}{Character. Name of output in \code{GRASS}. This is useful if you want to refer to the output object in \code{GRASS} later in a session by "chaining" functions.}
 
 \item{...}{Arguments to pass to \code{\link[rgrass]{execGRASS}} when calculating horizon height (i.e., function \code{r.horizon} in \code{GRASS}).}
@@ -40,15 +36,30 @@ fasterContour(
 If \code{grassToR} if \code{TRUE}, then a \code{SpatialLines} or \code{SpatialLinesDataFrame} object with the same coordinate reference system as \code{rast}. Regardless, a vector is written into the \code{GRASS} session. The name of this vector is given by \code{outGrassName}.
 }
 \description{
-This function creates a vector (\code{SpatialLines} or \code{SpatialLinesDataFrame}) object from a raster representing contour lines in the raster. It utilizes the \code{GRASS} function \code{r.contour}.
+This function creates a spatial vector object from a raster representing contour lines in the raster.
 }
 \details{
 See the documentation for the \code{GRASS} module \code{r.contour}{https://grass.osgeo.org/grass82/manuals/r.contour.html}.
 }
 \examples{
-man/examples/ex_fasterContour.r
+\dontrun{
+
+library(terra)
+
+# change this to where GRASS is installed on your system
+grassDir <- 'C:/Program Files/GRASS GIS 8.2' # example for a PC
+grassDir <- "/Applications/GRASS-8.2.app/Contents/Resources" # for a Mac
+
+madElev <- fasterData('madElev')
+conts <- fasterContour(madElev, levels=c(100, 200, 300, 400, 500),
+grassDir=grassDir)
+
+plot(madElev)
+plot(conts, add=TRUE)
+
+}
 
 }
 \seealso{
-\code{\link[terra]{contour}}
+\code{\link[terra]{contour}} in \pkg{terra}; \href{https://grass.osgeo.org/grass82/manuals/r.contour.html}{\code{r.contour}} in \code{GRASS}
 }

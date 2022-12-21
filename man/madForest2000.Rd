@@ -11,8 +11,36 @@ An object of class \code{'SpatRaster'}. Values are forest (1) or not forest (\co
 Raster of occurrence/non-occurrence of forest cover in a portion of Madagascar. Cells are 30-m in resolution. Values represent forest (1) or non-forest (\code{NA}).
 }
 \examples{
-man/examples/madData.r
 
+### vector data
+library(sf)
+
+# for vector data, we can use data(*) or fasterData(*):
+data(madCoast0) # same as next line
+madCoast <- fasterData('madCoast0') # same as previous
+plot(madCoast0)
+
+madCoast <- fasterData('madCoast4')
+plot(madCoast4, add = TRUE)
+
+madRivers <- fasterData('madRivers')
+plot(madRivers, add = TRUE)
+
+### raster data
+library(terra)
+
+# for raster data, we can get the file directly or using fasterData(*):
+rastFile <- system.file('extdata/madElev.tif'), package='fasterRaster')
+madElev <- terra::rast(rastFile)
+
+madElev <- fasterData('madElev') # same as previus two lines
+plot(madElev)
+
+madForest2000 <- fasterData('madForest2000')
+plot(madForest2000, col = 'forestgreen', add = TRUE)
+
+madForest2014 <- fasterData('madForest2014')
+plot(madForest2014, col = 'green', add = TRUE)
 }
 \references{
 Vielledent, G., Grinand, C., Rakotomala, F.A., Ranaivosoa, \pkg{R}., Rakotoarijaona, J-R., Allnutt, T.F., and Achard, F.  2018.  Combining global tree cover loss data with historical national forest cover maps to look at six decades of deforestation and forest fragmentation in Madagascar.  \emph{Biological Conservation} 222:189-197. \doi{10.1016/j.biocon.2018.04.008}.

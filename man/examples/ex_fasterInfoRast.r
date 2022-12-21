@@ -1,4 +1,4 @@
-\donttest{
+\dontrun{
 
 library(sf)
 library(terra)

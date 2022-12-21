@@ -16,6 +16,6 @@
 #'
 #' @source \href{https://lta.cr.usgs.gov/GMTED2010}{GMTED2010}
 #'
-#' @examples man/examples/ex_madData.r
+#' @example man/examples/ex_madData.r
 #'
 NULL

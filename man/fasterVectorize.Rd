@@ -11,6 +11,7 @@ fasterVectorize(
   smooth = FALSE,
   grassDir = options()$grassDir,
   grassToR = TRUE,
+  inRastName = ifelse(is.null(names(rast)), "rast", names(rast)),
   outGrassName = "rastToVect",
   ...
 )
@@ -28,6 +29,8 @@ fasterVectorize(
 
 \item{grassToR}{If \code{TRUE} (default) then the output will be returned to \pkg{R}. If \code{FALSE}, then the output is left in the \code{GRASS} session and named the value in \code{outGrassName}. You can then refer to the output in subsequent \pkg{fasterRaster} functions and avoid the need to re-import it. This is called "chaining" functions together, and it can save a lot of computational time.}
 
+\item{inRastName}{The name of the input raster in \code{GRASS}. This is useful only if you are "chaining" \code{fasterRaster} functions together and wish to refer to the input raster later. The default value is the name of the raster (i.e., \code{names(rast)}).}
+
 \item{outGrassName}{Character. Name of output in \code{GRASS}. This is useful if you want to refer to the output object in \code{GRASS} later in a session by "chaining" functions.}
 
 \item{...}{Arguments to pass to \code{\link[rgrass]{execGRASS}} when used for converting a raster to a vector (i.e., function \code{r.to.vect} in \pkg{GRASS}).}
@@ -40,15 +43,33 @@ fasterVectorize(
 If \code{grassToR} if \code{TRUE}, then a SpatialPointsDataFrame, SpatialLinesDataFrame, or a SpatialPolygonsDataFrame with the same coordinate reference system as \code{rast}. The field named \code{value} will have the raster values. Regardless, vector object with the name given by \code{outGrassName} will be written into the \code{GRASS} session.
 }
 \description{
-This function is a potentially faster version of the function \code{\link[terra]{rasterToPolygons}} in the \pkg{terra} package. It can convert a raster to points or polygons (conversion to lines is not yet supported, although it is possible using the \code{r.to.vect} module in \code{GRASS}).
-}
-\details{
-See the documentation for the \code{GRASS} module \code{r.to.vect}{https://grass.osgeo.org/grass82/manuals/r.to.vect.html}.
+Convert a raster to a spatial polygons object (points, lines, or polygons).
 }
 \examples{
-man/examples/ex_fasterVectorize.r
+\dontrun{
+
+# change this according to where GRASS is installed on your system
+# grassDir <- 'C:/Program Files/GRASS GIS 8.2' # example for a PC
+# grassDir <- "/Applications/GRASS-8.2.app/Contents/Resources" # for a Mac
+
+library(terra)
+
+madForest2000 <- fasterData('madForest2000')
+
+# could also use rasterToPolygons() which is
+# probably faster in this example
+forestPolyGrass <- fasterVectorize(rast=madForest2000,
+	vectType='area', grassDir=grassDir)
+
+forestPolyTerra <- rasterToPolygons(madForest2000, dissolve=TRUE)
+
+par(mfrow=c(1, 3))
+plot(madForest2000, main='Forest as Raster', col='forestgreen')
+plot(forestPolyGrass, main='Forest as Polygon', col='forestgreen', border=NA)
+plot(forestPolyTerra, main='Forest as Polygon', col='forestgreen', border=NA)
 
 }
+}
 \seealso{
-\code{\link[terra]{rasterToPolygons}}, \code{\link[fasterRaster]{fasterRasterize}}
+\code{\link[terra]{as.points}}, \code{\link[terra]{as.polygons}}, and \code{\link[terra]{as.lines}} in \pkg{terra}; \code{\link[fasterRaster]{fasterRasterize}} in \code{fasterRaster}; \href{https://grass.osgeo.org/grass82/manuals/r.to.vect.html}{\code{r.to.vect}} in \code{GRASS}
 }

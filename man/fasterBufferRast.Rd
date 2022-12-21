@@ -12,8 +12,8 @@ fasterBufferRast(
   lowMemory = FALSE,
   grassDir = options()$grassDir,
   grassToR = TRUE,
-  outGrassName = "rastBuffer",
-  ...
+  inRastName = ifelse(is.null(names(rast)), "rast", names(rast)),
+  outGrassName = "bufferRast"
 )
 }
 \arguments{
@@ -31,21 +31,37 @@ fasterBufferRast(
 
 \item{grassToR}{If \code{TRUE} (default) then the output will be returned to \pkg{R}. If \code{FALSE}, then the output is left in the \code{GRASS} session and named the value in \code{outGrassName}. You can then refer to the output in subsequent \pkg{fasterRaster} functions and avoid the need to re-import it. This is called "chaining" functions together, and it can save a lot of computational time.}
 
-\item{outGrassName}{Character. Name of output in \code{GRASS}. This is useful if you want to refer to the output object in \code{GRASS} later in a session by "chaining" functions.}
+\item{inRastName}{The name of the input raster in \code{GRASS}. This is useful only if you are "chaining" \code{fasterRaster} functions together and wish to refer to the input raster later. The default value is the name of the raster (i.e., \code{names(rast)}).}
 
-\item{...}{Arguments to pass to \code{\link[rgrass]{execGRASS}}.}
+\item{outGrassName}{Character. Name of output in \code{GRASS}. This is useful if you want to refer to the output object in \code{GRASS} later in a session by "chaining" functions.}
 }
 \value{
 If \code{grassToR} if \code{TRUE}, then a raster with the same extent, resolution, and coordinate reference system as \code{rast}. Regardless, a raster with a name given by \code{outGrassName} is written into the \code{GRASS} session.
 }
 \description{
-Calculate a buffer around non-\code{NA} cells or cells with values of 0 in a raster. The output will be a raster. This function utilizes the \code{GRASS} module \href{https://grass.osgeo.org/grass82/manuals/r.buffer.html}{\code{r.buffer}} and is the same or at least similar to the \pkg{terra} function \code{\link[terra]{buffer}}.
+Create a buffer around non-\code{NA} cells or cells with values of 0 in a raster. The output will be a raster.
 This function is a potentially faster version of the \code{\link[terra]{buffer}} function in the \pkg{terra} package for calculating a buffer around non-\code{NA} cells or cells with values of 0 in a raster. The output will be a raster.
 }
 \examples{
-man/examples/ex_fasterBufferRast.r
+\dontrun{
+
+library(terra)
+
+# change this to where GRASS is installed on your system
+grassDir <- 'C:/Program Files/GRASS GIS 8.2' # example for a PC
+grassDir <- "/Applications/GRASS-8.2.app/Contents/Resources" # for a Mac
+
+madForest2000 <- fasterData('madForest2000')
+
+rastBuff <- fasterBufferRast(rast=madForest2000, width=2,
+units='kilometers', grassDir=grassDir)
+
+plot(rastBuff, col=c('green', 'gray'))
+legend('topright', legend=c('forestgreen', 'buffer'),
+fill=c('green', 'gray'))
 
 }
+}
 \seealso{
-\code{\link[terra]{buffer}} in the \pkg{terra} package
+\code{\link[terra]{buffer}} in the \pkg{terra} package; \href{https://grass.osgeo.org/grass82/manuals/r.buffer.html}{\code{r.buffer}} in \code{GRASS}
 }

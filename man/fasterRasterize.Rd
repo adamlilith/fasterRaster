@@ -7,12 +7,14 @@
 fasterRasterize(
   vect,
   rast,
-  use = "value",
+  use = "val",
   value = 1,
   field = NULL,
   burn = NULL,
   grassDir = options()$grassDir,
   grassToR = TRUE,
+  inRastName = ifelse(is.null(names(rast)), "rast", names(rast)),
+  inVectName = "vect",
   outGrassName = "vectToRast",
   ...
 )
@@ -46,18 +48,36 @@ fasterRasterize(
 \item{...}{Arguments to pass to \code{\link[rgrass]{execGRASS}} when used for rasterizing (i.e., function \code{v.to.rast} in \code{GRASS}).}
 }
 \value{
-If \code{grassToR} if \code{TRUE}, then a raster with the same extent, resolution, and coordinate reference system as \code{rast}. Otherwise, a raster with the name given by \code{outRastName} is written into the \code{GRASS} session.
+If \code{grassToR} if \code{TRUE}, then a raster with the same extent, resolution, and coordinate reference system as \code{rast}. Regardless, a raster with the name given by \code{outRastName} is written into the \code{GRASS} session.
 }
 \description{
 This function is a potentially faster version of the \code{\link[terra]{rasterize}} function in the \pkg{terra} package which converts a spatial points, lines, or polygon into a raster based on a "template" raster. All cells covered by the spatial object can either have values taken from the spatial object or a user-defined.
 }
-\details{
-See the documentation for the \code{GRASS} module \code{v.to.rast}{https://grass.osgeo.org/grass82/manuals/v.to.rast.html}.
-}
 \examples{
-man/examples/ex_fasterRasterize.r
+\dontrun{
+# change this according to where GRASS is installed on your system
+# grassDir <- 'C:/Program Files/GRASS GIS 8.2' # example for a PC
+# grassDir <- "/Applications/GRASS-8.2.app/Contents/Resources" # for a Mac
+
+library(sf)
+library(terra)
+
+madCoast <- fasterData('madCoast0')
+madForest2000 <- fasterData('madForest2000')
+
+# could also use rasterize() or mask() from the raster package which may
+# be faster in this example
+madMask <- fasterRasterize(vect=madCoast0, rast=madForest2000, grassDir=grassDir)
+
+# terra
+# madMask <- rasterize(madCoast0, madForest2000)
+# madMask <- mask(madForest2000, madCoast0)
+
+plot(madMask, main='Portion of Eastern Madagascar')
+plot(madCoast0, add=TRUE)
 
 }
+}
 \seealso{
-\code{\link[terra]{rasterize}}
+\code{\link[terra]{rasterize}} in \pkg{terra}; \href{https://grass.osgeo.org/grass82/manuals/v.to.rast.html}{\code{v.to.rast}} in \code{GRASS}
 }

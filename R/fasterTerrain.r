@@ -1,107 +1,82 @@
 #' Rasters of slope, aspect, curvature, and partial slopes
 #'
-#' This function is a potentially faster version of the \code{\link[terra]{terrain}} function in the \pkg{terra} package for calculating slope and aspect of a raster. It can also calculate profile curvature, tangential curvature, and slope in the east-west or north-south directions.
+#' Calculate topographic indices, including slope, aspect, curvature, and partial slopes (slopes in the east-west or north-south directions).
+#'
 #' @inheritParams .sharedArgs_rast
+#' @inheritParams .sharedArgs_inRastName
 #' @inheritParams .sharedArgs_grassDir_grassToR
-#' @param slope Logical, if \code{TRUE} (default) then calculate slope.
-#' @param slopeUnits Character, "units" in which to calculate slope: either \code{degrees} for degrees or \code{percent}.
-#' @param aspect Logical, if \code{TRUE} then calculate aspect. Aspect is given in degrees from North going clockwise (0 = north, 90 = east, 180 = south, 270 = west).
-#' @param northIs0 Logical. If \code{TRUE} (default), aspect will be reported such that 0 is north, and degrees run clockwise (90 is east, 180 south, 270 west). If \code{FALSE}, then aspect will be reported such that 0 is east, and degrees run counterclockwise (90 is north, 180 west, 270 south). The latter is the default in \code{GRASS}7.
-#' @param profileCurve Logical, if \code{TRUE}, calculate profile curvature. Default is \code{FALSE}.
-#' @param tanCurve Logical, if \code{TRUE}, calculate tangential curvature. Default is \code{FALSE}.
-#' @param eastWestSlope Logical, if \code{TRUE}, calculate slope in east-west direction. Default is \code{FALSE}.
-#' @param northSouthSlope Logical, if \code{TRUE}, calculate slope in north-south direction. Default is \code{FALSE}.
-#' @param outGrassNameSlope Character. Name of slope raster in \pkg{GRASS}. Useful for referring to later in the same \code{GRASS} session.
-#' @param outGrassNameAspect Character. Name of aspect raster in \pkg{GRASS}. Useful for referring to later in the same \code{GRASS} session.
-#' @param outGrassNameProfileCurve Character. Name of profile curve raster in \pkg{GRASS}. Useful for referring to later in the same \code{GRASS} session.
-#' @param outGrassNameTanCurve Character. Name of tangent curve raster in \pkg{GRASS}. Useful for referring to later in the same \code{GRASS} session.
-#' @param outGrassNameEastWestSlope Character. Name of east-west slope raster in \pkg{GRASS}. Useful for referring to later in the same \code{GRASS} session.
-#' @param outGrassNameNorthSouthSlope Character. Name of north-south slope raster in \pkg{GRASS}. Useful for referring to later in the same \code{GRASS} session.
-#' @param ... Arguments to pass to \code{\link[rgrass]{execGRASS}} when used for rasterizing (i.e., function \code{r.slope.aspect} in \code{GRASS}).
+#' @param metrics Name of the topographic metric(s) to calculate. Valid values include one or more of:
+#' \itemize{
+#' 	\item \code{'slope'}: Slope. Units are given by argument \code{slopeUnits}.
+#' 	\item \code{'aspect'}: Aspect. When argument \code{northIs0} is \code{TRUE} (default), then aspect is given in degrees from north going clockwise (0 = north, 90 = east, 180 = south, 270 = west).
+#' 	\item \code{'profileCurve'}: Profile curvature.
+#' 	\item \code{'tanCurve'}: Tangential curvature.
+#' 	\item \code{'ewSlope'}: Slope in east-west direction.
+#' 	\item \code{'nsSlope'}: Slope in north-south direction.
+#' }
+#' @param slopeUnits Character, "units" in which to calculate slope: either \code{'degrees'} for degrees (default) or \code{'percent'}.
+#' @param northIs0 Logical. If \code{TRUE} (default), aspect will be reported such that 0 is north, and degrees run clockwise (90 is east, 180 south, 270 west). If \code{FALSE}, then aspect will be reported such that 0 is east, and degrees run counterclockwise (90 is north, 180 west, 270 south). The latter is the default in \code{GRASS}, but the former is the default in \pkg{terra}'s \code{\link[terra]{terrain}} function, so is used here as the default.
+#' @param outGrassName Name(s) of the rasters created in the \code{GRASS} session. Useful for chaining functions together. By default, these will be the values given in \code{metrics}.
 #'
-#' @return If \code{grassToR} if \code{TRUE}, then a raster or raster stack with the same extent, resolution, and coordinate reference system as \code{rast}. Regardless, raster(s) given by the names in the \code{outGrassName*} arguments are used are written into the \code{GRASS} session.
+#' @return If \code{grassToR} if \code{TRUE}, then a raster or raster stack with the same extent, resolution, and coordinate reference system as \code{rast}. Regardless, raster(s) given by the names in the \code{outGrassName} arguments are used are written into the \code{GRASS} session.
 #'
-#' @details See the documentation for the \code{GRASS} module \code{r.slope.aspect}{https://grass.osgeo.org/grass82/manuals/r.slope.aspect.html}.
+#' @seealso \code{\link[terra]{terrain}} in \pkg{terra}; \href{https://grass.osgeo.org/grass82/manuals/r.slope.aspect.html}{\code{r.slope.aspect}} in \code{GRASS}
 #'
-#' @seealso \code{\link[terra]{terrain}}
-#'
-#' @examples man/examples/ex_fasterTerrain.r
+#' @example man/examples/ex_fasterTerrain.r
 #'
 #' @export
 
 fasterTerrain <- function(
 	rast,
-	slope = TRUE,
+	metrics = 'slope',
 	slopeUnits = 'degrees',
-	aspect = FALSE,
 	northIs0 = TRUE,
-	profileCurve = FALSE,
-	tanCurve = FALSE,
-	eastWestSlope = FALSE,
-	northSouthSlope = FALSE,
 	
 	grassDir = options()$grassDir,
 	grassToR = TRUE,
 	
-	outGrassNameSlope = 'slope',
-	outGrassNameAspect = ifelse(northIs0, 'aspectNorthIs0', 'aspectEastIs0'),
-	outGrassNameProfileCurve = 'profileCurve',
-	outGrassNameTanCurve = 'tanCurve',
-	outGrassNameEastWestSlope = 'eastWestSlope',
-	outGrassNameNorthSouthSlope = 'northSouthSlope',
-	...
+	inRastName = ifelse(is.null(names(rast)), 'rast', names(rast)),
+	outGrassName = NULL
 ) {
 
 	flags <- c('quiet', 'overwrite')
 	
+	if (is.null(outGrassName)) outGrassName <- metrics
+	if (length(metrics) != length(outGrassName)) stop('The length of "outGrassName" must be the same as the length of "metrics."')
+	
 	# initialize GRASS
-	input <- initGrass(rast=rast, vect=NULL, grassDir=grassDir)
+	input <- initGrass(rast=rast, vect=NULL, inRastName=inRastName, inVectName=NULL, grassDir=grassDir)
 
-	# slope
-	if (slope) rgrass::execGRASS('r.slope.aspect', elevation=input, slope=outGrassNameSlope, format=slopeUnits, flags=flags)
+	for (metric in metrics) {
 	
-	# aspect (0 = east and goes counter-clockwise, so convert so 0 = north going clockwise)
-	if (aspect) {
-		rgrass::execGRASS('r.slope.aspect', elevation=input, aspect=outGrassNameAspect, flags=flags)
-		if (northIs0) fasterConvertDegree(outGrassNameAspect, grassDir=grassDir, outGrassName=outGrassNameAspect, grassToR=FALSE)
-	}
+		if (metrics == 'slope') {
+			rgrass::execGRASS('r.slope.aspect', elevation=input, slope='slope', format=slopeUnits, flags=flags)
+		} else if (metrics == 'aspect') {
+			rgrass::execGRASS('r.slope.aspect', elevation=input, aspect='aspect', format=slopeUnits, flags=flags)
+			if (northIs0) fasterConvertDegree('aspect', grassDir=grassDir, outGrassName=outGrassNameAspect, grassToR=FALSE)
+		} else if (metric == 'profileCurve') {
+			rgrass::execGRASS('r.slope.aspect', elevation=input, pcurvature='profileCurve', flags=flags)
+		} else if (metric == 'tanCurve') {
+			rgrass::execGRASS('r.slope.aspect', elevation=input, tcurvature='tanCurve', flags=flags)
+		} else if (metric == 'ewSlope') {
+			rgrass::execGRASS('r.slope.aspect', elevation=input, dx='ewSlope', flags=flags)
+		} else if (metric == 'nsSlope') {
+			rgrass::execGRASS('r.slope.aspect', elevation=input, dy='nsSlope', flags=flags)
+		}
+		
+		if (grassToR) {
+			out <- if (exists('out', inherits=FALSE)) {
+				c(out, rgrass::read_RAST(metric))
+			} else {
+				rgrass::read_RAST(metric)
+			}
+		}
 	
-	# curvatures
-	if (profileCurve) rgrass::execGRASS('r.slope.aspect', elevation=input, pcurvature=outGrassNameProfileCurve, flags=flags)
-	if (tanCurve) rgrass::execGRASS('r.slope.aspect', elevation=input, tcurvature=outGrassNameTanCurve, flags=flags)
-	
-	# first-derivative slopes
-	if (eastWestSlope) rgrass::execGRASS('r.slope.aspect', elevation=input, dx=outGrassNameEastWestSlope, flags=flags)
-	if (northSouthSlope) rgrass::execGRASS('r.slope.aspect', elevation=input, dy=outGrassNameNorthSouthSlope, flags=flags)
+	} # next metric
 
-	# return
 	if (grassToR) {
-	
-		out <- terra::rast(rgrass::read_RAST(input))
-	
-		if (slope) out <- c(out, terra::rast(rgrass::read_RAST(outGrassNameSlope)))
-		if (aspect) out <- c(out, terra::rast(rgrass::read_RAST(outGrassNameAspect)))
-		if (profileCurve) out <- c(out, terra::rast(rgrass::read_RAST(outGrassNameProfileCurve)))
-		if (tanCurve) out <- c(out, terra::rast(rgrass::read_RAST(outGrassNameTanCurve)))
-		if (eastWestSlope) out <- c(out, terra::rast(rgrass::read_RAST(outGrassNameEastWestSlope)))
-		if (northSouthSlope) out <- c(out, terra::rast(rgrass::read_RAST(outGrassNameNorthSouthSlope)))
-
-		out <- terra::subset(out, 2:terra::nlyr(out))
-
-		name <- c(
-			ifelse(slope, outGrassNameSlope, NA),
-			ifelse(aspect, outGrassNameAspect, NA),
-			ifelse(profileCurve, outGrassNameProfileCurve, NA),
-			ifelse(tanCurve, outGrassNameTanCurve, NA),
-			ifelse(eastWestSlope, outGrassNameEastWestSlope, NA),
-			ifelse(northSouthSlope, outGrassNameNorthSouthSlope, NA)
-		)
-		
-		name <- stats::na.omit(name)
-		names(out) <- name
-		
+		names(out) <- outGrassName
 		out
-		
 	}
 	
 }

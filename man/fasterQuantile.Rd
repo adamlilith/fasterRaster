@@ -8,6 +8,7 @@ fasterQuantile(
   rast,
   probs = c(0.025, 0.25, 0.5, 0.75, 0.975),
   grassDir = options()$grassDir,
+  inRastName = ifelse(is.null(names(rast)), "rast", names(rast)),
   ...
 )
 }
@@ -18,6 +19,8 @@ fasterQuantile(
 
 \item{grassDir}{Name of the folder path in which \code{GRASS} is installed. For a Windows system, this might be something like \code{'C:/Program Files/GRASS GIS 8.2'}. For a Mac system, this might be like \code{"/Applications/GRASS-8.2.app/Contents/Resources"}. If you are using a lot of \pkg{fasterRaster} functions, it can be easier to set this once using \code{\link{fasterOptions}}. By default, this is \code{NULL}, in which case the install path for \code{GRASS} will be searched for, but if not found, will result in an error.}
 
+\item{inRastName}{The name of the input raster in \code{GRASS}. This is useful only if you are "chaining" \code{fasterRaster} functions together and wish to refer to the input raster later. The default value is the name of the raster (i.e., \code{names(rast)}).}
+
 \item{...}{Arguments to pass to \code{\link[rgrass]{execGRASS}}.}
 }
 \value{
@@ -26,13 +29,25 @@ A named vector of the values for each quantile named in \code{probs}.
 \description{
 This function is a potentially faster version of the function \code{quantile(raster, probs)} for calculating the quantiles of a raster. This function will also work on rasters too big to load into memory using the \pkg{terra} package.
 }
-\details{
-See the documentation for the \code{GRASS} module \code{r.quantile}{https://grass.osgeo.org/grass82/manuals/r.quantile.html}.
-}
 \examples{
-man/examples/ex_fasterQuantile.r
+\dontrun{
+
+# change this according to where GRASS is installed on your system
+# grassDir <- 'C:/Program Files/GRASS GIS 8.2' # example for a PC
+# grassDir <- "/Applications/GRASS-8.2.app/Contents/Resources" # for a Mac
+
+library(terra)
+madElev <- fasterData('madElev')
+
+probs <- c(0.025, 0.1, 0.25, 0.5, 0.75, 0.9, 0.975)
+quants <- fasterQuantile(rast=madElev, probs=probs, grassDir=grassDir)
+quants
+
+# in this case, the raster package is faster:
+quantile(madElev, probs=probs, na.rm=TRUE)
 
 }
+}
 \seealso{
-\code{\link[stats]{quantile}} in the \pkg{base} package and \code{\link[terra]{quantile}} in the \pkg{terra} package
+\code{\link[stats]{quantile}} in the \pkg{base} package; \code{\link[terra]{quantile}} in \pkg{terra}; \href{https://grass.osgeo.org/grass82/manuals/r.quantile.html}{\code{r.quantile}} in \code{GRASS}
 }
