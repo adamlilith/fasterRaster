@@ -82,6 +82,7 @@
 #' 		\code{\link{fasterOptions}}: Set the argument \code{grassDir} for all functions at once so you do not have to do it every time.\cr
 #'
 #' @section Functions that do operations on rasters:
+#' 		\code{\link{fasterApp}}: Apply user-defined function to one or more rasters (using \code{GRASS}; see also \code{fasterFocal}).\cr
 #' 		\code{\link{fasterBufferRast}}: Add buffer to cells in a raster (using \code{GRASS}).\cr
 #' 		\code{\link{fasterContour}}: Calculate contour vectors from a raster.\cr
 #' 		\code{\link{fasterConvertDegree}}: Convert degrees from \code{GRASS} format (0 = east, 90 = north) to standard (0 = north, 90 = east) (using \code{GRASS}).\cr
@@ -90,7 +91,6 @@
 #' 		\code{\link{fasterHorizon}}: Horizon angle height from a DEM (using \code{GRASS}).\cr
 #' 		\code{\link{fasterInfoRast}}: Information on a raster in a \code{GRASS} session.\cr
 #' 		\code{\link{fasterLongLatRasts}}: Create rasters with values equal to cell longitude and latitude (using \code{GRASS}).\cr
-#' 		\code{\link{fasterApp}}: Apply user-defined function to one or more rasters (using \code{GRASS}; see also \code{fasterFocal}).\cr
 #' 		\code{\link{fasterProjectRast}}: Project and resample raster (using \code{GRASS}).\cr
 #' 		\code{\link{fasterQuantile}}: Quantiles of values in a raster (using \code{GRASS}).\cr
 #' 		\code{\link{fasterRastDistance}}: Distance from cells with \code{NA}s to closest non-\code{NA} cell (or the inverse of this) (using \code{GRASS}).\cr
