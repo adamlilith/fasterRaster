@@ -28,9 +28,9 @@ You can install **fasterRaster** from CRAN.  Alternatively, you can get the late
 
 To use **fasterRaster** you will also need to install [GRASS version 8+](https://grass.osgeo.org/) on your operating system. You will need to use the stand-alone installer, not the Open Source Geospatial (OS Geo) installer.
 
-You will also need to know the install path for **GRASS**. On my machine (Windows), it is `C:/Program Files/GRASS GIS 8.2`. A friend whose computer was infected with Mac OS told me it was `"/Applications/GRASS-8.2.app/Contents/Resources"` for them (note the double quotes). So before running any `fasterRaster` functions that need **GRASS** you need to tell the functions where **GRASS** is. There are two ways to do this.  
+## The `grassDir` argument
 
-First, you can pass this to each function that needs it. For example, you can call functions like this:  
+You will need to know the install path for **GRASS** and supply it to functions through an argument named `grassDir`. There are two ways to supply this argument. First, you can pass this to each function that needs it. For example, you can call functions like this:  
 
 `grassDir <- 'C:/Program Files/GRASS GIS 8.2' # PC`  
 `grassDir <- "/Applications/GRASS-8.2.app/Contents/Resources" # Mac`  
@@ -40,8 +40,9 @@ First, you can pass this to each function that needs it. For example, you can ca
 
 This is fine if you need to just run a few functions, but it can be cumbersome. The other way is to set an "option" equal to the install path:  
 
-`grassDir <- 'C:/Program Files/GRASS GIS 8.2'`  
-`options(grassDir = grassDir)`  
+`options(grassDir = 'C:/Program Files/GRASS GIS 8.2') # PC`  
+`options(grassDir = "/Applications/GRASS-8.2.app/Contents/Resources") # Mac`  
+`options(grassDir = '/usr/local/grass') # Linux`  
 
 Now, whenever you run a **fasterRaster** function that needs `grassDir`, it will just look for it there. So you can just do:
 
@@ -51,15 +52,16 @@ Now, whenever you run a **fasterRaster** function that needs `grassDir`, it will
 
 ## An example ##
 
-Let's get started! We'll do a simple operation in which we calculate the distance to rivers (represented by a spatial lines vector object) and burn the distance values into a raster. To do this, we'll be using maps representing the middle of the eastern coast of Madagascar.
+Let's get started! We'll do a simple operation in which we calculate the distance to rivers (represented by a spatial lines vector object) and burn the distance values into a raster. To do this, we'll be using maps representing the middle of the eastern coast of Madagascar. We will also use the \code{terra} and \code{sf} packages for raster and spatial vector support, respectively (**fasterRaster** also works with `terra`'s `SpatVector` class, and in fact "prefers" it).
 
 `library(fasterRaster)`  
 `library(terra)`  
 `library(sf)`  
 
-`# please change the next line to fit your installation path for GRASS`  
-`grassDir <- 'C:/Program Files/GRASS GIS 8.2' # for a PC`  
-`options(grassDir = grassDir)`  
+Please use/change the appropriate line to fit your installation path for **GRASS**:  
+`options(grassDir = 'C:/Program Files/GRASS GIS 8.2') # PC`  
+`options(grassDir = "/Applications/GRASS-8.2.app/Contents/Resources") # Mac`  
+`options(grassDir = '/usr/local/grass') # Linux`  
 
 `# load a raster to serve as a template and spatial vector file with rivers`  
 `madForest2000 <- fasterData('madForest2000')`  
@@ -76,12 +78,12 @@ Let's get started! We'll do a simple operation in which we calculate the distanc
 
 ## Chaining functions for speed ##
 That was easy enough. Under the hood, many of the `faster` functions are:  
-1) starting a **GRASS** session;  
-2) writing a raster and/or vector to that session;  
-3) doing the requested operation;  
-4) and then exporting the raster/vector output to**R**.  
+1) Starting a **GRASS** session;  
+2) Importing a raster and/or vector to that session;  
+3) Doing the requested operation; and then
+4) Exporting the raster/vector output to**R**.  
 
-Note that you really probably aren't interested in steps 1 and 4, but they create a computing overhead.  However, it is possible to "chain" functions together so that they use the same **GRASS** session by keeping the rasters/vectors in **GRASS** and then exporting them when you need them in the end.  
+Note that you really probably aren't interested importing and exporting things into/out of **GRASS** (steps 2 and 4), but they create a computing overhead.  To obviate this, it is possible to "chain" functions together so that they use the same **GRASS** session by keeping the rasters/vectors in **GRASS** and then exporting them when you need them in the end.  
 
 Here's an example in which we'll chain the `fasterVectToRastDistance` and `fasterQuantile` functions together.  
 
@@ -89,15 +91,12 @@ Here's an example in which we'll chain the `fasterVectToRastDistance` and `faste
 `quants <- fasterQuantile(rast='distToVect', probs=c(0.05, 0.5, 0.95))`  
 `quants`  
 
-The first function imports the raster and vector, and does its calculations, but does not export the output raster to **R**. Rather, the output raster stays in the **GRASS** session and is named `distToVect`. In the second function the first argument is `distToVect`, the name of the raster we just created in the first function. This tells the second function to look in the **GRASS** session for the raster, not in**R**. If we had instead set `rast` in the second function equal to an actual raster, then the function would have imported the raster into a **GRASS**S session, which takes some time to do.
+The first function imports the raster and vector, and does its calculations, but does not export the output raster to **R**. Rather, the output raster stays in the **GRASS** session and is named `distToVect`. We do not need to spend time exporting it back to **R**. In the second function the first argument is `distToVect`, the name of the raster we just created in the first function. This tells the second function to look in the **GRASS** session for the raster, not in**R**. If we had instead argument set `rast` in the second function equal to an actual raster, then the function would have imported the raster into a **GRASS** session, which takes some time to do.
 
-You can see that by chaining a series of `faster~` functions together, the process can be made faster because all of the operations are done in **GRASS** with less back-and-forth between **GRASS** and **R**.  The one exception to this is that some `faster~` functions do not use **GRASS** (e.g., `fasterFragmentation` and `fasterFocal`), so you can't use this trick.
+You can see that by chaining a series of **fasterRaster** functions together, the process can be made faster because all of the operations are done in **GRASS** with less back-and-forth between **GRASS** and **R**.  The one exception to this is that a few **fasterRaster** functions do not use **GRASS** (e.g., `fasterFragmentation`), so you can't use this trick.
 
 ## The generic `faster()` function ##
 The `faster` function is a generic wrapper for **GRASS** modules. You can use it to call many of the modules in **GRASS**.  It may not always work, but it simplifies the task of initiating a **GRASS** instance, importing the raster/vector, and executing the call:
-
-`grassDir <- 'C:/Program Files/GRASS GIS 8.2'`  
-`options(grassDir = grassDir)`  
 
 `madElev <- fasterData('madElev')`  
 `latRast <- faster('r.latlong', rast=madElev, outType='rast', flags=c('quiet', 'overwrite'))`  
@@ -107,7 +106,7 @@ By the way, this is the same as:
 
 `ll <- fasterLongLatRasts(madElev)`
 
-However, you can use `faster` to call **GRASS** functions that do not have a dedicated functon in **fasterRaster**, so `faster` is very flexible!
+However, you can use `faster` to call **GRASS** modules that do not have a dedicated functon in **fasterRaster**, so `faster` is very flexible!
 
 ## Chaining with the `faster()` function ##
 
@@ -116,37 +115,42 @@ Here is an example of chaining with the `faster` function. The second function u
 `latRast <- faster('r.latlong', rast=madElev, outType='rast', flags=c('quiet', 'overwrite'), outGrassName='lat')}`  
 `longRast <- faster('r.latlong', input='lat', outType='rast', flags=c('quiet', 'overwrite', 'l'))}`  
 
-Here, we used the product of the first \code{faster} call, which is named `'lat'`, as the input to the second `faster` call. Note that we could have also used `'madElev'` as the input to the second, since it was also already in **{GRASS}.
+Here, we used the product of the first \code{faster} call, which is named `'lat'`, as the input to the second `faster` call. Note that we could have also used `'madElev'` as the input to the second, since it was also already in **GRASS**.
 
 # Functions #
 
 ### Getting help
-* Typing `?fasterRaster` will pull up a table of package contents (much like this).
-* `fasterHelp`: Find equivalent functions in `fasterRaster`, `GRASS`, and `terra`.
+* Typing `?fasterRaster` will pull up a table of package contents (much like this) plus a quick-start guide.
+* `fasterHelp`: Find equivalent functions in **fasterRaster**, **GRASS**, **terra**, and **sf**.
 
-### *Faster* raster processing functions ##
+### *Faster* functions that do operations on rasters
+* `fasterApp`: Apply user-defined function to one or more rasters (using **GRASS**; see also `fasterFocal`).
 * `fasterBufferRast`: Add buffer to cells in a raster (using **GRASS**).
 * `fasterContour`: Calculate contour vectors from a raster (using **GRASS**).
 * `fasterConvertDegree`: Convert degrees from **GRASS** format (0 = east, 90 = north) to standard (0 = north, 90 = east) (using **GRASS**).
-* `fasterFocal`: Faster focal calculations (using multi-core; see also `fasterApp`).
-* `fasterFragmentation`: Fragmentation indices following**R**iitters et al. (2000 Conservation Ecology 4:3; using multi-core).
+* `fasterFocal`: Faster focal calculations (see also `fasterApp`).
+* `fasterFragmentation`: Fragmentation indices following Riitters et al. (2000 Conservation Ecology 4:3).
+* `fasterHorizon`: Horizon angle height from a DEM (using **GRASS**).
+* `fasterInfoRast`: Information on a vector in a **GRASS** session.
 * `fasterLongLatRasts`: Create rasters with values equal to cell longitude and latitude (using **GRASS**).
-* `fasterApp`: Apply user-defined function to one or more rasters (using **GRASS**; see also `fasterFocal`).
 * `fasterProjectRast`: Project and resample raster (using **GRASS**).
 * `fasterQuantile`: Quantiles of values in a raster (using **GRASS**).
 * `fasterRastDistance`: Distance from cells with `NA`s to closest non-`NA` cell (or the inverse of this) (using **GRASS**).
-* `fasterRasterize`: Convert vector to a raster (using **GRASS**).
+* `fasterSun`: Solar irradiance and radiance (using **GRASS**).
 * `fasterSurfFract`: Generate a raster with a fractal pattern (using **GRASS**).
 * `fasterTerrain`: Slope, aspect, and curvature (using **GRASS**).
 * `fasterTopidx`: Topographic wetness index (using **GRASS**).
 * `fasterVectorize`: Convert raster to spatial points, lines, or polygons (using **GRASS**).
+
+### *Faster* functions that operate on vectors
+* `fasterInfoVect`: Information on a vector in a **GRASS** session.
+* `fasterRasterize`: Convert vector to a raster (using **GRASS**.
+
+### *Faster* functions that operate on rasters and vectors simultaneously
 * `fasterVectToRastDistance`: Distance between raster cells and a vector (using **GRASS**).
 
-### Generic "faster" operations: ##
+### Generic "faster" operations for rasters and/or vectors
 * `faster`: Generic call to a **GRASS** module.
-
-### Normal-speed raster processing ##
-* `fragmentation`: Calculate landscape fragmentation indices as per**R**iitter et al. (2000 Conservation Ecology 4:3)
 
 ### Utility functions ##
 * `exportRastToGrass`: Export raster to an open **GRASS** session.
@@ -162,9 +166,9 @@ All spatial data represents features in a portion of eastern Madagascar.
 * `madRivers`: Major rivers (`sf` spatial vector)
 
 # Citation #
-As of October, 2020, there is not a package-specific citation for **fasterRaster**, but the package was first used in:
+As of December, 2022, there is not a package-specific citation for **fasterRaster**, but the package was first used in:
 
-Morelli*, T.L., Smith*, A.B., Mancini, A.N., Balko, E. A., Borgenson, C., Dolch,**R**., Farris, Z., Federman, S., Golden, C.D., Holmes, S., Irwin, M., Jacobs,**R**.L., Johnson, S., King, T., Lehman, S., Louis, E.E. Jr., Murphy, A.,**R**andriahaingo, H.N.T., Lucien,**R**andriannarimanana, H.L.L.,**R**atsimbazafy, J.,**R**azafindratsima, O.H., and Baden, A.L. 2020. The fate of Madagascar’s rainforest habitat.  *Nature Climate Change* 10:89-96. * Equal contribution https://doi.org/10.1038/s41558-019-0647-x
+Morelli*, T.L., Smith*, A.B., Mancini, A.N., Balko, E. A., Borgenson, C., Dolch,R., Farris, Z., Federman, S., Golden, C.D., Holmes, S., Irwin, M., Jacobs,R.L., Johnson, S., King, T., Lehman, S., Louis, E.E. Jr., Murphy, A.,Randriahaingo, H.N.T., Lucien,Randriannarimanana, H.L.L.,Ratsimbazafy, J.,Razafindratsima, O.H., and Baden, A.L. 2020. The fate of Madagascar’s rainforest habitat.  *Nature Climate Change* 10:89-96. * Equal contribution DOI: \<a href="https://doi.org/10.1038/s41558-019-0647-x">https://doi.org/10.1038/s41558-019-0647-x</a>.
 
 *Abstract*. Madagascar has experienced extensive deforestation and overharvesting, and anthropogenic climate change will compound these pressures. Anticipating these threats to endangered species and their ecosystems requires considering both climate change and habitat loss effects. The genus Varecia (ruffed lemurs), which is composed of two Critically Endangered forest-obligate species, can serve as a status indicator of the biodiverse eastern rainforest of Madagascar. Here, we combined decades of research to show that the suitable habitat for ruffed lemurs could be reduced by 29–59% from deforestation, 14–75% from climate change (representative concentration pathway 8.5) or 38–93% from both by 2070. If current protected areas avoid further deforestation, climate change will still reduce the suitable habitat by 62% (range: 38–83%). If ongoing deforestation continues, the suitable habitat will decline by 81% (range: 66–93%). Maintaining and enhancing the integrity of protected areas, where rates of forest loss are lower, will be essential for ensuring persistence of the diversity of the rapidly diminishing Malagasy rainforests.
 
