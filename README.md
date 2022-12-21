@@ -1,7 +1,6 @@
 # fasterRaster
 <!-- badges: start -->
 
-[![R-CMD-check](https://github.com/adamlilith/fasterRaster/workflows/R-CMD-check/badge.svg)](https://github.com/adamlilith/fasterRaster/actions)
 [![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
 [![cran version](https://www.r-pkg.org/badges/version/fasterRaster)](https://cran.r-project.org/package=fasterRaster)
 [![CRAN RStudio mirror downloads](https://cranlogs.r-pkg.org/badges/grand-total/fasterRaster?color=yellow)](https://r-pkg.org/pkg/fasterRaster)
