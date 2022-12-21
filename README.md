@@ -57,8 +57,8 @@ Let's get started! We'll do a simple operation in which we calculate the distanc
 `library(terra)`  
 `library(sf)`  
 
-`# please change the next line to fit your installation path for \code{GRASS}`  
-`grassDir <- 'C:/Program Files/GRASS GIS 8.2'`  
+`# please change the next line to fit your installation path for GRASS`  
+`grassDir <- 'C:/Program Files/GRASS GIS 8.2' # for a PC`  
 `options(grassDir = grassDir)`  
 
 `# load a raster to serve as a template and spatial vector file with rivers`  
@@ -99,14 +99,13 @@ The `faster` function is a generic wrapper for **GRASS** modules. You can use it
 `grassDir <- 'C:/Program Files/GRASS GIS 8.2'`  
 `options(grassDir = grassDir)`  
 
-`madForest2000 <- fasterData('madForest2000')`  
-`latRast <- faster('r.latlong', rast=madForest2000, outType='rast', flags=c('quiet', 'overwrite'))`  
-`longRast <- faster('r.latlong', rast=madForest2000, outType='rast', flags=c('quiet', 'overwrite', 'l'))`  
-`ll1 <- stack(latRast, longRast)`  
+`madElev <- fasterData('madElev')`  
+`latRast <- faster('r.latlong', rast=madElev, outType='rast', flags=c('quiet', 'overwrite'))`  
+`longRast <- faster('r.latlong', rast=madElev, outType='rast', flags=c('quiet', 'overwrite', 'l'))`  
 
 By the way, this is the same as:
 
-`ll2 <- fasterLongLatRasts(madForest2000)`
+`ll <- fasterLongLatRasts(madElev)`
 
 However, you can use `faster` to call **GRASS** functions that do not have a dedicated functon in **fasterRaster**, so `faster` is very flexible!
 
@@ -114,10 +113,10 @@ However, you can use `faster` to call **GRASS** functions that do not have a ded
 
 Here is an example of chaining with the `faster` function. The second function uses the **GRASS** session initiated by the first function. It then uses the raster created in the **GRASS** session by the first function as the input for its module.
 
-`latRast <- faster('r.latlong', rast=madForest2000, outType='rast', output='latitude', flags=c('quiet', 'overwrite'))`  
-`longRast <- faster('r.latlong', input='latitude', outType='rast', output='longitude', flags=c('quiet', 'overwrite', 'l'))`  
-`ll3 <- c(latRast, longRast)`  
-`plot(ll3)`  
+`latRast <- faster('r.latlong', rast=madElev, outType='rast', flags=c('quiet', 'overwrite'), outGrassName='lat')}`  
+`longRast <- faster('r.latlong', input='lat', outType='rast', flags=c('quiet', 'overwrite', 'l'))}`  
+
+Here, we used the product of the first \code{faster} call, which is named `'lat'`, as the input to the second `faster` call. Note that we could have also used `'madElev'` as the input to the second, since it was also already in **{GRASS}.
 
 # Functions #
 
