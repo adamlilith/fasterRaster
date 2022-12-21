@@ -6,6 +6,7 @@
 \title{fasterRaster: Faster raster processing using GRASS GIS}
 \description{
 This package is meant as an add-on to the \pkg{terra} package, and to a lesser extent the \pkg{sf} package. It uses \href{https://grass.osgeo.org/}{\code{GRASS GIS}} version 8+ to do some of the more laborious operations. For rasters and vectors that are small in memory, functions in the \pkg{terra} or \pkg{sf} packages will likely be faster. To use many of the functions in this package you must have the stand-alone version of \code{GRASS} 8+ installed on your system (i.e., do not use the \code{OSGeoW} installer to install \code{GRASS}). \cr
+\pkg{fasterRaster} makes heavy use of the \pkg{rgrass} package by Roger Bivand and others, the \pkg{terra} package by Robert Hijmans, and \pkg{sf} package by Edzer Pebesma and others, and of course \code{GRASS GIS}, so is heavily indebted to all of these creators.\cr
 
 If you find an error, please create an issue on \href{https://github.com/adamlilith/fasterRaster/issues}{GitHub}.
 }
@@ -98,6 +99,7 @@ Here, we used the product of the first \code{faster} call, which is named \code{
 
 \section{Functions that do operations on rasters}{
 
+		\code{\link{fasterApp}}: Apply user-defined function to one or more rasters (using \code{GRASS}; see also \code{fasterFocal}).\cr
 		\code{\link{fasterBufferRast}}: Add buffer to cells in a raster (using \code{GRASS}).\cr
 		\code{\link{fasterContour}}: Calculate contour vectors from a raster.\cr
 		\code{\link{fasterConvertDegree}}: Convert degrees from \code{GRASS} format (0 = east, 90 = north) to standard (0 = north, 90 = east) (using \code{GRASS}).\cr
@@ -106,7 +108,6 @@ Here, we used the product of the first \code{faster} call, which is named \code{
 		\code{\link{fasterHorizon}}: Horizon angle height from a DEM (using \code{GRASS}).\cr
 		\code{\link{fasterInfoRast}}: Information on a raster in a \code{GRASS} session.\cr
 		\code{\link{fasterLongLatRasts}}: Create rasters with values equal to cell longitude and latitude (using \code{GRASS}).\cr
-		\code{\link{fasterApp}}: Apply user-defined function to one or more rasters (using \code{GRASS}; see also \code{fasterFocal}).\cr
 		\code{\link{fasterProjectRast}}: Project and resample raster (using \code{GRASS}).\cr
 		\code{\link{fasterQuantile}}: Quantiles of values in a raster (using \code{GRASS}).\cr
 		\code{\link{fasterRastDistance}}: Distance from cells with \code{NA}s to closest non-\code{NA} cell (or the inverse of this) (using \code{GRASS}).\cr
