@@ -17,6 +17,8 @@ Faster raster processing in **R** using **GRASS GIS**
 
 **fasterRaster** uses the stand-alone installer of Open Source Geospatial's [GRASS GIS Version 8](https://grass.osgeo.org/rgrass/) to speed up some commonly used raster and vector operations. Most of these operations can be done using the **raster** or newer **terra** packages by Robert Hijmans, or the **rgeos** or newer **sf** packages.  However, when the input raster or vector is very large in memory, in some cases functions in those packages can take a long time and fail. The **fasterRaster** package attempts to address these problems by calls to **GRASS** which is faster. Please note that **terra** and **sf** may be faster and thus the better solution for functions that this package implements. However, in some cases **fasterRaster** is still faster!
 
+**fasterRaster** makes heavy use of the **rgrass** package by Roger Bivand and others, the **terra** package by Robert Hijmans, and **sf** package by Edzer Pebesma and others, so is heavily indebted to their creators.
+
 # Getting started #
 
 ## Installation ###
