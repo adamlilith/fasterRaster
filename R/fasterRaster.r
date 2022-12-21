@@ -1,7 +1,7 @@
 #' @title fasterRaster: Faster raster processing using GRASS GIS
 #'
 #' @description This package is meant as an add-on to the \pkg{terra} package, and to a lesser extent the \pkg{sf} package. It uses \href{https://grass.osgeo.org/}{\code{GRASS GIS}} version 8+ to do some of the more laborious operations. For rasters and vectors that are small in memory, functions in the \pkg{terra} or \pkg{sf} packages will likely be faster. To use many of the functions in this package you must have the stand-alone version of \code{GRASS} 8+ installed on your system (i.e., do not use the \code{OSGeoW} installer to install \code{GRASS}). \cr
-#' \pkg{fasterRaster} makes heavy use of the \pkg{rgrass} package by Roger Bivand and others, the \pkg{terra} package by Robert Hijmans, and \pkg{sf} package by Edzer Pebesma and others, so is heavily indebted to their creators, in addition to the \code{GRASS GIS} team at OS Geo.\cr
+#' \pkg{fasterRaster} makes heavy use of the \pkg{rgrass} package by Roger Bivand and others, the \pkg{terra} package by Robert Hijmans, and \pkg{sf} package by Edzer Pebesma and others, and of course \code{GRASS GIS}, so is heavily indebted to all of these creators.\cr
 #'
 #' If you find an error, please create an issue on \href{https://github.com/adamlilith/fasterRaster/issues}{GitHub}.
 #'
