@@ -1,9 +1,9 @@
-#' Export raster to an existing GRASS session
+#' Export raster(s) to an existing GRASS session
 #'
-#' Export a raster to an existing \code{GRASS} session.
+#' Export one or more rasters to an existing \code{GRASS} session.
 #'
-#' @param rast A \code{SpatRaster} raster from the \pkg{terra} package.
-#' @param inRastName What to name the raster in \pkg{GRASS}. By default, this will be the name of the raster (i.e., \code{names(rast)}).
+#' @inheritParams .sharedArgs_rast_plural
+#' @inheritParams .sharedArgs_inRastName_plural
 #'
 #' @return \code{TRUE} (invisibly, if the raster was successfully exported). The function also exports a raster to a \code{GRASS} session so it can be used by other functions.
 #'
@@ -14,11 +14,20 @@
 #' @export
 exportRastToGrass <- function(
 	rast,
-	inRastName = ifelse(is.null(names(rast)), 'rast', names(rast))
+	inRastName = NULL
 ) {
 
 	if (!inherits(rast, 'SpatRaster')) rast <- terra::rast(rast)
-	suppressMessages(rgrass::write_RAST(rast, vname=inRastName, flags=c('quiet', 'overwrite')))
+	inRastName <- .getInRastName(inRastName, rast)
+	if (length(inRastName) != terra::nlyr(rast)) stop('The number of names in "inRastName" is not the same as the number of layers in "rast."')
+	
+	n <- terra::nlyr(rast)
+	for (i in 1L:n) {
+		vname <- inRastName[[i]]
+		thisRast <- terra::subset(rast, i)
+		suppressMessages(rgrass::write_RAST(thisRast, vname=vname, flags=c('quiet', 'overwrite')))
+	}
+		
 	invisible(TRUE)
 
 }

@@ -13,7 +13,7 @@ fasterRasterize(
   burn = NULL,
   grassDir = options()$grassDir,
   grassToR = TRUE,
-  inRastName = ifelse(is.null(names(rast)), "rast", names(rast)),
+  inRastName = "rast",
   inVectName = "vect",
   outGrassName = "vectToRast",
   ...

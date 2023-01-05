@@ -9,10 +9,11 @@ fasterBufferRast(
   width,
   units = "meters",
   ignore = NA,
+  out = "terra",
   lowMemory = FALSE,
   grassDir = options()$grassDir,
   grassToR = TRUE,
-  inRastName = ifelse(is.null(names(rast)), "rast", names(rast)),
+  inRastName = "rast",
   outGrassName = "bufferRast"
 )
 }
@@ -25,13 +26,20 @@ fasterBufferRast(
 
 \item{ignore}{Either {NA} (default) or 0. The buffer will be drawn around cells that are not {NA} or not 0, depending on this value.}
 
+\item{out}{Any of:
+\itemize{
+    \item \code{'terra'} (default): The output raster will be the same as if using the \code{link[terra]{buffer}} function in the \pkg{terra} package. Cells in the buffer plus the cells around which buffers are created have values of 1, and all other cells are \code{NA}.
+        \item \code{'grass'}: All cells in the bufer are represented as 2's, all cells around which buffers are created are represented as 1's, and all other cells are \code{NA}.
+    \item \code{'buffer'}: All cells in the buffer are represented as 1's and all others as \code{NA}.
+}}
+
 \item{lowMemory}{Logical. If \code{FALSE} (default) use faster, memory-intensive procedure. If \code{TRUE} then use the slower, low-memory version. To help decide, consider using the low-memory version on a system with 1 GB of RAM for a raster larger than about 32000x32000 cells, or for a system with  with 8 GB of RAM a raster larger than about 90000x90000 cells.}
 
 \item{grassDir}{Name of the folder path in which \code{GRASS} is installed. For a Windows system, this might be something like \code{'C:/Program Files/GRASS GIS 8.2'}. For a Mac system, this might be like \code{"/Applications/GRASS-8.2.app/Contents/Resources"}. If you are using a lot of \pkg{fasterRaster} functions, it can be easier to set this once using \code{\link{fasterOptions}}. By default, this is \code{NULL}, in which case the install path for \code{GRASS} will be searched for, but if not found, will result in an error.}
 
 \item{grassToR}{If \code{TRUE} (default) then the output will be returned to \pkg{R}. If \code{FALSE}, then the output is left in the \code{GRASS} session and named the value in \code{outGrassName}. You can then refer to the output in subsequent \pkg{fasterRaster} functions and avoid the need to re-import it. This is called "chaining" functions together, and it can save a lot of computational time.}
 
-\item{inRastName}{The name of the input raster in \code{GRASS}. This is useful only if you are "chaining" \code{fasterRaster} functions together and wish to refer to the input raster later. The default value is the name of the raster (i.e., \code{names(rast)}).}
+\item{inRastName}{The name of the input raster in \code{GRASS}. This argument is useful if you are "chaining" \pkg{fasterRaster} functions together and wish to refer to the input raster later. The default value is the name of the raster (i.e., \code{names(rast)}).}
 
 \item{outGrassName}{Character. Name of output in \code{GRASS}. This is useful if you want to refer to the output object in \code{GRASS} later in a session by "chaining" functions.}
 }
@@ -53,12 +61,29 @@ grassDir <- "/Applications/GRASS-8.2.app/Contents/Resources" # for a Mac
 
 madForest2000 <- fasterData('madForest2000')
 
+# default is same as terra's buffer() function
 rastBuff <- fasterBufferRast(rast=madForest2000, width=2,
 units='kilometers', grassDir=grassDir)
 
-plot(rastBuff, col=c('green', 'gray'))
-legend('topright', legend=c('forestgreen', 'buffer'),
-fill=c('green', 'gray'))
+plot(rastBuff, col='forestgreen')
+legend('topright', legend=c('buffered + buffer'),
+fill='forestgreen')
+
+# GRASS default
+rastBuffGrass <- fasterBufferRast(rast=madForest2000, width=2,
+units='kilometers', out='grass', grassDir=grassDir)
+
+plot(rastBuffGrass, col=c('gray', 'forestgreen'))
+legend('topright', legend=c('buffered', 'buffer'),
+fill=c('gray', 'forestgreen'))
+
+# just the buffer
+rastBuffBuff <- fasterBufferRast(rast=madForest2000, width=2,
+units='kilometers', out='buffer', grassDir=grassDir)
+
+plot(rastBuffBuff, col='forestgreen')
+legend('topright', legend=c('buffer only'),
+fill='forestgreen')
 
 }
 }

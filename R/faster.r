@@ -30,7 +30,7 @@ faster <- function(
 	flags = c('quiet', 'overwrite'),
 	grassDir = options()$grassDir,
 	grassToR = TRUE,
-	inRastName = ifelse(is.null(names(rast)), 'rast', names(rast)),
+	inRastName = 'rast',
 	inVectName = 'vect',
 	outGrassName = 'output'
 ) {
@@ -48,7 +48,10 @@ faster <- function(
 		stop('Argument "rast" must be:\n* NULL;\n* the name of a raster already in a GRASS session; or\n* a SpatRaster.\nArgument "vect" must be:\n* NULL;\n* the name of a vector already in a GRASS session; or\n* a SpatVector or sf object.\nBoth "rast" and "vect" cannot be NULL simultaneously.\nOne cannot be a name and the other a raster/vector.')
 		
 	} else if (!is.null(rast) | !is.null(vect)) {
+
+		inRastName <- .getInRastName(inRastName, rast)
 		input <- initGrass(rast=rast, vect=vect, inRastName=inRastName, inVectName=inVectName, grassDir=grassDir)
+		
 		args <- if (!is.null(rast) & is.null(vect)) {
 			c(args, input=input[['rastNameInGrass']])
 		} else if (is.null(rast) & !is.null(vect)) {
@@ -56,6 +59,7 @@ faster <- function(
 		} else {
 			c(args, r=input[['rastNameInGrass']], v=input[['vectNameInGrass']])
 		}
+	
 	}
 	
 	do.call(rgrass::execGRASS, args=args)

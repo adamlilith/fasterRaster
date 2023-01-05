@@ -2,11 +2,11 @@
 #'
 #' Initiate a \code{GRASS} session and import a raster and/or vector into it.
 #'
+#' @inheritParams .sharedArgs_inRastName_plural
 #' @inheritParams .sharedArgs_grassDir
-#' @inheritParams .sharedArgs_inRastName
 #' @inheritParams .sharedArgs_inVectName
 #'
-#' @param rast Either: a \code{SpatRaster} object \emph{or} the name of a raster already imported into \code{GRASS} \emph{or} \code{NULL} (default) in which case no raster is exported into \pkg{GRASS}. Either \code{rast} or \code{vect} (or both) must be non-\code{NULL}. You cannot set one equal to a name and the other to a raster/vector.
+#' @param rast Either: a \code{SpatRaster} object with one or more layers \emph{or} the name of a raster already imported into \code{GRASS} \emph{or} \code{NULL} (default) in which case no raster is exported into \pkg{GRASS}. Either \code{rast} or \code{vect} (or both) must be non-\code{NULL}. You cannot set one equal to a name and the other to a raster/vector.
 #'
 #' @param vect Either: a \code{Spatvector} or \code{sf} object \emph{or} the name of a vector dataset already imported into \code{GRASS} \emph{or} \code{NULL} (default) in which case no vector is exported into \pkg{GRASS}. Either \code{rast} or \code{vect} (or both) must be non-\code{NULL}. You cannot set one equal to a name and the other to a raster/vector.
 #'
@@ -27,7 +27,7 @@
 initGrass <- function(
 	rast = NULL,
 	vect = NULL,
-	inRastName = ifelse(is.null(names(rast)), 'rast', names(rast)),
+	inRastName = 'rast',
 	inVectName = 'vect',
 	mapset = 'PERMANENT',
 	location = 'default',
@@ -44,6 +44,8 @@ initGrass <- function(
 	
 	}
 
+	inRastName <- .getInRastName(inRastName, rast)
+
 	# NULL and NULL
 	if (is.null(rast) & is.null(vect)) {
 	
@@ -53,13 +55,15 @@ initGrass <- function(
 	} else if (inherits(rast, 'character') & inherits(vect, 'character')) {
 	
 		input <- c(rast, vect)
-		names(input) <- c('rastNameInGrass', 'vectNameInGrass')
+		nr <- length(rast)
+		names(input) <- c(rep('rastNameInGrass', nr), 'vectNameInGrass')
 		
 	# NAME and NULL
 	} else if (inherits(rast, 'character') & is.null(vect)) {
 	
 		input <- rast
-		names(input) <- c('rastNameInGrass')
+		nr <- length(rast)
+		names(input) <- rep('rastNameInGrass', nr)
 		
 	# NULL and NAME
 	} else if (is.null(rast) & inherits(vect, 'character')) {
@@ -78,8 +82,9 @@ initGrass <- function(
 		# RASTER and NULL
 		if (inherits(rast, c('SpatRaster', 'Raster')) & is.null(vect)) {
 			
+			nr <- terra::nlyr(rast)
 			input <- inRastName
-			names(input) <- 'rastNameInGrass'
+			names(input) <- rep('rastNameInGrass', nr)
 			
 		# NULL and VECTOR
 		} else if (is.null(rast) & inherits(vect, c('SpatVector', 'sf', 'Spatial'))) {
@@ -90,8 +95,9 @@ initGrass <- function(
 		# RASTER and VECTOR
 		} else if (inherits(rast, c('SpatRaster', 'Raster')) & inherits(vect, c('SpatVector', 'sf', 'Spatial'))) {
 			
+			nr <- terra::nlyr(rast)
 			input <- c(inRastName, inVectName)
-			names(input) <- c('rastNameInGrass', 'vectNameInGrass')
+			names(input) <- c(rep('rastNameInGrass', nr), 'vectNameInGrass')
 
 		} else {
 		

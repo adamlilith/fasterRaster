@@ -6,19 +6,19 @@
 \usage{
 fasterProjectRast(
   rast,
-  template,
+  template = NULL,
   method = "bilinear",
   grassDir = options()$grassDir,
   grassToR = TRUE,
-  inRastName = ifelse(is.null(names(rast)), "rast", names(rast)),
+  inRastName = "rast",
   outGrassName = "projectedRast",
   ...
 )
 }
 \arguments{
-\item{rast}{A \code{SpatRaster} or the name of a raster already in an existing \code{GRASS} session.}
+\item{rast}{A \code{SpatRaster} with one or more layers, \emph{or} the name(s) of one or more raster already in an existing \code{GRASS} session.}
 
-\item{template}{Either a \code{SpatRaster} or the name of a raster in an existing \code{GRASS} session to serve as a template for projecting.}
+\item{template}{Either \code{NULL} (default) or a \code{SpatRaster} to serve as a template for projecting. If there is an existing \code{GRASS} session (started by anotehr \pkg{fasterRaster} function or through the \code{\link{initGrass}} function), then this argument can be \code{NULL}, and the raster in \code{rast} will be projected to the one used by the current \code{GRASS} session.  However, if a \code{GRASS} seesion has not yet been started, or a different projection is sesired, then this argument can be a \code{SpatRaster}, with the desired coordinate reference system, extent, and resolution.}
 
 \item{method}{Character, method for resampling cells:
 \itemize{
@@ -35,11 +35,9 @@ fasterProjectRast(
 
 \item{grassToR}{If \code{TRUE} (default) then the output will be returned to \pkg{R}. If \code{FALSE}, then the output is left in the \code{GRASS} session and named the value in \code{outGrassName}. You can then refer to the output in subsequent \pkg{fasterRaster} functions and avoid the need to re-import it. This is called "chaining" functions together, and it can save a lot of computational time.}
 
-\item{inRastName}{The name of the input raster in \code{GRASS}. This is useful only if you are "chaining" \code{fasterRaster} functions together and wish to refer to the input raster later. The default value is the name of the raster (i.e., \code{names(rast)}).}
+\item{inRastName}{The name of the input raster(s) in \code{GRASS}. If \code{rast} is a multi-layer raster, then there must be one name per layer. This argument is useful if you are "chaining" \pkg{fasterRaster} functions together and wish to refer to the input raster(s) later. The default value is the name(s) of the raster(s) (i.e., \code{names(rast)}).}
 
 \item{outGrassName}{Character. Name of output in \code{GRASS}. This is useful if you want to refer to the output object in \code{GRASS} later in a session by "chaining" functions.}
-
-\item{...}{Arguments to pass to \code{\link[rgrass]{execGRASS}} when used for rasterizing (i.e., function \code{r.proj} in \code{GRASS}).}
 }
 \value{
 If \code{grassToR} if \code{TRUE}, then a raster or raster stack with the same extent, resolution, and coordinate reference system as \code{rast}. Regardless, a raster with the name given by \code{outGrassName} is written into the \code{GRASS} session.
@@ -60,18 +58,22 @@ grassDir <- 'C:/Program Files/GRASS GIS 8.2' # example for a PC
 grassDir <- "/Applications/GRASS-8.2.app/Contents/Resources" # for a Mac
 
 library(terra)
-madElev <- fasterData('madElev')
-madForest2000 <- fasterData('madForest2000')
 
-crs(madElev)
-crs(madForest2000)
+madChelsa <- fasterData('madChelsa') # unprojected
+madElev <- fasterData('madElev') # projected
 
-elevResamp <- fasterProjectRast(rast=madElev,
-template=madForest2000, grassDir=grassDir)
+# coordinate reference systems are different!
+cat(crs(madChelsa), '\n')
+cat(crs(madElev), '\n')
+
+madChelsa <- subset(madChelsa, 1:3) # subset to speed this up
+
+madChelsaProj <- fasterProjectRast(rast=madChelsa,
+template=madElev, grassDir=grassDir)
 
 oldPar <- par(mfrow=c(1, 2))
-plot(madElev, main='Original')
-plot(elevResamp, main='Resampled')
+plot(madChelsa[[1]], main='Original')
+plot(madChelsaProj[[1]], main='Resampled')
 par(oldPar)
 
 }

@@ -8,6 +8,8 @@ grassDir <- "/Applications/GRASS-8.2.app/Contents/Resources" # for a Mac
 
 madForest2000 <- fasterData('madForest2000')
 
+# notice that values are unprojected (WGS84), even though the input raster
+# is projected
 unMasked <- fasterLongLatRasts(rast=madForest2000, mask=FALSE,
 grassDir=grassDir)
 plot(unMasked)

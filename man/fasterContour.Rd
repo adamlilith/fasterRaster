@@ -10,7 +10,7 @@ fasterContour(
   cut = 2,
   grassDir = options()$grassDir,
   grassToR = TRUE,
-  inRastName = ifelse(is.null(names(rast)), "rast", names(rast)),
+  inRastName = "rast",
   outGrassName = "contourVect",
   ...
 )
@@ -26,7 +26,7 @@ fasterContour(
 
 \item{grassToR}{If \code{TRUE} (default) then the output will be returned to \pkg{R}. If \code{FALSE}, then the output is left in the \code{GRASS} session and named the value in \code{outGrassName}. You can then refer to the output in subsequent \pkg{fasterRaster} functions and avoid the need to re-import it. This is called "chaining" functions together, and it can save a lot of computational time.}
 
-\item{inRastName}{The name of the input raster in \code{GRASS}. This is useful only if you are "chaining" \code{fasterRaster} functions together and wish to refer to the input raster later. The default value is the name of the raster (i.e., \code{names(rast)}).}
+\item{inRastName}{The name of the input raster in \code{GRASS}. This argument is useful if you are "chaining" \pkg{fasterRaster} functions together and wish to refer to the input raster later. The default value is the name of the raster (i.e., \code{names(rast)}).}
 
 \item{outGrassName}{Character. Name of output in \code{GRASS}. This is useful if you want to refer to the output object in \code{GRASS} later in a session by "chaining" functions.}
 
@@ -61,5 +61,5 @@ plot(conts, add=TRUE)
 
 }
 \seealso{
-\code{\link[terra]{contour}} in \pkg{terra}; \href{https://grass.osgeo.org/grass82/manuals/r.contour.html}{\code{r.contour}} in \code{GRASS}
+\code{\link[terra]{as.contour}} in \pkg{terra}; \href{https://grass.osgeo.org/grass82/manuals/r.contour.html}{\code{r.contour}} in \code{GRASS}
 }

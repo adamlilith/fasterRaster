@@ -12,6 +12,7 @@ fasterData(x)
     \item    \code{'madCoast0'}: Outline of the region (\code{sf} spatial vector).
     \item    \code{'madCoast4'}: Outlines of the Fokontanies (Communes) of the region (\code{sf} spatial vector).
     \item    \code{'madRivers'}: Major rivers (\code{sf} spatial vector).
+    \item    \code{'madChelsa'}: Bioclimatic variables (\code{SpatRaster}).
     \item    \code{'madElev'}: Elevation (\code{SpatRaster}).
     \item    \code{'madForest2000'}: Forest cover in year 2000 (\code{SpatRaster}).
     \item    \code{'madForest2014'}: Forest cover in year 2014 (\code{SpatRaster}).

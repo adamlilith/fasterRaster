@@ -20,7 +20,7 @@ fasterSurfFractal <- function(
 	dimension = 2.05,
 	grassDir = options()$grassDir,
 	grassToR = TRUE,
-	inRastName = ifelse(is.null(names(rast)), 'rast', names(rast)),
+	inRastName = 'rast',
 	outGrassName = 'fractalRast',
 	...
 ) {
@@ -30,6 +30,7 @@ fasterSurfFractal <- function(
 	if (dimension <= 2 | dimension >= 3) stop('Argument "dimension" must be >2 and <3.')
 	
 	# initialize GRASS
+	inRastName <- .getInRastName(inRastName, rast)
 	input <- initGrass(rast=rast, vect=NULL, inRastName=inRastName, inVectName=NULL, grassDir=grassDir)
 	
 	rgrass::execGRASS('r.surf.fractal', dimension=dimension, output=outGrassName, flags=flags, ...)

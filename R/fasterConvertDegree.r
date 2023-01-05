@@ -16,7 +16,7 @@ fasterConvertDegree <- function(
 	x,
 	grassDir = options()$grassDir,
 	grassToR = TRUE,
-	inRastName = ifelse(is.null(names(rast)), 'rast', names(rast)),
+	inRastName = 'rast',
 	outGrassName = 'degreeConvertRast'
 ) {
 
@@ -31,6 +31,7 @@ fasterConvertDegree <- function(
 		flags <- c('quiet', 'overwrite')
 		
 		# initialize GRASS
+		inRastName <- .getInRastName(inRastName, rast)
 		input <- initGrass(rast=rast, vect=NULL, inRastName=inRastName, inVectName=NULL, grassDir=grassDir)
 		
 		# execute

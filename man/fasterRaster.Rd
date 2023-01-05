@@ -92,9 +92,13 @@ Here, we used the product of the first \code{faster} call, which is named \code{
 	\code{fasterHelp('r.contour', grass = TRUE)} \cr
 }
 
-\section{Useful options}{
+\section{Options for multiple functions}{
 
-		\code{\link{fasterOptions}}: Set the argument \code{grassDir} for all functions at once so you do not have to do it every time.\cr
+		\code{\link{fasterOptions}}: Settings for \pkg{fasterRaster} functions, including:
+\itemize{
+	\item The \code{grassDir} argument for all functions at once so you do not have to do it every time.
+	\item The default class of spatial vector output for functions that produce spatial vectors. By default, this will be \code{SpatVector}s, but you can make them be \code{sf} objects instead.
+}
 }
 
 \section{Functions that do operations on rasters}{
@@ -138,6 +142,9 @@ Here, we used the product of the first \code{faster} call, which is named \code{
 
 		\code{\link{exportRastToGrass}}: Export raster to an open \code{GRASS} session with support for large rasters/vectors.\cr
 		\code{\link{exportVectToGrass}}: Export vector object to an open \code{GRASS} session with support for large rasters/vectors.\cr
+		\code{\link{fasterCRS}}: Information on the coordinate reference system in the current \code{GRASS} session.\cr
+		\code{\link{fasterLs}}: Names of all rasters and/or vectors in a \code{GRASS} session.\cr
+		\code{\link{fasterRm}}: Remove raster(s) and/or vector(s) from a \code{GRASS} session.\cr
 		\code{\link{initGrass}}: Initialize a \code{GRASS} session using a raster or a vector as a template.\cr
 }
 
@@ -146,6 +153,7 @@ Here, we used the product of the first \code{faster} call, which is named \code{
 	\code{\link{fasterData}}: Load any of the example rasters or spatial vectors.\cr
 	\code{\link{madCoast0}}: Borders of Madagascar.\cr
 	\code{\link{madCoast4}}: Borders of selected districts of Madagascar.\cr
+	\code{\link{madChelsa}}: Bioclimatic rasters for a portion of Madagascar.\cr
 	\code{\link{madElev}}: Elevation raster for a portion of Madagascar.\cr
 	\code{\link{madForest2000}}: Raster of occurrence/non-occurrence of forest in Madagascar.\cr
 	\code{\link{madRivers}}: Major rivers of Madagascar.\cr

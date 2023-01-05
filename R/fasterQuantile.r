@@ -18,7 +18,7 @@ fasterQuantile <- function(
 	rast,
 	probs = c(0.025, 0.25, 0.5, 0.75, 0.975),
 	grassDir = options()$grassDir,
-	inRastName = ifelse(is.null(names(rast)), 'rast', names(rast)),
+	inRastName = 'rast',
 	...
 ) {
 
@@ -27,6 +27,7 @@ fasterQuantile <- function(
 	probs <- 100 * probs
 
 	# initialize GRASS
+	inRastName <- .getInRastName(inRastName, rast)
 	input <- initGrass(rast=rast, vect=NULL, inRastName=inRastName, inVectName=NULL, grassDir=grassDir)
 	
 	# temp file for output

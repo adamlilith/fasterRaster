@@ -4,6 +4,12 @@
 #' @param rast A \code{SpatRaster} or the name of a raster already in an existing \code{GRASS} session.
 NULL
 
+#' @name .sharedArgs_rast_plural
+#' @title Shared argument(s)
+#'
+#' @param rast A \code{SpatRaster} with one or more layers, \emph{or} the name(s) of one or more raster already in an existing \code{GRASS} session.
+NULL
+
 #' @name .sharedArgs_vect
 #' @title Shared argument(s)
 #' @param vect A \code{Spatvector}, an \code{sf} object, or the name of a spatial vector already in an existing \code{GRASS} session.
@@ -12,13 +18,19 @@ NULL
 #' @name .sharedArgs_inRastName
 #' @title Shared argument(s)
 #'
-#' @param inRastName The name of the input raster in \code{GRASS}. This is useful only if you are "chaining" \code{fasterRaster} functions together and wish to refer to the input raster later. The default value is the name of the raster (i.e., \code{names(rast)}).
+#' @param inRastName The name of the input raster in \code{GRASS}. This argument is useful if you are "chaining" \pkg{fasterRaster} functions together and wish to refer to the input raster later. The default value is the name of the raster (i.e., \code{names(rast)}).
+NULL
+
+#' @name .sharedArgs_inRastName_plural
+#' @title Shared argument(s)
+#'
+#' @param inRastName The name of the input raster(s) in \code{GRASS}. If \code{rast} is a multi-layer raster, then there must be one name per layer. This argument is useful if you are "chaining" \pkg{fasterRaster} functions together and wish to refer to the input raster(s) later. The default value is the name(s) of the raster(s) (i.e., \code{names(rast)}).
 NULL
 
 #' @name .sharedArgs_inVectName
 #' @title Shared argument(s)
 #'
-#' @param inVectName The name of the input vector in \code{GRASS}. This is useful only if you are "chaining" \code{fasterRaster} functions together and wish to refer to the input vector later. The default value is \code{'vect'}.
+#' @param inVectName The name of the input vector in \code{GRASS}. This is useful only if you are "chaining" \pkg{fasterRaster} functions together and wish to refer to the input vector later. The default value is \code{'vect'}.
 NULL
 
 #' @name .sharedArgs_grassDir_grassToR_outGrassName

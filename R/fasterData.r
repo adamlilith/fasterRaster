@@ -7,6 +7,7 @@
 #'		\item	\code{'madCoast0'}: Outline of the region (\code{sf} spatial vector).
 #'		\item	\code{'madCoast4'}: Outlines of the Fokontanies (Communes) of the region (\code{sf} spatial vector).
 #'		\item	\code{'madRivers'}: Major rivers (\code{sf} spatial vector).
+#'		\item	\code{'madChelsa'}: Bioclimatic variables (\code{SpatRaster}).
 #'		\item	\code{'madElev'}: Elevation (\code{SpatRaster}).
 #'		\item	\code{'madForest2000'}: Forest cover in year 2000 (\code{SpatRaster}).
 #'		\item	\code{'madForest2014'}: Forest cover in year 2014 (\code{SpatRaster}).
@@ -41,7 +42,7 @@ fasterData <- function(x) {
 			} else if (x == 'madRivers') {
 				out <- madRivers
 			}
-		} else if (x %in% c('madElev', 'madForest2000', 'madForest2014')) {
+		} else if (x %in% c('madChelsa', 'madElev', 'madForest2000', 'madForest2014')) {
 			rastFile <- system.file('extdata', paste0(x, '.tif'), package='fasterRaster')
 			out <- terra::rast(rastFile)
 		} else {

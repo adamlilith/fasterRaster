@@ -156,12 +156,16 @@ Here, we used the product of the first \code{faster} call, which is named `'lat'
 ### Utility functions
 * `exportRastToGrass`: Export raster to an open **GRASS** session.
 * `exportVectToGrass`: Export vector to an open **GRASS** session.
+* `fasterCRS`: Information on the coordinate reference system in the current **GRASS** session.
+* `fasterLs`: Names of all rasters and/or vectors in a **GRASS** session.
+* `fasterRm`: Remove raster(s) and/or vector(s) from a **GRASS** session.
 * `initGrass`: Initialize a **GRASS** session using a raster or vector as a template.
 
 ### Data
 All spatial data represents features in a portion of eastern Madagascar.
 * `fasterData`: Load any of the spatial datasets
 * `madCoast0` and `madCoast4`: Outlines of a portion of eastern Madagascar (`sf` spatial vectors)
+* `madChelsa`: Bioclimatic rasters for a portion of eastern Madagascar (`SpatRaster` raster)
 * `madElev`: Elevation (`SpatRaster` raster)
 * `madForest2000` and `madForest2014`: Forest cover in 2000 and 2014 (`SpatRaster` raster)
 * `madRivers`: Major rivers (`sf` spatial vector)

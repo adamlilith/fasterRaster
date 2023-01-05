@@ -4,7 +4,7 @@
 \alias{.sharedArgs_inVectName}
 \title{Shared argument(s)}
 \arguments{
-\item{inVectName}{The name of the input vector in \code{GRASS}. This is useful only if you are "chaining" \code{fasterRaster} functions together and wish to refer to the input vector later. The default value is \code{'vect'}.}
+\item{inVectName}{The name of the input vector in \code{GRASS}. This is useful only if you are "chaining" \pkg{fasterRaster} functions together and wish to refer to the input vector later. The default value is \code{'vect'}.}
 }
 \description{
 Shared argument(s)

@@ -8,7 +8,7 @@ fasterQuantile(
   rast,
   probs = c(0.025, 0.25, 0.5, 0.75, 0.975),
   grassDir = options()$grassDir,
-  inRastName = ifelse(is.null(names(rast)), "rast", names(rast)),
+  inRastName = "rast",
   ...
 )
 }
@@ -19,7 +19,7 @@ fasterQuantile(
 
 \item{grassDir}{Name of the folder path in which \code{GRASS} is installed. For a Windows system, this might be something like \code{'C:/Program Files/GRASS GIS 8.2'}. For a Mac system, this might be like \code{"/Applications/GRASS-8.2.app/Contents/Resources"}. If you are using a lot of \pkg{fasterRaster} functions, it can be easier to set this once using \code{\link{fasterOptions}}. By default, this is \code{NULL}, in which case the install path for \code{GRASS} will be searched for, but if not found, will result in an error.}
 
-\item{inRastName}{The name of the input raster in \code{GRASS}. This is useful only if you are "chaining" \code{fasterRaster} functions together and wish to refer to the input raster later. The default value is the name of the raster (i.e., \code{names(rast)}).}
+\item{inRastName}{The name of the input raster in \code{GRASS}. This argument is useful if you are "chaining" \pkg{fasterRaster} functions together and wish to refer to the input raster later. The default value is the name of the raster (i.e., \code{names(rast)}).}
 
 \item{...}{Arguments to pass to \code{\link[rgrass]{execGRASS}}.}
 }

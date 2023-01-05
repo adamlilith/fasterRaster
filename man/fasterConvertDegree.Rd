@@ -8,7 +8,7 @@ fasterConvertDegree(
   x,
   grassDir = options()$grassDir,
   grassToR = TRUE,
-  inRastName = ifelse(is.null(names(rast)), "rast", names(rast)),
+  inRastName = "rast",
   outGrassName = "degreeConvertRast"
 )
 }

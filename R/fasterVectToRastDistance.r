@@ -35,7 +35,7 @@ fasterVectToRastDistance <- function(
 	invert = FALSE,
 	grassDir = options()$grassDir,
 	grassToR = TRUE,
-	inRastName = ifelse(is.null(names(rast)), 'rast', names(rast)),
+	inRastName = 'rast',
 	inVectName = 'vect',
 	outGrassName = 'distToVectRast',
 	...
@@ -46,6 +46,7 @@ fasterVectToRastDistance <- function(
 	if (invert) flags_rGrowDistance <- c(flags_rGrowDistance)
 	
 	# rasterize vector: creates raster named "distToVect"
+	inRastName <- .getInRastName(inRastName, rast)
 	fasterRasterize(vect=vect, rast=rast, use='value', value=1, grassDir=grassDir, grassToR=FALSE, inRastName=inRastName, inVectName=inVectName, outGrassName='vectToRast', ...)
 	
 	# calculate distance

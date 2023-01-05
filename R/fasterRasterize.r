@@ -37,7 +37,7 @@ fasterRasterize <- function(
 	burn = NULL,
 	grassDir = options()$grassDir,
 	grassToR = TRUE,
-	inRastName = ifelse(is.null(names(rast)), 'rast', names(rast)),
+	inRastName = 'rast',
 	inVectName = 'vect',
 	outGrassName = 'vectToRast',
 	...
@@ -73,6 +73,7 @@ fasterRasterize <- function(
 	}
 		
 	# initialize GRASS
+	inRastName <- .getInRastName(inRastName, rast)
 	input <- initGrass(rast=rast, vect=vect, inRastName=inRastName, inVectName=inVectName, grassDir=grassDir)
 
 	# rasterize

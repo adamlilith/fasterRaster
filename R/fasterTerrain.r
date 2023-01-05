@@ -35,7 +35,7 @@ fasterTerrain <- function(
 	grassDir = options()$grassDir,
 	grassToR = TRUE,
 	
-	inRastName = ifelse(is.null(names(rast)), 'rast', names(rast)),
+	inRastName = 'rast',
 	outGrassName = NULL
 ) {
 
@@ -45,6 +45,7 @@ fasterTerrain <- function(
 	if (length(metrics) != length(outGrassName)) stop('The length of "outGrassName" must be the same as the length of "metrics."')
 	
 	# initialize GRASS
+	inRastName <- .getInRastName(inRastName, rast)
 	input <- initGrass(rast=rast, vect=NULL, inRastName=inRastName, inVectName=NULL, grassDir=grassDir)
 
 	for (metric in metrics) {

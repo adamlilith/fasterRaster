@@ -15,7 +15,7 @@
 #'
 #' @details See the documentation for the \code{GRASS} module \code{r.contour}{https://grass.osgeo.org/grass82/manuals/r.contour.html}.
 #'
-#' @seealso \code{\link[terra]{contour}} in \pkg{terra}; \href{https://grass.osgeo.org/grass82/manuals/r.contour.html}{\code{r.contour}} in \code{GRASS}
+#' @seealso \code{\link[terra]{as.contour}} in \pkg{terra}; \href{https://grass.osgeo.org/grass82/manuals/r.contour.html}{\code{r.contour}} in \code{GRASS}
 #'
 #' @example man/examples/ex_fasterContour.R
 #'
@@ -30,7 +30,7 @@ fasterContour <- function(
 	cut = 2,
 	grassDir = options()$grassDir,
 	grassToR = TRUE,
-	inRastName = ifelse(is.null(names(rast)), 'rast', names(rast)),
+	inRastName = 'rast',
 	outGrassName = 'contourVect',
 	...
 ) {
@@ -38,6 +38,7 @@ fasterContour <- function(
 	flags <- c('quiet', 'overwrite')
 	
 	# initialize GRASS
+	inRastName <- .getInRastName(inRastName, rast)
 	input <- initGrass(rast=rast, vect=NULL, inRastName=inRastName, inVectName=NULL, grassDir=grassDir)
 	
 	# if (!is.null(step) & is.null(minlevel)) minlevel <- terra::minmax(rast)[1L, , drop = TRUE]
@@ -53,6 +54,9 @@ fasterContour <- function(
 	if (grassToR) {
 
 		out <- rgrass::read_VECT(outGrassName)
+		if (!is.null(options()$grassVectOut) && !is.na(options()$grassVectOut)) {
+			if (options()$grassVectOut == 'sf') out <- sf::st_as_sf(out)
+		}
 		out
 		
 	}

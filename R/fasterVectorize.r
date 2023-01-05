@@ -28,7 +28,7 @@ fasterVectorize <- function(
 	smooth = FALSE,
 	grassDir = options()$grassDir,
 	grassToR = TRUE,
-	inRastName = ifelse(is.null(names(rast)), 'rast', names(rast)),
+	inRastName = 'rast',
 	outGrassName = 'rastToVect',
 	...
 ) {
@@ -39,6 +39,7 @@ fasterVectorize <- function(
 	if (smooth & vectType == 'area') flags <- c(flags, 's')
 	
 	# initialize GRASS
+	inRastName <- .getInRastName(inRastName, rast)
 	input <- initGrass(rast=rast, vect=NULL, inRastName=inRastName, inVectName=NULL, grassDir=grassDir)
 
 	# vectorize
@@ -51,6 +52,9 @@ fasterVectorize <- function(
 		
 		# join output with same values
 		if (agg) out <- terra::aggregate(out, by='value')
+		if (!is.null(options()$grassVectOut) && !is.na(options()$grassVectOut)) {
+			if (options()$grassVectOut == 'sf') out <- sf::st_as_sf(out)
+		}
 		out
 		
 	}

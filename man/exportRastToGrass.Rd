@@ -2,23 +2,20 @@
 % Please edit documentation in R/exportRastToGrass.r
 \name{exportRastToGrass}
 \alias{exportRastToGrass}
-\title{Export raster to an existing GRASS session}
+\title{Export raster(s) to an existing GRASS session}
 \usage{
-exportRastToGrass(
-  rast,
-  inRastName = ifelse(is.null(names(rast)), "rast", names(rast))
-)
+exportRastToGrass(rast, inRastName = NULL)
 }
 \arguments{
-\item{rast}{A \code{SpatRaster} raster from the \pkg{terra} package.}
+\item{rast}{A \code{SpatRaster} with one or more layers, \emph{or} the name(s) of one or more raster already in an existing \code{GRASS} session.}
 
-\item{inRastName}{What to name the raster in \pkg{GRASS}. By default, this will be the name of the raster (i.e., \code{names(rast)}).}
+\item{inRastName}{The name of the input raster(s) in \code{GRASS}. If \code{rast} is a multi-layer raster, then there must be one name per layer. This argument is useful if you are "chaining" \pkg{fasterRaster} functions together and wish to refer to the input raster(s) later. The default value is the name(s) of the raster(s) (i.e., \code{names(rast)}).}
 }
 \value{
 \code{TRUE} (invisibly, if the raster was successfully exported). The function also exports a raster to a \code{GRASS} session so it can be used by other functions.
 }
 \description{
-Export a raster to an existing \code{GRASS} session.
+Export one or more rasters to an existing \code{GRASS} session.
 }
 \examples{
 man/examples/ex_exportXToGrass.R

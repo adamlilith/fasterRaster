@@ -5,14 +5,14 @@
 \alias{fasterInfoVect}
 \title{Information on a raster or vector in a \code{GRASS} session}
 \usage{
-fasterInfoRast(rastName, flags = NULL)
+fasterInfoRast(name, flags = NULL)
 
-fasterInfoVect(rastName, flags = NULL)
+fasterInfoVect(name, flags = NULL)
 }
 \arguments{
-\item{flags}{Either \code{NULL} (default) or flags to affect the information shown. Flags should be in quotes and without the preceeding "-" sign (example: \code{flags = 'e'}).}
-
 \item{name}{The name of the raster or vector in the R session. This must be in quotes.}
+
+\item{flags}{Either \code{NULL} (default) or flags to affect the information shown. Flags should be in quotes and without the preceeding "-" sign (example: \code{flags = 'e'}).}
 }
 \value{
 Nothing (displays information on the raster or vector).
@@ -28,17 +28,31 @@ library(terra)
 
 # start a GRASS session with a raster and get information on it
 madElev <- fasterData('madElev')
-initGrass(madElev, rastName = 'madElev')
+initGrass(madElev, inRastName = 'madElev')
 fasterInfoRast('madElev')
 
-# start a GRASS session with a vector and get information on it
+# export a vector and get information on it
 madCoast0 <- fasterData('madCoast0')
-exportVectToGrass(madCoast0, vectName = 'madCoast0')
+exportVectToGrass(madCoast0, inVectName = 'madCoast0')
 fasterInfoVect('madCoast0')
+
+# information on the coordinate rafeternec system
+fasterCRS()
+
+# names of all rasters and vectors in the GRASS session
+fasterLs()
+
+# remove raster
+fasterRm('madElev')
+fasterLs()
+
+# remove vector
+fasterRm('madCoast0')
+fasterLs()
 
 }
 
 }
 \seealso{
-\href{https://grass.osgeo.org/grass82/manuals/r.info.html}{\code{r.info}} and \href{https://grass.osgeo.org/grass82/manuals/v.info.html}{\code{v.info}} in \code{GRASS}
+\code{\link{fasterLs}}, \href{https://grass.osgeo.org/grass82/manuals/r.info.html}{\code{r.info}} and \href{https://grass.osgeo.org/grass82/manuals/v.info.html}{\code{v.info}} in \code{GRASS}
 }

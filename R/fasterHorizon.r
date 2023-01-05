@@ -32,9 +32,8 @@ fasterHorizon <- function(
 	mask = NULL,
 	grassDir = options()$grassDir,
 	grassToR = TRUE,
-	inRastName = ifelse(is.null(names(rast)), 'rast', names(rast)),
-	outGrassName = 'horizonHeightRast',
-	...
+	inRastName = 'rast',
+	outGrassName = 'horizonHeightRast'
 ) {
 
 	flags <- c('quiet', 'overwrite')
@@ -45,15 +44,16 @@ fasterHorizon <- function(
 	}
 	
 	# initialize GRASS
+	inRastName <- .getInRastName(inRastName, rast)
 	input <- initGrass(rast=rast, vect=NULL, inRastName=inRastName, inVectName=NULL, grassDir=grassDir)
 	
 	# calculate horizon height
 	for (direction in directions) {
 
 		if (is.null(maxDist)) {
-			rgrass::execGRASS('r.horizon', elevation=input, direction=direction, bufferzone=bufferZone, output=outGrassName, flags=flags, ...)
+			rgrass::execGRASS('r.horizon', elevation=input, direction=direction, bufferzone=bufferZone, output=outGrassName, flags=flags)
 		} else {
-			rgrass::execGRASS('r.horizon', elevation=input, direction=direction, bufferzone=bufferZone, maxdistance=maxDist, output=outGrassName, flags=flags, ...)
+			rgrass::execGRASS('r.horizon', elevation=input, direction=direction, bufferzone=bufferZone, maxdistance=maxDist, output=outRastName, flags=flags)
 		}
 
 	}
@@ -64,7 +64,6 @@ fasterHorizon <- function(
 	
 			degs <- paste0(c(ifelse(direction < 100, '0', ''), ifelse(direction < 10, '0', ''), direction), collapse='')
 			thisOut <- rgrass::read_RAST(paste0(outGrassName, '_', degs))
-			thisOut <- terra::rast(thisOut)
 			
 			out <- if (exists('out', inherits=FALSE)) {
 				c(out, thisOut)

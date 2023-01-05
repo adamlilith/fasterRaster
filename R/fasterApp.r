@@ -1,16 +1,16 @@
-#' User-defined calculations on a single raster
+#' User-defined calculations on one or more rasters
 #'
-#' This function creates a raster from another raster based on a user-defined function.
+#' This function creates a raster from mathematical or logical operations on one or more rasters.
 #'
 #' @inheritParams .sharedArgs_grassDir_grassToR
 #' @inheritParams .sharedArgs_outGrassName
 #'
 #' @param rast A single-layer or multi-layer \code{SpatRaster}, or the name(s) of one or more raster(s) already in an existing \code{GRASS} session.
-#' @param expression Character. Formula to evaluate. Below are examples where the input raster is named "rast" in the \code{GRASS} session and the output raster will be named "out". Note that raster must be referred to in formulae using their raster name (not name in R). In other words, in the examples below we could call a raster in R \code{myRast} but \code{names(myRast)} yields \code{rast}, so we need to call it "\code{rast}" in the formulae. The raster "\code{out}" will be created by the function.
+#' @param expression Character. Formula to evaluate. Below are examples where the input raster is named "rast" in the \code{GRASS} session and the output raster will be named "out". Note that raster must be referred to in formulae using their raster name (not name in R). In other words, in the examples below we could call a raster in R \code{myRast} but \code{names(myRast)} yields \code{rast}, so we need to call it "\code{rast}" in the formulae. The raster "\code{out}" will be created by the function. You also need to put spaces before and after the equals sign (e.g., \code{out = 2 * rast}, but not \code{out=2 * rast}).
 #' \itemize{
 #' \item Take the input raster "rast", multiplies each cell by 0, then adds 1 to each cell: \code{'out = (rast * 0) + 1'}
 #' \item Take the input raster "rast", multiplies square the value of each cell: \code{'out = rast^2'}
-#' \item Take the input raster "rast" and redefines each cell value to 17: \code{'out = 17'}
+#' \item Take the input raster "rast" (implicitly), and sets each cell value to 17: \code{'out = 17'}
 #' \item Take the input rasters "rast1" and "rast2", and multiplies them together. Note that in this case, \code{rast} will actually be a \code{SpatRaster} object with two layers named "rast1" and "rast2": \code{'out = rast1 * rast2'}
 #' \item Take the input raster "rast" and redefines each cell value to equal the sum of it and the four cells in the rooks's neighborhood (north, south, east, west of it): \code{'out = rast[0, 0] + rast[-1, 0] + rast[0, -1] + rast[0, 1] + rast[1, 0]'}
 #' \item Low-pass (averaging) filter across a 3x3 neighborhood: \code{'out = (rast[-1, -1] + rast[-1, 0] + rast[-1, 1] + rast[0, -1] + rast[0, 0] + rast[0, 1] + rast[1, -1] + rast[1, 0] + rast[1, 1]) / 9'}
@@ -33,7 +33,7 @@ fasterApp <- function(
 	expression,
 	grassDir = options()$grassDir,
 	grassToR = TRUE,
-	inRastName = ifelse(is.null(names(rast)), 'rast', names(rast)),
+	inRastName = 'rast',
 	outGrassName = 'appRast'
 ) {
 
@@ -47,14 +47,8 @@ fasterApp <- function(
 		numRasts <- terra::nlyr(rast)
 		rastNames <- names(rast)
 	
-		input <- initGrass(rast=rast[[1L]], vect=NULL, inRastName=rastNames[1L], inVectName=NULL, grassDir=grassDir)
-
-		# export remaining rasters
-		if (numRasts > 1L) {
-			for (i in 2L:length(rast)) {
-				exportRastToGrass(rast[[i]], inRastName=rastNames[i])
-			}
-		}
+		inRastName <- .getInRastName(inRastName, rast)
+		input <- initGrass(rast=rast, vect=NULL, inRastName=inRastName, inVectName=NULL, grassDir=grassDir)
 	
 	}
 
