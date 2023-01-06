@@ -19,12 +19,11 @@ fasterTopidx <- function(
 	rast,
 	grassDir = options()$grassDir,
 	grassToR = TRUE,
-	inRastName = 'rast',
+	inRastName = NULL,
 	outGrassName = 'twiRast',
 	...
 ) {
 
-	inRastName <- .getInRastName(inRastName, rast)
 	out <- faster(
 		mod = 'r.topidx',
 		rast = rast,

@@ -12,7 +12,10 @@
 #' @example man/examples/ex_fasterInfo.r
 #'
 #' @export
-fasterLs <- function(type = c('raster', 'vector'), incTemp = FALSE) {
+fasterLs <- function(
+	type = c('raster', 'vector'),
+	incTemp = FALSE
+) {
 	
 	flags <- c('quiet', 'overwrite')
 	

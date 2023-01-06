@@ -11,14 +11,18 @@ initGrass(madElev, inRastName = 'madElev')
 madCoast0 <- fasterData('madCoast0')
 exportVectToGrass(madCoast0, inVectName = 'madCoast0')
 
-# get information on the raster and vector
-fasterInfoRast('madElev')
-fasterInfoVect('madCoast0')
-
-# information on the coordinate reference system
-fasterCRS()
-
 # names of all rasters and vectors in the GRASS session
+fasterLs()
+
+# rename raster
+fasterRename('madElev', 'elevation')
+
+# remove raster
+fasterRm('elevation')
+fasterLs()
+
+# remove vector
+fasterRm('madCoast0')
 fasterLs()
 
 }

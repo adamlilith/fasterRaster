@@ -3,8 +3,8 @@
 #' Initiate a \code{GRASS} session and import a raster and/or vector into it.
 #'
 #' @inheritParams .sharedArgs_inRastName_plural
-#' @inheritParams .sharedArgs_grassDir
 #' @inheritParams .sharedArgs_inVectName
+#' @inheritParams .sharedArgs_grassDir
 #'
 #' @param rast Either: a \code{SpatRaster} object with one or more layers \emph{or} the name of a raster already imported into \code{GRASS} \emph{or} \code{NULL} (default) in which case no raster is exported into \pkg{GRASS}. Either \code{rast} or \code{vect} (or both) must be non-\code{NULL}. You cannot set one equal to a name and the other to a raster/vector.
 #'
@@ -27,8 +27,10 @@
 initGrass <- function(
 	rast = NULL,
 	vect = NULL,
-	inRastName = 'rast',
-	inVectName = 'vect',
+	inRastName = NULL,
+	inVectName = NULL,
+	clean = TRUE,
+	warn = TRUE,
 	mapset = 'PERMANENT',
 	location = 'default',
 	tempDir = tempdir(),
@@ -45,6 +47,10 @@ initGrass <- function(
 	}
 
 	inRastName <- .getInRastName(inRastName, rast)
+	if (!is.null(vect) & is.null(inVectName)) inVectName <- 'vect'
+
+	### setup
+	#########
 
 	# NULL and NULL
 	if (is.null(rast) & is.null(vect)) {
@@ -74,10 +80,17 @@ initGrass <- function(
 	# RASTER and/or VECTOR
 	} else {
 		
-		# just in case a \code{GRASS} session is already running
-		rgrass::unset.GIS_LOCK()
-		rgrass::remove_GISRC()
-		rgrass::unlink_.gislock()
+		if (clean) {
+			rgrass::unset.GIS_LOCK()
+			rgrass::remove_GISRC()
+			rgrass::unlink_.gislock()
+
+			files <- list.files(tempDir, include.dirs = TRUE, full.names = TRUE, recursive = TRUE)
+			files <- rev(files)
+			unlink(files, recursive = TRUE)
+			if (warn) warning('The GRASS session has been restarted.\nAll previously existing files have been removed.')
+			
+		}
 
 		# RASTER and NULL
 		if (inherits(rast, c('SpatRaster', 'Raster')) & is.null(vect)) {

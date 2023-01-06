@@ -10,7 +10,7 @@
 #'
 #' @seealso \code{\link{fasterLs}}, \href{https://grass.osgeo.org/grass82/manuals/g.remove.html}{\code{g.remove}} in \code{GRASS}
 #'
-#' @example man/examples/ex_fasterInfo.r
+#' @example man/examples/ex_fasterOperations.r
 #'
 #' @export
 fasterRm <- function(x, pattern = FALSE, rasters = TRUE, vectors = TRUE) {

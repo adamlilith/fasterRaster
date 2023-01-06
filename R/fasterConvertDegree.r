@@ -31,7 +31,6 @@ fasterConvertDegree <- function(
 		flags <- c('quiet', 'overwrite')
 		
 		# initialize GRASS
-		inRastName <- .getInRastName(inRastName, rast)
 		input <- initGrass(rast=rast, vect=NULL, inRastName=inRastName, inVectName=NULL, grassDir=grassDir)
 		
 		# execute
@@ -40,7 +39,7 @@ fasterConvertDegree <- function(
 
 		if (grassToR) {
 			
-			out <- rgrass::read_RAST(paste0(outGrassName))
+			out <- rgrass::read_RAST(outGrassName, flags='quiet')
 			names(out) <- outGrassName
 			
 		}

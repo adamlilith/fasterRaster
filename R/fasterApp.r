@@ -2,10 +2,11 @@
 #'
 #' This function creates a raster from mathematical or logical operations on one or more rasters.
 #'
+#' @inheritParams .sharedArgs_rast_plural
+#' @inheritParams .sharedArgs_inRastName_plural
 #' @inheritParams .sharedArgs_grassDir_grassToR
 #' @inheritParams .sharedArgs_outGrassName
 #'
-#' @param rast A single-layer or multi-layer \code{SpatRaster}, or the name(s) of one or more raster(s) already in an existing \code{GRASS} session.
 #' @param expression Character. Formula to evaluate. Below are examples where the input raster is named "rast" in the \code{GRASS} session and the output raster will be named "out". Note that raster must be referred to in formulae using their raster name (not name in R). In other words, in the examples below we could call a raster in R \code{myRast} but \code{names(myRast)} yields \code{rast}, so we need to call it "\code{rast}" in the formulae. The raster "\code{out}" will be created by the function. You also need to put spaces before and after the equals sign (e.g., \code{out = 2 * rast}, but not \code{out=2 * rast}).
 #' \itemize{
 #' \item Take the input raster "rast", multiplies each cell by 0, then adds 1 to each cell: \code{'out = (rast * 0) + 1'}
@@ -33,7 +34,7 @@ fasterApp <- function(
 	expression,
 	grassDir = options()$grassDir,
 	grassToR = TRUE,
-	inRastName = 'rast',
+	inRastName = NULL,
 	outGrassName = 'appRast'
 ) {
 
@@ -59,7 +60,7 @@ fasterApp <- function(
 
 		outRastName <- substr(expression, 1, regexpr(pattern='=', expression) - 1)
 		outRastName <- trimws(outRastName)
-		out <- rgrass::read_RAST(outRastName)
+		out <- rgrass::read_RAST(outRastName, flags='quiet')
 		names(out) <- outGrassName
 		out
 		

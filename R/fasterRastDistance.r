@@ -34,7 +34,7 @@ fasterRastDistance <- function(
 	fillNAs = TRUE,
 	grassDir = options()$grassDir,
 	grassToR = TRUE,
-	inRastName = 'rast',
+	inRastName = NULL,
 	outGrassName = 'distanceRast',
 	...
 ) {
@@ -44,7 +44,6 @@ fasterRastDistance <- function(
 	if (!fillNAs) flags <- c(flags, 'n')
 	
 	# initialize GRASS
-	inRastName <- .getInRastName(inRastName, rast)
 	input <- initGrass(rast=rast, vect=NULL, inRastName=inRastName, inVectName=NULL, grassDir=grassDir)
 	
 	# calculate distance
@@ -53,7 +52,7 @@ fasterRastDistance <- function(
 	# return
 	if (grassToR) {
 	
-		out <- rgrass::read_RAST(outGrassName)
+		out <- rgrass::read_RAST(outGrassName, flags='quiet')
 		out <- terra::rast(out)
 		names(out) <- outGrassName
 		out

@@ -9,7 +9,7 @@
 #'
 #' @seealso \code{\link[rgrass]{write_RAST}} in \pkg{rgrass}
 #'
-#' @examples man/examples/ex_exportXToGrass.R
+#' @examples man/examples/ex_exportRastToGrass.R
 #'
 #' @export
 exportRastToGrass <- function(
@@ -19,15 +19,26 @@ exportRastToGrass <- function(
 
 	if (!inherits(rast, 'SpatRaster')) rast <- terra::rast(rast)
 	inRastName <- .getInRastName(inRastName, rast)
-	if (length(inRastName) != terra::nlyr(rast)) stop('The number of names in "inRastName" is not the same as the number of layers in "rast."')
+
+	# NB writing first raster in a stack actualy writes all of them
+	suppressMessages(rgrass::write_RAST(rast[[1L]], vname=inRastName[1L], flags=c('quiet', 'overwrite')))
 	
+	# if multi-layer raster, rasters are imported using the first name plus a ".#" where # is a number, so they need renamed
 	n <- terra::nlyr(rast)
-	for (i in 1L:n) {
-		vname <- inRastName[[i]]
-		thisRast <- terra::subset(rast, i)
-		suppressMessages(rgrass::write_RAST(thisRast, vname=vname, flags=c('quiet', 'overwrite')))
-	}
+	if (n > 1L) {
+	
+		baseName <- inRastName[1L]
+	
+		for (i in 1L:n) {
 		
+			from <- paste0(baseName, '.', i)
+			to <- inRastName[i]
+			fasterRename(from=from, to=to, type='raster')
+		
+		}
+	
+	}
+	
 	invisible(TRUE)
 
 }
@@ -37,19 +48,21 @@ exportRastToGrass <- function(
 #' Export a spatial vector to an existing \code{GRASS} session.
 #'
 #' @param vect A \code{SpatVector} (\pkg{terra} package) or \code{sf} (\pkg{sf} package) spatial vector object.
-#' @param inVectName Name of vector in \code{GRASS}. By default, this will be \code{'vect'}.
+#' @param inVectName Name of vector in \code{GRASS}. If \code{NULL} (default), the name will be set to \code{'vect'}.
 #'
 #' @return \code{TRUE} (invisibly, if the vector was successfully exported). The function also exports a vector to a \code{GRASS} session so it can be used by other functions.
 #'
 #' @seealso \code{\link[rgrass]{write_VECT}} in \pkg{rgrass}
 #'
-#' @examples man/examples/ex_exportXToGrass.R
+#' @examples man/examples/ex_exportRastToGrass.R
 #'
 #' @export
 exportVectToGrass <- function(
 	vect,
-	inVectName = 'vect'
+	inVectName = NULL
 ) {
+
+	if (is.null(inVectName)) inVectName <- 'vect'
 
 	if (!inherits(vect, 'SpatVector')) vect <- terra::vect(vect)
 	suppressMessages(rgrass::write_VECT(vect, vname=inVectName, flags=c('quiet', 'overwrite')))

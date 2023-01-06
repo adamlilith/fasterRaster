@@ -32,7 +32,7 @@ fasterHorizon <- function(
 	mask = NULL,
 	grassDir = options()$grassDir,
 	grassToR = TRUE,
-	inRastName = 'rast',
+	inRastName = NULL,
 	outGrassName = 'horizonHeightRast'
 ) {
 
@@ -44,7 +44,6 @@ fasterHorizon <- function(
 	}
 	
 	# initialize GRASS
-	inRastName <- .getInRastName(inRastName, rast)
 	input <- initGrass(rast=rast, vect=NULL, inRastName=inRastName, inVectName=NULL, grassDir=grassDir)
 	
 	# calculate horizon height
@@ -63,7 +62,7 @@ fasterHorizon <- function(
 		for (direction in directions) {
 	
 			degs <- paste0(c(ifelse(direction < 100, '0', ''), ifelse(direction < 10, '0', ''), direction), collapse='')
-			thisOut <- rgrass::read_RAST(paste0(outGrassName, '_', degs))
+			thisOut <- rgrass::read_RAST(paste0(outGrassName, '_', degs), flags='quiet')
 			
 			out <- if (exists('out', inherits=FALSE)) {
 				c(out, thisOut)

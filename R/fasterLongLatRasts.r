@@ -22,14 +22,13 @@ fasterLongLatRasts <- function(
 	mask = TRUE,
 	grassDir = options()$grassDir,
 	grassToR = TRUE,
-	inRastName = 'rast',
+	inRastName = NULL,
 	outGrassName = c('longitudeRast', 'latitudeRast')
 ) {
 
 	flags <- c('quiet', 'overwrite')
 	
 	# initialize GRASS
-	inRastName <- .getInRastName(inRastName, rast)
 	input <- initGrass(rast=rast, vect=NULL, inRastName=inRastName, inVectName=NULL, grassDir=grassDir)
 	
 	# calculate longitude/latitude
@@ -47,8 +46,8 @@ fasterLongLatRasts <- function(
 	}
 	
 	if (grassToR) {
-		long <- rgrass::read_RAST(outGrassName[1L])
-		lat <- rgrass::read_RAST(outGrassName[2L])
+		long <- rgrass::read_RAST(outGrassName[1L], flags='quiet')
+		lat <- rgrass::read_RAST(outGrassName[2L], flags='quiet')
 		out <- c(long, lat)
 		names(out) <- outGrassName
 		out

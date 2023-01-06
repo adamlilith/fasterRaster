@@ -55,7 +55,7 @@ fasterFocal <- function(
 	cores = 1,
 	grassDir = options()$grassDir,
 	grassToR = TRUE,
-	inRastName = 'rast',
+	inRastName = NULL,
 	outGrassName = 'focalRast'
 ) {
 
@@ -98,7 +98,6 @@ fasterFocal <- function(
 	### initialize GRASS
 	flags <- c('quiet', 'overwrite')
 	
-	inRastName <- .getInRastName(inRastName, rast)
 	input <- initGrass(rast=rast, vect=NULL, inRastName=inRastName, inVectName=NULL, grassDir=grassDir)
 	
 	if (fun == 'mean') fun <- 'average'
@@ -212,7 +211,7 @@ fasterFocal <- function(
 
 	if (grassToR) {
 
-		out <- rgrass::read_RAST(outGrassName)
+		out <- rgrass::read_RAST(outGrassName, flags='quiet')
 		names(out) <- outGrassName
 		out
 		

@@ -4,6 +4,8 @@
 #'
 #' @inheritParams .sharedArgs_vect
 #' @inheritParams .sharedArgs_rast
+#' @inheritParams .sharedArgs_inRastName
+#' @inheritParams .sharedArgs_inVectName
 #' @inheritParams .sharedArgs_grassDir_grassToR
 #' @inheritParams .sharedArgs_outGrassName
 #'
@@ -37,8 +39,8 @@ fasterRasterize <- function(
 	burn = NULL,
 	grassDir = options()$grassDir,
 	grassToR = TRUE,
-	inRastName = 'rast',
-	inVectName = 'vect',
+	inRastName = NULL,
+	inVectName = NULL,
 	outGrassName = 'vectToRast',
 	...
 ) {
@@ -90,7 +92,7 @@ fasterRasterize <- function(
 	# get raster back to R
 	if (grassToR) {
 	
-		out <- rgrass::read_RAST(outGrassName)
+		out <- rgrass::read_RAST(outGrassName, flags='quiet')
 		out <- terra::rast(out)
 		names(out) <- outGrassName
 		out

@@ -174,7 +174,7 @@ fasterSun <- function(
 			
 			if (outValue) {
 
-				thisOut <- rgrass::read_RAST(outName)
+				thisOut <- rgrass::read_RAST(outName, flags='quiet')
 				names(thisOut) <- outName
 				out <- if (exists('out', inherits=FALSE)) {
 					c(out, thisOut)

@@ -12,7 +12,7 @@ madElev <- fasterData('madElev')
 # Example using a raster as input, raster as output:
 # "r.latlong" creates a raster with cell values equal to latitude (WGS84).
 # Note that fasterLongLatRasts() is easier to use.
-lat <- faster('r.latlong', rast=madElev, outType='rast',
+lat <- faster('r.latlong', rast=madElev, out='rast',
 flags=c('quiet', 'overwrite'), grassDir=grassDir)
 
 plot(lat, add=TRUE)
@@ -20,7 +20,7 @@ plot(lat, add=TRUE)
 # example using a raster as input, vector as output
 # "r.contour" creates a vector of contours
 # Note that fasterContour() is easier to use.
-conts <- faster('r.contour', rast=madElev, outType='vect',
+conts <- faster('r.contour', rast=madElev, out='vect',
 levels=c(100, 200, 300, 400, 500), flags=c('quiet', 'overwrite'),
 grassDir=grassDir)
 
@@ -32,7 +32,7 @@ plot(conts, add=TRUE)
 # Note that fasterRasterize() is easier to use.
 rastRivers <- faster('v.to.rast', vect=madRivers, outGrassName='rastRivers',
 use='val', value=1,
-outType='rast', flags=c('quiet', 'overwrite'), grassDir=grassDir)
+out='rast', flags=c('quiet', 'overwrite'), grassDir=grassDir)
 
 plot(madElev)
 plot(rastRivers, col='blue', add=TRUE)
@@ -42,7 +42,7 @@ plot(rastRivers, col='blue', add=TRUE)
 # Note that fasterBufferVect() is easier to use.
 riverBuff <- faster('v.buffer', vect=madRivers, outGrassName='riverBuff',
 distance = 1000,
-outType='vect', flags=c('quiet', 'overwrite'), grassDir=grassDir)
+out='vect', flags=c('quiet', 'overwrite'), grassDir=grassDir)
 
 plot(riverBuff)
 plot(st_geometry(madRivers), col='blue', add=TRUE)
@@ -53,12 +53,12 @@ plot(st_geometry(madRivers), col='blue', add=TRUE)
 # Note that fasterBufferVect() and fasterRasterize() would be easier to use.
 faster('v.buffer', vect=madRivers, outGrassName='riverBuff',
 distance = 1000,
-outType='vect', flags=c('quiet', 'overwrite'),
+out='vect', flags=c('quiet', 'overwrite'),
 grassDir=grassDir, grassToR=FALSE)
 
 rastBuff <- faster('v.to.rast', vect='riverBuff', outGrassName='rastRivers',
 use='val', value=1,
-outType='rast', flags=c('quiet', 'overwrite'), grassDir=grassDir)
+out='rast', flags=c('quiet', 'overwrite'), grassDir=grassDir)
 
 plot(rastBuff)
 plot(st_geometry(madRivers), col='blue', add=TRUE)

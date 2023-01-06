@@ -34,7 +34,7 @@ fasterProjectRast <- function(
 	method = 'bilinear',
 	grassDir = options()$grassDir,
 	grassToR = TRUE,
-	inRastName = 'rast',
+	inRastName = NULL,
 	outGrassName = 'projectedRast',
 	...
 ) {
@@ -42,7 +42,6 @@ fasterProjectRast <- function(
 	flags <- c('quiet', 'overwrite')
 	
 	# initialize two GRASS sessions
-	inRastName <- .getInRastName(inRastName, rast)
 	fromRastGrass <- initGrass(rast=rast, vect=NULL, location='fromRast', inRastName=inRastName, inVectName=NULL, grassDir=grassDir)
 
 	tempDir <- attr(fromRastGrass, 'tempDir')
@@ -56,7 +55,7 @@ fasterProjectRast <- function(
 	# return
 	if (grassToR) {
 	
-		out <- rgrass::read_RAST(outGrassName)
+		out <- rgrass::read_RAST(outGrassName, flags='quiet')
 		names(out) <- outGrassName
 		out
 		

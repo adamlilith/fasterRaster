@@ -1,6 +1,8 @@
-#' Display the coordinate reference system of the current GRASS sesion
+#' Coordinate reference system of the current GRASS sesion
 #'
-#' Display the coordinate reference system of the current \code{GRASS} sesion.
+#' Display information on the coordinate reference system of the current \code{GRASS} sesion.
+#'
+#' @param nice If \code{TRUE}, then print the CRS in a formatted manner and return it invisibly. Default is \code{FALSE}.
 #'
 #' @return Nothing (displays information on the coordinate reference system of the current \code{GRASS} session).
 #'
@@ -9,6 +11,18 @@
 #' @example man/examples/ex_fasterInfo.r
 #'
 #' @export
-fasterCRS <- function() {
-	rgrass::execGRASS('g.proj', flags=c('p'))
+fasterCRS <- function(nice = FALSE) {
+
+	wkt <- readLines(paste0(tempdir(), '/default/PERMANENT/PROJ_WKT'))
+	wkt <- paste(wkt, collapse='\n')
+	
+	if (nice) {
+		cat(wkt)
+		cat('\n')
+		utils::flush.console()
+		invisible(wkt)
+	} else {
+		wkt
+	}
+
 }

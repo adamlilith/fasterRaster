@@ -30,7 +30,7 @@ fasterContour <- function(
 	cut = 2,
 	grassDir = options()$grassDir,
 	grassToR = TRUE,
-	inRastName = 'rast',
+	inRastName = NULL,
 	outGrassName = 'contourVect',
 	...
 ) {
@@ -38,7 +38,6 @@ fasterContour <- function(
 	flags <- c('quiet', 'overwrite')
 	
 	# initialize GRASS
-	inRastName <- .getInRastName(inRastName, rast)
 	input <- initGrass(rast=rast, vect=NULL, inRastName=inRastName, inVectName=NULL, grassDir=grassDir)
 	
 	# if (!is.null(step) & is.null(minlevel)) minlevel <- terra::minmax(rast)[1L, , drop = TRUE]
@@ -53,7 +52,7 @@ fasterContour <- function(
 	
 	if (grassToR) {
 
-		out <- rgrass::read_VECT(outGrassName)
+		out <- rgrass::read_VECT(outGrassName, flags='quiet')
 		if (!is.null(options()$grassVectOut) && !is.na(options()$grassVectOut)) {
 			if (options()$grassVectOut == 'sf') out <- sf::st_as_sf(out)
 		}

@@ -37,7 +37,7 @@ fasterBufferRast <- function(
 	lowMemory = FALSE,
 	grassDir = options()$grassDir,
 	grassToR = TRUE,
-	inRastName = 'rast',
+	inRastName = NULL,
 	outGrassName = 'bufferRast'
 ) {
 
@@ -45,7 +45,6 @@ fasterBufferRast <- function(
 	if (!is.na(ignore) && ignore == 0) flags <- c(flags, 'z')
 
 	# initialize GRASS and export raster to \code{GRASS}
-	inRastName <- .getInRastName(inRastName, rast)
 	input <- initGrass(rast=rast, vect=NULL, inRastName=inRastName, inVectName=NULL, grassDir=grassDir)
 		
 	# buffer
@@ -89,7 +88,7 @@ fasterBufferRast <- function(
 	# return
 	if (grassToR) {
 
-		out <- rgrass::read_RAST(outGrassName)
+		out <- rgrass::read_RAST(outGrassName, flags='quiet')
 		names(out) <- outGrassName
 		out
 
