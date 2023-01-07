@@ -1,4 +1,4 @@
-#' Rasters of solar radiance and irradiation
+#' Solar radiance and irradiation rasters
 #'
 #' This function calculates beam (direct), diffuse and ground reflected solar irradiation for a given day and set of topographic and atmospheric conditions. It utilizes the \code{GRASS} function \code{r.sun}. This function only works in "mode 2" of \href{https://grass.osgeo.org/grass82/manuals/r.sun.html}{\code{r.sun}}.
 #'

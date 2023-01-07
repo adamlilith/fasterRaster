@@ -15,12 +15,12 @@ exportRastToGrass(rast, inRastName = NULL)
 \code{TRUE} (invisibly, if the raster was successfully exported). The function also exports a raster to a \code{GRASS} session so it can be used by other functions.
 }
 \description{
-Export one or more rasters to an existing \code{GRASS} session.
+Export one or more rasters to an existing \code{GRASS} session. To import a raster from \code{GRASS} to \pkg{R}, use \code{\link[rgrass]{read_RAST}}.
 }
 \examples{
-man/examples/ex_exportXToGrass.R
+man/examples/ex_exportToGrass.R
 
 }
 \seealso{
-\code{\link[rgrass]{write_RAST}} in \pkg{rgrass}
+\code{\link[rgrass]{write_RAST}} and \code{\link[rgrass]{read_RAST}} in \pkg{rgrass}
 }

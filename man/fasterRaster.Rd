@@ -5,8 +5,8 @@
 \alias{fasterRaster}
 \title{fasterRaster: Faster raster processing using GRASS GIS}
 \description{
-This package is meant as an add-on to the \pkg{terra} package, and to a lesser extent the \pkg{sf} package. It uses \href{https://grass.osgeo.org/}{\code{GRASS GIS}} version 8+ to do some of the more laborious operations. For rasters and vectors that are small in memory, functions in the \pkg{terra} or \pkg{sf} packages will likely be faster. To use many of the functions in this package you must have the stand-alone version of \code{GRASS} 8+ installed on your system (i.e., do not use the \code{OSGeoW} installer to install \code{GRASS}). \cr
-\pkg{fasterRaster} makes heavy use of the \pkg{rgrass} package by Roger Bivand and others, the \pkg{terra} package by Robert Hijmans, the \pkg{sf} package by Edzer Pebesma and others, and of course \code{GRASS GIS}, so is heavily indebted to all of these creators.\cr
+This package is meant as an add-on to the \pkg{terra} package, and to a lesser extent the \pkg{sf} package. It uses \href{https://grass.osgeo.org/}{\code{GRASS GIS}} version 8+ to do the more laborious operations. For rasters and vectors that are small in memory, functions in the \pkg{terra} or \pkg{sf} packages will likely be faster. To use many of the functions in this package you must have the stand-alone version of \code{GRASS} 8+ installed on your system (i.e., do not use the \code{OSGeoW} installer to install \code{GRASS}). \cr\cr
+\pkg{fasterRaster} makes heavy use of the \pkg{rgrass} package by Roger Bivand and others, the \pkg{terra} package by Robert Hijmans, the \pkg{sf} package by Edzer Pebesma and others, and of course \code{GRASS GIS}, so is greatly indebted to all of these creators.\cr
 
 If you find an error, please create an issue on \href{https://github.com/adamlilith/fasterRaster/issues}{GitHub}.
 }
@@ -33,7 +33,9 @@ To call most \pkg{fasterRaster} functions, you will need to supply the install p
 \code{quants} \cr
 
 Supplying the \code{grassDir} argument every time can get somewhat tedious. Instead, you can provide \code{grassDir} to all functions that need it by setting it as an option: \cr\cr
-\code{options(grassDir = grassDir)} \cr
+\code{options(grassDir = 'C:/Program Files/GRASS GIS 8.2') # for a PC} \cr
+\code{options(grassDir = "/Applications/GRASS-8.2.app/Contents/Resources") # for a Mac} \cr
+\code{options(grassDir = '/usr/local/grass') # Linux... maybe} \cr
 
 Now, you can simply do: \cr\cr
 \code{distToRiver <- fasterVectToRastDistance(madElev, madRivers)} \cr
@@ -63,7 +65,7 @@ Here is an example in which we will chain the \code{fasterVectToRastDistance} an
 \code{quants <- fasterQuantile('distToVect', probs=c(0.05, 0.5, 0.95), grassDir=grassDir)} \cr
 \code{quants} \cr
 
-That is how to make \code{fasterRaster} \emph{faster!} You can chain any raster/vector that was created or imported into \code{GRASS} through a \pkg{fasterRaster} function that uses \code{GRASS} (most of them do). That is, you do not always need to use the value in \code{outGrassName} as the input to the next function--just so long as there is a raster/vector in \code{GRASS} with the given name, you can use it in subsuquent functions without paying the price of importing it.
+That is how to make \code{fasterRaster} \emph{faster!} You can chain any raster/vector that was created or imported into \code{GRASS} through a \pkg{fasterRaster} function that uses \code{GRASS} (most of them do). That is, you do not always need to use the value in \code{outGrassName} as the input to the next function--just so long as there is a raster/vector in \code{GRASS} with the given name, you can use it in subsequent functions without paying the price of importing it.
 }
 
 \section{The generic faster() function}{
@@ -86,10 +88,14 @@ Here, we used the product of the first \code{faster} call, which is named \code{
 
 \section{How to get help}{
 
-	You can type \code{?fasterRaster} to see this page. To look up functions by their \pkg{fasterRaster}, \code{GRASS}, or \pkg{terra} name and their equivalents in the other two, you can use \code{\link{fasterHelp}}. Examples:\cr\cr
-	\code{fasterHelp('fasterContour')} \cr
-	\code{fasterHelp('contour', terra = TRUE)} \cr
-	\code{fasterHelp('r.contour', grass = TRUE)} \cr
+	You can type \code{?fasterRaster} to see this page. To look up functions by their \pkg{fasterRaster}, \pkg{terra}, \pkg{sf}, or \code{GRASS} equivalents, you can use \code{\link{fasterHelp}}. Examples:\cr\cr
+	\code{fasterHelp('fasterExt') # \pkg{fasterRaster} function name (default)} \cr
+	\code{fasterHelp('ext', 'terra') # \pkg{terra} function name} \cr
+	\code{fasterHelp('st_bbox', 'sf') # \pkg{sf} function name} \cr
+	\code{fasterHelp('g.region', 'GRASS') # \code{GRASS} function name} \cr
+	\code{fasterHelp() # list of all functions} \cr\cr
+
+Most functions are named as \code{fasterXYZ}, where \code{XYZ} is the \pkg{terra} equivalent function, if there is any. Note though, that functins may work differently than they do in \pkg{terra}.
 }
 
 \section{Options for multiple functions}{
@@ -112,7 +118,8 @@ Here, we used the product of the first \code{faster} call, which is named \code{
 		\code{\link{fasterHorizon}}: Horizon angle height from a DEM (using \code{GRASS}).\cr
 		\code{\link{fasterInfoRast}}: Information on a raster in a \code{GRASS} session.\cr
 		\code{\link{fasterLongLatRasts}}: Create rasters with values equal to cell longitude and latitude (using \code{GRASS}).\cr
-		\code{\link{fasterProjectRast}}: Project and resample raster (using \code{GRASS}).\cr
+		\code{\link{fasterMosaic}}: Combine rasters that do not perfectly overlap (using \code{GRASS}).\cr
+		\code{\link{fasterProjectRast}}: Project and resample a raster (using \code{GRASS}).\cr
 		\code{\link{fasterQuantile}}: Quantiles of values in a raster (using \code{GRASS}).\cr
 		\code{\link{fasterRastDistance}}: Distance from cells with \code{NA}s to closest non-\code{NA} cell (or the inverse of this) (using \code{GRASS}).\cr
 		\code{\link{fasterSun}}: Solar irradiance and radiance (using \code{GRASS}).\cr
@@ -125,6 +132,7 @@ Here, we used the product of the first \code{faster} call, which is named \code{
 \section{Functions that do operations on vectors}{
 
 		\code{\link{fasterInfoVect}}: Information on a vector in a \code{GRASS} session.\cr
+		\code{\link{fasterProjectVect}}: Project a spatial vector (using \code{GRASS}).\cr
 		\code{\link{fasterRasterize}}: Convert vector to a raster (using \code{GRASS}).\cr
 }
 
@@ -143,7 +151,9 @@ Here, we used the product of the first \code{faster} call, which is named \code{
 		\code{\link{exportRastToGrass}}: Export raster to an open \code{GRASS} session with support for large rasters/vectors.\cr
 		\code{\link{exportVectToGrass}}: Export vector object to an open \code{GRASS} session with support for large rasters/vectors.\cr
 		\code{\link{fasterCRS}}: Information on the coordinate reference system in the current \code{GRASS} session.\cr
+		\code{\link{fasterExt}}: Spatial extent of the current \code{GRASS} session.\cr
 		\code{\link{fasterLs}}: Names of all rasters and/or vectors in a \code{GRASS} session.\cr
+		\code{\link{fasterRes}}: Spatial resolution of a \code{GRASS} session.\cr
 		\code{\link{fasterRm}}: Remove raster(s) and/or vector(s) from a \code{GRASS} session.\cr
 		\code{\link{initGrass}}: Initialize a \code{GRASS} session using a raster or a vector as a template.\cr
 }

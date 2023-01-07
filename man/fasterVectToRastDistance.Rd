@@ -12,8 +12,8 @@ fasterVectToRastDistance(
   invert = FALSE,
   grassDir = options()$grassDir,
   grassToR = TRUE,
-  inRastName = "rast",
-  inVectName = "vect",
+  inRastName = NULL,
+  inVectName = NULL,
   outGrassName = "distToVectRast",
   ...
 )

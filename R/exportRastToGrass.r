@@ -1,15 +1,15 @@
 #' Export raster(s) to an existing GRASS session
 #'
-#' Export one or more rasters to an existing \code{GRASS} session.
+#' Export one or more rasters to an existing \code{GRASS} session. To import a raster from \code{GRASS} to \pkg{R}, use \code{\link[rgrass]{read_RAST}}.
 #'
 #' @inheritParams .sharedArgs_rast_plural
 #' @inheritParams .sharedArgs_inRastName_plural
 #'
 #' @return \code{TRUE} (invisibly, if the raster was successfully exported). The function also exports a raster to a \code{GRASS} session so it can be used by other functions.
 #'
-#' @seealso \code{\link[rgrass]{write_RAST}} in \pkg{rgrass}
+#' @seealso \code{\link[rgrass]{write_RAST}} and \code{\link[rgrass]{read_RAST}} in \pkg{rgrass}
 #'
-#' @examples man/examples/ex_exportRastToGrass.R
+#' @examples man/examples/ex_exportToGrass.R
 #'
 #' @export
 exportRastToGrass <- function(
@@ -45,16 +45,16 @@ exportRastToGrass <- function(
 
 #' Export a spatial vector to an existing GRASS session
 #'
-#' Export a spatial vector to an existing \code{GRASS} session.
+#' Export a spatial vector to an existing \code{GRASS} session. To import a vector from \code{GRASS} to \pkg{R}, use \code{\link[rgrass]{read_VECT}}.
 #'
 #' @param vect A \code{SpatVector} (\pkg{terra} package) or \code{sf} (\pkg{sf} package) spatial vector object.
 #' @param inVectName Name of vector in \code{GRASS}. If \code{NULL} (default), the name will be set to \code{'vect'}.
 #'
 #' @return \code{TRUE} (invisibly, if the vector was successfully exported). The function also exports a vector to a \code{GRASS} session so it can be used by other functions.
 #'
-#' @seealso \code{\link[rgrass]{write_VECT}} in \pkg{rgrass}
+#' @seealso \code{\link[rgrass]{write_VECT}} and \code{\link[rgrass]{read_VECT}} in \pkg{rgrass}
 #'
-#' @examples man/examples/ex_exportRastToGrass.R
+#' @examples man/examples/ex_exportToGrass.R
 #'
 #' @export
 exportVectToGrass <- function(

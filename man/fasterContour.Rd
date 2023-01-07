@@ -10,7 +10,7 @@ fasterContour(
   cut = 2,
   grassDir = options()$grassDir,
   grassToR = TRUE,
-  inRastName = "rast",
+  inRastName = NULL,
   outGrassName = "contourVect",
   ...
 )

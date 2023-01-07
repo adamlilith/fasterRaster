@@ -20,4 +20,7 @@ exportRastToGrass(madElev, inRastName = 'madElev')
 madCoast0 <- fasterData('madCoast0')
 exportVectToGrass(madCoast0, inVectName = 'madCoast0')
 
+# what did we export?
+fasterLs()
+
 }

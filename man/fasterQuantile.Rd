@@ -8,7 +8,7 @@ fasterQuantile(
   rast,
   probs = c(0.025, 0.25, 0.5, 0.75, 0.975),
   grassDir = options()$grassDir,
-  inRastName = "rast",
+  inRastName = NULL,
   ...
 )
 }

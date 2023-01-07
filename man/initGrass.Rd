@@ -7,8 +7,10 @@
 initGrass(
   rast = NULL,
   vect = NULL,
-  inRastName = "rast",
-  inVectName = "vect",
+  inRastName = NULL,
+  inVectName = NULL,
+  restartGrass = FALSE,
+  warn = TRUE,
   mapset = "PERMANENT",
   location = "default",
   tempDir = tempdir(),
@@ -24,6 +26,8 @@ initGrass(
 
 \item{inVectName}{The name of the input vector in \code{GRASS}. This is useful only if you are "chaining" \pkg{fasterRaster} functions together and wish to refer to the input vector later. The default value is \code{'vect'}.}
 
+\item{restartGrass}{If \code{TRUE}, then remove any existing \code{GRASS} session and restart a new one. This deletes all rasters and vectors that may already exist in \code{GRASS}, but does not affect anything in R. By default, this is \code{FALSE}, so if there is an existing session, it is used instead.}
+
 \item{mapset}{Character. Mapset of \code{GRASS} location. The default name is \code{'PERMANENT'}. Typically, it is not a good idea to change this, as most functions in the \pkg{fasterRaster} package assume the mapset is named "default".}
 
 \item{location}{Character. Name of \code{GRASS} location. The default name is \code{'default'}. Typically, it is not a good idea to change this, as most functions in the \pkg{fasterRaster} package assume the location is named "default".}
@@ -31,6 +35,8 @@ initGrass(
 \item{tempDir}{Character. Path name of directory in which to create the \code{GRASS} mapset. The default is to create a directory in the location for temporary files for the operating system.}
 
 \item{grassDir}{Name of the folder path in which \code{GRASS} is installed. For a Windows system, this might be something like \code{'C:/Program Files/GRASS GIS 8.2'}. For a Mac system, this might be like \code{"/Applications/GRASS-8.2.app/Contents/Resources"}. If you are using a lot of \pkg{fasterRaster} functions, it can be easier to set this once using \code{\link{fasterOptions}}. By default, this is \code{NULL}, in which case the install path for \code{GRASS} will be searched for, but if not found, will result in an error.}
+
+\item{warm}{If \code{TRUE}, then print a warning if the \code{GRASS} session has been restarted. This is only used if \code{restartGrass} is \code{TRUE}.}
 }
 \value{
 One or two-element character vector. If one element long, then it will be the name of raster \emph{or} vector exported or already in a \code{GRASS} session. If two elements long, then it will be the name of the raster \emph{and} the vector exported or already in a \code{GRASS} session.

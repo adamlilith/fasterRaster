@@ -8,7 +8,7 @@ fasterTopidx(
   rast,
   grassDir = options()$grassDir,
   grassToR = TRUE,
-  inRastName = "rast",
+  inRastName = NULL,
   outGrassName = "twiRast",
   ...
 )

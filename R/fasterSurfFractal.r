@@ -1,4 +1,4 @@
-#' Raster with a fractal pattern
+#' Create a raster with a fractal pattern
 #'
 #' Create a raster with a fractal pattern.
 #' @inheritParams .sharedArgs_rast

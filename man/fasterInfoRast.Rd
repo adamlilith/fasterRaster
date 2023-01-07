@@ -5,12 +5,12 @@
 \alias{fasterInfoVect}
 \title{Information on a raster or vector in a \code{GRASS} session}
 \usage{
-fasterInfoRast(name, flags = NULL)
+fasterInfoRast(x, flags = NULL)
 
-fasterInfoVect(name, flags = NULL)
+fasterInfoVect(x, flags = NULL)
 }
 \arguments{
-\item{name}{The name of the raster or vector in the R session. This must be in quotes.}
+\item{x}{The name of the raster or vector in the R session. This must be in quotes.}
 
 \item{flags}{Either \code{NULL} (default) or flags to affect the information shown. Flags should be in quotes and without the preceeding "-" sign (example: \code{flags = 'e'}).}
 }
@@ -26,28 +26,30 @@ Displays information on a raster or vector already in an R session. For further
 library(sf)
 library(terra)
 
-# start a GRASS session with a raster and get information on it
+# start a GRASS session with a raster
 madElev <- fasterData('madElev')
 initGrass(madElev, inRastName = 'madElev')
-fasterInfoRast('madElev')
 
-# export a vector and get information on it
+# import a vector
 madCoast0 <- fasterData('madCoast0')
 exportVectToGrass(madCoast0, inVectName = 'madCoast0')
+
+# get information on the raster and vector
+fasterInfoRast('madElev')
 fasterInfoVect('madCoast0')
 
-# information on the coordinate rafeternec system
-fasterCRS()
+# information on the coordinate reference system
+fasterCRS() # "plain" format
+fasterCRS(TRUE) # nice for the eyes
+
+# spatial extent of the GRASS session
+fasterExt() # returns a SpatExtent object
+fasterExt(FALSE) # returns a vector
+
+# spatial resolution
+fasterRes()
 
 # names of all rasters and vectors in the GRASS session
-fasterLs()
-
-# remove raster
-fasterRm('madElev')
-fasterLs()
-
-# remove vector
-fasterRm('madCoast0')
 fasterLs()
 
 }

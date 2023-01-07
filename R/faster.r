@@ -1,4 +1,4 @@
-#' Generic function to call a \code{GRASS} function (module)
+#' Generic function to call a GRASS function (module)
 #'
 #' This function is wrapper for \code{\link[rgrass]{execGRASS}}, plus code necessary to initiate a \code{GRASS} session. Many of the functions in \pkg{fasterRaster} actually utilize this function.  This function works best for modules that take one raster and/or one vector as input and produce one raster or vector as output.
 #' @param mod Name of \code{GRASS} module (e.g., \code{'r.latlong'} or \code{'v.buffer'}.

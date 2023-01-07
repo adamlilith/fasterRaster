@@ -25,24 +25,22 @@ Remove rasters or vectors from a \code{GRASS} session. This will remove them fro
 library(sf)
 library(terra)
 
-# start a GRASS session with a raster and get information on it
+# start a GRASS session with a raster
 madElev <- fasterData('madElev')
 initGrass(madElev, inRastName = 'madElev')
-fasterInfoRast('madElev')
 
-# export a vector and get information on it
+# import a vector
 madCoast0 <- fasterData('madCoast0')
 exportVectToGrass(madCoast0, inVectName = 'madCoast0')
-fasterInfoVect('madCoast0')
-
-# information on the coordinate rafeternec system
-fasterCRS()
 
 # names of all rasters and vectors in the GRASS session
 fasterLs()
 
+# rename raster
+fasterRename('madElev', 'elevation')
+
 # remove raster
-fasterRm('madElev')
+fasterRm('elevation')
 fasterLs()
 
 # remove vector

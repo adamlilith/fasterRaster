@@ -14,7 +14,7 @@ fasterHorizon(
   mask = NULL,
   grassDir = options()$grassDir,
   grassToR = TRUE,
-  inRastName = "rast",
+  inRastName = NULL,
   outGrassName = "horizonHeightRast"
 )
 }

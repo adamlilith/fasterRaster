@@ -1,4 +1,4 @@
-#' Lookup equivalent functions in fasterRaster, \code{GRASS}, and terra
+#' Lookup equivalent functions in fasterRaster, terra, sf, and GRASS
 #'
 #' Lookup equivalent functions in fasterRaster, \pkg{GRASS}, and terra, plus get the URL of the help file for the \code{GRASS} function, if it exists.
 #'

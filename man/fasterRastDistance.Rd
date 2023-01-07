@@ -11,7 +11,7 @@ fasterRastDistance(
   fillNAs = TRUE,
   grassDir = options()$grassDir,
   grassToR = TRUE,
-  inRastName = "rast",
+  inRastName = NULL,
   outGrassName = "distanceRast",
   ...
 )

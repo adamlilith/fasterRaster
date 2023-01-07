@@ -1,4 +1,4 @@
-#' Information on a raster or vector in a \code{GRASS} session
+#' Information on a raster or vector in a GRASS session
 #'
 #' Displays information on a raster or vector already in an R session. For further
 #'

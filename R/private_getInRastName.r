@@ -10,31 +10,39 @@
 #' @keywords internal
 .getInRastName <- function(inRastName, rast) {
 
-	# number of rasters
-	if (inherits(rast, 'character')) {
-		n <- length(rast)
+	# not needed
+	if (is.null(rast)) {
+		inRastName <- NULL
+	# needed
 	} else {
-		rast <- terra::rast(rast)
-		n <- terra::nlyr(rast)
-		rastNames <- names(rast)
-	}
 
-	if (is.null(inRastName)) {
-
-		# if rast is a raster
+		# number of rasters
 		if (inherits(rast, 'character')) {
-			inRastName <- rast
+			n <- length(rast)
 		} else {
-			inRastName <- if (any(is.null(rastNames)) || any(is.na(rastNames)) || any(rastNames == '')) {
-				paste0('rast', 1L:n)
-			} else {
-				rastNames
-			}
+			rast <- terra::rast(rast)
+			n <- terra::nlyr(rast)
+			rastNames <- names(rast)
 		}
-	
+
+		if (is.null(inRastName)) {
+
+			# if rast is a raster
+			if (inherits(rast, 'character')) {
+				inRastName <- rast
+			} else {
+				inRastName <- if (any(is.null(rastNames)) || any(is.na(rastNames)) || any(rastNames == '')) {
+					paste0('rast', 1L:n)
+				} else {
+					rastNames
+				}
+			}
+		
+		}
+		
+		if (length(inRastName) != n) stop('The number of names in "inRastName" is not the same as the number of layers in this raster.')
+		
 	}
-	
-	if (length(inRastName) != n) stop('The number of names in "inRastName" is not the same as the number of layers in this raster.')
 
 	inRastName
 

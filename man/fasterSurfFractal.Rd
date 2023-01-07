@@ -9,7 +9,7 @@ fasterSurfFractal(
   dimension = 2.05,
   grassDir = options()$grassDir,
   grassToR = TRUE,
-  inRastName = "rast",
+  inRastName = NULL,
   outGrassName = "fractalRast",
   ...
 )

@@ -11,7 +11,7 @@ fasterVectorize(
   smooth = FALSE,
   grassDir = options()$grassDir,
   grassToR = TRUE,
-  inRastName = "rast",
+  inRastName = NULL,
   outGrassName = "rastToVect",
   ...
 )

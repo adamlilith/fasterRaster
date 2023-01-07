@@ -16,7 +16,15 @@ fasterInfoRast('madElev')
 fasterInfoVect('madCoast0')
 
 # information on the coordinate reference system
-fasterCRS()
+fasterCRS() # "plain" format
+fasterCRS(TRUE) # nice for the eyes
+
+# spatial extent of the GRASS session
+fasterExt() # returns a SpatExtent object
+fasterExt(FALSE) # returns a vector
+
+# spatial resolution
+fasterRes()
 
 # names of all rasters and vectors in the GRASS session
 fasterLs()

@@ -17,7 +17,7 @@ fasterFocal(
   cores = 1,
   grassDir = options()$grassDir,
   grassToR = TRUE,
-  inRastName = "rast",
+  inRastName = NULL,
   outGrassName = "focalRast"
 )
 }

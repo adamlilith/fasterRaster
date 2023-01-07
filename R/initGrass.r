@@ -8,7 +8,11 @@
 #'
 #' @param rast Either: a \code{SpatRaster} object with one or more layers \emph{or} the name of a raster already imported into \code{GRASS} \emph{or} \code{NULL} (default) in which case no raster is exported into \pkg{GRASS}. Either \code{rast} or \code{vect} (or both) must be non-\code{NULL}. You cannot set one equal to a name and the other to a raster/vector.
 #'
-#' @param vect Either: a \code{Spatvector} or \code{sf} object \emph{or} the name of a vector dataset already imported into \code{GRASS} \emph{or} \code{NULL} (default) in which case no vector is exported into \pkg{GRASS}. Either \code{rast} or \code{vect} (or both) must be non-\code{NULL}. You cannot set one equal to a name and the other to a raster/vector.
+#' @param vect Either: a \code{SpatVector} or \code{sf} object \emph{or} the name of a vector dataset already imported into \code{GRASS} \emph{or} \code{NULL} (default) in which case no vector is exported into \pkg{GRASS}. Either \code{rast} or \code{vect} (or both) must be non-\code{NULL}. You cannot set one equal to a name and the other to a raster/vector.
+#'
+#' @param restartGrass If \code{TRUE}, then remove any existing \code{GRASS} session and restart a new one. This deletes all rasters and vectors that may already exist in \code{GRASS}, but does not affect anything in R. By default, this is \code{FALSE}, so if there is an existing session, it is used instead.
+#'
+#' @param warm If \code{TRUE}, then print a warning if the \code{GRASS} session has been restarted. This is only used if \code{restartGrass} is \code{TRUE}.
 #'
 #' @param mapset Character. Mapset of \code{GRASS} location. The default name is \code{'PERMANENT'}. Typically, it is not a good idea to change this, as most functions in the \pkg{fasterRaster} package assume the mapset is named "default".
 #'
@@ -29,7 +33,7 @@ initGrass <- function(
 	vect = NULL,
 	inRastName = NULL,
 	inVectName = NULL,
-	clean = TRUE,
+	restartGrass = FALSE,
 	warn = TRUE,
 	mapset = 'PERMANENT',
 	location = 'default',
@@ -42,6 +46,8 @@ initGrass <- function(
 	
 		mapset <- 'PERMANENT'
 		location <- 'default'
+		inRastName <- NULL
+		inVectName <- NULL
 		tempDir <- tempdir()
 	
 	}
@@ -80,18 +86,6 @@ initGrass <- function(
 	# RASTER and/or VECTOR
 	} else {
 		
-		if (clean) {
-			rgrass::unset.GIS_LOCK()
-			rgrass::remove_GISRC()
-			rgrass::unlink_.gislock()
-
-			files <- list.files(tempDir, include.dirs = TRUE, full.names = TRUE, recursive = TRUE)
-			files <- rev(files)
-			unlink(files, recursive = TRUE)
-			if (warn) warning('The GRASS session has been restarted.\nAll previously existing files have been removed.')
-			
-		}
-
 		# RASTER and NULL
 		if (inherits(rast, c('SpatRaster', 'Raster')) & is.null(vect)) {
 			
@@ -117,8 +111,22 @@ initGrass <- function(
 			stop('Argument "rast" must be:\n* NULL;\n* the name of a raster already in a GRASS session; or\n* a SpatRaster.\nArgument "vect" must be:\n* NULL;\n* the name of a vector already in a GRASS session; or\n* a SpatVector or sf object.\nBoth "rast" and "vect" cannot be NULL simultaneously.\nOne cannot be a name and the other a raster/vector.')
 
 		}
+
+		### refresh any existing GRASS session
+		if (restartGrass) {
 		
-		# setup session
+			rgrass::unset.GIS_LOCK()
+			rgrass::remove_GISRC()
+			rgrass::unlink_.gislock()
+
+			files <- list.files(tempDir, include.dirs = TRUE, full.names = TRUE, recursive = TRUE)
+			files <- rev(files)
+			unlink(files, recursive = TRUE)
+			if (warn) warning('The GRASS session has been restarted.\nAll previously existing files have been removed.')
+			
+		}
+
+		### initialize session
 		dir.create(tempDir, recursive=TRUE, showWarnings=FALSE)
 
 		# rgrass::initGRASS(gisBase=grassDir, home=tempDir, location=location, mapset=mapset, SG=rast, override=TRUE, remove_GISRC=TRUE, ignore.stderr=TRUE, pid=sample(10000, 1))
@@ -169,7 +177,7 @@ initGrass <- function(
 
 		# export
 		if (!is.null(rast)) exportRastToGrass(rast, inRastName=inRastName)
-		if (!is.null(vect))	exportVectToGrass(vect, inVectName=inVectName)
+		if (!is.null(vect)) exportVectToGrass(vect, inVectName=inVectName)
 		
 	} # if passing a raster and/or vector
 		

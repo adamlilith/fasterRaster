@@ -9,12 +9,12 @@ fasterApp(
   expression,
   grassDir = options()$grassDir,
   grassToR = TRUE,
-  inRastName = "rast",
+  inRastName = NULL,
   outGrassName = "appRast"
 )
 }
 \arguments{
-\item{rast}{A single-layer or multi-layer \code{SpatRaster}, or the name(s) of one or more raster(s) already in an existing \code{GRASS} session.}
+\item{rast}{A \code{SpatRaster} with one or more layers, \emph{or} the name(s) of one or more raster already in an existing \code{GRASS} session.}
 
 \item{expression}{Character. Formula to evaluate. Below are examples where the input raster is named "rast" in the \code{GRASS} session and the output raster will be named "out". Note that raster must be referred to in formulae using their raster name (not name in R). In other words, in the examples below we could call a raster in R \code{myRast} but \code{names(myRast)} yields \code{rast}, so we need to call it "\code{rast}" in the formulae. The raster "\code{out}" will be created by the function. You also need to put spaces before and after the equals sign (e.g., \code{out = 2 * rast}, but not \code{out=2 * rast}).
 \itemize{
@@ -31,6 +31,8 @@ See the documentation for \code{r.mapcalc}{https://grass.osgeo.org/grass82/manua
 \item{grassDir}{Name of the folder path in which \code{GRASS} is installed. For a Windows system, this might be something like \code{'C:/Program Files/GRASS GIS 8.2'}. For a Mac system, this might be like \code{"/Applications/GRASS-8.2.app/Contents/Resources"}. If you are using a lot of \pkg{fasterRaster} functions, it can be easier to set this once using \code{\link{fasterOptions}}. By default, this is \code{NULL}, in which case the install path for \code{GRASS} will be searched for, but if not found, will result in an error.}
 
 \item{grassToR}{If \code{TRUE} (default) then the output will be returned to \pkg{R}. If \code{FALSE}, then the output is left in the \code{GRASS} session and named the value in \code{outGrassName}. You can then refer to the output in subsequent \pkg{fasterRaster} functions and avoid the need to re-import it. This is called "chaining" functions together, and it can save a lot of computational time.}
+
+\item{inRastName}{The name of the input raster(s) in \code{GRASS}. If \code{rast} is a multi-layer raster, then there must be one name per layer. This argument is useful if you are "chaining" \pkg{fasterRaster} functions together and wish to refer to the input raster(s) later. The default value is the name(s) of the raster(s) (i.e., \code{names(rast)}).}
 
 \item{outGrassName}{Character. Name of output in \code{GRASS}. This is useful if you want to refer to the output object in \code{GRASS} later in a session by "chaining" functions.}
 }

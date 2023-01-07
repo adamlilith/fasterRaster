@@ -2,15 +2,18 @@
 % Please edit documentation in R/fasterCRS.r
 \name{fasterCRS}
 \alias{fasterCRS}
-\title{Display the coordinate reference system of the current GRASS sesion}
+\title{Coordinate reference system of the current GRASS sesion}
 \usage{
-fasterCRS()
+fasterCRS(nice = FALSE)
+}
+\arguments{
+\item{nice}{If \code{TRUE}, then print the CRS in a formatted manner and return it invisibly. Default is \code{FALSE}.}
 }
 \value{
 Nothing (displays information on the coordinate reference system of the current \code{GRASS} session).
 }
 \description{
-Display the coordinate reference system of the current \code{GRASS} sesion.
+Display information on the coordinate reference system of the current \code{GRASS} sesion.
 }
 \examples{
 \dontrun{
@@ -18,28 +21,30 @@ Display the coordinate reference system of the current \code{GRASS} sesion.
 library(sf)
 library(terra)
 
-# start a GRASS session with a raster and get information on it
+# start a GRASS session with a raster
 madElev <- fasterData('madElev')
 initGrass(madElev, inRastName = 'madElev')
-fasterInfoRast('madElev')
 
-# export a vector and get information on it
+# import a vector
 madCoast0 <- fasterData('madCoast0')
 exportVectToGrass(madCoast0, inVectName = 'madCoast0')
+
+# get information on the raster and vector
+fasterInfoRast('madElev')
 fasterInfoVect('madCoast0')
 
-# information on the coordinate rafeternec system
-fasterCRS()
+# information on the coordinate reference system
+fasterCRS() # "plain" format
+fasterCRS(TRUE) # nice for the eyes
+
+# spatial extent of the GRASS session
+fasterExt() # returns a SpatExtent object
+fasterExt(FALSE) # returns a vector
+
+# spatial resolution
+fasterRes()
 
 # names of all rasters and vectors in the GRASS session
-fasterLs()
-
-# remove raster
-fasterRm('madElev')
-fasterLs()
-
-# remove vector
-fasterRm('madCoast0')
 fasterLs()
 
 }

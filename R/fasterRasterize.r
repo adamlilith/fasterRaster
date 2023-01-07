@@ -1,6 +1,6 @@
-#' Rasterize a spatial vector
+#' Convert a spatial vector to a raster
 #'
-#' This function is a potentially faster version of the \code{\link[terra]{rasterize}} function in the \pkg{terra} package which converts a spatial points, lines, or polygon into a raster based on a "template" raster. All cells covered by the spatial object can either have values taken from the spatial object or a user-defined.
+#' This function converts a spatial points, lines, or polygon vector into a raster based on a "template" raster. All cells covered by the vector can either have values taken from the vector or be set to a user-defined value.
 #'
 #' @inheritParams .sharedArgs_vect
 #' @inheritParams .sharedArgs_rast

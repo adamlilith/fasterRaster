@@ -9,7 +9,7 @@ fasterLongLatRasts(
   mask = TRUE,
   grassDir = options()$grassDir,
   grassToR = TRUE,
-  inRastName = "rast",
+  inRastName = NULL,
   outGrassName = c("longitudeRast", "latitudeRast")
 )
 }

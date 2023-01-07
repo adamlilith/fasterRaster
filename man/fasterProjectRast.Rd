@@ -10,15 +10,15 @@ fasterProjectRast(
   method = "bilinear",
   grassDir = options()$grassDir,
   grassToR = TRUE,
-  inRastName = "rast",
-  outGrassName = "projectedRast",
+  inRastName = NULL,
+  outGrassName = NULL,
   ...
 )
 }
 \arguments{
 \item{rast}{A \code{SpatRaster} with one or more layers, \emph{or} the name(s) of one or more raster already in an existing \code{GRASS} session.}
 
-\item{template}{Either \code{NULL} (default) or a \code{SpatRaster} to serve as a template for projecting. If there is an existing \code{GRASS} session (started by anotehr \pkg{fasterRaster} function or through the \code{\link{initGrass}} function), then this argument can be \code{NULL}, and the raster in \code{rast} will be projected to the one used by the current \code{GRASS} session.  However, if a \code{GRASS} seesion has not yet been started, or a different projection is sesired, then this argument can be a \code{SpatRaster}, with the desired coordinate reference system, extent, and resolution.}
+\item{template}{Either \code{NULL} (default) or a \code{SpatRaster} to serve as a template for projecting. If there is an existing \code{GRASS} session (started by another \pkg{fasterRaster} function or through the \code{\link{initGrass}} function), then this argument can be \code{NULL}, and the raster in \code{rast} will be projected to the coordinate reference system used by the current \code{GRASS} session.  However, if a \code{GRASS} session has not yet been started, or a different projection is desired, then this argument must be non-\code{NULL}.}
 
 \item{method}{Character, method for resampling cells:
 \itemize{
@@ -57,24 +57,41 @@ library(terra)
 grassDir <- 'C:/Program Files/GRASS GIS 8.2' # example for a PC
 grassDir <- "/Applications/GRASS-8.2.app/Contents/Resources" # for a Mac
 
+library(sf)
 library(terra)
 
+### project a raster using fasterProjectRast()
 madChelsa <- fasterData('madChelsa') # unprojected
 madElev <- fasterData('madElev') # projected
 
 # coordinate reference systems are different!
-cat(crs(madChelsa), '\n')
-cat(crs(madElev), '\n')
-
-madChelsa <- subset(madChelsa, 1:3) # subset to speed this up
+crs(madChelsa)
+crs(madElev)
 
 madChelsaProj <- fasterProjectRast(rast=madChelsa,
 template=madElev, grassDir=grassDir)
 
-oldPar <- par(mfrow=c(1, 2))
-plot(madChelsa[[1]], main='Original')
-plot(madChelsaProj[[1]], main='Resampled')
-par(oldPar)
+crs(madChelsaProj)
+
+### project a vector using fasterProjectVect()
+# This is a contrived example, as we will project a vector to a different
+# coordinate reference system outside 
+madCoast0 <- fasterData('madCoast0')
+wgs84 <- '+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84'
+madCoast0wgs84 <- st_transform(madCoast0, wgs84)
+
+madCoast0proj <- fasterProjectVect(vect=madCoast0wgs84,
+template=madElev, grassDir=grassDir)
+
+# Note that we already created a GRASS session with the call to
+# fasterProjectRast(), so we could have used that session's CRS and
+# thereby # save some time importing the madElev raster to serve
+# as a template:
+
+madCoast0proj <- fasterProjectVect(vect=madCoast0wgs84,
+template=NULL, grassDir=grassDir)
+
+
 
 }
 }

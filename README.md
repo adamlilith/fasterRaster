@@ -134,6 +134,7 @@ Here, we used the product of the first \code{faster} call, which is named `'lat'
 * `fasterHorizon`: Horizon angle height from a DEM (using **GRASS**).
 * `fasterInfoRast`: Information on a vector in a **GRASS** session.
 * `fasterLongLatRasts`: Create rasters with values equal to cell longitude and latitude (using **GRASS**).
+* `fasterMosaic`: Combine rasters that do not overlap perfectly (using **GRASS**).
 * `fasterProjectRast`: Project and resample raster (using **GRASS**).
 * `fasterQuantile`: Quantiles of values in a raster (using **GRASS**).
 * `fasterRastDistance`: Distance from cells with `NA`s to closest non-`NA` cell (or the inverse of this) (using **GRASS**).
@@ -145,6 +146,7 @@ Here, we used the product of the first \code{faster} call, which is named `'lat'
 
 ### *Faster* functions that operate on vectors
 * `fasterInfoVect`: Information on a vector in a **GRASS** session.
+* `fasterProjectVect`: Project a spatial vector (using **GRASS**).
 * `fasterRasterize`: Convert vector to a raster (using **GRASS**.
 
 ### *Faster* functions that operate on rasters and vectors simultaneously
@@ -157,7 +159,9 @@ Here, we used the product of the first \code{faster} call, which is named `'lat'
 * `exportRastToGrass`: Export raster to an open **GRASS** session.
 * `exportVectToGrass`: Export vector to an open **GRASS** session.
 * `fasterCRS`: Information on the coordinate reference system in the current **GRASS** session.
+* `fasterExt`: Spatial extent of a **GRASS** session.
 * `fasterLs`: Names of all rasters and/or vectors in a **GRASS** session.
+* `fasterRes`: Spatial resolution of a **GRASS** session.
 * `fasterRm`: Remove raster(s) and/or vector(s) from a **GRASS** session.
 * `initGrass`: Initialize a **GRASS** session using a raster or vector as a template.
 

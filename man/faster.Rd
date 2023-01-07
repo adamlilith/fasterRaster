@@ -9,12 +9,12 @@ faster(
   rast = NULL,
   vect = NULL,
   ...,
-  outType = NULL,
+  out = NULL,
   flags = c("quiet", "overwrite"),
   grassDir = options()$grassDir,
   grassToR = TRUE,
-  inRastName = "rast",
-  inVectName = "vect",
+  inRastName = NULL,
+  inVectName = NULL,
   outGrassName = "output"
 )
 }
@@ -27,7 +27,7 @@ faster(
 
 \item{...}{Arguments to pass to the \code{GRASS} module through \code{\link[rgrass]{execGRASS}}.}
 
-\item{outType}{\code{NULL}, \code{'raster'}, or \code{'vector'} (partial string matching is used). Type of output expected from the \code{GRASS} module.}
+\item{out}{\code{NULL}, \code{'raster'}, or \code{'vector'} (partial string matching is used). Type of output expected from the \code{GRASS} module.}
 
 \item{flags}{List of flags for the \code{GRASS} module. The default (\code{c('quiet', 'overwrite')}) causes the module to report little/no messages and to overwrite existing files of the same name. For more flags, see the help documentation for the respective \code{GRASS} module.}
 
@@ -35,9 +35,9 @@ faster(
 
 \item{grassToR}{If \code{TRUE} (default) then the output will be returned to \pkg{R}. If \code{FALSE}, then the output is left in the \code{GRASS} session and named the value in \code{outGrassName}. You can then refer to the output in subsequent \pkg{fasterRaster} functions and avoid the need to re-import it. This is called "chaining" functions together, and it can save a lot of computational time.}
 
-\item{inVectName}{Character. Name of the input vector (if any) when exported to \pkg{GRASS}. Default is \code{'vect'}.}
+\item{inRastName}{The name of the input raster(s) in \code{GRASS}. If \code{rast} is a multi-layer raster, then there must be one name per layer. This argument is useful if you are "chaining" \pkg{fasterRaster} functions together and wish to refer to the input raster(s) later. The default value is the name(s) of the raster(s) (i.e., \code{names(rast)}).}
 
-\item{rastName}{Character. Name of the input raster (if any) when exported to \pkg{GRASS}. Default is \code{'rast'}.}
+\item{inVectName}{The name of the input vector in \code{GRASS}. This is useful only if you are "chaining" \pkg{fasterRaster} functions together and wish to refer to the input vector later. The default value is \code{'vect'}.}
 }
 \value{
 A raster, vector, or some other product of the \code{GRASS} module.
@@ -60,7 +60,7 @@ madElev <- fasterData('madElev')
 # Example using a raster as input, raster as output:
 # "r.latlong" creates a raster with cell values equal to latitude (WGS84).
 # Note that fasterLongLatRasts() is easier to use.
-lat <- faster('r.latlong', rast=madElev, outType='rast',
+lat <- faster('r.latlong', rast=madElev, out='rast',
 flags=c('quiet', 'overwrite'), grassDir=grassDir)
 
 plot(lat, add=TRUE)
@@ -68,7 +68,7 @@ plot(lat, add=TRUE)
 # example using a raster as input, vector as output
 # "r.contour" creates a vector of contours
 # Note that fasterContour() is easier to use.
-conts <- faster('r.contour', rast=madElev, outType='vect',
+conts <- faster('r.contour', rast=madElev, out='vect',
 levels=c(100, 200, 300, 400, 500), flags=c('quiet', 'overwrite'),
 grassDir=grassDir)
 
@@ -80,7 +80,7 @@ plot(conts, add=TRUE)
 # Note that fasterRasterize() is easier to use.
 rastRivers <- faster('v.to.rast', vect=madRivers, outGrassName='rastRivers',
 use='val', value=1,
-outType='rast', flags=c('quiet', 'overwrite'), grassDir=grassDir)
+out='rast', flags=c('quiet', 'overwrite'), grassDir=grassDir)
 
 plot(madElev)
 plot(rastRivers, col='blue', add=TRUE)
@@ -90,7 +90,7 @@ plot(rastRivers, col='blue', add=TRUE)
 # Note that fasterBufferVect() is easier to use.
 riverBuff <- faster('v.buffer', vect=madRivers, outGrassName='riverBuff',
 distance = 1000,
-outType='vect', flags=c('quiet', 'overwrite'), grassDir=grassDir)
+out='vect', flags=c('quiet', 'overwrite'), grassDir=grassDir)
 
 plot(riverBuff)
 plot(st_geometry(madRivers), col='blue', add=TRUE)
@@ -101,12 +101,12 @@ plot(st_geometry(madRivers), col='blue', add=TRUE)
 # Note that fasterBufferVect() and fasterRasterize() would be easier to use.
 faster('v.buffer', vect=madRivers, outGrassName='riverBuff',
 distance = 1000,
-outType='vect', flags=c('quiet', 'overwrite'),
+out='vect', flags=c('quiet', 'overwrite'),
 grassDir=grassDir, grassToR=FALSE)
 
 rastBuff <- faster('v.to.rast', vect='riverBuff', outGrassName='rastRivers',
 use='val', value=1,
-outType='rast', flags=c('quiet', 'overwrite'), grassDir=grassDir)
+out='rast', flags=c('quiet', 'overwrite'), grassDir=grassDir)
 
 plot(rastBuff)
 plot(st_geometry(madRivers), col='blue', add=TRUE)
@@ -114,7 +114,5 @@ plot(st_geometry(madRivers), col='blue', add=TRUE)
 }
 }
 \seealso{
-See the \code{OS Geo GRASS} websit for a catalog and detailed descriptions of \href{https://grass.osgeo.org/grass82/manuals/vector.html}{vector} and \href{https://grass.osgeo.org/grass82/manuals/raster.html}{raster} modules.
-
-\code{\link[rgrass]{execGRASS}} in \pkg{rgrass}, \code{\link{exportRastToGrass}} and \code{\link{exportRastToGrass}} for exporting rasters and vectors to an existing \code{GRASS} session.
+See the \code{OS Geo GRASS} websit for a catalog and detailed descriptions of \href{https://grass.osgeo.org/grass82/manuals/vector.html}{vector} and \href{https://grass.osgeo.org/grass82/manuals/raster.html}{raster} modules. Related functions include \code{\link[rgrass]{execGRASS}} in \pkg{rgrass}, and \code{\link{exportRastToGrass}} and \code{\link{exportVectToGrass}} for exporting rasters and vectors to an existing \code{GRASS} session.
 }
