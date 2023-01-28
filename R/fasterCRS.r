@@ -13,7 +13,13 @@
 #' @export
 fasterCRS <- function(nice = FALSE) {
 
-	wkt <- readLines(paste0(tempdir(), '/default/PERMANENT/PROJ_WKT'))
+	location <- .getLocation()
+	if (is.na(location)) location <- 'default'
+
+	mapset <- .getMapset()
+	if (is.na(mapset)) mapset <- 'PERMANENT'
+	
+	wkt <- readLines(file.path(tempdir(), location, mapset, 'PROJ_WKT'))
 	wkt <- paste(wkt, collapse='\n')
 	
 	if (nice) {

@@ -1,11 +1,14 @@
 #' Distance between cells with NAs and closest non-NA cells on a raster
 #'
-#' This function is a potentially faster version of the \code{\link[terra]{distance}} function in the \pkg{terra} package which it replaces values in all \code{NA} cells with the distance between them and the closest non-\code{NA} cell. Alternatively, it fills in values of non-\code{NA} cells with the distance between them and the closest \code{NA} cell. Note that the \code{distance} function also calculates distances between a raster and a spatial vector object, but this functionality is reproduced in \code{\link[fasterRaster]{fasterVectToRastDistance}}.
+#' This function replaces values in all \code{NA} cells with the distance between them and the closest non-\code{NA} cell. Alternatively, it fills in values of non-\code{NA} cells with the distance between them and the closest \code{NA} cell.
 #'
 #' @inheritParams .sharedArgs_rast
+#' @inheritParams .sharedArgs_replace
 #' @inheritParams .sharedArgs_inRastName
-#' @inheritParams .sharedArgs_grassDir_grassToR
+#' @inheritParams .sharedArgs_grassDir
+#' @inheritParams .sharedArgs_grassToR
 #' @inheritParams .sharedArgs_outGrassName
+#' @inheritParams .sharedArgs_dots_forInitGrass_andGrassModule
 #'
 #' @param metric Character, indicates type of distance to calculate:
 #' \itemize{
@@ -17,11 +20,10 @@
 #' }
 #' @param meters Logical, if \code{TRUE} then distance is in meters. If \code{FALSE} then distance is in map units.
 #' @param fillNAs Logical, if \code{TRUE} (default) then fill code{NA} cells with distance between them and closest non-\code{NA}. If \code{TRUE} then replace value in non-{NA} cells with distance between them and nearest \code{NA} cell.
-#' @param ... Arguments to pass to \code{\link[rgrass]{execGRASS}} when used for rasterizing (i.e., function \code{r.grow.distance} in \code{GRASS}).
 #'
 #' @return If \code{grassToR} if \code{TRUE}, then a raster with the same extent and coordinate reference system as \code{vect}. Regardless, a raster with the name given by \code{outGrassName} is written into the \code{GRASS} session.
 #'
-#' @seealso \code{\link[terra]{distance}} in \pkg{terra}; \code{\link[fasterRaster]{fasterVectToRastDistance}} in \pkg{fasterRaster}; \href{https://grass.osgeo.org/grass82/manuals/r.grow.distance.html}{\code{r.grow.distance}} in \code{GRASS}
+#' @seealso \code{\link[fasterRaster]{fasterVectToRastDistance}} in \pkg{fasterRaster}; \code{\link[terra]{distance}} in \pkg{terra}; \code{GRASS} module \href{https://grass.osgeo.org/grass82/manuals/r.grow.distance.html}{\code{r.grow.distance}}
 #'
 #' @example man/examples/ex_fasterRastDistance.r
 #'
@@ -29,22 +31,41 @@
 
 fasterRastDistance <- function(
 	rast,
+	inRastName,
 	metric = 'euclidean',
 	meters = TRUE,
 	fillNAs = TRUE,
-	grassDir = options()$grassDir,
-	grassToR = TRUE,
-	inRastName = NULL,
 	outGrassName = 'distanceRast',
+	
+	replace = fasterGetOptions('replace', FALSE),
+	grassToR = fasterGetOptions('grassToR', TRUE),
+	autoRegion = fasterGetOptions('autoRegion', TRUE),
+	grassDir = fasterGetOptions('grassDir', NULL),
 	...
 ) {
 
-	flags <- c('quiet', 'overwrite')
+	### begin common
+	flags <- 'quiet'
+	flags <- .getFlags(replace=replace, flags=flags)
+	inRastName <- .getInRastName(inRastName, rast)
+	# if (is.null(inVectName)) inVectName <- 'vect'
+	
+	# region settings
+	success <- .rememberRegion()
+	# on.exit(.restoreRegion(inits), add=TRUE)
+	# on.exit(.restoreRegion(), add=TRUE)
+	# on.exit(regionResize(), add=TRUE)
+	
+	if (is.null(inits)) inits <- list()
+	### end common
+
 	if (meters) flags <- c(flags, 'm')
 	if (!fillNAs) flags <- c(flags, 'n')
 	
 	# initialize GRASS
-	input <- initGrass(rast=rast, vect=NULL, inRastName=inRastName, inVectName=NULL, grassDir=grassDir)
+	if (is.null(inits)) inits <- list()
+	inits <- c(inits, list(rast=rast, vect=NULL, inRastName=inRastName, inVectName=NULL, replace=replace, grassDir=grassDir))
+	input <- do.call('initGrass', inits)
 	
 	# calculate distance
 	rgrass::execGRASS('r.grow.distance', input='rast', distance=outGrassName, metric=metric, flags=flags)
@@ -52,9 +73,7 @@ fasterRastDistance <- function(
 	# return
 	if (grassToR) {
 	
-		out <- rgrass::read_RAST(outGrassName, flags='quiet')
-		out <- terra::rast(out)
-		names(out) <- outGrassName
+		out <- fasterWriteRaster(outGrassName, paste0(tempfile(), '.tif'), overwrite=TRUE)
 		out
 		
 	}

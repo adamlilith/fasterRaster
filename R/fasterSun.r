@@ -2,7 +2,10 @@
 #'
 #' This function calculates beam (direct), diffuse and ground reflected solar irradiation for a given day and set of topographic and atmospheric conditions. It utilizes the \code{GRASS} function \code{r.sun}. This function only works in "mode 2" of \href{https://grass.osgeo.org/grass82/manuals/r.sun.html}{\code{r.sun}}.
 #'
-#' @inheritParams .sharedArgs_grassDir_grassToR
+#' @inheritParams .sharedArgs_replace
+#' @inheritParams .sharedArgs_grassDir
+#' @inheritParams .sharedArgs_grassToR
+#' @inheritParams .sharedArgs_dots_forInitGrass_andGrassModule
 #'
 #' @param elevation Either a \code{SpatRaster} or the name of a raster in an existing \code{GRASS} session with values representing elevation (typically in meters).
 #' @param aspect Numeric, character, or a \code{SpatRaster} layer. This is either a raster with values of terrain aspect, the name of such a raster in an existing \code{GRASS} session, or a numeric value. Units are in degrees such that a value of 0 is assumed to point east, 90 north, 180 west, and 270 south. This raster can be created using \code{\link{fasterTerrain}}. If aspect is give in degrees such that 0 is north, 90 east, and so on, then it can be converted to the "east = 0" orientation using \code{\link{fasterConvertDegree}}.
@@ -62,15 +65,19 @@ fasterSun <- function(
 	glob_rad = TRUE,
 	insol_time = TRUE,
 	
-	grassDir = options()$grassDir,
-	grassToR = TRUE,
+	replace = fasterGetOptions('replace', FALSE),
+	grassToR = fasterGetOptions('grassToR', TRUE),
+	autoRegion = fasterGetOptions('autoRegion', TRUE),
+	grassDir = fasterGetOptions('grassDir', NULL),
 	...
 ) {
 
-	flags <- c('quiet', 'overwrite')
+	flags <- .getFlags(replace=replace)
 	
 	# initialize GRASS
-	input <- initGrass(rast=elevation, vect=NULL, inRastName='elevation', inVectName=NULL, grassDir=grassDir)
+	if (is.null(inits)) inits <- list()
+	inits <- c(inits, list(rast=elevation, vect=NULL, inRastName='elevation', inVectName=NULL, replace=replace, grassDir=grassDir))
+	input <- do.call('initGrass', inits)
 	
 	## export rasters/collect scalars
 	
@@ -93,7 +100,7 @@ fasterSun <- function(
 	# aspect
 	if (inherits(aspect, 'SpatRaster')) { # raster
 		
-		exportRasterToGrass(aspect, inRastName='aspectFromEast')
+		fasterRast(aspect, inRastName='aspectFromEast', replace=replace)
 		args <- c(args, aspect='aspectFromEast')
 		
 	} else if (inherits(aspect, 'numeric')) { # constant
@@ -104,7 +111,7 @@ fasterSun <- function(
 	
 	# slope
 	if (inherits(slope, 'SpatRaster')) {
-		exportRasterToGrass(slope, inRastName='slope')
+		fasterRast(slope, inRastName='slope', replace=replace)
 		args <- c(args, slope='slope')
 	} else if (inherits(slope, 'numeric')) { # constant
 		args <- c(args, slope_value=slope)
@@ -114,7 +121,7 @@ fasterSun <- function(
 	
 	# albedo
 	if (inherits(albedo, 'SpatRaster')) {
-		exportRasterToGrass(albedo, inRastName='albedo')
+		fasterRast(albedo, inRastName='albedo', replace=replace)
 		args <- c(args, albedo='albedo')
 	} else if (inherits(albedo, 'numeric')) { # constant
 		args <- c(args, albedo_value=albedo)
@@ -124,7 +131,7 @@ fasterSun <- function(
 	
 	# linke
 	if (inherits(linke, 'SpatRaster')) {
-		exportRasterToGrass(linke, inRastName='aspect')
+		fasterRast(linke, inRastName='aspect', replace=replace)
 		args <- c(args, aspect='aspect')
 	} else if (inherits(linke, 'numeric')) { # constant
 		args <- c(args, linke_value=linke)
@@ -133,8 +140,8 @@ fasterSun <- function(
 	}
 
 	# coefficients of beam and diffuse radiation
-	if (!inherits(coeff_bh, 'character')) exportRastToGrass(coeff_bh, inRastName='coeff_bh')
-	if (!inherits(coeff_dh, 'character')) exportRastToGrass(coeff_dh, inRastName='coeff_dh')
+	if (!inherits(coeff_bh, 'character')) fasterRast(coeff_bh, inRastName='coeff_bh', replace=replace)
+	if (!inherits(coeff_dh, 'character')) fasterRast(coeff_dh, inRastName='coeff_dh', replace=replace)
 	
 	# horizon height
 	if (inherits(horizonHeight, 'character')) {
@@ -147,7 +154,7 @@ fasterSun <- function(
 				ifelse(direction < 10, '0', ''),
 				direction
 			)
-			exportRastToGrass(horizonHeight[[i]], inRastName=paste0('horizonHeight_', direction))
+			fasterRast(horizonHeight[[i]], inRastName=paste0('horizonHeight_', direction), replace=replace)
 		}
 		args <- c(args, 'horizon_basename' = 'horizonHeight')
 	}
@@ -174,20 +181,15 @@ fasterSun <- function(
 			
 			if (outValue) {
 
-				thisOut <- rgrass::read_RAST(outName, flags='quiet')
-				names(thisOut) <- outName
+				thisOut <- fasterWriteRaster(outName, paste0(tempfile(), '.tif'), overwrite=TRUE)
 				out <- if (exists('out', inherits=FALSE)) {
 					c(out, thisOut)
 				} else {
 					thisOut
 				}
-			
 			}
-			
 		}
-		
 		out
-		
 	}
 	
 }

@@ -9,10 +9,12 @@ fasterTerrain(
   metrics = "slope",
   slopeUnits = "degrees",
   northIs0 = TRUE,
-  grassDir = options()$grassDir,
-  grassToR = TRUE,
+  replace = FALSE,
   inRastName = NULL,
-  outGrassName = NULL
+  outGrassName = metrics,
+  grassToR = TRUE,
+  grassDir = options()$grassDir,
+  inits = NULL
 )
 }
 \arguments{
@@ -32,13 +34,17 @@ fasterTerrain(
 
 \item{northIs0}{Logical. If \code{TRUE} (default), aspect will be reported such that 0 is north, and degrees run clockwise (90 is east, 180 south, 270 west). If \code{FALSE}, then aspect will be reported such that 0 is east, and degrees run counterclockwise (90 is north, 180 west, 270 south). The latter is the default in \code{GRASS}, but the former is the default in \pkg{terra}'s \code{\link[terra]{terrain}} function, so is used here as the default.}
 
-\item{grassDir}{Name of the folder path in which \code{GRASS} is installed. For a Windows system, this might be something like \code{'C:/Program Files/GRASS GIS 8.2'}. For a Mac system, this might be like \code{"/Applications/GRASS-8.2.app/Contents/Resources"}. If you are using a lot of \pkg{fasterRaster} functions, it can be easier to set this once using \code{\link{fasterOptions}}. By default, this is \code{NULL}, in which case the install path for \code{GRASS} will be searched for, but if not found, will result in an error.}
+\item{replace}{Logical or \code{NULL}. If \code{FALSE} or \code{NULL} (default), then attempting to overwrite rasters or vectors already in a \code{GRASS} session will result in an error. You can allow overwriting by changing this to \code{TRUE}, or by setting \code{inRastName}, \code{inVectName}, and/or \code{outGrassName} to values different from rasters or vectors that already exist in the session (not all functions have these arguments). Use \code{\link{fasterLs}} to see existing rasters and vectors.  You can set this for all functions at once using \code{\link{fasterOptions}}.}
 
-\item{grassToR}{If \code{TRUE} (default) then the output will be returned to \pkg{R}. If \code{FALSE}, then the output is left in the \code{GRASS} session and named the value in \code{outGrassName}. You can then refer to the output in subsequent \pkg{fasterRaster} functions and avoid the need to re-import it. This is called "chaining" functions together, and it can save a lot of computational time.}
-
-\item{inRastName}{The name of the input raster in \code{GRASS}. This argument is useful if you are "chaining" \pkg{fasterRaster} functions together and wish to refer to the input raster later. The default value is the name of the raster (i.e., \code{names(rast)}).}
+\item{inRastName}{Character, missing, or \code{NULL}. The name of the input raster in \code{GRASS}. If this is missing, the name of the raster or raster file will be used. If \code{NULL}, then "\code{inputRast}" will be used. This argument is useful if you are \link{chaining} \pkg{fasterRaster} functions together and wish to refer to the input raster later in the \code{GRASS} session.}
 
 \item{outGrassName}{Name(s) of the rasters created in the \code{GRASS} session. Useful for chaining functions together. By default, these will be the values given in \code{metrics}.}
+
+\item{grassToR}{Logical or \code{NULL}. If \code{TRUE} or \code{NULL} (default) then the output will be returned to \code{R}. If \code{FALSE}, then the output is left in the \code{GRASS} session (with the name given by \code{outGrassName}). You can set this argument for all functions at once using \code{\link{fasterOptions}}.}
+
+\item{grassDir}{Character or \code{NULL}. Name of the path in which \code{GRASS} is installed. For a Windows system, this might be something like \code{'C:/Program Files/GRASS GIS 8.3'}, for a Mac, like \code{"/Applications/GRASS-8.3.app/Contents/Resources"}, and for Linux like \code{'/usr/local/grass'}. If you are using a lot of \pkg{fasterRaster} functions, you can set this for all functions at once using \code{\link{fasterOptions}}. By default, this is \code{NULL}, in which case the install path for \code{GRASS} will be searched for, but if not found, will result in an error (usually the case).}
+
+\item{inits}{Either \code{NULL} (default), or a named list of arguments to pass to \code{\link{initGrass}}. If \code{NULL}, then the current active \code{GRASS} session is used, or a new one in the "default" location is created.}
 }
 \value{
 If \code{grassToR} if \code{TRUE}, then a raster or raster stack with the same extent, resolution, and coordinate reference system as \code{rast}. Regardless, raster(s) given by the names in the \code{outGrassName} arguments are used are written into the \code{GRASS} session.

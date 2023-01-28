@@ -3,15 +3,15 @@
 \docType{data}
 \name{fasterFunctions}
 \alias{fasterFunctions}
-\title{Table of functions in fasterRaster and equivalents in \pkg{GRASS} and terra}
+\title{Equivalent functions in fasterRaster, terra, sf, and GRASS}
 \format{
-An object of class \code{'data.table'}.
+A \code{data.frame}.
 }
 \usage{
 data(fasterFunctions)
 }
 \description{
-Table of functions in \pkg{fasterRaster} and equivalents in \pkg{GRASS} and \pkg{terra}, plus a link to the \pkg{GRASS} function.
+Table of functions in \pkg{fasterRaster} and equivalents in \pkg{terra}, \pkg{sf}, and \pkg{GRASS}, plus a link to the \pkg{GRASS} function help page.
 }
 \examples{
 fasterHelp('fasterRasterize') # lookup by fasterRaster name

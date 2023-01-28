@@ -4,8 +4,9 @@
 \alias{.sharedArgs_grassToR}
 \title{Shared argument(s)}
 \arguments{
-\item{grassToR}{If \code{TRUE} (default) then the output will be returned to \pkg{R}. If \code{FALSE}, then the output is left in the \code{GRASS} session and named the value in \code{outGrassName}. You can then refer to the output in subsequent \pkg{fasterRaster} functions and avoid the need to re-import it. This is called "chaining" functions together, and it can save a lot of computational time.}
+\item{grassToR}{Logical or \code{NULL}. If \code{TRUE} or \code{NULL} (default) then the output will be returned to \code{R}. If \code{FALSE}, then the output is left in the \code{GRASS} session (with the name given by \code{outGrassName}). You can set this argument for all functions at once using \code{\link{fasterOptions}}.}
 }
 \description{
 Shared argument(s)
 }
+\keyword{internal}

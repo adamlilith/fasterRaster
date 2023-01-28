@@ -8,15 +8,15 @@ fasterProjectRast(
   rast,
   template = NULL,
   method = "bilinear",
-  grassDir = options()$grassDir,
-  grassToR = TRUE,
+  replace = FALSE,
   inRastName = NULL,
-  outGrassName = NULL,
-  ...
+  grassToR = TRUE,
+  grassDir = options()$grassDir,
+  inits = NULL
 )
 }
 \arguments{
-\item{rast}{A \code{SpatRaster} with one or more layers, \emph{or} the name(s) of one or more raster already in an existing \code{GRASS} session.}
+\item{rast}{A \code{SpatRaster} with one or more layers, \emph{or} the name(s) of one or more raster in the active \code{GRASS} session.}
 
 \item{template}{Either \code{NULL} (default) or a \code{SpatRaster} to serve as a template for projecting. If there is an existing \code{GRASS} session (started by another \pkg{fasterRaster} function or through the \code{\link{initGrass}} function), then this argument can be \code{NULL}, and the raster in \code{rast} will be projected to the coordinate reference system used by the current \code{GRASS} session.  However, if a \code{GRASS} session has not yet been started, or a different projection is desired, then this argument must be non-\code{NULL}.}
 
@@ -31,13 +31,15 @@ fasterProjectRast(
         \item \code{lanczos_f}: Lanczos interpolation with fallback.
 }}
 
-\item{grassDir}{Name of the folder path in which \code{GRASS} is installed. For a Windows system, this might be something like \code{'C:/Program Files/GRASS GIS 8.2'}. For a Mac system, this might be like \code{"/Applications/GRASS-8.2.app/Contents/Resources"}. If you are using a lot of \pkg{fasterRaster} functions, it can be easier to set this once using \code{\link{fasterOptions}}. By default, this is \code{NULL}, in which case the install path for \code{GRASS} will be searched for, but if not found, will result in an error.}
+\item{replace}{Logical or \code{NULL}. If \code{FALSE} or \code{NULL} (default), then attempting to overwrite rasters or vectors already in a \code{GRASS} session will result in an error. You can allow overwriting by changing this to \code{TRUE}, or by setting \code{inRastName}, \code{inVectName}, and/or \code{outGrassName} to values different from rasters or vectors that already exist in the session (not all functions have these arguments). Use \code{\link{fasterLs}} to see existing rasters and vectors.  You can set this for all functions at once using \code{\link{fasterOptions}}.}
 
-\item{grassToR}{If \code{TRUE} (default) then the output will be returned to \pkg{R}. If \code{FALSE}, then the output is left in the \code{GRASS} session and named the value in \code{outGrassName}. You can then refer to the output in subsequent \pkg{fasterRaster} functions and avoid the need to re-import it. This is called "chaining" functions together, and it can save a lot of computational time.}
+\item{inRastName}{The name of the input raster(s) in \code{GRASS}. If \code{rast} is a multi-layer raster, then there must be one name per layer. If missing or \code{NULL}, the name(s) of the raster(s) will be used (i.e., \code{names(rast)}). This argument is useful if you are \link{chaining} \pkg{fasterRaster} functions together and wish to refer to the raster(s) later in the \code{GRASS} session.}
 
-\item{inRastName}{The name of the input raster(s) in \code{GRASS}. If \code{rast} is a multi-layer raster, then there must be one name per layer. This argument is useful if you are "chaining" \pkg{fasterRaster} functions together and wish to refer to the input raster(s) later. The default value is the name(s) of the raster(s) (i.e., \code{names(rast)}).}
+\item{grassToR}{Logical or \code{NULL}. If \code{TRUE} or \code{NULL} (default) then the output will be returned to \code{R}. If \code{FALSE}, then the output is left in the \code{GRASS} session (with the name given by \code{outGrassName}). You can set this argument for all functions at once using \code{\link{fasterOptions}}.}
 
-\item{outGrassName}{Character. Name of output in \code{GRASS}. This is useful if you want to refer to the output object in \code{GRASS} later in a session by "chaining" functions.}
+\item{grassDir}{Character or \code{NULL}. Name of the path in which \code{GRASS} is installed. For a Windows system, this might be something like \code{'C:/Program Files/GRASS GIS 8.3'}, for a Mac, like \code{"/Applications/GRASS-8.3.app/Contents/Resources"}, and for Linux like \code{'/usr/local/grass'}. If you are using a lot of \pkg{fasterRaster} functions, you can set this for all functions at once using \code{\link{fasterOptions}}. By default, this is \code{NULL}, in which case the install path for \code{GRASS} will be searched for, but if not found, will result in an error (usually the case).}
+
+\item{inits}{Either \code{NULL} (default), or a named list of arguments to pass to \code{\link{initGrass}}. If \code{NULL}, then the current active \code{GRASS} session is used, or a new one in the "default" location is created.}
 }
 \value{
 If \code{grassToR} if \code{TRUE}, then a raster or raster stack with the same extent, resolution, and coordinate reference system as \code{rast}. Regardless, a raster with the name given by \code{outGrassName} is written into the \code{GRASS} session.
@@ -60,7 +62,9 @@ grassDir <- "/Applications/GRASS-8.2.app/Contents/Resources" # for a Mac
 library(sf)
 library(terra)
 
-### project a raster using fasterProjectRast()
+# These examples project and resample a "stack" of 4 rasters (madChelsa).
+
+### project a raster using a template raster
 madChelsa <- fasterData('madChelsa') # unprojected
 madElev <- fasterData('madElev') # projected
 
@@ -71,11 +75,18 @@ crs(madElev)
 madChelsaProj <- fasterProjectRast(rast=madChelsa,
 template=madElev, grassDir=grassDir)
 
+crs(madElev)
 crs(madChelsaProj)
+
+### project a raster using the current session as a template
+# This session was created by the previous faster function
+# and is still active.
+madChelsaProj <- fasterProjectRast(rast=madChelsa, grassDir=grassDir)
+
 
 ### project a vector using fasterProjectVect()
 # This is a contrived example, as we will project a vector to a different
-# coordinate reference system outside 
+# coordinate reference system (in R), then reproject it back to the original.
 madCoast0 <- fasterData('madCoast0')
 wgs84 <- '+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84'
 madCoast0wgs84 <- st_transform(madCoast0, wgs84)
@@ -90,8 +101,6 @@ template=madElev, grassDir=grassDir)
 
 madCoast0proj <- fasterProjectVect(vect=madCoast0wgs84,
 template=NULL, grassDir=grassDir)
-
-
 
 }
 }

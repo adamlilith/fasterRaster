@@ -4,8 +4,12 @@
 #'
 #' @inheritParams .sharedArgs_rast
 #' @inheritParams .sharedArgs_inRastName
-#' @inheritParams .sharedArgs_grassDir_grassToR
+#' @inheritParams .sharedArgs_replace
+#' @inheritParams .sharedArgs_grassDir
+#' @inheritParams .sharedArgs_grassToR
 #' @inheritParams .sharedArgs_outGrassName
+#' @inheritParams .sharedArgs_dots_forInitGrass_andGrassModule
+#'
 #' @param fun Name of the function to calculate on each neighborhood.
 #' \itemize{
 #' 	\item \code{'average'} or \code{'mean'} (default): \code{See note about rounding below!}
@@ -44,6 +48,7 @@
 
 fasterFocal <- function(
 	rast,
+	inRastName,
 	fun = 'mean',
 	w = 3,
 	circle = FALSE,
@@ -53,10 +58,13 @@ fasterFocal <- function(
 	quantile = 0.5,
 	largeNum = 1E6,
 	cores = 1,
-	grassDir = options()$grassDir,
-	grassToR = TRUE,
-	inRastName = NULL,
-	outGrassName = 'focalRast'
+	outGrassName = 'focalRast',
+
+	replace = fasterGetOptions('replace', FALSE),
+	grassToR = fasterGetOptions('grassToR', TRUE),
+	autoRegion = fasterGetOptions('autoRegion', TRUE),
+	grassDir = fasterGetOptions('grassDir', NULL),
+	...
 ) {
 
 	# for debugging
@@ -77,6 +85,19 @@ fasterFocal <- function(
 	
 	}
 
+	### begin common
+	flags <- .getFlags(replace=replace)
+	inRastName <- .getInRastName(inRastName, rast)
+	# if (is.null(inVectName)) inVectName <- 'vect'
+	
+	# # region settings
+	# success <- .rememberRegion()
+	# on.exit(.restoreRegion(), add=TRUE)
+	# on.exit(regionResize(), add=TRUE)
+	
+	if (is.null(inits)) inits <- list()
+	### end common
+
 	### catch errors
 	if (inherits(w, 'matrix') & circle | inherits(w, 'matrix') & !is.null(weightFx) | circle & !is.null(weightFx)) stop('You can only use a scalar for "w", "circle = TRUE", or specify "weightFx".')
 
@@ -96,10 +117,9 @@ fasterFocal <- function(
 	if (size %% 2 == 0) stop('Argument "size" must be an odd integer > 0.')
 
 	### initialize GRASS
-	flags <- c('quiet', 'overwrite')
-	
-	input <- initGrass(rast=rast, vect=NULL, inRastName=inRastName, inVectName=NULL, grassDir=grassDir)
-	
+	inits <- c(inits, list(rast=rast, vect=NULL, inRastName=inRastName, inVectName=NULL, replace=replace, grassDir=grassDir))
+	input <- do.call('initGrass', inits)
+
 	if (fun == 'mean') fun <- 'average'
 	if (fun == 'sd') fun <- 'stddev'
 	if (fun == 'var') fun <- 'variance'
@@ -107,8 +127,8 @@ fasterFocal <- function(
 	if (fun %in% c('average', 'stddev', 'variance') & !is.null(largeNum)) {
 
 		ex <- paste0('TEMPTEMPmult = ', sprintf('%.0f', largeNum), ' * ', inRastName)
-		fasterApp(inRastName, expression=ex, grassToR=FALSE, outGrassName='TEMPTEMPmult', grassDir=grassDir)
-		input[['rastNameInGrass']] <- 'TEMPTEMPmult'
+		fasterApp(inRastName, expression=ex, grassToR=FALSE, outGrassName='TEMPTEMPmult', replace=replace, grassDir=grassDir)
+		input[['raster']] <- 'TEMPTEMPmult'
 
 	}
 
@@ -149,7 +169,6 @@ fasterFocal <- function(
 		sink()
 		
 	}
-		
 
 	# no mask
 	if (is.null(mask)) {
@@ -159,18 +178,15 @@ fasterFocal <- function(
 		
 			# no weighting function
 			if (is.null(weightFx)) {
-				print('A')
 				rgrass::execGRASS('r.neighbors', input=input, size=size, method=fun, output=outGrassName, flags=theseFlags, quantile=quantile, nprocs=cores)
 			# weighting function
 			} else {
-				print('B')
 				weightFx <- tolower(weightFx)
 				rgrass::execGRASS('r.neighbors', input=input, size=size, method=fun, output=outGrassName, flags=theseFlags, weighting_function=weightFx, weighting_factor=weightFactor, quantile=quantile, nprocs=cores)
 			}
 		
 		# weight (will always have weighting function = 'file')
 		} else {
-			print('C')
 			rgrass::execGRASS('r.neighbors', input=input, size=size, method=fun, output=outGrassName, flags=theseFlags, weight=weightFileBack, weighting_function=weightFx, quantile=quantile, nprocs=cores)
 		}
 			
@@ -178,25 +194,22 @@ fasterFocal <- function(
 	} else {
 	
 		maskName <- ifelse(is.null(names(mask)), 'TEMPTEMPmask', names(mask))
-		exportRastToGrass(mask, inRastName=maskName)
+		fasterRast(mask, inRastName=maskName, replace=replace)
 		
 		# no weight
 		if (!inherits(w, 'matrix')) {
 		
 			# no weighting function
 			if (is.null(weightFx)) {
-				print('D')
 				rgrass::execGRASS('r.neighbors', input=input, size=size, method=fun, output=outGrassName, flags=theseFlags, quantile=quantile, nprocs=cores, selection=maskName)
 			# weighting function
 			} else {
-				print('E')
 				weightFx <- tolower(weightFx)
 				rgrass::execGRASS('r.neighbors', input=input, size=size, method=fun, output=outGrassName, flags=theseFlags, weighting_function=weightFx, weighting_factor=weightFactor, quantile=quantile, nprocs=cores, selection=maskName)
 			}
 		
 		# weight (will always have weighting function)
 		} else {
-			print('F')
 			rgrass::execGRASS('r.neighbors', input=input, size=size, method=fun, output=outGrassName, flags=theseFlags, weight='TEMPTEMPweights.txt', weighting_function=weightFx, quantile=quantile, nprocs=cores, selection=maskName)
 		}
 	
@@ -205,14 +218,13 @@ fasterFocal <- function(
 	if (fun %in% c('average', 'stddev', 'variance') & !is.null(largeNum)) {
 
 		ex <- paste0(outGrassName, ' = ', outGrassName, ' / ', sprintf('%.0f', largeNum))
-		fasterApp(inRastName, expression=ex, grassToR=FALSE, outGrassName=outGrassName, grassDir=grassDir)
+		fasterApp(inRastName, expression=ex, grassToR=FALSE, outGrassName=outGrassName, replace=replace, grassDir=grassDir)
 
 	}
 
 	if (grassToR) {
 
-		out <- rgrass::read_RAST(outGrassName, flags='quiet')
-		names(out) <- outGrassName
+		out <- fasterWriteRaster(outGrassName, paste0(tempfile(), '.tif'), overwrite=TRUE)
 		out
 		
 	}

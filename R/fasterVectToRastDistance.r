@@ -6,7 +6,12 @@
 #' @inheritParams .sharedArgs_vect
 #' @inheritParams .sharedArgs_inRastName
 #' @inheritParams .sharedArgs_inVectName
-#' @inheritParams .sharedArgs_grassDir_grassToR_outGrassName
+#' @inheritParams .sharedArgs_replace
+#' @inheritParams .sharedArgs_grassDir
+#' @inheritParams .sharedArgs_grassToR
+#' @inheritParams .sharedArgs_outGrassName
+#' @inheritParams .sharedArgs_dots_forInitGrass_andGrassModule
+#'
 #' @param metric Character, indicates type of distance to calculate:
 #' \itemize{
 #' \item \code{euclidean}: Euclidean distance
@@ -17,7 +22,7 @@
 #' } 
 #' @param meters Logical, if \code{TRUE} then distance is in meters. If \code{FALSE} then distance is in map units.
 #' @param invert Logical, if \code{TRUE} then for cells covered by a vector object calculate distance to nearest cell \emph{not} covered by a vector object.
-#' @param ... Arguments to pass to \code{\link[rgrass]{execGRASS}} when used for rasterizing (i.e., function \code{r.grow.distance} in \code{GRASS}).
+#' @param ... Arguments to pass to \code{GRASS} module \href{https://grass.osgeo.org/grass82/manuals/r.grow.distance.html}{\code{r.grow.distance}}.
 #'
 #' @return If \code{grassToR} if \code{TRUE}, then a raster with the same extent, resolution, and coordinate reference system as \code{vect}. Regardless, a raster with the name of \code{distToVect} is written into the \code{GRASS} session.
 #'
@@ -30,23 +35,27 @@
 fasterVectToRastDistance <- function(
 	rast,
 	vect,
+	inRastName,
+	inVectName,
 	metric = 'euclidean',
 	meters = TRUE,
-	invert = FALSE,
-	grassDir = options()$grassDir,
-	grassToR = TRUE,
-	inRastName = NULL,
-	inVectName = NULL,
+	invert = FALSE,	
 	outGrassName = 'distToVectRast',
+	
+	replace = fasterGetOptions('replace', FALSE),
+	grassToR = fasterGetOptions('grassToR', TRUE),
+	autoRegion = fasterGetOptions('autoRegion', TRUE),
+	grassDir = fasterGetOptions('grassDir', NULL),
 	...
 ) {
 
-	flags <- flags_vToRast <- flags_rGrowDistance <- c('quiet', 'overwrite')
+	flags <- .getFlags(replace=replace)
+	flags_vToRast <- flags_rGrowDistance <- flags
 	if (meters) flags_rGrowDistance <- c(flags_rGrowDistance, 'm')
 	if (invert) flags_rGrowDistance <- c(flags_rGrowDistance)
 	
 	# rasterize vector: creates raster named "distToVect"
-	fasterRasterize(vect=vect, rast=rast, use='value', value=1, grassDir=grassDir, grassToR=FALSE, inRastName=inRastName, inVectName=inVectName, outGrassName='vectToRast', ...)
+	fasterRasterize(vect=vect, rast=rast, use='value', value=1, grassDir=grassDir, grassToR=FALSE, inRastName=inRastName, inVectName=inVectName, replace=replace, outGrassName='vectToRast', inits=inits, ...)
 	
 	# calculate distance
 	rgrass::execGRASS('r.grow.distance', input='vectToRast', distance=outGrassName, metric=metric, flags=flags_rGrowDistance, ...)
@@ -54,8 +63,7 @@ fasterVectToRastDistance <- function(
 	# return
 	if (grassToR) {
 	
-		out <- rgrass::read_RAST(outGrassName, flags='quiet')
-		names(out) <- outGrassName
+		out <- fasterWriteRaster(outGrassName, paste0(tempfile(), '.tif'), overwrite=TRUE)
 		out
 		
 	}

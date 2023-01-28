@@ -4,7 +4,10 @@
 #'
 #' @inheritParams .sharedArgs_rast
 #' @inheritParams .sharedArgs_inRastName
-#' @inheritParams .sharedArgs_grassDir_grassToR
+#' @inheritParams .sharedArgs_replace
+#' @inheritParams .sharedArgs_grassDir
+#' @inheritParams .sharedArgs_grassToR
+#' @inheritParams .sharedArgs_dots_forInitGrass_andGrassModule
 #'
 #' @param mask Logical. If \code{TRUE} (default), cells that have \code{NA}s in \code{rast} will also have \code{NA}s in the output rasters.
 #' @param outGrassName Character vector with two elements, one for longitude and one for latitude.  Name of output in \pkg{GRASS}. This is useful if you want to refer to the output objects in \code{GRASS} later in a \code{GRASS} session.
@@ -19,17 +22,32 @@
 
 fasterLongLatRasts <- function(
 	rast,
+	inRastName,
 	mask = TRUE,
-	grassDir = options()$grassDir,
-	grassToR = TRUE,
-	inRastName = NULL,
-	outGrassName = c('longitudeRast', 'latitudeRast')
+	outGrassName = c('longitudeRast', 'latitudeRast'),
+
+	replace = fasterGetOptions('replace', FALSE),
+	grassToR = fasterGetOptions('grassToR', TRUE),
+	autoRegion = fasterGetOptions('autoRegion', TRUE),
+	grassDir = fasterGetOptions('grassDir', NULL),
+	...
 ) {
 
-	flags <- c('quiet', 'overwrite')
+	### begin common
+	flags <- .getFlags(replace=replace)
+	inRastName <- .getInRastName(inRastName, rast)
+	# if (is.null(inVectName)) inVectName <- 'vect'
 	
-	# initialize GRASS
-	input <- initGrass(rast=rast, vect=NULL, inRastName=inRastName, inVectName=NULL, grassDir=grassDir)
+	# # region settings
+	# success <- .rememberRegion()
+	# on.exit(.restoreRegion(), add=TRUE)
+	# on.exit(regionResize(), add=TRUE)
+	
+	if (is.null(inits)) inits <- list()
+	### end common
+
+	inits <- c(inits, list(rast=rast, vect=NULL, inRastName=inRastName, inVectName=NULL, replace=replace, grassDir=grassDir))
+	input <- do.call('initGrass', inits)
 	
 	# calculate longitude/latitude
 	rgrass::execGRASS('r.latlong', input=input, output=outGrassName[1], flags=c(flags, 'l'))
@@ -38,16 +56,16 @@ fasterLongLatRasts <- function(
 	if (mask) {
 
 		ex <- paste0(outGrassName[1L], ' = if(isnull(', inRastName, '), null(), ', outGrassName[1L], ')')
-		fasterApp(outGrassName[1L], expression=ex, grassDir=grassDir, grassToR=FALSE)
+		fasterApp(outGrassName[1L], expression=ex, replace=replace, grassDir=grassDir, grassToR=FALSE)
 		
 		ex <- paste0(outGrassName[2L], ' = if(isnull(', inRastName, '), null(), ', outGrassName[2L], ')')
-		fasterApp(outGrassName[2L], expression=ex, grassDir=grassDir, grassToR=FALSE)
+		fasterApp(outGrassName[2L], expression=ex, replace=replace, grassDir=grassDir, grassToR=FALSE)
 		
 	}
 	
 	if (grassToR) {
-		long <- rgrass::read_RAST(outGrassName[1L], flags='quiet')
-		lat <- rgrass::read_RAST(outGrassName[2L], flags='quiet')
+		long <- fasterWriteRaster(outGrassName[1L], paste0(tempfile(), '.tif'), overwrite=TRUE)
+		lat <- fasterWriteRaster(outGrassName[2L], paste0(tempfile(), '.tif'), overwrite=TRUE)
 		out <- c(long, lat)
 		names(out) <- outGrassName
 		out

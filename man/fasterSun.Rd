@@ -2,7 +2,7 @@
 % Please edit documentation in R/fasterSun.r
 \name{fasterSun}
 \alias{fasterSun}
-\title{Rasters of solar radiance and irradiation}
+\title{Solar radiance and irradiation rasters}
 \usage{
 fasterSun(
   elevation,
@@ -26,9 +26,10 @@ fasterSun(
   refl_rad = TRUE,
   glob_rad = TRUE,
   insol_time = TRUE,
-  grassDir = options()$grassDir,
+  replace = FALSE,
   grassToR = TRUE,
-  ...
+  grassDir = options()$grassDir,
+  inits = NULL
 )
 }
 \arguments{
@@ -72,9 +73,13 @@ fasterSun(
 
 \item{insol_time}{Logical. If \code{TRUE} (default), generate a raster with total insolation time in hours ("mode 2" of the \code{r.sun} \code{GRASS} module).}
 
-\item{grassDir}{Name of the folder path in which \code{GRASS} is installed. For a Windows system, this might be something like \code{'C:/Program Files/GRASS GIS 8.2'}. For a Mac system, this might be like \code{"/Applications/GRASS-8.2.app/Contents/Resources"}. If you are using a lot of \pkg{fasterRaster} functions, it can be easier to set this once using \code{\link{fasterOptions}}. By default, this is \code{NULL}, in which case the install path for \code{GRASS} will be searched for, but if not found, will result in an error.}
+\item{replace}{Logical or \code{NULL}. If \code{FALSE} or \code{NULL} (default), then attempting to overwrite rasters or vectors already in a \code{GRASS} session will result in an error. You can allow overwriting by changing this to \code{TRUE}, or by setting \code{inRastName}, \code{inVectName}, and/or \code{outGrassName} to values different from rasters or vectors that already exist in the session (not all functions have these arguments). Use \code{\link{fasterLs}} to see existing rasters and vectors.  You can set this for all functions at once using \code{\link{fasterOptions}}.}
 
-\item{grassToR}{If \code{TRUE} (default) then the output will be returned to \pkg{R}. If \code{FALSE}, then the output is left in the \code{GRASS} session and named the value in \code{outGrassName}. You can then refer to the output in subsequent \pkg{fasterRaster} functions and avoid the need to re-import it. This is called "chaining" functions together, and it can save a lot of computational time.}
+\item{grassToR}{Logical or \code{NULL}. If \code{TRUE} or \code{NULL} (default) then the output will be returned to \code{R}. If \code{FALSE}, then the output is left in the \code{GRASS} session (with the name given by \code{outGrassName}). You can set this argument for all functions at once using \code{\link{fasterOptions}}.}
+
+\item{grassDir}{Character or \code{NULL}. Name of the path in which \code{GRASS} is installed. For a Windows system, this might be something like \code{'C:/Program Files/GRASS GIS 8.3'}, for a Mac, like \code{"/Applications/GRASS-8.3.app/Contents/Resources"}, and for Linux like \code{'/usr/local/grass'}. If you are using a lot of \pkg{fasterRaster} functions, you can set this for all functions at once using \code{\link{fasterOptions}}. By default, this is \code{NULL}, in which case the install path for \code{GRASS} will be searched for, but if not found, will result in an error (usually the case).}
+
+\item{inits}{Either \code{NULL} (default), or a named list of arguments to pass to \code{\link{initGrass}}. If \code{NULL}, then the current active \code{GRASS} session is used, or a new one in the "default" location is created.}
 
 \item{time}{Positive numeric. Local solar time. Used for "mode 1" in the \code{r.sun} \code{GRASS} module. Default is \code{NULL} (i.e., use "mode 2").}
 }
@@ -108,8 +113,8 @@ grassDir=grassDir)
 # beam and diffuse radiation fractions... assuming they are both 1
 # (must be between 0 an 1)
 coeff_bh <- coeff_dh <- madElev * 0 + 1
-exportRastToGrass(coeff_bh, grassName='coeff_bh')
-exportRastToGrass(coeff_dh, grassName='coeff_dh')
+fasterRast(coeff_bh, grassName='coeff_bh')
+fasterRast(coeff_dh, grassName='coeff_dh')
 
 # calculate horizon height rasters... to reduce time just using 90 deg steps
 fasterHorizon('elevation', units='radians', directions=c(0, 90, 180, 

@@ -2,22 +2,26 @@
 #'
 #' This function creates a raster from mathematical or logical operations on one or more rasters.
 #'
-#' @inheritParams .sharedArgs_rast_plural
-#' @inheritParams .sharedArgs_inRastName_plural
-#' @inheritParams .sharedArgs_grassDir_grassToR
+#' @inheritParams .sharedArgs_rast_multiple
+#' @inheritParams .sharedArgs_inRastName_multiple
+#' @inheritParams .sharedArgs_replace
+#' @inheritParams .sharedArgs_grassDir
+#' @inheritParams .sharedArgs_grassToR
 #' @inheritParams .sharedArgs_outGrassName
+#' @inheritParams .sharedArgs_autoRegion
+#' @inheritParams .sharedArgs_dots_forInitGrass_andGrassModule
 #'
-#' @param expression Character. Formula to evaluate. Below are examples where the input raster is named "rast" in the \code{GRASS} session and the output raster will be named "out". Note that raster must be referred to in formulae using their raster name (not name in R). In other words, in the examples below we could call a raster in R \code{myRast} but \code{names(myRast)} yields \code{rast}, so we need to call it "\code{rast}" in the formulae. The raster "\code{out}" will be created by the function. You also need to put spaces before and after the equals sign (e.g., \code{out = 2 * rast}, but not \code{out=2 * rast}).
+#' @param expression Character. Formula to evaluate. Below are examples where the input raster is named "rast" Note that unlike in the \code{GRASS} \href{https://grass.osgeo.org/grass82/manuals/r.mapcalc.html}{\code{r.mapcalc}} module, the expression should \emph{not} start with the name of the output or an equals sign. The output raster is named by \code{outGrassName}, and this will be created by executing the formula.
 #' \itemize{
-#' \item Take the input raster "rast", multiplies each cell by 0, then adds 1 to each cell: \code{'out = (rast * 0) + 1'}
-#' \item Take the input raster "rast", multiplies square the value of each cell: \code{'out = rast^2'}
-#' \item Take the input raster "rast" (implicitly), and sets each cell value to 17: \code{'out = 17'}
-#' \item Take the input rasters "rast1" and "rast2", and multiplies them together. Note that in this case, \code{rast} will actually be a \code{SpatRaster} object with two layers named "rast1" and "rast2": \code{'out = rast1 * rast2'}
-#' \item Take the input raster "rast" and redefines each cell value to equal the sum of it and the four cells in the rooks's neighborhood (north, south, east, west of it): \code{'out = rast[0, 0] + rast[-1, 0] + rast[0, -1] + rast[0, 1] + rast[1, 0]'}
-#' \item Low-pass (averaging) filter across a 3x3 neighborhood: \code{'out = (rast[-1, -1] + rast[-1, 0] + rast[-1, 1] + rast[0, -1] + rast[0, 0] + rast[0, 1] + rast[1, -1] + rast[1, 0] + rast[1, 1]) / 9'}
-#' \item High-pass ("edge-finding") filter across a 3x3 neighborhood: \code{'out = -0.7 * rast[-1, -1] -1 * rast[-1, 0] -0.7 * rast[-1, 1] -1 * rast[0, -1] + 6.8 * rast[0, 0] -1 * rast[0, 1] -0.7 * rast[1, -1] -1 * rast[1, 0] -0.7 * rast[1, 1]'}
+#' \item Take the input raster "rast", multiplies each cell by 0, then adds 1 to each cell: \code{'= (rast * 0) + 1'}
+#' \item Take the input raster "rast", multiplies square the value of each cell: \code{'= rast^2'}
+#' \item Take the input raster "rast" (implicitly), and sets each cell value to 17: \code{'= 17'}
+#' \item Take the input rasters "rast1" and "rast2", and multiplies them together. Note that in this case, argument \code{rast} will actually be a \code{SpatRaster} "stack" of two rasters with later names "rast1" and "rast2": \code{'= rast1 * rast2'}
+#' \item Take the input raster "rast" and redefines each cell value to equal the sum of it and the four cells in the rooks's neighborhood (north, south, east, west of it): \code{'= rast[0, 0] + rast[-1, 0] + rast[0, -1] + rast[0, 1] + rast[1, 0]'}
+#' \item Low-pass (averaging) filter across a 3x3 neighborhood: \code{'(= rast[-1, -1] + rast[-1, 0] + rast[-1, 1] + rast[0, -1] + rast[0, 0] + rast[0, 1] + rast[1, -1] + rast[1, 0] + rast[1, 1]) / 9'}
+#' \item High-pass ("edge-finding") filter across a 3x3 neighborhood: \code{'= -0.7 * rast[-1, -1] -1 * rast[-1, 0] -0.7 * rast[-1, 1] -1 * rast[0, -1] + 6.8 * rast[0, 0] -1 * rast[0, 1] -0.7 * rast[1, -1] -1 * rast[1, 0] -0.7 * rast[1, 1]'}
 #' }
-#' See the documentation for \code{r.mapcalc}{https://grass.osgeo.org/grass82/manuals/r.mapcalc.html} for more information. Note that some operations that may make sense in \code{GRASS} may not make sense when exported back to R (e.g., changing color).
+#' See the documentation for \href{https://grass.osgeo.org/grass82/manuals/r.mapcalc.html}{\code{r.mapcalc}} for more information. Note that some operations that may make sense in \code{GRASS} may not make sense when exported back to R (e.g., changing color).
 #'
 #' @return If \code{grassToR} if \code{TRUE}, then a raster object with the same coordinate reference system, extent, and resolution as \code{rast}. Regardless, a raster by a name given in \code{expression} (before the "=" symbol) is written into the \code{GRASS} session.
 #'
@@ -31,37 +35,72 @@
 
 fasterApp <- function(
 	rast,
+	inRastName,
 	expression,
-	grassDir = options()$grassDir,
-	grassToR = TRUE,
-	inRastName = NULL,
-	outGrassName = 'appRast'
+	outGrassName = 'appRast',
+	replace = fasterGetOptions('replace', FALSE),
+	grassToR = fasterGetOptions('grassToR', TRUE),
+	autoRegion = fasterGetOptions('autoRegion', TRUE),
+	grassDir = fasterGetOptions('grassDir', NULL),
+	...
 ) {
 
-	flags <- c('quiet', 'overwrite')
-	
-	if (!inherits(rast, 'SpatRaster') & !inherits(rast, 'character')) rast <- terra::rast(rast)
-	
-	### export rasters
-	if (inherits(rast, 'SpatRaster')) {
+	### commons v1
+	##############
 
-		numRasts <- terra::nlyr(rast)
-		rastNames <- names(rast)
+		### arguments
+		if (exists('rast', where=environment(), inherits=FALSE)) {
+			inRastName <- .getInRastName(inRastName, rast)
+		} else {
+			rast <- inRastName <- NULL
+		}
+
+		if (exists('vect', where=environment(), inherits=FALSE)) {
+			inVectName <- .getInVectName(inVectName, vect=vect)
+		} else {
+			vect <- inVectName <- NULL
+		}
+
+		### flags
+		flags <- .getFlags(replace=replace)
+		
+		### restore
+		# on.exit(.restoreLocation(), add=TRUE) # return to starting location
+		if (autoRegion) on.exit(regionExt('*'), add=TRUE) # resize extent to encompass all spatials
+
+		### ellipses and initialization arguments
+		initsDots <- .getInitsDots(..., callingFx = 'fasterApp')
+		inits <- initsDots$inits
+		dots <- initsDots$dots
 	
-		inRastName <- .getInRastName(inRastName, rast)
-		input <- initGrass(rast=rast, vect=NULL, inRastName=inRastName, inVectName=NULL, grassDir=grassDir)
-	
-	}
+	### function-specific
 
 	# execute
-	rgrass::execGRASS('r.mapcalc', expression=expression, flags=flags)
+	if (!is.character(expression)) stop('Argument "expression" must be a text string.')
+	expression <- trimws(expression)
+	if (substr(expression, 1, 1) == '=' & substr(expression, 2, 2) != ' ') stop('An expression must begin with an equals sign then a space.')
+	if (substr(expression, 1, 1) != '=') expression <- paste0('= ', expression)
+	expression <- paste(outGrassName, expression)
+
+	args <- list(
+		cmd = 'r.mapcalc',
+		expression = expression,
+		flags = flags
+	)
+	args <- c(args, dots)
+
+	### initialize GRASS
+	input <- do.call('initGrass', inits)
+
+	### execute
 	
+	if (autoRegion) regionReshape(inRastName)
+	do.call(rgrass::execGRASS, args=args)
+
 	if (grassToR) {
 
-		outRastName <- substr(expression, 1, regexpr(pattern='=', expression) - 1)
-		outRastName <- trimws(outRastName)
-		out <- rgrass::read_RAST(outRastName, flags='quiet')
-		names(out) <- outGrassName
+		out <- fasterWriteRaster(outGrassName, paste0(tempfile(), '.tif'), overwrite=TRUE)
+		out <- terra::setMinMax(out)
 		out
 		
 	}

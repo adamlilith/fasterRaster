@@ -118,6 +118,22 @@ Here is an example of chaining with the `faster` function. The second function u
 
 Here, we used the product of the first \code{faster} call, which is named `'lat'`, as the input to the second `faster` call. Note that we could have also used `'madElev'` as the input to the second, since it was also already in **GRASS**.
 
+## Saving rasters ##
+
+For some reason, if you create or export a raster to **GRASS**, then import it back to \code{R}, saving it using **terra**'s `writeRaster` function automatically forces the `datatype` of the raster to a low-bit integer. As a result, values are truncated to integers and forced to a specific range (or coerced to `NA`). You can overcome this simply by saving these rasters using, for example:
+
+`writeRaster(rasterToSave, 'C:/pathToSave/fileName.tif', datatype='FLT4S')` or  
+`writeRaster(rasterToSave, 'C:/pathToSave/fileName.tif', datatype='FLT8S')`
+
+Here, the important part is the `datatype` argument, which in these two examples says to save the raster values as a 32-bit or 64-bit floating point values that are signed (can be negative or positive). Alternatively, you can also use these functions as shorthand to save in 32- or 64-bit signed, floating format:
+
+`writeRaster4(rasterToSave, 'C:/pathToSaveTo/fileName.tif')`  
+`writeRaster8(rasterToSave, 'C:/pathToSaveTo/fileName.tif')`
+
+You can also save rasters directly from a `GRASS` session using:
+
+`fasterWriteRaster(rasterNameInGrass, 'pathAndFileName.tif')`
+
 # Functions #
 
 ### Getting help
@@ -126,53 +142,80 @@ Here, we used the product of the first \code{faster} call, which is named `'lat'
 
 ### *Faster* functions that do operations on rasters
 * `fasterApp`: Apply user-defined function to one or more rasters (using **GRASS**; see also `fasterFocal`).
-* `fasterBufferRast`: Add buffer to cells in a raster (using **GRASS**).
-* `fasterContour`: Calculate contour vectors from a raster (using **GRASS**).
-* `fasterConvertDegree`: Convert degrees from **GRASS** format (0 = east, 90 = north) to standard (0 = north, 90 = east) (using **GRASS**).
+* `fasterBufferRast`: Add buffer to cells in a raster.
+* `fasterContour`: Calculate contour vectors from a raster.
+* `fasterConvertDegree`: Convert degrees from "0 = east and 90 = north" format to "0 = north and 90 = east" format.
+* `fasterCropRast`: Crop a raster to the region of overlap with another raster or vector.
 * `fasterFocal`: Faster focal calculations (see also `fasterApp`).
 * `fasterFragmentation`: Fragmentation indices following Riitters et al. (2000 Conservation Ecology 4:3).
-* `fasterHorizon`: Horizon angle height from a DEM (using **GRASS**).
-* `fasterInfoRast`: Information on a vector in a **GRASS** session.
-* `fasterLongLatRasts`: Create rasters with values equal to cell longitude and latitude (using **GRASS**).
-* `fasterMosaic`: Combine rasters that do not overlap perfectly (using **GRASS**).
-* `fasterProjectRast`: Project and resample raster (using **GRASS**).
-* `fasterQuantile`: Quantiles of values in a raster (using **GRASS**).
-* `fasterRastDistance`: Distance from cells with `NA`s to closest non-`NA` cell (or the inverse of this) (using **GRASS**).
-* `fasterSun`: Solar irradiance and radiance (using **GRASS**).
-* `fasterSurfFract`: Generate a raster with a fractal pattern (using **GRASS**).
-* `fasterTerrain`: Slope, aspect, and curvature (using **GRASS**).
-* `fasterTopidx`: Topographic wetness index (using **GRASS**).
-* `fasterVectorize`: Convert raster to spatial points, lines, or polygons (using **GRASS**).
+* `fasterHorizon`: Horizon angle height from a DEM.
+* `fasterInfo`: Information on one or more rasters or vectors in a **GRASS** session.
+* `fasterLongLatRasts`: Create rasters with values equal to cell longitude and latitude.
+* `fasterMosaic`: Combine rasters that do not overlap perfectly.
+* `fasterProjectRast`: Project and resample raster.
+* `fasterQuantile`: Quantiles of values in a raster.
+* `fasterRast`: Export raster to an active **GRASS** session.
+* `fasterRastDistance`: Distance from cells with `NA`s to closest non-`NA` cell (or the inverse of this).
+* `fasterSun`: Solar irradiance and radiance.
+* `fasterFractalRast`: Generate a raster with a fractal pattern.
+* `fasterTerrain`: Slope, aspect, and curvature.
+* `fasterTWIdx`: Topographic wetness index.
+* `fasterTrimRast`: Remove all rows and columns of a raster that are entirely NA.
+* `fasterVectorize`: Convert raster to spatial points, lines, or polygons.
+* `importFromGrass`: Import a raster or vector from a **GRASS** session into `R`.
 
 ### *Faster* functions that operate on vectors
-* `fasterInfoVect`: Information on a vector in a **GRASS** session.
-* `fasterProjectVect`: Project a spatial vector (using **GRASS**).
-* `fasterRasterize`: Convert vector to a raster (using **GRASS**.
+* `fasterBufferVect`: Create a buffer around a spatial vector.
+* `fasterConvHull`: Minimum convex hull around a spatial vector.
+* `fasterDelaunay`: Delauney triangulation for points.
+* `fasterInfo`: Information on one or more rasters or vectors in a **GRASS** session.
+* `fasterProjectVect`: Project a spatial vector.
+* `fasterRasterize`: Convert vector to a raster.
+* `fasterVect`: Export spatial vector to an active **GRASS** session.
+* `fasterVoronoi`: Voronoi diagrams for points or polygons.
+* `fasterWriteVector`: Save one or more vectors to disk directly from a **GRASS** session.
+* `importFromGrass`: Import a raster or vector from a **GRASS** session into `R`.
 
 ### *Faster* functions that operate on rasters and vectors simultaneously
-* `fasterVectToRastDistance`: Distance between raster cells and a vector (using **GRASS**).
+* `faster`: Generic call to a **GRASS** module.
+* `fasterVectToRastDistance`: Distance between raster cells and a vector.
 
 ### Generic *faster* function for rasters and/or vectors
 * `faster`: Generic call to a **GRASS** module.
 
 ### Utility functions
-* `exportRastToGrass`: Export raster to an open **GRASS** session.
-* `exportVectToGrass`: Export vector to an open **GRASS** session.
+* `compareFloat`: Compare values accounting for differences due to floating point precision.
 * `fasterCRS`: Information on the coordinate reference system in the current **GRASS** session.
 * `fasterExt`: Spatial extent of a **GRASS** session.
 * `fasterLs`: Names of all rasters and/or vectors in a **GRASS** session.
-* `fasterRes`: Spatial resolution of a **GRASS** session.
 * `fasterRm`: Remove raster(s) and/or vector(s) from a **GRASS** session.
 * `initGrass`: Initialize a **GRASS** session using a raster or vector as a template.
+* `writeRaster4` and `writeRaster8`: Save a raster exported from **GRASS** to disk.
+* `importFromGrass`: Import a raster or vector from a **GRASS** session into `R`.
+
+### Functions affecting `GRASS` "regions" (rarely used by most users):
+* `regionDim`: Number of rows and columns of a region.
+* `regionExt`: Extent of a region.
+* `regionNcell`: Number of cells of a region.
+* `regionNcol`: Number of columns of a region.
+* `regionNrow`: Number of rows of a region.
+* `regionRes`: Spatial resolution of a region.
+* `regionResample`: Change resolution of a region.
+* `regionReshape`: Change extent and resolution of a region using a raster or vector as a template.
+* `regionResize`: Change extent of a region.
+* `setGrassVer`: Sets version of **GRASS** for use by `fasterHelp()` function
 
 ### Data
 All spatial data represents features in a portion of eastern Madagascar.
 * `fasterData`: Load any of the spatial datasets
-* `madCoast0` and `madCoast4`: Outlines of a portion of eastern Madagascar (`sf` spatial vectors)
-* `madChelsa`: Bioclimatic rasters for a portion of eastern Madagascar (`SpatRaster` raster)
-* `madElev`: Elevation (`SpatRaster` raster)
-* `madForest2000` and `madForest2014`: Forest cover in 2000 and 2014 (`SpatRaster` raster)
-* `madRivers`: Major rivers (`sf` spatial vector)
+* `madCoast0` and `madCoast4`: Outlines of a portion of eastern Madagascar
+* `madChelsa`: Bioclimatic rasters for a portion of eastern Madagascar
+* `madDypsis`: Records of the genus *Dypsis* (slender, evergreen palms)
+* `madElev`: Elevation raster
+* `madElevAnt: Elevation raster for the Antanambe Commune of Madagascar
+* `madElevMan: Elevation raster for the Manompana Commune of Madagascar
+* `madForest2000` and `madForest2014`: Forest cover rasters for 2000 and 2014
+* `madRivers`: Major rivers
 
 # Citation #
 As of December, 2022, there is not a package-specific citation for **fasterRaster**, but the package was first used in:

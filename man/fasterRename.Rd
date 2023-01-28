@@ -4,12 +4,16 @@
 \alias{fasterRename}
 \title{Rename a raster or vector in an existing GRASS session}
 \usage{
-fasterRename(from, to, type = NULL)
+fasterRename(from, to, type = NULL, replace = FALSE, warn = TRUE)
 }
 \arguments{
 \item{from, to}{Names of the raster or vector to rename.}
 
 \item{type}{Either \code{'raster'} and/or \code{'vector'}, or \code{NULL} (default). This specifies the type of file to be renamed. Partial matching is allowed. If left as \code{NULL} (default), the function will rename any raster or vector with the given name. Note that unlike in \pkg{R}, \code{GRASS} can have rasters with the same name as vectors.}
+
+\item{replace}{Logical or \code{NULL}. If \code{FALSE} or \code{NULL} (default), then attempting to overwrite rasters or vectors already in a \code{GRASS} session will result in an error. You can allow overwriting by changing this to \code{TRUE}, or by setting \code{inRastName}, \code{inVectName}, and/or \code{outGrassName} to values different from rasters or vectors that already exist in the session (not all functions have these arguments). Use \code{\link{fasterLs}} to see existing rasters and vectors.  You can set this for all functions at once using \code{\link{fasterOptions}}.}
+
+\item{If}{\code{TRUE} (default), print a warning when renaming a raster to the name of an existing raster or vector (which overwrite it).}
 }
 \value{
 The function invisibly returns \code{TRUE} if the desired rasters and/or vectors were named, and \code{FALSE} if raster and/or vector to be renamed did not exist in the \code{GRASS} session. Notably, a raster or vector or both are renamed in an existing \code{GRASS} session.
@@ -25,17 +29,22 @@ library(terra)
 
 # start a GRASS session with a raster
 madElev <- fasterData('madElev')
-initGrass(madElev, inRastName = 'madElev')
+initGrass(madElev)
 
 # import a vector
 madCoast0 <- fasterData('madCoast0')
-exportVectToGrass(madCoast0, inVectName = 'madCoast0')
+fasterVect(madCoast0, inVectName = 'madCoast0')
 
 # names of all rasters and vectors in the GRASS session
 fasterLs()
 
 # rename raster
 fasterRename('madElev', 'elevation')
+fasterLs()
+
+# copy raster
+fasterCopy('elevation', 'elevationCopy')
+fasterLs()
 
 # remove raster
 fasterRm('elevation')

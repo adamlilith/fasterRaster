@@ -1,31 +1,37 @@
 # Examples with scalar and scalar vector:
-fasterConvertDegree(0, grassDir)
+fasterConvertDegree(0)
 fasterConvertDegree(seq(0, 360, by=90))
 
+# Examples with a raster
 \dontrun{
+# IMPORTANT: These function use the "location", "restartGrass", and
+# "warn" arguments to avoid interfering with an existing GRASS session.
+# WHEN YOU ARE DONE WITH THE EXAMPLES, run this line to revert to your
+# active GRASS session:
+# initGrass(location='default') # change "location" if not "default"
 
+# IMPORTANT: Change this to where GRASS is installed on your system.
+grassDir <- "/Applications/GRASS-8.2.app/Contents/Resources" # Mac
+grassDir <- 'C:/Program Files/GRASS GIS 8.2' # Windows
+grassDir <- '/usr/local/grass' # Linux
+
+library(sf)
 library(terra)
 
-# change this according to where GRASS is installed on your system
-grassDir <- 'C:/Program Files/GRASS GIS 8.2' # example for a PC
-grassDir <- "/Applications/GRASS-8.2.app/Contents/Resources" # for a Mac
-
-# Example with a raster:
-# First, generate an aspect raster from an elevation raster.
-# This is a contrived example because we could set the argument northIs0 in
-# fasterTerrain() to TRUE and get the raster we will name aspNorthIs0 from
-# that function in one step. Note that this could be done faster by
-# "chaining" fasterTerrain() and fasterConvertDegree().
 madElev <- fasterData('madElev')
 
-aspEastIs0 <- fasterTerrain(madElev, metrics='aspect', northIs0=FALSE,
-grassDir=grassDir)
+# calculate slope with east = 0 (default is for north = 0)
+aspEastIs0 <- fasterTerrain(madElev, v='aspect',
+northIs0=FALSE, grassDir=grassDir,
+location='examples', restartGrass=TRUE, warn=FALSE) # line for examples only
 
+# convert to north = 0
 aspNorthIs0 <- fasterConvertDegree(aspEastIs0, grassDir=grassDir)
 
-oldPar <- par(mfrow=c(1, 2))
-plot(aspEastIs0, main='0 deg = east')
-plot(aspNorthIs0, main='0 deg = north')
-par(oldPar)
+plot(c(aspEastIs0, aspNorthIs0), main=c('east = 0', 'north = 0'))
+
+# Revert back to original GRASS session if needed.
+# Change to your working location if not "default" (it usually is).
+initGrass(location='default')
 
 }

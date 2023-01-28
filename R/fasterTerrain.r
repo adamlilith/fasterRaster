@@ -4,23 +4,32 @@
 #'
 #' @inheritParams .sharedArgs_rast
 #' @inheritParams .sharedArgs_inRastName
-#' @inheritParams .sharedArgs_grassDir_grassToR
-#' @param metrics Name of the topographic metric(s) to calculate. Valid values include one or more of:
+#' @inheritParams .sharedArgs_replace
+#' @inheritParams .sharedArgs_grassDir
+#' @inheritParams .sharedArgs_grassToR
+#' @inheritParams .sharedArgs_dots_forInitGrass_andGrassModule
+#'
+#' @param v Name of the topographic metric(s) to calculate. Valid values include one or more of:
 #' \itemize{
-#' 	\item \code{'slope'}: Slope. Units are given by argument \code{slopeUnits}.
+#' 	\item \code{'slope'}: Slope. Units are given by argument \code{units}.
 #' 	\item \code{'aspect'}: Aspect. When argument \code{northIs0} is \code{TRUE} (default), then aspect is given in degrees from north going clockwise (0 = north, 90 = east, 180 = south, 270 = west).
 #' 	\item \code{'profileCurve'}: Profile curvature.
 #' 	\item \code{'tanCurve'}: Tangential curvature.
-#' 	\item \code{'ewSlope'}: Slope in east-west direction.
-#' 	\item \code{'nsSlope'}: Slope in north-south direction.
+#' 	\item \code{'ewSlope'}: Slope in east-west direction (\emph{dx}).
+#' 	\item \code{'nsSlope'}: Slope in north-south direction  (\emph{dy}).
+#' 	\item \code{'ewCurve'}: Second partial derivative in east-west direction (\emph{dxx}).
+#' 	\item \code{'nsCurve'}: Second partial derivative in north-south direction (\emph{dy}).
+#' 	\item \code{'nsewCurve'}: Second partial derivative along east-west and north-south direction (\emph{dxy}).
+#'	\item \code{'*'}: All of the above.
 #' }
-#' @param slopeUnits Character, "units" in which to calculate slope: either \code{'degrees'} for degrees (default) or \code{'percent'}.
+#' @param units Character, "units" in which to calculate slope: either \code{'degrees'} for degrees (default) or \code{'percent'}.
 #' @param northIs0 Logical. If \code{TRUE} (default), aspect will be reported such that 0 is north, and degrees run clockwise (90 is east, 180 south, 270 west). If \code{FALSE}, then aspect will be reported such that 0 is east, and degrees run counterclockwise (90 is north, 180 west, 270 south). The latter is the default in \code{GRASS}, but the former is the default in \pkg{terra}'s \code{\link[terra]{terrain}} function, so is used here as the default.
-#' @param outGrassName Name(s) of the rasters created in the \code{GRASS} session. Useful for chaining functions together. By default, these will be the values given in \code{metrics}.
+#' @param cores Number of processor cores to use. The default is 1.
+#' @param outGrassName Name(s) of the rasters created in the \code{GRASS} session. Useful for chaining functions together. By default, these will be the values given in \code{v}.
 #'
 #' @return If \code{grassToR} if \code{TRUE}, then a raster or raster stack with the same extent, resolution, and coordinate reference system as \code{rast}. Regardless, raster(s) given by the names in the \code{outGrassName} arguments are used are written into the \code{GRASS} session.
 #'
-#' @seealso \code{\link[terra]{terrain}} in \pkg{terra}; \href{https://grass.osgeo.org/grass82/manuals/r.slope.aspect.html}{\code{r.slope.aspect}} in \code{GRASS}
+#' @seealso \code{\link{fasterTWI}} in \pkg{fasterRaster}; \code{\link[terra]{terrain}} in \pkg{terra}; \code{GRASS} module \href{https://grass.osgeo.org/grass82/manuals/r.slope.aspect.html}{\code{r.slope.aspect}}
 #'
 #' @example man/examples/ex_fasterTerrain.r
 #'
@@ -28,55 +37,138 @@
 
 fasterTerrain <- function(
 	rast,
-	metrics = 'slope',
-	slopeUnits = 'degrees',
+	inRastName,
+	v = 'slope',
+	units = 'degrees',
 	northIs0 = TRUE,
+	cores = 1,
+	outGrassName = v,
 	
-	grassDir = options()$grassDir,
-	grassToR = TRUE,
-	
-	inRastName = NULL,
-	outGrassName = NULL
+	replace = fasterGetOptions('replace', FALSE),
+	grassToR = fasterGetOptions('grassToR', TRUE),
+	autoRegion = fasterGetOptions('autoRegion', TRUE),
+	grassDir = fasterGetOptions('grassDir', NULL),
+	...
 ) {
 
-	flags <- c('quiet', 'overwrite')
-	
-	if (is.null(outGrassName)) outGrassName <- metrics
-	if (length(metrics) != length(outGrassName)) stop('The length of "outGrassName" must be the same as the length of "metrics."')
-	
-	# initialize GRASS
-	input <- initGrass(rast=rast, vect=NULL, inRastName=inRastName, inVectName=NULL, grassDir=grassDir)
+	### commons v1
+	##############
 
-	for (metric in metrics) {
-	
-		if (metrics == 'slope') {
-			rgrass::execGRASS('r.slope.aspect', elevation=input, slope='slope', format=slopeUnits, flags=flags)
-		} else if (metrics == 'aspect') {
-			rgrass::execGRASS('r.slope.aspect', elevation=input, aspect='aspect', format=slopeUnits, flags=flags)
-			if (northIs0) fasterConvertDegree('aspect', grassDir=grassDir, outGrassName=outGrassNameAspect, grassToR=FALSE)
-		} else if (metric == 'profileCurve') {
-			rgrass::execGRASS('r.slope.aspect', elevation=input, pcurvature='profileCurve', flags=flags)
-		} else if (metric == 'tanCurve') {
-			rgrass::execGRASS('r.slope.aspect', elevation=input, tcurvature='tanCurve', flags=flags)
-		} else if (metric == 'ewSlope') {
-			rgrass::execGRASS('r.slope.aspect', elevation=input, dx='ewSlope', flags=flags)
-		} else if (metric == 'nsSlope') {
-			rgrass::execGRASS('r.slope.aspect', elevation=input, dy='nsSlope', flags=flags)
+		### arguments
+		if (exists('rast', where=environment(), inherits=FALSE)) {
+			inRastName <- .getInRastName(inRastName, rast)
+		} else {
+			rast <- inRastName <- NULL
 		}
+		### flags
+		flags <- .getFlags(replace=replace)
 		
-		if (grassToR) {
-			out <- if (exists('out', inherits=FALSE)) {
-				c(out, rgrass::read_RAST(metric), flags='quiet')
-			} else {
-				rgrass::read_RAST(metric, flags='quiet')
-			}
-		}
+		### restore
+		# on.exit(.restoreLocation(), add=TRUE) # return to starting location
+		# if (autoRegion) on.exit(regionExt('*'), add=TRUE) # resize extent to encompass all spatials
+
+		### ellipses and initialization arguments
+		initsDots <- .getInitsDots(..., callingFx = 'fasterTerrain')
+		inits <- initsDots$inits
+		dots <- initsDots$dots
+
+	###############
+	### end commons
+
+	### errors
+	metrics <- c('slope', 'aspect', 'profileCurve', 'tanCurve', 'ewSlope', 'nsSlope', 'ewCurve', 'nsCurve', 'nsewCurve')
+	if (length(v) > 1L & any('*' %in% v)) stop('You must use "*" in argument "v" by itself.')
+	if (length(v) == 1L && v == '*') v <- metrics
+	if (any(!(v %in% metrics))) stop('Argument "v" has at least on invalid values.')
+
+	if (any(v %in% c('slope', 'aspect')) && any(!(units %in% c('degrees', 'percent')))) stop('Argument "units" must be either "degrees" or "percent".')
+
+	if (is.null(outGrassName) || (length(outGrassName) == 1L & outGrassName == '*')) outGrassName <- v
+	if (length(v) != length(outGrassName)) stop('The length of "outGrassName" must be the same as the length of "v."')
+
+	### function-specific
+	args <- list(
+		cmd = 'r.slope.aspect',
+		elevation = inRastName,
+		nprocs = cores,
+		flags = flags
+	)
+	args <- c(args, dots)
 	
-	} # next metric
+	if ('slope' %in% v) {
+		args$slope = outGrassName[v %in% 'slope']
+		args$format = units
+	}
+
+	if ('aspect' %in% v) {
+		args$aspect = outGrassName[v %in% 'aspect']
+		args$format = units
+	}
+
+	if ('profileCurve' %in% v) {
+		args$pcurvature = outGrassName[v %in% 'profileCurve']
+	}
+
+	if ('tanCurve' %in% v) {
+		args$tcurvature = outGrassName[v %in% 'tanCurve']
+	}
+
+	if ('ewSlope' %in% v) {
+		args$dx = outGrassName[v %in% 'ewSlope']
+	}
+
+	if ('nsSlope' %in% v) {
+		args$dy = outGrassName[v %in% 'nsSlope']
+	}
+
+	if ('ewCurve' %in% v) {
+		args$dxx = outGrassName[v %in% 'ewCurve']
+	}
+
+	if ('nsCurve' %in% v) {
+		args$dyy = outGrassName[v %in% 'nsCurve']
+	}
+
+	if ('nsewCurve' %in% v) {
+		args$dxy = outGrassName[v %in% 'nsewCurve']
+	}
+
+	### initialize GRASS
+	input <- do.call('initGrass', inits)
+
+	### execute
+	if (autoRegion) regionReshape(inRastName)
+	do.call(rgrass::execGRASS, args=args)
+	
+	if ('aspect' %in% v & northIs0) {
+	
+		fasterConvertDegree(
+			rast = outGrassName[v %in% 'aspect'],
+			outGrassName = outGrassName[v %in% 'aspect'],
+			replace = TRUE,
+			grassToR = FALSE,
+			autoRegion = FALSE,
+			grassDir = grassDir
+		)
+		
+	}
 
 	if (grassToR) {
-		names(out) <- outGrassName
+		
+		for (ogn in outGrassName) {
+		
+			thisOut <- fasterWriteRaster(ogn, paste0(tempfile(), '.tif'), overwrite=TRUE)
+			out <- if (exists('out', inherits=FALSE)) {
+				c(out, thisOut)
+			} else {
+				thisOut
+			}
+			
+		}
+		
+		out <- terra::setMinMax(out)
 		out
+			
 	}
-	
+
 }

@@ -26,29 +26,29 @@ madElev <- fasterData('madElev')
 initGrass(madElev, inRastName = 'madElev')
 
 # import a vector
-madCoast0 <- fasterData('madCoast0')
-exportVectToGrass(madCoast0, inVectName = 'madCoast0')
+madRivers <- fasterData('madRivers')
+fasterVect(madRivers, inVectName = 'madRivers')
 
-# get information on the raster and vector
-fasterInfoRast('madElev')
-fasterInfoVect('madCoast0')
+# what's in the GRASS session?
+fasterLs('rasters') # what rasters?
+fasterLs('vectors') # what vectors?
+fasterLs() # what rasters and vectors?
 
-# information on the coordinate reference system
+# information on the raster and vector
+fasterInfo('madElev')
+fasterInfo('madCoast0')
+fasterInfo() # everything
+
+# information on the coordinate reference system of the GRASS session
 fasterCRS() # "plain" format
 fasterCRS(TRUE) # nice for the eyes
 
 # spatial extent of the GRASS session
-fasterExt() # returns a SpatExtent object
-fasterExt(FALSE) # returns a vector
-
-# spatial resolution
-fasterRes()
-
-# names of all rasters and vectors in the GRASS session
-fasterLs()
+fasterExt('madElev') # extent of madElev raster
+fasterExt('madRivers') # extent of madRivers vector
+fasterExt() # maximum extent of all spatial objects
 
 }
-
 }
 \seealso{
 \href{https://grass.osgeo.org/grass82/manuals/g.proj.html}{\code{g.list}} in \code{GRASS}

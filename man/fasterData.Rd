@@ -7,13 +7,20 @@
 fasterData(x)
 }
 \arguments{
-\item{x}{The name of the raster or spatial vector to get. All of these represent a portion of the eastern coast of Madagascar. Options include:
+\item{x}{The name of the raster or spatial vector to get. All of these represent a portion of the eastern coast of Madagascar. \cr
+Spatial vectors (objects of class \code{sf} from the \pkg{sf} package):
 \itemize{
-    \item    \code{'madCoast0'}: Outline of the region (\code{sf} spatial vector).
-    \item    \code{'madCoast4'}: Outlines of the Fokontanies (Communes) of the region (\code{sf} spatial vector).
-    \item    \code{'madRivers'}: Major rivers (\code{sf} spatial vector).
+    \item    \code{'madCoast0'}: Outline of the region (polygon).
+    \item    \code{'madCoast4'}: Outlines of the Fokontanies (Communes) of the region (polygons).
+    \item    \code{'madDypsis'}: Records of plants of the genus \emph{Dypsis} (points).
+    \item    \code{'madRivers'}: Major rivers (lines).
+}
+Rasters (objects of class \code{SpatRaster} from the \pkg{terra} package):
+\itemize{
     \item    \code{'madChelsa'}: Bioclimatic variables (\code{SpatRaster}).
     \item    \code{'madElev'}: Elevation (\code{SpatRaster}).
+    \item    \code{'madElevAnt'}: Elevation of the Antanambe Commune(\code{SpatRaster}).
+    \item    \code{'madElevMan'}: Elevation of the Manompana Commune (\code{SpatRaster}).
     \item    \code{'madForest2000'}: Forest cover in year 2000 (\code{SpatRaster}).
     \item    \code{'madForest2014'}: Forest cover in year 2014 (\code{SpatRaster}).
 }}
@@ -57,5 +64,5 @@ madForest2014 <- fasterData('madForest2014')
 plot(madForest2014, col = 'green', add = TRUE)
 }
 \seealso{
-\code{\link{madCoast0}}, \code{\link{madCoast4}}, \code{\link{madElev}}, \code{\link{madForest2000}}, \code{\link{madForest2014}}, \code{\link{madRivers}}
+\code{\link{madCoast0}}, \code{\link{madCoast4}}, \code{\link{madDypsis}}, \code{\link{madElev}}, \code{\link{madElevAnt}}, \code{\link{madElevMan}}, \code{\link{madForest2000}}, \code{\link{madForest2014}}, \code{\link{madRivers}}
 }

@@ -6,35 +6,41 @@
 \usage{
 fasterApp(
   rast,
+  inRastName,
   expression,
-  grassDir = options()$grassDir,
+  replace = NULL,
+  outGrassName = "appRast",
   grassToR = TRUE,
-  inRastName = NULL,
-  outGrassName = "appRast"
+  grassDir = NULL,
+  inits = NULL
 )
 }
 \arguments{
-\item{rast}{A \code{SpatRaster} with one or more layers, \emph{or} the name(s) of one or more raster already in an existing \code{GRASS} session.}
+\item{rast}{A \code{SpatRaster} with one or more layers, \emph{or} the name(s) of one or more raster in the active \code{GRASS} session.}
 
-\item{expression}{Character. Formula to evaluate. Below are examples where the input raster is named "rast" in the \code{GRASS} session and the output raster will be named "out". Note that raster must be referred to in formulae using their raster name (not name in R). In other words, in the examples below we could call a raster in R \code{myRast} but \code{names(myRast)} yields \code{rast}, so we need to call it "\code{rast}" in the formulae. The raster "\code{out}" will be created by the function. You also need to put spaces before and after the equals sign (e.g., \code{out = 2 * rast}, but not \code{out=2 * rast}).
+\item{inRastName}{The name of the input raster(s) in \code{GRASS}. If \code{rast} is a multi-layer raster, then there must be one name per layer. If missing or \code{NULL}, the name(s) of the raster(s) will be used (i.e., \code{names(rast)}). This argument is useful if you are \link{chaining} \pkg{fasterRaster} functions together and wish to refer to the raster(s) later in the \code{GRASS} session.}
+
+\item{expression}{Character. Formula to evaluate. Below are examples where the input raster is named "rast" in the \code{GRASS} session and the output raster will be named "out". Note that unlike in the \code{GRASS} \href{https://grass.osgeo.org/grass82/manuals/r.mapcalc.html}{\code{r.mapcalc}} module, the expression should \emph{not} start with the name of the output or an equals sign. The output raster is named by \code{outGrassName}, which will be created by executing the formula.
 \itemize{
-\item Take the input raster "rast", multiplies each cell by 0, then adds 1 to each cell: \code{'out = (rast * 0) + 1'}
-\item Take the input raster "rast", multiplies square the value of each cell: \code{'out = rast^2'}
-\item Take the input raster "rast" (implicitly), and sets each cell value to 17: \code{'out = 17'}
-\item Take the input rasters "rast1" and "rast2", and multiplies them together. Note that in this case, \code{rast} will actually be a \code{SpatRaster} object with two layers named "rast1" and "rast2": \code{'out = rast1 * rast2'}
-\item Take the input raster "rast" and redefines each cell value to equal the sum of it and the four cells in the rooks's neighborhood (north, south, east, west of it): \code{'out = rast[0, 0] + rast[-1, 0] + rast[0, -1] + rast[0, 1] + rast[1, 0]'}
-\item Low-pass (averaging) filter across a 3x3 neighborhood: \code{'out = (rast[-1, -1] + rast[-1, 0] + rast[-1, 1] + rast[0, -1] + rast[0, 0] + rast[0, 1] + rast[1, -1] + rast[1, 0] + rast[1, 1]) / 9'}
-\item High-pass ("edge-finding") filter across a 3x3 neighborhood: \code{'out = -0.7 * rast[-1, -1] -1 * rast[-1, 0] -0.7 * rast[-1, 1] -1 * rast[0, -1] + 6.8 * rast[0, 0] -1 * rast[0, 1] -0.7 * rast[1, -1] -1 * rast[1, 0] -0.7 * rast[1, 1]'}
+\item Take the input raster "rast", multiplies each cell by 0, then adds 1 to each cell: \code{'= (rast * 0) + 1'}
+\item Take the input raster "rast", multiplies square the value of each cell: \code{'= rast^2'}
+\item Take the input raster "rast" (implicitly), and sets each cell value to 17: \code{'= 17'}
+\item Take the input rasters "rast1" and "rast2", and multiplies them together. Note that in this case, argument \code{rast} will actually be a \code{SpatRaster} "stack" of two rasters with later names "rast1" and "rast2": \code{'= rast1 * rast2'}
+\item Take the input raster "rast" and redefines each cell value to equal the sum of it and the four cells in the rooks's neighborhood (north, south, east, west of it): \code{'= rast[0, 0] + rast[-1, 0] + rast[0, -1] + rast[0, 1] + rast[1, 0]'}
+\item Low-pass (averaging) filter across a 3x3 neighborhood: \code{'(= rast[-1, -1] + rast[-1, 0] + rast[-1, 1] + rast[0, -1] + rast[0, 0] + rast[0, 1] + rast[1, -1] + rast[1, 0] + rast[1, 1]) / 9'}
+\item High-pass ("edge-finding") filter across a 3x3 neighborhood: \code{'= -0.7 * rast[-1, -1] -1 * rast[-1, 0] -0.7 * rast[-1, 1] -1 * rast[0, -1] + 6.8 * rast[0, 0] -1 * rast[0, 1] -0.7 * rast[1, -1] -1 * rast[1, 0] -0.7 * rast[1, 1]'}
 }
-See the documentation for \code{r.mapcalc}{https://grass.osgeo.org/grass82/manuals/r.mapcalc.html} for more information. Note that some operations that may make sense in \code{GRASS} may not make sense when exported back to R (e.g., changing color).}
+See the documentation for \href{https://grass.osgeo.org/grass82/manuals/r.mapcalc.html}{\code{r.mapcalc}} for more information. Note that some operations that may make sense in \code{GRASS} may not make sense when exported back to R (e.g., changing color).}
 
-\item{grassDir}{Name of the folder path in which \code{GRASS} is installed. For a Windows system, this might be something like \code{'C:/Program Files/GRASS GIS 8.2'}. For a Mac system, this might be like \code{"/Applications/GRASS-8.2.app/Contents/Resources"}. If you are using a lot of \pkg{fasterRaster} functions, it can be easier to set this once using \code{\link{fasterOptions}}. By default, this is \code{NULL}, in which case the install path for \code{GRASS} will be searched for, but if not found, will result in an error.}
+\item{replace}{Logical or \code{NULL}. If \code{FALSE} or \code{NULL} (default), then attempting to overwrite rasters or vectors already in a \code{GRASS} session will result in an error. You can allow overwriting by changing this to \code{TRUE}, or by setting \code{inRastName}, \code{inVectName}, and/or \code{outGrassName} to values different from rasters or vectors that already exist in the session (not all functions have these arguments). Use \code{\link{fasterLs}} to see existing rasters and vectors.  You can set this for all functions at once using \code{\link{fasterOptions}}.}
 
-\item{grassToR}{If \code{TRUE} (default) then the output will be returned to \pkg{R}. If \code{FALSE}, then the output is left in the \code{GRASS} session and named the value in \code{outGrassName}. You can then refer to the output in subsequent \pkg{fasterRaster} functions and avoid the need to re-import it. This is called "chaining" functions together, and it can save a lot of computational time.}
+\item{outGrassName}{Character. Name of output in \code{GRASS}. This is useful if you want to refer to the output object in \code{GRASS} later in a session by \link{chaining} functions.}
 
-\item{inRastName}{The name of the input raster(s) in \code{GRASS}. If \code{rast} is a multi-layer raster, then there must be one name per layer. This argument is useful if you are "chaining" \pkg{fasterRaster} functions together and wish to refer to the input raster(s) later. The default value is the name(s) of the raster(s) (i.e., \code{names(rast)}).}
+\item{grassToR}{Logical or \code{NULL}. If \code{TRUE} or \code{NULL} (default) then the output will be returned to \code{R}. If \code{FALSE}, then the output is left in the \code{GRASS} session (with the name given by \code{outGrassName}). You can set this argument for all functions at once using \code{\link{fasterOptions}}.}
 
-\item{outGrassName}{Character. Name of output in \code{GRASS}. This is useful if you want to refer to the output object in \code{GRASS} later in a session by "chaining" functions.}
+\item{grassDir}{Character or \code{NULL}. Name of the path in which \code{GRASS} is installed. For a Windows system, this might be something like \code{'C:/Program Files/GRASS GIS 8.3'}, for a Mac, like \code{"/Applications/GRASS-8.3.app/Contents/Resources"}, and for Linux like \code{'/usr/local/grass'}. If you are using a lot of \pkg{fasterRaster} functions, you can set this for all functions at once using \code{\link{fasterOptions}}. By default, this is \code{NULL}, in which case the install path for \code{GRASS} will be searched for, but if not found, will result in an error (usually the case).}
+
+\item{inits}{Either \code{NULL} (default), or a named list of arguments to pass to \code{\link{initGrass}}. If \code{NULL}, then the current active \code{GRASS} session is used, or a new one in the "default" location is created.}
 }
 \value{
 If \code{grassToR} if \code{TRUE}, then a raster object with the same coordinate reference system, extent, and resolution as \code{rast}. Regardless, a raster by a name given in \code{expression} (before the "=" symbol) is written into the \code{GRASS} session.
@@ -48,53 +54,78 @@ The function \code{\link[terra]{focal}}, \code{\link[terra]{focalCpp}}, and \cod
 \examples{
 \dontrun{
 
+# IMPORTANT: These function use the "location", "restartGrass", and
+# "warn" arguments to avoid interfering with an existing GRASS session.
+# WHEN YOU ARE DONE WITH THE EXAMPLES, run this line to revert to your
+# active GRASS session:
+# initGrass(location='default') # change "location" if not "default"
+
+# For fasterRaster functions below, this will be used to set up a location
+# that does not interfere with any locations you may be using.
+inits <- list(location='examples', restartGrass=TRUE, warn=FALSE)
+
+library(sf)
 library(terra)
 
-# change this to where GRASS is installed on your system
-grassDir <- 'C:/Program Files/GRASS GIS 8.2' # example for a PC
+# IMPORTANT: Change this to where GRASS is installed on your system.
 grassDir <- "/Applications/GRASS-8.2.app/Contents/Resources" # for a Mac
+grassDir <- 'C:/Program Files/GRASS GIS 8.2' # for a PC
 
+
+# NOTE: Some operations do not work using the "madElev" raster as-is
+# because it was saved with values in interger form. To address this,
+# we modify the raster so it does not have the integer form. The operation
+# below changes the type of the raster's values without changing the
+# values.
+
+# square of elevation
 madElev <- fasterData('madElev')
-ex <- 'out = madElev^2'
-madElev2 <- fasterMapcalc(madElev, expression=ex, grassDir=grassDir)
-plot(c(madElev, madElev2))
+madElev <- madElev + 0.1
+madElev <- madElev - 0.1
 
-ex <- 'madElev_17 = 17'
-m_17 <- fasterMapcalc(madElev, expression=ex, grassDir=grassDir)
+expression <- 'madElev^2'
+madElevSq <- fasterApp(madElev, expression=expression, grassDir=grassDir,
+inits=inits) # typically use "inits" for examples only
+
+# We can also force the value type in GRASS using float():
+madElev <- fasterData('madElev')
+expression <- 'float((madElev)^2)'
+madElevSq <- fasterApp(madElev, expression=expression, grassDir=grassDir,
+inits=inits) # typically use "inits" for examples only
+
+plot(c(madElev, madElevSq))
+
+# force all values to 17
+expression <- '17'
+m_17 <- fasterApp(madElev, expression=expression, grassDir=grassDir,
+inits=inits) # typically use "inits" for examples only
+
 plot(c(madElev, m_17))
 
 # low-pass filter
-ex <- 'lowPass = (madElev[-1, -1] + madElev[-1, 0] + madElev[-1, 1] + madElev[0, -1] + madElev[0, 0] + madElev[0, 1] + madElev[1, -1] + madElev[1, 0] + madElev[1, 1]) / 9'
-lp <- fasterMapcalc(madElev, expression=ex, grassDir=grassDir)
+expression <- '(madElev[-1, -1] + madElev[-1, 0] + madElev[-1, 1] + madElev[0, -1] + madElev[0, 0] + madElev[0, 1] + madElev[1, -1] + madElev[1, 0] + madElev[1, 1]) / 9'
+lp <- fasterApp(madElev, expression=expression, grassDir=grassDir,
+inits=inits) # typically use "inits" for examples only
+
 plot(c(madElev, lp))
 
 # high-pass filter
-ex <- 'highPass = -0.7 * madElev[-1, -1] -1 * madElev[-1, 0] -0.7 * madElev[-1, 1] -1 * madElev[0, -1] + 6.8 * madElev[0, 0] -1 * madElev[0, 1] -0.7 * madElev[1, -1] -1 * madElev[1, 0] -0.7 * madElev[1, 1]'
-hp <- fasterMapcalc(madElev, expression=ex, grassDir=grassDir)
+expression <- '-0.7 * madElev[-1, -1] -1 * madElev[-1, 0] -0.7 * madElev[-1, 1] -1 * madElev[0, -1] + 6.8 * madElev[0, 0] -1 * madElev[0, 1] -0.7 * madElev[1, -1] -1 * madElev[1, 0] -0.7 * madElev[1, 1]'
+hp <- fasterApp(madElev, expression=expression, grassDir=grassDir,
+inits=inits) # typically use "inits" for examples only
+
 plot(c(madElev, hp))
 
-# Using some rasters already in a GRASS session:
-# Note we are passing raster "hp" as a raster, not as something already in
-# GRASS (even though it is). Also, we need to refer to the "hp" raster by
-# its raster name in the formula (ie, see "names(hp)") since it is passed in
-# as a raster.
+# Using multi-layer rasters:
+madChelsa <- fasterData('madChelsa')
+expression <- 'bio1 / bio12'
 
-input <- initGrass(rast=madElev, rastName='madElev', grassDir=grassDir)
-exportRastToGrass(lp, grassName='lp')
+clim <- fasterApp(madChelsa, expression=expression, grassDir=grassDir,
+inits=inits) # typically use "inits" for examples only
 
-ex <- 'out = (lp * highPass) / madElev'
-mapcalc <- fasterMapcalc('madElev', 'lp', hp, expression=ex,
-grassDir=grassDir)
-mapcalc
-
-# note differences between r.mapcalc and terra package math:
-mapcalc
-rast <- (lp * hp) / madElev
-rast
-
-# but they largely look the same
-plot(c(mapcalc, rast))
-plot(mapcalc - rast)
+# Revert back to original GRASS session.
+# Change to your working location if not "default" (it usually is).
+initGrass(location='default')
 
 }
 }

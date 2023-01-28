@@ -4,8 +4,9 @@
 \alias{.sharedArgs_outGrassName}
 \title{Shared argument(s)}
 \arguments{
-\item{outGrassName}{Character. Name of output in \code{GRASS}. This is useful if you want to refer to the output object in \code{GRASS} later in a session by "chaining" functions.}
+\item{outGrassName}{Character. Name of output in \code{GRASS}. This is useful if you want to refer to the output object in \code{GRASS} later in a session by \link{chaining} functions.}
 }
 \description{
 Shared argument(s)
 }
+\keyword{internal}

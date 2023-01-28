@@ -11,30 +11,39 @@ initGrass(
   inVectName = NULL,
   restartGrass = FALSE,
   warn = TRUE,
-  mapset = "PERMANENT",
+  replace = NULL,
+  dir = tempdir(),
   location = "default",
-  tempDir = tempdir(),
-  grassDir = options()$grassDir
+  mapset = "PERMANENT",
+  autoRegion = NULL,
+  grassDir = NULL,
+  ...
 )
 }
 \arguments{
-\item{rast}{Either: a \code{SpatRaster} object with one or more layers \emph{or} the name of a raster already imported into \code{GRASS} \emph{or} \code{NULL} (default) in which case no raster is exported into \pkg{GRASS}. Either \code{rast} or \code{vect} (or both) must be non-\code{NULL}. You cannot set one equal to a name and the other to a raster/vector.}
+\item{rast}{Either: a \code{SpatRaster} object with one or more layers \emph{or} the name of a raster already imported into \code{GRASS} \emph{or} \code{NULL} (default) in which case no raster is exported into \code{GRASS}. Typically, either \code{rast} and/or \code{vect} are specified. However, you can set both to \code{NULL} to switch to different \code{GRASS} \link{location}s without importing anything into the session. You cannot set one equal to a name and the other to a raster/vector.}
 
-\item{vect}{Either: a \code{Spatvector} or \code{sf} object \emph{or} the name of a vector dataset already imported into \code{GRASS} \emph{or} \code{NULL} (default) in which case no vector is exported into \pkg{GRASS}. Either \code{rast} or \code{vect} (or both) must be non-\code{NULL}. You cannot set one equal to a name and the other to a raster/vector.}
+\item{vect}{Either: a \code{SpatVector}, or \code{sf} object, \emph{or} the name of a vector dataset already imported into \code{GRASS}, \emph{or} \code{NULL} (default) in which case no vector is exported into \code{GRASS}. Either \code{rast} or \code{vect} (or both) must be non-\code{NULL}. You cannot set one equal to a name and the other to a raster/vector.}
 
-\item{inRastName}{The name of the input raster(s) in \code{GRASS}. If \code{rast} is a multi-layer raster, then there must be one name per layer. This argument is useful if you are "chaining" \pkg{fasterRaster} functions together and wish to refer to the input raster(s) later. The default value is the name(s) of the raster(s) (i.e., \code{names(rast)}).}
+\item{inRastName}{The name of the input raster(s) in \code{GRASS}. If \code{rast} is a multi-layer raster, then there must be one name per layer. If missing or \code{NULL}, the name(s) of the raster(s) will be used (i.e., \code{names(rast)}). This argument is useful if you are \link{chaining} \pkg{fasterRaster} functions together and wish to refer to the raster(s) later in the \code{GRASS} session.}
 
-\item{inVectName}{The name of the input vector in \code{GRASS}. This is useful only if you are "chaining" \pkg{fasterRaster} functions together and wish to refer to the input vector later. The default value is \code{'vect'}.}
+\item{inVectName}{Character. The name of the input vector in \code{GRASS}. If missing or \code{NULL}, \"code{inputVect}" will be used. This is useful if you are \link{chaining} \pkg{fasterRaster} functions together and wish to refer to the vector later in the \code{GRASS} session.}
 
 \item{restartGrass}{If \code{TRUE}, then remove any existing \code{GRASS} session and restart a new one. This deletes all rasters and vectors that may already exist in \code{GRASS}, but does not affect anything in R. By default, this is \code{FALSE}, so if there is an existing session, it is used instead.}
 
+\item{replace}{Logical or \code{NULL}. If \code{FALSE} or \code{NULL} (default), then attempting to overwrite rasters or vectors already in a \code{GRASS} session will result in an error. You can allow overwriting by changing this to \code{TRUE}, or by setting \code{inRastName}, \code{inVectName}, and/or \code{outGrassName} to values different from rasters or vectors that already exist in the session (not all functions have these arguments). Use \code{\link{fasterLs}} to see existing rasters and vectors.  You can set this for all functions at once using \code{\link{fasterOptions}}.}
+
+\item{dir}{Character. Path name of directory in which to create the \code{GRASS} mapset. The default is to create a directory in the location for temporary files for the operating system.}
+
+\item{location}{Character. Name of \code{GRASS} location. The default name is \code{'default'}. You can switch between locations by using \code{initGrass(location='newLocation')}.}
+
 \item{mapset}{Character. Mapset of \code{GRASS} location. The default name is \code{'PERMANENT'}. Typically, it is not a good idea to change this, as most functions in the \pkg{fasterRaster} package assume the mapset is named "default".}
 
-\item{location}{Character. Name of \code{GRASS} location. The default name is \code{'default'}. Typically, it is not a good idea to change this, as most functions in the \pkg{fasterRaster} package assume the location is named "default".}
+\item{autoRegion}{Logical or \code{NULL}. If \code{TRUE} or \code{NULL} (default), then during execution of this function, the \code{GRASS} \link{region} will be resized to encompass the raster/vector/area of interest, and if relevant, resampled to match its spatial resolution. If \code{FALSE}, the the current region's extent and resolution will be used. Most users will want to keep this \code{TRUE} or \code{NULL} (same as \code{TRUE}). If you change this to \code{FALSE}, you will need to keep track of the \code{GRASS} \link{region} properties. This argument can be set for all functions at once using \code{\link{fasterOptions}}.}
 
-\item{tempDir}{Character. Path name of directory in which to create the \code{GRASS} mapset. The default is to create a directory in the location for temporary files for the operating system.}
+\item{grassDir}{Character or \code{NULL}. Name of the path in which \code{GRASS} is installed. For a Windows system, this might be something like \code{'C:/Program Files/GRASS GIS 8.3'}, for a Mac, like \code{"/Applications/GRASS-8.3.app/Contents/Resources"}, and for Linux like \code{'/usr/local/grass'}. If you are using a lot of \pkg{fasterRaster} functions, you can set this for all functions at once using \code{\link{fasterOptions}}. By default, this is \code{NULL}, in which case the install path for \code{GRASS} will be searched for, but if not found, will result in an error (usually the case).}
 
-\item{grassDir}{Name of the folder path in which \code{GRASS} is installed. For a Windows system, this might be something like \code{'C:/Program Files/GRASS GIS 8.2'}. For a Mac system, this might be like \code{"/Applications/GRASS-8.2.app/Contents/Resources"}. If you are using a lot of \pkg{fasterRaster} functions, it can be easier to set this once using \code{\link{fasterOptions}}. By default, this is \code{NULL}, in which case the install path for \code{GRASS} will be searched for, but if not found, will result in an error.}
+\item{...}{Additional arguments (unused). Useful for passing arguments in from other functions when they call this one.}
 
 \item{warm}{If \code{TRUE}, then print a warning if the \code{GRASS} session has been restarted. This is only used if \code{restartGrass} is \code{TRUE}.}
 }
@@ -42,27 +51,61 @@ initGrass(
 One or two-element character vector. If one element long, then it will be the name of raster \emph{or} vector exported or already in a \code{GRASS} session. If two elements long, then it will be the name of the raster \emph{and} the vector exported or already in a \code{GRASS} session.
 }
 \description{
-Initiate a \code{GRASS} session and import a raster and/or vector into it.
+Initiate a \code{GRASS} session and import a raster and/or vector into it, \emph{or} switch to a different existing \code{GRASS} session. You can create different sessions by changing the \code{location} and/or \code{mapset} arguments, and switch between them by using this function with the \code{location} and/or \code{mapset} defined appropriately. When switching, you can set \code{rast} and \code{vect} to \code{NULL} to avoid importing a new raster or vector.
 }
 \examples{
 \dontrun{
 
-# change this according to where GRASS is installed on your system
-grassDir <- 'C:/Program Files/GRASS GIS 8.2' # example for a PC
+# IMPORTANT: These function use the "location", "restartGrass", and
+# "warn" arguments to avoid interfering with an existing GRASS session.
+# WHEN YOU ARE DONE WITH THE EXAMPLES, run this line to revert to your
+# active GRASS session:
+# initGrass(location='default') # change "location" if not "default"
+
+# IMPORTANT: Change this to where GRASS is installed on your system.
 grassDir <- "/Applications/GRASS-8.2.app/Contents/Resources" # for a Mac
+grassDir <- '/usr/local/grass' # example for Linux
+grassDir <- 'C:/Program Files/GRASS GIS 8.2' # example for a PC
 
-# start GRASS session with a raster
+library(sf)
 library(terra)
-madElev <- fasterData('madElev')
-input <- initGrass(rast=madElev, grassDir=grassDir)
 
-# start GRASS session with a vector
-madCoast <- fasterData('madCoast0')
-input <- initGrass(vect=madCoast0, grassDir=grassDir)
+### Start GRASS session with a raster.
+# Normally, skip the second line. This is used just for examples.
+madElev <- fasterData('madElev')
+
+initGrass(rast=madElev, grassDir=grassDir,
+location='examples', replace=TRUE, restartGrass=TRUE, warn=FALSE) 
+
+### Start GRASS session with a vector.
+# Normally, skip the second line. This is used just for examples.
+madCoast0 <- fasterData('madCoast0')
+
+initGrass(vect=madCoast0, inVectName='madCoast', grassDir=grassDir,
+location='examples', replace=TRUE, restartGrass=TRUE, warn=FALSE) 
+
+# What's in this session?
+fasterLs()
+
+### Start a different GRASS session then swicth back to the
+# "examples" session created above.
+# Normally, skip the third line. This is used just for examples.
+initGrass(vect=madCoast0, location='new',
+inVectName='madCoast0_new', grassDir=grassDir,
+replace=TRUE, restartGrass=TRUE, warn=FALSE)
+
+# What's in this session?
+fasterLs()
+
+# Switch to "default" location.
+initGrass(location='examples', grassDir=grassDir)
+
+# What's in this session?
+fasterLs()
 
 }
 
 }
 \seealso{
-\code{\link{exportRastToGrass}} and \code{\link{exportVectToGrass}} in \pkg{fasterRaster}
+\code{\link{fasterRast}} and \code{\link{fasterVect}} in \pkg{fasterRaster}
 }

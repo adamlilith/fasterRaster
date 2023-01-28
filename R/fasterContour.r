@@ -4,18 +4,20 @@
 #'
 #' @inheritParams .sharedArgs_rast
 #' @inheritParams .sharedArgs_inRastName
-#' @inheritParams .sharedArgs_grassDir_grassToR
+#' @inheritParams .sharedArgs_outVectClass
+#' @inheritParams .sharedArgs_replace
+#' @inheritParams .sharedArgs_grassDir
+#' @inheritParams .sharedArgs_grassToR
 #' @inheritParams .sharedArgs_outGrassName
+#' @inheritParams .sharedArgs_autoRegion
+#' @inheritParams .sharedArgs_dots_forInitGrass_andGrassModule
 #' 
 #' @param levels Numeric vector. Levels of values in \code{rast} at which contours should be drawn. You can specify contour levels using this argument or by providing values for \code{step}, \code{minlevel}, and \code{maxlevel}. \code{levels} will override use of \code{step}, if both of them are specified.
 #' @param cut Integer >= 0. Minimum number of points necessary to generate a contour line. A value of 0 implies no limit. Default is 2.
 #'
-#' @param ... Arguments to pass to \code{\link[rgrass]{execGRASS}} when calculating horizon height (i.e., function \code{r.horizon} in \code{GRASS}).
-#' @return If \code{grassToR} if \code{TRUE}, then a \code{SpatialLines} or \code{SpatialLinesDataFrame} object with the same coordinate reference system as \code{rast}. Regardless, a vector is written into the \code{GRASS} session. The name of this vector is given by \code{outGrassName}.
+#' @return If \code{grassToR} is \code{TRUE}, then this function returns either a \code{SpatVector} or \code{sf} object, depending on the value of \code{outVectClass}. Regardless, a vector is written into the \code{GRASS} session. The name of this vector in \code{GRASS} is given by \code{outGrassName}.
 #'
-#' @details See the documentation for the \code{GRASS} module \code{r.contour}{https://grass.osgeo.org/grass82/manuals/r.contour.html}.
-#'
-#' @seealso \code{\link[terra]{as.contour}} in \pkg{terra}; \href{https://grass.osgeo.org/grass82/manuals/r.contour.html}{\code{r.contour}} in \code{GRASS}
+#' @seealso \code{\link[terra]{as.contour}} in \pkg{terra}; \code{GRASS} module \code{\href{https://grass.osgeo.org/grass82/manuals/r.contour.html}{r.contour}}
 #'
 #' @example man/examples/ex_fasterContour.R
 #'
@@ -23,39 +25,67 @@
 
 fasterContour <- function(
 	rast,
-	# step = NULL,
-	# minlevel = NULL,
-	# maxlevel = NULL,
-	levels = NULL,
+	inRastName,
+	levels,
 	cut = 2,
-	grassDir = options()$grassDir,
-	grassToR = TRUE,
-	inRastName = NULL,
 	outGrassName = 'contourVect',
+
+	replace = fasterGetOptions('replace', FALSE),
+	grassToR = fasterGetOptions('grassToR', TRUE),
+	outVectClass = fasterGetOptions('outVectClass', 'SpatVector'),
+	autoRegion = fasterGetOptions('autoRegion', TRUE),
+	grassDir = fasterGetOptions('grassDir', NULL),
 	...
 ) {
 
-	flags <- c('quiet', 'overwrite')
+	### commons v1
+	##############
+
+		### arguments
+		if (exists('rast', where=environment(), inherits=FALSE)) {
+			inRastName <- .getInRastName(inRastName, rast)
+		} else {
+			rast <- inRastName <- NULL
+		}
+
+		### flags
+		flags <- .getFlags(replace=replace)
+		
+		### restore
+		# on.exit(.restoreLocation(), add=TRUE) # return to starting location
+		if (autoRegion) on.exit(regionExt('*'), add=TRUE) # resize extent to encompass all spatials
+
+		### ellipses and initialization arguments
+		initsDots <- .getInitsDots(..., callingFx = 'fasterContour')
+		inits <- initsDots$inits
+		dots <- initsDots$dots
+
+	###############
+	### end commons
+
+	### function-specific
+	if (!is.numeric(levels)) stop('Argument "levels" must be a numeric vector.')
+
+	args <- list(
+		cmd = 'r.contour',
+		input = inRastName,
+		output = outGrassName,
+		levels = levels,
+		cut = cut,
+		flags = flags
+	)
+	args <- c(args, dots)
 	
-	# initialize GRASS
-	input <- initGrass(rast=rast, vect=NULL, inRastName=inRastName, inVectName=NULL, grassDir=grassDir)
-	
-	# if (!is.null(step) & is.null(minlevel)) minlevel <- terra::minmax(rast)[1L, , drop = TRUE]
-	# if (!is.null(step) & is.null(maxlevel)) maxlevel <- terra::minmax(rast)[2L, , drop = TRUE]
-	
-	# execute
-	# if (!is.null(levels)) {
-		rgrass::execGRASS('r.contour', input=input, levels=levels, cut=cut, output=outGrassName, flags=flags, ...)
-	# } else if (!is.null(step) & is.null(minlevel) & is.null(maxlevel)) {
-		# rgrass::execGRASS('r.contour', input=input, step=step, minlevel=minlevel, maxlevel=maxlevel, cut=cut, output=outGrassName, flags=flags, ...)
-	# }
+	### initialize GRASS
+	input <- do.call('initGrass', inits)
+
+	### execute
+	do.call(rgrass::execGRASS, args=args)
 	
 	if (grassToR) {
 
 		out <- rgrass::read_VECT(outGrassName, flags='quiet')
-		if (!is.null(options()$grassVectOut) && !is.na(options()$grassVectOut)) {
-			if (options()$grassVectOut == 'sf') out <- sf::st_as_sf(out)
-		}
+		if (outVectClass == 'sf') out <- sf::st_as_sf(out)
 		out
 		
 	}

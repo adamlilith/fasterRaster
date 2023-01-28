@@ -8,26 +8,30 @@ fasterMosaic(
   ...,
   cores = 1,
   memory = 300,
-  grassDir = options()$grassDir,
-  grassToR = TRUE,
+  replace = FALSE,
   inRastName = NULL,
-  outGrassName = "mosaicRast"
+  outGrassName = "mosaicRast",
+  grassToR = TRUE,
+  grassDir = options()$grassDir,
+  inits = NULL
 )
 }
 \arguments{
-\item{...}{Two or more \code{SpatRasters}.}
+\item{...}{Two or more \code{SpatRasters}, and (optionally) arguments to send to \code{\link{initGrass}}.}
 
 \item{cores}{Number of cores to use.}
 
 \item{memory}{Memory to use, in MB. The defualt is 300 MB.}
 
-\item{grassDir}{Name of the folder path in which \code{GRASS} is installed. For a Windows system, this might be something like \code{'C:/Program Files/GRASS GIS 8.2'}. For a Mac system, this might be like \code{"/Applications/GRASS-8.2.app/Contents/Resources"}. If you are using a lot of \pkg{fasterRaster} functions, it can be easier to set this once using \code{\link{fasterOptions}}. By default, this is \code{NULL}, in which case the install path for \code{GRASS} will be searched for, but if not found, will result in an error.}
-
-\item{grassToR}{If \code{TRUE} (default) then the output will be returned to \pkg{R}. If \code{FALSE}, then the output is left in the \code{GRASS} session and named the value in \code{outGrassName}. You can then refer to the output in subsequent \pkg{fasterRaster} functions and avoid the need to re-import it. This is called "chaining" functions together, and it can save a lot of computational time.}
+\item{replace}{Logical or \code{NULL}. If \code{FALSE} or \code{NULL} (default), then attempting to overwrite rasters or vectors already in a \code{GRASS} session will result in an error. You can allow overwriting by changing this to \code{TRUE}, or by setting \code{inRastName}, \code{inVectName}, and/or \code{outGrassName} to values different from rasters or vectors that already exist in the session (not all functions have these arguments). Use \code{\link{fasterLs}} to see existing rasters and vectors.  You can set this for all functions at once using \code{\link{fasterOptions}}.}
 
 \item{inRastName}{The names of the input rasters in \code{GRASS}. The default value is the names of the raster(s) (i.e., \code{names(raster)}).}
 
-\item{outGrassName}{Character. Name of output in \code{GRASS}. This is useful if you want to refer to the output object in \code{GRASS} later in a session by "chaining" functions.}
+\item{outGrassName}{Character. Name of output in \code{GRASS}. This is useful if you want to refer to the output object in \code{GRASS} later in a session by \link{chaining} functions.}
+
+\item{grassToR}{Logical or \code{NULL}. If \code{TRUE} or \code{NULL} (default) then the output will be returned to \code{R}. If \code{FALSE}, then the output is left in the \code{GRASS} session (with the name given by \code{outGrassName}). You can set this argument for all functions at once using \code{\link{fasterOptions}}.}
+
+\item{inits}{Either \code{NULL} (default), or a named list of arguments to pass to \code{\link{initGrass}}. If \code{NULL}, then the current active \code{GRASS} session is used, or a new one in the "default" location is created.}
 }
 \value{
 A \code{SpatRaster}.
@@ -42,39 +46,23 @@ Note that unlike most \pkg{fasterRaster} functions, this function changes the ex
 library(sf)
 library(terra)
 
-# We will illustrate mosaicking by breaking apart a raster
-# then rejoining it.
+madElevAnt <- fasterData('madElevAnt')
+madElevMan <- fasterData('madElevMan')
+madCoast0 <- fasterData('madCoast0')
 
-madElev <- fasterData('madElev')
-madCoast4 <- fasterData('madCoast4')
-
-# crop elevation raster to each Commune
-ant <- madCoast4[madCoast4$NAME_4 == 'Antanambe', ]
-man <- madCoast4[madCoast4$NAME_4 == 'Manompana', ]
-
-plot(st_geometry(ant), border='blue')
-plot(st_geometry(man), add=TRUE, border='red')
-
-# split raster
-antElev <- crop(madElev, ant)
-manElev <- crop(madElev, man)
-
-names(antElev) <- 'antElev'
-names(manElev) <- 'manElev'
-
-# make color patelletes for each raster so we can differentiate them
+# make different color palettes for each raster so we can differentiate them
 antCol <- colorRampPalette(c('lightblue', 'darkblue'))
 manCol <- colorRampPalette(c('pink', 'darkred'))
 
 antCol <- antCol(10)
 manCol <- manCol(10)
 
-plot(st_geometry(madCoast4))
-plot(antElev, col=antCol, add=TRUE, legend=FALSE)
-plot(manElev, col=manCol, add=TRUE, legend=FALSE)
+plot(st_geometry(madCoast0))
+plot(madElevAnt, col=antCol, add=TRUE, legend=FALSE)
+plot(madElevMan, col=manCol, add=TRUE, legend=FALSE)
 
-inRastName <- c('ant', 'man')
-combo <- fasterMosaic(antElev, manElev, inRastName=inRastName, cores=2)
+inRastName <- c('ant', 'man') # cool!
+combo <- fasterMosaic(madElevAnt, madElevMan, inRastName=inRastName, cores=2)
 
 plot(combo)
 

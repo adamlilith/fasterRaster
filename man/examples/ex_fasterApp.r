@@ -1,51 +1,91 @@
 \dontrun{
 
+# IMPORTANT: These function use the "location", "restartGrass", and
+# "warn" arguments to avoid interfering with an existing GRASS session.
+# WHEN YOU ARE DONE WITH THE EXAMPLES, run this line to revert to your
+# active GRASS session:
+# initGrass(location='default') # change "location" if not "default"
+
+# IMPORTANT: Change this to where GRASS is installed on your system.
+grassDir <- "/Applications/GRASS-8.2.app/Contents/Resources" # Mac
+grassDir <- 'C:/Program Files/GRASS GIS 8.2' # Windows
+grassDir <- '/usr/local/grass' # Linux
+
+library(sf)
 library(terra)
 
-# change this to where GRASS is installed on your system
-grassDir <- 'C:/Program Files/GRASS GIS 8.2' # example for a PC
-grassDir <- "/Applications/GRASS-8.2.app/Contents/Resources" # for a Mac
+# NOTE: Some operations do not work using the "madElev" raster as-is
+# because it was saved with values in interger form. To address this,
+# we modify the raster so it does not have the integer type. The operation
+# below changes the type of the raster's values without changing the
+# values.
 
+# change data type to float
 madElev <- fasterData('madElev')
-ex <- 'out = madElev^2'
-madElev2 <- fasterMapcalc(madElev, expression=ex, grassDir=grassDir)
-plot(c(madElev, madElev2))
+madElev <- madElev + 0.1
+madElev <- madElev - 0.1
 
-ex <- 'madElev_17 = 17'
-m_17 <- fasterMapcalc(madElev, expression=ex, grassDir=grassDir)
-plot(c(madElev, m_17))
+expression <- '= madElev^2'
+madElevSq <- fasterApp(madElev, expression=expression, grassDir=grassDir,
+location='examples', restartGrass=TRUE, warn=FALSE) # line for examples only
+
+plot(c(madElev, madElevSq))
+
+# We can also force the value type in GRASS using float():
+madElev <- fasterData('madElev') # refresh
+
+expression <- '= float((madElev)^2)'
+madElevSq <- fasterApp(madElev, expression=expression, grassDir=grassDir,
+location='examples', restartGrass=TRUE, warn=FALSE) # line for examples
+
+plot(c(madElev, madElevSq))
+
+# force all values to 17
+expression <- '= 17'
+rast17 <- fasterApp(madElev, expression=expression, grassDir=grassDir,
+location='examples', restartGrass=TRUE, warn=FALSE) # line for examples only
+
+plot(c(madElev, rast17))
 
 # low-pass filter
-ex <- 'lowPass = (madElev[-1, -1] + madElev[-1, 0] + madElev[-1, 1] + madElev[0, -1] + madElev[0, 0] + madElev[0, 1] + madElev[1, -1] + madElev[1, 0] + madElev[1, 1]) / 9'
-lp <- fasterMapcalc(madElev, expression=ex, grassDir=grassDir)
+madElev <- madElev + 0.1
+madElev <- madElev - 0.1
+
+expression <- '= (madElev[-1, -1] + madElev[-1, 0] + madElev[-1, 1] +
+madElev[0, -1] + madElev[0, 0] + madElev[0, 1] + madElev[1, -1] +
+madElev[1, 0] + madElev[1, 1]) / 9'
+
+expression <- gsub('[\r\n]', '', expression) # remove line breaks
+
+lp <- fasterApp(madElev, expression=expression, grassDir=grassDir,
+location='examples', restartGrass=TRUE, warn=FALSE) # line for examples only
+
 plot(c(madElev, lp))
 
 # high-pass filter
-ex <- 'highPass = -0.7 * madElev[-1, -1] -1 * madElev[-1, 0] -0.7 * madElev[-1, 1] -1 * madElev[0, -1] + 6.8 * madElev[0, 0] -1 * madElev[0, 1] -0.7 * madElev[1, -1] -1 * madElev[1, 0] -0.7 * madElev[1, 1]'
-hp <- fasterMapcalc(madElev, expression=ex, grassDir=grassDir)
+expression <- '= -0.7 * madElev[-1, -1] -1 * madElev[-1, 0] -
+0.7 * madElev[-1, 1] -1 * madElev[0, -1] + 6.8 * madElev[0, 0] -
+1 * madElev[0, 1] -0.7 * madElev[1, -1] -1 * madElev[1, 0] -
+0.7 * madElev[1, 1]'
+
+expression <- gsub('[\r\n]', '', expression) # remove line breaks
+
+hp <- fasterApp(madElev, expression=expression, grassDir=grassDir,
+location='examples', restartGrass=TRUE, warn=FALSE) # line for examples only
+
 plot(c(madElev, hp))
 
-# Using some rasters already in a GRASS session:
-# Note we are passing raster "hp" as a raster, not as something already in
-# GRASS (even though it is). Also, we need to refer to the "hp" raster by
-# its raster name in the formula (ie, see "names(hp)") since it is passed in
-# as a raster.
+# Using multi-layer rasters:
+madChelsa <- fasterData('madChelsa')
+expression <- '= bio1 / bio12'
 
-input <- initGrass(rast=madElev, rastName='madElev', grassDir=grassDir)
-exportRastToGrass(lp, grassName='lp')
+div <- fasterApp(madChelsa, expression=expression, grassDir=grassDir,
+location='examples', restartGrass=TRUE, warn=FALSE) # line for examples only
 
-ex <- 'out = (lp * highPass) / madElev'
-mapcalc <- fasterMapcalc('madElev', 'lp', hp, expression=ex,
-grassDir=grassDir)
-mapcalc
+plot(div)
 
-# note differences between r.mapcalc and terra package math:
-mapcalc
-rast <- (lp * hp) / madElev
-rast
-
-# but they largely look the same
-plot(c(mapcalc, rast))
-plot(mapcalc - rast)
+# Revert back to original GRASS session.
+# Change to your working location if not "default" (it usually is).
+initGrass(location='default')
 
 }

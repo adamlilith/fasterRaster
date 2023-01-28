@@ -4,8 +4,9 @@
 \alias{.sharedArgs_inRastName}
 \title{Shared argument(s)}
 \arguments{
-\item{inRastName}{The name of the input raster in \code{GRASS}. This argument is useful if you are "chaining" \pkg{fasterRaster} functions together and wish to refer to the input raster later. The default value is the name of the raster (i.e., \code{names(rast)}).}
+\item{inRastName}{Character, missing, or \code{NULL}. The name of the input raster in \code{GRASS}. If this is missing, the name of the raster or raster file will be used. If \code{NULL}, then "\code{inputRast}" will be used. This argument is useful if you are \link{chaining} \pkg{fasterRaster} functions together and wish to refer to the input raster later in the \code{GRASS} session.}
 }
 \description{
 Shared argument(s)
 }
+\keyword{internal}

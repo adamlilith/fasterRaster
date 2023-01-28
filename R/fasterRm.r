@@ -4,7 +4,7 @@
 #'
 #' @param x Name(s) of the rasters and/or vectors to remove. If this is \code{'*'}, then \emph{everything} will be removed.
 #' @param pattern If \code{TRUE}, then \code{x} is used as a pattern so that any rasters or vectors matching this pattern will be removed. For example, if an existing \code{GRASS} session has rasters named \code{bio1}, \code{bio2}, and \code{bio3}, plus a vector named \code{bioVector}, then this command will remove them all: \code{fasterRm('bio', pattern = TRUE)}. By default this is \code{FALSE}, so the value(s) in \code{x} must be exact.
-#' @param rasters,vectors If \code{TRUE}, remove only files of this type.
+#' @param rastOrVect The type of object to delete: either \code{'rasters'} and/or \code{'vectors'}. If \code{NULL} (default), then the function will attempt to guess whether \code{x} refers to a raster or vector. However, in \code{GRASS}, it is possible to have a raster and a vector of the same name. If this is the case, then you can specify whether \code{x} is a raster or vector (partial matching is supported).
 #'
 #' @return Invisibly returns the number of rasters and/or vectors removed. More notably, this function also removes rasters and/or vectors from a \code{GRASS} session.
 #'
@@ -13,49 +13,65 @@
 #' @example man/examples/ex_fasterOperations.r
 #'
 #' @export
-fasterRm <- function(x, pattern = FALSE, rasters = TRUE, vectors = TRUE) {
+fasterRm <- function(
+	x,
+	pattern = FALSE,
+	rastOrVect = c('raster', 'vector')
+) {
 	
-	flags <- c('quiet')
-	flags <- c(flags, 'f')
+	flags <- c('quiet', 'f')
 	
-	files <- fasterLs()
-	numFilesStart <- length(files)
-
-	if (x == '*') {
-		x <- fasterLs()
-	} else if (pattern) {
-		theseFiles <- numeric()
-		for (i in seq_along(x)) theseFiles <- c(theseFiles, which(grepl(files, pattern=x[i])))
-		x <- files[sort(unique(theseFiles))]
-	}
+	rastOrVect <- .getRastOrVect(rastOrVect, n=2, nullOK=FALSE)
+	spatials <- fasterLs(rastOrVect=rastOrVect, temps=TRUE)
+	numFilesStart <- length(spatials)
 	
-	types <- names(files)[match(x, files)]
+	if (autoRegion) on.exit(regionExt('*'), add=TRUE) # resize extent to encompass all spatials
 	
-	# remove types not wanting to be deleted
-	if (!rasters) {
-		keeps <- which(types != 'raster')
-		x <- x[keeps]
-		types <- types[keeps]
-	}
+	# if any spatials
+	if (length(spatials) > 0L) {
 
-	if (!vectors & length(x) > 0L) {
-		keeps <- which(types != 'vectors')
-		x <- x[keeps]
-		types <- types[keeps]
-	}
+		if (length(x) == 1L && x == '*') {
+			x <- spatials
+		} else if (pattern) {
+		
+			theseSpatials <- character()
+			for (i in seq_along(x)) {
+			
+				n <- nchar(x[i])
+				if (any(x[i] == substr(spatials, 1L, n))) {
+					matches <- spatials[x[i] == substr(spatials, 1L, n)]
+					if (names(matches) %in% rastOrVect) {
+						theseSpatials <- c(theseSpatials, matches)
+					}
+				}
+			}
+			
+			x <- theseSpatials
+			if (length(x) == 0L) warning('No rasters or vectors with this matching pattern found.')
+			
+		}
 
-	if (length(x) > 0L) {
-
-		for (i in seq_along(x)) {
-			name <- x[i]
-			type <- types[i]
-			rgrass::execGRASS('g.remove', flags=flags, name=name, type=type)
+		if (length(x) == 0L) {
+			warning('No rasters or vectors found. No files have been deleted.')
+		} else {
+		
+			for (i in seq_along(x)) {
+			
+				thisSpatial <- spatials[spatials %in% x[i]]
+				spatialType <- names(spatials)[i]
+				
+				if (spatialType %in% rastOrVect) {
+					rgrass::execGRASS('g.remove', flags=c('quiet', 'f'), type=spatialType, name=thisSpatial)
+				}
+			
+			}
+		
 		}
 		
 	}
-
-	files <- fasterLs()
-	numFilesEnd <- length(files)
+	
+	# resize region to encompass all
+	numFilesEnd <- length(fasterLs(rastOrVect=rastOrVect, temps=TRUE))
 	
 	out <- numFilesStart - numFilesEnd
 	invisible(out)

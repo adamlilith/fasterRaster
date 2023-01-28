@@ -6,60 +6,90 @@
 \usage{
 fasterContour(
   rast,
-  levels = NULL,
+  inRastName,
+  levels,
   cut = 2,
-  grassDir = options()$grassDir,
-  grassToR = TRUE,
-  inRastName = NULL,
+  replace = NULL,
   outGrassName = "contourVect",
+  outVectClass = NULL,
+  grassToR = TRUE,
+  autoRegion = NULL,
+  grassDir = NULL,
+  inits = NULL,
   ...
 )
 }
 \arguments{
 \item{rast}{A \code{SpatRaster} or the name of a raster already in an existing \code{GRASS} session.}
 
+\item{inRastName}{Character, missing, or \code{NULL}. The name of the input raster in \code{GRASS}. If this is missing, the name of the raster or raster file will be used. If \code{NULL}, then "\code{inputRast}" will be used. This argument is useful if you are \link{chaining} \pkg{fasterRaster} functions together and wish to refer to the input raster later in the \code{GRASS} session.}
+
 \item{levels}{Numeric vector. Levels of values in \code{rast} at which contours should be drawn. You can specify contour levels using this argument or by providing values for \code{step}, \code{minlevel}, and \code{maxlevel}. \code{levels} will override use of \code{step}, if both of them are specified.}
 
 \item{cut}{Integer >= 0. Minimum number of points necessary to generate a contour line. A value of 0 implies no limit. Default is 2.}
 
-\item{grassDir}{Name of the folder path in which \code{GRASS} is installed. For a Windows system, this might be something like \code{'C:/Program Files/GRASS GIS 8.2'}. For a Mac system, this might be like \code{"/Applications/GRASS-8.2.app/Contents/Resources"}. If you are using a lot of \pkg{fasterRaster} functions, it can be easier to set this once using \code{\link{fasterOptions}}. By default, this is \code{NULL}, in which case the install path for \code{GRASS} will be searched for, but if not found, will result in an error.}
+\item{replace}{Logical or \code{NULL}. If \code{FALSE} or \code{NULL} (default), then attempting to overwrite rasters or vectors already in a \code{GRASS} session will result in an error. You can allow overwriting by changing this to \code{TRUE}, or by setting \code{inRastName}, \code{inVectName}, and/or \code{outGrassName} to values different from rasters or vectors that already exist in the session (not all functions have these arguments). Use \code{\link{fasterLs}} to see existing rasters and vectors.  You can set this for all functions at once using \code{\link{fasterOptions}}.}
 
-\item{grassToR}{If \code{TRUE} (default) then the output will be returned to \pkg{R}. If \code{FALSE}, then the output is left in the \code{GRASS} session and named the value in \code{outGrassName}. You can then refer to the output in subsequent \pkg{fasterRaster} functions and avoid the need to re-import it. This is called "chaining" functions together, and it can save a lot of computational time.}
+\item{outGrassName}{Character. Name of output in \code{GRASS}. This is useful if you want to refer to the output object in \code{GRASS} later in a session by \link{chaining} functions.}
 
-\item{inRastName}{The name of the input raster in \code{GRASS}. This argument is useful if you are "chaining" \pkg{fasterRaster} functions together and wish to refer to the input raster later. The default value is the name of the raster (i.e., \code{names(rast)}).}
+\item{outVectClass}{Character or \code{NULL}. This sets the class of spatial vectors imported back to \code{R} from \code{GRASS}. If \code{'SpatRaster'} or \code{NULL} 9default), a \code{SpatVector} from the \pkg{terra} package is returned. If \code{'sf'}, an \code{sf} object from the \pkg{sf} package is returned. This argument is ignored if \code{grassToR} is \code{FALSE}. You can set this argument for all functions at once using \code{\link{fasterOptions}}.}
 
-\item{outGrassName}{Character. Name of output in \code{GRASS}. This is useful if you want to refer to the output object in \code{GRASS} later in a session by "chaining" functions.}
+\item{grassToR}{Logical or \code{NULL}. If \code{TRUE} or \code{NULL} (default) then the output will be returned to \code{R}. If \code{FALSE}, then the output is left in the \code{GRASS} session (with the name given by \code{outGrassName}). You can set this argument for all functions at once using \code{\link{fasterOptions}}.}
 
-\item{...}{Arguments to pass to \code{\link[rgrass]{execGRASS}} when calculating horizon height (i.e., function \code{r.horizon} in \code{GRASS}).}
+\item{autoRegion}{Logical or \code{NULL}. If \code{TRUE} or \code{NULL} (default), then during execution of this function, the \code{GRASS} \link{region} will be resized to encompass the raster/vector/area of interest, and if relevant, resampled to match its spatial resolution. If \code{FALSE}, the the current region's extent and resolution will be used. Most users will want to keep this \code{TRUE} or \code{NULL} (same as \code{TRUE}). If you change this to \code{FALSE}, you will need to keep track of the \code{GRASS} \link{region} properties. This argument can be set for all functions at once using \code{\link{fasterOptions}}.}
+
+\item{grassDir}{Character or \code{NULL}. Name of the path in which \code{GRASS} is installed. For a Windows system, this might be something like \code{'C:/Program Files/GRASS GIS 8.3'}, for a Mac, like \code{"/Applications/GRASS-8.3.app/Contents/Resources"}, and for Linux like \code{'/usr/local/grass'}. If you are using a lot of \pkg{fasterRaster} functions, you can set this for all functions at once using \code{\link{fasterOptions}}. By default, this is \code{NULL}, in which case the install path for \code{GRASS} will be searched for, but if not found, will result in an error (usually the case).}
+
+\item{inits}{Either \code{NULL} (default), or a named list of arguments to pass to \code{\link{initGrass}}. If \code{NULL}, then the current active \code{GRASS} session is used, or a new one in the "default" location is created.}
+
+\item{...}{Arguments to send to \code{GRASS} module \code{\href{https://grass.osgeo.org/grass82/manuals/r.contour.html}{r.contour}}.}
 }
 \value{
-If \code{grassToR} if \code{TRUE}, then a \code{SpatialLines} or \code{SpatialLinesDataFrame} object with the same coordinate reference system as \code{rast}. Regardless, a vector is written into the \code{GRASS} session. The name of this vector is given by \code{outGrassName}.
+If \code{grassToR} is \code{TRUE}, then this function returns either a \code{SpatVector} or \code{sf} object, depending on the value of \code{outVectClass}. Regardless, a vector is written into the \code{GRASS} session. The name of this vector in \code{GRASS} is given by \code{outGrassName}.
 }
 \description{
 This function creates a spatial vector object from a raster representing contour lines in the raster.
 }
 \details{
-See the documentation for the \code{GRASS} module \code{r.contour}{https://grass.osgeo.org/grass82/manuals/r.contour.html}.
+See the documentation for the \code{GRASS} module \code{\href{https://grass.osgeo.org/grass82/manuals/r.contour.html}{r.contour}}.
 }
 \examples{
 \dontrun{
 
+# IMPORTANT: These function use the "location", "restartGrass", and
+# "warn" arguments to avoid interfering with an existing GRASS session.
+# WHEN YOU ARE DONE WITH THE EXAMPLES, run this line to revert to your
+# active GRASS session:
+# initGrass(location='default') # change "location" if not "default"
+
+# For fasterRaster functions below, this will be used to set up a location
+# that does not interfere with any locations you may be using.
+inits <- list(location='examples', restartGrass=TRUE, warn=FALSE)
+
+# IMPORTANT: Change this to where GRASS is installed on your system.
+grassDir <- "/Applications/GRASS-8.2.app/Contents/Resources" # for a Mac
+grassDir <- 'C:/Program Files/GRASS GIS 8.2' # example for a PC
+
+library(sf)
 library(terra)
 
-# change this to where GRASS is installed on your system
-grassDir <- 'C:/Program Files/GRASS GIS 8.2' # example for a PC
-grassDir <- "/Applications/GRASS-8.2.app/Contents/Resources" # for a Mac
-
 madElev <- fasterData('madElev')
-conts <- fasterContour(madElev, levels=c(100, 200, 300, 400, 500),
-grassDir=grassDir)
+
+levels <- c(0, 100, 200, 300, 400, 500)
+
+conts <- fasterContour(madElev, levels=levels, grassDir=grassDir,
+inits=inits)
 
 plot(madElev)
 plot(conts, add=TRUE)
+
+# Revert back to original GRASS session.
+# Change to your working location if not "default" (it usually is).
+initGrass(location='default')
 
 }
 
 }
 \seealso{
-\code{\link[terra]{as.contour}} in \pkg{terra}; \href{https://grass.osgeo.org/grass82/manuals/r.contour.html}{\code{r.contour}} in \code{GRASS}
+\code{\link[terra]{as.contour}} in \pkg{terra}; \code{GRASS} module \code{\href{https://grass.osgeo.org/grass82/manuals/r.contour.html}{r.contour}}
 }

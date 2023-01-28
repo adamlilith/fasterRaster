@@ -2,19 +2,20 @@
 % Please edit documentation in R/fasterRes.r
 \name{fasterRes}
 \alias{fasterRes}
-\title{Spatial extent of a GRASS session}
+\title{Information on a raster or vector in a GRASS session}
 \usage{
-fasterRes(terra = TRUE)
+fasterRes(rast, names = TRUE)
 }
 \arguments{
-\item{terra}{If \code{TRUE} (default), the object that is returned is an \code{\link[terra]{SpatExtent}} object. If \code{FALSE}, then the bounding coordinates are returned as a vector.}
+\item{names}{If \code{TRUE} (default), return a named vector.}
+
+\item{x}{The name of a raster in the active \code{GRASS} session. This must be in quotes.}
 }
 \value{
-An object of class \code{\link[terra]{SpatExtent}} or a numeric vector.
+A numeric vector with cell dimensions in the east-west and north-south directions.
 }
 \description{
-This function returns the spatial extent of a \code{GRASS} session. \code{GRASS} sessions must have an extent, and this is usually set by the first raster or vector that is imported into them. Any subsequent rasters or vectors are cropped to this extent (which may or may not be desirable). By default, the function returns an object of class \code{\link[terra]{SpatExtent}} from the \pkg{terra} package. \cr
-Note that retrieving this information is somewhat of a hack, so it only returns the extent of the "default" location with the "PERMANENT" mapset. These will work for nearly all users of \pkg{fasterRaster}, but if you create non-typical locations or mapsets using \code{\link{initGrass}}, then this function may return erroneous results.
+Displays information on a raster or vector already in an R session. For further
 }
 \examples{
 \dontrun{
@@ -27,30 +28,30 @@ madElev <- fasterData('madElev')
 initGrass(madElev, inRastName = 'madElev')
 
 # import a vector
-madCoast0 <- fasterData('madCoast0')
-exportVectToGrass(madCoast0, inVectName = 'madCoast0')
+madRivers <- fasterData('madRivers')
+fasterVect(madRivers, inVectName = 'madRivers')
 
-# get information on the raster and vector
-fasterInfoRast('madElev')
-fasterInfoVect('madCoast0')
+# what's in the GRASS session?
+fasterLs('rasters') # what rasters?
+fasterLs('vectors') # what vectors?
+fasterLs() # what rasters and vectors?
 
-# information on the coordinate reference system
+# information on the raster and vector
+fasterInfo('madElev')
+fasterInfo('madCoast0')
+fasterInfo() # everything
+
+# information on the coordinate reference system of the GRASS session
 fasterCRS() # "plain" format
 fasterCRS(TRUE) # nice for the eyes
 
 # spatial extent of the GRASS session
-fasterExt() # returns a SpatExtent object
-fasterExt(FALSE) # returns a vector
-
-# spatial resolution
-fasterRes()
-
-# names of all rasters and vectors in the GRASS session
-fasterLs()
+fasterExt('madElev') # extent of madElev raster
+fasterExt('madRivers') # extent of madRivers vector
+fasterExt() # maximum extent of all spatial objects
 
 }
-
 }
 \seealso{
-\code{\link{fasterExt}}, \code{\link{fasterInfoRast}}, and \code{\link{fasterInfoVect}} in \pkg{fasterRaster};  \code{\link[terra]{res}} in the \code{\link[terra]{terra}} package
+\code{\link{fasterLs}}, \code{\link{fasterExt}}, \code{\link{fasterDim}}, and \code{\link{fasterRes}} in \pkg{fasterRaster}; \href{https://grass.osgeo.org/grass82/manuals/r.info.html}{\code{r.info}} and \href{https://grass.osgeo.org/grass82/manuals/v.info.html}{\code{v.info}} in \code{GRASS}
 }

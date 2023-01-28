@@ -10,18 +10,20 @@ fasterVectToRastDistance(
   metric = "euclidean",
   meters = TRUE,
   invert = FALSE,
-  grassDir = options()$grassDir,
-  grassToR = TRUE,
+  replace = FALSE,
   inRastName = NULL,
   inVectName = NULL,
   outGrassName = "distToVectRast",
+  grassToR = TRUE,
+  grassDir = options()$grassDir,
+  inits = NULL,
   ...
 )
 }
 \arguments{
 \item{rast}{A \code{SpatRaster} or the name of a raster already in an existing \code{GRASS} session.}
 
-\item{vect}{A \code{Spatvector}, an \code{sf} object, or the name of a spatial vector already in an existing \code{GRASS} session.}
+\item{vect}{A \code{SpatVector}, an \code{sf} object, or the name of a spatial vector in the active \code{GRASS} session.}
 
 \item{metric}{Character, indicates type of distance to calculate:
 \itemize{
@@ -36,17 +38,21 @@ fasterVectToRastDistance(
 
 \item{invert}{Logical, if \code{TRUE} then for cells covered by a vector object calculate distance to nearest cell \emph{not} covered by a vector object.}
 
-\item{grassDir}{Name of the folder path in which \code{GRASS} is installed. For a Windows system, this might be something like \code{'C:/Program Files/GRASS GIS 8.2'}. For a Mac system, this might be like \code{"/Applications/GRASS-8.2.app/Contents/Resources"}. If you are using a lot of \pkg{fasterRaster} functions, it can be easier to set this once using \code{\link{fasterOptions}}. By default, this is \code{NULL}, in which case the install path for \code{GRASS} will be searched for, but if not found, will result in an error.}
+\item{replace}{Logical or \code{NULL}. If \code{FALSE} or \code{NULL} (default), then attempting to overwrite rasters or vectors already in a \code{GRASS} session will result in an error. You can allow overwriting by changing this to \code{TRUE}, or by setting \code{inRastName}, \code{inVectName}, and/or \code{outGrassName} to values different from rasters or vectors that already exist in the session (not all functions have these arguments). Use \code{\link{fasterLs}} to see existing rasters and vectors.  You can set this for all functions at once using \code{\link{fasterOptions}}.}
 
-\item{grassToR}{If \code{TRUE} (default) then the output will be returned to \pkg{R}. If \code{FALSE}, then the output is left in the \code{GRASS} session and named the value in \code{outGrassName}. You can then refer to the output in subsequent \pkg{fasterRaster} functions and avoid the need to re-import it. This is called "chaining" functions together, and it can save a lot of computational time.}
+\item{inRastName}{Character, missing, or \code{NULL}. The name of the input raster in \code{GRASS}. If this is missing, the name of the raster or raster file will be used. If \code{NULL}, then "\code{inputRast}" will be used. This argument is useful if you are \link{chaining} \pkg{fasterRaster} functions together and wish to refer to the input raster later in the \code{GRASS} session.}
 
-\item{inRastName}{The name of the input raster in \code{GRASS}. This argument is useful if you are "chaining" \pkg{fasterRaster} functions together and wish to refer to the input raster later. The default value is the name of the raster (i.e., \code{names(rast)}).}
+\item{inVectName}{Character. The name of the input vector in \code{GRASS}. If missing or \code{NULL}, \"code{inputVect}" will be used. This is useful if you are \link{chaining} \pkg{fasterRaster} functions together and wish to refer to the vector later in the \code{GRASS} session.}
 
-\item{inVectName}{The name of the input vector in \code{GRASS}. This is useful only if you are "chaining" \pkg{fasterRaster} functions together and wish to refer to the input vector later. The default value is \code{'vect'}.}
+\item{outGrassName}{Character. Name of output in \code{GRASS}. This is useful if you want to refer to the output object in \code{GRASS} later in a session by \link{chaining} functions.}
 
-\item{outGrassName}{Character. Name of output in \code{GRASS}. This is useful if you want to refer to the output object in \code{GRASS} later in a session by "chaining" functions.}
+\item{grassToR}{Logical or \code{NULL}. If \code{TRUE} or \code{NULL} (default) then the output will be returned to \code{R}. If \code{FALSE}, then the output is left in the \code{GRASS} session (with the name given by \code{outGrassName}). You can set this argument for all functions at once using \code{\link{fasterOptions}}.}
 
-\item{...}{Arguments to pass to \code{\link[rgrass]{execGRASS}} when used for rasterizing (i.e., function \code{r.grow.distance} in \code{GRASS}).}
+\item{grassDir}{Character or \code{NULL}. Name of the path in which \code{GRASS} is installed. For a Windows system, this might be something like \code{'C:/Program Files/GRASS GIS 8.3'}, for a Mac, like \code{"/Applications/GRASS-8.3.app/Contents/Resources"}, and for Linux like \code{'/usr/local/grass'}. If you are using a lot of \pkg{fasterRaster} functions, you can set this for all functions at once using \code{\link{fasterOptions}}. By default, this is \code{NULL}, in which case the install path for \code{GRASS} will be searched for, but if not found, will result in an error (usually the case).}
+
+\item{inits}{Either \code{NULL} (default), or a named list of arguments to pass to \code{\link{initGrass}}. If \code{NULL}, then the current active \code{GRASS} session is used, or a new one in the "default" location is created.}
+
+\item{...}{Arguments to pass to \code{GRASS} module \href{https://grass.osgeo.org/grass82/manuals/r.grow.distance.html}{\code{r.grow.distance}}.}
 }
 \value{
 If \code{grassToR} if \code{TRUE}, then a raster with the same extent, resolution, and coordinate reference system as \code{vect}. Regardless, a raster with the name of \code{distToVect} is written into the \code{GRASS} session.

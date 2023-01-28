@@ -4,7 +4,7 @@
 \alias{.sharedArgs_vect}
 \title{Shared argument(s)}
 \arguments{
-\item{vect}{A \code{Spatvector}, an \code{sf} object, or the name of a spatial vector already in an existing \code{GRASS} session.}
+\item{vect}{A \code{SpatVector}, an \code{sf} object, or the name of a spatial vector in the active \code{GRASS} session.}
 }
 \description{
 Shared argument(s)

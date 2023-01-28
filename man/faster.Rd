@@ -2,7 +2,7 @@
 % Please edit documentation in R/faster.r
 \name{faster}
 \alias{faster}
-\title{Generic function to call a \code{GRASS} function (module)}
+\title{Generic function to call a GRASS function (module)}
 \usage{
 faster(
   mod,
@@ -10,12 +10,14 @@ faster(
   vect = NULL,
   ...,
   out = NULL,
-  flags = c("quiet", "overwrite"),
-  grassDir = options()$grassDir,
-  grassToR = TRUE,
+  flags = "quiet",
+  replace = FALSE,
   inRastName = NULL,
   inVectName = NULL,
-  outGrassName = "output"
+  outGrassName = "output",
+  grassToR = TRUE,
+  grassDir = options()$grassDir,
+  inits = NULL
 )
 }
 \arguments{
@@ -25,19 +27,21 @@ faster(
 
 \item{vect}{A \code{Spatvector}, an \code{sf} object, or the name of a spatial vector already in an existing \code{GRASS} session. If the \code{GRASS} module does not use a vector, this can be \code{NULL}.}
 
-\item{...}{Arguments to pass to the \code{GRASS} module through \code{\link[rgrass]{execGRASS}}.}
-
 \item{out}{\code{NULL}, \code{'raster'}, or \code{'vector'} (partial string matching is used). Type of output expected from the \code{GRASS} module.}
 
 \item{flags}{List of flags for the \code{GRASS} module. The default (\code{c('quiet', 'overwrite')}) causes the module to report little/no messages and to overwrite existing files of the same name. For more flags, see the help documentation for the respective \code{GRASS} module.}
 
-\item{grassDir}{Name of the folder path in which \code{GRASS} is installed. For a Windows system, this might be something like \code{'C:/Program Files/GRASS GIS 8.2'}. For a Mac system, this might be like \code{"/Applications/GRASS-8.2.app/Contents/Resources"}. If you are using a lot of \pkg{fasterRaster} functions, it can be easier to set this once using \code{\link{fasterOptions}}. By default, this is \code{NULL}, in which case the install path for \code{GRASS} will be searched for, but if not found, will result in an error.}
+\item{replace}{Logical or \code{NULL}. If \code{FALSE} or \code{NULL} (default), then attempting to overwrite rasters or vectors already in a \code{GRASS} session will result in an error. You can allow overwriting by changing this to \code{TRUE}, or by setting \code{inRastName}, \code{inVectName}, and/or \code{outGrassName} to values different from rasters or vectors that already exist in the session (not all functions have these arguments). Use \code{\link{fasterLs}} to see existing rasters and vectors.  You can set this for all functions at once using \code{\link{fasterOptions}}.}
 
-\item{grassToR}{If \code{TRUE} (default) then the output will be returned to \pkg{R}. If \code{FALSE}, then the output is left in the \code{GRASS} session and named the value in \code{outGrassName}. You can then refer to the output in subsequent \pkg{fasterRaster} functions and avoid the need to re-import it. This is called "chaining" functions together, and it can save a lot of computational time.}
+\item{inRastName}{The name of the input raster(s) in \code{GRASS}. If \code{rast} is a multi-layer raster, then there must be one name per layer. If missing or \code{NULL}, the name(s) of the raster(s) will be used (i.e., \code{names(rast)}). This argument is useful if you are \link{chaining} \pkg{fasterRaster} functions together and wish to refer to the raster(s) later in the \code{GRASS} session.}
 
-\item{inRastName}{The name of the input raster(s) in \code{GRASS}. If \code{rast} is a multi-layer raster, then there must be one name per layer. This argument is useful if you are "chaining" \pkg{fasterRaster} functions together and wish to refer to the input raster(s) later. The default value is the name(s) of the raster(s) (i.e., \code{names(rast)}).}
+\item{inVectName}{Character. The name of the input vector in \code{GRASS}. If missing or \code{NULL}, \"code{inputVect}" will be used. This is useful if you are \link{chaining} \pkg{fasterRaster} functions together and wish to refer to the vector later in the \code{GRASS} session.}
 
-\item{inVectName}{The name of the input vector in \code{GRASS}. This is useful only if you are "chaining" \pkg{fasterRaster} functions together and wish to refer to the input vector later. The default value is \code{'vect'}.}
+\item{grassToR}{Logical or \code{NULL}. If \code{TRUE} or \code{NULL} (default) then the output will be returned to \code{R}. If \code{FALSE}, then the output is left in the \code{GRASS} session (with the name given by \code{outGrassName}). You can set this argument for all functions at once using \code{\link{fasterOptions}}.}
+
+\item{grassDir}{Character or \code{NULL}. Name of the path in which \code{GRASS} is installed. For a Windows system, this might be something like \code{'C:/Program Files/GRASS GIS 8.3'}, for a Mac, like \code{"/Applications/GRASS-8.3.app/Contents/Resources"}, and for Linux like \code{'/usr/local/grass'}. If you are using a lot of \pkg{fasterRaster} functions, you can set this for all functions at once using \code{\link{fasterOptions}}. By default, this is \code{NULL}, in which case the install path for \code{GRASS} will be searched for, but if not found, will result in an error (usually the case).}
+
+\item{inits}{Either \code{NULL} (default), or a named list of arguments to pass to \code{\link{initGrass}}. If \code{NULL}, then the current active \code{GRASS} session is used, or a new one in the "default" location is created.}
 }
 \value{
 A raster, vector, or some other product of the \code{GRASS} module.
@@ -48,71 +52,92 @@ This function is wrapper for \code{\link[rgrass]{execGRASS}}, plus code necessar
 \examples{
 \dontrun{
 
+# IMPORTANT: These function use the "location", "restartGrass", and
+# "warn" arguments to avoid interfering with an existing GRASS session.
+# WHEN YOU ARE DONE WITH THE EXAMPLES, run this line to revert to your
+# active GRASS session:
+# initGrass(location='default') # change "location" if not "default"
+
+# For fasterRaster functions below, this will be used to set up a location
+# that does not interfere with any locations you may be using.
+inits <- list(location='examples', restartGrass=TRUE, warn=FALSE)
+
 library(sf)
 library(terra)
 
 # change this to where GRASS is installed on your system:
-grassDir <- 'C:/Program Files/GRASS GIS 8.2' # example for a PC
 grassDir <- "/Applications/GRASS-8.2.app/Contents/Resources" # for a Mac
+grassDir <- 'C:/Program Files/GRASS GIS 8.2' # example for a PC
 
 madElev <- fasterData('madElev')
 
-# Example using a raster as input, raster as output:
+### Example using a raster as input, raster as output:
 # "r.latlong" creates a raster with cell values equal to latitude (WGS84).
-# Note that fasterLongLatRasts() is easier to use.
-lat <- faster('r.latlong', rast=madElev, out='rast',
-flags=c('quiet', 'overwrite'), grassDir=grassDir)
+# Note that fasterLongLatRasts() is easier to use than faster() in this case.
+#
+lat <- faster('r.latlong', rast=madElev, out='rast', grassDir=grassDir,
+inits=inits) # typically use "inits" for examples only
 
-plot(lat, add=TRUE)
+plot(lat)
 
-# example using a raster as input, vector as output
+### Example using a raster as input, vector as output
 # "r.contour" creates a vector of contours
 # Note that fasterContour() is easier to use.
 conts <- faster('r.contour', rast=madElev, out='vect',
-levels=c(100, 200, 300, 400, 500), flags=c('quiet', 'overwrite'),
-grassDir=grassDir)
+levels=c(100, 200, 300, 400, 500), grassDir=grassDir, 
+inits=inits) # typically use "inits" for examples only
 
 plot(madElev)
 plot(conts, add=TRUE)
 
-# Example using a vector as input, raster as output.
+### Example using a vector as input, raster as output.
 # "v.to.rast" creates a raster from a vector (i.e., rasterizes it).
 # Note that fasterRasterize() is easier to use.
+
+madDypsis <- fasterData('madDypsis')
+
+rastDypsis <- faster('v.to.rast', vect=madDypsis, inVectName='madDypsis',
+rast=madElev, use='val', value=1, out='rast',
+outGrassName='rastDypsis', grassDir=grassDir,
+inits=inits) # typically use "inits" for examples only
+
 rastRivers <- faster('v.to.rast', vect=madRivers, outGrassName='rastRivers',
-use='val', value=1,
-out='rast', flags=c('quiet', 'overwrite'), grassDir=grassDir)
+use='val', value=1, out='rast', grassDir=grassDir,
+inits=inits) # typically use "inits" for examples only
 
 plot(madElev)
 plot(rastRivers, col='blue', add=TRUE)
 
-# Example using a vector as input, vector as output.
-# "v.buffer" creates a buffer around avector.
+### Example using a vector as input, vector as output.
+# "v.buffer" creates a buffer around a vector.
 # Note that fasterBufferVect() is easier to use.
 riverBuff <- faster('v.buffer', vect=madRivers, outGrassName='riverBuff',
-distance = 1000,
-out='vect', flags=c('quiet', 'overwrite'), grassDir=grassDir)
+distance = 1000, out='vect', grassDir=grassDir,
+inits=inits) # typically use "inits" for examples only
 
 plot(riverBuff)
 plot(st_geometry(madRivers), col='blue', add=TRUE)
 
 # Example using "chaining".
-# "v.buffer" creates a buffer around avector.
+# "v.buffer" creates a buffer around a vector.
 # "v.to.rast" creates a raster from a vector (i.e., rasterizes it).
 # Note that fasterBufferVect() and fasterRasterize() would be easier to use.
 faster('v.buffer', vect=madRivers, outGrassName='riverBuff',
-distance = 1000,
-out='vect', flags=c('quiet', 'overwrite'),
-grassDir=grassDir, grassToR=FALSE)
+distance = 1000, out='vect', grassDir=grassDir, grassToR=FALSE,
+inits=inits) # typically use "inits" for examples only
 
 rastBuff <- faster('v.to.rast', vect='riverBuff', outGrassName='rastRivers',
-use='val', value=1,
-out='rast', flags=c('quiet', 'overwrite'), grassDir=grassDir)
+use='val', value=1, out='rast', grassDir=grassDir)
 
 plot(rastBuff)
 plot(st_geometry(madRivers), col='blue', add=TRUE)
 
+# Revert back to original GRASS session.
+# Change to your working location if not "default" (it usually is).
+initGrass(location='default')
+
 }
 }
 \seealso{
-See the \code{OS Geo GRASS} websit for a catalog and detailed descriptions of \href{https://grass.osgeo.org/grass82/manuals/vector.html}{vector} and \href{https://grass.osgeo.org/grass82/manuals/raster.html}{raster} modules. Related functions include \code{\link[rgrass]{execGRASS}} in \pkg{rgrass}, and \code{\link{exportRastToGrass}} and \code{\link{exportVectToGrass}} for exporting rasters and vectors to an existing \code{GRASS} session.
+See the \code{OS Geo GRASS} websit for a catalog and detailed descriptions of \href{https://grass.osgeo.org/grass82/manuals/vector.html}{vector} and \href{https://grass.osgeo.org/grass82/manuals/raster.html}{raster} modules. Related functions include \code{\link[rgrass]{execGRASS}} in \pkg{rgrass}, and \code{\link{fasterRast}} and \code{\link{fasterVect}} for exporting rasters and vectors to an existing \code{GRASS} session.
 }
