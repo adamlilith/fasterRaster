@@ -1,8 +1,11 @@
-#' Mask values in a raster using another raster or vector
+#' Create a mask to affect subsequent operations on rasters
 #'
-#' This function creates a copy of a raster, except that some cells can be set to \code{NA} by using a "mask". A mask can be created from a raster or a spatial vector.  If from a raster, then only cells in the inoput raster that overlap with non-\code{NA} cells in the mask are copied. If from a vector, only cells that overlap with the vector are copied.\cr
+#' This function creates a copy of a raster, but forces some cells to \code{NA} by using a "mask". A mask can be created from a raster or a spatial vector.  If from a raster, then only cells in the inoput raster that overlap with non-\code{NA} cells in the mask are copied. If from a vector, only cells that overlap with the vector are copied.\cr
 #' 
-#' In \code{GRASS}, a mask raster is always named \code{MASK}. If such a raster exists in the active \code{GRASS} session, it causes operations on rasters to affect only those portions of the raster that fall within a non-\code{NA} (in \code{GRASS}, a non-\code{NULL}) cell. It will continue to affect nearly all \pkg{fasterRaster} functions that operate on rasters until it is removed. To remove a mask, set the argument \code{removeMask} to \code{TRUE} when using this function, or use \code{\link{fasterRm}} or \code{\link{fasterRename}} on the \code{MASK} raster.
+#' In \code{GRASS}, a mask raster is always named \code{MASK}. If such a raster exists in the active \code{GRASS} session, it causes operations on rasters to affect only those portions of the raster that fall within a non-\code{NA} (in \code{GRASS}, a non-\code{NULL}) cell. It will continue to affect nearly all \pkg{fasterRaster} functions that operate on rasters until it is removed. To remove a mask, set the argument \code{removeMask} to \code{TRUE} when using this function, or use \code{\link{fasterRm}} or \code{\link{fasterRename}} on the \code{MASK} raster.\cr
+#'
+#' This function is similar to \code{\link{fasterMakeMask}}, except that this creates a mask, masks a focal raster, then (by default) removes the mask. That function creates a mask for use with subsequent operations.
+#' 
 #'
 #' @inheritParams .sharedArgs_rast
 #' @inheritParams .sharedArgs_inRastName
@@ -27,7 +30,7 @@
 #'
 #' @example man/examples/ex_fasterMask.r
 #'
-#' @seealso \code{\link[terra]{mask}} in package \pkg{terra}; \code{GRASS} module }\href{https://grass.osgeo.org/grass82/manuals/r.mask.html}{\code{r.mask}}
+#' @seealso \code{\link{fasterMakeMask}} in \pkg{fasterRaster}; code{\link[terra]{mask}} in package \pkg{terra}; \code{GRASS} module }\href{https://grass.osgeo.org/grass82/manuals/r.mask.html}{\code{r.mask}}
 #'
 #' @export
 
@@ -87,17 +90,7 @@ fasterMask <- function(
 		rastOrVect <- 'vector'
 	} else if (inherits(mask, 'character')) {
 		inMaskName <- mask
-		rastOrVect <- .getRastOrVect(rastOrVect, n=1, nullOK=TRUE)
-		if (is.null(rastOrVect)) {
-		
-			spatials <- fasterLs(rastOrVect=rastOrVect)
-			spatials <- spatials[spatials %in% mask]
-			rastOrVect <- names(spatials)
-		
-			if (length(spatials) > 1L) stop('There is more than one object with the name given\nby "mask" in GRASS. Use the "rastOrVect" argument.')
-		
-		}
-		
+		rastOrVect <- .isRastOrVect(x=mask, rastOrVect=rastOrVect, errorNotFound=TRUE, errorAmbig=TRUE, temps=FALSE)
 	}
 
 	args <- list(

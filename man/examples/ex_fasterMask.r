@@ -24,8 +24,8 @@ madCoast4 <- fasterData('madCoast4') # commune outlines
 # get a commune
 madAnt <- madCoast4[madCoast4$NAME_4 == 'Antanambe', ]
 
-### mask with a vector
-######################
+### mask with a vector: fasterMask
+##################################
 
 # make a mask from a commune
 masked <- fasterMask(madElev, mask=madAnt, grassDir=grassDir,
@@ -39,8 +39,8 @@ plot(madElev, col=grays, legend=FALSE)
 plot(masked, add=TRUE)
 plot(st_geometry(madAnt), add=TRUE)
 
-### mask with a raster
-######################
+### mask with a raster: fasterMask
+##################################
 
 # make a mask from a raster
 masked <- fasterMask(madElevAnt, mask=madElevMan, grassDir=grassDir,
@@ -61,8 +61,8 @@ plot(madElevAnt, col=reds, legend=FALSE, add=TRUE)
 plot(madElevMan, col=blues, legend=FALSE, add=TRUE)
 plot(masked, add=TRUE)
 
-### create a persistent mask
-############################
+### create a persistent mask: fasterMask
+########################################
 
 # create mask from raster
 fasterMask(madElevAnt, mask=madElevMan, removeMask=FALSE,
@@ -95,6 +95,47 @@ fasterRename('MASK', 'MASKold')
 # Operations no longer masked
 slopeUnmasked <- fasterTerrain(madElev, v='slope',
 cores=2, grassDir=grassDir,
+location='examples') # line for examples only
+
+grays <- colorRampPalette(c('white', 'gray20'))
+grays <- grays(10)
+
+plot(slopeUnmasked, legend=TRUE)
+plot(slope, col=grays, legend=FALSE, add=TRUE)
+
+### create a persistent mask: fasterMakeMask
+############################################
+
+# create mask from raster
+fasterMakeMask(madElevMan, grassDir=grassDir, grassToR=FALSE,
+location='examples', restartGrass=TRUE, warn=FALSE) # line for examples only
+
+# What did we make? The mask is always named "MASK".
+fasterLs()
+
+# importing then exporting a raster will crop it
+fasterRast(madForest2000)
+forestMasked <- importFromGrass('madForest2000')
+
+plot(madForest2000, col='gray', legend=FALSE)
+plot(forestMasked, col='darkgreen', add=TRUE)
+
+# Doing operations on a raster masks it.
+slope <- fasterTerrain(madElev, v='slope', cores=2, grassDir=grassDir,
+location='examples') # line for examples only
+
+grays <- colorRampPalette(c('white', 'gray20'))
+grays <- grays(10)
+
+plot(madElev, col=grays, legend=FALSE)
+plot(slope, add=TRUE)
+
+# Remove the mask.
+fasterRename('MASK', 'MASKold')
+
+# Operations no longer masked
+slopeUnmasked <- fasterTerrain(madElev, v='slope',
+cores=2, grassDir=grassDir, replace=TRUE,
 location='examples') # line for examples only
 
 grays <- colorRampPalette(c('white', 'gray20'))
