@@ -45,3 +45,62 @@
 	out
 	
 }
+
+# Indicates if x is a raster or vector in GRASS. Returns "raster" or "vector" or NA (not found) or error if ambiguous.
+.isRastOrVect <- function(x, rastOrVect=NULL, errorNotFound=TRUE, errorAmbig=TRUE, temps=FALSE) {
+
+	# x				Name of a purported raster or vector in GRASS
+	# rastOrVect	NULL, or "raster" and/or "vector"
+	# errNotFound	If TRUE, throw an error if not found (otherwise returns NA)
+	# errAmbig		If TRUE, throw an error if ambiguous (otherwise returns NA)
+	# temps			Include temporary files?
+
+	if (inherits(x, 'SpatRaster')) {
+		out <- 'raster'
+	} else if (inherits(x, c('SpatVector', 'sf'))) {
+		out <- 'vector'
+	# neither SpatRaster, SpatVector, nor sf
+	} else {
+
+		rov <- if (is.null(rastOrVect)) { c('rasters', 'vectors')} else { rastOrVect }
+		spatials <- fasterLs(rastOrVect = rov, temps=temps)
+
+		# nothing in session
+		if (length(spatials) == 0L) {
+			if (errorNotFound) stop('No object of this name was found the active GRASS session.')
+			out <- NA
+		} else {
+
+			rastOrVect <- .getRastOrVect(rastOrVect, n=1, nullOK=TRUE)
+
+			# get matching items
+			matches <- if (is.null(rastOrVect)) {
+				spatials[spatials %in% x]
+			} else {
+				spatials[names(spatials) %in% rastOrVect]
+			}
+
+			# get item type
+			if (length(matches) == 0L) {
+				if (errorNotFound) stop('No object of this name was found the active GRASS session.')
+				out <- NA
+			} else {
+				type <- names(matches)
+				if (length(type) == 0L) {
+					if (errorNotFound) stop('No object of this name was found the active GRASS session.')
+					out <- NA
+				} else if (length(type) > 1L) {
+					if (errorAmbig) stop('More than one object with this name in the active GRASS session.')
+					out <- NA
+				} else {
+					out <- type
+				}
+			}
+			
+		} # neither SpatRaster, SpatVector, nor sf
+		
+	}
+		
+	out
+
+}
