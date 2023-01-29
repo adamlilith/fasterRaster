@@ -20,7 +20,7 @@
 #' 
 #' @return A \code{SpatRaster}. Also creates a raster in a new grass session named \code{outGrassName}.
 #' 
-#' @seealso \code{\link{fasterRes}}, \code{\link{fasterExtendRast}}, and \code{\link{fasterTrimRast}} in \pkg{fasterRaster}; \code{\link[terra]{crop}} and \code{\link[terra]{extend}} in \pkg{terra}; \code{GRASS} module \href{https://grass.osgeo.org/grass82/manuals/r.clip.html}{\code{r.clip}}--but note that this function does \emph{not} use \code{r.clip}.
+#' @seealso \code{\link{fasterMask}} and \code{\link{fasterMakeMask}} in \pkg{fasterRaster}; \code{\link[terra]{crop}} in \pkg{terra}; \code{GRASS} module \href{https://grass.osgeo.org/grass82/manuals/r.clip.html}{\code{r.clip}}--but note that this function does \emph{not} use \code{r.clip}.
 #' 
 #' @examples man/examples/ex_fasterCropExtendRast.r
 #'
@@ -42,15 +42,54 @@ fasterCropRast <- function(
 	...
 ) {
 
-	fasterMask(
-		rast = rast,
+	### arguments
+	if (missing(inTemplateName)) inTemplateName <- NULL
+
+	### commons v1
+	##############
+
+		### arguments
+		if (exists('rast', where=environment(), inherits=FALSE)) {
+			inRastName <- .getInRastName(inRastName, rast=rast)
+		} else {
+			rast <- inRastName <- NULL
+		}
+
+		if (exists('vect', where=environment(), inherits=FALSE)) {
+			inVectName <- .getInVectName(inVectName, vect=vect)
+		} else {
+			vect <- inVectName <- NULL
+		}
+
+		### flags
+		flags <- .getFlags(replace=replace)
+		
+		### restore
+		# on.exit(.restoreLocation(), add=TRUE) # return to starting location
+		if (autoRegion) on.exit(regionExt('*'), add=TRUE) # resize extent to encompass all spatials
+
+		### ellipses and initialization arguments
+		initsDots <- .getInitsDots(..., callingFx = 'fasterCropRast')
+		inits <- initsDots$inits
+		dots <- initsDots$dots
+
+	###############
+	### end commons
+
+	### initialize GRASS
+	input <- do.call('initGrass', inits)
+
+	### execute
+	
+	# make mask
+	fasterMakeMask(
 		mask = template,
-		inRastName = inRastName,
 		inMaskName = inTemplateName,
 		rastOrVect = rastOrVect,
 		
-		removeMask = TRUE,
-		outGrassName = outGrassName,
+		clip = FALSE,
+		
+		outGrassName = 'MASK',
 		
 		replace = replace,
 		grassToR = FALSE,
@@ -58,6 +97,34 @@ fasterCropRast <- function(
 		grassDir = grassDir,
 		...
 	)
+	
+	# copy focal raster
+	fasterCopy(
+		from = inRastName,
+		to = outGrassName,
+		rastOrVect = 'raster',
+		replace = replace,
+		autoRegion = autoRegion
+	)
+	
+	# multiply focal by mask
+	ex <- paste0(' = ', inRastName, ' * MASK')
+	fasterApp(
+		rast = inRastName,
+		inRastName = inRastName,
+		expression = ex,
+
+		outGrassName = outGrassName,
+
+		replace = TRUE,
+		grassToR = FALSE,
+		autoRegion = autoRegion,
+		grassDir = grassDir,
+		...
+	)
+	
+	# remove mask
+	fasterRm('MASK', rastOrVect = 'raster')
 	
 	# return
 	if (grassToR) {

@@ -122,6 +122,7 @@
 #' 		\code{\link{fasterFragmentation}}: Landscape fragmentation indices following Riitters et al. (2000 \emph{Conservation Ecology} 4:3; using multi-core).\cr
 #' 		\code{\link{fasterHorizon}}: Horizon angle height from a DEM.\cr
 #' 		\code{\link{fasterLongLatRasts}}: Create rasters with values equal to cell longitude and latitude.\cr
+#' 		\code{\link{fasterMakeMask}}: Create a mask for affecting subsequent raster operations.\cr
 #' 		\code{\link{fasterMask}}: Mask values in a raster using another raster or vector.\cr
 #' 		\code{\link{fasterMosaic}}: Combine rasters that do not perfectly overlap.\cr
 #' 		\code{\link{fasterNcell}}: Number of cells of a raster.\cr
