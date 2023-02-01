@@ -55,12 +55,6 @@ fasterApp <- function(
 			rast <- inRastName <- NULL
 		}
 
-		if (exists('vect', where=environment(), inherits=FALSE)) {
-			inVectName <- .getInVectName(inVectName, vect=vect)
-		} else {
-			vect <- inVectName <- NULL
-		}
-
 		### flags
 		flags <- .getFlags(replace=replace)
 		
@@ -75,13 +69,14 @@ fasterApp <- function(
 	
 	### function-specific
 
-	# execute
+	# expresssion
 	if (!is.character(expression)) stop('Argument "expression" must be a text string.')
 	expression <- trimws(expression)
 	if (substr(expression, 1, 1) == '=' & substr(expression, 2, 2) != ' ') stop('An expression must begin with an equals sign then a space.')
 	if (substr(expression, 1, 1) != '=') expression <- paste0('= ', expression)
 	expression <- paste(outGrassName, expression)
 
+	# execute
 	args <- list(
 		cmd = 'r.mapcalc',
 		expression = expression,

@@ -89,10 +89,16 @@ fasterMakeMask <- function(
 	} else if (inherits(mask, 'character')) {
 		
 		rastOrVect <- .isRastOrVect(x=mask, rastOrVect=rastOrVect, errorNotFound=TRUE, errorAmbig=TRUE, temps=FALSE)
+		inMaskName <- mask
+		
 		if (rastOrVect == 'raster') {
-			args <- c(args, rast=mask, inRastName=inMaskName)
+			args <- c(args, raster=mask)
+			inits$rast <- mask
+			inits$inRastName <- inMaskName
 		} else {
-			args <- c(args, vect=mask, inVectName=inMaskName)
+			args <- c(args, vector=mask)
+			inits$vect <- mask
+			inits$inVectName <- inMaskName
 		}
  		
 	}

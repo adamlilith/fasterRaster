@@ -1,6 +1,6 @@
 #' Crop a raster to the area of overlap with another raster or vector
 #'
-#' Crop a raster to the extent of another raster or vector. NB: This function is actualy an alias for \code{\link{fasterMask}}, which creates a mask from a raster or vector, then creates a copy of the overlapping portion of the focal raster.
+#' Crop a raster to the extent of another raster or vector. NB: This function is actualy an alias for \code{\link{fasterMask}}, which creates a mask from a raster or vector, then creates a copy of the overlapping portion of the focal raster. \emph{Currently, this function only works on numeric (not catgorial) rasters.}
 #'
 #' @inheritParams .sharedArgs_rast
 #' @inheritParams .sharedArgs_inRastName
@@ -22,7 +22,7 @@
 #' 
 #' @seealso \code{\link{fasterMask}} and \code{\link{fasterMakeMask}} in \pkg{fasterRaster}; \code{\link[terra]{crop}} in \pkg{terra}; \code{GRASS} module \href{https://grass.osgeo.org/grass82/manuals/r.clip.html}{\code{r.clip}}--but note that this function does \emph{not} use \code{r.clip}.
 #' 
-#' @examples man/examples/ex_fasterCropExtendRast.r
+#' @examples man/examples/ex_fasterCropRast.r
 #'
 #' @export
 
@@ -55,12 +55,6 @@ fasterCropRast <- function(
 			rast <- inRastName <- NULL
 		}
 
-		if (exists('vect', where=environment(), inherits=FALSE)) {
-			inVectName <- .getInVectName(inVectName, vect=vect)
-		} else {
-			vect <- inVectName <- NULL
-		}
-
 		### flags
 		flags <- .getFlags(replace=replace)
 		
@@ -80,7 +74,25 @@ fasterCropRast <- function(
 	input <- do.call('initGrass', inits)
 
 	### execute
-	
+
+	# copy existing mask
+	maskExists <- fasterExists('MASK', rastOrVect='raster')
+	if (maskExists) {
+
+		tempMaskName <- paste0('TEMPTEMP_MASK', round(1E9 * runif(1)))
+		fasterRename('MASK', tempMaskName, rastOrVect='raster')
+		on.exit(
+			fasterRename(
+				from = tempMaskName,
+				to = 'MASK',
+				rastOrVect = 'raster',
+				replace = TRUE
+			),
+			add=TRUE
+		)
+
+	}
+
 	# make mask
 	fasterMakeMask(
 		mask = template,
@@ -92,12 +104,13 @@ fasterCropRast <- function(
 		outGrassName = 'MASK',
 		
 		replace = replace,
+		restartGrass = FALSE,
 		grassToR = FALSE,
 		autoRegion = autoRegion,
 		grassDir = grassDir,
 		...
 	)
-	
+
 	# copy focal raster
 	fasterCopy(
 		from = inRastName,
@@ -107,22 +120,22 @@ fasterCropRast <- function(
 		autoRegion = autoRegion
 	)
 	
-	# multiply focal by mask
-	ex <- paste0(' = ', inRastName, ' * MASK')
-	fasterApp(
-		rast = inRastName,
-		inRastName = inRastName,
-		expression = ex,
+	# # multiply focal by mask
+	# ex <- paste0(' = ', inRastName, ' * MASK')
+	# fasterApp(
+		# rast = inRastName,
+		# inRastName = inRastName,
+		# expression = ex,
 
-		outGrassName = outGrassName,
+		# outGrassName = outGrassName,
 
-		replace = TRUE,
-		grassToR = FALSE,
-		autoRegion = autoRegion,
-		grassDir = grassDir,
-		...
-	)
-	
+		# replace = TRUE,
+		# grassToR = FALSE,
+		# autoRegion = autoRegion,
+		# grassDir = grassDir,
+		# ...
+	# )
+
 	# remove mask
 	fasterRm('MASK', rastOrVect = 'raster')
 	

@@ -93,8 +93,8 @@ plot(slope, add=TRUE)
 fasterRename('MASK', 'MASKold')
 
 # Operations no longer masked
-slopeUnmasked <- fasterTerrain(madElev, v='slope',
-cores=2, grassDir=grassDir,
+slopeUnmasked <- fasterTerrain('madElev', v='slope',
+outGrassName='slopeUnmasked', cores=2, grassDir=grassDir,
 location='examples') # line for examples only
 
 grays <- colorRampPalette(c('white', 'gray20'))
@@ -134,8 +134,8 @@ plot(slope, add=TRUE)
 fasterRename('MASK', 'MASKold')
 
 # Operations no longer masked
-slopeUnmasked <- fasterTerrain(madElev, v='slope',
-cores=2, grassDir=grassDir, replace=TRUE,
+slopeUnmasked <- fasterTerrain('madElev', v='slope',
+outGrassName='slopeUnmasked', cores=2, grassDir=grassDir,
 location='examples') # line for examples only
 
 grays <- colorRampPalette(c('white', 'gray20'))

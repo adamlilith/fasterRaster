@@ -7,26 +7,24 @@
 # initGrass(location='default') # change "location" if not "default"
 
 # IMPORTANT: Change this to where GRASS is installed on your system.
-grassDir <- "/Applications/GRASS-8.2.app/Contents/Resources" # for a Mac
-grassDir <- '/usr/local/grass' # example for Linux
-grassDir <- 'C:/Program Files/GRASS GIS 8.2' # example for a PC
+grassDir <- "/Applications/GRASS-8.2.app/Contents/Resources" # Mac
+grassDir <- 'C:/Program Files/GRASS GIS 8.2' # Windows
+grassDir <- '/usr/local/grass' # Linux
 
 library(sf)
 library(terra)
 
 ### Start GRASS session with a raster.
-# Normally, skip the second line. This is used just for examples.
 madElev <- fasterData('madElev')
 
 initGrass(rast=madElev, grassDir=grassDir,
-location='examples', replace=TRUE, restartGrass=TRUE, warn=FALSE) 
+location='examples', restartGrass=TRUE, warn=FALSE) # line for examples only
 
 ### Start GRASS session with a vector.
-# Normally, skip the second line. This is used just for examples.
 madCoast0 <- fasterData('madCoast0')
 
 initGrass(vect=madCoast0, inVectName='madCoast', grassDir=grassDir,
-location='examples', replace=TRUE, restartGrass=TRUE, warn=FALSE) 
+location='examples', restartGrass=TRUE, warn=FALSE) # line for examples only
 
 # What's in this session?
 fasterLs()
@@ -34,9 +32,8 @@ fasterLs()
 ### Start a different GRASS session then swicth back to the
 # "examples" session created above.
 # Normally, skip the third line. This is used just for examples.
-initGrass(vect=madCoast0, location='new',
-inVectName='madCoast0_new', grassDir=grassDir,
-replace=TRUE, restartGrass=TRUE, warn=FALSE)
+initGrass(vect=madCoast0, inVectName='madCoast0_new', grassDir=grassDir,
+location='new', replace=TRUE, restartGrass=TRUE, warn=FALSE)
 
 # What's in this session?
 fasterLs()

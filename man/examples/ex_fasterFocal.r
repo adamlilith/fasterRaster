@@ -1,48 +1,94 @@
 \dontrun{
 
+# IMPORTANT: These function use the "location", "restartGrass", and
+# "warn" arguments to avoid interfering with an existing GRASS session.
+# WHEN YOU ARE DONE WITH THE EXAMPLES, run this line to revert to your
+# active GRASS session:
+# initGrass(location='default') # change "location" if not "default"
+
+# IMPORTANT: Change this to where GRASS is installed on your system.
+grassDir <- "/Applications/GRASS-8.2.app/Contents/Resources" # Mac
+grassDir <- 'C:/Program Files/GRASS GIS 8.2' # Windows
+grassDir <- '/usr/local/grass' # Linux
+
+library(sf)
 library(terra)
 
-### mean
 madElev <- fasterData('madElev')
-meanFocalFR <- fasterFocal(madElev, w=3, fun='mean', cores=2)
-meanFocalTerra <- terra::focal(madElev, w=3, fun='mean', na.rm=TRUE)
+
+### mean of square neighborhood with all cells of equal weight
+# Package terra is faster for small neighborhoods, but fasterRaster is faster
+# for large neighborhoods (w > ~100 in this example) if cores is ~4 or more.
+
+square <- fasterFocal(madElev, w=3, fun='mean', cores=2, grassDir=grassDir,
+location='examples', restartGrass=TRUE, warn=FALSE) # line for examples only
+
+terraSquare <- terra::focal(madElev, w=3, fun='mean', na.rm=TRUE)
 
 # same!
-meanFocalFR
-meanFocalTerra
+global(square, 'sum', na.rm=TRUE) - global(terraSquare, 'sum', na.rm=TRUE)
 
-### mean with circular neighborhood
-meanCircleFR <- fasterFocal(madElev, w=3, fun='mean', circle=TRUE,
-outGrassName='circle', cores=2)
 
-w <- matrix(c(0, 1, 0, 1, 1, 1, 0, 1, 0), nrow=3)
-meanCircleTerra <- terra::focal(madElev, w=w, fun='mean', na.rm=TRUE)
+### maximum of square neighborhood with all cells of equal weight with a mask
+# Using a mask replaces non-NA values in the mask with new values. Cells
+# with NA retain their original value from the input raster.
+madForest2000 <- fasterData('madForest2000')
 
-# same!
-meanCircleFR
-meanCircleTerra
+maxNoMask <- fasterFocal(madElev, w=5, fun='maximum',
+cores=2, grassDir=grassDir, outGrassName='focalUnMasked',
+location='examples', restartGrass=TRUE, warn=FALSE) # line for examples only
 
-### using weights matrix
-w <- matrix(c(0.5, 1, 0.5, 1, 2, 1, 0.5, 1, 0.5), nrow=3)
-w <- w / sum(w) # normalize
-meanWeightsFR <- fasterFocal(madElev, w=w, fun='sum', cores=2)
-meanWeightsTerra <- terra::focal(madElev, w=w, fun='sum', na.rm=TRUE)
+maxMasked <- fasterFocal('madElev', w=5, fun='maximum', mask=madForest2000,
+cores=2, grassDir=grassDir, outGrassName='focalMasked',
+location='examples') # line for examples only
 
-# same!
-meanWeightsFR
-meanWeightsTerra
+plot(maxNoMask - maxMasked)
 
-# Using a "high-pass" weights matrix:
-w <- matrix(c(-1, -1, -1, -1, 8, -1, -1, 1, -1) / 9, nrow=3)
-hpFilter <- fasterFocal(madElev, w=w, fun='sum', cores=2)
 
-### sum with mask
-mask <- fasterData('madForest2000')
-maskFocal <- fasterFocal(madElev, w=3, fun='sum', mask=mask, cores=2)
+### focal mean of circular neighborhood (with all cells of equal weight)
+circle <- fasterFocal(madElev, w=3, fun='max', circle=TRUE, cores=2,
+outGrassName='circleFocal', grassDir=grassDir,
+location='examples', restartGrass=TRUE, warn=FALSE) # line for examples only
+
+square <- fasterFocal('madElev', w=3, fun='max', cores=2, 
+outGrassName='squareFocal', grassDir=grassDir,
+location='examples')
+
+plot(square - circle)
+
+
+### focal mean of square neighborhood with cells of arbitrary weight
+w <- matrix(c(0, 1, 0, 1, 0, 1, 0, 1, 0), nrow=3)
+w
+
+wgt <- fasterFocal(madElev, w=w, fun='mean', cores=2, grassDir=grassDir,
+location='examples', restartGrass=TRUE, warn=FALSE) # line for examples only
+
+terraWgt <- terra::focal(madElev, w=w, fun='mean', na.rm=TRUE)
+
+# same
+global(wgt, 'sum', na.rm=TRUE) - global(terraWgt, 'sum', na.rm=TRUE)
+
+### population standard deviation vs standard deviation
+popSd <- fasterFocal(madElev, w=3, fun='popSd', cores=2,
+outGrassName='popSdFocal', grassDir=grassDir,
+location='examples', restartGrass=TRUE, warn=FALSE) # line for examples only
+
+sampSd <- fasterFocal('madElev', w=3, fun='sd', cores=2,
+outGrassName='sampSdFocal', grassDir=grassDir,
+location='examples') # line for examples only
+
+plot(sampSd - popSd)
+
+# vs terra's default sample sd
+terraSampSd <- terra::focal(madElev, w=3, fun='sd', na.rm=TRUE)
+
+plot(sampSd - terraSampSd)
 
 ### sum with weighting function
-gaussFocal <- fasterFocal(madElev, w=3, fun='sum', weightFx='gaussian',
-weightFactor=1, cores=2)
+gaussFocal <- fasterFocalDecay(madElev, w=3, fun='sum',
+weightFx='gaussian', weightFactor=1, cores=2,
+location='examples', restartGrass=TRUE, warn=FALSE) # line for examples only
 
 ### standard deviations
 sdFocalFR <- fasterFocal(madElev, w=3, fun='sd', cores=2)

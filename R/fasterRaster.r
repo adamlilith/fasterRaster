@@ -117,8 +117,11 @@
 #' 		\code{\link{fasterContour}}: Calculate contour vectors from a raster.\cr
 #' 		\code{\link{fasterConvertDegree}}: Convert degrees from \code{GRASS} format (0 = east, 90 = north) to standard (0 = north, 90 = east).\cr
 #' 		\code{\link{fasterCropRast}}: Crop a raster to the region of overlap with another raster or vector.\cr
+#' 		\code{\link{fasterDelaunay}}: Delauney triangulation for points.\cr
 #' 		\code{\link{fasterDim}}: Number of rows and columns of a raster.\cr
-#' 		\code{\link{fasterFocal}}: Faster focal calculations (using multi-core).\cr
+#' 		\code{\link{fasterFocal}}: Calculations on neighboring cells of a raster.\cr
+#' 		\code{\link{fasterFocalCircle}}: Calculations on cells in a circular neighborhood on a raster.\cr
+#' 		\code{\link{fasterFocalDecay}}: Calculations on neighboring cells with exponential or Gaussian weights.\cr
 #' 		\code{\link{fasterFragmentation}}: Landscape fragmentation indices following Riitters et al. (2000 \emph{Conservation Ecology} 4:3; using multi-core).\cr
 #' 		\code{\link{fasterHorizon}}: Horizon angle height from a DEM.\cr
 #' 		\code{\link{fasterLongLatRasts}}: Create rasters with values equal to cell longitude and latitude.\cr
@@ -143,7 +146,6 @@
 #' @section Functions that do operations on vectors:
 #' 		\code{\link{fasterBufferVect}}: Buffer a spatial vector.\cr
 #' 		\code{\link{fasterConvHull}}: Minimum convex hull around a spatial vector.\cr
-#' 		\code{\link{fasterDelaunay}}: Delauney triangulation for points.\cr
 #' 		\code{\link{fasterInfoVect}}: Information on a vector in a \code{GRASS} session.\cr
 #' 		\code{\link{fasterProjectVect}}: Project a spatial vector.\cr
 #' 		\code{\link{fasterRasterize}}: Convert vector to a raster.\cr

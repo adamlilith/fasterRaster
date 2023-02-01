@@ -4,8 +4,8 @@
 #'
 #' @inheritParams .sharedArgs_replace
 #' @param from,to Names of the raster or vector to rename.
-#' @param type Either \code{'raster'} and/or \code{'vector'}, or \code{NULL} (default). This specifies the type of file to be renamed. Partial matching is allowed. If left as \code{NULL} (default), the function will rename any raster or vector with the given name. Note that unlike in \pkg{R}, \code{GRASS} can have rasters with the same name as vectors.
-#' @param If \code{TRUE} (default), print a warning when renaming a raster to the name of an existing raster or vector (which overwrite it).
+#' @param rastOrVect Either \code{NULL} (default), \code{'raster'}, or \code{'vector'}. This specifies the rastOrVect of file to be renamed. Partial matching is allowed. If left as \code{NULL} (default), the function will try to identify if the object is a raster or vector, and return an error if there is both a raster and vector of given name. Note that unlike in \pkg{R}, \code{GRASS} can have rasters and vectoers with the same name.
+#' @param warn If \code{TRUE} (default), print a warning when renaming a raster to the name of an existing raster or vector (which overwrite it).
 #' 
 #' @return The function invisibly returns \code{TRUE} if the desired rasters and/or vectors were named, and \code{FALSE} if raster and/or vector to be renamed did not exist in the \code{GRASS} session. Notably, a raster or vector or both are renamed in an existing \code{GRASS} session.
 #'
@@ -17,76 +17,47 @@
 fasterRename <- function(
 	from,
 	to,
-	type = NULL,
+	rastOrVect = NULL,
 	replace = fasterGetOptions('replace', FALSE),
 	warn = TRUE
 ) {
 	
 	flags <- .getFlags(replace=replace)
 	
-	if (is.null(type)) {
-	
-		wantRaster <- wantVector <- TRUE
-	
-	} else {
-	
-		type <- tolower(type)
-		n <- nchar(type)
-
-		# want raster?
-		subs <- rep(NA, length(type))
-		for (i in seq_along(type)) subs[i] <- substr('rasters', 1, n[i])
-		wantRaster <- any(type %in% subs)
-		
-		# want vector?
-		subs <- rep(NA, length(type))
-		for (i in seq_along(type)) subs[i] <- substr('vectors', 1, n[i])
-		wantVector <- any(type %in% subs)
-	
-	}
-
+	rastOrVect <- .isRastOrVect(x=from, rastOrVect=rastOrVect, temps=TRUE)
 	fromTo <- c(from, to)
 
-	success <- TRUE
+	success <- FALSE
 
 	# rename raster
-	if (wantRaster) {
+	if (rastOrVect == 'raster') {
 	
-		files <- fasterLs('rasters')
-		if (!(from %in% files)) {
-			warning('A raster with this name does not exist.')
-			success <- FALSE
-		} else {
-			if (to %in% files) {
-				if (!replace) stop('This would rename a raster to the name of an existing raster.')
-			} else {
-			
-				warning(paste0('Overwriting raster ', to, '.'))
-				rgrass::execGRASS('g.rename', flags=flags, raster=fromTo, intern=TRUE)
-				success <- TRUE
-				
-			}
-		}
-		
-	}
+		spatials <- fasterLs('rasters')
 
-	# rename vector
-	if (wantVector) {
-	
-		files <- fasterLs('vectors')
-		if (!(from %in% files)) {
-			warning('A vector with this name does not exist.')
-			success <- FALSE
-		} else {
-			if (to %in% files) {
-				if (!replace) stop('This would rename a vector to the name of an existing vector.')
+		if (to %in% spatials) {
+			if (!replace) {
+				stop('This would rename a raster to the name of an existing raster.')
 			} else {
-				if (warn) warning(paste0('Overwriting vector ', to, '.'))
-				rgrass::execGRASS('g.rename', flags=flags, vector=fromTo)
-				success <- success & TRUE
+				warning(paste0('Overwriting raster ', to, '.'))
 			}
 		}
+		rgrass::execGRASS('g.rename', flags=flags, raster=fromTo, intern=TRUE)
+		success <- TRUE
 		
+	} else if (rastOrVect == 'vector') {
+	
+		spatials <- fasterLs('vectors')
+
+		if (to %in% spatials) {
+			if (!replace) {
+				stop('This would rename a vector to the name of an existing raster.')
+			} else {
+				warning(paste0('Overwriting vector ', to, '.'))
+			}
+		}
+		rgrass::execGRASS('g.rename', flags=flags, vector=fromTo, intern=TRUE)
+		success <- TRUE
+	
 	}
 
 	invisible(success)

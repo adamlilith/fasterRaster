@@ -85,7 +85,7 @@
 				if (errorNotFound) stop('No object of this name was found the active GRASS session.')
 				out <- NA
 			} else {
-				type <- names(matches)
+				type <- names(matches[matches %in% x])
 				if (length(type) == 0L) {
 					if (errorNotFound) stop('No object of this name was found the active GRASS session.')
 					out <- NA

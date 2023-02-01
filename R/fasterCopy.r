@@ -20,7 +20,7 @@
 fasterCopy <- function(
 	from,
 	to,
-	rastOrVect = c('raster', 'vector'),
+	rastOrVect = NULL,
 	replace = fasterGetOptions('replace', FALSE),
 	autoRegion = fasterGetOptions('autoRegion', TRUE)
 ) {
@@ -31,15 +31,14 @@ fasterCopy <- function(
 
 	if (from == to) stop('Arguments "from" and "to" must be different.')
 	
-	spatials <- fasterLs()
+	# detect conflicts (a raster and vector of the same name)
+	rastOrVect <- .isRastOrVect(x=from, rastOrVect=rastOrVect, errorNotFound=TRUE, errorAmbig=TRUE, temps=TRUE)
+	spatials <- fasterLs(rastOrVect=rastOrVect)
 
 	if (!replace) {
 		if (any(to %in% spatials)) stop('There is already an object with the name given in "to".\nEither use a different name or set "replace" to TRUE.')
 	}
 
-	# detect conflicts (a raster and vector of the same name)
-	rastOrVect <- .getRastOrVect(rastOrVect, n=Inf, nullOK=TRUE)
-	
 	if (is.null(rastOrVect)) {
 		if (sum(from %in% spatials) > 1L) stop('Both a raster and vector have the name given in "from". Please use argument "rastOrVect".')
 		rastOrVect <- names(spatials)[spatials %in% from]

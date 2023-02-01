@@ -77,24 +77,21 @@ regionExt <- function(
 			if (is.null(info)) {
 			
 				meta <- rgrass::gmeta(ignore.stderr=TRUE)
-				n <- meta$n
-				s <- meta$s
-				e <- meta$e
-				w <- meta$w
+				extent <- c(meta$w, meta$e, meta$s, meta$n)
 				
 				warning('No spatial objects are in the GRASS session. Using session defaults for the extent.')
 				
 			} else {
-				
-				w <- min(info$west)
-				e <- max(info$east)
-				s <- min(info$south)
-				n <- max(info$north)
-				
+
+				extent <- c(
+					min(info$west),
+					max(info$east),
+					min(info$south),
+					max(info$north)
+				)
+					
 			}
 			
-			extent <- c(w, e, s, n)
-				
 		} else if (inherits(x, 'numeric')) {
 			if (length(x) == 4L) {
 				extent <- x

@@ -1,6 +1,6 @@
 #' Create a mask to affect subsequent operations on rasters
 #'
-#' This function creates a copy of a raster, but forces some cells to \code{NA} by using a "mask". A mask can be created from a raster or a spatial vector.  If from a raster, then only cells in the inoput raster that overlap with non-\code{NA} cells in the mask are copied. If from a vector, only cells that overlap with the vector are copied.\cr
+#' This function creates a copy of a raster, but forces some cells to \code{NA} by using a "mask". A mask can be created from a raster or a spatial vector.  If from a raster, then only cells in the inoput raster that overlap with non-\code{NA} cells in the mask are copied. If from a vector, only cells that overlap with the vector are copied.\emph{Currently, this function only works on numeric (not catgorial) rasters.}\cr
 #' 
 #' In \code{GRASS}, a mask raster is always named \code{MASK}. If such a raster exists in the active \code{GRASS} session, it causes operations on rasters to affect only those portions of the raster that fall within a non-\code{NA} (in \code{GRASS}, a non-\code{NULL}) cell. It will continue to affect nearly all \pkg{fasterRaster} functions that operate on rasters until it is removed. To remove a mask, set the argument \code{removeMask} to \code{TRUE} when using this function, or use \code{\link{fasterRm}} or \code{\link{fasterRename}} on the \code{MASK} raster.\cr
 #'
@@ -25,6 +25,7 @@
 #' @param rastOrVect Either \code{'raster'}, \code{'vector'}, or \code{NULL} (default). The type of object that \code{mask} is. This is typically not needed, unless \code{mask} is the name of an object in \code{GRASS} and there is more than one object of that name.
 #'
 #' @param removeMask If \code{TRUE} (default), then the \code{MASK} will be deleted from the \code{GRASS} session. If \code{FALSE}, it will noyt be removed so it can be used in subsquent operations. Later, you can remove a mask using \code{\link{fasterRm}} or \code{\link{fasterRename}}.
+#' @param trim If \code{TRUE} (default) and the output is imported to \code{R}, then all rows and columns that are entirely \code{NA} will be removed.
 #'
 #' @return A \code{SpatRaster}. In the active \code{GRASS} session a raster is created, and possinly another raster named \code{MASK}.
 #'
@@ -42,6 +43,7 @@ fasterMask <- function(
 	rastOrVect = NULL,
 	
 	removeMask = TRUE,
+	trim = TRUE,
 	outGrassName = 'maskedRast',
 	
 	replace = fasterGetOptions('replace', FALSE),
@@ -115,19 +117,40 @@ fasterMask <- function(
 
 	do.call(rgrass::execGRASS, args=args)
 
-	# make copy of raster to mask
-	fromTo <- paste0(inRastName, ',TEMPTEMP_rastCopy')
-	thisFlags <- unique(flags, 'overwrite')
-	rgrass::execGRASS('g.copy', raster=fromTo, flags=thisFlags)
+	# # make copy of raster to mask
+	# fromTo <- paste0(inRastName, ',TEMPTEMP_rastCopy')
+	# thisFlags <- unique(flags, 'overwrite')
+	# rgrass::execGRASS('g.copy', raster=fromTo, flags=thisFlags)
 	
-	# multiply by mask
-	ex <- '= TEMPTEMP_rastCopy * MASK'
-	fasterApp('TEMPTEMP_rastCopy', expression=ex, outGrassName=outGrassName, replace=replace, grassToR=FALSE, autoRegion=FALSE, grassDir=grassDir)
+	# # multiply by mask
+	# ex <- '= TEMPTEMP_rastCopy * MASK'
+	# fasterApp(
+		# 'TEMPTEMP_rastCopy',
+		# expression = ex,
+		# outGrassName = outGrassName,
+		# replace = replace,
+		# grassToR = FALSE,
+		# autoRegion = FALSE,
+		# grassDir = grassDir
+	# )
+
+	fasterApp(
+		rast = inRastName,
+		ex = paste('=', inRastName),
+		outGrassName = outGrassName,
+		replace = replace,
+		grassToR = FALSE,
+		autoRegion = FALSE,
+		grassDir = grassDir,
+		...
+	)
 
 	### export
 	if (grassToR) {
 
 		out <- fasterWriteRaster(outGrassName, paste0(tempfile(), '.tif'), overwrite=TRUE)
+		if (removeMask) fasterRm('MASK', rastOrVect = 'raster')
+		if (trim) out <- terra::trim(out)
 		out <- terra::setMinMax(out)
 		out
 		

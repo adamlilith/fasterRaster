@@ -16,11 +16,12 @@
 #' @export
 fasterExt <- function(
 	x,
-	rastOrVect = c('rasters', 'vectors'),
+	rastOrVect = NULL,
 	terra = FALSE,
 	names = TRUE
 ) {
 
+	rastOrVect <- .isRastOrVect(x, rastOrVect=rastOrVect, errorNotFound=FALSE, errorAmbig=TRUE, temps=FALSE)
 	rastOrVect <- .getRastOrVect(rastOrVect, n=1, nullOK=TRUE)
 
 	if (missing(x) || is.null(x)) {
