@@ -62,6 +62,7 @@ fasterMask <- function(
 		### arguments
 		if (exists('rast', where=environment(), inherits=FALSE)) {
 			inRastName <- .getInRastName(inRastName, rast=rast)
+			.checkRastExists(replace=replace, rast=rast, inRastName=inRastName, outGrassName=outGrassName)
 		} else {
 			rast <- inRastName <- NULL
 		}
@@ -86,13 +87,21 @@ fasterMask <- function(
 	# arguments for "r.mask"
 	if (inherits(mask, 'SpatRaster')) {
 		inMaskName <- .getInRastName(inMaskName, rast=mask)
+		.checkRastExists(replace=replace, rast=mask, inRastName=inMaskName, outGrassName=NULL)
 		rastOrVect <- 'raster'
 	} else if (inherits(mask, c('SpatVector', 'sf'))) {
 		inMaskName <- .getInVectName(inMaskName, vect=mask)
+		.checkVectExists(replace=replace, vect=mask, inVectName=inMaskName, outGrassName=NULL)
 		rastOrVect <- 'vector'
 	} else if (inherits(mask, 'character')) {
 		inMaskName <- mask
-		rastOrVect <- .isRastOrVect(x=mask, rastOrVect=rastOrVect, errorNotFound=TRUE, errorAmbig=TRUE, temps=FALSE)
+		rastOrVect <- .matchRastOrVect(rastOrVect, n=1, naOK=TRUE)
+		if (is.na(rastOrVect)) rastOrVect <- .determineRastOrVect(x=mask, errorNotFound=TRUE, dupsOK=FALSE)
+		if (rastOrVect == 'raster') {
+			.checkRastExists(replace=replace, rast=mask, inRastName=inMaskName, outGrassName=NULL)
+		} else if (rastOrVect == 'vector') {
+			.checkVectExists(replace=replace, vect=mask, inVectName=inMaskName, outGrassName=NULL)
+		}
 	}
 
 	args <- list(

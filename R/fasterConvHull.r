@@ -39,6 +39,7 @@ fasterConvHull <- function(
 		### arguments
 		if (exists('vect', where=environment(), inherits=FALSE)) {
 			inVectName <- .getInVectName(inVectName, vect=vect)
+			.checkVectExists(replace=replace, vect=vect, inVectName=inVectName, outGrassName=outGrassName)
 		} else {
 			vect <- inVectName <- NULL
 		}

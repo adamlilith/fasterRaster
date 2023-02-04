@@ -79,6 +79,7 @@ fasterWriteRaster <- function(
 
 		thisRast <- rast[i]
 		thisFileName <- filename[i]
+		
 		if (autoRegion) regionReshape(thisRast)
 
 		nch <- nchar(filename)
@@ -108,7 +109,7 @@ fasterWriteRaster <- function(
 
 			# data type
 			thisDataType <- if (is.null(datatype)) {
-				fasterInfo(thisRast, rastOrVect='raster')$gdalDataType
+				fasterInfo(thisRast, rastOrVect='raster', temps=TRUE)$gdalDataType
 			} else if (datatype == 'INT1U') {
 				'Byte'
 			} else if (datatype == 'INT2U') {
@@ -131,6 +132,13 @@ fasterWriteRaster <- function(
 	}
 
 	out <- terra::rast(filename)
+	out <- terra::setMinMax(out)
 	invisible(out)
 
 }
+
+#' @name rastToR
+#' @title Get raster from 'GRASS'
+#' @rdname fasterWriteRaster
+#' @export
+rastToR <- function(rast) fasterWriteRaster(rast, filename=paste0(tempfile(), '.tif'), overwrite=TRUE)

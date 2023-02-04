@@ -2,9 +2,15 @@
 #'
 #' Remove rasters or vectors from a \code{GRASS} session. This will remove them from \code{GRASS}, but not from R if they exists in R.
 #'
-#' @param x Name(s) of the rasters and/or vectors to remove. If this is \code{'*'}, then \emph{everything} will be removed.
-#' @param pattern If \code{TRUE}, then \code{x} is used as a pattern so that any rasters or vectors matching this pattern will be removed. For example, if an existing \code{GRASS} session has rasters named \code{bio1}, \code{bio2}, and \code{bio3}, plus a vector named \code{bioVector}, then this command will remove them all: \code{fasterRm('bio', pattern = TRUE)}. By default this is \code{FALSE}, so the value(s) in \code{x} must be exact.
-#' @param rastOrVect The type of object to delete: either \code{'rasters'} and/or \code{'vectors'}. If \code{NULL} (default), then the function will attempt to guess whether \code{x} refers to a raster or vector. However, in \code{GRASS}, it is possible to have a raster and a vector of the same name. If this is the case, then you can specify whether \code{x} is a raster or vector (partial matching is supported).
+#' @param x Any of:
+#' \itemize{
+#'		\item Name(s) of the raster(s) and/or vector(s) to remove.
+#'		\item \code{'*'}: \emph{Everything} will be removed.
+#'		\item \code{'*rasters*'}: \emph{All} rasters.
+#'		\item \code{'*vectors*'}: \emph{All} vectors.
+#' }
+#' @param rastOrVect Only used if \code{x} is a character vector. The type of object to delete: either \code{'rasters'} and/or \code{'vectors'}. If \code{NULL} (default), then the function will attempt to guess whether \code{x} refers to a raster or vector. However, in \code{GRASS}, it is possible to have a raster and a vector of the same name. If this is the case, then you can specify whether \code{x} is a raster or vector (partial matching is supported).
+#' @param ... Additional arguments to send to \code{\link{fasterLs}}. This includes argument \code{temps} (\code{TRUE} or \code{FALSE}), which determines if temporary files are removed when using \code{*}, \code{*rasters*}, or \code{*vectors}. Temporary files begin with "\code{TEMPTEM_}".
 #'
 #' @return Invisibly returns the number of rasters and/or vectors removed. More notably, this function also removes rasters and/or vectors from a \code{GRASS} session.
 #'
@@ -15,63 +21,50 @@
 #' @export
 fasterRm <- function(
 	x,
-	pattern = FALSE,
-	rastOrVect = c('raster', 'vector')
+	rastOrVect = NULL,
+	...
 ) {
 	
-	flags <- c('quiet', 'f')
+	# getting all of a type
+	if (missing(x)) stop('Argument "x" cannot be missing.')
+	if (length(x) == 1L) {
+		if (x == '*') {
+			x <- fasterLs(rastOrVect=rastOrVect, ...)
+			rastOrVect <- names(x)
+		} else if (x == '*rasters*') {
+			x <- fasterLs(rastOrVect='rasters', ...)
+			rastOrVect <- names(x)
+		} else if (x == '*vectors*') {
+			x <- fasterLs(rastOrVect='vectors', ...)
+			rastOrVect <- names(x)
+		}
+	}
 	
-	rastOrVect <- .getRastOrVect(rastOrVect, n=2, nullOK=FALSE)
+	# clean and validate inputs
+	info <- .rastOrVectAndX(x=x, rastOrVect=rastOrVect, ...)
+	x <- info$x
+	rastOrVect <- info$rastOrVect
+	
 	spatials <- fasterLs(rastOrVect=rastOrVect, temps=TRUE)
 	numFilesStart <- length(spatials)
 	
-	if (autoRegion) on.exit(regionExt('*'), add=TRUE) # resize extent to encompass all spatials
+	# any to remove
+	if (length(x) > 0L) {
+		
+		if (autoRegion) on.exit(regionExt('*'), add=TRUE) # resize extent to encompass all spatials
+		for (i in seq_along(x)) {
+		
+			spatial <- x[i]
+			rov <- rastOrVect[i]
+			
+			rgrass::execGRASS('g.remove', flags=c('quiet', 'f'), type=rov, name=spatial)
+		
+		}
 	
-	# if any spatials
-	if (length(spatials) > 0L) {
-
-		if (length(x) == 1L && x == '*') {
-			x <- spatials
-		} else if (pattern) {
-		
-			theseSpatials <- character()
-			for (i in seq_along(x)) {
-			
-				n <- nchar(x[i])
-				if (any(x[i] == substr(spatials, 1L, n))) {
-					matches <- spatials[x[i] == substr(spatials, 1L, n)]
-					if (names(matches) %in% rastOrVect) {
-						theseSpatials <- c(theseSpatials, matches)
-					}
-				}
-			}
-			
-			x <- theseSpatials
-			if (length(x) == 0L) warning('No rasters or vectors with this matching pattern found.')
-			
-		}
-
-		if (length(x) == 0L) {
-			warning('No rasters or vectors found. No files have been deleted.')
-		} else {
-		
-			for (i in seq_along(x)) {
-			
-				thisSpatial <- spatials[spatials %in% x[i]]
-				spatialType <- names(spatials)[i]
-				
-				if (spatialType %in% rastOrVect) {
-					rgrass::execGRASS('g.remove', flags=c('quiet', 'f'), type=spatialType, name=thisSpatial)
-				}
-			
-			}
-		
-		}
-		
-	}
+	} # any to remove
 	
 	# resize region to encompass all
-	numFilesEnd <- length(fasterLs(rastOrVect=rastOrVect, temps=TRUE))
+	numFilesEnd <- length(fasterLs(rastOrVect=rastOrVect, ...))
 	
 	out <- numFilesStart - numFilesEnd
 	invisible(out)

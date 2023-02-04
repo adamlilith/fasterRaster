@@ -28,6 +28,7 @@ fasterVect <- function(
 
 		### arguments
 		inVectName <- .getInVectName(inVectName, vect=vect)
+		.checkVectExists(replace=replace, vect=vect, inVectName=inVectName, outGrassName=NULL)
 
 		### flags
 		flags <- .getFlags(replace=replace)

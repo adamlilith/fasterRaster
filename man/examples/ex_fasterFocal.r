@@ -18,34 +18,18 @@ madElev <- fasterData('madElev')
 
 ### mean of square neighborhood with all cells of equal weight
 # Package terra is faster for small neighborhoods, but fasterRaster is faster
-# for large neighborhoods (w > ~100 in this example) if cores is ~4 or more.
+# for large neighborhoods (w > ~100 in this example) if using >= 4 cores.
 
 square <- fasterFocal(madElev, w=3, fun='mean', cores=2, grassDir=grassDir,
 location='examples', restartGrass=TRUE, warn=FALSE) # line for examples only
 
 terraSquare <- terra::focal(madElev, w=3, fun='mean', na.rm=TRUE)
 
-# same!
-global(square, 'sum', na.rm=TRUE) - global(terraSquare, 'sum', na.rm=TRUE)
+# same
+global(abs(square - terraSquare), 'sum', na.rm=TRUE)
 
 
-### maximum of square neighborhood with all cells of equal weight with a mask
-# Using a mask replaces non-NA values in the mask with new values. Cells
-# with NA retain their original value from the input raster.
-madForest2000 <- fasterData('madForest2000')
-
-maxNoMask <- fasterFocal(madElev, w=5, fun='maximum',
-cores=2, grassDir=grassDir, outGrassName='focalUnMasked',
-location='examples', restartGrass=TRUE, warn=FALSE) # line for examples only
-
-maxMasked <- fasterFocal('madElev', w=5, fun='maximum', mask=madForest2000,
-cores=2, grassDir=grassDir, outGrassName='focalMasked',
-location='examples') # line for examples only
-
-plot(maxNoMask - maxMasked)
-
-
-### focal mean of circular neighborhood (with all cells of equal weight)
+### maximum in circular vs square neighborhood
 circle <- fasterFocal(madElev, w=3, fun='max', circle=TRUE, cores=2,
 outGrassName='circleFocal', grassDir=grassDir,
 location='examples', restartGrass=TRUE, warn=FALSE) # line for examples only
@@ -58,75 +42,84 @@ plot(square - circle)
 
 
 ### focal mean of square neighborhood with cells of arbitrary weight
-w <- matrix(c(0, 1, 0, 1, 0, 1, 0, 1, 0), nrow=3)
-w
+w <- matrix(c(NA, 1, NA, 1, NA, 1, NA, 1, NA), nrow=3)
+w 
 
-wgt <- fasterFocal(madElev, w=w, fun='mean', cores=2, grassDir=grassDir,
+custom <- fasterFocal(madElev, w=w, fun='mean', cores=2, grassDir=grassDir,
 location='examples', restartGrass=TRUE, warn=FALSE) # line for examples only
 
-terraWgt <- terra::focal(madElev, w=w, fun='mean', na.rm=TRUE)
+terraCustom <- terra::focal(madElev, w=w, fun='mean', na.rm=TRUE)
 
 # same
-global(wgt, 'sum', na.rm=TRUE) - global(terraWgt, 'sum', na.rm=TRUE)
+global(abs(custom - terraCustom), 'sum', na.rm=TRUE)
+
 
 ### population standard deviation vs standard deviation
-popSd <- fasterFocal(madElev, w=3, fun='popSd', cores=2,
-outGrassName='popSdFocal', grassDir=grassDir,
+sdPop <- fasterFocal(madElev, w=3, fun='sdPop', cores=2,
+outGrassName='sdPopFocal', grassDir=grassDir,
 location='examples', restartGrass=TRUE, warn=FALSE) # line for examples only
 
-sampSd <- fasterFocal('madElev', w=3, fun='sd', cores=2,
-outGrassName='sampSdFocal', grassDir=grassDir,
+sdSamp <- fasterFocal('madElev', w=3, fun='sd', cores=2,
+outGrassName='sdSampFocal', grassDir=grassDir,
 location='examples') # line for examples only
 
-plot(sampSd - popSd)
+plot(sdSamp - sdPop)
 
-# vs terra's default sample sd
-terraSampSd <- terra::focal(madElev, w=3, fun='sd', na.rm=TRUE)
+# terra calculates the sample standard deviation
+sdSampTerra <- focal(madElev, w=3, 'sd', na.rm=TRUE)
 
-plot(sampSd - terraSampSd)
+# same to within more than floating precision
+sdSamp - sdSampTerra
+global(abs(sdSamp - sdSampTerra), 'sum', na.rm=TRUE)
 
-### sum with weighting function
-gaussFocal <- fasterFocalDecay(madElev, w=3, fun='sum',
-weightFx='gaussian', weightFactor=1, cores=2,
+
+### median, mode, max, min, range, count, diversity, interspersion
+median <- fasterFocal(madElev, w=3, fun='median', cores=2,
+outGrassName='medianFocal', grassDir=grassDir,
 location='examples', restartGrass=TRUE, warn=FALSE) # line for examples only
 
-### standard deviations
-sdFocalFR <- fasterFocal(madElev, w=3, fun='sd', cores=2)
-sdFocalTerra <- focal(madElev, w=3, fun='sd', na.rm=TRUE)
-# also see focalCpp() in terra package
+mode <- fasterFocal('madElev', w=3, fun='mode', cores=2,
+outGrassName='modeFocal', grassDir=grassDir,
+location='examples') # line for examples only
 
-# different!
-sdFocalFR
-sdFocalTerra
+max <- fasterFocal('madElev', w=3, fun='max', cores=2,
+outGrassName='maxFocal', grassDir=grassDir,
+location='examples') # line for examples only
 
-# why different? Because GRASS uses population SD and terra the sample SD.
-madElevMat <- as.matrix(madElev, wide = TRUE)
-nr <- nrow(madElevMat)
-nc <- ncol(madElevMat)
+min <- fasterFocal('madElev', w=3, fun='min', cores=2,
+outGrassName='minFocal', grassDir=grassDir,
+location='examples') # line for examples only
 
-sdMat1 <- sdMat2 <- sdMat3 <- NA * madElevMat
-for (row in 2:(nr - 1)) {
-  for (col in 2:(nc - 1)) {
-    neigh <- madElevMat[(row - 1):(row + 1), (col - 1):(col + 1)]
-    numer <- sqrt( sum((neigh - mean(neigh, na.rm=T))^2) )
+range <- fasterFocal('madElev', w=3, fun='range', cores=2,
+outGrassName='rangeFocal', grassDir=grassDir,
+location='examples') # line for examples only
 
-    denom1 <- sqrt(sum(!is.na(neigh)))
-    denom2 <- sqrt(sum(!is.na(neigh)) - 1)
+count <- fasterFocal('madElev', w=3, fun='count', cores=2,
+outGrassName='countFocal', grassDir=grassDir,
+location='examples') # line for examples only
 
-    if (!is.na(denom2)) if (denom2 == 0) denom2 <- NA
+diversity <- fasterFocal('madElev', w=3, fun='diversity', cores=2,
+outGrassName='diversityFocal', grassDir=grassDir,
+location='examples') # line for examples only
 
-    sdMat1[row, col] <- numer / denom1
-    sdMat2[row, col] <- numer / denom2
-    sdMat3[row, col] <- sd(neigh, na.rm=TRUE)
-  }
-}
+interspersion <- fasterFocal('madElev', w=3, fun='interspersion', cores=2,
+outGrassName='interspersionFocal', grassDir=grassDir,
+location='examples') # line for examples only
 
-sdRast1 <- rast(sdMat1, crs=crs(madElev), extent=ext(madElev))
-sdRast2 <- rast(sdMat2, crs=crs(madElev), extent=ext(madElev))
-sdRast3 <- rast(sdMat3, crs=crs(madElev), extent=ext(madElev))
+quant25 <- fasterFocal('madElev', w=3, fun='quantile', cores=2,
+quantile=0.25, outGrassName='quant25Focal', grassDir=grassDir,
+location='examples') # line for examples only
 
-sdRast1 # fasterRaster/ GRASS
-sdRast2 # terra
-sdRast3 # base R
+quant75 <- fasterFocal('madElev', w=3, fun='quantile', cores=2,
+quantile=0.75, outGrassName='quant75Focal', grassDir=grassDir,
+location='examples') # line for examples only
+
+outs <- c(median, mode, max, min, range, count,
+	diversity, interspersion, quant25, quant75)
+plot(outs)
+
+# Revert back to original GRASS session if needed.
+# Change to your working location if not "default" (it usually is).
+initGrass(location='default')
 
 }

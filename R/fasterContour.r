@@ -44,9 +44,13 @@ fasterContour <- function(
 		### arguments
 		if (exists('rast', where=environment(), inherits=FALSE)) {
 			inRastName <- .getInRastName(inRastName, rast)
+			.checkRastExists(replace=replace, rast=rast, inRastName=inRastName, outGrassName=NULL)
 		} else {
 			rast <- inRastName <- NULL
 		}
+		
+		
+		.checkVectExists(replace=replace, vect=NULL, inVectName=NULL, outGrassName=outGrassName)
 
 		### flags
 		flags <- .getFlags(replace=replace)

@@ -13,7 +13,7 @@
 #'
 #' @export
 
-fasterDim <- function(rast, names = TRUE) {
+fasterDim <- function(rast, names = TRUE, ...) {
 
 	suppressMessages(
 		info <- rgrass::execGRASS(

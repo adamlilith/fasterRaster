@@ -173,7 +173,7 @@ initGrass <- function(
 		
 			.setSessionStarted(FALSE)
 
-			if (warn) warning(paste0('The GRASS session with these properties has been restarted:\n* location: ', location, '\n*  directory: ', dir, '.\nAll previously existing files have been removed.'))
+			if (warn) warning(paste0('The GRASS session with these properties has been restarted:\n* location: ', location, '\n*  directory: ', dir, '.\nAll previously existing files have been removed.'), immediate.=TRUE)
 			
 			rgrass::unset.GIS_LOCK()
 			rgrass::remove_GISRC()
@@ -281,7 +281,7 @@ initGrass <- function(
 		# export		
 		if (!is.null(rast)) fasterRast(rast=rast, inRastName=inRastName, replace=replace, autoRegion=FALSE)
 		if (!is.null(vect)) fasterVect(vect=vect, inVectName=inVectName, replace=replace, autoRegion=FALSE)
-		
+
 	} # if passing a raster and/or vector
 
 	invisible(input)

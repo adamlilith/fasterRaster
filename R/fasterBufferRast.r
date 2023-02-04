@@ -55,14 +55,9 @@ fasterBufferRast <- function(
 		### arguments
 		if (exists('rast', where=environment(), inherits=FALSE)) {
 			inRastName <- .getInRastName(inRastName, rast)
+			.checkRastExists(replace=replace, rast=rast, inRastName=inRastName, outGrassName=outGrassName)
 		} else {
 			rast <- inRastName <- NULL
-		}
-
-		if (exists('vect', where=environment(), inherits=FALSE)) {
-			inVectName <- .getInVectName(inVectName, vect=vect)
-		} else {
-			vect <- inVectName <- NULL
 		}
 
 		### flags

@@ -6,6 +6,7 @@
 #' @param rastOrVect If \code{NULL} (default), then the function will attempt to guess whether \code{x} refers to a raster or vector. However, in \code{GRASS}, it is possible to have a raster and a vector of the same name. This argument helps disambugiate this case.
 #' @param terra If \code{TRUE}, the object that is returned is an \code{\link[terra]{SpatExtent}} object. If \code{FALSE} (default), then the bounding coordinates are returned as a vector.
 #' @param names If \code{TRUE} (default), then the vector will have named values.
+#' @param ... Other arguments for \code{\link{fasterLs}} like \code{temps} (return tempprary files?).
 #' 
 #' @return A numeric vector or an object of class \code{\link[terra]{SpatExtent}}.
 #'
@@ -18,97 +19,75 @@ fasterExt <- function(
 	x,
 	rastOrVect = NULL,
 	terra = FALSE,
-	names = TRUE
+	names = TRUE,
+	...
 ) {
 
-	rastOrVect <- .isRastOrVect(x, rastOrVect=rastOrVect, errorNotFound=FALSE, errorAmbig=TRUE, temps=FALSE)
-	rastOrVect <- .getRastOrVect(rastOrVect, n=1, nullOK=TRUE)
-
-	if (missing(x) || is.null(x)) {
-		x <- fasterLs()
-		rastOrVect <- names(x)
-	} else if (is.null(rastOrVect)) {
-		spatials <- fasterLs()
-		if (sum(x %in% spatials) > length(x)) stop('Cannot resolve if "x" is a raster or vector. Use argument "rastOrVect".')
-		rastOrVect <- names(spatials)[match(x, spatials)]
-	} else {
-		rastOrVect <- rep(rastOrVect, length(x))
-	}
+	# clean and validate inputs
+	info <- .rastOrVectAndX(x=x, rastOrVect=rastOrVect, ...)
+	x <- info$x
+	rastOrVect <- info$rastOrVect
 	
-	if (length(x) == 0L) {
+	w <- Inf
+	e <- -Inf
+	s <- Inf
+	n <- -Inf
+
+	for (i in seq_along(x)) {
+
+		spatial <- x[i]
+		rov <- rastOrVect[i]
+		
+		if (rov == 'raster') {
+		
+			suppressMessages(
+				info <- rgrass::execGRASS(
+					'r.info',
+					flags = 'g',
+					map = spatial,
+					intern = TRUE,
+					Sys_show.output.on.console = FALSE,
+					echoCmd = FALSE
+				)
+			)
+			
+		} else if (rov == 'vector') {
+		
+			suppressMessages(
+				info <- rgrass::execGRASS(
+					'v.info',
+					flags = 'g',
+					map = spatial,
+					intern = TRUE,
+					Sys_show.output.on.console = FALSE,
+					echoCmd = FALSE
+				)
+			)
+		
+		} # if raster or vector
+		
+		nprime <- info[grepl('north=', info)]
+		sprime <- info[grepl('south=', info)]
+		eprime <- info[grepl('east=', info)]
+		wprime <- info[grepl('west=', info)]
+
+		nprime <- sub(nprime, pattern='north=', replacement='')
+		sprime <- sub(sprime, pattern='south=', replacement='')
+		eprime <- sub(eprime, pattern='east=', replacement='')
+		wprime <- sub(wprime, pattern='west=', replacement='')
+
+		nprime <- as.numeric(nprime)
+		sprime <- as.numeric(sprime)
+		eprime <- as.numeric(eprime)
+		wprime <- as.numeric(wprime)
+		
+		if (nprime > n) n <- nprime
+		if (sprime < s) s <- sprime
+		if (eprime > e) e <- eprime
+		if (wprime < w) w <- wprime
+		
+	} # next raster or vector
 	
-		meta <- rgrass::gmeta(ignore.stderr=TRUE)
-		n <- meta$n
-		s <- meta$s
-		e <- meta$e
-		w <- meta$w
-		
-		warning('No spatial objects are in the GRASS session. Using session defaults for the extent.')
-		
-	} else {
-		
-		w <- Inf
-		e <- -Inf
-		s <- Inf
-		n <- -Inf
-
-		for (i in seq_along(x)) {
-
-			spatial <- x[i]
-			type <- rastOrVect[i]
-			
-			if (type == 'raster') {
-			
-				suppressMessages(
-					info <- rgrass::execGRASS(
-						'r.info',
-						flags = 'g',
-						map = spatial,
-						intern = TRUE,
-						Sys_show.output.on.console = FALSE,
-						echoCmd = FALSE
-					)
-				)
-				
-			} else if (type == 'vector') {
-			
-				suppressMessages(
-					info <- rgrass::execGRASS(
-						'v.info',
-						flags = 'g',
-						map = spatial,
-						intern = TRUE,
-						Sys_show.output.on.console = FALSE,
-						echoCmd = FALSE
-					)
-				)
-			
-			} # if raster or vector
-			
-			nprime <- info[grepl('north=', info)]
-			sprime <- info[grepl('south=', info)]
-			eprime <- info[grepl('east=', info)]
-			wprime <- info[grepl('west=', info)]
-
-			nprime <- sub(nprime, pattern='north=', replacement='')
-			sprime <- sub(sprime, pattern='south=', replacement='')
-			eprime <- sub(eprime, pattern='east=', replacement='')
-			wprime <- sub(wprime, pattern='west=', replacement='')
-
-			nprime <- as.numeric(nprime)
-			sprime <- as.numeric(sprime)
-			eprime <- as.numeric(eprime)
-			wprime <- as.numeric(wprime)
-			
-			if (nprime > n) n <- nprime
-			if (sprime < s) s <- sprime
-			if (eprime > e) e <- eprime
-			if (wprime < w) w <- wprime
-			
-		} # next raster or vector
-		
-	} # if any objects in the session
-		
 	out <- c(w, e, s, n)
 	if (names & !terra) names(out) <- c('xmin', 'xman', 'ymin', 'ymax')
 	if (terra) out <- terra::ext(out)

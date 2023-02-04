@@ -24,12 +24,12 @@ fasterRast <- function(
 	...
 ) {
 
-
 	### commons v1
 	##############
 
 		### arguments
 		inRastName <- .getInRastName(inRastName, rast)
+		.checkRastExists(replace=replace, rast=rast, inRastName=inRastName, outGrassName=NULL)
 
 		### flags
 		flags <- .getFlags(replace=replace)

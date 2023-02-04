@@ -1,6 +1,6 @@
 #' Fragmentation indices for a raster (i.e., forest fragmentation)
 #'
-#' The "forest fragmentation" index from Riitters et al. (2000). Note that this function does \emph{not} use \code{GRASS} but rather the \code{\link[terra]{focal}} function in the \pkg{terra} package, so it is potentially very slow and may not work for very large rasters.
+#' The "forest fragmentation" index from Riitters et al. (2000).
 #'
 #' @param rast A \code{SpatRaster} with binary values (1 or 0 or \code{NA}).
 #' @param size Integer, number of cells wide and high of the window used to calculate fragmentation. This must be an odd integer (default is 3).

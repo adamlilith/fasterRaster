@@ -16,6 +16,7 @@
 #' }
 #' @param extent,dim,res Extent, dimensions, and resolution of the new region. These need only be specified if the region is to be resized and/or resampled "manually" (i.e., not using a pre-existing raster). In this case, \code{extent} must always be specified, and either \code{dim} or \code{res} must be specified. To change only extent, dimension, or resolution, use \code{\link{regionExt}}, \code{\link{regionDim}}, or \code{\link{regionRes}}.
 #' @param warn If \code{TRUE} (default), then print a warning if redefining the region resolution also forced a change in extent.
+#' @param ... Other arguments (not used).
 #'
 #' @return Either a list, or \code{TRUE} (invisibly) if resizing and resampling was successful. Also resizes and resamples the \link{region} in the active \code{GRASS} session.
 #'
@@ -25,7 +26,14 @@
 #'
 #' @export
 
-regionReshape <- function(x, extent = NULL, dim = NULL, res = NULL, warn = TRUE) {
+regionReshape <- function(
+	x,
+	extent = NULL,
+	dim = NULL,
+	res = NULL,
+	warn = TRUE,
+	...
+) {
 
 	if (missing(x)) x <- NULL
 
@@ -38,8 +46,8 @@ regionReshape <- function(x, extent = NULL, dim = NULL, res = NULL, warn = TRUE)
 
 	} else if (inherits(x, 'character'))  {
 		
-		extent <- fasterExt(x, rastOrVect = 'raster')
-		dim <- fasterDim(x)
+		extent <- fasterExt(x, rastOrVect = 'raster', ...)
+		dim <- fasterDim(x, ...)
 		
 		dimOrRes <- 'dim'
 

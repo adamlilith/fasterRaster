@@ -25,23 +25,20 @@ fasterCopy <- function(
 	autoRegion = fasterGetOptions('autoRegion', TRUE)
 ) {
 
-	### begin common
+	### commons
 	flags <- .getFlags(replace=replace)
-	### end common
+	### end commons
+	
+	rastOrVect <- .determineRastOrVect(x=from, errorNotFound=TRUE, dupsOK=FALSE, temps=TRUE)
 
 	if (from == to) stop('Arguments "from" and "to" must be different.')
+	fromTo <- c(from, to)
 	
 	# detect conflicts (a raster and vector of the same name)
-	rastOrVect <- .isRastOrVect(x=from, rastOrVect=rastOrVect, errorNotFound=TRUE, errorAmbig=TRUE, temps=TRUE)
-	spatials <- fasterLs(rastOrVect=rastOrVect)
+	spatials <- fasterLs(rastOrVect=rastOrVect, temps=TRUE)
 
 	if (!replace) {
 		if (any(to %in% spatials)) stop('There is already an object with the name given in "to".\nEither use a different name or set "replace" to TRUE.')
-	}
-
-	if (is.null(rastOrVect)) {
-		if (sum(from %in% spatials) > 1L) stop('Both a raster and vector have the name given in "from". Please use argument "rastOrVect".')
-		rastOrVect <- names(spatials)[spatials %in% from]
 	}
 
 	# resize region

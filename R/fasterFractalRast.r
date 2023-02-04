@@ -14,11 +14,11 @@
 #'
 #' @seealso \href{https://grass.osgeo.org/grass82/manuals/r.surf.fractal.html}{\code{r.surf.fractal}} in \code{GRASS}
 #'
-#' @example man/examples/ex_fasterSurfFractal.r
+#' @example man/examples/ex_fasterFractalRast.r
 #'
 #' @export
 
-fasterSurfFractal <- function(
+fasterFractalRast <- function(
 	rast,
 	inRastName,
 	dimension = 2.05,
@@ -26,28 +26,64 @@ fasterSurfFractal <- function(
 
 	replace = fasterGetOptions('replace', FALSE),
 	grassToR = fasterGetOptions('grassToR', TRUE),
-	outVectClass = fasterGetOptions('outVectClass', 'SpatVector'),
 	autoRegion = fasterGetOptions('autoRegion', TRUE),
 	grassDir = fasterGetOptions('grassDir', NULL),
 	...
 ) {
 
-	flags <- .getFlags(replace=replace)
-	
-	if (dimension <= 2 | dimension >= 3) stop('Argument "dimension" must be >2 and <3.')
-	
-	# initialize GRASS
-	if (is.null(inits)) inits <- list()
-	inits <- c(inits, list(rast=rast, vect=NULL, inRastName=inRastName, inVectName=NULL, replace=replace, grassDir=grassDir))
-	input <- do.call('initGrass', inits)
-	
-	rgrass::execGRASS('r.surf.fractal', dimension=dimension, output=outGrassName, flags=flags, ...)
+	### commons v1
+	##############
 
+		### arguments
+		if (exists('rast', where=environment(), inherits=FALSE)) {
+			inRastName <- .getInRastName(inRastName, rast=rast)
+			.checkRastExists(replace=replace, rast=rast, inRastName=inRastName, outGrassName=outGrassName)
+		} else {
+			rast <- inRastName <- NULL
+		}
+
+		### flags
+		flags <- .getFlags(replace=replace)
+		
+		### restore
+		# on.exit(.restoreLocation(), add=TRUE) # return to starting location
+		if (autoRegion) on.exit(regionExt('*'), add=TRUE) # resize extent to encompass all spatials
+
+		### ellipses and initialization arguments
+		initsDots <- .getInitsDots(..., callingFx = 'fasterFractalRast')
+		inits <- initsDots$inits
+		dots <- initsDots$dots
+
+	###############
+	### end commons
+
+	### errors?
+	if (dimension <= 2 | dimension >= 3) stop('Argument "dimension" must be >2 and <3.')
+
+	### function-specific
+	args <- list(
+		cmd = 'r.surf.fractal',
+		# input = inRastName,
+		output = outGrassName,
+		dimension = dimension,
+		flags = flags
+	)
+	args <- c(args, dots)
+
+	### initialize GRASS
+	input <- do.call('initGrass', inits)
+
+	### execute
+	if (autoRegion) regionReshape(inRastName)
+	do.call(rgrass::execGRASS, args=args)
+
+	### export
 	if (grassToR) {
 
 		out <- fasterWriteRaster(outGrassName, paste0(tempfile(), '.tif'), overwrite=TRUE)
+		out <- terra::setMinMax(out)
 		out
 		
 	}
-	
+
 }

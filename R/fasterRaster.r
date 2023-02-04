@@ -123,7 +123,8 @@
 #' 		\code{\link{fasterFocalCircle}}: Calculations on cells in a circular neighborhood on a raster.\cr
 #' 		\code{\link{fasterFocalDecay}}: Calculations on neighboring cells with exponential or Gaussian weights.\cr
 #' 		\code{\link{fasterFragmentation}}: Landscape fragmentation indices following Riitters et al. (2000 \emph{Conservation Ecology} 4:3; using multi-core).\cr
-#' 		\code{\link{fasterHorizon}}: Horizon angle height from a DEM.\cr
+#' 		\code{\link{fasterGlobal}}: Statistics summarizing all values of a raster.\cr
+#' 		\code{\link{fasterHorizon}}: Horizon angle height from an elevation raster.\cr
 #' 		\code{\link{fasterLongLatRasts}}: Create rasters with values equal to cell longitude and latitude.\cr
 #' 		\code{\link{fasterMakeMask}}: Create a mask for affecting subsequent raster operations.\cr
 #' 		\code{\link{fasterMask}}: Mask values in a raster using another raster or vector.\cr
@@ -141,7 +142,7 @@
 #' 		\code{\link{fasterTWI}}: Topographic wetness index.\cr
 #' 		\code{\link{fasterTrimRast}}: Remove all rows and columns of a raster that are entirely NA.\cr
 #' 		\code{\link{fasterVectorize}}: Convert raster to spatial points, lines, or polygons.\cr
-#' 		\code{\link{importFromGrass}}: Import a raster or vector from a GRASS session into \code{R}.\cr
+#' 		\code{\link{rastToR}}: Get a rasters from \code{GRASS}.\cr
 
 #' @section Functions that do operations on vectors:
 #' 		\code{\link{fasterBufferVect}}: Buffer a spatial vector.\cr
@@ -151,7 +152,7 @@
 #' 		\code{\link{fasterRasterize}}: Convert vector to a raster.\cr
 #' 		\code{\link{fasterVoronoi}}: Voronoi diagrams for points or polygons.\cr
 #' 		\code{\link{fasterWriteVector}}: Save one or more vectors to disk directly from a \code{GRASS} session.\cr
-#' 		\code{\link{importFromGrass}}: Import a raster or vector from a GRASS session into \code{R}.\cr
+#' 		\code{\link{vectToR}}: Get  vector from \code{GRASS}.\cr
 #'
 #' @section Functions that do operations on rasters and vectors simultaneously:
 #' 		\code{\link{faster}}: Generic call to a \code{GRASS} module.\cr

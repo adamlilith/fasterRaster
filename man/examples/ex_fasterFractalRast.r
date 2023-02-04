@@ -14,45 +14,21 @@ grassDir <- '/usr/local/grass' # Linux
 library(sf)
 library(terra)
 
-# load rasters
+# data
 madElev <- fasterData('madElev')
-madForest2000 <- fasterData('madForest2000')
 
-# load vectors
-madCoast0 <- fasterData('madCoast0') # get vector
-
-# start a GRASS session with a raster
-initGrass(madElev,
+fract22 <- fasterFractalRast(rast=madElev, dimension=2.2,
+outGrassName='fract2.2', grassDir=grassDir,
 location='examples', restartGrass=TRUE, warn=FALSE) # line for examples only
 
-# export another raster
-fasterRast(madForest2000)
+fract27 <- fasterFractalRast(rast='madElev', dimension=2.7,
+outGrassName='fract2.7', grassDir=grassDir,
+location='examples') # line for examples only
 
-# export a vector
-fasterVect(madCoast0, inVectName = 'madCoast0')
-
-# names of all rasters and vectors in the GRASS session
-fasterLs()
-
-# rename raster
-fasterRename('madElev', 'elevation')
-fasterLs()
-
-# copy raster
-fasterCopy('elevation', 'elevationCopy')
-fasterLs()
-
-# remove raster
-fasterRm('elevation')
-fasterLs()
-
-# remove vector
-fasterRm('madCoast0')
-fasterLs()
+plot(c(fract22, fract27), main=c('D = 2.2', 'D = 2.7'))
 
 # Revert back to original GRASS session if needed.
 # Change to your working location if not "default" (it usually is).
 initGrass(location='default')
 
 }
-

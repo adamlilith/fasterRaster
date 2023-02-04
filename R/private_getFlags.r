@@ -11,7 +11,7 @@
 
 .getFlags <- function(replace, flags = 'quiet') {
 
-	if (replace) flags <- c(flags, 'overwrite')
+	if (!is.na(replace) && replace) flags <- c(flags, 'overwrite')
 	flags <- unique(flags)
 	flags
 

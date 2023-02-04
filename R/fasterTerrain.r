@@ -57,6 +57,7 @@ fasterTerrain <- function(
 		### arguments
 		if (exists('rast', where=environment(), inherits=FALSE)) {
 			inRastName <- .getInRastName(inRastName, rast)
+			.checkRastExists(replace=replace, rast=rast, inRastName=inRastName, outGrassName=outGrassName)
 		} else {
 			rast <- inRastName <- NULL
 		}
