@@ -1,14 +1,6 @@
-#' Calculations on neighboring cells of a raster
+#' Calculations across cells surrounding a focal cell
 #'
-#' These functions calculate statistics on a moving set of cells in a "neighborhood". There are several ways to define the neighborhood, depending on the function:\cr
-#' \itemize{
-#'	\item \code{fasterFocal}: Conduct calculations for a "square" neighborhood where all cells are equally weighted. This requires users to specify a single, odd integer value for argument \code{diameter}.
-#'	\item \code{fasterFocal} with argument \code{circle} set to \code{TRUE}: Conduct calculations for a "square" neighborhood where all cells are equally weighted. This requires users to specify a single, odd integer value for argument \code{diameter}.
-#'	\item \code{fasterFocal}: Conduct calculations for a "square" neighborhood where cells are weighted according to a user-specified matrix.
-#'	\item \code{fasterFocalDecay}: Conduct calculations for a "square" neighborhood where the relative weoights of cells decay from the focal cell as per a Gaussian or exponential function..
-#'	\item \code{fasterFocalDecay} with argument \code{circle} set to \code{TRUE}: Conduct calculations for a "circular" neighborhood where the relative weoights of cells decay from the focal cell as per a Gaussian or exponential function..
-#' }
-#' Depending on the function applied to cells in the nerighborhood, additional arguments may be required.
+#' This functions calculates statistics on a moving "neighborhood" of cells of a raster. The neighborhood can be a square, circle, or a user-defined set of cells (with or without weights). This function is based on \code{GRASS} module \href{https://grass.osgeo.org/grass82/manuals/r.neighbors.html}{\code{r.neighbors}}. In that module some of the functions return integers for the mean, standard deviation, and variance.  However, unlike that module, this function will return rasters with floating-point values for most functions (unless otherwise noted--see argument \code{fun}).
 #'
 #' @inheritParams .sharedArgs_rast
 #' @inheritParams .sharedArgs_inRastName
@@ -18,54 +10,43 @@
 #' @inheritParams .sharedArgs_outGrassName
 #' @inheritParams .sharedArgs_dots_forInitGrass_andGrassModule
 #'
+#' @param w The size and nature of the neighborhood:
+#' \itemize{
+#' 	\item "Square" neighborhoods (when \code{circle = FALSE}: An odd integer >= 3, indicating indicates the size of a "square" neighborhood (number of cells wide and number or cells tall).
+#' 	\item "Circular" neighborhoods (when \code{circle = TRUE}: An odd integer >=3, indicating the diameter of the circle.
+#' 	\item A matrix of cell weights: The matrix must be square and have an odd number of rows and columns (example: \code{matrix(c(0.5, 1, 0.5, 1, 2, 1, 0.5, 1, 0.5), nrow=3)}). You cannot use a weights matrix when \code{circle = TRUE}. Cells with \code{NA} as a weight will be ignored.
+#' }
+#'
 #' @param fun Name of the function to calculate on each neighborhood.
 #' \itemize{
-#' 	\item \code{'mean'} (default): See note about rounding in \strong\code{{Details}}.
+#' 	\item \code{'mean'} (default)
 #' 	\item \code{'median'}
 #' 	\item \code{'mode'}
 #' 	\item \code{'min'} or \code{'max'}
 #' 	\item \code{'range'}
-#' 	\item \code{'sd'}: Sample standard deviation. See notes about standard deviations and rounding in \strong\code{{Details}}.
-#' 	\item \code{'popSd'}: Population standard deviation. See notes about standard deviations and rounding in \strong\code{{Details}}.
+#' 	\item \code{'sd'}: Sample standard deviation. See note about standard deviations and variances in \strong\code{{Details}}.
+#' 	\item \code{'sdPop'}: Population standard deviation. See note about standard deviations and variances in \strong\code{{Details}}.
 #' 	\item \code{'sum'}: Sum of non-\code{NA} cells.
 #' 	\item \code{'count'}: Number of non-\code{NA} cells.
-#' 	\item \code{'var'}: This is the population variance, not sample variance. Also see about rounding in \strong\code{{Details}}.
+#' 	\item \code{'var'}: Sample variance. See note about standard deviations and variances in \strong\code{{Details}}.
+#' 	\item \code{'varPop'}: Population variance. See note about standard deviations and variances in \strong\code{{Details}}.
 #' 	\item \code{'diversity'}: Number of unique values.
-#' 	\item \code{'interspersion'}: Percent of cells with values different from focal cell, plus 1 (e.g., if 6 of 8 cells have different values, then the interspersion is 100 * 6/8 + 1 = 76). Also see about rounding in \strong\code{{Details}}--unlike for other functions, rounding is \emph{NOT} corrected for.
+#' 	\item \code{'interspersion'}: Percent of cells with values different from focal cell, plus 1 (e.g., if 6 of 8 cells have different values, then the interspersion is 100 * 6/8 + 1 = 76). Values will be integers (i.e., not fractions of a percent).
 #' 	\item \code{'quantile'}: The value in argument \code{quantile} is used to specify the quantile.
 #' }
-#' The center cell value is always included in the calculations.\cr
+#' The center cell value is always included in the calculations, and all calculations ignore \code{NA} cells (i.e., they do not count as cells in the focal neighborhood).
 #'
 #' @param circle If \code{FALSE} (default), use a "square" neighborhood. If \code{TRUE}, use a "circular" neighborhood. When this is \code{TRUE}, argument \code{w} cannot be a matrix.
 #'
-#' @param w This determines the size and nature of the neighborhood:
-#' \itemize{
-#' 	\item "Square" neighborhoods (\code{circle = FALSE}: An odd integer >= 3, indicating indicates the size of a "square" neighborhood (number of cells wide and number or cells tall).
-#' 	\item "Circular" neighborhoods (\code{circle = TRUE}: An odd integer >=3, indicating the diameter of the circle.
-#' 	\item A matrix of cell weights: The matrix must be square and have an odd number of rows and columns (example: \code{matrix(c(0.5, 1, 0.5, 1, 2, 1, 0.5, 1, 0.5), nrow=3)}). You cannot use a weights matrix when \code{circle = TRUE}.
-#' }
-#'
-#' @param decayFx The name of the decay function. Valid values include: \code{'Gaussian'} (Gaussian weighting) or \code{'exponential'} (exponential weighting). See also argument \code{decayRate}.
-#'
-#' @param decayRate Value used to determine the decay rate (i.e., relative weighting of cells as one moves away from the focal cell). If the decay function is Gaussian, then this is the value of \eqn{\sigma} (the standard deviation), as in \deqn{exp(-(x*x+y*y)/(2*\sigma^2))/(2*π*σ^2)}. Smaller values increase the weight of cells near the center relative to those father away. If exponential, this is the value of the decay parameter \eqn{d}, as in \deqn{exp(d*\sqrt(x^2+y^2))}. Negative values cause weights of cells more distant from the center to have less influence. The default value of -0.1 may not make sense given your situation.
-#'
-#' @param mask Either \code{NULL} (default), a \code{SpatRaster}, or name of a raster already in \code{GRASS}. This is used to select cells to be used in calculations. If provided, then only cells that are not \code{NA} in the mask are filled in. All others are assigned the value in \code{rast}.
-#'
-#' @param inMaskName Either \code{NULL} (default) or the name of the \code{mask} raster in \code{GRASS}. If this is missing, the \code{\link[terra:names]{name}} of the raster or raster file will be used. If \code{NULL}, then "\code{maskRast}" will be used.
-#'
-#' @param quantile Quantile to calculate when \code{method = 'quantile'}. The default value is 0.5 (median), and valid values are in [0, 1].
-#'
-#' @param largeNum For functions that normally produce rounded output in \code{GRASS}, multiply the raster first by this value then execute the focal operation, then divide by this number. If you wish to skip this step (i.e., round the output), then set this equal to \code{NULL}. The default values is 1E6, so values should be accurate to within 1E-5. This \emph{really should} be an integer (positive or negative).
+#' @param quantile Quantile to calculate when \code{fun = 'quantile'}. The default value is 0.5 (median), and valid values are in [0, 1].
 #'
 #' @param cores Number of cores to use (default is 1).
 #'
-#' @details \strong{Rounding}: Depending on the data type of the input raster, Some of the functions noted above have outputs rounded to the nearest integer when executed in \code{GRASS}. To obviate this issue, for these functions the raster is first multipled by a large number (given in \code{largeNum}). The operation is performed, then the raster is divided by this large number again. If this is an issue, you can multiply the raster by a large number in \code{R} or by using \code{\link{fasterApp}}, do the focal operation, then divide by the same number. You can skip this step by setting \code{largeNum} to \code{NULL} (i.e., so output will be rounded for these functions)./cr
-#'
-#' \strong{Standard deviations}: The population standard deviation is calculated as:
-#' \deqn{sqrt(\sum((x_i - x_bar)^2) / N}
-#' whereas the sample standard deviation is calculated as
-#' \deqn{sqrt(\sum((x_i - x_bar)^2) / (N - 1)}
-#' By default, \code{GRASS} calculates the population standard deviation, whereas \code{R}'s \code{\link{sd}} (and functions in \pkg{terra} that can use the \code{sd} function) calculate the sample standard deviation. Which is better? It depends on whether you consider all of the cells in a neighborhood are the complete statistical "population" of cells in the neighborhood, or represent a random sample thereof.
+#' @details The population variance is calculated as:
+#' \deqn{\sum((x_i - x_bar)^2) / N}
+#' whereas the sample variance is calculated as
+#' \deqn{\sum((x_i - x_bar)^2) / (N - 1)}
+#' The population and sample standard deviations are just the square root of these, respectively. The \code{\link{sd}} function in \code{R} (and functions in \pkg{terra} that can use \code{sd}-like functions) calculate the sample standard deviation. Which is preferable? It depends on whether you consider all of the cells in a neighborhood are the complete statistical "population" of cells in the neighborhood, or represent a random sample thereof.
 #' 
 #' @return if \code{returnToR} is \code{TRUE}, a \code{SpatRaster}. Either way, a raster with the name given by \code{outGrassName} is created in a \code{GRASS} session.
 #'
@@ -81,12 +62,7 @@ fasterFocal <- function(
 	w = 3,
 	fun = 'mean',
 	circle = FALSE,
-
-	mask = NULL,
-	inMaskName = NULL,
-
 	quantile = 0.5,
-	largeNum = 1E6,
 
 	cores = 1,
 	outGrassName = 'focalRast',
@@ -101,11 +77,14 @@ fasterFocal <- function(
 	# for debugging
 	if (FALSE) {
 	
-		fun <- 'mean'
+		rast <- madElev
+		inRastName <- 'madElev'
+		fun <- 'sd'
 		w <- 3
 		quantile <- 0.5
-		largeNum <- 1E6
 		cores <- 4
+		circle <- FALSE
+		quantile <- 0.5
 		grassToR <- TRUE
 		inRastName <- ifelse(is.null(names(rast)), 'rast', names(rast))
 		outGrassName <- 'focalRast'
@@ -118,9 +97,12 @@ fasterFocal <- function(
 		### arguments
 		if (exists('rast', where=environment(), inherits=FALSE)) {
 			inRastName <- .getInRastName(inRastName, rast=rast)
+			.checkRastExists(replace=replace, rast=rast, inRastName=inRastName, outGrassName=outGrassName)
 		} else {
 			rast <- inRastName <- NULL
 		}
+		
+		### overwrites?
 
 		### flags
 		flags <- .getFlags(replace=replace)
@@ -146,44 +128,12 @@ fasterFocal <- function(
 	
 	if (is.matrix(w) & circle) ('Cannot use a circular neighborhood and a weights matrix at the same time.')
 	
-	# translate to GRASS function
-	if (fun == 'mean') fun <- 'average'
-	if (fun == 'max') fun <- 'maximum'
-	if (fun == 'min') fun <- 'minimum'
-	if (fun == 'var') fun <- 'variance'
-	
-	if (fun == 'popSd') {
-		fun <- 'stddev' # population standard deviation
-	} else if (fun == 'sd') {
-		fun <- 'stddev' # sample standard deviation
-		sampleSd <- TRUE
-	} else {
-		sampleSd <- FALSE
-	}
+	if (!(tolower(fun) %in% c('mean', 'average', 'sd', 'sdpop', 'var', 'varpop', 'median', 'mode', 'max', 'min', 'maximum', 'minimum', 'count', 'range', 'diversity', 'interspersion', 'quantile'))) stop('Argument "fun" is invalid.')
 	
 	### initialize GRASS
 	input <- do.call('initGrass', inits)
 
-	### execute
-	
-	# rescale
-	if (fun %in% c('average', 'stddev', 'variance') & !is.null(largeNum)) {
-
-		ex <- paste0('= ', sprintf('%.0f', largeNum), ' * ', inRastName)
-		
-		fasterApp(
-			rast = input,
-			expression = ex,
-			grassToR = FALSE,
-			outGrassName = input,
-			replace = TRUE,
-			restartGrass = FALSE,
-			autoRegion = autoRegion,
-			grassDir = grassDir,
-			...
-		)
-		
-	}
+	### function-specific
 
 	# size
 	size <- if (inherits(w, 'matrix')) {
@@ -216,6 +166,8 @@ fasterFocal <- function(
 	# weights matrix
 	if (inherits(w, 'matrix')) {
 		
+		if (anyNA(w)) w[is.na(w)] <- 0
+		
 		weight <- as.data.frame(w)
 		colnames(weight) <- NULL
 		
@@ -234,151 +186,128 @@ fasterFocal <- function(
 		
 	}
 
-	# mask
-	if (!is.null(mask)) {
-	
-		inMaskName <- .getInRastName(inMaskName, mask)
-		if (is.null(inMaskName)) inMaskName <- 'maskRast'
-		fasterRast(mask, inRastName=inMaskName, replace=replace, autoRegion=autoRegion)
-		args <- c(args, selection=inMaskName)
-	
-	}
-
-	# execute
+	### execute
 	if (autoRegion) regionReshape(inRastName)
+	
+	# convert rasters to double precision for some functions
+	mapCalcFlags <- .getFlags(replace, 'quiet')
+	if (fun %in% c('mean', 'average')) {
 
-	# anything but sample standard deviation
-	if (!sampleSd) {
+		# convert to double to obviate issues with imprecision
+		doubleRast <- .makeTempName('doubleRast')
+		ex <- paste0(doubleRast, ' = double(', inRastName, ')')
+		rgrass::execGRASS('r.mapcalc', expression=ex, flags=mapCalcFlags)
 
-		do.call(rgrass::execGRASS, args=args)
+		# focal sums (numerator)
+		sumRast <- .makeTempName('sumRast')
+		thisArgs <- args
+		thisArgs$method <- 'sum'
+		thisArgs$input <- doubleRast
+		thisArgs$output <- sumRast
+		do.call(rgrass::execGRASS, args=thisArgs)
 
-	# sample standard deviation
+		# ones mask (for denomimator)
+		onesRast <- .makeTempName('onesRast')
+		ex <- paste0(onesRast, ' = if(isnull(', doubleRast, '), null(), double(1))')
+		rgrass::execGRASS('r.mapcalc', expression=ex, flags=mapCalcFlags)
+
+		# count raster (sum of ones--denominator)
+		countRast <- .makeTempName('countRast')
+		thisArgs <- args
+		thisArgs$method <- 'sum'
+		thisArgs$input <- onesRast
+		thisArgs$output <- countRast
+		do.call(rgrass::execGRASS, args=thisArgs)
+
+		# calculate mean
+		ex <- paste0(outGrassName, ' = ', sumRast, ' / ', countRast)
+		rgrass::execGRASS('r.mapcalc', expression=ex, flags=mapCalcFlags)
+	
+	} else if (tolower(fun) %in% c('sdpop', 'sd', 'var', 'varpop')) {
+	
+		# convert to double to obviate issues with imprecision
+		doubleRast <- .makeTempName('doubleRast')
+		ex <- paste0(doubleRast, ' = double(', inRastName, ')')
+		rgrass::execGRASS('r.mapcalc', expression=ex, flags=mapCalcFlags)
+		
+		### numerator LHS
+			
+			# square values
+			squaredRast <- .makeTempName('squaredRast')
+			ex <- paste0(squaredRast, ' = ', doubleRast, '^2')
+			rgrass::execGRASS('r.mapcalc', expression=ex, flags=mapCalcFlags)
+			
+			# focal sums of squares
+			sumOfSquaresRast <- .makeTempName('sumOfSquaresRast')
+			thisArgs <- args
+			thisArgs$method <- 'sum'
+			thisArgs$input <- squaredRast
+			thisArgs$output <- sumOfSquaresRast
+			do.call(rgrass::execGRASS, args=thisArgs)
+
+		### numerator RHS
+				
+			# focal sums
+			sumsRast <- .makeTempName('sumsRast')
+			thisArgs <- args
+			thisArgs$method <- 'sum'
+			thisArgs$input <- doubleRast
+			thisArgs$output <- sumsRast
+			do.call(rgrass::execGRASS, args=thisArgs)
+			
+			# squared sums raster
+			squaredSumsRast <- .makeTempName('squaredSumsRast')
+			ex <- paste0(squaredSumsRast, ' = ', sumsRast, '^2')
+			rgrass::execGRASS('r.mapcalc', expression=ex, flags=mapCalcFlags)
+
+		### counts
+				
+			# ones mask... used to obviate problems where NULL cells are counted as 0
+			onesRast <- .makeTempName('onesRast')
+			ex <- paste0(onesRast, ' = if(isnull(', doubleRast, '), null(), double(1))')
+			rgrass::execGRASS('r.mapcalc', expression=ex, flags=mapCalcFlags)
+			
+			# count raster (sum of ones)
+			countRast <- .makeTempName('countRast')
+			thisArgs <- args
+			thisArgs$method <- 'sum'
+			thisArgs$input <- onesRast
+			thisArgs$output <- countRast
+			do.call(rgrass::execGRASS, args=thisArgs)
+
+		### final
+				
+			# numerator
+			numerRast <- .makeTempName('numerRast')
+			ex <- paste0(numerRast, ' = ', sumOfSquaresRast, ' - (', squaredSumsRast, ' / ', countRast, ')')
+			rgrass::execGRASS('r.mapcalc', expression=ex, flags=mapCalcFlags)
+			
+			# sd or variance
+			ex <- if (tolower(fun) == 'sd') {
+				paste0(outGrassName, ' = sqrt(', numerRast, ' / (', countRast, ' - 1))')
+			} else if (tolower(fun) == 'sdpop') {
+				paste0(outGrassName, ' = sqrt(', numerRast, ' / ', countRast, ')')
+			} else if (tolower(fun) == 'var') {
+				paste0(outGrassName, ' = ', numerRast, ' / (', countRast, ' - 1)')
+			} else if (tolower(fun) == 'varpop') {
+				paste0(outGrassName, ' = ', numerRast, ' / (', countRast, ')')
+			}
+
+			rgrass::execGRASS('r.mapcalc', expression=ex, flags=mapCalcFlags)
+
+	
 	} else {
 	
-		# mean
-		meanRast <- paste0('TEMPTEMP_meanRast', round(1E6 * runif(1)))
-
-		fasterFocal(
-			rast = inRastName,
-			inRastName = inRastName,
-			w = w,
-			fun = 'mean',
-			circle = circle,
-
-			mask = inMaskName,
-			inMaskName = inMaskName,
-
-			quantile = quantile,
-			largeNum = largeNum,
-
-			cores = cores,
-			outGrassName = meanRast,
-
-			replace = TRUE,
-			grassToR = FALSE,
-			autoRegion = FALSE,
-			grassDir = grassDir,
-			...
-		)
-	
-		# count of non-NA cells
-		countRast <- paste0('TEMPTEMP_countRast', round(1E6 * runif(1)))
-
-		fasterFocal(
-			rast = inRastName,
-			inRastName = inRastName,
-			w = w,
-			fun = 'count',
-			circle = circle,
-
-			mask = inMaskName,
-			inMaskName = inMaskName,
-
-			largeNum = largeNum,
-
-			cores = cores,
-			outGrassName = countRast,
-
-			replace = TRUE,
-			grassToR = FALSE,
-			autoRegion = FALSE,
-			grassDir = grassDir,
-			...
-		)
-
-		# calculate sample SD
-		ex <<- paste0('= sqrt(sum((', inRastName, ' - ', meanRast, ')^2) / (', countRast, ' - 1))')
-	
-		fasterApp(
-			rast = inRastName,
-			inRastName = inRastName,
-			expression = ex,
-			grassToR = FALSE,
-			outGrassName = outGrassName,
-			replace = TRUE,
-			restartGrass = FALSE,
-			autoRegion = FALSE,
-			grassDir = grassDir,
-			...
-		)
+		if (fun == 'max') {
+			args$method <- 'maximum'
+		} else if (fun == 'min') {
+			args$method <- 'minimum'
+		}
 		
-		# fasterRm(meanRast)
-		# fasterRm(countRast)
+		do.call(rgrass::execGRASS, args=args)
 	
 	}
 	
-	# rescale
-	if (fun %in% c('average', 'stddev', 'variance') & !is.null(largeNum)) {
-
-		ex <- paste0('= ', outGrassName, ' / ', sprintf('%.0f', largeNum))
-		
-		fasterApp(
-			rast = outGrassName,
-			inRastName = outGrassName,
-			expression = ex,
-			grassToR = FALSE,
-			outGrassName = outGrassName,
-			replace = TRUE,
-			restartGrass = FALSE,
-			autoRegion = FALSE,
-			grassDir = grassDir,
-			...
-		)
-
-	}
-
-	# # correct to sample SD
-	# if (fun == 'stddev' && sampleSd) {
-	
-		# thisArgs <- args
-		# thisArgs$method <- 'count'
-		# output <- paste0('TEMPTEMP_focalCount', round(1E6 * runif(1)))
-		# thisArgs$output <- output
-		# thisArgs$flags <- .getFlags(TRUE, thisArgs$flags)
-
-		# # calculate weighted sample size
-		# do.call(rgrass::execGRASS, args=thisArgs)
-
-		# # ex <- paste0('= ', outGrassName, ' / sqrt(', output, ')')
-		# ex <- paste0('= sqrt(((', outGrassName, '^2) * ', output, ') / (', output, ' - 1))')
-
-		# fasterApp(
-			# rast = outGrassName,
-			# inRastName = outGrassName,
-			# expression = ex,
-			# outGrassName = outGrassName,
-			# replace = TRUE,
-			# grassToR = FALSE,
-			# restartGrass = FALSE,
-			# autoRegion = FALSE,
-			# grassDir = grassDir,
-			# ...
-		# )
-		
-		# # fasterRm(output)
-	
-	# }
-
 	### export
 	if (grassToR) {
 
