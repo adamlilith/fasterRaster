@@ -212,8 +212,8 @@ All spatial data represents features in a portion of eastern Madagascar.
 * `madChelsa`: Bioclimatic rasters for a portion of eastern Madagascar
 * `madDypsis`: Records of the genus *Dypsis* (slender, evergreen palms)
 * `madElev`: Elevation raster
-* `madElevAnt: Elevation raster for the Antanambe Commune of Madagascar
-* `madElevMan: Elevation raster for the Manompana Commune of Madagascar
+* `madElevAnt`: Elevation raster for the Antanambe Commune of Madagascar
+* `madElevMan`: Elevation raster for the Manompana Commune of Madagascar
 * `madForest2000` and `madForest2014`: Forest cover rasters for 2000 and 2014
 * `madRivers`: Major rivers
 
