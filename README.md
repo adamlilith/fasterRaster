@@ -53,7 +53,7 @@ Now, whenever you run a **fasterRaster** function that needs `grassDir`, it will
 
 ## An example ##
 
-Let's get started! We'll do a simple operation in which we calculate the distance to rivers (represented by a spatial lines vector object) and burn the distance values into a raster. To do this, we'll be using maps representing the middle of the eastern coast of Madagascar. We will also use the \code{terra} and \code{sf} packages for raster and spatial vector support, respectively (**fasterRaster** also works with `terra`'s `SpatVector` class, and in fact "prefers" it).
+Let's get started! We'll do a simple operation in which we calculate the distance to rivers (represented by a spatial lines vector object) and burn the distance values into a raster. To do this, we'll be using maps representing the middle of the eastern coast of Madagascar. We will also use the `terra` and `sf` packages for raster and spatial vector support, respectively (**fasterRaster** also works with `terra`'s `SpatVector` class, and in fact "prefers" it).
 
 `library(fasterRaster)`  
 `library(terra)`  
@@ -116,11 +116,11 @@ Here is an example of chaining with the `faster` function. The second function u
 `latRast <- faster('r.latlong', rast=madElev, outType='rast', flags=c('quiet', 'overwrite'), outGrassName='lat')}`  
 `longRast <- faster('r.latlong', input='lat', outType='rast', flags=c('quiet', 'overwrite', 'l'))}`  
 
-Here, we used the product of the first \code{faster} call, which is named `'lat'`, as the input to the second `faster` call. Note that we could have also used `'madElev'` as the input to the second, since it was also already in **GRASS**.
+Here, we used the product of the first `faster` call, which is named `'lat'`, as the input to the second `faster` call. Note that we could have also used `'madElev'` as the input to the second, since it was also already in **GRASS**.
 
 ## Saving rasters ##
 
-For some reason, if you create or export a raster to **GRASS**, then import it back to \code{R}, saving it using **terra**'s `writeRaster` function automatically forces the `datatype` of the raster to a low-bit integer. As a result, values are truncated to integers and forced to a specific range (or coerced to `NA`). You can overcome this simply by saving these rasters using, for example:
+For some reason, if you create or export a raster to **GRASS**, then import it back to `R`, saving it using **terra**'s `writeRaster` function automatically forces the `datatype` of the raster to a low-bit integer. As a result, values are truncated to integers and forced to a specific range (or coerced to `NA`). You can overcome this simply by saving these rasters using, for example:
 
 `writeRaster(rasterToSave, 'C:/pathToSave/fileName.tif', datatype='FLT4S')` or  
 `writeRaster(rasterToSave, 'C:/pathToSave/fileName.tif', datatype='FLT8S')`
