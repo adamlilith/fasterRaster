@@ -22,7 +22,7 @@
 #'
 #' @param warn If \code{TRUE}, then print a warning if the \code{GRASS} session has been restarted. This is only used if \code{restartGrass} is \code{TRUE}.
 #'
-#' @param location Character. Name of \code{GRASS} location. The default name is \code{'default'}. You can switch between locations by using \code{initGrass(location='newLocation')}.
+#' @param location Character. Name of \code{GRASS} location. The default name is \code{'default'}. You can switch between locations by using \code{startFaster(location='newLocation')}.
 #'
 #' @param dir Character. Path name of directory in which to create the \code{GRASS} mapset. The default is to create a directory in the location for temporary files for the operating system.
 #'
@@ -36,7 +36,7 @@
 #'
 #' @export
 
-initGrass <- function(
+startFaster <- function(
 	rast,
 	vect,
 	inRastName,
@@ -173,7 +173,7 @@ initGrass <- function(
 		
 			.setSessionStarted(FALSE)
 
-			if (warn) warning(paste0('The GRASS session with these properties has been restarted:\n* location: ', location, '\n*  directory: ', dir, '.\nAll previously existing files have been removed.'), immediate.=TRUE)
+			if (warn) warning(paste0('The GRASS session with these properties has been restarted:\n* location: ', location, '\n* directory: ', dir, '.\nAll previously existing files have been removed.'), immediate.=TRUE)
 			
 			rgrass::unset.GIS_LOCK()
 			rgrass::remove_GISRC()

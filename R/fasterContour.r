@@ -42,15 +42,16 @@ fasterContour <- function(
 	##############
 
 		### arguments
-		if (exists('rast', where=environment(), inherits=FALSE)) {
-			inRastName <- .getInRastName(inRastName, rast)
-			.checkRastExists(replace=replace, rast=rast, inRastName=inRastName, outGrassName=NULL)
+		.checkRastExists(replace=replace, rast=NULL, inRastName=NULL, outGrassName=outGrassName, ...)
+		if (!missing(rast)) {
+			if (!inherits(rast, 'character') & !inherits(rast, 'SpatRaster')) rast <- terra::rast(rast)
+			inRastName <- .getInRastName(inRastName, rast=rast)
+			.checkRastExists(replace=replace, rast=rast, inRastName=inRastName, outGrassName=NULL, ...)
 		} else {
 			rast <- inRastName <- NULL
 		}
 		
-		
-		.checkVectExists(replace=replace, vect=NULL, inVectName=NULL, outGrassName=outGrassName)
+		.checkVectExists(replace=replace, vect=NULL, inVectName=NULL, outGrassName=outGrassName, ...)
 
 		### flags
 		flags <- .getFlags(replace=replace)
@@ -81,7 +82,7 @@ fasterContour <- function(
 	args <- c(args, dots)
 	
 	### initialize GRASS
-	input <- do.call('initGrass', inits)
+	input <- do.call('startFaster', inits)
 
 	### execute
 	do.call(rgrass::execGRASS, args=args)
@@ -92,6 +93,6 @@ fasterContour <- function(
 		if (outVectClass == 'sf') out <- sf::st_as_sf(out)
 		out
 		
-	}
+	} else { invisible(TRUE) }
 	
 }

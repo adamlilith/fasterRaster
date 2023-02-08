@@ -4,7 +4,7 @@
 # "warn" arguments to avoid interfering with an existing GRASS session.
 # WHEN YOU ARE DONE WITH THE EXAMPLES, run this line to revert to your
 # active GRASS session:
-# initGrass(location='default') # change "location" if not "default"
+# startFaster(location='default') # change "location" if not "default"
 
 # For fasterRaster functions below, this will be used to set up a location
 # that does not interfere with any locations you may be using.
@@ -82,6 +82,6 @@ plot(st_geometry(madRivers), col='blue', add=TRUE)
 
 # Revert back to original GRASS session.
 # Change to your working location if not "default" (it usually is).
-initGrass(location='default')
+startFaster(location='default')
 
 }

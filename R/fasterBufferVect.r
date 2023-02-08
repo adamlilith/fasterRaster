@@ -12,7 +12,7 @@
 #' @inheritParams .sharedArgs_dots_forInitGrass_andGrassModule
 #'
 #' @param width Size of the buffer in map units (usually meters). To create "inward" buffers, you can use negative numbers.
-#' @param union If \code{FALSE} (default), then each input feature will have its own buffer, and attributes from each input feature will be transfered to each buffer feature. If \code{TRUE}, the union buffers of different features that intersect.
+#' @param union If \code{FALSE} (default), then each input feature will have its own buffer, and attributes from each input feature will be transferred to each buffer feature. If \code{TRUE}, the union buffers of different features that intersect.
 #' 
 #' @return A \code{SpatVector} (\pkg{terra} package) or an object of class \code{sf} (\code{sf} package), if \code{options(grassVectOut = 'sf')}.
 #'
@@ -42,7 +42,8 @@ fasterBufferVect <- function(
 
 		### arguments
 
-		if (exists('vect', where=environment(), inherits=FALSE)) {
+		if (!missing(vect)) {
+			if (!inherits(vect, 'character') & !inherits(vect, 'SpatVector')) vect <- terra::vect(vect)
 			inVectName <- .getInVectName(inVectName, vect=vect)
 			.checkVectExists(replace=replace, vect=vect, inVectName=inVectName, outGrassName=NULL)
 		} else {
@@ -77,7 +78,7 @@ fasterBufferVect <- function(
 	args <- c(args, dots)
 
 	# initialize GRASS
-	input <- do.call('initGrass', inits)
+	input <- do.call('startFaster', inits)
 
 	### execute
 	do.call(rgrass::execGRASS, args=args)
@@ -89,6 +90,6 @@ fasterBufferVect <- function(
 		if (outVectClass == 'sf') out <- sf::st_as_sf(out)
 		out
 		
-	}
+	} else { invisible(TRUE) }
  
 }

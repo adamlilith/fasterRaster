@@ -1,7 +1,9 @@
 #' Save one or more rasters to disk directly from a GRASS session
 #'
-#' This function saves a raster to disk directly from a \code{GRASS} session. If you want to save a raster from \code{R}, use \code{\link[terra]{writeRaster}} in the \pkg{terra} package.  However, if the raster in \code{R} was produced in \code{GRASS}, please consult \code{\link{writeRaster4}} for important details! Please note that rasters saved by \code{GRASS} can sometimes be much larger than their counterparts saved from \code{R}.
+#' This function saves a raster to disk directly from a \code{GRASS} session. If you want to save a raster from \code{R}, use \code{\link[terra]{writeRaster}} in the \pkg{terra} package.  However, if the raster in \code{R} was produced in \code{GRASS}, please consult \code{\link{writeRaster4}} for important details! Please note that rasters saved by \code{GRASS} can sometimes be much larger than their counterparts saved from \code{R}.\cr
+#' The filetype will be attempted to be ascertained from the file extension, but you can specify the format using the \code{format} argument (see entry for \code{...}). You can see a list of supported formats by simply using this function with no arguments, as in \code{fasterWriteRaster()}, or also at \href{https://grass.osgeo.org/grass82/manuals/r.out.gdal.html}{\code{r.out.gdal}}.
 #'
+#' @inheritParams .sharedArgs_trimRast
 #' @inheritParams .sharedArgs_autoRegion
 #' @inheritParams .sharedArgs_grassDir
 #'
@@ -30,7 +32,7 @@
 #'
 #' @return A connecton to the written raster (invisibly). Also writes one or more files to disk.
 #'
-#' @seealso \code{\link{writeRaster4}} and \code{\link{writeRaster8}} for saving a raster created in \code{GRASS} then imported to \code{R} and \code{\link{importFromGrass}} for importing rasters and vectors from \code{GRASS}; \code{\link[terra]{writeRaster}} in \pkg{terra}; \code{GRASS} modules \code{\href{https://grass.osgeo.org/grass82/manuals/r.out.gdal.html}{r.out.gdal}} and \code{\href{https://grass.osgeo.org/grass82/manuals/r.out.ascii.html}{r.out.ascii}}
+#' @seealso \code{\link{writeRaster4}} and \code{\link{writeRaster8}} for saving a raster created in \code{GRASS} then imported to \code{R} and \code{\link{rastFromGrass}} for importing rasters from \code{GRASS}; \code{\link[terra]{writeRaster}} in \pkg{terra}; \code{GRASS} modules \code{\href{https://grass.osgeo.org/grass82/manuals/r.out.gdal.html}{r.out.gdal}} and \code{\href{https://grass.osgeo.org/grass82/manuals/r.out.ascii.html}{r.out.ascii}}
 #'
 #' @example man/examples/ex_fasterWriteRaster.r
 #'
@@ -43,102 +45,121 @@ fasterWriteRaster <- function(
 	datatype = NULL,
 	compressTiff = 'DEFLATE',
 	bigTiff = FALSE,
+	trimRast = fasterGetOptions('trimRast', TRUE),
 	autoRegion = fasterGetOptions('autoRegion', TRUE),
 	...
 ) {
 
-	flags <- c('quiet')
-	if (overwrite) flags <- c(flags, 'overwrite')
-
-	### commons
-	###########
-
-		### restore
-		# on.exit(.restoreLocation(), add=TRUE) # return to starting location
-		if (autoRegion) on.exit(regionExt('*'), add=TRUE) # resize extent to encompass all spatials
-
-	###############
-	### end commons
-
-	# going to overwrite anything?
-	if (!overwrite) {
-		for (i in seq_along(rast)) {
-			if (file.exists(filename[i])) stop(paste0('File already exists and "overwrite" is FALSE:\n ', filename[i]))
-		}
-	}
-
-	dots <- list(...)
-	ascii <- if (exists('format', where=dots, inherits=FALSE)) {
-		if (tolower(dots$format) == 'asc') { TRUE } else { FALSE }
+	### display supported formats
+	if (missing(rast)) {
+	
+		forms <- rgrass::execGRASS('r.out.gdal', flags='l', intern=TRUE)
+		forms <- forms[forms != 'Supported formats:']
+		forms <- trimws(forms)
+		forms <- sort(forms)
+		forms <- c('Supported raster file formats:', forms)
+		cat(paste(forms, collapse='\n'))
+		cat('\n')
+		flush.console()
+	
+	### if wanting to write a raster
 	} else {
-		FALSE
-	}
 
-	# save
-	for (i in seq_along(rast)) {
+		flags <- c('quiet')
+		if (overwrite) flags <- c(flags, 'overwrite')
 
-		thisRast <- rast[i]
-		thisFileName <- filename[i]
-		
-		if (autoRegion) regionReshape(thisRast)
+		### commons
+		###########
 
-		nch <- nchar(filename)
-		extension <- tolower(substr(thisFileName, nch - 3, nch))
+			### restore
+			# on.exit(.restoreLocation(), add=TRUE) # return to starting location
+			if (autoRegion) on.exit(regionExt('*'), add=TRUE) # resize extent to encompass all spatials
 
-		if (ascii | extension %in% c('.asc', '.asci', '.ascii')) {
-			rgrass::execGRASS('r.out.ascii', input=rast, output=thisFileName, flags=flags, intern=TRUE, ...)
-		} else {
+		###############
+		### end commons
 
-			thisFlags <- c(flags, 'c')
-
-			if (!exists('createopt', inherits = FALSE)) createopt <- NULL
-
-			# GeoTIFF options
-			if (extension == '.tif') {
-
-				# createopt
-				createopt <- c(createopt, 'PROFILE=GeoTIFF')
-				if (!is.null(compressTiff)) {
-					createopt <- c(createopt, paste0('COMPRESS=', toupper(compressTiff)))
-				}
-				if (bigTiff) createopt <- c(createopt, 'BIGTIFF=YES')
-				createopt <- unique(createopt)
-				createopt <- paste(createopt, collapse=',')
-
+		# going to overwrite anything?
+		if (!overwrite) {
+			for (i in seq_along(rast)) {
+				if (file.exists(filename[i])) stop(paste0('File already exists and "overwrite" is FALSE:\n ', filename[i]))
 			}
-
-			# data type
-			thisDataType <- if (is.null(datatype)) {
-				fasterInfo(thisRast, rastOrVect='raster', temps=TRUE)$gdalDataType
-			} else if (datatype == 'INT1U') {
-				'Byte'
-			} else if (datatype == 'INT2U') {
-				'UInt16'
-			} else if (datatype == 'INT2S') {
-				'Int32'
-			} else if (datatype == 'FLT4S') {
-				'Float32'
-			} else if (datatype == 'FLT8S') {
-				'Float64'
-			} else {
-				datatype
-			}
-
-			# save
-			success <- rgrass::execGRASS('r.out.gdal', input=thisRast, output=thisFileName, type=thisDataType, createopt=createopt, flags=thisFlags, intern=TRUE, ...)
-
 		}
 
-	}
+		dots <- list(...)
+		ascii <- if (exists('format', where=dots, inherits=FALSE)) {
+			if (tolower(dots$format) == 'asc') { TRUE } else { FALSE }
+		} else {
+			FALSE
+		}
 
-	out <- terra::rast(filename)
-	out <- terra::setMinMax(out)
-	invisible(out)
+		# save
+		for (i in seq_along(rast)) {
+
+			thisRast <- rast[i]
+			thisFileName <- filename[i]
+			
+			if (autoRegion) regionReshape(thisRast)
+
+			nch <- nchar(filename)
+			extension <- tolower(substr(thisFileName, nch - 3, nch))
+
+			if (ascii | extension %in% c('.asc', '.asci', '.ascii')) {
+				rgrass::execGRASS('r.out.ascii', input=rast, output=thisFileName, flags=flags, intern=TRUE, ...)
+			} else {
+
+				thisFlags <- c(flags, 'c')
+
+				if (!exists('createopt', inherits = FALSE)) createopt <- NULL
+
+				# GeoTIFF options
+				if (extension == '.tif') {
+
+					# createopt
+					createopt <- c(createopt, 'PROFILE=GeoTIFF')
+					if (!is.null(compressTiff)) {
+						createopt <- c(createopt, paste0('COMPRESS=', toupper(compressTiff)))
+					}
+					if (bigTiff) createopt <- c(createopt, 'BIGTIFF=YES')
+					createopt <- unique(createopt)
+					createopt <- paste(createopt, collapse=',')
+
+				}
+
+				# data type
+				thisDataType <- if (is.null(datatype)) {
+					fasterInfo(thisRast, rastOrVect='raster', temps=TRUE)$gdalDataType
+				} else if (datatype == 'INT1U') {
+					'Byte'
+				} else if (datatype == 'INT2U') {
+					'UInt16'
+				} else if (datatype == 'INT2S') {
+					'Int32'
+				} else if (datatype == 'FLT4S') {
+					'Float32'
+				} else if (datatype == 'FLT8S') {
+					'Float64'
+				} else {
+					datatype
+				}
+
+				# save
+				success <- rgrass::execGRASS('r.out.gdal', input=thisRast, output=thisFileName, type=thisDataType, createopt=createopt, flags=thisFlags, intern=TRUE, ...)
+
+			}
+
+		} # next raster
+
+		out <- terra::rast(filename[length(filename)])
+		if (trimRast) out <- terra::trim(rast)
+		out <- terra::setMinMax(out)
+		invisible(out)
+		
+	} # if wanting to write a raster
 
 }
 
-#' @name rastToR
+#' @name rastFromGrass
 #' @title Get raster from 'GRASS'
 #' @rdname fasterWriteRaster
 #' @export
-rastToR <- function(rast) fasterWriteRaster(rast, filename=paste0(tempfile(), '.tif'), overwrite=TRUE)
+rastFromGrass <- function(rast) fasterWriteRaster(rast, filename=paste0(tempfile(), '.tif'), overwrite=TRUE, trimRast=fasterGetOptions('trimRast', TRUE))

@@ -1,8 +1,8 @@
 Package: fasterRaster
 Type: Package
 Title: Faster raster processing in R using GRASS GIS
-Version: 1.0.0
-Date: 2022-12-13
+Version: 2.0.0
+Date: 2023-02-07
 Authors@R: 
 	c(
 		person(

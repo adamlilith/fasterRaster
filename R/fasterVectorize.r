@@ -47,7 +47,7 @@ fasterVectorize <- function(
 	# initialize GRASS
 	if (is.null(inits)) inits <- list()
 	inits <- c(inits, list(rast=rast, vect=NULL, inRastName=inRastName, inVectName=NULL, replace=replace, grassDir=grassDir))
-	input <- do.call('initGrass', inits)
+	input <- do.call('startFaster', inits)
 
 	# vectorize
 	rgrass::execGRASS('r.to.vect', input=input, output=outGrassName, type=vectType, flags=flags, ...)
@@ -67,6 +67,6 @@ fasterVectorize <- function(
 		}
 		out
 		
-	}
+	} else { invisible(TRUE) }
 	
 }

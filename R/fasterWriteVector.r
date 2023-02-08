@@ -1,18 +1,27 @@
-#' Save one or more vectors to disk directly from a GRASS session
+#' Save one or more spatial vectors to disk directly from a 'GRASS' session
 #'
-#' This function saves a spatial vector to disk directly from a \code{GRASS} session. If you want to save a vector from \code{R}, use \code{\link{save}} or \code{\link{saveRDS}}.
+#' This function saves one or more spatial vectors to disk directly from a \code{GRASS} session.\cr
+#' By default, files will be of OGC GeoPackage format (extension "\code{.gpkg}"). However, but you can specify the format using the \code{format} argument (see entry for \code{...}). You can see a list of supported formats by simply using this function with no arguments, as in \code{fasterWriteVector()}, or also at \href{https://grass.osgeo.org/grass82/manuals/v.out.ogr.html}{\code{v.out.ogr}}.
+#'
+#' @inheritParams .sharedArgs_outVectClass
 #'
 #' @param vect The name(s) or one or more spatial vectors in the active \code{GRASS} session.
-#' @param filename Path(s) and file name(s). If \code{vect} has more than one name, then you should state multiple file names, one per vector. The function will attempt to ascertain the type of the vector file from the filename extension, but you can also set it using \code{format} (see the \code{...} argument).
+#' @param filename Path(s) and file name(s), one per vector named in \code{vect}.
 #' @param overwrite If \code{FALSE} (default), do not save over existing file(s).
-#' @param ... Arguments to send to \href{https://grass.osgeo.org/grass82/manuals/v.out.ogr.html}{v.out.ogr}. This \code{GRASS} modole includes a \code{format} argument, which explicitly states the file format. Some common formats include:
+#' @param ... Arguments to send to \href{https://grass.osgeo.org/grass82/manuals/v.out.ogr.html}{\code{v.out.ogr}}. This \code{GRASS} modole includes a \code{format} argument, which explicitly states the file format. Some common formats include:
 #' \itemize{
+#'	\item OGC GeoPackage (default... You do not need to specify \code{format} for this format).
+#'	\item \code{'CSV'}: Comma-separated value... saves the data table only, not the geometries.
+#'	\item \code{'ESRI_Shapefile'}: ESRI shapefile... \code{filename} should not end in an extension.
+#'	\item \code{'GeoJSON'}: GeoJSON
+#'	\item \code{'KML'}: Keyhole Markup Language (KML)
+#'	\item \code{'netCDF'}: NetCDF... \code{filename} should not end in an extension.
+#'	\item \code{'XLSX'}: MS Office Open XML spreadsheet
 #' }
-#' For the full list, please see \href{https://grass.osgeo.org/grass82/manuals/v.out.ogr.html}{v.out.ogr}. When using other formats, you may have to specify the \code{createopts} argument, too. \cr
 #'
-#' @return Nothing. Writes one or more files to disk.
+#' @return Invisibly returns the last vector saved. Importantly, the function also writes one or more files to disk.
 #'
-#' @seealso \code{\link{importFromGrass}} in \pkg{fasterRaster}; \code{\link[terra]{writeVector}} in package \pkg{terra}; \code{GRASS} module \href{https://grass.osgeo.org/grass82/manuals/v.out.ogr.html}{\code{v.out.ogr}}
+#' @seealso \code{\link{vectFromGrass}} in \pkg{fasterRaster} to import vectors in \code{GRASS} to \code{R}; \code{\link[terra]{writeVector}} in package \pkg{terra}; \code{\link[sf]{st_write}} in package \pkg{sf}; \code{GRASS} module \href{https://grass.osgeo.org/grass82/manuals/v.out.ogr.html}{\code{v.out.ogr}}
 #'
 #' @example man/examples/ex_fasterWriteVector.r
 #'
@@ -22,85 +31,73 @@ fasterWriteVector <- function(
 	vect,
 	filename,
 	overwrite = FALSE,
+	outVectClass = fasterGetOptions('outVectClass', 'SpatVector'),
 	...
 ) {
 
-	flags <- c('quiet')
-	if (overwrite) flags <- c(flags, 'overwrite')
+	### display supported formats
+	if (missing(vect)) {
+	
+		forms <- rgrass::execGRASS('v.out.ogr', flags='l', intern=TRUE)
+		forms <- forms[forms != 'Supported formats:']
+		forms <- trimws(forms)
+		forms <- sort(forms)
+		forms <- c('Supported vector file formats:', forms)
+		cat(paste(forms, collapse='\n'))
+		cat('\n')
+		flush.console()
+	
+	### if wanting to write a vector
+	} else {	
 
-	# going to overwrite anything?
-	if (!overwrite) {
+		### commons v1
+		##############
+
+			### errors?
+			inGrass <- fasterExists(vect, rastOrVect='vector', temps=TRUE)
+			if (any(!inGrass)) stop('These vectors are not in the current GRASS session:\n ', paste(vect[!inGrass], collapse='\n'))
+
+		###############
+		### end commons
+
+		### going to overwrite anything?
+		if (!overwrite) {
+			for (i in seq_along(vect)) {
+				if (file.exists(basename(filename[i]))) stop(paste0('File already exists and "overwrite" is FALSE:\n ', filename[i]))
+			}
+		}
+
+		### general arguments
+		args <- list(...)
+		args$cmd <- 'v.out.ogr'
+		args$flags <- c('quiet', 's')
+		if (overwrite) args$flags <- c(args$flags, 'overwrite')
+
+		# save
 		for (i in seq_along(vect)) {
-			if (file.exists(basename(filename[i]))) stop(paste0('File already exists and "overwrite" is FALSE:\n ', filename[i]))
-		}
-	}
 
-	# save
-	for (i in seq_along(vect)) {
+			thisVect <- vect[i]
+			thisFileName <- filename[i]
 
-		thisVect <- vect[i]
-		thisFileName <- filename[i]
+			thisArgs <- args
+			thisArgs$input <- thisVect
+			thisArgs$output <- thisFileName
 
-		nch <- nchar(filename)
-		extension <- tolower(substr(thisFileName, nch - 3, nch))
-say(TBD)
-		if (ascii | extension %in% c('.asc', '.asci', '.ascii')) {
-			rgrass::execGRASS('thisVect.out.ascii', input=vect, output=thisFileName, flags=flags, ...)
-		} else {
+			### save
+			do.call(rgrass::execGRASS, thisArgs)
+			
+		} # next vector
 
-			thisFlags <- c(flags, 'c')
-
-			if (!exists('createopt', inherits = FALSE)) createopt <- NULL
-
-			# GeoTIFF options
-			if (extension == '.tif') {
-
-				# createopt
-				createopt <- c(createopt, 'PROFILE=GeoTIFF')
-				if (!is.null(compressTiff)) {
-					createopt <- c(createopt, paste0('COMPRESS=', toupper(compressTiff)))
-				}
-				if (bigTiff) createopt <- c(createopt, 'BIGTIFF=YES')
-				createopt <- unique(createopt)
-				createopt <- paste(createopt, collapse=',')
-
-			}
-
-			# data type
-			gdalDataType <- fasterInfo(thisVect)$gdalDataType
-
-			thisDataType <- if (is.null(datatype)) {
-				gdalDataType
-			} else if (datatype == 'INT1U') {
-				'Byte'
-			} else if (datatype == 'INT2U') {
-				'UInt16'
-			} else if (datatype == 'INT2S') {
-				'Int32'
-			} else if (datatype == 'FLT4S') {
-				'Float32'
-			} else if (datatype == 'FLT8S') {
-				'Float64'
-			} else {
-				datatype
-			}
-
-			# trim
-			if (trim) regionResize(thisVect, rastOrVect='vector')
-
-			# save
-			rgrass::execGRASS('r.out.ogr', input=thisVect, output=thisFileName, type=thisDataType, createopt=createopt, flags=thisFlags, ...)
-
-			# restore region
-			if (trim) success <- .revertRegion()
-
-		}
-
-	}
-
-	out <- terra::vect(filename)
-	invisible(out)
+		out <- terra::vect(filename)
+		if (outVectClass == 'sf') out <- sf::st_as_sf(out)
+		invisible(out)
+		
+	} # if wanting to write a vector
 
 }
 
-
+#' @name vectFromGrass
+#' @title Get vector from 'GRASS'
+#' @rdname fasterWriteVector
+#' @export
+vectFromGrass <- function(vect) fasterWriteVector(vect, filename=paste0(tempfile(), '.gpkg'), overwrite=TRUE)

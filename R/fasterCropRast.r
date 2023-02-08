@@ -1,12 +1,13 @@
 #' Crop a raster to the area of overlap with another raster or vector
 #'
-#' Crop a raster to the extent of another raster or vector. NB: This function is actualy an alias for \code{\link{fasterMask}}, which creates a mask from a raster or vector, then creates a copy of the overlapping portion of the focal raster. \emph{Currently, this function only works on numeric (not catgorial) rasters.}
+#' Crop a raster to the extent of another raster or vector. NB: This function is actually an alias for \code{\link{fasterMask}}, which creates a mask from a raster or vector, then creates a copy of the overlapping portion of the focal raster. \emph{Currently, this function only works on numeric (not categorical) rasters.}
 #'
 #' @inheritParams .sharedArgs_rast
 #' @inheritParams .sharedArgs_inRastName
 #' @inheritParams .sharedArgs_replace
 #' @inheritParams .sharedArgs_grassDir
 #' @inheritParams .sharedArgs_grassToR
+#' @inheritParams .sharedArgs_trimRast
 #' @inheritParams .sharedArgs_dots_forInitGrass_andGrassModule
 #'
 #' @param template Any of:
@@ -16,8 +17,6 @@
 #' }
 #' @param rastOrVect Either \code{'raster'} or \code{'vector'}. If \code{NULL} (default), then the function will attempt to guess whether \code{template} refers to a raster or vector. However, in \code{GRASS}, it is possible to have a raster and a vector of the same name. If this is the case, then you can specify whether \code{template} is a raster or vector (partial matching is supported).
 #'
-#' @param trim If \code{TRUE} (default), then remove rows and columns that are entirely \code{NA}. This only has effect if the raster is imported back to \code{R} (\code{grassToR} is \code{TRUE}). It does not affect the raster in \code{GRASS}. It is conducted in \code{R} using \pkg{terra}'s \code{\link[terra]{trim}} function.
-#' 
 #' @return A \code{SpatRaster}. Also creates a raster in a new grass session named \code{outGrassName}.
 #' 
 #' @seealso \code{\link{fasterMask}} and \code{\link{fasterMakeMask}} in \pkg{fasterRaster}; \code{\link[terra]{crop}} in \pkg{terra}; \code{GRASS} module \href{https://grass.osgeo.org/grass82/manuals/r.clip.html}{\code{r.clip}}--but note that this function does \emph{not} use \code{r.clip}.
@@ -37,6 +36,7 @@ fasterCropRast <- function(
 
 	replace = fasterGetOptions('replace', FALSE),
 	grassToR = fasterGetOptions('grassToR', TRUE),
+	trimRast = fasterGetOptions('trimRast', TRUE),
 	autoRegion = fasterGetOptions('autoRegion', TRUE),
 	grassDir = fasterGetOptions('grassDir', NULL),
 	...
@@ -49,9 +49,11 @@ fasterCropRast <- function(
 	##############
 
 		### arguments
-		if (exists('rast', where=environment(), inherits=FALSE)) {
+		.checkRastExists(replace=replace, rast=NULL, inRastName=NULL, outGrassName=outGrassName, ...)
+		if (!missing(rast)) {
+			if (!inherits(rast, 'character') & !inherits(rast, 'SpatRaster')) rast <- terra::rast(rast)
 			inRastName <- .getInRastName(inRastName, rast=rast)
-			.checkRastExists(replace=replace, rast=rast, inRastName=inRastName, outGrassName=outGrassName)
+			.checkRastExists(replace=replace, rast=rast, inRastName=inRastName, outGrassName=NULL, ...)
 		} else {
 			rast <- inRastName <- NULL
 		}
@@ -72,7 +74,7 @@ fasterCropRast <- function(
 	### end commons
 
 	### initialize GRASS
-	input <- do.call('initGrass', inits)
+	input <- do.call('startFaster', inits)
 
 	### execute
 
@@ -143,11 +145,9 @@ fasterCropRast <- function(
 	# return
 	if (grassToR) {
 
-		out <- fasterWriteRaster(outGrassName, paste0(tempfile(), '.tif'), overwrite=TRUE)
-		if (trim) out <- terra::trim(out)
-		out <- terra::setMinMax(out)
+		out <- fasterWriteRaster(outGrassName, paste0(tempfile(), '.tif'), overwrite=TRUE, trimRast=trimRast)
 		out
 
-	}
+	} else { invisible(TRUE) }
 
 }

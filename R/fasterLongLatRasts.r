@@ -7,6 +7,7 @@
 #' @inheritParams .sharedArgs_replace
 #' @inheritParams .sharedArgs_grassDir
 #' @inheritParams .sharedArgs_grassToR
+#' @inheritParams .sharedArgs_trimRast
 #' @inheritParams .sharedArgs_dots_forInitGrass_andGrassModule
 #'
 #' @param mask Logical. If \code{TRUE} (default), cells that have \code{NA}s in \code{rast} will also have \code{NA}s in the output rasters.
@@ -28,47 +29,102 @@ fasterLongLatRasts <- function(
 
 	replace = fasterGetOptions('replace', FALSE),
 	grassToR = fasterGetOptions('grassToR', TRUE),
+	trimRast = fasterGetOptions('trimRast', TRUE),
 	autoRegion = fasterGetOptions('autoRegion', TRUE),
 	grassDir = fasterGetOptions('grassDir', NULL),
 	...
 ) {
 
-	### begin common
-	flags <- .getFlags(replace=replace)
-	inRastName <- .getInRastName(inRastName, rast)
-	# if (is.null(inVectName)) inVectName <- 'vect'
-	
-	# # region settings
-	# success <- .rememberRegion()
-	# on.exit(.restoreRegion(), add=TRUE)
-	# on.exit(regionResize(), add=TRUE)
-	
-	if (is.null(inits)) inits <- list()
-	### end common
+	### commons v1
+	##############
 
-	inits <- c(inits, list(rast=rast, vect=NULL, inRastName=inRastName, inVectName=NULL, replace=replace, grassDir=grassDir))
-	input <- do.call('initGrass', inits)
-	
-	# calculate longitude/latitude
-	rgrass::execGRASS('r.latlong', input=input, output=outGrassName[1], flags=c(flags, 'l'))
-	rgrass::execGRASS('r.latlong', input=input, output=outGrassName[2], flags=flags)
-	
-	if (mask) {
+		### arguments
+		.checkRastExists(replace=replace, rast=NULL, inRastName=NULL, outGrassName=outGrassName, ...)
+		if (!missing(rast)) {
+			if (!inherits(rast, 'character') & !inherits(rast, 'SpatRaster')) rast <- terra::rast(rast)
+			inRastName <- .getInRastName(inRastName, rast=rast)
+			.checkRastExists(replace=replace, rast=rast, inRastName=inRastName, outGrassName=NULL, ...)
+		} else {
+			rast <- inRastName <- NULL
+		}
 
-		ex <- paste0(outGrassName[1L], ' = if(isnull(', inRastName, '), null(), ', outGrassName[1L], ')')
-		fasterApp(outGrassName[1L], expression=ex, replace=replace, grassDir=grassDir, grassToR=FALSE)
+		### flags
+		flags <- .getFlags(replace=replace)
 		
-		ex <- paste0(outGrassName[2L], ' = if(isnull(', inRastName, '), null(), ', outGrassName[2L], ')')
-		fasterApp(outGrassName[2L], expression=ex, replace=replace, grassDir=grassDir, grassToR=FALSE)
+		### restore
+		# on.exit(.restoreLocation(), add=TRUE) # return to starting location
+		if (autoRegion) on.exit(regionExt('*'), add=TRUE) # resize extent to encompass all spatials
+
+		### ellipses and initialization arguments
+		initsDots <- .getInitsDots(..., callingFx = 'fasterLongLatRasts')
+		inits <- initsDots$inits
+		dots <- initsDots$dots
+
+	###############
+	### end commons
+
+	### initialize GRASS
+	input <- do.call('startFaster', inits)
+
+	### function-specific
+	args <- list(
+		cmd = 'r.latlong',
+		input = inRastName,
+		output = NA,
+		flags = flags
+	)
+	args <- c(args, dots)
+
+	### execute
+	if (autoRegion) regionReshape(inRastName)
+
+	# mask
+	if (mask){
 		
+		# pre-existing mask?
+		if (fasterExists('MASK', rastOrVect='raster')) {
+			tempMask <- .makeTempName('TEMPTEMP_oldMASK')
+			fasterRename('MASK', tempMask)
+			maskExists <- TRUE
+		} else {
+			maskExists <- FALSE
+		}
+		
+		# make a new mask
+		fasterMakeMask(inRastName, inRastName, rastOrVect='raster', clip=TRUE, restartGrass=FALSE, autoRegion=FALSE, ...)
+
 	}
 	
+	# latitude
+	args$output <- outGrassName[2L]
+	do.call(rgrass::execGRASS, args=args)
+	
+	# longitude
+	args$flags <- c(args$flags, 'l') # longitude
+	args$output <- outGrassName[1L]
+	do.call(rgrass::execGRASS, args=args) # latitude
+
+	if (mask) {
+	
+		fasterRm('MASK', rastOrVect='raster')
+	
+		if (maskExists) {
+
+			fasterRm(tempMask)
+			fasterRename(tempMask, 'MASK', rastOrVect='raster')
+
+		}
+		
+	}
+
 	if (grassToR) {
-		long <- fasterWriteRaster(outGrassName[1L], paste0(tempfile(), '.tif'), overwrite=TRUE)
-		lat <- fasterWriteRaster(outGrassName[2L], paste0(tempfile(), '.tif'), overwrite=TRUE)
+	
+		long <- fasterWriteRaster(outGrassName[1L], paste0(tempfile(), '.tif'), overwrite=TRUE, trimRast=trimRast)
+		lat <- fasterWriteRaster(outGrassName[2L], paste0(tempfile(), '.tif'), overwrite=TRUE, trimRast=trimRast)
 		out <- c(long, lat)
 		names(out) <- outGrassName
 		out
-	}
+		
+	} else { invisible(TRUE) }
 
 }

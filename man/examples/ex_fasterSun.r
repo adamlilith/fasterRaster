@@ -15,7 +15,7 @@ library(terra)
 madElev <- fasterData('madElev')
 
 # initialize a GRASS session with the elevation raster
-initGrass(rast=madElev, inRastName='elevation',
+startFaster(rast=madElev, inRastName='elevation',
 grassDir=grassDir)
 
 # beam and diffuse radiation fractions... assuming they are both 1

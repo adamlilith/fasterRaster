@@ -1,46 +1,40 @@
-#' Project a spatial vector
+#' Project a spatial vector to a different coordinate reference system
 #'
-#' Project a spatial vector.
+#' Project a spatial vector to a different coordinate reference system. This function works by transferring a vector between two \code{GRASS} \href{location}s with different coordinate reference systems. You can use the default "from" location from which the raster is transferred, or name your own. By default, you do not need to name the destination location (which is named "default"), or you can specify one using the \code{location} argument (supplied in the \code{...}).
 #'
 #' @inheritParams .sharedArgs_vect
 #' @inheritParams .sharedArgs_inVectName
-#' @inheritParams .sharedArgs_outVectClass
 #' @inheritParams .sharedArgs_replace
 #' @inheritParams .sharedArgs_grassDir
 #' @inheritParams .sharedArgs_grassToR
 #' @inheritParams .sharedArgs_outGrassName
 #' @inheritParams .sharedArgs_dots_forInitGrass_andGrassModule
 #'
-#' @param template Either \code{NULL} (default), \emph{or} a \code{SpatRaster}, \code{SpatVector}, or object of class \code{sf} to serve as a template for projecting. If there is an existing \code{GRASS} session (started by another \pkg{fasterRaster} function or through the \code{\link{initGrass}} function), then this can be \code{NULL}, and the vector in \code{vect} will be projected to the one used by the current \code{GRASS} session.  However, if a \code{GRASS} session has not yet been started, or a different projection is desired, then this argument must be non-\code{NULL}.
-#' @param faster If \code{TRUE}, then do not build vector topology in \code{GRASS}. This can speed up projections for very large vectors, and is useful if the vector is not going to be used further in \code{GRASS}. If \code{FALSE} (default), then topology is built.
-#' @param method Character, method for resampling cells:
-#' \itemize{
-#' 		\item \code{nearest}: Nearest neighbor (uses value from 1 cell).
-#' 		\item \code{bilinear}: Bilinear interpolation (default; uses values from 4 cells).
-#' 		\item \code{bilinear_f}: Bilinear interpolation with fallback.
-#' 		\item \code{bicubic}: Bicubic interpolation (uses values from 16 cells).
-#' 		\item \code{bicubic_f}: Bicubic interpolation with fallback.
-#' 		\item \code{lanczos}: Lanczos interpolation (uses values from 25 cells).
-#' 		\item \code{lanczos_f}: Lanczos interpolation with fallback.
-#' }
+#' @param template This provides the "destination" coordinate reference system for the vector. If left as \code{NULL} (default), then it is assumed that there is a current, active \code{GRASS} session, and the vector will be projected to its coordinate reference system. Otherwise, this can also be a \code{SpatVector}, \code{SpatRaster}, \code{sf} object, or the name of a vector or raster in a \code{GRASS} \href{location} that provides a coordinate reference system to which the vector will be projected.
+#'	
+#' @param inTemplateName The name of the \code{SpatVector} template. Ignored if \code{template} is the name of an object existing in the active \href{location} (i.e., a character).
 #'
-#' @return If \code{grassToR} if \code{TRUE}, then a raster or raster stack with the same extent, resolution, and coordinate reference system as \code{rast}. Regardless, a raster with the name given by \code{outGrassName} is written into the \code{GRASS} session.
+#' @param buildTopo If \code{FALSE} (default), then vector topology is built. This can take significant time for large vectors. Setting this to \code{FALSE} will not build topology, but is usually only recommended for cases where you will not be using the vector further in \code{GRASS} (i.e., the purpose is to project the vector then import it back to \code{R} or to save it to disk).
 #'
-#' @details Note that it is not uncommon to get the warning "Projection of dataset does not appear to match the current mapset" (followed by more information). If the coordinate reference systems match, then the cause is likely due to extra information being stored in one of the spatial object's coordinate reference system slot (e.g., an EPSG code in addition to the other proj4string information), in which case it can probably be safely ignored.
+#' @param fromLocation The name of the \href{location} from which the vector in \code{vect} will be projected from. If this location does not exist, it will be created, but it can also be a pre-existing location created by another \pkg{fasterRaster} function or using \code{\link{startFaster}}.
 #'
-#' @seealso \code{\link{fasterProjectRast}} and \code{\link{fasterCRS}} in \pkg{fasterRaster}; \code{\link[terra]{project}} in \pkg{terra}; \href{https://grass.osgeo.org/grass82/manuals/v.proj.html}{\code{v.proj}} in \code{GRASS}
+#' @return If \code{grassToR} if \code{TRUE}, then a vector with the same coordinate reference system as \code{template}. Regardless, a vector with the name given by \code{outGrassName} is written into the active \code{GRASS} session.
 #'
-#' @example man/examples/ex_fasterProject.r
+#' @seealso \code{\link[terra]{project}} in \pkg{terra}; \code{\link{st_transform}} in the \pkg{sf} package; \href{https://grass.osgeo.org/grass82/manuals/v.proj.html}{\code{v.proj}} in \code{GRASS}
+#'
+#' @example man/examples/ex_fasterProjectVect.r
 #'
 #' @export
 
 fasterProjectVect <- function(
 	vect,
-	inVectName,
 	template = NULL,
-	faster = FALSE,
-	outGrassName = 'projectedVect',
-	
+	inVectName = NULL,
+	inTemplateName = NULL,
+	buildTopo = TRUE,
+	fromLocation = 'fromLocation',
+	outGrassName = inVectName,
+
 	replace = fasterGetOptions('replace', FALSE),
 	grassToR = fasterGetOptions('grassToR', TRUE),
 	outVectClass = fasterGetOptions('outVectClass', 'SpatVector'),
@@ -49,78 +43,101 @@ fasterProjectVect <- function(
 	...
 ) {
 
-	### begin common
-	flags <- .getFlags(replace=replace)
-	# inRastName <- .getInRastName(inRastName, rast)
-	if (is.null(inVectName)) inVectName <- 'vect'
-	
-	# region settings
-	success <- .rememberRegion()
-	on.exit(.restoreRegion(inits), add=TRUE)
-	on.exit(.revertRegion(), add=TRUE)
-	on.exit(regionResize(), add=TRUE)
-	
-	if (is.null(inits)) inits <- list()
-	### end common
+	ells <- list(...)
 
-	if (is.null(outGrassName)) outGrassName <- inVectName
+	### commons v1
+	##############
 
-	# initialize two GRASS sessions
-	fromGrass <- initGrass(rast=NULL, vect=vect, location='fromVect', inRastName=NULL, inVectName=inVectName, replace=replace, grassDir=grassDir)
-
-	fromVectLoc <- paste0('fromVect', round(1E9 * runif(1)))
-
-	if (is.null(inits)) inits <- list()
-	from <- c(inits, list(rast=NULL, vect=vect, inRastName=NULL, inVectName=inVectName, replace=replace, grassDir=grassDir, location=fromVectLoc))
-	input <- do.call('initGrass', inits)
-
-	# create new GRASS location
-	if (!is.null(template)) {
+		### arguments
 		
-		if (inherits(template, c('SpatRaster', 'Raster'))) {
+		if (!inherits(vect, 'character') & !inherits(vect, 'SpatVector')) vect <- terra::vect(vect)
+		inVectName <- .getInVectName(inVectName, vect=vect)
+		if (.getSessionStarted() & 'location' %in% names(ells)) {
+			ells$location <- NULL
+		}
+		.checkVectExists(replace=replace, vect=vect, inVectName=inVectName, location=fromLocation, unlist(ells))
+		if (is.null(outGrassName)) outGrassName <- inVectName
 
-			inits$rast <- template
-			inits$vect <- NULL
-			inits$inRastName <- 'TEMPTEMP_templateRast'
-			inits$inVectName <- NULL
-			inits$location <- 'default'
-
-		} else if (inherits(template, c('Spatvector', 'sf', 'Spatial'))) {
-
-			inits$rast <- NULL
-			inits$vect <- template
-			inits$inRastName <- NULL
-			inits$inVectName <- 'TEMPTEMP_templateVect'
+		if (!is.null(template)) {
+			if (inherits(template, 'SpatRaster')) {
+				inTemplateName <- .getInRastName(inTemplateName, rast=template)
+				.checkRastExists(replace=replace, rast=template, inRastName=inTemplateName, outGrassName=NULL, ...)
+			}
+			if (inherits(template, c('SpatVector', 'sf'))) {
+				inTemplateName <- .getInVectName(inTemplateName, vect=template)
+				.checkRastExists(replace=replace, vect=template, inVectName=inTemplateName, outGrassName=NULL, ...)
+			}
 		}
 
-		inits$location <- 'default'
-		input <- do.call('initGrass', inits)
+		### flags
+		flags <- .getFlags(replace=replace)
 		
-	# use existing GRASS location
-	} else {
-		rgrass::execGRASS('g.mapset', flags=c('quiet'), mapset='PERMANENT', location='default')
-	}
+		### restore
+		# on.exit(.restoreLocation(), add=TRUE) # return to starting location
+		if (autoRegion) on.exit(regionExt('*'), add=TRUE) # resize extent to encompass all spatials
 
+		### ellipses and initialization arguments
+		initsDots <- .getInitsDots(..., callingFx = 'fasterProjectVect')
+		inits <- initsDots$inits
+		dots <- initsDots$dots
+
+	###############
+	### end commons
 	
-	# export raster to project to GRASS (projects it automatically)
-	resol <- if (inherits(template, c('SpatRaster', 'Raster'))) {
-		terra::res(template)[1L]
-	} else {
-		fasterRes()[1L]
-	}
+	### errors?
+	
+	### function-specific
 
-	if (faster) flags <- c(thisFlags, 'b')
-	rgrass::execGRASS('v.proj', location='fromVect', mapset='PERMANENT', input=inVectName, output=outGrassName, flags=flags)
+	### export focal vector into "from" location
+	initsFrom <- inits
+	initsFrom$vect <- vect
+	initsFrom$inVectName <- inVectName
+	initsFrom$location <- fromLocation
+	if ('dir' %in% names(inits)) initsFrom$dir <- ells$dir
+	fromGrass <- do.call('startFaster', initsFrom)
+
+	### export template to current location or switch to pre-existing location
+	inits$vect <- inits$rast <- inits$inVectName <- inits$inRastName <- NULL
+	if (!is.null(template)) {
+		if (inherits(template, 'SpatRaster')) {
+			inits$rast <- template
+			inits$inRastName <- inTemplateName
+		} else if (inherits(template, c('SpatVector', 'sf'))) {
+			inits$vect <- template
+			inits$inVectName <- inTemplateName			
+		}
+	} else {
+		inits$restartGrass <- FALSE
+	}
+	
+	if (!('location' %in% inits)) location <- 'default'
+
+	do.call('startFaster', inits)
+
+	### function-specific
+	if (!buildTopo) flags <- c(flags, 'b')
+
+	### transfer vector to the target location
+	args <- list(
+		cmd = 'v.proj',
+		input = inVectName,
+		output = outGrassName,
+		location = fromLocation,
+		mapset = 'PERMANENT',
+		flags = flags,
+		intern = TRUE
+	)
+	args <- c(args, dots)
+
+	do.call(rgrass::execGRASS, args)
 
 	# return
 	if (grassToR) {
-	
-		out <- rgrass::read_VECT(outGrassName, flags='quiet')
-		if (.getOutVectClass(outVectClass) == 'sf') {
-			out <- sf::st_as_sf(out)
-		}
+
+		out <- fasterWriteVector(outGrassName, paste0(tempfile(), '.gpkg'), flags='quiet')
+		if (outVectClass == 'sf') out <- sf::st_as_sf(out)
 		out
 		
-	}
+	} else { invisible(TRUE) }
 	
 }

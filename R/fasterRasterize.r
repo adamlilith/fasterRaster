@@ -4,26 +4,28 @@
 #'
 #' @inheritParams .sharedArgs_vect
 #' @inheritParams .sharedArgs_rast
+#' @inheritParams .sharedArgs_memory
 #' @inheritParams .sharedArgs_replace
 #' @inheritParams .sharedArgs_inRastName
 #' @inheritParams .sharedArgs_inVectName
 #' @inheritParams .sharedArgs_grassDir
 #' @inheritParams .sharedArgs_grassToR
+#' @inheritParams .sharedArgs_trimRast
 #' @inheritParams .sharedArgs_outGrassName
 #' @inheritParams .sharedArgs_dots_forInitGrass_andGrassModule
 #'
 #' @param use Character, indicates the types of values to be "burned" to the raster. Options include
 #' \itemize{
-#' \item \code{value} (default): a user-define value given by \code{value}
-#' \item \code{field}: values directly from a field in \code{vect} named by \code{field}
-#' \item \code{category}: values according to which polygon is covered by a cell named in \code{field}
-#' \item \code{z}: z-coordinate (points or contours only)
-#' \item \code{direction}: flow direction (lines only)
+#' \item \code{'value'} (default): A user-define value given by \code{value}
+#' \item \code{'field'}: Values directly from a field in \code{vect} named by \code{field}
+#' \item \code{'category'}: Each cell assigned an integer based on which polygon covers it.
+#' \item \code{'z'}: Z-coordinate (points or contours only) UNTESTED!
+#' \item \code{'direction'}: Flow direction (lines only) UNTESTED!
 #' }
-#' @param field Name of column in \code{vect} with values or category labbels to which to burn to the raster.
+#' Partial matching is used.
+#' @param field Name of column in \code{vect} with values or category labels to which to burn to the raster.
 #' @param value Numeric, value to burn to each cell overlapped by the spatial object in \code{vect}.
-#' @param burn \code{NULL} or any of \code{'point'}, \code{'line'}, \code{'area'}, \code{'boundary'}, or \code{'centroid'}. This determines the manner in which the vector data is "burned" to the raster. If \code{NULL} (default), then points objects will rasterized as points, lines objects as lines, and polygons objects as areas. See \code{GRASS} module \href{https://grass.osgeo.org/grass82/manuals/v.to.rast.html}{v.to.rast} for more details.
-#' @param ... Arguments to send to \code{GRASS} module \href{https://grass.osgeo.org/grass82/manuals/v.to.rast.html}{\code{v.to.rast}}.
+#' @param thick If \code{FALSE} (default) and lines are being rasterized, then only cells on the actual path of the line will be rasterized. If \code{TRUE}, then any cell that touches the line will be included.
 #'
 #' @return If \code{grassToR} if \code{TRUE}, then a raster with the same extent, resolution, and coordinate reference system as \code{rast}. Regardless, a raster with the name given by \code{outRastName} is written into the \code{GRASS} session.
 #'
@@ -38,85 +40,147 @@ fasterRasterize <- function(
 	rast,
 	inVectName,
 	inRastName,
-	use = 'val',
+	use = 'value',
 	value = 1,
 	field = NULL,
-	burn = NULL,
+	# burn = NULL,
+	thick = FALSE,
 	outGrassName = 'vectToRast',
 	
+	memory = fasterGetOptions('memory', 300),
 	replace = fasterGetOptions('replace', FALSE),
 	grassToR = fasterGetOptions('grassToR', TRUE),
+	trimRast = fasterGetOptions('trimRast', TRUE),
 	autoRegion = fasterGetOptions('autoRegion', TRUE),
 	grassDir = fasterGetOptions('grassDir', NULL),
 	...
 ) {
 
-	### begin common
-	flags <- 'quiet'
-	flags <- .getFlags(replace=replace, flags=flags)
-	inRastName <- .getInRastName(inRastName, rast)
-	if (is.null(inVectName)) inVectName <- 'vect'
+	### commons v1
+	##############
+
+		### arguments
+		.checkRastExists(replace=replace, rast=NULL, inRastName=NULL, outGrassName=outGrassName, ...)
+		if (!missing(rast)) {
+			if (!inherits(rast, 'character') & !inherits(rast, 'SpatRaster')) rast <- terra::rast(rast)
+			inRastName <- .getInRastName(inRastName, rast=rast)
+			.checkRastExists(replace=replace, rast=rast, inRastName=inRastName, outGrassName=NULL, ...)
+		} else {
+			rast <- inRastName <- NULL
+		}
+
+		if (!missing(vect)) {
+			if (!inherits(vect, 'character') & !inherits(vect, 'SpatVector')) vect <- terra::vect(vect)
+			inVectName <- .getInVectName(inVectName, vect=vect)
+			.checkVectExists(replace=replace, vect=vect, inVectName=inVectName, outGrassName=NULL, ...)
+		} else {
+			vect <- inVectName <- NULL
+		}
+
+		### flags
+		flags <- .getFlags(replace=replace)
+		
+		### restore
+		# on.exit(.restoreLocation(), add=TRUE) # return to starting location
+		if (autoRegion) on.exit(regionExt('*'), add=TRUE) # resize extent to encompass all spatials
+
+		### ellipses and initialization arguments
+		initsDots <- .getInitsDots(..., callingFx = 'fasterRasterize')
+		inits <- initsDots$inits
+		dots <- initsDots$dots
+
+	###############
+	### end commons
 	
-	# region settings
-	success <- .rememberRegion()
-	# on.exit(.restoreRegion(inits), add=TRUE)
-	on.exit(.restoreRegion(), add=TRUE)
-	on.exit(regionResize(), add=TRUE)
-	
-	if (is.null(inits)) inits <- list()
-	### end common
-	
-	if (!inherits(rast, 'SpatRaster')) rast <- terra::rast(rast)
-	if (!inherits(vect, 'SpatVector')) vect <- terra::vect(vect)
+	### function-specific
 
 	# feature type
-	gtype <- terra::geomtype(vect)
-	if (is.null(burn)) {
+	if (inherits(vect, 'SpatVector')) {
 		
-		burn <- if (gtype == 'polygons') {
-			'point'
+		gtype <- terra::geomtype(vect)
+		type <- if (gtype == 'polygons') {
+			'area'
 		} else if (gtype == 'lines') {
 			'line'
 		} else if (gtype == 'points') {
-			'area'
+			'point'
 		}
-
+		
 	} else {
+		type <- vectType(vect, temps=TRUE)
+	}
+
+	# if (is.null(burn)) {
+		
+		# # burn <- if (gtype == 'polygons') {
+			# # 'point'
+		# # } else if (gtype == 'lines') {
+			# # 'line'
+		# # } else if (gtype == 'points') {
+			# # 'area'
+		# # }
+
+	# } else {
 	
-		if (!(burn %in% c('point', 'line', 'area', 'boundary', 'centroid'))) {
-			stop('Argument "burn" must be NULL or one of "point", "line", "area", "boundary",\nor "centroid" and match the type of argument "vect".')
-		}
+		# if (!(burn %in% c('point', 'line', 'area', 'boundary', 'centroid'))) {
+			# stop('Argument "burn" must be NULL or one of "point", "line", "area", "boundary",\nor "centroid" and match the type of argument "vect".')
+		# }
 		
-		if (burn %in% c('point', 'centroid') & !(gtype != 'points')) {
-			stop('Argument "burn" must be either "point" or "centroid" if\nargument "vect" is a "points" vector.')
-		}
+		# if (burn %in% c('point', 'centroid') & !(gtype != 'points')) {
+			# stop('Argument "burn" must be either "point" or "centroid" if\nargument "vect" is a "points" vector.')
+		# }
 		
-	}
-		
-	# initialize GRASS
-	inits <- c(inits, list(rast=rast, vect=vect, inRastName=inRastName, inVectName=inVectName, replace=replace, grassDir=grassDir))
-	input <- do.call('initGrass', inits)
+	# }
 
-	# resize region to encompass all objects
-	success <- regionResize()
+	# construct arguments
+	args <- list(
+		cmd = 'v.to.rast',
+		intern = TRUE,
+		flags = flags,
+		input = inVectName,
+		output = outGrassName,
+		type = type,
+		memory = memory
+	)
+	args <- c(args, dots)
+	
+	if ('line' %in% type & thick) args$flags <- c(flags, 'd')
 
-	# rasterize
-	if (use == 'field') {
-		rgrass::execGRASS('v.to.rast', input=input[['vector']], output=outGrassName, use='attr', attribute_column=field, type=burn, flags=flags)
-	} else if (use == 'category') {
-		rgrass::execGRASS('v.to.rast', input=input[['vector']], output=outGrassName, use='cat', label_column=field, type=burn, flags=flags)
-	} else if (use == 'value') {
-		rgrass::execGRASS('v.to.rast', input=input[['vector']], output=outGrassName, use='val', value=value, type=burn, flags=flags)
+	# different kinds of rasterization
+	opts <- c('field', 'category', 'value')
+	use <- pmatch(use, opts)
+	use <- if (is.na(use)) {
+		use
 	} else {
-		rgrass::execGRASS('v.to.rast', input=input[['vector']], output=outGrassName, use=use, flags=flags, type=burn)
+		opts[use]
 	}
+	
+	if (use == 'field') {
+		args$use <- 'attr'
+		args$attribute_column <- field
+	} else if (use == 'category') {
+		args$use <- 'cat'
+		args$label_column <- field
+	} else if (use == 'value') {
+		args$use <- 'val'
+		args$value <- value
+	} else {
+		args$use <- 'val'
+	}
+
+	### initialize GRASS
+	input <- do.call('startFaster', inits)
+
+	### execute
+	if (autoRegion) regionReshape(inRastName)
+	do.call(rgrass::execGRASS, args=args)
 	
 	# get raster back to R
 	if (grassToR) {
 	
-		out <- fasterWriteRaster(outGrassName, paste0(tempfile(), '.tif'), overwrite=TRUE)
+		out <- fasterWriteRaster(outGrassName, paste0(tempfile(), '.tif'), overwrite=TRUE, trimRast=trimRast)
 		out
 		
-	}
+	} else { invisible(TRUE) }
 
 }

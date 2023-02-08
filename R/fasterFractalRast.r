@@ -6,6 +6,7 @@
 #' @inheritParams .sharedArgs_replace
 #' @inheritParams .sharedArgs_grassDir
 #' @inheritParams .sharedArgs_grassToR
+#' @inheritParams .sharedArgs_trimRast
 #' @inheritParams .sharedArgs_outGrassName
 #' @param dimension Numeric. Fractal dimension. Must be >2 and <3. Default is 2.05.
 #' @inheritParams .sharedArgs_dots_forInitGrass_andGrassModule
@@ -26,6 +27,7 @@ fasterFractalRast <- function(
 
 	replace = fasterGetOptions('replace', FALSE),
 	grassToR = fasterGetOptions('grassToR', TRUE),
+	trimRast = fasterGetOptions('trimRast', TRUE),
 	autoRegion = fasterGetOptions('autoRegion', TRUE),
 	grassDir = fasterGetOptions('grassDir', NULL),
 	...
@@ -35,9 +37,11 @@ fasterFractalRast <- function(
 	##############
 
 		### arguments
-		if (exists('rast', where=environment(), inherits=FALSE)) {
+		.checkRastExists(replace=replace, rast=NULL, inRastName=NULL, outGrassName=outGrassName, ...)
+		if (!missing(rast)) {
+			if (!inherits(rast, 'character') & !inherits(rast, 'SpatRaster')) rast <- terra::rast(rast)
 			inRastName <- .getInRastName(inRastName, rast=rast)
-			.checkRastExists(replace=replace, rast=rast, inRastName=inRastName, outGrassName=outGrassName)
+			.checkRastExists(replace=replace, rast=rast, inRastName=inRastName, outGrassName=NULL, ...)
 		} else {
 			rast <- inRastName <- NULL
 		}
@@ -71,7 +75,7 @@ fasterFractalRast <- function(
 	args <- c(args, dots)
 
 	### initialize GRASS
-	input <- do.call('initGrass', inits)
+	input <- do.call('startFaster', inits)
 
 	### execute
 	if (autoRegion) regionReshape(inRastName)
@@ -80,10 +84,9 @@ fasterFractalRast <- function(
 	### export
 	if (grassToR) {
 
-		out <- fasterWriteRaster(outGrassName, paste0(tempfile(), '.tif'), overwrite=TRUE)
-		out <- terra::setMinMax(out)
+		out <- fasterWriteRaster(outGrassName, paste0(tempfile(), '.tif'), overwrite=TRUE, trimRast=trimRast)
 		out
 		
-	}
+	} else { invisible(TRUE) }
 
 }

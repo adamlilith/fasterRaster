@@ -9,16 +9,17 @@
 #' @inheritParams .sharedArgs_replace
 #' @inheritParams .sharedArgs_grassDir
 #' @inheritParams .sharedArgs_grassToR
+#' @inheritParams .sharedArgs_trimRast
 #' @inheritParams .sharedArgs_outGrassName
 #' @inheritParams .sharedArgs_dots_forInitGrass_andGrassModule
-#' 
+#'
 #' @param width Numeric. Maximum distance cells must be from focal cells to be within the buffer. Note that this function can only handle one value of \code{width} (unlike the function \code{r.buffer} in \code{GRASS}).
 #' @param units Either \code{'meters'} (default), \code{'kilometers'}, \code{'feet'}, \code{'miles'}, or \code{'nautmiles'}. Indicates the units of \code{width}.
 #' @param ignore Either {NA} (default) or 0. The buffer will be drawn around cells that are not {NA} or not 0, depending on this value.
 #' @param out Any of:
 #' \itemize{
 #'		\item \code{'terra'} (default): The output raster will be the same as if using the \code{link[terra]{buffer}} function in the \pkg{terra} package. Cells in the buffer plus the cells around which buffers are created have values of 1, and all other cells are \code{NA}.
-#' 		\item \code{'grass'}: All cells in the bufer are represented as 2's, all cells around which buffers are created are represented as 1's, and all other cells are \code{NA}.
+#' 		\item \code{'grass'}: All cells in the buffer are represented as 2's, all cells around which buffers are created are represented as 1's, and all other cells are \code{NA}.
 #'		\item \code{'buffer'}: All cells in the buffer are represented as 1's and all others as \code{NA}.
 #' }
 #' @param lowMemory Logical. If \code{FALSE} (default) use faster, memory-intensive procedure. If \code{TRUE} then use the slower, low-memory version. To help decide, consider using the low-memory version on a system with 1 GB of RAM for a raster larger than about 32000x32000 cells, or for a system with  with 8 GB of RAM a raster larger than about 90000x90000 cells.
@@ -40,10 +41,10 @@ fasterBufferRast <- function(
 	out = 'terra',
 	lowMemory = FALSE,
 	outGrassName = 'bufferedRast',
-	
+
 	replace = fasterGetOptions('replace', FALSE),
 	grassToR = fasterGetOptions('grassToR', TRUE),
-	outVectClass = fasterGetOptions('outVectClass', 'SpatVector'),
+	trimRast = fasterGetOptions('trimRast', TRUE),
 	autoRegion = fasterGetOptions('autoRegion', TRUE),
 	grassDir = fasterGetOptions('grassDir', NULL),
 	...
@@ -53,16 +54,18 @@ fasterBufferRast <- function(
 	##############
 
 		### arguments
-		if (exists('rast', where=environment(), inherits=FALSE)) {
-			inRastName <- .getInRastName(inRastName, rast)
-			.checkRastExists(replace=replace, rast=rast, inRastName=inRastName, outGrassName=outGrassName)
+		.checkRastExists(replace=replace, rast=NULL, inRastName=NULL, outGrassName=outGrassName, ...)
+		if (!missing(rast)) {
+			if (!inherits(rast, 'character') & !inherits(rast, 'SpatRaster')) rast <- terra::rast(rast)
+			inRastName <- .getInRastName(inRastName, rast=rast)
+			.checkRastExists(replace=replace, rast=rast, inRastName=inRastName, outGrassName=NULL, ...)
 		} else {
 			rast <- inRastName <- NULL
 		}
 
 		### flags
 		flags <- .getFlags(replace=replace)
-		
+
 		### restore
 		# on.exit(.restoreLocation(), add=TRUE) # return to starting location
 		if (autoRegion) on.exit(regionExt('*'), add=TRUE) # resize extent to encompass all spatials
@@ -97,18 +100,18 @@ fasterBufferRast <- function(
 	if (!(out %in% c('terra', 'grass', 'buffer'))) stop('Argument "out" must be "terra", "grass", or "buffer".')
 
 	# initialize GRASS
-	input <- do.call('initGrass', inits)
+	input <- do.call('startFaster', inits)
 
 	### execute
 	if (autoRegion) regionReshape(inRastName)
 
 	# GRASS-style output
 	if (out == 'grass') {
-	
+
 		do.call(rgrass::execGRASS, args=args)
-	
+
 	} else {
-	
+
 		# default GRASS output format
 		theseArgs <- args
 		theseArgs$output <- 'TEMPTEMP_bufferRast'
@@ -118,7 +121,7 @@ fasterBufferRast <- function(
 
 		# terra-style output
 		if (out == 'terra') {
-		
+
 			# GRASS output is 1 for buffered, 2 for the actual buffer, and NULL for everywhere else
 			# ex <- paste0(outGrassName, ' = if(TEMPTEMP_bufferRast==1 || TEMPTEMP_bufferRastAsTerra==2, 1, null())')
 
@@ -134,10 +137,10 @@ fasterBufferRast <- function(
 				autoRegion = FALSE, # already done above
 				grassDir = grassDir
 			)
-			
+
 		# buffer only output
 		} else if (out == 'buffer') {
-		
+
 			# GRASS output is 1 for buffered, 2 for the actual buffer, and NULL for everywhere else
 			ex <- '= if(TEMPTEMP_bufferRast == 2, 1, null())'
 			fasterApp(
@@ -148,18 +151,17 @@ fasterBufferRast <- function(
 				grassToR = FALSE,
 				outGrassName = outGrassName
 			)
-		
+
 		}
-		
+
 	}
 
 	### export
 	if (grassToR) {
 
-		out <- fasterWriteRaster(outGrassName, paste0(tempfile(), '.tif'), datatype='Byte', overwrite=TRUE)
-		out <- terra::setMinMax(out)
+		out <- fasterWriteRaster(outGrassName, paste0(tempfile(), '.tif'), datatype='Byte', overwrite=TRUE, trimRast=trimRast)
 		out
-		
-	}
+
+	} else { invisible(TRUE) }
 
 }

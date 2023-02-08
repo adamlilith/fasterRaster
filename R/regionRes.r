@@ -1,12 +1,12 @@
 #' Get or set the spatial resolution of a GRASS region
 #'
-#' This function either reports the spatial resolution of a \code{GRASS} \link{region} or sets a new resolution for the region. \emph{NOTE}: The extent of the region may be increased to accomodate an integer number of rows and columns.
+#' This function either reports the spatial resolution of a \code{GRASS} \link{region} or sets a new resolution for the region. \emph{NOTE}: The extent of the region may be increased to accommodate an integer number of rows and columns.
 #'
 #' @param x Any of:
 #' \itemize{
 #'	\item \code{NULL} (default): Reports the spatial resolution of the current region. Also see argument \code{names}.
 #'	\item A \code{SpatRaster} object: Sets the region's resolution to the resolution of the object. Note that this does not export the raster to the \code{GRASS} session.
-#'	\item A vector of one or two numbers representin, the resolution in the east-west and north-south directions (if two numbers) \emph{or} resolution in both directions simultanously (if one value--cells will be "square", though not necessarily actual squares owing to the curvature of the Earth).
+#'	\item A vector of one or two numbers representing the resolution in the east-west and north-south directions (if two numbers) \emph{or} resolution in both directions simultaneously (if one value--cells will be "square", though not necessarily actual squares owing to the curvature of the Earth).
 #'	\item The name of a raster in the active \code{GRASS} session: Resizes the resolution so it matched this raster.
 #' }
 #' @param warn If \code{TRUE} (default), then print a warning if redefining the region resolution also forced a change in extent.

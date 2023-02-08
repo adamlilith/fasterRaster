@@ -7,6 +7,7 @@
 #' @inheritParams .sharedArgs_replace
 #' @inheritParams .sharedArgs_grassDir
 #' @inheritParams .sharedArgs_grassToR
+#' @inheritParams .sharedArgs_trimRast
 #' @inheritParams .sharedArgs_dots_forInitGrass_andGrassModule
 #'
 #' @param template Any of:
@@ -43,6 +44,7 @@ fasterResampleRast <- function(
 	
 	replace = fasterGetOptions('replace', FALSE),
 	grassToR = fasterGetOptions('grassToR', TRUE),
+	trimRast = fasterGetOptions('trimRast', TRUE),
 	autoRegion = fasterGetOptions('autoRegion', TRUE),
 	grassDir = fasterGetOptions('grassDir', NULL),
 	...
@@ -55,7 +57,7 @@ fasterResampleRast <- function(
 
 	# initialize GRASS
 	inits <- c(inits, list(rast=rast, vect=NULL, inRastName=inRastName, inVectName=NULL, replace=replace, grassDir=grassDir))
-	input <- do.call('initGrass', inits)
+	input <- do.call('startFaster', inits)
 
 	# get resolution of the template
 	if (inherits(template, 'SpatRaster')) {
@@ -85,9 +87,9 @@ fasterResampleRast <- function(
 	# return
 	if (grassToR) {
 
-		out <- fasterWriteRaster(outGrassName, paste0(tempfile(), '.tif'), overwrite=TRUE)
+		out <- fasterWriteRaster(outGrassName, paste0(tempfile(), '.tif'), overwrite=TRUE, trimRast=trimRast)
 		out
 
-	}
+	} else { invisible(TRUE) }
 
 }

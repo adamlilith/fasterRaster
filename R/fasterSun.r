@@ -5,6 +5,7 @@
 #' @inheritParams .sharedArgs_replace
 #' @inheritParams .sharedArgs_grassDir
 #' @inheritParams .sharedArgs_grassToR
+#' @inheritParams .sharedArgs_trimRast
 #' @inheritParams .sharedArgs_dots_forInitGrass_andGrassModule
 #'
 #' @param elevation Either a \code{SpatRaster} or the name of a raster in an existing \code{GRASS} session with values representing elevation (typically in meters).
@@ -55,7 +56,6 @@ fasterSun <- function(
 	declination = NULL,
 	solar_constant = 1367,
 	
-	nprocs = 1,
 	distance_step = 1,
 	npartitions = 1,
 
@@ -65,8 +65,12 @@ fasterSun <- function(
 	glob_rad = TRUE,
 	insol_time = TRUE,
 	
+	lowMemory = FALSE,
+	
+	cores = fasterGetOptions('cores', 1),
 	replace = fasterGetOptions('replace', FALSE),
 	grassToR = fasterGetOptions('grassToR', TRUE),
+	trimRast = fasterGetOptions('trimRast', TRUE),
 	autoRegion = fasterGetOptions('autoRegion', TRUE),
 	grassDir = fasterGetOptions('grassDir', NULL),
 	...
@@ -77,7 +81,7 @@ fasterSun <- function(
 	# initialize GRASS
 	if (is.null(inits)) inits <- list()
 	inits <- c(inits, list(rast=elevation, vect=NULL, inRastName='elevation', inVectName=NULL, replace=replace, grassDir=grassDir))
-	input <- do.call('initGrass', inits)
+	input <- do.call('startFaster', inits)
 	
 	## export rasters/collect scalars
 	
@@ -87,7 +91,7 @@ fasterSun <- function(
 		flags = flags,
 		day = day,
 		step = step,
-		nprocs = nprocs,
+		nprocs = cores,
 		distance_step = distance_step,
 		npartitions = npartitions,
 		elevation = 'elevation',
@@ -181,7 +185,7 @@ fasterSun <- function(
 			
 			if (outValue) {
 
-				thisOut <- fasterWriteRaster(outName, paste0(tempfile(), '.tif'), overwrite=TRUE)
+				thisOut <- fasterWriteRaster(outName, paste0(tempfile(), '.tif'), overwrite=TRUE, trimRast=trimRast)
 				out <- if (exists('out', inherits=FALSE)) {
 					c(out, thisOut)
 				} else {
@@ -190,6 +194,6 @@ fasterSun <- function(
 			}
 		}
 		out
-	}
+	} else { invisible(TRUE) }
 	
 }

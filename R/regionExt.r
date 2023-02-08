@@ -15,7 +15,7 @@
 #' @param rastOrVect Either \code{'raster'} and/or \code{'vector'} (one value per value in \code{x}). If \code{NULL} (default), then the function will attempt to guess whether \code{x} refers to a raster or vector. However, in \code{GRASS}, it is possible to have a raster and a vector of the same name. If this is the case, then you can specify whether \code{x} is a raster or vector (partial matching is supported).
 #' @param names If \code{TRUE} (default), then the returned vector will have names. Ignored if \code{x} is non-\code{NULL}.
 #' @param terra If \code{TRUE}, then the returned object will be a \code{\link[terra]{SpatExtent}}. Ignored if \code{x} is non-\code{NULL}.
-#' @param ... Additional argumenst to send to \code{\link{fasterLs}}. This includes argument \code{temps} (\code{TRUE} or \code{FALSE}), which determines if temporary files are utilized, too. Temporary files start with "\code{TEMPTEMP_}".
+#' @param ... Additional arguments to send to \code{\link{fasterLs}}. This includes argument \code{temps} (\code{TRUE} or \code{FALSE}), which determines if temporary files are utilized, too. Temporary files start with "\code{TEMPTEMP_}".
 #'
 #' @return Either a numeric vector with four values, or \code{TRUE} (invisibly) if resizing was successful. Also resizes the extent of the \link{region} in the active \code{GRASS} session.
 #'

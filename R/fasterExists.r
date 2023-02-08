@@ -4,7 +4,7 @@
 #'
 #' @param x Name(s) of the object(s).
 #' @param rastOrVect The type of object(s) of \code{x}. This can be \code{'raster'} and/or \code{'vector'}, or \code{NULL} (default). If \code{NULL}, then the function will attempt to ascertain the type of \code{x}. Partial matching is allowed.
-#' @param ... Additional arguments to pass to \code{\link{fasterLs}}.
+#' @param ... Arguments to pass to \code{\link{fasterLs}}. These include argument \code{temps} (\code{TRUE} or \code{FALSE}), which allow retieval of temporary files (these always begin with "\code{TEMPTEMP_}").
 #'
 #' @return Logical for each value of \code{x}.
 #'

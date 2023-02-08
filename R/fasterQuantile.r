@@ -1,6 +1,6 @@
 #' Quantiles for a raster
 #'
-#' This function is a potentially faster version of the function \code{quantile(raster, probs)} for calculating the quantiles of a raster. This function will also work on rasters too big to load into memory using the \pkg{terra} package.
+#' Calculate quantiles for across all cells of a raster.
 #' @inheritParams .sharedArgs_rast
 #' @inheritParams .sharedArgs_inRastName
 #' @inheritParams .sharedArgs_replace
@@ -20,38 +20,62 @@ fasterQuantile <- function(
 	rast,
 	inRastName,
 	probs = c(0.025, 0.25, 0.5, 0.75, 0.975),
+	
 	replace = fasterGetOptions('replace', FALSE),
-	grassToR = fasterGetOptions('grassToR', TRUE),
 	autoRegion = fasterGetOptions('autoRegion', TRUE),
 	grassDir = fasterGetOptions('grassDir', NULL),
 	...
 ) {
 
-	### begin common
-	flags <- .getFlags(replace=replace)
-	inRastName <- .getInRastName(inRastName, rast)
-	if (is.null(inVectName)) inVectName <- 'vect'
-	
-	# region settings
-	success <- .rememberRegion()
-	# on.exit(.restoreRegion(inits), add=TRUE)
-	# on.exit(.revertRegion(), add=TRUE)
-	# on.exit(regionResize(), add=TRUE)
-	
-	if (is.null(inits)) inits <- list()
-	### end common
+	### commons v1
+	##############
 
+		### arguments
+		if (!missing(rast)) {
+			if (!inherits(rast, 'character') & !inherits(rast, 'SpatRaster')) rast <- terra::rast(rast)
+			inRastName <- .getInRastName(inRastName, rast=rast)
+			.checkRastExists(replace=replace, rast=rast, inRastName=inRastName, outGrassName=NULL, ...)
+		} else {
+			rast <- inRastName <- NULL
+		}
+
+		### flags
+		flags <- .getFlags(replace=replace)
+		
+		### restore
+		# on.exit(.restoreLocation(), add=TRUE) # return to starting location
+		if (autoRegion) on.exit(regionExt('*'), add=TRUE) # resize extent to encompass all spatials
+
+		### ellipses and initialization arguments
+		initsDots <- .getInitsDots(..., callingFx = 'fasterQuantile')
+		inits <- initsDots$inits
+		dots <- initsDots$dots
+
+	###############
+	### end commons
+
+	### function-specific
 	probs <- 100 * probs
 
-	# initialize GRASS
-	inits <- c(inits, list(rast=rast, vect=NULL, inRastName=inRastName, inVectName=NULL, replace=replace, grassDir=grassDir))
-	input <- do.call('initGrass', inits)
-	
-	# temp file for output
+	### function-specific
 	tempFile <- tempfile(pattern = 'file', tmpdir = tempdir(), fileext = '.csv')
 
-	# calculate
-	rgrass::execGRASS('r.quantile', input=input, file=tempFile, percentiles=probs, flags=flags)
+	args <- list(
+		cmd = 'r.quantile',
+		input = inRastName,
+		file = tempFile,
+		percentiles = probs,
+		flags = flags,
+		intern = TRUE
+	)
+	args <- c(args, dots)
+
+	### initialize GRASS
+	input <- do.call('startFaster', inits)
+	
+	### execute
+	if (autoRegion) regionReshape(inRastName)
+	do.call(rgrass::execGRASS, args=args)
 
 	# get output
 	grassQuants <- read.csv(tempFile, header=FALSE)

@@ -38,7 +38,7 @@ fasterHexagonGrid <- function(
 	### end common
 
 	inits <- c(inits, list(rast=NULL, vect=vect, inRastName=NULL, inVectName=inVectName, replace=replace, grassDir=grassDir))
-	input <- do.call('initGrass', inits)
+	input <- do.call('startFaster', inits)
 	
 	success <- regionResize()
 

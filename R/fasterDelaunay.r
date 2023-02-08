@@ -1,4 +1,4 @@
-#' Delauney triangulation for points
+#' Delaunay triangulation for points
 #'
 #' This function creates a Delaunay triangulation spatial vector from a set of spatial points.
 #'
@@ -38,9 +38,11 @@ fasterDelaunay <- function(
 	##############
 
 		### arguments
-		if (exists('vect', where=environment(), inherits=FALSE)) {
+		.checkVectExists(replace=replace, vect=NULL, inVectName=NULL, outGrassName=outGrassName, ...)
+		if (!missing(vect)) {
+			if (!inherits(vect, 'character') & !inherits(vect, 'SpatVector')) vect <- terra::vect(vect)
 			inVectName <- .getInVectName(inVectName, vect=vect)
-			.checkVectExists(replace=replace, vect=vect, inVectName=inVectName, outGrassName=outGrassName)
+			.checkVectExists(replace=replace, vect=vect, inVectName=inVectName, outGrassName=NULL, ...)
 		} else {
 			vect <- inVectName <- NULL
 		}
@@ -83,7 +85,7 @@ fasterDelaunay <- function(
 	args <- c(args, dots)
 
 	### initialize GRASS
-	input <- do.call('initGrass', inits)
+	input <- do.call('startFaster', inits)
 
 	### execute
 	
@@ -120,6 +122,6 @@ fasterDelaunay <- function(
 		if (outVectClass == 'sf') out <- sf::st_as_sf(out)
 		out
 
-	}
+	} else { invisible(TRUE) }
 	
 }

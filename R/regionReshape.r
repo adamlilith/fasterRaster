@@ -10,8 +10,8 @@
 #'	\item Values for each of \code{extent} and \emph{either} \code{dim} or \code{res} ("manual" model):
 #'	\itemize{
 #'		\item \code{extent}: Longitude and latitude of the new extent with four values listed in this order: western longitude, eastern longitude, southern latitude, northern latitude.
-#'		\item \code{dim}: Two integers representing number of rows and columns, respetively, in the region. The new resolution will be calculated by dividing the extent by the number of rows and columns.
-#'		\item \code{res}: One or two values representing spatial resolution of the region. If one value, it will be used as both the east-west and north-south resolution. If two values, these represent east-west and north-south resolution, respectively. The new dimensions will be calculated by dividing the extent by the resolution. If this is not a whole number, the extent will be increased to accomodate an integer number of rows and columns.
+#'		\item \code{dim}: Two integers representing number of rows and columns, respectively, in the region. The new resolution will be calculated by dividing the extent by the number of rows and columns.
+#'		\item \code{res}: One or two values representing spatial resolution of the region. If one value, it will be used as both the east-west and north-south resolution. If two values, these represent east-west and north-south resolution, respectively. The new dimensions will be calculated by dividing the extent by the resolution. If this is not a whole number, the extent will be increased to accommodate an integer number of rows and columns.
 #'	}
 #' }
 #' @param extent,dim,res Extent, dimensions, and resolution of the new region. These need only be specified if the region is to be resized and/or resampled "manually" (i.e., not using a pre-existing raster). In this case, \code{extent} must always be specified, and either \code{dim} or \code{res} must be specified. To change only extent, dimension, or resolution, use \code{\link{regionExt}}, \code{\link{regionDim}}, or \code{\link{regionRes}}.

@@ -1,6 +1,6 @@
 #' Create a mask to affect subsequent operations on rasters
 #'
-#' This function creates a raster mask to be used for subsuquent operations on rasters. A mask can be created from a raster or vector. If the mask is named "\code{MASK}" in the \code{GRASS} session (which it is by default), nearly all operations on other rasters will only operate cells that are not \code{NA} in the mask.To remove a mask, set the argument \code{removeMask} to \code{TRUE} when using this function, or use \code{\link{fasterRm}} or \code{\link{fasterRename}} on the \code{MASK} raster.\cr
+#' This function creates a raster mask to be used for subsequent operations on rasters. A mask can be created from a raster or vector. If the mask is named "\code{MASK}" in the \code{GRASS} session (which it is by default), nearly all operations on other rasters will only operate cells that are not \code{NA} in the mask.To remove a mask, set the argument \code{removeMask} to \code{TRUE} when using this function, or use \code{\link{fasterRm}} or \code{\link{fasterRename}} on the \code{MASK} raster.\cr
 #' 
 #' This function is similar to \code{\link{fasterMask}}, except that this one only creates a mask. That function creates a mask and removes from a focal raster all cells that are \code{NA} in the mask.
 #'
@@ -8,6 +8,8 @@
 #' @inheritParams .sharedArgs_autoRegion
 #' @inheritParams .sharedArgs_grassDir
 #' @inheritParams .sharedArgs_outGrassName
+#' @inheritParams .sharedArgs_grassToR
+#' @inheritParams .sharedArgs_trimRast
 #' @inheritParams .sharedArgs_dots_forInitGrass_andGrassModule
 #'
 #' @param mask Either of:
@@ -21,7 +23,7 @@
 #'
 #' @param clip If \code{TRUE} (default), then the mask will reflect the "shape" of the input object. That is, the \code{MASK} raster will have \code{NA} cells wherever the input object had \code{NA} cells (if input was a raster), or \code{NA} cells wherever the vector was not present (if a vector). If \code{FALSE}, then the entire extent of the input will become the mask (i.e., it will be rectangular).
 #'
-#' @return A \code{SpatRaster}. In the active \code{GRASS} session a raster is created, and possinly another raster named \code{MASK}.
+#' @return A \code{SpatRaster}. In the active \code{GRASS} session a raster is created, and possibly another raster named \code{MASK}.
 #'
 #' @example man/examples/ex_fasterMask.r
 #'
@@ -39,6 +41,7 @@ fasterMakeMask <- function(
 	
 	replace = fasterGetOptions('replace', FALSE),
 	grassToR = fasterGetOptions('grassToR', TRUE),
+	trimRast = fasterGetOptions('trimRast', TRUE),
 	autoRegion = fasterGetOptions('autoRegion', TRUE),
 	grassDir = fasterGetOptions('grassDir', NULL),
 	...
@@ -74,16 +77,18 @@ fasterMakeMask <- function(
 	args <- c(args, dots)
 	
 	# arguments for "r.mask"
-	.checkRastExists(replace=replace, rast=NULL, inRastName=NULL, outGrassName=outGrassName)
+	.checkRastExists(replace=replace, rast=NULL, inRastName=NULL, outGrassName=outGrassName, ...)
 	
 	if (inherits(mask, 'SpatRaster')) {
+		if (!inherits(mas, 'character') & !inherits(mas, 'SpatRaster')) mask <- terra::rast(mask)
 		inMaskName <- .getInRastName(inMaskName, rast=mask)
-		.checkRastExists(replace=replace, rast=rast, inRastName=inRastName, outGrassName=NULL)
+		.checkRastExists(replace=replace, rast=rast, inRastName=inRastName, outGrassName=NULL, ...)
 		rastOrVect <- 'raster'
 		inits$rast <- mask
 		inits$inRastName <- inMaskName
 		args <- c(args, raster=inMaskName)
 	} else if (inherits(mask, c('SpatVector', 'sf'))) {
+		if (!inherits(mask, 'character') & !inherits(mask, 'SpatVector')) mask <- terra::vect(mask)
 		inMaskName <- .getInVectName(inMaskName, vect=mask)
 		.checkVectExists(replace=replace, vect=vect, inVectName=inVectName, outGrassName=NULL)
 		rastOrVect <- 'vector'
@@ -97,12 +102,12 @@ fasterMakeMask <- function(
 		if (is.na(rastOrVect)) rastOrVect <- .determineRastOrVect(x=mask, errorNotFound=TRUE, dupsOK=FALSE)
 		
 		if (rastOrVect == 'raster') {
-			.checkRastExists(replace=replace, rast=mask, inRastName=inMaskName, outGrassName=NULL)
+			.checkRastExists(replace=replace, rast=mask, inRastName=inMaskName, outGrassName=NULL, ...)
 			args <- c(args, raster=mask)
 			inits$rast <- mask
 			inits$inRastName <- inMaskName
 		} else if (rastOrVect == 'vector') {
-			.checkVectExists(replace=replace, vect=mask, inVectName=inMaskName, outGrassName=NULL)
+			.checkVectExists(replace=replace, vect=mask, inVectName=inMaskName, outGrassName=NULL, ...)
 			args <- c(args, vector=mask)
 			inits$vect <- mask
 			inits$inVectName <- inMaskName
@@ -111,7 +116,7 @@ fasterMakeMask <- function(
 	}
 
 	### initialize GRASS
-	input <- do.call('initGrass', inits)
+	input <- do.call('startFaster', inits)
 	
 	### execute
 	if (autoRegion) regionReshape(inMaskName)
@@ -136,11 +141,11 @@ fasterMakeMask <- function(
 	### export
 	if (grassToR) {
 
-		out <- fasterWriteRaster(outGrassName, paste0(tempfile(), '.tif'), overwrite=TRUE)
+		out <- fasterWriteRaster(outGrassName, paste0(tempfile(), '.tif'), overwrite=TRUE, trimRast=trimRast)
 		out <- terra::setMinMax(out)
 		out
 		
-	}
+	} else { invisible(TRUE) }
 	
 }
 

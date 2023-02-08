@@ -3,9 +3,9 @@
 #' Extending a raster involves increasing the \code{GRASS} "region" into which it is imported and adding "empty" rows or columns with \code{NA} values.\cr
 #' IMPORTANT: This function will extend \emph{all} rasters in the currently active \code{GRASS} session. If you want to extend a raster without affecting the current \code{GRASS} session:
 #' \itemize{
-#'		\item Make a new \code{GRASS} session using \code{\link{initGrass}} and change the argument \code{location} to something other than \code{default}. Use this function to export the raster to be extended to the session.
-#'		\item Import the raster back to \code{R} (if desitred), using \code{\link[rgrass]{read_RAST}}.
-#'		\item Switch back to the original session using \code{initGrass(location='default')} (for example).
+#'		\item Make a new \code{GRASS} session using \code{\link{startFaster}} and change the argument \code{location} to something other than \code{default}. Use this function to export the raster to be extended to the session.
+#'		\item Import the raster back to \code{R} (if desired), using \code{\link[rgrass]{read_RAST}}.
+#'		\item Switch back to the original session using \code{startFaster(location='default')} (for example).
 #' }
 #'
 #' @inheritParams .sharedArgs_rast
@@ -32,6 +32,7 @@ fasterExtendRast <- function(
 
 	replace = fasterGetOptions('replace', FALSE),
 	grassToR = fasterGetOptions('grassToR', TRUE),
+	trimRast = fasterGetOptions('trimRast', TRUE),
 	autoRegion = fasterGetOptions('autoRegion', TRUE),
 	grassDir = fasterGetOptions('grassDir', NULL),
 	...
@@ -51,7 +52,7 @@ fasterExtendRast <- function(
 	### end common
 
 	inits <- c(inits, list(rast=rast, vect=NULL, inRastName=inRastName, inVectName=NULL, replace=replace, grassDir=grassDir))
-	input <- do.call('initGrass', inits)
+	input <- do.call('startFaster', inits)
 
 	
 ###
@@ -65,6 +66,6 @@ print(TBD)
 		out <- fasterWriteRaster(outGrassName, paste0(tempfile(), '.tif'), overwrite=TRUE)
 		out
 
-	}
+	} else { invisible(TRUE) }
 
 }

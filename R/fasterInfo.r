@@ -134,6 +134,7 @@ fasterInfo <- function(
 				data.frame(
 					name = spatial,
 					type = 'raster',
+					topology = NA,
 					
 					west = west,
 					east = east,
@@ -173,6 +174,9 @@ fasterInfo <- function(
 					echoCmd = FALSE
 				)
 			)
+			
+			# topology
+			topology <- vectTopo(spatial)
 
 			# extent
 			west <- info1[grepl(info1, pattern='west=')]
@@ -193,12 +197,19 @@ fasterInfo <- function(
 			# top/bottom
 			bottom <- info1[grepl(info1, pattern='bottom=')]
 			top <- info1[grepl(info1, pattern='top=')]
+			
+			bottom <- sub(bottom, pattern='bottom=', replacement='')
+			top <- sub(bottom, pattern='top=', replacement='')
+
+			bottom <- as.numeric(bottom)
+			top <- as.numeric(top)
 
 			out <- rbind(
 				out,
 				data.frame(
 					name = spatial,
 					type = 'vector',
+					topology = topology,
 					
 					west = west,
 					east = east,

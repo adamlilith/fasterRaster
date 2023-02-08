@@ -8,7 +8,7 @@ fasterConvertDegree(seq(0, 360, by=90))
 # "warn" arguments to avoid interfering with an existing GRASS session.
 # WHEN YOU ARE DONE WITH THE EXAMPLES, run this line to revert to your
 # active GRASS session:
-# initGrass(location='default') # change "location" if not "default"
+# startFaster(location='default') # change "location" if not "default"
 
 # IMPORTANT: Change this to where GRASS is installed on your system.
 grassDir <- "/Applications/GRASS-8.2.app/Contents/Resources" # Mac
@@ -32,6 +32,6 @@ plot(c(aspEastIs0, aspNorthIs0), main=c('east = 0', 'north = 0'))
 
 # Revert back to original GRASS session if needed.
 # Change to your working location if not "default" (it usually is).
-initGrass(location='default')
+startFaster(location='default')
 
 }

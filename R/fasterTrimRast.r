@@ -26,7 +26,6 @@ fasterTrimRast <- function(
 
 	replace = fasterGetOptions('replace', FALSE),
 	grassToR = fasterGetOptions('grassToR', TRUE),
-	outVectClass = fasterGetOptions('outVectClass', 'SpatVector'),
 	autoRegion = fasterGetOptions('autoRegion', TRUE),
 	grassDir = fasterGetOptions('grassDir', NULL),
 	...
@@ -37,7 +36,7 @@ fasterTrimRast <- function(
 	# initialize GRASS
 	if (is.null(inits)) inits <- list()
 	inits <- c(inits, list(rast=rast, vect=NULL, inRastName=inRastName, inVectName=NULL, replace=replace, grassDir=grassDir))
-	input <- do.call('initGrass', inits)
+	input <- do.call('startFaster', inits)
 
 say(TBD)
 	# do the work
@@ -49,13 +48,9 @@ say(TBD)
 	# return
 	if (grassToR) {
 
-		out <- fasterWriteRaster(outGrassName, paste0(tempfile(), '.tif'), overwrite=TRUE)
-		names(out) <- input
+		out <- fasterWriteRaster(outGrassName, paste0(tempfile(), '.tif'), overwrite=TRUE, trimRast=trimRast)
 		out
 
-	}
+	} else { invisible(TRUE) }
 	
-	# resize region to encompass everything
-	success <- resizeRegion()
-
 }

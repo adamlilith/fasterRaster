@@ -4,7 +4,7 @@
 #'
 #' @inheritParams .sharedArgs_replace
 #' @param from,to Names of the raster or vector to rename.
-#' @param rastOrVect Either \code{NULL} (default), \code{'raster'}, or \code{'vector'}. This specifies the type of object to be renamed. Partial matching is allowed. If left as \code{NULL} (default), the function will try to identify if the object is a raster or vector, and return an error if there is both a raster and vector of given name. Note that unlike in \pkg{R}, \code{GRASS} can have rasters and vectoers with the same name.
+#' @param rastOrVect Either \code{NULL} (default), \code{'raster'}, or \code{'vector'}. This specifies the type of object to be renamed. Partial matching is allowed. If left as \code{NULL} (default), the function will try to identify if the object is a raster or vector, and return an error if there is both a raster and vector of given name. Note that unlike in \pkg{R}, \code{GRASS} can have rasters and vector's with the same name.
 #' @param warn If \code{TRUE} (default), print a warning when renaming a raster to the name of an existing raster or vector (which overwrite it).
 #' 
 #' @return The function invisibly returns \code{TRUE} if the desired rasters and/or vectors were named, and \code{FALSE} if raster and/or vector to be renamed did not exist in the \code{GRASS} session. Notably, a raster or vector or both are renamed in an existing \code{GRASS} session.

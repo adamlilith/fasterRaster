@@ -8,6 +8,7 @@
 #' @inheritParams .sharedArgs_grassDir
 #' @inheritParams .sharedArgs_grassToR
 #' @inheritParams .sharedArgs_outGrassName
+#' @inheritParams .sharedArgs_trimRast
 #' @inheritParams .sharedArgs_autoRegion
 #' @inheritParams .sharedArgs_dots_forInitGrass_andGrassModule
 #'
@@ -38,8 +39,10 @@ fasterApp <- function(
 	inRastName,
 	expression,
 	outGrassName = 'appRast',
+	
 	replace = fasterGetOptions('replace', FALSE),
 	grassToR = fasterGetOptions('grassToR', TRUE),
+	trimRast = fasterGetOptions('trimRast', TRUE),
 	autoRegion = fasterGetOptions('autoRegion', TRUE),
 	grassDir = fasterGetOptions('grassDir', NULL),
 	...
@@ -49,9 +52,11 @@ fasterApp <- function(
 	##############
 
 		### arguments
-		if (exists('rast', where=environment(), inherits=FALSE)) {
-			inRastName <- .getInRastName(inRastName, rast)
-			.checkRastExists(replace=replace, rast=rast, inRastName=inRastName, outGrassName=outGrassName)
+		.checkRastExists(replace=replace, rast=NULL, inRastName=NULL, outGrassName=outGrassName, ...)
+		if (!missing(rast)) {
+			if (!inherits(rast, 'character') & !inherits(rast, 'SpatRaster')) rast <- terra::rast(rast)
+			inRastName <- .getInRastName(inRastName, rast=rast)
+			.checkRastExists(replace=replace, rast=rast, inRastName=inRastName, outGrassName=NULL, ...)
 		} else {
 			rast <- inRastName <- NULL
 		}
@@ -67,7 +72,7 @@ fasterApp <- function(
 		initsDots <- .getInitsDots(..., callingFx = 'fasterApp')
 		inits <- initsDots$inits
 		dots <- initsDots$dots
-	
+
 	### function-specific
 
 	# expresssion
@@ -86,19 +91,17 @@ fasterApp <- function(
 	args <- c(args, dots)
 
 	### initialize GRASS
-	input <- do.call('initGrass', inits)
+	input <- do.call('startFaster', inits)
 
 	### execute
-	
 	if (autoRegion) regionReshape(inRastName)
 	do.call(rgrass::execGRASS, args=args)
 
 	if (grassToR) {
 
-		out <- fasterWriteRaster(outGrassName, paste0(tempfile(), '.tif'), overwrite=TRUE)
-		out <- terra::setMinMax(out)
+		out <- fasterWriteRaster(outGrassName, paste0(tempfile(), '.tif'), overwrite=TRUE, trimRast=trimRast)
 		out
 		
-	}
+	} else { invisible(TRUE) }
 	
 }

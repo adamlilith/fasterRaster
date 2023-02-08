@@ -42,7 +42,7 @@ fasterVoronoi <- function(
 
 	if (is.null(inits)) inits <- list()
 	inits <- c(inits, list(rast=NULL, vect=vect, inRastName=NULL, inVectName=inVectName, replace=replace, grassDir=grassDir))
-	input <- do.call('initGrass', inits)
+	input <- do.call('startFaster', inits)
 	
 	# execute
 	type <- tolower(type)
@@ -66,8 +66,7 @@ fasterVoronoi <- function(
 		}
 		out
 
-	}
-
+	} else { invisible(TRUE) }
 
 
 }

@@ -6,14 +6,14 @@
 #' @inheritParams .sharedArgs_replace
 #' @inheritParams .sharedArgs_autoRegion
 #'
-#' @param rast A \code{SpatRaster} with one or more layers, or a character vector providing the path and names of raster files to import into the active \code{GRASS} session.
+#' @param rast Either a single \code{SpatRaster} with one or more layers, \emph{or} the file path(s) and filename(s) or one or more raster files to import into the active \code{GRASS} session. To see which formats are supported, use \code{\link{fasterWriteRaster()}} or see \href{https://grass.osgeo.org/grass82/manuals/r.in.gdal.html}{\code{r.in.gdal}}.
 #' @param ... Additional arguments (unused).
 #'
 #' @return \code{TRUE} (invisibly, if the raster was successfully exported). The function also exports a raster to a \code{GRASS} session so it can be used by other functions.
 #'
-#' @seealso \code{\link[terra]{rast}} in package \pkg{terra}; \code{\link[rgrass]{write_RAST}} and \code{\link[rgrass]{read_RAST}} in package \pkg{rgrass}; and \code{GRASS} module \href{https://grass.osgeo.org/grass82/manuals/r.in.gdal.html}{r.in.gdal}
+#' @seealso \code{\link[terra]{rast}} in package \pkg{terra}; \code{\link[rgrass]{write_RAST}} and \code{\link[rgrass]{read_RAST}} in package \pkg{rgrass}; and \code{GRASS} module \href{https://grass.osgeo.org/grass82/manuals/r.in.gdal.html}{\code{r.in.gdal}}
 #'
-#' @examples man/examples/ex_fasterRast_fasterVect.R
+#' @examples man/examples/ex_fasterRast.R
 #'
 #' @export
 fasterRast <- function(
@@ -28,8 +28,11 @@ fasterRast <- function(
 	##############
 
 		### arguments
+		if (!inherits(rast, 'character') & !inherits(rast, 'SpatRaster')) rast <- terra::rast(rast)
 		inRastName <- .getInRastName(inRastName, rast)
-		.checkRastExists(replace=replace, rast=rast, inRastName=inRastName, outGrassName=NULL)
+		if (!replace) {
+			if (any(fasterExists(inRastName))) stop('Raster(s) of the given name(s) already exist in GRASS.\nUse "replace=TRUE" or provide a different name with "inRastName".')
+		}
 
 		### flags
 		flags <- .getFlags(replace=replace)
@@ -41,8 +44,6 @@ fasterRast <- function(
 	###############
 	### end commons
 	
-	if (!inherits(rast, 'SpatRaster') & !inherits(rast, 'character')) rast <- terra::rast(rast)
-
 	# export to GRASS
 	if (inherits(rast, 'character')) {
 	
@@ -72,7 +73,7 @@ fasterRast <- function(
 			
 				from <- paste0(baseName, '.', i)
 				to <- inRastName[i]
-				fasterRename(from=from, to=to, type='raster')
+				fasterRename(from=from, to=to, rastOrVect='raster')
 			
 			}
 		

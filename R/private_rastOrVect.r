@@ -3,7 +3,7 @@
 #' Private. For one or more partial strings for "rasters", "vectors", or NULL, returns "raster", "vector", or NULL.
 #'
 #' @param rastOrVect String.
-#' @param n Number of valid returened values.
+#' @param n Number of valid returned values.
 #' @param naOK If TRUE, returning NA is OK if indeterminate answer
 #'
 #' @keywords internal

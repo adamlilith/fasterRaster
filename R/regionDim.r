@@ -1,6 +1,6 @@
 #' Get or set the number of rows and/or columns of a GRASS region
 #'
-#' This function either reports the number of rows and columns of a \code{GRASS} \link{region}, or sets the number of rows and columns. \emph{NOTE}: The spatial resoluton of the region may be changed to accomodate the desired numebr ofrows and columns.
+#' This function either reports the number of rows and columns of a \code{GRASS} \link{region}, or sets the number of rows and columns. \emph{NOTE}: The spatial resolution of the region may be changed to accommodate the desired number of rows and columns.
 #'
 #' @param x Any of:
 #' \itemize{

@@ -4,9 +4,12 @@
 #'
 #' @inheritParams .sharedArgs_rast
 #' @inheritParams .sharedArgs_inRastName
+#' @inheritParams .sharedArgs_cores
+#' @inheritParams .sharedArgs_memory
 #' @inheritParams .sharedArgs_replace
 #' @inheritParams .sharedArgs_grassDir
 #' @inheritParams .sharedArgs_grassToR
+#' @inheritParams .sharedArgs_trimRast
 #' @inheritParams .sharedArgs_dots_forInitGrass_andGrassModule
 #'
 #' @param v Name of the topographic metric(s) to calculate. Valid values include one or more of:
@@ -24,7 +27,6 @@
 #' }
 #' @param units Character, "units" in which to calculate slope: either \code{'degrees'} for degrees (default) or \code{'percent'}.
 #' @param northIs0 Logical. If \code{TRUE} (default), aspect will be reported such that 0 is north, and degrees run clockwise (90 is east, 180 south, 270 west). If \code{FALSE}, then aspect will be reported such that 0 is east, and degrees run counterclockwise (90 is north, 180 west, 270 south). The latter is the default in \code{GRASS}, but the former is the default in \pkg{terra}'s \code{\link[terra]{terrain}} function, so is used here as the default.
-#' @param cores Number of processor cores to use. The default is 1.
 #' @param outGrassName Name(s) of the rasters created in the \code{GRASS} session. Useful for chaining functions together. By default, these will be the values given in \code{v}.
 #'
 #' @return If \code{grassToR} if \code{TRUE}, then a raster or raster stack with the same extent, resolution, and coordinate reference system as \code{rast}. Regardless, raster(s) given by the names in the \code{outGrassName} arguments are used are written into the \code{GRASS} session.
@@ -41,11 +43,13 @@ fasterTerrain <- function(
 	v = 'slope',
 	units = 'degrees',
 	northIs0 = TRUE,
-	cores = 1,
 	outGrassName = v,
 	
+	cores = fasterGetOptions('cores', 1),
+	memory = fasterGetOptions('memory', 300),
 	replace = fasterGetOptions('replace', FALSE),
 	grassToR = fasterGetOptions('grassToR', TRUE),
+	trimRast = fasterGetOptions('trimRast', TRUE),
 	autoRegion = fasterGetOptions('autoRegion', TRUE),
 	grassDir = fasterGetOptions('grassDir', NULL),
 	...
@@ -55,12 +59,15 @@ fasterTerrain <- function(
 	##############
 
 		### arguments
-		if (exists('rast', where=environment(), inherits=FALSE)) {
-			inRastName <- .getInRastName(inRastName, rast)
-			.checkRastExists(replace=replace, rast=rast, inRastName=inRastName, outGrassName=outGrassName)
+		.checkRastExists(replace=replace, rast=NULL, inRastName=NULL, outGrassName=outGrassName, ...)
+		if (!missing(rast)) {
+			if (!inherits(rast, 'character') & !inherits(rast, 'SpatRaster')) rast <- terra::rast(rast)
+			inRastName <- .getInRastName(inRastName, rast=rast)
+			.checkRastExists(replace=replace, rast=rast, inRastName=inRastName, outGrassName=NULL, ...)
 		} else {
 			rast <- inRastName <- NULL
 		}
+
 		### flags
 		flags <- .getFlags(replace=replace)
 		
@@ -92,6 +99,7 @@ fasterTerrain <- function(
 		cmd = 'r.slope.aspect',
 		elevation = inRastName,
 		nprocs = cores,
+		memory = memory,
 		flags = flags
 	)
 	args <- c(args, dots)
@@ -135,7 +143,7 @@ fasterTerrain <- function(
 	}
 
 	### initialize GRASS
-	input <- do.call('initGrass', inits)
+	input <- do.call('startFaster', inits)
 
 	### execute
 	if (autoRegion) regionReshape(inRastName)
@@ -158,7 +166,7 @@ fasterTerrain <- function(
 		
 		for (ogn in outGrassName) {
 		
-			thisOut <- fasterWriteRaster(ogn, paste0(tempfile(), '.tif'), overwrite=TRUE)
+			thisOut <- fasterWriteRaster(ogn, paste0(tempfile(), '.tif'), overwrite=TRUE, trimRast=trimRast)
 			out <- if (exists('out', inherits=FALSE)) {
 				c(out, thisOut)
 			} else {
@@ -166,10 +174,8 @@ fasterTerrain <- function(
 			}
 			
 		}
-		
-		out <- terra::setMinMax(out)
 		out
 			
-	}
+	} else { invisible(TRUE) }
 
 }

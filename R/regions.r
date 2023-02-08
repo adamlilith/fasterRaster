@@ -6,16 +6,16 @@
 #'
 #' The region extent and resolution affects operations on rasters:
 #' \itemize{
-#' 	\item 	All operations conducted on a raster in \code{GRASS} affect on the portion of the raster that overlaps with the region.
+#' 	\item 	All operations conducted on a raster in \code{GRASS} affect the portion of the raster that overlaps with the current region.
 #'
-#'  \item	Importing the raster from \code{GRASS} to \code{R} using the \code{\link[rgrass]{read_RAST}} funtion in the \code{rgrass} package will crop the raster to the region. The raster may also be "padded" with rows and columns that are \code{NA} so that its extent matches the region. If the region has a different spatial resolution (or the same, but the region's registration is different from that of the raster), the raster will be resampled to match the resolution and registration of the region. You can import a raster as-is (i.e., not cropped, padded, resampled, or re-registered) from \code{GRASS} using \code{\link{importFromGrass}}.
+#'  \item	Importing the raster from \code{GRASS} to \code{R} using the \code{\link[rgrass]{read_RAST}} function in the \code{rgrass} package will crop the raster to the region. The raster may also be "padded" with rows and columns that are \code{NA} so that its extent matches the region. If the region has a different spatial resolution (or the same, but the region's registration is different from that of the raster), the raster will be resampled to match the resolution and registration of the region. You can import a raster as-is (i.e., not cropped, padded, resampled, or re-registered) from \code{GRASS} using \code{\link{rastFromGrass}}.
 #'
 #'  \item	Everything in the previous point also applies to saving a raster using \pkg{rgrass} functions \code{\link[rgrass]{execGRASS}} or \code{\link[rgrass]{parseGRASS}} with \code{GRASS} module \code{\href{https://grass.osgeo.org/grass82/manuals/r.out.gdal.html}{r.out.gdal}} or similar. The raster will be cropped, padded, resampled, and re-registered according to the region. To avoid this, you can use \code{\link{fasterWriteRaster}}.
 #' }
 #'
-#' Regions generally do \emph{not} affect operations on vectors. The few exceptions are those that convert vectors to rasters, but these are again handled automaticlaly by \pkg{fasterRaster} functions.
+#' Regions generally do \emph{not} affect operations on vectors. The few exceptions are those that convert vectors to rasters, but these are again handled automatically by \pkg{fasterRaster} functions.
 #'
-#' With the possible exception of the \code{\link{faster}} function, all functions in \pkg{fasterRaster} automatically manage the region so you do not need to. They set the extent and resolution of any rasters being operated on or saved. The few exceptions explicitly use redefinition of the region to crop, trim, or otherwise explicitly change raster operations, but these are also handled automatically. Users can turn this feature off by setting the \code{autoRegion} argument in most functions to \code{FALSE}, or for all functions at once using:
+#' With the exception of the "\code{\link{region}}" functions (e.g., \code{\link{regionExt}}, \code{\link{regionReshape}}), all functions in \pkg{fasterRaster} automatically manage the region so you do not need to. They set the extent and resolution of any rasters being operated on or saved. The few exceptions explicitly use redefinition of the region to crop, trim, or otherwise explicitly change raster operations, but these are also handled automatically. Users can turn off automatic handling of the region by setting the \code{autoRegion} argument that appears in most functions to \code{FALSE}, or for all functions at once using:
 #'
 #' \code{fasterOptions(autoRegion = FALSE)}
 #'

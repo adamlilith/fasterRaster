@@ -4,7 +4,7 @@
 # "warn" arguments to avoid interfering with an existing GRASS session.
 # WHEN YOU ARE DONE WITH THE EXAMPLES, run this line to revert to your
 # active GRASS session:
-# initGrass(location='default') # change "location" if not "default"
+# startFaster(location='default') # change "location" if not "default"
 
 # IMPORTANT: Change this to where GRASS is installed on your system.
 grassDir <- "/Applications/GRASS-8.2.app/Contents/Resources" # Mac
@@ -17,7 +17,7 @@ library(terra)
 # start a GRASS session with a raster
 madElev <- fasterData('madElev')
 
-initGrass(madElev, inRastName = 'madElev',
+startFaster(madElev, inRastName = 'madElev',
 location='examples', restartGrass=TRUE, warn=FALSE) # line for examples only
 
 # import a vector
@@ -70,6 +70,6 @@ fasterExt() # maximum extent of all spatial objects
 
 # Revert back to original GRASS session if needed.
 # Change to your working location if not "default" (it usually is).
-initGrass(location='default')
+startFaster(location='default')
 
 }

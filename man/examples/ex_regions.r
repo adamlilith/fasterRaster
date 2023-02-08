@@ -4,7 +4,7 @@
 # "warn" arguments to avoid interfering with an existing GRASS session.
 # WHEN YOU ARE DONE WITH THE EXAMPLES, run this line to revert to your
 # active GRASS session:
-# initGrass(location='default') # change "location" if not "default"
+# startFaster(location='default') # change "location" if not "default"
 
 # IMPORTANT: Change this to where GRASS is installed on your system.
 grassDir <- "/Applications/GRASS-8.2.app/Contents/Resources" # for a Mac
@@ -19,7 +19,7 @@ madElevAnt <- fasterData('madElevAnt') # small raster
 madRivers <- fasterData('madRivers') # small vector
 
 ### initiate a GRASS session and export a large raster
-initGrass(rast=madElev, grassDir=grassDir,
+startFaster(rast=madElev, grassDir=grassDir,
 restartGrass=TRUE, warn=FALSE, location='examples')
 
 # export the smaller raster and vector
@@ -103,6 +103,6 @@ plot(expanded, main='Expanded')
 
 # Revert back to original GRASS session.
 # Change to your working location if not "default" (it usually is).
-initGrass(location='default')
+startFaster(location='default')
 
 }

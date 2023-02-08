@@ -9,6 +9,7 @@
 #' @inheritParams .sharedArgs_replace
 #' @inheritParams .sharedArgs_grassDir
 #' @inheritParams .sharedArgs_grassToR
+#' @inheritParams .sharedArgs_trimRast
 #' @inheritParams .sharedArgs_outGrassName
 #' @inheritParams .sharedArgs_dots_forInitGrass_andGrassModule
 #'
@@ -44,6 +45,7 @@ fasterVectToRastDistance <- function(
 	
 	replace = fasterGetOptions('replace', FALSE),
 	grassToR = fasterGetOptions('grassToR', TRUE),
+	trimRast = fasterGetOptions('trimRast', TRUE),
 	autoRegion = fasterGetOptions('autoRegion', TRUE),
 	grassDir = fasterGetOptions('grassDir', NULL),
 	...
@@ -63,9 +65,9 @@ fasterVectToRastDistance <- function(
 	# return
 	if (grassToR) {
 	
-		out <- fasterWriteRaster(outGrassName, paste0(tempfile(), '.tif'), overwrite=TRUE)
+		out <- fasterWriteRaster(outGrassName, paste0(tempfile(), '.tif'), overwrite=TRUE, trimRast=trimRast)
 		out
 		
-	}
+	} else { invisible(TRUE) }
 
 }

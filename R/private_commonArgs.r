@@ -37,6 +37,20 @@ NULL
 #' @keywords internal
 NULL
 
+#' @name .sharedArgs_cores
+#' @title Shared argument(s)
+#'
+#' @param cores Number of processor cores to use. This must be a positive integer. The default is 1. You can set this for all functions at once using \code{\link{fasterSetOptions}}.
+#' @keywords internal
+NULL
+
+#' @name .sharedArgs_memory
+#' @title Shared argument(s)
+#'
+#' @param memory Amount of memory to allocate to the job, in MB. The default is 300 MB. You can set this for all functions at once using \code{\link{fasterSetOptions}}.
+#' @keywords internal
+NULL
+
 #' @name .sharedArgs_replace
 #' @title Shared argument(s)
 #'
@@ -58,10 +72,17 @@ NULL
 #' @keywords internal
 NULL
 
+#' @name .sharedArgs_trimRast
+#' @title Shared argument(s)
+#'
+#' @param trimRast Logical. If \code{TRUE} (default) and rasters are imported from \code{GRASS} to \code{R}, then all rows and columns that are entirely \code{NA} will be removed. If \code{FALSE}, then rasters may be "padded" with empty rows and columns. This is may be especially important if you are using rasters and vectors of very different sizes. Within \code{GRASS}, empty rows and columns can be added automatically by manipulation of the \link{region}. You can set this argument for all functions at once using \code{\link{fasterSetOptions}}.
+#' @keywords internal
+NULL
+
 #' @name .sharedArgs_outVectClass
 #' @title Shared argument(s)
 #'
-#' @param outVectClass Character or \code{NULL}. This sets the class of spatial vectors imported back to \code{R} from \code{GRASS}. If \code{'SpatRaster'} or \code{NULL} 9default), a \code{SpatVector} from the \pkg{terra} package is returned. If \code{'sf'}, an \code{sf} object from the \pkg{sf} package is returned. This argument is ignored if \code{grassToR} is \code{FALSE}. You can set this argument for all functions at once using \code{\link{fasterSetOptions}}.
+#' @param outVectClass Either \code{'SpatRaster'} or \code{'sf'}. This determines the class of spatial vectors imported back to \code{R} from \code{GRASS}. If \code{'SpatRaster'} (default), a \code{SpatVector} from the \pkg{terra} package is returned. If \code{'sf'}, an \code{sf} object from the \pkg{sf} package is returned. This argument is ignored if \code{grassToR} is \code{FALSE}. You can set this argument for all functions at once using \code{\link{fasterSetOptions}}.
 #' @keywords internal
 NULL
 
@@ -69,6 +90,13 @@ NULL
 #' @title Shared argument(s)
 #'
 #' @param outGrassName Character. Name of output in \code{GRASS}. This is useful if you want to refer to the output object in \code{GRASS} later in a session by \link{chaining} functions.
+#' @keywords internal
+NULL
+
+#' @name .sharedArgs_outGrassName_multiple
+#' @title Shared argument(s)
+#'
+#' @param outGrassName Character. One name per object created in \code{GRASS} (i.e., one per raster layer or vector). This is useful if you want to refer to the output object(s) in \code{GRASS} later in a session by \link{chaining} functions.
 #' @keywords internal
 NULL
 
@@ -82,11 +110,11 @@ NULL
 #' @name .sharedArgs_dots_forInitGrass
 #' @title Shared argument(s)
 #'
-#' @param ... Arguments to pass to \code{\link{initGrass}}.
+#' @param ... Arguments to pass to \code{\link{startFaster}}.
 NULL
 
 #' @name .sharedArgs_dots_forInitGrass_andGrassModule
 #' @title Shared argument(s)
 #'
-#' @param ... Arguments to pass to \code{\link{initGrass}} and/or to the respective \code{GRASS} module (see \code{\strong{See Also}} section).
+#' @param ... Arguments to pass to \code{\link{startFaster}} and/or to the respective \code{GRASS} module (see \code{\strong{See Also}} section).
 NULL

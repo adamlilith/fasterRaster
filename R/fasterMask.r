@@ -1,6 +1,6 @@
 #' Create a mask to affect subsequent operations on rasters
 #'
-#' This function creates a copy of a raster, but forces some cells to \code{NA} by using a "mask". A mask can be created from a raster or a spatial vector.  If from a raster, then only cells in the inoput raster that overlap with non-\code{NA} cells in the mask are copied. If from a vector, only cells that overlap with the vector are copied.\emph{Currently, this function only works on numeric (not catgorial) rasters.}\cr
+#' This function creates a copy of a raster, but forces some cells to \code{NA} by using a "mask". A mask can be created from a raster or a spatial vector.  If from a raster, then only cells in the input raster that overlap with non-\code{NA} cells in the mask are copied. If from a vector, only cells that overlap with the vector are copied.\emph{Currently, this function only works on numeric (not categorical) rasters.}\cr
 #' 
 #' In \code{GRASS}, a mask raster is always named \code{MASK}. If such a raster exists in the active \code{GRASS} session, it causes operations on rasters to affect only those portions of the raster that fall within a non-\code{NA} (in \code{GRASS}, a non-\code{NULL}) cell. It will continue to affect nearly all \pkg{fasterRaster} functions that operate on rasters until it is removed. To remove a mask, set the argument \code{removeMask} to \code{TRUE} when using this function, or use \code{\link{fasterRm}} or \code{\link{fasterRename}} on the \code{MASK} raster.\cr
 #'
@@ -10,6 +10,7 @@
 #' @inheritParams .sharedArgs_rast
 #' @inheritParams .sharedArgs_inRastName
 #' @inheritParams .sharedArgs_grassToR
+#' @inheritParams .sharedArgs_trimRast
 #' @inheritParams .sharedArgs_autoRegion
 #' @inheritParams .sharedArgs_grassDir
 #' @inheritParams .sharedArgs_outGrassName
@@ -24,10 +25,10 @@
 #'
 #' @param rastOrVect Either \code{'raster'}, \code{'vector'}, or \code{NULL} (default). The type of object that \code{mask} is. This is typically not needed, unless \code{mask} is the name of an object in \code{GRASS} and there is more than one object of that name.
 #'
-#' @param removeMask If \code{TRUE} (default), then the \code{MASK} will be deleted from the \code{GRASS} session. If \code{FALSE}, it will noyt be removed so it can be used in subsquent operations. Later, you can remove a mask using \code{\link{fasterRm}} or \code{\link{fasterRename}}.
+#' @param removeMask If \code{TRUE} (default), then the \code{MASK} will be deleted from the \code{GRASS} session. If \code{FALSE}, it will noyt be removed so it can be used in subsequent operations. Later, you can remove a mask using \code{\link{fasterRm}} or \code{\link{fasterRename}}.
 #' @param trim If \code{TRUE} (default) and the output is imported to \code{R}, then all rows and columns that are entirely \code{NA} will be removed.
 #'
-#' @return A \code{SpatRaster}. In the active \code{GRASS} session a raster is created, and possinly another raster named \code{MASK}.
+#' @return A \code{SpatRaster}. In the active \code{GRASS} session a raster is created, and possibly another raster named \code{MASK}.
 #'
 #' @example man/examples/ex_fasterMask.r
 #'
@@ -48,6 +49,7 @@ fasterMask <- function(
 	
 	replace = fasterGetOptions('replace', FALSE),
 	grassToR = fasterGetOptions('grassToR', TRUE),
+	trimRast = fasterGetOptions('trimRast', TRUE),
 	autoRegion = fasterGetOptions('autoRegion', TRUE),
 	grassDir = fasterGetOptions('grassDir', NULL),
 	...
@@ -60,9 +62,11 @@ fasterMask <- function(
 	##########################
 		
 		### arguments
-		if (exists('rast', where=environment(), inherits=FALSE)) {
+		.checkRastExists(replace=replace, rast=NULL, inRastName=NULL, outGrassName=outGrassName, ...)
+		if (!missing(rast)) {
+			if (!inherits(rast, 'character') & !inherits(rast, 'SpatRaster')) rast <- terra::rast(rast)
 			inRastName <- .getInRastName(inRastName, rast=rast)
-			.checkRastExists(replace=replace, rast=rast, inRastName=inRastName, outGrassName=outGrassName)
+			.checkRastExists(replace=replace, rast=rast, inRastName=inRastName, outGrassName=NULL, ...)
 		} else {
 			rast <- inRastName <- NULL
 		}
@@ -86,21 +90,24 @@ fasterMask <- function(
 	
 	# arguments for "r.mask"
 	if (inherits(mask, 'SpatRaster')) {
+		if (!inherits(mask, 'character') & !inherits(mask, 'SpatRaster')) mask <- terra::rast(mask)
 		inMaskName <- .getInRastName(inMaskName, rast=mask)
-		.checkRastExists(replace=replace, rast=mask, inRastName=inMaskName, outGrassName=NULL)
+		.checkRastExists(replace=replace, rast=mask, inRastName=inMaskName, outGrassName=NULL, ...)
 		rastOrVect <- 'raster'
 	} else if (inherits(mask, c('SpatVector', 'sf'))) {
+		if (!inherits(mask, 'character') & !inherits(mask, 'SpatVector')) mask <- terra::vect(mask)
 		inMaskName <- .getInVectName(inMaskName, vect=mask)
-		.checkVectExists(replace=replace, vect=mask, inVectName=inMaskName, outGrassName=NULL)
+		.checkVectExists(replace=replace, vect=mask, inVectName=inMaskName, outGrassName=NULL, ...)
 		rastOrVect <- 'vector'
 	} else if (inherits(mask, 'character')) {
+	
 		inMaskName <- mask
 		rastOrVect <- .matchRastOrVect(rastOrVect, n=1, naOK=TRUE)
 		if (is.na(rastOrVect)) rastOrVect <- .determineRastOrVect(x=mask, errorNotFound=TRUE, dupsOK=FALSE)
 		if (rastOrVect == 'raster') {
-			.checkRastExists(replace=replace, rast=mask, inRastName=inMaskName, outGrassName=NULL)
+			.checkRastExists(replace=replace, rast=mask, inRastName=inMaskName, outGrassName=NULL, ...)
 		} else if (rastOrVect == 'vector') {
-			.checkVectExists(replace=replace, vect=mask, inVectName=inMaskName, outGrassName=NULL)
+			.checkVectExists(replace=replace, vect=mask, inVectName=inMaskName, outGrassName=NULL, ...)
 		}
 	}
 
@@ -111,7 +118,7 @@ fasterMask <- function(
 	args <- c(args, dots)
 	
 	# initialize GRASS
-	input <- do.call('initGrass', inits)
+	input <- do.call('startFaster', inits)
 	
 	### execute
 	
@@ -157,13 +164,11 @@ fasterMask <- function(
 	### export
 	if (grassToR) {
 
-		out <- fasterWriteRaster(outGrassName, paste0(tempfile(), '.tif'), overwrite=TRUE)
+		out <- fasterWriteRaster(outGrassName, paste0(tempfile(), '.tif'), overwrite=TRUE, trimRast=trimRast)
 		if (removeMask) fasterRm('MASK', rastOrVect = 'raster')
-		if (trim) out <- terra::trim(out)
-		out <- terra::setMinMax(out)
 		out
 		
-	}
+	} else { invisible(TRUE) }
 	
 }
 

@@ -2,11 +2,11 @@
 #'
 #' Report the spatial extent of raster(s) and/or vector(s) in an active \code{GRASS} session.
 #'
-#' @param x Name of raster(s) and/or vector(s) in the active \code{GRASS} session. If nore than one object is named, then the maximum extent that fully encompasses all objects is returned. If missing, then the extent that encompasses all objects is returned.
-#' @param rastOrVect If \code{NULL} (default), then the function will attempt to guess whether \code{x} refers to a raster or vector. However, in \code{GRASS}, it is possible to have a raster and a vector of the same name. This argument helps disambugiate this case.
+#' @param x Name of raster(s) and/or vector(s) in the active \code{GRASS} session. If more than one object is named, then the maximum extent that fully encompasses all objects is returned. If missing, then the extent that encompasses all objects is returned.
+#' @param rastOrVect If \code{NULL} (default), then the function will attempt to guess whether \code{x} refers to a raster or vector. However, in \code{GRASS}, it is possible to have a raster and a vector of the same name. This argument helps disambiguate this case.
 #' @param terra If \code{TRUE}, the object that is returned is an \code{\link[terra]{SpatExtent}} object. If \code{FALSE} (default), then the bounding coordinates are returned as a vector.
 #' @param names If \code{TRUE} (default), then the vector will have named values.
-#' @param ... Other arguments for \code{\link{fasterLs}} like \code{temps} (return tempprary files?).
+#' @param ... Other arguments for \code{\link{fasterLs}} like \code{temps} (return temporary files?).
 #' 
 #' @return A numeric vector or an object of class \code{\link[terra]{SpatExtent}}.
 #'

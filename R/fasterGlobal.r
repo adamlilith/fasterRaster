@@ -1,9 +1,9 @@
 #' Statistics summarizing all values of a raster
 #'
-#' Displays statictics summarizing all values of a.
+#' Displays statistics summarizing all values of a.
 #'
 #' @param rast The name(s) of one or more rasters in the active \code{GRASS} session.
-#' @param fun The function used to summaizr values. This can be any of:
+#' @param fun The function used to summarize values. This can be any of:
 #' \itemize{
 #'	\item \code{'cv'}: Coefficient of variation (expressed as a proportion).
 #'	\item \code{'meanAbs'}: Mean of absolute values.

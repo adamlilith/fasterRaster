@@ -4,9 +4,12 @@
 #'
 #' @inheritParams .sharedArgs_rast
 #' @inheritParams .sharedArgs_inRastName
+#' @inheritParams .sharedArgs_cores
+#' @inheritParams .sharedArgs_memory
 #' @inheritParams .sharedArgs_replace
 #' @inheritParams .sharedArgs_grassDir
 #' @inheritParams .sharedArgs_grassToR
+#' @inheritParams .sharedArgs_trimRast
 #' @inheritParams .sharedArgs_outGrassName
 #' @inheritParams .sharedArgs_dots_forInitGrass_andGrassModule
 #'
@@ -64,11 +67,13 @@ fasterFocal <- function(
 	circle = FALSE,
 	quantile = 0.5,
 
-	cores = 1,
 	outGrassName = 'focalRast',
 
+	cores = fasterGetOptions('cores', 1),
+	memory = fasterGetOptions('memory', 300),
 	replace = fasterGetOptions('replace', FALSE),
 	grassToR = fasterGetOptions('grassToR', TRUE),
+	trimRast = fasterGetOptions('trimRast', TRUE),
 	autoRegion = fasterGetOptions('autoRegion', TRUE),
 	grassDir = fasterGetOptions('grassDir', NULL),
 	...
@@ -95,9 +100,11 @@ fasterFocal <- function(
 	##############
 
 		### arguments
-		if (exists('rast', where=environment(), inherits=FALSE)) {
+		.checkRastExists(replace=replace, rast=NULL, inRastName=NULL, outGrassName=outGrassName, ...)
+		if (!missing(rast)) {
+			if (!inherits(rast, 'character') & !inherits(rast, 'SpatRaster')) rast <- terra::rast(rast)
 			inRastName <- .getInRastName(inRastName, rast=rast)
-			.checkRastExists(replace=replace, rast=rast, inRastName=inRastName, outGrassName=outGrassName)
+			.checkRastExists(replace=replace, rast=rast, inRastName=inRastName, outGrassName=NULL, ...)
 		} else {
 			rast <- inRastName <- NULL
 		}
@@ -131,7 +138,7 @@ fasterFocal <- function(
 	if (!(tolower(fun) %in% c('mean', 'average', 'sd', 'sdpop', 'var', 'varpop', 'median', 'mode', 'max', 'min', 'maximum', 'minimum', 'count', 'range', 'diversity', 'interspersion', 'quantile'))) stop('Argument "fun" is invalid.')
 	
 	### initialize GRASS
-	input <- do.call('initGrass', inits)
+	input <- do.call('startFaster', inits)
 
 	### function-specific
 
@@ -156,6 +163,7 @@ fasterFocal <- function(
 		method = fun,
 		size = size,
 		nprocs = cores,
+		memory = memory,
 		flags = flags
 	)
 	args <- c(args, dots)
@@ -311,10 +319,9 @@ fasterFocal <- function(
 	### export
 	if (grassToR) {
 
-		out <- fasterWriteRaster(outGrassName, paste0(tempfile(), '.tif'), overwrite=TRUE)
-		out <- terra::setMinMax(out)
+		out <- fasterWriteRaster(outGrassName, paste0(tempfile(), '.tif'), overwrite=TRUE, trimRast=trimRast)
 		out
 		
-	}
+	} else { invisible(TRUE) }
 
 }

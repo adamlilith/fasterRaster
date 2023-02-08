@@ -8,8 +8,8 @@
 
 	ver <- read.dcf(file=system.file('DESCRIPTION', package=pkg), fields='Version')
 	packageStartupMessage(paste(pkg, ver))
-	packageStartupMessage('For information on getting started, see ?fasterRaster.')
-	packageStartupMessage('Use fasterHelp() to find equivalent functions in\nfasterRaster, terra, sf, and GRASS.')
+	packageStartupMessage('For information on getting started, see ?tutotial and ?fasterRaster.')
+	packageStartupMessage('Use fasterHelp() to find equivalent functions in fasterRaster, terra,\nsf, and GRASS.')
 	
 }
 

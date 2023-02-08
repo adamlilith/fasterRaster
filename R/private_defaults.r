@@ -7,8 +7,11 @@
 
 # global arguments
 .grassDirDefault <- function() NULL
+.coresDefault <- function() 1
+.memoryDefault <- function() 300 # in MB
 .replaceDefault <- function() FALSE
 .grassToRDefault <- function() TRUE
+.trimRastDefault <- function() TRUE
 .outVectClassDefault <- function() 'SpatVector'
 .autoRegionDefault <- function() TRUE
 .grassVerDefault <- function() '82'

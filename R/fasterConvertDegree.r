@@ -22,6 +22,7 @@ fasterConvertDegree <- function(
 	
 	replace = fasterGetOptions('replace', FALSE),
 	grassToR = fasterGetOptions('grassToR', TRUE),
+	trimRast = fasterGetOptions('trimRast', TRUE),
 	autoRegion = fasterGetOptions('autoRegion', TRUE),
 	grassDir = fasterGetOptions('grassDir', NULL),
 	...
@@ -39,9 +40,11 @@ fasterConvertDegree <- function(
 		##############
 
 			### arguments
-			if (exists('rast', where=environment(), inherits=FALSE)) {
-				inRastName <- .getInRastName(inRastName, rast)
-				.checkRastExists(replace=replace, rast=rast, inRastName=inRastName, outGrassName=outGrassName)
+			.checkRastExists(replace=replace, rast=NULL, inRastName=NULL, outGrassName=outGrassName, ...)
+			if (!missing(rast)) {
+				if (!inherits(rast, 'character') & !inherits(rast, 'SpatRaster')) rast <- terra::rast(rast)
+				inRastName <- .getInRastName(inRastName, rast=rast)
+				.checkRastExists(replace=replace, rast=rast, inRastName=inRastName, outGrassName=NULL, ...)
 			} else {
 				rast <- inRastName <- NULL
 			}
@@ -55,7 +58,7 @@ fasterConvertDegree <- function(
 		### end commons
 			
 		# initialize GRASS
-		input <- do.call('initGrass', inits)
+		input <- do.call('startFaster', inits)
 			
 		### execute
 		ex <- paste0(outGrassName, ' = ((360 - ', inRastName, ') % 360 + 90) % 360')
@@ -74,13 +77,14 @@ fasterConvertDegree <- function(
 		### export
 		if (grassToR) {
 
-			out <- fasterWriteRaster(outGrassName, paste0(tempfile(), '.tif'), overwrite=TRUE)
-			out <- terra::setMinMax(out)
+			out <- fasterWriteRaster(outGrassName, paste0(tempfile(), '.tif'), overwrite=TRUE, trimRast=trimRast)
 			
 		}
 		
 	}
 	
-	if (inherits(rast, c('numeric', 'integer')) | grassToR) out
+	if (inherits(rast, c('numeric', 'integer')) | grassToR) {
+		out
+	} else { invisible(TRUE) }
 	
 }

@@ -4,7 +4,7 @@
 # "warn" arguments to avoid interfering with an existing GRASS session.
 # WHEN YOU ARE DONE WITH THE EXAMPLES, run this line to revert to your
 # active GRASS session:
-# initGrass(location='default') # change "location" if not "default"
+# startFaster(location='default') # change "location" if not "default"
 
 # IMPORTANT: Change this to where GRASS is installed on your system.
 grassDir <- "/Applications/GRASS-8.2.app/Contents/Resources" # Mac
@@ -24,8 +24,8 @@ madCoast4 <- fasterData('madCoast4') # commune outlines
 # get a commune
 madAnt <- madCoast4[madCoast4$NAME_4 == 'Antanambe', ]
 
-### mask with a vector: fasterMask
-##################################
+### mask a rasters with a vector using fasterMask()
+###################################################
 
 # make a mask from a commune
 masked <- fasterMask(madElev, mask=madAnt, grassDir=grassDir,
@@ -39,8 +39,8 @@ plot(madElev, col=grays, legend=FALSE)
 plot(masked, add=TRUE)
 plot(st_geometry(madAnt), add=TRUE)
 
-### mask with a raster: fasterMask
-##################################
+### mask a rasters with a raster using fasterMask()
+###################################################
 
 # make a mask from a raster
 masked <- fasterMask(madElevAnt, mask=madElevMan, grassDir=grassDir,
@@ -61,8 +61,8 @@ plot(madElevAnt, col=reds, legend=FALSE, add=TRUE)
 plot(madElevMan, col=blues, legend=FALSE, add=TRUE)
 plot(masked, add=TRUE)
 
-### create a persistent mask: fasterMask
-########################################
+### create a persistent mask from a raster using fasterMask()
+#############################################################
 
 # create mask from raster
 fasterMask(madElevAnt, mask=madElevMan, removeMask=FALSE,
@@ -74,7 +74,7 @@ fasterLs()
 
 # importing then exporting a raster will crop it
 fasterRast(madForest2000)
-forestMasked <- importFromGrass('madForest2000')
+forestMasked <- rastFromGrass('madForest2000')
 
 plot(madForest2000, col='gray', legend=FALSE)
 plot(forestMasked, col='darkgreen', add=TRUE)
@@ -146,6 +146,6 @@ plot(slope, col=grays, legend=FALSE, add=TRUE)
 
 # Revert back to original GRASS session if needed.
 # Change to your working location if not "default" (it usually is).
-initGrass(location='default')
+startFaster(location='default')
 
 }

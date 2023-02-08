@@ -11,6 +11,7 @@
 .getInRastName <- function(inRastName, rast) {
 
 	if (missing(inRastName)) inRastName <- NULL
+	if (missing(rast)) rast <- NULL
 
 	# not needed
 	if (is.null(rast)) {
@@ -22,7 +23,7 @@
 		if (inherits(rast, 'character')) {
 			n <- length(rast)
 		} else {
-			rast <- terra::rast(rast)
+			if (!inherits(rast, 'SpatRaster')) rast <- terra::rast(rast)
 			n <- terra::nlyr(rast)
 			rastNames <- names(rast)
 		}
@@ -32,14 +33,18 @@
 			# if rast is a character
 			if (inherits(rast, 'character')) {
 				
-				# see if this is a raster file
-				if (file.exists(rast)) {
-					inRastName <- tryCatch(names(terra::rast(rast)), error=function(cond) FALSE)
-					if (is.logical(inRastName)) inRastName <- basename(rast)
-				} else {
-					inRastName <- rast
+				for (i in 1:n) {
+					
+					# see if this is a raster file
+					if (file.exists(rast[i])) {
+						inRastName[i] <- tryCatch(names(terra::rast(rast[i])), error=function(cond) FALSE)
+						if (is.logical(inRastName[i])) inRastName[i] <- basename(rast[i])
+					} else {
+						inRastName[i] <- rast[i]
+					}
+					
 				}
-				
+					
 			# if rast is a raster
 			} else {
 				if (any(is.null(rastNames)) || any(is.na(rastNames)) || any(rastNames == '')) {
@@ -54,7 +59,7 @@
 			}
 		
 		}
-		
+
 		if (length(inRastName) != n) stop('The number of names in "inRastName" is not the same as the number of layers in this raster.')
 		
 	}
@@ -74,6 +79,8 @@
 #'
 #' @keywords internal
 .getInVectName <- function(inVectName, vect) {
+
+	if (missing(vect)) vect <- 'inputVect'
 
 	if (missing(inVectName) || is.null(inVectName)) {
 		if (inherits(vect, 'character')) {

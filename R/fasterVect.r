@@ -4,11 +4,11 @@
 #'
 #' @inheritParams .sharedArgs_replace
 #' @inheritParams .sharedArgs_autoRegion
-#' @param vect A \code{SpatVector} (\pkg{terra} package) or \code{sf} (\pkg{sf} package) spatial vector object.
-#' @param inVectName Name of vector in \code{GRASS}. If \code{NULL} (default), the name will be set to \code{'inputVect'}.
+#' @param vect A single \code{SpatVector} (\pkg{terra} package) or \code{sf} object (\pkg{sf} package) spatial vector object, \emph{or} the file path(s) and name(s) of one or more spatial vectors. To see which formats are supported use \code{\link{fasterWriteVector()}} or see \href{https://grass.osgeo.org/grass82/manuals/v.in.ogr.html}{\code{v.in.ogr}}
+#' @param inVectName Name of vector(s) in \code{GRASS}. If \code{NULL} (default), the name will be set to \code{'inputVect'}.
 #' @param ... Additional arguments (unused).
 #'
-#' @return \code{TRUE} (invisibly, if the vector was successfully exported). The function also exports a vector to a \code{GRASS} session so it can be used by other functions.
+#' @return \code{TRUE} (invisibly, if the vector was successfully exported). The function also exports a vector to the active \code{GRASS} session.
 #'
 #' @seealso \code{\link[rgrass]{write_VECT}} and \code{\link[rgrass]{read_VECT}} in package \pkg{rgrass}
 #'
@@ -27,8 +27,11 @@ fasterVect <- function(
 	##############
 
 		### arguments
+		if (!inherits(vect, 'character') & !inherits(vect, 'SpatVector')) vect <- terra::vect(vect)
 		inVectName <- .getInVectName(inVectName, vect=vect)
-		.checkVectExists(replace=replace, vect=vect, inVectName=inVectName, outGrassName=NULL)
+		if (!replace) {
+			if (any(fasterExists(inVectName))) stop('Vector(s) of the given name(s) already exist in GRASS.\nUse "replace=TRUE" or provide a different name with "inVectName".')
+		}
 
 		### flags
 		flags <- .getFlags(replace=replace)
@@ -40,8 +43,16 @@ fasterVect <- function(
 	###############
 	### end commons
 
-	if (!inherits(vect, 'SpatVector')) vect <- terra::vect(vect)
-	rgrass::write_VECT(vect, vname=inVectName, flags=flags)
+	# export to GRASS
+	if (inherits(vect, 'character')) {
+	
+		for (i in seq_along(vect)) {
+			rgrass::execGRASS('v.in.ogr', input=vect[i], output=inVectName[i], flags=flags, intern=TRUE)
+		}
+	
+	} else {
+		success <- rgrass::write_VECT(vect, vname=inVectName, flags=flags)
+	}
 
 	invisible(TRUE)
 	
