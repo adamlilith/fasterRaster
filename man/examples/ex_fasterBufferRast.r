@@ -17,29 +17,37 @@ library(terra)
 # forest cover raster
 madForest2000 <- fasterData('madForest2000')
 
-# default is to produce output like terra
-defaultBuff <- fasterBufferRast(madForest2000, width=2000, grassDir=grassDir,
+### buffer by distance: default is to produce output like terra
+defaultBuff <- fasterBufferRast(madForest2000, width=1000, grassDir=grassDir,
+outGrassName='terraBuffRast',
 location='examples', restartGrass=TRUE, warn=FALSE) # line for examples only
 
 terraBuff <- buffer(madForest2000, width=2000)
 
 plot(c(terraBuff, defaultBuff))
 
-# GRASS default output
-grassBuff <- fasterBufferRast(madForest2000, width=2000, grassDir=grassDir,
-location='examples', restartGrass=TRUE, warn=FALSE) # line for examples
+### buffer by distance: GRASS default output
+grassBuff <- fasterBufferRast('madForest2000', width=1000, grassDir=grassDir,
+out='GRASS', outGrassName='grassBuffRast')
 
 plot(grassBuff, col=c('gray', 'forestgreen'))
 legend('topright', legend=c('buffered', 'buffer'),
 fill=c('gray', 'forestgreen'))
 
-# just the buffer output
-buffOnly <- fasterBufferRast(madForest2000, width=2000, grassDir=grassDir,
-location='examples', restartGrass=TRUE, warn=FALSE) # line for examples only
+### buffer by distance: just the buffer output
+buffOnly <- fasterBufferRast('madForest2000', width=1000, grassDir=grassDir,
+out='buffer', outGrassName='buffOnlyRast')
 
-plot(buffOnly, col='forestgreen')
+plot(buffOnly, col='gray30')
 legend('topright', legend=c('buffer only'),
-fill='forestgreen')
+fill='gray30')
+
+### buffer by number of cells
+cellBuff <- fasterBufferRast('madForest2000', width=7, units='cells',
+grassDir=grassDir, outGrassName='cellBuffRast', out='buffer')
+
+plot(madForest2000, col='forestgreen')
+plot(cellBuff, col='gray', add=TRUE)
 
 # Revert back to original GRASS session if needed.
 # Change to your working location if not "default" (it usually is).

@@ -17,7 +17,6 @@
 
 	if (length(dots) > 0L) args <- c(args, dots)
 	if (any(names(args) == '...')) args <- args[names(args) != '...']
-	
 	if (any(names(args) == '')) args <- args[names(args) != '']
 	
 	# get values of all arguments, including dots

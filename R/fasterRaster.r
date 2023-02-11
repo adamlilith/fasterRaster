@@ -9,10 +9,10 @@
 #' @section How to get help:
 #' You can type \code{?fasterRaster} to see this page. To look up functions by their \pkg{fasterRaster}, \pkg{terra}, \pkg{sf}, or \code{GRASS} equivalents, you can use \code{\link{fasterHelp}}. Examples:\cr
 #'
-#'		\code{fasterHelp('fasterExt') # lookup fasterRaster function name (default)} \cr
+#'		\code{fasterHelp('fasterExt') # lookup by fasterRaster function name (default)} \cr
 #'		\code{fasterHelp('ext', 'terra') # lookup terra function name} \cr
 #'		\code{fasterHelp('st_bbox', 'sf') # lookup sf function name} \cr
-#'		\code{fasterHelp('g.region', 'GRASS') # lookup GRASS function name} \cr
+#'		\code{fasterHelp('g.region', 'GRASS') # lookup by GRASS module name} \cr
 #'		\code{fasterHelp('g.r', 'GRASS', approx=TRUE) # lookup GRASS function name with fuzzy matching} \cr
 #'		\code{fasterHelp() # list of all functions} \cr
 #'
@@ -26,6 +26,7 @@
 #' 		\code{\link{fasterCropRast}}: Crop a raster to the region of overlap with another raster or vector.\cr
 #' 		\code{\link{fasterDelaunay}}: Delaunay triangulation for points.\cr
 #' 		\code{\link{fasterDim}}: Number of rows and columns of a raster.\cr
+#' 		\code{\link{fasterDistanceRast}}: Distance from cells with \code{NA}s to closest non-\code{NA} cell (or the inverse of this).\cr
 #' 		\code{\link{fasterFocal}}: Calculations on neighboring cells of a raster.\cr
 #' 		\code{\link{fasterFragmentation}}: Landscape fragmentation indices following Riitters et al. (2000 \emph{Conservation Ecology} 4:3; using multi-core).\cr
 #' 		\code{\link{fasterGlobal}}: Statistics summarizing all values of a raster.\cr
@@ -40,7 +41,6 @@
 #' 		\code{\link{fasterNrow}}: Number of rows of a raster.\cr
 #' 		\code{\link{fasterProjectRast}}: Project and resample a raster.\cr
 #' 		\code{\link{fasterQuantile}}: Quantiles of values in a raster.\cr
-#' 		\code{\link{fasterRastDistance}}: Distance from cells with \code{NA}s to closest non-\code{NA} cell (or the inverse of this).\cr
 #' 		\code{\link{fasterRes}}: Spatial resolution of a raster.\cr
 #' 		\code{\link{fasterSun}}: Solar irradiance and radiance.\cr
 #' 		\code{\link{fasterFractalRast}}: Generate a raster with a fractal pattern.\cr

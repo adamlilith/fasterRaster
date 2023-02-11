@@ -173,7 +173,7 @@ startFaster <- function(
 		
 			.setSessionStarted(FALSE)
 
-			if (warn) warning(paste0('The GRASS session with these properties has been restarted:\n* location: ', location, '\n* directory: ', dir, '.\nAll previously existing files have been removed.'), immediate.=TRUE)
+			if (warn) warning(paste0('The GRASS session with these properties has been restarted:\n  * location: ', location, '\n  * directory: ', dir, '.\n  All previously existing files have been removed.'), immediate.=TRUE)
 			
 			rgrass::unset.GIS_LOCK()
 			rgrass::remove_GISRC()

@@ -150,7 +150,7 @@ fasterWriteRaster <- function(
 		} # next raster
 
 		out <- terra::rast(filename[length(filename)])
-		if (trimRast) out <- terra::trim(rast)
+		if (trimRast) out <- terra::trim(out)
 		out <- terra::setMinMax(out)
 		invisible(out)
 		
@@ -162,4 +162,13 @@ fasterWriteRaster <- function(
 #' @title Get raster from 'GRASS'
 #' @rdname fasterWriteRaster
 #' @export
-rastFromGrass <- function(rast) fasterWriteRaster(rast, filename=paste0(tempfile(), '.tif'), overwrite=TRUE, trimRast=fasterGetOptions('trimRast', TRUE))
+rastFromGrass <- function(rast) {
+	out <- fasterWriteRaster(
+		rast,
+		filename=paste0(tempfile(), '.tif'),
+		overwrite=TRUE,
+		trimRast=fasterGetOptions('trimRast', TRUE)
+	)
+	out
+}
+
