@@ -24,11 +24,11 @@ madCoast4 <- fasterData('madCoast4') # commune outlines
 # get a commune
 madAnt <- madCoast4[madCoast4$NAME_4 == 'Antanambe', ]
 
-### mask a rasters with a vector using fasterMask()
+### mask a rasters with a vector using fasterMaskRast()
 ###################################################
 
 # make a mask from a commune
-masked <- fasterMask(madElev, mask=madAnt, grassDir=grassDir,
+masked <- fasterMaskRast(madElev, mask=madAnt, grassDir=grassDir,
 location='examples', restartGrass=TRUE, warn=FALSE) # line for examples only
 
 # plot
@@ -39,11 +39,11 @@ plot(madElev, col=grays, legend=FALSE)
 plot(masked, add=TRUE)
 plot(st_geometry(madAnt), add=TRUE)
 
-### mask a rasters with a raster using fasterMask()
+### mask a rasters with a raster using fasterMaskRast()
 ###################################################
 
 # make a mask from a raster
-masked <- fasterMask(madElevAnt, mask=madElevMan, grassDir=grassDir,
+masked <- fasterMaskRast(madElevAnt, mask=madElevMan, grassDir=grassDir,
 location='examples', restartGrass=TRUE, warn=FALSE) # line for examples only
 
 # plot
@@ -61,11 +61,11 @@ plot(madElevAnt, col=reds, legend=FALSE, add=TRUE)
 plot(madElevMan, col=blues, legend=FALSE, add=TRUE)
 plot(masked, add=TRUE)
 
-### create a persistent mask from a raster using fasterMask()
+### create a persistent mask from a raster using fasterMaskRast()
 #############################################################
 
 # create mask from raster
-fasterMask(madElevAnt, mask=madElevMan, removeMask=FALSE,
+fasterMaskRast(madElevAnt, mask=madElevMan, removeMask=FALSE,
 grassDir=grassDir, grassToR=FALSE,
 location='examples', restartGrass=TRUE, warn=FALSE) # line for examples only
 

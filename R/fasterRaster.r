@@ -20,6 +20,9 @@
 #'
 #' @section Functions that do operations on rasters:
 #' 		\code{\link{fasterApp}}: Apply user-defined function to one or more rasters (using \code{GRASS}; see also \code{fasterFocal}).\cr
+#' 		\code{\link{fasterAsPoints}}: Convert raster to a points vector.\cr
+#' 		\code{\link{fasterAsLines}}: Convert raster to a lines vector.\cr
+#' 		\code{\link{fasterAsPolygons}}: Convert raster to a polygons vector.\cr
 #' 		\code{\link{fasterBufferRast}}: Add buffer to cells in a raster.\cr
 #' 		\code{\link{fasterContour}}: Calculate contour vectors from a raster.\cr
 #' 		\code{\link{fasterConvertDegree}}: Convert degrees from \code{GRASS} format (0 = east, 90 = north) to standard (0 = north, 90 = east).\cr
@@ -34,7 +37,7 @@
 #' 		\code{\link{fasterInfo}}: Information on rasters and/or vectors.\cr
 #' 		\code{\link{fasterLongLatRasts}}: Create rasters with values equal to cell longitude and latitude.\cr
 #' 		\code{\link{fasterMakeMask}}: Create a mask for affecting subsequent raster operations.\cr
-#' 		\code{\link{fasterMask}}: Mask values in a raster using another raster or vector.\cr
+#' 		\code{\link{fasterMaskRast}}: Mask values in a raster using another raster or vector.\cr
 #' 		\code{\link{fasterMosaic}}: Combine rasters that do not perfectly overlap.\cr
 #' 		\code{\link{fasterNcell}}: Number of cells of a raster.\cr
 #' 		\code{\link{fasterNcol}}: Number of columns of a raster.\cr
@@ -47,7 +50,6 @@
 #' 		\code{\link{fasterTerrain}}: Slope, aspect, and curvature.\cr
 #' 		\code{\link{fasterTWI}}: Topographic wetness index.\cr
 #' 		\code{\link{fasterTrimRast}}: Remove all rows and columns of a raster that are entirely NA.\cr
-#' 		\code{\link{fasterVectorize}}: Convert raster to spatial points, lines, or polygons.\cr
 #' 		\code{\link{rastfromGrass}}: Get a rasters from \code{GRASS}.\cr
 
 #' @section Functions that do operations on vectors:

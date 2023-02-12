@@ -27,8 +27,11 @@ fasterRm <- function(
 	
 	# getting all of a type
 	if (missing(x)) stop('Argument "x" cannot be missing.')
+	
+	rmAll <- FALSE
 	if (length(x) == 1L) {
 		if (x == '*') {
+			rmAll <- TRUE
 			x <- fasterLs(rastOrVect=rastOrVect, ...)
 			rastOrVect <- names(x)
 		} else if (x == '*rasters*') {
@@ -64,7 +67,11 @@ fasterRm <- function(
 	} # any to remove
 	
 	# resize region to encompass all
-	numFilesEnd <- length(fasterLs(rastOrVect=rastOrVect, ...))
+	if (!rmAll) {
+		numFilesEnd <- length(fasterLs(rastOrVect=rastOrVect, ...))
+	} else {
+		numFilesEnd <- 0
+	}
 	
 	out <- numFilesStart - numFilesEnd
 	invisible(out)

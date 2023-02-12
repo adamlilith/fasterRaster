@@ -119,30 +119,20 @@ fasterMakeMask <- function(
 	input <- do.call('startFaster', inits)
 	
 	### execute
-	if (autoRegion) regionReshape(inMaskName)
+	if (autoRegion & rastOrVect != 'vector') regionReshape(inMaskName)
 	do.call(rgrass::execGRASS, args=args)
 	
 	# force all cells to 1
 	if (!clip) {
 	
-		fasterApp(
-			rast = 'MASK',
-			inRastName = outGrassName,
-			expression = '= 1',
-			outGrassName = outGrassName,
-			replace = TRUE,
-			grassToR = FALSE,
-			autoRegion = FALSE,
-			grassDir = grassDir
-		)
-		
+		rgrass::execGRASS('r.mapcalc', expression = paste0(outGrassName, ' = 1'), flags=c('quiet', 'overwrite'), intern=TRUE)
+	
 	}
 	
 	### export
 	if (grassToR) {
 
 		out <- fasterWriteRaster(outGrassName, paste0(tempfile(), '.tif'), overwrite=TRUE, trimRast=trimRast)
-		out <- terra::setMinMax(out)
 		out
 		
 	} else { invisible(TRUE) }

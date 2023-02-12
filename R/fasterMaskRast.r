@@ -36,7 +36,7 @@
 #'
 #' @export
 
-fasterMask <- function(
+fasterMaskRast <- function(
 	rast,
 	mask,
 	inRastName,
