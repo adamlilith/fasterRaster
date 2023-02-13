@@ -8,9 +8,9 @@
 #' @param vect The name(s) or one or more spatial vectors in the active \code{GRASS} session.
 #' @param filename Path(s) and file name(s), one per vector named in \code{vect}.
 #' @param overwrite If \code{FALSE} (default), do not save over existing file(s).
-#' @param ... Arguments to send to \href{https://grass.osgeo.org/grass82/manuals/v.out.ogr.html}{\code{v.out.ogr}}. This \code{GRASS} modole includes a \code{format} argument, which explicitly states the file format. Some common formats include:
+#' @param format File format. Some common formats include:
 #' \itemize{
-#'	\item OGC GeoPackage (default... You do not need to specify \code{format} for this format).
+#'	\item \code{'GPKG'} OGC GeoPackage (default).
 #'	\item \code{'CSV'}: Comma-separated value... saves the data table only, not the geometries.
 #'	\item \code{'ESRI_Shapefile'}: ESRI shapefile... \code{filename} should not end in an extension.
 #'	\item \code{'GeoJSON'}: GeoJSON
@@ -18,6 +18,8 @@
 #'	\item \code{'netCDF'}: NetCDF... \code{filename} should not end in an extension.
 #'	\item \code{'XLSX'}: MS Office Open XML spreadsheet
 #' }
+#' See \href{https://grass.osgeo.org/grass82/manuals/v.out.ogr.html}{\code{v.out.ogr}} for more formats.
+#' @param ... Additional arguments to send to \href{https://grass.osgeo.org/grass82/manuals/v.out.ogr.html}{\code{v.out.ogr}}.
 #'
 #' @return Invisibly returns the last vector saved. Importantly, the function also writes one or more files to disk.
 #'
@@ -31,6 +33,7 @@ fasterWriteVector <- function(
 	vect,
 	filename,
 	overwrite = FALSE,
+	format = 'GPKG',
 	outVectClass = fasterGetOptions('outVectClass', 'SpatVector'),
 	...
 ) {
@@ -70,7 +73,9 @@ fasterWriteVector <- function(
 		### general arguments
 		args <- list(...)
 		args$cmd <- 'v.out.ogr'
-		args$flags <- c('quiet', 's')
+		args$flags <- c('quiet', 's', 'm')
+		# args$flags <- c('quiet', 'm')
+		args$ignore.stderr <- TRUE
 		if (overwrite) args$flags <- c(args$flags, 'overwrite')
 
 		# save

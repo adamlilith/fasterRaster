@@ -107,7 +107,7 @@ fasterRasterize <- function(
 		}
 		
 	} else {
-		type <- vectType(vect, temps=TRUE)
+		type <- vectTopo(vect)
 	}
 
 	# if (is.null(burn)) {

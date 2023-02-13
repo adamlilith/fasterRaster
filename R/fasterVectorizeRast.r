@@ -15,13 +15,9 @@
 #'
 #' @param z If \code{TRUE}, then rasters converted to a points vector have their values interpreted as the "z" (up/down) coordinate. This is only valid if \code{vectTopo} is \code{'points'}.
 #'
-#' @param buildTopo If \code{TRUE}, construct the vector topology. If the vector to be created is very large, then setting this to \code{FALSE} can significantly reduce processing time. However, if the vector is to be used for further operations in \code{GRASS}, then this should be \code{TRUE}.
+#' @param buildTopo If \code{TRUE}, construct the vector topology. If the vector to be created is very large, then setting this to \code{FALSE} can significantly reduce processing time. However, if the vector is to be used for further operations in \code{GRASS}, then this should probably be \code{TRUE}. When topology is built, cells that share a border will have that border represented just once in the vector data, but if it is not built, it will be represented twice.
 #'
 #' @param values If \code{TRUE} (default), then create an attribute table for the vector.
-#'
-#' @param categorical If \code{TRUE} (default), then assume that raster values represent cateories, rather than continuous values. This aids dissolving of like-valued lines and polygons into the same feature set, and should probably be \code{TRUE} if \code{dissolve} is also \code{TRUE}.
-#'
-#' @param dissolve Logical. If \code{TRUE} (default) then union all points/lines/polygons with the same value into the same "multipart" polygon. This may or may not be desirable. For example, if the raster is vectorized into a polygons object each cell will become a separate polygon. Using this option will combine cells with the same value (even if they are not spatially adjacent one another).
 #'
 #' @param smooth Logical. If \code{TRUE} then when creating polygons, cell corners will be "rounded" by connecting the midpoints of corner cells (which leaves out the corner-most triangle of that cell). Default is \code{FALSE}.
 #'
@@ -40,7 +36,7 @@ fasterAsPoints <- function(
 	values = TRUE,
 	buildTopo = TRUE,
 	z = FALSE,
-	outGrassName = 'rastToPoints',
+	outGrassName = 'rastToPoint',
 	
 	replace = fasterGetOptions('replace', FALSE),
 	grassToR = fasterGetOptions('grassToR', TRUE),
@@ -98,6 +94,9 @@ fasterAsPoints <- function(
 	if (autoRegion) regionReshape(inRastName)
 	do.call(rgrass::execGRASS, args=args)
 
+	# remove "label" column
+	execGRASS('v.db.dropcolumn', map=outGrassName, columns='label', flags='quiet')
+
 	# get raster back to R
 	if (grassToR) {
 	
@@ -117,10 +116,10 @@ fasterAsLines <- function(
 	rast,
 	inRastName,
 	trunc = TRUE,
-	dissolve = TRUE,
 	values = TRUE,
+	thin = TRUE,
 	buildTopo = TRUE,
-	outGrassName = 'rastToLines',
+	outGrassName = 'rastToLine',
 	
 	replace = fasterGetOptions('replace', FALSE),
 	grassToR = fasterGetOptions('grassToR', TRUE),
@@ -192,16 +191,8 @@ fasterAsLines <- function(
 	if (autoRegion) regionReshape(inRastName)
 	do.call(rgrass::execGRASS, args=args)
 
-	### dissolve?
-	if (dissolve) {
-		rgrass::execGRASS(
-			'v.dissolve',
-			input = outGrassName,
-			output = outGrassName,
-			column = inRastName,
-			flags = c('quiet', 'overwrite')
-		)
-	}
+	# remove "label" column
+	execGRASS('v.db.dropcolumn', map=outGrassName, columns='label', flags='quiet')
 
 	### export
 	if (grassToR) {
@@ -222,9 +213,7 @@ fasterAsPolygons <- function(
 	rast,
 	inRastName,
 	trunc = TRUE,
-	dissolve = TRUE,
 	values = TRUE,
-	categorical = TRUE,
 
 	smooth = FALSE,
 	buildTopo = TRUE,
@@ -268,12 +257,11 @@ fasterAsPolygons <- function(
 	if (!buildTopo) flags <- c(flags, 'b')
 	if (!values) flags <- c(flags, 't')
 	if (smooth) flags <- c(flags, 's')
-	if (categorical) flags <- c(flags, 'v')
 
 	args <- list(
 		cmd = 'r.to.vect',
 		input = NA,
-		output = NA,
+		output = outGrassName,
 		type = 'area',
 		column = inRastName,
 		flags = flags,
@@ -299,38 +287,12 @@ fasterAsPolygons <- function(
 		inRastName
 	}
 
-	undissolvedRast <- if (dissolve) {
-		.makeTempName('dissolveRast')
-	} else {
-		outGrassName
-	}
-	args$output <- undissolvedRast
-
 	### execute
 	if (autoRegion) regionReshape(inRastName)
 	do.call(rgrass::execGRASS, args=args)
-
-	### union same-valued polygons?
-	if (dissolve) {
-		
-		rgrass::execGRASS(
-			'v.dissolve',
-			input = undissolvedRast,
-			output = outGrassName,
-			column = inRastName,
-			flags = c('quiet', 'overwrite')
-		)
-		
-		column <- c('cat', inRastName)
-		
-		# rgrass::execGRASS(
-			# 'v.db.renamecolumn',
-			# map = outGrassName,
-			# column = column,
-			# flags = 'quiet'
-		# )
-		
-	}
+	
+	# remove "label" column
+	execGRASS('v.db.dropcolumn', map=outGrassName, columns='label', flags='quiet')
 
 	### export
 	if (grassToR) {

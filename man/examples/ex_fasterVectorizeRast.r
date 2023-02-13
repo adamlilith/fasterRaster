@@ -20,63 +20,84 @@ library(terra)
 # area of analysis.
 
 ### convert forest raster to points
+###################################
+
 # raster of forest (1 = forest, NA = other)
 madForest2000 <- fasterData('madForest2000')
 
+# start GRASS and import raster
+startFaster(madForest2000,
+location='examples', restartGrass=TRUE, warn=FALSE) # line for examples only
+
+# create MASK raster
 xy <- cbind(
 	x = c(740914, 746774, 746774, 740914),
 	y = c(1072607, 1072607, 1076195, 1076195)
 )
 area <- vect(xy, 'polygon', crs=crs(madForest2000))
 
-# create MASK raster
 fasterMakeMask(area, 'maskVect', grassDir=grassDir, grassToR=FALSE,
-location='examples', restartGrass=TRUE, warn=FALSE) # line for examples only
+location='examples') # line for examples only
 
 # vectorize forest raster to points
-points <- fasterAsPoints(madForest2000, grassDir=grassDir,
+points <- fasterAsPoints('madForest2000', grassDir=grassDir,
 location='examples') # line for examples only
 
-oldpar <- par(mfrow=c(1, 2))
 plot(madForest2000, ext=area, col='forestgreen')
-plot(points, pch='.')
-par(oldpar)
-
-### vectorize elevation map to polygons
-# elevation raster
-madElev <- fasterData('madElev')
-
-# vectorize to polygons
-polys <- fasterAsPolygons(madElev, grassDir=grassDir,
-location='examples') # line for examples only
-
-# make color ramp palette and plot
-polys <- polys[order(polys$cat), ]
-unis <- unique(polys$cat)
-pal <- colorRampPalette(c('white', 'darkgreen'))
-uniqueCols <- pal(length(unis))
-
-rle <- rle(polys$cat)
-col <- character()
-for (i in seq_along(unis)) {
-	col <- c(col, rep(uniqueCols[i], each=rle$length[i]))
-}
-
-oldpar <- par(mfrow=c(1, 2))
-plot(polys, col=col, border=NA)
-plot(madElev, ext=area)
-par(oldpar)
+plot(points, pch='.', col='yellow', add=TRUE)
 
 ### vectorize river raster to lines
+###################################
+
 # NB This is a contrived example, as we start with a rivers vector, then
 # rasterize it to a raster. We then thin the raster to create better lines,
 # and finally vectorize it to lines.
 madRivers <- fasterData('madRivers')
 
-fasterRasterize()!!!!!!!!!!!!
-
-polys <- fasterAsPolygons(madElev, grassDir=grassDir,
+fasterRasterize(madRivers, 'madElev', inVectName='madRivers', grassToR=FALSE,
+outGrassName='riverRast',
 location='examples') # line for examples only
 
+riverPolys <- fasterAsLines('riverRast', grassDir=grassDir,
+location='examples') # line for examples only
+
+plot(riverPolys)
+plot(st_geometry(madRivers), col='red', ext=area, add=TRUE)
+
+### vectorize elevation map to polygons
+#######################################
+
+# elevation raster
+madElev <- fasterData('madElev')
+
+# vectorize forest to polygons
+forestPolys <- fasterAsPolygons('madForest2000', grassDir=grassDir,
+outGrassName='forestPolys',
+location='examples') # line for examples only
+
+plot(madForest2000, ext=area)
+plot(forestPolys, add=TRUE)
+
+# vectorize to polygons
+elevPolys <- fasterAsPolygons('madElev', grassDir=grassDir,
+outGrassName='elevPolys',
+location='examples') # line for examples only
+
+# make color ramp palette and plot
+elevPolys <- elevPolys[order(elevPolys$madElev), ]
+unis <- unique(elevPolys$madElev)
+uniqueCols <- terrain.colors(length(unis), rev=TRUE)
+
+rle <- rle(elevPolys$madElev)
+col <- character()
+for (i in seq_along(unis)) {
+	col <- c(col, rep(uniqueCols[i], each=rle$length[i]))
+}
+
+plot(elevPolys, col=col, border=NA)
+
+# Revert back to original GRASS session if needed.
+# Change to your working location if not "default" (it usually is).
+startFaster(location='default')
 
 }
