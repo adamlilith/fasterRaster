@@ -1,7 +1,7 @@
 Package: fasterRaster
 Type: Package
 Title: Faster raster processing in R using GRASS GIS
-Version: 2.0.0
+Version: 3.0.0
 Date: 2023-02-07
 Authors@R: 
 	c(
@@ -28,9 +28,7 @@ Description: Faster raster and spatial vector processing using 'GRASS GIS' and
 Depends:
 	R (>= 4.0.0)
 Imports:
-	parallel,
-	rlang,
-	rgrass,
+	methods,
 	sf,
 	terra
 Suggests:
