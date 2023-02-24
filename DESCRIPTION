@@ -1,8 +1,8 @@
 Package: fasterRaster
 Type: Package
-Title: Faster raster processing in R using GRASS GIS
+Title: Faster raster and spatial vector processing using 'GRASS GIS'
 Version: 3.0.0
-Date: 2023-02-07
+Date: 2023-02-15
 Authors@R: 
 	c(
 		person(
@@ -14,17 +14,13 @@ Authors@R:
 		)
 	)
 Maintainer: Adam B. Smith <adam.smith@mobot.org>
-Description: Faster raster and spatial vector processing using 'GRASS GIS' and
-	`multi-core	processing. Standard functions include projecting and
-	resampling, rasterizing, cropping, and other usual raster/vector operations.
-	Speciality functions include calculation of landscape (i.e., forest)
-	fragmentation indices (Riitters et al. 2000)<https::https://www.ecologyandsociety.org/vol4/iss2/art3/>,
-	custom focal functions, and generation of fractal landscapes. This package
-	is not a replacement for 'terra' or 'sf', but rather offers support for
-	cases where functions in those packages fail or otherwise are very slow
-	owing to memory requirements. Note that to use many of the functions you
-	must have the stand-alone version (not insalled through the 'OSGeoW4'
-	installer) of 'GRASS GIS' 8.2 or higher.
+Description: Processing of large-in-memory/-on disk rasters and spatial vectors
+    using 'GRASS GIS'. Most functions in 'terra' and 'sf' are recreated
+	identically or near-identically, and can stand in for them when rasters or
+	vectors are extremely large. Processing of medium-sized and smaller spatial
+	objects will nearly always be faster using 'terra' or 'sf'. To use most of
+	the functions you must have the stand-alone version (not the 'OSGeoW4'
+	installer version) of 'GRASS GIS' 8.0 or higher.
 Depends:
 	R (>= 4.0.0)
 Imports:
@@ -32,6 +28,7 @@ Imports:
 	sf,
 	terra
 Suggests:
+Roxygen: list(markdown = TRUE)
 License: GPL (>=3) + file LICENSE
 SystemRequirements: GRASS (>= 8)
 URL: http://www.earthSkySea.org

@@ -19,21 +19,21 @@ NULL
 #' @name .sharedArgs_inRastName
 #' @title Shared argument(s)
 #'
-#' @param inRastName Character, missing, or \code{NULL}. The name of the input raster in \code{GRASS}. If this is missing, the name of the raster or raster file will be used. If \code{NULL}, then "\code{inputRast}" will be used. This argument is useful if you are \link{chaining} \pkg{fasterRaster} functions together and wish to refer to the input raster later in the \code{GRASS} session.
+#' @param inRastName Character, missing, or `NULL`. The name of the input raster in \code{GRASS}. If this is missing, the name of the raster or raster file will be used. If `NULL`, then "\code{inputRast}" will be used. This argument is useful if you are \link{chaining} \pkg{fasterRaster} functions together and wish to refer to the input raster later in the \code{GRASS} session.
 #' @keywords internal
 NULL
 
 #' @name .sharedArgs_inRastName_multiple
 #' @title Shared argument(s)
 #'
-#' @param inRastName The name of the input raster(s) in \code{GRASS}. If \code{rast} is a multi-layer raster, then there must be one name per layer. If missing or \code{NULL}, the name(s) of the raster(s) will be used (i.e., \code{names(rast)}). This argument is useful if you are \link{chaining} \pkg{fasterRaster} functions together and wish to refer to the raster(s) later in the \code{GRASS} session.
+#' @param inRastName The name of the input raster(s) in \code{GRASS}. If \code{rast} is a multi-layer raster, then there must be one name per layer. If missing or `NULL`, the name(s) of the raster(s) will be used (i.e., \code{names(rast)}). This argument is useful if you are \link{chaining} \pkg{fasterRaster} functions together and wish to refer to the raster(s) later in the \code{GRASS} session.
 #' @keywords internal
 NULL
 
 #' @name .sharedArgs_inVectName
 #' @title Shared argument(s)
 #'
-#' @param inVectName Character. The name of the input vector in \code{GRASS}. If missing or \code{NULL}, \"code{inputVect}" will be used. This is useful if you are \link{chaining} \pkg{fasterRaster} functions together and wish to refer to the vector later in the \code{GRASS} session.
+#' @param inVectName Character. The name of the input vector in \code{GRASS}. If missing or `NULL`, \"code{inputVect}" will be used. This is useful if you are \link{chaining} \pkg{fasterRaster} functions together and wish to refer to the vector later in the \code{GRASS} session.
 #' @keywords internal
 NULL
 
@@ -54,21 +54,21 @@ NULL
 #' @name .sharedArgs_replace
 #' @title Shared argument(s)
 #'
-#' @param replace Logical or \code{NULL}. If \code{FALSE} or \code{NULL} (default), then attempting to overwrite rasters or vectors already in a \code{GRASS} session will result in an error. You can allow overwriting by changing this to \code{TRUE}, or by setting \code{inRastName}, \code{inVectName}, and/or \code{outGrassName} to values different from rasters or vectors that already exist in the session (not all functions have these arguments). Use \code{\link{fasterLs}} to see existing rasters and vectors.  You can set this for all functions at once using \code{\link{fasterSetOptions}}.
+#' @param replace Logical or `NULL`. If \code{FALSE} or `NULL` (default), then attempting to overwrite rasters or vectors already in a \code{GRASS} session will result in an error. You can allow overwriting by changing this to \code{TRUE}, or by setting \code{inRastName}, \code{inVectName}, and/or \code{outGrassName} to values different from rasters or vectors that already exist in the session (not all functions have these arguments). Use \code{\link{fasterLs}} to see existing rasters and vectors.  You can set this for all functions at once using \code{\link{fasterSetOptions}}.
 #' @keywords internal
 NULL
 
 #' @name .sharedArgs_grassDir
 #' @title Shared argument(s)
 #'
-#' @param grassDir Character or \code{NULL}. Name of the path in which \code{GRASS} is installed. For a Windows system, this might be something like \code{'C:/Program Files/GRASS GIS 8.3'}, for a Mac, like \code{"/Applications/GRASS-8.3.app/Contents/Resources"}, and for Linux like \code{'/usr/local/grass'}. If you are using a lot of \pkg{fasterRaster} functions, you can set this for all functions at once using \code{\link{fasterSetOptions}}. By default, this is \code{NULL}, in which case the install path for \code{GRASS} will be searched for, but if not found, will result in an error (usually the case).
+#' @param grassDir Character or `NULL`. Name of the path in which \code{GRASS} is installed. For a Windows system, this might be something like \code{'C:/Program Files/GRASS GIS 8.3'}, for a Mac, like \code{"/Applications/GRASS-8.3.app/Contents/Resources"}, and for Linux like \code{'/usr/local/grass'}. If you are using a lot of \pkg{fasterRaster} functions, you can set this for all functions at once using \code{\link{fasterSetOptions}}. By default, this is `NULL`, in which case the install path for \code{GRASS} will be searched for, but if not found, will result in an error (usually the case).
 #' @keywords internal
 NULL
 
 #' @name .sharedArgs_grassToR
 #' @title Shared argument(s)
 #'
-#' @param grassToR Logical or \code{NULL}. If \code{TRUE} or \code{NULL} (default) then the output will be returned to \code{R}. If \code{FALSE}, then the output is left in the \code{GRASS} session (with the name given by \code{outGrassName}). You can set this argument for all functions at once using \code{\link{fasterSetOptions}}.
+#' @param grassToR Logical or `NULL`. If \code{TRUE} or `NULL` (default) then the output will be returned to \code{R}. If \code{FALSE}, then the output is left in the \code{GRASS} session (with the name given by \code{outGrassName}). You can set this argument for all functions at once using \code{\link{fasterSetOptions}}.
 #' @keywords internal
 NULL
 
@@ -103,7 +103,7 @@ NULL
 #' @name .sharedArgs_autoRegion
 #' @title Shared argument(s)
 #'
-#' @param autoRegion Logical or \code{NULL}. If \code{TRUE} or \code{NULL} (default), then during execution of this function, the \code{GRASS} \link{region} will be resized to encompass the raster/vector/area of interest, and if relevant, resampled to match its spatial resolution. If \code{FALSE}, the the current region's extent and resolution will be used. Most users will want to keep this \code{TRUE} or \code{NULL} (same as \code{TRUE}). If you change this to \code{FALSE}, you will need to keep track of the \code{GRASS} \link{region} properties. This argument can be set for all functions at once using \code{\link{fasterSetOptions}}.
+#' @param autoRegion Logical or `NULL`. If \code{TRUE} or `NULL` (default), then during execution of this function, the \code{GRASS} \link{region} will be resized to encompass the raster/vector/area of interest, and if relevant, resampled to match its spatial resolution. If \code{FALSE}, the the current region's extent and resolution will be used. Most users will want to keep this \code{TRUE} or `NULL` (same as \code{TRUE}). If you change this to \code{FALSE}, you will need to keep track of the \code{GRASS} \link{region} properties. This argument can be set for all functions at once using \code{\link{fasterSetOptions}}.
 #' @keywords internal
 NULL
 
