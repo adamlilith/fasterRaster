@@ -1,18 +1,18 @@
 #' Set or get options shared across 'fasterRaster' functions
 #'
-#' @description These functions allows you to either 1) view or 2) define options shared by **fasterRaster** functions. You can view the current value for a particular option or for all options using:
-#' ```{r}
+#' These functions allows you to either 1) view or 2) define options shared by **fasterRaster** functions. You can view the current value for a particular option or for all options using:
+#' ```
 #' getFastOptions('grassDir')
 #' getFastOptions('rastClass')
 #' getFastOptions() # all options
 #' ```
 #' and all default values using
-#' ```{r}
+#' ```
 #' getFastOptions('rastClass', default = TRUE)
 #' getFastOptions(default = TRUE) # all options
 #' ```
 #' You can set options using forms like:
-#' ```{r}
+#' ```
 #' setFastOptions(grassDir = 'C:/Program Files/GRASS GIS 8.3')
 #' getFastOptions(rastClass = 'stars')
 #' getFastOptions(vectClass = 'sf')
@@ -38,7 +38,7 @@
 #' * `memory` (integer/numeric): The amount of memory to allocate to a task, in MB. The default is 300 MB. Only some **GRASS** modules allow this option.
 #'
 #' * `showDetails (logical): If \code{TRUE}, show details on run-time and otherwise hidden slots in classes. This is mainly used for debugging, so most users will want to keep this at its default, `FALSE`.
-#' 
+#'
 #' * `grassVer` (character): The [fasterHelp()] function supplies links to help pages for **GRASS** modules, but these links are version-dependent. You can change the version of **GRASS** you are using with this function, and thus avoid having to define it every time you use a link from [fasterHelp()]. This should be the version number of your **GRASS** installation, as a character (not numeric). The decimal is ignored. Valid examples: `'8.0'` or `'80'`.
 #'
 #' @param restore If `TRUE`, the all options will be reset to their default values. The default is `FALSE`.
@@ -146,9 +146,9 @@ setFastOptions <- function(
 				}
 				eval(str2expression(ex))
 			}
-			
+
 		}
-			
+
 
 	} else {
 		warning('Cannot set an option and use restore = TRUE at the same time.\n  No options have been changed.')
@@ -263,9 +263,9 @@ getFastOptions <- function(..., default=FALSE) {
 				}
 				eval(str2expression(ex))
 			}
-			
+
 		}
-			
+
 
 	} else {
 		warning('Cannot set an option and use restore = TRUE at the same time.\n  No options have been changed.')

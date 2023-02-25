@@ -26,6 +26,7 @@ Depends:
 Imports:
 	methods,
 	sf,
+	stars,
 	terra
 Suggests:
 Roxygen: list(markdown = TRUE)

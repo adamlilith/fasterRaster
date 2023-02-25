@@ -11,7 +11,7 @@
 #' * A `SpatRaster`, `SpatVector`, `SpatExtent`, `stars` or `sf` object
 #' * A CRS (coordinate reference system) string
 #'
-#' @param workDir Character: The name of the folder in which **GRASS** will store rasters and vectors. Nearly all users will want to use the [tempdir()] on their system (the default), but this is provided here as an option for cases where a putting these files on a seperate drive may be useful.
+#' @param workDir `NULL` or character: The name of the folder in which **GRASS** will store rasters and vectors. If this is `NULL` (default), then the [tempdir()] on the user's system will be used. If users wish to create persistent **GRASS** sesssions that can be used in a different instance of **R** (i.e., if **R** is stopped then restarted), then this needs to be specified.
 #'
 #' @param ... Options to send to [setFastOptions()]. These should be in `option = value` format.
 #'
@@ -26,7 +26,7 @@
 startFast <- function(
 	grassDir,
 	crs,
-	workDir = rightSlash(tempdir()),
+	workDir = NULL,
 	...
 ) {
 
@@ -35,27 +35,64 @@ startFast <- function(
 
 		grassDir <- 'C:/Program Files/GRASS GIS 8.2' # Windows
 		dots <- list()
+		workDir <- NULL
+		crs <- madRivers
 	
 	}
 
 	### function globals
 	dots <- list(...)
+	if (is.null(workDir)) workDir <- rightSlash(tempdir())
+	dir.create(workDir, showWarnings=FALSE, recursive=TRUE)
 
-	started <- .isGrassStarted()
-	
-	### start new GRASS session
-	if (!started) {
+	### CRS
+	crs <- if (inherits(crs, c('SpatRaster', 'SpatVector', 'SpatExtent'))) {
+		terra::crs(crs)
+	} else if (inherits(crs, 'sf')) {
+		sf::st_crs(crs)
+	} else if (inherits(crs, 'stars')) {
+		stars::st_crs(crs)
+	} # else, we assume crs is a string
 
-		mapset <- .getHiddenOptions('mapset', default=TRUE)
-		location <- .getHiddenOptions('location', default=TRUE)
+	### do we need a new GRASS session or to swicth the location/working directory?
 
-		if (inherits(crs, c('SpatRaster', 'SpatVector', 'SpatExtent'))) {
-			crs <- terra::crs(crs)
-		} else if (inherits(crs, 'sf')) {
-			crs <- sf::st_crs(crs)
-		} else if (inherits(crs, 'stars')) {
-			crs <- stars::st_crs(crs)
+	mapset <- .getHiddenOptions('mapset', default=TRUE)
+	location <- .getHiddenOptions('location', default=TRUE)
+	currentWorkDir <- .getHiddenOptions('workDir', default=TRUE)
+
+	# # have we started yet?
+	# if (!.isGrassStarted()) {
+		# start <- TRUE
+		
+	# # is working directory the same?
+	# } else {
+		
+		FRfile <- file.path(workDir, location, mapset, '.fasterRaster.rds')
+		
+		# working directory has .fasterRaster file
+		if (file.exists(FRfile)) {
+			existingFR <- readRDS(FRfile)
+			if (get('location', existingFR) != location) {
+				# different location
+				start <- TRUE
+			} else if (get('crs', existingFR) != crs) {
+				# different CRS
+				start <- FALSE
+			} else {
+				# same CRS
+				start <- TRUE
+			}
+		} else {
+			# no existing .fasterRaster file in proposed workinng directory
+			start <- TRUE
 		}
+	# different working directory
+	# }
+			
+	### start new GRASS session
+	# if (!started | newLoc | newWorkDir) {
+	if (start) {
+
 		emptyRast <- terra::rast(matrix(1), type='xy', crs=crs)
 
 		### start the GRASS session
@@ -66,82 +103,47 @@ startFast <- function(
 				SG = emptyRast,
 				location = location,
 				mapset = mapset,
-				override = TRUE,
+				override = TRUE, # must be TRUE to restart, even in different location/mapset
 				remove_GISRC = TRUE, # ???
 				ignore.stderr = TRUE
 			)
 		)
 		
 		### create environment and set options
-		.fasterRaster <<- new.env()
-		opts <- .namesOfOptions()
+		# .fasterRaster <<- new.env()
+		# opts <- .namesOfOptions()
 		
-		setFastOptions(restore=TRUE)
+		# setFastOptions(restore=TRUE)
 		setFastOptions(grassDir=grassDir)
 		if (length(dots) > 0L) setFastOptions(...)
 		.setHiddenOptions(workDir=workDir)
+		.setHiddenOptions(crs=crs)
 		
-		.grassIsStarted()
-		
-		local({
-		
-			locTable <- data.frame(
-				location = location,
-				mapset = mapset,
-				crs = crs
-			)
-		
-		}, envir=.fasterRaster)
-		
-		# ### environment variables
-		# local({
-			
-			# grassStarted <- TRUE
+		# .grassIsStarted()
 
-			# # crosswalk table
-			# # holds name in R and in GRASS and other metadata
-			# # GRASS name is usually hidden to user
-			# xtable <- data.frame(matrix(nrow=0, ncol=20))
-			# names(xtable) <- c(
-				# 'type',
-				# 'source'
-				# 'rname',
-				# 'gname',
-				# 'topology',
-				# 'west',
-				# 'east',
-				# 'south',
-				# 'north',
-				# 'bottom',
-				# 'top',
-				# 'rows',
-				# 'cols',
-				# 'ewres',
-				# 'nsres',
-				# 'grassDatatype',
-				# 'terraDatatype',
-				# 'gdalDatatype',
-				# 'numCategories',
-				# 'minVal',
-				# 'maxVal'
+		# local({
+
+			# locMapCrs <- GLocation(
+				# location = location,	# GRASS location
+				# mapset = mapset,		# GRASS MAPSET
+				# crs = crs				# coordinate reference system
 			# )
+			
+			# }, envir=.fasterRaster
+		# )
 		
-		# }, envir=.fasterRaster)
-		
-		out <- GLocation(
-			location = location,
-			mapset = mapset,
-			crs = crs
-		)
+		envSave <- get('.fasterRaster', globalenv())
+		FRfile <- file.path(workDir, location, mapset, '.fasterRaster.rds')
+		saveRDS(envSave, file=FRfile)
 		
 	### if already started GRASS
 	} else {
 	
 		warning('GRASS has already been initialized. If you want to change options\n  in the existing session, use setFastOptions(). No action taken.')
-		out <- FALSE
+		locMapCrs <- FALSE
 		
 	}
 	
-	invisible(out)
+	invisible(locMapCrs)
 
 }

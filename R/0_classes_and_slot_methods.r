@@ -19,6 +19,8 @@
 #'
 #' @return An object of class `GLocation`, `GSpatial`, `GRaster`, or `GVector`.
 #'
+#' @details `GRaster` and `GVector` are the main "working" classes--most user will not need to engage directly with the others. `GSpatial` is contained by `GRaster` and `GVector` and is the general spatial class. It may be extended to include **GRASS** regions later. `GLocation` is the location class and contained by all the rest.
+#'
 #' @export
 
 ### location class and slot methods
@@ -39,19 +41,21 @@
 	)
 
 	# CRS
+	crs.GLocation <- setGeneric(name='crs', def=function(x) { standardGeneric('crs') })
 	setMethod(
 		f='crs',
 		signature='GLocation',
 		definition=function(x) x@crs
 	)
-	
+
 	# CRS
+	st_crs.GLocation <- setGeneric(name='st_crs', def=function(x) { standardGeneric('st_crs') })
 	setMethod(
 		f='st_crs',
 		signature='GLocation',
 		definition=function(x) x@crs
 	)
-	
+
 	# show
 	setMethod(f='show', signature='GLocation',
 		definition = function(object) {
@@ -104,13 +108,13 @@
 		)
 	)
 
-
-	# extent and resolution
+	# extent
+	# if (!isGeneric('ext')) ext.GLocation <- setGeneric(name='ext', def=function(x) { standardGeneric('ext') })
+	setGeneric(name='ext', def=function(x) { standardGeneric('ext') })
 	setMethod(f='ext', signature='GSpatial', definition=function(x) {
 		x <- c(xmin=x@extent[1L], xmax=x@extent[2L], ymin=x@extent[3L], ymax=x@extent[4L])
 		terra::ext(x)
 	})
-	setMethod(f='res', signature='GSpatial', definition=function(x) x@crs)
 
 	# show
 	setMethod(f='show', signature='GSpatial',
@@ -235,33 +239,40 @@
 	)
 
 	# dim
+	# dim.GRaster <- setGeneric(name='dim', def=function(x) { standardGeneric('dim') })
 	setMethod(
 		f='dim',
 		signature='GRaster',
 		definition=function(x) x@dimensions
 	)
-	
+
 	# nlyr
+	# if (!isGeneric('nlyr')) nlyr.GRaster <- setGeneric(name='nlyr', def=function(x) { standardGeneric('nlyr') })
+	if (!isGeneric('nlyr')) setGeneric(name='nlyr', def=function(x) { standardGeneric('nlyr') })
+	# setGeneric(name='nlyr', def=function(x) { standardGeneric('nlyr') })
 	setMethod(
 		f='nlyr',
 		signature='GRaster',
 		definition=function(x) x@dimensions[3L]
 	)
-	
+
 	# res
+	# if (!isGeneric('res')) res.GRaster <- setGeneric(name='res', def=function(x) { standardGeneric('res') })
+	if (!isGeneric('res')) setGeneric(name='res', def=function(x) { standardGeneric('res') })
 	setMethod(
 		f='res',
 		signature='GRaster',
 		definition=function(x) x@resolution
 	)
-	
+
 	# minmax
+	minmax.GRaster <- setGeneric(name='minmax', def=function(x) { standardGeneric('minmax') })
 	setMethod(
 		f='minmax',
 		signature='GRaster',
 		definition=function(x) matrix(c(x@minVal, x@maxVal), nrow=2, byrow=TRUE, dimnames=list(c('min', 'max'), x@rname))
 	)
-	
+
 ### vector class and slot methods
 #################################
 
@@ -287,7 +298,7 @@
 	# show
 	setMethod(f='show', signature='GVector',
 		definition = function(object) {
-		
+
 			digs <- min(3, getOption('digits'))
 			extent <- round(object@extent, digs)
 
@@ -298,7 +309,7 @@
 			if (length(fields) > 5L) {
 				fields <- fields[1L:5L]
 				fields[6L] <- paste0('(and ', nFields - 5L, ' more)')
-				
+
 				fieldClasses <- fieldClasses[1L:5L]
 				fieldClasses[6L] <- '     '
 			}
@@ -307,13 +318,13 @@
 			fieldClasses[fieldClasses == 'character'] <- '<chr>'
 			fieldClasses[fieldClasses == 'integer'] <- '<int>'
 			fieldClasses[fieldClasses == 'numeric'] <- '<num>'
-		
+
 			crs <- object@crs
 			crs <- strsplit(crs, '\n')
 			append <- if (length(crs[[1L]]) > 1L) { ' ...'} else { '' }
 			crs <- crs[[1L]][1L]
 			crs <- paste0(crs, append)
-		
+
 			cat('class       :', paste(class(object), collapse=', '), '\n')
 			cat('topology    :', object@topology, '\n')
 			if (getFastOptions('details')) {
@@ -323,8 +334,8 @@
 			}
 			cat('extent      :', paste(extent, collapse=', '), '(xmin, xmax, ymin, ymax)\n')
 			cat('coord ref.  :', crs, '\n')
-			# cat('fields      :', paste(fields, collapse=', '), '\n') 
-			# cat('type        :', paste(fieldClasses, collapse=', '), '\n') 
+			# cat('fields      :', paste(fields, collapse=', '), '\n')
+			# cat('type        :', paste(fieldClasses, collapse=', '), '\n')
 
 			cat('fields      :', fieldClasses[1L], fields[1L], '\n')
 			if (nFields > 1L){
@@ -332,8 +343,8 @@
 					cat('             ', fieldClasses[i], fields[i], '\n')
 				}
 			}
-			
-			
+
+
 		}
 	)
 
@@ -343,4 +354,10 @@
 			show(x)
 		}
 	)
+
+	bottomtop.GVector <- setGeneric(name='bottomtop', def=function(x) { standardGeneric('bottomtop') })
+	setMethod(f='bottomtop', signature='GVector',
+		definition = function(x) {
+			c(x@bottom, x@top)
+		} )
 

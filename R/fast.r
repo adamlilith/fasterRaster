@@ -20,8 +20,8 @@
 #'
 #' @export
 
-if (!isGeneric('fast')) { setGeneric('fast', function(x, ...) standardGeneric('fast')) }
-# setGeneric('fast', function(x, rastOrVect = NULL, format = NULL) standardGeneric('fast'))
+# if (!isGeneric('fast')) { setGeneric('fast', function(x, ...) standardGeneric('fast')) }
+setGeneric('fast', function(x, rastOrVect = NULL, format = NULL) standardGeneric('fast'))
 
 ### SpatRaster in R
 ###################

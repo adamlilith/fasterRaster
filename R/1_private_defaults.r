@@ -13,6 +13,7 @@
 # global HIDDEN options
 .workDirDefault <- function() rightSlash(tempdir())
 .mapsetDefault <- function() 'PERMANENT'
+.crsDefault <- function() '<NA>'
 .locationDefault <- function() 'default'
 
 # Names or table of PUBLIC options
@@ -58,9 +59,11 @@
 		name = c(
 			'workDir',
 			'mapset',
-			'location'
+			'location',
+			'crs'
 		),
 		type = c(
+			'character',
 			'character',
 			'character',
 			'character'

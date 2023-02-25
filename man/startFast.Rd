@@ -4,17 +4,23 @@
 \alias{startFast}
 \title{Initialize a 'GRASS' session}
 \usage{
-startFast(grassDir, workDir = tempdir(), ...)
+startFast(grassDir, crs, workDir = NULL, ...)
 }
 \arguments{
-\item{grassDir}{Folder in which \strong{GRASS} is installed on your computer. This will look different depending on the operating system and verison of \strong{GRASS} you have installed. Here are some examples:
+\item{grassDir}{Character: Folder in which \strong{GRASS} is installed on your computer. This will look different depending on the operating system and verison of \strong{GRASS} you have installed. Here are some examples:
 \itemize{
 \item Windows: \code{'C:/Program Files/GRASS GIS 8.3'}
 \item Mac OS: \code{"/Applications/GRASS-8.3.app/Contents/Resources"}
 \item Linux: \code{'/usr/local/grass'}
 }}
 
-\item{workDir}{Folder in which \strong{GRASS} rasters and vectors are to be saved. The default is to use \code{\link[=tempdir]{tempdir()}}, which works for most users who will export rasters/vectors they want from the \strong{GRASS} session before quitting \strong{R}.}
+\item{crs}{Any object from which a coordinate reference system (CRS) can be acquired. Ergo, any of:
+\itemize{
+\item A \code{SpatRaster}, \code{SpatVector}, \code{SpatExtent}, \code{stars} or \code{sf} object
+\item A CRS (coordinate reference system) string
+}}
+
+\item{workDir}{\code{NULL} or character: The name of the folder in which \strong{GRASS} will store rasters and vectors. If this is \code{NULL} (default), then the \code{\link[=tempdir]{tempdir()}} on the user's system will be used. If users wish to create persistent \strong{GRASS} sesssions that can be used in a different instance of \strong{R} (i.e., if \strong{R} is stopped then restarted), then this needs to be specified.}
 
 \item{...}{Options to send to \code{\link[=setFastOptions]{setFastOptions()}}. These should be in \code{option = value} format.}
 }
