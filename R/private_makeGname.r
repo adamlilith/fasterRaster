@@ -27,6 +27,7 @@
 
 	fname <- tempfile()
 	fname <- basename(fname)
+	fname <- sub(fname, pattern='file', replacement='')
 	if (n > 1L) fname <- paste0(fname, '_', 1L:n)
 	gname <- if (rname[1L] != '') {
 		paste0(rastOrVect, '_', rname, '_', fname)

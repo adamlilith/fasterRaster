@@ -12,16 +12,10 @@ grassDir <- 'C:/Program Files/GRASS GIS 8.2' # Windows
 grassDir <- '/usr/local/grass' # Linux
 
 # setup
-library(sf)
 library(terra)
 
 # example data
 madElev <- fastData('madElev')
-madElevFile <- system.file('extdata', 'madElev.tif', package='fasterRaster')
-madRivers <- fastData('madRivers')
-madRiversFile <- system.file('extdata/shapes/madCoast.shp',
-     package='fasterRaster')
-
 
 # start GRASS session for examples only
 fastStart(grassDir = grassDir, crs = madElev,
@@ -29,21 +23,18 @@ workDir = rightSlash(tempdir()), location = 'examples') # line only needed for e
 
 # convert a SpatRaster to a GRaster
 me <- fast(madElev)
-me
 
-# create a GRaster directly from a GeoTIFF file
-mef <- fast(madElevFile)
-mef
+# calculate contour lines
+conts <- as.contour(me, nlevels=10)
 
-# convert an sf vector to a GVector
-mr <- fast(madRivers)
-mr
-
-# create a GVector directly from a shapefile
-mrf <- fast(madRiversFile)
-mrf
+plot(madElev)
+plot(conts, add=TRUE)
 
 # Revert back to original GRASS session if needed.
 fastRestore(opts.)
+
+# If you didn't run the very first line in this example, you can probably
+# return to your previous GRASS session using:
+# fastRestore(location='default')
 
 }

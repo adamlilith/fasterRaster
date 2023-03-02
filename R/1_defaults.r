@@ -1,7 +1,7 @@
 # DEFAULTS FOR ALL GLOBAL SETTINGS
 
 # global PUBLIC options
-.grassDirDefault <- function() NULL
+.grassDirDefault <- function() NA_character_
 .locationDefault <- function() 'default'
 .rastClassDefault <- function() 'SpatRaster'
 .vectClassDefault <- function() 'SpatVector'
@@ -10,10 +10,9 @@
 .memoryDefault <- function() 300 # in MB
 .grassVerDefault <- function() '82'
 
-# global HIDDEN options
 .workDirDefault <- function() rightSlash(tempdir())
 .mapsetDefault <- function() 'PERMANENT'
-.crsDefault <- function() '<NA>'
+.crsDefault <- function() NA_character_
 .locationDefault <- function() 'default'
 
 # Names or table of PUBLIC options
@@ -28,7 +27,12 @@
 			'details',
 			'cores',
 			'memory',
-			'grassVer'
+			'grassVer',
+			'location',
+			'mapset',
+			'workDir',
+			'mapset',
+			'location'
 		),
 		type = c(
 			'character',
@@ -37,6 +41,11 @@
 			'logical',
 			'numeric',
 			'numeric',
+			'character',
+			'character',
+			'character',
+			'character',
+			'character',
 			'character'
 		)
 	)
@@ -51,31 +60,31 @@
 	
 }
 
-#' Names or table HIDDEN of options
-#' @param type NULL (show all names), OR 'numeric', 'logical', or 'character', OR 'table' (show table)
-.namesOfHiddenOptions <- function(type= NULL) {
+# #' Names or table HIDDEN of options
+# #' @param type NULL (show all names), OR 'numeric', 'logical', or 'character', OR 'table' (show table)
+# .namesOfHiddenOptions <- function(type= NULL) {
 	
-	opts <- data.frame(
-		name = c(
-			'workDir',
-			'mapset',
-			'location',
-			'crs'
-		),
-		type = c(
-			'character',
-			'character',
-			'character',
-			'character'
-		)
-	)
+	# opts <- data.frame(
+		# name = c(
+			# # 'workDir',
+			# 'mapset',
+			# 'location',
+			# 'crs'
+		# ),
+		# type = c(
+			# # 'character',
+			# 'character',
+			# 'character',
+			# 'character'
+		# )
+	# )
 		
-	if (is.null(type)) {
-		opts$name
-	} else if (type == 'table') {
-		opts
-	} else {
-		opts$name[opts$type == type]
-	}
+	# if (is.null(type)) {
+		# opts$name
+	# } else if (type == 'table') {
+		# opts
+	# } else {
+		# opts$name[opts$type == type]
+	# }
 	
-}
+# }

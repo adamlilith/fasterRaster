@@ -3,25 +3,23 @@
 #' @description To use a raster or vector in with most **fasterRaster** functions, you need to 1) initiate a **GRASS** session with [startfast()], then either 2a) export one or more rasters or vectors to the session, or 2b) use [readRast()] or [readVect()] to load a raster or vector from disk directly into **GRASS**.  This function allows you to export a raster or vector to a **GRASS** session. **GRASS** supports loading from disk a vareity of [raster](https://grass.osgeo.org/grass82/manuals/r.in.gdal.html) and [vector](https://grass.osgeo.org/grass82/manuals/v.in.ogr.html) formats.
 #'
 #' @param ... One or more of:
-#' * A `SpatRaster` or `stars` raster. Rasters can have one or more layers. They will retain their 'layerdness' in most **fasterRaster** functions.
+#' * A `SpatRaster` or `stars` raster. Rasters can have one or more layers. They will retain their "layerdness" in most **fasterRaster** functions.
 #' * A `SpatVector` or `sf` spatial vector.
-#' * A character vector with the path and filename of one or more rasters or vector to be loaded directly into **GRASS**. The function will attempyt to ascertain the type of object from the file extension (raster or vector), but it can help to indicate which it is using the `rastOrVect` argument if it is unclear.
+#' * A character vector with the path and filename of one or more rasters or vector to be loaded directly into **GRASS**. The function will attempt to ascertain the type of object from the file extension (raster or vector), but it can help to indicate which it is using the `rastOrVect` argument if it is unclear.
 #' Mixing data types is allowed (i.e., you can export rasters and vectors to **GRASS** with one call of this function).
-#' 
-#' @param gname The name of the raster or vector in the **GRASS** session. Depending on how you intend to use **fasterRaster** functions, you may or may not want to use this argument:
-#' * For most cases: The names of rasters an vectors in **GRASS** is assigned automatically, and you do not need to use this argument (i.e., leave it as `NULL`).
-#' * For cases where you intend to use the same `GRASS` project folder in `GRASS` and do not want random-looking names for rasters and vectors: Use this argument to assign a human-friendly name to the raster or vector.
 #' 
 #' @param rastOrVect Either `NULL` (default) or character (`raster` or `vector`). If `...` is a raster or vector, this does not need to be specified. However, if `...` is one or more filenames, then the function will try to ascertain the data type from the file name(s), but sometimes this will fail. In that case, it can help to specify if the file holds a raster or vector. Partial matching is used. If `...` has more than one file name, you can specify one per file name, or just a single value (`raster` or `vector`), in which case it will be assumed that all are of that type.
 #'
-#' @return A **fasterRaster** `GRaster` or `GVector` object. Also exports a raster or vector to the active **GRASS** session.
+#' @seealso [rgrass::read_RAST()] and [rgrass::read_VECT()]; **GRASS** modules [https://grass.osgeo.org/grass82/manuals/r.in.gdal](r.in.gdal) and [https://grass.osgeo.org/grass82/manuals/r.in.gdal](v.in.ogr)
 #'
-#' @example man/ex_fast.r
+#' @return A **fasterRaster** `GRaster` or `GVector`.
+#'
+#' @example man/examples/example_fastStart.r
 #'
 #' @export
 
 # if (!isGeneric('fast')) { setGeneric('fast', function(x, ...) standardGeneric('fast')) }
-setGeneric('fast', function(x, rastOrVect = NULL, format = NULL) standardGeneric('fast'))
+setGeneric('fast', function(x, rastOrVect = NULL) standardGeneric('fast'))
 
 ### SpatRaster in R
 ###################
@@ -30,13 +28,13 @@ setMethod(
 	signature(x = 'SpatRaster'),
 	function(x) {
 
-	### function globals
-	####################
+	### set region
+	##############
 	
-	flags <- c('quiet', 'overwrite')
+	regionReshape(x, warn=FALSE)
 
-	### import raster(s)
-	####################
+	### import raster
+	#################
 
 	gname <- .makeGname(x)
 	rname <- names(x)
@@ -44,11 +42,11 @@ setMethod(
 	nLayers <- as.integer(nLayers)
 	
 	# NB writing first raster in a stack actually writes all of them
-	rgrass::write_RAST(x[[1L]], vname=gname[1L], flags=flags, verbose=FALSE)
+	rgrass::write_RAST(x[[1L]], vname=gname[1L], flags=c('quiet', 'overwrite'), verbose=FALSE)
 	
 	# if multi-layer raster, rasters are imported using the first name plus a '.#' where # is a number, so they need renamed
 	warning('ABS: If raster was part of a stack then subset, all layers are still imported into GRASS.')
-	# if (nLayers > 1L) {
+	if (nLayers > 1L) {
 	
 		baseName <- gname[1L]
 	
@@ -60,7 +58,7 @@ setMethod(
 		
 		}
 		
-	# }
+	}
 
 	info <- .rastInfo(gname)
 	
@@ -157,8 +155,10 @@ setMethod(
 		nLayers <- as.integer(nLayers)
 		rname <- names(rast)
 		gname <- .makeGname(rast, rastOrVect = 'raster')
+		
+		regionReshape(x, warn=FALSE)
 		rgrass::execGRASS('r.in.gdal', input=x, output=gname[1L], flags=flags, intern=TRUE)
-			
+		
 		# if multi-layer raster, rasters are imported using the first name plus a '.#' where # is a number, so they need renamed
 		if (nLayers > 1L) {
 		
@@ -228,6 +228,22 @@ setMethod(
 	'fast',
 	signature(x = 'SpatVector'),
 	function(x) {
+		out <- .fastVector(x)
+		out
+	}
+)
+
+setMethod(
+	'fast',
+	signature(x = 'sf'),
+	function(x) {
+		x <- terra::vect(x)
+		out <- .fastVector(x)
+		out
+	}
+)
+
+.fastVector <- 	function(x) {
 
 	### function globals
 	####################
@@ -261,5 +277,5 @@ setMethod(
 	out
 	
 	} # EOF
-)
+
 

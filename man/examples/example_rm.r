@@ -17,31 +17,25 @@ library(terra)
 
 # example data
 madElev <- fastData('madElev')
-madElevFile <- system.file('extdata', 'madElev.tif', package='fasterRaster')
 madRivers <- fastData('madRivers')
-madRiversFile <- system.file('extdata/shapes/madCoast.shp',
-     package='fasterRaster')
-
 
 # start GRASS session for examples only
 fastStart(grassDir = grassDir, crs = madElev,
 workDir = rightSlash(tempdir()), location = 'examples') # line only needed for examples
 
-# convert a SpatRaster to a GRaster
+# convert a SpatRaster to a GRaster and a SpatVector to a GVector
 me <- fast(madElev)
-me
-
-# create a GRaster directly from a GeoTIFF file
-mef <- fast(madElevFile)
-mef
-
-# convert an sf vector to a GVector
 mr <- fast(madRivers)
-mr
 
-# create a GVector directly from a shapefile
-mrf <- fast(madRiversFile)
-mrf
+# see that these are in GRASS
+fasterRaster:::.ls()
+
+# remove the GRaster and GVector from GRASS
+rm(me, mr)
+
+# NOTE! The `mr` and `me` objects still appear to be in R!
+me
+mr
 
 # Revert back to original GRASS session if needed.
 fastRestore(opts.)

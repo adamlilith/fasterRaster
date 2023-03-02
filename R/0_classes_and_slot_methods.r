@@ -23,8 +23,14 @@
 #'
 #' @export
 
-### location class and slot methods
-###################################
+### CONTENTS ###
+### location class and slot methods ###
+### spatial class and slot methods ###
+### raster class and slot methods ###
+### vector class and slot methods ###
+
+### location class and slot methods ###
+#######################################
 
 	GLocation <- setClass(
 		Class = 'GLocation',
@@ -41,7 +47,7 @@
 	)
 
 	# CRS
-	crs.GLocation <- setGeneric(name='crs', def=function(x) { standardGeneric('crs') })
+	if (!isGeneric('crs')) crs.GLocation <- setGeneric(name='crs', def=function(x) { standardGeneric('crs') })
 	setMethod(
 		f='crs',
 		signature='GLocation',
@@ -49,11 +55,15 @@
 	)
 
 	# CRS
-	st_crs.GLocation <- setGeneric(name='st_crs', def=function(x) { standardGeneric('st_crs') })
+	if (!isGeneric('st_crs')) st_crs.GLocation <- setGeneric(name='st_crs', def=function(x) { standardGeneric('st_crs') })
 	setMethod(
 		f='st_crs',
 		signature='GLocation',
-		definition=function(x) x@crs
+		definition=function(x) {
+			out <- x@crs
+			out <- sf::st_crs(out)
+			out
+		}
 	)
 
 	# show
@@ -73,24 +83,8 @@
 		}
 	)
 
-	# location (hidden)
-	.location.GLocation <- setGeneric(name='.location', def=function(x) { standardGeneric('.location') })
-	setMethod(
-		f='.location',
-		signature='GLocation',
-		definition=function(x) x@location
-	)
-
-	# mapset (hidden)
-	.mapset.GLocation <- setGeneric(name='.mapset', def=function(x) { standardGeneric('.mapset') })
-	setMethod(
-		f='.mapset',
-		signature='GLocation',
-		definition=function(x) x@mapset
-	)
-
-### spatial class and slot methods
-##################################
+### spatial class and slot methods ###
+######################################
 
 	# general class for rasters and vectors (and maybe regions?)
 	GSpatial <- setClass(
@@ -108,14 +102,6 @@
 		)
 	)
 
-	# extent
-	# if (!isGeneric('ext')) ext.GLocation <- setGeneric(name='ext', def=function(x) { standardGeneric('ext') })
-	setGeneric(name='ext', def=function(x) { standardGeneric('ext') })
-	setMethod(f='ext', signature='GSpatial', definition=function(x) {
-		x <- c(xmin=x@extent[1L], xmax=x@extent[2L], ymin=x@extent[3L], ymax=x@extent[4L])
-		terra::ext(x)
-	})
-
 	# show
 	setMethod(f='show', signature='GSpatial',
 		definition = function(object) {
@@ -125,7 +111,7 @@
 
 			cat('class       :', paste(class(object), collapse=', '), '\n')
 			cat('topology    :', object@topology, '\n')
-			if (.getHiddenOptions('details')) {
+			if (getFastOptions('details')) {
 				cat('gname       :', object@gname, '\n')
 				cat('location    :', object@location, '\n')
 				cat('mapset      :', object@mapset, '\n')
@@ -150,17 +136,9 @@
 		definition=function(x) x@gname
 	)
 
-	# topology
-	topology.GSpatial <- setGeneric(name='topology', def=function(x) { standardGeneric('topology') })
-	setMethod(
-		f='topology',
-		signature='GSpatial',
-		definition=function(x) x@topology
-	)
 
-
-### raster class and slot methods
-#################################
+### raster class and slot methods ###
+#####################################
 
 	GRaster <- setClass(
 		'GRaster',
@@ -207,15 +185,13 @@
 			maxVal <- round(object@maxVal, digs)
 
 			crs <- object@crs
-			crs <- strsplit(crs, '\n')
-			append <- if (length(crs[[1L]]) > 1L) { ' ...'} else { '' }
-			crs <- crs[[1L]][1L]
-			crs <- paste0(crs, append)
+			crs <- sf::st_crs(crs)
+			crs <- crs$input
 
 			cat('class       :', paste(class(object), collapse=', '), '\n')
 			cat('topology    :', object@topology, '\n')
 			cat('datatype    :', object@datatypeGRASS, '(GRASS)\n')
-			if (.getHiddenOptions('details')) {
+			if (getFastOptions('details')) {
 				cat('gname       :', object@gname, '\n')
 				cat('location    :', object@location, '\n')
 				cat('mapset      :', object@mapset, '\n')
@@ -238,43 +214,8 @@
 		}
 	)
 
-	# dim
-	# dim.GRaster <- setGeneric(name='dim', def=function(x) { standardGeneric('dim') })
-	setMethod(
-		f='dim',
-		signature='GRaster',
-		definition=function(x) x@dimensions
-	)
-
-	# nlyr
-	# if (!isGeneric('nlyr')) nlyr.GRaster <- setGeneric(name='nlyr', def=function(x) { standardGeneric('nlyr') })
-	if (!isGeneric('nlyr')) setGeneric(name='nlyr', def=function(x) { standardGeneric('nlyr') })
-	# setGeneric(name='nlyr', def=function(x) { standardGeneric('nlyr') })
-	setMethod(
-		f='nlyr',
-		signature='GRaster',
-		definition=function(x) x@dimensions[3L]
-	)
-
-	# res
-	# if (!isGeneric('res')) res.GRaster <- setGeneric(name='res', def=function(x) { standardGeneric('res') })
-	if (!isGeneric('res')) setGeneric(name='res', def=function(x) { standardGeneric('res') })
-	setMethod(
-		f='res',
-		signature='GRaster',
-		definition=function(x) x@resolution
-	)
-
-	# minmax
-	minmax.GRaster <- setGeneric(name='minmax', def=function(x) { standardGeneric('minmax') })
-	setMethod(
-		f='minmax',
-		signature='GRaster',
-		definition=function(x) matrix(c(x@minVal, x@maxVal), nrow=2, byrow=TRUE, dimnames=list(c('min', 'max'), x@rname))
-	)
-
-### vector class and slot methods
-#################################
+### vector class and slot methods ###
+#####################################
 
 	GVector <- setClass(
 		'GVector',
@@ -320,19 +261,19 @@
 			fieldClasses[fieldClasses == 'numeric'] <- '<num>'
 
 			crs <- object@crs
-			crs <- strsplit(crs, '\n')
-			append <- if (length(crs[[1L]]) > 1L) { ' ...'} else { '' }
-			crs <- crs[[1L]][1L]
-			crs <- paste0(crs, append)
+			crs <- sf::st_crs(crs)
+			crs <- crs$input
 
 			cat('class       :', paste(class(object), collapse=', '), '\n')
 			cat('topology    :', object@topology, '\n')
+			cat('geometry    :', object@geometry, '\n')
 			if (getFastOptions('details')) {
 				cat('gname       :', object@gname, '\n')
 				cat('location    :', object@location, '\n')
 				cat('mapset      :', object@mapset, '\n')
 			}
 			cat('extent      :', paste(extent, collapse=', '), '(xmin, xmax, ymin, ymax)\n')
+			cat('vert. ext.  :', paste(object@bottom, object@top, collapse=', '), '(bottom, top)\n')
 			cat('coord ref.  :', crs, '\n')
 			# cat('fields      :', paste(fields, collapse=', '), '\n')
 			# cat('type        :', paste(fieldClasses, collapse=', '), '\n')
@@ -354,10 +295,3 @@
 			show(x)
 		}
 	)
-
-	bottomtop.GVector <- setGeneric(name='bottomtop', def=function(x) { standardGeneric('bottomtop') })
-	setMethod(f='bottomtop', signature='GVector',
-		definition = function(x) {
-			c(x@bottom, x@top)
-		} )
-

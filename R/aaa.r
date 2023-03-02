@@ -4,12 +4,12 @@
 		# packageStartupMessage('Most fasterRaster functions will not work unless you run startFast().')
 	# }
 
-	.fasterRaster <<- new.env()
-	opts <- .namesOfOptions()
+	# # either turn these on here and comment out creation of .fasterRaster in startFast, or ice vers
+	# .fasterRaster <<- new.env()
+	# opts <- .namesOfOptions()
 	
-	setFastOptions(restore=TRUE)
-	.setHiddenOptions(restore=TRUE)
-
+	# setFastOptions(restore=TRUE)
+	# .setHiddenOptions(restore=TRUE)
 
 }
 
