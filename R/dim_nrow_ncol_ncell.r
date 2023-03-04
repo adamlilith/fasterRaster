@@ -27,7 +27,7 @@ setMethod(
 	definition = function(x) x@dimensions[1L]
 )
 
-#' @name ncell
+#' @name ncol
 #' @title Number of columns in a 'GRaster'
 #' @rdname dim
 #' @export
@@ -38,6 +38,17 @@ setMethod(
 	definition = function(x) x@dimensions[2L]
 )
 
+#' @name ndepth
+#' @title Number of depths in a 'GRaster'
+#' @rdname dim
+#' @export
+if (!isGeneric('ndepth')) ncol.GRaster <- setGeneric(name='ndepth', def=function(x) { standardGeneric('ndepth') })
+setMethod(
+	f = 'ndepth',
+	signature = 'GRaster',
+	definition = function(x) x@dimensions[3L]
+)
+
 #' @name ncell
 #' @title Number of cells in a 'GRaster'
 #' @rdname dim
@@ -46,5 +57,5 @@ if (!isGeneric('ncell')) ncell.GRaster <- setGeneric(name='ncell', def=function(
 setMethod(
 	f = 'ncell',
 	signature = 'GRaster',
-	definition = function(x) prod(x@dimensions[1L:2L])
+	definition = function(x) prod(x@dimensions[1L:3L])
 )

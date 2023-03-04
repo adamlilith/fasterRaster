@@ -11,20 +11,24 @@
 #' # Properties of **GRASS** rasters
 #' * [dim()]: Number of rows and columns
 #' * [ext()]: Spatial extent
+#' * [datatype()]: Data type
 #' * [minmax()]: Minimum and maximum values across all non-`NA` cells
 #' * [ncol()]: Number of columns
 #' * [ncell()]: Number of cells
 #' * [nlyr()]: Number of layers
 #' * [nrow()]: Number of rows
 #' * [res()]: Spatial resolution
+#' * [rname()]: Name of the raster in **R**
 #' * [topology()]: Dimensions of raster coordinates (2D or 3D)
 #' * [zExt()]: Vertical extent
 #' 
 #' # Functions that operate on **GRASS** rasters
 #' * [as.contour()]: Contour lines from a `GRaster`
+#' * [c()]: "Stack" two or more `GRaster`s
 #'
 #' # Properties of **GRASS** vectors
 #' * [ext()]: Spatial extent
+#' * [geometry()]: Type of vector (points, lines, polygons)
 #' * [topology()]: Dimensions of vector coordinates (2D or 3D)
 #' * [zExt()]: Vertical extent
 #' 
@@ -43,6 +47,7 @@
 #' 
 #' # General purpose functions
 #' * [compareFloat()]: Compare values accounting for differences due to floating point precision
+#' * [appendLists()]: Append values to elements of a list from another list
 #' * [fastRestore()]: Restore a previous **GRASS** session or switch **GRASS** locations/mapsets.
 #'
 #' # Functions that operate on **GRASS** "regions" (seldom used by most users):

@@ -15,19 +15,18 @@ library(terra)
 
 # example data
 madElev <- fastData('madElev')
+madForest2000 <- fastData('madForest2000')
 
 # start GRASS session for examples only
 fastStart(grassDir = grassDir, crs = madElev,
 workDir = rightSlash(tempdir()), location = 'examples') # line only needed for examples
 
-# convert a SpatRaster to a GRaster
+# convert SpatRasters to GRasters
 me <- fast(madElev)
+for00 <- fast(madForest2000)
 
-# calculate contour lines
-conts <- as.contour(me, nlevels=10)
-
-plot(madElev)
-plot(conts, add=TRUE)
+stack <- c(me, for00)
+stack
 
 # Revert back to original GRASS session if needed.
 fastRestore(opts.)

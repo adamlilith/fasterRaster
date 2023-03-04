@@ -13,5 +13,5 @@ if (!isGeneric('nlyr')) nlyr.GRaster <- setGeneric(name='nlyr', def=function(x) 
 setMethod(
 	f = 'nlyr',
 	signature = 'GRaster',
-	definition = function(x) x@dimensions[3L]
+	definition = function(x) x@dimensions[4L]
 )

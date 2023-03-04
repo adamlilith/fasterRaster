@@ -1,19 +1,11 @@
 #' Change or report the extent and dimensions/resolution of a region
 #'
-#' This function simultaneously changes the extent and dimensions of a **GRASS** "region". This function is used internally and rarely of direct use to most users.
+#' This function simultaneously changes the extent and dimensions of a **GRASS** "region". This function is mostly used internally and rarely of direct use to most users.
 #'
 #' @param x Any of:
-#'	* Missing (default) or `NULL`: Reports the extent, resolution, and dimensions of the current region. All other arguments will be ignored.
-#'	* A `SpatRaster` object: Sets the region's extent and dimensions to those of the raster. Note that this does not export the raster to the **GRASS** session.
-#'	* The name of a raster in the active **GRASS** session: Resizes the extent and dimensions to those of this raster.
-#'	* Values for each of `extent` and *either* `dim` or `res`:
-#'    * `extent`: Longitude and latitude of the new extent with four values listed in this order: western longitude, eastern longitude, southern latitude, northern latitude.
-#'    * `dim`: Two integers representing number of rows and columns, respectively, in the region. The new resolution will be calculated by dividing the extent by the number of rows and columns.
-#'    * `res`: One or two values representing spatial resolution of the region. If one value, it will be used as both the east-west and north-south resolution. If two values, these represent east-west and north-south resolution, respectively. The new dimensions will be calculated by dividing the extent by the resolution. If this is not a whole number, the extent will be increased to accommodate an integer number of rows and columns.
-#'
-#' @param extent,dim,res Extent, dimensions, and resolution of the new region. These need only be specified if the region is to be resized and/or resampled "manually" (i.e., not using a pre-existing raster). In this case, `extent` must always be specified, and either `dim` or `res` must be specified. To change only extent, dimension, or resolution, use [regionExt()], [regionDim()], or [regionRes()].
-#' @param warn If `TRUE` (default), then print a warning if redefining the region resolution also forced a change in extent.
-#' @param ... Other arguments (not used).
+#'	* Missing (default): Reports the extent, resolution, and dimensions of the current region. All other arguments will be ignored.
+#'	* A `GRaster`, `SpatRaster`, or `stars` raster: Sets the region's extent and dimensions to those of the raster.
+#' @param trimTo: A `GRaster` or `NA` (default). If a `GRaster`, then the region will be trimmed to the non-`NA` cells in this raster. `trimTo` can only be non-`NULL` if `x` is a `GRaster`.
 #'
 #' @return Either a list, or `TRUE` (invisibly) if resizing and resampling was successful. Also resizes and resamples the region in the active **GRASS** session.
 #'
@@ -23,84 +15,59 @@
 #'
 #' @export
 
-regionReshape <- function(
-	x,
-	extent = NULL,
-	dim = NULL,
-	res = NULL,
-	warn = TRUE,
-	...
-) {
+regionReshape <- function(x, trimTo = NULL) {
 
-	if (missing(x)) x <- NULL
-
-	if (inherits(x, 'SpatRaster')) {
-
-		extent <- terra::ext(x)@ptr$vector
-		dim <- dim(x)[1L:2L]
-		
-		dimOrRes <- 'dim'
-
-	} else if (inherits(x, 'character'))  {
-		
-		extent <- fasterExt(x, rastOrVect = 'raster', ...)
-		dim <- fasterDim(x, ...)
-		
-		dimOrRes <- 'dim'
-
-	} else if (is.null(x) & inherits(extent, 'numeric') & (inherits(dim, 'numeric') | inherits(res, 'numeric'))) {
+	# just print information about current region
+	if (missing(x)) {
 	
-		if (length(extent) != 4L) stop('Invalid value for argument "extent".')
-		if (!is.null(dim) & !is.null(res)) warning('Both "dim" and "res" have been supplied, but only "dim" will be used.')
+		execGRASS('g.region', flags=c('p', '3', 'u'))
+	
+	} else if (inherits(x, c('SpatRaster', 'stars'))) {
+	
+		if (!is.null(trimTo)) stop('Cannot use <trimTo> if <x> is a SpatRaster.')
+	
+		extent <- terra::ext(x)@ptr$vector
+		dims <- dim(x)
 		
-		if (!is.null(dim)) {
+		w <- as.character(extent[1L])
+		e <- as.character(extent[2L])
+		s <- as.character(extent[3L])
+		n <- as.character(extent[4L])
+	
+		rows <- dims[1L]
+		cols <- dims[2L]
+		
+		execGRASS('g.region', n=n, s=s, e=e, w=w, rows=rows, cols=cols, flags=c('o', 'quiet'))
+	
+	} else if (inherits(x, 'GRaster')) {
+	
+		topo <- topology(x)
+		gname <- .gname(x)
+
+		if (any(topo %in% '2D') & any(topo %in% '3D')) stop('Cannot mix 2D- and 3D-rasters when defining region.')
+
+		if (!is.null(trimTo)) {
+			trimToTopo <- topology(trimTo)
+			if (any(!(topo %in% trimToTopo))) stop('Tropology of <trimTo> does not match topology of <x>.')
 			
-			dimOrRes <- 'dim'
-
-		} else if (!is.null(res)) {
-		
-			if (length(res) == 1L) res <- rep(res, 2L)
-			dimOrRes <- 'res'
-
+			trimTo <- .gname(trimTo)
+			if (length(trimTo) != 1L) stop('Argument <trimTo> can have only one layer.')
 		}
 
-	} else {
-		stop('regionReshape: Invalid arguments.')
+		if (all(topo == '2D') & is.null(trimTo)) {
+			execGRASS('g.region', raster=gname, flags=c('o', 'quiet'))
+		} else if (all(topo == '2D') & !is.null(trimTo)) {
+			execGRASS('g.region', raster=gname, zoom=trimTo, flags=c('o', 'quiet'))
+		} else if (all(topo == '3D') & is.null(trimTo)) {
+			execGRASS('g.region', raster_3d=gname, flags=c('o', 'quiet'))
+		} else if (all(topo == '3D') & !is.null(trimTo)) {
+			execGRASS('g.region', raster_3d=gname, zoom=trimTo, flags=c('o', 'quiet'))
+		} else {
+			stop('Could not reshape region.')
+		}
+	
+		invisible(TRUE)
+	
 	}
-	
-	# reshape
-	w <- as.character(extent[1L])
-	e <- as.character(extent[2L])
-	s <- as.character(extent[3L])
-	n <- as.character(extent[4L])
-	
-	if (dimOrRes == 'dim') {
-
-		rows <- dim[1L]
-		cols <- dim[2L]
-
-		rgrass::execGRASS('g.region', w=w, e=e, s=s, n=n, rows=rows, cols=cols, flags='quiet')
-
-	} else if (dimOrRes == 'res') {
-
-		ewres <- as.character(res[1L])
-		nsres <- as.character(res[2L])
-
-		rgrass::execGRASS('g.region', w=w, e=e, s=s, n=n, ewres=ewres, nsres=nsres, flags='quiet')
-
-	}
-	
-	if (warn) {
-		
-		newExt <- regionExt()
-		if (compareFloat(newExt[1L], extent[1L], '!=') |
-			compareFloat(newExt[2L], extent[2L], '!=') |
-			compareFloat(newExt[3L], extent[3L], '!=') |
-			compareFloat(newExt[4L], extent[4L], '!=')
-		) warning('Extent has been modified to accomodate the new dimensions/resolution.')
-		
-	}
-	
-	invisible(TRUE)
 
 }

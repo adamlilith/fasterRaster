@@ -15,7 +15,7 @@
 #' @slot resolution	Vector of two numeric values: Size of a raster cell in the east-west direction and in the north-south direction.
 #' @slot numCategories Integer: Number of categories. Only >0 for categorical rasters.
 #' @slot minVal,maxVal Numeric: Minimum and maximum value across all cells of a raster.
-#' @slot bottom,top For 3D rasters and vector, this is the lowest and highest elevation.
+#' @slot zbottom,ztop For 3D rasters and vector, this is the lowest and highest elevation.
 #'
 #' @return An object of class `GLocation`, `GSpatial`, `GRaster`, or `GVector`.
 #'
@@ -93,12 +93,16 @@
 		slots = list(
 			gname = 'character',			# name in GRASS
 			topology = 'character',
-			extent = 'numeric'				# extent (4 numerics)
+			extent = 'numeric',				# extent (4 numerics)
+			ztop = 'numeric', 				# top elevation for 3D raster/vector
+			zbottom = 'numeric' 			# bottom elevation for 3D raster/vector
 		),
 		prototype = prototype(
 			gname = NA_character_,
 			topology = NA_character_,
-			extent = c(NA_real_, NA_real_, NA_real_, NA_real_)
+			extent = c(NA_real_, NA_real_, NA_real_, NA_real_),
+			ztop = NA_real_,
+			zbottom = NA_real_
 		)
 	)
 
@@ -128,15 +132,6 @@
 		}
 	)
 
-	# gname (hidden)
-	.gname.GSpatial <- setGeneric(name='.gname', def=function(x) { standardGeneric('.gname') })
-	setMethod(
-		f='.gname',
-		signature='GSpatial',
-		definition=function(x) x@gname
-	)
-
-
 ### raster class and slot methods ###
 #####################################
 
@@ -156,20 +151,19 @@
 			rname = NA_character_,
 			datatypeGRASS = NA_character_,
 			dimensions = c(NA_integer_, NA_integer_, NA_integer_),
-			resolution = c(NA_real_, NA_real_),
+			resolution = c(NA_real_, NA_real_, NA_real_),
 			numCategories = NA_integer_,
 			minVal = NA_real_,
 			maxVal = NA_real_
 		)
 	)
 
-
 	# rname (hidden)
-	.rname.GRaster <- setGeneric(name='.rname', def=function(x) { standardGeneric('.rname') })
+	rname.GRaster <- setGeneric(name='rname', def=function(x) { standardGeneric('rname') })
 	setMethod(
-		f='.rname',
-		signature='GRaster',
-		definition=function(x) x@rname
+		f = 'rname',
+		signature = 'GRaster',
+		definition = function(x) x@rname
 	)
 
 	# show
@@ -196,9 +190,11 @@
 				cat('location    :', object@location, '\n')
 				cat('mapset      :', object@mapset, '\n')
 			}
-			cat('dimensions  :', paste(object@dimensions, collapse=', '), '(nrow, ncol, nlayers)\n')
-			cat('resolution  :', paste(ress, collapse=', '), '(x, y)\n')
+			cat('dimensions  :', paste(object@dimensions, collapse=', '), '(nrow, ncol, depths, nlayers)\n')
+			cat('resolution  :', paste(ress, collapse=', '), '(x, y, z)\n')
 			cat('extent      :', paste(extent, collapse=', '), '(xmin, xmax, ymin, ymax)\n')
+			cat('top ext.    :', object@ztop, '\n')
+			cat('bottom ext. :', object@zbottom, '\n')
 			cat('coord ref.  :', crs, '\n')
 			cat('rname       :', object@rname, '\n')
 			cat('num. categ. :', object@numCategories, '\n')
@@ -222,15 +218,11 @@
 		contains = 'GSpatial',
 		slots = list(
 			geometry = 'character',
-			bottom = 'numeric', # bottom and top elevation for 3D vector
-			top = 'numeric', # bottom and top elevation for 3D vector
 			fields = 'character',
 			fieldClasses = 'character'
 		),
 		prototype = prototype(
 			geometry = NA_character_,
-			bottom = NA_real_,
-			top = NA_real_,
 			fields = NA_character_,
 			fieldClasses = NA_character_
 		)
@@ -273,7 +265,7 @@
 				cat('mapset      :', object@mapset, '\n')
 			}
 			cat('extent      :', paste(extent, collapse=', '), '(xmin, xmax, ymin, ymax)\n')
-			cat('vert. ext.  :', paste(object@bottom, object@top, collapse=', '), '(bottom, top)\n')
+			cat('vert. ext.  :', paste(object@zbottom, object@ztop, collapse=', '), '(bottom, top)\n')
 			cat('coord ref.  :', crs, '\n')
 			# cat('fields      :', paste(fields, collapse=', '), '\n')
 			# cat('type        :', paste(fieldClasses, collapse=', '), '\n')

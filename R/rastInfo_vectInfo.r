@@ -1,6 +1,8 @@
 #' Information on rasters and vectors in 'GRASS'
 #'
-#' Private. Reports extent, dimensions, resolution, bottom/top, etc.
+#' @param gname `GRASS` name for a raster, 3D raster, or vector.
+#'
+#' @return Reports extent, dimensions, resolution, bottom/top, etc.
 #'
 #' @keywords internal
 
@@ -25,50 +27,88 @@
 	### a single gname
 	##################
 
-		suppressMessages(
-			info1 <- rgrass::execGRASS(
-				'r.info',
-				flags = c('g', 'quiet'),
-				map = gname,
-				intern = TRUE,
-				Sys_show.output.on.console = FALSE,
-				echoCmd = FALSE
+		rasters <- .ls(c('rasters', 'rasters3d'))
+		type <- names(rasters[rasters %in% gname])
+
+		### 2D raster
+		if (type == 'raster') {
+
+			suppressMessages(
+				info <- rgrass::execGRASS(
+					'r.info',
+					flags = c('g', 'quiet'),
+					map = gname,
+					intern = TRUE,
+					Sys_show.output.on.console = FALSE,
+					echoCmd = FALSE
+				)
 			)
-		)
 
-		suppressMessages(
-			info2 <- rgrass::execGRASS(
-				'r.univar',
-				flags = c('r'),
-				map = gname,
-				intern = TRUE,
-				Sys_show.output.on.console = FALSE,
-				echoCmd = FALSE
+			suppressMessages(
+				range <- rgrass::execGRASS(
+					'r.info',
+					flags = c('r', 'quiet'),
+					map = gname,
+					intern = TRUE,
+					Sys_show.output.on.console = FALSE,
+					echoCmd = FALSE
+				)
 			)
-		)
+			
+			topology <- '2D'
 
-		suppressMessages(
-			info3 <- rgrass::execGRASS(
-				'r.info',
-				flags = c('s', 'e'),
-				map = gname,
-				intern = TRUE,
-				Sys_show.output.on.console = FALSE,
-				echoCmd = FALSE
+			ztop <- NA_real_
+			zbottom <- NA_real_
+			
+			numCategories <- info[grepl(info, pattern='ncats=')]
+			numCategories <- sub(numCategories, pattern='ncats=', replacement='')
+			numCategories <- as.integer(numCategories)
+
+		### 3D raster
+		} else if (type == 'raster3d') {
+
+			suppressMessages(
+				info <- rgrass::execGRASS(
+					'r3.info',
+					flags = c('g', 'quiet'),
+					map = gname,
+					intern = TRUE,
+					Sys_show.output.on.console = FALSE,
+					echoCmd = FALSE
+				)
 			)
-		)
+		
+			suppressMessages(
+				range <- rgrass::execGRASS(
+					'r3.info',
+					flags = c('r', 'quiet'),
+					map = gname,
+					intern = TRUE,
+					Sys_show.output.on.console = FALSE,
+					echoCmd = FALSE
+				)
+			)
 
-		# topology
-		topology <- info3[grepl(info3, pattern='vdatum=')]
-		topology <- sub(topology, pattern='vdatum=\"', replacement='')
-		topology <- sub(topology, pattern='\"', replacement='')
-		topology <- if (topology == 'none') { '2D' } else { '3D' }
-
+			topology <- '3D'
+		
+			ztop <- info[grepl(info, pattern='top=')]
+			zbottom <- info[grepl(info, pattern='bottom=')]
+			
+			ztop <- sub(ztop, pattern='top=', replacement='')
+			zbottom <- sub(zbottom, pattern='bottom=', replacement='')
+			
+			ztop <- as.numeric(ztop)
+			zbottom <- as.numeric(zbottom)
+			
+			numCategories <- 0L
+			
+		}
+		
 		# extent
-		west <- info1[grepl(info1, pattern='west=')]
-		east <- info1[grepl(info1, pattern='east=')]
-		south <- info1[grepl(info1, pattern='south=')]
-		north <- info1[grepl(info1, pattern='north=')]
+		west <- info[grepl(info, pattern='west=')]
+		east <- info[grepl(info, pattern='east=')]
+		south <- info[grepl(info, pattern='south=')]
+		north <- info[grepl(info, pattern='north=')]
 
 		west <- sub(west, pattern='west=', replacement='')
 		east <- sub(east, pattern='east=', replacement='')
@@ -81,28 +121,37 @@
 		north <- as.numeric(north)
 
 		# dimensions
-		rows <- info1[grepl(info1, pattern='rows=')]
-		cols <- info1[grepl(info1, pattern='cols=')]
+		rows <- info[grepl(info, pattern='rows=')]
+		cols <- info[grepl(info, pattern='cols=')]
+		depths <- info[grepl(info, pattern='depths=')]
 
 		rows <- sub(rows, pattern='rows=', replacement='')
 		cols <- sub(cols, pattern='cols=', replacement='')
+		depths <- sub(depths, pattern='depths=', replacement='')
 		
 		rows <- as.integer(rows)
 		cols <- as.integer(cols)
+		depths <- as.integer(depths)
+		if (length(depths) == 0L) depths <- NA_integer_
 		
 		# resolution
-		ewres <- info1[grepl(info1, pattern='ewres=')]
-		nsres <- info1[grepl(info1, pattern='nsres=')]
+		ewres <- info[grepl(info, pattern='ewres=')]
+		nsres <- info[grepl(info, pattern='nsres=')]
+		tbres <- info[grepl(info, pattern='tbres=')]
 
 		ewres <- sub(ewres, pattern='ewres=', replacement='')
 		nsres <- sub(nsres, pattern='nsres=', replacement='')
+		tbres <- sub(tbres, pattern='tbres=', replacement='')
 		
 		ewres <- as.numeric(ewres)
 		nsres <- as.numeric(nsres)
+		tbres <- as.numeric(tbres)
+		if (length(tbres) == 0L) tbres <- NA_real_
 
 		# data type
-		grassDataType <- info1[grepl(info1, pattern='datatype=')]
+		grassDataType <- info[grepl(info, pattern='datatype=')]
 		grassDataType <- sub(grassDataType, pattern='datatype=', replacement='')
+		grassDataType <- gsub(grassDataType, pattern='"', replacement='')
 		
 		if (grassDataType == 'CELL') {
 			terraDataType <- 'INT4S'
@@ -116,42 +165,45 @@
 		}
 		
 		# number of categories
-		numCategories <- info1[grepl(info1, pattern='ncats=')]
-		numCategories <- sub(numCategories, pattern='ncats=', replacement='')
-		numCategories <- as.integer(numCategories)
+		if (length(numCategories) == 0L) numCategories <- 0L
 
 		# range of values
 		if (numCategories == 0) {
 
-			minVal <- info2[grepl(info2, pattern='minimum: ')]
-			maxVal <- info2[grepl(info2, pattern='maximum: ')]
+			minVal <- range[grepl(range, pattern='min=')]
+			maxVal <- range[grepl(range, pattern='max=')]
 			
-			minVal <- sub(minVal, pattern='minimum: ', replacement='')
-			maxVal <- sub(maxVal, pattern='maximum: ', replacement='')
+			minVal <- sub(minVal, pattern='min=', replacement='')
+			maxVal <- sub(maxVal, pattern='max=', replacement='')
 			
-			minVal <- as.numeric(minVal)
-			maxVal <- as.numeric(maxVal)
+			minVal <- if (minVal == 'NULL') { NA_real_ } else { as.numeric(minVal) }
+			maxVal <- if (maxVal == 'NULL') { NA_real_ } else { as.numeric(maxVal) }
 
 		} else {
-			minVal <- NA
-			maxVal <- NA
+			minVal <- NA_real_
+			maxVal <- NA_real_
 		}
 
 		out <- list(
 			gname = gname,
-			type = 'raster',
+			type = type,
 			topology = topology,
 			
 			west = west,
 			east = east,
 			south = south,
 			north = north,
+			
+			ztop = ztop,
+			zbottom = zbottom,
 		
 			rows = rows,
 			cols = cols,
+			depths = depths,
 		
 			ewres = ewres,
 			nsres = nsres,
+			tbres = tbres,
 			
 			grassDataType = grassDataType,
 			terraDataType = terraDataType,
@@ -169,7 +221,9 @@
 
 }
 
-.vectInfo <- function(gname) {
+.vectInfo <- function(x) {
+
+	gname <- .gname(x)
 
 	# extent
 	suppressMessages(

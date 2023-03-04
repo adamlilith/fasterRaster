@@ -14,14 +14,14 @@
 #' @keywords internal
 
 .ls <- function(
-	rastOrVect = c('rasters', 'vectors')
+	rastOrVect = c('rasters', 'vectors', 'rasters3d')
 ) {
 
-	rov <- c('rasters', 'vectors')
+	rov <- c('rasters', 'vectors', 'rasters3d')
 	if (is.null(rastOrVect)) rastOrVect <- rov
 
 	# find rasters and vector
-	rasts <- vects <- character()
+	rasts <- vects <- rasts3d <- vects3d <- character()
 	match <- pmatch(rastOrVect, rov)
 	
 	# failure to match
@@ -45,7 +45,13 @@
 			vects <- sort(vects)
 		}
 		
-		out <- c(rasts, vects)
+		if (any(match == 3L)) {
+			rasts3d <- rgrass::execGRASS('g.list', flags='quiet', type='raster_3d', intern=TRUE, echoCmd=FALSE)
+			if (length(rasts3d) > 0L) names(rasts3d) <- rep('raster3d', length(rasts3d))
+			rasts3d <- sort(rasts3d)
+		}
+		
+		out <- c(rasts, rasts3d, vects)
 
 	}
 		

@@ -72,7 +72,7 @@ fastRestore <- function(...) {
 }
 
 #' Hidden function to restore location/mapset based on a GLocation object
-.restore(x) {
+.restore <- function(x) {
 
 	xloc <- fastLocation(x)
 	xms <- fastMapset(x)
@@ -80,7 +80,11 @@ fastRestore <- function(...) {
 	loc <- getFastOptions('location')
 	ms <- getFastOptions('mapset')
 	
-	if (loc != xloc | ms != xms) session <- fastRestore(location=xloc, mapset=xms)
+	if (loc != xloc | ms != xms) {
+		session <- fastRestore(location=xloc, mapset=xms)
+	} else {
+		session <- NULL
+	}
 	invisible(session)
 	
 }

@@ -31,7 +31,8 @@ setMethod(
 	### set region
 	##############
 	
-	regionReshape(x, warn=FALSE)
+	.restore(x)
+	regionReshape(x)
 
 	### import raster
 	#################
@@ -58,6 +59,10 @@ setMethod(
 		
 		}
 		
+		groupName <- .makeGname(rastOrVect = 'group')
+		input <- gname
+		rgrass::execGRASS('i.group', group=groupName, input=gname, flags='quiet', intern=TRUE)
+		
 	}
 
 	info <- .rastInfo(gname)
@@ -68,11 +73,13 @@ setMethod(
 		crs = terra::crs(x),
 		gname = gname,
 		rname = rname,
-		extent = c(info[['west']][1L], info[['east']][1L], info[['south']][1L], info[['north']][1L]),
 		topology = info[['topology']][1L],
+		extent = c(info[['west']][1L], info[['east']][1L], info[['south']][1L], info[['north']][1L]),
+		ztop = info[['ztop']],
+		zbottom = info[['zbottom']],
 		datatypeGRASS = info[['grassDataType']],
-		dimensions = c(info[['rows']][1L], info[['cols']][1L], nLayers),
-		resolution = c(info[['ewres']][1L], info[['nsres']][1L]),
+		dimensions = c(info[['rows']][1L], info[['cols']][1L], info[['depths']][1L], nLayers),
+		resolution = c(info[['ewres']][1L], info[['nsres']][1L], info[['tbres']][1L]),
 		numCategories = info[['numCategories']],
 		minVal = info[['minVal']],
 		maxVal = info[['maxVal']]
@@ -179,14 +186,16 @@ setMethod(
 		out <- GRaster(
 			location = getFastOptions('location'),
 			mapset = getFastOptions('mapset'),
-			crs = terra::crs(rast),
+			crs = terra::crs(x),
 			gname = gname,
 			rname = rname,
-			extent = c(info[['west']][1L], info[['east']][1L], info[['south']][1L], info[['north']][1L]),
 			topology = info[['topology']][1L],
+			extent = c(info[['west']][1L], info[['east']][1L], info[['south']][1L], info[['north']][1L]),
+			ztop = info[['ztop']],
+			zbottom = info[['zbottom']],
 			datatypeGRASS = info[['grassDataType']],
-			dimensions = c(info[['rows']][1L], info[['cols']][1L], nLayers),
-			resolution = c(info[['ewres']][1L], info[['nsres']][1L]),
+			dimensions = c(info[['rows']][1L], info[['cols']][1L], info[['depths']][1L], nLayers),
+			resolution = c(info[['ewres']][1L], info[['nsres']][1L], info[['tbres']][1L]),
 			numCategories = info[['numCategories']],
 			minVal = info[['minVal']],
 			maxVal = info[['maxVal']]

@@ -14,7 +14,7 @@ if (!isGeneric('zExt')) zExt.GRaster <- setGeneric(name='zExt', def=function(x) 
 if (!isGeneric('zExt')) zExt.GVector <- setGeneric(name='zExt', def=function(x) { standardGeneric('zExt') })
 
 .zExt <- function(x) {
-	matrix(c(x@bottom, x@top), nrow=2, byrow=TRUE, dimnames=list(c('bottom', 'top'), x@rname))
+	matrix(c(x@z_bottom, x@z_top), nrow=2, byrow=TRUE, dimnames=list(c('z_bottom', 'z_top'), x@rname))
 }
 
 setMethod(f='zExt', signature='GRaster',

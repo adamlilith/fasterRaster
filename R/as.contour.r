@@ -8,7 +8,7 @@
 #'
 #' @export
 
-if (!isGeneric('as.contour')) setGeneric('as.contour', function(x, nlevels, levels) standardGeneric('as.contour'))
+if (!isGeneric('as.contour')) as.contour.GRaster <- setGeneric('as.contour', function(x, nlevels, levels) standardGeneric('as.contour'))
 
 setMethod(
 	'as.contour',
