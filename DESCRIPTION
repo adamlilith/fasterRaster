@@ -1,8 +1,7 @@
 Package: fasterRaster
 Type: Package
-Title: Faster raster and spatial vector processing using 'GRASS GIS'
+Title: Faster Raster and Spatial Vector Processing Using 'GRASS GIS'
 Version: 3.0.0
-Date: 2023-02-15
 Authors@R: 
 	c(
 		person(
@@ -13,14 +12,12 @@ Authors@R:
 			comment = c(ORCID = '0000-0002-6420-1659')
 		)
 	)
-Maintainer: Adam B. Smith <adam.smith@mobot.org>
 Description: Processing of large-in-memory/-on disk rasters and spatial vectors
     using 'GRASS GIS'. Most functions in 'terra' and 'sf' are recreated
-	identically or near-identically, and can stand in for them when rasters or
-	vectors are extremely large. Processing of medium-sized and smaller spatial
-	objects will nearly always be faster using 'terra' or 'sf'. To use most of
-	the functions you must have the stand-alone version (not the 'OSGeoW4'
-	installer version) of 'GRASS GIS' 8.0 or higher.
+	identically or near-identically. Processing of medium-sized and smaller
+	spatial	objects will nearly always be faster using 'terra' or 'sf'. To use
+	most of	the functions you must have the stand-alone version (not the
+	'OSGeoW4' installer version) of 'GRASS GIS' 8.0 or higher.
 Depends:
 	R (>= 4.0.0)
 Imports:
@@ -29,6 +26,7 @@ Imports:
 	stars,
 	terra
 Suggests:
+	knitr
 Roxygen: list(markdown = TRUE)
 License: GPL (>=3) + file LICENSE
 SystemRequirements: GRASS (>= 8)
@@ -38,4 +36,4 @@ VignetteBuilder: knitr
 Encoding: UTF-8
 LazyData: true
 LazyLoad: yes
-RoxygenNote: 7.2.1
+RoxygenNote: 7.2.3

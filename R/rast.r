@@ -1,24 +1,25 @@
-#' Convert a 'GRaster' to a 'SpatRaster' or 'stars' raster
+#' Convert a 'GRaster' to a 'SpatRaster' raster
 #'
-#' Convert a `GRaster` to a `SpatRaster` or `stars` raster. The format of the output can be decided by the `format` argument, or set for all uses of this function with [setFastOptions()].
+#' Convert a `GRaster` to a `SpatRaster`. Note that if you intend to save the raster to disk (and do no other processing on it), it is almost always faster just to use [writeRaster()].
 #'
 #' @param x A `GRaster`.
-#' @param format Either `'SpatRaster'` (default) or `'stars'`.
 #'
-#' @return A `SpatRaster` or a `stars` raster.
+#' @return A `SpatRaster`.
 #'
 #' @example man/examples/example_GRaster.r
 #'
 #' @export
+# if (!isGeneric('rast')) setGeneric(name='rast', def=function(x) standardGeneric('rast'))
 
-# if (!isGeneric('rast')) rast.GRaster <- setGeneric(name='rast', def=function(x) { standardGeneric('rast') })
-
-# setMethod(f = 'rast',
-	# signature='GRaster',
-	# definition = function(x) {
+setMethod(f = 'rast',
+	signature='GRaster',
+	definition = function(x) {
 	
-	# ABS: WRITE RASTER
+	file <- paste0(tempfile(), '.tif')
+	file <- forwardSlash(file)
+	out <- writeRaster(x, filename = file, format = 'GeoTIFF', overwrite = TRUE)
+	out
 	
-	# } # EOF
-# )
+	} # EOF
+)
 

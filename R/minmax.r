@@ -9,9 +9,9 @@
 #' @example man/examples/example_GRaster.r
 #'
 #' @export
-if (!isGeneric('minmax')) minmax.GRaster <- setGeneric(name='minmax', def=function(x) { standardGeneric('minmax') })
+# if (!isGeneric('minmax')) setGeneric(name='minmax', def=function(x) standardGeneric('minmax'))
 setMethod(
 	f = 'minmax',
 	signature = 'GRaster',
-	definition = function(x) matrix(c(x@minVal, x@maxVal), nrow=2, byrow=TRUE, dimnames=list(c('min', 'max'), x@rname))
+	definition = function(x) matrix(c(x@minVal, x@maxVal), nrow=2, byrow=TRUE, dimnames=list(c('min', 'max'), names(x)))
 )

@@ -15,13 +15,8 @@
 #'
 #' @example man/examples/ex_fasterOperations.r
 #'
-#' @keywords internal
-
-if (!isGeneric('.rm')) { rm.GRaster <- setGeneric('.rm', function(...) standardGeneric('.rm')) }
-if (!isGeneric('.rm')) { rm.GVector <- setGeneric('.rm', function(...) standardGeneric('.rm')) }
-if (!isGeneric('.rm')) { rm.character <- setGeneric('.rm', function(...) standardGeneric('.rm')) }
-
-# generic rm() function
+#' @noRd
+setGeneric('.rm', function(...) standardGeneric('.rm'))
 ..rm <- function(...) {
 
 	x <- list(...)

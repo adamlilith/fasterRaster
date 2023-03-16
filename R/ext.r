@@ -7,11 +7,12 @@
 #'
 #' @return A numeric vector.
 #'
-#' @example man/examples/example_slots.r
+#' @examplesIf man/examples/example_slots.r
 #'
 #' @export
 
-if (!isGeneric('ext')) ext.GSpatial <- setGeneric(name='ext', def=function(x, vector) { standardGeneric('ext') })
+if (!isGeneric('ext')) setGeneric(name='ext', def=function(x, vector) standardGeneric('ext'))
+# setGeneric(name='ext', def=function(x, vector) standardGeneric('ext'))
 setMethod(
 	f = 'ext',
 	signature = 'GSpatial',

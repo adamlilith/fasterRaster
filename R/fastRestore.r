@@ -1,14 +1,14 @@
-#' Revert to a previous `GRASS` session
+#' Revert to a previous 'GRASS' session (working folder, location and mapset)
 #'
-#' This function is useful for reverting to a previous **GRASS** session (`workDir`, `location`, and/or `mapset`). The session must have been already initiated using [startFast()].
+#' This function is useful for reverting to a previous **GRASS** session (`workDir`, `location`, and/or `mapset`). The session must have been already initiated using [fastStart()] in the current **R** session or a previous one.
 #'
-#' @param ... Either a sequence of arguments with the pattern `<argument = value>`, or a list of arguments. These arguments can be any option available in [setFastOptions()]. Of particular note, the `workDir`, `location`, and `mapset` options allow one to revert to a previous **GRASS** session. The current session's information can be seen using [getFastOptions()].
+#' @param ... Either a sequence of arguments with the pattern `<argument = value>`, or a list of arguments. These arguments can be any option available in [setFastOptions()]. Of particular note, the `workDir`, `location`, and `mapset` options allow one to revert to a previous **GRASS** session. The current session's `workDir`, `location`, and `mapset` can be seen using [getFastOptions()].
 #'
 #' @return An object of class `gmeta` (invisibly) if successful. An error will likely result if not.
 #'
-#' @seealso **GRASS** [https://grass.osgeo.org/grass82/manuals/grass_database.html](locations and mapsets)
+#' @seealso **GRASS** [locations and mapsets][https://grass.osgeo.org/grass82/manuals/grass_database.html]
 #'
-#' @example man/examples/examples_fastStart.r
+#' @example man/examples/ex_session.r
 #'
 #' @export
 
@@ -28,6 +28,7 @@ fastRestore <- function(...) {
 	} else {
 		getFastOptions('workDir')
 	}
+	workDir <- forwardSlash(workDir)
 
 	location <- if ('location' %in% names(dots)) {
 		dots$location
@@ -48,6 +49,8 @@ fastRestore <- function(...) {
 	}
 	
 	### start new GRASS session
+	file <- file.path(workDir, location, 'crs.rds')
+	crs <- readRDS(file)
 	emptyRast <- terra::rast(matrix(1), type='xy', crs=crs)
 
 	### start the GRASS session
@@ -71,17 +74,17 @@ fastRestore <- function(...) {
 	
 }
 
-#' Hidden function to restore location/mapset based on a GLocation object
+#' Hidden function to restore location/mapset based on a GSession object
 .restore <- function(x) {
 
-	xloc <- fastLocation(x)
-	xms <- fastMapset(x)
+	xloc <- location(x)
+	xms <- mapset(x)
 	
 	loc <- getFastOptions('location')
 	ms <- getFastOptions('mapset')
 	
 	if (loc != xloc | ms != xms) {
-		session <- fastRestore(location=xloc, mapset=xms)
+		session <- sessionRestore(location=xloc, mapset=xms)
 	} else {
 		session <- NULL
 	}

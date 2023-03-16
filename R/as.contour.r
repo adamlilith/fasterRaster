@@ -2,13 +2,13 @@
 #'
 #' Create a spatial vector of contour lines from a raster.
 #'
-#' @seealso [terra::as.contour()]; **GRASS** module \code{\href{https://grass.osgeo.org/grass82/manuals/r.contour.html}{r.contour}}
+#' @seealso [terra::as.contour()]; **GRASS** module [r.contour][https://grass.osgeo.org/grass82/manuals/r.contour.html]
 #'
 #' @example man/examples/example_asContour.r
 #'
 #' @export
 
-if (!isGeneric('as.contour')) as.contour.GRaster <- setGeneric('as.contour', function(x, nlevels, levels) standardGeneric('as.contour'))
+# if (!isGeneric('as.contour')) setGeneric('as.contour', function(x, nlevels, levels) standardGeneric('as.contour'))
 
 setMethod(
 	'as.contour',

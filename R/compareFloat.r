@@ -1,14 +1,6 @@
 #' Compare values accounting for differences due to floating point precision
 #'
-#' This function compares values while accounting for differences in floating point precision. For example, this seems non-sensical:
-#' ```
-#' x <- 0.9 - 0.8
-#' y <- 0.8 - 0.7
-#' x == y # returns FALSE
-#' compareFloat(x = 0.9 - 0.8, y = 0.8 - 0.7, '==') # returns TRUE
-#' ```
-#'
-#' This function is inspired by the **fpCompare** package.
+#' This function compares values while accounting for differences in floating point precision. This function is inspired by the **fpCompare** package.
 #'
 #' @param x,y Numeric
 #' @param op Operator for comparison (must be in quotes): `'<'`, `'>'`, `'<='`, `'>='`, `'=='`, or `'!='`

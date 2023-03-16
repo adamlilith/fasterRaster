@@ -1,6 +1,6 @@
 #' Initialize a 'GRASS' session
 #'
-#' This function initializes a **GRASS** session in a particulatr folder. You need to run this function before you use most functions in **fasterRaster** (just once). You can also use the function to switch your **GRASS** session to a different folder, even if one is already started.
+#' This function initializes a **GRASS** session in a particulatr folder. You need to run this function before you use most functions in **fasterRaster** (just once). You can also use [sessionRestore()] to switch between working folders, [locations, and mapsets][sessions].
 #'
 #' @param crs Any object from which a coordinate reference system (CRS) can be acquired. Ergo, any of:
 #' * A `SpatRaster`, `SpatVector`, `SpatExtent`, `stars` or `sf` object
@@ -24,7 +24,7 @@
 #'
 #' @seealso Guide to getting [started](tutorial_starting) with **fasterRaster**.
 #'
-#' @example man/examples/examples_fastStart.r
+#' @examples man/examples/ex_fastStart.r
 #'
 #' @export
 
@@ -44,26 +44,15 @@ fastStart <- function(
 		dots <- list()
 		workDir <- NULL
 		crs <- madRivers
+		overwrite <- FALSE
 	
 	}
 
 	### function globals
 	dots <- list(...)
-	if (is.null(workDir)) workDir <- rightSlash(tempdir())
+	if (is.null(workDir)) workDir <- getFastOptions('workDir')
+	workDir <- forwardSlash(workDir)
 	dir.create(workDir, showWarnings=FALSE, recursive=TRUE)
-
-	### CRS
-	if (inherits(crs, c('SpatRaster', 'SpatVector', 'SpatExtent'))) {
-		crs <- terra::crs(crs)
-	} else if (inherits(crs, 'sf')) {
-		crs <- sf::st_crs(crs)
-	} else if (inherits(crs, 'stars')) {
-		crs <- stars::st_crs(crs)
-	} # else, we assume crs is a string
-	
-	if (inherits(crs, 'crs')) crs <- unclass(crs)$wkt
-
-	### do we need a new GRASS session or to swicth the location/working directory?
 
 	if (is.null(grassDir)) grassDir <- getFastOptions('grassDir')
 	if (is.na(grassDir)) grassDir <- NULL
@@ -80,6 +69,20 @@ fastStart <- function(
 		dots$location
 	}
 
+	### CRS
+	if (inherits(crs, c('SpatRaster', 'SpatVector', 'SpatExtent'))) {
+		crs <- terra::crs(crs)
+	} else if (inherits(crs, 'sf')) {
+		crs <- sf::st_crs(crs)
+	} else if (inherits(crs, 'stars')) {
+		crs <- stars::st_crs(crs)
+	} # else, we assume crs is a string
+	
+	if (inherits(crs, 'crs')) crs <- unclass(crs)$wkt
+	crsFile <- file.path(workDir, location, 'crs.rds')
+
+	### do we need a new GRASS session or to swicth the location/working directory?
+
 	if (overwrite) {
 	
 		if (warn) warning(paste0('The GRASS session with these properties has been overwritten:\n  * location: ', location, '\n  * mapset: ', mapset, '\n  * workDir: ', workDir, '.\n  All previously existing files have been removed.'), immediate.=TRUE)
@@ -88,20 +91,19 @@ fastStart <- function(
 		rgrass::remove_GISRC()
 		rgrass::unlink_.gislock()
 
-		files <- list.files(file.path(workDir, location), include.dirs = TRUE, full.names = TRUE, recursive = TRUE)
+		files <- list.files(file.path(workDir, location, mapset), include.dirs = TRUE, full.names = TRUE, recursive = TRUE)
 		files <- rev(files)
 		unlink(files, recursive = TRUE)
-		unlink(file.path(workDir, location), recursive = TRUE)
+		unlink(file.path(workDir, location, mapset), recursive = TRUE)
 	
 	}
 		
 	# are we trying to restart same folder, etc. but with a different CRS?
-	crsFile <- file.path(workDir, location, mapset, '.crs.rds')
 	if (!overwrite & length(crsFile) > 0L && file.exists(crsFile)) {
 		existingCrs <- readRDS(crsFile)
 		if (existingCrs != crs) {
 
-			stop('The active GRASS session has a different coordinate reference system.\n  Either use the same CRS or a different location (see ?locations).')
+			stop('The active GRASS session has a different coordinate reference system.\n  Either use the same CRS or a different <location> (see ?locations).')
 
 		}
 	}
@@ -118,7 +120,7 @@ fastStart <- function(
 			location = location,
 			mapset = mapset,
 			override = TRUE, # must be TRUE to restart, even in different location/mapset
-			remove_GISRC = TRUE, # ???
+			remove_GISRC = overwrite, # ???
 			ignore.stderr = TRUE
 		)
 	)

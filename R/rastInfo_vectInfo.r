@@ -6,7 +6,9 @@
 #'
 #' @keywords internal
 
-.rastInfo <- function(gname) {
+.rastInfo <- function(x) {
+
+	gname <- .gname(x)
 
 	### more than one raster
 	#######################
@@ -290,11 +292,6 @@
 		NA
 	}
 
-	# topology (2/3D)
-	topology <- info2[grepl(info2, pattern='map3d=')]
-	topology <- sub(topology, pattern='map3d=', replacement='')
-	topology <- if (topology == '0') { '2D'} else if (topology == '1') { '3D' }
-
 	# extent
 	west <- info1[grepl(info1, pattern='west=')]
 	east <- info1[grepl(info1, pattern='east=')]
@@ -311,15 +308,26 @@
 	south <- as.numeric(south)
 	north <- as.numeric(north)
 
-	# top/bottom
-	bottom <- info1[grepl(info1, pattern='bottom=')]
-	top <- info1[grepl(info1, pattern='top=')]
-	
-	bottom <- sub(bottom, pattern='bottom=', replacement='')
-	top <- sub(bottom, pattern='top=', replacement='')
+	# topology (2/3D)
+	topology <- info2[grepl(info2, pattern='map3d=')]
+	topology <- sub(topology, pattern='map3d=', replacement='')
+	topology <- if (topology == '0') { '2D'} else if (topology == '1') { '3D' }
 
-	bottom <- as.numeric(bottom)
-	top <- as.numeric(top)
+	# top/bottom
+	if (topology == '2D') {
+		ztop <- zbottom <- NA_real_
+	} else {
+		
+		zbottom <- info1[grepl(info1, pattern='bottom=')]
+		ztop <- info1[grepl(info1, pattern='top=')]
+		
+		zbottom <- sub(zbottom, pattern='bottom=', replacement='')
+		ztop <- sub(ztop, pattern='top=', replacement='')
+
+		zbottom <- as.numeric(zbottom)
+		ztop <- as.numeric(ztop)
+		
+	}
 
 	# fields and types
 	info3 <- info3[!grepl(info3, pattern ='INTEGER|cat')]
@@ -352,8 +360,8 @@
 		south = south,
 		north = north,
 	
-		bottom = bottom,
-		top = top,
+		zbottom = zbottom,
+		ztop = ztop,
 		
 		fields = fields,
 		fieldClasses = fieldClasses

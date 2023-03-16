@@ -10,20 +10,19 @@ setFastOptions(..., restore = FALSE)
 getFastOptions(..., default = FALSE)
 }
 \arguments{
-\item{...}{Any \strong{fasterRaster} shared option that can be defined using an \code{option = value} pattern. These include:
+\item{...}{Either a character (the name of an option), or \strong{fasterRaster} option that can be defined using an \code{option = value} pattern. These include:
 \itemize{
-\item \code{grassDir} (character): The folder in which \strong{GRASS} is installed on your computer. By default, this value is \code{NULL}, which causes the function to search for your installation of \strong{GRASS} (and which usually fails). Depending on your operating system, your install directory will look something like this:
+\item \code{cores} (integer/numeric): Number of processor cores to use on a task. The default is 1. Only some \strong{GRASS} modules allow this option.
+\item \code{memory} (integer/numeric): The amount of memory to allocate to a task, in MB. The default is 300 MB. Only some \strong{GRASS} modules allow this option.
+\item \code{details} (logical): If \code{TRUE}, show details on run-time and otherwise hidden slots in classes. This is mainly used for debugging, so most users will want to keep this at its default, \code{FALSE}.
+\item \code{grassVer} (character): The \code{\link[=fasterHelp]{fasterHelp()}} function supplies links to help pages for \strong{GRASS} modules, but these links are version-dependent. You can change the version of \strong{GRASS} you are using with this function, and thus avoid having to define it every time you use a link from \code{\link[=fasterHelp]{fasterHelp()}}. This should be the version number of your \strong{GRASS} installation, as a character (not numeric). The decimal is ignored. Valid examples: \code{'8.0'} or \code{'80'}.
+\item \code{grassDir} (character): The folder in which \strong{GRASS} is installed on your computer. Typically, this option is set when you run \code{\link[=fastStart]{fastStart()}}, but you can define it before you run that function. All subsequent calls of \code{fastStart}() do not need \code{grassDir} set because it will be obtained from the options. By default, \code{grassDir} is \code{NULL}, which causes the function to search for your installation of \strong{GRASS} (and which usually fails). Depending on your operating system, your install directory will look something like this:
 \itemize{
 \item Windows: \code{'C:/Program Files/GRASS GIS 8.3'}
 \item Mac OS: \code{"/Applications/GRASS-8.3.app/Contents/Resources"}
 \item Linux: \code{'/usr/local/grass'}
 }
-\item \code{rastClass} (character): Sets the type of rasters that \strong{fasterRaster} functions generate when they are returned to \strong{R}.  By default, this argument is \code{'SpatRaster'} (from the \strong{terra} package), but it can also be set to \code{'stars'} (from the \strong{stars} package).
-\item \code{vectClass} (character): Sets the type of spatial vectors that \strong{fasterRaster} functions generate when they are returned to \strong{R}. By default, this argument is \code{'SpatVector'} (\strong{terra} package), but can also be \code{'sf'} (\strong{sf} package).
-\item \code{cores} (integer/numeric): Number of processor cores to use on a task. The default is 1. Only some \strong{GRASS} modules allow this option.
-\item \code{memory} (integer/numeric): The amount of memory to allocate to a task, in MB. The default is 300 MB. Only some \strong{GRASS} modules allow this option.
-\item \verb{showDetails (logical): If \code{TRUE}, show details on run-time and otherwise hidden slots in classes. This is mainly used for debugging, so most users will want to keep this at its default, }FALSE`.
-\item \code{grassVer} (character): The \code{\link[=fasterHelp]{fasterHelp()}} function supplies links to help pages for \strong{GRASS} modules, but these links are version-dependent. You can change the version of \strong{GRASS} you are using with this function, and thus avoid having to define it every time you use a link from \code{\link[=fasterHelp]{fasterHelp()}}. This should be the version number of your \strong{GRASS} installation, as a character (not numeric). The decimal is ignored. Valid examples: \code{'8.0'} or \code{'80'}.
+\item \code{workDir} (character): The folder in which \strong{GRASS} rasters, vectors, and other objects are created and manipulated. Typically, this is set when you first call \code{\link[=fastStart]{fastStart()}}. All subsequent calls to \code{fastStart()} will not do not need \code{workDir} defined because it will be obtained from the options. By default, this is set to the temporary directory on your operating system (from \code{\link[=tempdir]{tempdir()}}), appended with "\code{fr}". Ergo, the path will be \code{file.path(tempdir(), 'fr')}.
 }}
 
 \item{restore}{If \code{TRUE}, the all options will be reset to their default values. The default is \code{FALSE}.}
@@ -31,31 +30,28 @@ getFastOptions(..., default = FALSE)
 \item{default}{Supplies the default value of the option(s).}
 }
 \value{
-The \code{getFastOptions} function returns a list of the value of one or more \strong{fasterRaster} settings. The \code{fasterRasterSet} function changes the values of these settings and returns the pre-existing values as a list (invisible--i.e., so you can revert to them if you want).
+If just one option is specified, \code{getFastOptions()} returns a vector with a single value. If more than one option is specified, \code{gastFasterOptions()} returns a named list with values. The \code{setFasterOptions()} function changes the values of these settings and returns the pre-existing values as a list (invisibly--i.e., so you can revert to them if you want).
 }
 \description{
-These functions allows you to either 1) view or 2) define options shared by \strong{fasterRaster} functions. You can view the current value for a particular option or for all options using:
+These functions allows you to either 1) view or 2) define options shared by \strong{fasterRaster} functions. You can view the current option(s) using, for example:
 
-\if{html}{\out{<div class="sourceCode">}}\preformatted{getFastOptions('grassDir')
-getFastOptions('rastClass')
+\if{html}{\out{<div class="sourceCode">}}\preformatted{getFastOptions('cores')
 getFastOptions() # all options
 }\if{html}{\out{</div>}}
 
 and all default values using
 
-\if{html}{\out{<div class="sourceCode">}}\preformatted{getFastOptions('rastClass', default = TRUE)
+\if{html}{\out{<div class="sourceCode">}}\preformatted{getFastOptions('memory', default = TRUE)
 getFastOptions(default = TRUE) # all options
 }\if{html}{\out{</div>}}
 
 You can set options using forms like:
 
 \if{html}{\out{<div class="sourceCode">}}\preformatted{setFastOptions(grassDir = 'C:/Program Files/GRASS GIS 8.3')
-getFastOptions(rastClass = 'stars')
-getFastOptions(vectClass = 'sf')
-getFastOptions(memory = 600)
-getFastOptions(cores = 4)
-getFastOptions(grassVer = '83')
 }\if{html}{\out{</div>}}
 
-You can view or set multiple options at once using either function simply by listing them with a comma between them.
+Multiple options can be set at once using
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{setFastOptions(details = TRUE, memory = 600, cores = 4)
+}\if{html}{\out{</div>}}
 }

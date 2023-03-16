@@ -1,8 +1,13 @@
 ^CONDUCT\.md$
-^\.travis\.yml$
+CODE_OF_CONDUCT.md
+^LICENSE\.md$
 ^README-.*\.png$
+^\.travis\.yml$
 ^cran-comments\.md$
 ^fasterRaster.png
 ^.*\.Rproj$
 ^\.Rproj\.user$
 ^\.github
+^\.R_old
+^\.R_working
+^README\.Rmd$

@@ -1,4 +1,4 @@
-#' Vertical extent of a 'GVector' or 'GRaster'
+#' Vertical extent of a `GVector` or `GRaster`
 #'
 #' `GRasters` and `GVectors` can have 2-dimensional or 3-dimensional coordinate systems. If 2-dimensional, the vertical extent is assumed to be 0. If 3-dimensional, this function reports the lowest and highest coordinates.
 #'
@@ -9,12 +9,10 @@
 #' @example man/examples/example_GRaster.r
 #'
 #' @export
-
-if (!isGeneric('zExt')) zExt.GRaster <- setGeneric(name='zExt', def=function(x) { standardGeneric('zExt') })
-if (!isGeneric('zExt')) zExt.GVector <- setGeneric(name='zExt', def=function(x) { standardGeneric('zExt') })
+# if (!isGeneric('zExt')) setGeneric(name='zExt', def=function(x) standardGeneric('zExt'))
 
 .zExt <- function(x) {
-	matrix(c(x@z_bottom, x@z_top), nrow=2, byrow=TRUE, dimnames=list(c('z_bottom', 'z_top'), x@rname))
+	matrix(c(x@zbottom, x@ztop), nrow=2, byrow=TRUE, dimnames=list(c('zbottom', 'ztop'), names(x)))
 }
 
 setMethod(f='zExt', signature='GRaster',

@@ -1,36 +1,19 @@
 .onLoad <- function(lib, pkg) {
 
-	# if (!exists('.fasterRaster', where=globalenv())) {
-		# packageStartupMessage('Most fasterRaster functions will not work unless you run startFast().')
-	# }
-
-	# # either turn these on here and comment out creation of .fasterRaster in startFast, or ice vers
-	# .fasterRaster <<- new.env()
-	# opts <- .namesOfOptions()
-	
-	# setFastOptions(restore=TRUE)
-	# .setHiddenOptions(restore=TRUE)
+	.fasterRaster <<- new.env(parent = emptyenv())
+	.fasterRaster$options <- list()
+	setFastOptions(restore = TRUE)
 
 }
 
 .onAttach <- function(lib, pkg) {
 
+	.fasterRaster <- new.env(parent = emptyenv())
+	.fasterRaster$options <- list()
+	setFastOptions(restore = TRUE)
+	
 	ver <- read.dcf(file=system.file('DESCRIPTION', package=pkg), fields='Version')
 	packageStartupMessage(paste(pkg, ver))
-	if (!exists('.fasterRaster', where=globalenv())) {
-		packageStartupMessage('To use most fasterRaster functions, please run startFast().')
-	}
-	
-}
-
-.onUnload <- function(lib, pkg) {
-
-	if (exists('.fasterRaster', where=globalenv())) rm(.fasterRaster, envir=globalenv())
-	
-}
-
-.onUnattach <- function(lib, pkg) {
-
-	if (exists('.fasterRaster', where=globalenv())) rm(.fasterRaster, envir=globalenv())
+	packageStartupMessage('To use fasterRaster functions, please run startFast().')
 	
 }

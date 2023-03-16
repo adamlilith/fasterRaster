@@ -2,22 +2,23 @@
 #'
 #' Retrieves the name of a raster or vector in **GRASS**.
 #'
-#' @param x The object for which to obtain the name. If `NULL`, we assume that the object is to be made (it does not yet exist in **GRASS**). We should define `type` in these cases.
-#' @param rastOrVect 'raster' or 'vector'
+#' @param x The object for which to obtain the name: a `GRaster`, `GVector`, or character. If a character, then the character itself is returned.
 #' @param n Number of names to make.
 #'
-#' @keywords internal
+#' @noRd
+# if (!isGeneric('.gname')) setGeneric(name='.gname', def=function(x) { standardGeneric('.gname') })
 
-if (!isGeneric('.gname')) .gname.GSpatial <- setGeneric(name='.gname', def=function(x) { standardGeneric('.gname') })
 setMethod(
 	f = '.gname',
 	signature = 'GSpatial',
 	definition = function(x) x@gname
 )
-
-
+setMethod(
+	f = '.gname',
+	signature = 'character',
+	definition = function(x) x
+)
 .makeGname <- function(x = NULL, rastOrVect = NULL, n = 1L) {
-# .makeGname <- function(x = NULL, n = 1L) {
 
 	if (is.null(x) & is.null(rastOrVect)) stop('Both <x> and <rastOrVect> cannot be NULL at the same time.')
 

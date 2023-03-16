@@ -1,25 +1,22 @@
 #' Export a raster or vector to 'GRASS'
 #'
-#' @description To use a raster or vector in with most **fasterRaster** functions, you need to 1) initiate a **GRASS** session with [startfast()], then either 2a) export one or more rasters or vectors to the session, or 2b) use [readRast()] or [readVect()] to load a raster or vector from disk directly into **GRASS**.  This function allows you to export a raster or vector to a **GRASS** session. **GRASS** supports loading from disk a vareity of [raster](https://grass.osgeo.org/grass82/manuals/r.in.gdal.html) and [vector](https://grass.osgeo.org/grass82/manuals/v.in.ogr.html) formats.
+#' @description To use a raster or vector in with most **fasterRaster** functions, you need to 1) initiate a **GRASS** session with [fastStart()], 2) then use this function to either convert a raster or vector in **R** to a `GRaster` or `GVector`, or load a raster or vector from disk directly into the `GRaster` or `GVector` format. **GRASS** supports loading from disk a variety of [raster](https://grass.osgeo.org/grass82/manuals/r.in.gdal.html) and [vector](https://grass.osgeo.org/grass82/manuals/v.in.ogr.html) formats.
 #'
-#' @param ... One or more of:
+#' @param x Any one of:
 #' * A `SpatRaster` or `stars` raster. Rasters can have one or more layers. They will retain their "layerdness" in most **fasterRaster** functions.
 #' * A `SpatVector` or `sf` spatial vector.
-#' * A character vector with the path and filename of one or more rasters or vector to be loaded directly into **GRASS**. The function will attempt to ascertain the type of object from the file extension (raster or vector), but it can help to indicate which it is using the `rastOrVect` argument if it is unclear.
-#' Mixing data types is allowed (i.e., you can export rasters and vectors to **GRASS** with one call of this function).
+#' * A character string with the path and filename of a raster or vector to be loaded directly into **GRASS**. The function will attempt to ascertain the type of object from the file extension (raster or vector), but it can help to indicate which it is using the `rastOrVect` argument if it is unclear.
 #' 
-#' @param rastOrVect Either `NULL` (default) or character (`raster` or `vector`). If `...` is a raster or vector, this does not need to be specified. However, if `...` is one or more filenames, then the function will try to ascertain the data type from the file name(s), but sometimes this will fail. In that case, it can help to specify if the file holds a raster or vector. Partial matching is used. If `...` has more than one file name, you can specify one per file name, or just a single value (`raster` or `vector`), in which case it will be assumed that all are of that type.
+#' @param rastOrVect Either `NULL` (default) or character (`raster` or `vector`). If `x` is a raster or vector already in **R**, this does not need to be specified. However, if `x` is a filename, then the function will try to ascertain the data type from the filenames, but sometimes this will fail. In that case, it can help to specify if the file holds a raster or vector. Partial matching is used.
 #'
-#' @seealso [rgrass::read_RAST()] and [rgrass::read_VECT()]; **GRASS** modules [https://grass.osgeo.org/grass82/manuals/r.in.gdal](r.in.gdal) and [https://grass.osgeo.org/grass82/manuals/r.in.gdal](v.in.ogr)
+#' @seealso [rgrass::read_RAST()] and [rgrass::read_VECT()]; **GRASS** modules [r.in.gdal](https://grass.osgeo.org/grass82/manuals/r.in.gdal) and [v.in.ogr](https://grass.osgeo.org/grass82/manuals/r.in.gdal)
 #'
-#' @return A **fasterRaster** `GRaster` or `GVector`.
+#' @return A `GRaster` or `GVector`.
 #'
 #' @example man/examples/example_fastStart.r
 #'
 #' @export
-
-# if (!isGeneric('fast')) { setGeneric('fast', function(x, ...) standardGeneric('fast')) }
-setGeneric('fast', function(x, rastOrVect = NULL) standardGeneric('fast'))
+# if (!isGeneric('fast')) setGeneric('fast', function(x, rastOrVect = NULL) standardGeneric('fast'))
 
 ### SpatRaster in R
 ###################
@@ -31,14 +28,13 @@ setMethod(
 	### set region
 	##############
 	
-	.restore(x)
 	regionReshape(x)
 
 	### import raster
 	#################
 
 	gname <- .makeGname(x)
-	rname <- names(x)
+	name <- names(x)
 	nLayers <- terra::nlyr(x)
 	nLayers <- as.integer(nLayers)
 	
@@ -66,13 +62,13 @@ setMethod(
 	}
 
 	info <- .rastInfo(gname)
-	
+
 	out <- GRaster(
 		location = getFastOptions('location'),
 		mapset = getFastOptions('mapset'),
 		crs = terra::crs(x),
 		gname = gname,
-		rname = rname,
+		name = name,
 		topology = info[['topology']][1L],
 		extent = c(info[['west']][1L], info[['east']][1L], info[['south']][1L], info[['north']][1L]),
 		ztop = info[['ztop']],
@@ -160,10 +156,10 @@ setMethod(
 		rast <- terra::rast(x)
 		nLayers <- terra::nlyr(rast)
 		nLayers <- as.integer(nLayers)
-		rname <- names(rast)
+		name <- names(rast)
 		gname <- .makeGname(rast, rastOrVect = 'raster')
 		
-		regionReshape(x, warn=FALSE)
+		regionReshape(x)
 		rgrass::execGRASS('r.in.gdal', input=x, output=gname[1L], flags=flags, intern=TRUE)
 		
 		# if multi-layer raster, rasters are imported using the first name plus a '.#' where # is a number, so they need renamed
@@ -188,7 +184,7 @@ setMethod(
 			mapset = getFastOptions('mapset'),
 			crs = terra::crs(x),
 			gname = gname,
-			rname = rname,
+			name = name,
 			topology = info[['topology']][1L],
 			extent = c(info[['west']][1L], info[['east']][1L], info[['south']][1L], info[['north']][1L]),
 			ztop = info[['ztop']],
@@ -254,17 +250,9 @@ setMethod(
 
 .fastVector <- 	function(x) {
 
-	### function globals
-	####################
-	
-	flags <- c('quiet', 'overwrite')
-
-	### import raster(s)
-	####################
-
 	gname <- .makeGname(x)
 	
-	# NB writing first raster in a stack actually writes all of them
+	flags <- c('quiet', 'overwrite')
 	rgrass::write_VECT(x, vname=gname, flags=flags, ignore.stderr=TRUE)
 	
 	info <- .vectInfo(gname)
@@ -277,14 +265,14 @@ setMethod(
 		extent = c(info[['west']][1L], info[['east']][1L], info[['south']][1L], info[['north']][1L]),
 		topology = info[['topology']][1L],
 		geometry = info[['geometry']][1L],
-		bottom = info[['bottom']],
-		top = info[['top']],
+		ztop = info[['ztop']],
+		zbottom = info[['zbottom']],
 		fields = info[['fields']],
 		fieldClasses = info[['fieldClasses']]
 	)
 
 	out
 	
-	} # EOF
+} # EOF
 
 

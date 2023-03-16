@@ -9,7 +9,7 @@
 #' @example man/examples/example_GRaster.r
 #'
 #' @export
-if (!isGeneric('nlyr')) nlyr.GRaster <- setGeneric(name='nlyr', def=function(x) { standardGeneric('nlyr') })
+if (!isGeneric('nlyr')) setGeneric(name='nlyr', definition = function(x) standardGeneric('nlyr'))
 setMethod(
 	f = 'nlyr',
 	signature = 'GRaster',

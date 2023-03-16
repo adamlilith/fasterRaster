@@ -8,7 +8,7 @@
 #'
 #' @export
 
-topology.GSpatial <- setGeneric(name='topology', def=function(x) { standardGeneric('topology') })
+# if (!isGeneric('topology')) setGeneric(name='topology', def=function(x) standardGeneric('topology'))
 setMethod(
 	f = 'topology',
 	signature = 'GSpatial',

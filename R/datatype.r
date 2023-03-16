@@ -3,15 +3,14 @@
 #' Returns the data type of a `GRaster`. Note that this may not necessarily be the optimal data type for ensuring the smallest file size given the values to be saved. Precedence is given to retaining data (vs. truncating values) over size on disk.
 #'
 #' @param x A `GRaster`.
-#' @param format Either `'GRASS'` (default), `'terra'` (**terra** package data types; see [terra::writeRaster()]), or `'GDAL'` (see [https://gdal.org/user/raster_data_model.html#raster-band](GDAL: Raster Band)).
+#' @param format Either `'GRASS'` (default), `'terra'` (**terra** package data types; see [terra::writeRaster()]), or `'GDAL'` (see [GDAL: Raster Band][https://gdal.org/user/raster_data_model.html#raster-band]).
 #'
 #' @return Character.
 #'
 #' @example man/examples/example_GRaster.r
 #'
 #' @export
-
-if (!isGeneric('datatype')) datatype.GRaster <- setGeneric(name='datatype', def=function(x, type) { standardGeneric('datatype') })
+# if (!isGeneric('datatype')) setGeneric(name='datatype', def=function(x, type = 'GRASS') standardGeneric('datatype'))
 
 setMethod(f = 'datatype',
 	signature = 'GRaster',

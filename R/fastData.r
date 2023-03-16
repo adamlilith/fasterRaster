@@ -22,7 +22,7 @@
 #'
 #' @seealso [madCoast0], [madCoast4], [madDypsis], [madElev], [madElevAnt], [madElevMan], [madForest2000], [madForest2014], [madRivers]
 #'
-#' @example man/examples/example_madData.r
+#' @example man/examples/example_fastData.r
 #'
 #' @export
 

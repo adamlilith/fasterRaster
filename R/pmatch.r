@@ -9,7 +9,7 @@
 #'
 #' @return One of the values in `table`.
 #'
-#' @keywords internal
+#' @noRd
 
 .pmatch <- function(x, table, error = TRUE, ...) {
 
