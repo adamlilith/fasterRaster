@@ -1,25 +1,23 @@
-#' Convert a 'GRaster' to a 'SpatRaster' raster
+#' Convert a GRaster to a SpatRaster
 #'
-#' Convert a `GRaster` to a `SpatRaster`. Note that if you intend to save the raster to disk (and do no other processing on it), it is almost always faster just to use [writeRaster()].
+#' @description The **fasterRaster** version of the `rast()` function converts a `GRaster` to a `SpatRaster` (from the **terra** package). If you wish to save this raster, please consult [writeRaster4()] and [writeRaster8()].
 #'
 #' @param x A `GRaster`.
+#' @param ... Additional arguments to send to [writeRaster()] (typically unneeded, though `bigTiff` may be of use if the raster is large).
 #'
-#' @return A `SpatRaster`.
+#' @return A `SpatRaster` (**terra** package).
 #'
-#' @example man/examples/example_GRaster.r
-#'
+#' @aliases rast
+#' @rdname rast
 #' @export
-# if (!isGeneric('rast')) setGeneric(name='rast', def=function(x) standardGeneric('rast'))
+#' @exportMethod rast
+setMethod(
+	'rast',
+	signature(x = 'GRaster'),
+	function(x, ...) {
 
-setMethod(f = 'rast',
-	signature='GRaster',
-	definition = function(x) {
-	
-	file <- paste0(tempfile(), '.tif')
-	file <- forwardSlash(file)
-	out <- writeRaster(x, filename = file, format = 'GeoTIFF', overwrite = TRUE)
+	filename <- paste0(forwardSlash(tempfile()), '.tif')
+	out <- writeRaster(x, filename=filename, ...)
 	out
-	
 	} # EOF
 )
-

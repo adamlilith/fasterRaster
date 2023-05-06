@@ -1,19 +1,20 @@
-#' Get the datatype of a 'GRaster'
+#' Get the datatype of a GRaster or of GVector columns
 #'
-#' Returns the data type of a `GRaster`. Note that this may not necessarily be the optimal data type for ensuring the smallest file size given the values to be saved. Precedence is given to retaining data (vs. truncating values) over size on disk.
+#' Returns the data type of a `GRaster` or of each column of a `GVector`.
 #'
-#' @param x A `GRaster`.
-#' @param format Either `'GRASS'` (default), `'terra'` (**terra** package data types; see [terra::writeRaster()]), or `'GDAL'` (see [GDAL: Raster Band][https://gdal.org/user/raster_data_model.html#raster-band]).
+#' @param x A `GRaster` or `GVector`.
+#' @param type Character: What type of datatype to report (`GRaster` only): `'GRASS'` (default), `'terra'` (**terra** package data types; see [terra::writeRaster()]), or `'GDAL'` (see [GDAL: Raster Band](https://gdal.org/user/raster_data_model.html#raster-band)).
 #'
-#' @return Character.
+#' @return `datatype()` for a `GRaster` returns a character. `datatype()` for a `GVector` returns a data frame, with one row per field.
 #'
-#' @example man/examples/example_GRaster.r
+#' @example man/examples/ex_GRaster.r
 #'
-#' @export
-# if (!isGeneric('datatype')) setGeneric(name='datatype', def=function(x, type = 'GRASS') standardGeneric('datatype'))
-
+#' @aliases datatype
+#' @rdname datatype
+#' @export datatype
+#' @exportMethod datatype
 setMethod(f = 'datatype',
-	signature = 'GRaster',
+	signature = c(x = 'GRaster'),
 	definition = function(x, type = 'GRASS') {
 	
 	dt <- x@datatypeGRASS
@@ -35,3 +36,27 @@ setMethod(f = 'datatype',
 	} # EOF
 )
 
+#' @aliases datatype
+#' @rdname datatype
+#' @export datatype
+#' @exportMethod datatype
+setMethod(f = 'datatype',
+	signature = c(x = 'GVector'),
+	definition = function(x) {
+
+		info <- rgrass::execGRASS('v.info', flags='c', map=gnames(x), intern=TRUE)
+		info <- info[!grepl(info, pattern='Displaying column types/names for database connection of layer')]
+		
+		info <- strsplit(info, split='\\|')
+		
+		dt <- fields <- rep(NA_character_, length(info))
+		for (i in seq_along(info)) {
+			fields[i] <- info[[i]][2L]
+			dt[i] <- info[[i]][1L]
+		}
+		
+		dt <- tolower(dt)
+		data.frame(field = fields, datatype = dt)
+	
+	} # EOF
+)

@@ -1,8 +1,11 @@
 \dontrun{
+# NB This example is in a "dontrun{}" block because it requires users to have
+# GRASS GIS Version 8+ installed on their system.
 
 # IMPORTANT #1: If you already have a GRASS session started, you will need to
 # run the line below and the last line in this example to work with it again.
-
+# If you have not started a GRASS session, you can skip this step and go to
+# step #2.
 opts. <- getFastOptions()
 
 # IMPORTANT #2: Select the appropriate line below and change as necessary to
@@ -25,14 +28,14 @@ fastStart(grassDir = grassDir, crs = madElev,
 workDir = tempdir(), location = 'examples') # line only needed for examples
 
 # convert a SpatRaster to a GRaster
-me <- fast(madElev)
-me
+elev <- fast(madElev)
+elev
 
 # convert an sf vector to a GVector
-mr <- fast(madRivers)
-mr
+rivers <- fast(madRivers)
+rivers
 
-# Revert back to original GRASS session if needed.
+# IMPORTANT #3: Revert back to original GRASS session if needed.
 sessionRestore(opts.)
 removeSession('examples')
 

@@ -1,15 +1,19 @@
 #' Contour lines from a 'GRaster'
 #'
-#' Create a spatial vector of contour lines from a raster.
+#' @description
+#' Create a `GVector` of contour lines from a `GRaster`.
 #'
-#' @seealso [terra::as.contour()]; **GRASS** module [r.contour][https://grass.osgeo.org/grass82/manuals/r.contour.html]
+#' @param x A `GRaster`.
+#' @param nlevels Numeric: A positive integer or missing (default). Number of levels at which to calculate contours. Levels will be calculated in equal-sized steps from the smallest to the largest value of `x`. Either `nlevels` or `levels` must be specified.
+#' @param levels Numeric vector: A numeric vector of values at which to calculate contour lines. Either `nlevels` or `levels` must be specified.
 #'
-#' @example man/examples/example_asContour.r
+#' @seealso [terra::as.contour()]
 #'
-#' @export
-
-# if (!isGeneric('as.contour')) setGeneric('as.contour', function(x, nlevels, levels) standardGeneric('as.contour'))
-
+#' @example man/examples/ex_asContour.r
+#'
+#' @aliases as.contour
+#' @rdname as.contour
+#' @exportMethod as.contour
 setMethod(
 	'as.contour',
 	signature(x = 'GRaster'),
@@ -19,50 +23,34 @@ setMethod(
 	###########
 	
 	.restore(x)
-	regionReshape(x)
+	regionShape(x)
 
 	### end commons
 	###############
 
-	if (!missing(nlevels) & !missing(levels)) stop('Please specify either <nlevels> or <levels>, but not both.')
-	if (missing(nlevels) & missing(levels)) stop('Please specify either <nlevels> or <levels>.')
+	if (!missing(nlevels) & !missing(levels)) stop('Please specify either ', sQuote('nlevels'), ' or ', sQuote('levels'), ', but not both.')
+	if (missing(nlevels) & missing(levels)) stop('Please specify either ', sQuote('nlevels'), ' or ', sQuote('levels'), '.')
 
 	if (!missing(nlevels)) {
-		minMax <- minmax(x)
-		levels <- seq(minMax[1L, 1L], minMax[2L, 1L], length.out=nlevels)
+		mm <- minmax(x)
+		levels <- seq(mm[1L, 1L], mm[2L, 1L], length.out=nlevels + 2L) # adding 2 bc creates no contours for min/max values
 	}
 
-
-	input <- .gname(x)
-	output <- .makeGname(rastOrVect = 'vector')
+	input <- gnames(x)
+	gn <- .makeGname(rastOrVect = 'vector')
 
 	### execute
 	args <- list(
 		cmd = 'r.contour',
 		input = input,
-		output = output,
+		output = gn,
 		levels = levels,
 		cut = 2,
 		flags = 'quiet'
 	)
 	
 	do.call(rgrass::execGRASS, args=args)
-	
-	info <- .vectInfo(output)
-	out <- GVector(
-		location = getFastOptions('location'),
-		mapset = getFastOptions('mapset'),
-		crs = crs(x),
-		gname = output,
-		extent = c(info[['west']][1L], info[['east']][1L], info[['south']][1L], info[['north']][1L]),
-		topology = info[['topology']][1L],
-		geometry = info[['geometry']][1L],
-		bottom = info[['bottom']],
-		top = info[['top']],
-		fields = info[['fields']],
-		fieldClasses = info[['fieldClasses']]
-	)
-	out
+	makeGVector(gn)
 	
 	} # EOF
 )

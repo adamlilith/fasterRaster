@@ -1,15 +1,16 @@
-#' Save one or more 'GRaster's to disk
+#' Save a GRaster to disk
 #'
-#' This function saves a raster to disk directly from a **GRASS** session. If the `GRaster` was produced in `GRASS` (i.e., not created using `terra` or `stars` then converted to a `GRaster`), and you convert it to a `SpatRaster` or `stars` raster, please consult [writeRaster4()] for important details!
+#' @description
+#' This function saves a `GRaster` to disk directly from a **GRASS** session. If the `GRaster` was produced in **GRASS** (i.e., not created using **terra** or **stars** then converted to a `GRaster`), and you convert it back to a `SpatRaster` or `stars` raster and want to save it, please consult [writeRaster4()] and [writeRaster8()] for important details!
 #'
-#' The file type will be attempted to be ascertained from the file extension, but you can specify the format using the `format` argument (see entry for `...`). You can see a list of supported formats by simply using this function with no arguments, as in `writeRaster()`, or also at [`r.out.gdal`][https://grass.osgeo.org/grass82/manuals/r.out.gdal.html]. Only the `GeoTIFF` file format is guaranteed to work for multi-layered rasters.
+#' The function will attempt to ascertain the file type to be ascertained from the file extension, but you can specify the format using the `format` argument (see entry for `...`). You can see a list of supported formats by simply using this function with no arguments, as in `writeRaster()`, or by consulting the online help page for the **GRASS** module `r.out.gdal`. Only the `GeoTIFF` file format is guaranteed to work for multi-layered rasters.
 #'
-#' @param x A `GRaster` or missing. If missing, a table of supported file types is reported.
-#' @param filename Path and file name.
-#' @param overwrite If `FALSE` (default), do not save over existing file(s).
+#' @param x A `GRaster` or missing: If missing, a table of supported file types is reported.
+#' @param filename Character: Path and file name.
+#' @param overwrite Logical: If `FALSE` (default), do not save over existing file(s).
 #' @param ... Additional arguments. These can include:
 #' * `datatype` The datatype of the values stored in non-ASCII rasters. If `NULL`, this will be ascertained from the raster . This can any of:
-#'    | **`terra`** | **`GRASS`** | **`GDAL`** | Values |
+#'    | **`terra`** | **`GRASS`** | **`GDAL`** | **Values** |
 #'    | ----------- | ----------- | ---------- | ------ |
 #'    | `INT1U`     | `CELL`      | `Byte`     | Integer values from 0 to 255 |
 #'    | `INT2U`     | `CELL`      | `UInt16`   | Integer values from 0 to 65,534 |
@@ -27,40 +28,22 @@
 #' * `format`: Character, indicating file format. This is usually ascertained from the file extension, but in case this fails, it can be stated explicitly. When using other formats, you may have to specify the `createopts` argument, too (see [r.out.gdal][https://grass.osgeo.org/grass82/manuals/r.out.gdal.html]). Two common formats include:
 #'    * `'GTiff'` (default): GeoTIFF `filename` ends in `.tif`
 #'    * `'ASC'`: ASCII `filename` ends in `.asc`
-#' * Additional arguments to send to [`r.out.gdal`][https://grass.osgeo.org/grass82/manuals/r.out.gdal.html] and [`r.out.ascii`][https://grass.osgeo.org/grass82/manuals/r.out.ascii.html].
+#' * Additional arguments to send to **GRASS** modules `r.out.gdal` and `r.out.ascii`.
 #' * `precision`: Numeric: For ASCII files, you may need to state the number of significant digits. 32-bit values have 7 digits and 64-bit values have 16. So in these cases the argument would be `precision=7` or `precision=16`.
 #'
 #' @return A `GRaster` or a `stars` raster. A raster is also saved to disk.
 #'
-#' @seealso [writeRaster4()] and [writeRaster8()] for saving a raster created in **GRASS** then imported to **R** using [rast()]; [terra::writeRaster()]; **GRASS** modules [`r.out.gdal`][https://grass.osgeo.org/grass82/manuals/r.out.gdal.html] and [`r.out.ascii`][https://grass.osgeo.org/grass82/manuals/r.out.ascii.html].
+#' @seealso [writeRaster4()] and [writeRaster8()] for saving a raster created in **GRASS** then imported to **R** using [rast()]; [terra::writeRaster()]
 #'
 #' @example man/examples/ex_writeRaster.r
 #'
+#' @aliases writeRaster
+#' @rdname writeRaster
 #' @export
-
-# if (!isGeneric('writeRaster')) setGeneric('writeRaster', function(x, ...) standardGeneric('writeRaster'))
-
+#' @exportMethod writeRaster
 setMethod(
 	'writeRaster',
-	signature(x = 'missing'),
-	function(x) {
-	
-	forms <- rgrass::execGRASS('r.out.gdal', flags='l', intern=TRUE)
-	forms <- forms[forms != 'Supported formats:']
-	forms <- trimws(forms)
-	forms <- sort(forms)
-	forms <- c('Supported raster file formats:', forms)
-	cat(paste(forms, collapse='\n'))
-	cat('\n')
-	utils::flush.console()
-	
-	} # EOF
-)
-
-
-setMethod(
-	'writeRaster',
-	signature(x = 'GRaster'),
+	signature(x = 'GRaster', filename = 'character'),
 	function(
 		x,
 		filename,
@@ -72,7 +55,7 @@ setMethod(
 	###########
 	
 	.restore(x)
-	regionReshape(x)
+	regionShape(x)
 
 	### end commons
 	###############
@@ -84,7 +67,7 @@ setMethod(
 
 	### going to overwrite anything?
 	if (!overwrite) {
-		if (file.exists(x)) stop('File already exists and "overwrite" is FALSE:\n  ', filename)
+		if (file.exists(filename)) stop('File already exists and "overwrite" is FALSE:\n  ', filename)
 	}
 
 	### format
@@ -114,12 +97,12 @@ setMethod(
 		## if multi-layered raster stack, then group first... only guaranteed to work with GeoTIFFs
 		if (numLayers > 1L) {
 			groupName <- .makeGname(rastOrVect='group')
-			input <- .gname(x)
+			input <- gnames(x)
 			rgrass::execGRASS('i.group', group=groupName, input=input, intern=TRUE)
 			# rgrass::execGRASS('i.group', group=groupName, flags='l')
-			gname <- groupName
+			gn <- groupName
 		} else {
-			gname <- .gname(x)
+			gn <- gnames(x)
 		}
 		
 		# data type
@@ -160,7 +143,7 @@ setMethod(
 
 			# createopt
 			createopt <- c(createopt, 'PROFILE=GeoTIFF')
-			if ('compressTiff' %in% names(dots) && dots$compressTiff) createopt <- c(createopt, paste0('COMPRESS=', toupper(compressTiff)))
+			if ('compressTiff' %in% names(dots) && dots$compressTiff) createopt <- c(createopt, paste0('COMPRESS=', toupper(dots$compressTiff)))
 			# if ('bigTiff' %in% names(dots) && bigTiff) createopt <- c(createopt, 'BIGTIFF=YES')
 			createopt <- c(createopt, 'BIGTIFF=IF_NEEDED')
 			if (thisDataType %in% c('Byte', 'UInt16', 'Int32')) createopt <- c(createopt, 'PREDICTOR=2')
@@ -180,8 +163,8 @@ setMethod(
 		}
 
 		# save
-		# rgrass::execGRASS('r.out.gdal', input=gname, output=filename, type=thisDataType, createopt=createopt, metaopt=metaopt, flags=thisFlags, intern=TRUE, ...)
-		rgrass::execGRASS('r.out.gdal', input=gname, output=filename, type=thisDataType, createopt=createopt, flags=thisFlags, intern=TRUE)
+		# rgrass::execGRASS('r.out.gdal', input=gnames, output=filename, type=thisDataType, createopt=createopt, metaopt=metaopt, flags=thisFlags, intern=TRUE, ...)
+		rgrass::execGRASS('r.out.gdal', input=gn, output=filename, type=thisDataType, createopt=createopt, flags=thisFlags, intern=TRUE)
 
 	}
 
@@ -192,4 +175,25 @@ setMethod(
 	
 	} # EOF
 	
+)
+
+#' @aliases writeRaster
+#' @rdname writeRaster
+#' @export
+#' @exportMethod writeRaster
+setMethod(
+	'writeRaster',
+	signature(x = 'missing', filename = 'missing'),
+	function(x, filename) {
+	
+	forms <- rgrass::execGRASS('r.out.gdal', flags='l', intern=TRUE)
+	forms <- forms[forms != 'Supported formats:']
+	forms <- trimws(forms)
+	forms <- sort(forms)
+	forms <- c('Supported raster file formats:', forms)
+	cat(paste(forms, collapse='\n'))
+	cat('\n')
+	utils::flush.console()
+	
+	} # EOF
 )

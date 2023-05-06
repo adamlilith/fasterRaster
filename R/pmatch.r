@@ -10,14 +10,13 @@
 #' @return One of the values in `table`.
 #'
 #' @noRd
-
 .pmatch <- function(x, table, error = TRUE, ...) {
 
 	x <- tolower(x)
 	lowerTable <- tolower(table)
 	match <- pmatch(x, lowerTable, ...)
 	if (is.na(match)) {
-		if (error) stop('Cannot find a match for <', x, '>. Valid options include: ', paste(table, collapse=', '))
+		if (error) stop('Cannot find a match for ', sQuote('x'), '. Valid options include: ', paste(table, collapse=', '))
 		out <- NA_character_
 	} else {
 		out <- table[match]

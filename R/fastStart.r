@@ -1,18 +1,18 @@
 #' Initialize a 'GRASS' session
 #'
-#' This function initializes a **GRASS** session in a particulatr folder. You need to run this function before you use most functions in **fasterRaster** (just once). You can also use [sessionRestore()] to switch between working folders, [locations, and mapsets][sessions].
+#' This function initializes a **GRASS** session in a particular folder. You need to run this function (usually just once) before you use most functions in **fasterRaster**. You can also use [fastRestore()] to switch between [working folders, locations, and mapsets][tutorial_sessions].
 #'
 #' @param crs Any object from which a coordinate reference system (CRS) can be acquired. Ergo, any of:
 #' * A `SpatRaster`, `SpatVector`, `SpatExtent`, `stars` or `sf` object
 #' * A CRS (coordinate reference system) string
 #'
-#' @param grassDir Character or `NULL` (default): Folder in which **GRASS** is installed on your computer. This will look different depending on the operating system and verison of **GRASS** you have installed. Here are some examples:
+#' @param grassDir Character or `NULL` (default): Folder in which **GRASS** is installed on your computer. This will look different depending on the operating system and version of **GRASS** you have installed. Here are some examples:
 #' * Windows: `'C:/Program Files/GRASS GIS 8.3'`
 #' * Mac OS: `"/Applications/GRASS-8.3.app/Contents/Resources"`
 #' * Linux: `'/usr/local/grass'`
-#' If `NULL`, then the function will use [getFastOption()] to attempt to get it. If it fails, `grassDir` will stay as `NULL` and likely reseult in an error.
+#' If `NULL`, then the function will use [getFastOptions()] to attempt to get it. If it fails, `grassDir` will stay as `NULL` and likely result in an error.
 #'
-#' @param workDir `NULL` or character: The name of the folder in which **GRASS** will store rasters and vectors. If this is `NULL` (default), then the [tempdir()] on the user's system will be used. If users wish to create persistent **GRASS** sesssions that can be used in a different instance of **R** (i.e., if **R** is stopped then restarted), then this needs to be specified.
+#' @param workDir `NULL` or character: The name of the folder in which **GRASS** will store rasters and vectors. If this is `NULL` (default), then the [tempdir()] on the user's system will be used. If users wish to create persistent **GRASS** sessions that can be used in a different instance of **R** (i.e., if **R** is stopped then restarted), then this needs to be specified.
 #'
 #' @param overwrite Logical: If `FALSE` (default), and a **GRASS** session in the stated (or default) location and mapset has already been started, then the function will fail. If `TRUE`, then any existing **GRASS** session will be overwritten. *NOTE*: This will **not** remove any **R** objects associated with rasters or vectors in the session, but they will no longer work because the objects they point to will be overwritten.
 #
@@ -24,7 +24,7 @@
 #'
 #' @seealso Guide to getting [started](tutorial_starting) with **fasterRaster**.
 #'
-#' @examples man/examples/ex_fastStart.r
+#' @example man/examples/ex_fastStart.r
 #'
 #' @export
 
@@ -58,13 +58,13 @@ fastStart <- function(
 	if (is.na(grassDir)) grassDir <- NULL
 
 	mapset <- if (!('mapset' %in% names(dots))) {
-		getFastOptions('mapset')
+		mapset()
 	} else {
 		dots$mapset
 	}
 
 	location <- if (!('location' %in% names(dots))) {
-		getFastOptions('location')
+		location()
 	} else {
 		dots$location
 	}
@@ -103,7 +103,7 @@ fastStart <- function(
 		existingCrs <- readRDS(crsFile)
 		if (existingCrs != crs) {
 
-			stop('The active GRASS session has a different coordinate reference system.\n  Either use the same CRS or a different <location> (see ?locations).')
+			stop('The active GRASS session has a different coordinate reference system.\n  Either use the same CRS or a different GRASS ', sQuote('location'), ' (see ?locations).')
 
 		}
 	}
@@ -114,6 +114,7 @@ fastStart <- function(
 	### start the GRASS session
 	suppressWarnings(
 		session <- rgrass::initGRASS(
+		# session <- fastGRASS(
 			gisBase = grassDir,
 			home = workDir,
 			SG = emptyRast,

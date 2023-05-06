@@ -20,15 +20,15 @@ fastStart(
 \item A CRS (coordinate reference system) string
 }}
 
-\item{grassDir}{Character or \code{NULL} (default): Folder in which \strong{GRASS} is installed on your computer. This will look different depending on the operating system and verison of \strong{GRASS} you have installed. Here are some examples:
+\item{grassDir}{Character or \code{NULL} (default): Folder in which \strong{GRASS} is installed on your computer. This will look different depending on the operating system and version of \strong{GRASS} you have installed. Here are some examples:
 \itemize{
 \item Windows: \code{'C:/Program Files/GRASS GIS 8.3'}
 \item Mac OS: \code{"/Applications/GRASS-8.3.app/Contents/Resources"}
 \item Linux: \code{'/usr/local/grass'}
-If \code{NULL}, then the function will use \code{\link[=getFastOption]{getFastOption()}} to attempt to get it. If it fails, \code{grassDir} will stay as \code{NULL} and likely reseult in an error.
+If \code{NULL}, then the function will use \code{\link[=getFastOptions]{getFastOptions()}} to attempt to get it. If it fails, \code{grassDir} will stay as \code{NULL} and likely result in an error.
 }}
 
-\item{workDir}{\code{NULL} or character: The name of the folder in which \strong{GRASS} will store rasters and vectors. If this is \code{NULL} (default), then the \code{\link[=tempdir]{tempdir()}} on the user's system will be used. If users wish to create persistent \strong{GRASS} sesssions that can be used in a different instance of \strong{R} (i.e., if \strong{R} is stopped then restarted), then this needs to be specified.}
+\item{workDir}{\code{NULL} or character: The name of the folder in which \strong{GRASS} will store rasters and vectors. If this is \code{NULL} (default), then the \code{\link[=tempdir]{tempdir()}} on the user's system will be used. If users wish to create persistent \strong{GRASS} sessions that can be used in a different instance of \strong{R} (i.e., if \strong{R} is stopped then restarted), then this needs to be specified.}
 
 \item{overwrite}{Logical: If \code{FALSE} (default), and a \strong{GRASS} session in the stated (or default) location and mapset has already been started, then the function will fail. If \code{TRUE}, then any existing \strong{GRASS} session will be overwritten. \emph{NOTE}: This will \strong{not} remove any \strong{R} objects associated with rasters or vectors in the session, but they will no longer work because the objects they point to will be overwritten.}
 
@@ -40,11 +40,51 @@ If \code{NULL}, then the function will use \code{\link[=getFastOption]{getFastOp
 An \code{\link[rgrass:gmeta]{rgrass::gmeta()}} object (a list) if successful (invisibly). If not successful, the function will usually either fail or return \code{FALSE} with a warning.
 }
 \description{
-This function initializes a \strong{GRASS} session in a particulatr folder. You need to run this function before you use most functions in \strong{fasterRaster} (just once). You can also use \code{\link[=sessionRestore]{sessionRestore()}} to switch between working folders, \link[=sessions]{locations, and mapsets}.
+This function initializes a \strong{GRASS} session in a particular folder. You need to run this function (usually just once) before you use most functions in \strong{fasterRaster}. You can also use \code{\link[=fastRestore]{fastRestore()}} to switch between \link[=tutorial_sessions]{working folders, locations, and mapsets}.
 }
 \examples{
-man/examples/ex_fastStart.r
+\dontrun{
+# NB This example is in a "dontrun{}" block because it requires users to have
+# GRASS GIS Version 8+ installed on their system.
 
+# IMPORTANT #1: If you already have a GRASS session started, you will need to
+# run the line below and the last line in this example to work with it again.
+# If you have not started a GRASS session, you can skip this step and go to
+# step #2.
+opts. <- getFastOptions()
+
+# IMPORTANT #2: Select the appropriate line below and change as necessary to
+# where GRASS is installed on your system.
+
+grassDir <- "/Applications/GRASS-8.2.app/Contents/Resources" # Mac
+grassDir <- 'C:/Program Files/GRASS GIS 8.2' # Windows
+grassDir <- '/usr/local/grass' # Linux
+
+# setup
+library(sf)
+library(terra)
+
+# example data
+madElev <- fastData('madElev')
+madRivers <- fastData('madRivers')
+
+# start GRASS session for examples only
+fastStart(grassDir = grassDir, crs = madElev,
+workDir = tempdir(), location = 'examples') # line only needed for examples
+
+# convert a SpatRaster to a GRaster
+elev <- fast(madElev)
+elev
+
+# convert an sf vector to a GVector
+rivers <- fast(madRivers)
+rivers
+
+# IMPORTANT #3: Revert back to original GRASS session if needed.
+sessionRestore(opts.)
+removeSession('examples')
+
+}
 }
 \seealso{
 Guide to getting \href{tutorial_starting}{started} with \strong{fasterRaster}.

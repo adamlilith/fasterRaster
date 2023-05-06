@@ -18,6 +18,6 @@
 #'
 #' @source \doi{https://doi.org/10.1038/sdata.2017.122}
 #'
-#' @example man/examples/ex_madData.r
+#' @example man/examples/ex_fastData.r
 #'
 NULL

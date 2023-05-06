@@ -8,6 +8,4 @@ CODE_OF_CONDUCT.md
 ^.*\.Rproj$
 ^\.Rproj\.user$
 ^\.github
-^\.R_old
-^\.R_working
 ^README\.Rmd$

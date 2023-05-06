@@ -5,23 +5,27 @@
 \alias{fasterRaster}
 \title{'fasterRaster': Faster raster and spatial vector processing using 'GRASS GIS'}
 \description{
-Processing of large-in-memory/-on disk rasters and spatial vectors using \strong{GRASS GIS}. Most functions in the \strong{terra} and \strong{sf} packages are recreated, and can stand in for them when rasters or vectors are extremely large in memory and/or on disk. Processing of medium-sized and smaller spatial objects will nearly always be faster using \strong{terra} or \strong{sf}. To use most of the functions you must have the stand-alone version of \strong{GRASS} 8.0 or higher (not the **OSGeoW4*installer version).
+Processing of large-in-memory/-on disk rasters and spatial vectors using \strong{GRASS GIS}. Most functions in the \strong{terra} and \strong{sf} packages are recreated, and can stand in for them when rasters or vectors are extremely large in memory and/or on disk. Processing of medium-sized and smaller spatial objects will nearly always be faster using \strong{terra} or \strong{sf}. To use most of the functions you must have the stand-alone version of \strong{GRASS} version 8.0 or higher (not the \strong{OSGeoW4} installer version).
 \subsection{Most useful functions/links:}{
 
-A \link[=tutorial]{quick-start tutorial}\cr
-\code{\link[=fastStart]{fastStart()}}: Initiate a **GRASS*session\cr
+A \link[=tutorial_getting_started]{quick-start tutorial}\cr
+\code{\link[=fastStart]{fastStart()}}: Initiate a \strong{GRASS} session\cr
 \code{\link[=fast]{fast()}}: Create \code{GRaster}s or \code{GVector}s from \code{SpatRaster}s, \code{SpatVector}s, or \code{sf} or \code{stars} objects, or from files\cr
 \code{\link[=rast]{rast()}}, \code{\link[=vect]{vect()}}, \code{\link[=st_as_sf]{st_as_sf()}}, and \code{\link[=stars]{stars()}}: Convert \code{GRaster}s and \code{GVector}s to \code{SpatRaster}s, \code{SpatVector}s, \code{sf} vectors, or \code{stars} rasters\cr
 \code{\link[=writeRaster]{writeRaster()}} and \code{\link[=writeVector]{writeVector()}}: Save \code{GRaster}s or \code{GVector}s to disk\cr
+\code{\link[=fastRestore]{fastRestore()}}: Re-starts a \strong{GRASS} session saved to disk\cr
 \code{\link[=setFastOptions]{setFastOptions()}} and \code{\link[=getFastOptions]{getFastOptions()}}: Set options for working with \strong{fasterRaster}\cr
 }
 
-\subsection{Properties of **GRASS*rasters}{
+\subsection{Properties of \strong{fasterRaster} rasters (\code{GRasters})}{
 
 \code{\link[=crs]{crs()}}: Coordinate reference system\cr
+\code{\link[=datatype]{datatype()}}: Data type\cr
 \code{\link[=dim]{dim()}}: Number of rows and columns\cr
 \code{\link[=ext]{ext()}}: Spatial extent\cr
-\code{\link[=datatype]{datatype()}}: Data type\cr
+\code{\link[=gnames]{gnames()}}: Name of the object in \strong{GRASS}\cr
+\code{\link[=location]{location()}}: \strong{GRASS} "location" of an object or the active session\cr
+\code{\link[=mapset]{mapset()}}: \strong{GRASS} "mapset" of an object or the active session\cr
 \code{\link[=minmax]{minmax()}}: Minimum and maximum values across all non-\code{NA} cells\cr
 \code{\link[=names]{names()}}: \code{GRaster} names\cr
 \code{\link[=ncol]{ncol()}}: Number of columns\cr
@@ -30,70 +34,99 @@ A \link[=tutorial]{quick-start tutorial}\cr
 \code{\link[=ndepth]{ndepth()}}: Number of depths of a 3D raster\cr
 \code{\link[=nlyr]{nlyr()}}: Number of layers\cr
 \code{\link[=nrow]{nrow()}}: Number of rows\cr
+\code{\link[=ncat]{ncat()}}: Number of categories\cr
 \code{\link[=res]{res()}}: Spatial resolution\cr
+\code{\link[=st_bbox]{st_bbox()}}: Spatial extent\cr
 \code{\link[=st_crs]{st_crs()}}: Coordinate reference system\cr
 \code{\link[=topology]{topology()}}: Dimensionality of a raster (2D or 3D)\cr
-\code{\link[=zExt]{zExt()}}: Vertical extent
+\code{\link[=zext]{zext()}}: Vertical extent
 }
 
-\subsection{Functions that operate on \code{GRasters}}{
+\subsection{Functions that operate on or create \code{GRasters}}{
 
+\link{Arithmetic}: Mathematical operations on \code{GRaster}s: \code{+}, \code{-}, \code{*}, \code{/}, \code{^}, \code{\%\%} (modulus), \code{\%/\%} (integer division)\cr
+Math: Mathematical functions applied to \code{GRaster}s: \code{\link[=abs]{abs()}}, \code{\link[=sin]{sin()}}, \code{\link[=cos]{cos()}}, \code{\link[=tan]{tan()}}, \code{\link[=asin]{asin()}}, \code{\link[=acos]{acos()}}, \code{\link[=atan]{atan()}}, \code{\link[=atan2]{atan2()}}, \code{\link[=exp]{exp()}}, \code{\link[=log]{log()}}, \code{\link[=log1p]{log1p()}}, \code{\link[=log2]{log2()}}, \code{\link[=log10]{log10()}}, \code{\link[=sqrt]{sqrt()}}, \code{\link[=round]{round()}}, \code{\link[=floor]{floor()}}, \code{\link[=ceiling]{ceiling()}}, \code{\link[=trunc]{trunc()}}\cr
 \code{\link[=as.contour]{as.contour()}}: Contour lines from a \code{GRaster}\cr
+\code{\link[=buffer]{buffer()}}: Create a buffer around non-\code{NA} cells\cr
 \code{\link[=c]{c()}}: "Stack" two or more \code{GRaster}s\cr
+\code{\link[=distance]{distance()}}: Distance to non-\code{NA} cells, or vice versa\cr
+\code{\link[=makeGRaster]{makeGRaster()}}: Makes a \code{GRaster} from a raster already in a \strong{GRASS} session\cr
+\verb{[[[]}\link{subset}: Subset a \code{GRaster} with multiple layers\cr
 }
 
-\subsection{Properties of `GVectors'}{
+\subsection{Properties of \strong{fasterRaster} vectors (`GVectors')}{
 
 \code{\link[=crs]{crs()}}: Coordinate reference system\cr
+\code{\link[=datatype]{datatype()}}: Data type of fields\cr
 \code{\link[=ext]{ext()}}: Spatial extent\cr
-\code{\link[=geometry]{geometry()}}: Type of vector (points, lines, polygons)\cr
+\code{\link[=geomtype]{geomtype()}}: Type of vector (points, lines, polygons)\cr
+\code{\link[=gnames]{gnames()}}: Name of the object in \strong{GRASS}\cr
+\code{\link[=is.points]{is.points()}}, \code{\link[=is.lines]{is.lines()}}, \code{\link[=is.polygons]{is.polygons()}}: Does a \code{GVector} represent points, lines, or polygons?\cr
+\code{\link[=location]{location()}}: \strong{GRASS} "location" of an object or the active session\cr
+\code{\link[=mapset]{mapset()}}: \strong{GRASS} "mapset" of an object or the active session\cr
+\code{\link[=names]{names()}}: Names of \code{GVector} fields\cr
+\code{\link[=ncol]{ncol()}}: Number of fields\cr
+\code{\link[=nrow]{nrow()}}: Names of geometries\cr
+\code{\link[=st_bbox]{st_bbox()}}: Spatial extent\cr
 \code{\link[=st_crs]{st_crs()}}: Coordinate reference system\cr
 \code{\link[=topology]{topology()}}: Dimensions of vector coordinates (2D or 3D)\cr
-\code{\link[=zExt]{zExt()}}: Vertical extent\cr
+\code{\link[=zext]{zext()}}: Vertical extent\cr
 }
 
-\subsection{Functions that operate on vectors}{
+\subsection{Functions that operate on or create \code{GVectors}}{
 
-Something here
+\code{\link[=buffer]{buffer()}}: Create a polygon around/inside a vector\cr
+\code{\link[=connectors]{connectors()}}: Create lines connecting nearest features of two vectors\cr
+\code{\link[=distance]{distance()}}: Distance between geometries in two vectors, or from a vector to cells of a raster\cr
+\code{\link[=makeGVector]{makeGVector()}}: Makes a \code{GVector} from a vector already in a \strong{GRASS} session.
+\code{\link[=st_buffer]{st_buffer()}}: Create a polygon around/inside a vector\cr
+\code{\link[=st_distance]{st_distance()}}: Distance between geometries in two vectors\cr
 }
 
 \subsection{Converting between data types}{
 
+\code{\link[=as.contour]{as.contour()}}: Contour lines from a \code{GRaster}\cr
 \code{\link[=as.points]{as.points()}}, \code{\link[=as.lines]{as.lines()}}, and \code{\link[=as.polygons]{as.polygons()}}: Convert a \code{GRaster} to a \code{GVector}\cr
-\code{\link[=rasterize]{rasterize()}}: Convert a \code{GVector} to a \code{GRaster}\cr
 \code{\link[=fast]{fast()}}: Create \code{GRaster}s or \code{GVector}s from \code{SpatRaster}s, \code{SpatVector}s, or \code{sf} or \code{stars} objects, or from files\cr
 \code{\link[=rast]{rast()}}: Convert a \code{GRaster} to a \code{SpatRaster}\cr
-\code{\link[=vect]{vect()}}: Convert a \code{GVector} to a \code{SpatVector}\cr
+\code{\link[=rasterize]{rasterize()}}: Convert a \code{GVector} to a \code{GRaster}\cr
 \code{\link[=st_as_sf]{st_as_sf()}}: Convert a \code{GVector} to a \code{sf} vectors\cr
 \code{\link[=stars]{stars()}}: Convert a \code{GVector} to a \code{stars} raster\cr
+\code{\link[=vect]{vect()}}: Convert a \code{GVector} to a \code{SpatVector}\cr
+\code{\link[=vectToGrass]{vectToGrass()}}: Convert a \code{SpatVector} to a \strong{GRASS} vector\cr
 }
 
 \subsection{General purpose functions}{
 
 \code{\link[=appendLists]{appendLists()}}: Append values to elements of a list from another list\cr
+\code{\link[=comparable]{comparable()}}: Determine if geographic metadata is same between two \code{GRaster}s and/or \code{GVector}s\cr
 \code{\link[=compareFloat]{compareFloat()}}: Compare values accounting for differences due to floating point precision\cr
+\code{\link[=fastClass]{fastClass()}}: Class of a \strong{fasterRaster} object\cr
 \code{\link[=forwardSlash]{forwardSlash()}}: Replace backslash with forward slash\cr
-\code{\link[=removeSession]{removeSession()}}: Delete a GRASS session (location, mapset(s), and all associated files)\cr
+\code{\link[=grassInfo]{grassInfo()}}: \strong{GRASS} version and citation\cr
+\code{\link[=vectToGrass]{vectToGrass()}}: Send a \code{SpatVector} or \code{sf} vector to an open \strong{GRASS} connection\cr
 }
 
-\subsection{Functions that operate on *\emph{GRASS}"sessions" (seldom used by most users):}{
+\subsection{Functions that operate on \strong{GRASS} "sessions" (seldom used by most users):}{
 
+\code{\link[=fastRemove]{fastRemove()}}: Delete a \strong{GRASS} session (location, mapset(s), and all associated files)\cr
 \code{\link[=fastRestore]{fastRestore()}}: Restore a previous \strong{GRASS} session or switch \strong{GRASS} locations/mapsets\cr
-\code{\link[=fastLocation]{fastLocation()}}: Get current \strong{GRASS}  "location"\cr
-\code{\link[=fastMaspet]{fastMaspet()}}: Get current \strong{GRASS} "mapset"\cr
+\code{\link[=location]{location()}}: \strong{GRASS} "location" of an object or the active session\cr
+\code{\link[=mapset]{mapset()}}: \strong{GRASS} "mapset" of an object or the active session\cr
 }
 
-\subsection{Functions that operate on *\emph{GRASS}"regions" (seldom used by most users):}{
+\subsection{Functions that operate on \strong{GRASS} "regions" (seldom used by most users):}{
 
-\code{\link[=regionDim]{regionDim()}}: Change or reprot the active region's resolution\cr
+\code{\link[=regionDim]{regionDim()}}: Change or report the active region's resolution\cr
 \code{\link[=regionExt]{regionExt()}}: Change or report the active region's extent\cr
-\code{\link[=regionRes]{regionRes()}}: Change or reprot the active region's dimensions\cr
-\code{\link[=regionReshape]{regionReshape()}}: Change or report the active region's extent and resolution\cr
+\code{\link[=regionRes]{regionRes()}}: Change or report the active region's dimensions\cr
+\code{\link[=regionShape]{regionShape()}}: Change or report the active region's extent and resolution\cr
 }
 
 \subsection{Esoteric tutorials}{
 
-\link[=location]{working directories and **GRASS*locations and mapsets}\cr
+\strong{fasterRaster} \link[=tutorial_sessions]{Working directories, locations, and mapsets}\cr
+\strong{GRASS} \link[=tutorial_regions]{regions}\cr
 }
 }
 \author{

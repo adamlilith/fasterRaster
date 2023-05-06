@@ -1,8 +1,11 @@
 \dontrun{
+# NB This example is in a "dontrun{}" block because it requires users to have
+# GRASS GIS Version 8+ installed on their system.
 
 # IMPORTANT #1: If you already have a GRASS session started, you will need to
 # run the line below and the last line in this example to work with it again.
-opts. <- getFastOptions()
+# If you have not started a GRASS session, you can skip this step and go to
+# step #2.
 
 # IMPORTANT #2: Select the appropriate line below and change as necessary to
 # where GRASS is installed on your system.
@@ -13,23 +16,25 @@ grassDir <- '/usr/local/grass' # Linux
 # setup
 library(terra)
 
-# example data
-madElev <- fastData('madElev')
-
 # start GRASS session for examples only
-fastStart(grassDir = grassDir, crs = madElev,
-workDir = rightSlash(tempdir()), location = 'examples') # line only needed for examples
+wd <- rightSlash(tempdir())
+
+fastStart(crs = madElev, grassDir = grassDir,
+workDir = wd, location = 'examples') # line only needed for examples
 
 # convert a SpatRaster to a GRaster
-me <- fast(madElev)
+madElev <- fastData('madElev') # elevation raster
+elev <- fast(madElev)
 
 # calculate contour lines
-conts <- as.contour(me, nlevels=10)
+conts <- as.contour(elev, nlevels=10)
+
+contsVect <- vect(conts)
 
 plot(madElev)
-plot(conts, add=TRUE)
+plot(contsVect, add=TRUE)
 
-# Revert back to original GRASS session if needed.
+# IMPORTANT #3: Revert back to original GRASS session if needed.
 sessionRestore(opts.)
 removeSession('examples')
 

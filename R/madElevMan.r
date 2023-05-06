@@ -10,8 +10,8 @@
 #'
 #' @keywords elevation Madagascar
 #'
-#' @source [WorldClim][https://worldclim.org]
+#' @source [WorldClim Version 2.1](https://worldclim.org)
 #'
-#' @example man/examples/ex_madData.r
+#' @example man/examples/ex_fastData.r
 #'
 NULL

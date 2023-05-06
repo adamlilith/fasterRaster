@@ -1,34 +1,47 @@
-#' Name(s) of a `GRaster`
+#' Name(s) of a GRaster or fields of a GVector
 #'
-#' Names(s) of a `GRaster`.
+#' Names(s) of a `GRaster` or of fields of a `GVector`.
 #'
-#' @param x A `GRaster`.
-#'
-#' @details `GRaster`s have two types of names, a "gname", which is used internally to point to the **GRASS** representation of the raster (this is not of use to most users), and an "rname", which is taken from the "**R**" name of the raster or the filename. This function returns the "rname".
+#' @param x A `GRaster` or `GVector`.
+#' @param value Character: Name(s) to assign to the raster(s).
+#' 
+#' @details `GRaster`s have two types of names, a "gnames", which is used internally to point to the **GRASS** representation of the raster (this is not of use to most users and is hidden by default), and an "rname", which is taken from the "**R**" name of the raster or the filename. This function returns the "rname".
 #'
 #' @return Character vector.
 #'
-#' @example man/examples/example_GRaster.r
+#' @example man/examples/ex_GRaster.r
 #'
+#' @aliases names
+#' @rdname names
 #' @export
-
-# if (!isGeneric('names')) setGeneric('names', function(x) standardGeneric('names'))
+#' @exportMethod names
 setMethod(
 	f = 'names',
 	signature = 'GRaster',
 	definition = function(x) x@names
 )
 
-if (!isGeneric('names<-')) setGeneric(
-	'names<-',
-	function(x, value) standardGeneric('names<-')
-)
+#' @rdname names
+#' @aliases names<-
+#' @exportMethod names<-
 setMethod(
 	f = 'names<-',
 	signature = 'GRaster',
 	definition = function(x, value) {
 		x@names <- value
-		validObject(x)
+		methods::validObject(x)
 		x
 	}
+)
+
+#' @aliases names
+#' @rdname names
+#' @export
+#' @exportMethod names
+setMethod(
+	f = 'names',
+	signature = 'GVector',
+	definition = function(x) {
+		rgrass::execGRASS('db.columns', table=gnames(x), intern=TRUE)
+	} # EOF
 )

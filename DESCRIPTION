@@ -21,6 +21,7 @@ Description: Processing of large-in-memory/-on disk rasters and spatial vectors
 Depends:
 	R (>= 4.0.0)
 Imports:
+	rgrass,
 	methods,
 	sf,
 	stars,

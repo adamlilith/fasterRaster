@@ -2,12 +2,12 @@
 % Please edit documentation in R/fastRestore.r
 \name{fastRestore}
 \alias{fastRestore}
-\title{Revert to a previous 'GRASS' session (working folder, location and mapset)}
+\title{Revert to a previous 'GRASS' session (working folder, location, and mapset)}
 \usage{
 fastRestore(...)
 }
 \arguments{
-\item{...}{Either a sequence of arguments with the pattern \verb{<argument = value>}, or a list of arguments. These arguments can be any option available in \code{\link[=setFastOptions]{setFastOptions()}}. Of particular note, the \code{workDir}, \code{location}, and \code{mapset} options allow one to revert to a previous \strong{GRASS} session. The current session's \code{workDir}, \code{location}, and \code{mapset} can be seen using \code{\link[=getFastOptions]{getFastOptions()}}.}
+\item{...}{Either a sequence of arguments with the pattern \verb{<argument = value>}, or a list of arguments. These arguments can be any option available in \code{\link[=setFastOptions]{setFastOptions()}}. Of particular note, the \code{workDir}, \code{location}, and \code{mapset} options allow one to revert to a previous \strong{GRASS} session. The current session's \code{workDir}, \code{location}, and \code{mapset} can be seen using \code{\link[=getFastOptions]{getFastOptions()}}, plus  \code{\link[=location]{location()}} and \code{\link[=mapset]{mapset()}}.}
 }
 \value{
 An object of class \code{gmeta} (invisibly) if successful. An error will likely result if not.
@@ -15,6 +15,64 @@ An object of class \code{gmeta} (invisibly) if successful. An error will likely 
 \description{
 This function is useful for reverting to a previous \strong{GRASS} session (\code{workDir}, \code{location}, and/or \code{mapset}). The session must have been already initiated using \code{\link[=fastStart]{fastStart()}} in the current \strong{R} session or a previous one.
 }
+\examples{
+\dontrun{
+# NB This example is in a "dontrun{}" block because it requires users to have
+# GRASS GIS Version 8+ installed on their system.
+
+# IMPORTANT #1: If you already have a GRASS session started, you will need to
+# run the line below and the last line in this example to work with it again.
+# If you have not started a GRASS session, you can skip this step and go to
+# step #2.
+opts. <- getFastOptions()
+
+# IMPORTANT #2: Select the appropriate line below and change as necessary to
+# where GRASS is installed on your system.
+grassDir <- "/Applications/GRASS-8.2.app/Contents/Resources" # Mac
+grassDir <- 'C:/Program Files/GRASS GIS 8.2' # Windows
+grassDir <- '/usr/local/grass' # Linux
+
+# setup
+library(terra)
+
+# example data
+madElev <- fastData('madElev')
+
+# set up one location
+fastStart(crs = madElev, grassDir = grassDir,
+workDir = tempdir(), location = 'examples1') # line only needed for examples
+
+# convert a SpatRaster to a GRaster using the first location
+me1 <- fast(madElev)
+
+# set up another location
+fastStart(crs = madElev, grassDir = grassDir,
+workDir = wd, location = 'examples2') # line only needed for examples
+
+# convert a SpatRaster to a GRaster using the second location
+me2 <- fast(madElev)
+
+location(me1)
+location(me2)
+
+# What GRASS location and mapset are we currently in?
+location()
+mapset()
+
+# What coordinate reference system?
+crs()
+
+# We cannot do any work on me1 because we're in the "examples2" location. We
+# need to switch back to "examples1":
+fastRestore(location = 'examples1')
+
+# IMPORTANT #3: Revert back to original GRASS session if needed.
+fastRestore(opts.)
+removeSession('examples1')
+removeSession('examples2')
+
+}
+}
 \seealso{
-\strong{GRASS} \link[=https://grass.osgeo.org/grass82/manuals/grass_database.html]{locations and mapsets}
+\strong{GRASS} \href{https://grass.osgeo.org/grass82/manuals/grass_database.html}{locations and mapsets}
 }

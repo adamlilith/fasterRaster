@@ -22,7 +22,7 @@
 #'
 #' @seealso [madCoast0], [madCoast4], [madDypsis], [madElev], [madElevAnt], [madElevMan], [madForest2000], [madForest2014], [madRivers]
 #'
-#' @example man/examples/example_fastData.r
+#' @example man/examples/ex_fastData.r
 #'
 #' @export
 
@@ -39,7 +39,7 @@ fastData <- function(x) {
 			madCoast0 <- madCoast4 <- madDypsis <- madRivers <- NULL
 			out <- do.call(utils::data, list(x, envir=environment(), package='fasterRaster'))
 			out <- get(out)
-			
+
 		} else if (x %in% rasters) {
 			rastFile <- system.file('extdata', paste0(x, '.tif'), package='fasterRaster')
 			out <- terra::rast(rastFile)
@@ -47,7 +47,7 @@ fastData <- function(x) {
 			stop('Please supply the name of a data object available in fasterRaster.')
 		}
 	}
-	
+
 	out
-	
+
 }

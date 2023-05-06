@@ -12,8 +12,8 @@
 #'
 #' @keywords Madagascar
 #'
-#' @source [DIVA-GIS][http://www.diva-gis.org/gdata]
+#' @source [DIVA-GIS](http://www.diva-gis.org/gdata)
 #'
-#' @example man/examples/ex_madData.r
+#' @example man/examples/ex_fastData.r
 #'
 NULL

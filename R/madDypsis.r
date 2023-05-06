@@ -12,8 +12,8 @@
 #'
 #' @keywords Dypsis Madagascar
 #'
-#' @source [Global Biodiversity Information Facility (GBIF)][https://gbif.org]
+#' @source [Global Biodiversity Information Facility (GBIF)](https://gbif.org)
 #'
-#' @example man/examples/ex_madData.r
+#' @example man/examples/ex_fastData.r
 #'
 NULL

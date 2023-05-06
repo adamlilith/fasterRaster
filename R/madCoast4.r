@@ -12,8 +12,8 @@
 #'
 #' @keywords Madagascar
 #'
-#' @source Database of Global Administrative Areas Version 2.8 ([GADM][https://gadm.org])
+#' @source [Database of Global Administrative Areas Version 2.8 (GADM)](https://gadm.org)
 #'
-#' @example man/examples/ex_madData.r
+#' @example man/examples/ex_fastData.r
 #'
 NULL

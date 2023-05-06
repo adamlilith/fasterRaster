@@ -1,22 +1,25 @@
 #' Information on rasters and vectors in 'GRASS'
 #'
-#' @param gname `GRASS` name for a raster, 3D raster, or vector.
+#' @param x A `GRaster`, `GVector`, or `gnames`.
 #'
-#' @return Reports extent, dimensions, resolution, bottom/top, etc.
+#' @returns Extent, dimensions, resolution, bottom/top, etc.
 #'
-#' @keywords internal
-
+#' @noRd
 .rastInfo <- function(x) {
 
-	gname <- .gname(x)
+	gn <- if (!inherits(x, 'character')) {
+		gnames(x)
+	} else {
+		x
+	}
 
 	### more than one raster
 	#######################
-	if (length(gname) > 1L) {
+	if (length(gn) > 1L) {
 		
-		for (i in seq_along(gname)) {
+		for (i in seq_along(gn)) {
 		
-			this <- .rastInfo(gname[i])
+			this <- .rastInfo(gn[i])
 			out <- if (exists('out', inherits=FALSE)) {
 				appendLists(out, this)
 			} else {
@@ -26,11 +29,11 @@
 		}
 	
 	} else {
-	### a single gname
+	### a single gnames
 	##################
 
 		rasters <- .ls(c('rasters', 'rasters3d'))
-		type <- names(rasters[rasters %in% gname])
+		type <- names(rasters[rasters %in% gn])
 
 		### 2D raster
 		if (type == 'raster') {
@@ -39,7 +42,7 @@
 				info <- rgrass::execGRASS(
 					'r.info',
 					flags = c('g', 'quiet'),
-					map = gname,
+					map = gn,
 					intern = TRUE,
 					Sys_show.output.on.console = FALSE,
 					echoCmd = FALSE
@@ -50,7 +53,7 @@
 				range <- rgrass::execGRASS(
 					'r.info',
 					flags = c('r', 'quiet'),
-					map = gname,
+					map = gn,
 					intern = TRUE,
 					Sys_show.output.on.console = FALSE,
 					echoCmd = FALSE
@@ -62,9 +65,9 @@
 			ztop <- NA_real_
 			zbottom <- NA_real_
 			
-			numCategories <- info[grepl(info, pattern='ncats=')]
-			numCategories <- sub(numCategories, pattern='ncats=', replacement='')
-			numCategories <- as.integer(numCategories)
+			nCats <- info[grepl(info, pattern='ncats=')]
+			nCats <- sub(nCats, pattern='ncats=', replacement='')
+			nCats <- as.integer(nCats)
 
 		### 3D raster
 		} else if (type == 'raster3d') {
@@ -73,7 +76,7 @@
 				info <- rgrass::execGRASS(
 					'r3.info',
 					flags = c('g', 'quiet'),
-					map = gname,
+					map = gn,
 					intern = TRUE,
 					Sys_show.output.on.console = FALSE,
 					echoCmd = FALSE
@@ -84,7 +87,7 @@
 				range <- rgrass::execGRASS(
 					'r3.info',
 					flags = c('r', 'quiet'),
-					map = gname,
+					map = gn,
 					intern = TRUE,
 					Sys_show.output.on.console = FALSE,
 					echoCmd = FALSE
@@ -102,7 +105,7 @@
 			ztop <- as.numeric(ztop)
 			zbottom <- as.numeric(zbottom)
 			
-			numCategories <- 0L
+			nCats <- 0L
 			
 		}
 		
@@ -167,10 +170,10 @@
 		}
 		
 		# number of categories
-		if (length(numCategories) == 0L) numCategories <- 0L
+		if (length(nCats) == 0L) nCats <- 0L
 
 		# range of values
-		if (numCategories == 0) {
+		if (nCats == 0) {
 
 			minVal <- range[grepl(range, pattern='min=')]
 			maxVal <- range[grepl(range, pattern='max=')]
@@ -187,7 +190,7 @@
 		}
 
 		out <- list(
-			gname = gname,
+			gnames = gn,
 			type = type,
 			topology = topology,
 			
@@ -211,7 +214,7 @@
 			terraDataType = terraDataType,
 			gdalDataType = gdalDataType,
 			
-			numCategories = numCategories,
+			nCats = nCats,
 			minVal = minVal,
 			maxVal = maxVal
 			
@@ -225,38 +228,30 @@
 
 .vectInfo <- function(x) {
 
-	gname <- .gname(x)
+	gn <- if (!inherits(x, 'character')) {
+		gnames(x)
+	} else {
+		x
+	}
 
-	# extent
+	### extent
 	suppressMessages(
 		info1 <- rgrass::execGRASS(
 			'v.info',
 			flags = 'g',
-			map = gname,
+			map = gn,
 			intern = TRUE,
 			Sys_show.output.on.console = FALSE,
 			echoCmd = FALSE
 		)
 	)
 	
-	# geometry and topology
+	### geometry and topology
 	suppressMessages(
 		info2 <- rgrass::execGRASS(
 			'v.info',
 			flags = 't',
-			map = gname,
-			intern = TRUE,
-			Sys_show.output.on.console = FALSE,
-			echoCmd = FALSE
-		)
-	)
-	
-	# fields
-	suppressMessages(
-		info3 <- rgrass::execGRASS(
-			'v.info',
-			flags = 'c',
-			map = gname,
+			map = gn,
 			intern = TRUE,
 			Sys_show.output.on.console = FALSE,
 			echoCmd = FALSE
@@ -282,15 +277,21 @@
 	centroids <- as.numeric(centroids)
 	areas <- as.numeric(areas)
 
-	geometry <- if (points > 0 & lines == 0 & boundaries == 0 & centroids == 0 & areas == 0) {
-		'points'
+	if (points > 0 & lines == 0 & boundaries == 0 & centroids == 0 & areas == 0) {
+		geometry <- 'points'
+		numGeometries <- points
 	} else if (points == 0 & lines > 0 & boundaries == 0 & centroids == 0 & areas == 0) {
-		'lines'
+		geometry <- 'lines'
+		numGeometries <- lines
 	} else if (points == 0 & lines == 0 & boundaries > 0 & centroids > 0 & areas > 0) {
-		'polygons'
+		geometry <- 'polygons'
+		numGeometries <- boundaries
 	} else {
-		NA
+		geometry <- NA
+		numGeometries <- NA
 	}
+	
+	numGeometries <- as.integer(numGeometries)
 
 	# extent
 	west <- info1[grepl(info1, pattern='west=')]
@@ -329,31 +330,60 @@
 		
 	}
 
-	# fields and types
-	info3 <- info3[!grepl(info3, pattern ='INTEGER|cat')]
-	info3 <- info3[!grepl(info3, pattern ='Displaying column types/names for database connection of layer')]
-	info3 <- strsplit(info3, '\\|')
-	fields <- fieldClasses <- rep(NA, length(info3))
-	for (i in seq_along(info3)) {
-	
-		type <- info3[[i]][1L]
-		type <- if (type == 'CHARACTER') {
-			'character'
-		} else if (type == 'INTEGER') {
-			'integer'
-		} else if (type == 'DOUBLE PRECISION') {
-			'numeric'
+	### fields
+	hasFields <- rgrass::execGRASS('v.db.connect', map=gn, flags='g', intern=TRUE)
+	if (grepl(hasFields, pattern='is not connected to a database')) {
+
+		fieldClasses <- NA_character_
+		fields <- NA_character_
+		numFields <- as.integer(0)
+
+	# vector has a data frame
+	} else {
+
+		suppressMessages(
+			info3 <- rgrass::execGRASS(
+				'v.info',
+				flags = 'c',
+				map = gn,
+				intern = TRUE,
+				Sys_show.output.on.console = FALSE,
+				echoCmd = FALSE
+			)
+		)
+		
+		# fields and types
+		info3 <- info3[!grepl(info3, pattern ='INTEGER|cat')]
+		info3 <- info3[!grepl(info3, pattern ='Displaying column types/names for database connection of layer')]
+		info3 <- strsplit(info3, '\\|')
+		fields <- fieldClasses <- rep(NA, length(info3))
+		for (i in seq_along(info3)) {
+		
+			type <- info3[[i]][1L]
+			type <- if (type == 'CHARACTER') {
+				'character'
+			} else if (type == 'INTEGER') {
+				'integer'
+			} else if (type == 'DOUBLE PRECISION') {
+				'numeric'
+			}
+		
+			fieldClasses[i] <- type
+			fields[i] <- info3[[i]][2L]
 		}
-	
-		fieldClasses[i] <- type
-		fields[i] <- info3[[i]][2L]
+		
+		numFields <- length(fields)
+		numFields <- as.integer(numFields)
+
 	}
-	
+		
 	out <- list(
-		gname = gname,
+		gnames = gn,
 		type = 'vector',
 		topology = topology,
 		geometry = geometry,
+		
+		numGeometries = numGeometries,
 		
 		west = west,
 		east = east,
@@ -363,6 +393,7 @@
 		zbottom = zbottom,
 		ztop = ztop,
 		
+		numFields = numFields,
 		fields = fields,
 		fieldClasses = fieldClasses
 	)

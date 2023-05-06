@@ -1,15 +1,17 @@
-#' Minimum and maximum values across all non-NA cells of a 'GRaster'
+#' Minimum and maximum values across all non-NA cells of a GRaster
 #'
-#' Minimum and maximum values across all non-NA cells of a 'GRaster'.
+#' Minimum and maximum values across all non-NA cells of a `GRaster`.
 #'
 #' @param x A `GRaster`.
 #'
 #' @return A numeric matrix.
 #' 
-#' @example man/examples/example_GRaster.r
+#' @example man/examples/ex_GRaster.r
 #'
+#' @aliases minmax
+#' @rdname minmax
 #' @export
-# if (!isGeneric('minmax')) setGeneric(name='minmax', def=function(x) standardGeneric('minmax'))
+#' @exportMethod minmax
 setMethod(
 	f = 'minmax',
 	signature = 'GRaster',

@@ -8,13 +8,51 @@
 An object of class \code{sf}.
 }
 \source{
-\link[=https://gbif.org]{Global Biodiversity Information Facility (GBIF)}
+\href{https://gbif.org}{Global Biodiversity Information Facility (GBIF)}
 }
 \usage{
 data(madDypsis)
 }
 \description{
 Spatial points vector of herbarium specimens and observations of plants in the genus \emph{Dypsis}  (slender, evergreen palms) from a portion of eastern Madagascar.
+}
+\examples{
+
+### vector data
+library(sf)
+
+# for vector data, we can use data(*) or fastData(*):
+data(madCoast0) # same as next line
+madCoast0 <- fastData('madCoast0') # same as previous
+madCoast0
+
+madCoast4 <- fastData('madCoast4')
+madCoast4
+
+madRivers <- fastData('madRivers')
+madRivers
+
+madDypsis <- fastData('madDypsis')
+madDypsis
+
+### raster data
+library(terra)
+
+# for raster data, we can get the file directly or using fastData(*):
+rastFile <- system.file('extdata/madElev.tif', package='fasterRaster')
+madElev <- terra::rast(rastFile)
+
+madElev <- fastData('madElev') # same as previous two lines
+madElev
+
+madForest2000 <- fastData('madForest2000')
+madForest2000
+
+madForest2014 <- fastData('madForest2014')
+madForest2014
+
+madChelsa <- fastData('madChelsa')
+madChelsa
 }
 \keyword{Dypsis}
 \keyword{Madagascar}
