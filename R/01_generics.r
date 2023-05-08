@@ -22,7 +22,7 @@ methods::setGeneric(name = 'distance', def = function(x, y, ...) standardGeneric
 methods::setGeneric('ext', package = 'terra')
 
 methods::setGeneric(name = 'fast', def = function(x, ...) standardGeneric('fast'))
-methods::setGeneric(name = 'fastClass', def = function(x, ...) standardGeneric('fastClass'))
+# methods::setGeneric(name = 'fastClass', def = function(x, ...) standardGeneric('fastClass'))
 
 methods::setGeneric(name = 'geomtype', package='terra')
 methods::setGeneric(name = 'gnames', def = function(x) standardGeneric('gnames'))

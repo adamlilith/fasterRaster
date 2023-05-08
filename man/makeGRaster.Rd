@@ -9,7 +9,7 @@ makeGRaster(gn, names = "raster")
 \arguments{
 \item{gn}{Character: The name of the raster in \strong{GRASS}.}
 
-\item{name}{Character: Name of the raster.}
+\item{names}{Character: Name of the raster.}
 }
 \value{
 A \code{GRaster}.
@@ -74,8 +74,8 @@ minmax(elev) # min/max values
 location(elev) # location
 mapset(elev) # mapset
 
-# "gname" of the object (its name in GRASS)
-gname(elev)
+# "gnames" of the object (its name in GRASS)
+gnames(elev)
 
 # coordinate reference system
 crs(elev)

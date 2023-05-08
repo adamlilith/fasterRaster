@@ -3,15 +3,18 @@
 \name{ext,GSpatial-method}
 \alias{ext,GSpatial-method}
 \alias{ext}
-\alias{zext,GSpatial-method}
+\alias{zext,GRaster-method}
 \alias{zext}
+\alias{zext,GVector-method}
 \alias{st_bbox,ANY-method}
 \alias{st_bbox}
 \title{Spatial extent of a GRaster or GVector}
 \usage{
 \S4method{ext}{GSpatial}(x)
 
-\S4method{zext}{GSpatial}(x)
+\S4method{zext}{GRaster}(x)
+
+\S4method{zext}{GVector}(x)
 
 \S4method{st_bbox}{ANY}(obj, ...)
 
@@ -23,7 +26,9 @@ st_bbox(obj, ...)
 \item{...}{Other arguments (generally unused).}
 }
 \value{
-\code{ext()} returns a \code{SpatExtent} object (\strong{terra} package), \code{zext()} a numeric vector, and \code{st_bbox()} returns a \code{bbox} object (\strong{sf} package).
+\code{ext()} returns a \code{SpatExtent} object (\strong{terra} package).
+\code{zext()} returns a numeric vector for \code{GRaster}s and a numeric matrix for \code{GVector}s.
+\code{st_bbox()} returns a \code{bbox} object (\strong{sf} package).
 }
 \description{
 \code{ext()} provides the 2-dimensional spatial extent of a \code{GRaster} or \code{GVector} (i.e., westernmost/easternmost and southernmost/northernmost coordinates of area represented). \code{zext()} provides the vertical extent (i.e., topmost and bottommost elevation of the volume represented). The vertical extent is only defined if the \code{GRaster} or \code{GVector} is 3-dimensional.
@@ -45,11 +50,14 @@ grassDir <- 'C:/Program Files/GRASS GIS 8.2' # Windows
 grassDir <- '/usr/local/grass' # Linux
 
 # setup
+library(sf)
 library(terra)
 
 # example data
 madElev <- fastData('madElev')
-madForest2000 <- fastData('madForest2000')
+madCoast0 <- fastData('madCoast0')
+madRivers <- fastData('madRivers')
+madDypsis <- fastData('madDypsis')
 
 # start GRASS session for examples only
 wd <- forwardSlash(tempdir()) # only for examples
@@ -57,11 +65,11 @@ wd <- forwardSlash(tempdir()) # only for examples
 fastStart(crs = madElev, grassDir = grassDir,
 workDir = wd, location = 'examples') # line only needed for examples
 
+### GRaster properties
+######################
+
 # convert SpatRasters to GRasters
 elev <- fast(madElev)
-forest <- fast(madForest2000)
-
-### GRaster properties
 
 dim(elev) # rows, columns, depths, layers
 nrow(elev) # rows
@@ -82,8 +90,8 @@ minmax(elev) # min/max values
 location(elev) # location
 mapset(elev) # mapset
 
-# "gname" of the object (its name in GRASS)
-gname(elev)
+# "gnames" of the object (its name in GRASS)
+gnames(elev)
 
 # coordinate reference system
 crs(elev)
@@ -93,21 +101,52 @@ st_crs(elev)
 ext(elev)
 st_bbox(elev)
 
-# vertical extent (not defined for this raster)
-zext(elev)
-
 # data type
 datatype(elev)
 
-# concatenating multiple GRasters
-rasts <- c(elev, forest)
-rasts
+# names
+names(elev)
 
-nlyr(rasts) # number of layers
+### GVector properties
+######################
 
-names(rasts) # names
-names(rasts) <- c('elev_meters', 'forest')
-rasts
+# convert sf vectors to GVectors
+coast <- fast(madCoast4)
+rivers <- fast(madRivers)
+dypsis <- fast(madDypsis)
+
+# extent
+ext(rivers)
+st_bbox(rivers) # extent
+
+# coordinate reference system
+crs(rivers)
+st_crs(rivers)
+
+# column names and data types
+names(coast)
+datatype(coast)
+
+# session information
+location(rivers) # GRASS location
+mapset(rivers) # GRASS mapset
+
+# points, lines, or polygons?
+geomtype(dypsis)
+geomtype(rivers)
+geomtype(coast)
+
+is.points(dypsis)
+is.points(coast)
+
+is.lines(rivers)
+is.lines(dypsis)
+
+is.polygons(coast)
+is.polygons(dypsis)
+
+# number of dimensions
+topology(rivers)
 
 # IMPORTANT #3: Revert back to original GRASS session if needed.
 fastRestore(opts.)

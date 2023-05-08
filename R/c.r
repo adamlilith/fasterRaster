@@ -1,18 +1,21 @@
-#' "Stack" GRasters or GVectors
+#' "Stack" GRasters and combine GVectors
 #'
-#' `GRaster`s and `GVector`s can be "stacked" using this function, effectively creating a multi-layered raster or vector set. Note that this is different from creating a 3-dimensional raster or vector, though such an effect can be emulated using stacking. Stacks can only be created when:
-#' * All objects are in the same **GRASS** [location and mapset][tutorial_sessions].
-#' * All objects are the same type (`GRaster`s or `GVector`s, but not both).
-#' * Additionally, for `GRaster`s:
-#'		* Horizontal extents are the same.
-#'      * Horizontal dimensions/resolutions are the same.
-#'		* The topology (2D or 3D) must be the same. If 3D, then all `GRaster`s must have the same number of depths and vertical extents.
-#'  `GVector`s do not have to have the same horizontal or vertical extents and topologies.
+#' `GRaster`s can be "stacked" using this function, effectively creating a multi-layered raster. Note that this is different from creating a 3-dimensional raster, though such an effect can be emulated using stacking. `GVector`s can be combined into a single vector.  Stacks can only be created when:
+#' * All objects are in the same **GRASS** [location and mapset][tutorial_locations].
+#' * All objects are the same class (either all `GRaster`s or all `GVector`s).
+#' * For `GRaster`s:
+#'      * Horizontal extents are the same.
+#'      * Horizontal dimensions are the same.
+#'      * The topology (2- or 3-dimensional) must be the same. If 3D, then all rasters must have the same number of depths and vertical extents.
+#' * For `GVector`s:
+#'      * The geometry (points, lines, or polygons) must be the same.
+#' If features (boundaries, lines, etc.) of `GVector`s that are combined are identical or nearly identical, they can be cleaned using [removeDupNodes()] and [snap()].
 #'
-#' @param x A `GRaster`, `GVector`, or a list of of `GRaster`s or `GVector`s (but not both),
-#' @param ... One or more `GRaster`s or `GVector`s, or a list of `GRaster`s or `GVector`s (but not both).
+#' @param x A `GRaster` or a `GVector`.
+#' @param ... One or more `GRaster`s, one or more `GVector`s, a list of `GRaster`s, or a list of `GVector`s. You can use a mix of lists and individual rasters or vectors.
+#' @param df If `TRUE`, copy the data frame of the `x` `GVector` to the output. If `FALSE` (default), the output will not have a data frame.
 #'
-#' @return A `GRaster`.
+#' @return A `GRaster` or `GVector`.
 #'
 #' @example man/examples/ex_GRaster_GVector.r
 #'
@@ -24,47 +27,40 @@ setMethod(f = 'c',
 	definition = function(x, ...) {
 
 	.restore(x)
-	x <- list(x, ...)
-
-	# unlist lists of GSpatials
-	isList <- sapply(x, is.list)
-	if (any(isList)) {
-		index <- which(isList)
-		for (i in index) x[[i]] <- c(unlist(x[[i]]))
-	}
+	dots <- list(...)
 
 	### concatenate
-	out <- x[[1L]]
+	out <- x
+	z <- zext(out)
+	dims <- dim(out)
 	
-	if (length(x) > 1L) {
+	if (length(dots) >= 1L) {
 
-		for (i in 2L:length(x)) {
+		for (i in seq_along(dots)) {
 
-			if (!inherits(x[[i]], 'GRaster')) stop('Can only combine GRasters with GRasters.')
+			if (is.list(dots[[i]])) dots[[i]] <- c(dots[[i]])
+			if (!inherits(dots[[i]], 'GRaster')) stop('Can only combine GRasters with GRasters.')
 			
-			comparable(first, x[[i]], fail = TRUE)
+			comparable(out, dots[[i]], fail = TRUE)
 
-			mmx <- minmax(x[[i]])
-			mmout <- minmax(out)
-			z <- zext(out)
+			mmdots <- minmax(dots[[i]])
 			
 			out <- GRaster(
 				location = location(out),
 				mapset = mapset(out),
 				crs = crs(out),
 				topology = topology(out),
-				gnames = c(gnames(out), gnames(x[[i]])),
-				names = c(names(out), names(x[[i]])),
+				gnames = c(gnames(out), gnames(dots[[i]])),
+				names = c(names(out), names(dots[[i]])),
 				extent = as.vector(ext(out)),
-				ztop = z[['top']],
-				zbottom = z[['bottom']],
-				datatypeGRASS = c(datatype(out), datatype(x[[i]])),
-				dimensions = c(nrow(out), ncol(out), ndepth(out)),
-				nLayers = nlyr(out) + nlyr(x[[i]]),
+				zextent = z,
+				datatypeGRASS = c(datatype(out), datatype(dots[[i]])),
+				dimensions = dims,
+				nLayers = nlyr(out) + nlyr(dots[[i]]),
 				resolution = res(out),
-				nCats = c(ncat(out), ncat(x[[i]])),
-				minVal = c(mmout['min', ], mm['min', ]),
-				maxVal = c(mmout['max', ], mm['max', ])
+				nCats = c(ncat(out), ncat(dots[[i]])),
+				minVal = c(out@minVal, mmdots['min', ]),
+				maxVal = c(out@maxVal, mmdots['max', ])
 			)
 		
 		} # next GRaster to combine
@@ -82,62 +78,53 @@ setMethod(f = 'c',
 #' @exportMethod c
 setMethod(f = 'c',
 	signature = 'GVector',
-	definition = function(x, ...) {
+	definition = function(x, ..., df = FALSE) {
+
+	flags <- c('quiet', 'overwrite')
+	if (df) flags <- c(flags, 'e')
 
 	.restore(x)
-	x <- list(x, ...)
-	
-	if (any(is.list(x))) {
-		newx <- list()
-		for (i in seq_len(x)) {
-			newx[[i]] <- if (is.list(x[[i]])) {
-				unlist(x[[i]])
-			} else {
-				x[[i]]
+	dots <- list(...)
+
+	# unlist any lists
+	if (length(dots) > 0L) {
+		
+		if (any(sapply(dots, is.list))) {
+			newdots <- list()
+			for (i in seq_along(dots)) {
+				if (is.list(dots[[i]])) {
+					newdots <- c(newdots, unlist(dots[[i]]))
+				} else {
+					newdots <- c(newdots, dots[[i]])
+				}
 			}
+			dots <- newdots
 		}
-		x <- newx
 	}
 
-	### concatenate
-	out <- x[[1L]]
-	
-	if (length(x) > 1L) {
+	# comparable?
+	if (length(dots) > 0L) {
+		for (i in seq_along(dots)) comparable(x, dots[[i]], compareTopo=TRUE, compareGeo=TRUE)
+	}
 
-		for (i in 2:length(x)) {
-		
-			if (!inherits(x[[i]], 'GVector')) stop('Can only combine GVectors with GVectors.')
-			
-			comparable(out[[1L]], x[[i]], fail = TRUE)
+	# gnames of inputs
+	input <- gnames(x)
+	if (length(dots) > 0L) input <- c(input, sapply(dots, gnames))
+	input <- paste(input, collapse=',')
 
-			mmx <- minmax(x[[i]])
-			mmout <- minmax(out)
-			zx <- zext(x)
-			zout <- zext(out)
-			
-			out <- GVector(
-				location = location(out),
-				mapset = mapset(out),
-				crs = crs(out),
-				topology = topology(out),
-				gnames = c(gnames(out), gnames(x[[i]])),
-				names = c(names(out), names(x[[i]])),
-				extent = as.vector(ext(out)),
-				ztop = c(zout[['top']], zx[['top']]),
-				zbottom = c(zout[['bottom']], zx[['bottom']]),
-				nLayers = c(nlyr(out), nlyr(x[[i]])),
-				geometry = c(geometry(out), geometry(x[[i]])),
-				nFields = c(nFields(out), nFields(x[[i]])),
-				fields = c(fields(out), fields(x[[i]])),
-				fieldClasses = c(fieldClasses(out), fieldClasses(x[[i]]))
-			)
-		
-		} # next GVector to combine
-		
-	} # next item
-		
-	if (length(anyDuplicated(out@names)) > 0L) out@names <- make.unique(out@names)
-	out
+	gn <- .makeGname('combo', 'vector')
+
+	args = list(
+		cmd = 'v.patch',
+		input = input,
+		output = gn,
+		flags = flags
+	)
+
+	do.call(rgrass::execGRASS, args=args)
+
+	makeGVector(gn)
 	
 	} # EOF
 )
+

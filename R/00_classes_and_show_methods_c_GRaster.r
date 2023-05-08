@@ -9,20 +9,20 @@ GRaster <- setClass(
 	'GRaster',
 	contains = 'GSpatial',
 	slots = list(
-		zextent = 'numeric',
 		datatypeGRASS = 'character',
 		dimensions = 'integer',
 		resolution = 'numeric',
+		nLayers = 'integer',
 		names = 'character',
 		nCats = 'integer',
 		minVal = 'numeric',
 		maxVal = 'numeric'
 	),
 	prototype = prototype(
-		zextent = c(NA_real_, NA_real_),
 		datatypeGRASS = NA_character_,
 		dimensions = c(NA_integer_, NA_integer_, NA_integer_),
 		resolution = c(NA_real_, NA_real_, NA_real_),
+		nLayers = NA_integer_,
 		names = NA_character_,
 		nCats = NA_integer_,
 		minVal = NA_real_,
@@ -32,13 +32,7 @@ GRaster <- setClass(
 
 setValidity('GRaster',
 	function(object) {
-		if (object@topology == '2D' & (!is.na(object@zextent[1L]) | !is.na(object@zextent[2L]))) {
-			paste0('@zxtent must be NA if @topology is ', sQuote('2D'), '.')
-		} else if (object@topology == '3D' & (is.na(object@zextent[1L]) | is.na(object@zextent[2L]))) {
-			paste0('@zextent cannot be NA if @topology is ', sQuote('3D'), '.')
-		} else if (object@topology == '3D' & (object@zextent[1L] > object@zextent[2L])) {
-			paste0('@zextent[1] is > @zextent[2].')
-		} else if (!all(object@datatypeGRASS %in% c('CELL', 'FCELL', 'DCELL'))) {
+		if (!all(object@datatypeGRASS %in% c('CELL', 'FCELL', 'DCELL'))) {
 			paste0('@datatypeGRASS can only be NA, ', sQuote('CELL'), ', ', sQuote('FCELL'), ', or ', sQuote('DCELL'), '.')
 		} else if (any(object@dimensions[1L:2L] <= 0L)) {
 			'First two values in @dimensions must be positive integers.'
@@ -50,6 +44,10 @@ setValidity('GRaster',
 			'Second @resolution must be a positive real value.'
 		} else if (!is.na(object@resolution[3L]) && object@resolution[3L] <= 0) {
 			'Third value in @resolution must be NA or a positive real value.'
+		} else if (object@nLayers < 1) {
+			'@nLayers must be a positive integer.'
+		} else if (object@nLayers != length(object@gnames)) {
+			'@nLayers is different from the number of @gnames.'
 		} else if (object@nLayers != length(object@names)) {
 			'@names must be @nLayers in length.'
 		} else if (object@nLayers != length(object@nCats)) {
@@ -69,7 +67,7 @@ setValidity('GRaster',
 #' @description Create a `GRaster` from a raster existing in the current **GRASS** session.
 #'
 #' @param gn Character: The name of the raster in **GRASS**.
-#' @param name Character: Name of the raster.
+#' @param names Character: Name of the raster.
 #'
 #' @returns A `GRaster`.
 #'

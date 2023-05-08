@@ -3,33 +3,25 @@
 \name{c,GRaster-method}
 \alias{c,GRaster-method}
 \alias{c}
-\alias{c,GVector-method}
-\title{"Stack" GRasters or GVectors}
+\title{"Stack" GRasters}
 \usage{
 \S4method{c}{GRaster}(x, ...)
-
-\S4method{c}{GVector}(x, ...)
 }
 \arguments{
-\item{x}{A \code{GRaster}, \code{GVector}, or a list of of \code{GRaster}s or \code{GVector}s (but not both),}
+\item{x}{A \code{GRaster} or a list of of \code{GRaster}s,}
 
-\item{...}{One or more \code{GRaster}s or \code{GVector}s, or a list of \code{GRaster}s or \code{GVector}s (but not both).}
+\item{...}{One or more \code{GRaster}s or a list of \code{GRaster}s.}
 }
 \value{
 A \code{GRaster}.
 }
 \description{
-\code{GRaster}s and \code{GVector}s can be "stacked" using this function, effectively creating a multi-layered raster or vector set. Note that this is different from creating a 3-dimensional raster or vector, though such an effect can be emulated using stacking. Stacks can only be created when:
+\code{GRaster}s can be "stacked" using this function, effectively creating a multi-layered raster. Note that this is different from creating a 3-dimensional raster, though such an effect can be emulated using stacking. Stacks can only be created when:
 \itemize{
-\item All objects are in the same \strong{GRASS} \link[=tutorial_sessions]{location and mapset}.
-\item All objects are the same type (\code{GRaster}s or \code{GVector}s, but not both).
-\item Additionally, for \code{GRaster}s:
-\itemize{
+\item All \code{GRaster}s are in the same \strong{GRASS} \link[=tutorial_locations]{location and mapset}.
 \item Horizontal extents are the same.
-\item Horizontal dimensions/resolutions are the same.
-\item The topology (2D or 3D) must be the same. If 3D, then all \code{GRaster}s must have the same number of depths and vertical extents.
-\code{GVector}s do not have to have the same horizontal or vertical extents and topologies.
-}
+\item Horizontal dimensions are the same.
+\item The topology (2- or 3-dimensional) must be the same. If 3D, then all rasters must have the same number of depths and vertical extents.
 }
 }
 \examples{
@@ -89,8 +81,8 @@ minmax(elev) # min/max values
 location(elev) # location
 mapset(elev) # mapset
 
-# "gname" of the object (its name in GRASS)
-gname(elev)
+# "gnames" of the object (its name in GRASS)
+gnames(elev)
 
 # coordinate reference system
 crs(elev)

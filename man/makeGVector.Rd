@@ -4,12 +4,10 @@
 \alias{makeGVector}
 \title{Create a GVector}
 \usage{
-makeGVector(gn, names = NULL)
+makeGVector(gn)
 }
 \arguments{
 \item{gn}{Character: The name of the vector in \strong{GRASS}.}
-
-\item{names}{Character: "Friendly" name of the vector.}
 }
 \value{
 A \code{GVector}.
@@ -74,8 +72,8 @@ minmax(elev) # min/max values
 location(elev) # location
 mapset(elev) # mapset
 
-# "gname" of the object (its name in GRASS)
-gname(elev)
+# "gnames" of the object (its name in GRASS)
+gnames(elev)
 
 # coordinate reference system
 crs(elev)

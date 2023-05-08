@@ -34,7 +34,7 @@ methods::setMethod(
 	function(x, rastOrVect) {
 	
 	n <- length(x)
-	gnsTo <- rep(NA_chatracter_, n)
+	gnsTo <- rep(NA_character_, n)
 	
 	rastOrVect <- .pmatch(tolower(rastOrVect), c('raster', 'vector'))
 	rastOrVect <- rep(rastOrVect, n)

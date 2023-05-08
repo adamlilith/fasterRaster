@@ -18,27 +18,54 @@ methods::setMethod(
 	f = 'convHull',
 	signature = c(x = 'GVector'),
 	definition = function(x, by = '') {
-print('HAVE NOT IMPLEMENTES "WHERE" IN CONVHULL()!')	
-	n <- nlyr(x)
-	out <- list()
-	
-	gn <- .makeGname('convHull', 'vector', n)
-	for (i in seq_len(n)) {
+
+	if (by == '') {
 		
+		gn <- .makeGname('convHull', 'vector', 1L)
+	
 		args <- list(
 			cmd = 'v.hull',
-			input = gnames(x)[i],
-			output = gn[i],
+			input = gnames(x),
+			output = gn,
 			flags = c('quiet', 'overwrite')
 		)
-	
+
 		do.call(rgrass::execGRASS, args=args)
+		out <- makeGVector(gn)
 		
-		out[[i]] <- makeVector(gn[i])
-		
-	} # next layer
+	} else {
 	
-	out <- c(out)
+		df <- as.data.frame(x)
+		uniques <- unique(df[ , by, drop=TRUE])
+	
+		n <- length(uniques)
+		gns <- .makeGname('convHull', 'vector', n)
+
+		vects <- list()
+		for (i in seq_len(n)) {
+
+			uniq <- uniques[i]
+			cats <- df$cat[df[ , by, drop = TRUE] == uniq]
+			cats <- paste(cats, collapse=', ')
+
+			# select
+			args <- list(
+				cmd = 'v.hull',
+				input = gnames(x),
+				output = gns[i],
+				layer = layerName(x),
+				flags = c('quiet', 'overwrite'),
+				cats = cats,
+				intern = FALSE
+			)
+			
+			do.call(rgrass::execGRASS, args=args)
+			vects[[i]] <- makeGVector(gns[i])
+			
+		} # next set
+	
+	}
+			
 	out
 		
 	} # EOF

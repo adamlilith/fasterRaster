@@ -11,9 +11,9 @@
 \S4method{[[}{GVector,ANY,ANY}(x, i)
 }
 \arguments{
-\item{x}{A \code{GRaster}.}
+\item{x}{A \code{GRaster} or \code{GVector} with more than one layer.}
 
-\item{i}{A character, numeric, or integer vector: Indicates the name(s) or indices of the objects to access.}
+\item{i}{A character (\code{GRaster}s only), numeric, or integer vector: Indicates the name(s) or indices of the objects to access.}
 }
 \value{
 A \code{GRaster}.
@@ -78,8 +78,8 @@ minmax(elev) # min/max values
 location(elev) # location
 mapset(elev) # mapset
 
-# "gname" of the object (its name in GRASS)
-gname(elev)
+# "gnames" of the object (its name in GRASS)
+gnames(elev)
 
 # coordinate reference system
 crs(elev)

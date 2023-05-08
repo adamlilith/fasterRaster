@@ -38,25 +38,19 @@ setMethod(f = 'datatype',
 
 #' @aliases datatype
 #' @rdname datatype
-#' @export datatype
 #' @exportMethod datatype
 setMethod(f = 'datatype',
 	signature = c(x = 'GVector'),
 	definition = function(x) {
 
-		info <- rgrass::execGRASS('v.info', flags='c', map=gnames(x), intern=TRUE)
-		info <- info[!grepl(info, pattern='Displaying column types/names for database connection of layer')]
-		
-		info <- strsplit(info, split='\\|')
-		
-		dt <- fields <- rep(NA_character_, length(info))
-		for (i in seq_along(info)) {
-			fields[i] <- info[[i]][2L]
-			dt[i] <- info[[i]][1L]
+		if (inherits(x@df, 'GFullMetaTable')) {
+			data.frame(
+				field = x@df@fields,
+				datatype = x@df@classes
+			)
+		} else {
+			NULL
 		}
-		
-		dt <- tolower(dt)
-		data.frame(field = fields, datatype = dt)
 	
 	} # EOF
 )

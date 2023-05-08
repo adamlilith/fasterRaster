@@ -79,16 +79,14 @@ methods::setMethod(
 			extent = as.vector(ext(x)),
 			ztop = zext(x)[1L],
 			zbottom = zext(x)[2L],
-			datatypeGRASS = datatype(x)[i],
-			dimensions = c(dim(x), n),
-			numFields = ncat(x)[i],
-			fieldClasses = ncat(x)[i],
-			fields = fields(x)[i]
+			nFields = ncat(x)[i],
+			fields = names(x)[[i]],
+			fieldClasses = ncat(x)[i]
 		)
 	
 	}
 	
-	if (length(anyDuplicated(out@names)) > 0L) out@names <- make.unique(out@names)
+	if (inherits(out, 'GRaster') && length(anyDuplicated(out@names)) > 0L) out@names <- make.unique(out@names)
 	out
 
 }

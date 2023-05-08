@@ -152,10 +152,10 @@ methods::setMethod(
 	flags <- c('quiet', 'overwrite', 'm')
 	if (!fillNA) flags <- c(flags, 'n')
 	
-	gn <- .makeGname(NULL, 'raster')
+	gnOut <- .makeGname(NULL, 'raster')
 	rgrass::execGRASS('r.grow.distance', input=gnameRasterized, distance=gn, metric=metric, flags=flags, intern=TRUE)
 	
-	# convert to kilometers
+	# convert meters to kilometers
 	unit <- .pmatch(unit, c('meters', 'kilometers', 'km'))
 	if (unit %in% c('kilometers', 'km')) {
 	
@@ -184,9 +184,6 @@ methods::setMethod(
 	if (!is.null(maxDist) && maxDist < 0) stop('Argument ', sQuote('maxDist'), ' must be positive or NULL.')
 	if ((!is.null(maxDist) & !is.null(maxDist)) && (minDist > maxDist)) stop('Argument ', sQuote('minDist'), ' is greater than ', sQuote('maxDist'), '.')
 
-	metrics <- c('euclidean', 'squared', 'maximum', 'manhattan', 'geodesic')
-	metric <- .pmatch(metric, metrics)
-
 	comparable(x, y)
 	.restore(x)
 
@@ -214,12 +211,11 @@ methods::setMethod(
 
 #' @aliases distance
 #' @rdname distance
-#' @export
-#' @exportMethod distance
+#' @exportMethod st_distance
 methods::setMethod(
 	'st_distance',
 	signature(x = 'GVector', y = 'GVector'),
 	function(x, y, unit = 'meters', minDist = NULL, maxDist = NULL) {
-		distance(x=x, y=y, unit=unit, metric =metric)
+		distance(x=x, y=y, unit=unit, minDist=minDist, maxDist=maxDist)
 	}
 )

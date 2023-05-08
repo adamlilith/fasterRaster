@@ -5,10 +5,12 @@
 \alias{convHull}
 \title{Minimum convex hull around a spatial vector}
 \usage{
-\S4method{convHull}{GVector}(x)
+\S4method{convHull}{GVector}(x, by = "")
 }
 \arguments{
 \item{x}{A \code{GVector}.}
+
+\item{by}{Character: If \code{''} (default), then a convex hull is created for all geometries together. Otherwise, this is the name of a field in the vector. Hulls will be created for each set of geometries with the same value in this column.}
 }
 \value{
 A \code{GVector}.

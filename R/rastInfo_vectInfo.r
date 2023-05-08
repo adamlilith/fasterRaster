@@ -228,7 +228,7 @@
 
 .vectInfo <- function(x) {
 
-	gn <- if (!inherits(x, 'character')) {
+	gn <- if (inherits(x, 'GVector')) {
 		gnames(x)
 	} else {
 		x
@@ -287,8 +287,8 @@
 		geometry <- 'polygons'
 		numGeometries <- boundaries
 	} else {
-		geometry <- NA
-		numGeometries <- NA
+		geometry <- NA_character_
+		numGeometries <- NA_integer_
 	}
 	
 	numGeometries <- as.integer(numGeometries)
@@ -334,9 +334,10 @@
 	hasFields <- rgrass::execGRASS('v.db.connect', map=gn, flags='g', intern=TRUE)
 	if (grepl(hasFields, pattern='is not connected to a database')) {
 
-		fieldClasses <- NA_character_
-		fields <- NA_character_
 		numFields <- as.integer(0)
+		layerName <- NA_character_
+		fields <- NA_character_
+		classes <- NA_character_
 
 	# vector has a data frame
 	} else {
@@ -352,11 +353,21 @@
 			)
 		)
 		
+		suppressMessages(
+			info4 <- rgrass::execGRASS(
+				'v.info',
+				flags = 'e',
+				map = gn,
+				intern = TRUE,
+				Sys_show.output.on.console = FALSE,
+				echoCmd = FALSE
+			)
+		)
+		
 		# fields and types
-		info3 <- info3[!grepl(info3, pattern ='INTEGER|cat')]
 		info3 <- info3[!grepl(info3, pattern ='Displaying column types/names for database connection of layer')]
 		info3 <- strsplit(info3, '\\|')
-		fields <- fieldClasses <- rep(NA, length(info3))
+		fields <- classes <- rep(NA, length(info3))
 		for (i in seq_along(info3)) {
 		
 			type <- info3[[i]][1L]
@@ -368,12 +379,15 @@
 				'numeric'
 			}
 		
-			fieldClasses[i] <- type
+			classes[i] <- type
 			fields[i] <- info3[[i]][2L]
 		}
 		
 		numFields <- length(fields)
 		numFields <- as.integer(numFields)
+
+		layerName <- info4[grepl(info4, pattern = 'attribute_layer_name')]
+		layerName <- gsub(layerName, pattern='attribute_layer_name=', replacement='')
 
 	}
 		
@@ -394,8 +408,9 @@
 		ztop = ztop,
 		
 		numFields = numFields,
+		layerName = layerName,
 		fields = fields,
-		fieldClasses = fieldClasses
+		classes = classes
 	)
 	
 	out

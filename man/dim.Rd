@@ -9,8 +9,6 @@
 \alias{ncol}
 \alias{ndepth,GRaster-method}
 \alias{ndepth}
-\alias{nlyr,GRaster-method}
-\alias{nlyr}
 \alias{ncell,GRaster-method}
 \alias{ncell}
 \alias{ncell3d,GRaster-method}
@@ -18,7 +16,8 @@
 \alias{dim,GVector-method}
 \alias{nrow,GVector-method}
 \alias{ncol,GVector-method}
-\alias{nlyr,GVector-method}
+\alias{nlyr,GSpatial-method}
+\alias{nlyr}
 \title{Number of rows, columns, depths, cells, and layers of a GRaster}
 \usage{
 \S4method{dim}{GRaster}(x)
@@ -28,8 +27,6 @@
 \S4method{ncol}{GRaster}(x)
 
 \S4method{ndepth}{GRaster}(x)
-
-\S4method{nlyr}{GRaster}(x)
 
 \S4method{ncell}{GRaster}(x)
 
@@ -41,7 +38,7 @@
 
 \S4method{ncol}{GVector}(x)
 
-\S4method{nlyr}{GVector}(x)
+\S4method{nlyr}{GSpatial}(x)
 }
 \arguments{
 \item{x}{A \code{GRaster} or \code{GVector}.}
@@ -122,8 +119,8 @@ minmax(elev) # min/max values
 location(elev) # location
 mapset(elev) # mapset
 
-# "gname" of the object (its name in GRASS)
-gname(elev)
+# "gnames" of the object (its name in GRASS)
+gnames(elev)
 
 # coordinate reference system
 crs(elev)

@@ -11,13 +11,13 @@ GSpatial <- setClass(
 	slots = list(
 		topology = 'character',			# 2D or 3D
 		extent = 'numeric',				# horizontal extent (4 numerics)
-		nLayers = 'integer',			# number of layers
+		zextent = 'numeric',			# vertical extent (2 numerics)
 		gnames = 'character'			# name in GRASS
 	),
 	prototype = prototype(
 		topology = NA_character_,
 		extent = c(NA_real_, NA_real_, NA_real_, NA_real_),
-		nLayers = NA_integer_,
+		zextent = c(NA_real_, NA_real_),
 		gnames = NA_character_
 	)
 )
@@ -32,10 +32,12 @@ setValidity('GSpatial',
 			'@crs can only be a single character string.'
 		} else if (!all(object@topology %in% c(NA_character_, '2D', '3D'))) {
 			paste0('@topology can only be a NA, ', sQuote('2D'), ', or ', sQuite('3D'), '.')
-		} else if (object@nLayers < 1) {
-			'@nLayers must be a positive integer.'
-		} else if (object@nLayers != length(object@gnames)) {
-			'@nLayers is different from the number of @gnames.'
+		} else if (object@topology == '3D' && any(is.na(object@zextent))) {
+			paste0('@topology is ', sQuote('3D'), ' but @zextent has at least one NA value.')
+		} else if ((!is.na(object@zextent[1L]) & is.na(object@zextent[2L])) | (is.na(object@zextent[1L]) & !is.na(object@zextent[2L]))) {
+			'Both values of @zextent must be NA or must be numeric values.'
+		} else if ((!is.na(object@zextent[1L]) & !is.na(object@zextent[2L])) && object@zextent[1L] > object@zextent[2L]) {
+			'Bottom values of @zextent is higher than the top values of @zextent.'
 		} else {
 			TRUE
 		}
@@ -71,6 +73,8 @@ methods::setMethod(
 	signature = 'GSpatial',
 	definition = function(object) {
 
+		details <- getFastOptions('details')
+
 		digs <- min(3, getOption('digits'))
 		extent <- round(object@extent, digs)
 		
@@ -79,13 +83,14 @@ methods::setMethod(
 		crs <- crs$input
 
 		cat('class       :', paste(class(object), collapse=', '), '\n')
-		cat('topology    :', object@topology, '\n')
 		if (getFastOptions('details')) {
 			cat('gnames(s)   :', object@gnames, '\n')
 			cat('location    :', object@location, '\n')
 			cat('mapset      :', object@mapset, '\n')
 		}
+		cat('topology    :', object@topology, '\n')
 		cat('extent      :', paste(extent, collapse=', '), '(xmin, xmax, ymin, ymax)\n')
+		if (details & object@topology == '3D') cat('z extent    :', paste(object@zextent, collapse=', '), ' (bottom, top)\n')
 		cat('coord ref.  :', crs, '\n')
 	}
 )

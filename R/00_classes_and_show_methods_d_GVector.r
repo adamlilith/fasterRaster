@@ -3,43 +3,63 @@
 #' @describeIn GSession
 #'
 #' @importFrom methods new
-#' @importFrom methods show
 #' @exportClass GVector
-GVector <- setClass(
-	'GVector',
-	contains = 'GSpatial',
+
+#' @exportClass GMetaTable
+#' @exportClass GEmptyMetaTable
+#' @exportClass GFullMetaTable
+GMetaTable <- setClass('GMetaTable')
+GEmptyMetaTable <- setClass('GEmptyMetaTable', contains = 'GMetaTable')
+GFullMetaTable <- setClass(
+	'GFullMetaTable',
+	contains = 'GMetaTable',
 	slots = list(
-		ztop = 'numeric',
-		zbottom = 'numeric',
-		nGeometries = 'integer',
-		geometry = 'character',
-		nFields = 'integer',
-		fields = 'list',
-		fieldClasses = 'list'
-	),
-	prototype = prototype(
-		ztop = NA_real_,
-		zbottom = NA_real_,
-		geometry = NA_character_,
-		nGeometries = NA_integer_,
-		nFields = NA_integer_,
-		fields = list(),
-		fieldClasses = list()
+		layerName = 'character',
+		fields = 'character',
+		classes = 'character'
 	)
 )
 
+setValidity('GFullMetaTable',
+	function(object) {
+		if (length(object@fields) != length(object@classes)) {
+			'Number of @fields must be the same as the number of @classes'
+		} else if (is.na(object@layerName)) {
+			'@layerName cannot be NA.'
+		} else {
+			TRUE
+		}
+	} # EOF
+)
+
+
+#' @exportClass GVector
+GVector <- methods::setClass(
+	'GVector',
+	contains = 'GSpatial',
+	slots = list(
+		nGeometries = 'integer',
+		geometry = 'character',
+		nFields = 'integer',
+		df = 'GMetaTable'
+	),
+	prototype = prototype(
+		geometry = NA_character_,
+		nGeometries = NA_integer_,
+		nFields = NA_integer_,
+		df = GEmptyMetaTable()
+	)
+)
+
+
 setValidity('GVector',
 	function(object) {
-		if (!(object@geometry %in% c(NA_character_, 'points', 'lines', 'polygons'))) {
+		if (!all(object@geometry %in% c(NA_character_, 'points', 'lines', 'polygons'))) {
 			paste0('@geometry can only be NA, ', sQuote('points'), ', ', sQuote('lines'), ', or ', sQuote('polygons'), '.')
-		} else if (object@nLayers != length(object@ztop)) {
-			'@nLayers is different from the number of @ztop values.'
-		} else if (object@nLayers != length(object@zbottom)) {
-			'@nLayers is different from the number of @zbottom values.'
-		} else if ((!all(is.na(object@ztop)) & !all(is.na(object@zbottom))) && any(object@ztop[!is.na(object@ztop)] < object@zbottom[!is.na(object@zbottom)])) {
-			'At least one @ztop values is lower than its corresponding @zbottom value.'
-		} else if (!all(sapply(object@fields, length) == sapply(object@fieldClasses, length))) {
-			'@fields and @fieldClasses must have the same lengths for each vector.'
+		# } else if (!inherits(object@df, 'GEmptyMetaTable') && object@nFields != length(object@df@fields)) {
+			# '@fields does not have @nFields values.'
+		# } else if (!inherits(object@df, 'GEmptyMetaTable') && object@nFields != length(object@df@classes)) {
+			# '@classes does not have @nFields values.'
 		} else {
 			TRUE
 		}
@@ -63,6 +83,17 @@ setValidity('GVector',
 makeGVector <- function(gn) {
 
 	info <- .vectInfo(gn)
+	
+	df <- if (is.na(info[['fields']][1L])) {
+		GEmptyMetaTable()
+	} else {
+		GFullMetaTable(
+			layerName = info[['layerName']],
+			fields = info[['fields']],
+			classes = info[['classes']]
+		)
+	}
+	
 	new(
 		'GVector',
 		location = getFastOptions('location'),
@@ -70,123 +101,97 @@ makeGVector <- function(gn) {
 		crs = crs(),
 		topology = info[['topology']][1L],
 		gnames = gn,
-		nLayers = 1L,
 		geometry = info[['geometry']][1L],
 		nGeometries = info[['numGeometries']],
 		extent = c(info[['west']][1L], info[['east']][1L], info[['south']][1L], info[['north']][1L]),
-		ztop = info[['ztop']],
-		zbottom = info[['zbottom']],
+		zextent = c(info[['zbottom']], info[['ztop']]),
 		nFields = info[['numFields']],
-		fields = list(info[['fields']]),
-		fieldClasses = list(info[['fieldClasses']])
+		df = df
 	)
+	
 }
 
-# # show
-# methods::setMethod(f='show', signature='GVector',
-	# definition = function(object) {
+#' @importFrom methods show
+#' @aliases show
+#' @exportMethod show
+methods::setMethod(f='show', signature='GVector',
+	definition = function(object) {
 
-		# details <- getFastOptions('details')
+	details <- getFastOptions('details')
 
-		# digs <- min(3, getOption('digits'))
-		# extent <- round(object@extent, digs)
+	digs <- min(3, getOption('digits'))
+	extent <- round(object@extent, digs)
+	zextent <- round(object@zextent, digs)
 
-		# nLayers <- nlyr(object)
+	# concatenate fields across vectors for display
+	# making list, each element becomes a line in the display
+	# each element contains field n from first vector, field n from second vector, etc.
+	# will then print each element on one line
+	if (object@nFields > 0L) {
 
-		# # concatenate fields across vectors for display
-		# # making list, each element becomes a line in the display
-		# # each element contains field n from first vector, field n from second vector, etc.
-		# # will then print each element on one line
-		# fields <- object@fields
-		# if (length(fields) == 0L) {
-			# fieldsDisplay <- '(none)'
-		# } else {
-			
-			# maxDisplay <- min(5L, max(object@nFields))
-			# fieldsDisplay <- list()
-			# for (i in 1L:maxDisplay) {
-				# for (j in seq_along(fields)) {
-					# if (length(fields[[j]]) >= i) {
-
-						# fc <- if (fieldClasses[[i]][j] == 'character') {
-							# '<chr>'
-						# } else if (fieldClasses[[i]][j] == 'integer') {
-							# '<int>'
-						# } else if (fieldClasses[[i]][j] == 'numeric') {
-							# '<num>'
-						# }
-						
-						# fieldsDisplay[[i]] <- c(fieldsDisplay[[i]], paste0(fc, fields[[j]][i]))
-
-					# }
-				# }
-			# }
-			
-			# if (any(nFields) > 5L) {
-				# for (i in seq_along(fields)) {
-					# if (nFields[i] > 5L) {
-						# fieldsDisplay[[6L]] <- c(fieldsDisplay[[i]], paste0('(and ', nFields[i] - 5L, ' more)'))
-					# } else {
-						# fieldsDisplay[[6L]] <- c(fieldsDisplay[[i]], '')
-					# }
-				# }
-			# }
-			
-		# }
+		fields <- object@df@fields
+		classes <- object@df@classes
+		maxFieldsToShow <- min(object@nFields, 10L)
 		
-		# stringLengths <- pmax(nchar(object@gnames)))
-		# for (i in seq_len(nlyr(object))) {
-			# stringLengths[i] <- pmax(stringLengths[i], fieldsDisplay[1L:length(fieldsDisplay)][i])
-		# }
+		if (object@nFields > 0L) {
 		
-
-		# crs <- object@crs
-		# crs <- sf::st_crs(crs)
-		# crs <- crs$input
-
-		# cat('class       : GVector\n')
-		# if (details) {
-			# cat('location    :', object@location, '\n')
-			# cat('mapset      :', object@mapset, '\n')
-		# }
-		# cat('topology    :', object@topology, '\n')
-		# cat('coord ref.  :', crs, '\n')
-		# cat('dimensions  :', paste0(object@nGeometries, ', ', object@nFields), '(geometries, fields)\n')
-		# cat('extent      :', paste(extent, collapse=', '), '(xmin, xmax, ymin, ymax)\n')
-		# if (details) cat('gnames      :', object@gnames, '\n')
-		# cat('geometry    :', object@geometry, '\n')
-		# cat('vert. ext.  :', paste(object@zbottom, object@ztop, collapse=', '), '(bottom, top)\n')
-		# # cat('fields      :', paste(fields, collapse=', '), '\n')
-		# # cat('type        :', paste(fieldClasses, collapse=', '), '\n')
-
-		# if (any(nFields) > 0L) {
-			# for (i in seq_along(fieldsDisplay)) {
-				# string <- fieldsDisplay[[i]]
-				# string <- sprintf('%10s')
-				# cat('fields      : ', paste())
-			# }
+			fields <- fields[1L:maxFieldsToShow]
+			classes <- classes[1L:maxFieldsToShow]
+			
+			classes <- gsub(classes, pattern='integer', replacement='<int>')
+			classes <- gsub(classes, pattern='numeric', replacement='<num>')
+			classes <- gsub(classes, pattern='character', replacement='<chr>')
+			
+		}
 		
-		# }
+		ncFields <- nchar(fields)
+		ncFieldClasses <- nchar(classes)
+		nc <- pmax(ncFields, ncFieldClasses)
+		
+		for (i in seq_along(fields)) {
+		
+			fmt	<- paste0('%', nc[i], 's')
+			fields[i] <- sprintf(fmt, fields[i])
+			classes[i] <- sprintf(fmt, classes[i])
+		}
+		
+		if (object@nFields > maxFieldsToShow) {
+			classes <- c(classes, paste('(and', object@nFields - maxFieldsToShow, 'more)'))
+		}
+		
+	}
+	
+	# CRS
+	crs <- object@crs
+	crs <- sf::st_crs(crs)
+	crs <- crs$input
 
-		# if (is.na(fields[1L])) {
-			# cat('fields      : NA\n')
-		# } else {
+	cat('class       : GVector\n')
+	if (details) {
+		cat('location    :', object@location, '\n')
+		cat('mapset      :', object@mapset, '\n')
+		cat('gname       :', object@gnames, '\n')
+		if (details & object@nFields > 0) cat('layer name  :', object@df@layerName, '\n')
+	}
+	cat('geometry    :', object@geometry, '\n')
+	cat('dimensions  :', paste0(object@nGeometries, ', ', object@nFields), '(geometries, columns)\n')
+	cat('topology    :', object@topology, '\n')
+	cat('extent      :', paste(extent, collapse=', '), '(xmin, xmax, ymin, ymax)\n')
+	if (details | object@topology == '3D') cat('z extent    :', paste(zextent, collapse=', '), '(bottom, top)\n')
+	cat('coord ref.  :', crs, '\n')
 
-			# cat('fields      :', fieldClasses[1L], fields[1L], '\n')
-			# if (nFields > 1L){
-				# for (i in 2L:length(fields)) {
-					# cat('             ', fieldClasses[i], fields[i], '\n')
-				# }
-			# }
-		# }
+	if (object@nFields > 0L) {
+		cat('names       :', fields, '\n')
+		cat('type        :', classes, '\n')
+	}
+	
+	} # EOF
 
+)
 
-	# }
-# )
-
-# # print
-# methods::setMethod(f='print', signature='GVector',
-	# definition = function(x) {
-		# show(x)
-	# }
-# )
+# print
+methods::setMethod(f='print', signature='GVector',
+	definition = function(x) {
+		show(x)
+	}
+)

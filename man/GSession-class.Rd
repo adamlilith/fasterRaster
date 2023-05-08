@@ -63,7 +63,7 @@ S4 classes that contain pointers to \strong{GRASS} objects. Most users will mani
 
 \item{\code{resolution}}{Vector of two numeric values (\code{GRaster}s only): Size of a raster cell in the east-west direction and in the north-south direction. Can be obtained using \code{\link[=res]{res()}} and \code{\link[=res3d]{res3d()}}.}
 
-\item{\code{numCategories}}{Integer (\code{GRaster}s only): Number of categories. Must be >0. Can be obtained using \code{\link[=ncat]{ncat()}}.}
+\item{\code{nCats}}{Integer (\code{GRaster}s only): Number of categories. Must be >0. Can be obtained using \code{\link[=ncat]{ncat()}}.}
 
 \item{\code{minVal,maxVal}}{Numeric (\code{GRaster}s only): Minimum and maximum value across all cells. Can be obtained using \code{\link[=minmax]{minmax()}}.}
 

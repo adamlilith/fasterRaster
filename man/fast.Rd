@@ -9,15 +9,15 @@
 \alias{fast,sf-method}
 \title{Create a GRaster or GVector}
 \usage{
-\S4method{fast}{character}(x, names = NULL, rastOrVect = NULL)
+\S4method{fast}{character}(x, rastOrVect = NULL)
 
 \S4method{fast}{SpatRaster}(x)
 
 \S4method{fast}{stars}(x)
 
-\S4method{fast}{SpatVector}(x, names = "vect")
+\S4method{fast}{SpatVector}(x)
 
-\S4method{fast}{sf}(x, names = "vect")
+\S4method{fast}{sf}(x)
 }
 \arguments{
 \item{x}{Any one of:
@@ -26,8 +26,6 @@
 \item A \code{SpatVector} or \code{sf} spatial vector.
 \item A character string with the path and filename of a raster or vector to be loaded directly into \strong{GRASS}. The function will attempt to ascertain the type of object from the file extension (raster or vector), but it can help to indicate which it is using the \code{rastOrVect} argument if it is unclear.
 }}
-
-\item{names}{Character: A "friendly" name for the object.}
 
 \item{rastOrVect}{Either \code{NULL} (default) or character (\code{raster} or \code{vector}). If \code{x} is a raster or vector already in \strong{R}, this does not need to be specified. However, if \code{x} is a filename, then the function will try to ascertain the data type from the filenames, but sometimes this will fail. In that case, it can help to specify if the file holds a raster or vector. Partial matching is used.}
 }

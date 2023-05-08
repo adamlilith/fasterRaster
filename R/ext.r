@@ -30,19 +30,9 @@ methods::setMethod(
 #' @exportMethod zext
 methods::setMethod(
 	f = 'zext',
-	signature = 'GRaster',
+	signature = 'GSpatial',
 	definition = function(x) {
 	c(bottom = x@zextent[1L], top = x@zextent[2L])
-})
-
-#' @aliases zext
-#' @rdname ext
-#' @exportMethod zext
-methods::setMethod(
-	f = 'zext',
-	signature = 'GVector',
-	definition = function(x) {
-	matrix(c(x@ztop, x@zbottom), byrow=FALSE, nrow=2, dimnames=list(c('top', 'bottom'), names(x)))
 })
 
 st_bbox <- function(obj, ...) UseMethod('st_bbox', obj)

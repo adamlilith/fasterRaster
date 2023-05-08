@@ -100,7 +100,7 @@ setMethod(
 setMethod(
 	f = 'ncol',
 	signature = 'GVector',
-	definition = function(x) x@numFields
+	definition = function(x) x@nFields
 )
 
 #' @rdname dim

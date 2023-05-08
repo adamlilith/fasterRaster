@@ -65,6 +65,7 @@
 #' [buffer()]: Create a polygon around/inside a vector\cr
 #' [connectors()]: Create lines connecting nearest features of two vectors\cr
 #' [distance()]: Distance between geometries in two vectors, or from a vector to cells of a raster\cr
+#' [fieldClasses()]: Classes of `GVector` fields\cr
 #' [makeGVector()]: Makes a `GVector` from a vector already in a **GRASS** session.
 #' [st_buffer()]: Create a polygon around/inside a vector\cr
 #' [st_distance()]: Distance between geometries in two vectors\cr
@@ -84,7 +85,6 @@
 #' [appendLists()]: Append values to elements of a list from another list\cr
 #' [comparable()]: Determine if geographic metadata is same between two `GRaster`s and/or `GVector`s\cr
 #' [compareFloat()]: Compare values accounting for differences due to floating point precision\cr
-#' [fastClass()]: Class of a **fasterRaster** object\cr
 #' [forwardSlash()]: Replace backslash with forward slash\cr
 #' [grassInfo()]: **GRASS** version and citation\cr
 #' [vectToGrass()]: Send a `SpatVector` or `sf` vector to an open **GRASS** connection\cr

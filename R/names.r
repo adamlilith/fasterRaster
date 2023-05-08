@@ -13,7 +13,6 @@
 #'
 #' @aliases names
 #' @rdname names
-#' @export
 #' @exportMethod names
 setMethod(
 	f = 'names',
@@ -36,12 +35,17 @@ setMethod(
 
 #' @aliases names
 #' @rdname names
-#' @export
 #' @exportMethod names
 setMethod(
 	f = 'names',
 	signature = 'GVector',
 	definition = function(x) {
-		rgrass::execGRASS('db.columns', table=gnames(x), intern=TRUE)
+	
+	if (inherits(x@df, 'GFullMetaTable')) {
+		x@df@fields
+	} else {
+		NULL
+	}
+	
 	} # EOF
 )

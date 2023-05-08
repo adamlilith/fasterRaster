@@ -154,6 +154,7 @@ methods::setMethod(
 	} # EOF
 )
 
+#' @aliases buffer
 #' @rdname buffer
 #' @exportMethod st_buffer
 methods::setMethod(

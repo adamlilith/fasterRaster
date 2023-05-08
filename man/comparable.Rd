@@ -10,7 +10,7 @@
 \usage{
 \S4method{comparable}{GRaster,GRaster}(x, y, fail = FALSE)
 
-\S4method{comparable}{GRaster,GVector}(x, y, fail = FALSE, compareTopo = FALSE, compareZExtent = FALSE)
+\S4method{comparable}{GRaster,GVector}(x, y, fail = FALSE, compareTopo = FALSE)
 
 \S4method{comparable}{GVector,GRaster}(x, y, fail = FALSE, compareTopo = FALSE)
 
@@ -22,8 +22,6 @@
 \item{fail}{Logical: If \code{TRUE}, throw an error with an explanation if the objects are not comparable. If \code{FALSE} (default), return \code{TRUE} or \code{FALSE}.}
 
 \item{compareTopo}{Logical: If \code{TRUE}, compare topology (only for \code{GRaster} vs. \code{GVector} comparison and \code{GVector} vs. \code{GVector} comparison).}
-
-\item{compareZExt}{Logical: If \code{TRUE}, compare vertical extent. This will only be tested if \code{comparaTopo} is \code{TRUE}, and is only value for \code{GRaster} vs. \code{GVector} comparison and \code{GVector} vs. \code{GVector} comparison.}
 }
 \value{
 Logical (invisibly), or side effect of throwing an error.

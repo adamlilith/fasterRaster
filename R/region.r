@@ -300,7 +300,7 @@ methods::setMethod(f = 'regionZExt', signature = 'GVector', definition = functio
 
 	if (inherits(x, 'GSpatial')) {
 		.restore(x)
-		x <- as.vector(zExt(x))
+		x <- as.vector(zext(x))
 	} else if (inherits(x, 'numeric')) {
 		if (length(x) != 2L) stop('Please supply a numeric vector of two values.')
 	}
