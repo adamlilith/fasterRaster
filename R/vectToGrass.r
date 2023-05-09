@@ -1,11 +1,12 @@
 #' Convert a SpatVector to a GRASS vector
 #'
-#' This is a utility function that sends a `SpatVector` to an existing **GRASS** connection. It is not of use to most users. The function is based on the [rgrass::write_RAST()] function, except that it works when **fasterRaster** is attached. The reason for (more or less) duplicating this function is that the use of [methods::getMethod()] looks at the **fasterRaster** definitions for `writeVector`, and cannot find one for a `SpatVector`.
+#' This is a utility function that sends a `SpatVector` to an existing **GRASS** connection. It is not of use to most users. The function is based on the [rgrass::write_VECT()] function, except that it works when **fasterRaster** is attached. The reason for (more or less) duplicating this function is that the use of [methods::getMethod()] looks at the **fasterRaster** definitions for `writeVector`, and cannot find one for a `SpatVector`. To make the raster an actual `GVector`, you need to use this function then [makeGVector()] using `gn` as the argument to that function.
 #'
 #' @param x A `SpatVector`.
 #' @param gn Character: Name of the file in **GRASS**.
 #' @param flags Character vector: Flags to send to **GRASS** module `v.in.ogr`.
 #'
+#' @seealso [rgrass::write_VECT()], [rgrass::read_VECT()]
 #' @returns `TRUE` (invisibly). Exports a `SpatVector` to an open **GRASS** connection and names it the value in `gn`.
 #'
 #' @example man/examples/ex_GVector.r

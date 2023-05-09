@@ -11,8 +11,8 @@
 \alias{GSpatial}
 \alias{GRaster-class}
 \alias{GRaster}
-\alias{GVector-class}
-\alias{GVector}
+\alias{GMetaTable-class}
+\alias{GMetaTable}
 \title{Classes for fasterRaster locations, rasters, and vectors}
 \value{
 An object of class \code{GSession}, \code{GSpatial}, \code{GRaster}, or \code{GVector}.
@@ -29,7 +29,7 @@ S4 classes that contain pointers to \strong{GRASS} objects. Most users will mani
 
 \item \code{GRaster}: 
 
-\item \code{GVector}: 
+\item \code{GMetaTable}: 
 
 }}
 \section{Slots}{
@@ -53,11 +53,13 @@ S4 classes that contain pointers to \strong{GRASS} objects. Most users will mani
 
 \item{\code{extent}}{Numeric vector with four values: Extent of the object listed in order from westernmost longitude, easternmost longitude, southernmost latitude, northernmost latitude. Can be obtained using \code{\link[=ext]{ext()}}.}
 
-\item{\code{ztop,zbottom}}{Numeric: Top- and bottom-most extents of 3D \code{GRaster}s and \code{GVector}s. Can be obtained using \code{\link[=zExt]{zExt()}}.}
+\item{\code{zextent}}{Numeric: Bottom- and top-most extents of 3D \code{GRaster}s and \code{GVector}s. Can be obtained using \code{\link[=zext]{zext()}}.}
 
 \item{\code{topology}}{Character: Valid values are \verb{2D} (2-dimensional--most rasters and vectors) or \verb{3D} (3-dimensional--e.g., as in LIDAR data). Can be obtained using \code{\link[=topology]{topology()}}.}
 
 \item{\code{geometry}}{Character (\code{GVectors}s only): Either \code{points}, \code{lines}, or \code{polygons}. Can be obtained using \code{\link[=geomtype]{geomtype()}}.}
+
+\item{\code{nGeometries}}{Integer (\code{GVector}s only): Number of features (points, lines, or polygons). Can be obtained using \code{\link[=nrow]{nrow()}}.}
 
 \item{\code{datatypeGRASS}}{Character (\code{GRaster}s only): Type of data stored in a raster, as interpreted by \code{GRASS}. This is either \code{CELL} (integers), \code{FCELL} (floating-point values), or \code{DCELL} (double-values). Can be obtained using \code{\link[=datatype]{datatype()}}.}
 

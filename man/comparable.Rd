@@ -8,13 +8,20 @@
 \alias{comparable,GVector,GVector-method}
 \title{Determine if two GRasters and/or GVectors are geographically comparable}
 \usage{
-\S4method{comparable}{GRaster,GRaster}(x, y, fail = FALSE)
+\S4method{comparable}{GRaster,GRaster}(x, y, fail = TRUE)
 
-\S4method{comparable}{GRaster,GVector}(x, y, fail = FALSE, compareTopo = FALSE)
+\S4method{comparable}{GRaster,GVector}(x, y, fail = TRUE, compareTopo = FALSE, compareZ = FALSE)
 
-\S4method{comparable}{GVector,GRaster}(x, y, fail = FALSE, compareTopo = FALSE)
+\S4method{comparable}{GVector,GRaster}(x, y, fail = TRUE, compareTopo = FALSE)
 
-\S4method{comparable}{GVector,GVector}(x, y, fail = FALSE, compareTopo = FALSE)
+\S4method{comparable}{GVector,GVector}(
+  x,
+  y,
+  fail = TRUE,
+  compareTopo = FALSE,
+  compareGeo = FALSE,
+  compareZ = FALSE
+)
 }
 \arguments{
 \item{x, y}{\code{GRaster}s or \code{GVector}s.}
@@ -22,6 +29,10 @@
 \item{fail}{Logical: If \code{TRUE}, throw an error with an explanation if the objects are not comparable. If \code{FALSE} (default), return \code{TRUE} or \code{FALSE}.}
 
 \item{compareTopo}{Logical: If \code{TRUE}, compare topology (only for \code{GRaster} vs. \code{GVector} comparison and \code{GVector} vs. \code{GVector} comparison).}
+
+\item{compareZ}{Logical: If \code{TRUE}, compare z extents (\code{GVector} vs. \code{GVector} and \code{GRaster} vs. \code{GVector} comparison--this is always done for \code{GRaster}s vs. \code{GRaster}s).}
+
+\item{compareGeo}{Logical: If \code{TRUE}, compare geometry (\code{GVector} vs. \code{GVector} comparison).}
 }
 \value{
 Logical (invisibly), or side effect of throwing an error.

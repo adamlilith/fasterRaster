@@ -3,6 +3,8 @@
 #' @description Convert a `GVector`'s data table to a data frame.
 #'
 #' @param x A `GVector`.
+#' @param row.names `NULL` (default) or a character vector giving names for rows.
+#' @param optional Ignored.
 #'
 #' @returns A `data.frame`.
 #'
@@ -14,7 +16,7 @@
 methods::setMethod(
 	f = 'as.data.frame',
 	signature = c(x = 'GVector'),
-	definition = function(x) {
+	definition = function(x, row.names = NULL, optional = FALSE) {
 	
 		data <- rgrass::execGRASS('v.db.select', map=gnames(x), intern=TRUE)
 		
@@ -37,9 +39,25 @@ methods::setMethod(
 		ints <- which(datatype(x)$datatype == 'integer')
 		nums <- which(datatype(x)$datatype == 'numeric')
 		
-		if (length(ints) > 0L) out[ , ints] <- as.integer(out[ , ints])
-		if (length(nums) > 0L) out[ , nums] <- as.numeric(out[ , nums])
+		if (length(ints) > 0L) {
+			for (int in ints) {
+				if (any(out[ , int] == '')) {
+					out[out[ , int] == '', int] <- NA_character_
+				}
+				out[ , int] <- as.integer(out[ , int])
+			}
+		}
 		
+		if (length(nums) > 0L) {
+			for (num in nums) {
+				if (any(out[ , num] == '')) {
+					out[out[ , num] == '', num] <- NA_character_
+				}
+				out[ , num] <- as.numeric(out[ , num])
+			}
+		}
+		
+		if (!is.null(row.names)) rownames(out) <- row.names
 		out
 	
 	} # EOF

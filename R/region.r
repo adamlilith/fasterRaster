@@ -6,11 +6,13 @@
 #' @param x Any of:
 #'	* Missing (default): Reports the extent, resolution, and dimensions of the current region. All other arguments will be ignored.
 #'	* A `GRaster`, `GVector`, `SpatRaster`, or `stars` raster: Sets the region's extent and dimensions to those of the raster or vector. If a raster is supplied, the region will be resized and resampled to match its extent, resolution, and dimensions. If a vector is supplied, the region will be resized and the number of cells will be increased/decreased to fully encompass this new extent, but resolution will not be changed.
-#'	* A `numeric` vector. This will resize the region's extent, resample the region's resolution, or both to ensure the desired dimensions or resolution are retained:
+#'	* A `numeric` vector. This will resize the region's extent, resample the region's resolution/dimensions, or both to ensure the desired dimensions or resolution are retained:
 #'       * 4 values for `regionExt()`: Westernmost and easternmost easting (longitude), and southernmost and northernmost northing (latitude)
 #'       * 2 values for `regionDim()`: Number of rows and columns
-#'       * 3 values for `regionDim()`: Number of rows, columns, and depths
+#'       * 2 values for `regionRes()`: Size of cells in the x- and y-dimensions
 #'       * 2 values for `regionZExt()`: Topmost and bottom-most elevations
+#'       * 3 values for `regionDim3d()`: Number of rows, columns, and depths
+#'       * 3 values for `regionRes3d()`: Size of cells in the x-, y-, and z-dimensions
 #'
 #' @param trimTo A `GRaster` or `NULL` (default). If a `GRaster`, then the region will be trimmed to the non-`NA` cells in this raster. `trimTo` can only be non-`NULL` if `x` is a `GRaster`. Ignored if `NULL`.
 #'
@@ -65,7 +67,7 @@ methods::setMethod(
 		top <- as.numeric(top)
 		bottom <- as.numeric(bottom)
 		
-		zext <- c(top=top, bottom=bottom)
+		zextent <- c(top=top, bottom=bottom)
 		
 		# dimensions
 		rows <- info[grepl(info, pattern='rows:')]
@@ -105,7 +107,7 @@ methods::setMethod(
 		
 		ress <- c(xres=ewres, yres=nsres, zres=tbres)
 		
-		list(extent = extent, zextent = zext, dim = dims, res = ress)
+		list(extent = extent, zextent = zextent, dim = dims, res = ress)
 		
 	}
 )

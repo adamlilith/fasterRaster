@@ -17,7 +17,7 @@ vectToGrass(x, gn, flags = c("quiet", "overwrite"))
 \code{TRUE} (invisibly). Exports a \code{SpatVector} to an open \strong{GRASS} connection and names it the value in \code{gn}.
 }
 \description{
-This is a utility function that sends a \code{SpatVector} to an existing \strong{GRASS} connection. It is not of use to most users. The function is based on the \code{\link[rgrass:readRAST]{rgrass::write_RAST()}} function, except that it works when \strong{fasterRaster} is attached. The reason for (more or less) duplicating this function is that the use of \code{\link[methods:getMethod]{methods::getMethod()}} looks at the \strong{fasterRaster} definitions for \code{writeVector}, and cannot find one for a \code{SpatVector}.
+This is a utility function that sends a \code{SpatVector} to an existing \strong{GRASS} connection. It is not of use to most users. The function is based on the \code{\link[rgrass:readVECT]{rgrass::write_VECT()}} function, except that it works when \strong{fasterRaster} is attached. The reason for (more or less) duplicating this function is that the use of \code{\link[methods:getMethod]{methods::getMethod()}} looks at the \strong{fasterRaster} definitions for \code{writeVector}, and cannot find one for a \code{SpatVector}. To make the raster an actual \code{GVector}, you need to use this function then \code{\link[=makeGVector]{makeGVector()}} using \code{gn} as the argument to that function.
 }
 \examples{
 \dontrun{
@@ -102,4 +102,7 @@ fastRestore(opts.)
 removeSession('examples')
 
 }
+}
+\seealso{
+\code{\link[rgrass:readVECT]{rgrass::write_VECT()}}, \code{\link[rgrass:readVECT]{rgrass::read_VECT()}}
 }

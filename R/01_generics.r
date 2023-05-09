@@ -4,6 +4,8 @@ require(stars)
 require(terra)
 
 methods::setGeneric(name = 'as.contour', package='terra')
+# if (!isGeneric('as.data.frame')) setGeneric('as.data.frame', function(x, row.names = NULL, optional = FALSE, ...) standardGeneric('as.data.frame'))
+setGeneric('as.data.frame') # from base
 
 methods::setGeneric(name = 'buffer', package='terra')
 
@@ -14,6 +16,7 @@ methods::setGeneric(name = 'copyGSpatial', def = function(x, ...) standardGeneri
 methods::setGeneric(name = 'convHull', def = function(x, ...) standardGeneric('convHull'))
 # methods::setGeneric(name = 'crs', def = function(x, ...) standardGeneric('crs'))
 methods::setGeneric(name = 'crs', package='terra')
+methods::setGeneric(name = 'crop', package='terra')
 
 # 'dim' already in base
 methods::setGeneric(name = 'datatype', def = function(x, ...) standardGeneric('datatype'))
@@ -27,6 +30,8 @@ methods::setGeneric(name = 'fast', def = function(x, ...) standardGeneric('fast'
 methods::setGeneric(name = 'geomtype', package='terra')
 methods::setGeneric(name = 'gnames', def = function(x) standardGeneric('gnames'))
 
+methods::setGeneric(name = 'is.2d', def = function(x) standardGeneric('is.2d'))
+methods::setGeneric(name = 'is.3d', def = function(x) standardGeneric('is.3d'))
 methods::setGeneric(name = 'is.lines', package='terra')
 methods::setGeneric(name = 'is.points', package='terra')
 methods::setGeneric(name = 'is.polygons', package='terra')

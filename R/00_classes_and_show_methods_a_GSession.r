@@ -12,9 +12,10 @@
 #' * `GRaster`s: Vector of four integers indicating number of rows, columns, depths (for 3D rasters), and layers of a "stack" of rasters. Can be obtained using [dim()], plus [nrow()], [ncol()], and [ndepth()].
 #' * `GVectors`s: Vector of two integers indicating number of geometries and number of fields. Can be obtained using [dim()], plus [nrow()] and [ncol()].
 #' @slot extent		Numeric vector with four values: Extent of the object listed in order from westernmost longitude, easternmost longitude, southernmost latitude, northernmost latitude. Can be obtained using [ext()].
-#' @slot ztop,zbottom	Numeric: Top- and bottom-most extents of 3D `GRaster`s and `GVector`s. Can be obtained using [zExt()].
+#' @slot zextent	Numeric: Bottom- and top-most extents of 3D `GRaster`s and `GVector`s. Can be obtained using [zext()].
 #' @slot topology	Character: Valid values are `2D` (2-dimensional--most rasters and vectors) or `3D` (3-dimensional--e.g., as in LIDAR data). Can be obtained using [topology()].
 #' @slot geometry	Character (`GVectors`s only): Either `points`, `lines`, or `polygons`. Can be obtained using [geomtype()].
+#' @slot nGeometries Integer (`GVector`s only): Number of features (points, lines, or polygons). Can be obtained using [nrow()].
 #' @slot datatypeGRASS Character (`GRaster`s only): Type of data stored in a raster, as interpreted by `GRASS`. This is either `CELL` (integers), `FCELL` (floating-point values), or `DCELL` (double-values). Can be obtained using [datatype()].
 #' @slot resolution	Vector of two numeric values (`GRaster`s only): Size of a raster cell in the east-west direction and in the north-south direction. Can be obtained using [res()] and [res3d()].
 #' @slot nCats Integer (`GRaster`s only): Number of categories. Must be >0. Can be obtained using [ncat()].

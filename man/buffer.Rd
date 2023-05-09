@@ -75,7 +75,7 @@ grassDir <- '/usr/local/grass' # Linux
 library(sf)
 library(terra)
 
-# elevation raster, rivers vector, locations of Dypsis plants
+# elevation raster, rivers vector
 madElev <- fastData('madElev')
 madRivers <- fastData('madRivers')
 

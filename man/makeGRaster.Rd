@@ -67,6 +67,8 @@ ncell(elev) # cells
 ncell3d(elev) # cells (3D rasters only)
 
 topology(elev) # number of dimensions
+is.2d(elev) # is it 2D?
+is.3d(elev) # is it 3D?
 
 minmax(elev) # min/max values
 
@@ -129,8 +131,20 @@ is.lines(dypsis)
 is.polygons(coast)
 is.polygons(dypsis)
 
-# number of dimensions
-topology(rivers)
+# dimensions
+nrow(rivers) # how many spatial features
+ncol(rivers) # hay many columns in the data frame
+
+# 2- or 3D
+topology(rivers) # dimensionality
+is.2d(elev) # is it 2D?
+is.3d(elev) # is it 3D?
+
+### operations on GVectors
+##########################
+
+# convert to data frame
+as.data.frame(rivers)
 
 # IMPORTANT #3: Revert back to original GRASS session if needed.
 fastRestore(opts.)

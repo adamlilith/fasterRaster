@@ -3,18 +3,15 @@
 \name{ext,GSpatial-method}
 \alias{ext,GSpatial-method}
 \alias{ext}
-\alias{zext,GRaster-method}
+\alias{zext,GSpatial-method}
 \alias{zext}
-\alias{zext,GVector-method}
 \alias{st_bbox,ANY-method}
 \alias{st_bbox}
 \title{Spatial extent of a GRaster or GVector}
 \usage{
 \S4method{ext}{GSpatial}(x)
 
-\S4method{zext}{GRaster}(x)
-
-\S4method{zext}{GVector}(x)
+\S4method{zext}{GSpatial}(x)
 
 \S4method{st_bbox}{ANY}(obj, ...)
 
@@ -83,6 +80,8 @@ ncell(elev) # cells
 ncell3d(elev) # cells (3D rasters only)
 
 topology(elev) # number of dimensions
+is.2d(elev) # is it 2D?
+is.3d(elev) # is it 3D?
 
 minmax(elev) # min/max values
 
@@ -145,8 +144,20 @@ is.lines(dypsis)
 is.polygons(coast)
 is.polygons(dypsis)
 
-# number of dimensions
-topology(rivers)
+# dimensions
+nrow(rivers) # how many spatial features
+ncol(rivers) # hay many columns in the data frame
+
+# 2- or 3D
+topology(rivers) # dimensionality
+is.2d(elev) # is it 2D?
+is.3d(elev) # is it 3D?
+
+### operations on GVectors
+##########################
+
+# convert to data frame
+as.data.frame(rivers)
 
 # IMPORTANT #3: Revert back to original GRASS session if needed.
 fastRestore(opts.)

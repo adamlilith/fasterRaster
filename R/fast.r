@@ -139,7 +139,7 @@ methods::setMethod(
 	nLayers <- as.integer(nLayers)
 
 	# NB writing first raster in a stack actually writes all of them
-	rgrass::write_RAST(x[[1L]], vname=gn[1L], flags=c('quiet', 'overwrite'), verbose=FALSE)
+	rastToGrass(x[[1L]], gn=gn[1L], flags=c('quiet', 'overwrite'))
 
 	# if multi-layer raster, rasters are imported using the first name plus a '.#' where # is a number, so they need renamed
 	warning('ABS: If raster was part of a stack then subset, all layers are still imported into GRASS.')

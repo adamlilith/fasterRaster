@@ -82,7 +82,7 @@ setMethod(
 methods::setMethod(
 	f = 'dim',
 	signature = 'GVector',
-	definition = function(x) c(x@numGeometries, x@numFields)
+	definition = function(x) c(x@nGeometries, x@nFields)
 )
 
 #' @rdname dim
@@ -91,7 +91,7 @@ methods::setMethod(
 setMethod(
 	f = 'nrow',
 	signature = 'GVector',
-	definition = function(x) x@numGeometries
+	definition = function(x) x@nGeometries
 )
 
 #' @rdname dim

@@ -95,11 +95,13 @@
 \itemize{
 \item Missing (default): Reports the extent, resolution, and dimensions of the current region. All other arguments will be ignored.
 \item A \code{GRaster}, \code{GVector}, \code{SpatRaster}, or \code{stars} raster: Sets the region's extent and dimensions to those of the raster or vector. If a raster is supplied, the region will be resized and resampled to match its extent, resolution, and dimensions. If a vector is supplied, the region will be resized and the number of cells will be increased/decreased to fully encompass this new extent, but resolution will not be changed.
-\item A \code{numeric} vector. This will resize the region's extent, resample the region's resolution, or both to ensure the desired dimensions or resolution are retained:
+\item A \code{numeric} vector. This will resize the region's extent, resample the region's resolution/dimensions, or both to ensure the desired dimensions or resolution are retained:
 * 4 values for \code{regionExt()}: Westernmost and easternmost easting (longitude), and southernmost and northernmost northing (latitude)
 * 2 values for \code{regionDim()}: Number of rows and columns
-* 3 values for \code{regionDim()}: Number of rows, columns, and depths
+* 2 values for \code{regionRes()}: Size of cells in the x- and y-dimensions
 * 2 values for \code{regionZExt()}: Topmost and bottom-most elevations
+* 3 values for \code{regionDim3d()}: Number of rows, columns, and depths
+* 3 values for \code{regionRes3d()}: Size of cells in the x-, y-, and z-dimensions
 }}
 
 \item{trimTo}{A \code{GRaster} or \code{NULL} (default). If a \code{GRaster}, then the region will be trimmed to the non-\code{NA} cells in this raster. \code{trimTo} can only be non-\code{NULL} if \code{x} is a \code{GRaster}. Ignored if \code{NULL}.}

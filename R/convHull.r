@@ -56,13 +56,16 @@ methods::setMethod(
 				layer = layerName(x),
 				flags = c('quiet', 'overwrite'),
 				cats = cats,
-				intern = FALSE
+				intern = TRUE
 			)
 			
 			do.call(rgrass::execGRASS, args=args)
 			vects[[i]] <- makeGVector(gns[i])
 			
 		} # next set
+		
+		# concatenate
+		out <- do.call('c', vects)
 	
 	}
 			

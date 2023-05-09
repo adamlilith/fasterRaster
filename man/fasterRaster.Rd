@@ -24,6 +24,7 @@ A \link[=tutorial_getting_started]{quick-start tutorial}\cr
 \code{\link[=dim]{dim()}}: Number of rows and columns\cr
 \code{\link[=ext]{ext()}}: Spatial extent\cr
 \code{\link[=gnames]{gnames()}}: Name of the object in \strong{GRASS}\cr
+\code{\link[=is.2d]{is.2d()}} and \code{\link[=is.3d]{is.3d()}}: Is an object 2- or 3-dimensional?\cr
 \code{\link[=location]{location()}}: \strong{GRASS} "location" of an object or the active session\cr
 \code{\link[=mapset]{mapset()}}: \strong{GRASS} "mapset" of an object or the active session\cr
 \code{\link[=minmax]{minmax()}}: Minimum and maximum values across all non-\code{NA} cells\cr
@@ -49,6 +50,7 @@ Math: Mathematical functions applied to \code{GRaster}s: \code{\link[=abs]{abs()
 \code{\link[=as.contour]{as.contour()}}: Contour lines from a \code{GRaster}\cr
 \code{\link[=buffer]{buffer()}}: Create a buffer around non-\code{NA} cells\cr
 \code{\link[=c]{c()}}: "Stack" two or more \code{GRaster}s\cr
+\code{\link[=crop]{crop()}}: Remove parts of a GRaster or GVector\cr
 \code{\link[=distance]{distance()}}: Distance to non-\code{NA} cells, or vice versa\cr
 \code{\link[=makeGRaster]{makeGRaster()}}: Makes a \code{GRaster} from a raster already in a \strong{GRASS} session\cr
 \verb{[[[]}\link{subset}: Subset a \code{GRaster} with multiple layers\cr
@@ -61,6 +63,7 @@ Math: Mathematical functions applied to \code{GRaster}s: \code{\link[=abs]{abs()
 \code{\link[=ext]{ext()}}: Spatial extent\cr
 \code{\link[=geomtype]{geomtype()}}: Type of vector (points, lines, polygons)\cr
 \code{\link[=gnames]{gnames()}}: Name of the object in \strong{GRASS}\cr
+\code{\link[=is.2d]{is.2d()}} and \code{\link[=is.3d]{is.3d()}}: Is an object 2- or 3-dimensional?\cr
 \code{\link[=is.points]{is.points()}}, \code{\link[=is.lines]{is.lines()}}, \code{\link[=is.polygons]{is.polygons()}}: Does a \code{GVector} represent points, lines, or polygons?\cr
 \code{\link[=location]{location()}}: \strong{GRASS} "location" of an object or the active session\cr
 \code{\link[=mapset]{mapset()}}: \strong{GRASS} "mapset" of an object or the active session\cr
@@ -75,24 +78,32 @@ Math: Mathematical functions applied to \code{GRaster}s: \code{\link[=abs]{abs()
 
 \subsection{Functions that operate on or create \code{GVectors}}{
 
+\code{\link[=as.data.frame]{as.data.frame()}}: Convert a \code{GVector} to a \code{data.frame}\cr
 \code{\link[=buffer]{buffer()}}: Create a polygon around/inside a vector\cr
 \code{\link[=connectors]{connectors()}}: Create lines connecting nearest features of two vectors\cr
+\code{\link[=convHull]{convHull()}}: Minimum convex hull\cr
+\code{\link[=crop]{crop()}}: Remove parts of a GRaster or GVector\cr
 \code{\link[=distance]{distance()}}: Distance between geometries in two vectors, or from a vector to cells of a raster\cr
-\code{\link[=fieldClasses]{fieldClasses()}}: Classes of \code{GVector} fields\cr
-\code{\link[=makeGVector]{makeGVector()}}: Makes a \code{GVector} from a vector already in a \strong{GRASS} session.
+\code{\link[=head]{head()}}: First rows of a \code{GVector}'s data frame.\cr
+\code{\link[=makeGVector]{makeGVector()}}: Makes a \code{GVector} from a vector already in a \strong{GRASS} session.\cr
 \code{\link[=st_buffer]{st_buffer()}}: Create a polygon around/inside a vector\cr
 \code{\link[=st_distance]{st_distance()}}: Distance between geometries in two vectors\cr
+\code{\link[=tail]{tail()}}: Last rows of a \code{GVector}'s data frame.\cr
 }
 
 \subsection{Converting between data types}{
 
 \code{\link[=as.contour]{as.contour()}}: Contour lines from a \code{GRaster}\cr
+\code{\link[=as.data.frame]{as.data.frame()}}: Convert \code{GVector} to a \code{data.frame}\cr
 \code{\link[=as.points]{as.points()}}, \code{\link[=as.lines]{as.lines()}}, and \code{\link[=as.polygons]{as.polygons()}}: Convert a \code{GRaster} to a \code{GVector}\cr
 \code{\link[=fast]{fast()}}: Create \code{GRaster}s or \code{GVector}s from \code{SpatRaster}s, \code{SpatVector}s, or \code{sf} or \code{stars} objects, or from files\cr
+\code{\link[=head]{head()}}: First rows of a \code{GVector}'s data frame.\cr
+\code{\link[=rastToGrass]{rastToGrass()}}: Convert a \code{SpatRaster} to a \strong{GRASS} raster\cr
 \code{\link[=rast]{rast()}}: Convert a \code{GRaster} to a \code{SpatRaster}\cr
 \code{\link[=rasterize]{rasterize()}}: Convert a \code{GVector} to a \code{GRaster}\cr
 \code{\link[=st_as_sf]{st_as_sf()}}: Convert a \code{GVector} to a \code{sf} vectors\cr
 \code{\link[=stars]{stars()}}: Convert a \code{GVector} to a \code{stars} raster\cr
+\code{\link[=tail]{tail()}}: Last rows of a \code{GVector}'s data frame.\cr
 \code{\link[=vect]{vect()}}: Convert a \code{GVector} to a \code{SpatVector}\cr
 \code{\link[=vectToGrass]{vectToGrass()}}: Convert a \code{SpatVector} to a \strong{GRASS} vector\cr
 }
@@ -104,6 +115,7 @@ Math: Mathematical functions applied to \code{GRaster}s: \code{\link[=abs]{abs()
 \code{\link[=compareFloat]{compareFloat()}}: Compare values accounting for differences due to floating point precision\cr
 \code{\link[=forwardSlash]{forwardSlash()}}: Replace backslash with forward slash\cr
 \code{\link[=grassInfo]{grassInfo()}}: \strong{GRASS} version and citation\cr
+\code{\link[=rastToGrass]{rastToGrass()}}: Convert a \code{SpatRaster} to a \strong{GRASS} raster\cr
 \code{\link[=vectToGrass]{vectToGrass()}}: Send a \code{SpatVector} or \code{sf} vector to an open \strong{GRASS} connection\cr
 }
 

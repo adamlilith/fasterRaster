@@ -17,6 +17,7 @@
 #' [dim()]: Number of rows and columns\cr
 #' [ext()]: Spatial extent\cr
 #' [gnames()]: Name of the object in **GRASS**\cr
+#' [is.2d()] and [is.3d()]: Is an object 2- or 3-dimensional?\cr
 #' [location()]: **GRASS** "location" of an object or the active session\cr
 #' [mapset()]: **GRASS** "mapset" of an object or the active session\cr
 #' [minmax()]: Minimum and maximum values across all non-`NA` cells\cr
@@ -40,6 +41,7 @@
 #' [as.contour()]: Contour lines from a `GRaster`\cr
 #' [buffer()]: Create a buffer around non-`NA` cells\cr
 #' [c()]: "Stack" two or more `GRaster`s\cr
+#' [crop()]: Remove parts of a `GRaster` or `GVector`\cr
 #' [distance()]: Distance to non-`NA` cells, or vice versa\cr
 #' [makeGRaster()]: Makes a `GRaster` from a raster already in a **GRASS** session\cr
 #' `[[[]`[subset]: Subset a `GRaster` with multiple layers\cr
@@ -50,6 +52,7 @@
 #' [ext()]: Spatial extent\cr
 #' [geomtype()]: Type of vector (points, lines, polygons)\cr
 #' [gnames()]: Name of the object in **GRASS**\cr
+#' [is.2d()] and [is.3d()]: Is an object 2- or 3-dimensional?\cr
 #' [is.points()], [is.lines()], [is.polygons()]: Does a `GVector` represent points, lines, or polygons?\cr
 #' [location()]: **GRASS** "location" of an object or the active session\cr
 #' [mapset()]: **GRASS** "mapset" of an object or the active session\cr
@@ -62,22 +65,30 @@
 #' [zext()]: Vertical extent\cr
 #'
 #' ## Functions that operate on or create `GVectors`
+#' [as.data.frame()]: Convert a `GVector` to a `data.frame`\cr
 #' [buffer()]: Create a polygon around/inside a vector\cr
 #' [connectors()]: Create lines connecting nearest features of two vectors\cr
+#' [convHull()]: Minimum convex hull\cr
+#' [crop()]: Remove parts of a `GRaster` or `GVector`\cr
 #' [distance()]: Distance between geometries in two vectors, or from a vector to cells of a raster\cr
-#' [fieldClasses()]: Classes of `GVector` fields\cr
-#' [makeGVector()]: Makes a `GVector` from a vector already in a **GRASS** session.
+#' [head()]: First rows of a `GVector`'s data frame.\cr
+#' [makeGVector()]: Makes a `GVector` from a vector already in a **GRASS** session.\cr
 #' [st_buffer()]: Create a polygon around/inside a vector\cr
 #' [st_distance()]: Distance between geometries in two vectors\cr
+#' [tail()]: Last rows of a `GVector`'s data frame.\cr
 #'
 #' ## Converting between data types
 #' [as.contour()]: Contour lines from a `GRaster`\cr
+#' [as.data.frame()]: Convert `GVector` to a `data.frame`\cr
 #' [as.points()], [as.lines()], and [as.polygons()]: Convert a `GRaster` to a `GVector`\cr
 #' [fast()]: Create `GRaster`s or `GVector`s from `SpatRaster`s, `SpatVector`s, or `sf` or `stars` objects, or from files\cr
+#' [head()]: First rows of a `GVector`'s data frame.\cr
+#' [rastToGrass()]: Convert a `SpatRaster` to a **GRASS** raster\cr
 #' [rast()]: Convert a `GRaster` to a `SpatRaster`\cr
 #' [rasterize()]: Convert a `GVector` to a `GRaster`\cr
 #' [st_as_sf()]: Convert a `GVector` to a `sf` vectors\cr
 #' [stars()]: Convert a `GVector` to a `stars` raster\cr
+#' [tail()]: Last rows of a `GVector`'s data frame.\cr
 #' [vect()]: Convert a `GVector` to a `SpatVector`\cr
 #' [vectToGrass()]: Convert a `SpatVector` to a **GRASS** vector\cr
 #'
@@ -87,6 +98,7 @@
 #' [compareFloat()]: Compare values accounting for differences due to floating point precision\cr
 #' [forwardSlash()]: Replace backslash with forward slash\cr
 #' [grassInfo()]: **GRASS** version and citation\cr
+#' [rastToGrass()]: Convert a `SpatRaster` to a **GRASS** raster\cr
 #' [vectToGrass()]: Send a `SpatVector` or `sf` vector to an open **GRASS** connection\cr
 #'
 #' ## Functions that operate on **GRASS** "sessions" (seldom used by most users):
