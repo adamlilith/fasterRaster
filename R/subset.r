@@ -1,9 +1,17 @@
-#' Sub-setting operator for GRasters
+#' Sub-setting operator for GRasters and GVectors
 #'
-#' Get a subset of a "stack" of `GRaster`s. Note that using the `[[` operator for `GRaster`s and `GVector`s makes a copy of the object in **GRASS** so is not fast. If you are simply wanting to obtain properties of a particular set of raster or vector layers, use [properties()].
+#' @description The `[` and `[[` operators do different things depending on whether they are applied to a `GRaster` or `GVector`:
+#' * `GVector`s:
+#'     * `[` operator: Returns a subset of geometries (i.e., points, lines, or polygons) of the `GVector`. For example, `vector[2:4]` will return the second through the fourth geometries.
+#'     * `[[` operator: Returns columns of the vector's data frame. For example, `vector[[2:4]]` returns columns 2 through 4 of the data frame.
+#' * `GRaster`s:
+#'     * `[[` operator: Returns `GRaster`s from a "stack" of `GRaster`s.
 #'
-#' @param x A `GRaster` or `GVector` with more than one layer.
-#' @param i A character (`GRaster`s only), numeric, or integer vector: Indicates the name(s) or indices of the objects to access.
+#' @param x A `GRaster` with one or more layers, or a `GVector`.
+#' @param i A character, numeric, integer, or logical vector:
+#' * `GVector`s:
+#'     * `[` operator: Indicates the columns to extract. `i` can be the name of the column(s), a number indicating the index of the columns, or a logical vector the same length as there are columns.
+#'     * `[[` operator: Indicates which geometries to extract. `i` can be a number indicating the index of the features, or a logical vector the same length as there are rows.
 #'
 #' @returns A `GRaster`.
 #'
@@ -16,7 +24,7 @@ methods::setMethod(
 	'[[',
 	signature = c(x = 'GRaster'),
 	function(x, i) {
-	.subset(x)
+	.subsetDouble(x)
 	} # EOF
 )
 
@@ -27,11 +35,11 @@ methods::setMethod(
 	'[[',
 	signature = c(x = 'GVector'),
 	function(x, i) {
-	.subset(x)
+	.subsetDouble(x)
 	} # EOF
 )
 
-.subset <- function(x, i) {
+.subsetDouble <- function(x, i) {
 
 	### test indices
 	if (inherits(i, 'character')) {
@@ -66,27 +74,16 @@ methods::setMethod(
 			maxVal = mm['max', i]
 		)
 		
+		if (inherits(out, 'GRaster') && length(anyDuplicated(out@names)) > 0L) out@names <- make.unique(out@names)
+
 	} else if (inherits(x, 'GVector')) {
-	
-		z <- zext(x)
-		out <- new(
-			'GVector',
-			location = location(x),
-			mapset = mapset(x),
-			crs = crs(x),
-			nLayers = length(i),
-			gnames = gnames(x)[i],
-			extent = as.vector(ext(x)),
-			ztop = zext(x)[1L],
-			zbottom = zext(x)[2L],
-			nFields = ncat(x)[i],
-			fields = names(x)[[i]],
-			fieldClasses = ncat(x)[i]
-		)
+
+		out <- as.data.frame(x)
+		out <- out[ , i, drop=FALSE]
 	
 	}
 	
-	if (inherits(out, 'GRaster') && length(anyDuplicated(out@names)) > 0L) out@names <- make.unique(out@names)
 	out
 
 }
+

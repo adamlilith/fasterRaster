@@ -3,9 +3,12 @@
 \name{crop,GRaster-method}
 \alias{crop,GRaster-method}
 \alias{crop}
+\alias{crop,GVector-method}
 \title{Remove parts of a GRaster or GVector}
 \usage{
 \S4method{crop}{GRaster}(x, y)
+
+\S4method{crop}{GVector}(x, y)
 }
 \arguments{
 \item{x}{A \code{GRaster} or \code{GVector} to be cropped.}

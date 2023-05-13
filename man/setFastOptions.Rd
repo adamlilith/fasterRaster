@@ -12,16 +12,17 @@ getFastOptions(..., default = FALSE)
 \arguments{
 \item{...}{Either a character (the name of an option), or \strong{fasterRaster} option that can be defined using an \code{option = value} pattern. These include:
 \itemize{
-\item \code{cores} (integer/numeric): Number of processor cores to use on a task. The default is 1. Only some \strong{GRASS} modules allow this option.
-\item \code{memory} (integer/numeric): The amount of memory to allocate to a task, in MB. The default is 300 MB. Only some \strong{GRASS} modules allow this option.
-\item \code{details} (logical): If \code{TRUE}, show details on run-time and otherwise hidden slots in classes. This is mainly used for debugging, so most users will want to keep this at its default, \code{FALSE}.
 \item \code{autoRegion} (logical): If \code{TRUE} (default), automatically resize and resample the \strong{GRASS} \link[=tutorial_regions]{region} so that it matches the desired output. Changing this to \code{FALSE} can yield unexpected output.
+\item \code{cores} (integer/numeric): Number of processor cores to use on a task. The default is 1. Only some \strong{GRASS} modules allow this option.
+\item \code{details} (logical): If \code{TRUE}, show details on run-time and otherwise hidden slots in classes. This is mainly used for debugging, so most users will want to keep this at its default, \code{FALSE}.
 \item \code{grassDir} (character): The folder in which \strong{GRASS} is installed on your computer. Typically, this option is set when you run \code{\link[=fastStart]{fastStart()}}, but you can define it before you run that function. All subsequent calls of \code{fastStart()} do not need \code{grassDir} set because it will be obtained from the options. By default, \code{grassDir} is \code{NULL}, which causes the function to search for your installation of \strong{GRASS} (and which usually fails). Depending on your operating system, your install directory will look something like this:
 \itemize{
 \item Windows: \code{'C:/Program Files/GRASS GIS 8.3'}
 \item Mac OS: \code{"/Applications/GRASS-8.3.app/Contents/Resources"}
 \item Linux: \code{'/usr/local/grass'}
 }
+\item \code{memory} (integer/numeric): The amount of memory to allocate to a task, in MB. The default is 300 MB. Only some \strong{GRASS} modules allow this option.
+\item \code{data.table} (logical): If \code{FALSE} (default), use \code{data.frame}s when going back and forth between data tables of \code{GVector}s and \strong{R}. This can be slow for very large data tables. If \code{TRUE}, use \code{data.table}s from the \strong{data.table} package. This can be much faster, but it might require you to know how to use \code{data.table}s if you want to manipulate them in \strong{R}. You can always convert them to \code{data.frame}s using \code{\link[=as.data.frame]{as.data.frame()}}.
 \item \code{workDir} (character): The folder in which \strong{GRASS} rasters, vectors, and other objects are created and manipulated. Typically, this is set when you first call \code{\link[=fastStart]{fastStart()}}. All subsequent calls to \code{fastStart()} will not do not need \code{workDir} defined because it will be obtained from the options. By default, this is set to the temporary directory on your operating system (from \code{\link[=tempdir]{tempdir()}}), appended with "\code{fr}". Ergo, the path will be \code{file.path(tempdir(), 'fr')}.
 }}
 

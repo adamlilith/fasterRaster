@@ -18,6 +18,7 @@ methods::setMethod(
 	signature = c(x = 'GVector'),
 	definition = function(x, row.names = NULL, optional = FALSE) {
 	
+	
 		data <- rgrass::execGRASS('v.db.select', map=gnames(x), intern=TRUE)
 		
 		# column names
@@ -27,13 +28,10 @@ methods::setMethod(
 	
 		# data values
 		data <- strsplit(data, '\\|')
-		out <- list()
-		for (i in seq_along(cols)) out[[i]] <- rep(NA, length(data))
-		names(out) <- cols
-		out <- as.data.frame(out)
+		out <- do.call(rbind.data.frame, data)
+		colnames(out) <- cols
 
-		# collate data
-		for (i in 1L:nrow(out)) out[i , ] <- data[[i]]
+		out <- data.table::as.data.table(x)
 		
 		# everything is exported as a character
 		ints <- which(datatype(x)$datatype == 'integer')
@@ -41,23 +39,25 @@ methods::setMethod(
 		
 		if (length(ints) > 0L) {
 			for (int in ints) {
-				if (any(out[ , int] == '')) {
-					out[out[ , int] == '', int] <- NA_character_
+				if (any(out[ , ..int] == '')) {
+					out[out[ , ..int] == '', ..int] <- NA_character_
 				}
-				out[ , int] <- as.integer(out[ , int])
+				out[ , ..int] <- as.integer(out[ , ..int])
 			}
 		}
 		
 		if (length(nums) > 0L) {
 			for (num in nums) {
-				if (any(out[ , num] == '')) {
-					out[out[ , num] == '', num] <- NA_character_
+				if (any(out[ , ..num] == '')) {
+					out[out[ , ..num] == '', ..num] <- NA_character_
 				}
-				out[ , num] <- as.numeric(out[ , num])
+				out[ , ..num] <- as.numeric(out[ , ..num])
 			}
 		}
 		
 		if (!is.null(row.names)) rownames(out) <- row.names
+		if (!getFastOptions('useDataTable')) out <- as.data.frame(x)
+		
 		out
 	
 	} # EOF

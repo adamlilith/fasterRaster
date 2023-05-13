@@ -20,18 +20,20 @@
 #' ```
 #' @param ... Either a character (the name of an option), or **fasterRaster** option that can be defined using an `option = value` pattern. These include:
 #'
+#' * `autoRegion` (logical): If `TRUE` (default), automatically resize and resample the **GRASS** [region][tutorial_regions] so that it matches the desired output. Changing this to `FALSE` can yield unexpected output.
+#'
 #' * `cores` (integer/numeric): Number of processor cores to use on a task. The default is 1. Only some **GRASS** modules allow this option.
 #'
-#' * `memory` (integer/numeric): The amount of memory to allocate to a task, in MB. The default is 300 MB. Only some **GRASS** modules allow this option.
-#'
 #' * `details` (logical): If `TRUE`, show details on run-time and otherwise hidden slots in classes. This is mainly used for debugging, so most users will want to keep this at its default, `FALSE`.
-#'
-#' * `autoRegion` (logical): If `TRUE` (default), automatically resize and resample the **GRASS** [region][tutorial_regions] so that it matches the desired output. Changing this to `FALSE` can yield unexpected output.
 #'
 #'	* `grassDir` (character): The folder in which **GRASS** is installed on your computer. Typically, this option is set when you run [fastStart()], but you can define it before you run that function. All subsequent calls of `fastStart()` do not need `grassDir` set because it will be obtained from the options. By default, `grassDir` is `NULL`, which causes the function to search for your installation of **GRASS** (and which usually fails). Depending on your operating system, your install directory will look something like this:
 #'     * Windows: `'C:/Program Files/GRASS GIS 8.3'`
 #'     * Mac OS: `"/Applications/GRASS-8.3.app/Contents/Resources"`
 #'     * Linux: `'/usr/local/grass'`
+#'
+#' * `memory` (integer/numeric): The amount of memory to allocate to a task, in MB. The default is 300 MB. Only some **GRASS** modules allow this option.
+#'
+#' * `data.table` (logical): If `FALSE` (default), use `data.frame`s when going back and forth between data tables of `GVector`s and **R**. This can be slow for very large data tables. If `TRUE`, use `data.table`s from the **data.table** package. This can be much faster, but it might require you to know how to use `data.table`s if you want to manipulate them in **R**. You can always convert them to `data.frame`s using [as.data.frame()].
 #'
 #'  * `workDir` (character): The folder in which **GRASS** rasters, vectors, and other objects are created and manipulated. Typically, this is set when you first call [fastStart()]. All subsequent calls to `fastStart()` will not do not need `workDir` defined because it will be obtained from the options. By default, this is set to the temporary directory on your operating system (from [tempdir()]), appended with "`fr`". Ergo, the path will be `file.path(tempdir(), 'fr')`.
 #'
@@ -96,6 +98,11 @@ setFastOptions <- function(
 	if (any(names(opts) %in% 'autoRegion')) {
 		if (!is.logical(opts$autoRegion)) stop('Option ', sQuote('autoRegion'), ' must be a logical. The default is ', .autoRegionDefault(), '.')
 		if (is.na(opts$autoRegion)) stop('Option ', sQuote('autoRegion'), ' must be TRUE or FALSE (not NA). The default is ', .autoRegionDefault(), '.')
+	}
+
+	if (any(names(opts) %in% 'useDataTable')) {
+		if (!is.logical(opts$autoRegion)) stop('Option ', sQuote('useDataTable'), ' must be a logical. The default is ', .useDataTableDefault(), '.')
+		if (is.na(opts$autoRegion)) stop('Option ', sQuote('useDataTable'), ' must be TRUE or FALSE (not NA). The default is ', .useDataTableDefault(), '.')
 	}
 
 	# if (any(names(opts) %in% 'vectClass')) {

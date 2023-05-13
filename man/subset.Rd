@@ -4,22 +4,40 @@
 \alias{[[,GRaster,ANY,ANY-method}
 \alias{subset}
 \alias{[[,GVector,ANY,ANY-method}
-\title{Sub-setting operator for GRasters}
+\title{Sub-setting operator for GRasters and GVectors}
 \usage{
 \S4method{[[}{GRaster,ANY,ANY}(x, i)
 
 \S4method{[[}{GVector,ANY,ANY}(x, i)
 }
 \arguments{
-\item{x}{A \code{GRaster} or \code{GVector} with more than one layer.}
+\item{x}{A \code{GRaster} with one or more layers, or a \code{GVector}.}
 
-\item{i}{A character (\code{GRaster}s only), numeric, or integer vector: Indicates the name(s) or indices of the objects to access.}
+\item{i}{A character, numeric, integer, or logical vector:
+\itemize{
+\item \code{GVector}s:
+\itemize{
+\item \code{[} operator: Indicates the columns to extract. \code{i} can be the name of the column(s), a number indicating the index of the columns, or a logical vector the same length as there are columns.
+\item \code{[[} operator: Indicates which geometries to extract. \code{i} can be a number indicating the index of the features, or a logical vector the same length as there are rows.
+}
+}}
 }
 \value{
 A \code{GRaster}.
 }
 \description{
-Get a subset of a "stack" of \code{GRaster}s. Note that using the \code{[[} operator for \code{GRaster}s and \code{GVector}s makes a copy of the object in \strong{GRASS} so is not fast. If you are simply wanting to obtain properties of a particular set of raster or vector layers, use \code{\link[=properties]{properties()}}.
+The \code{[} and \code{[[} operators do different things depending on whether they are applied to a \code{GRaster} or \code{GVector}:
+\itemize{
+\item \code{GVector}s:
+\itemize{
+\item \code{[} operator: Returns a subset of geometries (i.e., points, lines, or polygons) of the \code{GVector}. For example, \code{vector[2:4]} will return the second through the fourth geometries.
+\item \code{[[} operator: Returns columns of the vector's data frame. For example, \code{vector[[2:4]]} returns columns 2 through 4 of the data frame.
+}
+\item \code{GRaster}s:
+\itemize{
+\item \code{[[} operator: Returns \code{GRaster}s from a "stack" of \code{GRaster}s.
+}
+}
 }
 \examples{
 \dontrun{

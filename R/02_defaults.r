@@ -1,11 +1,12 @@
 # DEFAULTS FOR ALL GLOBAL SETTINGS
 
 # global PUBLIC options
-.grassDirDefault <- function() NULL
+.autoRegionDefault <- function() TRUE # only TRUE or FALSE, never NA
 .coresDefault <- function() 1
 .detailsDefault <- function() TRUE
+.grassDirDefault <- function() NULL
 .memoryDefault <- function() 300 # in MB
-.autoRegionDefault <- function() TRUE # only TRUE or FALSE, never NA
+.useDataTableDefault <- function() FALSE # logical
 # .grassVerDefault <- function() '82'
 
 .workDirDefault <- function() file.path(gsub('\\\\', '/', tempdir()))
@@ -26,7 +27,8 @@
 			'location',
 			'mapset',
 			'workDir',
-			'autoRegion'
+			'autoRegion',
+			'useDataTable'
 		),
 		type = c(
 			'character',
@@ -37,6 +39,7 @@
 			'character',
 			'character',
 			'character',
+			'logical',
 			'logical'
 		)
 	)
