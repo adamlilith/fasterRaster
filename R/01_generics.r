@@ -14,7 +14,7 @@ methods::setGeneric(name = 'comparable', def = function(x, y, ...) standardGener
 methods::setGeneric(name = 'connectors', def = function(x, y, ...) standardGeneric('connectors'))
 methods::setGeneric(name = 'copyGSpatial', def = function(x, ...) standardGeneric('copyGSpatial'))
 methods::setGeneric(name = 'convHull', def = function(x, ...) standardGeneric('convHull'))
-# methods::setGeneric(name = 'crs', def = function(x, ...) standardGeneric('crs'))
+methods::setGeneric(name = 'crds', def = function(x, ...) standardGeneric('crds'))
 methods::setGeneric(name = 'crs', package='terra')
 methods::setGeneric(name = 'crop', package='terra')
 
@@ -50,6 +50,8 @@ methods::setGeneric(name = 'nlyr', package='terra')
 methods::setGeneric(name = 'ncol', def = function(x) standardGeneric('ncol')) # in base
 methods::setGeneric(name = 'nrow', def = function(x) standardGeneric('nrow')) # in base
 
+methods::setGeneric(name = 'project', package='terra')
+
 methods::setGeneric(name = 'rast', package='terra')
 methods::setGeneric(name = 'regionDim', def=function(x, ...) standardGeneric('regionDim'))
 methods::setGeneric(name = 'regionExt', def=function(x, ...) standardGeneric('regionExt'))
@@ -57,6 +59,7 @@ methods::setGeneric(name = 'regionRes', def=function(x, ...) standardGeneric('re
 methods::setGeneric(name = 'regionShape', def=function(x, ...) standardGeneric('regionShape'))
 methods::setGeneric(name = 'regionZExt', def=function(x, ...) standardGeneric('regionZExt'))
 methods::setGeneric(name = 'res', package='terra')
+methods::setGeneric(name = 'resample', package='terra')
 methods::setGeneric(name = 'res3d', def = function(x) standardGeneric('res3d'))
 
 if (!isGeneric('st_bbox')) methods::setGeneric(name = 'st_bbox', def=function(obj, ...) standardGeneric('st_bbox'))
