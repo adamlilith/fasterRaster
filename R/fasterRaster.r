@@ -4,7 +4,7 @@
 #'
 #' ## Most useful functions/links:
 #' A [quick-start tutorial][tutorial_getting_started]\cr
-#' [fastStart()]: Initiate a **GRASS** session\cr
+#' [faster()]: Initiate a **GRASS** session\cr
 #' [fast()]: Create `GRaster`s or `GVector`s from `SpatRaster`s, `SpatVector`s, or `sf` or `stars` objects, or from files\cr
 #' [rast()], [vect()], [st_as_sf()], and [stars()]: Convert `GRaster`s and `GVector`s to `SpatRaster`s, `SpatVector`s, `sf` vectors, or `stars` rasters\cr
 #' [writeRaster()] and [writeVector()]: Save `GRaster`s or `GVector`s to disk\cr
@@ -38,13 +38,15 @@
 #' ## Functions that operate on or create `GRasters`
 #' [Arithmetic]: Mathematical operations on `GRaster`s: `+`, `-`, `*`, `/`, `^`, `%%` (modulus), `%/%` (integer division)\cr
 #' Math: Mathematical functions applied to `GRaster`s: [abs()], [sin()], [cos()], [tan()], [asin()], [acos()], [atan()], [atan2()], [exp()], [log()], [log1p()], [log2()], [log10()], [sqrt()], [round()], [floor()], [ceiling()], [trunc()]\cr
-#' [as.contour()]: Contour lines from a `GRaster`\cr
+#' [as.contour()]: Contour lines from a raster\cr
 #' [buffer()]: Create a buffer around non-`NA` cells\cr
-#' [c()]: "Stack" two or more `GRaster`s\cr
-#' [crop()]: Remove parts of a `GRaster` or `GVector`\cr
+#' [c()]: "Stack" two or more rasters\cr
+#' [crop()]: Remove parts of a raster\cr
 #' [distance()]: Distance to non-`NA` cells, or vice versa\cr
 #' [makeGRaster()]: Makes a `GRaster` from a raster already in a **GRASS** session\cr
-#' `[[[]`[subset]: Subset a `GRaster` with multiple layers\cr
+#' [project()]: Change coordinate reference system and cell size\cr
+#' [resample()]: Change cell size\cr
+#' `[[[]`[subset]: Subset a raster with multiple layers\cr
 #'
 #' ## Properties of **fasterRaster** vectors (`GVectors')
 #' [crs()]: Coordinate reference system\cr
@@ -65,17 +67,19 @@
 #' [zext()]: Vertical extent\cr
 #'
 #' ## Functions that operate on or create `GVectors`
-#' [as.data.frame()]: Convert a `GVector` to a `data.frame`\cr
+#' [as.data.frame()]: Convert a vector to a `data.frame`\cr
 #' [buffer()]: Create a polygon around/inside a vector\cr
 #' [connectors()]: Create lines connecting nearest features of two vectors\cr
 #' [convHull()]: Minimum convex hull\cr
-#' [crop()]: Remove parts of a `GRaster` or `GVector`\cr
+#' [crds()]: Coordinates of a vector's features\cr
+#' [crop()]: Remove parts of a vector\cr
 #' [distance()]: Distance between geometries in two vectors, or from a vector to cells of a raster\cr
-#' [head()]: First rows of a `GVector`'s data frame.\cr
+#' [head()]: First rows of a vector's data frame.\cr
 #' [makeGVector()]: Makes a `GVector` from a vector already in a **GRASS** session.\cr
+#' [project()]: Change coordinate reference system\cr
 #' [st_buffer()]: Create a polygon around/inside a vector\cr
 #' [st_distance()]: Distance between geometries in two vectors\cr
-#' [tail()]: Last rows of a `GVector`'s data frame.\cr
+#' [tail()]: Last rows of a vector's data frame.\cr
 #'
 #' ## Converting between data types
 #' [as.contour()]: Contour lines from a `GRaster`\cr
@@ -99,7 +103,7 @@
 #' [forwardSlash()]: Replace backslash with forward slash\cr
 #' [grassInfo()]: **GRASS** version and citation\cr
 #' [rastToGrass()]: Convert a `SpatRaster` to a **GRASS** raster\cr
-#' [vectToGrass()]: Send a `SpatVector` or `sf` vector to an open **GRASS** connection\cr
+#' [vectToGrass()]: Convert a `SpatVector` or `sf` vector to a `GVector`\cr
 #'
 #' ## Functions that operate on **GRASS** "sessions" (seldom used by most users):
 #' [fastRemove()]: Delete a **GRASS** session (location, mapset(s), and all associated files)\cr

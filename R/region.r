@@ -31,6 +31,9 @@ methods::setMethod(
 		
 		info <- rgrass::execGRASS('g.region', flags=c('p', '3', 'u'), intern=TRUE)
 		
+		projection <- info[grepl(info, pattern='projection:')]
+		longLatProj <- grepl(projection, pattern='(Latitude-Longitude)')
+		
 		# horizontal extent
 		n <- info[grepl(info, pattern='north:')]
 		s <- info[grepl(info, pattern='south:')]
@@ -47,11 +50,52 @@ methods::setMethod(
 		e <- trimws(e)
 		w <- trimws(w)
 		
-		n <- as.numeric(n)
-		s <- as.numeric(s)
-		e <- as.numeric(e)
-		w <- as.numeric(w)
+		if (longLatProj) {
+			
+			n <- strsplit(n, ':')[[1L]]
+			s <- strsplit(s, ':')[[1L]]
+			e <- strsplit(e, ':')[[1L]]
+			w <- strsplit(w, ':')[[1L]]
 		
+			nIsSouth <- any(grepl(n, pattern='S'))
+			sIsSouth <- any(grepl(s, pattern='S'))
+			eIsWest <- any(grepl(e, pattern='W'))
+			wIsWest <- any(grepl(w, pattern='W'))
+
+			n <- gsub(n, pattern='N', replacement='')
+			n <- gsub(n, pattern='S', replacement='')
+		
+			s <- gsub(s, pattern='N', replacement='')
+			s <- gsub(s, pattern='S', replacement='')
+		
+			e <- gsub(e, pattern='E', replacement='')
+			e <- gsub(e, pattern='W', replacement='')
+
+			w <- gsub(w, pattern='E', replacement='')
+			w <- gsub(w, pattern='W', replacement='')
+		
+			n <- as.numeric(n)
+			s <- as.numeric(s)
+			e <- as.numeric(e)
+			w <- as.numeric(w)
+		
+			if (length(n) == 3L) n <- n[1L] + n[2L] / 60 + n[3L] / 3600
+			if (length(s) == 3L) s <- s[1L] + s[2L] / 60 + s[3L] / 3600
+			if (length(e) == 3L) e <- e[1L] + e[2L] / 60 + e[3L] / 3600
+			if (length(w) == 3L) w <- w[1L] + w[2L] / 60 + w[3L] / 3600
+			
+			if (nIsSouth) n <- -1 * n
+			if (sIsSouth) s <- -1 * s
+			if (eIsWest) e <- -1 * e
+			if (wIsWest) w <- -1 * w
+		
+		} else {
+			n <- as.numeric(n)
+			s <- as.numeric(s)
+			e <- as.numeric(e)
+			w <- as.numeric(w)
+		}
+			
 		extent <- c(xmin=w, xmax=e, ymin=s, ymax=n)
 		
 		# vertical extent
@@ -101,13 +145,30 @@ methods::setMethod(
 		nsres <- trimws(nsres)
 		tbres <- trimws(tbres)
 		
-		ewres <- as.numeric(ewres)
-		nsres <- as.numeric(nsres)
 		tbres <- as.numeric(tbres)
 		
-		ress <- c(xres=ewres, yres=nsres, zres=tbres)
+		if (longLatProj) {
 		
-		list(extent = extent, zextent = zextent, dim = dims, res = ress)
+			ewres <- strsplit(ewres, ':')[[1L]]
+			nsres <- strsplit(nsres, ':')[[1L]]
+		
+			ewres <- as.numeric(ewres)
+			nsres <- as.numeric(nsres)
+		
+			if (length(ewres) == 3L) ewres <- ewres[1L] + ewres[2L] / 60 + ewres[3L] / 3600
+			if (length(nsres) == 3L) nsres <- nsres[1L] + nsres[2L] / 60 + nsres[3L] / 3600
+		
+		} else {
+			
+			ewres <- as.numeric(ewres)
+			nsres <- as.numeric(nsres)
+			tbres <- as.numeric(tbres)
+			
+		}
+			
+		resol <- c(xres=ewres, yres=nsres, zres=tbres)
+		
+		list(extent = extent, zextent = zextent, dim = dims, res = resol)
 		
 	}
 )
@@ -267,6 +328,7 @@ methods::setMethod(f = 'regionExt', signature = 'stars', definition = function(x
 	e <- as.character(x[2L])
 	s <- as.character(x[3L])
 	n <- as.character(x[4L])
+	# rgrass::execGRASS('g.region', n=n, s=s, e=e, w=w, flags=c('o', 'a', 'quiet'), intern=TRUE)
 	rgrass::execGRASS('g.region', n=n, s=s, e=e, w=w, flags=c('o', 'quiet'), intern=TRUE)
 	
 	invisible(initials)
@@ -400,10 +462,9 @@ methods::setMethod(f = 'regionRes', signature = 'stars', definition = function(x
 
 	if (inherits(x, 'GRaster')) {
 		.restore(x)
-		topo <- topology(x)
-		x <- if (topo == '2D') {
+		x <- if (is.2d(x)) {
 			res(x)
-		} else if (topo == '3D') {
+		} else if (is.3d(x)) {
 			res3d(x)
 		}
 	} else if (inherits(x, c('SpatRaster', 'stars'))) {
@@ -418,6 +479,7 @@ methods::setMethod(f = 'regionRes', signature = 'stars', definition = function(x
 	nsres <- as.character(x[2L])
 
 	if (length(x) == 2L) {
+		# rgrass::execGRASS('g.region', ewres=ewres, nsres=nsres, flags=c('o', 'a', 'quiet'), intern=TRUE)
 		rgrass::execGRASS('g.region', ewres=ewres, nsres=nsres, flags=c('o', 'quiet'), intern=TRUE)
 	} else if (length(x) == 3L) {
 		tbres <- x[3L]

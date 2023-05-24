@@ -41,12 +41,12 @@
 #' library(sf)
 #' library(terra)
 #' ```
-#' Now, we need to start a **fasterRaster** "session", which makes a connection to **GRASS**. You generally only need to do this one time each time you start **R** and wish to use **fasterRaster**. We do this with the [fastStart()] function, which needs the `grassDir` argument and a `crs` argument. This latter sets the coordinate reference system (CRS) for the session--all rasters and vectors used in the session must have the same CRS, or be projected so they have this CRS.  You can start other sessions using `fasteStart()` with different CRSs, and switch between them using [fastRestore()].
+#' Now, we need to start a **fasterRaster** "session", which makes a connection to **GRASS**. You generally only need to do this one time each time you start **R** and wish to use **fasterRaster**. We do this with the [faster()] function, which needs the `grassDir` argument and a `crs` argument. This latter sets the coordinate reference system (CRS) for the session--all rasters and vectors used in the session must have the same CRS, or be projected so they have this CRS.  You can start other sessions using `fasteStart()` with different CRSs, and switch between them using [fastRestore()].
 #'
 #' The `crs` argument takes a coordinate reference string or an object from which such a string can be obtained. We will use a raster that comes with **fasterRaster** to set the `crs` argument.
 #' ```
 #' madElev <- fastData('madElev') # get raster
-#' fastStart(madElev, grassDir = grassDir)
+#' faster(madElev, grassDir = grassDir)
 #' ```
 #' Here, the `grassDir` is the installation directory we defined earlier. Now, we can start using **fasterRaster**!
 #'

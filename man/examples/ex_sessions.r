@@ -21,14 +21,14 @@ library(terra)
 madElev <- fastData('madElev')
 
 # set up one location
-fastStart(crs = madElev, grassDir = grassDir,
+faster(crs = madElev, grassDir = grassDir,
 workDir = tempdir(), location = 'examples1') # line only needed for examples
 
 # convert a SpatRaster to a GRaster using the first location
 me1 <- fast(madElev)
 
 # set up another location
-fastStart(crs = madElev, grassDir = grassDir,
+faster(crs = madElev, grassDir = grassDir,
 workDir = wd, location = 'examples2') # line only needed for examples
 
 # convert a SpatRaster to a GRaster using the second location

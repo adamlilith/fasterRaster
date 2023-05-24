@@ -24,7 +24,7 @@ madElev <- fastData('madElev')
 madRivers <- fastData('madRivers')
 
 # start GRASS session for examples only
-fastStart(grassDir = grassDir, crs = madElev,
+faster(grassDir = grassDir, crs = madElev,
 workDir = tempdir(), location = 'examples') # line only needed for examples
 
 # convert a SpatRaster to a GRaster

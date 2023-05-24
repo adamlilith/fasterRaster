@@ -6,18 +6,18 @@
 \alias{st_coordinates}
 \title{Coordinates of a GVector's features or a GRaster's cell centers}
 \usage{
-\S4method{crds}{GVector}(x, z = TRUE)
+\S4method{crds}{GVector}(x, df = FALSE, list = FALSE, z = TRUE)
 
-\S4method{crds}{GVector}(x, z = TRUE)
+st_coordinates(x, ...)
 }
 \arguments{
 \item{x}{A \code{GVector} or a \code{GRaster}.}
 
-\item{z}{If \code{FALSE} (default), return only x- and y-coordinates. If \code{TRUE}, return x-, y-, and z-coordinates. For 2-dimensional objects, z-coordinates will all be 0.}
-
 \item{df}{Logical: If \code{TRUE}, return a \code{data.frame} instead of a \code{matrix}.}
 
 \item{list}{Logical: If \code{TRUE}, return a \code{list} instead of a \code{matrix}.}
+
+\item{z}{If \code{FALSE} (default), return only x- and y-coordinates. If \code{TRUE}, return x-, y-, and z-coordinates. For 2-dimensional objects, z-coordinates will all be 0.}
 
 \item{na.rm}{Logical: If \code{TRUE}, remove cells that are \code{NA} (\code{GRaster}s only).}
 }

@@ -109,7 +109,8 @@ methods::setMethod(
 		details <- getFastOptions('details')
 
 		digs <- min(5, getOption('digits'))
-		ress <- round(object@resolution, digs)
+		resol <- round(object@resolution, digs)
+		if (length(resol) == 2L) resol <- c(resol, NA_real_)
 		
 		digs <- min(1, getOption('digits'))
 		extent <- round(object@extent, digs)
@@ -157,15 +158,15 @@ methods::setMethod(
 		cat('topology    :', object@topology, '\n')
 		cat('coord ref.  :', crs, '\n')
 		cat('dimensions  :', paste(c(object@dimensions, object@nLayers), collapse=', '), '(nrow, ncol, ndepth, nlyr)\n')
-		cat('resolution  :', paste(ress, collapse=', '), '(x, y, z)\n')
+		cat('resolution  :', paste(resol, collapse=', '), '(x, y, z)\n')
 		cat('extent      :', paste(extent, collapse=', '), '(xmin, xmax, ymin, ymax)\n')
 		if (details | object@topology == '3D') {
-			cat('z extent    :', paste(object@zextent, collapse=', '), ' (bottom, top)\n')
+			cat('z extent    :', paste(object@zextent, collapse=', '), '(bottom, top)\n')
 		}
 		if (details) cat('gnames(s)   :', gnames, '\n')
 		cat('name(s)     :', names, '\n')
 		cat('datatype*   :', datatype, '\n')
-		cat('num. categ. :', nCats, '\n')
+		if (details | any(ncat(object) > 0L)) cat('num. categ. :', nCats, '\n')
 		cat('min. value  :', minValChar, '\n')
 		cat('max. value  :', maxValChar, '\n')
 		cat('* GRASS datatype\n')

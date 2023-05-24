@@ -1,6 +1,6 @@
 #' Revert to a previous 'GRASS' session (working folder, location, and mapset)
 #'
-#' This function is useful for reverting to a previous **GRASS** session (`workDir`, `location`, and/or `mapset`). The session must have been already initiated using [fastStart()] in the current **R** session or a previous one.
+#' This function is useful for reverting to a previous **GRASS** session (`workDir`, `location`, and/or `mapset`). The session must have been already initiated using [faster()] in the current **R** session or a previous one.
 #'
 #' @param ... Either a sequence of arguments with the pattern `<argument = value>`, or a list of arguments. These arguments can be any option available in [setFastOptions()]. Of particular note, the `workDir`, `location`, and `mapset` options allow one to revert to a previous **GRASS** session. The current session's `workDir`, `location`, and `mapset` can be seen using [getFastOptions()], plus  [location()] and [mapset()].
 #'
@@ -11,7 +11,6 @@
 #' @example man/examples/ex_sessions.r
 #'
 #' @export
-
 fastRestore <- function(...) {
 
 	dots <- list(...)

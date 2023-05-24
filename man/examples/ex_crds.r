@@ -15,26 +15,36 @@ grassDir <- '/usr/local/grass' # Linux
 
 # setup
 library(sf)
+library(terra)
 
-# plant specimens (points), rivers (lines), communes (polygons)
+# plant specimens (points), elevation (raster)
 madDypsis <- fastData('madDypsis')
 madRivers <- fastData('madRivers')
 madCoast4 <- fastData('madCoast4')
+madElev <- fastData('madElev')
 
 # start GRASS session for examples only
 wd <- forwardSlash(tempdir())
 
-fastStart(crs = madDypsis, grassDir = grassDir,
+faster(crs = madDypsis, grassDir = grassDir,
 workDir = wd, location = 'examples') # line only needed for examples
 
 # convert a SpatRaster to a GRaster, and sf to a GVector
 dypsis <- fast(madDypsis)
 rivers <- fast(madRivers)
 coast <- fast(madCoast4)
+elev <- fast(madElev)
 
 ### get coordinates
-dypPoints <- crds(dypsis)
+dypsisPoints <- crds(dypsis)
+riversPoints <- crds(rivers)
+coastPoints <- crds(coast)
+elevPoints <- crds(elev)
 
+head(dypsisPoints)
+head(riversPoints)
+head(coastPoints)
+head(elevPoints)
 
 # IMPORTANT #3: Revert back to original GRASS session if needed.
 sessionRestore(opts.)

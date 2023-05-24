@@ -82,6 +82,7 @@ Math: Mathematical functions applied to \code{GRaster}s: \code{\link[=abs]{abs()
 \code{\link[=buffer]{buffer()}}: Create a polygon around/inside a vector\cr
 \code{\link[=connectors]{connectors()}}: Create lines connecting nearest features of two vectors\cr
 \code{\link[=convHull]{convHull()}}: Minimum convex hull\cr
+\code{\link[=crds]{crds()}}: Coordinates of a vector's features\cr
 \code{\link[=crop]{crop()}}: Remove parts of a \code{GRaster} or \code{GVector}\cr
 \code{\link[=distance]{distance()}}: Distance between geometries in two vectors, or from a vector to cells of a raster\cr
 \code{\link[=head]{head()}}: First rows of a \code{GVector}'s data frame.\cr

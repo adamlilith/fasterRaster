@@ -102,10 +102,10 @@ makeGVector <- function(gn) {
 		topology = info[['topology']][1L],
 		gnames = gn,
 		geometry = info[['geometry']][1L],
-		nGeometries = info[['numGeometries']],
+		nGeometries = info[['nGeometries']],
 		extent = c(info[['west']][1L], info[['east']][1L], info[['south']][1L], info[['north']][1L]),
 		zextent = c(info[['zbottom']], info[['ztop']]),
-		nFields = info[['numFields']],
+		nFields = info[['nFields']],
 		df = df
 	)
 	

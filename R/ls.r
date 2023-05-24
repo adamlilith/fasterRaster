@@ -47,18 +47,18 @@
 			rasts <- sort(rasts)
 		}
 		
-		# vectors
-		if (any(match == 2L)) {
-			vects <- rgrass::execGRASS('g.list', flags='quiet', type='vector', intern=TRUE, echoCmd=FALSE)
-			if (length(vects) > 0L) names(vects) <- rep('vector', length(vects))
-			vects <- sort(vects)
-		}
-		
 		# 3D rasters
 		if (any(match == 3L)) {
 			rasts3d <- rgrass::execGRASS('g.list', flags='quiet', type='raster_3d', intern=TRUE, echoCmd=FALSE)
 			if (length(rasts3d) > 0L) names(rasts3d) <- rep('raster3d', length(rasts3d))
 			rasts3d <- sort(rasts3d)
+		}
+		
+		# vectors
+		if (any(match == 2L)) {
+			vects <- rgrass::execGRASS('g.list', flags='quiet', type='vector', intern=TRUE, echoCmd=FALSE)
+			if (length(vects) > 0L) names(vects) <- rep('vector', length(vects))
+			vects <- sort(vects)
 		}
 		
 		# groups
@@ -84,8 +84,8 @@
 
 	if (missing(x)) {
 		if (warn) {
-			ans <- readline(prompt='Delete everything in the current GRASS session (y/n)?')
-			if (ans != 'y') {
+			ans <- readline(prompt='Delete everything in the current GRASS session (Y/n)? ')
+			if (ans != 'Y') {
 				message('Nothing deleted.')
 				return(invisible(FALSE))
 			}

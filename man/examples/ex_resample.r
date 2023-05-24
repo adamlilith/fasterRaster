@@ -14,41 +14,28 @@ grassDir <- 'C:/Program Files/GRASS GIS 8.2' # Windows
 grassDir <- '/usr/local/grass' # Linux
 
 # setup
-library(sf)
 library(terra)
 
-# elevation raster, rivers vector
+# elevation raster, climate raster, rivers vector
 madElev <- fastData('madElev')
-madRivers <- fastData('madRivers')
 
 # start GRASS session for examples only
 wd <- forwardSlash(tempdir())
 
+# initiate GRASS session
 faster(crs = madElev, grassDir = grassDir,
 workDir = wd, location = 'examples') # line only needed for examples
 
-# convert a SpatRaster to a GRaster, and sf to a GVector
 elev <- fast(madElev)
-rivers <- fast(madRivers)
 
-### buffer a raster by a given distance
-buffByDist <- buffer(elev, width = 2000) # 2000-m buffer
-buffByDistRast <- rast(buffByDist)
-plot(buffByDistRast)
-
-### buffer a raster by a given number of cells
-buffByCells <- buffer(elev, width = 20.01, unit = 'cells') # 20-cell buffer
-buffByCellsRast <- rast(buffByCells)
-plot(buffByCellsRast)
-
-### buffer a vector
-buffRivers <- buffer(rivers, width = 2000) # 2000-m buffer
-buffRivers <- vect(buffRivers)
-plot(buffRivers)
-plot(st_geometry(madRivers), col = 'blue', add = TRUE)
+# resample raster to 120 x 120 m
+elevResamp <- resample(elev, c(120, 120), method='bilinear')
+elev
+elevResamp
 
 # IMPORTANT #3: Revert back to original GRASS session if needed.
 sessionRestore(opts.)
-removeSession('examples')
+removeSession('exampleFrom')
+removeSession('exampleTo')
 
 }

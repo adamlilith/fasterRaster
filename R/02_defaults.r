@@ -3,10 +3,10 @@
 # global PUBLIC options
 .autoRegionDefault <- function() TRUE # only TRUE or FALSE, never NA
 .coresDefault <- function() 1
-.detailsDefault <- function() TRUE
+.detailsDefault <- function() FALSE
 .grassDirDefault <- function() NULL
 .memoryDefault <- function() 300 # in MB
-.useDataTableDefault <- function() FALSE # logical
+.useDataTableDefault <- function() TRUE # logical
 # .grassVerDefault <- function() '82'
 
 .workDirDefault <- function() file.path(gsub('\\\\', '/', tempdir()))

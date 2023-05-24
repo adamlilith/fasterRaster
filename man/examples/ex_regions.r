@@ -21,7 +21,7 @@ library(terra)
 madElev <- fastData('madElev')
 
 # set up one location
-fastStart(crs = madElev, grassDir = grassDir,
+faster(crs = madElev, grassDir = grassDir,
 workDir = tempdir(), location = 'examples1') # line only needed for examples
 
 
