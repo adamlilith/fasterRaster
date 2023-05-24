@@ -27,8 +27,7 @@
 #' @example man/examples/ex_fastStart.r
 #'
 #' @export
-
-fastStart <- function(
+faster <- function(
 	crs,
 	grassDir= NULL,
 	workDir = NULL,
@@ -81,7 +80,7 @@ fastStart <- function(
 	if (inherits(crs, 'crs')) crs <- unclass(crs)$wkt
 	crsFile <- file.path(workDir, location, 'crs.rds')
 
-	### do we need a new GRASS session or to swicth the location/working directory?
+	### do we need a new GRASS session or to switch the location/working directory?
 
 	if (overwrite) {
 	
@@ -109,7 +108,7 @@ fastStart <- function(
 	}
 		
 	### start new GRASS session
-	emptyRast <- terra::rast(matrix(1), type='xy', crs=crs)
+	emptyRast <- terra::rast(matrix(1L), type='xy', crs=crs)
 
 	### start the GRASS session
 	suppressWarnings(
