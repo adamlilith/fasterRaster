@@ -279,19 +279,19 @@
 
 	if (points > 0 & lines == 0 & boundaries == 0 & centroids == 0 & areas == 0) {
 		geometry <- 'points'
-		numGeometries <- points
+		nGeometries <- points
 	} else if (points == 0 & lines > 0 & boundaries == 0 & centroids == 0 & areas == 0) {
 		geometry <- 'lines'
-		numGeometries <- lines
+		nGeometries <- lines
 	} else if (points == 0 & lines == 0 & boundaries > 0 & centroids > 0 & areas > 0) {
 		geometry <- 'polygons'
-		numGeometries <- boundaries
+		nGeometries <- boundaries
 	} else {
 		geometry <- NA_character_
-		numGeometries <- NA_integer_
+		nGeometries <- NA_integer_
 	}
 	
-	numGeometries <- as.integer(numGeometries)
+	nGeometries <- as.integer(nGeometries)
 
 	# extent
 	west <- info1[grepl(info1, pattern='west=')]
@@ -331,10 +331,23 @@
 	}
 
 	### fields
-	hasFields <- rgrass::execGRASS('v.db.connect', map=gn, flags='g', intern=TRUE)
-	if (grepl(hasFields, pattern='is not connected to a database')) {
+	suppressWarnings(
+		info3 <- rgrass::execGRASS(
+			'v.info',
+			flags = 'c',
+			map = gn,
+			intern = TRUE,
+			Sys_show.output.on.console = FALSE,
+			echoCmd = FALSE
+		)
+	)
+	
+	fieldData <- rgrass::execGRASS('v.db.connect', map=gn, flags='g', intern=TRUE)
+	hasNoFields <- any(grepl(fieldData, pattern='is not connected to a database')) | any(grepl(info3, pattern='ERROR: Database connection not defined for layer'))
+	
+	if (hasNoFields) {
 
-		numFields <- as.integer(0)
+		nFields <- as.integer(0)
 		layerName <- NA_character_
 		fields <- NA_character_
 		classes <- NA_character_
@@ -342,7 +355,7 @@
 	# vector has a data frame
 	} else {
 
-		suppressMessages(
+		suppressWarnings(
 			info3 <- rgrass::execGRASS(
 				'v.info',
 				flags = 'c',
@@ -377,17 +390,23 @@
 				'integer'
 			} else if (type == 'DOUBLE PRECISION') {
 				'numeric'
+			} else {
+				NA_character_
 			}
 		
 			classes[i] <- type
 			fields[i] <- info3[[i]][2L]
 		}
 		
-		numFields <- length(fields)
-		numFields <- as.integer(numFields)
+		nFields <- length(fields)
+		nFields <- as.integer(nFields)
 
 		layerName <- info4[grepl(info4, pattern = 'attribute_layer_name')]
-		layerName <- gsub(layerName, pattern='attribute_layer_name=', replacement='')
+		layerName <- if (length(layerName) == 0) {
+			NA_character_
+		} else {
+			gsub(layerName, pattern='attribute_layer_name=', replacement='')
+		}
 
 	}
 		
@@ -397,7 +416,7 @@
 		topology = topology,
 		geometry = geometry,
 		
-		numGeometries = numGeometries,
+		nGeometries = nGeometries,
 		
 		west = west,
 		east = east,
@@ -407,7 +426,7 @@
 		zbottom = zbottom,
 		ztop = ztop,
 		
-		numFields = numFields,
+		nFields = nFields,
 		layerName = layerName,
 		fields = fields,
 		classes = classes
