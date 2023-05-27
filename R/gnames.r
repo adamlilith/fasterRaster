@@ -1,6 +1,6 @@
-#' Name for a raster or vector in a 'GRASS' session
+#' Name of a raster or vector in a GRASS session
 #'
-#' Retrieves the name of a raster or vector in **GRASS**. `GRaster`s and `GVector`s are actually pointers to objects stored in a **GRASS* database. When using **fasterRaster** functions on rasters and vectors, the commands are translated into **GRASS** commands and executed on the objects named in the pointers. These objects use a `gnames` (which is really a filename) to refer to the **GRASS** objects. In select cases, it can help to get the `gnames` of a `GRaster` or `GVector`.
+#' @description `gnames()` retrieves the name of a raster or vector in **GRASS**. `GRaster`s and `GVector`s are actually pointers to objects stored in a **GRASS* database. When using **fasterRaster** functions on rasters and vectors, the commands are translated into **GRASS** commands and executed on the objects named in the pointers. These objects use a "gname" (which is really a filename) to refer to the **GRASS** objects. In select cases, it can help to get the "gnames" of a `GRaster` or `GVector`. This function is not of use to most users.
 #'
 #' @param x Either a `GSpatial` object or one that inherits from it (i.e., a `GRaster` or `GVector`), *or* a character. If a character, then the character itself is returned.
 #'
@@ -27,10 +27,10 @@ methods::setMethod(
 	definition = function(x) x
 )
 
-#' Make a gnames
+#' Make gnames
 #'
-#' @param n number of names to make
-#' @param rastOrVect `raster`, `raster3D`, or `vector`
+#' @param rastOrVect Character: `raster`, `raster3D`, or `vector`
+#' @param n Numeric integer: Number of names to make
 #' @noRd
 .makeGname <- function(x = NULL, rastOrVect = NULL, n = 1L) {
 
@@ -58,14 +58,12 @@ methods::setMethod(
 	if (rastOrVect == 'group') rastOrVect <- 'group'
 	if (rastOrVect == 'region') rastOrVect <- 'region'
 
-	fname <- tempfile()
-	fname <- basename(fname)
-	fname <- sub(fname, pattern='file', replacement='')
-	if (n > 1L) fname <- paste0(fname, '_', 1L:n)
+	gn <- rstring(1L)
+	if (n > 1L) gn <- paste0(gn, '_', 1L:n)
 	gn <- if (names[1L] != '') {
-		paste0(rastOrVect, '_', names, '_', fname)
+		paste0(rastOrVect, '_', names, '_', gn)
 	} else {
-		paste0(rastOrVect, '_', fname)
+		paste0(rastOrVect, '_', gn)
 	}
 	gn
 
