@@ -24,7 +24,38 @@ methods::setMethod(
 	'[[',
 	signature = c(x = 'GRaster'),
 	function(x, i) {
-	.subsetDouble(x)
+
+	# test indices
+	if (inherits(i, 'character')) {
+		if (any(!(i %in% names(x)))) stop('At least one name does not match a raster in this stack.')
+		i <- match(i, names(x))
+	}
+	if (any(!(i %in% seq_len(nlyr(x))))) stop('Index out of bounds.')
+	
+	mm <- minmax(x)
+	
+	out <- new(
+		'GRaster',
+		location = location(x),
+		mapset = mapset(x),
+		crs = crs(x),
+		nLayers = length(i),
+		dimensions = dim(x),
+		topology = topology(x),
+		extent = as.vector(ext(x)),
+		zextent = zext(x),
+		gnames = gnames(x)[i],
+		names = names(x)[i],
+		datatypeGRASS = datatype(x)[i],
+		resolution = res(x),
+		nCats = ncat(x)[i],
+		minVal = mm['min', i],
+		maxVal = mm['max', i]
+	)
+	
+	if (length(anyDuplicated(out@names)) > 0L) out@names <- make.unique(out@names)
+	out
+
 	} # EOF
 )
 
@@ -35,55 +66,11 @@ methods::setMethod(
 	'[[',
 	signature = c(x = 'GVector'),
 	function(x, i) {
-	.subsetDouble(x)
-	} # EOF
-)
 
-.subsetDouble <- function(x, i) {
-
-	### test indices
-	if (inherits(i, 'character')) {
-		if (inherits(x, 'GVector')) stop('Index cannot be a character when subsetting GVectors.')
-		if (any(!(i %in% names(x)))) stop('At least one name does not match a raster in this stack.')
-		i <- match(i, names(x))
-	}
-	if (any(!(i %in% seq_len(nlyr(x))))) stop('Index out of bounds.')
-	
-	type <- fastClass(x)
-
-	if (inherits(x, 'GRaster')) {
-		
-		mm <- minmax(x)
-		z <- zext(x)
-		out <- new(
-			'GRaster',
-			location = location(x),
-			mapset = mapset(x),
-			crs = crs(x),
-			nLayers = length(i),
-			dimensions = c(nrow(x)[i], ncol(x)[i], ndepth(x)[i]),
-			topology = topology(x)[i],
-			extent = as.vector(ext(x)),
-			zextent = zext(x),
-			gnames = gnames(x)[i],
-			names = names(x)[i],
-			datatypeGRASS = datatype(x)[i],
-			resolution = res(x),
-			nCats = ncat(x)[i],
-			minVal = mm['min', i],
-			maxVal = mm['max', i]
-		)
-		
-		if (inherits(out, 'GRaster') && length(anyDuplicated(out@names)) > 0L) out@names <- make.unique(out@names)
-
-	} else if (inherits(x, 'GVector')) {
-
-		out <- as.data.frame(x)
-		out <- out[ , i, drop=FALSE]
-	
-	}
-	
+	out <- as.data.frame(x)
+	out <- out[ , i, drop=FALSE]	
 	out
 
-}
+	} # EOF
+)
 
