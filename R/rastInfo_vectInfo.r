@@ -33,7 +33,7 @@
 	##################
 
 		rasters <- .ls(c('rasters', 'rasters3d'))
-		type <- names(rasters[rasters %in% gn])
+		type <- names(rasters[rasters == gn])
 
 		### 2D raster
 		if (type == 'raster') {
