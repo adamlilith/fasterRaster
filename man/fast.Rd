@@ -9,7 +9,7 @@
 \alias{fast,sf-method}
 \title{Create a GRaster or GVector}
 \usage{
-\S4method{fast}{character}(x, rastOrVect = NULL)
+\S4method{fast}{character}(x, rastOrVect = NULL, method = NULL, trim = TRUE, warn = TRUE)
 
 \S4method{fast}{SpatRaster}(x)
 
@@ -27,7 +27,20 @@
 \item A character string with the path and filename of a raster or vector to be loaded directly into \strong{GRASS}. The function will attempt to ascertain the type of object from the file extension (raster or vector), but it can help to indicate which it is using the \code{rastOrVect} argument if it is unclear.
 }}
 
-\item{rastOrVect}{Either \code{NULL} (default) or character (\code{raster} or \code{vector}). If \code{x} is a raster or vector already in \strong{R}, this does not need to be specified. However, if \code{x} is a filename, then the function will try to ascertain the data type from the filenames, but sometimes this will fail. In that case, it can help to specify if the file holds a raster or vector. Partial matching is used.}
+\item{rastOrVect}{Either \code{NULL} (default) or character (\code{'raster'} or \code{'vector'}). If \code{x} is a raster or vector already in \strong{R}, this does not need to be specified. However, if \code{x} is a filename, then the function will try to ascertain the data type from the filenames, but sometimes this will fail. In that case, it can help to specify if the file holds a raster or vector. Partial matching is used.}
+
+\item{method}{Character or \code{NULL} (rasters only): If \code{x} does not have the same coordinate reference system as the currently active \strong{GRASS} \link[=tutorial_sessions]{session}, then it will be projected when it is imported. You may need to specify which method is used to conduction the transformation. Partial matching is used.
+\itemize{
+\item \code{NULL} (default): Automatically choose based on raster properties (\code{near} for categorical data, \code{bilinear} for continuous data)
+\item \code{'near'}: Nearest neighbor. Best for categorical data, and often a poor choice for continuous data.
+\item \code{'bilinear'}: Bilinear interpolation (default for non-categorical data; uses weighted values from 4 cells).
+\item \code{'bicubic'}: Bicubic interpolation (uses weighted values from 16 cells).
+\item \code{'lanczos'}: Lanczos interpolation (uses weighted values from 25 cells).
+}}
+
+\item{trim}{Logical (rasters only): When importing rasters from disk that "wrap around" (i.e., whole-world rasters or rasters that have edges that actually circle around to meet on the globe), \code{trim} should be \code{FALSE} to avoid removing rows and columns from the "edge" of the map.}
+
+\item{warn}{Logical: If \code{TRUE}, display a warning when projecting the vector or raster.}
 }
 \value{
 A \code{GRaster} or \code{GVector}.
@@ -35,13 +48,16 @@ A \code{GRaster} or \code{GVector}.
 \description{
 To use most \strong{fasterRaster} functions, you need to
 \enumerate{
-\item Initiate a \strong{GRASS} session with \code{\link[=fastStart]{fastStart()}};
+\item Initiate a \strong{GRASS} session with \code{\link[=faster]{faster()}};
 \item Then use \code{fast()} to either:
 \itemize{
 \item Convert a \code{SpatRaster}, \code{SpatVector}, \code{sf} object, or \code{stars} raster to a \code{GRaster} or \code{GVector},
 \item Load a raster or vector from a file directly into the \code{GRaster} or \code{GVector} format. \strong{GRASS} supports loading from disk a variety of raster (see the \strong{GRASS} manual page for \code{r.in.gdal}) and vector(see the \strong{GRASS} manual page for \code{v.in.ogr}) formats, though not all of them will work with this function.
 }
 }
+}
+\details{
+When projecting a raster, the "fallback" methods in \code{r.import} are actually used, even though the \code{method} argument takes the strings for non-fallback methods. See the manual page for the \code{r.import} \strong{GRASS} module.
 }
 \examples{
 \dontrun{
@@ -70,7 +86,7 @@ madElev <- fastData('madElev')
 madRivers <- fastData('madRivers')
 
 # start GRASS session for examples only
-fastStart(grassDir = grassDir, crs = madElev,
+faster(grassDir = grassDir, crs = madElev,
 workDir = tempdir(), location = 'examples') # line only needed for examples
 
 # convert a SpatRaster to a GRaster
@@ -88,5 +104,5 @@ removeSession('examples')
 }
 }
 \seealso{
-\code{\link[rgrass:readRAST]{rgrass::read_RAST()}} and \code{\link[rgrass:readVECT]{rgrass::read_VECT()}}, plus \strong{GRASS} modules \code{r.in.gdal} and \code{v.in.ogr}
+\code{\link[rgrass:readRAST]{rgrass::read_RAST()}} and \code{\link[rgrass:readVECT]{rgrass::read_VECT()}}, plus \strong{GRASS} modules \code{r.in.gdal}, \code{r.import}, and \code{v.in.ogr}.
 }

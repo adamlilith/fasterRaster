@@ -32,7 +32,7 @@ methods::setMethod(
 	f = 'zext',
 	signature = 'GSpatial',
 	definition = function(x) {
-	c(bottom = x@zextent[1L], top = x@zextent[2L])
+	x@zextent
 })
 
 st_bbox <- function(obj, ...) UseMethod('st_bbox', obj)

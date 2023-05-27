@@ -9,7 +9,7 @@ Processing of large-in-memory/-on disk rasters and spatial vectors using \strong
 \subsection{Most useful functions/links:}{
 
 A \link[=tutorial_getting_started]{quick-start tutorial}\cr
-\code{\link[=fastStart]{fastStart()}}: Initiate a \strong{GRASS} session\cr
+\code{\link[=faster]{faster()}}: Initiate a \strong{GRASS} session\cr
 \code{\link[=fast]{fast()}}: Create \code{GRaster}s or \code{GVector}s from \code{SpatRaster}s, \code{SpatVector}s, or \code{sf} or \code{stars} objects, or from files\cr
 \code{\link[=rast]{rast()}}, \code{\link[=vect]{vect()}}, \code{\link[=st_as_sf]{st_as_sf()}}, and \code{\link[=stars]{stars()}}: Convert \code{GRaster}s and \code{GVector}s to \code{SpatRaster}s, \code{SpatVector}s, \code{sf} vectors, or \code{stars} rasters\cr
 \code{\link[=writeRaster]{writeRaster()}} and \code{\link[=writeVector]{writeVector()}}: Save \code{GRaster}s or \code{GVector}s to disk\cr
@@ -46,14 +46,27 @@ A \link[=tutorial_getting_started]{quick-start tutorial}\cr
 \subsection{Functions that operate on or create \code{GRasters}}{
 
 \link{Arithmetic}: Mathematical operations on \code{GRaster}s: \code{+}, \code{-}, \code{*}, \code{/}, \code{^}, \code{\%\%} (modulus), \code{\%/\%} (integer division)\cr
-Math: Mathematical functions applied to \code{GRaster}s: \code{\link[=abs]{abs()}}, \code{\link[=sin]{sin()}}, \code{\link[=cos]{cos()}}, \code{\link[=tan]{tan()}}, \code{\link[=asin]{asin()}}, \code{\link[=acos]{acos()}}, \code{\link[=atan]{atan()}}, \code{\link[=atan2]{atan2()}}, \code{\link[=exp]{exp()}}, \code{\link[=log]{log()}}, \code{\link[=log1p]{log1p()}}, \code{\link[=log2]{log2()}}, \code{\link[=log10]{log10()}}, \code{\link[=sqrt]{sqrt()}}, \code{\link[=round]{round()}}, \code{\link[=floor]{floor()}}, \code{\link[=ceiling]{ceiling()}}, \code{\link[=trunc]{trunc()}}\cr
-\code{\link[=as.contour]{as.contour()}}: Contour lines from a \code{GRaster}\cr
+Single-layer functions: Applied to each layer of a \code{GRaster}:
+\itemize{
+\item Trigonometry: \code{\link[=sin]{sin()}}, \code{\link[=cos]{cos()}}, \code{\link[=tan]{tan()}}, \code{\link[=asin]{asin()}}, \code{\link[=acos]{acos()}}, \code{\link[=atan]{atan()}}, \code{\link[=atan2]{atan2()}} \cr
+\item Logarithms and powers: \code{\link[=exp]{exp()}}, \code{\link[=log]{log()}}, \code{\link[=log1p]{log1p()}}, \code{\link[=log2]{log2()}}, \code{\link[=log10]{log10()}}, \code{\link[=sqrt]{sqrt()}} \cr
+\item Rounding: \code{\link[=round]{round()}}, \code{\link[=floor]{floor()}}, \code{\link[=ceiling]{ceiling()}}, \code{\link[=trunc]{trunc()}} \cr
+\item Signs: \code{\link[=abs]{abs()}} \cr
+Multi-layer functions: Applied across multiple \code{GRaster}s:
+\item Numeration: \code{\link[=sum]{sum()}}, \code{\link[=count]{count()}} \cr
+\item Central tendency: \code{\link[=mean]{mean()}}, \code{\link[=mmode]{mmode()}}, \code{\link[=median]{median()}} \cr
+\item Dispersion: \code{\link[=sd]{sd()}}, \code{\link[=var]{var()}}, \code{\link[=sdpop]{sdpop()}}, \code{\link[=varpop]{varpop()}}, \code{\link[=nunique]{nunique()}}, \code{\link[=quantile]{quantile()}}, \code{\link[=skewness]{skewness()}}, \code{\link[=kurtosis]{kurtosis()}}
+\item Extremes: \code{\link[=min]{min()}}, \code{\link[=max]{max()}}, \code{\link[=which.min]{which.min()}}, \code{\link[=which.max]{which.max()}} \cr
+\code{\link[=as.contour]{as.contour()}}: Contour lines from a raster\cr
 \code{\link[=buffer]{buffer()}}: Create a buffer around non-\code{NA} cells\cr
-\code{\link[=c]{c()}}: "Stack" two or more \code{GRaster}s\cr
-\code{\link[=crop]{crop()}}: Remove parts of a \code{GRaster} or \code{GVector}\cr
+\code{\link[=c]{c()}}: "Stack" two or more rasters\cr
+\code{\link[=crop]{crop()}}: Remove parts of a raster\cr
 \code{\link[=distance]{distance()}}: Distance to non-\code{NA} cells, or vice versa\cr
 \code{\link[=makeGRaster]{makeGRaster()}}: Makes a \code{GRaster} from a raster already in a \strong{GRASS} session\cr
-\verb{[[[]}\link{subset}: Subset a \code{GRaster} with multiple layers\cr
+\code{\link[=project]{project()}}: Change coordinate reference system and cell size\cr
+\code{\link[=resample]{resample()}}: Change cell size\cr
+\verb{[[[]}\link{subset}: Subset a raster with multiple layers\cr
+}
 }
 
 \subsection{Properties of \strong{fasterRaster} vectors (`GVectors')}{
@@ -69,7 +82,7 @@ Math: Mathematical functions applied to \code{GRaster}s: \code{\link[=abs]{abs()
 \code{\link[=mapset]{mapset()}}: \strong{GRASS} "mapset" of an object or the active session\cr
 \code{\link[=names]{names()}}: Names of \code{GVector} fields\cr
 \code{\link[=ncol]{ncol()}}: Number of fields\cr
-\code{\link[=nrow]{nrow()}}: Names of geometries\cr
+\code{\link[=nrow]{nrow()}}: Number of geometries\cr
 \code{\link[=st_bbox]{st_bbox()}}: Spatial extent\cr
 \code{\link[=st_crs]{st_crs()}}: Coordinate reference system\cr
 \code{\link[=topology]{topology()}}: Dimensions of vector coordinates (2D or 3D)\cr
@@ -78,18 +91,19 @@ Math: Mathematical functions applied to \code{GRaster}s: \code{\link[=abs]{abs()
 
 \subsection{Functions that operate on or create \code{GVectors}}{
 
-\code{\link[=as.data.frame]{as.data.frame()}}: Convert a \code{GVector} to a \code{data.frame}\cr
+\code{\link[=as.data.frame]{as.data.frame()}}: Convert a vector to a \code{data.frame}\cr
 \code{\link[=buffer]{buffer()}}: Create a polygon around/inside a vector\cr
 \code{\link[=connectors]{connectors()}}: Create lines connecting nearest features of two vectors\cr
 \code{\link[=convHull]{convHull()}}: Minimum convex hull\cr
 \code{\link[=crds]{crds()}}: Coordinates of a vector's features\cr
-\code{\link[=crop]{crop()}}: Remove parts of a \code{GRaster} or \code{GVector}\cr
+\code{\link[=crop]{crop()}}: Remove parts of a vector\cr
 \code{\link[=distance]{distance()}}: Distance between geometries in two vectors, or from a vector to cells of a raster\cr
-\code{\link[=head]{head()}}: First rows of a \code{GVector}'s data frame.\cr
+\code{\link[=head]{head()}}: First rows of a vector's data frame.\cr
 \code{\link[=makeGVector]{makeGVector()}}: Makes a \code{GVector} from a vector already in a \strong{GRASS} session.\cr
+\code{\link[=project]{project()}}: Change coordinate reference system\cr
 \code{\link[=st_buffer]{st_buffer()}}: Create a polygon around/inside a vector\cr
 \code{\link[=st_distance]{st_distance()}}: Distance between geometries in two vectors\cr
-\code{\link[=tail]{tail()}}: Last rows of a \code{GVector}'s data frame.\cr
+\code{\link[=tail]{tail()}}: Last rows of a vector's data frame.\cr
 }
 
 \subsection{Converting between data types}{
@@ -117,7 +131,8 @@ Math: Mathematical functions applied to \code{GRaster}s: \code{\link[=abs]{abs()
 \code{\link[=forwardSlash]{forwardSlash()}}: Replace backslash with forward slash\cr
 \code{\link[=grassInfo]{grassInfo()}}: \strong{GRASS} version and citation\cr
 \code{\link[=rastToGrass]{rastToGrass()}}: Convert a \code{SpatRaster} to a \strong{GRASS} raster\cr
-\code{\link[=vectToGrass]{vectToGrass()}}: Send a \code{SpatVector} or \code{sf} vector to an open \strong{GRASS} connection\cr
+\code{\link[=rstring]{rstring()}}: Create a statistically unique string\cr
+\code{\link[=vectToGrass]{vectToGrass()}}: Convert a \code{SpatVector} or \code{sf} vector to a \code{GVector}\cr
 }
 
 \subsection{Functions that operate on \strong{GRASS} "sessions" (seldom used by most users):}{
@@ -133,7 +148,7 @@ Math: Mathematical functions applied to \code{GRaster}s: \code{\link[=abs]{abs()
 \code{\link[=regionDim]{regionDim()}}: Change or report the active region's resolution\cr
 \code{\link[=regionExt]{regionExt()}}: Change or report the active region's extent\cr
 \code{\link[=regionRes]{regionRes()}}: Change or report the active region's dimensions\cr
-\code{\link[=regionShape]{regionShape()}}: Change or report the active region's extent and resolution\cr
+\code{\link[=region]{region()}}: Change or report the active region's extent and resolution\cr
 }
 
 \subsection{Esoteric tutorials}{

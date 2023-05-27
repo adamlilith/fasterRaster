@@ -23,7 +23,7 @@ setMethod(
 	###########
 	
 	.restore(x)
-	regionShape(x)
+	region(x)
 
 	### end commons
 	###############

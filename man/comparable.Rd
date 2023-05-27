@@ -8,7 +8,7 @@
 \alias{comparable,GVector,GVector-method}
 \title{Determine if two GRasters and/or GVectors are geographically comparable}
 \usage{
-\S4method{comparable}{GRaster,GRaster}(x, y, fail = TRUE)
+\S4method{comparable}{GRaster,GRaster}(x, y, nlayers = FALSE, fail = TRUE)
 
 \S4method{comparable}{GRaster,GVector}(x, y, fail = TRUE, compareTopo = FALSE, compareZ = FALSE)
 
@@ -25,6 +25,8 @@
 }
 \arguments{
 \item{x, y}{\code{GRaster}s or \code{GVector}s.}
+
+\item{nlayers}{Logical: If \code{FALSE} (default), do not compare number of layers. If \code{TRUE}, then return \code{FALSE} or fail if the number of layers in each raster is different.}
 
 \item{fail}{Logical: If \code{TRUE}, throw an error with an explanation if the objects are not comparable. If \code{FALSE} (default), return \code{TRUE} or \code{FALSE}.}
 

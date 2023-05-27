@@ -123,13 +123,19 @@ methods::setMethod(
 		minVal <- round(object@minVal, digs)
 		maxVal <- round(object@maxVal, digs)		
 		
+		minValLength <- nchar(minVal)
+		maxValLength <- nchar(maxVal)
+		
+		if (anyNA(minValLength)) minValLength[is.na(minValLength)] <- 2L
+		if (anyNA(maxValLength)) maxValLength[is.na(maxValLength)] <- 2L
+		
 		nc <- pmax(
 			rep(3, object@nLayers),
 			nchar(object@names),
 			nchar(object@datatypeGRASS),
 			nchar(object@nCats),
-			nchar(minVal),
-			nchar(maxVal)
+			minValLength,
+			maxValLength
 		)
 		if (details) nc <- pmax(nc, nchar(object@gnames))
 

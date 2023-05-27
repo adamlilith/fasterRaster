@@ -89,7 +89,7 @@ methods::setMethod(
 	function(x, z = TRUE, na.rm = TRUE) {
 
 	.restore(x)
-	regionShape(x)
+	region(x)
 	
 	flags <- c('quiet', 'overwrite')
 	if (!na.rm) flags <- c(flags, 'i')

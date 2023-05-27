@@ -54,19 +54,33 @@ riversProj
 # project raster into the "exampleTo" location but do not resample
 chelsaProjSameRes <- project(chelsa)
 
-# project raster into the "exampleTo" location and resample
-# this can take a while...
+# Project raster into the "exampleTo" location and resample to match template.
+# This can take a while...
 chelsaProjNewRes <- project(chelsa, elev)
 
 # compare outcomes
 chelsaProjSameRes
 chelsaProjNewRes
 
-# we get something a bit different if we resample after projecting
+# We get something a bit different if we resample after projecting:
 chelsaResampAfterProj <- resample(chelsaProjSameRes, elev)
 
 chelsaProjNewRes
 chelsaResampAfterProj
+
+# We can also project rasters/vectors with a different CRS than the current
+# "location" by importing them from disk using fast():
+vectFile <- system.file('extdata', 'shapes/madCoast.shp', package='fasterRaster')
+coastProj <- fast(vectFile)
+coastProj
+
+rastFile <- system.file('extdata', 'madChelsa.tif', package='fasterRaster')
+chelsaProjFromFile <- fast(rastFile, method='bilinear')
+chelsaProjFromFile
+
+# Projecting from file or from location to location yields same results:
+chelsaProjSameRes
+chelsaProjFromFile
 
 # IMPORTANT #3: Revert back to original GRASS session if needed.
 sessionRestore(opts.)

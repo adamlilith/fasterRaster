@@ -39,7 +39,7 @@ methods::setMethod(
 	function(x, width, unit = 'meters', method = 'Euclidean', background = 0, lowMemory = FALSE) {
 
 	.restore(x)
-	regionShape(x)
+	region(x)
 
 	units <- c('cells', 'meters', 'kilometers', 'km', 'feet', 'miles', 'nautmiles')
 	unit <- .pmatch(unit, units)

@@ -29,7 +29,10 @@ workDir = tempdir(), location = 'examples') # line only needed for examples
 
 # convert a SpatRaster to a GRaster
 elev <- fast(madElev)
+elevs <- c(elev, elev, elev ^ 0.8 - 100, sqrt(elev))
+
 elev
+elevs
 
 # do some math
 elev + 100
@@ -40,6 +43,14 @@ elev ^ 2
 elev %/% 100 # divide then round down
 elev %% 100 # modulus
 
+100 + elev
+100 %/% elev
+100 %% elev
+
+elevs + 100
+100 + elevs
+
+# math with logicals
 elev + TRUE
 elev - TRUE
 elev * TRUE
@@ -48,16 +59,28 @@ elev ^ TRUE
 elev %/% TRUE # divide then round down
 elev %% TRUE # modulus
 
+elevs + TRUE
+TRUE + elevs
+
+# raster interacting with raster
 elev + elev
 elev - elev
 elev * elev
 elev / elev
-elev ^ elev
-elev %/% elev # divide then round down
-elev %% elev # modulus
+elev ^ log(elev)
+elev %/% sqrt(elev) # divide then round down
+elev %% sqrt(elev) # modulus
 
-# operators
+elevs + elev
+elev * elevs
+elevs + elevs
+
+# sign
 abs(-1 * elev)
+abs(elevs)
+sqrt(elevs)
+
+# trigonometry
 sin(elev)
 cos(elev)
 tan(elev)
@@ -65,14 +88,19 @@ tan(elev)
 asin(elev)
 acos(elev)
 atan(elev)
-atan2(elev, m2^1.2)
+atan2(elev, elev^1.2)
 
+atan(elevs)
+
+# logarithms
 exp(elev)
 log(elev)
+log2(elev)
 log1p(elev)
 log10(elev)
-log(elev, 2)
+log(elev, 3)
 
+# rounding
 round(elev ^ 1.2)
 floor(elev ^ 1.2)
 ceiling(elev ^ 1.2)
@@ -92,6 +120,33 @@ elev == elev
 elev != 100
 elev + 100 > 2 * elev
 elev + 100 >= 2 * elev
+
+elevs > 10
+10 > elevs
+
+# mathematical functions on two or more rasters
+mean(elevs)
+mmode(elevs)
+median(elevs)
+nunique(elevs)
+
+sum(elevs)
+count(elevs)
+min(elevs)
+max(elevs)
+range(elevs)
+skewness(elevs)
+kurtosis(elevs)
+
+which.min(elevs)
+which.max(elevs)
+
+slope(elevs)
+intercept(elevs)
+r2(elevs)
+tvalue(elevs)
+
+quantile(elevs, 0.9)
 
 # IMPORTANT #3: Revert back to original GRASS session if needed.
 fastRestore(opts.)

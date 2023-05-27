@@ -3,6 +3,7 @@
 #' `comparable()` compares geographic metadata between two `GRaster`s, two `GVector`s, or a `GRaster` and a `GVector`. In many cases, spatial objects must be comparable for them to "interact" (e.g., conducting arithmetic operations, masking, etc.).
 #'
 #' @param x,y `GRaster`s or `GVector`s.
+#' @param nlayers Logical: If `FALSE` (default), do not compare number of layers. If `TRUE`, then return `FALSE` or fail if the number of layers in each raster is different.
 #' @param fail Logical: If `TRUE`, throw an error with an explanation if the objects are not comparable. If `FALSE` (default), return `TRUE` or `FALSE`.
 #' @param compareTopo Logical: If `TRUE`, compare topology (only for `GRaster` vs. `GVector` comparison and `GVector` vs. `GVector` comparison).
 #' @param compareGeo Logical: If `TRUE`, compare geometry (`GVector` vs. `GVector` comparison).
@@ -16,7 +17,7 @@
 methods::setMethod(
 	'comparable',
 	signature = c(x = 'GRaster', y = 'GRaster'),
-	definition = function(x, y, fail = TRUE) {
+	definition = function(x, y, nlayers = FALSE, fail = TRUE) {
 
 	out <- TRUE
 	if (location(x) != location(y)) {
@@ -67,6 +68,11 @@ methods::setMethod(
 
 	if ((!is.na(zext(x)[1L]) & !is.na(zext(y)[1L]) & !is.na(zext(x)[2L]) & !is.na(zext(y)[2L])) && zext(x) != zext(y)) {
 		if (fail) stop('The rasters have different vertical extents.')
+		out <- FALSE
+	}
+	
+	if (nlayers && nlyr(x) != nlyr(y)) {
+		if (fail) stop('The rasters have a different number of layers.')
 		out <- FALSE
 	}
 

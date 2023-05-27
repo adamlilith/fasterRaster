@@ -3,9 +3,8 @@
 #' Create a copy of a `GRaster` or `GVector` in **GRASS**.  This function is used internally and is of little use to most users.  This only creates a copy of the object in the **GRASS** session--to make a `GRaster` or `GVector`, [makeGRaster()] or [makeGVector()] need to be called after making the copy. Note that if the object is multi-layered, then a copy is made of each layer.
 #'
 #' @param x `GRaster`, `GVector`, or character: The object or the `gnames` of the object to be copied. Can take multi-layered objects or multiple `gnames`.
-#' @param rastOrVect Character: Type of object to copy. Either `raster` or `vector`. Partial matching is used, and case does not matter.
 #'
-#' @return Character vector representing the new `gnames` of each object, plus makes a copy of the given object(s) in **GRASS**.
+#' @returns Character vector representing the new `gnames` of each object, plus makes a copy of the given object(s) in **GRASS**.
 #'
 #' @aliases copyGSpatial
 #' @rdname copyGSpatial
@@ -31,13 +30,17 @@ methods::setMethod(
 methods::setMethod(
 	f = 'copyGSpatial',
 	signature = c(x = 'character'),
-	function(x, rastOrVect) {
+	function(x) {
 	
 	n <- length(x)
 	gnsTo <- rep(NA_character_, n)
 	
-	rastOrVect <- .pmatch(tolower(rastOrVect), c('raster', 'vector'))
-	rastOrVect <- rep(rastOrVect, n)
+	gns <- .ls()
+	rastsOrVects <- names(gns)
+	rastOrVect <- rastsOrVects[match(x, gns)]
+	
+	# rastOrVect <- .pmatch(tolower(rastOrVect), c('raster', 'vector'))
+	# rastOrVect <- rep(rastOrVect, n)
 
 	for (i in seq_len(n)) {
 		
@@ -50,6 +53,7 @@ methods::setMethod(
 		}
 	
 	}
+	gnsTo
 		
 	} # EOF
 
@@ -62,7 +66,7 @@ methods::setMethod(
 	rastOrVect <- if (topo == '2D') { 'raster' } else { 'raster3d' }
 
 	.restore(x)
-	regionShape(x)
+	region(x)
 
 	gn <- gnames(x)
 

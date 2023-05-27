@@ -14,6 +14,7 @@ methods::setGeneric(name = 'comparable', def = function(x, y, ...) standardGener
 methods::setGeneric(name = 'connectors', def = function(x, y, ...) standardGeneric('connectors'))
 methods::setGeneric(name = 'copyGSpatial', def = function(x, ...) standardGeneric('copyGSpatial'))
 methods::setGeneric(name = 'convHull', def = function(x, ...) standardGeneric('convHull'))
+methods::setGeneric(name = 'count', def = function(x, ...) standardGeneric('count'))
 methods::setGeneric(name = 'crds', def = function(x, ...) standardGeneric('crds'))
 methods::setGeneric(name = 'crs', package='terra')
 methods::setGeneric(name = 'crop', package='terra')
@@ -21,6 +22,7 @@ methods::setGeneric(name = 'crop', package='terra')
 # 'dim' already in base
 methods::setGeneric(name = 'datatype', def = function(x, ...) standardGeneric('datatype'))
 methods::setGeneric(name = 'distance', def = function(x, y, ...) standardGeneric('distance'))
+methods::setGeneric(name = 'nunique', def = function(x, ...) standardGeneric('nunique'))
 
 methods::setGeneric('ext', package = 'terra')
 
@@ -35,11 +37,15 @@ methods::setGeneric(name = 'is.3d', def = function(x) standardGeneric('is.3d'))
 methods::setGeneric(name = 'is.lines', package='terra')
 methods::setGeneric(name = 'is.points', package='terra')
 methods::setGeneric(name = 'is.polygons', package='terra')
+methods::setGeneric(name = 'intercept', def=function(x, ...) standardGeneric('intercept'))
+
+methods::setGeneric(name = 'kurtosis', def=function(x, ...) standardGeneric('kurtosis'))
 
 methods::setGeneric(name = 'location', def = function(x) standardGeneric('location'))
 
 methods::setGeneric(name = 'mapset', def = function(x) standardGeneric('mapset'))
 methods::setGeneric(name = 'minmax', package='terra')
+methods::setGeneric(name = 'mmode', def = function(x, ...) standardGeneric('mmode'))
 
 # 'names' already in base
 methods::setGeneric(name = 'ncat', def = function(x) standardGeneric('ncat'))
@@ -52,23 +58,29 @@ methods::setGeneric(name = 'nrow', def = function(x) standardGeneric('nrow')) # 
 
 methods::setGeneric(name = 'project', package='terra')
 
+methods::setGeneric(name = 'r2', def=function(x, ...) standardGeneric('r2'))
 methods::setGeneric(name = 'rast', package='terra')
 methods::setGeneric(name = 'regionDim', def=function(x, ...) standardGeneric('regionDim'))
 methods::setGeneric(name = 'regionExt', def=function(x, ...) standardGeneric('regionExt'))
 methods::setGeneric(name = 'regionRes', def=function(x, ...) standardGeneric('regionRes'))
-methods::setGeneric(name = 'regionShape', def=function(x, ...) standardGeneric('regionShape'))
+methods::setGeneric(name = 'region', def=function(x, ...) standardGeneric('region'))
 methods::setGeneric(name = 'regionZExt', def=function(x, ...) standardGeneric('regionZExt'))
 methods::setGeneric(name = 'res', package='terra')
 methods::setGeneric(name = 'resample', package='terra')
 methods::setGeneric(name = 'res3d', def = function(x) standardGeneric('res3d'))
 
+methods::setGeneric(name = 'sdpop', def=function(x, ...) standardGeneric('sdpop'))
+methods::setGeneric(name = 'skewness', def=function(x, ...) standardGeneric('skewness'))
+methods::setGeneric(name = 'slope', def=function(x, ...) standardGeneric('slope'))
 if (!isGeneric('st_bbox')) methods::setGeneric(name = 'st_bbox', def=function(obj, ...) standardGeneric('st_bbox'))
 methods::setGeneric(name = 'st_buffer', def=function(x, ...) standardGeneric('st_buffer'))
 if (!isGeneric('st_crs')) methods::setGeneric(name = 'st_crs', def=function(x, ...) standardGeneric('st_crs'))
 methods::setGeneric(name = 'st_distance', def=function(x, y, ...) standardGeneric('st_distance'))
 
 methods::setGeneric(name = 'topology', def=function(x, ...) standardGeneric('topology'))
+methods::setGeneric(name = 'tvalue', def=function(x, ...) standardGeneric('tvalue'))
 
+methods::setGeneric(name = 'varpop', def=function(x, ...) standardGeneric('varpop'))
 methods::setGeneric(name = 'vect', package='terra')
 
 methods::setGeneric(name = 'writeRaster', def=function(x, filename, ...) standardGeneric('writeRaster'))

@@ -22,7 +22,7 @@ methods::setMethod(
 	.restore(x)
 
 	### change region to match the extent of y but have the same resolution as x
-	regionShape(x)
+	region(x)
 
 	args <- list(
 		cmd = 'g.region',
@@ -50,7 +50,7 @@ methods::setMethod(
 	}
 	
 	out <- do.call('c', args=out)
-	regionShape(out)
+	region(out)
 	out
 
 	} # EOF

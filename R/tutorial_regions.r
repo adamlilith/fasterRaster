@@ -11,7 +11,7 @@
 #' ### Functions for managing regions in **fasterRaster**
 #'
 #' **fasterRaster** provides functions for managing regions:
-#' [regionShape()]: Extent *and* dimensions/resolution of a region. This function is used by many other **fasterRaster** functions before raster processing to ensure the raster is not changed (by the region).\cr
+#' [region()]: Extent *and* dimensions/resolution of a region. This function is used by many other **fasterRaster** functions before raster processing to ensure the raster is not changed (by the region).\cr
 #' [regionDim()]: Dimensions (number of rows and columns)\cr
 #' [regionExt()]: Extent\cr
 #' [regionZExt()]: Vertical extent\cr

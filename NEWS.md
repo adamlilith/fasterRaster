@@ -1,5 +1,5 @@
-fasterRaster 0.7.2 (2022-09-30a)
-Fixed bug in single-core implementation of fasterFragmentation (thank you, Simon C!)
+fasterRaster 3.0.0 (2023-XX-XX)
+First release of new, intuitive `fasterRaster` emulating `terra` and `sf`!!!
 
 fasterRaster 0.7.1 (2022-08-05a)
 Changed uses of class() to inherits()... fixes bug in fasterFocal() (and elsewhere?)

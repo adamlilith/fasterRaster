@@ -12,7 +12,7 @@ Each \strong{GRASS} \link[=tutorial_sessions]{session} typically has one active 
 \subsection{Functions for managing regions in \strong{fasterRaster}}{
 
 \strong{fasterRaster} provides functions for managing regions:
-\code{\link[=regionShape]{regionShape()}}: Extent \emph{and} dimensions/resolution of a region. This function is used by many other \strong{fasterRaster} functions before raster processing to ensure the raster is not changed (by the region).\cr
+\code{\link[=region]{region()}}: Extent \emph{and} dimensions/resolution of a region. This function is used by many other \strong{fasterRaster} functions before raster processing to ensure the raster is not changed (by the region).\cr
 \code{\link[=regionDim]{regionDim()}}: Dimensions (number of rows and columns)\cr
 \code{\link[=regionExt]{regionExt()}}: Extent\cr
 \code{\link[=regionZExt]{regionZExt()}}: Vertical extent\cr
@@ -57,7 +57,7 @@ library(terra)
 madElev <- fastData('madElev')
 
 # set up one location
-fastStart(crs = madElev, grassDir = grassDir,
+faster(crs = madElev, grassDir = grassDir,
 workDir = tempdir(), location = 'examples1') # line only needed for examples
 
 

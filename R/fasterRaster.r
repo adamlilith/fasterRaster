@@ -37,7 +37,16 @@
 #'
 #' ## Functions that operate on or create `GRasters`
 #' [Arithmetic]: Mathematical operations on `GRaster`s: `+`, `-`, `*`, `/`, `^`, `%%` (modulus), `%/%` (integer division)\cr
-#' Math: Mathematical functions applied to `GRaster`s: [abs()], [sin()], [cos()], [tan()], [asin()], [acos()], [atan()], [atan2()], [exp()], [log()], [log1p()], [log2()], [log10()], [sqrt()], [round()], [floor()], [ceiling()], [trunc()]\cr
+#' Single-layer functions: Applied to each layer of a `GRaster`:
+#' - Trigonometry: [sin()], [cos()], [tan()], [asin()], [acos()], [atan()], [atan2()] \cr
+#' - Logarithms and powers: [exp()], [log()], [log1p()], [log2()], [log10()], [sqrt()] \cr
+#' - Rounding: [round()], [floor()], [ceiling()], [trunc()] \cr
+#' - Signs: [abs()] \cr
+#' Multi-layer functions: Applied across multiple `GRaster`s:
+#' - Numeration: [sum()], [count()] \cr
+#' - Central tendency: [mean()], [mmode()], [median()] \cr
+#' - Dispersion: [sd()], [var()], [sdpop()], [varpop()], [nunique()], [quantile()], [skewness()], [kurtosis()]
+#' - Extremes: [min()], [max()], [which.min()], [which.max()] \cr
 #' [as.contour()]: Contour lines from a raster\cr
 #' [buffer()]: Create a buffer around non-`NA` cells\cr
 #' [c()]: "Stack" two or more rasters\cr
@@ -60,7 +69,7 @@
 #' [mapset()]: **GRASS** "mapset" of an object or the active session\cr
 #' [names()]: Names of `GVector` fields\cr
 #' [ncol()]: Number of fields\cr
-#' [nrow()]: Names of geometries\cr
+#' [nrow()]: Number of geometries\cr
 #' [st_bbox()]: Spatial extent\cr
 #' [st_crs()]: Coordinate reference system\cr
 #' [topology()]: Dimensions of vector coordinates (2D or 3D)\cr
@@ -99,10 +108,12 @@
 #' ## General purpose functions
 #' [appendLists()]: Append values to elements of a list from another list\cr
 #' [comparable()]: Determine if geographic metadata is same between two `GRaster`s and/or `GVector`s\cr
+#' [copyGSpatial()]: Copy a raster or vector already in **GRASS**\cr
 #' [compareFloat()]: Compare values accounting for differences due to floating point precision\cr
 #' [forwardSlash()]: Replace backslash with forward slash\cr
 #' [grassInfo()]: **GRASS** version and citation\cr
 #' [rastToGrass()]: Convert a `SpatRaster` to a **GRASS** raster\cr
+#' [rstring()]: Create a statistically unique string\cr
 #' [vectToGrass()]: Convert a `SpatVector` or `sf` vector to a `GVector`\cr
 #'
 #' ## Functions that operate on **GRASS** "sessions" (seldom used by most users):
@@ -112,10 +123,10 @@
 #' [mapset()]: **GRASS** "mapset" of an object or the active session\cr
 #'
 #' ## Functions that operate on **GRASS** "regions" (seldom used by most users):
+#' [region()]: Change or report the active region's extent and resolution\cr
 #' [regionDim()]: Change or report the active region's resolution\cr
 #' [regionExt()]: Change or report the active region's extent\cr
 #' [regionRes()]: Change or report the active region's dimensions\cr
-#' [regionShape()]: Change or report the active region's extent and resolution\cr
 #'
 #' ## Esoteric tutorials
 #' **fasterRaster** [Working directories, locations, and mapsets][tutorial_sessions]\cr

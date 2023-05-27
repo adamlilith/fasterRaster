@@ -44,7 +44,7 @@ madDypsis <- fastData('madDypsis')
 # start GRASS session for examples only
 wd <- forwardSlash(tempdir())
 
-fastStart(crs = madRivers, grassDir = grassDir,
+faster(crs = madRivers, grassDir = grassDir,
 workDir = wd, location = 'examples') # line only needed for examples
 
 # convert to GVectors

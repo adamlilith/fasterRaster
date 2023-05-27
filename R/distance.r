@@ -57,7 +57,7 @@ methods::setMethod(
 	metric <- .pmatch(metric, c('euclidean', 'squared', 'maximum', 'manhattan', 'geodesic'))
 
 	.restore(x)
-	regionShape(x)
+	region(x)
 	
 	gn <- gnames(x)
 	

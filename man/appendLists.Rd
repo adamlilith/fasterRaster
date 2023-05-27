@@ -26,7 +26,7 @@ appendLists(l1, l2)
 
 # different data types for same named element
 l1 <- list(a=3, b='XYZ')
-l2 <- list(a='lettters', c=FALSE)
+l2 <- list(a='letters', c=FALSE)
 appendLists(l1, l2)
 
 }

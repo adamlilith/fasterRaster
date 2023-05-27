@@ -80,7 +80,7 @@ madElev <- fastData('madElev')
 # start GRASS session for examples only
 wd <- forwardSlash(tempdir()) # only for examples
 
-fastStart(crs = madElev, grassDir = grassDir,
+faster(crs = madElev, grassDir = grassDir,
 workDir = wd, location = 'examples') # line only needed for examples
 
 # convert SpatRaster to GRaster

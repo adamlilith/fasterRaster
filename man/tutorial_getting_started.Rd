@@ -47,12 +47,12 @@ library(sf)
 library(terra)
 }\if{html}{\out{</div>}}
 
-Now, we need to start a \strong{fasterRaster} "session", which makes a connection to \strong{GRASS}. You generally only need to do this one time each time you start \strong{R} and wish to use \strong{fasterRaster}. We do this with the \code{\link[=fastStart]{fastStart()}} function, which needs the \code{grassDir} argument and a \code{crs} argument. This latter sets the coordinate reference system (CRS) for the session--all rasters and vectors used in the session must have the same CRS, or be projected so they have this CRS.  You can start other sessions using \code{fasteStart()} with different CRSs, and switch between them using \code{\link[=fastRestore]{fastRestore()}}.
+Now, we need to start a \strong{fasterRaster} "session", which makes a connection to \strong{GRASS}. You generally only need to do this one time each time you start \strong{R} and wish to use \strong{fasterRaster}. We do this with the \code{\link[=faster]{faster()}} function, which needs the \code{grassDir} argument and a \code{crs} argument. This latter sets the coordinate reference system (CRS) for the session--all rasters and vectors used in the session must have the same CRS, or be projected so they have this CRS.  You can start other sessions using \code{fasteStart()} with different CRSs, and switch between them using \code{\link[=fastRestore]{fastRestore()}}.
 
 The \code{crs} argument takes a coordinate reference string or an object from which such a string can be obtained. We will use a raster that comes with \strong{fasterRaster} to set the \code{crs} argument.
 
 \if{html}{\out{<div class="sourceCode">}}\preformatted{madElev <- fastData('madElev') # get raster
-fastStart(madElev, grassDir = grassDir)
+faster(madElev, grassDir = grassDir)
 }\if{html}{\out{</div>}}
 
 Here, the \code{grassDir} is the installation directory we defined earlier. Now, we can start using \strong{fasterRaster}!

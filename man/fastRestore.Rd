@@ -13,7 +13,7 @@ fastRestore(...)
 An object of class \code{gmeta} (invisibly) if successful. An error will likely result if not.
 }
 \description{
-This function is useful for reverting to a previous \strong{GRASS} session (\code{workDir}, \code{location}, and/or \code{mapset}). The session must have been already initiated using \code{\link[=fastStart]{fastStart()}} in the current \strong{R} session or a previous one.
+This function is useful for reverting to a previous \strong{GRASS} session (\code{workDir}, \code{location}, and/or \code{mapset}). The session must have been already initiated using \code{\link[=faster]{faster()}} in the current \strong{R} session or a previous one.
 }
 \examples{
 \dontrun{
@@ -39,14 +39,14 @@ library(terra)
 madElev <- fastData('madElev')
 
 # set up one location
-fastStart(crs = madElev, grassDir = grassDir,
+faster(crs = madElev, grassDir = grassDir,
 workDir = tempdir(), location = 'examples1') # line only needed for examples
 
 # convert a SpatRaster to a GRaster using the first location
 me1 <- fast(madElev)
 
 # set up another location
-fastStart(crs = madElev, grassDir = grassDir,
+faster(crs = madElev, grassDir = grassDir,
 workDir = wd, location = 'examples2') # line only needed for examples
 
 # convert a SpatRaster to a GRaster using the second location
