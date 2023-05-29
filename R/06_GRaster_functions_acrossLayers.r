@@ -195,8 +195,22 @@ setMethod(
 	signature(x = 'GRaster'),
 	function(x, na.rm = FALSE) {
 
-		v <- var(x)
-		sqrt(v)
+		gnSS <- .makeGname('ss', 'rast')
+		gnMean <- .genericMultiLayer(fx='average', fxName='mean', x=x, na.rm=na.rm, return='gname')
+		ex <- paste0(gnSS, ' = ', paste0('(', gnames(x), ' - ', gnMean, ')^2', collapse=' + '))
+		rgrass::execGRASS('r.mapcalc', expression=ex, flags=c('quiet', 'overwrite'), intern=TRUE)
+
+		gnCount <- .genericMultiLayer(fx='count', fxName='count', x=x, na.rm=na.rm, return='gname')
+		gnCountMinus1 <- .makeGname('nMinus1', 'rast')
+		ex <- paste0(gnCountMinus1, ' = ', gnCount, ' - 1')
+		rgrass::execGRASS('r.mapcalc', expression=ex, flags=c('quiet', 'overwrite'), intern=TRUE)
+
+		gn <- .makeGname('var', 'rast')
+		ex <- paste0(gn, ' = sqrt(', gnSS, ' / ', gnCountMinus1, ')')
+		
+		rgrass::execGRASS('r.mapcalc', expression=ex, flags=c('quiet', 'overwrite'), intern=TRUE)
+		
+		makeGRaster(gn, 'var')
 		
 	} # EOF
 )
@@ -210,15 +224,23 @@ setMethod(
 	function(x, na.rm = FALSE) {
 
 		.restore(x)
-		
-		avg <- mean(x, na.rm = na.rm)
-		n <- count(x)
-		n <- n - 1
+	
+		gnSS <- .makeGname('ss', 'rast')
+		gnMean <- .genericMultiLayer(fx='average', fxName='mean', x=x, na.rm=na.rm, return='gname')
+		ex <- paste0(gnSS, ' = ', paste0('(', gnames(x), ' - ', gnMean, ')^2', collapse=' + '))
+		rgrass::execGRASS('r.mapcalc', expression=ex, flags=c('quiet', 'overwrite'), intern=TRUE)
 
-		deltas <- x - avg
-		squares <- deltas^2
-		ss <- sum(squares)
-		ss / n
+		gnCount <- .genericMultiLayer(fx='count', fxName='count', x=x, na.rm=na.rm, return='gname')
+		gnCountMinus1 <- .makeGname('nMinus1', 'rast')
+		ex <- paste0(gnCountMinus1, ' = ', gnCount, ' - 1')
+		rgrass::execGRASS('r.mapcalc', expression=ex, flags=c('quiet', 'overwrite'), intern=TRUE)
+
+		gn <- .makeGname('var', 'rast')
+		ex <- paste0(gn, ' = ', gnSS, ' / ', gnCountMinus1)
+		
+		rgrass::execGRASS('r.mapcalc', expression=ex, flags=c('quiet', 'overwrite'), intern=TRUE)
+		
+		makeGRaster(gn, 'var')
 		
 	} # EOF
 )
@@ -382,7 +404,8 @@ setMethod(
 # fxName: stub name of output raster
 # x: GRaster
 # na.rm: T/F
-.genericMultiLayer <- function(fx, fxName, x, na.rm) {
+# return: GRaster or the gname of the output
+.genericMultiLayer <- function(fx, fxName, x, na.rm, return = 'GRaster') {
 
 	.restore(x)
 
@@ -400,5 +423,12 @@ setMethod(
 	if (!na.rm) args$flags <- c(args$flags, 'n')
 	
 	do.call(rgrass::execGRASS, args=args)
-	makeGRaster(gn, fxName)
+	if (return == 'GRaster') {
+		makeGRaster(gn, fxName)
+	} else if (return == 'gname') {
+		gn
+	} else {
+		stop('Invalid value for ', sQuote('return'), '.')
+	}
+	
 }
