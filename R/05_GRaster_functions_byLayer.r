@@ -4,7 +4,7 @@
 #'
 #' * Absolute value: `abs()`
 #' * Trigonometric functions (assumes values are in radians): `cos()`, `sin()`, `tan()`, `acos()`, `asin()`, `atan()`, `atan2()`
-#' * Exponential and logarithmic functions: `exp()`, `log()`, `log1p()` `log2()`, `log10()`
+#' * Exponential and logarithmic functions: `exp()`, `log()` (natural log), `log1p()`, `log2()`, `log10()`
 #' * Power functions: `sqrt()`, `x^y`
 #' * Rounding: `round()`, `floor()`, `ceiling()`, `trunc()`
 #'
@@ -97,20 +97,22 @@ setMethod(
 		comparable(y, x)
 		.restore(x)
 		
-		n1 <- nlyr(e1)
-		n2 <- nlyr(e2)
+		ny <- nlyr(y)
+		nx <- nlyr(x)
 		
-		if (n1 == 1L & n2 > 1L) {
-			e1 <- e1[[rep(1L, n2)]]
-		} else if (n1 > 1L & n2 == 1L) {
-			e2 <- e2[[rep(1L, n1)]]
-		} else if (n1 != n2) {
+		if (ny == 1L & nx > 1L) {
+			y <- y[[rep(1L, nx)]]
+		} else if (ny > 1L & nx == 1L) {
+			x <- x[[rep(1L, ny)]]
+		} else if (ny != nx) {
 			stop('Rasters must have the same number of layers, or at least one raster must have one layer.')
 		}
 		
-		for (i in seq_len(n1)) {
+		n <- max(ny, nx)
+		
+		for (i in seq_len(n)) {
 			
-			name <- paste0(names(e1)[i], '_', names(e2)[i])
+			name <- paste0(names(y)[i], '_', names(x)[i])
 			gn <- .makeGname(name, 'rast')
 			ex <- paste0(gn, ' = atan(double(', gnames(x)[i], ') , double(', gnames(y)[i], '))  * (', pi, ' / 180)')
 			if (i == 1L) {
@@ -262,14 +264,17 @@ setMethod(
 	for (i in 1L:nlyr(x)) {
 	
 		name <- names(x)[i]
+
 		gn <- .makeGname(name, 'rast')
-		ex <- paste0(gn, ' = ', fx, '(double(', gnames(x)[i], ')) * (', pi, ' / 180)')
+		ex <- paste0(gn, ' = ', fx, '(', gnames(x)[i], ' * 180 / ', pi, ')')
+		rgrass::execGRASS('r.mapcalc', expression=ex, flags=c('quiet', 'overwrite'), intern=TRUE)
+		this <- makeGRaster(gn, name)
 		if (i == 1L) {
-			out <- .genericArith(name = fx, gn = gn, ex = ex)
+			out <- this
 		} else {
-			this <- .genericArith(name = fx, gn = gn, ex = ex)
 			out <- c(out, this)
 		}
+		
 	}
 	out
 
@@ -286,11 +291,12 @@ setMethod(
 	
 		name <- names(x)[i]
 		gn <- .makeGname(name, 'rast')
-		ex <- paste0(gn, ' = ', fx, '(double(', gnames(x)[i], ') * 180 / ', pi, ')')
+		ex <- paste0(gn, ' = ', fx, '(', gnames(x)[i], ') * ', pi, ' / 180')
+		rgrass::execGRASS('r.mapcalc', expression=ex, flags=c('quiet', 'overwrite'), intern=TRUE)
+		this <- makeGRaster(gn, name)
 		if (i == 1L) {
-			out <- .genericArith(name = fx, gn = gn, ex = ex)
+			out <- this
 		} else {
-			this <- .genericArith(name = fx, gn = gn, ex = ex)
 			out <- c(out, this)
 		}
 	}
@@ -310,10 +316,11 @@ setMethod(
 		name <- names(x)[i]
 		gn <- .makeGname(name, 'rast')
 		ex <- paste0(gn, ' = ', fx, '(double(', gnames(x)[i], '))')
+		rgrass::execGRASS('r.mapcalc', expression=ex, flags=c('quiet', 'overwrite'), intern=TRUE)
+		this <- makeGRaster(gn, name)
 		if (i == 1L) {
-			out <- .genericArith(name = fx, gn = gn, ex = ex)
+			out <- this
 		} else {
-			this <- .genericArith(name = fx, gn = gn, ex = ex)
 			out <- c(out, this)
 		}
 	}
