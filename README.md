@@ -45,17 +45,22 @@ Let's get started! We'll do a simple operation in which we calculate the distanc
 `library(terra)`  
 `library(sf)`  
 
-Now, we need to start a **GRASS** "session". To do this, we run the `fastStart()` function, which makes the connection to **GRASS** and initiates the "session". We need to supply this function the coordinate reference system (CRS) we'll be using.  Here, we'll get that from a raster that comes with **FasterRaster**.
+Now, we need to start a **GRASS** "session". To do this, we run the `faster()` function, which makes the connection to **GRASS** and initiates the "session". We need to supply this function the coordinate reference system (CRS) we'll be using.  Here, we'll get that from a raster that comes with **FasterRaster**.
 
 ```
-madElev <- fastData('madElev') # raster with elevation
-madRivers <- fastData('madRivers') # vector with rivers
-fastStart(madElev, grassDir = grassDir, location = 'examples')
+# get raster and vector
+madElev <- fastData('madElev') # SpatRaster with elevation
+madRivers <- fastData('madRivers') # sp vector with rivers
+
+# make a temporary working directory
+workDir <- tempdir()
+workDir <- forwardSlash(workDir)
+faster(madElev, grassDir = grassDir, location = 'examples', workDir=workDir)
 ```
 
-This can take a few seconds. Normally, we don't need to use the `location = 'examples'` argument (the default values is `'default'`), but we'll do this here in case you already have a **GRASS** session started and don't want to conflict with it.
+This can take a few seconds. Normally, we don't need to use the `location = 'examples'` argument (the default value is `'default'`), but we'll do this here in case you already have a **GRASS** session started and don't want to conflict with it.
 
-We will now convert the raster, which is a `SpatRaster` from the **terra** package, to a `GRaster`, which is **FasterRaster**'s representation of a raster. This is done using the `fast()` function.  This function can also convert `stars` rasters from the **stars** package.
+We will now convert the raster from a `SpatRaster` to a `GRaster`, which is **FasterRaster**'s representation of a raster. This is done using the `fast()` function.  This function can also convert `stars` rasters from the **stars** package.
 ```
 elev <- fast(madElev)
 ```
@@ -89,21 +94,8 @@ plot(buffsTerra, add=TRUE)
 
 And that's how it's done!  You can do almost anything in **fasterRaster**  you can do with the other packages. The examples above do not show the advantage of **FasterRaster** because the they are not based in large-in-memory/large-on-disk spatial datasets. For very large datasets, **fasterRaster** can be much faster!
 
-
-# Functions #
-
-
-### Data
-All spatial data represents features in a portion of eastern Madagascar.
-* `fasterData`: Load any of the spatial datasets
-* `madCoast0` and `madCoast4`: Outlines of a portion of eastern Madagascar
-* `madChelsa`: Bioclimatic rasters for a portion of eastern Madagascar
-* `madDypsis`: Records of the genus *Dypsis* (slender, evergreen palms)
-* `madElev`: Elevation raster
-* `madElevAnt`: Elevation raster for the Antanambe Commune of Madagascar
-* `madElevMan`: Elevation raster for the Manompana Commune of Madagascar
-* `madForest2000` and `madForest2014`: Forest cover rasters for 2000 and 2014
-* `madRivers`: Major rivers
+# Functions
+If you want a detailed list of functions available in **fasterRaster**, attach the package and use `?fasterRaster`.
 
 # Citation #
 As of December, 2022, there is not a package-specific citation for **fasterRaster**, but the package was first used in:
