@@ -10,33 +10,39 @@ opts. <- getFastOptions()
 
 # IMPORTANT #2: Select the appropriate line below and change as necessary to
 # where GRASS is installed on your system.
+
 grassDir <- "/Applications/GRASS-8.2.app/Contents/Resources" # Mac
 grassDir <- 'C:/Program Files/GRASS GIS 8.2' # Windows
 grassDir <- '/usr/local/grass' # Linux
 
 # setup
+library(sf)
 library(terra)
 
 # example data
 madElev <- fastData('madElev')
 
 # start GRASS session for examples only
-wd <- forwardSlash(tempdir()) # only for examples
+faster(grassDir = grassDir, crs = madElev,
+workDir = tempdir(), location = 'examples') # line only needed for examples
 
-faster(crs = madElev, grassDir = grassDir,
-workDir = wd, location = 'examples') # line only needed for examples
-
-# convert SpatRaster to GRaster
+# convert a SpatRaster to a GRaster
 elev <- fast(madElev)
+elevs <- c(elev, elev, log10(elev) - 1, sqrt(elev))
+names(elevs) <- c('elev1', 'elev2', 'log_elev', 'sqrt_elev')
 
-### save GRaster to disk (using temporary file)
-filename <- tempfile()
-filename <- paste0(filename, '.tif')
-writeRaster(elev, filename)
+global(elevs, 'mean')
+global(elevs, 'sum')
+global(elevs, 'var')
+global(elevs, 'meanAbs')
 
-### load raster from disk
-elev2 <- fast(filename)
-elev2
+global(elev, 'median')
+global(elev, 'quantile', prob=0.95)
+
+# get a vector of all accepted functions and calculate them all
+# ... can take a while!
+funs <- global()
+global(elevs, funs, prob=0.95)
 
 # IMPORTANT #3: Revert back to original GRASS session if needed.
 fastRestore(opts.)

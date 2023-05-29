@@ -30,7 +30,7 @@ grassInfo('v')
 grassInfo('copyright')
 
 # IMPORTANT #3: Revert back to original GRASS session if needed.
-sessionRestore(opts.)
+fastRestore(opts.)
 removeSession('examples')
 
 }

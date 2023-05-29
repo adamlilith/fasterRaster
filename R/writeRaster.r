@@ -5,6 +5,8 @@
 #'
 #' The function will attempt to ascertain the file type to be ascertained from the file extension, but you can specify the format using the `format` argument (see entry for `...`). You can see a list of supported formats by simply using this function with no arguments, as in `writeRaster()`, or by consulting the online help page for the **GRASS** module `r.out.gdal`. Only the `GeoTIFF` file format is guaranteed to work for multi-layered rasters.
 #'
+#' **Note**: Rasters will be trimmed to their smallest extent such that no rows or columns are all `NA`s. You can add `NA` rows and columns to a `SpatRaster` using [terra::extend()].
+#'
 #' @param x A `GRaster` or missing: If missing, a table of supported file types is reported.
 #' @param filename Character: Path and file name.
 #' @param overwrite Logical: If `FALSE` (default), do not save over existing file(s).

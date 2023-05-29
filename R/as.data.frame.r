@@ -17,10 +17,12 @@ methods::setMethod(
 	f = 'as.data.frame',
 	signature = c(x = 'GVector'),
 	definition = function(x, row.names = NULL, optional = FALSE) {
-	
-	
-		data <- rgrass::execGRASS('v.db.select', map=gnames(x), intern=TRUE)
 		
+		data <- rgrass::execGRASS('v.db.select', map=gnames(x), intern=TRUE)
+
+		# # better, but noisy:
+		# data <- rgrass::execGRASS('db.out.ogr', input=gnames(x), output='C:/ecology/!Scratch/db.csv', format='CSV', table='rivers', flags=c('quiet', 'overwrite'))
+
 		# column names
 		cols <- data[1L]
 		cols <- strsplit(cols, '\\|')[[1L]]

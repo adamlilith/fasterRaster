@@ -128,6 +128,7 @@ faster <- function(
 	### set options
 	setFastOptions(grassDir = grassDir, workDir = workDir)
 	if (length(dots) > 0L) setFastOptions(...)
+	.fasterRaster$grassStarted <- TRUE
 	
 	saveRDS(crs, file=crsFile)
 			

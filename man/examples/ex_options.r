@@ -2,9 +2,8 @@
 # NB This example is in a "dontrun{}" block because it requires users to have
 # GRASS GIS Version 8+ installed on their system.
 
-# IMPORTANT #1: If you already have a GRASS session started, you will need to
-# run the line below and the last line in this example to work with it again.
-# If you have not started a GRASS session, you can skip this and the last step.
+# IMPORTANT: Run the line below to store your current settings. To restore
+# them, run the last line in this example.
 opts. <- getFastOptions()
 
 # see current values for options

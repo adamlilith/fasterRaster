@@ -112,8 +112,7 @@ methods::setMethod(
 		resol <- round(object@resolution, digs)
 		if (length(resol) == 2L) resol <- c(resol, NA_real_)
 		
-		digs <- min(1, getOption('digits'))
-		extent <- round(object@extent, digs)
+		extent <- round(object@extent, min(digs, 2))
 
 		crs <- object@crs
 		crs <- sf::st_crs(crs)

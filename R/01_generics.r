@@ -30,6 +30,7 @@ methods::setGeneric(name = 'fast', def = function(x, ...) standardGeneric('fast'
 # methods::setGeneric(name = 'fastClass', def = function(x, ...) standardGeneric('fastClass'))
 
 methods::setGeneric(name = 'geomtype', package='terra')
+methods::setGeneric(name = 'global', package='terra')
 methods::setGeneric(name = 'gnames', def = function(x) standardGeneric('gnames'))
 
 methods::setGeneric(name = 'is.2d', def = function(x) standardGeneric('is.2d'))
@@ -45,6 +46,7 @@ methods::setGeneric(name = 'location', def = function(x) standardGeneric('locati
 
 methods::setGeneric(name = 'mapset', def = function(x) standardGeneric('mapset'))
 methods::setGeneric(name = 'minmax', package='terra')
+methods::setGeneric(name = 'merge', def = function(x, y, ...) standardGeneric('merge'))
 methods::setGeneric(name = 'mmode', def = function(x, ...) standardGeneric('mmode'))
 
 # 'names' already in base
@@ -63,6 +65,7 @@ methods::setGeneric(name = 'rast', package='terra')
 methods::setGeneric(name = 'regionDim', def=function(x, ...) standardGeneric('regionDim'))
 methods::setGeneric(name = 'regionExt', def=function(x, ...) standardGeneric('regionExt'))
 methods::setGeneric(name = 'regionRes', def=function(x, ...) standardGeneric('regionRes'))
+methods::setGeneric(name = 'regionRes3d', def=function(x, ...) standardGeneric('regionRes3d'))
 methods::setGeneric(name = 'region', def=function(x, ...) standardGeneric('region'))
 methods::setGeneric(name = 'regionZExt', def=function(x, ...) standardGeneric('regionZExt'))
 methods::setGeneric(name = 'res', package='terra')

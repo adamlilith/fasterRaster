@@ -3,7 +3,7 @@
 	.fasterRaster <<- new.env(parent = emptyenv())
 	.fasterRaster$options <- list()
 	setFastOptions(restore = TRUE)
-
+	
 }
 
 .onAttach <- function(lib, pkg) {

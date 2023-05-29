@@ -21,7 +21,6 @@ library(terra)
 
 # example data
 madElev <- fastData('madElev')
-madRivers <- fastData('madRivers')
 
 # start GRASS session for examples only
 faster(grassDir = grassDir, crs = madElev,
@@ -29,7 +28,8 @@ workDir = tempdir(), location = 'examples') # line only needed for examples
 
 # convert a SpatRaster to a GRaster
 elev <- fast(madElev)
-elevs <- c(elev, elev, elev ^ 0.8 - 100, sqrt(elev))
+elevs <- c(elev, elev, log10(elev) - 1, sqrt(elev))
+names(elevs) <- c('elev1', 'elev2', 'log_elev', 'sqrt_elev')
 
 elev
 elevs
@@ -73,7 +73,6 @@ elev %% sqrt(elev) # modulus
 
 elevs + elev
 elev * elevs
-elevs + elevs
 
 # sign
 abs(-1 * elev)
@@ -88,9 +87,12 @@ tan(elev)
 asin(elev)
 acos(elev)
 atan(elev)
-atan2(elev, elev^1.2)
 
 atan(elevs)
+atan2(elev, elev^1.2)
+atan2(elevs, elev^1.2)
+atan2(elev, elevs^1.2)
+atan2(elevs, elevs^1.2)
 
 # logarithms
 exp(elev)
@@ -100,11 +102,13 @@ log1p(elev)
 log10(elev)
 log(elev, 3)
 
+log(elevs)
+
 # rounding
-round(elev ^ 1.2)
-floor(elev ^ 1.2)
-ceiling(elev ^ 1.2)
-trunc(elev ^ 1.2)
+round(elev + 0.5)
+floor(elev + 0.5)
+ceiling(elev + 0.5)
+trunc(elev + 0.5)
 
 # comparison
 elev < 100
@@ -115,11 +119,6 @@ elev > 100
 elev >= 100
 
 elev + 100 < 2 * elev
-elev + 100 <= 2 * elev
-elev == elev
-elev != 100
-elev + 100 > 2 * elev
-elev + 100 >= 2 * elev
 
 elevs > 10
 10 > elevs
@@ -146,7 +145,11 @@ intercept(elevs)
 r2(elevs)
 tvalue(elevs)
 
-quantile(elevs, 0.9)
+sd(elevs)
+sdpop(elevs)
+var(elevs)
+varpop(elevs)
+quantile(elevs, 0.1)
 
 # IMPORTANT #3: Revert back to original GRASS session if needed.
 fastRestore(opts.)

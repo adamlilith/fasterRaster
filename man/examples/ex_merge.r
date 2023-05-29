@@ -10,33 +10,44 @@ opts. <- getFastOptions()
 
 # IMPORTANT #2: Select the appropriate line below and change as necessary to
 # where GRASS is installed on your system.
+
 grassDir <- "/Applications/GRASS-8.2.app/Contents/Resources" # Mac
 grassDir <- 'C:/Program Files/GRASS GIS 8.2' # Windows
 grassDir <- '/usr/local/grass' # Linux
 
 # setup
+library(sf)
 library(terra)
 
 # example data
 madElev <- fastData('madElev')
+madCoast4 <- fastData('madCoast4')
+madCoast4 <- vect(madCoast4)
+
+# for the example, crop the elevation raster to two communes
+madAnt <- madCoast4[madCoast4$NAME_4 == 'Antanambe', ]
+madMan <- madCoast4[madCoast4$NAME_4 == 'Manompana', ]
+
+elevAnt <- crop(madElev, madAnt)
+elevMan <- crop(madElev, madMan)
+
+plot(madElev)
+plot(elevAnt, col='red', legend=FALSE, add=TRUE)
+plot(elevMan, col='blue', legend = FALSE, add=TRUE)
 
 # start GRASS session for examples only
-wd <- forwardSlash(tempdir()) # only for examples
+faster(grassDir = grassDir, crs = madElev,
+workDir = tempdir(), location = 'examples') # line only needed for examples
 
-faster(crs = madElev, grassDir = grassDir,
-workDir = wd, location = 'examples') # line only needed for examples
+# convert a SpatRaster to a GRaster
+ant <- fast(elevAnt)
+man <- fast(elevMan)
 
-# convert SpatRaster to GRaster
-elev <- fast(madElev)
+# merge
+antMan <- merge(ant, man)
 
-### save GRaster to disk (using temporary file)
-filename <- tempfile()
-filename <- paste0(filename, '.tif')
-writeRaster(elev, filename)
-
-### load raster from disk
-elev2 <- fast(filename)
-elev2
+antManTerra <- rast(antMan)
+plot(antManTerra, main='Antman!')
 
 # IMPORTANT #3: Revert back to original GRASS session if needed.
 fastRestore(opts.)

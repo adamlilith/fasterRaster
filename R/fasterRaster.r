@@ -16,6 +16,7 @@
 #' [datatype()]: Data type\cr
 #' [dim()]: Number of rows and columns\cr
 #' [ext()]: Spatial extent\cr
+#' [global()]: Summary statistics\cr
 #' [gnames()]: Name of the object in **GRASS**\cr
 #' [is.2d()] and [is.3d()]: Is an object 2- or 3-dimensional?\cr
 #' [location()]: **GRASS** "location" of an object or the active session\cr
@@ -45,14 +46,17 @@
 #' Multi-layer functions: Applied across multiple `GRaster`s:
 #' - Numeration: [sum()], [count()] \cr
 #' - Central tendency: [mean()], [mmode()], [median()] \cr
-#' - Dispersion: [sd()], [var()], [sdpop()], [varpop()], [nunique()], [quantile()], [skewness()], [kurtosis()]
+#' - Dispersion: [sd()], [var()], [sdpop()], [varpop()], [nunique()], [range()], [quantile()], [skewness()], [kurtosis()]
 #' - Extremes: [min()], [max()], [which.min()], [which.max()] \cr
 #' [as.contour()]: Contour lines from a raster\cr
+#' [aggregate()]: Aggregate values of raster cells into larger cells\cr
 #' [buffer()]: Create a buffer around non-`NA` cells\cr
 #' [c()]: "Stack" two or more rasters\cr
 #' [crop()]: Remove parts of a raster\cr
 #' [distance()]: Distance to non-`NA` cells, or vice versa\cr
+#' [global()]: Summary statistics\cr
 #' [makeGRaster()]: Makes a `GRaster` from a raster already in a **GRASS** session\cr
+#' [merge()]: Combine two or more rasters with different extents and fill in `NA`s\cr
 #' [project()]: Change coordinate reference system and cell size\cr
 #' [resample()]: Change cell size\cr
 #' `[[[]`[subset]: Subset a raster with multiple layers\cr
@@ -127,6 +131,9 @@
 #' [regionDim()]: Change or report the active region's resolution\cr
 #' [regionExt()]: Change or report the active region's extent\cr
 #' [regionRes()]: Change or report the active region's dimensions\cr
+#' [regionDim3d()]: Change or report the active region's 3D dimensions\cr
+#' [regionRes3d()]: Change or report the active region's 3D resolution\cr
+#' [regionZExt()]: Change or report the active region's vertical extent\cr
 #'
 #' ## Esoteric tutorials
 #' **fasterRaster** [Working directories, locations, and mapsets][tutorial_sessions]\cr

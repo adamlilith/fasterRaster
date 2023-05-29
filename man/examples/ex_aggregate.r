@@ -10,6 +10,7 @@ opts. <- getFastOptions()
 
 # IMPORTANT #2: Select the appropriate line below and change as necessary to
 # where GRASS is installed on your system.
+
 grassDir <- "/Applications/GRASS-8.2.app/Contents/Resources" # Mac
 grassDir <- 'C:/Program Files/GRASS GIS 8.2' # Windows
 grassDir <- '/usr/local/grass' # Linux
@@ -21,22 +22,22 @@ library(terra)
 madElev <- fastData('madElev')
 
 # start GRASS session for examples only
-wd <- forwardSlash(tempdir()) # only for examples
+faster(grassDir = grassDir, crs = madElev,
+workDir = tempdir(), location = 'examples') # line only needed for examples
 
-faster(crs = madElev, grassDir = grassDir,
-workDir = wd, location = 'examples') # line only needed for examples
-
-# convert SpatRaster to GRaster
+# convert a SpatRaster to a GRaster
 elev <- fast(madElev)
 
-### save GRaster to disk (using temporary file)
-filename <- tempfile()
-filename <- paste0(filename, '.tif')
-writeRaster(elev, filename)
+# aggregate by same factor in 2 dimensions
+agg2 <- aggregate(elev, 2, 'mean')
+agg2
 
-### load raster from disk
-elev2 <- fast(filename)
-elev2
+agg2.5 <- aggregate(elev, 2.5, 'mean')
+agg2.5
+
+# aggregate by different factor in 2 dimensions
+agg2_3 <- aggregate(elev, c(2, 3), 'mean')
+agg2_3
 
 # IMPORTANT #3: Revert back to original GRASS session if needed.
 fastRestore(opts.)
