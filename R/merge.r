@@ -1,0 +1,44 @@
+#' Combine two or more rasters with different extents and fill in NAs
+#'
+#' @description `merge()` combines two or more `GRaster`s, possibly with different extents, into a single larger `GRaster`. Where the same cell has different values in each raster, the value of the first raster's cell is used. If this is `NA`, then the value of the second raster's cell is used, and so on.
+#'
+#' @param ... Two or more `GRaster`s.
+#'
+#' @returns A `GRaster`.
+#'
+#' @example man/examples/ex_merge.r
+#'
+#' @aliases merge
+#' @rdname merge
+#' @exportMethod merge
+methods::setMethod(
+	f = 'merge',
+	signature = c(x = 'GRaster', y = 'GRaster'),
+	definition = function(x, y, ...) {
+
+	.restore(x)
+	comparable(x, y, extent = FALSE, dim = FALSE, dim3d = FALSE)
+	
+	x <- list(x, y, ...)
+
+	# set region to combined extent
+	rasts <- paste(sapply(x, gnames), collapse=',')
+	rgrass::execGRASS('g.region', raster=rasts, flags=c('o', 'quiet'), intern=TRUE)
+
+	# combine
+	gn <- .makeGname('merge', 'rast')
+	args <- list(
+		cmd = 'r.patch',
+		input = rasts,
+		output = gn,
+		nprocs = getFastOptions('cores'),
+		memory = getFastOptions('memory'),
+		flags = c('quiet', 'overwrite'),
+		intern = TRUE
+	)
+	
+	do.call(rgrass::execGRASS, args=args)
+	makeGRaster(gn, 'merge')
+	
+	} # EOF
+)
