@@ -7,8 +7,8 @@
 #'	* Missing (default): Reports the extent, resolution, and dimensions of the current region. All other arguments will be ignored.
 #'	* A `GRaster`, `GVector`, `SpatRaster`, or `stars` raster: Sets the region's extent and dimensions to those of the raster or vector. If a raster is supplied, the region will be resized and resampled to match its extent, resolution, and dimensions. If a vector is supplied, the region will be resized and the number of cells will be increased/decreased to fully encompass this new extent, but resolution will not be changed.
 #'	* A `numeric` vector. This will resize the region's extent, resample the region's resolution/dimensions, or both to ensure the desired dimensions or resolution are retained:
-#'       * 4 values for `regionExt()`: Westernmost and easternmost easting (longitude), and southernmost and northernmost northing (latitude)
 #'       * 2 values for `regionDim()`: Number of rows and columns
+#'       * 4 values for `regionExt()`: Westernmost and easternmost easting (longitude), and southernmost and northernmost northing (latitude)
 #'       * 2 values for `regionRes()`: Size of cells in the x- and y-dimensions
 #'       * 2 values for `regionZExt()`: Topmost and bottom-most elevations
 #'       * 3 values for `regionDim3d()`: Number of rows, columns, and depths
@@ -21,7 +21,7 @@
 #' @example man/examples/ex_regions.r
 #'
 #' @aliases regionsReshape
-#' @rdname regions
+#' @rdname region
 #' @export
 #' @exportMethod region
 methods::setMethod(
@@ -193,17 +193,17 @@ methods::setMethod(
 
 }
 
-#' @rdname regions
+#' @rdname region
 #' @aliases region
 #' @exportMethod region
 methods::setMethod(f = 'region', signature = 'SpatRaster', definition = function(x) .regionReshapeFromRObject(x))
 
-#' @rdname regions
+#' @rdname region
 #' @aliases region
 #' @exportMethod region
 methods::setMethod(f = 'region', signature = 'stars', definition = function(x) .regionReshapeFromRObject(x))
 
-#' @rdname regions
+#' @rdname region
 #' @aliases region
 #' @exportMethod region
 methods::setMethod(
@@ -247,7 +247,7 @@ methods::setMethod(
 	}
 )
 
-#' @rdname regions
+#' @rdname region
 #' @aliases region
 #' @exportMethod region
 methods::setMethod(
@@ -267,7 +267,7 @@ methods::setMethod(
 	}
 )
 
-#' @rdname regions
+#' @rdname region
 #' @aliases regionExt
 #' @exportMethod regionExt
 methods::setMethod(f = 'regionExt',
@@ -277,37 +277,37 @@ methods::setMethod(f = 'regionExt',
 	}
 )
 
-#' @rdname regions
+#' @rdname region
 #' @aliases regionExt
 #' @exportMethod regionExt
 methods::setMethod(f = 'regionExt', signature = 'numeric', definition = function(x) .regionExt(x))
 
-#' @rdname regions
+#' @rdname region
 #' @aliases regionExt
 #' @exportMethod regionExt
 methods::setMethod(f = 'regionExt', signature = 'GRaster', definition = function(x) .regionExt(x))
 
-#' @rdname regions
+#' @rdname region
 #' @aliases regionExt
 #' @exportMethod regionExt
 methods::setMethod(f = 'regionExt', signature = 'GVector', definition = function(x) .regionExt(x))
 
-#' @rdname regions
+#' @rdname region
 #' @aliases regionExt
 #' @exportMethod regionExt
 methods::setMethod(f = 'regionExt', signature = 'SpatRaster', definition = function(x) .regionExt(x))
 
-#' @rdname regions
+#' @rdname region
 #' @aliases regionExt
 #' @exportMethod regionExt
 methods::setMethod(f = 'regionExt', signature = 'SpatVector', definition = function(x) .regionExt(x))
 
-#' @rdname regions
+#' @rdname region
 #' @aliases regionExt
 #' @exportMethod regionExt
 methods::setMethod(f = 'regionExt', signature = 'sf', definition = function(x) .regionExt(x))
 
-#' @rdname regions
+#' @rdname region
 #' @aliases regionExt
 #' @exportMethod regionExt
 methods::setMethod(f = 'regionExt', signature = 'stars', definition = function(x) .regionExt(x))
@@ -335,7 +335,7 @@ methods::setMethod(f = 'regionExt', signature = 'stars', definition = function(x
 
 }
 
-#' @rdname regions
+#' @rdname region
 #' @aliases regionZExt
 #' @exportMethod regionZExt
 methods::setMethod(f = 'regionZExt',
@@ -345,17 +345,17 @@ methods::setMethod(f = 'regionZExt',
 	}
 )
 
-#' @rdname regions
+#' @rdname region
 #' @aliases regionZExt
 #' @exportMethod regionZExt
 methods::setMethod(f = 'regionZExt', signature = 'numeric', definition = function(x) .regionZExt(x))
 
-#' @rdname regions
+#' @rdname region
 #' @aliases regionZExt
 #' @exportMethod regionZExt
 methods::setMethod(f = 'regionZExt', signature = 'GRaster', definition = function(x) .regionZExt(x))
 
-#' @rdname regions
+#' @rdname region
 #' @aliases regionZExt
 #' @exportMethod regionZExt
 methods::setMethod(f = 'regionZExt', signature = 'GVector', definition = function(x) .regionZExt(x))
@@ -378,7 +378,7 @@ methods::setMethod(f = 'regionZExt', signature = 'GVector', definition = functio
 
 }
 
-#' @rdname regions
+#' @rdname region
 #' @aliases regionDim
 #' @exportMethod regionDim
 methods::setMethod(f = 'regionDim',
@@ -388,22 +388,22 @@ methods::setMethod(f = 'regionDim',
 	}
 )
 
-#' @rdname regions
+#' @rdname region
 #' @aliases regionDim
 #' @exportMethod regionDim
 methods::setMethod(f = 'regionDim', signature = 'numeric', definition = function(x) .regionDim(x))
 
-#' @rdname regions
+#' @rdname region
 #' @aliases regionDim
 #' @exportMethod regionDim
 methods::setMethod(f = 'regionDim', signature = 'GRaster', definition = function(x) .regionDim(x))
 
-#' @rdname regions
+#' @rdname region
 #' @aliases regionDim
 #' @exportMethod regionDim
 methods::setMethod(f = 'regionDim', signature = 'SpatRaster', definition = function(x) .regionDim(x))
 
-#' @rdname regions
+#' @rdname region
 #' @aliases regionDim
 #' @exportMethod regionDim
 methods::setMethod(f = 'regionDim', signature = 'stars', definition = function(x) .regionDim(x))
@@ -428,36 +428,35 @@ methods::setMethod(f = 'regionDim', signature = 'stars', definition = function(x
 
 }
 
-#' @rdname regions
+#' @rdname region
 #' @aliases regionRes
 #' @exportMethod regionRes
 methods::setMethod(f = 'regionRes',
 	signature = c(x = 'missing'),
-	definition = function(x) {
-		region()$res
-	}
+	definition = function(x) region()$res[1L:2L]
 )
 
-#' @rdname regions
+#' @rdname region
 #' @aliases regionRes
 #' @exportMethod regionRes
 methods::setMethod(f = 'regionRes', signature = 'numeric', definition = function(x) .regionRes(x))
 
-#' @rdname regions
+#' @rdname region
 #' @aliases regionRes
 #' @exportMethod regionRes
 methods::setMethod(f = 'regionRes', signature = 'GRaster', definition = function(x) .regionRes(x))
 
-#' @rdname regions
+#' @rdname region
 #' @aliases regionRes
 #' @exportMethod regionRes
 methods::setMethod(f = 'regionRes', signature = 'SpatRaster', definition = function(x) .regionRes(x))
 
-#' @rdname regions
+#' @rdname region
 #' @aliases regionRes
 #' @exportMethod regionRes
 methods::setMethod(f = 'regionRes', signature = 'stars', definition = function(x) .regionRes(x))
 
+# set resolution of region
 .regionRes <- function(x) {
 
 	if (inherits(x, 'GRaster')) {
@@ -470,7 +469,8 @@ methods::setMethod(f = 'regionRes', signature = 'stars', definition = function(x
 	} else if (inherits(x, c('SpatRaster', 'stars'))) {
 		x <- terra::res(x)
 	} else if (inherits(x, 'numeric')) {
-		if (!(length(x) %in% c(2L, 3L))) stop('Please supply a numeric vector of two or three values.')
+		if (length(x) == 1L) x <- rep(x, 2L)
+		if (length(x) != 2L) stop('Please supply a numeric vector of one or two values.')
 	}
 
 	initials <- region()
@@ -478,14 +478,51 @@ methods::setMethod(f = 'regionRes', signature = 'stars', definition = function(x
 	ewres <- as.character(x[1L])
 	nsres <- as.character(x[2L])
 
-	if (length(x) == 2L) {
-		# rgrass::execGRASS('g.region', ewres=ewres, nsres=nsres, flags=c('o', 'a', 'quiet'), intern=TRUE)
-		rgrass::execGRASS('g.region', ewres=ewres, nsres=nsres, flags=c('o', 'quiet'), intern=TRUE)
-	} else if (length(x) == 3L) {
-		tbres <- x[3L]
-		rgrass::execGRASS('g.region', ewres=ewres, nsres=nsres, tbres=tbres, flags=c('o', 'quiet'), intern=TRUE)
+	rgrass::execGRASS('g.region', ewres=ewres, nsres=nsres, flags=c('o', 'quiet'), intern=TRUE)
+	invisible(initials)
+
+}
+
+#' @rdname region
+#' @aliases regionRes3d
+#' @exportMethod regionRes3d
+methods::setMethod(f = 'regionRes3d',
+	signature = c(x = 'missing'),
+	definition = function(x) region()$res
+)
+
+#' @rdname region
+#' @aliases regionRes3d
+#' @exportMethod regionRes3d
+methods::setMethod(f = 'regionRes', signature = 'numeric', definition = function(x) .regionRes(x))
+
+#' @rdname region3d
+#' @aliases regionRes3d
+#' @exportMethod regionRes
+methods::setMethod(f = 'regionRes', signature = 'GRaster', definition = function(x) .regionRes(x))
+
+# set 3d resolution of region
+.regionRes3d <- function(x) {
+
+	if (inherits(x, 'GRaster')) {
+		.restore(x)
+		x <- if (is.2d(x)) {
+			res(x)
+		} else if (is.3d(x)) {
+			res3d(x)
+		}
+	} else if (inherits(x, 'numeric')) {
+		if (length(x) == 1L) x <- rep(x, 3L)
+		if (length(x) != 3L) stop('Please supply a numeric vector of three values.')
 	}
-	
+
+	initials <- region()
+
+	ewres <- as.character(x[1L])
+	nsres <- as.character(x[2L])
+	tbres <- as.character(x[3L])
+
+	rgrass::execGRASS('g.region', ewres=ewres, nsres=nsres, tbres=tbres, flags=c('o', 'quiet'), intern=TRUE)
 	invisible(initials)
 
 }
