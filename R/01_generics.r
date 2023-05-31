@@ -27,11 +27,13 @@ methods::setGeneric(name = 'nunique', def = function(x, ...) standardGeneric('nu
 methods::setGeneric('ext', package = 'terra')
 
 methods::setGeneric(name = 'fast', def = function(x, ...) standardGeneric('fast'))
-# methods::setGeneric(name = 'fastClass', def = function(x, ...) standardGeneric('fastClass'))
+methods::setGeneric(name = 'freq', package='terra')
 
 methods::setGeneric(name = 'geomtype', package='terra')
 methods::setGeneric(name = 'global', package='terra')
 methods::setGeneric(name = 'gnames', def = function(x) standardGeneric('gnames'))
+
+methods::setGeneric(name = 'horizonHeight', def = function(x, ...) standardGeneric('horizonHeight'))
 
 methods::setGeneric(name = 'is.2d', def = function(x) standardGeneric('is.2d'))
 methods::setGeneric(name = 'is.3d', def = function(x) standardGeneric('is.3d'))

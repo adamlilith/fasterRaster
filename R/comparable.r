@@ -202,46 +202,43 @@ methods::setMethod(f = 'comparable',
 ### compare z-extents
 .zextentCompare <- function(out, x, y, fail, warn) {
 
-	if (zextent) {
-		if (topology(x) == '3D' & topology(y) == '3D') {
-		
-			xzext <- zext(x)
-			xbottom <- xzext[1L]
-			xtop <- xzext[2L]
+	if (topology(x) == '3D' & topology(y) == '3D') {
+	
+		xzext <- zext(x)
+		xbottom <- xzext[1L]
+		xtop <- xzext[2L]
 
-			yzext <- zext(y)
-			ybottom <- yzext[1L]
-			ytop <- yzext[2L]
-			
-			if (anyNA(c(xzext, yzext))) {
-				msg <- 'At least one raster has a missing z-extent.'
-				if (fail) { stop(msg) } else if (warn) { warning(msg) }
-				out <- FALSE
-			}
-			if (compareFloat(xbottom, ybottom, '!=')) {
-				msg <- 'Objects have different vertical extents.'
-				if (fail) { stop(msg) } else if (warn) { warning(msg) }
-				out <- FALSE
-			}
-			if (compareFloat(xtop, ytop, '!=')) {
-				stop('Objects have different vertical extents.')
-				if (fail) { stop(msg) } else if (warn) { warning(msg) }
-				out <- FALSE
-			}
+		yzext <- zext(y)
+		ybottom <- yzext[1L]
+		ytop <- yzext[2L]
+		
+		if (anyNA(c(xzext, yzext))) {
+			msg <- 'At least one raster has a missing z-extent.'
+			if (fail) { stop(msg) } else if (warn) { warning(msg) }
+			out <- FALSE
+		}
+		if (compareFloat(xbottom, ybottom, '!=')) {
+			msg <- 'Objects have different vertical extents.'
+			if (fail) { stop(msg) } else if (warn) { warning(msg) }
+			out <- FALSE
+		}
+		if (compareFloat(xtop, ytop, '!=')) {
+			stop('Objects have different vertical extents.')
+			if (fail) { stop(msg) } else if (warn) { warning(msg) }
+			out <- FALSE
 		}
 	}
 	out
+	
 } # EOF
 
 ### compare topology
 .topoCompare <- function(out, x, y, fail, warn) {
 
-	if (topo) {
-		if (topology(x) != topology(y)) {
-			msg <- 'The rasters have different topologies.'
-			if (fail) { stop(msg) } else if (warn) { warning(msg) }
-			out <- FALSE
-		}
+	if (topology(x) != topology(y)) {
+		msg <- 'The rasters have different topologies.'
+		if (fail) { stop(msg) } else if (warn) { warning(msg) }
+		out <- FALSE
 	}
 	out
 	

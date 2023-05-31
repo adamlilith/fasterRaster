@@ -33,6 +33,7 @@ forest <- fast(madForest2000)
 
 ### GRaster properties
 
+# dimensions
 dim(elev) # rows, columns, depths, layers
 nrow(elev) # rows
 ncol(elev) # columns
@@ -41,10 +42,14 @@ nlyr(elev) # layers
 
 res(elev) # resolution
 
+# cell counts
 ncell(elev) # cells
 ncell3d(elev) # cells (3D rasters only)
 
+# topology
 topology(elev) # number of dimensions
+is.2d(elev) # is it 2-dimensional?
+is.3d(elev) # is it 3-dimensional?
 
 minmax(elev) # min/max values
 
@@ -73,11 +78,19 @@ datatype(elev)
 rasts <- c(elev, forest)
 rasts
 
-nlyr(rasts) # number of layers
+# number of layers
+nlyr(rasts) 
 
-names(rasts) # names
+# names
+names(rasts)
 names(rasts) <- c('elev_meters', 'forest')
 rasts
+
+# cell frequencies
+freq(elev)
+freq(2 * elev)
+freq(rasts)
+freq(rasts, value = 1)
 
 # IMPORTANT #3: Revert back to original GRASS session if needed.
 fastRestore(opts.)
