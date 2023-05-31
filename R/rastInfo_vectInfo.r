@@ -65,10 +65,6 @@
 			ztop <- NA_real_
 			zbottom <- NA_real_
 			
-			nCats <- info[grepl(info, pattern='ncats=')]
-			nCats <- sub(nCats, pattern='ncats=', replacement='')
-			nCats <- as.integer(nCats)
-
 		### 3D raster
 		} else if (type == 'raster3d') {
 
@@ -104,8 +100,6 @@
 			
 			ztop <- as.numeric(ztop)
 			zbottom <- as.numeric(zbottom)
-			
-			nCats <- 0L
 			
 		}
 		
@@ -168,12 +162,17 @@
 			terraDataType <- 'FLT8S'
 			gdalDataType <- 'Float64'
 		}
-		
-		# number of categories
-		if (length(nCats) == 0L) nCats <- 0L
 
-		# range of values
-		if (nCats == 0) {
+		# number of categories
+		nCats <- info[grepl(info, pattern='ncats=')]
+		nCats <- sub(nCats, pattern='ncats=', replacement='')
+		nCats <- as.integer(nCats)
+		# if (length(nCats) == 0L) nCats <- 0L
+			
+		if (grassDataType != 'CELL') nCats <- rep(0L, length(nCats))
+
+		# # range of values
+		# if (nCats == 0) {
 
 			minVal <- range[grepl(range, pattern='min=')]
 			maxVal <- range[grepl(range, pattern='max=')]
@@ -184,10 +183,10 @@
 			minVal <- if (minVal == 'NULL') { NA_real_ } else { as.numeric(minVal) }
 			maxVal <- if (maxVal == 'NULL') { NA_real_ } else { as.numeric(maxVal) }
 
-		} else {
-			minVal <- NA_real_
-			maxVal <- NA_real_
-		}
+		# } else {
+			# minVal <- NA_real_
+			# maxVal <- NA_real_
+		# }
 
 		out <- list(
 			gnames = gn,
