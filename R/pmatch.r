@@ -15,7 +15,7 @@
 	x <- tolower(x)
 	lowerTable <- tolower(table)
 	match <- pmatch(x, lowerTable, ...)
-	if (is.na(match)) {
+	if (any(is.na(match))) {
 		if (error) stop('Cannot find a match for ', sQuote('x'), '. Valid options include: ', paste(table, collapse=', '))
 		out <- NA_character_
 	} else {
