@@ -16,6 +16,7 @@
 #' [datatype()]: Data type\cr
 #' [dim()]: Number of rows and columns\cr
 #' [ext()]: Spatial extent\cr
+#' [freq()]: Frequencies of cell values in a raster\cr
 #' [global()]: Summary statistics\cr
 #' [gnames()]: Name of the object in **GRASS**\cr
 #' [is.2d()] and [is.3d()]: Is an object 2- or 3-dimensional?\cr
@@ -55,10 +56,13 @@
 #' [crop()]: Remove parts of a raster\cr
 #' [distance()]: Distance to non-`NA` cells, or vice versa\cr
 #' [global()]: Summary statistics\cr
+#' [horizonHeight()]: Horizon height\cr
 #' [makeGRaster()]: Makes a `GRaster` from a raster already in a **GRASS** session\cr
 #' [merge()]: Combine two or more rasters with different extents and fill in `NA`s\cr
 #' [project()]: Change coordinate reference system and cell size\cr
 #' [resample()]: Change cell size\cr
+#' [sun()]: Solar radiance and irradiance\cr
+#' [terrain()]: Slope, aspect, curvature, and partial slopes\cr
 #' `[[[]`[subset]: Subset a raster with multiple layers\cr
 #'
 #' ## Properties of **fasterRaster** vectors (`GVectors')
