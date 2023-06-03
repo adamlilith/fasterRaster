@@ -1,28 +1,33 @@
-#' Classes for fasterRaster locations, rasters, and vectors
+#' Classes for fasterRaster locations, regions, rasters, and vectors
 #'
-#' @description
-#' S4 classes that contain pointers to **GRASS** objects. Most users will manipulate objects using these classes, but do not need to know the details.
+#' @description S4 classes that contain pointers to **GRASS** objects. Most users will manipulate objects using these classes, but do not need to know the details.
+#' * the `GSession` class stores information about the **GRASS** session ([location][tutorial_locations]), mapset, and coordinate referenc system.
+#' * The 'GSpatial' class contains the `GSession` class and stores information about spatial objects (extent, toplogy) plus the name of the file representing it in **GRASS** (it's `gname`).
+#' * The `GRegion` class contains the `GSpatial` class and stores information about grids (dimensions and resolution). They do have `gname`s, but these are not used (they're always `NA`).
+#' * The `GRaster` class contains the `GRegion` class and represents rasters. It stores infomation on number of layers, categories, min/max values, and user-friendly names.
+#' # The `GVector` class contains the `GSpatial` class and represents spatial vectors. It stores information about the **GRASS** names of data tables, names of fields (columns), and their data type.
 #'
-#' @slot location	Character: The **GRASS** ["location"][tutorial_sessions] of the object. The default value is `default`. Can be obtained using [location()].
-#' @slot mapset		Character: The **GRASS** ["mapset"][tutorial_sessions]. Default value is `PERMANENT`. Typically hidden to users. Can be obtained using [mapset()].
-#' @slot gnames		Character: Name of the object in **GRASS**. These names are made on-the-fly and provide the pointer to the object from **R** to **GRASS**. Changing them will break the connection. Can be obtained using [gnames()].
+#' @slot location	Character (all classes): The **GRASS** ["location"][tutorial_sessions] of the object. The default value is `default`. Can be obtained using [location()].
+#' @slot mapset		Character (all classes): The **GRASS** ["mapset"][tutorial_sessions]. Default value is `PERMANENT`. Typically hidden to users. Can be obtained using [mapset()].
+#' @slot topology	Character (`GSpatial` objects, including `GRegion`s, `GRaster`s, and `GVector`s): Valid values are `2D` (2-dimensional--most rasters and vectors) or `3D` (3-dimensional--e.g., as in LIDAR data). Can be obtained using [topology()].
+#' @slot gnames		Character (`GRaster`s and `GVector`s): Name of the object in **GRASS**. These are typically made on-the-fly and provide the pointer to the object from **R** to **GRASS**. Changing them manually will break the connection. Can be obtained using [gnames()].
 #' @slot names		Character  (`GRaster`s only): Name of a raster or each raster layer in. Can be obtained using [names()].
-#' @slot crs		Character: Coordinate reference systems string (preferably in WKT2 format). Can be obtained using [crs()] or [st_crs()].
+#' @slot crs		Character (all classes): Coordinate reference systems string (preferably in WKT2 format). Can be obtained using [crs()] or [st_crs()].
 #' @slot dimensions	Dimensions:
-#' * `GRaster`s: Vector of four integers indicating number of rows, columns, depths (for 3D rasters), and layers of a "stack" of rasters. Can be obtained using [dim()], plus [nrow()], [ncol()], and [ndepth()].
+#' * `GRegion`s and `GRaster`s: Vector of three integers indicating number of rows, columns, and depths (for 3D objects). Can be obtained using [dim()], plus [nrow()], [ncol()], and [ndepth()].
 #' * `GVectors`s: Vector of two integers indicating number of geometries and number of fields. Can be obtained using [dim()], plus [nrow()] and [ncol()].
-#' @slot extent		Numeric vector with four values: Extent of the object listed in order from westernmost longitude, easternmost longitude, southernmost latitude, northernmost latitude. Can be obtained using [ext()].
-#' @slot zextent	Numeric: Bottom- and top-most extents of 3D `GRaster`s and `GVector`s. Can be obtained using [zext()].
-#' @slot topology	Character: Valid values are `2D` (2-dimensional--most rasters and vectors) or `3D` (3-dimensional--e.g., as in LIDAR data). Can be obtained using [topology()].
-#' @slot geometry	Character (`GVectors`s only): Either `points`, `lines`, or `polygons`. Can be obtained using [geomtype()].
-#' @slot nGeometries Integer (`GVector`s only): Number of features (points, lines, or polygons). Can be obtained using [nrow()].
-#' @slot datatypeGRASS Character (`GRaster`s only): Type of data stored in a raster, as interpreted by `GRASS`. This is either `CELL` (integers), `FCELL` (floating-point values), or `DCELL` (double-values). Can be obtained using [datatype()].
-#' @slot resolution	Vector of two numeric values (`GRaster`s only): Size of a raster cell in the east-west direction and in the north-south direction. Can be obtained using [res()] and [res3d()].
-#' @slot nCats Integer (`GRaster`s only): Number of categories. Must be >0. Can be obtained using [ncat()].
-#' @slot minVal,maxVal Numeric (`GRaster`s only): Minimum and maximum value across all cells. Can be obtained using [minmax()].
-#' @slot fields Names of fields (`GVector`s only). Can be obtained using [names()].
-#' @slot numFields Number of fields (`GVector`s only). Can be obtained using [ncol()].
-#' @slot fieldClasses Classes of fields (`GVector`s only). Can be obtained using [datatype()].
+#' @slot extent		Numeric vector with four values (`GSpatial` objects, including `GRegion`s, `GRaster`s, and `GVector`s): Extent of the object listed in order from westernmost longitude, easternmost longitude, southernmost latitude, northernmost latitude. Can be obtained using [ext()].
+#' @slot zextent	Numeric (`GSpatial` objects, including `GRegion`s, `GRaster`s, and `GVector`s): Bottom- and top-most extents of 3D `GRaster`s and `GVector`s. Can be obtained using [zext()].
+#' @slot geometry	Character (`GVectors`s): Either `points`, `lines`, or `polygons`. Can be obtained using [geomtype()].
+#' @slot nLayers Integer (`GRaster`s): Number of layers ("stacked" rasters--different from number of depths of 3D rasters). Can be obtained using [nlyr()].
+#' @slot nGeometries Integer (`GVector`s): Number of features (points, lines, or polygons). Can be obtained using [nrow()].
+#' @slot datatypeGRASS Character (`GRaster`s): Type of data stored in a raster, as interpreted by `GRASS`. This is either `CELL` (integers), `FCELL` (floating-point values), or `DCELL` (double-values). Can be obtained using [datatype()].
+#' @slot resolution	Vector of two numeric values (`GRegion`s, including `GRaster`s): Size of a raster cell in the east-west direction and in the north-south direction. Can be obtained using [res()] and [res3d()].
+#' @slot nCats Integer (`GRaster`s): Number of categories. Must be >0. Can be obtained using [ncat()].
+#' @slot minVal,maxVal Numeric (`GRaster`s): Minimum and maximum value across all cells. Can be obtained using [minmax()].
+#' @slot fields Names of fields (`GVector`s). Can be obtained using [names()].
+#' @slot numFields Number of fields (`GVector`s). Can be obtained using [ncol()].
+#' @slot fieldClasses Classes of fields (`GVector`s). Can be obtained using [datatype()].
 #'
 #' @return An object of class `GSession`, `GSpatial`, `GRaster`, or `GVector`.
 #'
@@ -30,7 +35,6 @@
 #'
 #' @importFrom methods new
 #' @importFrom methods show
-#' @export GSession
 #' @exportClass GSession
 
 	GSession <- setClass(

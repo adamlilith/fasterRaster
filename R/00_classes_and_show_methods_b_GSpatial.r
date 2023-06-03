@@ -36,8 +36,8 @@ setValidity('GSpatial',
 			paste0('@topology is ', sQuote('3D'), ' but @zextent has at least one NA value.')
 		} else if ((!is.na(object@zextent[1L]) & is.na(object@zextent[2L])) | (is.na(object@zextent[1L]) & !is.na(object@zextent[2L]))) {
 			'Both values of @zextent must be NA or must be numeric values.'
-		} else if ((!is.na(object@zextent[1L]) & !is.na(object@zextent[2L])) && object@zextent[1L] > object@zextent[2L]) {
-			'Bottom values of @zextent is higher than the top values of @zextent.'
+		} else if ((!is.na(object@zextent[1L]) & !is.na(object@zextent[2L])) && object@zextent[2L] > object@zextent[1L]) {
+			'Bottom value of @zextent is higher than the top value of @zextent.'
 		} else {
 			TRUE
 		}

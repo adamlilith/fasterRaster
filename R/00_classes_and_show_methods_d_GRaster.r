@@ -7,11 +7,9 @@
 #' @exportClass GRaster
 GRaster <- setClass(
 	'GRaster',
-	contains = 'GSpatial',
+	contains = 'GRegion',
 	slots = list(
 		datatypeGRASS = 'character',
-		dimensions = 'integer',
-		resolution = 'numeric',
 		nLayers = 'integer',
 		names = 'character',
 		nCats = 'integer',
@@ -20,8 +18,6 @@ GRaster <- setClass(
 	),
 	prototype = prototype(
 		datatypeGRASS = NA_character_,
-		dimensions = c(NA_integer_, NA_integer_, NA_integer_),
-		resolution = c(NA_real_, NA_real_, NA_real_),
 		nLayers = NA_integer_,
 		names = NA_character_,
 		nCats = NA_integer_,
@@ -34,14 +30,8 @@ setValidity('GRaster',
 	function(object) {
 		if (!all(object@datatypeGRASS %in% c('CELL', 'FCELL', 'DCELL'))) {
 			paste0('@datatypeGRASS can only be NA, ', sQuote('CELL'), ', ', sQuote('FCELL'), ', or ', sQuote('DCELL'), '.')
-		} else if (any(object@dimensions[1L:2L] <= 0L)) {
-			'First two values in @dimensions must be positive integers.'
 		} else if (!is.na(object@dimensions[3L]) && object@dimensions[3L] <= 0L) {
 			'Third value in @dimensions must be NA or a positive integer.'
-		} else if (object@resolution[1L] <= 0) {
-			'First @resolution must be a positive real value.'
-		} else if (object@resolution[2L] <= 0) {
-			'Second @resolution must be a positive real value.'
 		} else if (!is.na(object@resolution[3L]) && object@resolution[3L] <= 0) {
 			'Third value in @resolution must be NA or a positive real value.'
 		} else if (object@nLayers < 1) {
