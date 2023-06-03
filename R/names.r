@@ -8,6 +8,8 @@
 #' @details `GRaster`s have two types of names, a "gnames", which is used internally to point to the **GRASS** representation of the raster (this is not of use to most users and is hidden by default), and an "rname", which is taken from the "**R**" name of the raster or the filename. This function returns the "rname".
 #'
 #' @return Character vector.
+#' 
+#' @seealso [terra::names()]
 #'
 #' @example man/examples/ex_GRaster.r
 #'

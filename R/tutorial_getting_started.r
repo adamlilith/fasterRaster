@@ -100,6 +100,11 @@
 #' sfVect <- st_as_sf(rivers)
 #' ```
 #' Finally, you can use [writeRaster()] and [writeVector()] to save **fasterRaster** rasters and vectors directly to disk. This will be faster than converting to another format then saving.
+#'
+#' ## Further reading
+#' 
+#' * The [GRASS GIS](https://grass.osgeo.org/) website is authoritative and contains the manual on all the **GRASS** functions used in this package.
+#' * The Wiki on [how to run GRASS in R or R in GRASS](https://grasswiki.osgeo.org/wiki/R_statistics/rgrass) is a good place to start if you want to become a power-user of **GRASS** in **R**.
 #' 
 #' @keywords tutorial
 NULL

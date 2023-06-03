@@ -20,6 +20,8 @@
 #' @param northIs0 Logical: If `TRUE` (default), aspect will be reported in "north orientation," such that 0 is north, and degrees run clockwise (90 is east, 180 south, 270 west). If `FALSE`, then aspect will be reported in "east orientation," such that 0 is east, and degrees run counterclockwise (90 is north, 180 west, 270 south). The latter is the default in **GRASS**, but the former is the default in [terra::terrain()] function, so is used here as the default. **Note:** The [sun()] function requires aspect to be in east orientation.
 #'
 #' @returns A `GRaster` with one or more layers.
+#' 
+#' @seealso [terra::terrain()], module `r.slope.aspect` in **GRASS**
 #'
 #' @example man/examples/ex_terrain.r
 #'

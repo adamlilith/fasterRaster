@@ -6,10 +6,13 @@
 #' @param ... Additional arguments to send to [writeRaster()] (typically unneeded, though `bigTiff` may be of use if the raster is large).
 #'
 #' @return A `SpatVector` (**terra** package).
+#' 
+#' @seealso [terra::vect()]
+#' 
+#' @example man/examples/ex_GVector.r
 #'
 #' @aliases vect
 #' @rdname vect
-#' @export
 #' @exportMethod vect
 setMethod(
 	'vect',

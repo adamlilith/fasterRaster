@@ -10,41 +10,53 @@ opts. <- getFastOptions()
 
 # IMPORTANT #2: Select the appropriate line below and change as necessary to
 # where GRASS is installed on your system.
+
 grassDir <- "/Applications/GRASS-8.2.app/Contents/Resources" # Mac
 grassDir <- 'C:/Program Files/GRASS GIS 8.2' # Windows
 grassDir <- '/usr/local/grass' # Linux
 
 # setup
-library(sf)
 library(terra)
 
-# elevation raster, rivers vector
+# example data
 madElev <- fastData('madElev')
-madRivers <- fastData('madRivers')
 
 # start GRASS session for examples only
-faster(crs = madElev, grassDir = grassDir,
+faster(grassDir = grassDir, crs = madElev,
 workDir = tempdir(), location = 'examples') # line only needed for examples
 
-# convert a SpatRaster to a GRaster, and sf to a GVector
+# convert a SpatRaster to a GRaster
 elev <- fast(madElev)
-rivers <- fast(madRivers)
 
-### buffer a raster by a given distance
-buffByDist <- buffer(elev, width = 2000) # 2000-m buffer
-buffByDistRast <- rast(buffByDist)
-plot(buffByDistRast)
+### stretch based on user-defined range
 
-### buffer a raster by a given number of cells
-buffByCells <- buffer(elev, width = 20.01, unit = 'cells') # 20-cell buffer
-buffByCellsRast <- rast(buffByCells)
-plot(buffByCellsRast)
+#  fasterRaster
+fr <- stretch(elev, smin=1, smax=100)
+fr
 
-### buffer a vector
-buffRivers <- buffer(rivers, width = 2000) # 2000-m buffer
-buffRivers <- vect(buffRivers)
-plot(buffRivers)
-plot(st_geometry(madRivers), col = 'blue', add = TRUE)
+# terra
+tr <- stretch(madElev, smin = 1, smax = 100)
+tr
+
+# compare fasterRaster to terra output
+fr <- rast(fr)
+fr <- extend(fr, tr)
+fr - tr
+
+### stretch values in a certain quantile range
+
+#  fasterRaster
+fr <- stretch(elev, minq = 0.25, maxq = 0.75)
+fr
+
+# terra
+tr <- stretch(madElev, minq = 0.25, maxq = 0.75)
+tr
+
+# compare fasterRaster to terra output
+fr <- rast(fr)
+fr <- extend(fr, tr)
+fr - tr
 
 # IMPORTANT #3: Revert back to original GRASS session if needed.
 fastRestore(opts.)

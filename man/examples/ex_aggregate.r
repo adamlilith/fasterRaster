@@ -28,16 +28,37 @@ workDir = tempdir(), location = 'examples') # line only needed for examples
 # convert a SpatRaster to a GRaster
 elev <- fast(madElev)
 
-# aggregate by same factor in 2 dimensions
+### aggregate by same factor in 2 dimensions
+# fasterRaster
 agg2 <- aggregate(elev, 2, 'mean')
 agg2
 
-agg2.5 <- aggregate(elev, 2.5, 'mean')
-agg2.5
+# terra
+agg2terra <- aggregate(madElev, 2, 'mean')
+agg2terra
+
+# compare fasterRaster and terra... should be the same
+agg2 <- rast(agg2)
+agg2 <- extend(agg2, agg2terra)
+agg2 - agg2terra
+
+### aggregate by a factor of 2.5 in 2 dimensions
+# fasterRaster
+agg2.9 <- aggregate(elev, 2.9, 'mean')
+agg2.9
+
+# terra
+agg2.9terra <- aggregate(madElev, 2.9, 'mean')
+agg2.9terra
+
+# compare fasterRaster and terra... should be different
+res(agg2.9)
+res(agg2.9terra) # terra rounds aggregation factor down
+2 * res(madElev) # original resolution multipled by 2
 
 # aggregate by different factor in 2 dimensions
-agg2_3 <- aggregate(elev, c(2, 3), 'mean')
-agg2_3
+agg2x3 <- aggregate(elev, c(2, 3), 'mean')
+agg2x3
 
 # IMPORTANT #3: Revert back to original GRASS session if needed.
 fastRestore(opts.)

@@ -15,7 +15,9 @@
 #' @param ... One or more `GRaster`s, one or more `GVector`s, a list of `GRaster`s, or a list of `GVector`s. You can use a mix of lists and individual rasters or vectors.
 #' @param df If `TRUE`, copy the data frame of the `x` `GVector` to the output. If `FALSE` (default), the output will not have a data frame.
 #'
-#' @return A `GRaster` or `GVector`.
+#' @return A `GRaster`.
+#' 
+#' @seealso [terra::c()]
 #'
 #' @example man/examples/ex_GRaster_GVector.r
 #'

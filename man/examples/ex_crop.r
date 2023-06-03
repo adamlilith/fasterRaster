@@ -25,10 +25,8 @@ madCoast4 <- fastData('madCoast4')
 madAnt <- madCoast4[madCoast4$NAME_4 == 'Antanambe', ]
 
 # start GRASS session for examples only
-wd <- forwardSlash(tempdir())
-
 faster(crs = madElev, grassDir = grassDir,
-workDir = wd, location = 'examples') # line only needed for examples
+workDir = tempdir(), location = 'examples') # line only needed for examples
 
 # convert a SpatRaster to a GRaster, and sf to a GVector
 elev <- fast(madElev)

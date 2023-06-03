@@ -19,7 +19,7 @@
 methods::setMethod(
 	f = 'freq',
 	signature = c(x = 'GRaster'),
-	definition = function(x, digits = 3, value = NULL, bins = 256) {
+	definition = function(x, digits = 3, value = NULL, bins = 100) {
 
 	.restore(x)
 	region(x)

@@ -22,10 +22,8 @@ madElev <- fastData('madElev')
 madForest2000 <- fastData('madForest2000')
 
 # start GRASS session for examples only
-wd <- forwardSlash(tempdir()) # only for examples
-
 faster(crs = madElev, grassDir = grassDir,
-workDir = wd, location = 'examples') # line only needed for examples
+workDir = tempdir(), location = 'examples') # line only needed for examples
 
 # convert SpatRasters to GRasters
 elev <- fast(madElev)
@@ -40,7 +38,9 @@ ncol(elev) # columns
 ndepth(elev) # depths
 nlyr(elev) # layers
 
-res(elev) # resolution
+res(elev) # resolution (2D)
+res3d(elev) # resolution (3D)
+zres(elev) # vertical resolution
 
 # cell counts
 ncell(elev) # cells
@@ -74,12 +74,17 @@ zext(elev)
 # data type
 datatype(elev)
 
+# convert data type
+as.cell(elev) # integer; note that "elev" is already of type "CELL"
+as.fcell(elev) # floating-precision
+as.dcell(elev) # double-precision
+
 # concatenating multiple GRasters
 rasts <- c(elev, forest)
 rasts
 
 # number of layers
-nlyr(rasts) 
+nlyr(rasts)
 
 # names
 names(rasts)

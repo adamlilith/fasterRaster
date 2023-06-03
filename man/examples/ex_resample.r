@@ -21,18 +21,28 @@ library(terra)
 madElev <- fastData('madElev')
 
 # start GRASS session for examples only
-wd <- forwardSlash(tempdir())
-
-# initiate GRASS session
 faster(crs = madElev, grassDir = grassDir,
-workDir = wd, location = 'examples') # line only needed for examples
+workDir = tempdir(), location = 'examples') # line only needed for examples
 
 elev <- fast(madElev)
 
-# resample raster to 120 x 120 m
-elevResamp <- resample(elev, c(120, 120), method='bilinear')
+### resample raster to 120 x 120 m
+elev120 <- resample(elev, c(120, 120), method='bilinear')
 elev
-elevResamp
+elev120
+
+### resample using a coarser raster as a template
+# fasterRaster
+coarser <- aggregate(elev, 16)
+elevCoarser <- resample(elev, coarser, method='bilinear')
+elev
+elevCoarser
+
+# terra
+coarserTerra <- aggregate(madElev, 16)
+elevCoarserTerra <- resample(madElev, coarserTerra, method='bilinear')
+
+
 
 # IMPORTANT #3: Revert back to original GRASS session if needed.
 fastRestore(opts.)

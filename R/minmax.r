@@ -6,11 +6,12 @@
 #'
 #' @return A numeric matrix.
 #' 
+#' @seealso [terra::minmax()]
+#' 
 #' @example man/examples/ex_GRaster.r
 #'
 #' @aliases minmax
 #' @rdname minmax
-#' @export
 #' @exportMethod minmax
 setMethod(
 	f = 'minmax',

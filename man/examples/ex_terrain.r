@@ -32,6 +32,9 @@ elev <- fast(madElev)
 topos <- terrain(elev, v='*')
 topos
 
+# calculate a hillshade raster
+hs <- hillshade(elev)
+
 # IMPORTANT #3: Revert back to original GRASS session if needed.
 fastRestore(opts.)
 removeSession('examples')

@@ -5,6 +5,8 @@
 #' @param ... Two or more `GRaster`s.
 #'
 #' @returns A `GRaster`.
+#' 
+#' @seealso [terra::merge()]
 #'
 #' @example man/examples/ex_merge.r
 #'

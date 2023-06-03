@@ -21,10 +21,8 @@ library(sf)
 madRivers <- fastData('madRivers')
 
 # start GRASS session for examples only
-wd <- forwardSlash(tempdir()) # only for examples
-
 faster(crs = madRivers, grassDir = grassDir,
-workDir = wd, location = 'examples') # line only needed for examples
+workDir = tempdir(), location = 'examples') # line only needed for examples
 
 # example data
 madCoast4 <- fastData('madCoast4')
@@ -32,9 +30,9 @@ madRivers <- fastData('madRivers')
 madDypsis <- fastData('madDypsis')
 
 # convert SpatVectors to GVectors
-coast <- fast(madCoast4, 'coast')
-rivers <- fast(madRivers, 'rivers')
-dypsis <- fast(madDypsis, 'dypsis')
+coast <- fast(madCoast4)
+rivers <- fast(madRivers)
+dypsis <- fast(madDypsis)
 
 # GVector properties
 ext(rivers) # extent
@@ -64,9 +62,11 @@ is.polygons(dypsis)
 
 # number of dimensions
 topology(rivers)
+is.2d(rivers) # 2-dimensional?
+is.3d(rivers) # 3-dimensional?
 
 ### ADVANCED
-# We can send a `SpatRaster` or `sf` vector to an open GRASS connection
+# We can send a `SpatVector` or `sf` vector to an open GRASS connection
 # without making it a `GVector`.
 
 vectToGrass(madRivers, gn = 'rivers_vect1')

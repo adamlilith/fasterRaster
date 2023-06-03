@@ -5,6 +5,8 @@
 #' @param x A `GVector`.
 #'
 #' @return `geomtype()` returns either "points", "lines", or "polygons". The "`is.*`" functions return `TRUE` or `FALSE`.
+#' 
+#' @seealso [terra::geomtype()]
 #'
 #' @example man/examples/ex_GVector.r
 #'

@@ -6,7 +6,9 @@
 #' @param ... Other arguments (generally unused).
 #'
 #' @return Character.
-#'
+#' 
+#' @seealso [terra::crs()], [sf::st_crs()]
+#' 
 #' @example man/examples/ex_GRaster.r
 #'
 #' @aliases crs

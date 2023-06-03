@@ -6,10 +6,11 @@
 #' @param ... Additional arguments to send to [writeRaster()] (typically unneeded, though `bigTiff` may be of use if the raster is large).
 #'
 #' @return A `SpatRaster` (**terra** package).
+#' 
+#' @seealso [terra::rast()]
 #'
 #' @aliases rast
 #' @rdname rast
-#' @export
 #' @exportMethod rast
 setMethod(
 	'rast',

@@ -25,7 +25,6 @@
 #'
 #' @aliases writeVector
 #' @rdname writeVector
-#' @export
 #' @exportMethod writeVector
 setMethod(
 	'writeVector',

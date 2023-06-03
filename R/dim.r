@@ -1,22 +1,25 @@
 #' @title Number of rows, columns, depths, cells, and layers of a GRaster
 #'
 #' @description
-#' For `GRaster`s: Number of rows, columns, depths, cells, and layers:
+#' For `GRegions`s: Number of rows, columns, depths, and cells:
 #' * `dim()`: Rows, columns, depths, and layers of a
 #' * `nrow()`: Rows
 #' * `ncol()`: Columns
 #' * `ndepth()`: Depths (for 3-dimensional rasters only)
-#' * `nlyr()`: Layers (number of rasters or vectors). Note that for vectors, this does not count "geometries" (features), but rather independent vectors which are composed of one or more geometries (i.e., points, lines, polygons).
 #' * `ncell()`: Number of cells (2 dimensions)
 #' * `ncell3d()`: Number of cells (3 dimensions)
+#' For `GRaster`s: As above, plus number of cells and layers:
+#' * `nlyr()`: Layers (number of "stacked" rasters--different from depths of a raster).
 #' For `GVector`s: Number of geometries and fields (columns):
 #' * `dim()`: Number of geometries and fields
 #' * `nrow()`: Number of geometries
-#' * `ncol()`: Number of fields
+#' * `ncol()`: Number of fields (columns)
 #'
-#' @param x A `GRaster` or `GVector`.
+#' @param x A `Gregion`, `GRaster`, or `GVector`.
 #'
 #' @return A numeric value or vector.
+#' 
+#' @seealso [terra::dim()]
 #'
 #' @example man/examples/ex_GRaster_GVector.r
 #'
@@ -26,8 +29,8 @@
 #' @exportMethod dim
 methods::setMethod(
 	f = 'dim',
-	signature = 'GRaster',
-	definition = function(x) x@dimensions
+	signature = 'GRegion',
+	definition = function(x) c(rows=x@dimensions[1L], cols=x@dimensions[2L], depths=x@dimensions[3L])
 )
 
 #' @rdname dim
@@ -35,7 +38,7 @@ methods::setMethod(
 #' @exportMethod nrow
 setMethod(
 	f = 'nrow',
-	signature = 'GRaster',
+	signature = 'GRegion',
 	definition = function(x) x@dimensions[1L]
 )
 
@@ -44,7 +47,7 @@ setMethod(
 #' @exportMethod ncol
 setMethod(
 	f = 'ncol',
-	signature = 'GRaster',
+	signature = 'GRegion',
 	definition = function(x) x@dimensions[2L]
 )
 
@@ -53,7 +56,7 @@ setMethod(
 #' @exportMethod ndepth
 setMethod(
 	f = 'ndepth',
-	signature = 'GRaster',
+	signature = 'GRegion',
 	definition = function(x) x@dimensions[3L]
 )
 
@@ -62,7 +65,7 @@ setMethod(
 #' @exportMethod ncell
 setMethod(
 	f = 'ncell',
-	signature = 'GRaster',
+	signature = 'GRegion',
 	definition = function(x) prod(x@dimensions[1L:2L])
 )
 
@@ -71,7 +74,7 @@ setMethod(
 #' @exportMethod ncell3d
 setMethod(
 	f = 'ncell3d',
-	signature = 'GRaster',
+	signature = 'GRegion',
 	definition = function(x) prod(x@dimensions[1L:3L])
 )
 
@@ -82,7 +85,7 @@ setMethod(
 methods::setMethod(
 	f = 'dim',
 	signature = 'GVector',
-	definition = function(x) c(x@nGeometries, x@nFields)
+	definition = function(x) c(geometries = x@nGeometries, fields = x@nFields)
 )
 
 #' @rdname dim
@@ -108,6 +111,6 @@ setMethod(
 #' @exportMethod nlyr
 setMethod(
 	f = 'nlyr',
-	signature = 'GSpatial',
+	signature = 'GRaster',
 	definition = function(x) x@nLayers
 )

@@ -5,10 +5,10 @@
 #' ## Most useful functions/links:
 #' A [quick-start tutorial][tutorial_getting_started]\cr
 #' [faster()]: Initiate a **GRASS** session\cr
-#' [fast()]: Create `GRaster`s or `GVector`s from `SpatRaster`s, `SpatVector`s, or `sf` or `stars` objects, or from files\cr
-#' [rast()], [vect()], [st_as_sf()], and [stars()]: Convert `GRaster`s and `GVector`s to `SpatRaster`s, `SpatVector`s, `sf` vectors, or `stars` rasters\cr
+#' [fast()]: Create `GRaster`s or `GVector`s from `SpatRaster`s, `SpatVector`s, or `sf`  objects, or from files\cr
+#' [rast()], [vect()], and [st_as_sf()]: Convert `GRaster`s and `GVector`s to `SpatRaster`s, `SpatVector`s, or `sf` vectors\cr
 #' [writeRaster()] and [writeVector()]: Save `GRaster`s or `GVector`s to disk\cr
-#' [fastRestore()]: Re-starts a **GRASS** session saved to disk\cr
+#' [fastRestore()]: Revert to another **GRASS** [location/mapset[tutorial_locations], or restart a **GRASS** session saved to disk\cr
 #' [setFastOptions()] and [getFastOptions()]: Set options for working with **fasterRaster**\cr
 #'
 #' ## Properties of **fasterRaster** rasters (`GRasters`)
@@ -35,8 +35,9 @@
 #' [st_bbox()]: Spatial extent\cr
 #' [st_crs()]: Coordinate reference system\cr
 #' [topology()]: Dimensionality of a raster (2D or 3D)\cr
-#' [zext()]: Vertical extent
-#'
+#' [zext()]: Vertical extent\cr
+#' [zres()]: Vertical resolution\cr
+#' 
 #' ## Functions that operate on or create `GRasters`
 #' [Arithmetic]: Mathematical operations on `GRaster`s: `+`, `-`, `*`, `/`, `^`, `%%` (modulus), `%/%` (integer division)\cr
 #' Single-layer functions: Applied to each layer of a `GRaster`:
@@ -49,6 +50,7 @@
 #' - Central tendency: [mean()], [mmode()], [median()] \cr
 #' - Dispersion: [sd()], [var()], [sdpop()], [varpop()], [nunique()], [range()], [quantile()], [skewness()], [kurtosis()]
 #' - Extremes: [min()], [max()], [which.min()], [which.max()] \cr
+#' [as.cell()], [as.fcell()], [as.dcell()]: Change data type (integer/float/double)\cr
 #' [as.contour()]: Contour lines from a raster\cr
 #' [aggregate()]: Aggregate values of raster cells into larger cells\cr
 #' [buffer()]: Create a buffer around non-`NA` cells\cr
@@ -56,6 +58,7 @@
 #' [crop()]: Remove parts of a raster\cr
 #' [distance()]: Distance to non-`NA` cells, or vice versa\cr
 #' [global()]: Summary statistics\cr
+#' [hillshade()]: Create a hillshade raster\cr
 #' [horizonHeight()]: Horizon height\cr
 #' [makeGRaster()]: Makes a `GRaster` from a raster already in a **GRASS** session\cr
 #' [merge()]: Combine two or more rasters with different extents and fill in `NA`s\cr
@@ -82,6 +85,7 @@
 #' [st_crs()]: Coordinate reference system\cr
 #' [topology()]: Dimensions of vector coordinates (2D or 3D)\cr
 #' [zext()]: Vertical extent\cr
+#' [zres()]: Vertical resolution\cr
 #'
 #' ## Functions that operate on or create `GVectors`
 #' [as.data.frame()]: Convert a vector to a `data.frame`\cr
@@ -90,6 +94,7 @@
 #' [convHull()]: Minimum convex hull\cr
 #' [crds()]: Coordinates of a vector's features\cr
 #' [crop()]: Remove parts of a vector\cr
+#' [delaunay()]: Delaunay triangulation\cr
 #' [distance()]: Distance between geometries in two vectors, or from a vector to cells of a raster\cr
 #' [head()]: First rows of a vector's data frame.\cr
 #' [makeGVector()]: Makes a `GVector` from a vector already in a **GRASS** session.\cr
@@ -135,9 +140,11 @@
 #' [regionDim()]: Change or report the active region's resolution\cr
 #' [regionExt()]: Change or report the active region's extent\cr
 #' [regionRes()]: Change or report the active region's dimensions\cr
-#' [regionDim3d()]: Change or report the active region's 3D dimensions\cr
-#' [regionRes3d()]: Change or report the active region's 3D resolution\cr
+#' [regionDim3d()]: Change or report the active region's x, y, and z dimensions\cr
+#' [regionRes3d()]: Change or report the active region's x, y, and z resolutions\cr
+#' [regionZDim()]: Change or report the active region's vertical dimension\cr
 #' [regionZExt()]: Change or report the active region's vertical extent\cr
+#' [regionZRes()]: Change or report the active region's vertical resolution\cr
 #'
 #' ## Esoteric tutorials
 #' **fasterRaster** [Working directories, locations, and mapsets][tutorial_sessions]\cr

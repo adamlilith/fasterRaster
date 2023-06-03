@@ -8,6 +8,8 @@
 #' @param ... Other arguments.
 #'
 #' @returns A `data.frame`.
+#' 
+#' @seealso [base::head()], [base::tail()]
 #'
 #' @example man/examples/ex_GRaster_GVector.r
 #'

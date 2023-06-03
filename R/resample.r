@@ -14,6 +14,8 @@
 #' * `'lanczos'`: Lanczos interpolation (uses weighted values from 25 cells).
 #'
 #' @returns A `GRaster`.
+#' 
+#' @seealso [terra::resample()]
 #'
 #' @example man/examples/ex_resample.r
 #'

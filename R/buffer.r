@@ -3,7 +3,7 @@
 #' `buffer()` operates on `GRaster`s or `GVector`s. For rasters, the function creates a buffer around non-`NA` cells. The output will be a raster. For vectors, the function creates a vector larger or smaller than the focal vector.
 
 #' @param x A `GRaster` or `GVector`.
-#' @param width Numeric: Maximum distance cells must be from focal cells to be within the buffer. If the buffering unit is `'cells`', then to get `n` cell widths, use `n + epsilon`, where `epsilon` is a small number (e.g., 0.001). The larger the buffer, this smaller this must be to ensure just `n` cells are included.
+#' @param width Numeric: Maximum distance cells must be from focal cells to be within the buffer. For rasters, if the buffering unit is `'cells`', then to get `n` cell widths, use `n + epsilon`, where `epsilon` is a small number (e.g., 0.001). The larger the buffer, this smaller this must be to ensure just `n` cells are included.
 #' @param dist Same as `width`.
 #' @param background Numeric: Value to assign to cells that are not `NA` and not part of the buffer (default is 0).
 #' @param unit Character: Indicates the units of \code{width}. Can be one of:

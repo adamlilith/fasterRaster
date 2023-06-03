@@ -7,6 +7,8 @@
 #'
 #' @return `datatype()` for a `GRaster` returns a character. `datatype()` for a `GVector` returns a data frame, with one row per field.
 #'
+#' @seealso [terra::datatype()] 
+#'
 #' @example man/examples/ex_GRaster.r
 #'
 #' @aliases datatype

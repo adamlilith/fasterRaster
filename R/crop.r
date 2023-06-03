@@ -7,7 +7,7 @@
 #'
 #' @return A `GRaster` or `GVector`.
 #' 
-#' @seealso [terra::crop()]; [sf::st_crop()]
+#' @seealso [terra::crop()], [sf::st_crop()]
 #' 
 #' @examples man/examples/ex_crop.r
 #'

@@ -7,7 +7,9 @@
 #' @param optional Ignored.
 #'
 #' @returns A `data.frame`.
-#'
+#' 
+#' @seealso [terra::as.data.frame()]
+#' 
 #' @example man/examples/ex_GRaster_GVector.r
 #'
 #' @aliases as.data.frame

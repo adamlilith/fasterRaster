@@ -8,7 +8,7 @@
 #'
 #' @returns A `matrix`, `data.frame`, or `list`.
 #'
-#' @seealso [as.points()], [terra::crds()]
+#' @seealso [terra::crds()]
 #'
 #' @example man/examples/ex_crds.r
 #'

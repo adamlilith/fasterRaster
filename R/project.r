@@ -29,6 +29,8 @@
 #' @details When projecting a raster, the "fallback" methods in `r.import` are actually used, even though the `method` argument takes the strings for non-fallback methods. See the manual page for the `r.import` **GRASS** module.
 #' 
 #' @returns A `GRaster` or `GVector`.
+#' 
+#' @seealso [terra::project], [sf::st_transform()]
 #'
 #' @example man/examples/ex_project.r
 #'

@@ -16,35 +16,26 @@ grassDir <- '/usr/local/grass' # Linux
 
 # setup
 library(sf)
-library(terra)
 
-# elevation raster, rivers vector
-madElev <- fastData('madElev')
-madRivers <- fastData('madRivers')
+# example vectors
+madDypsis <- fastData('madDypsis') # points
+madCoast4 <- fastData('madCoast4') # polygons
 
-# start GRASS session for examples only
-faster(crs = madElev, grassDir = grassDir,
+# initiate GRASS session
+faster(crs = madDypsis, grassDir = grassDir,
 workDir = tempdir(), location = 'examples') # line only needed for examples
 
-# convert a SpatRaster to a GRaster, and sf to a GVector
-elev <- fast(madElev)
-rivers <- fast(madRivers)
+# convert sf vectors to GVectors
+dypsis <- fast(madDypsis)
+coast <- fast(madCoast4)
 
-### buffer a raster by a given distance
-buffByDist <- buffer(elev, width = 2000) # 2000-m buffer
-buffByDistRast <- rast(buffByDist)
-plot(buffByDistRast)
+# Delaunay triangulation
+dypsisDel <- delaunay(dypsis)
 
-### buffer a raster by a given number of cells
-buffByCells <- buffer(elev, width = 20.01, unit = 'cells') # 20-cell buffer
-buffByCellsRast <- rast(buffByCells)
-plot(buffByCellsRast)
+# Voronoi tessellation
+dypsisVor <- voronoi(dypsis)
+coastVor <- voronoi(coast)
 
-### buffer a vector
-buffRivers <- buffer(rivers, width = 2000) # 2000-m buffer
-buffRivers <- vect(buffRivers)
-plot(buffRivers)
-plot(st_geometry(madRivers), col = 'blue', add = TRUE)
 
 # IMPORTANT #3: Revert back to original GRASS session if needed.
 fastRestore(opts.)

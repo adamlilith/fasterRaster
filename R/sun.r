@@ -49,6 +49,8 @@
 #' * `refl_rad`: Reflected radiation (Watt-hours/m2/day)
 #' * `glob_rad`: Global radiation (Watt-hours/m2/day)
 #' * `insol_time`: Insolation duration (hours)
+#' 
+#' @seealso Module `r.sun` in **GRASS**
 #'
 #' @example man/examples/ex_sun.r
 #'

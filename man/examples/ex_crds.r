@@ -25,10 +25,8 @@ madCoast4 <- fastData('madCoast4')
 madElev <- fastData('madElev')
 
 # start GRASS session for examples only
-wd <- forwardSlash(tempdir())
-
 faster(crs = madDypsis, grassDir = grassDir,
-workDir = wd, location = 'examples') # line only needed for examples
+workDir = tempdir(), location = 'examples') # line only needed for examples
 
 # convert a SpatRaster to a GRaster, and sf to a GVector
 dypsis <- fast(madDypsis)

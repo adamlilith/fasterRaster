@@ -35,7 +35,7 @@
 #'
 #' @return A `GRaster` or a `stars` raster. A raster is also saved to disk.
 #'
-#' @seealso [writeRaster4()] and [writeRaster8()] for saving a raster created in **GRASS** then imported to **R** using [rast()]; [terra::writeRaster()]
+#' @seealso [terra::writeRaster()]
 #'
 #' @example man/examples/ex_writeRaster.r
 #'

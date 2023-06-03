@@ -36,13 +36,12 @@
 #'
 #' @return If `x` is a `GRaster`, then the output is a `GRaster`. If `x` is a `GVector`, then the output is a numeric vector.
 #'
-#' @seealso [terra::distance()]; [sf::st_distance()], **GRASS** module `r.grow.distance`
+#' @seealso [terra::distance()]; [sf::st_distance()], modules `r.grow.distance` and `v.distance` in **GRASS** 
 #'
 #' @example man/examples/ex_distance.r
 #'
 #' @aliases distance
 #' @rdname distance
-#' @export
 #' @exportMethod distance
 methods::setMethod(
 	'distance',

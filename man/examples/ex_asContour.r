@@ -18,10 +18,8 @@ grassDir <- '/usr/local/grass' # Linux
 library(terra)
 
 # start GRASS session for examples only
-wd <- rightSlash(tempdir())
-
 faster(crs = madElev, grassDir = grassDir,
-workDir = wd, location = 'examples') # line only needed for examples
+workDir = tempdir(), location = 'examples') # line only needed for examples
 
 # convert a SpatRaster to a GRaster
 madElev <- fastData('madElev') # elevation raster

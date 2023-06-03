@@ -27,6 +27,8 @@
 #'
 #' @returns If `x` is missing, the function returns a character vector of all accepted function names. If `x` is a `GRaster`, a data frame with the specified statistics is returned.
 #'
+#' @seealso [terra::global()]
+#'
 #' @example man/examples/ex_global.r
 #'
 #' @aliases global

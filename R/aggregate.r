@@ -27,6 +27,8 @@
 #' @param weight Logical: If `FALSE`, each source cell that has its center in the destination cell will be counted equally. If `TRUE`, the value of each source will be weighted the proportion of the destination cell the source cell covers.
 #'
 #' @returns A `GRaster`.
+#' 
+#' @seealso [terra::aggregate()]
 #'
 #' @example man/examples/ex_aggregate.r
 #'
@@ -36,7 +38,7 @@
 methods::setMethod(
 	f = 'aggregate',
 	signature = c(x = 'GRaster'),
-	definition = function(x, fact = 2, fun = 'mean', weight = FALSE, prob = NULL, na.rm = TRUE) {
+	definition = function(x, fact = 2, fun = 'mean', weight = FALSE, prob = NULL, na.rm = FALSE) {
 
 	if (any(fact < 0)) stop('Values of ', sQuote('fact'), ' must be > 0.')
 

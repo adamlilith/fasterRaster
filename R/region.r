@@ -1,11 +1,20 @@
-#' Change or report the extent and dimensions/resolution of a region
+#' Report or change the extent and dimensions/resolution of a region
 #'
-#' @description
-#' This function either changes the extent and dimensions of a **GRASS** ["region"][tutorial_regions] or reports the current region's extent, resolution, and dimensions. This function is mostly used internally and rarely of direct use to most users.
+#' @description These functions either change the extent, dimensions, and/or resolution of a **GRASS** ["region"][tutorial_regions] or report the current region's extent, dimensions, and/or resolution. These functions are mostly used internally and rarely of interest to most users.
+#' * `region()`: All aspects of a region.
+#' * `regionDim(): x- and y-dimensions.`
+#' * `regionDim3d(): x-, y-, and z-dimensions.`
+#' * `regionZDim(): z-dimension.`
+#' * `regionExt()`: x- and y-extent.
+#' * `regionExt3d()`: x-, y-, and z-extent.
+#' * `regionZExt()`: z-extent.
+#' * `regionRes()`: x- and y-resolution.
+#' * `regionRes3d()`: x-, y-, and z-resolution.
+#' * `regionZRes()`: z-resolution.
 #'
 #' @param x Any of:
 #'	* Missing (default): Reports the extent, resolution, and dimensions of the current region. All other arguments will be ignored.
-#'	* A `GRaster`, `GVector`, `SpatRaster`, or `stars` raster: Sets the region's extent and dimensions to those of the raster or vector. If a raster is supplied, the region will be resized and resampled to match its extent, resolution, and dimensions. If a vector is supplied, the region will be resized and the number of cells will be increased/decreased to fully encompass this new extent, but resolution will not be changed.
+#'	* A `GRegion`, `GRaster`, `GVector`, `SpatRaster`, or `stars` raster: Sets the region's extent and dimensions to those of the raster or vector. If a raster is supplied, the region will be resized and resampled to match its extent, resolution, and dimensions. If a vector is supplied, the region will be resized and the number of cells will be increased/decreased to fully encompass this new extent, but resolution will not be changed.
 #'	* A `numeric` vector. This will resize the region's extent, resample the region's resolution/dimensions, or both to ensure the desired dimensions or resolution are retained:
 #'       * 2 values for `regionDim()`: Number of rows and columns
 #'       * 4 values for `regionExt()`: Westernmost and easternmost easting (longitude), and southernmost and northernmost northing (latitude)
@@ -15,14 +24,20 @@
 #'       * 3 values for `regionRes3d()`: Size of cells in the x-, y-, and z-dimensions
 #'
 #' @param trim A `GRaster` or `NULL` (default). If a `GRaster`, then the region will be trimmed to the non-`NA` cells in this raster. `trim` can only be non-`NULL` if `x` is a `GRaster`. Ignored if `NULL`.
+#' 
+#' @warn Logical: If `TRUE`, display a warnig when changing one aspect (extent, resolution, or dimensions) changes another aspect. The default is `FALSE`.
 #'
-#' @return A list with values reflecting the region's horizontal extent, vertical extent, dimensions, and resolution. If the function is used to resize/resample the region, the values *before* resizing/resampling are returned invisibly. The function also resizes/resamples the [region][tutorial_regions].
+#' @returns The value returned depends on how the function is used:
+#' * If the function is used to change reshape/resample the region, it returns a `GRegion` object reflecting the region *befoer* it was changed. This allows users to reset the region if desired.
+#' * If used with no arguments, `region()` returns a `GRegion` object.
+#' * If used with no arguments, the other functions return numeric or integer vectors.
+#'
+#' @details When resizing extent, **terra** keeps the `xmin`` (west) and `ymax`` (north) the fixed and shifts `xmax` (east) and `ymin` (south) as needed. To retain as much fidelity between **fasterRaster** and **terra** as possible, these functions do the same to the region.
 #'
 #' @example man/examples/ex_regions.r
 #'
-#' @aliases regionsReshape
+#' @aliases regions
 #' @rdname region
-#' @export
 #' @exportMethod region
 methods::setMethod(
 	f = 'region',
@@ -131,6 +146,7 @@ methods::setMethod(
 		depths <- as.numeric(depths)
 		
 		dims <- c(rows=rows, cols=cols, depths=depths)
+		dims <- as.integer(dims)
 		
 		# resolution
 		ewres <- info[grepl(info, pattern='ewres:')]
@@ -168,40 +184,97 @@ methods::setMethod(
 			
 		resol <- c(xres=ewres, yres=nsres, zres=tbres)
 		
-		list(extent = extent, zextent = zextent, dim = dims, res = resol)
+		# list(extent = extent, zextent = zextent, dim = dims, res = resol)
 		
-	}
+		GRegion(
+			location = location(),
+			mapset = mapset(),
+			crs = crs(),
+			topology = '3D',
+			extent = extent,
+			zextent = zextent,
+			gnames = NA_character_,
+			dimensions = dims,
+			resolution = resol
+		)
+
+	} # EOF
 )
 
-.regionReshapeFromRObject <- function(x) {
-
+#' @rdname region
+#' @aliases region
+#' @exportMethod region
+methods::setMethod(
+	f = 'region',
+	signature = 'SpatRaster',
+	definition = function(x) {
+		
 	initials <- region()
 
+	dims <- terra::dim(x)
+	rows <- dims[1L]
+	cols <- dims[2L]
+
 	extent <- as.vector(terra::ext(x))
-	dims <- dim(x)
-	
 	w <- as.character(extent[1L])
 	e <- as.character(extent[2L])
 	s <- as.character(extent[3L])
 	n <- as.character(extent[4L])
 
-	rows <- dims[1L]
-	cols <- dims[2L]
-	
-	rgrass::execGRASS('g.region', n=n, s=s, e=e, w=w, rows=rows, cols=cols, flags=c('o', 'quiet'), intern=TRUE)
+	args <- list(
+		cmd = 'g.region',
+		n = n,
+		s = s,
+		e = e,
+		w = w,
+		rows = rows,
+		cols = cols,
+		flags=c('o', 'quiet'),
+		intern=TRUE
+	)
+
+	do.call(rgrass::execGRASS, args=args)
 	invisible(initials)
 
-}
+	} # EOF
+)
 
 #' @rdname region
 #' @aliases region
 #' @exportMethod region
-methods::setMethod(f = 'region', signature = 'SpatRaster', definition = function(x) .regionReshapeFromRObject(x))
+methods::setMethod(
+	f = 'region',
+	signature = c(x = 'GRegion'),
+	definition = function(x) {
+	
+		.restore(x)
+		initials <- region()
 
-#' @rdname region
-#' @aliases region
-#' @exportMethod region
-methods::setMethod(f = 'region', signature = 'stars', definition = function(x) .regionReshapeFromRObject(x))
+		extent <- ext(x, vector = TRUE)
+		extent <- as.character(extent)
+		w <- extent[1L]
+		e <- extent[2L]
+		s <- extent[3L]
+		n <- extent[4L]
+
+		dims <- dim(x)
+		nrow <- dims[1L]
+		ncol <- dims[2L]
+		ndepths <- dims[3L]
+
+		args <- list(
+			cmd = 'g.region',
+			n = n, s = s, e = e, w = w,
+			nrow = nrow, ncol = ncol,
+			flags = c('o', 'quiet'),
+			intern = TRUE
+		)
+
+		do.call(rgrass::execGRASS, args=args)
+		invisible(initials)
+		
+	} # EOF
+)
 
 #' @rdname region
 #' @aliases region
@@ -211,40 +284,41 @@ methods::setMethod(
 	signature = c(x = 'GRaster'),
 	definition = function(x, trim = NULL) {
 	
-		.restore(x)
-		initials <- region()
+	.restore(x)
+	initials <- region()
+
+	topo <- topology(x)
+
+	if (any(topo %in% '2D') & any(topo %in% '3D')) stop('Cannot mix 2D- and 3D-rasters when defining region.')
+
+	# ensure validity of trim raster
+	if (!is.null(trim)) {
 	
-		topo <- topology(x)
-		gn <- gnames(x)
-
-		if (any(topo %in% '2D') & any(topo %in% '3D')) stop('Cannot mix 2D- and 3D-rasters when defining region.')
-
-		# ensure validity of trim raster
-		if (!is.null(trim)) {
+		trimToTopo <- topology(trim)
+		if (any(!(topo %in% trimToTopo))) stop('Topology of ', sQuote('trim'), ' does not match topology of ', sQuote('x'), '.')
 		
-			trimToTopo <- topology(trim)
-			if (any(!(topo %in% trimToTopo))) stop('Topology of ', sQuote('trim'), ' does not match topology of ', sQuote('x'), '.')
-			
-			trim <- gnames(trim)
-			if (length(trim) != 1L) stop('Argument ', sQuote('trim'), ' can have only one layer.')
-		
-		}
-
-		if (all(topo == '2D') & is.null(trim)) {
-			rgrass::execGRASS('g.region', raster=gn, flags=c('o', 'quiet'), intern=TRUE)
-		} else if (all(topo == '2D') & !is.null(trim)) {
-			rgrass::execGRASS('g.region', raster=gn, zoom=trim, flags=c('o', 'quiet'), intern=TRUE)
-		} else if (all(topo == '3D') & is.null(trim)) {
-			rgrass::execGRASS('g.region', raster_3d=gn, flags=c('o', 'quiet'), intern=TRUE)
-		} else if (all(topo == '3D') & !is.null(trim)) {
-			rgrass::execGRASS('g.region', raster_3d=gn, zoom=trim, flags=c('o', 'quiet'), intern=TRUE)
-		} else {
-			stop('Could not reshape region.')
-		}
+		trim <- gnames(trim)
+		if (length(trim) != 1L) stop('Argument ', sQuote('trim'), ' can have only one layer.')
 	
-		invisible(initials)
-		
 	}
+
+	gn <- gnames(x)[i]
+
+	if (all(topo == '2D') & is.null(trim)) {
+		rgrass::execGRASS('g.region', raster=gn, flags=c('o', 'quiet'), intern=TRUE)
+	} else if (all(topo == '2D') & !is.null(trim)) {
+		rgrass::execGRASS('g.region', raster=gn, zoom=trim, flags=c('o', 'quiet'), intern=TRUE)
+	} else if (all(topo == '3D') & is.null(trim)) {
+		rgrass::execGRASS('g.region', raster_3d=gn, flags=c('o', 'quiet'), intern=TRUE)
+	} else if (all(topo == '3D') & !is.null(trim)) {
+		rgrass::execGRASS('g.region', raster_3d=gn, zoom=trim, flags=c('o', 'quiet'), intern=TRUE)
+	} else {
+		stop('Could not reshape region.')
+	}
+
+	invisible(initials)
+		
+	} # EOF
 )
 
 #' @rdname region
@@ -258,10 +332,7 @@ methods::setMethod(
 		.restore(x)
 		initials <- region()
 	
-		topo <- topology(x)
-		gn <- gnames(x)
-
-		rgrass::execGRASS('g.region', vector=gn, flags=c('o', 'quiet'), intern=TRUE)
+		rgrass::execGRASS('g.region', vector=gnames(x), flags=c('o', 'quiet'), intern=TRUE)
 		invisible(initials)
 		
 	}
@@ -272,65 +343,114 @@ methods::setMethod(
 #' @exportMethod regionExt
 methods::setMethod(f = 'regionExt',
 	signature = c(x = 'missing'),
-	definition = function(x) {
-		region()$extent
-	}
+	definition = function(x) region()@extent
 )
 
 #' @rdname region
 #' @aliases regionExt
 #' @exportMethod regionExt
-methods::setMethod(f = 'regionExt', signature = 'numeric', definition = function(x) .regionExt(x))
+methods::setMethod(
+	f = 'regionExt',
+	signature = 'numeric',
+	definition = function(x) .regionExt(x, warn = TRUE)
+)
 
 #' @rdname region
 #' @aliases regionExt
 #' @exportMethod regionExt
-methods::setMethod(f = 'regionExt', signature = 'GRaster', definition = function(x) .regionExt(x))
+methods::setMethod(
+	f = 'regionExt',
+	signature = 'GRegion',
+	definition = function(x) .regionExt(x, warn = TRUE)
+)
 
 #' @rdname region
 #' @aliases regionExt
 #' @exportMethod regionExt
-methods::setMethod(f = 'regionExt', signature = 'GVector', definition = function(x) .regionExt(x))
+methods::setMethod(
+	f = 'regionExt',
+	signature = 'GVector',
+	definition = function(x) .regionExt(x, warn = TRUE)
+)
 
 #' @rdname region
 #' @aliases regionExt
 #' @exportMethod regionExt
-methods::setMethod(f = 'regionExt', signature = 'SpatRaster', definition = function(x) .regionExt(x))
+methods::setMethod(
+	f = 'regionExt',
+	signature = 'SpatRaster',
+	definition = function(x) .regionExt(x, warn = TRUE)
+)
 
 #' @rdname region
 #' @aliases regionExt
 #' @exportMethod regionExt
-methods::setMethod(f = 'regionExt', signature = 'SpatVector', definition = function(x) .regionExt(x))
+methods::setMethod(
+	f = 'regionExt',
+	signature = 'SpatVector',
+	definition = function(x) .regionExt(x, warn = TRUE)
+)
 
 #' @rdname region
 #' @aliases regionExt
 #' @exportMethod regionExt
-methods::setMethod(f = 'regionExt', signature = 'sf', definition = function(x) .regionExt(x))
+methods::setMethod(
+	f = 'regionExt',
+	signature = 'sf',
+	definition = function(x) .regionExt(x, warn = TRUE)
+)
 
-#' @rdname region
-#' @aliases regionExt
-#' @exportMethod regionExt
-methods::setMethod(f = 'regionExt', signature = 'stars', definition = function(x) .regionExt(x))
 
-.regionExt <- function(x) {
+.regionExt <- function(x, warn) {
 
 	if (inherits(x, 'GSpatial')) {
 		.restore(x)
-		x <- as.vector(ext(x))
-	} else if (inherits(x, c('SpatRaster', 'SpatVector', 'sf', 'stars'))) {
+		x <- ext(x, vector=TRUE)
+	} else if (inherits(x, c('SpatRaster', 'SpatVector', 'sf'))) {
 		x <- as.vector(terra::ext(x))
 	} else if (inherits(x, 'numeric')) {
 		if (length(x) != 4L) stop('Please supply a numeric vector of four values.')
+		if (any(is.na(x))) stop('Extent cannot have an NA value.')
 	}
 
 	initials <- region()
+	
+	w <- x[1L]
+	e <- x[2L]
+	s <- x[3L]
+	n <- x[4L]
+	
+	# warn?
+	if (warn) {
+
+		origResol <- initials@resolution
+		xresol <- (e - w) / origResol[1L]
+		yresol <- (n - s) / origResol[2L]
+
+		xremain <- xresol %% 1
+		yremain <- yresol %% 1
+
+		xchange <- compareFloat(xremain, 0, '!=')
+		ychange <- compareFloat(yremain, 0, '!=')
+
+		if (xchange | ychange) {
+			warning('Resolution will be changed to accomodate new extent.')
+		}
+	}
+
 	w <- as.character(x[1L])
 	e <- as.character(x[2L])
 	s <- as.character(x[3L])
 	n <- as.character(x[4L])
-	# rgrass::execGRASS('g.region', n=n, s=s, e=e, w=w, flags=c('o', 'a', 'quiet'), intern=TRUE)
-	rgrass::execGRASS('g.region', n=n, s=s, e=e, w=w, flags=c('o', 'quiet'), intern=TRUE)
-	
+
+	args <- list(
+		cmd = 'g.region',
+		w = w, e = e, s = s, n = n,
+		flags = c('o', 'quiet'),
+		intern = TRUE
+	)
+
+	do.call(rgrass::execGRASS, args=args)
 	invisible(initials)
 
 }
@@ -341,39 +461,57 @@ methods::setMethod(f = 'regionExt', signature = 'stars', definition = function(x
 methods::setMethod(f = 'regionZExt',
 	signature = c(x = 'missing'),
 	definition = function(x) {
-		region()$zextent
+		region()@zextent
 	}
 )
 
 #' @rdname region
 #' @aliases regionZExt
 #' @exportMethod regionZExt
-methods::setMethod(f = 'regionZExt', signature = 'numeric', definition = function(x) .regionZExt(x))
+methods::setMethod(
+	f = 'regionZExt',
+	signature = 'numeric',
+	definition = function(x, warn = TRUE) .regionZExt(x, warn = warn)
+)
 
 #' @rdname region
 #' @aliases regionZExt
 #' @exportMethod regionZExt
-methods::setMethod(f = 'regionZExt', signature = 'GRaster', definition = function(x) .regionZExt(x))
+methods::setMethod(
+	f = 'regionZExt',
+	signature = 'GRegion',
+	definition = function(x, warn = TRUE) .regionZExt(x, warn = warn)
+)
 
 #' @rdname region
 #' @aliases regionZExt
 #' @exportMethod regionZExt
-methods::setMethod(f = 'regionZExt', signature = 'GVector', definition = function(x) .regionZExt(x))
+methods::setMethod(
+	f = 'regionZExt',
+	signature = 'GVector',
+	definition = function(x, warn = TRUE) .regionZExt(x, warn = warn)
+)
 
-.regionZExt <- function(x) {
+.regionZExt <- function(x, warn = warn) {
 
 	if (inherits(x, 'GSpatial')) {
 		.restore(x)
-		x <- as.vector(zext(x))
+		x <- zext(x)
+		zres <- zres(x)
 	} else if (inherits(x, 'numeric')) {
-		if (length(x) != 2L) stop('Please supply a numeric vector of two values.')
+		if (length(x) != 2L) stop('Please supply a numeric vector with two values.')
+	} else {
+		stop('Please supply a ', sQuote('GSpatial'), ' object or a numeric vector with two values.')
 	}
 
 	initials <- region()
-	top <- as.character(x[1L])
-	bottom <- as.character(x[2L])
+	top <- x[1L]
+	bottom <- x[2L]
+
+	top <- as.character(top)
+	bottom <- as.character(bottom)
+
 	rgrass::execGRASS('g.region', t=top, b=bottom, flags=c('o', 'quiet'), intern=TRUE)
-	
 	invisible(initials)
 
 }
@@ -384,37 +522,44 @@ methods::setMethod(f = 'regionZExt', signature = 'GVector', definition = functio
 methods::setMethod(f = 'regionDim',
 	signature = c(x = 'missing'),
 	definition = function(x) {
-		region()$dim
+		region()@dim
 	}
 )
 
 #' @rdname region
 #' @aliases regionDim
 #' @exportMethod regionDim
-methods::setMethod(f = 'regionDim', signature = 'numeric', definition = function(x) .regionDim(x))
+methods::setMethod(
+	f = 'regionDim',
+	signature = 'numeric',
+	definition = function(x) .regionDim(x)
+)
 
 #' @rdname region
 #' @aliases regionDim
 #' @exportMethod regionDim
-methods::setMethod(f = 'regionDim', signature = 'GRaster', definition = function(x) .regionDim(x))
+methods::setMethod(
+	f = 'regionDim',
+	signature = 'GRegion',
+	definition = function(x) .regionDim(x)
+)
 
 #' @rdname region
 #' @aliases regionDim
 #' @exportMethod regionDim
-methods::setMethod(f = 'regionDim', signature = 'SpatRaster', definition = function(x) .regionDim(x))
-
-#' @rdname region
-#' @aliases regionDim
-#' @exportMethod regionDim
-methods::setMethod(f = 'regionDim', signature = 'stars', definition = function(x) .regionDim(x))
+methods::setMethod(
+	f = 'regionDim',
+	signature = 'SpatRaster',
+	definition = function(x) .regionDim(x)
+)
 
 .regionDim <- function(x) {
 
 	if (inherits(x, 'GRaster')) {
 		.restore(x)
-		x <- as.vector(dim(x))[1L:2L]
+		x <- dim(x)[1L:2L]
 	} else if (inherits(x, c('SpatRaster', 'stars'))) {
-		x <- as.vector(dim(x))[1L:2L]
+		x <- dim(x)[1L:2L]
 	} else if (inherits(x, 'numeric')) {
 		if (length(x) != 2L) stop('Please supply a numeric vector of two integer values.')
 	}
@@ -422,8 +567,27 @@ methods::setMethod(f = 'regionDim', signature = 'stars', definition = function(x
 	initials <- region()
 	rows <- x[1L]
 	cols <- x[2L]
-	rgrass::execGRASS('g.region', rows=rows, cols=cols, flags=c('o', 'quiet'), intern=TRUE)
-	
+
+	extent <- initials@extent
+	w <- extent[['xmin']]
+	e <- extent[['xmax']]
+	s <- extent[['ymin']]
+	n <- extent[['ymax']]
+
+	w <- as.character(w)
+	e <- as.character(e)
+	s <- as.character(s)
+	n <- as.character(n)
+
+	args <- list(
+		cmd = 'g.region',
+		w = w, e = e, s = s, n = n,
+		rows = rows, cols = cols,
+		flags = c('o', 'quiet'),
+		intern = TRUE
+	)
+
+	do.call(rgrass::execGRASS, args=args)
 	invisible(initials)
 
 }
@@ -433,40 +597,47 @@ methods::setMethod(f = 'regionDim', signature = 'stars', definition = function(x
 #' @exportMethod regionRes
 methods::setMethod(f = 'regionRes',
 	signature = c(x = 'missing'),
-	definition = function(x) region()$res[1L:2L]
+	definition = function(x) region()@res[1L:2L]
 )
 
 #' @rdname region
 #' @aliases regionRes
 #' @exportMethod regionRes
-methods::setMethod(f = 'regionRes', signature = 'numeric', definition = function(x) .regionRes(x))
+methods::setMethod(
+	f = 'regionRes',
+	signature = 'numeric',
+	definition = function(x) .regionRes(x)
+)
 
 #' @rdname region
 #' @aliases regionRes
 #' @exportMethod regionRes
-methods::setMethod(f = 'regionRes', signature = 'GRaster', definition = function(x) .regionRes(x))
+methods::setMethod(
+	f = 'regionRes',
+	signature = 'GRegion',
+	definition = function(x) .regionRes(x)
+)
 
 #' @rdname region
 #' @aliases regionRes
 #' @exportMethod regionRes
-methods::setMethod(f = 'regionRes', signature = 'SpatRaster', definition = function(x) .regionRes(x))
-
-#' @rdname region
-#' @aliases regionRes
-#' @exportMethod regionRes
-methods::setMethod(f = 'regionRes', signature = 'stars', definition = function(x) .regionRes(x))
+methods::setMethod(
+	f = 'regionRes',
+	signature = 'SpatRaster',
+	definition = function(x) .regionRes(x)
+)
 
 # set resolution of region
 .regionRes <- function(x) {
 
-	if (inherits(x, 'GRaster')) {
+	if (inherits(x, 'GRegion')) {
 		.restore(x)
 		x <- if (is.2d(x)) {
 			res(x)
 		} else if (is.3d(x)) {
 			res3d(x)
 		}
-	} else if (inherits(x, c('SpatRaster', 'stars'))) {
+	} else if (inherits(x, 'SpatRaster') {
 		x <- terra::res(x)
 	} else if (inherits(x, 'numeric')) {
 		if (length(x) == 1L) x <- rep(x, 2L)
@@ -475,10 +646,35 @@ methods::setMethod(f = 'regionRes', signature = 'stars', definition = function(x
 
 	initials <- region()
 
-	ewres <- as.character(x[1L])
-	nsres <- as.character(x[2L])
+	ewres <- x[1L]
+	nsres <- x[2L]
 
-	rgrass::execGRASS('g.region', ewres=ewres, nsres=nsres, flags=c('o', 'quiet'), intern=TRUE)
+	extent <- initials$extent
+	w <- extent[['xmin']]
+	e <- extent[['xmax']]
+	s <- extent[['ymin']]
+	n <- extent[['ymax']]
+
+	cols <- ceiling((e - w) / ewres)
+	rows <- ceiling((n - s) / nsres)
+
+	e <- w + cols * ewres
+	s <- n - rows * nsres
+
+	w <- as.character(w)
+	e <- as.character(e)
+	s <- as.character(s)
+	n <- as.character(n)
+
+	args <- list(
+		cmd = 'g.region',
+		w = w, e = e, s = s, n = n,
+		rows = rows, cols = cols,
+		flags = c('o', 'quiet'),
+		intern = TRUE
+	)
+
+	do.call(rgrass::execGRASS, args=args)
 	invisible(initials)
 
 }
@@ -488,23 +684,31 @@ methods::setMethod(f = 'regionRes', signature = 'stars', definition = function(x
 #' @exportMethod regionRes3d
 methods::setMethod(f = 'regionRes3d',
 	signature = c(x = 'missing'),
-	definition = function(x) region()$res
+	definition = function(x) region()@res
 )
 
 #' @rdname region
 #' @aliases regionRes3d
 #' @exportMethod regionRes3d
-methods::setMethod(f = 'regionRes', signature = 'numeric', definition = function(x) .regionRes(x))
+methods::setMethod(
+	f = 'regionRes',
+	signature = 'numeric',
+	definition = function(x) .regionRes(x)
+)
 
 #' @rdname region3d
 #' @aliases regionRes3d
 #' @exportMethod regionRes
-methods::setMethod(f = 'regionRes', signature = 'GRaster', definition = function(x) .regionRes(x))
+methods::setMethod(
+	f = 'regionRes',
+	signature = 'GRegion',
+	definition = function(x) .regionRes(x)
+)
 
 # set 3d resolution of region
 .regionRes3d <- function(x) {
 
-	if (inherits(x, 'GRaster')) {
+	if (inherits(x, 'GRegion')) {
 		.restore(x)
 		x <- if (is.2d(x)) {
 			res(x)
@@ -518,11 +722,126 @@ methods::setMethod(f = 'regionRes', signature = 'GRaster', definition = function
 
 	initials <- region()
 
-	ewres <- as.character(x[1L])
-	nsres <- as.character(x[2L])
-	tbres <- as.character(x[3L])
+	# resolution
+	ewres <- x[1L]
+	nsres <- x[2L]
+	tbres <- x[3L]
 
-	rgrass::execGRASS('g.region', ewres=ewres, nsres=nsres, tbres=tbres, flags=c('o', 'quiet'), intern=TRUE)
+	# z-extent
+	zextent <- initials@zextent
+	t <- zextent[['top']]
+	b <- zextent[['botom']]
+
+	depths <- ceiling((t - b) / tbres)
+	t <- b + tbres * depths
+
+	t <- as.character(t)
+	b <- as.character(b)
+
+	# extent
+	extent <- initials@extent
+	w <- extent[['xmin']]
+	e <- extent[['xmax']]
+	s <- extent[['ymin']]
+	n <- extent[['ymax']]
+
+	cols <- ceiling((e - w) / ewres)
+	rows <- ceiling((n - s) / nsres)
+
+	e <- w + cols * ewres
+	s <- n - rows * nsres
+
+	w <- as.character(w)
+	e <- as.character(e)
+	s <- as.character(s)
+	n <- as.character(n)
+
+	args <- list(
+		cmd = 'g.region',
+		w = w, e = e, s = s, n = n,
+		t = t, b = b,
+		rows = rows, cols = cols,
+		tbres = tbres,
+		flags = c('o', 'quiet'),
+		intern = TRUE
+	)
+
+	do.call(rgrass::execGRASS, args=args)
 	invisible(initials)
 
 }
+
+#' @rdname region
+#' @aliases regionZRes
+#' @exportMethod regionZRes
+methods::setMethod(f = 'regionZRes',
+	signature = c(x = 'missing'),
+	definition = function(x, warn = TRUE) region()@res[3L]
+)
+
+#' @rdname region
+#' @aliases regionZRes
+#' @exportMethod regionZRes
+methods::setMethod(
+	f = 'regionZRes',
+	signature = 'numeric',
+	definition = function(x, warn = TRUE) .regionZRes(x, warn = warn)
+)
+
+#' @rdname region3d
+#' @aliases regionRes3d
+#' @exportMethod regionRes
+methods::setMethod(
+	f = 'regionZRes',
+	signature = 'GRegion',
+	definition = function(x, warn = TRUE) .regionZRes(x, warn = warn)
+)
+
+# set 3d resolution of region
+.regionZRes <- function(x, warn) {
+
+	## NB This function moves the upper extent "up" to accomodate the new resolution if needed.
+
+	if (inherits(x, 'GRegion')) {
+		.restore(x)
+		if (is.2d(x)) stop('Object is not 3-dimensional.')
+		x <- zres(x)
+	} else if (inherits(x, 'numeric')) {
+		if (length(x) != 1L) stop('Please supply a single positive numeric value.')
+		if (x <= 0) stop('Please supply a single positive numeric value.')
+	}
+
+	initials <- region()
+
+	# resolution
+	tbres <- x
+
+	# z-extent
+	zextent <- initials@zextent
+	t <- tstart <- zextent[['top']]
+	b <- zextent[['botom']]
+
+	depths <- ceiling((t - b) / tbres)
+	t <- b + tbres * depths
+
+	if (warn && compareFloat(tstart, t, '!=')) warning('Top of vertical extent has been raised to accomodate new z-resolution.')
+
+	t <- as.character(t)
+	b <- as.character(b)
+
+	args <- list(
+		cmd = 'g.region',
+		t = t, b = b,
+		rows = rows, cols = cols,
+		tbres = tbres,
+		flags = c('o', 'quiet'),
+		intern = TRUE
+	)
+
+	do.call(rgrass::execGRASS, args=args)
+	invisible(initials)
+
+}
+
+### NOTES
+### When resizing extent, terra keeps xmin (west) and ymax (north) the same. It changes xmax (east) and ymin (south).
