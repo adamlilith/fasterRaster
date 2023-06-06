@@ -79,7 +79,7 @@ methods::setMethod(
 		
 			thisFun <- fun[countFun]
 			funName <- funNames[countFun]
-			matchFun <- .pmatch(thisFun, funs)
+			matchFun <- pmatchSafe(thisFun, funs)
 
 			pattern <- if (matchFun == 'meanabs') {
 				'mean of absolute values: '

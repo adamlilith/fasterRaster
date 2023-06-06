@@ -21,7 +21,7 @@ setMethod(f = 'datatype',
 	
 	dt <- x@datatypeGRASS
 	
-	type <- .pmatch(type, c('GRASS', 'terra', 'GDAL'))
+	type <- pmatchSafe(type, c('GRASS', 'terra', 'GDAL'))
 	
 	if (type == 'terra') {
 		dt[dt == 'CELL'] <- 'INT4S'

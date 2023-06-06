@@ -40,7 +40,7 @@ methods::setMethod(
 
 	metrics <- c('slope', 'aspect', 'profileCurve', 'tanCurve', 'dx', 'dy', 'dxx', 'dyy', 'dxy')
 	if (length(v) == 1L && v == '*') v <- metrics
-	v <- .pmatch(v, metrics)
+	v <- pmatchSafe(v, metrics)
 	
 	.restore(x)
 	region(x)
@@ -55,13 +55,13 @@ methods::setMethod(
 	
 	if ('slope' %in% v) {
 		args$slope <- .makeGname('slope', 'rast')
-		units <- .pmatch(units, c('degrees', 'percent'))
+		units <- pmatchSafe(units, c('degrees', 'percent'))
 		args$format <- units
 	}
 
 	if ('aspect' %in% v) {
 		args$aspect <- .makeGname('aspect', 'rast')
-		units <- .pmatch(units, c('degrees', 'percent'))
+		units <- pmatchSafe(units, c('degrees', 'percent'))
 		args$format <- units
 		if (northIs0) args$flags <- c(args$flags, 'n')
 	}

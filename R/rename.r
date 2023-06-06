@@ -18,7 +18,7 @@
 	####################
 	
 	flags <- c('quiet', 'overwrite')
-	rastOrVect <- .pmatch(rastOrVect, c('raster', 'vector'), error=TRUE)
+	rastOrVect <- pmatchSafe(rastOrVect, c('raster', 'vector'), error=TRUE)
 	
 	fromTo <- c(from, to)
 	success <- FALSE

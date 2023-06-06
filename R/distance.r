@@ -53,7 +53,7 @@ methods::setMethod(
 	if ((!is.null(maxDist) & !is.null(maxDist)) && (minDist > maxDist)) stop('Argument ', sQuote('minDist'), ' is greater than ', sQuote('maxDist'), '.')
 
 	metric <- tolower(method)
-	metric <- .pmatch(metric, c('euclidean', 'squared', 'maximum', 'manhattan', 'geodesic'))
+	metric <- pmatchSafe(metric, c('euclidean', 'squared', 'maximum', 'manhattan', 'geodesic'))
 
 	.restore(x)
 	region(x)
@@ -95,7 +95,7 @@ methods::setMethod(
 	
 	# convert to kilometers
 	unit <- tolower(unit)
-	unit <- .pmatch(unit, c('meters', 'kilometers', 'km'))
+	unit <- pmatchSafe(unit, c('meters', 'kilometers', 'km'))
 	if (unit %in% c('kilometers', 'km')) {
 	
 		gnIn <- gnOut
@@ -124,7 +124,7 @@ methods::setMethod(
 	if ((!is.null(maxDist) & !is.null(maxDist)) && (minDist > maxDist)) stop('Argument ', sQuote('minDist'), ' is greater than ', sQuote('maxDist'), '.')
 
 	metric <- tolower(method)
-	metric <- .pmatch(metric, c('euclidean', 'squared', 'maximum', 'manhattan', 'geodesic'))
+	metric <- pmatchSafe(metric, c('euclidean', 'squared', 'maximum', 'manhattan', 'geodesic'))
 
 	comparable(x, y)
 	.restore(x)
@@ -155,7 +155,7 @@ methods::setMethod(
 	rgrass::execGRASS('r.grow.distance', input=gnameRasterized, distance=gn, metric=metric, flags=flags, intern=TRUE)
 	
 	# convert meters to kilometers
-	unit <- .pmatch(unit, c('meters', 'kilometers', 'km'))
+	unit <- pmatchSafe(unit, c('meters', 'kilometers', 'km'))
 	if (unit %in% c('kilometers', 'km')) {
 	
 		gnIn <- gnOut
@@ -200,7 +200,7 @@ methods::setMethod(
 	out <- as.numeric(out)
 	
 	# convert to kilometers
-	unit <- .pmatch(unit, c('meters', 'kilometers', 'km'))
+	unit <- pmatchSafe(unit, c('meters', 'kilometers', 'km'))
 	if (unit %in% c('kilometers', 'km')) out <- out / 1000
 	
 	out

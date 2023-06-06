@@ -13,7 +13,7 @@
 #' @export grassInfo
 grassInfo <- function(x = 'citation') {
 	
-	match <- .pmatch(x, table = c('citation', 'version', 'copyright'))
+	match <- pmatchSafe(x, table = c('citation', 'version', 'copyright'))
 
 	if (match == 'citation') {
 		rgrass::execGRASS('g.version', flags='x')

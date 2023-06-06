@@ -42,7 +42,7 @@ methods::setMethod(
 	region(x)
 
 	units <- c('cells', 'meters', 'kilometers', 'km', 'feet', 'miles', 'nautmiles')
-	unit <- .pmatch(unit, units)
+	unit <- pmatchSafe(unit, units)
 	if (unit == 'km') unit <- 'kilometers'
 
 	if (nlyr(x) > 1L) out <- list()
@@ -57,7 +57,7 @@ methods::setMethod(
 		
 			methods <- c('euclidean', 'manhattan', 'maximum')
 			method <- tolower(method)
-			method <- .pmatch(method, method)
+			method <- pmatchSafe(method, method)
 
 			args <- list(
 				cmd = 'r.grow',
@@ -131,7 +131,7 @@ methods::setMethod(
 	if (!union) flags <- c(flags, 't')
 
 	capstyle <- tolower(capstyle)
-	capstyle <- .pmatch(capstyle, c('round', 'square', 'flat'))
+	capstyle <- pmatchSafe(capstyle, c('round', 'square', 'flat'))
 
 	if (capstyle == 'square') flags <- c(flags, 's')
 	if (capstyle == 'flat') flags <- c(flags, 'c')

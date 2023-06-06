@@ -113,7 +113,6 @@ faster <- function(
 	### start the GRASS session
 	suppressWarnings(
 		session <- rgrass::initGRASS(
-		# session <- fastGRASS(
 			gisBase = grassDir,
 			home = workDir,
 			SG = emptyRast,

@@ -15,7 +15,7 @@
 #' [crs()]: Coordinate reference system\cr
 #' [datatype()]: Data type\cr
 #' [dim()]: Number of rows and columns\cr
-#' [ext()]: Spatial extent\cr
+#' [ext()], [north()], [south()], [east()], [west()], [top()], and [bottom()]: Spatial extent\cr
 #' [freq()]: Frequencies of cell values in a raster\cr
 #' [global()]: Summary statistics\cr
 #' [gnames()]: Name of the object in **GRASS**\cr
@@ -31,7 +31,7 @@
 #' [nlyr()]: Number of layers\cr
 #' [nrow()]: Number of rows\cr
 #' [ncat()]: Number of categories\cr
-#' [res()]: Spatial resolution\cr
+#' [res()], [ewres()], [nsres()], and [zres()]: Spatial resolution\cr
 #' [st_bbox()]: Spatial extent\cr
 #' [st_crs()]: Coordinate reference system\cr
 #' [topology()]: Dimensionality of a raster (2D or 3D)\cr
@@ -71,7 +71,7 @@
 #' ## Properties of **fasterRaster** vectors (`GVectors')
 #' [crs()]: Coordinate reference system\cr
 #' [datatype()]: Data type of fields\cr
-#' [ext()]: Spatial extent\cr
+#' [ext()], [north()], [south()], [east()], [west()], [top()], and [bottom()]: Spatial extent\cr
 #' [geomtype()]: Type of vector (points, lines, polygons)\cr
 #' [gnames()]: Name of the object in **GRASS**\cr
 #' [is.2d()] and [is.3d()]: Is an object 2- or 3-dimensional?\cr
@@ -125,6 +125,7 @@
 #' [compareFloat()]: Compare values accounting for differences due to floating point precision\cr
 #' [forwardSlash()]: Replace backslash with forward slash\cr
 #' [grassInfo()]: **GRASS** version and citation\cr
+#' [pmatchSafe()]: Partial matching of strings with error checking\cr
 #' [rastToGrass()]: Convert a `SpatRaster` to a **GRASS** raster\cr
 #' [rstring()]: Create a statistically unique string\cr
 #' [vectToGrass()]: Convert a `SpatVector` or `sf` vector to a `GVector`\cr
@@ -140,11 +141,6 @@
 #' [regionDim()]: Change or report the active region's resolution\cr
 #' [regionExt()]: Change or report the active region's extent\cr
 #' [regionRes()]: Change or report the active region's dimensions\cr
-#' [regionDim3d()]: Change or report the active region's x, y, and z dimensions\cr
-#' [regionRes3d()]: Change or report the active region's x, y, and z resolutions\cr
-#' [regionZDim()]: Change or report the active region's vertical dimension\cr
-#' [regionZExt()]: Change or report the active region's vertical extent\cr
-#' [regionZRes()]: Change or report the active region's vertical resolution\cr
 #'
 #' ## Esoteric tutorials
 #' **fasterRaster** [Working directories, locations, and mapsets][tutorial_sessions]\cr

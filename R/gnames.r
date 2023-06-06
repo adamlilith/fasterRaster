@@ -49,7 +49,7 @@ methods::setMethod(
 		names <- x
 	} else {
 		rastOrVect <- tolower(rastOrVect)
-		rastOrVect <- .pmatch(rastOrVect, c('raster', 'raster3d', 'vector', 'group', 'region'))
+		rastOrVect <- pmatchSafe(rastOrVect, c('raster', 'raster3d', 'vector', 'group', 'region'))
 	}
 
 	if (rastOrVect == 'raster3d') rastOrVect <- 'rast3d'

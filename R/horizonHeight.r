@@ -37,7 +37,7 @@ methods::setMethod(
 		maxDist = NULL
 	) {
 	
-	units <- .pmatch(units, c('radians', 'degrees'))
+	units <- pmatchSafe(units, c('radians', 'degrees'))
 	if (any(directions %% 1 != 0)) {
 		directions <- floor(directions)
 		warning('Non-integer value(s) used for argument ', sQuote('directions'), '.\n  Value(s) rounded down (GRASS will do this anyway).')

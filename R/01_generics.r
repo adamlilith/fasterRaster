@@ -9,6 +9,7 @@ methods::setGeneric(name = 'as.fcell', def = function(x, ...) standardGeneric('a
 methods::setGeneric(name = 'as.dcell', def = function(x, ...) standardGeneric('as.dcell'))
 setGeneric('as.data.frame')
 
+methods::setGeneric(name = 'bottom', def = function(x, ...) standardGeneric('bottom'))
 methods::setGeneric(name = 'buffer', package='terra')
 
 # 'c' already in base as S3 generic
@@ -27,6 +28,8 @@ methods::setGeneric('delaunay', package = 'terra')
 methods::setGeneric(name = 'distance', def = function(x, y, ...) standardGeneric('distance'))
 methods::setGeneric(name = 'nunique', def = function(x, ...) standardGeneric('nunique'))
 
+methods::setGeneric(name = 'east', def=function(x, ...) standardGeneric('east'))
+methods::setGeneric(name = 'ewres', def=function(x, ...) standardGeneric('ewres'))
 methods::setGeneric('ext', package = 'terra')
 
 methods::setGeneric(name = 'fast', def = function(x, ...) standardGeneric('fast'))
@@ -36,6 +39,7 @@ methods::setGeneric(name = 'geomtype', package='terra')
 methods::setGeneric(name = 'global', package='terra')
 methods::setGeneric(name = 'gnames', def = function(x) standardGeneric('gnames'))
 
+methods::setGeneric(name = 'hillshade', def=function(x, ...) standardGeneric('hillshade'))
 methods::setGeneric(name = 'horizonHeight', def = function(x, ...) standardGeneric('horizonHeight'))
 
 methods::setGeneric(name = 'is.2d', def = function(x) standardGeneric('is.2d'))
@@ -60,6 +64,8 @@ methods::setGeneric(name = 'ncell', package='terra')
 methods::setGeneric(name = 'ncell3d', def = function(x) standardGeneric('ncell3d'))
 methods::setGeneric(name = 'ndepth', def = function(x) standardGeneric('ndepth'))
 methods::setGeneric(name = 'nlyr', package='terra')
+methods::setGeneric(name = 'north', def=function(x, ...) standardGeneric('north'))
+methods::setGeneric(name = 'nsres', def=function(x, ...) standardGeneric('nsres'))
 methods::setGeneric(name = 'ncol', def = function(x) standardGeneric('ncol')) # in base
 methods::setGeneric(name = 'nrow', def = function(x) standardGeneric('nrow')) # in base
 
@@ -80,15 +86,16 @@ methods::setGeneric(name = 'resample', package='terra')
 methods::setGeneric(name = 'res3d', def = function(x) standardGeneric('res3d'))
 
 methods::setGeneric(name = 'sdpop', def=function(x, ...) standardGeneric('sdpop'))
-methods::setGeneric(name = 'hillshade', def=function(x, ...) standardGeneric('hillshade'))
 methods::setGeneric(name = 'skewness', def=function(x, ...) standardGeneric('skewness'))
 methods::setGeneric(name = 'slope', def=function(x, ...) standardGeneric('slope'))
+methods::setGeneric(name = 'south', def=function(x, ...) standardGeneric('south'))
 methods::setGeneric(name = 'stretch', package='terra')
 if (!isGeneric('st_bbox')) methods::setGeneric(name = 'st_bbox', def=function(obj, ...) standardGeneric('st_bbox'))
 methods::setGeneric(name = 'st_buffer', def=function(x, ...) standardGeneric('st_buffer'))
 if (!isGeneric('st_crs')) methods::setGeneric(name = 'st_crs', def=function(x, ...) standardGeneric('st_crs'))
 methods::setGeneric(name = 'st_distance', def=function(x, y, ...) standardGeneric('st_distance'))
 
+methods::setGeneric(name = 'top', def=function(x, ...) standardGeneric('top'))
 methods::setGeneric(name = 'topology', def=function(x, ...) standardGeneric('topology'))
 methods::setGeneric(name = 'tvalue', def=function(x, ...) standardGeneric('tvalue'))
 
@@ -96,6 +103,7 @@ methods::setGeneric(name = 'varpop', def=function(x, ...) standardGeneric('varpo
 methods::setGeneric(name = 'vect', package='terra')
 methods::setGeneric(name = 'voronoi', package='terra')
 
+methods::setGeneric(name = 'west', def=function(x, ...) standardGeneric('west'))
 methods::setGeneric(name = 'writeRaster', def=function(x, filename, ...) standardGeneric('writeRaster'))
 methods::setGeneric(name = 'writeVector', def=function(x, filename, ...) standardGeneric('writeVector'))
 

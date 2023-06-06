@@ -39,7 +39,7 @@ methods::setMethod(
 	rastsOrVects <- names(gns)
 	rastOrVect <- rastsOrVects[match(x, gns)]
 	
-	# rastOrVect <- .pmatch(tolower(rastOrVect), c('raster', 'vector'))
+	# rastOrVect <- pmatchSafe(tolower(rastOrVect), c('raster', 'vector'))
 	# rastOrVect <- rep(rastOrVect, n)
 
 	for (i in seq_len(n)) {

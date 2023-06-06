@@ -85,7 +85,7 @@ methods::setMethod(
 
 	} else {
 	### user supplied rastOrVect
-		rastOrVect <- .pmatch(rastOrVect, c('raster', 'vector'))
+		rastOrVect <- pmatchSafe(rastOrVect, c('raster', 'vector'))
 	}
 
 	### raster from disk
@@ -137,7 +137,7 @@ methods::setMethod(
 		
 		# # }
 		
-		# # method <- .pmatch(method, c('nearest', 'bilinear_f', 'bicubic_f', 'lanczos_f'))
+		# # method <- pmatchSafe(method, c('nearest', 'bilinear_f', 'bicubic_f', 'lanczos_f'))
 
 		# # ### resample/project
 		# # flags <- c('quiet', 'overwrite')

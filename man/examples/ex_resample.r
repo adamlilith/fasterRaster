@@ -33,20 +33,23 @@ elev120
 
 ### resample using a coarser raster as a template
 # fasterRaster
-coarser <- aggregate(elev, 16)
-elevCoarser <- resample(elev, coarser, method='bilinear')
+coarser <- aggregate(elev, 2)
+frResamp <- resample(elev, coarser, method='bilinear')
 elev
-elevCoarser
+frResamp
 
 # terra
-coarserTerra <- aggregate(madElev, 16)
-elevCoarserTerra <- resample(madElev, coarserTerra, method='bilinear')
+coarserTerra <- aggregate(madElev, 2)
+terra <- resample(madElev, coarserTerra, method='bilinear')
 
-
+# compare fasterRaster with terra
+fr <- rast(frResamp)
+fr <- extend(fr, terra)
+fr - terra
 
 # IMPORTANT #3: Revert back to original GRASS session if needed.
 fastRestore(opts.)
-removeSession('exampleFrom')
-removeSession('exampleTo')
+fastRemove('exampleFrom')
+fastRemove('exampleTo')
 
 }
