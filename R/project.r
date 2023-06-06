@@ -55,20 +55,20 @@ methods::setMethod(
 	
 	# target location and mapset
 	if (is.null(y)) {
-		targetLoc <- location()
-		targetMapset <- mapset()
+		toLoc <- location()
+		toMapset <- mapset()
 	} else {
-		targetLoc <- location(y)
-		targetMapset <- mapset(y)
+		toLoc <- location(y)
+		toMapset <- mapset(y)
 	}
 	
-	if (targetLoc == location(x) & targetMapset == mapset(x)) {
+	if (toLoc == location(x) & toMapset == mapset(x)) {
 		warning('Object is already in the desired coordinate reference system.')
 		return()
 	}
 	
 	# method
-	if (!is.null(method)) method <- .pmatch(method, c('nearest', 'bilinear', 'bicubic', 'lanczos'))
+	if (!is.null(method)) method <- pmatchSafe(method, c('nearest', 'bilinear', 'bicubic', 'lanczos'))
 	
 	### resample 1st
 	################
@@ -179,10 +179,10 @@ methods::setMethod(
 		}
 	}
 	
-	if (!is.null(method)) method <- .pmatch(method, c('nearest', 'bilinear_f', 'bicubic_f', 'lanczos_f'))
+	if (!is.null(method)) method <- pmatchSafe(method, c('nearest', 'bilinear_f', 'bicubic_f', 'lanczos_f'))
 
 	# set session to target location/mapset
-	fastRestore(location=targetLoc, mapset=targetMapset)
+	fastRestore(location=toLoc, mapset=toMapset)
 	
 	# set region in focal region to what the raster will be when it's projected so we don't crop things
 	focalExt <- ext(x)
@@ -254,14 +254,14 @@ methods::setMethod(
 	
 	# target location and mapset
 	if (is.null(y)) {
-		targetLoc <- location()
-		targetMapset <- mapset()
+		toLoc <- location()
+		toMapset <- mapset()
 	} else {
-		targetLoc <- location(y)
-		targetMapset <- mapset(y)
+		toLoc <- location(y)
+		toMapset <- mapset(y)
 	}
 	
-	if (targetLoc == location(x) & targetMapset == mapset(x)) {
+	if (toLoc == location(x) & toMapset == mapset(x)) {
 		warning('Object is already in the desired coordinate reference system.')
 		return()
 	}
@@ -269,7 +269,7 @@ methods::setMethod(
 	if (!is.null(y)) {
 		.restore(y)
 	} else if (location() != startLoc | mapset() != startMapset) {
-		fastStart(location = targetLoc, mapset = targetMapset)
+		fastStart(location = toLoc, mapset = toMapset)
 	}
 	
 	flags <- c('quiet', 'overwrite')
