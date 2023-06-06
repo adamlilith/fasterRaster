@@ -38,12 +38,19 @@
 methods::setMethod(
 	f = 'aggregate',
 	signature = c(x = 'GRaster'),
-	definition = function(x, fact = 2, fun = 'mean', weight = FALSE, prob = NULL, na.rm = FALSE) {
+	definition = function(
+		x,
+		fact = 2,
+		fun = 'mean',
+		weight = FALSE,
+		prob = NULL,
+		na.rm = FALSE
+	) {
 
 	if (any(fact < 0)) stop('Values of ', sQuote('fact'), ' must be > 0.')
 
 	funs <- c('mean', 'median', 'mode', 'min', 'maximum', 'range', 'quantile', 'sum', 'var', 'sd', 'count', 'diversity')
-	fun <- .pmatch(tolower(fun), funs)
+	fun <- pmatchSafe(tolower(fun), funs)
 	
 	if (fun == 'mean') {
 		fun <- 'average'
@@ -73,9 +80,9 @@ methods::setMethod(
 		if (length(fact) == 1L) fact <- rep(fact, 2L)
 		if (length(fact) == 3L) stop('This is a 2D raster. Only 1 or 2 values are allowed for ', sQuote('resol'), '.')
 	
-		resol <- regionRes()
+		resol <- res(x)
 		resol <- resol * fact
-		regionRes(resol)
+		regionRes(resol, respect='extent')
 	
 	} else if (is.3d(x)) {
 	
@@ -107,7 +114,6 @@ methods::setMethod(
 	nLayers <- nlyr(x)
 	for (i in seq_len(nLayers)) {
 		
-		name <- names(x)[i]
 		gn <- .makeGname(names(x)[i], 'rast')
 		
 		args$input <- gnames(x)[i]
@@ -115,11 +121,11 @@ methods::setMethod(
 		
 		do.call(rgrass::execGRASS, args=args)
 		
-		thisOut <- makeGRaster(gn, name)
+		this <- makeGRaster(gn, names(x)[i])
 		if (i == 1L) {
-			out <- thisOut
+			out <- this
 		} else {
-			out <- c(out, thisOut)
+			out <- c(out, this)
 		}
 		
 	}
