@@ -17,7 +17,7 @@ Faster raster processing in **R** using **GRASS GIS**
 
 **fasterRaster** uses the stand-alone installer of Open Source Geospatial's <a href="https://grass.osgeo.org/rgrass/">**GRASS GIS**</a> Version 8 to speed up some commonly used raster and vector operations. Most of these operations can be done using the **raster** or newer **terra** packages by Robert Hijmans, or the **rgeos** or newer **sf** packages.  However, when the input raster or vector is very large in memory, in some cases functions in those packages can take a long time and fail. The **fasterRaster** package attempts to address these problems by calls to **GRASS** which is faster. Please note that **terra** and **sf** may be faster and thus the better solution for functions that this package implements. However, in some cases **fasterRaster** is still faster!
 
-**fasterRaster** makes heavy use of the <a href="https://cran.r-project.org/package=rgrass">**rgrass**</a> package by Roger Bivand and others, the <a href="https://cran.r-project.org/package=rgrass">**terra**</a> package by Robert Hijmans, the <a href="https://cran.r-project.org/package=sf">**sf**</a> package by Edzer Pebesma and others, and of course <a href="https://grass.osgeo.org/">**GRASS GIS**</a>, so is heavily indebted to all of these creators
+**fasterRaster** makes heavy use of the <a href="https://cran.r-project.org/package=rgrass">**rgrass**</a> package by Roger Bivand and others, the <a href="https://cran.r-project.org/package=rgrass">**terra**</a> package by Robert Hijmans, the <a href="https://cran.r-project.org/package=sf">**sf**</a> package by Edzer Pebesma and others, and of course <a href="https://grass.osgeo.org/">**GRASS GIS**</a>, so is greatly indebted to all of these creators.
 
 # Getting started #
 
@@ -45,7 +45,7 @@ Let's get started! We'll do a simple operation in which we calculate the distanc
 `library(terra)`  
 `library(sf)`  
 
-Now, we need to start a **GRASS** "session". To do this, we run the `faster()` function, which makes the connection to **GRASS** and initiates the "session". We need to supply this function the coordinate reference system (CRS) we'll be using.  Here, we'll get that from a raster that comes with **FasterRaster**.
+Now, we need to start a **GRASS** "session". To do this, we run the `faster()` function, which makes the connection to **GRASS** and initiates the "session". We need to supply this function the coordinate reference system (CRS) we'll be using.  Here, we'll get that from a raster that comes with **fasterRaster**.
 
 ```
 # get raster and vector
@@ -60,7 +60,7 @@ faster(madElev, grassDir = grassDir, location = 'examples', workDir=workDir)
 
 This can take a few seconds. Normally, we don't need to use the `location = 'examples'` argument (the default value is `'default'`), but we'll do this here in case you already have a **GRASS** session started and don't want to conflict with it.
 
-We will now convert the raster from a `SpatRaster` to a `GRaster`, which is **FasterRaster**'s representation of a raster. This is done using the `fast()` function.  This function can also convert `stars` rasters from the **stars** package.
+We will now convert the raster from a `SpatRaster` to a `GRaster`, which is **fasterRaster**'s representation of a raster. This is done using the `fast()` function.
 ```
 elev <- fast(madElev)
 ```
@@ -70,9 +70,9 @@ Next, we'll do the same for the rivers vector. In this case, the vector is an `s
 rivers <- fast(madRivers)
 ```
 
-(This raster and this vector are fairly small, so the operations above went fairly fast. However, if you have big-in-memory/big-on-disk objects, importing them into **R** through the **terra**, **sf**, or **stars**  packages then into **fasterRaster** using `fast()` can be slow. You can instead use `fast()` to load a file with a raster or vector directly into the **GRASS** session. This is usually faster!)
+(This raster and this vector are fairly small, so the operations above went fairly fast. However, if you have big-in-memory/big-on-disk objects, importing them into **R** through the **terra** or **sf** packages then into **fasterRaster** using `fast()` can be slow. You can instead use `fast()` to load a file with a raster or vector directly into the **GRASS** session. This is usually faster!)
 
-Now, let's add a 1000-m buffer to the rivers using `buffer()`. As much as possible, **fasterRaster** functions have the same names and same arguments as their counterparts in the **terra** and **sf** packages. This is to help users who are familiar with one or both of those packages. Note, though, that the output from **FasterRaster** is not necessarily guaranteed to be the same as output from the respective functions in other packages. This is because there are different methods to do the same thing, and the developers of **GRASS** may have chosen different methods than the developers of other GIS packages.
+Now, let's add a 1000-m buffer to the rivers using `buffer()`. As much as possible, **fasterRaster** functions have the same names and same arguments as their counterparts in the **terra** and **sf** packages. This is to help users who are familiar with one or both of those packages. Note, though, that the output from **fasterRaster** is not necessarily guaranteed to be the same as output from the respective functions in other packages. This is because there are different methods to do the same thing, and the developers of **GRASS** may have chosen different methods than the developers of other GIS packages.
 
 ```
 buffs <- buffer(madRivers, width=1000)
@@ -83,7 +83,7 @@ Finally, let's calculate the distances between the buffered areas and all cells 
 dists <- distance(elev, buffs)
 ```
 
-A certain weakness of **fasterRaster** is that it lacks in plotting capabilities. For the meantime, we have to convert **fasterRaster** objects back to their **terra**/**stars**/**sf** counterparts and plot them. We do the conversion using the functions from each package that are used to create rasters or vectors.  This includes `rast()` and `stars()` to create rasters, `vect()` and `st_as_sf()` to create vectors (these are actually aliases of those functions from the respective packages).
+A certain weakness of **fasterRaster** is that it lacks in plotting capabilities. For the meantime, we have to convert **fasterRaster** objects back to their **terra**/**sf** counterparts and plot them. We do the conversion using the functions from each package that are used to create rasters or vectors.  This includes `rast()` to create rasters, and `vect()` and `st_as_sf()` to create vectors (these are actually aliases of those functions from the respective packages).
 ```
 buffsTerra <- vect(buffs)
 distsTerra <- vect(dists)
@@ -92,7 +92,7 @@ plot(distsTerra)
 plot(buffsTerra, add=TRUE)
 ```
 
-And that's how it's done!  You can do almost anything in **fasterRaster**  you can do with the other packages. The examples above do not show the advantage of **FasterRaster** because the they are not based in large-in-memory/large-on-disk spatial datasets. For very large datasets, **fasterRaster** can be much faster!
+And that's how it's done!  You can do almost anything in **fasterRaster**  you can do with the other packages. The examples above do not show the advantage of **fasterRaster** because the they are not based in large-in-memory/large-on-disk spatial datasets. For very large datasets, **fasterRaster** can be much faster!
 
 # Functions
 If you want a detailed list of functions available in **fasterRaster**, attach the package and use `?fasterRaster`.
