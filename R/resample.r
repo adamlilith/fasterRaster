@@ -40,7 +40,7 @@ methods::setMethod(
 .resample <- function(x, y, method = NULL) {
 
 	# method
-	if (!is.null(method)) method <- .pmatch(method, c('nearest', 'bilinear', 'bicubic', 'lanczos'))
+	if (!is.null(method)) method <- pmatchSafe(method, c('nearest', 'bilinear', 'bicubic', 'lanczos'))
 	if (is.null(method)) {
 		method <- if (all(ncat(x) > 0)) {
 			'bilinear'
@@ -50,40 +50,66 @@ methods::setMethod(
 	}
 	
 	# reshape region
-	xExt <- as.vector(ext(x))
-	n <- as.character(xExt[4L])
-	s <- as.character(xExt[3L])
-	e <- as.character(xExt[2L])
-	w <- as.character(xExt[1L])
-	
 	if (inherits(y, 'GRaster')) {
 
-		yRes <- res3d(y)
-		ewres <- as.character(yRes[1L])
-		nsres <- as.character(yRes[2L])
-		tbres <- as.character(yRes[3L])
+		ewres <- ewres(y)
+		nsres <- nsres(y)
+		zres <- zres(y)
+		
+		if (is.3d(x) & is.3d(y)) {
+			t <- top(y)
+			b <- bottom(y)
+		}
 		
 	} else {
 	
-		ewres <- as.character(y[1L])
-		nsres <- as.character(y[2L])
+		ewres <- y[1L]
+		nsres <- y[2L]
 		tbres <- if (length(y) == 3L) {
-			as.character(y[3L])
+			y[3L]
 		} else {
-			NA_character_
+			NA_real_
 		}
+
+		t <- top(x)
+		b <- bottom(x)
 	
 	}
 	
+	w <- west(x)
+	e <- east(x)
+	s <- south(x)
+	n <- north(x)
+
+	cols <- ceiling((e - w) / ewres)
+	rows <- ceiling((n - s) / nsres)
+
+	e <- w + cols * ewres
+	s <- n - rows * nsres
+
+	w <- as.character(w)
+	e <- as.character(e)
+	s <- as.character(s)
+	n <- as.character(n)
+	t <- as.character(t)
+	b <- as.character(b)
+
+	ewres <- as.character(ewres)
+	nsres <- as.character(nsres)
+	tbres <- as.character(tbres)
+
+
 	args <- list(
 		cmd = 'g.region',
 		n = n, s = s, e = e, w = w,
 		ewres = ewres, nsres = nsres,
-		flags = c('o', 'a', 'quiet'),
+		flags = c('o', 'quiet'),
 		intern = TRUE
 	)
-	
+	if (!is.na(t)) args <- c(args, t=t)
+	if (!is.na(b)) args <- c(args, t=b)
 	if (!is.na(tbres)) args <- c(args, tbres=tbres)
+
 	do.call(rgrass::execGRASS, args=args)
 	
 	# resample
@@ -111,18 +137,19 @@ methods::setMethod(
 	}
 
 	nLayers <- nlyr(x)
-	gns <- .makeGname('resample', 'raster', nLayers)
 	for (i in seq_len(nLayers)) {
 
+		gn <- .makeGname(names(x)[i], 'raster')
 		args$input <- gnames(x)[i]
-		args$output <- gns[i]
+		args$output <- gn
 
 		do.call(rgrass::execGRASS, args=args)
 		
+		this <- makeGRaster(gn, names(x)[i])
 		out <- if (i == 1L) {
-			makeGRaster(gns[i], names(x)[i])
+			this
 		} else {
-			c(out, makeGRaster(gns[i], names(x)[i]))
+			c(out, this)
 		}
 		
 	}
