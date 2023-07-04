@@ -1,6 +1,6 @@
 #' Change the cell size of a GRaster
 #'
-#' @description `resample()` changes the cell size (resolution) of a `GRaster` using either another raster as a template or a user-defined resolution. Note that the extent of the output raster may be expanded to accommodate an integer number of cells.
+#' @description `resample()` changes the cell size (resolution) of a `GRaster` using either another raster as a template or a user-defined resolution. Note that the extent of the output raster may be expanded to accommodate an integer number of cells. The function is not guaranteed to recreate the same output as **terra**, even when the same resampling method is used.
 #'
 #' @param x The `GRaster` to resample.
 #'
@@ -12,10 +12,13 @@
 #' * `'bilinear'`: Bilinear interpolation (default for non-categorical data; uses weighted values from 4 cells).
 #' * `'bicubic'`: Bicubic interpolation (uses weighted values from 16 cells).
 #' * `'lanczos'`: Lanczos interpolation (uses weighted values from 25 cells).
+#' Note that methods that use multiple cells will cause the focal cell to become `NA` if there is at least one cell with an `NA` in the cells it draws from. These `NA` cells can be filled using the `fallback` option.
+#' 
+#' @param fallback Logical: If `TRUE` (default), then use "lower" methods to fill in `NA` cells when a "higher" method is used. For example, if `method = 'bicubic'`, `NA` cells will be filled in using the `bilinear` method, except when that results in `NA`s, in which case the `near` method will be used. Fallback causes fewer cells to revert to `NA` values, so may be better at capturing complex "edges" (e.g., coastlines). Fallback does increase processing time because each "lower" method must be applied, then results merged.
 #'
 #' @returns A `GRaster`.
 #' 
-#' @seealso [terra::resample()]
+#' @seealso [terra::resample()] and modules `r.resample` and `r.resamp.interp` in **GRASS**
 #'
 #' @example man/examples/ex_resample.r
 #'
@@ -25,7 +28,7 @@
 methods::setMethod(
 	f = 'resample',
 	signature = c(x = 'GRaster', y = 'GRaster'),
-	definition = function(x, y, method = NULL) .resample(x=x, y=y, method=method)
+	definition = function(x, y, method = NULL, fallback = TRUE) .resample(x=x, y=y, method=method, fallback=fallback)
 )
 
 #' @aliases resample 
@@ -34,10 +37,11 @@ methods::setMethod(
 methods::setMethod(
 	f = 'resample',
 	signature = c(x = 'GRaster', y = 'numeric'),
-	definition = function(x, y, method = NULL) .resample(x=x, y=y, method=method)
+	definition = function(
+		x, y, method = NULL, fallback = TRUE) .resample(x=x, y=y, method=method, fallback=fallback)
 )
 
-.resample <- function(x, y, method = NULL) {
+.resample <- function(x, y, method, fallback) {
 
 	# method
 	if (!is.null(method)) method <- pmatchSafe(method, c('nearest', 'bilinear', 'bicubic', 'lanczos'))
@@ -52,13 +56,15 @@ methods::setMethod(
 	# reshape region
 	if (inherits(y, 'GRaster')) {
 
-		ewres <- ewres(y)
-		nsres <- nsres(y)
+		ewres <- xres(y)
+		nsres <- yres(y)
 		zres <- zres(y)
+		tbres <- t <- b <- NA_real_
 		
 		if (is.3d(x) & is.3d(y)) {
 			t <- top(y)
 			b <- bottom(y)
+			tbres <- zres(y)
 		}
 		
 	} else {
@@ -98,7 +104,6 @@ methods::setMethod(
 	nsres <- as.character(nsres)
 	tbres <- as.character(tbres)
 
-
 	args <- list(
 		cmd = 'g.region',
 		n = n, s = s, e = e, w = w,
@@ -112,48 +117,116 @@ methods::setMethod(
 
 	do.call(rgrass::execGRASS, args=args)
 	
-	# resample
-	if (method == 'nearest') {
-	
-		args <- list(
-			cmd = 'r.resample',
-			input = NA,
-			output = NA,
-			flags = c('quiet', 'overwrite'),
-			intern = TRUE
-		)
-		
-	} else {
-	
-		args <- list(
-			cmd = 'r.resamp.interp',
-			input = NA,
-			output = NA,
-			method = method,
-			flags = c('quiet', 'overwrite'),
-			intern = TRUE
-		)
-	
-	}
+	# resample each layer
+	for (i in 1L:nlyr(x)) {
 
-	nLayers <- nlyr(x)
-	for (i in seq_len(nLayers)) {
+		### resample
+		if (method == 'nearest' | fallback) {
 
-		gn <- .makeGname(names(x)[i], 'raster')
-		args$input <- gnames(x)[i]
-		args$output <- gn
+			gnNearest <- .makeGname('nearest', 'raster')
+			args <- list(
+				cmd = 'r.resample',
+				input = gnames(x)[i],
+				output = gnNearest,
+				flags = c('quiet', 'overwrite'),
+				intern = TRUE
+			)
+			do.call(rgrass::execGRASS, args=args)
 
-		do.call(rgrass::execGRASS, args=args)
-		
-		this <- makeGRaster(gn, names(x)[i])
-		out <- if (i == 1L) {
-			this
-		} else {
-			c(out, this)
 		}
-		
-	}
-	
-	out
 
+		if (method == 'bilinear' | (fallback & method %in% c('bicubic', 'lanczos'))) {
+
+			gnBilinear <- .makeGname('bilinear', 'raster')
+			args <- list(
+				cmd = 'r.resamp.interp',
+				input = gnames(x)[i],
+				output = gnBilinear,
+				method = 'bilinear',
+				flags = c('quiet', 'overwrite'),
+				intern = TRUE
+			)
+			do.call(rgrass::execGRASS, args=args)
+
+		}
+
+		if (method == 'bicubic' | (fallback & method == 'lanczos')) {
+
+			gnBicubic <- .makeGname('bicubic', 'raster')
+			args <- list(
+				cmd = 'r.resamp.interp',
+				input = gnames(x)[i],
+				output = gnBicubic,
+				method = 'bicubic',
+				flags = c('quiet', 'overwrite'),
+				intern = TRUE
+			)
+			do.call(rgrass::execGRASS, args=args)
+
+		}
+
+		if (method == 'lanczos') {
+
+			gnLanczos <- .makeGname('lanczos', 'raster')
+			args <- list(
+				cmd = 'r.resamp.interp',
+				input = gnames(x)[i],
+				output = gnLanczos,
+				method = 'lanczos',
+				flags = c('quiet', 'overwrite'),
+				intern = TRUE
+			)
+			do.call(rgrass::execGRASS, args=args)
+
+		}
+
+		### output/fallback
+		if (method == 'nearest') {
+			thisOut <- makeGRaster(gnNearest, names(x)[i])
+		} else if (method == 'bilinear' & !fallback) {
+			thisOut <- makeGRaster(gnBilinear, names(x)[i])
+		} else if (method == 'bicubic' & !fallback) {
+			thisOut <- makeGRaster(gnBicubic, names(x)[i])
+		} else if (method == 'lanczos' & !fallback) {
+			thisOut <- makeGRaster(gnLanczos, names(x)[i])
+		} else if (fallback) {
+			
+			gn <- .makeGname('resample', 'rast')
+			if (method == 'bilinear') {
+
+				# merge bilinear and nearest
+				ex <- paste0(gn, ' = if(!isnull(', gnBilinear, '), ', gnBilinear, ', ', gnNearest, ')')
+
+			} else if (method == 'bicubic') {
+			
+				# merge bicubic, bilinear, and nearest
+				ex <- paste0(gn, ' = if(!isnull(', gnBicubic, '), ', gnBicubic, ', if(!isnull(', gnBilinear, '), ', gnBilinear, ', ', gnNearest, '))')
+				
+			} else if (method == 'lanczos') {
+
+				# merge bicubic, bilinear, and nearest
+				ex = paste0(gn, ' = if(!isnull(', gnLanczos, '), ', gnLanczos, ', if(!isnull(', gnBicubic, '), ', gnBicubic, ', if(!isnull(', gnBilinear, '), ', gnBilinear, ', ', gnNearest, ')))')
+
+			}
+
+			args <- list(
+				cmd = 'r.mapcalc',
+				expression = ex,
+				flags = c('quiet', 'overwrite'),
+				intern = TRUE
+			)
+			do.call(rgrass::execGRASS, args=args)
+
+			thisOut <- makeGRaster(gn, names(x)[i])
+
+		}
+
+		if (i == 1L) {
+			out <- thisOut
+		} else {
+			out <- c(out, thisOut)
+		}
+
+	} # next layer
+	out
 }
