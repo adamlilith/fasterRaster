@@ -1,36 +1,45 @@
 #' Change the coordinate reference system of a GRaster or GVector
 #'
-#' @description There are two ways to project rasters and vectors into a different coordinate reference system (CRS) in **fasterRaster**.  Both are different from how they are implemented in other packages, so it is important to understand how it works in **fasterRaster**.
+#' @description *fasterRaster** offers three ways to project rasters and vectors into a different coordinate reference system (CRS).  Each of them are different from how they are implemented in **terra**, so it is important to understand how it works in **fasterRaster**.
 #'
-#' First, if you are wanting to change the CRS for a `SpatRaster`, `SpatVector`, or a raster or vector on disk, you can use the [fast()] function. To do this, you need to start a **GRASS** session using [faster()] with the CRS that you want to transform the raster/vector into, then convert the object to a `GRaster` or `GVector` using [fast()]. Note that for rasters the `method` argument in that function may be important.
+#' First, if you are wanting to change the CRS for a `SpatRaster`, `SpatVector`, or `sf` object already in `R`, use the [fast()] function. This function will project the object to the CRS of the current **GRASS** [location][tutorial_sessions]. Note that for rasters, the `method` and `fallback` arguments in the `fast()` function may be important to what you want to achieve.
+#' 
+#' Second the procedure works the same way for rasters or vectors stored on disk (and not already in **R**). Simply use the [fast()] function with the file name of the object. Again, the `method` and `fallback` arguments may be important 
 #'
-#' Second, if you are wanting to change the CRS for a `GRaster` or `GVector`, you need to initiate a new **GRASS** [location][tutorial_locations] using [faster()] with the CRS that you want to transform it into. This means you need to keep track of which "location" you are working in, as multiple rasters and/or vectors can only be used in the function if they are in the same location. **This function, `project()`, is for projecting `GRaster`s or `GVector`s.**
+#' Third, if you are wanting to change the CRS of a `GRaster` or `GVector`, you need to initiate a new **GRASS** [location][tutorial_sessions] using [faster()] with the CRS to which you want to transform the object. This means you need to keep track of which **GRASS** "location" you are working in, as multiple rasters and/or vectors can only be used in the function if they are in the same "location."  *This function, `project()`, is for projecting `GRaster`s or `GVector`s between **GRASS** "locations."*
 #'
-#' @param x A `GRaster` or `GVector`.
+#' @param x A `GRaster` or `GVector` to be projected.
 #'
-#' @param y A `NULL` (default), or a `GRaster` or `GVector`:
-#' * If `NULL`, then `x` is projected to the CRS of the current [location][tutorial_location] (i.e., `x` should not be in the current "location"). `x` will not be resampled.
-#' * If `x` is a `GRaster` and `y` is a `GRaster`, then `x` will be projected to the CRS of `y` and resampled to the same resolution as `y`. `x` should not be the same [location][tutorial_location] as `y`.
-#' * If `x` is a `GRaster` and `y` is a `GVector`, then `x` will be projected to the CRS of `y`. `x` will not be resampled. `x` should not be the same [location][tutorial_location] as `y`.
+#' @param y `NULL` (default), or a `GSession` object or any that contain it (i.e., a `GRaster`, `GVector`, or `GRegion`):
+#' * If `y` is `NULL`, then `x` is projected to the CRS of the current "[location][tutorial_sessions]" (i.e., `x` should not be in the current "location"). If `x` is a `GRaster`, it will not be resampled to a different resolution.
+#' * If `x` is a `GRaster` and `y` is a `GRaster` or `GRegion`, then `x` will be projected to the CRS of `y` and resampled to the same resolution as `y`. `x` will be cropped to the extent of `y` if `align` is `TRUE`. `x` should not be the same [location][tutorial_sessions] as `y`.
+#' * If `x` is a `GRaster` and `y` is a `GVector`, then `x` will be projected to the CRS of `y`. `x` will not be resampled. `x` should not be the same "[location][tutorial_sessions]" as `y`.
 #' * If `x` is a `GVector`, then `x` will be projected to the CRS of `y`.
+#' 
+#' @param align Logical: If `FALSE` (default), and `x` and `y` are `GRaster`s, then the extent of `x` will be cropped to the extent of `y`.
 #'
-#' @param method Character or `NULL`: Method to use to conduct the transformation (rasters only). Partial matching is used.
-#' * `NULL` (default): Automatically choose based on raster properties (`near` for categorical data, `bilinear` for continuous data)
-#' * `'near'`: Nearest neighbor. Best for categorical data, and often a poor choice for continuous data.  If [ncat()] is >0, this method will be used by default.
+#' @param method Character or `NULL` (`GRaster`s only): Method to use to conduct the transformation (rasters only). Partial matching is used.
+#' * `NULL` (default): Automatically choose based on raster properties (`near` for categorical data, `bilinear` for continuous data).
+#' * `'near'`: Nearest neighbor. Best for categorical data, and often a poor choice for continuous data.  If [datatype()] is `CELL`, this method will be used by default.
 #' * `'bilinear'`: Bilinear interpolation (default for non-categorical data; uses weighted values from 4 cells).
 #' * `'bicubic'`: Bicubic interpolation (uses weighted values from 16 cells).
 #' * `'lanczos'`: Lanczos interpolation (uses weighted values from 25 cells).
-#' Note that if `x` and `y` are `GRaster`s, then the same method is used to resample `x` to `y` before projecting `x`.
 #'
-#' @param location,mapset Character or `NULL` (default): The name of the [location][tutorial_locations] and [mapset][tutorial_locations] which has the CRS you to which you wish to transform the `GRaster` or `GVector`. You can get this using [location()] and [mapset()]. If left as `NULL`, then it will be assumed that you want to project the object to the current location and mapset.
+#' *Note #1*: If `x` and `y` are `GRaster`s, then the same `method` is used to resample `x` to the resolution of `y` before projecting `x`.
+#' 
+#' *Note #2*: Methods that use multiple cells will cause the focal cell to become `NA` if there is at least one cell with an `NA` in the cells it draws from. These `NA` cells can often be filled using the `fallback` option.
+#' 
+#' @param fallback Logical (projecting `GRaster`s only): If `TRUE` (default), then use "lower" methods to fill in `NA` cells when a "higher" method is used. For example, if `method = 'bicubic'`, `NA` cells will be filled in using the `bilinear` method, except when that results in `NA`s, in which case the `near` method will be used. Fallback causes fewer cells to revert to `NA` values, so may be better at capturing complex "edges" (e.g., coastlines). Fallback does increase processing time because each "lower" method must be applied, then results merged. Fallback is not used if `method = 'near'`.
+#' 
+#' @param location,mapset Character or `NULL` (default): The name of the [location and mapset][tutorial_sessions] which have the CRS you to which you want to transform the `GRaster` or `GVector`. You can get the current location and mapset or the location and mapset of an object using [location()] and [mapset()]. If left as `NULL`, then it will be assumed that you want to project the object to the currently active location and mapset.
 #'
-#' @param trim Logical: When projecting rasters that "wrap around" (i.e., whole-world rasters or rasters that have edges that actually circle around to meet on the globe), `trim` should be `FALSE` to avoid removing rows and columns from the "edge" of the map.
+#' @param wrap Logical (`GRaster`s only): When projecting rasters that "wrap around" (i.e., whole-world rasters or rasters that have edges that actually circle around to meet on the globe), `wrap` should be `TRUE` to avoid removing rows and columns from the "edge" of the map. The default is `FALSE`.
 #'
-#' @details When projecting a raster, the "fallback" methods in `r.import` are actually used, even though the `method` argument takes the strings for non-fallback methods. See the manual page for the `r.import` **GRASS** module.
+#' @details When projecting a raster, the "fallback" methods in **GRASS** module `r.import` are actually used, even though the `method` argument takes the strings specifying non-fallback methods. See the manual page for the `r.import` **GRASS** module.
 #' 
 #' @returns A `GRaster` or `GVector`.
 #' 
-#' @seealso [terra::project], [sf::st_transform()]
+#' @seealso [terra::project()], [sf::st_transform()], modules `r.proj` and `v.proj` in **GRASS**
 #'
 #' @example man/examples/ex_project.r
 #'
@@ -43,197 +52,180 @@ methods::setMethod(
 	definition = function(
 		x,
 		y = NULL,
+		align = FALSE,
 		method = NULL,
-		trim = TRUE,
-		location = NULL,
-		mapset = NULL
+		fallback = TRUE,
+		wrap = FALSE,
+		toLocation = NULL,
+		toMapset = NULL
 	) {
-	
+
 	# start location and mapset
 	startLoc <- location()
 	startMapset <- mapset()
+
+	on.exit(fastRestore(location=startLoc, mapset=startMapset), add=TRUE)
 	
 	# target location and mapset
 	if (is.null(y)) {
-		toLoc <- location()
+		toLocation <- location()
 		toMapset <- mapset()
 	} else {
-		toLoc <- location(y)
+		toLocation <- location(y)
 		toMapset <- mapset(y)
 	}
 	
-	if (toLoc == location(x) & toMapset == mapset(x)) {
+	if (toLocation == location(x) & toMapset == mapset(x)) {
 		warning('Object is already in the desired coordinate reference system.')
 		return()
 	}
 	
+	if (!is.null(y)) {
+		toCrs <- crs(y)
+	} else {
+		fastRestore(location=toLocation, mapset=toMapset)
+		toCrs <- crs()
+	}
+
 	# method
 	if (!is.null(method)) method <- pmatchSafe(method, c('nearest', 'bilinear', 'bicubic', 'lanczos'))
-	
-	### resample 1st
-	################
-	
+
+	if (is.null(method)) {
+		
+		dt <- datatype(x)
+		method <- if (all(dt == 'CELL')) {
+			'nearest'
+		} else if (all(dt %in% c('DCELL', 'FCELL'))) {
+			'bilinear'
+		} else {
+			stop('Rasters are a mix of datatype CELL and non-CELL (categorical and continuous).  \nProject each type of raster separately.')
+		}
+
+	}
+
+	### y is a GRaster
 	if (inherits(y, 'GRaster')) {
 
-		# set method
-		if (is.null(method)) {
-		
-			resampMethod <- if (all(ncat(x) == 0L)) {
-				'bilinear'
-			} else if (all(ncat(x) > 0L)) {
-				'nearest'
-			} else {
-				stop('Rasters are a mix of categorical and continuous. Project each type of raster separately.')
-			}
-			
-		} else {
-			resampMethod <- method
-		}
+		### resample 1st
 
+		# Use a SpatRaster as template for resampling region. We do this so we can set the "region" resolution and extent correctly. Using a one-cell raster to speed things up.
+		resol <- res(x)
+		extent <- ext(x, vector=TRUE)
+		extent[2L] <- extent[1L] + resol[1L]
+		extent[3L] <- extent[4L] - resol[2L]
+
+		xMat <- matrix(NA_real_, nrow=1L, ncol=1L)
+		xRast <- terra::rast(xMat, crs=crs(x), extent=extent)
+
+		resol <- res(y)
+		extent <- ext(y, vector=TRUE)
+		extent[2L] <- extent[1L] + resol[1L]
+		extent[3L] <- extent[4L] - resol[2L]
+		yMat <- matrix(NA_real_, nrow=1L, ncol=1L)
+		yRast <- terra::rast(yMat, crs=crs(y), extent=extent)
+
+		yRast <- terra::project(yRast, crs(x), method='near', align=TRUE)
+		xRast <- terra::resample(xRast, yRast, method='near')
+
+		# resample x in its native location to the resolution it will have in the target location
 		.restore(x)
-	
-		# back-project region from "to" location to "from" location
-		targetExt <- ext(y)
-		targetDim <- dim(y)
-		targetCRS <- crs(y)
-		empty <- matrix(NA, nrow=targetDim[1L], ncol=targetDim[2L])
-		emptyTo <- terra::rast(empty, crs=targetCRS, extent=targetExt)
-		
-		emptyFrom <- terra::project(emptyTo, crs(x), method='near', align=TRUE)
-
-		# reshape region in "from" region
-		xExt <- as.vector(ext(x))
-		n <- as.character(xExt[4L])
-		s <- as.character(xExt[3L])
-		e <- as.character(xExt[2L])
-		w <- as.character(xExt[1L])
-		
-		yRes <- terra::res(emptyFrom)
-		ewres <- as.character(yRes[1L])
-		nsres <- as.character(yRes[2L])
-		
-		args <- list(
-			cmd = 'g.region',
-			n = n, s = s, e = e, w = w,
-			ewres = ewres, nsres = nsres,
-			flags = c('o', 'a', 'quiet'),
-			intern = TRUE
+		x <- resample(
+			x = x,
+			y = terra::res(xRast),
+			method = method,
+			fallback = fallback
 		)
-		
-		do.call(rgrass::execGRASS, args=args)
 
-		# resample
-		if (resampMethod == 'nearest') {
-			
-			args <- list(
-				cmd ='r.resample',
-				input = NA,
-				output = NA,
-				flags = c('quiet', 'overwrite')
-			)
-			
-		} else {
-		
-			args <- list(
-				cmd = 'r.resamp.interp',
-				input = NA,
-				output = NA,
-				method = resampMethod,
-				flags = c('quiet', 'overwrite')
-			)
-			
-		}
+		fastRestore(location=toLocation, mapset=toMapset)
 
-		nLayers <- nlyr(x)
-		gns <- .makeGname('resampled', 'raster', nLayers)
-		for (i in 1L:nLayers) {
+	### "y" is not a raster (no resampling)
+	} else {
 
-			args$input <- gnames(x)[i]
-			args$output <- gns[i]
-		
-			do.call(rgrass::execGRASS, args=args)
-			
-			thisOut <- if (i == 1L) {
-				makeGRaster(gns[i], names(x)[i])
-			} else {
-				c(thisOut, makeGRaster(gns[i], names(x)[i]))
-			}
-		
-		}
-		
-		x <- thisOut
-	
+		# make template raster to match raster to be projected
+		resol <- res(x)
+		extent <- ext(x, vector=TRUE)
+		extent[2L] <- extent[1L] + resol[1L]
+		extent[3L] <- extent[4L] - resol[2L]
+
+		xMat <- matrix(NA_real_, nrow=1L, ncol=1L)
+		xRast <- terra::rast(xMat, crs=crs(x), extent=extent)
+
 	}
 
-	### project 2nd
-	###############
+	### reshape region in "to" location
+	###################################
 
-	# set method
-	if (is.null(method)) {
-		method <- if (all(ncat(x) == 0L)) {
-			'bilinear'
-		} else if (all(ncat(x) > 0L)) {
-			'nearest'
-		} else {
-			stop('Rasters are a mix of categorical and continuous. Project each type of raster separately.')
-		}
+	xRast <- terra::project(xRast, toCrs, method='near', align=TRUE)
+	ewres <- terra::xres(xRast)
+	nsres <- terra::yres(xRast)
+
+	# if using y just as a template for origin and resolution
+	if (align | !inherits(y, 'GRaster')) {
+
+		toExt <- ext(x, vector=TRUE)
+		toExt <- terra::ext(toExt)
+		toExt <- terra::project(toExt, from=crs(x), to=toCrs)
+		toExt <- as.vector(toExt)
+
+	} else {
+		toExt <- ext(y, vector=TRUE)
 	}
-	
-	if (!is.null(method)) method <- pmatchSafe(method, c('nearest', 'bilinear_f', 'bicubic_f', 'lanczos_f'))
 
-	# set session to target location/mapset
-	fastRestore(location=toLoc, mapset=toMapset)
+	n <- toExt[4L]
+	s <- toExt[3L]
+	e <- toExt[2L]
+	w <- toExt[1L]
 	
-	# set region in focal region to what the raster will be when it's projected so we don't crop things
-	focalExt <- ext(x)
-	focalDims <- dim(x)
-	focalCRS <- crs(x)
-	empty <- matrix(NA, nrow=focalDims[1L], ncol=focalDims[2L])
-	emptyFrom <- terra::rast(empty, crs=focalCRS, extent=focalExt)
-	
-	emptyTo <- terra::project(emptyFrom, crs(), method='near', align=TRUE)
-	region(emptyTo)
+	n <- as.character(n)
+	s <- as.character(s)
+	e <- as.character(e)
+	w <- as.character(w)
 
-	### project
-	flags <- c('quiet', 'overwrite')
-	if (!trim) flags <- c(flags, 'n')
+	ewres <- as.character(ewres)
+	nsres <- as.character(nsres)
 
 	args <- list(
-		cmd = 'r.proj',
-		input = NA,
-		output = NA,
-		location = location(x),
-		mapset = mapset(x),
-		method = method,
-		memory = getFastOptions('memory'),
-		flags = flags,
+		cmd = 'g.region',
+		n = n, s = s, e = e, w = w,
+		ewres = ewres, nsres = nsres,
+		flags = c('o', 'a', 'quiet'),
 		intern = TRUE
 	)
+	
+	fluff <- do.call(rgrass::execGRASS, args=args)
 
-	nLayers <- nlyr(x)
-	gns <- .makeGname('projected', 'raster', nLayers)
-	for (i in 1L:nLayers) {
-	
-		args$input <- gnames(x)[i]
-		args$output <- gns[i]
-	
+	### project raster
+	##################
+
+	if (method != 'nearest' & fallback) method <- paste0(method, '_f')
+
+	gns <- .makeGname(names(x), 'raster', nlyr(x))
+	for (i in 1L:nlyr(x)) {
+
+		args <- list(
+			cmd = 'r.proj',
+			location = location(x),
+			mapset = mapset(x),
+			input = gnames(x)[i],
+			output = gns[i],
+			method = method,
+			memory = getFastOptions('memory'),
+			flags = c('quiet', 'overwrite')
+		)
+
 		do.call(rgrass::execGRASS, args=args)
+		thisOut <- makeGRaster(gns[i], names(x)[i])
 		if (i == 1L) {
-			out <- makeGRaster(args$output, names=names(x)[i])
+			out <- thisOut
 		} else {
-			thisOut <- makeGRaster(args$output, names=names(x)[i])
 			out <- c(out, thisOut)
 		}
-	
-	}
 
-	if (location() != startLoc | mapset() != startMapset) fastRestore(location=startLoc, mapset=startMapset)
-
+	} # project next raster
 	out
-	
+
 	} # EOF
 )
-
 
 #' @aliases project
 #' @rdname project
@@ -254,14 +246,14 @@ methods::setMethod(
 	
 	# target location and mapset
 	if (is.null(y)) {
-		toLoc <- location()
+		toLocation <- location()
 		toMapset <- mapset()
 	} else {
-		toLoc <- location(y)
+		toLocation <- location(y)
 		toMapset <- mapset(y)
 	}
 	
-	if (toLoc == location(x) & toMapset == mapset(x)) {
+	if (toLocation == location(x) & toMapset == mapset(x)) {
 		warning('Object is already in the desired coordinate reference system.')
 		return()
 	}
@@ -269,7 +261,7 @@ methods::setMethod(
 	if (!is.null(y)) {
 		.restore(y)
 	} else if (location() != startLoc | mapset() != startMapset) {
-		fastStart(location = toLoc, mapset = toMapset)
+		fastStart(location = toLocation, mapset = toMapset)
 	}
 	
 	flags <- c('quiet', 'overwrite')
