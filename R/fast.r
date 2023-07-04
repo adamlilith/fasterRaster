@@ -35,7 +35,6 @@
 #'
 #' @aliases fast
 #' @rdname fast
-#' @export
 #' @exportMethod fast
 methods::setMethod(
 	'fast',
@@ -107,7 +106,7 @@ methods::setMethod(
 
 			fromLoc <- paste0('location_', rstring(1))
 			fromWorkDir <- tempdir()
-			faster(crs = rast, location=fromLoc, mapset='PERMANENT', workDir=fromWorkDir)
+			faster(x = rast, location=fromLoc, mapset='PERMANENT', workDir=fromWorkDir)
 			inRast <- fast(x, rastOrVect='raster')
 
 			# project raster to starting location

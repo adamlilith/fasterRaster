@@ -8,33 +8,72 @@
 \alias{comparable,GVector,GVector-method}
 \title{Determine if two GRasters and/or GVectors are geographically comparable}
 \usage{
-\S4method{comparable}{GRaster,GRaster}(x, y, nlayers = FALSE, fail = TRUE)
+\S4method{comparable}{GRaster,GRaster}(
+  x,
+  y,
+  fail = TRUE,
+  warn = TRUE,
+  extent = TRUE,
+  zextent = TRUE,
+  dim = TRUE,
+  dim3d = TRUE,
+  res = TRUE,
+  res3d = TRUE,
+  topo = TRUE,
+  nlayers = FALSE
+)
 
-\S4method{comparable}{GRaster,GVector}(x, y, fail = TRUE, compareTopo = FALSE, compareZ = FALSE)
+\S4method{comparable}{GRaster,GVector}(
+  x,
+  y,
+  fail = TRUE,
+  warn = TRUE,
+  extent = FALSE,
+  zextent = FALSE,
+  topo = FALSE
+)
 
-\S4method{comparable}{GVector,GRaster}(x, y, fail = TRUE, compareTopo = FALSE)
+\S4method{comparable}{GVector,GRaster}(
+  x,
+  y,
+  fail = TRUE,
+  warn = TRUE,
+  extent = FALSE,
+  zextent = FALSE,
+  topo = FALSE
+)
 
 \S4method{comparable}{GVector,GVector}(
   x,
   y,
   fail = TRUE,
-  compareTopo = FALSE,
-  compareGeo = FALSE,
-  compareZ = FALSE
+  warn = TRUE,
+  extent = FALSE,
+  zextent = FALSE,
+  topo = TRUE,
+  geometry = FALSE
 )
 }
 \arguments{
 \item{x, y}{\code{GRaster}s or \code{GVector}s.}
 
-\item{nlayers}{Logical: If \code{FALSE} (default), do not compare number of layers. If \code{TRUE}, then return \code{FALSE} or fail if the number of layers in each raster is different.}
+\item{fail}{Logical: If \code{TRUE} (default), throw an error with an explanation if the objects are not comparable. If \code{FALSE} (default), return \code{TRUE} or \code{FALSE}.}
 
-\item{fail}{Logical: If \code{TRUE}, throw an error with an explanation if the objects are not comparable. If \code{FALSE} (default), return \code{TRUE} or \code{FALSE}.}
+\item{warn}{Logical: If \verb{TRUE (default), display a warning if a condition is not met. This only comes into effect if }fail\code{is}TRUE`.}
 
-\item{compareTopo}{Logical: If \code{TRUE}, compare topology (only for \code{GRaster} vs. \code{GVector} comparison and \code{GVector} vs. \code{GVector} comparison).}
+\item{extent}{Logical: If \code{TRUE}, test for same extent. By default, is \code{TRUE} for raster-raster comparison and \code{FALSE} for all others.}
 
-\item{compareZ}{Logical: If \code{TRUE}, compare z extents (\code{GVector} vs. \code{GVector} and \code{GRaster} vs. \code{GVector} comparison--this is always done for \code{GRaster}s vs. \code{GRaster}s).}
+\item{zextent}{Logical: Test for same vertical extents (3D only). By default, this is \code{TRUE} for raster-raster comparisons, and \code{FALSE} for all others.}
 
-\item{compareGeo}{Logical: If \code{TRUE}, compare geometry (\code{GVector} vs. \code{GVector} comparison).}
+\item{res, res3d}{Logical (raster-raster only): If \code{TRUE} (default), test for same resolution in 2D and 3D.}
+
+\item{topo}{Logical: Test for same topology (2D or 3D). By default, this is \code{TRUE} for raster-raster comparisons, and \code{FALSE} for all others.}
+
+\item{nlayers}{Logical (raster-raster comparison only): If \code{FALSE} (default), do not compare number of layers. If \code{TRUE}, then return \code{FALSE} or fail if the number of layers in each raster is different.}
+
+\item{geometry}{Logical (vector-vector comparison only): Compare geometry. Default is \code{FALSE}.}
+
+\item{dim.dim3d}{Logical (raster-raster only): If \code{TRUE} (default), test for same dimensions in 2D and 3D.}
 }
 \value{
 Logical (invisibly), or side effect of throwing an error.

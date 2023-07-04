@@ -14,7 +14,7 @@
 #' @example man/example/ex_terrain.r
 #' 
 #' @aliases shade
-#' @rdname shade,hillshade
+#' @rdname hillshade
 #' @exportMethod hillshade
 methods::setMethod(
     f = 'hillshade',

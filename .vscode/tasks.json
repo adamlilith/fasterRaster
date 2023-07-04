@@ -1,0 +1,14 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"type": "R",
+			"code": [
+				"devtools::install(args='--no-lock')"
+			],
+			"group": "build",
+			"problemMatcher": [],
+			"label": "R: Install"
+		}
+	]
+}

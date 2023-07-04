@@ -9,10 +9,10 @@
 #' * `'countNonNA'`: Total number of non-`NA` cells.
 #' * `'cv'`: Sample coefficient of variation (expressed as a proportion of the mean).
 #' * `'cvpop'`: Population coefficient of variation (expressed as a proportion of the mean).
+#' * `'max'` and `'min'`: Highest and lowest values across non-`NA` cells.
 #' * `'mean'` (default): Average.
 #' * `'meanAbs'`: Mean of absolute values.
 #' * `'median'`: Median.
-#' * `'min'` and `'max'`: Lowest and highest value across non-`NA` cells.
 #' * `'quantile'`: Quantile (see also argument `prob`).
 #' * `'range'`: Range.
 #' * `'sd'`: Sample standard deviation.
@@ -27,7 +27,7 @@
 #'
 #' @returns If `x` is missing, the function returns a character vector of all accepted function names. If `x` is a `GRaster`, a data frame with the specified statistics is returned.
 #'
-#' @seealso [terra::global()]
+#' @seealso [terra::global()] and module `r.univar` in **GRASS
 #'
 #' @example man/examples/ex_global.r
 #'
@@ -37,14 +37,19 @@
 methods::setMethod(
 	f = 'global',
 	signature = c(x = 'GRaster'),
-	definition = function(x, fun = 'mean', prob = NULL, ...) {
+	definition = function(
+		x,
+		fun = 'mean',
+		prob = NULL,
+		...
+	) {
 	
 	funs <- c('sum', 'mean', 'median', 'min', 'max', 'cv', 'cvpop', 'meanAbs', 'countNA', 'countNonNA', 'range', 'sd', 'var', 'sdpop', 'varpop', 'quantile')
-	funs <- tolower(funs)
 	funNames <- fun
+	funs <- tolower(funs)
 	fun <- tolower(fun)
 	
-	if (any(fun == 'quantile') & is.null(prob)) stop('You must specify one or more values for ', sQuote('prob'), ' when calculating quantile statistics.')
+	if (any(fun == 'quantile') & is.null(prob)) stop('You must specify a value for ', sQuote('prob'), ' when calculating quantile statistics.')
 	
 	nLayers <- nlyr(x)
 	out <- data.frame()

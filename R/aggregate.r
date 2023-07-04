@@ -28,7 +28,7 @@
 #'
 #' @returns A `GRaster`.
 #' 
-#' @seealso [terra::aggregate()]
+#' @seealso [terra::aggregate()], [terra::disagg()], module `r.resamp.stats` in **GRASS**
 #'
 #' @example man/examples/ex_aggregate.r
 #'

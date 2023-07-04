@@ -22,6 +22,12 @@ fastRestore <- function(...) {
 		getFastOptions('grassDir')
 	}
 
+	addonDir <- if ('addonDir' %in% names(dots)) {
+		dots$addonDir
+	} else {
+		getFastOptions('addonDir')
+	}
+
 	workDir <- if ('workDir' %in% names(dots)) {
 		dots$workDir
 	} else {
@@ -56,6 +62,7 @@ fastRestore <- function(...) {
 	suppressWarnings(
 		session <- rgrass::initGRASS(
 			gisBase = grassDir,
+			addon_base = addonDir,
 			home = workDir,
 			SG = emptyRast,
 			location = location,

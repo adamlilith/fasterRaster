@@ -5,8 +5,9 @@
 \title{Initialize a 'GRASS' session}
 \usage{
 faster(
-  crs,
+  x,
   grassDir = NULL,
+  addonDir = NULL,
   workDir = NULL,
   overwrite = FALSE,
   warn = TRUE,
@@ -14,10 +15,11 @@ faster(
 )
 }
 \arguments{
-\item{crs}{Any object from which a coordinate reference system (CRS) can be acquired. Ergo, any of:
+\item{x}{Any object from which a coordinate reference system (CRS) can be acquired. Ergo, any of:
 \itemize{
-\item A \code{SpatRaster}, \code{SpatVector}, \code{SpatExtent}, \code{stars} or \code{sf} object
-\item A CRS (coordinate reference system) string
+\item A \code{SpatRaster}, \code{SpatVector}, \code{SpatExtent}, \code{stars}, or \code{sf} object
+\item A \code{crs} object (i.e., from \code{\link[sf:st_crs]{sf::st_crs()}}).
+\item A CRS (coordinate reference system) WKT string. Some PROJ4 strings \emph{might} work, too.
 }}
 
 \item{grassDir}{Character or \code{NULL} (default): Folder in which \strong{GRASS} is installed on your computer. This will look different depending on the operating system and version of \strong{GRASS} you have installed. Here are some examples:
@@ -27,6 +29,8 @@ faster(
 \item Linux: \code{'/usr/local/grass'}
 If \code{NULL}, then the function will use \code{\link[=getFastOptions]{getFastOptions()}} to attempt to get it. If it fails, \code{grassDir} will stay as \code{NULL} and likely result in an error.
 }}
+
+\item{addonDir}{Character or \code{NULL} (deafult): Folder in which \strong{GRASS} add-ons are stored. If \code{NULL}, this is assumed to be in \code{file.path(grassDir, 'addons')}.}
 
 \item{workDir}{\code{NULL} or character: The name of the folder in which \strong{GRASS} will store rasters and vectors. If this is \code{NULL} (default), then the \code{\link[=tempdir]{tempdir()}} on the user's system will be used. If users wish to create persistent \strong{GRASS} sessions that can be used in a different instance of \strong{R} (i.e., if \strong{R} is stopped then restarted), then this needs to be specified.}
 
@@ -40,7 +44,7 @@ If \code{NULL}, then the function will use \code{\link[=getFastOptions]{getFastO
 An \code{\link[rgrass:gmeta]{rgrass::gmeta()}} object (a list) if successful (invisibly). If not successful, the function will usually either fail or return \code{FALSE} with a warning.
 }
 \description{
-This function initializes a \strong{GRASS} session in a particular folder. You need to run this function (usually just once) before you use most functions in \strong{fasterRaster}. You can also use \code{\link[=fastRestore]{fastRestore()}} to switch between \link[=tutorial_sessions]{working folders, locations, and mapsets}.
+This function initializes a \strong{GRASS} session in a particular folder. You need to run this function (usually just once) before you use most functions in \strong{fasterRaster}. You can use \code{\link[=fastRestore]{fastRestore()}} to switch between \link[=tutorial_sessions]{working folders, locations, and mapsets}.
 }
 \examples{
 \dontrun{
@@ -81,7 +85,7 @@ rivers <- fast(madRivers)
 rivers
 
 # IMPORTANT #3: Revert back to original GRASS session if needed.
-sessionRestore(opts.)
+fastRestore(opts.)
 removeSession('examples')
 
 }

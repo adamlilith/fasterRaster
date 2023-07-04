@@ -7,7 +7,7 @@
 #' @param nlevels Numeric: A positive integer or missing (default). Number of levels at which to calculate contours. Levels will be calculated in equal-sized steps from the smallest to the largest value of `x`. Either `nlevels` or `levels` must be specified.
 #' @param levels Numeric vector: A numeric vector of values at which to calculate contour lines. Either `nlevels` or `levels` must be specified.
 #'
-#' @seealso [terra::as.contour()]
+#' @seealso [terra::as.contour()], module `r.contour` in **GRASS**
 #'
 #' @example man/examples/ex_asContour.r
 #'

@@ -23,7 +23,7 @@
 \arguments{
 \item{x}{A \code{GRaster} or \code{GVector}.}
 
-\item{width}{Numeric: Maximum distance cells must be from focal cells to be within the buffer. If the buffering unit is \verb{'cells}', then to get \code{n} cell widths, use \code{n + epsilon}, where \code{epsilon} is a small number (e.g., 0.001). The larger the buffer, this smaller this must be to ensure just \code{n} cells are included.}
+\item{width}{Numeric: Maximum distance cells must be from focal cells to be within the buffer. For rasters, if the buffering unit is \verb{'cells}', then to get \code{n} cell widths, use \code{n + epsilon}, where \code{epsilon} is a small number (e.g., 0.001). The larger the buffer, this smaller this must be to ensure just \code{n} cells are included.}
 
 \item{unit}{Character: Indicates the units of \code{width}. Can be one of:
 \itemize{
@@ -64,6 +64,7 @@ Partial matching is used and case is ignored.
 # run the line below and the last line in this example to work with it again.
 # If you have not started a GRASS session, you can skip this step and go to
 # step #2.
+opts. <- getFastOptions()
 
 # IMPORTANT #2: Select the appropriate line below and change as necessary to
 # where GRASS is installed on your system.
@@ -80,10 +81,8 @@ madElev <- fastData('madElev')
 madRivers <- fastData('madRivers')
 
 # start GRASS session for examples only
-wd <- forwardSlash(tempdir())
-
 faster(crs = madElev, grassDir = grassDir,
-workDir = wd, location = 'examples') # line only needed for examples
+workDir = tempdir(), location = 'examples') # line only needed for examples
 
 # convert a SpatRaster to a GRaster, and sf to a GVector
 elev <- fast(madElev)
@@ -106,11 +105,11 @@ plot(buffRivers)
 plot(st_geometry(madRivers), col = 'blue', add = TRUE)
 
 # IMPORTANT #3: Revert back to original GRASS session if needed.
-sessionRestore(opts.)
+fastRestore(opts.)
 removeSession('examples')
 
 }
 }
 \seealso{
-\code{\link[terra:buffer]{terra::buffer()}}, \code{\link[sf:geos_unary]{sf::st_buffer()}}, and \strong{GRASS} modules \code{r.buffer}, \code{r.grow}, and \code{v.buffer}
+\code{\link[terra:buffer]{terra::buffer()}}, \code{\link[sf:geos_unary]{sf::st_buffer()}}, and modules \code{r.buffer}, \code{r.grow}, and \code{v.buffer} in \strong{GRASS}
 }

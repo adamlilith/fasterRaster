@@ -77,8 +77,8 @@ makeGRaster <- function(gn, names = 'raster') {
 		crs = crs(),
 		topology = info[['topology']][1L],
 		extent = c(info[['west']][1L], info[['east']][1L], info[['south']][1L], info[['north']][1L]),
-		zextent = c(info[['zbottom']], info[['ztop']]),
-		nLayers = 1L,
+		zextent = c(info[['zbottom']][1L], info[['ztop']][1L]),
+		nLayers = length(gn),
 		dimensions = c(info[['rows']][1L], info[['cols']][1L], info[['depths']][1L]),
 		resolution = c(info[['ewres']][1L], info[['nsres']][1L], info[['tbres']][1L]),
 		gnames = gn,
@@ -151,13 +151,13 @@ methods::setMethod(
 			cat('mapset      :', object@mapset, '\n')
 		}
 		cat('topology    :', object@topology, '\n')
-		cat('coord ref.  :', crs, '\n')
 		cat('dimensions  :', paste(c(object@dimensions, object@nLayers), collapse=', '), '(nrow, ncol, ndepth, nlyr)\n')
 		cat('resolution  :', paste(resol, collapse=', '), '(x, y, z)\n')
 		cat('extent      :', paste(extent, collapse=', '), '(xmin, xmax, ymin, ymax)\n')
 		if (details | object@topology == '3D') {
 			cat('z extent    :', paste(object@zextent, collapse=', '), '(bottom, top)\n')
 		}
+		cat('coord ref.  :', crs, '\n')
 		if (details) cat('gnames(s)   :', gnames, '\n')
 		cat('name(s)     :', names, '\n')
 		cat('datatype*   :', datatype, '\n')

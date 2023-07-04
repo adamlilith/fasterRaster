@@ -18,7 +18,7 @@
 \item{df}{If \code{TRUE}, copy the data frame of the \code{x} \code{GVector} to the output. If \code{FALSE} (default), the output will not have a data frame.}
 }
 \value{
-A \code{GRaster} or \code{GVector}.
+A \code{GRaster}.
 }
 \description{
 \code{GRaster}s can be "stacked" using this function, effectively creating a multi-layered raster. Note that this is different from creating a 3-dimensional raster, though such an effect can be emulated using stacking. \code{GVector}s can be combined into a single vector.  Stacks can only be created when:
@@ -47,6 +47,7 @@ If features (boundaries, lines, etc.) of \code{GVector}s that are combined are i
 # run the line below and the last line in this example to work with it again.
 # If you have not started a GRASS session, you can skip this step and go to
 # step #2.
+opts. <- getFastOptions()
 
 # IMPORTANT #2: Select the appropriate line below and change as necessary to
 # where GRASS is installed on your system.
@@ -65,10 +66,8 @@ madRivers <- fastData('madRivers')
 madDypsis <- fastData('madDypsis')
 
 # start GRASS session for examples only
-wd <- forwardSlash(tempdir()) # only for examples
-
 faster(crs = madElev, grassDir = grassDir,
-workDir = wd, location = 'examples') # line only needed for examples
+workDir = tempdir(), location = 'examples') # line only needed for examples
 
 ### GRaster properties
 ######################
@@ -126,6 +125,13 @@ dypsis <- fast(madDypsis)
 ext(rivers)
 st_bbox(rivers) # extent
 
+west(rivers) # western extent
+east(rivers) # eastern extent
+south(rivers) # southern extent
+north(rivers) # northern extent
+top(rivers) # top extent
+bottom(rivers) # bottom extent
+
 # coordinate reference system
 crs(rivers)
 st_crs(rivers)
@@ -161,15 +167,26 @@ topology(rivers) # dimensionality
 is.2d(elev) # is it 2D?
 is.3d(elev) # is it 3D?
 
+# refresh values from GRASS
+# (reads values from GRASS... does not appear to do anything in this case)
+refresh(elev)
+
 ### operations on GVectors
 ##########################
 
 # convert to data frame
 as.data.frame(rivers)
 
+# refresh values from GRASS
+# (reads values from GRASS... does not appear to do anything in this case)
+refresh(rivers)
+
 # IMPORTANT #3: Revert back to original GRASS session if needed.
 fastRestore(opts.)
 removeSession('examples')
 
 }
+}
+\seealso{
+\code{\link[terra:c]{terra::c()}}
 }

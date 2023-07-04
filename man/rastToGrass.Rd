@@ -11,13 +11,13 @@ rastToGrass(x, gn, flags = c("quiet", "overwrite"))
 
 \item{gn}{Character: Name of the file in \strong{GRASS}.}
 
-\item{flags}{Character vector: Flags to send to \strong{GRASS} module \code{r.in.gdal}.}
+\item{flags}{Character vector: Flags to send to \strong{GRASS} module \code{r.in.gdal}. These can include \code{quiet} (suppress messages) and \code{overwrite} (write over an existing raster of the same name).}
 }
 \value{
 \code{TRUE} (invisibly). Exports a \code{SpatRaster} to an open \strong{GRASS} connection and names it the value in \code{gn}.
 }
 \description{
-This is a utility function that sends a \code{SpatRaster} to an existing \strong{GRASS} connection. It is not of use to most users. The function is based on the \code{\link[rgrass:readRAST]{rgrass::write_RAST()}} function, except that it works when \strong{fasterRaster} is attached. The reason for (more or less) duplicating this function is that the use of \code{\link[methods:getMethod]{methods::getMethod()}} looks at the \strong{fasterRaster} definitions for \code{writeVector}, and cannot find one for a \code{SpatVector}. To make the raster an actual \code{GRaster}, you need to use this function then \code{\link[=makeGRaster]{makeGRaster()}} using \code{gn} as the argument to that function.
+This is a utility function that converts a \code{SpatRaster} to a \strong{GRASS} raster. It does not make the corresponding \code{GRaster}, which is a pointer to the raster in \strong{GRASS}. It is therefore not of use to most users. The function is based on the \code{\link[rgrass:readRAST]{rgrass::write_RAST()}} function, except that it works when \strong{fasterRaster} is attached. The reason for (more or less) duplicating this function is that the use of \code{\link[methods:getMethod]{methods::getMethod()}} looks at the \strong{fasterRaster} definitions for \code{writeRaster}, and cannot find one for a \code{SpatRaster}. To make the raster an actual \code{GRaster}, you need to use this function then \code{\link[=makeGRaster]{makeGRaster()}} using \code{gn} as the argument to that function.
 }
 \examples{
 \dontrun{
@@ -28,6 +28,7 @@ This is a utility function that sends a \code{SpatRaster} to an existing \strong
 # run the line below and the last line in this example to work with it again.
 # If you have not started a GRASS session, you can skip this step and go to
 # step #2.
+opts. <- getFastOptions()
 
 # IMPORTANT #2: Select the appropriate line below and change as necessary to
 # where GRASS is installed on your system.
@@ -46,10 +47,8 @@ madRivers <- fastData('madRivers')
 madDypsis <- fastData('madDypsis')
 
 # start GRASS session for examples only
-wd <- forwardSlash(tempdir()) # only for examples
-
 faster(crs = madElev, grassDir = grassDir,
-workDir = wd, location = 'examples') # line only needed for examples
+workDir = tempdir(), location = 'examples') # line only needed for examples
 
 ### GRaster properties
 ######################
@@ -107,6 +106,13 @@ dypsis <- fast(madDypsis)
 ext(rivers)
 st_bbox(rivers) # extent
 
+west(rivers) # western extent
+east(rivers) # eastern extent
+south(rivers) # southern extent
+north(rivers) # northern extent
+top(rivers) # top extent
+bottom(rivers) # bottom extent
+
 # coordinate reference system
 crs(rivers)
 st_crs(rivers)
@@ -142,11 +148,19 @@ topology(rivers) # dimensionality
 is.2d(elev) # is it 2D?
 is.3d(elev) # is it 3D?
 
+# refresh values from GRASS
+# (reads values from GRASS... does not appear to do anything in this case)
+refresh(elev)
+
 ### operations on GVectors
 ##########################
 
 # convert to data frame
 as.data.frame(rivers)
+
+# refresh values from GRASS
+# (reads values from GRASS... does not appear to do anything in this case)
+refresh(rivers)
 
 # IMPORTANT #3: Revert back to original GRASS session if needed.
 fastRestore(opts.)
@@ -155,5 +169,6 @@ removeSession('examples')
 }
 }
 \seealso{
-\code{\link[rgrass:readRAST]{rgrass::write_RAST()}}, \code{\link[rgrass:readRAST]{rgrass::read_RAST()}}
+\code{\link[rgrass:readRAST]{rgrass::write_RAST()}}, \code{\link[rgrass:readRAST]{rgrass::read_RAST()}}, module \code{r.in.gdal} in \strong{GRASS}
+#'
 }

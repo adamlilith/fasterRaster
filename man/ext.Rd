@@ -5,30 +5,89 @@
 \alias{ext}
 \alias{zext,GSpatial-method}
 \alias{zext}
+\alias{west,missing-method}
+\alias{west}
+\alias{west,GSpatial-method}
+\alias{east,missing-method}
+\alias{east}
+\alias{east,GSpatial-method}
+\alias{north,missing-method}
+\alias{north}
+\alias{north,GSpatial-method}
+\alias{south,missing-method}
+\alias{south}
+\alias{south,GSpatial-method}
+\alias{top,missing-method}
+\alias{top}
+\alias{top,GSpatial-method}
+\alias{bottom,GSpatial-method}
+\alias{bottom}
+\alias{origin,GSpatial-method}
+\alias{origin}
 \alias{st_bbox,ANY-method}
 \alias{st_bbox}
-\title{Spatial extent of a GRaster or GVector}
+\title{Spatial extent or origin of a GRaster or GVector}
 \usage{
-\S4method{ext}{GSpatial}(x)
+\S4method{ext}{GSpatial}(x, vector = FALSE)
 
 \S4method{zext}{GSpatial}(x)
+
+\S4method{west}{missing}(x, char = FALSE)
+
+\S4method{west}{GSpatial}(x, char = FALSE)
+
+\S4method{east}{missing}(x, char = FALSE)
+
+\S4method{east}{GSpatial}(x, char = FALSE)
+
+\S4method{north}{missing}(x, char = FALSE)
+
+\S4method{north}{GSpatial}(x, char = FALSE)
+
+\S4method{south}{missing}(x, char = FALSE)
+
+\S4method{south}{GSpatial}(x, char = FALSE)
+
+\S4method{top}{missing}(x, char = FALSE)
+
+\S4method{top}{GSpatial}(x, char = FALSE)
+
+\S4method{bottom}{GSpatial}(x, char = FALSE)
+
+\S4method{bottom}{GSpatial}(x, char = FALSE)
+
+\S4method{origin}{GSpatial}(x)
 
 \S4method{st_bbox}{ANY}(obj, ...)
 
 st_bbox(obj, ...)
 }
 \arguments{
-\item{x, obj}{An object that inherits from \code{GSpatial} (i.e., a \code{GRaster} or \code{GVector}).}
+\item{x, obj}{An object that inherits from \code{GSpatial} (i.e., a \code{GRaster} or \code{GVector}) or missing. If missing, then the horitontal or vertical extent of the current \link[=tutorial_regions]{region} is returned.}
+
+\item{vector}{Logical: If \code{FALSE} (default), return a \code{SpatExtent} object. If \code{TRUE}, return the extent as a named vactor.}
+
+\item{char}{Logical: If \code{FALSE} (default), return a numeric value. If \code{TRUE}, return as a character.}
 
 \item{...}{Other arguments (generally unused).}
 }
 \value{
-\code{ext()} returns a \code{SpatExtent} object (\strong{terra} package).
-\code{zext()} returns a numeric vector for \code{GRaster}s and a numeric matrix for \code{GVector}s.
-\code{st_bbox()} returns a \code{bbox} object (\strong{sf} package).
+The returned values depend on the function:
+\itemize{
+\item \code{ext()}: A \code{SpatExtent} object (\strong{terra} package) or a numeric vector.
+\item \code{zext()}: A numeric vector.
+\item \code{west()}, \code{east()}, \code{north()}, \code{south()}, \code{top()}, and \code{bottom()}: A numeric value or character.
+\item \code{st_bbox()} returns a \code{bbox} object (\strong{sf} package).
+}
 }
 \description{
-\code{ext()} provides the 2-dimensional spatial extent of a \code{GRaster} or \code{GVector} (i.e., westernmost/easternmost and southernmost/northernmost coordinates of area represented). \code{zext()} provides the vertical extent (i.e., topmost and bottommost elevation of the volume represented). The vertical extent is only defined if the \code{GRaster} or \code{GVector} is 3-dimensional.
+The extent or origin of \code{GSpatial} object (\code{GRegions}, \code{GRaster}s, and \code{GVector}s):
+
+\code{ext()}: 2-dimensional spatial extent (i.e., westernmost/easternmost and southernmost/northernmost coordinates of area represented).\cr\cr
+\code{zext()}: Vertical extent (i.e., topmost and bottommost elevation of the volume represented). The vertical extent is not \code{NA} only if the object is 3-dimensional.\cr\cr
+\code{west()}, \code{east()}, \code{north()}, \code{south()}: Coordinates of one side of horiztonal extent.\cr\cr
+\code{top()} and \code{bottom()}: Coordinates of top and bottom of vertical extent.\cr\cr
+\code{origin()}: Coordinates of the northwest corner of the extent of the object.\cr\cr
 }
 \examples{
 \dontrun{
@@ -39,6 +98,7 @@ st_bbox(obj, ...)
 # run the line below and the last line in this example to work with it again.
 # If you have not started a GRASS session, you can skip this step and go to
 # step #2.
+opts. <- getFastOptions()
 
 # IMPORTANT #2: Select the appropriate line below and change as necessary to
 # where GRASS is installed on your system.
@@ -57,10 +117,8 @@ madRivers <- fastData('madRivers')
 madDypsis <- fastData('madDypsis')
 
 # start GRASS session for examples only
-wd <- forwardSlash(tempdir()) # only for examples
-
 faster(crs = madElev, grassDir = grassDir,
-workDir = wd, location = 'examples') # line only needed for examples
+workDir = tempdir(), location = 'examples') # line only needed for examples
 
 ### GRaster properties
 ######################
@@ -118,6 +176,13 @@ dypsis <- fast(madDypsis)
 ext(rivers)
 st_bbox(rivers) # extent
 
+west(rivers) # western extent
+east(rivers) # eastern extent
+south(rivers) # southern extent
+north(rivers) # northern extent
+top(rivers) # top extent
+bottom(rivers) # bottom extent
+
 # coordinate reference system
 crs(rivers)
 st_crs(rivers)
@@ -153,15 +218,26 @@ topology(rivers) # dimensionality
 is.2d(elev) # is it 2D?
 is.3d(elev) # is it 3D?
 
+# refresh values from GRASS
+# (reads values from GRASS... does not appear to do anything in this case)
+refresh(elev)
+
 ### operations on GVectors
 ##########################
 
 # convert to data frame
 as.data.frame(rivers)
 
+# refresh values from GRASS
+# (reads values from GRASS... does not appear to do anything in this case)
+refresh(rivers)
+
 # IMPORTANT #3: Revert back to original GRASS session if needed.
 fastRestore(opts.)
 removeSession('examples')
 
 }
+}
+\seealso{
+\code{\link[terra:ext]{terra::ext()}}, \code{\link[sf:st_bbox]{sf::st_bbox()}}
 }

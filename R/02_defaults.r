@@ -5,11 +5,12 @@
 .coresDefault <- function() 1
 .detailsDefault <- function() FALSE
 .grassDirDefault <- function() NULL
+.addonDirDefault <- function() NULL
 .memoryDefault <- function() 300 # in MB
 .useDataTableDefault <- function() TRUE # logical
 # .grassVerDefault <- function() '82'
 
-.workDirDefault <- function() file.path(gsub('\\\\', '/', tempdir()))
+.workDirDefault <- function() file.path(forwardSlash(tempdir()))
 .locationDefault <- function() 'default'
 .mapsetDefault <- function() 'PERMANENT'
 
@@ -20,6 +21,7 @@
 	opts <- data.frame(
 		name = c(
 			'grassDir',
+			'addonDir',
 			'details',
 			'cores',
 			'memory',
@@ -31,6 +33,7 @@
 			'useDataTable'
 		),
 		type = c(
+			'character',
 			'character',
 			'logical',
 			'numeric',

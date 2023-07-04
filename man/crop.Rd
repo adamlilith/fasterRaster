@@ -26,5 +26,5 @@ man/examples/ex_crop.r
 
 }
 \seealso{
-\code{\link[terra:crop]{terra::crop()}}; \code{\link[sf:st_crop]{sf::st_crop()}}
+\code{\link[terra:crop]{terra::crop()}}, \code{\link[sf:st_crop]{sf::st_crop()}}
 }

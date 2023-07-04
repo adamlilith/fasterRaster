@@ -21,6 +21,7 @@ getFastOptions(..., default = FALSE)
 \item Mac OS: \code{"/Applications/GRASS-8.3.app/Contents/Resources"}
 \item Linux: \code{'/usr/local/grass'}
 }
+\item \code{addonDir} (character): Folder in which \strong{GRASS} addons are stored. If \code{NULL} and \code{grassDir} is not \code{NULL}, this will be taken to be \code{file.path(grassDir, 'addons')}.
 \item \code{memory} (integer/numeric): The amount of memory to allocate to a task, in MB. The default is 300 MB. Only some \strong{GRASS} modules allow this option.
 \item \code{data.table} (logical): If \code{FALSE} (default), use \code{data.frame}s when going back and forth between data tables of \code{GVector}s and \strong{R}. This can be slow for very large data tables. If \code{TRUE}, use \code{data.table}s from the \strong{data.table} package. This can be much faster, but it might require you to know how to use \code{data.table}s if you want to manipulate them in \strong{R}. You can always convert them to \code{data.frame}s using \code{\link[=as.data.frame]{as.data.frame()}}.
 \item \code{workDir} (character): The folder in which \strong{GRASS} rasters, vectors, and other objects are created and manipulated. Typically, this is set when you first call \code{\link[=faster]{faster()}}. All subsequent calls to \code{faster()} will not do not need \code{workDir} defined because it will be obtained from the options. By default, this is set to the temporary directory on your operating system (from \code{\link[=tempdir]{tempdir()}}), appended with "\code{fr}". Ergo, the path will be \code{file.path(tempdir(), 'fr')}.
@@ -61,9 +62,8 @@ Multiple options can be set at once using
 # NB This example is in a "dontrun{}" block because it requires users to have
 # GRASS GIS Version 8+ installed on their system.
 
-# IMPORTANT #1: If you already have a GRASS session started, you will need to
-# run the line below and the last line in this example to work with it again.
-# If you have not started a GRASS session, you can skip this and the last step.
+# IMPORTANT: Run the line below to store your current settings. To restore
+# them, run the last line in this example.
 opts. <- getFastOptions()
 
 # see current values for options

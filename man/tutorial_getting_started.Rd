@@ -112,6 +112,13 @@ sfVect <- st_as_sf(rivers)
 
 Finally, you can use \code{\link[=writeRaster]{writeRaster()}} and \code{\link[=writeVector]{writeVector()}} to save \strong{fasterRaster} rasters and vectors directly to disk. This will be faster than converting to another format then saving.
 }
+
+\subsection{Further reading}{
+\itemize{
+\item The \href{https://grass.osgeo.org/}{GRASS GIS} website is authoritative and contains the manual on all the \strong{GRASS} functions used in this package.
+\item The Wiki on \href{https://grasswiki.osgeo.org/wiki/R_statistics/rgrass}{how to run GRASS in R or R in GRASS} is a good place to start if you want to become a power-user of \strong{GRASS} in \strong{R}.
+}
+}
 }
 
 \keyword{tutorial}

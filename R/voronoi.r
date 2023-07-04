@@ -13,7 +13,7 @@
 #'
 #' @aliases voronoi
 #' @rdname voronoi
-#' @exportMethods voronoi
+#' @exportMethod voronoi
 methods::setMethod(
 	f = 'voronoi',
 	signature = c(x = 'GVector'),

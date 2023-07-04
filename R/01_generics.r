@@ -29,7 +29,6 @@ methods::setGeneric(name = 'distance', def = function(x, y, ...) standardGeneric
 methods::setGeneric(name = 'nunique', def = function(x, ...) standardGeneric('nunique'))
 
 methods::setGeneric(name = 'east', def=function(x, ...) standardGeneric('east'))
-methods::setGeneric(name = 'ewres', def=function(x, ...) standardGeneric('ewres'))
 methods::setGeneric('ext', package = 'terra')
 
 methods::setGeneric(name = 'fast', def = function(x, ...) standardGeneric('fast'))
@@ -65,14 +64,15 @@ methods::setGeneric(name = 'ncell3d', def = function(x) standardGeneric('ncell3d
 methods::setGeneric(name = 'ndepth', def = function(x) standardGeneric('ndepth'))
 methods::setGeneric(name = 'nlyr', package='terra')
 methods::setGeneric(name = 'north', def=function(x, ...) standardGeneric('north'))
-methods::setGeneric(name = 'nsres', def=function(x, ...) standardGeneric('nsres'))
 methods::setGeneric(name = 'ncol', def = function(x) standardGeneric('ncol')) # in base
 methods::setGeneric(name = 'nrow', def = function(x) standardGeneric('nrow')) # in base
 
+methods::setGeneric(name = 'origin', package='terra')
 methods::setGeneric(name = 'project', package='terra')
 
 methods::setGeneric(name = 'r2', def=function(x, ...) standardGeneric('r2'))
 methods::setGeneric(name = 'rast', package='terra')
+methods::setGeneric(name = 'refresh', def=function(x, ...) standardGeneric('refresh'))
 methods::setGeneric(name = 'regionDim', def=function(x, ...) standardGeneric('regionDim'))
 methods::setGeneric(name = 'regionExt', def=function(x, ...) standardGeneric('regionExt'))
 methods::setGeneric(name = 'regionRes', def=function(x, ...) standardGeneric('regionRes'))
@@ -95,6 +95,7 @@ methods::setGeneric(name = 'st_buffer', def=function(x, ...) standardGeneric('st
 if (!isGeneric('st_crs')) methods::setGeneric(name = 'st_crs', def=function(x, ...) standardGeneric('st_crs'))
 methods::setGeneric(name = 'st_distance', def=function(x, y, ...) standardGeneric('st_distance'))
 
+methods::setGeneric(name = 'terrain', package='terra')
 methods::setGeneric(name = 'top', def=function(x, ...) standardGeneric('top'))
 methods::setGeneric(name = 'topology', def=function(x, ...) standardGeneric('topology'))
 methods::setGeneric(name = 'tvalue', def=function(x, ...) standardGeneric('tvalue'))
@@ -106,6 +107,10 @@ methods::setGeneric(name = 'voronoi', package='terra')
 methods::setGeneric(name = 'west', def=function(x, ...) standardGeneric('west'))
 methods::setGeneric(name = 'writeRaster', def=function(x, filename, ...) standardGeneric('writeRaster'))
 methods::setGeneric(name = 'writeVector', def=function(x, filename, ...) standardGeneric('writeVector'))
+
+methods::setGeneric(name = 'xres', package='terra')
+
+methods::setGeneric(name = 'yres', package='terra')
 
 methods::setGeneric(name = 'zext', def = function(x) standardGeneric('zext'))
 methods::setGeneric(name = 'zres', def = function(x) standardGeneric('zres'))

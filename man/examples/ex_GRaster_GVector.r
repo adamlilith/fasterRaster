@@ -126,11 +126,19 @@ topology(rivers) # dimensionality
 is.2d(elev) # is it 2D?
 is.3d(elev) # is it 3D?
 
+# refresh values from GRASS
+# (reads values from GRASS... does not appear to do anything in this case)
+refresh(elev)
+
 ### operations on GVectors
 ##########################
 
 # convert to data frame
 as.data.frame(rivers)
+
+# refresh values from GRASS
+# (reads values from GRASS... does not appear to do anything in this case)
+refresh(rivers)
 
 # IMPORTANT #3: Revert back to original GRASS session if needed.
 fastRestore(opts.)

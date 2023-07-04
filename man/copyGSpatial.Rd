@@ -11,12 +11,10 @@
 
 \S4method{copyGSpatial}{GVector}(x)
 
-\S4method{copyGSpatial}{character}(x, rastOrVect)
+\S4method{copyGSpatial}{character}(x)
 }
 \arguments{
 \item{x}{\code{GRaster}, \code{GVector}, or character: The object or the \code{gnames} of the object to be copied. Can take multi-layered objects or multiple \code{gnames}.}
-
-\item{rastOrVect}{Character: Type of object to copy. Either \code{raster} or \code{vector}. Partial matching is used, and case does not matter.}
 }
 \value{
 Character vector representing the new \code{gnames} of each object, plus makes a copy of the given object(s) in \strong{GRASS}.

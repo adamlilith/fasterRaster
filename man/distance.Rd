@@ -84,6 +84,7 @@ This function produces a raster or a matrix of geographic distances, depending o
 # run the line below and the last line in this example to work with it again.
 # If you have not started a GRASS session, you can skip this step and go to
 # step #2.
+opts. <- getFastOptions()
 
 # IMPORTANT #2: Select the appropriate line below and change as necessary to
 # where GRASS is installed on your system.
@@ -101,10 +102,8 @@ madRivers <- fastData('madRivers')
 madDypsis <- fastData('madDypsis')
 
 # start GRASS session for examples only
-wd <- forwardSlash(tempdir())
-
 faster(crs = madElev, grassDir = grassDir,
-workDir = wd, location = 'examples') # line only needed for examples
+workDir = tempdir(), location = 'examples') # line only needed for examples
 
 # convert a SpatRaster to a GRaster, and sf to a GVector
 elev <- fast(madElev)
@@ -153,11 +152,11 @@ distToRivers
 distToPlants
 
 # IMPORTANT #3: Revert back to original GRASS session if needed.
-sessionRestore(opts.)
+fastRestore(opts.)
 removeSession('examples')
 
 }
 }
 \seealso{
-\code{\link[terra:distance]{terra::distance()}}; \code{\link[sf:geos_measures]{sf::st_distance()}}, \strong{GRASS} module \code{r.grow.distance}
+\code{\link[terra:distance]{terra::distance()}}; \code{\link[sf:geos_measures]{sf::st_distance()}}, modules \code{r.grow.distance} and \code{v.distance} in \strong{GRASS}
 }

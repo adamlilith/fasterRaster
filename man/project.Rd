@@ -9,51 +9,62 @@
 \S4method{project}{GRaster}(
   x,
   y = NULL,
+  align = FALSE,
   method = NULL,
-  trim = TRUE,
-  location = NULL,
-  mapset = NULL
+  fallback = TRUE,
+  wrap = FALSE,
+  toLocation = NULL,
+  toMapset = NULL
 )
 
 \S4method{project}{GVector}(x, y = NULL, location = NULL, mapset = NULL)
 }
 \arguments{
-\item{x}{A \code{GRaster} or \code{GVector}.}
+\item{x}{A \code{GRaster} or \code{GVector} to be projected.}
 
-\item{y}{A \code{NULL} (default), or a \code{GRaster} or \code{GVector}:
+\item{y}{\code{NULL} (default), or a \code{GSession} object or any that contain it (i.e., a \code{GRaster}, \code{GVector}, or \code{GRegion}):
 \itemize{
-\item If \code{NULL}, then \code{x} is projected to the CRS of the current \link[=tutorial_location]{location} (i.e., \code{x} should not be in the current "location"). \code{x} will not be resampled.
-\item If \code{x} is a \code{GRaster} and \code{y} is a \code{GRaster}, then \code{x} will be projected to the CRS of \code{y} and resampled to the same resolution as \code{y}. \code{x} should not be the same \link[=tutorial_location]{location} as \code{y}.
-\item If \code{x} is a \code{GRaster} and \code{y} is a \code{GVector}, then \code{x} will be projected to the CRS of \code{y}. \code{x} will not be resampled. \code{x} should not be the same \link[=tutorial_location]{location} as \code{y}.
+\item If \code{y} is \code{NULL}, then \code{x} is projected to the CRS of the current "\link[=tutorial_sessions]{location}" (i.e., \code{x} should not be in the current "location"). If \code{x} is a \code{GRaster}, it will not be resampled to a different resolution.
+\item If \code{x} is a \code{GRaster} and \code{y} is a \code{GRaster} or \code{GRegion}, then \code{x} will be projected to the CRS of \code{y} and resampled to the same resolution as \code{y}. \code{x} will be cropped to the extent of \code{y} if \code{align} is \code{TRUE}. \code{x} should not be the same \link[=tutorial_sessions]{location} as \code{y}.
+\item If \code{x} is a \code{GRaster} and \code{y} is a \code{GVector}, then \code{x} will be projected to the CRS of \code{y}. \code{x} will not be resampled. \code{x} should not be the same "\link[=tutorial_sessions]{location}" as \code{y}.
 \item If \code{x} is a \code{GVector}, then \code{x} will be projected to the CRS of \code{y}.
 }}
 
-\item{method}{Character or \code{NULL}: Method to use to conduct the transformation (rasters only). Partial matching is used.
+\item{align}{Logical: If \code{FALSE} (default), and \code{x} and \code{y} are \code{GRaster}s, then the extent of \code{x} will be cropped to the extent of \code{y}.}
+
+\item{method}{Character or \code{NULL} (\code{GRaster}s only): Method to use to conduct the transformation (rasters only). Partial matching is used.
 \itemize{
-\item \code{NULL} (default): Automatically choose based on raster properties (\code{near} for categorical data, \code{bilinear} for continuous data)
-\item \code{'near'}: Nearest neighbor. Best for categorical data, and often a poor choice for continuous data.  If \code{\link[=ncat]{ncat()}} is >0, this method will be used by default.
+\item \code{NULL} (default): Automatically choose based on raster properties (\code{near} for categorical data, \code{bilinear} for continuous data).
+\item \code{'near'}: Nearest neighbor. Best for categorical data, and often a poor choice for continuous data.  If \code{\link[=datatype]{datatype()}} is \code{CELL}, this method will be used by default.
 \item \code{'bilinear'}: Bilinear interpolation (default for non-categorical data; uses weighted values from 4 cells).
 \item \code{'bicubic'}: Bicubic interpolation (uses weighted values from 16 cells).
 \item \code{'lanczos'}: Lanczos interpolation (uses weighted values from 25 cells).
-Note that if \code{x} and \code{y} are \code{GRaster}s, then the same method is used to resample \code{x} to \code{y} before projecting \code{x}.
-}}
+}
 
-\item{trim}{Logical: When projecting rasters that "wrap around" (i.e., whole-world rasters or rasters that have edges that actually circle around to meet on the globe), \code{trim} should be \code{FALSE} to avoid removing rows and columns from the "edge" of the map.}
+\emph{Note #1}: If \code{x} and \code{y} are \code{GRaster}s, then the same \code{method} is used to resample \code{x} to the resolution of \code{y} before projecting \code{x}.
 
-\item{location, mapset}{Character or \code{NULL} (default): The name of the \link[=tutorial_locations]{location} and \link[=tutorial_locations]{mapset} which has the CRS you to which you wish to transform the \code{GRaster} or \code{GVector}. You can get this using \code{\link[=location]{location()}} and \code{\link[=mapset]{mapset()}}. If left as \code{NULL}, then it will be assumed that you want to project the object to the current location and mapset.}
+\emph{Note #2}: Methods that use multiple cells will cause the focal cell to become \code{NA} if there is at least one cell with an \code{NA} in the cells it draws from. These \code{NA} cells can often be filled using the \code{fallback} option.}
+
+\item{fallback}{Logical (projecting \code{GRaster}s only): If \code{TRUE} (default), then use "lower" methods to fill in \code{NA} cells when a "higher" method is used. For example, if \code{method = 'bicubic'}, \code{NA} cells will be filled in using the \code{bilinear} method, except when that results in \code{NA}s, in which case the \code{near} method will be used. Fallback causes fewer cells to revert to \code{NA} values, so may be better at capturing complex "edges" (e.g., coastlines). Fallback does increase processing time because each "lower" method must be applied, then results merged. Fallback is not used if \code{method = 'near'}.}
+
+\item{wrap}{Logical (\code{GRaster}s only): When projecting rasters that "wrap around" (i.e., whole-world rasters or rasters that have edges that actually circle around to meet on the globe), \code{wrap} should be \code{TRUE} to avoid removing rows and columns from the "edge" of the map. The default is \code{FALSE}.}
+
+\item{location, mapset}{Character or \code{NULL} (default): The name of the \link[=tutorial_sessions]{location and mapset} which have the CRS you to which you want to transform the \code{GRaster} or \code{GVector}. You can get the current location and mapset or the location and mapset of an object using \code{\link[=location]{location()}} and \code{\link[=mapset]{mapset()}}. If left as \code{NULL}, then it will be assumed that you want to project the object to the currently active location and mapset.}
 }
 \value{
 A \code{GRaster} or \code{GVector}.
 }
 \description{
-There are two ways to project rasters and vectors into a different coordinate reference system (CRS) in \strong{fasterRaster}.  Both are different from how they are implemented in other packages, so it is important to understand how it works in \strong{fasterRaster}.
+\emph{fasterRaster}* offers three ways to project rasters and vectors into a different coordinate reference system (CRS).  Each of them are different from how they are implemented in \strong{terra}, so it is important to understand how it works in \strong{fasterRaster}.
 
-First, if you are wanting to change the CRS for a \code{SpatRaster}, \code{SpatVector}, or a raster or vector on disk, you can use the \code{\link[=fast]{fast()}} function. To do this, you need to start a \strong{GRASS} session using \code{\link[=faster]{faster()}} with the CRS that you want to transform the raster/vector into, then convert the object to a \code{GRaster} or \code{GVector} using \code{\link[=fast]{fast()}}. Note that for rasters the \code{method} argument in that function may be important.
+First, if you are wanting to change the CRS for a \code{SpatRaster}, \code{SpatVector}, or \code{sf} object already in \code{R}, use the \code{\link[=fast]{fast()}} function. This function will project the object to the CRS of the current \strong{GRASS} \link[=tutorial_sessions]{location}. Note that for rasters, the \code{method} and \code{fallback} arguments in the \code{fast()} function may be important to what you want to achieve.
 
-Second, if you are wanting to change the CRS for a \code{GRaster} or \code{GVector}, you need to initiate a new \strong{GRASS} \link[=tutorial_locations]{location} using \code{\link[=faster]{faster()}} with the CRS that you want to transform it into. This means you need to keep track of which "location" you are working in, as multiple rasters and/or vectors can only be used in the function if they are in the same location. \strong{This function, \code{project()}, is for projecting \code{GRaster}s or \code{GVector}s.}
+Second the procedure works the same way for rasters or vectors stored on disk (and not already in \strong{R}). Simply use the \code{\link[=fast]{fast()}} function with the file name of the object. Again, the \code{method} and \code{fallback} arguments may be important
+
+Third, if you are wanting to change the CRS of a \code{GRaster} or \code{GVector}, you need to initiate a new \strong{GRASS} \link[=tutorial_sessions]{location} using \code{\link[=faster]{faster()}} with the CRS to which you want to transform the object. This means you need to keep track of which \strong{GRASS} "location" you are working in, as multiple rasters and/or vectors can only be used in the function if they are in the same "location."  \emph{This function, \code{project()}, is for projecting \code{GRaster}s or \code{GVector}s between \strong{GRASS} "locations."}
 }
 \details{
-When projecting a raster, the "fallback" methods in \code{r.import} are actually used, even though the \code{method} argument takes the strings for non-fallback methods. See the manual page for the \code{r.import} \strong{GRASS} module.
+When projecting a raster, the "fallback" methods in \strong{GRASS} module \code{r.import} are actually used, even though the \code{method} argument takes the strings specifying non-fallback methods. See the manual page for the \code{r.import} \strong{GRASS} module.
 }
 \examples{
 \dontrun{
@@ -64,6 +75,7 @@ When projecting a raster, the "fallback" methods in \code{r.import} are actually
 # run the line below and the last line in this example to work with it again.
 # If you have not started a GRASS session, you can skip this step and go to
 # step #2.
+opts. <- getFastOptions()
 
 # IMPORTANT #2: Select the appropriate line below and change as necessary to
 # where GRASS is installed on your system.
@@ -89,19 +101,19 @@ madRivers <- project(madRivers, madChelsa)
 wd <- forwardSlash(tempdir())
 
 # set up "to" location
-faster(crs = madElev, grassDir = grassDir,
+faster(x = madElev, grassDir = grassDir,
 workDir = wd, location = 'exampleTo') # line only needed for examples
 
 elev <- fast(madElev)
 
 # set up "from" location and put a raster and vector in it
-faster(crs = madChelsa, grassDir = grassDir,
+faster(x = madChelsa, grassDir = grassDir,
 workDir = wd, location = 'exampleFrom') # line only needed for examples
 
 chelsa <- fast(madChelsa)
 rivers <- fast(madRivers)
 
-# re-activate the "exampleTo" location
+# re-activate the "exampleTo" "location"
 fastRestore(location='exampleTo')
 
 # project vector into the "exampleTo" location
@@ -111,20 +123,16 @@ riversProj
 
 # project raster into the "exampleTo" location but do not resample
 chelsaProjSameRes <- project(chelsa)
+chelsaProjSameRes
 
 # Project raster into the "exampleTo" location and resample to match template.
 # This can take a while...
 chelsaProjNewRes <- project(chelsa, elev)
+chelsaProjNewRes
 
-# compare outcomes
+# Compare:
 chelsaProjSameRes
 chelsaProjNewRes
-
-# We get something a bit different if we resample after projecting:
-chelsaResampAfterProj <- resample(chelsaProjSameRes, elev)
-
-chelsaProjNewRes
-chelsaResampAfterProj
 
 # We can also project rasters/vectors with a different CRS than the current
 # "location" by importing them from disk using fast():
@@ -141,9 +149,12 @@ chelsaProjSameRes
 chelsaProjFromFile
 
 # IMPORTANT #3: Revert back to original GRASS session if needed.
-sessionRestore(opts.)
+fastRestore(opts.)
 removeSession('exampleFrom')
 removeSession('exampleTo')
 
 }
+}
+\seealso{
+\code{\link[terra:project]{terra::project()}}, \code{\link[sf:st_transform]{sf::st_transform()}}, modules \code{r.proj} and \code{v.proj} in \strong{GRASS}
 }

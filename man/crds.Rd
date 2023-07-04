@@ -32,6 +32,7 @@ Returns the coordinates of a \code{GVector}'s features or the coordinates of the
 # run the line below and the last line in this example to work with it again.
 # If you have not started a GRASS session, you can skip this step and go to
 # step #2.
+opts. <- getFastOptions()
 
 # IMPORTANT #2: Select the appropriate line below and change as necessary to
 # where GRASS is installed on your system.
@@ -50,10 +51,8 @@ madCoast4 <- fastData('madCoast4')
 madElev <- fastData('madElev')
 
 # start GRASS session for examples only
-wd <- forwardSlash(tempdir())
-
 faster(crs = madDypsis, grassDir = grassDir,
-workDir = wd, location = 'examples') # line only needed for examples
+workDir = tempdir(), location = 'examples') # line only needed for examples
 
 # convert a SpatRaster to a GRaster, and sf to a GVector
 dypsis <- fast(madDypsis)
@@ -73,11 +72,11 @@ head(coastPoints)
 head(elevPoints)
 
 # IMPORTANT #3: Revert back to original GRASS session if needed.
-sessionRestore(opts.)
+fastRestore(opts.)
 removeSession('examples')
 
 }
 }
 \seealso{
-\code{\link[=as.points]{as.points()}}, \code{\link[terra:coords]{terra::crds()}}
+\code{\link[terra:crds]{terra::crds()}}
 }

@@ -54,6 +54,8 @@ A \code{GRaster} or a \code{stars} raster. A raster is also saved to disk.
 This function saves a \code{GRaster} to disk directly from a \strong{GRASS} session. If the \code{GRaster} was produced in \strong{GRASS} (i.e., not created using \strong{terra} or \strong{stars} then converted to a \code{GRaster}), and you convert it back to a \code{SpatRaster} or \code{stars} raster and want to save it, please consult \code{\link[=writeRaster4]{writeRaster4()}} and \code{\link[=writeRaster8]{writeRaster8()}} for important details!
 
 The function will attempt to ascertain the file type to be ascertained from the file extension, but you can specify the format using the \code{format} argument (see entry for \code{...}). You can see a list of supported formats by simply using this function with no arguments, as in \code{writeRaster()}, or by consulting the online help page for the \strong{GRASS} module \code{r.out.gdal}. Only the \code{GeoTIFF} file format is guaranteed to work for multi-layered rasters.
+
+\strong{Note}: Rasters will be trimmed to their smallest extent such that no rows or columns are all \code{NA}s. You can add \code{NA} rows and columns to a \code{SpatRaster} using \code{\link[terra:extend]{terra::extend()}}.
 }
 \examples{
 \dontrun{
@@ -64,6 +66,7 @@ The function will attempt to ascertain the file type to be ascertained from the 
 # run the line below and the last line in this example to work with it again.
 # If you have not started a GRASS session, you can skip this step and go to
 # step #2.
+opts. <- getFastOptions()
 
 # IMPORTANT #2: Select the appropriate line below and change as necessary to
 # where GRASS is installed on your system.
@@ -78,10 +81,8 @@ library(terra)
 madElev <- fastData('madElev')
 
 # start GRASS session for examples only
-wd <- forwardSlash(tempdir()) # only for examples
-
 faster(crs = madElev, grassDir = grassDir,
-workDir = wd, location = 'examples') # line only needed for examples
+workDir = tempdir(), location = 'examples') # line only needed for examples
 
 # convert SpatRaster to GRaster
 elev <- fast(madElev)
@@ -102,5 +103,5 @@ removeSession('examples')
 }
 }
 \seealso{
-\code{\link[=writeRaster4]{writeRaster4()}} and \code{\link[=writeRaster8]{writeRaster8()}} for saving a raster created in \strong{GRASS} then imported to \strong{R} using \code{\link[=rast]{rast()}}; \code{\link[terra:writeRaster]{terra::writeRaster()}}
+\code{\link[terra:writeRaster]{terra::writeRaster()}}
 }

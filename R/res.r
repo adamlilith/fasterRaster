@@ -4,11 +4,11 @@
 #' 
 #' `res()`: 2-dimensional resolution (x and y).\cr\cr
 #' `res3d()`: 3-dimensinal resolution (z, y, and z).\cr\cr
-#' `ewres()`, `nsres()`, and `zres()`: East-west resolution, north-south resolution, and top-bottom resolution.
+#' `xres()`, `yres()`, and `zres()`: East-west resolution, north-south resolution, and top-bottom resolution.
 #'
 #' @param x A `GRaster`.
 #'
-#' @return A numeric vector. For both `res()` and `res3d()`, the first value is the length of cells in the x-direction and the second the length of cells in the y-direction. For `res3d()` the third value is height of a voxel (the z-direction). `ewres()`, `nsres()`, and `tbres()` each return a single value.
+#' @return A numeric vector. For both `res()` and `res3d()`, the first value is the length of cells in the x-direction and the second the length of cells in the y-direction. For `res3d()` the third value is height of a voxel (the z-direction). `xres()`, `yres()`, and `tbres()` each return a single value.
 #'
 #' @seealso [terra::res()]
 #'
@@ -23,13 +23,22 @@ setMethod(
 	definition = function(x) x@resolution[1L:2L]
 )
 
-#' @aliases res3d
+#' @aliases xres
 #' @rdname res
-#' @exportMethod res3d
+#' @exportMethod xres
 setMethod(
-	f = 'res3d',
+	f = 'xres',
 	signature = 'GRegion',
-	definition = function(x) c(xres=x@resolution[1L], yres=x@resolution[2L], zres=x@resolution[3L])
+	definition = function(x) x@resolution[1L]
+)
+
+#' @aliases yres
+#' @rdname res
+#' @exportMethod yres
+setMethod(
+	f = 'yres',
+	signature = 'GRegion',
+	definition = function(x) x@resolution[2L]
 )
 
 #' @aliases zres
@@ -41,21 +50,12 @@ setMethod(
 	definition = function(x) x@resolution[3L]
 )
 
-#' @aliases ewres
+#' @aliases res3d
 #' @rdname res
-#' @exportMethod ewres
+#' @exportMethod res3d
 setMethod(
-	f = 'ewres',
+	f = 'res3d',
 	signature = 'GRegion',
-	definition = function(x) res3d(x)[1L]
-)
-
-#' @aliases nsres
-#' @rdname res
-#' @exportMethod nsres
-setMethod(
-	f = 'nsres',
-	signature = 'GRegion',
-	definition = function(x) res3d(x)[2L]
+	definition = function(x) c(xres=x@resolution[1L], yres=x@resolution[2L], zres=x@resolution[3L])
 )
 

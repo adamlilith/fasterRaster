@@ -27,6 +27,7 @@ Create a minimum convex hull around a spatial vector.
 # run the line below and the last line in this example to work with it again.
 # If you have not started a GRASS session, you can skip this step and go to
 # step #2.
+opts. <- getFastOptions()
 
 # IMPORTANT #2: Select the appropriate line below and change as necessary to
 # where GRASS is installed on your system.
@@ -41,10 +42,8 @@ library(sf)
 madDypsis <- fastData('madDypsis')
 
 # start GRASS session for examples only
-wd <- forwardSlash(tempdir())
-
 faster(crs = madRivers, grassDir = grassDir,
-workDir = wd, location = 'examples') # line only needed for examples
+workDir = tempdir(), location = 'examples') # line only needed for examples
 
 # convert and sf to a GVector
 dypsis <- fast(madDypsis)
@@ -66,11 +65,11 @@ plot(chSpeciesTerra, col=1:n, add=TRUE)
 
 
 # IMPORTANT #3: Revert back to original GRASS session if needed.
-sessionRestore(opts.)
+fastRestore(opts.)
 removeSession('examples')
 
 }
 }
 \seealso{
-[terra::convHull(), \code{sf::st_convex_hull()}, \strong{GRASS} module \code{v.hull}
+\code{\link[terra:convhull]{terra::convHull()}}, \code{\link[sf:geos_unary]{sf::st_convex_hull()}}, module \code{v.hull} in \strong{GRASS}
 }

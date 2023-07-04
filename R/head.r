@@ -9,7 +9,7 @@
 #'
 #' @returns A `data.frame`.
 #' 
-#' @seealso [base::head()], [base::tail()]
+#' @seealso [head()], [tail()]
 #'
 #' @example man/examples/ex_GRaster_GVector.r
 #'

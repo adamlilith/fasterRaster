@@ -26,7 +26,7 @@
 #'
 #' @param union Logical: If `FALSE` (default), construct a buffer for each geometry. If `TRUE`, union all buffers after creation.
 #'
-#' @seealso [terra::buffer()], [sf::st_buffer()], and **GRASS** modules `r.buffer`, `r.grow`, and `v.buffer`
+#' @seealso [terra::buffer()], [sf::st_buffer()], and modules `r.buffer`, `r.grow`, and `v.buffer` in **GRASS**
 #'
 #' @example man/examples/ex_buffer.R
 #'

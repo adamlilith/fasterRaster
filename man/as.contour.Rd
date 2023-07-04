@@ -26,6 +26,7 @@ Create a \code{GVector} of contour lines from a \code{GRaster}.
 # run the line below and the last line in this example to work with it again.
 # If you have not started a GRASS session, you can skip this step and go to
 # step #2.
+opts. <- getFastOptions()
 
 # IMPORTANT #2: Select the appropriate line below and change as necessary to
 # where GRASS is installed on your system.
@@ -37,10 +38,8 @@ grassDir <- '/usr/local/grass' # Linux
 library(terra)
 
 # start GRASS session for examples only
-wd <- rightSlash(tempdir())
-
 faster(crs = madElev, grassDir = grassDir,
-workDir = wd, location = 'examples') # line only needed for examples
+workDir = tempdir(), location = 'examples') # line only needed for examples
 
 # convert a SpatRaster to a GRaster
 madElev <- fastData('madElev') # elevation raster
@@ -55,11 +54,11 @@ plot(madElev)
 plot(contsVect, add=TRUE)
 
 # IMPORTANT #3: Revert back to original GRASS session if needed.
-sessionRestore(opts.)
+fastRestore(opts.)
 removeSession('examples')
 
 }
 }
 \seealso{
-\code{\link[terra:contour]{terra::as.contour()}}
+\code{\link[terra:contour]{terra::as.contour()}}, module \code{r.contour} in \strong{GRASS}
 }

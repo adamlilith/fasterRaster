@@ -1,11 +1,12 @@
-#' @title Spatial extent of a GRaster or GVector
+#' Spatial extent or origin of a GRaster or GVector
 #'
-#' @description The extent of `GSpatial` object (`GRegions`, `GRaster`s, and `GVector`s):
+#' @description The extent or origin of `GSpatial` object (`GRegions`, `GRaster`s, and `GVector`s):
 #' 
 #' `ext()`: 2-dimensional spatial extent (i.e., westernmost/easternmost and southernmost/northernmost coordinates of area represented).\cr\cr
 #' `zext()`: Vertical extent (i.e., topmost and bottommost elevation of the volume represented). The vertical extent is not `NA` only if the object is 3-dimensional.\cr\cr
 #' `west()`, `east()`, `north()`, `south()`: Coordinates of one side of horiztonal extent.\cr\cr
 #' `top()` and `bottom()`: Coordinates of top and bottom of vertical extent.\cr\cr
+#' `origin()`: Coordinates of the northwest corner of the extent of the object.\cr\cr
 #' 
 #' @param x,obj An object that inherits from `GSpatial` (i.e., a `GRaster` or `GVector`) or missing. If missing, then the horitontal or vertical extent of the current [region][tutorial_regions] is returned.
 #' @param vector Logical: If `FALSE` (default), return a `SpatExtent` object. If `TRUE`, return the extent as a named vactor.
@@ -30,7 +31,8 @@ methods::setMethod(
 	signature = 'GSpatial',
 	definition = function(x, vector = FALSE) {
 
-	out <- c(xmin = x@extent[1L], xmax = x@extent[2L], ymin = x@extent[3L], ymax = x@extent[4L])
+	out <- c(x@extent[1L], x@extent[2L], x@extent[3L], x@extent[4L])
+	names(out) <- c('xmin', 'xmax', 'ymin', 'ymax')
 	if (!vector) out <- terra::ext(out)
 	out
 
@@ -190,6 +192,15 @@ methods::setMethod(
 	if (char) out <- as.character(out)
 	out
 })
+
+#' @aliases origin
+#' @rdname ext
+#' @exportMethod origin
+setMethod(
+	f = 'origin',
+	signature = c(x = 'GSpatial'),
+	definition = function(x) ext(x, vector=TRUE)[c('xmin', 'ymin')]
+)
 
 st_bbox <- function(obj, ...) UseMethod('st_bbox', obj)
 

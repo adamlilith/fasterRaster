@@ -1,6 +1,6 @@
 #' 'fasterRaster': Faster raster and spatial vector processing using 'GRASS GIS'
 #'
-#' @description Processing of large-in-memory/-on disk rasters and spatial vectors using **GRASS GIS**. Most functions in the **terra** and **sf** packages are recreated, and can stand in for them when rasters or vectors are extremely large in memory and/or on disk. Processing of medium-sized and smaller spatial objects will nearly always be faster using **terra** or **sf**. To use most of the functions you must have the stand-alone version of **GRASS** version 8.0 or higher (not the **OSGeoW4** installer version).
+#' @description Processing of large-in-memory/-on disk rasters and spatial vectors using **GRASS GIS**. Most functions in the **terra** and **sf** packages are recreated. Processing of medium-sized and smaller spatial objects will nearly always be faster using **terra** or **sf**. To use most of the functions you must have the stand-alone version of **GRASS** version 8.0 or higher (not the **OSGeoW4** installer version). Note that due to developer choices, results will not always be strictly comparable between **terra**, **sf**, and **fasterRaster**.
 #'
 #' ## Most useful functions/links:
 #' A [quick-start tutorial][tutorial_getting_started]\cr
@@ -8,7 +8,7 @@
 #' [fast()]: Create `GRaster`s or `GVector`s from `SpatRaster`s, `SpatVector`s, or `sf`  objects, or from files\cr
 #' [rast()], [vect()], and [st_as_sf()]: Convert `GRaster`s and `GVector`s to `SpatRaster`s, `SpatVector`s, or `sf` vectors\cr
 #' [writeRaster()] and [writeVector()]: Save `GRaster`s or `GVector`s to disk\cr
-#' [fastRestore()]: Revert to another **GRASS** [location/mapset[tutorial_locations], or restart a **GRASS** session saved to disk\cr
+#' [fastRestore()]: Revert to another **GRASS** "[location or mapset][tutorial_sessions]", or restart a **GRASS** session saved to disk\cr
 #' [setFastOptions()] and [getFastOptions()]: Set options for working with **fasterRaster**\cr
 #'
 #' ## Properties of **fasterRaster** rasters (`GRasters`)
@@ -31,25 +31,29 @@
 #' [nlyr()]: Number of layers\cr
 #' [nrow()]: Number of rows\cr
 #' [ncat()]: Number of categories\cr
-#' [res()], [ewres()], [nsres()], and [zres()]: Spatial resolution\cr
+#' [origin()]: Coordinates of the northwest corner of the extent\cr
+#' [res()], [xres()], [yres()], and [zres()]: Spatial resolution\cr
 #' [st_bbox()]: Spatial extent\cr
 #' [st_crs()]: Coordinate reference system\cr
-#' [topology()]: Dimensionality of a raster (2D or 3D)\cr
+#' [topology()]: Dimensionality (2D or 3D)\cr
 #' [zext()]: Vertical extent\cr
 #' [zres()]: Vertical resolution\cr
 #' 
 #' ## Functions that operate on or create `GRasters`
 #' [Arithmetic]: Mathematical operations on `GRaster`s: `+`, `-`, `*`, `/`, `^`, `%%` (modulus), `%/%` (integer division)\cr
-#' Single-layer functions: Applied to each layer of a `GRaster`:
+#' Single-layer functions (applied to each layer of a `GRaster`):
 #' - Trigonometry: [sin()], [cos()], [tan()], [asin()], [acos()], [atan()], [atan2()] \cr
 #' - Logarithms and powers: [exp()], [log()], [log1p()], [log2()], [log10()], [sqrt()] \cr
 #' - Rounding: [round()], [floor()], [ceiling()], [trunc()] \cr
 #' - Signs: [abs()] \cr
-#' Multi-layer functions: Applied across multiple `GRaster`s:
+#' 
+#' Multi-layer functions (applied across a "stack" of `GRaster`s):
 #' - Numeration: [sum()], [count()] \cr
 #' - Central tendency: [mean()], [mmode()], [median()] \cr
 #' - Dispersion: [sd()], [var()], [sdpop()], [varpop()], [nunique()], [range()], [quantile()], [skewness()], [kurtosis()]
 #' - Extremes: [min()], [max()], [which.min()], [which.max()] \cr
+#' 
+#' Other functions:
 #' [as.cell()], [as.fcell()], [as.dcell()]: Change data type (integer/float/double)\cr
 #' [as.contour()]: Contour lines from a raster\cr
 #' [aggregate()]: Aggregate values of raster cells into larger cells\cr
@@ -63,12 +67,13 @@
 #' [makeGRaster()]: Makes a `GRaster` from a raster already in a **GRASS** session\cr
 #' [merge()]: Combine two or more rasters with different extents and fill in `NA`s\cr
 #' [project()]: Change coordinate reference system and cell size\cr
+#' [refresh()]: Update raster metadata\cr
 #' [resample()]: Change cell size\cr
 #' [sun()]: Solar radiance and irradiance\cr
 #' [terrain()]: Slope, aspect, curvature, and partial slopes\cr
-#' `[[[]`[subset]: Subset a raster with multiple layers\cr
+#' `[[`[subset]: Subset a raster with multiple layers\cr
 #'
-#' ## Properties of **fasterRaster** vectors (`GVectors')
+#' ## Properties of **fasterRaster** vectors (`GVectors`)
 #' [crs()]: Coordinate reference system\cr
 #' [datatype()]: Data type of fields\cr
 #' [ext()], [north()], [south()], [east()], [west()], [top()], and [bottom()]: Spatial extent\cr
@@ -81,9 +86,10 @@
 #' [names()]: Names of `GVector` fields\cr
 #' [ncol()]: Number of fields\cr
 #' [nrow()]: Number of geometries\cr
+#' [origin()]: Coordinates of the northwest corner of the extent\cr
 #' [st_bbox()]: Spatial extent\cr
 #' [st_crs()]: Coordinate reference system\cr
-#' [topology()]: Dimensions of vector coordinates (2D or 3D)\cr
+#' [topology()]: Dimensionality (2D or 3D)\cr
 #' [zext()]: Vertical extent\cr
 #' [zres()]: Vertical resolution\cr
 #'
@@ -92,13 +98,14 @@
 #' [buffer()]: Create a polygon around/inside a vector\cr
 #' [connectors()]: Create lines connecting nearest features of two vectors\cr
 #' [convHull()]: Minimum convex hull\cr
-#' [crds()]: Coordinates of a vector's features\cr
+#' [crds()]: Extract coordinates of a vector\cr
 #' [crop()]: Remove parts of a vector\cr
 #' [delaunay()]: Delaunay triangulation\cr
 #' [distance()]: Distance between geometries in two vectors, or from a vector to cells of a raster\cr
 #' [head()]: First rows of a vector's data frame.\cr
 #' [makeGVector()]: Makes a `GVector` from a vector already in a **GRASS** session.\cr
 #' [project()]: Change coordinate reference system\cr
+#' [refresh()]: Update vector metadata\cr
 #' [st_buffer()]: Create a polygon around/inside a vector\cr
 #' [st_distance()]: Distance between geometries in two vectors\cr
 #' [tail()]: Last rows of a vector's data frame.\cr
@@ -107,14 +114,14 @@
 #' [as.contour()]: Contour lines from a `GRaster`\cr
 #' [as.data.frame()]: Convert `GVector` to a `data.frame`\cr
 #' [as.points()], [as.lines()], and [as.polygons()]: Convert a `GRaster` to a `GVector`\cr
-#' [fast()]: Create `GRaster`s or `GVector`s from `SpatRaster`s, `SpatVector`s, or `sf` or `stars` objects, or from files\cr
-#' [head()]: First rows of a `GVector`'s data frame.\cr
+#' [fast()]: Create `GRaster`s or `GVector`s from `SpatRaster`s, `SpatVector`s, or `sf` objects, or from files\cr
+#' [head()] and [tail()]: First and last rows of a `GVector`'s data frame\cr
+#' [makeGRaster()]: Make a `GRaster` from a raster in **GRASS**\cr
+#' [makeGVector()]: Make a `GVector` from a vector in **GRASS**\cr
 #' [rastToGrass()]: Convert a `SpatRaster` to a **GRASS** raster\cr
 #' [rast()]: Convert a `GRaster` to a `SpatRaster`\cr
 #' [rasterize()]: Convert a `GVector` to a `GRaster`\cr
-#' [st_as_sf()]: Convert a `GVector` to a `sf` vectors\cr
-#' [stars()]: Convert a `GVector` to a `stars` raster\cr
-#' [tail()]: Last rows of a `GVector`'s data frame.\cr
+#' [st_as_sf()]: Convert a `GVector` to a `sf` vector\cr
 #' [vect()]: Convert a `GVector` to a `SpatVector`\cr
 #' [vectToGrass()]: Convert a `SpatVector` to a **GRASS** vector\cr
 #'
@@ -127,10 +134,11 @@
 #' [grassInfo()]: **GRASS** version and citation\cr
 #' [pmatchSafe()]: Partial matching of strings with error checking\cr
 #' [rastToGrass()]: Convert a `SpatRaster` to a **GRASS** raster\cr
-#' [rstring()]: Create a statistically unique string\cr
+#' [rstring()]: Create a string statistically likely to be unique\cr
 #' [vectToGrass()]: Convert a `SpatVector` or `sf` vector to a `GVector`\cr
 #'
-#' ## Functions that operate on **GRASS** "sessions" (seldom used by most users):
+#' ## Functions that operate on **GRASS** "sessions":
+#' [crs()]: Coordinate reference system of the current location\cr
 #' [fastRemove()]: Delete a **GRASS** session (location, mapset(s), and all associated files)\cr
 #' [fastRestore()]: Restore a previous **GRASS** session or switch **GRASS** locations/mapsets\cr
 #' [location()]: **GRASS** "location" of an object or the active session\cr
@@ -143,7 +151,7 @@
 #' [regionRes()]: Change or report the active region's dimensions\cr
 #'
 #' ## Esoteric tutorials
-#' **fasterRaster** [Working directories, locations, and mapsets][tutorial_sessions]\cr
+#' **fasterRaster** [sessions and locations][tutorial_sessions] (working directories, locations, and mapsets)\cr
 #' **GRASS** [regions][tutorial_regions]\cr
 #
 #' @docType package

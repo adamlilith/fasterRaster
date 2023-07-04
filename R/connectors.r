@@ -6,6 +6,8 @@
 #' @param minDist,maxDist Either `NULL` (default) or numeric values: Ignore features separated by less than or greater than these distances.
 #'
 #' @return A `GVector`.
+#' 
+#' @seealso Module `v.distance` in **GRASS**
 #'
 #' @example man/examples/ex_connectors.r
 #'

@@ -12,7 +12,7 @@
 #'
 #' @aliases delaunay
 #' @rdname delaunay
-#' @exportMethods delaunay
+#' @exportMethod delaunay
 methods::setMethod(
 	f = 'delaunay',
 	signature = c(x = 'GVector'),

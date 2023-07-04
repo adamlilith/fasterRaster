@@ -8,7 +8,7 @@
 #' 
 #' @returns A `GRaster`.
 #' 
-#' @seealso [datatype()]
+#' @seealso [terra::datatype()]
 #'
 #' @example man/examples/ex_GRaster.r
 #' 

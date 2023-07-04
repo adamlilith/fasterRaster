@@ -6,7 +6,7 @@
 #'
 #' @return A numeric vector with one value per layer in the `GRaster`.
 #' 
-#' @seealso [terra::ncat()]
+#' @seealso [terra::levels()], [terra::cats()]
 #' 
 #' @example man/examples/ex_GRaster.r
 #'

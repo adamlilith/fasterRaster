@@ -26,10 +26,12 @@
 #'
 #' * `details` (logical): If `TRUE`, show details on run-time and otherwise hidden slots in classes. This is mainly used for debugging, so most users will want to keep this at its default, `FALSE`.
 #'
-#'	* `grassDir` (character): The folder in which **GRASS** is installed on your computer. Typically, this option is set when you run [faster()], but you can define it before you run that function. All subsequent calls of `faster()` do not need `grassDir` set because it will be obtained from the options. By default, `grassDir` is `NULL`, which causes the function to search for your installation of **GRASS** (and which usually fails). Depending on your operating system, your install directory will look something like this:
+#' * `grassDir` (character): The folder in which **GRASS** is installed on your computer. Typically, this option is set when you run [faster()], but you can define it before you run that function. All subsequent calls of `faster()` do not need `grassDir` set because it will be obtained from the options. By default, `grassDir` is `NULL`, which causes the function to search for your installation of **GRASS** (and which usually fails). Depending on your operating system, your install directory will look something like this:
 #'     * Windows: `'C:/Program Files/GRASS GIS 8.3'`
 #'     * Mac OS: `"/Applications/GRASS-8.3.app/Contents/Resources"`
 #'     * Linux: `'/usr/local/grass'`
+#'
+#' *  `addonDir` (character): Folder in which **GRASS** addons are stored. If `NULL` and `grassDir` is not `NULL`, this will be taken to be `file.path(grassDir, 'addons')`.
 #'
 #' * `memory` (integer/numeric): The amount of memory to allocate to a task, in MB. The default is 300 MB. Only some **GRASS** modules allow this option.
 #'
@@ -64,8 +66,18 @@ setFastOptions <- function(
 	### check for validity
 	error <- paste0('Option ', sQuote('grassDir'), ' must be ', dQuote('NULL'), ' (which is likely to fail)\n  or a single character string. The default is ', dQuote(.grassDirDefault()), '.')
 	if (any(names(opts) %in% 'grassDir')) {
-		if (!is.character(opts$grassDir)) stop(error)
-		if (length(opts$grassDir) != 1L) stop(error)
+		if (!is.null(grassDir)) {
+			if (!is.character(opts$grassDir)) stop(error)
+			if (length(opts$grassDir) != 1L) stop(error)
+		}
+	}
+
+	error <- paste0('Option ', sQuote('addonDir'), ' must be ', sQuote('NULL'), ' or a single character string. The default is ', dQuote(.addonDirDefault()), '.')
+	if (any(names(opts) %in% 'addonDir')) {
+		if (!is.null(opts$addonDir)) {
+			if (!is.character(opts$addonDir)) stop(error)
+			if (length(opts$addonDir) != 1L) stop(error)
+		}
 	}
 
 	error <- paste0('Option ', sQuote('workDir'), ' must be a single character string. The default is\n  ', dQuote(.workDirDefault()), '.')

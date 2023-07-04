@@ -31,35 +31,59 @@ elev120 <- resample(elev, c(120, 120), method='bilinear')
 elev
 elev120
 
-### resample using a coarser raster as a template
+### resample using a template raster as a template
+
 # fasterRaster
-coarser <- aggregate(elev, 4)
+template <- aggregate(elev, 4)
 
-frResampFb <- resample(elev, coarser, method = 'lanczos')
-frResamp <- resample(elev, coarser, method = 'lanczos', fallback = FALSE)
+nearest <- resample(elev, template, method = 'nearest')
 
-frResampFb
-frResamp
+bilinear <- resample(elev, template, method = 'bilinear')
+bilinearNoFB <- resample(elev, template, method = 'bilinear', fallback = FALSE)
 
-# terra
-coarserTerra <- aggregate(madElev, 4)
-terra <- resample(madElev, coarserTerra, method = 'lanczos')
+bicubic <- resample(elev, template, method = 'bicubic')
+bicubicNoFB <- resample(elev, template, method = 'bicubic', fallback = FALSE)
+
+lanczos <- resample(elev, template, method = 'lanczos')
+lanczosNoFB <- resample(elev, template, method = 'lanczos', fallback = FALSE)
+
+# rasters resampled without fallback have fewer non-NA cells
+resampled <- c(nearest, bilinear, bilinearNoFB, bicubic, bicubicNoFB, lanczos,
+    lanczosNoFB)
+names(resampled) <- c('nearest', 'bilinear', 'bilinearNoFB', 'bicubic',
+    'bicubicNoFB', 'lanczos', 'lanczosNoFB')
+ones <- resampled * 0 + 1
+global(ones, 'sum') # number of non-NA cells
+global(resampled, c('mean', 'sd', 'min', 'max')) # other statistics
+
+# compare fallback to no fallback
+frLanczos <- rast(lanczos)
+frLanczosNoFB <- rast(lanczosNoFB)
+
+plot(frLanczos, col = 'red',
+    main = 'Red: Cells in fallback not non-fallback', legend = FALSE)
+plot(frLanczosNoFB, add=TRUE)
 
 # compare fasterRaster with terra
-frFb <- rast(frResampFb)
-fr <- rast(frResamp)
+coarserTerra <- aggregate(madElev, 4)
+terraLanczos <- resample(madElev, coarserTerra, method = 'lanczos')
 
-frFb <- extend(frFb, terra)
-fr <- extend(fr, terra)
+frLanczos <- extend(frLanczos, terraLanczos)
+frLanczosNoFB <- extend(frLanczosNoFB, terraLanczos)
 
-frFb - terra
-fr - terra
+frLanczos - terraLanczos
+frLanczosNoFB - terraLanczos
 
-plot(terra, col = 'red', main = 'No fallback')
-plot(fr, add = TRUE)
+plot(frLanczos - terraLanczos, main = 'Difference')
+plot(frLanczosNoFB - terraLanczos, main = 'Difference')
 
-plot(terra, col = 'red', main = 'Fallback')
-plot(frFb, add = TRUE)
+plot(terraLanczos, col = 'red',
+    main = 'Red: Cells in terra not in FR', legend = FALSE)
+plot(frLanczos, add=TRUE)
+
+plot(frLanczos, col = 'red',
+    main = 'Red: Cells in FR not in terra', legend = FALSE)
+plot(terraLanczos, add=TRUE)
 
 # IMPORTANT #3: Revert back to original GRASS session if needed.
 fastRestore(opts.)

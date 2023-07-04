@@ -32,19 +32,19 @@ madRivers <- project(madRivers, madChelsa)
 wd <- forwardSlash(tempdir())
 
 # set up "to" location
-faster(crs = madElev, grassDir = grassDir,
+faster(x = madElev, grassDir = grassDir,
 workDir = wd, location = 'exampleTo') # line only needed for examples
 
 elev <- fast(madElev)
 
 # set up "from" location and put a raster and vector in it
-faster(crs = madChelsa, grassDir = grassDir,
+faster(x = madChelsa, grassDir = grassDir,
 workDir = wd, location = 'exampleFrom') # line only needed for examples
 
 chelsa <- fast(madChelsa)
 rivers <- fast(madRivers)
 
-# re-activate the "exampleTo" location
+# re-activate the "exampleTo" "location"
 fastRestore(location='exampleTo')
 
 # project vector into the "exampleTo" location
@@ -54,20 +54,16 @@ riversProj
 
 # project raster into the "exampleTo" location but do not resample
 chelsaProjSameRes <- project(chelsa)
+chelsaProjSameRes
 
 # Project raster into the "exampleTo" location and resample to match template.
 # This can take a while...
 chelsaProjNewRes <- project(chelsa, elev)
+chelsaProjNewRes
 
-# compare outcomes
+# Compare:
 chelsaProjSameRes
 chelsaProjNewRes
-
-# We get something a bit different if we resample after projecting:
-chelsaResampAfterProj <- resample(chelsaProjSameRes, elev)
-
-chelsaProjNewRes
-chelsaResampAfterProj
 
 # We can also project rasters/vectors with a different CRS than the current
 # "location" by importing them from disk using fast():

@@ -1,12 +1,13 @@
 #' Convert a SpatRaster to a GRASS raster
 #'
-#' This is a utility function that sends a `SpatRaster` to an existing **GRASS** connection. It is not of use to most users. The function is based on the [rgrass::write_RAST()] function, except that it works when **fasterRaster** is attached. The reason for (more or less) duplicating this function is that the use of [methods::getMethod()] looks at the **fasterRaster** definitions for `writeVector`, and cannot find one for a `SpatVector`. To make the raster an actual `GRaster`, you need to use this function then [makeGRaster()] using `gn` as the argument to that function.
+#' This is a utility function that converts a `SpatRaster` to a **GRASS** raster. It does not make the corresponding `GRaster`, which is a pointer to the raster in **GRASS**. It is therefore not of use to most users. The function is based on the [rgrass::write_RAST()] function, except that it works when **fasterRaster** is attached. The reason for (more or less) duplicating this function is that the use of [methods::getMethod()] looks at the **fasterRaster** definitions for `writeRaster`, and cannot find one for a `SpatRaster`. To make the raster an actual `GRaster`, you need to use this function then [makeGRaster()] using `gn` as the argument to that function.
 #'
 #' @param x A `SpatRaster`.
 #' @param gn Character: Name of the file in **GRASS**.
-#' @param flags Character vector: Flags to send to **GRASS** module `r.in.gdal`.
+#' @param flags Character vector: Flags to send to **GRASS** module `r.in.gdal`. These can include `quiet` (suppress messages) and `overwrite` (write over an existing raster of the same name).
 #'
-#' @seealso [rgrass::write_RAST()], [rgrass::read_RAST()]
+#' @seealso [rgrass::write_RAST()], [rgrass::read_RAST()], module `r.in.gdal` in **GRASS**
+#' #'
 #' @returns `TRUE` (invisibly). Exports a `SpatRaster` to an open **GRASS** connection and names it the value in `gn`.
 #'
 #' @example man/examples/ex_GRaster_GVector.r
@@ -20,7 +21,7 @@ rastToGrass <- function(x, gn, flags = c('quiet', 'overwrite')) {
 
 	if (inherits(x, 'SpatRaster')) {
         
-# Suggestion https://github.com/rsbivand/rgrass/pull/45#discussion_r816113064 Floris Vanderhaeghe
+        # Suggestion https://github.com/rsbivand/rgrass/pull/45#discussion_r816113064 Floris Vanderhaeghe
         srcs <- terra::sources(x)
         mems <- terra::inMemory(x)
         if (length(srcs) == 1L && !mems[1]) {
@@ -39,11 +40,11 @@ rastToGrass <- function(x, gn, flags = c('quiet', 'overwrite')) {
                 fxt <- '.tif'
             }
             tf <- tempfile(fileext=fxt)
-            res <- terra::writeRaster(x, filename=tf, overwrite=TRUE, filetype=drv)
+            result <- terra::writeRaster(x, filename=tf, overwrite=TRUE, filetype=drv)
             tmpfl <- TRUE
 
         } else {
-            res <- x
+            result <- x
             tmpfl <- FALSE
         }
         rgrass::execGRASS('r.in.gdal', flags=flags, input=tf, output=gn)
@@ -60,6 +61,6 @@ rastToGrass <- function(x, gn, flags = c('quiet', 'overwrite')) {
     } else {
         stop('Object is not a SpatRaster.')
     }
-    invisible(res)
+    invisible(result)
 
 }
