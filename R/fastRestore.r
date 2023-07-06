@@ -50,7 +50,7 @@ fastRestore <- function(...) {
 	# are we trying to restart same folder, etc. but with a different CRS?
 	workLocMap <- file.path(workDir, location, mapset)
 	if (!file.exists(workLocMap)) {
-		stop('This location/mapset does not exist. Use startFast() to create new locations/mapsets.')
+		stop('This location/mapset does not exist. Use faster() to create a new location/mapset.')
 	}
 
 	### start new GRASS session
@@ -75,7 +75,14 @@ fastRestore <- function(...) {
 
 	### set options
 	setFastOptions(dots)
+	.fasterRaster$grassStarted <- TRUE
 
+	session <- GSession(
+		location = location,
+		mapset = mapset,
+		crs = crs
+	)
+	
 	invisible(session)
 
 }
@@ -97,9 +104,14 @@ fastRestore <- function(...) {
 
 	if (loc != xloc | ms != xms) {
 		session <- fastRestore(location=xloc, mapset=xms)
-	} else {
-		session <- NULL
 	}
+
+	session <- GSession(
+		location = location,
+		mapset = mapset,
+		crs = crs
+	)
+
 	invisible(session)
 
 }
