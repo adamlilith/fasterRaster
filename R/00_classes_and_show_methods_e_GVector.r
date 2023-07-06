@@ -164,7 +164,7 @@ methods::setMethod(f='show', signature='GVector',
 	# CRS
 	crs <- object@crs
 	crs <- sf::st_crs(crs)
-	crs <- crs$input
+	crsSimple <- crs$input
 
 	cat('class       : GVector\n')
 	if (details) {
@@ -178,7 +178,7 @@ methods::setMethod(f='show', signature='GVector',
 	cat('topology    :', object@topology, '\n')
 	cat('extent      :', paste(extent, collapse=', '), '(xmin, xmax, ymin, ymax)\n')
 	if (details | object@topology == '3D') cat('z extent    :', paste(zextent, collapse=', '), '(bottom, top)\n')
-	cat('coord ref.  :', crs, '\n')
+	cat('coord ref.  :', crsSimple, '\n')
 
 	if (object@nFields > 0L) {
 		cat('names       :', fields, '\n')
