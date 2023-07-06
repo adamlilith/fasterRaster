@@ -1,12 +1,12 @@
 #' Change the coordinate reference system of a GRaster or GVector
 #'
-#' @description *fasterRaster** offers three ways to project rasters and vectors into a different coordinate reference system (CRS).  Each of them are different from how they are implemented in **terra**, so it is important to understand how it works in **fasterRaster**.
+#' @description *fasterRaster** offers three ways to project rasters and vectors into a different coordinate reference system (CRS). Each of these ways are different from how they are implemented in **terra**, so it is important to understand how it works in **fasterRaster**.
 #'
 #' First, if you are wanting to change the CRS for a `SpatRaster`, `SpatVector`, or `sf` object already in `R`, use the [fast()] function. This function will project the object to the CRS of the current **GRASS** [location][tutorial_sessions]. Note that for rasters, the `method` and `fallback` arguments in the `fast()` function may be important to what you want to achieve.
 #' 
-#' Second the procedure works the same way for rasters or vectors stored on disk (and not already in **R**). Simply use the [fast()] function with the file name of the object. Again, the `method` and `fallback` arguments may be important 
+#' Second, the procedure works the same way for rasters or vectors stored on disk (and not already in **R**). Simply use the [fast()] function with the file name of the object. Again, the `method` and `fallback` arguments may be important .
 #'
-#' Third, if you are wanting to change the CRS of a `GRaster` or `GVector`, you need to initiate a new **GRASS** [location][tutorial_sessions] using [faster()] with the CRS to which you want to transform the object. This means you need to keep track of which **GRASS** "location" you are working in, as multiple rasters and/or vectors can only be used in the function if they are in the same "location."  *This function, `project()`, is for projecting `GRaster`s or `GVector`s between **GRASS** "locations."*
+#' Third, if you are wanting to change the CRS of a `GRaster` or `GVector`, you need to initiate a new **GRASS** [location][tutorial_sessions] using [faster()] with the CRS to which you want to transform the object. This means you need to keep track of which **GRASS** "location" you are working in, as multiple rasters and/or vectors can only be used in the function if they are in the same "location."  *This function, `project()`, is for projecting `GRaster`s or `GVector`s between **GRASS** "locations."* [location()] (with no arguments) will display the name of the currently active "location", and [crs()] (alo no arguments) will display its CRS.
 #'
 #' @param x A `GRaster` or `GVector` to be projected.
 #'
@@ -103,28 +103,21 @@ methods::setMethod(
 
 	}
 
-	### y is a GRaster
+	### If y is a GRaster, resample x in its native location first, then project.
 	if (inherits(y, 'GRaster')) {
 
 		### resample 1st
 
-		# Use a SpatRaster as template for resampling region. We do this so we can set the "region" resolution and extent correctly. Using a one-cell raster to speed things up.
-		resol <- res(x)
+		# Use a SpatRaster as template for resampling region. We do this so we can set the "region" resolution and extent correctly.
 		extent <- ext(x, vector=TRUE)
-		extent[2L] <- extent[1L] + resol[1L]
-		extent[3L] <- extent[4L] - resol[2L]
-
-		xMat <- matrix(NA_real_, nrow=1L, ncol=1L)
+		xMat <- matrix(NA_real_, nrow=nrow(x), ncol=ncol(x))
 		xRast <- terra::rast(xMat, crs=crs(x), extent=extent)
 
-		resol <- res(y)
 		extent <- ext(y, vector=TRUE)
-		extent[2L] <- extent[1L] + resol[1L]
-		extent[3L] <- extent[4L] - resol[2L]
-		yMat <- matrix(NA_real_, nrow=1L, ncol=1L)
+		yMat <- matrix(NA_real_, nrow=nrow(y), ncol=ncol(y))
 		yRast <- terra::rast(yMat, crs=crs(y), extent=extent)
 
-		yRast <- terra::project(yRast, crs(x), method='near', align=TRUE)
+		yRast <- terra::project(yRast, crs(x), method='near')
 		xRast <- terra::resample(xRast, yRast, method='near')
 
 		# resample x in its native location to the resolution it will have in the target location
@@ -142,12 +135,8 @@ methods::setMethod(
 	} else {
 
 		# make template raster to match raster to be projected
-		resol <- res(x)
 		extent <- ext(x, vector=TRUE)
-		extent[2L] <- extent[1L] + resol[1L]
-		extent[3L] <- extent[4L] - resol[2L]
-
-		xMat <- matrix(NA_real_, nrow=1L, ncol=1L)
+		xMat <- matrix(NA_real_, nrow=nrow(x), ncol=ncol(x))
 		xRast <- terra::rast(xMat, crs=crs(x), extent=extent)
 
 	}
@@ -156,43 +145,7 @@ methods::setMethod(
 	###################################
 
 	xRast <- terra::project(xRast, toCrs, method='near', align=TRUE)
-	ewres <- terra::xres(xRast)
-	nsres <- terra::yres(xRast)
-
-	# if using y just as a template for origin and resolution
-	if (align | !inherits(y, 'GRaster')) {
-
-		toExt <- ext(x, vector=TRUE)
-		toExt <- terra::ext(toExt)
-		toExt <- terra::project(toExt, from=crs(x), to=toCrs)
-		toExt <- as.vector(toExt)
-
-	} else {
-		toExt <- ext(y, vector=TRUE)
-	}
-
-	n <- toExt[4L]
-	s <- toExt[3L]
-	e <- toExt[2L]
-	w <- toExt[1L]
-	
-	n <- as.character(n)
-	s <- as.character(s)
-	e <- as.character(e)
-	w <- as.character(w)
-
-	ewres <- as.character(ewres)
-	nsres <- as.character(nsres)
-
-	args <- list(
-		cmd = 'g.region',
-		n = n, s = s, e = e, w = w,
-		ewres = ewres, nsres = nsres,
-		flags = c('o', 'a', 'quiet'),
-		intern = TRUE
-	)
-	
-	fluff <- do.call(rgrass::execGRASS, args=args)
+	region(xRast)
 
 	### project raster
 	##################
@@ -201,7 +154,7 @@ methods::setMethod(
 
 	gns <- .makeGname(names(x), 'raster', nlyr(x))
 	for (i in 1L:nlyr(x)) {
-
+		
 		args <- list(
 			cmd = 'r.proj',
 			location = location(x),
@@ -213,6 +166,8 @@ methods::setMethod(
 			flags = c('quiet', 'overwrite')
 		)
 
+		if (wrap) args$flags <- c(args$flags, 'n')
+
 		do.call(rgrass::execGRASS, args=args)
 		thisOut <- makeGRaster(gns[i], names(x)[i])
 		if (i == 1L) {
@@ -222,6 +177,9 @@ methods::setMethod(
 		}
 
 	} # project next raster
+
+	# if using y as extent to which to crop
+	if (!align & inherits(y, 'GRaster')) out <- crop(out, y)
 	out
 
 	} # EOF
@@ -246,8 +204,12 @@ methods::setMethod(
 	
 	# target location and mapset
 	if (is.null(y)) {
-		toLocation <- location()
-		toMapset <- mapset()
+		if (is.null(location)) {
+			toLocation <- location()
+		}
+		if (is.null(mapset)) {
+			toMapset <- mapset()
+		}
 	} else {
 		toLocation <- location(y)
 		toMapset <- mapset(y)
@@ -257,15 +219,15 @@ methods::setMethod(
 		warning('Object is already in the desired coordinate reference system.')
 		return()
 	}
-	
+
+	# go to "to" location	
+	on.exit(fastRestore(location=startLocation, mapset=startMapset), add=TRUE)
+
 	if (!is.null(y)) {
 		.restore(y)
 	} else if (location() != startLoc | mapset() != startMapset) {
-		fastStart(location = toLocation, mapset = toMapset)
+		fastRestore(location = toLocation, mapset = toMapset)
 	}
-	
-	flags <- c('quiet', 'overwrite')
-	# if (geomtype(x) == 'points') flags <- c(flags, 'b') # makes faster but is this OK???
 	
 	gn <- .makeGname('projected', 'vector')
 	
@@ -275,15 +237,13 @@ methods::setMethod(
 		mapset = mapset(x),
 		input = gnames(x),
 		output = gn,
-		flags = flags,
+		flags = c('quiet', 'overwrite'),
 		intern = TRUE
 	)
 
 	do.call(rgrass::execGRASS, args=args)
 	out <- makeGVector(gn)
 
-	if (location() != startLoc | mapset() != startMapset) fastRestore(location=startLoc, mapset=startMapset)
-	
 	out
 
 	} # EOF
