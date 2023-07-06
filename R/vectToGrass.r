@@ -12,10 +12,14 @@
 #' @example man/examples/ex_GVector.r
 #'
 #' @export
-vectToGrass <- function(x, gn, flags = c('quiet', 'overwrite')) {
+vectToGrass <- function(
+    x,
+    gn,
+    flags = c('quiet', 'overwrite')
+) {
     
 	if (!inherits(x, 'SpatVector')) x <- terra::vect(x)
-	
+
     ignore.stderr <- rgrass::get.ignore.stderrOption()
     stopifnot(is.logical(ignore.stderr))
     if (rgrass::get.suppressEchoCmdInFuncOption()) inEchoCmd <- rgrass::set.echoCmdOption(FALSE)
@@ -33,8 +37,37 @@ vectToGrass <- function(x, gn, flags = c('quiet', 'overwrite')) {
 	
     tempfile <- tempfile(fileext = '.gpkg')
     terra::writeVector(x, filename=tempfile, filetype='GPKG', overwrite=TRUE)
-    rgrass::execGRASS('v.in.ogr', flags=flags, input=tempfile, output=gn, type=type, ignore.stderr=ignore.stderr)
     
+    # import from disk and project
+    if (crs(x) != crs()) {
+
+        args <- list(
+            cmd = 'v.import',
+            input = tempfile,
+            output = gn,
+            extent = 'input',
+            flags = flags,
+            ignore.stderr = ignore.stderr,
+            intern = TRUE
+        )
+
+    # import from disk, no projecting
+    } else {
+
+        args <- list(
+            cmd = 'v.in.ogr',
+            flags = flags,
+            input = tempfile,
+            output = gn,
+            type = type,
+            ignore.stderr = ignore.stderr,
+            intern = TRUE
+        )
+
+    }
+    
+    do.call(rgrass::execGRASS, args=args)
+
 	if (rgrass::get.suppressEchoCmdInFuncOption()) tull <- rgrass::set.echoCmdOption(inEchoCmd)
 	invisible(TRUE)
 	
