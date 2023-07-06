@@ -134,6 +134,12 @@ faster <- function(
 	
 	saveRDS(x, file=crsFile)
 			
+	session <- GSession(
+		location = location,
+		mapset = mapset,
+		crs = x
+	)
+
 	invisible(session)
 
 }
