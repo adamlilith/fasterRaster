@@ -23,15 +23,42 @@ madElev <- fastData('madElev')
 madChelsa <- fastData('madChelsa')
 madRivers <- fastData('madRivers')
 
-# project rivers to WGS84 using terra (for this example)
+# For this example, we'll project the madRivers vector to WGS84 using terra.
 # (The CHELSA raster stack is already in WGS84.)
 madRivers <- vect(madRivers)
 madRivers <- project(madRivers, madChelsa)
 
-# start GRASS session for examples only
+# working directory
 wd <- forwardSlash(tempdir())
 
-# set up "to" location
+### Method 1: Project SpatRasters, SpatVectors, or sf vectors
+#############################################################
+
+# Initiate GRASS session:
+faster(x = madElev, grassDir = grassDir,
+workDir = wd, location = 'examples') # line only needed for 
+
+riversFromVect <- fast(madRivers)
+chelsaFromRast <- fast(madChelsa)
+
+### Method 2: Project rasters/vectors on disk
+#############################################
+
+vectFile <- system.file('extdata', 'shapes/madCoast.shp', package='fasterRaster')
+coastProj <- fast(vectFile)
+coastProj
+
+rastFile <- system.file('extdata', 'madChelsa.tif', package='fasterRaster')
+chelsaFromFile <- fast(rastFile, method='bilinear')
+chelsaFromFile
+
+# Compare rasters projected between GRASS "locations" and from a file:
+minmax(chelsaSameRes) - minmax(chelsaFromFile)
+
+### Method 3: Projecting between GRASS "locations"
+##################################################
+
+# Set up "to" location:
 faster(x = madElev, grassDir = grassDir,
 workDir = wd, location = 'exampleTo') # line only needed for examples
 
@@ -44,40 +71,39 @@ workDir = wd, location = 'exampleFrom') # line only needed for examples
 chelsa <- fast(madChelsa)
 rivers <- fast(madRivers)
 
-# re-activate the "exampleTo" "location"
+# Re-activate the "exampleTo" "location":
 fastRestore(location='exampleTo')
 
-# project vector into the "exampleTo" location
+### Project vector into the "exampleTo" location:
 riversProj <- project(rivers)
 rivers
 riversProj
 
-# project raster into the "exampleTo" location but do not resample
-chelsaProjSameRes <- project(chelsa)
-chelsaProjSameRes
+### Project raster into the "exampleTo" location but do not resample:
+chelsaSameRes <- project(chelsa)
+chelsaSameRes
 
-# Project raster into the "exampleTo" location and resample to match template.
-# This can take a while...
-chelsaProjNewRes <- project(chelsa, elev)
-chelsaProjNewRes
+# Compare to terra:
+chelsaSameResTerra <- project(madChelsa, crs(madElev))
 
-# Compare:
-chelsaProjSameRes
-chelsaProjNewRes
+minmax(chelsaSameRes)
+minmax(chelsaSameResTerra)
 
-# We can also project rasters/vectors with a different CRS than the current
-# "location" by importing them from disk using fast():
-vectFile <- system.file('extdata', 'shapes/madCoast.shp', package='fasterRaster')
-coastProj <- fast(vectFile)
-coastProj
+chelsaSameResSpat <- rast(chelsaSameRes)
+plot(chelsaSameResSpat - chelsaSameResTerra)
 
-rastFile <- system.file('extdata', 'madChelsa.tif', package='fasterRaster')
-chelsaProjFromFile <- fast(rastFile, method='bilinear')
-chelsaProjFromFile
+# Project raster into the "exampleTo" location and resample to match template. This can take a while...
+chelsaNewRes <- project(chelsa, elev)
+chelsaNewRes
 
-# Projecting from file or from location to location yields same results:
-chelsaProjSameRes
-chelsaProjFromFile
+# Compare to terra:
+chelsaNewResTerra <- project(madChelsa, madElev)
+
+minmax(chelsaNewRes)
+minmax(chelsaNewResTerra)
+
+chelsaNewResSpat <- rast(chelsaNewRes)
+plot(chelsaNewResSpat - chelsaNewResTerra)
 
 # IMPORTANT #3: Revert back to original GRASS session if needed.
 fastRestore(opts.)
