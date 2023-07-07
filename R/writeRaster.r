@@ -86,7 +86,7 @@ setMethod(
 
 	geotiff <- (('format' %in% names(dots) && tolower(dots$format) == 'gtiff') | extension3 == '.tif')
 
-	numLayers <- nlyr(x)
+	nLayers <- nlyr(x)
 
 	### save
 	if (ascii) {
@@ -97,12 +97,22 @@ setMethod(
 		thisFlags <- c(flags, 'c')
 
 		## if multi-layered raster stack, then group first... only guaranteed to work with GeoTIFFs
-		if (numLayers > 1L) {
+		if (nLayers > 1L) {
+
 			groupName <- .makeGname(rastOrVect='group')
 			input <- gnames(x)
-			rgrass::execGRASS('i.group', group=groupName, input=input, intern=TRUE)
-			# rgrass::execGRASS('i.group', group=groupName, flags='l')
+			
+			args <- list(
+				cmd = 'i.group',
+				group = groupName,
+				input = input,
+				flags = 'quiet',
+				intern = TRUE
+			)
+
+			do.call(rgrass::execGRASS, args=args)
 			gn <- groupName
+
 		} else {
 			gn <- gnames(x)
 		}
@@ -166,7 +176,17 @@ setMethod(
 
 		# save
 		# rgrass::execGRASS('r.out.gdal', input=gnames, output=filename, type=thisDataType, createopt=createopt, metaopt=metaopt, flags=thisFlags, intern=TRUE, ...)
-		rgrass::execGRASS('r.out.gdal', input=gn, output=filename, type=thisDataType, createopt=createopt, flags=thisFlags, intern=TRUE)
+		args <- list(
+			cmd = 'r.out.gdal',
+			input = gn,
+			output = filename,
+			type = thisDataType,
+			createopt = createopt,
+			flags = thisFlags,
+			intern = TRUE
+		)
+
+		do.call(rgrass::execGRASS, args=args)
 
 	}
 
