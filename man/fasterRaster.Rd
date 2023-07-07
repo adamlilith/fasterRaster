@@ -38,11 +38,11 @@ A \link[=tutorial_getting_started]{quick-start tutorial}\cr
 \code{\link[=nlyr]{nlyr()}}: Number of layers\cr
 \code{\link[=nrow]{nrow()}}: Number of rows\cr
 \code{\link[=ncat]{ncat()}}: Number of categories\cr
-\code{\link[=origin]{origin()}}: Coordinates of the northwest corner of the extent of a raster\cr
+\code{\link[=origin]{origin()}}: Coordinates of the northwest corner of the extent\cr
 \code{\link[=res]{res()}}, \code{\link[=xres]{xres()}}, \code{\link[=yres]{yres()}}, and \code{\link[=zres]{zres()}}: Spatial resolution\cr
 \code{\link[=st_bbox]{st_bbox()}}: Spatial extent\cr
 \code{\link[=st_crs]{st_crs()}}: Coordinate reference system\cr
-\code{\link[=topology]{topology()}}: Dimensionality of a raster (2D or 3D)\cr
+\code{\link[=topology]{topology()}}: Dimensionality (2D or 3D)\cr
 \code{\link[=zext]{zext()}}: Vertical extent\cr
 \code{\link[=zres]{zres()}}: Vertical resolution\cr
 }
@@ -50,17 +50,23 @@ A \link[=tutorial_getting_started]{quick-start tutorial}\cr
 \subsection{Functions that operate on or create \code{GRasters}}{
 
 \link{Arithmetic}: Mathematical operations on \code{GRaster}s: \code{+}, \code{-}, \code{*}, \code{/}, \code{^}, \code{\%\%} (modulus), \code{\%/\%} (integer division)\cr
-Single-layer functions: Applied to each layer of a \code{GRaster}:
+Single-layer functions (applied to each layer of a \code{GRaster}):
 \itemize{
 \item Trigonometry: \code{\link[=sin]{sin()}}, \code{\link[=cos]{cos()}}, \code{\link[=tan]{tan()}}, \code{\link[=asin]{asin()}}, \code{\link[=acos]{acos()}}, \code{\link[=atan]{atan()}}, \code{\link[=atan2]{atan2()}} \cr
 \item Logarithms and powers: \code{\link[=exp]{exp()}}, \code{\link[=log]{log()}}, \code{\link[=log1p]{log1p()}}, \code{\link[=log2]{log2()}}, \code{\link[=log10]{log10()}}, \code{\link[=sqrt]{sqrt()}} \cr
 \item Rounding: \code{\link[=round]{round()}}, \code{\link[=floor]{floor()}}, \code{\link[=ceiling]{ceiling()}}, \code{\link[=trunc]{trunc()}} \cr
 \item Signs: \code{\link[=abs]{abs()}} \cr
-Multi-layer functions: Applied across multiple \code{GRaster}s:
+}
+
+Multi-layer functions (applied across a "stack" of \code{GRaster}s):
+\itemize{
 \item Numeration: \code{\link[=sum]{sum()}}, \code{\link[=count]{count()}} \cr
 \item Central tendency: \code{\link[=mean]{mean()}}, \code{\link[=mmode]{mmode()}}, \code{\link[=median]{median()}} \cr
 \item Dispersion: \code{\link[=sd]{sd()}}, \code{\link[=var]{var()}}, \code{\link[=sdpop]{sdpop()}}, \code{\link[=varpop]{varpop()}}, \code{\link[=nunique]{nunique()}}, \code{\link[=range]{range()}}, \code{\link[=quantile]{quantile()}}, \code{\link[=skewness]{skewness()}}, \code{\link[=kurtosis]{kurtosis()}}
 \item Extremes: \code{\link[=min]{min()}}, \code{\link[=max]{max()}}, \code{\link[=which.min]{which.min()}}, \code{\link[=which.max]{which.max()}} \cr
+}
+
+Other functions:
 \code{\link[=as.cell]{as.cell()}}, \code{\link[=as.fcell]{as.fcell()}}, \code{\link[=as.dcell]{as.dcell()}}: Change data type (integer/float/double)\cr
 \code{\link[=as.contour]{as.contour()}}: Contour lines from a raster\cr
 \code{\link[=aggregate]{aggregate()}}: Aggregate values of raster cells into larger cells\cr
@@ -78,11 +84,10 @@ Multi-layer functions: Applied across multiple \code{GRaster}s:
 \code{\link[=resample]{resample()}}: Change cell size\cr
 \code{\link[=sun]{sun()}}: Solar radiance and irradiance\cr
 \code{\link[=terrain]{terrain()}}: Slope, aspect, curvature, and partial slopes\cr
-\verb{[[[]}\link{subset}: Subset a raster with multiple layers\cr
-}
+\code{[[}\link{subset}: Subset a raster with multiple layers\cr
 }
 
-\subsection{Properties of \strong{fasterRaster} vectors (`GVectors')}{
+\subsection{Properties of \strong{fasterRaster} vectors (\code{GVectors})}{
 
 \code{\link[=crs]{crs()}}: Coordinate reference system\cr
 \code{\link[=datatype]{datatype()}}: Data type of fields\cr
@@ -96,10 +101,10 @@ Multi-layer functions: Applied across multiple \code{GRaster}s:
 \code{\link[=names]{names()}}: Names of \code{GVector} fields\cr
 \code{\link[=ncol]{ncol()}}: Number of fields\cr
 \code{\link[=nrow]{nrow()}}: Number of geometries\cr
-\code{\link[=origin]{origin()}}: Coordinates of the northwest corner of the extent of a raster\cr
+\code{\link[=origin]{origin()}}: Coordinates of the northwest corner of the extent\cr
 \code{\link[=st_bbox]{st_bbox()}}: Spatial extent\cr
 \code{\link[=st_crs]{st_crs()}}: Coordinate reference system\cr
-\code{\link[=topology]{topology()}}: Dimensions of vector coordinates (2D or 3D)\cr
+\code{\link[=topology]{topology()}}: Dimensionality (2D or 3D)\cr
 \code{\link[=zext]{zext()}}: Vertical extent\cr
 \code{\link[=zres]{zres()}}: Vertical resolution\cr
 }
@@ -137,13 +142,12 @@ Multi-layer functions: Applied across multiple \code{GRaster}s:
 \code{\link[=rasterize]{rasterize()}}: Convert a \code{GVector} to a \code{GRaster}\cr
 \code{\link[=st_as_sf]{st_as_sf()}}: Convert a \code{GVector} to a \code{sf} vector\cr
 \code{\link[=vect]{vect()}}: Convert a \code{GVector} to a \code{SpatVector}\cr
-\code{\link[=vectToGrass]{vectToGrass()}}: Convert a \code{SpatVector} to a \strong{GRASS} vector\cr
 }
 
 \subsection{General purpose functions}{
 
 \code{\link[=appendLists]{appendLists()}}: Append values to elements of a list from another list\cr
-\code{\link[=comparable]{comparable()}}: Determine if geographic metadata is same between two \code{GRaster}s and/or \code{GVector}s\cr
+\code{\link[=compareGeom]{compareGeom()}}: Determine if geographic metadata is same between \code{GRaster}s and/or \code{GVector}s\cr
 \code{\link[=copyGSpatial]{copyGSpatial()}}: Copy a raster or vector already in \strong{GRASS}\cr
 \code{\link[=compareFloat]{compareFloat()}}: Compare values accounting for differences due to floating point precision\cr
 \code{\link[=forwardSlash]{forwardSlash()}}: Replace backslash with forward slash\cr
@@ -151,10 +155,9 @@ Multi-layer functions: Applied across multiple \code{GRaster}s:
 \code{\link[=pmatchSafe]{pmatchSafe()}}: Partial matching of strings with error checking\cr
 \code{\link[=rastToGrass]{rastToGrass()}}: Convert a \code{SpatRaster} to a \strong{GRASS} raster\cr
 \code{\link[=rstring]{rstring()}}: Create a string statistically likely to be unique\cr
-\code{\link[=vectToGrass]{vectToGrass()}}: Convert a \code{SpatVector} or \code{sf} vector to a \code{GVector}\cr
 }
 
-\subsection{Functions that operate on \strong{GRASS} "sessions" (seldom used by most users):}{
+\subsection{Functions that operate on \strong{GRASS} "sessions":}{
 
 \code{\link[=crs]{crs()}}: Coordinate reference system of the current location\cr
 \code{\link[=fastRemove]{fastRemove()}}: Delete a \strong{GRASS} session (location, mapset(s), and all associated files)\cr
