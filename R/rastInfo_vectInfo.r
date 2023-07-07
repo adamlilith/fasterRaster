@@ -237,7 +237,7 @@
 	suppressMessages(
 		info1 <- rgrass::execGRASS(
 			'v.info',
-			flags = 'g',
+			flags = c('g', 'quiet'),
 			map = gn,
 			intern = TRUE,
 			Sys_show.output.on.console = FALSE,
@@ -249,7 +249,7 @@
 	suppressMessages(
 		info2 <- rgrass::execGRASS(
 			'v.info',
-			flags = 't',
+			flags = c('t', 'quiet'),
 			map = gn,
 			intern = TRUE,
 			Sys_show.output.on.console = FALSE,
@@ -333,7 +333,7 @@
 	suppressWarnings(
 		info3 <- rgrass::execGRASS(
 			'v.info',
-			flags = 'c',
+			flags = c('c', 'quiet'),
 			map = gn,
 			intern = TRUE,
 			Sys_show.output.on.console = FALSE,
