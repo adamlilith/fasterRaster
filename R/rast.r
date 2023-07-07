@@ -17,7 +17,7 @@ setMethod(
 	signature(x = 'GRaster'),
 	function(x, ...) {
 
-	filename <- paste0(forwardSlash(tempfile()), '.tif')
+	filename <- tempfile(fileext='.tif')
 	out <- writeRaster(x, filename=filename, ...)
 	out
 	} # EOF
