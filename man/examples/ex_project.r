@@ -14,7 +14,9 @@ grassDir <- "/Applications/GRASS-8.2.app/Contents/Resources" # Mac
 grassDir <- 'C:/Program Files/GRASS GIS 8.2' # Windows
 grassDir <- '/usr/local/grass' # Linux
 
-# setup
+### setup for all examples
+##########################
+
 library(sf)
 library(terra)
 
@@ -36,13 +38,13 @@ wd <- forwardSlash(tempdir())
 
 # Initiate GRASS session:
 faster(x = madElev, grassDir = grassDir,
-workDir = wd, location = 'examples') # line only needed for 
+workDir = wd, location = 'examples') # line only needed for examples
 
 riversFromVect <- fast(madRivers)
 chelsaFromRast <- fast(madChelsa)
 
-### Method 2: Project rasters/vectors on disk
-#############################################
+### Method 2: Project while loading rasters/vectors from disk
+#############################################################
 
 vectFile <- system.file('extdata', 'shapes/madCoast.shp', package='fasterRaster')
 coastProj <- fast(vectFile)
@@ -52,11 +54,8 @@ rastFile <- system.file('extdata', 'madChelsa.tif', package='fasterRaster')
 chelsaFromFile <- fast(rastFile, method='bilinear')
 chelsaFromFile
 
-# Compare rasters projected between GRASS "locations" and from a file:
-minmax(chelsaSameRes) - minmax(chelsaFromFile)
-
-### Method 3: Projecting between GRASS "locations"
-##################################################
+### Method 3a: Projecting between GRASS "locations" but do not resample
+#######################################################################
 
 # Set up "to" location:
 faster(x = madElev, grassDir = grassDir,
@@ -64,7 +63,7 @@ workDir = wd, location = 'exampleTo') # line only needed for examples
 
 elev <- fast(madElev)
 
-# set up "from" location and put a raster and vector in it
+# Set up "from" location and put a raster and vector in it:
 faster(x = madChelsa, grassDir = grassDir,
 workDir = wd, location = 'exampleFrom') # line only needed for examples
 
@@ -92,21 +91,24 @@ minmax(chelsaSameResTerra)
 chelsaSameResSpat <- rast(chelsaSameRes)
 plot(chelsaSameResSpat - chelsaSameResTerra)
 
-# Project raster into the "exampleTo" location and resample to match template. This can take a while...
-chelsaNewRes <- project(chelsa, elev)
-chelsaNewRes
+### Method 3b: Projecting between GRASS "locations" and resample
+################################################################
+
+chelsaResamp <- project(chelsa, elev)
+chelsaResamp
 
 # Compare to terra:
-chelsaNewResTerra <- project(madChelsa, madElev)
+chelsaResampTerra <- project(madChelsa, madElev)
 
-minmax(chelsaNewRes)
-minmax(chelsaNewResTerra)
+minmax(chelsaResamp)
+minmax(chelsaResampTerra)
 
-chelsaNewResSpat <- rast(chelsaNewRes)
-plot(chelsaNewResSpat - chelsaNewResTerra)
+chelsaNewResSpat <- rast(chelsaResamp)
+plot(chelsaNewResSpat - chelsaResampTerra)
 
 # IMPORTANT #3: Revert back to original GRASS session if needed.
 fastRestore(opts.)
+removeSession('examples')
 removeSession('exampleFrom')
 removeSession('exampleTo')
 
