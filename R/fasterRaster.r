@@ -8,7 +8,7 @@
 #' [fast()]: Create `GRaster`s or `GVector`s from `SpatRaster`s, `SpatVector`s, or `sf`  objects, or from files\cr
 #' [rast()], [vect()], and [st_as_sf()]: Convert `GRaster`s and `GVector`s to `SpatRaster`s, `SpatVector`s, or `sf` vectors\cr
 #' [writeRaster()] and [writeVector()]: Save `GRaster`s or `GVector`s to disk\cr
-#' [fastRestore()]: Revert to another **GRASS** "[location or mapset][tutorial_sessions]", or restart a **GRASS** session saved to disk\cr
+#' [fastRestore()]: Revert to another **GRASS** ["location" or "mapset"][tutorial_sessions], or restart a **GRASS** session saved to disk\cr
 #' [setFastOptions()] and [getFastOptions()]: Set options for working with **fasterRaster**\cr
 #'
 #' ## Properties of **fasterRaster** rasters (`GRasters`)
@@ -47,13 +47,13 @@
 #' - Rounding: [round()], [floor()], [ceiling()], [trunc()] \cr
 #' - Signs: [abs()] \cr
 #' 
-#' Multi-layer functions (applied across a "stack" of `GRaster`s):
+#' Multi-layer functions (applied across layers of a "stack" of `GRaster`s):
 #' - Numeration: [sum()], [count()] \cr
 #' - Central tendency: [mean()], [mmode()], [median()] \cr
 #' - Dispersion: [sd()], [var()], [sdpop()], [varpop()], [nunique()], [range()], [quantile()], [skewness()], [kurtosis()]
 #' - Extremes: [min()], [max()], [which.min()], [which.max()] \cr
 #' 
-#' Other functions:
+#' Other functions:\cr
 #' [as.cell()], [as.fcell()], [as.dcell()]: Change data type (integer/float/double)\cr
 #' [as.contour()]: Contour lines from a raster\cr
 #' [aggregate()]: Aggregate values of raster cells into larger cells\cr
@@ -118,24 +118,20 @@
 #' [head()] and [tail()]: First and last rows of a `GVector`'s data frame\cr
 #' [makeGRaster()]: Make a `GRaster` from a raster in **GRASS**\cr
 #' [makeGVector()]: Make a `GVector` from a vector in **GRASS**\cr
-#' [rastToGrass()]: Convert a `SpatRaster` to a **GRASS** raster\cr
 #' [rast()]: Convert a `GRaster` to a `SpatRaster`\cr
 #' [rasterize()]: Convert a `GVector` to a `GRaster`\cr
 #' [st_as_sf()]: Convert a `GVector` to a `sf` vector\cr
 #' [vect()]: Convert a `GVector` to a `SpatVector`\cr
-#' [vectToGrass()]: Convert a `SpatVector` to a **GRASS** vector\cr
 #'
 #' ## General purpose functions
 #' [appendLists()]: Append values to elements of a list from another list\cr
-#' [comparable()]: Determine if geographic metadata is same between two `GRaster`s and/or `GVector`s\cr
+#' [compareGeom()]: Determine if geographic metadata is same between `GRaster`s and/or `GVector`s\cr
 #' [copyGSpatial()]: Copy a raster or vector already in **GRASS**\cr
 #' [compareFloat()]: Compare values accounting for differences due to floating point precision\cr
 #' [forwardSlash()]: Replace backslash with forward slash\cr
 #' [grassInfo()]: **GRASS** version and citation\cr
 #' [pmatchSafe()]: Partial matching of strings with error checking\cr
-#' [rastToGrass()]: Convert a `SpatRaster` to a **GRASS** raster\cr
 #' [rstring()]: Create a string statistically likely to be unique\cr
-#' [vectToGrass()]: Convert a `SpatVector` or `sf` vector to a `GVector`\cr
 #'
 #' ## Functions that operate on **GRASS** "sessions":
 #' [crs()]: Coordinate reference system of the current location\cr
