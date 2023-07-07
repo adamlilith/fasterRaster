@@ -9,15 +9,22 @@
 \alias{fast,sf-method}
 \title{Create a GRaster or GVector}
 \usage{
-\S4method{fast}{character}(x, rastOrVect = NULL, method = NULL, trim = TRUE, warn = TRUE)
+\S4method{fast}{character}(
+  x,
+  rastOrVect = NULL,
+  method = NULL,
+  fallback = TRUE,
+  wrap = FALSE,
+  warn = TRUE
+)
 
-\S4method{fast}{SpatRaster}(x)
+\S4method{fast}{SpatRaster}(x, method = NULL, fallback = TRUE, wrap = FALSE, warn = TRUE)
 
-\S4method{fast}{stars}(x)
+\S4method{fast}{stars}(x, method = NULL, fallback = TRUE, wrap = FALSE, warn = TRUE)
 
-\S4method{fast}{SpatVector}(x)
+\S4method{fast}{SpatVector}(x, warn = TRUE)
 
-\S4method{fast}{sf}(x)
+\S4method{fast}{sf}(x, warn = TRUE)
 }
 \arguments{
 \item{x}{Any one of:
@@ -27,7 +34,7 @@
 \item A character string with the path and filename of a raster or vector to be loaded directly into \strong{GRASS}. The function will attempt to ascertain the type of object from the file extension (raster or vector), but it can help to indicate which it is using the \code{rastOrVect} argument if it is unclear.
 }}
 
-\item{rastOrVect}{Either \code{NULL} (default) or character (\code{'raster'} or \code{'vector'}). If \code{x} is a raster or vector already in \strong{R}, this does not need to be specified. However, if \code{x} is a filename, then the function will try to ascertain the data type from the filenames, but sometimes this will fail. In that case, it can help to specify if the file holds a raster or vector. Partial matching is used.}
+\item{rastOrVect}{Either \code{NULL} (default) or character (\code{'raster'} or \code{'vector'}). If \code{x} is a raster or vector already in \strong{R}, this does not need to be specified. However, if \code{x} is a filename, then the function will try to ascertain whether it represents a raster or a vector, but sometimes this will fail. In that case, it can help to specify if the file holds a raster or vector. Partial matching is used.}
 
 \item{method}{Character or \code{NULL} (rasters only): If \code{x} does not have the same coordinate reference system as the currently active \strong{GRASS} \link[=tutorial_sessions]{session}, then it will be projected when it is imported. You may need to specify which method is used to conduction the transformation. Partial matching is used.
 \itemize{
@@ -38,7 +45,7 @@
 \item \code{'lanczos'}: Lanczos interpolation (uses weighted values from 25 cells).
 }}
 
-\item{trim}{Logical (rasters only): When importing rasters from disk that "wrap around" (i.e., whole-world rasters or rasters that have edges that actually circle around to meet on the globe), \code{trim} should be \code{FALSE} to avoid removing rows and columns from the "edge" of the map.}
+\item{wrap}{Logical (rasters only): When projecting rasters that "wrap around" (i.e., whole-world rasters or rasters that have edges that actually circle around to meet on the globe), \code{wrap} should be \code{TRUE} to avoid removing rows and columns from the "edge" of the map. The default is \code{FALSE}.}
 
 \item{warn}{Logical: If \code{TRUE}, display a warning when projecting the vector or raster.}
 }
@@ -52,7 +59,7 @@ To use most \strong{fasterRaster} functions, you need to
 \item Then use \code{fast()} to either:
 \itemize{
 \item Convert a \code{SpatRaster}, \code{SpatVector}, \code{sf} object, or \code{stars} raster to a \code{GRaster} or \code{GVector},
-\item Load a raster or vector from a file directly into the \code{GRaster} or \code{GVector} format. \strong{GRASS} supports loading from disk a variety of raster (see the \strong{GRASS} manual page for \code{r.in.gdal}) and vector(see the \strong{GRASS} manual page for \code{v.in.ogr}) formats, though not all of them will work with this function.
+\item Load a raster or vector from a file directly into the \code{GRaster} or \code{GVector} format using \code{fast()}. \strong{GRASS} supports loading from disk a variety of raster formats (see the \strong{GRASS} manual page for \code{r.in.gdal}) and vector formats (see the \strong{GRASS} manual page for \code{v.in.ogr}), though not all of them will work with this function.
 }
 }
 }
