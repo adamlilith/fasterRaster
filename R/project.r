@@ -221,7 +221,7 @@ methods::setMethod(
 	}
 
 	# go to "to" location	
-	on.exit(fastRestore(location=startLocation, mapset=startMapset), add=TRUE)
+	on.exit(fastRestore(location=startLoc, mapset=startMapset), add=TRUE)
 
 	if (!is.null(y)) {
 		.restore(y)
