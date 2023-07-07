@@ -87,11 +87,7 @@ sun <- function(
 
 	if (!beam_rad & !diff_rad & !refl_rad & !glob_rad & !insol_time) stop('No output requested.')
 
-	comparable(elevation, coeff_bh)
-	comparable(elevation, coeff_dh)
-	comparable(elevation, slope)
-	comparable(elevation, aspect)
-	comparable(elevation, hh)
+	compareGeom(elevation, coeff_bh, coeff_dh, slope, aspect, hh)
 	
 	.restore(elevation)
 	region(elevation)
@@ -120,7 +116,7 @@ sun <- function(
 
 	# albedo
 	if (inherits(albedo, 'GRaster')) { # raster
-		comparable(elevation, albedo)
+		compareGeom(elevation, albedo)
 		args <- c(args, albedo=gnames(albedo))
 	} else {
 		args <- c(args, albedo_value=albedo)
@@ -128,7 +124,7 @@ sun <- function(
 	
 	# linke
 	if (inherits(linke, 'GRaster')) { # raster
-		comparable(elevation, linke)
+		compareGeom(elevation, linke)
 		args <- c(args, linke=gnames(linke))
 	} else {
 		args <- c(args, linke_value=linke)

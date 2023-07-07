@@ -126,7 +126,7 @@ methods::setMethod(
 	metric <- tolower(method)
 	metric <- pmatchSafe(metric, c('euclidean', 'squared', 'maximum', 'manhattan', 'geodesic'))
 
-	comparable(x, y)
+	compareGeom(x, y)
 	.restore(x)
 	
 	flags <- 'quiet'
@@ -183,7 +183,7 @@ methods::setMethod(
 	if (!is.null(maxDist) && maxDist < 0) stop('Argument ', sQuote('maxDist'), ' must be positive or NULL.')
 	if ((!is.null(maxDist) & !is.null(maxDist)) && (minDist > maxDist)) stop('Argument ', sQuote('minDist'), ' is greater than ', sQuote('maxDist'), '.')
 
-	comparable(x, y)
+	compareGeom(x, y)
 	.restore(x)
 
 	if (is.null(minDist)) minDist <- -1

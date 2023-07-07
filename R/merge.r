@@ -19,7 +19,7 @@ methods::setMethod(
 	definition = function(x, y, ...) {
 
 	.restore(x)
-	comparable(x, y, extent = FALSE, dim = FALSE, dim3d = FALSE)
+	compareGeom(x, y, lyrs=TRUE, ext=FALSE, rowcol=FALSE, depths=TRUE, res=TRUE, zres=TRUE)
 	
 	x <- list(x, y, ...)
 

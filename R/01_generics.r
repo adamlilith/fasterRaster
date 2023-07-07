@@ -13,7 +13,7 @@ methods::setGeneric(name = 'bottom', def = function(x, ...) standardGeneric('bot
 methods::setGeneric(name = 'buffer', package='terra')
 
 # 'c' already in base as S3 generic
-methods::setGeneric(name = 'comparable', def = function(x, y, ...) standardGeneric('comparable'))
+methods::setGeneric(name = 'compareGeom', package='terra')
 methods::setGeneric(name = 'connectors', def = function(x, y, ...) standardGeneric('connectors'))
 methods::setGeneric(name = 'copyGSpatial', def = function(x, ...) standardGeneric('copyGSpatial'))
 methods::setGeneric(name = 'convHull', def = function(x, ...) standardGeneric('convHull'))

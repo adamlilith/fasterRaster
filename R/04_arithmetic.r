@@ -249,7 +249,7 @@ methods::setMethod('Arith', signature(e1 = 'integer', e2 = 'GRaster'),
 methods::setMethod('Arith', signature(e1 = 'GRaster', e2 = 'GRaster'),
     function(e1, e2) {
 	
-		comparable(e1, e2, fail = TRUE)
+		compareGeom(e1, e2)
 		.restore(e1)
 
 		oper <- as.vector(.Generic)[1L]

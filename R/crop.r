@@ -19,6 +19,7 @@ methods::setMethod(
 	signature = c(x = 'GRaster'),
 	definition = function(x, y) {
 	
+	compareGeom(x, y)
 	.restore(x)
 
 	### change region to match the extent of y but have the same resolution as x
@@ -38,7 +39,7 @@ methods::setMethod(
 	
 	do.call(rgrass::execGRASS, args=args)
 
-	### crop by creating copy of focal GRasters
+	### crop by creating copy of focal raster
 	out <- list()
 	gns <- .makeGname('crop', 'raster', nlyr(x))
 	for (countLayer in seq_len(nlyr(x))) {
@@ -64,6 +65,7 @@ methods::setMethod(
 	signature = c(x = 'GVector'),
 	definition = function(x, y) {
 	
+	compareGeom(x, y)
 	.restore(x)
 
 	## reshaping region to y

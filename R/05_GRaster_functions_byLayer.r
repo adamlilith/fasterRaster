@@ -94,7 +94,7 @@ setMethod(
 	signature(y = 'GRaster', x = 'GRaster'),
 	function(y, x) {
 	
-		comparable(y, x)
+		compareGeom(y, x)
 		.restore(x)
 		
 		ny <- nlyr(y)

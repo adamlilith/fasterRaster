@@ -43,8 +43,7 @@ setMethod(f = 'c',
 			if (is.list(dots[[i]])) dots[[i]] <- c(dots[[i]])
 			if (!inherits(dots[[i]], 'GRaster')) stop('Can only combine GRasters with GRasters.')
 			
-			comparable(out, dots[[i]], fail = TRUE)
-
+			compareGeom(out, dots[[i]])
 			mmdots <- minmax(dots[[i]])
 			
 			out <- GRaster(
@@ -106,7 +105,7 @@ setMethod(f = 'c',
 
 	# comparable?
 	if (length(dots) > 0L) {
-		for (i in seq_along(dots)) comparable(x, dots[[i]], compareTopo=TRUE, compareGeo=TRUE)
+		for (i in seq_along(dots)) compareGeom(x, dots[[i]], geometry=TRUE, topo=TRUE)
 	}
 
 	# gnames of inputs
