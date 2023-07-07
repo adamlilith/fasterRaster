@@ -107,9 +107,9 @@ fastRestore <- function(...) {
 	}
 
 	session <- GSession(
-		location = location,
-		mapset = mapset,
-		crs = crs
+		location = location(),
+		mapset = mapset(),
+		crs = crs()
 	)
 
 	invisible(session)
