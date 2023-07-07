@@ -39,7 +39,7 @@ methods::setMethod(
 setMethod(
 	f = 'nrow',
 	signature = 'GRegion',
-	definition = function(x) x@dimensions[1L]
+	definition = function(x) unname(x@dimensions[1L])
 )
 
 #' @rdname dim
@@ -48,7 +48,7 @@ setMethod(
 setMethod(
 	f = 'ncol',
 	signature = 'GRegion',
-	definition = function(x) x@dimensions[2L]
+	definition = function(x) unname(x@dimensions[2L])
 )
 
 #' @rdname dim
@@ -57,7 +57,7 @@ setMethod(
 setMethod(
 	f = 'ndepth',
 	signature = 'GRegion',
-	definition = function(x) x@dimensions[3L]
+	definition = function(x) unname(x@dimensions[3L])
 )
 
 #' @rdname dim
