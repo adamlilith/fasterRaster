@@ -93,7 +93,7 @@
 		dels <- .ls()
 		type <- names(dels)
 	} else if (inherits(x, c('GSpatial'))) {
-		dels <- gnames(x)
+		dels <- .gnames(x)
 		type <- if (inherits(x, 'GRaster')) {
 			'raster'
 		} else if (inherits(x, 'GVector')) {

@@ -7,6 +7,7 @@
 #' 
 #' @return The function invisibly returns \code{TRUE} if the desired rasters and/or vectors were named, and \code{FALSE} if raster and/or vector to be renamed did not exist in the \code{GRASS} session. Notably, a raster or vector or both are renamed in an existing \code{GRASS} session.
 #'
+#' @aliases .rename
 #' @noRd
 .rename <- function(
 	from,

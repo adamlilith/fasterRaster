@@ -8,7 +8,7 @@
 .rastInfo <- function(x) {
 
 	gn <- if (!inherits(x, 'character')) {
-		gnames(x)
+		.gnames(x)
 	} else {
 		x
 	}
@@ -228,7 +228,7 @@
 .vectInfo <- function(x) {
 
 	gn <- if (inherits(x, 'GVector')) {
-		gnames(x)
+		.gnames(x)
 	} else {
 		x
 	}
@@ -341,13 +341,14 @@
 		)
 	)
 	
-	fieldData <- rgrass::execGRASS('v.db.connect', map=gn, flags='g', intern=TRUE)
+	fieldData <- rgrass::execGRASS('v.db.connect', map=gn, flags=c('g', 'quiet'), intern=TRUE)
+
 	hasNoFields <- any(grepl(fieldData, pattern='is not connected to a database')) | any(grepl(info3, pattern='ERROR: Database connection not defined for layer'))
 	
 	if (hasNoFields) {
 
 		nFields <- as.integer(0)
-		layerName <- NA_character_
+		dbLayer <- NA_character_
 		fields <- NA_character_
 		classes <- NA_character_
 
@@ -357,7 +358,7 @@
 		suppressWarnings(
 			info3 <- rgrass::execGRASS(
 				'v.info',
-				flags = 'c',
+				flags = c('c', 'quiet'),
 				map = gn,
 				intern = TRUE,
 				Sys_show.output.on.console = FALSE,
@@ -378,8 +379,10 @@
 		
 		# fields and types
 		info3 <- info3[!grepl(info3, pattern ='Displaying column types/names for database connection of layer')]
+		
 		info3 <- strsplit(info3, '\\|')
 		fields <- classes <- rep(NA, length(info3))
+		
 		for (i in seq_along(info3)) {
 		
 			type <- info3[[i]][1L]
@@ -396,16 +399,34 @@
 			classes[i] <- type
 			fields[i] <- info3[[i]][2L]
 		}
-		
+
+		cat <- which(fields == 'cat')
+		fields <- fields[-cat]
+		classes <- classes[-cat]
+
 		nFields <- length(fields)
 		nFields <- as.integer(nFields)
 
-		layerName <- info4[grepl(info4, pattern = 'attribute_layer_name')]
-		layerName <- if (length(layerName) == 0) {
+		dbLayer <- info4[grepl(info4, pattern = 'attribute_layer_name')]
+		dbLayer <- if (length(dbLayer) == 0) {
 			NA_character_
 		} else {
-			gsub(layerName, pattern='attribute_layer_name=', replacement='')
+			gsub(dbLayer, pattern='attribute_layer_name=', replacement='')
 		}
+
+		### database table name
+		info <- rgrass::execGRASS(
+			'v.db.connect',
+			map = gn,
+			flags = c('p', 'quiet'),
+			intern = TRUE
+		)
+
+		start <- regexpr(info[2L], pattern = '> table <')
+		start <- start + 9L
+		stop <- regexpr(info[2L], pattern = '> in database <')
+		stop <- stop - 1L
+		dbTable <- substr(info[2L], start=start, stop=stop)
 
 	}
 		
@@ -426,7 +447,8 @@
 		ztop = ztop,
 		
 		nFields = nFields,
-		layerName = layerName,
+		dbLayer = dbLayer,
+		dbTable = dbTable,
 		fields = fields,
 		classes = classes
 	)

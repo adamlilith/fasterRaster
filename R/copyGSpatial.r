@@ -1,34 +1,31 @@
 #' Make a copy of an object in GRASS
 #'
-#' Create a copy of a `GRaster` or `GVector` in **GRASS**.  This function is used internally and is of little use to most users.  This only creates a copy of the object in the **GRASS** session--to make a `GRaster` or `GVector`, [makeGRaster()] or [makeGVector()] need to be called after making the copy. Note that if the object is multi-layered, then a copy is made of each layer.
+#' Create a copy of a `GRaster` or `GVector` in **GRASS**.  This function is used internally and is of little use to most users.  This only creates a copy of the object in the **GRASS** session--to make a `GRaster` or `GVector`, [.makeGRaster()] or [.makeGVector()] need to be called after making the copy. Note that if the object is multi-layered, then a copy is made of each layer.
 #'
 #' @param x `GRaster`, `GVector`, or character: The object or the `gnames` of the object to be copied. Can take multi-layered objects or multiple `gnames`.
 #'
 #' @returns Character vector representing the new `gnames` of each object, plus makes a copy of the given object(s) in **GRASS**.
 #'
-#' @aliases copyGSpatial
-#' @rdname copyGSpatial
-#' @exportMethod copyGSpatial
+#' @aliases .copyGSpatial
+#' @noRd
 methods::setMethod(
-	f = 'copyGSpatial',
+	f = '.copyGSpatial',
 	signature = c(x = 'GRaster'),
 	function(x) .copyGRaster(x)
 )
 
-#' @aliases copyGSpatial
-#' @rdname copyGSpatial
-#' @exportMethod copyGSpatial
+#' @aliases .copyGSpatial
+#' @noRd
 methods::setMethod(
-	f = 'copyGSpatial',
+	f = '.copyGSpatial',
 	signature = c(x = 'GVector'),
-	function(x) .copyGRaster(x)
+	function(x) .copyGVector(x)
 )
 
-#' @aliases copyGSpatial
-#' @rdname copyGSpatial
-#' @exportMethod copyGSpatial
+#' @aliases .copyGSpatial
+#' @noRd
 methods::setMethod(
-	f = 'copyGSpatial',
+	f = '.copyGSpatial',
 	signature = c(x = 'character'),
 	function(x) {
 	
@@ -45,10 +42,10 @@ methods::setMethod(
 	for (i in seq_len(n)) {
 		
 		if (rastOrVect[i] == 'raster') {
-			x <- makeGRaster(x[i])
+			x <- .makeGRaster(x[i])
 			gnsTo[i] <- .copyGRaster(x)
 		} else if (rastOrVect[i] == 'vector') {
-			makeGVector(x[i])
+			.makeGVector(x[i])
 			gnsTo[i] <- .copyGVector(x)
 		}
 	
@@ -68,10 +65,10 @@ methods::setMethod(
 	.restore(x)
 	region(x)
 
-	gn <- gnames(x)
+	gn <- .gnames(x)
 
 	# from/to GRASS names
-	gnTos <- .makeGname(NULL, rastOrVect='raster', n)
+	gnTos <- .makeGName(NULL, rastOrVect='raster', n)
 	
 	# copy
 	args <- list(
@@ -102,35 +99,52 @@ methods::setMethod(
 
 .copyGVector <- function(x = NULL) {
 
-	n <- nlyr(x)
-	topo <- topology(x)
-
 	.restore(x)
-	regionExt(x)
 
-	gn <- gnames(x)
+	### copy vector
+	gnFrom <- .gnames(x)
+	gnTo <- .makeGName(NULL, rastOrVect='vector')
 
-	# from/to GRASS names
-	gnTos <- .makeGname(NULL, rastOrVect='vector', n)
-	
-	# copy
+	fromTo <- paste0(gnFrom, ',', gnTo)
 	args <- list(
 		cmd = 'g.copy',
+		vector = fromTo,
 		flags = c('quiet', 'overwrite'),
 		intern = TRUE
 	)
 	
-	for (i in seq_len(n)) {
-		
-		gnFrom <- gn[i]
-		gnTo <- gnTos[i]
-		
-		fromTo <- paste0(gnFrom, ',', gnTo)
-		thisArgs <- c(args, vector = fromTo)
-		do.call(rgrass::execGRASS, thisArgs)
+	do.call(rgrass::execGRASS, args=args)
+
+	### copy database file
+	gnDb <- .makeGName('db', rastOrVect='vector')
 	
-	}
+	opts <- getFastOptions(c('workDir', 'location', 'mapset'))
+	grassDB <- paste(c(opts$workDir, opts$location, opts$mapset, '/sqlite/sqlite.db'), collapse='/')
+
+	args <- list(
+		cmd = 'db.copy',
+		# from_database = fromDatabase,
+		from_database = grassDB,
+		from_table = .gnames(x),
+		to_database = grassDB,
+		to_table = gnDb,
+		flags = c('quiet', 'overwrite'),
+		intern = FALSE
+	)
 	
-	gnTos
+	do.call(rgrass::execGRASS, args=args)
+	
+	### connect database to vector
+	args <- list(
+		cmd = 'v.db.connect',
+		map = gnTo,
+		driver = 'sqlite',
+		database = grassDB,
+		table = gnTo,
+		flags = c('o', 'quiet', 'overwrite'),
+		intern = FALSE
+	)
+	do.call(rgrass::execGRASS, args=args)
+	gnTo
 
 }
