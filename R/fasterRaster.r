@@ -18,7 +18,6 @@
 #' [ext()], [north()], [south()], [east()], [west()], [top()], and [bottom()]: Spatial extent\cr
 #' [freq()]: Frequencies of cell values in a raster\cr
 #' [global()]: Summary statistics\cr
-#' [gnames()]: Name of the object in **GRASS**\cr
 #' [is.2d()] and [is.3d()]: Is an object 2- or 3-dimensional?\cr
 #' [location()]: **GRASS** "location" of an object or the active session\cr
 #' [mapset()]: **GRASS** "mapset" of an object or the active session\cr
@@ -59,18 +58,22 @@
 #' [aggregate()]: Aggregate values of raster cells into larger cells\cr
 #' [buffer()]: Create a buffer around non-`NA` cells\cr
 #' [c()]: "Stack" two or more rasters\cr
+#' [clump()]: Group cells with similar values into clumps\cr
 #' [crop()]: Remove parts of a raster\cr
 #' [distance()]: Distance to non-`NA` cells, or vice versa\cr
 #' [global()]: Summary statistics\cr
-#' [hillshade()]: Create a hillshade raster\cr
+#' [`hillshade()`][shade]: Create a hillshade raster\cr
 #' [horizonHeight()]: Horizon height\cr
-#' [makeGRaster()]: Makes a `GRaster` from a raster already in a **GRASS** session\cr
+#' [longlat()]: Create longitude/latitude rasters.\cr
+#' [mask()]: Remove values in a raster based on values in another raster or vector\cr
+#' [.makeGRaster()]: Makes a `GRaster` from a raster already in a **GRASS** session\cr
 #' [merge()]: Combine two or more rasters with different extents and fill in `NA`s\cr
+#' [plot()]: Display a raster\cr
 #' [project()]: Change coordinate reference system and cell size\cr
-#' [refresh()]: Update raster metadata\cr
 #' [resample()]: Change cell size\cr
 #' [sun()]: Solar radiance and irradiance\cr
 #' [terrain()]: Slope, aspect, curvature, and partial slopes\cr
+#' [viewshed()]: Areas visible from points on a raster\cr
 #' `[[`[subset]: Subset a raster with multiple layers\cr
 #'
 #' ## Properties of **fasterRaster** vectors (`GVectors`)
@@ -78,7 +81,6 @@
 #' [datatype()]: Data type of fields\cr
 #' [ext()], [north()], [south()], [east()], [west()], [top()], and [bottom()]: Spatial extent\cr
 #' [geomtype()]: Type of vector (points, lines, polygons)\cr
-#' [gnames()]: Name of the object in **GRASS**\cr
 #' [is.2d()] and [is.3d()]: Is an object 2- or 3-dimensional?\cr
 #' [is.points()], [is.lines()], [is.polygons()]: Does a `GVector` represent points, lines, or polygons?\cr
 #' [location()]: **GRASS** "location" of an object or the active session\cr
@@ -96,6 +98,7 @@
 #' ## Functions that operate on or create `GVectors`
 #' [as.data.frame()]: Convert a vector to a `data.frame`\cr
 #' [buffer()]: Create a polygon around/inside a vector\cr
+#' [cleanGeom()]: Fix undesirable geometries of a vector\cr
 #' [connectors()]: Create lines connecting nearest features of two vectors\cr
 #' [convHull()]: Minimum convex hull\cr
 #' [crds()]: Extract coordinates of a vector\cr
@@ -103,12 +106,15 @@
 #' [delaunay()]: Delaunay triangulation\cr
 #' [distance()]: Distance between geometries in two vectors, or from a vector to cells of a raster\cr
 #' [head()]: First rows of a vector's data frame.\cr
-#' [makeGVector()]: Makes a `GVector` from a vector already in a **GRASS** session.\cr
+#' [.makeGVector()]: Makes a `GVector` from a vector already in a **GRASS** session.\cr
 #' [project()]: Change coordinate reference system\cr
-#' [refresh()]: Update vector metadata\cr
+#' [simplifyGeom()]: Remove vertices\cr
+#' [smoothGeom()]: Remove "angular" aspects of features\cr
 #' [st_buffer()]: Create a polygon around/inside a vector\cr
 #' [st_distance()]: Distance between geometries in two vectors\cr
 #' [tail()]: Last rows of a vector's data frame.\cr
+#' #' `[`[subset]: Select geometries/rows of a vector's data frame\cr
+#' #' `[[`[subset]: Subset columns of a vector's data frame\cr
 #'
 #' ## Converting between data types
 #' [as.contour()]: Contour lines from a `GRaster`\cr
@@ -116,8 +122,8 @@
 #' [as.points()], [as.lines()], and [as.polygons()]: Convert a `GRaster` to a `GVector`\cr
 #' [fast()]: Create `GRaster`s or `GVector`s from `SpatRaster`s, `SpatVector`s, or `sf` objects, or from files\cr
 #' [head()] and [tail()]: First and last rows of a `GVector`'s data frame\cr
-#' [makeGRaster()]: Make a `GRaster` from a raster in **GRASS**\cr
-#' [makeGVector()]: Make a `GVector` from a vector in **GRASS**\cr
+#' [.makeGRaster()]: Make a `GRaster` from a raster in **GRASS**\cr
+#' [.makeGVector()]: Make a `GVector` from a vector in **GRASS**\cr
 #' [rast()]: Convert a `GRaster` to a `SpatRaster`\cr
 #' [rasterize()]: Convert a `GVector` to a `GRaster`\cr
 #' [st_as_sf()]: Convert a `GVector` to a `sf` vector\cr
@@ -126,7 +132,6 @@
 #' ## General purpose functions
 #' [appendLists()]: Append values to elements of a list from another list\cr
 #' [compareGeom()]: Determine if geographic metadata is same between `GRaster`s and/or `GVector`s\cr
-#' [copyGSpatial()]: Copy a raster or vector already in **GRASS**\cr
 #' [compareFloat()]: Compare values accounting for differences due to floating point precision\cr
 #' [forwardSlash()]: Replace backslash with forward slash\cr
 #' [grassInfo()]: **GRASS** version and citation\cr
@@ -146,9 +151,13 @@
 #' [regionExt()]: Change or report the active region's extent\cr
 #' [regionRes()]: Change or report the active region's dimensions\cr
 #'
+#' ## Data objects
+#'
+#' 
 #' ## Esoteric tutorials
-#' **fasterRaster** [sessions and locations][tutorial_sessions] (working directories, locations, and mapsets)\cr
-#' **GRASS** [regions][tutorial_regions]\cr
+#' [Sessions, locations, and mapsets][tutorial_sessions]\cr
+#' [Regions][tutorial_regions]\cr
+#' [Undocumented functions][tutorial_undocumented_functions]\cr
 #
 #' @docType package
 #' @author Adam B. Smith

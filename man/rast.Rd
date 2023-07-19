@@ -16,7 +16,7 @@
 A \code{SpatRaster} (\strong{terra} package).
 }
 \description{
-The \strong{fasterRaster} version of the \code{rast()} function converts a \code{GRaster} to a \code{SpatRaster} (from the \strong{terra} package). If you wish to save this raster, please consult \code{\link[=writeRaster4]{writeRaster4()}} and \code{\link[=writeRaster8]{writeRaster8()}}.
+The \strong{fasterRaster} version of the \code{rast()} function converts a \code{GRaster} to a \code{SpatRaster} (from the \strong{terra} package).
 }
 \seealso{
 \code{\link[terra:rast]{terra::rast()}}

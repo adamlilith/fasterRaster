@@ -15,7 +15,7 @@
 .genericArith <- function(name, gn, ex) {
 
 	rgrass::execGRASS('r.mapcalc', expression = ex, flags = c('quiet', 'overwrite'), intern = TRUE)
-	makeGRaster(gn, name)
+	.makeGRaster(gn, name)
 	
 }
 
@@ -30,14 +30,14 @@ methods::setMethod('Arith', signature(e1 = 'GRaster', e2 = 'logical'),
 		
 		for (i in 1L:nlyr(e1)) {
 		
-			gn <- .makeGname('math', 'rast')
+			gn <- .makeGName('math', 'rast')
 			oper <- as.vector(.Generic)[1L]
 			ex <- if (oper == '%/%') {
-				paste(gn, '= floor(double(', gnames(e1)[i], ') /', e2, ')')
+				paste(gn, '= floor(double(', .gnames(e1)[i], ') /', e2, ')')
 			} else if (oper == '%%') {
-				paste0(gn, ' = double(', gnames(e1)[i], ') %', e2)
+				paste0(gn, ' = double(', .gnames(e1)[i], ') %', e2)
 			} else {
-				paste0(gn, ' = double(', gnames(e1)[i], ')', oper, e2)
+				paste0(gn, ' = double(', .gnames(e1)[i], ')', oper, e2)
 			}
 
 			name <- names(e1)[i]
@@ -65,14 +65,14 @@ methods::setMethod('Arith', signature(e1 = 'logical', e2 = 'GRaster'),
 		
 		for (i in 1L:nlyr(e2)) {
 		
-			gn <- .makeGname('math', 'rast')
+			gn <- .makeGName('math', 'rast')
 			oper <- as.vector(.Generic)[1L]
 			ex <- if (oper == '%/%') {
-				paste(gn, '= floor(', e1, '/ double(', gnames(e2)[i], '))')
+				paste(gn, '= floor(', e1, '/ double(', .gnames(e2)[i], '))')
 			} else if (oper == '%%') {
-				paste0(gn, ' = ', e1, '% double(', gnames(e2)[i], ')')
+				paste0(gn, ' = ', e1, '% double(', .gnames(e2)[i], ')')
 			} else {
-				paste0(gn, ' = ', e1, oper, ' double(', gnames(e2)[i], ')')
+				paste0(gn, ' = ', e1, oper, ' double(', .gnames(e2)[i], ')')
 			}
 
 			name <- names(e2)[i]
@@ -99,14 +99,14 @@ methods::setMethod('Arith', signature(e1 = 'GRaster', e2 = 'numeric'),
 		
 		for (i in 1L:nlyr(e1)) {
 		
-			gn <- .makeGname('math', 'rast')
+			gn <- .makeGName('math', 'rast')
 			oper <- as.vector(.Generic)[1L]
 			ex <- if (oper == '%/%') {
-				paste(gn, '= floor( double(', gnames(e1)[i], ') /', e2, ')')
+				paste(gn, '= floor( double(', .gnames(e1)[i], ') /', e2, ')')
 			} else if (oper == '%%') {
-				paste0(gn, ' = double(', gnames(e1)[i], ') %', e2)
+				paste0(gn, ' = double(', .gnames(e1)[i], ') %', e2)
 			} else {
-				paste0(gn, ' = double(', gnames(e1)[i], ') ', oper, e2)
+				paste0(gn, ' = double(', .gnames(e1)[i], ') ', oper, e2)
 			}
 
 			name <- names(e1)[i]
@@ -133,14 +133,14 @@ methods::setMethod('Arith', signature(e1 = 'GRaster', e2 = 'integer'),
 		
 		for (i in 1L:nlyr(e1)) {
 		
-			gn <- .makeGname('math', 'rast')
+			gn <- .makeGName('math', 'rast')
 			oper <- as.vector(.Generic)[1L]
 			ex <- if (oper == '%/%') {
-				paste(gn, '= floor( double(', gnames(e1)[i], ') /', e2, ')')
+				paste(gn, '= floor( double(', .gnames(e1)[i], ') /', e2, ')')
 			} else if (oper == '%%') {
-				paste0(gn, ' = double(', gnames(e1)[i], ') %', e2)
+				paste0(gn, ' = double(', .gnames(e1)[i], ') %', e2)
 			} else {
-				paste0(gn, ' = double(', gnames(e1)[i], ') ', oper, e2)
+				paste0(gn, ' = double(', .gnames(e1)[i], ') ', oper, e2)
 			}
 
 			name <- names(e1)[i]
@@ -168,13 +168,13 @@ methods::setMethod('Arith', signature(e1 = 'numeric', e2 = 'GRaster'),
 		
 		for (i in 1L:nlyr(e2)) {
 		
-			gn <- .makeGname('math', 'rast')
+			gn <- .makeGName('math', 'rast')
 			ex <- if (oper == '%/%') {
-				paste(gn, '= floor(', e1, '/ double(', gnames(e2)[i], '))')
+				paste(gn, '= floor(', e1, '/ double(', .gnames(e2)[i], '))')
 			} else if (oper == '%%') {
-				paste0(gn, ' = ', e1, ' % double(', gnames(e2)[i], ')')
+				paste0(gn, ' = ', e1, ' % double(', .gnames(e2)[i], ')')
 			} else {
-				paste0(gn, ' = ', e1, oper, ' double(', gnames(e2)[i], ')')
+				paste0(gn, ' = ', e1, oper, ' double(', .gnames(e2)[i], ')')
 			}
 
 			name <- names(e2)[i]
@@ -201,14 +201,14 @@ methods::setMethod('Arith', signature(e1 = 'integer', e2 = 'GRaster'),
 		
 		for (i in 1L:nlyr(e2)) {
 		
-			gn <- .makeGname('math', 'rast')
+			gn <- .makeGName('math', 'rast')
 			oper <- as.vector(.Generic)[1L]
 			ex <- if (oper == '%/%') {
-				paste(gn, '= floor(', e1, '/ double(', gnames(e2)[i], '))')
+				paste(gn, '= floor(', e1, '/ double(', .gnames(e2)[i], '))')
 			} else if (oper == '%%') {
-				paste0(gn, ' = ', e1, '% double(', gnames(e2)[i], ')')
+				paste0(gn, ' = ', e1, '% double(', .gnames(e2)[i], ')')
 			} else {
-				paste0(gn, ' = ', e1, oper, 'double(', gnames(e2)[i], ')')
+				paste0(gn, ' = ', e1, oper, 'double(', .gnames(e2)[i], ')')
 			}
 
 			name <- names(e2)[i]
@@ -231,14 +231,14 @@ methods::setMethod('Arith', signature(e1 = 'integer', e2 = 'GRaster'),
 	
 		# .restore(e2)
 
-		# gn <- .makeGname('math', 'rast')
+		# gn <- .makeGName('math', 'rast')
 
 		# oper <- as.vector(.Generic)[1L]
 		# print(oper)
 		# ex <- if (oper == '-') {
-			# paste0(gn, ' = -1 * ', gnames(e2))
+			# paste0(gn, ' = -1 * ', .gnames(e2))
 		# } else {
-			# paste0(gn, ' = ', gnames(e2))
+			# paste0(gn, ' = ', .gnames(e2))
 		# }
 		# .genericArith(x = e2, gn = gn, ex = ex)
 		
@@ -259,16 +259,16 @@ methods::setMethod('Arith', signature(e1 = 'GRaster', e2 = 'GRaster'),
 			for (i in 1L:nlyr(e1)) {
 
 				name <- paste0(names(e1)[i], '_', names(e2)[i])
-				gn <- .makeGname(name, 'rast')
+				gn <- .makeGName(name, 'rast')
 
 				ex <- if (oper == '%/%') {
-					paste0(gn, ' = floor(double(', gnames(e1)[i], ') / double(', gnames(e2)[i], '))')
+					paste0(gn, ' = floor(double(', .gnames(e1)[i], ') / double(', .gnames(e2)[i], '))')
 				} else if (oper == '%%') {
-					paste0(gn, ' = double(', gnames(e1)[i], ') % double(', gnames(e2)[i], ')')
+					paste0(gn, ' = double(', .gnames(e1)[i], ') % double(', .gnames(e2)[i], ')')
 				} else if (oper == '^') {
-					paste0(gn, ' = exp(double(', gnames(e1)[i], '), double(', gnames(e2)[i], '))')
+					paste0(gn, ' = exp(double(', .gnames(e1)[i], '), double(', .gnames(e2)[i], '))')
 				} else {
-					paste0(gn, '= double(', gnames(e1)[i], ')', oper, 'double(', gnames(e2)[i], ')')
+					paste0(gn, '= double(', .gnames(e1)[i], ')', oper, 'double(', .gnames(e2)[i], ')')
 				}
 				
 				if (i == 1L) {
@@ -285,16 +285,16 @@ methods::setMethod('Arith', signature(e1 = 'GRaster', e2 = 'GRaster'),
 			for (i in 1L:nlyr(e2)) {
 			
 				name <- paste0(names(e1), '_', names(e2)[i])
-				gn <- .makeGname(name, 'rast')
+				gn <- .makeGName(name, 'rast')
 
 				ex <- if (oper == '%/%') {
-					paste0(gn, ' = floor(double(', gnames(e1), ') / double(', gnames(e2)[i], '))')
+					paste0(gn, ' = floor(double(', .gnames(e1), ') / double(', .gnames(e2)[i], '))')
 				} else if (oper == '%%') {
-					paste0(gn, ' = double(', gnames(e1), ') % double(', gnames(e2)[i], ')')
+					paste0(gn, ' = double(', .gnames(e1), ') % double(', .gnames(e2)[i], ')')
 				} else if (oper == '^') {
-					paste0(gn, ' = exp(double(', gnames(e1), '), double(', gnames(e2)[i], '))')
+					paste0(gn, ' = exp(double(', .gnames(e1), '), double(', .gnames(e2)[i], '))')
 				} else {
-					paste0(gn, '= double(', gnames(e1), ')', oper, 'double(', gnames(e2)[i], ')')
+					paste0(gn, '= double(', .gnames(e1), ')', oper, 'double(', .gnames(e2)[i], ')')
 				}
 				
 				if (i == 1L) {
@@ -311,16 +311,16 @@ methods::setMethod('Arith', signature(e1 = 'GRaster', e2 = 'GRaster'),
 			for (i in 1L:nlyr(e1)) {
 			
 				name <- paste0(names(e1)[i], '_', names(e2))
-				gn <- .makeGname(name, 'rast')
+				gn <- .makeGName(name, 'rast')
 
 				ex <- if (oper == '%/%') {
-					paste0(gn, ' = floor(double(', gnames(e1)[i], ') / double(', gnames(e2), '))')
+					paste0(gn, ' = floor(double(', .gnames(e1)[i], ') / double(', .gnames(e2), '))')
 				} else if (oper == '%%') {
-					paste0(gn, ' = double(', gnames(e1)[i], ') % double(', gnames(e2), ')')
+					paste0(gn, ' = double(', .gnames(e1)[i], ') % double(', .gnames(e2), ')')
 				} else if (oper == '^') {
-					paste0(gn, ' = exp(double(', gnames(e1)[i], '), double(', gnames(e2), '))')
+					paste0(gn, ' = exp(double(', .gnames(e1)[i], '), double(', .gnames(e2), '))')
 				} else {
-					paste0(gn, '= double(', gnames(e1)[i], ')', oper, 'double(', gnames(e2), ')')
+					paste0(gn, '= double(', .gnames(e1)[i], ')', oper, 'double(', .gnames(e2), ')')
 				}
 				
 				if (i == 1L) {

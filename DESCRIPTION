@@ -25,8 +25,8 @@ Imports:
 	rgrass,
 	methods,
 	sf,
-	stars,
-	terra
+	terra,
+	utils
 Suggests:
 	knitr
 Roxygen: list(markdown = TRUE)

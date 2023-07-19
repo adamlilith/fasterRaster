@@ -4,7 +4,6 @@
 \alias{fast,character-method}
 \alias{fast}
 \alias{fast,SpatRaster-method}
-\alias{fast,stars-method}
 \alias{fast,SpatVector-method}
 \alias{fast,sf-method}
 \title{Create a GRaster or GVector}
@@ -20,8 +19,6 @@
 
 \S4method{fast}{SpatRaster}(x, method = NULL, fallback = TRUE, wrap = FALSE, warn = TRUE)
 
-\S4method{fast}{stars}(x, method = NULL, fallback = TRUE, wrap = FALSE, warn = TRUE)
-
 \S4method{fast}{SpatVector}(x, warn = TRUE)
 
 \S4method{fast}{sf}(x, warn = TRUE)
@@ -29,7 +26,7 @@
 \arguments{
 \item{x}{Any one of:
 \itemize{
-\item A \code{SpatRaster} or \code{stars} raster. Rasters can have one or more layers. They will retain their "layerdness" in most \strong{fasterRaster} functions.
+\item A \code{SpatRaster} raster. Rasters can have one or more layers. They will retain their "layerdness" in most \strong{fasterRaster} functions.
 \item A \code{SpatVector} or \code{sf} spatial vector.
 \item A character string with the path and filename of a raster or vector to be loaded directly into \strong{GRASS}. The function will attempt to ascertain the type of object from the file extension (raster or vector), but it can help to indicate which it is using the \code{rastOrVect} argument if it is unclear.
 }}
@@ -45,6 +42,8 @@
 \item \code{'lanczos'}: Lanczos interpolation (uses weighted values from 25 cells).
 }}
 
+\item{fallback}{Logical (rasters only): If \code{TRUE} (default), then use "lower" resampling methods to fill in \code{NA} cells when a "higher" method is used. For example, if \code{method = 'bicubic'}, \code{NA} cells will be filled in using the \code{bilinear} method, except when that results in \code{NA}s, in which case the \code{near} method will be used. Fallback causes fewer cells to revert to \code{NA} values, so may be better at capturing complex "edges" (e.g., coastlines). Fallback does increase processing time because each "lower" method must be applied, then results merged.}
+
 \item{wrap}{Logical (rasters only): When projecting rasters that "wrap around" (i.e., whole-world rasters or rasters that have edges that actually circle around to meet on the globe), \code{wrap} should be \code{TRUE} to avoid removing rows and columns from the "edge" of the map. The default is \code{FALSE}.}
 
 \item{warn}{Logical: If \code{TRUE}, display a warning when projecting the vector or raster.}
@@ -58,7 +57,7 @@ To use most \strong{fasterRaster} functions, you need to
 \item Initiate a \strong{GRASS} session with \code{\link[=faster]{faster()}};
 \item Then use \code{fast()} to either:
 \itemize{
-\item Convert a \code{SpatRaster}, \code{SpatVector}, \code{sf} object, or \code{stars} raster to a \code{GRaster} or \code{GVector},
+\item Convert a \code{SpatRaster}, \code{SpatVector} or \code{sf} object to a \code{GRaster} or \code{GVector},
 \item Load a raster or vector from a file directly into the \code{GRaster} or \code{GVector} format using \code{fast()}. \strong{GRASS} supports loading from disk a variety of raster formats (see the \strong{GRASS} manual page for \code{r.in.gdal}) and vector formats (see the \strong{GRASS} manual page for \code{v.in.ogr}), though not all of them will work with this function.
 }
 }
@@ -93,7 +92,7 @@ madElev <- fastData('madElev')
 madRivers <- fastData('madRivers')
 
 # start GRASS session for examples only
-faster(grassDir = grassDir, crs = madElev,
+faster(x = madElev, grassDir = grassDir,
 workDir = tempdir(), location = 'examples') # line only needed for examples
 
 # convert a SpatRaster to a GRaster

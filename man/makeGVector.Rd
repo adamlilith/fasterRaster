@@ -43,7 +43,7 @@ madRivers <- fastData('madRivers')
 madDypsis <- fastData('madDypsis')
 
 # start GRASS session for examples only
-faster(crs = madElev, grassDir = grassDir,
+faster(x = madElev, grassDir = grassDir,
 workDir = tempdir(), location = 'examples') # line only needed for examples
 
 ### GRaster properties
@@ -51,6 +51,7 @@ workDir = tempdir(), location = 'examples') # line only needed for examples
 
 # convert SpatRasters to GRasters
 elev <- fast(madElev)
+plot(elev)
 
 dim(elev) # rows, columns, depths, layers
 nrow(elev) # rows

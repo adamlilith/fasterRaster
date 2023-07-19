@@ -27,7 +27,7 @@
 #'
 #' @seealso Guide to getting [started](tutorial_starting) with **fasterRaster**.
 #'
-#' @example man/examples/ex_fastStart.r
+#' @example man/examples/ex_faster.r
 #'
 #' @export
 faster <- function(
@@ -110,6 +110,7 @@ faster <- function(
 	}
 		
 	### start new GRASS session
+	if (inherits(x, 'crs')) x <- x$wkt
 	emptyRast <- terra::rast(matrix(1L), type='xy', crs=x)
 
 	### start the GRASS session

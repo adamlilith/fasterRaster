@@ -6,6 +6,7 @@
 \alias{distance,GRaster,GVector-method}
 \alias{distance,GVector,GVector-method}
 \alias{st_distance,GVector,GVector-method}
+\alias{st_distance}
 \title{Geographic distance}
 \usage{
 \S4method{distance}{GRaster,missing}(
@@ -102,7 +103,7 @@ madRivers <- fastData('madRivers')
 madDypsis <- fastData('madDypsis')
 
 # start GRASS session for examples only
-faster(crs = madElev, grassDir = grassDir,
+faster(x = madElev, grassDir = grassDir,
 workDir = tempdir(), location = 'examples') # line only needed for examples
 
 # convert a SpatRaster to a GRaster, and sf to a GVector
@@ -137,9 +138,8 @@ plot(c(naDistRast, nonNaDistRast, distFocal3Rast, distTo3Rast))
 
 ### case 2: GRaster and GVector
 distToVect <- distance(elev, rivers)
-distToVectRast <- rast(distToVect)
 
-plot(distToVectRast)
+plot(distToVect)
 plot(st_geometry(madRivers), add=TRUE)
 
 ### case 3: GVector vs GVector

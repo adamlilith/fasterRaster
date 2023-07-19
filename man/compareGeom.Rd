@@ -22,6 +22,7 @@
   rowcol = TRUE,
   depths = TRUE,
   res = TRUE,
+  zres = TRUE,
   stopOnError = TRUE,
   messages = TRUE
 )
@@ -72,7 +73,7 @@
 \arguments{
 \item{x, y, ...}{\code{GRaster}s or \code{GVector}s. If \code{y} is \code{GRaster}, then the \code{...} must also be \code{GRaster}s (or missing). If \code{y} is \code{GVector}, then the \code{...} must also be \code{GVector}s (or missing).}
 
-\item{location, mapset}{Logical: Compare \strong{GRASS} \link[=tutorial_sessions]{"locations"} and "mapsets". Default is \code{TRUE}.}
+\item{location, mapset}{Logical: Compare \strong{GRASS} \link[=tutorial_sessions]{"locations" and "mapsets"}. Default is \code{TRUE}.}
 
 \item{topo}{Logical: Test for same topology (2D or 3D). By default, this is \code{TRUE} for raster-raster comparisons, and \code{FALSE} for all others.}
 
@@ -89,6 +90,8 @@
 \item{depths}{Logical (rasters only): Test for same number of depths. Default is \code{TRUE}.}
 
 \item{res}{Logical (rasters only): Test for same resolution in x- and y-dimensions. Default is \code{TRUE}.}
+
+\item{zres}{Logical (rasters only): Test for same resolution in z dimension. Default is \code{TRUE}.}
 
 \item{stopOnError}{Logical: If \code{TRUE} (default), throw an error with an explanation if the objects are not comparable. If \code{FALSE} (default), return \code{TRUE} or \code{FALSE}.}
 

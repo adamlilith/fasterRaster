@@ -34,7 +34,7 @@ grassDir <- 'C:/Program Files/GRASS GIS 8.2' # Windows
 grassDir <- '/usr/local/grass' # Linux
 
 ### start GRASS session for examples only
-faster(grassDir = grassDir, crs = madElev,
+faster(x = madElev, grassDir = grassDir,
 workDir = tempdir(), location = 'examples') # line only needed for examples
 
 ### GRASS information

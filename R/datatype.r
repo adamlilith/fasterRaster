@@ -45,10 +45,10 @@ setMethod(f = 'datatype',
 	signature = c(x = 'GVector'),
 	definition = function(x) {
 
-		if (inherits(x@df, 'GFullMetaTable')) {
+		if (inherits(x@db, 'GFullMetaTable')) {
 			data.frame(
-				field = x@df@fields,
-				datatype = x@df@classes
+				field = x@db@fields,
+				datatype = x@db@classes
 			)
 		} else {
 			NULL

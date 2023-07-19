@@ -1,7 +1,7 @@
 #' Save a GRaster to disk
 #'
 #' @description
-#' This function saves a `GRaster` to disk directly from a **GRASS** session. If the `GRaster` was produced in **GRASS** (i.e., not created using **terra** or **stars** then converted to a `GRaster`), and you convert it back to a `SpatRaster` or `stars` raster and want to save it, please consult [writeRaster4()] and [writeRaster8()] for important details!
+#' This function saves a `GRaster` to disk directly from a **GRASS** session. It is faster than using [rast()], then saving the output of that to disk (because `rast()` actually save the raster to disk, anyway).
 #'
 #' The function will attempt to ascertain the file type to be ascertained from the file extension, but you can specify the format using the `format` argument (see entry for `...`). You can see a list of supported formats by simply using this function with no arguments, as in `writeRaster()`, or by consulting the online help page for the **GRASS** module `r.out.gdal`. Only the `GeoTIFF` file format is guaranteed to work for multi-layered rasters.
 #'
@@ -27,7 +27,7 @@
 #'    * `'LZMA'`
 #'    * `NULL`: No compression is used, but the file can still be reduced in size by using zip, gzip, or other compressions.
 #' * `bigTiff`: Logical: If `TRUE`, and the file format is a GeoTIFF and would be larger than 4 GB (regardless of compression), then the file will be saved in BIGTIFF format.
-#' * `format`: Character, indicating file format. This is usually ascertained from the file extension, but in case this fails, it can be stated explicitly. When using other formats, you may have to specify the `createopts` argument, too (see [r.out.gdal][https://grass.osgeo.org/grass82/manuals/r.out.gdal.html]). Two common formats include:
+#' * `format`: Character, indicating file format. This is usually ascertained from the file extension, but in case this fails, it can be stated explicitly. When using other formats, you may have to specify the `createopts` argument, too (see help page for **GRASS** module `r.out.gdal`). Two common formats include:
 #'    * `'GTiff'` (default): GeoTIFF `filename` ends in `.tif`
 #'    * `'ASC'`: ASCII `filename` ends in `.asc`
 #' * Additional arguments to send to **GRASS** modules `r.out.gdal` and `r.out.ascii`.
@@ -99,8 +99,8 @@ setMethod(
 		## if multi-layered raster stack, then group first... only guaranteed to work with GeoTIFFs
 		if (nLayers > 1L) {
 
-			groupName <- .makeGname(rastOrVect='group')
-			input <- gnames(x)
+			groupName <- .makeGName(rastOrVect='group')
+			input <- .gnames(x)
 			
 			args <- list(
 				cmd = 'i.group',
@@ -114,7 +114,7 @@ setMethod(
 			gn <- groupName
 
 		} else {
-			gn <- gnames(x)
+			gn <- .gnames(x)
 		}
 		
 		# data type

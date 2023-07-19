@@ -102,8 +102,6 @@ You can convert a \code{GRaster} to a \code{SpatRaster} or \code{stars} raster u
 starsRast <- stars(elev)
 }\if{html}{\out{</div>}}
 
-Note that the data type of \code{GRaster}s converted to other types may not be best for retaining the values saved within them (i.e., if you use \code{\link[terra:writeRaster]{terra::writeRaster()}}, values might bet rounded). See \code{\link[=writeRaster4]{writeRaster4()}} for more details.
-
 To convert a \code{GVector} to the \strong{terra} package's \code{SpatVector} format or to an \code{sf} vector, use \code{\link[=vect]{vect()}} or [st_as_sf():
 
 \if{html}{\out{<div class="sourceCode">}}\preformatted{terraVect <- vect(rivers)

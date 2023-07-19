@@ -30,9 +30,9 @@ methods::setMethod('Ops', signature(e1 = 'GRaster', e2 = 'GRaster'),
 		for (i in 1L:nlyr(e1)) {
 
 			name <- paste0(names(e1)[i], '_', names(e2)[i])
-			gn <- .makeGname(name, 'rast')
+			gn <- .makeGName(name, 'rast')
 
-			ex <- paste(gn, '= ', gnames(e1)[i], ' ', oper, ' ', gnames(e2)[i])
+			ex <- paste(gn, '= ', .gnames(e1)[i], ' ', oper, ' ', .gnames(e2)[i])
 			if (i == 1L) {
 				out <- .genericArith(name = name, gn = gn, ex = ex)
 			} else {
@@ -59,9 +59,9 @@ methods::setMethod('Ops', signature(e1 = 'logical', e2 = 'GRaster'),
 		for (i in 1L:nlyr(e2)) {
 			
 			name <- names(e2)[i]
-			gn <- .makeGname(name, 'rast')
+			gn <- .makeGName(name, 'rast')
 
-			ex <- paste(gn, '= ', e1, ' ', oper, ' ', gnames(e2)[i])
+			ex <- paste(gn, '= ', e1, ' ', oper, ' ', .gnames(e2)[i])
 			if (i == 1L) {
 				out <- .genericArith(name = name, gn = gn, ex = ex)
 			} else {
@@ -88,9 +88,9 @@ methods::setMethod('Ops', signature(e1 = 'GRaster', e2 = 'logical'),
 		for (i in 1L:nlyr(e1)) {
 
 			name <- names(e2)[i]
-			gn <- .makeGname(name, 'rast')
+			gn <- .makeGName(name, 'rast')
 			
-			ex <- paste(gn, '= ', gnames(e1)[i], ' ', oper, ' ', e2)
+			ex <- paste(gn, '= ', .gnames(e1)[i], ' ', oper, ' ', e2)
 			if (i == 1L) {
 				out <- .genericArith(name = name, gn = gn, ex = ex)
 			} else {
@@ -116,9 +116,9 @@ methods::setMethod('Ops', signature(e1 = 'numeric', e2 = 'GRaster'),
 		for (i in 1L:nlyr(e2)) {
 		
 			name <- names(e2)[i]
-			gn <- .makeGname(name, 'rast')
+			gn <- .makeGName(name, 'rast')
 
-			ex <- paste(gn, '= ', e1, ' ', oper, ' ', gnames(e2)[i])
+			ex <- paste(gn, '= ', e1, ' ', oper, ' ', .gnames(e2)[i])
 			if (i == 1L) {
 				out <- .genericArith(name = name, gn = gn, ex = ex)
 			} else {
@@ -143,9 +143,9 @@ methods::setMethod('Ops', signature(e1 = 'GRaster', e2 = 'numeric'),
 		for (i in 1L:nlyr(e1)) {
 		
 			name <- names(e1)[i]
-			gn <- .makeGname(name, 'rast')
+			gn <- .makeGName(name, 'rast')
 
-			ex <- paste(gn, '= ', gnames(e1)[i], ' ', oper, ' ', e2)
+			ex <- paste(gn, '= ', .gnames(e1)[i], ' ', oper, ' ', e2)
 			if (i == 1L) {
 				out <- .genericArith(name = name, gn = gn, ex = ex)
 			} else {

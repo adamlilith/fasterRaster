@@ -3,7 +3,7 @@
 #' @description `stretch()` rescales the values in a `GRaster`. All values can be rescaled, or just values in a user-defined range. This range can be given by specifying either the lower and upper bounds of the range using `smin` and `smax`, and/or by the quantiles (across all cells of the raster) using `minq` and `maxq`.
 #' 
 #' @param x A `GRaster`.
-#' @param minv,maxv Numeric: Minumum and maximum values to which to rescale values.
+#' @param minv,maxv Numeric: Minimum and maximum values to which to rescale values.
 #' @param minq,maxq Numeric: Specifies range of values to rescale, given by their quantiles. The default is to stretch all values (the 0th and 100th quantiles). One or both are  ignored if `smin` and/or `smax` are provided.
 #' @param smin,smax Numeric: Specifies range of values to rescale.
 #' 
@@ -11,7 +11,7 @@
 #' 
 #' @seealso [terra::stretch()] and module `r.rescale` in **GRASS** (not used on this function)
 #' 
-#' @example man/example/ex_stretch.r
+#' @example man/examples/ex_stretch.r
 #' 
 #' @aliases stretch
 #' @rdname stretch
@@ -53,7 +53,7 @@ methods::setMethod(
                 args <- list(
                     cmd = 'r.univar',
                     flags = c('quiet', 'r', 'e'),
-                    map = gnames(x)[i],
+                    map = .gnames(x)[i],
                     Sys_show.output.on.console = FALSE,
                     echoCmd = FALSE,
                     intern = TRUE,
@@ -82,7 +82,7 @@ methods::setMethod(
                 args <- list(
                     cmd = 'r.univar',
                     flags = c('quiet', 'r', 'e'),
-                    map = gnames(x)[i],
+                    map = .gnames(x)[i],
                     Sys_show.output.on.console = FALSE,
                     echoCmd = FALSE,
                     intern = TRUE,
@@ -101,8 +101,8 @@ methods::setMethod(
         ### truncate values at min/max
         if (minmax(x[[i]])[1L, i] < lowerFrom | minmax(x[[i]])[2L, i] > upperFrom) {
 
-            gnTrunc <- .makeGname('truncated', 'rast')
-            ex <- paste0(gnTrunc, ' = if(', gnames(x)[i], ' < ', lowerFrom, ', ', lowerFrom, ', if(', gnames(x)[i], ' > ', upperFrom, ', ', upperFrom, ', ', gnames(x)[i], '))')
+            gnTrunc <- .makeGName('truncated', 'rast')
+            ex <- paste0(gnTrunc, ' = if(', .gnames(x)[i], ' < ', lowerFrom, ', ', lowerFrom, ', if(', .gnames(x)[i], ' > ', upperFrom, ', ', upperFrom, ', ', .gnames(x)[i], '))')
 
             args <- list(
                 cmd = 'r.mapcalc',
@@ -114,10 +114,10 @@ methods::setMethod(
             do.call(rgrass::execGRASS, args=args)
 
         } else {
-            gnTrunc <- gnames(x)[i]
+            gnTrunc <- .gnames(x)[i]
         }
 
-        gn <- .makeGname(names(x)[i], 'rast')
+        gn <- .makeGName(names(x)[i], 'rast')
         scale <- (maxv - minv) / (upperFrom - lowerFrom)
         ex <- paste0(gn, ' = ', minv, ' + (', scale, ' * (', gnTrunc, ' - ', lowerFrom, '))')
         
@@ -130,7 +130,7 @@ methods::setMethod(
 
         do.call(rgrass::execGRASS, args=args)
 
-        this <- makeGRaster(gn, names(x)[i])
+        this <- .makeGRaster(gn, names(x)[i])
         if (i == 1L) {
             out <- this
         } else {

@@ -4,16 +4,19 @@
 \alias{crds,GVector-method}
 \alias{crds}
 \alias{st_coordinates}
-\title{Coordinates of a GVector's features or a GRaster's cell centers}
+\alias{crds,GRaster-method}
+\title{Coordinates of a vector's features or a raster's cell centers}
 \usage{
 \S4method{crds}{GVector}(x, z = TRUE)
 
-st_coordinates(x, z = z)
+st_coordinates(x, z = TRUE)
+
+\S4method{crds}{GRaster}(x, z = TRUE, na.rm = TRUE)
 }
 \arguments{
 \item{x}{A \code{GVector} or a \code{GRaster}.}
 
-\item{z}{If \code{FALSE} (default), return only x- and y-coordinates. If \code{TRUE}, return x-, y-, and z-coordinates. For 2-dimensional objects, z-coordinates will all be 0.}
+\item{z}{If \code{TRUE} (default), return x-, y-, and z-coordinates. If \code{FALSE}, just return x- and y-coordinates. For 2-dimensional objects, z-coordinates will all be 0.}
 
 \item{na.rm}{Logical: If \code{TRUE}, remove cells that are \code{NA} (\code{GRaster}s only).}
 }
@@ -46,29 +49,21 @@ library(terra)
 
 # plant specimens (points), elevation (raster)
 madDypsis <- fastData('madDypsis')
-madRivers <- fastData('madRivers')
-madCoast4 <- fastData('madCoast4')
 madElev <- fastData('madElev')
 
 # start GRASS session for examples only
-faster(crs = madDypsis, grassDir = grassDir,
+faster(x = madDypsis, grassDir = grassDir,
 workDir = tempdir(), location = 'examples') # line only needed for examples
 
 # convert a SpatRaster to a GRaster, and sf to a GVector
 dypsis <- fast(madDypsis)
-rivers <- fast(madRivers)
-coast <- fast(madCoast4)
 elev <- fast(madElev)
 
 ### get coordinates
 dypsisPoints <- crds(dypsis)
-riversPoints <- crds(rivers)
-coastPoints <- crds(coast)
 elevPoints <- crds(elev)
 
 head(dypsisPoints)
-head(riversPoints)
-head(coastPoints)
 head(elevPoints)
 
 # IMPORTANT #3: Revert back to original GRASS session if needed.

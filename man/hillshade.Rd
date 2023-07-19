@@ -2,7 +2,7 @@
 % Please edit documentation in R/hillshade.r
 \name{hillshade,GRaster-method}
 \alias{hillshade,GRaster-method}
-\alias{shade}
+\alias{hillshade}
 \title{Hillshading}
 \usage{
 \S4method{hillshade}{GRaster}(x, angle = 45, direction = 0, zscale = 1)
@@ -10,17 +10,61 @@
 \arguments{
 \item{x}{A \code{GRaster} (typically representing elevation).}
 
-\item{angle}{Numeric: The altitude of the sun above the horizon in degrees. Valid values are in the range \link{0, 90}, and the default value is 45 (half way from the horizon to overhead).}
+\item{angle}{Numeric: The altitude of the sun above the horizon in degrees. Valid values are in the range [0, 90], and the default value is 45 (half way from the horizon to overhead).}
 
-\item{direction}{The direction (azimuth) in which the sun is shining in degrees. Valid values are in the range \link{0, 360}. The default is 0, meaning the sus is at due south (180 degrees) and shining due north (0 degrees). Note that in this function, 0 corresponds to north and 180 to south, but in the \strong{GRASS} module \code{r.relief}, "east orientation" is used (0 is east, 90 is north, etc.).}
+\item{direction}{The direction (azimuth) in which the sun is shining in degrees. Valid values are in the range 0 to 360. The default is 0, meaning the sun is at due south (180 degrees) and shining due north (0 degrees). Note that in this function, 0 corresponds to north and 180 to south, but in the \strong{GRASS} module \code{r.relief}, "east orientation" is used (0 is east, 90 is north, etc.).}
 
-\item{zscale}{Numeric: Value by which to exaggerate terrain. The default is 1.  Numbers greater than this will increase apparant relief, and lessthan this (even negative) will diminish it.}
+\item{zscale}{Numeric: Value by which to exaggerate terrain. The default is 1.  Numbers greater than this will increase apparent relief, and less than this (even negative) will diminish it.}
 }
 \value{
 A \code{GRaster}.
 }
 \description{
-Hillshade rasters are often used for display purposes becayse they make topographical relief look "real" to teh eye.
+Hillshade rasters are often used for display purposes because they make topographical relief look "real" to the eye.
+}
+\examples{
+\dontrun{
+# NB This example is in a "dontrun{}" block because it requires users to have
+# GRASS GIS Version 8+ installed on their system.
+
+# IMPORTANT #1: If you already have a GRASS session started, you will need to
+# run the line below and the last line in this example to work with it again.
+# If you have not started a GRASS session, you can skip this step and go to
+# step #2.
+opts. <- getFastOptions()
+
+# IMPORTANT #2: Select the appropriate line below and change as necessary to
+# where GRASS is installed on your system.
+
+grassDir <- "/Applications/GRASS-8.2.app/Contents/Resources" # Mac
+grassDir <- 'C:/Program Files/GRASS GIS 8.2' # Windows
+grassDir <- '/usr/local/grass' # Linux
+
+# setup
+library(terra)
+
+# example data
+madElev <- fastData('madElev')
+
+# start GRASS session for examples only
+faster(x = madElev, grassDir = grassDir,
+workDir = tempdir(), location = 'examples') # line only needed for examples
+
+# convert a SpatRaster to a GRaster
+elev <- fast(madElev)
+
+# calculate all topographic metrics
+topos <- terrain(elev, v='*')
+topos
+
+# calculate a hillshade raster
+hs <- hillshade(elev)
+
+# IMPORTANT #3: Revert back to original GRASS session if needed.
+fastRestore(opts.)
+removeSession('examples')
+
+}
 }
 \seealso{
 \code{\link[terra:shade]{terra::shade()}}, module \code{r.relief} in \strong{GRASS}

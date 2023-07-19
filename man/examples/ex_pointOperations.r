@@ -22,7 +22,7 @@ madDypsis <- fastData('madDypsis') # points
 madCoast4 <- fastData('madCoast4') # polygons
 
 # initiate GRASS session
-faster(crs = madDypsis, grassDir = grassDir,
+faster(x = madDypsis, grassDir = grassDir,
 workDir = tempdir(), location = 'examples') # line only needed for examples
 
 # convert sf vectors to GVectors

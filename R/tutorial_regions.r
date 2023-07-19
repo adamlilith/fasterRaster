@@ -10,11 +10,10 @@
 #'
 #' ### Functions for managing regions in **fasterRaster**
 #'
-#' **fasterRaster** provides functions for managing regions:
+#' **fasterRaster** provides functions for managing regions:\cr
 #' [region()]: Extent *and* dimensions/resolution of a region. This function is used by many other **fasterRaster** functions before raster processing to ensure the raster is not changed (by the region).\cr
 #' [regionDim()]: Dimensions (number of rows and columns)\cr
 #' [regionExt()]: Extent\cr
-#' [regionZExt()]: Vertical extent\cr
 #' [regionRes()]: Resolution\cr
 #'
 #' Most of these functions can be used in three different ways:

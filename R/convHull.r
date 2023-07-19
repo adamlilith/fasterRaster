@@ -21,17 +21,17 @@ methods::setMethod(
 
 	if (by == '') {
 		
-		gn <- .makeGname('convHull', 'vector', 1L)
+		gn <- .makeGName('convHull', 'vector', 1L)
 	
 		args <- list(
 			cmd = 'v.hull',
-			input = gnames(x),
+			input = .gnames(x),
 			output = gn,
 			flags = c('quiet', 'overwrite')
 		)
 
 		do.call(rgrass::execGRASS, args=args)
-		out <- makeGVector(gn)
+		out <- .makeGVector(gn)
 		
 	} else {
 	
@@ -39,7 +39,7 @@ methods::setMethod(
 		uniques <- unique(df[ , by, drop=TRUE])
 	
 		n <- length(uniques)
-		gns <- .makeGname('convHull', 'vector', n)
+		gns <- .makeGName('convHull', 'vector', n)
 
 		vects <- list()
 		for (i in seq_len(n)) {
@@ -51,7 +51,7 @@ methods::setMethod(
 			# select
 			args <- list(
 				cmd = 'v.hull',
-				input = gnames(x),
+				input = .gnames(x),
 				output = gns[i],
 				layer = layerName(x),
 				flags = c('quiet', 'overwrite'),
@@ -60,7 +60,7 @@ methods::setMethod(
 			)
 			
 			do.call(rgrass::execGRASS, args=args)
-			vects[[i]] <- makeGVector(gns[i])
+			vects[[i]] <- .makeGVector(gns[i])
 			
 		} # next set
 		

@@ -43,7 +43,7 @@ madRivers <- fastData('madRivers')
 madDypsis <- fastData('madDypsis')
 
 # start GRASS session for examples only
-faster(crs = madRivers, grassDir = grassDir,
+faster(x = madRivers, grassDir = grassDir,
 workDir = tempdir(), location = 'examples') # line only needed for examples
 
 # convert to GVectors
@@ -52,19 +52,17 @@ dypsis <- fast(madDypsis)
 
 ### connections from each point to nearest river
 consFromDypsis <- connectors(dypsis, rivers)
-consFromDypsisVect <- vect(consFromDypsis)
 
 plot(st_geometry(madDypsis))
 plot(st_geometry(madRivers), col = 'blue', add = TRUE)
-plot(consFromDypsisVect, add = TRUE)
+plot(consFromDypsis, add = TRUE)
 
 ### connections from each river to nearest point
 consFromRivers <- connectors(rivers, dypsis)
-consFromRiversVect <- vect(consFromRivers)
 
 plot(st_geometry(madDypsis))
 plot(st_geometry(madRivers), col = 'blue', add = TRUE)
-plot(consFromRiversVect, add = TRUE)
+plot(consFromRivers, add = TRUE)
 
 # IMPORTANT #3: Revert back to original GRASS session if needed.
 fastRestore(opts.)

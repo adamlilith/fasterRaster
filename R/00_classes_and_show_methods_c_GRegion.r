@@ -3,7 +3,6 @@
 #' @describeIn GSession
 #'
 #' @importFrom methods new
-#' @importFrom methods show
 #' @exportClass GRegion
 GRegion <- setClass(
 	Class = 'GRegion',
@@ -33,44 +32,4 @@ setValidity('GRegion',
 		}
 
 	} # EOF
-)
-
-# show
-methods::setMethod(
-	f = 'show',
-	signature = 'GRegion',
-	definition = function(object) {
-
-		details <- getFastOptions('details')
-
-		digs <- min(5, getOption('digits'))
-		resol <- round(object@resolution, digs)
-
-		extent <- round(object@extent, max(round(digs / 2), 2))
-		zextent <- round(object@zextent, max(round(digs / 2), 2))
-		
-		crs <- object@crs
-		crs <- sf::st_crs(crs)
-		crs <- crs$input
-
-		cat('class       :', paste(class(object), collapse=', '), '\n')
-		if (getFastOptions('details')) {
-			# cat('gnames(s)   :', object@gnames, '\n')
-			cat('location    :', object@location, '\n')
-			cat('mapset      :', object@mapset, '\n')
-		}
-		cat('topology    :', object@topology, '\n')
-		cat('coord ref.  :', crs, '\n')
-		cat('dimensions  :', paste(object@dimensions, collapse=', '), '(nrow, ncol, ndepth)\n')
-		cat('resolution  :', paste(resol, collapse=', '), '(x, y, z)\n')
-		cat('extent      :', paste(extent, collapse=', '), '(xmin, xmax, ymin, ymax)\n')
-		cat('z extent    :', paste(object@zextent, collapse=', '), ' (bottom, top)\n')
-	}
-)
-
-# print
-methods::setMethod(
-	f = 'print',
-	signature = 'GRegion',
-	definition = function(x) show(x)
 )

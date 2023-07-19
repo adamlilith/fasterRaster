@@ -92,8 +92,6 @@
 #' terraRast <- rast(elev)
 #' starsRast <- stars(elev)
 #' ```
-#' Note that the data type of `GRaster`s converted to other types may not be best for retaining the values saved within them (i.e., if you use [terra::writeRaster()], values might bet rounded). See [writeRaster4()] for more details.
-#' 
 #' To convert a `GVector` to the **terra** package's `SpatVector` format or to an `sf` vector, use [vect()] or [st_as_sf():
 #' ```
 #' terraVect <- vect(rivers)

@@ -1,7 +1,7 @@
 #' "Stack" GRasters and combine GVectors
 #'
 #' `GRaster`s can be "stacked" using this function, effectively creating a multi-layered raster. Note that this is different from creating a 3-dimensional raster, though such an effect can be emulated using stacking. `GVector`s can be combined into a single vector.  Stacks can only be created when:
-#' * All objects are in the same **GRASS** [location and mapset][tutorial_locations].
+#' * All objects are in the same **GRASS** ["location" and "mapset"][tutorial_sessions].
 #' * All objects are the same class (either all `GRaster`s or all `GVector`s).
 #' * For `GRaster`s:
 #'      * Horizontal extents are the same.
@@ -51,7 +51,7 @@ setMethod(f = 'c',
 				mapset = mapset(out),
 				crs = crs(out),
 				topology = topology(out),
-				gnames = c(gnames(out), gnames(dots[[i]])),
+				gnames = c(.gnames(out), .gnames(dots[[i]])),
 				names = c(names(out), names(dots[[i]])),
 				extent = as.vector(ext(out)),
 				zextent = z,
@@ -109,11 +109,11 @@ setMethod(f = 'c',
 	}
 
 	# gnames of inputs
-	input <- gnames(x)
+	input <- .gnames(x)
 	if (length(dots) > 0L) input <- c(input, sapply(dots, gnames))
 	input <- paste(input, collapse=',')
 
-	gn <- .makeGname('combo', 'vector')
+	gn <- .makeGName('combo', 'vector')
 
 	args = list(
 		cmd = 'v.patch',
@@ -124,7 +124,7 @@ setMethod(f = 'c',
 
 	do.call(rgrass::execGRASS, args=args)
 
-	makeGVector(gn)
+	.makeGVector(gn)
 	
 	} # EOF
 )

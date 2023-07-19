@@ -2,7 +2,7 @@
 #'
 #' @description `merge()` combines two or more `GRaster`s, possibly with different extents, into a single larger `GRaster`. Where the same cell has different values in each raster, the value of the first raster's cell is used. If this is `NA`, then the value of the second raster's cell is used, and so on.
 #'
-#' @param ... Two or more `GRaster`s.
+#' @param x,y,... `GRaster`s.
 #'
 #' @returns A `GRaster`.
 #' 
@@ -24,11 +24,11 @@ methods::setMethod(
 	x <- list(x, y, ...)
 
 	# set region to combined extent
-	rasts <- paste(sapply(x, gnames), collapse=',')
+	rasts <- paste(sapply(x, .gnames), collapse=',')
 	rgrass::execGRASS('g.region', raster=rasts, flags=c('o', 'quiet'), intern=TRUE)
 
 	# combine
-	gn <- .makeGname('merge', 'rast')
+	gn <- .makeGName('merge', 'rast')
 	args <- list(
 		cmd = 'r.patch',
 		input = rasts,
@@ -40,7 +40,7 @@ methods::setMethod(
 	)
 	
 	do.call(rgrass::execGRASS, args=args)
-	makeGRaster(gn, 'merge')
+	.makeGRaster(gn, 'merge')
 	
 	} # EOF
 )

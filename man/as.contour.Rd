@@ -38,7 +38,7 @@ grassDir <- '/usr/local/grass' # Linux
 library(terra)
 
 # start GRASS session for examples only
-faster(crs = madElev, grassDir = grassDir,
+faster(x = madElev, grassDir = grassDir,
 workDir = tempdir(), location = 'examples') # line only needed for examples
 
 # convert a SpatRaster to a GRaster
@@ -48,10 +48,8 @@ elev <- fast(madElev)
 # calculate contour lines
 conts <- as.contour(elev, nlevels=10)
 
-contsVect <- vect(conts)
-
 plot(madElev)
-plot(contsVect, add=TRUE)
+plot(conts, add=TRUE)
 
 # IMPORTANT #3: Revert back to original GRASS session if needed.
 fastRestore(opts.)
@@ -60,5 +58,5 @@ removeSession('examples')
 }
 }
 \seealso{
-\code{\link[terra:contour]{terra::as.contour()}}, module \code{r.contour} in \strong{GRASS}
+\code{\link[terra:contour]{terra::as.contour()}}, \strong{GRASS} module \code{r.contour}
 }

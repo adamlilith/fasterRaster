@@ -26,7 +26,7 @@
 \alias{origin}
 \alias{st_bbox,ANY-method}
 \alias{st_bbox}
-\title{Spatial extent or origin of a GRaster or GVector}
+\title{Spatial bounds of a GRaster or GVector}
 \usage{
 \S4method{ext}{GSpatial}(x, vector = FALSE)
 
@@ -63,9 +63,9 @@
 st_bbox(obj, ...)
 }
 \arguments{
-\item{x, obj}{An object that inherits from \code{GSpatial} (i.e., a \code{GRaster} or \code{GVector}) or missing. If missing, then the horitontal or vertical extent of the current \link[=tutorial_regions]{region} is returned.}
+\item{x, obj}{An object that inherits from \code{GSpatial} (i.e., a \code{GRaster} or \code{GVector}) or missing. If missing, then the horizontal or vertical extent of the current \link[=tutorial_regions]{region} is returned.}
 
-\item{vector}{Logical: If \code{FALSE} (default), return a \code{SpatExtent} object. If \code{TRUE}, return the extent as a named vactor.}
+\item{vector}{Logical: If \code{FALSE} (default), return a \code{SpatExtent} object. If \code{TRUE}, return the extent as a named vector.}
 
 \item{char}{Logical: If \code{FALSE} (default), return a numeric value. If \code{TRUE}, return as a character.}
 
@@ -81,13 +81,14 @@ The returned values depend on the function:
 }
 }
 \description{
-The extent or origin of \code{GSpatial} object (\code{GRegions}, \code{GRaster}s, and \code{GVector}s):
-
-\code{ext()}: 2-dimensional spatial extent (i.e., westernmost/easternmost and southernmost/northernmost coordinates of area represented).\cr\cr
-\code{zext()}: Vertical extent (i.e., topmost and bottommost elevation of the volume represented). The vertical extent is not \code{NA} only if the object is 3-dimensional.\cr\cr
-\code{west()}, \code{east()}, \code{north()}, \code{south()}: Coordinates of one side of horiztonal extent.\cr\cr
-\code{top()} and \code{bottom()}: Coordinates of top and bottom of vertical extent.\cr\cr
-\code{origin()}: Coordinates of the northwest corner of the extent of the object.\cr\cr
+These functions return the extent or origin of \code{GSpatial} object (\code{GRegions}, \code{GRaster}s, and \code{GVector}s):
+\itemize{
+\item \code{ext()} and \code{st_bbox()}: 2-dimensional spatial extent (i.e., westernmost/easternmost and southernmost/northernmost coordinates of area represented).\cr\cr
+\item \code{zext()}: Vertical extent (i.e., topmost and bottom-most elevation of the volume represented). The vertical extent is not \code{NA} only if the object is 3-dimensional.\cr\cr
+\item \code{west()}, \code{east()}, \code{north()}, \code{south()}: Coordinates of one side of horizontal extent.\cr\cr
+\item \code{top()} and \code{bottom()}: Coordinates of top and bottom of vertical extent.\cr\cr
+\item \code{origin()}: Coordinates of the northwest corner of the extent of the object.\cr\cr
+}
 }
 \examples{
 \dontrun{
@@ -117,7 +118,7 @@ madRivers <- fastData('madRivers')
 madDypsis <- fastData('madDypsis')
 
 # start GRASS session for examples only
-faster(crs = madElev, grassDir = grassDir,
+faster(x = madElev, grassDir = grassDir,
 workDir = tempdir(), location = 'examples') # line only needed for examples
 
 ### GRaster properties
@@ -125,6 +126,7 @@ workDir = tempdir(), location = 'examples') # line only needed for examples
 
 # convert SpatRasters to GRasters
 elev <- fast(madElev)
+plot(elev)
 
 dim(elev) # rows, columns, depths, layers
 nrow(elev) # rows

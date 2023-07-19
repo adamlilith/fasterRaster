@@ -2,7 +2,7 @@
 #'
 #' @description Tests whether a a GRaster or GVector is 2- or 3-dimensional.
 #'
-#' @param An object that inherits from the `GSpatial` class (i.e., a `GRaster` or `GVector`).
+#' @param x An object that inherits from the `GSpatial` class (i.e., a `GRaster` or `GVector`).
 #'
 #' @returns Logical.
 #'

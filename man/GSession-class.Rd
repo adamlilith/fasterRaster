@@ -2,8 +2,7 @@
 % Please edit documentation in R/00_classes_and_show_methods_a_GSession.r,
 %   R/00_classes_and_show_methods_b_GSpatial.r,
 %   R/00_classes_and_show_methods_c_GRegion.r,
-%   R/00_classes_and_show_methods_d_GRaster.r,
-%   R/00_classes_and_show_methods_e_GVector.r
+%   R/00_classes_and_show_methods_d_GRaster.r
 \docType{class}
 \name{GSession-class}
 \alias{GSession-class}
@@ -14,8 +13,6 @@
 \alias{GRegion}
 \alias{GRaster-class}
 \alias{GRaster}
-\alias{GMetaTable-class}
-\alias{GMetaTable}
 \title{Classes for fasterRaster sessions, regions, rasters, and vectors}
 \value{
 An object of class \code{GSession}, \code{GSpatial}, \code{GRaster}, or \code{GVector}.
@@ -28,6 +25,7 @@ The \code{G} suite of S4 classes contain pointers to \strong{GRASS} objects or m
 \item The \code{GRegion} class contains the \code{GSpatial} class and stores information about grids (dimensions and resolution). They do have \code{gname}s, but these are not used (they're always \code{NA}). Contained by \code{GRaster}.
 \item The \code{GRaster} class contains the \code{GRegion} class and represents rasters. It stores information on number of layers, categories, min/max values, and user-friendly names.
 \item The \code{GVector} class contains the \code{GSpatial} class and represents spatial vectors. It stores information about the \strong{GRASS} names of data tables, names of fields (columns), and their data type.
+\item The \code{GMetaTable}, \code{GEmptyMetaTable}, and \code{GFullMetaTable} classes are "helper" classes intended to store metadata about data tables associated with \code{GVector}s. The "full" and "empty" classes are contained by \code{GMetaTable}, and in turn, this is contained by the \code{GVector} class.
 }
 }
 \section{Functions}{
@@ -37,8 +35,6 @@ The \code{G} suite of S4 classes contain pointers to \strong{GRASS} objects or m
 \item \code{GRegion}: 
 
 \item \code{GRaster}: 
-
-\item \code{GMetaTable}: 
 
 }}
 \section{Slots}{
@@ -79,6 +75,8 @@ The \code{G} suite of S4 classes contain pointers to \strong{GRASS} objects or m
 \item{\code{nCats}}{Integer (\code{GRaster}s): Number of categories. Must be >0. Can be obtained using \code{\link[=ncat]{ncat()}}.}
 
 \item{\code{minVal,maxVal}}{Numeric (\code{GRaster}s): Minimum and maximum value across all cells. Can be obtained using \code{\link[=minmax]{minmax()}}.}
+
+\item{\code{dbLayer,dbName}}{Character ('GVector's): Names of the layer and table associated with the \code{GVector} in the \strong{GRASS} SQLite database.}
 
 \item{\code{fields}}{Names of fields (\code{GVector}s). Can be obtained using \code{\link[=names]{names()}}.}
 

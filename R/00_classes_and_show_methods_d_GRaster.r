@@ -3,7 +3,6 @@
 #' @describeIn GSession
 #'
 #' @importFrom methods new
-#' @importFrom methods show
 #' @exportClass GRaster
 GRaster <- setClass(
 	'GRaster',
@@ -61,13 +60,12 @@ setValidity('GRaster',
 #'
 #' @returns A `GRaster`.
 #'
-#' @seealso [makeGVector()]
+#' @seealso [.makeGVector()]
 #'
 #' @example man/examples/ex_GRaster_GVector.r
 #'
-#' @rdname makeGRaster
-#' @export
-makeGRaster <- function(gn, names = 'raster') {
+#' @noRd
+.makeGRaster <- function(gn, names = 'raster') {
 
 	info <- .rastInfo(gn)
 	new(
@@ -89,88 +87,3 @@ makeGRaster <- function(gn, names = 'raster') {
 		maxVal = info[['maxVal']]
 	)
 }
-
-# show
-methods::setMethod(
-	f='show',
-	signature='GRaster',
-	definition = function(object) {
-
-		details <- getFastOptions('details')
-
-		digs <- min(5, getOption('digits'))
-		resol <- round(object@resolution, digs)
-		if (length(resol) == 2L) resol <- c(resol, NA_real_)
-		
-		extent <- round(object@extent, min(digs, 2))
-
-		crs <- object@crs
-		crs <- sf::st_crs(crs)
-		crs <- crs$input
-
-		# pad everything by same amount so display of data for each later appears in neat columns
-		minVal <- round(object@minVal, digs)
-		maxVal <- round(object@maxVal, digs)		
-		
-		minValLength <- nchar(minVal)
-		maxValLength <- nchar(maxVal)
-		
-		if (anyNA(minValLength)) minValLength[is.na(minValLength)] <- 2L
-		if (anyNA(maxValLength)) maxValLength[is.na(maxValLength)] <- 2L
-		
-		nc <- pmax(
-			rep(3, object@nLayers),
-			nchar(object@names),
-			nchar(object@datatypeGRASS),
-			nchar(object@nCats),
-			minValLength,
-			maxValLength
-		)
-		if (details) nc <- pmax(nc, nchar(object@gnames))
-
-		gnames <- names <- datatype <- nCats <- minValChar <- maxValChar <- rep(NA, object@nLayers)
-		for (i in seq_len(object@nLayers)) {
-			fmt <- paste0('%', nc[i], 's')
-			gnames[i] <- sprintf(fmt, object@gnames[i])
-			names[i] <- sprintf(fmt, object@names[i])
-			datatype[i] <- sprintf(fmt, object@datatypeGRASS[i])
-			nCats[i] <- sprintf(fmt, object@nCats[i])
-			minValChar[i] <- sprintf(fmt, minVal[i])
-			maxValChar[i] <- sprintf(fmt, maxVal[i])
-		}
-		
-		gnames <- paste(gnames, collapse=' ')
-		names <- paste(names, collapse=' ')
-		datatype <- paste(datatype, collapse=' ')
-		minValChar <- paste(minValChar, collapse=' ')
-		maxValChar <- paste(maxValChar, collapse=' ')
-
-		cat('class       : GRaster\n')
-		if (details) {
-			cat('location    :', object@location, '\n')
-			cat('mapset      :', object@mapset, '\n')
-		}
-		cat('topology    :', object@topology, '\n')
-		cat('dimensions  :', paste(c(object@dimensions, object@nLayers), collapse=', '), '(nrow, ncol, ndepth, nlyr)\n')
-		cat('resolution  :', paste(resol, collapse=', '), '(x, y, z)\n')
-		cat('extent      :', paste(extent, collapse=', '), '(xmin, xmax, ymin, ymax)\n')
-		if (details | object@topology == '3D') {
-			cat('z extent    :', paste(object@zextent, collapse=', '), '(bottom, top)\n')
-		}
-		cat('coord ref.  :', crs, '\n')
-		if (details) cat('gnames(s)   :', gnames, '\n')
-		cat('name(s)     :', names, '\n')
-		cat('datatype*   :', datatype, '\n')
-		if (details | any(ncat(object) > 0L)) cat('num. categ. :', nCats, '\n')
-		cat('min. value  :', minValChar, '\n')
-		cat('max. value  :', maxValChar, '\n')
-		cat('* GRASS datatype\n')
-	}
-)
-
-# print
-methods::setMethod(f='print', signature='GRaster',
-	definition = function(x) {
-		show(x)
-	}
-)

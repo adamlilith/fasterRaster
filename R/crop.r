@@ -9,7 +9,7 @@
 #' 
 #' @seealso [terra::crop()], [sf::st_crop()]
 #' 
-#' @examples man/examples/ex_crop.r
+#' @example man/examples/ex_crop.r
 #'
 #' @aliases crop
 #' @rdname crop
@@ -32,21 +32,21 @@ methods::setMethod(
 	)
 
 	if (inherits(y, 'GRaster')) {
-		args <- c(args, list(raster = gnames(y)))
+		args <- c(args, list(raster = .gnames(y)))
 	} else if (inherits(y, 'GVector')) {
-		args <- c(args, list(vector = gnames(y)))
+		args <- c(args, list(vector = .gnames(y)))
 	}
 	
 	do.call(rgrass::execGRASS, args=args)
 
 	### crop by creating copy of focal raster
 	out <- list()
-	gns <- .makeGname('crop', 'raster', nlyr(x))
+	gns <- .makeGName('crop', 'raster', nlyr(x))
 	for (countLayer in seq_len(nlyr(x))) {
 	
-		ex <- paste0(gns[countLayer], ' = ', gnames(x)[countLayer])
+		ex <- paste0(gns[countLayer], ' = ', .gnames(x)[countLayer])
 		rgrass::execGRASS('r.mapcalc', expression=ex, flags=c('quiet', 'overwrite'), intern=TRUE)
-		out[[countLayer]] <- makeGRaster(gns[countLayer])
+		out[[countLayer]] <- .makeGRaster(gns[countLayer])
 		
 	}
 	
@@ -76,17 +76,17 @@ methods::setMethod(
 	)
 
 	if (inherits(y, 'GRaster')) {
-		args <- c(args, list(raster = gnames(y)))
+		args <- c(args, list(raster = .gnames(y)))
 	} else if (inherits(y, 'GVector')) {
-		args <- c(args, list(vector = gnames(y)))
+		args <- c(args, list(vector = .gnames(y)))
 	}
 	
 	do.call(rgrass::execGRASS, args=args)
 
 	### crop
-	gn <- .makeGname('crop', 'vector')
-	rgrass::execGRASS('v.clip', input=gnames(x), clip=gnames(y), output=gn, flags=c('quiet', 'overwrite', 'r'), intern=TRUE)
-	makeGVector(gn)
+	gn <- .makeGName('crop', 'vector')
+	rgrass::execGRASS('v.clip', input=.gnames(x), clip=.gnames(y), output=gn, flags=c('quiet', 'overwrite', 'r'), intern=TRUE)
+	.makeGVector(gn)
 
 	} # EOF
 )

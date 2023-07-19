@@ -21,7 +21,7 @@ library(terra)
 madRivers <- fastData('madRivers')
 
 # start GRASS session for examples only
-faster(crs = madRivers, grassDir = grassDir,
+faster(x = madRivers, grassDir = grassDir,
 workDir = tempdir(), location = 'examples') # line only needed for examples
 
 # convert SpatRasters to GRasters

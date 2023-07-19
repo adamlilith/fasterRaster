@@ -4,7 +4,7 @@
 #'
 #' @param x,y,... `GRaster`s or `GVector`s. If `y` is `GRaster`, then the `...` must also be `GRaster`s (or missing). If `y` is `GVector`, then the `...` must also be `GVector`s (or missing).
 #'
-#' @param location,mapset Logical: Compare **GRASS** ["locations"][tutorial_sessions] and "mapsets". Default is `TRUE`.
+#' @param location,mapset Logical: Compare **GRASS** ["locations" and "mapsets"][tutorial_sessions]. Default is `TRUE`.
 #' 
 #' @param crs Logical: Compare coordinate reference systems. Default is `TRUE`.
 #' 
@@ -21,6 +21,8 @@
 #' @param depths Logical (rasters only): Test for same number of depths. Default is `TRUE`.
 #' 
 #' @param res Logical (rasters only): Test for same resolution in x- and y-dimensions. Default is `TRUE`.
+#'
+#' @param zres Logical (rasters only): Test for same resolution in z dimension. Default is `TRUE`.
 #' 
 #' @param geometry Logical (vector-vector comparison only): Compare geometry. Default is `FALSE`.
 #'
@@ -50,6 +52,7 @@ methods::setMethod(
 		rowcol = TRUE,
 		depths = TRUE,
 		res = TRUE,
+		zres = TRUE,
 		stopOnError = TRUE,
 		messages = TRUE
 	) {
@@ -113,12 +116,12 @@ methods::setMethod(
 			}
 
 		}
-!
+
 		if (res) {
 			xres <- res(x)[1L:2L]
 			yres <- res(y[[i]])[1L:2L]
 			
-			if (!all(compareFloat(xres, yres), '!=')) {
+			if (!all(compareFloat(xres, yres, '=='))) {
 				msg <- 'The rasters have a different horizontal resolutions.'
 				if (stopOnError) stop(msg)
 				if (messages & !stopOnError) warning(msg)
@@ -318,7 +321,7 @@ methods::setMethod(f = 'compareGeom',
 		}
 
 	} # next object
-	invisible(out)
+	out
 
 }
 

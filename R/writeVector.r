@@ -19,7 +19,7 @@
 #'
 #' @return Invisibly returns a `SpatVector`. Importantly, the function also writes one or more files to disk.
 #'
-#' @seealso [terra::writeVector()], [sf:st_write()]
+#' @seealso [terra::writeVector()], [sf::st_write()]
 #'
 #' @example man/examples/ex_writeVector.r
 #'
@@ -36,7 +36,7 @@ setMethod(
 
 	### general arguments
 	args <- list(...)
-	args$input <- gnames(x)
+	args$input <- .gnames(x)
 	args$output <- filename
 	args$cmd <- 'v.out.ogr'
 	args$flags <- c('quiet', 's', 'm')

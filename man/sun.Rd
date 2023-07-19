@@ -30,17 +30,16 @@ sun(
 \arguments{
 \item{elevation}{A \code{GRaster} with values representing elevation (typically in meters).}
 
-\item{coeff_bh}{A \code{GRaster}: A raster with values of the real-sky beam radiation coefficient. Valid values are in the range \link{0, 1}.}
+\item{coeff_bh}{A \code{GRaster}: A raster with values of the real-sky beam radiation coefficient. Valid values are between 0 and 1.}
 
-\item{coeff_dh}{A \code{GRaster}: A raster with values of the real-sky diffuse radiation coefficient. Valid values are in the range \link{0, 1}.}
+\item{coeff_dh}{A \code{GRaster}: A raster with values of the real-sky diffuse radiation coefficient. Valid values are between 0 and 1.}
 
-\item{slope}{A \code{GRaster}: This is a raster representing topographic slope in radians, and it can be calculated using \code{\link[=terrain]{terrain()}}.}
+\item{slope}{A \code{GRaster}: This is a raster representing topographic slope in radians. It can be generated using \code{\link[=terrain]{terrain()}}.}
 
-\item{aspect}{A \code{GRaster}: This is a raster representing topographic aspect in degrees, and it can be calculated using \code{\link[=terrain]{terrain()}}. If calculated with that function, "east orientation" \emph{must} be used (i.e., argument \code{northIs0} must be \code{FALSE}).}
+\item{aspect}{A \code{GRaster}: This is a raster representing topographic aspect in degrees. It can be generated using \code{\link[=terrain]{terrain()}}. If generated with that function, "east orientation" \emph{must} be used (i.e., argument \code{northIs0} must be \code{FALSE}).}
 
-\item{hh}{A "stack" of \code{GRaster}s: This represents height of the horizon in radians in particular directions. Horizon height can be calculated using \code{\link[=horizonHeight]{horizonHeight()}}. The directions \emph{must} be in "east orientation" (i.e., argument \code{northIs0} in \code{horzionHeight()} must be \code{FALSE}). The directions must correspond with the sequence given by \code{horizon_step}. For example, if \code{horizon_step} is 90, then \code{hh} must contain rasters representing horizon height at 0 (east), 90 (north), 180 (west), and 270 (south) aspects.
-
-Note that the \code{sun()} function uses the \code{\link[=gnames]{gnames()}} of each raster in the stack. The first part of each \code{gname} must be the same. The last part must be \emph{_xyz}, where \emph{xyz} is an integer between 0 and 359, with leading zeros so the total length of the string \emph{_xyz} is 4 (example: \code{rast_horizon_q6GW0c35DM_090}).}
+\item{hh}{A "stack" of \code{GRaster}s: This represents height of the horizon in radians in particular directions. Horizon height can be calculated using \code{\link[=horizonHeight]{horizonHeight()}}. The directions \emph{must} be in "east orientation" (i.e., argument \code{northIs0} in \code{horzionHeight()} must be \code{FALSE}). The directions must correspond with the sequence given by \code{horizon_step} (see next argument). For example, if \code{horizon_step} is 90, then \code{hh} must contain rasters representing horizon height at 0 (east), 90 (north), 180 (west), and 270 (south) aspects.
+#'}
 
 \item{horizon_step}{Numeric >0: Difference between angular steps in which horizon height is measured. One horizon height raster will be made per value from 0 to 360 - \code{horizon_step} degrees.}
 
@@ -48,30 +47,30 @@ Note that the \code{sun()} function uses the \code{\link[=gnames]{gnames()}} of 
 
 \item{linke}{A \code{GRaster} or a numeric value: This is either a raster with values of the Linke atmospheric turbidity coefficient or a numeric value (in which case the same value is assumed for all locations). The Linke coefficient is unit-less. The default value is 3, but see also the \strong{GRASS} manual page for module \code{r.sun}.}
 
-\item{day}{Positive integer in the range \link{1, 365}: Day of year for which to calculate ir/radiation. Default is 1 (January 1st).}
+\item{day}{Positive integer between 1 to 365, inclusive: Day of year for which to calculate ir/radiation. Default is 1 (January 1st).}
 
-\item{step}{Positive integer in the range (0, 24]. Time step in hours for all-day radiation sums. Decimal values are OK.}
+\item{step}{Positive integer between 0 and 24, inclusive. Time step in hours for all-day radiation sums. Decimal values are OK.}
 
 \item{declination}{Numeric or \code{NULL} (default). Declination value. If \code{NULL}, this is calculated automatically.}
 
 \item{solar_constant}{Positive numeric: The solar constant (solar energy hitting the top of the atmosphere). Default is 1367. Units are W / m^2.}
 
-\item{distance_step}{Positive numeric in the range \link{0.5, 1.5}: Sampling distance coefficient. Default is 1.}
+\item{distance_step}{Positive numeric between 0.5 and 1.5, inclusive: Sampling distance coefficient. Default is 1.}
 
 \item{npartitions}{Positive numeric. Number of chunks in which to read input files. Default is 1.}
 
-\item{beam_rad}{Logical: If \code{TRUE} (default), generate a raster with beam irradiation with units of Wh * m^2 / day ("mode 2" of the \code{r.sun} \strong{GRASS} module).}
+\item{beam_rad}{Logical: If \code{TRUE} (default), generate a raster with beam irradiation with units of Wh / m^2 / day ("mode 2" of the \code{r.sun} \strong{GRASS} module).}
 
-\item{refl_rad}{Logical: If \code{TRUE} (default), generate a raster with ground-reflected irradiation with units of Wh * m^2 / day ("mode 2" of the \code{r.sun} \strong{GRASS} module).}
+\item{diff_rad}{Logical: If \code{TRUE} (default), generate a raster representing irradiation in Wh / m^2 /day}
 
-\item{glob_rad}{Logical:. If \code{TRUE} (default), generate a raster with total irradiance/irradiation with units of Wh * m^2 / day ("mode 2" of the \code{r.sun} \strong{GRASS} module).}
+\item{refl_rad}{Logical: If \code{TRUE} (default), generate a raster with ground-reflected irradiation with units of Wh / m^2 / day ("mode 2" of the \code{r.sun} \strong{GRASS} module).}
+
+\item{glob_rad}{Logical:. If \code{TRUE} (default), generate a raster with total irradiance/irradiation with units of Wh / m^2 / day ("mode 2" of the \code{r.sun} \strong{GRASS} module).}
 
 \item{insol_time}{Logical: If \code{TRUE} (default), generate a raster with total insolation time in hours ("mode 2" of the \code{r.sun} \strong{GRASS} module).}
-
-\item{time}{Positive numeric (default is 2): Local solar time. Used for "mode 1" in the \code{r.sun} \strong{GRASS} module. The default is to use "mode 2".}
 }
 \value{
-A raster or raster stack stack with the same extent, resolution, and coordinate reference system as \code{elevation}. Assumimg all possible rasters are generated they represent:
+A raster or raster stack stack with the same extent, resolution, and coordinate reference system as \code{elevation}. Assuming all possible rasters are generated they represent:
 \itemize{
 \item \code{beam_rad}: Beam radiation (Watt-hours/m2/day)
 \item \code{diff_rad}: Diffuse radiation (Watt-hours/m2/day)
@@ -108,7 +107,7 @@ library(terra)
 madElev <- fastData('madElev')
 
 # start GRASS session for examples only
-faster(grassDir = grassDir, crs = madElev,
+faster(x = madElev, grassDir = grassDir,
 workDir = tempdir(), location = 'examples') # line only needed for examples
 
 # convert a SpatRaster to a GRaster

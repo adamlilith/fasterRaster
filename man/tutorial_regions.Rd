@@ -11,11 +11,10 @@ Generally, most users of \strong{fasterRaster} will not need to know how regions
 Each \strong{GRASS} \link[=tutorial_sessions]{session} typically has one active region. The extent and resolution of this region is initially set by the first raster that is imported into it.
 \subsection{Functions for managing regions in \strong{fasterRaster}}{
 
-\strong{fasterRaster} provides functions for managing regions:
+\strong{fasterRaster} provides functions for managing regions:\cr
 \code{\link[=region]{region()}}: Extent \emph{and} dimensions/resolution of a region. This function is used by many other \strong{fasterRaster} functions before raster processing to ensure the raster is not changed (by the region).\cr
 \code{\link[=regionDim]{regionDim()}}: Dimensions (number of rows and columns)\cr
 \code{\link[=regionExt]{regionExt()}}: Extent\cr
-\code{\link[=regionZExt]{regionZExt()}}: Vertical extent\cr
 \code{\link[=regionRes]{regionRes()}}: Resolution\cr
 
 Most of these functions can be used in three different ways:
@@ -46,6 +45,7 @@ opts. <- getFastOptions()
 
 # IMPORTANT #2: Select the appropriate line below and change as necessary to
 # where GRASS is installed on your system.
+
 grassDir <- "/Applications/GRASS-8.2.app/Contents/Resources" # Mac
 grassDir <- 'C:/Program Files/GRASS GIS 8.2' # Windows
 grassDir <- '/usr/local/grass' # Linux
@@ -55,18 +55,51 @@ library(terra)
 
 # example data
 madElev <- fastData('madElev')
+madRivers <- fastData('madRivers')
 
 # set up one location
-faster(crs = madElev, grassDir = grassDir,
-workDir = tempdir(), location = 'examples1') # line only needed for examples
+faster(x = madElev, grassDir = grassDir,
+workDir = tempdir(), location = 'examples') # line only needed for examples
 
+# Importing a raster sets the region to match its extent and dimensions.
+elev <- fast(madElev)
+elev
+region()
 
-TBD
+# Importing a vector does not change the region.
+dypsis <- fast(madDypsis)
+region()
+
+# report information on current region
+(start <- region())
+regionDim()
+regionExt()
+regionRes()
+
+# coarsen grid... sets region to match aggregated raster's extent and dimensions
+aggElev <- aggregate(elev, 2) 
+
+# reset region dimensions
+regionDim()
+regionDim(elev, respect='resolution')
+regionDim()
+
+# reset region extent
+regionExt()
+regionExt(dypsis, respect='resolution')
+regionExt()
+
+# reset region resolution
+regionRes()
+regionRes(elev, respect='extent')
+regionRes()
+
+# reset region
+(region(start))
 
 # IMPORTANT #3: Revert back to original GRASS session if needed.
 fastRestore(opts.)
-removeSession('examples1')
-removeSession('examples2')
+removeSession('examples')
 
 }
 }

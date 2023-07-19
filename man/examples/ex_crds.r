@@ -20,29 +20,21 @@ library(terra)
 
 # plant specimens (points), elevation (raster)
 madDypsis <- fastData('madDypsis')
-madRivers <- fastData('madRivers')
-madCoast4 <- fastData('madCoast4')
 madElev <- fastData('madElev')
 
 # start GRASS session for examples only
-faster(crs = madDypsis, grassDir = grassDir,
+faster(x = madDypsis, grassDir = grassDir,
 workDir = tempdir(), location = 'examples') # line only needed for examples
 
 # convert a SpatRaster to a GRaster, and sf to a GVector
 dypsis <- fast(madDypsis)
-rivers <- fast(madRivers)
-coast <- fast(madCoast4)
 elev <- fast(madElev)
 
 ### get coordinates
 dypsisPoints <- crds(dypsis)
-riversPoints <- crds(rivers)
-coastPoints <- crds(coast)
 elevPoints <- crds(elev)
 
 head(dypsisPoints)
-head(riversPoints)
-head(coastPoints)
 head(elevPoints)
 
 # IMPORTANT #3: Revert back to original GRASS session if needed.

@@ -3,7 +3,7 @@
 # global PUBLIC options
 .autoRegionDefault <- function() TRUE # only TRUE or FALSE, never NA
 .coresDefault <- function() 1
-.detailsDefault <- function() FALSE
+.detailsDefault <- function() TRUE
 .grassDirDefault <- function() NULL
 .addonDirDefault <- function() NULL
 .memoryDefault <- function() 300 # in MB

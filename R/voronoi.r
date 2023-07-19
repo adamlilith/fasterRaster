@@ -48,10 +48,10 @@ methods::setMethod(
 		
 	}
 
-	gn <- .makeGname('voronoi', 'vect')
+	gn <- .makeGName('voronoi', 'vect')
 	args <- list(
 		cmd = 'v.voronoi',
-		input = gnames(x),
+		input = .gnames(x),
 		output = gn,
 		flags = c('quiet', 'overwrite'),
 		intern = TRUE
@@ -60,7 +60,7 @@ methods::setMethod(
 	if (geomtype(x) == 'polygons') args$flags <- c(args$clags, 'a')
 
 	do.call(rgrass::execGRASS, args=args)
-	makeGVector(gn)
+	.makeGVector(gn)
 	
 	} # EOF
 )

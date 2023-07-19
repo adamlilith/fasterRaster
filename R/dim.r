@@ -1,15 +1,17 @@
-#' @title Number of rows, columns, depths, cells, and layers of a GRaster
+#' @title Number of rows, columns, depths, cells, and layers
 #'
 #' @description
-#' For `GRegions`s: Number of rows, columns, depths, and cells:
+#' Number of rows, columns, depths, and cells of a `GRegion`:
 #' * `dim()`: Rows, columns, depths, and layers of a
 #' * `nrow()`: Rows
 #' * `ncol()`: Columns
 #' * `ndepth()`: Depths (for 3-dimensional rasters only)
 #' * `ncell()`: Number of cells (2 dimensions)
 #' * `ncell3d()`: Number of cells (3 dimensions)
+#'
 #' For `GRaster`s: As above, plus number of cells and layers:
 #' * `nlyr()`: Layers (number of "stacked" rasters--different from depths of a raster).
+#'
 #' For `GVector`s: Number of geometries and fields (columns):
 #' * `dim()`: Number of geometries and fields
 #' * `nrow()`: Number of geometries

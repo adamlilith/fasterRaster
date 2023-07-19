@@ -10,7 +10,7 @@
 \arguments{
 \item{x}{A \code{GRaster}.}
 
-\item{minv, maxv}{Numeric: Minumum and maximum values to which to rescale values.}
+\item{minv, maxv}{Numeric: Minimum and maximum values to which to rescale values.}
 
 \item{minq, maxq}{Numeric: Specifies range of values to rescale, given by their quantiles. The default is to stretch all values (the 0th and 100th quantiles). One or both are  ignored if \code{smin} and/or \code{smax} are provided.}
 
@@ -21,6 +21,73 @@ A \code{GRaster}.
 }
 \description{
 \code{stretch()} rescales the values in a \code{GRaster}. All values can be rescaled, or just values in a user-defined range. This range can be given by specifying either the lower and upper bounds of the range using \code{smin} and \code{smax}, and/or by the quantiles (across all cells of the raster) using \code{minq} and \code{maxq}.
+}
+\examples{
+\dontrun{
+# NB This example is in a "dontrun{}" block because it requires users to have
+# GRASS GIS Version 8+ installed on their system.
+
+# IMPORTANT #1: If you already have a GRASS session started, you will need to
+# run the line below and the last line in this example to work with it again.
+# If you have not started a GRASS session, you can skip this step and go to
+# step #2.
+opts. <- getFastOptions()
+
+# IMPORTANT #2: Select the appropriate line below and change as necessary to
+# where GRASS is installed on your system.
+
+grassDir <- "/Applications/GRASS-8.2.app/Contents/Resources" # Mac
+grassDir <- 'C:/Program Files/GRASS GIS 8.2' # Windows
+grassDir <- '/usr/local/grass' # Linux
+
+# setup
+library(terra)
+
+# example data
+madElev <- fastData('madElev')
+
+# start GRASS session for examples only
+faster(grassDir = grassDir, crs = madElev,
+workDir = tempdir(), location = 'examples') # line only needed for examples
+
+# convert a SpatRaster to a GRaster
+elev <- fast(madElev)
+
+### stretch based on user-defined range
+
+#  fasterRaster
+fr <- stretch(elev, smin=1, smax=100)
+fr
+
+# terra
+tr <- stretch(madElev, smin = 1, smax = 100)
+tr
+
+# compare fasterRaster to terra output
+fr <- rast(fr)
+fr <- extend(fr, tr)
+fr - tr
+
+### stretch values in a certain quantile range
+
+#  fasterRaster
+fr <- stretch(elev, minq = 0.25, maxq = 0.75)
+fr
+
+# terra
+tr <- stretch(madElev, minq = 0.25, maxq = 0.75)
+tr
+
+# compare fasterRaster to terra output
+fr <- rast(fr)
+fr <- extend(fr, tr)
+fr - tr
+
+# IMPORTANT #3: Revert back to original GRASS session if needed.
+fastRestore(opts.)
+removeSession('examples')
+
+}
 }
 \seealso{
 \code{\link[terra:stretch]{terra::stretch()}} and module \code{r.rescale} in \strong{GRASS} (not used on this function)

@@ -3,10 +3,13 @@
 \name{[[,GRaster,ANY,ANY-method}
 \alias{[[,GRaster,ANY,ANY-method}
 \alias{subset}
+\alias{[,GVector,ANY,ANY-method}
 \alias{[[,GVector,ANY,ANY-method}
 \title{Sub-setting operator for GRasters and GVectors}
 \usage{
 \S4method{[[}{GRaster,ANY,ANY}(x, i)
+
+\S4method{[}{GVector,ANY,ANY}(x, i)
 
 \S4method{[[}{GVector,ANY,ANY}(x, i)
 }
@@ -31,7 +34,7 @@ The \code{[} and \code{[[} operators do different things depending on whether th
 \item \code{GVector}s:
 \itemize{
 \item \code{[} operator: Returns a subset of geometries (i.e., points, lines, or polygons) of the \code{GVector}. For example, \code{vector[2:4]} will return the second through the fourth geometries.
-\item \code{[[} operator: Returns columns of the vector's data frame. For example, \code{vector[[2:4]]} returns columns 2 through 4 of the data frame.
+\item \code{[[} operator: Returns columns of the vector's data frame. For example, \code{vector[[2:4]]} returns the `GVector, but with just columns 2 through 4 of the data frame.
 }
 \item \code{GRaster}s:
 \itemize{
@@ -67,7 +70,7 @@ madRivers <- fastData('madRivers')
 madDypsis <- fastData('madDypsis')
 
 # start GRASS session for examples only
-faster(crs = madElev, grassDir = grassDir,
+faster(x = madElev, grassDir = grassDir,
 workDir = tempdir(), location = 'examples') # line only needed for examples
 
 ### GRaster properties
@@ -75,6 +78,7 @@ workDir = tempdir(), location = 'examples') # line only needed for examples
 
 # convert SpatRasters to GRasters
 elev <- fast(madElev)
+plot(elev)
 
 dim(elev) # rows, columns, depths, layers
 nrow(elev) # rows

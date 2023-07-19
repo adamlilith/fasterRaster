@@ -17,7 +17,7 @@
   toMapset = NULL
 )
 
-\S4method{project}{GVector}(x, y = NULL, location = NULL, mapset = NULL)
+\S4method{project}{GVector}(x, y = NULL, toLocation = NULL, toMapset = NULL)
 }
 \arguments{
 \item{x}{A \code{GRaster} or \code{GVector} to be projected.}
@@ -49,7 +49,7 @@
 
 \item{wrap}{Logical (\code{GRaster}s only): When projecting rasters that "wrap around" (i.e., whole-world rasters or rasters that have edges that actually circle around to meet on the globe), \code{wrap} should be \code{TRUE} to avoid removing rows and columns from the "edge" of the map. The default is \code{FALSE}.}
 
-\item{location, mapset}{Character or \code{NULL} (default): The name of the \link[=tutorial_sessions]{location and mapset} which have the CRS you to which you want to transform the \code{GRaster} or \code{GVector}. You can get the current location and mapset or the location and mapset of an object using \code{\link[=location]{location()}} and \code{\link[=mapset]{mapset()}}. If left as \code{NULL}, then it will be assumed that you want to project the object to the currently active location and mapset.}
+\item{toLocation, toMapset}{Character or \code{NULL} (default): The name of the \link[=tutorial_sessions]{"location" and "mapset"} which have the CRS you to which you want to transform the \code{GRaster} or \code{GVector}. You can get the current location and mapset or the location and mapset of an object using \code{\link[=location]{location()}} and \code{\link[=mapset]{mapset()}}. If left as \code{NULL}, then it will be assumed that you want to project the object to the currently active location and mapset.}
 }
 \value{
 A \code{GRaster} or \code{GVector}.

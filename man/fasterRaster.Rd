@@ -13,7 +13,7 @@ A \link[=tutorial_getting_started]{quick-start tutorial}\cr
 \code{\link[=fast]{fast()}}: Create \code{GRaster}s or \code{GVector}s from \code{SpatRaster}s, \code{SpatVector}s, or \code{sf}  objects, or from files\cr
 \code{\link[=rast]{rast()}}, \code{\link[=vect]{vect()}}, and \code{\link[=st_as_sf]{st_as_sf()}}: Convert \code{GRaster}s and \code{GVector}s to \code{SpatRaster}s, \code{SpatVector}s, or \code{sf} vectors\cr
 \code{\link[=writeRaster]{writeRaster()}} and \code{\link[=writeVector]{writeVector()}}: Save \code{GRaster}s or \code{GVector}s to disk\cr
-\code{\link[=fastRestore]{fastRestore()}}: Revert to another \strong{GRASS} "\link[=tutorial_sessions]{location or mapset}", or restart a \strong{GRASS} session saved to disk\cr
+\code{\link[=fastRestore]{fastRestore()}}: Revert to another \strong{GRASS} \link[=tutorial_sessions]{"location" or "mapset"}, or restart a \strong{GRASS} session saved to disk\cr
 \code{\link[=setFastOptions]{setFastOptions()}} and \code{\link[=getFastOptions]{getFastOptions()}}: Set options for working with \strong{fasterRaster}\cr
 }
 
@@ -58,7 +58,7 @@ Single-layer functions (applied to each layer of a \code{GRaster}):
 \item Signs: \code{\link[=abs]{abs()}} \cr
 }
 
-Multi-layer functions (applied across a "stack" of \code{GRaster}s):
+Multi-layer functions (applied across layers of a "stack" of \code{GRaster}s):
 \itemize{
 \item Numeration: \code{\link[=sum]{sum()}}, \code{\link[=count]{count()}} \cr
 \item Central tendency: \code{\link[=mean]{mean()}}, \code{\link[=mmode]{mmode()}}, \code{\link[=median]{median()}} \cr
@@ -66,24 +66,29 @@ Multi-layer functions (applied across a "stack" of \code{GRaster}s):
 \item Extremes: \code{\link[=min]{min()}}, \code{\link[=max]{max()}}, \code{\link[=which.min]{which.min()}}, \code{\link[=which.max]{which.max()}} \cr
 }
 
-Other functions:
+Other functions:\cr
 \code{\link[=as.cell]{as.cell()}}, \code{\link[=as.fcell]{as.fcell()}}, \code{\link[=as.dcell]{as.dcell()}}: Change data type (integer/float/double)\cr
 \code{\link[=as.contour]{as.contour()}}: Contour lines from a raster\cr
 \code{\link[=aggregate]{aggregate()}}: Aggregate values of raster cells into larger cells\cr
 \code{\link[=buffer]{buffer()}}: Create a buffer around non-\code{NA} cells\cr
 \code{\link[=c]{c()}}: "Stack" two or more rasters\cr
+\code{\link[=clump]{clump()}}: Group cells with similar values into clumps\cr
 \code{\link[=crop]{crop()}}: Remove parts of a raster\cr
 \code{\link[=distance]{distance()}}: Distance to non-\code{NA} cells, or vice versa\cr
 \code{\link[=global]{global()}}: Summary statistics\cr
-\code{\link[=hillshade]{hillshade()}}: Create a hillshade raster\cr
+\code{\link[=shade]{hillshade()}}: Create a hillshade raster\cr
 \code{\link[=horizonHeight]{horizonHeight()}}: Horizon height\cr
+\code{\link[=longlat]{longlat()}}: Create longitude/latitude rasters.\cr
+\code{\link[=mask]{mask()}}: Remove values in a raster based on values in another raster or vector\cr
 \code{\link[=makeGRaster]{makeGRaster()}}: Makes a \code{GRaster} from a raster already in a \strong{GRASS} session\cr
 \code{\link[=merge]{merge()}}: Combine two or more rasters with different extents and fill in \code{NA}s\cr
+\code{\link[=plot]{plot()}}: Display a raster\cr
 \code{\link[=project]{project()}}: Change coordinate reference system and cell size\cr
 \code{\link[=refresh]{refresh()}}: Update raster metadata\cr
 \code{\link[=resample]{resample()}}: Change cell size\cr
 \code{\link[=sun]{sun()}}: Solar radiance and irradiance\cr
 \code{\link[=terrain]{terrain()}}: Slope, aspect, curvature, and partial slopes\cr
+\code{\link[=viewshed]{viewshed()}}: Areas visible from points on a raster\cr
 \code{[[}\link{subset}: Subset a raster with multiple layers\cr
 }
 
@@ -113,6 +118,7 @@ Other functions:
 
 \code{\link[=as.data.frame]{as.data.frame()}}: Convert a vector to a \code{data.frame}\cr
 \code{\link[=buffer]{buffer()}}: Create a polygon around/inside a vector\cr
+\code{\link[=cleanGeom]{cleanGeom()}}: Fix undesirable geometries of a vector\cr
 \code{\link[=connectors]{connectors()}}: Create lines connecting nearest features of two vectors\cr
 \code{\link[=convHull]{convHull()}}: Minimum convex hull\cr
 \code{\link[=crds]{crds()}}: Extract coordinates of a vector\cr
@@ -123,9 +129,13 @@ Other functions:
 \code{\link[=makeGVector]{makeGVector()}}: Makes a \code{GVector} from a vector already in a \strong{GRASS} session.\cr
 \code{\link[=project]{project()}}: Change coordinate reference system\cr
 \code{\link[=refresh]{refresh()}}: Update vector metadata\cr
+\code{\link[=simplifyGeom]{simplifyGeom()}}: Remove vertices\cr
+\code{\link[=smoothGeom]{smoothGeom()}}: Remove "angular" aspects of features\cr
 \code{\link[=st_buffer]{st_buffer()}}: Create a polygon around/inside a vector\cr
 \code{\link[=st_distance]{st_distance()}}: Distance between geometries in two vectors\cr
 \code{\link[=tail]{tail()}}: Last rows of a vector's data frame.\cr
+#' \code{[}\link{subset}: Select geometries/rows of a vector's data frame\cr
+#' \code{[[}\link{subset}: Subset columns of a vector's data frame\cr
 }
 
 \subsection{Converting between data types}{
@@ -137,7 +147,6 @@ Other functions:
 \code{\link[=head]{head()}} and \code{\link[=tail]{tail()}}: First and last rows of a \code{GVector}'s data frame\cr
 \code{\link[=makeGRaster]{makeGRaster()}}: Make a \code{GRaster} from a raster in \strong{GRASS}\cr
 \code{\link[=makeGVector]{makeGVector()}}: Make a \code{GVector} from a vector in \strong{GRASS}\cr
-\code{\link[=rastToGrass]{rastToGrass()}}: Convert a \code{SpatRaster} to a \strong{GRASS} raster\cr
 \code{\link[=rast]{rast()}}: Convert a \code{GRaster} to a \code{SpatRaster}\cr
 \code{\link[=rasterize]{rasterize()}}: Convert a \code{GVector} to a \code{GRaster}\cr
 \code{\link[=st_as_sf]{st_as_sf()}}: Convert a \code{GVector} to a \code{sf} vector\cr
@@ -148,12 +157,10 @@ Other functions:
 
 \code{\link[=appendLists]{appendLists()}}: Append values to elements of a list from another list\cr
 \code{\link[=compareGeom]{compareGeom()}}: Determine if geographic metadata is same between \code{GRaster}s and/or \code{GVector}s\cr
-\code{\link[=copyGSpatial]{copyGSpatial()}}: Copy a raster or vector already in \strong{GRASS}\cr
 \code{\link[=compareFloat]{compareFloat()}}: Compare values accounting for differences due to floating point precision\cr
 \code{\link[=forwardSlash]{forwardSlash()}}: Replace backslash with forward slash\cr
 \code{\link[=grassInfo]{grassInfo()}}: \strong{GRASS} version and citation\cr
 \code{\link[=pmatchSafe]{pmatchSafe()}}: Partial matching of strings with error checking\cr
-\code{\link[=rastToGrass]{rastToGrass()}}: Convert a \code{SpatRaster} to a \strong{GRASS} raster\cr
 \code{\link[=rstring]{rstring()}}: Create a string statistically likely to be unique\cr
 }
 
@@ -172,6 +179,9 @@ Other functions:
 \code{\link[=regionDim]{regionDim()}}: Change or report the active region's resolution\cr
 \code{\link[=regionExt]{regionExt()}}: Change or report the active region's extent\cr
 \code{\link[=regionRes]{regionRes()}}: Change or report the active region's dimensions\cr
+}
+
+\subsection{Data objects}{
 }
 
 \subsection{Esoteric tutorials}{

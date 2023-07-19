@@ -62,7 +62,7 @@ library(terra)
 madRivers <- fastData('madRivers')
 
 # start GRASS session for examples only
-faster(crs = madRivers, grassDir = grassDir,
+faster(x = madRivers, grassDir = grassDir,
 workDir = tempdir(), location = 'examples') # line only needed for examples
 
 # convert SpatRasters to GRasters
@@ -85,5 +85,5 @@ removeSession('examples')
 }
 }
 \seealso{
-\code{\link[terra:writeVector]{terra::writeVector()}}, \code{\link[=sf:st_write]{sf:st_write()}}
+\code{\link[terra:writeVector]{terra::writeVector()}}, \code{\link[sf:st_write]{sf::st_write()}}
 }

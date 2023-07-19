@@ -2,7 +2,7 @@
 #'
 #' @description These functions either change the extent, dimensions, and/or resolution of a **GRASS** ["region"][tutorial_regions] or report the current region's extent, dimensions, and/or resolution. These functions are mostly used internally and rarely of interest to most users.
 #' * `region()`: All 2D and 3D aspects of a region.
-#' * `regionDim(): x- and y-dimensions.`
+#' * `regionDim()`: x- and y-dimensions.`
 #' * `regionExt()`: x- and y-extent.
 #' * `regionRes()`: x- and y-resolution.
 #'
@@ -17,9 +17,9 @@
 #' @param trim A `GRaster` or `NULL` (default). If a `GRaster`, then the region will be trimmed to the non-`NA` cells in this raster. `trim` can only be non-`NULL` if `x` is a `GRaster`. Ignored if `NULL`.
 #' 
 #' @param respect Character: Indicates what aspect of the current region to retain. Different functions allow for different aspect to be retained. Partial matching is used.
-#' * `regionDim()`: `'extent'` (size) or `'resolution'` (cell size).
-#' * `regionExt()`: `'dimensions'` (number of rows and columns) or `'resolution'` (cell size--see note).
-#' * `regionRes()`: `'extent'` (size--see note) or `'dimensions'` (number of rows and columns).
+#' * `regionDim()`: `'extent'` or `'resolution'`.
+#' * `regionExt()`: `'dimensions'` or `'resolution'`.
+#' * `regionRes()`: `'extent'` or `'dimensions'`.
 #' 
 #' Note: In most cases extent cannot be retained exactly if the resolution is changed. When resolution is changed, the actual extent will be the user-supplied extent expanded by zero to one rows or zero to one columns to accommodate an integer number of cells of the desired size. The western and northern limits of the extent will be retained, while the eastern and southern limits of the extent will be moved to accommodate an integer number of columns and rows.
 #'
@@ -255,6 +255,7 @@ methods::setMethod(
 		cols <- ncol(x)
 
 		tbres <- zres(x)
+		tbres <- as.character(tbres)
 
 		args <- list(
 			cmd = 'g.region',
@@ -295,12 +296,12 @@ methods::setMethod(
 		trimToTopo <- topology(trim)
 		if (any(!(topo %in% trimToTopo))) stop('Topology of ', sQuote('trim'), ' does not match topology of ', sQuote('x'), '.')
 		
-		trim <- gnames(trim)
+		trim <- .gnames(trim)
 		if (length(trim) != 1L) stop('Argument ', sQuote('trim'), ' can have only one layer.')
 	
 	}
 
-	gn <- gnames(x)[1L]
+	gn <- .gnames(x)[1L]
 
 	if (all(topo == '2D') & is.null(trim)) {
 		rgrass::execGRASS('g.region', raster=gn, flags=c('o', 'quiet'), intern=TRUE)
@@ -330,7 +331,7 @@ methods::setMethod(
 		.restore(x)
 		initials <- region()
 	
-		rgrass::execGRASS('g.region', vector=gnames(x), flags=c('o', 'quiet'), intern=TRUE)
+		rgrass::execGRASS('g.region', vector=.gnames(x), flags=c('o', 'quiet'), intern=TRUE)
 		invisible(initials)
 		
 	}
@@ -369,7 +370,7 @@ methods::setMethod(
 
 .regionExt <- function(x, respect) {
 
-	respect <- pmatchSafe(resepct, c('resolution', 'dimensions'))
+	respect <- pmatchSafe(respect, c('resolution', 'dimensions'))
 
 	if (inherits(x, 'GSpatial')) {
 		.restore(x)
@@ -438,7 +439,7 @@ methods::setMethod(
 methods::setMethod(f = 'regionDim',
 	signature = c(x = 'missing'),
 	definition = function(x) {
-		region()@dim
+		region()@dimensions
 	}
 )
 
@@ -448,7 +449,7 @@ methods::setMethod(f = 'regionDim',
 methods::setMethod(
 	f = 'regionDim',
 	signature = 'numeric',
-	definition = function(x, respect) .regionDim(x, respect)
+	definition = function(x, respect='resolution') .regionDim(x, respect)
 )
 
 #' @rdname region
@@ -479,7 +480,7 @@ methods::setMethod(
 	rows <- x[1L]
 	cols <- x[2L]
 
-	extent <- initials@extent
+	extent <- ext(initials, vector=TRUE)
 	w <- extent[['xmin']]
 	e <- extent[['xmax']]
 	s <- extent[['ymin']]

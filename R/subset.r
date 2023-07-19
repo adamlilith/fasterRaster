@@ -3,7 +3,7 @@
 #' @description The `[` and `[[` operators do different things depending on whether they are applied to a `GRaster` or `GVector`:
 #' * `GVector`s:
 #'     * `[` operator: Returns a subset of geometries (i.e., points, lines, or polygons) of the `GVector`. For example, `vector[2:4]` will return the second through the fourth geometries.
-#'     * `[[` operator: Returns columns of the vector's data frame. For example, `vector[[2:4]]` returns columns 2 through 4 of the data frame.
+#'     * `[[` operator: Returns columns of the vector's data frame. For example, `vector[[2:4]]` returns the `GVector, but with just columns 2 through 4 of the data frame.
 #' * `GRaster`s:
 #'     * `[[` operator: Returns `GRaster`s from a "stack" of `GRaster`s.
 #'
@@ -30,7 +30,7 @@ methods::setMethod(
 		if (any(!(i %in% names(x)))) stop('At least one name does not match a raster in this stack.')
 		i <- match(i, names(x))
 	}
-	if (any(!(i %in% seq_len(nlyr(x))))) stop('Index out of bounds.')
+	if (any(!(i %in% seq_len(nrow(x))))) stop('Index out of bounds.')
 	
 	mm <- minmax(x)
 	
@@ -44,7 +44,7 @@ methods::setMethod(
 		topology = topology(x),
 		extent = as.vector(ext(x)),
 		zextent = zext(x),
-		gnames = gnames(x)[i],
+		gnames = .gnames(x)[i],
 		names = names(x)[i],
 		datatypeGRASS = datatype(x)[i],
 		resolution = res(x),
@@ -63,13 +63,70 @@ methods::setMethod(
 #' @rdname subset
 #' @exportMethod [[
 methods::setMethod(
+	'[',
+	signature = c(x = 'GVector'),
+	function(x, i) {
+
+	nr <- nrow(x)
+	if (is.logical(i)) i <- which(i)
+	if (any(i < 1L | i > nr)) stop('Index out of bounds.')
+	
+	rows <- seq_len(nr)
+	drops <- rows[!(rows %in% i)]
+
+	gn <- .makeGName(NULL, rastOrVect = 'vector')
+	where <- paste0('cat IN (', paste0(drops, collapse=', '), ')')
+	args <- list(
+		cmd = 'v.db.droprow',
+		input = .gnames(x),
+		layer = .dbLayer(x),
+		output = gn,
+		where = where,
+		flags = c('quiet', 'overwrite'),
+		intern = FALSE
+	)
+
+	do.call(rgrass::execGRASS, args=args)
+	.makeGVector(gn)
+
+	} # EOF
+)
+
+#' @aliases subset
+#' @rdname subset
+#' @exportMethod [[
+methods::setMethod(
 	'[[',
 	signature = c(x = 'GVector'),
 	function(x, i) {
 
-	out <- as.data.frame(x)
-	out <- out[ , i, drop=FALSE]	
-	out
+	nc <- ncol(x)
+	if (is.logical(i)) {
+		i <- which(i)
+	} else if (is.character(i)) {
+		misses <- !(i %in% names(x))
+		if (any(misses)) stop('At least one named column does not exist in this vector\'s data table.')
+		i <- which(names(x) %in% i)
+	}
+
+	if (any(i < 1L | i > nc)) stop('Index out of bounds.')
+	
+	cols <- seq_len(nc)
+	drops <- cols[!(cols %in% i)]
+	drops <- names(x)[drops]
+
+	gn <- .copyGSpatial(x)
+	args <- list(
+		cmd = 'v.db.dropcolumn',
+		map = gn,
+		columns = drops,
+		flags = 'quiet',
+		layer = '1',
+		intern = FALSE
+	)
+
+	do.call(rgrass::execGRASS, args=args)
+	.makeGVector(gn)
 
 	} # EOF
 )

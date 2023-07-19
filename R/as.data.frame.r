@@ -20,10 +20,10 @@ methods::setMethod(
 	signature = c(x = 'GVector'),
 	definition = function(x, row.names = NULL, optional = FALSE) {
 		
-		data <- rgrass::execGRASS('v.db.select', map=gnames(x), intern=TRUE)
+		data <- rgrass::execGRASS('v.db.select', map=.gnames(x), intern=TRUE)
 
 		# # better, but noisy:
-		# data <- rgrass::execGRASS('db.out.ogr', input=gnames(x), output='C:/ecology/!Scratch/db.csv', format='CSV', table='rivers', flags=c('quiet', 'overwrite'))
+		# data <- rgrass::execGRASS('db.out.ogr', input=.gnames(x), output='C:/ecology/!Scratch/db.csv', format='CSV', table='rivers', flags=c('quiet', 'overwrite'))
 
 		# column names
 		cols <- data[1L]
@@ -35,7 +35,8 @@ methods::setMethod(
 		out <- do.call(rbind.data.frame, data)
 		colnames(out) <- cols
 
-		out <- data.table::as.data.table(x)
+		out <- data.table::as.data.table(out)
+		out$cat <- NULL
 		
 		# everything is exported as a character
 		ints <- which(datatype(x)$datatype == 'integer')
@@ -43,19 +44,19 @@ methods::setMethod(
 		
 		if (length(ints) > 0L) {
 			for (int in ints) {
-				if (any(out[ , ..int] == '')) {
-					out[out[ , ..int] == '', ..int] <- NA_character_
+				if (any(out[[int]] == '')) {
+					out[[out[[int]] == '', int]] <- NA_character_
 				}
-				out[ , ..int] <- as.integer(out[ , ..int])
+				out[ , int] <- as.integer(out[[int]])
 			}
 		}
 		
 		if (length(nums) > 0L) {
 			for (num in nums) {
-				if (any(out[ , ..num] == '')) {
-					out[out[ , ..num] == '', ..num] <- NA_character_
+				if (any(out[[num]] == '')) {
+					out[out[[num]] == '', num] <- NA_character_
 				}
-				out[ , ..num] <- as.numeric(out[ , ..num])
+				out[ , num] <- as.numeric(out[[num]])
 			}
 		}
 		

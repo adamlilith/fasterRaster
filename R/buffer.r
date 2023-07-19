@@ -1,7 +1,7 @@
-#' Buffer a GVector of cells of a GRaster
+#' Increase/decrease the size of a vector or around non-NA cells of a raster
 #'
-#' `buffer()` operates on `GRaster`s or `GVector`s. For rasters, the function creates a buffer around non-`NA` cells. The output will be a raster. For vectors, the function creates a vector larger or smaller than the focal vector.
-
+#' `buffer()` operates on `GRaster`s or `GVector`s. For rasters, the function creates a buffer around non-`NA` cells. The output will be a raster. For vectors, the function creates a vector polygon larger or smaller than the focal vector.
+#'
 #' @param x A `GRaster` or `GVector`.
 #' @param width Numeric: Maximum distance cells must be from focal cells to be within the buffer. For rasters, if the buffering unit is `'cells`', then to get `n` cell widths, use `n + epsilon`, where `epsilon` is a small number (e.g., 0.001). The larger the buffer, this smaller this must be to ensure just `n` cells are included.
 #' @param dist Same as `width`.
@@ -50,7 +50,7 @@ methods::setMethod(
 	# for each layer
 	for (i in 1L:nlyr(x)) {
 
-		gnBuffer <- .makeGname('buffer', 'raster')
+		gnBuffer <- .makeGName('buffer', 'raster')
 
 		### buffering by cells
 		if (unit == 'cells') {
@@ -61,7 +61,7 @@ methods::setMethod(
 
 			args <- list(
 				cmd = 'r.grow',
-				input = gnames(x[[i]]),
+				input = .gnames(x[[i]]),
 				output = gnBuffer,
 				radius = width,
 				metric = method,
@@ -82,7 +82,7 @@ methods::setMethod(
 
 			args <- list(
 				cmd = ifelse (lowMemory, 'r.buffer.lowmem', 'r.buffer'),
-				input = gnames(x),
+				input = .gnames(x),
 				output = gnBuffer,
 				distances = width,
 				units = unit,
@@ -96,7 +96,7 @@ methods::setMethod(
 		do.call(rgrass::execGRASS, args)
 
 		### reclass
-		gn <- .makeGname('buffer', 'raster')
+		gn <- .makeGName('buffer', 'raster')
 		ex <- if (!is.na(background)) {
 			paste0(gn, ' = if(isnull(', gnBuffer, '), ', background, ', if(', gnBuffer, ' == 2, 1, 1))')
 		} else {
@@ -105,9 +105,9 @@ methods::setMethod(
 		rgrass::execGRASS('r.mapcalc', expression=ex, flags=c('quiet', 'overwrite'))
 		
 		if (nlyr(x) > 1L) {
-			group[[i]] <- makeGRaster(gn, names(x[[i]]))
+			group[[i]] <- .makeGRaster(gn, names(x[[i]]))
 		} else {
-			out <- makeGRaster(gn, names(x[[i]]))
+			out <- .makeGRaster(gn, names(x[[i]]))
 		}
 		
 	} # next layer
@@ -137,10 +137,10 @@ methods::setMethod(
 	if (capstyle == 'flat') flags <- c(flags, 'c')
 
 	### buffer
-	gn <- .makeGname('buffer', 'vector')
+	gn <- .makeGName('buffer', 'vector')
 	args <- list(
 		cmd = 'v.buffer',
-		input = gnames(x),
+		input = .gnames(x),
 		output = gn,
 		distance = width,
 		flags = flags,
@@ -149,12 +149,12 @@ methods::setMethod(
 
 	do.call(rgrass::execGRASS, args)
 	
-	makeGVector(gn)
+	.makeGVector(gn)
 	
 	} # EOF
 )
 
-#' @aliases buffer
+#' @aliases st_buffer
 #' @rdname buffer
 #' @exportMethod st_buffer
 methods::setMethod(

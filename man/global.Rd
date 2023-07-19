@@ -32,7 +32,7 @@
 \item \code{'varpop'}: Population variance.
 }}
 
-\item{prob}{Numeric: Quantile at which to calculate \code{quantile}. Only a single value in the range \link{0, 1} is allowed.}
+\item{prob}{Numeric: Quantile at which to calculate \code{quantile}. Only a single value between 0 and 1 is allowed.}
 
 \item{...}{Other arguments (unused).}
 }
@@ -68,7 +68,7 @@ library(terra)
 madElev <- fastData('madElev')
 
 # start GRASS session for examples only
-faster(grassDir = grassDir, crs = madElev,
+faster(x = madElev, grassDir = grassDir,
 workDir = tempdir(), location = 'examples') # line only needed for examples
 
 # convert a SpatRaster to a GRaster

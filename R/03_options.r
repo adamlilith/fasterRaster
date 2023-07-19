@@ -66,7 +66,7 @@ setFastOptions <- function(
 	### check for validity
 	error <- paste0('Option ', sQuote('grassDir'), ' must be ', dQuote('NULL'), ' (which is likely to fail)\n  or a single character string. The default is ', dQuote(.grassDirDefault()), '.')
 	if (any(names(opts) %in% 'grassDir')) {
-		if (!is.null(grassDir)) {
+		if (!is.null(opts$grassDir)) {
 			if (!is.character(opts$grassDir)) stop(error)
 			if (length(opts$grassDir) != 1L) stop(error)
 		}

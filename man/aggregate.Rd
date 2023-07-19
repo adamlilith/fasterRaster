@@ -74,7 +74,7 @@ library(terra)
 madElev <- fastData('madElev')
 
 # start GRASS session for examples only
-faster(grassDir = grassDir, crs = madElev,
+faster(x = madElev, grassDir = grassDir,
 workDir = tempdir(), location = 'examples') # line only needed for examples
 
 # convert a SpatRaster to a GRaster

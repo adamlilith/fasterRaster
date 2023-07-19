@@ -49,8 +49,8 @@ methods::setMethod(
 
     for (i in 1L:nlyr(x)) {
 
-        gn <- .makeGname(names(x)[i], 'rast')
-        ex <- paste0(gn, ' = ', fx, '(', gnames(x)[i], ')')
+        gn <- .makeGName(names(x)[i], 'rast')
+        ex <- paste0(gn, ' = ', fx, '(', .gnames(x)[i], ')')
         args <- list(
             cmd = 'r.mapcalc',
             expression = ex,
@@ -60,7 +60,7 @@ methods::setMethod(
 
         do.call(rgrass::execGRASS, args=args)
 
-        this <- makeGRaster(gn, names(x)[i])
+        this <- .makeGRaster(gn, names(x)[i])
         if (i == 1L) {
             out <- this
         } else {

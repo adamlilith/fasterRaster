@@ -21,7 +21,7 @@
 #' * `'var'`: Sample variance.
 #' * `'varpop'`: Population variance.
 #'
-#' @param prob Numeric: Quantile at which to calculate `quantile`. Only a single value in the range [0, 1] is allowed.
+#' @param prob Numeric: Quantile at which to calculate `quantile`. Only a single value between 0 and 1 is allowed.
 #'
 #' @param ... Other arguments (unused).
 #'
@@ -60,7 +60,7 @@ methods::setMethod(
 		args <- list(
 			cmd = 'r.univar',
 			flags = c('quiet', 'r'),
-			map = gnames(x)[i],
+			map = .gnames(x)[i],
 			Sys_show.output.on.console = FALSE,
 			echoCmd = FALSE,
 			intern = TRUE
@@ -155,8 +155,8 @@ methods::setMethod(
 					mean. <- sub(mean., pattern=pattern, replacement='')
 					mean. <- as.numeric(mean.)
 
-					gnSS <- .makeGname('delta', 'rast')
-					ex <- paste0(gnSS, ' = (', gnames(x)[i], ' - ', mean., ')^2')
+					gnSS <- .makeGName('delta', 'rast')
+					ex <- paste0(gnSS, ' = (', .gnames(x)[i], ' - ', mean., ')^2')
 					rgrass::execGRASS('r.mapcalc', expression=ex, flags=c('quiet', 'overwrite'), intern=TRUE)
 				
 					thisInfo <- rgrass::execGRASS(
@@ -194,8 +194,8 @@ methods::setMethod(
 					mean. <- sub(mean., pattern=pattern, replacement='')
 					mean. <- as.numeric(mean.)
 
-					gnSS <- .makeGname('delta', 'rast')
-					ex <- paste0(gnSS, ' = (', gnames(x)[i], ' - ', mean., ')^2')
+					gnSS <- .makeGName('delta', 'rast')
+					ex <- paste0(gnSS, ' = (', .gnames(x)[i], ' - ', mean., ')^2')
 					rgrass::execGRASS('r.mapcalc', expression=ex, flags=c('quiet', 'overwrite'), intern=TRUE)
 				
 					thisInfo <- rgrass::execGRASS(

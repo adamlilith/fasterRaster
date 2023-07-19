@@ -23,7 +23,7 @@ madElev <- fastData('madElev')
 madRivers <- fastData('madRivers')
 
 # start GRASS session for examples only
-faster(crs = madElev, grassDir = grassDir,
+faster(x = madElev, grassDir = grassDir,
 workDir = tempdir(), location = 'examples') # line only needed for examples
 
 # convert a SpatRaster to a GRaster, and sf to a GVector
@@ -32,17 +32,16 @@ rivers <- fast(madRivers)
 
 ### buffer a raster by a given distance
 buffByDist <- buffer(elev, width = 2000) # 2000-m buffer
-buffByDistRast <- rast(buffByDist)
-plot(buffByDistRast)
+plot(buffByDist, legend=FALSE)
+plot(madElev, add=TRUE)
 
 ### buffer a raster by a given number of cells
 buffByCells <- buffer(elev, width = 20.01, unit = 'cells') # 20-cell buffer
-buffByCellsRast <- rast(buffByCells)
-plot(buffByCellsRast)
+plot(buffByCells)
+plot(madElev, add=TRUE)
 
 ### buffer a vector
 buffRivers <- buffer(rivers, width = 2000) # 2000-m buffer
-buffRivers <- vect(buffRivers)
 plot(buffRivers)
 plot(st_geometry(madRivers), col = 'blue', add = TRUE)
 

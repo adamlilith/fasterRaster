@@ -12,7 +12,7 @@
 #'
 #' rstring(1)
 #' rstring(5)
-#' rstring(c(5, 2))
+#' rstring(5, 2)
 #'
 #' @export
 rstring <- function(n, x = 10) {

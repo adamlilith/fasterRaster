@@ -21,6 +21,6 @@ Character.
 
 rstring(1)
 rstring(5)
-rstring(c(5, 2))
+rstring(5, 2)
 
 }

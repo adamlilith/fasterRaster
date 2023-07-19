@@ -36,7 +36,7 @@ plot(elevAnt, col='red', legend=FALSE, add=TRUE)
 plot(elevMan, col='blue', legend = FALSE, add=TRUE)
 
 # start GRASS session for examples only
-faster(grassDir = grassDir, crs = madElev,
+faster(x = madElev, grassDir = grassDir,
 workDir = tempdir(), location = 'examples') # line only needed for examples
 
 # convert a SpatRaster to a GRaster
@@ -45,9 +45,7 @@ man <- fast(elevMan)
 
 # merge
 antMan <- merge(ant, man)
-
-antManTerra <- rast(antMan)
-plot(antManTerra, main='Antman!')
+plot(antMan, main='Antman!')
 
 # IMPORTANT #3: Revert back to original GRASS session if needed.
 fastRestore(opts.)

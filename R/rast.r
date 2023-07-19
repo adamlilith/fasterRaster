@@ -1,6 +1,6 @@
 #' Convert a GRaster to a SpatRaster
 #'
-#' @description The **fasterRaster** version of the `rast()` function converts a `GRaster` to a `SpatRaster` (from the **terra** package). If you wish to save this raster, please consult [writeRaster4()] and [writeRaster8()].
+#' @description The **fasterRaster** version of the `rast()` function converts a `GRaster` to a `SpatRaster` (from the **terra** package).
 #'
 #' @param x A `GRaster`.
 #' @param ... Additional arguments to send to [writeRaster()] (typically unneeded, though `bigTiff` may be of use if the raster is large).

@@ -23,7 +23,7 @@ A \code{GRaster}.
 \description{
 \code{GRaster}s can be "stacked" using this function, effectively creating a multi-layered raster. Note that this is different from creating a 3-dimensional raster, though such an effect can be emulated using stacking. \code{GVector}s can be combined into a single vector.  Stacks can only be created when:
 \itemize{
-\item All objects are in the same \strong{GRASS} \link[=tutorial_locations]{location and mapset}.
+\item All objects are in the same \strong{GRASS} \link[=tutorial_sessions]{"location" and "mapset"}.
 \item All objects are the same class (either all \code{GRaster}s or all \code{GVector}s).
 \item For \code{GRaster}s:
 \itemize{
@@ -66,7 +66,7 @@ madRivers <- fastData('madRivers')
 madDypsis <- fastData('madDypsis')
 
 # start GRASS session for examples only
-faster(crs = madElev, grassDir = grassDir,
+faster(x = madElev, grassDir = grassDir,
 workDir = tempdir(), location = 'examples') # line only needed for examples
 
 ### GRaster properties
@@ -74,6 +74,7 @@ workDir = tempdir(), location = 'examples') # line only needed for examples
 
 # convert SpatRasters to GRasters
 elev <- fast(madElev)
+plot(elev)
 
 dim(elev) # rows, columns, depths, layers
 nrow(elev) # rows

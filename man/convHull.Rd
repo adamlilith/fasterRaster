@@ -42,7 +42,7 @@ library(sf)
 madDypsis <- fastData('madDypsis')
 
 # start GRASS session for examples only
-faster(crs = madRivers, grassDir = grassDir,
+faster(x = madDypsis, grassDir = grassDir,
 workDir = tempdir(), location = 'examples') # line only needed for examples
 
 # convert and sf to a GVector
@@ -55,13 +55,10 @@ ch <- convHull(dypsis)
 chSpecies <- convHull(dypsis, by='species')
 
 ### plot
-chTerra <- vect(ch)
-chSpeciesTerra <- vect(chSpecies)
-
 plot(st_geometry(madDypsis))
-plot(chTerra, add=TRUE)
-n <- nrow(chSpeciesTerra)
-plot(chSpeciesTerra, col=1:n, add=TRUE)
+plot(ch, add=TRUE)
+n <- nrow(chSpecies)
+plot(chSpecies, col=1:n, add=TRUE)
 
 
 # IMPORTANT #3: Revert back to original GRASS session if needed.

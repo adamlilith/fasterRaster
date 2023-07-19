@@ -38,7 +38,7 @@
 \item \code{NULL}: No compression is used, but the file can still be reduced in size by using zip, gzip, or other compressions.
 }
 \item \code{bigTiff}: Logical: If \code{TRUE}, and the file format is a GeoTIFF and would be larger than 4 GB (regardless of compression), then the file will be saved in BIGTIFF format.
-\item \code{format}: Character, indicating file format. This is usually ascertained from the file extension, but in case this fails, it can be stated explicitly. When using other formats, you may have to specify the \code{createopts} argument, too (see \link[=https://grass.osgeo.org/grass82/manuals/r.out.gdal.html]{r.out.gdal}). Two common formats include:
+\item \code{format}: Character, indicating file format. This is usually ascertained from the file extension, but in case this fails, it can be stated explicitly. When using other formats, you may have to specify the \code{createopts} argument, too (see help page for \strong{GRASS} module \code{r.out.gdal}). Two common formats include:
 \itemize{
 \item \code{'GTiff'} (default): GeoTIFF \code{filename} ends in \code{.tif}
 \item \code{'ASC'}: ASCII \code{filename} ends in \code{.asc}
@@ -51,7 +51,7 @@
 A \code{GRaster} or a \code{stars} raster. A raster is also saved to disk.
 }
 \description{
-This function saves a \code{GRaster} to disk directly from a \strong{GRASS} session. If the \code{GRaster} was produced in \strong{GRASS} (i.e., not created using \strong{terra} or \strong{stars} then converted to a \code{GRaster}), and you convert it back to a \code{SpatRaster} or \code{stars} raster and want to save it, please consult \code{\link[=writeRaster4]{writeRaster4()}} and \code{\link[=writeRaster8]{writeRaster8()}} for important details!
+This function saves a \code{GRaster} to disk directly from a \strong{GRASS} session. It is faster than using \code{\link[=rast]{rast()}}, then saving the output of that to disk (because \code{rast()} actually save the raster to disk, anyway).
 
 The function will attempt to ascertain the file type to be ascertained from the file extension, but you can specify the format using the \code{format} argument (see entry for \code{...}). You can see a list of supported formats by simply using this function with no arguments, as in \code{writeRaster()}, or by consulting the online help page for the \strong{GRASS} module \code{r.out.gdal}. Only the \code{GeoTIFF} file format is guaranteed to work for multi-layered rasters.
 
@@ -81,7 +81,7 @@ library(terra)
 madElev <- fastData('madElev')
 
 # start GRASS session for examples only
-faster(crs = madElev, grassDir = grassDir,
+faster(x = madElev, grassDir = grassDir,
 workDir = tempdir(), location = 'examples') # line only needed for examples
 
 # convert SpatRaster to GRaster

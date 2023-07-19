@@ -123,10 +123,10 @@ methods::setMethod(
 		### resample
 		if (method == 'nearest' | fallback) {
 
-			gnNearest <- .makeGname('nearest', 'raster')
+			gnNearest <- .makeGName('nearest', 'raster')
 			args <- list(
 				cmd = 'r.resample',
-				input = gnames(x)[i],
+				input = .gnames(x)[i],
 				output = gnNearest,
 				flags = c('quiet', 'overwrite'),
 				intern = TRUE
@@ -137,10 +137,10 @@ methods::setMethod(
 
 		if (method == 'bilinear' | (fallback & method %in% c('bicubic', 'lanczos'))) {
 
-			gnBilinear <- .makeGname('bilinear', 'raster')
+			gnBilinear <- .makeGName('bilinear', 'raster')
 			args <- list(
 				cmd = 'r.resamp.interp',
-				input = gnames(x)[i],
+				input = .gnames(x)[i],
 				output = gnBilinear,
 				method = 'bilinear',
 				flags = c('quiet', 'overwrite'),
@@ -152,10 +152,10 @@ methods::setMethod(
 
 		if (method == 'bicubic' | (fallback & method == 'lanczos')) {
 
-			gnBicubic <- .makeGname('bicubic', 'raster')
+			gnBicubic <- .makeGName('bicubic', 'raster')
 			args <- list(
 				cmd = 'r.resamp.interp',
-				input = gnames(x)[i],
+				input = .gnames(x)[i],
 				output = gnBicubic,
 				method = 'bicubic',
 				flags = c('quiet', 'overwrite'),
@@ -167,10 +167,10 @@ methods::setMethod(
 
 		if (method == 'lanczos') {
 
-			gnLanczos <- .makeGname('lanczos', 'raster')
+			gnLanczos <- .makeGName('lanczos', 'raster')
 			args <- list(
 				cmd = 'r.resamp.interp',
-				input = gnames(x)[i],
+				input = .gnames(x)[i],
 				output = gnLanczos,
 				method = 'lanczos',
 				flags = c('quiet', 'overwrite'),
@@ -182,16 +182,16 @@ methods::setMethod(
 
 		### output/fallback
 		if (method == 'nearest') {
-			thisOut <- makeGRaster(gnNearest, names(x)[i])
+			thisOut <- .makeGRaster(gnNearest, names(x)[i])
 		} else if (method == 'bilinear' & !fallback) {
-			thisOut <- makeGRaster(gnBilinear, names(x)[i])
+			thisOut <- .makeGRaster(gnBilinear, names(x)[i])
 		} else if (method == 'bicubic' & !fallback) {
-			thisOut <- makeGRaster(gnBicubic, names(x)[i])
+			thisOut <- .makeGRaster(gnBicubic, names(x)[i])
 		} else if (method == 'lanczos' & !fallback) {
-			thisOut <- makeGRaster(gnLanczos, names(x)[i])
+			thisOut <- .makeGRaster(gnLanczos, names(x)[i])
 		} else if (fallback) {
 			
-			gn <- .makeGname('resample', 'rast')
+			gn <- .makeGName('resample', 'rast')
 			if (method == 'bilinear') {
 
 				# merge bilinear and nearest
@@ -217,7 +217,7 @@ methods::setMethod(
 			)
 			do.call(rgrass::execGRASS, args=args)
 
-			thisOut <- makeGRaster(gn, names(x)[i])
+			thisOut <- .makeGRaster(gn, names(x)[i])
 
 		}
 

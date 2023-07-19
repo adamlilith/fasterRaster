@@ -39,7 +39,7 @@
 
 \S4method{regionDim}{missing}(x)
 
-\S4method{regionDim}{numeric}(x, respect)
+\S4method{regionDim}{numeric}(x, respect = "resolution")
 
 \S4method{regionDim}{GRegion}(x, respect)
 
@@ -64,9 +64,9 @@
 
 \item{respect}{Character: Indicates what aspect of the current region to retain. Different functions allow for different aspect to be retained. Partial matching is used.
 \itemize{
-\item \code{regionDim()}: \code{'extent'} (size) or \code{'resolution'} (cell size).
-\item \code{regionExt()}: \code{'dimensions'} (number of rows and columns) or \code{'resolution'} (cell size--see note).
-\item \code{regionRes()}: \code{'extent'} (size--see note) or \code{'dimensions'} (number of rows and columns).
+\item \code{regionDim()}: \code{'extent'} or \code{'resolution'}.
+\item \code{regionExt()}: \code{'dimensions'} or \code{'resolution'}.
+\item \code{regionRes()}: \code{'extent'} or \code{'dimensions'}.
 }
 
 Note: In most cases extent cannot be retained exactly if the resolution is changed. When resolution is changed, the actual extent will be the user-supplied extent expanded by zero to one rows or zero to one columns to accommodate an integer number of cells of the desired size. The western and northern limits of the extent will be retained, while the eastern and southern limits of the extent will be moved to accommodate an integer number of columns and rows.}
@@ -83,7 +83,7 @@ The value returned depends on how the function is used:
 These functions either change the extent, dimensions, and/or resolution of a \strong{GRASS} \link[=tutorial_regions]{"region"} or report the current region's extent, dimensions, and/or resolution. These functions are mostly used internally and rarely of interest to most users.
 \itemize{
 \item \code{region()}: All 2D and 3D aspects of a region.
-\item \verb{regionDim(): x- and y-dimensions.}
+\item \code{regionDim()}: x- and y-dimensions.`
 \item \code{regionExt()}: x- and y-extent.
 \item \code{regionRes()}: x- and y-resolution.
 }
@@ -104,6 +104,7 @@ opts. <- getFastOptions()
 
 # IMPORTANT #2: Select the appropriate line below and change as necessary to
 # where GRASS is installed on your system.
+
 grassDir <- "/Applications/GRASS-8.2.app/Contents/Resources" # Mac
 grassDir <- 'C:/Program Files/GRASS GIS 8.2' # Windows
 grassDir <- '/usr/local/grass' # Linux
@@ -113,18 +114,51 @@ library(terra)
 
 # example data
 madElev <- fastData('madElev')
+madRivers <- fastData('madRivers')
 
 # set up one location
-faster(crs = madElev, grassDir = grassDir,
-workDir = tempdir(), location = 'examples1') # line only needed for examples
+faster(x = madElev, grassDir = grassDir,
+workDir = tempdir(), location = 'examples') # line only needed for examples
 
+# Importing a raster sets the region to match its extent and dimensions.
+elev <- fast(madElev)
+elev
+region()
 
-TBD
+# Importing a vector does not change the region.
+dypsis <- fast(madDypsis)
+region()
+
+# report information on current region
+(start <- region())
+regionDim()
+regionExt()
+regionRes()
+
+# coarsen grid... sets region to match aggregated raster's extent and dimensions
+aggElev <- aggregate(elev, 2) 
+
+# reset region dimensions
+regionDim()
+regionDim(elev, respect='resolution')
+regionDim()
+
+# reset region extent
+regionExt()
+regionExt(dypsis, respect='resolution')
+regionExt()
+
+# reset region resolution
+regionRes()
+regionRes(elev, respect='extent')
+regionRes()
+
+# reset region
+(region(start))
 
 # IMPORTANT #3: Revert back to original GRASS session if needed.
 fastRestore(opts.)
-removeSession('examples1')
-removeSession('examples2')
+removeSession('examples')
 
 }
 }

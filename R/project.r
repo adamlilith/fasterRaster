@@ -31,9 +31,9 @@
 #' 
 #' @param fallback Logical (projecting `GRaster`s only): If `TRUE` (default), then use "lower" methods to fill in `NA` cells when a "higher" method is used. For example, if `method = 'bicubic'`, `NA` cells will be filled in using the `bilinear` method, except when that results in `NA`s, in which case the `near` method will be used. Fallback causes fewer cells to revert to `NA` values, so may be better at capturing complex "edges" (e.g., coastlines). Fallback does increase processing time because each "lower" method must be applied, then results merged. Fallback is not used if `method = 'near'`.
 #' 
-#' @param location,mapset Character or `NULL` (default): The name of the [location and mapset][tutorial_sessions] which have the CRS you to which you want to transform the `GRaster` or `GVector`. You can get the current location and mapset or the location and mapset of an object using [location()] and [mapset()]. If left as `NULL`, then it will be assumed that you want to project the object to the currently active location and mapset.
-#'
 #' @param wrap Logical (`GRaster`s only): When projecting rasters that "wrap around" (i.e., whole-world rasters or rasters that have edges that actually circle around to meet on the globe), `wrap` should be `TRUE` to avoid removing rows and columns from the "edge" of the map. The default is `FALSE`.
+#'
+#' @param toLocation,toMapset Character or `NULL` (default): The name of the ["location" and "mapset"][tutorial_sessions] which have the CRS you to which you want to transform the `GRaster` or `GVector`. You can get the current location and mapset or the location and mapset of an object using [location()] and [mapset()]. If left as `NULL`, then it will be assumed that you want to project the object to the currently active location and mapset.
 #'
 #' @details When projecting a raster, the "fallback" methods in **GRASS** module `r.import` are actually used, even though the `method` argument takes the strings specifying non-fallback methods. See the manual page for the `r.import` **GRASS** module.
 #' 
@@ -152,14 +152,14 @@ methods::setMethod(
 
 	if (method != 'nearest' & fallback) method <- paste0(method, '_f')
 
-	gns <- .makeGname(names(x), 'raster', nlyr(x))
+	gns <- .makeGName(names(x), 'raster', nlyr(x))
 	for (i in 1L:nlyr(x)) {
 		
 		args <- list(
 			cmd = 'r.proj',
 			location = location(x),
 			mapset = mapset(x),
-			input = gnames(x)[i],
+			input = .gnames(x)[i],
 			output = gns[i],
 			method = method,
 			memory = getFastOptions('memory'),
@@ -169,7 +169,7 @@ methods::setMethod(
 		if (wrap) args$flags <- c(args$flags, 'n')
 
 		do.call(rgrass::execGRASS, args=args)
-		thisOut <- makeGRaster(gns[i], names(x)[i])
+		thisOut <- .makeGRaster(gns[i], names(x)[i])
 		if (i == 1L) {
 			out <- thisOut
 		} else {
@@ -194,8 +194,8 @@ methods::setMethod(
 	definition = function(
 		x,
 		y = NULL,
-		location = NULL,
-		mapset = NULL
+		toLocation = NULL,
+		toMapset = NULL
 	) {
 
 	# start location and mapset
@@ -229,20 +229,20 @@ methods::setMethod(
 		fastRestore(location = toLocation, mapset = toMapset)
 	}
 	
-	gn <- .makeGname('projected', 'vector')
+	gn <- .makeGName('projected', 'vector')
 	
 	args <- list(
 		cmd = 'v.proj',
 		location = location(x),
 		mapset = mapset(x),
-		input = gnames(x),
+		input = .gnames(x),
 		output = gn,
 		flags = c('quiet', 'overwrite'),
 		intern = TRUE
 	)
 
 	do.call(rgrass::execGRASS, args=args)
-	out <- makeGVector(gn)
+	out <- .makeGVector(gn)
 
 	out
 

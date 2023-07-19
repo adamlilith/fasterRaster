@@ -58,16 +58,16 @@ methods::setMethod(
 	.restore(x)
 	region(x)
 	
-	gn <- gnames(x)
+	gn <- .gnames(x)
 	
 	# create mask
 	if (!is.na(target)) {
 		
-		gn1 <- .makeGname(NULL, 'raster')
-		ex <- paste0(gn1, ' = if(', gnames(x), ' == ', target, ')')
+		gn1 <- .makeGName(NULL, 'raster')
+		ex <- paste0(gn1, ' = if(', .gnames(x), ' == ', target, ')')
 		rgrass::execGRASS('r.mapcalc', expression=ex, flags=c('quiet', 'overwrite'))
 		
-		gn <- .makeGname(NULL, 'raster')
+		gn <- .makeGName(NULL, 'raster')
 		ex <- paste0(gn, ' = ', gn1, ' / ', gn1)
 		rgrass::execGRASS('r.mapcalc', expression=ex, flags=c('quiet', 'overwrite'))
 		
@@ -78,7 +78,7 @@ methods::setMethod(
 	flags <- c('quiet', 'overwrite', 'm')
 	if (!fillNA) flags <- c(flags, 'n')
 	
-	gnOut <- .makeGname(NULL, 'raster')
+	gnOut <- .makeGName(NULL, 'raster')
 	args <- list(
 		cmd = 'r.grow.distance',
 		input = gn,
@@ -99,20 +99,19 @@ methods::setMethod(
 	if (unit %in% c('kilometers', 'km')) {
 	
 		gnIn <- gnOut
-		gnOut <- .makeGname(NULL, 'rast')
+		gnOut <- .makeGName(NULL, 'rast')
 		ex <- paste0(gnOut, ' = ', gnIn, ' / 1000')
 		rgrass::execGRASS('r.mapcalc', expression=ex, flags=c('quiet', 'overwrite'), intern=TRUE)
 		
 	}
 	
-	makeGRaster(gn, 'distance')
+	.makeGRaster(gn, 'distance')
 	
 	} # EOF
 )
 
 #' @aliases distance
 #' @rdname distance
-#' @export
 #' @exportMethod distance
 methods::setMethod(
 	'distance',
@@ -145,13 +144,13 @@ methods::setMethod(
 	flags <- c('quiet', 'overwrite')
 	if (dense) flags <- c(flags, 'd')
 	
-	gnameRasterized <- .makeGname(NULL, 'raster')
-	rgrass::execGRASS('v.to.rast', input=gnames(y), output=gnameRasterized, use='val', value=1, type=type, flags=flags, intern=TRUE)
+	gnameRasterized <- .makeGName(NULL, 'raster')
+	rgrass::execGRASS('v.to.rast', input=.gnames(y), output=gnameRasterized, use='val', value=1, type=type, flags=flags, intern=TRUE)
 	
 	flags <- c('quiet', 'overwrite', 'm')
 	if (!fillNA) flags <- c(flags, 'n')
 	
-	gnOut <- .makeGname(NULL, 'raster')
+	gnOut <- .makeGName(NULL, 'raster')
 	rgrass::execGRASS('r.grow.distance', input=gnameRasterized, distance=gn, metric=metric, flags=flags, intern=TRUE)
 	
 	# convert meters to kilometers
@@ -159,20 +158,19 @@ methods::setMethod(
 	if (unit %in% c('kilometers', 'km')) {
 	
 		gnIn <- gnOut
-		gn <- .makeGname(NULL, 'rast')
+		gn <- .makeGName(NULL, 'rast')
 		ex <- paste0(gn, ' = ', gnIn, ' / 1000')
 		rgrass::execGRASS('r.mapcalc', expression=ex, flags=c('quiet', 'overwrite'), intern=TRUE)
 		
 	}
 
-	makeGRaster(gn, 'distance')
+	.makeGRaster(gn, 'distance')
 	
 	} # EOF
 )
 
 #' @aliases distance
 #' @rdname distance
-#' @export
 #' @exportMethod distance
 methods::setMethod(
 	'distance',
@@ -190,7 +188,7 @@ methods::setMethod(
 	if (is.null(maxDist)) maxDist <- -1
 
 	flags <- c('quiet', 'overwrite', 'p')
-	dists <- rgrass::execGRASS('v.distance', from=gnames(x), to=gnames(y), upload='dist', flags=flags, dmin=minDist, dmax=maxDist, intern=TRUE)
+	dists <- rgrass::execGRASS('v.distance', from=.gnames(x), to=.gnames(y), upload='dist', flags=flags, dmin=minDist, dmax=maxDist, intern=TRUE)
 	
 	dists <- dists[-which(dists=='from_cat|dist')]
 	dists <- strsplit(dists, split='\\|')
@@ -208,7 +206,7 @@ methods::setMethod(
 	} # EOF
 )
 
-#' @aliases distance
+#' @aliases st_distance
 #' @rdname distance
 #' @exportMethod st_distance
 methods::setMethod(

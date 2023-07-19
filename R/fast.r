@@ -4,11 +4,11 @@
 #' To use most **fasterRaster** functions, you need to
 #' 1. Initiate a **GRASS** session with [faster()];
 #' 2. Then use `fast()` to either:
-#'      * Convert a `SpatRaster`, `SpatVector`, `sf` object, or `stars` raster to a `GRaster` or `GVector`,
+#'      * Convert a `SpatRaster`, `SpatVector` or `sf` object to a `GRaster` or `GVector`,
 #'      * Load a raster or vector from a file directly into the `GRaster` or `GVector` format using `fast()`. **GRASS** supports loading from disk a variety of raster formats (see the **GRASS** manual page for `r.in.gdal`) and vector formats (see the **GRASS** manual page for `v.in.ogr`), though not all of them will work with this function.
 #'
 #' @param x Any one of:
-#' * A `SpatRaster` or `stars` raster. Rasters can have one or more layers. They will retain their "layerdness" in most **fasterRaster** functions.
+#' * A `SpatRaster` raster. Rasters can have one or more layers. They will retain their "layerdness" in most **fasterRaster** functions.
 #' * A `SpatVector` or `sf` spatial vector.
 #' * A character string with the path and filename of a raster or vector to be loaded directly into **GRASS**. The function will attempt to ascertain the type of object from the file extension (raster or vector), but it can help to indicate which it is using the `rastOrVect` argument if it is unclear.
 #'
@@ -21,6 +21,8 @@
 #' * `'bicubic'`: Bicubic interpolation (uses weighted values from 16 cells).
 #' * `'lanczos'`: Lanczos interpolation (uses weighted values from 25 cells).
 #'
+#' @param fallback Logical (rasters only): If `TRUE` (default), then use "lower" resampling methods to fill in `NA` cells when a "higher" method is used. For example, if `method = 'bicubic'`, `NA` cells will be filled in using the `bilinear` method, except when that results in `NA`s, in which case the `near` method will be used. Fallback causes fewer cells to revert to `NA` values, so may be better at capturing complex "edges" (e.g., coastlines). Fallback does increase processing time because each "lower" method must be applied, then results merged.
+#'
 #' @param wrap Logical (rasters only): When projecting rasters that "wrap around" (i.e., whole-world rasters or rasters that have edges that actually circle around to meet on the globe), `wrap` should be `TRUE` to avoid removing rows and columns from the "edge" of the map. The default is `FALSE`.
 #'
 #' @param warn Logical: If `TRUE`, display a warning when projecting the vector or raster.
@@ -31,7 +33,7 @@
 #'
 #' @return A `GRaster` or `GVector`.
 #'
-#' @example man/examples/ex_fastStart.r
+#' @example man/examples/ex_faster.r
 #'
 #' @aliases fast
 #' @rdname fast
@@ -96,7 +98,7 @@ methods::setMethod(
 		xRast <- terra::rast(x)
 		nLayers <- terra::nlyr(xRast)
 		xNames <- names(xRast)
-		gn <- .makeGname(NULL, rastOrVect = 'raster')
+		gn <- .makeGName(NULL, rastOrVect = 'raster')
 
 		### load raster (no projecting needed)
 		if (terra::crs(xRast) == crs()) {
@@ -159,9 +161,9 @@ methods::setMethod(
 
 		do.call(rgrass::execGRASS, args=args)
 		if (nLayers == 1L) {
-			out <- makeGRaster(gn, names=xNames)
+			out <- .makeGRaster(gn, names=xNames)
 		} else {
-			out <- makeGRaster(paste0(gn, '.', 1L:nLayers), names=xNames)
+			out <- .makeGRaster(paste0(gn, '.', 1L:nLayers), names=xNames)
 		}
 
 	### vector from disk (and project on the fly if needed)
@@ -172,7 +174,7 @@ methods::setMethod(
 		xVect <- terra::vect(x)
 		xCrs <- crs(xVect)
 		currentCrs <- crs()
-		gn <- .makeGname(xVect, rastOrVect = 'vector')
+		gn <- .makeGName(xVect, rastOrVect = 'vector')
 
 		# vector is in same CRS as current location
 		if (xCrs == currentCrs) {
@@ -203,7 +205,7 @@ methods::setMethod(
 		} # vector on disk needs projected
 
 		do.call(rgrass::execGRASS, args=args)
-		out <- makeGVector(gn)
+		out <- .makeGVector(gn)
 
 	} # is vector on disk
 	out
@@ -244,26 +246,6 @@ methods::setMethod(
 #' @exportMethod fast
 methods::setMethod(
 	'fast',
-	signature(x = 'stars'),
-	function(
-		x,
-		method = NULL,
-		fallback = TRUE,
-		wrap = FALSE,
-		warn = TRUE
-	) {
-
-	x <- terra::rast(x)
-	fast(x = x, method = method, fallback = fallback, wrap = wrap, warn = warn)
-
-	} # EOF
-)
-
-#' @rdname fast
-#' @aliases fast
-#' @exportMethod fast
-methods::setMethod(
-	'fast',
 	signature(x = 'SpatVector'),
 	function(x, warn = TRUE) .fastVector(x, warn=warn)
 )
@@ -292,6 +274,6 @@ methods::setMethod(
 		vectFile <- terra::sources(x)
 	}
     
-	fast(x=vectFile, rastOrVect='vector', warn=warn)
+	fast(x = vectFile, rastOrVect = 'vector', warn=warn)
 	
 }

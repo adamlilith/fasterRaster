@@ -106,7 +106,8 @@ fastRestore <- function(...) {
 		session <- fastRestore(location=xloc, mapset=xms)
 	}
 
-	session <- GSession(
+	session <- new(
+		'GSession',
 		location = location(),
 		mapset = mapset(),
 		crs = crs()

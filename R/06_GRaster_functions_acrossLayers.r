@@ -6,6 +6,7 @@
 #' * Extremes: `min()`, `max()`, `which.min()` (index of raster with the minimum value), `which.max()` (index of the raster with the maximum value)
 #' * Dispersion: `range()`, `sd()` (sample standard deviation), `var()` (sample variance), `sdpop()` (population standard deviation), `varpop()` (population variance), `nunique()` (number of unique values), `quantile()` (use argument `probs`), `skewness()`, and `kurtosis()`.
 #' * Regression: Assuming we calculate a linear regression for each set of cells through all values of the cells, we can calculate its `slope()`, `intercept()`, `r2()`, and `tvalue()`.
+#'
 #' This function returns a raster. If you want to summarize across cells in a raster (e.g., calculate the mean value of all cells on a raster), use [global()].
 #'
 #' @param x A `GRaster`. Typically, this raster will have two or more layers. Values will be calculated within cells across rasters.
@@ -195,22 +196,22 @@ setMethod(
 	signature(x = 'GRaster'),
 	function(x, na.rm = FALSE) {
 
-		gnSS <- .makeGname('ss', 'rast')
+		gnSS <- .makeGName('ss', 'rast')
 		gnMean <- .genericMultiLayer(fx='average', fxName='mean', x=x, na.rm=na.rm, return='gname')
-		ex <- paste0(gnSS, ' = ', paste0('(', gnames(x), ' - ', gnMean, ')^2', collapse=' + '))
+		ex <- paste0(gnSS, ' = ', paste0('(', .gnames(x), ' - ', gnMean, ')^2', collapse=' + '))
 		rgrass::execGRASS('r.mapcalc', expression=ex, flags=c('quiet', 'overwrite'), intern=TRUE)
 
 		gnCount <- .genericMultiLayer(fx='count', fxName='count', x=x, na.rm=na.rm, return='gname')
-		gnCountMinus1 <- .makeGname('nMinus1', 'rast')
+		gnCountMinus1 <- .makeGName('nMinus1', 'rast')
 		ex <- paste0(gnCountMinus1, ' = ', gnCount, ' - 1')
 		rgrass::execGRASS('r.mapcalc', expression=ex, flags=c('quiet', 'overwrite'), intern=TRUE)
 
-		gn <- .makeGname('var', 'rast')
+		gn <- .makeGName('var', 'rast')
 		ex <- paste0(gn, ' = sqrt(', gnSS, ' / ', gnCountMinus1, ')')
 		
 		rgrass::execGRASS('r.mapcalc', expression=ex, flags=c('quiet', 'overwrite'), intern=TRUE)
 		
-		makeGRaster(gn, 'var')
+		.makeGRaster(gn, 'var')
 		
 	} # EOF
 )
@@ -225,22 +226,22 @@ setMethod(
 
 		.restore(x)
 	
-		gnSS <- .makeGname('ss', 'rast')
+		gnSS <- .makeGName('ss', 'rast')
 		gnMean <- .genericMultiLayer(fx='average', fxName='mean', x=x, na.rm=na.rm, return='gname')
-		ex <- paste0(gnSS, ' = ', paste0('(', gnames(x), ' - ', gnMean, ')^2', collapse=' + '))
+		ex <- paste0(gnSS, ' = ', paste0('(', .gnames(x), ' - ', gnMean, ')^2', collapse=' + '))
 		rgrass::execGRASS('r.mapcalc', expression=ex, flags=c('quiet', 'overwrite'), intern=TRUE)
 
 		gnCount <- .genericMultiLayer(fx='count', fxName='count', x=x, na.rm=na.rm, return='gname')
-		gnCountMinus1 <- .makeGname('nMinus1', 'rast')
+		gnCountMinus1 <- .makeGName('nMinus1', 'rast')
 		ex <- paste0(gnCountMinus1, ' = ', gnCount, ' - 1')
 		rgrass::execGRASS('r.mapcalc', expression=ex, flags=c('quiet', 'overwrite'), intern=TRUE)
 
-		gn <- .makeGname('var', 'rast')
+		gn <- .makeGName('var', 'rast')
 		ex <- paste0(gn, ' = ', gnSS, ' / ', gnCountMinus1)
 		
 		rgrass::execGRASS('r.mapcalc', expression=ex, flags=c('quiet', 'overwrite'), intern=TRUE)
 		
-		makeGRaster(gn, 'var')
+		.makeGRaster(gn, 'var')
 		
 	} # EOF
 )
@@ -378,10 +379,10 @@ setMethod(
 	fx <- 'quantile'
 	fxName <- 'quantile'
 	
-	gn <- .makeGname(fxName, 'rast')
+	gn <- .makeGName(fxName, 'rast')
 	args <- list(
 		cmd = 'r.series',
-		input = paste(gnames(x), collapse=','),
+		input = paste(.gnames(x), collapse=','),
 		output = gn,
 		method = fx,
 		quantile = prob,
@@ -393,7 +394,7 @@ setMethod(
 	if (na.rm) args$flags <- c(args$flags, 'n')
 	
 	do.call(rgrass::execGRASS, args=args)
-	makeGRaster(gn, fxName)
+	.makeGRaster(gn, fxName)
 		
 	} # EOF
 )
@@ -409,10 +410,10 @@ setMethod(
 
 	.restore(x)
 
-	gn <- .makeGname(fx, 'rast')
+	gn <- .makeGName(fx, 'rast')
 	args <- list(
 		cmd = 'r.series',
-		input = paste(gnames(x), collapse=','),
+		input = paste(.gnames(x), collapse=','),
 		output = gn,
 		method = fx,
 		nprocs = getFastOptions('cores'),
@@ -424,7 +425,7 @@ setMethod(
 	
 	do.call(rgrass::execGRASS, args=args)
 	if (return == 'GRaster') {
-		makeGRaster(gn, fxName)
+		.makeGRaster(gn, fxName)
 	} else if (return == 'gname') {
 		gn
 	} else {

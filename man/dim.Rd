@@ -18,7 +18,7 @@
 \alias{ncol,GVector-method}
 \alias{nlyr,GRaster-method}
 \alias{nlyr}
-\title{Number of rows, columns, depths, cells, and layers of a GRaster}
+\title{Number of rows, columns, depths, cells, and layers}
 \usage{
 \S4method{dim}{GRegion}(x)
 
@@ -47,7 +47,7 @@
 A numeric value or vector.
 }
 \description{
-For \code{GRegions}s: Number of rows, columns, depths, and cells:
+Number of rows, columns, depths, and cells of a \code{GRegion}:
 \itemize{
 \item \code{dim()}: Rows, columns, depths, and layers of a
 \item \code{nrow()}: Rows
@@ -55,9 +55,15 @@ For \code{GRegions}s: Number of rows, columns, depths, and cells:
 \item \code{ndepth()}: Depths (for 3-dimensional rasters only)
 \item \code{ncell()}: Number of cells (2 dimensions)
 \item \code{ncell3d()}: Number of cells (3 dimensions)
+}
+
 For \code{GRaster}s: As above, plus number of cells and layers:
+\itemize{
 \item \code{nlyr()}: Layers (number of "stacked" rasters--different from depths of a raster).
+}
+
 For \code{GVector}s: Number of geometries and fields (columns):
+\itemize{
 \item \code{dim()}: Number of geometries and fields
 \item \code{nrow()}: Number of geometries
 \item \code{ncol()}: Number of fields (columns)
@@ -91,7 +97,7 @@ madRivers <- fastData('madRivers')
 madDypsis <- fastData('madDypsis')
 
 # start GRASS session for examples only
-faster(crs = madElev, grassDir = grassDir,
+faster(x = madElev, grassDir = grassDir,
 workDir = tempdir(), location = 'examples') # line only needed for examples
 
 ### GRaster properties
@@ -99,6 +105,7 @@ workDir = tempdir(), location = 'examples') # line only needed for examples
 
 # convert SpatRasters to GRasters
 elev <- fast(madElev)
+plot(elev)
 
 dim(elev) # rows, columns, depths, layers
 nrow(elev) # rows

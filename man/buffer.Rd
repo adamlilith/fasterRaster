@@ -5,7 +5,8 @@
 \alias{buffer}
 \alias{buffer,GVector-method}
 \alias{st_buffer,GVector-method}
-\title{Buffer a GVector of cells of a GRaster}
+\alias{st_buffer}
+\title{Increase/decrease the size of a vector or around non-NA cells of a raster}
 \usage{
 \S4method{buffer}{GRaster}(
   x,
@@ -53,7 +54,7 @@ Partial matching is used and case is ignored.
 \item{endCapStyle}{Same as \code{capstyle}.}
 }
 \description{
-\code{buffer()} operates on \code{GRaster}s or \code{GVector}s. For rasters, the function creates a buffer around non-\code{NA} cells. The output will be a raster. For vectors, the function creates a vector larger or smaller than the focal vector.
+\code{buffer()} operates on \code{GRaster}s or \code{GVector}s. For rasters, the function creates a buffer around non-\code{NA} cells. The output will be a raster. For vectors, the function creates a vector polygon larger or smaller than the focal vector.
 }
 \examples{
 \dontrun{
@@ -81,7 +82,7 @@ madElev <- fastData('madElev')
 madRivers <- fastData('madRivers')
 
 # start GRASS session for examples only
-faster(crs = madElev, grassDir = grassDir,
+faster(x = madElev, grassDir = grassDir,
 workDir = tempdir(), location = 'examples') # line only needed for examples
 
 # convert a SpatRaster to a GRaster, and sf to a GVector
@@ -90,17 +91,16 @@ rivers <- fast(madRivers)
 
 ### buffer a raster by a given distance
 buffByDist <- buffer(elev, width = 2000) # 2000-m buffer
-buffByDistRast <- rast(buffByDist)
-plot(buffByDistRast)
+plot(buffByDist, legend=FALSE)
+plot(madElev, add=TRUE)
 
 ### buffer a raster by a given number of cells
 buffByCells <- buffer(elev, width = 20.01, unit = 'cells') # 20-cell buffer
-buffByCellsRast <- rast(buffByCells)
-plot(buffByCellsRast)
+plot(buffByCells)
+plot(madElev, add=TRUE)
 
 ### buffer a vector
 buffRivers <- buffer(rivers, width = 2000) # 2000-m buffer
-buffRivers <- vect(buffRivers)
 plot(buffRivers)
 plot(st_geometry(madRivers), col = 'blue', add = TRUE)
 

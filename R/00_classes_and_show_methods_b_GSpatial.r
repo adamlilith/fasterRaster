@@ -3,7 +3,6 @@
 #' @describeIn GSession
 #'
 #' @importFrom methods new
-#' @importFrom methods show
 #' @exportClass GSpatial
 GSpatial <- setClass(
 	Class = 'GSpatial',
@@ -67,37 +66,3 @@ setValidity('GSpatial',
 	# )
 # }
 
-# show
-methods::setMethod(
-	f = 'show',
-	signature = 'GSpatial',
-	definition = function(object) {
-
-		details <- getFastOptions('details')
-
-		digs <- min(3, getOption('digits'))
-		extent <- round(object@extent, digs)
-		
-		crs <- object@crs
-		crs <- sf::st_crs(crs)
-		crs <- crs$input
-
-		cat('class       :', paste(class(object), collapse=', '), '\n')
-		if (getFastOptions('details')) {
-			cat('gnames(s)   :', object@gnames, '\n')
-			cat('location    :', object@location, '\n')
-			cat('mapset      :', object@mapset, '\n')
-		}
-		cat('topology    :', object@topology, '\n')
-		cat('extent      :', paste(extent, collapse=', '), '(xmin, xmax, ymin, ymax)\n')
-		if (details & object@topology == '3D') cat('z extent    :', paste(object@zextent, collapse=', '), ' (bottom, top)\n')
-		cat('coord ref.  :', crs, '\n')
-	}
-)
-
-# print
-methods::setMethod(
-	f = 'print',
-	signature = 'GSpatial',
-	definition = function(x) show(x)
-)

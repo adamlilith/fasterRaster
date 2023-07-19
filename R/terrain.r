@@ -47,41 +47,41 @@ methods::setMethod(
 	
 	args <- list(
 		cmd = 'r.slope.aspect',
-		elevation = gnames(x),
+		elevation = .gnames(x),
 		nprocs = getFastOptions('cores'),
 		memory = getFastOptions('memory'),
 		flags = c('quiet', 'overwrite', 'e')
 	)
 	
 	if ('slope' %in% v) {
-		args$slope <- .makeGname('slope', 'rast')
+		args$slope <- .makeGName('slope', 'rast')
 		units <- pmatchSafe(units, c('degrees', 'percent'))
 		args$format <- units
 	}
 
 	if ('aspect' %in% v) {
-		args$aspect <- .makeGname('aspect', 'rast')
+		args$aspect <- .makeGName('aspect', 'rast')
 		units <- pmatchSafe(units, c('degrees', 'percent'))
 		args$format <- units
 		if (northIs0) args$flags <- c(args$flags, 'n')
 	}
 
-	if ('profileCurve' %in% v) args$pcurvature = .makeGname('profileCurve', 'rast')
-	if ('tanCurve' %in% v) args$tcurvature = .makeGname('tanCurve', 'rast')
-	if ('dx' %in% v) args$dx = .makeGname('dx', 'rast')
-	if ('dy' %in% v) args$dy = .makeGname('dy', 'rast')
-	if ('dxx' %in% v) args$dxx = .makeGname('dxx', 'rast')
-	if ('dyy' %in% v) args$dyy = .makeGname('dyy', 'rast')
-	if ('dxy' %in% v) args$dxy = .makeGname('dxy', 'rast')
+	if ('profileCurve' %in% v) args$pcurvature = .makeGName('profileCurve', 'rast')
+	if ('tanCurve' %in% v) args$tcurvature = .makeGName('tanCurve', 'rast')
+	if ('dx' %in% v) args$dx = .makeGName('dx', 'rast')
+	if ('dy' %in% v) args$dy = .makeGName('dy', 'rast')
+	if ('dxx' %in% v) args$dxx = .makeGName('dxx', 'rast')
+	if ('dyy' %in% v) args$dyy = .makeGName('dyy', 'rast')
+	if ('dxy' %in% v) args$dxy = .makeGName('dxy', 'rast')
 	
 	do.call(rgrass::execGRASS, args)
 	
 	if ('slope' %in% v) {
-		out <- makeGRaster(args$slope, 'slope')
+		out <- .makeGRaster(args$slope, 'slope')
 	}
 	
 	if ('aspect' %in% v) {
-		this <- makeGRaster(args$aspect, 'aspect')
+		this <- .makeGRaster(args$aspect, 'aspect')
 		if (exists('out', inherits=FALSE)) {
 			out <- c(out, this)
 		} else {
@@ -90,7 +90,7 @@ methods::setMethod(
 	}
 
 	if ('profileCurve' %in% v) {
-		this <- makeGRaster(args$pcurvature, 'profileCurve')
+		this <- .makeGRaster(args$pcurvature, 'profileCurve')
 		if (exists('out', inherits=FALSE)) {
 			out <- c(out, this)
 		} else {
@@ -99,7 +99,7 @@ methods::setMethod(
 	}
 
 	if ('tanCurve' %in% v) {
-		this <- makeGRaster(args$tcurvature, 'tanCurve')
+		this <- .makeGRaster(args$tcurvature, 'tanCurve')
 		if (exists('out', inherits=FALSE)) {
 			out <- c(out, this)
 		} else {
@@ -108,7 +108,7 @@ methods::setMethod(
 	}
 
 	if ('dx' %in% v) {
-		this <- makeGRaster(args$dx, 'dx')
+		this <- .makeGRaster(args$dx, 'dx')
 		if (exists('out', inherits=FALSE)) {
 			out <- c(out, this)
 		} else {
@@ -117,7 +117,7 @@ methods::setMethod(
 	}
 
 	if ('dy' %in% v) {
-		this <- makeGRaster(args$dy, 'dy')
+		this <- .makeGRaster(args$dy, 'dy')
 		if (exists('out', inherits=FALSE)) {
 			out <- c(out, this)
 		} else {
@@ -126,7 +126,7 @@ methods::setMethod(
 	}
 
 	if ('dxx' %in% v) {
-		this <- makeGRaster(args$dxx, 'dxx')
+		this <- .makeGRaster(args$dxx, 'dxx')
 		if (exists('out', inherits=FALSE)) {
 			out <- c(out, this)
 		} else {
@@ -135,7 +135,7 @@ methods::setMethod(
 	}
 
 	if ('dyy' %in% v) {
-		this <- makeGRaster(args$dyy, 'dyy')
+		this <- .makeGRaster(args$dyy, 'dyy')
 		if (exists('out', inherits=FALSE)) {
 			out <- c(out, this)
 		} else {
@@ -144,7 +144,7 @@ methods::setMethod(
 	}
 
 	if ('dxy' %in% v) {
-		this <- makeGRaster(args$dxy, 'dxy')
+		this <- .makeGRaster(args$dxy, 'dxy')
 		if (exists('out', inherits=FALSE)) {
 			out <- c(out, this)
 		} else {

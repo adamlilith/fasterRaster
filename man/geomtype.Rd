@@ -52,7 +52,7 @@ library(sf)
 madRivers <- fastData('madRivers')
 
 # start GRASS session for examples only
-faster(crs = madRivers, grassDir = grassDir,
+faster(x = madRivers, grassDir = grassDir,
 workDir = tempdir(), location = 'examples') # line only needed for examples
 
 # example data
@@ -96,15 +96,19 @@ topology(rivers)
 is.2d(rivers) # 2-dimensional?
 is.3d(rivers) # 3-dimensional?
 
-### ADVANCED
-# We can send a `SpatVector` or `sf` vector to an open GRASS connection
-# without making it a `GVector`.
+# vector with just selected columns
+names(rivers)
+rivers[[c('NAM', 'NAME_0')]]
+rivers[[c(3, 5)]]
 
-vectToGrass(madRivers, gn = 'rivers_vect1')
+# selected geometries/rows of the vector
+nrow(rivers)
+selected <- rivers[2:6]
+nrow(selected)
 
-# This is nearly the same as:
-madRiversVect <- vect(madRivers)
-rgrass::write_VECT(madRiversVect, vname = 'rivers_vect2')
+# plot
+plot(rivers)
+plot(selected, col='red', add=TRUE)
 
 # IMPORTANT #3: Revert back to original GRASS session if needed.
 fastRestore(opts.)

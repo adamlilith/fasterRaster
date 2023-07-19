@@ -57,7 +57,7 @@ library(terra)
 madElev <- fastData('madElev')
 
 # start GRASS session for examples only
-faster(crs = madElev, grassDir = grassDir,
+faster(x = madElev, grassDir = grassDir,
 workDir = tempdir(), location = 'examples') # line only needed for examples
 
 elev <- fast(madElev)
@@ -68,8 +68,8 @@ elev
 elev120
 
 ### resample using a template raster as a template
+##################################################
 
-# fasterRaster
 template <- aggregate(elev, 4)
 
 nearest <- resample(elev, template, method = 'nearest')
@@ -123,8 +123,7 @@ plot(terraLanczos, add=TRUE)
 
 # IMPORTANT #3: Revert back to original GRASS session if needed.
 fastRestore(opts.)
-fastRemove('exampleFrom')
-fastRemove('exampleTo')
+fastRemove('examples')
 
 }
 }

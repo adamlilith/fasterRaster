@@ -1,19 +1,22 @@
 #' Hillshading
 #' 
-#' @description Hillshade rasters are often used for display purposes becayse they make topographical relief look "real" to teh eye.
+#' @description Hillshade rasters are often used for display purposes because they make topographical relief look "real" to the eye.
 #'
 #' @param x A `GRaster` (typically representing elevation).
-#' @param angle Numeric: The altitude of the sun above the horizon in degrees. Valid values are in the range [0, 90], and the default value is 45 (half way from the horizon to overhead).
-#' @param direction The direction (azimuth) in which the sun is shining in degrees. Valid values are in the range [0, 360]. The default is 0, meaning the sus is at due south (180 degrees) and shining due north (0 degrees). Note that in this function, 0 corresponds to north and 180 to south, but in the **GRASS** module `r.relief`, "east orientation" is used (0 is east, 90 is north, etc.).
-#' @param zscale Numeric: Value by which to exaggerate terrain. The default is 1.  Numbers greater than this will increase apparant relief, and lessthan this (even negative) will diminish it.
+#'
+#' @param angle Numeric: The altitude of the sun above the horizon in degrees. Valid values are in the range \[0, 90\], and the default value is 45 (half way from the horizon to overhead).
+#'
+#' @param direction The direction (azimuth) in which the sun is shining in degrees. Valid values are in the range 0 to 360. The default is 0, meaning the sun is at due south (180 degrees) and shining due north (0 degrees). Note that in this function, 0 corresponds to north and 180 to south, but in the **GRASS** module `r.relief`, "east orientation" is used (0 is east, 90 is north, etc.).
+#'
+#' @param zscale Numeric: Value by which to exaggerate terrain. The default is 1.  Numbers greater than this will increase apparent relief, and less than this (even negative) will diminish it.
 #'
 #' @returns A `GRaster`.
 #'
 #' @seealso [terra::shade()], module `r.relief` in **GRASS**
 #' 
-#' @example man/example/ex_terrain.r
+#' @example man/examples/ex_terrain.r
 #' 
-#' @aliases shade
+#' @aliases hillshade
 #' @rdname hillshade
 #' @exportMethod hillshade
 methods::setMethod(
@@ -32,10 +35,10 @@ methods::setMethod(
 
     for (i in 1L:nlyr(x)) {
 
-        gn <- .makeGname('shade', 'rast')
+        gn <- .makeGName('shade', 'rast')
         args <- list(
             cmd = 'r.relief',
-            input = gnames(x)[i],
+            input = .gnames(x)[i],
             output = gn,
             altitude = angle,
             azimuth = direction,
@@ -46,7 +49,7 @@ methods::setMethod(
 
         do.call(rgrass::execGRASS, args=args)
 
-        this <- makeGRaster(gn, paste0(names(x)[i], '_shade'))
+        this <- .makeGRaster(gn, paste0(names(x)[i], '_shade'))
         if (i == 1L) {
             out <- this
         } else {
