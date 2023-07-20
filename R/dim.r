@@ -27,12 +27,20 @@
 #'
 #' @aliases dim
 #' @rdname dim
-#' @export
 #' @exportMethod dim
 methods::setMethod(
 	f = 'dim',
 	signature = 'GRegion',
-	definition = function(x) c(rows=x@dimensions[1L], cols=x@dimensions[2L], depths=x@dimensions[3L])
+	definition = function(x) c(rows = x@dimensions[1L], cols = x@dimensions[2L], depths = x@dimensions[3L])
+)
+
+#' @aliases dim
+#' @rdname dim
+#' @exportMethod dim
+methods::setMethod(
+	f = 'dim',
+	signature = 'GRaster',
+	definition = function(x) c(rows = x@dimensions[1L], cols = x@dimensions[2L], depths = x@dimensions[3L], nlyr = x@nLayers)
 )
 
 #' @rdname dim
@@ -82,7 +90,6 @@ setMethod(
 
 #' @aliases dim
 #' @rdname dim
-#' @export
 #' @exportMethod dim
 methods::setMethod(
 	f = 'dim',
