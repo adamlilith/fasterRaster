@@ -3,6 +3,8 @@
 #' Create a copy of a `GRaster` or `GVector` in **GRASS**.  This function is used internally and is of little use to most users.  This only creates a copy of the object in the **GRASS** session--to make a `GRaster` or `GVector`, [.makeGRaster()] or [.makeGVector()] need to be called after making the copy. Note that if the object is multi-layered, then a copy is made of each layer.
 #'
 #' @param x `GRaster`, `GVector`, or character: The object or the `gnames` of the object to be copied. Can take multi-layered objects or multiple `gnames`.
+#' 
+#' @param reshapeRegion Logical: If `TRUE`, reshape the region to match `x` (`GRaster`s only).
 #'
 #' @returns Character vector representing the new `gnames` of each object, plus makes a copy of the given object(s) in **GRASS**.
 #'
@@ -11,7 +13,7 @@
 methods::setMethod(
 	f = '.copyGSpatial',
 	signature = c(x = 'GRaster'),
-	function(x) .copyGRaster(x)
+	function(x, reshapeRegion = TRUE) .copyGRaster(x, reshapeRegion = reshapeRegion)
 )
 
 #' @aliases .copyGSpatial
@@ -27,23 +29,23 @@ methods::setMethod(
 methods::setMethod(
 	f = '.copyGSpatial',
 	signature = c(x = 'character'),
-	function(x) {
+	function(x, reshapeRegion = TRUE) {
 	
-	n <- length(x)
-	gnsTo <- rep(NA_character_, n)
+	nLayers <- length(x)
+	gnsTo <- rep(NA_character_, nLayers)
 	
 	gns <- .ls()
 	rastsOrVects <- names(gns)
 	rastOrVect <- rastsOrVects[match(x, gns)]
 	
 	# rastOrVect <- pmatchSafe(tolower(rastOrVect), c('raster', 'vector'))
-	# rastOrVect <- rep(rastOrVect, n)
+	# rastOrVect <- rep(rastOrVect, nLayers)
 
-	for (i in seq_len(n)) {
+	for (i in seq_len(nLayers)) {
 		
 		if (rastOrVect[i] == 'raster') {
 			x <- .makeGRaster(x[i])
-			gnsTo[i] <- .copyGRaster(x)
+			gnsTo[i] <- .copyGRaster(x, reshapeRegion = reshapeRegion)
 		} else if (rastOrVect[i] == 'vector') {
 			.makeGVector(x[i])
 			gnsTo[i] <- .copyGVector(x)
@@ -56,44 +58,34 @@ methods::setMethod(
 
 )
 
-.copyGRaster <- function(x) {
+.copyGRaster <- function(x, reshapeRegion) {
 
-	n <- nlyr(x)
+	# NB This function could use `g.copy`, but in some cases it does not have the desired effect. For example, when a MASK raster is present, it correctly copies cells that are not masked, but when the MASK is removed, the masked cells re-appear. Similarly, it ignores the region when copying.
+
+	nLayers <- nlyr(x)
 	topo <- topology(x)
 	rastOrVect <- if (topo == '2D') { 'raster' } else { 'raster3d' }
 
 	.restore(x)
-	region(x)
+	if (reshapeRegion) region(x)
+	gns <- .makeGName(x, rastOrVect = 'raster', nLayers)
 
-	gn <- .gnames(x)
+	for (i in seq_len(nLayers)) {
 
-	# from/to GRASS names
-	gnTos <- .makeGName(NULL, rastOrVect='raster', n)
-	
-	# copy
-	args <- list(
-		cmd = 'g.copy',
-		flags = c('quiet', 'overwrite'),
-		intern = TRUE
-	)
-	
-	for (i in seq_len(n)) {
-		
-		gnFrom <- gn[i]
-		gnTo <- gnTos[i]
-		
-		fromTo <- paste0(gnFrom, ',', gnTo)
-		if (topo == '2D') {
-			thisArgs <- c(args, raster = fromTo)
-		} else if (topo == '3D') {
-			thisArgs <- c(args, raster_3d = fromTo)
-		}
-		
-		do.call(rgrass::execGRASS, thisArgs)
-	
+		ex <- paste0(gns[i], ' = ', .gnames(x)[i])
+
+		args <- list(
+			cmd = 'r.mapcalc',
+			expression = ex,
+			flags = c('quiet', 'overwrite'),
+			intern = TRUE
+		)
+
+		do.call(rgrass::execGRASS, args = args)
+
 	}
-	
-	gnTos
+
+	gns
 	
 }
 
