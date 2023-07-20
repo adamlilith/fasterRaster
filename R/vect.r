@@ -7,7 +7,7 @@
 #'
 #' @return A `SpatVector` (**terra** package).
 #' 
-#' @seealso [terra::vect()]
+#' @seealso [terra::vect()], [sf::st_as_sf()]
 #' 
 #' @example man/examples/ex_GVector.r
 #'
@@ -22,5 +22,17 @@ setMethod(
 	filename <- paste0(forwardSlash(tempfile()), '.gpkg')
 	out <- writeVector(x, filename=filename, ...)
 	out
+	} # EOF
+)
+
+#' @aliases st_as_sf
+#' @rdname vect
+#' @exportMethod st_as_sf
+setMethod(
+	'st_as_sf',
+	signature(x = 'GVector'),
+	function(x) {
+	out <- vect(x)
+	sf::st_as_sf(out)
 	} # EOF
 )

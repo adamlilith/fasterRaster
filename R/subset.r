@@ -3,15 +3,15 @@
 #' @description The `[` and `[[` operators do different things depending on whether they are applied to a `GRaster` or `GVector`:
 #' * `GVector`s:
 #'     * `[` operator: Returns a subset of geometries (i.e., points, lines, or polygons) of the `GVector`. For example, `vector[2:4]` will return the second through the fourth geometries.
-#'     * `[[` operator: Returns columns of the vector's data frame. For example, `vector[[2:4]]` returns the `GVector, but with just columns 2 through 4 of the data frame.
+#'     * `[[` operator: Returns a vector with the selected columns in its data frame. For example, `vector[[2:4]]` returns the `GVector, but with just columns 2 through 4 of the data frame.
 #' * `GRaster`s:
-#'     * `[[` operator: Returns `GRaster`s from a "stack" of `GRaster`s.
+#'     * `[[` operator: Returns `GRaster`s from a "stack" of `GRaster`s. For example, `raster[[2:3]]` returns the second and third rasters in a stack of `GRaster`s.
 #'
 #' @param x A `GRaster` with one or more layers, or a `GVector`.
 #' @param i A character, numeric, integer, or logical vector:
 #' * `GVector`s:
-#'     * `[` operator: Indicates the columns to extract. `i` can be the name of the column(s), a number indicating the index of the columns, or a logical vector the same length as there are columns.
-#'     * `[[` operator: Indicates which geometries to extract. `i` can be a number indicating the index of the features, or a logical vector the same length as there are rows.
+#'     * `[` operator: Indicates the geometries/rows to retain. `i` can be a number indicating the index of the rows, or a logical vector the same length as there are rows.
+#'     * `[[` operator: Indicates which columns to retain. `i` can be a number indicating the index of the features, a logical vector the same length as there are columns, or a character vector of the names of the columns to keep.
 #'
 #' @returns A `GRaster`.
 #'

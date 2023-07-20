@@ -449,7 +449,7 @@ methods::setMethod(f = 'regionDim',
 methods::setMethod(
 	f = 'regionDim',
 	signature = 'numeric',
-	definition = function(x, respect='resolution') .regionDim(x, respect)
+	definition = function(x, respect) .regionDim(x, respect)
 )
 
 #' @rdname region

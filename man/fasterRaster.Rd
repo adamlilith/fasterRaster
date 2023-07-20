@@ -25,7 +25,6 @@ A \link[=tutorial_getting_started]{quick-start tutorial}\cr
 \code{\link[=ext]{ext()}}, \code{\link[=north]{north()}}, \code{\link[=south]{south()}}, \code{\link[=east]{east()}}, \code{\link[=west]{west()}}, \code{\link[=top]{top()}}, and \code{\link[=bottom]{bottom()}}: Spatial extent\cr
 \code{\link[=freq]{freq()}}: Frequencies of cell values in a raster\cr
 \code{\link[=global]{global()}}: Summary statistics\cr
-\code{\link[=gnames]{gnames()}}: Name of the object in \strong{GRASS}\cr
 \code{\link[=is.2d]{is.2d()}} and \code{\link[=is.3d]{is.3d()}}: Is an object 2- or 3-dimensional?\cr
 \code{\link[=location]{location()}}: \strong{GRASS} "location" of an object or the active session\cr
 \code{\link[=mapset]{mapset()}}: \strong{GRASS} "mapset" of an object or the active session\cr
@@ -50,6 +49,7 @@ A \link[=tutorial_getting_started]{quick-start tutorial}\cr
 \subsection{Functions that operate on or create \code{GRasters}}{
 
 \link{Arithmetic}: Mathematical operations on \code{GRaster}s: \code{+}, \code{-}, \code{*}, \code{/}, \code{^}, \code{\%\%} (modulus), \code{\%/\%} (integer division)\cr
+
 Single-layer functions (applied to each layer of a \code{GRaster}):
 \itemize{
 \item Trigonometry: \code{\link[=sin]{sin()}}, \code{\link[=cos]{cos()}}, \code{\link[=tan]{tan()}}, \code{\link[=asin]{asin()}}, \code{\link[=acos]{acos()}}, \code{\link[=atan]{atan()}}, \code{\link[=atan2]{atan2()}} \cr
@@ -80,11 +80,10 @@ Other functions:\cr
 \code{\link[=horizonHeight]{horizonHeight()}}: Horizon height\cr
 \code{\link[=longlat]{longlat()}}: Create longitude/latitude rasters.\cr
 \code{\link[=mask]{mask()}}: Remove values in a raster based on values in another raster or vector\cr
-\code{\link[=makeGRaster]{makeGRaster()}}: Makes a \code{GRaster} from a raster already in a \strong{GRASS} session\cr
+\code{\link[=.makeGRaster]{.makeGRaster()}}: Makes a \code{GRaster} from a raster already in a \strong{GRASS} session\cr
 \code{\link[=merge]{merge()}}: Combine two or more rasters with different extents and fill in \code{NA}s\cr
 \code{\link[=plot]{plot()}}: Display a raster\cr
 \code{\link[=project]{project()}}: Change coordinate reference system and cell size\cr
-\code{\link[=refresh]{refresh()}}: Update raster metadata\cr
 \code{\link[=resample]{resample()}}: Change cell size\cr
 \code{\link[=sun]{sun()}}: Solar radiance and irradiance\cr
 \code{\link[=terrain]{terrain()}}: Slope, aspect, curvature, and partial slopes\cr
@@ -98,7 +97,6 @@ Other functions:\cr
 \code{\link[=datatype]{datatype()}}: Data type of fields\cr
 \code{\link[=ext]{ext()}}, \code{\link[=north]{north()}}, \code{\link[=south]{south()}}, \code{\link[=east]{east()}}, \code{\link[=west]{west()}}, \code{\link[=top]{top()}}, and \code{\link[=bottom]{bottom()}}: Spatial extent\cr
 \code{\link[=geomtype]{geomtype()}}: Type of vector (points, lines, polygons)\cr
-\code{\link[=gnames]{gnames()}}: Name of the object in \strong{GRASS}\cr
 \code{\link[=is.2d]{is.2d()}} and \code{\link[=is.3d]{is.3d()}}: Is an object 2- or 3-dimensional?\cr
 \code{\link[=is.points]{is.points()}}, \code{\link[=is.lines]{is.lines()}}, \code{\link[=is.polygons]{is.polygons()}}: Does a \code{GVector} represent points, lines, or polygons?\cr
 \code{\link[=location]{location()}}: \strong{GRASS} "location" of an object or the active session\cr
@@ -126,11 +124,11 @@ Other functions:\cr
 \code{\link[=delaunay]{delaunay()}}: Delaunay triangulation\cr
 \code{\link[=distance]{distance()}}: Distance between geometries in two vectors, or from a vector to cells of a raster\cr
 \code{\link[=head]{head()}}: First rows of a vector's data frame.\cr
-\code{\link[=makeGVector]{makeGVector()}}: Makes a \code{GVector} from a vector already in a \strong{GRASS} session.\cr
+\code{\link[=.makeGVector]{.makeGVector()}}: Makes a \code{GVector} from a vector already in a \strong{GRASS} session.\cr
 \code{\link[=project]{project()}}: Change coordinate reference system\cr
-\code{\link[=refresh]{refresh()}}: Update vector metadata\cr
 \code{\link[=simplifyGeom]{simplifyGeom()}}: Remove vertices\cr
 \code{\link[=smoothGeom]{smoothGeom()}}: Remove "angular" aspects of features\cr
+\code{\link[=st_as_sf]{st_as_sf()}}: Convert a \code{GVector} to a \code{sf} vector\cr
 \code{\link[=st_buffer]{st_buffer()}}: Create a polygon around/inside a vector\cr
 \code{\link[=st_distance]{st_distance()}}: Distance between geometries in two vectors\cr
 \code{\link[=tail]{tail()}}: Last rows of a vector's data frame.\cr
@@ -145,8 +143,8 @@ Other functions:\cr
 \code{\link[=as.points]{as.points()}}, \code{\link[=as.lines]{as.lines()}}, and \code{\link[=as.polygons]{as.polygons()}}: Convert a \code{GRaster} to a \code{GVector}\cr
 \code{\link[=fast]{fast()}}: Create \code{GRaster}s or \code{GVector}s from \code{SpatRaster}s, \code{SpatVector}s, or \code{sf} objects, or from files\cr
 \code{\link[=head]{head()}} and \code{\link[=tail]{tail()}}: First and last rows of a \code{GVector}'s data frame\cr
-\code{\link[=makeGRaster]{makeGRaster()}}: Make a \code{GRaster} from a raster in \strong{GRASS}\cr
-\code{\link[=makeGVector]{makeGVector()}}: Make a \code{GVector} from a vector in \strong{GRASS}\cr
+\code{\link[=.makeGRaster]{.makeGRaster()}}: Make a \code{GRaster} from a raster in \strong{GRASS}\cr
+\code{\link[=.makeGVector]{.makeGVector()}}: Make a \code{GVector} from a vector in \strong{GRASS}\cr
 \code{\link[=rast]{rast()}}: Convert a \code{GRaster} to a \code{SpatRaster}\cr
 \code{\link[=rasterize]{rasterize()}}: Convert a \code{GVector} to a \code{GRaster}\cr
 \code{\link[=st_as_sf]{st_as_sf()}}: Convert a \code{GVector} to a \code{sf} vector\cr
@@ -186,8 +184,9 @@ Other functions:\cr
 
 \subsection{Esoteric tutorials}{
 
-\strong{fasterRaster} \link[=tutorial_sessions]{sessions and locations} (working directories, locations, and mapsets)\cr
-\strong{GRASS} \link[=tutorial_regions]{regions}\cr
+\link[=tutorial_sessions]{Sessions, locations, and mapsets}\cr
+\link[=tutorial_regions]{Regions}\cr
+\link[=tutorial_undocumented_functions]{Undocumented functions}\cr
 }
 }
 \author{

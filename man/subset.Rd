@@ -20,8 +20,8 @@
 \itemize{
 \item \code{GVector}s:
 \itemize{
-\item \code{[} operator: Indicates the columns to extract. \code{i} can be the name of the column(s), a number indicating the index of the columns, or a logical vector the same length as there are columns.
-\item \code{[[} operator: Indicates which geometries to extract. \code{i} can be a number indicating the index of the features, or a logical vector the same length as there are rows.
+\item \code{[} operator: Indicates the geometries/rows to retain. \code{i} can be a number indicating the index of the rows, or a logical vector the same length as there are rows.
+\item \code{[[} operator: Indicates which columns to retain. \code{i} can be a number indicating the index of the features, a logical vector the same length as there are columns, or a character vector of the names of the columns to keep.
 }
 }}
 }
@@ -34,11 +34,11 @@ The \code{[} and \code{[[} operators do different things depending on whether th
 \item \code{GVector}s:
 \itemize{
 \item \code{[} operator: Returns a subset of geometries (i.e., points, lines, or polygons) of the \code{GVector}. For example, \code{vector[2:4]} will return the second through the fourth geometries.
-\item \code{[[} operator: Returns columns of the vector's data frame. For example, \code{vector[[2:4]]} returns the `GVector, but with just columns 2 through 4 of the data frame.
+\item \code{[[} operator: Returns a vector with the selected columns in its data frame. For example, \code{vector[[2:4]]} returns the `GVector, but with just columns 2 through 4 of the data frame.
 }
 \item \code{GRaster}s:
 \itemize{
-\item \code{[[} operator: Returns \code{GRaster}s from a "stack" of \code{GRaster}s.
+\item \code{[[} operator: Returns \code{GRaster}s from a "stack" of \code{GRaster}s. For example, \code{raster[[2:3]]} returns the second and third rasters in a stack of \code{GRaster}s.
 }
 }
 }

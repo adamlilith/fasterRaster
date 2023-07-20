@@ -23,7 +23,7 @@
 #'
 #' @param ... Options to send to [setFastOptions()]. These should be in `option = value` format.
 #'
-#' @return An [rgrass::gmeta()] object (a list) if successful (invisibly). If not successful, the function will usually either fail or return `FALSE` with a warning.
+#' @return A `[GSession]`[GSession] object (invisibly).
 #'
 #' @seealso Guide to getting [started](tutorial_starting) with **fasterRaster**.
 #'

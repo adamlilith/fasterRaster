@@ -3,9 +3,13 @@
 \name{vect,GVector-method}
 \alias{vect,GVector-method}
 \alias{vect}
+\alias{st_as_sf,GVector-method}
+\alias{st_as_sf}
 \title{Convert a GVector to a SpatVector}
 \usage{
 \S4method{vect}{GVector}(x, ...)
+
+\S4method{st_as_sf}{GVector}(x)
 }
 \arguments{
 \item{x}{A \code{GVector}.}
@@ -107,5 +111,5 @@ removeSession('examples')
 }
 }
 \seealso{
-\code{\link[terra:vect]{terra::vect()}}
+\code{\link[terra:vect]{terra::vect()}}, \code{\link[sf:st_as_sf]{sf::st_as_sf()}}
 }

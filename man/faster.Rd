@@ -41,7 +41,7 @@ If \code{NULL}, then the function will use \code{\link[=getFastOptions]{getFastO
 \item{...}{Options to send to \code{\link[=setFastOptions]{setFastOptions()}}. These should be in \code{option = value} format.}
 }
 \value{
-An \code{\link[rgrass:gmeta]{rgrass::gmeta()}} object (a list) if successful (invisibly). If not successful, the function will usually either fail or return \code{FALSE} with a warning.
+A \verb{[GSession]}\link{GSession} object (invisibly).
 }
 \description{
 This function initializes a \strong{GRASS} session in a particular folder. You need to run this function (usually just once) before you use most functions in \strong{fasterRaster}. You can use \code{\link[=fastRestore]{fastRestore()}} to switch between \link[=tutorial_sessions]{working folders, locations, and mapsets}.

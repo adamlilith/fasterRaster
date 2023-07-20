@@ -4,16 +4,17 @@
 #'
 #' @param x A `GRaster` (typically representing elevation).
 #' @param v Name of the topographic metric(s) to calculate. Valid values include one or more of:
-#' 	* `'slope'`: Slope. Units are given by argument `units`.
-#' 	* `'aspect'`: Aspect. When argument `northIs0` is `TRUE` (default), then aspect is given in degrees from north going clockwise (0 = north, 90 = east, 180 = south, 270 = west).
-#' 	* `'profileCurve'`: Profile curvature.
-#' 	* `'tanCurve'`: Tangential curvature.
-#' 	* `'dx'`: Slope in east-west direction.
-#' 	* `'dy'`: Slope in north-south direction.
-#' 	* `'dxx'`: Second partial derivative in east-west direction.
-#' 	* `'dyy'`: Second partial derivative in north-south direction.
-#' 	* `'dxy'`: Second partial derivative along east-west and north-south direction.
-#'	* `'*'`: All of the above.
+#'
+#' * `'slope'`: Slope. Units are given by argument `units`.
+#' * `'aspect'`: Aspect. When argument `northIs0` is `TRUE` (default), then aspect is given in degrees from north going clockwise (0 = north, 90 = east, 180 = south, 270 = west).
+#' * `'profileCurve'`: Profile curvature.
+#' * `'tanCurve'`: Tangential curvature.
+#' * `'dx'`: Slope in east-west direction.
+#' * `'dy'`: Slope in north-south direction.
+#' * `'dxx'`: Second partial derivative in east-west direction.
+#' * `'dyy'`: Second partial derivative in north-south direction.
+#' * `'dxy'`: Second partial derivative along east-west and north-south direction.
+#' * `'*'`: All of the above.
 #'
 #' @param units Character: "Units" in which to calculate slope: either `'degrees'` for degrees (default) or `'percent'`.
 #'

@@ -364,8 +364,10 @@ methods::setMethod(f = 'compareGeom',
 ### compare extents
 .extentCompare <- function(out, x, y, stopOnError, messages) {
 	
-	if (any(compareFloat(ext(x, vector=TRUE), ext(y, vector=TRUE), '!='))) {
-		msg <- 'The raster and vector have different extents.'
+	xx <- ext(x, vector=TRUE)
+	yy <- ext(y, vector=TRUE)
+	if (any(compareFloat(xx, yy, '!='))) {
+		msg <- 'The objects have different extents.'
 		if (stopOnError) stop(msg)
 		if (messages & !stopOnError) warning(msg)
 		out <- FALSE

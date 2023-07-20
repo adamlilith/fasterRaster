@@ -112,31 +112,33 @@ methods::setMethod(
     do.call(rgrass::execGRASS, args = args)
 
     ### copy rasters with mask operative
-    ### NB Using g.copy/.copyGSpatial() will not allow the mask to be retained on exiting the function when the mask is automatically removed.
+    ### NOT CORRECT AS OF 2023/07/19: Using g.copy/.copyGSpatial() will not allow the mask to be retained on exiting the function when the mask is automatically removed.
     n <- nlyr(x)
-    gns <- .makeGName('mask', 'raster', n)
-    for (i in seq_len(n)) {
+    gns <- .copyGSpatial(x, reshapeRegion = FALSE)
+    # gns <- .makeGName('mask', 'raster', n)
 
-        ex <- paste0(gns[i], ' = ', .gnames(x))
-        rgrass::execGRASS('r.mapcalc', expression = ex, flags = c('quiet', 'overwrite'), intern = TRUE)
+    # for (i in seq_len(n)) {
 
-    }
-    out <- .makeGRaster(gns, names(x))
+        # ex <- paste0(gns[i], ' = ', .gnames(x))
+        # rgrass::execGRASS('r.mapcalc', expression = ex, flags = c('quiet', 'overwrite'), intern = TRUE)
 
-    # change masked values
+    # }
+
+    ### change masked values
     if (!is.na(updatevalue)) {
 
-        n <- nlyr(x)
-        gns <- .makeGName(names(x), 'raster', n)
-        for (i in seq_len(n)) {
+        gnsUpdate <- .makeGName('mask', 'raster', nLayers)
+        for (i in seq_len(nLayers)) {
 
-            ex <- paste0(gns[i], ' = if(!isnull(', .gnames(out)[i], '), ', updatevalue, ', null())')
+            ex <- paste0(gnsUpdate[i], ' = if(!isnull(', gns[i], '), ', updatevalue, ', null())')
             rgrass::execGRASS('r.mapcalc', expression = ex, flags = c('quiet', 'overwrite'), intern = TRUE)
 
         } # next raster
-        out <- .makeGRaster(gns, names(x))
+        out <- .makeGRaster(gnsUpdate, names(x))
 
-    } # custom updated value
+    } else {
+        out <- .makeGRaster(gns, names(x))
+    }
     out
 
 } # EOF

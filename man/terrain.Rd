@@ -11,16 +11,16 @@
 \item{x}{A \code{GRaster} (typically representing elevation).}
 
 \item{v}{Name of the topographic metric(s) to calculate. Valid values include one or more of:
-* \code{'slope'}: Slope. Units are given by argument \code{units}.
-* \code{'aspect'}: Aspect. When argument \code{northIs0} is \code{TRUE} (default), then aspect is given in degrees from north going clockwise (0 = north, 90 = east, 180 = south, 270 = west).
-* \code{'profileCurve'}: Profile curvature.
-* \code{'tanCurve'}: Tangential curvature.
-* \code{'dx'}: Slope in east-west direction.
-* \code{'dy'}: Slope in north-south direction.
-* \code{'dxx'}: Second partial derivative in east-west direction.
-* \code{'dyy'}: Second partial derivative in north-south direction.
-* \code{'dxy'}: Second partial derivative along east-west and north-south direction.
 \itemize{
+\item \code{'slope'}: Slope. Units are given by argument \code{units}.
+\item \code{'aspect'}: Aspect. When argument \code{northIs0} is \code{TRUE} (default), then aspect is given in degrees from north going clockwise (0 = north, 90 = east, 180 = south, 270 = west).
+\item \code{'profileCurve'}: Profile curvature.
+\item \code{'tanCurve'}: Tangential curvature.
+\item \code{'dx'}: Slope in east-west direction.
+\item \code{'dy'}: Slope in north-south direction.
+\item \code{'dxx'}: Second partial derivative in east-west direction.
+\item \code{'dyy'}: Second partial derivative in north-south direction.
+\item \code{'dxy'}: Second partial derivative along east-west and north-south direction.
 \item \code{'*'}: All of the above.
 }}
 

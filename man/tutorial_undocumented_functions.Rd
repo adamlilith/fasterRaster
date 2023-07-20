@@ -26,7 +26,7 @@ Gets the name(s) of the file(s) in \strong{GRASS} that represent(s) the object(s
 Lists the \code{gnames} of all objects in the current \strong{GRASS} session.
 }
 
-\subsection{\code{.makeGnames()}}{
+\subsection{\code{.makeGNames()}}{
 
 Makes one or more statistically unique strings that can be used as file names to represent rasters or vectors in \strong{GRASS}.
 }

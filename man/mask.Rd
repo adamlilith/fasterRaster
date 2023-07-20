@@ -100,3 +100,6 @@ removeSession('examples')
 
 }
 }
+\seealso{
+\code{\link[=maskRand]{maskRand()}}, \code{\link[terra:mask]{terra::mask()}}, \strong{GRASS} module \code{r.mask}
+}

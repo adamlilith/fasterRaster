@@ -46,7 +46,7 @@ The \code{G} suite of S4 classes contain pointers to \strong{GRASS} objects or m
 
 \item{\code{topology}}{Character (\code{GSpatial} objects, including \code{GRegion}s, \code{GRaster}s, and \code{GVector}s): Valid values are \verb{2D} (2-dimensional--most rasters and vectors) or \verb{3D} (3-dimensional--e.g., LIDAR data). Can be obtained using \code{\link[=topology]{topology()}}.}
 
-\item{\code{gnames}}{Character (\code{GRaster}s and \code{GVector}s): Name of the object in \strong{GRASS}. These are typically made on-the-fly and provide the pointer to the object from \strong{R} to \strong{GRASS}. Changing them manually will break the connection. Can be obtained using \code{\link[=gnames]{gnames()}}.}
+\item{\code{gnames}}{Character (\code{GRaster}s and \code{GVector}s): Name of the object in \strong{GRASS}. These are typically made on-the-fly and provide the pointer to the object from \strong{R} to \strong{GRASS}. Changing them manually will break the connection. Can be obtained using \code{.gnames()}.}
 
 \item{\code{names}}{Character  (\code{GRaster}s only): Name of a raster or each raster layer in. Can be obtained using \code{\link[=names]{names()}}.}
 
@@ -76,7 +76,7 @@ The \code{G} suite of S4 classes contain pointers to \strong{GRASS} objects or m
 
 \item{\code{minVal,maxVal}}{Numeric (\code{GRaster}s): Minimum and maximum value across all cells. Can be obtained using \code{\link[=minmax]{minmax()}}.}
 
-\item{\code{dbLayer,dbName}}{Character ('GVector's): Names of the layer and table associated with the \code{GVector} in the \strong{GRASS} SQLite database.}
+\item{\code{dbLayer,dbName}}{Character ('GVector's): Names of the layer and table associated with the \code{GVector} in the \strong{GRASS} SQLite database. Can be obtained using \code{.dbName()} and \code{.dblayer()}.}
 
 \item{\code{fields}}{Names of fields (\code{GVector}s). Can be obtained using \code{\link[=names]{names()}}.}
 

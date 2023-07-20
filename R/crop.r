@@ -1,6 +1,6 @@
 #' Remove parts of a GRaster or GVector
 #'
-#' [`crop()] removes parts of a `GRaster` or `GVector` that fall "outside" another raster or vector.
+#' `crop()` removes parts of a `GRaster` or `GVector` that fall "outside" another raster or vector.
 #'
 #' @param x A `GRaster` or `GVector` to be cropped.
 #' @param y A `GRaster` or `GVector` to serve as a template for cropping.
@@ -41,17 +41,10 @@ methods::setMethod(
 
 	### crop by creating copy of focal raster
 	out <- list()
-	gns <- .makeGName('crop', 'raster', nlyr(x))
-	for (countLayer in seq_len(nlyr(x))) {
-	
-		ex <- paste0(gns[countLayer], ' = ', .gnames(x)[countLayer])
-		rgrass::execGRASS('r.mapcalc', expression=ex, flags=c('quiet', 'overwrite'), intern=TRUE)
-		out[[countLayer]] <- .makeGRaster(gns[countLayer])
-		
-	}
-	
-	out <- do.call('c', args=out)
-	region(out)
+	gns <- .copyGSpatial(x, reshapeRegion = FALSE)
+	out <- .makeGRaster(gns, names(x))
+	print("RESOLUTION MAY BE CHANGED!!!")
+
 	out
 
 	} # EOF
@@ -86,6 +79,7 @@ methods::setMethod(
 	### crop
 	gn <- .makeGName('crop', 'vector')
 	rgrass::execGRASS('v.clip', input=.gnames(x), clip=.gnames(y), output=gn, flags=c('quiet', 'overwrite', 'r'), intern=TRUE)
+
 	.makeGVector(gn)
 
 	} # EOF

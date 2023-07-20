@@ -8,10 +8,10 @@
 #'
 #' @example man/examples/ex_GRaster.r
 #' 
-#' @aliases gnames
+#' @aliases .gnames
 #' @noRd
 methods::setMethod(
-	f = 'gnames',
+	f = '.gnames',
 	signature = 'GSpatial',
 	definition = function(x) x@gnames
 )
@@ -19,7 +19,7 @@ methods::setMethod(
 #' @rdname gnames
 #' @noRd
 methods::setMethod(
-	f = 'gnames',
+	f = '.gnames',
 	signature = 'character',
 	definition = function(x) x
 )
@@ -36,14 +36,20 @@ methods::setMethod(
 	rastOrVect <- tolower(rastOrVect)
 
 	names <- ''
-	if (!is.null(x) && inherits(x, c('SpatRaster', 'stars'))) {
-		rastOrVect <- 'raster'
-		names <- names(x)
-		n <- terra::nlyr(x)
-	} else if (!is.null(x) && inherits(x, c('SpatVector', 'sf'))) {
-		rastOrVect <- 'vector'
-	} else if (!is.null(x) && inherits(x, 'character')) {
-		names <- x
+	if (!is.null(x)) {
+		if (inherits(x, 'SpatRaster')) {
+			rastOrVect <- 'raster'
+			names <- names(x)
+			n <- terra::nlyr(x)
+		} else if (inherits(x, 'GRaster')) {
+			rastOrVect <- 'raster'
+			names <- names(x)
+			n <- nlyr(x)
+		} else if (inherits(x, c('SpatVector', 'sf'))) {
+			rastOrVect <- 'vector'
+		} else if (inherits(x, 'character')) {
+			names <- x
+		}
 	} else {
 		rastOrVect <- tolower(rastOrVect)
 		rastOrVect <- pmatchSafe(rastOrVect, c('raster', 'raster3d', 'vector', 'group', 'region'))

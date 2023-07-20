@@ -24,10 +24,12 @@
 #' [minmax()]: Minimum and maximum values across all non-`NA` cells\cr
 #' [names()]: `GRaster` names\cr
 #' [ncol()]: Number of columns\cr
+#' [nacell()]: Number of `NA` cells\cr
 #' [ncell()]: Number of cells\cr
 #' [ncell3d()]: Number of cells of a 3D raster\cr
 #' [ndepth()]: Number of depths of a 3D raster\cr
 #' [nlyr()]: Number of layers\cr
+#' [nonnacell()]: Number of non-`NA` cells\cr
 #' [nrow()]: Number of rows\cr
 #' [ncat()]: Number of categories\cr
 #' [origin()]: Coordinates of the northwest corner of the extent\cr
@@ -40,6 +42,7 @@
 #' 
 #' ## Functions that operate on or create `GRasters`
 #' [Arithmetic]: Mathematical operations on `GRaster`s: `+`, `-`, `*`, `/`, `^`, `%%` (modulus), `%/%` (integer division)\cr
+#'
 #' Single-layer functions (applied to each layer of a `GRaster`):
 #' - Trigonometry: [sin()], [cos()], [tan()], [asin()], [acos()], [atan()], [atan2()] \cr
 #' - Logarithms and powers: [exp()], [log()], [log1p()], [log2()], [log10()], [sqrt()] \cr
@@ -61,7 +64,9 @@
 #' [clump()]: Group cells with similar values into clumps\cr
 #' [crop()]: Remove parts of a raster\cr
 #' [distance()]: Distance to non-`NA` cells, or vice versa\cr
-#' [global()]: Summary statistics\cr
+#' [extend()]: Add rows and columns to a raster\cr
+#' [focal()]: Calculate cell values based on values of nearby cells\cr
+#' [global()]: Summary statistics across cells of each raster layer\cr
 #' [`hillshade()`][shade]: Create a hillshade raster\cr
 #' [horizonHeight()]: Horizon height\cr
 #' [longlat()]: Create longitude/latitude rasters.\cr
@@ -71,6 +76,7 @@
 #' [plot()]: Display a raster\cr
 #' [project()]: Change coordinate reference system and cell size\cr
 #' [resample()]: Change cell size\cr
+#' [spatSample()]: Randomly points from a raster\cr
 #' [sun()]: Solar radiance and irradiance\cr
 #' [terrain()]: Slope, aspect, curvature, and partial slopes\cr
 #' [viewshed()]: Areas visible from points on a raster\cr
@@ -110,6 +116,7 @@
 #' [project()]: Change coordinate reference system\cr
 #' [simplifyGeom()]: Remove vertices\cr
 #' [smoothGeom()]: Remove "angular" aspects of features\cr
+#' [st_as_sf()]: Convert a `GVector` to a `sf` vector\cr
 #' [st_buffer()]: Create a polygon around/inside a vector\cr
 #' [st_distance()]: Distance between geometries in two vectors\cr
 #' [tail()]: Last rows of a vector's data frame.\cr

@@ -37,15 +37,17 @@ methods::setGeneric(name = 'nunique', def = function(x, ...) standardGeneric('nu
 
 methods::setGeneric(name = 'east', def=function(x, ...) standardGeneric('east'))
 #' @importFrom terra ext
+#' @importFrom terra extend
 
 methods::setGeneric(name = 'fast', def = function(x, ...) standardGeneric('fast'))
+#' @importFrom terra focal
 #' @importFrom terra freq
 
 #' @importFrom terra geomtype
 #' @importFrom terra global
 methods::setGeneric(name = 'geomtype', package='terra')
 methods::setGeneric(name = 'global', package='terra')
-methods::setGeneric(name = 'gnames', def = function(x) standardGeneric('gnames'))
+methods::setGeneric(name = '.gnames', def = function(x) standardGeneric('.gnames'))
 
 #' @importFrom utils head
 methods::setGeneric(name = 'hillshade', def=function(x, ...) standardGeneric('hillshade'))
@@ -65,7 +67,6 @@ methods::setGeneric(name = 'longlat', def = function(x) standardGeneric('longlat
 
 methods::setGeneric(name = 'mapset', def = function(x) standardGeneric('mapset'))
 #' @importFrom terra mask
-methods::setGeneric(name = 'maskRand', def = function(x) standardGeneric('maskRand'))
 #' @importFrom terra minmax
 #' @importFrom terra merge
 #' @importFrom stats median
@@ -112,7 +113,9 @@ methods::setGeneric(name = 'smoothGeom', def=function(x, ...) standardGeneric('s
 methods::setGeneric(name = 'skewness', def=function(x, ...) standardGeneric('skewness'))
 methods::setGeneric(name = 'slope', def=function(x, ...) standardGeneric('slope'))
 methods::setGeneric(name = 'south', def=function(x, ...) standardGeneric('south'))
+#' @importFrom terra spatSample
 #' @importFrom terra stretch
+methods::setGeneric(name = 'st_as_sf', def=function(x, ...) standardGeneric('st_as_sf'))
 if (!isGeneric('st_bbox')) methods::setGeneric(name = 'st_bbox', def=function(obj, ...) standardGeneric('st_bbox'))
 methods::setGeneric(name = 'st_buffer', def=function(x, ...) standardGeneric('st_buffer'))
 if (!isGeneric('st_crs')) methods::setGeneric(name = 'st_crs', def=function(x, ...) standardGeneric('st_crs'))

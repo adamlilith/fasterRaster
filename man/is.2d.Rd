@@ -18,7 +18,7 @@
 Logical.
 }
 \description{
-Tests whether a a GRaster or GVector is 2- or 3-dimensional.
+Test whether a \code{GRaster} or \code{GVector} is 2- or 3-dimensional.
 }
 \examples{
 \dontrun{

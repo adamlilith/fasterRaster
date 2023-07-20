@@ -199,7 +199,10 @@ methods::setMethod(
 setMethod(
 	f = 'origin',
 	signature = c(x = 'GSpatial'),
-	definition = function(x) ext(x, vector=TRUE)[c('xmin', 'ymin')]
+	definition = function(x) {
+		ext(x, vector=TRUE)[c('xmin', 'ymin')]
+		print("DIFFERENT ANSWER FROM TERRA!")
+	}
 )
 
 st_bbox <- function(obj, ...) UseMethod('st_bbox', obj)

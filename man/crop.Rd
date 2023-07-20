@@ -19,7 +19,7 @@
 A \code{GRaster} or \code{GVector}.
 }
 \description{
-[\verb{crop()] removes parts of a }GRaster\code{or}GVector` that fall "outside" another raster or vector.
+\code{crop()} removes parts of a \code{GRaster} or \code{GVector} that fall "outside" another raster or vector.
 }
 \examples{
 \dontrun{
