@@ -22,14 +22,14 @@
 #'
 #' Once you have installed **GRASS**, you will need to know where on your computer it was installed. The exact folder will depend on your operating system, the version installed, and perhaps other things, but in general, the install folder will look something like:
 #'
-#' Windows: `'C:/Program Files/GRASS GIS 8.2'`\cr
-#' Mac: `"/Applications/GRASS-8.2.app/Contents/Resources"`\cr
+#' Windows: `'C:/Program Files/GRASS GIS 8.3'`\cr
+#' Mac: `"/Applications/GRASS-8.3.app/Contents/Resources"`\cr
 #' Linux: `'/usr/local/grass'`\cr
 #'
 #' Whatever the name of this folder, it is passed to functions using an argument named `grassDir`. So, it is helpful to define `grassDir`, as in:
 #' ```
-#' grassDir <- 'C:/Program Files/GRASS GIS 8.2' # Windows
-#' grassDir <- "/Applications/GRASS-8.2.app/Contents/Resources" # Mac
+#' grassDir <- 'C:/Program Files/GRASS GIS 8.3' # Windows
+#' grassDir <- "/Applications/GRASS-8.3.app/Contents/Resources" # Mac
 #' grassDir <- '/usr/local/grass' # Linux
 #' ```
 #' 

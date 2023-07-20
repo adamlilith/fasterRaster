@@ -23,6 +23,7 @@ methods::setMethod(
     args <- list(
         cmd = 'r.univar',
         map = paste(.gnames(x), collapse=','),
+			nprocs = getFastOptions('cores'),
         flags = c('r', 'quiet', 'overwrite'),
         intern = TRUE
     )

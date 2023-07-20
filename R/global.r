@@ -163,6 +163,7 @@ methods::setMethod(
 						cmd = 'r.univar',
 						flags = c('r', 'quiet'),
 						map = gnSS,
+						nprocs = getFastOptions('cores'),
 						Sys_show.output.on.console = FALSE,
 						echoCmd = FALSE,
 						intern = TRUE
@@ -202,6 +203,7 @@ methods::setMethod(
 						cmd = 'r.univar',
 						flags = c('r', 'quiet'),
 						map = gnSS,
+						nprocs = getFastOptions('cores'),
 						Sys_show.output.on.console = FALSE,
 						echoCmd = FALSE,
 						intern = TRUE

@@ -43,7 +43,7 @@ faster <- function(
 	# for debugging
 	if (FALSE) {
 
-		grassDir <- 'C:/Program Files/GRASS GIS 8.2' # Windows
+		grassDir <- 'C:/Program Files/GRASS GIS 8.3' # Windows
 		dots <- list()
 		workDir <- NULL
 		x <- madRivers

@@ -143,6 +143,8 @@ methods::setMethod(
 				input = .gnames(x)[i],
 				output = gnBilinear,
 				method = 'bilinear',
+				nprocs = getFastOptions('cores'),
+				memory = getFastOptions('memory'),
 				flags = c('quiet', 'overwrite'),
 				intern = TRUE
 			)
@@ -158,6 +160,8 @@ methods::setMethod(
 				input = .gnames(x)[i],
 				output = gnBicubic,
 				method = 'bicubic',
+				nprocs = getFastOptions('cores'),
+				memory = getFastOptions('memory'),
 				flags = c('quiet', 'overwrite'),
 				intern = TRUE
 			)
@@ -173,6 +177,8 @@ methods::setMethod(
 				input = .gnames(x)[i],
 				output = gnLanczos,
 				method = 'lanczos',
+				nprocs = getFastOptions('cores'),
+				memory = getFastOptions('memory'),
 				flags = c('quiet', 'overwrite'),
 				intern = TRUE
 			)

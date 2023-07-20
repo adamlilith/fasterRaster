@@ -129,7 +129,7 @@ setFastOptions <- function(
 		# }
 		# opts$grassVer <- as.character(opts$grassVer)
 		# opts$grassVer <- gsub(opts$grassVer, pattern='.', replacement='', fixed=TRUE)
-		# if (nchar(opts$grassVer) != 2L) stop('Please supply <grassVer> as a character string (including the trailing zero if 8.0).\n  Do not include the minor version (e.g., 8.2, not 8.2.1).\n  The default is ', .grassVerDefault(), '.')
+		# if (nchar(opts$grassVer) != 2L) stop('Please supply <grassVer> as a character string (including the trailing zero if 8.0).\n  Do not include the minor version (e.g., 8.3, not 8.3.1).\n  The default is ', .grassVerDefault(), '.')
 		# if (as.numeric(substr(opts$grassVer, 1, 1) < 8)) stop('fasterRaster only supports GRASS GIS version 8.0 or above.\n  The default is ', .grassVerDefault(), '.')
 	# }
 
