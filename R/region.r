@@ -25,8 +25,7 @@
 #' * `regionExt()`: New region will have same dimensions and resolution.
 #' * `regionRes()`: New region will have same extent and dimensions.
 #' 
-#' 
- In this case, the new region's registration will be the same as this raster, and cell resolution will be the same
+#' In this case, the new region's registration will be the same as this raster, and cell resolution will be the same
 #' 
 #' Note: In most cases extent cannot be retained exactly if the resolution is changed. When resolution is changed, the actual extent will be the user-supplied extent expanded by zero to one rows or zero to one columns to accommodate an integer number of cells of the desired size. The western and northern limits of the extent will be retained, while the eastern and southern limits of the extent will be moved to accommodate an integer number of columns and rows.
 #'
