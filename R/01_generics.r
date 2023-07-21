@@ -3,7 +3,9 @@ globalVariables(c('..int', '..char', '..num'))
 require(sf)
 require(terra)
 
-
+#' @importFrom terra app
+methods::setGeneric(name = "appFuns", def = function(show, ...) standardGeneric("appFuns"))
+methods::setGeneric(name = "appCheck", def = function(x, fun, ...) standardGeneric("appCheck"))
 #' @importFrom terra as.contour
 # # # methods::setGeneric(name = 'as.contour', package='terra')
 methods::setGeneric(name = 'as.cell', def = function(x, ...) standardGeneric('as.cell'))
