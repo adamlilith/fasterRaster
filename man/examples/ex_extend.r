@@ -12,19 +12,19 @@ opts. <- getFastOptions()
 # where GRASS is installed on your system.
 
 grassDir <- "/Applications/GRASS-8.3.app/Contents/Resources" # Mac
-grassDir <- 'C:/Program Files/GRASS GIS 8.3' # Windows
-grassDir <- '/usr/local/grass' # Linux
+grassDir <- "C:/Program Files/GRASS GIS 8.3" # Windows
+grassDir <- "/usr/local/grass" # Linux
 
 # setup
 library(terra)
 
 # example data
-madElev <- fastData('madElev')
-madRivers <- fastData('madRivers')
+madElev <- fastData("madElev")
+madRivers <- fastData("madRivers")
 
 # start GRASS session for examples only
 faster(x = madElev, grassDir = grassDir,
-workDir = tempdir(), location = 'examples') # line only needed for examples
+workDir = tempdir(), location = "examples") # line only needed for examples
 
 # Send spatial objects to GRASS:
 elev <- fast(madElev)
@@ -57,6 +57,6 @@ plot(uncrop900)
 
 # IMPORTANT #3: Revert back to original GRASS session if needed.
 fastRestore(opts.)
-removeSession('examples')
+removeSession("examples")
 
 }

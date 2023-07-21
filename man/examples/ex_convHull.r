@@ -11,18 +11,18 @@ opts. <- getFastOptions()
 # IMPORTANT #2: Select the appropriate line below and change as necessary to
 # where GRASS is installed on your system.
 grassDir <- "/Applications/GRASS-8.3.app/Contents/Resources" # Mac
-grassDir <- 'C:/Program Files/GRASS GIS 8.3' # Windows
-grassDir <- '/usr/local/grass' # Linux
+grassDir <- "C:/Program Files/GRASS GIS 8.3" # Windows
+grassDir <- "/usr/local/grass" # Linux
 
 # setup
 library(sf)
 
 # rivers vector
-madDypsis <- fastData('madDypsis')
+madDypsis <- fastData("madDypsis")
 
 # start GRASS session for examples only
 faster(x = madDypsis, grassDir = grassDir,
-workDir = tempdir(), location = 'examples') # line only needed for examples
+workDir = tempdir(), location = "examples") # line only needed for examples
 
 # convert and sf to a GVector
 dypsis <- fast(madDypsis)
@@ -31,7 +31,7 @@ dypsis <- fast(madDypsis)
 ch <- convHull(dypsis)
 
 ### convex hull for each species
-chSpecies <- convHull(dypsis, by='species')
+chSpecies <- convHull(dypsis, by="species")
 
 ### plot
 plot(st_geometry(madDypsis))
@@ -42,6 +42,6 @@ plot(chSpecies, col=1:n, add=TRUE)
 
 # IMPORTANT #3: Revert back to original GRASS session if needed.
 fastRestore(opts.)
-removeSession('examples')
+removeSession("examples")
 
 }

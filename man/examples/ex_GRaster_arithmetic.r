@@ -12,24 +12,24 @@ opts. <- getFastOptions()
 # where GRASS is installed on your system.
 
 grassDir <- "/Applications/GRASS-8.3.app/Contents/Resources" # Mac
-grassDir <- 'C:/Program Files/GRASS GIS 8.3' # Windows
-grassDir <- '/usr/local/grass' # Linux
+grassDir <- "C:/Program Files/GRASS GIS 8.3" # Windows
+grassDir <- "/usr/local/grass" # Linux
 
 # setup
 library(sf)
 library(terra)
 
 # example data
-madElev <- fastData('madElev')
+madElev <- fastData("madElev")
 
 # start GRASS session for examples only
 faster(x = madElev, grassDir = grassDir,
-workDir = tempdir(), location = 'examples') # line only needed for examples
+workDir = tempdir(), location = "examples") # line only needed for examples
 
 # convert a SpatRaster to a GRaster
 elev <- fast(madElev)
 elevs <- c(elev, elev, log10(elev) - 1, sqrt(elev))
-names(elevs) <- c('elev1', 'elev2', 'log_elev', 'sqrt_elev')
+names(elevs) <- c("elev1", "elev2", "log_elev", "sqrt_elev")
 
 elev
 elevs
@@ -153,6 +153,6 @@ quantile(elevs, 0.1)
 
 # IMPORTANT #3: Revert back to original GRASS session if needed.
 fastRestore(opts.)
-removeSession('examples')
+removeSession("examples")
 
 }

@@ -11,22 +11,22 @@ opts. <- getFastOptions()
 # IMPORTANT #2: Select the appropriate line below and change as necessary to
 # where GRASS is installed on your system.
 grassDir <- "/Applications/GRASS-8.3.app/Contents/Resources" # Mac
-grassDir <- 'C:/Program Files/GRASS GIS 8.3' # Windows
-grassDir <- '/usr/local/grass' # Linux
+grassDir <- "C:/Program Files/GRASS GIS 8.3" # Windows
+grassDir <- "/usr/local/grass" # Linux
 
 # setup
 library(sf)
 library(terra)
 
 # elevation raster, rivers vector
-madElev <- fastData('madElev')
-madRivers <- fastData('madRivers')
-madCoast4 <- fastData('madCoast4')
-madAnt <- madCoast4[madCoast4$NAME_4 == 'Antanambe', ]
+madElev <- fastData("madElev")
+madRivers <- fastData("madRivers")
+madCoast4 <- fastData("madCoast4")
+madAnt <- madCoast4[madCoast4$NAME_4 == "Antanambe", ]
 
 # start GRASS session for examples only
 faster(x = madElev, grassDir = grassDir,
-workDir = tempdir(), location = 'examples') # line only needed for examples
+workDir = tempdir(), location = "examples") # line only needed for examples
 
 # convert a SpatRaster to a GRaster, and sf to a GVector
 elev <- fast(madElev)
@@ -37,9 +37,9 @@ man <- fast(madAnt)
 rastByVect <- crop(elev, man)
 
 ### crop raster by raster
-# We'll cheat by making the raster smaller in R, then crop the
+# We"ll cheat by making the raster smaller in R, then crop the
 # fasterRaster by this.
-madMan <- madCoast4[madCoast4$NAME_4 == 'Manompana', ]
+madMan <- madCoast4[madCoast4$NAME_4 == "Manompana", ]
 templateRast <- crop(madElev, madMan)
 
 template <- fast(templateRast)
@@ -54,6 +54,6 @@ vectByRast <- crop(rivers, template)
 
 # IMPORTANT #3: Revert back to original GRASS session if needed.
 fastRestore(opts.)
-removeSession('examples')
+removeSession("examples")
 
 }

@@ -8,46 +8,46 @@
 .addonDirDefault <- function() NULL
 .memoryDefault <- function() 300 # in MB
 .useDataTableDefault <- function() TRUE # logical
-# .grassVerDefault <- function() '82'
+# .grassVerDefault <- function() "82"
 
 .workDirDefault <- function() file.path(forwardSlash(tempdir()))
-.locationDefault <- function() 'default'
-.mapsetDefault <- function() 'PERMANENT'
+.locationDefault <- function() "default"
+.mapsetDefault <- function() "PERMANENT"
 
 # Names or table of PUBLIC options
-# @param type NULL (show all names), OR 'numeric', 'logical', or 'character', OR 'table' (show table)
+# @param type NULL (show all names), OR "numeric", "logical", or "character", OR "table" (show table)
 .namesOfOptions <- function(type= NULL) {
 	
 	opts <- data.frame(
 		name = c(
-			'grassDir',
-			'addonDir',
-			'grassVer',
-			'details',
-			'cores',
-			'memory',
-			'location',
-			'mapset',
-			'workDir',
-			'useDataTable'
+			"grassDir",
+			"addonDir",
+			"grassVer",
+			"details",
+			"cores",
+			"memory",
+			"location",
+			"mapset",
+			"workDir",
+			"useDataTable"
 		),
 		type = c(
-			'character',
-			'character',
-			'character',
-			'logical',
-			'numeric',
-			'numeric',
-			'character',
-			'character',
-			'character',
-			'logical'
+			"character",
+			"character",
+			"character",
+			"logical",
+			"numeric",
+			"numeric",
+			"character",
+			"character",
+			"character",
+			"logical"
 		)
 	)
 		
 	if (is.null(type)) {
 		opts$name
-	} else if (type == 'table') {
+	} else if (type == "table") {
 		opts
 	} else {
 		opts$name[opts$type == type]

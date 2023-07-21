@@ -1,66 +1,66 @@
-#' Report or change the extent, dimensions, and/or resolution of a region GRASS
-#'
-#' @description These functions either change the extent, dimensions, and/or resolution of a **GRASS** ["region"][tutorial_regions] or report the current region's extent, dimensions, and/or resolution. These functions are mostly used internally and rarely of interest to most users.
-#' * `region()`: All 2D and 3D aspects of a region.
-#' * `regionDim()`: x- and y-dimensions.`
-#' * `regionExt()`: x- and y-extent.
-#' * `regionRes()`: x- and y-resolution.
-#'
-#' @param x Any of:
-#'	* Missing (default): Reports the extent, resolution, and dimensions of the current region. All other arguments will be ignored.
-#'	* A `GSpatial`, `GRegion`, `GRaster`, `GVector` object: Sets the region's extent, dimensions, and/or resolution to those of the object.
-#'	* A `numeric` vector. This will resize the region's extent, resample the region's resolution/dimensions, or both, to ensure the desired dimensions or resolution are retained:
-#'       * 2 values for `regionDim()`: Number of rows and columns
-#'       * 4 values for `regionExt()`: Westernmost and easternmost easting (longitude), and southernmost and northernmost northing (latitude)
-#'       * 2 values for `regionRes()`: Size of cells in the x- and y-dimensions
-#'
-#' @param trim A `GRaster` or `NULL` (default). If a `GRaster`, then the region will be trimmed to the non-`NA` cells in this raster. `trim` can only be non-`NULL` if `x` is a `GRaster`. Ignored if `NULL`.
-#' 
-#' @param respect Character or `GRaster`: Indicates what aspect(s) of the current region to retain. Different functions allow for different aspect to be retained. Partial matching is used.
-#' * `regionDim()`: `'extent'` or `'resolution'`.
-#' * `regionExt()`: `'dimensions'` or `'resolution'`.
-#' * `regionRes()`: `'extent'` or `'dimensions'`.
-#' Alternatively, a `GRaster` can be supplied:
-#' * `regionDim()`: New region will have same extent and resolution.
-#' * `regionExt()`: New region will have same dimensions and resolution.
-#' * `regionRes()`: New region will have same extent and dimensions.
-#' 
-#' In this case, the new region's registration will be the same as this raster, and cell resolution will be the same
-#' 
-#' Note: In most cases extent cannot be retained exactly if the resolution is changed. When resolution is changed, the actual extent will be the user-supplied extent expanded by zero to one rows or zero to one columns to accommodate an integer number of cells of the desired size. The western and northern limits of the extent will be retained, while the eastern and southern limits of the extent will be moved to accommodate an integer number of columns and rows.
-#'
-#' @returns The value returned depends on how the function is used:
-#' * If used with no arguments, `region()` returns a `GRegion` object.
-#' * If used with no arguments, `regionDim()`, `regionExt()`, and `regionres()` return numeric or integer vectors.
-#' * If the function is used to change reshape/resample the region, it returns a `GRegion` object reflecting the region *before* it was changed. This allows users to revert to the original region if desired.
-#' 
-#' @details When resizing extent, **terra** keeps the `xmin`` (west) and `ymax`` (north) the fixed and shifts `xmax` (east) and `ymin` (south) as needed. To retain as much fidelity between **fasterRaster** and **terra** as possible, these functions do the same to the region.
-#'
-#' @example man/examples/ex_regions.r
-#'
-#' @aliases region
-#' @rdname region
-#' @exportMethod region
+#" Report or change the extent, dimensions, and/or resolution of a region GRASS
+#"
+#" @description These functions either change the extent, dimensions, and/or resolution of a **GRASS** ["region"][tutorial_regions] or report the current region"s extent, dimensions, and/or resolution. These functions are mostly used internally and rarely of interest to most users.
+#" * `region()`: All 2D and 3D aspects of a region.
+#" * `regionDim()`: x- and y-dimensions.`
+#" * `regionExt()`: x- and y-extent.
+#" * `regionRes()`: x- and y-resolution.
+#"
+#" @param x Any of:
+#"	* Missing (default): Reports the extent, resolution, and dimensions of the current region. All other arguments will be ignored.
+#"	* A `GSpatial`, `GRegion`, `GRaster`, `GVector` object: Sets the region"s extent, dimensions, and/or resolution to those of the object.
+#"	* A `numeric` vector. This will resize the region"s extent, resample the region"s resolution/dimensions, or both, to ensure the desired dimensions or resolution are retained:
+#"       * 2 values for `regionDim()`: Number of rows and columns
+#"       * 4 values for `regionExt()`: Westernmost and easternmost easting (longitude), and southernmost and northernmost northing (latitude)
+#"       * 2 values for `regionRes()`: Size of cells in the x- and y-dimensions
+#"
+#" @param trim A `GRaster` or `NULL` (default). If a `GRaster`, then the region will be trimmed to the non-`NA` cells in this raster. `trim` can only be non-`NULL` if `x` is a `GRaster`. Ignored if `NULL`.
+#" 
+#" @param respect Character or `GRaster`: Indicates what aspect(s) of the current region to retain. Different functions allow for different aspect to be retained. Partial matching is used.
+#" * `regionDim()`: `"extent"` or `"resolution"`.
+#" * `regionExt()`: `"dimensions"` or `"resolution"`.
+#" * `regionRes()`: `"extent"` or `"dimensions"`.
+#" Alternatively, a `GRaster` can be supplied:
+#" * `regionDim()`: New region will have same extent and resolution.
+#" * `regionExt()`: New region will have same dimensions and resolution.
+#" * `regionRes()`: New region will have same extent and dimensions.
+#" 
+#" In this case, the new region"s registration will be the same as this raster, and cell resolution will be the same
+#" 
+#" Note: In most cases extent cannot be retained exactly if the resolution is changed. When resolution is changed, the actual extent will be the user-supplied extent expanded by zero to one rows or zero to one columns to accommodate an integer number of cells of the desired size. The western and northern limits of the extent will be retained, while the eastern and southern limits of the extent will be moved to accommodate an integer number of columns and rows.
+#"
+#" @returns The value returned depends on how the function is used:
+#" * If used with no arguments, `region()` returns a `GRegion` object.
+#" * If used with no arguments, `regionDim()`, `regionExt()`, and `regionres()` return numeric or integer vectors.
+#" * If the function is used to change reshape/resample the region, it returns a `GRegion` object reflecting the region *before* it was changed. This allows users to revert to the original region if desired.
+#" 
+#" @details When resizing extent, **terra** keeps the `xmin`` (west) and `ymax`` (north) the fixed and shifts `xmax` (east) and `ymin` (south) as needed. To retain as much fidelity between **fasterRaster** and **terra** as possible, these functions do the same to the region.
+#"
+#" @example man/examples/ex_regions.r
+#"
+#" @aliases region
+#" @rdname region
+#" @exportMethod region
 methods::setMethod(
-	f = 'region',
-	signature = 'missing',
+	f = "region",
+	signature = "missing",
 	definition = function(x) {
 		
-		info <- rgrass::execGRASS('g.region', flags=c('p', '3', 'u'), intern=TRUE)
+		info <- rgrass::execGRASS("g.region", flags=c("p", "3", "u"), intern=TRUE)
 		
-		projection <- info[grepl(info, pattern='projection:')]
-		longLatProj <- grepl(projection, pattern='(Latitude-Longitude)')
+		projection <- info[grepl(info, pattern="projection:")]
+		longLatProj <- grepl(projection, pattern="(Latitude-Longitude)")
 		
 		# horizontal extent
-		n <- info[grepl(info, pattern='north:')]
-		s <- info[grepl(info, pattern='south:')]
-		e <- info[grepl(info, pattern='east:')]
-		w <- info[grepl(info, pattern='west:')]
+		n <- info[grepl(info, pattern="north:")]
+		s <- info[grepl(info, pattern="south:")]
+		e <- info[grepl(info, pattern="east:")]
+		w <- info[grepl(info, pattern="west:")]
 		
-		n <- gsub(n, pattern='north:', replacement='')
-		s <- gsub(s, pattern='south:', replacement='')
-		e <- gsub(e, pattern='east:', replacement='')
-		w <- gsub(w, pattern='west:', replacement='')
+		n <- gsub(n, pattern="north:", replacement="")
+		s <- gsub(s, pattern="south:", replacement="")
+		e <- gsub(e, pattern="east:", replacement="")
+		w <- gsub(w, pattern="west:", replacement="")
 		
 		n <- trimws(n)
 		s <- trimws(s)
@@ -69,27 +69,27 @@ methods::setMethod(
 		
 		if (longLatProj) {
 			
-			n <- strsplit(n, ':')[[1L]]
-			s <- strsplit(s, ':')[[1L]]
-			e <- strsplit(e, ':')[[1L]]
-			w <- strsplit(w, ':')[[1L]]
+			n <- strsplit(n, ":")[[1L]]
+			s <- strsplit(s, ":")[[1L]]
+			e <- strsplit(e, ":")[[1L]]
+			w <- strsplit(w, ":")[[1L]]
 		
-			nIsSouth <- any(grepl(n, pattern='S'))
-			sIsSouth <- any(grepl(s, pattern='S'))
-			eIsWest <- any(grepl(e, pattern='W'))
-			wIsWest <- any(grepl(w, pattern='W'))
+			nIsSouth <- any(grepl(n, pattern="S"))
+			sIsSouth <- any(grepl(s, pattern="S"))
+			eIsWest <- any(grepl(e, pattern="W"))
+			wIsWest <- any(grepl(w, pattern="W"))
 
-			n <- gsub(n, pattern='N', replacement='')
-			n <- gsub(n, pattern='S', replacement='')
+			n <- gsub(n, pattern="N", replacement="")
+			n <- gsub(n, pattern="S", replacement="")
 		
-			s <- gsub(s, pattern='N', replacement='')
-			s <- gsub(s, pattern='S', replacement='')
+			s <- gsub(s, pattern="N", replacement="")
+			s <- gsub(s, pattern="S", replacement="")
 		
-			e <- gsub(e, pattern='E', replacement='')
-			e <- gsub(e, pattern='W', replacement='')
+			e <- gsub(e, pattern="E", replacement="")
+			e <- gsub(e, pattern="W", replacement="")
 
-			w <- gsub(w, pattern='E', replacement='')
-			w <- gsub(w, pattern='W', replacement='')
+			w <- gsub(w, pattern="E", replacement="")
+			w <- gsub(w, pattern="W", replacement="")
 		
 			n <- as.numeric(n)
 			s <- as.numeric(s)
@@ -116,11 +116,11 @@ methods::setMethod(
 		extent <- c(w, e, s, n)
 		
 		# vertical extent
-		top <- info[grepl(info, pattern='top:')]
-		bottom <- info[grepl(info, pattern='bottom:')]
+		top <- info[grepl(info, pattern="top:")]
+		bottom <- info[grepl(info, pattern="bottom:")]
 		
-		top <- gsub(top, pattern='top:', replacement='')
-		bottom <- gsub(bottom, pattern='bottom:', replacement='')
+		top <- gsub(top, pattern="top:", replacement="")
+		bottom <- gsub(bottom, pattern="bottom:", replacement="")
 		
 		top <- trimws(top)
 		bottom <- trimws(bottom)
@@ -131,13 +131,13 @@ methods::setMethod(
 		zextent <- c(top=top, bottom=bottom)
 		
 		# dimensions
-		rows <- info[grepl(info, pattern='rows:')]
-		cols <- info[grepl(info, pattern='cols:')]
-		depths <- info[grepl(info, pattern='depths:')]
+		rows <- info[grepl(info, pattern="rows:")]
+		cols <- info[grepl(info, pattern="cols:")]
+		depths <- info[grepl(info, pattern="depths:")]
 
-		rows <- gsub(rows, pattern='rows:', replacement='')
-		cols <- gsub(cols, pattern='cols:', replacement='')
-		depths <- gsub(depths, pattern='depths:', replacement='')
+		rows <- gsub(rows, pattern="rows:", replacement="")
+		cols <- gsub(cols, pattern="cols:", replacement="")
+		depths <- gsub(depths, pattern="depths:", replacement="")
 		
 		rows <- trimws(rows)
 		cols <- trimws(cols)
@@ -151,13 +151,13 @@ methods::setMethod(
 		dims <- as.integer(dims)
 		
 		# resolution
-		ewres <- info[grepl(info, pattern='ewres:')]
-		nsres <- info[grepl(info, pattern='nsres:')]
-		tbres <- info[grepl(info, pattern='tbres:')]
+		ewres <- info[grepl(info, pattern="ewres:")]
+		nsres <- info[grepl(info, pattern="nsres:")]
+		tbres <- info[grepl(info, pattern="tbres:")]
 
-		ewres <- gsub(ewres, pattern='ewres:', replacement='')
-		nsres <- gsub(nsres, pattern='nsres:', replacement='')
-		tbres <- gsub(tbres, pattern='tbres:', replacement='')
+		ewres <- gsub(ewres, pattern="ewres:", replacement="")
+		nsres <- gsub(nsres, pattern="nsres:", replacement="")
+		tbres <- gsub(tbres, pattern="tbres:", replacement="")
 		
 		ewres <- trimws(ewres)
 		nsres <- trimws(nsres)
@@ -167,8 +167,8 @@ methods::setMethod(
 		
 		if (longLatProj) {
 		
-			ewres <- strsplit(ewres, ':')[[1L]]
-			nsres <- strsplit(nsres, ':')[[1L]]
+			ewres <- strsplit(ewres, ":")[[1L]]
+			nsres <- strsplit(nsres, ":")[[1L]]
 		
 			ewres <- as.numeric(ewres)
 			nsres <- as.numeric(nsres)
@@ -190,7 +190,7 @@ methods::setMethod(
 			location = location(),
 			mapset = mapset(),
 			crs = crs(),
-			topology = '3D',
+			topology = "3D",
 			extent = extent,
 			zextent = zextent,
 			gnames = NA_character_,
@@ -201,12 +201,12 @@ methods::setMethod(
 	} # EOF
 )
 
-#' @rdname region
-#' @aliases region
-#' @exportMethod region
+#" @rdname region
+#" @aliases region
+#" @exportMethod region
 methods::setMethod(
-	f = 'region',
-	signature = 'SpatRaster',
+	f = "region",
+	signature = "SpatRaster",
 	definition = function(x) {
 		
 	initials <- region()
@@ -222,14 +222,14 @@ methods::setMethod(
 	n <- as.character(extent[4L])
 
 	args <- list(
-		cmd = 'g.region',
+		cmd = "g.region",
 		n = n,
 		s = s,
 		e = e,
 		w = w,
 		rows = rows,
 		cols = cols,
-		flags=c('o', 'quiet'),
+		flags=c("o", "quiet"),
 		intern=TRUE
 	)
 
@@ -239,12 +239,12 @@ methods::setMethod(
 	} # EOF
 )
 
-#' @rdname region
-#' @aliases region
-#' @exportMethod region
+#" @rdname region
+#" @aliases region
+#" @exportMethod region
 methods::setMethod(
-	f = 'region',
-	signature = c(x = 'GRegion'),
+	f = "region",
+	signature = c(x = "GRegion"),
 	definition = function(x) {
 	
 		.restore(x)
@@ -264,10 +264,10 @@ methods::setMethod(
 		tbres <- as.character(tbres)
 
 		args <- list(
-			cmd = 'g.region',
+			cmd = "g.region",
 			n = n, s = s, e = e, w = w,
 			rows = rows, cols = cols,
-			flags = c('o', 'quiet'),
+			flags = c("o", "quiet"),
 			intern = TRUE
 		)
 
@@ -281,12 +281,12 @@ methods::setMethod(
 	} # EOF
 )
 
-#' @rdname region
-#' @aliases region
-#' @exportMethod region
+#" @rdname region
+#" @aliases region
+#" @exportMethod region
 methods::setMethod(
-	f = 'region',
-	signature = c(x = 'GRaster'),
+	f = "region",
+	signature = c(x = "GRaster"),
 	definition = function(x, trim = NULL) {
 	
 	.restore(x)
@@ -294,31 +294,31 @@ methods::setMethod(
 
 	topo <- topology(x)
 
-	if (any(topo %in% '2D') & any(topo %in% '3D')) stop('Cannot mix 2D- and 3D-rasters when defining region.')
+	if (any(topo %in% "2D") & any(topo %in% "3D")) stop("Cannot mix 2D- and 3D-rasters when defining region.")
 
 	# ensure validity of trim raster
 	if (!is.null(trim)) {
 	
 		trimToTopo <- topology(trim)
-		if (any(!(topo %in% trimToTopo))) stop('Topology of ', sQuote('trim'), ' does not match topology of ', sQuote('x'), '.')
+		if (any(!(topo %in% trimToTopo))) stop("Topology of ", sQuote("trim"), " does not match topology of ", sQuote("x"), ".")
 		
 		trim <- .gnames(trim)
-		if (length(trim) != 1L) stop('Argument ', sQuote('trim'), ' can have only one layer.')
+		if (length(trim) != 1L) stop("Argument ", sQuote("trim"), " can have only one layer.")
 	
 	}
 
 	gn <- .gnames(x)[1L]
 
-	if (all(topo == '2D') & is.null(trim)) {
-		rgrass::execGRASS('g.region', raster=gn, flags=c('o', 'quiet'), intern=TRUE)
-	} else if (all(topo == '2D') & !is.null(trim)) {
-		rgrass::execGRASS('g.region', raster=gn, zoom=trim, flags=c('o', 'quiet'), intern=TRUE)
-	} else if (all(topo == '3D') & is.null(trim)) {
-		rgrass::execGRASS('g.region', raster_3d=gn, flags=c('o', 'quiet'), intern=TRUE)
-	} else if (all(topo == '3D') & !is.null(trim)) {
-		rgrass::execGRASS('g.region', raster_3d=gn, zoom=trim, flags=c('o', 'quiet'), intern=TRUE)
+	if (all(topo == "2D") & is.null(trim)) {
+		rgrass::execGRASS("g.region", raster=gn, flags=c("o", "quiet"), intern=TRUE)
+	} else if (all(topo == "2D") & !is.null(trim)) {
+		rgrass::execGRASS("g.region", raster=gn, zoom=trim, flags=c("o", "quiet"), intern=TRUE)
+	} else if (all(topo == "3D") & is.null(trim)) {
+		rgrass::execGRASS("g.region", raster_3d=gn, flags=c("o", "quiet"), intern=TRUE)
+	} else if (all(topo == "3D") & !is.null(trim)) {
+		rgrass::execGRASS("g.region", raster_3d=gn, zoom=trim, flags=c("o", "quiet"), intern=TRUE)
 	} else {
-		stop('Could not reshape region.')
+		stop("Could not reshape region.")
 	}
 
 	invisible(initials)
@@ -326,18 +326,18 @@ methods::setMethod(
 	} # EOF
 )
 
-#' @rdname region
-#' @aliases region
-#' @exportMethod region
+#" @rdname region
+#" @aliases region
+#" @exportMethod region
 methods::setMethod(
-	f = 'region',
-	signature = c(x = 'GVector'),
+	f = "region",
+	signature = c(x = "GVector"),
 	definition = function(x) {
 	
 		.restore(x)
 		initials <- region()
 	
-		rgrass::execGRASS('g.region', vector=.gnames(x), flags=c('o', 'quiet'), intern=TRUE)
+		rgrass::execGRASS("g.region", vector=.gnames(x), flags=c("o", "quiet"), intern=TRUE)
 		invisible(initials)
 		
 	}
@@ -347,43 +347,43 @@ methods::setMethod(
 ### regionExt ###
 #################
 
-#' @rdname region
-#' @aliases regionExt
-#' @exportMethod regionExt
+#" @rdname region
+#" @aliases regionExt
+#" @exportMethod regionExt
 methods::setMethod(
-	f = 'regionExt',
-	signature = 'missing',
+	f = "regionExt",
+	signature = "missing",
 	definition = function(x) region()@extent
 )
 
-#' @rdname region
-#' @aliases regionExt
-#' @exportMethod regionExt
+#" @rdname region
+#" @aliases regionExt
+#" @exportMethod regionExt
 methods::setMethod(
-	f = 'regionExt',
-	signature = 'numeric',
+	f = "regionExt",
+	signature = "numeric",
 	definition = function(x, respect) .regionExt(x, respect)
 )
 
-#' @rdname region
-#' @aliases regionExt
-#' @exportMethod regionExt
+#" @rdname region
+#" @aliases regionExt
+#" @exportMethod regionExt
 methods::setMethod(
-	f = 'regionExt',
-	signature = 'GSpatial',
+	f = "regionExt",
+	signature = "GSpatial",
 	definition = function(x, respect) .regionExt(x, respect)
 )
 
 .regionExt <- function(x, respect) {
 
-	respect <- pmatchSafe(respect, c('resolution', 'dimensions'))
+	respect <- pmatchSafe(respect, c("resolution", "dimensions"))
 
-	if (inherits(x, 'GSpatial')) {
+	if (inherits(x, "GSpatial")) {
 		.restore(x)
 		x <- ext(x, vector=TRUE)
-	} else if (inherits(x, 'numeric')) {
-		if (length(x) != 4L) stop('Please supply a numeric vector of four values.')
-		if (any(is.na(x))) stop('Extent cannot have an NA value.')
+	} else if (inherits(x, "numeric")) {
+		if (length(x) != 4L) stop("Please supply a numeric vector of four values.")
+		if (any(is.na(x))) stop("Extent cannot have an NA value.")
 	}
 
 	initials <- region()
@@ -396,7 +396,7 @@ methods::setMethod(
 	ewres <- res(initials)[1L]
 	nsres <- res(initials)[2L]
 
-	if (respect == 'resolution') {
+	if (respect == "resolution") {
 
 		cols <- ceiling((w - e) / ewres)
 		rows <- ceiling((n - s) / nsres)
@@ -404,7 +404,7 @@ methods::setMethod(
 		e <- w + cols * ewres
 		s <- n - rows * nsres
 
-	} else if (respect == 'dimensions') {
+	} else if (respect == "dimensions") {
 
 		cols <- ncol(initials)
 		rows <- nrow(initials)
@@ -423,10 +423,10 @@ methods::setMethod(
 	nsres <- as.character(nsres)
 
 	args <- list(
-		cmd = 'g.region',
+		cmd = "g.region",
 		w = w, e = e, s = s, n = n,
 		ewres = ewres, nsres = nsres,
-		flags = c('o', 'quiet'),
+		flags = c("o", "quiet"),
 		intern = TRUE
 	)
 
@@ -439,45 +439,45 @@ methods::setMethod(
 ### regionDim ###
 #################
 
-#' @rdname region
-#' @aliases regionDim
-#' @exportMethod regionDim
-methods::setMethod(f = 'regionDim',
-	signature = c(x = 'missing'),
+#" @rdname region
+#" @aliases regionDim
+#" @exportMethod regionDim
+methods::setMethod(f = "regionDim",
+	signature = c(x = "missing"),
 	definition = function(x) {
 		region()@dimensions
 	}
 )
 
-#' @rdname region
-#' @aliases regionDim
-#' @exportMethod regionDim
+#" @rdname region
+#" @aliases regionDim
+#" @exportMethod regionDim
 methods::setMethod(
-	f = 'regionDim',
-	signature = 'numeric',
+	f = "regionDim",
+	signature = "numeric",
 	definition = function(x, respect) .regionDim(x, respect)
 )
 
-#' @rdname region
-#' @aliases regionDim
-#' @exportMethod regionDim
+#" @rdname region
+#" @aliases regionDim
+#" @exportMethod regionDim
 methods::setMethod(
-	f = 'regionDim',
-	signature = 'GRegion',
+	f = "regionDim",
+	signature = "GRegion",
 	definition = function(x, respect) .regionDim(x, respect)
 )
 
 .regionDim <- function(x, respect) {
 
-	respect <- pmatchSafe(respect, c('extent', 'resolution'))
+	respect <- pmatchSafe(respect, c("extent", "resolution"))
 
-	if (inherits(x, 'GRegion')) {
+	if (inherits(x, "GRegion")) {
 		x <- dim(x)[1L:2L]
-	} else if (inherits(x, 'SpatRaster')) {
+	} else if (inherits(x, "SpatRaster")) {
 		x <- dim(x)[1L:2L]
-	} else if (inherits(x, 'numeric')) {
-		if (length(x) != 2L | any(x <= 0) |any(compareFloat(x %% 1, 0, '!='))) {
-			stop('Please supply a numeric vector of two positive integer values.')
+	} else if (inherits(x, "numeric")) {
+		if (length(x) != 2L | any(x <= 0) |any(compareFloat(x %% 1, 0, "!="))) {
+			stop("Please supply a numeric vector of two positive integer values.")
 		}
 	}
 
@@ -487,21 +487,21 @@ methods::setMethod(
 	cols <- x[2L]
 
 	extent <- ext(initials, vector=TRUE)
-	w <- extent[['xmin']]
-	e <- extent[['xmax']]
-	s <- extent[['ymin']]
-	n <- extent[['ymax']]
+	w <- extent[["xmin"]]
+	e <- extent[["xmax"]]
+	s <- extent[["ymin"]]
+	n <- extent[["ymax"]]
 
 	resol <- initials@resolution
 	ewres <- resol[1L]
 	nsres <- resol[2L]
 
-	if (respect == 'extent') {
+	if (respect == "extent") {
 
 		ewres <- (e - w) / cols
 		nsres <- (n - s) / rows
 
-	} else if (respect == 'resolution') {
+	} else if (respect == "resolution") {
 
 		e <- w + cols * ewres
 		s <- n - rows * nsres
@@ -517,11 +517,11 @@ methods::setMethod(
 	nsres <- as.character(nsres)
 
 	args <- list(
-		cmd = 'g.region',
+		cmd = "g.region",
 		w = w, e = e, s = s, n = n,
 		rows = rows, cols = cols,
 		ewres = ewres, nsres = nsres,
-		flags = c('o', 'quiet'),
+		flags = c("o", "quiet"),
 		intern = TRUE
 	)
 
@@ -534,43 +534,43 @@ methods::setMethod(
 ### regionRes ###
 #################
 
-#' @rdname region
-#' @aliases regionRes
-#' @exportMethod regionRes
-methods::setMethod(f = 'regionRes',
-	signature = c(x = 'missing'),
+#" @rdname region
+#" @aliases regionRes
+#" @exportMethod regionRes
+methods::setMethod(f = "regionRes",
+	signature = c(x = "missing"),
 	definition = function(x) region()@resolution[1L:2L]
 )
 
-#' @rdname region
-#' @aliases regionRes
-#' @exportMethod regionRes
+#" @rdname region
+#" @aliases regionRes
+#" @exportMethod regionRes
 methods::setMethod(
-	f = 'regionRes',
-	signature = 'numeric',
+	f = "regionRes",
+	signature = "numeric",
 	definition = function(x, respect) .regionRes(x, respect)
 )
 
-#' @rdname region
-#' @aliases regionRes
-#' @exportMethod regionRes
+#" @rdname region
+#" @aliases regionRes
+#" @exportMethod regionRes
 methods::setMethod(
-	f = 'regionRes',
-	signature = 'GRegion',
+	f = "regionRes",
+	signature = "GRegion",
 	definition = function(x, respect) .regionRes(x, respect)
 )
 
 # set resolution of region
 .regionRes <- function(x, respect) {
 
-	respect <- pmatchSafe(respect, c('extent', 'dimensions'))
+	respect <- pmatchSafe(respect, c("extent", "dimensions"))
 
-	if (inherits(x, 'GRegion')) {
+	if (inherits(x, "GRegion")) {
 		x <- res(x)[1L:2L]
-	} else if (inherits(x, 'numeric')) {
+	} else if (inherits(x, "numeric")) {
 		if (length(x) == 1L) x <- rep(x, 2L)
 		if (length(x) != 2L | any(x <= 0)) {
-			stop('Please supply a numeric vector of one or two positive values.')
+			stop("Please supply a numeric vector of one or two positive values.")
 		}
 	}
 
@@ -584,7 +584,7 @@ methods::setMethod(
 	s <- south(initials)
 	n <- north(initials)
 
-	if (respect == 'extent') {
+	if (respect == "extent") {
 
 		cols <- ceiling((e - w) / ewres)
 		rows <- ceiling((n - s) / nsres)
@@ -592,7 +592,7 @@ methods::setMethod(
 		e <- w + cols * ewres
 		s <- n - rows * nsres
 
-	} else if (respect == 'dimensions') {
+	} else if (respect == "dimensions") {
 
 		e <- w + ncol(initials) * ewres
 		s <- n - nrow(initials) * nsres
@@ -608,10 +608,10 @@ methods::setMethod(
 	nsres <- as.character(nsres)
 
 	args <- list(
-		cmd = 'g.region',
+		cmd = "g.region",
 		w = w, e = e, s = s, n = n,
 		ewres = ewres, nsres=nsres,
-		flags = c('o', 'quiet'),
+		flags = c("o", "quiet"),
 		intern = TRUE
 	)
 

@@ -1,34 +1,34 @@
-#' Make a copy of an object in GRASS
-#'
-#' Create a copy of a `GRaster` or `GVector` in **GRASS**.  This function is used internally and is of little use to most users.  This only creates a copy of the object in the **GRASS** session--to make a `GRaster` or `GVector`, [.makeGRaster()] or [.makeGVector()] need to be called after making the copy. Note that if the object is multi-layered, then a copy is made of each layer.
-#'
-#' @param x `GRaster`, `GVector`, or character: The object or the `gnames` of the object to be copied. Can take multi-layered objects or multiple `gnames`.
-#' 
-#' @param reshapeRegion Logical: If `TRUE`, reshape the region to match `x` (`GRaster`s only).
-#'
-#' @returns Character vector representing the new `gnames` of each object, plus makes a copy of the given object(s) in **GRASS**.
-#'
-#' @aliases .copyGSpatial
-#' @noRd
+#" Make a copy of an object in GRASS
+#"
+#" Create a copy of a `GRaster` or `GVector` in **GRASS**.  This function is used internally and is of little use to most users.  This only creates a copy of the object in the **GRASS** session--to make a `GRaster` or `GVector`, [.makeGRaster()] or [.makeGVector()] need to be called after making the copy. Note that if the object is multi-layered, then a copy is made of each layer.
+#"
+#" @param x `GRaster`, `GVector`, or character: The object or the `gnames` of the object to be copied. Can take multi-layered objects or multiple `gnames`.
+#" 
+#" @param reshapeRegion Logical: If `TRUE`, reshape the region to match `x` (`GRaster`s only).
+#"
+#" @returns Character vector representing the new `gnames` of each object, plus makes a copy of the given object(s) in **GRASS**.
+#"
+#" @aliases .copyGSpatial
+#" @noRd
 methods::setMethod(
-	f = '.copyGSpatial',
-	signature = c(x = 'GRaster'),
+	f = ".copyGSpatial",
+	signature = c(x = "GRaster"),
 	function(x, reshapeRegion = TRUE) .copyGRaster(x, reshapeRegion = reshapeRegion)
 )
 
-#' @aliases .copyGSpatial
-#' @noRd
+#" @aliases .copyGSpatial
+#" @noRd
 methods::setMethod(
-	f = '.copyGSpatial',
-	signature = c(x = 'GVector'),
+	f = ".copyGSpatial",
+	signature = c(x = "GVector"),
 	function(x) .copyGVector(x)
 )
 
-#' @aliases .copyGSpatial
-#' @noRd
+#" @aliases .copyGSpatial
+#" @noRd
 methods::setMethod(
-	f = '.copyGSpatial',
-	signature = c(x = 'character'),
+	f = ".copyGSpatial",
+	signature = c(x = "character"),
 	function(x, reshapeRegion = TRUE) {
 	
 	nLayers <- length(x)
@@ -38,15 +38,15 @@ methods::setMethod(
 	rastsOrVects <- names(gns)
 	rastOrVect <- rastsOrVects[match(x, gns)]
 	
-	# rastOrVect <- pmatchSafe(tolower(rastOrVect), c('raster', 'vector'))
+	# rastOrVect <- pmatchSafe(tolower(rastOrVect), c("raster", "vector"))
 	# rastOrVect <- rep(rastOrVect, nLayers)
 
 	for (i in seq_len(nLayers)) {
 		
-		if (rastOrVect[i] == 'raster') {
+		if (rastOrVect[i] == "raster") {
 			x <- .makeGRaster(x[i])
 			gnsTo[i] <- .copyGRaster(x, reshapeRegion = reshapeRegion)
-		} else if (rastOrVect[i] == 'vector') {
+		} else if (rastOrVect[i] == "vector") {
 			.makeGVector(x[i])
 			gnsTo[i] <- .copyGVector(x)
 		}
@@ -64,20 +64,20 @@ methods::setMethod(
 
 	nLayers <- nlyr(x)
 	topo <- topology(x)
-	rastOrVect <- if (topo == '2D') { 'raster' } else { 'raster3d' }
+	rastOrVect <- if (topo == "2D") { "raster" } else { "raster3d" }
 
 	.restore(x)
 	if (reshapeRegion) region(x)
-	gns <- .makeGName(x, rastOrVect = 'raster', nLayers)
+	gns <- .makeGName(x, rastOrVect = "raster", nLayers)
 
 	for (i in seq_len(nLayers)) {
 
-		ex <- paste0(gns[i], ' = ', .gnames(x)[i])
+		ex <- paste0(gns[i], " = ", .gnames(x)[i])
 
 		args <- list(
-			cmd = 'r.mapcalc',
+			cmd = "r.mapcalc",
 			expression = ex,
-			flags = c('quiet', 'overwrite'),
+			flags = c("quiet", "overwrite"),
 			intern = TRUE
 		)
 
@@ -95,32 +95,32 @@ methods::setMethod(
 
 	### copy vector
 	gnFrom <- .gnames(x)
-	gnTo <- .makeGName(NULL, rastOrVect='vector')
+	gnTo <- .makeGName(NULL, rastOrVect="vector")
 
-	fromTo <- paste0(gnFrom, ',', gnTo)
+	fromTo <- paste0(gnFrom, ",", gnTo)
 	args <- list(
-		cmd = 'g.copy',
+		cmd = "g.copy",
 		vector = fromTo,
-		flags = c('quiet', 'overwrite'),
+		flags = c("quiet", "overwrite"),
 		intern = TRUE
 	)
 	
 	do.call(rgrass::execGRASS, args=args)
 
 	### copy database file
-	gnDb <- .makeGName('db', rastOrVect='vector')
+	gnDb <- .makeGName("db", rastOrVect="vector")
 	
-	opts <- getFastOptions(c('workDir', 'location', 'mapset'))
-	grassDB <- paste(c(opts$workDir, opts$location, opts$mapset, '/sqlite/sqlite.db'), collapse='/')
+	opts <- getFastOptions(c("workDir", "location", "mapset"))
+	grassDB <- paste(c(opts$workDir, opts$location, opts$mapset, "/sqlite/sqlite.db"), collapse="/")
 
 	args <- list(
-		cmd = 'db.copy',
+		cmd = "db.copy",
 		# from_database = fromDatabase,
 		from_database = grassDB,
 		from_table = .gnames(x),
 		to_database = grassDB,
 		to_table = gnDb,
-		flags = c('quiet', 'overwrite'),
+		flags = c("quiet", "overwrite"),
 		intern = FALSE
 	)
 	
@@ -128,12 +128,12 @@ methods::setMethod(
 	
 	### connect database to vector
 	args <- list(
-		cmd = 'v.db.connect',
+		cmd = "v.db.connect",
 		map = gnTo,
-		driver = 'sqlite',
+		driver = "sqlite",
 		database = grassDB,
 		table = gnTo,
-		flags = c('o', 'quiet', 'overwrite'),
+		flags = c("o", "quiet", "overwrite"),
 		intern = FALSE
 	)
 	do.call(rgrass::execGRASS, args=args)

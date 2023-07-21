@@ -12,22 +12,22 @@ opts. <- getFastOptions()
 # where GRASS is installed on your system.
 
 grassDir <- "/Applications/GRASS-8.3.app/Contents/Resources" # Mac
-grassDir <- 'C:/Program Files/GRASS GIS 8.3' # Windows
-grassDir <- '/usr/local/grass' # Linux
+grassDir <- "C:/Program Files/GRASS GIS 8.3" # Windows
+grassDir <- "/usr/local/grass" # Linux
 
 # setup
 library(sf)
 library(terra)
 
 # example data
-madElev <- fastData('madElev') # raster
-madForest <- fastData('madForest2000') # raster
-madCoast <- fastData('madCoast4') # vector
-madAnt <- madCoast[madCoast$NAME_4 == 'Antanambe', ]
+madElev <- fastData("madElev") # raster
+madForest <- fastData("madForest2000") # raster
+madCoast <- fastData("madCoast4") # vector
+madAnt <- madCoast[madCoast$NAME_4 == "Antanambe", ]
 
 # start GRASS session for examples only
 faster(x = madElev, grassDir = grassDir,
-workDir = tempdir(), location = 'examples') # line only needed for examples
+workDir = tempdir(), location = "examples") # line only needed for examples
 
 # convert to GRasters and GVectors
 elev <- fast(madElev)
@@ -66,6 +66,6 @@ plot(byVectAll)
 
 # IMPORTANT #3: Revert back to original GRASS session if needed.
 fastRestore(opts.)
-removeSession('examples')
+removeSession("examples")
 
 }

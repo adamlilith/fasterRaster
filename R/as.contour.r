@@ -1,22 +1,22 @@
-#' Contour lines from a 'GRaster'
-#'
-#' @description
-#' Create a `GVector` of contour lines from a `GRaster`.
-#'
-#' @param x A `GRaster`.
-#' @param nlevels Numeric: A positive integer or missing (default). Number of levels at which to calculate contours. Levels will be calculated in equal-sized steps from the smallest to the largest value of `x`. Either `nlevels` or `levels` must be specified.
-#' @param levels Numeric vector: A numeric vector of values at which to calculate contour lines. Either `nlevels` or `levels` must be specified.
-#'
-#' @seealso [terra::as.contour()], **GRASS** module `r.contour`
-#'
-#' @example man/examples/ex_asContour.r
-#'
-#' @aliases as.contour
-#' @rdname as.contour
-#' @exportMethod as.contour
+#" Contour lines from a "GRaster"
+#"
+#" @description
+#" Create a `GVector` of contour lines from a `GRaster`.
+#"
+#" @param x A `GRaster`.
+#" @param nlevels Numeric: A positive integer or missing (default). Number of levels at which to calculate contours. Levels will be calculated in equal-sized steps from the smallest to the largest value of `x`. Either `nlevels` or `levels` must be specified.
+#" @param levels Numeric vector: A numeric vector of values at which to calculate contour lines. Either `nlevels` or `levels` must be specified.
+#"
+#" @seealso [terra::as.contour()], **GRASS** module `r.contour`
+#"
+#" @example man/examples/ex_asContour.r
+#"
+#" @aliases as.contour
+#" @rdname as.contour
+#" @exportMethod as.contour
 setMethod(
-	'as.contour',
-	signature(x = 'GRaster'),
+	"as.contour",
+	signature(x = "GRaster"),
 	function(x, nlevels, levels) {
 	
 	### commons
@@ -28,8 +28,8 @@ setMethod(
 	### end commons
 	###############
 
-	if (!missing(nlevels) & !missing(levels)) stop('Please specify either ', sQuote('nlevels'), ' or ', sQuote('levels'), ', but not both.')
-	if (missing(nlevels) & missing(levels)) stop('Please specify either ', sQuote('nlevels'), ' or ', sQuote('levels'), '.')
+	if (!missing(nlevels) & !missing(levels)) stop("Please specify either ", sQuote("nlevels"), " or ", sQuote("levels"), ", but not both.")
+	if (missing(nlevels) & missing(levels)) stop("Please specify either ", sQuote("nlevels"), " or ", sQuote("levels"), ".")
 
 	if (!missing(nlevels)) {
 		mm <- minmax(x)
@@ -37,16 +37,16 @@ setMethod(
 	}
 
 	input <- .gnames(x)
-	gn <- .makeGName(rastOrVect = 'vector')
+	gn <- .makeGName(rastOrVect = "vector")
 
 	### execute
 	args <- list(
-		cmd = 'r.contour',
+		cmd = "r.contour",
 		input = input,
 		output = gn,
 		levels = levels,
 		cut = 2,
-		flags = 'quiet'
+		flags = "quiet"
 	)
 	
 	do.call(rgrass::execGRASS, args=args)

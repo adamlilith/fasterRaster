@@ -12,29 +12,29 @@ opts. <- getFastOptions()
 # where GRASS is installed on your system.
 
 grassDir <- "/Applications/GRASS-8.2.app/Contents/Resources" # Mac
-grassDir <- 'C:/Program Files/GRASS GIS 8.2' # Windows
-grassDir <- '/usr/local/grass' # Linux
+grassDir <- "C:/Program Files/GRASS GIS 8.2" # Windows
+grassDir <- "/usr/local/grass" # Linux
 
 # setup
 library(terra)
 
 # example data
-madElev <- fastData('madElev')
+madElev <- fastData("madElev")
 
 # start GRASS session for examples only
 faster(x = madElev, grassDir = grassDir,
-workDir = tempdir(), location = 'examples') # line only needed for examples
+workDir = tempdir(), location = "examples") # line only needed for examples
 
 # Convert a SpatRaster to a GRaster:
 elev <- fast(madElev)
 
 # Focal calculations:
-sums <- focal(elev, fun = 'sum')
-means <- focal(elev, fun = 'mean')
+sums <- focal(elev, fun = "sum")
+means <- focal(elev, fun = "mean")
 
 # Focal calculations on a circular window:
-sds <- focal(elev, fun = 'sd')
-sdsCircle <- focal(elev, fun = 'sd', circle = TRUE)
+sds <- focal(elev, fun = "sd")
+sdsCircle <- focal(elev, fun = "sd", circle = TRUE)
 
 sds
 sdsCircle
@@ -44,13 +44,13 @@ plot(sds - sdsCircle)
 # Focal calculations with user-defined weights:
 w <- matrix(c(1, 0, 1, 0, 1, 0, 1, 0, 1), ncol = 3)
 w
-sumsWeighted <- focal(elev, fun = 'sum', w = w)
+sumsWeighted <- focal(elev, fun = "sum", w = w)
 
 s <- c(sums, sumsWeighted)
 minmax(s)
 
 # IMPORTANT #3: Revert back to original GRASS session if needed.
 fastRestore(opts.)
-removeSession('examples')
+removeSession("examples")
 
 }

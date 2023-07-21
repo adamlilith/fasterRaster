@@ -1,62 +1,62 @@
-#' Revert to a previous 'GRASS' session (working folder, location, and mapset)
-#'
-#' This function is useful for reverting to a previous **GRASS** session (`workDir`, `location`, and/or `mapset`). The session must have been already initiated using [faster()] in the current **R** session or a previous one.
-#'
-#' @param ... Either a sequence of arguments with the pattern `<argument = value>`, or a list of arguments. These arguments can be any option available in [setFastOptions()]. Of particular note, the `workDir`, `location`, and `mapset` options allow one to revert to a previous **GRASS** session. The current session's `workDir`, `location`, and `mapset` can be seen using [getFastOptions()], plus  [location()] and [mapset()].
-#'
-#' @return An object of class `gmeta` (invisibly) if successful. An error will likely result if not.
-#'
-#' @seealso **GRASS** [locations and mapsets](https://grass.osgeo.org/grass82/manuals/grass_database.html)
-#'
-#' @example man/examples/ex_sessions.r
-#'
-#' @export
+#" Revert to a previous "GRASS" session (working folder, location, and mapset)
+#"
+#" This function is useful for reverting to a previous **GRASS** session (`workDir`, `location`, and/or `mapset`). The session must have been already initiated using [faster()] in the current **R** session or a previous one.
+#"
+#" @param ... Either a sequence of arguments with the pattern `<argument = value>`, or a list of arguments. These arguments can be any option available in [setFastOptions()]. Of particular note, the `workDir`, `location`, and `mapset` options allow one to revert to a previous **GRASS** session. The current session"s `workDir`, `location`, and `mapset` can be seen using [getFastOptions()], plus  [location()] and [mapset()].
+#"
+#" @return An object of class `gmeta` (invisibly) if successful. An error will likely result if not.
+#"
+#" @seealso **GRASS** [locations and mapsets](https://grass.osgeo.org/grass82/manuals/grass_database.html)
+#"
+#" @example man/examples/ex_sessions.r
+#"
+#" @export
 fastRestore <- function(...) {
 
 	dots <- list(...)
-	if (length(dots) == 1L && inherits(dots[[1L]], 'list')) dots <- dots[[1L]]
+	if (length(dots) == 1L && inherits(dots[[1L]], "list")) dots <- dots[[1L]]
 
-	grassDir <- if ('grassDir' %in% names(dots)) {
+	grassDir <- if ("grassDir" %in% names(dots)) {
 		dots$grassDir
 	} else {
-		getFastOptions('grassDir')
+		getFastOptions("grassDir")
 	}
 
-	addonDir <- if ('addonDir' %in% names(dots)) {
+	addonDir <- if ("addonDir" %in% names(dots)) {
 		dots$addonDir
 	} else {
-		getFastOptions('addonDir')
+		getFastOptions("addonDir")
 	}
 
-	workDir <- if ('workDir' %in% names(dots)) {
+	workDir <- if ("workDir" %in% names(dots)) {
 		dots$workDir
 	} else {
-		getFastOptions('workDir')
+		getFastOptions("workDir")
 	}
 	workDir <- forwardSlash(workDir)
 
-	location <- if ('location' %in% names(dots)) {
+	location <- if ("location" %in% names(dots)) {
 		dots$location
 	} else {
-		getFastOptions('location')
+		getFastOptions("location")
 	}
 
-	mapset <- if ('mapset' %in% names(dots)) {
+	mapset <- if ("mapset" %in% names(dots)) {
 		dots$mapset
 	} else {
-		getFastOptions('mapset')
+		getFastOptions("mapset")
 	}
 
 	# are we trying to restart same folder, etc. but with a different CRS?
 	workLocMap <- file.path(workDir, location, mapset)
 	if (!file.exists(workLocMap)) {
-		stop('This location/mapset does not exist. Use faster() to create a new location/mapset.')
+		stop("This location/mapset does not exist. Use faster() to create a new location/mapset.")
 	}
 
 	### start new GRASS session
-	file <- file.path(workDir, location, 'crs.rds')
+	file <- file.path(workDir, location, "crs.rds")
 	crs <- readRDS(file)
-	emptyRast <- terra::rast(matrix(1), type='xy', crs=crs)
+	emptyRast <- terra::rast(matrix(1), type="xy", crs=crs)
 
 	### start the GRASS session
 	suppressWarnings(
@@ -87,27 +87,27 @@ fastRestore <- function(...) {
 
 }
 
-#' Hidden function to restore location/mapset based on a GSession object
-#'
-#' @param x `GSpatial` object. The session will be restored to the location and mapset of this object.
-#'
-#' @return Session (invisibly).
-#'
-#' @noRd
+#" Hidden function to restore location/mapset based on a GSession object
+#"
+#" @param x `GSpatial` object. The session will be restored to the location and mapset of this object.
+#"
+#" @return Session (invisibly).
+#"
+#" @noRd
 .restore <- function(x) {
 
 	xloc <- location(x)
 	xms <- mapset(x)
 
-	loc <- getFastOptions('location')
-	ms <- getFastOptions('mapset')
+	loc <- getFastOptions("location")
+	ms <- getFastOptions("mapset")
 
 	if (loc != xloc | ms != xms) {
 		session <- fastRestore(location=xloc, mapset=xms)
 	}
 
 	session <- new(
-		'GSession',
+		"GSession",
 		location = location(),
 		mapset = mapset(),
 		crs = crs()

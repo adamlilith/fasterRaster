@@ -11,19 +11,19 @@ opts. <- getFastOptions()
 # IMPORTANT #2: Select the appropriate line below and change as necessary to
 # where GRASS is installed on your system.
 grassDir <- "/Applications/GRASS-8.3.app/Contents/Resources" # Mac
-grassDir <- 'C:/Program Files/GRASS GIS 8.3' # Windows
-grassDir <- '/usr/local/grass' # Linux
+grassDir <- "C:/Program Files/GRASS GIS 8.3" # Windows
+grassDir <- "/usr/local/grass" # Linux
 
 # setup
 library(sf)
 
 # rivers vector and locations of Dypsis plants
-madRivers <- fastData('madRivers')
-madDypsis <- fastData('madDypsis')
+madRivers <- fastData("madRivers")
+madDypsis <- fastData("madDypsis")
 
 # start GRASS session for examples only
 faster(x = madRivers, grassDir = grassDir,
-workDir = tempdir(), location = 'examples') # line only needed for examples
+workDir = tempdir(), location = "examples") # line only needed for examples
 
 # convert to GVectors
 rivers <- fast(madRivers)
@@ -33,18 +33,18 @@ dypsis <- fast(madDypsis)
 consFromDypsis <- connectors(dypsis, rivers)
 
 plot(st_geometry(madDypsis))
-plot(st_geometry(madRivers), col = 'blue', add = TRUE)
+plot(st_geometry(madRivers), col = "blue", add = TRUE)
 plot(consFromDypsis, add = TRUE)
 
 ### connections from each river to nearest point
 consFromRivers <- connectors(rivers, dypsis)
 
 plot(st_geometry(madDypsis))
-plot(st_geometry(madRivers), col = 'blue', add = TRUE)
+plot(st_geometry(madRivers), col = "blue", add = TRUE)
 plot(consFromRivers, add = TRUE)
 
 # IMPORTANT #3: Revert back to original GRASS session if needed.
 fastRestore(opts.)
-removeSession('examples')
+removeSession("examples")
 
 }

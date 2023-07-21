@@ -11,23 +11,23 @@ opts. <- getFastOptions()
 # IMPORTANT #2: Select the appropriate line below and change as necessary to
 # where GRASS is installed on your system.
 grassDir <- "/Applications/GRASS-8.3.app/Contents/Resources" # Mac
-grassDir <- 'C:/Program Files/GRASS GIS 8.3' # Windows
-grassDir <- '/usr/local/grass' # Linux
+grassDir <- "C:/Program Files/GRASS GIS 8.3" # Windows
+grassDir <- "/usr/local/grass" # Linux
 
 # setup
 library(terra)
 
 # elevation raster, climate raster, rivers vector
-madElev <- fastData('madElev')
+madElev <- fastData("madElev")
 
 # start GRASS session for examples only
 faster(x = madElev, grassDir = grassDir,
-workDir = tempdir(), location = 'examples') # line only needed for examples
+workDir = tempdir(), location = "examples") # line only needed for examples
 
 elev <- fast(madElev)
 
 ### resample raster to 120 x 120 m
-elev120 <- resample(elev, c(120, 120), method='bilinear')
+elev120 <- resample(elev, c(120, 120), method="bilinear")
 elev
 elev120
 
@@ -36,37 +36,37 @@ elev120
 
 template <- aggregate(elev, 4)
 
-nearest <- resample(elev, template, method = 'nearest')
+nearest <- resample(elev, template, method = "nearest")
 
-bilinear <- resample(elev, template, method = 'bilinear')
-bilinearNoFB <- resample(elev, template, method = 'bilinear', fallback = FALSE)
+bilinear <- resample(elev, template, method = "bilinear")
+bilinearNoFB <- resample(elev, template, method = "bilinear", fallback = FALSE)
 
-bicubic <- resample(elev, template, method = 'bicubic')
-bicubicNoFB <- resample(elev, template, method = 'bicubic', fallback = FALSE)
+bicubic <- resample(elev, template, method = "bicubic")
+bicubicNoFB <- resample(elev, template, method = "bicubic", fallback = FALSE)
 
-lanczos <- resample(elev, template, method = 'lanczos')
-lanczosNoFB <- resample(elev, template, method = 'lanczos', fallback = FALSE)
+lanczos <- resample(elev, template, method = "lanczos")
+lanczosNoFB <- resample(elev, template, method = "lanczos", fallback = FALSE)
 
 # rasters resampled without fallback have fewer non-NA cells
 resampled <- c(nearest, bilinear, bilinearNoFB, bicubic, bicubicNoFB, lanczos,
     lanczosNoFB)
-names(resampled) <- c('nearest', 'bilinear', 'bilinearNoFB', 'bicubic',
-    'bicubicNoFB', 'lanczos', 'lanczosNoFB')
+names(resampled) <- c("nearest", "bilinear", "bilinearNoFB", "bicubic",
+    "bicubicNoFB", "lanczos", "lanczosNoFB")
 ones <- resampled * 0 + 1
-global(ones, 'sum') # number of non-NA cells
-global(resampled, c('mean', 'sd', 'min', 'max')) # other statistics
+global(ones, "sum") # number of non-NA cells
+global(resampled, c("mean", "sd", "min", "max")) # other statistics
 
 # compare fallback to no fallback
 frLanczos <- rast(lanczos)
 frLanczosNoFB <- rast(lanczosNoFB)
 
-plot(frLanczos, col = 'red',
-    main = 'Red: Cells in fallback not non-fallback', legend = FALSE)
+plot(frLanczos, col = "red",
+    main = "Red: Cells in fallback not non-fallback", legend = FALSE)
 plot(frLanczosNoFB, add=TRUE)
 
 # compare fasterRaster with terra
 coarserTerra <- aggregate(madElev, 4)
-terraLanczos <- resample(madElev, coarserTerra, method = 'lanczos')
+terraLanczos <- resample(madElev, coarserTerra, method = "lanczos")
 
 frLanczos <- extend(frLanczos, terraLanczos)
 frLanczosNoFB <- extend(frLanczosNoFB, terraLanczos)
@@ -74,19 +74,19 @@ frLanczosNoFB <- extend(frLanczosNoFB, terraLanczos)
 frLanczos - terraLanczos
 frLanczosNoFB - terraLanczos
 
-plot(frLanczos - terraLanczos, main = 'Difference')
-plot(frLanczosNoFB - terraLanczos, main = 'Difference')
+plot(frLanczos - terraLanczos, main = "Difference")
+plot(frLanczosNoFB - terraLanczos, main = "Difference")
 
-plot(terraLanczos, col = 'red',
-    main = 'Red: Cells in terra not in FR', legend = FALSE)
+plot(terraLanczos, col = "red",
+    main = "Red: Cells in terra not in FR", legend = FALSE)
 plot(frLanczos, add=TRUE)
 
-plot(frLanczos, col = 'red',
-    main = 'Red: Cells in FR not in terra', legend = FALSE)
+plot(frLanczos, col = "red",
+    main = "Red: Cells in FR not in terra", legend = FALSE)
 plot(terraLanczos, add=TRUE)
 
 # IMPORTANT #3: Revert back to original GRASS session if needed.
 fastRestore(opts.)
-fastRemove('examples')
+fastRemove("examples")
 
 }

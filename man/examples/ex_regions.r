@@ -12,19 +12,19 @@ opts. <- getFastOptions()
 # where GRASS is installed on your system.
 
 grassDir <- "/Applications/GRASS-8.3.app/Contents/Resources" # Mac
-grassDir <- 'C:/Program Files/GRASS GIS 8.3' # Windows
-grassDir <- '/usr/local/grass' # Linux
+grassDir <- "C:/Program Files/GRASS GIS 8.3" # Windows
+grassDir <- "/usr/local/grass" # Linux
 
 # setup
 library(terra)
 
 # example data
-madElev <- fastData('madElev')
-madRivers <- fastData('madRivers')
+madElev <- fastData("madElev")
+madRivers <- fastData("madRivers")
 
 # set up one location
 faster(x = madElev, grassDir = grassDir,
-workDir = tempdir(), location = 'examples') # line only needed for examples
+workDir = tempdir(), location = "examples") # line only needed for examples
 
 # Importing a raster sets the region to match its extent and dimensions.
 elev <- fast(madElev)
@@ -41,22 +41,22 @@ regionDim()
 regionExt()
 regionRes()
 
-# coarsen grid... sets region to match aggregated raster's extent and dimensions
+# coarsen grid... sets region to match aggregated raster"s extent and dimensions
 aggElev <- aggregate(elev, 2) 
 
 # reset region dimensions
 regionDim()
-regionDim(elev, respect='resolution')
+regionDim(elev, respect="resolution")
 regionDim()
 
 # reset region extent
 regionExt()
-regionExt(dypsis, respect='resolution')
+regionExt(dypsis, respect="resolution")
 regionExt()
 
 # reset region resolution
 regionRes()
-regionRes(elev, respect='extent')
+regionRes(elev, respect="extent")
 regionRes()
 
 # reset region
@@ -64,6 +64,6 @@ regionRes()
 
 # IMPORTANT #3: Revert back to original GRASS session if needed.
 fastRestore(opts.)
-removeSession('examples')
+removeSession("examples")
 
 }

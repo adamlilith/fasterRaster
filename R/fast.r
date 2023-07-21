@@ -1,46 +1,46 @@
-#' @title Create a GRaster or GVector
-#'
-#' @description
-#' To use most **fasterRaster** functions, you need to
-#' 1. Initiate a **GRASS** session with [faster()];
-#' 2. Then use `fast()` to either:
-#'      * Convert a `SpatRaster`, `SpatVector` or `sf` object to a `GRaster` or `GVector`,
-#'      * Load a raster or vector from a file directly into the `GRaster` or `GVector` format using `fast()`. **GRASS** supports loading from disk a variety of raster formats (see the **GRASS** manual page for `r.in.gdal`) and vector formats (see the **GRASS** manual page for `v.in.ogr`), though not all of them will work with this function.
-#'
-#' @param x Any one of:
-#' * A `SpatRaster` raster. Rasters can have one or more layers. They will retain their "layerdness" in most **fasterRaster** functions.
-#' * A `SpatVector` or `sf` spatial vector.
-#' * A character string with the path and filename of a raster or vector to be loaded directly into **GRASS**. The function will attempt to ascertain the type of object from the file extension (raster or vector), but it can help to indicate which it is using the `rastOrVect` argument if it is unclear.
-#'
-#' @param rastOrVect Either `NULL` (default) or character (`'raster'` or `'vector'`). If `x` is a raster or vector already in **R**, this does not need to be specified. However, if `x` is a filename, then the function will try to ascertain whether it represents a raster or a vector, but sometimes this will fail. In that case, it can help to specify if the file holds a raster or vector. Partial matching is used.
-#'
-#' @param method Character or `NULL` (rasters only): If `x` does not have the same coordinate reference system as the currently active **GRASS** [session][tutorial_sessions], then it will be projected when it is imported. You may need to specify which method is used to conduction the transformation. Partial matching is used.
-#' * `NULL` (default): Automatically choose based on raster properties (`near` for categorical data, `bilinear` for continuous data)
-#' * `'near'`: Nearest neighbor. Best for categorical data, and often a poor choice for continuous data.
-#' * `'bilinear'`: Bilinear interpolation (default for non-categorical data; uses weighted values from 4 cells).
-#' * `'bicubic'`: Bicubic interpolation (uses weighted values from 16 cells).
-#' * `'lanczos'`: Lanczos interpolation (uses weighted values from 25 cells).
-#'
-#' @param fallback Logical (rasters only): If `TRUE` (default), then use "lower" resampling methods to fill in `NA` cells when a "higher" method is used. For example, if `method = 'bicubic'`, `NA` cells will be filled in using the `bilinear` method, except when that results in `NA`s, in which case the `near` method will be used. Fallback causes fewer cells to revert to `NA` values, so may be better at capturing complex "edges" (e.g., coastlines). Fallback does increase processing time because each "lower" method must be applied, then results merged.
-#'
-#' @param wrap Logical (rasters only): When projecting rasters that "wrap around" (i.e., whole-world rasters or rasters that have edges that actually circle around to meet on the globe), `wrap` should be `TRUE` to avoid removing rows and columns from the "edge" of the map. The default is `FALSE`.
-#'
-#' @param warn Logical: If `TRUE`, display a warning when projecting the vector or raster.
-#'
-#' @details When projecting a raster, the "fallback" methods in `r.import` are actually used, even though the `method` argument takes the strings for non-fallback methods. See the manual page for the `r.import` **GRASS** module.
-#' 
-#' @seealso [rgrass::read_RAST()] and [rgrass::read_VECT()], plus **GRASS** modules `r.in.gdal`, `r.import`, and `v.in.ogr`.
-#'
-#' @return A `GRaster` or `GVector`.
-#'
-#' @example man/examples/ex_faster.r
-#'
-#' @aliases fast
-#' @rdname fast
-#' @exportMethod fast
+#" @title Create a GRaster or GVector
+#"
+#" @description
+#" To use most **fasterRaster** functions, you need to
+#" 1. Initiate a **GRASS** session with [faster()];
+#" 2. Then use `fast()` to either:
+#"      * Convert a `SpatRaster`, `SpatVector` or `sf` object to a `GRaster` or `GVector`,
+#"      * Load a raster or vector from a file directly into the `GRaster` or `GVector` format using `fast()`. **GRASS** supports loading from disk a variety of raster formats (see the **GRASS** manual page for `r.in.gdal`) and vector formats (see the **GRASS** manual page for `v.in.ogr`), though not all of them will work with this function.
+#"
+#" @param x Any one of:
+#" * A `SpatRaster` raster. Rasters can have one or more layers. They will retain their "layerdness" in most **fasterRaster** functions.
+#" * A `SpatVector` or `sf` spatial vector.
+#" * A character string with the path and filename of a raster or vector to be loaded directly into **GRASS**. The function will attempt to ascertain the type of object from the file extension (raster or vector), but it can help to indicate which it is using the `rastOrVect` argument if it is unclear.
+#"
+#" @param rastOrVect Either `NULL` (default) or character (`"raster"` or `"vector"`). If `x` is a raster or vector already in **R**, this does not need to be specified. However, if `x` is a filename, then the function will try to ascertain whether it represents a raster or a vector, but sometimes this will fail. In that case, it can help to specify if the file holds a raster or vector. Partial matching is used.
+#"
+#" @param method Character or `NULL` (rasters only): If `x` does not have the same coordinate reference system as the currently active **GRASS** [session][tutorial_sessions], then it will be projected when it is imported. You may need to specify which method is used to conduction the transformation. Partial matching is used.
+#" * `NULL` (default): Automatically choose based on raster properties (`near` for categorical data, `bilinear` for continuous data)
+#" * `"near"`: Nearest neighbor. Best for categorical data, and often a poor choice for continuous data.
+#" * `"bilinear"`: Bilinear interpolation (default for non-categorical data; uses weighted values from 4 cells).
+#" * `"bicubic"`: Bicubic interpolation (uses weighted values from 16 cells).
+#" * `"lanczos"`: Lanczos interpolation (uses weighted values from 25 cells).
+#"
+#" @param fallback Logical (rasters only): If `TRUE` (default), then use "lower" resampling methods to fill in `NA` cells when a "higher" method is used. For example, if `method = "bicubic"`, `NA` cells will be filled in using the `bilinear` method, except when that results in `NA`s, in which case the `near` method will be used. Fallback causes fewer cells to revert to `NA` values, so may be better at capturing complex "edges" (e.g., coastlines). Fallback does increase processing time because each "lower" method must be applied, then results merged.
+#"
+#" @param wrap Logical (rasters only): When projecting rasters that "wrap around" (i.e., whole-world rasters or rasters that have edges that actually circle around to meet on the globe), `wrap` should be `TRUE` to avoid removing rows and columns from the "edge" of the map. The default is `FALSE`.
+#"
+#" @param warn Logical: If `TRUE`, display a warning when projecting the vector or raster.
+#"
+#" @details When projecting a raster, the "fallback" methods in `r.import` are actually used, even though the `method` argument takes the strings for non-fallback methods. See the manual page for the `r.import` **GRASS** module.
+#" 
+#" @seealso [rgrass::read_RAST()] and [rgrass::read_VECT()], plus **GRASS** modules `r.in.gdal`, `r.import`, and `v.in.ogr`.
+#"
+#" @return A `GRaster` or `GVector`.
+#"
+#" @example man/examples/ex_faster.r
+#"
+#" @aliases fast
+#" @rdname fast
+#" @exportMethod fast
 methods::setMethod(
-	'fast',
-	signature(x = 'character'),
+	"fast",
+	signature(x = "character"),
 	function(
 		x,
 		rastOrVect = NULL,
@@ -58,47 +58,47 @@ methods::setMethod(
 		nc <- nchar(x)
 
 		# 3-letter extensions
-		rastExtensions <- c('.asc', '.grd', '.img', '.mem', '.tif')
-		vectExtensions <- c('.shp')
+		rastExtensions <- c(".asc", ".grd", ".img", ".mem", ".tif")
+		vectExtensions <- c(".shp")
 
 		ext <- substr(x, nc - 3, nc)
 		ext <- tolower(ext)
 
 		if (ext %in% rastExtensions) {
-			rastOrVect <- 'raster'
+			rastOrVect <- "raster"
 		} else if (ext %in% vectExtensions) {
-			rastOrVect <- 'vector'
+			rastOrVect <- "vector"
 		}
 
 		# 4-letter extensions
-		rastExtensions <- c('.saga')
-		vectExtensions <- c('.gpkg')
+		rastExtensions <- c(".saga")
+		vectExtensions <- c(".gpkg")
 
 		ext <- substr(x, nc - 4, nc)
 		ext <- tolower(ext)
 
 		if (ext %in% rastExtensions) {
-			rastOrVect <- 'raster'
+			rastOrVect <- "raster"
 		} else if (ext %in% vectExtensions) {
-			rastOrVect <- 'vector'
+			rastOrVect <- "vector"
 		}
 
-		if (is.null(rastOrVect)) stop('Cannot determine data if raster or vector from file name. Please use argument ', sQuote('rastOrVect'), '.')
+		if (is.null(rastOrVect)) stop("Cannot determine data if raster or vector from file name. Please use argument ", sQuote("rastOrVect"), ".")
 
 	} else {
 	### user supplied rastOrVect
-		rastOrVect <- pmatchSafe(rastOrVect, c('raster', 'vector'))
+		rastOrVect <- pmatchSafe(rastOrVect, c("raster", "vector"))
 	}
 
 	### raster from disk
 	####################
 	
-	if (rastOrVect == 'raster') {
+	if (rastOrVect == "raster") {
 
 		xRast <- terra::rast(x)
 		nLayers <- terra::nlyr(xRast)
 		xNames <- names(xRast)
-		gn <- .makeGName(NULL, rastOrVect = 'raster')
+		gn <- .makeGName(NULL, rastOrVect = "raster")
 
 		### load raster (no projecting needed)
 		if (terra::crs(xRast) == crs()) {
@@ -106,36 +106,36 @@ methods::setMethod(
 			region(xRast)
 
 			args <- list(
-				cmd = 'r.in.gdal',
+				cmd = "r.in.gdal",
 				input = x,
 				output = gn,
-				flags = 'quiet',
+				flags = "quiet",
 				intern = TRUE
 			)
 
 		### load and project raster
 		} else {
 		
-			if (warn) warning('Raster has a different coordinate reference system than this GRASS ', dQuote('location'), '.\n  Raster will be projected to the current location\'s coordinate reference system.')
+			if (warn) warning("Raster has a different coordinate reference system than this GRASS ", dQuote("location"), ".\n  Raster will be projected to the current location\"s coordinate reference system.")
 
 			# method
-			if (!is.null(method)) method <- pmatchSafe(method, c('nearest', 'bilinear', 'bicubic', 'lanczos'))
+			if (!is.null(method)) method <- pmatchSafe(method, c("nearest", "bilinear", "bicubic", "lanczos"))
 
 			if (is.null(method)) {
 
 				factors <- terra::is.factor(xRast)
 				nFactors <- sum(factors)
 				if (nFactors > 0L & nFactors < nLayers) {
-					stop('Raster file has categorical and non-categorical rasters, so the resampling method cannot be determined automatically.')
+					stop("Raster file has categorical and non-categorical rasters, so the resampling method cannot be determined automatically.")
 				} else if (nFactors == nLayers) {
-					method <- 'nearest'
+					method <- "nearest"
 				} else {
-					method <- 'bilinear'
+					method <- "bilinear"
 				}
 
 			}
 
-			if (method != 'nearest' & fallback) method <- paste0(method, '_f')
+			if (method != "nearest" & fallback) method <- paste0(method, "_f")
 
 			# define region settings using a projected SpatRaster that matches x
 			xRast <- xRast[[1L]]
@@ -144,18 +144,18 @@ methods::setMethod(
 			region(xRast)
 
 			args <- list(
-				cmd = 'r.import',
+				cmd = "r.import",
 				input = x,
 				output = gn,
 				resample = method,
-				memory = getFastOptions('memory'),
-				extent = 'region',
-				resolution = 'region',
-				flags = c('quiet', 'overwrite'),
+				memory = getFastOptions("memory"),
+				extent = "region",
+				resolution = "region",
+				flags = c("quiet", "overwrite"),
 				intern = TRUE
 			)
 
-			if (wrap) args$flags <- c(args$flags, 'n')
+			if (wrap) args$flags <- c(args$flags, "n")
 		
 		} # projected raster from disk
 
@@ -163,27 +163,27 @@ methods::setMethod(
 		if (nLayers == 1L) {
 			out <- .makeGRaster(gn, names=xNames)
 		} else {
-			out <- .makeGRaster(paste0(gn, '.', 1L:nLayers), names=xNames)
+			out <- .makeGRaster(paste0(gn, ".", 1L:nLayers), names=xNames)
 		}
 
 	### vector from disk (and project on the fly if needed)
 	#######################################################
 	
-	} else if (rastOrVect == 'vector') {
+	} else if (rastOrVect == "vector") {
 
 		xVect <- terra::vect(x)
 		xCrs <- crs(xVect)
 		currentCrs <- crs()
-		gn <- .makeGName(xVect, rastOrVect = 'vector')
+		gn <- .makeGName(xVect, rastOrVect = "vector")
 
 		# vector is in same CRS as current location
 		if (xCrs == currentCrs) {
 
 			args <- list(
-				cmd = 'v.in.ogr',
+				cmd = "v.in.ogr",
 				input = x,
 				output = gn,
-				flags = c('quiet', 'overwrite'),
+				flags = c("quiet", "overwrite"),
 				intern=TRUE
 			)
 
@@ -191,14 +191,14 @@ methods::setMethod(
 		# ... need to import to a temporary location, then project to the current location
 		} else {
 
-			if (warn) warning('Vector has a different coordinate reference system than this GRASS ', dQuote('location'), '.\n  Vector will be projected to the current location\'s coordinate reference system.')
+			if (warn) warning("Vector has a different coordinate reference system than this GRASS ", dQuote("location"), ".\n  Vector will be projected to the current location\"s coordinate reference system.")
 
 			args <- list(
-				cmd = 'v.import',
+				cmd = "v.import",
 				input = x,
 				output = gn,
-				extent = 'input',
-				flags = c('quiet', 'overwrite'),
+				extent = "input",
+				flags = c("quiet", "overwrite"),
 				intern = TRUE
 			)
 
@@ -213,12 +213,12 @@ methods::setMethod(
 	} # EOF
 )
 
-#' @rdname fast
-#' @aliases fast
-#' @exportMethod fast
+#" @rdname fast
+#" @aliases fast
+#" @exportMethod fast
 methods::setMethod(
-	'fast',
-	signature(x = 'SpatRaster'),
+	"fast",
+	signature(x = "SpatRaster"),
 	function(
 		x,
 		method = NULL,
@@ -228,8 +228,8 @@ methods::setMethod(
 	) {
 
 	rastFile <- terra::sources(x)
-	if ((length(rastFile) > 0L) || rastFile == '') {
-		tempFile <- tempfile(fileext='.tif')
+	if ((length(rastFile) > 0L) || rastFile == "") {
+		tempFile <- tempfile(fileext=".tif")
 		terra::writeRaster(x, tempFile, overwrite=TRUE)
 		x <- tempFile
 	} else {
@@ -241,39 +241,39 @@ methods::setMethod(
 	} # EOF
 )
 
-#' @rdname fast
-#' @aliases fast
-#' @exportMethod fast
+#" @rdname fast
+#" @aliases fast
+#" @exportMethod fast
 methods::setMethod(
-	'fast',
-	signature(x = 'SpatVector'),
+	"fast",
+	signature(x = "SpatVector"),
 	function(x, warn = TRUE) .fastVector(x, warn=warn)
 )
 
-#' @rdname fast
-#' @aliases fast
-#' @exportMethod fast
+#" @rdname fast
+#" @aliases fast
+#" @exportMethod fast
 methods::setMethod(
-	'fast',
-	signature(x = 'sf'),
+	"fast",
+	signature(x = "sf"),
 	function(x, warn = TRUE) .fastVector(x, warn=warn)
 )
 
 # 1. Write vector to disk (if needed)
-# 2. Send to fast(signature = 'character')
+# 2. Send to fast(signature = "character")
 .fastVector <- function(
     x,		# SpatVector or sf
 	warn	# logical
 ) {
     
-	if (!inherits(x, 'SpatVector')) x <- terra::vect(x)
-	if (terra::sources(x) == '') {
-		vectFile <- tempfile(fileext = '.gpkg')
-		terra::writeVector(x, filename=vectFile, filetype='GPKG', overwrite=TRUE)
+	if (!inherits(x, "SpatVector")) x <- terra::vect(x)
+	if (terra::sources(x) == "") {
+		vectFile <- tempfile(fileext = ".gpkg")
+		terra::writeVector(x, filename=vectFile, filetype="GPKG", overwrite=TRUE)
 	} else {
 		vectFile <- terra::sources(x)
 	}
     
-	fast(x = vectFile, rastOrVect = 'vector', warn=warn)
+	fast(x = vectFile, rastOrVect = "vector", warn=warn)
 	
 }
