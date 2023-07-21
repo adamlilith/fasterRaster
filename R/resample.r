@@ -143,11 +143,12 @@ methods::setMethod(
 				input = .gnames(x)[i],
 				output = gnBilinear,
 				method = 'bilinear',
-				nprocs = getFastOptions('cores'),
 				memory = getFastOptions('memory'),
 				flags = c('quiet', 'overwrite'),
 				intern = TRUE
 			)
+			if (getFastOptions('grassVer') >= '8.3') args$nprocs <- getFastOptions('cores')
+
 			do.call(rgrass::execGRASS, args=args)
 
 		}
@@ -160,11 +161,11 @@ methods::setMethod(
 				input = .gnames(x)[i],
 				output = gnBicubic,
 				method = 'bicubic',
-				nprocs = getFastOptions('cores'),
 				memory = getFastOptions('memory'),
 				flags = c('quiet', 'overwrite'),
 				intern = TRUE
 			)
+			if (getFastOptions('grassVer') >= '8.3') args$nprocs <- getFastOptions('cores')
 			do.call(rgrass::execGRASS, args=args)
 
 		}
@@ -177,11 +178,11 @@ methods::setMethod(
 				input = .gnames(x)[i],
 				output = gnLanczos,
 				method = 'lanczos',
-				nprocs = getFastOptions('cores'),
 				memory = getFastOptions('memory'),
 				flags = c('quiet', 'overwrite'),
 				intern = TRUE
 			)
+			if (getFastOptions('grassVer') >= '8.3') args$nprocs <- getFastOptions('cores')
 			do.call(rgrass::execGRASS, args=args)
 
 		}

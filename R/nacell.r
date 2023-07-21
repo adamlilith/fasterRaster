@@ -23,10 +23,11 @@ methods::setMethod(
     args <- list(
         cmd = 'r.univar',
         map = paste(.gnames(x), collapse=','),
-			nprocs = getFastOptions('cores'),
         flags = c('r', 'quiet', 'overwrite'),
         intern = TRUE
     )
+
+    if (getFastOptions('grassVer') >= '8.3') args$nprocs <- getFastOptions('cores')
 
     stats <- do.call(rgrass::execGRASS, args = args)
     pattern <- 'total null cells: '

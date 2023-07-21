@@ -27,7 +27,7 @@
 #'
 #' @returns If `x` is missing, the function returns a character vector of all accepted function names. If `x` is a `GRaster`, a data frame with the specified statistics is returned.
 #'
-#' @seealso [terra::global()] and module `r.univar` in **GRASS
+#' @seealso [terra::global()] and **GRASS** module `r.univar`
 #'
 #' @example man/examples/ex_global.r
 #'
@@ -65,6 +65,8 @@ methods::setMethod(
 			echoCmd = FALSE,
 			intern = TRUE
 		)
+
+		if (getFastOptions('grassVer') >= '8.3') args$nprocs <- getFastOptions('cores')
 	
 		if (any(fun %in% c('quantile', 'median'))) args$flags <- c(args$flags, 'e')
 		if (any(fun == 'quantile')) {
@@ -169,6 +171,8 @@ methods::setMethod(
 						intern = TRUE
 					)
 
+					if (getFastOptions('grassVer') >= '8.3') args$nprocs <- getFastOptions('cores')
+
 					pattern <- 'sum: '
 					ss <- thisInfo[grepl(info, pattern=pattern)]
 					ss <- sub(ss, pattern=pattern, replacement='')
@@ -208,6 +212,8 @@ methods::setMethod(
 						echoCmd = FALSE,
 						intern = TRUE
 					)
+
+					if (getFastOptions('grassVer') >= '8.3') args$nprocs <- getFastOptions('cores')
 
 					pattern <- 'sum: '
 					ss <- thisInfo[grepl(info, pattern=pattern)]

@@ -54,12 +54,13 @@ methods::setMethod(
                     cmd = 'r.univar',
                     flags = c('quiet', 'r', 'e'),
                     map = .gnames(x)[i],
-							nprocs = getFastOptions('cores'),
                     Sys_show.output.on.console = FALSE,
                     echoCmd = FALSE,
                     intern = TRUE,
                     percentile = minq * 100
                 )
+
+                if (getFastOptions('grassVer') >= '8.3') args$nprocs <- getFastOptions('cores')
 
                 info <- do.call(rgrass::execGRASS, args)
                 pattern <- 'percentile: '
@@ -84,12 +85,13 @@ methods::setMethod(
                     cmd = 'r.univar',
                     flags = c('quiet', 'r', 'e'),
                     map = .gnames(x)[i],
-							nprocs = getFastOptions('cores'),
                     Sys_show.output.on.console = FALSE,
                     echoCmd = FALSE,
                     intern = TRUE,
                     percentile = maxq * 100
                 )
+
+                if (getFastOptions('grassVer') >= '8.3') args$nprocs <- getFastOptions('cores')
 
                 info <- do.call(rgrass::execGRASS, args)
                 pattern <- 'percentile: '
