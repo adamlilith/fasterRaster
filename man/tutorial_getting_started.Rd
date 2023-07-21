@@ -26,14 +26,14 @@ and the latest development version using:
 
 Once you have installed \strong{GRASS}, you will need to know where on your computer it was installed. The exact folder will depend on your operating system, the version installed, and perhaps other things, but in general, the install folder will look something like:
 
-Windows: \code{'C:/Program Files/GRASS GIS 8.2'}\cr
-Mac: \code{"/Applications/GRASS-8.2.app/Contents/Resources"}\cr
+Windows: \code{'C:/Program Files/GRASS GIS 8.3'}\cr
+Mac: \code{"/Applications/GRASS-8.3.app/Contents/Resources"}\cr
 Linux: \code{'/usr/local/grass'}\cr
 
 Whatever the name of this folder, it is passed to functions using an argument named \code{grassDir}. So, it is helpful to define \code{grassDir}, as in:
 
-\if{html}{\out{<div class="sourceCode">}}\preformatted{grassDir <- 'C:/Program Files/GRASS GIS 8.2' # Windows
-grassDir <- "/Applications/GRASS-8.2.app/Contents/Resources" # Mac
+\if{html}{\out{<div class="sourceCode">}}\preformatted{grassDir <- 'C:/Program Files/GRASS GIS 8.3' # Windows
+grassDir <- "/Applications/GRASS-8.3.app/Contents/Resources" # Mac
 grassDir <- '/usr/local/grass' # Linux
 }\if{html}{\out{</div>}}
 }

@@ -3,6 +3,7 @@
 \name{dim,GRegion-method}
 \alias{dim,GRegion-method}
 \alias{dim}
+\alias{dim,GRaster-method}
 \alias{nrow,GRegion-method}
 \alias{nrow}
 \alias{ncol,GRegion-method}
@@ -21,6 +22,8 @@
 \title{Number of rows, columns, depths, cells, and layers}
 \usage{
 \S4method{dim}{GRegion}(x)
+
+\S4method{dim}{GRaster}(x)
 
 \S4method{nrow}{GRegion}(x)
 
@@ -82,8 +85,8 @@ opts. <- getFastOptions()
 
 # IMPORTANT #2: Select the appropriate line below and change as necessary to
 # where GRASS is installed on your system.
-grassDir <- "/Applications/GRASS-8.2.app/Contents/Resources" # Mac
-grassDir <- 'C:/Program Files/GRASS GIS 8.2' # Windows
+grassDir <- "/Applications/GRASS-8.3.app/Contents/Resources" # Mac
+grassDir <- 'C:/Program Files/GRASS GIS 8.3' # Windows
 grassDir <- '/usr/local/grass' # Linux
 
 # setup

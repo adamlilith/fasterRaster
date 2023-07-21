@@ -46,8 +46,8 @@ opts. <- getFastOptions()
 
 # IMPORTANT #2: Select the appropriate line below and change as necessary to
 # where GRASS is installed on your system.
-grassDir <- "/Applications/GRASS-8.2.app/Contents/Resources" # Mac
-grassDir <- 'C:/Program Files/GRASS GIS 8.2' # Windows
+grassDir <- "/Applications/GRASS-8.3.app/Contents/Resources" # Mac
+grassDir <- 'C:/Program Files/GRASS GIS 8.3' # Windows
 grassDir <- '/usr/local/grass' # Linux
 
 # setup

@@ -39,7 +39,7 @@
 
 \S4method{regionDim}{missing}(x)
 
-\S4method{regionDim}{numeric}(x, respect = "resolution")
+\S4method{regionDim}{numeric}(x, respect)
 
 \S4method{regionDim}{GRegion}(x, respect)
 
@@ -62,12 +62,18 @@
 
 \item{trim}{A \code{GRaster} or \code{NULL} (default). If a \code{GRaster}, then the region will be trimmed to the non-\code{NA} cells in this raster. \code{trim} can only be non-\code{NULL} if \code{x} is a \code{GRaster}. Ignored if \code{NULL}.}
 
-\item{respect}{Character: Indicates what aspect of the current region to retain. Different functions allow for different aspect to be retained. Partial matching is used.
+\item{respect}{Character or \code{GRaster}: Indicates what aspect(s) of the current region to retain. Different functions allow for different aspect to be retained. Partial matching is used.
 \itemize{
 \item \code{regionDim()}: \code{'extent'} or \code{'resolution'}.
 \item \code{regionExt()}: \code{'dimensions'} or \code{'resolution'}.
 \item \code{regionRes()}: \code{'extent'} or \code{'dimensions'}.
+Alternatively, a \code{GRaster} can be supplied:
+\item \code{regionDim()}: New region will have same extent and resolution.
+\item \code{regionExt()}: New region will have same dimensions and resolution.
+\item \code{regionRes()}: New region will have same extent and dimensions.
 }
+
+In this case, the new region's registration will be the same as this raster, and cell resolution will be the same
 
 Note: In most cases extent cannot be retained exactly if the resolution is changed. When resolution is changed, the actual extent will be the user-supplied extent expanded by zero to one rows or zero to one columns to accommodate an integer number of cells of the desired size. The western and northern limits of the extent will be retained, while the eastern and southern limits of the extent will be moved to accommodate an integer number of columns and rows.}
 }
@@ -105,8 +111,8 @@ opts. <- getFastOptions()
 # IMPORTANT #2: Select the appropriate line below and change as necessary to
 # where GRASS is installed on your system.
 
-grassDir <- "/Applications/GRASS-8.2.app/Contents/Resources" # Mac
-grassDir <- 'C:/Program Files/GRASS GIS 8.2' # Windows
+grassDir <- "/Applications/GRASS-8.3.app/Contents/Resources" # Mac
+grassDir <- 'C:/Program Files/GRASS GIS 8.3' # Windows
 grassDir <- '/usr/local/grass' # Linux
 
 # setup
