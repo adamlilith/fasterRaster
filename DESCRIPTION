@@ -22,9 +22,11 @@ Depends:
 	R (>= 4.0.0)
 Imports:
 	data.table,
-	rgrass,
+	DT,
 	methods,
+	rgrass,
 	sf,
+	shiny,
 	terra,
 	utils
 Suggests:
