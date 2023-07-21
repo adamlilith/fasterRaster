@@ -20,7 +20,7 @@
 #' 
 #' @seealso [spatSample()], **GRASS** module `r.random`
 #' 
-#' @example man/examples/ex_maskRand.r
+#' @example man/examples/ex_spatSample.r
 #' 
 #' @aliases spatSample
 #' @rdName spatSample
