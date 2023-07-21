@@ -1,10 +1,10 @@
 # DEFAULTS FOR ALL GLOBAL SETTINGS
 
 # global PUBLIC options
-.autoRegionDefault <- function() TRUE # only TRUE or FALSE, never NA
 .coresDefault <- function() 1
 .detailsDefault <- function() TRUE
 .grassDirDefault <- function() NULL
+.grassVerDefault <- function() 8.3
 .addonDirDefault <- function() NULL
 .memoryDefault <- function() 300 # in MB
 .useDataTableDefault <- function() TRUE # logical
@@ -22,27 +22,25 @@
 		name = c(
 			'grassDir',
 			'addonDir',
+			'grassVer',
 			'details',
 			'cores',
 			'memory',
-			# 'grassVer',
 			'location',
 			'mapset',
 			'workDir',
-			'autoRegion',
 			'useDataTable'
 		),
 		type = c(
 			'character',
 			'character',
+			'character',
 			'logical',
 			'numeric',
 			'numeric',
-			# 'character',
 			'character',
 			'character',
 			'character',
-			'logical',
 			'logical'
 		)
 	)

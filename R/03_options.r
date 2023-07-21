@@ -33,9 +33,11 @@
 #'
 #' *  `addonDir` (character): Folder in which **GRASS** addons are stored. If `NULL` and `grassDir` is not `NULL`, this will be taken to be `file.path(grassDir, 'addons')`.
 #'
+#' * `grassVer` (character): Version of **GRASS** being used. This should be supplied as a character string, not as a numeric value. Do not include the minor version (e.g., use `'8.3'`, not `'8.3.1'``). As **GRASS** is developed, new modules and functionalities for existing modules are added. Setting the version correctly allows you to take advantage of these options.
+#' 
 #' * `memory` (integer/numeric): The amount of memory to allocate to a task, in MB. The default is 300 MB. Only some **GRASS** modules allow this option.
 #'
-#' * `data.table` (logical): If `FALSE` (default), use `data.frame`s when going back and forth between data tables of `GVector`s and **R**. This can be slow for very large data tables. If `TRUE`, use `data.table`s from the **data.table** package. This can be much faster, but it might require you to know how to use `data.table`s if you want to manipulate them in **R**. You can always convert them to `data.frame`s using [as.data.frame()].
+#' * `useDataTable` (logical): If `FALSE` (default), use `data.frame`s when going back and forth between data tables of `GVector`s and **R**. This can be slow for very large data tables. If `TRUE`, use `data.table`s from the **data.table** package. This can be much faster, but it might require you to know how to use `data.table`s if you want to manipulate them in **R**. You can always convert them to `data.frame`s using [as.data.frame()].
 #'
 #'  * `workDir` (character): The folder in which **GRASS** rasters, vectors, and other objects are created and manipulated. Typically, this is set when you first call [faster()]. All subsequent calls to `faster()` will not do not need `workDir` defined because it will be obtained from the options. By default, this is set to the temporary directory on your operating system (from [tempdir()]), appended with "`fr`". Ergo, the path will be `file.path(tempdir(), 'fr')`.
 #'
@@ -107,10 +109,10 @@ setFastOptions <- function(
 		if (opts$memory <= 0) stop('Option ', sQuote('memory'), ' must be a positive number. The default is ', .memoryDefault(), ' (MB).')
 	}
 
-	if (any(names(opts) %in% 'autoRegion')) {
-		if (!is.logical(opts$autoRegion)) stop('Option ', sQuote('autoRegion'), ' must be a logical. The default is ', .autoRegionDefault(), '.')
-		if (is.na(opts$autoRegion)) stop('Option ', sQuote('autoRegion'), ' must be TRUE or FALSE (not NA). The default is ', .autoRegionDefault(), '.')
-	}
+	# if (any(names(opts) %in% 'autoRegion')) {
+	# 	if (!is.logical(opts$autoRegion)) stop('Option ', sQuote('autoRegion'), ' must be a logical. The default is ', .autoRegionDefault(), '.')
+	# 	if (is.na(opts$autoRegion)) stop('Option ', sQuote('autoRegion'), ' must be TRUE or FALSE (not NA). The default is ', .autoRegionDefault(), '.')
+	# }
 
 	if (any(names(opts) %in% 'useDataTable')) {
 		if (!is.logical(opts$useDataTable)) stop('Option ', sQuote('useDataTable'), ' must be a logical. The default is ', .useDataTableDefault(), '.')
@@ -123,15 +125,20 @@ setFastOptions <- function(
 		# }
 	# }
 
-	# if (any(names(opts) %in% 'grassVer')) {
-		# if (is.null(opts$grassVer) || is.na(opts$grassVer) || !inherits(opts$grassVer, c('numeric', 'character'))) {
-			# stop('Option <grassVer> must be the version number of GRASS installed on your system. The default is ', .grassVerDefault(), '.')
-		# }
-		# opts$grassVer <- as.character(opts$grassVer)
-		# opts$grassVer <- gsub(opts$grassVer, pattern='.', replacement='', fixed=TRUE)
-		# if (nchar(opts$grassVer) != 2L) stop('Please supply <grassVer> as a character string (including the trailing zero if 8.0).\n  Do not include the minor version (e.g., 8.3, not 8.3.1).\n  The default is ', .grassVerDefault(), '.')
-		# if (as.numeric(substr(opts$grassVer, 1, 1) < 8)) stop('fasterRaster only supports GRASS GIS version 8.0 or above.\n  The default is ', .grassVerDefault(), '.')
-	# }
+	if (any(names(opts) %in% 'grassVer')) {
+
+		if (is.null(opts$grassVer) || is.na(opts$grassVer) || !inherits(opts$grassVer, c('numeric', 'character'))) {
+			stop('Option <grassVer> must be the version number of GRASS installed on your system. The default is ', .grassVerDefault(), '.')
+		}
+
+		opts$grassVer <- as.character(opts$grassVer)
+		opts$grassVer <- gsub(opts$grassVer, pattern='.', replacement='', fixed=TRUE)
+
+		if (nchar(opts$grassVer) != 2L) stop('Please supply <grassVer> as a character string (including the trailing zero if 8.0).\n  Do not include the minor version (e.g., 8.3, not 8.3.1).\n  The default is ', .grassVerDefault(), '.')
+
+		if (as.numeric(substr(opts$grassVer, 1, 1) < 8)) stop('fasterRaster only supports GRASS GIS version 8.0 or above.\n  The default is ', .grassVerDefault(), '.')
+		
+	}
 
 	### set the options
 	if (length(opts) == 0L) {
