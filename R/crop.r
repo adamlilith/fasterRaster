@@ -1,19 +1,19 @@
-#" Remove parts of a GRaster or GVector
-#"
-#" `crop()` removes parts of a `GRaster` or `GVector` that fall "outside" another raster or vector.
-#"
-#" @param x A `GRaster` or `GVector` to be cropped.
-#" @param y A `GRaster` or `GVector` to serve as a template for cropping.
-#"
-#" @return A `GRaster` or `GVector`.
-#" 
-#" @seealso [terra::crop()], [sf::st_crop()]
-#" 
-#" @example man/examples/ex_crop.r
-#"
-#" @aliases crop
-#" @rdname crop
-#" @exportMethod crop
+#' Remove parts of a GRaster or GVector
+#'
+#' `crop()` removes parts of a `GRaster` or `GVector` that fall "outside" another raster or vector.
+#'
+#' @param x A `GRaster` or `GVector` to be cropped.
+#' @param y A `GRaster` or `GVector` to serve as a template for cropping.
+#'
+#' @return A `GRaster` or `GVector`.
+#' 
+#' @seealso [terra::crop()], [sf::st_crop()]
+#' 
+#' @example man/examples/ex_crop.r
+#'
+#' @aliases crop
+#' @rdname crop
+#' @exportMethod crop
 methods::setMethod(
 	f = "crop",
 	signature = c(x = "GRaster"),
@@ -50,9 +50,9 @@ methods::setMethod(
 	} # EOF
 )
 
-#" @aliases crop
-#" @rdname crop
-#" @exportMethod crop
+#' @aliases crop
+#' @rdname crop
+#' @exportMethod crop
 methods::setMethod(
 	f = "crop",
 	signature = c(x = "GVector"),

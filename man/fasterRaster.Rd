@@ -3,7 +3,7 @@
 \docType{package}
 \name{fasterRaster}
 \alias{fasterRaster}
-\title{'fasterRaster': Faster raster and spatial vector processing using 'GRASS GIS'}
+\title{"fasterRaster": Faster raster and spatial vector processing using "GRASS GIS"}
 \description{
 Processing of large-in-memory/-on disk rasters and spatial vectors using \strong{GRASS GIS}. Most functions in the \strong{terra} and \strong{sf} packages are recreated. Processing of medium-sized and smaller spatial objects will nearly always be faster using \strong{terra} or \strong{sf}. To use most of the functions you must have the stand-alone version of \strong{GRASS} version 8.0 or higher (not the \strong{OSGeoW4} installer version). Note that due to developer choices, results will not always be strictly comparable between \strong{terra}, \strong{sf}, and \strong{fasterRaster}.
 \subsection{Most useful functions/links:}{
@@ -73,10 +73,12 @@ Other functions:\cr
 \code{\link[=as.contour]{as.contour()}}: Contour lines from a raster\cr
 \code{\link[=aggregate]{aggregate()}}: Aggregate values of raster cells into larger cells\cr
 \code{\link[=buffer]{buffer()}}: Create a buffer around non-\code{NA} cells\cr
+\code{\link[=app]{app()}}: Apply a user-defined function to layers of a raster\cr
 \code{\link[=c]{c()}}: "Stack" two or more rasters\cr
 \code{\link[=clump]{clump()}}: Group cells with similar values into clumps\cr
 \code{\link[=crop]{crop()}}: Remove parts of a raster\cr
 \code{\link[=distance]{distance()}}: Distance to non-\code{NA} cells, or vice versa\cr
+\code{\link[=expanse]{expanse()}}: Total area of non-\code{NA} cells\cr
 \code{\link[=extend]{extend()}}: Add rows and columns to a raster\cr
 \code{\link[=focal]{focal()}}: Calculate cell values based on values of nearby cells\cr
 \code{\link[=global]{global()}}: Summary statistics across cells of each raster layer\cr
@@ -89,6 +91,7 @@ Other functions:\cr
 \code{\link[=plot]{plot()}}: Display a raster\cr
 \code{\link[=project]{project()}}: Change coordinate reference system and cell size\cr
 \code{\link[=resample]{resample()}}: Change cell size\cr
+\code{\link[=rnormRast]{rnormRast()}}: A random raster with or without spatial dependence\cr
 \code{\link[=spatSample]{spatSample()}}: Randomly points from a raster\cr
 \code{\link[=sun]{sun()}}: Solar radiance and irradiance\cr
 \code{\link[=terrain]{terrain()}}: Slope, aspect, curvature, and partial slopes\cr
@@ -128,7 +131,7 @@ Other functions:\cr
 \code{\link[=crop]{crop()}}: Remove parts of a vector\cr
 \code{\link[=delaunay]{delaunay()}}: Delaunay triangulation\cr
 \code{\link[=distance]{distance()}}: Distance between geometries in two vectors, or from a vector to cells of a raster\cr
-\code{\link[=head]{head()}}: First rows of a vector's data frame.\cr
+\code{\link[=head]{head()}}: First rows of a vector"s data frame.\cr
 \code{\link[=.makeGVector]{.makeGVector()}}: Makes a \code{GVector} from a vector already in a \strong{GRASS} session.\cr
 \code{\link[=project]{project()}}: Change coordinate reference system\cr
 \code{\link[=simplifyGeom]{simplifyGeom()}}: Remove vertices\cr
@@ -136,9 +139,9 @@ Other functions:\cr
 \code{\link[=st_as_sf]{st_as_sf()}}: Convert a \code{GVector} to a \code{sf} vector\cr
 \code{\link[=st_buffer]{st_buffer()}}: Create a polygon around/inside a vector\cr
 \code{\link[=st_distance]{st_distance()}}: Distance between geometries in two vectors\cr
-\code{\link[=tail]{tail()}}: Last rows of a vector's data frame.\cr
-#' \code{[}\link{subset}: Select geometries/rows of a vector's data frame\cr
-#' \code{[[}\link{subset}: Subset columns of a vector's data frame\cr
+\code{\link[=tail]{tail()}}: Last rows of a vector"s data frame.\cr
+#' \code{[}\link{subset}: Select geometries/rows of a vector"s data frame\cr
+#' \code{[[}\link{subset}: Subset columns of a vector"s data frame\cr
 }
 
 \subsection{Converting between data types}{
@@ -147,7 +150,7 @@ Other functions:\cr
 \code{\link[=as.data.frame]{as.data.frame()}}: Convert \code{GVector} to a \code{data.frame}\cr
 \code{\link[=as.points]{as.points()}}, \code{\link[=as.lines]{as.lines()}}, and \code{\link[=as.polygons]{as.polygons()}}: Convert a \code{GRaster} to a \code{GVector}\cr
 \code{\link[=fast]{fast()}}: Create \code{GRaster}s or \code{GVector}s from \code{SpatRaster}s, \code{SpatVector}s, or \code{sf} objects, or from files\cr
-\code{\link[=head]{head()}} and \code{\link[=tail]{tail()}}: First and last rows of a \code{GVector}'s data frame\cr
+\code{\link[=head]{head()}} and \code{\link[=tail]{tail()}}: First and last rows of a \code{GVector}"s data frame\cr
 \code{\link[=.makeGRaster]{.makeGRaster()}}: Make a \code{GRaster} from a raster in \strong{GRASS}\cr
 \code{\link[=.makeGVector]{.makeGVector()}}: Make a \code{GVector} from a vector in \strong{GRASS}\cr
 \code{\link[=rast]{rast()}}: Convert a \code{GRaster} to a \code{SpatRaster}\cr
@@ -178,10 +181,10 @@ Other functions:\cr
 
 \subsection{Functions that operate on \strong{GRASS} "regions" (seldom used by most users):}{
 
-\code{\link[=region]{region()}}: Change or report the active region's extent and resolution\cr
-\code{\link[=regionDim]{regionDim()}}: Change or report the active region's resolution\cr
-\code{\link[=regionExt]{regionExt()}}: Change or report the active region's extent\cr
-\code{\link[=regionRes]{regionRes()}}: Change or report the active region's dimensions\cr
+\code{\link[=region]{region()}}: Change or report the active region"s extent and resolution\cr
+\code{\link[=regionDim]{regionDim()}}: Change or report the active region"s resolution\cr
+\code{\link[=regionExt]{regionExt()}}: Change or report the active region"s extent\cr
+\code{\link[=regionRes]{regionRes()}}: Change or report the active region"s dimensions\cr
 }
 
 \subsection{Data objects}{
@@ -193,6 +196,9 @@ Other functions:\cr
 \link[=tutorial_regions]{Regions}\cr
 \link[=tutorial_undocumented_functions]{Undocumented functions}\cr
 }
+}
+\details{
+\figure{fasterRaster.png}{options: alt="fasterRaster" align="right" vertical-align="top" width=1.2in}
 }
 \author{
 Adam B. Smith

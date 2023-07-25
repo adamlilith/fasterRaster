@@ -35,17 +35,17 @@
 \item{method}{Character or \code{NULL} (\code{GRaster}s only): Method to use to conduct the transformation (rasters only). Partial matching is used.
 \itemize{
 \item \code{NULL} (default): Automatically choose based on raster properties (\code{near} for categorical data, \code{bilinear} for continuous data).
-\item \code{'near'}: Nearest neighbor. Best for categorical data, and often a poor choice for continuous data.  If \code{\link[=datatype]{datatype()}} is \code{CELL}, this method will be used by default.
-\item \code{'bilinear'}: Bilinear interpolation (default for non-categorical data; uses weighted values from 4 cells).
-\item \code{'bicubic'}: Bicubic interpolation (uses weighted values from 16 cells).
-\item \code{'lanczos'}: Lanczos interpolation (uses weighted values from 25 cells).
+\item \code{"near"}: Nearest neighbor. Best for categorical data, and often a poor choice for continuous data.  If \code{\link[=datatype]{datatype()}} is \code{CELL}, this method will be used by default.
+\item \code{"bilinear"}: Bilinear interpolation (default for non-categorical data; uses weighted values from 4 cells).
+\item \code{"bicubic"}: Bicubic interpolation (uses weighted values from 16 cells).
+\item \code{"lanczos"}: Lanczos interpolation (uses weighted values from 25 cells).
 }
 
 \emph{Note #1}: If \code{x} and \code{y} are \code{GRaster}s, then the same \code{method} is used to resample \code{x} to the resolution of \code{y} before projecting \code{x}.
 
 \emph{Note #2}: Methods that use multiple cells will cause the focal cell to become \code{NA} if there is at least one cell with an \code{NA} in the cells it draws from. These \code{NA} cells can often be filled using the \code{fallback} option.}
 
-\item{fallback}{Logical (projecting \code{GRaster}s only): If \code{TRUE} (default), then use "lower" methods to fill in \code{NA} cells when a "higher" method is used. For example, if \code{method = 'bicubic'}, \code{NA} cells will be filled in using the \code{bilinear} method, except when that results in \code{NA}s, in which case the \code{near} method will be used. Fallback causes fewer cells to revert to \code{NA} values, so may be better at capturing complex "edges" (e.g., coastlines). Fallback does increase processing time because each "lower" method must be applied, then results merged. Fallback is not used if \code{method = 'near'}.}
+\item{fallback}{Logical (projecting \code{GRaster}s only): If \code{TRUE} (default), then use "lower" methods to fill in \code{NA} cells when a "higher" method is used. For example, if \code{method = "bicubic"}, \code{NA} cells will be filled in using the \code{bilinear} method, except when that results in \code{NA}s, in which case the \code{near} method will be used. Fallback causes fewer cells to revert to \code{NA} values, so may be better at capturing complex "edges" (e.g., coastlines). Fallback does increase processing time because each "lower" method must be applied, then results merged. Fallback is not used if \code{method = "near"}.}
 
 \item{wrap}{Logical (\code{GRaster}s only): When projecting rasters that "wrap around" (i.e., whole-world rasters or rasters that have edges that actually circle around to meet on the globe), \code{wrap} should be \code{TRUE} to avoid removing rows and columns from the "edge" of the map. The default is \code{FALSE}.}
 
@@ -80,8 +80,8 @@ opts. <- getFastOptions()
 # IMPORTANT #2: Select the appropriate line below and change as necessary to
 # where GRASS is installed on your system.
 grassDir <- "/Applications/GRASS-8.3.app/Contents/Resources" # Mac
-grassDir <- 'C:/Program Files/GRASS GIS 8.3' # Windows
-grassDir <- '/usr/local/grass' # Linux
+grassDir <- "C:/Program Files/GRASS GIS 8.3" # Windows
+grassDir <- "/usr/local/grass" # Linux
 
 ### setup for all examples
 ##########################
@@ -90,11 +90,11 @@ library(sf)
 library(terra)
 
 # elevation raster, climate raster, rivers vector
-madElev <- fastData('madElev')
-madChelsa <- fastData('madChelsa')
-madRivers <- fastData('madRivers')
+madElev <- fastData("madElev")
+madChelsa <- fastData("madChelsa")
+madRivers <- fastData("madRivers")
 
-# For this example, we'll project the madRivers vector to WGS84 using terra.
+# For this example, we"ll project the madRivers vector to WGS84 using terra.
 # (The CHELSA raster stack is already in WGS84.)
 madRivers <- vect(madRivers)
 madRivers <- project(madRivers, madChelsa)
@@ -107,7 +107,7 @@ wd <- forwardSlash(tempdir())
 
 # Initiate GRASS session:
 faster(x = madElev, grassDir = grassDir,
-workDir = wd, location = 'examples') # line only needed for examples
+workDir = wd, location = "examples") # line only needed for examples
 
 riversFromVect <- fast(madRivers)
 chelsaFromRast <- fast(madChelsa)
@@ -115,12 +115,12 @@ chelsaFromRast <- fast(madChelsa)
 ### Method 2: Project while loading rasters/vectors from disk
 #############################################################
 
-vectFile <- system.file('extdata', 'shapes/madCoast.shp', package='fasterRaster')
+vectFile <- system.file("extdata", "shapes/madCoast.shp", package="fasterRaster")
 coastProj <- fast(vectFile)
 coastProj
 
-rastFile <- system.file('extdata', 'madChelsa.tif', package='fasterRaster')
-chelsaFromFile <- fast(rastFile, method='bilinear')
+rastFile <- system.file("extdata", "madChelsa.tif", package="fasterRaster")
+chelsaFromFile <- fast(rastFile, method="bilinear")
 chelsaFromFile
 
 ### Method 3a: Projecting between GRASS "locations" but do not resample
@@ -128,19 +128,19 @@ chelsaFromFile
 
 # Set up "to" location:
 faster(x = madElev, grassDir = grassDir,
-workDir = wd, location = 'exampleTo') # line only needed for examples
+workDir = wd, location = "exampleTo") # line only needed for examples
 
 elev <- fast(madElev)
 
 # Set up "from" location and put a raster and vector in it:
 faster(x = madChelsa, grassDir = grassDir,
-workDir = wd, location = 'exampleFrom') # line only needed for examples
+workDir = wd, location = "exampleFrom") # line only needed for examples
 
 chelsa <- fast(madChelsa)
 rivers <- fast(madRivers)
 
 # Re-activate the "exampleTo" "location":
-fastRestore(location='exampleTo')
+fastRestore(location="exampleTo")
 
 ### Project vector into the "exampleTo" location:
 riversProj <- project(rivers)
@@ -177,9 +177,9 @@ plot(chelsaNewResSpat - chelsaResampTerra)
 
 # IMPORTANT #3: Revert back to original GRASS session if needed.
 fastRestore(opts.)
-removeSession('examples')
-removeSession('exampleFrom')
-removeSession('exampleTo')
+removeSession("examples")
+removeSession("exampleFrom")
+removeSession("exampleTo")
 
 }
 }

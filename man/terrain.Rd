@@ -12,19 +12,19 @@
 
 \item{v}{Name of the topographic metric(s) to calculate. Valid values include one or more of:
 \itemize{
-\item \code{'slope'}: Slope. Units are given by argument \code{units}.
-\item \code{'aspect'}: Aspect. When argument \code{northIs0} is \code{TRUE} (default), then aspect is given in degrees from north going clockwise (0 = north, 90 = east, 180 = south, 270 = west).
-\item \code{'profileCurve'}: Profile curvature.
-\item \code{'tanCurve'}: Tangential curvature.
-\item \code{'dx'}: Slope in east-west direction.
-\item \code{'dy'}: Slope in north-south direction.
-\item \code{'dxx'}: Second partial derivative in east-west direction.
-\item \code{'dyy'}: Second partial derivative in north-south direction.
-\item \code{'dxy'}: Second partial derivative along east-west and north-south direction.
-\item \code{'*'}: All of the above.
+\item \code{"slope"}: Slope. Units are given by argument \code{units}.
+\item \code{"aspect"}: Aspect. When argument \code{northIs0} is \code{TRUE} (default), then aspect is given in degrees from north going clockwise (0 = north, 90 = east, 180 = south, 270 = west).
+\item \code{"profileCurve"}: Profile curvature.
+\item \code{"tanCurve"}: Tangential curvature.
+\item \code{"dx"}: Slope in east-west direction.
+\item \code{"dy"}: Slope in north-south direction.
+\item \code{"dxx"}: Second partial derivative in east-west direction.
+\item \code{"dyy"}: Second partial derivative in north-south direction.
+\item \code{"dxy"}: Second partial derivative along east-west and north-south direction.
+\item \code{"*"}: All of the above.
 }}
 
-\item{units}{Character: "Units" in which to calculate slope: either \code{'degrees'} for degrees (default) or \code{'percent'}.}
+\item{units}{Character: "Units" in which to calculate slope: either \code{"degrees"} for degrees (default) or \code{"percent"}.}
 
 \item{northIs0}{Logical: If \code{TRUE} (default), aspect will be reported in "north orientation," such that 0 is north, and degrees run clockwise (90 is east, 180 south, 270 west). If \code{FALSE}, then aspect will be reported in "east orientation," such that 0 is east, and degrees run counterclockwise (90 is north, 180 west, 270 south). The latter is the default in \strong{GRASS}, but the former is the default in \code{\link[terra:terrain]{terra::terrain()}} function, so is used here as the default. \strong{Note:} The \code{\link[=sun]{sun()}} function requires aspect to be in east orientation.}
 }
@@ -49,24 +49,24 @@ opts. <- getFastOptions()
 # where GRASS is installed on your system.
 
 grassDir <- "/Applications/GRASS-8.3.app/Contents/Resources" # Mac
-grassDir <- 'C:/Program Files/GRASS GIS 8.3' # Windows
-grassDir <- '/usr/local/grass' # Linux
+grassDir <- "C:/Program Files/GRASS GIS 8.3" # Windows
+grassDir <- "/usr/local/grass" # Linux
 
 # setup
 library(terra)
 
 # example data
-madElev <- fastData('madElev')
+madElev <- fastData("madElev")
 
 # start GRASS session for examples only
 faster(x = madElev, grassDir = grassDir,
-workDir = tempdir(), location = 'examples') # line only needed for examples
+workDir = tempdir(), location = "examples") # line only needed for examples
 
 # convert a SpatRaster to a GRaster
 elev <- fast(madElev)
 
 # calculate all topographic metrics
-topos <- terrain(elev, v='*')
+topos <- terrain(elev, v="*")
 topos
 
 # calculate a hillshade raster
@@ -74,7 +74,7 @@ hs <- hillshade(elev)
 
 # IMPORTANT #3: Revert back to original GRASS session if needed.
 fastRestore(opts.)
-removeSession('examples')
+removeSession("examples")
 
 }
 }

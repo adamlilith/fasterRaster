@@ -21,8 +21,8 @@ An object of class \code{GSession}, \code{GSpatial}, \code{GRaster}, or \code{GV
 The \code{G} suite of S4 classes contain pointers to \strong{GRASS} objects or metadata about the current \strong{GRASS} session. Most users will manipulate objects using these classes, but do not need to know the details.
 \itemize{
 \item The \code{GSession} class stores information about the \strong{GRASS} session ("\link[=tutorial_sessions]{location}"), mapset, and coordinate reference system. Contained by all the rest.
-\item The 'GSpatial' class contains the \code{GSession} class and stores information about spatial objects (extent, topology) plus the name of the file representing it in \strong{GRASS} (its \code{gname}). Contained by \code{GRegion}, \code{GRaster}, and \code{GVector}.
-\item The \code{GRegion} class contains the \code{GSpatial} class and stores information about grids (dimensions and resolution). They do have \code{gname}s, but these are not used (they're always \code{NA}). Contained by \code{GRaster}.
+\item The "GSpatial" class contains the \code{GSession} class and stores information about spatial objects (extent, topology) plus the name of the file representing it in \strong{GRASS} (its \code{gname}). Contained by \code{GRegion}, \code{GRaster}, and \code{GVector}.
+\item The \code{GRegion} class contains the \code{GSpatial} class and stores information about grids (dimensions and resolution). They do have \code{gname}s, but these are not used (they"re always \code{NA}). Contained by \code{GRaster}.
 \item The \code{GRaster} class contains the \code{GRegion} class and represents rasters. It stores information on number of layers, categories, min/max values, and user-friendly names.
 \item The \code{GVector} class contains the \code{GSpatial} class and represents spatial vectors. It stores information about the \strong{GRASS} names of data tables, names of fields (columns), and their data type.
 \item The \code{GMetaTable}, \code{GEmptyMetaTable}, and \code{GFullMetaTable} classes are "helper" classes intended to store metadata about data tables associated with \code{GVector}s. The "full" and "empty" classes are contained by \code{GMetaTable}, and in turn, this is contained by the \code{GVector} class.
@@ -76,7 +76,7 @@ The \code{G} suite of S4 classes contain pointers to \strong{GRASS} objects or m
 
 \item{\code{minVal,maxVal}}{Numeric (\code{GRaster}s): Minimum and maximum value across all cells. Can be obtained using \code{\link[=minmax]{minmax()}}.}
 
-\item{\code{dbLayer,dbName}}{Character ('GVector's): Names of the layer and table associated with the \code{GVector} in the \strong{GRASS} SQLite database. Can be obtained using \code{.dbName()} and \code{.dblayer()}.}
+\item{\code{dbLayer,dbName}}{Character ("GVector"s): Names of the layer and table associated with the \code{GVector} in the \strong{GRASS} SQLite database. Can be obtained using \code{.dbName()} and \code{.dblayer()}.}
 
 \item{\code{fields}}{Names of fields (\code{GVector}s). Can be obtained using \code{\link[=names]{names()}}.}
 

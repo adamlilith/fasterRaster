@@ -1,31 +1,31 @@
-#" Spatial bounds of a GRaster or GVector
-#"
-#" @description These functions return the extent or origin of `GSpatial` object (`GRegions`, `GRaster`s, and `GVector`s):
-#" 
-#" * `ext()` and `st_bbox()`: 2-dimensional spatial extent (i.e., westernmost/easternmost and southernmost/northernmost coordinates of area represented).\cr\cr
-#" * `zext()`: Vertical extent (i.e., topmost and bottom-most elevation of the volume represented). The vertical extent is not `NA` only if the object is 3-dimensional.\cr\cr
-#" * `west()`, `east()`, `north()`, `south()`: Coordinates of one side of horizontal extent.\cr\cr
-#" * `top()` and `bottom()`: Coordinates of top and bottom of vertical extent.\cr\cr
-#" * `origin()`: Coordinates of the northwest corner of the extent of the object.\cr\cr
-#" 
-#" @param x,obj An object that inherits from `GSpatial` (i.e., a `GRaster` or `GVector`) or missing. If missing, then the horizontal or vertical extent of the current [region][tutorial_regions] is returned.
-#" @param vector Logical: If `FALSE` (default), return a `SpatExtent` object. If `TRUE`, return the extent as a named vector.
-#" @param char Logical: If `FALSE` (default), return a numeric value. If `TRUE`, return as a character.
-#" @param ... Other arguments (generally unused).
-#"
-#" @returns The returned values depend on the function:
-#" * `ext()`: A `SpatExtent` object (**terra** package) or a numeric vector.
-#" * `zext()`: A numeric vector.
-#" * `west()`, `east()`, `north()`, `south()`, `top()`, and `bottom()`: A numeric value or character.
-#" * `st_bbox()` returns a `bbox` object (**sf** package).
-#"
-#" @seealso [terra::ext()], [sf::st_bbox()]
-#" 
-#" @example man/examples/ex_GRaster_GVector.r
-#"
-#" @aliases ext
-#" @rdname ext
-#" @exportMethod ext
+#' Spatial bounds of a GRaster or GVector
+#'
+#' @description These functions return the extent or origin of `GSpatial` object (`GRegions`, `GRaster`s, and `GVector`s):
+#' 
+#' * `ext()` and `st_bbox()`: 2-dimensional spatial extent (i.e., westernmost/easternmost and southernmost/northernmost coordinates of area represented).\cr\cr
+#' * `zext()`: Vertical extent (i.e., topmost and bottom-most elevation of the volume represented). The vertical extent is not `NA` only if the object is 3-dimensional.\cr\cr
+#' * `west()`, `east()`, `north()`, `south()`: Coordinates of one side of horizontal extent.\cr\cr
+#' * `top()` and `bottom()`: Coordinates of top and bottom of vertical extent.\cr\cr
+#' * `origin()`: Coordinates of the northwest corner of the extent of the object.\cr\cr
+#' 
+#' @param x,obj An object that inherits from `GSpatial` (i.e., a `GRaster` or `GVector`) or missing. If missing, then the horizontal or vertical extent of the current [region][tutorial_regions] is returned.
+#' @param vector Logical: If `FALSE` (default), return a `SpatExtent` object. If `TRUE`, return the extent as a named vector.
+#' @param char Logical: If `FALSE` (default), return a numeric value. If `TRUE`, return as a character.
+#' @param ... Other arguments (generally unused).
+#'
+#' @returns The returned values depend on the function:
+#' * `ext()`: A `SpatExtent` object (**terra** package) or a numeric vector.
+#' * `zext()`: A numeric vector.
+#' * `west()`, `east()`, `north()`, `south()`, `top()`, and `bottom()`: A numeric value or character.
+#' * `st_bbox()` returns a `bbox` object (**sf** package).
+#'
+#' @seealso [terra::ext()], [sf::st_bbox()]
+#' 
+#' @example man/examples/ex_GRaster_GVector.r
+#'
+#' @aliases ext
+#' @rdname ext
+#' @exportMethod ext
 methods::setMethod(
 	f = "ext",
 	signature = "GSpatial",
@@ -39,9 +39,9 @@ methods::setMethod(
 	} # EOF
 )
 
-#" @aliases zext
-#" @rdname ext
-#" @exportMethod zext
+#' @aliases zext
+#' @rdname ext
+#' @exportMethod zext
 methods::setMethod(
 	f = "zext",
 	signature = "GSpatial",
@@ -49,9 +49,9 @@ methods::setMethod(
 	x@zextent
 })
 
-#" @aliases west
-#" @rdname ext
-#" @exportMethod west
+#' @aliases west
+#' @rdname ext
+#' @exportMethod west
 methods::setMethod(
 	f = "west",
 	signature = "missing",
@@ -61,9 +61,9 @@ methods::setMethod(
 	out
 })
 
-#" @aliases west
-#" @rdname ext
-#" @exportMethod west
+#' @aliases west
+#' @rdname ext
+#' @exportMethod west
 methods::setMethod(
 	f = "west",
 	signature = "GSpatial",
@@ -73,9 +73,9 @@ methods::setMethod(
 	out
 })
 
-#" @aliases east
-#" @rdname ext
-#" @exportMethod east
+#' @aliases east
+#' @rdname ext
+#' @exportMethod east
 methods::setMethod(
 	f = "east",
 	signature = "missing",
@@ -85,9 +85,9 @@ methods::setMethod(
 	out
 })
 
-#" @aliases east
-#" @rdname ext
-#" @exportMethod east
+#' @aliases east
+#' @rdname ext
+#' @exportMethod east
 methods::setMethod(
 	f = "east",
 	signature = "GSpatial",
@@ -97,9 +97,9 @@ methods::setMethod(
 	out
 })
 
-#" @aliases north
-#" @rdname ext
-#" @exportMethod north
+#' @aliases north
+#' @rdname ext
+#' @exportMethod north
 methods::setMethod(
 	f = "north",
 	signature = "missing",
@@ -109,9 +109,9 @@ methods::setMethod(
 	out
 })
 
-#" @aliases north
-#" @rdname ext
-#" @exportMethod north
+#' @aliases north
+#' @rdname ext
+#' @exportMethod north
 methods::setMethod(
 	f = "north",
 	signature = "GSpatial",
@@ -121,9 +121,9 @@ methods::setMethod(
 	out
 })
 
-#" @aliases south
-#" @rdname ext
-#" @exportMethod south
+#' @aliases south
+#' @rdname ext
+#' @exportMethod south
 methods::setMethod(
 	f = "south",
 	signature = "missing",
@@ -133,9 +133,9 @@ methods::setMethod(
 	out
 })
 
-#" @aliases south
-#" @rdname ext
-#" @exportMethod south
+#' @aliases south
+#' @rdname ext
+#' @exportMethod south
 methods::setMethod(
 	f = "south",
 	signature = "GSpatial",
@@ -145,9 +145,9 @@ methods::setMethod(
 	out
 })
 
-#" @aliases top
-#" @rdname ext
-#" @exportMethod top
+#' @aliases top
+#' @rdname ext
+#' @exportMethod top
 methods::setMethod(
 	f = "top",
 	signature = c(x = "missing"),
@@ -157,9 +157,9 @@ methods::setMethod(
 	out
 })
 
-#" @aliases top
-#" @rdname ext
-#" @exportMethod top
+#' @aliases top
+#' @rdname ext
+#' @exportMethod top
 methods::setMethod(
 	f = "top",
 	signature = "GSpatial",
@@ -169,9 +169,9 @@ methods::setMethod(
 	out
 })
 
-#" @aliases bottom
-#" @rdname ext
-#" @exportMethod bottom
+#' @aliases bottom
+#' @rdname ext
+#' @exportMethod bottom
 methods::setMethod(
 	f = "bottom",
 	signature = c(x = "GSpatial"),
@@ -181,9 +181,9 @@ methods::setMethod(
 	out
 })
 
-#" @aliases bottom
-#" @rdname ext
-#" @exportMethod bottom
+#' @aliases bottom
+#' @rdname ext
+#' @exportMethod bottom
 methods::setMethod(
 	f = "bottom",
 	signature = "GSpatial",
@@ -193,9 +193,9 @@ methods::setMethod(
 	out
 })
 
-#" @aliases origin
-#" @rdname ext
-#" @exportMethod origin
+#' @aliases origin
+#' @rdname ext
+#' @exportMethod origin
 setMethod(
 	f = "origin",
 	signature = c(x = "GSpatial"),
@@ -207,12 +207,12 @@ setMethod(
 
 st_bbox <- function(obj, ...) UseMethod("st_bbox", obj)
 
-#" @rdname ext
-#" @exportMethod st_bbox
+#' @rdname ext
+#' @exportMethod st_bbox
 setMethod("st_bbox", definition = function(obj, ...) st_bbox(obj, ...))
 
-#" @rdname ext
-#" @export
+#' @rdname ext
+#' @export
 st_bbox <- function(obj, ...) {
 	if (inherits(obj, "GSpatial")) {
 		out <- obj@extent

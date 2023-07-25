@@ -1,27 +1,27 @@
-#" @title Mathematical operations on two or more GRasters
-#"
-#" @description These functions can be applied to a "stack" of `GRaster`s with two or more layers:
-#" * Numeration: `count()` (number of non-`NA` cells), `sum()`.
-#" * Central tendency: `mean()`, `mmode()` (mode), `median()`.
-#" * Extremes: `min()`, `max()`, `which.min()` (index of raster with the minimum value), `which.max()` (index of the raster with the maximum value)
-#" * Dispersion: `range()`, `sd()` (sample standard deviation), `var()` (sample variance), `sdpop()` (population standard deviation), `varpop()` (population variance), `nunique()` (number of unique values), `quantile()` (use argument `probs`), `skewness()`, and `kurtosis()`.
-#" * Regression: Assuming we calculate a linear regression for each set of cells through all values of the cells, we can calculate its `slope()`, `intercept()`, `r2()`, and `tvalue()`.
-#"
-#" This function returns a raster. If you want to summarize across cells in a raster (e.g., calculate the mean value of all cells on a raster), use [global()].
-#"
-#" @param x A `GRaster`. Typically, this raster will have two or more layers. Values will be calculated within cells across rasters.
-#"
-#" @param prob Numeric: Quantile to calculate. Used for `quantile()`.
-#"
-#" @param na.rm Logical: If `FALSE` (default), of one cell value has an `NA`, the result will be `NA`. If `TRUE`, `NA`s are ignored.
-#"
-#" @returns A `GRaster`.
-#"
-#" @example man/examples/ex_GRaster_arithmetic.r
-#"
-#" @aliases mean
-#" @rdname functions
-#" @exportMethod mean
+#' @title Mathematical operations on two or more GRasters
+#'
+#' @description These functions can be applied to a "stack" of `GRaster`s with two or more layers:
+#' * Numeration: `count()` (number of non-`NA` cells), `sum()`.
+#' * Central tendency: `mean()`, `mmode()` (mode), `median()`.
+#' * Extremes: `min()`, `max()`, `which.min()` (index of raster with the minimum value), `which.max()` (index of the raster with the maximum value)
+#' * Dispersion: `range()`, `sd()` (sample standard deviation), `var()` (sample variance), `sdpop()` (population standard deviation), `varpop()` (population variance), `nunique()` (number of unique values), `quantile()` (use argument `probs`), `skewness()`, and `kurtosis()`.
+#' * Regression: Assuming we calculate a linear regression for each set of cells through all values of the cells, we can calculate its `slope()`, `intercept()`, `r2()`, and `tvalue()`.
+#'
+#' This function returns a raster. If you want to summarize across cells in a raster (e.g., calculate the mean value of all cells on a raster), use [global()].
+#'
+#' @param x A `GRaster`. Typically, this raster will have two or more layers. Values will be calculated within cells across rasters.
+#'
+#' @param prob Numeric: Quantile to calculate. Used for `quantile()`.
+#'
+#' @param na.rm Logical: If `FALSE` (default), of one cell value has an `NA`, the result will be `NA`. If `TRUE`, `NA`s are ignored.
+#'
+#' @returns A `GRaster`.
+#'
+#' @example man/examples/ex_GRaster_arithmetic.r
+#'
+#' @aliases mean
+#' @rdname functions
+#' @exportMethod mean
 setMethod(
 	"mean",
 	signature(x = "GRaster"),
@@ -34,9 +34,9 @@ setMethod(
 	} # EOF
 )
 
-#" @aliases mmode
-#" @rdname functions
-#" @exportMethod mmode
+#' @aliases mmode
+#' @rdname functions
+#' @exportMethod mmode
 setMethod(
 	"mmode",
 	signature(x = "GRaster"),
@@ -49,9 +49,9 @@ setMethod(
 	} # EOF
 )
 
-#" @aliases median
-#" @rdname functions
-#" @exportMethod median
+#' @aliases median
+#' @rdname functions
+#' @exportMethod median
 setMethod(
 	"median",
 	signature(x = "GRaster"),
@@ -64,9 +64,9 @@ setMethod(
 	} # EOF
 )
 
-#" @aliases count
-#" @rdname functions
-#" @exportMethod count
+#' @aliases count
+#' @rdname functions
+#' @exportMethod count
 setMethod(
 	"count",
 	signature(x = "GRaster"),
@@ -79,9 +79,9 @@ setMethod(
 	} # EOF
 )
 
-#" @aliases sum
-#" @rdname functions
-#" @exportMethod sum
+#' @aliases sum
+#' @rdname functions
+#' @exportMethod sum
 setMethod(
 	"sum",
 	signature(x = "GRaster"),
@@ -94,9 +94,9 @@ setMethod(
 	} # EOF
 )
 
-#" @aliases min
-#" @rdname functions
-#" @exportMethod min
+#' @aliases min
+#' @rdname functions
+#' @exportMethod min
 setMethod(
 	"min",
 	signature(x = "GRaster"),
@@ -109,9 +109,9 @@ setMethod(
 	} # EOF
 )
 
-#" @aliases max
-#" @rdname functions
-#" @exportMethod max
+#' @aliases max
+#' @rdname functions
+#' @exportMethod max
 setMethod(
 	"max",
 	signature(x = "GRaster"),
@@ -126,9 +126,9 @@ setMethod(
 	} # EOF
 )
 
-#" @aliases which.min
-#" @rdname functions
-#" @exportMethod which.min
+#' @aliases which.min
+#' @rdname functions
+#' @exportMethod which.min
 setMethod(
 	"which.min",
 	signature(x = "GRaster"),
@@ -142,9 +142,9 @@ setMethod(
 	} # EOF
 )
 
-#" @aliases which.max
-#" @rdname functions
-#" @exportMethod which.max
+#' @aliases which.max
+#' @rdname functions
+#' @exportMethod which.max
 setMethod(
 	"which.max",
 	signature(x = "GRaster"),
@@ -158,9 +158,9 @@ setMethod(
 	} # EOF
 )
 
-#" @aliases sdpop
-#" @rdname functions
-#" @exportMethod sdpop
+#' @aliases sdpop
+#' @rdname functions
+#' @exportMethod sdpop
 setMethod(
 	"sdpop",
 	signature(x = "GRaster"),
@@ -173,9 +173,9 @@ setMethod(
 	} # EOF
 )
 
-#" @aliases varpop
-#" @rdname functions
-#" @exportMethod varpop
+#' @aliases varpop
+#' @rdname functions
+#' @exportMethod varpop
 setMethod(
 	"varpop",
 	signature(x = "GRaster"),
@@ -188,9 +188,9 @@ setMethod(
 	} # EOF
 )
 
-#" @aliases sd
-#" @rdname functions
-#" @exportMethod sd
+#' @aliases sd
+#' @rdname functions
+#' @exportMethod sd
 setMethod(
 	"sd",
 	signature(x = "GRaster"),
@@ -216,9 +216,9 @@ setMethod(
 	} # EOF
 )
 
-#" @aliases var
-#" @rdname functions
-#" @exportMethod var
+#' @aliases var
+#' @rdname functions
+#' @exportMethod var
 setMethod(
 	"var",
 	signature(x = "GRaster"),
@@ -246,9 +246,9 @@ setMethod(
 	} # EOF
 )
 
-#" @aliases nunique
-#" @rdname functions
-#" @exportMethod nunique
+#' @aliases nunique
+#' @rdname functions
+#' @exportMethod nunique
 setMethod(
 	"nunique",
 	signature(x = "GRaster"),
@@ -261,9 +261,9 @@ setMethod(
 	} # EOF
 )
 
-#" @aliases skewness
-#" @rdname functions
-#" @exportMethod skewness
+#' @aliases skewness
+#' @rdname functions
+#' @exportMethod skewness
 setMethod(
 	"skewness",
 	signature(x = "GRaster"),
@@ -276,9 +276,9 @@ setMethod(
 	} # EOF
 )
 
-#" @aliases kurtosis
-#" @rdname functions
-#" @exportMethod kurtosis
+#' @aliases kurtosis
+#' @rdname functions
+#' @exportMethod kurtosis
 setMethod(
 	"kurtosis",
 	signature(x = "GRaster"),
@@ -291,9 +291,9 @@ setMethod(
 	} # EOF
 )
 
-#" @aliases slope
-#" @rdname functions
-#" @exportMethod slope
+#' @aliases slope
+#' @rdname functions
+#' @exportMethod slope
 setMethod(
 	"slope",
 	signature(x = "GRaster"),
@@ -306,9 +306,9 @@ setMethod(
 	} # EOF
 )
 
-#" @aliases intercept
-#" @rdname functions
-#" @exportMethod intercept
+#' @aliases intercept
+#' @rdname functions
+#' @exportMethod intercept
 setMethod(
 	"intercept",
 	signature(x = "GRaster"),
@@ -321,9 +321,9 @@ setMethod(
 	} # EOF
 )
 
-#" @aliases r2
-#" @rdname functions
-#" @exportMethod r2
+#' @aliases r2
+#' @rdname functions
+#' @exportMethod r2
 setMethod(
 	"r2",
 	signature(x = "GRaster"),
@@ -336,9 +336,9 @@ setMethod(
 	} # EOF
 )
 
-#" @aliases tvalue
-#" @rdname functions
-#" @exportMethod tvalue
+#' @aliases tvalue
+#' @rdname functions
+#' @exportMethod tvalue
 setMethod(
 	"tvalue",
 	signature(x = "GRaster"),
@@ -351,9 +351,9 @@ setMethod(
 	} # EOF
 )
 
-#" @aliases range
-#" @rdname functions
-#" @exportMethod range
+#' @aliases range
+#' @rdname functions
+#' @exportMethod range
 setMethod(
 	"range",
 	signature(x = "GRaster"),
@@ -366,9 +366,9 @@ setMethod(
 	} # EOF
 )
 
-#" @aliases quantile
-#" @rdname functions
-#" @exportMethod quantile
+#' @aliases quantile
+#' @rdname functions
+#' @exportMethod quantile
 setMethod(
 	"quantile",
 	signature(x = "GRaster"),

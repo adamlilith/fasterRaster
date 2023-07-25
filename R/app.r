@@ -1,41 +1,41 @@
-#" Apply a function to a set of rasters
-#"
-#" @description `app()` applies a function to a set of "stacked" rasters.
-#" 
-#" This function operates in a manner slightly different from [terra::app()]. The function to be applied *must* be written as a character string. For example, if the raster had layer names "`x1`" and "`x2`", then the function might be like `"= max(sqrt(x1), log(x2))"`. Rasters **cannot** have the same names as functions used in the formula. In this example, the rasters could not be named "max", "sqrt", or "log".
-#" 
-#" The `app()` function will automatically check for raster names that appear also to be functions that appear in the formula, but the `appCheck()` function can be applied to the raster stack plus the formula to do this outside of `app()`. You can obtain a list of functions using `appFuns()`. Note that these are sometimes different from how they are applied in **R**.
-#"
-#" @param x A `GRaster` with one or more named layers.
-#"
-#" @param fun Character: The function to apply. This must be written as a character string that follows these rules:
-#" 
-#" * It must begin with an equals sign ("`=`"").
-#" * It must use typical arithmetic operators like `+`, `-`, `*`, `/` and/or functions that can be seen using `appFuns(TRUE)`.
-#" * It has no functions that have the same names as the [names()] of any of the raster layers. Note that `x` and `y` are forbidden names :(
-#" The help page for `r.mapcalc` on the **GRASS** website provides more details.
-#" 
-#" @param ensure Character: This ensures that rasters are treated as a certain type before they are operated on. This is useful when using rasters that have all integer values, which **GRASS** can assume represent integers, even if they are not supposed to. In this case, the output of operations on this raster might be an integer if otherwise not corrected. Partial matching is used, and options include:
-#" * `"integer"`: Force all rasters to integers by truncating their values. The output may still be of type `float` if the operation creates non-integer values.
-#" * `"float"`: Force rasters to be considered floating-point values.
-#" * `"double"`: Force rasters to be considered double-floating point values.
-#" * `"auto"` (default): Ensure that rasters are represented by their native [datatype()] (i.e., "CELL" rasters as integers, "FCELL" rasters as floating-point, and "DCELL" as double-floating point).
-#" 
-#" @param show Logical (function `appFuns()`):
-#" * `FALSE` (default): Return a `data.frame` or `data.table`` with definitions of functions.
-#" * `TRUE`: Open a searchable, sortable **shiny** table in a browser.
-#" 
-#" @param msgOnGood Logical (function `appCheck()`): If `TRUE` (default), display a message if no overt problems with the raster names and formula are detected.
-#" 
-#" @param failOnBad Logical (function `appCheck()`): If `TRUE` (default), fail if overt problems with raster names and the formula are detected.
-#"
-#" @returns A `GRaster`.
-#"
-#" @seealso [terra::app()], and modules `r.mapcalc` and `r.mapcalc.simple` in **GRASS**.
-#"
-#" @aliases app
-#" @rdname app
-#" @exportMethod app
+#' Apply a function to a set of rasters
+#'
+#' @description `app()` applies a function to a set of "stacked" rasters.
+#' 
+#' This function operates in a manner slightly different from [terra::app()]. The function to be applied *must* be written as a character string. For example, if the raster had layer names "`x1`" and "`x2`", then the function might be like `"= max(sqrt(x1), log(x2))"`. Rasters **cannot** have the same names as functions used in the formula. In this example, the rasters could not be named "max", "sqrt", or "log".
+#' 
+#' The `app()` function will automatically check for raster names that appear also to be functions that appear in the formula, but the `appCheck()` function can be applied to the raster stack plus the formula to do this outside of `app()`. You can obtain a list of functions using `appFuns()`. Note that these are sometimes different from how they are applied in **R**.
+#'
+#' @param x A `GRaster` with one or more named layers.
+#'
+#' @param fun Character: The function to apply. This must be written as a character string that follows these rules:
+#' 
+#' * It must begin with an equals sign ("`=`"").
+#' * It must use typical arithmetic operators like `+`, `-`, `*`, `/` and/or functions that can be seen using `appFuns(TRUE)`.
+#' * It has no functions that have the same names as the [names()] of any of the raster layers. Note that `x` and `y` are forbidden names :(
+#' The help page for `r.mapcalc` on the **GRASS** website provides more details.
+#' 
+#' @param ensure Character: This ensures that rasters are treated as a certain type before they are operated on. This is useful when using rasters that have all integer values, which **GRASS** can assume represent integers, even if they are not supposed to. In this case, the output of operations on this raster might be an integer if otherwise not corrected. Partial matching is used, and options include:
+#' * `"integer"`: Force all rasters to integers by truncating their values. The output may still be of type `float` if the operation creates non-integer values.
+#' * `"float"`: Force rasters to be considered floating-point values.
+#' * `"double"`: Force rasters to be considered double-floating point values.
+#' * `"auto"` (default): Ensure that rasters are represented by their native [datatype()] (i.e., "CELL" rasters as integers, "FCELL" rasters as floating-point, and "DCELL" as double-floating point).
+#' 
+#' @param show Logical (function `appFuns()`):
+#' * `FALSE` (default): Return a `data.frame` or `data.table`` with definitions of functions.
+#' * `TRUE`: Open a searchable, sortable **shiny** table in a browser.
+#' 
+#' @param msgOnGood Logical (function `appCheck()`): If `TRUE` (default), display a message if no overt problems with the raster names and formula are detected.
+#' 
+#' @param failOnBad Logical (function `appCheck()`): If `TRUE` (default), fail if overt problems with raster names and the formula are detected.
+#'
+#' @returns A `GRaster`.
+#'
+#' @seealso [terra::app()], and modules `r.mapcalc` and `r.mapcalc.simple` in **GRASS**.
+#'
+#' @aliases app
+#' @rdname app
+#' @exportMethod app
 methods::setMethod(
     f = "app",
     signature = c(x = "GRaster"),
@@ -102,9 +102,9 @@ methods::setMethod(
     } # EOF
 )
 
-#" @aliases appFuns
-#" @rdname app
-#" @exportMethod appFuns
+#' @aliases appFuns
+#' @rdname app
+#' @exportMethod appFuns
 methods::setMethod(
     f = "appFuns",
     signature = c(show = "logical"),
@@ -143,9 +143,9 @@ methods::setMethod(
     } # EOF
 )
 
-#" @aliases appCheck
-#" @rdname app
-#" @exportMethod appCheck
+#' @aliases appCheck
+#' @rdname app
+#' @exportMethod appCheck
 methods::setMethod(
     f = "appCheck",
     signature = c(x = "GRaster", fun = "character"),

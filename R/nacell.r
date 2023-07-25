@@ -1,18 +1,18 @@
-#" Number of NA or non-NA cells in a raster
-#"
-#" @description Number of non-`NA` or number of `NA` cells in a raster. If the raster is 3D, then all cells in all layers are counted.
-#"
-#" @param x A `GRaster`.
-#"
-#" @returns A numeric value, one per raster layer in the input.
-#"
-#" @example man/examples/ex_GRaster.r
-#"
-#" @seealso [ncell()], [ncell3d()]
-#" 
-#" @aliases nacell
-#" @rdname nacell
-#" @exportMethod nacell
+#' Number of NA or non-NA cells in a raster
+#'
+#' @description Number of non-`NA` or number of `NA` cells in a raster. If the raster is 3D, then all cells in all layers are counted.
+#'
+#' @param x A `GRaster`.
+#'
+#' @returns A numeric value, one per raster layer in the input.
+#'
+#' @example man/examples/ex_GRaster.r
+#'
+#' @seealso [ncell()], [ncell3d()], [terra::ncell()]
+#' 
+#' @aliases nacell
+#' @rdname nacell
+#' @exportMethod nacell
 methods::setMethod(
     f = "nacell",
     signature = c(x = "GRaster"),
@@ -38,9 +38,9 @@ methods::setMethod(
     } # EOF
 )
 
-#" @aliases nonnacell
-#" @rdname nacell
-#" @exportMethod nonnacell
+#' @aliases nonnacell
+#' @rdname nacell
+#' @exportMethod nonnacell
 methods::setMethod(
     f = "nonnacell",
     signature = c(x = "GRaster"),

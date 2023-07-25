@@ -1,21 +1,21 @@
-#" Frequencies of cell values in a raster
-#"
-#" @description `freq()` tabulates the frequency of cell values in a raster. For rasters where [datatype()] is `CELL` (integers), the frequency of each value is reported. For other rasters, the range of values is divided into bins, and the number of cells with values in each bin is reported.
-#"
-#" @param x A `GRaster`.
-#" @param digits Numeric integer: Number of digits by which to round raster values.
-#" @param value Numeric or `NULL` (default): If numeric, only cells with this value will be counted.
-#" @param bins Positive numeric integer: Number of bins in which to divide values of a raster with continuous values.
-#"
-#" @returns A `data.frame` or a named `list` of `data.frame`s, one per layer in `x`.
-#"
-#" @seealso [terra::freq()], module `r.stats` in **GRASS**
-#"
-#" @example man/examples/ex_GRaster.r
-#"
-#" @aliases freq
-#" @rdname freq
-#" @exportMethod freq
+#' Frequencies of cell values in a raster
+#'
+#' @description `freq()` tabulates the frequency of cell values in a raster. For rasters where [datatype()] is `CELL` (integers), the frequency of each value is reported. For other rasters, the range of values is divided into bins, and the number of cells with values in each bin is reported.
+#'
+#' @param x A `GRaster`.
+#' @param digits Numeric integer: Number of digits by which to round raster values.
+#' @param value Numeric or `NULL` (default): If numeric, only cells with this value will be counted.
+#' @param bins Positive numeric integer: Number of bins in which to divide values of a raster with continuous values.
+#'
+#' @returns A `data.frame` or a named `list` of `data.frame`s, one per layer in `x`.
+#'
+#' @seealso [terra::freq()], module `r.stats` in **GRASS**
+#'
+#' @example man/examples/ex_GRaster.r
+#'
+#' @aliases freq
+#' @rdname freq
+#' @exportMethod freq
 methods::setMethod(
 	f = "freq",
 	signature = c(x = "GRaster"),

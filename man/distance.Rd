@@ -49,7 +49,7 @@
 \item Case 3, when \code{x} is a \code{GVector} and \code{y} is a \code{GVector}: This argument is not used in this case.
 }}
 
-\item{unit}{Character: Units of the output. Either of \code{'meters'} or \verb{'kilometers' (or '}km'`). Partial matching is used.}
+\item{unit}{Character: Units of the output. Either of \code{"meters"} or \verb{"kilometers" (or "}km"`). Partial matching is used.}
 
 \item{method}{Character: The type of distance to calculate. Partial matching is used and capitalization is ignored. Possible values include:
 \itemize{
@@ -90,21 +90,21 @@ opts. <- getFastOptions()
 # IMPORTANT #2: Select the appropriate line below and change as necessary to
 # where GRASS is installed on your system.
 grassDir <- "/Applications/GRASS-8.3.app/Contents/Resources" # Mac
-grassDir <- 'C:/Program Files/GRASS GIS 8.3' # Windows
-grassDir <- '/usr/local/grass' # Linux
+grassDir <- "C:/Program Files/GRASS GIS 8.3" # Windows
+grassDir <- "/usr/local/grass" # Linux
 
 # setup
 library(sf)
 library(terra)
 
 # elevation raster, rivers vector, locations of Dypsis plants
-madElev <- fastData('madElev')
-madRivers <- fastData('madRivers')
-madDypsis <- fastData('madDypsis')
+madElev <- fastData("madElev")
+madRivers <- fastData("madRivers")
+madDypsis <- fastData("madDypsis")
 
 # start GRASS session for examples only
 faster(x = madElev, grassDir = grassDir,
-workDir = tempdir(), location = 'examples') # line only needed for examples
+workDir = tempdir(), location = "examples") # line only needed for examples
 
 # convert a SpatRaster to a GRaster, and sf to a GVector
 elev <- fast(madElev)
@@ -115,19 +115,19 @@ dypsis <- fast(madDypsis)
 
 # distance between NA cells and nearest non-NA cells
 naDist <- distance(elev)
-names(naDist) <- 'NA Distance'
+names(naDist) <- "NA Distance"
 
 # distance between non-NA cells and nearest NA cells
 nonNaDist <- distance(elev, fillNA = FALSE)
-names(nonNaDist) <- 'non-NA Distance'
+names(nonNaDist) <- "non-NA Distance"
 
 # distance between cells with an elevation of 3 and any other cell that != 3
 distFocal3 <- distance(elev, target = 3)
-names(distFocal3) <- 'Distance from 3'
+names(distFocal3) <- "Distance from 3"
 
 # distance between any cell and cells with a value of 3
 distTo3 <- distance(elev, fillNA = FALSE, target = 3)
-names(distTo3) <- 'Distance to 3'
+names(distTo3) <- "Distance to 3"
 
 naDistRast <- rast(naDist)
 nonNaDistRast <- rast(nonNaDist)
@@ -153,7 +153,7 @@ distToPlants
 
 # IMPORTANT #3: Revert back to original GRASS session if needed.
 fastRestore(opts.)
-removeSession('examples')
+removeSession("examples")
 
 }
 }

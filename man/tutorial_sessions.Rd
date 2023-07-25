@@ -14,7 +14,7 @@ As used in \strong{fasterRaster} documentation, a \emph{session} is created usin
 
 \subsection{Working with sessions}{
 
-By default, the working directory is set to the user's temporary folder, obtained through \code{\link[=tempdir]{tempdir()}}. However, if a user wishes to save their work, quit \strong{R}, and later restart the \strong{GRASS} session, they will want to use a custom folder. This is specified in \code{\link[=faster]{faster()}} using the argument \code{workDir}. Restarting a session should be done using \code{\link[=fastRestore]{fastRestore()}}.
+By default, the working directory is set to the user"s temporary folder, obtained through \code{\link[=tempdir]{tempdir()}}. However, if a user wishes to save their work, quit \strong{R}, and later restart the \strong{GRASS} session, they will want to use a custom folder. This is specified in \code{\link[=faster]{faster()}} using the argument \code{workDir}. Restarting a session should be done using \code{\link[=fastRestore]{fastRestore()}}.
 
 Rasters and vectors must typically be in the same location and mapset to be operated on by a single function, although they can be copied between locations/mapsets. When the CRS is different between locations, rasters and vectors are automatically reprojected "on the fly". This can be OK for non-essential work, but in practice, it is better to use \code{\link[=project]{project()}} to ensure the projecting is done in the manner you prefer.
 

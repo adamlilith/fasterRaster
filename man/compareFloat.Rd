@@ -9,7 +9,7 @@ compareFloat(x, y, op, tol = NULL)
 \arguments{
 \item{x, y}{Numeric}
 
-\item{op}{Operator for comparison (must be in quotes): \code{'<'}, \code{'>'}, \code{'<='}, \code{'>='}, \code{'=='}, or \code{'!='}}
+\item{op}{Operator for comparison (must be in quotes): \code{"<"}, \code{">"}, \code{"<="}, \code{">="}, \code{"=="}, or \code{"!="}}
 
 \item{tol}{Tolerance value. If \code{NULL} (default), then this is set equal to \code{.Machine$double.eps^0.5}.}
 }
@@ -24,21 +24,21 @@ x <- 0.9 - 0.8
 y <- 0.8 - 0.7
 
 x < y
-compareFloat(x, y, '<')
+compareFloat(x, y, "<")
 
 x <= y
-compareFloat(x, y, '<=')
+compareFloat(x, y, "<=")
 
 x == y
-compareFloat(x, y, '==')
+compareFloat(x, y, "==")
 
 y > x
-compareFloat(y, x, '>')
+compareFloat(y, x, ">")
 
 y >= x
-compareFloat(y, x, '>=')
+compareFloat(y, x, ">=")
 
 x != y
-compareFloat(x, y, '!=')
+compareFloat(x, y, "!=")
 
 }

@@ -1,40 +1,40 @@
-#" Aggregate values of raster cells into larger cells
-#"
-#" @description `aggregate()` creates a new raster with cells that are an even multiple of the size of the cells of the original raster.
-#"
-#" @param x A `GRaster`.
-#" @param fact Numeric vector: One, two, or three positive values. These reflect the size of the new cells as multiples of the size of the old cells. If just one value is supplied, this is used for all two or three dimensions. If two values are supplied, the first is multiplied by the east-west size of cells, and the second north-south size of cells (the raster must be 2D). If three values are supplied, the third value is used as the multiplier of the vertical dimension of cells. Values are calculated using all cells that have their centers contained by the target cell.
-#"
-#" Note that unlike [terra::aggregate()], these values need not be even integers. Aggregation
-#" @param fun Character: Name of the function used to aggregate:
-#" * `mean``: Average (default)
-#" * `median`: Median
-#" * `mode`: Most common value
-#" * `min`: Minimum
-#" * `max`: Maximum
-#" * `range`: Difference between maximum and minimum
-#" * `sum`: Sum
-#" * `varpop`: Population variance
-#" * `sdpop`: Population standard deviation
-#" * `quantile`: Quantile (see argument `prob`)
-#" * `count`: Number of non-`NA` cell
-#" * `diversity`: Number of unique values
-#"
-#" @param prob Numeric: Quantile at which to calculate `quantile`.
-#"
-#" @param na.rm Logical: If `FALSE` (default), propagate `NA` cells.
-#"
-#" @param weight Logical: If `FALSE`, each source cell that has its center in the destination cell will be counted equally. If `TRUE`, the value of each source will be weighted the proportion of the destination cell the source cell covers.
-#"
-#" @returns A `GRaster`.
-#" 
-#" @seealso [terra::aggregate()], [terra::disagg()], module `r.resamp.stats` in **GRASS**
-#"
-#" @example man/examples/ex_aggregate.r
-#"
-#" @aliases aggregate
-#" @rdname aggregate
-#" @exportMethod aggregate
+#' Aggregate values of raster cells into larger cells
+#'
+#' @description `aggregate()` creates a new raster with cells that are an even multiple of the size of the cells of the original raster.
+#'
+#' @param x A `GRaster`.
+#' @param fact Numeric vector: One, two, or three positive values. These reflect the size of the new cells as multiples of the size of the old cells. If just one value is supplied, this is used for all two or three dimensions. If two values are supplied, the first is multiplied by the east-west size of cells, and the second north-south size of cells (the raster must be 2D). If three values are supplied, the third value is used as the multiplier of the vertical dimension of cells. Values are calculated using all cells that have their centers contained by the target cell.
+#'
+#' Note that unlike [terra::aggregate()], these values need not be even integers. Aggregation
+#' @param fun Character: Name of the function used to aggregate:
+#' * `mean``: Average (default)
+#' * `median`: Median
+#' * `mode`: Most common value
+#' * `min`: Minimum
+#' * `max`: Maximum
+#' * `range`: Difference between maximum and minimum
+#' * `sum`: Sum
+#' * `varpop`: Population variance
+#' * `sdpop`: Population standard deviation
+#' * `quantile`: Quantile (see argument `prob`)
+#' * `count`: Number of non-`NA` cell
+#' * `diversity`: Number of unique values
+#'
+#' @param prob Numeric: Quantile at which to calculate `quantile`.
+#'
+#' @param na.rm Logical: If `FALSE` (default), propagate `NA` cells.
+#'
+#' @param weight Logical: If `FALSE`, each source cell that has its center in the destination cell will be counted equally. If `TRUE`, the value of each source will be weighted the proportion of the destination cell the source cell covers.
+#'
+#' @returns A `GRaster`.
+#' 
+#' @seealso [terra::aggregate()], [terra::disagg()], module `r.resamp.stats` in **GRASS**
+#'
+#' @example man/examples/ex_aggregate.r
+#'
+#' @aliases aggregate
+#' @rdname aggregate
+#' @exportMethod aggregate
 methods::setMethod(
 	f = "aggregate",
 	signature = c(x = "GRaster"),

@@ -27,26 +27,26 @@ This function is the same as \code{\link[=pmatch]{pmatch()}}, but it can throw a
 }
 \examples{
 
-pmatchSafe('ap', c('apples', 'oranges', 'bananas'))
+pmatchSafe("ap", c("apples", "oranges", "bananas"))
 
-pmatchSafe('AP', c('apples', 'oranges', 'bananas'))
+pmatchSafe("AP", c("apples", "oranges", "bananas"))
 
-pmatchSafe('AP', c('apples', 'oranges', 'bananas'),
+pmatchSafe("AP", c("apples", "oranges", "bananas"),
     ignoreCase = FALSE, error = FALSE)
 
-pmatchSafe(c('ap', 'ba'), c('apples', 'oranges', 'bananas'))
+pmatchSafe(c("ap", "ba"), c("apples", "oranges", "bananas"))
 
 tryCatch(
-    pmatchSafe('kumquats', c('apples', 'oranges', 'bananas')),
+    pmatchSafe("kumquats", c("apples", "oranges", "bananas")),
 	error = function(cond) FALSE
 )
 
-pmatchSafe('kumquats', c('apples', 'oranges', 'bananas'), error = FALSE)
+pmatchSafe("kumquats", c("apples", "oranges", "bananas"), error = FALSE)
 
-pmatchSafe(c('ap', 'corn'), c('apples', 'oranges', 'bananas'), error = FALSE)
+pmatchSafe(c("ap", "corn"), c("apples", "oranges", "bananas"), error = FALSE)
 
 tryCatch(
-    pmatchSafe(c('ap', 'ba'), c('apples', 'oranges', 'bananas'), nmax = 1),
+    pmatchSafe(c("ap", "ba"), c("apples", "oranges", "bananas"), nmax = 1),
 	error=function(cond) FALSE
 )
 

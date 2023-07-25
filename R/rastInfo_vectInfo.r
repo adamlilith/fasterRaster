@@ -1,10 +1,10 @@
-#" Information on rasters and vectors in "GRASS"
-#"
-#" @param x A `GRaster`, `GVector`, or `gnames`.
-#"
-#" @returns Extent, dimensions, resolution, bottom/top, etc.
-#"
-#" @noRd
+#' Information on rasters and vectors in "GRASS"
+#'
+#' @param x A `GRaster`, `GVector`, or `gnames`.
+#'
+#' @returns Extent, dimensions, resolution, bottom/top, etc.
+#'
+#' @noRd
 .rastInfo <- function(x) {
 
 	gn <- if (!inherits(x, "character")) {
@@ -150,7 +150,7 @@
 		# data type
 		grassDataType <- info[grepl(info, pattern="datatype=")]
 		grassDataType <- sub(grassDataType, pattern="datatype=", replacement="")
-		grassDataType <- gsub(grassDataType, pattern=""", replacement="")
+		grassDataType <- gsub(grassDataType, pattern="\"", replacement="")
 		
 		if (grassDataType == "CELL") {
 			terraDataType <- "INT4S"

@@ -3,7 +3,7 @@
 \name{setFastOptions}
 \alias{setFastOptions}
 \alias{getFastOptions}
-\title{Set or get options shared across 'fasterRaster' functions}
+\title{Set or get options shared across "fasterRaster" functions}
 \usage{
 setFastOptions(..., restore = FALSE)
 
@@ -17,15 +17,15 @@ getFastOptions(..., default = FALSE)
 \item \code{details} (logical): If \code{TRUE}, show details on run-time and otherwise hidden slots in classes. This is mainly used for debugging, so most users will want to keep this at its default, \code{FALSE}.
 \item \code{grassDir} (character): The folder in which \strong{GRASS} is installed on your computer. Typically, this option is set when you run \code{\link[=faster]{faster()}}, but you can define it before you run that function. All subsequent calls of \code{faster()} do not need \code{grassDir} set because it will be obtained from the options. By default, \code{grassDir} is \code{NULL}, which causes the function to search for your installation of \strong{GRASS} (and which usually fails). Depending on your operating system, your install directory will look something like this:
 \itemize{
-\item Windows: \code{'C:/Program Files/GRASS GIS 8.3'}
+\item Windows: \code{"C:/Program Files/GRASS GIS 8.3"}
 \item Mac OS: \code{"/Applications/GRASS-8.3.app/Contents/Resources"}
-\item Linux: \code{'/usr/local/grass'}
+\item Linux: \code{"/usr/local/grass"}
 }
-\item \code{addonDir} (character): Folder in which \strong{GRASS} addons are stored. If \code{NULL} and \code{grassDir} is not \code{NULL}, this will be taken to be \code{file.path(grassDir, 'addons')}.
-\item \code{grassVer} (character): Version of \strong{GRASS} being used. This should be supplied as a character string, not as a numeric value. Do not include the minor version (e.g., use \code{'8.3'}, not `'8.3.1'``). As \strong{GRASS} is developed, new modules and functionalities for existing modules are added. Setting the version correctly allows you to take advantage of these options.
+\item \code{addonDir} (character): Folder in which \strong{GRASS} addons are stored. If \code{NULL} and \code{grassDir} is not \code{NULL}, this will be taken to be \code{file.path(grassDir, "addons")}.
+\item \code{grassVer} (character): Version of \strong{GRASS} being used. This should be supplied as a character string, not as a numeric value. Do not include the minor version (e.g., use \code{"8.3"}, not `"8.3.1"``). As \strong{GRASS} is developed, new modules and functionalities for existing modules are added. Setting the version correctly allows you to take advantage of these options.
 \item \code{memory} (integer/numeric): The amount of memory to allocate to a task, in MB. The default is 300 MB. Only some \strong{GRASS} modules allow this option.
 \item \code{useDataTable} (logical): If \code{FALSE} (default), use \code{data.frame}s when going back and forth between data tables of \code{GVector}s and \strong{R}. This can be slow for very large data tables. If \code{TRUE}, use \code{data.table}s from the \strong{data.table} package. This can be much faster, but it might require you to know how to use \code{data.table}s if you want to manipulate them in \strong{R}. You can always convert them to \code{data.frame}s using \code{\link[=as.data.frame]{as.data.frame()}}.
-\item \code{workDir} (character): The folder in which \strong{GRASS} rasters, vectors, and other objects are created and manipulated. Typically, this is set when you first call \code{\link[=faster]{faster()}}. All subsequent calls to \code{faster()} will not do not need \code{workDir} defined because it will be obtained from the options. By default, this is set to the temporary directory on your operating system (from \code{\link[=tempdir]{tempdir()}}), appended with "\code{fr}". Ergo, the path will be \code{file.path(tempdir(), 'fr')}.
+\item \code{workDir} (character): The folder in which \strong{GRASS} rasters, vectors, and other objects are created and manipulated. Typically, this is set when you first call \code{\link[=faster]{faster()}}. All subsequent calls to \code{faster()} will not do not need \code{workDir} defined because it will be obtained from the options. By default, this is set to the temporary directory on your operating system (from \code{\link[=tempdir]{tempdir()}}), appended with "\code{fr}". Ergo, the path will be \code{file.path(tempdir(), "fr")}.
 }}
 
 \item{restore}{If \code{TRUE}, the all options will be reset to their default values. The default is \code{FALSE}.}
@@ -38,19 +38,19 @@ If just one option is specified, \code{getFastOptions()} returns a vector with a
 \description{
 These functions allows you to either 1) view or 2) define options shared by \strong{fasterRaster} functions. You can view the current option(s) using, for example:
 
-\if{html}{\out{<div class="sourceCode R">}}\preformatted{getFastOptions('cores') # show current value of "cores" option
+\if{html}{\out{<div class="sourceCode R">}}\preformatted{getFastOptions("cores") # show current value of "cores" option
 getFastOptions() # show all options
 }\if{html}{\out{</div>}}
 
 and all default values using
 
-\if{html}{\out{<div class="sourceCode R">}}\preformatted{getFastOptions('memory', default = TRUE) # default value of "memory" option
+\if{html}{\out{<div class="sourceCode R">}}\preformatted{getFastOptions("memory", default = TRUE) # default value of "memory" option
 getFastOptions(default = TRUE) # default values of all options
 }\if{html}{\out{</div>}}
 
 You can set options using forms like:
 
-\if{html}{\out{<div class="sourceCode R">}}\preformatted{setFastOptions(grassDir = 'C:/Program Files/GRASS GIS 8.3')
+\if{html}{\out{<div class="sourceCode R">}}\preformatted{setFastOptions(grassDir = "C:/Program Files/GRASS GIS 8.3")
 }\if{html}{\out{</div>}}
 
 Multiple options can be set at once using
@@ -68,20 +68,20 @@ Multiple options can be set at once using
 opts. <- getFastOptions()
 
 # see current values for options
-getFastOptions('cores')
-getFastOptions('memory')
-getFastOptions('details')
-getFastOptions('grassVer')
-getFastOptions('grassDir')
-getFastOptions('workDir')
+getFastOptions("cores")
+getFastOptions("memory")
+getFastOptions("details")
+getFastOptions("grassVer")
+getFastOptions("grassDir")
+getFastOptions("workDir")
 getFastOptions() # all options
 
 # see default values for options
-getFastOptions('cores', default = TRUE)
+getFastOptions("cores", default = TRUE)
 getFastOptions(default = TRUE) # all options
 
 # set options (change accordingly for your system!!!)
-setFastOptions(grassDir = 'C:/Program Files/GRASS GIS 8.3')
+setFastOptions(grassDir = "C:/Program Files/GRASS GIS 8.3")
 setFastOptions(details = TRUE, memory = 600, cores = 4)
 
 # IMPORTANT #2: Revert back to original GRASS session if needed.

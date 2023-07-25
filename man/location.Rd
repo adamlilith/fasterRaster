@@ -36,25 +36,25 @@ opts. <- getFastOptions()
 # IMPORTANT #2: Select the appropriate line below and change as necessary to
 # where GRASS is installed on your system.
 grassDir <- "/Applications/GRASS-8.3.app/Contents/Resources" # Mac
-grassDir <- 'C:/Program Files/GRASS GIS 8.3' # Windows
-grassDir <- '/usr/local/grass' # Linux
+grassDir <- "C:/Program Files/GRASS GIS 8.3" # Windows
+grassDir <- "/usr/local/grass" # Linux
 
 # setup
 library(terra)
 
 # example data
-madElev <- fastData('madElev')
+madElev <- fastData("madElev")
 
 # set up one location
 faster(x = madElev, grassDir = grassDir,
-workDir = tempdir(), location = 'examples1') # line only needed for examples
+workDir = tempdir(), location = "examples1") # line only needed for examples
 
 # convert a SpatRaster to a GRaster using the first location
 me1 <- fast(madElev)
 
 # set up another location
 faster(crs = madElev, grassDir = grassDir,
-workDir = wd, location = 'examples2') # line only needed for examples
+workDir = wd, location = "examples2") # line only needed for examples
 
 # convert a SpatRaster to a GRaster using the second location
 me2 <- fast(madElev)
@@ -69,14 +69,14 @@ mapset()
 # What coordinate reference system?
 crs()
 
-# We cannot do any work on me1 because we're in the "examples2" location. We
+# We cannot do any work on me1 because we"re in the "examples2" location. We
 # need to switch back to "examples1":
-fastRestore(location = 'examples1')
+fastRestore(location = "examples1")
 
 # IMPORTANT #3: Revert back to original GRASS session if needed.
 fastRestore(opts.)
-removeSession('examples1')
-removeSession('examples2')
+removeSession("examples1")
+removeSession("examples2")
 
 }
 }

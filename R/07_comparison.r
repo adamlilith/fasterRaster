@@ -1,15 +1,15 @@
-#" Comparison operations on GRasters
-#"
-#" @description You can do comparative operations on `GRaster`s using normal operators in **R**: `<`, `<=`, `==`, `!=`, `>=`, and `>`.
-#" 
-#" @param e1,e2 `GRaster`, logical, or numeric
-#"
-#" @return A `GRaster`.
-#"
-#" @example man/examples/ex_GRaster_arithmetic.r
-#"
-#" @rdname Comparison
-#" @noRd
+#' Comparison operations on GRasters
+#'
+#' @description You can do comparative operations on `GRaster`s using normal operators in **R**: `<`, `<=`, `==`, `!=`, `>=`, and `>`.
+#' 
+#' @param e1,e2 `GRaster`, logical, or numeric
+#'
+#' @return A `GRaster`.
+#'
+#' @example man/examples/ex_GRaster_arithmetic.r
+#'
+#' @rdname Comparison
+#' @noRd
 
 # raster raster
 methods::setMethod("Ops", signature(e1 = "GRaster", e2 = "GRaster"),

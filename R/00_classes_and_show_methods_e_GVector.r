@@ -1,18 +1,18 @@
-#" @title Classes for "fasterRaster" locations, rasters, and vectors
-#"
-#" @aliases GMetaTable
-#" @rdname GSession
-#" @exportClass GMetaTable
+#' @title Classes for "fasterRaster" locations, rasters, and vectors
+#'
+#' @aliases GMetaTable
+#' @rdname GSession
+#' @exportClass GMetaTable
 GMetaTable <- setClass("GMetaTable")
 
-#" @aliases GEmptyMetaTable
-#" @rdname GSession
-#" @exportClass GEmptyMetaTable
+#' @aliases GEmptyMetaTable
+#' @rdname GSession
+#' @exportClass GEmptyMetaTable
 GEmptyMetaTable <- setClass("GEmptyMetaTable", contains = "GMetaTable")
 
-#" @aliases GFullMetaTable
-#" @rdname GSession
-#" @exportClass GFullMetaTable
+#' @aliases GFullMetaTable
+#' @rdname GSession
+#' @exportClass GFullMetaTable
 GFullMetaTable <- setClass(
 	"GFullMetaTable",
 	contains = "GMetaTable",
@@ -39,9 +39,9 @@ setValidity("GFullMetaTable",
 )
 
 
-#" @aliases GSession
-#" @rdname GSession
-#" @exportClass GVector
+#' @aliases GSession
+#' @rdname GSession
+#' @exportClass GVector
 GVector <- methods::setClass(
 	"GVector",
 	contains = "GSpatial",
@@ -74,19 +74,19 @@ setValidity("GVector",
 	} # EOF
 )
 
-#" Create a GVector
-#"
-#" @description Create a `GVector` from a vector existing in the current **GRASS** session.
-#"
-#" @param gn Character: The name of the vector in **GRASS**.
-#"
-#" @returns A `GVector`.
-#"
-#" @seealso [.makeGRaster()]
-#"
-#" @example man/examples/ex_GRaster_GVector.r
-#"
-#" @noRd
+#' Create a GVector
+#'
+#' @description Create a `GVector` from a vector existing in the current **GRASS** session.
+#'
+#' @param gn Character: The name of the vector in **GRASS**.
+#'
+#' @returns A `GVector`.
+#'
+#' @seealso [.makeGRaster()]
+#'
+#' @example man/examples/ex_GRaster_GVector.r
+#'
+#' @noRd
 .makeGVector <- function(gn) {
 
 	info <- .vectInfo(gn)

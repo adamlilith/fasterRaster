@@ -1,19 +1,19 @@
-#" Delete a GRASS session (location, mapset(s), and all associated files)
-#"
-#" @description `fastRemove()` deletes a **GRASS** "session"s" [location and mapsets][tutorial_sessions] and all rasters and vectors therein. This function should be used cautiously, and is mainly provided as a way to clean up after running examples.
-#"
-#" @param location Character: Name of the **GRASS** location.
-#" @param mapset Character: Either `NULL` (default) or the name of the mapset to delete. If `NULL`, then all mapsets in the given location will be deleted.
-#" @param workDir Character: Either `NULL` (default) or a character string of the directory in which the location to be removed resides. If `NULL`, then the working directory will be obtained from `getFastOptions("workDir")`.
-#"
-#" @returns If successful, `TRUE` (invisibly). If not, then `FALSE` (also invisibly), plus a warning.
-#"
-#" @examples
-#"
-#" # See nearly any example using a fasterRaster function for
-#" # how fastRemove() can be used.
-#"
-#" @export
+#' Delete a GRASS session (location, mapset(s), and all associated files)
+#'
+#' @description `fastRemove()` deletes a **GRASS** "session"s" [location and mapsets][tutorial_sessions] and all rasters and vectors therein. This function should be used cautiously, and is mainly provided as a way to clean up after running examples.
+#'
+#' @param location Character: Name of the **GRASS** location.
+#' @param mapset Character: Either `NULL` (default) or the name of the mapset to delete. If `NULL`, then all mapsets in the given location will be deleted.
+#' @param workDir Character: Either `NULL` (default) or a character string of the directory in which the location to be removed resides. If `NULL`, then the working directory will be obtained from `getFastOptions("workDir")`.
+#'
+#' @returns If successful, `TRUE` (invisibly). If not, then `FALSE` (also invisibly), plus a warning.
+#'
+#' @examples
+#'
+#' # See nearly any example using a fasterRaster function for
+#' # how fastRemove() can be used.
+#'
+#' @export
 fastRemove <- function(
 	location,
 	mapset = NULL,

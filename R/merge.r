@@ -1,18 +1,18 @@
-#" Combine two or more rasters with different extents and fill in NAs
-#"
-#" @description `merge()` combines two or more `GRaster`s, possibly with different extents, into a single larger `GRaster`. Where the same cell has different values in each raster, the value of the first raster"s cell is used. If this is `NA`, then the value of the second raster"s cell is used, and so on.
-#"
-#" @param x,y,... `GRaster`s.
-#"
-#" @returns A `GRaster`.
-#" 
-#" @seealso [terra::merge()]
-#"
-#" @example man/examples/ex_merge.r
-#"
-#" @aliases merge
-#" @rdname merge
-#" @exportMethod merge
+#' Combine two or more rasters with different extents and fill in NAs
+#'
+#' @description `merge()` combines two or more `GRaster`s, possibly with different extents, into a single larger `GRaster`. Where the same cell has different values in each raster, the value of the first raster"s cell is used. If this is `NA`, then the value of the second raster"s cell is used, and so on.
+#'
+#' @param x,y,... `GRaster`s.
+#'
+#' @returns A `GRaster`.
+#' 
+#' @seealso [terra::merge()]
+#'
+#' @example man/examples/ex_merge.r
+#'
+#' @aliases merge
+#' @rdname merge
+#' @exportMethod merge
 methods::setMethod(
 	f = "merge",
 	signature = c(x = "GRaster", y = "GRaster"),

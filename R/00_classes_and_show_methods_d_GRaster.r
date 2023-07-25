@@ -1,9 +1,9 @@
-#" @title Classes for "fasterRaster" locations, rasters, and vectors
-#"
-#" @describeIn GSession
-#"
-#" @importFrom methods new
-#" @exportClass GRaster
+#' @title Classes for "fasterRaster" locations, rasters, and vectors
+#'
+#' @describeIn GSession
+#'
+#' @importFrom methods new
+#' @exportClass GRaster
 GRaster <- setClass(
 	"GRaster",
 	contains = "GRegion",
@@ -51,20 +51,20 @@ setValidity("GRaster",
 	} # EOF
 )
 
-#" Create a GRaster
-#"
-#" @description Create a `GRaster` from a raster existing in the current **GRASS** session.
-#"
-#" @param gn Character: The name of the raster in **GRASS**.
-#" @param names Character: Name of the raster.
-#"
-#" @returns A `GRaster`.
-#"
-#" @seealso [.makeGVector()]
-#"
-#" @example man/examples/ex_GRaster_GVector.r
-#"
-#" @noRd
+#' Create a GRaster
+#'
+#' @description Create a `GRaster` from a raster existing in the current **GRASS** session.
+#'
+#' @param gn Character: The name of the raster in **GRASS**.
+#' @param names Character: Name of the raster.
+#'
+#' @returns A `GRaster`.
+#'
+#' @seealso [.makeGVector()]
+#'
+#' @example man/examples/ex_GRaster_GVector.r
+#'
+#' @noRd
 .makeGRaster <- function(gn, names = "raster") {
 
 	info <- .rastInfo(gn)

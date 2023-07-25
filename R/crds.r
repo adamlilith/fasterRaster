@@ -1,20 +1,20 @@
-#" Coordinates of a vector"s features or a raster"s cell centers
-#"
-#" @description Returns the coordinates of a `GVector`"s features or the coordinates of the center of cells of a `GRaster`. Note that if you simply want to convert a vector to a points vector, using [as.points()] is faster.
-#"
-#" @param x A `GVector` or a `GRaster`.
-#" @param z If `TRUE` (default), return x-, y-, and z-coordinates. If `FALSE`, just return x- and y-coordinates. For 2-dimensional objects, z-coordinates will all be 0.
-#" @param na.rm Logical: If `TRUE`, remove cells that are `NA` (`GRaster`s only).
-#"
-#" @returns A `matrix`, `data.frame`, or `list`.
-#"
-#" @seealso [terra::crds()]
-#"
-#" @example man/examples/ex_crds.r
-#"
-#" @aliases crds
-#" @rdname crds
-#" @exportMethod crds
+#' Coordinates of a vector"s features or a raster"s cell centers
+#'
+#' @description Returns the coordinates of a `GVector`"s features or the coordinates of the center of cells of a `GRaster`. Note that if you simply want to convert a vector to a points vector, using [as.points()] is faster.
+#'
+#' @param x A `GVector` or a `GRaster`.
+#' @param z If `TRUE` (default), return x-, y-, and z-coordinates. If `FALSE`, just return x- and y-coordinates. For 2-dimensional objects, z-coordinates will all be 0.
+#' @param na.rm Logical: If `TRUE`, remove cells that are `NA` (`GRaster`s only).
+#'
+#' @returns A `matrix`, `data.frame`, or `list`.
+#'
+#' @seealso [terra::crds()]
+#'
+#' @example man/examples/ex_crds.r
+#'
+#' @aliases crds
+#' @rdname crds
+#' @exportMethod crds
 methods::setMethod(
 	f = "crds",
 	signature = c(x = "GVector"),
@@ -23,8 +23,8 @@ methods::setMethod(
 	} # EOF
 )
 
-#" @rdname crds
-#" @export
+#' @rdname crds
+#' @export
 st_coordinates <- function(x, z = TRUE) {
 	if (inherits(x, "GSpatial")) {
 		.crdsVect(x, z = z)
@@ -81,9 +81,9 @@ st_coordinates <- function(x, z = TRUE) {
 	
 }
 
-#" @aliases crds
-#" @rdname crds
-#" @exportMethod crds
+#' @aliases crds
+#' @rdname crds
+#' @exportMethod crds
 methods::setMethod(
 	f = "crds",
 	signature = c(x = "GRaster"),

@@ -53,8 +53,8 @@
 \item{x}{Any of:
 \itemize{
 \item Missing (default): Reports the extent, resolution, and dimensions of the current region. All other arguments will be ignored.
-\item A \code{GSpatial}, \code{GRegion}, \code{GRaster}, \code{GVector} object: Sets the region's extent, dimensions, and/or resolution to those of the object.
-\item A \code{numeric} vector. This will resize the region's extent, resample the region's resolution/dimensions, or both, to ensure the desired dimensions or resolution are retained:
+\item A \code{GSpatial}, \code{GRegion}, \code{GRaster}, \code{GVector} object: Sets the region"s extent, dimensions, and/or resolution to those of the object.
+\item A \code{numeric} vector. This will resize the region"s extent, resample the region"s resolution/dimensions, or both, to ensure the desired dimensions or resolution are retained:
 * 2 values for \code{regionDim()}: Number of rows and columns
 * 4 values for \code{regionExt()}: Westernmost and easternmost easting (longitude), and southernmost and northernmost northing (latitude)
 * 2 values for \code{regionRes()}: Size of cells in the x- and y-dimensions
@@ -64,16 +64,16 @@
 
 \item{respect}{Character or \code{GRaster}: Indicates what aspect(s) of the current region to retain. Different functions allow for different aspect to be retained. Partial matching is used.
 \itemize{
-\item \code{regionDim()}: \code{'extent'} or \code{'resolution'}.
-\item \code{regionExt()}: \code{'dimensions'} or \code{'resolution'}.
-\item \code{regionRes()}: \code{'extent'} or \code{'dimensions'}.
+\item \code{regionDim()}: \code{"extent"} or \code{"resolution"}.
+\item \code{regionExt()}: \code{"dimensions"} or \code{"resolution"}.
+\item \code{regionRes()}: \code{"extent"} or \code{"dimensions"}.
 Alternatively, a \code{GRaster} can be supplied:
 \item \code{regionDim()}: New region will have same extent and resolution.
 \item \code{regionExt()}: New region will have same dimensions and resolution.
 \item \code{regionRes()}: New region will have same extent and dimensions.
 }
 
-In this case, the new region's registration will be the same as this raster, and cell resolution will be the same
+In this case, the new region"s registration will be the same as this raster, and cell resolution will be the same
 
 Note: In most cases extent cannot be retained exactly if the resolution is changed. When resolution is changed, the actual extent will be the user-supplied extent expanded by zero to one rows or zero to one columns to accommodate an integer number of cells of the desired size. The western and northern limits of the extent will be retained, while the eastern and southern limits of the extent will be moved to accommodate an integer number of columns and rows.}
 }
@@ -86,7 +86,7 @@ The value returned depends on how the function is used:
 }
 }
 \description{
-These functions either change the extent, dimensions, and/or resolution of a \strong{GRASS} \link[=tutorial_regions]{"region"} or report the current region's extent, dimensions, and/or resolution. These functions are mostly used internally and rarely of interest to most users.
+These functions either change the extent, dimensions, and/or resolution of a \strong{GRASS} \link[=tutorial_regions]{"region"} or report the current region"s extent, dimensions, and/or resolution. These functions are mostly used internally and rarely of interest to most users.
 \itemize{
 \item \code{region()}: All 2D and 3D aspects of a region.
 \item \code{regionDim()}: x- and y-dimensions.`
@@ -112,19 +112,19 @@ opts. <- getFastOptions()
 # where GRASS is installed on your system.
 
 grassDir <- "/Applications/GRASS-8.3.app/Contents/Resources" # Mac
-grassDir <- 'C:/Program Files/GRASS GIS 8.3' # Windows
-grassDir <- '/usr/local/grass' # Linux
+grassDir <- "C:/Program Files/GRASS GIS 8.3" # Windows
+grassDir <- "/usr/local/grass" # Linux
 
 # setup
 library(terra)
 
 # example data
-madElev <- fastData('madElev')
-madRivers <- fastData('madRivers')
+madElev <- fastData("madElev")
+madRivers <- fastData("madRivers")
 
 # set up one location
 faster(x = madElev, grassDir = grassDir,
-workDir = tempdir(), location = 'examples') # line only needed for examples
+workDir = tempdir(), location = "examples") # line only needed for examples
 
 # Importing a raster sets the region to match its extent and dimensions.
 elev <- fast(madElev)
@@ -141,22 +141,22 @@ regionDim()
 regionExt()
 regionRes()
 
-# coarsen grid... sets region to match aggregated raster's extent and dimensions
+# coarsen grid... sets region to match aggregated raster"s extent and dimensions
 aggElev <- aggregate(elev, 2) 
 
 # reset region dimensions
 regionDim()
-regionDim(elev, respect='resolution')
+regionDim(elev, respect="resolution")
 regionDim()
 
 # reset region extent
 regionExt()
-regionExt(dypsis, respect='resolution')
+regionExt(dypsis, respect="resolution")
 regionExt()
 
 # reset region resolution
 regionRes()
-regionRes(elev, respect='extent')
+regionRes(elev, respect="extent")
 regionRes()
 
 # reset region
@@ -164,7 +164,7 @@ regionRes()
 
 # IMPORTANT #3: Revert back to original GRASS session if needed.
 fastRestore(opts.)
-removeSession('examples')
+removeSession("examples")
 
 }
 }

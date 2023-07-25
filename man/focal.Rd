@@ -17,27 +17,27 @@
 
 \item{fun}{Character: Name of the function to apply to the neighborhood:
 \itemize{
-\item '\code{mean}' (default)
-\item '\code{median}'
-\item '\code{mode}'
-\item '\code{min}' or '\code{max}': Minumum or maximum. Should not use a weights matrix.
-\item '\code{range}': Difference between the maximum and minimum.  Should not use a weights matrix.
-\item '\code{sd}': Sample standard deviation.  NB: This is the same as the \code{\link[stats:sd]{stats::sd()}} function.
-\item '\code{sdpop}': Population standard deviation. NB: This is the same as the function 'stddev' in the \strong{GRASS} module \code{r.neighbors}.
-\item '\code{sum}': Sum of non-`NA`` cells.
-\item '\code{count}': Number of non-`NA cells. Should not use a weights matrix.
-\item '\code{var}': Sample variance.  NB: This is the same as the \code{\link[stats:cor]{stats::var()}} function.
-\item '\code{varpop}': Population variance. NB: This is the same as the function 'variance' in the \strong{GRASS} module \code{r.neighbors}.
-\item '\code{nunique}': Number of unique values. Should not use a weights matrix.
-\item '\code{interspersion}': Proportion of cells with values different from focal cell (e.g., if 6 of 8 cells have different values, then the interspersion is 6/8 = 0.75). NB: This is slightly different from how it is defined in the \strong{GRASS} module \code{r.neighbors}. Should not use a weights matrix.
-\item '\code{quantile}': Quantile of values. The value in argument \code{quantile} is used to specify the quantile.
+\item "\code{mean}" (default)
+\item "\code{median}"
+\item "\code{mode}"
+\item "\code{min}" or "\code{max}": Minumum or maximum. Should not use a weights matrix.
+\item "\code{range}": Difference between the maximum and minimum.  Should not use a weights matrix.
+\item "\code{sd}": Sample standard deviation.  NB: This is the same as the \code{\link[stats:sd]{stats::sd()}} function.
+\item "\code{sdpop}": Population standard deviation. NB: This is the same as the function "stddev" in the \strong{GRASS} module \code{r.neighbors}.
+\item "\code{sum}": Sum of non-`NA`` cells.
+\item "\code{count}": Number of non-`NA cells. Should not use a weights matrix.
+\item "\code{var}": Sample variance.  NB: This is the same as the \code{\link[stats:cor]{stats::var()}} function.
+\item "\code{varpop}": Population variance. NB: This is the same as the function "variance" in the \strong{GRASS} module \code{r.neighbors}.
+\item "\code{nunique}": Number of unique values. Should not use a weights matrix.
+\item "\code{interspersion}": Proportion of cells with values different from focal cell (e.g., if 6 of 8 cells have different values, then the interspersion is 6/8 = 0.75). NB: This is slightly different from how it is defined in the \strong{GRASS} module \code{r.neighbors}. Should not use a weights matrix.
+\item "\code{quantile}": Quantile of values. The value in argument \code{quantile} is used to specify the quantile.
 }
 
 The center cell value is always included in the calculations, and all calculations ignore \code{NA} cells (i.e., they do not count as cells in the focal neighborhood).}
 
 \item{circle}{Logical: If \code{FALSE} (default), use a "square" neighborhood. If \verb{TRUE, use a "circular" neighborhood. When this is }TRUE\verb{, argument }w cannot be a matrix.}
 
-\item{quantile}{Numeric between 0 and 1, inclusive: Quantile to calculate when \code{fun = 'quantile'}. The default value is 0.5 (median), and valid values must be in the range between 0 and 1, inclusive.}
+\item{quantile}{Numeric between 0 and 1, inclusive: Quantile to calculate when \code{fun = "quantile"}. The default value is 0.5 (median), and valid values must be in the range between 0 and 1, inclusive.}
 }
 \value{
 A \code{GRaster}.
@@ -60,29 +60,29 @@ opts. <- getFastOptions()
 # where GRASS is installed on your system.
 
 grassDir <- "/Applications/GRASS-8.2.app/Contents/Resources" # Mac
-grassDir <- 'C:/Program Files/GRASS GIS 8.2' # Windows
-grassDir <- '/usr/local/grass' # Linux
+grassDir <- "C:/Program Files/GRASS GIS 8.2" # Windows
+grassDir <- "/usr/local/grass" # Linux
 
 # setup
 library(terra)
 
 # example data
-madElev <- fastData('madElev')
+madElev <- fastData("madElev")
 
 # start GRASS session for examples only
 faster(x = madElev, grassDir = grassDir,
-workDir = tempdir(), location = 'examples') # line only needed for examples
+workDir = tempdir(), location = "examples") # line only needed for examples
 
 # Convert a SpatRaster to a GRaster:
 elev <- fast(madElev)
 
 # Focal calculations:
-sums <- focal(elev, fun = 'sum')
-means <- focal(elev, fun = 'mean')
+sums <- focal(elev, fun = "sum")
+means <- focal(elev, fun = "mean")
 
 # Focal calculations on a circular window:
-sds <- focal(elev, fun = 'sd')
-sdsCircle <- focal(elev, fun = 'sd', circle = TRUE)
+sds <- focal(elev, fun = "sd")
+sdsCircle <- focal(elev, fun = "sd", circle = TRUE)
 
 sds
 sdsCircle
@@ -92,14 +92,14 @@ plot(sds - sdsCircle)
 # Focal calculations with user-defined weights:
 w <- matrix(c(1, 0, 1, 0, 1, 0, 1, 0, 1), ncol = 3)
 w
-sumsWeighted <- focal(elev, fun = 'sum', w = w)
+sumsWeighted <- focal(elev, fun = "sum", w = w)
 
 s <- c(sums, sumsWeighted)
 minmax(s)
 
 # IMPORTANT #3: Revert back to original GRASS session if needed.
 fastRestore(opts.)
-removeSession('examples')
+removeSession("examples")
 
 }
 }

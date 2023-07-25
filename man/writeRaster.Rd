@@ -31,17 +31,17 @@
 
 \item \code{compressTiff}: Character or \code{NULL}: Type of compression for GeoTIFF files:
 \itemize{
-\item \code{'DEFLATE'} (default)
-\item \code{'LZW'}
-\item \code{'PACKBITS'}
-\item \code{'LZMA'}
+\item \code{"DEFLATE"} (default)
+\item \code{"LZW"}
+\item \code{"PACKBITS"}
+\item \code{"LZMA"}
 \item \code{NULL}: No compression is used, but the file can still be reduced in size by using zip, gzip, or other compressions.
 }
 \item \code{bigTiff}: Logical: If \code{TRUE}, and the file format is a GeoTIFF and would be larger than 4 GB (regardless of compression), then the file will be saved in BIGTIFF format.
 \item \code{format}: Character, indicating file format. This is usually ascertained from the file extension, but in case this fails, it can be stated explicitly. When using other formats, you may have to specify the \code{createopts} argument, too (see help page for \strong{GRASS} module \code{r.out.gdal}). Two common formats include:
 \itemize{
-\item \code{'GTiff'} (default): GeoTIFF \code{filename} ends in \code{.tif}
-\item \code{'ASC'}: ASCII \code{filename} ends in \code{.asc}
+\item \code{"GTiff"} (default): GeoTIFF \code{filename} ends in \code{.tif}
+\item \code{"ASC"}: ASCII \code{filename} ends in \code{.asc}
 }
 \item Additional arguments to send to \strong{GRASS} modules \code{r.out.gdal} and \code{r.out.ascii}.
 \item \code{precision}: Numeric: For ASCII files, you may need to state the number of significant digits. 32-bit values have 7 digits and 64-bit values have 16. So in these cases the argument would be \code{precision=7} or \code{precision=16}.
@@ -71,25 +71,25 @@ opts. <- getFastOptions()
 # IMPORTANT #2: Select the appropriate line below and change as necessary to
 # where GRASS is installed on your system.
 grassDir <- "/Applications/GRASS-8.3.app/Contents/Resources" # Mac
-grassDir <- 'C:/Program Files/GRASS GIS 8.3' # Windows
-grassDir <- '/usr/local/grass' # Linux
+grassDir <- "C:/Program Files/GRASS GIS 8.3" # Windows
+grassDir <- "/usr/local/grass" # Linux
 
 # setup
 library(terra)
 
 # example data
-madElev <- fastData('madElev')
+madElev <- fastData("madElev")
 
 # start GRASS session for examples only
 faster(x = madElev, grassDir = grassDir,
-workDir = tempdir(), location = 'examples') # line only needed for examples
+workDir = tempdir(), location = "examples") # line only needed for examples
 
 # convert SpatRaster to GRaster
 elev <- fast(madElev)
 
 ### save GRaster to disk (using temporary file)
 filename <- tempfile()
-filename <- paste0(filename, '.tif')
+filename <- paste0(filename, ".tif")
 writeRaster(elev, filename)
 
 ### load raster from disk
@@ -98,7 +98,7 @@ elev2
 
 # IMPORTANT #3: Revert back to original GRASS session if needed.
 fastRestore(opts.)
-removeSession('examples')
+removeSession("examples")
 
 }
 }

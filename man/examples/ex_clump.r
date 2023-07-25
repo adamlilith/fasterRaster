@@ -34,10 +34,10 @@ exact <- clump(elev)
 plot(exact)
 
 # Clump based on approximate values.
-approx <- clump(elev, minDiff = 0.005)
+approx <- clump(elev, minDiff = 0.0075)
 plot(approx)
 
-# Clump based on approximate values with minimum clump size.
+# Clump based on approximate values with minimum clump size:
 # This can take a minute or two...
 approx20 <- clump(elev, minDiff = 0.005, minClumpSize = 20)
 plot(approx20)

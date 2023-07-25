@@ -34,19 +34,19 @@ opts. <- getFastOptions()
 # IMPORTANT #2: Select the appropriate line below and change as necessary to
 # where GRASS is installed on your system.
 grassDir <- "/Applications/GRASS-8.3.app/Contents/Resources" # Mac
-grassDir <- 'C:/Program Files/GRASS GIS 8.3' # Windows
-grassDir <- '/usr/local/grass' # Linux
+grassDir <- "C:/Program Files/GRASS GIS 8.3" # Windows
+grassDir <- "/usr/local/grass" # Linux
 
 # setup
 library(terra)
 
 # example data
-madElev <- fastData('madElev')
-madForest2000 <- fastData('madForest2000')
+madElev <- fastData("madElev")
+madForest2000 <- fastData("madForest2000")
 
 # start GRASS session for examples only
 faster(x = madElev, grassDir = grassDir,
-workDir = tempdir(), location = 'examples') # line only needed for examples
+workDir = tempdir(), location = "examples") # line only needed for examples
 
 # convert SpatRasters to GRasters
 elev <- fast(madElev)
@@ -68,6 +68,10 @@ zres(elev) # vertical resolution
 # cell counts
 ncell(elev) # cells
 ncell3d(elev) # cells (3D rasters only)
+
+# number of NA and non-NA cells
+nacell(elev)
+nonnacell(elev)
 
 # topology
 topology(elev) # number of dimensions
@@ -111,7 +115,7 @@ nlyr(rasts)
 
 # names
 names(rasts)
-names(rasts) <- c('elev_meters', 'forest')
+names(rasts) <- c("elev_meters", "forest")
 rasts
 
 # cell frequencies
@@ -120,12 +124,15 @@ freq(2 * elev)
 freq(rasts)
 freq(rasts, value = 1)
 
+# plotting
+plot(elev)
+
 # IMPORTANT #3: Revert back to original GRASS session if needed.
 fastRestore(opts.)
-removeSession('examples')
+removeSession("examples")
 
 }
 }
 \seealso{
-\code{\link[=ncell]{ncell()}}, \code{\link[=ncell3d]{ncell3d()}}
+\code{\link[=ncell]{ncell()}}, \code{\link[=ncell3d]{ncell3d()}}, \code{\link[terra:dimensions]{terra::ncell()}}
 }

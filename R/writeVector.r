@@ -1,38 +1,38 @@
-#" Save a GVector to disk
-#"
-#" @description This function saves a spatial vector to disk directly from a **GRASS** session.
-#"
-#" By default, files will be of OGC GeoPackage format (extension "`.gpkg`"), but this can be changed with the `format` argument. You can see a list of supported formats by simply using this function with no arguments, as in `writeVector()`, or by consulting the online help page for **GRASS** module `v.out.ogr`.
-#"
-#" @param x A `GVector`.
-#" @param filename Character: Path and file name.
-#" @param overwrite Logical: If `FALSE` (default), do not save over existing files.
-#" @param format File format. Some common formats include:
-#"	* `"GPKG"`: OGC GeoPackage (default).
-#"	* `"CSV"`: Comma-separated value... saves the data table only, not the geometries.
-#"	* `"ESRI_Shapefile"`: ESRI shapefile... \code{filename} should not end in an extension.
-#"	* `"GeoJSON"`: GeoJSON
-#"	* `"KML"`: Keyhole Markup Language (KML)
-#"	* `"netCDF"`: NetCDF (argument `filename` should not end in an extension).
-#"	* `"XLSX"`: MS Office Open XML spreadsheet
-#" @param ... Additional arguments to send to **GRASS** module `v.out.ogr`.
-#"
-#" @return Invisibly returns a `SpatVector`. Importantly, the function also writes one or more files to disk.
-#"
-#" @seealso [terra::writeVector()], [sf::st_write()]
-#"
-#" @example man/examples/ex_writeVector.r
-#"
-#" @aliases writeVector
-#" @rdname writeVector
-#" @exportMethod writeVector
+#' Save a GVector to disk
+#'
+#' @description This function saves a spatial vector to disk directly from a **GRASS** session.
+#'
+#' By default, files will be of OGC GeoPackage format (extension "`.gpkg`"), but this can be changed with the `format` argument. You can see a list of supported formats by simply using this function with no arguments, as in `writeVector()`, or by consulting the online help page for **GRASS** module `v.out.ogr`.
+#'
+#' @param x A `GVector`.
+#' @param filename Character: Path and file name.
+#' @param overwrite Logical: If `FALSE` (default), do not save over existing files.
+#' @param format File format. Some common formats include:
+#'	* `"GPKG"`: OGC GeoPackage (default).
+#'	* `"CSV"`: Comma-separated value... saves the data table only, not the geometries.
+#'	* `"ESRI_Shapefile"`: ESRI shapefile... \code{filename} should not end in an extension.
+#'	* `"GeoJSON"`: GeoJSON
+#'	* `"KML"`: Keyhole Markup Language (KML)
+#'	* `"netCDF"`: NetCDF (argument `filename` should not end in an extension).
+#'	* `"XLSX"`: MS Office Open XML spreadsheet
+#' @param ... Additional arguments to send to **GRASS** module `v.out.ogr`.
+#'
+#' @return Invisibly returns a `SpatVector`. Importantly, the function also writes one or more files to disk.
+#'
+#' @seealso [terra::writeVector()], [sf::st_write()]
+#'
+#' @example man/examples/ex_writeVector.r
+#'
+#' @aliases writeVector
+#' @rdname writeVector
+#' @exportMethod writeVector
 setMethod(
 	"writeVector",
 	signature(x = "GVector", filename = "character"),
 	function(x, filename, overwrite = FALSE, format = "GPKG", ...) {
 
 	### going to overwrite anything?
-	if (!overwrite && file.exists(filename)) stop(paste0("File already exists and ", sQuote(overwrite), " is FALSE:\n ", filename))
+	if (!overwrite && file.exists(filename)) stop(paste0("File already exists and ", sQuote("overwrite"), " is FALSE:\n ", filename))
 
 	### general arguments
 	args <- list(...)
@@ -51,10 +51,10 @@ setMethod(
 	} # EOF
 )
 
-#" @aliases writeVector
-#" @rdname writeVector
-#" @export
-#" @exportMethod writeVector
+#' @aliases writeVector
+#' @rdname writeVector
+#' @export
+#' @exportMethod writeVector
 setMethod(
 	"writeVector",
 	signature(x = "missing", filename = "missing"),

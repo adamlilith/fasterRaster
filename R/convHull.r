@@ -1,19 +1,19 @@
-#" Minimum convex hull around a spatial vector
-#"
-#" Create a minimum convex hull around a spatial vector.
-#"
-#" @param x A `GVector`.
-#" @param by Character: If `""` (default), then a convex hull is created for all geometries together. Otherwise, this is the name of a field in the vector. Hulls will be created for each set of geometries with the same value in this column.
-#"
-#" @return A `GVector`.
-#"
-#" @seealso [terra::convHull()], [sf::st_convex_hull()], module `v.hull` in **GRASS**
-#"
-#" @example man/examples/ex_convHull.r
-#"
-#" @aliases convHull
-#" @rdname convHull
-#" @exportMethod convHull
+#' Minimum convex hull around a spatial vector
+#'
+#' Create a minimum convex hull around a spatial vector.
+#'
+#' @param x A `GVector`.
+#' @param by Character: If `""` (default), then a convex hull is created for all geometries together. Otherwise, this is the name of a field in the vector. Hulls will be created for each set of geometries with the same value in this column.
+#'
+#' @return A `GVector`.
+#'
+#' @seealso [terra::convHull()], [sf::st_convex_hull()], module `v.hull` in **GRASS**
+#'
+#' @example man/examples/ex_convHull.r
+#'
+#' @aliases convHull
+#' @rdname convHull
+#' @exportMethod convHull
 methods::setMethod(
 	f = "convHull",
 	signature = c(x = "GVector"),

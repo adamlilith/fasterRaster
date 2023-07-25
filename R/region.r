@@ -1,46 +1,46 @@
-#" Report or change the extent, dimensions, and/or resolution of a region GRASS
-#"
-#" @description These functions either change the extent, dimensions, and/or resolution of a **GRASS** ["region"][tutorial_regions] or report the current region"s extent, dimensions, and/or resolution. These functions are mostly used internally and rarely of interest to most users.
-#" * `region()`: All 2D and 3D aspects of a region.
-#" * `regionDim()`: x- and y-dimensions.`
-#" * `regionExt()`: x- and y-extent.
-#" * `regionRes()`: x- and y-resolution.
-#"
-#" @param x Any of:
-#"	* Missing (default): Reports the extent, resolution, and dimensions of the current region. All other arguments will be ignored.
-#"	* A `GSpatial`, `GRegion`, `GRaster`, `GVector` object: Sets the region"s extent, dimensions, and/or resolution to those of the object.
-#"	* A `numeric` vector. This will resize the region"s extent, resample the region"s resolution/dimensions, or both, to ensure the desired dimensions or resolution are retained:
-#"       * 2 values for `regionDim()`: Number of rows and columns
-#"       * 4 values for `regionExt()`: Westernmost and easternmost easting (longitude), and southernmost and northernmost northing (latitude)
-#"       * 2 values for `regionRes()`: Size of cells in the x- and y-dimensions
-#"
-#" @param trim A `GRaster` or `NULL` (default). If a `GRaster`, then the region will be trimmed to the non-`NA` cells in this raster. `trim` can only be non-`NULL` if `x` is a `GRaster`. Ignored if `NULL`.
-#" 
-#" @param respect Character or `GRaster`: Indicates what aspect(s) of the current region to retain. Different functions allow for different aspect to be retained. Partial matching is used.
-#" * `regionDim()`: `"extent"` or `"resolution"`.
-#" * `regionExt()`: `"dimensions"` or `"resolution"`.
-#" * `regionRes()`: `"extent"` or `"dimensions"`.
-#" Alternatively, a `GRaster` can be supplied:
-#" * `regionDim()`: New region will have same extent and resolution.
-#" * `regionExt()`: New region will have same dimensions and resolution.
-#" * `regionRes()`: New region will have same extent and dimensions.
-#" 
-#" In this case, the new region"s registration will be the same as this raster, and cell resolution will be the same
-#" 
-#" Note: In most cases extent cannot be retained exactly if the resolution is changed. When resolution is changed, the actual extent will be the user-supplied extent expanded by zero to one rows or zero to one columns to accommodate an integer number of cells of the desired size. The western and northern limits of the extent will be retained, while the eastern and southern limits of the extent will be moved to accommodate an integer number of columns and rows.
-#"
-#" @returns The value returned depends on how the function is used:
-#" * If used with no arguments, `region()` returns a `GRegion` object.
-#" * If used with no arguments, `regionDim()`, `regionExt()`, and `regionres()` return numeric or integer vectors.
-#" * If the function is used to change reshape/resample the region, it returns a `GRegion` object reflecting the region *before* it was changed. This allows users to revert to the original region if desired.
-#" 
-#" @details When resizing extent, **terra** keeps the `xmin`` (west) and `ymax`` (north) the fixed and shifts `xmax` (east) and `ymin` (south) as needed. To retain as much fidelity between **fasterRaster** and **terra** as possible, these functions do the same to the region.
-#"
-#" @example man/examples/ex_regions.r
-#"
-#" @aliases region
-#" @rdname region
-#" @exportMethod region
+#' Report or change the extent, dimensions, and/or resolution of a region GRASS
+#'
+#' @description These functions either change the extent, dimensions, and/or resolution of a **GRASS** ["region"][tutorial_regions] or report the current region"s extent, dimensions, and/or resolution. These functions are mostly used internally and rarely of interest to most users.
+#' * `region()`: All 2D and 3D aspects of a region.
+#' * `regionDim()`: x- and y-dimensions.`
+#' * `regionExt()`: x- and y-extent.
+#' * `regionRes()`: x- and y-resolution.
+#'
+#' @param x Any of:
+#'	* Missing (default): Reports the extent, resolution, and dimensions of the current region. All other arguments will be ignored.
+#'	* A `GSpatial`, `GRegion`, `GRaster`, `GVector` object: Sets the region"s extent, dimensions, and/or resolution to those of the object.
+#'	* A `numeric` vector. This will resize the region"s extent, resample the region"s resolution/dimensions, or both, to ensure the desired dimensions or resolution are retained:
+#'       * 2 values for `regionDim()`: Number of rows and columns
+#'       * 4 values for `regionExt()`: Westernmost and easternmost easting (longitude), and southernmost and northernmost northing (latitude)
+#'       * 2 values for `regionRes()`: Size of cells in the x- and y-dimensions
+#'
+#' @param trim A `GRaster` or `NULL` (default). If a `GRaster`, then the region will be trimmed to the non-`NA` cells in this raster. `trim` can only be non-`NULL` if `x` is a `GRaster`. Ignored if `NULL`.
+#' 
+#' @param respect Character or `GRaster`: Indicates what aspect(s) of the current region to retain. Different functions allow for different aspect to be retained. Partial matching is used.
+#' * `regionDim()`: `"extent"` or `"resolution"`.
+#' * `regionExt()`: `"dimensions"` or `"resolution"`.
+#' * `regionRes()`: `"extent"` or `"dimensions"`.
+#' Alternatively, a `GRaster` can be supplied:
+#' * `regionDim()`: New region will have same extent and resolution.
+#' * `regionExt()`: New region will have same dimensions and resolution.
+#' * `regionRes()`: New region will have same extent and dimensions.
+#' 
+#' In this case, the new region"s registration will be the same as this raster, and cell resolution will be the same
+#' 
+#' Note: In most cases extent cannot be retained exactly if the resolution is changed. When resolution is changed, the actual extent will be the user-supplied extent expanded by zero to one rows or zero to one columns to accommodate an integer number of cells of the desired size. The western and northern limits of the extent will be retained, while the eastern and southern limits of the extent will be moved to accommodate an integer number of columns and rows.
+#'
+#' @returns The value returned depends on how the function is used:
+#' * If used with no arguments, `region()` returns a `GRegion` object.
+#' * If used with no arguments, `regionDim()`, `regionExt()`, and `regionres()` return numeric or integer vectors.
+#' * If the function is used to change reshape/resample the region, it returns a `GRegion` object reflecting the region *before* it was changed. This allows users to revert to the original region if desired.
+#' 
+#' @details When resizing extent, **terra** keeps the `xmin`` (west) and `ymax`` (north) the fixed and shifts `xmax` (east) and `ymin` (south) as needed. To retain as much fidelity between **fasterRaster** and **terra** as possible, these functions do the same to the region.
+#'
+#' @example man/examples/ex_regions.r
+#'
+#' @aliases region
+#' @rdname region
+#' @exportMethod region
 methods::setMethod(
 	f = "region",
 	signature = "missing",
@@ -201,9 +201,9 @@ methods::setMethod(
 	} # EOF
 )
 
-#" @rdname region
-#" @aliases region
-#" @exportMethod region
+#' @rdname region
+#' @aliases region
+#' @exportMethod region
 methods::setMethod(
 	f = "region",
 	signature = "SpatRaster",
@@ -239,9 +239,9 @@ methods::setMethod(
 	} # EOF
 )
 
-#" @rdname region
-#" @aliases region
-#" @exportMethod region
+#' @rdname region
+#' @aliases region
+#' @exportMethod region
 methods::setMethod(
 	f = "region",
 	signature = c(x = "GRegion"),
@@ -281,9 +281,9 @@ methods::setMethod(
 	} # EOF
 )
 
-#" @rdname region
-#" @aliases region
-#" @exportMethod region
+#' @rdname region
+#' @aliases region
+#' @exportMethod region
 methods::setMethod(
 	f = "region",
 	signature = c(x = "GRaster"),
@@ -326,9 +326,9 @@ methods::setMethod(
 	} # EOF
 )
 
-#" @rdname region
-#" @aliases region
-#" @exportMethod region
+#' @rdname region
+#' @aliases region
+#' @exportMethod region
 methods::setMethod(
 	f = "region",
 	signature = c(x = "GVector"),
@@ -347,27 +347,27 @@ methods::setMethod(
 ### regionExt ###
 #################
 
-#" @rdname region
-#" @aliases regionExt
-#" @exportMethod regionExt
+#' @rdname region
+#' @aliases regionExt
+#' @exportMethod regionExt
 methods::setMethod(
 	f = "regionExt",
 	signature = "missing",
 	definition = function(x) region()@extent
 )
 
-#" @rdname region
-#" @aliases regionExt
-#" @exportMethod regionExt
+#' @rdname region
+#' @aliases regionExt
+#' @exportMethod regionExt
 methods::setMethod(
 	f = "regionExt",
 	signature = "numeric",
 	definition = function(x, respect) .regionExt(x, respect)
 )
 
-#" @rdname region
-#" @aliases regionExt
-#" @exportMethod regionExt
+#' @rdname region
+#' @aliases regionExt
+#' @exportMethod regionExt
 methods::setMethod(
 	f = "regionExt",
 	signature = "GSpatial",
@@ -439,9 +439,9 @@ methods::setMethod(
 ### regionDim ###
 #################
 
-#" @rdname region
-#" @aliases regionDim
-#" @exportMethod regionDim
+#' @rdname region
+#' @aliases regionDim
+#' @exportMethod regionDim
 methods::setMethod(f = "regionDim",
 	signature = c(x = "missing"),
 	definition = function(x) {
@@ -449,18 +449,18 @@ methods::setMethod(f = "regionDim",
 	}
 )
 
-#" @rdname region
-#" @aliases regionDim
-#" @exportMethod regionDim
+#' @rdname region
+#' @aliases regionDim
+#' @exportMethod regionDim
 methods::setMethod(
 	f = "regionDim",
 	signature = "numeric",
 	definition = function(x, respect) .regionDim(x, respect)
 )
 
-#" @rdname region
-#" @aliases regionDim
-#" @exportMethod regionDim
+#' @rdname region
+#' @aliases regionDim
+#' @exportMethod regionDim
 methods::setMethod(
 	f = "regionDim",
 	signature = "GRegion",
@@ -534,26 +534,26 @@ methods::setMethod(
 ### regionRes ###
 #################
 
-#" @rdname region
-#" @aliases regionRes
-#" @exportMethod regionRes
+#' @rdname region
+#' @aliases regionRes
+#' @exportMethod regionRes
 methods::setMethod(f = "regionRes",
 	signature = c(x = "missing"),
 	definition = function(x) region()@resolution[1L:2L]
 )
 
-#" @rdname region
-#" @aliases regionRes
-#" @exportMethod regionRes
+#' @rdname region
+#' @aliases regionRes
+#' @exportMethod regionRes
 methods::setMethod(
 	f = "regionRes",
 	signature = "numeric",
 	definition = function(x, respect) .regionRes(x, respect)
 )
 
-#" @rdname region
-#" @aliases regionRes
-#" @exportMethod regionRes
+#' @rdname region
+#' @aliases regionRes
+#' @exportMethod regionRes
 methods::setMethod(
 	f = "regionRes",
 	signature = "GRegion",

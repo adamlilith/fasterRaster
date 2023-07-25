@@ -1,19 +1,19 @@
-#" Create lines connecting nearest features of two GVectors
-#"
-#" @description `connectors()` creates a lines `GVector` which represent the shortest (Great Circle) paths between each feature of one `GVector` and the nearest feature of another `GVector`.
-#"
-#" @param x,y `GVector`s.
-#" @param minDist,maxDist Either `NULL` (default) or numeric values: Ignore features separated by less than or greater than these distances.
-#"
-#" @return A `GVector`.
-#" 
-#" @seealso Module `v.distance` in **GRASS**
-#"
-#" @example man/examples/ex_connectors.r
-#"
-#" @aliases connectors
-#" @rdname connectors
-#" @exportMethod connectors
+#' Create lines connecting nearest features of two GVectors
+#'
+#' @description `connectors()` creates a lines `GVector` which represent the shortest (Great Circle) paths between each feature of one `GVector` and the nearest feature of another `GVector`.
+#'
+#' @param x,y `GVector`s.
+#' @param minDist,maxDist Either `NULL` (default) or numeric values: Ignore features separated by less than or greater than these distances.
+#'
+#' @return A `GVector`.
+#' 
+#' @seealso Module `v.distance` in **GRASS**
+#'
+#' @example man/examples/ex_connectors.r
+#'
+#' @aliases connectors
+#' @rdname connectors
+#' @exportMethod connectors
 methods::setMethod(
 	"connectors",
 	signature(x = "GVector", y = "GVector"),

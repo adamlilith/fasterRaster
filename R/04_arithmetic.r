@@ -1,17 +1,17 @@
-#" Arithmetic operations on GRasters
-#"
-#" @description You can do arithmetic operations on `GRaster`s using normal operators in **R**: `+`, `-`, `*`, `/`, `^`, `%%` (modulus), and `%/%` (integer division).
-#" 
-#" @param name Character: Name of the new `GRaster`.
-#" @param gn `gname`s of the `GRaster` being operated on
-#" @param ex expression for `r.mapcalc`
-#"
-#" @return A `GRaster`.
-#"
-#" @example man/examples/ex_GRaster_arithmetic.r
-#"
-#" @rdname Arithmetic
-#" @noRd
+#' Arithmetic operations on GRasters
+#'
+#' @description You can do arithmetic operations on `GRaster`s using normal operators in **R**: `+`, `-`, `*`, `/`, `^`, `%%` (modulus), and `%/%` (integer division).
+#' 
+#' @param name Character: Name of the new `GRaster`.
+#' @param gn `gname`s of the `GRaster` being operated on
+#' @param ex expression for `r.mapcalc`
+#'
+#' @return A `GRaster`.
+#'
+#' @example man/examples/ex_GRaster_arithmetic.r
+#'
+#' @rdname Arithmetic
+#' @noRd
 .genericArith <- function(name, gn, ex) {
 
 	rgrass::execGRASS("r.mapcalc", expression = ex, flags = c("quiet", "overwrite"), intern = TRUE)

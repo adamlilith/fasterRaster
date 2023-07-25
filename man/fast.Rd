@@ -31,18 +31,18 @@
 \item A character string with the path and filename of a raster or vector to be loaded directly into \strong{GRASS}. The function will attempt to ascertain the type of object from the file extension (raster or vector), but it can help to indicate which it is using the \code{rastOrVect} argument if it is unclear.
 }}
 
-\item{rastOrVect}{Either \code{NULL} (default) or character (\code{'raster'} or \code{'vector'}). If \code{x} is a raster or vector already in \strong{R}, this does not need to be specified. However, if \code{x} is a filename, then the function will try to ascertain whether it represents a raster or a vector, but sometimes this will fail. In that case, it can help to specify if the file holds a raster or vector. Partial matching is used.}
+\item{rastOrVect}{Either \code{NULL} (default) or character (\code{"raster"} or \code{"vector"}). If \code{x} is a raster or vector already in \strong{R}, this does not need to be specified. However, if \code{x} is a filename, then the function will try to ascertain whether it represents a raster or a vector, but sometimes this will fail. In that case, it can help to specify if the file holds a raster or vector. Partial matching is used.}
 
 \item{method}{Character or \code{NULL} (rasters only): If \code{x} does not have the same coordinate reference system as the currently active \strong{GRASS} \link[=tutorial_sessions]{session}, then it will be projected when it is imported. You may need to specify which method is used to conduction the transformation. Partial matching is used.
 \itemize{
 \item \code{NULL} (default): Automatically choose based on raster properties (\code{near} for categorical data, \code{bilinear} for continuous data)
-\item \code{'near'}: Nearest neighbor. Best for categorical data, and often a poor choice for continuous data.
-\item \code{'bilinear'}: Bilinear interpolation (default for non-categorical data; uses weighted values from 4 cells).
-\item \code{'bicubic'}: Bicubic interpolation (uses weighted values from 16 cells).
-\item \code{'lanczos'}: Lanczos interpolation (uses weighted values from 25 cells).
+\item \code{"near"}: Nearest neighbor. Best for categorical data, and often a poor choice for continuous data.
+\item \code{"bilinear"}: Bilinear interpolation (default for non-categorical data; uses weighted values from 4 cells).
+\item \code{"bicubic"}: Bicubic interpolation (uses weighted values from 16 cells).
+\item \code{"lanczos"}: Lanczos interpolation (uses weighted values from 25 cells).
 }}
 
-\item{fallback}{Logical (rasters only): If \code{TRUE} (default), then use "lower" resampling methods to fill in \code{NA} cells when a "higher" method is used. For example, if \code{method = 'bicubic'}, \code{NA} cells will be filled in using the \code{bilinear} method, except when that results in \code{NA}s, in which case the \code{near} method will be used. Fallback causes fewer cells to revert to \code{NA} values, so may be better at capturing complex "edges" (e.g., coastlines). Fallback does increase processing time because each "lower" method must be applied, then results merged.}
+\item{fallback}{Logical (rasters only): If \code{TRUE} (default), then use "lower" resampling methods to fill in \code{NA} cells when a "higher" method is used. For example, if \code{method = "bicubic"}, \code{NA} cells will be filled in using the \code{bilinear} method, except when that results in \code{NA}s, in which case the \code{near} method will be used. Fallback causes fewer cells to revert to \code{NA} values, so may be better at capturing complex "edges" (e.g., coastlines). Fallback does increase processing time because each "lower" method must be applied, then results merged.}
 
 \item{wrap}{Logical (rasters only): When projecting rasters that "wrap around" (i.e., whole-world rasters or rasters that have edges that actually circle around to meet on the globe), \code{wrap} should be \code{TRUE} to avoid removing rows and columns from the "edge" of the map. The default is \code{FALSE}.}
 
@@ -80,20 +80,20 @@ opts. <- getFastOptions()
 # where GRASS is installed on your system.
 
 grassDir <- "/Applications/GRASS-8.3.app/Contents/Resources" # Mac
-grassDir <- 'C:/Program Files/GRASS GIS 8.3' # Windows
-grassDir <- '/usr/local/grass' # Linux
+grassDir <- "C:/Program Files/GRASS GIS 8.3" # Windows
+grassDir <- "/usr/local/grass" # Linux
 
 # setup
 library(sf)
 library(terra)
 
 # example data
-madElev <- fastData('madElev')
-madRivers <- fastData('madRivers')
+madElev <- fastData("madElev")
+madRivers <- fastData("madRivers")
 
 # start GRASS session for examples only
 faster(x = madElev, grassDir = grassDir,
-workDir = tempdir(), location = 'examples') # line only needed for examples
+workDir = tempdir(), location = "examples") # line only needed for examples
 
 # convert a SpatRaster to a GRaster
 elev <- fast(madElev)
@@ -105,7 +105,7 @@ rivers
 
 # IMPORTANT #3: Revert back to original GRASS session if needed.
 fastRestore(opts.)
-removeSession('examples')
+removeSession("examples")
 
 }
 }

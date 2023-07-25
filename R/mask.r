@@ -1,26 +1,26 @@
-#" Mask values in a raster
-#"
-#" @description The output of `mask()` is a `GRaster` that has the same as values as the input raster. However, if the `mask` argument is a `GRaster`, the output will have `NA` values in the sample cells that the `mask` raster has `NA` cells. If the `mask` argument is a `GVector`, then the output raster will have `NA` values in cells the `GVector` does not cover.
-#"
-#" @param x A `GRaster`.
-#" 
-#" @param mask A `GRaster` or `GVector`.
-#" 
-#" @param inverse Logical: If `TRUE`, the effect of the mask is inverted. That is, a copy of the input raster is made, but cells that overlap with an `NA` in the mask raster or are not covered by the mask vector retain their values. Cells that overlap with an `NA` in the mask raster or overlap with the mask vector are forced to `NA`.
-#" 
-#" @param maskvalue Numeric vector, including `NA` (only for when `mask` is a `GRaster`): The value(s) in the mask raster cells that serve as the mask. The default is `NA`, in which case cells in the input raster that overlap with `NA` cells in the mask are forced to `NA`.
-#" 
-#" @param updatevalue Numeric, including `NA` (default): The values assigned to masked cells.
-#" 
-#" @returns A `GRaster`.
-#" 
-#" @seealso [maskRand()], [terra::mask()], **GRASS** module `r.mask` 
-#"
-#" @example man/examples/ex_mask.r
-#" 
-#" @aliases mask
-#" @rdname mask
-#" @exportMethod mask
+#' Mask values in a raster
+#'
+#' @description The output of `mask()` is a `GRaster` that has the same as values as the input raster. However, if the `mask` argument is a `GRaster`, the output will have `NA` values in the sample cells that the `mask` raster has `NA` cells. If the `mask` argument is a `GVector`, then the output raster will have `NA` values in cells the `GVector` does not cover.
+#'
+#' @param x A `GRaster`.
+#' 
+#' @param mask A `GRaster` or `GVector`.
+#' 
+#' @param inverse Logical: If `TRUE`, the effect of the mask is inverted. That is, a copy of the input raster is made, but cells that overlap with an `NA` in the mask raster or are not covered by the mask vector retain their values. Cells that overlap with an `NA` in the mask raster or overlap with the mask vector are forced to `NA`.
+#' 
+#' @param maskvalue Numeric vector, including `NA` (only for when `mask` is a `GRaster`): The value(s) in the mask raster cells that serve as the mask. The default is `NA`, in which case cells in the input raster that overlap with `NA` cells in the mask are forced to `NA`.
+#' 
+#' @param updatevalue Numeric, including `NA` (default): The values assigned to masked cells.
+#' 
+#' @returns A `GRaster`.
+#' 
+#' @seealso [maskRand()], [terra::mask()], **GRASS** module `r.mask` 
+#'
+#' @example man/examples/ex_mask.r
+#' 
+#' @aliases mask
+#' @rdname mask
+#' @exportMethod mask
 methods::setMethod(
     f = "mask",
     signature = c(x = "GRaster", mask = "GRaster"),
@@ -29,9 +29,9 @@ methods::setMethod(
     } # EOF
 )
 
-#" @aliases mask
-#" @rdname mask
-#" @exportMethod mask
+#' @aliases mask
+#' @rdname mask
+#' @exportMethod mask
 methods::setMethod(
     f = "mask",
     signature = c(x = "GRaster", mask = "GVector"),

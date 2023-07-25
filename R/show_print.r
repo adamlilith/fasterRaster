@@ -1,16 +1,16 @@
-#" Display a fasterRaster object
-#"
-#" @description Display a `GSession`, `GSpatial`, `GRegion`, `GRaster`, or `GVector` object.
-#"
-#" @param object An object of class `GSession`, `GSpatial`, `GRegion`, `GRaster`, or `GVector`.
-#"
-#" @returns Nothing (side effect is to display metadata on the given object).
-#"
-#" @example man/examples/ex_GRaster_GVector.r
-#"
-#" @aliases show
-#" @rdname show
-#" @exportMethod show
+#' Display a fasterRaster object
+#'
+#' @description Display a `GSession`, `GSpatial`, `GRegion`, `GRaster`, or `GVector` object.
+#'
+#' @param object An object of class `GSession`, `GSpatial`, `GRegion`, `GRaster`, or `GVector`.
+#'
+#' @returns Nothing (side effect is to display metadata on the given object).
+#'
+#' @example man/examples/ex_GRaster_GVector.r
+#'
+#' @aliases show
+#' @rdname show
+#' @exportMethod show
 methods::setMethod(
 	f = "show", 
 	signature = "GSession",
@@ -27,18 +27,18 @@ methods::setMethod(
 	}
 )
 
-#" @aliases print
-#" @rdname show
-#" @exportMethod print
+#' @aliases print
+#' @rdname show
+#' @exportMethod print
 methods::setMethod(
 	f = "print",
 	signature = "GSession",
 	definition = function(x) show(x)
 )
 
-#" @aliases show
-#" @rdname show
-#" @exportMethod show
+#' @aliases show
+#' @rdname show
+#' @exportMethod show
 methods::setMethod(
 	f = "show",
 	signature = "GSpatial",
@@ -66,18 +66,18 @@ methods::setMethod(
 	}
 )
 
-#" @aliases print
-#" @rdname show
-#" @exportMethod print
+#' @aliases print
+#' @rdname show
+#' @exportMethod print
 methods::setMethod(
 	f = "print",
 	signature = "GSpatial",
 	definition = function(x) show(x)
 )
 
-#" @aliases show
-#" @rdname show
-#" @exportMethod show
+#' @aliases show
+#' @rdname show
+#' @exportMethod show
 methods::setMethod(
 	f = "show",
 	signature = "GRegion",
@@ -110,18 +110,18 @@ methods::setMethod(
 	}
 )
 
-#" @aliases print
-#" @rdname show
-#" @exportMethod print
+#' @aliases print
+#' @rdname show
+#' @exportMethod print
 methods::setMethod(
 	f = "print",
 	signature = "GRegion",
 	definition = function(x) show(x)
 )
 
-#" @aliases show
-#" @rdname show
-#" @exportMethod show
+#' @aliases show
+#' @rdname show
+#' @exportMethod show
 methods::setMethod(
 	f="show",
 	signature="GRaster",
@@ -199,18 +199,18 @@ methods::setMethod(
 	}
 )
 
-#" @aliases print
-#" @rdname show
-#" @exportMethod print
+#' @aliases print
+#' @rdname show
+#' @exportMethod print
 methods::setMethod(
 	f = "print",
 	signature = "GRaster",
 	definition = function(x) show(x)
 )
 
-#" @aliases show
-#" @rdname show
-#" @exportMethod show
+#' @aliases show
+#' @rdname show
+#' @exportMethod show
 methods::setMethod(f="show", signature="GVector",
 	definition = function(object) {
 
@@ -289,9 +289,9 @@ methods::setMethod(f="show", signature="GVector",
 
 )
 
-#" @aliases print
-#" @rdname show
-#" @exportMethod print
+#' @aliases print
+#' @rdname show
+#' @exportMethod print
 methods::setMethod(f="print", signature="GVector",
 	definition = function(x) show(x)
 )

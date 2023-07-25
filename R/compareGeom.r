@@ -1,40 +1,40 @@
-#" Determine if GRasters and/or GVectors are geographically comparable
-#"
-#" `compareGeom()` compares geographic metadata between `GRaster`s, `GVector`s, or `GRaster`s and `GVector`s. In many cases, spatial objects must be comparable for them to "interact" (e.g., conducting arithmetic operations, masking, etc.).
-#"
-#" @param x,y,... `GRaster`s or `GVector`s. If `y` is `GRaster`, then the `...` must also be `GRaster`s (or missing). If `y` is `GVector`, then the `...` must also be `GVector`s (or missing).
-#"
-#" @param location,mapset Logical: Compare **GRASS** ["locations" and "mapsets"][tutorial_sessions]. Default is `TRUE`.
-#" 
-#" @param crs Logical: Compare coordinate reference systems. Default is `TRUE`.
-#" 
-#" @param lyrs Logical (rasters only): Compare number of layers of "stacked" rasters. Note this is different from number of vertical "depths" of a raster. Default is `FALSE`.
-#" 
-#" @param topo Logical: Test for same topology (2D or 3D). By default, this is `TRUE` for raster-raster comparisons, and `FALSE` for all others.
-#"
-#" @param ext Logical: If `TRUE`, test for same extent. By default, is `TRUE` for raster-raster comparison and `FALSE` for all others.
-#"
-#" @param zext Logical: Test for same vertical extents (3D only). By default, this is `TRUE` for raster-raster comparisons, and `FALSE` for all others.
-#" 
-#" @param rowcol Logical (rasters only): Test for same number of rows and columns. Default is `TRUE`.
-#" 
-#" @param depths Logical (rasters only): Test for same number of depths. Default is `TRUE`.
-#" 
-#" @param res Logical (rasters only): Test for same resolution in x- and y-dimensions. Default is `TRUE`.
-#"
-#" @param zres Logical (rasters only): Test for same resolution in z dimension. Default is `TRUE`.
-#" 
-#" @param geometry Logical (vector-vector comparison only): Compare geometry. Default is `FALSE`.
-#"
-#" @param stopOnError Logical: If `TRUE` (default), throw an error with an explanation if the objects are not comparable. If `FALSE` (default), return `TRUE` or `FALSE`.
-#"
-#" @param messages Logical: If `TRUE (default), display a warning if a condition is not met. This only comes into effect if `stopOnError` is `FALSE`.
-#"
-#" @return Logical (invisibly), or side effect of throwing an error.
-#"
-#" @aliases compareGeom
-#" @rdname compareGeom
-#" @exportMethod compareGeom
+#' Determine if GRasters and/or GVectors are geographically comparable
+#'
+#' `compareGeom()` compares geographic metadata between `GRaster`s, `GVector`s, or `GRaster`s and `GVector`s. In many cases, spatial objects must be comparable for them to "interact" (e.g., conducting arithmetic operations, masking, etc.).
+#'
+#' @param x,y,... `GRaster`s or `GVector`s. If `y` is `GRaster`, then the `...` must also be `GRaster`s (or missing). If `y` is `GVector`, then the `...` must also be `GVector`s (or missing).
+#'
+#' @param location,mapset Logical: Compare **GRASS** ["locations" and "mapsets"][tutorial_sessions]. Default is `TRUE`.
+#' 
+#' @param crs Logical: Compare coordinate reference systems. Default is `TRUE`.
+#' 
+#' @param lyrs Logical (rasters only): Compare number of layers of "stacked" rasters. Note this is different from number of vertical "depths" of a raster. Default is `FALSE`.
+#' 
+#' @param topo Logical: Test for same topology (2D or 3D). By default, this is `TRUE` for raster-raster comparisons, and `FALSE` for all others.
+#'
+#' @param ext Logical: If `TRUE`, test for same extent. By default, is `TRUE` for raster-raster comparison and `FALSE` for all others.
+#'
+#' @param zext Logical: Test for same vertical extents (3D only). By default, this is `TRUE` for raster-raster comparisons, and `FALSE` for all others.
+#' 
+#' @param rowcol Logical (rasters only): Test for same number of rows and columns. Default is `TRUE`.
+#' 
+#' @param depths Logical (rasters only): Test for same number of depths. Default is `TRUE`.
+#' 
+#' @param res Logical (rasters only): Test for same resolution in x- and y-dimensions. Default is `TRUE`.
+#'
+#' @param zres Logical (rasters only): Test for same resolution in z dimension. Default is `TRUE`.
+#' 
+#' @param geometry Logical (vector-vector comparison only): Compare geometry. Default is `FALSE`.
+#'
+#' @param stopOnError Logical: If `TRUE` (default), throw an error with an explanation if the objects are not comparable. If `FALSE` (default), return `TRUE` or `FALSE`.
+#'
+#' @param messages Logical: If `TRUE (default), display a warning if a condition is not met. This only comes into effect if `stopOnError` is `FALSE`.
+#'
+#' @return Logical (invisibly), or side effect of throwing an error.
+#'
+#' @aliases compareGeom
+#' @rdname compareGeom
+#' @exportMethod compareGeom
 methods::setMethod(
 	"compareGeom",
 	signature = c(x = "GRaster", y = "GRaster"),
@@ -162,9 +162,9 @@ methods::setMethod(
 	} # EOF
 )
 
-#" @aliases compareGeom
-#" @rdname compareGeom
-#" @exportMethod compareGeom
+#' @aliases compareGeom
+#' @rdname compareGeom
+#' @exportMethod compareGeom
 methods::setMethod(f = "compareGeom",
 	signature = c(x = "GVector", y = "GVector"),
 	definition = function(
@@ -200,9 +200,9 @@ methods::setMethod(f = "compareGeom",
 	} # EOF
 )
 
-#" @aliases compareGeom
-#" @rdname compareGeom
-#" @exportMethod compareGeom
+#' @aliases compareGeom
+#' @rdname compareGeom
+#' @exportMethod compareGeom
 methods::setMethod(f = "compareGeom",
 	signature = c(x = "GRaster", y = "GVector"),
 	definition = function(
@@ -237,9 +237,9 @@ methods::setMethod(f = "compareGeom",
 	} # EOF
 )
 
-#" @aliases compareGeom
-#" @rdname compareGeom
-#" @exportMethod compareGeom
+#' @aliases compareGeom
+#' @rdname compareGeom
+#' @exportMethod compareGeom
 methods::setMethod(f = "compareGeom",
 	signature = c(x = "GVector", y = "GRaster"),
 	definition = function(

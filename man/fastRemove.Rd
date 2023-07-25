@@ -11,13 +11,13 @@ fastRemove(location, mapset = NULL, workDir = NULL)
 
 \item{mapset}{Character: Either \code{NULL} (default) or the name of the mapset to delete. If \code{NULL}, then all mapsets in the given location will be deleted.}
 
-\item{workDir}{Character: Either \code{NULL} (default) or a character string of the directory in which the location to be removed resides. If \code{NULL}, then the working directory will be obtained from \code{getFastOptions('workDir')}.}
+\item{workDir}{Character: Either \code{NULL} (default) or a character string of the directory in which the location to be removed resides. If \code{NULL}, then the working directory will be obtained from \code{getFastOptions("workDir")}.}
 }
 \value{
 If successful, \code{TRUE} (invisibly). If not, then \code{FALSE} (also invisibly), plus a warning.
 }
 \description{
-\code{fastRemove()} deletes a \strong{GRASS} "session's" \link[=tutorial_sessions]{location and mapsets} and all rasters and vectors therein. This function should be used cautiously, and is mainly provided as a way to clean up after running examples.
+\code{fastRemove()} deletes a \strong{GRASS} "session"s" \link[=tutorial_sessions]{location and mapsets} and all rasters and vectors therein. This function should be used cautiously, and is mainly provided as a way to clean up after running examples.
 }
 \examples{
 

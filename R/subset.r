@@ -1,25 +1,25 @@
-#" Sub-setting operator for GRasters and GVectors
-#"
-#" @description The `[` and `[[` operators do different things depending on whether they are applied to a `GRaster` or `GVector`:
-#" * `GVector`s:
-#"     * `[` operator: Returns a subset of geometries (i.e., points, lines, or polygons) of the `GVector`. For example, `vector[2:4]` will return the second through the fourth geometries.
-#"     * `[[` operator: Returns a vector with the selected columns in its data frame. For example, `vector[[2:4]]` returns the `GVector, but with just columns 2 through 4 of the data frame.
-#" * `GRaster`s:
-#"     * `[[` operator: Returns `GRaster`s from a "stack" of `GRaster`s. For example, `raster[[2:3]]` returns the second and third rasters in a stack of `GRaster`s.
-#"
-#" @param x A `GRaster` with one or more layers, or a `GVector`.
-#" @param i A character, numeric, integer, or logical vector:
-#" * `GVector`s:
-#"     * `[` operator: Indicates the geometries/rows to retain. `i` can be a number indicating the index of the rows, or a logical vector the same length as there are rows.
-#"     * `[[` operator: Indicates which columns to retain. `i` can be a number indicating the index of the features, a logical vector the same length as there are columns, or a character vector of the names of the columns to keep.
-#"
-#" @returns A `GRaster`.
-#"
-#" @example man/examples/ex_GRaster_GVector.r
-#"
-#" @aliases subset
-#" @rdname subset
-#" @exportMethod [[
+#' Sub-setting operator for GRasters and GVectors
+#'
+#' @description The `[` and `[[` operators do different things depending on whether they are applied to a `GRaster` or `GVector`:
+#' * `GVector`s:
+#'     * `[` operator: Returns a subset of geometries (i.e., points, lines, or polygons) of the `GVector`. For example, `vector[2:4]` will return the second through the fourth geometries.
+#'     * `[[` operator: Returns a vector with the selected columns in its data frame. For example, `vector[[2:4]]` returns the `GVector, but with just columns 2 through 4 of the data frame.
+#' * `GRaster`s:
+#'     * `[[` operator: Returns `GRaster`s from a "stack" of `GRaster`s. For example, `raster[[2:3]]` returns the second and third rasters in a stack of `GRaster`s.
+#'
+#' @param x A `GRaster` with one or more layers, or a `GVector`.
+#' @param i A character, numeric, integer, or logical vector:
+#' * `GVector`s:
+#'     * `[` operator: Indicates the geometries/rows to retain. `i` can be a number indicating the index of the rows, or a logical vector the same length as there are rows.
+#'     * `[[` operator: Indicates which columns to retain. `i` can be a number indicating the index of the features, a logical vector the same length as there are columns, or a character vector of the names of the columns to keep.
+#'
+#' @returns A `GRaster`.
+#'
+#' @example man/examples/ex_GRaster_GVector.r
+#'
+#' @aliases subset
+#' @rdname subset
+#' @exportMethod [[
 methods::setMethod(
 	"[[",
 	signature = c(x = "GRaster"),
@@ -30,7 +30,7 @@ methods::setMethod(
 		if (any(!(i %in% names(x)))) stop("At least one name does not match a raster in this stack.")
 		i <- match(i, names(x))
 	}
-	if (any(!(i %in% seq_len(nrow(x))))) stop("Index out of bounds.")
+	if (any(!(i %in% seq_len(nlyr(x))))) stop("Index out of bounds.")
 	
 	mm <- minmax(x)
 	
@@ -59,9 +59,9 @@ methods::setMethod(
 	} # EOF
 )
 
-#" @aliases subset
-#" @rdname subset
-#" @exportMethod [[
+#' @aliases subset
+#' @rdname subset
+#' @exportMethod [
 methods::setMethod(
 	"[",
 	signature = c(x = "GVector"),
@@ -70,12 +70,21 @@ methods::setMethod(
 	nr <- nrow(x)
 	if (is.logical(i)) i <- which(i)
 	if (any(i < 1L | i > nr)) stop("Index out of bounds.")
-	
+
+	# select rows to drop	
 	rows <- seq_len(nr)
 	drops <- rows[!(rows %in% i)]
 
+	if (length(i) >= nr) {
+		where <- paste0("cat IN (", paste0(drops, collapse = ","), ")")
+	} else {
+		where <- paste0("cat NOT IN (", paste0(i, collapse = ","), ")")
+	}
+	
+cat("Command line too long when selecting > ~1500 records.")
+utils::flush.console()
+
 	gn <- .makeGName(NULL, rastOrVect = "vector")
-	where <- paste0("cat IN (", paste0(drops, collapse=", "), ")")
 	args <- list(
 		cmd = "v.db.droprow",
 		input = .gnames(x),
@@ -92,9 +101,9 @@ methods::setMethod(
 	} # EOF
 )
 
-#" @aliases subset
-#" @rdname subset
-#" @exportMethod [[
+#' @aliases subset
+#' @rdname subset
+#' @exportMethod [[
 methods::setMethod(
 	"[[",
 	signature = c(x = "GVector"),
@@ -130,4 +139,3 @@ methods::setMethod(
 
 	} # EOF
 )
-

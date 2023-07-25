@@ -7,7 +7,7 @@
 grassInfo(x = "citation")
 }
 \arguments{
-\item{x}{Character: What to return. Any of: \code{'citation'} (default), \code{'version'}, '\code{copyright}' Partial matching is used.}
+\item{x}{Character: What to return. Any of: \code{"citation"} (default), \code{"version"}, "\code{copyright}" Partial matching is used.}
 }
 \value{
 Character.
@@ -30,26 +30,26 @@ opts. <- getFastOptions()
 # where GRASS is installed on your system.
 
 grassDir <- "/Applications/GRASS-8.3.app/Contents/Resources" # Mac
-grassDir <- 'C:/Program Files/GRASS GIS 8.3' # Windows
-grassDir <- '/usr/local/grass' # Linux
+grassDir <- "C:/Program Files/GRASS GIS 8.3" # Windows
+grassDir <- "/usr/local/grass" # Linux
 
 ### start GRASS session for examples only
 faster(x = madElev, grassDir = grassDir,
-workDir = tempdir(), location = 'examples') # line only needed for examples
+workDir = tempdir(), location = "examples") # line only needed for examples
 
 ### GRASS information
 # citation
 grassInfo()
 
 # version
-grassInfo('v')
+grassInfo("v")
 
 # copyright
-grassInfo('copyright')
+grassInfo("copyright")
 
 # IMPORTANT #3: Revert back to original GRASS session if needed.
 fastRestore(opts.)
-removeSession('examples')
+removeSession("examples")
 
 }
 }

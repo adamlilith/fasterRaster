@@ -1,43 +1,43 @@
-#" @title Create a GRaster or GVector
-#"
-#" @description
-#" To use most **fasterRaster** functions, you need to
-#" 1. Initiate a **GRASS** session with [faster()];
-#" 2. Then use `fast()` to either:
-#"      * Convert a `SpatRaster`, `SpatVector` or `sf` object to a `GRaster` or `GVector`,
-#"      * Load a raster or vector from a file directly into the `GRaster` or `GVector` format using `fast()`. **GRASS** supports loading from disk a variety of raster formats (see the **GRASS** manual page for `r.in.gdal`) and vector formats (see the **GRASS** manual page for `v.in.ogr`), though not all of them will work with this function.
-#"
-#" @param x Any one of:
-#" * A `SpatRaster` raster. Rasters can have one or more layers. They will retain their "layerdness" in most **fasterRaster** functions.
-#" * A `SpatVector` or `sf` spatial vector.
-#" * A character string with the path and filename of a raster or vector to be loaded directly into **GRASS**. The function will attempt to ascertain the type of object from the file extension (raster or vector), but it can help to indicate which it is using the `rastOrVect` argument if it is unclear.
-#"
-#" @param rastOrVect Either `NULL` (default) or character (`"raster"` or `"vector"`). If `x` is a raster or vector already in **R**, this does not need to be specified. However, if `x` is a filename, then the function will try to ascertain whether it represents a raster or a vector, but sometimes this will fail. In that case, it can help to specify if the file holds a raster or vector. Partial matching is used.
-#"
-#" @param method Character or `NULL` (rasters only): If `x` does not have the same coordinate reference system as the currently active **GRASS** [session][tutorial_sessions], then it will be projected when it is imported. You may need to specify which method is used to conduction the transformation. Partial matching is used.
-#" * `NULL` (default): Automatically choose based on raster properties (`near` for categorical data, `bilinear` for continuous data)
-#" * `"near"`: Nearest neighbor. Best for categorical data, and often a poor choice for continuous data.
-#" * `"bilinear"`: Bilinear interpolation (default for non-categorical data; uses weighted values from 4 cells).
-#" * `"bicubic"`: Bicubic interpolation (uses weighted values from 16 cells).
-#" * `"lanczos"`: Lanczos interpolation (uses weighted values from 25 cells).
-#"
-#" @param fallback Logical (rasters only): If `TRUE` (default), then use "lower" resampling methods to fill in `NA` cells when a "higher" method is used. For example, if `method = "bicubic"`, `NA` cells will be filled in using the `bilinear` method, except when that results in `NA`s, in which case the `near` method will be used. Fallback causes fewer cells to revert to `NA` values, so may be better at capturing complex "edges" (e.g., coastlines). Fallback does increase processing time because each "lower" method must be applied, then results merged.
-#"
-#" @param wrap Logical (rasters only): When projecting rasters that "wrap around" (i.e., whole-world rasters or rasters that have edges that actually circle around to meet on the globe), `wrap` should be `TRUE` to avoid removing rows and columns from the "edge" of the map. The default is `FALSE`.
-#"
-#" @param warn Logical: If `TRUE`, display a warning when projecting the vector or raster.
-#"
-#" @details When projecting a raster, the "fallback" methods in `r.import` are actually used, even though the `method` argument takes the strings for non-fallback methods. See the manual page for the `r.import` **GRASS** module.
-#" 
-#" @seealso [rgrass::read_RAST()] and [rgrass::read_VECT()], plus **GRASS** modules `r.in.gdal`, `r.import`, and `v.in.ogr`.
-#"
-#" @return A `GRaster` or `GVector`.
-#"
-#" @example man/examples/ex_faster.r
-#"
-#" @aliases fast
-#" @rdname fast
-#" @exportMethod fast
+#' @title Create a GRaster or GVector
+#'
+#' @description
+#' To use most **fasterRaster** functions, you need to
+#' 1. Initiate a **GRASS** session with [faster()];
+#' 2. Then use `fast()` to either:
+#'      * Convert a `SpatRaster`, `SpatVector` or `sf` object to a `GRaster` or `GVector`,
+#'      * Load a raster or vector from a file directly into the `GRaster` or `GVector` format using `fast()`. **GRASS** supports loading from disk a variety of raster formats (see the **GRASS** manual page for `r.in.gdal`) and vector formats (see the **GRASS** manual page for `v.in.ogr`), though not all of them will work with this function.
+#'
+#' @param x Any one of:
+#' * A `SpatRaster` raster. Rasters can have one or more layers. They will retain their "layerdness" in most **fasterRaster** functions.
+#' * A `SpatVector` or `sf` spatial vector.
+#' * A character string with the path and filename of a raster or vector to be loaded directly into **GRASS**. The function will attempt to ascertain the type of object from the file extension (raster or vector), but it can help to indicate which it is using the `rastOrVect` argument if it is unclear.
+#'
+#' @param rastOrVect Either `NULL` (default) or character (`"raster"` or `"vector"`). If `x` is a raster or vector already in **R**, this does not need to be specified. However, if `x` is a filename, then the function will try to ascertain whether it represents a raster or a vector, but sometimes this will fail. In that case, it can help to specify if the file holds a raster or vector. Partial matching is used.
+#'
+#' @param method Character or `NULL` (rasters only): If `x` does not have the same coordinate reference system as the currently active **GRASS** [session][tutorial_sessions], then it will be projected when it is imported. You may need to specify which method is used to conduction the transformation. Partial matching is used.
+#' * `NULL` (default): Automatically choose based on raster properties (`near` for categorical data, `bilinear` for continuous data)
+#' * `"near"`: Nearest neighbor. Best for categorical data, and often a poor choice for continuous data.
+#' * `"bilinear"`: Bilinear interpolation (default for non-categorical data; uses weighted values from 4 cells).
+#' * `"bicubic"`: Bicubic interpolation (uses weighted values from 16 cells).
+#' * `"lanczos"`: Lanczos interpolation (uses weighted values from 25 cells).
+#'
+#' @param fallback Logical (rasters only): If `TRUE` (default), then use "lower" resampling methods to fill in `NA` cells when a "higher" method is used. For example, if `method = "bicubic"`, `NA` cells will be filled in using the `bilinear` method, except when that results in `NA`s, in which case the `near` method will be used. Fallback causes fewer cells to revert to `NA` values, so may be better at capturing complex "edges" (e.g., coastlines). Fallback does increase processing time because each "lower" method must be applied, then results merged.
+#'
+#' @param wrap Logical (rasters only): When projecting rasters that "wrap around" (i.e., whole-world rasters or rasters that have edges that actually circle around to meet on the globe), `wrap` should be `TRUE` to avoid removing rows and columns from the "edge" of the map. The default is `FALSE`.
+#'
+#' @param warn Logical: If `TRUE`, display a warning when projecting the vector or raster.
+#'
+#' @details When projecting a raster, the "fallback" methods in `r.import` are actually used, even though the `method` argument takes the strings for non-fallback methods. See the manual page for the `r.import` **GRASS** module.
+#' 
+#' @seealso [rgrass::read_RAST()] and [rgrass::read_VECT()], plus **GRASS** modules `r.in.gdal`, `r.import`, and `v.in.ogr`.
+#'
+#' @return A `GRaster` or `GVector`.
+#'
+#' @example man/examples/ex_faster.r
+#'
+#' @aliases fast
+#' @rdname fast
+#' @exportMethod fast
 methods::setMethod(
 	"fast",
 	signature(x = "character"),
@@ -213,9 +213,9 @@ methods::setMethod(
 	} # EOF
 )
 
-#" @rdname fast
-#" @aliases fast
-#" @exportMethod fast
+#' @rdname fast
+#' @aliases fast
+#' @exportMethod fast
 methods::setMethod(
 	"fast",
 	signature(x = "SpatRaster"),
@@ -241,18 +241,18 @@ methods::setMethod(
 	} # EOF
 )
 
-#" @rdname fast
-#" @aliases fast
-#" @exportMethod fast
+#' @rdname fast
+#' @aliases fast
+#' @exportMethod fast
 methods::setMethod(
 	"fast",
 	signature(x = "SpatVector"),
 	function(x, warn = TRUE) .fastVector(x, warn=warn)
 )
 
-#" @rdname fast
-#" @aliases fast
-#" @exportMethod fast
+#' @rdname fast
+#' @aliases fast
+#' @exportMethod fast
 methods::setMethod(
 	"fast",
 	signature(x = "sf"),

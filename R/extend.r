@@ -1,77 +1,77 @@
-#" Add rows and columns around a writeRaster
-#"
-#" @description `extend()` adds cells around a raster, making it larger.
-#" 
-#" @param x A `GRaster`.
-#" 
-#" @param y Any of:
-#"
-#" *  An object from which an extent can be obtained; i.e., a `SpatRaster`, `SpatVector`, `SpatExtent`, `sf` vector, or a `GSpatial` object (any of `GRaster`, `GVector`, or `GRegion`). If the extent of `x` is "outside" the extent of `y` on any side, the side(s) of `x` that are outside will be kept as-is (i.e., the extent of `x` will never be shrunk).
-#" * A single positive integer: Number of rows and columns to add to the top, bottom, and sides of the raster.
-#" * Two integers >= 0: Number of columns (1st value) to add to the sides, and number of rows (2nd value) to add to the top and bottom of the raster.
-#" * Four integers >= 0: Number of rows and columns to add (left column, right column, bottom row, top row).
-#" 
-#" @param snap Character: Method used to align `y` to `x`. Partial matching is used. This is only used if `y` is not a set of numbers.
-#" * `"near"` (default): Round to nearest row/column
-#" * `"in"`: Round "inward" toward the extent of `x` to nearest row/column
-#" * `"out"`: Round "outward" away from the extent of `x` to the nearest row/column. 
-#" 
-#" @param fill Numeric: Value to place in the new cells. The default is `NA`.
-#" 
-#" @returns A `GRaster`.
-#" 
-#" @seealso [terra::extend()] 
-#"
-#" @example man/examples/ex_extend.r
-#" 
-#" @aliases extend
-#" @rdname extend
-#" @exportMethod extend
+#' Add rows and columns around a writeRaster
+#'
+#' @description `extend()` adds cells around a raster, making it larger.
+#' 
+#' @param x A `GRaster`.
+#' 
+#' @param y Any of:
+#'
+#' *  An object from which an extent can be obtained; i.e., a `SpatRaster`, `SpatVector`, `SpatExtent`, `sf` vector, or a `GSpatial` object (any of `GRaster`, `GVector`, or `GRegion`). If the extent of `x` is "outside" the extent of `y` on any side, the side(s) of `x` that are outside will be kept as-is (i.e., the extent of `x` will never be shrunk).
+#' * A single positive integer: Number of rows and columns to add to the top, bottom, and sides of the raster.
+#' * Two integers >= 0: Number of columns (1st value) to add to the sides, and number of rows (2nd value) to add to the top and bottom of the raster.
+#' * Four integers >= 0: Number of rows and columns to add (left column, right column, bottom row, top row).
+#' 
+#' @param snap Character: Method used to align `y` to `x`. Partial matching is used. This is only used if `y` is not a set of numbers.
+#' * `"near"` (default): Round to nearest row/column
+#' * `"in"`: Round "inward" toward the extent of `x` to nearest row/column
+#' * `"out"`: Round "outward" away from the extent of `x` to the nearest row/column. 
+#' 
+#' @param fill Numeric: Value to place in the new cells. The default is `NA`.
+#' 
+#' @returns A `GRaster`.
+#' 
+#' @seealso [terra::extend()] 
+#'
+#' @example man/examples/ex_extend.r
+#' 
+#' @aliases extend
+#' @rdname extend
+#' @exportMethod extend
 methods::setMethod(
     f = "extend",
     signature = c(x = "GRaster", y = "numeric"),
     function(x, y, fill = NA) .extend(x = x, y = y, snap = NA, fill = fill)
 )
 
-#" @aliases extend
-#" @rdname extend
-#" @exportMethod extend
+#' @aliases extend
+#' @rdname extend
+#' @exportMethod extend
 methods::setMethod(
     f = "extend",
     signature = c(x = "GRaster", y = "SpatRaster"),
     function(x, y, snap = "near", fill = NA) .extend(x = x, y = y, snap = snap, fill = fill)
 )
 
-#" @aliases extend
-#" @rdname extend
-#" @exportMethod extend
+#' @aliases extend
+#' @rdname extend
+#' @exportMethod extend
 methods::setMethod(
     f = "extend",
     signature = c(x = "GRaster", y = "SpatVector"),
     function(x, y, snap = "near", fill = NA) .extend(x = x, y = y, snap = snap, fill = fill)
 )
 
-#" @aliases extend
-#" @rdname extend
-#" @exportMethod extend
+#' @aliases extend
+#' @rdname extend
+#' @exportMethod extend
 methods::setMethod(
     f = "extend",
     signature = c(x = "GRaster", y = "SpatExtent"),
     function(x, y, snap = "near", fill = NA) .extend(x = x, y = y, snap = snap, fill = fill)
 )
 
-#" @aliases extend
-#" @rdname extend
-#" @exportMethod extend
+#' @aliases extend
+#' @rdname extend
+#' @exportMethod extend
 methods::setMethod(
     f = "extend",
     signature = c(x = "GRaster", y = "sf"),
     function(x, y, snap = "near", fill = NA) .extend(x = x, y = y, snap = snap, fill = fill)
 )
 
-#" @aliases extend
-#" @rdname extend
-#" @exportMethod extend
+#' @aliases extend
+#' @rdname extend
+#' @exportMethod extend
 methods::setMethod(
     f = "extend",
     signature = c(x = "GRaster", y = "GSpatial"),

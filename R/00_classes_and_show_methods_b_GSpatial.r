@@ -1,9 +1,9 @@
-#" @title Classes for "fasterRaster" locations, rasters, and vectors
-#"
-#" @describeIn GSession
-#"
-#" @importFrom methods new
-#" @exportClass GSpatial
+#' @title Classes for "fasterRaster" locations, rasters, and vectors
+#'
+#' @describeIn GSession
+#'
+#' @importFrom methods new
+#' @exportClass GSpatial
 GSpatial <- setClass(
 	Class = "GSpatial",
 	contains = "GSession",

@@ -37,9 +37,9 @@
 
 \item{snap}{Character: Method used to align \code{y} to \code{x}. Partial matching is used. This is only used if \code{y} is not a set of numbers.
 \itemize{
-\item \code{'near'} (default): Round to nearest row/column
-\item \code{'in'}: Round "inward" toward the extent of \code{x} to nearest row/column
-\item \code{'out'}: Round "outward" away from the extent of \code{x} to the nearest row/column.
+\item \code{"near"} (default): Round to nearest row/column
+\item \code{"in"}: Round "inward" toward the extent of \code{x} to nearest row/column
+\item \code{"out"}: Round "outward" away from the extent of \code{x} to the nearest row/column.
 }}
 }
 \value{
@@ -63,19 +63,19 @@ opts. <- getFastOptions()
 # where GRASS is installed on your system.
 
 grassDir <- "/Applications/GRASS-8.3.app/Contents/Resources" # Mac
-grassDir <- 'C:/Program Files/GRASS GIS 8.3' # Windows
-grassDir <- '/usr/local/grass' # Linux
+grassDir <- "C:/Program Files/GRASS GIS 8.3" # Windows
+grassDir <- "/usr/local/grass" # Linux
 
 # setup
 library(terra)
 
 # example data
-madElev <- fastData('madElev')
-madRivers <- fastData('madRivers')
+madElev <- fastData("madElev")
+madRivers <- fastData("madRivers")
 
 # start GRASS session for examples only
 faster(x = madElev, grassDir = grassDir,
-workDir = tempdir(), location = 'examples') # line only needed for examples
+workDir = tempdir(), location = "examples") # line only needed for examples
 
 # Send spatial objects to GRASS:
 elev <- fast(madElev)
@@ -108,7 +108,7 @@ plot(uncrop900)
 
 # IMPORTANT #3: Revert back to original GRASS session if needed.
 fastRestore(opts.)
-removeSession('examples')
+removeSession("examples")
 
 }
 }

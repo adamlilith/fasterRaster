@@ -1,30 +1,30 @@
-#" Areas visible from points on a raster
-#"
-#" @description `viewshed()` calculates the area that can be seen from a given point on a raster. It accounts for elevation, and optionally) curvature of the Earth and atmospheric refraction.
-#" 
-#" @param x A `GRaster` typically representing elevation.
-#" 
-#" @param loc A "points" `GVector`, a two-column matrix with coordinate pairs (longitude then latitude), or a pair of numeric values indicating longitude and latitude of the point from which the viewshed should be calculated. If more than one point is supplied, the final map will reflect the combined viewshed from all points.
-#" 
-#" @param observer Numeric: The altitude of the observer above the surface (in meters). The default is 1.8 (approximately eye-level).
-#" 
-#" @param target Numeric: The altitude of the target above the surface (in meters). The default is 0.
-#" 
-#" @param curvature Logical: If `TRUE` (default), account for curvature of the Earth.
-#" 
-#" @param refraction Logical: If `TRUE`, account for atmospheric refraction. Default is `FALSE`.
-#" 
-#" @param refractCoeff Numeric between 0 and 1: Refraction coefficient. The default is 0.14286.
-#" 
-#" @param maxDist Numeric >= 0: Maximum distance for which to calculate viewshed. Default is `Inf` (infinite). This is in map units (usually meters).
-#" 
-#" @returns A `GRaster`.
-#" 
-#" @example man/examples/ex_viewshed.r
-#" 
-#" @aliases viewshed
-#" @rdname viewshed
-#" @exportMethod viewshed
+#' Areas visible from points on a raster
+#'
+#' @description `viewshed()` calculates the area that can be seen from a given point on a raster. It accounts for elevation, and optionally) curvature of the Earth and atmospheric refraction.
+#' 
+#' @param x A `GRaster` typically representing elevation.
+#' 
+#' @param loc A "points" `GVector`, a two-column matrix with coordinate pairs (longitude then latitude), or a pair of numeric values indicating longitude and latitude of the point from which the viewshed should be calculated. If more than one point is supplied, the final map will reflect the combined viewshed from all points.
+#' 
+#' @param observer Numeric: The altitude of the observer above the surface (in meters). The default is 1.8 (approximately eye-level).
+#' 
+#' @param target Numeric: The altitude of the target above the surface (in meters). The default is 0.
+#' 
+#' @param curvature Logical: If `TRUE` (default), account for curvature of the Earth.
+#' 
+#' @param refraction Logical: If `TRUE`, account for atmospheric refraction. Default is `FALSE`.
+#' 
+#' @param refractCoeff Numeric between 0 and 1: Refraction coefficient. The default is 0.14286.
+#' 
+#' @param maxDist Numeric >= 0: Maximum distance for which to calculate viewshed. Default is `Inf` (infinite). This is in map units (usually meters).
+#' 
+#' @returns A `GRaster`.
+#' 
+#' @example man/examples/ex_viewshed.r
+#' 
+#' @aliases viewshed
+#' @rdname viewshed
+#' @exportMethod viewshed
 methods::setMethod(
     f = "viewshed",
     signature = c(x = "GRaster"),

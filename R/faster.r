@@ -1,35 +1,35 @@
-#" Initialize a "GRASS" session
-#"
-#" This function initializes a **GRASS** session in a particular folder. You need to run this function (usually just once) before you use most functions in **fasterRaster**. You can use [fastRestore()] to switch between [working folders, locations, and mapsets][tutorial_sessions].
-#"
-#" @param x Any object from which a coordinate reference system (CRS) can be acquired. Ergo, any of:
-#" * A `SpatRaster`, `SpatVector`, `SpatExtent`, `stars`, or `sf` object
-#" * A `crs` object (i.e., from [sf::st_crs()]).
-#" * A CRS (coordinate reference system) WKT string. Some PROJ4 strings *might* work, too.
-#"
-#" @param grassDir Character or `NULL` (default): Folder in which **GRASS** is installed on your computer. This will look different depending on the operating system and version of **GRASS** you have installed. Here are some examples:
-#" * Windows: `"C:/Program Files/GRASS GIS 8.3"`
-#" * Mac OS: `"/Applications/GRASS-8.3.app/Contents/Resources"`
-#" * Linux: `"/usr/local/grass"`
-#" If `NULL`, then the function will use [getFastOptions()] to attempt to get it. If it fails, `grassDir` will stay as `NULL` and likely result in an error.
-#"
-#" @param addonDir Character or `NULL` (deafult): Folder in which **GRASS** add-ons are stored. If `NULL`, this is assumed to be in `file.path(grassDir, "addons")`.
-#" 
-#" @param workDir `NULL` or character: The name of the folder in which **GRASS** will store rasters and vectors. If this is `NULL` (default), then the [tempdir()] on the user"s system will be used. If users wish to create persistent **GRASS** sessions that can be used in a different instance of **R** (i.e., if **R** is stopped then restarted), then this needs to be specified.
-#"
-#" @param overwrite Logical: If `FALSE` (default), and a **GRASS** session in the stated (or default) location and mapset has already been started, then the function will fail. If `TRUE`, then any existing **GRASS** session will be overwritten. *NOTE*: This will **not** remove any **R** objects associated with rasters or vectors in the session, but they will no longer work because the objects they point to will be overwritten.
+#' Initialize a "GRASS" session
+#'
+#' This function initializes a **GRASS** session in a particular folder. You need to run this function (usually just once) before you use most functions in **fasterRaster**. You can use [fastRestore()] to switch between [working folders, locations, and mapsets][tutorial_sessions].
+#'
+#' @param x Any object from which a coordinate reference system (CRS) can be acquired. Ergo, any of:
+#' * A `SpatRaster`, `SpatVector`, `SpatExtent`, `stars`, or `sf` object
+#' * A `crs` object (i.e., from [sf::st_crs()]).
+#' * A CRS (coordinate reference system) WKT string. Some PROJ4 strings *might* work, too.
+#'
+#' @param grassDir Character or `NULL` (default): Folder in which **GRASS** is installed on your computer. This will look different depending on the operating system and version of **GRASS** you have installed. Here are some examples:
+#' * Windows: `"C:/Program Files/GRASS GIS 8.3"`
+#' * Mac OS: `"/Applications/GRASS-8.3.app/Contents/Resources"`
+#' * Linux: `"/usr/local/grass"`
+#' If `NULL`, then the function will use [getFastOptions()] to attempt to get it. If it fails, `grassDir` will stay as `NULL` and likely result in an error.
+#'
+#' @param addonDir Character or `NULL` (deafult): Folder in which **GRASS** add-ons are stored. If `NULL`, this is assumed to be in `file.path(grassDir, "addons")`.
+#' 
+#' @param workDir `NULL` or character: The name of the folder in which **GRASS** will store rasters and vectors. If this is `NULL` (default), then the [tempdir()] on the user"s system will be used. If users wish to create persistent **GRASS** sessions that can be used in a different instance of **R** (i.e., if **R** is stopped then restarted), then this needs to be specified.
+#'
+#' @param overwrite Logical: If `FALSE` (default), and a **GRASS** session in the stated (or default) location and mapset has already been started, then the function will fail. If `TRUE`, then any existing **GRASS** session will be overwritten. *NOTE*: This will **not** remove any **R** objects associated with rasters or vectors in the session, but they will no longer work because the objects they point to will be overwritten.
 #
-#" @param warn Logical: If `TRUE` (default) and `overwrite` is `TRUE`, then display a warning.
-#"
-#" @param ... Options to send to [setFastOptions()]. These should be in `option = value` format.
-#"
-#" @return A `[GSession]`[GSession] object (invisibly).
-#"
-#" @seealso Guide to getting [started](tutorial_starting) with **fasterRaster**.
-#"
-#" @example man/examples/ex_faster.r
-#"
-#" @export
+#' @param warn Logical: If `TRUE` (default) and `overwrite` is `TRUE`, then display a warning.
+#'
+#' @param ... Options to send to [setFastOptions()]. These should be in `option = value` format.
+#'
+#' @return A `[GSession]`[GSession] object (invisibly).
+#'
+#' @seealso Guide to getting [started](tutorial_starting) with **fasterRaster**.
+#'
+#' @example man/examples/ex_faster.r
+#'
+#' @export
 faster <- function(
 	x,
 	grassDir = NULL,

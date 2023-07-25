@@ -24,28 +24,28 @@
 \arguments{
 \item{x}{A \code{GRaster} or \code{GVector}.}
 
-\item{width}{Numeric: Maximum distance cells must be from focal cells to be within the buffer. For rasters, if the buffering unit is \verb{'cells}', then to get \code{n} cell widths, use \code{n + epsilon}, where \code{epsilon} is a small number (e.g., 0.001). The larger the buffer, this smaller this must be to ensure just \code{n} cells are included.}
+\item{width}{Numeric: Maximum distance cells must be from focal cells to be within the buffer. For rasters, if the buffering unit is \verb{"cells}", then to get \code{n} cell widths, use \code{n + epsilon}, where \code{epsilon} is a small number (e.g., 0.001). The larger the buffer, this smaller this must be to ensure just \code{n} cells are included.}
 
 \item{unit}{Character: Indicates the units of \code{width}. Can be one of:
 \itemize{
-\item \code{'cells'}: Units are numbers of cells.
-\item \code{'meters'} (default), \code{'kilometers'} or \code{'km'}, \code{'feet'}, \code{'miles'}, or \code{'nautmiles'} (nautical miles).
+\item \code{"cells"}: Units are numbers of cells.
+\item \code{"meters"} (default), \code{"kilometers"} or \code{"km"}, \code{"feet"}, \code{"miles"}, or \code{"nautmiles"} (nautical miles).
 }
 Partial matching is used and case is ignored.}
 
-\item{method}{Character: Only used if \code{units} is \code{'cells'}. Indicates the manner in which distances are calculated for adding of cells:
+\item{method}{Character: Only used if \code{units} is \code{"cells"}. Indicates the manner in which distances are calculated for adding of cells:
 \itemize{
-\item \code{'Euclidean'}: Euclidean distance
-\item \code{'Manhattan'}: "taxi-cab" distance)
-\item \code{'maximum'}: Maximum of the north-south and east-west distances between points.
+\item \code{"Euclidean"}: Euclidean distance
+\item \code{"Manhattan"}: "taxi-cab" distance)
+\item \code{"maximum"}: Maximum of the north-south and east-west distances between points.
 Partial matching is used and case is ignored.
 }}
 
 \item{background}{Numeric: Value to assign to cells that are not \code{NA} and not part of the buffer (default is 0).}
 
-\item{lowMemory}{Logical: Only used if buffering a raster and \code{units} is not \code{'meters'}. If \code{FALSE} (default) use faster, memory-intensive procedure. If \code{TRUE} then use the slower, low-memory version. To help decide which to use, consider using the low-memory version on a system with 1 GB of RAM for a raster larger than about 32000x32000 cells, or for a system with  with 8 GB of RAM a raster larger than about 90000x90000 cells.}
+\item{lowMemory}{Logical: Only used if buffering a raster and \code{units} is not \code{"meters"}. If \code{FALSE} (default) use faster, memory-intensive procedure. If \code{TRUE} then use the slower, low-memory version. To help decide which to use, consider using the low-memory version on a system with 1 GB of RAM for a raster larger than about 32000x32000 cells, or for a system with  with 8 GB of RAM a raster larger than about 90000x90000 cells.}
 
-\item{capstyle}{Character: Style for ending the "cap" of buffers around lines. Valid options include \code{'rounded'}, \code{'square'}, and '\code{flat}'.}
+\item{capstyle}{Character: Style for ending the "cap" of buffers around lines. Valid options include \code{"rounded"}, \code{"square"}, and "\code{flat}".}
 
 \item{union}{Logical: If \code{FALSE} (default), construct a buffer for each geometry. If \code{TRUE}, union all buffers after creation.}
 
@@ -70,20 +70,20 @@ opts. <- getFastOptions()
 # IMPORTANT #2: Select the appropriate line below and change as necessary to
 # where GRASS is installed on your system.
 grassDir <- "/Applications/GRASS-8.3.app/Contents/Resources" # Mac
-grassDir <- 'C:/Program Files/GRASS GIS 8.3' # Windows
-grassDir <- '/usr/local/grass' # Linux
+grassDir <- "C:/Program Files/GRASS GIS 8.3" # Windows
+grassDir <- "/usr/local/grass" # Linux
 
 # setup
 library(sf)
 library(terra)
 
 # elevation raster, rivers vector
-madElev <- fastData('madElev')
-madRivers <- fastData('madRivers')
+madElev <- fastData("madElev")
+madRivers <- fastData("madRivers")
 
 # start GRASS session for examples only
 faster(x = madElev, grassDir = grassDir,
-workDir = tempdir(), location = 'examples') # line only needed for examples
+workDir = tempdir(), location = "examples") # line only needed for examples
 
 # convert a SpatRaster to a GRaster, and sf to a GVector
 elev <- fast(madElev)
@@ -95,18 +95,18 @@ plot(buffByDist, legend=FALSE)
 plot(madElev, add=TRUE)
 
 ### buffer a raster by a given number of cells
-buffByCells <- buffer(elev, width = 20.01, unit = 'cells') # 20-cell buffer
+buffByCells <- buffer(elev, width = 20.01, unit = "cells") # 20-cell buffer
 plot(buffByCells)
 plot(madElev, add=TRUE)
 
 ### buffer a vector
 buffRivers <- buffer(rivers, width = 2000) # 2000-m buffer
 plot(buffRivers)
-plot(st_geometry(madRivers), col = 'blue', add = TRUE)
+plot(st_geometry(madRivers), col = "blue", add = TRUE)
 
 # IMPORTANT #3: Revert back to original GRASS session if needed.
 fastRestore(opts.)
-removeSession('examples')
+removeSession("examples")
 
 }
 }

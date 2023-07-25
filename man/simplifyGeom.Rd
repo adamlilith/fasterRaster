@@ -14,10 +14,10 @@
 
 \item{method}{Character: Method used to reduce the number of vertices. Partial matching is used, and case does not matter:
 \itemize{
-\item \code{'VR'}: Vertex reduction (default, simplest): If two points p1 and p2 on the same line are closer than the threshold, remove p2. The \code{tolerance} argument represents this threshold distance.
-\item \code{'DP'}: Douglas-Peucker (AKA Ramer–Douglas–Peucker) algorithm: Simply stated, for points p1, p2, and p3 on a line, this method constructs a line segment between p1 and p3. If p2 is closer than the threshold to the line segment, it is removed. In this example, the \code{tolerance} argument refers to the maximum distance between p2 and the line segment.
-\item \code{'DPR'}: Douglas-Peucker algorithm with reduction: As the Douglas-Pueker method, but each geometry is thinned so that in the end it has only a given proportion of the starting number of points. The \code{prop} argument refers to this proportion of remaining points.
-\item \verb{'RW}: Reumann-Witkam algorithm: For points p1, p2, p3, and p4 on a line, constructs two line segments parallel to the line segment defined by p1 and p4. These are placed \code{tolerance} distance one either side of the p1-p4 line segment. If the line segment p1-p2 or p3-p4 falls entirely within the bounds of the two outer parallel segments, p2 and p3 are removed, leaving just p1 and p4.
+\item \code{"VR"}: Vertex reduction (default, simplest): If two points p1 and p2 on the same line are closer than the threshold, remove p2. The \code{tolerance} argument represents this threshold distance.
+\item \code{"DP"}: Douglas-Peucker (AKA Ramer–Douglas–Peucker) algorithm: Simply stated, for points p1, p2, and p3 on a line, this method constructs a line segment between p1 and p3. If p2 is closer than the threshold to the line segment, it is removed. In this example, the \code{tolerance} argument refers to the maximum distance between p2 and the line segment.
+\item \code{"DPR"}: Douglas-Peucker algorithm with reduction: As the Douglas-Pueker method, but each geometry is thinned so that in the end it has only a given proportion of the starting number of points. The \code{prop} argument refers to this proportion of remaining points.
+\item \verb{"RW}: Reumann-Witkam algorithm: For points p1, p2, p3, and p4 on a line, constructs two line segments parallel to the line segment defined by p1 and p4. These are placed \code{tolerance} distance one either side of the p1-p4 line segment. If the line segment p1-p2 or p3-p4 falls entirely within the bounds of the two outer parallel segments, p2 and p3 are removed, leaving just p1 and p4.
 }}
 
 \item{prop}{Positive value between 0 and 1: Proportion of points that will be retained for each geometry when the Douglas-Peucker algorithm with reduction is applied (ignored otherwise). Default is 0.5 (retain 50\% of vertices).}
@@ -42,20 +42,20 @@ opts. <- getFastOptions()
 # IMPORTANT #2: Select the appropriate line below and change as necessary to
 # where GRASS is installed on your system.
 grassDir <- "/Applications/GRASS-8.3.app/Contents/Resources" # Mac
-grassDir <- 'C:/Program Files/GRASS GIS 8.3' # Windows
-grassDir <- '/usr/local/grass' # Linux
+grassDir <- "C:/Program Files/GRASS GIS 8.3" # Windows
+grassDir <- "/usr/local/grass" # Linux
 
 # setup
 library(sf)
 library(terra)
 
 # example data
-madCoast0 <- fastData('madCoast0')
-madRivers <- fastData('madRivers')
+madCoast0 <- fastData("madCoast0")
+madRivers <- fastData("madRivers")
 
 # start GRASS session for examples only
 faster(x = madRivers, grassDir = grassDir,
-workDir = tempdir(), location = 'examples') # line only needed for examples
+workDir = tempdir(), location = "examples") # line only needed for examples
 
 ### simplify geometry (remove nodes)
 ####################################
@@ -63,25 +63,25 @@ workDir = tempdir(), location = 'examples') # line only needed for examples
 rivers <- fast(madRivers)
 
 vr <- simplifyGeom(rivers, tolerance = 2000)
-dp <- simplifyGeom(rivers, tolerance = 2000, method = 'dp')
-dpr <- simplifyGeom(rivers, tolerance = 2000, method = 'dpr', prop=0.5)
-rw <- simplifyGeom(rivers, tolerance = 2000, method = 'rw')
+dp <- simplifyGeom(rivers, tolerance = 2000, method = "dp")
+dpr <- simplifyGeom(rivers, tolerance = 2000, method = "dpr", prop=0.5)
+rw <- simplifyGeom(rivers, tolerance = 2000, method = "rw")
 
-plot(st_geometry(madRivers), col='gray', lwd=3)
-plot(vr, col='blue', add=TRUE)
-plot(dp, col='red', add=TRUE)
-plot(dpr, col='chartreuse', add=TRUE)
-plot(rw, col='orange', add=TRUE)
+plot(st_geometry(madRivers), col="gray", lwd=3)
+plot(vr, col="blue", add=TRUE)
+plot(dp, col="red", add=TRUE)
+plot(dpr, col="chartreuse", add=TRUE)
+plot(rw, col="orange", add=TRUE)
 
-legend('topright',
+legend("topright",
    legend = c(
-	  'Original',
-      'Vertex reduction',
-      'Douglas-Peucker',
-      'Douglas-Peucker reduction',
-      'Reumann-Witkam'
+	  "Original",
+      "Vertex reduction",
+      "Douglas-Peucker",
+      "Douglas-Peucker reduction",
+      "Reumann-Witkam"
 	),
-	col = c('gray', 'blue', 'red', 'chartreuse', 'orange'),
+	col = c("gray", "blue", "red", "chartreuse", "orange"),
 	lwd = c(3, 1, 1, 1, 1)
 )
 
@@ -89,41 +89,41 @@ legend('topright',
 ###################
 
 hermite <- smoothGeom(rivers, dist = 2000, angle = 3)
-chaiken <- smoothGeom(rivers, method = 'Chaiken', dist = 2000)
+chaiken <- smoothGeom(rivers, method = "Chaiken", dist = 2000)
 
-plot(st_geometry(madRivers), col='gray', lwd=2)
-plot(hermite, col='blue', add=TRUE)
-plot(chaiken, col='red', add=TRUE)
+plot(st_geometry(madRivers), col="gray", lwd=2)
+plot(hermite, col="blue", add=TRUE)
+plot(chaiken, col="red", add=TRUE)
 
-legend('topright',
+legend("topright",
    legend = c(
-	  'Original',
-      'Hermite',
-      'Chaiken'
+	  "Original",
+      "Hermite",
+      "Chaiken"
 	),
-	col = c('gray', 'blue', 'red'),
+	col = c("gray", "blue", "red"),
 	lwd = c(2, 1, 1, 1, 1)
 )
 
 ### clean geometry
 ##################
 
-noDangs <- cleanGeom(rivers, method = 'removeDangles', tolerance = 2000)
+noDangs <- cleanGeom(rivers, method = "removeDangles", tolerance = 2000)
 
-plot(st_geometry(madRivers), col='blue')
-plot(noDangs, col='red', add=TRUE)
+plot(st_geometry(madRivers), col="blue")
+plot(noDangs, col="red", add=TRUE)
 
-legend('topright',
+legend("topright",
    legend = c(
-	  'Original',
-      'No dangles'
+	  "Original",
+      "No dangles"
 	),
-	col = c('blue', 'red')
+	col = c("blue", "red")
 )
 
 # IMPORTANT #3: Revert back to original GRASS session if needed.
 fastRestore(opts.)
-removeSession('examples')
+removeSession("examples")
 
 }
 }

@@ -1,48 +1,48 @@
 
-#" Geographic distance
-#"
-#" @description
-#" This function produces a raster or a matrix of geographic distances, depending on the input:
-#"
-#" **Case 1: Argument `x` is a `GRaster` and `y` is missing:** By default, this function replaces values in all `NA` cells with the distance between them and their closest non-`NA` cell. Alternatively, all non-`NA` cells can have their values replaced by the distance to `NA` cells. You can also specify which cells (by value) have their values replaced by distance to other cells.
-#"
-#" **Case 2: Argument `x` is a `GRaster` and `y` is a `GVector`:** All cells in the raster have their value replaced by the distance to the nearest features in the `GVector`. Alternatively, calculate the distance from any cell covered by a vector object and the nearest cell *not* covered by a vector object. Note that the vector is rasterized first.
-#"
-#" **Case 3: Argument `x` is a `GVector` and `y` is a `GVector`:** A matrix of pairwise distances between all features in one versus the other `GVector` is returned.
-#" 
-#" @param x A `GRaster` or `GVector`.
-#"
-#" @param y Either missing, or a `GVector`.
-#"
-#" @param target Numeric: Only applicable for case 1, when `x` is a `GRaster` and `y` is missing.  If this is `NA` (default), then cells with `NA`s have their values replaced with the distance to the nearest non-`NA` cell. If this is another value, then cells with these values have their values replaced with the distance to any other cell (`NA` and non-`NA`, except for cells with this value).
-#"
-#" @param fillNA Logical: Determines which raster cells to fill with distances.
-#" * Case 1, when `x` is a `GRaster` and `y` is missing: If `TRUE` (default), fill values of `NA` cells with distances to non-`NA` cells. If `FALSE`, fill non-`NA` cells width distance to `NA` cells.
-#" * Case 2, when `x` is a `GRaster` and `y` is a `GVector`: If `TRUE` (default), then the returned raster will contain the distance from the cell to the closest feature in the vector. If `FALSE`, then cells covered by the vector will have their values replaced with the distance to the nearest cell not covered, and cells that are not covered by the vector will have values of 0.
-#" * Case 3, when `x` is a `GVector` and `y` is a `GVector`: This argument is not used in this case.
-#"
-#" @param unit Character: Units of the output. Either of `"meters"` or `"kilometers" (or "`km"`). Partial matching is used.
-#"
-#" @param dense Logical: Only applicable for case 2, when `x` is a `GRaster` and `y` is a `GVector`. If `TRUE` (default), then the vector will be represented by "densified" lines (i.e., any cell that the line/boundary touches, not just the ones on the rendering path).
-#"
-#" @param method Character: The type of distance to calculate. Partial matching is used and capitalization is ignored. Possible values include:
-#" * `Euclidean` (default): Euclidean distance
-#" * `squared`: Squared Euclidean distance (faster than just Euclidean distance but same rank--good for cases where only order matters)
-#" * `maximum`: Maximum Euclidean distance
-#" * `geodesic`: Geographic distance
-#" * `Manhattan`: Manhattan distance (i.e., "taxicab" distance, distance along cells going only north-south and east-west and never along a diagonal).
-#"
-#" @param minDist,maxDist Either `NULL` (default) or numeric values: Ignore distances less than or greater than these distances.
-#"
-#" @return If `x` is a `GRaster`, then the output is a `GRaster`. If `x` is a `GVector`, then the output is a numeric vector.
-#"
-#" @seealso [terra::distance()]; [sf::st_distance()], modules `r.grow.distance` and `v.distance` in **GRASS** 
-#"
-#" @example man/examples/ex_distance.r
-#"
-#" @aliases distance
-#" @rdname distance
-#" @exportMethod distance
+#' Geographic distance
+#'
+#' @description
+#' This function produces a raster or a matrix of geographic distances, depending on the input:
+#'
+#' **Case 1: Argument `x` is a `GRaster` and `y` is missing:** By default, this function replaces values in all `NA` cells with the distance between them and their closest non-`NA` cell. Alternatively, all non-`NA` cells can have their values replaced by the distance to `NA` cells. You can also specify which cells (by value) have their values replaced by distance to other cells.
+#'
+#' **Case 2: Argument `x` is a `GRaster` and `y` is a `GVector`:** All cells in the raster have their value replaced by the distance to the nearest features in the `GVector`. Alternatively, calculate the distance from any cell covered by a vector object and the nearest cell *not* covered by a vector object. Note that the vector is rasterized first.
+#'
+#' **Case 3: Argument `x` is a `GVector` and `y` is a `GVector`:** A matrix of pairwise distances between all features in one versus the other `GVector` is returned.
+#' 
+#' @param x A `GRaster` or `GVector`.
+#'
+#' @param y Either missing, or a `GVector`.
+#'
+#' @param target Numeric: Only applicable for case 1, when `x` is a `GRaster` and `y` is missing.  If this is `NA` (default), then cells with `NA`s have their values replaced with the distance to the nearest non-`NA` cell. If this is another value, then cells with these values have their values replaced with the distance to any other cell (`NA` and non-`NA`, except for cells with this value).
+#'
+#' @param fillNA Logical: Determines which raster cells to fill with distances.
+#' * Case 1, when `x` is a `GRaster` and `y` is missing: If `TRUE` (default), fill values of `NA` cells with distances to non-`NA` cells. If `FALSE`, fill non-`NA` cells width distance to `NA` cells.
+#' * Case 2, when `x` is a `GRaster` and `y` is a `GVector`: If `TRUE` (default), then the returned raster will contain the distance from the cell to the closest feature in the vector. If `FALSE`, then cells covered by the vector will have their values replaced with the distance to the nearest cell not covered, and cells that are not covered by the vector will have values of 0.
+#' * Case 3, when `x` is a `GVector` and `y` is a `GVector`: This argument is not used in this case.
+#'
+#' @param unit Character: Units of the output. Either of `"meters"` or `"kilometers" (or "`km"`). Partial matching is used.
+#'
+#' @param dense Logical: Only applicable for case 2, when `x` is a `GRaster` and `y` is a `GVector`. If `TRUE` (default), then the vector will be represented by "densified" lines (i.e., any cell that the line/boundary touches, not just the ones on the rendering path).
+#'
+#' @param method Character: The type of distance to calculate. Partial matching is used and capitalization is ignored. Possible values include:
+#' * `Euclidean` (default): Euclidean distance
+#' * `squared`: Squared Euclidean distance (faster than just Euclidean distance but same rank--good for cases where only order matters)
+#' * `maximum`: Maximum Euclidean distance
+#' * `geodesic`: Geographic distance
+#' * `Manhattan`: Manhattan distance (i.e., "taxicab" distance, distance along cells going only north-south and east-west and never along a diagonal).
+#'
+#' @param minDist,maxDist Either `NULL` (default) or numeric values: Ignore distances less than or greater than these distances.
+#'
+#' @return If `x` is a `GRaster`, then the output is a `GRaster`. If `x` is a `GVector`, then the output is a numeric vector.
+#'
+#' @seealso [terra::distance()]; [sf::st_distance()], modules `r.grow.distance` and `v.distance` in **GRASS** 
+#'
+#' @example man/examples/ex_distance.r
+#'
+#' @aliases distance
+#' @rdname distance
+#' @exportMethod distance
 methods::setMethod(
 	"distance",
 	signature(x = "GRaster", y = "missing"),
@@ -110,9 +110,9 @@ methods::setMethod(
 	} # EOF
 )
 
-#" @aliases distance
-#" @rdname distance
-#" @exportMethod distance
+#' @aliases distance
+#' @rdname distance
+#' @exportMethod distance
 methods::setMethod(
 	"distance",
 	signature(x = "GRaster", y = "GVector"),
@@ -169,9 +169,9 @@ methods::setMethod(
 	} # EOF
 )
 
-#" @aliases distance
-#" @rdname distance
-#" @exportMethod distance
+#' @aliases distance
+#' @rdname distance
+#' @exportMethod distance
 methods::setMethod(
 	"distance",
 	signature(x = "GVector", y = "GVector"),
@@ -206,9 +206,9 @@ methods::setMethod(
 	} # EOF
 )
 
-#" @aliases st_distance
-#" @rdname distance
-#" @exportMethod st_distance
+#' @aliases st_distance
+#' @rdname distance
+#' @exportMethod st_distance
 methods::setMethod(
 	"st_distance",
 	signature(x = "GVector", y = "GVector"),

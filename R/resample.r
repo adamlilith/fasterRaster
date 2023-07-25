@@ -1,39 +1,39 @@
-#" Change the cell size of a GRaster
-#"
-#" @description `resample()` changes the cell size (resolution) of a `GRaster` using either another raster as a template or a user-defined resolution. Note that the extent of the output raster may be expanded to accommodate an integer number of cells. The function is not guaranteed to recreate the same output as **terra**, even when the same resampling method is used.
-#"
-#" @param x The `GRaster` to resample.
-#"
-#" @param y Either a `GRaster` to serve as a template, or a numeric vector with two or three values. If a numeric vector, the values represent east-west and north-south resolution for 2D rasters, or east-west, north-south, and top-bottom resolution for 3D rasters.
-#"
-#" @param method Character or `NULL`: Method to use to assign values to cells. Partial matching is used.
-#" * `NULL` (default): Automatically choose based on raster properties (`near` for categorical data, `bilinear` for continuous data)
-#" * `"near"`: Nearest neighbor. Best for categorical data, and often a poor choice for continuous data.  If [ncat()] is >0 for all rasters, this method will be used by default.
-#" * `"bilinear"`: Bilinear interpolation (default for non-categorical data; uses weighted values from 4 cells).
-#" * `"bicubic"`: Bicubic interpolation (uses weighted values from 16 cells).
-#" * `"lanczos"`: Lanczos interpolation (uses weighted values from 25 cells).
-#" Note that methods that use multiple cells will cause the focal cell to become `NA` if there is at least one cell with an `NA` in the cells it draws from. These `NA` cells can be filled using the `fallback` option.
-#" 
-#" @param fallback Logical: If `TRUE` (default), then use "lower" methods to fill in `NA` cells when a "higher" method is used. For example, if `method = "bicubic"`, `NA` cells will be filled in using the `bilinear` method, except when that results in `NA`s, in which case the `near` method will be used. Fallback causes fewer cells to revert to `NA` values, so may be better at capturing complex "edges" (e.g., coastlines). Fallback does increase processing time because each "lower" method must be applied, then results merged.
-#"
-#" @returns A `GRaster`.
-#" 
-#" @seealso [terra::resample()] and modules `r.resample` and `r.resamp.interp` in **GRASS**
-#"
-#" @example man/examples/ex_resample.r
-#"
-#" @aliases resample 
-#" @rdname resample 
-#" @exportMethod resample
+#' Change the cell size of a GRaster
+#'
+#' @description `resample()` changes the cell size (resolution) of a `GRaster` using either another raster as a template or a user-defined resolution. Note that the extent of the output raster may be expanded to accommodate an integer number of cells. The function is not guaranteed to recreate the same output as **terra**, even when the same resampling method is used.
+#'
+#' @param x The `GRaster` to resample.
+#'
+#' @param y Either a `GRaster` to serve as a template, or a numeric vector with two or three values. If a numeric vector, the values represent east-west and north-south resolution for 2D rasters, or east-west, north-south, and top-bottom resolution for 3D rasters.
+#'
+#' @param method Character or `NULL`: Method to use to assign values to cells. Partial matching is used.
+#' * `NULL` (default): Automatically choose based on raster properties (`near` for categorical data, `bilinear` for continuous data)
+#' * `"near"`: Nearest neighbor. Best for categorical data, and often a poor choice for continuous data.  If [ncat()] is >0 for all rasters, this method will be used by default.
+#' * `"bilinear"`: Bilinear interpolation (default for non-categorical data; uses weighted values from 4 cells).
+#' * `"bicubic"`: Bicubic interpolation (uses weighted values from 16 cells).
+#' * `"lanczos"`: Lanczos interpolation (uses weighted values from 25 cells).
+#' Note that methods that use multiple cells will cause the focal cell to become `NA` if there is at least one cell with an `NA` in the cells it draws from. These `NA` cells can be filled using the `fallback` option.
+#' 
+#' @param fallback Logical: If `TRUE` (default), then use "lower" methods to fill in `NA` cells when a "higher" method is used. For example, if `method = "bicubic"`, `NA` cells will be filled in using the `bilinear` method, except when that results in `NA`s, in which case the `near` method will be used. Fallback causes fewer cells to revert to `NA` values, so may be better at capturing complex "edges" (e.g., coastlines). Fallback does increase processing time because each "lower" method must be applied, then results merged.
+#'
+#' @returns A `GRaster`.
+#' 
+#' @seealso [terra::resample()] and modules `r.resample` and `r.resamp.interp` in **GRASS**
+#'
+#' @example man/examples/ex_resample.r
+#'
+#' @aliases resample 
+#' @rdname resample 
+#' @exportMethod resample
 methods::setMethod(
 	f = "resample",
 	signature = c(x = "GRaster", y = "GRaster"),
 	definition = function(x, y, method = NULL, fallback = TRUE) .resample(x=x, y=y, method=method, fallback=fallback)
 )
 
-#" @aliases resample 
-#" @rdname resample 
-#" @exportMethod resample
+#' @aliases resample 
+#' @rdname resample 
+#' @exportMethod resample
 methods::setMethod(
 	f = "resample",
 	signature = c(x = "GRaster", y = "numeric"),

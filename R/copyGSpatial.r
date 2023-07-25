@@ -1,31 +1,31 @@
-#" Make a copy of an object in GRASS
-#"
-#" Create a copy of a `GRaster` or `GVector` in **GRASS**.  This function is used internally and is of little use to most users.  This only creates a copy of the object in the **GRASS** session--to make a `GRaster` or `GVector`, [.makeGRaster()] or [.makeGVector()] need to be called after making the copy. Note that if the object is multi-layered, then a copy is made of each layer.
-#"
-#" @param x `GRaster`, `GVector`, or character: The object or the `gnames` of the object to be copied. Can take multi-layered objects or multiple `gnames`.
-#" 
-#" @param reshapeRegion Logical: If `TRUE`, reshape the region to match `x` (`GRaster`s only).
-#"
-#" @returns Character vector representing the new `gnames` of each object, plus makes a copy of the given object(s) in **GRASS**.
-#"
-#" @aliases .copyGSpatial
-#" @noRd
+#' Make a copy of an object in GRASS
+#'
+#' Create a copy of a `GRaster` or `GVector` in **GRASS**.  This function is used internally and is of little use to most users.  This only creates a copy of the object in the **GRASS** session--to make a `GRaster` or `GVector`, [.makeGRaster()] or [.makeGVector()] need to be called after making the copy. Note that if the object is multi-layered, then a copy is made of each layer.
+#'
+#' @param x `GRaster`, `GVector`, or character: The object or the `gnames` of the object to be copied. Can take multi-layered objects or multiple `gnames`.
+#' 
+#' @param reshapeRegion Logical: If `TRUE`, reshape the region to match `x` (`GRaster`s only).
+#'
+#' @returns Character vector representing the new `gnames` of each object, plus makes a copy of the given object(s) in **GRASS**.
+#'
+#' @aliases .copyGSpatial
+#' @noRd
 methods::setMethod(
 	f = ".copyGSpatial",
 	signature = c(x = "GRaster"),
 	function(x, reshapeRegion = TRUE) .copyGRaster(x, reshapeRegion = reshapeRegion)
 )
 
-#" @aliases .copyGSpatial
-#" @noRd
+#' @aliases .copyGSpatial
+#' @noRd
 methods::setMethod(
 	f = ".copyGSpatial",
 	signature = c(x = "GVector"),
 	function(x) .copyGVector(x)
 )
 
-#" @aliases .copyGSpatial
-#" @noRd
+#' @aliases .copyGSpatial
+#' @noRd
 methods::setMethod(
 	f = ".copyGSpatial",
 	signature = c(x = "character"),

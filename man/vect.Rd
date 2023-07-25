@@ -36,23 +36,23 @@ opts. <- getFastOptions()
 # IMPORTANT #2: Select the appropriate line below and change as necessary to
 # where GRASS is installed on your system.
 grassDir <- "/Applications/GRASS-8.3.app/Contents/Resources" # Mac
-grassDir <- 'C:/Program Files/GRASS GIS 8.3' # Windows
-grassDir <- '/usr/local/grass' # Linux
+grassDir <- "C:/Program Files/GRASS GIS 8.3" # Windows
+grassDir <- "/usr/local/grass" # Linux
 
 # setup
 library(sf)
 
 # sample data raster
-madRivers <- fastData('madRivers')
+madRivers <- fastData("madRivers")
 
 # start GRASS session for examples only
 faster(x = madRivers, grassDir = grassDir,
-workDir = tempdir(), location = 'examples') # line only needed for examples
+workDir = tempdir(), location = "examples") # line only needed for examples
 
 # example data
-madCoast4 <- fastData('madCoast4')
-madRivers <- fastData('madRivers')
-madDypsis <- fastData('madDypsis')
+madCoast4 <- fastData("madCoast4")
+madRivers <- fastData("madRivers")
+madDypsis <- fastData("madDypsis")
 
 # convert SpatVectors to GVectors
 coast <- fast(madCoast4)
@@ -92,7 +92,7 @@ is.3d(rivers) # 3-dimensional?
 
 # vector with just selected columns
 names(rivers)
-rivers[[c('NAM', 'NAME_0')]]
+rivers[[c("NAM", "NAME_0")]]
 rivers[[c(3, 5)]]
 
 # selected geometries/rows of the vector
@@ -102,11 +102,11 @@ nrow(selected)
 
 # plot
 plot(rivers)
-plot(selected, col='red', add=TRUE)
+plot(selected, col="red", add=TRUE)
 
 # IMPORTANT #3: Revert back to original GRASS session if needed.
 fastRestore(opts.)
-removeSession('examples')
+removeSession("examples")
 
 }
 }

@@ -1,30 +1,30 @@
-#" Random points from a raster
-#"
-#" @description `spatSample()` randomly samples points from non-`NA` cells of a raster. Points will be located at cell centers.
-#"
-#" @param x A `GRaster`.
-#"
-#" @param size Integer > 0: Number of cells or proportion of cells to select.
-#" 
-#" @param prop Logical: If `TRUE`, the value of `size` will be interpreted as a proportion of cells. The default is `FALSE` (`size` is interpreted as the number of cells to select).
-#"
-#" @param maskvalues Numeric vector, including `NA`, or `NULL` (default): Values in the raster to select from. All others will be ignored. If this is `NULL`, then only non-`NA` cells will be selected for retention.
-#"
-#" @param updatevalue Numeric or `NULL` (default): Value to assign to masked cells. If `NULL`, then the values in the input raster are retained.
-#" 
-#" @param fail Logical: If `TRUE` (default), and `size` is greater than the number of non-`NA` cells in `x`, then fail.
-#"
-#" @param seed `NULL` (default) or numeric: If `NULL`, then a random seed will be generated for the random number generator. Otherwise a seed can be provided.
-#" 
-#" @returns A `GRaster`.
-#" 
-#" @seealso [spatSample()], **GRASS** module `r.random`
-#" 
-#" @example man/examples/ex_spatSample.r
-#" 
-#" @aliases spatSample
-#" @rdName spatSample
-#" @exportMethod spatSample
+#' Random points from a raster
+#'
+#' @description `spatSample()` randomly samples points from non-`NA` cells of a raster. Points will be located at cell centers.
+#'
+#' @param x A `GRaster`.
+#'
+#' @param size Integer > 0: Number of cells or proportion of cells to select.
+#' 
+#' @param prop Logical: If `TRUE`, the value of `size` will be interpreted as a proportion of cells. The default is `FALSE` (`size` is interpreted as the number of cells to select).
+#'
+#' @param maskvalues Numeric vector, including `NA`, or `NULL` (default): Values in the raster to select from. All others will be ignored. If this is `NULL`, then only non-`NA` cells will be selected for retention.
+#'
+#' @param updatevalue Numeric or `NULL` (default): Value to assign to masked cells. If `NULL`, then the values in the input raster are retained.
+#' 
+#' @param fail Logical: If `TRUE` (default), and `size` is greater than the number of non-`NA` cells in `x`, then fail.
+#'
+#' @param seed `NULL` (default) or numeric: If `NULL`, then a random seed will be generated for the random number generator. Otherwise a seed can be provided.
+#' 
+#' @returns A `GRaster`.
+#' 
+#' @seealso [spatSample()], **GRASS** module `r.random`
+#' 
+#' @example man/examples/ex_spatSample.r
+#' 
+#' @aliases spatSample
+#' @rdname spatSample
+#' @exportMethod spatSample
 methods::setMethod(
     f = "spatSample",
     signature = c(x = "GRaster"),

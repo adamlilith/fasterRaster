@@ -1,94 +1,94 @@
-#" @title Mathematical operations on single GRasters
-#"
-#" @description You can apply mathematical operators to `GRaster`s. These include:\cr
-#"
-#" * Absolute value: `abs()`
-#" * Trigonometric functions (assumes values are in radians): `cos()`, `sin()`, `tan()`, `acos()`, `asin()`, `atan()`, `atan2()`
-#" * Exponential and logarithmic functions: `exp()`, `log()` (natural log), `log1p()`, `log2()`, `log10()`
-#" * Power functions: `sqrt()`, `x^y`
-#" * Rounding: `round()`, `floor()`, `ceiling()`, `trunc()`
-#"
-#" @param x,y `GRaster`s
-#" @param base Numeric: Base of the logarithm.
-#" @param digits Numeric: Number of digits to round to. If negative, then rounding is to the nearest power of 10. For example, if `digits = -2`, then the `GRaster` values are rounded to the nearest 100.
-#"
-#" @returns A `GRaster`.
-#"
-#" @example man/examples/ex_GRaster_arithmetic.r
-#"
-#" @aliases abs
-#" @rdname math
-#" @exportMethod abs
+#' @title Mathematical operations on single GRasters
+#'
+#' @description You can apply mathematical operators to `GRaster`s. These include:\cr
+#'
+#' * Absolute value: `abs()`
+#' * Trigonometric functions (assumes values are in radians): `cos()`, `sin()`, `tan()`, `acos()`, `asin()`, `atan()`, `atan2()`
+#' * Exponential and logarithmic functions: `exp()`, `log()` (natural log), `log1p()`, `log2()`, `log10()`
+#' * Power functions: `sqrt()`, `x^y`
+#' * Rounding: `round()`, `floor()`, `ceiling()`, `trunc()`
+#'
+#' @param x,y `GRaster`s
+#' @param base Numeric: Base of the logarithm.
+#' @param digits Numeric: Number of digits to round to. If negative, then rounding is to the nearest power of 10. For example, if `digits = -2`, then the `GRaster` values are rounded to the nearest 100.
+#'
+#' @returns A `GRaster`.
+#'
+#' @example man/examples/ex_GRaster_arithmetic.r
+#'
+#' @aliases abs
+#' @rdname math
+#' @exportMethod abs
 setMethod(
 	"abs",
 	signature(x = "GRaster"),
 	function(x) .genericFx("abs", x)
 )
 
-#" @aliases sin
-#" @rdname math
-#" @export
-#" @exportMethod sin
+#' @aliases sin
+#' @rdname math
+#' @export
+#' @exportMethod sin
 setMethod(
 	"sin",
 	signature(x = "GRaster"),
 	function(x) .genericTrig("sin", x)
 )
 
-#" @aliases cos
-#" @rdname math
-#" @export
-#" @exportMethod cos
+#' @aliases cos
+#' @rdname math
+#' @export
+#' @exportMethod cos
 setMethod(
 	"cos",
 	signature(x = "GRaster"),
 	function(x) .genericTrig("cos", x)
 )
 
-#" @aliases tan
-#" @rdname math
-#" @export
-#" @exportMethod tan
+#' @aliases tan
+#' @rdname math
+#' @export
+#' @exportMethod tan
 setMethod(
 	"tan",
 	signature(x = "GRaster"),
 	function(x) .genericTrig("tan", x)
 )
 
-#" @aliases asin
-#" @rdname math
-#" @export
-#" @exportMethod asin
+#' @aliases asin
+#' @rdname math
+#' @export
+#' @exportMethod asin
 setMethod(
 	"asin",
 	signature(x = "GRaster"),
 	function(x) .genericArcTrig("asin", x)
 )
 
-#" @aliases acos
-#" @rdname math
-#" @export
-#" @exportMethod acos
+#' @aliases acos
+#' @rdname math
+#' @export
+#' @exportMethod acos
 setMethod(
 	"acos",
 	signature(x = "GRaster"),
 	function(x) .genericArcTrig("acos", x)
 )
 
-#" @aliases atan
-#" @rdname math
-#" @export
-#" @exportMethod atan
+#' @aliases atan
+#' @rdname math
+#' @export
+#' @exportMethod atan
 setMethod(
 	"atan",
 	signature(x = "GRaster"),
 	function(x) .genericArcTrig("atan", x)
 )
 
-#" @aliases atan2
-#" @rdname math
-#" @export
-#" @exportMethod atan2
+#' @aliases atan2
+#' @rdname math
+#' @export
+#' @exportMethod atan2
 setMethod(
 	"atan2",
 	signature(y = "GRaster", x = "GRaster"),
@@ -127,20 +127,20 @@ setMethod(
 	} # EOF
 )
 
-#" @aliases exp
-#" @rdname math
-#" @export
-#" @exportMethod exp
+#' @aliases exp
+#' @rdname math
+#' @export
+#' @exportMethod exp
 setMethod(
 	"exp",
 	signature = "GRaster",
 	function(x) .genericFx("exp", x)
 )
 
-#" @aliases log1p
-#" @rdname math
-#" @export
-#" @exportMethod log1p
+#' @aliases log1p
+#' @rdname math
+#' @export
+#' @exportMethod log1p
 setMethod(
 	"log1p",
 	signature = "GRaster",
@@ -164,48 +164,48 @@ setMethod(
 	} # EOF
 )
 
-#" @aliases log
-#" @rdname math
-#" @export
-#" @exportMethod log
+#' @aliases log
+#' @rdname math
+#' @export
+#' @exportMethod log
 setMethod(
 	"log",
 	signature = "GRaster",
 	function(x, base = exp(1)) .genericFx2("log", x, base)
 )
 
-#" @aliases log2
-#" @rdname math
-#" @export
-#" @exportMethod log2
+#' @aliases log2
+#' @rdname math
+#' @export
+#' @exportMethod log2
 setMethod(
 	"log2",
 	signature = "GRaster",
 	function(x) .genericFx2("log", x, 2)
 )
 
-#" @aliases log10
-#" @rdname math
-#" @exportMethod log10
+#' @aliases log10
+#' @rdname math
+#' @exportMethod log10
 setMethod(
 	"log10",
 	signature = "GRaster",
 	function(x) .genericFx2("log", x, 10)
 )
 
-#" @aliases sqrt
-#" @rdname math
-#" @exportMethod sqrt
+#' @aliases sqrt
+#' @rdname math
+#' @exportMethod sqrt
 setMethod(
 	"sqrt",
 	signature = "GRaster",
 	function(x) .genericFx("sqrt", x)
 )
 
-#" @aliases round
-#" @rdname math
-#" @export
-#" @exportMethod round
+#' @aliases round
+#' @rdname math
+#' @export
+#' @exportMethod round
 setMethod(
 	"round",
 	signature = "GRaster",
@@ -224,40 +224,40 @@ setMethod(
 	} # EOF
 )
 
-#" @aliases floor
-#" @rdname math
-#" @export
-#" @exportMethod floor
+#' @aliases floor
+#' @rdname math
+#' @export
+#' @exportMethod floor
 setMethod(
 	"floor",
 	signature = "GRaster",
 	function(x) .genericFx("floor", x)
 )
 
-#" @aliases ceiling
-#" @rdname math
-#" @export
-#" @exportMethod ceiling
+#' @aliases ceiling
+#' @rdname math
+#' @export
+#' @exportMethod ceiling
 setMethod(
 	"ceiling",
 	signature = "GRaster",
 	function(x) .genericFx("ceil", x)
 )
 
-#" @aliases trunc
-#" @rdname math
-#" @export
-#" @exportMethod trunc
+#' @aliases trunc
+#' @rdname math
+#' @export
+#' @exportMethod trunc
 setMethod(
 	"trunc",
 	signature = "GRaster",
 	function(x) .genericFx("int", x)
 )
 
-#" Generic trigonometry function
-#" @param fx	Character: Name of the function in **GRASS** module `r.series`.
-#" @param x		A `GRaster`.
-#" @noRd
+#' Generic trigonometry function
+#' @param fx	Character: Name of the function in **GRASS** module `r.series`.
+#' @param x		A `GRaster`.
+#' @noRd
 .genericTrig <- function(fx, x) {
 
 	.restore(x)
@@ -280,10 +280,10 @@ setMethod(
 
 }
 
-#" Generic "arc"-trigonometry function
-#" @param fx	Character: Name of the function in **GRASS** module `r.series`.
-#" @param x		A `GRaster`.
-#" @noRd
+#' Generic "arc"-trigonometry function
+#' @param fx	Character: Name of the function in **GRASS** module `r.series`.
+#' @param x		A `GRaster`.
+#' @noRd
 .genericArcTrig <- function(fx, x) {
 
 	.restore(x)
@@ -304,10 +304,10 @@ setMethod(
 
 }
 
-#" Generic function with one input (the GRaster)
-#" @param fx	Character: Name of the function in **GRASS** module `r.series`.
-#" @param x		A `GRaster`.
-#" @noRd
+#' Generic function with one input (the GRaster)
+#' @param fx	Character: Name of the function in **GRASS** module `r.series`.
+#' @param x		A `GRaster`.
+#' @noRd
 .genericFx <- function(fx, x) {
 
 	.restore(x)
@@ -328,11 +328,11 @@ setMethod(
 
 }
 
-#" Generic function with two inputs (GRaster and a numeric)
-#" @param fx	Character: Name of the function in **GRASS** module `r.series`.
-#" @param x		A `GRaster`.
-#" @param y		A numeric.
-#" @noRd
+#' Generic function with two inputs (GRaster and a numeric)
+#' @param fx	Character: Name of the function in **GRASS** module `r.series`.
+#' @param x		A `GRaster`.
+#' @param y		A numeric.
+#' @noRd
 .genericFx2 <- function(fx, x, y) {
 
 	.restore(x)

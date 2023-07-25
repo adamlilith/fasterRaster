@@ -3,7 +3,7 @@
 \name{as.contour,GRaster-method}
 \alias{as.contour,GRaster-method}
 \alias{as.contour}
-\title{Contour lines from a 'GRaster'}
+\title{Contour lines from a "GRaster"}
 \usage{
 \S4method{as.contour}{GRaster}(x, nlevels, levels)
 }
@@ -31,18 +31,18 @@ opts. <- getFastOptions()
 # IMPORTANT #2: Select the appropriate line below and change as necessary to
 # where GRASS is installed on your system.
 grassDir <- "/Applications/GRASS-8.3.app/Contents/Resources" # Mac
-grassDir <- 'C:/Program Files/GRASS GIS 8.3' # Windows
-grassDir <- '/usr/local/grass' # Linux
+grassDir <- "C:/Program Files/GRASS GIS 8.3" # Windows
+grassDir <- "/usr/local/grass" # Linux
 
 # setup
 library(terra)
 
 # start GRASS session for examples only
 faster(x = madElev, grassDir = grassDir,
-workDir = tempdir(), location = 'examples') # line only needed for examples
+workDir = tempdir(), location = "examples") # line only needed for examples
 
 # convert a SpatRaster to a GRaster
-madElev <- fastData('madElev') # elevation raster
+madElev <- fastData("madElev") # elevation raster
 elev <- fast(madElev)
 
 # calculate contour lines
@@ -53,7 +53,7 @@ plot(conts, add=TRUE)
 
 # IMPORTANT #3: Revert back to original GRASS session if needed.
 fastRestore(opts.)
-removeSession('examples')
+removeSession("examples")
 
 }
 }

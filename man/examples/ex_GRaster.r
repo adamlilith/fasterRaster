@@ -46,6 +46,10 @@ zres(elev) # vertical resolution
 ncell(elev) # cells
 ncell3d(elev) # cells (3D rasters only)
 
+# number of NA and non-NA cells
+nacell(elev)
+nonnacell(elev)
+
 # topology
 topology(elev) # number of dimensions
 is.2d(elev) # is it 2-dimensional?
@@ -96,6 +100,9 @@ freq(elev)
 freq(2 * elev)
 freq(rasts)
 freq(rasts, value = 1)
+
+# plotting
+plot(elev)
 
 # IMPORTANT #3: Revert back to original GRASS session if needed.
 fastRestore(opts.)

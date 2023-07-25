@@ -1,21 +1,21 @@
-#" Rescale values in a raster
-#" 
-#" @description `stretch()` rescales the values in a `GRaster`. All values can be rescaled, or just values in a user-defined range. This range can be given by specifying either the lower and upper bounds of the range using `smin` and `smax`, and/or by the quantiles (across all cells of the raster) using `minq` and `maxq`.
-#" 
-#" @param x A `GRaster`.
-#" @param minv,maxv Numeric: Minimum and maximum values to which to rescale values.
-#" @param minq,maxq Numeric: Specifies range of values to rescale, given by their quantiles. The default is to stretch all values (the 0th and 100th quantiles). One or both are  ignored if `smin` and/or `smax` are provided.
-#" @param smin,smax Numeric: Specifies range of values to rescale.
-#" 
-#" @returns A `GRaster`.
-#" 
-#" @seealso [terra::stretch()] and module `r.rescale` in **GRASS** (not used on this function)
-#" 
-#" @example man/examples/ex_stretch.r
-#" 
-#" @aliases stretch
-#" @rdname stretch
-#" @exportMethod stretch
+#' Rescale values in a raster
+#' 
+#' @description `stretch()` rescales the values in a `GRaster`. All values can be rescaled, or just values in a user-defined range. This range can be given by specifying either the lower and upper bounds of the range using `smin` and `smax`, and/or by the quantiles (across all cells of the raster) using `minq` and `maxq`.
+#' 
+#' @param x A `GRaster`.
+#' @param minv,maxv Numeric: Minimum and maximum values to which to rescale values.
+#' @param minq,maxq Numeric: Specifies range of values to rescale, given by their quantiles. The default is to stretch all values (the 0th and 100th quantiles). One or both are  ignored if `smin` and/or `smax` are provided.
+#' @param smin,smax Numeric: Specifies range of values to rescale.
+#' 
+#' @returns A `GRaster`.
+#' 
+#' @seealso [terra::stretch()] and module `r.rescale` in **GRASS** (not used on this function)
+#' 
+#' @example man/examples/ex_stretch.r
+#' 
+#' @aliases stretch
+#' @rdname stretch
+#' @exportMethod stretch
 methods::setMethod(
     f = "stretch",
     signature = c(x = "GRaster"),

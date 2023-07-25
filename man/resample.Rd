@@ -18,14 +18,14 @@
 \item{method}{Character or \code{NULL}: Method to use to assign values to cells. Partial matching is used.
 \itemize{
 \item \code{NULL} (default): Automatically choose based on raster properties (\code{near} for categorical data, \code{bilinear} for continuous data)
-\item \code{'near'}: Nearest neighbor. Best for categorical data, and often a poor choice for continuous data.  If \code{\link[=ncat]{ncat()}} is >0 for all rasters, this method will be used by default.
-\item \code{'bilinear'}: Bilinear interpolation (default for non-categorical data; uses weighted values from 4 cells).
-\item \code{'bicubic'}: Bicubic interpolation (uses weighted values from 16 cells).
-\item \code{'lanczos'}: Lanczos interpolation (uses weighted values from 25 cells).
+\item \code{"near"}: Nearest neighbor. Best for categorical data, and often a poor choice for continuous data.  If \code{\link[=ncat]{ncat()}} is >0 for all rasters, this method will be used by default.
+\item \code{"bilinear"}: Bilinear interpolation (default for non-categorical data; uses weighted values from 4 cells).
+\item \code{"bicubic"}: Bicubic interpolation (uses weighted values from 16 cells).
+\item \code{"lanczos"}: Lanczos interpolation (uses weighted values from 25 cells).
 Note that methods that use multiple cells will cause the focal cell to become \code{NA} if there is at least one cell with an \code{NA} in the cells it draws from. These \code{NA} cells can be filled using the \code{fallback} option.
 }}
 
-\item{fallback}{Logical: If \code{TRUE} (default), then use "lower" methods to fill in \code{NA} cells when a "higher" method is used. For example, if \code{method = 'bicubic'}, \code{NA} cells will be filled in using the \code{bilinear} method, except when that results in \code{NA}s, in which case the \code{near} method will be used. Fallback causes fewer cells to revert to \code{NA} values, so may be better at capturing complex "edges" (e.g., coastlines). Fallback does increase processing time because each "lower" method must be applied, then results merged.}
+\item{fallback}{Logical: If \code{TRUE} (default), then use "lower" methods to fill in \code{NA} cells when a "higher" method is used. For example, if \code{method = "bicubic"}, \code{NA} cells will be filled in using the \code{bilinear} method, except when that results in \code{NA}s, in which case the \code{near} method will be used. Fallback causes fewer cells to revert to \code{NA} values, so may be better at capturing complex "edges" (e.g., coastlines). Fallback does increase processing time because each "lower" method must be applied, then results merged.}
 }
 \value{
 A \code{GRaster}.
@@ -47,23 +47,23 @@ opts. <- getFastOptions()
 # IMPORTANT #2: Select the appropriate line below and change as necessary to
 # where GRASS is installed on your system.
 grassDir <- "/Applications/GRASS-8.3.app/Contents/Resources" # Mac
-grassDir <- 'C:/Program Files/GRASS GIS 8.3' # Windows
-grassDir <- '/usr/local/grass' # Linux
+grassDir <- "C:/Program Files/GRASS GIS 8.3" # Windows
+grassDir <- "/usr/local/grass" # Linux
 
 # setup
 library(terra)
 
 # elevation raster, climate raster, rivers vector
-madElev <- fastData('madElev')
+madElev <- fastData("madElev")
 
 # start GRASS session for examples only
 faster(x = madElev, grassDir = grassDir,
-workDir = tempdir(), location = 'examples') # line only needed for examples
+workDir = tempdir(), location = "examples") # line only needed for examples
 
 elev <- fast(madElev)
 
 ### resample raster to 120 x 120 m
-elev120 <- resample(elev, c(120, 120), method='bilinear')
+elev120 <- resample(elev, c(120, 120), method="bilinear")
 elev
 elev120
 
@@ -72,37 +72,37 @@ elev120
 
 template <- aggregate(elev, 4)
 
-nearest <- resample(elev, template, method = 'nearest')
+nearest <- resample(elev, template, method = "nearest")
 
-bilinear <- resample(elev, template, method = 'bilinear')
-bilinearNoFB <- resample(elev, template, method = 'bilinear', fallback = FALSE)
+bilinear <- resample(elev, template, method = "bilinear")
+bilinearNoFB <- resample(elev, template, method = "bilinear", fallback = FALSE)
 
-bicubic <- resample(elev, template, method = 'bicubic')
-bicubicNoFB <- resample(elev, template, method = 'bicubic', fallback = FALSE)
+bicubic <- resample(elev, template, method = "bicubic")
+bicubicNoFB <- resample(elev, template, method = "bicubic", fallback = FALSE)
 
-lanczos <- resample(elev, template, method = 'lanczos')
-lanczosNoFB <- resample(elev, template, method = 'lanczos', fallback = FALSE)
+lanczos <- resample(elev, template, method = "lanczos")
+lanczosNoFB <- resample(elev, template, method = "lanczos", fallback = FALSE)
 
 # rasters resampled without fallback have fewer non-NA cells
 resampled <- c(nearest, bilinear, bilinearNoFB, bicubic, bicubicNoFB, lanczos,
     lanczosNoFB)
-names(resampled) <- c('nearest', 'bilinear', 'bilinearNoFB', 'bicubic',
-    'bicubicNoFB', 'lanczos', 'lanczosNoFB')
+names(resampled) <- c("nearest", "bilinear", "bilinearNoFB", "bicubic",
+    "bicubicNoFB", "lanczos", "lanczosNoFB")
 ones <- resampled * 0 + 1
-global(ones, 'sum') # number of non-NA cells
-global(resampled, c('mean', 'sd', 'min', 'max')) # other statistics
+global(ones, "sum") # number of non-NA cells
+global(resampled, c("mean", "sd", "min", "max")) # other statistics
 
 # compare fallback to no fallback
 frLanczos <- rast(lanczos)
 frLanczosNoFB <- rast(lanczosNoFB)
 
-plot(frLanczos, col = 'red',
-    main = 'Red: Cells in fallback not non-fallback', legend = FALSE)
+plot(frLanczos, col = "red",
+    main = "Red: Cells in fallback not non-fallback", legend = FALSE)
 plot(frLanczosNoFB, add=TRUE)
 
 # compare fasterRaster with terra
 coarserTerra <- aggregate(madElev, 4)
-terraLanczos <- resample(madElev, coarserTerra, method = 'lanczos')
+terraLanczos <- resample(madElev, coarserTerra, method = "lanczos")
 
 frLanczos <- extend(frLanczos, terraLanczos)
 frLanczosNoFB <- extend(frLanczosNoFB, terraLanczos)
@@ -110,20 +110,20 @@ frLanczosNoFB <- extend(frLanczosNoFB, terraLanczos)
 frLanczos - terraLanczos
 frLanczosNoFB - terraLanczos
 
-plot(frLanczos - terraLanczos, main = 'Difference')
-plot(frLanczosNoFB - terraLanczos, main = 'Difference')
+plot(frLanczos - terraLanczos, main = "Difference")
+plot(frLanczosNoFB - terraLanczos, main = "Difference")
 
-plot(terraLanczos, col = 'red',
-    main = 'Red: Cells in terra not in FR', legend = FALSE)
+plot(terraLanczos, col = "red",
+    main = "Red: Cells in terra not in FR", legend = FALSE)
 plot(frLanczos, add=TRUE)
 
-plot(frLanczos, col = 'red',
-    main = 'Red: Cells in FR not in terra', legend = FALSE)
+plot(frLanczos, col = "red",
+    main = "Red: Cells in FR not in terra", legend = FALSE)
 plot(terraLanczos, add=TRUE)
 
 # IMPORTANT #3: Revert back to original GRASS session if needed.
 fastRestore(opts.)
-fastRemove('examples')
+fastRemove("examples")
 
 }
 }

@@ -9,12 +9,12 @@
 
 You probably already have \strong{fasterRaster} installed on your computer, but if not, you can install the latest release version from CRAN using:
 
-\if{html}{\out{<div class="sourceCode">}}\preformatted{install.packages('fasterRaster')
+\if{html}{\out{<div class="sourceCode">}}\preformatted{install.packages("fasterRaster")
 }\if{html}{\out{</div>}}
 
 and the latest development version using:
 
-\if{html}{\out{<div class="sourceCode">}}\preformatted{remotes::install_github('adamlilith/fasterRaster', dependencies = TRUE)
+\if{html}{\out{<div class="sourceCode">}}\preformatted{remotes::install_github("adamlilith/fasterRaster", dependencies = TRUE)
 }\if{html}{\out{</div>}}
 
 (You may need to install the \code{remotes} package first.)
@@ -26,21 +26,21 @@ and the latest development version using:
 
 Once you have installed \strong{GRASS}, you will need to know where on your computer it was installed. The exact folder will depend on your operating system, the version installed, and perhaps other things, but in general, the install folder will look something like:
 
-Windows: \code{'C:/Program Files/GRASS GIS 8.3'}\cr
+Windows: \code{"C:/Program Files/GRASS GIS 8.3"}\cr
 Mac: \code{"/Applications/GRASS-8.3.app/Contents/Resources"}\cr
-Linux: \code{'/usr/local/grass'}\cr
+Linux: \code{"/usr/local/grass"}\cr
 
 Whatever the name of this folder, it is passed to functions using an argument named \code{grassDir}. So, it is helpful to define \code{grassDir}, as in:
 
-\if{html}{\out{<div class="sourceCode">}}\preformatted{grassDir <- 'C:/Program Files/GRASS GIS 8.3' # Windows
+\if{html}{\out{<div class="sourceCode">}}\preformatted{grassDir <- "C:/Program Files/GRASS GIS 8.3" # Windows
 grassDir <- "/Applications/GRASS-8.3.app/Contents/Resources" # Mac
-grassDir <- '/usr/local/grass' # Linux
+grassDir <- "/usr/local/grass" # Linux
 }\if{html}{\out{</div>}}
 }
 
 \subsection{Starting a \strong{fasterRaster} session}{
 
-First, we attach \strong{fasterRaster} in \strong{R}. In most cases, we will also want to be using the \strong{terra} and/or \strong{sf} package, so let's attach them, too.
+First, we attach \strong{fasterRaster} in \strong{R}. In most cases, we will also want to be using the \strong{terra} and/or \strong{sf} package, so let"s attach them, too.
 
 \if{html}{\out{<div class="sourceCode">}}\preformatted{library(fasterRaster)
 library(sf)
@@ -51,7 +51,7 @@ Now, we need to start a \strong{fasterRaster} "session", which makes a connectio
 
 The \code{crs} argument takes a coordinate reference string or an object from which such a string can be obtained. We will use a raster that comes with \strong{fasterRaster} to set the \code{crs} argument.
 
-\if{html}{\out{<div class="sourceCode">}}\preformatted{madElev <- fastData('madElev') # get raster
+\if{html}{\out{<div class="sourceCode">}}\preformatted{madElev <- fastData("madElev") # get raster
 faster(madElev, grassDir = grassDir)
 }\if{html}{\out{</div>}}
 
@@ -67,9 +67,9 @@ elev
 
 You can see the properties of the \code{GRaster} representation of the \code{madElev} raster. Converting rasters that are already in \strong{R} to \code{GRaster}s takes some time. Instead, you can load a raster directly from disk to a \strong{fasterRaster} session using \code{fast()}. To do this, you just replace the argument in \code{\link[=fast]{fast()}} with a string representing the folder path and file name of the raster you want to load into the session.
 
-Now, let's create a \code{GVector}. The \code{\link[=fast]{fast()}} function can take a \code{SpatVector} from the \strong{terra} package, an \code{sf} object from the \strong{sf} package, or a string representing the file path and file name of a vector file (e.g., a GeoPackage file or a shapefile).
+Now, let"s create a \code{GVector}. The \code{\link[=fast]{fast()}} function can take a \code{SpatVector} from the \strong{terra} package, an \code{sf} object from the \strong{sf} package, or a string representing the file path and file name of a vector file (e.g., a GeoPackage file or a shapefile).
 
-\if{html}{\out{<div class="sourceCode">}}\preformatted{madRivers <- fastData('madRivers')
+\if{html}{\out{<div class="sourceCode">}}\preformatted{madRivers <- fastData("madRivers")
 rivers <- fast(madRivers)
 rivers
 }\if{html}{\out{</div>}}
@@ -87,8 +87,7 @@ logElev
 You can also use the many \strong{fasterRaster} functions. In general, these functions have the same names as their \strong{terra} and *8sf(( counterparts and usually the same arguments. The following code creates a raster where cell values reflect the distance between them and the nearest river, then converts the output to a \code{SpatRaster} for plotting:
 
 \if{html}{\out{<div class="sourceCode">}}\preformatted{dist <- distance(elev, rivers)
-distRast <- rast(dist)
-plot(distRast)
+plot(dist)
 }\if{html}{\out{</div>}}
 
 And that's how you get started! Now that you have a raster and a vector in your \strong{fasterRaster} session, you can start doing manipulations and analyses using any of the \strong{fasterRaster} functions!  To see an annotated list of these functions, use \code{?fasterRaster}.
@@ -96,13 +95,12 @@ And that's how you get started! Now that you have a raster and a vector in your 
 
 \subsection{Exporting \code{GRaster}s and \code{GVector}s from a \strong{GRASS} session}{
 
-You can convert a \code{GRaster} to a \code{SpatRaster} or \code{stars} raster using \code{\link[=rast]{rast()}} or \code{\link[=stars]{stars()}}:
+You can convert a \code{GRaster} to a \code{SpatRaster} raster using \code{\link[=rast]{rast()}}:
 
 \if{html}{\out{<div class="sourceCode">}}\preformatted{terraRast <- rast(elev)
-starsRast <- stars(elev)
 }\if{html}{\out{</div>}}
 
-To convert a \code{GVector} to the \strong{terra} package's \code{SpatVector} format or to an \code{sf} vector, use \code{\link[=vect]{vect()}} or [st_as_sf():
+To convert a \code{GVector} to the \strong{terra} package"s \code{SpatVector} format or to an \code{sf} vector, use \code{\link[=vect]{vect()}} or [st_as_sf():
 
 \if{html}{\out{<div class="sourceCode">}}\preformatted{terraVect <- vect(rivers)
 sfVect <- st_as_sf(rivers)

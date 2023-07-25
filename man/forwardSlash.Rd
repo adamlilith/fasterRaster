@@ -17,6 +17,6 @@ This function is helpful for Windows systems, where paths are usually expressed 
 }
 \examples{
 
-forwardSlash('C:\\\\ecology\\\\main project')
+forwardSlash("C:\\\\ecology\\\\main project")
 
 }

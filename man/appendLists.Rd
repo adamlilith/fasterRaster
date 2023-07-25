@@ -10,7 +10,7 @@ appendLists(...)
 \item{...}{Two or more lists. All elements must have names.}
 }
 \description{
-This function "adds" two lists with the same or different names together. For example, if one list is as \code{l1 <- list(a=1, b='XYZ')} and the second is as \code{l2 <- list(a=3, c=FALSE)}, the output will be as \code{list(a = c(1, 3), b = 'XYZ', c = FALSE)}. All elements in each list must have names.
+This function "adds" two lists with the same or different names together. For example, if one list is as \code{l1 <- list(a=1, b="XYZ")} and the second is as \code{l2 <- list(a=3, c=FALSE)}, the output will be as \code{list(a = c(1, 3), b = "XYZ", c = FALSE)}. All elements in each list must have names.
 }
 \details{
 If two lists share the same name and these elements have the same class, then they will be merged as-is. If the classes are different, one of them will be coerced to the other (see \emph{Examples}). The output will have elements with the names of all lists.
@@ -20,13 +20,13 @@ Adapted from nswer by user \emph{polkas} on \href{StackOverflow}{https://stackov
 \examples{
 
 # same data types for same named element
-l1 <- list(a=1, b='XYZ')
+l1 <- list(a=1, b="XYZ")
 l2 <- list(a=3, c=FALSE)
 appendLists(l1, l2)
 
 # different data types for same named element
-l1 <- list(a=3, b='XYZ')
-l2 <- list(a='letters', c=FALSE)
+l1 <- list(a=3, b="XYZ")
+l2 <- list(a="letters", c=FALSE)
 appendLists(l1, l2)
 
 }

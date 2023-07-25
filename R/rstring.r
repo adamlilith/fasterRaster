@@ -1,20 +1,20 @@
-#" Make a nearly-guaranteed unique string
-#"
-#" `rstring()` makes a string that is statically extremely likely to be unique.
-#"
-#" @param n Numeric integer: How many strings to make (default is 1).
-#" 
-#" @param x Numeric integer: Number of letters and digits to use to make the string. Default is 10, leading to a probability of two matching random strings of <1E-38.
-#"
-#" @returns Character.
-#"
-#" @examples
-#"
-#" rstring(1)
-#" rstring(5)
-#" rstring(5, 2)
-#"
-#" @export
+#' Make a nearly-guaranteed unique string
+#'
+#' `rstring()` makes a string that is statically extremely likely to be unique.
+#'
+#' @param n Numeric integer: How many strings to make (default is 1).
+#' 
+#' @param x Numeric integer: Number of letters and digits to use to make the string. Default is 10, leading to a probability of two matching random strings of <1E-38.
+#'
+#' @returns Character.
+#'
+#' @examples
+#'
+#' rstring(1)
+#' rstring(5)
+#' rstring(5, 2)
+#'
+#' @export
 rstring <- function(n, x = 10) {
 
 	n <- as.integer(n)

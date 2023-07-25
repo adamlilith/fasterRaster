@@ -1,29 +1,29 @@
-#" "Stack" GRasters and combine GVectors
-#"
-#" `GRaster`s can be "stacked" using this function, effectively creating a multi-layered raster. Note that this is different from creating a 3-dimensional raster, though such an effect can be emulated using stacking. `GVector`s can be combined into a single vector.  Stacks can only be created when:
-#" * All objects are in the same **GRASS** ["location" and "mapset"][tutorial_sessions].
-#" * All objects are the same class (either all `GRaster`s or all `GVector`s).
-#" * For `GRaster`s:
-#"      * Horizontal extents are the same.
-#"      * Horizontal dimensions are the same.
-#"      * The topology (2- or 3-dimensional) must be the same. If 3D, then all rasters must have the same number of depths and vertical extents.
-#" * For `GVector`s:
-#"      * The geometry (points, lines, or polygons) must be the same.
-#" If features (boundaries, lines, etc.) of `GVector`s that are combined are identical or nearly identical, they can be cleaned using [removeDupNodes()] and [snap()].
-#"
-#" @param x A `GRaster` or a `GVector`.
-#" @param ... One or more `GRaster`s, one or more `GVector`s, a list of `GRaster`s, or a list of `GVector`s. You can use a mix of lists and individual rasters or vectors.
-#" @param df If `TRUE`, copy the data frame of the `x` `GVector` to the output. If `FALSE` (default), the output will not have a data frame.
-#"
-#" @return A `GRaster`.
-#" 
-#" @seealso [terra::c()]
-#"
-#" @example man/examples/ex_GRaster_GVector.r
-#"
-#" @aliases c
-#" @rdname c
-#" @exportMethod c
+#' "Stack" GRasters and combine GVectors
+#'
+#' `GRaster`s can be "stacked" using this function, effectively creating a multi-layered raster. Note that this is different from creating a 3-dimensional raster, though such an effect can be emulated using stacking. `GVector`s can be combined into a single vector.  Stacks can only be created when:
+#' * All objects are in the same **GRASS** ["location" and "mapset"][tutorial_sessions].
+#' * All objects are the same class (either all `GRaster`s or all `GVector`s).
+#' * For `GRaster`s:
+#'      * Horizontal extents are the same.
+#'      * Horizontal dimensions are the same.
+#'      * The topology (2- or 3-dimensional) must be the same. If 3D, then all rasters must have the same number of depths and vertical extents.
+#' * For `GVector`s:
+#'      * The geometry (points, lines, or polygons) must be the same.
+#' If features (boundaries, lines, etc.) of `GVector`s that are combined are identical or nearly identical, they can be cleaned using [removeDupNodes()] and [snap()].
+#'
+#' @param x A `GRaster` or a `GVector`.
+#' @param ... One or more `GRaster`s, one or more `GVector`s, a list of `GRaster`s, or a list of `GVector`s. You can use a mix of lists and individual rasters or vectors.
+#' @param df If `TRUE`, copy the data frame of the `x` `GVector` to the output. If `FALSE` (default), the output will not have a data frame.
+#'
+#' @return A `GRaster`.
+#' 
+#' @seealso [terra::c()]
+#'
+#' @example man/examples/ex_GRaster_GVector.r
+#'
+#' @aliases c
+#' @rdname c
+#' @exportMethod c
 setMethod(f = "c",
 	signature = "GRaster",
 	definition = function(x, ...) {
@@ -74,9 +74,9 @@ setMethod(f = "c",
 	} # EOF
 )
 
-#" @aliases c
-#" @rdname c
-#" @exportMethod c
+#' @aliases c
+#' @rdname c
+#' @exportMethod c
 setMethod(f = "c",
 	signature = "GVector",
 	definition = function(x, ..., df = FALSE) {
