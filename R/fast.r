@@ -191,7 +191,7 @@ methods::setMethod(
 		# ... need to import to a temporary location, then project to the current location
 		} else {
 
-			if (warn) warning("Vector has a different coordinate reference system than this GRASS ", dQuote("location"), ".\n  Vector will be projected to the current location\"s coordinate reference system.")
+			if (warn) warning("Vector has a different coordinate reference system than this GRASS ", dQuote("location"), ".\n  Vector will be projected to the current location\'s coordinate reference system.")
 
 			args <- list(
 				cmd = "v.import",
