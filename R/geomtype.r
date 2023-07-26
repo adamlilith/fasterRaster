@@ -3,8 +3,10 @@
 #' @description `geomtype()` reports whether a `GVector` represents points, lines, or polygons. The "`is.*`" functions test whether the `GVector` represents points, lines, or polygons.
 #'
 #' @param x A `GVector`.
+#' 
+#' @param grass Logical: If `FALSE` (default), return **terra**-like geometry types ("points", "lines", or "polygons"). If `TRUE`, return **GRASS**-like geometry types ("point", "line", "area"--note that these are a subset of the available types and may not be the "true" **GRASS** type).
 #'
-#' @return `geomtype()` returns either "points", "lines", or "polygons". The "`is.*`" functions return `TRUE` or `FALSE`.
+#' @return `geomtype()` returns either "points", "lines", or "polygons" if the `grass` arguments is `FALSE`, or "point", "line", "area" if `grass` is `TRUE`. The "`is.*`" functions return `TRUE` or `FALSE`.
 #' 
 #' @seealso [terra::geomtype()]
 #'
@@ -16,7 +18,19 @@
 methods::setMethod(
 	f = "geomtype",
 	signature = "GVector",
-	definition = function(x) x@geometry
+	definition = function(x, grass = FALSE) {
+  	out <- x@geometry
+	if (grass) {
+		if (out == "points") {
+			out <- "point"
+		} else if (out == "lines") {
+			out <- "line"
+		} else if (out == "polygons") {
+			out <- "area"
+		}
+	}
+	out
+  } # EOF
 )
 
 #' @aliases is.points
