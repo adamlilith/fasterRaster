@@ -136,7 +136,7 @@
 #' ## Converting between data types
 #' [as.contour()]: Contour lines from a `GRaster`\cr
 #' [as.data.frame()]: Convert `GVector` to a `data.frame`\cr
-#' [as.points()]: Convert a `GRaster` to a `GVector`\cr
+#' [as.points()]: Convert a `GRaster` to a "points" `GVector`\cr
 #' [fast()]: Create `GRaster`s or `GVector`s from `SpatRaster`s, `SpatVector`s, or `sf` objects, or from files\cr
 #' [head()] and [tail()]: First and last rows of a `GVector`"s data frame\cr
 #' [.makeGRaster()]: Make a `GRaster` from a raster in **GRASS**\cr
