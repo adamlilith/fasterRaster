@@ -1,6 +1,6 @@
-#' Convert a lines or polygons vector to points
+#' Convert a raster or lines or polygons vector to a points vector
 #'
-#' @description 'as.points()' converts a `GRaster` or `GVector` to a points `GVector`. For rasters, the points have the coordinates of cell centers and ba assigned the cell's value in the attribute table. One non-`NA` cells will be converted to a point. For vectors, each point will have the attributes of the line or polygon to which it belonged. Points are extracted from each vertex.
+#' @description 'as.points()' converts a `GRaster` or `GVector` to a points `GVector`. For rasters, the points have the coordinates of cell centers and are assigned the cells' values. Only non-`NA` cells will be converted to a point. For vectors, each point will have the attributes of the line or polygon to which it belonged. Points are extracted from each vertex.
 #' 
 #' @param x A `GRaster`, `GVector`.
 #' 
@@ -20,23 +20,13 @@ methods::setMethod(
     signature = c(x = 'GVector'),
     function(x) {
 
-    if (geomtype(x) == "points") {
+    gtype <- geomtype(x, grass = TRUE)
+    if (geomtype(x) == "point") {
         warning("Vector object is already a points object.")
         return(x)
     }
 
     .restore(x)
-
-    gtype <- geomtype(x)
-    if (gtype == "points") {
-        warning("Vector object is already a points object.")
-        return(x)
-    } else if (gtype == "lines") {
-        type <- "line"
-    } else if (gtype == "polygons") {
-        type <- "area"
-        # type <- "boundary"
-    }
 
     gn <- .makeGName(NULL, "vector")
     args <- list(
@@ -44,7 +34,7 @@ methods::setMethod(
         input = .gnames(x),
         output = gn,
         use = "vertex",
-        type = type,
+        type = gtype,
         flags = c("quiet", "overwrite"),
         intern = TRUE
     )
