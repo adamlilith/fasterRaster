@@ -21,16 +21,17 @@ methods::setMethod(
 
 	if (by == "") {
 		
-		gn <- .makeGName("convHull", "vector", 1L)
+		gn <- .makeGName("convHull", "vector")
 	
 		args <- list(
 			cmd = "v.hull",
 			input = .gnames(x),
 			output = gn,
-			flags = c("quiet", "overwrite")
+			flags = c("quiet", "overwrite"),
+			intern = TRUE
 		)
 
-		do.call(rgrass::execGRASS, args=args)
+		do.call(rgrass::execGRASS, args = args)
 		out <- .makeGVector(gn)
 		
 	} else {
@@ -68,7 +69,6 @@ methods::setMethod(
 		out <- do.call("c", vects)
 	
 	}
-			
 	out
 		
 	} # EOF
