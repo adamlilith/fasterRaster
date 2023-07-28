@@ -1,16 +1,18 @@
 #' Spatial bounds of a GRaster or GVector
 #'
-#' @description These functions return the extent or origin of `GSpatial` object (`GRegions`, `GRaster`s, and `GVector`s):
+#' @description These functions return the extent of a `GSpatial` object (`GRegions`, `GRaster`s, and `GVector`s):
 #' 
 #' * `ext()` and `st_bbox()`: 2-dimensional spatial extent (i.e., westernmost/easternmost and southernmost/northernmost coordinates of area represented).\cr\cr
 #' * `zext()`: Vertical extent (i.e., topmost and bottom-most elevation of the volume represented). The vertical extent is not `NA` only if the object is 3-dimensional.\cr\cr
 #' * `west()`, `east()`, `north()`, `south()`: Coordinates of one side of horizontal extent.\cr\cr
 #' * `top()` and `bottom()`: Coordinates of top and bottom of vertical extent.\cr\cr
-#' * `origin()`: Coordinates of the northwest corner of the extent of the object.\cr\cr
 #' 
-#' @param x,obj An object that inherits from `GSpatial` (i.e., a `GRaster` or `GVector`) or missing. If missing, then the horizontal or vertical extent of the current [region][tutorial_regions] is returned.
+#' @param x,obj An object that inherits from `GSpatial` (i.e., a `GRaster` or `GVector`) or missing. If missing, then the horizontal or vertical extent of the currently active [region][tutorial_regions] is returned.
+#' 
 #' @param vector Logical: If `FALSE` (default), return a `SpatExtent` object. If `TRUE`, return the extent as a named vector.
+#' 
 #' @param char Logical: If `FALSE` (default), return a numeric value. If `TRUE`, return as a character.
+#' 
 #' @param ... Other arguments (generally unused).
 #'
 #' @returns The returned values depend on the function:
@@ -28,6 +30,15 @@
 #' @exportMethod ext
 methods::setMethod(
 	f = "ext",
+	signature = "missing",
+	definition = function(x, vector = FALSE) ext(region(), vector = vector)
+)
+
+#' @aliases ext
+#' @rdname ext
+#' @exportMethod ext
+methods::setMethod(
+	f = "ext",
 	signature = "GSpatial",
 	definition = function(x, vector = FALSE) {
 
@@ -37,6 +48,15 @@ methods::setMethod(
 	out
 
 	} # EOF
+)
+
+#' @aliases zext
+#' @rdname ext
+#' @exportMethod zext
+methods::setMethod(
+	f = "zext",
+	signature = "missing",
+ 	definition = function(x) zext(region())
 )
 
 #' @aliases zext
@@ -193,18 +213,6 @@ methods::setMethod(
 	out
 })
 
-#' @aliases origin
-#' @rdname ext
-#' @exportMethod origin
-setMethod(
-	f = "origin",
-	signature = c(x = "GSpatial"),
-	definition = function(x) {
-		ext(x, vector=TRUE)[c("xmin", "ymin")]
-		print("DIFFERENT ANSWER FROM TERRA!")
-	}
-)
-
 st_bbox <- function(obj, ...) UseMethod("st_bbox", obj)
 
 #' @rdname ext
@@ -214,6 +222,7 @@ setMethod("st_bbox", definition = function(obj, ...) st_bbox(obj, ...))
 #' @rdname ext
 #' @export
 st_bbox <- function(obj, ...) {
+	if (missing(obj)) obj <- region()
 	if (inherits(obj, "GSpatial")) {
 		out <- obj@extent
 		out <- c(out[1L], out[3L], out[2L], out[4L])
