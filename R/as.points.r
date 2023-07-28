@@ -8,13 +8,13 @@
 #' 
 #' @returns A `points` `GVector`.
 #' 
-#' @seealso [terra::as.points()] and &** GRASS** modules `v.to.points` and `r.to.vect`
+#' @seealso [as.lines()], [as.polygons()], [terra::as.points()], and ** GRASS** modules `v.to.points` and `r.to.vect`
 #' 
 #' @example man/examples/ex_asPoints.r
 #' 
 #' @aliases as.points
 #' @rdname as.points
-#' @setMethod as.points
+#' @exportMethod as.points
 methods::setMethod(
     f = "as.points",
     signature = c(x = 'GVector'),
@@ -46,7 +46,7 @@ methods::setMethod(
 
 #' @aliases as.points
 #' @rdname as.points
-#' @setMethod as.points
+#' @exportMethod as.points
 methods::setMethod(
     f = "as.points",
     signature = c(x = "GRaster"),
