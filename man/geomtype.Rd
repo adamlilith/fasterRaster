@@ -11,7 +11,7 @@
 \alias{is.polygons}
 \title{Geometry of a GVector (points, lines, or polygons)}
 \usage{
-\S4method{geomtype}{GVector}(x)
+\S4method{geomtype}{GVector}(x, grass = FALSE)
 
 \S4method{is.points}{GVector}(x)
 
@@ -21,9 +21,11 @@
 }
 \arguments{
 \item{x}{A \code{GVector}.}
+
+\item{grass}{Logical: If \code{FALSE} (default), return \strong{terra}-like geometry types ("points", "lines", or "polygons"). If \code{TRUE}, return \strong{GRASS}-like geometry types ("point", "line", "area"--note that these are a subset of the available types and may not be the "true" \strong{GRASS} type).}
 }
 \value{
-\code{geomtype()} returns either "points", "lines", or "polygons". The "\verb{is.*}" functions return \code{TRUE} or \code{FALSE}.
+\code{geomtype()} returns either "points", "lines", or "polygons" if the \code{grass} arguments is \code{FALSE}, or "point", "line", "area" if \code{grass} is \code{TRUE}. The "\verb{is.*}" functions return \code{TRUE} or \code{FALSE}.
 }
 \description{
 \code{geomtype()} reports whether a \code{GVector} represents points, lines, or polygons. The "\verb{is.*}" functions test whether the \code{GVector} represents points, lines, or polygons.

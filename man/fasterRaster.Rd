@@ -71,6 +71,9 @@ Multi-layer functions (applied across layers of a "stack" of \code{GRaster}s):
 Other functions:\cr
 \code{\link[=as.cell]{as.cell()}}, \code{\link[=as.fcell]{as.fcell()}}, \code{\link[=as.dcell]{as.dcell()}}: Change data type (integer/float/double)\cr
 \code{\link[=as.contour]{as.contour()}}: Contour lines from a raster\cr
+\code{\link[=as.lines]{as.lines()}}: Convert a raster to a "lines" vector\cr
+\code{\link[=as.points]{as.points()}}: Convert a raster to a "points" vector\cr
+\code{\link[=as.polygons]{as.polygons()}}: Convert a raster to a "polygons" vector\cr
 \code{\link[=aggregate]{aggregate()}}: Aggregate values of raster cells into larger cells\cr
 \code{\link[=buffer]{buffer()}}: Create a buffer around non-\code{NA} cells\cr
 \code{\link[=app]{app()}}: Apply a user-defined function to layers of a raster\cr
@@ -80,7 +83,9 @@ Other functions:\cr
 \code{\link[=distance]{distance()}}: Distance to non-\code{NA} cells, or vice versa\cr
 \code{\link[=expanse]{expanse()}}: Total area of non-\code{NA} cells\cr
 \code{\link[=extend]{extend()}}: Add rows and columns to a raster\cr
+\code{\link[=extract]{extract()}}: Extract values from a raster at locations in a points vector\cr
 \code{\link[=focal]{focal()}}: Calculate cell values based on values of nearby cells\cr
+\code{\link[=fractalRast]{fractalRast()}}: Create a fractal raster\cr
 \code{\link[=global]{global()}}: Summary statistics across cells of each raster layer\cr
 \code{\link[=shade]{hillshade()}}: Create a hillshade raster\cr
 \code{\link[=horizonHeight]{horizonHeight()}}: Horizon height\cr
@@ -93,8 +98,10 @@ Other functions:\cr
 \code{\link[=resample]{resample()}}: Change cell size\cr
 \code{\link[=rnormRast]{rnormRast()}}: A random raster with or without spatial dependence\cr
 \code{\link[=spatSample]{spatSample()}}: Randomly points from a raster\cr
+\code{\link[=spDepRast]{spDepRast()}}: Create a random raster with or without spatial dependence\cr
 \code{\link[=sun]{sun()}}: Solar radiance and irradiance\cr
 \code{\link[=terrain]{terrain()}}: Slope, aspect, curvature, and partial slopes\cr
+\code{\link[=thin]{thin()}}: Reduce linear features on a raster so linear features are 1 cell wide\cr
 \code{\link[=viewshed]{viewshed()}}: Areas visible from points on a raster\cr
 \code{[[}\link{subset}: Subset a raster with multiple layers\cr
 }
@@ -123,6 +130,7 @@ Other functions:\cr
 \subsection{Functions that operate on or create \code{GVectors}}{
 
 \code{\link[=as.data.frame]{as.data.frame()}}: Convert a vector to a \code{data.frame}\cr
+\code{\link[=as.points]{as.points()}}: Extract vertex coordinates from a "lines" or "polygons" \code{GVector}\cr
 \code{\link[=buffer]{buffer()}}: Create a polygon around/inside a vector\cr
 \code{\link[=cleanGeom]{cleanGeom()}}: Fix undesirable geometries of a vector\cr
 \code{\link[=connectors]{connectors()}}: Create lines connecting nearest features of two vectors\cr
@@ -146,13 +154,10 @@ Other functions:\cr
 
 \subsection{Converting between data types}{
 
-\code{\link[=as.contour]{as.contour()}}: Contour lines from a \code{GRaster}\cr
+\code{\link[=as.contour]{as.contour()}}: Convert a \code{GRaster} to a \code{GVector} representing contour lines\cr
 \code{\link[=as.data.frame]{as.data.frame()}}: Convert \code{GVector} to a \code{data.frame}\cr
 \code{\link[=as.points]{as.points()}}, \code{\link[=as.lines]{as.lines()}}, and \code{\link[=as.polygons]{as.polygons()}}: Convert a \code{GRaster} to a \code{GVector}\cr
-\code{\link[=fast]{fast()}}: Create \code{GRaster}s or \code{GVector}s from \code{SpatRaster}s, \code{SpatVector}s, or \code{sf} objects, or from files\cr
-\code{\link[=head]{head()}} and \code{\link[=tail]{tail()}}: First and last rows of a \code{GVector}"s data frame\cr
-\code{\link[=.makeGRaster]{.makeGRaster()}}: Make a \code{GRaster} from a raster in \strong{GRASS}\cr
-\code{\link[=.makeGVector]{.makeGVector()}}: Make a \code{GVector} from a vector in \strong{GRASS}\cr
+\code{\link[=fast]{fast()}}: Convert a \code{SpatRaster}, \code{SpatVector}, or \code{sf} vector to a \code{GRaster} or \code{GVector}, or load one from a file\cr
 \code{\link[=rast]{rast()}}: Convert a \code{GRaster} to a \code{SpatRaster}\cr
 \code{\link[=rasterize]{rasterize()}}: Convert a \code{GVector} to a \code{GRaster}\cr
 \code{\link[=st_as_sf]{st_as_sf()}}: Convert a \code{GVector} to a \code{sf} vector\cr

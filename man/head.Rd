@@ -7,7 +7,7 @@
 \alias{tail}
 \title{Return first or last part of the data frame of a GVector}
 \usage{
-\S4method{head}{GVector}(x, n = 6L, ...)
+\S4method{head}{GVector}(x, n = 6L, keepnums = TRUE, ...)
 
 \S4method{tail}{GVector}(x, n = 6L, keepnums = TRUE, ...)
 }
@@ -16,9 +16,9 @@
 
 \item{n}{Integer: Number of rows to display.}
 
-\item{...}{Other arguments.}
+\item{keepnums}{Logical: If no \code{rownames} are present, create them. Default is \code{TRUE}.}
 
-\item{keepnums}{Logical: If no rownames are present, create them.}
+\item{...}{Other arguments.}
 }
 \value{
 A \code{data.frame}.

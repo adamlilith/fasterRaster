@@ -8,18 +8,30 @@
 \usage{
 \S4method{crop}{GRaster}(x, y)
 
-\S4method{crop}{GVector}(x, y)
+\S4method{crop}{GVector}(x, y, ext = FALSE)
 }
 \arguments{
 \item{x}{A \code{GRaster} or \code{GVector} to be cropped.}
 
 \item{y}{A \code{GRaster} or \code{GVector} to serve as a template for cropping.}
+
+\item{ext}{Logical (when \code{x} and \code{y} are \code{GVector}s): If \code{TRUE}, use the extent of \code{y} to crop \code{x}. Otherwise:
+\itemize{
+\item If \code{ext} is \verb{TRUE, and }x\code{and}y\verb{are "points"}GVector\verb{s, use the convex hull around }y\verb{to select points in}x`.
+}}
 }
 \value{
 A \code{GRaster} or \code{GVector}.
 }
 \description{
-\code{crop()} removes parts of a \code{GRaster} or \code{GVector} that fall "outside" another raster or vector.
+\code{crop()} removes parts of a \code{GRaster} or \code{GVector} that fall "outside" another raster or vector. You cannot make the \code{GRaster} or \code{GVector} larger than it already is (see \code{\link[=extend]{extend()}}). Rasters may not be cropped to the exact extent, as the extent will be enlarged to encompass an integer number of cells. If you wish to remove certain cells of a raster, see \code{\link[=mask]{mask()}}.
+}
+\details{
+Known differences from \code{\link[terra:crop]{terra::crop()}}:
+\itemize{
+\item If \code{x} and \code{y} are "points" vectors, and \code{ext} is \code{TRUE}, \strong{terra} removes points that fall on the extent boundary. \strong{fasterRaster} does not remove points on the extent boundary.
+\item If \code{x} is a "points" vector and \code{y} is a "lines" vectors, and \code{ext} is \code{FALSE}, \strong{terra} uses the extent of \code{y} to crop the points.  \strong{fasterRaster} uses the minimum convex hull of the lines vector.
+}
 }
 \examples{
 \dontrun{
@@ -42,39 +54,161 @@ grassDir <- "/usr/local/grass" # Linux
 library(sf)
 library(terra)
 
-# elevation raster, rivers vector
+# elevation raster, rivers vector, outline of area vector
 madElev <- fastData("madElev")
+madDypsis <- fastData("madDypsis")
 madRivers <- fastData("madRivers")
 madCoast4 <- fastData("madCoast4")
 madAnt <- madCoast4[madCoast4$NAME_4 == "Antanambe", ]
 
-# start GRASS session for examples only
+# Start GRASS session for examples only.
 faster(x = madElev, grassDir = grassDir,
 workDir = tempdir(), location = "examples") # line only needed for examples
 
-# convert a SpatRaster to a GRaster, and sf to a GVector
+# Convert to fasterRaster format.
 elev <- fast(madElev)
+dypsis <- fast(madDypsis)
 rivers <- fast(madRivers)
-man <- fast(madAnt)
+coast <- fast(madCoast4)
+ant <- fast(madAnt)
 
-### crop raster by vector
-rastByVect <- crop(elev, man)
+### Crop raster by vector:
+rastByVect <- crop(elev, ant)
+plot(elev, col = "gray")
+plot(rastByVect, add = TRUE)
+plot(ant, add = TRUE)
 
-### crop raster by raster
-# We"ll cheat by making the raster smaller in R, then crop the
-# fasterRaster by this.
-madMan <- madCoast4[madCoast4$NAME_4 == "Manompana", ]
-templateRast <- crop(madElev, madMan)
+### Crop raster by raster:
+# We'll cheat by making the raster smaller in R, then crop the
+# raster by this.
+templateRast <- crop(madElev, madAnt)
 
 template <- fast(templateRast)
 rastByRast <- crop(elev, template)
 
-### crop vector by vector
-vectByVect <- crop(rivers, man)
+plot(elev, col = "gray")
+plot(rastByRast, add = TRUE)
 
-### crop vector by raster
-vectByRast <- crop(rivers, template)
+### Crop vector by raster:
+# We'll cheat by making the raster smaller in R, then crop the
+# raster by this.
+templateRast <- crop(madElev, madAnt)
 
+template <- fast(templateRast)
+ptsByRast <- crop(dypsis, template)
+
+plot(elev, col = "gray", legend = FALSE)
+plot(template, add = TRUE)
+plot(dypsis, add = TRUE)
+plot(ptsByRast, pch = 21, bg = "red", add = TRUE)
+
+### Crop vector by vector:
+ptsSubset <- dypsis[1:10] # use first 10 points as cropping template
+
+# Crop points vector by convex hull around points:
+ptsByPts <- crop(dypsis, ptsSubset)
+plot(dypsis)
+plot(convHull(ptsSubset), lty = "dotted", col = "blue", add = TRUE)
+plot(ptsByPts, col = "red", add = TRUE)
+plot(ptsSubset, col = "blue", pch = 3, cex = 1.6, add = TRUE)
+legend("topleft",
+    legend = c("Dypsis", "Selected", "Crop template", "Convex hull"),
+    pch = c(16, 16, 3, NA),
+    lwd = c(NA, NA, NA, 1),
+    col = c("black", "red", "blue", "blue"),
+    lty = c(NA, NA, NA, "dotted"),
+    xpd = NA,
+    bg = "white"
+)
+
+# Crop points vector by extent of points:
+ptsByPts <- crop(dypsis, ptsSubset, ext = TRUE)
+plot(dypsis)
+plot(ptsByPts, col = "red", add = TRUE)
+plot(ptsSubset, col = "blue", pch = 3, cex = 1.6, add = TRUE)
+legend("topleft",
+    legend = c("Dypsis", "Selected", "Crop template"),
+    pch = c(16, 16, 3),
+    lwd = c(NA, NA, NA),
+    col = c("black", "red", "blue"),
+    lty = c(NA, NA, NA),
+    xpd = NA,
+    bg = "white"
+)
+
+# Crop points vector by convex hull around lines:
+ptsByPts <- crop(dypsis, rivers)
+plot(rivers, col = "blue", pch = 3, cex = 1.6)
+plot(dypsis, add = TRUE)
+plot(convHull(rivers), lty = "dotted", border = "blue", add = TRUE)
+plot(ptsByPts, col = "red", add = TRUE)
+legend("topleft",
+    legend = c("Dypsis", "Selected", "Rivers", "Convex hull"),
+    pch = c(16, 16, NA, NA),
+    lwd = c(NA, NA, 1, 1),
+    col = c("black", "red", "blue", "blue"),
+    lty = c(NA, NA, "solid", "dotted"),
+    xpd = NA,
+    bg = "white"
+)
+
+# Crop points vector by extent of lines:
+ptsByPts <- crop(dypsis, rivers, ext = TRUE)
+plot(rivers, col = "blue", pch = 3, cex = 1.6)
+plot(dypsis, add = TRUE)
+plot(convHull(rivers), lty = "dotted", border = "blue", add = TRUE)
+plot(ptsByPts, col = "red", add = TRUE)
+legend("topleft",
+    legend = c("Dypsis", "Selected", "Rivers"),
+    pch = c(16, 16, NA),
+    lwd = c(NA, NA, 1),
+    col = c("black", "red", "blue"),
+    lty = c(NA, NA, "solid"),
+    xpd = NA,
+    bg = "white"
+)
+
+# Crop points vector by polygon:
+ptsByPts <- crop(dypsis, ant)
+plot(dypsis)
+plot(ant, border = "blue", pch = 3, cex = 1.6, add = TRUE)
+plot(ptsByPts, col = "red", add = TRUE)
+legend("topleft",
+    legend = c("Dypsis", "Selected", "Antanambe"),
+    pch = c(16, 16, NA),
+    lwd = c(NA, NA, 1),
+    col = c("black", "red", "blue"),
+    lty = c(NA, NA, "solid"),
+    xpd = NA,
+    bg = "white"
+)
+
+# Crop lines vector by polygon:
+linesByPoly <- crop(rivers, ant)
+plot(rivers)
+plot(ant, border = "blue", pch = 3, cex = 1.6, add = TRUE)
+plot(linesByPoly, col = "red", add = TRUE)
+legend("topleft",
+    legend = c("Rivers", "Selected", "Antanambe"),
+    col = c("black", "red", "blue"),
+    lwd = 1,
+    xpd = NA,
+    bg = "white"
+)
+
+# Crop polygon vector by convex hull around points:
+polyByPoints <- crop(ant, dypsis)
+plot(dypsis, col = "red")
+plot(ant, border = "blue", add = TRUE)
+plot(polyByPoints, border = "red", add = TRUE)
+legend("topleft",
+    legend = c("Dypsis", "Antanambe", "Selected"),
+    col = c("red", "blue", "red"),
+    pch = c(16, NA, NA),
+    lwd = c(NA, 1, 1),
+    xpd = NA,
+    bg = "white"
+)
 
 # IMPORTANT #3: Revert back to original GRASS session if needed.
 fastRestore(opts.)
