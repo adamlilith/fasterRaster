@@ -14,7 +14,9 @@ methods::setGeneric(name = "as.cell", def = function(x, ...) standardGeneric("as
 methods::setGeneric(name = "as.fcell", def = function(x, ...) standardGeneric("as.fcell"))
 methods::setGeneric(name = "as.dcell", def = function(x, ...) standardGeneric("as.dcell"))
 setGeneric("as.data.frame")
+#' @importFrom terra as.lines
 #' @importFrom terra as.points
+#' @importFrom terra as.polygons
 #' methods::setGeneric(name = "aggregate", package="stats")
 
 methods::setGeneric(name = "bottom", def = function(x, ...) standardGeneric("bottom"))
@@ -93,8 +95,6 @@ methods::setGeneric(name = "north", def=function(x, ...) standardGeneric("north"
 methods::setGeneric(name = "ncol", def = function(x) standardGeneric("ncol")) # in base
 methods::setGeneric(name = "nrow", def = function(x) standardGeneric("nrow")) # in base
 
-#' @importFrom terra origin
-
 #' @importFrom terra project
 
 #' @importFrom stats quantile
@@ -133,6 +133,7 @@ methods::setGeneric(name = "st_distance", def=function(x, y, ...) standardGeneri
 
 #' @importFrom utils tail
 #' @importFrom terra terrain
+methods::setGeneric(name = "thin", def=function(x, ...) standardGeneric("thin"))
 methods::setGeneric(name = "top", def=function(x, ...) standardGeneric("top"))
 methods::setGeneric(name = "topology", def=function(x, ...) standardGeneric("topology"))
 methods::setGeneric(name = "tvalue", def=function(x, ...) standardGeneric("tvalue"))
