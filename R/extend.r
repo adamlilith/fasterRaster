@@ -20,7 +20,9 @@
 #' 
 #' @returns A `GRaster`.
 #' 
-#' @seealso [terra::extend()] 
+#' @details Known issues: When `GRaster`s are saved to disk explicitly using [writeRaster()], or implicitly using [rast()] or [plot()], rows and columns that are entirely `NA` are dropped.
+#' 
+#' @seealso [terra::extend()]
 #'
 #' @example man/examples/ex_extend.r
 #' 
@@ -81,19 +83,22 @@ methods::setMethod(
 .extend <- function(x, y, snap, fill) {
 
     # resolution of x
-    xCellSize <- xres(x)
-    yCellSize <- yres(x)
+    ewres <- xres(x)
+    nsres <- yres(x)
 
     ### find coordinates of new extent
     if (inherits(y, "numeric")) {
 
-        if (!(length(y) %in% c(1L, 2L, 4L) )) {
+        if (!(length(y) %in% c(1L, 2L, 4L))) {
             stop("Argument ", sQuote("y"), " is invalid.")
         } else if (length(y) == 1L) {
             y <- rep(y, 4L)
         } else if (length(y) == 2L) {
             y <- rep(y, each = 2L)
         }
+        
+        if (any(y %% 1 != 0)) stop("Values of ", sQuote("y"), " must be numeric integers.")
+        if (any(y < 0L)) y[y < 0L] <- 0L
 
     } else {
 
@@ -107,10 +112,10 @@ methods::setMethod(
         }
 
         # by how many rows and columns do we grow?
-        wgrow <- max(0, west(x) - extent[1L]) / xCellSize
-        egrow <- max(0, extent[2L] - east(x)) / xCellSize
-        sgrow <- max(0, south(x) - extent[3L]) / yCellSize
-        ngrow <- max(0, extent[4L] - north(x)) / yCellSize
+        wgrow <- max(0, west(x) - extent[1L]) / ewres
+        egrow <- max(0, extent[2L] - east(x)) / ewres
+        sgrow <- max(0, south(x) - extent[3L]) / nsres
+        ngrow <- max(0, extent[4L] - north(x)) / nsres
 
         snap <- pmatchSafe(snap, c("near", "in", "out"))
         fx <- if (snap == "near") {
@@ -127,42 +132,62 @@ methods::setMethod(
     } # if y is an object with an extent
 
     # new extent coordinates
-    w <- west(x) - y[1L] * xCellSize
-    e <- east(x) + y[2L] * xCellSize
-    s <- south(x) - y[3L] * yCellSize
-    n <- north(x) + y[4L] * yCellSize
+    w <- west(x) - y[1L] * ewres
+    e <- east(x) + y[2L] * ewres
+    s <- south(x) - y[3L] * nsres
+    n <- north(x) + y[4L] * nsres
+
+    w <- as.character(w)
+    e <- as.character(e)
+    s <- as.character(s)
+    n <- as.character(n)
+
+    ewres <- as.character(ewres)
+    nsres <- as.character(nsres)
 
     # reset region
-    regionExt(c(w, e, s, n), respect="resolution")
+    args <- list(
+        cmd = "g.region",
+        w = w, e = e, s = s, n = n,
+        ewres = ewres, nsres = nsres,
+        flags = c("quiet", "overwrite"),
+        intern = TRUE
+    )
+    do.call(rgrass::execGRASS, args = args)
 
+    reg <- region()
+    nc <- ncol(reg)
+    nr <- nrow(reg)
+
+    ### extent
     nLayers <- nlyr(x)
-    gns <- .copyGSpatial(x, reshapeRegion = FALSE)
-    
-    ### fill cells
-    if (!is.na(fill)) {
+    for (i in seq_len(nLayers)) {
 
-        reg <- region()
-        dims <- dim(reg)
-        nr <- dims[1L]
-        nc <- dims[2L]
-        extent <- ext(reg, vector = TRUE)
+        if (is.na(fill)) {
+            gn <- .copyGSpatial(x = x[[i]], reshapeRegion = FALSE)
+        } else {
+            gn <- .makeGName(names(x), "raster", nLayers)
+
+            ex <- paste0(gn, " = if(col() <= ", y[1L], ", ", fill, ", if(col() > ncols() - ", y[2L], ", ", fill, ", if(row() <= ", y[4L], ", ", fill, ", if(row() > nrows() - ", y[3], ", ", fill, ", ", .gnames(x)[i], "))))")
+
+            args <- list(
+                cmd = "r.mapcalc",
+                expression = ex,
+                region = "current",
+                flags = c("quiet", "overwrite"),
+                intern = TRUE
+            )
+            do.call(rgrass::execGRASS, args = args)
+        }
         
-        template <- matrix(NA_real_, nrow = nr, ncol = nc)
+        this <- .makeGRaster(gn, names(x)[i])
+        if (i == 1L) {
+            out <- this
+        } else {
+            out <- c(out, this)
+        }
 
-        if (y[1L] > 0L) template[ , 1L:y[1L]] <- fill
-        if (y[2L] > 0L) template[ , nc:(nc - y[2L] + 1L)] <- fill
-        if (y[3L] > 0L) template[nr:(nr - y[3L] + 1L), ] <- fill
-        if (y[4L] > 0L) template[1:y[4L], ] <- fill
-
-        template <- terra::rast(template, extent = extent, crs = crs(x))
-
-        template <- fast(template)
-        out <- merge(template, x)
-        names(out) <- names(x)
-
-    } else {
-        out <- .makeGRaster(gns, names(x))
-    }
+    } # next raster
     out
 
 } # EOF
