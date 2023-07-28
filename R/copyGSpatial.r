@@ -58,6 +58,7 @@ methods::setMethod(
 
 )
 
+#' @noRd
 .copyGRaster <- function(x, reshapeRegion) {
 
 	# NB This function could use `g.copy`, but in some cases it does not have the desired effect. For example, when a MASK raster is present, it correctly copies cells that are not masked, but when the MASK is removed, the masked cells re-appear. Similarly, it ignores the region when copying.
@@ -89,6 +90,7 @@ methods::setMethod(
 	
 }
 
+#' @noRd
 .copyGVector <- function(x = NULL) {
 
 	.restore(x)
