@@ -1,4 +1,4 @@
-#' Group cells with similar values into clumps
+#' Group adjacent cells with similar values
 #'
 #' @description `clump()` identifies groups of adjacent cells that have the same value or same approximate value, and assigns them a unique number, creating "clumps" of same- or similar-valued cells.
 #' 
