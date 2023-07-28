@@ -4,10 +4,10 @@
 #'
 #' @description Processing of large-in-memory/-on disk rasters and spatial vectors using **GRASS GIS**. Most functions in the **terra** and **sf** packages are recreated. Processing of medium-sized and smaller spatial objects will nearly always be faster using **terra** or **sf**. To use most of the functions you must have the stand-alone version of **GRASS** version 8.0 or higher (not the **OSGeoW4** installer version). Note that due to developer choices, results will not always be strictly comparable between **terra**, **sf**, and **fasterRaster**.
 #'
-#' ## Most useful functions/links:
+#' ## Most useful tutorials and functions:
 #' A [quick-start tutorial][tutorial_getting_started]\cr
 #' [faster()]: Initiate a **GRASS** session\cr
-#' [fast()]: Create `GRaster`s or `GVector`s from `SpatRaster`s, `SpatVector`s, or `sf`  objects, or from files\cr
+#' [fast()]: Convert a `SpatRaster`, `SpatVector`, or `sf` vector to **fasterRaster**'s raster format (`GRaster`s) or vector format (`GVector`s), or load one from a file\cr
 #' [rast()], [vect()], and [st_as_sf()]: Convert `GRaster`s and `GVector`s to `SpatRaster`s, `SpatVector`s, or `sf` vectors\cr
 #' [writeRaster()] and [writeVector()]: Save `GRaster`s or `GVector`s to disk\cr
 #' [fastRestore()]: Revert to another **GRASS** ["location" or "mapset"][tutorial_sessions], or restart a **GRASS** session saved to disk\cr
@@ -34,7 +34,6 @@
 #' [nonnacell()]: Number of non-`NA` cells\cr
 #' [nrow()]: Number of rows\cr
 #' [ncat()]: Number of categories\cr
-#' [origin()]: Coordinates of the northwest corner of the extent\cr
 #' [res()], [xres()], [yres()], and [zres()]: Spatial resolution\cr
 #' [st_bbox()]: Spatial extent\cr
 #' [st_crs()]: Coordinate reference system\cr
@@ -60,12 +59,14 @@
 #' Other functions:\cr
 #' [as.cell()], [as.fcell()], [as.dcell()]: Change data type (integer/float/double)\cr
 #' [as.contour()]: Contour lines from a raster\cr
-#' [as.points()]: Convert a raster to a points vector\cr
+#' [as.lines()]: Convert a raster to a "lines" vector\cr
+#' [as.points()]: Convert a raster to a "points" vector\cr
+#' [as.polygons()]: Convert a raster to a "polygons" vector\cr
 #' [aggregate()]: Aggregate values of raster cells into larger cells\cr
 #' [buffer()]: Create a buffer around non-`NA` cells\cr
-#' [app()]: Apply a user-defined function to layers of a raster\cr
+#' [app()]: Apply a user-defined function to multiple layers of a raster (with helper functions [appFuns()] and [appCheck()])\cr
 #' [c()]: "Stack" two or more rasters\cr
-#' [clump()]: Group cells with similar values into clumps\cr
+#' [clump()]: Group adjacent cells with similar values\cr
 #' [crop()]: Remove parts of a raster\cr
 #' [distance()]: Distance to non-`NA` cells, or vice versa\cr
 #' [expanse()]: Total area of non-`NA` cells\cr
@@ -78,7 +79,6 @@
 #' [horizonHeight()]: Horizon height\cr
 #' [longlat()]: Create longitude/latitude rasters.\cr
 #' [mask()]: Remove values in a raster based on values in another raster or vector\cr
-#' [.makeGRaster()]: Makes a `GRaster` from a raster already in a **GRASS** session\cr
 #' [merge()]: Combine two or more rasters with different extents and fill in `NA`s\cr
 #' [plot()]: Display a raster\cr
 #' [project()]: Change coordinate reference system and cell size\cr
@@ -88,6 +88,7 @@
 #' [spDepRast()]: Create a random raster with or without spatial dependence\cr
 #' [sun()]: Solar radiance and irradiance\cr
 #' [terrain()]: Slope, aspect, curvature, and partial slopes\cr
+#' [thin()]: Reduce linear features on a raster so linear features are 1 cell wide\cr
 #' [viewshed()]: Areas visible from points on a raster\cr
 #' `[[`[subset]: Subset a raster with multiple layers\cr
 #'
@@ -103,12 +104,10 @@
 #' [names()]: Names of `GVector` fields\cr
 #' [ncol()]: Number of fields\cr
 #' [nrow()]: Number of geometries\cr
-#' [origin()]: Coordinates of the northwest corner of the extent\cr
 #' [st_bbox()]: Spatial extent\cr
 #' [st_crs()]: Coordinate reference system\cr
 #' [topology()]: Dimensionality (2D or 3D)\cr
 #' [zext()]: Vertical extent\cr
-#' [zres()]: Vertical resolution\cr
 #'
 #' ## Functions that operate on or create `GVectors`
 #' [as.data.frame()]: Convert a vector to a `data.frame`\cr
@@ -122,7 +121,6 @@
 #' [delaunay()]: Delaunay triangulation\cr
 #' [distance()]: Distance between geometries in two vectors, or from a vector to cells of a raster\cr
 #' [head()]: First rows of a vector"s data frame.\cr
-#' [.makeGVector()]: Makes a `GVector` from a vector already in a **GRASS** session.\cr
 #' [project()]: Change coordinate reference system\cr
 #' [simplifyGeom()]: Remove vertices\cr
 #' [smoothGeom()]: Remove "angular" aspects of features\cr
@@ -130,17 +128,14 @@
 #' [st_buffer()]: Create a polygon around/inside a vector\cr
 #' [st_distance()]: Distance between geometries in two vectors\cr
 #' [tail()]: Last rows of a vector"s data frame.\cr
-#' #' `[`[subset]: Select geometries/rows of a vector"s data frame\cr
-#' #' `[[`[subset]: Subset columns of a vector"s data frame\cr
+#' `[`[subset]: Select geometries/rows of a vector"s data frame\cr
+#' `[[`[subset]: Subset columns of a vector"s data frame\cr
 #'
 #' ## Converting between data types
-#' [as.contour()]: Contour lines from a `GRaster`\cr
+#' [as.contour()]: Convert a `GRaster` to a `GVector` representing contour lines\cr
 #' [as.data.frame()]: Convert `GVector` to a `data.frame`\cr
-#' [as.points()]: Convert a `GRaster` to a "points" `GVector`\cr
-#' [fast()]: Create `GRaster`s or `GVector`s from `SpatRaster`s, `SpatVector`s, or `sf` objects, or from files\cr
-#' [head()] and [tail()]: First and last rows of a `GVector`"s data frame\cr
-#' [.makeGRaster()]: Make a `GRaster` from a raster in **GRASS**\cr
-#' [.makeGVector()]: Make a `GVector` from a vector in **GRASS**\cr
+#' [as.points()], [as.lines()], and [as.polygons()]: Convert a `GRaster` to a `GVector`\cr
+#' [fast()]: Convert a `SpatRaster`, `SpatVector`, or `sf` vector to a `GRaster` or `GVector`, or load one from a file\cr
 #' [rast()]: Convert a `GRaster` to a `SpatRaster`\cr
 #' [rasterize()]: Convert a `GVector` to a `GRaster`\cr
 #' [st_as_sf()]: Convert a `GVector` to a `sf` vector\cr
@@ -163,13 +158,19 @@
 #' [mapset()]: **GRASS** "mapset" of an object or the active session\cr
 #'
 #' ## Functions that operate on **GRASS** "regions" (seldom used by most users):
-#' [region()]: Change or report the active region"s extent and resolution\cr
-#' [regionDim()]: Change or report the active region"s resolution\cr
-#' [regionExt()]: Change or report the active region"s extent\cr
-#' [regionRes()]: Change or report the active region"s dimensions\cr
+#' [region()]: Change or report the active region's extent and resolution\cr
+#' [regionDim()]: Change or report the active region's resolution (also [dim()] and related functions, with no arguments)
+#' [regionExt()]: Change or report the active region's extent (also [ext()] and related functions, with no arguments)\cr
+#' [regionRes()]: Change or report the active region's dimensions (also [res()] and related functions, with no arguments)\cr
 #'
 #' ## Data objects
-#'
+#' [appFunsTable][appFunsTable] (see also [appFuns()]): Functions usable by the [app()] function\cr
+#' [madChelsa][madChelsa]: Climate rasters for of a portion of eastern Madagascar\cr
+#' [madCoast0][madCoast0], [madCoast4][madCoast4], and [madCoast][madCoast]: Borders of an eastern portion of Madagascar\cr
+#' [madDypsis][madDypsis]: Specimens records of species in the genus *Dypsis*\cr
+#' [madElev][madElev]: Elevation raster\cr
+#' [madForest2000][madForest2000] and [madForest2014][madForest2014]: Forest cover in 2000 and 2014\cr
+#' [madRivers][madRivers]: Rivers vector\cr
 #' 
 #' ## Esoteric tutorials
 #' [Sessions, locations, and mapsets][tutorial_sessions]\cr
