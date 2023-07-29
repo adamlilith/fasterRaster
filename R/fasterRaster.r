@@ -21,6 +21,7 @@
 #' [freq()]: Frequencies of cell values in a raster\cr
 #' [global()]: Summary statistics\cr
 #' [is.2d()] and [is.3d()]: Is an object 2- or 3-dimensional?\cr
+#' [is.cell()], [is.fcell()], [is.dcell()]: Raster data type (integer/float/double)\cr
 #' [location()]: **GRASS** "location" of an object or the active session\cr
 #' [mapset()]: **GRASS** "mapset" of an object or the active session\cr
 #' [minmax()]: Minimum and maximum values across all non-`NA` cells\cr
@@ -57,6 +58,7 @@
 #' - Extremes: [min()], [max()], [which.min()], [which.max()] \cr
 #' 
 #' Other functions:\cr
+#' `[[[]`[subset]: Subset a raster with multiple layers\cr
 #' [as.cell()], [as.fcell()], [as.dcell()]: Change data type (integer/float/double)\cr
 #' [as.contour()]: Contour lines from a raster\cr
 #' [as.lines()]: Convert a raster to a "lines" vector\cr
@@ -69,7 +71,6 @@
 #' [clump()]: Group adjacent cells with similar values\cr
 #' [crop()]: Remove parts of a raster\cr
 #' [distance()]: Distance to non-`NA` cells, or vice versa\cr
-#' [expanse()]: Total area of non-`NA` cells\cr
 #' [extend()]: Add rows and columns to a raster\cr
 #' [extract()]: Extract values from a raster at locations in a points vector\cr
 #' [focal()]: Calculate cell values based on values of nearby cells\cr
@@ -90,11 +91,11 @@
 #' [terrain()]: Slope, aspect, curvature, and partial slopes\cr
 #' [thin()]: Reduce linear features on a raster so linear features are 1 cell wide\cr
 #' [viewshed()]: Areas visible from points on a raster\cr
-#' `[[`[subset]: Subset a raster with multiple layers\cr
 #'
 #' ## Properties of **fasterRaster** vectors (`GVectors`)
 #' [crs()]: Coordinate reference system\cr
 #' [datatype()]: Data type of fields\cr
+#' [dim()]: Number of geometries and columns\cr
 #' [ext()], [north()], [south()], [east()], [west()], [top()], and [bottom()]: Spatial extent\cr
 #' [geomtype()]: Type of vector (points, lines, polygons)\cr
 #' [is.2d()] and [is.3d()]: Is an object 2- or 3-dimensional?\cr
@@ -110,6 +111,8 @@
 #' [zext()]: Vertical extent\cr
 #'
 #' ## Functions that operate on or create `GVectors`
+#' `[[]`[subset]: Select geometries/rows of a vector"s data frame\cr
+#' `[[[]`[subset]: Subset columns of a vector"s data frame\cr
 #' [as.data.frame()]: Convert a vector to a `data.frame`\cr
 #' [as.points()]: Extract vertex coordinates from a "lines" or "polygons" `GVector`\cr
 #' [buffer()]: Create a polygon around/inside a vector\cr
@@ -128,8 +131,6 @@
 #' [st_buffer()]: Create a polygon around/inside a vector\cr
 #' [st_distance()]: Distance between geometries in two vectors\cr
 #' [tail()]: Last rows of a vector"s data frame.\cr
-#' `[`[subset]: Select geometries/rows of a vector"s data frame\cr
-#' `[[`[subset]: Subset columns of a vector"s data frame\cr
 #'
 #' ## Converting between data types
 #' [as.contour()]: Convert a `GRaster` to a `GVector` representing contour lines\cr
