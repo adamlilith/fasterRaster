@@ -2,14 +2,14 @@
 #'
 #' @description
 #' Number of rows, columns, depths, and cells of a `GRegion`:
-#' * `dim()`: Rows, columns, depths, and layers of a
+#' * `dim()`: Rows, columns, depths, and layers
 #' * `nrow()`: Rows
 #' * `ncol()`: Columns
 #' * `ndepth()`: Depths (for 3-dimensional rasters only)
 #' * `ncell()`: Number of cells (2 dimensions)
 #' * `ncell3d()`: Number of cells (3 dimensions)
 #'
-#' For `GRaster`s: As above, plus number of cells and layers:
+#' For `GRaster`s: As above, plus number of layers:
 #' * `nlyr()`: Layers (number of "stacked" rasters--different from depths of a raster).
 #'
 #' For `GVector`s: Number of geometries and fields (columns):
@@ -25,15 +25,6 @@
 #'
 #' @example man/examples/ex_GRaster_GVector.r
 #'
-#' @aliases dim
-#' @rdname dim
-#' @exportMethod dim
-methods::setMethod(
-	f = "dim",
-	signature = "missing",
- 	definition = function(x) dim(region())
-)
-
 #' @aliases dim
 #' @rdname dim
 #' @exportMethod dim
@@ -112,7 +103,7 @@ setMethod(
 setMethod(
 	f = "ncell",
 	signature = "missing",
- definition = function(x) ncell(region())
+	definition = function(x) ncell(region())
 )
 
 #' @rdname dim
