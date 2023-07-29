@@ -21,8 +21,10 @@
 \alias{which.max}
 \alias{sdpop,GRaster-method}
 \alias{sdpop}
+\alias{sdpop,numeric-method}
 \alias{varpop,GRaster-method}
 \alias{varpop}
+\alias{varpop,numeric-method}
 \alias{sd,GRaster-method}
 \alias{sd}
 \alias{var,GRaster-method}
@@ -67,7 +69,11 @@
 
 \S4method{sdpop}{GRaster}(x, na.rm = FALSE)
 
+\S4method{sdpop}{numeric}(x, na.rm = FALSE)
+
 \S4method{varpop}{GRaster}(x, na.rm = FALSE)
+
+\S4method{varpop}{numeric}(x, na.rm = FALSE)
 
 \S4method{sd}{GRaster}(x, na.rm = FALSE)
 

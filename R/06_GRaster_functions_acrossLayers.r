@@ -173,6 +173,17 @@ setMethod(
 	} # EOF
 )
 
+#' @aliases sdpop
+#' @rdname functions
+#' @exportMethod sdpop
+setMethod(
+	"sdpop",
+	signature(x = "numeric"),
+	function(x, na.rm = FALSE) {
+	sqrt(varpop(x, na.rm = na.rm))
+	} # EOF
+)
+
 #' @aliases varpop
 #' @rdname functions
 #' @exportMethod varpop
@@ -184,6 +195,22 @@ setMethod(
 		fx <- "variance"
 		fxName <- "varpop"
 		.genericMultiLayer(fx = fx, fxName = fxName, x = x, na.rm = na.rm)
+		
+	} # EOF
+)
+
+#' @aliases varpop
+#' @rdname functions
+#' @exportMethod varpop
+setMethod(
+	"varpop",
+	signature(x = "numeric"),
+	function(x, na.rm = FALSE) {
+
+	if (na.rm && anyNA(x)) x <- x[!is.na(x)]
+	ss <- sum((x - mean(x))^2)
+	n <- length(n)
+	ss / n
 		
 	} # EOF
 )

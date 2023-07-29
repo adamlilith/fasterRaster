@@ -36,15 +36,15 @@ methods::setMethod(
 	function(x, method = "duplicated", tolerance = NULL, minArea = 0) {
 
 	# automatic distance
-	if (is.null(tolerance)) {
-		extent <- ext(x, vector=TRUE)
+	if (is.null(tolerance) & !(method %in% c("duplicated"))) {
+		extent <- ext(x, vector = TRUE)
 		xext <- extent[2L] - extent[1L]
 		yext <- extent[4L] - extent[3L]
-		zext <- diff(zext)
-		tolerance <- 0.02 * min(xext, yext, zext, na.rm=TRUE)
+  		zext <- diff(zext(x))
+		tolerance <- 0.01 * min(xext, yext, zext, na.rm=TRUE)
+	} else {
+		tolerance <- 0
 	}
-
-	
 
 	.restore(x)
 	

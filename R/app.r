@@ -107,38 +107,38 @@ methods::setMethod(
 #' @exportMethod appFuns
 methods::setMethod(
     f = "appFuns",
-    signature = c(show = "logical"),
-    function(show = TRUE) {
-        
-    if (show) {
+    signature = c(x = "missing"),
+    function(x) {
+    
+	appFunsTable <- NULL
+    utils::data("appFunsTable", envir = environment(), package = "fasterRaster")
+ 
+    if (interactive()) {
+    
+        showableCols <- c("Type", "GRASS_Function", "R_Function", "Definition", "Returns")
 
-        if (interactive()) {
-            showableCols <- c("Type", "GRASS_Function", "R_Function", "Definition", "Returns")
-
-            shiny::shinyApp(
-                ui = shiny::fluidPage(DT::DTOutput("tbl")),
-                server = function(input, output) {
-                    output$tbl <- DT::renderDT(
-                        crss[, showableCols],
-                        caption = shiny::HTML("Functions that can be used in the fasterRaster app() function and their equivalent."),
-                        options = list(
-                            pageLength = nrow(appFuns),
-                            width = "100%",
-                            scrollX = TRUE
-                        )
-                        # options = list(lengthChange = FALSE)
+        shiny::shinyApp(
+            ui = shiny::fluidPage(DT::DTOutput("tbl")),
+            server = function(input, output) {
+                output$tbl <- DT::renderDT(
+                    appFunsTable[, showableCols],
+                    caption = shiny::HTML("Functions that can be used in the fasterRaster app() function and their equivalent."),
+                    options = list(
+                        pageLength = nrow(appFuns),
+                        width = "100%",
+                        scrollX = TRUE
                     )
-                }
-            )
-        } else {
-            warning("You must be running R interactively to view the table using appFuns(TRUE).")
-        }
-
+                    # options = list(lengthChange = FALSE)
+                )
+            }
+        )
+        
     } else {
-        appFunsTable <- NULL
-        utils::data("appFunsTable", envir = environment(), package = "fasterRaster")
-        if (getFastOptions("useDataTable")) appFuns <- data.table::as.data.table(appFunsTable)
+        warning("You must be running R interactively to view the table using appFuns().")
     }
+
+    if (getFastOptions("useDataTable")) appFunsTable <- data.table::data.table(appFunsTable)
+    invisible(appFunsTable)
 
     } # EOF
 )

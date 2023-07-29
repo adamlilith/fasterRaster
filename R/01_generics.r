@@ -6,7 +6,7 @@ require(terra)
 if (!isGeneric("[[")) methods::setGeneric(name = "[[", def = function(x, ...) standardGeneric("[["))
 
 #' @importFrom terra app
-methods::setGeneric(name = "appFuns", def = function(show, ...) standardGeneric("appFuns"))
+methods::setGeneric(name = "appFuns", def = function(x, ...) standardGeneric("appFuns"))
 methods::setGeneric(name = "appCheck", def = function(x, fun, ...) standardGeneric("appCheck"))
 #' @importFrom terra as.contour
 # # # methods::setGeneric(name = "as.contour", package="terra")
@@ -14,19 +14,23 @@ methods::setGeneric(name = "as.cell", def = function(x, ...) standardGeneric("as
 methods::setGeneric(name = "as.fcell", def = function(x, ...) standardGeneric("as.fcell"))
 methods::setGeneric(name = "as.dcell", def = function(x, ...) standardGeneric("as.dcell"))
 setGeneric("as.data.frame")
-#' @importFrom terra as.lines
-#' @importFrom terra as.points
-#' @importFrom terra as.polygons
-#' methods::setGeneric(name = "aggregate", package="stats")
+# #' @importFrom terra as.lines # Warning that "=" is not exported from terra
+# #' @importFrom terra as.points # Warning that "=" is not exported from terra
+# #' @importFrom terra as.polygons # Warning that "=" is not exported from terra
+if (!isGeneric("as.lines")) { setGeneric("as.lines", function(x,...) standardGeneric("as.lines")) }
+if (!isGeneric("as.points")) { setGeneric("as.points", function(x,...) standardGeneric("as.points")) }
+if (!isGeneric("as.polygons")) { setGeneric("as.polygons", function(x,...) standardGeneric("as.polygons")) }
+# #' methods::setGeneric(name = "aggregate", package="stats")
+#' @importFrom stats aggregate
+if (!isGeneric("aggregate")) { setGeneric("aggregate", function(x,...) standardGeneric("aggregate")) }
 
 methods::setGeneric(name = "bottom", def = function(x, ...) standardGeneric("bottom"))
-# methods::setGeneric(name = "buffer", package="terra")
-# methods::setGeneric(name = "buffer", package="terra")
 #' @importFrom terra buffer
 
-# "c" already in base as S3 generic
+# "c" is already generic in `base`
 methods::setGeneric(name = "cleanGeom", def = function(x, ...) standardGeneric("cleanGeom"))
 methods::setGeneric(name = "clump", def = function(x, ...) standardGeneric("clump"))
+
 #' @importFrom terra compareGeom
 methods::setGeneric(name = "connectors", def = function(x, y, ...) standardGeneric("connectors"))
 methods::setGeneric(name = ".copyGSpatial", def = function(x, ...) standardGeneric(".copyGSpatial"))
@@ -40,10 +44,8 @@ methods::setGeneric(name = "count", def = function(x, ...) standardGeneric("coun
 methods::setGeneric(name = "datatype", def = function(x, ...) standardGeneric("datatype"))
 #' @importFrom terra delaunay
 methods::setGeneric(name = "distance", def = function(x, y, ...) standardGeneric("distance"))
-methods::setGeneric(name = "nunique", def = function(x, ...) standardGeneric("nunique"))
 
 methods::setGeneric(name = "east", def=function(x, ...) standardGeneric("east"))
-#' @importFrom terra expanse
 #' @importFrom terra ext
 #' @importFrom terra extend
 #' @importFrom terra extract
@@ -65,6 +67,9 @@ methods::setGeneric(name = "horizonHeight", def = function(x, ...) standardGener
 
 methods::setGeneric(name = "is.2d", def = function(x) standardGeneric("is.2d"))
 methods::setGeneric(name = "is.3d", def = function(x) standardGeneric("is.3d"))
+methods::setGeneric(name = "is.cell", def = function(x) standardGeneric("is.cell"))
+methods::setGeneric(name = "is.fcell", def = function(x) standardGeneric("is.fcell"))
+methods::setGeneric(name = "is.dcell", def = function(x) standardGeneric("is.dcell"))
 #' @importFrom terra is.lines
 #' @importFrom terra is.points
 #' @importFrom terra is.polygons
@@ -94,6 +99,7 @@ methods::setGeneric(name = "nonnacell", def = function(x) standardGeneric("nonna
 methods::setGeneric(name = "north", def=function(x, ...) standardGeneric("north"))
 methods::setGeneric(name = "ncol", def = function(x) standardGeneric("ncol")) # in base
 methods::setGeneric(name = "nrow", def = function(x) standardGeneric("nrow")) # in base
+methods::setGeneric(name = "nunique", def = function(x, ...) standardGeneric("nunique"))
 
 #' @importFrom terra project
 
@@ -106,11 +112,7 @@ methods::setGeneric(name = ".refresh", def=function(x, ...) standardGeneric(".re
 methods::setGeneric(name = "regionDim", def=function(x, ...) standardGeneric("regionDim"))
 methods::setGeneric(name = "regionExt", def=function(x, ...) standardGeneric("regionExt"))
 methods::setGeneric(name = "regionRes", def=function(x, ...) standardGeneric("regionRes"))
-methods::setGeneric(name = "regionRes3d", def=function(x, ...) standardGeneric("regionRes3d"))
 methods::setGeneric(name = "region", def=function(x, ...) standardGeneric("region"))
-methods::setGeneric(name = "regionZDim", def=function(x, ...) standardGeneric("regionZDim"))
-methods::setGeneric(name = "regionZExt", def=function(x, ...) standardGeneric("regionZExt"))
-methods::setGeneric(name = "regionZRes", def=function(x, ...) standardGeneric("regionZRes"))
 #' @importFrom terra res
 #' @importFrom terra resample
 methods::setGeneric(name = "res3d", def = function(x) standardGeneric("res3d"))
@@ -153,3 +155,4 @@ methods::setGeneric(name = "west", def=function(x, ...) standardGeneric("west"))
 
 methods::setGeneric(name = "zext", def = function(x) standardGeneric("zext"))
 methods::setGeneric(name = "zres", def = function(x) standardGeneric("zres"))
+

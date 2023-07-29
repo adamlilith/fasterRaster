@@ -76,23 +76,43 @@ regionDim()
 regionExt()
 regionRes()
 
+dim()
+nrow()
+ncol()
+ndepth()
+ncell()
+ncell3d()
+nlyr()
+
+ext()
+west()
+east()
+south()
+north()
+
+res()
+res3d()
+xres()
+yres()
+zres()
+
 # coarsen grid... sets region to match aggregated raster"s extent and dimensions
 aggElev <- aggregate(elev, 2) 
 
 # reset region dimensions
-regionDim()
-regionDim(elev, respect="resolution")
-regionDim()
+dim()
+regionDim(elev, respect = "resolution")
+dim()
 
 # reset region extent
-regionExt()
+ext()
 regionExt(dypsis, respect="resolution")
-regionExt()
+ext()
 
 # reset region resolution
-regionRes()
+res()
 regionRes(elev, respect="extent")
-regionRes()
+res()
 
 # reset region
 (region(start))

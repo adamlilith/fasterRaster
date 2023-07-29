@@ -17,7 +17,7 @@
 #' @exportMethod as.points
 methods::setMethod(
     f = "as.points",
-    signature = c(x = 'GVector'),
+    signature = c(x = "GVector"),
     function(x) {
 
     gtype <- geomtype(x, grass = TRUE)

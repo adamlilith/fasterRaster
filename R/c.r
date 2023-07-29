@@ -110,7 +110,7 @@ setMethod(f = "c",
 
 	# gnames of inputs
 	input <- .gnames(x)
-	if (length(dots) > 0L) input <- c(input, sapply(dots, gnames))
+	if (length(dots) > 0L) input <- c(input, sapply(dots, .gnames))
 	input <- paste(input, collapse=",")
 
 	gn <- .makeGName("combo", "vector")

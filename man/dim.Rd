@@ -4,34 +4,50 @@
 \alias{dim,GRegion-method}
 \alias{dim}
 \alias{dim,GRaster-method}
-\alias{nrow,GRegion-method}
+\alias{nrow,missing-method}
 \alias{nrow}
-\alias{ncol,GRegion-method}
+\alias{nrow,GRegion-method}
+\alias{ncol,missing-method}
 \alias{ncol}
-\alias{ndepth,GRegion-method}
+\alias{ncol,GRegion-method}
+\alias{ndepth,missing-method}
 \alias{ndepth}
-\alias{ncell,GRegion-method}
+\alias{ndepth,GRegion-method}
+\alias{ncell,missing-method}
 \alias{ncell}
-\alias{ncell3d,GRegion-method}
+\alias{ncell,GRegion-method}
+\alias{ncell3d,missing-method}
 \alias{ncell3d}
+\alias{ncell3d,GRegion-method}
 \alias{dim,GVector-method}
 \alias{nrow,GVector-method}
 \alias{ncol,GVector-method}
-\alias{nlyr,GRaster-method}
+\alias{nlyr,missing-method}
 \alias{nlyr}
+\alias{nlyr,GRaster-method}
 \title{Number of rows, columns, depths, cells, and layers}
 \usage{
 \S4method{dim}{GRegion}(x)
 
 \S4method{dim}{GRaster}(x)
 
+\S4method{nrow}{missing}(x)
+
 \S4method{nrow}{GRegion}(x)
+
+\S4method{ncol}{missing}(x)
 
 \S4method{ncol}{GRegion}(x)
 
+\S4method{ndepth}{missing}(x)
+
 \S4method{ndepth}{GRegion}(x)
 
+\S4method{ncell}{missing}(x)
+
 \S4method{ncell}{GRegion}(x)
+
+\S4method{ncell3d}{missing}(x)
 
 \S4method{ncell3d}{GRegion}(x)
 
@@ -41,10 +57,12 @@
 
 \S4method{ncol}{GVector}(x)
 
+\S4method{nlyr}{missing}(x)
+
 \S4method{nlyr}{GRaster}(x)
 }
 \arguments{
-\item{x}{A \code{Gregion}, \code{GRaster}, or \code{GVector}.}
+\item{x}{A \code{GRegion}, \code{GRaster}, \code{GVector}, or missing. If missing, then the dimensions of the currently active \link[=tutorial_regions]{region} are returned.}
 }
 \value{
 A numeric value or vector.

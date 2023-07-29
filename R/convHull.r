@@ -54,7 +54,7 @@ methods::setMethod(
 				cmd = "v.hull",
 				input = .gnames(x),
 				output = gns[i],
-				layer = layerName(x),
+				layer = .dbLayer(x),
 				flags = c("quiet", "overwrite"),
 				cats = cats,
 				intern = TRUE

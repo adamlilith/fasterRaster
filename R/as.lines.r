@@ -27,7 +27,7 @@ methods::setMethod(
     gn <- .makeGName("asLines", "raster")
     args <- list(
         cmd = "r.to.vect",
-        input = gnIn,
+        input = .gnames(x),
         output = gn,
         type = "line",
         flags = c("quiet", "overwrite"),

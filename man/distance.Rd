@@ -49,14 +49,14 @@
 \item Case 3, when \code{x} is a \code{GVector} and \code{y} is a \code{GVector}: This argument is not used in this case.
 }}
 
-\item{unit}{Character: Units of the output. Either of \code{"meters"} or \verb{"kilometers" (or "}km"`). Partial matching is used.}
+\item{unit}{Character: Units of the output. Either of \code{"meters"}, \verb{"kilometers" (or "}km"\verb{), or }"miles"`. Partial matching is used.}
 
 \item{method}{Character: The type of distance to calculate. Partial matching is used and capitalization is ignored. Possible values include:
 \itemize{
-\item \code{Euclidean} (default): Euclidean distance
-\item \code{squared}: Squared Euclidean distance (faster than just Euclidean distance but same rank--good for cases where only order matters)
-\item \code{maximum}: Maximum Euclidean distance
-\item \code{geodesic}: Geographic distance
+\item \code{Euclidean} (default for projected objects): Euclidean distance.
+\item \code{geodesic} (default for unprojected objects): Geographic distance. If \code{x} is unprojected (e.g., WGS84), then the \code{method} must be \code{"geodesic"}.
+\item \code{squared}: Squared Euclidean distance (faster than just Euclidean distance but same rank--good for cases where only order matters).
+\item \code{maximum}: Maximum Euclidean distance.
 \item \code{Manhattan}: Manhattan distance (i.e., "taxicab" distance, distance along cells going only north-south and east-west and never along a diagonal).
 }}
 

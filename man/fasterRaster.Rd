@@ -6,11 +6,11 @@
 \title{"fasterRaster": Faster raster and spatial vector processing using "GRASS GIS"}
 \description{
 Processing of large-in-memory/-on disk rasters and spatial vectors using \strong{GRASS GIS}. Most functions in the \strong{terra} and \strong{sf} packages are recreated. Processing of medium-sized and smaller spatial objects will nearly always be faster using \strong{terra} or \strong{sf}. To use most of the functions you must have the stand-alone version of \strong{GRASS} version 8.0 or higher (not the \strong{OSGeoW4} installer version). Note that due to developer choices, results will not always be strictly comparable between \strong{terra}, \strong{sf}, and \strong{fasterRaster}.
-\subsection{Most useful functions/links:}{
+\subsection{Most useful tutorials and functions:}{
 
 A \link[=tutorial_getting_started]{quick-start tutorial}\cr
 \code{\link[=faster]{faster()}}: Initiate a \strong{GRASS} session\cr
-\code{\link[=fast]{fast()}}: Create \code{GRaster}s or \code{GVector}s from \code{SpatRaster}s, \code{SpatVector}s, or \code{sf}  objects, or from files\cr
+\code{\link[=fast]{fast()}}: Convert a \code{SpatRaster}, \code{SpatVector}, or \code{sf} vector to \strong{fasterRaster}'s raster format (\code{GRaster}s) or vector format (\code{GVector}s), or load one from a file\cr
 \code{\link[=rast]{rast()}}, \code{\link[=vect]{vect()}}, and \code{\link[=st_as_sf]{st_as_sf()}}: Convert \code{GRaster}s and \code{GVector}s to \code{SpatRaster}s, \code{SpatVector}s, or \code{sf} vectors\cr
 \code{\link[=writeRaster]{writeRaster()}} and \code{\link[=writeVector]{writeVector()}}: Save \code{GRaster}s or \code{GVector}s to disk\cr
 \code{\link[=fastRestore]{fastRestore()}}: Revert to another \strong{GRASS} \link[=tutorial_sessions]{"location" or "mapset"}, or restart a \strong{GRASS} session saved to disk\cr
@@ -26,6 +26,7 @@ A \link[=tutorial_getting_started]{quick-start tutorial}\cr
 \code{\link[=freq]{freq()}}: Frequencies of cell values in a raster\cr
 \code{\link[=global]{global()}}: Summary statistics\cr
 \code{\link[=is.2d]{is.2d()}} and \code{\link[=is.3d]{is.3d()}}: Is an object 2- or 3-dimensional?\cr
+\code{\link[=is.cell]{is.cell()}}, \code{\link[=is.fcell]{is.fcell()}}, \code{\link[=is.dcell]{is.dcell()}}: Raster data type (integer/float/double)\cr
 \code{\link[=location]{location()}}: \strong{GRASS} "location" of an object or the active session\cr
 \code{\link[=mapset]{mapset()}}: \strong{GRASS} "mapset" of an object or the active session\cr
 \code{\link[=minmax]{minmax()}}: Minimum and maximum values across all non-\code{NA} cells\cr
@@ -39,7 +40,6 @@ A \link[=tutorial_getting_started]{quick-start tutorial}\cr
 \code{\link[=nonnacell]{nonnacell()}}: Number of non-\code{NA} cells\cr
 \code{\link[=nrow]{nrow()}}: Number of rows\cr
 \code{\link[=ncat]{ncat()}}: Number of categories\cr
-\code{\link[=origin]{origin()}}: Coordinates of the northwest corner of the extent\cr
 \code{\link[=res]{res()}}, \code{\link[=xres]{xres()}}, \code{\link[=yres]{yres()}}, and \code{\link[=zres]{zres()}}: Spatial resolution\cr
 \code{\link[=st_bbox]{st_bbox()}}: Spatial extent\cr
 \code{\link[=st_crs]{st_crs()}}: Coordinate reference system\cr
@@ -76,9 +76,9 @@ Other functions:\cr
 \code{\link[=as.polygons]{as.polygons()}}: Convert a raster to a "polygons" vector\cr
 \code{\link[=aggregate]{aggregate()}}: Aggregate values of raster cells into larger cells\cr
 \code{\link[=buffer]{buffer()}}: Create a buffer around non-\code{NA} cells\cr
-\code{\link[=app]{app()}}: Apply a user-defined function to layers of a raster\cr
+\code{\link[=app]{app()}}: Apply a user-defined function to multiple layers of a raster (with helper functions \code{\link[=appFuns]{appFuns()}} and \code{\link[=appCheck]{appCheck()}})\cr
 \code{\link[=c]{c()}}: "Stack" two or more rasters\cr
-\code{\link[=clump]{clump()}}: Group cells with similar values into clumps\cr
+\code{\link[=clump]{clump()}}: Group adjacent cells with similar values\cr
 \code{\link[=crop]{crop()}}: Remove parts of a raster\cr
 \code{\link[=distance]{distance()}}: Distance to non-\code{NA} cells, or vice versa\cr
 \code{\link[=expanse]{expanse()}}: Total area of non-\code{NA} cells\cr
@@ -91,7 +91,6 @@ Other functions:\cr
 \code{\link[=horizonHeight]{horizonHeight()}}: Horizon height\cr
 \code{\link[=longlat]{longlat()}}: Create longitude/latitude rasters.\cr
 \code{\link[=mask]{mask()}}: Remove values in a raster based on values in another raster or vector\cr
-\code{\link[=.makeGRaster]{.makeGRaster()}}: Makes a \code{GRaster} from a raster already in a \strong{GRASS} session\cr
 \code{\link[=merge]{merge()}}: Combine two or more rasters with different extents and fill in \code{NA}s\cr
 \code{\link[=plot]{plot()}}: Display a raster\cr
 \code{\link[=project]{project()}}: Change coordinate reference system and cell size\cr
@@ -119,12 +118,10 @@ Other functions:\cr
 \code{\link[=names]{names()}}: Names of \code{GVector} fields\cr
 \code{\link[=ncol]{ncol()}}: Number of fields\cr
 \code{\link[=nrow]{nrow()}}: Number of geometries\cr
-\code{\link[=origin]{origin()}}: Coordinates of the northwest corner of the extent\cr
 \code{\link[=st_bbox]{st_bbox()}}: Spatial extent\cr
 \code{\link[=st_crs]{st_crs()}}: Coordinate reference system\cr
 \code{\link[=topology]{topology()}}: Dimensionality (2D or 3D)\cr
 \code{\link[=zext]{zext()}}: Vertical extent\cr
-\code{\link[=zres]{zres()}}: Vertical resolution\cr
 }
 
 \subsection{Functions that operate on or create \code{GVectors}}{
@@ -140,7 +137,6 @@ Other functions:\cr
 \code{\link[=delaunay]{delaunay()}}: Delaunay triangulation\cr
 \code{\link[=distance]{distance()}}: Distance between geometries in two vectors, or from a vector to cells of a raster\cr
 \code{\link[=head]{head()}}: First rows of a vector"s data frame.\cr
-\code{\link[=.makeGVector]{.makeGVector()}}: Makes a \code{GVector} from a vector already in a \strong{GRASS} session.\cr
 \code{\link[=project]{project()}}: Change coordinate reference system\cr
 \code{\link[=simplifyGeom]{simplifyGeom()}}: Remove vertices\cr
 \code{\link[=smoothGeom]{smoothGeom()}}: Remove "angular" aspects of features\cr
@@ -148,8 +144,8 @@ Other functions:\cr
 \code{\link[=st_buffer]{st_buffer()}}: Create a polygon around/inside a vector\cr
 \code{\link[=st_distance]{st_distance()}}: Distance between geometries in two vectors\cr
 \code{\link[=tail]{tail()}}: Last rows of a vector"s data frame.\cr
-#' \code{[}\link{subset}: Select geometries/rows of a vector"s data frame\cr
-#' \code{[[}\link{subset}: Subset columns of a vector"s data frame\cr
+\code{[}\link{subset}: Select geometries/rows of a vector"s data frame\cr
+\code{[[}\link{subset}: Subset columns of a vector"s data frame\cr
 }
 
 \subsection{Converting between data types}{
@@ -186,13 +182,21 @@ Other functions:\cr
 
 \subsection{Functions that operate on \strong{GRASS} "regions" (seldom used by most users):}{
 
-\code{\link[=region]{region()}}: Change or report the active region"s extent and resolution\cr
-\code{\link[=regionDim]{regionDim()}}: Change or report the active region"s resolution\cr
-\code{\link[=regionExt]{regionExt()}}: Change or report the active region"s extent\cr
-\code{\link[=regionRes]{regionRes()}}: Change or report the active region"s dimensions\cr
+\code{\link[=region]{region()}}: Change or report the active region's extent and resolution\cr
+\code{\link[=regionDim]{regionDim()}}: Change or report the active region's resolution (also \code{\link[=dim]{dim()}} and related functions, with no arguments)
+\code{\link[=regionExt]{regionExt()}}: Change or report the active region's extent (also \code{\link[=ext]{ext()}} and related functions, with no arguments)\cr
+\code{\link[=regionRes]{regionRes()}}: Change or report the active region's dimensions (also \code{\link[=res]{res()}} and related functions, with no arguments)\cr
 }
 
 \subsection{Data objects}{
+
+\link{appFunsTable} (see also \code{\link[=appFuns]{appFuns()}}): Functions usable by the \code{\link[=app]{app()}} function\cr
+\link{madChelsa}: Climate rasters for of a portion of eastern Madagascar\cr
+\link{madCoast0}, \link{madCoast4}, and \link{madCoast}: Borders of an eastern portion of Madagascar\cr
+\link{madDypsis}: Specimens records of species in the genus \emph{Dypsis}\cr
+\link{madElev}: Elevation raster\cr
+\link{madForest2000} and \link{madForest2014}: Forest cover in 2000 and 2014\cr
+\link{madRivers}: Rivers vector\cr
 }
 
 \subsection{Esoteric tutorials}{

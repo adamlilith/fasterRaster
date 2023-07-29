@@ -3,7 +3,7 @@
 \name{clump,GRaster-method}
 \alias{clump,GRaster-method}
 \alias{clump}
-\title{Group cells with similar values into clumps}
+\title{Group adjacent cells with similar values}
 \usage{
 \S4method{clump}{GRaster}(x, minDiff = 0, minClumpSize = 1, diagonal = TRUE)
 }

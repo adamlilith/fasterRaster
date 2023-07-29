@@ -92,9 +92,9 @@ methods::setMethod(
 			fact[3L] <- 1
 		}
 	
-		resol <- regionRes3d()
+		resol <- res3d()
 		resol <- resol * fact
-		regionRes3d(resol)
+		regionRes(resol)
 
 	}
 

@@ -52,7 +52,7 @@
 \arguments{
 \item{x}{Any of:
 \itemize{
-\item Missing (default): Reports the extent, resolution, and dimensions of the current region. All other arguments will be ignored.
+\item Missing (default): Reports the extent, resolution, and dimensions of the current region. All other arguments will be ignored. You can also use \code{\link[=ext]{ext()}}, \code{\link[=dim]{dim()}}, and \code{\link[=res]{res()}} and related functions with missing arguments.
 \item A \code{GSpatial}, \code{GRegion}, \code{GRaster}, \code{GVector} object: Sets the region"s extent, dimensions, and/or resolution to those of the object.
 \item A \code{numeric} vector. This will resize the region"s extent, resample the region"s resolution/dimensions, or both, to ensure the desired dimensions or resolution are retained:
 * 2 values for \code{regionDim()}: Number of rows and columns
@@ -141,23 +141,43 @@ regionDim()
 regionExt()
 regionRes()
 
+dim()
+nrow()
+ncol()
+ndepth()
+ncell()
+ncell3d()
+nlyr()
+
+ext()
+west()
+east()
+south()
+north()
+
+res()
+res3d()
+xres()
+yres()
+zres()
+
 # coarsen grid... sets region to match aggregated raster"s extent and dimensions
 aggElev <- aggregate(elev, 2) 
 
 # reset region dimensions
-regionDim()
-regionDim(elev, respect="resolution")
-regionDim()
+dim()
+regionDim(elev, respect = "resolution")
+dim()
 
 # reset region extent
-regionExt()
+ext()
 regionExt(dypsis, respect="resolution")
-regionExt()
+ext()
 
 # reset region resolution
-regionRes()
+res()
 regionRes(elev, respect="extent")
-regionRes()
+res()
 
 # reset region
 (region(start))

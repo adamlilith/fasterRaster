@@ -102,7 +102,7 @@ nrow(selected)
 
 # plot
 plot(rivers)
-plot(selected, col="red", add=TRUE)
+plot(selected, col = "red", add = TRUE)
 
 # IMPORTANT #3: Revert back to original GRASS session if needed.
 fastRestore(opts.)

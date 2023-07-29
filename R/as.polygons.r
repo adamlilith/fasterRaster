@@ -28,10 +28,12 @@ methods::setMethod(
     .restore(x)
     region(x)
 
-    gn <- .makeGName("asLines", "raster")
+    if (round & !is.cell(x)) x <- round(x)
+
+    gn <- .makeGName("asPolys", "raster")
     args <- list(
         cmd = "r.to.vect",
-        input = gnIn,
+        input = .gnames(x),
         output = gn,
         type = "area",
         column = names(x),
