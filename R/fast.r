@@ -236,7 +236,7 @@ methods::setMethod(
 		x <- terra::sources(x)
 	}
 
-	fast(x = x, method = method, fallback = fallback, wrap = wrap, warn = warn)
+	fast(x = x, rastOrVect = "raster", method = method, fallback = fallback, wrap = wrap, warn = warn)
 
 	} # EOF
 )
@@ -247,7 +247,7 @@ methods::setMethod(
 methods::setMethod(
 	"fast",
 	signature(x = "SpatVector"),
-	function(x, warn = TRUE) .fastVector(x, warn=warn)
+	function(x, warn = TRUE) .fastVector(x, warn = warn)
 )
 
 #' @rdname fast
@@ -256,7 +256,7 @@ methods::setMethod(
 methods::setMethod(
 	"fast",
 	signature(x = "sf"),
-	function(x, warn = TRUE) .fastVector(x, warn=warn)
+	function(x, warn = TRUE) .fastVector(x, warn = warn)
 )
 
 # 1. Write vector to disk (if needed)
@@ -274,6 +274,6 @@ methods::setMethod(
 		vectFile <- terra::sources(x)
 	}
     
-	fast(x = vectFile, rastOrVect = "vector", warn=warn)
+	fast(x = vectFile, rastOrVect = "vector", warn = warn)
 	
 }
