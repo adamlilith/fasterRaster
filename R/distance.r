@@ -21,15 +21,15 @@
 #' * Case 2, when `x` is a `GRaster` and `y` is a `GVector`: If `TRUE` (default), then the returned raster will contain the distance from the cell to the closest feature in the vector. If `FALSE`, then cells covered by the vector will have their values replaced with the distance to the nearest cell not covered, and cells that are not covered by the vector will have values of 0.
 #' * Case 3, when `x` is a `GVector` and `y` is a `GVector`: This argument is not used in this case.
 #'
-#' @param unit Character: Units of the output. Either of `"meters"` or `"kilometers" (or "`km"`). Partial matching is used.
+#' @param unit Character: Units of the output. Either of `"meters"`, `"kilometers" (or "`km"`), or `"miles"`. Partial matching is used.
 #'
 #' @param dense Logical: Only applicable for case 2, when `x` is a `GRaster` and `y` is a `GVector`. If `TRUE` (default), then the vector will be represented by "densified" lines (i.e., any cell that the line/boundary touches, not just the ones on the rendering path).
 #'
 #' @param method Character: The type of distance to calculate. Partial matching is used and capitalization is ignored. Possible values include:
-#' * `Euclidean` (default): Euclidean distance
-#' * `squared`: Squared Euclidean distance (faster than just Euclidean distance but same rank--good for cases where only order matters)
-#' * `maximum`: Maximum Euclidean distance
-#' * `geodesic`: Geographic distance
+#' * `Euclidean` (default for projected objects): Euclidean distance.
+#' * `geodesic` (default for unprojected objects): Geographic distance. If `x` is unprojected (e.g., WGS84), then the `method` must be `"geodesic"`.
+#' * `squared`: Squared Euclidean distance (faster than just Euclidean distance but same rank--good for cases where only order matters).
+#' * `maximum`: Maximum Euclidean distance.
 #' * `Manhattan`: Manhattan distance (i.e., "taxicab" distance, distance along cells going only north-south and east-west and never along a diagonal).
 #'
 #' @param minDist,maxDist Either `NULL` (default) or numeric values: Ignore distances less than or greater than these distances.
@@ -75,35 +75,24 @@ methods::setMethod(
 		
 	}
 	
-	flags <- c("quiet", "overwrite", "m")
-	if (!fillNA) flags <- c(flags, "n")
-	
 	gnOut <- .makeGName(NULL, "raster")
 	args <- list(
 		cmd = "r.grow.distance",
 		input = gn,
 		distance = gnOut,
 		metric = metric,
-		flags = flags,
+		flags = c("quiet", "overwrite", "m"),
 		intern = TRUE
 	)
-	
+	if (!fillNA) args$flags <- c(args$flags, "n")
 	if (!is.null(minDist)) args <- c(args, minimum_distance = minDist)
 	if (!is.null(maxDist)) args <- c(args, maximum_distance = maxDist)
 	
 	input <- do.call(rgrass::execGRASS, args)
 	
-	# convert to kilometers
-	unit <- tolower(unit)
-	unit <- pmatchSafe(unit, c("meters", "kilometers", "km"))
-	if (unit %in% c("kilometers", "km")) {
-	
-		gnIn <- gnOut
-		gnOut <- .makeGName(NULL, "rast")
-		ex <- paste0(gnOut, " = ", gnIn, " / 1000")
-		rgrass::execGRASS("r.mapcalc", expression=ex, flags=c("quiet", "overwrite"), intern=TRUE)
-		
-	}
+	# convert units
+	gnConvert <- .convertRastUnits(gnOut, unit)
+	if (!is.null(gnConvert)) gn <- gnConvert
 	
 	.makeGRaster(gn, "distance")
 	
@@ -128,8 +117,6 @@ methods::setMethod(
 	compareGeom(x, y)
 	.restore(x)
 	
-	flags <- "quiet"
-	
 	gt <- geomtype(y)
     type <- if (gt == "points") {
         "point"
@@ -141,24 +128,32 @@ methods::setMethod(
         stop("Unknown vector data type.")
 	}
 
-	flags <- c("quiet", "overwrite")
+	gnRasterized <- .makeGName(NULL, "raster")
+	args <- list(
+		cmd = "v.to.rast",
+		input = .gnames(y),
+		output = gnRasterized,
+		use="val",
+		value = 1,
+		type = type,
+		flags = c("quiet", "overwrite"),
+		intern=TRUE
+	)
 	if (dense) flags <- c(flags, "d")
-	
-	gnameRasterized <- .makeGName(NULL, "raster")
-	rgrass::execGRASS("v.to.rast", input=.gnames(y), output=gnameRasterized, use="val", value=1, type=type, flags=flags, intern=TRUE)
+	do.call(rgrass::execGRASS, args = args)
 	
 	flags <- c("quiet", "overwrite", "m")
 	if (!fillNA) flags <- c(flags, "n")
 	
-	gnOut <- .makeGName(NULL, "raster")
-	rgrass::execGRASS("r.grow.distance", input=gnameRasterized, distance=gn, metric=metric, flags=flags, intern=TRUE)
+	gnOut <- .makeGName("distance", "raster")
+	rgrass::execGRASS("r.grow.distance", input=gnRasterized, distance=gn, metric=metric, flags=flags, intern=TRUE)
 	
 	# convert meters to kilometers
 	unit <- pmatchSafe(unit, c("meters", "kilometers", "km"))
-	if (unit %in% c("kilometers", "km")) {
+	if (unit %in% c("kilometer", "kilometers", "km")) {
 	
 		gnIn <- gnOut
-		gn <- .makeGName(NULL, "rast")
+		gn <- .makeGName("distance", "rast")
 		ex <- paste0(gn, " = ", gnIn, " / 1000")
 		rgrass::execGRASS("r.mapcalc", expression=ex, flags=c("quiet", "overwrite"), intern=TRUE)
 		
@@ -216,3 +211,38 @@ methods::setMethod(
 		distance(x=x, y=y, unit=unit, minDist=minDist, maxDist=maxDist)
 	}
 )
+
+# @noRd
+.convertRastUnits <- function(gn, unit) {
+	
+	if (inherits(gn, "GRaster")) gn <- .gnames(gn)
+	
+	# convert raster units
+	unit <- tolower(unit)
+	unit <- pmatchSafe(unit, c("meters", "kilometers", "km", "miles"))
+	if (unit %in% c("kilometers", "km", "miles")) {
+	
+		gnIn <- gn
+		gnOut <- .makeGName(NULL, "rast")
+		
+		ex <- if (unit %in% c("kilometers", "km")) {
+			paste0(gnOut, " = ", gnIn, " / 1000")
+		} else if (unit == "miles") {
+			paste0(gnOut, " = ", gnIn, " / 1609.34")
+		}
+		
+		args <- list(
+			"r.mapcalc",
+			expression = ex,
+			flags = c("quiet", "overwrite"),
+			intern = TRUE
+		)
+		do.call(rgrass::execGRASS, args = args)
+		out <- gnOut
+		
+	} else {
+		out <- NULL
+	}
+	out
+	
+}
