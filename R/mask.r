@@ -127,6 +127,7 @@ methods::setMethod(
     ### change masked values
     if (!is.na(updatevalue)) {
 
+		nLayers <- nlyr(x)
         gnsUpdate <- .makeGName("mask", "raster", nLayers)
         for (i in seq_len(nLayers)) {
 
