@@ -69,7 +69,7 @@ setMethod(
 
 	### going to overwrite anything?
 	if (!overwrite) {
-		if (file.exists(filename)) stop("File already exists and ", sQuuote("overwrite"), " is FALSE:\n  ", filename)
+		if (file.exists(filename)) stop("File already exists and ", sQuote("overwrite"), " is FALSE:\n  ", filename)
 	}
 
 	### format
