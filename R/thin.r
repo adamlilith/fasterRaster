@@ -8,7 +8,7 @@
 #' 
 #' @returns A `GRaster`.
 #' 
-#' @example man/ex_asLines.r
+#' @example man/examples/ex_asLines.r
 #' 
 #' @aliases thin
 #' @rdname thin
