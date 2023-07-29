@@ -26,8 +26,13 @@ methods::setMethod(
 #' @exportMethod crs
 methods::setMethod(
 	f = "crs",
-	signature = "missing",
- 	definition = function(x) crs(region())
+	signature = c(x = "missing"),
+ 	definition = function(x) {
+    workDir <- getFastOptions("workDir")
+	loc <- location()
+ 	crsFile <- file.path(workDir, loc, "crs.rds")
+	readRDS(crsFile)
+	} # EOF
 )
 
 st_crs <- function(x, ...) UseMethod("st_crs", x)
@@ -62,7 +67,7 @@ methods::setMethod(
 #' @exportMethod st_crs
 methods::setMethod(
 	f = "st_crs",
-	signature = "missing",
+	signature = c(x = "missing"),
 	definition = function(x) {
 		x <- region()
 		out <- sf::st_crs(x)
