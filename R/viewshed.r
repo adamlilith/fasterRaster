@@ -73,7 +73,7 @@ methods::setMethod(
     if (curvature) args$flags <- c(args$flags, "c")
     if (refraction) args$flags <- c(args$flags, "c")
     if (is.infinite(maxDist)) args$max_distance <- -1
-    if (!is.infinite(maxDist)) args$max_distance <- madDist
+    if (!is.infinite(maxDist)) args$max_distance <- maxDist
 
     nLayers <- nlyr(x)
     for (i in seq_len(nLayers)) {
