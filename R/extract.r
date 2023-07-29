@@ -24,7 +24,7 @@ methods::setMethod(
     signature = c(x = "GRaster", y = "GVector"),
     function(x, y, xy = FALSE, cat = FALSE) {
 
-    if (geomtype(y) != "points") stop("Argumment", sQuote("y"), " must be a points vector.")
+    if (geomtype(y) != "points") stop("Argument", sQuote("y"), " must be a points vector.")
     
     nLayers <- nlyr(x)
     for (i in seq_len(nLayers)) {
