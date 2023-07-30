@@ -22,6 +22,9 @@
 #' ## `.makeGRaster()` and `makeGVector()`
 #' Make `GRaster`s or `GVector`s from a vector of `gname`(s), which point to files in **GRASS**.
 #' 
+#' ## `.projection()`
+#' Get the value of the `@projection` slot in a `GRaster` or `GVector`.
+#' 
 #' ## `.refresh()`
 #' Refresh metadata held within a `GRaster` or `GVector`` by querying the object in **GRASS**.
 #' 
