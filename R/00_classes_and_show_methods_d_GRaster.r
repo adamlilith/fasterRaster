@@ -8,6 +8,7 @@ GRaster <- setClass(
 	"GRaster",
 	contains = "GRegion",
 	slots = list(
+		projection = "character",
 		datatypeGRASS = "character",
 		nLayers = "integer",
 		names = "character",
@@ -16,6 +17,7 @@ GRaster <- setClass(
 		maxVal = "numeric"
 	),
 	prototype = prototype(
+		projection = NA_character_,
 		datatypeGRASS = NA_character_,
 		nLayers = NA_integer_,
 		names = NA_character_,
@@ -73,6 +75,7 @@ setValidity("GRaster",
 		location = getFastOptions("location"),
 		mapset = getFastOptions("mapset"),
 		crs = crs(),
+		projection = info[["projection"]][1L],
 		topology = info[["topology"]][1L],
 		extent = c(info[["west"]][1L], info[["east"]][1L], info[["south"]][1L], info[["north"]][1L]),
 		zextent = c(info[["zbottom"]][1L], info[["ztop"]][1L]),
