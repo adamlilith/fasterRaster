@@ -189,6 +189,7 @@ methods::setMethod(
 			cat("z extent    :", paste(object@zextent, collapse=", "), "(bottom, top)\n")
 		}
 		cat("coord ref.  :", crs, "\n")
+  		if (details) cat("projection  :", object@projection, "\n")
 		if (details) cat("gnames(s)   :", gnames, "\n")
 		cat("name(s)     :", names, "\n")
 		if (details) cat("datatype*   :", datatype, "\n")
@@ -268,10 +269,7 @@ methods::setMethod(f="show", signature="GVector",
 		cat("location    :", object@location, "\n")
 		cat("mapset      :", object@mapset, "\n")
 		cat("gname       :", object@gnames, "\n")
-		if (details & object@nFields > 0) {
-			cat("db layer    :", object@db@dbLayer, "\n")
-			cat("db table    :", object@db@dbTable, "\n")
-		}
+		if (details & object@nFields > 0) cat("db layer    :", object@db@dbLayer, "\n")
 	}
 	cat("geometry    :", object@geometry, "\n")
 	cat("dimensions  :", paste0(object@nGeometries, ", ", object@nFields), "(geometries, columns)\n")
@@ -279,6 +277,7 @@ methods::setMethod(f="show", signature="GVector",
 	cat("extent      :", paste(extent, collapse=", "), "(xmin, xmax, ymin, ymax)\n")
 	if (details | object@topology == "3D") cat("z extent    :", paste(zextent, collapse=", "), "(bottom, top)\n")
 	cat("coord ref.  :", crsSimple, "\n")
+	cat("projection  :", object@projection, "\n")
 
 	if (object@nFields > 0L) {
 		cat("names       :", fields, "\n")
