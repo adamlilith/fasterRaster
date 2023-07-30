@@ -102,6 +102,7 @@ methods::setGeneric(name = "ncol", def = function(x) standardGeneric("ncol")) # 
 methods::setGeneric(name = "nrow", def = function(x) standardGeneric("nrow")) # in base
 methods::setGeneric(name = "nunique", def = function(x, ...) standardGeneric("nunique"))
 
+methods::setGeneric(name = "plot", def = function(x, y, ...) standardGeneric("plot"))
 #' @importFrom terra project
 
 #' @importFrom stats quantile
