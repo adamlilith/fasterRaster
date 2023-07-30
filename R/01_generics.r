@@ -71,6 +71,7 @@ methods::setGeneric(name = "is.cell", def = function(x) standardGeneric("is.cell
 methods::setGeneric(name = "is.fcell", def = function(x) standardGeneric("is.fcell"))
 methods::setGeneric(name = "is.dcell", def = function(x) standardGeneric("is.dcell"))
 #' @importFrom terra is.lines
+#' @importFrom terra is.lonlat
 #' @importFrom terra is.points
 #' @importFrom terra is.polygons
 methods::setGeneric(name = "intercept", def=function(x, ...) standardGeneric("intercept"))
