@@ -18,7 +18,7 @@
 	# packageStartupMessage("fasterRaster using, for example, "library(terra)".")
 	packageStartupMessage("To use fasterRaster functions, please connect to GRASS using faster().")
 	packageStartupMessage("Functions will be executed assuming you are using GRASS ", .grassVerDefault(), ".")
-	packageStartupMessage("Use setFastOptions() to set the version of GRASS you are using.")
+	packageStartupMessage("Use setFastOptions() to set the GRASS version.")
 
 	
 }
