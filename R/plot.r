@@ -38,7 +38,7 @@ methods::setMethod(
 		cols <- ncol(x)
 		
 		scale <- ceiling(nc / (2 * maxcell))
-		x <- aggregate(x, fact=scale)
+		x <- aggregate(x, fact = scale)
 		
 	}
 	
