@@ -18,40 +18,39 @@ GFullMetaTable <- setClass(
 	contains = "GMetaTable",
 	slots = list(
 		dbLayer = "character",
-		dbTable = "character",
 		fields = "character",
 		classes = "character"
 	)
 )
 
+#' @noRd
 setValidity("GFullMetaTable",
 	function(object) {
 		if (length(object@fields) != length(object@classes)) {
 			"Number of @fields must be the same as the number of @classes"
 		} else if (is.na(object@dbLayer)) {
 			"@dbLayer cannot be NA."
-		} else if (is.na(object@dbTable)) {
-			"@dbTable cannot be NA."
 		} else {
 			TRUE
 		}
 	} # EOF
 )
 
-
-#' @aliases GSession
+#' @aliases GVector
 #' @rdname GSession
 #' @exportClass GVector
 GVector <- methods::setClass(
 	"GVector",
 	contains = "GSpatial",
 	slots = list(
+		projection = "character",
 		nGeometries = "integer",
 		geometry = "character",
 		nFields = "integer",
 		db = "GMetaTable"
 	),
 	prototype = prototype(
+		projection = NA_character_,
 		geometry = NA_character_,
 		nGeometries = NA_integer_,
 		nFields = NA_integer_,
@@ -96,7 +95,6 @@ setValidity("GVector",
 	} else {
 		GFullMetaTable(
 			dbLayer = info[["dbLayer"]],
-			dbTable = info[["dbTable"]],
 			fields = info[["fields"]],
 			classes = info[["classes"]]
 		)
@@ -107,6 +105,7 @@ setValidity("GVector",
 		location = getFastOptions("location"),
 		mapset = getFastOptions("mapset"),
 		crs = crs(),
+  		projection = info[["projection"]][1L],
 		topology = info[["topology"]][1L],
 		gnames = gn,
 		geometry = info[["geometry"]][1L],
