@@ -60,8 +60,9 @@ plot(c(naDistRast, nonNaDistRast, distFocal3Rast, distTo3Rast))
 ### case 2: GRaster and GVector
 distToVect <- distance(elev, rivers)
 
+distToVect <- rast(distToVect)
 plot(distToVect)
-plot(st_geometry(madRivers), add=TRUE)
+plot(vect(madRivers), add = TRUE)
 
 ### case 3: GVector vs GVector
 plot(st_geometry(madRivers))

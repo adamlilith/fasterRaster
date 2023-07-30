@@ -27,6 +27,7 @@ A \link[=tutorial_getting_started]{quick-start tutorial}\cr
 \code{\link[=global]{global()}}: Summary statistics\cr
 \code{\link[=is.2d]{is.2d()}} and \code{\link[=is.3d]{is.3d()}}: Is an object 2- or 3-dimensional?\cr
 \code{\link[=is.cell]{is.cell()}}, \code{\link[=is.fcell]{is.fcell()}}, \code{\link[=is.dcell]{is.dcell()}}: Raster data type (integer/float/double)\cr
+\link{is.lonlat}: Is an object projected (e.g., in WGS84)?\cr
 \code{\link[=location]{location()}}: \strong{GRASS} "location" of an object or the active session\cr
 \code{\link[=mapset]{mapset()}}: \strong{GRASS} "mapset" of an object or the active session\cr
 \code{\link[=minmax]{minmax()}}: Minimum and maximum values across all non-\code{NA} cells\cr
@@ -112,6 +113,7 @@ Other functions:\cr
 \code{\link[=ext]{ext()}}, \code{\link[=north]{north()}}, \code{\link[=south]{south()}}, \code{\link[=east]{east()}}, \code{\link[=west]{west()}}, \code{\link[=top]{top()}}, and \code{\link[=bottom]{bottom()}}: Spatial extent\cr
 \code{\link[=geomtype]{geomtype()}}: Type of vector (points, lines, polygons)\cr
 \code{\link[=is.2d]{is.2d()}} and \code{\link[=is.3d]{is.3d()}}: Is an object 2- or 3-dimensional?\cr
+\link{is.lonlat}: Is an object projected (e.g., in WGS84)?\cr
 \code{\link[=is.points]{is.points()}}, \code{\link[=is.lines]{is.lines()}}, \code{\link[=is.polygons]{is.polygons()}}: Does a \code{GVector} represent points, lines, or polygons?\cr
 \code{\link[=location]{location()}}: \strong{GRASS} "location" of an object or the active session\cr
 \code{\link[=mapset]{mapset()}}: \strong{GRASS} "mapset" of an object or the active session\cr

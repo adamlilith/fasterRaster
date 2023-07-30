@@ -51,13 +51,13 @@
 
 \item{unit}{Character: Units of the output. Any of:
 \itemize{
-\item \code{"meters"} (or \code{"m"})
-\item \code{"kilometers"} (or \code{"km"})
+\item \code{"meters"}, "metres", or \code{"m"}
+\item \code{"kilometers"} or \code{"km"}
 \item \code{"miles"}
-\item \code{"nautical miles"} (or \code{"nm"})
-\item \code{"yards"} (or \code{"yds"})
-\item \code{"survey feet"} (or \code{"sft"}) -- US survey, obsolete after January 1, 2023, 1 foot approximately equal to 0.304800000001219 meters
-\item \code{"feet"} (or \code{"ft"}) -- international, 1 foot exactly equal to 0.3048 meters
+\item \code{"nautical miles"} or \code{"nm"}
+\item \code{"yards"} or \code{"yds"}
+\item \code{"survey feet"} or \code{"sft"} -- US survey, obsolete after January 1, 2023, 1 foot approximately equal to 0.304800000001219 meters
+\item \code{"feet"} or \code{"ft"} -- international, 1 foot exactly equal to 0.3048 meters
 Partial matching is used.
 }}
 
@@ -149,8 +149,9 @@ plot(c(naDistRast, nonNaDistRast, distFocal3Rast, distTo3Rast))
 ### case 2: GRaster and GVector
 distToVect <- distance(elev, rivers)
 
+distToVect <- rast(distToVect)
 plot(distToVect)
-plot(st_geometry(madRivers), add=TRUE)
+plot(vect(madRivers), add = TRUE)
 
 ### case 3: GVector vs GVector
 plot(st_geometry(madRivers))
