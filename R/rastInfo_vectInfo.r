@@ -20,7 +20,7 @@
 		for (i in seq_along(gn)) {
 		
 			this <- .rastInfo(gn[i])
-			out <- if (exists("out", inherits=FALSE)) {
+			out <- if (i == 1L) {
 				appendLists(out, this)
 			} else {
 				this
@@ -29,7 +29,7 @@
 		}
 	
 	} else {
-	### a single gnames
+	### a single gname
 	##################
 
 		rasters <- .ls(c("rasters", "rasters3d"))
@@ -39,7 +39,18 @@
 		if (type == "raster") {
 
 			suppressMessages(
-				info <- rgrass::execGRASS(
+				niceinfo <- rgrass::execGRASS(
+					"r.info",
+					flags = c("quiet"),
+					map = gn,
+					intern = TRUE,
+					Sys_show.output.on.console = FALSE,
+					echoCmd = FALSE
+				)
+			)
+
+			suppressMessages(
+				extentinfo <- rgrass::execGRASS(
 					"r.info",
 					flags = c("g", "quiet"),
 					map = gn,
@@ -50,7 +61,7 @@
 			)
 
 			suppressMessages(
-				range <- rgrass::execGRASS(
+				rangeinfo <- rgrass::execGRASS(
 					"r.info",
 					flags = c("r", "quiet"),
 					map = gn,
@@ -69,7 +80,18 @@
 		} else if (type == "raster3d") {
 
 			suppressMessages(
-				info <- rgrass::execGRASS(
+				niceinfo <- rgrass::execGRASS(
+					"r3.info",
+					flags = c("quiet"),
+					map = gn,
+					intern = TRUE,
+					Sys_show.output.on.console = FALSE,
+					echoCmd = FALSE
+				)
+			)
+
+			suppressMessages(
+				extentinfo <- rgrass::execGRASS(
 					"r3.info",
 					flags = c("g", "quiet"),
 					map = gn,
@@ -80,7 +102,7 @@
 			)
 		
 			suppressMessages(
-				range <- rgrass::execGRASS(
+				rangeinfo <- rgrass::execGRASS(
 					"r3.info",
 					flags = c("r", "quiet"),
 					map = gn,
@@ -92,8 +114,8 @@
 
 			topology <- "3D"
 		
-			ztop <- info[grepl(info, pattern="top=")]
-			zbottom <- info[grepl(info, pattern="bottom=")]
+			ztop <- extentinfo[grepl(extentinfo, pattern = "top=")]
+   			zbottom <- extentinfo[grepl(extentinfo, pattern = "bottom=")]
 			
 			ztop <- sub(ztop, pattern="top=", replacement="")
 			zbottom <- sub(zbottom, pattern="bottom=", replacement="")
@@ -102,12 +124,19 @@
 			zbottom <- as.numeric(zbottom)
 			
 		}
+
+		# projection
+		index <- grepl(niceinfo, pattern = " \\|        Projection: ")
+		projection <- niceinfo[index]
+		projection <- sub(projection, pattern = " \\|        Projection: ", replacement = "")
+		projection <- substr(projection, 1L, nchar(projection) - 1L)
+		projection <- trimws(projection)
 		
 		# extent
-		west <- info[grepl(info, pattern="west=")]
-		east <- info[grepl(info, pattern="east=")]
-		south <- info[grepl(info, pattern="south=")]
-		north <- info[grepl(info, pattern="north=")]
+		west <- extentinfo[grepl(extentinfo, pattern = "west=")]
+		east <- extentinfo[grepl(extentinfo, pattern = "east=")]
+		south <- extentinfo[grepl(extentinfo, pattern = "south=")]
+		north <- extentinfo[grepl(extentinfo, pattern = "north=")]
 
 		west <- sub(west, pattern="west=", replacement="")
 		east <- sub(east, pattern="east=", replacement="")
@@ -120,9 +149,9 @@
 		north <- as.numeric(north)
 
 		# dimensions
-		rows <- info[grepl(info, pattern="rows=")]
-		cols <- info[grepl(info, pattern="cols=")]
-		depths <- info[grepl(info, pattern="depths=")]
+		rows <- extentinfo[grepl(extentinfo, pattern="rows=")]
+		cols <- extentinfo[grepl(extentinfo, pattern="cols=")]
+		depths <- extentinfo[grepl(extentinfo, pattern="depths=")]
 
 		rows <- sub(rows, pattern="rows=", replacement="")
 		cols <- sub(cols, pattern="cols=", replacement="")
@@ -134,9 +163,9 @@
 		if (length(depths) == 0L) depths <- NA_integer_
 		
 		# resolution
-		ewres <- info[grepl(info, pattern="ewres=")]
-		nsres <- info[grepl(info, pattern="nsres=")]
-		tbres <- info[grepl(info, pattern="tbres=")]
+		ewres <- extentinfo[grepl(extentinfo, pattern="ewres=")]
+		nsres <- extentinfo[grepl(extentinfo, pattern="nsres=")]
+		tbres <- extentinfo[grepl(extentinfo, pattern="tbres=")]
 
 		ewres <- sub(ewres, pattern="ewres=", replacement="")
 		nsres <- sub(nsres, pattern="nsres=", replacement="")
@@ -148,7 +177,7 @@
 		if (length(tbres) == 0L) tbres <- NA_real_
 
 		# data type
-		grassDataType <- info[grepl(info, pattern="datatype=")]
+		grassDataType <- extentinfo[grepl(extentinfo, pattern="datatype=")]
 		grassDataType <- sub(grassDataType, pattern="datatype=", replacement="")
 		grassDataType <- gsub(grassDataType, pattern="\"", replacement="")
 		
@@ -164,7 +193,7 @@
 		}
 
 		# number of categories
-		nCats <- info[grepl(info, pattern="ncats=")]
+		nCats <- extentinfo[grepl(extentinfo, pattern="ncats=")]
 		nCats <- sub(nCats, pattern="ncats=", replacement="")
 		nCats <- as.integer(nCats)
 		# if (length(nCats) == 0L) nCats <- 0L
@@ -174,8 +203,8 @@
 		# # range of values
 		# if (nCats == 0) {
 
-			minVal <- range[grepl(range, pattern="min=")]
-			maxVal <- range[grepl(range, pattern="max=")]
+			minVal <- rangeinfo[grepl(rangeinfo, pattern="min=")]
+			maxVal <- rangeinfo[grepl(rangeinfo, pattern="max=")]
 			
 			minVal <- sub(minVal, pattern="min=", replacement="")
 			maxVal <- sub(maxVal, pattern="max=", replacement="")
@@ -192,6 +221,7 @@
 			gnames = gn,
 			type = type,
 			topology = topology,
+			projection = projection,
 			
 			west = west,
 			east = east,
@@ -233,9 +263,9 @@
 		x
 	}
 
-	### extent
+	### extent/topology
 	suppressMessages(
-		info1 <- rgrass::execGRASS(
+		extentinfo <- rgrass::execGRASS(
 			"v.info",
 			flags = c("g", "quiet"),
 			map = gn,
@@ -245,9 +275,9 @@
 		)
 	)
 	
-	### geometry and topology
+	### geometry
 	suppressMessages(
-		info2 <- rgrass::execGRASS(
+		geominfo <- rgrass::execGRASS(
 			"v.info",
 			flags = c("t", "quiet"),
 			map = gn,
@@ -256,13 +286,51 @@
 			echoCmd = FALSE
 		)
 	)
-	
+	# extent
+	west <- extentinfo[grepl(extentinfo, pattern = "west=")]
+	east <- extentinfo[grepl(extentinfo, pattern = "east=")]
+	south <- extentinfo[grepl(extentinfo, pattern = "south=")]
+	north <- extentinfo[grepl(extentinfo, pattern = "north=")]
+
+	west <- sub(west, pattern = "west=", replacement = "")
+	east <- sub(east, pattern = "east=", replacement = "")
+	south <- sub(south, pattern = "south=", replacement = "")
+	north <- sub(north, pattern = "north=", replacement = "")
+
+	west <- as.numeric(west)
+	east <- as.numeric(east)
+	south <- as.numeric(south)
+	north <- as.numeric(north)
+
+	# topology (2/3D)
+	topology <- geominfo[grepl(geominfo, pattern = "map3d=")]
+	topology <- sub(topology, pattern = "map3d=", replacement = "")
+	topology <- if (topology == "0") {
+		"2D"
+	} else if (topology == "1") {
+		"3D"
+	}
+
+	# top/bottom
+	if (topology == "2D") {
+		ztop <- zbottom <- NA_real_
+	} else {
+		zbottom <- extentinfo[grepl(extentinfo, pattern = "bottom=")]
+		ztop <- extentinfo[grepl(extentinfo, pattern = "top=")]
+
+		zbottom <- sub(zbottom, pattern = "bottom=", replacement = "")
+		ztop <- sub(ztop, pattern = "top=", replacement = "")
+
+		zbottom <- as.numeric(zbottom)
+		ztop <- as.numeric(ztop)
+	}
+ 
 	# geometry (points/lines/polygons)
-	points <- info2[grepl(info2, pattern="points=")]
-	lines <- info2[grepl(info2, pattern="lines=")]
-	boundaries <- info2[grepl(info2, pattern="boundaries=")]
-	centroids <- info2[grepl(info2, pattern="centroids=")]
-	areas <- info2[grepl(info2, pattern="areas=")]
+	points <- geominfo[grepl(geominfo, pattern="points=")]
+	lines <- geominfo[grepl(geominfo, pattern="lines=")]
+	boundaries <- geominfo[grepl(geominfo, pattern="boundaries=")]
+	centroids <- geominfo[grepl(geominfo, pattern="centroids=")]
+	areas <- geominfo[grepl(geominfo, pattern="areas=")]
 
 	points <- sub(points, pattern="points=", replacement="")
 	lines <- sub(lines, pattern="lines=", replacement="")
@@ -292,46 +360,9 @@
 	
 	nGeometries <- as.integer(nGeometries)
 
-	# extent
-	west <- info1[grepl(info1, pattern="west=")]
-	east <- info1[grepl(info1, pattern="east=")]
-	south <- info1[grepl(info1, pattern="south=")]
-	north <- info1[grepl(info1, pattern="north=")]
-
-	west <- sub(west, pattern="west=", replacement="")
-	east <- sub(east, pattern="east=", replacement="")
-	south <- sub(south, pattern="south=", replacement="")
-	north <- sub(north, pattern="north=", replacement="")
-	
-	west <- as.numeric(west)
-	east <- as.numeric(east)
-	south <- as.numeric(south)
-	north <- as.numeric(north)
-
-	# topology (2/3D)
-	topology <- info2[grepl(info2, pattern="map3d=")]
-	topology <- sub(topology, pattern="map3d=", replacement="")
-	topology <- if (topology == "0") { "2D"} else if (topology == "1") { "3D" }
-
-	# top/bottom
-	if (topology == "2D") {
-		ztop <- zbottom <- NA_real_
-	} else {
-		
-		zbottom <- info1[grepl(info1, pattern="bottom=")]
-		ztop <- info1[grepl(info1, pattern="top=")]
-		
-		zbottom <- sub(zbottom, pattern="bottom=", replacement="")
-		ztop <- sub(ztop, pattern="top=", replacement="")
-
-		zbottom <- as.numeric(zbottom)
-		ztop <- as.numeric(ztop)
-		
-	}
-
 	### fields
 	suppressWarnings(
-		info3 <- rgrass::execGRASS(
+		fieldinfo <- rgrass::execGRASS(
 			"v.info",
 			flags = c("c", "quiet"),
 			map = gn,
@@ -341,9 +372,25 @@
 		)
 	)
 	
-	fieldData <- rgrass::execGRASS("v.db.connect", map=gn, flags=c("g", "quiet"), intern=TRUE)
+	fieldData <- rgrass::execGRASS(
+		"v.db.connect",
+		map = gn,
+		flags = c("g", "quiet"),
+		intern = TRUE
+	)
 
-	hasNoFields <- any(grepl(fieldData, pattern="is not connected to a database")) | any(grepl(info3, pattern="ERROR: Database connection not defined for layer"))
+	suppressMessages(
+		attribMetaInfo <- rgrass::execGRASS(
+			"v.info",
+			flags = "e",
+			map = gn,
+			intern = TRUE,
+			Sys_show.output.on.console = FALSE,
+			echoCmd = FALSE
+		)
+	)
+
+	hasNoFields <- any(grepl(fieldData, pattern="is not connected to a database")) | any(grepl(fieldinfo, pattern="ERROR: Database connection not defined for layer"))
 	
 	if (hasNoFields) {
 
@@ -355,37 +402,15 @@
 	# vector has a data frame
 	} else {
 
-		suppressWarnings(
-			info3 <- rgrass::execGRASS(
-				"v.info",
-				flags = c("c", "quiet"),
-				map = gn,
-				intern = TRUE,
-				Sys_show.output.on.console = FALSE,
-				echoCmd = FALSE
-			)
-		)
-		
-		suppressMessages(
-			info4 <- rgrass::execGRASS(
-				"v.info",
-				flags = "e",
-				map = gn,
-				intern = TRUE,
-				Sys_show.output.on.console = FALSE,
-				echoCmd = FALSE
-			)
-		)
-		
 		# fields and types
-		info3 <- info3[!grepl(info3, pattern ="Displaying column types/names for database connection of layer")]
+		fieldinfo <- fieldinfo[!grepl(fieldinfo, pattern ="Displaying column types/names for database connection of layer")]
 		
-		info3 <- strsplit(info3, "\\|")
-		fields <- classes <- rep(NA, length(info3))
+		fieldinfo <- strsplit(fieldinfo, "\\|")
+		fields <- classes <- rep(NA, length(fieldinfo))
 		
-		for (i in seq_along(info3)) {
+		for (i in seq_along(fieldinfo)) {
 		
-			type <- info3[[i]][1L]
+			type <- fieldinfo[[i]][1L]
 			type <- if (type == "CHARACTER") {
 				"character"
 			} else if (type == "INTEGER") {
@@ -397,7 +422,7 @@
 			}
 		
 			classes[i] <- type
-			fields[i] <- info3[[i]][2L]
+			fields[i] <- fieldinfo[[i]][2L]
 		}
 
 		cat <- which(fields == "cat")
@@ -407,32 +432,22 @@
 		nFields <- length(fields)
 		nFields <- as.integer(nFields)
 
-		dbLayer <- info4[grepl(info4, pattern = "attribute_layer_name")]
+  		dbLayer <- attribMetaInfo[grepl(attribMetaInfo, pattern = "attribute_layer_name")]
 		dbLayer <- if (length(dbLayer) == 0) {
 			NA_character_
 		} else {
 			gsub(dbLayer, pattern="attribute_layer_name=", replacement="")
 		}
 
-		### database table name
-		info <- rgrass::execGRASS(
-			"v.db.connect",
-			map = gn,
-			flags = c("p", "quiet"),
-			intern = TRUE
-		)
-
-		start <- regexpr(info[2L], pattern = "> table <")
-		start <- start + 9L
-		stop <- regexpr(info[2L], pattern = "> in database <")
-		stop <- stop - 1L
-		dbTable <- substr(info[2L], start=start, stop=stop)
-
 	}
+
+  	projection <- attribMetaInfo[grepl(attribMetaInfo, pattern = "projection=")]
+ 	projection <- sub(projection, pattern = "projection=", replacement = "")
 		
 	out <- list(
 		gnames = gn,
 		type = "vector",
+		projection = projection,
 		topology = topology,
 		geometry = geometry,
 		
@@ -448,7 +463,6 @@
 		
 		nFields = nFields,
 		dbLayer = dbLayer,
-		dbTable = dbTable,
 		fields = fields,
 		classes = classes
 	)
