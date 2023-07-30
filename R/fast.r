@@ -159,11 +159,11 @@ methods::setMethod(
 		
 		} # projected raster from disk
 
-		do.call(rgrass::execGRASS, args=args)
+		do.call(rgrass::execGRASS, args = args)
 		if (nLayers == 1L) {
-			out <- .makeGRaster(gn, names=xNames)
+			out <- .makeGRaster(gn, names = xNames)
 		} else {
-			out <- .makeGRaster(paste0(gn, ".", 1L:nLayers), names=xNames)
+			out <- .makeGRaster(paste0(gn, ".", 1L:nLayers), names = xNames)
 		}
 
 	### vector from disk (and project on the fly if needed)
