@@ -15,6 +15,7 @@
 #' @slot gnames		Character (`GRaster`s and `GVector`s): Name of the object in **GRASS**. These are typically made on-the-fly and provide the pointer to the object from **R** to **GRASS**. Changing them manually will break the connection. Can be obtained using `.gnames()`.
 #' @slot names		Character  (`GRaster`s only): Name of a raster or each raster layer in. Can be obtained using [names()].
 #' @slot crs		Character (all classes): Coordinate reference systems string (preferably in WKT2 format). Can be obtained using [crs()] or [st_crs()].
+#' @slot projection Character: The **GRASS** "projection" for a `GRaster` or `GVector`. Can be obtained using `.projection()`.
 #' @slot dimensions	Dimensions:
 #' * `GRegion`s and `GRaster`s: Vector of three integers indicating number of rows, columns, and depths (for 3D objects). Can be obtained using [dim()], plus [nrow()], [ncol()], and [ndepth()].
 #' * `GVectors`s: Vector of two integers indicating number of geometries and number of fields. Can be obtained using [dim()], plus [nrow()] and [ncol()].
@@ -27,7 +28,7 @@
 #' @slot resolution	Vector of two numeric values (`GRegion`s, including `GRaster`s): Size of a raster cell in the east-west direction and in the north-south direction. Can be obtained using [res()] and [res3d()].
 #' @slot nCats Integer (`GRaster`s): Number of categories. Must be >0. Can be obtained using [ncat()].
 #' @slot minVal,maxVal Numeric (`GRaster`s): Minimum and maximum value across all cells. Can be obtained using [minmax()].
-#' @slot dbLayer,dbName Character ("GVector"s): Names of the layer and table associated with the `GVector` in the **GRASS** SQLite database. Can be obtained using `.dbName()` and `.dblayer()`.
+#' @slot dbLayer Character (`GVector`s): Names of the attribute table "layer" associated with the `GVector` in the **GRASS** SQLite database. Can be obtained using and `.dbLayer()`.
 #' @slot fields Names of fields (`GVector`s). Can be obtained using [names()].
 #' @slot numFields Number of fields (`GVector`s). Can be obtained using [ncol()].
 #' @slot fieldClasses Classes of fields (`GVector`s). Can be obtained using [datatype()].
