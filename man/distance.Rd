@@ -15,7 +15,7 @@
   target = NA,
   fillNA = TRUE,
   unit = "meters",
-  method = "Euclidean",
+  method = ifelse(is.lonlat(x), "geodesic", "Euclidean"),
   minDist = NULL,
   maxDist = NULL
 )
@@ -26,7 +26,7 @@
   fillNA = TRUE,
   dense = TRUE,
   unit = "meters",
-  method = "Euclidean",
+  method = ifelse(is.lonlat(x), "geodesic", "Euclidean"),
   minDist = NULL,
   maxDist = NULL
 )
@@ -40,7 +40,7 @@
 
 \item{y}{Either missing, or a \code{GVector}.}
 
-\item{target}{Numeric: Only applicable for case 1, when \code{x} is a \code{GRaster} and \code{y} is missing.  If this is \code{NA} (default), then cells with \code{NA}s have their values replaced with the distance to the nearest non-\code{NA} cell. If this is another value, then cells with these values have their values replaced with the distance to any other cell (\code{NA} and non-\code{NA}, except for cells with this value).}
+\item{target}{Numeric: Only applicable for case 1, when \code{x} is a \code{GRaster} and \code{y} is missing.  If this is \code{NA} (default), then cells with \code{NA}s have their values replaced with the distance to the nearest non-\code{NA} cell. If this is another value, then cells with these values have their values replaced with the distance to any other cell (meaning, both \code{NA} and non-\code{NA}, except for cells with this value).}
 
 \item{fillNA}{Logical: Determines which raster cells to fill with distances.
 \itemize{
@@ -49,12 +49,22 @@
 \item Case 3, when \code{x} is a \code{GVector} and \code{y} is a \code{GVector}: This argument is not used in this case.
 }}
 
-\item{unit}{Character: Units of the output. Either of \code{"meters"}, \verb{"kilometers" (or "}km"\verb{), or }"miles"`. Partial matching is used.}
+\item{unit}{Character: Units of the output. Any of:
+\itemize{
+\item \code{"meters"} (or \code{"m"})
+\item \code{"kilometers"} (or \code{"km"})
+\item \code{"miles"}
+\item \code{"nautical miles"} (or \code{"nm"})
+\item \code{"yards"} (or \code{"yds"})
+\item \code{"survey feet"} (or \code{"sft"}) -- US survey, obsolete after January 1, 2023, 1 foot approximately equal to 0.304800000001219 meters
+\item \code{"feet"} (or \code{"ft"}) -- international, 1 foot exactly equal to 0.3048 meters
+Partial matching is used.
+}}
 
 \item{method}{Character: The type of distance to calculate. Partial matching is used and capitalization is ignored. Possible values include:
 \itemize{
-\item \code{Euclidean} (default for projected objects): Euclidean distance.
-\item \code{geodesic} (default for unprojected objects): Geographic distance. If \code{x} is unprojected (e.g., WGS84), then the \code{method} must be \code{"geodesic"}.
+\item \code{Euclidean} (default for projected rasters): Euclidean distance.
+\item \code{geodesic} (default for unprojected rasters): Geographic distance. If \code{x} is unprojected (e.g., WGS84 or NAD83), then the \code{method} must be \code{"geodesic"}.
 \item \code{squared}: Squared Euclidean distance (faster than just Euclidean distance but same rank--good for cases where only order matters).
 \item \code{maximum}: Maximum Euclidean distance.
 \item \code{Manhattan}: Manhattan distance (i.e., "taxicab" distance, distance along cells going only north-south and east-west and never along a diagonal).
@@ -158,5 +168,5 @@ removeSession("examples")
 }
 }
 \seealso{
-\code{\link[terra:distance]{terra::distance()}}; \code{\link[sf:geos_measures]{sf::st_distance()}}, modules \code{r.grow.distance} and \code{v.distance} in \strong{GRASS}
+\code{\link[terra:distance]{terra::distance()}}; \code{\link[sf:geos_measures]{sf::st_distance()}}, \strong{GRASS} modules \code{r.grow.distance} and \code{v.distance}
 }

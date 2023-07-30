@@ -70,7 +70,7 @@ A numeric value or vector.
 \description{
 Number of rows, columns, depths, and cells of a \code{GRegion}:
 \itemize{
-\item \code{dim()}: Rows, columns, depths, and layers of a
+\item \code{dim()}: Rows, columns, depths, and layers
 \item \code{nrow()}: Rows
 \item \code{ncol()}: Columns
 \item \code{ndepth()}: Depths (for 3-dimensional rasters only)
@@ -78,7 +78,7 @@ Number of rows, columns, depths, and cells of a \code{GRegion}:
 \item \code{ncell3d()}: Number of cells (3 dimensions)
 }
 
-For \code{GRaster}s: As above, plus number of cells and layers:
+For \code{GRaster}s: As above, plus number of layers:
 \itemize{
 \item \code{nlyr()}: Layers (number of "stacked" rasters--different from depths of a raster).
 }

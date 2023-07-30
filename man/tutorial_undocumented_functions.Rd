@@ -4,14 +4,13 @@
 \alias{tutorial_undocumented_functions}
 \title{Undocumented functions}
 \description{
-\strong{fasterRaster} interfaces with \strong{GRASS GIS} to process rasters and spatial vector data. It is intended as an add-on to the \strong{terra} and \strong{sf} packages, and relies heavily on them. For most rasters and vectors that are small or medium-sized in memory/disk, those packages will almost always be faster. They may also be faster for very large objects.  But when they aren't, \strong{fasterRaster} can step in.
-\subsection{Installing \strong{fasterRaster} has a number of undocumented functions. These are used internally, but may be of utility to power-users, so are documented here.}{
+\strong{fasterRaster} has a number of undocumented functions. These are used internally, but may be of utility to power-users, so are documented here.
 \subsection{\code{.copyGSpatial()}}{
 
-Creates in \strong{GRASS} a copy of a \code{GSpatial} object (a \code{GRaster} or a \code{GVector}).
+Creates in \strong{GRASS} a copy of a \code{GSpatial} object (typically, a \code{GRaster} or a \code{GVector}).
 }
 
-\subsection{\code{dbName()} and \code{dbLayer()}}{
+\subsection{\code{.dbName()} and \code{.dbLayer()}}{
 
 \strong{GRASS} names of the data table and data layer associated with a vector.
 }
@@ -31,6 +30,16 @@ Lists the \code{gnames} of all objects in the current \strong{GRASS} session.
 Makes one or more statistically unique strings that can be used as file names to represent rasters or vectors in \strong{GRASS}.
 }
 
+\subsection{\code{.makeGRaster()} and \code{makeGVector()}}{
+
+Make \code{GRaster}s or \code{GVector}s from a vector of \code{gname}(s), which point to files in \strong{GRASS}.
+}
+
+\subsection{\code{.projection()}}{
+
+Get the value of the \verb{@projection} slot in a \code{GRaster} or \code{GVector}.
+}
+
 \subsection{\code{.refresh()}}{
 
 Refresh metadata held within a \code{GRaster} or `GVector`` by querying the object in \strong{GRASS}.
@@ -46,16 +55,9 @@ Rename a \strong{GRASS} raster or vector.
 Delete all \strong{GRASS} files representing rasters or vectors.
 }
 
-\subsection{\code{.rastInfo()}}{
+\subsection{\code{.rastInfo()} and \code{.vectInfo()}}{
 
-Metadata for a \strong{GRASS} raster.
-}
-
-\subsection{\code{.vectInfo()}}{
-
-Metadata for a \strong{GRASS} vector.
-}
-
+Metadata for a \strong{GRASS} raster or vector.
 }
 }
 \keyword{tutorial}

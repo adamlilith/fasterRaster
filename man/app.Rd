@@ -3,7 +3,7 @@
 \name{app,GRaster-method}
 \alias{app,GRaster-method}
 \alias{app}
-\alias{appFuns,logical-method}
+\alias{appFuns,missing-method}
 \alias{appFuns}
 \alias{appCheck,GRaster,character-method}
 \alias{appCheck}
@@ -11,7 +11,7 @@
 \usage{
 \S4method{app}{GRaster}(x, fun, ensure = "auto")
 
-\S4method{appFuns}{logical}(show = TRUE)
+\S4method{appFuns}{missing}(x)
 
 \S4method{appCheck}{GRaster,character}(x, fun, msgOnGood = TRUE, failOnBad = TRUE)
 }
@@ -34,15 +34,15 @@ The help page for \code{r.mapcalc} on the \strong{GRASS} website provides more d
 \item \code{"auto"} (default): Ensure that rasters are represented by their native \code{\link[=datatype]{datatype()}} (i.e., "CELL" rasters as integers, "FCELL" rasters as floating-point, and "DCELL" as double-floating point).
 }}
 
+\item{msgOnGood}{Logical (function \code{appCheck()}): If \code{TRUE} (default), display a message if no overt problems with the raster names and formula are detected.}
+
+\item{failOnBad}{Logical (function \code{appCheck()}): If \code{TRUE} (default), fail if overt problems with raster names and the formula are detected.}
+
 \item{show}{Logical (function \code{appFuns()}):
 \itemize{
 \item \code{FALSE} (default): Return a \code{data.frame} or `data.table`` with definitions of functions.
 \item \code{TRUE}: Open a searchable, sortable \strong{shiny} table in a browser.
 }}
-
-\item{msgOnGood}{Logical (function \code{appCheck()}): If \code{TRUE} (default), display a message if no overt problems with the raster names and formula are detected.}
-
-\item{failOnBad}{Logical (function \code{appCheck()}): If \code{TRUE} (default), fail if overt problems with raster names and the formula are detected.}
 }
 \value{
 A \code{GRaster}.

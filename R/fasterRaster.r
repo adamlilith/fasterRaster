@@ -22,6 +22,7 @@
 #' [global()]: Summary statistics\cr
 #' [is.2d()] and [is.3d()]: Is an object 2- or 3-dimensional?\cr
 #' [is.cell()], [is.fcell()], [is.dcell()]: Raster data type (integer/float/double)\cr
+#' [is.lonlat]: Is an object projected (e.g., in WGS84)?\cr
 #' [location()]: **GRASS** "location" of an object or the active session\cr
 #' [mapset()]: **GRASS** "mapset" of an object or the active session\cr
 #' [minmax()]: Minimum and maximum values across all non-`NA` cells\cr
@@ -99,6 +100,7 @@
 #' [ext()], [north()], [south()], [east()], [west()], [top()], and [bottom()]: Spatial extent\cr
 #' [geomtype()]: Type of vector (points, lines, polygons)\cr
 #' [is.2d()] and [is.3d()]: Is an object 2- or 3-dimensional?\cr
+#' [is.lonlat]: Is an object projected (e.g., in WGS84)?\cr
 #' [is.points()], [is.lines()], [is.polygons()]: Does a `GVector` represent points, lines, or polygons?\cr
 #' [location()]: **GRASS** "location" of an object or the active session\cr
 #' [mapset()]: **GRASS** "mapset" of an object or the active session\cr

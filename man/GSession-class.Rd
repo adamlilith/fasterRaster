@@ -52,6 +52,8 @@ The \code{G} suite of S4 classes contain pointers to \strong{GRASS} objects or m
 
 \item{\code{crs}}{Character (all classes): Coordinate reference systems string (preferably in WKT2 format). Can be obtained using \code{\link[=crs]{crs()}} or \code{\link[=st_crs]{st_crs()}}.}
 
+\item{\code{projection}}{Character: The \strong{GRASS} "projection" for a \code{GRaster} or \code{GVector}. Can be obtained using \code{.projection()}.}
+
 \item{\code{dimensions}}{Dimensions:
 \itemize{
 \item \code{GRegion}s and \code{GRaster}s: Vector of three integers indicating number of rows, columns, and depths (for 3D objects). Can be obtained using \code{\link[=dim]{dim()}}, plus \code{\link[=nrow]{nrow()}}, \code{\link[=ncol]{ncol()}}, and \code{\link[=ndepth]{ndepth()}}.
@@ -76,7 +78,7 @@ The \code{G} suite of S4 classes contain pointers to \strong{GRASS} objects or m
 
 \item{\code{minVal,maxVal}}{Numeric (\code{GRaster}s): Minimum and maximum value across all cells. Can be obtained using \code{\link[=minmax]{minmax()}}.}
 
-\item{\code{dbLayer,dbName}}{Character ("GVector"s): Names of the layer and table associated with the \code{GVector} in the \strong{GRASS} SQLite database. Can be obtained using \code{.dbName()} and \code{.dblayer()}.}
+\item{\code{dbLayer}}{Character (\code{GVector}s): Names of the attribute table "layer" associated with the \code{GVector} in the \strong{GRASS} SQLite database. Can be obtained using and \code{.dbLayer()}.}
 
 \item{\code{fields}}{Names of fields (\code{GVector}s). Can be obtained using \code{\link[=names]{names()}}.}
 

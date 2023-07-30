@@ -69,6 +69,7 @@ Multi-layer functions (applied across layers of a "stack" of \code{GRaster}s):
 }
 
 Other functions:\cr
+\verb{[[[]}\link{subset}: Subset a raster with multiple layers\cr
 \code{\link[=as.cell]{as.cell()}}, \code{\link[=as.fcell]{as.fcell()}}, \code{\link[=as.dcell]{as.dcell()}}: Change data type (integer/float/double)\cr
 \code{\link[=as.contour]{as.contour()}}: Contour lines from a raster\cr
 \code{\link[=as.lines]{as.lines()}}: Convert a raster to a "lines" vector\cr
@@ -81,7 +82,6 @@ Other functions:\cr
 \code{\link[=clump]{clump()}}: Group adjacent cells with similar values\cr
 \code{\link[=crop]{crop()}}: Remove parts of a raster\cr
 \code{\link[=distance]{distance()}}: Distance to non-\code{NA} cells, or vice versa\cr
-\code{\link[=expanse]{expanse()}}: Total area of non-\code{NA} cells\cr
 \code{\link[=extend]{extend()}}: Add rows and columns to a raster\cr
 \code{\link[=extract]{extract()}}: Extract values from a raster at locations in a points vector\cr
 \code{\link[=focal]{focal()}}: Calculate cell values based on values of nearby cells\cr
@@ -102,13 +102,13 @@ Other functions:\cr
 \code{\link[=terrain]{terrain()}}: Slope, aspect, curvature, and partial slopes\cr
 \code{\link[=thin]{thin()}}: Reduce linear features on a raster so linear features are 1 cell wide\cr
 \code{\link[=viewshed]{viewshed()}}: Areas visible from points on a raster\cr
-\code{[[}\link{subset}: Subset a raster with multiple layers\cr
 }
 
 \subsection{Properties of \strong{fasterRaster} vectors (\code{GVectors})}{
 
 \code{\link[=crs]{crs()}}: Coordinate reference system\cr
 \code{\link[=datatype]{datatype()}}: Data type of fields\cr
+\code{\link[=dim]{dim()}}: Number of geometries and columns\cr
 \code{\link[=ext]{ext()}}, \code{\link[=north]{north()}}, \code{\link[=south]{south()}}, \code{\link[=east]{east()}}, \code{\link[=west]{west()}}, \code{\link[=top]{top()}}, and \code{\link[=bottom]{bottom()}}: Spatial extent\cr
 \code{\link[=geomtype]{geomtype()}}: Type of vector (points, lines, polygons)\cr
 \code{\link[=is.2d]{is.2d()}} and \code{\link[=is.3d]{is.3d()}}: Is an object 2- or 3-dimensional?\cr
@@ -126,6 +126,8 @@ Other functions:\cr
 
 \subsection{Functions that operate on or create \code{GVectors}}{
 
+\verb{[[]}\link{subset}: Select geometries/rows of a vector"s data frame\cr
+\verb{[[[]}\link{subset}: Subset columns of a vector"s data frame\cr
 \code{\link[=as.data.frame]{as.data.frame()}}: Convert a vector to a \code{data.frame}\cr
 \code{\link[=as.points]{as.points()}}: Extract vertex coordinates from a "lines" or "polygons" \code{GVector}\cr
 \code{\link[=buffer]{buffer()}}: Create a polygon around/inside a vector\cr
@@ -144,8 +146,6 @@ Other functions:\cr
 \code{\link[=st_buffer]{st_buffer()}}: Create a polygon around/inside a vector\cr
 \code{\link[=st_distance]{st_distance()}}: Distance between geometries in two vectors\cr
 \code{\link[=tail]{tail()}}: Last rows of a vector"s data frame.\cr
-\code{[}\link{subset}: Select geometries/rows of a vector"s data frame\cr
-\code{[[}\link{subset}: Subset columns of a vector"s data frame\cr
 }
 
 \subsection{Converting between data types}{

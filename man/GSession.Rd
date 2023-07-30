@@ -10,7 +10,6 @@
 \alias{GFullMetaTable}
 \alias{GVector-class}
 \alias{GVector}
-\alias{GSession}
 \title{Classes for "fasterRaster" locations, rasters, and vectors}
 \description{
 Classes for "fasterRaster" locations, rasters, and vectors

@@ -60,8 +60,11 @@ app(x, fun = fun)
 # This is the same as:
 (x[[1]] / x[[2]]) + x[[3]]
 
-# A table of functions... we can see a Shiny table using appFuns(TRUE)):
-appFuns(FALSE)
+# We can view a Shiny table using appFuns()):
+appFuns()
+
+# This is the same as:
+data(appFunsTable)
 
 # Apply other functions:
 fun <- "= median(x1 / x2, x3, x1 * 2, cos(x2))"
