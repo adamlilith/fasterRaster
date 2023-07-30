@@ -1,4 +1,3 @@
-
 #' Geographic distance
 #'
 #' @description
@@ -14,20 +13,28 @@
 #'
 #' @param y Either missing, or a `GVector`.
 #'
-#' @param target Numeric: Only applicable for case 1, when `x` is a `GRaster` and `y` is missing.  If this is `NA` (default), then cells with `NA`s have their values replaced with the distance to the nearest non-`NA` cell. If this is another value, then cells with these values have their values replaced with the distance to any other cell (`NA` and non-`NA`, except for cells with this value).
+#' @param target Numeric: Only applicable for case 1, when `x` is a `GRaster` and `y` is missing.  If this is `NA` (default), then cells with `NA`s have their values replaced with the distance to the nearest non-`NA` cell. If this is another value, then cells with these values have their values replaced with the distance to any other cell (meaning, both `NA` and non-`NA`, except for cells with this value).
 #'
 #' @param fillNA Logical: Determines which raster cells to fill with distances.
 #' * Case 1, when `x` is a `GRaster` and `y` is missing: If `TRUE` (default), fill values of `NA` cells with distances to non-`NA` cells. If `FALSE`, fill non-`NA` cells width distance to `NA` cells.
 #' * Case 2, when `x` is a `GRaster` and `y` is a `GVector`: If `TRUE` (default), then the returned raster will contain the distance from the cell to the closest feature in the vector. If `FALSE`, then cells covered by the vector will have their values replaced with the distance to the nearest cell not covered, and cells that are not covered by the vector will have values of 0.
 #' * Case 3, when `x` is a `GVector` and `y` is a `GVector`: This argument is not used in this case.
 #'
-#' @param unit Character: Units of the output. Either of `"meters"`, `"kilometers" (or "`km"`), or `"miles"`. Partial matching is used.
+#' @param unit Character: Units of the output. Any of:
+#' * `"meters"`, "metres", or `"m"`
+#' * `"kilometers"` or `"km"`
+#' * `"miles"`
+#' * `"nautical miles"` or `"nm"`
+#' * `"yards"` or `"yds"`
+#' * `"survey feet"` or `"sft"` -- US survey, obsolete after January 1, 2023, 1 foot approximately equal to 0.304800000001219 meters
+#' * `"feet"` or `"ft"` -- international, 1 foot exactly equal to 0.3048 meters
+#' Partial matching is used.
 #'
 #' @param dense Logical: Only applicable for case 2, when `x` is a `GRaster` and `y` is a `GVector`. If `TRUE` (default), then the vector will be represented by "densified" lines (i.e., any cell that the line/boundary touches, not just the ones on the rendering path).
 #'
 #' @param method Character: The type of distance to calculate. Partial matching is used and capitalization is ignored. Possible values include:
-#' * `Euclidean` (default for projected objects): Euclidean distance.
-#' * `geodesic` (default for unprojected objects): Geographic distance. If `x` is unprojected (e.g., WGS84), then the `method` must be `"geodesic"`.
+#' * `Euclidean` (default for projected rasters): Euclidean distance.
+#' * `geodesic` (default for unprojected rasters): Geographic distance. If `x` is unprojected (e.g., WGS84 or NAD83), then the `method` must be `"geodesic"`.
 #' * `squared`: Squared Euclidean distance (faster than just Euclidean distance but same rank--good for cases where only order matters).
 #' * `maximum`: Maximum Euclidean distance.
 #' * `Manhattan`: Manhattan distance (i.e., "taxicab" distance, distance along cells going only north-south and east-west and never along a diagonal).
@@ -36,7 +43,7 @@
 #'
 #' @return If `x` is a `GRaster`, then the output is a `GRaster`. If `x` is a `GVector`, then the output is a numeric vector.
 #'
-#' @seealso [terra::distance()]; [sf::st_distance()], modules `r.grow.distance` and `v.distance` in **GRASS** 
+#' @seealso [terra::distance()]; [sf::st_distance()], **GRASS** modules `r.grow.distance` and `v.distance`
 #'
 #' @example man/examples/ex_distance.r
 #'
@@ -46,7 +53,7 @@
 methods::setMethod(
 	"distance",
 	signature(x = "GRaster", y = "missing"),
-	function(x, y, target = NA, fillNA = TRUE, unit = "meters", method = "Euclidean", minDist = NULL, maxDist = NULL) {
+	function(x, y, target = NA, fillNA = TRUE, unit = "meters", method = ifelse(is.lonlat(x), "geodesic", "Euclidean"), minDist = NULL, maxDist = NULL) {
 	
 	if (!is.null(minDist) && minDist < 0) stop("Argument ", sQuote("minDist"), " must be positive or NULL.")
 	if (!is.null(maxDist) && maxDist < 0) stop("Argument ", sQuote("maxDist"), " must be positive or NULL.")
@@ -54,6 +61,7 @@ methods::setMethod(
 
 	metric <- tolower(method)
 	metric <- pmatchSafe(metric, c("euclidean", "squared", "maximum", "manhattan", "geodesic"))
+	if (is.lonlat(x) & metric != "geodesic") warning("Argument ", sQuote("method"), " should be ", sQuote("geodesic"), " for rasters with longitude/latitude coordinate reference systems.")
 
 	.restore(x)
 	region(x)
@@ -63,13 +71,9 @@ methods::setMethod(
 	# create mask
 	if (!is.na(target)) {
 		
-		gn1 <- .makeGName(NULL, "raster")
-		ex <- paste0(gn1, " = if(", .gnames(x), " == ", target, ")")
-		rgrass::execGRASS("r.mapcalc", expression=ex, flags=c("quiet", "overwrite"))
-		
-		gn <- .makeGName(NULL, "raster")
-		ex <- paste0(gn, " = ", gn1, " / ", gn1)
-		rgrass::execGRASS("r.mapcalc", expression=ex, flags=c("quiet", "overwrite"))
+		gn <- .makeGName("distMask", "raster") # note: redefining "gn"
+		ex <- paste0(gn, " = if(", .gnames(x), " == ", target, ", 1, null())")
+  		rgrass::execGRASS("r.mapcalc", expression = ex, flags = c("quiet", "overwrite"))
 		
 		fillNA <- !fillNA
 		
@@ -88,12 +92,10 @@ methods::setMethod(
 	if (!is.null(minDist)) args <- c(args, minimum_distance = minDist)
 	if (!is.null(maxDist)) args <- c(args, maximum_distance = maxDist)
 	
-	input <- do.call(rgrass::execGRASS, args)
+	do.call(rgrass::execGRASS, args)
 	
 	# convert units
-	gnConvert <- .convertRastUnits(gnOut, unit)
-	if (!is.null(gnConvert)) gn <- gnConvert
-	
+	gn <- .convertRastUnits(gnOut, unit)
 	.makeGRaster(gn, "distance")
 	
 	} # EOF
@@ -105,7 +107,7 @@ methods::setMethod(
 methods::setMethod(
 	"distance",
 	signature(x = "GRaster", y = "GVector"),
-	function(x, y, fillNA = TRUE, dense = TRUE, unit = "meters", method = "Euclidean", minDist = NULL, maxDist = NULL) {
+	function(x, y, fillNA = TRUE, dense = TRUE, unit = "meters", method = ifelse(is.lonlat(x), "geodesic", "Euclidean"), minDist = NULL, maxDist = NULL) {
 	
 	if (!is.null(minDist) && minDist < 0) stop("Argument ", sQuote("minDist"), " must be positive or NULL.")
 	if (!is.null(maxDist) && maxDist < 0) stop("Argument ", sQuote("maxDist"), " must be positive or NULL.")
@@ -113,52 +115,41 @@ methods::setMethod(
 
 	metric <- tolower(method)
 	metric <- pmatchSafe(metric, c("euclidean", "squared", "maximum", "manhattan", "geodesic"))
+	if (is.lonlat(x) & metric != "geodesic") warning("Argument ", sQuote("method"), " should be ", sQuote("geodesic"), " for rasters with longitude/latitude coordinate reference systems.")
 
 	compareGeom(x, y)
 	.restore(x)
 	
-	gt <- geomtype(y)
-    type <- if (gt == "points") {
-        "point"
-    } else if (gt == "lines") {
-        "line"
-    } else if (gt == "polygons") {
-        "boundary"
-	} else {
-        stop("Unknown vector data type.")
-	}
+ 	gtype <- geomtype(y, grass = TRUE)
 
-	gnRasterized <- .makeGName(NULL, "raster")
+	gnRasterized <- .makeGName("rasterized", "raster")
 	args <- list(
 		cmd = "v.to.rast",
 		input = .gnames(y),
 		output = gnRasterized,
-		use="val",
+		use = "val",
 		value = 1,
-		type = type,
+		type = gtype,
 		flags = c("quiet", "overwrite"),
-		intern=TRUE
+		intern = TRUE
 	)
-	if (dense) flags <- c(flags, "d")
+	if (dense) args$flags <- c(args$flags, "d")
 	do.call(rgrass::execGRASS, args = args)
 	
-	flags <- c("quiet", "overwrite", "m")
-	if (!fillNA) flags <- c(flags, "n")
+	gn <- .makeGName("distance", "raster")
+	args <- list(
+		cmd = "r.grow.distance",
+		input = gnRasterized,
+		distance = gn,
+		metric = metric,
+		flags = c("m", "quiet", "overwrite"),
+		intern = TRUE
+	)
+	if (!fillNA) args$flags <- c(args$flags, "n")
+	do.call(rgrass::execGRASS, args = args)
 	
-	gnOut <- .makeGName("distance", "raster")
-	rgrass::execGRASS("r.grow.distance", input=gnRasterized, distance=gn, metric=metric, flags=flags, intern=TRUE)
-	
-	# convert meters to kilometers
-	unit <- pmatchSafe(unit, c("meters", "kilometers", "km"))
-	if (unit %in% c("kilometer", "kilometers", "km")) {
-	
-		gnIn <- gnOut
-		gn <- .makeGName("distance", "rast")
-		ex <- paste0(gn, " = ", gnIn, " / 1000")
-		rgrass::execGRASS("r.mapcalc", expression=ex, flags=c("quiet", "overwrite"), intern=TRUE)
-		
-	}
-
+	# convert units
+	gn <- .convertRastUnits(gn = gn, unit = unit)
 	.makeGRaster(gn, "distance")
 	
 	} # EOF
@@ -182,8 +173,17 @@ methods::setMethod(
 	if (is.null(minDist)) minDist <- -1
 	if (is.null(maxDist)) maxDist <- -1
 
-	flags <- c("quiet", "overwrite", "p")
-	dists <- rgrass::execGRASS("v.distance", from=.gnames(x), to=.gnames(y), upload="dist", flags=flags, dmin=minDist, dmax=maxDist, intern=TRUE)
+	args <- list(
+		cmd = "v.distance",
+		from = .gnames(x),
+		to = .gnames(y),
+		upload = "dist",
+		dmin = minDist,
+		dmax = maxDist,
+		flags = c("p", "quiet", "overwrite"),
+		intern = TRUE
+	)
+	dists <- do.call(rgrass::execGRASS, args = args)
 	
 	dists <- dists[-which(dists=="from_cat|dist")]
 	dists <- strsplit(dists, split="\\|")
@@ -192,10 +192,22 @@ methods::setMethod(
 	for (i in seq_along(out)) out[i] <- dists[[i]][2L]
 	out <- as.numeric(out)
 	
-	# convert to kilometers
-	unit <- pmatchSafe(unit, c("meters", "kilometers", "km"))
-	if (unit %in% c("kilometers", "km")) out <- out / 1000
-	
+	# convert units
+    unit <- pmatchSafe(unit, c("meters", "metres", "kilometers", "km", "miles", "nautical miles", "nm", "yards", "yds", "feet", "ft"))
+	if (unit %in% c("kilometers", "km")) {
+		out <- out / 1000
+	} else if (unit == "miles") {
+		out <- out * 0.0006213712
+	} else if (unit %in% c("nautical miles", "nm")) {
+		out <- out * 0.0005399568
+	} else if (unit %in% c("yards", "yds")) {
+		out <- out * 1.0936132983
+	} else if (unit %in% c("survey feet", "sft")) {
+		out <- out * 3.2804
+	} else if (unit %in% c("feet", "ft")) {
+		out <- out * 3.280839895
+	}
+
 	out
 	
 	} # EOF
@@ -208,41 +220,45 @@ methods::setMethod(
 	"st_distance",
 	signature(x = "GVector", y = "GVector"),
 	function(x, y, unit = "meters", minDist = NULL, maxDist = NULL) {
-		distance(x=x, y=y, unit=unit, minDist=minDist, maxDist=maxDist)
+  		distance(x = x, y = y, unit = unit, minDist = minDist, maxDist = maxDist)
 	}
 )
 
-# @noRd
 .convertRastUnits <- function(gn, unit) {
-	
+    
 	if (inherits(gn, "GRaster")) gn <- .gnames(gn)
-	
-	# convert raster units
-	unit <- tolower(unit)
-	unit <- pmatchSafe(unit, c("meters", "kilometers", "km", "miles"))
-	if (unit %in% c("kilometers", "km", "miles")) {
-	
-		gnIn <- gn
-		gnOut <- .makeGName(NULL, "rast")
-		
-		ex <- if (unit %in% c("kilometers", "km")) {
-			paste0(gnOut, " = ", gnIn, " / 1000")
-		} else if (unit == "miles") {
-			paste0(gnOut, " = ", gnIn, " / 1609.34")
-		}
-		
-		args <- list(
-			"r.mapcalc",
-			expression = ex,
-			flags = c("quiet", "overwrite"),
-			intern = TRUE
-		)
-		do.call(rgrass::execGRASS, args = args)
-		out <- gnOut
-		
-	} else {
-		out <- NULL
-	}
-	out
-	
+
+    # convert raster units
+    unit <- pmatchSafe(unit, c("meters", "metres", "kilometers", "km", "miles", "nautical miles", "nm", "yards", "yds", "feet", "ft"))
+    if (!(unit %in% c("meters", "metres"))) {
+
+        gnIn <- gn
+        gnOut <- .makeGName("unitConvert", "raster")
+
+        ex <- if (unit %in% c("kilometers", "km")) {
+            paste0(gnOut, " = ", gnIn, " / 1000")
+        } else if (unit == "miles") {
+            paste0(gnOut, " = ", gnIn, " * 0.0006213712")
+        } else if (unit %in% c("nautical miles", "nm")) {
+            paste0(gnOut, " = ", gnIn, " * 0.0005399568")
+        } else if (unit %in% c("yards", "yds")) {
+            paste0(gnOut, " = ", gnIn, " * 1.0936132983")
+        } else if (unit %in% c("feet", "ft")) {
+            paste0(gnOut, " = ", gnIn, " * 3.28084")
+        } else if (unit %in% c("survey feet", "sft")) {
+            paste0(gnOut, " = ", gnIn, " * 3.280839895")
+        }
+
+        args <- list(
+            "r.mapcalc",
+            expression = ex,
+            flags = c("quiet", "overwrite"),
+            intern = TRUE
+        )
+        do.call(rgrass::execGRASS, args = args)
+        out <- gnOut
+    } else {
+        out <- gn
+    }
+    out
 }
