@@ -112,9 +112,9 @@ methods::setMethod(
     
 	appFunsTable <- NULL
     utils::data("appFunsTable", envir = environment(), package = "fasterRaster")
- 
+
     if (interactive()) {
-    
+
         showableCols <- c("Type", "GRASS_Function", "R_Function", "Definition", "Returns")
 
         shiny::shinyApp(
@@ -122,7 +122,7 @@ methods::setMethod(
             server = function(input, output) {
                 output$tbl <- DT::renderDT(
                     appFunsTable[, showableCols],
-                    caption = shiny::HTML("Functions that can be used in the fasterRaster app() function and their equivalent."),
+                    caption = shiny::HTML("Functions that can be used in the fasterRaster app() function and the equivalent functions in R."),
                     options = list(
                         pageLength = nrow(appFuns),
                         width = "100%",
