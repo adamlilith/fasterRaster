@@ -37,32 +37,28 @@ dypsis <- fast(madDypsis)
 # distance between NA cells and nearest non-NA cells
 naDist <- distance(elev)
 names(naDist) <- "NA Distance"
+plot(naDist)
 
 # distance between non-NA cells and nearest NA cells
 nonNaDist <- distance(elev, fillNA = FALSE)
 names(nonNaDist) <- "non-NA Distance"
+plot(nonNaDist)
 
 # distance between cells with an elevation of 3 and any other cell that != 3
 distFocal3 <- distance(elev, target = 3)
 names(distFocal3) <- "Distance from 3"
+plot(distFocal3)
 
 # distance between any cell and cells with a value of 3
 distTo3 <- distance(elev, fillNA = FALSE, target = 3)
 names(distTo3) <- "Distance to 3"
-
-naDistRast <- rast(naDist)
-nonNaDistRast <- rast(nonNaDist)
-distFocal3Rast <- rast(distFocal3)
-distTo3Rast <- rast(distTo3)
-
-plot(c(naDistRast, nonNaDistRast, distFocal3Rast, distTo3Rast))
+plot(distTo3)
 
 ### case 2: GRaster and GVector
 distToVect <- distance(elev, rivers)
 
-distToVect <- rast(distToVect)
 plot(distToVect)
-plot(vect(madRivers), add = TRUE)
+plot(st_geometry(madRivers), add = TRUE)
 
 ### case 3: GVector vs GVector
 plot(st_geometry(madRivers))
