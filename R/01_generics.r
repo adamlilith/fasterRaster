@@ -21,8 +21,8 @@ if (!isGeneric("as.lines")) { setGeneric("as.lines", function(x,...) standardGen
 if (!isGeneric("as.points")) { setGeneric("as.points", function(x,...) standardGeneric("as.points")) }
 if (!isGeneric("as.polygons")) { setGeneric("as.polygons", function(x,...) standardGeneric("as.polygons")) }
 # #' methods::setGeneric(name = "aggregate", package="stats")
-#' @importFrom stats aggregate
-if (!isGeneric("aggregate")) { setGeneric("aggregate", function(x,...) standardGeneric("aggregate")) }
+# #' @importFrom stats aggregate
+if (!isGeneric("aggregate")) methods::setGeneric("aggregate", function(x,...) standardGeneric("aggregate"))
 
 methods::setGeneric(name = "bottom", def = function(x, ...) standardGeneric("bottom"))
 #' @importFrom terra buffer
@@ -102,7 +102,8 @@ methods::setGeneric(name = "ncol", def = function(x) standardGeneric("ncol")) # 
 methods::setGeneric(name = "nrow", def = function(x) standardGeneric("nrow")) # in base
 methods::setGeneric(name = "nunique", def = function(x, ...) standardGeneric("nunique"))
 
-methods::setGeneric(name = "plot", def = function(x, y, ...) standardGeneric("plot"))
+# methods::setGeneric(name = "plot", def = function(x, y, ...) standardGeneric("plot"))
+#' @importFrom terra plot
 #' @importFrom terra project
 
 #' @importFrom stats quantile

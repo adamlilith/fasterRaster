@@ -29,17 +29,16 @@ methods::setMethod(
 	f = "plot",
 	signature = c(x = "GRaster", y = "missing"),
 	function(x, y, simplify = TRUE, maxcell = 500000, ...) {
-	
+
 	# simplify
 	nc <- ncell(x)
 	if (simplify & nc > maxcell) {
-		
+
 		rows <- nrow(x)
 		cols <- ncol(x)
-		
-		scale <- ceiling(nc / (2 * maxcell))
-		x <- aggregate(x, fact = scale)
-		
+		rescale <- ceiling(nc / (2 * maxcell))
+		if (rescale != 1) x <- aggregate(x, fact = rescale)
+
 	}
 	
 	tf <- tempfile(fileext = ".tif")
