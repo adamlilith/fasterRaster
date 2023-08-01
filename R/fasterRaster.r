@@ -91,6 +91,7 @@
 #' [sun()]: Solar radiance and irradiance\cr
 #' [terrain()]: Slope, aspect, curvature, and partial slopes\cr
 #' [thin()]: Reduce linear features on a raster so linear features are 1 cell wide\cr
+#' [trim()]: Remove rows and columns from a raster that are all `NA`\cr
 #' [viewshed()]: Areas visible from points on a raster\cr
 #'
 #' ## Properties of **fasterRaster** vectors (`GVectors`)
