@@ -21,9 +21,9 @@
 		
 			this <- .rastInfo(gn[i])
 			out <- if (i == 1L) {
-				appendLists(out, this)
-			} else {
 				this
+			} else {
+    			appendLists(out, this)
 			}
 		
 		}
