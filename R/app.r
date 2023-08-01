@@ -22,7 +22,7 @@
 #' * `"auto"` (default): Ensure that rasters are represented by their native [datatype()] (i.e., "CELL" rasters as integers, "FCELL" rasters as floating-point, and "DCELL" as double-floating point).
 #' 
 #' @param show Logical (function `appFuns()`):
-#' * `FALSE` (default): Return a `data.frame` or `data.table`` with definitions of functions.
+#' * `FALSE` (default): Return a `data.frame` or `data.table` with definitions of functions.
 #' * `TRUE`: Open a searchable, sortable **shiny** table in a browser.
 #' 
 #' @param msgOnGood Logical (function `appCheck()`): If `TRUE` (default), display a message if no overt problems with the raster names and formula are detected.
@@ -107,13 +107,13 @@ methods::setMethod(
 #' @exportMethod appFuns
 methods::setMethod(
     f = "appFuns",
-    signature = c(x = "missing"),
-    function(x) {
+    signature = c(x = "logical"),
+    function(x = FALSE) {
     
 	appFunsTable <- NULL
     utils::data("appFunsTable", envir = environment(), package = "fasterRaster")
 
-    if (interactive()) {
+    if (x & interactive()) {
 
         showableCols <- c("Type", "GRASS_Function", "R_Function", "Definition", "Returns")
 
@@ -133,7 +133,7 @@ methods::setMethod(
             }
         )
         
-    } else {
+    } else if (!interactive() & x) {
         warning("You must be running R interactively to view the table using appFuns().")
     }
 
