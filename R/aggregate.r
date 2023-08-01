@@ -3,9 +3,11 @@
 #' @description `aggregate()` creates a new raster with cells that are an even multiple of the size of the cells of the original raster.
 #'
 #' @param x A `GRaster`.
+#'
 #' @param fact Numeric vector: One, two, or three positive values. These reflect the size of the new cells as multiples of the size of the old cells. If just one value is supplied, this is used for all two or three dimensions. If two values are supplied, the first is multiplied by the east-west size of cells, and the second north-south size of cells (the raster must be 2D). If three values are supplied, the third value is used as the multiplier of the vertical dimension of cells. Values are calculated using all cells that have their centers contained by the target cell.
 #'
-#' Note that unlike [terra::aggregate()], these values need not be even integers. Aggregation
+#' Note that unlike [terra::aggregate()] and [terra::disagg()], these values need not be integers.
+#'
 #' @param fun Character: Name of the function used to aggregate:
 #' * `mean``: Average (default)
 #' * `median`: Median
@@ -47,9 +49,9 @@ methods::setMethod(
 		na.rm = FALSE
 	) {
 
-	if (any(fact < 0)) stop("Values of ", sQuote("fact"), " must be > 0.")
+	if (any(fact <= 0)) stop("Values of ", sQuote("fact"), " must be > 0.")
 
-	funs <- c("mean", "median", "mode", "min", "maximum", "range", "quantile", "sum", "var", "sd", "count", "diversity")
+	funs <- c("mean", "median", "mode", "min", "maximum", "range", "quantile", "sum", "varpop", "sdpop", "count", "diversity")
 	fun <- pmatchSafe(tolower(fun), funs)
 	
 	if (fun == "mean") {
@@ -62,9 +64,7 @@ methods::setMethod(
 		fun <- "variance"
 	} else if (fun == "sdpop") {
 		fun <- "stdev"
-	}
-	
-	if (fun == "quantile") {
+	} else if (fun == "quantile") {
 		
 		if (is.null(prob)) stop("A value must be specified for ", sQuote("prob"), " if the aggregating function is ", sQuote("quantile"), ".")
 		
