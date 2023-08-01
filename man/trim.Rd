@@ -68,6 +68,11 @@ plot(elevNAs)
 
 elevs <- c(elev, elevNAs)
 trimmedElevs <- trim(elevs)
+trimmedElevNAs <- trim(elevNAs)
+
+dim(elevs)
+dim(trimmedElevNAs)
+dim(trimmedElevs)
 
 
 # IMPORTANT #3: Revert back to original GRASS session if needed.
