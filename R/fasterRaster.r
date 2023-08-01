@@ -59,7 +59,8 @@
 #' - Extremes: [min()], [max()], [which.min()], [which.max()] \cr
 #' 
 #' Other functions:\cr
-#' `[[[]`[subset]: Subset a raster with multiple layers\cr
+#' `[<-` ([assign][subset]): Assign values to a raster's cells\cr
+#' `[[` ([subset]): Subset a raster with multiple layers\cr
 #' [as.cell()], [as.fcell()], [as.dcell()]: Change data type (integer/float/double)\cr
 #' [as.contour()]: Contour lines from a raster\cr
 #' [as.lines()]: Convert a raster to a "lines" vector\cr
@@ -114,8 +115,8 @@
 #' [zext()]: Vertical extent\cr
 #'
 #' ## Functions that operate on or create `GVectors`
-#' `[[]`[subset]: Select geometries/rows of a vector"s data frame\cr
-#' `[[[]`[subset]: Subset columns of a vector"s data frame\cr
+#' `[` ([subset]): Select geometries/rows of a vector"s data frame\cr
+#' `[[` ([subset]): Subset columns of a vector"s data frame\cr
 #' [as.data.frame()]: Convert a vector to a `data.frame`\cr
 #' [as.points()]: Extract vertex coordinates from a "lines" or "polygons" `GVector`\cr
 #' [buffer()]: Create a polygon around/inside a vector\cr
