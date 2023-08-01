@@ -89,18 +89,14 @@ methods::setMethod(
 		w = w, e = e, s = s, n = n,
 		ewres = ewres, nsres = nsres,
 		flags = c("quiet", "overwrite"),
-		# flags = c("quiet", "overwrite", "o"),
 		intern = TRUE
 	)
 
  	do.call(rgrass::execGRASS, args = args)
 
 	### crop by creating copy of focal raster
-	out <- list()
 	gns <- .copyGSpatial(x, reshapeRegion = FALSE)
-	out <- .makeGRaster(gns, names(x))
-
-	out
+	.makeGRaster(gns, names(x))
 
 	} # EOF
 )
