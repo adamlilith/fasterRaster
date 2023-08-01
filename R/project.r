@@ -6,7 +6,7 @@
 #' 
 #' Second, the procedure works the same way for rasters or vectors stored on disk (and not already in **R**). Simply use the [fast()] function with the file name of the object. Again, the `method` and `fallback` arguments may be important .
 #'
-#' Third, if you are wanting to change the CRS of a `GRaster` or `GVector`, you need to initiate a new **GRASS** [location][tutorial_sessions] using [faster()] with the CRS to which you want to transform the object. This means you need to keep track of which **GRASS** "location" you are working in, as multiple rasters and/or vectors can only be used in the function if they are in the same "location."  *This function, `project()`, is for projecting `GRaster`s or `GVector`s between **GRASS** "locations."* [location()] (with no arguments) will display the name of the currently active "location", and [crs()] (alo no arguments) will display its CRS.
+#' Third, if you are wanting to change the CRS of a `GRaster` or `GVector`, you need to initiate a new **GRASS** [location][tutorial_sessions] using [faster()] with the CRS to which you want to transform the object. This means you need to keep track of which **GRASS** "location" you are working in, as multiple rasters and/or vectors can only be used in the function if they are in the same "location."  *This function, `project()`, is for projecting `GRaster`s or `GVector`s between **GRASS** "locations."* You can get the name of the current location with [location()] (with no arguments), and its coordinate reference system with [crs()] or [st_crs()] (also no arguments).
 #'
 #' @param x A `GRaster` or `GVector` to be projected.
 #'
