@@ -38,13 +38,19 @@ methods::setMethod(
 	names <- ""
 	if (!is.null(x)) {
 		if (inherits(x, "SpatRaster")) {
+			
 			rastOrVect <- "raster"
 			names <- names(x)
+			names <- .fixNames(names)
 			n <- terra::nlyr(x)
+			
 		} else if (inherits(x, "GRaster")) {
+
 			rastOrVect <- "raster"
 			names <- names(x)
+			names <- .fixNames(names)
 			n <- nlyr(x)
+
 		} else if (inherits(x, c("SpatVector", "sf"))) {
 			rastOrVect <- "vector"
 		} else if (inherits(x, "character")) {
@@ -69,5 +75,40 @@ methods::setMethod(
 		paste0(rastOrVect, "_", gn)
 	}
 	gn
+
+}
+
+.fixNames <- function(names) {
+
+	names <- gsub(names, pattern = " ", replacement="_")
+	names <- gsub(names, pattern = "\\.", replacement="_")
+	names <- gsub(names, pattern = "\\+", replacement="_")
+	names <- gsub(names, pattern = "-", replacement="_")
+	names <- gsub(names, pattern = "\\?", replacement="_")
+	names <- gsub(names, pattern = "!", replacement="_")
+	names <- gsub(names, pattern = "\\*", replacement="_")
+	names <- gsub(names, pattern = "\\(", replacement="_")
+	names <- gsub(names, pattern = "\\)", replacement="_")
+	names <- gsub(names, pattern = "\\[", replacement="_")
+	names <- gsub(names, pattern = "\\]", replacement="_")
+	names <- gsub(names, pattern = "\\|", replacement="_")
+	names <- gsub(names, pattern = "@", replacement="_")
+	names <- gsub(names, pattern = "\\$", replacement="_")
+	names <- gsub(names, pattern = "#", replacement="_")
+	names <- gsub(names, pattern = "%", replacement="_")
+	names <- gsub(names, pattern = "\\^", replacement="_")
+	names <- gsub(names, pattern = "&", replacement="_")
+	names <- gsub(names, pattern = "=", replacement="_")
+	names <- gsub(names, pattern = "\\'", replacement="_")
+	names <- gsub(names, pattern = "\\{", replacement="_")
+	names <- gsub(names, pattern = "}", replacement="_")
+	names <- gsub(names, pattern = ";", replacement="_")
+	names <- gsub(names, pattern = ":", replacement="_")
+	names <- gsub(names, pattern = "<", replacement="_")
+	names <- gsub(names, pattern = ">", replacement="_")
+	names <- gsub(names, pattern = "/", replacement="_")
+	names <- gsub(names, pattern = "`", replacement="_")
+	names <- gsub(names, pattern = "~", replacement="_")
+	names
 
 }
