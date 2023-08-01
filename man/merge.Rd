@@ -14,7 +14,7 @@
 A \code{GRaster}.
 }
 \description{
-\code{merge()} combines two or more \code{GRaster}s, possibly with different extents, into a single larger \code{GRaster}. Where the same cell has different values in each raster, the value of the first raster"s cell is used. If this is \code{NA}, then the value of the second raster"s cell is used, and so on.
+\code{merge()} combines two or more \code{GRaster}s, possibly with different extents, into a single larger \code{GRaster}. Where the same cell has different values in each raster, the value of the first raster's cell is used. If this is \code{NA}, then the value of the second raster's cell is used, and so on.
 }
 \examples{
 \dontrun{
@@ -73,5 +73,5 @@ removeSession("examples")
 }
 }
 \seealso{
-\code{\link[terra:merge]{terra::merge()}}
+\code{\link[terra:merge]{terra::merge()}}, \code{\link[terra:mosaic]{terra::mosaic()}}, and \strong{GRASS} module \code{r.patch}
 }

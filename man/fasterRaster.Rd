@@ -102,6 +102,7 @@ Other functions:\cr
 \code{\link[=sun]{sun()}}: Solar radiance and irradiance\cr
 \code{\link[=terrain]{terrain()}}: Slope, aspect, curvature, and partial slopes\cr
 \code{\link[=thin]{thin()}}: Reduce linear features on a raster so linear features are 1 cell wide\cr
+\code{\link[=trim]{trim()}}: Remove rows and columns from a raster that are all \code{NA}\cr
 \code{\link[=viewshed]{viewshed()}}: Areas visible from points on a raster\cr
 }
 

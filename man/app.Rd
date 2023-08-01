@@ -3,7 +3,7 @@
 \name{app,GRaster-method}
 \alias{app,GRaster-method}
 \alias{app}
-\alias{appFuns,missing-method}
+\alias{appFuns,logical-method}
 \alias{appFuns}
 \alias{appCheck,GRaster,character-method}
 \alias{appCheck}
@@ -11,7 +11,7 @@
 \usage{
 \S4method{app}{GRaster}(x, fun, ensure = "auto")
 
-\S4method{appFuns}{missing}(x)
+\S4method{appFuns}{logical}(x = FALSE)
 
 \S4method{appCheck}{GRaster,character}(x, fun, msgOnGood = TRUE, failOnBad = TRUE)
 }
@@ -40,7 +40,7 @@ The help page for \code{r.mapcalc} on the \strong{GRASS} website provides more d
 
 \item{show}{Logical (function \code{appFuns()}):
 \itemize{
-\item \code{FALSE} (default): Return a \code{data.frame} or `data.table`` with definitions of functions.
+\item \code{FALSE} (default): Return a \code{data.frame} or \code{data.table} with definitions of functions.
 \item \code{TRUE}: Open a searchable, sortable \strong{shiny} table in a browser.
 }}
 }
