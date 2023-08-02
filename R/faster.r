@@ -44,10 +44,12 @@ faster <- function(
 	if (FALSE) {
 
 		grassDir <- "C:/Program Files/GRASS GIS 8.3" # Windows
+		addonDir <- NULL
 		dots <- list()
 		workDir <- NULL
-		x <- madRivers
+		x <- madElev
 		overwrite <- FALSE
+		warn <- TRUE
 	
 	}
 
