@@ -98,7 +98,7 @@ methods::setMethod(
 		xRast <- terra::rast(x)
 		nLayers <- terra::nlyr(xRast)
 		xNames <- names(xRast)
-		gn <- .makeGName(NULL, rastOrVect = "raster")
+		gn <- .makeGName("importFromFile", rastOrVect = "raster")
 
 		### load raster (no projecting needed)
 		if (terra::crs(xRast) == crs()) {
@@ -120,7 +120,6 @@ methods::setMethod(
 
 			# method
 			if (!is.null(method)) method <- pmatchSafe(method, c("nearest", "bilinear", "bicubic", "lanczos"))
-
 			if (is.null(method)) {
 
 				factors <- terra::is.factor(xRast)
@@ -139,8 +138,10 @@ methods::setMethod(
 
 			# define region settings using a projected SpatRaster that matches x
 			xRast <- xRast[[1L]]
+cat("Time-consuming step here for large rasters:")
 			xRast <- xRast * NA_real_
 			xRast <- terra::project(xRast, crs(), align=TRUE)
+cat("Time-consuming step here for large rasters^^^")
 			region(xRast)
 
 			args <- list(
@@ -160,12 +161,8 @@ methods::setMethod(
 		} # projected raster from disk
 
 		do.call(rgrass::execGRASS, args = args)
-		if (nLayers == 1L) {
-			out <- .makeGRaster(gn, names = xNames)
-		} else {
-			out <- .makeGRaster(paste0(gn, ".", 1L:nLayers), names = xNames)
-		}
-
+		out <- .makeGRaster(gn, names = xNames)
+		
 	### vector from disk (and project on the fly if needed)
 	#######################################################
 	
@@ -228,7 +225,7 @@ methods::setMethod(
 	) {
 
 	rastFile <- terra::sources(x)
-	if ((length(rastFile) > 0L) || rastFile == "") {
+	if (rastFile == "") {
 		tempFile <- tempfile(fileext=".tif")
 		terra::writeRaster(x, tempFile, overwrite=TRUE)
 		x <- tempFile
@@ -262,7 +259,7 @@ methods::setMethod(
 # 1. Write vector to disk (if needed)
 # 2. Send to fast(signature = "character")
 .fastVector <- function(
-    x,		# SpatVector or sf
+	x,		# SpatVector or sf
 	warn	# logical
 ) {
     
