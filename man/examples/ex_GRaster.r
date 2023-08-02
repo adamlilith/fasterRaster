@@ -30,6 +30,10 @@ elev <- fast(madElev)
 forest <- fast(madForest2000)
 
 ### GRaster properties
+######################
+
+# plotting
+plot(elev)
 
 # dimensions
 dim(elev) # rows, columns, depths, layers
@@ -40,6 +44,9 @@ nlyr(elev) # layers
 
 res(elev) # resolution (2D)
 res3d(elev) # resolution (3D)
+zres(elev) # vertical resolution
+xres(elev) # vertical resolution
+yres(elev) # vertical resolution
 zres(elev) # vertical resolution
 
 # cell counts
@@ -61,8 +68,8 @@ minmax(elev) # min/max values
 location(elev) # location
 mapset(elev) # mapset
 
-# "gnames" of the object (its name in GRASS)
-gnames(elev)
+# "names" of the object
+names(elev)
 
 # coordinate reference system
 crs(elev)
@@ -77,32 +84,48 @@ zext(elev)
 
 # data type
 datatype(elev)
+is.cell(elev)
+is.fcell(elev)
+is.dcell(elev)
 
 # convert data type
 as.cell(elev) # integer; note that "elev" is already of type "CELL"
 as.fcell(elev) # floating-precision
 as.dcell(elev) # double-precision
 
+# assigning
+copy <- elev
+copy[] <- pi # assign all cells to the value of pi
+copy
+
 # concatenating multiple GRasters
 rasts <- c(elev, forest)
 rasts
 
-# number of layers
-nlyr(rasts)
+# subsetting
+rasts[[1]]
+rasts[["madForest2000"]]
+
+# replacing
+rasts[[2]] <- 2 * forest
+
+# adding layers
+rasts[[3]] <- elev > 500
+rasts <- c(rasts, sqrt(elev))
 
 # names
 names(rasts)
-names(rasts) <- c("elev_meters", "forest")
+names(rasts) <- c("elev_meters", "2_x_forest", "high_elevation", "sqrt_elev")
 rasts
+
+# number of layers
+nlyr(rasts)
 
 # cell frequencies
 freq(elev)
 freq(2 * elev)
 freq(rasts)
 freq(rasts, value = 1)
-
-# plotting
-plot(elev)
 
 # IMPORTANT #3: Revert back to original GRASS session if needed.
 fastRestore(opts.)
