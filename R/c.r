@@ -50,6 +50,7 @@ setMethod(f = "c",
 				location = location(out),
 				mapset = mapset(out),
 				crs = crs(out),
+				projection = .projection(out),
 				topology = topology(out),
 				gnames = c(.gnames(out), .gnames(dots[[i]])),
 				names = c(names(out), names(dots[[i]])),
@@ -60,8 +61,8 @@ setMethod(f = "c",
 				nLayers = nlyr(out) + nlyr(dots[[i]]),
 				resolution = res(out),
 				nCats = c(ncat(out), ncat(dots[[i]])),
-				minVal = c(out@minVal, mmdots["min", ]),
-				maxVal = c(out@maxVal, mmdots["max", ])
+				minVal = c(.minVal(out), .minVal(dots[[i]])),
+				maxVal = c(.maxVal(out), .maxVal(dots[[i]]))
 			)
 		
 		} # next GRaster to combine

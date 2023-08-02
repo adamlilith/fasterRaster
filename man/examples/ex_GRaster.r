@@ -110,12 +110,16 @@ rasts[["madForest2000"]]
 rasts[[2]] <- 2 * forest
 
 # adding layers
-rasts[[3]] <- elev > 500
-rasts <- c(rasts, sqrt(elev))
+rasts[[3]] <- elev > 500 # add a layer
+rasts <- c(rasts, sqrt(elev)) # add another
 
 # names
 names(rasts)
 names(rasts) <- c("elev_meters", "2_x_forest", "high_elevation", "sqrt_elev")
+rasts
+
+# remove a layer
+rasts[["2_x_forest"]] <- NULL
 rasts
 
 # number of layers
