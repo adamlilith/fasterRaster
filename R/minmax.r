@@ -18,3 +18,18 @@ setMethod(
 	signature = "GRaster",
 	definition = function(x) matrix(c(x@minVal, x@maxVal), nrow=2, byrow=TRUE, dimnames=list(c("min", "max"), names(x)))
 )
+
+#' @noRd
+methods::setMethod(
+	f = ".minVal",
+	signature = c(x = "GRaster"),
+	function(x) x@minVal
+)
+
+#' @noRd
+methods::setMethod(
+	f = ".maxVal",
+	signature = c(x = "GRaster"),
+	function(x) x@maxVal
+)
+

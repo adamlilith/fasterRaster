@@ -20,7 +20,10 @@
 #' Makes one or more statistically unique strings that can be used as file names to represent rasters or vectors in **GRASS**.
 #' 
 #' ## `.makeGRaster()` and `makeGVector()`
-#' Make `GRaster`s or `GVector`s from a vector of `gname`(s), which point to files in **GRASS**.
+#' Make `GRaster`s or `GVector`s from a `gname`, which is a pointer to files in **GRASS**.
+#' 
+#' ## `.minVal()` and `.maxVal()`
+#' Get the value of the `@minVal` and `@maxVal` slot in a `GRaster`.
 #' 
 #' ## `.projection()`
 #' Get the value of the `@projection` slot in a `GRaster` or `GVector`.
