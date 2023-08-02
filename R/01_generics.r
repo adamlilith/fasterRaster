@@ -3,7 +3,12 @@
 require(sf)
 require(terra)
 
+if (!isGeneric("[")) methods::setGeneric(name = "[", def = function(x, ...) standardGeneric("["))
+if (!isGeneric("[<-")) methods::setGeneric(name = "[<-", def = function(x, ...) standardGeneric("[<-"))
 if (!isGeneric("[[")) methods::setGeneric(name = "[[", def = function(x, ...) standardGeneric("[["))
+if (!isGeneric("[[")) methods::setGeneric(name = "[[<-", def = function(x, ...) standardGeneric("[[<-"))
+methods::setGeneric(name = ".maxVal", def = function(x, ...) standardGeneric(".maxVal"))
+methods::setGeneric(name = ".minVal", def = function(x, ...) standardGeneric(".minVal"))
 
 #' @importFrom terra app
 methods::setGeneric(name = "appFuns", def = function(x, ...) standardGeneric("appFuns"))
