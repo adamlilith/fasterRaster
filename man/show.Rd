@@ -103,8 +103,8 @@ minmax(elev) # min/max values
 location(elev) # location
 mapset(elev) # mapset
 
-# "gnames" of the object (its name in GRASS)
-gnames(elev)
+# "names" of the object
+names(elev)
 
 # coordinate reference system
 crs(elev)
@@ -117,8 +117,29 @@ st_bbox(elev)
 # data type
 datatype(elev)
 
+# assigning
+copy <- elev
+copy[] <- pi # assign all cells to the value of pi
+copy
+
+# concatenating multiple GRasters
+rasts <- c(elev, forest)
+rasts
+
+# subsetting
+rasts[[1]]
+rasts[["forest"]]
+
+# assigning
+rasts[[3]] <- elev > 500
+
+# number of layers
+nlyr(rasts)
+
 # names
-names(elev)
+names(rasts)
+names(rasts) <- c("elev_meters", "forest", "high_elevation")
+rasts
 
 ### GVector properties
 ######################

@@ -70,7 +70,9 @@ Multi-layer functions (applied across layers of a "stack" of \code{GRaster}s):
 }
 
 Other functions:\cr
-\verb{[[[]}\link{subset}: Subset a raster with multiple layers\cr
+\verb{[<-} (\link[=subset_assign]{assign}): Assign values to a raster's cells\cr
+\code{[[} (\link[=subset_assign]{subset}): Subset a raster with multiple layers\cr
+\verb{[[<-} (\link[=subset_assign]{assign}): Replace or add layers to a raster\cr
 \code{\link[=as.cell]{as.cell()}}, \code{\link[=as.fcell]{as.fcell()}}, \code{\link[=as.dcell]{as.dcell()}}: Change data type (integer/float/double)\cr
 \code{\link[=as.contour]{as.contour()}}: Contour lines from a raster\cr
 \code{\link[=as.lines]{as.lines()}}: Convert a raster to a "lines" vector\cr
@@ -129,8 +131,8 @@ Other functions:\cr
 
 \subsection{Functions that operate on or create \code{GVectors}}{
 
-\verb{[[]}\link{subset}: Select geometries/rows of a vector"s data frame\cr
-\verb{[[[]}\link{subset}: Subset columns of a vector"s data frame\cr
+\code{[} (\link[=subset_assign]{subset}): Select geometries/rows of a vector"s data frame\cr
+\code{[[} (\link[=subset_assign]{subset}): Subset columns of a vector"s data frame\cr
 \code{\link[=as.data.frame]{as.data.frame()}}: Convert a vector to a \code{data.frame}\cr
 \code{\link[=as.points]{as.points()}}: Extract vertex coordinates from a "lines" or "polygons" \code{GVector}\cr
 \code{\link[=buffer]{buffer()}}: Create a polygon around/inside a vector\cr

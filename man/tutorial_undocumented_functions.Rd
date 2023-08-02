@@ -32,7 +32,12 @@ Makes one or more statistically unique strings that can be used as file names to
 
 \subsection{\code{.makeGRaster()} and \code{makeGVector()}}{
 
-Make \code{GRaster}s or \code{GVector}s from a vector of \code{gname}(s), which point to files in \strong{GRASS}.
+Make \code{GRaster}s or \code{GVector}s from a \code{gname}, which is a pointer to files in \strong{GRASS}.
+}
+
+\subsection{\code{.minVal()} and \code{.maxVal()}}{
+
+Get the value of the \verb{@minVal} and \verb{@maxVal} slot in a \code{GRaster}.
 }
 
 \subsection{\code{.projection()}}{

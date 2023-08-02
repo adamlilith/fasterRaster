@@ -86,8 +86,8 @@ minmax(elev) # min/max values
 location(elev) # location
 mapset(elev) # mapset
 
-# "gnames" of the object (its name in GRASS)
-gnames(elev)
+# "names" of the object
+names(elev)
 
 # coordinate reference system
 crs(elev)
@@ -108,16 +108,35 @@ as.cell(elev) # integer; note that "elev" is already of type "CELL"
 as.fcell(elev) # floating-precision
 as.dcell(elev) # double-precision
 
+# plotting
+plot(elev)
+
+# assigning
+copy <- elev
+copy[] <- pi # assign all cells to the value of pi
+copy
+
 # concatenating multiple GRasters
 rasts <- c(elev, forest)
 rasts
+
+# subsetting
+rasts[[1]]
+rasts[["forest"]]
+
+# replacing
+rasts[[2]] <- 2 * forest
+
+# adding layers
+rasts[[3]] <- elev > 500
+rasts <- c(rasts, eqrt(elev))
 
 # number of layers
 nlyr(rasts)
 
 # names
 names(rasts)
-names(rasts) <- c("elev_meters", "forest")
+names(rasts) <- c("elev_meters", "2_x_forest", "high_elevation", "sqrt_elev")
 rasts
 
 # cell frequencies
@@ -125,9 +144,6 @@ freq(elev)
 freq(2 * elev)
 freq(rasts)
 freq(rasts, value = 1)
-
-# plotting
-plot(elev)
 
 # IMPORTANT #3: Revert back to original GRASS session if needed.
 fastRestore(opts.)
