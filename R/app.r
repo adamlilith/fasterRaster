@@ -33,6 +33,8 @@
 #'
 #' @seealso [terra::app()], and modules `r.mapcalc` and `r.mapcalc.simple` in **GRASS**.
 #'
+#' @example man/examples/ex_app.r
+#'
 #' @aliases app
 #' @rdname app
 #' @exportMethod app
@@ -97,7 +99,7 @@ methods::setMethod(
         intern = TRUE
     )
     do.call(rgrass::execGRASS, args = args)
-    .makeGRaster(gn, "app")
+    .makeGRaster(gn, "layer")
 
     } # EOF
 )
@@ -121,10 +123,10 @@ methods::setMethod(
             ui = shiny::fluidPage(DT::DTOutput("tbl")),
             server = function(input, output) {
                 output$tbl <- DT::renderDT(
-                    appFunsTable[, showableCols],
-                    caption = shiny::HTML("Functions that can be used in the fasterRaster app() function and the equivalent functions in R."),
+                    appFunsTable[ , showableCols],
+                    caption = shiny::HTML("Functions that can be used in the fasterRaster app() function and the equivalent functions in R. Note that in GRASS, 'null()' is the same as 'NA'."),
                     options = list(
-                        pageLength = nrow(appFuns),
+                        pageLength = nrow(appFunsTable),
                         width = "100%",
                         scrollX = TRUE
                     )
