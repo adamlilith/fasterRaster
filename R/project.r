@@ -145,7 +145,9 @@ methods::setMethod(
 	###################################
 
 	xRast <- terra::project(xRast, toCrs, method="near", align=TRUE)
+cat("Slow step!")
 	region(xRast)
+cat("Slow step^^^")
 
 	### project raster
 	##################
@@ -153,7 +155,7 @@ methods::setMethod(
 	if (method != "nearest" & fallback) method <- paste0(method, "_f")
 
 	gns <- .makeGName(names(x), "raster", nlyr(x))
-	for (i in 1L:nlyr(x)) {
+	for (i in seq_len(nlyr(x))) {
 		
 		args <- list(
 			cmd = "r.proj",
