@@ -16,14 +16,11 @@ methods::setMethod(
 	signature = "GSession",
 	definition = function(object) {
 	
-		crs <- object@crs
-		crs <- sf::st_crs(crs)
-		crs <- crs$input
-	
-		cat("class       :", paste(class(object), collapse=", "), "\n")
-		cat("location    :", object@location, "\n")
-		cat("mapset      :", object@mapset, "\n")
-		cat("coord ref.  :", crs, "\n")
+	cat("class       :", paste(class(object), collapse=", "), "\n")
+	cat("location    :", object@location, "\n")
+	cat("mapset      :", object@mapset, "\n")
+	cat("coord ref.  :", .showCRS(object), "\n")
+
 	}
 )
 
@@ -44,25 +41,22 @@ methods::setMethod(
 	signature = "GSpatial",
 	definition = function(object) {
 
-		details <- getFastOptions("details")
+	details <- getFastOptions("details")
 
-		digs <- min(3, getOption("digits"))
-		extent <- round(object@extent, digs)
-		
-		crs <- object@crs
-		crs <- sf::st_crs(crs)
-		crs <- crs$input
-
-		cat("class       :", paste(class(object), collapse=", "), "\n")
-		if (getFastOptions("details")) {
-			cat("gnames(s)   :", object@gnames, "\n")
-			cat("location    :", object@location, "\n")
-			cat("mapset      :", object@mapset, "\n")
-		}
-		cat("topology    :", object@topology, "\n")
-		cat("extent      :", paste(extent, collapse=", "), "(xmin, xmax, ymin, ymax)\n")
-		if (details & object@topology == "3D") cat("z extent    :", paste(object@zextent, collapse=", "), " (bottom, top)\n")
-		cat("coord ref.  :", crs, "\n")
+	digs <- min(3, getOption("digits"))
+	extent <- round(object@extent, digs)
+	
+	cat("class       :", paste(class(object), collapse=", "), "\n")
+	if (getFastOptions("details")) {
+		cat("gnames(s)   :", object@gnames, "\n")
+		cat("location    :", object@location, "\n")
+		cat("mapset      :", object@mapset, "\n")
+	}
+	cat("topology    :", object@topology, "\n")
+	cat("extent      :", paste(extent, collapse=", "), "(xmin, xmax, ymin, ymax)\n")
+	if (details & object@topology == "3D") cat("z extent    :", paste(object@zextent, collapse=", "), " (bottom, top)\n")
+	cat("coord ref.  :", .showCRS(object), "\n")
+	
 	}
 )
 
@@ -83,30 +77,27 @@ methods::setMethod(
 	signature = "GRegion",
 	definition = function(object) {
 
-		details <- getFastOptions("details")
+	details <- getFastOptions("details")
 
-		digs <- min(5, getOption("digits"))
-		resol <- round(object@resolution, digs)
+	digs <- min(5, getOption("digits"))
+	resol <- round(object@resolution, digs)
 
-		extent <- round(object@extent, max(round(digs / 2), 2))
-		zextent <- round(object@zextent, max(round(digs / 2), 2))
-		
-		crs <- object@crs
-		crs <- sf::st_crs(crs)
-		crs <- crs$input
-
-		cat("class       :", paste(class(object), collapse=", "), "\n")
-		if (getFastOptions("details")) {
-			# cat("gnames(s)   :", object@gnames, "\n")
-			cat("location    :", object@location, "\n")
-			cat("mapset      :", object@mapset, "\n")
-		}
-		cat("topology    :", object@topology, "\n")
-		cat("coord ref.  :", crs, "\n")
-		cat("dimensions  :", paste(object@dimensions, collapse=", "), "(nrow, ncol, ndepth)\n")
-		cat("resolution  :", paste(resol, collapse=", "), "(x, y, z)\n")
-		cat("extent      :", paste(extent, collapse=", "), "(xmin, xmax, ymin, ymax)\n")
-		cat("z extent    :", paste(object@zextent, collapse=", "), " (bottom, top)\n")
+	extent <- round(object@extent, max(round(digs / 2), 2))
+	zextent <- round(object@zextent, max(round(digs / 2), 2))
+	
+	cat("class       :", paste(class(object), collapse=", "), "\n")
+	if (getFastOptions("details")) {
+		# cat("gnames(s)   :", object@gnames, "\n")
+		cat("location    :", object@location, "\n")
+		cat("mapset      :", object@mapset, "\n")
+	}
+	cat("topology    :", object@topology, "\n")
+	cat("coord ref.  :", .showCRS(object), "\n")
+	cat("dimensions  :", paste(object@dimensions, collapse=", "), "(nrow, ncol, ndepth)\n")
+	cat("resolution  :", paste(resol, collapse=", "), "(x, y, z)\n")
+	cat("extent      :", paste(extent, collapse=", "), "(xmin, xmax, ymin, ymax)\n")
+	cat("z extent    :", paste(object@zextent, collapse=", "), " (bottom, top)\n")
+	
 	}
 )
 
@@ -127,76 +118,73 @@ methods::setMethod(
 	signature="GRaster",
 	definition = function(object) {
 
-		details <- getFastOptions("details")
+	details <- getFastOptions("details")
 
-		digs <- min(5, getOption("digits"))
-		resol <- round(object@resolution, digs)
-		if (length(resol) == 2L) resol <- c(resol, NA_real_)
-		
-		extent <- round(object@extent, min(digs, 2))
+	digs <- min(5, getOption("digits"))
+	resol <- round(object@resolution, digs)
+	if (length(resol) == 2L) resol <- c(resol, NA_real_)
+	
+	extent <- round(object@extent, min(digs, 2))
 
-		crs <- object@crs
-		crs <- sf::st_crs(crs)
-		crs <- crs$input
+	# pad everything by same amount so display of data for each later appears in neat columns
+	minVal <- round(object@minVal, digs)
+	maxVal <- round(object@maxVal, digs)		
+	
+	minValLength <- nchar(minVal)
+	maxValLength <- nchar(maxVal)
+	
+	if (anyNA(minValLength)) minValLength[is.na(minValLength)] <- 2L
+	if (anyNA(maxValLength)) maxValLength[is.na(maxValLength)] <- 2L
+	
+	nc <- pmax(
+		rep(3, object@nLayers),
+		nchar(object@names),
+		nchar(object@datatypeGRASS),
+		nchar(object@nCats),
+		minValLength,
+		maxValLength
+	)
+	if (details) nc <- pmax(nc, nchar(object@gnames))
 
-		# pad everything by same amount so display of data for each later appears in neat columns
-		minVal <- round(object@minVal, digs)
-		maxVal <- round(object@maxVal, digs)		
-		
-		minValLength <- nchar(minVal)
-		maxValLength <- nchar(maxVal)
-		
-		if (anyNA(minValLength)) minValLength[is.na(minValLength)] <- 2L
-		if (anyNA(maxValLength)) maxValLength[is.na(maxValLength)] <- 2L
-		
-		nc <- pmax(
-			rep(3, object@nLayers),
-			nchar(object@names),
-			nchar(object@datatypeGRASS),
-			nchar(object@nCats),
-			minValLength,
-			maxValLength
-		)
-		if (details) nc <- pmax(nc, nchar(object@gnames))
+	gnames <- names <- datatype <- nCats <- minValChar <- maxValChar <- rep(NA, object@nLayers)
+	for (i in seq_len(object@nLayers)) {
+		fmt <- paste0("%", nc[i], "s")
+		gnames[i] <- sprintf(fmt, object@gnames[i])
+		names[i] <- sprintf(fmt, object@names[i])
+		datatype[i] <- sprintf(fmt, object@datatypeGRASS[i])
+		nCats[i] <- sprintf(fmt, object@nCats[i])
+		minValChar[i] <- sprintf(fmt, minVal[i])
+		maxValChar[i] <- sprintf(fmt, maxVal[i])
+	}
+	
+	gnames <- paste(gnames, collapse=" ")
+	names <- paste(names, collapse=" ")
+	datatype <- paste(datatype, collapse=" ")
+	minValChar <- paste(minValChar, collapse=" ")
+	maxValChar <- paste(maxValChar, collapse=" ")
 
-		gnames <- names <- datatype <- nCats <- minValChar <- maxValChar <- rep(NA, object@nLayers)
-		for (i in seq_len(object@nLayers)) {
-			fmt <- paste0("%", nc[i], "s")
-			gnames[i] <- sprintf(fmt, object@gnames[i])
-			names[i] <- sprintf(fmt, object@names[i])
-			datatype[i] <- sprintf(fmt, object@datatypeGRASS[i])
-			nCats[i] <- sprintf(fmt, object@nCats[i])
-			minValChar[i] <- sprintf(fmt, minVal[i])
-			maxValChar[i] <- sprintf(fmt, maxVal[i])
-		}
-		
-		gnames <- paste(gnames, collapse=" ")
-		names <- paste(names, collapse=" ")
-		datatype <- paste(datatype, collapse=" ")
-		minValChar <- paste(minValChar, collapse=" ")
-		maxValChar <- paste(maxValChar, collapse=" ")
+	cat("class       : GRaster\n")
+	if (details) {
+		cat("location    :", object@location, "\n")
+		cat("mapset      :", object@mapset, "\n")
+	}
+	cat("topology    :", object@topology, "\n")
+	cat("dimensions  :", paste(c(object@dimensions, object@nLayers), collapse=", "), "(nrow, ncol, ndepth, nlyr)\n")
+	cat("resolution  :", paste(resol, collapse=", "), "(x, y, z)\n")
+	cat("extent      :", paste(extent, collapse=", "), "(xmin, xmax, ymin, ymax)\n")
+	if (details | object@topology == "3D") {
+		cat("z extent    :", paste(object@zextent, collapse=", "), "(bottom, top)\n")
+	}
+	cat("coord ref.  :", .showCRS(object), "\n")
+	if (details) cat("projection  :", object@projection, "\n")
+	if (details) cat("gnames(s)   :", gnames, "\n")
+	cat("name(s)     :", names, "\n")
+	if (details) cat("datatype*   :", datatype, "\n")
+	if (details | any(ncat(object) > 0L)) cat("num. categ. :", nCats, "\n")
+	cat("min. value  :", minValChar, "\n")
+	cat("max. value  :", maxValChar, "\n")
+	cat("* GRASS datatype\n")
 
-		cat("class       : GRaster\n")
-		if (details) {
-			cat("location    :", object@location, "\n")
-			cat("mapset      :", object@mapset, "\n")
-		}
-		cat("topology    :", object@topology, "\n")
-		cat("dimensions  :", paste(c(object@dimensions, object@nLayers), collapse=", "), "(nrow, ncol, ndepth, nlyr)\n")
-		cat("resolution  :", paste(resol, collapse=", "), "(x, y, z)\n")
-		cat("extent      :", paste(extent, collapse=", "), "(xmin, xmax, ymin, ymax)\n")
-		if (details | object@topology == "3D") {
-			cat("z extent    :", paste(object@zextent, collapse=", "), "(bottom, top)\n")
-		}
-		cat("coord ref.  :", crs, "\n")
-  		if (details) cat("projection  :", object@projection, "\n")
-		if (details) cat("gnames(s)   :", gnames, "\n")
-		cat("name(s)     :", names, "\n")
-		if (details) cat("datatype*   :", datatype, "\n")
-		if (details | any(ncat(object) > 0L)) cat("num. categ. :", nCats, "\n")
-		cat("min. value  :", minValChar, "\n")
-		cat("max. value  :", maxValChar, "\n")
-		cat("* GRASS datatype\n")
 	}
 )
 
@@ -259,11 +247,6 @@ methods::setMethod(f="show", signature="GVector",
 		
 	}
 	
-	# CRS
-	crs <- object@crs
-	crs <- sf::st_crs(crs)
-	crsSimple <- crs$input
-
 	cat("class       : GVector\n")
 	if (details) {
 		cat("location    :", object@location, "\n")
@@ -276,7 +259,7 @@ methods::setMethod(f="show", signature="GVector",
 	cat("topology    :", object@topology, "\n")
 	cat("extent      :", paste(extent, collapse=", "), "(xmin, xmax, ymin, ymax)\n")
 	if (details | object@topology == "3D") cat("z extent    :", paste(zextent, collapse=", "), "(bottom, top)\n")
-	cat("coord ref.  :", crsSimple, "\n")
+	cat("coord ref.  :", .showCRS(object), "\n")
 	cat("projection  :", object@projection, "\n")
 
 	if (object@nFields > 0L) {
@@ -294,3 +277,39 @@ methods::setMethod(f="show", signature="GVector",
 methods::setMethod(f="print", signature="GVector",
 	definition = function(x) show(x)
 )
+
+
+#' Show the CRS for an object, and make it pretty, even if it doesn't want to
+#' @noRd
+.showCRS <- function(x) {
+
+	if (inherits(x, c("SpatRaster", "SpatVector", "sf"))) {
+		x <- sf::st_crs(x)
+	} else if (inherits(x, "GSpatial")) {
+		x <- st_crs(x)
+	} else if (!inherits(x, "crs")) {
+		x <- sf::st_crs(x)
+	}
+
+	if (!is.na(x$input) && x$input != x$wkt) {
+		out <- x$input # pre-made
+	} else {
+  		start <- regexec(x$wkt, pattern = "CONVERSION")[[1L]]
+		if (start == -1L) {
+			out <- NA_character_
+		} else {
+   			start <- start + nchar("CONVERSION") + 1L
+			x <- substr(x$wkt, start = start, stop = nchar(x$wkt))
+
+   			stop <- regexec(x, pattern = ",")[[1L]] - 2L
+			x <- substr(x, start = 2L, stop)
+			if (grepl(x, pattern = "METHOD")) {
+				out <- NA_character_
+			} else {
+			   out <- x
+			}
+		}
+	}
+	out
+
+}
