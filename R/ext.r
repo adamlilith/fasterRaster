@@ -222,15 +222,21 @@ setMethod("st_bbox", definition = function(obj, ...) st_bbox(obj, ...))
 #' @rdname ext
 #' @export
 st_bbox <- function(obj, ...) {
-	if (missing(obj)) obj <- region()
-	if (inherits(obj, "GSpatial")) {
-		out <- obj@extent
-		out <- c(out[1L], out[3L], out[2L], out[4L])
-		names(out) <- c("xmin", "ymin", "xmax", "ymax")
-		if (!vector) out <- sf::st_bbox(out, crs = st_crs(obj))
+	dots <- list(...)
+	if (any(names(dots) == "vector")) {
+		vector <- dots$vector
 	} else {
-		out <- sf::st_bbox(obj, ...)
-		if (vector) out <- as.vector(out)
+		vector <- FALSE
 	}
-	out
+    if (missing(obj)) obj <- region()
+    if (inherits(obj, "GSpatial")) {
+        out <- obj@extent
+        out <- c(out[1L], out[3L], out[2L], out[4L])
+        names(out) <- c("xmin", "ymin", "xmax", "ymax")
+        if (!vector) out <- sf::st_bbox(out, crs = st_crs(obj))
+    } else {
+        out <- sf::st_bbox(obj, ...)
+        if (vector) out <- as.vector(out)
+    }
+    out
 }
