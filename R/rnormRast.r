@@ -14,7 +14,7 @@
 #'
 #' @example man/examples/ex_randRast.r
 #' 
-#' @seealso [spDepRast()], [fractalRast()], and module `r.random.surface` in **GRASS**
+#' @seealso [spDepRast()], [fractalRast()], [runifRast()], and **GRASS** module `r.random.surface`
 #'
 #' @aliases rnormRast
 #' @rdname rnormRast
@@ -51,14 +51,8 @@ methods::setMethod(
         if (!is.null(seed)) args$seed <- seed[i]
         do.call(rgrass::execGRASS, args = args)
 
-        this <- .makeGRaster(gns[i], "rnorm")
-        if (i == 1L) {
-            out <- this
-        } else {
-            out <- c(out, this)
-        }
     } # next raster
-    out
+    .makeGRaster(gns, "rnorm")
 
     } # EOF
 )

@@ -14,7 +14,7 @@
 #'
 #' @example man/examples/ex_randRast.r
 #' 
-#' @seealso [rnormRast()] and module `r.surf.fractal` in **GRASS**
+#' @seealso [spDepRast()], [rnormRast()], [runifRast()], and module `r.surf.fractal` in **GRASS**
 #'
 #' @aliases fractalRast
 #' @rdname fractalRast
@@ -66,14 +66,8 @@ methods::setMethod(
         )
         do.call(rgrass::execGRASS, args = args)
 
-        this <- .makeGRaster(gns[i], "fractal")
-        if (i == 1L) {
-            out <- this
-        } else {
-            out <- c(out, this)
-        }
     } # next raster
-    out
+    .makeGRaster(gns, "fractal")
 
     } # EOF
 )
