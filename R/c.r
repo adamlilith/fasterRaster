@@ -68,8 +68,7 @@ setMethod(f = "c",
 		} # next GRaster to combine
 		
 	} # next item
-		
-	if (length(anyDuplicated(out@names)) > 0L) out@names <- make.unique(out@names)
+	out <- .makeUniqueNames(out)		
 	out
 	
 	} # EOF
