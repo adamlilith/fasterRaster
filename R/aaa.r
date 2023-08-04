@@ -1,15 +1,19 @@
 .onLoad <- function(lib, pkg) {
 
 	.fasterRaster <<- new.env(parent = emptyenv())
+	.fasterRaster$grassStarted <- FALSE
 	.fasterRaster$options <- list()
+	.fasterRaster$locations <- list()
 	setFastOptions(restore = TRUE)
 	
 }
 
 .onAttach <- function(lib, pkg) {
 
-	.fasterRaster <- new.env(parent = emptyenv())
+	.fasterRaster <<- new.env(parent = emptyenv())
+	.fasterRaster$grassStarted <- FALSE
 	.fasterRaster$options <- list()
+	.fasterRaster$locations <- list()
 	setFastOptions(restore = TRUE)
 	
 	ver <- read.dcf(file=system.file("DESCRIPTION", package=pkg), fields="Version")
