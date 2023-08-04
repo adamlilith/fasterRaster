@@ -21,6 +21,8 @@
 #'
 #' @param tolerance Numeric or `NULL` (default): Minimum distance in map units (degrees for unprojected, usually meters for projected) or minimum area (for `smallAreas` in meters-squared, regardless of projection). If `NULL`, then 2% of the minimum of the x-, y-, and z-extent will be used, or this same value but assumed to be in meters-squared (for `smallAreas`).
 #'
+#' @param minArea Numeric >= 0: Minimum area of a polygon to be retained when using the `smallAreas` tool.
+#'
 #' @seealso [simplifyGeom()], [terra::simplifyGeom()], [smoothGeom()]
 #'
 #' @returns A `GVector`.
