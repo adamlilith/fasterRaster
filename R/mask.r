@@ -8,13 +8,13 @@
 #' 
 #' @param inverse Logical: If `TRUE`, the effect of the mask is inverted. That is, a copy of the input raster is made, but cells that overlap with an `NA` in the mask raster or are not covered by the mask vector retain their values. Cells that overlap with an `NA` in the mask raster or overlap with the mask vector are forced to `NA`.
 #' 
-#' @param maskvalue Numeric vector, including `NA` (only for when `mask` is a `GRaster`): The value(s) in the mask raster cells that serve as the mask. The default is `NA`, in which case cells in the input raster that overlap with `NA` cells in the mask are forced to `NA`.
+#' @param maskvalues Numeric vector, including `NA` (only for when `mask` is a `GRaster`): The value(s) in the mask raster cells that serve as the mask. The default is `NA`, in which case cells in the input raster that overlap with `NA` cells in the mask are forced to `NA`.
 #' 
 #' @param updatevalue Numeric, including `NA` (default): The values assigned to masked cells.
 #' 
 #' @returns A `GRaster`.
 #' 
-#' @seealso [maskRand()], [terra::mask()], **GRASS** module `r.mask` 
+#' @seealso [terra::mask()], **GRASS** module `r.mask` 
 #'
 #' @example man/examples/ex_mask.r
 #' 
