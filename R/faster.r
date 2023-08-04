@@ -48,7 +48,7 @@ faster <- function(
 		dots <- list()
 		workDir <- NULL
 		x <- madElev
-		overwrite <- FALSE
+		overwrite <- TRUE
 		warn <- TRUE
 	
 	}
@@ -86,7 +86,7 @@ faster <- function(
 	crsFile <- file.path(workDir, location, "crs.rds")
 
 	### do we need a new GRASS session or to switch the location/working directory?
-	if (overwrite) {
+	if (overwrite & .fasterRaster$grassStarted) {
 	
 		if (warn) warning(paste0("The GRASS session with these properties has been overwritten:\n  * location: ", location, "\n  * mapset: ", mapset, "\n  * workDir: ", workDir, ".\n  All previously existing files have been removed."), immediate.=TRUE)
 		
@@ -103,6 +103,7 @@ faster <- function(
 		
 	# are we trying to restart same folder, etc. but with a different CRS?
 	if (!overwrite & length(crsFile) > 0L && file.exists(crsFile)) {
+		
 		existingCrs <- readRDS(crsFile)
 		if (existingCrs != x) {
 
@@ -136,12 +137,27 @@ faster <- function(
 	.fasterRaster$grassStarted <- TRUE
 	
 	saveRDS(x, file=crsFile)
-			
+	
 	session <- GSession(
 		location = location,
 		mapset = mapset,
 		crs = x
 	)
+
+	### remember session
+ 	sessionNames <- names(.fasterRaster$locations)
+	thisSessionName <- paste0(location, "_", mapset)
+
+ 	match <- which(sessionNames == thisSessionName)
+	if (length(match) == 0L) {
+		put <- length(.fasterRaster$locations) + 1L
+	} else {
+		put <- match
+	}
+
+	remember <- list(session = session, workDir = workDir)
+	.fasterRaster$locations[[put]] <- remember
+	names(.fasterRaster$locations)[put] <- thisSessionName
 
 	invisible(session)
 
