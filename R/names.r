@@ -51,3 +51,21 @@ setMethod(
 	
 	} # EOF
 )
+
+
+#' Make unique names
+#'
+#' @param x A `GRaster`.
+#' @returns A `GRaster`
+#'
+#' @noRd
+.makeUniqueNames <- function(x) {
+
+	if (any(duplicated(names(x)))) {
+		names(x) <- make.unique(x@names)
+	} else {
+		x
+	}
+	x
+
+}
