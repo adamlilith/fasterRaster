@@ -14,7 +14,13 @@
 #' @noRd
 .genericArith <- function(name, gn, ex) {
 
-	rgrass::execGRASS("r.mapcalc", expression = ex, flags = c("quiet", "overwrite"), intern = TRUE)
+	args <- list(
+		cmd = "r.mapcalc",
+		expression = ex,
+		flags = c("quiet", "overwrite"),
+		intern = TRUE
+	)
+	do.call(rgrass::execGRASS, args = args)
 	.makeGRaster(gn, name)
 	
 }
