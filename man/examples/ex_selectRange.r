@@ -10,57 +10,34 @@ opts. <- getFastOptions()
 
 # IMPORTANT #2: Select the appropriate line below and change as necessary to
 # where GRASS is installed on your system.
+
 grassDir <- "/Applications/GRASS-8.3.app/Contents/Resources" # Mac
 grassDir <- "C:/Program Files/GRASS GIS 8.3" # Windows
 grassDir <- "/usr/local/grass" # Linux
 
 # setup
-library(sf)
 library(terra)
 
-# elevation raster
+# example data
 madElev <- fastData("madElev")
 
 # start GRASS session for examples only
 faster(x = madElev, grassDir = grassDir,
 workDir = tempdir(), location = "examples") # line only needed for examples
 
-# Convert a SpatRaster to a GRaster:
+# convert a SpatRaster to a GRaster
 elev <- fast(madElev)
 
-# Create a raster with values drawn from a uniform distribution:
-unif <- runifRast(elev)
-plot(unif)
+# Make a stack of various versions of "elev" from which to select from:
+x <- c(elev, 10 * elev, ln(elev), -1 * elev)
+x
 
-unifs <- runifRast(elev, 2, -1, 1)
-plot(unifs)
+# Make a layer with random numbers between 1 and 4:
+fun <- "= round(rand(0.5, 4.5))"
+y <- app(elev, fun = fun)
 
-# Create a raster with values drawn from a normal distribution:
-norms <- rnormRast(elev, n = 2, mu = c(5, 10), sigma = c(2, 1))
-plot(norms)
+selected <- selectRange(x, y)
 
-ns <- rast(norms)
-hist(ns[[1]], breaks = 100)
-
-# Create a raster with random, seemingly normally-distributed values:
-rand <- spDepRast(elev)
-plot(rand)
-
-# Values appear normal on first inspection:
-r <- rast(rand)
-hist(r)
-
-# ... but actually are patterned:
-hist(r, breaks = 100)
-
-# Create a raster with random, normally-distributed values with
-# spatial dependence. This can take a few minutes.
-spatDep <- spDepRast(elev, dist = 3000)
-plot(spatDep)
-
-# Create a fractal raster:
-fractal <- fractalRast(elev, n = 2, dimension = c(2.1, 2.8))
-plot(fractal)
 
 # IMPORTANT #3: Revert back to original GRASS session if needed.
 fastRestore(opts.)

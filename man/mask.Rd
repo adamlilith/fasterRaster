@@ -17,9 +17,9 @@
 
 \item{inverse}{Logical: If \code{TRUE}, the effect of the mask is inverted. That is, a copy of the input raster is made, but cells that overlap with an \code{NA} in the mask raster or are not covered by the mask vector retain their values. Cells that overlap with an \code{NA} in the mask raster or overlap with the mask vector are forced to \code{NA}.}
 
-\item{updatevalue}{Numeric, including \code{NA} (default): The values assigned to masked cells.}
+\item{maskvalues}{Numeric vector, including \code{NA} (only for when \code{mask} is a \code{GRaster}): The value(s) in the mask raster cells that serve as the mask. The default is \code{NA}, in which case cells in the input raster that overlap with \code{NA} cells in the mask are forced to \code{NA}.}
 
-\item{maskvalue}{Numeric vector, including \code{NA} (only for when \code{mask} is a \code{GRaster}): The value(s) in the mask raster cells that serve as the mask. The default is \code{NA}, in which case cells in the input raster that overlap with \code{NA} cells in the mask are forced to \code{NA}.}
+\item{updatevalue}{Numeric, including \code{NA} (default): The values assigned to masked cells.}
 }
 \value{
 A \code{GRaster}.
@@ -101,5 +101,5 @@ removeSession("examples")
 }
 }
 \seealso{
-\code{\link[=maskRand]{maskRand()}}, \code{\link[terra:mask]{terra::mask()}}, \strong{GRASS} module \code{r.mask}
+\code{\link[terra:mask]{terra::mask()}}, \strong{GRASS} module \code{r.mask}
 }

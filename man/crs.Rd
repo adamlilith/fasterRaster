@@ -63,6 +63,10 @@ elev <- fast(madElev)
 forest <- fast(madForest2000)
 
 ### GRaster properties
+######################
+
+# plotting
+plot(elev)
 
 # dimensions
 dim(elev) # rows, columns, depths, layers
@@ -73,6 +77,9 @@ nlyr(elev) # layers
 
 res(elev) # resolution (2D)
 res3d(elev) # resolution (3D)
+zres(elev) # vertical resolution
+xres(elev) # vertical resolution
+yres(elev) # vertical resolution
 zres(elev) # vertical resolution
 
 # cell counts
@@ -110,14 +117,14 @@ zext(elev)
 
 # data type
 datatype(elev)
+is.cell(elev)
+is.fcell(elev)
+is.dcell(elev)
 
 # convert data type
 as.cell(elev) # integer; note that "elev" is already of type "CELL"
 as.fcell(elev) # floating-precision
 as.dcell(elev) # double-precision
-
-# plotting
-plot(elev)
 
 # assigning
 copy <- elev
@@ -130,22 +137,26 @@ rasts
 
 # subsetting
 rasts[[1]]
-rasts[["forest"]]
+rasts[["madForest2000"]]
 
 # replacing
 rasts[[2]] <- 2 * forest
 
 # adding layers
-rasts[[3]] <- elev > 500
-rasts <- c(rasts, eqrt(elev))
-
-# number of layers
-nlyr(rasts)
+rasts[[3]] <- elev > 500 # add a layer
+rasts <- c(rasts, sqrt(elev)) # add another
 
 # names
 names(rasts)
 names(rasts) <- c("elev_meters", "2_x_forest", "high_elevation", "sqrt_elev")
 rasts
+
+# remove a layer
+rasts[["2_x_forest"]] <- NULL
+rasts
+
+# number of layers
+nlyr(rasts)
 
 # cell frequencies
 freq(elev)

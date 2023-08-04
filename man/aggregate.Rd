@@ -19,7 +19,7 @@
 
 \item{fact}{Numeric vector: One, two, or three positive values. These reflect the size of the new cells as multiples of the size of the old cells. If just one value is supplied, this is used for all two or three dimensions. If two values are supplied, the first is multiplied by the east-west size of cells, and the second north-south size of cells (the raster must be 2D). If three values are supplied, the third value is used as the multiplier of the vertical dimension of cells. Values are calculated using all cells that have their centers contained by the target cell.
 
-Note that unlike \code{\link[terra:aggregate]{terra::aggregate()}} and \code{\link[terra:disaggregate]{terra::disagg()}}, these values need not be integers.}
+Note that unlike \code{terra::aggregate()} and \code{\link[terra:disaggregate]{terra::disagg()}}, these values need not be integers.}
 
 \item{fun}{Character: Name of the function used to aggregate:
 \itemize{
@@ -119,5 +119,5 @@ removeSession("examples")
 }
 }
 \seealso{
-\code{\link[terra:aggregate]{terra::aggregate()}}, \code{\link[terra:disaggregate]{terra::disagg()}}, module \code{r.resamp.stats} in \strong{GRASS}
+\code{\link[stats:aggregate]{stats::aggregate()}}, \code{\link[terra:disaggregate]{terra::disagg()}}, \strong{GRASS} module \code{r.resamp.stats}
 }

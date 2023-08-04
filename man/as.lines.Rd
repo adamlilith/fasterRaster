@@ -5,10 +5,12 @@
 \alias{as.lines}
 \title{Convert a raster to a lines vector}
 \usage{
-\S4method{as.lines}{GRaster}(x, round = TRUE, smooth = FALSE)
+\S4method{as.lines}{GRaster}(x)
 }
 \arguments{
 \item{x}{A \code{GRaster}. If more than one layer is in the \code{GRaster}, only the first will be used (with a warning).}
+
+\item{round}{Logical: If \code{TRUE} (default),}
 }
 \value{
 A \code{GVector}.

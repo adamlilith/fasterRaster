@@ -3,7 +3,8 @@
 \name{[[,GRaster,ANY,ANY-method}
 \alias{[[,GRaster,ANY,ANY-method}
 \alias{subset_assign}
-\alias{[[<-,GRaster,ANY-method}
+\alias{[[<-,GRaster,ANY,missing-method}
+\alias{[[<-,subset_assign}
 \alias{[<-,GRaster,ANY,ANY-method}
 \alias{[,GVector,ANY,ANY-method}
 \alias{[[,GVector,ANY,ANY-method}
@@ -11,7 +12,7 @@
 \usage{
 \S4method{[[}{GRaster,ANY,ANY}(x, i)
 
-\S4method{[[}{GRaster,ANY}(x, i) <- value
+\S4method{[[}{GRaster,ANY,missing}(x, i, j) <- value
 
 \S4method{[}{GRaster,ANY,ANY}(x) <- value
 
@@ -31,7 +32,11 @@
 }
 }}
 
-\item{value}{A numeric, integer, or logical value (including \code{NA}): Value to assign to all cells in a raster.}
+\item{j}{Not used.}
+
+\item{value}{A numeric, integer, logical value (including \code{NA}), or \code{NULL}: Value to assign to all cells in a raster.}
+
+\item{...}{Not used.}
 }
 \value{
 A \code{GRaster}.
@@ -46,8 +51,9 @@ The \code{[} and \code{[[} operators do different things depending on whether th
 }
 \item \code{GRaster}s:
 \itemize{
-\item \code{[} operator used with the assignment operator, \verb{<-} (example: \code{raster[] <- 7}): Assigns the given value to all cells in the \code{GRaster}.
+\item \code{[} operator with the assignment operator, \verb{<-} (example: \code{raster[] <- 7}): Assigns the given value to all cells in the \code{GRaster}.
 \item \code{[[} operator: Returns \code{GRaster}s from a "stack" of \code{GRaster}s. For example, \code{raster[[2:3]]} returns the second and third rasters in a stack of \code{GRaster}s, and \code{raster[[c("bio1", "bio12")]]} returns the two rasters with \code{\link[=names]{names()}} "bio1" and "bio12".
+\item \code{[[} operator with the assignment operator, \verb{<-}: Replaces existing layers or adds new layers to a \code{GRaster}. For example, \code{x[[2]] <- newRaster} makes the second layer of \code{x} \code{newRaster}. If \code{x} already has two layers, the second one is replaced. If it only had one layer, a second is added.
 }
 }
 }

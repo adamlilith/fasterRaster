@@ -97,6 +97,7 @@ atan2(elevs, elevs^1.2)
 # logarithms
 exp(elev)
 log(elev)
+ln(elev)
 log2(elev)
 log1p(elev)
 log10(elev)

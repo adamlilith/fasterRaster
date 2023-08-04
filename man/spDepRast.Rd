@@ -35,7 +35,7 @@
 A \code{GRaster}.
 }
 \description{
-'spDepRast()' creates a raster with random values in cells. Across the raster, values are approximately normally distributed, though a raster with a "true" normal distribution can be made with \code{\link[=rnformRast]{rnformRast()}}. Spatial dependence can be introduced, though all together the values will still be approximately normally distributed.
+'spDepRast()' creates a raster with random values in cells. Across the raster, values are approximately normally distributed, though a raster with a "true" normal distribution can be made with \code{\link[=rnormRast]{rnormRast()}}. Spatial dependence can be introduced, though all together the values will still be approximately normally distributed.
 }
 \examples{
 \dontrun{

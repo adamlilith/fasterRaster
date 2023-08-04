@@ -36,7 +36,7 @@
 \S4method{print}{GVector}(x)
 }
 \arguments{
-\item{object}{An object of class \code{GSession}, \code{GSpatial}, \code{GRegion}, \code{GRaster}, or \code{GVector}.}
+\item{object, x}{An object of class \code{GSession}, \code{GSpatial}, \code{GRegion}, \code{GRaster}, or \code{GVector}.}
 }
 \value{
 Nothing (side effect is to display metadata on the given object).

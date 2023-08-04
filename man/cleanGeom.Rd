@@ -27,6 +27,8 @@
 }}
 
 \item{tolerance}{Numeric or \code{NULL} (default): Minimum distance in map units (degrees for unprojected, usually meters for projected) or minimum area (for \code{smallAreas} in meters-squared, regardless of projection). If \code{NULL}, then 2\% of the minimum of the x-, y-, and z-extent will be used, or this same value but assumed to be in meters-squared (for \code{smallAreas}).}
+
+\item{minArea}{Numeric >= 0: Minimum area of a polygon to be retained when using the \code{smallAreas} tool.}
 }
 \value{
 A \code{GVector}.

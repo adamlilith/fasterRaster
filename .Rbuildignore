@@ -11,3 +11,4 @@ CODE_OF_CONDUCT.md
 ^\.vscode
 ^README\.Rmd$
 ^.lintr$
+^fasterRaster.code-workspace

@@ -69,6 +69,14 @@ app(x, fun = fun, ensure = "integer") # output is integer
 fun <- "= sin(x2)"
 app(x, fun = fun, ensure = "integer")
 
+# Make a raster with random numbers between 1 and 4, with equal probability
+# of each:
+fun <- "= round(rand(0.5, 4.5))"
+rand <- app(elev, fun = fun)
+rand
+
+freq(rand) # cell frequencies
+
 # IMPORTANT #3: Revert back to original GRASS session if needed.
 fastRestore(opts.)
 removeSession("examples")

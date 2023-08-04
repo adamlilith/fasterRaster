@@ -21,8 +21,6 @@ Rasters (objects of class \code{SpatRaster} from the \strong{terra} package):
 \itemize{
 \item \code{madChelsa}: Bioclimatic variables
 \item \code{madElev}: Elevation
-\item \code{madElevAnt}: Elevation of the Antanambe Commune
-\item \code{madElevMan}: Elevation of the Manompana Commune
 \item \code{madForest2000}: Forest cover in year 2000
 \item \code{madForest2014}: Forest cover in year 2014
 }}
@@ -72,5 +70,5 @@ madChelsa <- fastData("madChelsa")
 madChelsa
 }
 \seealso{
-\link{madCoast0}, \link{madCoast4}, \link{madDypsis}, \link{madElev}, \link{madElevAnt}, \link{madElevMan}, \link{madForest2000}, \link{madForest2014}, \link{madRivers}
+\link{madCoast0}, \link{madCoast4}, \link{madDypsis}, \link{madElev}, \link{madForest2000}, \link{madForest2014}, \link{madRivers}
 }

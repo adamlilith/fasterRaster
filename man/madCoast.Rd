@@ -11,7 +11,7 @@ ESRI Shapefile.
 \href{https://gadm.org}{Database of Global Administrative Areas Version 2.8 (GADM)}
 }
 \usage{
-fast(system.file("extdata/shapes/madCoast.shp", package = "fasterRaster"))
+system.file("extdata/shapes/madCoast.shp", package = "fasterRaster")
 }
 \description{
 Borders of a selected portion of Madagascar
