@@ -8,6 +8,7 @@
 #'     * `[` operator with the assignment operator, `<-` (example: `raster[] <- 7`): Assigns the given value to all cells in the `GRaster`.
 #'     * `[[` operator: Returns `GRaster`s from a "stack" of `GRaster`s. For example, `raster[[2:3]]` returns the second and third rasters in a stack of `GRaster`s, and `raster[[c("bio1", "bio12")]]` returns the two rasters with [names()] "bio1" and "bio12".
 #'     * `[[` operator with the assignment operator, `<-`: Replaces existing layers or adds new layers to a `GRaster`. For example, `x[[2]] <- newRaster` makes the second layer of `x` `newRaster`. If `x` already has two layers, the second one is replaced. If it only had one layer, a second is added.
+#'     * `add<-`: "Stacks" two `GRaster`s. This is the same as `c(x, value)`, where `x` and `value` are `GRaster`.
 #'
 #' @param x A `GRaster` with one or more layers, or a `GVector`.
 #'
@@ -15,6 +16,9 @@
 #' * `GVector`s:
 #'     * `[` operator: Indicates the geometries/rows to retain. `i` can be a number indicating the index of the rows, or a logical vector the same length as there are rows.
 #'     * `[[` operator: Indicates which columns to retain. `i` can be a number indicating the index of the features, a logical vector the same length as there are columns, or a character vector of the names of the columns to keep.
+#'
+#' @param j Not used.
+#' @param ... Not used.
 #'
 #' @param value A numeric, integer, logical value (including `NA`), or `NULL`: Value to assign to all cells in a raster.
 #'
@@ -65,13 +69,13 @@ methods::setMethod(
 	} # EOF
 )
 
-#' @aliases subset_assign
+#' @aliases [[<-,subset_assign
 #' @rdname subset_assign
 #' @exportMethod [[<-
 methods::setMethod(
 	"[[<-",
-	signature = c(x = "GRaster"),
-	function(x, i, value) {
+	signature = c(x = "GRaster", i = "ANY", j = "missing"),
+	function(x, i, j, value) {
 
 	if (!inherits(value, c("GRaster", "NULL"))) stop("Cannot assign a non-GRaster to a GRaster layer.")
 	
@@ -190,6 +194,14 @@ methods::setMethod(
 	} # EOF
 )
 
+#' @aliases add<-
+#' @rdname subset_assign
+#' @exportMethod add<-
+methods::setMethod(
+	"add<-",
+	signature = c(x = "GRaster", value = "GRaster"),
+	function(x, value) c(x, value)
+)
 
 #' @rdname subset_assign
 #' @aliases subset_assign
