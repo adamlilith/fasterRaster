@@ -48,7 +48,7 @@
 #'
 #' Single-layer functions (applied to each layer of a `GRaster`):
 #' - Trigonometry: [sin()], [cos()], [tan()], [asin()], [acos()], [atan()], [atan2()] \cr
-#' - Logarithms and powers: [exp()], [log()], [log1p()], [log2()], [log10()], [sqrt()] \cr
+#' - Logarithms and powers: [exp()], [log()], [ln()], [log1p()], [log2()], [log10()], [sqrt()] \cr
 #' - Rounding: [round()], [floor()], [ceiling()], [trunc()] \cr
 #' - Signs: [abs()] \cr
 #' 
@@ -62,6 +62,7 @@
 #' `[<-` ([assign][subset_assign]): Assign values to a raster's cells\cr
 #' `[[` ([subset][subset_assign]): Subset a raster with multiple layers\cr
 #' `[[<-` ([assign][subset_assign]): Replace or add layers to a raster\cr
+#' [add<-`]`: Add layers to a raster\cr
 #' [as.cell()], [as.fcell()], [as.dcell()]: Change data type (integer/float/double)\cr
 #' [as.contour()]: Contour lines from a raster\cr
 #' [as.lines()]: Convert a raster to a "lines" vector\cr
@@ -87,7 +88,9 @@
 #' [plot()]: Display a raster\cr
 #' [project()]: Change coordinate reference system and cell size\cr
 #' [resample()]: Change cell size\cr
-#' [rnormRast()]: A random raster with or without spatial dependence\cr
+#' [rnormRast()]: A random raster with values drawn from a normal distribution\cr
+#' [runifRast()]: A random raster with values drawn from a uniform distribution\cr
+#' [selectRange()]: Select values from rasters in a stack based on values in another raster\cr
 #' [spatSample()]: Randomly points from a raster\cr
 #' [spDepRast()]: Create a random raster with or without spatial dependence\cr
 #' [sun()]: Solar radiance and irradiance\cr
