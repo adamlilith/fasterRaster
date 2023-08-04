@@ -1,4 +1,4 @@
-#' @title Create a GRaster or GVector
+#' Create a GRaster or GVector
 #'
 #' @description
 #' To use most **fasterRaster** functions, you need to
@@ -161,6 +161,7 @@ cat("Time-consuming step here for large rasters^^^")
 		} # projected raster from disk
 
 		do.call(rgrass::execGRASS, args = args)
+		if (nLayers > 1L) gn <- paste0(gn, ".", seq_len(nLayers))
 		out <- .makeGRaster(gn, names = xNames)
 		
 	### vector from disk (and project on the fly if needed)
@@ -225,9 +226,9 @@ methods::setMethod(
 	) {
 
 	rastFile <- terra::sources(x)
-	if (rastFile == "") {
-		tempFile <- tempfile(fileext=".tif")
-		terra::writeRaster(x, tempFile, overwrite=TRUE)
+	if (any(rastFile == "")) {
+		tempFile <- tempfile(fileext = ".tif")
+		terra::writeRaster(x, tempFile, overwrite = TRUE)
 		x <- tempFile
 	} else {
 		x <- terra::sources(x)
