@@ -41,7 +41,7 @@ setMethod("st_crs", definition = function(x, ...) st_crs(x, ...))
 #' @rdname crs
 #' @export
 st_crs <- function(x, ...) {
-	if (inherits(x, "GSpatial")) {
+	if (inherits(x, "GSession")) {
 		out <- x@crs
 		out <- sf::st_crs(out)
 	} else {
@@ -62,6 +62,7 @@ methods::setMethod(
 		out
 	}
 )
+
 #' @rdname crs
 #' @aliases st_crs
 #' @exportMethod st_crs
@@ -70,7 +71,7 @@ methods::setMethod(
 	signature = c(x = "missing"),
 	definition = function(x) {
 		x <- region()
-		out <- sf::st_crs(x)
+		out <- st_crs(x)
 		out
 	}
 )
