@@ -70,7 +70,7 @@ setValidity("GRaster",
 .makeGRaster <- function(gn, names = "raster") {
 
 	info <- .rastInfo(gn)
-	new(
+	out <- new(
 		"GRaster",
 		location = getFastOptions("location"),
 		mapset = getFastOptions("mapset"),
@@ -79,7 +79,7 @@ setValidity("GRaster",
 		topology = info[["topology"]][1L],
 		extent = c(info[["west"]][1L], info[["east"]][1L], info[["south"]][1L], info[["north"]][1L]),
 		zextent = c(info[["zbottom"]][1L], info[["ztop"]][1L]),
-		nLayers = length(gn),
+		nLayers = length(info$gnames),
 		dimensions = c(info[["rows"]][1L], info[["cols"]][1L], info[["depths"]][1L]),
 		resolution = c(info[["ewres"]][1L], info[["nsres"]][1L], info[["tbres"]][1L]),
 		gnames = gn,
@@ -89,4 +89,7 @@ setValidity("GRaster",
 		minVal = info[["minVal"]],
 		maxVal = info[["maxVal"]]
 	)
+	out <- .makeUniqueNames(out)
+	out
+
 }
