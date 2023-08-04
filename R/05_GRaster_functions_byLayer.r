@@ -4,7 +4,7 @@
 #'
 #' * Absolute value: `abs()`
 #' * Trigonometric functions (assumes values are in radians): `cos()`, `sin()`, `tan()`, `acos()`, `asin()`, `atan()`, `atan2()`
-#' * Exponential and logarithmic functions: `exp()`, `log()` (natural log), `log1p()`, `log2()`, `log10()`
+#' * Exponential and logarithmic functions: `exp()`, `log()` (natural log), `ln()` (also natural log), `log1p()` (same as `log(x + 1)`), `log2()` (log, base 2), `log10()` (log, base 10)
 #' * Power functions: `sqrt()`, `x^y`
 #' * Rounding: `round()`, `floor()`, `ceiling()`, `trunc()`
 #'
@@ -174,6 +174,15 @@ setMethod(
 	function(x, base = exp(1)) .genericFx2("log", x, base)
 )
 
+#' @aliases log ln
+#' @rdname math
+#' @exportMethod ln
+setMethod(
+	"ln",
+	signature = "GRaster",
+ 	function(x) .genericFx2("log", x, y = exp(1))
+)
+
 #' @aliases log2
 #' @rdname math
 #' @export
@@ -311,20 +320,24 @@ setMethod(
 .genericFx <- function(fx, x) {
 
 	.restore(x)
-	for (i in 1L:nlyr(x)) {
 	
-		name <- names(x)[i]
-		gn <- .makeGName(name, "rast")
-		ex <- paste0(gn, " = ", fx, "(double(", .gnames(x)[i], "))")
-		rgrass::execGRASS("r.mapcalc", expression=ex, flags=c("quiet", "overwrite"), intern=TRUE)
-		this <- .makeGRaster(gn, name)
-		if (i == 1L) {
-			out <- this
-		} else {
-			out <- c(out, this)
-		}
+	nLayers <- nlyr(x)
+	gns <- .makeGName(names(x), "raster", nLayers)
+	
+	for (i in seq_len(nLayers)) {
+	
+		ex <- paste0(gns[i], " = ", fx, "(double(", .gnames(x)[i], "))")
+
+		args <- list(
+			cmd = "r.mapcalc",
+			expression = ex,
+			flags = c("quiet", "overwrite"),
+			intern=TRUE	
+		)
+		do.call(rgrass::execGRASS, args = args)
+		
 	}
-	out
+	.makeGRaster(gns, names(x))
 
 }
 
@@ -336,15 +349,19 @@ setMethod(
 .genericFx2 <- function(fx, x, y) {
 
 	.restore(x)
-	for (i in 1L:nlyr(x)) {
+
+	nLayers <- nlyr(x)
+	gns <- .makeGName(names(x), "raster", nLayers)
 	
-		name <- names(x)[i]
-		gn <- .makeGName(name, "rast")
-		ex <- paste0(gn, " = ", fx, "(double(", .gnames(x)[i], "), ", y, ")")
+	for (i in seq_len(nLayers)) {
+	
+		ex <- paste0(gns[i], " = ", fx, "(double(", .gnames(x)[i], "), ", y, ")")
+
+		this <- .genericArith(name = fx, gn = gns[i], ex = ex)
+		
 		if (i == 1L) {
-			out <- .genericArith(name = fx, gn = gn, ex = ex)
+			out <- this
 		} else {
-			this <- .genericArith(name = fx, gn = gn, ex = ex)
 			out <- c(out, this)
 		}
 	}
