@@ -3,6 +3,8 @@
 #' @description [as.lines()] converts a `GRaster` to a "lines" `GVector`. Before you apply this function, you may need to run [thin()] on the raster to reduce linear features to a single-cell width. You may also need to use [cleanGeom()] (especially the "duplicated" and "removeDangles" `method`s) afterward to remove duplicated vertices and "dangling" lines.
 #' 
 #' @param x A `GRaster`. If more than one layer is in the `GRaster`, only the first will be used (with a warning).
+#'
+#' @param round Logical: If `TRUE` (default), 
 #' 
 #' @returns A `GVector`.
 #' 
@@ -16,7 +18,7 @@
 methods::setMethod(
     f = "as.lines",
     signature = c(x = "GRaster"),
-    function(x, round = TRUE, smooth = FALSE) {
+    function(x) {
 
     if (nlyr(x) > 1L) warning("The raster has >1 layer. Only the first will be used.")
     x <- x[[1L]]
