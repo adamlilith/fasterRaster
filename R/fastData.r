@@ -13,19 +13,16 @@
 #' Rasters (objects of class `SpatRaster` from the **terra** package):
 #' * `madChelsa`: Bioclimatic variables
 #' * `madElev`: Elevation
-#' * `madElevAnt`: Elevation of the Antanambe Commune
-#' * `madElevMan`: Elevation of the Manompana Commune
 #' * `madForest2000`: Forest cover in year 2000
 #' * `madForest2014`: Forest cover in year 2014
 #'
 #' @return A `SpatRaster` or `sf` spatial vector.
 #'
-#' @seealso [madCoast0], [madCoast4], [madDypsis], [madElev], [madElevAnt], [madElevMan], [madForest2000], [madForest2014], [madRivers]
+#' @seealso [madCoast0], [madCoast4], [madDypsis], [madElev], [madForest2000], [madForest2014], [madRivers]
 #'
 #' @example man/examples/ex_fastData.r
 #'
 #' @export
-
 fastData <- function(x) {
 
 	vectors <- c("madCoast0", "madCoast4", "madDypsis", "madRivers")
