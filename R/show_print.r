@@ -2,7 +2,7 @@
 #'
 #' @description Display a `GSession`, `GSpatial`, `GRegion`, `GRaster`, or `GVector` object.
 #'
-#' @param object An object of class `GSession`, `GSpatial`, `GRegion`, `GRaster`, or `GVector`.
+#' @param object,x An object of class `GSession`, `GSpatial`, `GRegion`, `GRaster`, or `GVector`.
 #'
 #' @returns Nothing (side effect is to display metadata on the given object).
 #'
@@ -66,7 +66,7 @@ methods::setMethod(
 methods::setMethod(
 	f = "print",
 	signature = "GSpatial",
-	definition = function(x) show(x)
+ 	definition = function(x) show(x)
 )
 
 #' @aliases show
@@ -107,7 +107,7 @@ methods::setMethod(
 methods::setMethod(
 	f = "print",
 	signature = "GRegion",
-	definition = function(x) show(x)
+ 	definition = function(x) show(x)
 )
 
 #' @aliases show
@@ -194,7 +194,7 @@ methods::setMethod(
 methods::setMethod(
 	f = "print",
 	signature = "GRaster",
-	definition = function(x) show(x)
+ 	definition = function(x) show(x)
 )
 
 #' @aliases show
@@ -274,8 +274,10 @@ methods::setMethod(f="show", signature="GVector",
 #' @aliases print
 #' @rdname show
 #' @exportMethod print
-methods::setMethod(f="print", signature="GVector",
-	definition = function(x) show(x)
+methods::setMethod(
+	f = "print",
+	signature = "GVector",
+ 	definition = function(x) show(x)
 )
 
 
@@ -285,7 +287,7 @@ methods::setMethod(f="print", signature="GVector",
 
 	if (inherits(x, c("SpatRaster", "SpatVector", "sf"))) {
 		x <- sf::st_crs(x)
-	} else if (inherits(x, "GSpatial")) {
+	} else if (inherits(x, "GSession")) {
 		x <- st_crs(x)
 	} else if (!inherits(x, "crs")) {
 		x <- sf::st_crs(x)
