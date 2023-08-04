@@ -6,7 +6,7 @@
 #'
 #' @docType data
 #'
-#' @usage fast(system.file("extdata/shapes/madCoast.shp", package = "fasterRaster"))
+#' @usage system.file("extdata/shapes/madCoast.shp", package = "fasterRaster")
 #'
 #' @format ESRI Shapefile.
 #'
