@@ -10,8 +10,9 @@ if (!isGeneric("[[")) methods::setGeneric(name = "[[<-", def = function(x, ...) 
 methods::setGeneric(name = ".maxVal", def = function(x, ...) standardGeneric(".maxVal"))
 methods::setGeneric(name = ".minVal", def = function(x, ...) standardGeneric(".minVal"))
 
+#' @importFrom terra add<-
 #' @importFrom terra app
-methods::setGeneric(name = "appFuns", def = function(x, ...) standardGeneric("appFuns"))
+methods::setGeneric(name = "appFuns", def = function(show, ...) standardGeneric("appFuns"))
 methods::setGeneric(name = "appCheck", def = function(x, fun, ...) standardGeneric("appCheck"))
 #' @importFrom terra as.contour
 # # # methods::setGeneric(name = "as.contour", package="terra")
@@ -19,15 +20,11 @@ methods::setGeneric(name = "as.cell", def = function(x, ...) standardGeneric("as
 methods::setGeneric(name = "as.fcell", def = function(x, ...) standardGeneric("as.fcell"))
 methods::setGeneric(name = "as.dcell", def = function(x, ...) standardGeneric("as.dcell"))
 setGeneric("as.data.frame")
-# #' @importFrom terra as.lines # Warning that "=" is not exported from terra
-# #' @importFrom terra as.points # Warning that "=" is not exported from terra
-# #' @importFrom terra as.polygons # Warning that "=" is not exported from terra
-if (!isGeneric("as.lines")) { setGeneric("as.lines", function(x,...) standardGeneric("as.lines")) }
-if (!isGeneric("as.points")) { setGeneric("as.points", function(x,...) standardGeneric("as.points")) }
-if (!isGeneric("as.polygons")) { setGeneric("as.polygons", function(x,...) standardGeneric("as.polygons")) }
-# #' methods::setGeneric(name = "aggregate", package="stats")
-# #' @importFrom stats aggregate
-if (!isGeneric("aggregate")) methods::setGeneric("aggregate", function(x,...) standardGeneric("aggregate"))
+setGeneric("as.lines", function(x,...) standardGeneric("as.lines"))
+setGeneric("as.points", function(x,...) standardGeneric("as.points"))
+setGeneric("as.polygons", function(x,...) standardGeneric("as.polygons"))
+setGeneric("aggregate", function(x, ...) standardGeneric("aggregate"), package = "stats")
+#' @importFrom terra aggregate
 
 methods::setGeneric(name = "bottom", def = function(x, ...) standardGeneric("bottom"))
 #' @importFrom terra buffer
@@ -83,6 +80,7 @@ methods::setGeneric(name = "intercept", def=function(x, ...) standardGeneric("in
 
 methods::setGeneric(name = "kurtosis", def=function(x, ...) standardGeneric("kurtosis"))
 
+methods::setGeneric(name = "ln", def = function(x, ...) standardGeneric("ln"))
 methods::setGeneric(name = "location", def = function(x) standardGeneric("location"))
 methods::setGeneric(name = "longlat", def = function(x) standardGeneric("longlat"))
 
@@ -115,6 +113,7 @@ methods::setGeneric(name = "nunique", def = function(x, ...) standardGeneric("nu
 
 methods::setGeneric(name = "r2", def=function(x, ...) standardGeneric("r2"))
 methods::setGeneric(name = "rnormRast", def = function(x, ...) standardGeneric("rnormRast"))
+methods::setGeneric(name = "runifRast", def = function(x, ...) standardGeneric("runifRast"))
 #' @importFrom terra rast
 methods::setGeneric(name = ".refresh", def=function(x, ...) standardGeneric(".refresh"))
 methods::setGeneric(name = "regionDim", def=function(x, ...) standardGeneric("regionDim"))
@@ -126,6 +125,7 @@ methods::setGeneric(name = "region", def=function(x, ...) standardGeneric("regio
 methods::setGeneric(name = "res3d", def = function(x) standardGeneric("res3d"))
 
 methods::setGeneric(name = "sdpop", def=function(x, ...) standardGeneric("sdpop"))
+methods::setGeneric(name = "selectRange", def = function(x, ...) standardGeneric("selectRange"))
 #' @importFrom methods show
 #' @importFrom terra simplifyGeom
 methods::setGeneric(name = "smoothGeom", def=function(x, ...) standardGeneric("smoothGeom"))
@@ -146,6 +146,7 @@ methods::setGeneric(name = "st_distance", def=function(x, y, ...) standardGeneri
 methods::setGeneric(name = "thin", def=function(x, ...) standardGeneric("thin"))
 methods::setGeneric(name = "top", def=function(x, ...) standardGeneric("top"))
 methods::setGeneric(name = "topology", def=function(x, ...) standardGeneric("topology"))
+#' @importFrom terra trim
 methods::setGeneric(name = "tvalue", def=function(x, ...) standardGeneric("tvalue"))
 
 methods::setGeneric(name = "varpop", def=function(x, ...) standardGeneric("varpop"))
