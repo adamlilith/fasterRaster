@@ -20,6 +20,8 @@
 #' * `"float"`: Force rasters to be considered floating-point values.
 #' * `"double"`: Force rasters to be considered double-floating point values.
 #' * `"auto"` (default): Ensure that rasters are represented by their native [datatype()] (i.e., "CELL" rasters as integers, "FCELL" rasters as floating-point, and "DCELL" as double-floating point).
+#'
+#' @param seed Numeric integer vector or `NULL` (default): A number for the random seed. Used only for `app()` function `rand()`, that generates a random number. If `NULL`, a seed will be generated. Defining the seed is useful for replicating a raster made with `rand()`. This must be an integer!
 #' 
 #' @param show Logical (function `appFuns()`):
 #' * `FALSE` (default): Return a `data.frame` or `data.table` with definitions of functions.
@@ -41,14 +43,12 @@
 methods::setMethod(
     f = "app",
     signature = c(x = "GRaster"),
-    function(x, fun, ensure = "auto") {
+    function(x, fun, ensure = "auto", seed = NULL) {
 
     fun <- trimws(fun)
 
     if (substr(fun, 1L, 1L) != "=") stop("Argument ", sQuote("fun"), " should begin with an equals sign.")
-    
     if (substr(fun, 1L, 2L) == "==") stop("Argument ", sQuote("fun"), " cannot begin with a double equals sign.")
-
     if (substr(fun, 1L, 2L) != "= ") fun <- paste0("= ", substr(fun, 2L, nchar(fun)))
 
     appCheck(x, fun, msgOnGood = FALSE, failOnBad = TRUE)
@@ -95,11 +95,13 @@ methods::setMethod(
     args <- list(
         cmd = "r.mapcalc",
         expression = fun,
+        seed = seed,
         flags = c("quiet", "overwrite"),
         intern = TRUE
     )
+    if (is.null(seed)) args$flags <- c(args$flags, "s")
     do.call(rgrass::execGRASS, args = args)
-    .makeGRaster(gn, "layer")
+    .makeGRaster(gn, "app")
 
     } # EOF
 )
@@ -109,13 +111,13 @@ methods::setMethod(
 #' @exportMethod appFuns
 methods::setMethod(
     f = "appFuns",
-    signature = c(x = "logical"),
-    function(x = FALSE) {
+    signature = c(show = "logical"),
+    function(show = FALSE) {
     
 	appFunsTable <- NULL
     utils::data("appFunsTable", envir = environment(), package = "fasterRaster")
 
-    if (x & interactive()) {
+    if (show & interactive()) {
 
         showableCols <- c("Type", "GRASS_Function", "R_Function", "Definition", "Returns")
 
@@ -135,7 +137,7 @@ methods::setMethod(
             }
         )
         
-    } else if (!interactive() & x) {
+    } else if (show & !interactive()) {
         warning("You must be running R interactively to view the table using appFuns().")
     }
 
