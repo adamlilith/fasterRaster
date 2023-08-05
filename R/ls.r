@@ -2,6 +2,8 @@
 #'
 #' Display or delete the names of all rasters and/or vectors that have been exported to or created in the active **GRASS** session"s location and mapset.
 #'
+#' @param type Character: One or more of `"rasters"`, `"vectors"`, `"rasters3d"`, `"groups"`, or missing: Type of object(s) to display. If missing, all objects are displayed.
+#' 
 #' @param x Character, a `GSpatial` object, or missing (default):
 #' * Character:
 #'      * Any of `"rasters"` (all rasters), `"vectors"` (all spatial vectors), `"rasters3d"` (3D-rasters), and/or `"groups"` (groups), and all of these types will be deleted. Partial matching is supported. 
@@ -9,6 +11,7 @@
 #' * `GSpatial` object (i.e., a `GRaster` or `GVector`): Delete this object.
 #' * Missing: Delete everything in the active **GRASS** session.
 #' @param type The type of spatial objects to display or delete. This can include `"rasters"` (all rasters), `"vectors"` (all spatial vectors), `"rasters3d"` (3D-rasters), and/or `"groups"` (groups). Partial matching is supported.
+#'
 #' @param warn Logical: If `TRUE` (default), display warning if no matches or if everything is to be deleted.
 #' 
 #' @return Character vector of names of **GRASS** objects.
@@ -20,8 +23,7 @@
 #' @export
 #' @noRd
 .ls <- function(
-	type = c("rasters", "vectors", "rasters3d", "groups"),
-	warn = TRUE
+	type = c("rasters", "vectors", "rasters3d", "groups")
 ) {
 
 	rov <- c("rasters", "vectors", "rasters3d", "groups")
