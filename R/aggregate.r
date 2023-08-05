@@ -1,6 +1,6 @@
 #' Aggregate values of raster cells into larger cells
 #'
-#' @description `aggregate()` creates a new raster with cells that are an even multiple of the size of the cells of the original raster.
+#' @description `aggregate()` creates a new raster with cells that are a multiple of the size of the cells of the original raster. The new cells can be larger or smaller than the original cells (this function thus emulates the `terra::aggregate()` and [terra::disagg()] functions in **terra**.)
 #'
 #' @param x A `GRaster`.
 #'
@@ -34,8 +34,8 @@
 #'
 #' @example man/examples/ex_aggregate.r
 #'
-#' @aliases aggregate
-#' @rdname aggregate
+#' @aliases aggregate,disagg
+#' @rdname aggregate,disagg
 #' @exportMethod aggregate
 methods::setMethod(
 	f = "aggregate",
