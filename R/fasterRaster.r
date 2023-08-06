@@ -45,13 +45,15 @@
 #' 
 #' ## Functions that operate on or create `GRasters`
 #' [Arithmetic]: Mathematical operations on `GRaster`s: `+`, `-`, `*`, `/`, `^`, `%%` (modulus), `%/%` (integer division)\cr
+#' Equality: `<`, `<=`, `==`, `!=`, `>=`, `>`
 #'
 #' Single-layer functions (applied to each layer of a `GRaster`):
+#' - `NA`s: [is.na()] and [not.na()] \cr
 #' - Trigonometry: [sin()], [cos()], [tan()], [asin()], [acos()], [atan()], [atan2()] \cr
 #' - Logarithms and powers: [exp()], [log()], [ln()], [log1p()], [log2()], [log10()], [sqrt()] \cr
 #' - Rounding: [round()], [floor()], [ceiling()], [trunc()] \cr
 #' - Signs: [abs()] \cr
-#' 
+#'
 #' Multi-layer functions (applied across layers of a "stack" of `GRaster`s):
 #' - Numeration: [sum()], [count()] \cr
 #' - Central tendency: [mean()], [mmode()], [median()] \cr

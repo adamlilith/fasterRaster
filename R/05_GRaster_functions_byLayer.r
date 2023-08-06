@@ -2,20 +2,87 @@
 #'
 #' @description You can apply mathematical operators to `GRaster`s. These include:\cr
 #'
+#' * `NA`s: `is.na()`, `!is.na()`, and `not.na()`
 #' * Absolute value: `abs()`
 #' * Trigonometric functions (assumes values are in radians): `cos()`, `sin()`, `tan()`, `acos()`, `asin()`, `atan()`, `atan2()`
 #' * Exponential and logarithmic functions: `exp()`, `log()` (natural log), `ln()` (also natural log), `log1p()` (same as `log(x + 1)`), `log2()` (log, base 2), `log10()` (log, base 10)
 #' * Power functions: `sqrt()`, `x^y`
 #' * Rounding: `round()`, `floor()`, `ceiling()`, `trunc()`
 #'
-#' @param x,y `GRaster`s
+#' @param x,y `GRaster`s.
+#'
+#' @param falseNA Function `not.na()`, logical: If `FALSE` (default), non-`NA` cells will be converted to 1, and `NA` cells to 0. If `TRUE`, non-`NA` cells will be converted to  and `NA` cells will stay as `NA`.
+#'
 #' @param base Numeric: Base of the logarithm.
+#'
 #' @param digits Numeric: Number of digits to round to. If negative, then rounding is to the nearest power of 10. For example, if `digits = -2`, then the `GRaster` values are rounded to the nearest 100.
 #'
 #' @returns A `GRaster`.
 #'
 #' @example man/examples/ex_GRaster_arithmetic.r
 #'
+#' @aliases is.na
+#' @rdname math
+#' @exportMethod is.na
+setMethod(
+	"is.na",
+	signature(x = "GRaster"),
+	function(x) {
+	
+	.restore(x)
+	region(x)
+
+	gns <- .makeGName("isNA", "raster", nlyr(x))
+	for (i in seq_len(nlyr(x))) {
+	
+		ex <- paste0(gns[i], " = if(isnull(", .gnames(x)[i], "), 1, 0)")
+		args <- list(
+			cmd = "r.mapcalc",
+			expression = ex,
+			flags = c("quiet", "overwrite"),
+			intern = TRUE
+		)
+		do.call(rgrass::execGRASS, args = args)
+	
+	}
+	.makeGRaster(gns, "layer")
+
+	} # EOF
+)
+
+#' @aliases not.na
+#' @rdname math
+#' @exportMethod not.na
+setMethod(
+	"not.na",
+	signature(x = "GRaster"),
+	function(x, falseNA = FALSE) {
+	
+	.restore(x)
+	region(x)
+
+	gns <- .makeGName("notNA", "raster", nlyr(x))
+	for (i in seq_len(nlyr(x))) {
+	
+		ex <- if (falseNA) {
+			paste0(gns[i], " = if(isnull(", .gnames(x)[i], "), 1, null())")
+		} else {
+   			paste0(gns[i], " = if(isnull(", .gnames(x)[i], "), 1, 0)")
+		}
+		args <- list(
+			cmd = "r.mapcalc",
+			expression = ex,
+			flags = c("quiet", "overwrite"),
+			intern = TRUE
+		)
+		do.call(rgrass::execGRASS, args = args)
+	
+	}
+	.makeGRaster(gns, "layer")
+
+	}
+)
+
 #' @aliases abs
 #' @rdname math
 #' @exportMethod abs
@@ -115,10 +182,10 @@ setMethod(
 			name <- paste0(names(y)[i], "_", names(x)[i])
 			gn <- .makeGName(name, "rast")
 			ex <- paste0(gn, " = atan(double(", .gnames(x)[i], ") , double(", .gnames(y)[i], "))  * (", pi, " / 180)")
+			this <- .genericArith(name = name, gn = gn, ex = ex)
 			if (i == 1L) {
-				out <- .genericArith(name = name, gn = gn, ex = ex)
+				out <- this
 			} else {
-				this <- .genericArith(name = name, gn = gn, ex = ex)
 				out <- c(out, this)
 			}
 		}
@@ -129,7 +196,6 @@ setMethod(
 
 #' @aliases exp
 #' @rdname math
-#' @export
 #' @exportMethod exp
 setMethod(
 	"exp",
@@ -139,7 +205,6 @@ setMethod(
 
 #' @aliases log1p
 #' @rdname math
-#' @export
 #' @exportMethod log1p
 setMethod(
 	"log1p",
@@ -147,19 +212,23 @@ setMethod(
 	function(x) {
 
 		.restore(x)
-		for (i in 1L:nlyr(x)) {
+		region(x)
+
+		gns <- .makeGName(name, "rast", nlyr(x))
+		for (i in seq_len(nlyr(x))) {
 
 			name <- names(x)[i]
-			gn <- .makeGName(name, "rast")
-			ex <- paste0(gn, " = log(", .gnames(x)[i], " + 1)")
-			if (i == 1L) {
-				out <- .genericArith(name = name, gn = gn, ex = ex)
-			} else {
-				this <- .genericArith(name = name, gn = gn, ex = ex)
-				out <- c(out, this)
-			}
+			ex <- paste0(gns[i], " = log(", .gnames(x)[i], " + 1)")
+			args <- list(
+				cmd = "r.mapcalc",
+				expression = ex,
+				flags = c("quiet", "overwrite"),
+				intern = TRUE
+			)
+			do.call(rgrass::execGRASS, args = args)
+
 		}
-		out
+		.makeGRaster(gns, "log1p")
 		
 	} # EOF
 )
@@ -270,22 +339,18 @@ setMethod(
 .genericTrig <- function(fx, x) {
 
 	.restore(x)
+	region(x)
+	gns <- .makeGName(name, "rast", nlyr(x))
 	for (i in 1L:nlyr(x)) {
 	
 		name <- names(x)[i]
 
-		gn <- .makeGName(name, "rast")
-		ex <- paste0(gn, " = ", fx, "(", .gnames(x)[i], " * 180 / ", pi, ")")
+		ex <- paste0(gns[i], " = ", fx, "(", .gnames(x)[i], " * 180 / ", pi, ")")
 		rgrass::execGRASS("r.mapcalc", expression=ex, flags=c("quiet", "overwrite"), intern=TRUE)
 		this <- .makeGRaster(gn, name)
-		if (i == 1L) {
-			out <- this
-		} else {
-			out <- c(out, this)
-		}
 		
 	}
-	out
+	.makeGRaster(gns, fx)
 
 }
 
@@ -296,20 +361,16 @@ setMethod(
 .genericArcTrig <- function(fx, x) {
 
 	.restore(x)
+	region(x)
+
+	gns <- .makeGName(name, "rast", nlyr(x))
 	for (i in 1L:nlyr(x)) {
 	
 		name <- names(x)[i]
-		gn <- .makeGName(name, "rast")
-		ex <- paste0(gn, " = ", fx, "(", .gnames(x)[i], ") * ", pi, " / 180")
+		ex <- paste0(gns[i], " = ", fx, "(", .gnames(x)[i], ") * ", pi, " / 180")
 		rgrass::execGRASS("r.mapcalc", expression=ex, flags=c("quiet", "overwrite"), intern=TRUE)
-		this <- .makeGRaster(gn, name)
-		if (i == 1L) {
-			out <- this
-		} else {
-			out <- c(out, this)
-		}
 	}
-	out
+	.makeGRaster(gns, fx)
 
 }
 
@@ -320,6 +381,7 @@ setMethod(
 .genericFx <- function(fx, x) {
 
 	.restore(x)
+	region(x)
 	
 	nLayers <- nlyr(x)
 	gns <- .makeGName(names(x), "raster", nLayers)
@@ -337,7 +399,7 @@ setMethod(
 		do.call(rgrass::execGRASS, args = args)
 		
 	}
-	.makeGRaster(gns, names(x))
+	.makeGRaster(gns, fx)
 
 }
 
@@ -349,6 +411,7 @@ setMethod(
 .genericFx2 <- function(fx, x, y) {
 
 	.restore(x)
+	region(x)
 
 	nLayers <- nlyr(x)
 	gns <- .makeGName(names(x), "raster", nLayers)
@@ -357,14 +420,14 @@ setMethod(
 	
 		ex <- paste0(gns[i], " = ", fx, "(double(", .gnames(x)[i], "), ", y, ")")
 
-		this <- .genericArith(name = fx, gn = gns[i], ex = ex)
-		
-		if (i == 1L) {
-			out <- this
-		} else {
-			out <- c(out, this)
-		}
+		args <- list(
+			cmd = "r.mapcalc",
+			expression = ex,
+			flags = c("quiet", "overwrite"),
+			intern = TRUE
+		)
+		do.call(rgrass::execGRASS, args = args)
 	}
-	out
+	.makeGRaster(gns, fx)
 
 }

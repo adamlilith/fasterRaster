@@ -74,6 +74,7 @@ methods::setGeneric(name = "is.fcell", def = function(x) standardGeneric("is.fce
 methods::setGeneric(name = "is.dcell", def = function(x) standardGeneric("is.dcell"))
 #' @importFrom terra is.lines
 #' @importFrom terra is.lonlat
+if (!isGeneric("is.na")) { methods::setGeneric(name = "is.na", def = function(x) standardGeneric("is.na")) }
 #' @importFrom terra is.points
 #' @importFrom terra is.polygons
 methods::setGeneric(name = "intercept", def=function(x, ...) standardGeneric("intercept"))
@@ -101,6 +102,7 @@ methods::setGeneric(name = "ndepth", def = function(x) standardGeneric("ndepth")
 methods::setGeneric(name = "nacell", def = function(x) standardGeneric("nacell"))
 methods::setGeneric(name = "nonnacell", def = function(x) standardGeneric("nonnacell"))
 methods::setGeneric(name = "north", def=function(x, ...) standardGeneric("north"))
+#' @importFrom terra not.na
 methods::setGeneric(name = "ncol", def = function(x) standardGeneric("ncol")) # in base
 methods::setGeneric(name = "nrow", def = function(x) standardGeneric("nrow")) # in base
 methods::setGeneric(name = "nunique", def = function(x, ...) standardGeneric("nunique"))
