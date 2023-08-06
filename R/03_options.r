@@ -20,9 +20,9 @@
 #' ```
 #' @param ... Either a character (the name of an option), or **fasterRaster** option that can be defined using an `option = value` pattern. These include:
 #'
-#' * `autoRegion` (logical): If `TRUE` (default), automatically resize and resample the **GRASS** [region][tutorial_regions] so that it matches the desired output. Changing this to `FALSE` can yield unexpected output.
-#'
 #' * `cores` (integer/numeric): Number of processor cores to use on a task. The default is 1. Only some **GRASS** modules allow this option.
+#'
+#' * `memory` (integer/numeric): The amount of memory to allocate to a task, in MB. The default is 300 MB. Only some **GRASS** modules allow this option.
 #'
 #' * `details` (logical): If `TRUE`, show details on run-time and otherwise hidden slots in classes. This is mainly used for debugging, so most users will want to keep this at its default, `FALSE`.
 #'
@@ -35,7 +35,7 @@
 #'
 #' * `grassVer` (character): Version of **GRASS** being used. This should be supplied as a character string, not as a numeric value. Do not include the minor version (e.g., use `"8.3"`, not `"8.3.1"``). As **GRASS** is developed, new modules and functionalities for existing modules are added. Setting the version correctly allows you to take advantage of these options.
 #' 
-#' * `memory` (integer/numeric): The amount of memory to allocate to a task, in MB. The default is 300 MB. Only some **GRASS** modules allow this option.
+#' * `rasterDataType` (character): The precision of values output when applying mathematical operations to a `GRaster`. By default, this is `"FCELL"` (the same as "float"`), which allows for precision to about the 7th decimal place. However, it can be set to `"DCELL"` (or `"double"`), which allows for precision to about the 15th decimal place. `DCELL` rasters are larger in memory and on disk.
 #'
 #' * `useDataTable` (logical): If `FALSE` (default), use `data.frame`s when going back and forth between data tables of `GVector`s and **R**. This can be slow for very large data tables. If `TRUE`, use `data.table`s from the **data.table** package. This can be much faster, but it might require you to know how to use `data.table`s if you want to manipulate them in **R**. You can always convert them to `data.frame`s using [as.data.frame()].
 #'
@@ -69,35 +69,30 @@ setFastOptions <- function(
 	error <- paste0("Option ", sQuote("grassDir"), " must be ", dQuote("NULL"), " (which is likely to fail)\n  or a single character string. The default is ", dQuote(.grassDirDefault()), ".")
 	if (any(names(opts) %in% "grassDir")) {
 		if (!is.null(opts$grassDir)) {
-			if (!is.character(opts$grassDir)) stop(error)
-			if (length(opts$grassDir) != 1L) stop(error)
+   			if (!is.character(opts$grassDir) || length(opts$grassDir) != 1L) stop(error)
 		}
 	}
 
 	error <- paste0("Option ", sQuote("addonDir"), " must be ", sQuote("NULL"), " or a single character string. The default is ", dQuote(.addonDirDefault()), ".")
 	if (any(names(opts) %in% "addonDir")) {
 		if (!is.null(opts$addonDir)) {
-			if (!is.character(opts$addonDir)) stop(error)
-			if (length(opts$addonDir) != 1L) stop(error)
+   			if (!is.character(opts$addonDir) || length(opts$addonDir) != 1L) stop(error)
 		}
 	}
 
 	error <- paste0("Option ", sQuote("workDir"), " must be a single character string. The default is\n  ", dQuote(.workDirDefault()), ".")
 	if (any(names(opts) %in% "workDir")) {
-		if (!is.character(opts$workDir)) stop(error)
-		if (length(opts$workDir) != 1L) stop(error)
+  		if (!is.character(opts$workDir) || length(opts$workDir) != 1L) stop(error)
 	}
 
 	error <- paste0("Option ", sQuote("location"), " must be a single character string. The default is ", dQuote(.locationDefault()), ".")
 	if (any(names(opts) %in% "location")) {
-		if (!is.character(opts$location)) stop(error)
-		if (length(opts$location) != 1L) stop(error)
+  		if (!is.character(opts$location) || length(opts$location) != 1L) stop(error)
 	}
 
 	error <- paste0("Option ", sQuote("mapset"), " must be a single character string. The default is ", dQuote(.mapsetDefault()), ".")
 	if (any(names(opts) %in% "mapset")) {
-		if (!is.character(opts$mapset)) stop(error)
-		if (length(opts$mapset) != 1L) stop(error)
+  		if (!is.character(opts$mapset) || length(opts$mapset) != 1L) stop(error)
 	}
 
 	if (any(names(opts) %in% "cores")) {
@@ -105,8 +100,7 @@ setFastOptions <- function(
 	}
 
 	if (any(names(opts) %in% "memory")) {
-		if (!is.numeric(opts$memory)) stop("Option ", sQuote("memory"), " must be a positive number. The default is ", .memoryDefault(), " (MB).")
-		if (opts$memory <= 0) stop("Option ", sQuote("memory"), " must be a positive number. The default is ", .memoryDefault(), " (MB).")
+		if (!is.numeric(opts$memory) || opts$memory <= 0) stop("Option ", sQuote("memory"), " must be a positive number. The default is ", .memoryDefault(), " (MB).")
 	}
 
 	# if (any(names(opts) %in% "autoRegion")) {
@@ -114,9 +108,19 @@ setFastOptions <- function(
 	# 	if (is.na(opts$autoRegion)) stop("Option ", sQuote("autoRegion"), " must be TRUE or FALSE (not NA). The default is ", .autoRegionDefault(), ".")
 	# }
 
+	if (any(names(opts) %in% "rasterDataType")) {
+		if (is.na(opts$rasterDataType) || !is.character(opts$rasterDataType) | ) stop("Option ", sQuote("rasterDataType"), " must be one of: ", sQuote("FCELL", " or ", sQuote("float"), " or ", sQuote("DCELL"), " or ", sQuote("double"), ".\n  The default is ", .rasterDataTypeDefault(), ".")
+
+     	opts$rasterDataType <- .pmatchSafe(opts$rasterDataType, c("FCELL", "float", "DCELL", "double"))
+		if (opts$rasterDataType == "FCELL") {
+   			opts$rasterDataType <- "float"
+		} else (if opts$rasterDataType == "DCELL") {
+			opts$rasterDataType <- "double"
+		}
+	}
+
 	if (any(names(opts) %in% "useDataTable")) {
-		if (!is.logical(opts$useDataTable)) stop("Option ", sQuote("useDataTable"), " must be a logical. The default is ", .useDataTableDefault(), ".")
-		if (is.na(opts$useDataTable)) stop("Option ", sQuote("useDataTable"), " must be TRUE or FALSE (not NA). The default is ", .useDataTableDefault(), ".")
+		if (is.na(opts$useDataTable) || !is.logical(opts$useDataTable)) stop("Option ", sQuote("useDataTable"), " must be a logical. The default is ", .useDataTableDefault(), ".")
 	}
 
 	# if (any(names(opts) %in% "vectClass")) {
@@ -128,7 +132,7 @@ setFastOptions <- function(
 	if (any(names(opts) %in% "grassVer")) {
 
 		if (is.null(opts$grassVer) || is.na(opts$grassVer) || !inherits(opts$grassVer, c("numeric", "character"))) {
-			stop("Option <grassVer> must be the version number of GRASS installed on your system. The default is ", .grassVerDefault(), ".")
+			stop("Option ", sQuote("grassVer"), " must be the version number of GRASS installed on your system. The default is ", .grassVerDefault(), ".")
 		}
 
 		opts$grassVer <- as.character(opts$grassVer)
