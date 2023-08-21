@@ -12,13 +12,18 @@
 #'
 #' Rasters (objects of class `SpatRaster` from the **terra** package):
 #' * `madChelsa`: Bioclimatic variables
+#' * `madCover`: Land cover (also see `madCoverCats)
 #' * `madElev`: Elevation
 #' * `madForest2000`: Forest cover in year 2000
 #' * `madForest2014`: Forest cover in year 2014
 #'
+#' Data frames
+#' * `appFunsTable`: Table of functions usable by [app()].
+#' * `madCoverCats`: Land cover values and categories.
+#'
 #' @return A `SpatRaster` or `sf` spatial vector.
 #'
-#' @seealso [madCoast0], [madCoast4], [madDypsis], [madElev], [madForest2000], [madForest2014], [madRivers]
+#' @seealso [madCoast0], [madCoast4], [madCover], [madCoverCats], [madDypsis], [madElev], [madForest2000], [madForest2014], [madRivers]
 #'
 #' @example man/examples/ex_fastData.r
 #'
@@ -26,19 +31,21 @@
 fastData <- function(x) {
 
 	vectors <- c("madCoast0", "madCoast4", "madDypsis", "madRivers")
-	rasters <- c("madChelsa", "madElev", "madElevAnt", "madElevMan", "madForest2000", "madForest2014")
+	tables <- c("appFunsTable", "madCoverCats")
+	rasters <- c("madChelsa", "madCover", "madElev", "madElevAnt", "madElevMan", "madForest2000", "madForest2014")
 
 	if (!inherits(x, "character")) {
 		stop("Please supply the name of an example raster or spatial vector in fasterRaster.")
 	} else {
-		if (x %in% vectors) {
+		if (x %in% c(vectors, tables)) {
 
 			madCoast0 <- madCoast4 <- madDypsis <- madRivers <- NULL
-			out <- do.call(utils::data, list(x, envir=environment(), package="fasterRaster"))
+			madCoverCats <- NULL
+			out <- do.call(utils::data, list(x, envir = environment(), package = "fasterRaster"))
 			out <- get(out)
 
 		} else if (x %in% rasters) {
-			rastFile <- system.file("extdata", paste0(x, ".tif"), package="fasterRaster")
+			rastFile <- system.file("extdata", paste0(x, ".tif"), package = "fasterRaster")
 			out <- terra::rast(rastFile)
 		} else {
 			stop("Please supply the name of a data object available in fasterRaster.")
