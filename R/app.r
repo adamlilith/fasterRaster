@@ -6,6 +6,12 @@
 #' 
 #' The `app()` function will automatically check for raster names that appear also to be functions that appear in the formula, but the `appCheck()` function can be applied to the raster stack plus the formula to do this outside of `app()`. You can obtain a list of functions using `appFuns()`. Note that these are sometimes different from how they are applied in **R**.
 #'
+#' TIPS:
+#' * In **GRASS**, `null()` is the same as `NA` in **R**.
+#' * If you want to calculate values using while removing `NA` (or `null`) values, see the functions that begin with `n` (like `nmean`).
+#' * Be mindful of the data type that a function returns. In **GRASS**, these are `CELL` (integer), `FCELL` (floating point values--precise to about the 7th decimal place), and `DCELL` (double-floating point values--precise to about the 15th decimal place). In cases where you want to ensure a raster to be treated like a float or double data type raster, wrap the raster in the `float()` or `double()` functions to ensure it is treated as such. This is especially useful if the raster might appear like the `CELL` type because it only contains integer values. You can get the data type of a raster by displaying the raster's metadata (type the name of the raster in **R**), or by using [datatype()]. You can change the data type of a `GRaster` using [as.cell()], [as.fcell], and [as.dcell]. You can also change a `CELL` raster to a `FCELL` raster by adding then subtracting a decimal value, as in `x - 0.1 + 0.1`.
+#' * The `rand()` function returns `CELL` (integer) values by default. If you want non-integer values, use the tricks mentioned above to enure non-integer values. For example, the [runifRast()] function's expression is (essentially) `= float(rand(0 + 0.1, 1 + 0.1) - 0.1)`
+#'
 #' @param x A `GRaster` with one or more named layers.
 #'
 #' @param fun Character: The function to apply. This must be written as a character string that follows these rules:
