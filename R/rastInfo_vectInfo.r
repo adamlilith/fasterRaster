@@ -193,10 +193,20 @@
 		}
 
 		# number of categories
-		nCats <- extentinfo[grepl(extentinfo, pattern="ncats=")]
-		nCats <- sub(nCats, pattern="ncats=", replacement="")
+		suppressMessages(
+			catinfo <- rgrass::execGRASS(
+				"r.category",
+				flags = "quiet",
+				map = gn,
+				intern = TRUE,
+				separator = "pipe",
+				Sys_show.output.on.console = FALSE,
+				echoCmd = FALSE
+			)
+		)
+
+		nCats <- length(catinfo)
 		nCats <- as.integer(nCats)
-		# if (length(nCats) == 0L) nCats <- 0L
 			
 		if (grassDataType != "CELL") nCats <- rep(0L, length(nCats))
 
