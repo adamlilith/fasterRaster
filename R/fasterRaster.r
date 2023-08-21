@@ -23,6 +23,7 @@
 #' [is.2d()] and [is.3d()]: Is an object 2- or 3-dimensional?\cr
 #' [is.cell()], [is.fcell()], [is.dcell()]: Raster data type (integer/float/double)\cr
 #' [is.lonlat]: Is an object projected (e.g., in WGS84)?\cr
+#' [levels()]: Names of levels in a categorical raster\cr
 #' [location()]: **GRASS** "location" of an object or the active session\cr
 #' [mapset()]: **GRASS** "mapset" of an object or the active session\cr
 #' [minmax()]: Minimum and maximum values across all non-`NA` cells\cr
@@ -84,6 +85,7 @@
 #' [global()]: Summary statistics across cells of each raster layer\cr
 #' [`hillshade()`][shade]: Create a hillshade raster\cr
 #' [horizonHeight()]: Horizon height\cr
+#' [levels<-]: Assign levels to a categorical raster\cr
 #' [longlat()]: Create longitude/latitude rasters.\cr
 #' [mask()]: Remove values in a raster based on values in another raster or vector\cr
 #' [merge()]: Combine two or more rasters with different extents and fill in `NA`s\cr
