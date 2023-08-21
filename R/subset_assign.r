@@ -5,7 +5,7 @@
 #'     * `[` operator: Returns a subset of geometries (i.e., points, lines, or polygons) of the `GVector`. For example, `vector[2:4]` will return the second through the fourth geometries.
 #'     * `[[` operator: Returns a vector with the selected columns in its data frame. For example, `vector[[2:4]]` returns the `GVector, but with just columns 2 through 4 of the data frame.
 #' * `GRaster`s:
-#'     * `[` operator with the assignment operator, `<-` (example: `raster[] <- 7`): Assigns the given value to all cells in the `GRaster`.
+#'     * `[` operator with the assignment operator, `<-`: Assigns the given value to all cells in the `GRaster`. For examples, `raster[] <- 7` replaces all cell values in `raster` with 7.
 #'     * `[[` operator: Returns `GRaster`s from a "stack" of `GRaster`s. For example, `raster[[2:3]]` returns the second and third rasters in a stack of `GRaster`s, and `raster[[c("bio1", "bio12")]]` returns the two rasters with [names()] "bio1" and "bio12".
 #'     * `[[` operator with the assignment operator, `<-`: Replaces existing layers or adds new layers to a `GRaster`. For example, `x[[2]] <- newRaster` makes the second layer of `x` `newRaster`. If `x` already has two layers, the second one is replaced. If it only had one layer, a second is added.
 #'     * `add<-`: "Stacks" two `GRaster`s. This is the same as `c(x, value)`, where `x` and `value` are `GRaster`.
