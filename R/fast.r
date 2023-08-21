@@ -96,6 +96,7 @@ methods::setMethod(
 	if (rastOrVect == "raster") {
 
 		xRast <- terra::rast(x)
+		xNumCats <- ncat(xRast)
 		nLayers <- terra::nlyr(xRast)
 		xNames <- names(xRast)
 		gn <- .makeGName("importFromFile", rastOrVect = "raster")
@@ -163,7 +164,21 @@ cat("Time-consuming step here for large rasters^^^")
 		do.call(rgrass::execGRASS, args = args)
 		if (nLayers > 1L) gn <- paste0(gn, ".", seq_len(nLayers))
 		out <- .makeGRaster(gn, names = xNames)
-		
+
+		# assign categories to categorical rasters
+		if (any(xNumCats > 0L)) {
+			
+			hasCats <- which(xNumCats > 0L)
+			xLevels <- terra::levels(xRast)
+			
+			for (thisCatRast in hasCats) {
+			
+				categories <- terra::cats(xRast[[thisCatRast]])
+				levels(out[[thisCatRast]]) <- categories
+			
+			}
+		}
+
 	### vector from disk (and project on the fly if needed)
 	#######################################################
 	
