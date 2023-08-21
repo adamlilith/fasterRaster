@@ -109,13 +109,13 @@ setFastOptions <- function(
 	# }
 
 	if (any(names(opts) %in% "rasterDataType")) {
-		if (is.na(opts$rasterDataType) || !is.character(opts$rasterDataType) | ) stop("Option ", sQuote("rasterDataType"), " must be one of: ", sQuote("FCELL", " or ", sQuote("float"), " or ", sQuote("DCELL"), " or ", sQuote("double"), ".\n  The default is ", .rasterDataTypeDefault(), ".")
+		if (is.na(opts$rasterDataType) || !is.character(opts$rasterDataType)) stop("Option ", sQuote("rasterDataType"), " must be one of: ", sQuote("FCELL", " (or ", sQuote("float"), ") or ", sQuote("DCELL"), " (or ", sQuote("double"), ").\n  The default is ", .rasterDataTypeDefault(), "."))
 
      	opts$rasterDataType <- .pmatchSafe(opts$rasterDataType, c("FCELL", "float", "DCELL", "double"))
-		if (opts$rasterDataType == "FCELL") {
-   			opts$rasterDataType <- "float"
-		} else (if opts$rasterDataType == "DCELL") {
-			opts$rasterDataType <- "double"
+		opts$rasterDataType <- if (opts$rasterDataType == "FCELL") {
+   			"float"
+		} else if (opts$rasterDataType == "DCELL") {
+			"double"
 		}
 	}
 
