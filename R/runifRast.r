@@ -39,10 +39,11 @@ methods::setMethod(
 
     for (i in seq_len(n)) {
 
-		# have to add/subtract a fractional number to avoid producing a rounded (CELL) raster
-		num <- 1 / sqrt(pi * exp(1))
+		# # have to add/subtract a fractional number to avoid producing a rounded (CELL) raster
+		# num <- 1 / sqrt(pi * exp(1))
 
-		ex <- paste0(gns[i], " = float(rand(", low, " + ", num, ", ", high, " + ", num, ") - ", num, ")")
+		# ex <- paste0(gns[i], " = float(rand(", low, " + ", num, ", ", high, " + ", num, ") - ", num, ")")
+		ex <- paste0(gns[i], " = float(rand(", low, " + 0.1, ", high, " + 0.1) - 0.1)")
         args <- list(
             cmd = "r.mapcalc",
             expression = ex,
