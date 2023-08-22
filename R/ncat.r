@@ -19,15 +19,7 @@ setMethod(
     f = "ncat",
     signature = "GRaster",
     definition = function(x) {
-        if (x@nCats == 0L) {
-            out <- 0L
-        } else {
-            levs <- levels(x)
-            isChar <- sapply(levs, inherits, "character")
-            out <- rep(NA_integer_, nlyr(x))
-            if (any(isChar)) out[isChar] <- 0L
-            if (any(!isChar)) out[!isChar] <- sapply(levs[!isChar], nrow)
-        }
+        out <- x@nCats
 		names(out) <- names(x)
         out
     } # EOF
@@ -41,7 +33,9 @@ setMethod(
     signature = "SpatRaster",
     definition = function(x, dropLevels = TRUE) {
         if (dropLevels) x <- terra::droplevels(x)
-        out <- sapply(terra::levels(x), nrow)
+        out <- lapply(terra::levels(x), nrow) # cannot use sapply
+        out <- unlist(out)
+        if (any(is.null(out))) out[is.null(out)] <- 0L
         names(out) <- names(x)
         out
     } # EOF
