@@ -114,19 +114,20 @@ methods::setMethod(
 #' @rdname show
 #' @exportMethod show
 methods::setMethod(
-	f="show",
-	signature="GRaster",
+	f = "show",
+	signature = "GRaster",
 	definition = function(object) {
 
+	maxColWidth <- 30L
 	details <- getFastOptions("details")
 
-	digs <- min(5, getOption("digits"))
+	digs <- min(7, getOption("digits"))
 	resol <- round(object@resolution, digs)
 	if (length(resol) == 2L) resol <- c(resol, NA_real_)
 	
-	extent <- round(object@extent, min(digs, 2))
+	extent <- round(object@extent, min(digs, 3))
 
-	# pad everything by same amount so display of data for each later appears in neat columns
+	### pad everything by same amount so display of data for each later appears in neat columns
 	minVal <- round(object@minVal, digs)
 	maxVal <- round(object@maxVal, digs)		
 	
@@ -136,32 +137,92 @@ methods::setMethod(
 	if (anyNA(minValLength)) minValLength[is.na(minValLength)] <- 2L
 	if (anyNA(maxValLength)) maxValLength[is.na(maxValLength)] <- 2L
 	
+	# minimum and maximum category values
+	ncats <- ncat(object)
+	if (any(ncats > 0L)) {
+	
+		minCat <- maxCat <- rep(NA_character_, object@nLayers)
+		levs <- levels(object)
+		for (i in seq_along(levs)) {
+
+			if (ncats[i] == 0L) {
+				minCat[i] <- ""
+				maxCat[i] <- ""
+			} else {
+
+				if (is.data.frame(levs[[i]])) {
+					valueOrder <- order(as.numeric(levs[[i]]$Value))
+					levs[[i]] <- levs[[i]][valueOrder, , drop = FALSE]
+				} else {
+					levs[[i]]$TEMPTEMP_newValue <- as.numeric(levs[[i]][["Value"]])
+     				levs[[i]] <- data.table::setorderv(levs[[i]], cols = "TEMPTEMP_newValue")
+				}
+				minCat[i] <- levs[[i]]$Label[1L]
+				maxCat[i] <- levs[[i]]$Label[nrow(levs[[i]])]
+			}
+		}
+	
+	} else {
+		minCat <- maxCat <- rep("", object@nLayers)
+	}
+
+	# truncate long names
+	namesChar <- object@names
+	ncharNames <- nchar(namesChar)
+	if (any(ncharNames > maxColWidth)) {
+    	namesChar[ncharNames > maxColWidth] <-
+   			paste0(substr(namesChar[ncharNames > maxColWidth], 1L, maxColWidth - 1L), "~")
+	}
+
+	# truncate long gnames
+	if (details) {
+	
+		gnames <- object@gnames
+		ncharNames <- nchar(gnames)
+		if (any(ncharNames > maxColWidth)) {
+			gnames[ncharNames > maxColWidth] <-
+				paste0(substr(gnames[ncharNames > maxColWidth], 1L, maxColWidth - 1L), "~")
+		}
+	}
+
+	# number of characters of longest display item
 	nc <- pmax(
 		rep(3, object@nLayers),
-		nchar(object@names),
+		nchar(namesChar),
 		nchar(object@datatypeGRASS),
 		nchar(object@nCats),
-		minValLength,
-		maxValLength
+		minValLength, maxValLength
 	)
-	if (details) nc <- pmax(nc, nchar(object@gnames))
+	if (details) nc <- pmax(nc, nchar(gnames))
 
-	gnames <- names <- datatype <- nCats <- minValChar <- maxValChar <- rep(NA, object@nLayers)
+	# truncate category names
+	if (any(nchar(minCat) > nc)) {
+  		minCat[nchar(minCat) > nc] <- paste0(substr(minCat[nchar(minCat) > nc], 1L, nc - 1L), "~")
+	}
+	if (any(nchar(maxCat) > nc)) {
+  		maxCat[nchar(maxCat) > nc] <- paste0(substr(maxCat[nchar(maxCat) > nc], 1L, nc - 1L), "~")
+	}
+
+	gnamesChar <- names <- datatype <- nCats <- minValChar <- maxValChar <- minCatChar <- maxCatChar <- rep(NA, object@nLayers)
 	for (i in seq_len(object@nLayers)) {
 		fmt <- paste0("%", nc[i], "s")
-		gnames[i] <- sprintf(fmt, object@gnames[i])
+		gnamesChar[i] <- sprintf(fmt, gnames[i])
 		names[i] <- sprintf(fmt, object@names[i])
 		datatype[i] <- sprintf(fmt, object@datatypeGRASS[i])
 		nCats[i] <- sprintf(fmt, object@nCats[i])
+		minCatChar[i] <- sprintf(fmt, minCat[i])
+		maxCatChar[i] <- sprintf(fmt, maxCat[i])
 		minValChar[i] <- sprintf(fmt, minVal[i])
 		maxValChar[i] <- sprintf(fmt, maxVal[i])
 	}
 	
-	gnames <- paste(gnames, collapse=" ")
+	gnames <- paste(gnamesChar, collapse=" ")
 	names <- paste(names, collapse=" ")
 	datatype <- paste(datatype, collapse=" ")
 	minValChar <- paste(minValChar, collapse=" ")
 	maxValChar <- paste(maxValChar, collapse=" ")
+	minCatChar <- paste(minCatChar, collapse=" ")
+	maxCatChar <- paste(maxCatChar, collapse=" ")
 
 	cat("class       : GRaster\n")
 	if (details) {
@@ -177,15 +238,19 @@ methods::setMethod(
 	}
 	cat("coord ref.  :", .showCRS(object), "\n")
 	if (details) cat("projection  :", object@projection, "\n")
-	if (details) cat("gnames(s)   :", gnames, "\n")
-	cat("name(s)     :", names, "\n")
-	if (details) cat("datatype*   :", datatype, "\n")
-	if (details | any(ncat(object) > 0L)) cat("num. categ. :", nCats, "\n")
-	cat("min. value  :", minValChar, "\n")
-	cat("max. value  :", maxValChar, "\n")
-	cat("* GRASS datatype\n")
-
+	if (details) cat("gnames      :", gnames, "\n")
+	cat("name        :", names, "\n")
+	if (details) cat("datatype    :", datatype, "\n")
+	if (any(ncats > 0L)) {
+	  cat("num. categ. :", nCats, "\n")
+		cat("min. categ. :", minCatChar, "\n")
+		cat("max. categ. :", maxCatChar, "\n")
+	} else {
+		cat("min. value  :", minValChar, "\n")
+		cat("max. value  :", maxValChar, "\n")
 	}
+
+	} # EOF
 )
 
 #' @aliases print
