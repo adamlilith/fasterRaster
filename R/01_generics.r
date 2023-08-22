@@ -1,8 +1,15 @@
-# globalVariables(c("..int", "..char", "..num"))
 .restore <- NULL
 require(sf)
 require(terra)
 
+### data.table
+.datatable.aware <- TRUE
+
+if (getRversion() >= "2.15.1") {
+    utils::globalVariables(c(".", ".I", ".N", ".SD"), utils::packageName())
+}
+
+### GENERICS
 if (!isGeneric("[")) methods::setGeneric(name = "[", def = function(x, ...) standardGeneric("["))
 if (!isGeneric("[<-")) methods::setGeneric(name = "[<-", def = function(x, ...) standardGeneric("[<-"))
 if (!isGeneric("[[")) methods::setGeneric(name = "[[", def = function(x, ...) standardGeneric("[["))
@@ -70,8 +77,9 @@ methods::setGeneric(name = "horizonHeight", def = function(x, ...) standardGener
 methods::setGeneric(name = "is.2d", def = function(x) standardGeneric("is.2d"))
 methods::setGeneric(name = "is.3d", def = function(x) standardGeneric("is.3d"))
 methods::setGeneric(name = "is.cell", def = function(x) standardGeneric("is.cell"))
-methods::setGeneric(name = "is.fcell", def = function(x) standardGeneric("is.fcell"))
+if (!isGeneric("is.factor")) { methods::setGeneric(name = "is.factor", def = function(x) standardGeneric("is.factor")) }
 methods::setGeneric(name = "is.dcell", def = function(x) standardGeneric("is.dcell"))
+methods::setGeneric(name = "is.fcell", def = function(x) standardGeneric("is.fcell"))
 #' @importFrom terra is.lines
 #' @importFrom terra is.lonlat
 if (!isGeneric("is.na")) { methods::setGeneric(name = "is.na", def = function(x) standardGeneric("is.na")) }

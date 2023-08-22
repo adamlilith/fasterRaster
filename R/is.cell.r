@@ -2,6 +2,10 @@
 #'
 #' @description In **GRASS**, rasters can have three data types: "CELL" (integers/categories), "float" (floating point values, accurate to ~7 decimal places), and "DCELL" (double-precision values, accurate to ~16 decimal places). Often rasters that have integer values are assumed by **GRASS** to represent CELL values, but in some cases they should be DCELL or FCELL.
 #'
+#' The `is.cell()`, `is.fcell()`, and `is.dcell()` functions return `TRUE` or `FALSE`, depending on the data type of the raster.
+#'
+#' The `is.factor()` returns `TRUE` if raster values represent categories. Note that unlike `SpatRaster`s, `GRaster`s can be integer or non-integer and still represent categorical data.
+#'
 #' @param x A `GRaster`.
 #' 
 #' @returns Logical.
@@ -35,4 +39,13 @@ methods::setMethod(
     f = "is.dcell",
     signature = c(x = "GRaster"),
     function(x) datatype(x) == "DCELL"
+)
+
+#' @aliases is.factor
+#' @rdname is.cell
+#' @exportMethod is.factor
+methods::setMethod(
+    f = "is.factor",
+    signature = c(x = "GRaster"),
+    function(x) ncat(x) > 0L
 )
