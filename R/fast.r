@@ -61,7 +61,7 @@ methods::setMethod(
 		rastExtensions <- c(".asc", ".grd", ".img", ".mem", ".tif")
 		vectExtensions <- c(".shp")
 
-		ext <- substr(x, nc - 3, nc)
+		ext <- substr(x, nc - 3L, nc)
 		ext <- tolower(ext)
 
 		if (ext %in% rastExtensions) {
@@ -74,7 +74,7 @@ methods::setMethod(
 		rastExtensions <- c(".saga")
 		vectExtensions <- c(".gpkg")
 
-		ext <- substr(x, nc - 4, nc)
+		ext <- substr(x, nc - 4L, nc)
 		ext <- tolower(ext)
 
 		if (ext %in% rastExtensions) {
@@ -96,8 +96,8 @@ methods::setMethod(
 	if (rastOrVect == "raster") {
 
 		xRast <- terra::rast(x)
-		xNumCats <- ncat(xRast)
 		nLayers <- terra::nlyr(xRast)
+	    xFactors <- terra::is.factor(xRast)
 		xNames <- names(xRast)
 		gn <- .makeGName("importFromFile", rastOrVect = "raster")
 
@@ -121,19 +121,20 @@ methods::setMethod(
 
 			# method
 			if (!is.null(method)) method <- pmatchSafe(method, c("nearest", "bilinear", "bicubic", "lanczos"))
+
 			if (is.null(method)) {
 
-				factors <- terra::is.factor(xRast)
-				nFactors <- sum(factors)
-				if (nFactors > 0L & nFactors < nLayers) {
+				if (any(xFactors) > 0L & sum(xFactors) < nLayers) {
 					stop("Raster file has categorical and non-categorical rasters, so the resampling method cannot be determined automatically.")
-				} else if (nFactors == nLayers) {
+				} else if (sum(xFactors) == nLayers) {
 					method <- "nearest"
 				} else {
 					method <- "bilinear"
 				}
 
 			}
+
+			if (any(xFactors) & method != "nearest") warning("At least one raster is categorical but non-nearest resampling method has been selected. Values may not correspond to categories.")
 
 			if (method != "nearest" & fallback) method <- paste0(method, "_f")
 
@@ -165,10 +166,10 @@ cat("Time-consuming step here for large rasters^^^")
 		if (nLayers > 1L) gn <- paste0(gn, ".", seq_len(nLayers))
 		out <- .makeGRaster(gn, names = xNames)
 
-		# assign categories to categorical rasters
-		if (any(xNumCats > 0L)) {
+		### assign categories to categorical rasters
+		if (any(xFactors)) {
 			
-			hasCats <- which(xNumCats > 0L)
+			hasCats <- which(xFactors)
 			xLevels <- terra::levels(xRast)
 			
 			for (thisCatRast in hasCats) {
