@@ -22,6 +22,7 @@
 #' [global()]: Summary statistics\cr
 #' [is.2d()] and [is.3d()]: Is an object 2- or 3-dimensional?\cr
 #' [is.cell()], [is.fcell()], [is.dcell()]: Raster data type (integer/float/double)\cr
+#' [is.factor]: Does a raster represent categorical data?\cr
 #' [is.lonlat]: Is an object projected (e.g., in WGS84)?\cr
 #' [levels()]: Names of levels in a categorical raster\cr
 #' [location()]: **GRASS** "location" of an object or the active session\cr
@@ -193,4 +194,6 @@
 #' @docType package
 #' @author Adam B. Smith
 #' @name fasterRaster
+#' @keywords internal 
+"_PACKAGE"
 NULL
