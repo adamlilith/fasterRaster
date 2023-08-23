@@ -119,7 +119,7 @@ setMethod(
 		
 		# data type
 		thisDataType <- if (!("datatype" %in% names(dots))) {
-			datatype(x, type="GDAL")
+			datatype(x, type = "GDAL")
 		} else if (dots$datatype == "INT1U") {
 			"Byte"
 		} else if (dots$datatype == "INT2U") {
