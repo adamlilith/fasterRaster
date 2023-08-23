@@ -10,7 +10,7 @@
 #'
 #' @seealso [levels()], [terra::cats()], [terra::levels()], [terra::addCats()], [terra::droplevels()], [categorical rasters][tutorial_categorical_rasters]
 #'
-#' @example man/examples/ex_categorical_rasters.r
+#' @example man/examples/ex_GRaster_categorical.r
 #'
 #' @aliases ncat
 #' @rdname ncat
