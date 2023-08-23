@@ -35,7 +35,7 @@ setMethod(
 	gns <- .makeGName("isNA", "raster", nlyr(x))
 	for (i in seq_len(nlyr(x))) {
 	
-		ex <- paste0(gns[i], " = if(isnull(", .gnames(x)[i], "), 1, 0)")
+		ex <- paste0(gns[i], " = int(if(isnull(", .gnames(x)[i], "), 1, 0))")
 		args <- list(
 			cmd = "r.mapcalc",
 			expression = ex,
@@ -65,9 +65,9 @@ setMethod(
 	for (i in seq_len(nlyr(x))) {
 	
 		ex <- if (falseNA) {
-			paste0(gns[i], " = if(isnull(", .gnames(x)[i], "), 1, null())")
+			paste0(gns[i], " = int(if(isnull(", .gnames(x)[i], "), 1, null()))")
 		} else {
-   			paste0(gns[i], " = if(isnull(", .gnames(x)[i], "), 1, 0)")
+   			paste0(gns[i], " = int(if(isnull(", .gnames(x)[i], "), 1, 0))")
 		}
 		args <- list(
 			cmd = "r.mapcalc",
