@@ -29,33 +29,36 @@ You can install **fasterRaster** from CRAN.  Alternatively, you can get the late
 
 To use **fasterRaster** you will also need to install [GRASS version 8+](https://grass.osgeo.org/) on your operating system. You will need to use the stand-alone installer, not the Open Source Geospatial (OS Geo) installer.
 
-## The `grassDir` argument
-
-You will need to know the install path for **GRASS** and supply it to functions through an argument named `grassDir`. There are two ways to supply this argument. First, you can pass this to each function that needs it. For example, you can call functions like this:  
-
-`grassDir <- 'C:/Program Files/GRASS GIS 8.2' # PC`  
-`grassDir <- "/Applications/GRASS-8.2.app/Contents/Resources" # Mac`  
-`grassDir <- '/usr/local/grass' # Linux... maybe`  
-
 ## An example ##
 
-Let's get started! We'll do a simple operation in which we calculate the distance to rivers (represented by a spatial lines vector object) and burn the distance values into a raster. To do this, we'll be using maps representing the middle of the eastern coast of Madagascar. We will also use the `terra` and `sf` packages for raster and spatial vector support, respectively (**fasterRaster** also works with `terra`'s `SpatVector` class, and in fact "prefers" it).
-
-`library(fasterRaster)`  
-`library(terra)`  
-`library(sf)`  
-
-Now, we need to start a **GRASS** "session". To do this, we run the `faster()` function, which makes the connection to **GRASS** and initiates the "session". We need to supply this function the coordinate reference system (CRS) we'll be using.  Here, we'll get that from a raster that comes with **fasterRaster**.
+We'll do a simple operation in which we add a buffer to lines representing rivers, then calculate the distance to the buffers and burn the distance values into a raster. To do this, we'll be using maps representing the middle of the eastern coast of Madagascar. We will also use the `terra` and `sf` packages for raster and spatial vector support, respectively (**fasterRaster** also works with `terra`'s `SpatVector` class, and in fact "prefers" it).
 
 ```
-# get raster and vector
+library(fasterRaster)
+library(terra)
+library(sf)
+
+# get elevation raster and rivers vector
 madElev <- fastData('madElev') # SpatRaster with elevation
 madRivers <- fastData('madRivers') # sp vector with rivers
 
-# make a temporary working directory
-workDir <- tempdir()
-workDir <- forwardSlash(workDir)
-faster(madElev, grassDir = grassDir, location = 'examples', workDir=workDir)
+# plot inputs
+plot(madElev)
+plot(st_geometry(madRivers), col = "blue", add = TRUE)
+```
+
+To initiate a **GRASS** session in **R**, you can use the `faster()` function. This function requires an argument named `grassDir`. This arguments indicates the folder in which **GRASS** is installed on your system. The folder will vary by operating system and maybe **GRASS** version, but will look something like this:  
+
+```
+grassDir <- "C:/Program Files/GRASS GIS 8.2" # PC
+grassDir <- "/Applications/GRASS-8.2.app/Contents/Resources" # Mac
+grassDir <- "/usr/local/grass" # Linux
+```
+
+We also need to supply the `faster()` function the coordinate reference system (CRS) we'll be using.  Here, we'll get that from a raster that comes with **fasterRaster**.
+
+```
+faster(madElev, grassDir = grassDir, location = "examples")
 ```
 
 This can take a few seconds. Normally, we don't need to use the `location = 'examples'` argument (the default value is `'default'`), but we'll do this here in case you already have a **GRASS** session started and don't want to conflict with it.
@@ -73,9 +76,8 @@ rivers <- fast(madRivers)
 (This raster and this vector are fairly small, so the operations above went fairly fast. However, if you have big-in-memory/big-on-disk objects, importing them into **R** through the **terra** or **sf** packages then into **fasterRaster** using `fast()` can be slow. You can instead use `fast()` to load a file with a raster or vector directly into the **GRASS** session. This is usually faster!)
 
 Now, let's add a 1000-m buffer to the rivers using `buffer()`. As much as possible, **fasterRaster** functions have the same names and same arguments as their counterparts in the **terra** and **sf** packages. This is to help users who are familiar with one or both of those packages. Note, though, that the output from **fasterRaster** is not necessarily guaranteed to be the same as output from the respective functions in other packages. This is because there are different methods to do the same thing, and the developers of **GRASS** may have chosen different methods than the developers of other GIS packages.
-
 ```
-buffs <- buffer(madRivers, width=1000)
+buffs <- buffer(madRivers, width = 1000)
 ```
 
 Finally, let's calculate the distances between the buffered areas and all cells on the raster map using `distance()`.
@@ -83,13 +85,11 @@ Finally, let's calculate the distances between the buffered areas and all cells 
 dists <- distance(elev, buffs)
 ```
 
-A certain weakness of **fasterRaster** is that it lacks in plotting capabilities. For the meantime, we have to convert **fasterRaster** objects back to their **terra**/**sf** counterparts and plot them. We do the conversion using the functions from each package that are used to create rasters or vectors.  This includes `rast()` to create rasters, and `vect()` and `st_as_sf()` to create vectors (these are actually aliases of those functions from the respective packages).
+Now, let's plot the output.
 ```
-buffsTerra <- vect(buffs)
-distsTerra <- vect(dists)
-
-plot(distsTerra)
-plot(buffsTerra, add=TRUE)
+plot(dists)
+plot(buffs, add = TRUE)
+plot(rivers, col = "blue", add = TRUE)
 ```
 
 And that's how it's done!  You can do almost anything in **fasterRaster**  you can do with the other packages. The examples above do not show the advantage of **fasterRaster** because the they are not based in large-in-memory/large-on-disk spatial datasets. For very large datasets, **fasterRaster** can be much faster!
