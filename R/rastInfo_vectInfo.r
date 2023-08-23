@@ -193,22 +193,28 @@
 		}
 
 		# number of categories
-		suppressMessages(
-			catinfo <- rgrass::execGRASS(
-				"r.category",
-				flags = "quiet",
-				map = gn,
-				intern = TRUE,
-				separator = "pipe",
-				Sys_show.output.on.console = FALSE,
-				echoCmd = FALSE
+		if (grassDataType == "CELL") {
+		
+			suppressMessages(
+				catinfo <- rgrass::execGRASS(
+					"r.category",
+					flags = "quiet",
+					map = gn,
+					separator = "pipe",
+					intern = TRUE,
+					Sys_show.output.on.console = FALSE,
+					echoCmd = FALSE
+				)
 			)
-		)
 
-		nCats <- length(catinfo)
-		nCats <- as.integer(nCats)
-			
-		if (grassDataType != "CELL") nCats <- rep(0L, length(nCats))
+			nCats <- length(catinfo)
+			nCats <- as.integer(nCats)
+
+		} else {
+			nCats <- 0L
+		}
+				
+		# if (grassDataType != "CELL") nCats <- rep(0L, length(nCats))
 
 		# # range of values
 		# if (nCats == 0) {
