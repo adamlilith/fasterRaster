@@ -34,8 +34,8 @@
 #'
 #' @example man/examples/ex_aggregate.r
 #'
-#' @aliases aggregate,disagg
-#' @rdname aggregate,disagg
+#' @aliases aggregate
+#' @rdname aggregate
 #' @exportMethod aggregate
 methods::setMethod(
 	f = "aggregate",
