@@ -1,13 +1,13 @@
 #' Set and get categories for categorical rasters
 #'
-#' @description `GRaster`s can represent [categorical data][tutorial_categorical_rasters]. The actual call values are integers, but each of these corresponds to a category "name", such as "desert" or "wetland." A categorical raster is associated with a table that matches each integer value to a category name. The two `levels()` functions are related:
+#' @description `GRaster`s can represent [categorical data][tutorial_raster_data_types]. Cell values are actually integers, each corresponding to a category, such as "desert" or "wetland." A categorical raster is associated with a table that matches each value to a category name. The two `levels()` functions are related:
 #'
 #' * `levels()`: Reports category values and their codes (only those represented in the raster).
 #' * `levels() <-`: Sets category values.
 #'
 #' @param x A `GRaster`.
 #'
-#' @param value A `data.frame`, `data.table`, or a list of `data.frames` or `data.tables`, one per raster layer. The table's first column is the "ID" column and must contain integer values. The second column defines category labels.  (Subsequent columns are ignored.)
+#' @param value A `data.frame`, `data.table`, or a list of `data.frames` or `data.tables`, one per raster layer. The table's first column is the "value" column and must contain numeric values (of class `numeric` or `character`). The second column defines category labels.  (Subsequent columns are ignored.)
 #'
 #' @returns Values returned are:
 #' `levels` list of `data.frame`s or `data.table`s, one per raster.
@@ -59,10 +59,14 @@ methods::setMethod(
 	.restore(x)
 
 	gns <- .copyGSpatial(x)
-	for (i in seq_len(x)) {
+	for (i in seq_along(x)) {
 	
 		# export category values and labels to file to be read in by GRASS
-		rules <- paste0(value[[i]][[1L]], "|", value[[i]][[2L]])
+		if (inherits(value[[i]], "data.frame")) {
+		   rules <- paste0(value[[i]][ , 1L], "|", value[[i]][ , 2L])
+		} else {
+			rules <- paste0(value[[i]][[1L]], "|", value[[i]][[2L]])
+		}
 		rules <- list(rules)
 		tempFile <- tempfile(fileext = ".csv")
 		tempFile <- forwardSlash(tempFile)
@@ -75,7 +79,7 @@ methods::setMethod(
 			quote = FALSE,
 			nThread = getFastOptions("cores")
 		)
-
+		
 		args <- list(
 			cmd = "r.category",
 			map = gns[i],
@@ -106,28 +110,36 @@ methods::setMethod(
 
 	for (i in seq_len(nLayers)) {
 	
-		args <- list(
-			cmd = "r.category",
-			map = .gnames(x)[i],
-			separator = "pipe",
-			flags = "quiet",
-			intern = TRUE
-		)
-		info <- do.call(rgrass::execGRASS, args = args)
+		if (datatype(x)[i] != "CELL") {
 
-		info <- strsplit(info, split = "\\|")
-		if (all(sapply(info, length) == 1L)) {
 			out[[i]] <- ""
+
 		} else {
 
-			info <- data.table::data.table(
-				Value = sapply(info, "[[", 1L),
-				Label = sapply(info, "[[", 2L)
+			args <- list(
+				cmd = "r.category",
+				map = .gnames(x)[i],
+				separator = "pipe",
+				flags = "quiet",
+				intern = TRUE
 			)
-			if (!getFastOptions("useDataTable")) info <- as.data.frame(info)
+			info <- do.call(rgrass::execGRASS, args = args)
 
-			out[[i]] <- info
-		
+			info <- strsplit(info, split = "\\|")
+			if (all(sapply(info, length) == 1L)) {
+				out[[i]] <- ""
+			} else {
+
+				info <- data.table::data.table(
+					Value = sapply(info, "[[", 1L),
+					Label = sapply(info, "[[", 2L)
+				)
+				if (!getFastOptions("useDataTable")) info <- as.data.frame(info)
+
+				out[[i]] <- info
+			
+			} # if CELL raster
+
 		}
 
 	} # next layer
