@@ -118,6 +118,12 @@ methods::setMethod(
 	signature = "GRaster",
 	definition = function(object) {
 
+	ncats <- ncat(object)
+	if (any(ncats > 0L)) {
+  		minColWidth <- 8L
+	} else {
+  		minColWidth <- 4L
+	}
 	maxColWidth <- 30L
 	details <- getFastOptions("details")
 
@@ -138,34 +144,27 @@ methods::setMethod(
 	if (anyNA(maxValLength)) maxValLength[is.na(maxValLength)] <- 2L
 	
 	# minimum and maximum category values
-	ncats <- ncat(object)
-	if (any(ncats > 0L)) {
-	
-		minCat <- maxCat <- rep(NA_character_, object@nLayers)
-		levs <- levels(object)
-		for (i in seq_along(levs)) {
+	minCat <- maxCat <- rep(NA_character_, object@nLayers)
+	levs <- levels(object)
 
-			if (ncats[i] == 0L) {
-				minCat[i] <- ""
-				maxCat[i] <- ""
+	for (i in seq_len(object@nLayers)) {
+
+		if (ncats[i] == 0L) {
+			minCat[i] <- ""
+   			maxCat[i] <- ""
+		} else {
+
+			if (is.data.frame(levs[[i]])) {
+				valueOrder <- order(as.numeric(levs[[i]]$Value))
+				levs[[i]] <- levs[[i]][valueOrder, , drop = FALSE]
 			} else {
-
-				if (is.data.frame(levs[[i]])) {
-					valueOrder <- order(as.numeric(levs[[i]]$Value))
-					levs[[i]] <- levs[[i]][valueOrder, , drop = FALSE]
-				} else {
-					levs[[i]]$TEMPTEMP_newValue <- as.numeric(levs[[i]][["Value"]])
-     				levs[[i]] <- data.table::setorderv(levs[[i]], cols = "TEMPTEMP_newValue")
-				}
-				minCat[i] <- levs[[i]]$Label[1L]
-				maxCat[i] <- levs[[i]]$Label[nrow(levs[[i]])]
+				levs[[i]]$TEMPTEMP_newValue <- as.numeric(levs[[i]][["Value"]])
+				levs[[i]] <- data.table::setorderv(levs[[i]], cols = "TEMPTEMP_newValue")
 			}
+			minCat[i] <- levs[[i]]$Label[1L]
+			maxCat[i] <- levs[[i]]$Label[nrow(levs[[i]])]
 		}
-	
-	} else {
-		minCat <- maxCat <- rep("", object@nLayers)
 	}
-
 	# truncate long names
 	namesChar <- object@names
 	ncharNames <- nchar(namesChar)
@@ -194,6 +193,7 @@ methods::setMethod(
 		minValLength, maxValLength
 	)
 	if (details) nc <- pmax(nc, nchar(gnames))
+	if (any(nc < minColWidth)) nc[nc < minColWdith] <- minColWidth
 
 	# truncate category names
 	if (any(nchar(minCat) > nc)) {
