@@ -2,9 +2,9 @@
 #'
 #' @description You can do comparative operations on `GRaster`s using normal operators in **R**: `<`, `<=`, `==`, `!=`, `>=`, and `>`.
 #' 
-#' @param e1,e2 `GRaster`, logical, or numeric
+#' @param e1,e2 `GRaster`, logical, numeric, or character. Character is useful when using a [categorical raster][tutorials_raster_data_types], in which case you can use something like `raster1 == "Wetlands"` to force all "wetland" cells to be 1 (TRUE) and all others 0 (FALSE) or `NA` (if it was originally `NA`).
 #'
-#' @return A `GRaster`.
+#' @returns A `GRaster` of [type][tutorial_raster_data_types] `CELL`.
 #'
 #' @example man/examples/ex_GRaster_arithmetic.r
 #'
@@ -145,7 +145,7 @@ methods::setMethod("Ops", signature(e1 = "GRaster", e2 = "numeric"),
 			name <- names(e1)[i]
 			gn <- .makeGName(name, "rast")
 
-			ex <- paste(gn, "= ", .gnames(e1)[i], " ", oper, " ", e2)
+			ex <- paste(gn, "= if(", .gnames(e1)[i], " ", oper, " ", e2)
 			if (i == 1L) {
 				out <- .genericArith(name = name, gn = gn, ex = ex)
 			} else {
@@ -154,6 +154,85 @@ methods::setMethod("Ops", signature(e1 = "GRaster", e2 = "numeric"),
 			}
 			
 		}
+		out
+			
+	} # EOF
+)
+
+# raster character
+methods::setMethod("Ops", signature(e1 = "GRaster", e2 = "character"),
+    function(e1, e2) {
+	
+		if (!all(is.factor(e1))) stop("Raster must be categorical for this type of comparison.")
+		.restore(e1)
+
+		oper <- as.vector(.Generic)[1L]
+		if (!(oper %in% c("==", "!="))) stop("Can only use the ", sQuote("=="), " or ", sQuote("!="), " logical operators when comparing a raster to a character string.")
+
+		levs <- levels(e1)
+
+		for (i in 1L:nlyr(e1)) {
+
+			# get value of this category
+			thisValue <- levs[[i]]$Value[levs[[i]]$Label == e2]
+			if (length(thisValue) == 0L) {
+				this <- 0L * not.na(e1)
+			} else {
+
+				if (oper == "==") {
+					this <- e1 == thisValue
+				} else if (oper == "!=") {
+     				this <- e1 != thisValue
+				}
+
+			}
+
+			if (i == 1L) {
+				out <- this
+			} else {
+				out <- c(out, this)
+			}
+			
+		} # next layer
+		out
+			
+	} # EOF
+)
+# character raster
+methods::setMethod("Ops", signature(e1 = "character", e2 = "GRaster"),
+    function(e1, e2) {
+	
+		if (!all(is.factor(e2))) stop("Raster must be categorical for this type of comparison.")
+		.restore(e2)
+
+		oper <- as.vector(.Generic)[1L]
+		if (!(oper %in% c("==", "!="))) stop("Can only use the ", sQuote("=="), " or ", sQuote("!="), " logical operators when comparing a raster to a character string.")
+
+		levs <- levels(e2)
+
+		for (i in 1L:nlyr(e2)) {
+
+			# get value of this category
+			thisValue <- levs[[i]]$Value[levs[[i]]$Label == e1]
+			if (length(thisValue) == 0L) {
+				this <- 0L * not.na(e2)
+			} else {
+
+				if (oper == "==") {
+					this <- e2 == thisValue
+				} else if (oper == "!=") {
+     				this <- e2 != thisValue
+				}
+
+			}
+
+			if (i == 1L) {
+				out <- this
+			} else {
+				out <- c(out, this)
+			}
+			
+		} # next layer
 		out
 			
 	} # EOF
