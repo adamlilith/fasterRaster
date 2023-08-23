@@ -15,35 +15,33 @@ grassDir <- "C:/Program Files/GRASS GIS 8.3" # Windows
 grassDir <- "/usr/local/grass" # Linux
 
 # Setup
-library(sf)
 library(terra)
 
-# Elevation raster, rivers vector
-madElev <- fastData("madElev")
-madRivers <- fastData("madRivers")
+# Example data: Land cover raster
+madCover <- fastData("madCover")
 
-# Start GRASS session for examples only:
-faster(x = madElev, grassDir = grassDir,
+# Start GRASS session for examples only
+faster(x = madCover, grassDir = grassDir,
 workDir = tempdir(), location = "examples") # line only needed for examples
 
-# Convert a SpatRaster to a GRaster, and sf to a GVector
-elev <- fast(madElev)
-rivers <- fast(madRivers)
+# Convert categorical SpatRaster to categorical GRaster
+cover <- fast(madCover)
 
-### Buffer a raster by a given distance:
-buffByDist <- buffer(elev, width = 2000) # 2000-m buffer
-plot(buffByDist, legend = FALSE)
-plot(madElev, add = TRUE)
+# The GRaster inherited the SpatRaster's categories:
+cover # Note display of "min"/"max" categories and number of categories
+is.factor(cover) # Is the raster categorical?
+ncat(cover) # Number of categories
+levels(cover) # Categories
 
-### Buffer a raster by a given number of cells:
-buffByCells <- buffer(elev, width = 20.01, unit = "cells") # 20-cell buffer
-plot(buffByCells)
-plot(madElev, add = TRUE)
+# Assign new levels. Note we can use ranges of values.
+value <- c("11:30", "40:110", "120:150", "160:180", "190", "200:220", "230")
+label <- c("Cropland", "Forest", "Grass/shrubland", "Flooded", "Artifical",
+     "Bare/Water/Ice", "NA")
 
-### Buffer a vector:
-buffRivers <- buffer(rivers, width = 2000) # 2000-m buffer
-plot(buffRivers)
-plot(st_geometry(madRivers), col = "blue", add = TRUE)
+cats <- data.frame(value = value, label = label)
+levels(cover) <- cats
+
+
 
 # IMPORTANT #3: Revert back to original GRASS session if needed.
 fastRestore(opts.)

@@ -5,6 +5,8 @@
 \alias{subset_assign}
 \alias{[[<-,GRaster,ANY,missing-method}
 \alias{[[<-,subset_assign}
+\alias{add<-,GRaster,GRaster-method}
+\alias{add<-}
 \alias{[<-,GRaster,ANY,ANY-method}
 \alias{[,GVector,ANY,ANY-method}
 \alias{[[,GVector,ANY,ANY-method}
@@ -13,6 +15,8 @@
 \S4method{[[}{GRaster,ANY,ANY}(x, i)
 
 \S4method{[[}{GRaster,ANY,missing}(x, i, j) <- value
+
+\S4method{add}{GRaster,GRaster}(x) <- value
 
 \S4method{[}{GRaster,ANY,ANY}(x) <- value
 
@@ -51,9 +55,10 @@ The \code{[} and \code{[[} operators do different things depending on whether th
 }
 \item \code{GRaster}s:
 \itemize{
-\item \code{[} operator with the assignment operator, \verb{<-} (example: \code{raster[] <- 7}): Assigns the given value to all cells in the \code{GRaster}.
+\item \code{[} operator with the assignment operator, \verb{<-}: Assigns the given value to all cells in the \code{GRaster}. For examples, \code{raster[] <- 7} replaces all cell values in \code{raster} with 7.
 \item \code{[[} operator: Returns \code{GRaster}s from a "stack" of \code{GRaster}s. For example, \code{raster[[2:3]]} returns the second and third rasters in a stack of \code{GRaster}s, and \code{raster[[c("bio1", "bio12")]]} returns the two rasters with \code{\link[=names]{names()}} "bio1" and "bio12".
 \item \code{[[} operator with the assignment operator, \verb{<-}: Replaces existing layers or adds new layers to a \code{GRaster}. For example, \code{x[[2]] <- newRaster} makes the second layer of \code{x} \code{newRaster}. If \code{x} already has two layers, the second one is replaced. If it only had one layer, a second is added.
+\item \verb{add<-}: "Stacks" two \code{GRaster}s. This is the same as \code{c(x, value)}, where \code{x} and \code{value} are \code{GRaster}.
 }
 }
 }
@@ -139,19 +144,23 @@ copy
 rasts <- c(elev, forest)
 rasts
 
+# adding a raster "in place"
+add(rasts) <- ln(elev)
+rasts
+
 # subsetting
 rasts[[1]]
 rasts[["forest"]]
 
 # assigning
-rasts[[3]] <- elev > 500
+rasts[[4]] <- elev > 500
 
 # number of layers
 nlyr(rasts)
 
 # names
 names(rasts)
-names(rasts) <- c("elev_meters", "forest", "high_elevation")
+names(rasts) <- c("elev_meters", "forest", "ln_elev", "high_elevation")
 rasts
 
 ### GVector properties

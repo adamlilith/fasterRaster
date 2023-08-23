@@ -30,20 +30,20 @@ grassDir <- "/Applications/GRASS-8.3.app/Contents/Resources" # Mac
 grassDir <- "C:/Program Files/GRASS GIS 8.3" # Windows
 grassDir <- "/usr/local/grass" # Linux
 
-# setup
+# Setup
 library(terra)
 
-# elevation raster, rivers vector, locations of Dypsis plants
+# Elevation raster
 madElev <- fastData("madElev")
 
-# start GRASS session for examples only
+# Start GRASS session for examples only:
 faster(x = madElev, grassDir = grassDir,
 workDir = tempdir(), location = "examples") # line only needed for examples
 
 # Convert SpatRaster to a GRaster:
 elev <- fast(madElev)
 
-# Create a set of rasters for us to operate on:
+# Create a "stack" of rasters for us to operate on:
 x <- c(elev, elev^2, sqrt(elev))
 
 # Demonstrate check for badly-named rasters:
@@ -60,7 +60,7 @@ app(x, fun = fun)
 # This is the same as:
 (x[[1]] / x[[2]]) + x[[3]]
 
-# We can view a Shiny table using appFuns()):
+# We can view a Shiny table using appFuns():
 appFuns()
 
 # This is the same as:
@@ -84,6 +84,14 @@ app(x, fun = fun, ensure = "integer") # output is integer
 # not be an integer because the sin() function returns a float value.
 fun <- "= sin(x2)"
 app(x, fun = fun, ensure = "integer")
+
+# Make a raster with random numbers between 1 and 4, with equal probability
+# of each:
+fun <- "= round(rand(0.5, 4.5))"
+rand <- app(elev, fun = fun)
+rand
+
+freq(rand) # cell frequencies
 
 # IMPORTANT #3: Revert back to original GRASS session if needed.
 fastRestore(opts.)

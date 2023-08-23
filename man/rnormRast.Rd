@@ -53,6 +53,13 @@ workDir = tempdir(), location = "examples") # line only needed for examples
 # Convert a SpatRaster to a GRaster:
 elev <- fast(madElev)
 
+# Create a raster with values drawn from a uniform distribution:
+unif <- runifRast(elev)
+plot(unif)
+
+unifs <- runifRast(elev, 2, -1, 1)
+plot(unifs)
+
 # Create a raster with values drawn from a normal distribution:
 norms <- rnormRast(elev, n = 2, mu = c(5, 10), sigma = c(2, 1))
 plot(norms)
@@ -87,5 +94,5 @@ removeSession("examples")
 }
 }
 \seealso{
-\code{\link[=spDepRast]{spDepRast()}}, \code{\link[=fractalRast]{fractalRast()}}, and module \code{r.random.surface} in \strong{GRASS}
+\code{\link[=spDepRast]{spDepRast()}}, \code{\link[=fractalRast]{fractalRast()}}, \code{\link[=runifRast]{runifRast()}}, and \strong{GRASS} module \code{r.random.surface}
 }

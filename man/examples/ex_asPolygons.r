@@ -14,17 +14,17 @@ grassDir <- "/Applications/GRASS-8.3.app/Contents/Resources" # Mac
 grassDir <- "C:/Program Files/GRASS GIS 8.3" # Windows
 grassDir <- "/usr/local/grass" # Linux
 
-# setup
+# Setup
 library(terra)
 
-# elevation
+# Elevation
 madElev <- fastData("madElev")
 
-# start GRASS session for examples only
+# Start GRASS session for examples only:
 faster(x = madElev, grassDir = grassDir,
 workDir = tempdir(), location = "examples") # line only needed for examples
 
-# Convert to GVector:
+# Convert SpatRaster to GRaster:
 elev <- fast(madElev)
 
 # To speed things up, first group cells of similar value:

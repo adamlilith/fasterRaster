@@ -73,33 +73,33 @@ grassDir <- "/Applications/GRASS-8.3.app/Contents/Resources" # Mac
 grassDir <- "C:/Program Files/GRASS GIS 8.3" # Windows
 grassDir <- "/usr/local/grass" # Linux
 
-# setup
+# Setup
 library(sf)
 library(terra)
 
-# elevation raster, rivers vector
+# Elevation raster, rivers vector
 madElev <- fastData("madElev")
 madRivers <- fastData("madRivers")
 
-# start GRASS session for examples only
+# Start GRASS session for examples only:
 faster(x = madElev, grassDir = grassDir,
 workDir = tempdir(), location = "examples") # line only needed for examples
 
-# convert a SpatRaster to a GRaster, and sf to a GVector
+# Convert a SpatRaster to a GRaster, and sf to a GVector
 elev <- fast(madElev)
 rivers <- fast(madRivers)
 
-### buffer a raster by a given distance
+### Buffer a raster by a given distance:
 buffByDist <- buffer(elev, width = 2000) # 2000-m buffer
-plot(buffByDist, legend=FALSE)
-plot(madElev, add=TRUE)
+plot(buffByDist, legend = FALSE)
+plot(madElev, add = TRUE)
 
-### buffer a raster by a given number of cells
+### Buffer a raster by a given number of cells:
 buffByCells <- buffer(elev, width = 20.01, unit = "cells") # 20-cell buffer
 plot(buffByCells)
-plot(madElev, add=TRUE)
+plot(madElev, add = TRUE)
 
-### buffer a vector
+### Buffer a vector:
 buffRivers <- buffer(rivers, width = 2000) # 2000-m buffer
 plot(buffRivers)
 plot(st_geometry(madRivers), col = "blue", add = TRUE)

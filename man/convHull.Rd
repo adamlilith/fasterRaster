@@ -35,31 +35,31 @@ grassDir <- "/Applications/GRASS-8.3.app/Contents/Resources" # Mac
 grassDir <- "C:/Program Files/GRASS GIS 8.3" # Windows
 grassDir <- "/usr/local/grass" # Linux
 
-# setup
+# Setup
 library(sf)
 
-# rivers vector
+# Points vector of specimens of species in the plant genus Dypsis
 madDypsis <- fastData("madDypsis")
 
-# start GRASS session for examples only
+# Start GRASS session for examples only:
 faster(x = madDypsis, grassDir = grassDir,
 workDir = tempdir(), location = "examples") # line only needed for examples
 
-# convert and sf to a GVector
+# Convert sf to a GVector:
 dypsis <- fast(madDypsis)
 
-### convex hull for all plant specimens together
+### Convex hull for all plant specimens together
 ch <- convHull(dypsis)
 
-### convex hull for each species
-chSpecies <- convHull(dypsis, by="species")
+### Convex hull for each species
+head(dypsis) # See the "species" column?
+chSpecies <- convHull(dypsis, by = "species")
 
-### plot
+### Plot
 plot(st_geometry(madDypsis))
-plot(ch, add=TRUE)
+plot(ch, add = TRUE)
 n <- nrow(chSpecies)
-plot(chSpecies, col=1:n, add=TRUE)
-
+plot(chSpecies, col = 1:n, add = TRUE)
 
 # IMPORTANT #3: Revert back to original GRASS session if needed.
 fastRestore(opts.)

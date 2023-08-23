@@ -14,22 +14,23 @@ grassDir <- "/Applications/GRASS-8.3.app/Contents/Resources" # Mac
 grassDir <- "C:/Program Files/GRASS GIS 8.3" # Windows
 grassDir <- "/usr/local/grass" # Linux
 
-# setup
+# Eetup
 library(sf)
 library(terra)
 
-# elevation raster, rivers vector, outline of area vector
+# Elevation raster, plant specimen collections, rivers vector,
+# outline of area vector
 madElev <- fastData("madElev")
 madDypsis <- fastData("madDypsis")
 madRivers <- fastData("madRivers")
 madCoast4 <- fastData("madCoast4")
 madAnt <- madCoast4[madCoast4$NAME_4 == "Antanambe", ]
 
-# Start GRASS session for examples only.
+# Start GRASS session for examples only:
 faster(x = madElev, grassDir = grassDir,
 workDir = tempdir(), location = "examples") # line only needed for examples
 
-# Convert to fasterRaster format.
+# Convert to fasterRaster format:
 elev <- fast(madElev)
 dypsis <- fast(madDypsis)
 rivers <- fast(madRivers)

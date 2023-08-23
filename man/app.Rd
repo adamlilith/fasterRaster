@@ -9,9 +9,9 @@
 \alias{appCheck}
 \title{Apply a function to a set of rasters}
 \usage{
-\S4method{app}{GRaster}(x, fun, ensure = "auto")
+\S4method{app}{GRaster}(x, fun, ensure = "auto", seed = NULL)
 
-\S4method{appFuns}{logical}(x = FALSE)
+\S4method{appFuns}{logical}(show = FALSE)
 
 \S4method{appCheck}{GRaster,character}(x, fun, msgOnGood = TRUE, failOnBad = TRUE)
 }
@@ -34,15 +34,17 @@ The help page for \code{r.mapcalc} on the \strong{GRASS} website provides more d
 \item \code{"auto"} (default): Ensure that rasters are represented by their native \code{\link[=datatype]{datatype()}} (i.e., "CELL" rasters as integers, "FCELL" rasters as floating-point, and "DCELL" as double-floating point).
 }}
 
-\item{msgOnGood}{Logical (function \code{appCheck()}): If \code{TRUE} (default), display a message if no overt problems with the raster names and formula are detected.}
-
-\item{failOnBad}{Logical (function \code{appCheck()}): If \code{TRUE} (default), fail if overt problems with raster names and the formula are detected.}
+\item{seed}{Numeric integer vector or \code{NULL} (default): A number for the random seed. Used only for \code{app()} function \code{rand()}, that generates a random number. If \code{NULL}, a seed will be generated. Defining the seed is useful for replicating a raster made with \code{rand()}. This must be an integer!}
 
 \item{show}{Logical (function \code{appFuns()}):
 \itemize{
 \item \code{FALSE} (default): Return a \code{data.frame} or \code{data.table} with definitions of functions.
 \item \code{TRUE}: Open a searchable, sortable \strong{shiny} table in a browser.
 }}
+
+\item{msgOnGood}{Logical (function \code{appCheck()}): If \code{TRUE} (default), display a message if no overt problems with the raster names and formula are detected.}
+
+\item{failOnBad}{Logical (function \code{appCheck()}): If \code{TRUE} (default), fail if overt problems with raster names and the formula are detected.}
 }
 \value{
 A \code{GRaster}.
@@ -53,6 +55,14 @@ A \code{GRaster}.
 This function operates in a manner slightly different from \code{\link[terra:app]{terra::app()}}. The function to be applied \emph{must} be written as a character string. For example, if the raster had layer names "\code{x1}" and "\code{x2}", then the function might be like \code{"= max(sqrt(x1), log(x2))"}. Rasters \strong{cannot} have the same names as functions used in the formula. In this example, the rasters could not be named "max", "sqrt", or "log".
 
 The \code{app()} function will automatically check for raster names that appear also to be functions that appear in the formula, but the \code{appCheck()} function can be applied to the raster stack plus the formula to do this outside of \code{app()}. You can obtain a list of functions using \code{appFuns()}. Note that these are sometimes different from how they are applied in \strong{R}.
+
+TIPS:
+\itemize{
+\item In \strong{GRASS}, \code{null()} is the same as \code{NA} in \strong{R}.
+\item If you want to calculate values using while removing \code{NA} (or \code{null}) values, see the functions that begin with \code{n} (like \code{nmean}).
+\item Be mindful of the data type that a function returns. In \strong{GRASS}, these are \code{CELL} (integer), \code{FCELL} (floating point values--precise to about the 7th decimal place), and \code{DCELL} (double-floating point values--precise to about the 15th decimal place). In cases where you want to ensure a raster to be treated like a float or double data type raster, wrap the raster in the \code{float()} or \code{double()} functions to ensure it is treated as such. This is especially useful if the raster might appear like the \code{CELL} type because it only contains integer values. You can get the data type of a raster by displaying the raster's metadata (type the name of the raster in \strong{R}), or by using \code{\link[=datatype]{datatype()}}. You can change the data type of a \code{GRaster} using \code{\link[=as.cell]{as.cell()}}, \link{as.fcell}, and \link{as.dcell}. You can also change a \code{CELL} raster to a \code{FCELL} raster by adding then subtracting a decimal value, as in \code{x - 0.1 + 0.1}.
+\item The \code{rand()} function returns \code{CELL} (integer) values by default. If you want non-integer values, use the tricks mentioned above to enure non-integer values. For example, the \code{\link[=runifRast]{runifRast()}} function's expression is (essentially) \verb{= float(rand(0 + 0.1, 1 + 0.1) - 0.1)}
+}
 }
 \examples{
 \dontrun{
@@ -71,20 +81,20 @@ grassDir <- "/Applications/GRASS-8.3.app/Contents/Resources" # Mac
 grassDir <- "C:/Program Files/GRASS GIS 8.3" # Windows
 grassDir <- "/usr/local/grass" # Linux
 
-# setup
+# Setup
 library(terra)
 
-# elevation raster, rivers vector, locations of Dypsis plants
+# Elevation raster
 madElev <- fastData("madElev")
 
-# start GRASS session for examples only
+# Start GRASS session for examples only:
 faster(x = madElev, grassDir = grassDir,
 workDir = tempdir(), location = "examples") # line only needed for examples
 
 # Convert SpatRaster to a GRaster:
 elev <- fast(madElev)
 
-# Create a set of rasters for us to operate on:
+# Create a "stack" of rasters for us to operate on:
 x <- c(elev, elev^2, sqrt(elev))
 
 # Demonstrate check for badly-named rasters:
@@ -101,7 +111,7 @@ app(x, fun = fun)
 # This is the same as:
 (x[[1]] / x[[2]]) + x[[3]]
 
-# We can view a Shiny table using appFuns()):
+# We can view a Shiny table using appFuns():
 appFuns()
 
 # This is the same as:
@@ -125,6 +135,14 @@ app(x, fun = fun, ensure = "integer") # output is integer
 # not be an integer because the sin() function returns a float value.
 fun <- "= sin(x2)"
 app(x, fun = fun, ensure = "integer")
+
+# Make a raster with random numbers between 1 and 4, with equal probability
+# of each:
+fun <- "= round(rand(0.5, 4.5))"
+rand <- app(elev, fun = fun)
+rand
+
+freq(rand) # cell frequencies
 
 # IMPORTANT #3: Revert back to original GRASS session if needed.
 fastRestore(opts.)

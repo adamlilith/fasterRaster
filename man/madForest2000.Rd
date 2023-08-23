@@ -47,6 +47,11 @@ madForest2014
 
 madChelsa <- fastData("madChelsa")
 madChelsa
+
+madCover <- fastData("madCover")
+madCover
+madCover <- dropLevels(madCover)
+levels(madCover)
 }
 \references{
 Vielledent, G., Grinand, C., Rakotomala, F.A., Ranaivosoa, \pkg{R}., Rakotoarijaona, J-R., Allnutt, T.F., and Achard, F.  2018.  Combining global tree cover loss data with historical national forest cover maps to look at six decades of deforestation and forest fragmentation in Madagascar. \emph{Biological Conservation} 222:189-197. \doi{10.1016/j.biocon.2018.04.008}.

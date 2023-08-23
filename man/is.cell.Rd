@@ -7,6 +7,8 @@
 \alias{is.fcell}
 \alias{is.dcell,GRaster-method}
 \alias{is.dcell}
+\alias{is.factor,GRaster-method}
+\alias{is.factor}
 \title{Data type of a raster}
 \usage{
 \S4method{is.cell}{GRaster}(x)
@@ -14,6 +16,8 @@
 \S4method{is.fcell}{GRaster}(x)
 
 \S4method{is.dcell}{GRaster}(x)
+
+\S4method{is.factor}{GRaster}(x)
 }
 \arguments{
 \item{x}{A \code{GRaster}.}
@@ -23,6 +27,10 @@ Logical.
 }
 \description{
 In \strong{GRASS}, rasters can have three data types: "CELL" (integers/categories), "float" (floating point values, accurate to ~7 decimal places), and "DCELL" (double-precision values, accurate to ~16 decimal places). Often rasters that have integer values are assumed by \strong{GRASS} to represent CELL values, but in some cases they should be DCELL or FCELL.
+
+The \code{is.cell()}, \code{is.fcell()}, and \code{is.dcell()} functions return \code{TRUE} or \code{FALSE}, depending on the data type of the raster.
+
+The \code{is.factor()} returns \code{TRUE} if raster values represent categories. Note that unlike \code{SpatRaster}s, \code{GRaster}s can be integer or non-integer and still represent categorical data.
 }
 \examples{
 \dontrun{
@@ -137,12 +145,13 @@ rasts[["madForest2000"]]
 rasts[[2]] <- 2 * forest
 
 # adding layers
-rasts[[3]] <- elev > 500 # add a layer
+rasts[[4]] <- elev > 500 # add a layer
 rasts <- c(rasts, sqrt(elev)) # add another
+add(rasts) <- ln(elev)
 
 # names
 names(rasts)
-names(rasts) <- c("elev_meters", "2_x_forest", "high_elevation", "sqrt_elev")
+names(rasts) <- c("elev_meters", "2_x_forest", "high_elevation", "sqrt_elev", "ln_elev")
 rasts
 
 # remove a layer

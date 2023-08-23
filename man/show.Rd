@@ -126,19 +126,23 @@ copy
 rasts <- c(elev, forest)
 rasts
 
+# adding a raster "in place"
+add(rasts) <- ln(elev)
+rasts
+
 # subsetting
 rasts[[1]]
 rasts[["forest"]]
 
 # assigning
-rasts[[3]] <- elev > 500
+rasts[[4]] <- elev > 500
 
 # number of layers
 nlyr(rasts)
 
 # names
 names(rasts)
-names(rasts) <- c("elev_meters", "forest", "high_elevation")
+names(rasts) <- c("elev_meters", "forest", "ln_elev", "high_elevation")
 rasts
 
 ### GVector properties

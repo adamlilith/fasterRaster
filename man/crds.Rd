@@ -43,23 +43,23 @@ grassDir <- "/Applications/GRASS-8.3.app/Contents/Resources" # Mac
 grassDir <- "C:/Program Files/GRASS GIS 8.3" # Windows
 grassDir <- "/usr/local/grass" # Linux
 
-# setup
+# Setup
 library(sf)
 library(terra)
 
-# plant specimens (points), elevation (raster)
+# Plant specimens (points), elevation (raster)
 madDypsis <- fastData("madDypsis")
 madElev <- fastData("madElev")
 
-# start GRASS session for examples only
+# Start GRASS session for examples only:
 faster(x = madDypsis, grassDir = grassDir,
 workDir = tempdir(), location = "examples") # line only needed for examples
 
-# convert a SpatRaster to a GRaster, and sf to a GVector
+# Convert a SpatRaster to a GRaster, and sf to a GVector
 dypsis <- fast(madDypsis)
 elev <- fast(madElev)
 
-### get coordinates
+### Get coordinates:
 dypsisPoints <- crds(dypsis)
 elevPoints <- crds(elev)
 

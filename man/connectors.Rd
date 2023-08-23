@@ -35,29 +35,29 @@ grassDir <- "/Applications/GRASS-8.3.app/Contents/Resources" # Mac
 grassDir <- "C:/Program Files/GRASS GIS 8.3" # Windows
 grassDir <- "/usr/local/grass" # Linux
 
-# setup
+# Setup
 library(sf)
 
-# rivers vector and locations of Dypsis plants
+# Rivers vector and locations of Dypsis plants
 madRivers <- fastData("madRivers")
 madDypsis <- fastData("madDypsis")
 
-# start GRASS session for examples only
+# Start GRASS session for examples only:
 faster(x = madRivers, grassDir = grassDir,
 workDir = tempdir(), location = "examples") # line only needed for examples
 
-# convert to GVectors
+# Convert sf's to GVectors:
 rivers <- fast(madRivers)
 dypsis <- fast(madDypsis)
 
-### connections from each point to nearest river
+### Connections from each point to nearest river
 consFromDypsis <- connectors(dypsis, rivers)
 
 plot(st_geometry(madDypsis))
 plot(st_geometry(madRivers), col = "blue", add = TRUE)
 plot(consFromDypsis, add = TRUE)
 
-### connections from each river to nearest point
+### Connections from each river to nearest point
 consFromRivers <- connectors(rivers, dypsis)
 
 plot(st_geometry(madDypsis))

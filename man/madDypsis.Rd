@@ -53,6 +53,11 @@ madForest2014
 
 madChelsa <- fastData("madChelsa")
 madChelsa
+
+madCover <- fastData("madCover")
+madCover
+madCover <- dropLevels(madCover)
+levels(madCover)
 }
 \keyword{Dypsis}
 \keyword{Madagascar}

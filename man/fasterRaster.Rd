@@ -3,6 +3,7 @@
 \docType{package}
 \name{fasterRaster}
 \alias{fasterRaster}
+\alias{fasterRaster-package}
 \title{"fasterRaster": Faster raster and spatial vector processing using "GRASS GIS"}
 \description{
 Processing of large-in-memory/-on disk rasters and spatial vectors using \strong{GRASS GIS}. Most functions in the \strong{terra} and \strong{sf} packages are recreated. Processing of medium-sized and smaller spatial objects will nearly always be faster using \strong{terra} or \strong{sf}. To use most of the functions you must have the stand-alone version of \strong{GRASS} version 8.0 or higher (not the \strong{OSGeoW4} installer version). Note that due to developer choices, results will not always be strictly comparable between \strong{terra}, \strong{sf}, and \strong{fasterRaster}.
@@ -27,7 +28,9 @@ A \link[=tutorial_getting_started]{quick-start tutorial}\cr
 \code{\link[=global]{global()}}: Summary statistics\cr
 \code{\link[=is.2d]{is.2d()}} and \code{\link[=is.3d]{is.3d()}}: Is an object 2- or 3-dimensional?\cr
 \code{\link[=is.cell]{is.cell()}}, \code{\link[=is.fcell]{is.fcell()}}, \code{\link[=is.dcell]{is.dcell()}}: Raster data type (integer/float/double)\cr
+\link{is.factor}: Does a raster represent categorical data?\cr
 \link{is.lonlat}: Is an object projected (e.g., in WGS84)?\cr
+\code{\link[=levels]{levels()}}: Names of levels in a categorical raster\cr
 \code{\link[=location]{location()}}: \strong{GRASS} "location" of an object or the active session\cr
 \code{\link[=mapset]{mapset()}}: \strong{GRASS} "mapset" of an object or the active session\cr
 \code{\link[=minmax]{minmax()}}: Minimum and maximum values across all non-\code{NA} cells\cr
@@ -52,11 +55,13 @@ A \link[=tutorial_getting_started]{quick-start tutorial}\cr
 \subsection{Functions that operate on or create \code{GRasters}}{
 
 \link{Arithmetic}: Mathematical operations on \code{GRaster}s: \code{+}, \code{-}, \code{*}, \code{/}, \code{^}, \code{\%\%} (modulus), \code{\%/\%} (integer division)\cr
+Equality: \code{<}, \code{<=}, \code{==}, \code{!=}, \code{>=}, \code{>}
 
 Single-layer functions (applied to each layer of a \code{GRaster}):
 \itemize{
+\item \code{NA}s: \code{\link[=is.na]{is.na()}} and \code{\link[=not.na]{not.na()}} \cr
 \item Trigonometry: \code{\link[=sin]{sin()}}, \code{\link[=cos]{cos()}}, \code{\link[=tan]{tan()}}, \code{\link[=asin]{asin()}}, \code{\link[=acos]{acos()}}, \code{\link[=atan]{atan()}}, \code{\link[=atan2]{atan2()}} \cr
-\item Logarithms and powers: \code{\link[=exp]{exp()}}, \code{\link[=log]{log()}}, \code{\link[=log1p]{log1p()}}, \code{\link[=log2]{log2()}}, \code{\link[=log10]{log10()}}, \code{\link[=sqrt]{sqrt()}} \cr
+\item Logarithms and powers: \code{\link[=exp]{exp()}}, \code{\link[=log]{log()}}, \code{\link[=ln]{ln()}}, \code{\link[=log1p]{log1p()}}, \code{\link[=log2]{log2()}}, \code{\link[=log10]{log10()}}, \code{\link[=sqrt]{sqrt()}} \cr
 \item Rounding: \code{\link[=round]{round()}}, \code{\link[=floor]{floor()}}, \code{\link[=ceiling]{ceiling()}}, \code{\link[=trunc]{trunc()}} \cr
 \item Signs: \code{\link[=abs]{abs()}} \cr
 }
@@ -73,6 +78,7 @@ Other functions:\cr
 \verb{[<-} (\link[=subset_assign]{assign}): Assign values to a raster's cells\cr
 \code{[[} (\link[=subset_assign]{subset}): Subset a raster with multiple layers\cr
 \verb{[[<-} (\link[=subset_assign]{assign}): Replace or add layers to a raster\cr
+[add<-\verb{]}: Add layers to a raster\cr
 \code{\link[=as.cell]{as.cell()}}, \code{\link[=as.fcell]{as.fcell()}}, \code{\link[=as.dcell]{as.dcell()}}: Change data type (integer/float/double)\cr
 \code{\link[=as.contour]{as.contour()}}: Contour lines from a raster\cr
 \code{\link[=as.lines]{as.lines()}}: Convert a raster to a "lines" vector\cr
@@ -92,13 +98,16 @@ Other functions:\cr
 \code{\link[=global]{global()}}: Summary statistics across cells of each raster layer\cr
 \code{\link[=shade]{hillshade()}}: Create a hillshade raster\cr
 \code{\link[=horizonHeight]{horizonHeight()}}: Horizon height\cr
+\link{levels<-}: Assign levels to a categorical raster\cr
 \code{\link[=longlat]{longlat()}}: Create longitude/latitude rasters.\cr
 \code{\link[=mask]{mask()}}: Remove values in a raster based on values in another raster or vector\cr
 \code{\link[=merge]{merge()}}: Combine two or more rasters with different extents and fill in \code{NA}s\cr
 \code{\link[=plot]{plot()}}: Display a raster\cr
 \code{\link[=project]{project()}}: Change coordinate reference system and cell size\cr
 \code{\link[=resample]{resample()}}: Change cell size\cr
-\code{\link[=rnormRast]{rnormRast()}}: A random raster with or without spatial dependence\cr
+\code{\link[=rnormRast]{rnormRast()}}: A random raster with values drawn from a normal distribution\cr
+\code{\link[=runifRast]{runifRast()}}: A random raster with values drawn from a uniform distribution\cr
+\code{\link[=selectRange]{selectRange()}}: Select values from rasters in a stack based on values in another raster\cr
 \code{\link[=spatSample]{spatSample()}}: Randomly points from a raster\cr
 \code{\link[=spDepRast]{spDepRast()}}: Create a random raster with or without spatial dependence\cr
 \code{\link[=sun]{sun()}}: Solar radiance and irradiance\cr
@@ -214,6 +223,15 @@ Other functions:\cr
 \details{
 \figure{fasterRaster.png}{options: alt="fasterRaster" align="right" vertical-align="top" width=1.2in}
 }
+\seealso{
+Useful links:
+\itemize{
+  \item \url{http://www.earthSkySea.org}
+  \item Report bugs at \url{https://github.com/adamlilith/fasterRaster/issues}
+}
+
+}
 \author{
 Adam B. Smith
 }
+\keyword{internal}

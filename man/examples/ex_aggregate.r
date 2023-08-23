@@ -15,20 +15,20 @@ grassDir <- "/Applications/GRASS-8.3.app/Contents/Resources" # Mac
 grassDir <- "C:/Program Files/GRASS GIS 8.3" # Windows
 grassDir <- "/usr/local/grass" # Linux
 
-# setup
+# Setup
 library(terra)
 
-# example data
+# Example data
 madElev <- fastData("madElev")
 
-# start GRASS session for examples only
+# Start GRASS session for examples only:
 faster(x = madElev, grassDir = grassDir,
 workDir = tempdir(), location = "examples") # line only needed for examples
 
-# convert a SpatRaster to a GRaster
+# Convert a SpatRaster to a GRaster:
 elev <- fast(madElev)
 
-### aggregate by same factor in 2 dimensions
+### Aggregate by same factor in 2 dimensions
 # fasterRaster
 agg2 <- aggregate(elev, 2, "mean")
 agg2
@@ -37,12 +37,12 @@ agg2
 agg2terra <- aggregate(madElev, 2, "mean")
 agg2terra
 
-# compare fasterRaster and terra... should be the same
+# Compare fasterRaster and terra... These should be the same.
 agg2 <- rast(agg2)
 agg2 <- extend(agg2, agg2terra)
 agg2 - agg2terra
 
-### aggregate by a factor of 2.5 in 2 dimensions
+### Aggregate by a non-integer factor in 2 dimensions
 # fasterRaster
 agg2.9 <- aggregate(elev, 2.9, "mean")
 agg2.9
@@ -51,12 +51,12 @@ agg2.9
 agg2.9terra <- aggregate(madElev, 2.9, "mean")
 agg2.9terra
 
-# compare fasterRaster and terra... should be different
+# Compare fasterRaster and terra... These should be different.
 res(agg2.9)
 res(agg2.9terra) # terra rounds aggregation factor down
 2 * res(madElev) # original resolution multipled by 2
 
-# aggregate by different factor in 2 dimensions
+### Aggregate by different factor in 2 dimensions
 agg2x3 <- aggregate(elev, c(2, 3), "mean")
 agg2x3
 

@@ -54,6 +54,11 @@ madForest2014
 
 madChelsa <- fastData("madChelsa")
 madChelsa
+
+madCover <- fastData("madCover")
+madCover
+madCover <- dropLevels(madCover)
+levels(madCover)
 }
 \references{
 Karger, D.N., Conrad, O., Böhner, J., Kawohl, T., Kreft, H., Soria-Auza, R.W., Zimmermann, N.E., Linder, H.P., and Kessler, M.  2017.  Climatologies at high resolution for the earth’s land surface areas. \emph{Scientific Data} 4:170122. \doi{https://doi.org/10.1038/sdata.2017.122}

@@ -20,9 +20,16 @@ Spatial vectors (objects of class \code{sf} from the \strong{sf} `package):
 Rasters (objects of class \code{SpatRaster} from the \strong{terra} package):
 \itemize{
 \item \code{madChelsa}: Bioclimatic variables
+\item \code{madCover}: Land cover (also see `madCoverCats)
 \item \code{madElev}: Elevation
 \item \code{madForest2000}: Forest cover in year 2000
 \item \code{madForest2014}: Forest cover in year 2014
+}
+
+Data frames
+\itemize{
+\item \code{appFunsTable}: Table of functions usable by \code{\link[=app]{app()}}.
+\item \code{madCoverCats}: Land cover values and categories.
 }}
 }
 \value{
@@ -68,7 +75,12 @@ madForest2014
 
 madChelsa <- fastData("madChelsa")
 madChelsa
+
+madCover <- fastData("madCover")
+madCover
+madCover <- dropLevels(madCover)
+levels(madCover)
 }
 \seealso{
-\link{madCoast0}, \link{madCoast4}, \link{madDypsis}, \link{madElev}, \link{madForest2000}, \link{madForest2014}, \link{madRivers}
+\link{madCoast0}, \link{madCoast4}, \link{madCover}, \link{madCoverCats}, \link{madDypsis}, \link{madElev}, \link{madForest2000}, \link{madForest2014}, \link{madRivers}
 }

@@ -3,18 +3,23 @@
 \name{ncat,GRaster-method}
 \alias{ncat,GRaster-method}
 \alias{ncat}
-\title{Number of categories in a GRaster}
+\alias{ncat,SpatRaster-method}
+\title{Number of levels in a categorical raster}
 \usage{
 \S4method{ncat}{GRaster}(x)
+
+\S4method{ncat}{SpatRaster}(x, dropLevels = TRUE)
 }
 \arguments{
-\item{x}{A \code{GRaster}.}
+\item{x}{A \code{GRaster} or \code{SpatRaster}.}
+
+\item{droplevels}{Logical: If \code{TRUE} (default), drop levels that do not appear in the raster.}
 }
 \value{
-A numeric vector with one value per layer in the \code{GRaster}.
+A numeric vector of integers. These represent the number of levels that appear in the raster (always for \code{GRaster}s, and for \code{SpatRaster}s when \code{dropLevels = TRUE}), or the number of levels that appear or could appear in the raster (for \code{SpatRaster}s only, when \code{dropLevels = FALSE}).
 }
 \description{
-Reports number of categories in a categorical \code{GRaster}.
+This function reports the number of categories (levels) in a \link[=tutorial_categorical_rasters]{categorical raster}.
 }
 \examples{
 \dontrun{
@@ -33,122 +38,34 @@ grassDir <- "/Applications/GRASS-8.3.app/Contents/Resources" # Mac
 grassDir <- "C:/Program Files/GRASS GIS 8.3" # Windows
 grassDir <- "/usr/local/grass" # Linux
 
-# setup
+# Setup
 library(terra)
 
-# example data
-madElev <- fastData("madElev")
-madForest2000 <- fastData("madForest2000")
+# Example data: Land cover raster
+madCover <- fastData("madCover")
 
-# start GRASS session for examples only
-faster(x = madElev, grassDir = grassDir,
+# Start GRASS session for examples only
+faster(x = madCover, grassDir = grassDir,
 workDir = tempdir(), location = "examples") # line only needed for examples
 
-# convert SpatRasters to GRasters
-elev <- fast(madElev)
-forest <- fast(madForest2000)
+# Convert categorical SpatRaster to categorical GRaster
+cover <- fast(madCover)
 
-### GRaster properties
-######################
+# The GRaster inherited the SpatRaster's categories:
+cover # Note display of "min"/"max" categories and number of categories
+is.factor(cover) # Is the raster categorical?
+ncat(cover) # Number of categories
+levels(cover) # Categories
 
-# plotting
-plot(elev)
+# Assign new levels. Note we can use ranges of values.
+value <- c("11:30", "40:110", "120:150", "160:180", "190", "200:220", "230")
+label <- c("Cropland", "Forest", "Grass/shrubland", "Flooded", "Artifical",
+     "Bare/Water/Ice", "NA")
 
-# dimensions
-dim(elev) # rows, columns, depths, layers
-nrow(elev) # rows
-ncol(elev) # columns
-ndepth(elev) # depths
-nlyr(elev) # layers
+cats <- data.frame(value = value, label = label)
+levels(cover) <- cats
 
-res(elev) # resolution (2D)
-res3d(elev) # resolution (3D)
-zres(elev) # vertical resolution
-xres(elev) # vertical resolution
-yres(elev) # vertical resolution
-zres(elev) # vertical resolution
 
-# cell counts
-ncell(elev) # cells
-ncell3d(elev) # cells (3D rasters only)
-
-# number of NA and non-NA cells
-nacell(elev)
-nonnacell(elev)
-
-# topology
-topology(elev) # number of dimensions
-is.2d(elev) # is it 2-dimensional?
-is.3d(elev) # is it 3-dimensional?
-
-minmax(elev) # min/max values
-
-# information on the GRASS session in which the GRaster is located
-location(elev) # location
-mapset(elev) # mapset
-
-# "names" of the object
-names(elev)
-
-# coordinate reference system
-crs(elev)
-st_crs(elev)
-
-# extent (bounding box)
-ext(elev)
-st_bbox(elev)
-
-# vertical extent (not defined for this raster)
-zext(elev)
-
-# data type
-datatype(elev)
-is.cell(elev)
-is.fcell(elev)
-is.dcell(elev)
-
-# convert data type
-as.cell(elev) # integer; note that "elev" is already of type "CELL"
-as.fcell(elev) # floating-precision
-as.dcell(elev) # double-precision
-
-# assigning
-copy <- elev
-copy[] <- pi # assign all cells to the value of pi
-copy
-
-# concatenating multiple GRasters
-rasts <- c(elev, forest)
-rasts
-
-# subsetting
-rasts[[1]]
-rasts[["madForest2000"]]
-
-# replacing
-rasts[[2]] <- 2 * forest
-
-# adding layers
-rasts[[3]] <- elev > 500 # add a layer
-rasts <- c(rasts, sqrt(elev)) # add another
-
-# names
-names(rasts)
-names(rasts) <- c("elev_meters", "2_x_forest", "high_elevation", "sqrt_elev")
-rasts
-
-# remove a layer
-rasts[["2_x_forest"]] <- NULL
-rasts
-
-# number of layers
-nlyr(rasts)
-
-# cell frequencies
-freq(elev)
-freq(2 * elev)
-freq(rasts)
-freq(rasts, value = 1)
 
 # IMPORTANT #3: Revert back to original GRASS session if needed.
 fastRestore(opts.)
@@ -157,5 +74,5 @@ removeSession("examples")
 }
 }
 \seealso{
-\code{\link[terra:factors]{terra::levels()}}, \code{\link[terra:factors]{terra::cats()}}
+\code{\link[=levels]{levels()}}, \code{\link[terra:factors]{terra::cats()}}, \code{\link[terra:factors]{terra::levels()}}, \code{\link[terra:factors]{terra::addCats()}}, \code{\link[terra:factors]{terra::droplevels()}}, \link[=tutorial_categorical_rasters]{categorical rasters}
 }
