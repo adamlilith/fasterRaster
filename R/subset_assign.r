@@ -3,19 +3,19 @@
 #' @description The `[` and `[[` operators do different things depending on whether they are applied to a `GRaster` or `GVector`:
 #' * `GVector`s:
 #'     * `[` operator: Returns a subset of geometries (i.e., points, lines, or polygons) of the `GVector`. For example, `vector[2:4]` will return the second through the fourth geometries.
-#'     * `[[` operator: Returns a vector with the selected columns in its data frame. For example, `vector[[2:4]]` returns the `GVector, but with just columns 2 through 4 of the data frame.
+#'     * `[[` operator: Returns a vector with the selected columns in its data frame. For example, `vector[[2:4]]` returns the `GVector`, but with just columns 2 through 4 of the data frame.
 #' * `GRaster`s:
 #'     * `[` operator with the assignment operator, `<-`: Assigns the given value to all cells in the `GRaster`. For examples, `raster[] <- 7` replaces all cell values in `raster` with 7.
-#'     * `[[` operator: Returns `GRaster`s from a "stack" of `GRaster`s. For example, `raster[[2:3]]` returns the second and third rasters in a stack of `GRaster`s, and `raster[[c("bio1", "bio12")]]` returns the two rasters with [names()] "bio1" and "bio12".
+#'     * `[[` operator: Returns `GRaster`s from a "[stack][c]" of `GRaster`s. For example, `raster[[2:3]]` returns the second and third rasters in a stack of `GRaster`s, and `raster[[c("bio1", "bio12")]]` returns the two rasters with [names()] "bio1" and "bio12".
 #'     * `[[` operator with the assignment operator, `<-`: Replaces existing layers or adds new layers to a `GRaster`. For example, `x[[2]] <- newRaster` makes the second layer of `x` `newRaster`. If `x` already has two layers, the second one is replaced. If it only had one layer, a second is added.
-#'     * `add<-`: "Stacks" two `GRaster`s. This is the same as `c(x, value)`, where `x` and `value` are `GRaster`.
+#'     * `add<-`: "Stacks" two `GRaster`s. This is the same as stacking rasters with [c()]. For example, you `c(raster1, raster2)` and `add(raster1) <- raster2` are equivalent.
 #'
-#' @param x A `GRaster` with one or more layers, or a `GVector`.
+#' @param x A `GVector`, or a `GRaster` with one or more layers.
 #'
 #' @param i A character, numeric, integer, or logical vector:
 #' * `GVector`s:
-#'     * `[` operator: Indicates the geometries/rows to retain. `i` can be a number indicating the index of the rows, or a logical vector the same length as there are rows.
-#'     * `[[` operator: Indicates which columns to retain. `i` can be a number indicating the index of the features, a logical vector the same length as there are columns, or a character vector of the names of the columns to keep.
+#'     * `[` operator: Indicates the geometries/rows to retain.
+#'     * `[[` operator: Indicates which columns to retain of a `GVector` or which layers to replace or fetch of a `GRaster`.
 #'
 #' @param j Not used.
 #' @param ... Not used.
