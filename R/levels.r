@@ -25,7 +25,7 @@ methods::setMethod(
 	signature = c(x = "GRaster", value = "data.frame"),
 	function(x, value) {
 	
-	if (getFastOptions("useDataTable")) value <- data.table::data.table(value)
+	if (getFastOptions("useDataTable")) value <- data.table::as.data.table(value)
 	value <- list(value)
 	levels(x) <- value
 	
@@ -58,19 +58,25 @@ methods::setMethod(
 
 	.restore(x)
 
-	gns <- .copyGSpatial(x)
+	# gns <- .copyGSpatial(x)
 	for (i in seq_along(x)) {
 	
 		# export category values and labels to file to be read in by GRASS
-		if (inherits(value[[i]], "data.frame")) {
-		   rules <- paste0(value[[i]][ , 1L], "|", value[[i]][ , 2L])
-		} else {
-			rules <- paste0(value[[i]][[1L]], "|", value[[i]][[2L]])
+		rules <- value[[i]]
+		if (inherits(rules, "data.table")) {
+			vals <- rules[[1L]]
+			labs <- rules[[2L]]
+		} else if (inherits(rules, "data.frame")) {
+			vals <- rules[ , 1L, drop = TRUE]
+   			labs <- rules[ , 2L, drop = TRUE]
 		}
+		
+		rules <- paste0(vals, "|", labs)
 		rules <- list(rules)
 		tempFile <- tempfile(fileext = ".csv")
 		tempFile <- forwardSlash(tempFile)
-		
+
+		# using fwrite because write.csv quotes everything, and this breaks
 		data.table::fwrite(
 			rules,
 			file = tempFile,
@@ -82,16 +88,18 @@ methods::setMethod(
 		
 		args <- list(
 			cmd = "r.category",
-			map = gns[i],
+			# map = gns[i],
+			map = .gnames(x)[i],
 			separator = "pipe",
 			rules = tempFile,
 			flags = "quiet",
 			intern = TRUE
 		)
 		do.call(rgrass::execGRASS, args = args)
-	
-	}
-	.makeGRaster(gns, names(x))
+
+	} # next raster
+	# .makeGRaster(gns, names(x))
+	x
 	
 	} # EOF
 )
