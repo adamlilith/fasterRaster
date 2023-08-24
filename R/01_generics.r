@@ -1,4 +1,5 @@
 .restore <- NULL
+require(data.table)
 require(sf)
 require(terra)
 
@@ -89,8 +90,8 @@ methods::setGeneric(name = "intercept", def=function(x, ...) standardGeneric("in
 
 methods::setGeneric(name = "kurtosis", def=function(x, ...) standardGeneric("kurtosis"))
 
-if (!isGeneric("levels")) { methods::setGeneric(name = "levels", def = function(x) standardGeneric("levels")) }
-if (!isGeneric("levels<-")) { methods::setGeneric(name = "levels<-", def = function(x) standardGeneric("levels<-")) }
+methods::setGeneric(name = "levels", def = function(x) standardGeneric("levels"))
+# methods::setGeneric(name = "levels<-", def = function(x, value) standardGeneric("levels<-"))
 methods::setGeneric(name = "ln", def = function(x, ...) standardGeneric("ln"))
 methods::setGeneric(name = "location", def = function(x) standardGeneric("location"))
 methods::setGeneric(name = "longlat", def = function(x) standardGeneric("longlat"))
