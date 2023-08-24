@@ -6,6 +6,7 @@
 #'
 #' ## Most useful tutorials and functions:
 #' A [quick-start tutorial][tutorial_getting_started]\cr
+#' A [tutorial on raster data types][tutorial_raster_data_types]\cr
 #' [faster()]: Initiate a **GRASS** session\cr
 #' [fast()]: Convert a `SpatRaster`, `SpatVector`, or `sf` vector to **fasterRaster**'s raster format (`GRaster`s) or vector format (`GVector`s), or load one from a file\cr
 #' [rast()], [vect()], and [st_as_sf()]: Convert `GRaster`s and `GVector`s to `SpatRaster`s, `SpatVector`s, or `sf` vectors\cr
