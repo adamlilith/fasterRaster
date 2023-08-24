@@ -20,7 +20,7 @@
 \arguments{
 \item{x}{A \code{GRaster}.}
 
-\item{value}{A \code{data.frame}, \code{data.table}, or a list of \code{data.frames} or \code{data.tables}, one per raster layer. The table's first column is the "value" column and must contain numeric values (of class \code{numeric} or \code{character}). The second column defines category labels.  (Subsequent columns are ignored.) Note that in the "value" column you can specify ranges using formatting like \code{"1.3:10.2"} (to denote the given category should be assigned to all values in the range from 1.3 to 10.2).}
+\item{value}{A \code{data.frame}, \code{data.table}, or a list of \code{data.frames} or \code{data.tables}, one per raster layer. The table's first column is the "value" column and must contain numeric values (of class \code{numeric} or \code{character}). The second column defines category labels.  (Subsequent columns are ignored.)}
 }
 \value{
 Values returned are:
@@ -28,7 +28,7 @@ Values returned are:
 \verb{levels <-} A categorical \code{GRaster}.
 }
 \description{
-\code{GRaster}s can represent \link[=tutorial_raster_data_types]{categorical data}. Cell values can be integers or non-integers, each corresponding to a category, such as "desert" or "wetland." A categorical raster is associated with a table that matches each value or range of values to a category name. The two \code{levels()} functions are related:
+\code{GRaster}s can represent \link[=tutorial_raster_data_types]{categorical data}. Cell values are actually integers, each corresponding to a category, such as "desert" or "wetland." A categorical raster is associated with a table that matches each value to a category name. The two \code{levels()} functions are related:
 \itemize{
 \item \code{levels()}: Reports category values and their codes (only those represented in the raster).
 \item \verb{levels() <-}: Sets category values.

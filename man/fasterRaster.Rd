@@ -10,6 +10,7 @@ Processing of large-in-memory/-on disk rasters and spatial vectors using \strong
 \subsection{Most useful tutorials and functions:}{
 
 A \link[=tutorial_getting_started]{quick-start tutorial}\cr
+A \link[=tutorial_raster_data_types]{tutorial on raster data types}\cr
 \code{\link[=faster]{faster()}}: Initiate a \strong{GRASS} session\cr
 \code{\link[=fast]{fast()}}: Convert a \code{SpatRaster}, \code{SpatVector}, or \code{sf} vector to \strong{fasterRaster}'s raster format (\code{GRaster}s) or vector format (\code{GVector}s), or load one from a file\cr
 \code{\link[=rast]{rast()}}, \code{\link[=vect]{vect()}}, and \code{\link[=st_as_sf]{st_as_sf()}}: Convert \code{GRaster}s and \code{GVector}s to \code{SpatRaster}s, \code{SpatVector}s, or \code{sf} vectors\cr
