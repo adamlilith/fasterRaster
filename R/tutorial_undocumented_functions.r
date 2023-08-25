@@ -9,6 +9,15 @@
 #'
 #* Argument(s): `x`: `GRaster`, `GVector`, or character: The object or the `gnames` of the object to be copied. Can take multi-layered objects or multiple `gnames`.
 #' 
+#' ## `.datatype()`
+#' Intuits GDAL or **terra** raster data type.
+#'
+#' Argument(s): `x`: A `GRaster` or vector of `gnames`.
+#' 
+#' `type`: Character. Either "terra" or "GDAL".
+#'
+#' `force`: `NULL` (default) or character: Force data type to respect `CELL`, 'FCELL', or `DCELL`.
+#' 
 #' ## `.dbLayer()` and `.dbTable()`
 #' **GRASS** names of the data table and data layer associated with a vector.
 #'
