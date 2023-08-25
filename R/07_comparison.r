@@ -32,11 +32,12 @@ methods::setMethod("Ops", signature(e1 = "GRaster", e2 = "GRaster"),
 			name <- paste0(names(e1)[i], "_", names(e2)[i])
 			gn <- .makeGName(name, "rast")
 
-			ex <- paste(gn, "= ", .gnames(e1)[i], " ", oper, " ", .gnames(e2)[i])
+			ex <- paste(gn, "= int(if(", .gnames(e1)[i], " ", oper, " ", .gnames(e2)[i], "))")
+			this <- .genericArith(name = name, gn = gn, ex = ex)
+			
 			if (i == 1L) {
-				out <- .genericArith(name = name, gn = gn, ex = ex)
+				out <- this
 			} else {
-				this <- .genericArith(name = name, gn = gn, ex = ex)
 				out <- c(out, this)
 			}
 			
@@ -61,11 +62,12 @@ methods::setMethod("Ops", signature(e1 = "logical", e2 = "GRaster"),
 			name <- names(e2)[i]
 			gn <- .makeGName(name, "rast")
 
-			ex <- paste(gn, "= ", e1, " ", oper, " ", .gnames(e2)[i])
+			ex <- paste(gn, "= int(if(", e1, " ", oper, " ", .gnames(e2)[i], "))")
+			this <- .genericArith(name = name, gn = gn, ex = ex)
+			
 			if (i == 1L) {
-				out <- .genericArith(name = name, gn = gn, ex = ex)
+				out <- this
 			} else {
-				this <- .genericArith(name = name, gn = gn, ex = ex)
 				out <- c(out, this)
 			}
 			
@@ -90,11 +92,12 @@ methods::setMethod("Ops", signature(e1 = "GRaster", e2 = "logical"),
 			name <- names(e2)[i]
 			gn <- .makeGName(name, "rast")
 			
-			ex <- paste(gn, "= ", .gnames(e1)[i], " ", oper, " ", e2)
+			ex <- paste(gn, "= int(if(", .gnames(e1)[i], " ", oper, " ", e2, "))")
+			this <- .genericArith(name = name, gn = gn, ex = ex)
+			
 			if (i == 1L) {
-				out <- .genericArith(name = name, gn = gn, ex = ex)
+				out <- this
 			} else {
-				this <- .genericArith(name = name, gn = gn, ex = ex)
 				out <- c(out, this)
 			}
 			
@@ -118,13 +121,15 @@ methods::setMethod("Ops", signature(e1 = "numeric", e2 = "GRaster"),
 			name <- names(e2)[i]
 			gn <- .makeGName(name, "rast")
 
-			ex <- paste(gn, "= ", e1, " ", oper, " ", .gnames(e2)[i])
+			ex <- paste(gn, "= int(if(", e1, " ", oper, " ", .gnames(e2)[i], "))")
+			this <- .genericArith(name = name, gn = gn, ex = ex)
+			
 			if (i == 1L) {
-				out <- .genericArith(name = name, gn = gn, ex = ex)
+				out <- this
 			} else {
-				this <- .genericArith(name = name, gn = gn, ex = ex)
 				out <- c(out, this)
 			}
+
 		}
 		out
 		
@@ -145,11 +150,12 @@ methods::setMethod("Ops", signature(e1 = "GRaster", e2 = "numeric"),
 			name <- names(e1)[i]
 			gn <- .makeGName(name, "rast")
 
-			ex <- paste(gn, "= if(", .gnames(e1)[i], " ", oper, " ", e2)
+			ex <- paste(gn, "= int(if(", .gnames(e1)[i], " ", oper, " ", e2, "))")
+			this <- .genericArith(name = name, gn = gn, ex = ex)
+			
 			if (i == 1L) {
-				out <- .genericArith(name = name, gn = gn, ex = ex)
+				out <- this
 			} else {
-				this <- .genericArith(name = name, gn = gn, ex = ex)
 				out <- c(out, this)
 			}
 			
@@ -171,10 +177,11 @@ methods::setMethod("Ops", signature(e1 = "GRaster", e2 = "character"),
 
 		levs <- levels(e1)
 
-		for (i in 1L:nlyr(e1)) {
+		for (i in seq_len(nlyr(e1))) {
 
 			# get value of this category
 			thisValue <- levs[[i]]$Value[levs[[i]]$Label == e2]
+			thisValue <- as.numeric(thisValue)
 			if (length(thisValue) == 0L) {
 				this <- 0L * not.na(e1)
 			} else {
@@ -198,6 +205,7 @@ methods::setMethod("Ops", signature(e1 = "GRaster", e2 = "character"),
 			
 	} # EOF
 )
+
 # character raster
 methods::setMethod("Ops", signature(e1 = "character", e2 = "GRaster"),
     function(e1, e2) {
@@ -210,7 +218,7 @@ methods::setMethod("Ops", signature(e1 = "character", e2 = "GRaster"),
 
 		levs <- levels(e2)
 
-		for (i in 1L:nlyr(e2)) {
+		for (i in seq_len(nlyr(e2))) {
 
 			# get value of this category
 			thisValue <- levs[[i]]$Value[levs[[i]]$Label == e1]
