@@ -120,7 +120,7 @@ methods::setMethod(
 
 	ncats <- ncat(object)
 	if (any(ncats > 0L)) {
-  		minColWidth <- 8L
+  		minColWidth <- 10L
 	} else {
   		minColWidth <- 4L
 	}
@@ -145,26 +145,38 @@ methods::setMethod(
 	
 	# minimum and maximum category values
 	minCat <- maxCat <- rep(NA_character_, object@nLayers)
-	levs <- levels(object)
+	objLevels <- levels(object)
 
 	for (i in seq_len(object@nLayers)) {
 
+		# no levels for this raster
 		if (ncats[i] == 0L) {
+
 			minCat[i] <- ""
    			maxCat[i] <- ""
+
+		# levels for this raster
 		} else {
 
-			if (is.data.frame(levs[[i]])) {
-				valueOrder <- order(as.numeric(levs[[i]]$Value))
-				levs[[i]] <- levs[[i]][valueOrder, , drop = FALSE]
+			thisLevs <- objLevels[[names(object)[i]]]
+
+			if (inherits(thisLevs, "data.table")) {
+				thisLevs$ValueNumeric <- as.numeric(thisLevs[['Value']])
+    			thisLevs <- data.table::setorderv(thisLevs, cols = "ValueNumeric")
+				minCat[i] <- as.matrix(thisLevs[1L])[1L, 2L]
+				maxCat[i] <- as.matrix(thisLevs[nrow(thisLevs)])[1L, 2L]
 			} else {
-				levs[[i]]$TEMPTEMP_newValue <- as.numeric(levs[[i]][["Value"]])
-				levs[[i]] <- data.table::setorderv(levs[[i]], cols = "TEMPTEMP_newValue")
+				valueOrder <- order(as.numeric(thisLevs$Value))
+				thisLevs <- thisLevs[valueOrder, , drop = FALSE]
 			}
-			minCat[i] <- levs[[i]]$Label[1L]
-			maxCat[i] <- levs[[i]]$Label[nrow(levs[[i]])]
+
+			minCat[i] <- thisLevs$Label[1L]
+			maxCat[i] <- thisLevs$Label[nrow(thisLevs)]
+
 		}
+		
 	}
+
 	# truncate long names
 	namesChar <- object@names
 	ncharNames <- nchar(namesChar)
@@ -193,7 +205,7 @@ methods::setMethod(
 		minValLength, maxValLength
 	)
 	if (details) nc <- pmax(nc, nchar(gnames))
-	if (any(nc < minColWidth)) nc[nc < minColWdith] <- minColWidth
+	if (any(nc < minColWidth)) nc[nc < minColWidth] <- minColWidth
 
 	# truncate category names
 	if (any(nchar(minCat) > nc)) {
@@ -206,7 +218,7 @@ methods::setMethod(
 	gnamesChar <- names <- datatype <- nCats <- minValChar <- maxValChar <- minCatChar <- maxCatChar <- rep(NA, object@nLayers)
 	for (i in seq_len(object@nLayers)) {
 		fmt <- paste0("%", nc[i], "s")
-		gnamesChar[i] <- sprintf(fmt, gnames[i])
+		if (details) gnamesChar[i] <- sprintf(fmt, gnames[i])
 		names[i] <- sprintf(fmt, object@names[i])
 		datatype[i] <- sprintf(fmt, object@datatypeGRASS[i])
 		nCats[i] <- sprintf(fmt, object@nCats[i])
@@ -216,7 +228,7 @@ methods::setMethod(
 		maxValChar[i] <- sprintf(fmt, maxVal[i])
 	}
 	
-	gnames <- paste(gnamesChar, collapse=" ")
+	if (details) gnames <- paste(gnamesChar, collapse=" ")
 	names <- paste(names, collapse=" ")
 	datatype <- paste(datatype, collapse=" ")
 	minValChar <- paste(minValChar, collapse=" ")
@@ -241,13 +253,12 @@ methods::setMethod(
 	if (details) cat("gnames      :", gnames, "\n")
 	cat("name        :", names, "\n")
 	if (details) cat("datatype    :", datatype, "\n")
+	cat("min. value  :", minValChar, "\n")
+	cat("max. value  :", maxValChar, "\n")
 	if (any(ncats > 0L)) {
-	  cat("num. categ. :", nCats, "\n")
 		cat("min. categ. :", minCatChar, "\n")
 		cat("max. categ. :", maxCatChar, "\n")
-	} else {
-		cat("min. value  :", minValChar, "\n")
-		cat("max. value  :", maxValChar, "\n")
+		cat("num. categ. :", nCats, "\n")
 	}
 
 	} # EOF
