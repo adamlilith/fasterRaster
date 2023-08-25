@@ -10,8 +10,7 @@
 #' @param x A `GRaster` or missing: If missing, a table of supported file types is reported.
 #' @param filename Character: Path and file name.
 #' @param overwrite Logical: If `FALSE` (default), do not save over existing file(s).
-#' @param ... Additional arguments. These can include:
-#' * `datatype` The datatype of the values stored in non-ASCII rasters. If `NULL`, this will be ascertained from the raster . This can any of:
+#' @param datatype Character: The datatype of the values stored in non-ASCII rasters. If `NULL`, this will be ascertained from the raster. This can any of:
 #'    | **`terra`** | **`GRASS`** | **`GDAL`** | **Values** |
 #'    | ----------- | ----------- | ---------- | ------ |
 #'    | `INT1U`     | `CELL`      | `Byte`     | Integer values from 0 to 255 |
@@ -20,6 +19,7 @@
 #'    | `INT4S`     | `CELL`     | `Int32`    | Integer values from -2,147,483,647 to 2,147,483,647 |
 #'    | `FLT4S`     | `FCELL`   | `Float32`    | Values from -3.4e+38 to 3.4e+38, including decimal values |
 #'    | `FLT8S`     | `DCELL`   | `Float64`    | Values from -1.7e+308 to 1.7e+308, including decimal values |
+#' @param ... Additional arguments. These can include:
 #' * `compressTiff`: Character or `NULL`: Type of compression for GeoTIFF files:
 #'    * `"DEFLATE"` (default)
 #'    * `"LZW"`
@@ -45,7 +45,7 @@
 #' @exportMethod writeRaster
 setMethod(
 	"writeRaster",
-	signature(x = "GRaster", filename = "character"),
+	signature(x = "GRaster", filename = "character", datatype = NULL),
 	function(
 		x,
 		filename,
@@ -118,32 +118,24 @@ setMethod(
 		}
 		
 		# data type
-		thisDataType <- if (!("datatype" %in% names(dots))) {
-			datatype(x, type = "GDAL")
-		} else if (dots$datatype == "INT1U") {
-			"Byte"
-		} else if (dots$datatype == "INT2U") {
-			"UInt16"
-		} else if (dots$datatype == "INT2S") {
-			"Int32"
-		} else if (dots$datatype == "FLT4S") {
-			"Float32"
-		} else if (dots$datatype == "FLT8S") {
-			"Float64"
-		} else {
-			datatype
-		}
+		if (is.null(datatype)) datatype <- .datatype(x, "GDAL")
 		
-		if (length(thisDataType) > 1L) {
-			thisDataType <- if (any(thisDataType == "Float64")) {
+		if (any(datatype == "INT1U")) datatype[datatype == "INT1U"] <- "Byte"
+		if (any(datatype == "INT2U")) datatype[datatype == "INT2U"] <- "UInt16"
+		if (any(datatype == "INT2S")) datatype[datatype == "INT2S"] <- "Int32"
+		if (any(datatype == "FLT4S")) datatype[datatype == "FLT4S"] <- "Float32"
+		if (any(datatype == "FLT8S")) datatype[datatype == "FLT8S"] <- "Float64"
+		
+		if (length(datatype) > 1L) {
+			datatype <- if (any(datatype == "Float64")) {
 				"Float64"
-			} else if (any(thisDataType == "Float32")) {
+			} else if (any(datatype == "Float32")) {
 				"Float32"
-			} else if (any(thisDataType == "Int32")) {
+			} else if (any(datatype == "Int32")) {
 				"Int32"
-			} else if (any(thisDataType == "UInt16")) {
+			} else if (any(datatype == "UInt16")) {
 				"UInt16"
-			} else if (any(thisDataType == "Byte")) {
+			} else if (any(datatype == "Byte")) {
 				"Byte"
 			}
 		}
@@ -158,8 +150,8 @@ setMethod(
 			if ("compressTiff" %in% names(dots) && dots$compressTiff) createopt <- c(createopt, paste0("COMPRESS=", toupper(dots$compressTiff)))
 			# if ("bigTiff" %in% names(dots) && bigTiff) createopt <- c(createopt, "BIGTIFF=YES")
 			createopt <- c(createopt, "BIGTIFF=IF_NEEDED")
-			if (thisDataType %in% c("Byte", "UInt16", "Int32")) createopt <- c(createopt, "PREDICTOR=2")
-			if (thisDataType %in% c("Float32", "Float64")) createopt <- c(createopt, "PREDICTOR=3")
+			if (datatype %in% c("Byte", "UInt16", "Int32")) createopt <- c(createopt, "PREDICTOR=2")
+			if (datatype %in% c("Float32", "Float64")) createopt <- c(createopt, "PREDICTOR=3")
 			
 			createopt <- unique(createopt)
 			createopt <- paste(createopt, collapse=",")
@@ -175,12 +167,12 @@ setMethod(
 		}
 
 		# save
-		# rgrass::execGRASS("r.out.gdal", input=gnames, output=filename, type=thisDataType, createopt=createopt, metaopt=metaopt, flags=thisFlags, intern=TRUE, ...)
+		# rgrass::execGRASS("r.out.gdal", input=gnames, output=filename, type=datatype, createopt=createopt, metaopt=metaopt, flags=thisFlags, intern=TRUE, ...)
 		args <- list(
 			cmd = "r.out.gdal",
 			input = gn,
 			output = filename,
-			type = thisDataType,
+			type = datatype,
 			createopt = createopt,
 			flags = thisFlags,
 			intern = TRUE
