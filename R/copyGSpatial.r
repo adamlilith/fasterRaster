@@ -2,11 +2,11 @@
 #'
 #' Create a copy of a `GRaster` or `GVector` in **GRASS**.  This function is used internally and is of little use to most users.  This only creates a copy of the object in the **GRASS** session--to make a `GRaster` or `GVector`, [.makeGRaster()] or [.makeGVector()] need to be called after making the copy. Note that if the object is multi-layered, then a copy is made of each layer.
 #'
-#' @param x `GRaster`, `GVector`, or character: The object or the `gnames` of the object to be copied. Can take multi-layered objects or multiple `gnames`.
+#' @param x `GRaster`, `GVector`, or character: The object or the `sources` of the object to be copied. Can take multi-layered objects or multiple `sources`.
 #' 
 #' @param reshapeRegion Logical: If `TRUE`, reshape the region to match `x` (`GRaster`s only).
 #'
-#' @returns Character vector representing the new `gnames` of each object, plus makes a copy of the given object(s) in **GRASS**.
+#' @returns Character vector representing the new `sources` of each object, plus makes a copy of the given object(s) in **GRASS**.
 #'
 #' @aliases .copyGSpatial
 #' @noRd
@@ -69,11 +69,11 @@ methods::setMethod(
 
 	.restore(x)
 	if (reshapeRegion) region(x)
-	gns <- .makeGName(x, rastOrVect = "raster", nLayers)
+	gns <- .makeSourceName(x, rastOrVect = "raster", nLayers)
 
 	for (i in seq_len(nLayers)) {
 
-		ex <- paste0(gns[i], " = ", .gnames(x)[i])
+		ex <- paste0(gns[i], " = ", sources(x)[i])
 
 		args <- list(
 			cmd = "r.mapcalc",
@@ -96,8 +96,8 @@ methods::setMethod(
 	.restore(x)
 
 	### copy vector
-	gnFrom <- .gnames(x)
-	gnTo <- .makeGName(NULL, rastOrVect="vector")
+	gnFrom <- sources(x)
+	gnTo <- .makeSourceName(NULL, rastOrVect="vector")
 
 	fromTo <- paste0(gnFrom, ",", gnTo)
 	args <- list(
@@ -110,7 +110,7 @@ methods::setMethod(
 	do.call(rgrass::execGRASS, args=args)
 
 	### copy database file
-	gnDb <- .makeGName("db", rastOrVect="vector")
+	gnDb <- .makeSourceName("db", rastOrVect="vector")
 	
 	opts <- getFastOptions(c("workDir", "location", "mapset"))
 	grassDB <- paste(c(opts$workDir, opts$location, opts$mapset, "/sqlite/sqlite.db"), collapse="/")
@@ -119,7 +119,7 @@ methods::setMethod(
 		cmd = "db.copy",
 		# from_database = fromDatabase,
 		from_database = grassDB,
-		from_table = .gnames(x),
+		from_table = sources(x),
 		to_database = grassDB,
 		to_table = gnDb,
 		flags = c("quiet", "overwrite"),

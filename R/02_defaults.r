@@ -7,7 +7,7 @@
 .grassVerDefault <- function() 8.3
 .addonDirDefault <- function() NULL
 .memoryDefault <- function() 300 # in MB
-.rasterDataTypeDefault <- function() "float" # "FCELL"/"float", or "DCELL"/"double"
+.rasterPrecisionDefault <- function() "float" # "FCELL"/"float", or "DCELL"/"double"
 .useDataTableDefault <- function() TRUE # logical
 # .grassVerDefault <- function() "82"
 
@@ -31,7 +31,7 @@
 			"mapset",
 			"workDir",
 			"useDataTable",
-   			"rasterDataType"
+   			"rasterPrecision"
 		),
 		type = c(
 			"character",

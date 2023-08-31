@@ -10,6 +10,17 @@
 Creates in \strong{GRASS} a copy of a \code{GSpatial} object (typically, a \code{GRaster} or a \code{GVector}).
 }
 
+\subsection{\code{.datatype()}}{
+
+Intuits GDAL or \strong{terra} raster data type.
+
+Argument(s): \code{x}: A \code{GRaster} or vector of \code{gnames}.
+
+\code{type}: Character. Either "terra" or "GDAL".
+
+\code{force}: \code{NULL} (default) or character: Force data type to respect \code{CELL}, 'FCELL', or \code{DCELL}.
+}
+
 \subsection{\code{.dbLayer()} and \code{.dbTable()}}{
 
 \strong{GRASS} names of the data table and data layer associated with a vector.
@@ -61,6 +72,13 @@ Argument(s): \code{x}: A \code{GRaster}.
 Get the value of the \verb{@minVal} and \verb{@maxVal} slot in a \code{GRaster}.
 
 Argument(s): \code{x}: A \code{GRaster}.
+}
+
+\subsection{\code{.ncat()}}{
+
+Count number of levels in a \code{GRaster}, \code{data.frame}, \code{data.table}, empty string, or a list of \code{data.frame}s, \code{data.table}s, and/or empty strings.
+
+Argument(s): \code{x}: A \code{GRaster}, \code{data.frame}, \code{data.table}, empty string, or a list thereof.
 }
 
 \subsection{\code{.projection()}}{

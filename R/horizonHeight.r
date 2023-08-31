@@ -52,7 +52,7 @@ methods::setMethod(
 	
 	args <- list(
 		cmd = "r.horizon",
-		elevation = .gnames(x),
+		elevation = sources(x),
 		output = NA_character_,
 		direction = NA_real_,
 		bufferzone = bufferZone,
@@ -65,7 +65,7 @@ methods::setMethod(
 	.restore(x)
 	region(x)
 	
-	gn <- .makeGName("horizon", "rast")
+	gn <- .makeSourceName("horizon", "rast")
 	for (i in seq_along(directions)) {
 	
 		direction <- directions[i]

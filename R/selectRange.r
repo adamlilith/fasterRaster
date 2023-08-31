@@ -27,9 +27,9 @@ methods::setMethod(
 	}
 	if (!is.cell(y)) y <- round(y)
 
-	gn <- .makeGName("selectRange", "raster")
-	xGnames <- .gnames(x)
-	yGname <- .gnames(y)
+	gn <- .makeSourceName("selectRange", "raster")
+	xGnames <- sources(x)
+	yGname <- sources(y)
 	nLayers <- nlyr(x)
 
 	ex <- paste0(gn, " = ")

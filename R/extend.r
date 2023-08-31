@@ -166,9 +166,9 @@ methods::setMethod(
         if (is.na(fill)) {
             gn <- .copyGSpatial(x = x[[i]], reshapeRegion = FALSE)
         } else {
-            gn <- .makeGName(names(x), "raster", nLayers)
+            gn <- .makeSourceName(names(x), "raster", nLayers)
 
-            ex <- paste0(gn, " = if(col() <= ", y[1L], ", ", fill, ", if(col() > ncols() - ", y[2L], ", ", fill, ", if(row() <= ", y[4L], ", ", fill, ", if(row() > nrows() - ", y[3], ", ", fill, ", ", .gnames(x)[i], "))))")
+            ex <- paste0(gn, " = if(col() <= ", y[1L], ", ", fill, ", if(col() > ncols() - ", y[2L], ", ", fill, ", if(row() <= ", y[4L], ", ", fill, ", if(row() > nrows() - ", y[3], ", ", fill, ", ", sources(x)[i], "))))")
 
             args <- list(
                 cmd = "r.mapcalc",

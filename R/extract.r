@@ -31,8 +31,8 @@ methods::setMethod(
 
         args <- list(
             cmd = "r.what",
-            map = .gnames(x)[i],
-            points = .gnames(y),
+            map = sources(x)[i],
+            points = sources(y),
             null_value = "NA",
             flags = c("quiet", "overwrite"),
             intern = TRUE

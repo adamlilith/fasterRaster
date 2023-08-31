@@ -1,17 +1,20 @@
-#' @title Classes for "fasterRaster" locations, rasters, and vectors
+#' @title Classes for fasterRaster locations, rasters, and vectors
 #'
+#' @name GMetaTable-class
 #' @aliases GMetaTable
-#' @rdname GSession
+#' @rdname GSession-class
 #' @exportClass GMetaTable
 GMetaTable <- setClass("GMetaTable")
 
+#' @name GEmptyMetaTable-class
 #' @aliases GEmptyMetaTable
-#' @rdname GSession
+#' @rdname GSession-class
 #' @exportClass GEmptyMetaTable
 GEmptyMetaTable <- setClass("GEmptyMetaTable", contains = "GMetaTable")
 
+#' @name GFullMetaTable-class
 #' @aliases GFullMetaTable
-#' @rdname GSession
+#' @rdname GSession-class
 #' @exportClass GFullMetaTable
 GFullMetaTable <- setClass(
 	"GFullMetaTable",
@@ -36,8 +39,9 @@ setValidity("GFullMetaTable",
 	} # EOF
 )
 
+#' @name GVector-class
 #' @aliases GVector
-#' @rdname GSession
+#' @rdname GSession-class
 #' @exportClass GVector
 GVector <- methods::setClass(
 	"GVector",
@@ -107,7 +111,7 @@ setValidity("GVector",
 		crs = crs(),
   		projection = info[["projection"]][1L],
 		topology = info[["topology"]][1L],
-		gnames = gn,
+		sources = gn,
 		geometry = info[["geometry"]][1L],
 		nGeometries = info[["nGeometries"]],
 		extent = c(info[["west"]][1L], info[["east"]][1L], info[["south"]][1L], info[["north"]][1L]),

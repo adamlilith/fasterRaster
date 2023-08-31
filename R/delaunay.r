@@ -20,10 +20,10 @@ methods::setMethod(
 
 	if (geomtype(x) != "points") stop("The vector must represent spatial points.")
 	
-	gn <- .makeGName("delaunay", "vect")
+	gn <- .makeSourceName("delaunay", "vect")
 	args <- list(
 		cmd = "v.delaunay",
-		input = .gnames(x),
+		input = sources(x),
 		output = gn,
 		flags = c("quiet", "overwrite"),
 		intern = TRUE

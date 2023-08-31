@@ -113,7 +113,7 @@ methods::setMethod(
 	.restore(x)
 
 	### crop
-	gn <- .makeGName("crop", "vector")
+	gn <- .makeSourceName("crop", "vector")
 	if (inherits(y, "GVector")) {
 
 		xgeom <- geomtype(x, grass = TRUE)
@@ -121,7 +121,7 @@ methods::setMethod(
 
 		args <- list(
 			cmd = "v.clip",
-			input = .gnames(x),
+			input = sources(x),
 			output = gn,
 			flags = c("quiet", "overwrite"),
 			intern = TRUE
@@ -130,20 +130,20 @@ methods::setMethod(
 		if (ext) {
 			regionExt(y, respect = "dim")
 			args$flags <- c(args$flags, "r")
-			args$clip <- .gnames(y)
+			args$clip <- sources(y)
 		} else if (ygeom %in% c("point", "line")) {
 			ch <- convHull(y)
-			args$clip <- .gnames(ch)
+			args$clip <- sources(ch)
 		} else if (ygeom == "area") {
-			args$clip <- .gnames(y)
+			args$clip <- sources(y)
 		}
 
 	} else if (inherits(y, "GRaster")) {
 
 		args <- list(
 			cmd = "v.clip",
-			input = .gnames(x),
-			clip = .gnames(y),
+			input = sources(x),
+			clip = sources(y),
 			output = gn,
 			flags = c("r", "quiet", "overwrite"),
 			intern = TRUE

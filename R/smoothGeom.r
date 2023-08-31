@@ -45,10 +45,10 @@ methods::setMethod(
 	
 	if (method == "hermite" && angle < 0) stop("Argument ", sQuote("angle"), " must be >0.")
 	
-	gn <- .makeGName("generalized", "vect")
+	gn <- .makeSourceName("generalized", "vect")
 	args <- list(
 		cmd = "v.generalize",
-		input = .gnames(x),
+		input = sources(x),
 		output = gn,
 		method = method,
 		threshold = dist,

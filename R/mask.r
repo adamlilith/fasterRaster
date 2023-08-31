@@ -79,7 +79,7 @@ methods::setMethod(
         # custom mask values
         if (length(maskvalues) > 1L || !is.na(maskvalues)) {
 
-            maskGn <- .makeGName("mask", "raster")
+            maskGn <- .makeSourceName("mask", "raster")
 
             if (anyNA(maskvalues)) {
                 maskValuesHaveNAs <- TRUE
@@ -89,8 +89,8 @@ methods::setMethod(
             }
 
             maskvalues <- as.character(maskvalues)
-            maskvalues <- paste(paste0(.gnames(mask), " == "), maskvalues)
-            if (maskValuesHaveNAs) maskvalues <- c(maskvalues, paste0("isnull(", .gnames(mask), ")"))
+            maskvalues <- paste(paste0(sources(mask), " == "), maskvalues)
+            if (maskValuesHaveNAs) maskvalues <- c(maskvalues, paste0("isnull(", sources(mask), ")"))
 
             maskvalues <- paste(maskvalues, collapse = " | ")
 
@@ -98,14 +98,14 @@ methods::setMethod(
             rgrass::execGRASS("r.mapcalc", expression = ex, flags = c("quiet", "overwrite"), intern = TRUE)
 
         } else {
-            maskGn <- .gnames(mask)
+            maskGn <- sources(mask)
         }
 
         args$raster <- maskGn
     
     ### mask is a vector
     } else if (inherits(mask, "GVector")) {
-        args$vector <- .gnames(mask)
+        args$vector <- sources(mask)
     }
 
     ### create mask
@@ -115,11 +115,11 @@ methods::setMethod(
     ### NOT CORRECT AS OF 2023/07/19: Using g.copy/.copyGSpatial() will not allow the mask to be retained on exiting the function when the mask is automatically removed.
     n <- nlyr(x)
     gns <- .copyGSpatial(x, reshapeRegion = FALSE)
-    # gns <- .makeGName("mask", "raster", n)
+    # gns <- .makeSourceName("mask", "raster", n)
 
     # for (i in seq_len(n)) {
 
-        # ex <- paste0(gns[i], " = ", .gnames(x))
+        # ex <- paste0(gns[i], " = ", sources(x))
         # rgrass::execGRASS("r.mapcalc", expression = ex, flags = c("quiet", "overwrite"), intern = TRUE)
 
     # }
@@ -128,7 +128,7 @@ methods::setMethod(
     if (!is.na(updatevalue)) {
 
 		nLayers <- nlyr(x)
-        gnsUpdate <- .makeGName("mask", "raster", nLayers)
+        gnsUpdate <- .makeSourceName("mask", "raster", nLayers)
         for (i in seq_len(nLayers)) {
 
             ex <- paste0(gnsUpdate[i], " = if(!isnull(", gns[i], "), ", updatevalue, ", null())")

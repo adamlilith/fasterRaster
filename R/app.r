@@ -1,8 +1,8 @@
 #' Apply a function to a set of rasters
 #'
-#' @description `app()` applies a function to a set of "stacked" rasters.
+#' @description `app()` applies a function to a set of "stacked" rasters. `appFuns()` provides a table of **GRASS** functions and their equivalent **R** function. `appCheck()` tests whether a formula supplied to `app()` has any "forbidden" function calls.
 #' 
-#' This function operates in a manner slightly different from [terra::app()]. The function to be applied *must* be written as a character string. For example, if the raster had layer names "`x1`" and "`x2`", then the function might be like `"= max(sqrt(x1), log(x2))"`. Rasters **cannot** have the same names as functions used in the formula. In this example, the rasters could not be named "max", "sqrt", or "log".
+#' `app()` function operates in a manner slightly different from [terra::app()]. The function to be applied *must* be written as a character string. For example, if the raster had layer names "`x1`" and "`x2`", then the function might be like `"= max(sqrt(x1), log(x2))"`. Rasters **cannot** have the same names as functions used in the formula. In this example, the rasters could not be named "max", "sqrt", or "log".
 #' 
 #' The `app()` function will automatically check for raster names that appear also to be functions that appear in the formula, but the `appCheck()` function can be applied to the raster stack plus the formula to do this outside of `app()`. You can obtain a list of functions using `appFuns()`. Note that these are sometimes different from how they are applied in **R**.
 #'
@@ -62,7 +62,7 @@ methods::setMethod(
     .restore(x)
     region(x)
 
-    # replace raster names with gnames
+    # replace raster names with sources
     # replacing from longest to shortest to avoid issues with nestedness
     xn <- names(x)
     nchars <- nchar(xn)
@@ -74,10 +74,10 @@ methods::setMethod(
     for (name in xn) {
 
         i <- which(name == names(x))
-        gn <- .gnames(x)[i]
+        gn <- sources(x)[i]
 
         # ensure data type  
-        dt <- datatype(x)[i]
+        dt <- datatype(x, "GRASS")[i]
         if (ensure == "auto") {
             gn <- if (dt == "CELL") {
                 paste0("int(", gn, ")")
@@ -95,7 +95,7 @@ methods::setMethod(
         fun <- gsub(fun, pattern = name, replacement = gn)
     }
 
-    gn <- .makeGName("app", "raster")
+    gn <- .makeSourceName("app", "raster")
     fun <- paste(gn, fun)
 
     args <- list(

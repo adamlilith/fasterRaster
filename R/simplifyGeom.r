@@ -57,10 +57,10 @@ methods::setMethod(
 	
 	if (method == "reumann" && (prop < 0 | prop > 1)) stop("Argument ", sQuote("prop"), " must be in the range [0, 1].")
 	
-	gn <- .makeGName("generalized", "vect")
+	gn <- .makeSourceName("generalized", "vect")
 	args <- list(
 		cmd = "v.generalize",
-		input = .gnames(x),
+		input = sources(x),
 		output = gn,
 		method = method,
 		threshold = tolerance,

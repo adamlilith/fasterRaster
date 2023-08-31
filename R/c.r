@@ -52,17 +52,18 @@ setMethod(f = "c",
 				crs = crs(out),
 				projection = .projection(out),
 				topology = topology(out),
-				gnames = c(.gnames(out), .gnames(dots[[i]])),
+				sources = c(sources(out), sources(dots[[i]])),
 				names = c(names(out), names(dots[[i]])),
 				extent = as.vector(ext(out)),
 				zextent = z,
-				datatypeGRASS = c(datatype(out), datatype(dots[[i]])),
+				datatypeGRASS = c(out@datatypeGRASS, dots[[i]]@datatypeGRASS),
 				dimensions = dims,
 				nLayers = nlyr(out) + nlyr(dots[[i]]),
 				resolution = res(out),
-				nCats = c(ncat(out), ncat(dots[[i]])),
 				minVal = c(.minVal(out), .minVal(dots[[i]])),
-				maxVal = c(.maxVal(out), .maxVal(dots[[i]]))
+				maxVal = c(.maxVal(out), .maxVal(dots[[i]])),
+				activeCat = c(out@activeCat, dots[[i]]@activeCat),
+				levels = c(out@levels, dots[[i]]@levels)
 			)
 		
 		} # next GRaster to combine
@@ -108,12 +109,12 @@ setMethod(f = "c",
 		for (i in seq_along(dots)) compareGeom(x, dots[[i]], geometry=TRUE, topo=TRUE)
 	}
 
-	# gnames of inputs
-	input <- .gnames(x)
-	if (length(dots) > 0L) input <- c(input, sapply(dots, .gnames))
+	# sources of inputs
+	input <- sources(x)
+	if (length(dots) > 0L) input <- c(input, sapply(dots, sources))
 	input <- paste(input, collapse=",")
 
-	gn <- .makeGName("combo", "vector")
+	gn <- .makeSourceName("combo", "vector")
 
 	args = list(
 		cmd = "v.patch",

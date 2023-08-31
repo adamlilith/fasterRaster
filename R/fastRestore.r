@@ -2,11 +2,11 @@
 #'
 #' This function is useful for reverting to a previous **GRASS** session (`workDir`, `location`, and/or `mapset`). The session must have been already initiated using [faster()] in the current **R** session or a previous one.
 #'
-#' @param ... Either a sequence of arguments with the pattern `<argument = value>`, or a list of arguments. These arguments can be any option available in [setFastOptions()]. Of particular note, the `workDir`, `location`, and `mapset` options allow one to revert to a previous **GRASS** session. The current session"s `workDir`, `location`, and `mapset` can be seen using [getFastOptions()], plus  [location()] and [mapset()].
+#' @param ... Either a sequence of arguments with the pattern `<argument = value>`, or a list of arguments. These arguments can be any option available in [setFastOptions()]. Of particular note, the `workDir`, `location`, and `mapset` options allow one to revert to a previous **GRASS** session. The current session's `workDir`, `location`, and `mapset` can be seen using [getFastOptions()], plus  [location()] and [mapset()].
 #'
-#' @return An object of class `gmeta` (invisibly) if successful. An error will likely result if not.
+#' @return An object of class `GSession` (invisibly) if successful. An error will likely result if not.
 #'
-#' @seealso **GRASS** [locations and mapsets](https://grass.osgeo.org/grass82/manuals/grass_database.html)
+#' @seealso **fasterRaster** **GRASS** [sessions][tutorial_sessions]
 #'
 #' @example man/examples/ex_sessions.r
 #'

@@ -53,7 +53,7 @@ methods::setMethod(
                 args <- list(
                     cmd = "r.univar",
                     flags = c("quiet", "r", "e"),
-                    map = .gnames(x)[i],
+                    map = sources(x)[i],
                     Sys_show.output.on.console = FALSE,
                     echoCmd = FALSE,
                     intern = TRUE,
@@ -84,7 +84,7 @@ methods::setMethod(
                 args <- list(
                     cmd = "r.univar",
                     flags = c("quiet", "r", "e"),
-                    map = .gnames(x)[i],
+                    map = sources(x)[i],
                     Sys_show.output.on.console = FALSE,
                     echoCmd = FALSE,
                     intern = TRUE,
@@ -105,8 +105,8 @@ methods::setMethod(
         ### truncate values at min/max
         if (minmax(x[[i]])[1L, i] < lowerFrom | minmax(x[[i]])[2L, i] > upperFrom) {
 
-            gnTrunc <- .makeGName("truncated", "rast")
-            ex <- paste0(gnTrunc, " = if(", .gnames(x)[i], " < ", lowerFrom, ", ", lowerFrom, ", if(", .gnames(x)[i], " > ", upperFrom, ", ", upperFrom, ", ", .gnames(x)[i], "))")
+            gnTrunc <- .makeSourceName("truncated", "rast")
+            ex <- paste0(gnTrunc, " = if(", sources(x)[i], " < ", lowerFrom, ", ", lowerFrom, ", if(", sources(x)[i], " > ", upperFrom, ", ", upperFrom, ", ", sources(x)[i], "))")
 
             args <- list(
                 cmd = "r.mapcalc",
@@ -118,10 +118,10 @@ methods::setMethod(
             do.call(rgrass::execGRASS, args=args)
 
         } else {
-            gnTrunc <- .gnames(x)[i]
+            gnTrunc <- sources(x)[i]
         }
 
-        gn <- .makeGName(names(x)[i], "rast")
+        gn <- .makeSourceName(names(x)[i], "rast")
         scale <- (maxv - minv) / (upperFrom - lowerFrom)
         ex <- paste0(gn, " = ", minv, " + (", scale, " * (", gnTrunc, " - ", lowerFrom, "))")
         

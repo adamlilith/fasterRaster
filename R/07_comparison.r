@@ -30,9 +30,9 @@ methods::setMethod("Ops", signature(e1 = "GRaster", e2 = "GRaster"),
 		for (i in 1L:nlyr(e1)) {
 
 			name <- paste0(names(e1)[i], "_", names(e2)[i])
-			gn <- .makeGName(name, "rast")
+			gn <- .makeSourceName(name, "rast")
 
-			ex <- paste(gn, "= int(if(", .gnames(e1)[i], " ", oper, " ", .gnames(e2)[i], "))")
+			ex <- paste(gn, "= int(if(", sources(e1)[i], " ", oper, " ", sources(e2)[i], "))")
 			this <- .genericArith(name = name, gn = gn, ex = ex)
 			
 			if (i == 1L) {
@@ -60,9 +60,9 @@ methods::setMethod("Ops", signature(e1 = "logical", e2 = "GRaster"),
 		for (i in 1L:nlyr(e2)) {
 			
 			name <- names(e2)[i]
-			gn <- .makeGName(name, "rast")
+			gn <- .makeSourceName(name, "rast")
 
-			ex <- paste(gn, "= int(if(", e1, " ", oper, " ", .gnames(e2)[i], "))")
+			ex <- paste(gn, "= int(if(", e1, " ", oper, " ", sources(e2)[i], "))")
 			this <- .genericArith(name = name, gn = gn, ex = ex)
 			
 			if (i == 1L) {
@@ -90,9 +90,9 @@ methods::setMethod("Ops", signature(e1 = "GRaster", e2 = "logical"),
 		for (i in 1L:nlyr(e1)) {
 
 			name <- names(e2)[i]
-			gn <- .makeGName(name, "rast")
+			gn <- .makeSourceName(name, "rast")
 			
-			ex <- paste(gn, "= int(if(", .gnames(e1)[i], " ", oper, " ", e2, "))")
+			ex <- paste(gn, "= int(if(", sources(e1)[i], " ", oper, " ", e2, "))")
 			this <- .genericArith(name = name, gn = gn, ex = ex)
 			
 			if (i == 1L) {
@@ -119,9 +119,9 @@ methods::setMethod("Ops", signature(e1 = "numeric", e2 = "GRaster"),
 		for (i in 1L:nlyr(e2)) {
 		
 			name <- names(e2)[i]
-			gn <- .makeGName(name, "rast")
+			gn <- .makeSourceName(name, "rast")
 
-			ex <- paste(gn, "= int(if(", e1, " ", oper, " ", .gnames(e2)[i], "))")
+			ex <- paste(gn, "= int(if(", e1, " ", oper, " ", sources(e2)[i], "))")
 			this <- .genericArith(name = name, gn = gn, ex = ex)
 			
 			if (i == 1L) {
@@ -148,9 +148,9 @@ methods::setMethod("Ops", signature(e1 = "GRaster", e2 = "numeric"),
 		for (i in 1L:nlyr(e1)) {
 		
 			name <- names(e1)[i]
-			gn <- .makeGName(name, "rast")
+			gn <- .makeSourceName(name, "rast")
 
-			ex <- paste(gn, "= int(if(", .gnames(e1)[i], " ", oper, " ", e2, "))")
+			ex <- paste(gn, "= int(if(", sources(e1)[i], " ", oper, " ", e2, "))")
 			this <- .genericArith(name = name, gn = gn, ex = ex)
 			
 			if (i == 1L) {

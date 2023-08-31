@@ -48,7 +48,7 @@ methods::setMethod(
 	
 	cat("class       :", paste(class(object), collapse=", "), "\n")
 	if (getFastOptions("details")) {
-		cat("gnames(s)   :", object@gnames, "\n")
+		cat("sources(s)   :", object@sources, "\n")
 		cat("location    :", object@location, "\n")
 		cat("mapset      :", object@mapset, "\n")
 	}
@@ -87,7 +87,7 @@ methods::setMethod(
 	
 	cat("class       :", paste(class(object), collapse=", "), "\n")
 	if (getFastOptions("details")) {
-		# cat("gnames(s)   :", object@gnames, "\n")
+		# cat("sources(s)   :", object@sources, "\n")
 		cat("location    :", object@location, "\n")
 		cat("mapset      :", object@mapset, "\n")
 	}
@@ -144,67 +144,54 @@ methods::setMethod(
 	if (anyNA(maxValLength)) maxValLength[is.na(maxValLength)] <- 2L
 	
 	# minimum and maximum category values
-	minCat <- maxCat <- rep(NA_character_, object@nLayers)
-	objLevels <- levels(object)
-
-	for (i in seq_len(object@nLayers)) {
-
-		# no levels for this raster
-		if (ncats[i] == 0L) {
-
-			minCat[i] <- ""
-   			maxCat[i] <- ""
-
-		# levels for this raster
-		} else {
-
-			thisLevs <- objLevels[[names(object)[i]]]
-
-			if (inherits(thisLevs, "data.table")) {
-				thisLevs$ValueNumeric <- as.numeric(thisLevs[['Value']])
-    			thisLevs <- data.table::setorderv(thisLevs, cols = "ValueNumeric")
-				minCat[i] <- as.matrix(thisLevs[1L])[1L, 2L]
-				maxCat[i] <- as.matrix(thisLevs[nrow(thisLevs)])[1L, 2L]
-			} else {
-				valueOrder <- order(as.numeric(thisLevs$Value))
-				thisLevs <- thisLevs[valueOrder, , drop = FALSE]
-			}
-
-			minCat[i] <- thisLevs$Label[1L]
-			maxCat[i] <- thisLevs$Label[nrow(thisLevs)]
-
-		}
-		
-	}
+	mmCats <- minmaxCat(object)
+	minCat <- mmCats["min", , drop = TRUE]
+	maxCat <- mmCats["max", , drop = TRUE]
+	minCat[is.na(minCat)] <- "NA"
+	maxCat[is.na(maxCat)] <- "NA"
+	nCats <- ncat(object)
+	if (details) activeCat <- object@activeCat - 1L
 
 	# truncate long names
-	namesChar <- object@names
-	ncharNames <- nchar(namesChar)
+	namesNice <- object@names
+	ncharNames <- nchar(namesNice)
 	if (any(ncharNames > maxColWidth)) {
-    	namesChar[ncharNames > maxColWidth] <-
-   			paste0(substr(namesChar[ncharNames > maxColWidth], 1L, maxColWidth - 1L), "~")
+    	namesNice[ncharNames > maxColWidth] <-
+   			paste0(substr(namesNice[ncharNames > maxColWidth], 1L, maxColWidth - 1L), "~")
 	}
 
-	# truncate long gnames
+	# truncate long sources
 	if (details) {
 	
-		gnames <- object@gnames
-		ncharNames <- nchar(gnames)
+		sources <- object@sources
+		ncharNames <- nchar(sources)
 		if (any(ncharNames > maxColWidth)) {
-			gnames[ncharNames > maxColWidth] <-
-				paste0(substr(gnames[ncharNames > maxColWidth], 1L, maxColWidth - 1L), "~")
+			sources[ncharNames > maxColWidth] <-
+				paste0(substr(sources[ncharNames > maxColWidth], 1L, maxColWidth - 1L), "~")
 		}
 	}
+
+	# datatype
+	datatypeFR <- datatype(object, "fasterRaster")
+	if (details) datatypeGRASS <- datatype(object, "GRASS")
 
 	# number of characters of longest display item
 	nc <- pmax(
 		rep(3, object@nLayers),
-		nchar(namesChar),
-		nchar(object@datatypeGRASS),
-		nchar(object@nCats),
+		nchar(namesNice),
+		nchar(datatypeFR),
+		nchar(nCats),
 		minValLength, maxValLength
 	)
-	if (details) nc <- pmax(nc, nchar(gnames))
+ 	if (details) {
+		nc <- pmax(
+			nc,
+			nchar(activeCat),
+			nchar(object@datatypeGRASS),
+			nchar(sources)
+		)
+	}
+	
 	if (any(nc < minColWidth)) nc[nc < minColWidth] <- minColWidth
 
 	# truncate category names
@@ -215,27 +202,42 @@ methods::setMethod(
   		maxCat[nchar(maxCat) > nc] <- paste0(substr(maxCat[nchar(maxCat) > nc], 1L, nc - 1L), "~")
 	}
 
-	gnamesChar <- names <- datatype <- nCats <- minValChar <- maxValChar <- minCatChar <- maxCatChar <- rep(NA, object@nLayers)
+ 	# pad with extra spaces
+ 	sourcesNice <- names <- datatypeNiceFR <- datatypeNiceGRASS <- nCatsNice <- minValNice <- maxValNice <- minCatNice <- maxCatNice <- rep(NA, object@nLayers)
+
 	for (i in seq_len(object@nLayers)) {
+
 		fmt <- paste0("%", nc[i], "s")
-		if (details) gnamesChar[i] <- sprintf(fmt, gnames[i])
+		if (details) {
+			sourcesNice[i] <- sprintf(fmt, sources[i])
+    		activeCat[i] <- sprintf(fmt, activeCat[i])
+   			datatypeNiceGRASS[i] <- sprintf(fmt, datatypeGRASS[i])
+		}
 		names[i] <- sprintf(fmt, object@names[i])
-		datatype[i] <- sprintf(fmt, object@datatypeGRASS[i])
-		nCats[i] <- sprintf(fmt, object@nCats[i])
-		minCatChar[i] <- sprintf(fmt, minCat[i])
-		maxCatChar[i] <- sprintf(fmt, maxCat[i])
-		minValChar[i] <- sprintf(fmt, minVal[i])
-		maxValChar[i] <- sprintf(fmt, maxVal[i])
+		datatypeNiceFR[i] <- sprintf(fmt, datatypeFR[i])
+		nCatsNice[i] <- sprintf(fmt, nCats[i])
+		minCatNice[i] <- sprintf(fmt, minCat[i])
+		maxCatNice[i] <- sprintf(fmt, maxCat[i])
+		minValNice[i] <- sprintf(fmt, minVal[i])
+		maxValNice[i] <- sprintf(fmt, maxVal[i])
+
 	}
 	
-	if (details) gnames <- paste(gnamesChar, collapse=" ")
+	# concatenate each line into single strings
 	names <- paste(names, collapse=" ")
-	datatype <- paste(datatype, collapse=" ")
-	minValChar <- paste(minValChar, collapse=" ")
-	maxValChar <- paste(maxValChar, collapse=" ")
-	minCatChar <- paste(minCatChar, collapse=" ")
-	maxCatChar <- paste(maxCatChar, collapse=" ")
+	datatypeNiceFR <- paste(datatypeNiceFR, collapse=" ")
+	minValNice <- paste(minValNice, collapse=" ")
+	maxValNice <- paste(maxValNice, collapse=" ")
+ 	nCatsNice <- paste(nCatsNice, collapse = " ")
+	minCatNice <- paste(minCatNice, collapse=" ")
+	maxCatNice <- paste(maxCatNice, collapse=" ")
 
+	if (details) {
+		sources <- paste(sourcesNice, collapse=" ")
+  		datatypeNiceGRASS <- paste(datatypeNiceGRASS, collapse = " ")
+		activeCat <- paste(activeCat, collapse = "")
+	}
+	
 	cat("class       : GRaster\n")
 	if (details) {
 		cat("location    :", object@location, "\n")
@@ -250,15 +252,21 @@ methods::setMethod(
 	}
 	cat("coord ref.  :", .showCRS(object), "\n")
 	if (details) cat("projection  :", object@projection, "\n")
-	if (details) cat("gnames      :", gnames, "\n")
+	if (details) cat("sources     :", sources, "\n")
 	cat("name        :", names, "\n")
-	if (details) cat("datatype    :", datatype, "\n")
-	cat("min. value  :", minValChar, "\n")
-	cat("max. value  :", maxValChar, "\n")
+	if (!details) {
+		cat("datatype    :", datatypeNiceFR, "\n")
+	} else {
+		cat("type (fR)   :", datatypeNiceFR, "\n")
+		cat("type (GR)   :", datatypeNiceGRASS, "\n")
+	}
+	cat("min. value  :", minValNice, "\n")
+	cat("max. value  :", maxValNice, "\n")
 	if (any(ncats > 0L)) {
-		cat("min. categ. :", minCatChar, "\n")
-		cat("max. categ. :", maxCatChar, "\n")
-		cat("num. categ. :", nCats, "\n")
+  		cat("categories  :", nCatsNice, "\n")
+  		if (details) cat("active col. :", activeCat, "\n")
+		cat("min. categ. :", minCatNice, "\n")
+		cat("max. categ. :", maxCatNice, "\n")
 	}
 
 	} # EOF
@@ -327,7 +335,7 @@ methods::setMethod(f="show", signature="GVector",
 	if (details) {
 		cat("location    :", object@location, "\n")
 		cat("mapset      :", object@mapset, "\n")
-		cat("gname       :", object@gnames, "\n")
+		cat("source       :", object@sources, "\n")
 		if (details & object@nFields > 0) cat("db layer    :", object@db@dbLayer, "\n")
 	}
 	cat("geometry    :", object@geometry, "\n")

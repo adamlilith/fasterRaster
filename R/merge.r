@@ -24,11 +24,11 @@ methods::setMethod(
 	x <- list(x, y, ...)
 
 	# set region to combined extent
-	rasts <- paste(sapply(x, .gnames), collapse=",")
+	rasts <- paste(sapply(x, sources), collapse=",")
 	rgrass::execGRASS("g.region", raster=rasts, flags=c("o", "quiet"), intern=TRUE)
 
 	# combine
-	gn <- .makeGName("merge", "rast")
+	gn <- .makeSourceName("merge", "rast")
 	args <- list(
 		cmd = "r.patch",
 		input = rasts,

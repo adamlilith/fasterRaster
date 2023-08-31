@@ -48,32 +48,32 @@ methods::setMethod(
 	
 	args <- list(
 		cmd = "r.slope.aspect",
-		elevation = .gnames(x),
+		elevation = sources(x),
 		nprocs = getFastOptions("cores"),
 		memory = getFastOptions("memory"),
 		flags = c("quiet", "overwrite", "e")
 	)
 	
 	if ("slope" %in% v) {
-		args$slope <- .makeGName("slope", "rast")
+		args$slope <- .makeSourceName("slope", "rast")
 		units <- pmatchSafe(units, c("degrees", "percent"))
 		args$format <- units
 	}
 
 	if ("aspect" %in% v) {
-		args$aspect <- .makeGName("aspect", "rast")
+		args$aspect <- .makeSourceName("aspect", "rast")
 		units <- pmatchSafe(units, c("degrees", "percent"))
 		args$format <- units
 		if (northIs0) args$flags <- c(args$flags, "n")
 	}
 
-	if ("profileCurve" %in% v) args$pcurvature = .makeGName("profileCurve", "rast")
-	if ("tanCurve" %in% v) args$tcurvature = .makeGName("tanCurve", "rast")
-	if ("dx" %in% v) args$dx = .makeGName("dx", "rast")
-	if ("dy" %in% v) args$dy = .makeGName("dy", "rast")
-	if ("dxx" %in% v) args$dxx = .makeGName("dxx", "rast")
-	if ("dyy" %in% v) args$dyy = .makeGName("dyy", "rast")
-	if ("dxy" %in% v) args$dxy = .makeGName("dxy", "rast")
+	if ("profileCurve" %in% v) args$pcurvature = .makeSourceName("profileCurve", "rast")
+	if ("tanCurve" %in% v) args$tcurvature = .makeSourceName("tanCurve", "rast")
+	if ("dx" %in% v) args$dx = .makeSourceName("dx", "rast")
+	if ("dy" %in% v) args$dy = .makeSourceName("dy", "rast")
+	if ("dxx" %in% v) args$dxx = .makeSourceName("dxx", "rast")
+	if ("dyy" %in% v) args$dyy = .makeSourceName("dyy", "rast")
+	if ("dxy" %in% v) args$dxy = .makeSourceName("dxy", "rast")
 	
 	do.call(rgrass::execGRASS, args)
 	

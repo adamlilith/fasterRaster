@@ -6,8 +6,6 @@
 #'
 #' @docType data
 #'
-#' @usage system.file("extdata/shapes/madCoast.shp", package = "fasterRaster")
-#'
 #' @format ESRI Shapefile.
 #'
 #' @keywords Madagascar

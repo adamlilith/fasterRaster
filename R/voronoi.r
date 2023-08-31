@@ -48,10 +48,10 @@ methods::setMethod(
 		
 	}
 
-	gn <- .makeGName("voronoi", "vect")
+	gn <- .makeSourceName("voronoi", "vect")
 	args <- list(
 		cmd = "v.voronoi",
-		input = .gnames(x),
+		input = sources(x),
 		output = gn,
 		flags = c("quiet", "overwrite"),
 		intern = TRUE

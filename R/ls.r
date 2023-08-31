@@ -1,6 +1,6 @@
 #' List objects in the active GRASS session
 #'
-#' Display the `gnames` (see `.gnames()`) of all rasters and/or vectors that have been exported to or created in the active **GRASS** session"s location and mapset.
+#' Display the `sources` (see `sources()`) of all rasters and/or vectors that have been exported to or created in the active **GRASS** session"s location and mapset.
 #'
 #' @param type The type of spatial objects to display. This can include `"rasters"` (all rasters), `"vectors"` (all spatial vectors), `"rasters3d"` (3D-rasters), and/or `"groups"` (groups). Partial matching is supported. If missing, all objects are displayed.
 #' 

@@ -60,7 +60,7 @@ methods::setMethod(
 		args <- list(
 			cmd = "r.univar",
 			flags = c("quiet", "r"),
-			map = .gnames(x)[i],
+			map = sources(x)[i],
 			Sys_show.output.on.console = FALSE,
 			echoCmd = FALSE,
 			intern = TRUE
@@ -157,8 +157,8 @@ methods::setMethod(
 					mean. <- sub(mean., pattern=pattern, replacement="")
 					mean. <- as.numeric(mean.)
 
-					gnSS <- .makeGName("delta", "rast")
-					ex <- paste0(gnSS, " = (", .gnames(x)[i], " - ", mean., ")^2")
+					gnSS <- .makeSourceName("delta", "rast")
+					ex <- paste0(gnSS, " = (", sources(x)[i], " - ", mean., ")^2")
 					rgrass::execGRASS("r.mapcalc", expression=ex, flags=c("quiet", "overwrite"), intern=TRUE)
 				
 					thisInfo <- rgrass::execGRASS(
@@ -199,8 +199,8 @@ methods::setMethod(
 					mean. <- sub(mean., pattern=pattern, replacement="")
 					mean. <- as.numeric(mean.)
 
-					gnSS <- .makeGName("delta", "rast")
-					ex <- paste0(gnSS, " = (", .gnames(x)[i], " - ", mean., ")^2")
+					gnSS <- .makeSourceName("delta", "rast")
+					ex <- paste0(gnSS, " = (", sources(x)[i], " - ", mean., ")^2")
 					rgrass::execGRASS("r.mapcalc", expression=ex, flags=c("quiet", "overwrite"), intern=TRUE)
 				
 					thisInfo <- rgrass::execGRASS(
@@ -246,6 +246,7 @@ methods::setMethod(
 		
 	} # next layer
 
+	rownames(out) <- names(x)
 	out
 	
 	} # EOF

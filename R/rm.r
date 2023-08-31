@@ -5,7 +5,7 @@
 #' @param x Character, a `GSpatial` object, or missing (default):
 #' * Character:
 #'      * Any of `"rasters"` (all rasters), `"vectors"` (all spatial vectors), `"rasters3d"` (3D-rasters), and/or `"groups"` (groups), and all of these types will be deleted. Partial matching is supported.
-#'      * The `gnames` of the object to be deleted. Argument `type` must be specified.
+#'      * The `sources` of the object to be deleted. Argument `type` must be specified.
 #' * `GSpatial` object (i.e., a `GRaster` or `GVector`): Delete this object.
 #' * Missing: Delete everything in the active **GRASS** session.
 #'
@@ -34,14 +34,14 @@
 		dels <- .ls()
 		type <- names(dels)
 	} else if (inherits(x, c("GSpatial"))) {
-		dels <- .gnames(x)
+		dels <- sources(x)
 		type <- if (inherits(x, "GRaster")) {
 			"raster"
 		} else if (inherits(x, "GVector")) {
 			"vector"
 		}
 	} else if (inherits(x, "character")) {
-		dels <- .ls(x, warn = FALSE)
+		dels <- .ls(x)
 		if (is.null(dels)) {
 			dels <- x
 		} else {

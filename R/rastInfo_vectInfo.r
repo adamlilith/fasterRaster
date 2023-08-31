@@ -1,6 +1,6 @@
 #' Information on rasters and vectors in "GRASS"
 #'
-#' @param x A `GRaster`, `GVector`, or `gnames`.
+#' @param x A `GRaster`, `GVector`, or `sources`.
 #'
 #' @returns Extent, dimensions, resolution, bottom/top, etc.
 #'
@@ -8,7 +8,7 @@
 .rastInfo <- function(x) {
 
 	gn <- if (!inherits(x, "character")) {
-		.gnames(x)
+		sources(x)
 	} else {
 		x
 	}
@@ -29,7 +29,7 @@
 		}
 	
 	} else {
-	### a single gname
+	### a single source
 	##################
 
 		rasters <- .ls(c("rasters", "rasters3d"))
@@ -180,61 +180,44 @@
 		grassDataType <- extentinfo[grepl(extentinfo, pattern="datatype=")]
 		grassDataType <- sub(grassDataType, pattern="datatype=", replacement="")
 		grassDataType <- gsub(grassDataType, pattern="\"", replacement="")
-		
-		if (grassDataType == "CELL") {
-			terraDataType <- "INT4S"
-			gdalDataType <- "Int32"
-		} else if (grassDataType == "FCELL") {
-			terraDataType <- "FLT4S"
-			gdalDataType <- "Float32"
-		} else if (grassDataType == "DCELL") {
-			terraDataType <- "FLT8S"
-			gdalDataType <- "Float64"
-		}
 
-		# number of categories
-		if (grassDataType == "CELL") {
-		
-			suppressMessages(
-				catinfo <- rgrass::execGRASS(
-					"r.category",
-					flags = "quiet",
-					map = gn,
-					separator = "pipe",
-					intern = TRUE,
-					Sys_show.output.on.console = FALSE,
-					echoCmd = FALSE
-				)
-			)
+		# ### Any categories? Note that "r.info" incorrectly reports number of categories, so we will use r.info just to determine if there are any categories.
+		# anyCats <- niceinfo[grepl(niceinfo, pattern = "Number of Categories:")]
+		# start <- regexpr(anyCats, pattern = "Number of Categories: ")
+    	# start <- start[1L] + nchar("Number of Categories: ")
+		# anyCats <- substr(anyCats, 63, nchar(anyCats))
+		# anyCats <- gsub(anyCats, pattern = "\\|", replacement = "")
+		# anyCats <- as.integer(anyCats)
 
-			nCats <- length(catinfo)
-			nCats <- as.integer(nCats)
-
-		} else {
-			nCats <- 0L
-		}
-				
-		# if (grassDataType != "CELL") nCats <- rep(0L, length(nCats))
-
-		# # range of values
-		# if (nCats == 0) {
-
-			minVal <- rangeinfo[grepl(rangeinfo, pattern="min=")]
-			maxVal <- rangeinfo[grepl(rangeinfo, pattern="max=")]
-			
-			minVal <- sub(minVal, pattern="min=", replacement="")
-			maxVal <- sub(maxVal, pattern="max=", replacement="")
-			
-			minVal <- if (minVal == "NULL") { NA_real_ } else { as.numeric(minVal) }
-			maxVal <- if (maxVal == "NULL") { NA_real_ } else { as.numeric(maxVal) }
-
+		# if (anyCats == 0L) {
+		# 	numCategories <- 0L
 		# } else {
-			# minVal <- NA_real_
-			# maxVal <- NA_real_
+		
+		# 	catinfo <- rgrass::execGRASS(
+		# 		"r.category",
+		# 		map = gn,
+		# 		flags = "quiet",
+		# 		separator = "pipe",
+		# 		intern = TRUE
+		# 	)
+
+		# 	numCategories <- length(catinfo)
+		# 	numCategories <- as.integer(numCategories)
+		
 		# }
 
+		# mininum/maximum value
+		minVal <- rangeinfo[grepl(rangeinfo, pattern="min=")]
+		maxVal <- rangeinfo[grepl(rangeinfo, pattern="max=")]
+		
+		minVal <- sub(minVal, pattern="min=", replacement="")
+		maxVal <- sub(maxVal, pattern="max=", replacement="")
+		
+		minVal <- if (minVal == "NULL") { NA_real_ } else { as.numeric(minVal) }
+		maxVal <- if (maxVal == "NULL") { NA_real_ } else { as.numeric(maxVal) }
+
 		out <- list(
-			gnames = gn,
+			sources = gn,
 			type = type,
 			topology = topology,
 			projection = projection,
@@ -256,10 +239,8 @@
 			tbres = tbres,
 			
 			grassDataType = grassDataType,
-			terraDataType = terraDataType,
-			gdalDataType = gdalDataType,
 			
-			nCats = nCats,
+			# numCategories = numCategories,
 			minVal = minVal,
 			maxVal = maxVal
 			
@@ -274,7 +255,7 @@
 .vectInfo <- function(x) {
 
 	gn <- if (inherits(x, "GVector")) {
-		.gnames(x)
+		sources(x)
 	} else {
 		x
 	}
@@ -461,7 +442,7 @@
  	projection <- sub(projection, pattern = "projection=", replacement = "")
 		
 	out <- list(
-		gnames = gn,
+		sources = gn,
 		type = "vector",
 		projection = projection,
 		topology = topology,

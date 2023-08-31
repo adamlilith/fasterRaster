@@ -223,18 +223,20 @@ setMethod(
 	signature(x = "GRaster"),
 	function(x, na.rm = FALSE) {
 
-		gnSS <- .makeGName("ss", "rast")
-		gnMean <- .genericMultiLayer(fx="average", fxName="mean", x=x, na.rm=na.rm, return="gname")
-		ex <- paste0(gnSS, " = ", paste0("(", .gnames(x), " - ", gnMean, ")^2", collapse=" + "))
+		gnSS <- .makeSourceName("ss", "rast")
+		gnMean <- .genericMultiLayer(fx="average", fxName="mean", x=x, na.rm=na.rm, return="source")
+		ex <- paste0(gnSS, " = ", paste0("(", sources(x), " - ", gnMean, ")^2", collapse=" + "))
 		rgrass::execGRASS("r.mapcalc", expression=ex, flags=c("quiet", "overwrite"), intern=TRUE)
 
-		gnCount <- .genericMultiLayer(fx="count", fxName="count", x=x, na.rm=na.rm, return="gname")
-		gnCountMinus1 <- .makeGName("nMinus1", "rast")
+		gnCount <- .genericMultiLayer(fx="count", fxName="count", x=x, na.rm=na.rm, return="source")
+		gnCountMinus1 <- .makeSourceName("nMinus1", "rast")
 		ex <- paste0(gnCountMinus1, " = ", gnCount, " - 1")
 		rgrass::execGRASS("r.mapcalc", expression=ex, flags=c("quiet", "overwrite"), intern=TRUE)
 
-		gn <- .makeGName("var", "rast")
-		ex <- paste0(gn, " = sqrt(", gnSS, " / ", gnCountMinus1, ")")
+  		prec <- getFastOptions("rasterPrecision")
+
+		gn <- .makeSourceName("var", "rast")
+		ex <- paste0(gn, " = ", prec, "(sqrt(", gnSS, " / ", gnCountMinus1, "))")
 		
 		rgrass::execGRASS("r.mapcalc", expression=ex, flags=c("quiet", "overwrite"), intern=TRUE)
 		
@@ -253,18 +255,20 @@ setMethod(
 
 		.restore(x)
 	
-		gnSS <- .makeGName("ss", "rast")
-		gnMean <- .genericMultiLayer(fx="average", fxName="mean", x=x, na.rm=na.rm, return="gname")
-		ex <- paste0(gnSS, " = ", paste0("(", .gnames(x), " - ", gnMean, ")^2", collapse=" + "))
+		gnSS <- .makeSourceName("ss", "rast")
+		gnMean <- .genericMultiLayer(fx="average", fxName="mean", x=x, na.rm=na.rm, return="source")
+		ex <- paste0(gnSS, " = ", paste0("(", sources(x), " - ", gnMean, ")^2", collapse=" + "))
 		rgrass::execGRASS("r.mapcalc", expression=ex, flags=c("quiet", "overwrite"), intern=TRUE)
 
-		gnCount <- .genericMultiLayer(fx="count", fxName="count", x=x, na.rm=na.rm, return="gname")
-		gnCountMinus1 <- .makeGName("nMinus1", "rast")
+		gnCount <- .genericMultiLayer(fx="count", fxName="count", x=x, na.rm=na.rm, return="source")
+		gnCountMinus1 <- .makeSourceName("nMinus1", "rast")
 		ex <- paste0(gnCountMinus1, " = ", gnCount, " - 1")
 		rgrass::execGRASS("r.mapcalc", expression=ex, flags=c("quiet", "overwrite"), intern=TRUE)
 
-		gn <- .makeGName("var", "rast")
-		ex <- paste0(gn, " = ", gnSS, " / ", gnCountMinus1)
+  		prec <- getFastOptions("rasterPrecision")
+
+		gn <- .makeSourceName("var", "rast")
+		ex <- paste0(gn, " = ", prec, "(", gnSS, " / ", gnCountMinus1, ")")
 		
 		rgrass::execGRASS("r.mapcalc", expression=ex, flags=c("quiet", "overwrite"), intern=TRUE)
 		
@@ -406,10 +410,10 @@ setMethod(
 	fx <- "quantile"
 	fxName <- "quantile"
 	
-	gn <- .makeGName(fxName, "rast")
+	gn <- .makeSourceName(fxName, "rast")
 	args <- list(
 		cmd = "r.series",
-		input = paste(.gnames(x), collapse=","),
+		input = paste(sources(x), collapse=","),
 		output = gn,
 		method = fx,
 		quantile = prob,
@@ -432,15 +436,15 @@ setMethod(
 # fxName: stub name of output raster
 # x: GRaster
 # na.rm: T/F
-# return: GRaster or the gname of the output
+# return: GRaster or the source of the output
 .genericMultiLayer <- function(fx, fxName, x, na.rm, return = "GRaster") {
 
 	.restore(x)
 
-	gn <- .makeGName(fx, "rast")
+	gn <- .makeSourceName(fx, "rast")
 	args <- list(
 		cmd = "r.series",
-		input = paste(.gnames(x), collapse=","),
+		input = paste(sources(x), collapse=","),
 		output = gn,
 		method = fx,
 		nprocs = getFastOptions("cores"),
@@ -453,7 +457,7 @@ setMethod(
 	do.call(rgrass::execGRASS, args=args)
 	if (return == "GRaster") {
 		.makeGRaster(gn, fxName)
-	} else if (return == "gname") {
+	} else if (return == "source") {
 		gn
 	} else {
 		stop("Invalid value for ", sQuote("return"), ".")

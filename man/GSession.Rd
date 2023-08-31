@@ -10,7 +10,7 @@
 \alias{GFullMetaTable}
 \alias{GVector-class}
 \alias{GVector}
-\title{Classes for "fasterRaster" locations, rasters, and vectors}
+\title{Classes for fasterRaster locations, rasters, and vectors}
 \description{
-Classes for "fasterRaster" locations, rasters, and vectors
+Classes for fasterRaster locations, rasters, and vectors
 }

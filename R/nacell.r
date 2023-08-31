@@ -22,7 +22,7 @@ methods::setMethod(
 
     args <- list(
         cmd = "r.univar",
-        map = paste(.gnames(x), collapse=","),
+        map = paste(sources(x), collapse=","),
         flags = c("r", "quiet", "overwrite"),
         intern = TRUE
     )

@@ -6,7 +6,7 @@
 \alias{writeRaster,missing,missing-method}
 \title{Save a GRaster to disk}
 \usage{
-\S4method{writeRaster}{GRaster,character}(x, filename, overwrite = FALSE, ...)
+\S4method{writeRaster}{GRaster,character}(x, filename, datatype = NULL, overwrite = FALSE, ...)
 
 \S4method{writeRaster}{missing,missing}(x, filename)
 }
@@ -15,11 +15,7 @@
 
 \item{filename}{Character: Path and file name.}
 
-\item{overwrite}{Logical: If \code{FALSE} (default), do not save over existing file(s).}
-
-\item{...}{Additional arguments. These can include:
-\itemize{
-\item \code{datatype} The datatype of the values stored in non-ASCII rasters. If \code{NULL}, this will be ascertained from the raster . This can any of:\tabular{llll}{
+\item{datatype}{Character: The datatype of the values stored in non-ASCII rasters. If \code{NULL}, this will be ascertained from the raster. This can any of:\tabular{llll}{
    \strong{\code{terra}} \tab \strong{\code{GRASS}} \tab \strong{\code{GDAL}} \tab \strong{Values} \cr
    \code{INT1U} \tab \code{CELL} \tab \code{Byte} \tab Integer values from 0 to 255 \cr
    \code{INT2U} \tab \code{CELL} \tab \code{UInt16} \tab Integer values from 0 to 65,534 \cr
@@ -27,8 +23,12 @@
    \code{INT4S} \tab \code{CELL} \tab \code{Int32} \tab Integer values from -2,147,483,647 to 2,147,483,647 \cr
    \code{FLT4S} \tab \code{FCELL} \tab \code{Float32} \tab Values from -3.4e+38 to 3.4e+38, including decimal values \cr
    \code{FLT8S} \tab \code{DCELL} \tab \code{Float64} \tab Values from -1.7e+308 to 1.7e+308, including decimal values \cr
-}
+}}
 
+\item{overwrite}{Logical: If \code{FALSE} (default), do not save over existing file(s).}
+
+\item{...}{Additional arguments. These can include:
+\itemize{
 \item \code{compressTiff}: Character or \code{NULL}: Type of compression for GeoTIFF files:
 \itemize{
 \item \code{"DEFLATE"} (default)

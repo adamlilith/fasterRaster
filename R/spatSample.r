@@ -51,13 +51,13 @@ methods::setMethod(
     }
 
     nLayers <- nlyr(x)
-    gns <- .makeGName("random", "raster", nLayers)
+    gns <- .makeSourceName("random", "raster", nLayers)
     for (i in seq_len(nLayers)) {
     
         args <- list(
             cmd = "r.random",
-            input = .gnames(x)[i],
-            cover = .gnames(x)[i],
+            input = sources(x)[i],
+            cover = sources(x)[i],
             npoints = npoints,
             raster = gns[i],
             flags = c("quiet", "overwrite"),
@@ -74,7 +74,7 @@ methods::setMethod(
         # custom mask values
         if (length(maskvalues) > 1L || !is.na(maskvalues)) {
 
-            maskGn <- .makeGName("mask", "raster")
+            maskGn <- .makeSourceName("mask", "raster")
 
             if (anyNA(maskvalues)) {
                 maskValuesHaveNAs <- TRUE
@@ -84,8 +84,8 @@ methods::setMethod(
             }
 
             maskvalues <- as.character(maskvalues)
-            maskvalues <- paste(paste0(.gnames(x)[i], " == "), maskvalues)
-            if (maskValuesHaveNAs) maskvalues <- c(maskvalues, paste0("isnull(", .gnames(mask), ")"))
+            maskvalues <- paste(paste0(sources(x)[i], " == "), maskvalues)
+            if (maskValuesHaveNAs) maskvalues <- c(maskvalues, paste0("isnull(", sources(mask), ")"))
 
             maskvalues <- paste(maskvalues, collapse = " | ")
 
@@ -93,7 +93,7 @@ methods::setMethod(
             rgrass::execGRASS("r.mapcalc", expression = ex, flags = c("quiet", "overwrite"), intern = TRUE)
 
         } else {
-            maskGn <- .gnames(x)[i]
+            maskGn <- sources(x)[i]
         }
         args$input <- maskGn
 
@@ -104,7 +104,7 @@ methods::setMethod(
     ### change masked values
     if (!is.null(updatevalue)) {
 
-        gnsUpdate <- .makeGName("random", "raster", nLayers)
+        gnsUpdate <- .makeSourceName("random", "raster", nLayers)
         for (i in seq_len(nLayers)) {
 
             ex <- paste0(gnsUpdate[i], " = if(!isnull(", gns[i], "), ", updatevalue, ", null())")

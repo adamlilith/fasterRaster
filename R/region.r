@@ -193,7 +193,7 @@ methods::setMethod(
 			topology = "3D",
 			extent = extent,
 			zextent = zextent,
-			gnames = NA_character_,
+			sources = NA_character_,
 			dimensions = dims,
 			resolution = resol
 		)
@@ -302,12 +302,12 @@ methods::setMethod(
 		trimToTopo <- topology(trim)
 		if (any(!(topo %in% trimToTopo))) stop("Topology of ", sQuote("trim"), " does not match topology of ", sQuote("x"), ".")
 		
-		trim <- .gnames(trim)
+		trim <- sources(trim)
 		if (length(trim) != 1L) stop("Argument ", sQuote("trim"), " can have only one layer.")
 	
 	}
 
-	gn <- .gnames(x)[1L]
+	gn <- sources(x)[1L]
 
 	if (all(topo == "2D") & is.null(trim)) {
 		rgrass::execGRASS("g.region", raster=gn, flags=c("o", "quiet"), intern=TRUE)
@@ -337,7 +337,7 @@ methods::setMethod(
 		.restore(x)
 		initials <- region()
 	
-		rgrass::execGRASS("g.region", vector=.gnames(x), flags=c("o", "quiet"), intern=TRUE)
+		rgrass::execGRASS("g.region", vector=sources(x), flags=c("o", "quiet"), intern=TRUE)
 		invisible(initials)
 		
 	}

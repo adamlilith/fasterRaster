@@ -4,7 +4,9 @@
 \alias{levels<-,GRaster,data.frame-method}
 \alias{levels<-}
 \alias{levels<-,GRaster,data.table-method}
-\alias{levels<-,GRaster,list-method}
+\alias{levels<-,GRaster,SpatRaster-method}
+\alias{categories,GRaster-method}
+\alias{categories}
 \alias{levels,GRaster-method}
 \alias{levels}
 \title{Set and get categories for categorical rasters}
@@ -13,14 +15,16 @@
 
 \S4method{levels}{GRaster,data.table}(x) <- value
 
-\S4method{levels}{GRaster,list}(x) <- value
+\S4method{levels}{GRaster,SpatRaster}(x) <- value
+
+\S4method{categories}{GRaster}(x, layer = 1, value, active = 1)
 
 \S4method{levels}{GRaster}(x)
 }
 \arguments{
 \item{x}{A \code{GRaster}.}
 
-\item{value}{A \code{data.frame}, \code{data.table}, or a list of \code{data.frames} or \code{data.tables}, one per raster layer. The table's first column is the "value" column and must contain numeric values (of class \code{numeric} or \code{character}). The second column defines category labels.  (Subsequent columns are ignored.)}
+\item{value}{A \code{data.frame}, \code{data.table}, a list of \code{data.frames} or \code{data.tables} with one per raster layer, or a categorical \code{SpatRaster}. The table's first column is the "value" column and must contain numeric values (of class \code{numeric} or \code{character}). If a \code{SpatRaster} is supplied, then its categories will be transferred to the \code{GRaster}.}
 }
 \value{
 Values returned are:
@@ -61,24 +65,37 @@ madCover <- fastData("madCover")
 faster(x = madCover, grassDir = grassDir,
 workDir = tempdir(), location = "examples") # line only needed for examples
 
-# Convert categorical SpatRaster to categorical GRaster
+# Convert categorical SpatRaster to categorical GRaster:
 cover <- fast(madCover)
 
-# The GRaster inherited the SpatRaster's categories:
+# set categories
+cover # note... no categories
+levs <- levels(madCover)
+levs <- levs[[1]]
+cover <- categories(cover, layer = 1, value = levs)
+
 cover # Note display of "min"/"max" categories and number of categories
 is.factor(cover) # Is the raster categorical?
 ncat(cover) # Number of categories
 levels(cover) # Categories
 
-# Assign new levels. Note we can use ranges of values.
-value <- c("11:30", "40:110", "120:150", "160:180", "190", "200:220", "230")
-label <- c("Cropland", "Forest", "Grass/shrubland", "Flooded", "Artifical",
-     "Bare/Water/Ice", "NA")
+# Re-assign levels
+value <- c(20, 30, 40, 50, 120, 130, 140, 170, 210)
+label <- c("Cropland", "Cropland", "Forest", "Forest", "Forest", "Shrubland", "Herbaceous", "Flooded", "Water")
 
 cats <- data.frame(value = value, label = label)
-levels(cover) <- cats
+cover <- categories(cover, layer = 1, value = cats)
+cover
 
+# We can implement logical operations on categorical rasters
+cover < "Forest" # 1 for cells with a value < 40, 0 otherwise
+cover <= "Forest" # 1 for cells with a value < 120, 0 otherwise
+cover == "Forest" # 1 for cells with value of 40-120, 0 otherwise
+cover != "Forest" # 1 for cells with value that is not 40-120, 0 otherwise
+cover > "Forest" # 1 for cells with a value > 120, 0 otherwise
+cover >= "Forest" # 1 for cells with a value >= 120, 0 otherwise
 
+cover \%in\% c("Cropland", "Forest") # 1 for cropland/forest cells, 0 otherwise
 
 # IMPORTANT #3: Revert back to original GRASS session if needed.
 fastRestore(opts.)

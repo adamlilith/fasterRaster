@@ -2,7 +2,7 @@
 #'
 #' @describeIn GSession
 #'
-#' @importFrom methods new
+#' @name GSession-class
 #' @exportClass GSpatial
 GSpatial <- setClass(
 	Class = "GSpatial",
@@ -11,13 +11,13 @@ GSpatial <- setClass(
 		topology = "character",			# 2D or 3D
 		extent = "numeric",				# horizontal extent (4 numerics)
 		zextent = "numeric",			# vertical extent (2 numerics)
-		gnames = "character"			# name in GRASS
+		sources = "character"			# name in GRASS
 	),
 	prototype = prototype(
 		topology = NA_character_,
 		extent = c(NA_real_, NA_real_, NA_real_, NA_real_),
 		zextent = c(NA_real_, NA_real_),
-		gnames = NA_character_
+		sources = NA_character_
 	)
 )
 
@@ -47,7 +47,7 @@ setValidity("GSpatial",
 	# location = NA_character_,
 	# mapset = NA_character_,
 	# crs = NA_character_,
-	# gnames = NA_character_,
+	# sources = NA_character_,
 	# topology = NA_character_,
 	# extent = c(NA_real_, NA_real_, NA_real_, NA_real_),
 	# ztop = NA_real_,
@@ -58,7 +58,7 @@ setValidity("GSpatial",
 		# location = location,
 		# mapset = mapset,
 		# crs = crs,
-		# gnames = gnames,
+		# sources = sources,
 		# topology = topology,
 		# extent = extent,
 		# ztop = ztop,

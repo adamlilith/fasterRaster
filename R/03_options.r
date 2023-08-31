@@ -1,23 +1,7 @@
 #' Set or get options shared across "fasterRaster" functions
 #'
-#' @description These functions allows you to either 1) view or 2) define options shared by **fasterRaster** functions. You can view the current option(s) using, for example:
-#' ```R
-#' getFastOptions("cores") # show current value of "cores" option
-#' getFastOptions() # show all options
-#' ```
-#' and all default values using
-#' ```R
-#' getFastOptions("memory", default = TRUE) # default value of "memory" option
-#' getFastOptions(default = TRUE) # default values of all options
-#' ```
-#' You can set options using forms like:
-#' ```R
-#' setFastOptions(grassDir = "C:/Program Files/GRASS GIS 8.3")
-#' ```
-#' Multiple options can be set at once using
-#' ```R
-#' setFastOptions(details = TRUE, memory = 600, cores = 4)
-#' ```
+#' @description These functions allows you to either 1) view or 2) define options shared by **fasterRaster** functions. 
+#'
 #' @param ... Either a character (the name of an option), or **fasterRaster** option that can be defined using an `option = value` pattern. These include:
 #'
 #' * `cores` (integer/numeric): Number of processor cores to use on a task. The default is 1. Only some **GRASS** modules allow this option.
@@ -35,9 +19,9 @@
 #'
 #' * `grassVer` (character): Version of **GRASS** being used. This should be supplied as a character string, not as a numeric value. Do not include the minor version (e.g., use `"8.3"`, not `"8.3.1"``). As **GRASS** is developed, new modules and functionalities for existing modules are added. Setting the version correctly allows you to take advantage of these options.
 #' 
-#' * `rasterDataType` (character): The precision of values output when applying mathematical operations to a `GRaster`. By default, this is `"FCELL"` (the same as "float"`), which allows for precision to about the 7th decimal place. However, it can be set to `"DCELL"` (or `"double"`), which allows for precision to about the 15th decimal place. `DCELL` rasters are larger in memory and on disk.
+#' * `rasterPrecision` (character): The [precision][tutorial_raster_data_types] of values when applying mathematical operations to a `GRaster`. By default, this is `"float"`, which allows for precision to about the 7th decimal place. However, it can be set to `"double"`, which allows for precision to about the 15th decimal place. `DCELL` rasters are larger in memory and on disk. The default is `"float"`.`
 #'
-#' * `useDataTable` (logical): If `FALSE` (default), use `data.frame`s when going back and forth between data tables of `GVector`s and **R**. This can be slow for very large data tables. If `TRUE`, use `data.table`s from the **data.table** package. This can be much faster, but it might require you to know how to use `data.table`s if you want to manipulate them in **R**. You can always convert them to `data.frame`s using [as.data.frame()].
+#' * `useDataTable` (logical): If `FALSE` (default), use `data.frame`s when going back and forth between data tables of `GVector`s and **R**. This can be slow for very large data tables. If `TRUE`, use `data.table`s from the **data.table** package. This can be much faster, but it might require you to know how to use `data.table`s if you want to manipulate them in **R**. You can always convert them to `data.frame`s using [base::as.data.frame()].
 #'
 #'  * `workDir` (character): The folder in which **GRASS** rasters, vectors, and other objects are created and manipulated. Typically, this is set when you first call [faster()]. All subsequent calls to `faster()` will not do not need `workDir` defined because it will be obtained from the options. By default, this is set to the temporary directory on your operating system (from [tempdir()]), appended with "`fr`". Ergo, the path will be `file.path(tempdir(), "fr")`.
 #'
@@ -108,13 +92,13 @@ setFastOptions <- function(
 	# 	if (is.na(opts$autoRegion)) stop("Option ", sQuote("autoRegion"), " must be TRUE or FALSE (not NA). The default is ", .autoRegionDefault(), ".")
 	# }
 
-	if (any(names(opts) %in% "rasterDataType")) {
-		if (is.na(opts$rasterDataType) || !is.character(opts$rasterDataType)) stop("Option ", sQuote("rasterDataType"), " must be one of: ", sQuote("FCELL", " (or ", sQuote("float"), ") or ", sQuote("DCELL"), " (or ", sQuote("double"), ").\n  The default is ", .rasterDataTypeDefault(), "."))
+	if (any(names(opts) %in% "rasterPrecision")) {
+		if (is.na(opts$rasterPrecision) || !is.character(opts$rasterPrecision)) stop("Option ", sQuote("rasterPrecision"), " must be ", sQuote("float"), ") or ", sQuote("double"), ".\n  The default is ", .rasterPrecisionDefault(), ".")
 
-     	opts$rasterDataType <- .pmatchSafe(opts$rasterDataType, c("FCELL", "float", "DCELL", "double"))
-		opts$rasterDataType <- if (opts$rasterDataType == "FCELL") {
+     	opts$rasterPrecision <- pmatchSafe(opts$rasterPrecision, c("FCELL", "float", "DCELL", "double"))
+		opts$rasterPrecision <- if (opts$rasterPrecision == "FCELL") {
    			"float"
-		} else if (opts$rasterDataType == "DCELL") {
+		} else if (opts$rasterPrecision == "DCELL") {
 			"double"
 		}
 	}

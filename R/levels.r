@@ -7,13 +7,13 @@
 #'
 #' @param x A `GRaster`.
 #'
-#' @param value A `data.frame`, `data.table`, or a list of `data.frames` or `data.tables`, one per raster layer. The table's first column is the "value" column and must contain numeric values (of class `numeric` or `character`). The second column defines category labels.  (Subsequent columns are ignored.)
+#' @param value A `data.frame`, `data.table`, a list of `data.frames` or `data.tables` with one per raster layer, or a categorical `SpatRaster`. The table's first column is the "value" column and must contain numeric values (of class `numeric` or `character`). If a `SpatRaster` is supplied, then its categories will be transferred to the `GRaster`.
 #'
 #' @returns Values returned are:
 #' `levels` list of `data.frame`s or `data.table`s, one per raster.
 #' `levels <-` A categorical `GRaster`.
 #'
-#' @seealso [ncat()], [terra::cats()], [terra::levels()], [terra::addCats()], [terra::droplevels()], [categorical rasters][tutorial_categorical_rasters]
+#' @seealso [ncat()], [terra::cats()], [terra::levels()], [terra::addCats()], [terra::droplevels()], [categorical rasters][tutorial_raster_data_types]
 #'
 #' @example man/examples/ex_GRaster_categorical.r
 #'
@@ -51,56 +51,63 @@ methods::setMethod(
 #' @exportMethod levels<-
 methods::setMethod(
 	f = "levels<-",
-	signature = c(x = "GRaster", value = "list"),
+	signature = c(x = "GRaster", value = "SpatRaster"),
 	function(x, value) {
 
-	if (nlyr(x) != length(value)) stop("There must be one data frame or data table per raster layer in x.")
+	value <- levels(value)
+	levels(x) <- value
+	x
+
+	} # EOF
+)
+
+
+#' @aliases categories
+#' @rdname levels
+#' @exportMethod categories
+methods::setMethod(
+	f = "categories",
+	signature = c(x = "GRaster"),
+	function(x, layer = 1, value, active = 1) {
 
 	.restore(x)
 
-	# gns <- .copyGSpatial(x)
-	for (i in seq_along(x)) {
+	# export category values and labels to file to be read in by GRASS
+	if (inherits(value, "data.table")) {
+		vals <- value[[1L]]
+		labs <- value[[active + 1L]]
+	} else if (inherits(value, "data.frame")) {
+		vals <- value[ , 1L, drop = TRUE]
+		labs <- value[ , active + 1L, drop = TRUE]
+	}
 	
-		# export category values and labels to file to be read in by GRASS
-		rules <- value[[i]]
-		if (inherits(rules, "data.table")) {
-			vals <- rules[[1L]]
-			labs <- rules[[2L]]
-		} else if (inherits(rules, "data.frame")) {
-			vals <- rules[ , 1L, drop = TRUE]
-   			labs <- rules[ , 2L, drop = TRUE]
-		}
-		
-		rules <- paste0(vals, "|", labs)
-		rules <- list(rules)
-		tempFile <- tempfile(fileext = ".csv")
-		tempFile <- forwardSlash(tempFile)
+	rules <- paste0(vals, "|", labs)
+	rules <- list(rules)
+	tempFile <- tempfile(fileext = ".csv")
+	tempFile <- forwardSlash(tempFile)
 
-		# using fwrite because write.csv quotes everything, and this breaks
-		data.table::fwrite(
-			rules,
-			file = tempFile,
-			na = "NA",
-			col.names = FALSE,
-			quote = FALSE,
-			nThread = getFastOptions("cores")
-		)
-		
-		args <- list(
-			cmd = "r.category",
-			# map = gns[i],
-			map = .gnames(x)[i],
-			separator = "pipe",
-			rules = tempFile,
-			flags = "quiet",
-			intern = TRUE
-		)
-		do.call(rgrass::execGRASS, args = args)
-
-	} # next raster
-	# .makeGRaster(gns, names(x))
-	x
+	# using fwrite because write.csv quotes everything, and this breaks
+	data.table::fwrite(
+		rules,
+		file = tempFile,
+		na = "<undefined>",
+		col.names = FALSE,
+		quote = FALSE,
+		nThread = getFastOptions("cores")
+	)
 	
+	args <- list(
+		cmd = "r.category",
+		# map = gns[i],
+		map = sources(x)[layer],
+		separator = "pipe",
+		rules = tempFile,
+		flags = "quiet",
+		intern = TRUE
+	)
+	info <- do.call(rgrass::execGRASS, args = args)
+	.refresh(x)
+
 	} # EOF
 )
 
@@ -126,7 +133,7 @@ methods::setMethod(
 
 			args <- list(
 				cmd = "r.category",
-				map = .gnames(x)[i],
+				map = sources(x)[i],
 				separator = "pipe",
 				flags = "quiet",
 				intern = TRUE

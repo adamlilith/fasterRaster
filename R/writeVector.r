@@ -1,6 +1,6 @@
 #' Save a GVector to disk
 #'
-#' @description This function saves a spatial vector to disk directly from a **GRASS** session.
+#' @description This function saves a `GVector` to disk directly from a **GRASS** session.
 #'
 #' By default, files will be of OGC GeoPackage format (extension "`.gpkg`"), but this can be changed with the `format` argument. You can see a list of supported formats by simply using this function with no arguments, as in `writeVector()`, or by consulting the online help page for **GRASS** module `v.out.ogr`.
 #'
@@ -36,7 +36,7 @@ setMethod(
 
 	### general arguments
 	args <- list(...)
-	args$input <- .gnames(x)
+	args$input <- sources(x)
 	args$output <- filename
 	args$cmd <- "v.out.ogr"
 	args$flags <- c("quiet", "s", "m")

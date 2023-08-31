@@ -21,11 +21,11 @@ methods::setMethod(
 
 	if (by == "") {
 		
-		gn <- .makeGName("convHull", "vector")
+		gn <- .makeSourceName("convHull", "vector")
 	
 		args <- list(
 			cmd = "v.hull",
-			input = .gnames(x),
+			input = sources(x),
 			output = gn,
 			flags = c("quiet", "overwrite"),
 			intern = TRUE
@@ -40,7 +40,7 @@ methods::setMethod(
 		uniques <- unique(df[ , by, drop=TRUE])
 	
 		n <- length(uniques)
-		gns <- .makeGName("convHull", "vector", n)
+		gns <- .makeSourceName("convHull", "vector", n)
 
 		vects <- list()
 		for (i in seq_len(n)) {
@@ -52,7 +52,7 @@ methods::setMethod(
 			# select
 			args <- list(
 				cmd = "v.hull",
-				input = .gnames(x),
+				input = sources(x),
 				output = gns[i],
 				layer = .dbLayer(x),
 				flags = c("quiet", "overwrite"),

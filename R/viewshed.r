@@ -78,10 +78,10 @@ methods::setMethod(
     nLayers <- nlyr(x)
     for (i in seq_len(nLayers)) {
 
-        args$input <- .gnames(x)[i]
+        args$input <- sources(x)[i]
 
         nPoints <- nrow(coords)
-        gns <- .makeGName("viewshed", "raster", nPoints)
+        gns <- .makeSourceName("viewshed", "raster", nPoints)
         for (j in seq_len(nPoints)) {
 
             args$output <- gns[j]

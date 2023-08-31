@@ -37,8 +37,8 @@ methods::setMethod(
     .restore(x)
     region(x)
 
-    gnFracts <- .makeGName("fractal", "raster", n)
-    gns <- .makeGName("fractalScaled", "raster", n)
+    gnFracts <- .makeSourceName("fractal", "raster", n)
+    gns <- .makeSourceName("fractalScaled", "raster", n)
 
     for (i in seq_len(n)) {
 

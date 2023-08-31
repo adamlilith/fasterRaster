@@ -13,7 +13,7 @@
 methods::setMethod(
     f = ".refresh",
     signature = c(x = "GRaster"),
-    definition = function(x) .makeGRaster(.gnames(x))
+    definition = function(x) .makeGRaster(sources(x))
 )
 
 #' @aliases .refresh
@@ -21,5 +21,5 @@ methods::setMethod(
 methods::setMethod(
     f = ".refresh",
     signature = c(x = "GVector"),
-    definition = function(x) .makeGVector(.gnames(x))
+    definition = function(x) .makeGVector(sources(x))
 )

@@ -36,8 +36,8 @@ setMethod(
 		levels <- seq(mm[1L, 1L], mm[2L, 1L], length.out=nlevels + 2L) # adding 2 bc creates no contours for min/max values
 	}
 
-	input <- .gnames(x)
-	gn <- .makeGName(rastOrVect = "vector")
+	input <- sources(x)
+	gn <- .makeSourceName(rastOrVect = "vector")
 
 	### execute
 	args <- list(

@@ -18,14 +18,13 @@
 #'     * `[[` operator: Indicates which columns to retain of a `GVector` or which layers to replace or fetch of a `GRaster`.
 #'
 #' @param j Not used.
-#' @param ... Not used.
-#'
 #' @param value A numeric, integer, logical value (including `NA`), or `NULL`: Value to assign to all cells in a raster.
 #'
 #' @returns A `GRaster`.
 #'
 #' @example man/examples/ex_GRaster_GVector.r
 #'
+#' @name subset_assign
 #' @aliases subset_assign
 #' @rdname subset_assign
 #' @exportMethod [[
@@ -54,7 +53,7 @@ methods::setMethod(
 		topology = topology(x),
 		extent = as.vector(ext(x)),
 		zextent = zext(x),
-		gnames = .gnames(x)[i],
+		sources = sources(x)[i],
 		names = names(x)[i],
 		datatypeGRASS = datatype(x)[i],
 		resolution = res(x),
@@ -106,7 +105,7 @@ methods::setMethod(
 				topology = topology(out),
 				extent = as.vector(ext(out)),
 				zextent = zext(out),
-				gnames = .gnames(out)[notNulls],
+				sources = sources(out)[notNulls],
 				names = names(out)[notNulls],
 				datatypeGRASS = datatype(out)[notNulls],
 				resolution = res(out),
@@ -144,8 +143,8 @@ methods::setMethod(
 		
 			valueInsides <- seq_len(lenIns)
 
-			gns <- .gnames(out)
-			gns[i] <- .gnames(value)[valueInsides]
+			gns <- sources(out)
+			gns[i] <- sources(value)[valueInsides]
 
 			names <- names(out)
 			names[insides] <- names(value)[valueInsides]
@@ -173,7 +172,7 @@ methods::setMethod(
 				topology = topology(out),
 				extent = as.vector(ext(out)),
 				zextent = zext(out),
-				gnames = gns,
+				sources = gns,
 				names = names,
 				datatypeGRASS = dts,
 				resolution = res(out),
@@ -224,7 +223,7 @@ setMethod(
 	}
 	
 	nLayers <- nlyr(x)
-	gns <- .makeGName(x, "raster", nLayers)
+	gns <- .makeSourceName(x, "raster", nLayers)
 	for (i in seq_len(nLayers)) {
 	
 		ex <- paste0(gns[i], " = ", value)
@@ -267,10 +266,10 @@ methods::setMethod(
 cat("Command line too long when selecting > ~1500 records.")
 utils::flush.console()
 
-	gn <- .makeGName(NULL, rastOrVect = "vector")
+	gn <- .makeSourceName(NULL, rastOrVect = "vector")
 	args <- list(
 		cmd = "v.db.droprow",
-		input = .gnames(x),
+		input = sources(x),
 		layer = .dbLayer(x),
 		output = gn,
 		where = where,

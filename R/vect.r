@@ -1,9 +1,9 @@
 #' Convert a GVector to a SpatVector
 #'
-#' @description The **fasterRaster** version of the `vect()` function converts a `GVector` to a `SpatVector` (from the **terra** package).
+#' @description The **fasterRaster** version of the `vect()` function converts a `GVector` to a `SpatVector` (from the **terra** package). The **fasterRaster** version of the `st_as_sf()` function converts a `GVector` to an `sf` object (**sf**) package).
 #'
 #' @param x A `GVector`.
-#' @param ... Additional arguments to send to [writeRaster()] (typically unneeded, though `bigTiff` may be of use if the raster is large).
+#' @param ... Additional arguments to send to [writeVector()].
 #'
 #' @return A `SpatVector` (**terra** package).
 #' 

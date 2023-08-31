@@ -66,20 +66,20 @@ methods::setMethod(
 	.restore(x)
 	region(x)
 	
-	gn <- .gnames(x)
+	gn <- sources(x)
 	
 	# create mask
 	if (!is.na(target)) {
 		
-		gn <- .makeGName("distMask", "raster") # note: redefining "gn"
-		ex <- paste0(gn, " = if(", .gnames(x), " == ", target, ", 1, null())")
+		gn <- .makeSourceName("distMask", "raster") # note: redefining "gn"
+		ex <- paste0(gn, " = if(", sources(x), " == ", target, ", 1, null())")
   		rgrass::execGRASS("r.mapcalc", expression = ex, flags = c("quiet", "overwrite"))
 		
 		fillNA <- !fillNA
 		
 	}
 	
-	gnOut <- .makeGName(NULL, "raster")
+	gnOut <- .makeSourceName(NULL, "raster")
 	args <- list(
 		cmd = "r.grow.distance",
 		input = gn,
@@ -122,10 +122,10 @@ methods::setMethod(
 	
  	gtype <- geomtype(y, grass = TRUE)
 
-	gnRasterized <- .makeGName("rasterized", "raster")
+	gnRasterized <- .makeSourceName("rasterized", "raster")
 	args <- list(
 		cmd = "v.to.rast",
-		input = .gnames(y),
+		input = sources(y),
 		output = gnRasterized,
 		use = "val",
 		value = 1,
@@ -136,7 +136,7 @@ methods::setMethod(
 	if (dense) args$flags <- c(args$flags, "d")
 	do.call(rgrass::execGRASS, args = args)
 	
-	gn <- .makeGName("distance", "raster")
+	gn <- .makeSourceName("distance", "raster")
 	args <- list(
 		cmd = "r.grow.distance",
 		input = gnRasterized,
@@ -175,8 +175,8 @@ methods::setMethod(
 
 	args <- list(
 		cmd = "v.distance",
-		from = .gnames(x),
-		to = .gnames(y),
+		from = sources(x),
+		to = sources(y),
 		upload = "dist",
 		dmin = minDist,
 		dmax = maxDist,
@@ -226,14 +226,14 @@ methods::setMethod(
 
 .convertRastUnits <- function(gn, unit) {
     
-	if (inherits(gn, "GRaster")) gn <- .gnames(gn)
+	if (inherits(gn, "GRaster")) gn <- sources(gn)
 
     # convert raster units
     unit <- pmatchSafe(unit, c("meters", "metres", "kilometers", "km", "miles", "nautical miles", "nm", "yards", "yds", "feet", "ft"))
     if (!(unit %in% c("meters", "metres"))) {
 
         gnIn <- gn
-        gnOut <- .makeGName("unitConvert", "raster")
+        gnOut <- .makeSourceName("unitConvert", "raster")
 
         ex <- if (unit %in% c("kilometers", "km")) {
             paste0(gnOut, " = ", gnIn, " / 1000")

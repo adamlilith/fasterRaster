@@ -35,7 +35,7 @@ methods::setMethod(
     .restore(x)
     region(x)
 
-    gns <- .makeGName("runif", "raster", n)
+    gns <- .makeSourceName("runif", "raster", n)
 
     for (i in seq_len(n)) {
 

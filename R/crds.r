@@ -48,8 +48,8 @@ st_coordinates <- function(x, z = TRUE) {
 
 		# if (z && is.3d(x)) warning("z coordinates ignored.")
 	
-		# gn <- .makeGName("points", "vect")
-		# rgrass::execGRASS("v.to.points", input=.gnames(x), output=gn, use="vertex", flags=c("quiet", "overwrite"), intern=TRUE)
+		# gn <- .makeSourceName("points", "vect")
+		# rgrass::execGRASS("v.to.points", input=sources(x), output=gn, use="vertex", flags=c("quiet", "overwrite"), intern=TRUE)
 		# pts <- .makeGVector(gn)
 		# pts <- vect(pts)
 
@@ -57,7 +57,7 @@ st_coordinates <- function(x, z = TRUE) {
 
 	} else if (gm == "points") {
 		
-		data <- rgrass::execGRASS("v.to.db", map=.gnames(x), flags=c("p", "quiet"), option="coor", type="point", intern=TRUE)
+		data <- rgrass::execGRASS("v.to.db", map=sources(x), flags=c("p", "quiet"), option="coor", type="point", intern=TRUE)
 		# data <- data[-1L]
 		# cutAt <- which(data == "Reading features...")
 		# data <- data[1L:(cutAt - 1L)]
@@ -98,7 +98,7 @@ methods::setMethod(
 	if (!na.rm) flags <- c(flags, "i")
 	
 	temp <- paste0(tempfile(), ".csv")
-	rgrass::execGRASS("r.out.xyz", input=.gnames(x), output=temp, separator="comma", flags=flags, intern=TRUE)
+	rgrass::execGRASS("r.out.xyz", input=sources(x), output=temp, separator="comma", flags=flags, intern=TRUE)
 	#see https://grass.osgeo.org/grass82/manuals/r.out.xyz.html
 	out <- data.table::fread(temp)
 	

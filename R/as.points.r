@@ -28,10 +28,10 @@ methods::setMethod(
 
     .restore(x)
 
-    gn <- .makeGName(NULL, "vector")
+    gn <- .makeSourceName(NULL, "vector")
     args <- list(
         cmd = "v.to.points",
-        input = .gnames(x),
+        input = sources(x),
         output = gn,
         use = "vertex",
         type = gtype,
@@ -57,11 +57,11 @@ methods::setMethod(
 
     if (nlyr(x) > 1L) warning("The raster has more than one layer. Only the first layer will be converted to points.")
 
-    gn <- .makeGName(NULL, "vector")
+    gn <- .makeSourceName(NULL, "vector")
 
     args <- list(
         cmd = "r.to.vect",
-        input = .gnames(x)[1L],
+        input = sources(x)[1L],
         output = gn,
         type = "point",
         column = names(x)[1L],

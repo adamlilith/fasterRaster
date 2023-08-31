@@ -1,0 +1,24 @@
+Value,Label
+11,Irrigated crops
+14,Rainfed crops
+20,Mosaic crops
+30,Mosaic cropland/vegetation
+40,Sparse broadleaved evergreen/semi-deciduous forest
+50,Broadleaved deciduous forest
+60,Sparse broadleaved deciduous forest
+70,Needleleaved evergreen forest
+90,Sparse needleleaved deciduous/evergreen forest
+100,Broadleaved/needleleaved forest
+110,Forest with mosaic grassland
+120,Grassland with mosaic forest
+130,Shrubland
+140,Grassland/savanna/lichen
+150,Sparse vegetation
+160,Intermittently flooded broadleaf forest
+170,Flooded forest
+180,Flooded grassland
+190,Artificial/urban
+200,Bare
+210,Water
+220,Permanent snow and ice
+230,"No data (burnt areas, clouds, etc.)"

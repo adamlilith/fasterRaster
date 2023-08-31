@@ -47,6 +47,14 @@ fastData <- function(x) {
 		} else if (x %in% rasters) {
 			rastFile <- system.file("extdata", paste0(x, ".tif"), package = "fasterRaster")
 			out <- terra::rast(rastFile)
+
+			if (x == "madCover") {
+			    levs <- system.file("extdata", paste0("madCover.csv"), package = "fasterRaster")
+				levs <- utils::read.csv(levs)
+				levels(out) <- levs
+				# set.cats(out, layer = 1L, value = levs, active = 1L)
+			}
+
 		} else {
 			stop("Please supply the name of a data object available in fasterRaster.")
 		}

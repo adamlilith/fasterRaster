@@ -4,8 +4,6 @@
 #' 
 #' @param x A `GRaster`. If more than one layer is in the `GRaster`, only the first will be used (with a warning).
 #'
-#' @param round Logical: If `TRUE` (default), 
-#' 
 #' @returns A `GVector`.
 #' 
 #' @seealso [as.points()], [as.polygons()], [terra::as.lines()], [thin()], [cleanGeom()], and **GRASS** module `r.to.vect`
@@ -26,10 +24,10 @@ methods::setMethod(
     .restore(x)
     region(x)
 
-    gn <- .makeGName("asLines", "raster")
+    gn <- .makeSourceName("asLines", "raster")
     args <- list(
         cmd = "r.to.vect",
-        input = .gnames(x),
+        input = sources(x),
         output = gn,
         type = "line",
         flags = c("quiet", "overwrite"),

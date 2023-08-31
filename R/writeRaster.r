@@ -45,10 +45,11 @@
 #' @exportMethod writeRaster
 setMethod(
 	"writeRaster",
-	signature(x = "GRaster", filename = "character", datatype = NULL),
+	signature(x = "GRaster", filename = "character"),
 	function(
 		x,
 		filename,
+		datatype = NULL,
 		overwrite = FALSE,
 		...
 	) {
@@ -99,8 +100,8 @@ setMethod(
 		## if multi-layered raster stack, then group first... only guaranteed to work with GeoTIFFs
 		if (nLayers > 1L) {
 
-			groupName <- .makeGName(rastOrVect="group")
-			input <- .gnames(x)
+			groupName <- .makeSourceName(rastOrVect="group")
+			input <- sources(x)
 			
 			args <- list(
 				cmd = "i.group",
@@ -114,7 +115,7 @@ setMethod(
 			gn <- groupName
 
 		} else {
-			gn <- .gnames(x)
+			gn <- sources(x)
 		}
 		
 		# data type
@@ -167,7 +168,7 @@ setMethod(
 		}
 
 		# save
-		# rgrass::execGRASS("r.out.gdal", input=gnames, output=filename, type=datatype, createopt=createopt, metaopt=metaopt, flags=thisFlags, intern=TRUE, ...)
+		# rgrass::execGRASS("r.out.gdal", input=sources, output=filename, type=datatype, createopt=createopt, metaopt=metaopt, flags=thisFlags, intern=TRUE, ...)
 		args <- list(
 			cmd = "r.out.gdal",
 			input = gn,

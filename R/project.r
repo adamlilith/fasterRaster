@@ -154,14 +154,14 @@ cat("Slow step^^^")
 
 	if (method != "nearest" & fallback) method <- paste0(method, "_f")
 
-	gns <- .makeGName(names(x), "raster", nlyr(x))
+	gns <- .makeSourceName(names(x), "raster", nlyr(x))
 	for (i in seq_len(nlyr(x))) {
 		
 		args <- list(
 			cmd = "r.proj",
 			location = location(x),
 			mapset = mapset(x),
-			input = .gnames(x)[i],
+			input = sources(x)[i],
 			output = gns[i],
 			method = method,
 			memory = getFastOptions("memory"),
@@ -231,13 +231,13 @@ methods::setMethod(
 		fastRestore(location = toLocation, mapset = toMapset)
 	}
 	
-	gn <- .makeGName("projected", "vector")
+	gn <- .makeSourceName("projected", "vector")
 	
 	args <- list(
 		cmd = "v.proj",
 		location = location(x),
 		mapset = mapset(x),
-		input = .gnames(x),
+		input = sources(x),
 		output = gn,
 		flags = c("quiet", "overwrite"),
 		intern = TRUE

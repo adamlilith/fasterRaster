@@ -36,7 +36,6 @@ methods::setMethod(
 )
 
 st_crs <- function(x, ...) UseMethod("st_crs", x)
-setMethod("st_crs", definition = function(x, ...) st_crs(x, ...))
 
 #' @rdname crs
 #' @export

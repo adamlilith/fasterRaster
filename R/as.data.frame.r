@@ -20,10 +20,10 @@ methods::setMethod(
 	signature = c(x = "GVector"),
 	definition = function(x, row.names = NULL, optional = FALSE) {
 	
- 	data <- rgrass::execGRASS("v.db.select", map = .gnames(x), intern = TRUE)
+ 	data <- rgrass::execGRASS("v.db.select", map = sources(x), intern = TRUE)
 
 	# # better, but noisy:
-	# data <- rgrass::execGRASS("db.out.ogr", input=.gnames(x), output="C:/ecology/!Scratch/db.csv", format="CSV", table="rivers", flags=c("quiet", "overwrite"))
+	# data <- rgrass::execGRASS("db.out.ogr", input=sources(x), output="C:/ecology/!Scratch/db.csv", format="CSV", table="rivers", flags=c("quiet", "overwrite"))
 
 	# column names
 	cols <- data[1L]

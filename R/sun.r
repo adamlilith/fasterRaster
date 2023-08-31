@@ -91,7 +91,7 @@ sun <- function(
 	.restore(elevation)
 	region(elevation)
 
-	hhGn <- .gnames(hh)[1L]
+	hhGn <- sources(hh)[1L]
 	directions <- seq(0, 359.9999999, by=horizon_step)
 	hhGn <- gsub(hhGn, pattern=paste0("_", sprintf("%03.0f", directions[1L])), replacement="")
 		
@@ -103,11 +103,11 @@ sun <- function(
 		nprocs = getFastOptions("cores"),
 		distance_step = distance_step,
 		npartitions = npartitions,
-		elevation = .gnames(elevation),
-		coeff_bh = .gnames(coeff_bh),
-		coeff_dh = .gnames(coeff_dh),
-		slope = .gnames(slope),
-		aspect = .gnames(aspect),
+		elevation = sources(elevation),
+		coeff_bh = sources(coeff_bh),
+		coeff_dh = sources(coeff_dh),
+		slope = sources(slope),
+		aspect = sources(aspect),
 		horizon_basename = hhGn,
 		horizon_step = horizon_step
 	)
@@ -117,7 +117,7 @@ sun <- function(
 	# albedo
 	if (inherits(albedo, "GRaster")) { # raster
 		compareGeom(elevation, albedo)
-		args <- c(args, albedo=.gnames(albedo))
+		args <- c(args, albedo=sources(albedo))
 	} else {
 		args <- c(args, albedo_value=albedo)
 	}
@@ -125,17 +125,17 @@ sun <- function(
 	# linke
 	if (inherits(linke, "GRaster")) { # raster
 		compareGeom(elevation, linke)
-		args <- c(args, linke=.gnames(linke))
+		args <- c(args, linke=sources(linke))
 	} else {
 		args <- c(args, linke_value=linke)
 	}
 
 	# output names
-	if (beam_rad) args <- c(args, beam_rad = .makeGName("beam_rad", "rast"))
-	if (diff_rad) args <- c(args, diff_rad = .makeGName("diff_rad", "rast"))
-	if (refl_rad) args <- c(args, refl_rad = .makeGName("refl_rad", "rast"))
-	if (glob_rad) args <- c(args, glob_rad = .makeGName("glob_rad", "rast"))
-	if (insol_time) args <- c(args, insol_time = .makeGName("insol_time", "rast"))
+	if (beam_rad) args <- c(args, beam_rad = .makeSourceName("beam_rad", "rast"))
+	if (diff_rad) args <- c(args, diff_rad = .makeSourceName("diff_rad", "rast"))
+	if (refl_rad) args <- c(args, refl_rad = .makeSourceName("refl_rad", "rast"))
+	if (glob_rad) args <- c(args, glob_rad = .makeSourceName("glob_rad", "rast"))
+	if (insol_time) args <- c(args, insol_time = .makeSourceName("insol_time", "rast"))
 
 	# execute!
 	do.call(rgrass::execGRASS, args=args)

@@ -1,10 +1,11 @@
 #' @title Classes for "fasterRaster" locations, rasters, and vectors
 #'
-#' @describeIn GSession
-#'
-#' @importFrom methods new
+#' @describeIn GSession-class
+#' @name GRaster-class
+#' @aliases GRaster
+#' @rdname GSession-class
 #' @exportClass GRaster
-GRaster <- setClass(
+GRaster <- methods::setClass(
 	"GRaster",
 	contains = "GRegion",
 	slots = list(
@@ -12,21 +13,97 @@ GRaster <- setClass(
 		datatypeGRASS = "character",
 		nLayers = "integer",
 		names = "character",
-		nCats = "integer",
 		minVal = "numeric",
-		maxVal = "numeric"
+		maxVal = "numeric",
+		activeCat = "integer",
+		levels = "list"
 	),
 	prototype = prototype(
 		projection = NA_character_,
 		datatypeGRASS = NA_character_,
 		nLayers = NA_integer_,
 		names = NA_character_,
-		nCats = NA_integer_,
 		minVal = NA_real_,
-		maxVal = NA_real_
+		maxVal = NA_real_,
+		activeCat = 2L,
+		levels = list(data.table::data.table(NULL))
 	)
 )
 
+#' Evaluate the @levels column slot of a `GRaster`
+#'
+#' @description Test whether a list of "levels" tables is valid. First column must be integer. Must have >= 2 columns.
+#' 
+#' @param object A `GRaster`.
+#' @returns `TRUE` if invalid, `FALSE` otherwise.
+#'
+#' @noRd
+.validLevelTable <- function(object) {
+
+	levels <- object@levels
+
+	for (i in seq_along(levels)) {
+	
+		nr <- nrow(levels[[i]])
+	
+		if (nr != 0) {
+	
+			if (object@datatypeGRASS[i] != "CELL") {
+				return(TRUE)
+			} else if (nr == 1L) {
+				return(TRUE)
+			} else if (!inherits(levels[[i]][[1L]], "integer")) {
+				return(TRUE)
+			}
+		
+		}
+	
+	}
+	FALSE
+
+}
+
+#' Evaluate the @activeCat slot of a GRaster
+#'
+#' @description Test whether a list of "levels" tables is valid. First column must be integer. Must have >= 2 columns.
+#' 
+#' @param object A `GRaster`.
+#' @returns `TRUE` if invalid, `FALSE` otherwise.
+#'
+#' @noRd
+.validActiveCat <- function(object) {
+
+	bad <- FALSE
+	if (any(object@activeCat < 2L)) {
+		bad <- TRUE
+	} else {
+		numCols <- sapply(object@levels, ncol)
+		ncats <- ncat(object)
+  		if (any(ncats > 0L & object@activeCat > numCols)) bad <- TRUE
+	}
+	bad
+
+}
+
+#' Evaluate whether a raster's datatype can accommodate levels
+#'
+#' @description A `GRaster` must have the `CELL` datatype to have levels.
+#' 
+#' @param object A `GRaster`
+#' @returns `TRUE` if invalid, `FALSE` otherwise.
+#'
+#' @noRd
+.validFactor <- function(object) {
+
+	dt <- object@datatypeGRASS
+	ncats <- ncat(object)
+	any(ncats > 0L & dt != "CELL")
+
+}
+
+#' Test if GRaster is valid
+#'
+#' @noRd
 setValidity("GRaster",
 	function(object) {
 		if (!all(object@datatypeGRASS %in% c("CELL", "FCELL", "DCELL"))) {
@@ -37,16 +114,24 @@ setValidity("GRaster",
 			"Third value in @resolution must be NA or a positive real value."
 		} else if (object@nLayers < 1) {
 			"@nLayers must be a positive integer."
-		} else if (object@nLayers != length(object@gnames)) {
-			"@nLayers is different from the number of @gnames."
+		} else if (object@nLayers != length(object@sources)) {
+			"@nLayers is different from the number of @sources."
 		} else if (object@nLayers != length(object@names)) {
 			"@names must be @nLayers in length."
-		} else if (object@nLayers != length(object@nCats)) {
-			"@nCats must be @nLayers in length."
 		} else if (object@nLayers != length(object@minVal)) {
 			"@minVal must be @nLayers in length."
 		} else if (object@nLayers != length(object@maxVal)) {
 			"@maxVal must be @nLayers in length."
+		} else if (length(object@activeCat) != object@nLayers) {
+			"The number of @activeCat values must be the same as the number of @nLayers."
+		} else if (length(object@levels) != object@nLayers) {
+			"The number of tables in @levels must be the same as the number of @nLayers."
+		} else if (.validFactor(object)) {
+			"The GRASS datatype of a rasters with levels must be CELL."
+		} else if (.validLevelTable(object)) {
+			"Each table must be a NULL data.table, or if not, the first column must be an integer, and there must be >1 columns."
+		} else if (.validActiveCat(object)) {
+			"@activeCat must be an integer between 2 and the number of columns in each data.table in @levels."
 		} else {
 			TRUE
 		}
@@ -59,6 +144,7 @@ setValidity("GRaster",
 #'
 #' @param gn Character: The name of the raster in **GRASS**.
 #' @param names Character: Name of the raster.
+#' @param levels `NULL` (default), a `data.frame`, `data.table`, an empty string (`""`), or a list of `data.frame`s, `data.table`s, and/or empty strings: These become the raster's [levels()]. If `""`, then no levels are defined.
 #'
 #' @returns A `GRaster`.
 #'
@@ -67,8 +153,20 @@ setValidity("GRaster",
 #' @example man/examples/ex_GRaster_GVector.r
 #'
 #' @noRd
-.makeGRaster <- function(gn, names = "raster") {
+.makeGRaster <- function(gn, names = "raster", levels = "") {
 
+	# levels: convert empty strings to NULL data.tables and data.frames to data.tables
+	if (is.null(levels)) levels <- ""
+	if (!is.list(levels)) levels <- list(levels)
+
+	for (i in seq_along(levels)) {
+		if (inherits(levels[[i]], "character") && levels[[i]] == "") {
+			levels[[i]] <- data.table::data.table(NULL)
+		} else if (!inherits(levels[[i]], "data.table")) {
+   			levels[[i]] <- data.table::data.table(levels[[i]])
+		}
+	}
+	
 	info <- .rastInfo(gn)
 	out <- new(
 		"GRaster",
@@ -79,15 +177,16 @@ setValidity("GRaster",
 		topology = info[["topology"]][1L],
 		extent = c(info[["west"]][1L], info[["east"]][1L], info[["south"]][1L], info[["north"]][1L]),
 		zextent = c(info[["zbottom"]][1L], info[["ztop"]][1L]),
-		nLayers = length(info$gnames),
+		nLayers = length(info$sources),
 		dimensions = c(info[["rows"]][1L], info[["cols"]][1L], info[["depths"]][1L]),
 		resolution = c(info[["ewres"]][1L], info[["nsres"]][1L], info[["tbres"]][1L]),
-		gnames = gn,
+		sources = gn,
 		names = names,
 		datatypeGRASS = info[["grassDataType"]],
-		nCats = info[["nCats"]],
 		minVal = info[["minVal"]],
-		maxVal = info[["maxVal"]]
+		maxVal = info[["maxVal"]],
+		activeCat = rep(2L, length(gn)),
+		levels = levels
 	)
 	out <- .makeUniqueNames(out)
 	out

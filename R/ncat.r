@@ -17,10 +17,11 @@
 #' @exportMethod ncat
 setMethod(
     f = "ncat",
-    signature = "GRaster",
-    definition = function(x) {
-        out <- x@nCats
-		names(out) <- names(x)
+    signature = "SpatRaster",
+    definition = function(x, dropLevels = TRUE) {
+        if (dropLevels) x <- terra::droplevels(x)
+        out <- .ncat(x)
+        names(out) <- names(x)
         out
     } # EOF
 )
@@ -30,13 +31,40 @@ setMethod(
 #' @exportMethod ncat
 setMethod(
     f = "ncat",
-    signature = "SpatRaster",
-    definition = function(x, dropLevels = TRUE) {
-        if (dropLevels) x <- terra::droplevels(x)
-        out <- lapply(terra::levels(x), nrow) # cannot use sapply
-        out <- unlist(out)
-        if (any(is.null(out))) out[is.null(out)] <- 0L
-        names(out) <- names(x)
+    signature = "GRaster",
+    definition = function(x) {
+        out <- sapply(x@levels, nrow)
+		names(out) <- names(x)
         out
     } # EOF
 )
+
+#' Count number of levels
+#'
+#' @description Counts number of levels in a character string (specifically, the empty string `""`), a `data.frame`, `data.table`, or list of `data.frame`s or `data.table`s or empty strings.
+#'
+#' @param x A `data.frame`, `data.table`, an empty string, or a list thereof.
+#'
+#' @noRd
+.ncat <- function(x) {
+
+	if (inherits(x, "SpatRaster")) x <- levels(x)
+	
+	if (!is.list(x)) x <- list(x)
+	n <- rep(NA_integer_, length(list))
+
+	for (i in seq_along(x)) {
+	
+		if (inherits(x[[i]], "character")) {
+			if (x[[i]] == "") {
+				n[i] <- 0L
+			} else {
+				stop("Argument x must be a data frame, data table, an empty string or a list of any of these.")
+			}
+		} else if (inherits(x[[i]], c("data.frame", "data.table"))) {
+			n[i] <- nrow(x[[i]])
+		}
+	}
+	n
+
+}

@@ -36,7 +36,7 @@ methods::setMethod(
     .restore(x)
     region(x)
 
-    gns <- .makeGName("rnormScaled", "raster", n)
+    gns <- .makeSourceName("rnormScaled", "raster", n)
 
     for (i in seq_len(n)) {
 

@@ -30,10 +30,10 @@ methods::setMethod(
 
     if (round & !is.cell(x)) x <- round(x)
 
-    gn <- .makeGName("asPolys", "raster")
+    gn <- .makeSourceName("asPolys", "raster")
     args <- list(
         cmd = "r.to.vect",
-        input = .gnames(x),
+        input = sources(x),
         output = gn,
         type = "area",
         column = names(x),

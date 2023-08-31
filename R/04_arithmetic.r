@@ -2,10 +2,10 @@
 #'
 #' @description You can do arithmetic operations on `GRaster`s using normal operators in **R**: `+`, `-`, `*`, `/`, `^`, `%%` (modulus), and `%/%` (integer division).
 #'
-#' Note that the precision of the result will be determined by the `rasterDataType` option, which can be set using [setFastOptions()]. The default is `"float"`, which is precise to about the 7th decimal place. This be increased to about the 15th decimal place by setting this to `"double"`, though it can substantially increase the size of the raster output in memory and when saved to disk.
+#' Note that the precision of the result will be determined by the `rasterPrecision` option, which can be set using [setFastOptions()]. The default is `"float"`, which is precise to about the 7th decimal place. This be increased to about the 15th decimal place by setting this to `"double"`, though it can substantially increase the size of the raster output in memory and when saved to disk.
 #' 
 #' @param name Character: Name of the new `GRaster`.
-#' @param gn `gname`s of the `GRaster` being operated on
+#' @param gn `sources` of the `GRaster` being operated on
 #' @param ex expression for `r.mapcalc`
 #'
 #' @return A `GRaster`.
@@ -28,25 +28,27 @@
 }
 
 # raster math
-methods::setMethod("Arith", signature(e1 = "GRaster", e2 = "logical"),
+methods::setMethod(
+	f = "Arith",
+	signature(e1 = "GRaster", e2 = "logical"),
     function(e1, e2) {
 	
 		.restore(e1)
 
 		e2 <- as.integer(e2)
 		if (is.na(e2)) e2 <- "null()"
-		dt <- getFastOptions("rasterDataType")
+		prec <- getFastOptions("rasterPrecision")
 		
 		for (i in 1L:nlyr(e1)) {
 		
-			gn <- .makeGName("math", "rast")
+			gn <- .makeSourceName("math", "rast")
 			oper <- as.vector(.Generic)[1L]
 			ex <- if (oper == "%/%") {
-				paste(gn, "= floor(", dt, "(", .gnames(e1)[i], ") /", e2, ")")
+				paste(gn, "= floor(", prec, "(", sources(e1)[i], ") /", e2, ")")
 			} else if (oper == "%%") {
-				paste0(gn, " = ", dt, "(", .gnames(e1)[i], ") %", e2)
+				paste0(gn, " = ", prec, "(", sources(e1)[i], ") %", e2)
 			} else {
-				paste0(gn, " = ", dt, "(", .gnames(e1)[i], ")  ", oper, e2)
+				paste0(gn, " = ", prec, "(", sources(e1)[i], ")  ", oper, e2)
 			}
 
 			name <- names(e1)[i]
@@ -64,25 +66,27 @@ methods::setMethod("Arith", signature(e1 = "GRaster", e2 = "logical"),
 )
 
 # logical raster
-methods::setMethod("Arith", signature(e1 = "logical", e2 = "GRaster"),
+methods::setMethod(
+	f = "Arith",
+	signature(e1 = "logical", e2 = "GRaster"),
     function(e1, e2) {
 	
 		.restore(e2)
 
 		e1 <- as.integer(e1)
 		if (is.na(e1)) e1 <- "null()"
-  		dt <- getFastOptions("rasterDataType")
+  		prec <- getFastOptions("rasterPrecision")
 		
 		for (i in 1L:nlyr(e2)) {
 		
-			gn <- .makeGName("math", "rast")
+			gn <- .makeSourceName("math", "rast")
 			oper <- as.vector(.Generic)[1L]
 			ex <- if (oper == "%/%") {
-				paste(gn, "= floor(", e1, "/ ", dt, "(", .gnames(e2)[i], "))")
+				paste(gn, "= floor(", e1, "/ ", prec, "(", sources(e2)[i], "))")
 			} else if (oper == "%%") {
-				paste0(gn, " = ", e1, "% ", dt, "(", .gnames(e2)[i], ")")
+				paste0(gn, " = ", e1, "% ", prec, "(", sources(e2)[i], ")")
 			} else {
-				paste0(gn, " = ", e1, oper, " ", dt, "(", .gnames(e2)[i], ")")
+				paste0(gn, " = ", e1, oper, " ", prec, "(", sources(e2)[i], ")")
 			}
 
 			name <- names(e2)[i]
@@ -100,24 +104,26 @@ methods::setMethod("Arith", signature(e1 = "logical", e2 = "GRaster"),
 )
 
 # raster numeric
-methods::setMethod("Arith", signature(e1 = "GRaster", e2 = "numeric"),
+methods::setMethod(
+	f = "Arith",
+	signature(e1 = "GRaster", e2 = "numeric"),
     function(e1, e2) {
 	
 		.restore(e1)
 
 		if (is.na(e2)) e2 <- "null()"
-  		dt <- getFastOptions("rasterDataType")
+  		prec <- getFastOptions("rasterPrecision")
 		
 		for (i in 1L:nlyr(e1)) {
 		
-			gn <- .makeGName("math", "rast")
+			gn <- .makeSourceName("math", "rast")
 			oper <- as.vector(.Generic)[1L]
 			ex <- if (oper == "%/%") {
-				paste(gn, "= floor(", dt, "(", .gnames(e1)[i], ") /", e2, ")")
+				paste(gn, "= floor(", prec, "(", sources(e1)[i], ") /", e2, ")")
 			} else if (oper == "%%") {
-				paste0(gn, " = ", dt, "(", .gnames(e1)[i], ") %", e2)
+				paste0(gn, " = ", prec, "(", sources(e1)[i], ") %", e2)
 			} else {
-				paste0(gn, " = ", dt, "(", .gnames(e1)[i], ")  ", oper, e2)
+				paste0(gn, " = ", prec, "(", sources(e1)[i], ")  ", oper, e2)
 			}
 
 			name <- names(e1)[i]
@@ -135,24 +141,26 @@ methods::setMethod("Arith", signature(e1 = "GRaster", e2 = "numeric"),
 )
 
 # raster integer
-methods::setMethod("Arith", signature(e1 = "GRaster", e2 = "integer"),
+methods::setMethod(
+	f = "Arith",
+	signature(e1 = "GRaster", e2 = "integer"),
     function(e1, e2) {
 	
 		.restore(e1)
 
 		if (is.na(e2)) e2 <- "null()"
-  		dt <- getFastOptions("rasterDataType")
+  		prec <- getFastOptions("rasterPrecision")
 		
 		for (i in 1L:nlyr(e1)) {
 		
-			gn <- .makeGName("math", "rast")
+			gn <- .makeSourceName("math", "rast")
 			oper <- as.vector(.Generic)[1L]
 			ex <- if (oper == "%/%") {
-				paste(gn, "= floor(", dt, "(", .gnames(e1)[i], ") /", e2, ")")
+				paste(gn, "= floor(", prec, "(", sources(e1)[i], ") /", e2, ")")
 			} else if (oper == "%%") {
-				paste0(gn, " = ", dt, "(", .gnames(e1)[i], ") %", e2)
+				paste0(gn, " = ", prec, "(", sources(e1)[i], ") %", e2)
 			} else {
-				paste0(gn, " = ", dt, "(", .gnames(e1)[i], ")  ", oper, e2)
+				paste0(gn, " = ", prec, "(", sources(e1)[i], ")  ", oper, e2)
 			}
 
 			name <- names(e1)[i]
@@ -170,24 +178,26 @@ methods::setMethod("Arith", signature(e1 = "GRaster", e2 = "integer"),
 )
 
 # numeric raster
-methods::setMethod("Arith", signature(e1 = "numeric", e2 = "GRaster"),
+methods::setMethod(
+	f = "Arith",
+	signature(e1 = "numeric", e2 = "GRaster"),
     function(e1, e2) {
 	
 		.restore(e2)
 
 		if (is.na(e1)) e1 <- "null()"
 		oper <- as.vector(.Generic)[1L]
-  		dt <- getFastOptions("rasterDataType")
+  		prec <- getFastOptions("rasterPrecision")
 		
 		for (i in 1L:nlyr(e2)) {
 		
-			gn <- .makeGName("math", "rast")
+			gn <- .makeSourceName("math", "rast")
 			ex <- if (oper == "%/%") {
-				paste(gn, "= floor(", e1, "/ ", dt, "(", .gnames(e2)[i], "))")
+				paste(gn, "= floor(", e1, "/ ", prec, "(", sources(e2)[i], "))")
 			} else if (oper == "%%") {
-				paste0(gn, " = ", e1, " % ", dt, "(", .gnames(e2)[i], ")")
+				paste0(gn, " = ", e1, " % ", prec, "(", sources(e2)[i], ")")
 			} else {
-				paste0(gn, " = ", e1, oper, " ", dt, "(", .gnames(e2)[i], ")")
+				paste0(gn, " = ", e1, oper, " ", prec, "(", sources(e2)[i], ")")
 			}
 
 			name <- names(e2)[i]
@@ -205,24 +215,26 @@ methods::setMethod("Arith", signature(e1 = "numeric", e2 = "GRaster"),
 )
 
 # integer raster
-methods::setMethod("Arith", signature(e1 = "integer", e2 = "GRaster"),
+methods::setMethod(
+	f = "Arith",
+	signature(e1 = "integer", e2 = "GRaster"),
     function(e1, e2) {
 	
 		.restore(e2)
 
 		if (is.na(e1)) e1 <- "null()"
-  		dt <- getFastOptions("rasterDataType")
+  		prec <- getFastOptions("rasterPrecision")
 		
 		for (i in 1L:nlyr(e2)) {
 		
-			gn <- .makeGName("math", "rast")
+			gn <- .makeSourceName("math", "rast")
 			oper <- as.vector(.Generic)[1L]
 			ex <- if (oper == "%/%") {
-				paste(gn, "= floor(", e1, " / ", dt, "(", .gnames(e2)[i], "))")
+				paste(gn, "= floor(", e1, " / ", prec, "(", sources(e2)[i], "))")
 			} else if (oper == "%%") {
-				paste0(gn, " = ", e1, "% ", dt, "(", .gnames(e2)[i], ")")
+				paste0(gn, " = ", e1, "% ", prec, "(", sources(e2)[i], ")")
 			} else {
-				paste0(gn, " = ", e1, oper, " ", dt, "(", .gnames(e2)[i], ")")
+				paste0(gn, " = ", e1, oper, " ", prec, "(", sources(e2)[i], ")")
 			}
 
 			name <- names(e2)[i]
@@ -240,19 +252,21 @@ methods::setMethod("Arith", signature(e1 = "integer", e2 = "GRaster"),
 )
 
 # # missing raster
-# methods::setMethod("Arith", signature(e1 = "missing", e2 = "GRaster"),
+# methods::setMethod(
+	# f = "Arith",
+	# signature(e1 = "missing", e2 = "GRaster"),
     # function(e1, e2) {
 	
 		# .restore(e2)
 
-		# gn <- .makeGName("math", "rast")
+		# gn <- .makeSourceName("math", "rast")
 
 		# oper <- as.vector(.Generic)[1L]
 		# print(oper)
 		# ex <- if (oper == "-") {
-			# paste0(gn, " = -1 * ", .gnames(e2))
+			# paste0(gn, " = -1 * ", sources(e2))
 		# } else {
-			# paste0(gn, " = ", .gnames(e2))
+			# paste0(gn, " = ", sources(e2))
 		# }
 		# .genericArith(x = e2, gn = gn, ex = ex)
 		
@@ -260,30 +274,32 @@ methods::setMethod("Arith", signature(e1 = "integer", e2 = "GRaster"),
 # )
 
 # raster raster
-methods::setMethod("Arith", signature(e1 = "GRaster", e2 = "GRaster"),
+methods::setMethod(
+	f = "Arith",
+	signature(e1 = "GRaster", e2 = "GRaster"),
     function(e1, e2) {
 	
 		compareGeom(e1, e2)
 		.restore(e1)
 
 		oper <- as.vector(.Generic)[1L]
-  		dt <- getFastOptions("rasterDataType")
+  		prec <- getFastOptions("rasterPrecision")
 		
 		if (nlyr(e1) == nlyr(e2)) {
 
 			for (i in 1L:nlyr(e1)) {
 
 				name <- paste0(names(e1)[i], "_", names(e2)[i])
-				gn <- .makeGName(name, "rast")
+				gn <- .makeSourceName(name, "rast")
 
 				ex <- if (oper == "%/%") {
-					paste0(gn, " = floor(", dt, "(", .gnames(e1)[i], ") / ", dt, "(", .gnames(e2)[i], "))")
+					paste0(gn, " = floor(", prec, "(", sources(e1)[i], ") / ", prec, "(", sources(e2)[i], "))")
 				} else if (oper == "%%") {
-					paste0(gn, " = ", dt, "(", .gnames(e1)[i], ") % ", dt, "(", .gnames(e2)[i], ")")
+					paste0(gn, " = ", prec, "(", sources(e1)[i], ") % ", prec, "(", sources(e2)[i], ")")
 				} else if (oper == "^") {
-					paste0(gn, " = exp(", dt, "(", .gnames(e1)[i], "), ", dt, "(", .gnames(e2)[i], "))")
+					paste0(gn, " = exp(", prec, "(", sources(e1)[i], "), ", prec, "(", sources(e2)[i], "))")
 				} else {
-					paste0(gn, "= ", dt, "(", .gnames(e1)[i], ")  ", oper, " ", dt, "(", .gnames(e2)[i], ")")
+					paste0(gn, "= ", prec, "(", sources(e1)[i], ")  ", oper, " ", prec, "(", sources(e2)[i], ")")
 				}
 				
 				if (i == 1L) {
@@ -300,16 +316,16 @@ methods::setMethod("Arith", signature(e1 = "GRaster", e2 = "GRaster"),
 			for (i in 1L:nlyr(e2)) {
 			
 				name <- paste0(names(e1), "_", names(e2)[i])
-				gn <- .makeGName(name, "rast")
+				gn <- .makeSourceName(name, "rast")
 
 				ex <- if (oper == "%/%") {
-					paste0(gn, " = floor(", dt, "(", .gnames(e1), ") / ", dt, "(", .gnames(e2)[i], "))")
+					paste0(gn, " = floor(", prec, "(", sources(e1), ") / ", prec, "(", sources(e2)[i], "))")
 				} else if (oper == "%%") {
-					paste0(gn, " = ", dt, "(", .gnames(e1), ") % ", dt, "(", .gnames(e2)[i], ")")
+					paste0(gn, " = ", prec, "(", sources(e1), ") % ", prec, "(", sources(e2)[i], ")")
 				} else if (oper == "^") {
-					paste0(gn, " = exp(", dt, "(", .gnames(e1), "), ", dt, "(", .gnames(e2)[i], "))")
+					paste0(gn, " = exp(", prec, "(", sources(e1), "), ", prec, "(", sources(e2)[i], "))")
 				} else {
-					paste0(gn, "= ", dt, "(", .gnames(e1), ")  ", oper, " ", dt, "(", .gnames(e2)[i], ")")
+					paste0(gn, "= ", prec, "(", sources(e1), ")  ", oper, " ", prec, "(", sources(e2)[i], ")")
 				}
 				
 				if (i == 1L) {
@@ -326,16 +342,16 @@ methods::setMethod("Arith", signature(e1 = "GRaster", e2 = "GRaster"),
 			for (i in 1L:nlyr(e1)) {
 			
 				name <- paste0(names(e1)[i], "_", names(e2))
-				gn <- .makeGName(name, "rast")
+				gn <- .makeSourceName(name, "rast")
 
 				ex <- if (oper == "%/%") {
-					paste0(gn, " = floor(", dt, "(", .gnames(e1)[i], ") / ", dt, "(", .gnames(e2), "))")
+					paste0(gn, " = floor(", prec, "(", sources(e1)[i], ") / ", prec, "(", sources(e2), "))")
 				} else if (oper == "%%") {
-					paste0(gn, " = ", dt, "(", .gnames(e1)[i], ") % ", dt, "(", .gnames(e2), ")")
+					paste0(gn, " = ", prec, "(", sources(e1)[i], ") % ", prec, "(", sources(e2), ")")
 				} else if (oper == "^") {
-					paste0(gn, " = exp(", dt, "(", .gnames(e1)[i], "), ", dt, "(", .gnames(e2), "))")
+					paste0(gn, " = exp(", prec, "(", sources(e1)[i], "), ", prec, "(", sources(e2), "))")
 				} else {
-					paste0(gn, "= ", dt, "(", .gnames(e1)[i], ") ", oper, " ", dt, "(", .gnames(e2), ")")
+					paste0(gn, "= ", prec, "(", sources(e1)[i], ") ", oper, " ", prec, "(", sources(e2), ")")
 				}
 				
 				if (i == 1L) {

@@ -114,9 +114,9 @@ methods::setMethod(
 	nLayers <- nlyr(x)
 	for (i in seq_len(nLayers)) {
 		
-		gn <- .makeGName(names(x)[i], "rast")
+		gn <- .makeSourceName(names(x)[i], "rast")
 		
-		args$input <- .gnames(x)[i]
+		args$input <- sources(x)[i]
 		args$output <- gn
 		
 		do.call(rgrass::execGRASS, args=args)

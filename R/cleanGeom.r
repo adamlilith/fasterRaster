@@ -79,10 +79,10 @@ methods::setMethod(
 		"rmsa"
 	}
 	
-	gn <- .makeGName("generalized", "vect")
+	gn <- .makeSourceName("generalized", "vect")
 	args <- list(
 		cmd = "v.clean",
-		input = .gnames(x),
+		input = sources(x),
 		output = gn,
 		tool = method,
 		threshold = tolerance,

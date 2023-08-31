@@ -21,11 +21,11 @@ methods::setMethod(
     region(x)
 
     nLayer <- nlyr(x)
-    gns <- .makeGName("thin", "raster", nLayer)
+    gns <- .makeSourceName("thin", "raster", nLayer)
     for (i in seq_len(nLayer)) {
         args <- list(
             cmd = "r.thin",
-            input = .gnames(x)[i],
+            input = sources(x)[i],
             output = gns[i],
             iterations = iter,
             flags = c("quiet", "overwrite"),

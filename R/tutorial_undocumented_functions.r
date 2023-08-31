@@ -7,12 +7,12 @@
 #' ## `.copyGSpatial()`
 #' Creates in **GRASS** a copy of a `GSpatial` object (typically, a `GRaster` or a `GVector`).
 #'
-#* Argument(s): `x`: `GRaster`, `GVector`, or character: The object or the `gnames` of the object to be copied. Can take multi-layered objects or multiple `gnames`.
+#* Argument(s): `x`: `GRaster`, `GVector`, or character: The object or the `sources` of the object to be copied. Can take multi-layered objects or multiple `sources`.
 #' 
 #' ## `.datatype()`
 #' Intuits GDAL or **terra** raster data type.
 #'
-#' Argument(s): `x`: A `GRaster` or vector of `gnames`.
+#' Argument(s): `x`: A `GRaster` or vector of `sources`.
 #' 
 #' `type`: Character. Either "terra" or "GDAL".
 #'
@@ -23,29 +23,24 @@
 #'
 #' Argument(s): `x`: A `GVector`.
 #'
-#' ## `.gnames()`
-#' Gets the name(s) of the file(s) in **GRASS** that represent(s) the object(s).
-#'
-#' Argument(s): `x`: A `GRaster` or `GVector`.
-#'
 #' ## `.ls()`
-#' Lists the `gnames` of all objects in the current **GRASS** session.
+#' Lists the `sources` of all objects in the current **GRASS** session.
 #'
 #' Argument(s): `type`: One or more of `"rasters"`, `"vectors"`, `"rasters3d"`, `"groups"`, or missing: Type of object(s) to display. If missing, all objects are displayed.
 #'
-#' ## `.makeGNames()`
+#' ## `.makeSourceNames()`
 #' Makes one or more statistically unique strings that can be used as file names to represent rasters or vectors in **GRASS**.
 #'
-#' Argument(s): `x`: Missing, character, `SpatRaster`, `SpatVector`, `sf`, `GRaster`, or `GVector`. Object from which to make the `gname` (if possible).
+#' Argument(s): `x`: Missing, character, `SpatRaster`, `SpatVector`, `sf`, `GRaster`, or `GVector`. Object from which to make the `source` (if possible).
 #'
-#' `rastOrVect`: Character: `"raster"` or `"vector"` (partial matching is used). Type of `gname` to make.
+#' `rastOrVect`: Character: `"raster"` or `"vector"` (partial matching is used). Type of `source` to make.
 #'
-#' `n`: Numeric integer: Number of `gname`s to make.
+#' `n`: Numeric integer: Number of `sources` to make.
 #' 
-#' ## `.makeGRaster()` and `makeGVector()`
-#' Make `GRaster`s or `GVector`s from a vector of `gname`s, which is a pointer to files in **GRASS**.
+#' ## `.makeGRaster()` and `.makeGVector()`
+#' Make `GRaster`s or `GVector`s from a vector of `sources`, which is a pointer to files in **GRASS**.
 #'
-#' Argument(s): `gn`: Character vector of `gname`s.
+#' Argument(s): `gn`: Character vector of `sources`.
 #'
 #' `name`: Character (rasters only): Name(s) of the `GRaster`s.
 #' 
@@ -57,6 +52,11 @@
 #' Get the value of the `@minVal` and `@maxVal` slot in a `GRaster`.
 #'
 #' Argument(s): `x`: A `GRaster`.
+#' 
+#' ## `.ncat()`
+#' Count number of levels in a `GRaster`, `data.frame`, `data.table`, empty string, or a list of `data.frame`s, `data.table`s, and/or empty strings.
+#'
+#' Argument(s): `x`: A `GRaster`, `data.frame`, `data.table`, empty string, or a list thereof.
 #' 
 #' ## `.projection()`
 #' Get the value of the `@projection` slot in a `GRaster` or `GVector`.
@@ -71,14 +71,14 @@
 #' ## `.rename()`
 #' Rename a **GRASS** raster or vector.
 #'
-#' Argument(s): `from` and `to`: Character: The `gname`s of the object to be renamed.
+#' Argument(s): `from` and `to`: Character: The `sources` of the object to be renamed.
 #'
 #' `rastorVect`: Character: Either `"raster"` or `"vector"` or `NULL`. Type of object to rename. If `NULL`, function will try to determine if `from` is a raster or vector (slower).
 #' 
 #' ## `.rm()`
 #' Delete all **GRASS** files representing rasters or vectors.
 #'
-#' Argument(s): `x`: A `GRaster`, `GVector`, character, or missing (default): The `gname`(s) of the object(s) to be deleted, or objects from which `gname`(s) can be obtained. If missing, all objects will be deleted (but their type can specified using `type`).
+#' Argument(s): `x`: A `GRaster`, `GVector`, character, or missing (default): The `source`(s) of the object(s) to be deleted, or objects from which `source`(s) can be obtained. If missing, all objects will be deleted (but their type can specified using `type`).
 #'
 #' `type`: Character: `"rasters"`, `"vectors"`, `"rasters3d"`, `"groups"`, or `NULL` (default). Type(s) of objects to delete. If `NULL`, and `x` is missing, all objects will be deleted.
 #'
@@ -87,7 +87,7 @@
 #' ## `.rastInfo()` and `.vectInfo()`
 #' Metadata for a **GRASS** raster or vector.
 #'
-#' Argument(s): `x`: A `GRaster`, `GVector`, or character vector representing `gname`s.
+#' Argument(s): `x`: A `GRaster`, `GVector`, or character vector representing `sources`.
 #'
 #' @keywords tutorial
 NULL

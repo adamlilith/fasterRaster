@@ -23,9 +23,9 @@
 #'
 #' @param ... Options to send to [setFastOptions()]. These should be in `option = value` format.
 #'
-#' @return A `[GSession]`[GSession] object (invisibly).
+#' @return A [GSession] object (invisibly).
 #'
-#' @seealso Guide to getting [started](tutorial_starting) with **fasterRaster**.
+#' @seealso [Guide][tutorial_getting_started] to getting started with **fasterRaster**.
 #'
 #' @example man/examples/ex_faster.r
 #'

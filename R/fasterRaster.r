@@ -40,6 +40,7 @@
 #' [nrow()]: Number of rows\cr
 #' [ncat()]: Number of categories\cr
 #' [res()], [xres()], [yres()], and [zres()]: Spatial resolution\cr
+#' [sources()]: Name of the raster in **GRASS**\cr
 #' [st_bbox()]: Spatial extent\cr
 #' [st_crs()]: Coordinate reference system\cr
 #' [topology()]: Dimensionality (2D or 3D)\cr
@@ -119,6 +120,7 @@
 #' [names()]: Names of `GVector` fields\cr
 #' [ncol()]: Number of fields\cr
 #' [nrow()]: Number of geometries\cr
+#' [sources()]: Name of the vector in **GRASS**\cr
 #' [st_bbox()]: Spatial extent\cr
 #' [st_crs()]: Coordinate reference system\cr
 #' [topology()]: Dimensionality (2D or 3D)\cr
@@ -182,6 +184,7 @@
 #' [appFunsTable][appFunsTable] (see also [appFuns()]): Functions usable by the [app()] function\cr
 #' [madChelsa][madChelsa]: Climate rasters for of a portion of eastern Madagascar\cr
 #' [madCoast0][madCoast0], [madCoast4][madCoast4], and [madCoast][madCoast]: Borders of an eastern portion of Madagascar\cr
+#' [madCover]: Land cover raster\cr
 #' [madDypsis][madDypsis]: Specimens records of species in the genus *Dypsis*\cr
 #' [madElev][madElev]: Elevation raster\cr
 #' [madForest2000][madForest2000] and [madForest2014][madForest2014]: Forest cover in 2000 and 2014\cr
@@ -195,6 +198,5 @@
 #' @docType package
 #' @author Adam B. Smith
 #' @name fasterRaster
-#' @keywords internal 
+#' @keywords internal
 "_PACKAGE"
-NULL

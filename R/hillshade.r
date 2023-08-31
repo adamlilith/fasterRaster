@@ -35,10 +35,10 @@ methods::setMethod(
 
     for (i in 1L:nlyr(x)) {
 
-        gn <- .makeGName("shade", "rast")
+        gn <- .makeSourceName("shade", "rast")
         args <- list(
             cmd = "r.relief",
-            input = .gnames(x)[i],
+            input = sources(x)[i],
             output = gn,
             altitude = angle,
             azimuth = direction,

@@ -1,10 +1,12 @@
-#' Minimum and maximum values across all non-NA cells of a GRaster
+#' Minimum and maximum values or categories of a GRaster
 #'
-#' Minimum and maximum values across all non-NA cells of a `GRaster`.
+#' @description `minmax()` reports the minimum and maximum values across all non-NA cells of a `GRaster`.
+#'
+#' `minmaxCats()` reports the "lowest" and "highest" category values in a [categorical raster][tutorial_raster_data_types].
 #'
 #' @param x A `GRaster`.
 #'
-#' @return A numeric matrix.
+#' @return `minmax()` returns a numeric matrix, and `minmaxCat()` returns a `data.frame` with category names.
 #' 
 #' @seealso [terra::minmax()]
 #' 
@@ -33,3 +35,42 @@ methods::setMethod(
 	function(x) x@maxVal
 )
 
+#' @aliases minmaxCat
+#' @rdname minmax
+#' @exportMethod minmaxCat
+setMethod(
+    f = "minmaxCat",
+    signature = "GRaster",
+    definition = function(x) {
+	
+	ncats <- ncat(x)
+	for (i in seq_len(nlyr(x))) {
+
+		if (ncats[i] > 0L) {
+   			
+			thisMin <- x@levels[[i]][[x@activeCat[i]]][1L]
+        	thisMax <- x@levels[[i]][[x@activeCat[i]]][ncats[i]]
+
+			this <- data.frame(TEMPTEMP_ = c(thisMin, thisMax), row.names = c("min", "max"))
+		   	
+			names(this) <- names(x)[i]
+
+		} else {
+
+			this <- data.frame(TEMPTEMP_ = c(NA_character_, NA_character_), row.names = c("min", "max"))
+			
+			names(this) <- names(x)[i]
+
+		}
+
+		if (i == 1L) {
+			out <- this
+		} else {
+			out <- cbind(out, this)
+		}
+
+	} # next raster
+	out
+
+	} # EOF
+)

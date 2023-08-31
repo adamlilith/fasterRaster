@@ -30,20 +30,20 @@ methods::setMethod(
 	if (is.null(maxDist)) maxDist <- -1
 
 	# # make copy of x because we add a new column to it
-	# gnCopy <- .makeGName(x, "vector")
-	# fromTo <- paste0(.gnames(x), ",", gnCopy)
+	# gnCopy <- .makeSourceName(x, "vector")
+	# fromTo <- paste0(sources(x), ",", gnCopy)
 	# rgrass::execGRASS("g.copy", vector=fromTo, flags=c("quiet", "overwrite"))
 	# rgrass::execGRASS("v.db.addcolumn", map=gnCopy, columns="TEMP_minDist_meters", flags="quiet")
 	
-	rgrass::execGRASS("v.db.addcolumn", map=.gnames(x), columns="TEMPTEMP_minDist_meters", flags="quiet")
+	rgrass::execGRASS("v.db.addcolumn", map=sources(x), columns="TEMPTEMP_minDist_meters", flags="quiet")
 
 	# create connectors
-	gn <- .makeGName("connectors", "vector")
+	gn <- .makeSourceName("connectors", "vector")
 
 	args <- list(
 		cmd = "v.distance",
-		from = .gnames(x),
-		to = .gnames(y),
+		from = sources(x),
+		to = sources(y),
 		output = gn,
 		upload = "dist",
 		flags = c("quiet", "overwrite"),
@@ -56,7 +56,7 @@ methods::setMethod(
 	input <- do.call(rgrass::execGRASS, args)
 
 	# remove column that was added to x
-	rgrass::execGRASS("v.db.dropcolumn", map=.gnames(x), columns="TEMPTEMP_minDist_meters", flags="quiet")
+	rgrass::execGRASS("v.db.dropcolumn", map=sources(x), columns="TEMPTEMP_minDist_meters", flags="quiet")
 
 	.makeGVector(gn)
 

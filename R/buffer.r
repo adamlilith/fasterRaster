@@ -50,7 +50,7 @@ methods::setMethod(
 	# for each layer
 	for (i in 1L:nlyr(x)) {
 
-		gnBuffer <- .makeGName("buffer", "raster")
+		gnBuffer <- .makeSourceName("buffer", "raster")
 
 		### buffering by cells
 		if (unit == "cells") {
@@ -61,7 +61,7 @@ methods::setMethod(
 
 			args <- list(
 				cmd = "r.grow",
-				input = .gnames(x[[i]]),
+				input = sources(x[[i]]),
 				output = gnBuffer,
 				radius = width,
 				metric = method,
@@ -82,7 +82,7 @@ methods::setMethod(
 
 			args <- list(
 				cmd = ifelse (lowMemory, "r.buffer.lowmem", "r.buffer"),
-				input = .gnames(x),
+				input = sources(x),
 				output = gnBuffer,
 				distances = width,
 				units = unit,
@@ -96,7 +96,7 @@ methods::setMethod(
 		do.call(rgrass::execGRASS, args)
 
 		### reclass
-		gn <- .makeGName("buffer", "raster")
+		gn <- .makeSourceName("buffer", "raster")
 		ex <- if (!is.na(background)) {
 			paste0(gn, " = if(isnull(", gnBuffer, "), ", background, ", if(", gnBuffer, " == 2, 1, 1))")
 		} else {
@@ -137,10 +137,10 @@ methods::setMethod(
 	if (capstyle == "flat") flags <- c(flags, "c")
 
 	### buffer
-	gn <- .makeGName("buffer", "vector")
+	gn <- .makeSourceName("buffer", "vector")
 	args <- list(
 		cmd = "v.buffer",
-		input = .gnames(x),
+		input = sources(x),
 		output = gn,
 		distance = width,
 		flags = flags,

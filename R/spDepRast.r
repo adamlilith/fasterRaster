@@ -51,8 +51,8 @@ methods::setMethod(
     .restore(x)
     region(x)
 
-    gnRands <- .makeGName("rand", "raster", n)
-    gns <- .makeGName("randScaled", "raster", n)
+    gnRands <- .makeSourceName("rand", "raster", n)
+    gns <- .makeSourceName("randScaled", "raster", n)
 
     for (i in seq_len(n)) {
 

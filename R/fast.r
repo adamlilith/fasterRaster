@@ -1,20 +1,28 @@
 #' Create a GRaster or GVector
 #'
-#' @description
-#' To use most **fasterRaster** functions, you need to
-#' 1. Initiate a **GRASS** session with [faster()];
-#' 2. Then use `fast()` to either:
-#'      * Convert a `SpatRaster`, `SpatVector` or `sf` object to a `GRaster` or `GVector`,
-#'      * Load a raster or vector from a file directly into the `GRaster` or `GVector` format using `fast()`. **GRASS** supports loading from disk a variety of raster formats (see the **GRASS** manual page for `r.in.gdal`) and vector formats (see the **GRASS** manual page for `v.in.ogr`), though not all of them will work with this function.
+#' @description `fast()` imports a raster or vector into the active **GRASS** session and from it creates a `GRaster` or `GVector`.
+#'
+#' Rasters can vectors can be imported from `SpatRaster`s, `SpatVector`s, or `sf` objects, or from files on disk. **GRASS** supports loading from disk a variety of raster formats (see the **GRASS** manual page for `r.in.gdal`) and vector formats (see the **GRASS** manual page for `v.in.ogr`), though not all of them will work with this function. 
+#'
+#' Rasters can have "levels" (i. have categories associated with values). This can be specified using the `levels` argument. If a `SpatRaster` already has levels associated with it, these should be attached to the `GRaster` automatically. Vectors can also have attribute tables, though they do not need to.
+#'
+#' The `fast()` function will project a raster or vector to the current "[location's][tutorial_sessions]" coordinate reference system. Users can specify how to do this using the `method`, `fallback`, and `wrap` arguments.
 #'
 #' @param x Any one of:
 #' * A `SpatRaster` raster. Rasters can have one or more layers. They will retain their "layerdness" in most **fasterRaster** functions.
 #' * A `SpatVector` or `sf` spatial vector.
 #' * A character string with the path and filename of a raster or vector to be loaded directly into **GRASS**. The function will attempt to ascertain the type of object from the file extension (raster or vector), but it can help to indicate which it is using the `rastOrVect` argument if it is unclear.
 #'
+#' @param levels Specifies the [levels()] of a categorical raster:
+#'  * `NULL` (default): If `x` is a `SpatRaster` and it already has levels, these will be attached to the `GRaster`. Otherwise, the raster is assumed to have no levels.
+#' * An empty string: Same as `NULL` (no levels).
+#'  * `data.frame` or `data.table`: Must have at least two columns. The first column must be integers indicating which values in the raster correspond to what categories. The second column is assumed to have category labels. This can be changed using [activeCat<-][activeCat].
+#' * A list with one element per raster layer: Each element can be a `data.frame`, `data.table`, or a empty string. A list can have a mix of any of these.
+#' * A non-empty string: Specifies name of a file containing a `data.frame`, `data.table`, or `list` with levels. Files can be ".csv", ".tab", ".rds", or ".rda" files.
+#' 
 #' @param rastOrVect Either `NULL` (default) or character (`"raster"` or `"vector"`). If `x` is a raster or vector already in **R**, this does not need to be specified. However, if `x` is a filename, then the function will try to ascertain whether it represents a raster or a vector, but sometimes this will fail. In that case, it can help to specify if the file holds a raster or vector. Partial matching is used.
 #'
-#' @param method Character or `NULL` (rasters only): If `x` does not have the same coordinate reference system as the currently active **GRASS** [session][tutorial_sessions], then it will be projected when it is imported. You may need to specify which method is used to conduction the transformation. Partial matching is used.
+#' @param method Character or `NULL` (rasters only): If `x` does not have the same coordinate reference system as the currently active **GRASS** "[location][tutorial_sessions]", then it will be projected when it is imported. You may need to specify which method is used to conduction the transformation. Partial matching is used.
 #' * `NULL` (default): Automatically choose based on raster properties (`near` for categorical data, `bilinear` for continuous data)
 #' * `"near"`: Nearest neighbor. Best for categorical data, and often a poor choice for continuous data.
 #' * `"bilinear"`: Bilinear interpolation (default for non-categorical data; uses weighted values from 4 cells).
@@ -43,6 +51,7 @@ methods::setMethod(
 	signature(x = "character"),
 	function(
 		x,
+		levels = NULL,
 		rastOrVect = NULL,
 		method = NULL,
 		fallback = TRUE,
@@ -97,15 +106,14 @@ methods::setMethod(
 
 		xRast <- terra::rast(x)
 		nLayers <- terra::nlyr(xRast)
-	    xFactors <- terra::is.factor(xRast)
 		xNames <- names(xRast)
-		gn <- .makeGName("importFromFile", rastOrVect = "raster")
 
 		### load raster (no projecting needed)
 		if (terra::crs(xRast) == crs()) {
 
 			region(xRast)
 
+			gn <- .makeSourceName("r.in.gdal", rastOrVect = "raster")
 			args <- list(
 				cmd = "r.in.gdal",
 				input = x,
@@ -124,17 +132,15 @@ methods::setMethod(
 
 			if (is.null(method)) {
 
-				if (any(xFactors) > 0L & sum(xFactors) < nLayers) {
-					stop("Raster file has categorical and non-categorical rasters, so the resampling method cannot be determined automatically.")
-				} else if (sum(xFactors) == nLayers) {
-					method <- "nearest"
+				method <- if (!is.null(levels)) {
+					"nearest"
 				} else {
-					method <- "bilinear"
+					"bilinear"
 				}
 
 			}
 
-			if (any(xFactors) & method != "nearest") warning("At least one raster is categorical but non-nearest resampling method has been selected. Values may not correspond to categories.")
+			if (!is.null(levels) & method != "nearest") warning("At least one raster is categorical but non-nearest resampling method has been selected. Values may not correspond to categories.")
 
 			if (method != "nearest" & fallback) method <- paste0(method, "_f")
 
@@ -142,10 +148,11 @@ methods::setMethod(
 			xRast <- xRast[[1L]]
 cat("Time-consuming step here for large rasters:")
 			xRast <- xRast * NA_real_
-			xRast <- terra::project(xRast, crs(), align=TRUE)
+			xRast <- terra::project(xRast, crs(), align = TRUE)
 cat("Time-consuming step here for large rasters^^^")
 			region(xRast)
 
+   			gn <- .makeSourceName("r.import", rastOrVect = "raster")
 			args <- list(
 				cmd = "r.import",
 				input = x,
@@ -164,21 +171,10 @@ cat("Time-consuming step here for large rasters^^^")
 
 		do.call(rgrass::execGRASS, args = args)
 		if (nLayers > 1L) gn <- paste0(gn, ".", seq_len(nLayers))
-		out <- .makeGRaster(gn, names = xNames)
 
-		### assign categories to categorical rasters
-		if (any(xFactors)) {
-			
-			hasCats <- which(xFactors)
-			xLevels <- terra::levels(xRast)
-			
-			for (thisCatRast in hasCats) {
-			
-				categories <- terra::cats(xRast[[thisCatRast]])
-				levels(out[[thisCatRast]]) <- categories
-			
-			}
-		}
+		# raster levels
+		if (!is.null(levels)) levels <- .getLevels(levels)
+		out <- .makeGRaster(gn, names = xNames, levels = levels)
 
 	### vector from disk (and project on the fly if needed)
 	#######################################################
@@ -188,7 +184,7 @@ cat("Time-consuming step here for large rasters^^^")
 		xVect <- terra::vect(x)
 		xCrs <- crs(xVect)
 		currentCrs <- crs()
-		gn <- .makeGName(xVect, rastOrVect = "vector")
+		gn <- .makeSourceName(xVect, rastOrVect = "vector")
 
 		# vector is in same CRS as current location
 		if (xCrs == currentCrs) {
@@ -242,18 +238,82 @@ methods::setMethod(
 	) {
 
 	rastFile <- terra::sources(x)
+	levs <- .getLevels(x)
+
+	if (!is.null(levs) && any(.ncat(levs) > 0L)) {
+
+		levelsFile <- tempfile(fileext = ".rds")
+		levelsFile <- forwardSlash(levelsFile)
+  		saveRDS(levs, file = levelsFile)
+
+	} else {
+		levelsFile <- NULL
+	}
+
 	if (any(rastFile == "")) {
 		tempFile <- tempfile(fileext = ".tif")
-		terra::writeRaster(x, tempFile, overwrite = TRUE)
+		terra::writeRaster(x, tempFile, overwrite = TRUE, datatype = .datatype(x))
 		x <- tempFile
 	} else {
 		x <- terra::sources(x)
 	}
 
-	fast(x = x, rastOrVect = "raster", method = method, fallback = fallback, wrap = wrap, warn = warn)
+	fast(x = x, levels = levelsFile, rastOrVect = "raster", method = method, fallback = fallback, wrap = wrap, warn = warn)
 
 	} # EOF
 )
+
+#' Get levels from a SpatRaster or a file
+#'
+#' @param x A `SpatRaster`, `data.frame`, `data.table`, empty string, `NULL`, or a file name. CSV, TAB, RDS, and RDA are allowed file types.
+#'
+#' @noRd
+.getLevels <- function(x) {
+
+	if (is.null(x)) {
+		levels <- NULL
+	} else if (inherits(x, "SpatRaster")) {
+		levels <- levels(x)
+	} else if (is.character(x)) {
+		if (x == "") {
+			levels <- list(x)
+		} else {
+		
+			# load from file
+		    nc <- nchar(x)
+			suffix <- substr(x, nc - 3L, nc)
+			
+			suffix <- tolower(suffix)
+			
+			if (suffix %in% c(".csv", ".tab")) {
+				levels <- data.table::fread(x, nThread = getFastOptions("cores"), na.strings = "<not defined>", showProgress = FALSE)
+			} else if (suffix == ".rds") {
+				levels <- readRDS(x)
+			} else if (suffix == ".rda") {
+				levelsObj <- load(x)
+				levels <- get(levelsObj)
+			} else {
+
+				suffix <- substr(x, nc - 5L, nc)
+
+				suffix <- tolower(suffix)
+
+				if (suffix == ".rdata") {
+					levelsObj <- load(levels)
+					levels <- get(levelsObj)
+				} else {
+					stop("Cannot open a file with level data of this type.\n  Supported types include .csv, .tab, .rds, .rda/.rdata (case is ignored).")
+				}
+
+			}
+		}
+	
+	} else if (!inherits(x, c("list", "data.frame", "data.table"))) {
+		stop("Argument ", sQuote("levels"), " must be a data.frame, data.table, an empty string, a list of these, OR NULL or a file name.")
+	}
+	levels
+
+}
 
 #' @rdname fast
 #' @aliases fast

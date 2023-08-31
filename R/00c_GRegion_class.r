@@ -2,9 +2,10 @@
 #'
 #' @describeIn GSession
 #'
-#' @importFrom methods new
+#' @name GRegion-class
+#' @rdname GSession
 #' @exportClass GRegion
-GRegion <- setClass(
+GRegion <- methods::setClass(
 	Class = "GRegion",
 	contains = "GSpatial",
 	slots = list(

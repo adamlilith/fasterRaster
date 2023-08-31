@@ -49,8 +49,8 @@ methods::setMethod(
 
     for (i in 1L:nlyr(x)) {
 
-        gn <- .makeGName(names(x)[i], "rast")
-        ex <- paste0(gn, " = ", fx, "(", .gnames(x)[i], ")")
+        gn <- .makeSourceName(names(x)[i], "rast")
+        ex <- paste0(gn, " = ", fx, "(", sources(x)[i], ")")
         args <- list(
             cmd = "r.mapcalc",
             expression = ex,

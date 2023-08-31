@@ -28,11 +28,11 @@ methods::setMethod(
 	out <- list()
 	for (i in 1L:nlyr(x)) {
 
-		thisGn <- .gnames(x)[i]
+		thisGn <- sources(x)[i]
 	
 		if (!is.null(value)) {
-			thisGn <- .makeGName("value", "rast")
-			ex <- paste0(thisGn, " = if(", .gnames(x)[i], " == ", value, ", ", value, ", null())")
+			thisGn <- .makeSourceName("value", "rast")
+			ex <- paste0(thisGn, " = if(", sources(x)[i], " == ", value, ", ", value, ", null())")
 			rgrass::execGRASS("r.mapcalc", expression=ex, flags=c("quiet", "overwrite"), intern=TRUE)
 		}
 

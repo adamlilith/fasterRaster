@@ -35,8 +35,8 @@ methods::setMethod(
 	
 		args <- list(
 			cmd = "g.region",
-			raster = .gnames(x)[i],
-			zoom = .gnames(x)[i],
+			raster = sources(x)[i],
+			zoom = sources(x)[i],
 			flags = c("quiet", "overwrite"),
 			intern = TRUE
 		)
