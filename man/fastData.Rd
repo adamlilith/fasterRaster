@@ -78,8 +78,9 @@ madChelsa
 
 madCover <- fastData("madCover")
 madCover
-madCover <- dropLevels(madCover)
-levels(madCover)
+madCover <- droplevels(madCover)
+levels(madCover) # levels in the raster
+ncat(madCover) # number of categories
 }
 \seealso{
 \link{madCoast0}, \link{madCoast4}, \link{madCover}, \link{madCoverCats}, \link{madDypsis}, \link{madElev}, \link{madForest2000}, \link{madForest2014}, \link{madRivers}

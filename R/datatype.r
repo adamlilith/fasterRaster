@@ -28,9 +28,9 @@ methods::setMethod(
 	
 	if (type == "fasterRaster") {
 
-		ncats <- ncat(x)
-		out[out == "CELL" & ncats > 0L] <- "factor"
-		out[out == "CELL" & ncats == 0L] <- "integer"
+		numLevels <- nlevels(x)
+		out[out == "CELL" & numLevels > 0L] <- "factor"
+		out[out == "CELL" & numLevels == 0L] <- "integer"
 		out[out == "FCELL"] <- "float"
 		out[out == "DCELL"] <- "double"
 	

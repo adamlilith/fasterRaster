@@ -3,18 +3,24 @@
 \name{minmax,GRaster-method}
 \alias{minmax,GRaster-method}
 \alias{minmax}
-\title{Minimum and maximum values across all non-NA cells of a GRaster}
+\alias{minmaxCat,GRaster-method}
+\alias{minmaxCat}
+\title{Minimum and maximum values or categories of a GRaster}
 \usage{
 \S4method{minmax}{GRaster}(x)
+
+\S4method{minmaxCat}{GRaster}(x)
 }
 \arguments{
 \item{x}{A \code{GRaster}.}
 }
 \value{
-A numeric matrix.
+\code{minmax()} returns a numeric matrix, and \code{minmaxCat()} returns a \code{data.frame} with category names.
 }
 \description{
-Minimum and maximum values across all non-NA cells of a \code{GRaster}.
+\code{minmax()} reports the minimum and maximum values across all non-NA cells of a \code{GRaster}.
+
+\code{minmaxCats()} reports the "lowest" and "highest" category values in a \link[=tutorial_raster_data_types]{categorical raster}.
 }
 \examples{
 \dontrun{

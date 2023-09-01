@@ -34,7 +34,7 @@
 Invisibly returns a \code{SpatVector}. Importantly, the function also writes one or more files to disk.
 }
 \description{
-This function saves a spatial vector to disk directly from a \strong{GRASS} session.
+This function saves a \code{GVector} to disk directly from a \strong{GRASS} session.
 
 By default, files will be of OGC GeoPackage format (extension "\code{.gpkg}"), but this can be changed with the \code{format} argument. You can see a list of supported formats by simply using this function with no arguments, as in \code{writeVector()}, or by consulting the online help page for \strong{GRASS} module \code{v.out.ogr}.
 }

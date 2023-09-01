@@ -240,7 +240,7 @@ methods::setMethod(
 	rastFile <- terra::sources(x)
 	levs <- .getLevels(x)
 
-	if (!is.null(levs) && any(.ncat(levs) > 0L)) {
+	if (!is.null(levs) && any(.nlevels(levs) > 0L)) {
 
 		levelsFile <- tempfile(fileext = ".rds")
 		levelsFile <- forwardSlash(levelsFile)

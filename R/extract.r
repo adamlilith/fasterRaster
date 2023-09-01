@@ -38,7 +38,7 @@ methods::setMethod(
             intern = TRUE
         )
 
-        if (cat & ncat(x)[i] > 0L) args$flags <- c(args$flags, "f")
+        if (cat & nlevels(x)[i] > 0L) args$flags <- c(args$flags, "f")
         this <- do.call(rgrass::execGRASS, args = args)
 
         pillars <- gregexpr(this, pattern = "\\|\\|")
@@ -46,7 +46,7 @@ methods::setMethod(
         ncs <- nchar(this)
         this <- substr(this, pillars + 2L, ncs)
         
-        if (cat & ncat(x)[i] > 0) {
+        if (cat & nlevels(x)[i] > 0) {
 
             this <- strsplit(this, split = "\\|")
             cats <- rep(NA_character_)

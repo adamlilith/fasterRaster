@@ -22,6 +22,7 @@ if (!isGeneric("[[")) methods::setGeneric(name = "[[<-", def = function(x, ...) 
 methods::setGeneric(name = ".maxVal", def = function(x, ...) standardGeneric(".maxVal"))
 methods::setGeneric(name = ".minVal", def = function(x, ...) standardGeneric(".minVal"))
 
+#' @importFrom terra activeCat
 #' @importFrom terra add<-
 #' @importFrom terra app
 methods::setGeneric(name = "appFuns", def = function(show, ...) standardGeneric("appFuns"))
@@ -108,16 +109,17 @@ methods::setGeneric(name = "merge", package = "terra")
 methods::setGeneric(name = "mmode", def = function(x, ...) standardGeneric("mmode"))
 
 # "names" (in base) is primitive
-methods::setGeneric(name = "ncat", def = function(x, ...) standardGeneric("ncat"))
 #' @importFrom terra ncell
 methods::setGeneric(name = "ncell3d", def = function(x) standardGeneric("ncell3d"))
 methods::setGeneric(name = "ndepth", def = function(x) standardGeneric("ndepth"))
 #' @importFrom methods new
 #' @importFrom terra nlyr
 methods::setGeneric(name = "nacell", def = function(x) standardGeneric("nacell"))
+methods::setGeneric(name = "nlevels", def = function(x, ...) standardGeneric("nlevels"))
 methods::setGeneric(name = "nonnacell", def = function(x) standardGeneric("nonnacell"))
 methods::setGeneric(name = "north", def = function(x, ...) standardGeneric("north"))
-#' @importFrom terra not.na
+# #' @importFrom terra not.na
+methods::setGeneric(name = "not.na", def = function(x, ...) standardGeneric("not.na")) # in base
 methods::setGeneric(name = "ncol", def = function(x) standardGeneric("ncol")) # in base
 methods::setGeneric(name = "nrow", def = function(x) standardGeneric("nrow")) # in base
 methods::setGeneric(name = "nunique", def = function(x, ...) standardGeneric("nunique"))
@@ -154,12 +156,14 @@ methods::setGeneric(name = "spDepRast", def = function(x, ...) standardGeneric("
 # #' @importFrom terra stretch
 methods::setGeneric(name = "stretch", package = "terra")
 methods::setGeneric(name = "st_as_sf", package = "sf")
-methods::setGeneric(name = "st_bbox", package = "sf")
+# methods::setGeneric(name = "st_bbox", package = "sf")
+# methods::setGeneric(name = "st_bbox", def = function(obj, ...) standardGeneric("st_bbox"))
+
 methods::setGeneric(name = "st_buffer", package = "sf")
-methods::setGeneric(name = "st_as_sf", def = function(x, ...) standardGeneric("st_as_sf"))
-methods::setGeneric(name = "st_bbox", def = function(obj, ...) standardGeneric("st_bbox"))
-methods::setGeneric(name = "st_buffer", def = function(x, ...) standardGeneric("st_buffer"))
-methods::setGeneric(name = "st_buffer", def = function(x, ...) standardGeneric("st_buffer"))
+methods::setGeneric(name = "st_crs", def = function(x, ...) standardGeneric("st_crs"))
+
+# methods::setGeneric(name = "st_distance", def = function(x, y, ...) standardGeneric("st_distance"))
+methods::setGeneric(name = "st_buffer", package = "sf")
 
 #' @importFrom utils tail
 #' @importFrom terra terrain

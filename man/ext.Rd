@@ -24,8 +24,6 @@
 \alias{top,GSpatial-method}
 \alias{bottom,GSpatial-method}
 \alias{bottom}
-\alias{st_bbox,ANY-method}
-\alias{st_bbox}
 \title{Spatial bounds of a GRaster or GVector}
 \usage{
 \S4method{ext}{missing}(x, vector = FALSE)
@@ -59,10 +57,6 @@
 \S4method{bottom}{GSpatial}(x, char = FALSE)
 
 \S4method{bottom}{GSpatial}(x, char = FALSE)
-
-\S4method{st_bbox}{ANY}(obj, ...)
-
-st_bbox(obj, ...)
 }
 \arguments{
 \item{x, obj}{An object that inherits from \code{GSpatial} (i.e., a \code{GRaster} or \code{GVector}) or missing. If missing, then the horizontal or vertical extent of the currently active \link[=tutorial_regions]{region} is returned.}

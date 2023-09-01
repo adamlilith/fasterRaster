@@ -12,25 +12,25 @@
 #'
 #' @example man/examples/ex_GRaster_categorical.r
 #'
-#' @aliases ncat
-#' @rdname ncat
-#' @exportMethod ncat
+#' @aliases nlevels
+#' @rdname nlevels
+#' @exportMethod nlevels
 setMethod(
-    f = "ncat",
+    f = "nlevels",
     signature = "SpatRaster",
     definition = function(x, dropLevels = TRUE) {
         if (dropLevels) x <- terra::droplevels(x)
-        out <- .ncat(x)
+        out <- .nlevels(x)
         names(out) <- names(x)
         out
     } # EOF
 )
 
-#' @aliases ncat
-#' @rdname ncat
-#' @exportMethod ncat
+#' @aliases nlevels
+#' @rdname nlevels
+#' @exportMethod nlevels
 setMethod(
-    f = "ncat",
+    f = "nlevels",
     signature = "GRaster",
     definition = function(x) {
         out <- sapply(x@levels, nrow)
@@ -46,7 +46,7 @@ setMethod(
 #' @param x A `data.frame`, `data.table`, an empty string, or a list thereof.
 #'
 #' @noRd
-.ncat <- function(x) {
+.nlevels <- function(x) {
 
 	if (inherits(x, "SpatRaster")) x <- levels(x)
 	

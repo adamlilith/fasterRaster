@@ -10,6 +10,7 @@
 \usage{
 \S4method{fast}{character}(
   x,
+  levels = NULL,
   rastOrVect = NULL,
   method = NULL,
   fallback = TRUE,
@@ -31,9 +32,18 @@
 \item A character string with the path and filename of a raster or vector to be loaded directly into \strong{GRASS}. The function will attempt to ascertain the type of object from the file extension (raster or vector), but it can help to indicate which it is using the \code{rastOrVect} argument if it is unclear.
 }}
 
+\item{levels}{Specifies the \code{\link[=levels]{levels()}} of a categorical raster:
+\itemize{
+\item \code{NULL} (default): If \code{x} is a \code{SpatRaster} and it already has levels, these will be attached to the \code{GRaster}. Otherwise, the raster is assumed to have no levels.
+\item An empty string: Same as \code{NULL} (no levels).
+\item \code{data.frame} or \code{data.table}: Must have at least two columns. The first column must be integers indicating which values in the raster correspond to what categories. The second column is assumed to have category labels. This can be changed using \link[=activeCat]{activeCat<-}.
+\item A list with one element per raster layer: Each element can be a \code{data.frame}, \code{data.table}, or a empty string. A list can have a mix of any of these.
+\item A non-empty string: Specifies name of a file containing a \code{data.frame}, \code{data.table}, or \code{list} with levels. Files can be ".csv", ".tab", ".rds", or ".rda" files.
+}}
+
 \item{rastOrVect}{Either \code{NULL} (default) or character (\code{"raster"} or \code{"vector"}). If \code{x} is a raster or vector already in \strong{R}, this does not need to be specified. However, if \code{x} is a filename, then the function will try to ascertain whether it represents a raster or a vector, but sometimes this will fail. In that case, it can help to specify if the file holds a raster or vector. Partial matching is used.}
 
-\item{method}{Character or \code{NULL} (rasters only): If \code{x} does not have the same coordinate reference system as the currently active \strong{GRASS} \link[=tutorial_sessions]{session}, then it will be projected when it is imported. You may need to specify which method is used to conduction the transformation. Partial matching is used.
+\item{method}{Character or \code{NULL} (rasters only): If \code{x} does not have the same coordinate reference system as the currently active \strong{GRASS} "\link[=tutorial_sessions]{location}", then it will be projected when it is imported. You may need to specify which method is used to conduction the transformation. Partial matching is used.
 \itemize{
 \item \code{NULL} (default): Automatically choose based on raster properties (\code{near} for categorical data, \code{bilinear} for continuous data)
 \item \code{"near"}: Nearest neighbor. Best for categorical data, and often a poor choice for continuous data.
@@ -52,15 +62,13 @@
 A \code{GRaster} or \code{GVector}.
 }
 \description{
-To use most \strong{fasterRaster} functions, you need to
-\enumerate{
-\item Initiate a \strong{GRASS} session with \code{\link[=faster]{faster()}};
-\item Then use \code{fast()} to either:
-\itemize{
-\item Convert a \code{SpatRaster}, \code{SpatVector} or \code{sf} object to a \code{GRaster} or \code{GVector},
-\item Load a raster or vector from a file directly into the \code{GRaster} or \code{GVector} format using \code{fast()}. \strong{GRASS} supports loading from disk a variety of raster formats (see the \strong{GRASS} manual page for \code{r.in.gdal}) and vector formats (see the \strong{GRASS} manual page for \code{v.in.ogr}), though not all of them will work with this function.
-}
-}
+\code{fast()} imports a raster or vector into the active \strong{GRASS} session and from it creates a \code{GRaster} or \code{GVector}.
+
+Rasters can vectors can be imported from \code{SpatRaster}s, \code{SpatVector}s, or \code{sf} objects, or from files on disk. \strong{GRASS} supports loading from disk a variety of raster formats (see the \strong{GRASS} manual page for \code{r.in.gdal}) and vector formats (see the \strong{GRASS} manual page for \code{v.in.ogr}), though not all of them will work with this function.
+
+Rasters can have "levels" (i. have categories associated with values). This can be specified using the \code{levels} argument. If a \code{SpatRaster} already has levels associated with it, these should be attached to the \code{GRaster} automatically. Vectors can also have attribute tables, though they do not need to.
+
+The \code{fast()} function will project a raster or vector to the current "\link[=tutorial_sessions]{location's}" coordinate reference system. Users can specify how to do this using the \code{method}, \code{fallback}, and \code{wrap} arguments.
 }
 \details{
 When projecting a raster, the "fallback" methods in \code{r.import} are actually used, even though the \code{method} argument takes the strings for non-fallback methods. See the manual page for the \code{r.import} \strong{GRASS} module.

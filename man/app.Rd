@@ -50,9 +50,9 @@ The help page for \code{r.mapcalc} on the \strong{GRASS} website provides more d
 A \code{GRaster}.
 }
 \description{
-\code{app()} applies a function to a set of "stacked" rasters.
+\code{app()} applies a function to a set of "stacked" rasters. \code{appFuns()} provides a table of \strong{GRASS} functions and their equivalent \strong{R} function. \code{appCheck()} tests whether a formula supplied to \code{app()} has any "forbidden" function calls.
 
-This function operates in a manner slightly different from \code{\link[terra:app]{terra::app()}}. The function to be applied \emph{must} be written as a character string. For example, if the raster had layer names "\code{x1}" and "\code{x2}", then the function might be like \code{"= max(sqrt(x1), log(x2))"}. Rasters \strong{cannot} have the same names as functions used in the formula. In this example, the rasters could not be named "max", "sqrt", or "log".
+\code{app()} function operates in a manner slightly different from \code{\link[terra:app]{terra::app()}}. The function to be applied \emph{must} be written as a character string. For example, if the raster had layer names "\code{x1}" and "\code{x2}", then the function might be like \code{"= max(sqrt(x1), log(x2))"}. Rasters \strong{cannot} have the same names as functions used in the formula. In this example, the rasters could not be named "max", "sqrt", or "log".
 
 The \code{app()} function will automatically check for raster names that appear also to be functions that appear in the formula, but the \code{appCheck()} function can be applied to the raster stack plus the formula to do this outside of \code{app()}. You can obtain a list of functions using \code{appFuns()}. Note that these are sometimes different from how they are applied in \strong{R}.
 

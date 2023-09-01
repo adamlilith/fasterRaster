@@ -35,42 +35,42 @@ methods::setMethod(
 	} # EOF
 )
 
-st_crs <- function(x, ...) UseMethod("st_crs", x)
+# st_crs <- function(x, ...) UseMethod("st_crs", x)
 
-#' @rdname crs
-#' @export
-st_crs <- function(x, ...) {
-	if (inherits(x, "GSession")) {
-		out <- x@crs
-		out <- sf::st_crs(out)
-	} else {
-		out <- sf::st_crs(x, ...)
-	}
-	out
-}
+# #' @rdname crs
+# #' @export
+# st_crs <- function(x, ...) {
+	# if (inherits(x, "GSession")) {
+		# out <- x@crs
+		# out <- sf::st_crs(out)
+	# } else {
+		# out <- sf::st_crs(x, ...)
+	# }
+	# out
+# }
 
-#' @rdname crs
-#' @aliases st_crs
-#' @exportMethod st_crs
-methods::setMethod(
-	f = "st_crs",
-	signature = "GSession",
-	definition = function(x) {
-		out <- x@crs
-		out <- sf::st_crs(out)
-		out
-	}
-)
+# #' @rdname crs
+# #' @aliases st_crs
+# #' @exportMethod st_crs
+# methods::setMethod(
+	# f = "st_crs",
+	# signature = "GSession",
+	# definition = function(x) {
+		# out <- x@crs
+		# out <- sf::st_crs(out)
+		# out
+	# }
+# )
 
-#' @rdname crs
-#' @aliases st_crs
-#' @exportMethod st_crs
-methods::setMethod(
-	f = "st_crs",
-	signature = c(x = "missing"),
-	definition = function(x) {
-		x <- region()
-		out <- st_crs(x)
-		out
-	}
-)
+# #' @rdname crs
+# #' @aliases st_crs
+# #' @exportMethod st_crs
+# methods::setMethod(
+	# f = "st_crs",
+	# signature = c(x = "missing"),
+	# definition = function(x) {
+		# x <- region()
+		# out <- st_crs(x)
+		# out
+	# }
+# )

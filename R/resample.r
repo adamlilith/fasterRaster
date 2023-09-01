@@ -8,7 +8,7 @@
 #'
 #' @param method Character or `NULL`: Method to use to assign values to cells. Partial matching is used.
 #' * `NULL` (default): Automatically choose based on raster properties (`near` for categorical data, `bilinear` for continuous data)
-#' * `"near"`: Nearest neighbor. Best for categorical data, and often a poor choice for continuous data.  If [ncat()] is >0 for all rasters, this method will be used by default.
+#' * `"near"`: Nearest neighbor. Best for categorical data, and often a poor choice for continuous data.  If [nlevels()] is >0 for all rasters, this method will be used by default.
 #' * `"bilinear"`: Bilinear interpolation (default for non-categorical data; uses weighted values from 4 cells).
 #' * `"bicubic"`: Bicubic interpolation (uses weighted values from 16 cells).
 #' * `"lanczos"`: Lanczos interpolation (uses weighted values from 25 cells).
@@ -46,9 +46,9 @@ methods::setMethod(
 	# method
 	if (!is.null(method)) method <- pmatchSafe(method, c("nearest", "bilinear", "bicubic", "lanczos"))
 	if (is.null(method)) {
-		method <- if (all(ncat(x) > 0)) {
+		method <- if (all(nlevels(x) > 0)) {
 			"bilinear"
-		} else if (all(ncat(x) == 0)) {
+		} else if (all(nlevels(x) == 0)) {
 			"nearest"
 		}
 	}

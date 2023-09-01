@@ -7,10 +7,10 @@
 fastRestore(...)
 }
 \arguments{
-\item{...}{Either a sequence of arguments with the pattern \verb{<argument = value>}, or a list of arguments. These arguments can be any option available in \code{\link[=setFastOptions]{setFastOptions()}}. Of particular note, the \code{workDir}, \code{location}, and \code{mapset} options allow one to revert to a previous \strong{GRASS} session. The current session"s \code{workDir}, \code{location}, and \code{mapset} can be seen using \code{\link[=getFastOptions]{getFastOptions()}}, plus  \code{\link[=location]{location()}} and \code{\link[=mapset]{mapset()}}.}
+\item{...}{Either a sequence of arguments with the pattern \verb{<argument = value>}, or a list of arguments. These arguments can be any option available in \code{\link[=setFastOptions]{setFastOptions()}}. Of particular note, the \code{workDir}, \code{location}, and \code{mapset} options allow one to revert to a previous \strong{GRASS} session. The current session's \code{workDir}, \code{location}, and \code{mapset} can be seen using \code{\link[=getFastOptions]{getFastOptions()}}, plus  \code{\link[=location]{location()}} and \code{\link[=mapset]{mapset()}}.}
 }
 \value{
-An object of class \code{gmeta} (invisibly) if successful. An error will likely result if not.
+An object of class \code{GSession} (invisibly) if successful. An error will likely result if not.
 }
 \description{
 This function is useful for reverting to a previous \strong{GRASS} session (\code{workDir}, \code{location}, and/or \code{mapset}). The session must have been already initiated using \code{\link[=faster]{faster()}} in the current \strong{R} session or a previous one.
@@ -74,5 +74,5 @@ removeSession("examples2")
 }
 }
 \seealso{
-\strong{GRASS} \href{https://grass.osgeo.org/grass82/manuals/grass_database.html}{locations and mapsets}
+\strong{fasterRaster} \strong{GRASS} \link[=tutorial_sessions]{sessions}
 }

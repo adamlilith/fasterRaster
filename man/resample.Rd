@@ -18,7 +18,7 @@
 \item{method}{Character or \code{NULL}: Method to use to assign values to cells. Partial matching is used.
 \itemize{
 \item \code{NULL} (default): Automatically choose based on raster properties (\code{near} for categorical data, \code{bilinear} for continuous data)
-\item \code{"near"}: Nearest neighbor. Best for categorical data, and often a poor choice for continuous data.  If \code{\link[=ncat]{ncat()}} is >0 for all rasters, this method will be used by default.
+\item \code{"near"}: Nearest neighbor. Best for categorical data, and often a poor choice for continuous data.  If \code{\link[=nlevels]{nlevels()}} is >0 for all rasters, this method will be used by default.
 \item \code{"bilinear"}: Bilinear interpolation (default for non-categorical data; uses weighted values from 4 cells).
 \item \code{"bicubic"}: Bicubic interpolation (uses weighted values from 16 cells).
 \item \code{"lanczos"}: Lanczos interpolation (uses weighted values from 25 cells).

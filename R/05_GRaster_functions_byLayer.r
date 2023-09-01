@@ -53,8 +53,8 @@ setMethod(
 #' @aliases not.na
 #' @rdname math
 #' @exportMethod not.na
-setMethod(
-	"not.na",
+methods::setMethod(
+	f = "not.na",
 	signature(x = "GRaster"),
 	function(x, falseNA = FALSE) {
 	

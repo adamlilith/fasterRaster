@@ -1,9 +1,7 @@
 #' @title Classes for "fasterRaster" locations, rasters, and vectors
 #'
-#' @describeIn GSession-class
-#' @name GRaster-class
 #' @aliases GRaster
-#' @rdname GSession-class
+#' @rdname GSession
 #' @exportClass GRaster
 GRaster <- methods::setClass(
 	"GRaster",
@@ -78,8 +76,8 @@ GRaster <- methods::setClass(
 		bad <- TRUE
 	} else {
 		numCols <- sapply(object@levels, ncol)
-		ncats <- ncat(object)
-  		if (any(ncats > 0L & object@activeCat > numCols)) bad <- TRUE
+		numLevels <- nlevels(object)
+  		if (any(numLevels > 0L & object@activeCat > numCols)) bad <- TRUE
 	}
 	bad
 
@@ -96,8 +94,8 @@ GRaster <- methods::setClass(
 .validFactor <- function(object) {
 
 	dt <- object@datatypeGRASS
-	ncats <- ncat(object)
-	any(ncats > 0L & dt != "CELL")
+	numLevels <- nlevels(object)
+	any(numLevels > 0L & dt != "CELL")
 
 }
 

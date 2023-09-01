@@ -44,8 +44,9 @@ A \link[=tutorial_raster_data_types]{tutorial on raster data types}\cr
 \code{\link[=nlyr]{nlyr()}}: Number of layers\cr
 \code{\link[=nonnacell]{nonnacell()}}: Number of non-\code{NA} cells\cr
 \code{\link[=nrow]{nrow()}}: Number of rows\cr
-\code{\link[=ncat]{ncat()}}: Number of categories\cr
+\code{\link[=nlevels]{nlevels()}}: Number of categories\cr
 \code{\link[=res]{res()}}, \code{\link[=xres]{xres()}}, \code{\link[=yres]{yres()}}, and \code{\link[=zres]{zres()}}: Spatial resolution\cr
+\code{\link[=sources]{sources()}}: Name of the raster in \strong{GRASS}\cr
 \code{\link[=st_bbox]{st_bbox()}}: Spatial extent\cr
 \code{\link[=st_crs]{st_crs()}}: Coordinate reference system\cr
 \code{\link[=topology]{topology()}}: Dimensionality (2D or 3D)\cr
@@ -133,6 +134,7 @@ Other functions:\cr
 \code{\link[=names]{names()}}: Names of \code{GVector} fields\cr
 \code{\link[=ncol]{ncol()}}: Number of fields\cr
 \code{\link[=nrow]{nrow()}}: Number of geometries\cr
+\code{\link[=sources]{sources()}}: Name of the vector in \strong{GRASS}\cr
 \code{\link[=st_bbox]{st_bbox()}}: Spatial extent\cr
 \code{\link[=st_crs]{st_crs()}}: Coordinate reference system\cr
 \code{\link[=topology]{topology()}}: Dimensionality (2D or 3D)\cr
@@ -208,6 +210,7 @@ Other functions:\cr
 \link{appFunsTable} (see also \code{\link[=appFuns]{appFuns()}}): Functions usable by the \code{\link[=app]{app()}} function\cr
 \link{madChelsa}: Climate rasters for of a portion of eastern Madagascar\cr
 \link{madCoast0}, \link{madCoast4}, and \link{madCoast}: Borders of an eastern portion of Madagascar\cr
+\link{madCover}: Land cover raster\cr
 \link{madDypsis}: Specimens records of species in the genus \emph{Dypsis}\cr
 \link{madElev}: Elevation raster\cr
 \link{madForest2000} and \link{madForest2014}: Forest cover in 2000 and 2014\cr

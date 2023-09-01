@@ -1,20 +1,17 @@
 #' @title Classes for fasterRaster locations, rasters, and vectors
 #'
-#' @name GMetaTable-class
 #' @aliases GMetaTable
-#' @rdname GSession-class
+#' @rdname GSession
 #' @exportClass GMetaTable
 GMetaTable <- setClass("GMetaTable")
 
-#' @name GEmptyMetaTable-class
 #' @aliases GEmptyMetaTable
-#' @rdname GSession-class
+#' @rdname GSession
 #' @exportClass GEmptyMetaTable
 GEmptyMetaTable <- setClass("GEmptyMetaTable", contains = "GMetaTable")
 
-#' @name GFullMetaTable-class
 #' @aliases GFullMetaTable
-#' @rdname GSession-class
+#' @rdname GSession
 #' @exportClass GFullMetaTable
 GFullMetaTable <- setClass(
 	"GFullMetaTable",
@@ -39,9 +36,8 @@ setValidity("GFullMetaTable",
 	} # EOF
 )
 
-#' @name GVector-class
 #' @aliases GVector
-#' @rdname GSession-class
+#' @rdname GSession
 #' @exportClass GVector
 GVector <- methods::setClass(
 	"GVector",

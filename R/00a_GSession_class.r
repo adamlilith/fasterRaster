@@ -26,7 +26,7 @@
 #' @slot nGeometries Integer (`GVector`s): Number of features (points, lines, or polygons). Can be obtained using [nrow()].
 #' @slot datatypeGRASS Character (`GRaster`s): Type of data stored in a raster, as interpreted by `GRASS`. This is either `CELL` (integers), `FCELL` (floating-point values), or `DCELL` (double-values). Can be obtained using [datatype()].
 #' @slot resolution	Vector of two numeric values (`GRegion`s, including `GRaster`s): Size of a raster cell in the east-west direction and in the north-south direction. Can be obtained using [res()] and [res3d()].
-#' @slot nCats Integer (`GRaster`s): Number of categories. Must be >0. Can be obtained using [ncat()].
+#' @slot nCats Integer (`GRaster`s): Number of categories. Must be >0. Can be obtained using [nlevels()].
 #' @slot minVal,maxVal Numeric (`GRaster`s): Minimum and maximum value across all cells. Can be obtained using [minmax()].
 #' @slot dbLayer Character (`GVector`s): Names of the attribute table "layer" associated with the `GVector` in the **GRASS** SQLite database. Can be obtained using and `.dbLayer()`.
 #' @slot fields Names of fields (`GVector`s). Can be obtained using [names()].

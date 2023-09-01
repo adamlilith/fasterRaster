@@ -53,13 +53,14 @@ madChelsa
 
 madCover <- fastData("madCover")
 madCover
-madCover <- dropLevels(madCover)
-levels(madCover)
+madCover <- droplevels(madCover)
+levels(madCover) # levels in the raster
+ncat(madCover) # number of categories
 }
 \references{
 Arino O., P. Bicheron, F. Achard, J. Latham, R. Witt and J.-L. Weber. 2008. GlobCover: The most detailed portrait of Earth. European Space Agency Bulletin 136:25-31. \url{http://due.esrin.esa.int}{http://due.esrin.esa.int}.
 }
 \seealso{
-\code{\link[=madCoverCats]{madCoverCats()}}, \link[=categorical_rasters]{categorical rasters}
+\code{\link[=madCoverCats]{madCoverCats()}}, \link[=tutoral_raster_datatypes]{raster data types}
 }
 \keyword{Madagascar}

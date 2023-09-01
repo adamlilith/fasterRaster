@@ -21,7 +21,7 @@ Description: Processing of large-in-memory/-on disk rasters and spatial vectors
 Depends:
 	R (>= 4.0.0)
 Imports:
-	data.table,
+	data.table (>= 1.14.8),
 	DT,
 	methods,
 	rgrass,

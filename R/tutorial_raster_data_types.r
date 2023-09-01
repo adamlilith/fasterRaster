@@ -22,7 +22,7 @@
 #' * [as.cell()], [as.fcell()], and [as.dcell()] coerces a raster to the given type.
 #' * [is.factor()] indicates if the raster is a categorical raster.
 #' * [levels()] returns the attribute table of a categorical raster (or a blank list if the raster is not categorical).
-#' * [ncat()] returns the number of categorical values represented by a categorical raster.
+#' * [nlevels()] returns the number of categorical values represented by a categorical raster.
 #'
 #'
 #' ## Saving rasters to disk

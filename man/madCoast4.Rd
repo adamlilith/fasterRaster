@@ -56,7 +56,8 @@ madChelsa
 
 madCover <- fastData("madCover")
 madCover
-madCover <- dropLevels(madCover)
-levels(madCover)
+madCover <- droplevels(madCover)
+levels(madCover) # levels in the raster
+ncat(madCover) # number of categories
 }
 \keyword{Madagascar}

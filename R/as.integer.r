@@ -12,29 +12,29 @@
 #'
 #' @example man/examples/ex_GRaster.r
 #' 
-#' @aliases as.cell
-#' @rdname as.cell
-#' @exportMethod as.cell
+#' @aliases as.integer
+#' @rdname as.integer
+#' @exportMethod as.integer
 methods::setMethod(
-    f = "as.cell",
+    f = "as.integer",
     signature = c(x = "GRaster"),
     function(x) .as.type(x, fx = "int")
 )
 
-#' @aliases as.fcell
-#' @rdname as.cell
-#' @exportMethod as.fcell
+#' @aliases as.float
+#' @rdname as.integer
+#' @exportMethod as.float
 methods::setMethod(
-    f = "as.fcell",
+    f = "as.float",
     signature = c(x = "GRaster"),
     function(x) .as.type(x, fx = "float")
 )
 
-#' @aliases as.dcell
-#' @rdname as.cell
-#' @exportMethod as.dcell
+#' @aliases as.double
+#' @rdname as.double
+#' @exportMethod as.double
 methods::setMethod(
-    f = "as.dcell",
+    f = "as.double",
     signature = c(x = "GRaster"),
     function(x) .as.type(x, fx = "double")
 )

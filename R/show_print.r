@@ -118,8 +118,8 @@ methods::setMethod(
 	signature = "GRaster",
 	definition = function(object) {
 
-	ncats <- ncat(object)
-	if (any(ncats > 0L)) {
+	numLevels <- nlevels(object)
+	if (any(numLevels > 0L)) {
   		minColWidth <- 10L
 	} else {
   		minColWidth <- 4L
@@ -149,7 +149,7 @@ methods::setMethod(
 	maxCat <- mmCats["max", , drop = TRUE]
 	minCat[is.na(minCat)] <- "NA"
 	maxCat[is.na(maxCat)] <- "NA"
-	nCats <- ncat(object)
+	nCats <- nlevels(object)
 	if (details) activeCat <- object@activeCat - 1L
 
 	# truncate long names
@@ -262,7 +262,7 @@ methods::setMethod(
 	}
 	cat("min. value  :", minValNice, "\n")
 	cat("max. value  :", maxValNice, "\n")
-	if (any(ncats > 0L)) {
+	if (any(numLevels > 0L)) {
   		cat("categories  :", nCatsNice, "\n")
   		if (details) cat("active col. :", activeCat, "\n")
 		cat("min. categ. :", minCatNice, "\n")

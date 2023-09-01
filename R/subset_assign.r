@@ -57,7 +57,7 @@ methods::setMethod(
 		names = names(x)[i],
 		datatypeGRASS = datatype(x)[i],
 		resolution = res(x),
-		nCats = ncat(x)[i],
+		nCats = nlevels(x)[i],
 		minVal = mm["min", i],
 		maxVal = mm["max", i]
 	)
@@ -109,7 +109,7 @@ methods::setMethod(
 				names = names(out)[notNulls],
 				datatypeGRASS = datatype(out)[notNulls],
 				resolution = res(out),
-				nCats = ncat(out)[notNulls],
+				nCats = nlevels(out)[notNulls],
 				minVal = .minVal(out)[notNulls],
 				maxVal = .maxVal(out)[notNulls]
 			)
@@ -152,8 +152,8 @@ methods::setMethod(
 			dts <- datatype(out)
 			dts[insides] <- datatype(value)[valueInsides]
 
-			ncs <- ncat(out)
-			ncs[insides] <- ncat(value)[valueInsides]
+			ncs <- nlevels(out)
+			ncs[insides] <- nlevels(value)[valueInsides]
 
 			minVal <- .minVal(out)
 			minVal[insides] <- .minVal(value)[valueInsides]

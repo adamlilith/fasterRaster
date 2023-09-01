@@ -14,13 +14,13 @@
 \arguments{
 \item{x}{A \code{GVector}.}
 
-\item{...}{Additional arguments to send to \code{\link[=writeRaster]{writeRaster()}} (typically unneeded, though \code{bigTiff} may be of use if the raster is large).}
+\item{...}{Additional arguments to send to \code{\link[=writeVector]{writeVector()}}.}
 }
 \value{
 A \code{SpatVector} (\strong{terra} package).
 }
 \description{
-The \strong{fasterRaster} version of the \code{vect()} function converts a \code{GVector} to a \code{SpatVector} (from the \strong{terra} package).
+The \strong{fasterRaster} version of the \code{vect()} function converts a \code{GVector} to a \code{SpatVector} (from the \strong{terra} package). The \strong{fasterRaster} version of the \code{st_as_sf()} function converts a \code{GVector} to an \code{sf} object (\strong{sf}) package).
 }
 \examples{
 \dontrun{

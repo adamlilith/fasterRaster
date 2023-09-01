@@ -43,13 +43,13 @@ setMethod(
     signature = "GRaster",
     definition = function(x) {
 	
-	ncats <- ncat(x)
+	numLevels <- nlevels(x)
 	for (i in seq_len(nlyr(x))) {
 
-		if (ncats[i] > 0L) {
+		if (numLevels[i] > 0L) {
    			
 			thisMin <- x@levels[[i]][[x@activeCat[i]]][1L]
-        	thisMax <- x@levels[[i]][[x@activeCat[i]]][ncats[i]]
+        	thisMax <- x@levels[[i]][[x@activeCat[i]]][numLevels[i]]
 
 			this <- data.frame(TEMPTEMP_ = c(thisMin, thisMax), row.names = c("min", "max"))
 		   	

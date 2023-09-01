@@ -26,7 +26,7 @@ Character vector.
 Names(s) of a \code{GRaster} or of fields of a \code{GVector}.
 }
 \details{
-\code{GRaster}s have two types of names, a "gnames", which is used internally to point to the \strong{GRASS} representation of the raster (this is not of use to most users and is hidden by default), and an "rname", which is taken from the "\strong{R}" name of the raster or the filename. This function returns the "rname".
+\code{GRaster}s have two types of names, a "sources", which is used internally to point to the \strong{GRASS} representation of the raster (this is not of use to most users and is hidden by default), and an "rname", which is taken from the "\strong{R}" name of the raster or the filename. This function returns the "rname".
 }
 \examples{
 \dontrun{

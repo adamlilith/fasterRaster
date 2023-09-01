@@ -10,9 +10,6 @@ ESRI Shapefile.
 \source{
 \href{https://gadm.org}{Database of Global Administrative Areas Version 2.8 (GADM)}
 }
-\usage{
-system.file("extdata/shapes/madCoast.shp", package = "fasterRaster")
-}
 \description{
 Borders of a selected portion of Madagascar
 }
@@ -56,7 +53,8 @@ madChelsa
 
 madCover <- fastData("madCover")
 madCover
-madCover <- dropLevels(madCover)
-levels(madCover)
+madCover <- droplevels(madCover)
+levels(madCover) # levels in the raster
+ncat(madCover) # number of categories
 }
 \keyword{Madagascar}

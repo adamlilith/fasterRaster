@@ -41,7 +41,7 @@ If \code{NULL}, then the function will use \code{\link[=getFastOptions]{getFastO
 \item{...}{Options to send to \code{\link[=setFastOptions]{setFastOptions()}}. These should be in \code{option = value} format.}
 }
 \value{
-A \verb{[GSession]}\link{GSession} object (invisibly).
+A \link{GSession} object (invisibly).
 }
 \description{
 This function initializes a \strong{GRASS} session in a particular folder. You need to run this function (usually just once) before you use most functions in \strong{fasterRaster}. You can use \code{\link[=fastRestore]{fastRestore()}} to switch between \link[=tutorial_sessions]{working folders, locations, and mapsets}.
@@ -91,5 +91,5 @@ removeSession("examples")
 }
 }
 \seealso{
-Guide to getting \href{tutorial_starting}{started} with \strong{fasterRaster}.
+\link[=tutorial_getting_started]{Guide} to getting started with \strong{fasterRaster}.
 }

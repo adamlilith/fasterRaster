@@ -53,7 +53,7 @@
 #'
 #' Argument(s): `x`: A `GRaster`.
 #' 
-#' ## `.ncat()`
+#' ## `.nlevels()`
 #' Count number of levels in a `GRaster`, `data.frame`, `data.table`, empty string, or a list of `data.frame`s, `data.table`s, and/or empty strings.
 #'
 #' Argument(s): `x`: A `GRaster`, `data.frame`, `data.table`, empty string, or a list thereof.

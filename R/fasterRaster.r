@@ -22,8 +22,8 @@
 #' [freq()]: Frequencies of cell values in a raster\cr
 #' [global()]: Summary statistics\cr
 #' [is.2d()] and [is.3d()]: Is an object 2- or 3-dimensional?\cr
-#' [is.cell()], [is.fcell()], [is.dcell()]: Raster data type (integer/float/double)\cr
-#' [is.factor]: Does a raster represent categorical data?\cr
+#' [is.integer()], [is.float()], [is.double()]: Raster data type (integer/float/double)\cr
+#' [is.factor()]: Does a raster represent categorical data?\cr
 #' [is.lonlat]: Is an object projected (e.g., in WGS84)?\cr
 #' [levels()]: Names of levels in a categorical raster\cr
 #' [location()]: **GRASS** "location" of an object or the active session\cr
@@ -38,7 +38,7 @@
 #' [nlyr()]: Number of layers\cr
 #' [nonnacell()]: Number of non-`NA` cells\cr
 #' [nrow()]: Number of rows\cr
-#' [ncat()]: Number of categories\cr
+#' [nlevels()]: Number of categories\cr
 #' [res()], [xres()], [yres()], and [zres()]: Spatial resolution\cr
 #' [sources()]: Name of the raster in **GRASS**\cr
 #' [st_bbox()]: Spatial extent\cr
@@ -69,7 +69,7 @@
 #' `[[` ([subset][subset_assign]): Subset a raster with multiple layers\cr
 #' `[[<-` ([assign][subset_assign]): Replace or add layers to a raster\cr
 #' [add<-`]`: Add layers to a raster\cr
-#' [as.cell()], [as.fcell()], [as.dcell()]: Change data type (integer/float/double)\cr
+#' [as.integer()], [as.float()], [as.double()]: Change data type (integer/float/double)\cr
 #' [as.contour()]: Contour lines from a raster\cr
 #' [as.lines()]: Convert a raster to a "lines" vector\cr
 #' [as.points()]: Convert a raster to a "points" vector\cr
@@ -105,6 +105,17 @@
 #' [thin()]: Reduce linear features on a raster so linear features are 1 cell wide\cr
 #' [trim()]: Remove rows and columns from a raster that are all `NA`\cr
 #' [viewshed()]: Areas visible from points on a raster\cr
+#'
+#' ## Functions operating on categorical rasters
+#' [activeCat()]: Column that defines category labels\cr
+#' [activeCat()<-]: Set column that defines category labels\cr
+#' [cats()]: Levels table of a categorical raster\cr
+#' [categories()]: Set levels table for specific layers of a categorical raster\cr
+#' [is.factor()]: Is a raster categorical?\cr
+#' [levels()]: Levels table of a categorical raster\cr
+#' [levels()<-]: Set levels table of a categorical raster\cr
+#' [minmaxCat()]: "Minimum" and "maximum" category values of categorical rasters\cr
+#' [nlevels()]: Number of levels\cr
 #'
 #' ## Properties of **fasterRaster** vectors (`GVectors`)
 #' [crs()]: Coordinate reference system\cr
@@ -150,9 +161,13 @@
 #'
 #' ## Converting between data types
 #' [as.contour()]: Convert a `GRaster` to a `GVector` representing contour lines\cr
+#' [as.double()]: Convert a `GRaster` to a double-floating point raster (***GRASS** data type `DCELL`)\cr
 #' [as.data.frame()]: Convert `GVector` to a `data.frame`\cr
+#' [as.float()]: Convert a `GRaster` to a floating-point raster (***GRASS** data type `FCELL`)\cr
+#' [as.integer()]: Convert a `GRaster` to an integer raster (***GRASS** data type `CELL`)\cr
 #' [as.points()], [as.lines()], and [as.polygons()]: Convert a `GRaster` to a `GVector`\cr
 #' [fast()]: Convert a `SpatRaster`, `SpatVector`, or `sf` vector to a `GRaster` or `GVector`, or load one from a file\cr
+#' [categories()] and [levels()<-]: Convert an integer raster to a categorical ("factor") raster.
 #' [rast()]: Convert a `GRaster` to a `SpatRaster`\cr
 #' [rasterize()]: Convert a `GVector` to a `GRaster`\cr
 #' [st_as_sf()]: Convert a `GVector` to a `sf` vector\cr
@@ -185,6 +200,7 @@
 #' [madChelsa][madChelsa]: Climate rasters for of a portion of eastern Madagascar\cr
 #' [madCoast0][madCoast0], [madCoast4][madCoast4], and [madCoast][madCoast]: Borders of an eastern portion of Madagascar\cr
 #' [madCover]: Land cover raster\cr
+#' [madCoverTable][madCoverTable]: Table of land cover classes\cr
 #' [madDypsis][madDypsis]: Specimens records of species in the genus *Dypsis*\cr
 #' [madElev][madElev]: Elevation raster\cr
 #' [madForest2000][madForest2000] and [madForest2014][madForest2014]: Forest cover in 2000 and 2014\cr
@@ -192,6 +208,7 @@
 #' 
 #' ## Esoteric tutorials
 #' [Sessions, locations, and mapsets][tutorial_sessions]\cr
+#' [Raster data types][tutorial_raster_data_types]\cr
 #' [Regions][tutorial_regions]\cr
 #' [Undocumented functions][tutorial_undocumented_functions]\cr
 #

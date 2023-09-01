@@ -6,20 +6,26 @@
 \alias{datatype,GVector-method}
 \title{Get the datatype of a GRaster or of GVector columns}
 \usage{
-\S4method{datatype}{GRaster}(x, type = "GRASS")
+\S4method{datatype}{GRaster}(x, type = "fasterRaster")
 
 \S4method{datatype}{GVector}(x)
 }
 \arguments{
 \item{x}{A \code{GRaster} or \code{GVector}.}
 
-\item{type}{Character: What type of datatype to report (\code{GRaster} only): \code{"GRASS"} (default), \code{"terra"} (\strong{terra} package data types; see \code{\link[terra:writeRaster]{terra::writeRaster()}}), or \code{"GDAL"} (see \href{https://gdal.org/user/raster_data_model.html#raster-band}{GDAL: Raster Band}).}
+\item{type}{\code{NULL} or character: Type of datatype to report (\code{GRaster} only):
+\itemize{
+\item \code{"fasterRaster"} (default): Reports the "\emph{fasterRaster}*" type (factor, float, or double)
+\item \code{"terra"}: Report the (inferred) \strong{terra} data type (e.g., INT2U, FLT4S). Please see the table in the \link{tutorial on raster data types}.\link{tutorial_raster_data_types} for more information.
+\item \code{"GRASS"}: Will return "CELL" (integer), "FCELL" (floating-point value), or "DCELL" (double=floating point value)
+\item \code{"GDAL"}: See \href{https://gdal.org/user/raster_data_model.html#raster-band}{GDAL: Raster Band}.
+}}
 }
 \value{
 \code{datatype()} for a \code{GRaster} returns a character. \code{datatype()} for a \code{GVector} returns a data frame, with one row per field.
 }
 \description{
-Returns the data type of a \code{GRaster} or of each column of a \code{GVector}.
+\code{datatype()} returns the data type of a \code{GRaster} or of each column of a \code{GVector}. See the short \link[=raster_data_types]{tutorial} on raster data types for an explanation of the various types of data types.
 }
 \examples{
 \dontrun{

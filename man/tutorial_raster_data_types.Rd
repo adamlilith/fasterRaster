@@ -32,7 +32,7 @@ Categorical rasters are actually \code{CELL} (integer) rasters, but have an asso
 \item \code{\link[=as.cell]{as.cell()}}, \code{\link[=as.fcell]{as.fcell()}}, and \code{\link[=as.dcell]{as.dcell()}} coerces a raster to the given type.
 \item \code{\link[=is.factor]{is.factor()}} indicates if the raster is a categorical raster.
 \item \code{\link[=levels]{levels()}} returns the attribute table of a categorical raster (or a blank list if the raster is not categorical).
-\item \code{\link[=ncat]{ncat()}} returns the number of categorical values represented by a categorical raster.
+\item \code{\link[=nlevels]{nlevels()}} returns the number of categorical values represented by a categorical raster.
 }
 }
 

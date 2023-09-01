@@ -23,8 +23,8 @@ getFastOptions(..., default = FALSE)
 }
 \item \code{addonDir} (character): Folder in which \strong{GRASS} addons are stored. If \code{NULL} and \code{grassDir} is not \code{NULL}, this will be taken to be \code{file.path(grassDir, "addons")}.
 \item \code{grassVer} (character): Version of \strong{GRASS} being used. This should be supplied as a character string, not as a numeric value. Do not include the minor version (e.g., use \code{"8.3"}, not `"8.3.1"``). As \strong{GRASS} is developed, new modules and functionalities for existing modules are added. Setting the version correctly allows you to take advantage of these options.
-\item \code{rasterDataType} (character): The precision of values output when applying mathematical operations to a \code{GRaster}. By default, this is \code{"FCELL"} (the same as "float"\verb{), which allows for precision to about the 7th decimal place. However, it can be set to }"DCELL"\verb{(or}"double"\verb{), which allows for precision to about the 15th decimal place. }DCELL` rasters are larger in memory and on disk.
-\item \code{useDataTable} (logical): If \code{FALSE} (default), use \code{data.frame}s when going back and forth between data tables of \code{GVector}s and \strong{R}. This can be slow for very large data tables. If \code{TRUE}, use \code{data.table}s from the \strong{data.table} package. This can be much faster, but it might require you to know how to use \code{data.table}s if you want to manipulate them in \strong{R}. You can always convert them to \code{data.frame}s using \code{\link[=as.data.frame]{as.data.frame()}}.
+\item \code{rasterPrecision} (character): The \link[=tutorial_raster_data_types]{precision} of values when applying mathematical operations to a \code{GRaster}. By default, this is \code{"float"}, which allows for precision to about the 7th decimal place. However, it can be set to \code{"double"}, which allows for precision to about the 15th decimal place. \code{DCELL} rasters are larger in memory and on disk. The default is \code{"float"}.`
+\item \code{useDataTable} (logical): If \code{FALSE} (default), use \code{data.frame}s when going back and forth between data tables of \code{GVector}s and \strong{R}. This can be slow for very large data tables. If \code{TRUE}, use \code{data.table}s from the \strong{data.table} package. This can be much faster, but it might require you to know how to use \code{data.table}s if you want to manipulate them in \strong{R}. You can always convert them to \code{data.frame}s using \code{\link[base:as.data.frame]{base::as.data.frame()}}.
 \item \code{workDir} (character): The folder in which \strong{GRASS} rasters, vectors, and other objects are created and manipulated. Typically, this is set when you first call \code{\link[=faster]{faster()}}. All subsequent calls to \code{faster()} will not do not need \code{workDir} defined because it will be obtained from the options. By default, this is set to the temporary directory on your operating system (from \code{\link[=tempdir]{tempdir()}}), appended with "\code{fr}". Ergo, the path will be \code{file.path(tempdir(), "fr")}.
 }}
 
@@ -36,27 +36,7 @@ getFastOptions(..., default = FALSE)
 If just one option is specified, \code{getFastOptions()} returns a vector with a single value. If more than one option is specified, \code{gastFasterOptions()} returns a named list with values. The \code{setFasterOptions()} function changes the values of these settings and returns the pre-existing values as a list (invisibly--i.e., so you can revert to them if you want).
 }
 \description{
-These functions allows you to either 1) view or 2) define options shared by \strong{fasterRaster} functions. You can view the current option(s) using, for example:
-
-\if{html}{\out{<div class="sourceCode R">}}\preformatted{getFastOptions("cores") # show current value of "cores" option
-getFastOptions() # show all options
-}\if{html}{\out{</div>}}
-
-and all default values using
-
-\if{html}{\out{<div class="sourceCode R">}}\preformatted{getFastOptions("memory", default = TRUE) # default value of "memory" option
-getFastOptions(default = TRUE) # default values of all options
-}\if{html}{\out{</div>}}
-
-You can set options using forms like:
-
-\if{html}{\out{<div class="sourceCode R">}}\preformatted{setFastOptions(grassDir = "C:/Program Files/GRASS GIS 8.3")
-}\if{html}{\out{</div>}}
-
-Multiple options can be set at once using
-
-\if{html}{\out{<div class="sourceCode R">}}\preformatted{setFastOptions(details = TRUE, memory = 600, cores = 4)
-}\if{html}{\out{</div>}}
+These functions allows you to either 1) view or 2) define options shared by \strong{fasterRaster} functions.
 }
 \examples{
 \dontrun{

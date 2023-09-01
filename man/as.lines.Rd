@@ -9,8 +9,6 @@
 }
 \arguments{
 \item{x}{A \code{GRaster}. If more than one layer is in the \code{GRaster}, only the first will be used (with a warning).}
-
-\item{round}{Logical: If \code{TRUE} (default),}
 }
 \value{
 A \code{GVector}.
