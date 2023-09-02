@@ -10,15 +10,20 @@
 #' @param x A `GRaster` or missing: If missing, a table of supported file types is reported.
 #' @param filename Character: Path and file name.
 #' @param overwrite Logical: If `FALSE` (default), do not save over existing file(s).
-#' @param datatype Character: The datatype of the values stored in non-ASCII rasters. If `NULL`, this will be ascertained from the raster. This can any of:
-#'    | **`terra`** | **`GRASS`** | **`GDAL`** | **Values** |
-#'    | ----------- | ----------- | ---------- | ------ |
-#'    | `INT1U`     | `CELL`      | `Byte`     | Integer values from 0 to 255 |
-#'    | `INT2U`     | `CELL`      | `UInt16`   | Integer values from 0 to 65,534 |
-#'    | `INT2S`     | `CELL`     | `Int16`    | Integer values from -32,767 to -32,767 |
-#'    | `INT4S`     | `CELL`     | `Int32`    | Integer values from -2,147,483,647 to 2,147,483,647 |
-#'    | `FLT4S`     | `FCELL`   | `Float32`    | Values from -3.4e+38 to 3.4e+38, including decimal values |
-#'    | `FLT8S`     | `DCELL`   | `Float64`    | Values from -1.7e+308 to 1.7e+308, including decimal values |
+#' @param datatype `NULL` (default) or character: The datatype of the values stored in non-ASCII rasters. If `NULL`, this will be ascertained from the raster. This can any of:
+#'
+#'    | **`fasterRaster`** | **`terra`** | **`GRASS`** | **`GDAL`** | **Values** |
+#'    | ------------------ | ----------- | ----------- | ---------- | ------ |
+#'    | `integer`          | `INT1U`     | `CELL`      | `Byte`     | Integer values from 0 to 255 |
+#'    | `integer`          | `INT2U`     | `CELL`      | `UInt16`   | Integer values from 0 to 65,534 |
+#'    | `integer`          | `INT2S`     | `CELL`     | `Int16`    | Integer values from -32,767 to -32,767 |
+#'    | `integer`          | `INT4S`     | `CELL`     | `Int32`    | Integer values from -2,147,483,647 to 2,147,483,647 |
+#'    | `float`            | `FLT4S`     | `FCELL`   | `Float32`    | Values from -3.4e+38 to 3.4e+38, including decimal values |
+#'    | `double`           | `FLT8S`     | `DCELL`   | `Float64`    | Values from -1.7e+308 to 1.7e+308, including decimal values |
+#'    | `factor`           | `INT`*      | `CELL`    | *            | Integer values corresponding to categories
+#'
+#' `*` Depends on the integers (signed/unsigned, range of values). Categorical rasters will have a CSV file with category values and labels saved with them. The file name will be the same as the raster's file name, but end in extension ".csv".
+#'
 #' @param ... Additional arguments. These can include:
 #' * `compressTiff`: Character or `NULL`: Type of compression for GeoTIFF files:
 #'    * `"DEFLATE"` (default)
