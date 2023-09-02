@@ -125,7 +125,7 @@ setValidity("GRaster",
 		} else if (length(object@levels) != object@nLayers) {
 			"The number of tables in @levels must be the same as the number of @nLayers."
 		} else if (.validFactor(object)) {
-			"The GRASS datatype of a rasters with levels must be CELL."
+			"Only GRASS datatype of a rasters with levels must be CELL."
 		} else if (.validLevelTable(object)) {
 			"Each table must be a NULL data.table, or if not, the first column must be an integer, and there must be >1 columns."
 		} else if (.validActiveCat(object)) {
@@ -140,7 +140,7 @@ setValidity("GRaster",
 #'
 #' @description Create a `GRaster` from a raster existing in the current **GRASS** session.
 #'
-#' @param gn Character: The name of the raster in **GRASS**.
+#' @param src Character: The name of the raster in **GRASS**.
 #' @param names Character: Name of the raster.
 #' @param levels `NULL` (default), a `data.frame`, `data.table`, an empty string (`""`), or a list of `data.frame`s, `data.table`s, and/or empty strings: These become the raster's [levels()]. If `""`, then no levels are defined.
 #'
@@ -151,21 +151,24 @@ setValidity("GRaster",
 #' @example man/examples/ex_GRaster_GVector.r
 #'
 #' @noRd
-.makeGRaster <- function(gn, names = "raster", levels = "") {
+.makeGRaster <- function(src, names = "raster", levels = "") {
 
 	# levels: convert empty strings to NULL data.tables and data.frames to data.tables
 	if (is.null(levels)) levels <- ""
 	if (!is.list(levels)) levels <- list(levels)
+	if (length(levels) == 1L & length(src) > 1L) {
+		for (i in 2L:length(src)) levels[[i]] <- levels[[1L]]
+	}
 
 	for (i in seq_along(levels)) {
-		if (inherits(levels[[i]], "character") && levels[[i]] == "") {
+		if (is.character(levels[[i]]) && levels[[i]] == "") {
 			levels[[i]] <- data.table::data.table(NULL)
 		} else if (!inherits(levels[[i]], "data.table")) {
    			levels[[i]] <- data.table::data.table(levels[[i]])
 		}
 	}
 	
-	info <- .rastInfo(gn)
+	info <- .rastInfo(src)
 	out <- new(
 		"GRaster",
 		location = getFastOptions("location"),
@@ -178,12 +181,12 @@ setValidity("GRaster",
 		nLayers = length(info$sources),
 		dimensions = c(info[["rows"]][1L], info[["cols"]][1L], info[["depths"]][1L]),
 		resolution = c(info[["ewres"]][1L], info[["nsres"]][1L], info[["tbres"]][1L]),
-		sources = gn,
+		sources = src,
 		names = names,
 		datatypeGRASS = info[["grassDataType"]],
 		minVal = info[["minVal"]],
 		maxVal = info[["maxVal"]],
-		activeCat = rep(2L, length(gn)),
+		activeCat = rep(2L, length(src)),
 		levels = levels
 	)
 	out <- .makeUniqueNames(out)
