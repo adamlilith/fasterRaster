@@ -1,10 +1,10 @@
 #' Frequencies of cell values in a raster
 #'
-#' @description `freq()` tabulates the frequency of cell values in a raster. For rasters where [datatype()] is `CELL` (integers), the frequency of each value is reported. For other rasters, the range of values is divided into bins, and the number of cells with values in each bin is reported.
+#' @description `freq()` tabulates the frequency of cell values in a raster. For rasters where [datatype()] is `integer`, the frequency of each value is reported. For other rasters, the range of values is divided into bins, and the number of cells with values in each bin is reported.
 #'
 #' @param x A `GRaster`.
 #' @param digits Numeric integer: Number of digits by which to round raster values.
-#' @param value Numeric or `NULL` (default): If numeric, only cells with this value will be counted.
+#' @param value Numeric or `NULL` (default): If numeric, only cells with this value will be counted. If `NULL`, all values will be counted.
 #' @param bins Positive numeric integer: Number of bins in which to divide values of a raster with continuous values.
 #'
 #' @returns A `data.frame` or a named `list` of `data.frame`s, one per layer in `x`.
@@ -23,6 +23,8 @@ methods::setMethod(
 
 	.restore(x)
 	region(x)
+
+	if (bins <= 0) stop("Argument ", sQuote("bins"), " must be a positive integer.")
 	
 	# get values for each raster
 	out <- list()
@@ -31,19 +33,27 @@ methods::setMethod(
 		thisGn <- sources(x)[i]
 	
 		if (!is.null(value)) {
+
 			thisGn <- .makeSourceName("value", "rast")
 			ex <- paste0(thisGn, " = if(", sources(x)[i], " == ", value, ", ", value, ", null())")
-			rgrass::execGRASS("r.mapcalc", expression=ex, flags=c("quiet", "overwrite"), intern=TRUE)
+			info <- rgrass::execGRASS(
+				"r.mapcalc",
+				expression=ex,
+				flags=c("quiet", "overwrite"),
+				intern=TRUE
+			)
+		
 		}
 
 		args <- list(
 			cmd = "r.stats",
 			input = thisGn,
+   			separator = "pipe",
 			flags = c("c", "n", "quiet"),
 			intern = TRUE
 		)
 		
-		if (datatype(x)[i] != "CELL") args$nsteps = bins
+		if (datatype(x, "GRASS")[i] != "CELL") args$nsteps = bins
 		
 		data <- do.call(rgrass::execGRASS, args=args)
 		
@@ -53,11 +63,11 @@ methods::setMethod(
 		bads <- which(grepl(data, pattern="\b"))
 		if (length(bads) > 0L) data <- data[-bads]
 	
+		data <- strsplit(data, split = "\\|")
+
 		# categorical data
-		if (datatype(x)[i] == "CELL") {
+		if (datatype(x)[i] %in% c("integer", "factor")) {
 			
-			data <- strsplit(data, split=" ")
-		
 			n <- length(data)
 			freqs <- data.table::data.table(value = rep(NA_character_, n), count = rep(NA_character_, n))
 			for (j in seq_along(data)) {
@@ -71,10 +81,9 @@ methods::setMethod(
 		# continuous data
 		} else {
 	
-			data <- strsplit(data, split=" ")
-	
 			n <- length(data)
 			freqs <- data.table::data.table(from = rep(NA_real_, n), to = rep(NA_real_, n), count = rep(NA_character_, n))
+
 			for (j in seq_along(data)) {
 			
 				count <- data[[j]][2L]
