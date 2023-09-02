@@ -23,6 +23,13 @@
 #'
 #' Argument(s): `x`: A `GVector`.
 #'
+#' ## `.delete()` and `.keep()`
+#' Remove or retain rows of a `data.table`.
+#'
+#' Argument(s): `DT`: A `data.table`.
+#'
+#' `removes` or `keeps`: Rows to remove or keep.
+#'
 #' ## `.ls()`
 #' Lists the `sources` of all objects in the current **GRASS** session.
 #'
