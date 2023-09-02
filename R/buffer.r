@@ -154,13 +154,13 @@ methods::setMethod(
 	} # EOF
 )
 
-#' @aliases st_buffer
-#' @rdname buffer
-#' @exportMethod st_buffer
-methods::setMethod(
-	"st_buffer",
-	signature(x = "GVector"),
-	function(x, dist, endCapStyle = "round", union = FALSE) {
-		buffer(x, width=dist, capstyle=endCapStyle, union=union)
-	} # EOF
-)
+# #' @aliases st_buffer
+# #' @rdname buffer
+# #' @exportMethod st_buffer
+# methods::setMethod(
+# 	"st_buffer",
+# 	signature(x = "GVector"),
+# 	function(x, dist, endCapStyle = "round", union = FALSE) {
+# 		buffer(x, width=dist, capstyle=endCapStyle, union=union)
+# 	} # EOF
+# )
