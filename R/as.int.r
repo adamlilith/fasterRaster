@@ -1,28 +1,31 @@
 #' Coerce raster to integer, float, or double precision
 #'
-#' @description Typically, changing the [datatype()] of a `GRaster` is not necessary in **fasterRaster**, but on occasions it can be useful.
-#' 
-#' In **GRASS** rasters can have three data types: "CELL" (integers/categories), "float" (floating point values, accurate to ~7 decimal places), and "DCELL" (double-precision values, accurate to ~16 decimal places). Often rasters that have integer values are assumed by **GRASS** to represent CELL values, but in some cases they should be DCELL or FCELL. These functions help convert between these types.
+#' @description In **fasterRaster**, rasters can have three [data types][tutorial_raster_data_types]: "factor" (categorical rasters), "integer" (integers), "float" (floating point values, accurate to ~7 decimal places), and "double" (double-precision values, accurate to ~16 decimal places). The type of raster can be checked with:
 #'
+#' * [as.int()]: Coerce values to integers (**GRASS** type `CELL`).
+#' * [as.float()]: Coerce values to floating-point precision.
+#' * [as.doub()]: Coerce values to double-floating point precision.
+#' * Conversion to the categorical type can be done using [levels()] or [categories()].
+#' 
 #' @param x A `GRaster`.
 #' 
 #' @returns A `GRaster`.
 #' 
-#' @seealso [terra::datatype()]
+#' @seealso [datatype()], [terra::datatype()], [is.int()], [is.float()], [is.doub()], [is.factor()], [explanation of `GRaster` data types][tutorial_raster_data_types]
 #'
 #' @example man/examples/ex_GRaster.r
 #' 
-#' @aliases as.integer
-#' @rdname as.integer
-#' @exportMethod as.integer
+#' @aliases as.int
+#' @rdname as.int
+#' @exportMethod as.int
 methods::setMethod(
-    f = "as.integer",
+    f = "as.int",
     signature = c(x = "GRaster"),
     function(x) .as.type(x, fx = "int")
 )
 
 #' @aliases as.float
-#' @rdname as.integer
+#' @rdname as.int
 #' @exportMethod as.float
 methods::setMethod(
     f = "as.float",
@@ -30,18 +33,17 @@ methods::setMethod(
     function(x) .as.type(x, fx = "float")
 )
 
-#' @aliases as.double
-#' @rdname as.double
-#' @exportMethod as.double
+#' @aliases as.doub
+#' @rdname as.doub
+#' @exportMethod as.doub
 methods::setMethod(
-    f = "as.double",
+    f = "as.doub",
     signature = c(x = "GRaster"),
     function(x) .as.type(x, fx = "double")
 )
 
-
-# x GRaster
-# type "int", "float", "double"
+# x: GRaster
+# fx: "int", "float", "double"
 .as.type <- function(x, fx) {
 
     .restore(x)

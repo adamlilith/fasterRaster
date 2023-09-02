@@ -35,7 +35,8 @@
 #'
 #' @return An object of class `GSession`, `GSpatial`, `GRaster`, or `GVector`.
 #'
-#' @name GSession
+#' @aliases GSession
+#' @rdname GSession
 #' @exportClass GSession
 GSession <- methods::setClass(
 	Class = "GSession",

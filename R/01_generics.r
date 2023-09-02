@@ -3,9 +3,9 @@
 # require(sf)
 # require(terra)
 
-#' @import data.table
-#' @import sf
-#' @import terra
+# #' @import data.table
+# #' @import sf
+# #' @import terra
 
 ### data.table
 .datatable.aware <- TRUE
@@ -22,16 +22,18 @@ if (!isGeneric("[[")) methods::setGeneric(name = "[[<-", def = function(x, ...) 
 methods::setGeneric(name = ".maxVal", def = function(x, ...) standardGeneric(".maxVal"))
 methods::setGeneric(name = ".minVal", def = function(x, ...) standardGeneric(".minVal"))
 
-#' @importFrom terra activeCat
+methods::setGeneric(name = "activeCat", def = function(x, ...) standardGeneric("activeCat"))
+methods::setGeneric(name = "activeCat<-", def = function(x, ...) standardGeneric("activeCat<-"))
+# #' @importFrom terra activeCat
 #' @importFrom terra add<-
-#' @importFrom terra app
+methods::setGeneric(name = "app", package = "terra")
 methods::setGeneric(name = "appFuns", def = function(show, ...) standardGeneric("appFuns"))
 methods::setGeneric(name = "appCheck", def = function(x, fun, ...) standardGeneric("appCheck"))
 #' @importFrom terra as.contour
-methods::setGeneric(name = "as.cell", def = function(x, ...) standardGeneric("as.cell"))
-methods::setGeneric(name = "as.fcell", def = function(x, ...) standardGeneric("as.fcell"))
-methods::setGeneric(name = "as.dcell", def = function(x, ...) standardGeneric("as.dcell"))
 setGeneric("as.data.frame")
+methods::setGeneric(name = "as.doub", def = function(x, ...) standardGeneric("as.doub"))
+methods::setGeneric(name = "as.float", def = function(x, ...) standardGeneric("as.float"))
+# as.integer() is primitive
 setGeneric("as.lines", function(x,...) standardGeneric("as.lines"))
 setGeneric("as.points", function(x,...) standardGeneric("as.points"))
 setGeneric("as.polygons", function(x,...) standardGeneric("as.polygons"))
@@ -79,10 +81,11 @@ methods::setGeneric(name = "horizonHeight", def = function(x, ...) standardGener
 
 methods::setGeneric(name = "is.2d", def = function(x) standardGeneric("is.2d"))
 methods::setGeneric(name = "is.3d", def = function(x) standardGeneric("is.3d"))
-methods::setGeneric(name = "is.cell", def = function(x) standardGeneric("is.cell"))
 if (!isGeneric("is.factor")) { methods::setGeneric(name = "is.factor", def = function(x) standardGeneric("is.factor")) }
-methods::setGeneric(name = "is.dcell", def = function(x) standardGeneric("is.dcell"))
-methods::setGeneric(name = "is.fcell", def = function(x) standardGeneric("is.fcell"))
+# is.double() is primitive
+methods::setGeneric(name = "is.doub", def = function(x) standardGeneric("is.doub"))
+methods::setGeneric(name = "is.float", def = function(x) standardGeneric("is.float"))
+methods::setGeneric(name = "is.int", def = function(x) standardGeneric("is.int"))
 #' @importFrom terra is.lines
 # #' @importFrom terra is.lonlat
 methods::setGeneric(name = "is.lonlat", package = "terra")

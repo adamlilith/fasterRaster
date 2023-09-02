@@ -22,7 +22,7 @@
 #' [freq()]: Frequencies of cell values in a raster\cr
 #' [global()]: Summary statistics\cr
 #' [is.2d()] and [is.3d()]: Is an object 2- or 3-dimensional?\cr
-#' [is.integer()], [is.float()], [is.double()]: Raster data type (integer/float/double)\cr
+#' [is.int()], [is.float()], [is.doub()]: Raster data type (integer/float/double)\cr
 #' [is.factor()]: Does a raster represent categorical data?\cr
 #' [is.lonlat]: Is an object projected (e.g., in WGS84)?\cr
 #' [levels()]: Names of levels in a categorical raster\cr
@@ -69,7 +69,7 @@
 #' `[[` ([subset][subset_assign]): Subset a raster with multiple layers\cr
 #' `[[<-` ([assign][subset_assign]): Replace or add layers to a raster\cr
 #' [add<-`]`: Add layers to a raster\cr
-#' [as.integer()], [as.float()], [as.double()]: Change data type (integer/float/double)\cr
+#' [as.int()], [as.float()], [as.doub()]: Change data type (integer/float/double)\cr
 #' [as.contour()]: Contour lines from a raster\cr
 #' [as.lines()]: Convert a raster to a "lines" vector\cr
 #' [as.points()]: Convert a raster to a "points" vector\cr
@@ -161,10 +161,10 @@
 #'
 #' ## Converting between data types
 #' [as.contour()]: Convert a `GRaster` to a `GVector` representing contour lines\cr
-#' [as.double()]: Convert a `GRaster` to a double-floating point raster (***GRASS** data type `DCELL`)\cr
+#' [as.doub()]: Convert a `GRaster` to a double-floating point raster (***GRASS** data type `DCELL`)\cr
 #' [as.data.frame()]: Convert `GVector` to a `data.frame`\cr
 #' [as.float()]: Convert a `GRaster` to a floating-point raster (***GRASS** data type `FCELL`)\cr
-#' [as.integer()]: Convert a `GRaster` to an integer raster (***GRASS** data type `CELL`)\cr
+#' [as.int()]: Convert a `GRaster` to an integer raster (***GRASS** data type `CELL`)\cr
 #' [as.points()], [as.lines()], and [as.polygons()]: Convert a `GRaster` to a `GVector`\cr
 #' [fast()]: Convert a `SpatRaster`, `SpatVector`, or `sf` vector to a `GRaster` or `GVector`, or load one from a file\cr
 #' [categories()] and [levels()<-]: Convert an integer raster to a categorical ("factor") raster.
