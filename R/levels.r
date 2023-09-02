@@ -40,6 +40,7 @@ methods::setMethod(
     function(x) {
 
 		out <- cats(x)
+		numLevels <- nlevels(x)
 
 		for (i in seq_along(out)) {
 
@@ -51,6 +52,7 @@ methods::setMethod(
 			}
 		}
 
+		names(out) <- names(x)
         out
 
     } # EOF
@@ -75,6 +77,7 @@ methods::setMethod(
 			if (numLevels[i] > 0L) out[[i]] <- as.data.frame(out[[i]])
 		}
 	}
+	names(out) <- names(x)[layer]
 	out
 
     } # EOF
