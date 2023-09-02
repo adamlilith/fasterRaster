@@ -10,11 +10,16 @@
 #' * `categories()`: Assign category values and their labels to specific layers.
 #' * [nlevels()]: Number of levels in each raster.
 #' * [activeCat()]: Retrieve the column index or name of the category labels.
-#' * [activeCat()<-]: Set the column index or name of the category labels.
+#' * [activeCat() <-]: Set the column index or name of the category labels.
+#' * droplevels(): Removes levels that are not represented in the raster.
 #'
 #' @param x A `GRaster`.
 #'
 #' @param value A `data.frame`, `data.table`, a list of `data.frames` or `data.tables` with one per raster layer, or a categorical `SpatRaster`. The table's first column is the "value" column and must contain numeric values (of class `numeric` or `character`). If a `SpatRaster` is supplied, then its categories will be transferred to the `GRaster`.
+#'
+#' @param level Numeric, integer, character, or `NULL` (default): Level(s) to remove. Levels cane be specified by their integer (numeric) value or category label. `NULL` removes all levels not represented in the raster.
+#'
+#' @param layer Numeric integers: Layer(s) from which to drop levels.
 #'
 #' @returns Values returned are:
 #' `levels`: A list of `data.frame`s or `data.table`s, one per raster.
@@ -207,5 +212,49 @@ methods::setMethod(
 	validObject(x)
 	x
 
+	} # EOF
+)
+
+#' @aliases droplevels
+#' @rdname levels
+#' @exportMethod droplevels
+methods::setMethod(
+	f = "droplevels",
+	signature = c(x = "GRaster"),
+	function(x, level = NULL, layer = 1) {
+	
+	levs <- levels(x)
+	ncats <- nlevels(x)
+	for (i in layer) {
+
+		if (ncats[i] > 0L) {
+
+			# remove all non-extant levels
+			if (is.null(level)) {
+			
+				freqs <- freq(x[[i]])
+				valsInRast <- freqs[[1L]]
+				removes <- which(!(levs[[i]][[1L]] %in% valsInRast))
+
+			} else if (is.character(level)) {
+			
+				removes <- which(levs[[i]][[activeCat]] %in% levels)
+			
+			} else if (is.logical(level)) {
+			
+				if (length(level) < nrow(levs[[i]])) {
+					level <- rep(level, length.out = nrow(levs[[i]]))
+				}
+				removes <- which(level)
+			
+			}
+
+			x@levels[[i]] <- .remove(levs[[i]], removes = removes)
+
+		} # if this layer has levels
+
+	} # next raster
+	x
+	
 	} # EOF
 )
