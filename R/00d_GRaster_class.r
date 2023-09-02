@@ -23,7 +23,7 @@ GRaster <- methods::setClass(
 		names = NA_character_,
 		minVal = NA_real_,
 		maxVal = NA_real_,
-		activeCat = 2L,
+		activeCat = NA_integer_,
 		levels = list(data.table::data.table(NULL))
 	)
 )
@@ -63,7 +63,7 @@ GRaster <- methods::setClass(
 
 #' Evaluate the @activeCat slot of a GRaster
 #'
-#' @description Test whether a list of "levels" tables is valid. First column must be integer. Must have >= 2 columns.
+#' @description Test whether `@activeCat` values are valid.
 #' 
 #' @param object A `GRaster`.
 #' @returns `TRUE` if invalid, `FALSE` otherwise.
@@ -72,13 +72,13 @@ GRaster <- methods::setClass(
 .validActiveCat <- function(object) {
 
 	bad <- FALSE
-	if (any(object@activeCat < 2L)) {
-		bad <- TRUE
-	} else {
-		numCols <- sapply(object@levels, ncol)
-		numLevels <- nlevels(object)
-  		if (any(numLevels > 0L & object@activeCat > numCols)) bad <- TRUE
-	}
+	
+	numCols <- sapply(object@levels, ncol)
+	numLevels <- nlevels(object)
+	if (
+		any(numLevels > 0L & is.na(object@activeCat)) ||
+		any(numLevels > 0L & (object@activeCat < 1L | object@activeCat > numCols))) bad <- TRUE
+	
 	bad
 
 }
@@ -129,7 +129,7 @@ setValidity("GRaster",
 		} else if (.validLevelTable(object)) {
 			"Each table must be a NULL data.table, or if not, the first column must be an integer, and there must be >1 columns."
 		} else if (.validActiveCat(object)) {
-			"@activeCat must be an integer between 2 and the number of columns in each data.table in @levels."
+			"@activeCat must be an integer between 1 and the number of columns in each data.table in @levels, not counting the first (value) column."
 		} else {
 			TRUE
 		}
