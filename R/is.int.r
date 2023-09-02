@@ -2,16 +2,16 @@
 #'
 #' @description In **fasterRaster**, rasters can have three [data types][tutorial_raster_data_types]: "factor" (categorical rasters), "integer" (integers), "float" (floating point values, accurate to ~7 decimal places), and "double" (double-precision values, accurate to ~16 decimal places). The type of raster can be checked with:
 #'
-#' * [is.factor()]: The raster will have integer values and categories matched to the integers (see levels()).
-#' * [is.int()]: Are values integers? Note that `is.int()` will return `FALSE` for categorical rasters, even though cell values are technically integers.
-#' * [is.float()]: Are values floating-point precision?
-#' * [as.doub()]: Are values double-floating point precision?
+#' * `is.factor()`: The raster will have integer values and categories matched to the integers (see levels()).
+#' * `is.int()`: Are values integers? Note that `is.int()` will return `FALSE` for categorical rasters, even though cell values are technically integers.
+#' * `is.float()`: Are values floating-point precision?
+#' * `is.doub()`: Are values double-floating point precision?
 #'
 #' @param x A `GRaster`.
 #' 
 #' @returns Logical.
 #' 
-#' @seealso [datatype()], [terra::datatype()], [as.int()], [as.float()], [as.double()], [as.factor()], [explanation of `GRaster` data types][tutorial_raster_data_types]#'
+#' @seealso [datatype()], [terra::datatype()], [as.int()], [as.float()], [as.double()], [as.factor()]
 #'
 #' @example man/examples/ex_GRaster.r
 #' 
@@ -25,7 +25,7 @@ methods::setMethod(
 )
 
 #' @aliases is.float
-#' @rdname is.integer
+#' @rdname is.int
 #' @exportMethod is.float
 methods::setMethod(
     f = "is.float",
@@ -34,7 +34,7 @@ methods::setMethod(
 )
 
 #' @aliases as.doub
-#' @rdname is.integer
+#' @rdname is.int
 #' @exportMethod as.doub
 methods::setMethod(
     f = "as.doub",
@@ -43,7 +43,7 @@ methods::setMethod(
 )
 
 #' @aliases is.factor
-#' @rdname is.integer
+#' @rdname is.int
 #' @exportMethod is.factor
 methods::setMethod(
     f = "is.factor",
