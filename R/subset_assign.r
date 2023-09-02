@@ -55,11 +55,12 @@ methods::setMethod(
 		zextent = zext(x),
 		sources = sources(x)[i],
 		names = names(x)[i],
-		datatypeGRASS = datatype(x)[i],
+		datatypeGRASS = datatype(x, "GRASS")[i],
 		resolution = res(x),
-		nCats = nlevels(x)[i],
 		minVal = mm["min", i],
-		maxVal = mm["max", i]
+		maxVal = mm["max", i],
+		activeCat = activeCat(x)[i],
+		levels = levels(x)[i]
 	)
 	
 	if (length(anyDuplicated(out@names)) > 0L) out@names <- make.unique(out@names)
@@ -107,11 +108,12 @@ methods::setMethod(
 				zextent = zext(out),
 				sources = sources(out)[notNulls],
 				names = names(out)[notNulls],
-				datatypeGRASS = datatype(out)[notNulls],
+				datatypeGRASS = datatype(out, "GRASS")[notNulls],
 				resolution = res(out),
-				nCats = nlevels(out)[notNulls],
 				minVal = .minVal(out)[notNulls],
-				maxVal = .maxVal(out)[notNulls]
+				maxVal = .maxVal(out)[notNulls],
+				activeCat = activeCat(out)[notNulls],
+				levels = out@levels[notNulls]
 			)
 		
 		}
@@ -149,17 +151,20 @@ methods::setMethod(
 			names <- names(out)
 			names[insides] <- names(value)[valueInsides]
 
-			dts <- datatype(out)
-			dts[insides] <- datatype(value)[valueInsides]
-
-			ncs <- nlevels(out)
-			ncs[insides] <- nlevels(value)[valueInsides]
+			dts <- datatype(out, "GRASS")
+			dts[insides] <- datatype(value, "GRASS")[valueInsides]
 
 			minVal <- .minVal(out)
 			minVal[insides] <- .minVal(value)[valueInsides]
 
 			maxVal <- .maxVal(out)
 			maxVal[insides] <- .maxVal(value)[valueInsides]
+
+			ac <- activeCat(out)
+			ac[insides] <- activeCat(value)[valueInsides]
+
+			levs <- levels(out)
+			levs[insides] <- levels(value)[levs]
 
 			out <- new(
 				"GRaster",
@@ -176,9 +181,10 @@ methods::setMethod(
 				names = names,
 				datatypeGRASS = dts,
 				resolution = res(out),
-				nCats = ncs,
 				minVal = minVal,
-				maxVal = maxVal
+				maxVal = maxVal,
+				activeCat = ac,
+				levels = levs
 			)
 
 		}
