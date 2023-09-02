@@ -35,17 +35,23 @@
 }
 \value{
 Values returned are:
-\code{levels} list of \code{data.frame}s or \code{data.table}s, one per raster.
-\verb{levels <-} A categorical \code{GRaster}.
+\code{levels}: A list of \code{data.frame}s or \code{data.table}s, one per raster.
+\code{cats}: A list of \code{data.frame}s or \code{data.table}s, one per raster.
+\verb{levels <-}: A categorical \code{GRaster}.
+\code{categories}: A categorical \code{GRaster}.
 }
 \description{
-\code{GRaster}s can represent \link[=tutorial_raster_data_types]{categorical data}. Cell values are actually integers, each corresponding to a category, such as "desert" or "wetland." A categorical raster is associated with a table that matches each value to a category name. The table must be \code{NULL} (i.e., no categories--so not a categorical raster), or have at least two columns. The first column must have integers and represent raster values. One or more subsequent columns must have category labels. Which column corresponds to category labels can be seen using \code{\link[=activeCat]{activeCat()}} and set using \link{activeCat()<-}.
+\code{GRaster}s can represent \link[=tutorial_raster_data_types]{categorical data}. Cell values are actually integers, each corresponding to a category, such as "desert" or "wetland." A categorical raster is associated with a table that matches each value to a category name. The table must be \code{NULL} (i.e., no categories--so not a categorical raster), or have at least two columns. The first column must have integers and represent raster values. One or more subsequent columns must have category labels.
 
 Several functions help manage categorical rasters:
 \itemize{
 \item \code{levels()}: Reports category values and their labels. Only the values and active column is reported.
 \item \code{cats()}: Reports category values and their labels. The entire table is returned.
-\item \verb{levels() <-}: Assign category values and their labels.
+\item \verb{levels() <-}: Assign category values and their labels to all layers.
+\item \code{categories()}: Assign category values and their labels to specific layers.
+\item \code{\link[=nlevels]{nlevels()}}: Number of levels in each raster.
+\item \code{\link[=activeCat]{activeCat()}}: Retrieve the column index or name of the category labels.
+\item \link{activeCat()<-}: Set the column index or name of the category labels.
 }
 }
 \examples{

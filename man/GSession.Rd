@@ -2,7 +2,8 @@
 % Please edit documentation in R/00a_GSession_class.r, R/00c_GRegion_class.r,
 %   R/00d_GRaster_class.r, R/00e_GVector_class.r
 \docType{class}
-\name{GSession}
+\name{GSession-class}
+\alias{GSession-class}
 \alias{GSession}
 \alias{GRegion}
 \alias{GRaster-class}

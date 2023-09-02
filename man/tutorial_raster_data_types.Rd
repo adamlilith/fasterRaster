@@ -5,40 +5,52 @@
 \title{Raster data types}
 \description{
 \strong{fasterRaster} \code{GRaster}s can represent three numeric data types and one categorical type.
-\subsection{\code{CELL}/Integer values}{
+\subsection{Integers}{
 
-Rasters that represent integers are of type \code{CELL} in \strong{GRASS} and \strong{fasterRaster}. You can force a raster to be an integer using \code{as.cell()}. Some of the functions in \code{\link[=app]{app()}} function will also return integer-type rasters. Integer rasters typically take the least memory.
+Rasters that represent integers are called "integer" rasters in \strong{fasterRaster} and \code{CELL} rasters in \strong{GRASS}. You can force a raster to be an integer using \code{\link[=as.int]{as.int()}}. Some of the functions in \code{\link[=app]{app()}} function will also return integer-type rasters. Integer rasters typically take the least memory.
 }
 
-\subsection{\code{FCELL}/Floating-point values}{
+\subsection{Floating-point values}{
 
-Floating-point values are accurate to about the 7th decimal place. These are called \code{FCELL} rasters in \strong{GRASS} and \strong{fasterRaster}. By default, operations conducted using raster math (e.g., \code{raster1 * raster2}) return floating-point valued rasters, but this can be changed using \code{\link[=setFastOptions]{setFastOptions()}} (e.g., \code{setFastOptions(rasterDataType = "DCELL")}). Floating-point rasters typically take more memory than integer rasters, but less than double-floating point rasters.
+Floating-point values are accurate to about the 6th to 9th decimal place. These are called "float" rasters in \strong{fasterRaster} and \code{FCELL} rasters in \strong{GRASS}. By default, operations conducted using raster math (e.g., \code{raster1 * raster2}) return floating-point valued rasters, but this can be changed to double-floating point precision using \code{\link[=setFastOptions]{setFastOptions()}} (e.g., \code{setFastOptions(rasterDataType = "double")}). Floating-point rasters typically take more memory than integer rasters, but less than double-floating point rasters.
 }
 
-\subsection{\code{DCELL}/Double-floating point values}{
+\subsection{Double-floating point values}{
 
-Double-floating point values are accurate to about the 15th decimal place, and are called \code{DCELL} rasters in \strong{GRASS} and \strong{fasterRaster}. These rasters typically take the most memory.
+Double-floating point values are accurate to about the 15th to 17th decimal place. These are called "double" rasters in \strong{fasterRaster} and \code{DCELL} rasters in \strong{GRASS}. These rasters typically take the most memory. All "\code{numeric}" values in \strong{RR} are double-floating point values. \strong{R} does not use single floating-point values.
 }
 
 \subsection{Categorical rasters}{
 
-Categorical rasters are actually \code{CELL} (integer) rasters, but have an associated attribute table that maps each integer value to a category label, such as "wetland" or "forest".
+Categorical rasters are actually integer rasters, but have an associated attribute table that maps each integer value to a category label, such as "wetland" or "forest".
 }
 
 \subsection{Functions relevant to raster data types}{
 \itemize{
-\item \code{\link[=datatype]{datatype()}} returns \code{CELL}, \code{DCELL}, or \code{FCELL}.
-\item \code{\link[=is.cell]{is.cell()}}, \code{\link[=is.fcell]{is.fcell()}}, and \code{\link[=is.dcell]{is.dcell()}} indicate if the raster is of the given type.
-\item \code{\link[=as.cell]{as.cell()}}, \code{\link[=as.fcell]{as.fcell()}}, and \code{\link[=as.dcell]{as.dcell()}} coerces a raster to the given type.
+\item \code{\link[=datatype]{datatype()}} returns the data type of a \code{GRaster}.
+\item \code{\link[=is.int]{is.int()}}, \code{\link[=is.float]{is.float()}}, and \code{\link[=is.doub]{is.doub()}} indicate if the raster is of the given type.
+\item \code{\link[=as.int]{as.int()}}, \code{\link[=as.float]{as.float()}}, and \code{\link[=as.doub]{as.doub()}} coerces a raster to the given type.
 \item \code{\link[=is.factor]{is.factor()}} indicates if the raster is a categorical raster.
 \item \code{\link[=levels]{levels()}} returns the attribute table of a categorical raster (or a blank list if the raster is not categorical).
 \item \code{\link[=nlevels]{nlevels()}} returns the number of categorical values represented by a categorical raster.
+\item You can convert an integer raster to a categorical raster using \link{levels()<-} or \code{\link[=categories]{categories()}}.
 }
 }
 
 \subsection{Saving rasters to disk}{
 
-You can save substantial space on disk if you set the \code{datatype} argument in \code{\link[=writeRaster]{writeRaster()}} when saving a raster. This argument allows for finer "divisions" than just integer/float/double-float, so depending on the range of values in your raster, you can optimize file size by selecting the one that best matches the values in the raster. See the documentation for \code{\link[=writeRaster]{writeRaster()}} for more information.
+You can save substantial space on disk if you set the \code{datatype} argument in \code{\link[=writeRaster]{writeRaster()}} when saving a raster. This argument allows for finer "divisions" than just integer/float/double-float, so depending on the range of values in your raster, you can optimize file size by selecting the one that best matches the values in the raster. See the documentation for \code{\link[=writeRaster]{writeRaster()}} for more information.\tabular{lllll}{
+   \strong{\code{fasterRaster}} \tab \strong{\code{terra}} \tab \strong{\code{GRASS}} \tab \strong{\code{GDAL}} \tab \strong{Values} \cr
+   \code{integer} \tab \code{INT1U} \tab \code{CELL} \tab \code{Byte} \tab Integer values from 0 to 255 \cr
+   \code{integer} \tab \code{INT2U} \tab \code{CELL} \tab \code{UInt16} \tab Integer values from 0 to 65,534 \cr
+   \code{integer} \tab \code{INT2S} \tab \code{CELL} \tab \code{Int16} \tab Integer values from -32,767 to -32,767 \cr
+   \code{integer} \tab \code{INT4S} \tab \code{CELL} \tab \code{Int32} \tab Integer values from -2,147,483,647 to 2,147,483,647 \cr
+   \code{float} \tab \code{FLT4S} \tab \code{FCELL} \tab \code{Float32} \tab Values from -3.4e+38 to 3.4e+38, including decimal values \cr
+   \code{double} \tab \code{FLT8S} \tab \code{DCELL} \tab \code{Float64} \tab Values from -1.7e+308 to 1.7e+308, including decimal values \cr
+   \code{factor} \tab \code{INT}* \tab \code{CELL} \tab * \tab Integer values corresponding to categories \cr
+   \code{*} Depends on the integers (signed/unsigned, their range) \tab  \tab  \tab  \tab  \cr
+}
+
 }
 }
 \examples{

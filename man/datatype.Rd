@@ -113,15 +113,20 @@ st_bbox(elev)
 zext(elev)
 
 # data type
-datatype(elev)
-is.cell(elev)
-is.fcell(elev)
-is.dcell(elev)
+datatype(elev) # fasterRaster type
+datatype(elev, "GRASS") # GRASS type
+datatype(elev, "terra") # terra type
+datatype(elev, "GDAL") # GDAL type
+
+is.integer(elev)
+is.float(elev)
+is.double(elev)
+is.factor(elev)
 
 # convert data type
-as.cell(elev) # integer; note that "elev" is already of type "CELL"
-as.fcell(elev) # floating-precision
-as.dcell(elev) # double-precision
+as.integer(elev) # integer; note that "elev" is already of type "integer"
+as.float(elev) # floating-precision
+as.double(elev) # double-precision
 
 # assigning
 copy <- elev

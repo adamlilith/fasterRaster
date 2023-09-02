@@ -5,8 +5,6 @@
 \alias{distance}
 \alias{distance,GRaster,GVector-method}
 \alias{distance,GVector,GVector-method}
-\alias{st_distance,GVector,GVector-method}
-\alias{st_distance}
 \title{Geographic distance}
 \usage{
 \S4method{distance}{GRaster,missing}(
@@ -32,8 +30,6 @@
 )
 
 \S4method{distance}{GVector,GVector}(x, y, unit = "meters", minDist = NULL, maxDist = NULL)
-
-\S4method{st_distance}{GVector,GVector}(x, y, unit = "meters", minDist = NULL, maxDist = NULL)
 }
 \arguments{
 \item{x}{A \code{GRaster} or \code{GVector}.}

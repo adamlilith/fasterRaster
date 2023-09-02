@@ -28,8 +28,8 @@ A \link[=tutorial_raster_data_types]{tutorial on raster data types}\cr
 \code{\link[=freq]{freq()}}: Frequencies of cell values in a raster\cr
 \code{\link[=global]{global()}}: Summary statistics\cr
 \code{\link[=is.2d]{is.2d()}} and \code{\link[=is.3d]{is.3d()}}: Is an object 2- or 3-dimensional?\cr
-\code{\link[=is.cell]{is.cell()}}, \code{\link[=is.fcell]{is.fcell()}}, \code{\link[=is.dcell]{is.dcell()}}: Raster data type (integer/float/double)\cr
-\link{is.factor}: Does a raster represent categorical data?\cr
+\code{\link[=is.int]{is.int()}}, \code{\link[=is.float]{is.float()}}, \code{\link[=is.doub]{is.doub()}}: Raster data type (integer/float/double)\cr
+\code{\link[=is.factor]{is.factor()}}: Does a raster represent categorical data?\cr
 \link{is.lonlat}: Is an object projected (e.g., in WGS84)?\cr
 \code{\link[=levels]{levels()}}: Names of levels in a categorical raster\cr
 \code{\link[=location]{location()}}: \strong{GRASS} "location" of an object or the active session\cr
@@ -81,7 +81,7 @@ Other functions:\cr
 \code{[[} (\link[=subset_assign]{subset}): Subset a raster with multiple layers\cr
 \verb{[[<-} (\link[=subset_assign]{assign}): Replace or add layers to a raster\cr
 [add<-\verb{]}: Add layers to a raster\cr
-\code{\link[=as.cell]{as.cell()}}, \code{\link[=as.fcell]{as.fcell()}}, \code{\link[=as.dcell]{as.dcell()}}: Change data type (integer/float/double)\cr
+\code{\link[=as.int]{as.int()}}, \code{\link[=as.float]{as.float()}}, \code{\link[=as.doub]{as.doub()}}: Change data type (integer/float/double)\cr
 \code{\link[=as.contour]{as.contour()}}: Contour lines from a raster\cr
 \code{\link[=as.lines]{as.lines()}}: Convert a raster to a "lines" vector\cr
 \code{\link[=as.points]{as.points()}}: Convert a raster to a "points" vector\cr
@@ -117,6 +117,19 @@ Other functions:\cr
 \code{\link[=thin]{thin()}}: Reduce linear features on a raster so linear features are 1 cell wide\cr
 \code{\link[=trim]{trim()}}: Remove rows and columns from a raster that are all \code{NA}\cr
 \code{\link[=viewshed]{viewshed()}}: Areas visible from points on a raster\cr
+}
+
+\subsection{Functions operating on categorical rasters}{
+
+\code{\link[=activeCat]{activeCat()}}: Column that defines category labels\cr
+\link{activeCat()<-}: Set column that defines category labels\cr
+\code{\link[=cats]{cats()}}: Levels table of a categorical raster\cr
+\code{\link[=categories]{categories()}}: Set levels table for specific layers of a categorical raster\cr
+\code{\link[=is.factor]{is.factor()}}: Is a raster categorical?\cr
+\code{\link[=levels]{levels()}}: Levels table of a categorical raster\cr
+\link{levels()<-}: Set levels table of a categorical raster\cr
+\code{\link[=minmaxCat]{minmaxCat()}}: "Minimum" and "maximum" category values of categorical rasters\cr
+\code{\link[=nlevels]{nlevels()}}: Number of levels\cr
 }
 
 \subsection{Properties of \strong{fasterRaster} vectors (\code{GVectors})}{
@@ -168,9 +181,13 @@ Other functions:\cr
 \subsection{Converting between data types}{
 
 \code{\link[=as.contour]{as.contour()}}: Convert a \code{GRaster} to a \code{GVector} representing contour lines\cr
+\code{\link[=as.doub]{as.doub()}}: Convert a \code{GRaster} to a double-floating point raster (*\strong{GRASS} data type \code{DCELL})\cr
 \code{\link[=as.data.frame]{as.data.frame()}}: Convert \code{GVector} to a \code{data.frame}\cr
+\code{\link[=as.float]{as.float()}}: Convert a \code{GRaster} to a floating-point raster (*\strong{GRASS} data type \code{FCELL})\cr
+\code{\link[=as.int]{as.int()}}: Convert a \code{GRaster} to an integer raster (*\strong{GRASS} data type \code{CELL})\cr
 \code{\link[=as.points]{as.points()}}, \code{\link[=as.lines]{as.lines()}}, and \code{\link[=as.polygons]{as.polygons()}}: Convert a \code{GRaster} to a \code{GVector}\cr
 \code{\link[=fast]{fast()}}: Convert a \code{SpatRaster}, \code{SpatVector}, or \code{sf} vector to a \code{GRaster} or \code{GVector}, or load one from a file\cr
+\code{\link[=categories]{categories()}} and \link{levels()<-}: Convert an integer raster to a categorical ("factor") raster.
 \code{\link[=rast]{rast()}}: Convert a \code{GRaster} to a \code{SpatRaster}\cr
 \code{\link[=rasterize]{rasterize()}}: Convert a \code{GVector} to a \code{GRaster}\cr
 \code{\link[=st_as_sf]{st_as_sf()}}: Convert a \code{GVector} to a \code{sf} vector\cr
@@ -211,6 +228,7 @@ Other functions:\cr
 \link{madChelsa}: Climate rasters for of a portion of eastern Madagascar\cr
 \link{madCoast0}, \link{madCoast4}, and \link{madCoast}: Borders of an eastern portion of Madagascar\cr
 \link{madCover}: Land cover raster\cr
+\link{madCoverTable}: Table of land cover classes\cr
 \link{madDypsis}: Specimens records of species in the genus \emph{Dypsis}\cr
 \link{madElev}: Elevation raster\cr
 \link{madForest2000} and \link{madForest2014}: Forest cover in 2000 and 2014\cr
@@ -220,6 +238,7 @@ Other functions:\cr
 \subsection{Esoteric tutorials}{
 
 \link[=tutorial_sessions]{Sessions, locations, and mapsets}\cr
+\link[=tutorial_raster_data_types]{Raster data types}\cr
 \link[=tutorial_regions]{Regions}\cr
 \link[=tutorial_undocumented_functions]{Undocumented functions}\cr
 }
