@@ -1,11 +1,11 @@
 #' Get the datatype of a GRaster or of GVector columns
 #'
-#' @description `datatype()` returns the data type of a `GRaster` or of each column of a `GVector`. See the short [tutorial][raster_data_types] on raster data types for an explanation of the various types of data types.
+#' @description `datatype()` returns the [data type[tutorial_raster_data_types] of a `GRaster` or of each column of a `GVector`.
 #'
 #' @param x A `GRaster` or `GVector`.
 #' @param type `NULL` or character: Type of datatype to report (`GRaster` only):
 #' * `"fasterRaster"` (default): Reports the "*fasterRaster**" type (factor, float, or double)
-#' * `"terra"`: Report the (inferred) **terra** data type (e.g., INT2U, FLT4S). Please see the table in the [tutorial on raster data types].[tutorial_raster_data_types] for more information.
+#' * `"terra"`: Report the (inferred) **terra** data type (e.g., INT2U, FLT4S). Please see the table in the [tutorial on raster data types] for more information.
 #' * `"GRASS"`: Will return "CELL" (integer), "FCELL" (floating-point value), or "DCELL" (double=floating point value)
 #' * `"GDAL"`: See [GDAL: Raster Band](https://gdal.org/user/raster_data_model.html#raster-band).
 #'
@@ -38,10 +38,10 @@ methods::setMethod(
 
 		stats <- global(x, fun = c("min", "max", "range", "sum"))
 
-		min <- stats[i, "min"]
-		max <- stats[i, "max"]
-		range <- stats[i, "range"]
-		sum <- stats[i, "sum"]
+		min <- stats[ , "min"]
+		max <- stats[ , "max"]
+		range <- stats[ , "range"]
+		sum <- stats[ , "sum"]
 
 	    remainder <- stats %% 1
 		integer <- rowSums(abs(remainder)) == 0
