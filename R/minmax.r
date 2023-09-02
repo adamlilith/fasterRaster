@@ -1,12 +1,10 @@
 #' Minimum and maximum values or categories of a GRaster
 #'
-#' @description `minmax()` reports the minimum and maximum values across all non-NA cells of a `GRaster`.
-#'
-#' `minmaxCats()` reports the "lowest" and "highest" category values in a [categorical raster][tutorial_raster_data_types].
+#' @description `minmax()` reports the minimum and maximum values across all non-NA cells of a `GRaster`. When the `cats` argument is `TRUE` and the raster is categorical, the function` reports the "lowest" and "highest" category values in a [categorical raster][tutorial_raster_data_types].
 #'
 #' @param x A `GRaster`.
 #'
-#' @return `minmax()` returns a numeric matrix, and `minmaxCat()` returns a `data.frame` with category names.
+#' @return `minmax()` returns a numeric matrix, and `minmax(..., cats = TRUE)` returns a `data.frame` with category names. In the latter case, non-categorical rasters will have `NA` values.
 #' 
 #' @seealso [terra::minmax()]
 #' 
