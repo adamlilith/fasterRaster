@@ -24,17 +24,17 @@ methods::setMethod(
     .restore(x)
     region(x)
 
-    gn <- .makeSourceName("asLines", "raster")
+    src <- .makeSourceName("asLines", "raster")
     args <- list(
         cmd = "r.to.vect",
         input = sources(x),
-        output = gn,
+        output = src,
         type = "line",
         flags = c("quiet", "overwrite"),
         intern = TRUE
     )
     do.call(rgrass::execGRASS, args = args)
-    .makeGVector(gn)
+    .makeGVector(src)
 
     } # EOF
 )

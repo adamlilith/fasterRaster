@@ -19,11 +19,11 @@ methods::setMethod(
     .restore(x)
     region(x)
     
-    gns <- .makeSourceName(c("long", "lat"), "raster")
+    srcs <- .makeSourceName(c("long", "lat"), "raster")
     args <- list(
         cmd = "r.latlong",
         input = sources(x)[1L],
-        output = gns[1L],
+        output = srcs[1L],
         flags = c("l", "quiet", "overwrite"),
         intern = TRUE
     )
@@ -34,13 +34,13 @@ methods::setMethod(
     args <- list(
         cmd = "r.latlong",
         input = sources(x)[1L],
-        output = gns[2L],
+        output = srcs[2L],
         flags = c("quiet", "overwrite"),
         intern = TRUE
     )
     do.call(rgrass::execGRASS, args=args)
 
-    .makeGRaster(gns, c("longitude", "latitude"))
+    .makeGRaster(srcs, c("longitude", "latitude"))
 
     } # EOF
 )

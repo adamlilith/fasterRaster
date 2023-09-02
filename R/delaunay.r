@@ -20,17 +20,17 @@ methods::setMethod(
 
 	if (geomtype(x) != "points") stop("The vector must represent spatial points.")
 	
-	gn <- .makeSourceName("delaunay", "vect")
+	src <- .makeSourceName("delaunay", "vect")
 	args <- list(
 		cmd = "v.delaunay",
 		input = sources(x),
-		output = gn,
+		output = src,
 		flags = c("quiet", "overwrite"),
 		intern = TRUE
 	)
 
 	do.call(rgrass::execGRASS, args=args)
-	.makeGVector(gn)
+	.makeGVector(src)
 	
 	} # EOF
 )

@@ -81,14 +81,14 @@ methods::setMethod(
         args$input <- sources(x)[i]
 
         nPoints <- nrow(coords)
-        gns <- .makeSourceName("viewshed", "raster", nPoints)
+        srcs <- .makeSourceName("viewshed", "raster", nPoints)
         for (j in seq_len(nPoints)) {
 
-            args$output <- gns[j]
+            args$output <- srcs[j]
             args$coordinates <- unlist(coords[j, ])
 
             do.call(rgrass::execGRASS, args = args)
-            this <- .makeGRaster(gns[j], "viewshed")
+            this <- .makeGRaster(srcs[j], "viewshed")
             if (j == 1L) {
                 thisOut <- this
             } else {

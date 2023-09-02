@@ -32,10 +32,10 @@ setMethod(
 	.restore(x)
 	region(x)
 
-	gns <- .makeSourceName("isNA", "raster", nlyr(x))
+	srcs <- .makeSourceName("isNA", "raster", nlyr(x))
 	for (i in seq_len(nlyr(x))) {
 	
-		ex <- paste0(gns[i], " = int(if(isnull(", sources(x)[i], "), 1, 0))")
+		ex <- paste0(srcs[i], " = int(if(isnull(", sources(x)[i], "), 1, 0))")
 		args <- list(
 			cmd = "r.mapcalc",
 			expression = ex,
@@ -45,7 +45,7 @@ setMethod(
 		do.call(rgrass::execGRASS, args = args)
 	
 	}
-	.makeGRaster(gns, "layer")
+	.makeGRaster(srcs, "layer")
 
 	} # EOF
 )
@@ -61,13 +61,13 @@ methods::setMethod(
 	.restore(x)
 	region(x)
 
-	gns <- .makeSourceName("notNA", "raster", nlyr(x))
+	srcs <- .makeSourceName("notNA", "raster", nlyr(x))
 	for (i in seq_len(nlyr(x))) {
 	
 		ex <- if (falseNA) {
-			paste0(gns[i], " = int(if(isnull(", sources(x)[i], "), 1, null()))")
+			paste0(srcs[i], " = int(if(isnull(", sources(x)[i], "), 1, null()))")
 		} else {
-   			paste0(gns[i], " = int(if(isnull(", sources(x)[i], "), 1, 0))")
+   			paste0(srcs[i], " = int(if(isnull(", sources(x)[i], "), 1, 0))")
 		}
 		args <- list(
 			cmd = "r.mapcalc",
@@ -78,7 +78,7 @@ methods::setMethod(
 		do.call(rgrass::execGRASS, args = args)
 	
 	}
-	.makeGRaster(gns, "layer")
+	.makeGRaster(srcs, "layer")
 
 	}
 )
@@ -182,9 +182,9 @@ setMethod(
 		for (i in seq_len(n)) {
 			
 			name <- paste0(names(y)[i], "_", names(x)[i])
-			gn <- .makeSourceName(name, "rast")
-			ex <- paste0(gn, " = atan(", prec, "(", sources(x)[i], ") , double(", sources(y)[i], "))  * (", pi, " / 180)")
-			this <- .genericArith(name = name, gn = gn, ex = ex)
+			src <- .makeSourceName(name, "rast")
+			ex <- paste0(src, " = atan(", prec, "(", sources(x)[i], ") , double(", sources(y)[i], "))  * (", pi, " / 180)")
+			this <- .genericArith(name = name, src = src, ex = ex)
 			if (i == 1L) {
 				out <- this
 			} else {
@@ -216,11 +216,11 @@ setMethod(
 		.restore(x)
 		region(x)
 
-		gns <- .makeSourceName(name, "rast", nlyr(x))
+		srcs <- .makeSourceName(name, "rast", nlyr(x))
 		for (i in seq_len(nlyr(x))) {
 
 			name <- names(x)[i]
-			ex <- paste0(gns[i], " = log(", sources(x)[i], " + 1)")
+			ex <- paste0(srcs[i], " = log(", sources(x)[i], " + 1)")
 			args <- list(
 				cmd = "r.mapcalc",
 				expression = ex,
@@ -230,7 +230,7 @@ setMethod(
 			do.call(rgrass::execGRASS, args = args)
 
 		}
-		.makeGRaster(gns, "log1p")
+		.makeGRaster(srcs, "log1p")
 		
 	} # EOF
 )
@@ -342,19 +342,19 @@ setMethod(
 
 	.restore(x)
 	region(x)
-	gns <- .makeSourceName("r.mapcalc", "rast", nlyr(x))
+	srcs <- .makeSourceName("r.mapcalc", "rast", nlyr(x))
 	for (i in 1L:nlyr(x)) {
 	
 		name <- names(x)[i]
 
 		prec <- getFastOptions("rasterPrecision")
 
-  		ex <- paste0(gns[i], " = ", fx, "(", prec, "(", sources(x)[i], ") * 180 / ", pi, ")")
+  		ex <- paste0(srcs[i], " = ", fx, "(", prec, "(", sources(x)[i], ") * 180 / ", pi, ")")
 		rgrass::execGRASS("r.mapcalc", expression=ex, flags=c("quiet", "overwrite"), intern=TRUE)
-		this <- .makeGRaster(gns[i], name)
+		this <- .makeGRaster(srcs[i], name)
 		
 	}
-	.makeGRaster(gns, fx)
+	.makeGRaster(srcs, fx)
 
 }
 
@@ -369,14 +369,14 @@ setMethod(
 
  	prec <- getFastOptions("rasterPrecision")
 
-	gns <- .makeSourceName(name, "rast", nlyr(x))
+	srcs <- .makeSourceName(name, "rast", nlyr(x))
 	for (i in 1L:nlyr(x)) {
 	
 		name <- names(x)[i]
-		ex <- paste0(gns[i], " = ", fx, "(", prec, "(", sources(x)[i], ") * ", pi, " / 180)")
+		ex <- paste0(srcs[i], " = ", fx, "(", prec, "(", sources(x)[i], ") * ", pi, " / 180)")
 		rgrass::execGRASS("r.mapcalc", expression=ex, flags=c("quiet", "overwrite"), intern=TRUE)
 	}
-	.makeGRaster(gns, fx)
+	.makeGRaster(srcs, fx)
 
 }
 
@@ -390,13 +390,13 @@ setMethod(
 	region(x)
 	
 	nLayers <- nlyr(x)
-	gns <- .makeSourceName(names(x), "raster", nLayers)
+	srcs <- .makeSourceName(names(x), "raster", nLayers)
 	
 	prec <- getFastOptions("rasterPrecision")
 
 	for (i in seq_len(nLayers)) {
 	
-		ex <- paste0(gns[i], " = ", fx, "(", prec, "(", sources(x)[i], "))")
+		ex <- paste0(srcs[i], " = ", fx, "(", prec, "(", sources(x)[i], "))")
 
 		args <- list(
 			cmd = "r.mapcalc",
@@ -407,7 +407,7 @@ setMethod(
 		do.call(rgrass::execGRASS, args = args)
 		
 	}
-	.makeGRaster(gns, fx)
+	.makeGRaster(srcs, fx)
 
 }
 
@@ -424,11 +424,11 @@ setMethod(
  	prec <- getFastOptions("rasterPrecision")
 
 	nLayers <- nlyr(x)
-	gns <- .makeSourceName(names(x), "raster", nLayers)
+	srcs <- .makeSourceName(names(x), "raster", nLayers)
 	
 	for (i in seq_len(nLayers)) {
 	
-		ex <- paste0(gns[i], " = ", fx, "(", prec, "(", sources(x)[i], "), ", y, ")")
+		ex <- paste0(srcs[i], " = ", fx, "(", prec, "(", sources(x)[i], "), ", y, ")")
 
 		args <- list(
 			cmd = "r.mapcalc",
@@ -438,6 +438,6 @@ setMethod(
 		)
 		do.call(rgrass::execGRASS, args = args)
 	}
-	.makeGRaster(gns, fx)
+	.makeGRaster(srcs, fx)
 
 }

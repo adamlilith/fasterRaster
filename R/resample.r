@@ -198,21 +198,21 @@ methods::setMethod(
 			thisOut <- .makeGRaster(gnLanczos, names(x)[i])
 		} else if (fallback) {
 			
-			gn <- .makeSourceName("resample", "rast")
+			src <- .makeSourceName("resample", "rast")
 			if (method == "bilinear") {
 
 				# merge bilinear and nearest
-				ex <- paste0(gn, " = if(!isnull(", gnBilinear, "), ", gnBilinear, ", ", gnNearest, ")")
+				ex <- paste0(src, " = if(!isnull(", gnBilinear, "), ", gnBilinear, ", ", gnNearest, ")")
 
 			} else if (method == "bicubic") {
 			
 				# merge bicubic, bilinear, and nearest
-				ex <- paste0(gn, " = if(!isnull(", gnBicubic, "), ", gnBicubic, ", if(!isnull(", gnBilinear, "), ", gnBilinear, ", ", gnNearest, "))")
+				ex <- paste0(src, " = if(!isnull(", gnBicubic, "), ", gnBicubic, ", if(!isnull(", gnBilinear, "), ", gnBilinear, ", ", gnNearest, "))")
 				
 			} else if (method == "lanczos") {
 
 				# merge bicubic, bilinear, and nearest
-				ex = paste0(gn, " = if(!isnull(", gnLanczos, "), ", gnLanczos, ", if(!isnull(", gnBicubic, "), ", gnBicubic, ", if(!isnull(", gnBilinear, "), ", gnBilinear, ", ", gnNearest, ")))")
+				ex = paste0(src, " = if(!isnull(", gnLanczos, "), ", gnLanczos, ", if(!isnull(", gnBicubic, "), ", gnBicubic, ", if(!isnull(", gnBilinear, "), ", gnBilinear, ", ", gnNearest, ")))")
 
 			}
 
@@ -224,7 +224,7 @@ methods::setMethod(
 			)
 			do.call(rgrass::execGRASS, args=args)
 
-			thisOut <- .makeGRaster(gn, names(x)[i])
+			thisOut <- .makeGRaster(src, names(x)[i])
 
 		}
 

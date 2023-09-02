@@ -96,18 +96,18 @@ methods::setMethod(
 		do.call(rgrass::execGRASS, args)
 
 		### reclass
-		gn <- .makeSourceName("buffer", "raster")
+		src <- .makeSourceName("buffer", "raster")
 		ex <- if (!is.na(background)) {
-			paste0(gn, " = if(isnull(", gnBuffer, "), ", background, ", if(", gnBuffer, " == 2, 1, 1))")
+			paste0(src, " = if(isnull(", gnBuffer, "), ", background, ", if(", gnBuffer, " == 2, 1, 1))")
 		} else {
-			paste0(gn, " = if(", gnBuffer, " == 2, 1, 1)")
+			paste0(src, " = if(", gnBuffer, " == 2, 1, 1)")
 		}
 		rgrass::execGRASS("r.mapcalc", expression=ex, flags=c("quiet", "overwrite"))
 		
 		if (nlyr(x) > 1L) {
-			group[[i]] <- .makeGRaster(gn, names(x[[i]]))
+			group[[i]] <- .makeGRaster(src, names(x[[i]]))
 		} else {
-			out <- .makeGRaster(gn, names(x[[i]]))
+			out <- .makeGRaster(src, names(x[[i]]))
 		}
 		
 	} # next layer
@@ -137,11 +137,11 @@ methods::setMethod(
 	if (capstyle == "flat") flags <- c(flags, "c")
 
 	### buffer
-	gn <- .makeSourceName("buffer", "vector")
+	src <- .makeSourceName("buffer", "vector")
 	args <- list(
 		cmd = "v.buffer",
 		input = sources(x),
-		output = gn,
+		output = src,
 		distance = width,
 		flags = flags,
 		intern = TRUE
@@ -149,7 +149,7 @@ methods::setMethod(
 
 	do.call(rgrass::execGRASS, args)
 	
-	.makeGVector(gn)
+	.makeGVector(src)
 	
 	} # EOF
 )

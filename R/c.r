@@ -114,18 +114,18 @@ setMethod(f = "c",
 	if (length(dots) > 0L) input <- c(input, sapply(dots, sources))
 	input <- paste(input, collapse=",")
 
-	gn <- .makeSourceName("combo", "vector")
+	src <- .makeSourceName("combo", "vector")
 
 	args = list(
 		cmd = "v.patch",
 		input = input,
-		output = gn,
+		output = src,
 		flags = flags
 	)
 
 	do.call(rgrass::execGRASS, args=args)
 
-	.makeGVector(gn)
+	.makeGVector(src)
 	
 	} # EOF
 )

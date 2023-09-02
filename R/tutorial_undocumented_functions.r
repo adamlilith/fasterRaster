@@ -47,7 +47,7 @@
 #' ## `.makeGRaster()` and `.makeGVector()`
 #' Make `GRaster`s or `GVector`s from a vector of `sources`, which is a pointer to files in **GRASS**.
 #'
-#' Argument(s): `gn`: Character vector of `sources`.
+#' Argument(s): `src`: Character vector of `sources`.
 #'
 #' `name`: Character (rasters only): Name(s) of the `GRaster`s.
 #' 

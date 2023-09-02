@@ -57,11 +57,11 @@ methods::setMethod(
 	
 	if (method == "reumann" && (prop < 0 | prop > 1)) stop("Argument ", sQuote("prop"), " must be in the range [0, 1].")
 	
-	gn <- .makeSourceName("generalized", "vect")
+	src <- .makeSourceName("generalized", "vect")
 	args <- list(
 		cmd = "v.generalize",
 		input = sources(x),
-		output = gn,
+		output = src,
 		method = method,
 		threshold = tolerance,
 		flags = c("quiet", "overwrite"),
@@ -71,7 +71,7 @@ methods::setMethod(
 	if (method == "reumann") args$reduction <- 100 * prop
 	
 	do.call(rgrass::execGRASS, args=args)
-	.makeGVector(gn)
+	.makeGVector(src)
 
 	} # EOF
 )

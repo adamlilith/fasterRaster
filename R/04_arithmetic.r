@@ -5,7 +5,7 @@
 #' Note that the precision of the result will be determined by the `rasterPrecision` option, which can be set using [setFastOptions()]. The default is `"float"`, which is precise to about the 7th decimal place. This be increased to about the 15th decimal place by setting this to `"double"`, though it can substantially increase the size of the raster output in memory and when saved to disk.
 #' 
 #' @param name Character: Name of the new `GRaster`.
-#' @param gn `sources` of the `GRaster` being operated on
+#' @param src `sources` of the `GRaster` being operated on
 #' @param ex expression for `r.mapcalc`
 #'
 #' @return A `GRaster`.
@@ -14,7 +14,7 @@
 #'
 #' @rdname Arithmetic
 #' @noRd
-.genericArith <- function(name, gn, ex) {
+.genericArith <- function(name, src, ex) {
 
 	args <- list(
 		cmd = "r.mapcalc",
@@ -23,7 +23,7 @@
 		intern = TRUE
 	)
 	do.call(rgrass::execGRASS, args = args)
-	.makeGRaster(gn, name)
+	.makeGRaster(src, name)
 	
 }
 
@@ -41,21 +41,21 @@ methods::setMethod(
 		
 		for (i in 1L:nlyr(e1)) {
 		
-			gn <- .makeSourceName("math", "rast")
+			src <- .makeSourceName("math", "rast")
 			oper <- as.vector(.Generic)[1L]
 			ex <- if (oper == "%/%") {
-				paste(gn, "= floor(", prec, "(", sources(e1)[i], ") /", e2, ")")
+				paste(src, "= floor(", prec, "(", sources(e1)[i], ") /", e2, ")")
 			} else if (oper == "%%") {
-				paste0(gn, " = ", prec, "(", sources(e1)[i], ") %", e2)
+				paste0(src, " = ", prec, "(", sources(e1)[i], ") %", e2)
 			} else {
-				paste0(gn, " = ", prec, "(", sources(e1)[i], ")  ", oper, e2)
+				paste0(src, " = ", prec, "(", sources(e1)[i], ")  ", oper, e2)
 			}
 
 			name <- names(e1)[i]
 			if (i == 1L) {
-				out <- .genericArith(name = name, gn = gn, ex = ex)
+				out <- .genericArith(name = name, src = src, ex = ex)
 			} else {
-				out <- c(out, .genericArith(name = name, gn = gn, ex = ex))
+				out <- c(out, .genericArith(name = name, src = src, ex = ex))
 			}
 		
 		} # next layer
@@ -79,21 +79,21 @@ methods::setMethod(
 		
 		for (i in 1L:nlyr(e2)) {
 		
-			gn <- .makeSourceName("math", "rast")
+			src <- .makeSourceName("math", "rast")
 			oper <- as.vector(.Generic)[1L]
 			ex <- if (oper == "%/%") {
-				paste(gn, "= floor(", e1, "/ ", prec, "(", sources(e2)[i], "))")
+				paste(src, "= floor(", e1, "/ ", prec, "(", sources(e2)[i], "))")
 			} else if (oper == "%%") {
-				paste0(gn, " = ", e1, "% ", prec, "(", sources(e2)[i], ")")
+				paste0(src, " = ", e1, "% ", prec, "(", sources(e2)[i], ")")
 			} else {
-				paste0(gn, " = ", e1, oper, " ", prec, "(", sources(e2)[i], ")")
+				paste0(src, " = ", e1, oper, " ", prec, "(", sources(e2)[i], ")")
 			}
 
 			name <- names(e2)[i]
 			if (i == 1L) {
-				out <- .genericArith(name = name, gn = gn, ex = ex)
+				out <- .genericArith(name = name, src = src, ex = ex)
 			} else {
-				out <- c(out, .genericArith(name = name, gn = gn, ex = ex))
+				out <- c(out, .genericArith(name = name, src = src, ex = ex))
 			}
 		
 		} # next layer
@@ -116,21 +116,21 @@ methods::setMethod(
 		
 		for (i in 1L:nlyr(e1)) {
 		
-			gn <- .makeSourceName("math", "rast")
+			src <- .makeSourceName("math", "rast")
 			oper <- as.vector(.Generic)[1L]
 			ex <- if (oper == "%/%") {
-				paste(gn, "= floor(", prec, "(", sources(e1)[i], ") /", e2, ")")
+				paste(src, "= floor(", prec, "(", sources(e1)[i], ") /", e2, ")")
 			} else if (oper == "%%") {
-				paste0(gn, " = ", prec, "(", sources(e1)[i], ") %", e2)
+				paste0(src, " = ", prec, "(", sources(e1)[i], ") %", e2)
 			} else {
-				paste0(gn, " = ", prec, "(", sources(e1)[i], ")  ", oper, e2)
+				paste0(src, " = ", prec, "(", sources(e1)[i], ")  ", oper, e2)
 			}
 
 			name <- names(e1)[i]
 			if (i == 1L) {
-				out <- .genericArith(name = name, gn = gn, ex = ex)
+				out <- .genericArith(name = name, src = src, ex = ex)
 			} else {
-				out <- c(out, .genericArith(name = name, gn = gn, ex = ex))
+				out <- c(out, .genericArith(name = name, src = src, ex = ex))
 			}
 		
 		} # next layer
@@ -153,21 +153,21 @@ methods::setMethod(
 		
 		for (i in 1L:nlyr(e1)) {
 		
-			gn <- .makeSourceName("math", "rast")
+			src <- .makeSourceName("math", "rast")
 			oper <- as.vector(.Generic)[1L]
 			ex <- if (oper == "%/%") {
-				paste(gn, "= floor(", prec, "(", sources(e1)[i], ") /", e2, ")")
+				paste(src, "= floor(", prec, "(", sources(e1)[i], ") /", e2, ")")
 			} else if (oper == "%%") {
-				paste0(gn, " = ", prec, "(", sources(e1)[i], ") %", e2)
+				paste0(src, " = ", prec, "(", sources(e1)[i], ") %", e2)
 			} else {
-				paste0(gn, " = ", prec, "(", sources(e1)[i], ")  ", oper, e2)
+				paste0(src, " = ", prec, "(", sources(e1)[i], ")  ", oper, e2)
 			}
 
 			name <- names(e1)[i]
 			if (i == 1L) {
-				out <- .genericArith(name = name, gn = gn, ex = ex)
+				out <- .genericArith(name = name, src = src, ex = ex)
 			} else {
-				out <- c(out, .genericArith(name = name, gn = gn, ex = ex))
+				out <- c(out, .genericArith(name = name, src = src, ex = ex))
 			}
 		
 		} # next layer
@@ -191,20 +191,20 @@ methods::setMethod(
 		
 		for (i in 1L:nlyr(e2)) {
 		
-			gn <- .makeSourceName("math", "rast")
+			src <- .makeSourceName("math", "rast")
 			ex <- if (oper == "%/%") {
-				paste(gn, "= floor(", e1, "/ ", prec, "(", sources(e2)[i], "))")
+				paste(src, "= floor(", e1, "/ ", prec, "(", sources(e2)[i], "))")
 			} else if (oper == "%%") {
-				paste0(gn, " = ", e1, " % ", prec, "(", sources(e2)[i], ")")
+				paste0(src, " = ", e1, " % ", prec, "(", sources(e2)[i], ")")
 			} else {
-				paste0(gn, " = ", e1, oper, " ", prec, "(", sources(e2)[i], ")")
+				paste0(src, " = ", e1, oper, " ", prec, "(", sources(e2)[i], ")")
 			}
 
 			name <- names(e2)[i]
 			if (i == 1L) {
-				out <- .genericArith(name = name, gn = gn, ex = ex)
+				out <- .genericArith(name = name, src = src, ex = ex)
 			} else {
-				out <- c(out, .genericArith(name = name, gn = gn, ex = ex))
+				out <- c(out, .genericArith(name = name, src = src, ex = ex))
 			}
 		
 		} # next layer
@@ -227,21 +227,21 @@ methods::setMethod(
 		
 		for (i in 1L:nlyr(e2)) {
 		
-			gn <- .makeSourceName("math", "rast")
+			src <- .makeSourceName("math", "rast")
 			oper <- as.vector(.Generic)[1L]
 			ex <- if (oper == "%/%") {
-				paste(gn, "= floor(", e1, " / ", prec, "(", sources(e2)[i], "))")
+				paste(src, "= floor(", e1, " / ", prec, "(", sources(e2)[i], "))")
 			} else if (oper == "%%") {
-				paste0(gn, " = ", e1, "% ", prec, "(", sources(e2)[i], ")")
+				paste0(src, " = ", e1, "% ", prec, "(", sources(e2)[i], ")")
 			} else {
-				paste0(gn, " = ", e1, oper, " ", prec, "(", sources(e2)[i], ")")
+				paste0(src, " = ", e1, oper, " ", prec, "(", sources(e2)[i], ")")
 			}
 
 			name <- names(e2)[i]
 			if (i == 1L) {
-				out <- .genericArith(name = name, gn = gn, ex = ex)
+				out <- .genericArith(name = name, src = src, ex = ex)
 			} else {
-				out <- c(out, .genericArith(name = name, gn = gn, ex = ex))
+				out <- c(out, .genericArith(name = name, src = src, ex = ex))
 			}
 		
 		} # next layer
@@ -259,16 +259,16 @@ methods::setMethod(
 	
 		# .restore(e2)
 
-		# gn <- .makeSourceName("math", "rast")
+		# src <- .makeSourceName("math", "rast")
 
 		# oper <- as.vector(.Generic)[1L]
 		# print(oper)
 		# ex <- if (oper == "-") {
-			# paste0(gn, " = -1 * ", sources(e2))
+			# paste0(src, " = -1 * ", sources(e2))
 		# } else {
-			# paste0(gn, " = ", sources(e2))
+			# paste0(src, " = ", sources(e2))
 		# }
-		# .genericArith(x = e2, gn = gn, ex = ex)
+		# .genericArith(x = e2, src = src, ex = ex)
 		
 	# }
 # )
@@ -290,22 +290,22 @@ methods::setMethod(
 			for (i in 1L:nlyr(e1)) {
 
 				name <- paste0(names(e1)[i], "_", names(e2)[i])
-				gn <- .makeSourceName(name, "rast")
+				src <- .makeSourceName(name, "rast")
 
 				ex <- if (oper == "%/%") {
-					paste0(gn, " = floor(", prec, "(", sources(e1)[i], ") / ", prec, "(", sources(e2)[i], "))")
+					paste0(src, " = floor(", prec, "(", sources(e1)[i], ") / ", prec, "(", sources(e2)[i], "))")
 				} else if (oper == "%%") {
-					paste0(gn, " = ", prec, "(", sources(e1)[i], ") % ", prec, "(", sources(e2)[i], ")")
+					paste0(src, " = ", prec, "(", sources(e1)[i], ") % ", prec, "(", sources(e2)[i], ")")
 				} else if (oper == "^") {
-					paste0(gn, " = exp(", prec, "(", sources(e1)[i], "), ", prec, "(", sources(e2)[i], "))")
+					paste0(src, " = exp(", prec, "(", sources(e1)[i], "), ", prec, "(", sources(e2)[i], "))")
 				} else {
-					paste0(gn, "= ", prec, "(", sources(e1)[i], ")  ", oper, " ", prec, "(", sources(e2)[i], ")")
+					paste0(src, "= ", prec, "(", sources(e1)[i], ")  ", oper, " ", prec, "(", sources(e2)[i], ")")
 				}
 				
 				if (i == 1L) {
-					out <- .genericArith(name = name, gn = gn, ex = ex)
+					out <- .genericArith(name = name, src = src, ex = ex)
 				} else {
-					this <- .genericArith(name = name, gn = gn, ex = ex)
+					this <- .genericArith(name = name, src = src, ex = ex)
 					out <- c(out, this)
 				}
 				
@@ -316,22 +316,22 @@ methods::setMethod(
 			for (i in 1L:nlyr(e2)) {
 			
 				name <- paste0(names(e1), "_", names(e2)[i])
-				gn <- .makeSourceName(name, "rast")
+				src <- .makeSourceName(name, "rast")
 
 				ex <- if (oper == "%/%") {
-					paste0(gn, " = floor(", prec, "(", sources(e1), ") / ", prec, "(", sources(e2)[i], "))")
+					paste0(src, " = floor(", prec, "(", sources(e1), ") / ", prec, "(", sources(e2)[i], "))")
 				} else if (oper == "%%") {
-					paste0(gn, " = ", prec, "(", sources(e1), ") % ", prec, "(", sources(e2)[i], ")")
+					paste0(src, " = ", prec, "(", sources(e1), ") % ", prec, "(", sources(e2)[i], ")")
 				} else if (oper == "^") {
-					paste0(gn, " = exp(", prec, "(", sources(e1), "), ", prec, "(", sources(e2)[i], "))")
+					paste0(src, " = exp(", prec, "(", sources(e1), "), ", prec, "(", sources(e2)[i], "))")
 				} else {
-					paste0(gn, "= ", prec, "(", sources(e1), ")  ", oper, " ", prec, "(", sources(e2)[i], ")")
+					paste0(src, "= ", prec, "(", sources(e1), ")  ", oper, " ", prec, "(", sources(e2)[i], ")")
 				}
 				
 				if (i == 1L) {
-					out <- .genericArith(name = name, gn = gn, ex = ex)
+					out <- .genericArith(name = name, src = src, ex = ex)
 				} else {
-					this <- .genericArith(name = name, gn = gn, ex = ex)
+					this <- .genericArith(name = name, src = src, ex = ex)
 					out <- c(out, this)
 				}
 				
@@ -342,22 +342,22 @@ methods::setMethod(
 			for (i in 1L:nlyr(e1)) {
 			
 				name <- paste0(names(e1)[i], "_", names(e2))
-				gn <- .makeSourceName(name, "rast")
+				src <- .makeSourceName(name, "rast")
 
 				ex <- if (oper == "%/%") {
-					paste0(gn, " = floor(", prec, "(", sources(e1)[i], ") / ", prec, "(", sources(e2), "))")
+					paste0(src, " = floor(", prec, "(", sources(e1)[i], ") / ", prec, "(", sources(e2), "))")
 				} else if (oper == "%%") {
-					paste0(gn, " = ", prec, "(", sources(e1)[i], ") % ", prec, "(", sources(e2), ")")
+					paste0(src, " = ", prec, "(", sources(e1)[i], ") % ", prec, "(", sources(e2), ")")
 				} else if (oper == "^") {
-					paste0(gn, " = exp(", prec, "(", sources(e1)[i], "), ", prec, "(", sources(e2), "))")
+					paste0(src, " = exp(", prec, "(", sources(e1)[i], "), ", prec, "(", sources(e2), "))")
 				} else {
-					paste0(gn, "= ", prec, "(", sources(e1)[i], ") ", oper, " ", prec, "(", sources(e2), ")")
+					paste0(src, "= ", prec, "(", sources(e1)[i], ") ", oper, " ", prec, "(", sources(e2), ")")
 				}
 				
 				if (i == 1L) {
-					out <- .genericArith(name = name, gn = gn, ex = ex)
+					out <- .genericArith(name = name, src = src, ex = ex)
 				} else {
-					this <- .genericArith(name = name, gn = gn, ex = ex)
+					this <- .genericArith(name = name, src = src, ex = ex)
 					out <- c(out, this)
 				}
 				

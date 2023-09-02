@@ -7,7 +7,7 @@
 #' @noRd
 .rastInfo <- function(x) {
 
-	gn <- if (!inherits(x, "character")) {
+	src <- if (!inherits(x, "character")) {
 		sources(x)
 	} else {
 		x
@@ -15,11 +15,11 @@
 
 	### more than one raster
 	#######################
-	if (length(gn) > 1L) {
+	if (length(src) > 1L) {
 		
-		for (i in seq_along(gn)) {
+		for (i in seq_along(src)) {
 		
-			this <- .rastInfo(gn[i])
+			this <- .rastInfo(src[i])
 			out <- if (i == 1L) {
 				this
 			} else {
@@ -33,7 +33,7 @@
 	##################
 
 		rasters <- .ls(c("rasters", "rasters3d"))
-		type <- names(rasters[rasters == gn])
+		type <- names(rasters[rasters == src])
 
 		### 2D raster
 		if (type == "raster") {
@@ -42,7 +42,7 @@
 				niceinfo <- rgrass::execGRASS(
 					"r.info",
 					flags = c("quiet"),
-					map = gn,
+					map = src,
 					intern = TRUE,
 					Sys_show.output.on.console = FALSE,
 					echoCmd = FALSE
@@ -53,7 +53,7 @@
 				extentinfo <- rgrass::execGRASS(
 					"r.info",
 					flags = c("g", "quiet"),
-					map = gn,
+					map = src,
 					intern = TRUE,
 					Sys_show.output.on.console = FALSE,
 					echoCmd = FALSE
@@ -64,7 +64,7 @@
 				rangeinfo <- rgrass::execGRASS(
 					"r.info",
 					flags = c("r", "quiet"),
-					map = gn,
+					map = src,
 					intern = TRUE,
 					Sys_show.output.on.console = FALSE,
 					echoCmd = FALSE
@@ -83,7 +83,7 @@
 				niceinfo <- rgrass::execGRASS(
 					"r3.info",
 					flags = c("quiet"),
-					map = gn,
+					map = src,
 					intern = TRUE,
 					Sys_show.output.on.console = FALSE,
 					echoCmd = FALSE
@@ -94,7 +94,7 @@
 				extentinfo <- rgrass::execGRASS(
 					"r3.info",
 					flags = c("g", "quiet"),
-					map = gn,
+					map = src,
 					intern = TRUE,
 					Sys_show.output.on.console = FALSE,
 					echoCmd = FALSE
@@ -105,7 +105,7 @@
 				rangeinfo <- rgrass::execGRASS(
 					"r3.info",
 					flags = c("r", "quiet"),
-					map = gn,
+					map = src,
 					intern = TRUE,
 					Sys_show.output.on.console = FALSE,
 					echoCmd = FALSE
@@ -195,7 +195,7 @@
 		
 		# 	catinfo <- rgrass::execGRASS(
 		# 		"r.category",
-		# 		map = gn,
+		# 		map = src,
 		# 		flags = "quiet",
 		# 		separator = "pipe",
 		# 		intern = TRUE
@@ -217,7 +217,7 @@
 		maxVal <- if (maxVal == "NULL") { NA_real_ } else { as.numeric(maxVal) }
 
 		out <- list(
-			sources = gn,
+			sources = src,
 			type = type,
 			topology = topology,
 			projection = projection,
@@ -254,7 +254,7 @@
 
 .vectInfo <- function(x) {
 
-	gn <- if (inherits(x, "GVector")) {
+	src <- if (inherits(x, "GVector")) {
 		sources(x)
 	} else {
 		x
@@ -265,7 +265,7 @@
 		extentinfo <- rgrass::execGRASS(
 			"v.info",
 			flags = c("g", "quiet"),
-			map = gn,
+			map = src,
 			intern = TRUE,
 			Sys_show.output.on.console = FALSE,
 			echoCmd = FALSE
@@ -277,7 +277,7 @@
 		geominfo <- rgrass::execGRASS(
 			"v.info",
 			flags = c("t", "quiet"),
-			map = gn,
+			map = src,
 			intern = TRUE,
 			Sys_show.output.on.console = FALSE,
 			echoCmd = FALSE
@@ -362,7 +362,7 @@
 		fieldinfo <- rgrass::execGRASS(
 			"v.info",
 			flags = c("c", "quiet"),
-			map = gn,
+			map = src,
 			intern = TRUE,
 			Sys_show.output.on.console = FALSE,
 			echoCmd = FALSE
@@ -371,7 +371,7 @@
 	
 	fieldData <- rgrass::execGRASS(
 		"v.db.connect",
-		map = gn,
+		map = src,
 		flags = c("g", "quiet"),
 		intern = TRUE
 	)
@@ -380,7 +380,7 @@
 		attribMetaInfo <- rgrass::execGRASS(
 			"v.info",
 			flags = "e",
-			map = gn,
+			map = src,
 			intern = TRUE,
 			Sys_show.output.on.console = FALSE,
 			echoCmd = FALSE
@@ -442,7 +442,7 @@
  	projection <- sub(projection, pattern = "projection=", replacement = "")
 		
 	out <- list(
-		sources = gn,
+		sources = src,
 		type = "vector",
 		projection = projection,
 		topology = topology,

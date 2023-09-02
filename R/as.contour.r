@@ -37,20 +37,20 @@ setMethod(
 	}
 
 	input <- sources(x)
-	gn <- .makeSourceName(rastOrVect = "vector")
+	src <- .makeSourceName(rastOrVect = "vector")
 
 	### execute
 	args <- list(
 		cmd = "r.contour",
 		input = input,
-		output = gn,
+		output = src,
 		levels = levels,
 		cut = 2,
 		flags = "quiet"
 	)
 	
 	do.call(rgrass::execGRASS, args=args)
-	.makeGVector(gn)
+	.makeGVector(src)
 	
 	} # EOF
 )

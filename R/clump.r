@@ -40,14 +40,14 @@ methods::setMethod(
     if (diagonal) args$flags <- c(args$flags, "d")
 
     nLayers <- nlyr(x)
-    gns <- .makeSourceName("clump", "rast", nLayers)
+    srcs <- .makeSourceName("clump", "rast", nLayers)
     for (i in seq_len(nLayers)) {
 
         args$input <- sources(x)[i]
-        args$output <- gns[i]
+        args$output <- srcs[i]
 
         do.call(rgrass::execGRASS, args=args)
-        this <- .makeGRaster(gns[i])
+        this <- .makeGRaster(srcs[i])
 
         if (i == 1L) {
             out <- this

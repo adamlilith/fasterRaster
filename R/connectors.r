@@ -38,13 +38,13 @@ methods::setMethod(
 	rgrass::execGRASS("v.db.addcolumn", map=sources(x), columns="TEMPTEMP_minDist_meters", flags="quiet")
 
 	# create connectors
-	gn <- .makeSourceName("connectors", "vector")
+	src <- .makeSourceName("connectors", "vector")
 
 	args <- list(
 		cmd = "v.distance",
 		from = sources(x),
 		to = sources(y),
-		output = gn,
+		output = src,
 		upload = "dist",
 		flags = c("quiet", "overwrite"),
 		dmin = minDist,
@@ -58,7 +58,7 @@ methods::setMethod(
 	# remove column that was added to x
 	rgrass::execGRASS("v.db.dropcolumn", map=sources(x), columns="TEMPTEMP_minDist_meters", flags="quiet")
 
-	.makeGVector(gn)
+	.makeGVector(src)
 
 	} # EOF
 )

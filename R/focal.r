@@ -144,8 +144,8 @@ methods::setMethod(
             do.call(rgrass::execGRASS, args = thisArgs)
 
             # calculate mean
-            gn <- .makeSourceName(fun, "raster")
-            ex <- paste0(gn, " = ", gnSum, " / ", gnCount)
+            src <- .makeSourceName(fun, "raster")
+            ex <- paste0(src, " = ", gnSum, " / ", gnCount)
             rgrass::execGRASS("r.mapcalc", expression = ex, flags=c("quiet", "overwrite"), intern = TRUE)
         
         } else if (fun %in% c("sdpop", "sd", "var", "varpop")) {
@@ -208,15 +208,15 @@ methods::setMethod(
                 rgrass::execGRASS("r.mapcalc", expression = ex, flags = c("quiet", "overwrite"), intern = TRUE)
                 
                 # sd or variance
-                gn <- .makeSourceName(fun, "raster")
+                src <- .makeSourceName(fun, "raster")
                 ex <- if (fun == "sd") {
-                    paste0(gn, " = sqrt(", gnNumer, " / (", gnCount, " - 1))")
+                    paste0(src, " = sqrt(", gnNumer, " / (", gnCount, " - 1))")
                 } else if (fun == "sdpop") {
-                    paste0(gn, " = sqrt(", gnNumer, " / ", gnCount, ")")
+                    paste0(src, " = sqrt(", gnNumer, " / ", gnCount, ")")
                 } else if (tolower(fun) == "var") {
-                    paste0(gn, " = ", gnNumer, " / (", gnCount, " - 1)")
+                    paste0(src, " = ", gnNumer, " / (", gnCount, " - 1)")
                 } else if (tolower(fun) == "varpop") {
-                    paste0(gn, " = ", gnNumer, " / (", gnCount, ")")
+                    paste0(src, " = ", gnNumer, " / (", gnCount, ")")
                 }
 
                 rgrass::execGRASS("r.mapcalc", expression = ex, flags = c("quiet", "overwrite"), intern = TRUE)
@@ -228,18 +228,18 @@ methods::setMethod(
             args$input <- sources(x)[i]
             do.call(rgrass::execGRASS, args = args)
 
-            gn <- .makeSourceName(names(x)[i], "raster")
-            ex <- paste0(gn, " = (double(", gnInter, ") - 1) / 100")
+            src <- .makeSourceName(names(x)[i], "raster")
+            ex <- paste0(src, " = (double(", gnInter, ") - 1) / 100")
             rgrass::execGRASS("r.mapcalc", expression = ex, flags = c("quiet", "overwrite"), intern = TRUE)
         
         } else {
-            gn <- .makeSourceName(names(x)[i], "raster")
-            args$output <- gn
+            src <- .makeSourceName(names(x)[i], "raster")
+            args$output <- src
             args$input <- sources(x)[i]
             do.call(rgrass::execGRASS, args = args)
         }
         
-        this <- .makeGRaster(gn, names(x)[i])
+        this <- .makeGRaster(src, names(x)[i])
         if (i == 1L) {
             out <- this
         } else {

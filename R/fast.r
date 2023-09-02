@@ -113,11 +113,11 @@ methods::setMethod(
 
 			region(xRast)
 
-			gn <- .makeSourceName("r.in.gdal", rastOrVect = "raster")
+			src <- .makeSourceName("r.in.gdal", rastOrVect = "raster")
 			args <- list(
 				cmd = "r.in.gdal",
 				input = x,
-				output = gn,
+				output = src,
 				flags = "quiet",
 				intern = TRUE
 			)
@@ -152,11 +152,11 @@ cat("Time-consuming step here for large rasters:")
 cat("Time-consuming step here for large rasters^^^")
 			region(xRast)
 
-   			gn <- .makeSourceName("r.import", rastOrVect = "raster")
+   			src <- .makeSourceName("r.import", rastOrVect = "raster")
 			args <- list(
 				cmd = "r.import",
 				input = x,
-				output = gn,
+				output = src,
 				resample = method,
 				memory = getFastOptions("memory"),
 				extent = "region",
@@ -170,11 +170,12 @@ cat("Time-consuming step here for large rasters^^^")
 		} # projected raster from disk
 
 		do.call(rgrass::execGRASS, args = args)
-		if (nLayers > 1L) gn <- paste0(gn, ".", seq_len(nLayers))
+		if (nLayers > 1L) src <- paste0(src, ".", seq_len(nLayers))
 
 		# raster levels
 		if (!is.null(levels)) levels <- .getLevels(levels)
-		out <- .makeGRaster(gn, names = xNames, levels = levels)
+
+		out <- .makeGRaster(src, names = xNames, levels = levels)
 
 	### vector from disk (and project on the fly if needed)
 	#######################################################
@@ -184,7 +185,7 @@ cat("Time-consuming step here for large rasters^^^")
 		xVect <- terra::vect(x)
 		xCrs <- crs(xVect)
 		currentCrs <- crs()
-		gn <- .makeSourceName(xVect, rastOrVect = "vector")
+		src <- .makeSourceName(xVect, rastOrVect = "vector")
 
 		# vector is in same CRS as current location
 		if (xCrs == currentCrs) {
@@ -192,7 +193,7 @@ cat("Time-consuming step here for large rasters^^^")
 			args <- list(
 				cmd = "v.in.ogr",
 				input = x,
-				output = gn,
+				output = src,
 				flags = c("quiet", "overwrite"),
 				intern=TRUE
 			)
@@ -206,7 +207,7 @@ cat("Time-consuming step here for large rasters^^^")
 			args <- list(
 				cmd = "v.import",
 				input = x,
-				output = gn,
+				output = src,
 				extent = "input",
 				flags = c("quiet", "overwrite"),
 				intern = TRUE
@@ -215,7 +216,7 @@ cat("Time-consuming step here for large rasters^^^")
 		} # vector on disk needs projected
 
 		do.call(rgrass::execGRASS, args=args)
-		out <- .makeGVector(gn)
+		out <- .makeGVector(src)
 
 	} # is vector on disk
 	out

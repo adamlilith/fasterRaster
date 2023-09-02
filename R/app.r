@@ -74,29 +74,29 @@ methods::setMethod(
     for (name in xn) {
 
         i <- which(name == names(x))
-        gn <- sources(x)[i]
+        src <- sources(x)[i]
 
         # ensure data type  
         dt <- datatype(x, "GRASS")[i]
         if (ensure == "auto") {
-            gn <- if (dt == "CELL") {
-                paste0("int(", gn, ")")
+            src <- if (dt == "CELL") {
+                paste0("int(", src, ")")
             } else if (dt == "FCELL") {
-                paste0("float(", gn, ")")
+                paste0("float(", src, ")")
             } else if (dt == "DCELL") {
-                paste0("double(", gn, ")")
+                paste0("double(", src, ")")
             }
         } else {
             if (dt != "FCELL") {
-                gn <- paste0(ensure, "(", gn, ")")
+                src <- paste0(ensure, "(", src, ")")
             }
         }
 
-        fun <- gsub(fun, pattern = name, replacement = gn)
+        fun <- gsub(fun, pattern = name, replacement = src)
     }
 
-    gn <- .makeSourceName("app", "raster")
-    fun <- paste(gn, fun)
+    src <- .makeSourceName("app", "raster")
+    fun <- paste(src, fun)
 
     args <- list(
         cmd = "r.mapcalc",
@@ -107,7 +107,7 @@ methods::setMethod(
     )
     if (is.null(seed)) args$flags <- c(args$flags, "s")
     do.call(rgrass::execGRASS, args = args)
-    .makeGRaster(gn, "app")
+    .makeGRaster(src, "app")
 
     } # EOF
 )

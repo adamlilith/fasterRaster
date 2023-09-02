@@ -65,16 +65,16 @@ methods::setMethod(
 	.restore(x)
 	region(x)
 	
-	gn <- .makeSourceName("horizon", "rast")
+	src <- .makeSourceName("horizon", "rast")
 	for (i in seq_along(directions)) {
 	
 		direction <- directions[i]
 		niceDirection <- sprintf("%03.0f", direction)
 		args$direction <- direction
-		args$output <- gn
+		args$output <- src
 	
 		do.call(rgrass::execGRASS, args=args)
-		this <- .makeGRaster(paste0(gn, "_", niceDirection), paste0("horizonHeight_", niceDirection, "deg"))
+		this <- .makeGRaster(paste0(src, "_", niceDirection), paste0("horizonHeight_", niceDirection, "deg"))
 	
 		if (i == 1L) {
 			out <- this

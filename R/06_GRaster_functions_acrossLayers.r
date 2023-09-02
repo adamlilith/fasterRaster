@@ -235,12 +235,12 @@ setMethod(
 
   		prec <- getFastOptions("rasterPrecision")
 
-		gn <- .makeSourceName("var", "rast")
-		ex <- paste0(gn, " = ", prec, "(sqrt(", gnSS, " / ", gnCountMinus1, "))")
+		src <- .makeSourceName("var", "rast")
+		ex <- paste0(src, " = ", prec, "(sqrt(", gnSS, " / ", gnCountMinus1, "))")
 		
 		rgrass::execGRASS("r.mapcalc", expression=ex, flags=c("quiet", "overwrite"), intern=TRUE)
 		
-		.makeGRaster(gn, "var")
+		.makeGRaster(src, "var")
 		
 	} # EOF
 )
@@ -267,12 +267,12 @@ setMethod(
 
   		prec <- getFastOptions("rasterPrecision")
 
-		gn <- .makeSourceName("var", "rast")
-		ex <- paste0(gn, " = ", prec, "(", gnSS, " / ", gnCountMinus1, ")")
+		src <- .makeSourceName("var", "rast")
+		ex <- paste0(src, " = ", prec, "(", gnSS, " / ", gnCountMinus1, ")")
 		
 		rgrass::execGRASS("r.mapcalc", expression=ex, flags=c("quiet", "overwrite"), intern=TRUE)
 		
-		.makeGRaster(gn, "var")
+		.makeGRaster(src, "var")
 		
 	} # EOF
 )
@@ -410,11 +410,11 @@ setMethod(
 	fx <- "quantile"
 	fxName <- "quantile"
 	
-	gn <- .makeSourceName(fxName, "rast")
+	src <- .makeSourceName(fxName, "rast")
 	args <- list(
 		cmd = "r.series",
 		input = paste(sources(x), collapse=","),
-		output = gn,
+		output = src,
 		method = fx,
 		quantile = prob,
 		nprocs = getFastOptions("cores"),
@@ -425,7 +425,7 @@ setMethod(
 	if (na.rm) args$flags <- c(args$flags, "n")
 	
 	do.call(rgrass::execGRASS, args=args)
-	.makeGRaster(gn, fxName)
+	.makeGRaster(src, fxName)
 		
 	} # EOF
 )
@@ -441,11 +441,11 @@ setMethod(
 
 	.restore(x)
 
-	gn <- .makeSourceName(fx, "rast")
+	src <- .makeSourceName(fx, "rast")
 	args <- list(
 		cmd = "r.series",
 		input = paste(sources(x), collapse=","),
-		output = gn,
+		output = src,
 		method = fx,
 		nprocs = getFastOptions("cores"),
 		memory = getFastOptions("memory"),
@@ -456,9 +456,9 @@ setMethod(
 	
 	do.call(rgrass::execGRASS, args=args)
 	if (return == "GRaster") {
-		.makeGRaster(gn, fxName)
+		.makeGRaster(src, fxName)
 	} else if (return == "source") {
-		gn
+		src
 	} else {
 		stop("Invalid value for ", sQuote("return"), ".")
 	}

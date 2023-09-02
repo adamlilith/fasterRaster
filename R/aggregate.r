@@ -114,14 +114,14 @@ methods::setMethod(
 	nLayers <- nlyr(x)
 	for (i in seq_len(nLayers)) {
 		
-		gn <- .makeSourceName(names(x)[i], "rast")
+		src <- .makeSourceName(names(x)[i], "rast")
 		
 		args$input <- sources(x)[i]
-		args$output <- gn
+		args$output <- src
 		
 		do.call(rgrass::execGRASS, args=args)
 		
-		this <- .makeGRaster(gn, names(x)[i])
+		this <- .makeGRaster(src, names(x)[i])
 		if (i == 1L) {
 			out <- this
 		} else {

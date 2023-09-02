@@ -35,15 +35,15 @@ methods::setMethod(
     .restore(x)
     region(x)
 
-    gns <- .makeSourceName("runif", "raster", n)
+    srcs <- .makeSourceName("runif", "raster", n)
 
     for (i in seq_len(n)) {
 
 		# # have to add/subtract a fractional number to avoid producing a rounded (CELL) raster
 		# num <- 1 / sqrt(pi * exp(1))
 
-		# ex <- paste0(gns[i], " = float(rand(", low, " + ", num, ", ", high, " + ", num, ") - ", num, ")")
-		ex <- paste0(gns[i], " = float(rand(", low, " + 0.1, ", high, " + 0.1) - 0.1)")
+		# ex <- paste0(srcs[i], " = float(rand(", low, " + ", num, ", ", high, " + ", num, ") - ", num, ")")
+		ex <- paste0(srcs[i], " = float(rand(", low, " + 0.1, ", high, " + 0.1) - 0.1)")
         args <- list(
             cmd = "r.mapcalc",
             expression = ex,
@@ -59,7 +59,7 @@ methods::setMethod(
         do.call(rgrass::execGRASS, args = args)
 
     } # next raster
-    .makeGRaster(gns, rep("runif", n))
+    .makeGRaster(srcs, rep("runif", n))
 
     } # EOF
 )

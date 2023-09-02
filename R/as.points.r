@@ -28,18 +28,18 @@ methods::setMethod(
 
     .restore(x)
 
-    gn <- .makeSourceName(NULL, "vector")
+    src <- .makeSourceName(NULL, "vector")
     args <- list(
         cmd = "v.to.points",
         input = sources(x),
-        output = gn,
+        output = src,
         use = "vertex",
         type = gtype,
         flags = c("quiet", "overwrite"),
         intern = TRUE
     )
     do.call(rgrass::execGRASS, args = args)
-    .makeGVector(gn)
+    .makeGVector(src)
 
     } # E#OF
 )
@@ -57,12 +57,12 @@ methods::setMethod(
 
     if (nlyr(x) > 1L) warning("The raster has more than one layer. Only the first layer will be converted to points.")
 
-    gn <- .makeSourceName(NULL, "vector")
+    src <- .makeSourceName(NULL, "vector")
 
     args <- list(
         cmd = "r.to.vect",
         input = sources(x)[1L],
-        output = gn,
+        output = src,
         type = "point",
         column = names(x)[1L],
         flags = c("quiet", "overwrite"),
@@ -72,14 +72,14 @@ methods::setMethod(
     do.call(rgrass::execGRASS, args = args)
 
     # drop "label" column
-    info <- rgrass::execGRASS("v.info", map = gn, flags = c("c", "quiet"), intern = TRUE)
+    info <- rgrass::execGRASS("v.info", map = src, flags = c("c", "quiet"), intern = TRUE)
     if (length(info) == 3L & info[3L] == 'CHARACTER|label') {
 
-        rgrass::execGRASS("v.db.dropcolumn", map = gn, columns = "label", flags = "verbose", intern = TRUE)
+        rgrass::execGRASS("v.db.dropcolumn", map = src, columns = "label", flags = "verbose", intern = TRUE)
 
     }
 
-    .makeGVector(gn)
+    .makeGVector(src)
 
     } # EOF
 )

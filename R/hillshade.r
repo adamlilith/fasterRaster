@@ -35,11 +35,11 @@ methods::setMethod(
 
     for (i in 1L:nlyr(x)) {
 
-        gn <- .makeSourceName("shade", "rast")
+        src <- .makeSourceName("shade", "rast")
         args <- list(
             cmd = "r.relief",
             input = sources(x)[i],
-            output = gn,
+            output = src,
             altitude = angle,
             azimuth = direction,
             zscale = zscale,
@@ -49,7 +49,7 @@ methods::setMethod(
 
         do.call(rgrass::execGRASS, args=args)
 
-        this <- .makeGRaster(gn, paste0(names(x)[i], "_shade"))
+        this <- .makeGRaster(src, paste0(names(x)[i], "_shade"))
         if (i == 1L) {
             out <- this
         } else {

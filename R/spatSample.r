@@ -51,7 +51,7 @@ methods::setMethod(
     }
 
     nLayers <- nlyr(x)
-    gns <- .makeSourceName("random", "raster", nLayers)
+    srcs <- .makeSourceName("random", "raster", nLayers)
     for (i in seq_len(nLayers)) {
     
         args <- list(
@@ -59,7 +59,7 @@ methods::setMethod(
             input = sources(x)[i],
             cover = sources(x)[i],
             npoints = npoints,
-            raster = gns[i],
+            raster = srcs[i],
             flags = c("quiet", "overwrite"),
             intern = TRUE
         )
@@ -107,14 +107,14 @@ methods::setMethod(
         gnsUpdate <- .makeSourceName("random", "raster", nLayers)
         for (i in seq_len(nLayers)) {
 
-            ex <- paste0(gnsUpdate[i], " = if(!isnull(", gns[i], "), ", updatevalue, ", null())")
+            ex <- paste0(gnsUpdate[i], " = if(!isnull(", srcs[i], "), ", updatevalue, ", null())")
             rgrass::execGRASS("r.mapcalc", expression = ex, flags = c("quiet", "overwrite"), intern = TRUE)
 
         } # next raster
         out <- .makeGRaster(gnsUpdate, names(x))
 
     } else {
-        out <- .makeGRaster(gns, names(x))
+        out <- .makeGRaster(srcs, names(x))
     }
     out
 

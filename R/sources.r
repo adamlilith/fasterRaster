@@ -78,14 +78,14 @@ methods::setMethod(
 	if (rastOrVect == "group") rastOrVect <- "group"
 	if (rastOrVect == "region") rastOrVect <- "region"
 
-	gn <- rstring(1L)
-	if (n > 1L) gn <- paste0(gn, "_", 1L:n)
-	gn <- if (names[1L] != "") {
-		paste0(rastOrVect, "_", names, "_", gn)
+	src <- rstring(1L)
+	if (n > 1L) src <- paste0(src, "_", 1L:n)
+	src <- if (names[1L] != "") {
+		paste0(rastOrVect, "_", names, "_", src)
 	} else {
-		paste0(rastOrVect, "_", gn)
+		paste0(rastOrVect, "_", src)
 	}
-	gn
+	src
 
 }
 

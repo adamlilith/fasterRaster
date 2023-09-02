@@ -117,10 +117,10 @@ setMethod(
 			)
 
 			do.call(rgrass::execGRASS, args=args)
-			gn <- groupName
+			src <- groupName
 
 		} else {
-			gn <- sources(x)
+			src <- sources(x)
 		}
 		
 		# data type
@@ -176,7 +176,7 @@ setMethod(
 		# rgrass::execGRASS("r.out.gdal", input=sources, output=filename, type=datatype, createopt=createopt, metaopt=metaopt, flags=thisFlags, intern=TRUE, ...)
 		args <- list(
 			cmd = "r.out.gdal",
-			input = gn,
+			input = src,
 			output = filename,
 			type = datatype,
 			createopt = createopt,

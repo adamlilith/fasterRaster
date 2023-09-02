@@ -121,9 +121,9 @@ methods::setMethod(
             gnTrunc <- sources(x)[i]
         }
 
-        gn <- .makeSourceName(names(x)[i], "rast")
+        src <- .makeSourceName(names(x)[i], "rast")
         scale <- (maxv - minv) / (upperFrom - lowerFrom)
-        ex <- paste0(gn, " = ", minv, " + (", scale, " * (", gnTrunc, " - ", lowerFrom, "))")
+        ex <- paste0(src, " = ", minv, " + (", scale, " * (", gnTrunc, " - ", lowerFrom, "))")
         
         args <- list(
             cmd = "r.mapcalc",
@@ -134,7 +134,7 @@ methods::setMethod(
 
         do.call(rgrass::execGRASS, args=args)
 
-        this <- .makeGRaster(gn, names(x)[i])
+        this <- .makeGRaster(src, names(x)[i])
         if (i == 1L) {
             out <- this
         } else {

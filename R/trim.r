@@ -90,8 +90,8 @@ methods::setMethod(
 	)
 	do.call(rgrass::execGRASS, args = args)
 
-	gn <- .copyGSpatial(x, reshapeRegion = FALSE)
-	.makeGRaster(gn, names(x))
+	src <- .copyGSpatial(x, reshapeRegion = FALSE)
+	.makeGRaster(src, names(x))
 	
 	} # EOF
 )

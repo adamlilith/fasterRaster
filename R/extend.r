@@ -164,11 +164,11 @@ methods::setMethod(
     for (i in seq_len(nLayers)) {
 
         if (is.na(fill)) {
-            gn <- .copyGSpatial(x = x[[i]], reshapeRegion = FALSE)
+            src <- .copyGSpatial(x = x[[i]], reshapeRegion = FALSE)
         } else {
-            gn <- .makeSourceName(names(x), "raster", nLayers)
+            src <- .makeSourceName(names(x), "raster", nLayers)
 
-            ex <- paste0(gn, " = if(col() <= ", y[1L], ", ", fill, ", if(col() > ncols() - ", y[2L], ", ", fill, ", if(row() <= ", y[4L], ", ", fill, ", if(row() > nrows() - ", y[3], ", ", fill, ", ", sources(x)[i], "))))")
+            ex <- paste0(src, " = if(col() <= ", y[1L], ", ", fill, ", if(col() > ncols() - ", y[2L], ", ", fill, ", if(row() <= ", y[4L], ", ", fill, ", if(row() > nrows() - ", y[3], ", ", fill, ", ", sources(x)[i], "))))")
 
             args <- list(
                 cmd = "r.mapcalc",
@@ -180,7 +180,7 @@ methods::setMethod(
             do.call(rgrass::execGRASS, args = args)
         }
         
-        this <- .makeGRaster(gn, names(x)[i])
+        this <- .makeGRaster(src, names(x)[i])
         if (i == 1L) {
             out <- this
         } else {

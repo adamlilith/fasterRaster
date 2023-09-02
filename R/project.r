@@ -154,7 +154,7 @@ cat("Slow step^^^")
 
 	if (method != "nearest" & fallback) method <- paste0(method, "_f")
 
-	gns <- .makeSourceName(names(x), "raster", nlyr(x))
+	srcs <- .makeSourceName(names(x), "raster", nlyr(x))
 	for (i in seq_len(nlyr(x))) {
 		
 		args <- list(
@@ -162,7 +162,7 @@ cat("Slow step^^^")
 			location = location(x),
 			mapset = mapset(x),
 			input = sources(x)[i],
-			output = gns[i],
+			output = srcs[i],
 			method = method,
 			memory = getFastOptions("memory"),
 			flags = c("quiet", "overwrite")
@@ -171,7 +171,7 @@ cat("Slow step^^^")
 		if (wrap) args$flags <- c(args$flags, "n")
 
 		do.call(rgrass::execGRASS, args=args)
-		thisOut <- .makeGRaster(gns[i], names(x)[i])
+		thisOut <- .makeGRaster(srcs[i], names(x)[i])
 		if (i == 1L) {
 			out <- thisOut
 		} else {
@@ -231,20 +231,20 @@ methods::setMethod(
 		fastRestore(location = toLocation, mapset = toMapset)
 	}
 	
-	gn <- .makeSourceName("projected", "vector")
+	src <- .makeSourceName("projected", "vector")
 	
 	args <- list(
 		cmd = "v.proj",
 		location = location(x),
 		mapset = mapset(x),
 		input = sources(x),
-		output = gn,
+		output = src,
 		flags = c("quiet", "overwrite"),
 		intern = TRUE
 	)
 
 	do.call(rgrass::execGRASS, args=args)
-	out <- .makeGVector(gn)
+	out <- .makeGVector(src)
 
 	out
 

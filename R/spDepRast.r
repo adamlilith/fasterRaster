@@ -52,7 +52,7 @@ methods::setMethod(
     region(x)
 
     gnRands <- .makeSourceName("rand", "raster", n)
-    gns <- .makeSourceName("randScaled", "raster", n)
+    srcs <- .makeSourceName("randScaled", "raster", n)
 
     for (i in seq_len(n)) {
 
@@ -73,7 +73,7 @@ methods::setMethod(
         xmu <- global(y, "mean")
         xsigma <- global(y, "sd")
 
-        ex <- paste0(gns[i], " = ", mu[i], " + ", sigma[i], " * (", gnRands[i], " - ", xmu, ") / ", xsigma)
+        ex <- paste0(srcs[i], " = ", mu[i], " + ", sigma[i], " * (", gnRands[i], " - ", xmu, ") / ", xsigma)
 
         args <- list(
             cmd = "r.mapcalc",
@@ -84,7 +84,7 @@ methods::setMethod(
         do.call(rgrass::execGRASS, args = args)
 
     } # next raster
-    .makeGRaster(gns, "rnorm")
+    .makeGRaster(srcs, "rnorm")
 
     } # EOF
 )

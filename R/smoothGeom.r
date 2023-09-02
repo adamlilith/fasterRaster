@@ -45,11 +45,11 @@ methods::setMethod(
 	
 	if (method == "hermite" && angle < 0) stop("Argument ", sQuote("angle"), " must be >0.")
 	
-	gn <- .makeSourceName("generalized", "vect")
+	src <- .makeSourceName("generalized", "vect")
 	args <- list(
 		cmd = "v.generalize",
 		input = sources(x),
-		output = gn,
+		output = src,
 		method = method,
 		threshold = dist,
 		flags = c("quiet", "overwrite"),
@@ -59,7 +59,7 @@ methods::setMethod(
 	if (method == "hermite") args$angle_thresh <- angle
 	
 	do.call(rgrass::execGRASS, args=args)
-	.makeGVector(gn)
+	.makeGVector(src)
 
 	} # EOF
 )

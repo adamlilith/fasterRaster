@@ -36,13 +36,13 @@ methods::setMethod(
     .restore(x)
     region(x)
 
-    gns <- .makeSourceName("rnormScaled", "raster", n)
+    srcs <- .makeSourceName("rnormScaled", "raster", n)
 
     for (i in seq_len(n)) {
 
         args <- list(
             cmd = "r.surf.gauss",
-            output = gns[i],
+            output = srcs[i],
             mean = mu[i],
             sigma = sigma[i],
             flags = c("quiet", "overwrite"),
@@ -52,7 +52,7 @@ methods::setMethod(
         do.call(rgrass::execGRASS, args = args)
 
     } # next raster
-    .makeGRaster(gns, "rnorm")
+    .makeGRaster(srcs, "rnorm")
 
     } # EOF
 )

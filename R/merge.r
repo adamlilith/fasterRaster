@@ -28,11 +28,11 @@ methods::setMethod(
 	rgrass::execGRASS("g.region", raster=rasts, flags=c("o", "quiet"), intern=TRUE)
 
 	# combine
-	gn <- .makeSourceName("merge", "rast")
+	src <- .makeSourceName("merge", "rast")
 	args <- list(
 		cmd = "r.patch",
 		input = rasts,
-		output = gn,
+		output = src,
 		nprocs = getFastOptions("cores"),
 		memory = getFastOptions("memory"),
 		flags = c("quiet", "overwrite"),
@@ -40,7 +40,7 @@ methods::setMethod(
 	)
 	
 	do.call(rgrass::execGRASS, args=args)
-	.makeGRaster(gn, "merge")
+	.makeGRaster(src, "merge")
 	
 	} # EOF
 )

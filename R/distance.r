@@ -66,13 +66,13 @@ methods::setMethod(
 	.restore(x)
 	region(x)
 	
-	gn <- sources(x)
+	src <- sources(x)
 	
 	# create mask
 	if (!is.na(target)) {
 		
-		gn <- .makeSourceName("distMask", "raster") # note: redefining "gn"
-		ex <- paste0(gn, " = if(", sources(x), " == ", target, ", 1, null())")
+		src <- .makeSourceName("distMask", "raster") # note: redefining "src"
+		ex <- paste0(src, " = if(", sources(x), " == ", target, ", 1, null())")
   		rgrass::execGRASS("r.mapcalc", expression = ex, flags = c("quiet", "overwrite"))
 		
 		fillNA <- !fillNA
@@ -82,7 +82,7 @@ methods::setMethod(
 	gnOut <- .makeSourceName(NULL, "raster")
 	args <- list(
 		cmd = "r.grow.distance",
-		input = gn,
+		input = src,
 		distance = gnOut,
 		metric = metric,
 		flags = c("quiet", "overwrite", "m"),
@@ -95,8 +95,8 @@ methods::setMethod(
 	do.call(rgrass::execGRASS, args)
 	
 	# convert units
-	gn <- .convertRastUnits(gnOut, unit)
-	.makeGRaster(gn, "distance")
+	src <- .convertRastUnits(gnOut, unit)
+	.makeGRaster(src, "distance")
 	
 	} # EOF
 )
@@ -136,11 +136,11 @@ methods::setMethod(
 	if (dense) args$flags <- c(args$flags, "d")
 	do.call(rgrass::execGRASS, args = args)
 	
-	gn <- .makeSourceName("distance", "raster")
+	src <- .makeSourceName("distance", "raster")
 	args <- list(
 		cmd = "r.grow.distance",
 		input = gnRasterized,
-		distance = gn,
+		distance = src,
 		metric = metric,
 		flags = c("m", "quiet", "overwrite"),
 		intern = TRUE
@@ -149,8 +149,8 @@ methods::setMethod(
 	do.call(rgrass::execGRASS, args = args)
 	
 	# convert units
-	gn <- .convertRastUnits(gn = gn, unit = unit)
-	.makeGRaster(gn, "distance")
+	src <- .convertRastUnits(src = src, unit = unit)
+	.makeGRaster(src, "distance")
 	
 	} # EOF
 )
@@ -224,15 +224,15 @@ methods::setMethod(
 # 	}
 # )
 
-.convertRastUnits <- function(gn, unit) {
+.convertRastUnits <- function(src, unit) {
     
-	if (inherits(gn, "GRaster")) gn <- sources(gn)
+	if (inherits(src, "GRaster")) src <- sources(src)
 
     # convert raster units
     unit <- pmatchSafe(unit, c("meters", "metres", "kilometers", "km", "miles", "nautical miles", "nm", "yards", "yds", "feet", "ft"))
     if (!(unit %in% c("meters", "metres"))) {
 
-        gnIn <- gn
+        gnIn <- src
         gnOut <- .makeSourceName("unitConvert", "raster")
 
         ex <- if (unit %in% c("kilometers", "km")) {
@@ -258,7 +258,7 @@ methods::setMethod(
         do.call(rgrass::execGRASS, args = args)
         out <- gnOut
     } else {
-        out <- gn
+        out <- src
     }
     out
 }

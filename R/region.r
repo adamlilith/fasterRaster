@@ -307,16 +307,16 @@ methods::setMethod(
 	
 	}
 
-	gn <- sources(x)[1L]
+	src <- sources(x)[1L]
 
 	if (all(topo == "2D") & is.null(trim)) {
-		rgrass::execGRASS("g.region", raster=gn, flags=c("o", "quiet"), intern=TRUE)
+		rgrass::execGRASS("g.region", raster=src, flags=c("o", "quiet"), intern=TRUE)
 	} else if (all(topo == "2D") & !is.null(trim)) {
-		rgrass::execGRASS("g.region", raster=gn, zoom=trim, flags=c("o", "quiet"), intern=TRUE)
+		rgrass::execGRASS("g.region", raster=src, zoom=trim, flags=c("o", "quiet"), intern=TRUE)
 	} else if (all(topo == "3D") & is.null(trim)) {
-		rgrass::execGRASS("g.region", raster_3d=gn, flags=c("o", "quiet"), intern=TRUE)
+		rgrass::execGRASS("g.region", raster_3d=src, flags=c("o", "quiet"), intern=TRUE)
 	} else if (all(topo == "3D") & !is.null(trim)) {
-		rgrass::execGRASS("g.region", raster_3d=gn, zoom=trim, flags=c("o", "quiet"), intern=TRUE)
+		rgrass::execGRASS("g.region", raster_3d=src, zoom=trim, flags=c("o", "quiet"), intern=TRUE)
 	} else {
 		stop("Could not reshape region.")
 	}

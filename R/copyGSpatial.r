@@ -34,9 +34,9 @@ methods::setMethod(
 	nLayers <- length(x)
 	gnsTo <- rep(NA_character_, nLayers)
 	
-	gns <- .ls()
-	rastsOrVects <- names(gns)
-	rastOrVect <- rastsOrVects[match(x, gns)]
+	srcs <- .ls()
+	rastsOrVects <- names(srcs)
+	rastOrVect <- rastsOrVects[match(x, srcs)]
 	
 	# rastOrVect <- pmatchSafe(tolower(rastOrVect), c("raster", "vector"))
 	# rastOrVect <- rep(rastOrVect, nLayers)
@@ -69,11 +69,11 @@ methods::setMethod(
 
 	.restore(x)
 	if (reshapeRegion) region(x)
-	gns <- .makeSourceName(x, rastOrVect = "raster", nLayers)
+	srcs <- .makeSourceName(x, rastOrVect = "raster", nLayers)
 
 	for (i in seq_len(nLayers)) {
 
-		ex <- paste0(gns[i], " = ", sources(x)[i])
+		ex <- paste0(srcs[i], " = ", sources(x)[i])
 
 		args <- list(
 			cmd = "r.mapcalc",
@@ -86,7 +86,7 @@ methods::setMethod(
 
 	}
 
-	gns
+	srcs
 	
 }
 

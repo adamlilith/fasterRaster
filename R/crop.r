@@ -95,8 +95,8 @@ methods::setMethod(
  	do.call(rgrass::execGRASS, args = args)
 
 	### crop by creating copy of focal raster
-	gns <- .copyGSpatial(x, reshapeRegion = FALSE)
-	.makeGRaster(gns, names(x))
+	srcs <- .copyGSpatial(x, reshapeRegion = FALSE)
+	.makeGRaster(srcs, names(x))
 
 	} # EOF
 )
@@ -113,7 +113,7 @@ methods::setMethod(
 	.restore(x)
 
 	### crop
-	gn <- .makeSourceName("crop", "vector")
+	src <- .makeSourceName("crop", "vector")
 	if (inherits(y, "GVector")) {
 
 		xgeom <- geomtype(x, grass = TRUE)
@@ -122,7 +122,7 @@ methods::setMethod(
 		args <- list(
 			cmd = "v.clip",
 			input = sources(x),
-			output = gn,
+			output = src,
 			flags = c("quiet", "overwrite"),
 			intern = TRUE
 		)
@@ -144,7 +144,7 @@ methods::setMethod(
 			cmd = "v.clip",
 			input = sources(x),
 			clip = sources(y),
-			output = gn,
+			output = src,
 			flags = c("r", "quiet", "overwrite"),
 			intern = TRUE
 		)
@@ -153,7 +153,7 @@ methods::setMethod(
 
 	do.call(rgrass::execGRASS, args = args)
 
-	.makeGVector(gn)
+	.makeGVector(src)
 
 	} # EOF
 )

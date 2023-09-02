@@ -145,8 +145,8 @@ methods::setMethod(
 		
 			valueInsides <- seq_len(lenIns)
 
-			gns <- sources(out)
-			gns[i] <- sources(value)[valueInsides]
+			srcs <- sources(out)
+			srcs[i] <- sources(value)[valueInsides]
 
 			names <- names(out)
 			names[insides] <- names(value)[valueInsides]
@@ -177,7 +177,7 @@ methods::setMethod(
 				topology = topology(out),
 				extent = as.vector(ext(out)),
 				zextent = zext(out),
-				sources = gns,
+				sources = srcs,
 				names = names,
 				datatypeGRASS = dts,
 				resolution = res(out),
@@ -229,10 +229,10 @@ setMethod(
 	}
 	
 	nLayers <- nlyr(x)
-	gns <- .makeSourceName(x, "raster", nLayers)
+	srcs <- .makeSourceName(x, "raster", nLayers)
 	for (i in seq_len(nLayers)) {
 	
-		ex <- paste0(gns[i], " = ", value)
+		ex <- paste0(srcs[i], " = ", value)
 		args <- list(
 			cmd = "r.mapcalc",
 			expression = ex,
@@ -242,7 +242,7 @@ setMethod(
 		do.call(rgrass::execGRASS, args = args)
 	
 	} # next raster
-	.makeGRaster(gns, 'layer')
+	.makeGRaster(srcs, 'layer')
 	
 	} # EOF
 )
@@ -272,19 +272,19 @@ methods::setMethod(
 cat("Command line too long when selecting > ~1500 records.")
 utils::flush.console()
 
-	gn <- .makeSourceName(NULL, rastOrVect = "vector")
+	src <- .makeSourceName(NULL, rastOrVect = "vector")
 	args <- list(
 		cmd = "v.db.droprow",
 		input = sources(x),
 		layer = .dbLayer(x),
-		output = gn,
+		output = src,
 		where = where,
 		flags = c("quiet", "overwrite"),
 		intern = FALSE
 	)
 
 	do.call(rgrass::execGRASS, args=args)
-	.makeGVector(gn)
+	.makeGVector(src)
 
 	} # EOF
 )
@@ -312,10 +312,10 @@ methods::setMethod(
 	drops <- cols[!(cols %in% i)]
 	drops <- names(x)[drops]
 
-	gn <- .copyGSpatial(x)
+	src <- .copyGSpatial(x)
 	args <- list(
 		cmd = "v.db.dropcolumn",
-		map = gn,
+		map = src,
 		columns = drops,
 		flags = "quiet",
 		layer = "1",
@@ -323,7 +323,7 @@ methods::setMethod(
 	)
 
 	do.call(rgrass::execGRASS, args=args)
-	.makeGVector(gn)
+	.makeGVector(src)
 
 	} # EOF
 )

@@ -77,7 +77,7 @@ setValidity("GVector",
 #'
 #' @description Create a `GVector` from a vector existing in the current **GRASS** session.
 #'
-#' @param gn Character: The name of the vector in **GRASS**.
+#' @param src Character: The name of the vector in **GRASS**.
 #'
 #' @returns A `GVector`.
 #'
@@ -86,9 +86,9 @@ setValidity("GVector",
 #' @example man/examples/ex_GRaster_GVector.r
 #'
 #' @noRd
-.makeGVector <- function(gn) {
+.makeGVector <- function(src) {
 
-	info <- .vectInfo(gn)
+	info <- .vectInfo(src)
 	
 	db <- if (is.na(info[["fields"]][1L])) {
 		GEmptyMetaTable()
@@ -107,7 +107,7 @@ setValidity("GVector",
 		crs = crs(),
   		projection = info[["projection"]][1L],
 		topology = info[["topology"]][1L],
-		sources = gn,
+		sources = src,
 		geometry = info[["geometry"]][1L],
 		nGeometries = info[["nGeometries"]],
 		extent = c(info[["west"]][1L], info[["east"]][1L], info[["south"]][1L], info[["north"]][1L]),

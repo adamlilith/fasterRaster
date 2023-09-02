@@ -27,12 +27,12 @@ methods::setMethod(
 	}
 	if (!is.cell(y)) y <- round(y)
 
-	gn <- .makeSourceName("selectRange", "raster")
+	src <- .makeSourceName("selectRange", "raster")
 	xGnames <- sources(x)
 	yGname <- sources(y)
 	nLayers <- nlyr(x)
 
-	ex <- paste0(gn, " = ")
+	ex <- paste0(src, " = ")
 	for (i in seq_len(nLayers)) {
 		ex <- paste0(ex, " if(", yGname, " == ", i, ", ", xGnames[i], ",")
 	}
@@ -46,7 +46,7 @@ methods::setMethod(
 	)
 	do.call(rgrass::execGRASS, args = args)
 
-	.makeGRaster(gn, "selectRange")
+	.makeGRaster(src, "selectRange")
 
 	} # EOF
 )

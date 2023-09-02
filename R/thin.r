@@ -21,19 +21,19 @@ methods::setMethod(
     region(x)
 
     nLayer <- nlyr(x)
-    gns <- .makeSourceName("thin", "raster", nLayer)
+    srcs <- .makeSourceName("thin", "raster", nLayer)
     for (i in seq_len(nLayer)) {
         args <- list(
             cmd = "r.thin",
             input = sources(x)[i],
-            output = gns[i],
+            output = srcs[i],
             iterations = iter,
             flags = c("quiet", "overwrite"),
             intern = TRUE
         )
         do.call(rgrass::execGRASS, args = args)
     }
-    .makeGRaster(gns, names(x))
+    .makeGRaster(srcs, names(x))
     
     } # EOF
 )

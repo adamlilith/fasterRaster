@@ -51,8 +51,8 @@ methods::setMethod(
 
     for (i in 1L:nlyr(x)) {
 
-        gn <- .makeSourceName(names(x)[i], "rast")
-        ex <- paste0(gn, " = ", fx, "(", sources(x)[i], ")")
+        src <- .makeSourceName(names(x)[i], "rast")
+        ex <- paste0(src, " = ", fx, "(", sources(x)[i], ")")
         args <- list(
             cmd = "r.mapcalc",
             expression = ex,
@@ -62,7 +62,7 @@ methods::setMethod(
 
         do.call(rgrass::execGRASS, args=args)
 
-        this <- .makeGRaster(gn, names(x)[i])
+        this <- .makeGRaster(src, names(x)[i])
         if (i == 1L) {
             out <- this
         } else {

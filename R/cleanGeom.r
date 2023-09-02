@@ -79,11 +79,11 @@ methods::setMethod(
 		"rmsa"
 	}
 	
-	gn <- .makeSourceName("generalized", "vect")
+	src <- .makeSourceName("generalized", "vect")
 	args <- list(
 		cmd = "v.clean",
 		input = sources(x),
-		output = gn,
+		output = src,
 		tool = method,
 		threshold = tolerance,
 		flags = c("c", "quiet", "overwrite"),
@@ -91,7 +91,7 @@ methods::setMethod(
 	)
 
 	do.call(rgrass::execGRASS, args=args)
-	.makeGVector(gn)
+	.makeGVector(src)
 
 	} # EOF
 )

@@ -30,11 +30,11 @@ methods::setMethod(
 
     if (round & !is.cell(x)) x <- round(x)
 
-    gn <- .makeSourceName("asPolys", "raster")
+    src <- .makeSourceName("asPolys", "raster")
     args <- list(
         cmd = "r.to.vect",
         input = sources(x),
-        output = gn,
+        output = src,
         type = "area",
         column = names(x),
         flags = c("quiet", "overwrite"),
@@ -42,7 +42,7 @@ methods::setMethod(
     )
     if (smooth) args$flags <- c(args$flags, "s")
     do.call(rgrass::execGRASS, args = args)
-    .makeGVector(gn)
+    .makeGVector(src)
 
     } # EOF
 )
