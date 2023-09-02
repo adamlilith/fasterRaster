@@ -25,14 +25,14 @@ setMethod(
 	} # EOF
 )
 
-#' @aliases st_as_sf
-#' @rdname vect
-#' @exportMethod st_as_sf
-setMethod(
-	"st_as_sf",
-	signature(x = "GVector"),
-	function(x) {
-	out <- vect(x)
-	sf::st_as_sf(out)
-	} # EOF
-)
+# #' @aliases st_as_sf
+# #' @rdname vect
+# #' @exportMethod st_as_sf
+# setMethod(
+# 	"st_as_sf",
+# 	signature(x = "GVector"),
+# 	function(x) {
+# 	out <- vect(x)
+# 	sf::st_as_sf(out)
+# 	} # EOF
+# )
