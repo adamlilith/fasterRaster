@@ -2,16 +2,16 @@
 #'
 #' @description In **fasterRaster**, rasters can have three [data types][tutorial_raster_data_types]: "factor" (categorical rasters), "integer" (integers), "float" (floating point values, accurate to ~7 decimal places), and "double" (double-precision values, accurate to ~16 decimal places). The type of raster can be checked with:
 #'
-#' * [as.int()]: Coerce values to integers (**GRASS** type `CELL`).
-#' * [as.float()]: Coerce values to floating-point precision.
-#' * [as.doub()]: Coerce values to double-floating point precision.
-#' * Conversion to the categorical type can be done using [levels()] or [categories()].
+#' * `as.int()`: Coerce values to integers (**GRASS** type `CELL`).
+#' * `as.float()`: Coerce values to floating-point precision.
+#' * `as.doub()`: Coerce values to double-floating point precision.
+#' * Conversion to the categorical type can be done using [levels()<-] or [categories()].
 #' 
 #' @param x A `GRaster`.
 #' 
 #' @returns A `GRaster`.
 #' 
-#' @seealso [datatype()], [terra::datatype()], [is.int()], [is.float()], [is.doub()], [is.factor()], [explanation of `GRaster` data types][tutorial_raster_data_types]
+#' @seealso [datatype()], [terra::datatype()], [is.int()], [is.float()], [is.doub()], [is.factor()]
 #'
 #' @example man/examples/ex_GRaster.r
 #' 
@@ -34,7 +34,7 @@ methods::setMethod(
 )
 
 #' @aliases as.doub
-#' @rdname as.doub
+#' @rdname as.int
 #' @exportMethod as.doub
 methods::setMethod(
     f = "as.doub",
