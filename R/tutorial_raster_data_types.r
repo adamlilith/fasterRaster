@@ -14,19 +14,20 @@
 #' Double-floating point values are accurate to about the 15th to 17th decimal place. These are called "double" rasters in **fasterRaster** and `DCELL` rasters in **GRASS**. These rasters typically take the most memory. All "`numeric`" values in **RR** are double-floating point values. **R** does not use single floating-point values.
 #' 
 #' ## Categorical rasters
-#' Categorical rasters are actually integer rasters, but have an associated attribute table that maps each integer value to a category label, such as "wetland" or "forest".
+#' Categorical rasters (also called "factor" rasters) are actually integer rasters, but have an associated attribute table that maps each integer value to a category label, such as "wetland" or "forest". The table has at least two columns. The first is integer values, and (by default) the second is category names. This second column is the "active" category column. This active column can be changed using [activeCat<-].
 #'
 #' ## Functions relevant to raster data types
 #' * [datatype()] returns the data type of a `GRaster`.
-#' * [as.int()], [as.float()], and [as.doub()] coerces a raster to an integer, float, or double.
 #' * [is.int()], [is.float()], and [is.doub()] indicate if the raster is an integer, float, or double raster.
 #' * [is.factor()] indicates if the raster is a categorical raster.
+#' * [as.int()], [as.float()], and [as.doub()] coerces a raster to an integer, float, or double.
 #' * [levels()] returns the attribute table of a categorical raster (or a blank list if the raster is not categorical).
-#' * [nlevels()] returns the number of categorical values represented by a categorical raster.
-#' * [levels()<-] and [categories()] can be used to coerce an integer raster to a categorical raster and assign categories.
+#' * [levels()<-] and [categories()] can be used to assign categories to an integer raster and make it categorical (i.e., a factor). 
+#' * [nlevels()] returns the number of levels represented by a categorical raster.
 #' * [activeCat()] and [activeCat()<-] can be used to see or assign which column in a "levels" table associated with a categorical raster is used as category labels.
 #' * [droplevels()] can be used to remove "unused" levels in a levels table.
-#' * [as.int()], [as.float()], and [as.doub()] can be used to convert a raster to an integer, float, or double-floating precision raster (and remove levels in the process).
+#' * [addCats()] can be used to add categories to a categorical raster.
+#' * [missingCats()] finds values in categorical rasters that do not have a category assigned to them.
 #'
 #' ## Saving rasters to disk
 #' You can save substantial space on disk if you set the `datatype` argument in [writeRaster()] when saving a raster. This argument allows for finer "divisions" than just integer/float/double-float, so depending on the range of values in your raster, you can optimize file size by selecting the one that best matches the values in the raster. See the documentation for [writeRaster()] for more information.
