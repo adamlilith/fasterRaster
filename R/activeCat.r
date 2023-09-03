@@ -2,16 +2,6 @@
 #'
 #' @description `GRaster`s can represent [categorical data][tutorial_raster_data_types]. Cell values are actually integers, each corresponding to a category, such as "desert" or "wetland." A categorical raster is associated with a table that matches each value to a category name. The table must be `NULL` (i.e., no categories--so not a categorical raster), or have at least two columns. The first column must have integers and represent raster values. One or more subsequent columns must have category labels. Which column corresponds to category labels can be seen using [activeCat()] and set using [activeCat()<-].
 #'
-#' Several functions help manage categorical rasters:
-#'
-#' * [levels()]: Reports category values and their labels. Only the values and active column is reported.
-#' * [cats()]: Reports category values and their labels. The entire table is returned.
-#' * [levels()<-]: Assign category values and their labels to all layers.
-#' * [categories()]: Assign category values and their labels to specific layers.
-#' * [nlevels()]: Number of levels in each raster.
-#' * `activeCat()`: Retrieve the column index or name of the category labels.
-#' * `activeCat()<-: Set the column index or name of the category labels.
-#'
 #' @param x A categorical `GRaster`.
 #' 
 #' @param layer Numeric, integer, logical, or character: Indicates for which layer(s) to get or set the active category column. This can be a number (the index of the raster(s)), a logical vector (`TRUE` ==> get/set the active category column, `FALSE` ==> leave as-is), or a character vector (names of layers).
