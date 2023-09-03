@@ -56,12 +56,20 @@ levels(cover)
 
 # Re-assign levels:
 vals <- freq(cover)
-value <- c(20, 30, 40, 50, 120, 130, 140, 170, 210)
-label <- c("Cropland", "Cropland", "Forest", "Forest", "Forest", "Shrubland", "Herbaceous", "Flooded", "Water")
+value <- c(20, 30, 40, 50, 120, 130, 140, 170, 300)
+label <- c("Cropland", "Cropland", "Forest", "Forest", "Forest", "Shrubland", "Herbaceous", "Flooded")
 
 cats <- data.frame(value = value, label = label)
 cover <- categories(cover, layer = 1, value = cats)
 levels(cover)
+
+# Are there any values not assigned a category?
+missingCats(cover)
+
+# Let's assign a category for value 210 (water):
+water <- data.frame(value = 210, label = "Water")
+cover <- addCats(cover, water)
+cover
 
 # We can implement logical operations on categorical rasters:
 cover < "Forest" # 1 for cells with a value < 40, 0 otherwise
