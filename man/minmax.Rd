@@ -3,24 +3,20 @@
 \name{minmax,GRaster-method}
 \alias{minmax,GRaster-method}
 \alias{minmax}
-\alias{minmaxCat,GRaster-method}
-\alias{minmaxCat}
 \title{Minimum and maximum values or categories of a GRaster}
 \usage{
-\S4method{minmax}{GRaster}(x)
-
-\S4method{minmaxCat}{GRaster}(x)
+\S4method{minmax}{GRaster}(x, levels = FALSE)
 }
 \arguments{
 \item{x}{A \code{GRaster}.}
+
+\item{levels}{Logical: If \code{TRUE} and the raster is a categorical raster, return the "lowest" and "highest" categories. The default is \code{FALSE}.}
 }
 \value{
-\code{minmax()} returns a numeric matrix, and \code{minmaxCat()} returns a \code{data.frame} with category names.
+\code{minmax()} returns a numeric matrix, and \code{minmax(..., levels = TRUE)} returns a \code{data.frame} with category names. In the latter case, non-categorical rasters will have \code{NA} values.
 }
 \description{
-\code{minmax()} reports the minimum and maximum values across all non-NA cells of a \code{GRaster}.
-
-\code{minmaxCats()} reports the "lowest" and "highest" category values in a \link[=tutorial_raster_data_types]{categorical raster}.
+\code{minmax()} reports the minimum and maximum values across all non-NA cells of a \code{GRaster}. When the \code{levels} argument is \code{TRUE} and the raster is categorical, the function` reports the "lowest" and "highest" category values in a \link[=tutorial_raster_data_types]{categorical raster}.
 }
 \examples{
 \dontrun{

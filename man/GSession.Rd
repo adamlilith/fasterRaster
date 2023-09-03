@@ -68,9 +68,11 @@ The \code{G} suite of S4 classes contain pointers to \strong{GRASS} objects or m
 
 \item{\code{resolution}}{Vector of two numeric values (\code{GRegion}s, including \code{GRaster}s): Size of a raster cell in the east-west direction and in the north-south direction. Can be obtained using \code{\link[=res]{res()}} and \code{\link[=res3d]{res3d()}}.}
 
-\item{\code{nCats}}{Integer (\code{GRaster}s): Number of categories. Must be >0. Can be obtained using \code{\link[=nlevels]{nlevels()}}.}
-
 \item{\code{minVal,maxVal}}{Numeric (\code{GRaster}s): Minimum and maximum value across all cells. Can be obtained using \code{\link[=minmax]{minmax()}}.}
+
+\item{\code{activeCat}}{Integer (\code{GRaster}s): Column index of the category labels. Must be >0. Note that from the user's standpoint, 1 is subtracted from this number. So a value if \verb{@activeCat} is \code{2}, then the user would see "1" when printed. Can be obtained using \code{\link[=activeCat]{activeCat()}}.}
+
+\item{\code{levels}}{List of \code{data.table}s (\code{GRaster}s): Tables for categorical rasters. If a raster is not categorical, the \code{data.table} is \code{NULL}, as in \code{data.table(NULL)}. Can be obtained using \code{levels()} or \code{cats()}.}
 
 \item{\code{dbLayer}}{Character (\code{GVector}s): Names of the attribute table "layer" associated with the \code{GVector} in the \strong{GRASS} SQLite database. Can be obtained using and \code{.dbLayer()}.}
 

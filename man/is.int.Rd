@@ -28,10 +28,10 @@ Logical.
 \description{
 In \strong{fasterRaster}, rasters can have three \link[=tutorial_raster_data_types]{data types}: "factor" (categorical rasters), "integer" (integers), "float" (floating point values, accurate to ~7 decimal places), and "double" (double-precision values, accurate to ~16 decimal places). The type of raster can be checked with:
 \itemize{
-\item \code{\link[=is.factor]{is.factor()}}: The raster will have integer values and categories matched to the integers (see levels()).
-\item \code{\link[=is.int]{is.int()}}: Are values integers? Note that \code{is.int()} will return \code{FALSE} for categorical rasters, even though cell values are technically integers.
-\item \code{\link[=is.float]{is.float()}}: Are values floating-point precision?
-\item \code{\link[=as.doub]{as.doub()}}: Are values double-floating point precision?
+\item \code{is.factor()}: The raster will have integer values and categories matched to the integers (see levels()).
+\item \code{is.int()}: Are values integers? Note that \code{is.int()} will return \code{FALSE} for categorical rasters, even though cell values are technically integers.
+\item \code{is.float()}: Are values floating-point precision?
+\item \code{is.doub()}: Are values double-floating point precision?
 }
 }
 \examples{

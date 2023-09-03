@@ -125,10 +125,11 @@ Other functions:\cr
 \link{activeCat()<-}: Set column that defines category labels\cr
 \code{\link[=cats]{cats()}}: Levels table of a categorical raster\cr
 \code{\link[=categories]{categories()}}: Set levels table for specific layers of a categorical raster\cr
+\code{\link[=droplevels]{droplevels()}}: Remove one or more levels\cr
 \code{\link[=is.factor]{is.factor()}}: Is a raster categorical?\cr
 \code{\link[=levels]{levels()}}: Levels table of a categorical raster\cr
 \link{levels()<-}: Set levels table of a categorical raster\cr
-\code{\link[=minmaxCat]{minmaxCat()}}: "Minimum" and "maximum" category values of categorical rasters\cr
+\code{\link[=minmax]{minmax()}}: "Lowest" and "highest" category values of categorical rasters (when argument \code{levels = TRUE})\cr
 \code{\link[=nlevels]{nlevels()}}: Number of levels\cr
 }
 
@@ -199,6 +200,7 @@ Other functions:\cr
 \code{\link[=appendLists]{appendLists()}}: Append values to elements of a list from another list\cr
 \code{\link[=compareGeom]{compareGeom()}}: Determine if geographic metadata is same between \code{GRaster}s and/or \code{GVector}s\cr
 \code{\link[=compareFloat]{compareFloat()}}: Compare values accounting for differences due to floating point precision\cr
+\code{\link[=dropRows]{dropRows()}}: Drop rows from a \code{data.table} or \code{data.frame}\cr
 \code{\link[=forwardSlash]{forwardSlash()}}: Replace backslash with forward slash\cr
 \code{\link[=grassInfo]{grassInfo()}}: \strong{GRASS} version and citation\cr
 \code{\link[=pmatchSafe]{pmatchSafe()}}: Partial matching of strings with error checking\cr

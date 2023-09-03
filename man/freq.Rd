@@ -12,7 +12,7 @@
 
 \item{digits}{Numeric integer: Number of digits by which to round raster values.}
 
-\item{value}{Numeric or \code{NULL} (default): If numeric, only cells with this value will be counted.}
+\item{value}{Numeric or \code{NULL} (default): If numeric, only cells with this value will be counted. If \code{NULL}, all values will be counted.}
 
 \item{bins}{Positive numeric integer: Number of bins in which to divide values of a raster with continuous values.}
 }
@@ -20,7 +20,7 @@
 A \code{data.frame} or a named \code{list} of \code{data.frame}s, one per layer in \code{x}.
 }
 \description{
-\code{freq()} tabulates the frequency of cell values in a raster. For rasters where \code{\link[=datatype]{datatype()}} is \code{CELL} (integers), the frequency of each value is reported. For other rasters, the range of values is divided into bins, and the number of cells with values in each bin is reported.
+\code{freq()} tabulates the frequency of cell values in a raster. For rasters where \code{\link[=datatype]{datatype()}} is \code{integer}, the frequency of each value is reported. For other rasters, the range of values is divided into bins, and the number of cells with values in each bin is reported.
 }
 \examples{
 \dontrun{

@@ -16,7 +16,7 @@
 \item{type}{\code{NULL} or character: Type of datatype to report (\code{GRaster} only):
 \itemize{
 \item \code{"fasterRaster"} (default): Reports the "\emph{fasterRaster}*" type (factor, float, or double)
-\item \code{"terra"}: Report the (inferred) \strong{terra} data type (e.g., INT2U, FLT4S). Please see the table in the \link{tutorial on raster data types}.\link{tutorial_raster_data_types} for more information.
+\item \code{"terra"}: Report the (inferred) \strong{terra} data type (e.g., INT2U, FLT4S). Please see the table in the \link{tutorial on raster data types} for more information.
 \item \code{"GRASS"}: Will return "CELL" (integer), "FCELL" (floating-point value), or "DCELL" (double=floating point value)
 \item \code{"GDAL"}: See \href{https://gdal.org/user/raster_data_model.html#raster-band}{GDAL: Raster Band}.
 }}
@@ -25,7 +25,7 @@
 \code{datatype()} for a \code{GRaster} returns a character. \code{datatype()} for a \code{GVector} returns a data frame, with one row per field.
 }
 \description{
-\code{datatype()} returns the data type of a \code{GRaster} or of each column of a \code{GVector}. See the short \link[=raster_data_types]{tutorial} on raster data types for an explanation of the various types of data types.
+\code{datatype()} returns the [data type\link{tutorial_raster_data_types} of a \code{GRaster} or of each column of a \code{GVector}.
 }
 \examples{
 \dontrun{

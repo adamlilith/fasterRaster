@@ -24,10 +24,10 @@ A \code{GRaster}.
 \description{
 In \strong{fasterRaster}, rasters can have three \link[=tutorial_raster_data_types]{data types}: "factor" (categorical rasters), "integer" (integers), "float" (floating point values, accurate to ~7 decimal places), and "double" (double-precision values, accurate to ~16 decimal places). The type of raster can be checked with:
 \itemize{
-\item \code{\link[=as.int]{as.int()}}: Coerce values to integers (\strong{GRASS} type \code{CELL}).
-\item \code{\link[=as.float]{as.float()}}: Coerce values to floating-point precision.
-\item \code{\link[=as.doub]{as.doub()}}: Coerce values to double-floating point precision.
-\item Conversion to the categorical type can be done using \code{\link[=levels]{levels()}} or \code{\link[=categories]{categories()}}.
+\item \code{as.int()}: Coerce values to integers (\strong{GRASS} type \code{CELL}).
+\item \code{as.float()}: Coerce values to floating-point precision.
+\item \code{as.doub()}: Coerce values to double-floating point precision.
+\item Conversion to the categorical type can be done using \link{levels()<-} or \code{\link[=categories]{categories()}}.
 }
 }
 \examples{

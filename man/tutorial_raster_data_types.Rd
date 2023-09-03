@@ -28,12 +28,15 @@ Categorical rasters are actually integer rasters, but have an associated attribu
 \subsection{Functions relevant to raster data types}{
 \itemize{
 \item \code{\link[=datatype]{datatype()}} returns the data type of a \code{GRaster}.
-\item \code{\link[=is.int]{is.int()}}, \code{\link[=is.float]{is.float()}}, and \code{\link[=is.doub]{is.doub()}} indicate if the raster is of the given type.
-\item \code{\link[=as.int]{as.int()}}, \code{\link[=as.float]{as.float()}}, and \code{\link[=as.doub]{as.doub()}} coerces a raster to the given type.
+\item \code{\link[=as.int]{as.int()}}, \code{\link[=as.float]{as.float()}}, and \code{\link[=as.doub]{as.doub()}} coerces a raster to an integer, float, or double.
+\item \code{\link[=is.int]{is.int()}}, \code{\link[=is.float]{is.float()}}, and \code{\link[=is.doub]{is.doub()}} indicate if the raster is an integer, float, or double raster.
 \item \code{\link[=is.factor]{is.factor()}} indicates if the raster is a categorical raster.
 \item \code{\link[=levels]{levels()}} returns the attribute table of a categorical raster (or a blank list if the raster is not categorical).
 \item \code{\link[=nlevels]{nlevels()}} returns the number of categorical values represented by a categorical raster.
-\item You can convert an integer raster to a categorical raster using \link{levels()<-} or \code{\link[=categories]{categories()}}.
+\item \link{levels()<-} and \code{\link[=categories]{categories()}} can be used to coerce an integer raster to a categorical raster and assign categories.
+\item \code{\link[=activeCat]{activeCat()}} and \link{activeCat()<-} can be used to see or assign which column in a "levels" table associated with a categorical raster is used as category labels.
+\item \code{\link[=droplevels]{droplevels()}} can be used to remove "unused" levels in a levels table.
+\item \code{\link[=as.int]{as.int()}}, \code{\link[=as.float]{as.float()}}, and \code{\link[=as.doub]{as.doub()}} can be used to convert a raster to an integer, float, or double-floating precision raster (and remove levels in the process).
 }
 }
 
@@ -48,9 +51,10 @@ You can save substantial space on disk if you set the \code{datatype} argument i
    \code{float} \tab \code{FLT4S} \tab \code{FCELL} \tab \code{Float32} \tab Values from -3.4e+38 to 3.4e+38, including decimal values \cr
    \code{double} \tab \code{FLT8S} \tab \code{DCELL} \tab \code{Float64} \tab Values from -1.7e+308 to 1.7e+308, including decimal values \cr
    \code{factor} \tab \code{INT}* \tab \code{CELL} \tab * \tab Integer values corresponding to categories \cr
-   \code{*} Depends on the integers (signed/unsigned, their range) \tab  \tab  \tab  \tab  \cr
 }
 
+
+\code{*} Depends on the integers (signed/unsigned, range of values)
 }
 }
 \examples{

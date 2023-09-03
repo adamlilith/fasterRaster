@@ -24,8 +24,10 @@
    \code{float} \tab \code{FLT4S} \tab \code{FCELL} \tab \code{Float32} \tab Values from -3.4e+38 to 3.4e+38, including decimal values \cr
    \code{double} \tab \code{FLT8S} \tab \code{DCELL} \tab \code{Float64} \tab Values from -1.7e+308 to 1.7e+308, including decimal values \cr
    \code{factor} \tab \code{INT}* \tab \code{CELL} \tab * \tab Integer values corresponding to categories \cr
-   \code{*} Depends on the integers (signed/unsigned, their range). Categorical rasters will have a CSV file with category values and labels saved with them. The file name will be the same as the raster's file name, but end in extension ".csv". \tab  \tab  \tab  \tab  \cr
-}}
+}
+
+
+\code{*} Depends on the integers (signed/unsigned, range of values). Categorical rasters will have a CSV file with category values and labels saved with them. The file name will be the same as the raster's file name, but end in extension ".csv".}
 
 \item{overwrite}{Logical: If \code{FALSE} (default), do not save over existing file(s).}
 

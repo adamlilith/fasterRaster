@@ -28,6 +28,15 @@ Argument(s): \code{x}: A \code{GRaster} or vector of \code{sources}.
 Argument(s): \code{x}: A \code{GVector}.
 }
 
+\subsection{\code{.delete()} and \code{.keep()}}{
+
+Remove or retain rows of a \code{data.table}.
+
+Argument(s): \code{DT}: A \code{data.table}.
+
+\code{removes} or \code{keeps}: Rows to remove or keep.
+}
+
 \subsection{\code{.ls()}}{
 
 Lists the \code{sources} of all objects in the current \strong{GRASS} session.
@@ -50,7 +59,7 @@ Argument(s): \code{x}: Missing, character, \code{SpatRaster}, \code{SpatVector},
 
 Make \code{GRaster}s or \code{GVector}s from a vector of \code{sources}, which is a pointer to files in \strong{GRASS}.
 
-Argument(s): \code{gn}: Character vector of \code{sources}.
+Argument(s): \code{src}: Character vector of \code{sources}.
 
 \code{name}: Character (rasters only): Name(s) of the \code{GRaster}s.
 }

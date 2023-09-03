@@ -18,7 +18,7 @@
 
 \item{names}{Logical: If \code{TRUE}, display the name(s) of the active column(s). If \code{FALSE} (default), report the index of the active column. Following \code{\link[terra:activeCat]{terra::activeCat()}}, the first column in the levels table is ignored. So, an active column of "1" means the second column is active. "2" means the third column is active, and so on.}
 
-\item{value}{Numeric, integer, or character. Following \code{\link[terra:activeCat]{terra::activeCat()}}, the first column in each levels table is ignored. So, if you want the second column to be the category label, the use 1. if you want the third column, use 2, and so on. You can also specify the active column by its column name.}
+\item{value}{Numeric, integer, or character. Following \code{\link[terra:activeCat]{terra::activeCat()}}, the first column in each levels table is ignored. So, if you want the second column to be the category label, the use 1. if you want the third column, use 2, and so on. You can also specify the active column by its column name (though this can't be the first column).}
 }
 \value{
 \code{activeCat()} returns an integer or character vector of active column indices or names. \verb{activeCat()<-} returns a \code{GRaster}.
@@ -67,26 +67,40 @@ workDir = tempdir(), location = "examples") # line only needed for examples
 # Convert categorical SpatRaster to categorical GRaster:
 cover <- fast(madCover)
 
-# set categories
-cover # note... no categories
-levs <- levels(madCover)
-levs <- levs[[1]]
-cover <- categories(cover, layer = 1, value = levs)
-
-cover # Note display of "min"/"max" categories and number of categories
+# Properties of categorical rasters:
+cover # note categories
 is.factor(cover) # Is the raster categorical?
-ncat(cover) # Number of categories
-levels(cover) # Categories
+nlevels(cover) # number of levels
+levels(cover) # just the value and active column
+cats(cover) # all columns
+minmax(cover) # min/max values
+minmax(cover, levels = TRUE) # min/max categories
 
-# Re-assign levels
+
+# Remove unused levels:
+nlevels(cover)
+cover <- droplevels(cover)
+nlevels(cover)
+
+# Which column sets the category labels?
+activeCat(cover)
+
+# Choose a different column for category labels:
+levels(cover)
+activeCat(cover) <- 2
+levels(cover)
+
+
+# Re-assign levels:
+vals <- freq(cover)
 value <- c(20, 30, 40, 50, 120, 130, 140, 170, 210)
 label <- c("Cropland", "Cropland", "Forest", "Forest", "Forest", "Shrubland", "Herbaceous", "Flooded", "Water")
 
 cats <- data.frame(value = value, label = label)
 cover <- categories(cover, layer = 1, value = cats)
-cover
+levels(cover)
 
-# We can implement logical operations on categorical rasters
+# We can implement logical operations on categorical rasters:
 cover < "Forest" # 1 for cells with a value < 40, 0 otherwise
 cover <= "Forest" # 1 for cells with a value < 120, 0 otherwise
 cover == "Forest" # 1 for cells with value of 40-120, 0 otherwise
