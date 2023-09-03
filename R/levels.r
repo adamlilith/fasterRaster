@@ -8,6 +8,8 @@
 #' * `cats()`: Reports category values and their labels. The entire table is returned.
 #' * `levels() <-`: Assign category values and their labels to all layers.
 #' * `categories()`: Assign category values and their labels to specific layers.
+#' * `addCats()`: Add categories (rows) or columns to the levels table of a categorical raster.
+#' * `missingCats()`: Identifies values that have no assigned category.
 #' * [nlevels()]: Number of levels in each raster.
 #' * [activeCat()]: Retrieve the column index or name of the category labels.
 #' * [activeCat() <-]: Set the column index or name of the category labels.
@@ -46,8 +48,14 @@ methods::setMethod(
 
 			if (numLevels[i] > 0L) {
 			
-				activeCat <- x@activeCat[[i]]
-				out[[i]] <- out[[i]][ , c(1L, ..activeCat)]
+				names <- names(x@levels[[i]])
+				active <- names[x@activeCat[[i]]]
+				active <- names[x@activeCat[[i]]]
+				value <- names[1L]
+
+				cols <- c(value, active)
+
+				out[[i]] <- out[[i]][ , ..cols]
 
 			}
 		}
@@ -159,6 +167,11 @@ methods::setMethod(
 			# convert first column to integer
 			value[[i]][, (valueCol) := lapply(.SD, as.integer), .SDcols = valueCol]
 
+			# detect non-unique values
+			unis <- unique(value[[i]][ , 1L])
+			numUnis <- nrow(unis)
+			if (numUnis < nrow(value[[i]])) stop("The value column (the first column) must have unique values.")
+
 			# sort by first column
    			data.table::setorderv(value[[i]], col = valueCol)
 
@@ -182,11 +195,11 @@ methods::setMethod(
 	signature = c(x = "GRaster"),
 	function(x, layer = 1, value, active = 1) {
 
-	if (!is.list(value)) value <- list(value)
+	if (!inherits(value, "list")) value <- list(value)
 
 	if (length(list) != length(layer)) stop("The number of level tables is not the same as the number of raster layers.")
 
-	for (i in seq_along(value)) {
+	for (i in layer) {
 
 		if (is.character(value[[i]]) && value[[i]] == "") {
 			value[[i]] <- data.table::data.table(NULL)
@@ -196,14 +209,21 @@ methods::setMethod(
 
 		# set value to integer and sort by value
 		if (!is.character(value[[i]])) {
+
 			names <- names(value[[i]])
 			valueCol <- names[1L]
 
 			# convert first column to integer
-			value[[i]][, (valueCol) := lapply(.SD, as.integer), .SDcols = valueCol]
+			value[[i]][ , (valueCol) := lapply(.SD, as.integer), .SDcols = valueCol]
+
+			# detect non-unique values
+			unis <- unique(value[[i]][, 1L])
+			numUnis <- nrow(unis)
+			if (numUnis < nrow(value[[i]])) stop("The value column (the first column) must have unique values.")
 
 			# sort by first column
 			data.table::setorderv(value[[i]], col = valueCol)
+		
 		}
 
 	}
@@ -218,6 +238,40 @@ methods::setMethod(
 	} # EOF
 )
 
+#' @aliases addCats
+#' @rdname levels
+#' @exportMethod addCats
+methods::setMethod(
+	f = "addCats",
+	signature = c(x = "GRaster"),
+	function(x, value, merge = FALSE, layer = 1) {
+
+	if (inherits(value, "data.frame", which = TRUE) != 1L) {
+		value <- data.table::as.data.table(value)
+	}
+
+	if (merge) {
+	
+  		# levelValCol <- names(x@levels[[layer]])[1L]
+  		valValCol <- names(value)[1L]
+
+  		x@levels[[layer]] <- x@levels[[layer]][value, on = c(Code = valValCol)]
+
+		# data.table::setkey(x@levels[[layer]], levelValCol)
+		# data.table::setkey(value, valValCol)
+		# x@levels[[layer]] <- value[x@levels[[layer]]]
+	
+	} else {
+	
+		x@levels[[layer]] <- cbind(x@levels[[layer]], value)
+	
+	}
+ 	validObject(x)
+	x
+
+	} # EOF
+)
+
 #' @aliases droplevels
 #' @rdname levels
 #' @exportMethod droplevels
@@ -226,38 +280,90 @@ methods::setMethod(
 	signature = c(x = "GRaster"),
 	function(x, level = NULL, layer = 1) {
 	
-	levs <- levels(x)
-	ncats <- nlevels(x)
+	levs <- cats(x)
+	isFact <- is.factor(x)
 	for (i in layer) {
 
-		if (ncats[i] > 0L) {
+		if (isFact[i]) {
 
 			# remove all non-extant levels
 			if (is.null(level)) {
-			
-				freqs <- freq(x[[i]])
-				valsInRast <- freqs[[1L]]
-				removes <- which(!(levs[[i]][[1L]] %in% valsInRast))
+
+			    freqs <- freq(x[[i]])
+
+				data.table::setkeyv(freqs, names(freqs))
+				data.table::setkeyv(levs[[i]], names(levs[[i]])[1L])
+
+				cols <- names(levs[[i]])
+
+    			x@levels[[i]] <- levs[[i]][unique(levs[[i]][freqs, which = TRUE]), ]
 
 			} else if (is.character(level)) {
 			
-				removes <- which(levs[[i]][[activeCat]] %in% levels)
+				ac <- activeCat(x, layer = i, names = TRUE)
+
+				x@levels[[i]] <- levs[[i]][levs[[i]][ , !(get(ac) %in% levels)]]
 			
 			} else if (is.logical(level)) {
 			
 				if (length(level) < nrow(levs[[i]])) {
+
 					level <- rep(level, length.out = nrow(levs[[i]]))
 				}
-				removes <- which(level)
+
+    			x@levels[[i]] <- levs[[i]][level]
 			
 			}
 
-			x@levels[[i]] <- .remove(levs[[i]], removes = removes)
+			if (nrow(x@levels[[i]]) == 0L) x@activeCat[i] <- NA_integer_
 
 		} # if this layer has levels
 
 	} # next raster
+	validObject(x)
 	x
 	
 	} # EOF
 )
+
+#' @aliases missingCats
+#' @rdname levels
+#' @exportMethod missingCats
+methods::setMethod(
+    f = "missingCats",
+    signature = c(x = "GRaster"),
+    function(x) {
+
+	levs <- levels(x)
+	isFact <- is.factor(x)
+
+	out <- list()
+	for (i in seq_len(nlyr(x))) {
+	
+		if (!isFact[i]) {
+			out[[i]] <- numeric()
+		} else {
+		
+			freqs <- freq(x[[i]])
+			if (!inherits(freqs, "data.table")) freqs <- data.table::as.data.table(freqs)
+
+			freqs <- freqs[ , 1L]
+			
+			data.table::setkeyv(freqs, names(freqs))
+   			data.table::setkeyv(levs[[i]], names(levs[[i]])[1L])
+
+   			missing <- freqs[!levs[[i]]]
+			if (nrow(missing) == 0L) {
+   				out[[i]] <- integer()
+			} else {
+				out[[i]] <- missing[[1L]]
+			}
+
+		} # if this layer has levels
+	} # next raster
+	names(out) <- names(x)
+	out
+
+    } # EOF
+)
+
