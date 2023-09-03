@@ -274,7 +274,7 @@ methods::setMethod(
 	if (is.null(x)) {
 		levels <- NULL
 	} else if (inherits(x, "SpatRaster")) {
-		levels <- levels(x)
+		levels <- terra::cats(x)
 	} else if (is.character(x)) {
 		if (x == "") {
 			levels <- list(x)
