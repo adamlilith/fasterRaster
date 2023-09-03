@@ -144,7 +144,7 @@ methods::setMethod(
 	if (anyNA(maxValLength)) maxValLength[is.na(maxValLength)] <- 2L
 	
 	# minimum and maximum category values
-	mmCats <- minmaxCat(object)
+	mmCats <- minmax(object, levels = TRUE)
 	minCat <- mmCats["min", , drop = TRUE]
 	maxCat <- mmCats["max", , drop = TRUE]
 	minCat[is.na(minCat)] <- "NA"
@@ -264,7 +264,7 @@ methods::setMethod(
 	cat("max. value  :", maxValNice, "\n")
 	if (any(numLevels > 0L)) {
   		cat("categories  :", nCatsNice, "\n")
-  		if (details) cat("active col. :", activeCat, "\n")
+  		if (details) cat("active cat. :", activeCat, "\n")
 		cat("min. categ. :", minCatNice, "\n")
 		cat("max. categ. :", maxCatNice, "\n")
 	}
