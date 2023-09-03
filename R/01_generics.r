@@ -28,6 +28,7 @@ methods::setGeneric(name = "activeCat", package = "terra")
 methods::setGeneric(name = "activeCat<-", package = "terra")
 # #' @importFrom terra add<-
 methods::setGeneric(name = "add<-", package = "terra")
+methods::setGeneric(name = "addCats", package = "terra")
 # #' @importFrom terra app
 methods::setGeneric(name = "app", package = "terra")
 methods::setGeneric(name = "appFuns", def = function(show, ...) standardGeneric("appFuns"))
@@ -75,6 +76,7 @@ methods::setGeneric(name = "datatype", def = function(x, ...) standardGeneric("d
 methods::setGeneric(name = "delaunay", package = "terra")
 methods::setGeneric(name = "distance", def = function(x, y, ...) standardGeneric("distance"))
 methods::setGeneric(name = "droplevels", package = "terra")
+methods::setGeneric(name = "dropRows", def = function(x, ...) standardGeneric("dropRows"))
 
 methods::setGeneric(name = "east", def = function(x, ...) standardGeneric("east"))
 # #' @importFrom terra ext
@@ -119,6 +121,7 @@ methods::setGeneric(name = "is.points", package = "terra")
 methods::setGeneric(name = "is.polygons", package = "terra")
 methods::setGeneric(name = "intercept", def = function(x, ...) standardGeneric("intercept"))
 
+methods::setGeneric(name = "keepRows", def = function(x, ...) standardGeneric("keepRows"))
 methods::setGeneric(name = "kurtosis", def = function(x, ...) standardGeneric("kurtosis"))
 
 # levels (in base) is generic
@@ -132,7 +135,7 @@ methods::setGeneric(name = "mapset", def = function(x) standardGeneric("mapset")
 methods::setGeneric(name = "mask", package = "terra")
 # #' @importFrom terra minmax
 methods::setGeneric(name = "minmax", package = "terra")
-methods::setGeneric(name = "minmaxCat", def = function(x, ...) standardGeneric("minmaxCat"))
+methods::setGeneric(name = "missingCats", def = function(x, ...) standardGeneric("missingCats"))
 # #' @importFrom terra merge
 methods::setGeneric(name = "merge", package = "terra")
 #' @importFrom stats median
