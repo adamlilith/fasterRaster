@@ -4,9 +4,7 @@
 #'
 #' @param x A `GRaster`.
 #'
-#' @param droplevels Logical: If `TRUE` (default), drop levels that do not appear in the raster.
-#'
-#' @return A named, numerfic vector of integers. The values represent the number of levels (rows) that appear in the raster's levels table.
+#' @return A named, numeric vector of integers. The values represent the number of levels (rows) that appear in the raster's levels table.
 #'
 #' @seealso [levels()], [terra::levels()], [categorical rasters][tutorial_raster_data_types]
 #'
