@@ -65,15 +65,17 @@ methods::setMethod(
 methods::setMethod(
 	f = "activeCat<-",
 	signature = c(x = "GRaster"),
-	function(x, layer = 1, value) {
+	function(x, value, layer = 1) {
 	
 	if (is.logical(layer)) layer <- which(layer)
 	if (is.character(layer)) layer <- match(layer, names(x))
 
-	if (any(!(layer %in% seq_along(nlyr(x))))) stop("Raster only contains ", nlyr(x), " layer(s).")
+	if (!all(layer %in% seq_len(nlyr(x)))) {
+		stop("Raster only contains ", nlyr(x), " layer(s).")
+	}
 
 	facts <- is.factor(x)
-	if (any(!(which(facts) %in% layer))) stop("At least one layer is not categorical. The active category cannot be set for this layer.")
+	if (any(!(which(facts) %in% layer))) stop("At least one layer is not categorical.\n  The active category cannot be set for this layer.")
 
 	if (is.character(value)) {
 		levs <- levels(x)
@@ -84,8 +86,9 @@ methods::setMethod(
 		value <- value + 1L
 	}
 
+	value <- as.integer(value)
 	x@activeCat[layer] <- value
-	isValid(x)
+	validObject(x)
 	x
 
 	} # EOF
