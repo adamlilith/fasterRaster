@@ -59,7 +59,7 @@ methods::setMethod(
 		resolution = res(x),
 		minVal = mm["min", i],
 		maxVal = mm["max", i],
-		activeCat = activeCat(x)[i],
+		activeCat = x@activeCat[i],
 		levels = levels(x)[i]
 	)
 	
@@ -160,7 +160,7 @@ methods::setMethod(
 			maxVal <- .maxVal(out)
 			maxVal[insides] <- .maxVal(value)[valueInsides]
 
-			ac <- activeCat(out)
+			ac <- out@activeCat
 			ac[insides] <- activeCat(value)[valueInsides]
 
 			levs <- levels(out)
