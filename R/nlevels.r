@@ -6,9 +6,9 @@
 #'
 #' @param droplevels Logical: If `TRUE` (default), drop levels that do not appear in the raster.
 #'
-#' @return A numeric vector of integers. These represent the number of levels that appear in the raster (always for `GRaster`s, and for `SpatRaster`s when `dropLevels = TRUE`), or the number of levels that appear or could appear in the raster (for `SpatRaster`s only, when `dropLevels = FALSE`).
+#' @return A named, numerfic vector of integers. The values represent the number of levels (rows) that appear in the raster's levels table.
 #'
-#' @seealso [terra::nlevels()], [levels()], [terra::levels()], [categorical rasters][tutorial_raster_data_types]
+#' @seealso [levels()], [terra::levels()], [categorical rasters][tutorial_raster_data_types]
 #'
 #' @example man/examples/ex_GRaster_categorical.r
 #'
@@ -25,7 +25,7 @@ setMethod(
     } # EOF
 )
 
-#' Count number of levels
+#' Count number of levels from a data.frame/table, list, or SpatRaster
 #'
 #' @description Counts number of levels in a character string (specifically, the empty string `""`), a `data.frame`, `data.table`, or list of `data.frame`s or `data.table`s or empty strings.
 #'
