@@ -74,11 +74,12 @@ GRaster <- methods::setClass(
 	bad <- FALSE
 	
 	numCols <- sapply(object@levels, ncol)
-	numLevels <- nlevels(object)
-	if (
-		any(numLevels > 0L & is.na(object@activeCat)) ||
-		any(numLevels > 0L & (object@activeCat < 1L | object@activeCat > numCols))) bad <- TRUE
-	
+	isFact <- is.factor(object)
+	if (any(isFact & is.na(object@activeCat))) {
+		bad <- TRUE
+	} else if (any(isFact & (object@activeCat < 1L | object@activeCat > numCols))) {
+		bad <- TRUE
+	}
 	bad
 
 }
@@ -129,7 +130,7 @@ setValidity("GRaster",
 		} else if (.validLevelTable(object)) {
 			"Each table must be a NULL data.table, or if not, the first column must be an integer, and there must be >1 columns."
 		} else if (.validActiveCat(object)) {
-			"@activeCat must be an integer between 1 and the number of columns in each data.table in @levels, not counting the first (value) column."
+			"@activeCat must be NA_integer, or an integer between 2 and the number of columns in each data.table in @levels."
 		} else {
 			TRUE
 		}
