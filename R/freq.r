@@ -65,11 +65,13 @@ methods::setMethod(
 	
 		data <- strsplit(data, split = "\\|")
 
-		# categorical data
+		# categorical/integer data
 		if (datatype(x)[i] %in% c("integer", "factor")) {
 			
 			n <- length(data)
+
 			freqs <- data.table::data.table(value = rep(NA_character_, n), count = rep(NA_character_, n))
+
 			for (j in seq_along(data)) {
 				freqs$value[j] <- data[[j]][1L]
 				freqs$count[j] <- data[[j]][2L]
@@ -77,6 +79,16 @@ methods::setMethod(
 			
 			freqs$value <- as.numeric(freqs$value)
 			freqs$count <- as.numeric(freqs$count)
+			data.table::setkeyv(freqs, "value")
+
+			# add level labels
+			if (is.factor(x)[i]) {
+
+          		levs <- levels(x)[[i]]
+				freqs <- merge(freqs, levs, by.x = names(freqs)[1L], by.y = names(levs)[1L])
+    			data.table::setkeyv(freqs, "value")
+
+			}
 		
 		# continuous data
 		} else {
