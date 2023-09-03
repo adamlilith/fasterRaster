@@ -109,10 +109,11 @@
 #' ## Functions operating on categorical rasters
 #' [activeCat()]: Column that defines category labels\cr
 #' [activeCat()<-]: Set column that defines category labels\cr
-#' [cats()]: Levels table of a categorical raster\cr
 #' [categories()]: Set levels table for specific layers of a categorical raster\cr
+#' [cats()]: Levels table of a categorical raster\cr
 #' [droplevels()]: Remove one or more levels\cr
 #' [is.factor()]: Is a raster categorical?\cr
+#' [missingCats()]: Values that have no category assigned to them\cr
 #' [levels()]: Levels table of a categorical raster\cr
 #' [levels()<-]: Set levels table of a categorical raster\cr
 #' [minmax()]: "Lowest" and "highest" category values of categorical rasters (when argument `levels = TRUE`)\cr
