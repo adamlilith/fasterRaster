@@ -20,14 +20,18 @@
 #' * [datatype()] returns the data type of a `GRaster`.
 #' * [is.int()], [is.float()], and [is.doub()] indicate if the raster is an integer, float, or double raster.
 #' * [is.factor()] indicates if the raster is a categorical raster.
-#' * [as.int()], [as.float()], and [as.doub()] coerces a raster to an integer, float, or double.
-#' * [levels()] returns the attribute table of a categorical raster (or a blank list if the raster is not categorical).
-#' * [levels()<-] and [categories()] can be used to assign categories to an integer raster and make it categorical (i.e., a factor). 
+#' * [as.int()], [as.float()], and [as.doub()] coerce a raster to an integer, float, or double.
+#' * [levels()] returns the "levels" table of a categorical raster (just the value column and the active column).
+#' * [cats()] returns the entire "levels" table of a categorical raster.
+#' * [levels()<-] and [categories()] can be used to assign categories to an integer raster and make it categorical (i.e., a "factor" raster). 
+#' * [addCats()] adds information to the "levels" table using [data.table::merge()] (same as [merge()]).
+#' * [addCats<-] add new levels to a "levels" table.
+#' * [droplevels()] removes "unused" levels in a "levels" table.
+#' * [catNames()] reports the column names of the "levels" table of each layer of a raster.
 #' * [nlevels()] returns the number of levels represented by a categorical raster.
 #' * [activeCat()] and [activeCat()<-] can be used to see or assign which column in a "levels" table associated with a categorical raster is used as category labels.
-#' * [droplevels()] can be used to remove "unused" levels in a levels table.
-#' * [addCats()] can be used to add categories to a categorical raster.
 #' * [missingCats()] finds values in categorical rasters that do not have a category assigned to them.
+#' * [freq()]: Frequency of each category across cells of a raster\cr
 #'
 #' ## Saving rasters to disk
 #' You can save substantial space on disk if you set the `datatype` argument in [writeRaster()] when saving a raster. This argument allows for finer "divisions" than just integer/float/double-float, so depending on the range of values in your raster, you can optimize file size by selecting the one that best matches the values in the raster. See the documentation for [writeRaster()] for more information.
