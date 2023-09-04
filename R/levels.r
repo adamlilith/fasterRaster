@@ -8,12 +8,15 @@
 #' * `cats()`: Reports category values and their labels. The entire table is returned.
 #' * `levels() <-`: Assign category values and their labels to all layers.
 #' * `categories()`: Assign category values and their labels to specific layers.
-#' * `addCats()`: Add categories (rows) or columns to the levels table of a categorical raster.
-#' * `missingCats()`: Identifies values that have no assigned category.
+#' * `addCats<-`: Add values and categories (rows) to the levels table of a categorical raster.
+#' * `addCats()`: Add new columns to a levels table using [data.table::merge()] or [cbind()]. This does not add new rows to the table.
+#' * [catNames()]: Column names of each levels table.
+#' * `missingCats()`: Values in the raster that have no assigned category.
 #' * [nlevels()]: Number of levels in each raster.
-#' * [activeCat()]: Retrieve the column index or name of the category labels.
-#' * [activeCat() <-]: Set the column index or name of the category labels.
+#' * [activeCat()]: Column index or name of the category labels.
+#' * [activeCat() <-]: Set the column of the category labels.
 #' * droplevels(): Removes levels that are not represented in the raster.
+#' * [freq()]: Frequency of each category across cells of a raster\cr
 #'
 #' @param x A `GRaster`.
 #'
@@ -21,15 +24,17 @@
 #'
 #' @param level Numeric, integer, character, or `NULL` (default): Level(s) to remove. Levels cane be specified by their integer (numeric) value or category label. `NULL` removes all levels not represented in the raster.
 #'
-#' @param layer Numeric integers: Layer(s) from which to drop levels.
+#' @param layer Numeric integers, logical vector, or character: Layer(s) to which to add or from which to drop levels.
 #'
 #' @returns Values returned are:
-#' `levels`: A list of `data.frame`s or `data.table`s, one per raster.
-#' `cats`: A list of `data.frame`s or `data.table`s, one per raster.
-#' `levels <-`: A categorical `GRaster`.
-#' `categories`: A categorical `GRaster`.
+#' * `addCats()` and `addCats<-`: A `GRaster`.
+#' * `categories()`: A categorical `GRaster`.
+#' * `cats()`: A list of `data.frame`s or `data.table`s, one per raster.
+#' * `droplevels()`: A `GRaster`.
+#' * `levels()`: A list of `data.frame`s or `data.table`s, one per raster.
+#' * `levels <-`: A categorical `GRaster`.
 #'
-#' @seealso [nlevels()], [terra::cats()], [terra::levels()], [terra::addCats()], [terra::droplevels()], [categorical rasters][tutorial_raster_data_types]
+#' @seealso [nlevels()], [catNames()], [terra::cats()], [terra::levels()], [terra::addCats()], [terra::droplevels()], [categorical rasters][tutorial_raster_data_types]
 #'
 #' @example man/examples/ex_GRaster_categorical.r
 #'
@@ -48,9 +53,8 @@ methods::setMethod(
 
 			if (numLevels[i] > 0L) {
 			
-				names <- names(x@levels[[i]])
-				active <- names[x@activeCat[[i]]]
-				active <- names[x@activeCat[[i]]]
+				names <- catNames(x, i)
+				active <- activeCat(x, name = TRUE)[i]
 				value <- names[1L]
 
 				cols <- c(value, active)
@@ -246,24 +250,52 @@ methods::setMethod(
 	signature = c(x = "GRaster"),
 	function(x, value, merge = FALSE, layer = 1) {
 
-	if (inherits(value, "data.frame", which = TRUE) != 1L) {
+	if (!inherits(value, "data.table")) {
 		value <- data.table::as.data.table(value)
 	}
 
-	if (merge) {
-	
-  		# levelValCol <- names(x@levels[[layer]])[1L]
-  		valValCol <- names(value)[1L]
+	for (i in layer) {
 
-  		x@levels[[layer]] <- x@levels[[layer]][value, on = c(Code = valValCol)]
+		if (merge) {
 
-		# data.table::setkey(x@levels[[layer]], levelValCol)
-		# data.table::setkey(value, valValCol)
-		# x@levels[[layer]] <- value[x@levels[[layer]]]
-	
-	} else {
-	
-		x@levels[[layer]] <- cbind(x@levels[[layer]], value)
+			levelValCol <- names(x@levels[[i]])[1L]
+			valueValCol <- names(value)[1L]
+			data.table::setkeyv(value, valueValCol)
+
+			x@levels[[i]] <- merge(x@levels[[i]], value, by.x = levelValCol, by.y = valueValCol, all.x = TRUE, allow.cartesian = FALSE)
+
+			data.table::setkeyv(x@levels[[i]], levelValCol)
+
+		} else {
+		
+			x@levels[[i]] <- cbind(x@levels[[i]], value)
+		
+		}
+	}
+
+ 	validObject(x)
+	x
+
+	} # EOF
+)
+
+#' @aliases addCats<-
+#' @rdname levels
+#' @exportMethod addCats<-
+methods::setMethod(
+	f = "addCats<-",
+	signature = c(x = "GRaster"),
+	function(x, value, layer = 1) {
+
+	if (!inherits(value, "data.table")) {
+		value <- data.table::as.data.table(value)
+	}
+
+	for (i in layer) {
+
+  		x@levels[[i]] <- rbind(x@levels[[i]], value)
+		val <- names(x@levels[[i]])[1L]
+		data.table::setkeyv(x@levels[[i]], val)
 	
 	}
  	validObject(x)
@@ -345,19 +377,11 @@ methods::setMethod(
 		} else {
 		
 			freqs <- freq(x[[i]])
-			if (!inherits(freqs, "data.table")) freqs <- data.table::as.data.table(freqs)
 
-			freqs <- freqs[ , 1L]
-			
-			data.table::setkeyv(freqs, names(freqs))
-   			data.table::setkeyv(levs[[i]], names(levs[[i]])[1L])
+			ac <- activeCat(x, names = TRUE)[i]
+			val <- names(freqs)[1L]
 
-   			missing <- freqs[!levs[[i]]]
-			if (nrow(missing) == 0L) {
-   				out[[i]] <- integer()
-			} else {
-				out[[i]] <- missing[[1L]]
-			}
+			out <- freqs[(is.na(get(ac))), get(val)]
 
 		} # if this layer has levels
 	} # next raster
@@ -366,4 +390,3 @@ methods::setMethod(
 
     } # EOF
 )
-
