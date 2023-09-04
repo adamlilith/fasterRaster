@@ -66,7 +66,7 @@ methods::setMethod(
 		data <- strsplit(data, split = "\\|")
 
 		# categorical/integer data
-		if (datatype(x)[i] %in% c("integer", "factor")) {
+		if (datatype(x, "GRASS")[i] == "CELL") {
 			
 			n <- length(data)
 
@@ -85,7 +85,7 @@ methods::setMethod(
 			if (is.factor(x)[i]) {
 
           		levs <- levels(x)[[i]]
-				freqs <- merge(freqs, levs, by.x = names(freqs)[1L], by.y = names(levs)[1L])
+				freqs <- merge(freqs, levs, all = TRUE)
     			data.table::setkeyv(freqs, "value")
 
 			}
@@ -131,6 +131,8 @@ methods::setMethod(
 		
 		}
 		
+  		data.table::setkeyv(freqs, "value")
+
 		if (!getFastOptions("useDataTable")) freqs <- as.data.frame(freqs)
 		out[[i]] <- freqs
 		names(out)[i] <- names(x)[i]
