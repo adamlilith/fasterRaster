@@ -29,6 +29,7 @@ methods::setGeneric(name = "activeCat<-", package = "terra")
 # #' @importFrom terra add<-
 methods::setGeneric(name = "add<-", package = "terra")
 methods::setGeneric(name = "addCats", package = "terra")
+methods::setGeneric(name = "addCats<-", def = function(x, ...) standardGeneric("addCats<-"))
 # #' @importFrom terra app
 methods::setGeneric(name = "app", package = "terra")
 methods::setGeneric(name = "appFuns", def = function(show, ...) standardGeneric("appFuns"))
@@ -51,6 +52,7 @@ methods::setGeneric(name = "buffer", package = "terra")
 # c() is primitive
 # #' @importFrom terra categories
 methods::setGeneric(name = "categories", package = "terra")
+methods::setGeneric(name = "catNames", def = function(x, ...) standardGeneric("catNames"))
 # #' @importFrom terra cats
 methods::setGeneric(name = "cats", package = "terra")
 methods::setGeneric(name = "cleanGeom", def = function(x, ...) standardGeneric("cleanGeom"))
