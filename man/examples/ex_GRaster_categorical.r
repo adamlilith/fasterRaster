@@ -27,7 +27,9 @@ workDir = tempdir(), location = "examples") # line only needed for examples
 # Convert categorical SpatRaster to categorical GRaster:
 cover <- fast(madCover)
 
-# Properties of categorical rasters:
+### Properties of categorical rasters
+#####################################
+
 cover # note categories
 is.factor(cover) # Is the raster categorical?
 nlevels(cover) # number of levels
@@ -35,43 +37,61 @@ levels(cover) # just the value and active column
 cats(cover) # all columns
 minmax(cover) # min/max values
 minmax(cover, levels = TRUE) # min/max categories
+catNames(cover) # column names of the levels table
+freq(cover) # frequency of each category (number of cells)
 
-
-# Remove unused levels:
-nlevels(cover)
-cover <- droplevels(cover)
-nlevels(cover)
-
-# Frequency of each category (number of cells):
-freq(cover)
+### Active column
+#################
 
 # Which column sets the category labels?
 activeCat(cover)
+activeCat(cover, names = TRUE)
 
 # Choose a different column for category labels:
 levels(cover)
 activeCat(cover) <- 2
 levels(cover)
 
+### Managing levels tables
+##########################
+
+# Remove unused levels:
+nlevels(cover)
+cover <- droplevels(cover)
+nlevels(cover)
 
 # Re-assign levels:
-vals <- freq(cover)
-value <- c(20, 30, 40, 50, 120, 130, 140, 170, 300)
-label <- c("Cropland", "Cropland", "Forest", "Forest", "Forest", "Shrubland", "Herbaceous", "Flooded")
+value <- c(20, 30, 40, 50, 120, 130, 140, 170)
+label <- c("Cropland", "Cropland", "Forest", "Forest", "Grassland", "Shrubland", "Herbaceous", "Flooded")
 
-cats <- data.frame(value = value, label = label)
-cover <- categories(cover, layer = 1, value = cats)
-levels(cover)
+newCats <- data.frame(value = value, label = label)
+
+cover <- categories(cover, layer = 1, value = newCats)
+cats(cover)
+
+# This is the same as:
+levels(cover) <- newCats
+cats(cover)
 
 # Are there any values not assigned a category?
 missingCats(cover)
 
 # Let's assign a category for value 210 (water):
 water <- data.frame(value = 210, label = "Water")
-cover <- addCats(cover, water)
-cover
+addCats(cover) <- water
 
-# We can implement logical operations on categorical rasters:
+# Add more information to the levels table using merge():
+landType <- data.frame(
+     Value = c(20, 30, 40, 50, 120),
+     Type = c("Irrigated", "Rainfed", "Broadleaf evergreen", "Broadleaf deciduous", "Mosaic with forest")
+)
+cats(cover)
+cover <- addCats(cover, landType, merge = TRUE)
+cats(cover)
+
+### Logical operations on categorical rasters
+#############################################
+
 cover < "Forest" # 1 for cells with a value < 40, 0 otherwise
 cover <= "Forest" # 1 for cells with a value < 120, 0 otherwise
 cover == "Forest" # 1 for cells with value of 40-120, 0 otherwise
