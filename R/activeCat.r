@@ -1,6 +1,6 @@
 #' Get or set the column with category labels in a categorical raster
 #'
-#' @description `GRaster`s can represent [categorical data][tutorial_raster_data_types]. Cell values are actually integers, each corresponding to a category, such as "desert" or "wetland." A categorical raster is associated with a table that matches each value to a category name. The table must be `NULL` (i.e., no categories--so not a categorical raster), or have at least two columns. The first column must have integers and represent raster values. One or more subsequent columns must have category labels. Which column corresponds to category labels can be seen using [activeCat()] and set using [activeCat()<-].
+#' @description `GRaster`s can represent [categorical data][tutorial_raster_data_types]. Cell values are actually integers, each corresponding to a category, such as "desert" or "wetland." A categorical raster is associated with a table that matches each value to a category name. The table must be `NULL` (i.e., no categories--so not a categorical raster), or have at least two columns. The first column must have integers and represent raster values. One or more subsequent columns must have category labels. Which column corresponds to category labels can be seen using `activeCat()` and set using `activeCat()<-`.
 #'
 #' @param x A categorical `GRaster`.
 #' 
@@ -22,10 +22,7 @@ methods::setMethod(
 	signature = c(x = "GRaster"),
 	function(x, layer = 1, names = FALSE) {
 	
-	if (is.logical(layer)) layer <- which(layer)
-	if (!inherits(layer, c("numeric", "integer"))) layer <- match(layer, names(x))
-
-	if (any(!(layer %in% seq_along(nlyr(x))))) stop("Raster only contains ", nlyr(x), " layer(s).")
+	layer <- .layerIndex(layer, x, recycle = TRUE)
 
 	if (names) {
 
@@ -57,12 +54,7 @@ methods::setMethod(
 	signature = c(x = "GRaster"),
 	function(x, value, layer = 1) {
 	
-	if (is.logical(layer)) layer <- which(layer)
-	if (is.character(layer)) layer <- match(layer, names(x))
-
-	if (!all(layer %in% seq_len(nlyr(x)))) {
-		stop("Raster only contains ", nlyr(x), " layer(s).")
-	}
+	layer <- .layerIndex(layer, x, recycle = TRUE)
 
 	facts <- is.factor(x)
 	if (any(!(which(facts) %in% layer))) stop("At least one layer is not categorical.\n  The active category cannot be set for this layer.")
@@ -78,7 +70,7 @@ methods::setMethod(
 
 	value <- as.integer(value)
 	x@activeCat[layer] <- value
-	validObject(x)
+	methods::validObject(x)
 	x
 
 	} # EOF

@@ -30,7 +30,7 @@
 #' @exportMethod [[
 methods::setMethod(
 	"[[",
-	signature = c(x = "GRaster"),
+	signature = c(x = "GRaster", i = "ANY"),
 	function(x, i) {
 
 	# test indices
@@ -69,7 +69,7 @@ methods::setMethod(
 	} # EOF
 )
 
-#' @aliases [[<-,subset_assign
+#' @aliases [[<-
 #' @rdname subset_assign
 #' @exportMethod [[<-
 methods::setMethod(

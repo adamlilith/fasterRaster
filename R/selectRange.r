@@ -25,7 +25,7 @@ methods::setMethod(
 		warning("The ", sQuote("y"), " raster has more than one layer. On the first will be used.")
 		y <- y[[1L]]
 	}
-	if (!is.cell(y)) y <- round(y)
+	if (datatype(y, "GRASS") != "CELL") y <- round(y)
 
 	src <- .makeSourceName("selectRange", "raster")
 	xGnames <- sources(x)

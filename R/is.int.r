@@ -33,9 +33,9 @@ methods::setMethod(
     function(x) datatype(x, "GRASS") == "FCELL"
 )
 
-#' @aliases as.doub
+#' @aliases is.doub
 #' @rdname is.int
-#' @exportMethod as.doub
+#' @exportMethod is.doub
 methods::setMethod(
     f = "as.doub",
     signature = c(x = "GRaster"),
@@ -48,5 +48,5 @@ methods::setMethod(
 methods::setMethod(
     f = "is.factor",
     signature = c(x = "GRaster"),
-    function(x) nlevels(x) > 0L
+    function(x) nlevels(x) > 0L && datatype(x, "GRASS") == "CELL"
 )

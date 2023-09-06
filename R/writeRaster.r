@@ -124,7 +124,7 @@ setMethod(
 		}
 		
 		# data type
-		if (is.null(datatype)) datatype <- .datatype(x, "GDAL")
+		if (is.null(datatype)) datatype <- datatype(x, "GDAL")
 		
 		if (any(datatype == "INT1U")) datatype[datatype == "INT1U"] <- "Byte"
 		if (any(datatype == "INT2U")) datatype[datatype == "INT2U"] <- "UInt16"
@@ -189,7 +189,7 @@ setMethod(
 	}
 
 	out <- terra::rast(filename)
-	out <- terra::trim(out)
+	# out <- terra::trim(out)
 	names(out) <- names(x)
 	invisible(out)
 	

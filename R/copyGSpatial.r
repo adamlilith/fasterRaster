@@ -110,7 +110,7 @@ methods::setMethod(
 	do.call(rgrass::execGRASS, args=args)
 
 	### copy database file
-	gnDb <- .makeSourceName("db", rastOrVect="vector")
+	gnDb <- .makeSourceName("db", rastOrVect = "vector")
 	
 	opts <- getFastOptions(c("workDir", "location", "mapset"))
 	grassDB <- paste(c(opts$workDir, opts$location, opts$mapset, "/sqlite/sqlite.db"), collapse="/")

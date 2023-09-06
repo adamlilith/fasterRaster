@@ -1,5 +1,3 @@
-#' @title Classes for "fasterRaster" locations, rasters, and vectors
-#'
 #' @name GRegion
 #' @rdname GSession
 #' @exportClass GRegion

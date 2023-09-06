@@ -108,7 +108,7 @@
 #'
 #' ## Functions operating on categorical rasters
 #' [activeCat()]: Column that defines category labels\cr
-#' [activeCat()<-]: Set column that defines category labels\cr
+#' [activeCat<-]: Set column that defines category labels\cr
 #' [addCats())]: Add columns to a "levels" table\cr
 #' [addCats<-]: Add new rows (levels)\cr
 #' [categories()]: Set "levels" table for specific layers of a categorical raster\cr
@@ -119,7 +119,7 @@
 #' [is.factor()]: Is a raster categorical?\cr
 #' [missingCats()]: Values that have no category assigned to them\cr
 #' [levels()]: "Levels" table of a categorical raster\cr
-#' [levels()<-]: Set "levels" table of a categorical raster\cr
+#' [levels<-]: Set "levels" table of a categorical raster\cr
 #' [minmax()]: "Lowest" and "highest" category values of categorical rasters (when argument `levels = TRUE`)\cr
 #' [nlevels()]: Number of levels\cr
 #'
@@ -183,7 +183,6 @@
 #' [appendLists()]: Append values to elements of a list from another list\cr
 #' [compareGeom()]: Determine if geographic metadata is same between `GRaster`s and/or `GVector`s\cr
 #' [compareFloat()]: Compare values accounting for differences due to floating point precision\cr
-#' [dropRows()]: Drop rows from a `data.table` or `data.frame`\cr
 #' [forwardSlash()]: Replace backslash with forward slash\cr
 #' [grassInfo()]: **GRASS** version and citation\cr
 #' [pmatchSafe()]: Partial matching of strings with error checking\cr

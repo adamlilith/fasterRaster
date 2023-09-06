@@ -1,6 +1,6 @@
 #' Number of levels in a categorical raster
 #'
-#' @description This function reports the number of categories (levels) in a [categorical raster][tutorial_categorical_rasters].
+#' @description This function reports the number of categories (levels) in a [categorical raster][tutorial_raster_data_types].
 #'
 #' @param x A `GRaster`.
 #'
@@ -40,7 +40,7 @@ setMethod(
 	for (i in seq_along(x)) {
 	
 		if (inherits(x[[i]], "character")) {
-			if (x[[i]] == "") {
+			if (is.null(x[[i]]) || x[[i]] == "") {
 				n[i] <- 0L
 			} else {
 				stop("Argument x must be a data frame, data table, an empty string or a list of any of these.")

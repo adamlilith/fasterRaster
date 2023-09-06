@@ -28,7 +28,7 @@ methods::setMethod(
     .restore(x)
     region(x)
 
-    if (round & !is.cell(x)) x <- round(x)
+    if (round & datatype(x, "GRASS") != "CELL") x <- round(x)
 
     src <- .makeSourceName("asPolys", "raster")
     args <- list(

@@ -23,13 +23,13 @@
 #' * [as.int()], [as.float()], and [as.doub()] coerce a raster to an integer, float, or double.
 #' * [levels()] returns the "levels" table of a categorical raster (just the value column and the active column).
 #' * [cats()] returns the entire "levels" table of a categorical raster.
-#' * [levels()<-] and [categories()] can be used to assign categories to an integer raster and make it categorical (i.e., a "factor" raster). 
+#' * [levels<-] and [categories()] can be used to assign categories to an integer raster and make it categorical (i.e., a "factor" raster). 
 #' * [addCats()] adds information to the "levels" table using [data.table::merge()] (same as [merge()]).
 #' * [addCats<-] add new levels to a "levels" table.
 #' * [droplevels()] removes "unused" levels in a "levels" table.
 #' * [catNames()] reports the column names of the "levels" table of each layer of a raster.
 #' * [nlevels()] returns the number of levels represented by a categorical raster.
-#' * [activeCat()] and [activeCat()<-] can be used to see or assign which column in a "levels" table associated with a categorical raster is used as category labels.
+#' * [activeCat()] and [activeCat<-] can be used to see or assign which column in a "levels" table associated with a categorical raster is used as category labels.
 #' * [missingCats()] finds values in categorical rasters that do not have a category assigned to them.
 #' * [freq()]: Frequency of each category across cells of a raster\cr
 #'
