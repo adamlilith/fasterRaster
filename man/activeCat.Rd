@@ -24,18 +24,7 @@
 \code{activeCat()} returns an integer or character vector of active column indices or names. \verb{activeCat()<-} returns a \code{GRaster}.
 }
 \description{
-\code{GRaster}s can represent \link[=tutorial_raster_data_types]{categorical data}. Cell values are actually integers, each corresponding to a category, such as "desert" or "wetland." A categorical raster is associated with a table that matches each value to a category name. The table must be \code{NULL} (i.e., no categories--so not a categorical raster), or have at least two columns. The first column must have integers and represent raster values. One or more subsequent columns must have category labels. Which column corresponds to category labels can be seen using \code{\link[=activeCat]{activeCat()}} and set using \link{activeCat()<-}.
-
-Several functions help manage categorical rasters:
-\itemize{
-\item \code{\link[=levels]{levels()}}: Reports category values and their labels. Only the values and active column is reported.
-\item \code{\link[=cats]{cats()}}: Reports category values and their labels. The entire table is returned.
-\item \link{levels()<-}: Assign category values and their labels to all layers.
-\item \code{\link[=categories]{categories()}}: Assign category values and their labels to specific layers.
-\item \code{\link[=nlevels]{nlevels()}}: Number of levels in each raster.
-\item \code{activeCat()}: Retrieve the column index or name of the category labels.
-\item `activeCat()<-: Set the column index or name of the category labels.
-}
+\code{GRaster}s can represent \link[=tutorial_raster_data_types]{categorical data}. Cell values are actually integers, each corresponding to a category, such as "desert" or "wetland." A categorical raster is associated with a table that matches each value to a category name. The table must be \code{NULL} (i.e., no categories--so not a categorical raster), or have at least two columns. The first column must have integers and represent raster values. One or more subsequent columns must have category labels. Which column corresponds to category labels can be seen using \code{activeCat()} and set using \verb{activeCat()<-}.
 }
 \examples{
 \dontrun{
@@ -67,7 +56,9 @@ workDir = tempdir(), location = "examples") # line only needed for examples
 # Convert categorical SpatRaster to categorical GRaster:
 cover <- fast(madCover)
 
-# Properties of categorical rasters:
+### Properties of categorical rasters
+#####################################
+
 cover # note categories
 is.factor(cover) # Is the raster categorical?
 nlevels(cover) # number of levels
@@ -75,32 +66,62 @@ levels(cover) # just the value and active column
 cats(cover) # all columns
 minmax(cover) # min/max values
 minmax(cover, levels = TRUE) # min/max categories
+catNames(cover) # column names of the levels table
+missingCats(cover) # categories in table with no values in raster
+freq(cover) # frequency of each category (number of cells)
 
-
-# Remove unused levels:
-nlevels(cover)
-cover <- droplevels(cover)
-nlevels(cover)
+### Active column
+#################
 
 # Which column sets the category labels?
 activeCat(cover)
+activeCat(cover, names = TRUE)
 
 # Choose a different column for category labels:
 levels(cover)
 activeCat(cover) <- 2
 levels(cover)
 
+### Managing levels tables
+##########################
+
+# Remove unused levels:
+nlevels(cover)
+cover <- droplevels(cover)
+nlevels(cover)
 
 # Re-assign levels:
-vals <- freq(cover)
-value <- c(20, 30, 40, 50, 120, 130, 140, 170, 210)
-label <- c("Cropland", "Cropland", "Forest", "Forest", "Forest", "Shrubland", "Herbaceous", "Flooded", "Water")
+value <- c(20, 30, 40, 50, 120, 130, 140, 170)
+label <- c("Cropland", "Cropland", "Forest", "Forest", "Grassland", "Shrubland", "Herbaceous", "Flooded")
 
-cats <- data.frame(value = value, label = label)
-cover <- categories(cover, layer = 1, value = cats)
-levels(cover)
+newCats <- data.frame(value = value, label = label)
 
-# We can implement logical operations on categorical rasters:
+cover <- categories(cover, layer = 1, value = newCats)
+cats(cover)
+
+# This is the same as:
+levels(cover) <- newCats
+cats(cover)
+
+# Are there any values not assigned a category?
+missingCats(cover)
+
+# Let's assign a category for value 210 (water):
+water <- data.frame(value = 210, label = "Water")
+addCats(cover) <- water
+
+# Add more information to the levels table using merge():
+landType <- data.frame(
+     Value = c(20, 30, 40, 50, 120),
+     Type = c("Irrigated", "Rainfed", "Broadleaf evergreen", "Broadleaf deciduous", "Mosaic with forest")
+)
+cats(cover)
+cover <- addCats(cover, landType, merge = TRUE)
+cats(cover)
+
+### Logical operations on categorical rasters
+#############################################
+
 cover < "Forest" # 1 for cells with a value < 40, 0 otherwise
 cover <= "Forest" # 1 for cells with a value < 120, 0 otherwise
 cover == "Forest" # 1 for cells with value of 40-120, 0 otherwise

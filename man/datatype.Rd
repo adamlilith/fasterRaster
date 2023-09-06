@@ -25,7 +25,7 @@
 \code{datatype()} for a \code{GRaster} returns a character. \code{datatype()} for a \code{GVector} returns a data frame, with one row per field.
 }
 \description{
-\code{datatype()} returns the [data type\link{tutorial_raster_data_types} of a \code{GRaster} or of each column of a \code{GVector}.
+\code{datatype()} returns the \link[=tutorial_raster_data_types]{data type} of a \code{GRaster} or of each column of a \code{GVector}.
 }
 \examples{
 \dontrun{
@@ -174,5 +174,5 @@ removeSession("examples")
 }
 }
 \seealso{
-\code{\link[terra:geomtype]{terra::datatype()}}
+\code{\link[terra:geomtype]{terra::datatype()}}, \link[=tutorial_raster_data_types]{raster data types} in \strong{fasterRaster}
 }

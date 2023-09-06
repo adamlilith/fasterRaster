@@ -22,21 +22,26 @@ Double-floating point values are accurate to about the 15th to 17th decimal plac
 
 \subsection{Categorical rasters}{
 
-Categorical rasters are actually integer rasters, but have an associated attribute table that maps each integer value to a category label, such as "wetland" or "forest".
+Categorical rasters (also called "factor" rasters) are actually integer rasters, but have an associated attribute table that maps each integer value to a category label, such as "wetland" or "forest". The table has at least two columns. The first is integer values, and (by default) the second is category names. This second column is the "active" category column. This active column can be changed using \link{activeCat<-}.
 }
 
 \subsection{Functions relevant to raster data types}{
 \itemize{
 \item \code{\link[=datatype]{datatype()}} returns the data type of a \code{GRaster}.
-\item \code{\link[=as.int]{as.int()}}, \code{\link[=as.float]{as.float()}}, and \code{\link[=as.doub]{as.doub()}} coerces a raster to an integer, float, or double.
 \item \code{\link[=is.int]{is.int()}}, \code{\link[=is.float]{is.float()}}, and \code{\link[=is.doub]{is.doub()}} indicate if the raster is an integer, float, or double raster.
 \item \code{\link[=is.factor]{is.factor()}} indicates if the raster is a categorical raster.
-\item \code{\link[=levels]{levels()}} returns the attribute table of a categorical raster (or a blank list if the raster is not categorical).
-\item \code{\link[=nlevels]{nlevels()}} returns the number of categorical values represented by a categorical raster.
-\item \link{levels()<-} and \code{\link[=categories]{categories()}} can be used to coerce an integer raster to a categorical raster and assign categories.
-\item \code{\link[=activeCat]{activeCat()}} and \link{activeCat()<-} can be used to see or assign which column in a "levels" table associated with a categorical raster is used as category labels.
-\item \code{\link[=droplevels]{droplevels()}} can be used to remove "unused" levels in a levels table.
-\item \code{\link[=as.int]{as.int()}}, \code{\link[=as.float]{as.float()}}, and \code{\link[=as.doub]{as.doub()}} can be used to convert a raster to an integer, float, or double-floating precision raster (and remove levels in the process).
+\item \code{\link[=as.int]{as.int()}}, \code{\link[=as.float]{as.float()}}, and \code{\link[=as.doub]{as.doub()}} coerce a raster to an integer, float, or double.
+\item \code{\link[=levels]{levels()}} returns the "levels" table of a categorical raster (just the value column and the active column).
+\item \code{\link[=cats]{cats()}} returns the entire "levels" table of a categorical raster.
+\item \link{levels<-} and \code{\link[=categories]{categories()}} can be used to assign categories to an integer raster and make it categorical (i.e., a "factor" raster).
+\item \code{\link[=addCats]{addCats()}} adds information to the "levels" table using \code{\link[data.table:merge]{data.table::merge()}} (same as \code{\link[=merge]{merge()}}).
+\item \link{addCats<-} add new levels to a "levels" table.
+\item \code{\link[=droplevels]{droplevels()}} removes "unused" levels in a "levels" table.
+\item \code{\link[=catNames]{catNames()}} reports the column names of the "levels" table of each layer of a raster.
+\item \code{\link[=nlevels]{nlevels()}} returns the number of levels represented by a categorical raster.
+\item \code{\link[=activeCat]{activeCat()}} and \link{activeCat<-} can be used to see or assign which column in a "levels" table associated with a categorical raster is used as category labels.
+\item \code{\link[=missingCats]{missingCats()}} finds values in categorical rasters that do not have a category assigned to them.
+\item \code{\link[=freq]{freq()}}: Frequency of each category across cells of a raster\cr
 }
 }
 

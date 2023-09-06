@@ -6,7 +6,7 @@
 \alias{is.float,GRaster-method}
 \alias{is.float}
 \alias{as.doub,GRaster-method}
-\alias{as.doub}
+\alias{is.doub}
 \alias{is.factor,GRaster-method}
 \alias{is.factor}
 \title{Data type of a raster}

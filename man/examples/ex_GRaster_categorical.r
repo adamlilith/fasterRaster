@@ -38,6 +38,7 @@ cats(cover) # all columns
 minmax(cover) # min/max values
 minmax(cover, levels = TRUE) # min/max categories
 catNames(cover) # column names of the levels table
+missingCats(cover) # categories in table with no values in raster
 freq(cover) # frequency of each category (number of cells)
 
 ### Active column

@@ -122,13 +122,18 @@ Other functions:\cr
 \subsection{Functions operating on categorical rasters}{
 
 \code{\link[=activeCat]{activeCat()}}: Column that defines category labels\cr
-\link{activeCat()<-}: Set column that defines category labels\cr
-\code{\link[=cats]{cats()}}: Levels table of a categorical raster\cr
-\code{\link[=categories]{categories()}}: Set levels table for specific layers of a categorical raster\cr
-\code{\link[=droplevels]{droplevels()}}: Remove one or more levels\cr
+\link{activeCat<-}: Set column that defines category labels\cr
+[addCats())]: Add columns to a "levels" table\cr
+[addCats<-]: Add new rows (levels)\cr
+[categories()]: Set "levels" table for specific layers of a categorical raster\cr
+[catNames()]: Names of each "levels" table\cr
+[cats()]: "Levels" table of a categorical raster\cr
+[droplevels()]: Remove one or more levels\cr
+\code{\link[=freq]{freq()}}: Frequency of each category across cells of a raster\cr
 \code{\link[=is.factor]{is.factor()}}: Is a raster categorical?\cr
-\code{\link[=levels]{levels()}}: Levels table of a categorical raster\cr
-\link{levels()<-}: Set levels table of a categorical raster\cr
+[missingCats()]: Values that have no category assigned to them\cr
+\code{\link[=levels]{levels()}}: "Levels" table of a categorical raster\cr
+\link{levels<-}: Set "levels" table of a categorical raster\cr
 \code{\link[=minmax]{minmax()}}: "Lowest" and "highest" category values of categorical rasters (when argument \code{levels = TRUE})\cr
 \code{\link[=nlevels]{nlevels()}}: Number of levels\cr
 }
@@ -139,10 +144,10 @@ Other functions:\cr
 \code{\link[=datatype]{datatype()}}: Data type of fields\cr
 \code{\link[=dim]{dim()}}: Number of geometries and columns\cr
 \code{\link[=ext]{ext()}}, \code{\link[=north]{north()}}, \code{\link[=south]{south()}}, \code{\link[=east]{east()}}, \code{\link[=west]{west()}}, \code{\link[=top]{top()}}, and \code{\link[=bottom]{bottom()}}: Spatial extent\cr
-\code{\link[=geomtype]{geomtype()}}: Type of vector (points, lines, polygons)\cr
+[geomtype()]: Type of vector (points, lines, polygons)\cr
 \code{\link[=is.2d]{is.2d()}} and \code{\link[=is.3d]{is.3d()}}: Is an object 2- or 3-dimensional?\cr
 \link{is.lonlat}: Is an object projected (e.g., in WGS84)?\cr
-\code{\link[=is.points]{is.points()}}, \code{\link[=is.lines]{is.lines()}}, \code{\link[=is.polygons]{is.polygons()}}: Does a \code{GVector} represent points, lines, or polygons?\cr
+[is.points()], [is.lines()], [is.polygons()]: Does a \code{GVector} represent points, lines, or polygons?\cr
 \code{\link[=location]{location()}}: \strong{GRASS} "location" of an object or the active session\cr
 \code{\link[=mapset]{mapset()}}: \strong{GRASS} "mapset" of an object or the active session\cr
 \code{\link[=names]{names()}}: Names of \code{GVector} fields\cr
@@ -159,58 +164,57 @@ Other functions:\cr
 
 \code{[} (\link[=subset_assign]{subset}): Select geometries/rows of a vector"s data frame\cr
 \code{[[} (\link[=subset_assign]{subset}): Subset columns of a vector"s data frame\cr
-\code{\link[=as.data.frame]{as.data.frame()}}: Convert a vector to a \code{data.frame}\cr
+[as.data.frame()]: Convert a vector to a \code{data.frame}\cr
 \code{\link[=as.points]{as.points()}}: Extract vertex coordinates from a "lines" or "polygons" \code{GVector}\cr
 \code{\link[=buffer]{buffer()}}: Create a polygon around/inside a vector\cr
-\code{\link[=cleanGeom]{cleanGeom()}}: Fix undesirable geometries of a vector\cr
-\code{\link[=connectors]{connectors()}}: Create lines connecting nearest features of two vectors\cr
-\code{\link[=convHull]{convHull()}}: Minimum convex hull\cr
-\code{\link[=crds]{crds()}}: Extract coordinates of a vector\cr
+[cleanGeom()]: Fix undesirable geometries of a vector\cr
+[connectors()]: Create lines connecting nearest features of two vectors\cr
+[convHull()]: Minimum convex hull\cr
+[crds()]: Extract coordinates of a vector\cr
 \code{\link[=crop]{crop()}}: Remove parts of a vector\cr
-\code{\link[=delaunay]{delaunay()}}: Delaunay triangulation\cr
+[delaunay()]: Delaunay triangulation\cr
 \code{\link[=distance]{distance()}}: Distance between geometries in two vectors, or from a vector to cells of a raster\cr
-\code{\link[=head]{head()}}: First rows of a vector"s data frame.\cr
+[head()]: First rows of a vector"s data frame.\cr
 \code{\link[=project]{project()}}: Change coordinate reference system\cr
-\code{\link[=simplifyGeom]{simplifyGeom()}}: Remove vertices\cr
-\code{\link[=smoothGeom]{smoothGeom()}}: Remove "angular" aspects of features\cr
+[simplifyGeom()]: Remove vertices\cr
+[smoothGeom()]: Remove "angular" aspects of features\cr
 \code{\link[=st_as_sf]{st_as_sf()}}: Convert a \code{GVector} to a \code{sf} vector\cr
-\code{\link[=st_buffer]{st_buffer()}}: Create a polygon around/inside a vector\cr
-\code{\link[=st_distance]{st_distance()}}: Distance between geometries in two vectors\cr
-\code{\link[=tail]{tail()}}: Last rows of a vector"s data frame.\cr
+[st_buffer()]: Create a polygon around/inside a vector\cr
+[st_distance()]: Distance between geometries in two vectors\cr
+[tail()]: Last rows of a vector"s data frame.\cr
 }
 
 \subsection{Converting between data types}{
 
 \code{\link[=as.contour]{as.contour()}}: Convert a \code{GRaster} to a \code{GVector} representing contour lines\cr
 \code{\link[=as.doub]{as.doub()}}: Convert a \code{GRaster} to a double-floating point raster (*\strong{GRASS} data type \code{DCELL})\cr
-\code{\link[=as.data.frame]{as.data.frame()}}: Convert \code{GVector} to a \code{data.frame}\cr
+[as.data.frame()]: Convert \code{GVector} to a \code{data.frame}\cr
 \code{\link[=as.float]{as.float()}}: Convert a \code{GRaster} to a floating-point raster (*\strong{GRASS} data type \code{FCELL})\cr
 \code{\link[=as.int]{as.int()}}: Convert a \code{GRaster} to an integer raster (*\strong{GRASS} data type \code{CELL})\cr
 \code{\link[=as.points]{as.points()}}, \code{\link[=as.lines]{as.lines()}}, and \code{\link[=as.polygons]{as.polygons()}}: Convert a \code{GRaster} to a \code{GVector}\cr
 \code{\link[=fast]{fast()}}: Convert a \code{SpatRaster}, \code{SpatVector}, or \code{sf} vector to a \code{GRaster} or \code{GVector}, or load one from a file\cr
-\code{\link[=categories]{categories()}} and \link{levels()<-}: Convert an integer raster to a categorical ("factor") raster.
+[categories()] and [levels()<-]: Convert an integer raster to a categorical ("factor") raster.
 \code{\link[=rast]{rast()}}: Convert a \code{GRaster} to a \code{SpatRaster}\cr
-\code{\link[=rasterize]{rasterize()}}: Convert a \code{GVector} to a \code{GRaster}\cr
+[rasterize()]: Convert a \code{GVector} to a \code{GRaster}\cr
 \code{\link[=st_as_sf]{st_as_sf()}}: Convert a \code{GVector} to a \code{sf} vector\cr
 \code{\link[=vect]{vect()}}: Convert a \code{GVector} to a \code{SpatVector}\cr
 }
 
 \subsection{General purpose functions}{
 
-\code{\link[=appendLists]{appendLists()}}: Append values to elements of a list from another list\cr
-\code{\link[=compareGeom]{compareGeom()}}: Determine if geographic metadata is same between \code{GRaster}s and/or \code{GVector}s\cr
-\code{\link[=compareFloat]{compareFloat()}}: Compare values accounting for differences due to floating point precision\cr
-\code{\link[=dropRows]{dropRows()}}: Drop rows from a \code{data.table} or \code{data.frame}\cr
-\code{\link[=forwardSlash]{forwardSlash()}}: Replace backslash with forward slash\cr
-\code{\link[=grassInfo]{grassInfo()}}: \strong{GRASS} version and citation\cr
-\code{\link[=pmatchSafe]{pmatchSafe()}}: Partial matching of strings with error checking\cr
-\code{\link[=rstring]{rstring()}}: Create a string statistically likely to be unique\cr
+[appendLists()]: Append values to elements of a list from another list\cr
+[compareGeom()]: Determine if geographic metadata is same between \code{GRaster}s and/or \code{GVector}s\cr
+[compareFloat()]: Compare values accounting for differences due to floating point precision\cr
+[forwardSlash()]: Replace backslash with forward slash\cr
+[grassInfo()]: \strong{GRASS} version and citation\cr
+[pmatchSafe()]: Partial matching of strings with error checking\cr
+[rstring()]: Create a string statistically likely to be unique\cr
 }
 
 \subsection{Functions that operate on \strong{GRASS} "sessions":}{
 
 \code{\link[=crs]{crs()}}: Coordinate reference system of the current location\cr
-\code{\link[=fastRemove]{fastRemove()}}: Delete a \strong{GRASS} session (location, mapset(s), and all associated files)\cr
+[fastRemove()]: Delete a \strong{GRASS} session (location, mapset(s), and all associated files)\cr
 \code{\link[=fastRestore]{fastRestore()}}: Restore a previous \strong{GRASS} session or switch \strong{GRASS} locations/mapsets\cr
 \code{\link[=location]{location()}}: \strong{GRASS} "location" of an object or the active session\cr
 \code{\link[=mapset]{mapset()}}: \strong{GRASS} "mapset" of an object or the active session\cr
@@ -218,31 +222,144 @@ Other functions:\cr
 
 \subsection{Functions that operate on \strong{GRASS} "regions" (seldom used by most users):}{
 
-\code{\link[=region]{region()}}: Change or report the active region's extent and resolution\cr
-\code{\link[=regionDim]{regionDim()}}: Change or report the active region's resolution (also \code{\link[=dim]{dim()}} and related functions, with no arguments)
-\code{\link[=regionExt]{regionExt()}}: Change or report the active region's extent (also \code{\link[=ext]{ext()}} and related functions, with no arguments)\cr
-\code{\link[=regionRes]{regionRes()}}: Change or report the active region's dimensions (also \code{\link[=res]{res()}} and related functions, with no arguments)\cr
+[region()]: Change or report the active region's extent and resolution\cr
+[regionDim()]: Change or report the active region's resolution (also \code{\link[=dim]{dim()}} and related functions, with no arguments)
+[regionExt()]: Change or report the active region's extent (also \code{\link[=ext]{ext()}} and related functions, with no arguments)\cr
+[regionRes()]: Change or report the active region's dimensions (also \code{\link[=res]{res()}} and related functions, with no arguments)\cr
 }
 
 \subsection{Data objects}{
 
-\link{appFunsTable} (see also \code{\link[=appFuns]{appFuns()}}): Functions usable by the \code{\link[=app]{app()}} function\cr
-\link{madChelsa}: Climate rasters for of a portion of eastern Madagascar\cr
-\link{madCoast0}, \link{madCoast4}, and \link{madCoast}: Borders of an eastern portion of Madagascar\cr
-\link{madCover}: Land cover raster\cr
-\link{madCoverTable}: Table of land cover classes\cr
-\link{madDypsis}: Specimens records of species in the genus \emph{Dypsis}\cr
-\link{madElev}: Elevation raster\cr
-\link{madForest2000} and \link{madForest2014}: Forest cover in 2000 and 2014\cr
-\link{madRivers}: Rivers vector\cr
+[appFunsTable][appFunsTable] (see also \code{\link[=appFuns]{appFuns()}}): Functions usable by the \code{\link[=app]{app()}} function\cr
+[madChelsa][madChelsa]: Climate rasters for of a portion of eastern Madagascar\cr
+[madCoast0][madCoast0], [madCoast4][madCoast4], and [madCoast][madCoast]: Borders of an eastern portion of Madagascar\cr
+[madCover]: Land cover raster\cr
+[madCoverTable][madCoverTable]: Table of land cover classes\cr
+[madDypsis][madDypsis]: Specimens records of species in the genus \emph{Dypsis}\cr
+[madElev][madElev]: Elevation raster\cr
+[madForest2000][madForest2000] and [madForest2014][madForest2014]: Forest cover in 2000 and 2014\cr
+[madRivers][madRivers]: Rivers vector\cr
 }
 
 \subsection{Esoteric tutorials}{
 
 \link[=tutorial_sessions]{Sessions, locations, and mapsets}\cr
 \link[=tutorial_raster_data_types]{Raster data types}\cr
-\link[=tutorial_regions]{Regions}\cr
-\link[=tutorial_undocumented_functions]{Undocumented functions}\cr
+[Regions][tutorial_regions]\cr
+[Undocumented functions][tutorial_undocumented_functions]\cr
+
+[addCats())]: R:addCats())
+[addCats<-]: R:addCats\%3C-
+[categories()]: R:categories()
+[catNames()]: R:catNames()
+[cats()]: R:cats()
+[droplevels()]: R:droplevels()
+\code{\link[=freq]{freq()}}: R:freq()
+\code{\link[=is.factor]{is.factor()}}: R:is.factor()
+[missingCats()]: R:missingCats()
+\code{\link[=levels]{levels()}}: R:levels()
+\link{levels<-}: R:levels\%3C-
+\code{\link[=minmax]{minmax()}}: R:minmax()
+\code{\link[=nlevels]{nlevels()}}: R:nlevels()
+\code{\link[=crs]{crs()}}: R:crs()
+\code{\link[=datatype]{datatype()}}: R:datatype()
+\code{\link[=dim]{dim()}}: R:dim()
+\code{\link[=ext]{ext()}}: R:ext()
+\code{\link[=north]{north()}}: R:north()
+\code{\link[=south]{south()}}: R:south()
+\code{\link[=east]{east()}}: R:east()
+\code{\link[=west]{west()}}: R:west()
+\code{\link[=top]{top()}}: R:top()
+\code{\link[=bottom]{bottom()}}: R:bottom()
+[geomtype()]: R:geomtype()
+\code{\link[=is.2d]{is.2d()}}: R:is.2d()
+\code{\link[=is.3d]{is.3d()}}: R:is.3d()
+\link{is.lonlat}: R:is.lonlat
+[is.points()]: R:is.points()
+[is.lines()]: R:is.lines()
+[is.polygons()]: R:is.polygons()
+\code{\link[=location]{location()}}: R:location()
+\code{\link[=mapset]{mapset()}}: R:mapset()
+\code{\link[=names]{names()}}: R:names()
+\code{\link[=ncol]{ncol()}}: R:ncol()
+\code{\link[=nrow]{nrow()}}: R:nrow()
+\code{\link[=sources]{sources()}}: R:sources()
+\code{\link[=st_bbox]{st_bbox()}}: R:st_bbox()
+\code{\link[=st_crs]{st_crs()}}: R:st_crs()
+\code{\link[=topology]{topology()}}: R:topology()
+\code{\link[=zext]{zext()}}: R:zext()
+\link{subset_assign}: R:subset_assign
+\link{subset_assign}: R:subset_assign
+[as.data.frame()]: R:as.data.frame()
+\code{\link[=as.points]{as.points()}}: R:as.points()
+\code{\link[=buffer]{buffer()}}: R:buffer()
+[cleanGeom()]: R:cleanGeom()
+[connectors()]: R:connectors()
+[convHull()]: R:convHull()
+[crds()]: R:crds()
+\code{\link[=crop]{crop()}}: R:crop()
+[delaunay()]: R:delaunay()
+\code{\link[=distance]{distance()}}: R:distance()
+[head()]: R:head()
+\code{\link[=project]{project()}}: R:project()
+[simplifyGeom()]: R:simplifyGeom()
+[smoothGeom()]: R:smoothGeom()
+\code{\link[=st_as_sf]{st_as_sf()}}: R:st_as_sf()
+[st_buffer()]: R:st_buffer()
+[st_distance()]: R:st_distance()
+[tail()]: R:tail()
+\code{\link[=as.contour]{as.contour()}}: R:as.contour()
+\code{\link[=as.doub]{as.doub()}}: R:as.doub()
+[as.data.frame()]: R:as.data.frame()
+\code{\link[=as.float]{as.float()}}: R:as.float()
+\code{\link[=as.int]{as.int()}}: R:as.int()
+\code{\link[=as.points]{as.points()}}: R:as.points()
+\code{\link[=as.lines]{as.lines()}}: R:as.lines()
+\code{\link[=as.polygons]{as.polygons()}}: R:as.polygons()
+\code{\link[=fast]{fast()}}: R:fast()
+[categories()]: R:categories()
+[levels()<-]: R:levels()\%3C-
+\code{\link[=rast]{rast()}}: R:rast()
+[rasterize()]: R:rasterize()
+\code{\link[=st_as_sf]{st_as_sf()}}: R:st_as_sf()
+\code{\link[=vect]{vect()}}: R:vect()
+[appendLists()]: R:appendLists()
+[compareGeom()]: R:compareGeom()
+[compareFloat()]: R:compareFloat()
+[forwardSlash()]: R:forwardSlash()
+[grassInfo()]: R:grassInfo()
+[pmatchSafe()]: R:pmatchSafe()
+[rstring()]: R:rstring()
+\code{\link[=crs]{crs()}}: R:crs()
+[fastRemove()]: R:fastRemove()
+\code{\link[=fastRestore]{fastRestore()}}: R:fastRestore()
+\code{\link[=location]{location()}}: R:location()
+\code{\link[=mapset]{mapset()}}: R:mapset()
+[region()]: R:region()
+[regionDim()]: R:regionDim()
+\code{\link[=dim]{dim()}}: R:dim()
+[regionExt()]: R:regionExt()
+\code{\link[=ext]{ext()}}: R:ext()
+[regionRes()]: R:regionRes()
+\code{\link[=res]{res()}}: R:res()
+[appFunsTable]: R:appFunsTable
+\code{\link[=appFuns]{appFuns()}}: R:appFuns()
+\code{\link[=app]{app()}}: R:app()
+[madChelsa]: R:madChelsa
+[madCoast0]: R:madCoast0
+[madCoast4]: R:madCoast4
+[madCoast]: R:madCoast
+[madCover]: R:madCover
+[madCoverTable]: R:madCoverTable
+[madDypsis]: R:madDypsis
+[madElev]: R:madElev
+[madForest2000]: R:madForest2000
+[madForest2014]: R:madForest2014
+[madRivers]: R:madRivers
+\link{tutorial_sessions}: R:tutorial_sessions
+\link{tutorial_raster_data_types}: R:tutorial_raster_data_types
+[tutorial_regions]: R:tutorial_regions
+[tutorial_undocumented_functions]: R:tutorial_undocumented_functions
 }
 }
 \details{

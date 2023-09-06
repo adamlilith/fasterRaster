@@ -3,7 +3,7 @@
 \name{subset_assign}
 \alias{subset_assign}
 \alias{[[<-,GRaster,ANY,missing-method}
-\alias{[[<-,subset_assign}
+\alias{[[<-}
 \alias{add<-,GRaster,GRaster-method}
 \alias{add<-}
 \alias{[<-,GRaster,ANY,ANY-method}

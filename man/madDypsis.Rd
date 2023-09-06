@@ -58,7 +58,8 @@ madCover <- fastData("madCover")
 madCover
 madCover <- droplevels(madCover)
 levels(madCover) # levels in the raster
-ncat(madCover) # number of categories
+nlevels(madCover) # number of categories
+catNames(madCover) # names of categories table
 }
 \keyword{Dypsis}
 \keyword{Madagascar}
