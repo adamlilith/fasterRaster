@@ -241,7 +241,7 @@ methods::setMethod(
 	rastFile <- terra::sources(x)
 	levs <- .getLevels(x)
 
-	if (!is.null(levs) && any(.nlevels(levs) > 0L)) {
+	if (!is.null(levs) && !any(sapply(levs, is.null)) && any(.nlevels(levs) > 0L)) {
 
 		levelsFile <- tempfile(fileext = ".rds")
 		levelsFile <- forwardSlash(levelsFile)
@@ -253,7 +253,7 @@ methods::setMethod(
 
 	if (any(rastFile == "")) {
 		tempFile <- tempfile(fileext = ".tif")
-		terra::writeRaster(x, tempFile, overwrite = TRUE, datatype = .datatype(x))
+		terra::writeRaster(x, tempFile, overwrite = TRUE, datatype = datatype(x, "terra"))
 		x <- tempFile
 	} else {
 		x <- terra::sources(x)
