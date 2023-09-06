@@ -1,6 +1,6 @@
 #' Get the datatype of a GRaster or of GVector columns
 #'
-#' @description `datatype()` returns the [data type[tutorial_raster_data_types] of a `GRaster` or of each column of a `GVector`.
+#' @description `datatype()` returns the [data type][tutorial_raster_data_types] of a `GRaster` or of each column of a `GVector`.
 #'
 #' @param x A `GRaster` or `GVector`.
 #' @param type `NULL` or character: Type of datatype to report (`GRaster` only):
@@ -11,7 +11,7 @@
 #'
 #' @return `datatype()` for a `GRaster` returns a character. `datatype()` for a `GVector` returns a data frame, with one row per field.
 #'
-#' @seealso [terra::datatype()] 
+#' @seealso [terra::datatype()], [raster data types][tutorial_raster_data_types] in **fasterRaster**
 #'
 #' @example man/examples/ex_GRaster.r
 #'
@@ -28,9 +28,9 @@ methods::setMethod(
 	
 	if (type == "fasterRaster") {
 
-		numLevels <- nlevels(x)
-		out[out == "CELL" & numLevels > 0L] <- "factor"
-		out[out == "CELL" & numLevels == 0L] <- "integer"
+		isFact <- is.factor(x)
+		out[out == "CELL" & isFact] <- "factor"
+		out[out == "CELL" & !isFact] <- "integer"
 		out[out == "FCELL"] <- "float"
 		out[out == "DCELL"] <- "double"
 	
@@ -48,7 +48,7 @@ methods::setMethod(
 
 		for (i in seq_along(x)) {
 
-			if (integer[i] & out[i] == "CELL") {
+			if (out[i] == "CELL") {
 			
 				if (min >= 0 & max <= 255) {
 					out[i] <- if (type == "GDAL") { "Byte" } else { "INT1U" }
@@ -59,9 +59,10 @@ methods::setMethod(
 				} else if (min >= -2147483647 & max <= 2147483647) {
 					out[i] <- if (type == "GDAL") { "Int32" } else { "INT4S" }
 				}
-			} else if (out[i] == "FCELL" | (min >= -3.4E38 & max <= 3.4E38)) {
+				
+			} else if (out[i] == "FCELL") {
 				out[i] <- if (type == "GDAL") { "Float32" } else { "FLT4S" }
-			} else if (out[i] == "DCELL" | (min >= -1.7E308 & max <= 1.7E308)) {
+			} else if (out[i] == "DCELL") {
 				out[i] <- if (type == "GDAL") { "Float64" } else { "FLT8S" }
 			} else {
 				warning("Values are too small/large to represent.")
