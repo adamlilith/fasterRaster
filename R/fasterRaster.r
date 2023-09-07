@@ -5,8 +5,8 @@
 #' @description Processing of large-in-memory/-on disk rasters and spatial vectors using **GRASS GIS**. Most functions in the **terra** and **sf** packages are recreated. Processing of medium-sized and smaller spatial objects will nearly always be faster using **terra** or **sf**. To use most of the functions you must have the stand-alone version of **GRASS** version 8.0 or higher (not the **OSGeoW4** installer version). Note that due to developer choices, results will not always be strictly comparable between **terra**, **sf**, and **fasterRaster**.
 #'
 #' ## Most useful tutorials and functions:
-#' A [quick-start tutorial][tutorial_getting_started]\cr
-#' A [tutorial on raster data types][tutorial_raster_data_types]\cr
+#' A [quick-start][tutorial_getting_started] tutorial\cr
+#' A tutorial on [raster data types][tutorial_raster_data_types]\cr
 #' [faster()]: Initiate a **GRASS** session\cr
 #' [fast()]: Convert a `SpatRaster`, `SpatVector`, or `sf` vector to **fasterRaster**'s raster format (`GRaster`s) or vector format (`GVector`s), or load one from a file\cr
 #' [rast()], [vect()], and [st_as_sf()]: Convert `GRaster`s and `GVector`s to `SpatRaster`s, `SpatVector`s, or `sf` vectors\cr
@@ -18,13 +18,13 @@
 #' [crs()]: Coordinate reference system\cr
 #' [datatype()]: Data type\cr
 #' [dim()]: Number of rows and columns\cr
-#' [ext()], [north()], [south()], [east()], [west()], [top()], and [bottom()]: Spatial extent\cr
+#' [ext()], [N()], [S()], [E()], [W()], [top()], and [bottom()]: Spatial extent\cr
 #' [freq()]: Frequencies of cell values in a raster\cr
 #' [global()]: Summary statistics\cr
 #' [is.2d()] and [is.3d()]: Is an object 2- or 3-dimensional?\cr
 #' [is.int()], [is.float()], [is.doub()]: Raster data type (integer/float/double)\cr
 #' [is.factor()]: Does a raster represent categorical data?\cr
-#' [is.lonlat]: Is an object projected (e.g., in WGS84)?\cr
+#' [is.lonlat()]: Is an object projected (e.g., in WGS84)?\cr
 #' [levels()]: Names of levels in a categorical raster\cr
 #' [location()]: **GRASS** "location" of an object or the active session\cr
 #' [mapset()]: **GRASS** "mapset" of an object or the active session\cr
@@ -49,7 +49,7 @@
 #' 
 #' ## Functions that operate on or create `GRasters`
 #' [Arithmetic]: Mathematical operations on `GRaster`s: `+`, `-`, `*`, `/`, `^`, `%%` (modulus), `%/%` (integer division)\cr
-#' Equality: `<`, `<=`, `==`, `!=`, `>=`, `>`
+#' [Equality][Comparison]: `<`, `<=`, `==`, `!=`, `>=`, `>`
 #'
 #' Single-layer functions (applied to each layer of a `GRaster`):
 #' - `NA`s: [is.na()] and [not.na()] \cr
@@ -68,7 +68,7 @@
 #' `[<-` ([assign][subset_assign]): Assign values to a raster's cells\cr
 #' `[[` ([subset][subset_assign]): Subset a raster with multiple layers\cr
 #' `[[<-` ([assign][subset_assign]): Replace or add layers to a raster\cr
-#' [add<-`]`: Add layers to a raster\cr
+#' [add<-]: Add layers to a raster\cr
 #' [as.int()], [as.float()], [as.doub()]: Change data type (integer/float/double)\cr
 #' [as.contour()]: Contour lines from a raster\cr
 #' [as.lines()]: Convert a raster to a "lines" vector\cr
@@ -88,7 +88,7 @@
 #' [global()]: Summary statistics across cells of each raster layer\cr
 #' [`hillshade()`][shade]: Create a hillshade raster\cr
 #' [horizonHeight()]: Horizon height\cr
-#' [levels<-]: Assign levels to a categorical raster\cr
+#' [levels()<-]: Assign levels to a categorical raster\cr
 #' [longlat()]: Create longitude/latitude rasters.\cr
 #' [mask()]: Remove values in a raster based on values in another raster or vector\cr
 #' [merge()]: Combine two or more rasters with different extents and fill in `NA`s\cr
@@ -108,9 +108,9 @@
 #'
 #' ## Functions operating on categorical rasters
 #' [activeCat()]: Column that defines category labels\cr
-#' [activeCat<-]: Set column that defines category labels\cr
-#' [addCats())]: Add columns to a "levels" table\cr
-#' [addCats<-]: Add new rows (levels)\cr
+#' [activeCat()<-]: Set column that defines category labels\cr
+#' [addCats()]: Add columns to a "levels" table\cr
+#' [addCats()<-]: Add new rows (levels)\cr
 #' [categories()]: Set "levels" table for specific layers of a categorical raster\cr
 #' [catNames()]: Names of each "levels" table\cr
 #' [cats()]: "Levels" table of a categorical raster\cr
@@ -127,16 +127,17 @@
 #' [crs()]: Coordinate reference system\cr
 #' [datatype()]: Data type of fields\cr
 #' [dim()]: Number of geometries and columns\cr
-#' [ext()], [north()], [south()], [east()], [west()], [top()], and [bottom()]: Spatial extent\cr
+#' [ext()], [N()], [S()], [E()], [W()], [top()], and [bottom()]: Spatial extent\cr
 #' [geomtype()]: Type of vector (points, lines, polygons)\cr
 #' [is.2d()] and [is.3d()]: Is an object 2- or 3-dimensional?\cr
-#' [is.lonlat]: Is an object projected (e.g., in WGS84)?\cr
+#' [is.lonlat()]: Is an object projected (e.g., in WGS84)?\cr
 #' [is.points()], [is.lines()], [is.polygons()]: Does a `GVector` represent points, lines, or polygons?\cr
 #' [location()]: **GRASS** "location" of an object or the active session\cr
 #' [mapset()]: **GRASS** "mapset" of an object or the active session\cr
 #' [names()]: Names of `GVector` fields\cr
 #' [ncol()]: Number of fields\cr
-#' [nrow()]: Number of geometries\cr
+#' [ngeom()]: Number of geometries (points, lines, polygons)\cr
+#' [nrow()]: Number of rows in a vector data table\cr
 #' [sources()]: Name of the vector in **GRASS**\cr
 #' [st_bbox()]: Spatial extent\cr
 #' [st_crs()]: Coordinate reference system\cr
@@ -144,8 +145,8 @@
 #' [zext()]: Vertical extent\cr
 #'
 #' ## Functions that operate on or create `GVectors`
-#' `[` ([subset][subset_assign]): Select geometries/rows of a vector"s data frame\cr
-#' `[[` ([subset][subset_assign]): Subset columns of a vector"s data frame\cr
+#' `[` ([subset][subset_assign]): Select geometries/rows of a vector's data table\cr
+#' `[[` ([subset][subset_assign]): Subset columns of a vector's data table\cr
 #' [as.data.frame()]: Convert a vector to a `data.frame`\cr
 #' [as.points()]: Extract vertex coordinates from a "lines" or "polygons" `GVector`\cr
 #' [buffer()]: Create a polygon around/inside a vector\cr
@@ -156,14 +157,14 @@
 #' [crop()]: Remove parts of a vector\cr
 #' [delaunay()]: Delaunay triangulation\cr
 #' [distance()]: Distance between geometries in two vectors, or from a vector to cells of a raster\cr
-#' [head()]: First rows of a vector"s data frame.\cr
+#' [head()]: First rows of a vector's data table\cr
 #' [project()]: Change coordinate reference system\cr
 #' [simplifyGeom()]: Remove vertices\cr
 #' [smoothGeom()]: Remove "angular" aspects of features\cr
 #' [st_as_sf()]: Convert a `GVector` to a `sf` vector\cr
 #' [st_buffer()]: Create a polygon around/inside a vector\cr
 #' [st_distance()]: Distance between geometries in two vectors\cr
-#' [tail()]: Last rows of a vector"s data frame.\cr
+#' [tail()]: Last rows of a vector's data table\cr
 #'
 #' ## Converting between data types
 #' [as.contour()]: Convert a `GRaster` to a `GVector` representing contour lines\cr
@@ -184,8 +185,10 @@
 #' [compareGeom()]: Determine if geographic metadata is same between `GRaster`s and/or `GVector`s\cr
 #' [compareFloat()]: Compare values accounting for differences due to floating point precision\cr
 #' [forwardSlash()]: Replace backslash with forward slash\cr
+#' [dropRows()]: Remove rows from a `data.frame` or `data.table`\cr
 #' [grassInfo()]: **GRASS** version and citation\cr
 #' [pmatchSafe()]: Partial matching of strings with error checking\cr
+#' [replaceNAs()]: Replace `NA`s in columns of a `data.table` or `data.frame`\ce
 #' [rstring()]: Create a string statistically likely to be unique\cr
 #'
 #' ## Functions that operate on **GRASS** "sessions":
