@@ -110,10 +110,10 @@ dypsis <- fast(madDypsis)
 ext(rivers)
 st_bbox(rivers) # extent
 
-west(rivers) # western extent
-east(rivers) # eastern extent
-south(rivers) # southern extent
-north(rivers) # northern extent
+W(rivers) # western extent
+E(rivers) # eastern extent
+S(rivers) # southern extent
+N(rivers) # northern extent
 top(rivers) # top extent
 bottom(rivers) # bottom extent
 
