@@ -29,7 +29,7 @@ methods::setMethod(
 		layer <- which(layer)
 	}
 
-	categs <- cats(x[[layer]])
+	categs <- x@levels[layer]
 	lapply(categs, names)
 	
 	} # EOF
