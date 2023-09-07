@@ -1,8 +1,8 @@
-#' @title Mathematical operations on single GRasters
+#' @title Mathematical operations on each layer of a GRasters
 #'
-#' @description You can apply mathematical operators to `GRaster`s. These include:\cr
+#' @description You can apply mathematical functions to each layer of a `GRaster`s. These include:\cr
 #'
-#' * `NA`s: `is.na()`, `!is.na()`, and `not.na()`
+#' * `NA`s: `is.na()` and `not.na()`
 #' * Absolute value: `abs()`
 #' * Trigonometric functions (assumes values are in radians): `cos()`, `sin()`, `tan()`, `acos()`, `asin()`, `atan()`, `atan2()`
 #' * Exponential and logarithmic functions: `exp()`, `log()` (natural log), `ln()` (also natural log), `log1p()` (same as `log(x + 1)`), `log2()` (log, base 2), `log10()` (log, base 10)
