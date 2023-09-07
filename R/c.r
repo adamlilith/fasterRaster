@@ -1,6 +1,6 @@
 #' "Stack" GRasters and combine GVectors
 #'
-#' `GRaster`s can be "stacked" using this function, effectively creating a multi-layered raster. Note that this is different from creating a 3-dimensional raster, though such an effect can be emulated using stacking. `GVector`s can be combined into a single vector.  Stacks can only be created when:
+#' @description `GRaster`s can be "stacked" using this function, effectively creating a multi-layered raster. Note that this is different from creating a 3-dimensional raster, though such an effect can be emulated using stacking. `GVector`s can be combined into a single vector.  Stacks can only be created when:
 #' * All objects are in the same **GRASS** ["location" and "mapset"][tutorial_sessions].
 #' * All objects are the same class (either all `GRaster`s or all `GVector`s).
 #' * For `GRaster`s:
