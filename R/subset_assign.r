@@ -15,7 +15,7 @@
 #' @param i A character, numeric, integer, or logical vector:
 #' * `GVector`s:
 #'     * `[` operator: Indicates the geometries/rows to retain.
-#'     * `[[` operator: Indicates which columns to retain of a `GVector` or which layers to replace or fetch of a `GRaster`.
+#'     * `[[` operator: Indicates which columns to retain of a `GVector` or which layers to replace or subset of a `GRaster`.
 #'
 #' @param j Not used.
 #' @param value A numeric, integer, logical value (including `NA`), or `NULL`: Value to assign to all cells in a raster.
@@ -60,7 +60,7 @@ methods::setMethod(
 		minVal = mm["min", i],
 		maxVal = mm["max", i],
 		activeCat = x@activeCat[i],
-		levels = levels(x)[i]
+		levels = cats(x)[i]
 	)
 	
 	if (length(anyDuplicated(out@names)) > 0L) out@names <- make.unique(out@names)
@@ -74,7 +74,7 @@ methods::setMethod(
 #' @exportMethod [[<-
 methods::setMethod(
 	"[[<-",
-	signature = c(x = "GRaster", i = "ANY", j = "missing"),
+	signature = c(x = "GRaster", i = "ANY", j = "ANY"),
 	function(x, i, j, value) {
 
 	if (!inherits(value, c("GRaster", "NULL"))) stop("Cannot assign a non-GRaster to a GRaster layer.")
@@ -203,7 +203,7 @@ methods::setMethod(
 #' @rdname subset_assign
 #' @exportMethod add<-
 methods::setMethod(
-	"add<-",
+	f = "add<-",
 	signature = c(x = "GRaster", value = "GRaster"),
 	function(x, value) c(x, value)
 )
