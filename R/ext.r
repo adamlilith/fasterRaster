@@ -18,7 +18,7 @@
 #' @returns The returned values depend on the function:
 #' * `ext()`: A `SpatExtent` object (**terra** package) or a numeric vector.
 #' * `zext()`: A numeric vector.
-#' * `west()`, `east()`, `north()`, `south()`, `top()`, and `bottom()`: A numeric value or character.
+#' * `W()`, `E()`, `N()`, `S()`, `top()`, and `bottom()`: A numeric value or character.
 #' * `st_bbox()` returns a `bbox` object (**sf** package).
 #'
 #' @seealso [terra::ext()], [sf::st_bbox()]
@@ -69,11 +69,11 @@ methods::setMethod(
 	x@zextent
 })
 
-#' @aliases west
+#' @aliases W
 #' @rdname ext
-#' @exportMethod west
+#' @exportMethod W
 methods::setMethod(
-	f = "west",
+	f = "W",
 	signature = "missing",
 	definition = function(x, char = FALSE) {
 	out <- unname(ext(region(), vector = TRUE)["xmin"])
@@ -81,11 +81,11 @@ methods::setMethod(
 	out
 })
 
-#' @aliases west
+#' @aliases W
 #' @rdname ext
-#' @exportMethod west
+#' @exportMethod W
 methods::setMethod(
-	f = "west",
+	f = "W",
 	signature = "GSpatial",
 	definition = function(x, char = FALSE) {
 	out <- unname(ext(x, vector = TRUE)["xmin"])
@@ -93,11 +93,11 @@ methods::setMethod(
 	out
 })
 
-#' @aliases east
+#' @aliases E
 #' @rdname ext
-#' @exportMethod east
+#' @exportMethod E
 methods::setMethod(
-	f = "east",
+	f = "E",
 	signature = "missing",
 	definition = function(x, char = FALSE) {
 	out <- unname(ext(region(), vector = TRUE)["xmax"])
@@ -105,11 +105,11 @@ methods::setMethod(
 	out
 })
 
-#' @aliases east
+#' @aliases E
 #' @rdname ext
-#' @exportMethod east
+#' @exportMethod E
 methods::setMethod(
-	f = "east",
+	f = "E",
 	signature = "GSpatial",
 	definition = function(x, char = FALSE) {
 	out <- unname(ext(x, vector = TRUE)["xmax"])
@@ -117,11 +117,11 @@ methods::setMethod(
 	out
 })
 
-#' @aliases north
+#' @aliases N
 #' @rdname ext
-#' @exportMethod north
+#' @exportMethod N
 methods::setMethod(
-	f = "north",
+	f = "N",
 	signature = "missing",
 	definition = function(x, char = FALSE) {
 	out <- unname(ext(region(), vector = TRUE)["ymax"])
@@ -129,11 +129,11 @@ methods::setMethod(
 	out
 })
 
-#' @aliases north
+#' @aliases N
 #' @rdname ext
-#' @exportMethod north
+#' @exportMethod N
 methods::setMethod(
-	f = "north",
+	f = "N",
 	signature = "GSpatial",
 	definition = function(x, char = FALSE) {
 	out <- unname(ext(x, vector = TRUE)["ymax"])
@@ -141,11 +141,11 @@ methods::setMethod(
 	out
 })
 
-#' @aliases south
+#' @aliases S
 #' @rdname ext
-#' @exportMethod south
+#' @exportMethod S
 methods::setMethod(
-	f = "south",
+	f = "S",
 	signature = "missing",
 	definition = function(x, char = FALSE) {
 	out <- unname(ext(region(), vector = TRUE)["ymin"])
@@ -153,11 +153,11 @@ methods::setMethod(
 	out
 })
 
-#' @aliases south
+#' @aliases S
 #' @rdname ext
-#' @exportMethod south
+#' @exportMethod S
 methods::setMethod(
-	f = "south",
+	f = "S",
 	signature = "GSpatial",
 	definition = function(x, char = FALSE) {
 	out <- unname(ext(x, vector = TRUE)["ymin"])
