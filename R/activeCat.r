@@ -8,7 +8,7 @@
 #'
 #' @param names Logical: If `TRUE`, display the name(s) of the active column(s). If `FALSE` (default), report the index of the active column. Following [terra::activeCat()], the first column in the levels table is ignored. So, an active column of "1" means the second column is active. "2" means the third column is active, and so on.
 #'
-#' @param value Numeric, integer, or character. Following [terra::activeCat()], the first column in each levels table is ignored. So, if you want the second column to be the category label, the use 1. if you want the third column, use 2, and so on. You can also specify the active column by its column name (though this can't be the first column).
+#' @param value Numeric, integer, or character. Following [terra::activeCat()], the first column in each levels table is ignored. So, if you want the second column to be the category label, the use 1. If you want the third column, use 2, and so on. You can also specify the active column by its column name (though this can't be the first column).
 #'
 #' @returns `activeCat()` returns an integer or character vector of active column indices or names. `activeCat()<-` returns a `GRaster`.
 #'
