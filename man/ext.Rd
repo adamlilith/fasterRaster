@@ -7,18 +7,18 @@
 \alias{zext,missing-method}
 \alias{zext}
 \alias{zext,GSpatial-method}
-\alias{west,missing-method}
-\alias{west}
-\alias{west,GSpatial-method}
-\alias{east,missing-method}
-\alias{east}
-\alias{east,GSpatial-method}
-\alias{north,missing-method}
-\alias{north}
-\alias{north,GSpatial-method}
-\alias{south,missing-method}
-\alias{south}
-\alias{south,GSpatial-method}
+\alias{W,missing-method}
+\alias{W}
+\alias{W,GSpatial-method}
+\alias{E,missing-method}
+\alias{E}
+\alias{E,GSpatial-method}
+\alias{N,missing-method}
+\alias{N}
+\alias{N,GSpatial-method}
+\alias{S,missing-method}
+\alias{S}
+\alias{S,GSpatial-method}
 \alias{top,missing-method}
 \alias{top}
 \alias{top,GSpatial-method}
@@ -34,21 +34,21 @@
 
 \S4method{zext}{GSpatial}(x)
 
-\S4method{west}{missing}(x, char = FALSE)
+\S4method{W}{missing}(x, char = FALSE)
 
-\S4method{west}{GSpatial}(x, char = FALSE)
+\S4method{W}{GSpatial}(x, char = FALSE)
 
-\S4method{east}{missing}(x, char = FALSE)
+\S4method{E}{missing}(x, char = FALSE)
 
-\S4method{east}{GSpatial}(x, char = FALSE)
+\S4method{E}{GSpatial}(x, char = FALSE)
 
-\S4method{north}{missing}(x, char = FALSE)
+\S4method{N}{missing}(x, char = FALSE)
 
-\S4method{north}{GSpatial}(x, char = FALSE)
+\S4method{N}{GSpatial}(x, char = FALSE)
 
-\S4method{south}{missing}(x, char = FALSE)
+\S4method{S}{missing}(x, char = FALSE)
 
-\S4method{south}{GSpatial}(x, char = FALSE)
+\S4method{S}{GSpatial}(x, char = FALSE)
 
 \S4method{top}{missing}(x, char = FALSE)
 
@@ -72,7 +72,7 @@ The returned values depend on the function:
 \itemize{
 \item \code{ext()}: A \code{SpatExtent} object (\strong{terra} package) or a numeric vector.
 \item \code{zext()}: A numeric vector.
-\item \code{west()}, \code{east()}, \code{north()}, \code{south()}, \code{top()}, and \code{bottom()}: A numeric value or character.
+\item \code{W()}, \code{E()}, \code{N()}, \code{S()}, \code{top()}, and \code{bottom()}: A numeric value or character.
 \item \code{st_bbox()} returns a \code{bbox} object (\strong{sf} package).
 }
 }
@@ -198,10 +198,10 @@ dypsis <- fast(madDypsis)
 ext(rivers)
 st_bbox(rivers) # extent
 
-west(rivers) # western extent
-east(rivers) # eastern extent
-south(rivers) # southern extent
-north(rivers) # northern extent
+W(rivers) # western extent
+E(rivers) # eastern extent
+S(rivers) # southern extent
+N(rivers) # northern extent
 top(rivers) # top extent
 bottom(rivers) # bottom extent
 

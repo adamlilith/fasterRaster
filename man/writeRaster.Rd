@@ -6,7 +6,7 @@
 \alias{writeRaster,missing,missing-method}
 \title{Save a GRaster to disk}
 \usage{
-\S4method{writeRaster}{GRaster,character}(x, filename, datatype = NULL, overwrite = FALSE, ...)
+\S4method{writeRaster}{GRaster,character}(x, filename, datatype = NULL, overwrite = FALSE, warn = TRUE, ...)
 
 \S4method{writeRaster}{missing,missing}(x, filename)
 }
@@ -30,6 +30,8 @@
 \code{*} Depends on the integers (signed/unsigned, range of values). Categorical rasters will have a CSV file with category values and labels saved with them. The file name will be the same as the raster's file name, but end in extension ".csv".}
 
 \item{overwrite}{Logical: If \code{FALSE} (default), do not save over existing file(s).}
+
+\item{warn}{Logical: If \code{TRUE} (default), display a warning if the \code{datatype} argument does not match the value given by \link{datatype(x, "GDAL")}.}
 
 \item{...}{Additional arguments. These can include:
 \itemize{

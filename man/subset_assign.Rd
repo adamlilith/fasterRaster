@@ -2,7 +2,7 @@
 % Please edit documentation in R/subset_assign.r
 \name{subset_assign}
 \alias{subset_assign}
-\alias{[[<-,GRaster,ANY,missing-method}
+\alias{[[<-,GRaster,ANY-method}
 \alias{[[<-}
 \alias{add<-,GRaster,GRaster-method}
 \alias{add<-}
@@ -13,7 +13,7 @@
 \usage{
 \S4method{[[}{GRaster,ANY,ANY}(x, i)
 
-\S4method{[[}{GRaster,ANY,missing}(x, i, j) <- value
+\S4method{[[}{GRaster,ANY}(x, i, j) <- value
 
 \S4method{add}{GRaster,GRaster}(x) <- value
 
@@ -31,7 +31,7 @@
 \item \code{GVector}s:
 \itemize{
 \item \code{[} operator: Indicates the geometries/rows to retain.
-\item \code{[[} operator: Indicates which columns to retain of a \code{GVector} or which layers to replace or fetch of a \code{GRaster}.
+\item \code{[[} operator: Indicates which columns to retain of a \code{GVector} or which layers to replace or subset of a \code{GRaster}.
 }
 }}
 
@@ -172,10 +172,10 @@ dypsis <- fast(madDypsis)
 ext(rivers)
 st_bbox(rivers) # extent
 
-west(rivers) # western extent
-east(rivers) # eastern extent
-south(rivers) # southern extent
-north(rivers) # northern extent
+W(rivers) # western extent
+E(rivers) # eastern extent
+S(rivers) # southern extent
+N(rivers) # northern extent
 top(rivers) # top extent
 bottom(rivers) # bottom extent
 

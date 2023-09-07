@@ -43,7 +43,7 @@
 \alias{ceiling}
 \alias{trunc,GRaster-method}
 \alias{trunc}
-\title{Mathematical operations on single GRasters}
+\title{Mathematical operations on each layer of a GRasters}
 \usage{
 \S4method{is.na}{GRaster}(x)
 
@@ -100,9 +100,9 @@
 A \code{GRaster}.
 }
 \description{
-You can apply mathematical operators to \code{GRaster}s. These include:\cr
+You can apply mathematical functions to each layer of a \code{GRaster}s. These include:\cr
 \itemize{
-\item \code{NA}s: \code{is.na()}, \code{!is.na()}, and \code{not.na()}
+\item \code{NA}s: \code{is.na()} and \code{not.na()}
 \item Absolute value: \code{abs()}
 \item Trigonometric functions (assumes values are in radians): \code{cos()}, \code{sin()}, \code{tan()}, \code{acos()}, \code{asin()}, \code{atan()}, \code{atan2()}
 \item Exponential and logarithmic functions: \code{exp()}, \code{log()} (natural log), \code{ln()} (also natural log), \code{log1p()} (same as \code{log(x + 1)}), \code{log2()} (log, base 2), \code{log10()} (log, base 10)
