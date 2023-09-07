@@ -8,11 +8,13 @@
 #'
 #' @example man/examples/ex_GRaster_arithmetic.r
 #'
+#' @aliases Comparison
 #' @rdname Comparison
-#' @noRd
-
+#' @exportMethod Ops
 # raster raster
-methods::setMethod("Ops", signature(e1 = "GRaster", e2 = "GRaster"),
+methods::setMethod(
+	f = "Ops",
+	signature(e1 = "GRaster", e2 = "GRaster"),
     function(e1, e2) {
 	
 		compareGeom(e1, e2)
@@ -48,6 +50,9 @@ methods::setMethod("Ops", signature(e1 = "GRaster", e2 = "GRaster"),
 )
 
 # logical raster
+#' @aliases Comparison
+#' @rdname Comparison
+#' @exportMethod Ops
 methods::setMethod("Ops", signature(e1 = "logical", e2 = "GRaster"),
     function(e1, e2) {
 	
@@ -78,6 +83,9 @@ methods::setMethod("Ops", signature(e1 = "logical", e2 = "GRaster"),
 )
 
 # raster logical
+#' @aliases Comparison
+#' @rdname Comparison
+#' @exportMethod Ops
 methods::setMethod("Ops", signature(e1 = "GRaster", e2 = "logical"),
     function(e1, e2) {
 	
@@ -108,6 +116,9 @@ methods::setMethod("Ops", signature(e1 = "GRaster", e2 = "logical"),
 )
 
 # numeric raster
+#' @aliases Comparison
+#' @rdname Comparison
+#' @exportMethod Ops
 methods::setMethod("Ops", signature(e1 = "numeric", e2 = "GRaster"),
     function(e1, e2) {
 	
@@ -137,6 +148,9 @@ methods::setMethod("Ops", signature(e1 = "numeric", e2 = "GRaster"),
 )
 
 # raster numeric
+#' @aliases Comparison
+#' @rdname Comparison
+#' @exportMethod Ops
 methods::setMethod("Ops", signature(e1 = "GRaster", e2 = "numeric"),
     function(e1, e2) {
 	
@@ -166,6 +180,9 @@ methods::setMethod("Ops", signature(e1 = "GRaster", e2 = "numeric"),
 )
 
 # raster character
+#' @aliases Comparison
+#' @rdname Comparison
+#' @exportMethod Ops
 methods::setMethod("Ops", signature(e1 = "GRaster", e2 = "character"),
     function(e1, e2) {
 	
@@ -173,40 +190,87 @@ methods::setMethod("Ops", signature(e1 = "GRaster", e2 = "character"),
 		.restore(e1)
 
 		oper <- as.vector(.Generic)[1L]
-		if (!(oper %in% c("==", "!="))) stop("Can only use the ", sQuote("=="), " or ", sQuote("!="), " logical operators when comparing a raster to a character string.")
-
 		levs <- levels(e1)
+		acs <- activeCat(e1, names = TRUE)
+
+		srcs <- .makeSourceName("logical", "raster", nlyr(e1))
 
 		for (i in seq_len(nlyr(e1))) {
 
 			# get value of this category
-			thisValue <- levs[[i]]$Value[levs[[i]]$Label == e2]
-			thisValue <- as.numeric(thisValue)
-			if (length(thisValue) == 0L) {
+			ac <- acs[i]
+			thisVal <- eval(parse(text = paste0("levs[[", i, "]][", ac, " == e2]")))
+			thisVal <- thisVal[[1L]]
+
+			if (length(thisVal) == 0L) {
 				this <- 0L * not.na(e1)
 			} else {
 
-				if (oper == "==") {
-					this <- e1 == thisValue
+				if (oper %in% c("<", "<=", ">=", ">")) {
+
+					thisVal <- max(thisVal)
+					
+					ex <- paste0(srcs[i], " = if(", sources(x)[i], " ", oper, " ", thisVal, ", 1, 0)")
+
+				thisVal <- max(thisVal)
+				} else if (oper %in% c(">", ">=")) {
+					
+					thisVal <- min(thisVal)
+
+					ex <- paste0(srcs[i], " = if(", sources(e1)[i], " ", oper, " ", thisVal, ", 1, 0)")
+
+				} else if (oper == "==") {
+
+     				ex <- paste0(srcs[i], " = if(", sources(e1)[i], " == ", thisVal[1L])
+
+					if (length(thisVal) > 1L) {
+						
+						for (count in 2L:length(thisVal)) {
+							
+							ex <- paste0(ex, " | ", sources(e1)[i], " == ", thisVal)
+
+						}
+					}
+
+					ex <- paste0(ex, ", 1, 0)")
+
 				} else if (oper == "!=") {
-     				this <- e1 != thisValue
+				
+					ex <- paste0(srcs[i], " = if(", sources(e1)[i], " != ", thisVal[1L])
+
+					if (length(thisVal) > 1L) {
+
+						for (count in 2L:length(thisVal)) {
+							ex <- paste0(ex, " & ", sources(e1)[i], " != ", thisVal)
+						}
+
+					}
+
+					ex <- paste0(ex, ", 1, 0)")
+				
 				}
 
+				args <- list(
+					cmd = "r.mapcalc",
+					expression = ex,
+					flags = c("quiet", "overwrite"),
+					intern = TRUE
+				)
+
+				do.call(rgrass::execGRASS, args = args)
+
 			}
 
-			if (i == 1L) {
-				out <- this
-			} else {
-				out <- c(out, this)
-			}
-			
 		} # next layer
-		out
-			
+		.makeGRaster(srcs, "logical")
+		
 	} # EOF
 )
 
 # character raster
+#' @aliases Comparison
+#' @rdname Comparison
+#' @exportMethod Ops
 methods::setMethod("Ops", signature(e1 = "character", e2 = "GRaster"),
     function(e1, e2) {
 	
@@ -214,34 +278,79 @@ methods::setMethod("Ops", signature(e1 = "character", e2 = "GRaster"),
 		.restore(e2)
 
 		oper <- as.vector(.Generic)[1L]
-		if (!(oper %in% c("==", "!="))) stop("Can only use the ", sQuote("=="), " or ", sQuote("!="), " logical operators when comparing a raster to a character string.")
-
 		levs <- levels(e2)
+		acs <- activeCat(e2, names = TRUE)
+
+		srcs <- .makeSourceName("logical", "raster", nlyr(e2))
 
 		for (i in seq_len(nlyr(e2))) {
 
 			# get value of this category
-			thisValue <- levs[[i]]$Value[levs[[i]]$Label == e1]
-			if (length(thisValue) == 0L) {
+			ac <- acs[i]
+			thisVal <- eval(parse(text = paste0("levs[[", i, "]][", ac, " == e1]")))
+			thisVal <- thisVal[[1L]]
+
+			if (length(thisVal) == 0L) {
 				this <- 0L * not.na(e2)
 			} else {
 
-				if (oper == "==") {
-					this <- e2 == thisValue
+				if (oper %in% c("<", "<=", ">=", ">")) {
+
+					thisVal <- max(thisVal)
+					
+					ex <- paste0(srcs[i], " = if(", sources(e2)[i], " ", oper, " ", thisVal, ", 1, 0)")
+
+				thisVal <- max(thisVal)
+				} else if (oper %in% c(">", ">=")) {
+					
+					thisVal <- min(thisVal)
+
+					ex <- paste0(srcs[i], " = if(", sources(e2)[i], " ", oper, " ", thisVal, ", 1, 0)")
+
+				} else if (oper == "==") {
+
+     				ex <- paste0(srcs[i], " = if(", sources(e2)[i], " == ", thisVal[1L])
+
+					if (length(thisVal) > 1L) {
+						
+						for (count in 2L:length(thisVal)) {
+							
+							ex <- paste0(ex, " | ", sources(e2)[i], " == ", thisVal)
+
+						}
+					}
+
+					ex <- paste0(ex, ", 1, 0)")
+
 				} else if (oper == "!=") {
-     				this <- e2 != thisValue
+				
+					ex <- paste0(srcs[i], " = if(", sources(e2)[i], " != ", thisVal[1L])
+
+					if (length(thisVal) > 1L) {
+
+						for (count in 2L:length(thisVal)) {
+							ex <- paste0(ex, " & ", sources(e2)[i], " != ", thisVal)
+						}
+
+					}
+
+					ex <- paste0(ex, ", 1, 0)")
+				
 				}
 
+				args <- list(
+					cmd = "r.mapcalc",
+					expression = ex,
+					flags = c("quiet", "overwrite"),
+					intern = TRUE
+				)
+
+				do.call(rgrass::execGRASS, args = args)
+
 			}
 
-			if (i == 1L) {
-				out <- this
-			} else {
-				out <- c(out, this)
-			}
-			
 		} # next layer
-		out
-			
+		.makeGRaster(srcs, "logical")
+		
 	} # EOF
 )
