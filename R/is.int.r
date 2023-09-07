@@ -11,7 +11,7 @@
 #' 
 #' @returns Logical.
 #' 
-#' @seealso [datatype()], [terra::datatype()], [as.int()], [as.float()], [as.double()], [as.factor()]
+#' @seealso [datatype()], [terra::datatype()], [as.int()], [as.float()], [as.doub()]
 #'
 #' @example man/examples/ex_GRaster.r
 #' 
