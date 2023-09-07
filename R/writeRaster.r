@@ -24,6 +24,8 @@
 #'
 #' `*` Depends on the integers (signed/unsigned, range of values). Categorical rasters will have a CSV file with category values and labels saved with them. The file name will be the same as the raster's file name, but end in extension ".csv".
 #'
+#' @param warn Logical: If `TRUE` (default), display a warning if the `datatype` argument does not match the value given by [datatype(x, "GDAL")].
+#'
 #' @param ... Additional arguments. These can include:
 #' * `compressTiff`: Character or `NULL`: Type of compression for GeoTIFF files:
 #'    * `"DEFLATE"` (default)
@@ -56,6 +58,7 @@ setMethod(
 		filename,
 		datatype = NULL,
 		overwrite = FALSE,
+		warn = TRUE,
 		...
 	) {
 	
@@ -144,6 +147,11 @@ setMethod(
 			} else if (any(datatype == "Byte")) {
 				"Byte"
 			}
+		}
+
+		if (datatype != datatype(x, "GDAL")) {
+			flags <- c(flags, "f")
+			if (warn) warning("Argument ", sQuote("datatype"), " does not match the data type of the raster. Data may be lost.")
 		}
 
 		if (!("createopt" %in% names(dots))) createopt <- NULL
