@@ -3,9 +3,9 @@
 # require(sf)
 # require(terra)
 
-# #' @import data.table
-# #' @import sf
-# #' @import terra
+#' @import data.table
+#' @import sf
+#' @import terra
 
 ### data.table
 .datatable.aware <- TRUE
@@ -24,8 +24,10 @@ methods::setGeneric(name = ".maxVal", def = function(x, ...) standardGeneric(".m
 methods::setGeneric(name = ".minVal", def = function(x, ...) standardGeneric(".minVal"))
 
 methods::setGeneric(name = "activeCat", package = "terra")
+# methods::setGeneric(name = "activeCat", def = function(x, ...) standardGeneric("activeCat"))
 methods::setGeneric(name = "activeCat<-", def = function(x, ...) standardGeneric("activeCat<-"))
 methods::setGeneric(name = "add<-", package = "terra")
+# methods::setGeneric(name = "add<-", def = function(x, ...) standardGeneric("add<-"))
 methods::setGeneric(name = "addCats", package = "terra")
 methods::setGeneric(name = "addCats<-", def = function(x, ...) standardGeneric("addCats<-"))
 methods::setGeneric(name = "app", package = "terra")
@@ -68,7 +70,7 @@ methods::setGeneric(name = "distance", def = function(x, y, ...) standardGeneric
 methods::setGeneric(name = "droplevels", package = "terra")
 methods::setGeneric(name = "dropRows", def = function(x, ...) standardGeneric("dropRows"))
 
-methods::setGeneric(name = "east", def = function(x, ...) standardGeneric("east"))
+methods::setGeneric(name = "E", def = function(x, ...) standardGeneric("E"))
 methods::setGeneric(name = "ext", package = "terra") 
 methods::setGeneric(name = "extend", package = "terra")
 methods::setGeneric(name = "extract", package = "terra")
@@ -125,7 +127,7 @@ methods::setGeneric(name = "nlyr", package = "terra")
 methods::setGeneric(name = "nacell", def = function(x) standardGeneric("nacell"))
 methods::setGeneric(name = "nlevels", def = function(x, ...) standardGeneric("nlevels"))
 methods::setGeneric(name = "nonnacell", def = function(x) standardGeneric("nonnacell"))
-methods::setGeneric(name = "north", def = function(x, ...) standardGeneric("north"))
+methods::setGeneric(name = "N", def = function(x, ...) standardGeneric("N"))
 methods::setGeneric(name = "not.na", def = function(x, ...) standardGeneric("not.na")) # in base
 methods::setGeneric(name = "ncol", def = function(x) standardGeneric("ncol")) # in base
 methods::setGeneric(name = "nrow", def = function(x) standardGeneric("nrow")) # in base
@@ -138,6 +140,7 @@ methods::setGeneric(name = "quantile", package = "stats")
 
 methods::setGeneric(name = "r2", def = function(x, ...) standardGeneric("r2"))
 methods::setGeneric(name = "rast", package = "terra")
+methods::setGeneric(name = "replaceNAs", def = function(x, ...) standardGeneric("replaceNAs"))
 methods::setGeneric(name = "rnormRast", def = function(x, ...) standardGeneric("rnormRast"))
 methods::setGeneric(name = "runifRast", def = function(x, ...) standardGeneric("runifRast"))
 
@@ -157,7 +160,7 @@ methods::setGeneric(name = "simplifyGeom", package = "terra")
 methods::setGeneric(name = "smoothGeom", def = function(x, ...) standardGeneric("smoothGeom"))
 methods::setGeneric(name = "skewness", def = function(x, ...) standardGeneric("skewness"))
 methods::setGeneric(name = "slope", def = function(x, ...) standardGeneric("slope"))
-methods::setGeneric(name = "south", def = function(x, ...) standardGeneric("south"))
+methods::setGeneric(name = "S", def = function(x, ...) standardGeneric("S"))
 methods::setGeneric(name = "sources", package = "terra")
 methods::setGeneric(name = "spatSample", package = "terra")
 methods::setGeneric(name = "spDepRast", def = function(x, ...) standardGeneric("spDepRast"))
@@ -184,7 +187,7 @@ methods::setGeneric(name = "vect", package = "terra")
 methods::setGeneric(name = "viewshed", package = "terra")
 methods::setGeneric(name = "voronoi", package = "terra")
 
-methods::setGeneric(name = "west", def = function(x, ...) standardGeneric("west"))
+methods::setGeneric(name = "W", def = function(x, ...) standardGeneric("W"))
 methods::setGeneric(name = "writeRaster", package = "terra")
 methods::setGeneric(name = "writeVector", package = "terra")
 
