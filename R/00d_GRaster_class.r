@@ -72,9 +72,10 @@ GRaster <- methods::setClass(
 .validActiveCat <- function(object) {
 
 	bad <- FALSE
-	
 	numCols <- sapply(object@levels, ncol)
+	
 	isFact <- is.factor(object)
+
 	if (any(isFact & is.na(object@activeCat))) {
 		bad <- TRUE
 	} else if (any(isFact & (object@activeCat < 1L | object@activeCat > numCols))) {
