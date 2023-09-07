@@ -90,8 +90,11 @@ methods::setMethod(
 			if (is.factor(x)[i]) {
 
           		levs <- levels(x)[[i]]
-				freqs <- merge(freqs, levs, all = TRUE)
-    			data.table::setkeyv(freqs, "value")
+				xValCol <- names(freqs)[1L]
+				yValCol <- names(levs)[1L]
+				freqs <- merge(freqs, levs, by.x = xValCol, by.y = yValCol, all.y = TRUE)
+				
+				freqs <- replaceNAs(freqs, cols = "count", replace = 0)
 
 			}
 		
