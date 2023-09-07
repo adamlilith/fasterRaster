@@ -17,10 +17,12 @@ setMethod(
     f = "nlevels",
     signature = "GRaster",
     definition = function(x) {
-        out <- sapply(x@levels, nrow)
-		names(out) <- names(x)
-        out
-    } # EOF
+
+	out <- sapply(x@levels, nrow)
+	names(out) <- names(x)
+	out
+
+	} # EOF
 )
 
 #' Count number of levels from a data.frame/table, list, or SpatRaster
