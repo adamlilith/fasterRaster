@@ -34,12 +34,7 @@ methods::setMethod(
 	function(x, i) {
 
 	# test indices
-	if (inherits(i, "character")) {
-		if (any(!(i %in% names(x)))) stop("At least one name does not match a raster in this stack.")
-		i <- match(i, names(x))
-	}
-	if (any(!(i %in% seq_len(nlyr(x))))) stop("Index out of bounds.")
-	
+	i <- .layerIndex(i, x, recycle = TRUE)
 	mm <- minmax(x)
 	
 	out <- new(
