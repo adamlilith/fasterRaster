@@ -11,7 +11,7 @@
 #' @param active An integer or a character: The index or column name of the column used for category labels (the "active column"). Following [terra::activeCat()], the first column of the "levels" table is ignored, so a value of 1 means to use the second column of the table for labels. A value of 2 means to use the third column, and so on.
 #'
 #' @returns Values returned are:
-#' * `levels()` and `cats()`: A list of `data.frame`s or `data.table`s, one per raster.
+#' * `levels()` and `cats()`: A list of `data.frame`s or `data.table`s, one per raster layer.
 #' * `levels()<-` and `categories()`: A `GRaster`.
 #'
 #' @seealso [terra::levels()], [terra::levels<-], [terra::cats()], [terra::categories()], [categorical rasters][tutorial_raster_data_types] in **fasterRaster**
@@ -51,7 +51,7 @@ methods::setMethod(
 )
 
 #' @aliases cats
-#' @rdname categories
+#' @rdname levels
 #' @exportMethod cats
 methods::setMethod(
     f = "cats",
@@ -61,10 +61,12 @@ methods::setMethod(
 	layer <- .layerIndex(layer, x, recycle = TRUE)
 	
 	out <- x@levels[layer]
-	numLevels <- nlevels(x)[layer]
+	numLevels <- .nlevels(out)
 	for (i in seq_along(out)) {
-		if (numLevels[i] == 0L) out[[i]] <- NULL
+		if (numLevels[i] == 0L) out[[i]] <- data.table::data.table(NULL)
 	}
+	
+	# out <- lapply(out, .replace0LevelsWithNull)
 
 	if (!getFastOptions("useDataTable")) {
 		for (i in seq_along(out)) {
@@ -76,6 +78,25 @@ methods::setMethod(
 
     } # EOF
 )
+
+# #' Replaces data.table/frames in a list with 0 rows with NULL
+# #'
+# #' Have to do this because defining a list element as 'NULL' removes that element entirely. Fix from https://stackoverflow.com/questions/7944809/assigning-null-to-a-list-element-in-r.
+# #'
+# #' @param y A data.table/frame
+# #'
+# #' @returns A data.table/frame or 'NULL'.
+# #'
+# #' @noRd
+# .replace0LevelsWithNull <- function(y) {
+
+	# if (nrow(y) == 0L) {
+		# NULL
+	# } else {
+		# y
+	# }
+
+# }
 
 #' @aliases categories
 #' @rdname levels
