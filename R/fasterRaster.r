@@ -1,6 +1,6 @@
 #' "fasterRaster": Faster raster and spatial vector processing using "GRASS GIS"
 #'
-#' \figure{fasterRaster.png}{options: alt="fasterRaster" align="right" vertical-align="top" width=1.2in}
+#' \figure{man/figures/fasterRaster.png}{options: alt="fasterRaster" align="right" vertical-align="top" width=1.2in}
 #'
 #' @description Processing of large-in-memory/-on disk rasters and spatial vectors using **GRASS GIS**. Most functions in the **terra** and **sf** packages are recreated. Processing of medium-sized and smaller spatial objects will nearly always be faster using **terra** or **sf**. To use most of the functions you must have the stand-alone version of **GRASS** version 8.0 or higher (not the **OSGeoW4** installer version). Note that due to developer choices, results will not always be strictly comparable between **terra**, **sf**, and **fasterRaster**.
 #'
@@ -11,7 +11,7 @@
 #' [fast()]: Convert a `SpatRaster`, `SpatVector`, or `sf` vector to **fasterRaster**'s raster format (`GRaster`s) or vector format (`GVector`s), or load one from a file\cr
 #' [rast()], [vect()], and [st_as_sf()]: Convert `GRaster`s and `GVector`s to `SpatRaster`s, `SpatVector`s, or `sf` vectors\cr
 #' [writeRaster()] and [writeVector()]: Save `GRaster`s or `GVector`s to disk\cr
-#' [fastRestore()]: Revert to another **GRASS** ["location" or "mapset"][tutorial_sessions], or restart a **GRASS** session saved to disk\cr
+#' [restoreSession()]: Revert to another **GRASS** ["location" or "mapset"][tutorial_sessions], or restart a **GRASS** session saved to disk\cr
 #' [setFastOptions()] and [getFastOptions()]: Set options for working with **fasterRaster**\cr
 #'
 #' ## Properties of **fasterRaster** rasters (`GRasters`)
@@ -188,15 +188,15 @@
 #' [dropRows()]: Remove rows from a `data.frame` or `data.table`\cr
 #' [grassInfo()]: **GRASS** version and citation\cr
 #' [pmatchSafe()]: Partial matching of strings with error checking\cr
-#' [replaceNAs()]: Replace `NA`s in columns of a `data.table` or `data.frame`\ce
+#' [replaceNAs()]: Replace `NA`s in columns of a `data.table` or `data.frame`, or in a vector\ce
 #' [rstring()]: Create a string statistically likely to be unique\cr
 #'
 #' ## Functions that operate on **GRASS** "sessions":
 #' [crs()]: Coordinate reference system of the current location\cr
-#' [fastRemove()]: Delete a **GRASS** session (location, mapset(s), and all associated files)\cr
-#' [fastRestore()]: Restore a previous **GRASS** session or switch **GRASS** locations/mapsets\cr
 #' [location()]: **GRASS** "location" of an object or the active session\cr
 #' [mapset()]: **GRASS** "mapset" of an object or the active session\cr
+#' [restoreSession()]: Restore a previous **GRASS** session or switch **GRASS** locations/mapsets\cr
+#' [removeSession()]: Delete a **GRASS** session (location, mapset(s), and all associated files)\cr
 #'
 #' ## Functions that operate on **GRASS** "regions" (seldom used by most users):
 #' [region()]: Change or report the active region's extent and resolution\cr
