@@ -7,9 +7,8 @@
 .grassVerDefault <- function() 8.3
 .addonDirDefault <- function() NULL
 .memoryDefault <- function() 300 # in MB
-.rasterPrecisionDefault <- function() "float" # "FCELL"/"float", or "DCELL"/"double"
+.rasterPrecisionDefault <- function() "double" # "FCELL"/"float", or "DCELL"/"double"
 .useDataTableDefault <- function() TRUE # logical
-# .grassVerDefault <- function() "82"
 
 .workDirDefault <- function() file.path(forwardSlash(tempdir()))
 .locationDefault <- function() "default"
@@ -17,7 +16,7 @@
 
 # Names or table of PUBLIC options
 # @param type NULL (show all names), OR "numeric", "logical", or "character", OR "table" (show table)
-.namesOfOptions <- function(type= NULL) {
+.namesOfOptions <- function(type = NULL) {
 	
 	opts <- data.frame(
 		name = c(
