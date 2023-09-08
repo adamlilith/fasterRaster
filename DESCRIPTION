@@ -28,6 +28,7 @@ Imports:
 	sf,
 	shiny,
 	terra,
+	tidyterra,
 	utils
 Suggests:
 	knitr
