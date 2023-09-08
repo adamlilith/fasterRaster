@@ -1,6 +1,6 @@
 #' Apply a function to a set of rasters
 #'
-#' @description `app()` applies a function to a set of "stacked" rasters. `appFuns()` provides a table of **GRASS** functions and their equivalent **R** function. `appCheck()` tests whether a formula supplied to `app()` has any "forbidden" function calls.
+#' @description `app()` applies a function to a set of "stacked" rasters. `appFuns()` provides a table of **GRASS** functions and their equivalents from the **terra** and **sf** packages. `appCheck()` tests whether a formula supplied to `app()` has any "forbidden" function calls.
 #' 
 #' `app()` function operates in a manner slightly different from [terra::app()]. The function to be applied *must* be written as a character string. For example, if the raster had layer names "`x1`" and "`x2`", then the function might be like `"= max(sqrt(x1), log(x2))"`. Rasters **cannot** have the same names as functions used in the formula. In this example, the rasters could not be named "max", "sqrt", or "log".
 #' 
@@ -101,11 +101,14 @@ methods::setMethod(
     args <- list(
         cmd = "r.mapcalc",
         expression = fun,
-        seed = seed,
         flags = c("quiet", "overwrite"),
         intern = TRUE
     )
-    if (is.null(seed)) args$flags <- c(args$flags, "s")
+    if (is.null(seed)) {
+		args$flags <- c(args$flags, "s")
+	} else {
+		args$seed <- seed
+	}
     do.call(rgrass::execGRASS, args = args)
     .makeGRaster(src, "app")
 
