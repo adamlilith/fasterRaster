@@ -39,10 +39,11 @@ GRaster <- methods::setClass(
 .validLevelTable <- function(object) {
 
 	levels <- object@levels
+	nlevs <- .nlevels(levels)
 
 	for (i in seq_along(levels)) {
 	
-		nr <- nrow(levels[[i]])
+		nr <- nlevs[i]
 	
 		if (nr != 0) {
 	
@@ -93,10 +94,10 @@ GRaster <- methods::setClass(
 #' @returns `TRUE` if invalid, `FALSE` otherwise.
 #'
 #' @noRd
-.validFactor <- function(object) {
+.canMakeRasterCategorical <- function(object) {
 
 	dt <- object@datatypeGRASS
-	numLevels <- nlevels(object)
+	numLevels <- sapply(object@levels, nrow)
 	any(numLevels > 0L & dt != "CELL")
 
 }
@@ -126,7 +127,7 @@ setValidity("GRaster",
 			"The number of @activeCat values must be the same as the number of @nLayers."
 		} else if (length(object@levels) != object@nLayers) {
 			"The number of tables in @levels must be the same as the number of @nLayers."
-		} else if (.validFactor(object)) {
+		} else if (.canMakeRasterCategorical(object)) {
 			"Only GRASS datatype of a rasters with levels must be CELL."
 		} else if (.validLevelTable(object)) {
 			"Each table must be a NULL data.table, or if not, the first column must be an integer, and there must be >1 columns."
@@ -162,10 +163,13 @@ setValidity("GRaster",
 		for (i in 2L:length(src)) levels[[i]] <- levels[[1L]]
 	}
 
+	ac <- rep(NA_integer_, length(levels))
 	for (i in seq_along(levels)) {
-		if (is.character(levels[[i]]) && levels[[i]] == "") {
+		if (is.null(levels[[i]]) || (is.character(levels[[i]]) && levels[[i]] == "")) {
+			ac[i] <- NA_integer_
 			levels[[i]] <- data.table::data.table(NULL)
 		} else if (!inherits(levels[[i]], "data.table")) {
+			ac[i] <- 2L
    			levels[[i]] <- data.table::data.table(levels[[i]])
 		}
 	}
@@ -188,7 +192,7 @@ setValidity("GRaster",
 		datatypeGRASS = info[["grassDataType"]],
 		minVal = info[["minVal"]],
 		maxVal = info[["maxVal"]],
-		activeCat = rep(2L, length(src)),
+		activeCat = ac,
 		levels = levels
 	)
 	out <- .makeUniqueNames(out)
