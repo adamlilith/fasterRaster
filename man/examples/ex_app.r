@@ -44,10 +44,10 @@ app(x, fun = fun)
 # This is the same as:
 (x[[1]] / x[[2]]) + x[[3]]
 
-# We can view a Shiny table using appFuns():
-appFuns()
+# We can view a table of app() functions using appFuns():
+appFuns(FALSE) # Change to TRUE to see a Shiny version.
 
-# This is the same as:
+# We can also get the table using:
 data(appFunsTable)
 
 # Apply other functions:
@@ -78,7 +78,7 @@ rand
 freq(rand) # cell frequencies
 
 # IMPORTANT #3: Revert back to original GRASS session if needed.
-fastRestore(opts.)
+restoreSession(opts.)
 removeSession("examples")
 
 }
