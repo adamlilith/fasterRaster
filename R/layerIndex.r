@@ -18,7 +18,7 @@
 		if (recycle && length(layer) < nlyr(x)) layer <- rep(layer, length.out = nlyr(x))
 		layer <- which(layer)
 	}
-	if (any(!(layer %in% seq_along(nlyr(x))))) stop("Raster only contains ", nlyr(x), " layer(s).")
+	if (any(!(layer %in% seq_len(nlyr(x))))) stop("Raster only contains ", nlyr(x), " layer(s).")
 	layer
 
 }
