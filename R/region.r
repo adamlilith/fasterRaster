@@ -128,7 +128,7 @@ methods::setMethod(
 		top <- as.numeric(top)
 		bottom <- as.numeric(bottom)
 		
-		zextent <- c(top=top, bottom=bottom)
+		zextent <- c(bottom=bottom, top=top)
 		
 		# dimensions
 		rows <- info[grepl(info, pattern="rows:")]
@@ -579,10 +579,10 @@ methods::setMethod(
 	ewres <- x[1L]
 	nsres <- x[2L]
 
-	w <- west(initials)
-	e <- east(initials)
-	s <- south(initials)
-	n <- north(initials)
+	w <- W(initials)
+	e <- E(initials)
+	s <- S(initials)
+	n <- N(initials)
 
 	if (respect == "extent") {
 
