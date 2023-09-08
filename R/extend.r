@@ -112,10 +112,10 @@ methods::setMethod(
         }
 
         # by how many rows and columns do we grow?
-        wgrow <- max(0, west(x) - extent[1L]) / ewres
-        egrow <- max(0, extent[2L] - east(x)) / ewres
-        sgrow <- max(0, south(x) - extent[3L]) / nsres
-        ngrow <- max(0, extent[4L] - north(x)) / nsres
+        wgrow <- max(0, W(x) - extent[1L]) / ewres
+        egrow <- max(0, extent[2L] - E(x)) / ewres
+        sgrow <- max(0, S(x) - extent[3L]) / nsres
+        ngrow <- max(0, extent[4L] - N(x)) / nsres
 
         snap <- pmatchSafe(snap, c("near", "in", "out"))
         fx <- if (snap == "near") {
