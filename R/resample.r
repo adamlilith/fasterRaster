@@ -82,10 +82,10 @@ methods::setMethod(
 	
 	}
 	
-	w <- west(x)
-	e <- east(x)
-	s <- south(x)
-	n <- north(x)
+	w <- W(x)
+	e <- E(x)
+	s <- S(x)
+	n <- N(x)
 
 	cols <- ceiling((e - w) / ewres)
 	rows <- ceiling((n - s) / nsres)
