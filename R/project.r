@@ -64,7 +64,7 @@ methods::setMethod(
 	startLoc <- location()
 	startMapset <- mapset()
 
-	on.exit(fastRestore(location=startLoc, mapset=startMapset), add=TRUE)
+	on.exit(restoreSession(location=startLoc, mapset=startMapset), add=TRUE)
 	
 	# target location and mapset
 	if (is.null(y)) {
@@ -83,7 +83,7 @@ methods::setMethod(
 	if (!is.null(y)) {
 		toCrs <- crs(y)
 	} else {
-		fastRestore(location=toLocation, mapset=toMapset)
+		restoreSession(location=toLocation, mapset=toMapset)
 		toCrs <- crs()
 	}
 
@@ -129,7 +129,7 @@ methods::setMethod(
 			fallback = fallback
 		)
 
-		fastRestore(location=toLocation, mapset=toMapset)
+		restoreSession(location=toLocation, mapset=toMapset)
 
 	### "y" is not a raster (no resampling)
 	} else {
@@ -223,12 +223,12 @@ methods::setMethod(
 	}
 
 	# go to "to" location	
-	on.exit(fastRestore(location=startLoc, mapset=startMapset), add=TRUE)
+	on.exit(restoreSession(location=startLoc, mapset=startMapset), add=TRUE)
 
 	if (!is.null(y)) {
 		.restore(y)
 	} else if (location() != startLoc | mapset() != startMapset) {
-		fastRestore(location = toLocation, mapset = toMapset)
+		restoreSession(location = toLocation, mapset = toMapset)
 	}
 	
 	src <- .makeSourceName("projected", "vector")
