@@ -19,7 +19,7 @@
 #'
 #' * `grassVer` (character): Version of **GRASS** being used. This should be supplied as a character string, not as a numeric value. Do not include the minor version (e.g., use `"8.3"`, not `"8.3.1"``). As **GRASS** is developed, new modules and functionalities for existing modules are added. Setting the version correctly allows you to take advantage of these options.
 #' 
-#' * `rasterPrecision` (character): The [precision][tutorial_raster_data_types] of values when applying mathematical operations to a `GRaster`. By default, this is `"float"`, which allows for precision to about the 7th decimal place. However, it can be set to `"double"`, which allows for precision to about the 15th decimal place. `DCELL` rasters are larger in memory and on disk. The default is `"float"`.`
+#' * `rasterPrecision` (character): The [precision][tutorial_raster_data_types] of values when applying mathematical operations to a `GRaster`. By default, this is `"double"`, which allows for precision to about the 16th decimal place. However, it can be set to `"float"`, which allows for precision to about the 7th decimal place. `float` rasters are smaller in memory and on disk. The default is `"double"`.`
 #'
 #' * `useDataTable` (logical): If `FALSE` (default), use `data.frame`s when going back and forth between data tables of `GVector`s and **R**. This can be slow for very large data tables. If `TRUE`, use `data.table`s from the **data.table** package. This can be much faster, but it might require you to know how to use `data.table`s if you want to manipulate them in **R**. You can always convert them to `data.frame`s using [base::as.data.frame()].
 #'
