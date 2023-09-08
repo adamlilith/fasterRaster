@@ -2,11 +2,11 @@
 #'
 #' @description This function replaces `NA`s in one or more `data.table` columns with a user-defined value.
 #'
-#' @param x A `data.table` or `data.frame`.
-#'
-#' @param cols `NULL`, character, numeric, integer, or logical vector: Indicates columns for which to replace `NA`s. If `NULL`, then all columns will have `NA`s replaced. If a character, this is the column name(s). If numeric or integer, this is the columns' indices. If logical, columns with `TRUE` have `NA`s replaced. If a logical vector has fewer than the total number of columns, it will be recycled.
+#' @param x A `data.table` or `data.frame`, or a vector of numeric, integer, logical, or character values.
 #'
 #' @param replace A value of any atomic class (numeric, integer, character, Date, etc.): Value to to replace `NA`s.
+#'
+#' @param cols `NULL`, character, numeric, integer, or logical vector: Indicates columns for which to replace `NA`s. If `NULL`, then all columns will have `NA`s replaced. If a character, this is the column name(s). If numeric or integer, this is the columns' indices. If logical, columns with `TRUE` have `NA`s replaced. If a logical vector has fewer than the total number of columns, it will be recycled.
 #'
 #' @returns A `data.table` or `data.frame`.
 #'
@@ -14,7 +14,7 @@
 #'
 #' @aliases replaceNAs
 #' @rdname replaceNAs
-#' @exportMethods replaceNAs
+#' @exportMethod replaceNAs
 methods::setMethod(
 	f = "replaceNAs",
 	signature = c(x = "data.frame"),
@@ -43,7 +43,7 @@ methods::setMethod(
 
 #' @aliases replaceNAs
 #' @rdname replaceNAs
-#' @exportMethods replaceNAs
+#' @exportMethod replaceNAs
 methods::setMethod(
     f = "replaceNAs",
     signature = c(x = "data.table"),
@@ -75,3 +75,55 @@ methods::setMethod(
 
     } # EOF
 )
+
+#' @aliases replaceNAs
+#' @rdname replaceNAs
+#' @exportMethod replaceNAs
+methods::setMethod(
+    f = "replaceNAs",
+    signature = c(x = "numeric"),
+    function(x, replace) .replaceNAsAtomic(x, replace)
+)
+
+#' @aliases replaceNAs
+#' @rdname replaceNAs
+#' @exportMethod replaceNAs
+methods::setMethod(
+    f = "replaceNAs",
+    signature = c(x = "integer"),
+    function(x, replace) .replaceNAsAtomic(x, replace)
+)
+
+#' @aliases replaceNAs
+#' @rdname replaceNAs
+#' @exportMethod replaceNAs
+methods::setMethod(
+    f = "replaceNAs",
+    signature = c(x = "logical"),
+    function(x, replace) .replaceNAsAtomic(x, replace)
+)
+
+#' @aliases replaceNAs
+#' @rdname replaceNAs
+#' @exportMethod replaceNAs
+methods::setMethod(
+    f = "replaceNAs",
+    signature = c(x = "character"),
+    function(x, replace) .replaceNAsAtomic(x, replace)
+)
+
+#' Replace NAs in an atomic vector
+#'
+#' @param x A vector of numeric, integer, logical, or character values.
+#' @param replace What to replace `NA` with.
+#'
+#' @returns A vector of (usually) the same class as the input.
+#'
+#' @noRd
+.replaceNAsAtomic <- function(x, replace) {
+
+	if (length(replace) != 1L) stop("Argument ", sQuote("replace"), " must be a single value.")
+	x[is.na(x)] <- replace
+	x
+
+}
