@@ -150,7 +150,11 @@ methods::setMethod(
 	minCat[is.na(minCat)] <- "NA"
 	maxCat[is.na(maxCat)] <- "NA"
 	nCats <- nlevels(object)
-	if (details) activeCat <- object@activeCat - 1L
+	
+	if (details) {
+		activeCat <- object@activeCat - 1L
+		if (anyNA(activeCat)) activeCat[is.na(activeCat)] <- "NA"
+	}
 
 	# truncate long names
 	namesNice <- object@names
@@ -284,8 +288,14 @@ methods::setMethod(
 #' @aliases show
 #' @rdname show
 #' @exportMethod show
-methods::setMethod(f="show", signature="GVector",
+methods::setMethod(
+	f = "show",
+	signature = "GVector",
 	definition = function(object) {
+
+	# maximum number of fields to show
+	maxFieldsToShow <- 7L
+  	maxColWidth <- 20L
 
 	details <- getFastOptions("details")
 
@@ -297,36 +307,95 @@ methods::setMethod(f="show", signature="GVector",
 	# making list, each element becomes a line in the display
 	# each element contains field n from first vector, field n from second vector, etc.
 	# will then print each element on one line
-	if (object@nFields > 0L) {
+	nFields <- ncol(object@table)
+	nRows <- nrow(object@table)
+	if (nRows > 0L) {
 
-		fields <- object@db@fields
-		classes <- object@db@classes
-		maxFieldsToShow <- min(object@nFields, 10L)
+		fields <- colnames(object@table)
+		classes <- sapply(object@table, class)
+		maxFieldsToShow <- min(ncol(object@table), maxFieldsToShow)
 		
-		if (object@nFields > 0L) {
+  		row1 <- table[1L, 1L:maxFieldsToShow]
+		row1 <- as.data.frame(row1)
+		row1 <- unlist(row1)
+		row1 <- as.character(row1)
 		
-			fields <- fields[1L:maxFieldsToShow]
-			classes <- classes[1L:maxFieldsToShow]
-			
-			classes <- gsub(classes, pattern="integer", replacement="<int>")
-			classes <- gsub(classes, pattern="numeric", replacement="<num>")
-			classes <- gsub(classes, pattern="character", replacement="<chr>")
-			
+		if (nRows >= 2L) {
+			row2 <- table[2L, 1L:maxFieldsToShow]
+			row2 <- as.data.frame(row2)
+			row2 <- unlist(row2)
+			row2 <- as.character(row2)
+		} else {
+			row2 <- NULL
 		}
 		
+		if (nRows >= 3L) {
+			row3 <- table[3L, 1L:maxFieldsToShow]
+   			row3 <- as.data.frame(row3)
+			row3 <- unlist(row3)
+			row3 <- as.character(row3)
+		} else {
+			row3 <- NULL
+		}
+
+		fields <- fields[1L:maxFieldsToShow]
+		classes <- classes[1L:maxFieldsToShow]
+		
+		classes <- gsub(classes, pattern="integer", replacement="<int>")
+		classes <- gsub(classes, pattern="numeric", replacement="<num>")
+		classes <- gsub(classes, pattern="character", replacement="<chr>")
+		classes <- gsub(classes, pattern="logical", replacement="<log>")
+
+		# column widths		
 		ncFields <- nchar(fields)
 		ncFieldClasses <- nchar(classes)
-		nc <- pmax(ncFields, ncFieldClasses)
+		ncRow1 <- nchar(row1)
+		nc <- pmax(ncFields, ncFieldClasses, ncRow1)
+		
+		if (!is.null(row2)) ncTableCells <- nchar(row2)
+		if (!is.null(row3)) ncTableCells <- pmax(ncTableCells, nchar(row3))
+
+		nc <- pmax(nc, ncTableCells)
+
+		if (any(nc > maxColWidth)) nc[nc > maxColWidth] <- maxColWidth
+
+		# format table values
+		tooLongIndex <- which(nchar(row1) > maxColWidth)
+		if (length(tooLongIndex) > 0L) {
+			row1[tooLongIndex] <- paste0(substr(row1[tooLongIndex], 1L, nc - 1L), "~")
+		}
+
+		if (!is.null(row2)) {		
+
+			tooLongIndex <- which(nchar(row2) > nc)
+			if (length(tooLongIndex) > 0L) {
+				row2[tooLongIndex] <- paste0(substr(row2[tooLongIndex], 1L, nc - 1L), "~")
+			}
+		
+		}
+		
+		if (!is.null(row3)) {		
+
+   			tooLongIndex <- which(nchar(row3) > nc)
+			if (length(tooLongIndex) > 0L) {
+				row3[tooLongIndex] <- paste0(substr(row3[tooLongIndex], 1L, nc - 1L), "~")
+			}
+		
+		}
 		
 		for (i in seq_along(fields)) {
 		
 			fmt	<- paste0("%", nc[i], "s")
 			fields[i] <- sprintf(fmt, fields[i])
 			classes[i] <- sprintf(fmt, classes[i])
+   			row1[i] <- sprintf(fmt, row1[i])
+   			if (!is.null(row2)) row2[i] <- sprintf(fmt, row2[i])
+   			if (!is.null(row3)) row3[i] <- sprintf(fmt, row3[i])
+		
 		}
 		
-		if (object@nFields > maxFieldsToShow) {
-			classes <- c(classes, paste("(and", object@nFields - maxFieldsToShow, "more)"))
+		if (nFields > maxFieldsToShow) {
+			classes <- c(classes, paste("(and", nFields - maxFieldsToShow, "more columns)"))
 		}
 		
 	}
@@ -336,19 +405,22 @@ methods::setMethod(f="show", signature="GVector",
 		cat("location    :", object@location, "\n")
 		cat("mapset      :", object@mapset, "\n")
 		cat("source       :", object@sources, "\n")
-		if (details & object@nFields > 0) cat("db layer    :", object@db@dbLayer, "\n")
 	}
 	cat("geometry    :", object@geometry, "\n")
-	cat("dimensions  :", paste0(object@nGeometries, ", ", object@nFields), "(geometries, columns)\n")
+	cat("dimensions  :", paste0(object@nGeometries, ", ", nFields), "(geometries, columns)\n")
 	cat("topology    :", object@topology, "\n")
 	cat("extent      :", paste(extent, collapse=", "), "(xmin, xmax, ymin, ymax)\n")
 	if (details | object@topology == "3D") cat("z extent    :", paste(zextent, collapse=", "), "(bottom, top)\n")
 	cat("coord ref.  :", .showCRS(object), "\n")
 	cat("projection  :", object@projection, "\n")
 
-	if (object@nFields > 0L) {
+	if (nFields > 0L) {
 		cat("names       :", fields, "\n")
 		cat("type        :", classes, "\n")
+		cat("values      :", row1, "\n")
+		if (!is.null(row2)) cat("             ", row2, "\n")
+		if (!is.null(row3)) cat("             ", row3, "\n")
+		if (nRows > 3L) cat("             ...and ", nRows - 3L, " more rows\n")
 	}
 	
 	} # EOF
