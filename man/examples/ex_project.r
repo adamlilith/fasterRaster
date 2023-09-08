@@ -71,7 +71,7 @@ chelsa <- fast(madChelsa)
 rivers <- fast(madRivers)
 
 # Re-activate the "exampleTo" "location":
-fastRestore(location="exampleTo")
+restoreSession(location="exampleTo")
 
 ### Project vector into the "exampleTo" location:
 riversProj <- project(rivers)
@@ -107,7 +107,7 @@ chelsaNewResSpat <- rast(chelsaResamp)
 plot(chelsaNewResSpat - chelsaResampTerra)
 
 # IMPORTANT #3: Revert back to original GRASS session if needed.
-fastRestore(opts.)
+restoreSession(opts.)
 removeSession("examples")
 removeSession("exampleFrom")
 removeSession("exampleTo")

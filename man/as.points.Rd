@@ -38,20 +38,20 @@ grassDir <- "/Applications/GRASS-8.3.app/Contents/Resources" # Mac
 grassDir <- "C:/Program Files/GRASS GIS 8.3" # Windows
 grassDir <- "/usr/local/grass" # Linux
 
-# setup
+# Setup
 library(sf)
 library(terra)
 
-# elevation, outline of a portion of eastern Madagascar, and rivers vector
+# Elevation raster, outline of a part of Madagascar, and rivers vector:
 madElev <- fastData("madElev")
 madCoast0 <- fastData("madCoast0")
 madRivers <- fastData("madRivers")
 
-# start GRASS session for examples only
+# Start GRASS session for examples only:
 faster(x = madElev, grassDir = grassDir,
 workDir = tempdir(), location = "examples") # line only needed for examples
 
-# Convert to GVector:
+# Convert to GRaster and GVectors:
 elev <- fast(madElev)
 coast <- fast(madCoast0)
 rivers <- fast(madRivers)
@@ -77,7 +77,7 @@ plot(rivers, col = "blue", add = TRUE)
 plot(riversPoints, col = "blue", add = TRUE)
 
 # IMPORTANT #3: Revert back to original GRASS session if needed.
-fastRestore(opts.)
+restoreSession(opts.)
 removeSession("examples")
 
 }

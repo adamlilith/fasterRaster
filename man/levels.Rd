@@ -3,6 +3,8 @@
 \name{levels,GRaster-method}
 \alias{levels,GRaster-method}
 \alias{levels}
+\alias{cats,GRaster-method}
+\alias{cats}
 \alias{categories,GRaster-method}
 \alias{categories}
 \alias{levels<-,GRaster,data.frame-method}
@@ -13,6 +15,8 @@
 \title{Set and get categories for categorical rasters}
 \usage{
 \S4method{levels}{GRaster}(x)
+
+\S4method{cats}{GRaster}(x, layer = 1:nlyr(x))
 
 \S4method{categories}{GRaster}(x, layer = 1, value, active = 1)
 
@@ -36,7 +40,7 @@
 \value{
 Values returned are:
 \itemize{
-\item \code{levels()} and \code{cats()}: A list of \code{data.frame}s or \code{data.table}s, one per raster.
+\item \code{levels()} and \code{cats()}: A list of \code{data.frame}s or \code{data.table}s, one per raster layer.
 \item \verb{levels()<-} and \code{categories()}: A \code{GRaster}.
 }
 }
@@ -139,6 +143,7 @@ cats(cover)
 ### Logical operations on categorical rasters
 #############################################
 
+
 cover < "Forest" # 1 for cells with a value < 40, 0 otherwise
 cover <= "Forest" # 1 for cells with a value < 120, 0 otherwise
 cover == "Forest" # 1 for cells with value of 40-120, 0 otherwise
@@ -149,7 +154,7 @@ cover >= "Forest" # 1 for cells with a value >= 120, 0 otherwise
 cover \%in\% c("Cropland", "Forest") # 1 for cropland/forest cells, 0 otherwise
 
 # IMPORTANT #3: Revert back to original GRASS session if needed.
-fastRestore(opts.)
+restoreSession(opts.)
 removeSession("examples")
 
 }

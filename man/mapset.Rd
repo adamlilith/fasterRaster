@@ -71,10 +71,10 @@ crs()
 
 # We cannot do any work on me1 because we"re in the "examples2" location. We
 # need to switch back to "examples1":
-fastRestore(location = "examples1")
+restoreSession(location = "examples1")
 
 # IMPORTANT #3: Revert back to original GRASS session if needed.
-fastRestore(opts.)
+restoreSession(opts.)
 removeSession("examples1")
 removeSession("examples2")
 

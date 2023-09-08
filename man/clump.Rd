@@ -71,7 +71,7 @@ approx
 approx20
 
 # IMPORTANT #3: Revert back to original GRASS session if needed.
-fastRestore(opts.)
+restoreSession(opts.)
 removeSession("examples")
 
 }

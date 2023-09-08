@@ -24,6 +24,6 @@ setFastOptions(grassDir = "C:/Program Files/GRASS GIS 8.3")
 setFastOptions(details = TRUE, memory = 600, cores = 4)
 
 # IMPORTANT #2: Revert back to original GRASS session if needed.
-fastRestore(opts.)
+restoreSession(opts.)
 
 }

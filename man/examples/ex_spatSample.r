@@ -52,7 +52,7 @@ randAll <- spatSample(elev, 10000, maskvalues = 1:20, updatevalue = 7)
 plot(randAll)
 
 # IMPORTANT #3: Revert back to original GRASS session if needed.
-fastRestore(opts.)
+restoreSession(opts.)
 removeSession("examples")
 
 }

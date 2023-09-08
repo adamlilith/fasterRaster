@@ -86,7 +86,7 @@ plot(frLanczos, col = "red",
 plot(terraLanczos, add=TRUE)
 
 # IMPORTANT #3: Revert back to original GRASS session if needed.
-fastRestore(opts.)
+restoreSession(opts.)
 fastRemove("examples")
 
 }

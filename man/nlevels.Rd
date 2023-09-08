@@ -112,6 +112,7 @@ cats(cover)
 ### Logical operations on categorical rasters
 #############################################
 
+
 cover < "Forest" # 1 for cells with a value < 40, 0 otherwise
 cover <= "Forest" # 1 for cells with a value < 120, 0 otherwise
 cover == "Forest" # 1 for cells with value of 40-120, 0 otherwise
@@ -122,7 +123,7 @@ cover >= "Forest" # 1 for cells with a value >= 120, 0 otherwise
 cover \%in\% c("Cropland", "Forest") # 1 for cropland/forest cells, 0 otherwise
 
 # IMPORTANT #3: Revert back to original GRASS session if needed.
-fastRestore(opts.)
+restoreSession(opts.)
 removeSession("examples")
 
 }

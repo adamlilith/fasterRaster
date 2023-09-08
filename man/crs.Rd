@@ -4,48 +4,15 @@
 \alias{crs,missing-method}
 \alias{crs}
 \alias{crs,GSession-method}
-\alias{st_crs,missing-method}
-\alias{st_crs}
 \alias{st_crs,GSession-method}
-\alias{st_crs,sf-method}
-\alias{st_crs,SpatRaster-method}
-\alias{st_crs,SpatVector-method}
-\alias{st_crs,SpatExtent-method}
-\alias{st_crs,SpatGraticule-method}
-\alias{st_crs,numeric-method}
-\alias{st_crs,character-method}
-\alias{st_crs,bbox-method}
-\alias{st_crs,crs-method}
-\alias{st_crs,CRS-method}
+\alias{st_crs}
 \title{Coordinate reference system of a GRaster or GVector}
 \usage{
 \S4method{crs}{missing}(x)
 
 \S4method{crs}{GSession}(x)
 
-\S4method{st_crs}{missing}(x)
-
 \S4method{st_crs}{GSession}(x)
-
-\S4method{st_crs}{sf}(x, ...)
-
-\S4method{st_crs}{SpatRaster}(x, ...)
-
-\S4method{st_crs}{SpatVector}(x, ...)
-
-\S4method{st_crs}{SpatExtent}(x, ...)
-
-\S4method{st_crs}{SpatGraticule}(x, ...)
-
-\S4method{st_crs}{numeric}(x)
-
-\S4method{st_crs}{character}(x)
-
-\S4method{st_crs}{bbox}(x)
-
-\S4method{st_crs}{crs}(x)
-
-\S4method{st_crs}{CRS}(x)
 }
 \arguments{
 \item{x}{An object that inherits from a \code{GSession} (i.e., a \code{GRaster} or \code{GVector}) or missing. If missing, the coordinate reference system of the currently active \strong{GRASS} \link[=tutorial_sessions]{location} is reported.}
@@ -199,7 +166,7 @@ freq(rasts)
 freq(rasts, value = 1)
 
 # IMPORTANT #3: Revert back to original GRASS session if needed.
-fastRestore(opts.)
+restoreSession(opts.)
 removeSession("examples")
 
 }

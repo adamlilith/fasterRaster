@@ -15,7 +15,7 @@ A tutorial on \link[=tutorial_raster_data_types]{raster data types}\cr
 \code{\link[=fast]{fast()}}: Convert a \code{SpatRaster}, \code{SpatVector}, or \code{sf} vector to \strong{fasterRaster}'s raster format (\code{GRaster}s) or vector format (\code{GVector}s), or load one from a file\cr
 \code{\link[=rast]{rast()}}, \code{\link[=vect]{vect()}}, and \code{\link[=st_as_sf]{st_as_sf()}}: Convert \code{GRaster}s and \code{GVector}s to \code{SpatRaster}s, \code{SpatVector}s, or \code{sf} vectors\cr
 \code{\link[=writeRaster]{writeRaster()}} and \code{\link[=writeVector]{writeVector()}}: Save \code{GRaster}s or \code{GVector}s to disk\cr
-\code{\link[=fastRestore]{fastRestore()}}: Revert to another \strong{GRASS} \link[=tutorial_sessions]{"location" or "mapset"}, or restart a \strong{GRASS} session saved to disk\cr
+\code{\link[=restoreSession]{restoreSession()}}: Revert to another \strong{GRASS} \link[=tutorial_sessions]{"location" or "mapset"}, or restart a \strong{GRASS} session saved to disk\cr
 \code{\link[=setFastOptions]{setFastOptions()}} and \code{\link[=getFastOptions]{getFastOptions()}}: Set options for working with \strong{fasterRaster}\cr
 }
 
@@ -210,16 +210,17 @@ Other functions:\cr
 \code{\link[=dropRows]{dropRows()}}: Remove rows from a \code{data.frame} or \code{data.table}\cr
 \code{\link[=grassInfo]{grassInfo()}}: \strong{GRASS} version and citation\cr
 \code{\link[=pmatchSafe]{pmatchSafe()}}: Partial matching of strings with error checking\cr
+\code{\link[=replaceNAs]{replaceNAs()}}: Replace \code{NA}s in columns of a \code{data.table} or \code{data.frame}, or in a vector\ce
 \code{\link[=rstring]{rstring()}}: Create a string statistically likely to be unique\cr
 }
 
 \subsection{Functions that operate on \strong{GRASS} "sessions":}{
 
 \code{\link[=crs]{crs()}}: Coordinate reference system of the current location\cr
-\code{\link[=fastRemove]{fastRemove()}}: Delete a \strong{GRASS} session (location, mapset(s), and all associated files)\cr
-\code{\link[=fastRestore]{fastRestore()}}: Restore a previous \strong{GRASS} session or switch \strong{GRASS} locations/mapsets\cr
 \code{\link[=location]{location()}}: \strong{GRASS} "location" of an object or the active session\cr
 \code{\link[=mapset]{mapset()}}: \strong{GRASS} "mapset" of an object or the active session\cr
+\code{\link[=restoreSession]{restoreSession()}}: Restore a previous \strong{GRASS} session or switch \strong{GRASS} locations/mapsets\cr
+\code{\link[=removeSession]{removeSession()}}: Delete a \strong{GRASS} session (location, mapset(s), and all associated files)\cr
 }
 
 \subsection{Functions that operate on \strong{GRASS} "regions" (seldom used by most users):}{
@@ -252,7 +253,7 @@ Other functions:\cr
 }
 }
 \details{
-\figure{fasterRaster.png}{options: alt="fasterRaster" align="right" vertical-align="top" width=1.2in}
+\figure{man/figures/fasterRaster.png}{options: alt="fasterRaster" align="right" vertical-align="top" width=1.2in}
 }
 \seealso{
 Useful links:

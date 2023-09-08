@@ -8,17 +8,11 @@
 \alias{GRegion}
 \alias{GRaster-class}
 \alias{GRaster}
-\alias{GMetaTable-class}
-\alias{GMetaTable}
-\alias{GEmptyMetaTable-class}
-\alias{GEmptyMetaTable}
-\alias{GFullMetaTable-class}
-\alias{GFullMetaTable}
 \alias{GVector-class}
 \alias{GVector}
 \title{Classes for fasterRaster sessions, regions, rasters, and vectors}
 \value{
-An object of class \code{GSession}, \code{GSpatial}, \code{GRaster}, or \code{GVector}.
+An object of class \code{GSession}, \code{GSpatial}, \code{GRegion}, \code{GRaster}, or \code{GVector}.
 }
 \description{
 The \code{G} suite of S4 classes contain pointers to \strong{GRASS} objects or metadata about the current \strong{GRASS} session. Most users will manipulate objects using these classes, but do not need to know the details.
@@ -74,12 +68,6 @@ The \code{G} suite of S4 classes contain pointers to \strong{GRASS} objects or m
 
 \item{\code{levels}}{List of \code{data.table}s (\code{GRaster}s): Tables for categorical rasters. If a raster is not categorical, the \code{data.table} is \code{NULL}, as in \code{data.table(NULL)}. Can be obtained using \code{levels()} or \code{cats()}.}
 
-\item{\code{dbLayer}}{Character (\code{GVector}s): Names of the attribute table "layer" associated with the \code{GVector} in the \strong{GRASS} SQLite database. Can be obtained using and \code{.dbLayer()}.}
-
-\item{\code{fields}}{Names of fields (\code{GVector}s). Can be obtained using \code{\link[=names]{names()}}.}
-
-\item{\code{numFields}}{Number of fields (\code{GVector}s). Can be obtained using \code{\link[=ncol]{ncol()}}.}
-
-\item{\code{fieldClasses}}{Classes of fields (\code{GVector}s). Can be obtained using \code{\link[=datatype]{datatype()}}.}
+\item{\code{table}}{\code{data.table} (\code{GVector}s): Table with metadata, one row per geometry (point, line, or plane). If no table is associated with the vector, this must be \code{data.table(NULL)}.}
 }}
 

@@ -61,7 +61,7 @@ agg2x3 <- aggregate(elev, c(2, 3), "mean")
 agg2x3
 
 # IMPORTANT #3: Revert back to original GRASS session if needed.
-fastRestore(opts.)
+restoreSession(opts.)
 removeSession("examples")
 
 }

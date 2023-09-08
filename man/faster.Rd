@@ -44,7 +44,7 @@ If \code{NULL}, then the function will use \code{\link[=getFastOptions]{getFastO
 A \link{GSession} object (invisibly).
 }
 \description{
-This function initializes a \strong{GRASS} session in a particular folder. You need to run this function (usually just once) before you use most functions in \strong{fasterRaster}. You can use \code{\link[=fastRestore]{fastRestore()}} to switch between \link[=tutorial_sessions]{working folders, locations, and mapsets}.
+This function initializes a \strong{GRASS} session in a particular folder. You need to run this function (usually just once) before you use most functions in \strong{fasterRaster}. You can use \code{\link[=restoreSession]{restoreSession()}} to switch between \link[=tutorial_sessions]{working folders, locations, and mapsets}.
 }
 \examples{
 \dontrun{
@@ -85,7 +85,7 @@ rivers <- fast(madRivers)
 rivers
 
 # IMPORTANT #3: Revert back to original GRASS session if needed.
-fastRestore(opts.)
+restoreSession(opts.)
 removeSession("examples")
 
 }

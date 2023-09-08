@@ -101,7 +101,7 @@ plot(buffRivers)
 plot(st_geometry(madRivers), col = "blue", add = TRUE)
 
 # IMPORTANT #3: Revert back to original GRASS session if needed.
-fastRestore(opts.)
+restoreSession(opts.)
 removeSession("examples")
 
 }

@@ -21,3 +21,13 @@ dropped
 
 # NB May not print... in that case, use:
 print(dropped)
+
+# We can also use replaceNAs() on vectors:
+y <- 1:10
+y[c(2, 10)] <- NA
+replaceNAs(y, -99)
+
+# Same as:
+y <- 1:10
+y[c(2, 10)] <- NA
+y[is.na(y)] <- -99

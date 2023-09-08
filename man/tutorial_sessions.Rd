@@ -9,12 +9,12 @@ Most users of \strong{fasterRaster} will not need to understand or explicitly us
 
 To start using \strong{fasterRaster}, a user needs to initiate a "session" using \code{\link[=faster]{faster()}}. This function 1) creates a \strong{GRASS} "location" and "mapset" inside a working directory, and 2) registers \strong{GRASS} so it does operations in this place. Locations and mapsets are stored as folders and files within the working directory, but they also represent data structures in \strong{GRASS}.  Essentially, the working directory contains one or more locations, and each location contains one or more mapsets. A \strong{GRASS} \emph{location} is a set of vectors and/or rasters with the same coordinate reference system (CRS), that may or may not represent the same location on Earth. A \strong{GRASS} location can be thought of as a folder in which spatial objects of the same CRS are stored. \emph{Mapsets} are subfolders inside a location, and typically represent different sub-projects. Each location must always contain a mapset named "PERMANENT" (all-capitals).
 
-As used in \strong{fasterRaster} documentation, a \emph{session} is created using \code{\link[=faster]{faster()}} or restored using \code{\link[=fastRestore]{fastRestore()}}. Having the requisite location and mapset folders and files on disk is not enough. \strong{GRASS} must be started and linked to the location/mapset using one of these functions.
+As used in \strong{fasterRaster} documentation, a \emph{session} is created using \code{\link[=faster]{faster()}} or restored using \code{\link[=restoreSession]{restoreSession()}}. Having the requisite location and mapset folders and files on disk is not enough. \strong{GRASS} must be started and linked to the location/mapset using one of these functions.
 }
 
 \subsection{Working with sessions}{
 
-By default, the working directory is set to the user"s temporary folder, obtained through \code{\link[=tempdir]{tempdir()}}. However, if a user wishes to save their work, quit \strong{R}, and later restart the \strong{GRASS} session, they will want to use a custom folder. This is specified in \code{\link[=faster]{faster()}} using the argument \code{workDir}. Restarting a session should be done using \code{\link[=fastRestore]{fastRestore()}}.
+By default, the working directory is set to the user"s temporary folder, obtained through \code{\link[=tempdir]{tempdir()}}. However, if a user wishes to save their work, quit \strong{R}, and later restart the \strong{GRASS} session, they will want to use a custom folder. This is specified in \code{\link[=faster]{faster()}} using the argument \code{workDir}. Restarting a session should be done using \code{\link[=restoreSession]{restoreSession()}}.
 
 Rasters and vectors must typically be in the same location and mapset to be operated on by a single function, although they can be copied between locations/mapsets. When the CRS is different between locations, rasters and vectors are automatically reprojected "on the fly". This can be OK for non-essential work, but in practice, it is better to use \code{\link[=project]{project()}} to ensure the projecting is done in the manner you prefer.
 
@@ -22,7 +22,7 @@ The location and mapset in which a \code{GRaster} or \code{GVector} occurs can b
 
 Users can exercise full control over working directory, location, and mapset when they initiate a \strong{GRASS} session using \code{\link[=faster]{faster()}}. The ellipse (\code{...}) argument allows users to assign a \code{mapset} and/or \code{location}, and the \code{workDir} argument allows for a user-defined working directory.
 
-Users can switch between locations, mapsets, and working directories that have been created using \code{\link[=fastRestore]{fastRestore()}}. If \strong{R} has been restarted and a user wishes to return to a specific (not-temporary) working folder, location, and mapset, then they should use \code{\link[=fastRestore]{fastRestore()}} (not \code{faster()}).
+Users can switch between locations, mapsets, and working directories that have been created using \code{\link[=restoreSession]{restoreSession()}}. If \strong{R} has been restarted and a user wishes to return to a specific (not-temporary) working folder, location, and mapset, then they should use \code{\link[=restoreSession]{restoreSession()}} (not \code{faster()}).
 }
 }
 \keyword{tutorial}

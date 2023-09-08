@@ -35,7 +35,7 @@ hhNorthEast <- horizonHeight(elev, directions = c(0, 90))
 hhEastNorth <- horizonHeight(elev, directions = c(0, 90), northIs0 = FALSE)
 
 # IMPORTANT #3: Revert back to original GRASS session if needed.
-fastRestore(opts.)
+restoreSession(opts.)
 removeSession("examples")
 
 }

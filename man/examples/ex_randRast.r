@@ -63,7 +63,7 @@ fractal <- fractalRast(elev, n = 2, dimension = c(2.1, 2.8))
 plot(fractal)
 
 # IMPORTANT #3: Revert back to original GRASS session if needed.
-fastRestore(opts.)
+restoreSession(opts.)
 removeSession("examples")
 
 }

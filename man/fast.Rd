@@ -10,8 +10,9 @@
 \usage{
 \S4method{fast}{character}(
   x,
-  levels = NULL,
   rastOrVect = NULL,
+  levels = NULL,
+  table = NULL,
   method = NULL,
   fallback = TRUE,
   wrap = FALSE,
@@ -32,6 +33,8 @@
 \item A character string with the path and filename of a raster or vector to be loaded directly into \strong{GRASS}. The function will attempt to ascertain the type of object from the file extension (raster or vector), but it can help to indicate which it is using the \code{rastOrVect} argument if it is unclear.
 }}
 
+\item{rastOrVect}{Either \code{NULL} (default) or character (\code{"raster"} or \code{"vector"}). If \code{x} is a raster or vector already in \strong{R}, this does not need to be specified. However, if \code{x} is a filename, then the function will try to ascertain whether it represents a raster or a vector, but sometimes this will fail. In that case, it can help to specify if the file holds a raster or vector. Partial matching is used.}
+
 \item{levels}{Specifies the \code{\link[=levels]{levels()}} of a categorical raster:
 \itemize{
 \item \code{NULL} (default): If \code{x} is a \code{SpatRaster} and it already has levels, these will be attached to the \code{GRaster}. Otherwise, the raster is assumed to have no levels.
@@ -41,7 +44,7 @@
 \item A non-empty string: Specifies name of a file containing a \code{data.frame}, \code{data.table}, or \code{list} with levels. Files can be ".csv", ".tab", ".rds", or ".rda" files.
 }}
 
-\item{rastOrVect}{Either \code{NULL} (default) or character (\code{"raster"} or \code{"vector"}). If \code{x} is a raster or vector already in \strong{R}, this does not need to be specified. However, if \code{x} is a filename, then the function will try to ascertain whether it represents a raster or a vector, but sometimes this will fail. In that case, it can help to specify if the file holds a raster or vector. Partial matching is used.}
+\item{table}{Either \code{NULL} (default), or a \code{data.frame} or \code{data.table}: Metadata associated with each feature in a vector. This is usually not useful for most users, as the attribute table of a \code{SpatVector} will be automatically copied over from the file, \code{SpatVector}, or \code{sf} vector to the \code{GVector}. Leaving this as \code{NULL} will copy this table automatically.}
 
 \item{method}{Character or \code{NULL} (rasters only): If \code{x} does not have the same coordinate reference system as the currently active \strong{GRASS} "\link[=tutorial_sessions]{location}", then it will be projected when it is imported. You may need to specify which method is used to conduction the transformation. Partial matching is used.
 \itemize{
@@ -112,7 +115,7 @@ rivers <- fast(madRivers)
 rivers
 
 # IMPORTANT #3: Revert back to original GRASS session if needed.
-fastRestore(opts.)
+restoreSession(opts.)
 removeSession("examples")
 
 }
