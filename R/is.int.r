@@ -48,5 +48,5 @@ methods::setMethod(
 methods::setMethod(
     f = "is.factor",
     signature = c(x = "GRaster"),
-    function(x) nlevels(x) > 0L && datatype(x, "GRASS") == "CELL"
+    function(x) nlevels(x) > 0L & datatype(x, "GRASS") == "CELL"
 )
