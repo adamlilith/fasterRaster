@@ -165,14 +165,15 @@ methods::setGeneric(name = "sources", package = "terra")
 methods::setGeneric(name = "spatSample", package = "terra")
 methods::setGeneric(name = "spDepRast", def = function(x, ...) standardGeneric("spDepRast"))
 methods::setGeneric(name = "stretch", package = "terra")
-# #' @importFrom sf st_crs
+# #' @importFrom sf st_as_sf
 # methods::setGeneric(name = "st_as_sf", package = "sf")
 # methods::setGeneric(name = "st_bbox", package = "sf")
 # methods::setGeneric(name = "st_bbox", def = function(obj, ...) standardGeneric("st_bbox"))
 
 # methods::setGeneric(name = "st_buffer", package = "sf")
-#' @importFrom sf st_crs
-methods::setGeneric(name = "st_crs", def = function(x, ...) standardGeneric("st_crs"))
+# #' @importFrom sf st_crs
+# methods::setGeneric(name = "st_crs", def = function(x, ...) standardGeneric("st_crs"))
+methods::setGeneric(name = "st_crs", package = "sf")
 
 methods::setGeneric(name = "tail", package = "utils")
 methods::setGeneric(name = "terrain", package = "terra")
