@@ -19,6 +19,8 @@
 #'  * `data.frame` or `data.table`: Must have at least two columns. The first column must be integers indicating which values in the raster correspond to what categories. The second column is assumed to have category labels. This can be changed using [activeCat<-][activeCat].
 #' * A list with one element per raster layer: Each element can be a `data.frame`, `data.table`, or a empty string. A list can have a mix of any of these.
 #' * A non-empty string: Specifies name of a file containing a `data.frame`, `data.table`, or `list` with levels. Files can be ".csv", ".tab", ".rds", or ".rda" files.
+#'
+#' @param table Either `NULL` (default), or a `data.frame` or `data.table`: Metadata associated with each feature in a vector. This is usually not useful for most users, as the attribute table of a `SpatVector` will be automatically copied over from the file, `SpatVector`, or `sf` vector to the `GVector`. Leaving this as `NULL` will copy this table automatically.
 #' 
 #' @param rastOrVect Either `NULL` (default) or character (`"raster"` or `"vector"`). If `x` is a raster or vector already in **R**, this does not need to be specified. However, if `x` is a filename, then the function will try to ascertain whether it represents a raster or a vector, but sometimes this will fail. In that case, it can help to specify if the file holds a raster or vector. Partial matching is used.
 #'
@@ -51,8 +53,9 @@ methods::setMethod(
 	signature(x = "character"),
 	function(
 		x,
-		levels = NULL,
 		rastOrVect = NULL,
+		levels = NULL,
+		table = NULL,
 		method = NULL,
 		fallback = TRUE,
 		wrap = FALSE,
@@ -174,7 +177,6 @@ cat("Time-consuming step here for large rasters^^^")
 
 		# raster levels
 		if (!is.null(levels)) levels <- .getLevels(levels)
-
 		out <- .makeGRaster(src, names = xNames, levels = levels)
 
 	### vector from disk (and project on the fly if needed)
@@ -183,7 +185,17 @@ cat("Time-consuming step here for large rasters^^^")
 	} else if (rastOrVect == "vector") {
 
 		xVect <- terra::vect(x)
-		xCrs <- crs(xVect)
+		
+		# if loading from file, get attribute table and strip it from the vector
+		if (is.null(table)) {
+		
+			table <- terra::as.data.frame(xVect)
+			table <- data.table::as.data.table(table)
+			xVect <- tidyterra::transmute(xVect)
+		
+		}
+		
+		xCrs <- terra::crs(xVect)
 		currentCrs <- crs()
 		src <- .makeSourceName(xVect, rastOrVect = "vector")
 
@@ -216,7 +228,7 @@ cat("Time-consuming step here for large rasters^^^")
 		} # vector on disk needs projected
 
 		do.call(rgrass::execGRASS, args=args)
-		out <- .makeGVector(src)
+		out <- .makeGVector(src, table = table)
 
 	} # is vector on disk
 	out
@@ -342,13 +354,17 @@ methods::setMethod(
 ) {
     
 	if (!inherits(x, "SpatVector")) x <- terra::vect(x)
+
+	table <- terra::as.data.frame(x)
+	if (nrow(table) != 0L) x <- tidyterra::transmute(x) # remove data frame
+
 	if (terra::sources(x) == "") {
 		vectFile <- tempfile(fileext = ".gpkg")
-		terra::writeVector(x, filename=vectFile, filetype="GPKG", overwrite=TRUE)
+		terra::writeVector(x, filename = vectFile, filetype = "GPKG", overwrite = TRUE)
 	} else {
 		vectFile <- terra::sources(x)
 	}
     
-	fast(x = vectFile, rastOrVect = "vector", warn = warn)
+	fast(x = vectFile, rastOrVect = "vector", table = table, warn = warn)
 	
 }
