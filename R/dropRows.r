@@ -1,8 +1,8 @@
 #' Remove rows in a data.table
 #'
-#' @description As of September of 2023, the **data.table** package does not have a function for removing rows by index. This function does this job and is adapted from an \url{issue}{https://github.com/Rdatatable/data.table/issues/635} to that effect raised on the **data.table** *GitHub* page.
+#' @description As of September of 2023, the **data.table** package does not have a function for removing rows by index. This function does this job and is adapted from an [issue]{(ttps://github.com/Rdatatable/data.table/issues/635) to that effect raised on the **data.table** *GitHub* page.
 #'
-#' @param X A `data.table` or `data.frame`.
+#' @param x A `data.table` or `data.frame`.
 #' @param drops Numeric, integer, or logical vector: Indices or indicators of rows to remove.
 #'
 #' If a logical vector is supplied, rows that correspond to `TRUE` will be removed. If the vector is shorter than the number of rows, values of `drops` will be recycled.

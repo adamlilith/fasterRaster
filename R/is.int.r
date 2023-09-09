@@ -11,7 +11,7 @@
 #' 
 #' @returns Logical.
 #' 
-#' @seealso [datatype()], [terra::datatype()], [as.int()], [as.float()], [as.doub()]
+#' @seealso [datatype()], [terra::datatype()], [as.int()], [as.float()], [as.doub()], [levels<-], [raster data types][tutorial_raster_data_types] in **fasterRaster**
 #'
 #' @example man/examples/ex_GRaster.r
 #' 

@@ -2,6 +2,12 @@
 #'
 #' @description `GRaster`s can represent [categorical data][tutorial_raster_data_types]. Cell values are actually integers, each corresponding to a category, such as "desert" or "wetland." A categorical raster is associated with a table that matches each value to a category name. The table must be `NULL` (i.e., no categories--so not a categorical raster), or have at least two columns. The first column must have integers and represent raster values. One or more subsequent columns must have category labels. The column with these labels is the "active category".
 #'
+#' * `levels()` displays the "levels" table of a raster (just the value and active category columns)
+#' * `cats()` displays the entire "levels" table of a raster
+#' * `levels()<-` (re)assigns the "levels" table to each layer of a raster. Assigning a "levels" table to an integer raster makes it a categorical raster.
+#' * `categories()` (re)assigns the "levels" table to specific layer(s) of a raster.
+#' * For a complete list of functions relevant to categorical rasters, open the package help index using `?fasterRaster`, then see the **Functions operating on categorical rasters** section.
+#'
 #' @param x A `GRaster`.
 #'
 #' @param value A `data.frame`, `data.table`, a list of `data.frames` or `data.tables` with one per raster layer, or a categorical `SpatRaster`. The table's first column is the "value" column and must contain numeric values (of class `numeric` or `character`). If a `SpatRaster` is supplied, then its categories will be transferred to the `GRaster`.
@@ -14,7 +20,7 @@
 #' * `levels()` and `cats()`: A list of `data.frame`s or `data.table`s, one per raster layer.
 #' * `levels()<-` and `categories()`: A `GRaster`.
 #'
-#' @seealso [terra::levels()], [terra::levels<-], [terra::cats()], [terra::categories()], [categorical rasters][tutorial_raster_data_types] in **fasterRaster**
+#' @seealso [terra::levels()], [levels<-], [terra::cats()], [terra::categories()], [categorical rasters][tutorial_raster_data_types] in **fasterRaster**
 #'
 #' @example man/examples/ex_GRaster_categorical.r
 #'

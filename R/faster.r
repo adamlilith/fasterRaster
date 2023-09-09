@@ -1,6 +1,6 @@
 #' Initialize a "GRASS" session
 #'
-#' This function initializes a **GRASS** session in a particular folder. You need to run this function (usually just once) before you use most functions in **fasterRaster**. You can use [restoreSession()] to switch between [working folders, locations, and mapsets][tutorial_sessions].
+#' @description This function initializes a **GRASS** session in a particular folder. You need to run this function (usually just once) before you use most functions in **fasterRaster**. You can use [restoreSession()] to switch between [working folders, locations, and mapsets][tutorial_sessions].
 #'
 #' @param x Any object from which a coordinate reference system (CRS) can be acquired. Ergo, any of:
 #' * A `SpatRaster`, `SpatVector`, `SpatExtent`, `stars`, or `sf` object

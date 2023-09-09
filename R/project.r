@@ -2,9 +2,9 @@
 #'
 #' @description *fasterRaster** offers three ways to project rasters and vectors into a different coordinate reference system (CRS). Each of these ways are different from how they are implemented in **terra**, so it is important to understand how it works in **fasterRaster**.
 #'
-#' First, if you are wanting to change the CRS for a `SpatRaster`, `SpatVector`, or `sf` object already in `R`, use the [fast()] function. This function will project the object to the CRS of the current **GRASS** [location][tutorial_sessions]. Note that for rasters, the `method` and `fallback` arguments in the `fast()` function may be important to what you want to achieve.
+#' First, if you are wanting to change the CRS for a `SpatRaster`, `SpatVector`, or `sf` object already in **R**, use the [fast()] function. This function will project the object to the CRS of the current **GRASS** [location][tutorial_sessions]. Note that for rasters, the `method`, `fallback`, and `wrap` arguments in the `fast()` function may be important to what you want to achieve.
 #' 
-#' Second, the procedure works the same way for rasters or vectors stored on disk (and not already in **R**). Simply use the [fast()] function with the file name of the object. Again, the `method` and `fallback` arguments may be important .
+#' Second, the procedure works the same way for rasters or vectors stored on disk (and not already in **R**). Simply use the [fast()] function with the file name of the object. Again, the `method`, `fallback`, and `wrap` arguments may be important .
 #'
 #' Third, if you are wanting to change the CRS of a `GRaster` or `GVector`, you need to initiate a new **GRASS** [location][tutorial_sessions] using [faster()] with the CRS to which you want to transform the object. This means you need to keep track of which **GRASS** "location" you are working in, as multiple rasters and/or vectors can only be used in the function if they are in the same "location."  *This function, `project()`, is for projecting `GRaster`s or `GVector`s between **GRASS** "locations."* You can get the name of the current location with [location()] (with no arguments), and its coordinate reference system with [crs()] or [st_crs()] (also no arguments).
 #'
@@ -20,7 +20,7 @@
 #'
 #' @param method Character or `NULL` (`GRaster`s only): Method to use to conduct the transformation (rasters only). Partial matching is used.
 #' * `NULL` (default): Automatically choose based on raster properties (`near` for categorical data, `bilinear` for continuous data).
-#' * `"near"`: Nearest neighbor. Best for categorical data, and often a poor choice for continuous data.  If [datatype()] is `CELL`, this method will be used by default.
+#' * `"near"`: Nearest neighbor. Best for categorical data, and often a poor choice for continuous data.  If [datatype()] is `integer`, this method will be used by default.
 #' * `"bilinear"`: Bilinear interpolation (default for non-categorical data; uses weighted values from 4 cells).
 #' * `"bicubic"`: Bicubic interpolation (uses weighted values from 16 cells).
 #' * `"lanczos"`: Lanczos interpolation (uses weighted values from 25 cells).

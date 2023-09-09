@@ -1,6 +1,6 @@
 #' Minimum and maximum values or categories of a GRaster
 #'
-#' @description `minmax()` reports the minimum and maximum values across all non-NA cells of a `GRaster`. When the `levels` argument is `TRUE` and the raster is categorical, the function` reports the "lowest" and "highest" category values in a [categorical raster][tutorial_raster_data_types].
+#' @description `minmax()` reports the minimum and maximum values across all non-NA cells of a `GRaster`. When the `levels` argument is `TRUE` and the raster is categorical, the function reports the "lowest" and "highest" category values in a [categorical raster][tutorial_raster_data_types].
 #'
 #' @param x A `GRaster`.
 #'
@@ -63,6 +63,8 @@ setMethod(
 	} # EOF
 )
 
+#' Get minimum value from raster metadata
+#' @param x A `GRaster`.
 #' @noRd
 methods::setMethod(
 	f = ".minVal",
@@ -70,6 +72,8 @@ methods::setMethod(
 	function(x) x@minVal
 )
 
+#' Get maximum value from raster metadata
+#' @param x A `GRaster`.
 #' @noRd
 methods::setMethod(
 	f = ".maxVal",

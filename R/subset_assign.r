@@ -64,6 +64,7 @@ methods::setMethod(
 	} # EOF
 )
 
+#' @title Sub-setting assignment operator for GRasters and GVectors
 #' @aliases [[<-
 #' @rdname subset_assign
 #' @exportMethod [[<-

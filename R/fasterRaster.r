@@ -88,7 +88,7 @@
 #' [global()]: Summary statistics across cells of each raster layer\cr
 #' [`hillshade()`][shade]: Create a hillshade raster\cr
 #' [horizonHeight()]: Horizon height\cr
-#' [levels()<-]: Assign levels to a categorical raster\cr
+#' [levels<-]: Assign levels to a categorical raster\cr
 #' [longlat()]: Create longitude/latitude rasters.\cr
 #' [mask()]: Remove values in a raster based on values in another raster or vector\cr
 #' [merge()]: Combine two or more rasters with different extents and fill in `NA`s\cr
@@ -108,9 +108,9 @@
 #'
 #' ## Functions operating on categorical rasters
 #' [activeCat()]: Column that defines category labels\cr
-#' [activeCat()<-]: Set column that defines category labels\cr
+#' [activeCat<-]: Set column that defines category labels\cr
 #' [addCats()]: Add columns to a "levels" table\cr
-#' [addCats()<-]: Add new rows (levels)\cr
+#' [addCats<-]: Add new rows (levels)\cr
 #' [categories()]: Set "levels" table for specific layers of a categorical raster\cr
 #' [catNames()]: Names of each "levels" table\cr
 #' [cats()]: "Levels" table of a categorical raster\cr
@@ -174,7 +174,7 @@
 #' [as.int()]: Convert a `GRaster` to an integer raster (***GRASS** data type `CELL`)\cr
 #' [as.points()], [as.lines()], and [as.polygons()]: Convert a `GRaster` to a `GVector`\cr
 #' [fast()]: Convert a `SpatRaster`, `SpatVector`, or `sf` vector to a `GRaster` or `GVector`, or load one from a file\cr
-#' [categories()] and [levels()<-]: Convert an integer raster to a categorical ("factor") raster.
+#' [categories()] and [levels<-]: Convert an integer raster to a categorical ("factor") raster.
 #' [rast()]: Convert a `GRaster` to a `SpatRaster`\cr
 #' [rasterize()]: Convert a `GVector` to a `GRaster`\cr
 #' [st_as_sf()]: Convert a `GVector` to a `sf` vector\cr
@@ -188,7 +188,7 @@
 #' [dropRows()]: Remove rows from a `data.frame` or `data.table`\cr
 #' [grassInfo()]: **GRASS** version and citation\cr
 #' [pmatchSafe()]: Partial matching of strings with error checking\cr
-#' [replaceNAs()]: Replace `NA`s in columns of a `data.table` or `data.frame`, or in a vector\ce
+#' [replaceNAs()]: Replace `NA`s in columns of a `data.table` or `data.frame`, or in a vector\cr
 #' [rstring()]: Create a string statistically likely to be unique\cr
 #'
 #' ## Functions that operate on **GRASS** "sessions":
@@ -209,7 +209,7 @@
 #' [madChelsa][madChelsa]: Climate rasters for of a portion of eastern Madagascar\cr
 #' [madCoast0][madCoast0], [madCoast4][madCoast4], and [madCoast][madCoast]: Borders of an eastern portion of Madagascar\cr
 #' [madCover]: Land cover raster\cr
-#' [madCoverTable][madCoverTable]: Table of land cover classes\cr
+#' [madCoverCats][madCoverCats]: Table of land cover classes\cr
 #' [madDypsis][madDypsis]: Specimens records of species in the genus *Dypsis*\cr
 #' [madElev][madElev]: Elevation raster\cr
 #' [madForest2000][madForest2000] and [madForest2014][madForest2014]: Forest cover in 2000 and 2014\cr

@@ -10,11 +10,11 @@
 #'
 #' @keywords Madagascar
 #'
-#' @seealso [madCoverCats], [raster data types][tutoral_raster_data_types]
+#' @seealso [madCoverCats], [raster data types][tutorial_raster_data_types]
 #'
-#' @references  Arino O., P. Bicheron, F. Achard, J. Latham, R. Witt and J.-L. Weber. 2008. GlobCover: The most detailed portrait of Earth. European Space Agency Bulletin 136:25-31. \url{http://due.esrin.esa.int}{http://due.esrin.esa.int}.
+#' @references  Arino O., P. Bicheron, F. Achard, J. Latham, R. Witt and J.-L. Weber. 2008. GlobCover: The most detailed portrait of Earth. European Space Agency Bulletin 136:25-31. [http://due.esrin.esa.int](http://due.esrin.esa.int}).
 #'
-#' @source \url{http://due.esrin.esa.int}{http://due.esrin.esa.int}
+#' @source [http://due.esrin.esa.int](http://due.esrin.esa.int})
 #'
 #' @example man/examples/ex_fastData.r
 #'
