@@ -2,7 +2,7 @@
 #'
 #' @description You can do comparative operations on `GRaster`s using normal operators in **R**: `<`, `<=`, `==`, `!=`, `>=`, and `>`.
 #' 
-#' @param e1,e2 `GRaster`, logical, numeric, or character. Character is useful when using a [categorical raster][tutorials_raster_data_types], in which case you can use something like `raster1 == "Wetlands"` to force all "wetland" cells to be 1 (TRUE) and all others 0 (FALSE) or `NA` (if it was originally `NA`).
+#' @param e1,e2 `GRaster`, logical, numeric, or character. Character is useful when using a [categorical raster][tutorial_raster_data_types], in which case you can use something like `raster1 == "Wetlands"` to force all "wetland" cells to be 1 (TRUE) and all others 0 (FALSE) or `NA` (if it was originally `NA`).
 #'
 #' @returns A `GRaster` of [type][tutorial_raster_data_types] `CELL`.
 #'
@@ -10,10 +10,11 @@
 #'
 #' @aliases Comparison
 #' @rdname Comparison
-#' @exportMethod Ops
+#' @exportMethod Logic
 # raster raster
 methods::setMethod(
-	f = "Ops",
+	# f = "Ops",
+	f = "Logic",
 	signature(e1 = "GRaster", e2 = "GRaster"),
     function(e1, e2) {
 	
@@ -52,8 +53,11 @@ methods::setMethod(
 # logical raster
 #' @aliases Comparison
 #' @rdname Comparison
-#' @exportMethod Ops
-methods::setMethod("Ops", signature(e1 = "logical", e2 = "GRaster"),
+#' @exportMethod Logic
+methods::setMethod(
+	# f = "Ops",
+	f = "Logic",
+	signature(e1 = "logical", e2 = "GRaster"),
     function(e1, e2) {
 	
 		.restore(e2)
@@ -85,8 +89,11 @@ methods::setMethod("Ops", signature(e1 = "logical", e2 = "GRaster"),
 # raster logical
 #' @aliases Comparison
 #' @rdname Comparison
-#' @exportMethod Ops
-methods::setMethod("Ops", signature(e1 = "GRaster", e2 = "logical"),
+#' @exportMethod Logic
+methods::setMethod(
+	# f = "Ops",
+	f = "Logic",
+	signature(e1 = "GRaster", e2 = "logical"),
     function(e1, e2) {
 	
 		.restore(e1)
@@ -118,8 +125,11 @@ methods::setMethod("Ops", signature(e1 = "GRaster", e2 = "logical"),
 # numeric raster
 #' @aliases Comparison
 #' @rdname Comparison
-#' @exportMethod Ops
-methods::setMethod("Ops", signature(e1 = "numeric", e2 = "GRaster"),
+#' @exportMethod Logic
+methods::setMethod(
+	# f = "Ops",
+	f = "Logic",
+	signature(e1 = "numeric", e2 = "GRaster"),
     function(e1, e2) {
 	
 		.restore(e2)
@@ -150,8 +160,11 @@ methods::setMethod("Ops", signature(e1 = "numeric", e2 = "GRaster"),
 # raster numeric
 #' @aliases Comparison
 #' @rdname Comparison
-#' @exportMethod Ops
-methods::setMethod("Ops", signature(e1 = "GRaster", e2 = "numeric"),
+#' @exportMethod Logic
+methods::setMethod(
+	# f = "Ops",
+	f = "Logic",
+	signature(e1 = "GRaster", e2 = "numeric"),
     function(e1, e2) {
 	
 		.restore(e1)
@@ -182,8 +195,11 @@ methods::setMethod("Ops", signature(e1 = "GRaster", e2 = "numeric"),
 # raster character
 #' @aliases Comparison
 #' @rdname Comparison
-#' @exportMethod Ops
-methods::setMethod("Ops", signature(e1 = "GRaster", e2 = "character"),
+#' @exportMethod Logic
+methods::setMethod(
+	# f = "Ops",
+	f = "Logic",
+	signature(e1 = "GRaster", e2 = "character"),
     function(e1, e2) {
 	
 		if (!all(is.factor(e1))) stop("Raster must be categorical for this type of comparison.")
@@ -210,7 +226,7 @@ methods::setMethod("Ops", signature(e1 = "GRaster", e2 = "character"),
 
 					thisVal <- max(thisVal)
 					
-					ex <- paste0(srcs[i], " = if(", sources(x)[i], " ", oper, " ", thisVal, ", 1, 0)")
+					ex <- paste0(srcs[i], " = if(", sources(e1)[i], " ", oper, " ", thisVal, ", 1, 0)")
 
 				thisVal <- max(thisVal)
 				} else if (oper %in% c(">", ">=")) {
@@ -270,8 +286,11 @@ methods::setMethod("Ops", signature(e1 = "GRaster", e2 = "character"),
 # character raster
 #' @aliases Comparison
 #' @rdname Comparison
-#' @exportMethod Ops
-methods::setMethod("Ops", signature(e1 = "character", e2 = "GRaster"),
+#' @exportMethod Logic
+methods::setMethod(
+	# f = "Ops",
+	f = "Logic",
+	signature(e1 = "character", e2 = "GRaster"),
     function(e1, e2) {
 	
 		if (!all(is.factor(e2))) stop("Raster must be categorical for this type of comparison.")
