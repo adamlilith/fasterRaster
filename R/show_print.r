@@ -315,13 +315,13 @@ methods::setMethod(
 		classes <- sapply(object@table, class)
 		maxFieldsToShow <- min(ncol(object@table), maxFieldsToShow)
 		
-  		row1 <- table[1L, 1L:maxFieldsToShow]
+  		row1 <- object@table[1L, 1L:maxFieldsToShow]
 		row1 <- as.data.frame(row1)
 		row1 <- unlist(row1)
 		row1 <- as.character(row1)
 		
 		if (nRows >= 2L) {
-			row2 <- table[2L, 1L:maxFieldsToShow]
+			row2 <- object@table[2L, 1L:maxFieldsToShow]
 			row2 <- as.data.frame(row2)
 			row2 <- unlist(row2)
 			row2 <- as.character(row2)
@@ -330,7 +330,7 @@ methods::setMethod(
 		}
 		
 		if (nRows >= 3L) {
-			row3 <- table[3L, 1L:maxFieldsToShow]
+			row3 <- object@table[3L, 1L:maxFieldsToShow]
    			row3 <- as.data.frame(row3)
 			row3 <- unlist(row3)
 			row3 <- as.character(row3)
