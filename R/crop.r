@@ -33,48 +33,48 @@ methods::setMethod(
 	.restore(x)
 
 	### change region to match the extent of y but have the same resolution and registration as x
-	if (west(y) <= west(x)) {
-		w <- west(y)
+	if (W(y) <= W(x)) {
+		w <- W(y)
 	} else {
-  		cells <- (west(y) - west(x)) / xres(x)
+  		cells <- (W(y) - W(x)) / xres(x)
   		cells <- ceiling(cells)
-  		w <- west(x) + cells * xres(x)
+  		w <- W(x) + cells * xres(x)
 	}
 
-	if (east(y) >= east(x)) {
-		e <- east(x)
+	if (E(y) >= E(x)) {
+		e <- E(x)
 	} else {
-  		cells <- (east(x) - east(y)) / xres(x)
+  		cells <- (E(x) - E(y)) / xres(x)
 		if (inherits(y, "GVector")) {
 			cells <- floor(cells)
 		} else if (inherits(y, "GRaster")) {
 			cells <- floor(cells) # !!!
 		}
-  		e <- east(x) - cells * xres(x)
+  		e <- E(x) - cells * xres(x)
 	}
 
-	if (south(y) <= south(x)) {
-		s <- south(x)
+	if (S(y) <= S(x)) {
+		s <- S(x)
 	} else {
-  		cells <- (south(y) - south(x)) / yres(x)
+  		cells <- (S(y) - S(x)) / yres(x)
   		if (inherits(y, "GVector")) {
 			cells <- floor(cells)
 		} else if (inherits(y, "GRaster")) {
    			cells <- ceiling(cells)
 		}
-  		s <- south(x) + cells * yres(x)
+  		s <- S(x) + cells * yres(x)
 	}
 
-	if (north(y) >= north(x)) {
-		n <- north(x)
+	if (N(y) >= N(x)) {
+		n <- N(x)
 	} else {
-  		cells <- (north(x) - north(y)) / yres(x)
+  		cells <- (N(x) - N(y)) / yres(x)
 		if (inherits(y, "GVector")) {
 			cells <- floor(cells)
 		} else if (inherits(y, "GRaster")) {
 			cells <- ceiling(cells)
 		}
-  		n <- north(x) - cells * yres(x)
+  		n <- N(x) - cells * yres(x)
 	}
 
 	w <- as.character(w)
