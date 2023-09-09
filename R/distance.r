@@ -213,16 +213,20 @@ methods::setMethod(
 	} # EOF
 )
 
-# #' @aliases st_distance
-# #' @rdname distance
-# #' @exportMethod st_distance
-# methods::setMethod(
-# 	"st_distance",
-# 	signature(x = "GVector", y = "GVector"),
-# 	function(x, y, unit = "meters", minDist = NULL, maxDist = NULL) {
-#   		distance(x = x, y = y, unit = unit, minDist = minDist, maxDist = maxDist)
-# 	}
-# )
+#' @aliases st_distance
+#' @rdname distance
+#' @exportMethod st_distance
+methods::setMethod(
+	"st_distance",
+	signature(x = "GVector", y = "GVector"),
+	function(x, y, unit = "meters", minDist = NULL, maxDist = NULL) {
+  		distance(x = x, y = y, unit = unit, minDist = minDist, maxDist = maxDist)
+	}
+)
+
+#' @importFrom st_distance
+#' export
+sf::st_distance
 
 .convertRastUnits <- function(src, unit) {
     
