@@ -158,30 +158,62 @@ methods::setMethod(
 # 	out
 # }
 
+# #' @rdname crs
+# #' @aliases st_crs
+# #' @exportMethod st_crs
+# methods::setMethod(
+# 	f = "st_crs",
+# 	signature = "GSession",
+# 	definition = function(x) {
+
+# 	if (missing(x)) {
+	
+# 		out <- crs()
+# 		out <- sf::st_crs(out)
+
+# 	} else if (inherits(x, "GSession")) {
+
+# 		out <- x@crs
+# 		out <- sf::st_crs(out)
+
+# 	} else {
+	
+#   		out <- NextMethod(x)
+	
+# 	}
+# 	out
+
+# 	} # EOF
+# )
+
+#' @rdname crs
+#' @aliases st_crs
+#' @exportMethod st_crs
+methods::setMethod(
+	f = "st_crs",
+	signature = "missing",
+	definition = function(x, ...) {
+		
+	out <- crs()
+	sf::st_crs(out)
+
+	} # EOF
+)
+
 #' @rdname crs
 #' @aliases st_crs
 #' @exportMethod st_crs
 methods::setMethod(
 	f = "st_crs",
 	signature = "GSession",
-	definition = function(x) {
+	definition = function(x, ...) {
 
-	if (missing(x)) {
-	
-		out <- crs()
-		out <- sf::st_crs(out)
-
-	} else if (inherits(x, "GSession")) {
-
-		out <- x@crs
-		out <- sf::st_crs(out)
-
-	} else {
-	
-  		out <- NextMethod(x)
-	
-	}
-	out
+	out <- x@crs
+	sf::st_crs(out)
 
 	} # EOF
 )
+
+#' @importFrom sf st_crs
+#' @export
+sf::st_crs
