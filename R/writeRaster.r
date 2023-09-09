@@ -17,14 +17,15 @@
 #'    | `integer`          | `INT1U`     | `CELL`      | `Byte`     | Integer values from 0 to 255 |
 #'    | `integer`          | `INT2U`     | `CELL`      | `UInt16`   | Integer values from 0 to 65,534 |
 #'    | `integer`          | `INT2S`     | `CELL`     | `Int16`    | Integer values from -32,767 to -32,767 |
+#'    | `integer`          | na     | `CELL`     | `Unt32`    | Integer values from 0 to 4,294,967,295 |
 #'    | `integer`          | `INT4S`     | `CELL`     | `Int32`    | Integer values from -2,147,483,647 to 2,147,483,647 |
 #'    | `float`            | `FLT4S`     | `FCELL`   | `Float32`    | Values from -3.4e+38 to 3.4e+38, including decimal values |
-#'    | `double`           | `FLT8S`     | `DCELL`   | `Float64`    | Values from -1.7e+308 to 1.7e+308, including decimal values |
-#'    | `factor`           | `INT`*      | `CELL`    | *            | Integer values corresponding to categories
+#'    | `double`           | `FLT8S`     | `DCELL`   | `Float64`    | Values from -1.79e+308 to 1.79e+308, including decimal values |
+#'    | `factor`           | `INT`*      | `CELL`    | `INT*`        | Integer values corresponding to categories
 #'
 #' `*` Depends on the integers (signed/unsigned, range of values). Categorical rasters will have a CSV file with category values and labels saved with them. The file name will be the same as the raster's file name, but end in extension ".csv".
 #'
-#' @param warn Logical: If `TRUE` (default), display a warning if the `datatype` argument does not match the value given by [datatype(x, "GDAL")].
+#' @param warn Logical: If `TRUE` (default), display a warning if the `datatype` argument does not match the value given by `datatype(x, "GDAL")`.
 #'
 #' @param ... Additional arguments. These can include:
 #' * `compressTiff`: Character or `NULL`: Type of compression for GeoTIFF files:
@@ -72,6 +73,7 @@ setMethod(
 	###############
 
 	dots <- list(...)
+	filename <- trimws(filename)
 
 	flags <- c("quiet")
 	if (overwrite) flags <- c(flags, "overwrite")
@@ -82,25 +84,23 @@ setMethod(
 	}
 
 	### format
-	nch <- nchar(filename)
-	extension3 <- tolower(substr(filename, nch - 3, nch))
-	extension4 <- tolower(substr(filename, nch - 4, nch))
-	extension5 <- tolower(substr(filename, nch - 5, nch))
+	extension <- tools::file_ext(filename)
+	extension <- tolower(extension)
 	
 	ascii <- if ("format" %in% names(dots)) {
-		if (("format" %in% names(dots) && tolower(dots$format) == "asc") | extension3 == ".asc" | extension4 == ".asci" | extension5 == ".ascii") { TRUE } else { FALSE }
+		if (("format" %in% names(dots) && tolower(dots$format) %in% c("asc", "asci", "ascii")) || extension %in% c("asc", "asci", "ascii")) { TRUE } else { FALSE }
 	} else {
 		FALSE
 	}
 
-	geotiff <- (("format" %in% names(dots) && tolower(dots$format) == "gtiff") | extension3 == ".tif")
+	geotiff <- ("format" %in% names(dots) && tolower(dots$format) == "gtiff") | extension == "tif"
 
 	nLayers <- nlyr(x)
 
 	### save
 	if (ascii) {
 		if (nlyr(x) > 1L) stop("Cannot save multi-layer GRaster as a single ASCII file. Save each layer individually.")
-		rgrass::execGRASS("r.out.ascii", input=x, output=filename, flags=flags, intern=TRUE, ...)
+		rgrass::execGRASS("r.out.ascii", input = x, output = filename, flags = flags, intern = TRUE, ...)
 	} else {
 
 		thisFlags <- c(flags, "c")
@@ -195,10 +195,20 @@ setMethod(
 		do.call(rgrass::execGRASS, args=args)
 
 	}
+	
+	if (any(is.factor(x))) {
+
+		extension <- paste0(".", extension)
+		filename <- substr(filename, 1L, nchar(filename) - nchar(extension))
+		filename <- paste0(filename, ".csv")
+		write.csv(levels(x), filename)
+
+	}
 
 	out <- terra::rast(filename)
 	# out <- terra::trim(out)
 	names(out) <- names(x)
+	levels(out) <- levels(x)
 	invisible(out)
 	
 	} # EOF
