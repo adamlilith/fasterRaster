@@ -29,6 +29,7 @@ Imports:
 	shiny,
 	terra,
 	tidyterra,
+	tools,
 	utils
 Suggests:
 	knitr
