@@ -4,7 +4,7 @@
 #' 
 #' * `ext()` and `st_bbox()`: 2-dimensional spatial extent (i.e., westernmost/easternmost and southernmost/northernmost coordinates of area represented).\cr\cr
 #' * `zext()`: Vertical extent (i.e., topmost and bottom-most elevation of the volume represented). The vertical extent is not `NA` only if the object is 3-dimensional.\cr\cr
-#' * `west()`, `east()`, `north()`, `south()`: Coordinates of one side of horizontal extent.\cr\cr
+#' * `W()`, `E()`, `N()`, `S()`: Coordinates of one side of horizontal extent.\cr\cr
 #' * `top()` and `bottom()`: Coordinates of top and bottom of vertical extent.\cr\cr
 #' 
 #' @param x,obj An object that inherits from `GSpatial` (i.e., a `GRaster` or `GVector`) or missing. If missing, then the horizontal or vertical extent of the currently active [region][tutorial_regions] is returned.
@@ -212,6 +212,40 @@ methods::setMethod(
 	if (char) out <- as.character(out)
 	out
 })
+
+#' @aliases st_bbox
+#' @rdname ext
+#' @exportMethod st_bbox
+methods::setMethod(
+	f = "st_bbox",
+	signature = c(obj = "GSpatial"),
+	function(obj, ...) {
+
+	out <- obj@extent
+	names(out) <- c('xmin', 'xmax', 'ymin', 'ymax')
+	sf::st_bbox(out, crs = st_crs(obj))
+	
+	} # EOF
+)
+
+#' @aliases st_bbox
+#' @rdname ext
+#' @exportMethod st_bbox
+methods::setMethod(
+	f = "st_bbox",
+	signature = c(obj = "missing"),
+	function(obj, ...) {
+
+	out <- ext(vector = TRUE)
+	names(out) <- c('xmin', 'xmax', 'ymin', 'ymax')
+	sf::st_bbox(out, crs = st_crs())
+	
+	} # EOF
+)
+
+#' @importFrom sf st_bbox
+#' @export
+sf::st_bbox
 
 # st_bbox <- function(obj, ...) UseMethod("st_bbox", obj)
 
