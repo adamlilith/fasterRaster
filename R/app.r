@@ -1,15 +1,19 @@
 #' Apply a function to a set of rasters
 #'
-#' @description `app()` applies a function to a set of "stacked" rasters. `appFuns()` provides a table of **GRASS** functions and their equivalents from the **terra** and **sf** packages. `appCheck()` tests whether a formula supplied to `app()` has any "forbidden" function calls.
-#' 
-#' `app()` function operates in a manner slightly different from [terra::app()]. The function to be applied *must* be written as a character string. For example, if the raster had layer names "`x1`" and "`x2`", then the function might be like `"= max(sqrt(x1), log(x2))"`. Rasters **cannot** have the same names as functions used in the formula. In this example, the rasters could not be named "max", "sqrt", or "log".
-#' 
-#' The `app()` function will automatically check for raster names that appear also to be functions that appear in the formula, but the `appCheck()` function can be applied to the raster stack plus the formula to do this outside of `app()`. You can obtain a list of functions using `appFuns()`. Note that these are sometimes different from how they are applied in **R**.
+#' @description `app()` applies a function to a set of "stacked" rasters.
 #'
-#' TIPS:
+#' `appFuns()` provides a table of **GRASS** functions that can be used by `app()` and their equivalents in **R**.
+#'
+#' `appCheck()` tests whether a formula supplied to `app()` has any "forbidden" function calls.
+#' 
+#' The `app()` function operates in a manner slightly different from [terra::app()]. The function to be applied *must* be written as a character string. For example, if the raster had layer names "`x1`" and "`x2`", then the function might be like `"= max(sqrt(x1), log(x2))"`. Rasters **cannot** have the same names as functions used in the formula. In this example, the rasters could not be named "max", "sqrt", or "log".
+#' 
+#' The `app()` function will automatically check for raster names that appear also to be functions that appear in the formula. However, you can check a formula before running `app()` by using the `appCheck()` function. You can obtain a list of `app()` functions using `appFuns()`. Note that these are sometimes different from how they are applied in **R**.
+#'
+#' Tips:
 #' * In **GRASS**, `null()` is the same as `NA` in **R**.
-#' * If you want to calculate values using while removing `NA` (or `null`) values, see the functions that begin with `n` (like `nmean`).
-#' * Be mindful of the data type that a function returns. In **GRASS**, these are `CELL` (integer), `FCELL` (floating point values--precise to about the 7th decimal place), and `DCELL` (double-floating point values--precise to about the 15th decimal place). In cases where you want to ensure a raster to be treated like a float or double data type raster, wrap the raster in the `float()` or `double()` functions to ensure it is treated as such. This is especially useful if the raster might be assumed to be the `CELL` type because it only contains integer values. You can get the data type of a raster using [datatype()]. You can change the data type of a `GRaster` using [as.int()], [as.float()], and [as.doub()]. Note that [categorical][tutorial_raster_data_types] are really `CELL` rasters with an associated "levels" table. You can also change a `CELL` raster to a `FCELL` raster by adding then subtracting a decimal value, as in `x - 0.1 + 0.1`.
+#' * If you want to calculate values using while ignoring `NA` (or `null`) values, see the functions that begin with `n` (like `nmean`).
+#' * Be mindful of the data type that a function returns. In **GRASS**, these are `CELL` (integer), `FCELL` (floating point values--precise to about the 7th decimal place), and `DCELL` (double-floating point values--precise to about the 15th decimal place). In cases where you want to ensure a raster to be treated like a float or double data type raster, wrap the raster in the `float()` or `double()` functions to ensure it is treated as such. This is especially useful if the raster might be assumed to be the `CELL` type because it only contains integer values. You can get the data type of a raster using [datatype()] with the `type` argument set to `GRASS`. You can change the data type of a `GRaster` using [as.int()], [as.float()], and [as.doub()]. Note that [categorical][tutorial_raster_data_types] rasters are really `CELL` (integer) rasters with an associated "levels" table. You can also change a `CELL` raster to a `FCELL` raster by adding then subtracting a decimal value, as in `x - 0.1 + 0.1`.
 #' * The `rand()` function returns `CELL` (integer) values by default. If you want non-integer values, use the tricks mentioned above to ensure non-integer values. For example, the [runifRast()] function's expression is (essentially) `= float(rand(0 + 0.1, 1 + 0.1) - 0.1)`
 #'
 #' @param x A `GRaster` with one or more named layers.
@@ -18,7 +22,8 @@
 #' 
 #' * It must begin with an equals sign ("`=`"").
 #' * It must use typical arithmetic operators like `+`, `-`, `*`, `/` and/or functions that can be seen using `appFuns(TRUE)`.
-#' * It has no functions that have the same names as the [names()] of any of the raster layers. Note that `x` and `y` are forbidden names :(
+#' * The [names()] of the rasters do not match any of the functions in the `appFuns(TRUE)` table. Note that `x` and `y` are forbidden names :(
+#'
 #' The help page for `r.mapcalc` on the **GRASS** website provides more details.
 #' 
 #' @param ensure Character: This ensures that rasters are treated as a certain type before they are operated on. This is useful when using rasters that have all integer values, which **GRASS** can assume represent integers, even if they are not supposed to. In this case, the output of operations on this raster might be an integer if otherwise not corrected. Partial matching is used, and options include:
@@ -29,10 +34,8 @@
 #'
 #' @param seed Numeric integer vector or `NULL` (default): A number for the random seed. Used only for `app()` function `rand()`, that generates a random number. If `NULL`, a seed will be generated. Defining the seed is useful for replicating a raster made with `rand()`. This must be an integer!
 #' 
-#' @param show Logical (function `appFuns()`):
-#' * `FALSE` (default): Return a `data.frame` or `data.table` with definitions of functions.
-#' * `TRUE`: Open a searchable, sortable **shiny** table in a browser.
-#' 
+#' @param warn Logical (function `appFuns()`): If `TRUE` (default), display a warning when `allFuns()` is not called interactively.
+#'
 #' @param msgOnGood Logical (function `appCheck()`): If `TRUE` (default), display a message if no overt problems with the raster names and formula are detected.
 #' 
 #' @param failOnBad Logical (function `appCheck()`): If `TRUE` (default), fail if overt problems with raster names and the formula are detected.
@@ -115,46 +118,51 @@ methods::setMethod(
     } # EOF
 )
 
-#' @aliases appFuns
-#' @rdname app
-#' @exportMethod appFuns
-methods::setMethod(
-    f = "appFuns",
-    signature = c(show = "logical"),
-    function(show = FALSE) {
+# #' @aliases appFuns
+# #' @rdname app
+# #' @export
+# methods::setMethod(
+    # f = "appFuns",
+    # signature = c(x = "logical"),
+    # function(x = FALSE) {
     
+#' @export
+appFuns <- function(warn = TRUE) {
+	
 	appFunsTable <- NULL
     utils::data("appFunsTable", envir = environment(), package = "fasterRaster")
+print('appFuns A')
+	if (interactive()) {
+print('appFuns B')
+		showableCols <- c("Type", "GRASS_Function", "R_Function", "Definition", "Returns")
 
-    if (show & interactive()) {
-
-        showableCols <- c("Type", "GRASS_Function", "R_Function", "Definition", "Returns")
-
-        shiny::shinyApp(
-            ui = shiny::fluidPage(DT::DTOutput("tbl")),
-            server = function(input, output) {
-                output$tbl <- DT::renderDT(
-                    appFunsTable[ , showableCols],
-                    caption = shiny::HTML("Functions that can be used in the fasterRaster app() function and the equivalent functions in R. Note that in GRASS, 'null()' is the same as 'NA'."),
-                    options = list(
-                        pageLength = nrow(appFunsTable),
-                        width = "100%",
-                        scrollX = TRUE
-                    )
-                    # options = list(lengthChange = FALSE)
-                )
-            }
-        )
+		shiny::shinyApp(
+			ui = shiny::fluidPage(DT::DTOutput("tbl")),
+			server = function(input, output) {
+				output$tbl <- DT::renderDT(
+					appFunsTable[ , showableCols],
+					caption = shiny::HTML("Functions that can be used in the <b>fasterRaster</b> app() function and their equivalents in <b>R</b>.<br/>Note that in GRASS, 'null()' is the same as 'NA'."),
+					options = list(
+						pageLength = nrow(appFunsTable),
+						width = "100%",
+						scrollX = TRUE
+					)
+					# options = list(lengthChange = FALSE)
+				)
+			}
+		)
         
-    } else if (show & !interactive()) {
+    } else if (warn) {
         warning("You must be running R interactively to view the table using appFuns().")
     }
 
     if (getFastOptions("useDataTable")) appFunsTable <- data.table::data.table(appFunsTable)
-    invisible(appFunsTable)
+	invisible(appFunsTable)
+	
+}
 
-    } # EOF
-)
+    # } # EOF
+# )
 
 #' @aliases appCheck
 #' @rdname app
