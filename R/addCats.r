@@ -12,7 +12,7 @@
 #'
 #' @param layer Numeric integers, logical vector, or character: Layer(s) to which to add or from which to drop levels.
 #'
-#' @param level
+#' @param level Character, numeric, integer, or logical vector: Level(s) to drop. If a character, then the labels are used to identify levels to drop. If numeric or integer, then the values are used. If logical, then levels that correspond to `TRUE` are dropped. For logical vectors, if the vector is shorter than the number of rows in the raster's "levels" table, the vector is recycled.
 #'
 #' @returns A `GRaster`. The "levels" table of the raster is modified.
 #'
@@ -117,13 +117,11 @@ methods::setMethod(
 			} else if (is.character(level)) {
 			
 				ac <- activeCat(x, layer = i, names = TRUE)
-
 				x@levels[[i]] <- levs[[i]][levs[[i]][ , !(get(ac) %in% levels)]]
 			
 			} else if (is.logical(level)) {
 			
 				if (length(level) < nrow(levs[[i]])) {
-
 					level <- rep(level, length.out = nrow(levs[[i]]))
 				}
 
