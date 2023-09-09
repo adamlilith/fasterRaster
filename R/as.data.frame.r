@@ -1,10 +1,9 @@
 #' Convert GVector to a data frame
 #'
-#' @description Convert a `GVector`"s data table to a data frame.
+#' @description Convert a `GVector`'s attribute table to a data frame.
 #'
 #' @param x A `GVector`.
 #' @param row.names `NULL` (default) or a character vector giving names for rows.
-#' @param optional Ignored.
 #'
 #' @returns A `data.frame`.
 #' 
@@ -18,7 +17,7 @@
 methods::setMethod(
 	f = "as.data.frame",
 	signature = c(x = "GVector"),
-	definition = function(x, row.names = NULL, optional = FALSE) {
+	definition = function(x, row.names = NULL) {
 	
  	data <- rgrass::execGRASS("v.db.select", map = sources(x), intern = TRUE)
 
