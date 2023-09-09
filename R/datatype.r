@@ -1,19 +1,19 @@
 #' Get the datatype of a GRaster or of GVector columns
 #'
-#' @description `datatype()` returns the [data type][tutorial_raster_data_types] of a `GRaster` or of each column of a `GVector`.
+#' @description For `GRaster`s, `datatype()` returns the [data type][tutorial_raster_data_types]. For `GVector`s, `datatype()` returns the class of each column of the attribute table.
 #'
 #' @param x A `GRaster` or `GVector`.
-#' @param type `NULL` or character: Type of datatype to report (`GRaster` only):
-#' * `"fasterRaster"` (default): Reports the "*fasterRaster**" type (factor, float, or double)
+#' @param type (`GRaster`s only) `NULL` or character: Type of datatype to report (`GRaster` only):
+#' * `"fasterRaster"` (default): Reports the **fasterRaster** type (factor, integer, float, or double)
 #' * `"terra"`: Report the (inferred) **terra** data type (e.g., INT2U, FLT4S). Please see the table in the [tutorial on raster data types] for more information.
-#' * `"GRASS"`: Will return "CELL" (integer), "FCELL" (floating-point value), or "DCELL" (double=floating point value)
-#' * `"GDAL"`: See [GDAL: Raster Band](https://gdal.org/user/raster_data_model.html#raster-band).
+#' * `"GRASS"`: Will return "CELL" (integer), "FCELL" (floating-point value), or "DCELL" (double-floating point value)
+#' * `"GDAL"`: See [GDAL: Raster Band](https://gdal.org/user/raster_data_model.html#raster-band). Please also see the table in the [tutorial on raster data types].
 #'
-#' @return `datatype()` for a `GRaster` returns a character. `datatype()` for a `GVector` returns a data frame, with one row per field.
+#' @returns `datatype()` for a `GRaster` returns a character. `datatype()` for a `GVector` returns a data frame, with one row per field. If the `GVector` has no attribute table, the function returns `NULL`.
 #'
 #' @seealso [terra::datatype()], [raster data types][tutorial_raster_data_types] in **fasterRaster**
 #'
-#' @example man/examples/ex_GRaster.r
+#' @example man/examples/ex_GRaster_GVector.r
 #'
 #' @aliases datatype
 #' @rdname datatype
@@ -84,14 +84,11 @@ setMethod(f = "datatype",
 	signature = c(x = "GVector"),
 	definition = function(x) {
 
-		if (inherits(x@db, "GFullMetaTable")) {
-			data.frame(
-				field = x@db@fields,
-				datatype = x@db@classes
-			)
-		} else {
-			NULL
-		}
-	
+	if (nrow(x@table) > 0L) {
+		data.frame(field = names(x@table), datatype = x@db@classes)
+	} else {
+		NULL
+	}
+
 	} # EOF
 )
