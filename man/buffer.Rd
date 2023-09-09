@@ -4,6 +4,8 @@
 \alias{buffer,GRaster-method}
 \alias{buffer}
 \alias{buffer,GVector-method}
+\alias{st_buffer,GVector-method}
+\alias{st_buffer}
 \title{Increase/decrease the size of a vector or around non-NA cells of a raster}
 \usage{
 \S4method{buffer}{GRaster}(
@@ -16,6 +18,8 @@
 )
 
 \S4method{buffer}{GVector}(x, width, capstyle = "round", union = FALSE)
+
+\S4method{st_buffer}{GVector}(x, dist, endCapStyle = "round", union = FALSE)
 }
 \arguments{
 \item{x}{A \code{GRaster} or \code{GVector}.}

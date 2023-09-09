@@ -20,7 +20,7 @@
 A \code{data.frame} or a named \code{list} of \code{data.frame}s, one per layer in \code{x}.
 }
 \description{
-\code{freq()} tabulates the frequency of cell values in a raster. For rasters where \code{\link[=datatype]{datatype()}} is \code{integer}, the frequency of each value is reported. For other rasters, the range of values is divided into bins, and the number of cells with values in each bin is reported.
+\code{freq()} tabulates the frequency of cell values in a raster. For rasters where \code{\link[=datatype]{datatype()}} is \code{integer} or \code{factor}, the frequency of each value or level is reported. For other rasters, the range of values is divided into bins, and the number of cells with values in each bin is reported.
 }
 \examples{
 \dontrun{

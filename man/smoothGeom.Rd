@@ -13,7 +13,7 @@
 \item{method}{Character: Method used to smooth line segments. Partial matching is used, and case does not matter:
 \itemize{
 \item \code{"Hermite"}: Hermite interpolation (default): Guarantees that the output vector always passes through the original points. This method adds points (possibly many) by constructing cubic splines with points approximately \code{dist} apart. The number of points can be reduced by specifying a smaller value of \code{angle}, which specifies the minimum angle between two successive line segments.
-\item \code{"Chaiken"}: Chaiken"s algorithm: Guarantees that the new vector always touches the midpoint of each original line segment. The points on the new line are at least \code{dist} apart.
+\item \code{"Chaiken"}: Chaiken's algorithm: Guarantees that the new vector always touches the midpoint of each original line segment. The points on the new line are at least \code{dist} apart.
 }}
 
 \item{dist}{Numeric > 0 of \code{NULL} (default): Minimum distance (see \code{method}). Units are in map units. If \code{NULL}, then 2\% of the minimum of the x-, y-, and z-extent will be used.}

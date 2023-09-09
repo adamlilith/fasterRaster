@@ -5,20 +5,18 @@
 \alias{as.data.frame}
 \title{Convert GVector to a data frame}
 \usage{
-\S4method{as.data.frame}{GVector}(x, row.names = NULL, optional = FALSE)
+\S4method{as.data.frame}{GVector}(x, row.names = NULL)
 }
 \arguments{
 \item{x}{A \code{GVector}.}
 
 \item{row.names}{\code{NULL} (default) or a character vector giving names for rows.}
-
-\item{optional}{Ignored.}
 }
 \value{
 A \code{data.frame}.
 }
 \description{
-Convert a \code{GVector}"s data table to a data frame.
+Convert a \code{GVector}'s attribute table to a data frame.
 }
 \examples{
 \dontrun{

@@ -35,7 +35,7 @@
 \item{method}{Character or \code{NULL} (\code{GRaster}s only): Method to use to conduct the transformation (rasters only). Partial matching is used.
 \itemize{
 \item \code{NULL} (default): Automatically choose based on raster properties (\code{near} for categorical data, \code{bilinear} for continuous data).
-\item \code{"near"}: Nearest neighbor. Best for categorical data, and often a poor choice for continuous data.  If \code{\link[=datatype]{datatype()}} is \code{CELL}, this method will be used by default.
+\item \code{"near"}: Nearest neighbor. Best for categorical data, and often a poor choice for continuous data.  If \code{\link[=datatype]{datatype()}} is \code{integer}, this method will be used by default.
 \item \code{"bilinear"}: Bilinear interpolation (default for non-categorical data; uses weighted values from 4 cells).
 \item \code{"bicubic"}: Bicubic interpolation (uses weighted values from 16 cells).
 \item \code{"lanczos"}: Lanczos interpolation (uses weighted values from 25 cells).
@@ -57,9 +57,9 @@ A \code{GRaster} or \code{GVector}.
 \description{
 \emph{fasterRaster}* offers three ways to project rasters and vectors into a different coordinate reference system (CRS). Each of these ways are different from how they are implemented in \strong{terra}, so it is important to understand how it works in \strong{fasterRaster}.
 
-First, if you are wanting to change the CRS for a \code{SpatRaster}, \code{SpatVector}, or \code{sf} object already in \code{R}, use the \code{\link[=fast]{fast()}} function. This function will project the object to the CRS of the current \strong{GRASS} \link[=tutorial_sessions]{location}. Note that for rasters, the \code{method} and \code{fallback} arguments in the \code{fast()} function may be important to what you want to achieve.
+First, if you are wanting to change the CRS for a \code{SpatRaster}, \code{SpatVector}, or \code{sf} object already in \strong{R}, use the \code{\link[=fast]{fast()}} function. This function will project the object to the CRS of the current \strong{GRASS} \link[=tutorial_sessions]{location}. Note that for rasters, the \code{method}, \code{fallback}, and \code{wrap} arguments in the \code{fast()} function may be important to what you want to achieve.
 
-Second, the procedure works the same way for rasters or vectors stored on disk (and not already in \strong{R}). Simply use the \code{\link[=fast]{fast()}} function with the file name of the object. Again, the \code{method} and \code{fallback} arguments may be important .
+Second, the procedure works the same way for rasters or vectors stored on disk (and not already in \strong{R}). Simply use the \code{\link[=fast]{fast()}} function with the file name of the object. Again, the \code{method}, \code{fallback}, and \code{wrap} arguments may be important .
 
 Third, if you are wanting to change the CRS of a \code{GRaster} or \code{GVector}, you need to initiate a new \strong{GRASS} \link[=tutorial_sessions]{location} using \code{\link[=faster]{faster()}} with the CRS to which you want to transform the object. This means you need to keep track of which \strong{GRASS} "location" you are working in, as multiple rasters and/or vectors can only be used in the function if they are in the same "location."  \emph{This function, \code{project()}, is for projecting \code{GRaster}s or \code{GVector}s between \strong{GRASS} "locations."} You can get the name of the current location with \code{\link[=location]{location()}} (with no arguments), and its coordinate reference system with \code{\link[=crs]{crs()}} or \code{\link[=st_crs]{st_crs()}} (also no arguments).
 }

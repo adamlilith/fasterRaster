@@ -13,19 +13,19 @@
 \arguments{
 \item{x}{A \code{GRaster} or \code{GVector}.}
 
-\item{type}{\code{NULL} or character: Type of datatype to report (\code{GRaster} only):
+\item{type}{(\code{GRaster}s only) \code{NULL} or character: Type of datatype to report (\code{GRaster} only):
 \itemize{
-\item \code{"fasterRaster"} (default): Reports the "\emph{fasterRaster}*" type (factor, float, or double)
+\item \code{"fasterRaster"} (default): Reports the \strong{fasterRaster} type (factor, integer, float, or double)
 \item \code{"terra"}: Report the (inferred) \strong{terra} data type (e.g., INT2U, FLT4S). Please see the table in the \link{tutorial on raster data types} for more information.
-\item \code{"GRASS"}: Will return "CELL" (integer), "FCELL" (floating-point value), or "DCELL" (double=floating point value)
-\item \code{"GDAL"}: See \href{https://gdal.org/user/raster_data_model.html#raster-band}{GDAL: Raster Band}.
+\item \code{"GRASS"}: Will return "CELL" (integer), "FCELL" (floating-point value), or "DCELL" (double-floating point value)
+\item \code{"GDAL"}: See \href{https://gdal.org/user/raster_data_model.html#raster-band}{GDAL: Raster Band}. Please also see the table in the \link{tutorial on raster data types}.
 }}
 }
 \value{
-\code{datatype()} for a \code{GRaster} returns a character. \code{datatype()} for a \code{GVector} returns a data frame, with one row per field.
+\code{datatype()} for a \code{GRaster} returns a character. \code{datatype()} for a \code{GVector} returns a data frame, with one row per field. If the \code{GVector} has no attribute table, the function returns \code{NULL}.
 }
 \description{
-\code{datatype()} returns the \link[=tutorial_raster_data_types]{data type} of a \code{GRaster} or of each column of a \code{GVector}.
+For \code{GRaster}s, \code{datatype()} returns the \link[=tutorial_raster_data_types]{data type}. For \code{GVector}s, \code{datatype()} returns the class of each column of the attribute table.
 }
 \examples{
 \dontrun{
@@ -45,52 +45,40 @@ grassDir <- "C:/Program Files/GRASS GIS 8.3" # Windows
 grassDir <- "/usr/local/grass" # Linux
 
 # setup
+library(sf)
 library(terra)
 
 # example data
 madElev <- fastData("madElev")
-madForest2000 <- fastData("madForest2000")
+madCoast0 <- fastData("madCoast0")
+madRivers <- fastData("madRivers")
+madDypsis <- fastData("madDypsis")
 
 # start GRASS session for examples only
 faster(x = madElev, grassDir = grassDir,
 workDir = tempdir(), location = "examples") # line only needed for examples
 
-# convert SpatRasters to GRasters
-elev <- fast(madElev)
-forest <- fast(madForest2000)
-
 ### GRaster properties
 ######################
 
-# plotting
+# convert SpatRasters to GRasters
+elev <- fast(madElev)
 plot(elev)
 
-# dimensions
 dim(elev) # rows, columns, depths, layers
 nrow(elev) # rows
 ncol(elev) # columns
 ndepth(elev) # depths
 nlyr(elev) # layers
 
-res(elev) # resolution (2D)
-res3d(elev) # resolution (3D)
-zres(elev) # vertical resolution
-xres(elev) # vertical resolution
-yres(elev) # vertical resolution
-zres(elev) # vertical resolution
+res(elev) # resolution
 
-# cell counts
 ncell(elev) # cells
 ncell3d(elev) # cells (3D rasters only)
 
-# number of NA and non-NA cells
-nacell(elev)
-nonnacell(elev)
-
-# topology
 topology(elev) # number of dimensions
-is.2d(elev) # is it 2-dimensional?
-is.3d(elev) # is it 3-dimensional?
+is.2d(elev) # is it 2D?
+is.3d(elev) # is it 3D?
 
 minmax(elev) # min/max values
 
@@ -109,24 +97,8 @@ st_crs(elev)
 ext(elev)
 st_bbox(elev)
 
-# vertical extent (not defined for this raster)
-zext(elev)
-
 # data type
-datatype(elev) # fasterRaster type
-datatype(elev, "GRASS") # GRASS type
-datatype(elev, "terra") # terra type
-datatype(elev, "GDAL") # GDAL type
-
-is.integer(elev)
-is.float(elev)
-is.double(elev)
-is.factor(elev)
-
-# convert data type
-as.integer(elev) # integer; note that "elev" is already of type "integer"
-as.float(elev) # floating-precision
-as.double(elev) # double-precision
+datatype(elev)
 
 # assigning
 copy <- elev
@@ -137,35 +109,92 @@ copy
 rasts <- c(elev, forest)
 rasts
 
+# adding a raster "in place"
+add(rasts) <- ln(elev)
+rasts
+
 # subsetting
 rasts[[1]]
-rasts[["madForest2000"]]
+rasts[["forest"]]
 
-# replacing
-rasts[[2]] <- 2 * forest
-
-# adding layers
-rasts[[4]] <- elev > 500 # add a layer
-rasts <- c(rasts, sqrt(elev)) # add another
-add(rasts) <- ln(elev)
-
-# names
-names(rasts)
-names(rasts) <- c("elev_meters", "2_x_forest", "high_elevation", "sqrt_elev", "ln_elev")
-rasts
-
-# remove a layer
-rasts[["2_x_forest"]] <- NULL
-rasts
+# assigning
+rasts[[4]] <- elev > 500
 
 # number of layers
 nlyr(rasts)
 
-# cell frequencies
-freq(elev)
-freq(2 * elev)
-freq(rasts)
-freq(rasts, value = 1)
+# names
+names(rasts)
+names(rasts) <- c("elev_meters", "forest", "ln_elev", "high_elevation")
+rasts
+
+### GVector properties
+######################
+
+# convert sf vectors to GVectors
+coast <- fast(madCoast4)
+rivers <- fast(madRivers)
+dypsis <- fast(madDypsis)
+
+# extent
+ext(rivers)
+st_bbox(rivers) # extent
+
+W(rivers) # western extent
+E(rivers) # eastern extent
+S(rivers) # southern extent
+N(rivers) # northern extent
+top(rivers) # top extent
+bottom(rivers) # bottom extent
+
+# coordinate reference system
+crs(rivers)
+st_crs(rivers)
+
+# column names and data types
+names(coast)
+datatype(coast)
+
+# session information
+location(rivers) # GRASS location
+mapset(rivers) # GRASS mapset
+
+# points, lines, or polygons?
+geomtype(dypsis)
+geomtype(rivers)
+geomtype(coast)
+
+is.points(dypsis)
+is.points(coast)
+
+is.lines(rivers)
+is.lines(dypsis)
+
+is.polygons(coast)
+is.polygons(dypsis)
+
+# dimensions
+nrow(rivers) # how many spatial features
+ncol(rivers) # hay many columns in the data frame
+
+# 2- or 3D
+topology(rivers) # dimensionality
+is.2d(elev) # is it 2D?
+is.3d(elev) # is it 3D?
+
+# refresh values from GRASS
+# (reads values from GRASS... does not appear to do anything in this case)
+refresh(elev)
+
+### operations on GVectors
+##########################
+
+# convert to data frame
+as.data.frame(rivers)
+
+# refresh values from GRASS
+# (reads values from GRASS... does not appear to do anything in this case)
+refresh(rivers)
 
 # IMPORTANT #3: Revert back to original GRASS session if needed.
 restoreSession(opts.)

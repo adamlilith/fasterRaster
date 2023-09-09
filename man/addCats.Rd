@@ -24,7 +24,7 @@
 
 \item{layer}{Numeric integers, logical vector, or character: Layer(s) to which to add or from which to drop levels.}
 
-\item{level}{}
+\item{level}{Character, numeric, integer, or logical vector: Level(s) to drop. If a character, then the labels are used to identify levels to drop. If numeric or integer, then the values are used. If logical, then levels that correspond to \code{TRUE} are dropped. For logical vectors, if the vector is shorter than the number of rows in the raster's "levels" table, the vector is recycled.}
 }
 \value{
 A \code{GRaster}. The "levels" table of the raster is modified.

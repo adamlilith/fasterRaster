@@ -16,7 +16,7 @@
 \code{minmax()} returns a numeric matrix, and \code{minmax(..., levels = TRUE)} returns a \code{data.frame} with category names. In the latter case, non-categorical rasters will have \code{NA} values.
 }
 \description{
-\code{minmax()} reports the minimum and maximum values across all non-NA cells of a \code{GRaster}. When the \code{levels} argument is \code{TRUE} and the raster is categorical, the function` reports the "lowest" and "highest" category values in a \link[=tutorial_raster_data_types]{categorical raster}.
+\code{minmax()} reports the minimum and maximum values across all non-NA cells of a \code{GRaster}. When the \code{levels} argument is \code{TRUE} and the raster is categorical, the function reports the "lowest" and "highest" category values in a \link[=tutorial_raster_data_types]{categorical raster}.
 }
 \examples{
 \dontrun{

@@ -8,7 +8,7 @@
 An object of class \code{SpatRaster} in unprojected (WGS84) coordinates.
 }
 \source{
-\url{http://due.esrin.esa.int}{http://due.esrin.esa.int}
+\href{http://due.esrin.esa.int}}{http://due.esrin.esa.int}
 }
 \description{
 Raster of land cover for an eastern portion of Madagascar. Note that the land cover classes have been simplified, so this raster should \emph{not} be used for "real" analyses.
@@ -59,9 +59,9 @@ nlevels(madCover) # number of categories
 catNames(madCover) # names of categories table
 }
 \references{
-Arino O., P. Bicheron, F. Achard, J. Latham, R. Witt and J.-L. Weber. 2008. GlobCover: The most detailed portrait of Earth. European Space Agency Bulletin 136:25-31. \url{http://due.esrin.esa.int}{http://due.esrin.esa.int}.
+Arino O., P. Bicheron, F. Achard, J. Latham, R. Witt and J.-L. Weber. 2008. GlobCover: The most detailed portrait of Earth. European Space Agency Bulletin 136:25-31. \href{http://due.esrin.esa.int}}{http://due.esrin.esa.int}.
 }
 \seealso{
-\link{madCoverCats}, \link[=tutoral_raster_data_types]{raster data types}
+\link{madCoverCats}, \link[=tutorial_raster_data_types]{raster data types}
 }
 \keyword{Madagascar}

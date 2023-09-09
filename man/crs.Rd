@@ -4,15 +4,18 @@
 \alias{crs,missing-method}
 \alias{crs}
 \alias{crs,GSession-method}
-\alias{st_crs,GSession-method}
+\alias{st_crs,missing-method}
 \alias{st_crs}
+\alias{st_crs,GSession-method}
 \title{Coordinate reference system of a GRaster or GVector}
 \usage{
 \S4method{crs}{missing}(x)
 
 \S4method{crs}{GSession}(x)
 
-\S4method{st_crs}{GSession}(x)
+\S4method{st_crs}{missing}(x, ...)
+
+\S4method{st_crs}{GSession}(x, ...)
 }
 \arguments{
 \item{x}{An object that inherits from a \code{GSession} (i.e., a \code{GRaster} or \code{GVector}) or missing. If missing, the coordinate reference system of the currently active \strong{GRASS} \link[=tutorial_sessions]{location} is reported.}

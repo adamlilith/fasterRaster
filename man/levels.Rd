@@ -46,6 +46,13 @@ Values returned are:
 }
 \description{
 \code{GRaster}s can represent \link[=tutorial_raster_data_types]{categorical data}. Cell values are actually integers, each corresponding to a category, such as "desert" or "wetland." A categorical raster is associated with a table that matches each value to a category name. The table must be \code{NULL} (i.e., no categories--so not a categorical raster), or have at least two columns. The first column must have integers and represent raster values. One or more subsequent columns must have category labels. The column with these labels is the "active category".
+\itemize{
+\item \code{levels()} displays the "levels" table of a raster (just the value and active category columns)
+\item \code{cats()} displays the entire "levels" table of a raster
+\item \verb{levels()<-} (re)assigns the "levels" table to each layer of a raster. Assigning a "levels" table to an integer raster makes it a categorical raster.
+\item \code{categories()} (re)assigns the "levels" table to specific layer(s) of a raster.
+\item For a complete list of functions relevant to categorical rasters, open the package help index using \code{?fasterRaster}, then see the \strong{Functions operating on categorical rasters} section.
+}
 }
 \examples{
 \dontrun{
@@ -160,5 +167,5 @@ removeSession("examples")
 }
 }
 \seealso{
-\code{\link[terra:factors]{terra::levels()}}, \link[terra:factors]{terra::levels<-}, \code{\link[terra:factors]{terra::cats()}}, \code{\link[terra:factors]{terra::categories()}}, \link[=tutorial_raster_data_types]{categorical rasters} in \strong{fasterRaster}
+\code{\link[terra:factors]{terra::levels()}}, \link{levels<-}, \code{\link[terra:factors]{terra::cats()}}, \code{\link[terra:factors]{terra::categories()}}, \link[=tutorial_raster_data_types]{categorical rasters} in \strong{fasterRaster}
 }

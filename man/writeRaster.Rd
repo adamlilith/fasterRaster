@@ -20,10 +20,11 @@
    \code{integer} \tab \code{INT1U} \tab \code{CELL} \tab \code{Byte} \tab Integer values from 0 to 255 \cr
    \code{integer} \tab \code{INT2U} \tab \code{CELL} \tab \code{UInt16} \tab Integer values from 0 to 65,534 \cr
    \code{integer} \tab \code{INT2S} \tab \code{CELL} \tab \code{Int16} \tab Integer values from -32,767 to -32,767 \cr
+   \code{integer} \tab na \tab \code{CELL} \tab \code{Unt32} \tab Integer values from 0 to 4,294,967,295 \cr
    \code{integer} \tab \code{INT4S} \tab \code{CELL} \tab \code{Int32} \tab Integer values from -2,147,483,647 to 2,147,483,647 \cr
    \code{float} \tab \code{FLT4S} \tab \code{FCELL} \tab \code{Float32} \tab Values from -3.4e+38 to 3.4e+38, including decimal values \cr
-   \code{double} \tab \code{FLT8S} \tab \code{DCELL} \tab \code{Float64} \tab Values from -1.7e+308 to 1.7e+308, including decimal values \cr
-   \code{factor} \tab \code{INT}* \tab \code{CELL} \tab * \tab Integer values corresponding to categories \cr
+   \code{double} \tab \code{FLT8S} \tab \code{DCELL} \tab \code{Float64} \tab Values from -1.79e+308 to 1.79e+308, including decimal values \cr
+   \code{factor} \tab \code{INT}* \tab \code{CELL} \tab \verb{INT*} \tab Integer values corresponding to categories \cr
 }
 
 
@@ -31,7 +32,7 @@
 
 \item{overwrite}{Logical: If \code{FALSE} (default), do not save over existing file(s).}
 
-\item{warn}{Logical: If \code{TRUE} (default), display a warning if the \code{datatype} argument does not match the value given by \link{datatype(x, "GDAL")}.}
+\item{warn}{Logical: If \code{TRUE} (default), display a warning if the \code{datatype} argument does not match the value given by \code{datatype(x, "GDAL")}.}
 
 \item{...}{Additional arguments. These can include:
 \itemize{

@@ -24,6 +24,9 @@
 \alias{top,GSpatial-method}
 \alias{bottom,GSpatial-method}
 \alias{bottom}
+\alias{st_bbox,GSpatial-method}
+\alias{st_bbox}
+\alias{st_bbox,missing-method}
 \title{Spatial bounds of a GRaster or GVector}
 \usage{
 \S4method{ext}{missing}(x, vector = FALSE)
@@ -57,6 +60,10 @@
 \S4method{bottom}{GSpatial}(x, char = FALSE)
 
 \S4method{bottom}{GSpatial}(x, char = FALSE)
+
+\S4method{st_bbox}{GSpatial}(obj, ...)
+
+\S4method{st_bbox}{missing}(obj, ...)
 }
 \arguments{
 \item{x, obj}{An object that inherits from \code{GSpatial} (i.e., a \code{GRaster} or \code{GVector}) or missing. If missing, then the horizontal or vertical extent of the currently active \link[=tutorial_regions]{region} is returned.}
@@ -81,7 +88,7 @@ These functions return the extent of a \code{GSpatial} object (\code{GRegions}, 
 \itemize{
 \item \code{ext()} and \code{st_bbox()}: 2-dimensional spatial extent (i.e., westernmost/easternmost and southernmost/northernmost coordinates of area represented).\cr\cr
 \item \code{zext()}: Vertical extent (i.e., topmost and bottom-most elevation of the volume represented). The vertical extent is not \code{NA} only if the object is 3-dimensional.\cr\cr
-\item \code{west()}, \code{east()}, \code{north()}, \code{south()}: Coordinates of one side of horizontal extent.\cr\cr
+\item \code{W()}, \code{E()}, \code{N()}, \code{S()}: Coordinates of one side of horizontal extent.\cr\cr
 \item \code{top()} and \code{bottom()}: Coordinates of top and bottom of vertical extent.\cr\cr
 }
 }

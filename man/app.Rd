@@ -3,15 +3,11 @@
 \name{app,GRaster-method}
 \alias{app,GRaster-method}
 \alias{app}
-\alias{appFuns,logical-method}
-\alias{appFuns}
 \alias{appCheck,GRaster,character-method}
 \alias{appCheck}
 \title{Apply a function to a set of rasters}
 \usage{
 \S4method{app}{GRaster}(x, fun, ensure = "auto", seed = NULL)
-
-\S4method{appFuns}{logical}(show = FALSE)
 
 \S4method{appCheck}{GRaster,character}(x, fun, msgOnGood = TRUE, failOnBad = TRUE)
 }
@@ -22,9 +18,10 @@
 \itemize{
 \item It must begin with an equals sign ("\code{=}"").
 \item It must use typical arithmetic operators like \code{+}, \code{-}, \code{*}, \code{/} and/or functions that can be seen using \code{appFuns(TRUE)}.
-\item It has no functions that have the same names as the \code{\link[=names]{names()}} of any of the raster layers. Note that \code{x} and \code{y} are forbidden names :(
-The help page for \code{r.mapcalc} on the \strong{GRASS} website provides more details.
-}}
+\item The \code{\link[=names]{names()}} of the rasters do not match any of the functions in the \code{appFuns(TRUE)} table. Note that \code{x} and \code{y} are forbidden names :(
+}
+
+The help page for \code{r.mapcalc} on the \strong{GRASS} website provides more details.}
 
 \item{ensure}{Character: This ensures that rasters are treated as a certain type before they are operated on. This is useful when using rasters that have all integer values, which \strong{GRASS} can assume represent integers, even if they are not supposed to. In this case, the output of operations on this raster might be an integer if otherwise not corrected. Partial matching is used, and options include:
 \itemize{
@@ -36,31 +33,31 @@ The help page for \code{r.mapcalc} on the \strong{GRASS} website provides more d
 
 \item{seed}{Numeric integer vector or \code{NULL} (default): A number for the random seed. Used only for \code{app()} function \code{rand()}, that generates a random number. If \code{NULL}, a seed will be generated. Defining the seed is useful for replicating a raster made with \code{rand()}. This must be an integer!}
 
-\item{show}{Logical (function \code{appFuns()}):
-\itemize{
-\item \code{FALSE} (default): Return a \code{data.frame} or \code{data.table} with definitions of functions.
-\item \code{TRUE}: Open a searchable, sortable \strong{shiny} table in a browser.
-}}
-
 \item{msgOnGood}{Logical (function \code{appCheck()}): If \code{TRUE} (default), display a message if no overt problems with the raster names and formula are detected.}
 
 \item{failOnBad}{Logical (function \code{appCheck()}): If \code{TRUE} (default), fail if overt problems with raster names and the formula are detected.}
+
+\item{warn}{Logical (function \code{appFuns()}): If \code{TRUE} (default), display a warning when \code{allFuns()} is not called interactively.}
 }
 \value{
 A \code{GRaster}.
 }
 \description{
-\code{app()} applies a function to a set of "stacked" rasters. \code{appFuns()} provides a table of \strong{GRASS} functions and their equivalents from the \strong{terra} and \strong{sf} packages. \code{appCheck()} tests whether a formula supplied to \code{app()} has any "forbidden" function calls.
+\code{app()} applies a function to a set of "stacked" rasters.
 
-\code{app()} function operates in a manner slightly different from \code{\link[terra:app]{terra::app()}}. The function to be applied \emph{must} be written as a character string. For example, if the raster had layer names "\code{x1}" and "\code{x2}", then the function might be like \code{"= max(sqrt(x1), log(x2))"}. Rasters \strong{cannot} have the same names as functions used in the formula. In this example, the rasters could not be named "max", "sqrt", or "log".
+\code{appFuns()} provides a table of \strong{GRASS} functions that can be used by \code{app()} and their equivalents in \strong{R}.
 
-The \code{app()} function will automatically check for raster names that appear also to be functions that appear in the formula, but the \code{appCheck()} function can be applied to the raster stack plus the formula to do this outside of \code{app()}. You can obtain a list of functions using \code{appFuns()}. Note that these are sometimes different from how they are applied in \strong{R}.
+\code{appCheck()} tests whether a formula supplied to \code{app()} has any "forbidden" function calls.
 
-TIPS:
+The \code{app()} function operates in a manner slightly different from \code{\link[terra:app]{terra::app()}}. The function to be applied \emph{must} be written as a character string. For example, if the raster had layer names "\code{x1}" and "\code{x2}", then the function might be like \code{"= max(sqrt(x1), log(x2))"}. Rasters \strong{cannot} have the same names as functions used in the formula. In this example, the rasters could not be named "max", "sqrt", or "log".
+
+The \code{app()} function will automatically check for raster names that appear also to be functions that appear in the formula. However, you can check a formula before running \code{app()} by using the \code{appCheck()} function. You can obtain a list of \code{app()} functions using \code{appFuns()}. Note that these are sometimes different from how they are applied in \strong{R}.
+
+Tips:
 \itemize{
 \item In \strong{GRASS}, \code{null()} is the same as \code{NA} in \strong{R}.
-\item If you want to calculate values using while removing \code{NA} (or \code{null}) values, see the functions that begin with \code{n} (like \code{nmean}).
-\item Be mindful of the data type that a function returns. In \strong{GRASS}, these are \code{CELL} (integer), \code{FCELL} (floating point values--precise to about the 7th decimal place), and \code{DCELL} (double-floating point values--precise to about the 15th decimal place). In cases where you want to ensure a raster to be treated like a float or double data type raster, wrap the raster in the \code{float()} or \code{double()} functions to ensure it is treated as such. This is especially useful if the raster might be assumed to be the \code{CELL} type because it only contains integer values. You can get the data type of a raster using \code{\link[=datatype]{datatype()}}. You can change the data type of a \code{GRaster} using \code{\link[=as.int]{as.int()}}, \code{\link[=as.float]{as.float()}}, and \code{\link[=as.doub]{as.doub()}}. Note that \link[=tutorial_raster_data_types]{categorical} are really \code{CELL} rasters with an associated "levels" table. You can also change a \code{CELL} raster to a \code{FCELL} raster by adding then subtracting a decimal value, as in \code{x - 0.1 + 0.1}.
+\item If you want to calculate values using while ignoring \code{NA} (or \code{null}) values, see the functions that begin with \code{n} (like \code{nmean}).
+\item Be mindful of the data type that a function returns. In \strong{GRASS}, these are \code{CELL} (integer), \code{FCELL} (floating point values--precise to about the 7th decimal place), and \code{DCELL} (double-floating point values--precise to about the 15th decimal place). In cases where you want to ensure a raster to be treated like a float or double data type raster, wrap the raster in the \code{float()} or \code{double()} functions to ensure it is treated as such. This is especially useful if the raster might be assumed to be the \code{CELL} type because it only contains integer values. You can get the data type of a raster using \code{\link[=datatype]{datatype()}} with the \code{type} argument set to \code{GRASS}. You can change the data type of a \code{GRaster} using \code{\link[=as.int]{as.int()}}, \code{\link[=as.float]{as.float()}}, and \code{\link[=as.doub]{as.doub()}}. Note that \link[=tutorial_raster_data_types]{categorical} rasters are really \code{CELL} (integer) rasters with an associated "levels" table. You can also change a \code{CELL} raster to a \code{FCELL} raster by adding then subtracting a decimal value, as in \code{x - 0.1 + 0.1}.
 \item The \code{rand()} function returns \code{CELL} (integer) values by default. If you want non-integer values, use the tricks mentioned above to ensure non-integer values. For example, the \code{\link[=runifRast]{runifRast()}} function's expression is (essentially) \verb{= float(rand(0 + 0.1, 1 + 0.1) - 0.1)}
 }
 }

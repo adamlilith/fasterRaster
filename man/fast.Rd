@@ -67,9 +67,9 @@ A \code{GRaster} or \code{GVector}.
 \description{
 \code{fast()} imports a raster or vector into the active \strong{GRASS} session and from it creates a \code{GRaster} or \code{GVector}.
 
-Rasters can vectors can be imported from \code{SpatRaster}s, \code{SpatVector}s, or \code{sf} objects, or from files on disk. \strong{GRASS} supports loading from disk a variety of raster formats (see the \strong{GRASS} manual page for \code{r.in.gdal}) and vector formats (see the \strong{GRASS} manual page for \code{v.in.ogr}), though not all of them will work with this function.
+Rasters and vectors can be imported from \code{SpatRaster}s, \code{SpatVector}s, or \code{sf} objects, or from files on disk. \strong{GRASS} supports loading from disk a variety of raster formats (see the \strong{GRASS} manual page for \code{r.in.gdal}) and vector formats (see the \strong{GRASS} manual page for \code{v.in.ogr}), though not all of them will work with this function.
 
-Rasters can have "levels" (i. have categories associated with values). This can be specified using the \code{levels} argument. If a \code{SpatRaster} already has levels associated with it, these should be attached to the \code{GRaster} automatically. Vectors can also have attribute tables, though they do not need to.
+Rasters can have "levels" (i. have categories associated with values). This can be specified using the \code{levels} argument. If a \code{SpatRaster} already has levels associated with it, these will be attached to the \code{GRaster} automatically. Vectors can also have attribute tables, though they do not need to. If they do, there must be one row per geometry (point, line, or polygon).
 
 The \code{fast()} function will project a raster or vector to the current "\link[=tutorial_sessions]{location's}" coordinate reference system. Users can specify how to do this using the \code{method}, \code{fallback}, and \code{wrap} arguments.
 }

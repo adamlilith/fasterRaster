@@ -100,7 +100,7 @@ Other functions:\cr
 \code{\link[=global]{global()}}: Summary statistics across cells of each raster layer\cr
 \code{\link[=shade]{hillshade()}}: Create a hillshade raster\cr
 \code{\link[=horizonHeight]{horizonHeight()}}: Horizon height\cr
-\link{levels()<-}: Assign levels to a categorical raster\cr
+\link{levels<-}: Assign levels to a categorical raster\cr
 \code{\link[=longlat]{longlat()}}: Create longitude/latitude rasters.\cr
 \code{\link[=mask]{mask()}}: Remove values in a raster based on values in another raster or vector\cr
 \code{\link[=merge]{merge()}}: Combine two or more rasters with different extents and fill in \code{NA}s\cr
@@ -122,9 +122,9 @@ Other functions:\cr
 \subsection{Functions operating on categorical rasters}{
 
 \code{\link[=activeCat]{activeCat()}}: Column that defines category labels\cr
-\link{activeCat()<-}: Set column that defines category labels\cr
+\link{activeCat<-}: Set column that defines category labels\cr
 \code{\link[=addCats]{addCats()}}: Add columns to a "levels" table\cr
-\link{addCats()<-}: Add new rows (levels)\cr
+\link{addCats<-}: Add new rows (levels)\cr
 \code{\link[=categories]{categories()}}: Set "levels" table for specific layers of a categorical raster\cr
 \code{\link[=catNames]{catNames()}}: Names of each "levels" table\cr
 \code{\link[=cats]{cats()}}: "Levels" table of a categorical raster\cr
@@ -194,7 +194,7 @@ Other functions:\cr
 \code{\link[=as.int]{as.int()}}: Convert a \code{GRaster} to an integer raster (*\strong{GRASS} data type \code{CELL})\cr
 \code{\link[=as.points]{as.points()}}, \code{\link[=as.lines]{as.lines()}}, and \code{\link[=as.polygons]{as.polygons()}}: Convert a \code{GRaster} to a \code{GVector}\cr
 \code{\link[=fast]{fast()}}: Convert a \code{SpatRaster}, \code{SpatVector}, or \code{sf} vector to a \code{GRaster} or \code{GVector}, or load one from a file\cr
-\code{\link[=categories]{categories()}} and \link{levels()<-}: Convert an integer raster to a categorical ("factor") raster.
+\code{\link[=categories]{categories()}} and \link{levels<-}: Convert an integer raster to a categorical ("factor") raster.
 \code{\link[=rast]{rast()}}: Convert a \code{GRaster} to a \code{SpatRaster}\cr
 \code{\link[=rasterize]{rasterize()}}: Convert a \code{GVector} to a \code{GRaster}\cr
 \code{\link[=st_as_sf]{st_as_sf()}}: Convert a \code{GVector} to a \code{sf} vector\cr
@@ -210,7 +210,7 @@ Other functions:\cr
 \code{\link[=dropRows]{dropRows()}}: Remove rows from a \code{data.frame} or \code{data.table}\cr
 \code{\link[=grassInfo]{grassInfo()}}: \strong{GRASS} version and citation\cr
 \code{\link[=pmatchSafe]{pmatchSafe()}}: Partial matching of strings with error checking\cr
-\code{\link[=replaceNAs]{replaceNAs()}}: Replace \code{NA}s in columns of a \code{data.table} or \code{data.frame}, or in a vector\ce
+\code{\link[=replaceNAs]{replaceNAs()}}: Replace \code{NA}s in columns of a \code{data.table} or \code{data.frame}, or in a vector\cr
 \code{\link[=rstring]{rstring()}}: Create a string statistically likely to be unique\cr
 }
 
@@ -237,7 +237,7 @@ Other functions:\cr
 \link{madChelsa}: Climate rasters for of a portion of eastern Madagascar\cr
 \link{madCoast0}, \link{madCoast4}, and \link{madCoast}: Borders of an eastern portion of Madagascar\cr
 \link{madCover}: Land cover raster\cr
-\link{madCoverTable}: Table of land cover classes\cr
+\link{madCoverCats}: Table of land cover classes\cr
 \link{madDypsis}: Specimens records of species in the genus \emph{Dypsis}\cr
 \link{madElev}: Elevation raster\cr
 \link{madForest2000} and \link{madForest2014}: Forest cover in 2000 and 2014\cr
