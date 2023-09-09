@@ -132,10 +132,10 @@ methods::setMethod(
     } # if y is an object with an extent
 
     # new extent coordinates
-    w <- west(x) - y[1L] * ewres
-    e <- east(x) + y[2L] * ewres
-    s <- south(x) - y[3L] * nsres
-    n <- north(x) + y[4L] * nsres
+    w <- W(x) - y[1L] * ewres
+    e <- E(x) + y[2L] * ewres
+    s <- S(x) - y[3L] * nsres
+    n <- N(x) + y[4L] * nsres
 
     w <- as.character(w)
     e <- as.character(e)

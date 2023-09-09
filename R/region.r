@@ -250,10 +250,10 @@ methods::setMethod(
 		.restore(x)
 		initials <- region()
 
-		w <- west(x, TRUE)
-		e <- east(x, TRUE)
-		s <- south(x, TRUE)
-		n <- north(x, TRUE)
+		w <- W(x, TRUE)
+		e <- E(x, TRUE)
+		s <- S(x, TRUE)
+		n <- N(x, TRUE)
 		t <- top(x, TRUE)
 		b <- bottom(x, TRUE)
 
