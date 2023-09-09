@@ -44,17 +44,17 @@ methods::setMethod(
 		do.call(rgrass::execGRASS, args = args)
 
 		reg <- region()
-		w[i] <- west(reg)
-		e[i] <- east(reg)
-		s[i] <- south(reg)
-		n[i] <- north(reg)
+		w[i] <- W(reg)
+		e[i] <- E(reg)
+		s[i] <- S(reg)
+		n[i] <- N(reg)
 	
 	}
 
-	wDelta <- w - west(x)
-	eDelta <- e - east(x)
-	sDelta <- s - south(x)
-	nDelta <- n - north(x)
+	wDelta <- w - W(x)
+	eDelta <- e - E(x)
+	sDelta <- s - S(x)
+	nDelta <- n - N(x)
 
 	w <- w[which.min(wDelta)]
 	e <- e[which.min(eDelta)]
@@ -66,10 +66,10 @@ methods::setMethod(
 
 	if (pad > 0) {
 	
-		w <- max(w - pad * ewres, west(x))
-		e <- min(e + pad * ewres, east(x))
-  		s <- max(s - pad * nsres, south(x))
-		n <- min(n + pad * nsres, north(x))
+		w <- max(w - pad * ewres, W(x))
+		e <- min(e + pad * ewres, E(x))
+  		s <- max(s - pad * nsres, S(x))
+		n <- min(n + pad * nsres, N(x))
 	
 	}
 
