@@ -35,6 +35,8 @@
 #'
 #' @param wrap Logical (rasters only): When projecting rasters that "wrap around" (i.e., whole-world rasters or rasters that have edges that actually circle around to meet on the globe), `wrap` should be `TRUE` to avoid removing rows and columns from the "edge" of the map. The default is `FALSE`.
 #'
+#' @param snap `NULL` (default) or a positive numeric value (vectors only): Sometimes, polygons created in other software are topologically incorrect--the borders of adjacent polygons may cross one another, or there may be small gaps between them. These errors can be corrected by slightly moving vertices. The value of `snap` indicates how close vertices need to be for them to be shifted to to the same location for a correct topology. Small values are recommended, and units are in map units (usually meters). By default, this is `NULL`, meaning no snapping is done. Vectors that have been snapped may need to be cleaned using [cleanGeom()] with the `break`, `duplicated`, and `smallAngles` tools.
+#'
 #' @param warn Logical: If `TRUE`, display a warning when projecting the vector or raster.
 #'
 #' @details When projecting a raster, the "fallback" methods in `r.import` are actually used, even though the `method` argument takes the strings for non-fallback methods. See the manual page for the `r.import` **GRASS** module.
@@ -59,6 +61,7 @@ methods::setMethod(
 		method = NULL,
 		fallback = TRUE,
 		wrap = FALSE,
+		snap = NULL,
 		warn = TRUE
 	) {
 
@@ -224,6 +227,8 @@ cat("Time-consuming step here for large rasters^^^")
 				flags = c("quiet", "overwrite"),
 				intern = TRUE
 			)
+			
+			if (!is.null(snap)) args$snap <- snap
 
 		} # vector on disk needs projected
 
@@ -334,7 +339,7 @@ methods::setMethod(
 methods::setMethod(
 	"fast",
 	signature(x = "SpatVector"),
-	function(x, warn = TRUE) .fastVector(x, warn = warn)
+	function(x, snap = NULL, warn = TRUE) .fastVector(x, snap = snap, warn = warn)
 )
 
 #' @rdname fast
@@ -343,13 +348,14 @@ methods::setMethod(
 methods::setMethod(
 	"fast",
 	signature(x = "sf"),
-	function(x, warn = TRUE) .fastVector(x, warn = warn)
+	function(x, snap = NULL, warn = TRUE) .fastVector(x, snap = snap, warn = warn)
 )
 
 # 1. Write vector to disk (if needed)
 # 2. Send to fast(signature = "character")
 .fastVector <- function(
 	x,		# SpatVector or sf
+	snap,	# NULL or numeric
 	warn	# logical
 ) {
     
@@ -365,6 +371,6 @@ methods::setMethod(
 		vectFile <- terra::sources(x)
 	}
     
-	fast(x = vectFile, rastOrVect = "vector", table = table, warn = warn)
+	fast(x = vectFile, rastOrVect = "vector", table = table, snap = snap, warn = warn)
 	
 }
