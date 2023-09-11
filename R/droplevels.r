@@ -77,6 +77,6 @@ methods::setMethod(
 	} # EOF
 )
 
-#' @importFrom base droplevels
-#' @export
-base::droplevels
+# #' @importFrom base droplevels
+# #' @export
+# base::droplevels
