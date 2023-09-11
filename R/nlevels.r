@@ -29,12 +29,12 @@ setMethod(
 #'
 #' @description Counts number of levels in a character string (specifically, the empty string `""`), a `data.frame`, `data.table`, or list of `data.frame`s or `data.table`s or empty strings.
 #'
-#' @param x A `data.frame`, `data.table`, an empty string, or a list thereof.
+#' @param x A `GRaster`, `SpatRaster`, *or* a `data.frame`, `data.table`, an empty string, or a list thereof.
 #'
 #' @noRd
 .nlevels <- function(x) {
 
-	if (inherits(x, "SpatRaster")) x <- levels(x)
+	if (inherits(x, c("SpatRaster", "GRaster"))) x <- levels(x)
 	
 	if (!is.list(x)) x <- list(x)
 	n <- rep(NA_integer_, length(list))
