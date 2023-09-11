@@ -64,7 +64,7 @@
 #' - Dispersion: [sd()], [var()], [sdpop()], [varpop()], [nunique()], [range()], [quantile()], [skewness()], [kurtosis()]
 #' - Extremes: [min()], [max()], [which.min()], [which.max()] \cr
 #' 
-#' Other functions:\cr
+#' ## Functions that operate on or create `GRaster`s
 #' `[<-` ([assign][subset_assign]): Assign values to a raster's cells\cr
 #' `[[` ([subset][subset_assign]): Subset a raster with multiple layers\cr
 #' `[[<-` ([assign][subset_assign]): Replace or add layers to a raster\cr
@@ -87,6 +87,7 @@
 #' [fractalRast()]: Create a fractal raster\cr
 #' [global()]: Summary statistics across cells of each raster layer\cr
 #' [`hillshade()`][shade]: Create a hillshade raster\cr
+#' [hist()]: Histogram of raster values\cr
 #' [horizonHeight()]: Horizon height\cr
 #' [levels<-]: Assign levels to a categorical raster\cr
 #' [longlat()]: Create longitude/latitude rasters.\cr
@@ -123,7 +124,7 @@
 #' [minmax()]: "Lowest" and "highest" category values of categorical rasters (when argument `levels = TRUE`)\cr
 #' [nlevels()]: Number of levels\cr
 #'
-#' ## Properties of **fasterRaster** vectors (`GVectors`)
+#' ## Properties of **fasterRaster** vectors (`GVector`s)
 #' [crs()]: Coordinate reference system\cr
 #' [datatype()]: Data type of fields\cr
 #' [dim()]: Number of geometries and columns\cr
@@ -144,10 +145,11 @@
 #' [topology()]: Dimensionality (2D or 3D)\cr
 #' [zext()]: Vertical extent\cr
 #'
-#' ## Functions that operate on or create `GVectors`
+#' ## Functions that operate on or create `GVector`s
 #' `[` ([subset][subset_assign]): Select geometries/rows of a vector's data table\cr
 #' `[[` ([subset][subset_assign]): Subset columns of a vector's data table\cr
-#' [as.data.frame()]: Convert a vector to a `data.frame`\cr
+#' [as.data.frame()]: Convert a vector's attribute table to a `data.frame`\cr
+#' [as.data.table()]: Convert a vector's attribute table to a `data.table`\cr
 #' [as.points()]: Extract vertex coordinates from a "lines" or "polygons" `GVector`\cr
 #' [buffer()]: Create a polygon around/inside a vector\cr
 #' [cleanGeom()]: Fix undesirable geometries of a vector\cr
@@ -220,7 +222,7 @@
 #' [Raster data types][tutorial_raster_data_types]\cr
 #' [Regions][tutorial_regions]\cr
 #' [Undocumented functions][tutorial_undocumented_functions]\cr
-#
+#'
 #' @docType package
 #' @author Adam B. Smith
 #' @name fasterRaster
