@@ -46,18 +46,43 @@ methods::setMethod(
 	} # EOF
 )
 
-#' @importFrom terra activeCat
-#' @export
-terra::activeCat
+# # # #' @importFrom terra activeCat
+# # # #' @export
+# # # terra::activeCat
 
 #' @aliases activeCat<-
 #' @rdname activeCat
 #' @exportMethod activeCat<-
 methods::setMethod(
 	f = "activeCat<-",
-	signature = c(x = "GRaster"),
-	function(x, value, layer = 1) {
-	
+	signature = c(x = "GRaster", value = "numeric"),
+	function(x, layer = 1, value) {
+		.activeCatAssign(x = x, layer = layer, value = value)
+	} # EOF
+)
+
+#' @aliases activeCat<-
+#' @rdname activeCat
+#' @exportMethod activeCat<-
+methods::setMethod(
+	f = "activeCat<-",
+	signature = c(x = "GRaster", value = "integer"),
+	function(x, layer = 1, value) {
+		.activeCatAssign(x = x, layer = layer, value = value)
+	} # EOF
+)
+
+#' Worker function for activeCat<-
+#'
+#' @param x A `GRaster`.
+#' @param layer Numeric, integer, character, logical.
+#' @param value Numeric or integer.
+#'
+#' @returns A `GRaster`.
+#'
+#' @noRd
+.activeCatAssign <- function(x, layer, value) {
+
 	layer <- .layerIndex(layer, x, recycle = TRUE)
 
 	facts <- is.factor(x)
@@ -77,5 +102,4 @@ methods::setMethod(
 	methods::validObject(x)
 	x
 
-	} # EOF
-)
+}
