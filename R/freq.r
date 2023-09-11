@@ -5,7 +5,7 @@
 #' @param x A `GRaster`.
 #' @param digits Numeric integer: Number of digits by which to round raster values.
 #' @param value Numeric or `NULL` (default): If numeric, only cells with this value will be counted. If `NULL`, all values will be counted.
-#' @param bins Positive numeric integer: Number of bins in which to divide values of a raster with continuous values.
+#' @param bins Positive numeric integer: Number of bins in which to divide values of `numeric` rasters. The default is 100. For `integer` and categorical rasters, each value is tallied.
 #'
 #' @returns A `data.frame` or a named `list` of `data.frame`s, one per layer in `x`.
 #'
@@ -75,7 +75,7 @@ methods::setMethod(
 			
 			n <- length(data)
 
-			freqs <- data.table::data.table(value = rep(NA_character_, n), count = rep(NA_character_, n))
+			freqs <- data.table::data.table(value = rep(NA_character_, n), count = rep(NA_integer_, n))
 
 			for (j in seq_along(data)) {
 				freqs$value[j] <- data[[j]][1L]
@@ -98,11 +98,13 @@ methods::setMethod(
 
 			}
 		
+	  		data.table::setkeyv(freqs, "value")
+
 		# continuous data
 		} else {
 	
 			n <- length(data)
-			freqs <- data.table::data.table(from = rep(NA_real_, n), to = rep(NA_real_, n), count = rep(NA_character_, n))
+			freqs <- data.table::data.table(from = rep(NA_real_, n), to = rep(NA_real_, n), count = rep(NA_integer_, n))
 
 			for (j in seq_along(data)) {
 			
@@ -138,8 +140,6 @@ methods::setMethod(
 			freqs$to <- round(freqs$to, digits)
 		
 		}
-		
-  		data.table::setkeyv(freqs, "value")
 
 		if (!getFastOptions("useDataTable")) freqs <- as.data.frame(freqs)
 		out[[i]] <- freqs
