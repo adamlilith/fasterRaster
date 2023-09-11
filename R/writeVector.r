@@ -29,7 +29,13 @@
 setMethod(
 	"writeVector",
 	signature(x = "GVector", filename = "character"),
-	function(x, filename, overwrite = FALSE, format = "GPKG", ...) {
+	function(
+		x,
+		filename,
+		overwrite = FALSE,
+		format = "GPKG",
+		...
+	) {
 
 	### going to overwrite anything?
 	if (!overwrite && file.exists(filename)) stop(paste0("File already exists and ", sQuote("overwrite"), " is FALSE:\n ", filename))
