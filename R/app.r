@@ -125,7 +125,9 @@ methods::setMethod(
     # f = "appFuns",
     # signature = c(x = "logical"),
     # function(x = FALSE) {
-    
+   
+#' @aliases appFuns
+#' @rdname app
 #' @export
 appFuns <- function(warn = TRUE) {
 	
