@@ -5,7 +5,7 @@
 #' @param x A `GRaster` or `GVector`.
 #' @param type (`GRaster`s only) `NULL` or character: Type of datatype to report (`GRaster` only):
 #' * `"fasterRaster"` (default): Reports the **fasterRaster** type (factor, integer, float, or double)
-#' * `"terra"`: Report the (inferred) **terra** data type (e.g., INT2U, FLT4S). Please see the table in the [tutorial on raster data types] for more information.
+#' * `"terra"`: Report the (inferred) **terra** data type (e.g., INT2U, FLT4S). Please see the table in the [tutorial on raster data types][tutorial_raster_data_types] for more information.
 #' * `"GRASS"`: Will return "CELL" (integer), "FCELL" (floating-point value), or "DCELL" (double-floating point value)
 #' * `"GDAL"`: See [GDAL: Raster Band](https://gdal.org/user/raster_data_model.html#raster-band). Please also see the table in the [tutorial on raster data types].
 #'
