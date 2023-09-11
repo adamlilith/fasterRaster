@@ -201,7 +201,7 @@ setMethod(
 		extension <- paste0(".", extension)
 		filename <- substr(filename, 1L, nchar(filename) - nchar(extension))
 		filename <- paste0(filename, ".csv")
-		write.csv(levels(x), filename)
+		utils::write.csv(levels(x), filename)
 
 	}
 
