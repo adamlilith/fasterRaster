@@ -4,6 +4,7 @@
 #'
 #' * `is.factor()`: The raster will have integer values and categories matched to the integers (see levels()).
 #' * `is.int()`: Are values integers? Note that `is.int()` will return `FALSE` for categorical rasters, even though cell values are technically integers.
+#' * `is.cell()`: Are values integers (`TRUE` for `integer` and categorical rasters).
 #' * `is.float()`: Are values floating-point precision?
 #' * `is.doub()`: Are values double-floating point precision?
 #'
@@ -22,6 +23,15 @@ methods::setMethod(
     f = "is.int",
     signature = c(x = "GRaster"),
     function(x) datatype(x, "GRASS") == "CELL" & nlevels(x) == 0L
+)
+
+#' @aliases is.cell
+#' @rdname is.int
+#' @exportMethod is.cell
+methods::setMethod(
+    f = "is.cell",
+    signature = c(x = "GRaster"),
+    function(x) datatype(x, "GRASS") == "CELL"
 )
 
 #' @aliases is.float
