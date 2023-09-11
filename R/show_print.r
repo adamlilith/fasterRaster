@@ -404,7 +404,7 @@ methods::setMethod(
 	if (details) {
 		cat("location    :", object@location, "\n")
 		cat("mapset      :", object@mapset, "\n")
-		cat("source       :", object@sources, "\n")
+		cat("source      :", object@sources, "\n")
 	}
 	cat("geometry    :", object@geometry, "\n")
 	cat("dimensions  :", paste0(object@nGeometries, ", ", nFields), "(geometries, columns)\n")
