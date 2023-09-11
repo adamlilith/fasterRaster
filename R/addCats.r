@@ -64,8 +64,32 @@ methods::setMethod(
 #' @exportMethod addCats<-
 methods::setMethod(
 	f = "addCats<-",
-	signature = c(x = "GRaster"),
-	function(x, value, layer = 1) {
+	signature = c(x = "GRaster", value = "data.frame"),
+	function(x, layer = 1, value) {
+		.addCatsAssign(x = x, layer = 1, value = value)
+	}
+)
+
+#' @aliases addCats<-
+#' @rdname addCats
+#' @exportMethod addCats<-
+methods::setMethod(
+	f = "addCats<-",
+	signature = c(x = "GRaster", value = "data.table"),
+	function(x, layer = 1, value) {
+		.addCatsAssign(x = x, layer = 1, value = value)
+	}
+)
+
+#' Worker function for addCats<-
+#'
+#' @param x A `GRaster`.
+#' @param value A `data.frame` or `data.table`.
+#'
+#' @returns A `GRaster.
+#'
+#' @noRd
+.addCatsAssign <- function(x, layer, value) {
 
 	layer <- .layerIndex(layer, x, recycle = TRUE)
 
@@ -83,8 +107,7 @@ methods::setMethod(
  	methods::validObject(x)
 	x
 
-	} # EOF
-)
+}
 
 #' @aliases droplevels
 #' @rdname addCats
