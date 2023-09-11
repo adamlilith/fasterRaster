@@ -1,13 +1,12 @@
 #' Convert GVector to a data frame
 #'
-#' @description Convert a `GVector`'s attribute table to a data frame.
+#' @description Convert a `GVector`'s attribute table to a `data.frame` or `data.table`.
 #'
 #' @param x A `GVector`.
-#' @param row.names `NULL` (default) or a character vector giving names for rows.
 #'
-#' @returns A `data.frame`.
+#' @returns A `data.frame` or `NULL` (if the `GRaster` has no attribute table).
 #' 
-#' @seealso [terra::as.data.frame()]
+#' @seealso [terra::as.data.frame()], [data.table::as.data.table()]
 #' 
 #' @example man/examples/ex_GRaster_GVector.r
 #'
@@ -17,52 +16,28 @@
 methods::setMethod(
 	f = "as.data.frame",
 	signature = c(x = "GVector"),
-	definition = function(x, row.names = NULL) {
-	
- 	data <- rgrass::execGRASS("v.db.select", map = sources(x), intern = TRUE)
-
-	# # better, but noisy:
-	# data <- rgrass::execGRASS("db.out.ogr", input=sources(x), output="C:/ecology/!Scratch/db.csv", format="CSV", table="rivers", flags=c("quiet", "overwrite"))
-
-	# column names
-	cols <- data[1L]
-	cols <- strsplit(cols, "\\|")[[1L]]
-	data <- data[-1L]
-
-	# data values
-	data <- strsplit(data, "\\|")
-	out <- do.call(rbind.data.frame, data)
-	colnames(out) <- cols
-
-	out <- data.table::as.data.table(out)
-	out$cat <- NULL
-	
-	# everything is exported as a character
-	ints <- which(datatype(x)$datatype == "integer")
-	nums <- which(datatype(x)$datatype == "numeric")
-	
-	if (length(ints) > 0L) {
-		for (int in ints) {
-			if (any(out[[int]] == "")) {
-				out[[out[[int]] == "", int]] <- NA_character_
-			}
-			out[ , int] <- as.integer(out[[int]])
+	definition = function(x) {
+		if (nrow(x) > 0L) {
+			as.data.frame(x@table)
+		} else {
+			NULL
 		}
-	}
-	
-	if (length(nums) > 0L) {
-		for (num in nums) {
-			if (any(out[[num]] == "")) {
-				out[out[[num]] == "", num] <- NA_character_
-			}
-			out[ , num] <- as.numeric(out[[num]])
+
+	} # EOF
+)
+
+#' @aliases as.data.table
+#' @rdname as.data.frame
+#' @exportMethod as.data.table
+methods::setMethod(
+	f = "as.data.table",
+	signature = c(x = "GVector"),
+	definition = function(x) {
+		if (nrow(x) > 0L) {
+			x@table
+		} else {
+			NULL
 		}
-	}
-	
-	if (!is.null(row.names)) rownames(out) <- row.names
-	if (!getFastOptions("useDataTable")) out <- as.data.frame(x)
-	
-	out
 
 	} # EOF
 )
