@@ -3,6 +3,8 @@
 \name{is.int,GRaster-method}
 \alias{is.int,GRaster-method}
 \alias{is.int}
+\alias{is.cell,GRaster-method}
+\alias{is.cell}
 \alias{is.float,GRaster-method}
 \alias{is.float}
 \alias{as.doub,GRaster-method}
@@ -12,6 +14,8 @@
 \title{Data type of a raster}
 \usage{
 \S4method{is.int}{GRaster}(x)
+
+\S4method{is.cell}{GRaster}(x)
 
 \S4method{is.float}{GRaster}(x)
 
@@ -30,6 +34,7 @@ In \strong{fasterRaster}, rasters can have three \link[=tutorial_raster_data_typ
 \itemize{
 \item \code{is.factor()}: The raster will have integer values and categories matched to the integers (see levels()).
 \item \code{is.int()}: Are values integers? Note that \code{is.int()} will return \code{FALSE} for categorical rasters, even though cell values are technically integers.
+\item \code{is.cell()}: Are values integers (\code{TRUE} for \code{integer} and categorical rasters).
 \item \code{is.float()}: Are values floating-point precision?
 \item \code{is.doub()}: Are values double-floating point precision?
 }

@@ -4,7 +4,7 @@
 \alias{.maxVal}
 \title{[[ is already generic}
 \usage{
-.maxVal(x, ...)
+.maxVal(x)
 }
 \description{
 [[ is already generic

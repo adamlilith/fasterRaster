@@ -3,13 +3,16 @@
 \name{activeCat,GRaster-method}
 \alias{activeCat,GRaster-method}
 \alias{activeCat}
-\alias{activeCat<-,GRaster-method}
+\alias{activeCat<-,GRaster,numeric-method}
 \alias{activeCat<-}
+\alias{activeCat<-,GRaster,integer-method}
 \title{Get or set the column with category labels in a categorical raster}
 \usage{
 \S4method{activeCat}{GRaster}(x, layer = 1, names = FALSE)
 
-\S4method{activeCat}{GRaster}(x, layer = 1) <- value
+\S4method{activeCat}{GRaster,numeric}(x, layer = 1) <- value
+
+\S4method{activeCat}{GRaster,integer}(x, layer = 1) <- value
 }
 \arguments{
 \item{x}{A categorical \code{GRaster}.}

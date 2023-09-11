@@ -23,6 +23,7 @@ Depends:
 Imports:
 	data.table (>= 1.14.8),
 	DT,
+	graphics,
 	methods,
 	rgrass,
 	sf,

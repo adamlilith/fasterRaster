@@ -3,11 +3,14 @@
 \name{app,GRaster-method}
 \alias{app,GRaster-method}
 \alias{app}
+\alias{appFuns}
 \alias{appCheck,GRaster,character-method}
 \alias{appCheck}
 \title{Apply a function to a set of rasters}
 \usage{
 \S4method{app}{GRaster}(x, fun, ensure = "auto", seed = NULL)
+
+appFuns(warn = TRUE)
 
 \S4method{appCheck}{GRaster,character}(x, fun, msgOnGood = TRUE, failOnBad = TRUE)
 }
@@ -33,11 +36,11 @@ The help page for \code{r.mapcalc} on the \strong{GRASS} website provides more d
 
 \item{seed}{Numeric integer vector or \code{NULL} (default): A number for the random seed. Used only for \code{app()} function \code{rand()}, that generates a random number. If \code{NULL}, a seed will be generated. Defining the seed is useful for replicating a raster made with \code{rand()}. This must be an integer!}
 
+\item{warn}{Logical (function \code{appFuns()}): If \code{TRUE} (default), display a warning when \code{allFuns()} is not called interactively.}
+
 \item{msgOnGood}{Logical (function \code{appCheck()}): If \code{TRUE} (default), display a message if no overt problems with the raster names and formula are detected.}
 
 \item{failOnBad}{Logical (function \code{appCheck()}): If \code{TRUE} (default), fail if overt problems with raster names and the formula are detected.}
-
-\item{warn}{Logical (function \code{appFuns()}): If \code{TRUE} (default), display a warning when \code{allFuns()} is not called interactively.}
 }
 \value{
 A \code{GRaster}.

@@ -21,7 +21,7 @@ If a logical vector is supplied, rows that correspond to \code{TRUE} will be rem
 A \code{data.table} or \code{data.frame}.
 }
 \description{
-
+As of September of 2023, the \strong{data.table} package does not have a function for removing rows by index. This function does this job and is adapted from an \href{https://github.com/Rdatatable/data.table/issues/635}{issue} to that effect raised on the \strong{data.table} \emph{GitHub} page.
 }
 \examples{
 

@@ -75,8 +75,10 @@ Multi-layer functions (applied across layers of a "stack" of \code{GRaster}s):
 \item Dispersion: \code{\link[=sd]{sd()}}, \code{\link[=var]{var()}}, \code{\link[=sdpop]{sdpop()}}, \code{\link[=varpop]{varpop()}}, \code{\link[=nunique]{nunique()}}, \code{\link[=range]{range()}}, \code{\link[=quantile]{quantile()}}, \code{\link[=skewness]{skewness()}}, \code{\link[=kurtosis]{kurtosis()}}
 \item Extremes: \code{\link[=min]{min()}}, \code{\link[=max]{max()}}, \code{\link[=which.min]{which.min()}}, \code{\link[=which.max]{which.max()}} \cr
 }
+}
 
-Other functions:\cr
+\subsection{Functions that operate on or create \code{GRaster}s}{
+
 \verb{[<-} (\link[=subset_assign]{assign}): Assign values to a raster's cells\cr
 \code{[[} (\link[=subset_assign]{subset}): Subset a raster with multiple layers\cr
 \verb{[[<-} (\link[=subset_assign]{assign}): Replace or add layers to a raster\cr
@@ -99,6 +101,7 @@ Other functions:\cr
 \code{\link[=fractalRast]{fractalRast()}}: Create a fractal raster\cr
 \code{\link[=global]{global()}}: Summary statistics across cells of each raster layer\cr
 \code{\link[=shade]{hillshade()}}: Create a hillshade raster\cr
+\code{\link[=hist]{hist()}}: Histogram of raster values\cr
 \code{\link[=horizonHeight]{horizonHeight()}}: Horizon height\cr
 \link{levels<-}: Assign levels to a categorical raster\cr
 \code{\link[=longlat]{longlat()}}: Create longitude/latitude rasters.\cr
@@ -138,7 +141,7 @@ Other functions:\cr
 \code{\link[=nlevels]{nlevels()}}: Number of levels\cr
 }
 
-\subsection{Properties of \strong{fasterRaster} vectors (\code{GVectors})}{
+\subsection{Properties of \strong{fasterRaster} vectors (\code{GVector}s)}{
 
 \code{\link[=crs]{crs()}}: Coordinate reference system\cr
 \code{\link[=datatype]{datatype()}}: Data type of fields\cr
@@ -161,7 +164,7 @@ Other functions:\cr
 \code{\link[=zext]{zext()}}: Vertical extent\cr
 }
 
-\subsection{Functions that operate on or create \code{GVectors}}{
+\subsection{Functions that operate on or create \code{GVector}s}{
 
 \code{[} (\link[=subset_assign]{subset}): Select geometries/rows of a vector's data table\cr
 \code{[[} (\link[=subset_assign]{subset}): Subset columns of a vector's data table\cr

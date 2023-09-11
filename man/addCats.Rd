@@ -3,15 +3,18 @@
 \name{addCats,GRaster-method}
 \alias{addCats,GRaster-method}
 \alias{addCats}
-\alias{addCats<-,GRaster-method}
+\alias{addCats<-,GRaster,data.frame-method}
 \alias{addCats<-}
+\alias{addCats<-,GRaster,data.table-method}
 \alias{droplevels,GRaster-method}
 \alias{droplevels}
 \title{Add rows or columns to the "levels" table of a categorical raster}
 \usage{
 \S4method{addCats}{GRaster}(x, value, merge = FALSE, layer = 1)
 
-\S4method{addCats}{GRaster}(x, layer = 1) <- value
+\S4method{addCats}{GRaster,data.frame}(x, layer = 1) <- value
+
+\S4method{addCats}{GRaster,data.table}(x, layer = 1) <- value
 
 \S4method{droplevels}{GRaster}(x, level = NULL, layer = 1)
 }

@@ -14,7 +14,7 @@
 
 \item{value}{Numeric or \code{NULL} (default): If numeric, only cells with this value will be counted. If \code{NULL}, all values will be counted.}
 
-\item{bins}{Positive numeric integer: Number of bins in which to divide values of a raster with continuous values.}
+\item{bins}{Positive numeric integer: Number of bins in which to divide values of \code{numeric} rasters. The default is 100. For \code{integer} and categorical rasters, each value is tallied.}
 }
 \value{
 A \code{data.frame} or a named \code{list} of \code{data.frame}s, one per layer in \code{x}.
