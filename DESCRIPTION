@@ -19,12 +19,12 @@ Description: Processing of large-in-memory/-on disk rasters and spatial vectors
 	most of	the functions you must have the stand-alone version (not the
 	'OSGeoW4' installer version) of 'GRASS GIS' 8.0 or higher.
 Depends:
-	R (>= 4.0.0)
+	R (>= 4.0.0),
+	methods
 Imports:
 	data.table (>= 1.14.8),
 	DT,
 	graphics,
-	methods,
 	rgrass,
 	sf,
 	shiny,
