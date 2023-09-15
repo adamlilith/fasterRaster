@@ -1,11 +1,22 @@
 .restore <- NULL
+
+# bad form:
 # require(data.table)
 # require(sf)
 # require(terra)
 
-#' @import data.table
+# creates conflicts with terra::shift and data.table::shift
+# #' @import terra
+# #' @import data.table
+# #' @import terra
+
 #' @import sf
-#' @import terra
+#' @rawNamespace import(data.table, except = shift)
+#' @rawNamespace import(terra, except = shift)
+#' @importFrom methods new
+#' @importFrom methods setMethod
+#' @importFrom methods setValidity
+#' @importFrom methods validObject
 
 ### data.table
 .datatable.aware <- TRUE
@@ -46,6 +57,7 @@ setGeneric("as.points", function(x,...) standardGeneric("as.points"))
 setGeneric("as.polygons", function(x,...) standardGeneric("as.polygons"))
 setGeneric("aggregate", function(x, ...) standardGeneric("aggregate"), package = "stats")
 
+methods::setGeneric(name = "barplot", package = "terra")
 methods::setGeneric(name = "bottom", def = function(x, ...) standardGeneric("bottom"))
 methods::setGeneric(name = "buffer", package = "terra")
 
@@ -67,8 +79,9 @@ methods::setGeneric(name = "crop", package = "terra")
 
 # dim() is primitive
 methods::setGeneric(name = "datatype", def = function(x, ...) standardGeneric("datatype"))
-methods::setGeneric(name = "db.as.data.table", def = function(x, ...) standardGeneric("db.as.data.table"))
-methods::setGeneric(name = "db.remove", def = function(x, ...) standardGeneric("db.remove"))
+methods::setGeneric(name = "dbCats", def = function(x, ...) standardGeneric("dbCats"))
+methods::setGeneric(name = "dbToDataTable", def = function(x, ...) standardGeneric("dbToDataTable"))
+methods::setGeneric(name = "dbRemove", def = function(x, ...) standardGeneric("dbRemove"))
 methods::setGeneric(name = "delaunay", package = "terra")
 methods::setGeneric(name = "distance", def = function(x, y, ...) standardGeneric("distance"))
 methods::setGeneric(name = "droplevels", package = "terra")
@@ -89,7 +102,7 @@ methods::setGeneric(name = "global", package = "terra")
 
 methods::setGeneric(name = "head", package = "utils")
 methods::setGeneric(name = "hillshade", def = function(x, ...) standardGeneric("hillshade"))
-methods::setGeneric(name = "hist", def = function(x, ...) standardGeneric("hist"))
+methods::setGeneric(name = "hist", package = "terra")
 methods::setGeneric(name = "horizonHeight", def = function(x, ...) standardGeneric("horizonHeight"))
 
 methods::setGeneric(name = "is.2d", def = function(x) standardGeneric("is.2d"))
@@ -121,7 +134,8 @@ methods::setGeneric(name = "mask", package = "terra")
 methods::setGeneric(name = "minmax", package = "terra")
 methods::setGeneric(name = "missingCats", def = function(x, ...) standardGeneric("missingCats"))
 methods::setGeneric(name = "merge", package = "terra")
-#' @importFrom stats median
+#' @importFrom terra median
+methods::setGeneric(name = "median", def = function(x, na.rm) standardGeneric("median"))
 methods::setGeneric(name = "mmode", def = function(x, ...) standardGeneric("mmode"))
 
 # "names" (in base) is primitive
@@ -142,9 +156,10 @@ methods::setGeneric(name = "nrow", def = function(x) standardGeneric("nrow")) # 
 methods::setGeneric(name = "nunique", def = function(x, ...) standardGeneric("nunique"))
 
 methods::setGeneric(name = "plot", package = "terra")
+methods::setGeneric(name = "plotRGB", package = "terra")
 methods::setGeneric(name = "project", package = "terra")
 
-methods::setGeneric(name = "quantile", package = "stats")
+methods::setGeneric(name = "quantile", package = "terra")
 
 methods::setGeneric(name = "r2", def = function(x, ...) standardGeneric("r2"))
 methods::setGeneric(name = "rast", package = "terra")
