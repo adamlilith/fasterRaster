@@ -9,13 +9,20 @@
 #'
 #* `x`: `GRaster`, `GVector`, or character: The object or the `sources` of the object to be copied. Can take multi-layered objects or multiple `sources`.
 #' 
-#' ## `db.as.data.table()`
+#' ## `dbCat()`
+#' Get a `data.table` with a single column named `cat`, which corresponds to the **GRASS** attribute table's `cat` column.
+#'
+#' `x`: A `GVector`.
+#
+#' ## `dbToDataTable()`
 #' Convert the attribute table linked to a vector in **GRASS** to a `data.table`. This table is distinct from the attribute table attached to a `GVector`.
 #'
-#' `x`: A 'GVector'.
+#' `x`: A `GVector`.
 #'
-#' ## `db.remove`
+#' ## `dbRemove`
 #' Delete an attribute table linked to a vector in **GRASS**. This table is distinct from the attribute table attached to a `GVector`. Note that even the `cat` column, which is necessary for identifying individual features, is dropped.
+#'
+#' `x`: A `GVector`.
 #'
 #' ## `.layerIndex()`
 #' Gets the index of raster layers from a vector.
