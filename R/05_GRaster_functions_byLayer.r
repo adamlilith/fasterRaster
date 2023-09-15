@@ -163,6 +163,7 @@ setMethod(
 	
 		compareGeom(y, x)
 		.restore(x)
+  		region(x)
 		
 		ny <- nlyr(y)
 		nx <- nlyr(x)
@@ -342,6 +343,7 @@ setMethod(
 
 	.restore(x)
 	region(x)
+	
 	srcs <- .makeSourceName("r.mapcalc", "rast", nlyr(x))
 	for (i in 1L:nlyr(x)) {
 	
