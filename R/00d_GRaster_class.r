@@ -157,12 +157,13 @@ setValidity("GRaster",
 .makeGRaster <- function(src, names = "raster", levels = "") {
 
 	# levels: convert empty strings to NULL data.tables and data.frames to data.tables
-	if (is.null(levels)) levels <- ""
-	if (!is.list(levels)) levels <- list(levels)
+	if (is.null(levels)) levels <- data.table::data.table(NULL)
+	if (!inherits(levels, "list")) levels <- list(levels)
 	if (length(levels) == 1L & length(src) > 1L) {
 		for (i in 2L:length(src)) levels[[i]] <- levels[[1L]]
 	}
 
+	# acgive category and levels
 	ac <- rep(NA_integer_, length(levels))
 	for (i in seq_along(levels)) {
 		if (is.null(levels[[i]]) || (is.character(levels[[i]]) && levels[[i]] == "")) {
