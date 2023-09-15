@@ -7,7 +7,7 @@
 #' * `"fasterRaster"` (default): Reports the **fasterRaster** type (factor, integer, float, or double)
 #' * `"terra"`: Report the (inferred) **terra** data type (e.g., INT2U, FLT4S). Please see the table in the [tutorial on raster data types][tutorial_raster_data_types] for more information.
 #' * `"GRASS"`: Will return "CELL" (integer), "FCELL" (floating-point value), or "DCELL" (double-floating point value)
-#' * `"GDAL"`: See [GDAL: Raster Band](https://gdal.org/user/raster_data_model.html#raster-band). Please also see the table in the [tutorial on raster data types].
+#' * `"GDAL"`: See [GDAL: Raster Band](https://gdal.org/user/raster_data_model.html#raster-band). Please also see the table in the [tutorial on raster data types][tutorial_raster_data_types].
 #'
 #' @returns `datatype()` for a `GRaster` returns a character. `datatype()` for a `GVector` returns a data frame, with one row per field. If the `GVector` has no attribute table, the function returns `NULL`.
 #'
@@ -46,7 +46,7 @@ methods::setMethod(
 	    remainder <- stats %% 1
 		integer <- rowSums(abs(remainder)) == 0
 
-		for (i in seq_along(x)) {
+		for (i in seq_along(out)) {
 
 			if (out[i] == "CELL") {
 			
@@ -85,7 +85,7 @@ setMethod(f = "datatype",
 	definition = function(x) {
 
 	if (nrow(x@table) > 0L) {
-		data.frame(field = names(x@table), datatype = x@db@classes)
+		sapply(x@table, "class")
 	} else {
 		NULL
 	}
