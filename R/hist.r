@@ -14,9 +14,11 @@
 #'
 #' @param ... Arguments to pass to [graphics::barplot()].
 #'
-#' @returns A named list of `data.frame`s(invisibly), one per layer plotted, and creates a graph.
+#' @returns A named list of `data.frame`s (invisibly), one per layer plotted, and creates a graph.
 #'
-#' @example man/examples/ex_hist.r
+#' @example man/examples/ex_plot.r
+#'
+#' @importFrom graphics par
 #'
 #' @aliases hist
 #' @rdname hist
@@ -49,14 +51,22 @@ methods::setMethod(
 	
 		if (!inherits(freqs[[i]], "data.table")) freqs[[i]] <- as.data.table(freqs[[i]])
 
-		if (is.cell(x[[i]])) {
+		if (is.factor(x[[i]])) {
+			xs <- levels(x[[i]])[[2L]]
+			las <- 3
+			xlab <- ""
+		} else if (is.cell(x[[i]])) {
    			xs <- freqs[[i]][["value"]]
+			las <- 0
+			xlab <- "Value"
 		} else {
 
 			TEMPTEMP_mean_ <- NULL
-   			data.table::setDT(freqs[[i]])[, TEMPTEMP_mean_ := rowMeans(.SD, na.rm = TRUE), .SDcols = c("from", "to")]
+   			data.table::setDT(freqs[[i]])[ , TEMPTEMP_mean_ := rowMeans(.SD, na.rm = TRUE), .SDcols = c("from", "to")]
 
 			xs <- freqs[[i]][["TEMPTEMP_mean_"]]
+			las <- 0
+			xlab <- "Mean bin value"
 		
 		}
 		
@@ -65,7 +75,7 @@ methods::setMethod(
 		
 		ylab <- if (freq) { "Frequency"} else { "Density" }
 		
-		graphics::barplot(ys, main = names(x)[i], xlab = "Value", ylab = ylab, names.arg = xs, ...)
+		graphics::barplot(ys, main = names(x)[i], xlab = xlab, ylab = ylab, names.arg = xs, las = las, ...)
 	
 	}
 	
