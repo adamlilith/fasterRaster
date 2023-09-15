@@ -34,6 +34,7 @@ methods::setMethod(
     function(e1, e2) {
 	
 		.restore(e1)
+  		region(e1)
 
 		e2 <- as.integer(e2)
 		if (is.na(e2)) e2 <- "null()"
@@ -51,7 +52,7 @@ methods::setMethod(
 				paste0(src, " = ", prec, "(", sources(e1)[i], ")  ", oper, e2)
 			}
 
-			name <- names(e1)[i]
+			name <- "layer"
 			if (i == 1L) {
 				out <- .genericArith(name = name, src = src, ex = ex)
 			} else {
@@ -72,6 +73,7 @@ methods::setMethod(
     function(e1, e2) {
 	
 		.restore(e2)
+  		region(e2)
 
 		e1 <- as.integer(e1)
 		if (is.na(e1)) e1 <- "null()"
@@ -89,7 +91,7 @@ methods::setMethod(
 				paste0(src, " = ", e1, oper, " ", prec, "(", sources(e2)[i], ")")
 			}
 
-			name <- names(e2)[i]
+			name <- "layer"
 			if (i == 1L) {
 				out <- .genericArith(name = name, src = src, ex = ex)
 			} else {
@@ -110,6 +112,7 @@ methods::setMethod(
     function(e1, e2) {
 	
 		.restore(e1)
+		region(e1)
 
 		if (is.na(e2)) e2 <- "null()"
   		prec <- getFastOptions("rasterPrecision")
@@ -123,10 +126,10 @@ methods::setMethod(
 			} else if (oper == "%%") {
 				paste0(src, " = ", prec, "(", sources(e1)[i], ") %", e2)
 			} else {
-				paste0(src, " = ", prec, "(", sources(e1)[i], ")  ", oper, e2)
+				paste0(src, " = ", prec, "(", sources(e1)[i], ")  ", oper, " ", e2)
 			}
 
-			name <- names(e1)[i]
+			name <- "layer"
 			if (i == 1L) {
 				out <- .genericArith(name = name, src = src, ex = ex)
 			} else {
@@ -147,6 +150,7 @@ methods::setMethod(
     function(e1, e2) {
 	
 		.restore(e1)
+  		region(e1)
 
 		if (is.na(e2)) e2 <- "null()"
   		prec <- getFastOptions("rasterPrecision")
@@ -163,7 +167,7 @@ methods::setMethod(
 				paste0(src, " = ", prec, "(", sources(e1)[i], ")  ", oper, e2)
 			}
 
-			name <- names(e1)[i]
+			name <- "layer"
 			if (i == 1L) {
 				out <- .genericArith(name = name, src = src, ex = ex)
 			} else {
@@ -184,6 +188,7 @@ methods::setMethod(
     function(e1, e2) {
 	
 		.restore(e2)
+  		region(e2)
 
 		if (is.na(e1)) e1 <- "null()"
 		oper <- as.vector(.Generic)[1L]
@@ -200,7 +205,7 @@ methods::setMethod(
 				paste0(src, " = ", e1, oper, " ", prec, "(", sources(e2)[i], ")")
 			}
 
-			name <- names(e2)[i]
+			name <- "layer"
 			if (i == 1L) {
 				out <- .genericArith(name = name, src = src, ex = ex)
 			} else {
@@ -221,6 +226,7 @@ methods::setMethod(
     function(e1, e2) {
 	
 		.restore(e2)
+		region(e2)
 
 		if (is.na(e1)) e1 <- "null()"
   		prec <- getFastOptions("rasterPrecision")
@@ -237,7 +243,7 @@ methods::setMethod(
 				paste0(src, " = ", e1, oper, " ", prec, "(", sources(e2)[i], ")")
 			}
 
-			name <- names(e2)[i]
+   			name <- "layer"
 			if (i == 1L) {
 				out <- .genericArith(name = name, src = src, ex = ex)
 			} else {
@@ -258,6 +264,7 @@ methods::setMethod(
     # function(e1, e2) {
 	
 		# .restore(e2)
+		# region(e2)
 
 		# src <- .makeSourceName("math", "rast")
 
@@ -281,6 +288,7 @@ methods::setMethod(
 	
 		compareGeom(e1, e2)
 		.restore(e1)
+		region(e1)
 
 		oper <- as.vector(.Generic)[1L]
   		prec <- getFastOptions("rasterPrecision")
@@ -289,7 +297,7 @@ methods::setMethod(
 
 			for (i in 1L:nlyr(e1)) {
 
-				name <- paste0(names(e1)[i], "_", names(e2)[i])
+				name <- "layer"
 				src <- .makeSourceName(name, "rast")
 
 				ex <- if (oper == "%/%") {
@@ -315,7 +323,7 @@ methods::setMethod(
 
 			for (i in 1L:nlyr(e2)) {
 			
-				name <- paste0(names(e1), "_", names(e2)[i])
+				name <- "layer"
 				src <- .makeSourceName(name, "rast")
 
 				ex <- if (oper == "%/%") {
