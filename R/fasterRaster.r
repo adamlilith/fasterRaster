@@ -66,8 +66,8 @@
 #' 
 #' ## Functions that operate on or create `GRaster`s
 #' `[<-` ([assign][subset_assign]): Assign values to a raster's cells\cr
-#' `[[` ([subset][subset_assign]): Subset a raster with multiple layers\cr
-#' `[[<-` ([assign][subset_assign]): Replace or add layers to a raster\cr
+#' `$` and `[[` ([subset][subset_assign]): Subset a raster with multiple layers\cr
+#' `$<-` and [[<-` ([assign][subset_assign]): Replace or add layers to a raster\cr
 #' [add<-]: Add layers to a raster\cr
 #' [as.int()], [as.float()], [as.doub()]: Change data type (integer/float/double)\cr
 #' [as.contour()]: Contour lines from a raster\cr
@@ -89,11 +89,11 @@
 #' [`hillshade()`][shade]: Create a hillshade raster\cr
 #' [hist()]: Histogram of raster values\cr
 #' [horizonHeight()]: Horizon height\cr
-#' [levels<-]: Assign levels to a categorical raster\cr
 #' [longlat()]: Create longitude/latitude rasters.\cr
 #' [mask()]: Remove values in a raster based on values in another raster or vector\cr
 #' [merge()]: Combine two or more rasters with different extents and fill in `NA`s\cr
 #' [plot()]: Display a raster\cr
+#' [plotRGB()]: Display a multispectral raster using red, blue, green, and alpha channels\cr
 #' [project()]: Change coordinate reference system and cell size\cr
 #' [resample()]: Change cell size\cr
 #' [rnormRast()]: A random raster with values drawn from a normal distribution\cr
@@ -110,18 +110,18 @@
 #' ## Functions operating on categorical rasters
 #' [activeCat()]: Column that defines category labels\cr
 #' [activeCat<-]: Set column that defines category labels\cr
-#' [addCats()]: Add columns to a "levels" table\cr
-#' [addCats<-]: Add new rows (levels)\cr
+#' [addCats()]: Add new columns to a "levels" table\cr
+#' [addCats<-]: Add new rows (levels) to a "levels" table\cr
 #' [categories()]: Set "levels" table for specific layers of a categorical raster\cr
 #' [catNames()]: Names of each "levels" table\cr
 #' [cats()]: "Levels" table of a categorical raster\cr
 #' [droplevels()]: Remove one or more levels\cr
 #' [freq()]: Frequency of each category across cells of a raster\cr
 #' [is.factor()]: Is a raster categorical?\cr
-#' [missingCats()]: Values that have no category assigned to them\cr
 #' [levels()]: "Levels" table of a categorical raster\cr
 #' [levels<-]: Set "levels" table of a categorical raster\cr
 #' [minmax()]: "Lowest" and "highest" category values of categorical rasters (when argument `levels = TRUE`)\cr
+#' [missingCats()]: Values that have no category assigned to them\cr
 #' [nlevels()]: Number of levels\cr
 #'
 #' ## Properties of **fasterRaster** vectors (`GVector`s)
@@ -147,7 +147,8 @@
 #'
 #' ## Functions that operate on or create `GVector`s
 #' `[` ([subset][subset_assign]): Select geometries/rows of a vector's data table\cr
-#' `[[` ([subset][subset_assign]): Subset columns of a vector's data table\cr
+#' `$` and `[[` ([subset][subset_assign]): Subset columns of a vector's data table\cr
+#' `$<-` and `[[<-` ([assign][subset_assign]): Assign values to columns of a vector's data table\cr
 #' [as.data.frame()]: Convert a vector's attribute table to a `data.frame`\cr
 #' [as.data.table()]: Convert a vector's attribute table to a `data.table`\cr
 #' [as.points()]: Extract vertex coordinates from a "lines" or "polygons" `GVector`\cr
@@ -182,6 +183,13 @@
 #' [st_as_sf()]: Convert a `GVector` to a `sf` vector\cr
 #' [vect()]: Convert a `GVector` to a `SpatVector`\cr
 #'
+#' ## Functions that operate on **GRASS** "sessions":
+#' [crs()]: Coordinate reference system of the current location\cr
+#' [location()]: **GRASS** "location" of an object or the active session\cr
+#' [mapset()]: **GRASS** "mapset" of an object or the active session\cr
+#' [restoreSession()]: Restore a previous **GRASS** session or switch **GRASS** locations/mapsets\cr
+#' [removeSession()]: Delete a **GRASS** session (location, mapset(s), and all associated files)\cr
+#'
 #' ## General purpose functions
 #' [appendLists()]: Append values to elements of a list from another list\cr
 #' [compareGeom()]: Determine if geographic metadata is same between `GRaster`s and/or `GVector`s\cr
@@ -192,21 +200,15 @@
 #' [pmatchSafe()]: Partial matching of strings with error checking\cr
 #' [replaceNAs()]: Replace `NA`s in columns of a `data.table` or `data.frame`, or in a vector\cr
 #' [rstring()]: Create a string statistically likely to be unique\cr
+#' [seqToSQL()]: Format a numeric series into an SQL value call.\cr
 #'
-#' ## Functions that operate on **GRASS** "sessions":
-#' [crs()]: Coordinate reference system of the current location\cr
-#' [location()]: **GRASS** "location" of an object or the active session\cr
-#' [mapset()]: **GRASS** "mapset" of an object or the active session\cr
-#' [restoreSession()]: Restore a previous **GRASS** session or switch **GRASS** locations/mapsets\cr
-#' [removeSession()]: Delete a **GRASS** session (location, mapset(s), and all associated files)\cr
-#'
-#' ## Functions that operate on **GRASS** "regions" (seldom used by most users):
+#' ## Functions that operate on **GRASS** "regions" (useful mostly to developers):
 #' [region()]: Change or report the active region's extent and resolution\cr
 #' [regionDim()]: Change or report the active region's resolution (also [dim()] and related functions, with no arguments)
 #' [regionExt()]: Change or report the active region's extent (also [ext()] and related functions, with no arguments)\cr
 #' [regionRes()]: Change or report the active region's dimensions (also [res()] and related functions, with no arguments)\cr
 #'
-#' ## Data objects
+#' ## Example data
 #' [appFunsTable][appFunsTable] (see also [appFuns()]): Functions usable by the [app()] function\cr
 #' [madChelsa][madChelsa]: Climate rasters for of a portion of eastern Madagascar\cr
 #' [madCoast0][madCoast0], [madCoast4][madCoast4], and [madCoast][madCoast]: Borders of an eastern portion of Madagascar\cr
