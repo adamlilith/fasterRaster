@@ -355,7 +355,7 @@ methods::setMethod(
 		if (!is.null(row2)) ncTableCells <- nchar(row2)
 		if (!is.null(row3)) ncTableCells <- pmax(ncTableCells, nchar(row3))
 
-		nc <- pmax(nc, ncTableCells)
+		if (!is.null(row2))	nc <- pmax(nc, ncTableCells)
 
 		if (any(nc > maxColWidth)) nc[nc > maxColWidth] <- maxColWidth
 
