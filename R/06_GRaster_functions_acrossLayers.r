@@ -54,7 +54,7 @@ setMethod(
 #' @exportMethod median
 setMethod(
 	"median",
-	signature(x = "GRaster"),
+	signature(x = "GRaster", na.rm = "logical"),
 	function(x, na.rm = FALSE) {
 
 		fx <- "median"
@@ -223,22 +223,40 @@ setMethod(
 	signature(x = "GRaster"),
 	function(x, na.rm = FALSE) {
 
+  		.restore(x)
+  		region(x)
+
 		gnSS <- .makeSourceName("ss", "rast")
 		gnMean <- .genericMultiLayer(fx="average", fxName="mean", x=x, na.rm=na.rm, return="source")
 		ex <- paste0(gnSS, " = ", paste0("(", sources(x), " - ", gnMean, ")^2", collapse=" + "))
-		rgrass::execGRASS("r.mapcalc", expression=ex, flags=c("quiet", "overwrite"), intern=TRUE)
+		rgrass::execGRASS(
+			cmd = "r.mapcalc",
+			expression = ex,
+			flags = c("quiet", "overwrite"),
+			intern = TRUE
+		)
 
 		gnCount <- .genericMultiLayer(fx="count", fxName="count", x=x, na.rm=na.rm, return="source")
 		gnCountMinus1 <- .makeSourceName("nMinus1", "rast")
 		ex <- paste0(gnCountMinus1, " = ", gnCount, " - 1")
-		rgrass::execGRASS("r.mapcalc", expression=ex, flags=c("quiet", "overwrite"), intern=TRUE)
+		rgrass::execGRASS(
+			cmd = "r.mapcalc",
+			expression = ex,
+			flags = c("quiet", "overwrite"),
+			intern = TRUE
+		)
 
   		prec <- getFastOptions("rasterPrecision")
 
 		src <- .makeSourceName("var", "rast")
 		ex <- paste0(src, " = ", prec, "(sqrt(", gnSS, " / ", gnCountMinus1, "))")
 		
-		rgrass::execGRASS("r.mapcalc", expression=ex, flags=c("quiet", "overwrite"), intern=TRUE)
+		rgrass::execGRASS(
+			cmd = "r.mapcalc",
+			expression = ex,
+			flags = c("quiet", "overwrite"),
+			intern = TRUE
+		)
 		
 		.makeGRaster(src, "var")
 		
@@ -254,6 +272,7 @@ setMethod(
 	function(x, na.rm = FALSE) {
 
 		.restore(x)
+		region(x)
 	
 		gnSS <- .makeSourceName("ss", "rast")
 		gnMean <- .genericMultiLayer(fx="average", fxName="mean", x=x, na.rm=na.rm, return="source")
@@ -405,7 +424,8 @@ setMethod(
 	signature(x = "GRaster"),
 	function(x, prob, na.rm = FALSE) {
 
-	.restore(x)
+    .restore(x)
+    region(x)
 
 	fx <- "quantile"
 	fxName <- "quantile"
@@ -439,7 +459,8 @@ setMethod(
 # return: GRaster or the source of the output
 .genericMultiLayer <- function(fx, fxName, x, na.rm, return = "GRaster") {
 
-	.restore(x)
+    .restore(x)
+    region(x)
 
 	src <- .makeSourceName(fx, "rast")
 	args <- list(
