@@ -283,6 +283,7 @@
 			echoCmd = FALSE
 		)
 	)
+
 	# extent
 	west <- extentinfo[grepl(extentinfo, pattern = "west=")]
 	east <- extentinfo[grepl(extentinfo, pattern = "east=")]
@@ -357,24 +358,24 @@
 	
 	nGeometries <- as.integer(nGeometries)
 
-	### fields
-	suppressWarnings(
-		fieldinfo <- rgrass::execGRASS(
-			"v.info",
-			flags = c("c", "quiet"),
-			map = src,
-			intern = TRUE,
-			Sys_show.output.on.console = FALSE,
-			echoCmd = FALSE
-		)
-	)
+	# ### fields
+	# suppressWarnings(
+	# 	fieldinfo <- rgrass::execGRASS(
+	# 		"v.info",
+	# 		flags = c("c", "quiet"),
+	# 		map = src,
+	# 		intern = TRUE,
+	# 		Sys_show.output.on.console = FALSE,
+	# 		echoCmd = FALSE
+	# 	)
+	# )
 	
-	fieldData <- rgrass::execGRASS(
-		"v.db.connect",
-		map = src,
-		flags = c("g", "quiet"),
-		intern = TRUE
-	)
+	# fieldData <- rgrass::execGRASS(
+	# 	"v.db.connect",
+	# 	map = src,
+	# 	flags = c("g", "quiet"),
+	# 	intern = TRUE
+	# )
 
 	suppressMessages(
 		attribMetaInfo <- rgrass::execGRASS(
@@ -387,56 +388,56 @@
 		)
 	)
 
-	hasNoFields <- any(grepl(fieldData, pattern="is not connected to a database")) | any(grepl(fieldinfo, pattern="ERROR: Database connection not defined for layer"))
+	# hasNoFields <- any(grepl(fieldData, pattern="is not connected to a database")) | any(grepl(fieldinfo, pattern="ERROR: Database connection not defined for layer"))
 	
-	if (hasNoFields) {
+	# if (hasNoFields) {
 
-		nFields <- as.integer(0)
-		dbLayer <- NA_character_
-		fields <- NA_character_
-		classes <- NA_character_
+	# 	nFields <- as.integer(0)
+	# 	dbLayer <- NA_character_
+	# 	fields <- NA_character_
+	# 	classes <- NA_character_
 
-	# vector has a data frame
-	} else {
+	# # vector has a data frame
+	# } else {
 
-		# fields and types
-		fieldinfo <- fieldinfo[!grepl(fieldinfo, pattern ="Displaying column types/names for database connection of layer")]
+	# 	# fields and types
+	# 	fieldinfo <- fieldinfo[!grepl(fieldinfo, pattern ="Displaying column types/names for database connection of layer")]
 		
-		fieldinfo <- strsplit(fieldinfo, "\\|")
-		fields <- classes <- rep(NA, length(fieldinfo))
+	# 	fieldinfo <- strsplit(fieldinfo, "\\|")
+	# 	fields <- classes <- rep(NA, length(fieldinfo))
 		
-		for (i in seq_along(fieldinfo)) {
+	# 	for (i in seq_along(fieldinfo)) {
 		
-			type <- fieldinfo[[i]][1L]
-			type <- if (type == "CHARACTER") {
-				"character"
-			} else if (type == "INTEGER") {
-				"integer"
-			} else if (type == "DOUBLE PRECISION") {
-				"numeric"
-			} else {
-				NA_character_
-			}
+	# 		type <- fieldinfo[[i]][1L]
+	# 		type <- if (type == "CHARACTER") {
+	# 			"character"
+	# 		} else if (type == "INTEGER") {
+	# 			"integer"
+	# 		} else if (type == "DOUBLE PRECISION") {
+	# 			"numeric"
+	# 		} else {
+	# 			NA_character_
+	# 		}
 		
-			classes[i] <- type
-			fields[i] <- fieldinfo[[i]][2L]
-		}
+	# 		classes[i] <- type
+	# 		fields[i] <- fieldinfo[[i]][2L]
+	# 	}
 
-		cat <- which(fields == "cat")
-		fields <- fields[-cat]
-		classes <- classes[-cat]
+	# 	cat <- which(fields == "cat")
+	# 	fields <- fields[-cat]
+	# 	classes <- classes[-cat]
 
-		nFields <- length(fields)
-		nFields <- as.integer(nFields)
+	# 	nFields <- length(fields)
+	# 	nFields <- as.integer(nFields)
 
-  		dbLayer <- attribMetaInfo[grepl(attribMetaInfo, pattern = "attribute_layer_name")]
-		dbLayer <- if (length(dbLayer) == 0) {
-			NA_character_
-		} else {
-			gsub(dbLayer, pattern="attribute_layer_name=", replacement="")
-		}
+  	# 	dbLayer <- attribMetaInfo[grepl(attribMetaInfo, pattern = "attribute_layer_name")]
+	# 	dbLayer <- if (length(dbLayer) == 0) {
+	# 		NA_character_
+	# 	} else {
+	# 		gsub(dbLayer, pattern="attribute_layer_name=", replacement="")
+	# 	}
 
-	}
+	# }
 
   	projection <- attribMetaInfo[grepl(attribMetaInfo, pattern = "projection=")]
  	projection <- sub(projection, pattern = "projection=", replacement = "")
@@ -456,12 +457,12 @@
 		north = north,
 	
 		zbottom = zbottom,
-		ztop = ztop,
+		ztop = ztop
 		
-		nFields = nFields,
-		dbLayer = dbLayer,
-		fields = fields,
-		classes = classes
+		# nFields = nFields,
+		# dbLayer = dbLayer,
+		# fields = fields,
+		# classes = classes
 	)
 	
 	out
