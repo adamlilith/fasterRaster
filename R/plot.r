@@ -20,7 +20,7 @@
 #'
 #' @seealso [terra::plot()]
 #'
-#' @example man/examples/ex_GRaster_GVector.r
+#' @example man/examples/ex_plot.r
 #'
 #' @aliases plot
 #' @rdname plot
@@ -37,7 +37,7 @@ methods::setMethod(
 		rows <- nrow(x)
 		cols <- ncol(x)
 		rescale <- ceiling(nc / (2 * maxcell))
-		if (rescale != 1) x <- aggregate(x, fact = rescale)
+		if (rescale != 1L) x <- aggregate(x, fact = rescale)
 
 	}
 	
