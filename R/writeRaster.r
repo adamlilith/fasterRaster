@@ -47,9 +47,10 @@
 #'
 #' @example man/examples/ex_writeRaster.r
 #'
+#' @importFrom tools file_ext
+#'
 #' @aliases writeRaster
 #' @rdname writeRaster
-#' @export
 #' @exportMethod writeRaster
 setMethod(
 	"writeRaster",
@@ -147,9 +148,10 @@ setMethod(
 			} else if (any(datatype == "Byte")) {
 				"Byte"
 			}
+			
 		}
 
-		if (datatype != datatype(x, "GDAL")) {
+		if (any(!(datatype(x, "GDAL") %in% datatype))) {
 			flags <- c(flags, "f")
 			if (warn) warning("Argument ", sQuote("datatype"), " does not match the data type of the raster. Data may be lost.")
 		}
@@ -195,8 +197,8 @@ setMethod(
 		do.call(rgrass::execGRASS, args=args)
 
 	}
-	
-	if (any(is.factor(x))) {
+	isFact <- is.factor(x)
+	if (any(isFact)) {
 
 		extension <- paste0(".", extension)
 		filename <- substr(filename, 1L, nchar(filename) - nchar(extension))
@@ -204,11 +206,17 @@ setMethod(
 		utils::write.csv(levels(x), filename)
 
 	}
-
 	out <- terra::rast(filename)
 	# out <- terra::trim(out)
 	names(out) <- names(x)
-	levels(out) <- levels(x)
+	
+	if (any(isFact)) {
+		for (i in which(isFact)) {
+			out[[i]] <- categories(out[[i]], layer = i, value = cats(x)[[i]], active = activeCat(x)[i])
+		}
+	}
+	
+	# levels(out) <- levels(x)
 	invisible(out)
 	
 	} # EOF
