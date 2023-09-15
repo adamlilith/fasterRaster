@@ -43,8 +43,8 @@ setMethod(
 	signature = "GVector",
 	definition = function(x) {
 	
-	if (inherits(x@db, "GFullMetaTable")) {
-		x@db@fields
+	if (nrow(x@table) > 0L) {
+		names(x@table)
 	} else {
 		NULL
 	}
