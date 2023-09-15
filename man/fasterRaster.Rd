@@ -108,6 +108,7 @@ Multi-layer functions (applied across layers of a "stack" of \code{GRaster}s):
 \code{\link[=mask]{mask()}}: Remove values in a raster based on values in another raster or vector\cr
 \code{\link[=merge]{merge()}}: Combine two or more rasters with different extents and fill in \code{NA}s\cr
 \code{\link[=plot]{plot()}}: Display a raster\cr
+\code{\link[=plotRGB]{plotRGB()}}: Display a multispectral raster using red, blue, and green channels\cr
 \code{\link[=project]{project()}}: Change coordinate reference system and cell size\cr
 \code{\link[=resample]{resample()}}: Change cell size\cr
 \code{\link[=rnormRast]{rnormRast()}}: A random raster with values drawn from a normal distribution\cr
@@ -168,7 +169,8 @@ Multi-layer functions (applied across layers of a "stack" of \code{GRaster}s):
 
 \code{[} (\link[=subset_assign]{subset}): Select geometries/rows of a vector's data table\cr
 \code{[[} (\link[=subset_assign]{subset}): Subset columns of a vector's data table\cr
-\code{\link[=as.data.frame]{as.data.frame()}}: Convert a vector to a \code{data.frame}\cr
+\code{\link[=as.data.frame]{as.data.frame()}}: Convert a vector's attribute table to a \code{data.frame}\cr
+\code{\link[=as.data.table]{as.data.table()}}: Convert a vector's attribute table to a \code{data.table}\cr
 \code{\link[=as.points]{as.points()}}: Extract vertex coordinates from a "lines" or "polygons" \code{GVector}\cr
 \code{\link[=buffer]{buffer()}}: Create a polygon around/inside a vector\cr
 \code{\link[=cleanGeom]{cleanGeom()}}: Fix undesirable geometries of a vector\cr
@@ -204,6 +206,15 @@ Multi-layer functions (applied across layers of a "stack" of \code{GRaster}s):
 \code{\link[=vect]{vect()}}: Convert a \code{GVector} to a \code{SpatVector}\cr
 }
 
+\subsection{Functions that operate on \strong{GRASS} "sessions":}{
+
+\code{\link[=crs]{crs()}}: Coordinate reference system of the current location\cr
+\code{\link[=location]{location()}}: \strong{GRASS} "location" of an object or the active session\cr
+\code{\link[=mapset]{mapset()}}: \strong{GRASS} "mapset" of an object or the active session\cr
+\code{\link[=restoreSession]{restoreSession()}}: Restore a previous \strong{GRASS} session or switch \strong{GRASS} locations/mapsets\cr
+\code{\link[=removeSession]{removeSession()}}: Delete a \strong{GRASS} session (location, mapset(s), and all associated files)\cr
+}
+
 \subsection{General purpose functions}{
 
 \code{\link[=appendLists]{appendLists()}}: Append values to elements of a list from another list\cr
@@ -215,15 +226,7 @@ Multi-layer functions (applied across layers of a "stack" of \code{GRaster}s):
 \code{\link[=pmatchSafe]{pmatchSafe()}}: Partial matching of strings with error checking\cr
 \code{\link[=replaceNAs]{replaceNAs()}}: Replace \code{NA}s in columns of a \code{data.table} or \code{data.frame}, or in a vector\cr
 \code{\link[=rstring]{rstring()}}: Create a string statistically likely to be unique\cr
-}
-
-\subsection{Functions that operate on \strong{GRASS} "sessions":}{
-
-\code{\link[=crs]{crs()}}: Coordinate reference system of the current location\cr
-\code{\link[=location]{location()}}: \strong{GRASS} "location" of an object or the active session\cr
-\code{\link[=mapset]{mapset()}}: \strong{GRASS} "mapset" of an object or the active session\cr
-\code{\link[=restoreSession]{restoreSession()}}: Restore a previous \strong{GRASS} session or switch \strong{GRASS} locations/mapsets\cr
-\code{\link[=removeSession]{removeSession()}}: Delete a \strong{GRASS} session (location, mapset(s), and all associated files)\cr
+\code{\link[=seqToSQL]{seqToSQL()}}: Format a numeric series into an SQL value call.\cr
 }
 
 \subsection{Functions that operate on \strong{GRASS} "regions" (seldom used by most users):}{
@@ -234,7 +237,7 @@ Multi-layer functions (applied across layers of a "stack" of \code{GRaster}s):
 \code{\link[=regionRes]{regionRes()}}: Change or report the active region's dimensions (also \code{\link[=res]{res()}} and related functions, with no arguments)\cr
 }
 
-\subsection{Data objects}{
+\subsection{Example data}{
 
 \link{appFunsTable} (see also \code{\link[=appFuns]{appFuns()}}): Functions usable by the \code{\link[=app]{app()}} function\cr
 \link{madChelsa}: Climate rasters for of a portion of eastern Madagascar\cr

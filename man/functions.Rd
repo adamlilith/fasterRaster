@@ -5,7 +5,7 @@
 \alias{mean}
 \alias{mmode,GRaster-method}
 \alias{mmode}
-\alias{median,GRaster-method}
+\alias{median,GRaster,logical-method}
 \alias{median}
 \alias{count,GRaster-method}
 \alias{count}
@@ -53,7 +53,7 @@
 
 \S4method{mmode}{GRaster}(x, na.rm = FALSE)
 
-\S4method{median}{GRaster}(x, na.rm = FALSE)
+\S4method{median}{GRaster,logical}(x, na.rm = FALSE)
 
 \S4method{count}{GRaster}(x)
 

@@ -10,45 +10,49 @@
 Creates in \strong{GRASS} a copy of a \code{GSpatial} object (typically, a \code{GRaster} or a \code{GVector}).
 }
 
-\subsection{\code{.datatype()}}{
+\subsection{\code{dbCat()}}{
 
-Intuits GDAL or \strong{terra} raster data type.
+Get a \code{data.table} with a single column named \code{cat}, which corresponds to the \strong{GRASS} attribute table's \code{cat} column.
 
-Argument(s): \code{x}: A \code{GRaster} or vector of \code{sources}.
-
-\code{type}: Character. Either "terra" or "GDAL".
-
-\code{force}: \code{NULL} (default) or character: Force data type to respect \code{CELL}, 'FCELL', or \code{DCELL}.
+\code{x}: A \code{GVector}.
 }
 
-\subsection{\code{.dbLayer()} and \code{.dbTable()}}{
+\subsection{\code{dbToDataTable()}}{
 
-\strong{GRASS} names of the data table and data layer associated with a vector.
+Convert the attribute table linked to a vector in \strong{GRASS} to a \code{data.table}. This table is distinct from the attribute table attached to a \code{GVector}.
 
-Argument(s): \code{x}: A \code{GVector}.
+\code{x}: A \code{GVector}.
 }
 
-\subsection{\code{.delete()} and \code{.keep()}}{
+\subsection{\code{dbRemove}}{
 
-Remove or retain rows of a \code{data.table}.
+Delete an attribute table linked to a vector in \strong{GRASS}. This table is distinct from the attribute table attached to a \code{GVector}. Note that even the \code{cat} column, which is necessary for identifying individual features, is dropped.
 
-Argument(s): \code{DT}: A \code{data.table}.
+\code{x}: A \code{GVector}.
+}
 
-\code{removes} or \code{keeps}: Rows to remove or keep.
+\subsection{\code{.layerIndex()}}{
+
+Gets the index of raster layers from a vector.
+
+\code{layer}: Integer, numeric, logical, or character: Refers to one or more layers.
+
+\code{x}: A \code{GRaster}.
+\code{recycle} Logical: If \code{TRUE} (default), and \code{layer} is logical and smaller in number than the number of layers, then recycle the vector of \code{layer}.
 }
 
 \subsection{\code{.ls()}}{
 
 Lists the \code{sources} of all objects in the current \strong{GRASS} session.
 
-Argument(s): \code{type}: One or more of \code{"rasters"}, \code{"vectors"}, \code{"rasters3d"}, \code{"groups"}, or missing: Type of object(s) to display. If missing, all objects are displayed.
+\code{type}: One or more of \code{"rasters"}, \code{"vectors"}, \code{"rasters3d"}, \code{"groups"}, or missing: Type of object(s) to display. If missing, all objects are displayed.
 }
 
 \subsection{\code{.makeSourceNames()}}{
 
 Makes one or more statistically unique strings that can be used as file names to represent rasters or vectors in \strong{GRASS}.
 
-Argument(s): \code{x}: Missing, character, \code{SpatRaster}, \code{SpatVector}, \code{sf}, \code{GRaster}, or \code{GVector}. Object from which to make the \code{source} (if possible).
+\code{x}: Missing, character, \code{SpatRaster}, \code{SpatVector}, \code{sf}, \code{GRaster}, or \code{GVector}. Object from which to make the \code{source} (if possible).
 
 \code{rastOrVect}: Character: \code{"raster"} or \code{"vector"} (partial matching is used). Type of \code{source} to make.
 
@@ -59,58 +63,53 @@ Argument(s): \code{x}: Missing, character, \code{SpatRaster}, \code{SpatVector},
 
 Make \code{GRaster}s or \code{GVector}s from a vector of \code{sources}, which is a pointer to files in \strong{GRASS}.
 
-Argument(s): \code{src}: Character vector of \code{sources}.
+\code{src}: Character vector of \code{sources}.
 
 \code{name}: Character (rasters only): Name(s) of the \code{GRaster}s.
-}
-
-\subsection{\code{.makeUniqueNames()}: Make unique \code{GRaster} names.}{
-
-Argument(s): \code{x}: A \code{GRaster}.
 }
 
 \subsection{\code{.minVal()} and \code{.maxVal()}}{
 
 Get the value of the \verb{@minVal} and \verb{@maxVal} slot in a \code{GRaster}.
 
-Argument(s): \code{x}: A \code{GRaster}.
+\code{x}: A \code{GRaster}.
 }
 
 \subsection{\code{.nlevels()}}{
 
-Count number of levels in a \code{GRaster}, \code{data.frame}, \code{data.table}, empty string, or a list of \code{data.frame}s, \code{data.table}s, and/or empty strings.
+Count number of levels in a \code{SpatVector}, \code{data.frame}, \code{data.table}, empty string, or a list of \code{data.frame}s, \code{data.table}s, and/or empty strings.
 
-Argument(s): \code{x}: A \code{GRaster}, \code{data.frame}, \code{data.table}, empty string, or a list thereof.
+\code{x}: A \code{GRaster}, \code{data.frame}, \code{data.table}, empty string, or a list thereof.
 }
 
 \subsection{\code{.projection()}}{
 
 Get the value of the \verb{@projection} slot in a \code{GRaster} or \code{GVector}.
 
-Argument(s): A \code{GRaster} or \code{GVector}.
+A \code{GRaster} or \code{GVector}.
 }
 
 \subsection{\code{.refresh()}}{
 
 Refresh metadata held within a \code{GRaster} or `GVector`` by querying the object in \strong{GRASS}.
 
-Argument(s): \code{x}: A \code{GRaster} or \code{GVector}.
+\code{x}: A \code{GRaster} or \code{GVector}.
 }
 
 \subsection{\code{.rename()}}{
 
 Rename a \strong{GRASS} raster or vector.
 
-Argument(s): \code{from} and \code{to}: Character: The \code{sources} of the object to be renamed.
+\code{from} and \code{to}: Character: The \code{sources} of the object to be renamed.
 
-\code{rastorVect}: Character: Either \code{"raster"} or \code{"vector"} or \code{NULL}. Type of object to rename. If \code{NULL}, function will try to determine if \code{from} is a raster or vector (slower).
+\code{rastOrVect}: Character: Either \code{"raster"} or \code{"vector"} or \code{NULL}. Type of object to rename. If \code{NULL}, function will try to determine if \code{from} is a raster or vector (slower).
 }
 
 \subsection{\code{.rm()}}{
 
 Delete all \strong{GRASS} files representing rasters or vectors.
 
-Argument(s): \code{x}: A \code{GRaster}, \code{GVector}, character, or missing (default): The \code{source}(s) of the object(s) to be deleted, or objects from which \code{source}(s) can be obtained. If missing, all objects will be deleted (but their type can specified using \code{type}).
+\code{x}: A \code{GRaster}, \code{GVector}, character, or missing (default): The \code{source}(s) of the object(s) to be deleted, or objects from which \code{source}(s) can be obtained. If missing, all objects will be deleted (but their type can specified using \code{type}).
 
 \code{type}: Character: \code{"rasters"}, \code{"vectors"}, \code{"rasters3d"}, \code{"groups"}, or \code{NULL} (default). Type(s) of objects to delete. If \code{NULL}, and \code{x} is missing, all objects will be deleted.
 
@@ -121,7 +120,7 @@ Argument(s): \code{x}: A \code{GRaster}, \code{GVector}, character, or missing (
 
 Metadata for a \strong{GRASS} raster or vector.
 
-Argument(s): \code{x}: A \code{GRaster}, \code{GVector}, or character vector representing \code{sources}.
+\code{x}: A \code{GRaster}, \code{GVector}, or character vector representing \code{sources}.
 }
 }
 \keyword{tutorial}

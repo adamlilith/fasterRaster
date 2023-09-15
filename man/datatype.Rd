@@ -18,7 +18,7 @@
 \item \code{"fasterRaster"} (default): Reports the \strong{fasterRaster} type (factor, integer, float, or double)
 \item \code{"terra"}: Report the (inferred) \strong{terra} data type (e.g., INT2U, FLT4S). Please see the table in the \link[=tutorial_raster_data_types]{tutorial on raster data types} for more information.
 \item \code{"GRASS"}: Will return "CELL" (integer), "FCELL" (floating-point value), or "DCELL" (double-floating point value)
-\item \code{"GDAL"}: See \href{https://gdal.org/user/raster_data_model.html#raster-band}{GDAL: Raster Band}. Please also see the table in the \link{tutorial on raster data types}.
+\item \code{"GDAL"}: See \href{https://gdal.org/user/raster_data_model.html#raster-band}{GDAL: Raster Band}. Please also see the table in the \link[=tutorial_raster_data_types]{tutorial on raster data types}.
 }}
 }
 \value{
@@ -191,6 +191,12 @@ refresh(elev)
 
 # convert to data frame
 as.data.frame(rivers)
+
+# subsetting
+rivers[c(1:2, 5)] # select 3 geometries
+rivers[-5:-11] # rivers select
+rivers[c(TRUE, FALSE)] # select every other geometry (T/F vector is recycled)
+
 
 # refresh values from GRASS
 # (reads values from GRASS... does not appear to do anything in this case)

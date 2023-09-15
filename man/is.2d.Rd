@@ -185,6 +185,12 @@ refresh(elev)
 # convert to data frame
 as.data.frame(rivers)
 
+# subsetting
+rivers[c(1:2, 5)] # select 3 geometries
+rivers[-5:-11] # rivers select
+rivers[c(TRUE, FALSE)] # select every other geometry (T/F vector is recycled)
+
+
 # refresh values from GRASS
 # (reads values from GRASS... does not appear to do anything in this case)
 refresh(rivers)

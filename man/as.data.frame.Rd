@@ -3,20 +3,22 @@
 \name{as.data.frame,GVector-method}
 \alias{as.data.frame,GVector-method}
 \alias{as.data.frame}
+\alias{as.data.table,GVector-method}
+\alias{as.data.table}
 \title{Convert GVector to a data frame}
 \usage{
-\S4method{as.data.frame}{GVector}(x, row.names = NULL)
+\S4method{as.data.frame}{GVector}(x)
+
+\S4method{as.data.table}{GVector}(x)
 }
 \arguments{
 \item{x}{A \code{GVector}.}
-
-\item{row.names}{\code{NULL} (default) or a character vector giving names for rows.}
 }
 \value{
-A \code{data.frame}.
+A \code{data.frame} or \code{NULL} (if the \code{GRaster} has no attribute table).
 }
 \description{
-Convert a \code{GVector}'s attribute table to a data frame.
+Convert a \code{GVector}'s attribute table to a \code{data.frame} or \code{data.table}.
 }
 \examples{
 \dontrun{
@@ -183,6 +185,12 @@ refresh(elev)
 # convert to data frame
 as.data.frame(rivers)
 
+# subsetting
+rivers[c(1:2, 5)] # select 3 geometries
+rivers[-5:-11] # rivers select
+rivers[c(TRUE, FALSE)] # select every other geometry (T/F vector is recycled)
+
+
 # refresh values from GRASS
 # (reads values from GRASS... does not appear to do anything in this case)
 refresh(rivers)
@@ -194,5 +202,5 @@ removeSession("examples")
 }
 }
 \seealso{
-\code{\link[terra:as.data.frame]{terra::as.data.frame()}}
+\code{\link[terra:as.data.frame]{terra::as.data.frame()}}, \code{\link[data.table:as.data.table]{data.table::as.data.table()}}
 }

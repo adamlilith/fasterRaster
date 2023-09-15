@@ -162,9 +162,20 @@ refresh(elev)
 # convert to data frame
 as.data.frame(rivers)
 
-# refresh values from GRASS
-# (reads values from GRASS... does not appear to do anything in this case)
-refresh(rivers)
+# subsetting
+rivers[c(1:2, 5)] # select 3 geometries
+rivers[-5:-11] # reverse select
+rivers[ , 1] # columns
+rivers[ , "NAM"] # select column
+rivers[["NAM"]] # select column
+rivers[1, 1] # rows and columns
+rivers[c(TRUE, FALSE)] # select every other geometry (T/F vector is recycled)
+rivers[ , c(TRUE, FALSE)] # select every other column (T/F vector is recycled)
+
+# Refresh values from GRASS
+# (Reads values from GRASS... will not appear to do anything in this case
+# since the rivers object is up-to-date):
+rivers <- refresh(rivers)
 
 # IMPORTANT #3: Revert back to original GRASS session if needed.
 restoreSession(opts.)

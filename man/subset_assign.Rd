@@ -9,19 +9,31 @@
 \alias{[<-,GRaster,ANY,ANY-method}
 \alias{[,GVector,ANY,ANY-method}
 \alias{[[,GVector,ANY,ANY-method}
+\alias{$,GVector-method}
+\alias{$<-,GVector-method}
 \title{Sub-setting operator for GRasters and GVectors}
 \usage{
 \S4method{[[}{GRaster,ANY,ANY}(x, i)
+
+\S4method{$}{GRaster}(x, name)
 
 \S4method{[[}{GRaster,ANY}(x, i, j) <- value
 
 \S4method{add}{GRaster,GRaster}(x) <- value
 
+\S4method{$}{GRaster}(x, name) <- value
+
 \S4method{[}{GRaster,ANY,ANY}(x) <- value
 
-\S4method{[}{GVector,ANY,ANY}(x, i)
+\S4method{[}{GVector,ANY,ANY}(x, i, j)
+
+\S4method{[}{GVector,ANY,ANY}(x, i, j)
 
 \S4method{[[}{GVector,ANY,ANY}(x, i)
+
+\S4method{$}{GVector}(x, name)
+
+\S4method{$}{GVector}(x, name) <- value
 }
 \arguments{
 \item{x}{A \code{GVector}, or a \code{GRaster} with one or more layers.}
@@ -43,12 +55,15 @@
 A \code{GRaster}.
 }
 \description{
-The \code{[} and \code{[[} operators do different things depending on whether they are applied to a \code{GRaster} or \code{GVector}:
+The \code{[} and \code{[[} operators do different things depending on whether they are applied to a \code{GRaster} or \code{GVector} and whether the index is positive or negative:
 \itemize{
 \item \code{GVector}s:
 \itemize{
-\item \code{[} operator: Returns a subset of geometries (i.e., points, lines, or polygons) of the \code{GVector}. For example, \code{vector[2:4]} will return the second through the fourth geometries.
-\item \code{[[} operator: Returns a vector with the selected columns in its data frame. For example, \code{vector[[2:4]]} returns the \code{GVector}, but with just columns 2 through 4 of the data frame.
+\item \code{[} operator with a positive index: Returns a subset of geometries (i.e., points, lines, or polygons) of the \code{GVector}. For example, \code{vector[2:4]} will return the second through the fourth geometries.
+\item \code{[} operator with a negative index: Drops a subset of geometries. For example, \code{vector[-2:-4]} will remove the second, third, and fourth geometries.
+\item \code{[[} operator with a positive index: Returns a vector with the selected columns in its data frame. For example, \code{vector[[2:4]]} returns the \code{GVector}, but with just columns 2 through 4 of its data frame.
+\item \code{[[} operator with a negative index: Returns a vector without the selected columns. For example, \code{vector[[-2:-4]]} returns the \code{GVector} without columns 2 through 4 in is data frame.
+\item \verb{[[<-} operator: Replaces the values in the column(s) indicated by the index by the new value.
 }
 \item \code{GRaster}s:
 \itemize{
@@ -223,6 +238,12 @@ refresh(elev)
 
 # convert to data frame
 as.data.frame(rivers)
+
+# subsetting
+rivers[c(1:2, 5)] # select 3 geometries
+rivers[-5:-11] # rivers select
+rivers[c(TRUE, FALSE)] # select every other geometry (T/F vector is recycled)
+
 
 # refresh values from GRASS
 # (reads values from GRASS... does not appear to do anything in this case)

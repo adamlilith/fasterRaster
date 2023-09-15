@@ -58,5 +58,5 @@ removeSession("examples")
 }
 }
 \seealso{
-\code{\link[terra:contour]{terra::as.contour()}}, \strong{GRASS} module \code{r.contour}
+\code{\link[terra:contour]{terra::as.contour()}}, module \code{r.contour} in \strong{GRASS}
 }
