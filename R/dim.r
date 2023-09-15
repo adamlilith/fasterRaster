@@ -139,7 +139,7 @@ setMethod(
 methods::setMethod(
 	f = "dim",
 	signature = "GVector",
-	definition = function(x) c(geometries = x@nGeometries, fields = x@nFields)
+	definition = function(x) dim(x@table)
 )
 
 #' @rdname dim
@@ -148,7 +148,7 @@ methods::setMethod(
 setMethod(
 	f = "nrow",
 	signature = "GVector",
-	definition = function(x) x@nGeometries
+	definition = function(x) nrow(x@table)
 )
 
 #' @rdname dim
@@ -157,7 +157,7 @@ setMethod(
 setMethod(
 	f = "ncol",
 	signature = "GVector",
-	definition = function(x) x@nFields
+	definition = function(x) ncol(x@table)
 )
 
 #' @rdname dim
