@@ -204,6 +204,7 @@ methods::setGeneric(name = "trim", package = "terra")
 methods::setGeneric(name = "tvalue", def = function(x, ...) standardGeneric("tvalue"))
 
 methods::setGeneric(name = "varpop", def = function(x, ...) standardGeneric("varpop"))
+methods::setGeneric(name = "vegIndex", def = function(x, ...) standardGeneric("vegIndex"))
 methods::setGeneric(name = "vect", package = "terra")
 methods::setGeneric(name = "viewshed", package = "terra")
 methods::setGeneric(name = "voronoi", package = "terra")
