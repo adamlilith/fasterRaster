@@ -217,6 +217,7 @@
 #' [madDypsis][madDypsis]: Specimens records of species in the genus *Dypsis*\cr
 #' [madElev][madElev]: Elevation raster\cr
 #' [madForest2000][madForest2000] and [madForest2014][madForest2014]: Forest cover in 2000 and 2014\cr
+#' [madLand][madLand]: Surface reflectance in 2023\cr
 #' [madRivers][madRivers]: Rivers vector\cr
 #' 
 #' ## Esoteric tutorials

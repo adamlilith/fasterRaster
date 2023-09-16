@@ -16,6 +16,7 @@
 #' * `madElev`: Elevation
 #' * `madForest2000`: Forest cover in year 2000
 #' * `madForest2014`: Forest cover in year 2014
+#' * `madLand`: Surface reflectance in 2023
 #'
 #' Data frames
 #' * `appFunsTable`: Table of functions usable by [app()].
@@ -32,7 +33,7 @@ fastData <- function(x) {
 
 	vectors <- c("madCoast0", "madCoast4", "madDypsis", "madRivers")
 	tables <- c("appFunsTable", "madCoverCats")
-	rasters <- c("madChelsa", "madCover", "madElev", "madElevAnt", "madElevMan", "madForest2000", "madForest2014")
+	rasters <- c("madChelsa", "madCover", "madElev", "madLand", "madForest2000", "madForest2014")
 
 	if (!inherits(x, "character")) {
 		stop("Please supply the name of an example raster or spatial vector in fasterRaster.")
