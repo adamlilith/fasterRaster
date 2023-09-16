@@ -123,6 +123,11 @@
 #' [minmax()]: "Lowest" and "highest" category values of categorical rasters (when argument `levels = TRUE`)\cr
 #' [missingCats()]: Values that have no category assigned to them\cr
 #' [nlevels()]: Number of levels\cr
+#' 
+#' ## Functions for analysis of remote sensing rasters
+#' [toarAster()]: Convert digital number ASTER rasters to radiance, and radiance to reflectance\cr
+#' [toarLandsat()]: Convert digital number LANDSAT rasters to radiance, and radiance to reflectance\cr
+#' [vegIndex()]: Vegetation indices from surface reflectance\cr
 #'
 #' ## Properties of **fasterRaster** vectors (`GVector`s)
 #' [crs()]: Coordinate reference system\cr
