@@ -36,37 +36,56 @@ methods::setMethod(
 		
 	} else {
 	
-		df <- as.data.frame(x)
-		uniques <- unique(df[ , by, drop=TRUE])
+		byCol <- which(names(x) == by)
+		bys <- as.data.table(x)[[by]]
+		uniques <- unique(bys)
 	
 		n <- length(uniques)
-		srcs <- .makeSourceName("convHull", "vector", n)
 
+		srcs <- .makeSourceName("convHull", "vector", n)
 		vects <- list()
 		for (i in seq_len(n)) {
 
 			uniq <- uniques[i]
-			cats <- df$cat[df[ , by, drop = TRUE] == uniq]
-			cats <- paste(cats, collapse=", ")
+			selected <- which(bys == uniq)
 
-			# select
-			args <- list(
-				cmd = "v.hull",
-				input = sources(x),
-				output = srcs[i],
-				layer = .dbLayer(x),
-				flags = c("quiet", "overwrite"),
-				cats = cats,
-				intern = TRUE
-			)
-			
-			do.call(rgrass::execGRASS, args=args)
-			vects[[i]] <- .makeGVector(srcs[i])
-			
+			xx <- x[selected]
+
+			if (ngeom(xx) < 3L) {
+
+				warnings("Skipping ", uniq, " in column ", by, " because it has <3 locations.")
+
+			} else {
+					
+				# select
+				args <- list(
+					cmd = "v.hull",
+					input = sources(xx),
+					output = srcs[i],
+					flags = c("quiet", "overwrite"),
+					intern = TRUE
+				)
+				
+				do.call(rgrass::execGRASS, args=args)
+				vects[[i]] <- .makeGVector(srcs[i])
+
+			}
+				
 		} # next set
 		
-		# concatenate
-		out <- do.call("c", vects)
+		# remove any NULL polygons
+		vects <- Filter(Negate(is.null), vects)
+		
+		if (length(vects) == 0L) {
+			out <- NULL
+		} else {
+
+			# concatenate
+			args <- list(x = vects[[1L]])
+			if (length(vects) > 1L) args <- c(args, list(vects[2:length(vects)]))
+			out <- do.call("c", args)
+
+		}
 	
 	}
 	out
