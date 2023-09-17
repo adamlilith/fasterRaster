@@ -35,157 +35,6 @@ methods::setMethod(
 	definition = function(x) x@crs
 )
 
-# #' @rdname crs
-# #' @aliases st_crs
-# #' @exportMethod st_crs
-# methods::setMethod(
-#     f = "st_crs",
-#     signature = c(x = "missing"),
-#     definition = function(x) st_crs(region())
-# )
-
-# #' @aliases st_crs
-# #' @rdname crs
-# #' @exportMethod st_crs
-# methods::setMethod(
-#     f = "st_crs",
-#     signature(x = "GSession"),
-#     function(x) sf::st_crs(x@crs)
-# )
-
-# #' @aliases st_crs
-# #' @rdname crs
-# #' @exportMethod st_crs
-# methods::setMethod(
-# 	f = "st_crs",
-# 	signature(x = "sf"),
-# 	function(x, ...) sf::st_crs(x, ...)
-# )
-
-# #' @aliases st_crs
-# #' @rdname crs
-# #' @exportMethod st_crs
-# methods::setMethod(
-# 	f = "st_crs",
-# 	signature(x = "SpatRaster"),
-# 	function(x, ...) sf::st_crs(x, ...)
-# )
-
-# #' @aliases st_crs
-# #' @rdname crs
-# #' @exportMethod st_crs
-# methods::setMethod(
-# 	f = "st_crs",
-# 	signature(x = "SpatVector"),
-# 	function(x, ...) sf::st_crs(x, ...)
-# )
-
-# #' @aliases st_crs
-# #' @rdname crs
-# #' @exportMethod st_crs
-# methods::setMethod(
-# 	f = "st_crs",
-# 	signature(x = "SpatExtent"),
-# 	function(x, ...) sf::st_crs(x, ...)
-# )
-
-# #' @aliases st_crs
-# #' @rdname crs
-# #' @exportMethod st_crs
-# methods::setMethod(
-# 	f = "st_crs",
-# 	signature(x = "SpatGraticule"),
-# 	function(x, ...) sf::st_crs(x, ...)
-# )
-
-# #' @aliases st_crs
-# #' @rdname crs
-# #' @exportMethod st_crs
-# methods::setMethod(
-# 	f = "st_crs",
-# 	signature(x = "numeric"),
-# 	function(x) sf::st_crs(x)
-# )
-
-# #' @aliases st_crs
-# #' @rdname crs
-# #' @exportMethod st_crs
-# methods::setMethod(
-# 	f = "st_crs",
-# 	signature(x = "character"),
-# 	function(x) sf::st_crs(x)
-# )
-
-# #' @aliases st_crs
-# #' @rdname crs
-# #' @exportMethod st_crs
-# methods::setMethod(
-# 	f = "st_crs",
-# 	signature(x = "bbox"),
-# 	function(x) sf::st_crs(x)
-# )
-
-# #' @aliases st_crs
-# #' @rdname crs
-# #' @exportMethod st_crs
-# methods::setMethod(
-# 	f = "st_crs",
-# 	signature(x = "crs"),
-# 	function(x) sf::st_crs(x)
-# )
-
-# #' @aliases st_crs
-# #' @rdname crs
-# #' @exportMethod st_crs
-# methods::setMethod(
-# 	f = "st_crs",
-# 	signature(x = "CRS"),
-# 	function(x) sf::st_crs(x)
-# )
-
-
-# st_crs <- function(x, ...) UseMethod("st_crs", x)
-
-# #' @rdname crs
-# #' @export
-# st_crs <- function(x, ...) {
-# 	if (inherits(x, "GSession")) {
-# 		out <- x@crs
-# 		out <- sf::st_crs(out)
-# 	} else {
-# 		out <- sf::st_crs(x, ...)
-# 	}
-# 	out
-# }
-
-# #' @rdname crs
-# #' @aliases st_crs
-# #' @exportMethod st_crs
-# methods::setMethod(
-# 	f = "st_crs",
-# 	signature = "GSession",
-# 	definition = function(x) {
-
-# 	if (missing(x)) {
-	
-# 		out <- crs()
-# 		out <- sf::st_crs(out)
-
-# 	} else if (inherits(x, "GSession")) {
-
-# 		out <- x@crs
-# 		out <- sf::st_crs(out)
-
-# 	} else {
-	
-#   		out <- NextMethod(x)
-	
-# 	}
-# 	out
-
-# 	} # EOF
-# )
-
 #' @rdname crs
 #' @aliases st_crs
 #' @exportMethod st_crs
@@ -194,7 +43,7 @@ methods::setMethod(
 	signature = "missing",
 	definition = function(x, ...) {
 		
-	out <- crs()
+	out <- crs(location())
 	sf::st_crs(out)
 
 	} # EOF
@@ -214,6 +63,7 @@ methods::setMethod(
 	} # EOF
 )
 
-#' @importFrom sf st_crs
+#' @aliases st_crs
+#' @rdname crs
 #' @export
-sf::st_crs
+st_crs <- function(x, ...) UseMethod("st_crs", x)

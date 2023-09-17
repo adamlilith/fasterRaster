@@ -224,9 +224,7 @@ methods::setMethod(
 	}
 )
 
-#' @importFrom sf st_distance
-#' @export
-sf::st_distance
+st_distance <- function(x) UseMethod("st_distance", x)
 
 .convertRastUnits <- function(src, unit) {
     

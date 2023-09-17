@@ -165,6 +165,4 @@ methods::setMethod(
 	} # EOF
 )
 
-#' @importFrom sf st_buffer
-#' @export
-sf::st_buffer
+st_buffer <- function(x) UseMethod("st_buffer", x)

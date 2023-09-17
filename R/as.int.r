@@ -11,7 +11,7 @@
 #' 
 #' @returns A `GRaster`.
 #' 
-#' @seealso [datatype()], [terra::datatype()], [is.int()], [is.float()], [is.doub()], [is.factor()], [raster data types][tutorial_raster_data_types] in **fasterRaster**
+#' @seealso [datatype()], [terra::datatype()], [is.int()], [is.float()], [is.doub()], [levels<-], [raster data types][tutorial_raster_data_types] in **fasterRaster**
 #'
 #' @example man/examples/ex_GRaster.r
 #' 

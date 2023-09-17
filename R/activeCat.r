@@ -46,10 +46,6 @@ methods::setMethod(
 	} # EOF
 )
 
-# # # #' @importFrom terra activeCat
-# # # #' @export
-# # # terra::activeCat
-
 #' @aliases activeCat<-
 #' @rdname activeCat
 #' @exportMethod activeCat<-

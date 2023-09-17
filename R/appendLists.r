@@ -8,6 +8,8 @@
 #'
 #' @details Adapted from nswer by user *polkas* on [https://stackoverflow.com/questions/18538977/combine-merge-lists-by-elements-names](StackOverflow).
 #'
+#' @returns A `list`. 
+#'
 #' @examples
 #' 
 #' # same data types for same named element
@@ -20,8 +22,9 @@
 #' l2 <- list(a="letters", c=FALSE)
 #' appendLists(l1, l2)
 #' 
+#' @aliases appendLists
+#' @rdname appendLists
 #' @export
-
 appendLists <- function(...) {
 
 	dots <- list(...)

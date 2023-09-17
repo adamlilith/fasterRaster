@@ -77,6 +77,4 @@ methods::setMethod(
 	} # EOF
 )
 
-# #' @importFrom base droplevels
-# #' @export
-# base::droplevels
+droplevels <- function(x) UseMethod("droplevels", x)

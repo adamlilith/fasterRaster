@@ -23,7 +23,7 @@
 
 if (getRversion() >= "2.15.1") {
     utils::globalVariables(c(".", ".I", ".N", ".SD"), utils::packageName())
-    utils::globalVariables(c("..ac", "..cols", ".datatype"), utils::packageName())
+    utils::globalVariables(c("..ac", "..cols", "..i", "..j"), utils::packageName())
 }
 
 ### GENERICS
@@ -31,15 +31,11 @@ if (getRversion() >= "2.15.1") {
 if (!isGeneric("[")) methods::setGeneric(name = "[", def = function(x, ...) standardGeneric("["))
 if (!isGeneric("[<-")) methods::setGeneric(name = "[<-", def = function(x, ...) standardGeneric("[<-"))
 #' [[ is already generic
-methods::setGeneric(name = ".maxVal", def = function(x) standardGeneric(".maxVal"))
-methods::setGeneric(name = ".minVal", def = function(x) standardGeneric(".minVal"))
 
 # methods::setGeneric(name = "activeCat", package = "terra")
 methods::setGeneric(name = "activeCat", def = function(x, ...) standardGeneric("activeCat"))
 methods::setGeneric(name = "activeCat<-", package = "terra")
-# methods::setGeneric(name = "activeCat<-", def = function(x, ..., value) standardGeneric("activeCat<-"))
 methods::setGeneric(name = "add<-", package = "terra")
-# methods::setGeneric(name = "add<-", def = function(x, ...) standardGeneric("add<-"))
 methods::setGeneric(name = "addCats", package = "terra")
 methods::setGeneric(name = "addCats<-", def = function(x, ..., value) standardGeneric("addCats<-"))
 methods::setGeneric(name = "app", package = "terra")
@@ -146,7 +142,6 @@ methods::setGeneric(name = "new", package = "methods")
 methods::setGeneric(name = "nlyr", package = "terra")
 methods::setGeneric(name = "nacell", def = function(x) standardGeneric("nacell"))
 methods::setGeneric(name = "ngeom", def = function(x) standardGeneric("ngeom"))
-# methods::setGeneric(name = "nlevels", def = function(x, ...) standardGeneric("nlevels"))
 methods::setGeneric(name = "nlevels", package = "terra")
 methods::setGeneric(name = "nonnacell", def = function(x) standardGeneric("nonnacell"))
 methods::setGeneric(name = "N", def = function(x, ...) standardGeneric("N"))
