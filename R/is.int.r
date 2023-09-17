@@ -12,7 +12,7 @@
 #' 
 #' @returns Logical.
 #' 
-#' @seealso [datatype()], [terra::datatype()], [as.int()], [as.float()], [as.doub()], [levels<-], [raster data types][tutorial_raster_data_types] in **fasterRaster**
+#' @seealso [datatype()], [terra::datatype()], [as.int()], [as.float()], [as.doub()], [is.factor()], [raster data types][tutorial_raster_data_types] in **fasterRaster**
 #'
 #' @example man/examples/ex_GRaster.r
 #' 
@@ -24,6 +24,8 @@ methods::setMethod(
     signature = c(x = "GRaster"),
     function(x) datatype(x, "GRASS") == "CELL" & nlevels(x) == 0L
 )
+
+is.int <- function(x) UseMethod("is.int", x)
 
 #' @aliases is.cell
 #' @rdname is.int
@@ -47,7 +49,7 @@ methods::setMethod(
 #' @rdname is.int
 #' @exportMethod is.doub
 methods::setMethod(
-    f = "as.doub",
+    f = "is.doub",
     signature = c(x = "GRaster"),
     function(x) datatype(x, "GRASS") == "DCELL"
 )
