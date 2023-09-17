@@ -217,6 +217,19 @@ methods::setMethod(
 #' @rdname ext
 #' @exportMethod st_bbox
 methods::setMethod(
+    f = "st_bbox",
+    signature = c(obj = "missing"),
+    function(obj, ...) {
+        out <- ext(vector = TRUE)
+        names(out) <- c("xmin", "xmax", "ymin", "ymax")
+        sf::st_bbox(out, crs = st_crs())
+    } # EOF
+)
+
+#' @aliases st_bbox
+#' @rdname ext
+#' @exportMethod st_bbox
+methods::setMethod(
 	f = "st_bbox",
 	signature = c(obj = "GSpatial"),
 	function(obj, ...) {
@@ -228,49 +241,30 @@ methods::setMethod(
 	} # EOF
 )
 
-#' @aliases st_bbox
-#' @rdname ext
-#' @exportMethod st_bbox
-methods::setMethod(
-	f = "st_bbox",
-	signature = c(obj = "missing"),
-	function(obj, ...) {
-
-	out <- ext(vector = TRUE)
-	names(out) <- c('xmin', 'xmax', 'ymin', 'ymax')
-	sf::st_bbox(out, crs = st_crs())
-	
-	} # EOF
-)
-
-#' @importFrom sf st_bbox
-#' @export
-sf::st_bbox
-
-# st_bbox <- function(obj, ...) UseMethod("st_bbox", obj)
+# #' @rdname ext
+# #' @export
+# st_bbox <- function(obj, ...) {
+# 	dots <- list(...)
+# 	if (any(names(dots) == "vector")) {
+# 		vector <- dots$vector
+# 	} else {
+# 		vector <- FALSE
+# 	}
+#     if (missing(obj)) obj <- region()
+#     if (inherits(obj, "GSpatial")) {
+#         out <- obj@extent
+#         out <- c(out[1L], out[3L], out[2L], out[4L])
+#         names(out) <- c("xmin", "ymin", "xmax", "ymax")
+#         if (!vector) out <- sf::st_bbox(out, crs = st_crs(obj))
+#     } else {
+#         out <- sf::st_bbox(obj, ...)
+#         if (vector) out <- as.vector(out)
+#     }
+#     out
+# }
 
 # #' @rdname ext
 # #' @exportMethod st_bbox
 # setMethod("st_bbox", definition = function(obj, ...) st_bbox(obj, ...))
 
-# #' @rdname ext
-# #' @export
-# st_bbox <- function(obj, ...) {
-	# dots <- list(...)
-	# if (any(names(dots) == "vector")) {
-		# vector <- dots$vector
-	# } else {
-		# vector <- FALSE
-	# }
-    # if (missing(obj)) obj <- region()
-    # if (inherits(obj, "GSpatial")) {
-        # out <- obj@extent
-        # out <- c(out[1L], out[3L], out[2L], out[4L])
-        # names(out) <- c("xmin", "ymin", "xmax", "ymax")
-        # if (!vector) out <- sf::st_bbox(out, crs = st_crs(obj))
-    # } else {
-        # out <- sf::st_bbox(obj, ...)
-        # if (vector) out <- as.vector(out)
-    # }
-    # out
-# }
+st_bbox <- function(obj, ...) UseMethod("st_bbox", obj)
