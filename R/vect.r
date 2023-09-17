@@ -39,6 +39,4 @@ setMethod(
 	} # EOF
 )
 
-#' @importFrom sf st_as_sf
-#' @export
-sf::st_as_sf
+st_as_sf <- function(x) UseMethod("st_as_sf", x)
