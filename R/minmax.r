@@ -63,21 +63,13 @@ setMethod(
 	} # EOF
 )
 
+
 #' Get minimum value from raster metadata
 #' @param x A `GRaster`.
 #' @noRd
-methods::setMethod(
-	f = ".minVal",
-	signature = c(x = "GRaster"),
-	function(x) x@minVal
-)
+.minVal <- function(x) x@minVal
 
 #' Get maximum value from raster metadata
 #' @param x A `GRaster`.
 #' @noRd
-methods::setMethod(
-	f = ".maxVal",
-	signature = c(x = "GRaster"),
-	function(x) x@maxVal
-)
-
+.maxVal <- function(x) x@maxVal
