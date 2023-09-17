@@ -9,6 +9,9 @@ appendLists(...)
 \arguments{
 \item{...}{Two or more lists. All elements must have names.}
 }
+\value{
+A \code{list}.
+}
 \description{
 This function "adds" two lists with the same or different names together. For example, if one list is as \code{l1 <- list(a=1, b="XYZ")} and the second is as \code{l2 <- list(a=3, c=FALSE)}, the output will be as \code{list(a = c(1, 3), b = "XYZ", c = FALSE)}. All elements in each list must have names.
 }

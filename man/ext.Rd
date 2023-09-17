@@ -24,9 +24,9 @@
 \alias{top,GSpatial-method}
 \alias{bottom,GSpatial-method}
 \alias{bottom}
-\alias{st_bbox,GSpatial-method}
-\alias{st_bbox}
 \alias{st_bbox,missing-method}
+\alias{st_bbox}
+\alias{st_bbox,GSpatial-method}
 \title{Spatial bounds of a GRaster or GVector}
 \usage{
 \S4method{ext}{missing}(x, vector = FALSE)
@@ -61,9 +61,9 @@
 
 \S4method{bottom}{GSpatial}(x, char = FALSE)
 
-\S4method{st_bbox}{GSpatial}(obj, ...)
-
 \S4method{st_bbox}{missing}(obj, ...)
+
+\S4method{st_bbox}{GSpatial}(obj, ...)
 }
 \arguments{
 \item{x, obj}{An object that inherits from \code{GSpatial} (i.e., a \code{GRaster} or \code{GVector}) or missing. If missing, then the horizontal or vertical extent of the currently active \link[=tutorial_regions]{region} is returned.}
@@ -259,13 +259,18 @@ as.data.frame(rivers)
 
 # subsetting
 rivers[c(1:2, 5)] # select 3 geometries
-rivers[-5:-11] # rivers select
+rivers[-5:-11] # reverse select
+rivers[ , 1] # columns
+rivers[ , "NAM"] # select column
+rivers[["NAM"]] # select column
+rivers[1, 1] # rows and columns
 rivers[c(TRUE, FALSE)] # select every other geometry (T/F vector is recycled)
+rivers[ , c(TRUE, FALSE)] # select every other column (T/F vector is recycled)
 
-
-# refresh values from GRASS
-# (reads values from GRASS... does not appear to do anything in this case)
-refresh(rivers)
+# Refresh values from GRASS
+# (Reads values from GRASS... will not appear to do anything in this case
+# since the rivers object is up-to-date):
+rivers <- refresh(rivers)
 
 # IMPORTANT #3: Revert back to original GRASS session if needed.
 restoreSession(opts.)

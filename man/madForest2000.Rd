@@ -13,9 +13,11 @@ Raster of occurrence/non-occurrence of forest cover in a portion of Madagascar. 
 \examples{
 
 ### vector data
+###############
+
 library(sf)
 
-# for vector data, we can use data(*) or fastData(*):
+# For vector data, we can use data(*) or fastData(*):
 data(madCoast0) # same as next line
 madCoast0 <- fastData("madCoast0") # same as previous
 madCoast0
@@ -30,23 +32,33 @@ madDypsis <- fastData("madDypsis")
 madDypsis
 
 ### raster data
+###############
+
 library(terra)
 
-# for raster data, we can get the file directly or using fastData(*):
+# For raster data, we can get the file directly or using fastData(*):
 rastFile <- system.file("extdata/madElev.tif", package="fasterRaster")
 madElev <- terra::rast(rastFile)
 
 madElev <- fastData("madElev") # same as previous two lines
 madElev
+plot(madElev)
 
 madForest2000 <- fastData("madForest2000")
 madForest2000
+plot(madForest2000)
 
 madForest2014 <- fastData("madForest2014")
 madForest2014
+plot(madForest2014)
 
 madChelsa <- fastData("madChelsa")
 madChelsa
+plot(madChelsa)
+
+madLand <- fastData("madLand")
+madLand
+plotRGB(madLand, 4, 1, 2, stretch = "lin")
 
 madCover <- fastData("madCover")
 madCover
@@ -54,6 +66,8 @@ madCover <- droplevels(madCover)
 levels(madCover) # levels in the raster
 nlevels(madCover) # number of categories
 catNames(madCover) # names of categories table
+
+plot(madCover)
 }
 \references{
 Vielledent, G., Grinand, C., Rakotomala, F.A., Ranaivosoa, \pkg{R}., Rakotoarijaona, J-R., Allnutt, T.F., and Achard, F.  2018.  Combining global tree cover loss data with historical national forest cover maps to look at six decades of deforestation and forest fragmentation in Madagascar. \emph{Biological Conservation} 222:189-197. \doi{10.1016/j.biocon.2018.04.008}.

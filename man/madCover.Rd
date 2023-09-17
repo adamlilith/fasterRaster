@@ -16,9 +16,11 @@ Raster of land cover for an eastern portion of Madagascar. Note that the land co
 \examples{
 
 ### vector data
+###############
+
 library(sf)
 
-# for vector data, we can use data(*) or fastData(*):
+# For vector data, we can use data(*) or fastData(*):
 data(madCoast0) # same as next line
 madCoast0 <- fastData("madCoast0") # same as previous
 madCoast0
@@ -33,23 +35,33 @@ madDypsis <- fastData("madDypsis")
 madDypsis
 
 ### raster data
+###############
+
 library(terra)
 
-# for raster data, we can get the file directly or using fastData(*):
+# For raster data, we can get the file directly or using fastData(*):
 rastFile <- system.file("extdata/madElev.tif", package="fasterRaster")
 madElev <- terra::rast(rastFile)
 
 madElev <- fastData("madElev") # same as previous two lines
 madElev
+plot(madElev)
 
 madForest2000 <- fastData("madForest2000")
 madForest2000
+plot(madForest2000)
 
 madForest2014 <- fastData("madForest2014")
 madForest2014
+plot(madForest2014)
 
 madChelsa <- fastData("madChelsa")
 madChelsa
+plot(madChelsa)
+
+madLand <- fastData("madLand")
+madLand
+plotRGB(madLand, 4, 1, 2, stretch = "lin")
 
 madCover <- fastData("madCover")
 madCover
@@ -57,6 +69,8 @@ madCover <- droplevels(madCover)
 levels(madCover) # levels in the raster
 nlevels(madCover) # number of categories
 catNames(madCover) # names of categories table
+
+plot(madCover)
 }
 \references{
 Arino O., P. Bicheron, F. Achard, J. Latham, R. Witt and J.-L. Weber. 2008. GlobCover: The most detailed portrait of Earth. European Space Agency Bulletin 136:25-31. \url{http://due.esrin.esa.int}.

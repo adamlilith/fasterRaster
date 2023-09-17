@@ -80,46 +80,8 @@ Multi-layer functions (applied across layers of a "stack" of \code{GRaster}s):
 \subsection{Functions that operate on or create \code{GRaster}s}{
 
 \verb{[<-} (\link[=subset_assign]{assign}): Assign values to a raster's cells\cr
-\code{[[} (\link[=subset_assign]{subset}): Subset a raster with multiple layers\cr
-\verb{[[<-} (\link[=subset_assign]{assign}): Replace or add layers to a raster\cr
-\link{add<-}: Add layers to a raster\cr
-\code{\link[=as.int]{as.int()}}, \code{\link[=as.float]{as.float()}}, \code{\link[=as.doub]{as.doub()}}: Change data type (integer/float/double)\cr
-\code{\link[=as.contour]{as.contour()}}: Contour lines from a raster\cr
-\code{\link[=as.lines]{as.lines()}}: Convert a raster to a "lines" vector\cr
-\code{\link[=as.points]{as.points()}}: Convert a raster to a "points" vector\cr
-\code{\link[=as.polygons]{as.polygons()}}: Convert a raster to a "polygons" vector\cr
-\code{\link[=aggregate]{aggregate()}}: Aggregate values of raster cells into larger cells\cr
-\code{\link[=buffer]{buffer()}}: Create a buffer around non-\code{NA} cells\cr
-\code{\link[=app]{app()}}: Apply a user-defined function to multiple layers of a raster (with helper functions \code{\link[=appFuns]{appFuns()}} and \code{\link[=appCheck]{appCheck()}})\cr
-\code{\link[=c]{c()}}: "Stack" two or more rasters\cr
-\code{\link[=clump]{clump()}}: Group adjacent cells with similar values\cr
-\code{\link[=crop]{crop()}}: Remove parts of a raster\cr
-\code{\link[=distance]{distance()}}: Distance to non-\code{NA} cells, or vice versa\cr
-\code{\link[=extend]{extend()}}: Add rows and columns to a raster\cr
-\code{\link[=extract]{extract()}}: Extract values from a raster at locations in a points vector\cr
-\code{\link[=focal]{focal()}}: Calculate cell values based on values of nearby cells\cr
-\code{\link[=fractalRast]{fractalRast()}}: Create a fractal raster\cr
-\code{\link[=global]{global()}}: Summary statistics across cells of each raster layer\cr
-\code{\link[=shade]{hillshade()}}: Create a hillshade raster\cr
-\code{\link[=hist]{hist()}}: Histogram of raster values\cr
-\code{\link[=horizonHeight]{horizonHeight()}}: Horizon height\cr
-\link{levels<-}: Assign levels to a categorical raster\cr
-\code{\link[=longlat]{longlat()}}: Create longitude/latitude rasters.\cr
-\code{\link[=mask]{mask()}}: Remove values in a raster based on values in another raster or vector\cr
-\code{\link[=merge]{merge()}}: Combine two or more rasters with different extents and fill in \code{NA}s\cr
-\code{\link[=plot]{plot()}}: Display a raster\cr
-\code{\link[=plotRGB]{plotRGB()}}: Display a multispectral raster using red, blue, and green channels\cr
-\code{\link[=project]{project()}}: Change coordinate reference system and cell size\cr
-\code{\link[=resample]{resample()}}: Change cell size\cr
-\code{\link[=rnormRast]{rnormRast()}}: A random raster with values drawn from a normal distribution\cr
-\code{\link[=runifRast]{runifRast()}}: A random raster with values drawn from a uniform distribution\cr
-\code{\link[=selectRange]{selectRange()}}: Select values from rasters in a stack based on values in another raster\cr
-\code{\link[=spatSample]{spatSample()}}: Randomly points from a raster\cr
-\code{\link[=spDepRast]{spDepRast()}}: Create a random raster with or without spatial dependence\cr
-\code{\link[=sun]{sun()}}: Solar radiance and irradiance\cr
-\code{\link[=terrain]{terrain()}}: Slope, aspect, curvature, and partial slopes\cr
-\code{\link[=thin]{thin()}}: Reduce linear features on a raster so linear features are 1 cell wide\cr
-\code{\link[=trim]{trim()}}: Remove rows and columns from a raster that are all \code{NA}\cr
+\code{$} and \code{[[} (\link[=subset_assign]{subset}): Subset a raster with multiple layers\cr
+\verb{$<-} and [[<-\verb{ ([assign][subset_assign]): Replace or add layers to a raster\\cr [add<-]: Add layers to a raster\\cr [as.int()], [as.float()], [as.doub()]: Change data type (integer/float/double)\\cr [as.contour()]: Contour lines from a raster\\cr [as.lines()]: Convert a raster to a "lines" vector\\cr [as.points()]: Convert a raster to a "points" vector\\cr [as.polygons()]: Convert a raster to a "polygons" vector\\cr [aggregate()]: Aggregate values of raster cells into larger cells\\cr [buffer()]: Create a buffer around non-}NA\verb{ cells\\cr [app()]: Apply a user-defined function to multiple layers of a raster (with helper functions [appFuns()] and [appCheck()])\\cr [c()]: "Stack" two or more rasters\\cr [clump()]: Group adjacent cells with similar values\\cr [crop()]: Remove parts of a raster\\cr [distance()]: Distance to non-}NA\verb{ cells, or vice versa\\cr [extend()]: Add rows and columns to a raster\\cr [extract()]: Extract values from a raster at locations in a points vector\\cr [focal()]: Calculate cell values based on values of nearby cells\\cr [fractalRast()]: Create a fractal raster\\cr [global()]: Summary statistics across cells of each raster layer\\cr [}hillshade()\verb{][shade]: Create a hillshade raster\\cr [hist()]: Histogram of raster values\\cr [horizonHeight()]: Horizon height\\cr [longlat()]: Create longitude/latitude rasters.\\cr [mask()]: Remove values in a raster based on values in another raster or vector\\cr [merge()]: Combine two or more rasters with different extents and fill in }NA\verb{s\\cr [plot()]: Display a raster\\cr [plotRGB()]: Display a multispectral raster using red, blue, green, and alpha channels\\cr [project()]: Change coordinate reference system and cell size\\cr [resample()]: Change cell size\\cr [rnormRast()]: A random raster with values drawn from a normal distribution\\cr [runifRast()]: A random raster with values drawn from a uniform distribution\\cr [selectRange()]: Select values from rasters in a stack based on values in another raster\\cr [spatSample()]: Randomly points from a raster\\cr [spDepRast()]: Create a random raster with or without spatial dependence\\cr [sun()]: Solar radiance and irradiance\\cr [terrain()]: Slope, aspect, curvature, and partial slopes\\cr [thin()]: Reduce linear features on a raster so linear features are 1 cell wide\\cr [trim()]: Remove rows and columns from a raster that are all }NA`\cr
 \code{\link[=viewshed]{viewshed()}}: Areas visible from points on a raster\cr
 }
 
@@ -127,19 +89,26 @@ Multi-layer functions (applied across layers of a "stack" of \code{GRaster}s):
 
 \code{\link[=activeCat]{activeCat()}}: Column that defines category labels\cr
 \link{activeCat<-}: Set column that defines category labels\cr
-\code{\link[=addCats]{addCats()}}: Add columns to a "levels" table\cr
-\link{addCats<-}: Add new rows (levels)\cr
+\code{\link[=addCats]{addCats()}}: Add new columns to a "levels" table\cr
+\link{addCats<-}: Add new rows (levels) to a "levels" table\cr
 \code{\link[=categories]{categories()}}: Set "levels" table for specific layers of a categorical raster\cr
 \code{\link[=catNames]{catNames()}}: Names of each "levels" table\cr
 \code{\link[=cats]{cats()}}: "Levels" table of a categorical raster\cr
 \code{\link[=droplevels]{droplevels()}}: Remove one or more levels\cr
 \code{\link[=freq]{freq()}}: Frequency of each category across cells of a raster\cr
 \code{\link[=is.factor]{is.factor()}}: Is a raster categorical?\cr
-\code{\link[=missingCats]{missingCats()}}: Values that have no category assigned to them\cr
 \code{\link[=levels]{levels()}}: "Levels" table of a categorical raster\cr
 \link{levels<-}: Set "levels" table of a categorical raster\cr
 \code{\link[=minmax]{minmax()}}: "Lowest" and "highest" category values of categorical rasters (when argument \code{levels = TRUE})\cr
+\code{\link[=missingCats]{missingCats()}}: Values that have no category assigned to them\cr
 \code{\link[=nlevels]{nlevels()}}: Number of levels\cr
+}
+
+\subsection{Functions for analysis of remote sensing rasters}{
+
+\code{\link[=toarAster]{toarAster()}}: Convert digital number ASTER rasters to radiance, and radiance to reflectance\cr
+\code{\link[=toarLandsat]{toarLandsat()}}: Convert digital number LANDSAT rasters to radiance, and radiance to reflectance\cr
+\code{\link[=vegIndex]{vegIndex()}}: Vegetation indices from surface reflectance\cr
 }
 
 \subsection{Properties of \strong{fasterRaster} vectors (\code{GVector}s)}{
@@ -168,7 +137,8 @@ Multi-layer functions (applied across layers of a "stack" of \code{GRaster}s):
 \subsection{Functions that operate on or create \code{GVector}s}{
 
 \code{[} (\link[=subset_assign]{subset}): Select geometries/rows of a vector's data table\cr
-\code{[[} (\link[=subset_assign]{subset}): Subset columns of a vector's data table\cr
+\code{$} and \code{[[} (\link[=subset_assign]{subset}): Subset columns of a vector's data table\cr
+\verb{$<-} and \verb{[[<-} (\link[=subset_assign]{assign}): Assign values to columns of a vector's data table\cr
 \code{\link[=as.data.frame]{as.data.frame()}}: Convert a vector's attribute table to a \code{data.frame}\cr
 \code{\link[=as.data.table]{as.data.table()}}: Convert a vector's attribute table to a \code{data.table}\cr
 \code{\link[=as.points]{as.points()}}: Extract vertex coordinates from a "lines" or "polygons" \code{GVector}\cr
@@ -229,7 +199,7 @@ Multi-layer functions (applied across layers of a "stack" of \code{GRaster}s):
 \code{\link[=seqToSQL]{seqToSQL()}}: Format a numeric series into an SQL value call.\cr
 }
 
-\subsection{Functions that operate on \strong{GRASS} "regions" (seldom used by most users):}{
+\subsection{Functions that operate on \strong{GRASS} "regions" (useful mostly to developers):}{
 
 \code{\link[=region]{region()}}: Change or report the active region's extent and resolution\cr
 \code{\link[=regionDim]{regionDim()}}: Change or report the active region's resolution (also \code{\link[=dim]{dim()}} and related functions, with no arguments)
@@ -247,6 +217,7 @@ Multi-layer functions (applied across layers of a "stack" of \code{GRaster}s):
 \link{madDypsis}: Specimens records of species in the genus \emph{Dypsis}\cr
 \link{madElev}: Elevation raster\cr
 \link{madForest2000} and \link{madForest2014}: Forest cover in 2000 and 2014\cr
+\link{madLand}: Surface reflectance in 2023\cr
 \link{madRivers}: Rivers vector\cr
 }
 

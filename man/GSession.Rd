@@ -5,6 +5,7 @@
 \name{GSession-class}
 \alias{GSession-class}
 \alias{GSession}
+\alias{GRegion-class}
 \alias{GRegion}
 \alias{GRaster-class}
 \alias{GRaster}

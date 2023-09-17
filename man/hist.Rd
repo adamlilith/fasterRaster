@@ -47,33 +47,27 @@ grassDir <- "/usr/local/grass" # Linux
 library(terra)
 
 # Example data
+madLand <- fastData("madLand")
 madRivers <- fastData("madRivers")
-madChelsa <- fastData("madChelsa")
 
 # Start GRASS session for examples only:
-faster(x = madChelsa, grassDir = grassDir,
+faster(x = madLand, grassDir = grassDir,
 workDir = tempdir(), location = "examples") # line only needed for examples
 
 # Convert SpatRaster to GRaster and SpatVector to GVector
-chelsa <- fast(madChelsa)
+land <- fast(madLand)
 rivers <- fast(madRivers)
 
 # Plot:
-plot(chelsa[[1L]])
+plot(land[[1L]])
 plot(rivers, add = TRUE)
 
 # Histogram:
-hist(chelsa)
+hist(land)
 
-# Plot in RGB... This isn't a multispectral raster, but we'll use the layers
-# as if it was.
-chelsaRescale <- chelsa
-maxs <- global(chelsaRescale, "max")
-chelsaRescale[[1]] <- 255 * chelsaRescale[[1]] / maxs[1, 1]
-chelsaRescale[[2]] <- 255 * chelsaRescale[[2]] / maxs[2, 1]
-chelsaRescale[[3]] <- 255 * chelsaRescale[[3]] / maxs[3, 1]
-
-plotRGB(chelsa, r = 1, g = 2, b = 3, stretch = "lin")
+# Plot surface reflectance in RGB:
+plotRGB(land, 3, 2, 1) # "natural" color
+plotRGB(land, 4, 1, 2, stretch = "lin") # emphasize near-infrared (vegetation)
 
 # IMPORTANT #3: Revert back to original GRASS session if needed.
 restoreSession(opts.)

@@ -6,7 +6,7 @@
 \alias{plot,GVector,missing-method}
 \title{Display a raster or vector}
 \usage{
-\S4method{plot}{GRaster,missing}(x, y, simplify = TRUE, maxcell = 5e+05, ...)
+\S4method{plot}{GRaster,missing}(x, y, maxcell = 5e+05, ...)
 
 \S4method{plot}{GVector,missing}(x, y, simplify = FALSE, maxGeoms = 10000, ...)
 }
@@ -15,11 +15,11 @@
 
 \item{y}{Missing--leave as empty.}
 
-\item{simplify}{Logical: If \code{TRUE} (default), then simplify the \code{GRaster} or \code{GVector} before plotting. This can save time for very dense rasters or large vectors, but especially for vectors, how the vector appears may be different from how it actually is.}
-
 \item{maxcell}{Positive integer (rasters only): Maximum number of cells to display. When simplifying, \code{\link[=aggregate]{aggregate()}} will be applied so that it has approximately this number of cells. The default is 500000.}
 
 \item{...}{Other arguments to send to \code{\link[terra:plot]{terra::plot()}}.}
+
+\item{simplify}{Logical (vectors only): If \code{TRUE} (default), then simplify the \code{GVector} before plotting. This can save time for very large vectors. However, details in the vector may appear inaccurate.}
 
 \item{maxGeoms}{Positive integer (vectors only): Maximum number of features before simplification is used (\code{simplify} must also be \code{TRUE}).}
 }
@@ -52,33 +52,27 @@ grassDir <- "/usr/local/grass" # Linux
 library(terra)
 
 # Example data
+madLand <- fastData("madLand")
 madRivers <- fastData("madRivers")
-madChelsa <- fastData("madChelsa")
 
 # Start GRASS session for examples only:
-faster(x = madChelsa, grassDir = grassDir,
+faster(x = madLand, grassDir = grassDir,
 workDir = tempdir(), location = "examples") # line only needed for examples
 
 # Convert SpatRaster to GRaster and SpatVector to GVector
-chelsa <- fast(madChelsa)
+land <- fast(madLand)
 rivers <- fast(madRivers)
 
 # Plot:
-plot(chelsa[[1L]])
+plot(land[[1L]])
 plot(rivers, add = TRUE)
 
 # Histogram:
-hist(chelsa)
+hist(land)
 
-# Plot in RGB... This isn't a multispectral raster, but we'll use the layers
-# as if it was.
-chelsaRescale <- chelsa
-maxs <- global(chelsaRescale, "max")
-chelsaRescale[[1]] <- 255 * chelsaRescale[[1]] / maxs[1, 1]
-chelsaRescale[[2]] <- 255 * chelsaRescale[[2]] / maxs[2, 1]
-chelsaRescale[[3]] <- 255 * chelsaRescale[[3]] / maxs[3, 1]
-
-plotRGB(chelsa, r = 1, g = 2, b = 3, stretch = "lin")
+# Plot surface reflectance in RGB:
+plotRGB(land, 3, 2, 1) # "natural" color
+plotRGB(land, 4, 1, 2, stretch = "lin") # emphasize near-infrared (vegetation)
 
 # IMPORTANT #3: Revert back to original GRASS session if needed.
 restoreSession(opts.)
