@@ -312,7 +312,7 @@ methods::setMethod(f = "compareGeom",
 		if (zext) out <- .zextentCompare(out=out, x=x, y=y[[i]], stopOnError=stopOnError, messages=messages)
 
 		if (geometry) {
-			if (geometry(x) != geometry(y[[i]])) {
+			if (geomtype(x) != geomtype(y[[i]])) {
 				msg <- "The vectors have a different geometries."
 				if (stopOnError) stop(msg)
 				if (messages & !stopOnError) warning(msg)
