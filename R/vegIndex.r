@@ -72,13 +72,13 @@ methods::setMethod(
 			intern = TRUE
 		)
 
-		if (!is.null(r)) args$red <- gnames(x)[r]
-		if (!is.null(g)) args$green <- gnames(x)[g]
-		if (!is.null(b)) args$blue <- gnames(x)[b]
-		if (!is.null(nir)) args$nir <- gnames(x)[nir]
+		if (!is.null(r)) args$red <- sources(x)[r]
+		if (!is.null(g)) args$green <- sources(x)[g]
+		if (!is.null(b)) args$blue <- sources(x)[b]
+		if (!is.null(nir)) args$nir <- sources(x)[nir]
 		
-		if (!is.null(b5)) args$band5 <- gnames(x)[b5]
-		if (!is.null(b7)) args$band7 <- gnames(x)[b7]
+		if (!is.null(b5)) args$band5 <- sources(x)[b5]
+		if (!is.null(b7)) args$band7 <- sources(x)[b7]
 		
   		if (!is.null(soilSlope)) args$soil_line_slope <- soilSlope
   		
