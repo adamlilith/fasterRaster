@@ -4,11 +4,11 @@
 #'
 #' @param x A `GRaster`.
 #'
-#' @param y A `points` `GVector`, a `data.frame` or `matrix` where the first two columns represent longitude and latitude (in that order), or a two-element numeric vector where the first column represents longitude and the second latitude
+#' @param y A `points` `GVector`, a `data.frame` or `matrix` where the first two columns represent longitude and latitude (in that order), or a two-element numeric vector where the first column represents longitude and the second latitude.
 #'
 #' @param xy Logical: If `TRUE`, also return the coordinates of each point. Default is `FALSE.`
 #'
-#' @param cat Logical: If `TRUE`, report the category label rather than the cell value. Default is `FALSE.
+#' @param cat Logical: If `TRUE`, report the category label rather of [categorical rasters][tutorial_raster_data_types] than the cell value. Default is `FALSE.
 #'
 #' @returns A `data.frame`.
 #'
@@ -38,40 +38,45 @@ methods::setMethod(
             intern = TRUE
         )
 
-        if (cat & nlevels(x)[i] > 0L) args$flags <- c(args$flags, "f")
-        this <- do.call(rgrass::execGRASS, args = args)
+        vals <- do.call(rgrass::execGRASS, args = args)
 
-        pillars <- gregexpr(this, pattern = "\\|\\|")
+        pillars <- gregexpr(vals, pattern = "\\|\\|")
         pillars <- unlist(pillars)
-        ncs <- nchar(this)
-        this <- substr(this, pillars + 2L, ncs)
-        
-        if (cat & nlevels(x)[i] > 0) {
+        ncs <- nchar(vals)
+        vals <- substr(vals, pillars + 2L, ncs)
 
-            this <- strsplit(this, split = "\\|")
-            cats <- rep(NA_character_)
-            for (index in indexHasCat) cats[index] <- this[[index]][2L]
-            this <- cats
-
+        if (is.cell(x)[i]) {
+            vals <- as.integer(vals)
         } else {
-            this <- as.numeric(this)
+            vals <- as.numeric(vals)
         }
 
-        this <- data.table::data.table(xyzabc_ = this)
+        this <- data.table::data.table(TEMPTEMP__ = vals)
         names(this) <- names(x)[i]
+
+        # category label instead of value
+        if (cats && is.factor(x)[i]) {
+
+            levs <- levels(x[[i]])[[1L]]
+            this <- levs[match(vals, levs[[1L]]), 2L]
+            names(this) <- paste0(names(x)[i], "_label")
+
+        }
 
         if (i == 1L) {
             out <- this
         } else {
             out <- cbind(out, this)
         }
-    
+
     } # next raster
     
     if (xy) {
+
         coords <- crds(y, z = is.3d(y))
         coords <- data.table::as.data.table(coords)
         out <- cbind(coords, out)
+
     }
 
     if (!getFastOptions("useDataTable")) out <- as.data.frame(out)
@@ -92,6 +97,9 @@ methods::setMethod(
     if (ncol(y) > 2L) warning("Argument ", sQuote("y"), " has more than two columns. The first will be assumed to represent longitude and the second latitude.")
 
     y <- terra::vect(y, geom = colnames(y)[1L:2L], crs = crs(x), keepgeom = FALSE)
+
+    y <- fast(y)
+
     extract(x = x, y = y, xy = xy, cat = cat)
 
     } # EOF
@@ -109,6 +117,9 @@ methods::setMethod(
     if (ncol(y) > 2L) warning("Argument ", sQuote("y"), " has more than two columns. The first will be assumed to represent longitude and the second latitude.")
 
     y <- terra::vect(y, geom = colnames(y)[1L:2L], crs = crs(x), keepgeom = FALSE)
+
+    y <- fast(y)
+
     extract(x = x, y = y, xy = xy, cat = cat)
 
     } # EOF
@@ -126,6 +137,9 @@ methods::setMethod(
     y <- cbind(y)
     colnames(y) <- c("x", "y")
     y <- terra::vect(y, geom = colnames(y)[1L:2L], crs = crs(x), keepgeom = FALSE)
+
+    y <- fast(y)
+
     extract(x = x, y = y, xy = xy, cat = cat)
 
     } # EOF
