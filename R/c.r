@@ -80,10 +80,7 @@ setMethod(f = "c",
 #' @exportMethod c
 setMethod(f = "c",
 	signature = "GVector",
-	definition = function(x, ..., df = FALSE) {
-
-	flags <- c("quiet", "overwrite")
-	if (df) flags <- c(flags, "e")
+	definition = function(x, ...) {
 
 	.restore(x)
 	dots <- list(...)
@@ -106,7 +103,7 @@ setMethod(f = "c",
 
 	# comparable?
 	if (length(dots) > 0L) {
-		for (i in seq_along(dots)) compareGeom(x, dots[[i]], geometry=TRUE, topo=TRUE)
+		for (i in seq_along(dots)) compareGeom(x, dots[[i]], geometry = TRUE, topo = TRUE)
 	}
 
 	# sources of inputs
@@ -114,13 +111,14 @@ setMethod(f = "c",
 	if (length(dots) > 0L) input <- c(input, sapply(dots, sources))
 	input <- paste(input, collapse=",")
 
-	src <- .makeSourceName("combo", "vector")
+	src <- .makeSourceName("combined", "vector")
 
 	args = list(
 		cmd = "v.patch",
 		input = input,
 		output = src,
-		flags = flags
+  		flags = c("quiet", "overwrite", "e"), ### ??? "e"???
+		intern = TRUE
 	)
 
 	do.call(rgrass::execGRASS, args=args)
