@@ -53,6 +53,12 @@ setMethod(
 	do.call(rgrass::execGRASS, args)
 	
 	out <- terra::vect(filename)
+
+	if (nrow(x) > 0L) {
+		df <- as.data.frame(x)
+		out <- terra::merge(out, df)
+	}
+
 	invisible(out)
 	} # EOF
 )
