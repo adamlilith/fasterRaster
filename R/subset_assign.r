@@ -8,7 +8,7 @@
 #' * `GRaster`s:
 #'     * `$` and `[[` operators: Returns `GRaster`s from a "[stack][c]" of `GRaster`s. For example, `raster[[2:3]]` returns the second and third rasters in a stack of `GRaster`s, `raster[[c("bio1", "bio12")]]` returns the two rasters with [names()] "bio1" and "bio12", and `raster$bio12` returns the `bio12` raster.
 #'     * `[<-` operator with the assignment operator, `<-`: Assigns the given value to all cells in the `GRaster`. For examples, `raster[] <- 7` replaces all cell values in `raster` with 7.
-#'     * `$<-` and [[<-` operators: Replaces existing layers or adds new layers to a `GRaster`. For example, `x[[2]] <- newRaster` makes the second layer of `x` `newRaster`. If `x` already has two layers, the second one is replaced. If it only had one layer, a second is added. `x$bio12 <- newRaster` replaces the layer named `bio12` with `newRaster`.
+#'     * `$<-` and [[<-` operators: Replaces existing layers or adds new layers to a `GRaster`. For example, \code{x[[2]] <- newRaster} makes the second layer of `x` `newRaster`. If `x` already has two layers, the second one is replaced. If it only had one layer, a second is added. `x$bio12 <- newRaster` replaces the layer named `bio12` with `newRaster`.
 #'     * `add<-`: "Stacks" two `GRaster`s. This is the same as stacking rasters with [c()]. For example, `c(raster1, raster2)` and `add(raster1) <- raster2` are equivalent.
 #'
 #' @param x A `GVector`, or a `GRaster` with one or more layers.
@@ -18,15 +18,18 @@
 #'     * `[` operator: Indicates the geometries/rows to retain.
 #'     * `[[` operator: Indicates which columns to retain of a `GVector` or which layers to replace or subset of a `GRaster`.
 #'
+#' @param name Character: Value immediately after the `$` operator, as in `vector$name`.
+#' 
 #' @param j Not used.
-#' @param value A numeric, integer, logical value (including `NA`), or `NULL`: Value to assign to all cells in a raster.
+#' 
+#' @param value A numeric, integer, logical value (including `NA`), or `NULL`: Value to assign to all cells in a raster or all values in a column of a vector's data table.
 #'
 #' @returns A `GRaster`.
 #'
 #' @example man/examples/ex_GRaster_GVector.r
 #'
-#' @name subset_assign
-#' @aliases subset_assign
+#' @name subset_double
+#' @aliases subset_double
 #' @rdname subset_assign
 #' @exportMethod [[
 methods::setMethod(
@@ -65,8 +68,8 @@ methods::setMethod(
 	} # EOF
 )
 
-#' @name subset_assign
-#' @aliases subset_assign
+#' @name subset_dollar
+#' @aliases subset_dollar
 #' @rdname subset_assign
 #' @exportMethod $
 methods::setMethod(
@@ -75,8 +78,8 @@ methods::setMethod(
     function(x, name) x[[name]]
 )
 
-#' @name subset_assign
-#' @aliases subset_assign
+#' @name replace_dollar
+#' @aliases replace_dollar
 #' @rdname subset_assign
 #' @exportMethod $<-
 methods::setMethod(
@@ -439,6 +442,8 @@ methods::setMethod(
 						table <- data.table::data.table(NULL)
 					} else {
 					
+						..j <- NULL
+
 						if (reverseColSelect) {
 							j <- setdiff(names(x), names(x)[j])
 						} else {
@@ -507,6 +512,8 @@ methods::setMethod(
 		x@table <- data.table::data.table(NULL)
 	# keep some columns
 	} else {
+
+		..i <- NULL
 		if (reverseSelect) {
 			i <- setdiff(names(x), names(x)[i])
 		} else {
