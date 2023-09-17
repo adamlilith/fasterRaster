@@ -8,9 +8,9 @@
 #'
 #' @param y Missing--leave as empty.
 #'
-#' @param simplify Logical: If `TRUE` (default), then simplify the `GRaster` or `GVector` before plotting. This can save time for very dense rasters or large vectors, but especially for vectors, how the vector appears may be different from how it actually is.
-#'
 #' @param maxcell Positive integer (rasters only): Maximum number of cells to display. When simplifying, [aggregate()] will be applied so that it has approximately this number of cells. The default is 500000.
+#'
+#' @param simplify Logical (vectors only): If `TRUE` (default), then simplify the `GVector` before plotting. This can save time for very large vectors. However, details in the vector may appear inaccurate.
 #'
 #' @param maxGeoms Positive integer (vectors only): Maximum number of features before simplification is used (`simplify` must also be `TRUE`).
 #' 
@@ -28,11 +28,11 @@
 methods::setMethod(
 	f = "plot",
 	signature = c(x = "GRaster", y = "missing"),
-	function(x, y, simplify = TRUE, maxcell = 500000, ...) {
+	function(x, y, maxcell = 500000, ...) {
 
 	# simplify
 	nc <- ncell(x)
-	if (simplify & nc > maxcell) {
+	if (nc > maxcell) {
 
 		rows <- nrow(x)
 		cols <- ncol(x)
