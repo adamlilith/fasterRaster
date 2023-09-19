@@ -10,11 +10,11 @@
 #'
 #' @returns A `GVector` (invisibly). This may have an attribute table associated with it, but the table is in **R**. The table in **GRASS** will have been deleted.
 #'
-#' @aliases dbRemove
+#' @aliases .dbRemove
 #' @rdname dbRemove
 #' @noRd
 methods::setMethod(
-	f = "dbRemove",
+	f = ".dbRemove",
 	signature = c(x = "GVector"),
 	function(x) {
 	

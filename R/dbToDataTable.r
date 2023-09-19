@@ -10,11 +10,11 @@
 #'
 #' @returns A `data.table`.
 #'
-#' @aliases dbToDataTable
-#' @aliases dbToDataTable
+#' @aliases .dbToDataTable
+#' @rdname dbToDataTable
 #' @noRd
 methods::setMethod(
-	f = "dbToDataTable",
+	f = ".dbToDataTable",
 	signature = c(x = "GVector"),
 	definition = function(x) {
 		

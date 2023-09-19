@@ -6,11 +6,11 @@
 #'
 #' @returns A `data.table` with a single column named `cat`.
 #'
-#' @aliases dbCats
-#' @aliases dbCats
+#' @aliases .dbCats
+#' @rdname dbCats
 #' @noRd
 methods::setMethod(
-	f = "dbCats",
+	f = ".dbCats",
 	signature = c(x = "GVector"),
 	definition = function(x) {
 
