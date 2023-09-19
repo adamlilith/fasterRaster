@@ -1,21 +1,42 @@
 #' @title Mathematical operations on each layer of a GRasters
 #'
-#' @description You can apply mathematical functions to each layer of a `GRaster`s. These include:\cr
+#' @description You can apply mathematical functions to each layer of a `GRaster`. These include:\cr
 #'
-#' * `NA`s: `is.na()` and `not.na()`
+#' * `NA`s:
+#'      * `is.na()`
+#'      * `not.na()`
 #' * Absolute value: `abs()`
-#' * Trigonometric functions (assumes values are in radians): `cos()`, `sin()`, `tan()`, `acos()`, `asin()`, `atan()`, `atan2()`
-#' * Exponential and logarithmic functions: `exp()`, `log()` (natural log), `ln()` (also natural log), `log1p()` (same as `log(x + 1)`), `log2()` (log, base 2), `log10()` (log, base 10)
-#' * Power functions: `sqrt()`, `x^y`
-#' * Rounding: `round()`, `floor()`, `ceiling()`, `trunc()`
+#' * Trigonometric functions (assumes values are in radians):
+#'      * `cos()`
+#'      * `sin()`
+#'      * `tan()`
+#'      * `acos()`
+#'      * `asin()`
+#'      * `atan()`
+#'      * `atan2()`
+#' * Exponential and logarithmic functions:
+#'      * `exp()`
+#'      * `log()` (natural log)
+#'      * `ln()` (also natural log)
+#'      * `log1p()` (same as `log(x + 1)`)
+#'      * `log2()` (log, base 2)
+#'      * `log10()` (log, base 10)
+#' * Power functions:
+#'      * `sqrt()`
+#'      * `x^y`
+#' * Rounding:
+#'      * `round()`
+#'      * `floor()` (round down)
+#'      * `ceiling()` (round up)
+#'      * `trunc()` (remove decimal portion)
 #'
 #' @param x,y `GRaster`s.
 #'
-#' @param falseNA Function `not.na()`, logical: If `FALSE` (default), non-`NA` cells will be converted to 1, and `NA` cells to 0. If `TRUE`, non-`NA` cells will be converted to  and `NA` cells will stay as `NA`.
+#' @param falseNA Logical (function `not.na()`): If `FALSE` (default), non-`NA` cells will be converted to 1, and `NA` cells to 0. If `TRUE`, non-`NA` cells will be converted to  and `NA` cells will stay as `NA`.
 #'
 #' @param base Numeric: Base of the logarithm.
 #'
-#' @param digits Numeric: Number of digits to round to. If negative, then rounding is to the nearest power of 10. For example, if `digits = -2`, then the `GRaster` values are rounded to the nearest 100.
+#' @param digits Numeric: Number of digits to round to. If negative, then rounding is to the nearest positive power of 10. For example, if `digits = -2`, then the `GRaster` values are rounded to the nearest 100.
 #'
 #' @returns A `GRaster`.
 #'

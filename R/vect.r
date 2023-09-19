@@ -5,7 +5,7 @@
 #' @param x A `GVector`.
 #' @param ... Additional arguments to send to [writeVector()].
 #'
-#' @return A `SpatVector` (**terra** package).
+#' @returns `vect()` returns a `SpatVector` (**terra** package), and `st_as_sf()` returns an `sf` vector (**sf** package).
 #' 
 #' @seealso [terra::vect()], [sf::st_as_sf()]
 #' 

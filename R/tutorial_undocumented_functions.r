@@ -9,17 +9,17 @@
 #'
 #* `x`: `GRaster`, `GVector`, or character: The object or the `sources` of the object to be copied. Can take multi-layered objects or multiple `sources`.
 #' 
-#' ## `dbCat()`
+#' ## `.dbCats()`
 #' Get a `data.table` with a single column named `cat`, which corresponds to the **GRASS** attribute table's `cat` column.
 #'
 #' `x`: A `GVector`.
 #
-#' ## `dbToDataTable()`
+#' ## `.dbToDataTable()`
 #' Convert the attribute table linked to a vector in **GRASS** to a `data.table`. This table is distinct from the attribute table attached to a `GVector`.
 #'
 #' `x`: A `GVector`.
 #'
-#' ## `dbRemove`
+#' ## `.dbRemove`
 #' Delete an attribute table linked to a vector in **GRASS**. This table is distinct from the attribute table attached to a `GVector`. Note that even the `cat` column, which is necessary for identifying individual features, is dropped.
 #'
 #' `x`: A `GVector`.
@@ -68,9 +68,6 @@
 #'
 #' A `GRaster` or `GVector`.
 #' 
-#' ## `.refresh()`
-#' Refresh metadata held within a `GRaster` or `GVector`` by querying the object in **GRASS**.
-#'
 #' `x`: A `GRaster` or `GVector`.
 #' 
 #' ## `.rename()`
@@ -92,7 +89,7 @@
 #' ## `.rastInfo()` and `.vectInfo()`
 #' Metadata for a **GRASS** raster or vector.
 #'
-#' `x`: A `GRaster`, `GVector`, or character vector representing `sources`.
+#' `x`: A `GRaster`, `GVector`, or character vector representing raster or vector [sources()].
 #'
 #' @keywords tutorial
 NULL

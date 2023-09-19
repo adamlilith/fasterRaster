@@ -1,7 +1,7 @@
 #' @title Classes for "fasterRaster" locations, rasters, and vectors
 #'
 #' @aliases GSpatial
-#' @rdname GSpatial
+#' @rdname GSession
 #' @exportClass GSpatial
 GSpatial <- setClass(
 	Class = "GSpatial",

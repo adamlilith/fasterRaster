@@ -1,6 +1,6 @@
 #' Coordinate reference system of a GRaster or GVector
 #' 
-#' @description Get the coordinate reference system (CRS) of a `GRaster`, `GVector`, `GSpatial`, or `GSession` object, or from the currently active **GRASS** location.
+#' @description Get the coordinate reference system (CRS) of a `GSession` object, or any that contain it (especially `GRaster`s and `GVector`s), or from the currently active **GRASS** [location][tutorial_sessions].
 #'
 #' @param x An object that inherits from a `GSession` (i.e., a `GRaster` or `GVector`) or missing. If missing, the coordinate reference system of the currently active **GRASS** [location][tutorial_sessions] is reported.
 #' 

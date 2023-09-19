@@ -4,7 +4,7 @@
 #'
 #' Rasters and vectors can be imported from `SpatRaster`s, `SpatVector`s, or `sf` objects, or from files on disk. **GRASS** supports loading from disk a variety of raster formats (see the **GRASS** manual page for `r.in.gdal`) and vector formats (see the **GRASS** manual page for `v.in.ogr`), though not all of them will work with this function. 
 #'
-#' Rasters can have "levels" (i. have categories associated with values). This can be specified using the `levels` argument. If a `SpatRaster` already has levels associated with it, these will be attached to the `GRaster` automatically. Vectors can also have attribute tables, though they do not need to. If they do, there must be one row per geometry (point, line, or polygon).
+#' Rasters can have "levels" (i.e., categories associated with values). This can be specified using the `levels` argument. If a `SpatRaster` already has levels associated with it, these will be attached to the `GRaster` automatically. Vectors can also have attribute tables, though they do not need to. If they do, there must be one row per geometry (point, line, or polygon).
 #'
 #' The `fast()` function will project a raster or vector to the current "[location's][tutorial_sessions]" coordinate reference system. Users can specify how to do this using the `method`, `fallback`, and `wrap` arguments.
 #'

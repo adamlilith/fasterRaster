@@ -17,19 +17,18 @@
 #' Categorical rasters (also called "factor" rasters) are actually integer rasters, but have an associated attribute table that maps each integer value to a category label, such as "wetland" or "forest". The table has at least two columns. The first is integer values, and (by default) the second is category names. This second column is the "active" category column, but can be changed using [activeCat<-].
 #'
 #' ## Functions relevant to raster data types
-#' * [activeCat()] and [activeCat<-] can be used to see or assign which column in a "levels" table associated with a categorical raster is used as category labels.
+#' * [activeCat()] and `[activeCat<-]` can be used to see or assign which column in a "levels" table associated with a categorical raster is used as category labels.
 #' * [addCats()] adds information to the "levels" table using [data.table::merge()] (same as [merge()]).
-#' * [addCats<-] add new levels to a "levels" table.
+#' * `[addCats<-]` add new levels to a "levels" table.
 #' * [as.int()], [as.float()], and [as.doub()] coerce a raster to an integer, float, or double.
 #' * [catNames()] reports the column names of the "levels" table of each layer of a raster.
 #' * [cats()] returns the entire "levels" table of a categorical raster.
 #' * [datatype()] returns the data type of a `GRaster`.
 #' * [droplevels()] removes "unused" levels in a "levels" table.
 #' * [freq()]: Frequency of each category across cells of a raster\cr
-#' * [is.int()], [is.float()], and [is.doub()] indicate if the raster is an integer, float, or double raster.
 #' * [is.factor()] indicates if the raster is a categorical raster.
 #' * [levels()] returns the "levels" table of a categorical raster (just the value column and the active column).
-#' * [levels<-] and [categories()] can be used to assign categories to an integer raster and make it categorical (i.e., a "factor" raster). 
+#' * `[levels<-]` and [categories()] can be used to assign categories to an integer raster and make it categorical (i.e., a "factor" raster). 
 #' * [missingCats()] finds values in categorical rasters that do not have a category assigned to them.
 #' * [nlevels()] returns the number of levels represented by a categorical raster.
 #'
