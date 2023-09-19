@@ -6,8 +6,6 @@
 \alias{addCats<-,GRaster,data.frame-method}
 \alias{addCats<-}
 \alias{addCats<-,GRaster,data.table-method}
-\alias{droplevels,GRaster-method}
-\alias{droplevels}
 \title{Add rows or columns to the "levels" table of a categorical raster}
 \usage{
 \S4method{addCats}{GRaster}(x, value, merge = FALSE, layer = 1)
@@ -15,8 +13,6 @@
 \S4method{addCats}{GRaster,data.frame}(x, layer = 1) <- value
 
 \S4method{addCats}{GRaster,data.table}(x, layer = 1) <- value
-
-\S4method{droplevels}{GRaster}(x, level = NULL, layer = 1)
 }
 \arguments{
 \item{x}{A \code{GRaster}.}
@@ -26,8 +22,6 @@
 \item{merge}{Logical (function \code{addCats()}): If \code{FALSE} (default), columns will be combined with the existing "levels" table using \code{\link[=cbind]{cbind()}}. If \code{TRUE}, they will be combined using \code{\link[data.table:merge]{data.table::merge()}}.}
 
 \item{layer}{Numeric integers, logical vector, or character: Layer(s) to which to add or from which to drop levels.}
-
-\item{level}{Character, numeric, integer, or logical vector: Level(s) to drop. If a character, then the labels are used to identify levels to drop. If numeric or integer, then the values are used. If logical, then levels that correspond to \code{TRUE} are dropped. For logical vectors, if the vector is shorter than the number of rows in the raster's "levels" table, the vector is recycled.}
 }
 \value{
 A \code{GRaster}. The "levels" table of the raster is modified.

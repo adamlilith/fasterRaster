@@ -177,5 +177,5 @@ removeSession("examples")
 }
 }
 \seealso{
-\code{\link[=datatype]{datatype()}}, \code{\link[terra:geomtype]{terra::datatype()}}, \code{\link[=is.int]{is.int()}}, \code{\link[=is.float]{is.float()}}, \code{\link[=is.doub]{is.doub()}}, \code{\link[=is.factor]{is.factor()}}, \link[=tutorial_raster_data_types]{raster data types} in \strong{fasterRaster}
+\code{\link[=datatype]{datatype()}}, \code{\link[terra:geomtype]{terra::datatype()}}, \code{\link[=is.int]{is.int()}}, \code{\link[=is.float]{is.float()}}, \code{\link[=is.doub]{is.doub()}}, \link{levels<-}, \link[=tutorial_raster_data_types]{raster data types} in \strong{fasterRaster}
 }

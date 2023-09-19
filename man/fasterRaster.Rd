@@ -28,10 +28,10 @@ A tutorial on \link[=tutorial_raster_data_types]{raster data types}\cr
 \code{\link[=freq]{freq()}}: Frequencies of cell values in a raster\cr
 \code{\link[=global]{global()}}: Summary statistics\cr
 \code{\link[=is.2d]{is.2d()}} and \code{\link[=is.3d]{is.3d()}}: Is an object 2- or 3-dimensional?\cr
-\code{\link[=is.int]{is.int()}}, \code{\link[=is.float]{is.float()}}, \code{\link[=is.doub]{is.doub()}}: Raster data type (integer/float/double)\cr
+\code{\link[=is.int]{is.int()}}, \code{\link[=is.float]{is.float()}}, \code{\link[=is.doub]{is.doub()}}: \code{GRaster} data type (integer/float/double)\cr
 \code{\link[=is.factor]{is.factor()}}: Does a raster represent categorical data?\cr
 \code{\link[=is.lonlat]{is.lonlat()}}: Is an object projected (e.g., in WGS84)?\cr
-\code{\link[=levels]{levels()}}: Names of levels in a categorical raster\cr
+\code{\link[=levels]{levels()}}: Names of levels in a categorical \code{GRaster}\cr
 \code{\link[=location]{location()}}: \strong{GRASS} "location" of an object or the active session\cr
 \code{\link[=mapset]{mapset()}}: \strong{GRASS} "mapset" of an object or the active session\cr
 \code{\link[=minmax]{minmax()}}: Minimum and maximum values across all non-\code{NA} cells\cr
@@ -39,14 +39,14 @@ A tutorial on \link[=tutorial_raster_data_types]{raster data types}\cr
 \code{\link[=ncol]{ncol()}}: Number of columns\cr
 \code{\link[=nacell]{nacell()}}: Number of \code{NA} cells\cr
 \code{\link[=ncell]{ncell()}}: Number of cells\cr
-\code{\link[=ncell3d]{ncell3d()}}: Number of cells of a 3D raster\cr
-\code{\link[=ndepth]{ndepth()}}: Number of depths of a 3D raster\cr
+\code{\link[=ncell3d]{ncell3d()}}: Number of cells of a 3D \code{GRaster}\cr
+\code{\link[=ndepth]{ndepth()}}: Number of depths of a 3D \code{GRaster}\cr
 \code{\link[=nlyr]{nlyr()}}: Number of layers\cr
 \code{\link[=nonnacell]{nonnacell()}}: Number of non-\code{NA} cells\cr
 \code{\link[=nrow]{nrow()}}: Number of rows\cr
 \code{\link[=nlevels]{nlevels()}}: Number of categories\cr
 \code{\link[=res]{res()}}, \code{\link[=xres]{xres()}}, \code{\link[=yres]{yres()}}, and \code{\link[=zres]{zres()}}: Spatial resolution\cr
-\code{\link[=sources]{sources()}}: Name of the raster in \strong{GRASS}\cr
+\code{\link[=sources]{sources()}}: Name of the \code{GRaster} in \strong{GRASS}\cr
 \code{\link[=st_bbox]{st_bbox()}}: Spatial extent\cr
 \code{\link[=st_crs]{st_crs()}}: Coordinate reference system\cr
 \code{\link[=topology]{topology()}}: Dimensionality (2D or 3D)\cr
@@ -79,9 +79,48 @@ Multi-layer functions (applied across layers of a "stack" of \code{GRaster}s):
 
 \subsection{Functions that operate on or create \code{GRaster}s}{
 
-\verb{[<-} (\link[=subset_assign]{assign}): Assign values to a raster's cells\cr
-\code{$} and \code{[[} (\link[=subset_assign]{subset}): Subset a raster with multiple layers\cr
-\verb{$<-} and [[<-\verb{ ([assign][subset_assign]): Replace or add layers to a raster\\cr [add<-]: Add layers to a raster\\cr [as.int()], [as.float()], [as.doub()]: Change data type (integer/float/double)\\cr [as.contour()]: Contour lines from a raster\\cr [as.lines()]: Convert a raster to a "lines" vector\\cr [as.points()]: Convert a raster to a "points" vector\\cr [as.polygons()]: Convert a raster to a "polygons" vector\\cr [aggregate()]: Aggregate values of raster cells into larger cells\\cr [buffer()]: Create a buffer around non-}NA\verb{ cells\\cr [app()]: Apply a user-defined function to multiple layers of a raster (with helper functions [appFuns()] and [appCheck()])\\cr [c()]: "Stack" two or more rasters\\cr [clump()]: Group adjacent cells with similar values\\cr [crop()]: Remove parts of a raster\\cr [distance()]: Distance to non-}NA\verb{ cells, or vice versa\\cr [extend()]: Add rows and columns to a raster\\cr [extract()]: Extract values from a raster at locations in a points vector\\cr [focal()]: Calculate cell values based on values of nearby cells\\cr [fractalRast()]: Create a fractal raster\\cr [global()]: Summary statistics across cells of each raster layer\\cr [}hillshade()\verb{][shade]: Create a hillshade raster\\cr [hist()]: Histogram of raster values\\cr [horizonHeight()]: Horizon height\\cr [longlat()]: Create longitude/latitude rasters.\\cr [mask()]: Remove values in a raster based on values in another raster or vector\\cr [merge()]: Combine two or more rasters with different extents and fill in }NA\verb{s\\cr [plot()]: Display a raster\\cr [plotRGB()]: Display a multispectral raster using red, blue, green, and alpha channels\\cr [project()]: Change coordinate reference system and cell size\\cr [resample()]: Change cell size\\cr [rnormRast()]: A random raster with values drawn from a normal distribution\\cr [runifRast()]: A random raster with values drawn from a uniform distribution\\cr [selectRange()]: Select values from rasters in a stack based on values in another raster\\cr [spatSample()]: Randomly points from a raster\\cr [spDepRast()]: Create a random raster with or without spatial dependence\\cr [sun()]: Solar radiance and irradiance\\cr [terrain()]: Slope, aspect, curvature, and partial slopes\\cr [thin()]: Reduce linear features on a raster so linear features are 1 cell wide\\cr [trim()]: Remove rows and columns from a raster that are all }NA`\cr
+The "subset" operators \verb{[$][subset_dollar]}, and \code{[[} (\link[=subset_double]{double subset}) can be used to obtain or remove specific layers of a \code{GRaster}.
+The "assign" operator \verb{[<-} (\link[=replace_values]{single assign}) can be used to replace values of a \code{GRaster}.
+The "assign" operators \verb{[$<-][[replace_dollar]} and \verb{[[<-} (\link[=replace_layers]{double assign}) can be used to replace specific layers of a \code{GRaster}.
+
+\link{add<-}: Add layers to a \code{GRaster}\cr
+\code{\link[=as.int]{as.int()}}, \code{\link[=as.float]{as.float()}}, \code{\link[=as.doub]{as.doub()}}: Change data type (integer/float/double)\cr
+\code{\link[=as.contour]{as.contour()}}: Contour lines from a \code{GRaster}\cr
+\code{\link[=as.lines]{as.lines()}}: Convert a \code{GRaster} to a "lines" vector\cr
+\code{\link[=as.points]{as.points()}}: Convert a \code{GRaster} to a "points" vector\cr
+\code{\link[=as.polygons]{as.polygons()}}: Convert a \code{GRaster} to a "polygons" vector\cr
+\code{\link[=aggregate]{aggregate()}}: Aggregate values of \code{GRaster} cells into larger cells\cr
+\code{\link[=buffer]{buffer()}}: Create a buffer around non-\code{NA} cells\cr
+\code{\link[=app]{app()}}: Apply a user-defined function to multiple layers of a \code{GRaster} (with helper functions \code{\link[=appFuns]{appFuns()}} and \code{\link[=appCheck]{appCheck()}})\cr
+\code{\link[=c]{c()}}: "Stack" two or more rasters\cr
+\code{\link[=clump]{clump()}}: Group adjacent cells with similar values\cr
+\code{\link[=crop]{crop()}}: Remove parts of a \code{GRaster}\cr
+\code{\link[=distance]{distance()}}: Distance to non-\code{NA} cells, or vice versa\cr
+\code{\link[=extend]{extend()}}: Add rows and columns to a \code{GRaster}\cr
+\code{\link[=extract]{extract()}}: Extract values from a \code{GRaster} at locations in a points vector\cr
+\code{\link[=focal]{focal()}}: Calculate cell values based on values of nearby cells\cr
+\code{\link[=fractalRast]{fractalRast()}}: Create a fractal \code{GRaster}\cr
+\code{\link[=global]{global()}}: Summary statistics across cells of each \code{GRaster} layer\cr
+\code{\link[=shade]{hillshade()}}: Create a hillshade \code{GRaster}\cr
+\code{\link[=hist]{hist()}}: Histogram of \code{GRaster} values\cr
+\code{\link[=horizonHeight]{horizonHeight()}}: Horizon height\cr
+\code{\link[=longlat]{longlat()}}: Create longitude/latitude rasters.\cr
+\code{\link[=mask]{mask()}}: Remove values in a \code{GRaster} based on values in another \code{GRaster} or vector\cr
+\code{\link[=merge]{merge()}}: Combine two or more rasters with different extents and fill in \code{NA}s\cr
+\code{\link[=plot]{plot()}}: Display a \code{GRaster}\cr
+\code{\link[=plotRGB]{plotRGB()}}: Display a multispectral \code{GRaster} using red, blue, green, and alpha channels\cr
+\code{\link[=project]{project()}}: Change coordinate reference system and cell size\cr
+\code{\link[=resample]{resample()}}: Change cell size\cr
+\code{\link[=rnormRast]{rnormRast()}}: A random \code{GRaster} with values drawn from a normal distribution\cr
+\code{\link[=runifRast]{runifRast()}}: A random \code{GRaster} with values drawn from a uniform distribution\cr
+\code{\link[=selectRange]{selectRange()}}: Select values from rasters in a stack based on values in another \code{GRaster}\cr
+\code{\link[=spatSample]{spatSample()}}: Randomly points from a \code{GRaster}\cr
+\code{\link[=spDepRast]{spDepRast()}}: Create a random \code{GRaster} with or without spatial dependence\cr
+\code{\link[=sun]{sun()}}: Solar radiance and irradiance\cr
+\code{\link[=terrain]{terrain()}}: Slope, aspect, curvature, and partial slopes\cr
+\code{\link[=thin]{thin()}}: Reduce linear features on a \code{GRaster} so linear features are 1 cell wide\cr
+\code{\link[=trim]{trim()}}: Remove rows and columns from a \code{GRaster} that are all \code{NA}\cr
+\code{\link[=update]{update()}}: Update a \code{GRaster}s metadata from its \strong{GRASS} object
 \code{\link[=viewshed]{viewshed()}}: Areas visible from points on a raster\cr
 }
 
@@ -136,9 +175,9 @@ Multi-layer functions (applied across layers of a "stack" of \code{GRaster}s):
 
 \subsection{Functions that operate on or create \code{GVector}s}{
 
-\code{[} (\link[=subset_assign]{subset}): Select geometries/rows of a vector's data table\cr
-\code{$} and \code{[[} (\link[=subset_assign]{subset}): Subset columns of a vector's data table\cr
-\verb{$<-} and \verb{[[<-} (\link[=subset_assign]{assign}): Assign values to columns of a vector's data table\cr
+The subset operator \link{`[`}{subset_single} can be used to get specific geometries of a \code{GRaster}.
+The "subset" operators \verb{[$][subset_dollar]}, and \code{[[} (\link[=subset_double]{double subset}) can be used to get columns of a \code{GRaster}'s data table.
+The "assign" operators \verb{[$<-][[replace_dollar]} and \verb{[[<-} (\link[=replace_layers]{double assign}) can be used to replace specific columns of a \code{GVector}'s data table.
 \code{\link[=as.data.frame]{as.data.frame()}}: Convert a vector's attribute table to a \code{data.frame}\cr
 \code{\link[=as.data.table]{as.data.table()}}: Convert a vector's attribute table to a \code{data.table}\cr
 \code{\link[=as.points]{as.points()}}: Extract vertex coordinates from a "lines" or "polygons" \code{GVector}\cr
@@ -158,6 +197,7 @@ Multi-layer functions (applied across layers of a "stack" of \code{GRaster}s):
 \code{\link[=st_buffer]{st_buffer()}}: Create a polygon around/inside a vector\cr
 \code{\link[=st_distance]{st_distance()}}: Distance between geometries in two vectors\cr
 \code{\link[=tail]{tail()}}: Last rows of a vector's data table\cr
+\code{\link[=update]{update()}}: Update a \code{GVector}s metadata from its \strong{GRASS} object
 }
 
 \subsection{Converting between data types}{
@@ -230,7 +270,16 @@ Multi-layer functions (applied across layers of a "stack" of \code{GRaster}s):
 }
 }
 \details{
-\figure{man/figures/fasterRaster.png}{options: alt="fasterRaster" align="right" vertical-align="top" width=1.2in}
+\if{html}{
+
+  \out{<div style="text-align: right">}\figure{fasterRaster.png.png}{options: style="width:300px;max-width:25\%;"}\out{</div>}
+
+}
+\if{latex}{
+
+  \out{\begin{right}}\figure{fasterRaster.png}\out{\end{right}}
+
+}
 }
 \seealso{
 Useful links:

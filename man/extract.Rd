@@ -19,11 +19,11 @@
 \arguments{
 \item{x}{A \code{GRaster}.}
 
-\item{y}{A \code{points} \code{GVector}, a \code{data.frame} or \code{matrix} where the first two columns represent longitude and latitude (in that order), or a two-element numeric vector where the first column represents longitude and the second latitude}
+\item{y}{A \code{points} \code{GVector}, a \code{data.frame} or \code{matrix} where the first two columns represent longitude and latitude (in that order), or a two-element numeric vector where the first column represents longitude and the second latitude.}
 
 \item{xy}{Logical: If \code{TRUE}, also return the coordinates of each point. Default is \code{FALSE.}}
 
-\item{cat}{Logical: If \code{TRUE}, report the category label rather than the cell value. Default is `FALSE.}
+\item{cat}{Logical: If \code{TRUE}, report the category label rather of \link[=tutorial_raster_data_types]{categorical rasters} than the cell value. Default is `FALSE.}
 }
 \value{
 A \code{data.frame}.

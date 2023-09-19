@@ -8,14 +8,12 @@
 \usage{
 \S4method{c}{GRaster}(x, ...)
 
-\S4method{c}{GVector}(x, ..., df = FALSE)
+\S4method{c}{GVector}(x, ...)
 }
 \arguments{
 \item{x}{A \code{GRaster} or a \code{GVector}.}
 
 \item{...}{One or more \code{GRaster}s, one or more \code{GVector}s, a list of \code{GRaster}s, or a list of \code{GVector}s. You can use a mix of lists and individual rasters or vectors.}
-
-\item{df}{If \code{TRUE}, copy the data frame of the \code{x} \code{GVector} to the output. If \code{FALSE} (default), the output will not have a data frame.}
 }
 \value{
 A \code{GRaster}.
@@ -225,5 +223,5 @@ removeSession("examples")
 }
 }
 \seealso{
-\code{\link[terra:c]{terra::c()}}
+\link{add<-}, \code{\link[terra:c]{terra::c()}}, \link[terra:add]{terra::add<-}
 }
