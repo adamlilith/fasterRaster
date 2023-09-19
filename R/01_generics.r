@@ -28,9 +28,15 @@ if (getRversion() >= "2.15.1") {
 
 ### GENERICS
 #' @importFrom data.table :=
-if (!isGeneric("[")) methods::setGeneric(name = "[", def = function(x, ...) standardGeneric("["))
-if (!isGeneric("[<-")) methods::setGeneric(name = "[<-", def = function(x, ...) standardGeneric("[<-"))
-#' [[ is already generic
+# if (!isGeneric("[")) methods::setGeneric(name = "[", def = function(x, ...) standardGeneric("["))
+# if (!isGeneric("[<-")) methods::setGeneric(name = "[<-", def = function(x, ...) standardGeneric("[<-"))
+
+# $ is already generic
+# $<- is already generic
+# [ is already generic
+# [<- is already generic
+# [[ is already generic
+# [[<- is already generic
 
 # methods::setGeneric(name = "activeCat", package = "terra")
 methods::setGeneric(name = "activeCat", def = function(x, ...) standardGeneric("activeCat"))
@@ -108,7 +114,8 @@ if (!isGeneric("is.factor")) { methods::setGeneric(name = "is.factor", def = fun
 methods::setGeneric(name = "is.cell", def = function(x) standardGeneric("is.cell"))
 methods::setGeneric(name = "is.doub", def = function(x) standardGeneric("is.doub"))
 methods::setGeneric(name = "is.float", def = function(x) standardGeneric("is.float"))
-methods::setGeneric(name = "is.int", def = function(x) standardGeneric("is.int"))
+# methods::setGeneric(name = "is.int", def = function(x) standardGeneric("is.int"))
+methods::setGeneric(name = "is.int", package = "terra")
 methods::setGeneric(name = "is.lines", package = "terra")
 methods::setGeneric(name = "is.lonlat", package = "terra")
 if (!isGeneric("is.na")) { methods::setGeneric(name = "is.na", def = function(x) standardGeneric("is.na")) }
@@ -162,7 +169,6 @@ methods::setGeneric(name = "replaceNAs", def = function(x, ...) standardGeneric(
 methods::setGeneric(name = "rnormRast", def = function(x, ...) standardGeneric("rnormRast"))
 methods::setGeneric(name = "runifRast", def = function(x, ...) standardGeneric("runifRast"))
 
-methods::setGeneric(name = ".refresh", def = function(x, ...) standardGeneric(".refresh"))
 methods::setGeneric(name = "regionDim", def = function(x, ...) standardGeneric("regionDim"))
 methods::setGeneric(name = "regionExt", def = function(x, ...) standardGeneric("regionExt"))
 methods::setGeneric(name = "regionRes", def = function(x, ...) standardGeneric("regionRes"))
@@ -197,6 +203,8 @@ methods::setGeneric(name = "top", def = function(x, ...) standardGeneric("top"))
 methods::setGeneric(name = "topology", def = function(x, ...) standardGeneric("topology"))
 methods::setGeneric(name = "trim", package = "terra")
 methods::setGeneric(name = "tvalue", def = function(x, ...) standardGeneric("tvalue"))
+
+methods::setGeneric(name = "update", package = "terra")
 
 methods::setGeneric(name = "varpop", def = function(x, ...) standardGeneric("varpop"))
 methods::setGeneric(name = "vegIndex", def = function(x, ...) standardGeneric("vegIndex"))
