@@ -192,6 +192,72 @@ methods::setMethod(
 	} # EOF
 )
 
+# raster integer
+#' @aliases Comparison
+#' @rdname Comparison
+#' @exportMethod Logic
+methods::setMethod(
+	# f = "Ops",
+	f = "Logic",
+	signature(e1 = "GRaster", e2 = "integer"),
+    function(e1, e2) {
+	
+		.restore(e1)
+
+		if (is.na(e2)) e2 <- "null()"
+		oper <- as.vector(.Generic)[1L]
+
+		for (i in 1L:nlyr(e1)) {
+		
+			name <- names(e1)[i]
+			src <- .makeSourceName(name, "rast")
+
+			ex <- paste(src, "= int(if(", sources(e1)[i], " ", oper, " ", e2, "))")
+			this <- .genericArith(name = name, src = src, ex = ex)
+			
+			if (i == 1L) {
+				out <- this
+			} else {
+				out <- c(out, this)
+			}
+			
+		}
+		out
+			
+	} # EOF
+)
+
+# integer raster
+#' @aliases Comparison
+#' @rdname Comparison
+#' @exportMethod Logic
+methods::setMethod(
+    # f = "Ops",
+    f = "Logic",
+    signature(e1 = "integer", e2 = "GRaster"),
+    function(e1, e2) {
+        .restore(e2)
+
+        if (is.na(e1)) e1 <- "null()"
+
+        oper <- as.vector(.Generic)[1L]
+        for (i in 1L:nlyr(e2)) {
+            name <- names(e2)[i]
+            src <- .makeSourceName(name, "rast")
+
+            ex <- paste(src, "= int(if(", e1, " ", oper, " ", sources(e2)[i], "))")
+            this <- .genericArith(name = name, src = src, ex = ex)
+
+            if (i == 1L) {
+                out <- this
+            } else {
+                out <- c(out, this)
+            }
+        }
+        out
+    } # EOF
+)
+
 # raster character
 #' @aliases Comparison
 #' @rdname Comparison
