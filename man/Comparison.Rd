@@ -7,6 +7,8 @@
 \alias{Logic,GRaster,logical-method}
 \alias{Logic,numeric,GRaster-method}
 \alias{Logic,GRaster,numeric-method}
+\alias{Logic,GRaster,integer-method}
+\alias{Logic,integer,GRaster-method}
 \alias{Logic,GRaster,character-method}
 \alias{Logic,character,GRaster-method}
 \title{Comparison operations on GRasters}
@@ -20,6 +22,10 @@
 \S4method{Logic}{numeric,GRaster}(e1, e2)
 
 \S4method{Logic}{GRaster,numeric}(e1, e2)
+
+\S4method{Logic}{GRaster,integer}(e1, e2)
+
+\S4method{Logic}{integer,GRaster}(e1, e2)
 
 \S4method{Logic}{GRaster,character}(e1, e2)
 

@@ -90,24 +90,55 @@
 \arguments{
 \item{x, y}{\code{GRaster}s.}
 
-\item{falseNA}{Function \code{not.na()}, logical: If \code{FALSE} (default), non-\code{NA} cells will be converted to 1, and \code{NA} cells to 0. If \code{TRUE}, non-\code{NA} cells will be converted to  and \code{NA} cells will stay as \code{NA}.}
+\item{falseNA}{Logical (function \code{not.na()}): If \code{FALSE} (default), non-\code{NA} cells will be converted to 1, and \code{NA} cells to 0. If \code{TRUE}, non-\code{NA} cells will be converted to  and \code{NA} cells will stay as \code{NA}.}
 
 \item{base}{Numeric: Base of the logarithm.}
 
-\item{digits}{Numeric: Number of digits to round to. If negative, then rounding is to the nearest power of 10. For example, if \code{digits = -2}, then the \code{GRaster} values are rounded to the nearest 100.}
+\item{digits}{Numeric: Number of digits to round to. If negative, then rounding is to the nearest positive power of 10. For example, if \code{digits = -2}, then the \code{GRaster} values are rounded to the nearest 100.}
 }
 \value{
 A \code{GRaster}.
 }
 \description{
-You can apply mathematical functions to each layer of a \code{GRaster}s. These include:\cr
+You can apply mathematical functions to each layer of a \code{GRaster}. These include:\cr
 \itemize{
-\item \code{NA}s: \code{is.na()} and \code{not.na()}
+\item \code{NA}s:
+\itemize{
+\item \code{is.na()}
+\item \code{not.na()}
+}
 \item Absolute value: \code{abs()}
-\item Trigonometric functions (assumes values are in radians): \code{cos()}, \code{sin()}, \code{tan()}, \code{acos()}, \code{asin()}, \code{atan()}, \code{atan2()}
-\item Exponential and logarithmic functions: \code{exp()}, \code{log()} (natural log), \code{ln()} (also natural log), \code{log1p()} (same as \code{log(x + 1)}), \code{log2()} (log, base 2), \code{log10()} (log, base 10)
-\item Power functions: \code{sqrt()}, \code{x^y}
-\item Rounding: \code{round()}, \code{floor()}, \code{ceiling()}, \code{trunc()}
+\item Trigonometric functions (assumes values are in radians):
+\itemize{
+\item \code{cos()}
+\item \code{sin()}
+\item \code{tan()}
+\item \code{acos()}
+\item \code{asin()}
+\item \code{atan()}
+\item \code{atan2()}
+}
+\item Exponential and logarithmic functions:
+\itemize{
+\item \code{exp()}
+\item \code{log()} (natural log)
+\item \code{ln()} (also natural log)
+\item \code{log1p()} (same as \code{log(x + 1)})
+\item \code{log2()} (log, base 2)
+\item \code{log10()} (log, base 10)
+}
+\item Power functions:
+\itemize{
+\item \code{sqrt()}
+\item \code{x^y}
+}
+\item Rounding:
+\itemize{
+\item \code{round()}
+\item \code{floor()} (round down)
+\item \code{ceiling()} (round up)
+\item \code{trunc()} (remove decimal portion)
+}
 }
 }
 \examples{

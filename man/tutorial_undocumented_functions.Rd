@@ -10,21 +10,21 @@
 Creates in \strong{GRASS} a copy of a \code{GSpatial} object (typically, a \code{GRaster} or a \code{GVector}).
 }
 
-\subsection{\code{dbCat()}}{
+\subsection{\code{.dbCats()}}{
 
 Get a \code{data.table} with a single column named \code{cat}, which corresponds to the \strong{GRASS} attribute table's \code{cat} column.
 
 \code{x}: A \code{GVector}.
 }
 
-\subsection{\code{dbToDataTable()}}{
+\subsection{\code{.dbToDataTable()}}{
 
 Convert the attribute table linked to a vector in \strong{GRASS} to a \code{data.table}. This table is distinct from the attribute table attached to a \code{GVector}.
 
 \code{x}: A \code{GVector}.
 }
 
-\subsection{\code{dbRemove}}{
+\subsection{\code{.dbRemove}}{
 
 Delete an attribute table linked to a vector in \strong{GRASS}. This table is distinct from the attribute table attached to a \code{GVector}. Note that even the \code{cat} column, which is necessary for identifying individual features, is dropped.
 
@@ -87,11 +87,6 @@ Count number of levels in a \code{SpatVector}, \code{data.frame}, \code{data.tab
 Get the value of the \verb{@projection} slot in a \code{GRaster} or \code{GVector}.
 
 A \code{GRaster} or \code{GVector}.
-}
-
-\subsection{\code{.refresh()}}{
-
-Refresh metadata held within a \code{GRaster} or `GVector`` by querying the object in \strong{GRASS}.
 
 \code{x}: A \code{GRaster} or \code{GVector}.
 }
@@ -120,7 +115,7 @@ Delete all \strong{GRASS} files representing rasters or vectors.
 
 Metadata for a \strong{GRASS} raster or vector.
 
-\code{x}: A \code{GRaster}, \code{GVector}, or character vector representing \code{sources}.
+\code{x}: A \code{GRaster}, \code{GVector}, or character vector representing raster or vector \code{\link[=sources]{sources()}}.
 }
 }
 \keyword{tutorial}

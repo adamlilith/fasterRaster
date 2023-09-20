@@ -21,11 +21,10 @@ An object of class \code{GSession}, \code{GSpatial}, \code{GRegion}, \code{GRast
 The \code{G} suite of S4 classes contain pointers to \strong{GRASS} objects or metadata about the current \strong{GRASS} session. Most users will manipulate objects using these classes, but do not need to know the details.
 \itemize{
 \item The \code{GSession} class stores information about the \strong{GRASS} session ("\link[=tutorial_sessions]{location}"), mapset, and coordinate reference system. Contained by all the rest.
-\item The "GSpatial" class contains the \code{GSession} class and stores information about spatial objects (extent, topology) plus the name of the file representing it in \strong{GRASS} (its \code{source}). Contained by \code{GRegion}, \code{GRaster}, and \code{GVector}.
-\item The \code{GRegion} class contains the \code{GSpatial} class and stores information about grids (dimensions and resolution). They do have \code{sources}, but these are not used (they"re always \code{NA}). Contained by \code{GRaster}.
-\item The \code{GRaster} class contains the \code{GRegion} class and represents rasters. It stores information on number of layers, categories, min/max values, and user-friendly names.
-\item The \code{GVector} class contains the \code{GSpatial} class and represents spatial vectors. It stores information about the \strong{GRASS} names of data tables, names of fields (columns), and their data type.
-\item The \code{GMetaTable}, \code{GEmptyMetaTable}, and \code{GFullMetaTable} classes are "helper" classes intended to store metadata about data tables associated with \code{GVector}s. The "full" and "empty" classes are contained by \code{GMetaTable}, and in turn, this is contained by the \code{GVector} class.
+\item The \code{GSpatial} class contains the \code{GSession} class and stores information about spatial objects (extent, topology) plus the name of the file representing it in \strong{GRASS} (its \code{source}). Contained by \code{GRegion}, \code{GRaster}, and \code{GVector}.
+\item The \code{GRegion} class contains the \code{GSpatial} class and stores information about grids (dimensions and resolution). They do have \code{sources}, but these are not used (they're always \code{NA}). Contained by \code{GRaster}. The \code{GRegion} corresponds to \strong{GRASS} "\link[=tutorial_regions]{regions}", though \code{GRegion} objects are not actually pointers to \strong{GRASS} "region" files.
+\item The \code{GRaster} class contains the \code{GRegion} class and represents rasters. It stores information on number of layers, categories, min/max values, and user-friendly names. \link[=tutorial_raster_data_types]{Categorical rasters} can also be associated with a "levels" table for representing categorical data (e.g., wetlands, forest, etc.).
+\item The \code{GVector} class contains the \code{GSpatial} class and represents spatial vectors. It may or may not have an associated \code{data.table} (i.e., a \code{data.frame}), which contains metadata about each geometry in the vector.
 }
 }
 \section{Slots}{
@@ -37,7 +36,7 @@ The \code{G} suite of S4 classes contain pointers to \strong{GRASS} objects or m
 
 \item{\code{topology}}{Character (\code{GSpatial} objects, including \code{GRegion}s, \code{GRaster}s, and \code{GVector}s): Valid values are \verb{2D} (2-dimensional--most rasters and vectors) or \verb{3D} (3-dimensional--e.g., LIDAR data). Can be obtained using \code{\link[=topology]{topology()}}.}
 
-\item{\code{sources}}{Character (\code{GRaster}s and \code{GVector}s): Name of the object in \strong{GRASS}. These are typically made on-the-fly and provide the pointer to the object from \strong{R} to \strong{GRASS}. Changing them manually will break the connection. Can be obtained using \code{sources()}.}
+\item{\code{sources}}{Character (\code{GRaster}s and \code{GVector}s): Name of the object in \strong{GRASS}. These are typically made on-the-fly and provide the pointer to the object from \strong{R} to \strong{GRASS}. Changing them manually will break the connection. Can be obtained using \code{\link[=sources]{sources()}}.}
 
 \item{\code{names}}{Character  (\code{GRaster}s only): Name of a raster or each raster layer in. Can be obtained using \code{\link[=names]{names()}}.}
 

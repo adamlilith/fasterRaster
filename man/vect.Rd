@@ -17,7 +17,7 @@
 \item{...}{Additional arguments to send to \code{\link[=writeVector]{writeVector()}}.}
 }
 \value{
-A \code{SpatVector} (\strong{terra} package).
+\code{vect()} returns a \code{SpatVector} (\strong{terra} package), and \code{st_as_sf()} returns an \code{sf} vector (\strong{sf} package).
 }
 \description{
 The \strong{fasterRaster} version of the \code{vect()} function converts a \code{GVector} to a \code{SpatVector} (from the \strong{terra} package). The \strong{fasterRaster} version of the \code{st_as_sf()} function converts a \code{GVector} to an \code{sf} object (\strong{sf}) package).

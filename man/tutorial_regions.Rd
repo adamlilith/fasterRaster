@@ -12,24 +12,21 @@ Each \strong{GRASS} \link[=tutorial_sessions]{session} typically has one active 
 \subsection{Functions for managing regions in \strong{fasterRaster}}{
 
 \strong{fasterRaster} provides functions for managing regions:\cr
-\code{\link[=region]{region()}}: Extent \emph{and} dimensions/resolution of a region. This function is used by many other \strong{fasterRaster} functions before raster processing to ensure the raster is not changed (by the region).\cr
-\code{\link[=regionDim]{regionDim()}}: Dimensions (number of rows and columns)\cr
-\code{\link[=regionExt]{regionExt()}}: Extent\cr
-\code{\link[=regionRes]{regionRes()}}: Resolution\cr
+\itemize{
+\item \code{\link[=region]{region()}}: Extent \emph{and} dimensions/resolution of a region. This function is used by many other \strong{fasterRaster} functions before raster processing to ensure the raster is not changed (by the region).
+\item 
+\item 
+\item 
+}
 
 Most of these functions can be used in three different ways:
 \itemize{
 \item No arguments: The function reports the respective value(s) (e.g., \code{regionExt()} reports the extent of the region).
-\item With a \code{GRaster}, \code{GVector}, \code{SpatRaster}, \code{SpatVector}, \code{sf} object, or \code{stars} object: Resizes and/or resamples the region so it has the same extent and/or resolution as the spatial object. Note that vector objects do not have a resolution, so cannot be used in functions that resample the region"s resolution.
-\item With numeric values (i.e., representing extent, resolution, or dimensions): Resize or resample the region so it has these dimensions. When a region"s extent is resized or resolution is changed, it will be extended to have the next-larger number of rows and/or columns so it can accommodate cells of the desired size.
+\item With a \code{GRaster}, \code{GVector}, \code{SpatRaster}, \code{SpatVector}, or \code{sf} object: Resizes and/or resamples the region so it has the same extent and/or resolution as the spatial object. Note that vector objects do not have a resolution, so cannot be used in functions that resample the region's resolution.
+\item With numeric values (i.e., representing extent, resolution, or dimensions): Resize or resample the region so it has these dimensions. When a region's extent is resized or resolution is changed, it will be extended to have the next-larger number of rows and/or columns so it can accommodate cells of the desired size.
 }
 
 Regions are inherently 3-dimensional, but often have a single depth (i.e., one "layer" of cells).
-}
-
-\subsection{Automatic management of regions}{
-
-Automatic resizing/resampling of the region is performed by default if the \strong{fasterRaster} option \code{autoRegion} is \code{TRUE}. To turn off automatic region handling, use \code{setFastOptions(autoRegion = FALSE)}. This is risky and can result in unexpected output, so please only do this if you want to manually manipulate regions.
 }
 }
 \examples{

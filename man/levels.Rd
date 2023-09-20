@@ -120,7 +120,8 @@ nlevels(cover)
 
 # Re-assign levels:
 value <- c(20, 30, 40, 50, 120, 130, 140, 170)
-label <- c("Cropland", "Cropland", "Forest", "Forest", "Grassland", "Shrubland", "Herbaceous", "Flooded")
+label <- c("Cropland", "Cropland", "Forest", "Forest",
+ "Grassland", "Shrubland", "Herbaceous", "Flooded")
 
 newCats <- data.frame(value = value, label = label)
 
@@ -141,7 +142,8 @@ addCats(cover) <- water
 # Add more information to the levels table using merge():
 landType <- data.frame(
      Value = c(20, 30, 40, 50, 120),
-     Type = c("Irrigated", "Rainfed", "Broadleaf evergreen", "Broadleaf deciduous", "Mosaic with forest")
+     Type = c("Irrigated", "Rainfed", "Broadleaf evergreen",
+     "Broadleaf deciduous", "Mosaic with forest")
 )
 cats(cover)
 cover <- addCats(cover, landType, merge = TRUE)

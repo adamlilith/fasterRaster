@@ -11,9 +11,10 @@
 \S4method{location}{missing}(x)
 }
 \arguments{
-\item{x}{A Either:
+\item{x}{Either:
 \itemize{
 \item Missing: Reports location of currently active \link[=tutorial_sessions]{session}.
+\item A \code{GSession} object or an object that contains the \code{GSession} class (i.e., a \code{GSpatial} object: a \code{GRaster} or \code{GVector}).
 }}
 }
 \value{
@@ -81,5 +82,5 @@ removeSession("examples2")
 }
 }
 \seealso{
-\strong{GRASS} \href{https://grass.osgeo.org/grass82/manuals/grass_database.html}{locations and mapsets}
+\code{\link[=mapset]{mapset()}}
 }

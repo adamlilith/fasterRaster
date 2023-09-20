@@ -27,19 +27,18 @@ Categorical rasters (also called "factor" rasters) are actually integer rasters,
 
 \subsection{Functions relevant to raster data types}{
 \itemize{
-\item \code{\link[=activeCat]{activeCat()}} and \link{activeCat<-} can be used to see or assign which column in a "levels" table associated with a categorical raster is used as category labels.
+\item \code{\link[=activeCat]{activeCat()}} and \verb{[activeCat<-]} can be used to see or assign which column in a "levels" table associated with a categorical raster is used as category labels.
 \item \code{\link[=addCats]{addCats()}} adds information to the "levels" table using \code{\link[data.table:merge]{data.table::merge()}} (same as \code{\link[=merge]{merge()}}).
-\item \link{addCats<-} add new levels to a "levels" table.
+\item \verb{[addCats<-]} add new levels to a "levels" table.
 \item \code{\link[=as.int]{as.int()}}, \code{\link[=as.float]{as.float()}}, and \code{\link[=as.doub]{as.doub()}} coerce a raster to an integer, float, or double.
 \item \code{\link[=catNames]{catNames()}} reports the column names of the "levels" table of each layer of a raster.
 \item \code{\link[=cats]{cats()}} returns the entire "levels" table of a categorical raster.
 \item \code{\link[=datatype]{datatype()}} returns the data type of a \code{GRaster}.
 \item \code{\link[=droplevels]{droplevels()}} removes "unused" levels in a "levels" table.
 \item \code{\link[=freq]{freq()}}: Frequency of each category across cells of a raster\cr
-\item \code{\link[=is.int]{is.int()}}, \code{\link[=is.float]{is.float()}}, and \code{\link[=is.doub]{is.doub()}} indicate if the raster is an integer, float, or double raster.
 \item \code{\link[=is.factor]{is.factor()}} indicates if the raster is a categorical raster.
 \item \code{\link[=levels]{levels()}} returns the "levels" table of a categorical raster (just the value column and the active column).
-\item \link{levels<-} and \code{\link[=categories]{categories()}} can be used to assign categories to an integer raster and make it categorical (i.e., a "factor" raster).
+\item \verb{[levels<-]} and \code{\link[=categories]{categories()}} can be used to assign categories to an integer raster and make it categorical (i.e., a "factor" raster).
 \item \code{\link[=missingCats]{missingCats()}} finds values in categorical rasters that do not have a category assigned to them.
 \item \code{\link[=nlevels]{nlevels()}} returns the number of levels represented by a categorical raster.
 }

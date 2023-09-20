@@ -28,7 +28,7 @@ st_crs(x, ...)
 Character.
 }
 \description{
-Get the coordinate reference system (CRS) of a \code{GRaster}, \code{GVector}, \code{GSpatial}, or \code{GSession} object, or from the currently active \strong{GRASS} location.
+Get the coordinate reference system (CRS) of a \code{GSession} object, or any that contain it (especially \code{GRaster}s and \code{GVector}s), or from the currently active \strong{GRASS} \link[=tutorial_sessions]{location}.
 }
 \examples{
 \dontrun{
