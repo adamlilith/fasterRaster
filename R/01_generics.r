@@ -81,9 +81,9 @@ methods::setGeneric(name = "crop", package = "terra")
 
 # dim() is primitive
 methods::setGeneric(name = "datatype", def = function(x, ...) standardGeneric("datatype"))
-methods::setGeneric(name = "dbCats", def = function(x, ...) standardGeneric("dbCats"))
-methods::setGeneric(name = "dbToDataTable", def = function(x, ...) standardGeneric("dbToDataTable"))
-methods::setGeneric(name = "dbRemove", def = function(x, ...) standardGeneric("dbRemove"))
+methods::setGeneric(name = ".dbCats", def = function(x, ...) standardGeneric(".dbCats"))
+methods::setGeneric(name = ".dbToDataTable", def = function(x, ...) standardGeneric(".dbToDataTable"))
+methods::setGeneric(name = ".dbRemove", def = function(x, ...) standardGeneric(".dbRemove"))
 methods::setGeneric(name = "delaunay", package = "terra")
 methods::setGeneric(name = "distance", def = function(x, y, ...) standardGeneric("distance"))
 methods::setGeneric(name = "droplevels", package = "terra")
