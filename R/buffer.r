@@ -1,16 +1,14 @@
 #' Increase/decrease the size of a vector or around non-NA cells of a raster
 #'
-#' `buffer()` operates on `GRaster`s or `GVector`s. For rasters, the function creates a buffer around non-`NA` cells. The output will be a raster. For vectors, the function creates a vector polygon larger or smaller than the focal vector.
+#' Buffers can be constructed for `GRaster`s or `GVector`s. For rasters, the `buffer()` function creates a buffer around non-`NA` cells. The output will be a raster. For vectors, the `buffer()` and `st_buffer()` functions create a vector polygon larger or smaller than the focal vector.
 #'
 #' @param x A `GRaster` or `GVector`.
 #' @param width Numeric: Maximum distance cells must be from focal cells to be within the buffer. For rasters, if the buffering unit is `"cells`", then to get `n` cell widths, use `n + epsilon`, where `epsilon` is a small number (e.g., 0.001). The larger the buffer, this smaller this must be to ensure just `n` cells are included.
 #' @param dist Same as `width`.
 #' @param background Numeric: Value to assign to cells that are not `NA` and not part of the buffer (default is 0).
 #' @param unit Character: Indicates the units of \code{width}. Can be one of:
-#' \itemize{
-#' 		\item `"cells"`: Units are numbers of cells.
-#'		\item `"meters"` (default), `"kilometers"` or `"km"`, `"feet"`, `"miles"`, or `"nautmiles"` (nautical miles).
-#' }
+#' 	* `"cells"`: Units are numbers of cells.
+#'	* `"meters"` (default), `"kilometers"` or `"km"`, `"feet"`, `"miles"`, or `"nautmiles"` (nautical miles).
 #' Partial matching is used and case is ignored.
 #'
 #' @param method Character: Only used if `units` is `"cells"`. Indicates the manner in which distances are calculated for adding of cells: 

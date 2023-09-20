@@ -1,12 +1,12 @@
 #' Change the coordinate reference system of a GRaster or GVector
 #'
-#' @description *fasterRaster** offers three ways to project rasters and vectors into a different coordinate reference system (CRS). Each of these ways are different from how they are implemented in **terra**, so it is important to understand how it works in **fasterRaster**.
+#' @description **fasterRaster** offers three ways to project rasters and vectors into a different coordinate reference system (CRS). Each of these ways are different from how they are implemented in **terra**, so it is important to understand how it works in **fasterRaster**.
 #'
 #' First, if you are wanting to change the CRS for a `SpatRaster`, `SpatVector`, or `sf` object already in **R**, use the [fast()] function. This function will project the object to the CRS of the current **GRASS** [location][tutorial_sessions]. Note that for rasters, the `method`, `fallback`, and `wrap` arguments in the `fast()` function may be important to what you want to achieve.
 #' 
 #' Second, the procedure works the same way for rasters or vectors stored on disk (and not already in **R**). Simply use the [fast()] function with the file name of the object. Again, the `method`, `fallback`, and `wrap` arguments may be important .
 #'
-#' Third, if you are wanting to change the CRS of a `GRaster` or `GVector`, you need to initiate a new **GRASS** [location][tutorial_sessions] using [faster()] with the CRS to which you want to transform the object. This means you need to keep track of which **GRASS** "location" you are working in, as multiple rasters and/or vectors can only be used in the function if they are in the same "location."  *This function, `project()`, is for projecting `GRaster`s or `GVector`s between **GRASS** "locations."* You can get the name of the current location with [location()] (with no arguments), and its coordinate reference system with [crs()] or [st_crs()] (also no arguments).
+#' Third, if you are wanting to change the CRS of a `GRaster` or `GVector`, you need to initiate a new **GRASS** [location][tutorial_sessions] using [faster()] with the CRS to which you want to transform the object. This means you need to keep track of which **GRASS** "location" in which you are working.  *This function,* `project()`*, is for projecting `GRaster`s or `GVector`s between **GRASS** "locations."* You can get the name of the current location with [location()] (with no arguments), and its coordinate reference system with [crs()] or [st_crs()] (also no arguments).
 #'
 #' @param x A `GRaster` or `GVector` to be projected.
 #'

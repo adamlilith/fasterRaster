@@ -1,16 +1,5 @@
 #' "fasterRaster": Faster raster and spatial vector processing using "GRASS GIS"
 #'
-#' \if{html}{
-#'
-#'   \out{<div style="text-align: right">}\figure{fasterRaster.png.png}{options: style="width:300px;max-width:25\%;"}\out{</div>}
-#'
-#' }
-#' \if{latex}{
-#'
-#'   \out{\begin{right}}\figure{fasterRaster.png}\out{\end{right}}
-#'
-#' }
-#'
 #' @description Processing of large-in-memory/-on disk rasters and spatial vectors using **GRASS GIS**. Most functions in the **terra** and **sf** packages are recreated. Processing of medium-sized and smaller spatial objects will nearly always be faster using **terra** or **sf**. To use most of the functions you must have the stand-alone version of **GRASS** version 8.0 or higher (not the **OSGeoW4** installer version). Note that due to developer choices, results will not always be strictly comparable between **terra**, **sf**, and **fasterRaster**.
 #'
 #' ## Most useful tutorials and functions:
@@ -58,7 +47,7 @@
 #' 
 #' ## Functions that operate on or create `GRasters`
 #' [Arithmetic]: Mathematical operations on `GRaster`s: `+`, `-`, `*`, `/`, `^`, `%%` (modulus), `%/%` (integer division)\cr
-#' [Equality][Comparison]: `<`, `<=`, `==`, `!=`, `>=`, `>`\cr
+#' [Equality][Comparison]: `<`, `<=`, `==`, `!=`, `>=`, and `>`, plus `%in%` (for categorical rasters only)\cr
 #'
 #' Single-layer functions (applied to each layer of a `GRaster`):
 #' - `NA`s: [is.na()] and [not.na()] \cr
@@ -74,11 +63,9 @@
 #' - Extremes: [min()], [max()], [which.min()], [which.max()] \cr
 #' 
 #' ## Functions that operate on or create `GRaster`s
-#' The "subset" operators `[$][subset_dollar]`, and `[[` ([double subset][subset_double]) can be used to obtain or remove specific layers of a `GRaster`.\cr
-#' The "assign" operator `[<-` ([single assign][replace_values]) can be used to replace values of a `GRaster`.\cr
-#' The "assign" operators `[$<-][[replace_dollar]` and `[[<-` ([double assign][replace_layers]) can be used to replace specific layers of a `GRaster`.\cr
-#' 
-#' `[add<-]``: Add layers to a `GRaster`\cr
+#' The operators `$` ([dollar][subset_dollar]) and `[[` ([double-square brackets][subset_double_square_brackets]) can be used to subset or remove specific layers of a `GRaster`.\cr
+#' The `[<-` ([single-bracket assign][replace_single_square_bracket]) operator can be used to replace values of cells of a `GRaster`.\cr
+#' The assign operators, `$<-` ([dollar assign][replace_dollar]), `[[<-` ([double-square brackets assign][replace_double_square_brackets]), and `[add<-]` can be used to replace specific layers of a `GRaster`.\cr
 #' [as.int()], [as.float()], [as.doub()]: Change data type (integer/float/double)\cr
 #' [as.contour()]: Contour lines from a `GRaster`\cr
 #' [as.lines()]: Convert a `GRaster` to a "lines" vector\cr
@@ -115,7 +102,6 @@
 #' [terrain()]: Slope, aspect, curvature, and partial slopes\cr
 #' [thin()]: Reduce linear features on a `GRaster` so linear features are 1 cell wide\cr
 #' [trim()]: Remove rows and columns from a `GRaster` that are all `NA`\cr
-#' [update()]: Update a `GRaster`s metadata from its **GRASS** object
 #' [viewshed()]: Areas visible from points on a raster\cr
 #'
 #' ## Functions operating on categorical rasters
@@ -162,9 +148,9 @@
 #' [zext()]: Vertical extent\cr
 #'
 #' ## Functions that operate on or create `GVector`s
-#' The subset operator \link{`[`}{subset_single} can be used to get specific geometries of a `GRaster`.\cr
-#' The "subset" operators `[$][subset_dollar]`, and `[[` ([double subset][subset_double]) can be used to get columns of a `GRaster`'s data table.\cr
-#' The "assign" operators `[$<-][[replace_dollar]` and `[[<-` ([double assign][replace_layers]) can be used to replace specific columns of a `GVector`'s data table.\cr
+#' The [`[`][subset_single_bracket] operator, can be used to subset geometries of a `GRaster`.\cr
+#' The `$` [dollar][subset_dollar] and `[[` ([double-square brackets][subset_double_square_brackets]) operators can be used to get columns of a `GVector`'s data table.\cr
+#' The `$<-` ([dollar replace][replace_dollar]) operator can be used to replace specific columns of a `GVector`'s data table.\cr
 #' [as.data.frame()]: Convert a vector's attribute table to a `data.frame`\cr
 #' [as.data.table()]: Convert a vector's attribute table to a `data.table`\cr
 #' [as.points()]: Extract vertex coordinates from a "lines" or "polygons" `GVector`\cr
@@ -184,7 +170,6 @@
 #' [st_buffer()]: Create a polygon around/inside a vector\cr
 #' [st_distance()]: Distance between geometries in two vectors\cr
 #' [tail()]: Last rows of a vector's data table\cr
-#' [update()]: Update a `GVector`s metadata from its **GRASS** object
 #'
 #' ## Converting between data types
 #' [as.contour()]: Convert a `GRaster` to a `GVector` representing contour lines\cr
@@ -218,6 +203,7 @@
 #' [replaceNAs()]: Replace `NA`s in columns of a `data.table` or `data.frame`, or in a vector\cr
 #' [rstring()]: Create a string statistically likely to be unique\cr
 #' [seqToSQL()]: Format a numeric series into an SQL value call.\cr
+#' [update()]: Refresh metadata in a `GRaster` or `GVector` object.\cr
 #'
 #' ## Functions that operate on **GRASS** "regions" (useful mostly to developers):
 #' [region()]: Change or report the active region's extent and resolution\cr

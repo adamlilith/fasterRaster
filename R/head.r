@@ -1,17 +1,17 @@
 #' Return first or last part of the data frame of a GVector
 #'
-#' @description Return the first or last part of a data frame of a `GVector`.
+#' @description Return the first or last part of a `GVector`'s data table.
 #'
 #' @param x A `GVector`.
 #' @param n Integer: Number of rows to display.
 #' @param keepnums Logical: If no `rownames` are present, create them. Default is `TRUE`.
 #' @param ... Other arguments.
 #'
-#' @returns A `data.frame`.
+#' @returns A `data.table` or `data.frame`.
 #' 
-#' @seealso [head()], [tail()]
+#' @seealso [terra::head()], [terra::tail()]
 #'
-#' @example man/examples/ex_GRaster_GVector.r
+#' @example man/examples/ex_GVector.r
 #'
 #' @aliases head
 #' @rdname head
@@ -20,8 +20,12 @@ methods::setMethod(
 	f = "head",
 	signature = c(x = "GVector"),
 	definition = function(x, n = 6L, keepnums = TRUE, ...) {
-		x <- as.data.frame(x)
-		head(x, n = n, keepnums = keepnums, ...)
+
+		nr <- nrow(x)
+		out <- x@table[1L:n]
+		if (!getFastOptions("useDataTable")) out <- as.data.frame(out)
+		out
+
 	} # EOF
 )
 
@@ -32,7 +36,11 @@ methods::setMethod(
     f = "tail",
     signature = c(x = "GVector"),
     definition = function(x, n = 6L, keepnums = TRUE, ...) {
-        x <- as.data.frame(x)
-        tail(x, n = n, keepnums = keepnums, ...)
+
+	nr <- nrow(x)
+	out <- x@table[(nr - n + 1L):nr]
+	if (!getFastOptions("useDataTable")) out <- as.data.frame(out)
+	out
+
     } # EOF
 )

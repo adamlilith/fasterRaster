@@ -1,6 +1,6 @@
 #' Coordinates of a vector"s features or a raster"s cell centers
 #'
-#' @description Returns the coordinates of a `GVector`"s features or the coordinates of the center of cells of a `GRaster`. Note that if you simply want to convert a vector to a points vector, using [as.points()] is faster.
+#' @description Returns the coordinates of the center of cells of a `GRaster` or coordinates of a `GVector`'s vertices. The output will be a `matrix`, `data.frame`, or `list`. If you want the output to be a "points" `GVector`, use [as.points()].
 #'
 #' @param x A `GVector` or a `GRaster`.
 #' @param z If `TRUE` (default), return x-, y-, and z-coordinates. If `FALSE`, just return x- and y-coordinates. For 2-dimensional objects, z-coordinates will all be 0.
@@ -12,6 +12,45 @@
 #'
 #' @example man/examples/ex_crds.r
 #'
+#' @aliases crds
+#' @rdname crds
+#' @exportMethod crds
+methods::setMethod(
+    f = "crds",
+    signature = c(x = "GRaster"),
+    function(x, z = TRUE, na.rm = TRUE) {
+
+        ..char <- NULL
+
+        .restore(x)
+        region(x)
+
+        flags <- c("quiet", "overwrite")
+        if (!na.rm) flags <- c(flags, "i")
+
+        temp <- paste0(tempfile(), ".csv")
+        rgrass::execGRASS("r.out.xyz", input = sources(x), output = temp, separator = "comma", flags = flags, intern = TRUE)
+        # see https://grass.osgeo.org/grass82/manuals/r.out.xyz.html
+        out <- data.table::fread(temp)
+
+        if (is.3d(x)) {
+            names(out) <- c("x", "y", "z", names(x))
+        } else {
+            names(out) <- c("x", "y", names(x))
+        }
+
+        # convert to numerics
+        classes <- sapply(out, class)
+        if (any(classes %in% "character")) {
+            chars <- which(classes == "character")
+            for (char in chars) out[, ..char] <- as.numeric(out[, ..char])
+        }
+
+        if (!getFastOptions("useDataTable")) out <- as.data.frame(out)
+        out
+    } # EOF
+)
+
 #' @aliases crds
 #' @rdname crds
 #' @exportMethod crds
@@ -80,44 +119,3 @@ st_coordinates <- function(x, z = TRUE) {
 	out
 	
 }
-
-#' @aliases crds
-#' @rdname crds
-#' @exportMethod crds
-methods::setMethod(
-	f = "crds",
-	signature = c(x = "GRaster"),
-	function(x, z = TRUE, na.rm = TRUE) {
-
-	..char <- NULL
-
-	.restore(x)
-	region(x)
-	
-	flags <- c("quiet", "overwrite")
-	if (!na.rm) flags <- c(flags, "i")
-	
-	temp <- paste0(tempfile(), ".csv")
-	rgrass::execGRASS("r.out.xyz", input=sources(x), output=temp, separator="comma", flags=flags, intern=TRUE)
-	#see https://grass.osgeo.org/grass82/manuals/r.out.xyz.html
-	out <- data.table::fread(temp)
-	
-	if (is.3d(x)) {
-		names(out) <- c("x", "y", "z", names(x))
-	} else {
-		names(out) <- c("x", "y", names(x))
-	}
-	
-	# convert to numerics
-	classes <- sapply(out, class)
-	if (any(classes %in% "character")) {
-		chars <- which(classes == "character")
-		for (char in chars) out[ , ..char] <- as.numeric(out[ , ..char])
-	}
-	
-	if (!getFastOptions("useDataTable")) out <- as.data.frame(out)
-	out
-
-	} # EOF
-)
-

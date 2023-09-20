@@ -1,6 +1,6 @@
 #' Delaunay triangulation for points
 #'
-#' @description This function creates a Delaunay triangulation from a set of spatial points.
+#' @description This function creates a Delaunay triangulation from a "points" `GVector`.
 #'
 #' @param x A `GVector` "points" object.
 #'

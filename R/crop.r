@@ -4,8 +4,9 @@
 #'
 #' @param x A `GRaster` or `GVector` to be cropped.
 #' @param y A `GRaster` or `GVector` to serve as a template for cropping.
-#' @param ext Logical (when `x` and `y` are `GVector`s): If `TRUE`, use the extent of `y` to crop `x`. Otherwise:
-#' * If `ext` is `TRUE, and `x` and `y` are "points" `GVector`s, use the convex hull around `y` to select points in `x`.
+#' @param ext Logical:
+#' * If `y` is a "points" `GVector`: Use the convex hull around `y` to crop `x`.
+#' * If `y` is a "lines" or "polygons" `GVector`: If `TRUE`, use the extent of `y` to crop `x`.
 #' 
 #' @details Known differences from [terra::crop()]:
 #' * If `x` and `y` are "points" vectors, and `ext` is `TRUE`, **terra** removes points that fall on the extent boundary. **fasterRaster** does not remove points on the extent boundary.

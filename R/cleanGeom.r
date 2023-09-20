@@ -1,6 +1,6 @@
 #' Fix undesirable geometries of a vector
 #'
-#' @description `cleanGeom()` fixes geometries of a vector. These can include, for example, "dangling" lines, removing topologically incorrect features, or lines of 0 length.
+#' @description `cleanGeom()` fixes geometries of a vector. These can include, for example, "dangling" lines, removing topologically incorrect features, or lines of zero length.
 #'
 #' @param x A `GVector`.
 #'
