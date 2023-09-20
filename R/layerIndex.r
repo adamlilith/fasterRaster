@@ -13,8 +13,10 @@
 
 	if (length(layer) > nlyr(x)) stop("Raster only contains ", nlyr(x), " layer(s).")
 
-	if (is.character(layer)) layer <- match(layer, names(x))
-	if (is.logical(layer)) {
+	if (is.character(layer)) {
+		layer <- match(layer, names(x))
+		if (anyNA(layer)) stop("Layer not found.")
+	} else if (is.logical(layer)) {
 		if (recycle && length(layer) < nlyr(x)) layer <- rep(layer, length.out = nlyr(x))
 		layer <- which(layer)
 	}
