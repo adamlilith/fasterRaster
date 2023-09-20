@@ -14,7 +14,7 @@ methods::setMethod(
 	signature = c(x = "GVector"),
 	definition = function(x) {
 
-	out <- dbToDataTable(x)
+	out <- .dbToDataTable(x)
 	out[ , "cat"]
 
 	} # EOF
