@@ -42,8 +42,8 @@ methods::setMethod(
 	}
 	
 	tf <- tempfile(fileext = ".tif")
-	x <- writeRaster(x, tf, overwrite = TRUE)
-	terra::plot(x, ...)
+	y <- writeRaster(x, tf, overwrite = TRUE)
+	terra::plot(y, ...)
 	
 	} # EOF
 )
@@ -60,8 +60,8 @@ methods::setMethod(
 	if (simplify & nrow(x) > maxGeoms) x <- simplifyGeom(x)
 	
 	tf <- tempfile(fileext = ".gpkg")
-	x <- writeVector(x, tf, overwrite=TRUE)
-	terra::plot(x, ...)
+	y <- writeVector(x, tf, overwrite=TRUE)
+	terra::plot(y, ...)
 	
 	} # EOF
 )
