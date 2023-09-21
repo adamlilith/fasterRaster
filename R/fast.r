@@ -22,6 +22,8 @@
 #'
 #' @param table Either `NULL` (default), or a `data.frame` or `data.table`: Metadata associated with each feature in a vector. This is usually not useful for most users, as the attribute table of a `SpatVector` will be automatically copied over from the file, `SpatVector`, or `sf` vector to the `GVector`. Leaving this as `NULL` will copy this table automatically.
 #' 
+#' @param checkCRS Logical: If `TRUE` (default), compare the coordinate reference system (CRS) of the raster or vector to that of the current location. If it is different, then project the raster or vector while importing. If `FALSE`, ignore differences in CRS (if any), and import the raster or vector.
+#' 
 #' @param rastOrVect Either `NULL` (default) or character (`"raster"` or `"vector"`). If `x` is a raster or vector already in **R**, this does not need to be specified. However, if `x` is a filename, then the function will try to ascertain whether it represents a raster or a vector, but sometimes this will fail. In that case, it can help to specify if the file holds a raster or vector. Partial matching is used.
 #'
 #' @param method Character or `NULL` (rasters only): If `x` does not have the same coordinate reference system as the currently active **GRASS** "[location][tutorial_sessions]", then it will be projected when it is imported. You may need to specify which method is used to conduction the transformation. Partial matching is used.
@@ -58,6 +60,7 @@ methods::setMethod(
 		rastOrVect = NULL,
 		levels = NULL,
 		table = NULL,
+		checkCRS = TRUE,
 		method = NULL,
 		fallback = TRUE,
 		wrap = FALSE,
@@ -115,7 +118,7 @@ methods::setMethod(
 		xNames <- names(xRast)
 
 		### load raster (no projecting needed)
-		if (terra::crs(xRast) == crs()) {
+		if (!checkCRS || terra::crs(xRast) == crs()) {
 
 			region(xRast)
 
@@ -127,6 +130,8 @@ methods::setMethod(
 				flags = "quiet",
 				intern = TRUE
 			)
+
+			if (!checkCRS) args$flags <- c(args$flags, "o")
 
 		### load and project raster
 		} else {
@@ -203,7 +208,7 @@ cat("Time-consuming step here for large rasters^^^")
 		src <- .makeSourceName(xVect, rastOrVect = "vector")
 
 		# vector is in same CRS as current location
-		if (xCrs == currentCrs) {
+		if (!checkCRS || xCrs == currentCrs) {
 
 			args <- list(
 				cmd = "v.in.ogr",
@@ -212,6 +217,8 @@ cat("Time-consuming step here for large rasters^^^")
 				flags = c("quiet", "overwrite"),
 				intern=TRUE
 			)
+
+			if (!checkCRS) args$flags <- c(args$flags, "o")
 
 		# vector is in different CRS from current location
 		# ... need to import to a temporary location, then project to the current location
@@ -249,6 +256,7 @@ methods::setMethod(
 	signature(x = "SpatRaster"),
 	function(
 		x,
+		checkCRS = TRUE,
 		method = NULL,
 		fallback = TRUE,
 		wrap = FALSE,
@@ -339,7 +347,7 @@ methods::setMethod(
 methods::setMethod(
 	"fast",
 	signature(x = "SpatVector"),
-	function(x, snap = NULL, warn = TRUE) .fastVector(x, snap = snap, warn = warn)
+	function(x, checkCRS = TRUE, snap = NULL, warn = TRUE) .fastVector(x, checkCRS = checkCRS, snap = snap, warn = warn)
 )
 
 #' @rdname fast
@@ -348,13 +356,14 @@ methods::setMethod(
 methods::setMethod(
 	"fast",
 	signature(x = "sf"),
-	function(x, snap = NULL, warn = TRUE) .fastVector(x, snap = snap, warn = warn)
+	function(x, checkCRS = TRUE, snap = NULL, warn = TRUE) .fastVector(x, checkCRS = checkCRS, snap = snap, warn = warn)
 )
 
 # 1. Write vector to disk (if needed)
 # 2. Send to fast(signature = "character")
 .fastVector <- function(
 	x,		# SpatVector or sf
+	checkCRS, # Logical
 	snap,	# NULL or numeric
 	warn	# logical
 ) {
@@ -371,6 +380,6 @@ methods::setMethod(
 		vectFile <- terra::sources(x)
 	}
     
-	fast(x = vectFile, rastOrVect = "vector", table = table, snap = snap, warn = warn)
+ 	fast(x = vectFile, rastOrVect = "vector", table = table, checkCRS = checkCRS, snap = snap, warn = warn)
 	
 }
