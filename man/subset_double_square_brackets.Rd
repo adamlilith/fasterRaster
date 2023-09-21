@@ -14,7 +14,7 @@
 \arguments{
 \item{x}{A \code{GRaster} or \code{GVector}.}
 
-\item{i}{Numeric integer, integer, logical, or character: Indicates the layer(s) of a \code{GRaster} to subset, or the column(s) of a \code{GVector} to return.}
+\item{i}{Numeric integer, integer, logical, or character: Indicates the layer(s) of a \code{GRaster} to subset, or the column(s) of a \code{GVector} to return. If negative numeric or integer values are supplied, then these layers or columns will be removed from the output.}
 
 \item{j}{Ignored for \code{[[}.}
 }
@@ -22,7 +22,7 @@
 A \code{GRaster} or \code{GVector}.
 }
 \description{
-The \code{[[} operator can be used to subset or remove one or more layers from a \code{GRaster}. It can also be used to subset columns from a \code{GVector} with a data table.
+The \code{[[} operator can be used to subset or remove one or more layers from a \code{GRaster}. It can also be used to subset or remove columns from a \code{GVector} with a data table.
 }
 \examples{
 \dontrun{

@@ -21,10 +21,10 @@
 \item{...}{Other arguments.}
 }
 \value{
-A \code{data.frame}.
+A \code{data.table} or \code{data.frame}.
 }
 \description{
-Return the first or last part of a data frame of a \code{GVector}.
+Return the first or last part of a \code{GVector}'s data table.
 }
 \examples{
 \dontrun{
@@ -45,110 +45,27 @@ grassDir <- "/usr/local/grass" # Linux
 
 # setup
 library(sf)
-library(terra)
+
+# sample data raster
+madRivers <- fastData("madRivers")
+
+# start GRASS session for examples only
+faster(x = madRivers, grassDir = grassDir,
+workDir = tempdir(), location = "examples") # line only needed for examples
 
 # example data
-madElev <- fastData("madElev")
-madCoast0 <- fastData("madCoast0")
+madCoast4 <- fastData("madCoast4")
 madRivers <- fastData("madRivers")
 madDypsis <- fastData("madDypsis")
 
-# start GRASS session for examples only
-faster(x = madElev, grassDir = grassDir,
-workDir = tempdir(), location = "examples") # line only needed for examples
-
-### GRaster properties
-######################
-
-# convert SpatRasters to GRasters
-elev <- fast(madElev)
-plot(elev)
-
-dim(elev) # rows, columns, depths, layers
-nrow(elev) # rows
-ncol(elev) # columns
-ndepth(elev) # depths
-nlyr(elev) # layers
-
-res(elev) # resolution
-
-ncell(elev) # cells
-ncell3d(elev) # cells (3D rasters only)
-
-topology(elev) # number of dimensions
-is.2d(elev) # is it 2D?
-is.3d(elev) # is it 3D?
-
-minmax(elev) # min/max values
-
-# information on the GRASS session in which the GRaster is located
-location(elev) # location
-mapset(elev) # mapset
-
-# "names" of the object
-names(elev)
-
-# coordinate reference system
-crs(elev)
-st_crs(elev)
-
-# extent (bounding box)
-ext(elev)
-st_bbox(elev)
-
-# data type
-datatype(elev)
-
-# assigning
-copy <- elev
-copy[] <- pi # assign all cells to the value of pi
-copy
-
-# concatenating multiple GRasters
-rasts <- c(elev, forest)
-rasts
-
-# adding a raster "in place"
-add(rasts) <- ln(elev)
-rasts
-
-# subsetting
-rasts[[1]]
-rasts[["forest"]]
-
-# assigning
-rasts[[4]] <- elev > 500
-
-# number of layers
-nlyr(rasts)
-
-# names
-names(rasts)
-names(rasts) <- c("elev_meters", "forest", "ln_elev", "high_elevation")
-rasts
-
-### GVector properties
-######################
-
-# convert sf vectors to GVectors
+# convert SpatVectors to GVectors
 coast <- fast(madCoast4)
 rivers <- fast(madRivers)
 dypsis <- fast(madDypsis)
 
-# extent
-ext(rivers)
-st_bbox(rivers) # extent
-
-W(rivers) # western extent
-E(rivers) # eastern extent
-S(rivers) # southern extent
-N(rivers) # northern extent
-top(rivers) # top extent
-bottom(rivers) # bottom extent
-
-# coordinate reference system
-crs(rivers)
-st_crs(rivers)
+# GVector properties
+ext(rivers) # extent
+crs(rivers) # coordinate reference system
 
 # column names and data types
 names(coast)
@@ -172,39 +89,33 @@ is.lines(dypsis)
 is.polygons(coast)
 is.polygons(dypsis)
 
-# dimensions
-nrow(rivers) # how many spatial features
-ncol(rivers) # hay many columns in the data frame
+# number of dimensions
+topology(rivers)
+is.2d(rivers) # 2-dimensional?
+is.3d(rivers) # 3-dimensional?
 
-# 2- or 3D
-topology(rivers) # dimensionality
-is.2d(elev) # is it 2D?
-is.3d(elev) # is it 3D?
+# head/tail
+head(rivers)
+tail(rivers)
 
-# refresh values from GRASS
-# (reads values from GRASS... does not appear to do anything in this case)
-refresh(elev)
-
-### operations on GVectors
-##########################
-
-# convert to data frame
+# just the data table
 as.data.frame(rivers)
+as.data.table(rivers)
 
-# subsetting
-rivers[c(1:2, 5)] # select 3 geometries
-rivers[-5:-11] # reverse select
-rivers[ , 1] # columns
-rivers[ , "NAM"] # select column
-rivers[["NAM"]] # select column
-rivers[1, 1] # rows and columns
-rivers[c(TRUE, FALSE)] # select every other geometry (T/F vector is recycled)
-rivers[ , c(TRUE, FALSE)] # select every other column (T/F vector is recycled)
+# vector or table with just selected columns
+names(rivers)
+rivers$NAME
+rivers[[c("NAM", "NAME_0")]]
+rivers[[c(3, 5)]]
 
-# Refresh values from GRASS
-# (Reads values from GRASS... will not appear to do anything in this case
-# since the rivers object is up-to-date):
-rivers <- refresh(rivers)
+# selected geometries/rows of the vector
+nrow(rivers)
+selected <- rivers[2:6]
+nrow(selected)
+
+# plot
+plot(rivers)
+plot(selected, col = "red", add = TRUE)
 
 # IMPORTANT #3: Revert back to original GRASS session if needed.
 restoreSession(opts.)
@@ -213,5 +124,5 @@ removeSession("examples")
 }
 }
 \seealso{
-\code{\link[=head]{head()}}, \code{\link[=tail]{tail()}}
+\code{\link[terra:headtail]{terra::head()}}, \code{\link[terra:headtail]{terra::tail()}}
 }

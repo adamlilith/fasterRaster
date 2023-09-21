@@ -34,7 +34,7 @@
 A \code{GVector}.
 }
 \description{
-\code{cleanGeom()} fixes geometries of a vector. These can include, for example, "dangling" lines, removing topologically incorrect features, or lines of 0 length.
+\code{cleanGeom()} fixes geometries of a vector. These can include, for example, "dangling" lines, removing topologically incorrect features, or lines of zero length.
 }
 \examples{
 \dontrun{

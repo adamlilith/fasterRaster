@@ -80,11 +80,11 @@ If \code{x} is a \code{GRaster}, then the output is a \code{GRaster}. If \code{x
 \description{
 This function produces a raster or a matrix of geographic distances, depending on the input:
 
-\strong{Case 1: Argument \code{x} is a \code{GRaster} and \code{y} is missing:} By default, this function replaces values in all \code{NA} cells with the distance between them and their closest non-\code{NA} cell. Alternatively, all non-\code{NA} cells can have their values replaced by the distance to \code{NA} cells. You can also specify which cells (by value) have their values replaced by distance to other cells.
+\strong{Case 1: Argument \code{x} is a \code{GRaster} and \code{y} is missing: (\code{distance()})} By default, this function replaces values in all \code{NA} cells with the distance between them and their closest non-\code{NA} cell. Alternatively, all non-\code{NA} cells can have their values replaced by the distance to \code{NA} cells. You can also specify which cells (by value) have their values replaced by distance to other cells.
 
-\strong{Case 2: Argument \code{x} is a \code{GRaster} and \code{y} is a \code{GVector}:} All cells in the raster have their value replaced by the distance to the nearest features in the \code{GVector}. Alternatively, calculate the distance from any cell covered by a vector object and the nearest cell \emph{not} covered by a vector object. Note that the vector is rasterized first.
+\strong{Case 2: Argument \code{x} is a \code{GRaster} and \code{y} is a \code{GVector} (\code{distance()}):} All cells in the raster have their value replaced by the distance to the nearest features in the \code{GVector}. Alternatively, calculate the distance from any cell covered by a vector object and the nearest cell \emph{not} covered by a vector object. Note that the vector is rasterized first.
 
-\strong{Case 3: Argument \code{x} is a \code{GVector} and \code{y} is a \code{GVector}:} A matrix of pairwise distances between all features in one versus the other \code{GVector} is returned.
+\strong{Case 3: Argument \code{x} is a \code{GVector} and \code{y} is a \code{GVector} (\code{distance()} and \code{st_distance()}):} A matrix of pairwise distances between all features in one versus the other \code{GVector} is returned.
 }
 \examples{
 \dontrun{

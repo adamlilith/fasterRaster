@@ -14,7 +14,7 @@
 A \code{GVector}.
 }
 \description{
-This function creates a Delaunay triangulation from a set of spatial points.
+This function creates a Delaunay triangulation from a "points" \code{GVector}.
 }
 \examples{
 \dontrun{

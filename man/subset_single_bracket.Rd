@@ -19,7 +19,7 @@
 A \code{GVector}.
 }
 \description{
-The \code{[} operator returns a subset of geometries of a \code{GVector}. You can get the number of geometries using \code{\link[=ngeom]{ngeom()}}.
+The \code{[} operator returns a subset or remove specific geometries of a \code{GVector}. You can get the number of geometries using \code{\link[=ngeom]{ngeom()}}.
 }
 \examples{
 \dontrun{

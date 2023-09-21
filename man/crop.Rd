@@ -15,9 +15,10 @@
 
 \item{y}{A \code{GRaster} or \code{GVector} to serve as a template for cropping.}
 
-\item{ext}{Logical (when \code{x} and \code{y} are \code{GVector}s): If \code{TRUE}, use the extent of \code{y} to crop \code{x}. Otherwise:
+\item{ext}{Logical:
 \itemize{
-\item If \code{ext} is \verb{TRUE, and }x\code{and}y\verb{are "points"}GVector\verb{s, use the convex hull around }y\verb{to select points in}x`.
+\item If \code{y} is a "points" \code{GVector}: Use the convex hull around \code{y} to crop \code{x}.
+\item If \code{y} is a "lines" or "polygons" \code{GVector}: If \code{TRUE}, use the extent of \code{y} to crop \code{x}.
 }}
 }
 \value{

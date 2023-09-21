@@ -81,7 +81,7 @@ Multi-layer functions (applied across layers of a "stack" of \code{GRaster}s):
 
 The operators \code{$} (\link[=subset_dollar]{dollar}) and \code{[[} (\link[=subset_double_square_brackets]{double-square brackets}) can be used to subset or remove specific layers of a \code{GRaster}.\cr
 The \verb{[<-} (\link[=replace_single_square_bracket]{single-bracket assign}) operator can be used to replace values of cells of a \code{GRaster}.\cr
-The assign operators, \verb{$<-} (\link[=replace_dollar]{dollar assign}), \verb{[[<-} (\link[=replace_double_square_brackets]{double-square brackets assign}), and \verb{add<-} (\verb{[add]}) can be used to replace specific layers of a \code{GRaster}.\cr
+The assign operators, \verb{$<-} (\link[=replace_dollar]{dollar assign}), \verb{[[<-} (\link[=replace_double_square_brackets]{double-square brackets assign}), and \verb{[add<-]} can be used to replace specific layers of a \code{GRaster}.\cr
 \code{\link[=as.int]{as.int()}}, \code{\link[=as.float]{as.float()}}, \code{\link[=as.doub]{as.doub()}}: Change data type (integer/float/double)\cr
 \code{\link[=as.contour]{as.contour()}}: Contour lines from a \code{GRaster}\cr
 \code{\link[=as.lines]{as.lines()}}: Convert a \code{GRaster} to a "lines" vector\cr
@@ -118,7 +118,6 @@ The assign operators, \verb{$<-} (\link[=replace_dollar]{dollar assign}), \verb{
 \code{\link[=terrain]{terrain()}}: Slope, aspect, curvature, and partial slopes\cr
 \code{\link[=thin]{thin()}}: Reduce linear features on a \code{GRaster} so linear features are 1 cell wide\cr
 \code{\link[=trim]{trim()}}: Remove rows and columns from a \code{GRaster} that are all \code{NA}\cr
-\code{\link[=update]{update()}}: Update a \code{GRaster}s metadata from its \strong{GRASS} object
 \code{\link[=viewshed]{viewshed()}}: Areas visible from points on a raster\cr
 }
 
@@ -173,7 +172,7 @@ The assign operators, \verb{$<-} (\link[=replace_dollar]{dollar assign}), \verb{
 
 \subsection{Functions that operate on or create \code{GVector}s}{
 
-The \code{\link[=subset_single_bracket]{[}} operator, can be used to subset geometries of a \code{GRaster}.\cr
+The \code{[} (\link[=subset_single_bracket]{single bracket}) operator, can be used to subset geometries of a \code{GRaster}.\cr
 The \code{$} \link[=subset_dollar]{dollar} and \code{[[} (\link[=subset_double_square_brackets]{double-square brackets}) operators can be used to get columns of a \code{GVector}'s data table.\cr
 The \verb{$<-} (\link[=replace_dollar]{dollar replace}) operator can be used to replace specific columns of a \code{GVector}'s data table.\cr
 \code{\link[=as.data.frame]{as.data.frame()}}: Convert a vector's attribute table to a \code{data.frame}\cr
@@ -195,7 +194,6 @@ The \verb{$<-} (\link[=replace_dollar]{dollar replace}) operator can be used to 
 \code{\link[=st_buffer]{st_buffer()}}: Create a polygon around/inside a vector\cr
 \code{\link[=st_distance]{st_distance()}}: Distance between geometries in two vectors\cr
 \code{\link[=tail]{tail()}}: Last rows of a vector's data table\cr
-\code{\link[=update]{update()}}: Update a \code{GVector}s metadata from its \strong{GRASS} object
 }
 
 \subsection{Converting between data types}{
@@ -235,6 +233,7 @@ The \verb{$<-} (\link[=replace_dollar]{dollar replace}) operator can be used to 
 \code{\link[=replaceNAs]{replaceNAs()}}: Replace \code{NA}s in columns of a \code{data.table} or \code{data.frame}, or in a vector\cr
 \code{\link[=rstring]{rstring()}}: Create a string statistically likely to be unique\cr
 \code{\link[=seqToSQL]{seqToSQL()}}: Format a numeric series into an SQL value call.\cr
+\code{\link[=update]{update()}}: Refresh metadata in a \code{GRaster} or \code{GVector} object.\cr
 }
 
 \subsection{Functions that operate on \strong{GRASS} "regions" (useful mostly to developers):}{

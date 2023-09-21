@@ -27,11 +27,11 @@
 \item{width}{Numeric: Maximum distance cells must be from focal cells to be within the buffer. For rasters, if the buffering unit is \verb{"cells}", then to get \code{n} cell widths, use \code{n + epsilon}, where \code{epsilon} is a small number (e.g., 0.001). The larger the buffer, this smaller this must be to ensure just \code{n} cells are included.}
 
 \item{unit}{Character: Indicates the units of \code{width}. Can be one of:
+* \code{"cells"}: Units are numbers of cells.
 \itemize{
-\item \code{"cells"}: Units are numbers of cells.
 \item \code{"meters"} (default), \code{"kilometers"} or \code{"km"}, \code{"feet"}, \code{"miles"}, or \code{"nautmiles"} (nautical miles).
-}
-Partial matching is used and case is ignored.}
+Partial matching is used and case is ignored.
+}}
 
 \item{method}{Character: Only used if \code{units} is \code{"cells"}. Indicates the manner in which distances are calculated for adding of cells:
 \itemize{
@@ -54,7 +54,7 @@ Partial matching is used and case is ignored.
 \item{endCapStyle}{Same as \code{capstyle}.}
 }
 \description{
-\code{buffer()} operates on \code{GRaster}s or \code{GVector}s. For rasters, the function creates a buffer around non-\code{NA} cells. The output will be a raster. For vectors, the function creates a vector polygon larger or smaller than the focal vector.
+Buffers can be constructed for \code{GRaster}s or \code{GVector}s. For rasters, the \code{buffer()} function creates a buffer around non-\code{NA} cells. The output will be a raster. For vectors, the \code{buffer()} and \code{st_buffer()} functions create a vector polygon larger or smaller than the focal vector.
 }
 \examples{
 \dontrun{

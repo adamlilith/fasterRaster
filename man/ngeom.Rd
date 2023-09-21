@@ -84,8 +84,17 @@ topology(rivers)
 is.2d(rivers) # 2-dimensional?
 is.3d(rivers) # 3-dimensional?
 
-# vector with just selected columns
+# head/tail
+head(rivers)
+tail(rivers)
+
+# just the data table
+as.data.frame(rivers)
+as.data.table(rivers)
+
+# vector or table with just selected columns
 names(rivers)
+rivers$NAME
 rivers[[c("NAM", "NAME_0")]]
 rivers[[c(3, 5)]]
 
