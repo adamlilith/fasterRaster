@@ -65,7 +65,7 @@
 #' ## Functions that operate on or create `GRaster`s
 #' The operators `$` ([dollar][subset_dollar]) and `[[` ([double-square brackets][subset_double_square_brackets]) can be used to subset or remove specific layers of a `GRaster`.\cr
 #' The `[<-` ([single-bracket assign][replace_single_square_bracket]) operator can be used to replace values of cells of a `GRaster`.\cr
-#' The assign operators, `$<-` ([dollar assign][replace_dollar]), `[[<-` ([double-square brackets assign][replace_double_square_brackets]), and `[add<-]` can be used to replace specific layers of a `GRaster`.\cr
+#' The assign operators, `$<-` ([dollar assign][replace_dollar]), `[[<-` ([double-square brackets assign][replace_double_square_brackets]), and `[add<-][add]` can be used to replace specific layers of a `GRaster`.\cr
 #' [as.int()], [as.float()], [as.doub()]: Change data type (integer/float/double)\cr
 #' [as.contour()]: Contour lines from a `GRaster`\cr
 #' [as.lines()]: Convert a `GRaster` to a "lines" vector\cr
@@ -148,7 +148,7 @@
 #' [zext()]: Vertical extent\cr
 #'
 #' ## Functions that operate on or create `GVector`s
-#' The [`[`][subset_single_bracket] operator, can be used to subset geometries of a `GRaster`.\cr
+#' The `[` ([single bracket][subset_single_bracket]) operator, can be used to subset geometries of a `GRaster`.\cr
 #' The `$` [dollar][subset_dollar] and `[[` ([double-square brackets][subset_double_square_brackets]) operators can be used to get columns of a `GVector`'s data table.\cr
 #' The `$<-` ([dollar replace][replace_dollar]) operator can be used to replace specific columns of a `GVector`'s data table.\cr
 #' [as.data.frame()]: Convert a vector's attribute table to a `data.frame`\cr
@@ -220,8 +220,9 @@
 #' [madDypsis][madDypsis]: Specimens records of species in the genus *Dypsis*\cr
 #' [madElev][madElev]: Elevation raster\cr
 #' [madForest2000][madForest2000] and [madForest2014][madForest2014]: Forest cover in 2000 and 2014\cr
-#' [madLand][madLand]: Surface reflectance in 2023\cr
+#' [madLANDSAT][madLANDSAT]: Surface reflectance in 2023\cr
 #' [madRivers][madRivers]: Rivers vector\cr
+#' [madVegIndices][madVegIndices]: Vegetation indices that can be calculated using [vegIndex()].
 #' 
 #' ## Esoteric tutorials
 #' [Sessions, locations, and mapsets][tutorial_sessions]\cr
