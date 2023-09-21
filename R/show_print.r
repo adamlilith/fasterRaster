@@ -19,7 +19,7 @@ methods::setMethod(
 	cat("class       :", paste(class(object), collapse=", "), "\n")
 	cat("location    :", object@location, "\n")
 	cat("mapset      :", object@mapset, "\n")
-	cat("coord ref.  :", .showCRS(object), "\n")
+	cat("coord ref.  :", format(st_crs(object)), "\n")
 
 	}
 )
@@ -55,7 +55,7 @@ methods::setMethod(
 	cat("topology    :", object@topology, "\n")
 	cat("extent      :", paste(extent, collapse=", "), "(xmin, xmax, ymin, ymax)\n")
 	if (details & object@topology == "3D") cat("z extent    :", paste(object@zextent, collapse=", "), " (bottom, top)\n")
-	cat("coord ref.  :", .showCRS(object), "\n")
+	cat("coord ref.  :", format(st_crs(object)), "\n")
 	
 	}
 )
@@ -92,7 +92,7 @@ methods::setMethod(
 		cat("mapset      :", object@mapset, "\n")
 	}
 	cat("topology    :", object@topology, "\n")
-	cat("coord ref.  :", .showCRS(object), "\n")
+	cat("coord ref.  :", format(st_crs(object)), "\n")
 	cat("dimensions  :", paste(object@dimensions, collapse=", "), "(nrow, ncol, ndepth)\n")
 	cat("resolution  :", paste(resol, collapse=", "), "(x, y, z)\n")
 	cat("extent      :", paste(extent, collapse=", "), "(xmin, xmax, ymin, ymax)\n")
@@ -254,7 +254,7 @@ methods::setMethod(
 	if (details | object@topology == "3D") {
 		cat("z extent    :", paste(object@zextent, collapse=", "), "(bottom, top)\n")
 	}
-	cat("coord ref.  :", .showCRS(object), "\n")
+	cat("coord ref.  :", format(st_crs(object)), "\n")
 	if (details) cat("projection  :", object@projection, "\n")
 	if (details) cat("sources     :", sources, "\n")
 	cat("name        :", names, "\n")
@@ -411,7 +411,7 @@ methods::setMethod(
 	cat("topology    :", object@topology, "\n")
 	cat("extent      :", paste(extent, collapse=", "), "(xmin, xmax, ymin, ymax)\n")
 	if (details | object@topology == "3D") cat("z extent    :", paste(zextent, collapse=", "), "(bottom, top)\n")
-	cat("coord ref.  :", .showCRS(object), "\n")
+	cat("coord ref.  :", format(st_crs(object)), "\n")
 	cat("projection  :", object@projection, "\n")
 
 	if (nFields > 0L) {
@@ -440,6 +440,8 @@ methods::setMethod(
 #' Show the CRS for an object, and make it pretty, even if it doesn't want to
 #' @noRd
 .showCRS <- function(x) {
+
+	format(st_crs(object))(stcrs(x))
 
 	if (inherits(x, c("SpatRaster", "SpatVector", "sf"))) {
 		x <- sf::st_crs(x)
