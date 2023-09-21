@@ -12,11 +12,11 @@
 #' * `"NotSoil"`: Calculate all indices that use any channels but do not require `soilSlope` or `soilIntercept`.
 #' **Note**: A near-comprehensive table of indices can be found on the (Index Database: A database for remote sensing indices)[https://www.indexdatabase.de]
 #' 
-#' @param r,g,b,nir Numeric or character: Index or [names()] of the layers in `x` that represent the red, green, blue, and near infrared channels.
+#' @param r,g,b,nir Numeric or character: Index or [names()] of the layers in `x` that represent the red, green, blue, and near infrared channels. Values must be in the range fromm 0 to 1 or integers.
 #' 
-#' @param b5,b7 Numeric or character: Index of names of the layers representing bands 5 and 7. These are used only for GVI and PVI.
+#' @param b5,b7 Numeric or character: Index of names of the layers representing bands 5 and 7. These are used only for GVI and PVI. Values must be in the range fromm 0 to 1 or integers.
 #' 
-#' @param bits Either `NULL` (default) or numeric integer or integer with a value of 7, 8, 10, or 16: If the rasters are represented by integers (so do not fall in the range of 0 to 1), then the number of bits can be supplied using `bits`. If this is the case, then they will range from 0 to 2^`n`, where `n` is 7, 8, 10, or 16. If bit rasters are supplied, they must be of [datatype()] "integer".
+#' @param bits Either `NULL` (default) or numeric integer or integer with a value of 7, 8, 10, or 16: If the rasters are represented by integers (so do not fall in the range of 0 to 1), then the number of bits can be supplied using `bits`. If this is the case, then they will range from 0 to 2^`n`, where `n` is 7, 8, 10, or 16. If bit rasters are supplied, they must be of [datatype()] "integer". If raster values are in the range from 0 to 1, then `bits` should be `NULL` (default).
 #' 
 #' @param soilSlope,soilIntercept,soilNR Numeric: Values of the soil slope, intercept, and soil noise reduction factor (0.08, by default). Used only for calculation of MSAVI.
 #' 
