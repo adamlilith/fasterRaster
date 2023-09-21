@@ -28,9 +28,17 @@ workDir = tempdir(), location = "examples") # line only needed for examples
 landsat <- fast(madLANDSAT)
 
 # Normalized Difference Vegetation Index and Enhanced Vegetation Index:
-vi <- vegIndex(landsat, index = c("ndvi", "evi"), r = 1, b = 3, nir = 4, bits = 8)
+indices <- c("ndvi", "evi")
+vi <- vegIndex(landsat, index = indices, r = 1, b = 3, nir = 4, bits = 8)
 
 plot(vi)
+
+# All indices using R and NIR:
+rnir <- vegIndex(landsat, index = c("rnir"), r = 1, nir = 4, bits = 8)
+
+# Note: Some values are highly skewed, likely due to cloud cover and other
+# anomalies that should be corrected.
+plot(rnir)
 
 # IMPORTANT #3: Revert back to original GRASS session if needed.
 restoreSession(opts.)
