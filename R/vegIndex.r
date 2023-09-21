@@ -1,38 +1,28 @@
 #' Vegetation indices from surface reflectance
 #'
-#' @description This function calculates one of many types of vegetation indices from a raster with four bands representing blue (B), green (G), red (R), and near infrared (NIR), plus possibly channels 5 and 7. The function requires rasters that represent reflectance, so should have values that fall in the range 0 to 1.
+#' @description This function calculates one of many types of vegetation indices from a raster with four bands representing blue (B), green (G), red (R), and near infrared (NIR), plus possibly channels 5 and 7. The function requires rasters that represent surface reflectance, so should have values that fall in the range 0 to 1, unless they are digital number rasters (e.g., integers in the range 0 to 255). If digital number format is used, then the `bits` argument should be defined.
 #' 
 #' The [toarLandsat()] or [toarAster()] functions can convert LANDSAT and ASTER digital-number rasters to radiance rasters, and then to reflectance rasters.
 #'
 #' @param x A `GRaster` with one layer per required band. Values should be between 0 and 1.
 #' 
-#' @param metric Character or character vector: The vegetation index or indices to calculate. Partial matching is used, and case is ignored. More infomration on each index can be found on the **GRASS** help page for the `i.vi` module.
+#' @param index Character or character vector: The vegetation index or indices to calculate. You can find a list of available indices using [fastData("vegIndices")][fastData] (also see [vegIndices]). The first column, "`index`" provides the name of the index, and these are the values that this argument will accept (e.g., "NDVI", "EVI2"). Partial matching is used, and case is ignored. You can also use these shortcuts:
+#' * `"*"`: Calculate *all* indices
+#' * `"RNIR"`: Calculate all indices that use R and NIR channels (but not other channels).
+#' * `"NotSoil"`: Calculate all indices that use any channels but do not require `soilSlope` or `soilIntercept`.
+#' **Note**: A near-comprehensive table of indices can be found on the (Index Database: A database for remote sensing indices)[https://www.indexdatabase.de]
 #' 
-#' * `ARVI`: Atmospherically Resistant Vegetation Index - Less sensitive to atmospheric interference than NDVI. Requires RGB channels.
-#' * `CI`: Crust Index - Suitable for detecting biogenic crust on soil. Requires RB channels.
-#' * `DVI`: Difference Vegetation Index - Requires R and NIR channels.
-#' * `EVI`: Enhanced Vegetation Index - Saturates more slowly than NDVI in high-biomass areas.  Requires RB an NIR channels.
-#' * `EVI2`: Enhanced Vegetation Index 2 - As EVI.  Requires R and NIR channels.
-#' * `GARI`: Green atmospherically resistant vegetation index.  Requires RGB and NIR channels.
-#' * `GEMI`: Global Environmental Monitoring Index.  Requires R and NIR channels.
-#' * `GVI`: Green Vegetation Index - Requires RGB, NIR, plus channels 5 and 7.
-#' * `IPVI`: Infrared Percentage Vegetation Index.  Requires R and NIR channels.
-#' * `MSAVI`: Modified Soil Adjusted Vegetation Index. Requires R and NIR channels, plus soil line slope, intercept, and a noise reduction factor.
-#' * `MSAVI2`: Second Modified Soil Adjusted Vegetation Index. Requires R and NIR channels.
-#' * `NDVI`: Normalized Difference Vegetation Index.  Requires R and NIR channels.
-#' * `NDWI`: Normalized Difference Water Index. Requires G and NIR channels.
-#' * `PVI`: Perpendicular Vegetation Index. Requires R and NIR channels.
-#' * `SAVI`: Soil Adjusted Vegetation Index. Requires R and NIR channels.
-#' * `SR`: Simple Vegetation ratio. Requires R and NIR channels.
-#' * `WDVI`: Weighted Difference Vegetation Index. Requires R, NIR, and soil line weight channels.
-#'
 #' @param r,g,b,nir Numeric or character: Index or [names()] of the layers in `x` that represent the red, green, blue, and near infrared channels.
 #' 
-#' @param b5,b7 Numeric or character: Index of names of the layers representing bands 5 and 7. These are used only for GVI.
+#' @param b5,b7 Numeric or character: Index of names of the layers representing bands 5 and 7. These are used only for GVI and PVI.
+#' 
+#' @param bits Either `NULL` (default) or numeric integer or integer with a value of 7, 8, 10, or 16: If the rasters are represented by integers (so do not fall in the range of 0 to 1), then the number of bits can be supplied using `bits`. If this is the case, then they will range from 0 to 2^`n`, where `n` is 7, 8, 10, or 16. If bit rasters are supplied, they must be of [datatype()] "integer".
 #' 
 #' @param soilSlope,soilIntercept,soilNR Numeric: Values of the soil slope, intercept, and soil noise reduction factor (0.08, by default). Used only for calculation of MSAVI.
 #' 
 #' @returns A `GRaster`.
+#' 
+#' @seealso Module `i.vi` in **GRASS**.
 #' 
 #' @example man/examples/ex_vegIndex.r
 #' 
@@ -42,17 +32,61 @@
 methods::setMethod(
 	f = "vegIndex",
 	signature = c(x = "GRaster"),
-	function(x, metric = "NDVI", r = NULL, g = NULL, b = NULL, nir = NULL, b5 = NULL, b7 = NULL, soilSlope = NULL, soilIntercept = NULL, soilNR = 0.08) {
+	function(
+		x,
+		index = "NDVI",
+		r = NULL,
+		g = NULL,
+		b = NULL,
+		nir = NULL,
+		b5 = NULL,
+		b7 = NULL,
+		soilSlope = NULL,
+		soilIntercept = NULL,
+		soilNR = 0.08,
+		bits = NULL
+	) {
 
 	mm <- minmax(x)
-	if (any(mm < 0) | any(mm > 1)) stop("Values in the raster should be between 0 and 1.")
+	if (any(mm < 0)) stop("Raster values cannot be < 0.")
+
+	if (is.null(bits)) {
+
+		if (any(mm > 1)) stop("Raster values should be between 0 and 1 if ", sQuote("bits"), " is NULL.")
+
+	} else {
+
+		if (!all(is.int(x))) stop("If argument ", sQuote("bits"), " is defined, then rasters must be of type ", sQuote("integer"), ".")
+
+		maxVal <- 2^bits
+		if (any(mm > maxVal)) stop("Maximum value for ", bits, " bits is ", maxVal, ".\n  At least one raster surpasses this.")
+
+	}
 
 	.restore(x)
 	region(x)
 
-	metrics <- c("arvi", "ci", "dvi", "evi", "evi2", "gvi", "gari", "gemi", "ipvi", "msavi", "msavi2", "ndvi", "ndwi", "pvi", "savi", "sr", "vari", "wdvi")
+	vegIndices <- NULL
+	utils::data("vegIndices", envir = environment(), package = "fasterRaster")
 
-	metric <- pmatchSafe(metric, metrics)
+	index <- tolower(index)
+	if ("*" %in% index) {
+		index <- vegIndices$index
+	} else if ("notsoil" %in% index) {
+    	index <- c(
+			index,
+			vegIndices[!vegIndices$soilSlope & !vegIndices$soilIntercept, "index", drop = TRUE]
+		)
+	} else if ("rnir" %in% index) {
+    	index <- c(
+			index,
+			vegIndices[vegIndices$R & !vegIndices$G & !vegIndices$B & vegIndices$NIR & !vegIndices$channel5 & !vegIndices$channel7 & !vegIndices$soilSlope & !vegIndices$soilIntercept, "index", drop = TRUE]
+		)
+	}
+	
+	index <- pmatchSafe(index, vegIndices$index)
+
+	index <- tolower(index)
 
 	if (!is.null(r) && is.character(r)) r <- match(names(x), r)
 	if (!is.null(g) && is.character(g)) g <- match(names(x), g)
@@ -61,16 +95,18 @@ methods::setMethod(
 	if (!is.null(b5) && is.character(b5)) b5 <- match(names(x), b5)
 	if (!is.null(b7) && is.character(b7)) b7 <- match(names(x), b7)
 
-	srcs <- .makeSourceName(metric, "raster")
-	for (i in seq_along(metric)) {
+	srcs <- .makeSourceName(index, "raster")
+	for (i in seq_along(index)) {
 
 		args <- list(
 			cmd = "i.vi",
-			viname = metric[i],
+			viname = index[i],
 			output = srcs[i],
 			flags = c("quiet", "overwrite"),
 			intern = TRUE
 		)
+
+		if (!is.null(bits)) args$storage_bit <- bits
 
 		if (!is.null(r)) args$red <- sources(x)[r]
 		if (!is.null(g)) args$green <- sources(x)[g]
@@ -89,7 +125,7 @@ methods::setMethod(
 		do.call(rgrass::execGRASS, args = args)
 
 	} # next metric
-	.makeGRaster(srcs, metric)
+	.makeGRaster(srcs, toupper(index))
 
 	} #OF
 )
