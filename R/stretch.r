@@ -3,9 +3,12 @@
 #' @description `stretch()` rescales the values in a `GRaster`. All values can be rescaled, or just values in a user-defined range. This range can be given by specifying either the lower and upper bounds of the range using `smin` and `smax`, and/or by the quantiles (across all cells of the raster) using `minq` and `maxq`.
 #' 
 #' @param x A `GRaster`.
+#' 
 #' @param minv,maxv Numeric: Minimum and maximum values to which to rescale values.
+#' 
 #' @param minq,maxq Numeric: Specifies range of values to rescale, given by their quantiles. The default is to stretch all values (the 0th and 100th quantiles). One or both are  ignored if `smin` and/or `smax` are provided.
-#' @param smin,smax Numeric: Specifies range of values to rescale.
+#' 
+#' @param smin,smax Numeric or `NA`: Specifies range of values to rescale. If `NA` (default), then all values are rescaled.
 #' 
 #' @returns A `GRaster`.
 #' 
@@ -38,15 +41,17 @@ methods::setMethod(
     .restore(x)
     region(x)
 
-    for (i in 1L:nlyr(x)) {
+    mm <- minmax(x)
 
+    for (i in 1L:nlyr(x)) {
+        
         ### lower "from" bound
         if (!is.na(smin)) {
             lowerFrom <- smin
         } else {
             
             if (minq == 0) {
-                lowerFrom <- minmax(x)[1L, i]
+                lowerFrom <- mm[1L, i]
             } else {
 
                 # get lower quantile
@@ -77,7 +82,7 @@ methods::setMethod(
         } else {
             
             if (maxq == 1) {
-                upperFrom <- minmax(x)[2L, i]
+                upperFrom <- mm[2L, i]
             } else {
 
                 # get lower quantile
@@ -102,8 +107,9 @@ methods::setMethod(
             } # if calculating quantile
         } # if calculating upper quantile
 
+
         ### truncate values at min/max
-        if (minmax(x[[i]])[1L, i] < lowerFrom | minmax(x[[i]])[2L, i] > upperFrom) {
+        if (mm[1L, i] < lowerFrom | mm[2L, i] > upperFrom) {
 
             gnTrunc <- .makeSourceName("truncated", "rast")
             ex <- paste0(gnTrunc, " = if(", sources(x)[i], " < ", lowerFrom, ", ", lowerFrom, ", if(", sources(x)[i], " > ", upperFrom, ", ", upperFrom, ", ", sources(x)[i], "))")
