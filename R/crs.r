@@ -58,7 +58,8 @@ methods::setMethod(
 	definition = function(x, ...) {
 
 	out <- x@crs
-	sf::st_crs(out)
+	out <- sf::st_crs(out)
+	out
 
 	} # EOF
 )
