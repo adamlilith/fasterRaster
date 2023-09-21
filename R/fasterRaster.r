@@ -80,6 +80,7 @@
 #' [distance()]: Distance to non-`NA` cells, or vice versa\cr
 #' [extend()]: Add rows and columns to a `GRaster`\cr
 #' [extract()]: Extract values from a `GRaster` at locations in a points vector\cr
+#' [filter()]: Remove "noise" from a `GRaster` using a principal components analysis (PCA)\cr
 #' [focal()]: Calculate cell values based on values of nearby cells\cr
 #' [fractalRast()]: Create a fractal `GRaster`\cr
 #' [global()]: Summary statistics across cells of each `GRaster` layer\cr
@@ -89,6 +90,7 @@
 #' [longlat()]: Create longitude/latitude rasters.\cr
 #' [mask()]: Remove values in a `GRaster` based on values in another `GRaster` or vector\cr
 #' [merge()]: Combine two or more rasters with different extents and fill in `NA`s\cr
+#' [pca()]: Apply a principal components analysis (PCA) to a `GRaster`\cr
 #' [plot()]: Display a `GRaster`\cr
 #' [plotRGB()]: Display a multispectral `GRaster` using red, blue, green, and alpha channels\cr
 #' [project()]: Change coordinate reference system and cell size\cr
