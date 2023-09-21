@@ -131,7 +131,7 @@ methods::setMethod(
 #' @export
 appFuns <- function(warn = TRUE) {
 	
-	appFunsTable <- NULL
+	# appFunsTable <- NULL
     utils::data("appFunsTable", envir = environment(), package = "fasterRaster")
 print('appFuns A')
 	if (interactive()) {
