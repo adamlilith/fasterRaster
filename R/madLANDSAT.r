@@ -1,4 +1,4 @@
-#' @name madLand
+#' @name madLANDSAT
 #'
 #' @title Rasters of surface reflectance for an eastern portion of Madagascar
 #'
