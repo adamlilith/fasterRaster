@@ -107,7 +107,7 @@ faster <- function(
 		existingCrs <- readRDS(crsFile)
 		if (existingCrs != x) {
 
-			stop("The active GRASS session has a different coordinate reference system.\n  Either use the same CRS or a different GRASS ", sQuote("location"), " (see ?location).")
+			stop("The active GRASS session has a different coordinate reference system.\n  Either use the same CRS or a different GRASS ", sQuote("location"), " (see ?location)\n  or use argument overwrite = TRUE (which unlinks all previous GRasters and GVectors).")
 
 		}
 	}
