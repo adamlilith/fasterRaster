@@ -17,24 +17,33 @@ grassDir <- "/usr/local/grass" # Linux
 # Setup
 library(terra)
 
-# Plant specimens (points), elevation (raster)
-madDypsis <- fastData("madDypsis")
-madElev <- fastData("madElev")
+# Climate raster:
+madChelsa <- fastData("madChelsa")
 
 # Start GRASS session for examples only:
-faster(x = madDypsis, grassDir = grassDir,
+faster(x = madChelsa, grassDir = grassDir,
 workDir = tempdir(), location = "examples") # line only needed for examples
 
-# Convert a SpatRaster to a GRaster, and sf to a GVector
-dypsis <- fast(madDypsis)
-elev <- fast(madElev)
+# Convert a SpatRaster to a GRaster:
+chelsa <- fast(madChelsa)
 
-### Get coordinates:
-dypsisPoints <- crds(dypsis)
-elevPoints <- crds(elev)
+### Denoise:
+quiet <- denoise(chelsa, scale = TRUE)
 
-head(dypsisPoints)
-head(elevPoints)
+compare1 <- c(chelsa[["bio1"]], quiet[["bio1"]])
+plot(compare1)
+
+compare2 <- c(chelsa[["bio7"]], quiet[["bio7"]])
+plot(compare2)
+
+### Noise:
+loud <- noise(chelsa, scale = TRUE)
+
+compare1 <- c(chelsa[["bio1"]], loud[["bio1"]])
+plot(compare1)
+
+compare2 <- c(chelsa[["bio7"]], loud[["bio7"]])
+plot(compare2)
 
 # IMPORTANT #3: Revert back to original GRASS session if needed.
 restoreSession(opts.)

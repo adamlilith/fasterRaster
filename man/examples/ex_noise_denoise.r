@@ -17,24 +17,26 @@ grassDir <- "/usr/local/grass" # Linux
 # Setup
 library(terra)
 
-# Plant specimens (points), elevation (raster)
-madDypsis <- fastData("madDypsis")
-madElev <- fastData("madElev")
+# Climate raster:
+madChelsa <- fastData("madChelsa")
 
 # Start GRASS session for examples only:
-faster(x = madDypsis, grassDir = grassDir,
+faster(x = madChelsa, grassDir = grassDir,
 workDir = tempdir(), location = "examples") # line only needed for examples
 
-# Convert a SpatRaster to a GRaster, and sf to a GVector
-dypsis <- fast(madDypsis)
-elev <- fast(madElev)
+# Convert a SpatRaster to a GRaster:
+chelsa <- fast(madChelsa)
 
-### Get coordinates:
-dypsisPoints <- crds(dypsis)
-elevPoints <- crds(elev)
+# Generate raster with layers representing principal component predictions:
+pcRast <- pca(chelsa, scale = TRUE)
+plot(pcRast)
 
-head(dypsisPoints)
-head(elevPoints)
+# Get information on the PCA:
+prinComp <- pcs(pcRast)
+
+prinComp
+summary(prinComp)
+plot(prinComp)
 
 # IMPORTANT #3: Revert back to original GRASS session if needed.
 restoreSession(opts.)
