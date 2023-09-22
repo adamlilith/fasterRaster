@@ -76,6 +76,8 @@
 #' [app()]: Apply a user-defined function to multiple layers of a `GRaster` (with helper functions [appFuns()] and [appCheck()])\cr
 #' [c()]: "Stack" two or more rasters\cr
 #' [clump()]: Group adjacent cells with similar values\cr
+#' [cor()]: Correlation matrix between layers of a `GRaster`\cr
+#' [cov()]: Covariance matrix between layers of a `GRaster`\cr
 #' [crop()]: Remove parts of a `GRaster`\cr
 #' [denoise()]: Remove "noise" from a `GRaster` using a principal components analysis (PCA)\cr
 #' [distance()]: Distance to non-`NA` cells, or vice versa\cr
