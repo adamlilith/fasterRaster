@@ -151,10 +151,10 @@ setMethod(
 			
 		}
 
-		if (any(!(datatype(x, "GDAL") %in% datatype))) {
-			flags <- c(flags, "f")
-			if (warn) warning("Argument ", sQuote("datatype"), " does not match the data type of the raster. Data may be lost.")
-		}
+		# if (any(!(datatype(x, "GDAL") %in% datatype))) {
+		# 	flags <- c(flags, "f")
+		# 	if (warn) warning("Argument ", sQuote("datatype"), " does not match the data type of the raster. Data may be lost.")
+		# }
 
 		if (!("createopt" %in% names(dots))) createopt <- NULL
 
