@@ -136,7 +136,7 @@ methods::setMethod(
 		### load and project raster
 		} else {
 		
-			if (warn) warning("Raster has a different coordinate reference system than this GRASS ", dQuote("location"), ".\n  Raster will be projected to the current location\"s coordinate reference system.")
+			if (warn) warning("Raster has a different coordinate reference system than this GRASS ", dQuote("location"), ".\n  Raster will be projected to the current location\'s coordinate reference system.")
 
 			# method
 			if (!is.null(method)) method <- pmatchSafe(method, c("nearest", "bilinear", "bicubic", "lanczos"))
