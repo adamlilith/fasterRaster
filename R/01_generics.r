@@ -85,6 +85,7 @@ methods::setGeneric(name = ".dbCats", def = function(x, ...) standardGeneric(".d
 methods::setGeneric(name = ".dbToDataTable", def = function(x, ...) standardGeneric(".dbToDataTable"))
 methods::setGeneric(name = ".dbRemove", def = function(x, ...) standardGeneric(".dbRemove"))
 methods::setGeneric(name = "delaunay", package = "terra")
+methods::setGeneric(name = "denoise", def = function(x, ...) standardGeneric("denoise"))
 methods::setGeneric(name = "distance", def = function(x, y, ...) standardGeneric("distance"))
 methods::setGeneric(name = "droplevels", package = "terra")
 methods::setGeneric(name = "dropRows", def = function(x, ...) standardGeneric("dropRows"))
@@ -150,6 +151,7 @@ methods::setGeneric(name = "nlyr", package = "terra")
 methods::setGeneric(name = "nacell", def = function(x) standardGeneric("nacell"))
 methods::setGeneric(name = "ngeom", def = function(x) standardGeneric("ngeom"))
 methods::setGeneric(name = "nlevels", package = "terra")
+methods::setGeneric(name = "noise", def = function(x, ...) standardGeneric("noise"))
 methods::setGeneric(name = "nonnacell", def = function(x) standardGeneric("nonnacell"))
 methods::setGeneric(name = "N", def = function(x, ...) standardGeneric("N"))
 methods::setGeneric(name = "not.na", def = function(x, ...) standardGeneric("not.na")) # in base
@@ -157,6 +159,7 @@ methods::setGeneric(name = "ncol", def = function(x) standardGeneric("ncol")) # 
 methods::setGeneric(name = "nrow", def = function(x) standardGeneric("nrow")) # in base
 methods::setGeneric(name = "nunique", def = function(x, ...) standardGeneric("nunique"))
 
+methods::setGeneric(name = "pca", def = function(x, ...) standardGeneric("pca"))
 methods::setGeneric(name = "plot", package = "terra")
 methods::setGeneric(name = "plotRGB", package = "terra")
 methods::setGeneric(name = "project", package = "terra")
