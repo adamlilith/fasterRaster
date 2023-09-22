@@ -38,6 +38,11 @@ if (getRversion() >= "2.15.1") {
 # [[ is already generic
 # [[<- is already generic
 
+methods::setGeneric(name = ".copyGSpatial", def = function(x, ...) standardGeneric(".copyGSpatial"))
+methods::setGeneric(name = ".dbCats", def = function(x, ...) standardGeneric(".dbCats"))
+methods::setGeneric(name = ".dbToDataTable", def = function(x, ...) standardGeneric(".dbToDataTable"))
+methods::setGeneric(name = ".dbRemove", def = function(x, ...) standardGeneric(".dbRemove"))
+
 # methods::setGeneric(name = "activeCat", package = "terra")
 methods::setGeneric(name = "activeCat", def = function(x, ...) standardGeneric("activeCat"))
 methods::setGeneric(name = "activeCat<-", package = "terra")
@@ -71,7 +76,8 @@ methods::setGeneric(name = "cleanGeom", def = function(x, ...) standardGeneric("
 methods::setGeneric(name = "clump", def = function(x, ...) standardGeneric("clump"))
 methods::setGeneric(name = "compareGeom", package = "terra")
 methods::setGeneric(name = "connectors", def = function(x, y, ...) standardGeneric("connectors"))
-methods::setGeneric(name = ".copyGSpatial", def = function(x, ...) standardGeneric(".copyGSpatial"))
+setGeneric("cor", function(x, y, ...) standardGeneric("cor"), package = "stats")
+setGeneric("cov", function(x, ...) standardGeneric("cov"), package = "stats")
 methods::setGeneric(name = "convHull", package = "terra")
 methods::setGeneric(name = "count", def = function(x, ...) standardGeneric("count"))
 methods::setGeneric(name = "crds", package = "terra")
@@ -81,9 +87,6 @@ methods::setGeneric(name = "crop", package = "terra")
 
 # dim() is primitive
 methods::setGeneric(name = "datatype", def = function(x, ...) standardGeneric("datatype"))
-methods::setGeneric(name = ".dbCats", def = function(x, ...) standardGeneric(".dbCats"))
-methods::setGeneric(name = ".dbToDataTable", def = function(x, ...) standardGeneric(".dbToDataTable"))
-methods::setGeneric(name = ".dbRemove", def = function(x, ...) standardGeneric(".dbRemove"))
 methods::setGeneric(name = "delaunay", package = "terra")
 methods::setGeneric(name = "denoise", def = function(x, ...) standardGeneric("denoise"))
 methods::setGeneric(name = "distance", def = function(x, y, ...) standardGeneric("distance"))
@@ -159,6 +162,7 @@ methods::setGeneric(name = "ncol", def = function(x) standardGeneric("ncol")) # 
 methods::setGeneric(name = "nrow", def = function(x) standardGeneric("nrow")) # in base
 methods::setGeneric(name = "nunique", def = function(x, ...) standardGeneric("nunique"))
 
+methods::setGeneric(name = "pairs", package = "terra")
 methods::setGeneric(name = "pca", def = function(x, ...) standardGeneric("pca"))
 methods::setGeneric(name = "plot", package = "terra")
 methods::setGeneric(name = "plotRGB", package = "terra")
