@@ -19,6 +19,7 @@ methods::setMethod(
     f = "as.points",
     signature = c(x = "GRaster"),
     function(x, values = TRUE) {
+        
         .restore(x)
         region(x)
 
