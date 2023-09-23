@@ -6,23 +6,25 @@
 #'
 #' This function is typically used by developers.
 #'
-#' @param x A `GVector`.
+#' @param x A `GVector` or the [sources()] of a `GVector` in **GRASS**.
 #'
 #' @returns A `data.table`.
 #'
-#' @aliases .dbToDataTable
+#' @aliases .dbAsDataTable
 #' @rdname dbToDataTable
 #' @noRd
-methods::setMethod(
-	f = ".dbToDataTable",
-	signature = c(x = "GVector"),
-	definition = function(x) {
-		
-	.restore(x)
+.dbAsDataTable <- function(x) {
+
+	if (inherits(x, "GVector")) {
+
+		.restore(x)
+		x <- sources(x)
+
+	}
 
 	data <- rgrass::execGRASS(
 		"v.db.select",
-		map = sources(x),
+		map = x,
 		intern = TRUE
 	)
 
@@ -31,18 +33,21 @@ methods::setMethod(
 	# * a vector with pipe characters if more than one column is available
 
 	cols <- data[1L]
+	data <- data[-1L]
 	
 	### one column
-	if (!grepl(data[1L], pattern = "\\|")) {
+	splitted <- strsplit(data, split = "\\|")
+
+	# if (!grepl(data[1L], pattern = "\\|")) {
+	if (length(splitted[[length(splitted)]]) == 1L) {
 	
-		data <- data[-1L]
+		if (any(grepl(data, pattern = "\\|"))) data <- gsub(data, pattern = "\\|", replacement = "")
 		out <- data.table::data.table(cat = as.integer(data))
 	
 	### multiple columns
 	} else {
 	
 		cols <- strsplit(cols, "\\|")[[1L]]
-		data <- data[-1L]
 
 		# data values
 		data <- strsplit(data, "\\|")
@@ -76,6 +81,11 @@ methods::setMethod(
 	}
 
 	out
+}
+
+
+# .dbAsDataTable <- function(x) {
+
 	# # tempFile <- tempfile(fileext = ".csv")
  	# # suppressMessages(
 	# # 	data <- rgrass::execGRASS(
@@ -144,5 +154,5 @@ methods::setMethod(
 	
 	# out
 
-	} # EOF
-)
+
+# }

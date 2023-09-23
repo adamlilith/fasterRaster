@@ -9,13 +9,9 @@
 #' @aliases .dbCats
 #' @rdname dbCats
 #' @noRd
-methods::setMethod(
-	f = ".dbCats",
-	signature = c(x = "GVector"),
-	definition = function(x) {
+.dbCats <- function(x) {
 
 	out <- .dbToDataTable(x)
-	out[ , "cat"]
+	out[["cat"]]
 
-	} # EOF
-)
+}

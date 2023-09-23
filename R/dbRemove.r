@@ -13,11 +13,8 @@
 #' @aliases .dbRemove
 #' @rdname dbRemove
 #' @noRd
-methods::setMethod(
-	f = ".dbRemove",
-	signature = c(x = "GVector"),
-	function(x) {
-	
+.dbRemove <- function(x) {
+
 	.restore(x)
 	args <- list(
 		cmd = "v.db.droptable",
@@ -29,5 +26,4 @@ methods::setMethod(
 
 	invisible(x)
 	
-	} # EOF
-)
+}
