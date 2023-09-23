@@ -39,9 +39,9 @@ if (getRversion() >= "2.15.1") {
 # [[<- is already generic
 
 methods::setGeneric(name = ".copyGSpatial", def = function(x, ...) standardGeneric(".copyGSpatial"))
-methods::setGeneric(name = ".dbCats", def = function(x, ...) standardGeneric(".dbCats"))
-methods::setGeneric(name = ".dbToDataTable", def = function(x, ...) standardGeneric(".dbToDataTable"))
-methods::setGeneric(name = ".dbRemove", def = function(x, ...) standardGeneric(".dbRemove"))
+# methods::setGeneric(name = ".dbCats", def = function(x, ...) standardGeneric(".dbCats"))
+# methods::setGeneric(name = ".dbToDataTable", def = function(x, ...) standardGeneric(".dbToDataTable"))
+# methods::setGeneric(name = ".dbRemove", def = function(x, ...) standardGeneric(".dbRemove"))
 
 # methods::setGeneric(name = "activeCat", package = "terra")
 methods::setGeneric(name = "activeCat", def = function(x, ...) standardGeneric("activeCat"))
@@ -184,6 +184,7 @@ methods::setGeneric(name = "res", package = "terra")
 methods::setGeneric(name = "resample", package = "terra")
 methods::setGeneric(name = "res3d", def = function(x) standardGeneric("res3d"))
 
+methods::setGeneric(name = "sampleRast", def = function(x, ...) standardGeneric("sampleRast"))
 methods::setGeneric(name = "sdpop", def = function(x, ...) standardGeneric("sdpop"))
 methods::setGeneric(name = "selectRange", def = function(x, ...) standardGeneric("selectRange"))
 methods::setGeneric(name = "show", package = "methods")
