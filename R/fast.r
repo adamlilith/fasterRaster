@@ -370,7 +370,9 @@ methods::setMethod(
     
 	if (!inherits(x, "SpatVector")) x <- terra::vect(x)
 
-	table <- terra::as.data.frame(x)
+	x <- terra::disagg(x)
+
+	table <- data.table::as.data.table(x)
 	if (nrow(table) != 0L) x <- tidyterra::transmute(x) # remove data frame
 
 	if (terra::sources(x) == "") {
