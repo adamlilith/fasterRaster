@@ -336,11 +336,11 @@
 	centroids <- sub(centroids, pattern="centroids=", replacement="")
 	areas <- sub(areas, pattern="areas=", replacement="")
 
-	points <- as.numeric(points)
-	lines <- as.numeric(lines)
-	boundaries <- as.numeric(boundaries)
-	centroids <- as.numeric(centroids)
-	areas <- as.numeric(areas)
+	points <- as.integer(points)
+	lines <- as.integer(lines)
+	boundaries <- as.integer(boundaries)
+	centroids <- as.integer(centroids)
+	areas <- as.integer(areas)
 
 	if (points > 0 & lines == 0 & boundaries == 0 & centroids == 0 & areas == 0) {
 		geometry <- "points"
@@ -350,7 +350,7 @@
 		nGeometries <- lines
 	} else if (points == 0 & lines == 0 & boundaries > 0 & centroids > 0 & areas > 0) {
 		geometry <- "polygons"
-		nGeometries <- boundaries
+		nGeometries <- centroids
 	} else {
 		geometry <- NA_character_
 		nGeometries <- NA_integer_
