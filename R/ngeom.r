@@ -27,4 +27,6 @@ methods::setMethod(
 		sum(.vGeometries(x))
 	}
 
+	} # EOF
+
 )
