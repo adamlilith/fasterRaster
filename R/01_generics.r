@@ -200,10 +200,11 @@ methods::setGeneric(name = "spDepRast", def = function(x, ...) standardGeneric("
 methods::setGeneric(name = "stretch", package = "terra")
 methods::setGeneric(name = "st_as_sf", package = "sf")
 methods::setGeneric(name = "st_bbox", package = "sf")
-
 methods::setGeneric(name = "st_buffer", package = "sf")
 methods::setGeneric(name = "st_crs", package = "sf")
 methods::setGeneric(name = "st_distance", package = "sf")
+methods::setGeneric(name = "st_distance", package = "sf")
+methods::setGeneric(name = "summary", def = function(object, ...) standardGeneric("summary"))
 
 methods::setGeneric(name = "tail", package = "utils")
 methods::setGeneric(name = "terrain", package = "terra")

@@ -33,6 +33,16 @@ methods::setMethod(
 	definition = function(x) show(x)
 )
 
+#' @aliases summary
+#' @rdname show
+#' @exportMethod summary
+methods::setMethod(
+	f = "summary",
+	signature = "GSession",
+	definition = function(x) show(x)
+)
+
+
 #' @aliases show
 #' @rdname show
 #' @exportMethod show
@@ -67,6 +77,15 @@ methods::setMethod(
 	f = "print",
 	signature = "GSpatial",
  	definition = function(x) show(x)
+)
+
+#' @aliases summary
+#' @rdname show
+#' @exportMethod summary
+methods::setMethod(
+	f = "summary",
+	signature = "GSpatial",
+	definition = function(x) show(x)
 )
 
 #' @aliases show
@@ -108,6 +127,15 @@ methods::setMethod(
 	f = "print",
 	signature = "GRegion",
  	definition = function(x) show(x)
+)
+
+#' @aliases summary
+#' @rdname show
+#' @exportMethod summary
+methods::setMethod(
+	f = "summary",
+	signature = "GRegion",
+	definition = function(x) show(x)
 )
 
 #' @aliases show
@@ -285,6 +313,15 @@ methods::setMethod(
  	definition = function(x) show(x)
 )
 
+#' @aliases summary
+#' @rdname show
+#' @exportMethod summary
+methods::setMethod(
+	f = "summary",
+	signature = "GRaster",
+	definition = function(x) show(x)
+)
+
 #' @aliases show
 #' @rdname show
 #' @exportMethod show
@@ -436,6 +473,14 @@ methods::setMethod(
  	definition = function(x) show(x)
 )
 
+#' @aliases summary
+#' @rdname show
+#' @exportMethod summary
+methods::setMethod(
+    f = "summary",
+    signature = "GVector",
+    definition = function(x) show(x)
+)
 
 #' Show the CRS for an object, and make it pretty, even if it doesn't want to
 #' @noRd
