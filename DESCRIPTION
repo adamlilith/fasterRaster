@@ -29,7 +29,6 @@ Imports:
 	sf,
 	shiny,
 	terra,
-	tidyterra,
 	tools,
 	utils
 Suggests:
