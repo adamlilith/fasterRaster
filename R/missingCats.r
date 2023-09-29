@@ -7,6 +7,8 @@
 #' @param x A `GRaster`.
 #'
 #' @param layer Numeric integers, logical vector, or character: Layer(s) for which to obtain missing categories.
+#' 
+#' @returns A numeric vector (if `x`is just one layer), or a named list of numeric vectors, one per layer in `x`.
 #'
 #' @seealso [categorical rasters][tutorial_raster_data_types] in **fasterRaster**
 #'
@@ -36,12 +38,18 @@ methods::setMethod(
                 ac <- activeCat(x, names = TRUE)[i]
                 val <- names(freqs)[1L]
 
-                out <- freqs[(is.na(ac)), (val)]
-                out <- freqs[is.na(ac), val]
+                this <- freqs[(is.na(ac))]
+                this <- this[[(val)]]
+                out[[i]] <- this
 
             } # if this layer has levels
         } # next raster
-        names(out) <- names(x)[layer]
+        if (length(out) == 1L) {
+            out <- out[[1L]]
+        } else {
+            names(out) <- names(x)[layer]
+        }
         out
+
     } # EOF
 )
