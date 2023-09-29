@@ -39,7 +39,7 @@ methods::setMethod(
 methods::setMethod(
 	f = "summary",
 	signature = "GSession",
-	definition = function(x) show(x)
+	definition = function(object) show(object)
 )
 
 
@@ -85,7 +85,7 @@ methods::setMethod(
 methods::setMethod(
 	f = "summary",
 	signature = "GSpatial",
-	definition = function(x) show(x)
+	definition = function(object) show(object)
 )
 
 #' @aliases show
@@ -135,7 +135,7 @@ methods::setMethod(
 methods::setMethod(
 	f = "summary",
 	signature = "GRegion",
-	definition = function(x) show(x)
+	definition = function(object) show(object)
 )
 
 #' @aliases show
@@ -319,7 +319,7 @@ methods::setMethod(
 methods::setMethod(
 	f = "summary",
 	signature = "GRaster",
-	definition = function(x) show(x)
+	definition = function(object) show(object)
 )
 
 #' @aliases show
@@ -479,7 +479,7 @@ methods::setMethod(
 methods::setMethod(
     f = "summary",
     signature = "GVector",
-    definition = function(x) show(x)
+    definition = function(object) show(object)
 )
 
 #' Show the CRS for an object, and make it pretty, even if it doesn't want to
