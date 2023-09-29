@@ -13,19 +13,8 @@
 #' * A `SpatVector` or `sf` spatial vector.
 #' * A character string with the path and filename of a raster or vector to be loaded directly into **GRASS**. The function will attempt to ascertain the type of object from the file extension (raster or vector), but it can help to indicate which it is using the `rastOrVect` argument if it is unclear.
 #'
-#' @param levels Specifies the [levels()] of a categorical raster:
-#'  * `NULL` (default): If `x` is a `SpatRaster` and it already has levels, these will be attached to the `GRaster`. Otherwise, the raster is assumed to have no levels.
-#' * An empty string: Same as `NULL` (no levels).
-#'  * `data.frame` or `data.table`: Must have at least two columns. The first column must be integers indicating which values in the raster correspond to what categories. The second column is assumed to have category labels. This can be changed using [activeCat<-][activeCat].
-#' * A list with one element per raster layer: Each element can be a `data.frame`, `data.table`, or a empty string. A list can have a mix of any of these.
-#' * A non-empty string: Specifies name of a file containing a `data.frame`, `data.table`, or `list` with levels. Files can be ".csv", ".tab", ".rds", or ".rda" files.
-#'
-#' @param table Either `NULL` (default), or a `data.frame` or `data.table`: Metadata associated with each feature in a vector. This is usually not useful for most users, as the attribute table of a `SpatVector` will be automatically copied over from the file, `SpatVector`, or `sf` vector to the `GVector`. Leaving this as `NULL` will copy this table automatically.
-#' 
 #' @param checkCRS Logical: If `TRUE` (default), compare the coordinate reference system (CRS) of the raster or vector to that of the current location. If it is different, then project the raster or vector while importing. If `FALSE`, ignore differences in CRS (if any), and import the raster or vector.
 #' 
-#' @param rastOrVect Either `NULL` (default) or character (`"raster"` or `"vector"`). If `x` is a raster or vector already in **R**, this does not need to be specified. However, if `x` is a filename, then the function will try to ascertain whether it represents a raster or a vector, but sometimes this will fail. In that case, it can help to specify if the file holds a raster or vector. Partial matching is used.
-#'
 #' @param method Character or `NULL` (rasters only): If `x` does not have the same coordinate reference system as the currently active **GRASS** "[location][tutorial_sessions]", then it will be projected when it is imported. You may need to specify which method is used to conduction the transformation. Partial matching is used.
 #' * `NULL` (default): Automatically choose based on raster properties (`near` for categorical data, `bilinear` for continuous data)
 #' * `"near"`: Nearest neighbor. Best for categorical data, and often a poor choice for continuous data.
@@ -40,6 +29,13 @@
 #' @param snap `NULL` (default) or a positive numeric value (vectors only): Sometimes, polygons created in other software are topologically incorrect--the borders of adjacent polygons may cross one another, or there may be small gaps between them. These errors can be corrected by slightly moving vertices. The value of `snap` indicates how close vertices need to be for them to be shifted to to the same location for a correct topology. Small values are recommended, and units are in map units (usually meters). By default, this is `NULL`, meaning no snapping is done. Vectors that have been snapped may need to be cleaned using [cleanGeom()] with the `break`, `duplicated`, and `smallAngles` tools.
 #'
 #' @param warn Logical: If `TRUE`, display a warning when projecting the vector or raster.
+#' 
+#' @param ... Other arguments. These are typically used internally so not of use to most users. They can include:
+#' * `rastOrVect` Character (`"raster"` or `"vector"`). If `x` is a filename, then the function will try to ascertain whether it represents a raster or a vector, but sometimes this will fail. In that case, it can help to specify if the file holds a raster or vector. Partial matching is used.
+#'
+#' * `levels` (`GRaster`s): A `data.frame`, `data.table`, or list of `data.frame`s or `data.table`s with categories for categorical rasters: The first column of a table corresponds to raster values. A subsequent column corresponds to category labels. By default, the second column is assumed to represent labels, but his can be changed with `[activeCat<-]`. Tables can also be `NULL` (e.g., `data.fame(NULL)`).
+#'
+#' * `table` (`GVector`s): A `data.frame` or `data.table` with one row per geometry in a `GVector`: Serves as an attribute table.
 #'
 #' @details When projecting a raster, the "fallback" methods in `r.import` are actually used, even though the `method` argument takes the strings for non-fallback methods. See the manual page for the `r.import` **GRASS** module.
 #' 
@@ -57,16 +53,22 @@ methods::setMethod(
 	signature(x = "character"),
 	function(
 		x,
-		rastOrVect = NULL,
-		levels = NULL,
-		table = NULL,
 		checkCRS = TRUE,
 		method = NULL,
 		fallback = TRUE,
 		wrap = FALSE,
 		snap = NULL,
-		warn = TRUE
+		warn = TRUE,
+		...
 	) {
+
+	dots <- list(...)
+
+	if (any(names(dots) == "rastOrVect")) {
+		rastOrVect <- dots$rastOrVect
+	} else {
+		rastOrVect <- NULL
+	}
 
 	### raster or vector?
 	#####################
@@ -76,32 +78,19 @@ methods::setMethod(
 		nc <- nchar(x)
 
 		# 3-letter extensions
-		rastExtensions <- c(".asc", ".grd", ".img", ".mem", ".tif")
-		vectExtensions <- c(".shp")
+		rastExtensions <- c(".asc", ".grd", ".img", ".mem", ".tif", ".saga")
+		vectExtensions <- c(".shp", ".gpkg")
 
-		ext <- substr(x, nc - 3L, nc)
+		ext <- tools::file_ext(x)
 		ext <- tolower(ext)
 
 		if (ext %in% rastExtensions) {
 			rastOrVect <- "raster"
 		} else if (ext %in% vectExtensions) {
 			rastOrVect <- "vector"
+		} else {
+			stop("Cannot determine data if raster or vector from file name. Please use argument ", sQuote("rastOrVect"), ".")
 		}
-
-		# 4-letter extensions
-		rastExtensions <- c(".saga")
-		vectExtensions <- c(".gpkg")
-
-		ext <- substr(x, nc - 4L, nc)
-		ext <- tolower(ext)
-
-		if (ext %in% rastExtensions) {
-			rastOrVect <- "raster"
-		} else if (ext %in% vectExtensions) {
-			rastOrVect <- "vector"
-		}
-
-		if (is.null(rastOrVect)) stop("Cannot determine data if raster or vector from file name. Please use argument ", sQuote("rastOrVect"), ".")
 
 	} else {
 	### user supplied rastOrVect
@@ -184,7 +173,11 @@ cat("Time-consuming step here for large rasters^^^")
 		if (nLayers > 1L) src <- paste0(src, ".", seq_len(nLayers))
 
 		# raster levels
-		if (!is.null(levels)) levels <- .getLevels(levels)
+		if (any(names(dots) == "levels")) {
+			if (!is.null(levels)) levels <- dots$levels
+		} else {
+			levels <- NULL
+		}
 		out <- .makeGRaster(src, names = xNames, levels = levels)
 
 	### vector from disk (and project on the fly if needed)
@@ -199,7 +192,8 @@ cat("Time-consuming step here for large rasters^^^")
 		
 			table <- terra::as.data.frame(xVect)
 			table <- data.table::as.data.table(table)
-			xVect <- tidyterra::transmute(xVect)
+			nc <- ncol(xVect)
+			xVect <- xVect[ , seq_len(nc)] <- NULL
 		
 		}
 		
@@ -239,6 +233,12 @@ cat("Time-consuming step here for large rasters^^^")
 
 		} # vector on disk needs projected
 
+		if (any(names(dots) == "table")) {
+			table <- dots$table
+		} else {
+			table <- NULL
+		}
+
 		do.call(rgrass::execGRASS, args=args)
 		out <- .makeGVector(src, table = table)
 
@@ -264,17 +264,7 @@ methods::setMethod(
 	) {
 
 	rastFile <- terra::sources(x)
-	levs <- .getLevels(x)
-
-	if (!is.null(levs) && !any(sapply(levs, is.null)) && any(.nlevels(levs) > 0L)) {
-
-		levelsFile <- tempfile(fileext = ".rds")
-		levelsFile <- forwardSlash(levelsFile)
-  		saveRDS(levs, file = levelsFile)
-
-	} else {
-		levelsFile <- NULL
-	}
+	levels <- .getLevels(x)
 
 	if (any(rastFile == "")) {
 		tempFile <- tempfile(fileext = ".tif")
@@ -284,7 +274,7 @@ methods::setMethod(
 		x <- terra::sources(x)
 	}
 
-	fast(x = x, levels = levelsFile, rastOrVect = "raster", method = method, fallback = fallback, wrap = wrap, warn = warn)
+	fast(x = x, method = method, fallback = fallback, wrap = wrap, warn = warn, levels = levels, rastOrVect = "raster")
 
 	} # EOF
 )
@@ -373,7 +363,10 @@ methods::setMethod(
 	x <- terra::disagg(x)
 
 	table <- data.table::as.data.table(x)
-	if (nrow(table) != 0L) x <- tidyterra::transmute(x) # remove data frame
+	if (nrow(table) != 0L) {
+		nc <- ncol(x)
+		x[ , seq_len(nc)] <- NULL # remove data frame
+	}
 
 	if (terra::sources(x) == "") {
 		vectFile <- tempfile(fileext = ".gpkg")
@@ -382,6 +375,6 @@ methods::setMethod(
 		vectFile <- terra::sources(x)
 	}
     
- 	fast(x = vectFile, rastOrVect = "vector", table = table, checkCRS = checkCRS, snap = snap, warn = warn)
+  fast(x = vectFile, checkCRS = checkCRS, snap = snap, warn = warn, table = table, rastOrVect = "vector", )
 	
 }
