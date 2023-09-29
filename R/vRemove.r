@@ -10,10 +10,10 @@
 #'
 #' @returns A `GVector` (invisibly). This may have an attribute table associated with it, but the table is in **R**. The table in **GRASS** will have been deleted.
 #'
-#' @aliases .dbRemove
+#' @aliases .vRemove
 #' @rdname dbRemove
 #' @noRd
-.dbRemove <- function(x) {
+.vRemove <- function(x) {
 
 	.restore(x)
 	args <- list(
