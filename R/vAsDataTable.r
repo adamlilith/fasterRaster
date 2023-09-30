@@ -6,7 +6,7 @@
 #'
 #' This function is typically used by developers.
 #'
-#' @param x A `GVector` or the [sources()] of a `GVector` in **GRASS**.
+#' @param x A `GVector` or the name of a vector in **GRASS**.
 #'
 #' @returns A `data.table`.
 #'
@@ -16,10 +16,10 @@
 .vAsDataTable <- function(x) {
 
 	if (inherits(x, "GVector")) {
-
 		.restore(x)
-		x <- sources(x)
-
+		src <- sources(x)
+	} else {
+		src <- x
 	}
 
 	data <- rgrass::execGRASS("v.db.select", map = x, intern = TRUE)
