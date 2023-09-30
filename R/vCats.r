@@ -1,8 +1,8 @@
-#' Category column of a vector in GRASS
+#' Category column values of a vector in GRASS
 #'
-#' @description Imports the `cat` column of a vector in **GRASS**. This is *not* the same as the `cat` index attached to a `GVector`, which is an **R** object that points to a vector in **GRASS**.
+#' @description Returns values in the `cat` column of a vector in **GRASS**.
 #'
-#' @param x A `GVector`.
+#' @param x A `GVector` or the name of a vector in **GRASS**.
 #'
 #' @returns An integer vector with the category of each geometry in the vector
 #'
@@ -11,9 +11,16 @@
 #' @noRd
 .vCats <- function(x) {
 
+	if (inherits(x, "GVector")) {
+		.restore(x)
+		src <- sources(x)
+	} else {
+		src <- x
+	}
+
 	args <- list(
 		cmd = "v.category",
-		input = sources(x),
+		input = src,
 		option = "print",
 		flags = c("quiet", "overwrite"),
 		intern = TRUE
