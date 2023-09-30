@@ -9,7 +9,7 @@
 #'
 #* `x`: `GRaster`, `GVector`, or character: The object or the `sources` of the object to be copied. Can take multi-layered objects or multiple `sources`.
 #' 
-#' ## `.dbCats()`
+#' ## `.vCats()`
 #' Get a `data.table` with a single column named `cat`, which corresponds to the **GRASS** attribute table's `cat` column.
 #'
 #' `x`: A `GVector`.
