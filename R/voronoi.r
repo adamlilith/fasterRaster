@@ -3,7 +3,7 @@
 #' @description This function creates a Voronoi tessellation from a set of spatial points or polygons.
 #'
 #' @param x A `GVector` "points" object.
-#' @param buffer Numeric: By default, this function creates a vector that has an extent exactly the same as the input data. However, the apparent extent can be changed by setting this value to one different from 0. Negative values reduce the size of the extent, and positive extend it.  Units are in map units.
+#' @param buffer Numeric: By default, this function creates a vector that has an extent exactly the same as the input data. However, the apparent extent can be changed by setting this value to a value different from 0. Negative values reduce the size of the extent, and positive extend it.  Units are in map units.
 #'
 #' @returns A `GVector`.
 #'
@@ -59,7 +59,7 @@ methods::setMethod(
 
 	if (geomtype(x) == "polygons") args$flags <- c(args$clags, "a")
 
-	do.call(rgrass::execGRASS, args=args)
+	do.call(rgrass::execGRASS, args = args)
 	.makeGVector(src)
 	
 	} # EOF
