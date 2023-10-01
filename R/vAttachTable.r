@@ -21,7 +21,7 @@
 	}
 
 	if (is.null(table)) {
-		table <- data.frame(TEMPTEMP_count = 1:ngeom(x, type = "GRASS"))
+		table <- data.frame(TEMPTEMP_count = 0L)
 		names(table)[1L] <- rstring(1L)
 	}
 
@@ -45,11 +45,10 @@
 		cmd = "v.db.addtable",
 		map = src,
 		columns = columns,
-		flags = "quiet",
-		intern = TRUE
+		flags = "quiet"
 	)
 
-	info <- suppressMessages(do.call(rgrass::execGRASS, args = args))
+	suppressMessages(do.call(rgrass::execGRASS, args = args))
 	invisible(x)
 
 }
