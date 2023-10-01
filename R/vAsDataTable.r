@@ -22,7 +22,7 @@
 		src <- x
 	}
 
-	data <- rgrass::execGRASS("v.db.select", map = x, intern = TRUE)
+	data <- rgrass::execGRASS("v.db.select", map = src, intern = TRUE)
 
 	### "data" can be
 	# * a single vector headed by "cat" and no pipe characters if only this column is available
