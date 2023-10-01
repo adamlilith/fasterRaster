@@ -18,15 +18,18 @@
 		src <- x
 	}
 
-	args <- list(
-		cmd = "v.category",
-		input = src,
-		option = "print",
-		flags = c("quiet", "overwrite"),
-		intern = TRUE
-	)
+	out <- .vAsDataTable(y)
+	out <- out[["cat"]]
 
-	out <- do.call(rgrass::execGRASS, args = args)
+	# args <- list(
+	# 	cmd = "v.category",
+	# 	input = src,
+	# 	option = "print",
+	# 	flags = c("quiet", "overwrite"),
+	# 	intern = TRUE
+	# )
+
+	# out <- do.call(rgrass::execGRASS, args = args)
 	out <- as.integer(out)
 	out
 
