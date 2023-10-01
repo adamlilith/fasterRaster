@@ -29,17 +29,17 @@ y <- fast(madCoast4)
 # see atts table
 .vAsDataTable(y)
 
-# remove atts table
-.vRemoveTable(y)
+# # remove atts table
+# .vRemoveTable(y)
 
 # # see atts table
 # .vAsDataTable(y) # error bc removed
 
-# print categories
-.vCats(y)
+# # print categories
+# .vCats(y)
 
-# attach new table with random column
-.vAttachTable(y)
+# # attach new table with random column
+# .vAttachTable(y)
 
 # tb <- data.frame(yes = letters[ngeom(y, "GRASS")])
 # .vAttachTable(y, table = tb) # already table linked
@@ -55,11 +55,11 @@ y <- fast(madCoast4)
 # db columns
 .vNames(y)
 
-# remove column
-.vDropColumn(y, 2)
+# # remove column
+# .vDropColumn(y, 2)
 
-# see atts table
-.vAsDataTable(y)
+# # see atts table
+# .vAsDataTable(y)
 
 # # add values to a column
 # args <- list(
@@ -75,9 +75,44 @@ y <- fast(madCoast4)
 # # see atts table
 # .vAsDataTable(y)
 
-y <- .vMakeKey(y)
+.vMakeKey(y)
+.vKeys(y)
 .vAsDataTable(y)
 
-sql <- paste0("UPDATE ", src, " SET cat = 7 WHERE key = 'yq8Bf7uYgTpC';")
-rgrass::execGRASS("db.execute", sql = sql)
+# sql <- matrix(NA_character_, nrow = 2, ncol = 1)
+# sql[1, 1] <- "cat 1"
+# sql[2, 1] <- "WHERE key = 'wfwfO7A5cjTS'"
+
+keys <- .vKeys(y)
+nGeoms <- ngeom(y, "GRASS")
+sql <- matrix(NA_character_, nrow = 2 * nGeoms, ncol = 1)
+for (i in seq_len(nGeoms)) {
+	sql[2 * i - 1L, 1L] <- paste0("cat ", 1)
+	sql[2 * i, 1L] <- paste0("WHERE key = '", keys[i], "'")
+}
+
+tf <- tempfile(fileext = ".sql")
+write(sql, tf)
+
+src <- .makeSourceName("recat", "vector")
+args <- list(
+	cmd = "v.reclass",
+	input = sources(y),
+	output = src,
+	rules = tf,
+	flags = c("quiet", "overwrite")
+)
+do.call(rgrass::execGRASS, args = args)
+out <- .makeGVector(src)
+
+# dt <- data.frame(key = "character")
+# .vAttachTable(out, dt)
+# .vMakeKey(out)
+
+.vKeys(out)
+.vCats(out)
+.vAsDataTable(out)
+
+
+
 
