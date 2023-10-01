@@ -239,7 +239,7 @@ cat("Time-consuming step here for large rasters^^^")
 			table <- NULL
 		}
 
-		do.call(rgrass::execGRASS, args=args)
+		do.call(rgrass::execGRASS, args = args)
 		out <- .makeGVector(src, table = table)
 
 	} # is vector on disk
