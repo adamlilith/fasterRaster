@@ -23,19 +23,25 @@
 
 	# write file for SQL
 	src <- sources(x)
-	sql <- matrix(NA_character_, nrow = ng, ncol = 1)
-	for (i in seq_len(ng)) {
+	sql <- matrix(NA_character_, nrow = nGeoms, ncol = 1)
+	for (i in seq_len(nGeoms)) {
 
-		sql[i] <- paste0("UPDATE ", src, " SET key = '", id[i], "' WHERE cat = ", i, ";")
+		sql[i] <- paste0("UPDATE ", src, " SET key = '", keys[i], "' WHERE cat = ", i, ";")
 
 	}
 	tf <- tempfile(fileext = ".sql")
 	write(sql, tf)
 
-	rgrass::execGRASS("db.execute", input = tf, flags = "quiet")
+	args <- list(
+		cmd = "db.execute",
+		input = tf,
+		flags = "quiet"
+	)
 
-	x@keys <- keys
-	validObject(x)
-	x
+	do.call(rgrass::execGRASS, args = args)
+
+	# x@keys <- keys
+	# validObject(x)
+	invisible(x)
 
 }
