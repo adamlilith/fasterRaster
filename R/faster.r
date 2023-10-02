@@ -53,6 +53,8 @@ faster <- function(
 	
 	}
 
+	ignore <- rgrass::set.ignore.stderrOption(TRUE)
+
 	### function globals
 	dots <- list(...)
 	if (is.null(workDir)) workDir <- getFastOptions("workDir")
