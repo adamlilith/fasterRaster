@@ -37,53 +37,54 @@ methods::setMethod(
 
 #' Make sources
 #'
-#' @param rastOrVect Character: `raster`, `raster3D`, or `vector`
+#' @param x Character or `NULL`: Descriptive string. **Developers, please note**: To assist with debugging, **GRASS** objects created by a **GRASS** module have the module named in this argument (with underscores). Example: "v_in_ogr" or "r_resample".
+#' @param type Character: `raster`, `raster3D`, `vector`, or `table`.
 #' @param n Numeric integer: Number of names to make
 #' @noRd
-.makeSourceName <- function(x = NULL, rastOrVect = NULL, n = 1L) {
+.makeSourceName <- function(x = NULL, type = NULL, n = 1L) {
 
-	if (is.null(x) & is.null(rastOrVect)) stop("Both ", sQuote("x"), " and ", sQuote("rastOrVect"), " cannot be ", dQuote("NULL"), " at the same time.")
+	if (is.null(x) & is.null(type)) stop("Both ", sQuote("x"), " and ", sQuote("type"), " cannot be ", dQuote("NULL"), " at the same time.")
 
-	rastOrVect <- tolower(rastOrVect)
+ 	type <- tolower(type)
 
 	names <- ""
 	if (!is.null(x)) {
 		if (inherits(x, "SpatRaster")) {
 			
-			rastOrVect <- "raster"
+			type <- "raster"
 			names <- names(x)
 			names <- .fixNames(names)
 			n <- terra::nlyr(x)
 			
 		} else if (inherits(x, "GRaster")) {
 
-			rastOrVect <- "raster"
+			type <- "raster"
 			names <- names(x)
 			names <- .fixNames(names)
 			n <- nlyr(x)
 
 		} else if (inherits(x, c("SpatVector", "sf"))) {
-			rastOrVect <- "vector"
+			type <- "vector"
 		} else if (inherits(x, "character")) {
-			names <- x
+			type <- x
 		}
 	} else {
-		rastOrVect <- tolower(rastOrVect)
-		rastOrVect <- pmatchSafe(rastOrVect, c("raster", "raster3d", "vector", "group", "region"))
+		type <- pmatchSafe(type, c("raster", "raster3d", "vector", "group", "region", "table"))
 	}
 
-	if (rastOrVect == "raster3d") rastOrVect <- "rast3d"
-	if (rastOrVect %in% c("GRaster", "raster")) rastOrVect <- "rast"
-	if (rastOrVect %in% c("GVector", "vector")) rastOrVect <- "vect"
-	if (rastOrVect == "group") rastOrVect <- "group"
-	if (rastOrVect == "region") rastOrVect <- "region"
+	if (type == "raster3d") type <- "rast3d"
+	if (type %in% c("GRaster", "raster")) rastOrVect <- "rast"
+	if (type %in% c("GVector", "vector")) type <- "vect"
+	if (type == "group") type <- "group"
+	if (type == "region") type <- "region"
+	if (type == "table") type <- "table"
 
 	src <- rstring(1L)
 	if (n > 1L) src <- paste0(src, "_", 1L:n)
 	src <- if (names[1L] != "") {
-		paste0(rastOrVect, "_", names, "_", src)
+  		paste0(type, "_", names, "_", src)
 	} else {
-		paste0(rastOrVect, "_", src)
+  		paste0(type, "_", src)
 	}
 	src
 
