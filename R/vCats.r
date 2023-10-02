@@ -18,7 +18,7 @@
 		src <- x
 	}
 
-	out <- .vAsDataTable(y)
+	out <- .vAsDataTable(x)
 	out <- out[["cat"]]
 
 	# args <- list(
