@@ -20,14 +20,33 @@ madCoast4 <- fastData("madCoast4")
 
 session <- faster(grassDir = grassDir, x = madRivers, workDir = tempdir(), location = 'examples', overwrite = TRUE, warn = FALSE)
 
-y <- fast(madCoast4)
+# NB no disagg!
+
+writeVector(vect(madCoast4), "C:/!Scratch/madCoast4.gpkg", overwrite = TRUE
+)
+rgrass::execGRASS("v.in.ogr", input = "C:/!Scratch//madCoast4.gpkg", output = "coastXYZ")
+
+dt <- .vAsDataTable("coastXYZ")
+dt <- as.data.frame(dt)
+write.csv(dt, "C:/!Scratch/madCoast4Table.csv", row.names = F)
 
 
-# print categories
-.vCats(y)
+args <- list("db.in.ogr", input = "C:/!Scratch/madCoast4Table.csv", output = "madCoast4Table")
+do.call(rgrass::execGRASS, args = args)
 
-# see atts table
-.vAsDataTable(y)
+
+rgrass::execGRASS("v.db.connect", map = "coastXYZ", table = "madCoast4Table", key = "cat")
+
+
+### METHODS DEVELOPMENT FOR AD HOC CATEGORIES USING UNIUQE KEY
+# y <- fast(madCoast4)
+
+
+# # print categories
+# .vCats(y)
+
+# # see atts table
+# .vAsDataTable(y)
 
 # # remove atts table
 # .vRemoveTable(y)
@@ -52,8 +71,8 @@ y <- fast(madCoast4)
 # # see atts table
 # .vAsDataTable(y)
 
-# db columns
-.vNames(y)
+# # db columns
+# .vNames(y)
 
 # # remove column
 # .vDropColumn(y, 2)
@@ -75,43 +94,44 @@ y <- fast(madCoast4)
 # # see atts table
 # .vAsDataTable(y)
 
-.vMakeKey(y)
-.vKeys(y)
-.vAsDataTable(y)
+# .vMakeKey(y)
+# .vKeys(y)
+# .vAsDataTable(y)
 
 # sql <- matrix(NA_character_, nrow = 2, ncol = 1)
 # sql[1, 1] <- "cat 1"
 # sql[2, 1] <- "WHERE key = 'wfwfO7A5cjTS'"
 
-keys <- .vKeys(y)
-nGeoms <- ngeom(y, "GRASS")
-sql <- matrix(NA_character_, nrow = 2 * nGeoms, ncol = 1)
-for (i in seq_len(nGeoms)) {
-	sql[2 * i - 1L, 1L] <- paste0("cat ", 1)
-	sql[2 * i, 1L] <- paste0("WHERE key = '", keys[i], "'")
-}
+# keys <- .vKeys(y)
+# nGeoms <- ngeom(y, "GRASS")
+# sql <- matrix(NA_character_, nrow = 2 * nGeoms, ncol = 1)
+# for (i in seq_len(nGeoms)) {
+# 	sql[2 * i - 1L, 1L] <- paste0("cat ", 1)
+# 	sql[2 * i, 1L] <- paste0("WHERE key = '", keys[i], "'")
+# }
 
-tf <- tempfile(fileext = ".sql")
-write(sql, tf)
+# tf <- tempfile(fileext = ".sql")
+# write(sql, tf)
 
-src <- .makeSourceName("recat", "vector")
-args <- list(
-	cmd = "v.reclass",
-	input = sources(y),
-	output = src,
-	rules = tf,
-	flags = c("quiet", "overwrite")
-)
-do.call(rgrass::execGRASS, args = args)
-out <- .makeGVector(src)
+# src <- .makeSourceName("recat", "vector")
+# args <- list(
+# 	cmd = "v.reclass",
+# 	input = sources(y),
+# 	output = src,
+# 	rules = tf,
+# 	flags = c("quiet", "overwrite")
+# )
+# do.call(rgrass::execGRASS, args = args)
+# out <- .makeGVector(src)
 
-# dt <- data.frame(key = "character")
-# .vAttachTable(out, dt)
-# .vMakeKey(out)
+# # dt <- data.frame(key = "character")
+# # .vAttachTable(out, dt)
+# # .vMakeKey(out)
 
-.vKeys(out)
-.vCats(out)
-.vAsDataTable(out)
+# .vKeys(out)
+# .vCats(out)
+# .vAsDataTable(out)
+
 
 
 

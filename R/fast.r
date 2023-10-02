@@ -187,19 +187,28 @@ cat("Time-consuming step here for large rasters^^^")
 
 		xVect <- terra::vect(x)
 		
-		# if loading from file, get attribute table and strip it from the vector
-		if (is.null(table)) {
+		# table from ...
+		if (any(names(dots) == "table")) {
+			
+			table <- dots$table
 		
+		# if loading from file, get attribute table and strip it from the vector
+		} else if (dim(xVect)[2L] > 0L) {
+
+			xVect$frKEY <- 1L:dim(xVect)[1L]
+			xVect <- terra::disagg(xVext)
 			table <- terra::as.data.frame(xVect)
 			table <- data.table::as.data.table(table)
 			nc <- ncol(xVect)
 			xVect <- xVect[ , seq_len(nc)] <- NULL
 		
+		} else {
+			table <- NULL
 		}
 		
 		xCrs <- terra::crs(xVect)
 		currentCrs <- crs()
-		src <- .makeSourceName(xVect, rastOrVect = "vector")
+		src <- .makeSourceName("v_in_ogr", type = "vector")
 
 		# vector is in same CRS as current location
 		if (!checkCRS || xCrs == currentCrs) {
@@ -232,12 +241,6 @@ cat("Time-consuming step here for large rasters^^^")
 			if (!is.null(snap)) args$snap <- snap
 
 		} # vector on disk needs projected
-
-		if (any(names(dots) == "table")) {
-			table <- dots$table
-		} else {
-			table <- NULL
-		}
 
 		do.call(rgrass::execGRASS, args = args)
 		out <- .makeGVector(src, table = table)
@@ -359,13 +362,14 @@ methods::setMethod(
 ) {
     
 	if (!inherits(x, "SpatVector")) x <- terra::vect(x)
-
-	x <- terra::disagg(x)
+	x$frKEY <- 1L:dim(x)[1L]
 
 	table <- data.table::as.data.table(x)
+	
+	# remove data frame
 	if (nrow(table) != 0L) {
 		nc <- ncol(x)
-		x[ , seq_len(nc)] <- NULL # remove data frame
+		x[ , seq_len(nc)] <- NULL 
 	}
 
 	if (terra::sources(x) == "") {

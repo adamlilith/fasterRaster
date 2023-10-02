@@ -380,8 +380,10 @@ methods::setMethod(
 		
 		classes <- gsub(classes, pattern="integer", replacement="<int>")
 		classes <- gsub(classes, pattern="numeric", replacement="<num>")
+		classes <- gsub(classes, pattern="complex", replacement="<cpx>")
 		classes <- gsub(classes, pattern="character", replacement="<chr>")
 		classes <- gsub(classes, pattern="logical", replacement="<log>")
+		classes <- gsub(classes, pattern="Date", replacement="<Dte>")
 
 		# column widths		
 		ncFields <- nchar(fields)
@@ -443,13 +445,12 @@ methods::setMethod(
 		cat("mapset      :", object@mapset, "\n")
 		cat("source      :", object@sources, "\n")
 	}
-	cat("geometry    :", object@geometry, "\n")
-	cat("dimensions  :", paste0(object@nGeometries, ", ", nFields), "(geometries, columns)\n")
-	cat("topology    :", object@topology, "\n")
+ 	cat("geometry    :", object@topology, object@geometry, "\n")
+	cat("dimensions  :", paste0(object@nGeometries, ", ", object@nSubgeometries, ", ", nFields), "(geometries, sub-geometries, columns)\n")
 	cat("extent      :", paste(extent, collapse=", "), "(xmin, xmax, ymin, ymax)\n")
 	if (details | object@topology == "3D") cat("z extent    :", paste(zextent, collapse=", "), "(bottom, top)\n")
 	cat("coord ref.  :", format(st_crs(object)), "\n")
-	cat("projection  :", object@projection, "\n")
+	if (details) cat("projection  :", object@projection, "\n")
 
 	if (nFields > 0L) {
 		cat("names       :", fields, "\n")
