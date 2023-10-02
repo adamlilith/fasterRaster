@@ -62,9 +62,21 @@ methods::setMethod(
 	} # EOF
 )
 
+#' For use by other functions where we pass the GRASS name
+#' @aliases crds
+#' @rdname crds
+#' @noRd
+methods::setMethod(
+	f = "crds",
+	signature = c(x = "character"),
+	function(x) {
+	.crdsVect(x)
+	} # EOF
+)
+
 #' @rdname crds
 #' @export
-st_coordinates <- function(x, z = TRUE) {
+st_coordinates <- function(x) {
 	if (inherits(x, "GSpatial")) {
 		.crdsVect(x, z = z)
 	} else {
@@ -72,11 +84,22 @@ st_coordinates <- function(x, z = TRUE) {
 	}
 }
 
-# extract coordinates for vector
-.crdsVect <- function(x, z) {
+#' Extract coordinates for vector
+#'
+#' @param x A GVector
+#' @param z T/F Extract z-coordinate?
+#' @param gm Character: [geomtype()] of the vector.
+#' 
+#' @noRd
+.crdsVect <- function(x, z, gm = NULL) {
 
-	.restore(x)
-	gm <- geomtype(x)
+	if (inherits(x, "GVector")) {
+		.restore(x)
+		gm <- geomtype(x)
+		src <- sources(x)
+	} else {
+		src <- x
+	}
 
 	# if lines or polygons, convert to points first
 	if (gm %in% c("lines", "polygons")) {
@@ -96,7 +119,7 @@ st_coordinates <- function(x, z = TRUE) {
 
 	} else if (gm == "points") {
 		
-		data <- rgrass::execGRASS("v.to.db", map=sources(x), flags=c("p", "quiet"), option="coor", type="point", intern=TRUE)
+		data <- rgrass::execGRASS("v.to.db", map = src, flags=c("p", "quiet"), option="coor", type="point", intern=TRUE)
 		# data <- data[-1L]
 		# cutAt <- which(data == "Reading features...")
 		# data <- data[1L:(cutAt - 1L)]
