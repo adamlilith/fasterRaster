@@ -69,32 +69,8 @@ setValidity("GVector",
 		### 1 Save table and format file
 		### 2 Read in with db.in
 		### 3 Attach to vector and set "cat" column
-		tf <- tempfile(fileext = ".csv")
-		tft <- paste0(tf, "t")
-		utils::write.csv(catTable, tf, row.names = FALSE)
-		keyTableType <- '"Integer"'
-		write(keyTableType, tft)
-
-		attsSrc <- .makeSourceName("db_in_ogr", "table")
-		args <- list(
-			cmd = "db.in.ogr",
-			input = tf,
-			output = attsSrc,
-			key = "cat",
-			flags = c("quiet", "overwrite")
-		)
-		do.call(rgrass::execGRASS, args = args)
-
 		### attach table
-		args <- list(
-			cmd = "v.db.connect",
-			map = src,
-			table = attsSrc,
-			key = "cat",
-			flags = c("quiet", "overwrite")
-		)
-		do.call(rgrass::execGRASS, args = args)
-
+		.vRecat(catTable, src)
 		nGeoms <- nrow(catTable[ , .N, by = "cat"])
 
 	# GRASS made its own cat column
