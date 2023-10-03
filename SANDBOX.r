@@ -20,22 +20,36 @@ madCoast4 <- fastData("madCoast4")
 
 session <- faster(grassDir = grassDir, x = madRivers, workDir = tempdir(), location = 'examples', overwrite = TRUE, warn = FALSE)
 
-# NB no disagg!
+mc <- fast(madCoast4)
+.vRemoveTable(mc)
 
-writeVector(vect(madCoast4), "C:/!Scratch/madCoast4.gpkg", overwrite = TRUE
-)
-rgrass::execGRASS("v.in.ogr", input = "C:/!Scratch//madCoast4.gpkg", output = "coastXYZ")
+dt <- data.frame(cat = 1L:18L)
+write.csv(dt, "C:/!Scratch/madCoast4TableReCat.csv", row.names = F)
 
-dt <- .vAsDataTable("coastXYZ")
-dt <- as.data.frame(dt)
-write.csv(dt, "C:/!Scratch/madCoast4Table.csv", row.names = F)
-
-
-args <- list("db.in.ogr", input = "C:/!Scratch/madCoast4Table.csv", output = "madCoast4Table")
+args <- list("db.in.ogr", input = "C:/!Scratch/madCoast4TableReCat.csv", output = "madCoast4TableReCat")
 do.call(rgrass::execGRASS, args = args)
 
+rgrass::execGRASS("v.db.connect", map = sources(mc), table = "madCoast4TableReCat", key = "cat")
 
-rgrass::execGRASS("v.db.connect", map = "coastXYZ", table = "madCoast4Table", key = "cat")
+.vCats(mc)
+.vAsDataTable(mc)
+
+# # NB no disagg!
+
+# writeVector(vect(madCoast4), "C:/!Scratch/madCoast4.gpkg", overwrite = TRUE
+# )
+# rgrass::execGRASS("v.in.ogr", input = "C:/!Scratch//madCoast4.gpkg", output = "coastXYZ")
+
+# dt <- .vAsDataTable("coastXYZ")
+# dt <- as.data.frame(dt)
+# write.csv(dt, "C:/!Scratch/madCoast4Table.csv", row.names = F)
+
+
+# args <- list("db.in.ogr", input = "C:/!Scratch/madCoast4Table.csv", output = "madCoast4Table")
+# do.call(rgrass::execGRASS, args = args)
+
+
+# rgrass::execGRASS("v.db.connect", map = "coastXYZ", table = "madCoast4Table", key = "cat")
 
 
 ### METHODS DEVELOPMENT FOR AD HOC CATEGORIES USING UNIUQE KEY
