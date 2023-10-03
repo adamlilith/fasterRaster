@@ -168,6 +168,7 @@
 #' [crds()]: Extract coordinates of a vector\cr
 #' [crop()]: Remove parts of a vector\cr
 #' [delaunay()]: Delaunay triangulation\cr
+#' [disagg()]: Separate multipart geometries into singlepart geometries\cr
 #' [distance()]: Distance between geometries in two vectors, or from a vector to cells of a raster\cr
 #' [head()]: First rows of a vector's data table\cr
 #' [project()]: Change coordinate reference system\cr
