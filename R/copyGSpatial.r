@@ -69,7 +69,7 @@ methods::setMethod(
 
 	.restore(x)
 	if (reshapeRegion) region(x)
-	srcs <- .makeSourceName(x, rastOrVect = "raster", nLayers)
+	srcs <- .makeSourceName(x, type = "raster", nLayers)
 
 	for (i in seq_len(nLayers)) {
 
@@ -97,48 +97,47 @@ methods::setMethod(
 
 	### copy vector
 	gnFrom <- sources(x)
-	gnTo <- .makeSourceName(NULL, rastOrVect="vector")
+	gnTo <- .makeSourceName("g_copy", type="vector")
 
 	fromTo <- paste0(gnFrom, ",", gnTo)
 	args <- list(
 		cmd = "g.copy",
 		vector = fromTo,
-		flags = c("quiet", "overwrite"),
-		intern = TRUE
+		flags = c("quiet", "overwrite")
 	)
 	
-	do.call(rgrass::execGRASS, args=args)
+	do.call(rgrass::execGRASS, args = args)
 
-	### copy database file
-	gnDb <- .makeSourceName("db", rastOrVect = "vector")
+	# ### copy database file
+	# gnDb <- .makeSourceName("db", rastOrVect = "vector")
 	
-	opts <- getFastOptions(c("workDir", "location", "mapset"))
-	grassDB <- paste(c(opts$workDir, opts$location, opts$mapset, "/sqlite/sqlite.db"), collapse="/")
+	# opts <- getFastOptions(c("workDir", "location", "mapset"))
+	# grassDB <- paste(c(opts$workDir, opts$location, opts$mapset, "/sqlite/sqlite.db"), collapse="/")
 
-	args <- list(
-		cmd = "db.copy",
-		# from_database = fromDatabase,
-		from_database = grassDB,
-		from_table = sources(x),
-		to_database = grassDB,
-		to_table = gnDb,
-		flags = c("quiet", "overwrite"),
-		intern = FALSE
-	)
+	# args <- list(
+	# 	cmd = "db.copy",
+	# 	# from_database = fromDatabase,
+	# 	from_database = grassDB,
+	# 	from_table = sources(x),
+	# 	to_database = grassDB,
+	# 	to_table = gnDb,
+	# 	flags = c("quiet", "overwrite"),
+	# 	intern = FALSE
+	# )
 	
-	do.call(rgrass::execGRASS, args=args)
+	# do.call(rgrass::execGRASS, args=args)
 	
-	### connect database to vector
-	args <- list(
-		cmd = "v.db.connect",
-		map = gnTo,
-		driver = "sqlite",
-		database = grassDB,
-		table = gnTo,
-		flags = c("o", "quiet", "overwrite"),
-		intern = FALSE
-	)
-	do.call(rgrass::execGRASS, args=args)
+	# ### connect database to vector
+	# args <- list(
+	# 	cmd = "v.db.connect",
+	# 	map = gnTo,
+	# 	driver = "sqlite",
+	# 	database = grassDB,
+	# 	table = gnTo,
+	# 	flags = c("o", "quiet", "overwrite"),
+	# 	intern = FALSE
+	# )
+	# do.call(rgrass::execGRASS, args=args)
 	gnTo
 
 }
