@@ -111,7 +111,7 @@ methods::setMethod(
 
 			region(xRast)
 
-			src <- .makeSourceName("r.in.gdal", rastOrVect = "raster")
+			src <- .makeSourceName("r.in.gdal", type = "raster")
 			args <- list(
 				cmd = "r.in.gdal",
 				input = x,
@@ -152,7 +152,7 @@ cat("Time-consuming step here for large rasters:")
 cat("Time-consuming step here for large rasters^^^")
 			region(xRast)
 
-   			src <- .makeSourceName("r.import", rastOrVect = "raster")
+   			src <- .makeSourceName("r.import", type = "raster")
 			args <- list(
 				cmd = "r.import",
 				input = x,
