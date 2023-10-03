@@ -22,6 +22,8 @@
 #' * `rasterPrecision` (character): The [precision][tutorial_raster_data_types] of values when applying mathematical operations to a `GRaster`. By default, this is `"double"`, which allows for precision to about the 16th decimal place. However, it can be set to `"float"`, which allows for precision to about the 7th decimal place. `float` rasters are smaller in memory and on disk. The default is `"double"`.`
 #'
 #' * `useDataTable` (logical): If `FALSE` (default), use `data.frame`s when going back and forth between data tables of `GVector`s and **R**. This can be slow for very large data tables. If `TRUE`, use `data.table`s from the **data.table** package. This can be much faster, but it might require you to know how to use `data.table`s if you want to manipulate them in **R**. You can always convert them to `data.frame`s using [base::as.data.frame()].
+#' 
+#' * `grassMessages` (logical): If `TRUE`, display messages from **GRASS**. These are typically warnings and error messages. By default, this is `FALSE`, but developers may want to turn this on.
 #'
 #'  * `workDir` (character): The folder in which **GRASS** rasters, vectors, and other objects are created and manipulated. Typically, this is set when you first call [faster()]. All subsequent calls to `faster()` will not do not need `workDir` defined because it will be obtained from the options. By default, this is set to the temporary directory on your operating system (from [tempdir()]), appended with "`fr`". Ergo, the path will be `file.path(tempdir(), "fr")`.
 #'
@@ -93,6 +95,7 @@ setFastOptions <- function(
 	# }
 
 	if (any(names(opts) %in% "rasterPrecision")) {
+	
 		if (is.na(opts$rasterPrecision) || !is.character(opts$rasterPrecision)) stop("Option ", sQuote("rasterPrecision"), " must be ", sQuote("float"), ") or ", sQuote("double"), ".\n  The default is ", .rasterPrecisionDefault(), ".")
 
      	opts$rasterPrecision <- pmatchSafe(opts$rasterPrecision, c("FCELL", "float", "DCELL", "double"))
@@ -105,6 +108,10 @@ setFastOptions <- function(
 
 	if (any(names(opts) %in% "useDataTable")) {
 		if (is.na(opts$useDataTable) || !is.logical(opts$useDataTable)) stop("Option ", sQuote("useDataTable"), " must be a logical. The default is ", .useDataTableDefault(), ".")
+	}
+
+	if (any(names(opts) %in% "grassMessages")) {
+		if (is.na(opts$grassMessages) || !is.logical(opts$grassMessages)) stop("Option ", sQuote("grassMessages"), " must be a logical. The default is ", .grassMessagesDefault(), ".")
 	}
 
 	# if (any(names(opts) %in% "vectClass")) {
