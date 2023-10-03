@@ -3,6 +3,7 @@
 # global PUBLIC options
 .coresDefault <- function() 1
 .detailsDefault <- function() TRUE
+.grassMessagesDefault <- function() TRUE
 .grassDirDefault <- function() NULL
 .grassVerDefault <- function() 8.3
 .addonDirDefault <- function() NULL
@@ -23,6 +24,7 @@
 			"grassDir",
 			"addonDir",
 			"grassVer",
+			"grassMessages",
 			"details",
 			"cores",
 			"memory",
@@ -36,6 +38,7 @@
 			"character",
 			"character",
 			"character",
+			"logical",
 			"logical",
 			"numeric",
 			"numeric",

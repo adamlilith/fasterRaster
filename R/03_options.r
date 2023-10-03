@@ -23,9 +23,9 @@
 #'
 #' * `useDataTable` (logical): If `FALSE` (default), use `data.frame`s when going back and forth between data tables of `GVector`s and **R**. This can be slow for very large data tables. If `TRUE`, use `data.table`s from the **data.table** package. This can be much faster, but it might require you to know how to use `data.table`s if you want to manipulate them in **R**. You can always convert them to `data.frame`s using [base::as.data.frame()].
 #' 
-#' * `grassMessages` (logical): If `TRUE`, display messages from **GRASS**. These are typically warnings and error messages. By default, this is `FALSE`, but developers may want to turn this on.
+#' * `grassMessages` (logical): If `TRUE`, display messages produced by **GRASS**. Usually, these are warnings, but sometimes error messages. The default is `FALSE`.
 #'
-#'  * `workDir` (character): The folder in which **GRASS** rasters, vectors, and other objects are created and manipulated. Typically, this is set when you first call [faster()]. All subsequent calls to `faster()` will not do not need `workDir` defined because it will be obtained from the options. By default, this is set to the temporary directory on your operating system (from [tempdir()]), appended with "`fr`". Ergo, the path will be `file.path(tempdir(), "fr")`.
+#'  * `workDir` (character): The folder in which **GRASS** rasters, vectors, and other objects are created and manipulated. Typically, this is set when you first call [faster()]. All subsequent calls to `faster()` will not do not need `workDir` defined because it will be obtained from the options. By default, this is set to the temporary directory on your operating system (from [tempdir()]).
 #'
 #' @param restore If `TRUE`, the all options will be reset to their default values. The default is `FALSE`.
 #'
@@ -106,12 +106,16 @@ setFastOptions <- function(
 		}
 	}
 
-	if (any(names(opts) %in% "useDataTable")) {
-		if (is.na(opts$useDataTable) || !is.logical(opts$useDataTable)) stop("Option ", sQuote("useDataTable"), " must be a logical. The default is ", .useDataTableDefault(), ".")
+	if (any(names(opts) %in% "grassMessages")) {
+
+  		if (is.na(opts$grassMessages) || !is.logical(opts$grassMessages)) stop("Option ", sQuote("grassMessages"), " must be a logical. The default is ", .grassMessagesDefault(), ".")
+	
 	}
 
-	if (any(names(opts) %in% "grassMessages")) {
-		if (is.na(opts$grassMessages) || !is.logical(opts$grassMessages)) stop("Option ", sQuote("grassMessages"), " must be a logical. The default is ", .grassMessagesDefault(), ".")
+	if (any(names(opts) %in% "useDataTable")) {
+
+		if (is.na(opts$useDataTable) || !is.logical(opts$useDataTable)) stop("Option ", sQuote("useDataTable"), " must be a logical. The default is ", .useDataTableDefault(), ".")
+	
 	}
 
 	# if (any(names(opts) %in% "vectClass")) {
@@ -155,6 +159,10 @@ setFastOptions <- function(
 		} else {
 			.fasterRaster$options[[opt]] <- val
 		}
+	}
+
+	if (any(names(opt) %in% "grassMessages")) {
+		rgrass::set.ignore.stderrOption(getFastOptions("grassMessages"))
 	}
 
 	invisible(out)
