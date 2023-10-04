@@ -6,12 +6,14 @@
 #' 
 #' @param src The [sources()] name of the vector in **GRASS** to which to attach the table.
 #' 
+#' @param removeTable Logical: If `TRUE` (default), remove existing attribute table before attaching new one with categories.
+#' 
 #' @returns The [sources()] name of the table imported into **GRASS**.
 #' 
 #' @aliases .vMakeCatTable
 #' @rdname .vMakeCatTable
 #' @noRd
-.vRecat <- function(catTable, src = NULL) {
+.vRecat <- function(catTable, src, removeTable = TRUE) {
 
 	if (inherits(src, "GVector")) src <- sources(x)
 
@@ -34,7 +36,7 @@
 	do.call(rgrass::execGRASS, args = args)
 	
 	# attach to vector
-	.vRemoveTable(src)
+	if (removeTable) .vRemoveTable(src)
 	args <- list(
 		cmd = "v.db.connect",
 		map = src,
