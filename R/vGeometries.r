@@ -28,6 +28,7 @@
 
 	info <- do.call(rgrass::execGRASS, args = args)
 	info <- info[-1L:-2L]
+	info <- info[-length(info)]
 	out <- rep(NA_integer_, length(info))
 	for (i in seq_along(info)) {
 
