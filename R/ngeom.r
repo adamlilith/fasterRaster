@@ -23,7 +23,6 @@ methods::setMethod(
 	f = "ngeom",
 	signature = c(x = "GVector"),
 	function(x, type = "fasterRaster") x@nGeometries
-
 )
 
 #' @aliases nsubgeom
