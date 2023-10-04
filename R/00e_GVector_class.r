@@ -76,7 +76,7 @@ setValidity("GVector",
 	# GRASS made its own cat column
 	} else {
 
-		nGeoms <- max(.vGeometries(src))
+		nGeoms <- length(unique(.vCats(src)))
 
 	}
 
