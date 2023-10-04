@@ -124,29 +124,52 @@ methods::setMethod(
 	signature(x = "GVector"),
 	function(x, width, capstyle = "round", union = FALSE) {
 
-	### flags
-	flags <- c("quiet", "overwrite")
-	if (!union) flags <- c(flags, "t")
-
-	capstyle <- tolower(capstyle)
-	capstyle <- pmatchSafe(capstyle, c("round", "square", "flat"))
-
-	if (capstyle == "square") flags <- c(flags, "s")
-	if (capstyle == "flat") flags <- c(flags, "c")
+	.restore(x)
 
 	### buffer
-	src <- .makeSourceName("buffer", "vector")
+	src <- .makeSourceName("v_buffer", "vector")
 	args <- list(
 		cmd = "v.buffer",
 		input = sources(x),
 		output = src,
 		distance = width,
-		flags = flags,
+		flags = c("quiet", "overwrite"),
 		intern = TRUE
 	)
 
+	if (!union) args$flags <- c(args$flags, "t")
+
+	capstyle <- tolower(capstyle)
+	capstyle <- pmatchSafe(capstyle, c("round", "square", "flat"))
+	if (capstyle == "square") {
+		args$flags <- c(args$flags, "s")
+	} else if (capstyle == "flat") {
+		args$flags <- c(args$flags, "c")
+	}
+
 	do.call(rgrass::execGRASS, args)
-	
+
+	# dissolve by category
+	if (!union) {
+
+		# dissolve
+		srcBuff <- src
+		src <- .makeSourceName("v_dissolve", "vector")
+		args <- list(
+			cmd = "v.dissolve",
+			input = srcBuff,
+			output = src,
+			flags = c("quiet", "overwrite")
+		)
+		do.call(rgrass::execGRASS, args = args)
+
+		# add categories
+		nGeoms <- max(.vGeometries(src))
+		catTable <- data.frame(cat = 1L:nGeoms)
+		.vRecat(catTable, src, removeTable = FALSE)
+
+	}
+
 	.makeGVector(src)
 	
 	} # EOF
