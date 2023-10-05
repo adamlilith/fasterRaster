@@ -41,7 +41,7 @@
 #' * Additional arguments to send to **GRASS** modules `r.out.gdal` and `r.out.ascii`.
 #' * `precision`: Numeric: For ASCII files, you may need to state the number of significant digits. 32-bit values have 7 digits and 64-bit values have 16. So in these cases the argument would be `precision=7` or `precision=16`.
 #'
-#' @return A `GRaster` or a `stars` raster. A raster is also saved to disk.
+#' @return A `GRaster` (invisibly). A raster is also saved to disk.
 #'
 #' @seealso [terra::writeRaster()]
 #'
@@ -236,10 +236,11 @@ setMethod(
 	forms <- forms[forms != "Supported formats:"]
 	forms <- trimws(forms)
 	forms <- sort(forms)
-	forms <- c("Supported raster file formats:", forms)
-	cat(paste(forms, collapse="\n"))
+	formsHeader <- c("Supported raster file formats:", forms)
+	cat(paste(formsHeader, collapse = "\n"))
 	cat("\n")
 	utils::flush.console()
+	invisible(forms)
 	
 	} # EOF
 )
