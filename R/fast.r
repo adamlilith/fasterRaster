@@ -75,11 +75,9 @@ methods::setMethod(
 	if (is.null(rastOrVect)) {
 
 		### attempt to get type from extension
-		nc <- nchar(x)
-
 		# 3-letter extensions
-		rastExtensions <- c(".asc", ".grd", ".img", ".mem", ".tif", ".saga")
-		vectExtensions <- c(".shp", ".gpkg")
+		rastExtensions <- c("asc", "grd", "img", "mem", "tif", "saga")
+		vectExtensions <- c("shp", "gpkg")
 
 		ext <- tools::file_ext(x)
 		ext <- tolower(ext)
@@ -93,7 +91,7 @@ methods::setMethod(
 		}
 
 	} else {
-	### user supplied rastOrVect
+		### user supplied rastOrVect
 		rastOrVect <- pmatchSafe(rastOrVect, c("raster", "vector"))
 	}
 
@@ -195,12 +193,13 @@ cat("Time-consuming step here for large rasters^^^")
 		# if loading from file, get attribute table and strip it from the vector
 		} else if (dim(xVect)[2L] > 0L) {
 
-			xVect$frKEY <- 1L:dim(xVect)[1L]
-			xVect <- terra::disagg(xVext)
+			# xVect$frKEY <- 1L:dim(xVect)[1L]
+			# xVect <- terra::disagg(xVext)
 			table <- terra::as.data.frame(xVect)
 			table <- data.table::as.data.table(table)
-			nc <- ncol(xVect)
-			xVect <- xVect[ , seq_len(nc)] <- NULL
+			# table[ , names(table) := lapply(.SD, function(x) gsub("\\|", "-", x))]
+			# nc <- ncol(xVect)
+			# xVect[ , 1L:nc] <- NULL
 		
 		} else {
 			table <- NULL
@@ -217,8 +216,7 @@ cat("Time-consuming step here for large rasters^^^")
 				cmd = "v.in.ogr",
 				input = x,
 				output = src,
-				flags = c("quiet", "overwrite"),
-				intern=TRUE
+				flags = c("quiet", "overwrite")
 			)
 
 			if (!checkCRS) args$flags <- c(args$flags, "o")
