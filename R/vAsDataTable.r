@@ -22,52 +22,60 @@
 		src <- x
 	}
 
-	data <- rgrass::execGRASS("v.db.select", map = src, intern = TRUE)
+	# data <- rgrass::execGRASS("v.db.select", map = src, intern = TRUE, separator = "pipe", null_value = "NA")
+	tf <- tempfile(fileext = ".csv")
+	rgrass::execGRASS("v.db.select", map = src, intern = TRUE, separator = "comma", null_value = "NA", file = tf)
+	out <- data.table::fread(tf)
 
-	### "data" can be
-	# * a single vector headed by "cat" and no pipe characters if only this column is available
-	# * a vector with pipe characters if more than one column is available
+	# ### "data" can be
+	# # * a single vector headed by "cat" and no pipe characters if only this column is available
+	# # * a vector with pipe characters if more than one column is available
 
-	cols <- data[1L]
-	data <- data[-1L]
+	# cols <- data[1L]
+	# data <- data[-1L]
 	
-	### one column
-	if (!grepl(data[1L], pattern = "\\|")) {
+	# ### one column
+	# if (!grepl(data[1L], pattern = "\\|")) {
 	
-		if (any(grepl(data, pattern = "\\|"))) data <- gsub(data, pattern = "\\|", replacement = "")
-		out <- data.table::data.table(cat = as.integer(data))
+		# if (any(grepl(data, pattern = "\\|"))) data <- gsub(data, pattern = "\\|", replacement = "")
+		# out <- data.table::data.table(cat = as.integer(data))
 	
-	### multiple columns
-	} else {
+	# ### multiple columns
+	# } else {
 	
-		cols <- strsplit(cols, "\\|")[[1L]]
+		# cols <- strsplit(cols, "\\|")[[1L]]
 
-		# data values
-		data <- strsplit(data, "\\|")
-		out <- do.call(rbind.data.frame, data)
+		# # data values
+		# data <- strsplit(data, "\\|")
+		# lengths <- sapply(data, length)
+		# shorts <- which(lengths < length(cols))
+		# for (short in shorts) data[[short]][length(data[[short + 1L]])] <- ""
 		
-		# add NAs in missing columns
-		diff <- length(cols) - ncol(out)
-		if (diff > 0L) {
+		
+		# out <- do.call(rbind.data.frame, data)
+		
+		# # add NAs in missing columns
+		# diff <- length(cols) - ncol(out)
+		# if (diff > 0L) {
 			
-			empty <- matrix(NA, ncol = diff, nrow = nrow(out))
+			# empty <- matrix(NA, ncol = diff, nrow = nrow(out))
 
-			out <- cbind(out, empty)
+			# out <- cbind(out, empty)
 		
-		}
+		# }
 		
-		out <- data.table::as.data.table(out)
-		colnames(out) <- cols
+		# out <- data.table::as.data.table(out)
+		# colnames(out) <- cols
 
-		for (i in seq_len(ncol(out))) {
+		# for (i in seq_len(ncol(out))) {
 
-			this <- out[[i]]
-			if (!all(is.na(this)) && all(this == "")) {
-				out[ , (i)] <- NA
-			}
+			# this <- out[[i]]
+			# if (!all(is.na(this)) && all(this == "")) {
+				# out[ , (i)] <- NA
+			# }
 
-		}
+		# }
 
-	}
+	# }
 	out
 }
