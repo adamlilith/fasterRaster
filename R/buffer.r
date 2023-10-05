@@ -3,26 +3,31 @@
 #' Buffers can be constructed for `GRaster`s or `GVector`s. For rasters, the `buffer()` function creates a buffer around non-`NA` cells. The output will be a raster. For vectors, the `buffer()` and `st_buffer()` functions create a vector polygon larger or smaller than the focal vector.
 #'
 #' @param x A `GRaster` or `GVector`.
-#' @param width Numeric: Maximum distance cells must be from focal cells to be within the buffer. For rasters, if the buffering unit is `"cells`", then to get `n` cell widths, use `n + epsilon`, where `epsilon` is a small number (e.g., 0.001). The larger the buffer, this smaller this must be to ensure just `n` cells are included.
-#' @param dist Same as `width`.
-#' @param background Numeric: Value to assign to cells that are not `NA` and not part of the buffer (default is 0).
-#' @param unit Character: Indicates the units of \code{width}. Can be one of:
+#' 
+#' @param width Numeric: For rasters -- Maximum distance cells must be from focal cells to be within the buffer. For rasters, if the buffering unit is `"cells`", then to get `n` cell widths, use `n + epsilon`, where `epsilon` is a small number (e.g., 0.001). The larger the buffer, this smaller this must be to ensure just `n` cells are included.
+#' 
+#' For vectors, distance from the object to place the buffer. Negative values create "inside" buffers. Units are in the same units as the current coordinate reference system (e.g., degrees for WGS84 or NAD83, often meters for projected systems).
+#' 
+#' @param dist Vectors -- Same as `width`.
+#' 
+#' @param background Numeric: Rasters -- Value to assign to cells that are not `NA` and not part of the buffer (default is 0).
+#' 
+#' @param unit Character: Rasters -- Indicates the units of \code{width}. Can be one of:
 #' 	* `"cells"`: Units are numbers of cells.
 #'	* `"meters"` (default), `"kilometers"` or `"km"`, `"feet"`, `"miles"`, or `"nautmiles"` (nautical miles).
 #' Partial matching is used and case is ignored.
 #'
-#' @param method Character: Only used if `units` is `"cells"`. Indicates the manner in which distances are calculated for adding of cells: 
+#' @param method Character: Rasters -- Only used if `units` is `"cells"`. Indicates the manner in which distances are calculated for adding of cells:
 #' * `"Euclidean"`: Euclidean distance
 #' * `"Manhattan"`: "taxi-cab" distance)
 #' * `"maximum"`: Maximum of the north-south and east-west distances between points. 
 #' Partial matching is used and case is ignored.
 #'
-#' @param lowMemory Logical: Only used if buffering a raster and `units` is not `"meters"`. If `FALSE` (default) use faster, memory-intensive procedure. If `TRUE` then use the slower, low-memory version. To help decide which to use, consider using the low-memory version on a system with 1 GB of RAM for a raster larger than about 32000x32000 cells, or for a system with  with 8 GB of RAM a raster larger than about 90000x90000 cells.
+#' @param lowMemory Logical: Rasters -- Only used if buffering a raster and `units` is not `"meters"`. If `FALSE` (default) use faster, memory-intensive procedure. If `TRUE` then use the slower, low-memory version. To help decide which to use, consider using the low-memory version on a system with 1 GB of RAM for a raster larger than about 32000x32000 cells, or for a system with  with 8 GB of RAM a raster larger than about 90000x90000 cells.
 #'
-#' @param capstyle Character: Style for ending the "cap" of buffers around lines. Valid options include `"rounded"`, `"square"`, and "`flat`".
-#' @param endCapStyle Same as `capstyle`.
+#' @param capstyle,endCapStyle Character: Vectors -- Style for ending the "cap" of buffers around lines. Valid options include `"rounded"`, `"square"`, and "`flat`".
 #'
-#' @param union Logical: If `FALSE` (default), construct a buffer for each geometry. If `TRUE`, union all buffers after creation.
+#' @param union LogicalVectors --: If `FALSE` (default), construct a buffer for each geometry. If `TRUE`, union all buffers after creation.
 #'
 #' @seealso [terra::buffer()], [sf::st_buffer()], and modules `r.buffer`, `r.grow`, and `v.buffer` in **GRASS**
 #'
