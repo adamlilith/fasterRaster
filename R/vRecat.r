@@ -2,7 +2,7 @@
 #' 
 #' @description This function assigns new category values to geometries of a `GVector`. It first saves a `data.frame` containing a single column named "cat" with integer values to a temporary file. It then imports the table into **GRASS*. It ends by attaching the table to a *GRASS** vector.
 #'
-#' @param catTable A `data.frame` with one column named "cat" with integer values, one per geometry in a `GVector`.
+#' @param catTable A numeric vector with integers, an integer vector, or a `data.frame` with one column named "cat" with integer values, one per geometry in a `GVector`.
 #' 
 #' @param src The [sources()] name of the vector in **GRASS** to which to attach the table.
 #' 
@@ -16,6 +16,7 @@
 .vRecat <- function(catTable, src, removeTable = TRUE) {
 
 	if (inherits(src, "GVector")) src <- sources(x)
+	if (inherits(catTable, c("numeric", "integer"))) catTable <- data.frame(cat = catTable)
 
 	# save cat table
 	tf <- tempfile(fileext = ".csv")
