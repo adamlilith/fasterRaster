@@ -53,7 +53,7 @@ faster <- function(
 	
 	}
 
-	rgrass::set.ignore.stderrOption(getFastOptions("grassMessages"))
+	rgrass::set.ignore.stderrOption(!getFastOptions("grassMessages"))
 
 	### function globals
 	dots <- list(...)
