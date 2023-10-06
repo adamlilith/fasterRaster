@@ -117,7 +117,7 @@ methods::setMethod(
 #' 
 #' @example man/examples/ex_pca.r
 #'
-#' aliases pcs
-#' rdname pcs
-#' export
+#' @aliases pcs
+#' @rdname pcs
+#' @export
 pcs <- function(x) attr(x, "pca")
