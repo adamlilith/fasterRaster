@@ -162,7 +162,7 @@ setFastOptions <- function(
 	}
 
 	if (any(names(opt) %in% "grassMessages")) {
-		rgrass::set.ignore.stderrOption(getFastOptions("grassMessages"))
+		rgrass::set.ignore.stderrOption(!getFastOptions("grassMessages"))
 	}
 
 	invisible(out)
