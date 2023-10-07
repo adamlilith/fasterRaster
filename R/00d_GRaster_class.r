@@ -163,7 +163,7 @@ setValidity("GRaster",
 		for (i in 2L:length(src)) levels[[i]] <- levels[[1L]]
 	}
 
-	# acgive category and levels
+	# active category and levels
 	ac <- rep(NA_integer_, length(levels))
 	for (i in seq_along(levels)) {
 		if (is.null(levels[[i]]) || (is.character(levels[[i]]) && levels[[i]] == "")) {
@@ -174,7 +174,6 @@ setValidity("GRaster",
    			levels[[i]] <- data.table::data.table(levels[[i]])
 		}
 	}
-	
 	info <- .rastInfo(src)
 	out <- new(
 		"GRaster",
