@@ -4,7 +4,7 @@
 #' 
 #' @param x A `GVector` or the name of a vector in **GRASS**.
 #' 
-#' @returns
+#' @returns A numeric, named vector.
 #' 
 #' @aliases .vGeometries
 #' @rdname vGeometries
