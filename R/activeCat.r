@@ -68,6 +68,17 @@ methods::setMethod(
 	} # EOF
 )
 
+#' @aliases activeCat<-
+#' @rdname activeCat
+#' @exportMethod activeCat<-
+methods::setMethod(
+	f = "activeCat<-",
+	signature = c(x = "GRaster", value = "character"),
+	function(x, layer = 1, value) {
+		.activeCatAssign(x = x, layer = layer, value = value)
+	} # EOF
+)
+
 #' Worker function for activeCat<-
 #'
 #' @param x A `GRaster`.
