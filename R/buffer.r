@@ -39,7 +39,14 @@
 methods::setMethod(
 	"buffer",
 	signature(x = "GRaster"),
-	function(x, width, unit = "meters", method = "Euclidean", background = 0, lowMemory = FALSE) {
+	function(
+		x,
+		width,
+		unit = "meters",
+		method = "Euclidean",
+		background = 0,
+		lowMemory = FALSE
+	) {
 
 	.restore(x)
 	region(x)
@@ -127,7 +134,12 @@ methods::setMethod(
 methods::setMethod(
 	"buffer",
 	signature(x = "GVector"),
-	function(x, width, capstyle = "round", union = FALSE) {
+	function(
+		x,
+		width,
+		capstyle = "round",
+		union = FALSE
+	) {
 
 	.restore(x)
 
@@ -155,7 +167,7 @@ methods::setMethod(
 	do.call(rgrass::execGRASS, args)
 
 	# dissolve by category
-	if (!union) {
+	if (!union && length(.vCats(src) != x@nGeometries)) {
 
 		# dissolve
 		srcBuff <- src
@@ -164,14 +176,14 @@ methods::setMethod(
 			cmd = "v.dissolve",
 			input = srcBuff,
 			output = src,
+			column = "cat",
 			flags = c("quiet", "overwrite")
 		)
 		do.call(rgrass::execGRASS, args = args)
 
 		# add categories
-		nGeoms <- max(.vGeometries(src))
-		catTable <- data.frame(cat = 1L:nGeoms)
-		.vRecat(catTable, src, removeTable = FALSE)
+		nGeoms <- x@nGeometries
+		.vRecat(1L:nGeoms, src, removeTable = FALSE)
 
 	}
 
