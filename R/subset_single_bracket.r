@@ -61,13 +61,16 @@ methods::setMethod(
 				input = sources(x),
 				cats = iSeq,
 				output = src,
-				new = 1,
-				flags = c("quiet", "overwrite", "t"),
+				new = -1,
+				flags = c("quiet", "overwrite"),
 				intern = FALSE
 			)
 
 			if (reverseRowSelect) args$flags <- c(args$flags, "r")
 			do.call(rgrass::execGRASS, args = args)
+			vCats <- .vCats(src)
+			vCats <- omnibus::renumSeq(vCats)
+			.vRecat(data.frame(cat = vCats), src)
 			
 			if (nrow(x) == 0L) {
 				table <- NULL
@@ -109,7 +112,15 @@ methods::setMethod(
 						} else {
 							j <- names(x)[j]
 						}
-						table <- table[ , ..j]
+						
+						
+						# .. <- function(x, env = parent.frame()) {
+						# 	stopifnot(inherits(x, "character"))
+						# 	stopifnot(length(x) == 1)
+						# 	get(x, envir = parent.env(env))
+						# }
+						
+						table <- table[ , ..j, with = FALSE]
 
 					}
 				
