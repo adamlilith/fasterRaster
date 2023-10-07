@@ -356,12 +356,14 @@ methods::setMethod(
 		row1 <- as.data.frame(row1)
 		row1 <- unlist(row1)
 		row1 <- as.character(row1)
+		if (anyNA(row1)) row1[is.na(row1)] <- "NA"
 		
 		if (nRows >= 2L) {
 			row2 <- object@table[2L, 1L:maxFieldsToShow]
 			row2 <- as.data.frame(row2)
 			row2 <- unlist(row2)
 			row2 <- as.character(row2)
+			if (anyNA(row2)) row2[is.na(row2)] <- "NA"
 		} else {
 			row2 <- NULL
 		}
@@ -371,6 +373,7 @@ methods::setMethod(
    			row3 <- as.data.frame(row3)
 			row3 <- unlist(row3)
 			row3 <- as.character(row3)
+			if (anyNA(row3)) row3[is.na(row3)] <- "NA"
 		} else {
 			row3 <- NULL
 		}
@@ -446,7 +449,8 @@ methods::setMethod(
 		cat("source      :", object@sources, "\n")
 	}
  	cat("geometry    :", object@topology, object@geometry, "\n")
-	cat("dimensions  :", paste0(object@nGeometries, ", ", object@nSubgeometries, ", ", nFields), "(geometries, sub-geometries, columns)\n")
+	# cat("dimensions  :", paste0(object@nGeometries, ", ", object@nSubgeometries, ", ", nFields), "(geometries, sub-geometries, columns)\n")
+	cat("dimensions  :", paste0(object@nGeometries, ", ", nFields), "(geometries, columns)\n")
 	cat("extent      :", paste(extent, collapse=", "), "(xmin, xmax, ymin, ymax)\n")
 	if (details | object@topology == "3D") cat("z extent    :", paste(zextent, collapse=", "), "(bottom, top)\n")
 	cat("coord ref.  :", format(st_crs(object)), "\n")

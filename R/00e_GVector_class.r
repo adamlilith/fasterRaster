@@ -9,7 +9,6 @@ GVector <- methods::setClass(
 	slots = list(
 		projection = "character",
 		nGeometries = "integer",
-		nSubgeometries = "integer",
 		geometry = "character",
 		table = "data.table"
 	),
@@ -17,7 +16,6 @@ GVector <- methods::setClass(
 		projection = NA_character_,
 		geometry = NA_character_,
 		nGeometries = NA_integer_,
-		nSubgeometries = NA_integer_,
 		table = data.table::data.table(NULL)
 	)
 )
@@ -29,8 +27,8 @@ setValidity("GVector",
 			paste0("@geometry can only be NA, ", sQuote("points"), ", ", sQuote("lines"), ", or ", sQuote("polygons"), ".")
 		# } else if (length(unique(.vCats(object)) != object@nGeometries)) {
 			# "The number of @nGeometries is not the same as the number of unique ", sQuote("cat"), " values in the vector attribute table in GRASS."
-		} else if (object@nGeometries > object@nSubgeometries) {
-			"The number of sub-geometries in @nSubgeometries must be <= the number of geometries in @nGeometries."
+		# } else if (object@nGeometries > object@nSubgeometries) {
+			# "The number of sub-geometries in @nSubgeometries must be <= the number of geometries in @nGeometries."
 		} else if (nrow(object@table) > 0L && nrow(object@table) != object@nGeometries) {
 			"The data.table in @table must be a NULL table (data.table(NULL)), or it must have the same number of rows as @nGeometries."
 		} else {
@@ -64,7 +62,6 @@ setValidity("GVector",
 		catTable <- table[ , "frKEY"]
 		names(catTable) <- "cat"
 		table$frKEY <- NULL
-	
 		### create GRASS attribute table
 		### 1 Save table and format file
 		### 2 Read in with db.in
@@ -93,7 +90,7 @@ setValidity("GVector",
 		sources = src,
 		geometry = info[["geometry"]][1L],
 		nGeometries = nGeoms,
-		nSubgeometries = nSubgeoms,
+		# nSubgeometries = nSubgeoms,
 		extent = c(info[["west"]][1L], info[["east"]][1L], info[["south"]][1L], info[["north"]][1L]),
 		zextent = c(info[["zbottom"]], info[["ztop"]]),
 		table = table
