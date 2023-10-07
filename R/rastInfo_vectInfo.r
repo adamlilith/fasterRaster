@@ -31,7 +31,6 @@
 	} else {
 	### a single source
 	##################
-
 		rasters <- .ls(c("rasters", "rasters3d"))
 		type <- names(rasters[rasters == src])
 
