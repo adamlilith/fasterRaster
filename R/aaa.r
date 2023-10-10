@@ -4,6 +4,7 @@
 	.fasterRaster$grassStarted <- FALSE
 	.fasterRaster$options <- list()
 	.fasterRaster$locations <- list()
+	.fasterRaster$messages <- list()
 	setFastOptions(restore = TRUE)
 	
 }
