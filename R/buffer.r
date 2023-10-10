@@ -141,6 +141,8 @@ methods::setMethod(
 		union = FALSE
 	) {
 
+	.message(msg = "buffer", message = "As of GRASS 8.4, terra's buffer() function is much faster, even for very large vectors.")
+	
 	.restore(x)
 
 	### buffer
@@ -154,6 +156,15 @@ methods::setMethod(
 		intern = TRUE
 	)
 
+	gt <- geomtype(x)
+	if (gt == "points") {
+		type <- "point"
+	} else if (gt == "lines") {
+		type <- "line"
+	} else if (gt == "polygons") {
+		type <- "area"
+	}
+	args$type <- type
 	if (!union) args$flags <- c(args$flags, "t")
 
 	capstyle <- tolower(capstyle)
