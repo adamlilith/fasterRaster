@@ -21,9 +21,9 @@ library(terra)
 
 # example data
 madElev <- fastData("madElev") # raster
-madForest <- fastData("madForest2000") # raster
+madCover <- fastData("madCover") # raster
 madCoast <- fastData("madCoast4") # vector
-madAnt <- madCoast[madCoast$NAME_4 == "Antanambe", ]
+madRivers <- fastData("madRivers") # vector
 
 # start GRASS session for examples only
 faster(x = madElev, grassDir = grassDir,
@@ -31,25 +31,22 @@ workDir = tempdir(), location = "examples") # line only needed for examples
 
 # convert to GRasters and GVectors
 elev <- fast(madElev)
-forest <- fast(madForest)
-ant <- fast(madAnt)
+cover <- fast(madCover, warn = FALSE)
+coast <- fast(madCoast)
+rivers <- fast(madRivers)
 
-# Random cells in non-NA cells:
-rand <- spatSample(elev, 10000)
-plot(rand)
-nonnacell(rand)
+# Random points:
+randVals <- spatSample(elev, size = 20, values = TRUE)
+randVals
 
-# Use custom values for the mask:
-randCustomMask <- spatSample(elev, 10000, maskvalues = 1:20)
-plot(randCustomMask)
+randPoints <- spatSample(elev, size = 20, as.points = TRUE)
+plot(elev)
+plot(randPoints, add = TRUE)
 
-# Force selected values to a custom value:
-randCustomUpdate <- spatSample(elev, 10000, updatevalue = 7)
-plot(randCustomUpdate)
-
-# Custom values for mask and set selected cells to custom value:
-randAll <- spatSample(elev, 10000, maskvalues = 1:20, updatevalue = 7)
-plot(randAll)
+# Random categories
+randCover <- spatSample(cover, size = 20, values = TRUE, cat = TRUE,
+     xy = TRUE)
+randCover
 
 # IMPORTANT #3: Revert back to original GRASS session if needed.
 restoreSession(opts.)

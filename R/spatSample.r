@@ -1,122 +1,145 @@
-#' Random points from a raster
+#' Sample random points from a GRaster or GVector
 #'
-#' @description `spatSample()` randomly samples points from non-`NA` cells of a raster. Points will be located at cell centers.
+#' @description `spatSample()` randomly locates points across a `GRaster` or `GVector`. It can return the coordinates, values associated with the points, or both.
+#' 
+#' @param x A `GRaster` or `GVector`.
+#' 
+#' @param size Numeric integer or integer > 0: Number of points to create.
+#' 
+#' @param as.points Logical: If `FALSE` (default), the output is a `data.frame` or `data.table`. If `TRUE`, the output is a "points" `GVector`.
+#' 
+#' @param values Logical: If `TRUE` (default), values of the `GRaster` at points are returned.
+#' 
+#' @param cat Logical: If `TRUE` and the `GRaster` is [categorical][tutorial_raster_data_types], then return the category label of each cell. If `values` is also `TRUE`, then the cell value will also be returned.
+#' 
+#' @param xy Logical: If `TRUE`, return the longitude and latitude of each point. Default is `FALSE`.
 #'
-#' @param x A `GRaster`.
+#' @param strata Either `NULL` (default), or a `GVector` defining strata. If supplied, the `size` argument will be interpreted as number of points to place per geometry in `strata`.
+#' 
+#' @param zlim Either `NULL` (default), or a vector of two numbers defining the lower and upper altitudinal bounds of coordinates.
+#' 
+#' @param seed Either `NULL` (default) or an integer: Used as the random seed. If `NULL`, then **GRASS** will generate its own seed.
 #'
-#' @param size Integer > 0: Number of cells or proportion of cells to select.
+#' @returns A `data.frame`, `data.table`, or `GVector`.
 #' 
-#' @param prop Logical: If `TRUE`, the value of `size` will be interpreted as a proportion of cells. The default is `FALSE` (`size` is interpreted as the number of cells to select).
+#' @seealso [sampleRast()], [terra::spatSample()], module `v.random` in **GRASS**
 #'
-#' @param maskvalues Numeric vector, including `NA`, or `NULL` (default): Values in the raster to select from. All others will be ignored. If this is `NULL`, then only non-`NA` cells will be selected for retention.
+#' @example man/examples/ex_spatSample_sampleRast.r
 #'
-#' @param updatevalue Numeric or `NULL` (default): Value to assign to masked cells. If `NULL`, then the values in the input raster are retained.
-#' 
-#' @param fail Logical: If `TRUE` (default), and `size` is greater than the number of non-`NA` cells in `x`, then fail.
-#'
-#' @param seed `NULL` (default) or numeric: If `NULL`, then a random seed will be generated for the random number generator. Otherwise a seed can be provided.
-#' 
-#' @returns A `GRaster`.
-#' 
-#' @seealso [spatSample()], **GRASS** module `r.random`
-#' 
-#' @example man/examples/ex_spatSample.r
-#' 
 #' @aliases spatSample
 #' @rdname spatSample
 #' @exportMethod spatSample
 methods::setMethod(
-    f = "spatSample",
-    signature = c(x = "GRaster"),
-    function(x, size, prop = FALSE, maskvalues = NA, updatevalue = NULL, fail = TRUE, seed = NULL) {
+	f = "spatSample",
+	signature = "GRaster",
+	function(
+		x,
+		size,
+		as.points = FALSE,
+		values = TRUE,
+		cat = FALSE,
+		xy = FALSE,
+		strata = NULL,
+		zlim = NULL,
+		seed = NULL
+	) {
 
-    if (size <= 0) stop("Cannot select this number of cells.")
-    if (prop && size > 1) stop("Cannot select more than 100% of cells.")
-    if (any(size > nacell(x))) {
-        msg <- "At least one raster has too few non-NA cells."
-        if (fail) {
-            stop(msg)
-        } else {
-            warning(msg)
-        }
-    }
+	.restore(x)
+	region(x)
 
-    .restore(x)
-    region(x)
+	if (!xy) values <- TRUE
 
-    if (!prop) {
-        npoints <- as.character(size)
-    } else {
-        npoints <- paste0(100 * npoints, "%")
-    }
+	src <- .makeSourceName("v_random", "vector")
 
-    nLayers <- nlyr(x)
-    srcs <- .makeSourceName("random", "raster", nLayers)
-    for (i in seq_len(nLayers)) {
-    
-        args <- list(
-            cmd = "r.random",
-            input = sources(x)[i],
-            cover = sources(x)[i],
-            npoints = npoints,
-            raster = srcs[i],
-            flags = c("quiet", "overwrite"),
-            intern = TRUE
-        )
+	args <- list(
+		cmd = "v.random",
+		output = src,
+		npoints = size,
+		flags = c("quiet", "overwrite")
+	)
 
-        if (is.null(seed)) {
-            args$flags <- c(args$flags, "s")
-        } else {
-            args$seed <- seed
-        }
-        # if (selectNA) args$flags <- c(args$flags, "size")
+	if (!is.null(strata)) {
+		args$restrict <- sources(strata)
+		args$flags <- c(args$flags, "a")
+	}
 
-        # custom mask values
-        if (length(maskvalues) > 1L || !is.na(maskvalues)) {
+	if (!is.null(zlim)) {
+		args$zmin <- zlim[1L]
+		args$zmax <- zlim[2L]
+		args$flags <- c(args$flags, "z")
+	}
 
-            maskGn <- .makeSourceName("mask", "raster")
+	if (!is.null(seed)) args$seed <- seed
 
-            if (anyNA(maskvalues)) {
-                maskValuesHaveNAs <- TRUE
-                maskvalues <- maskvalues[!is.na(maskvalues)]
-            } else {
-                maskValuesHaveNAs <- FALSE
-            }
+	do.call(rgrass::execGRASS, args = args)
 
-            maskvalues <- as.character(maskvalues)
-            maskvalues <- paste(paste0(sources(x)[i], " == "), maskvalues)
-            if (maskValuesHaveNAs) maskvalues <- c(maskvalues, paste0("isnull(", sources(mask), ")"))
+	# return coordinates
+	if (xy) {
+		out <- .crdsVect(src, z = is.3d(x), gm = "points")
+	}
 
-            maskvalues <- paste(maskvalues, collapse = " | ")
+	# extract values from raster
+	if (values | cat) {
 
-            ex <- paste0(maskGn, " = if(", maskvalues, ", 1, null())")
-            rgrass::execGRASS("r.mapcalc", expression = ex, flags = c("quiet", "overwrite"), intern = TRUE)
+		nLayers <- nlyr(x)
+		for (i in seq_len(nLayers)) {
 
-        } else {
-            maskGn <- sources(x)[i]
-        }
-        args$input <- maskGn
+			args <- list(
+				cmd = "r.what",
+				map = sources(x)[i],
+				points = src,
+				null_value = "NA",
+				flags = c("quiet", "overwrite"),
+				intern = TRUE
+			)
 
-        do.call(rgrass::execGRASS, args = args)
+			vals <- do.call(rgrass::execGRASS, args = args)
 
-    } # next raster
+			pillars <- gregexpr(vals, pattern = "\\|\\|")
+			pillars <- unlist(pillars)
+			ncs <- nchar(vals)
+			vals <- substr(vals, pillars + 2L, ncs)
+			vals[vals == "NA"] <- NA
 
-    ### change masked values
-    if (!is.null(updatevalue)) {
+			if (is.cell(x)[i]) {
+				vals <- as.integer(vals)
+			} else {
+				vals <- as.numeric(vals)
+			}
 
-        gnsUpdate <- .makeSourceName("random", "raster", nLayers)
-        for (i in seq_len(nLayers)) {
+			this <- data.table::data.table(TEMPTEMP__ = vals)
+			names(this) <- names(x)[i]
 
-            ex <- paste0(gnsUpdate[i], " = if(!isnull(", srcs[i], "), ", updatevalue, ", null())")
-            rgrass::execGRASS("r.mapcalc", expression = ex, flags = c("quiet", "overwrite"), intern = TRUE)
+			# category label instead of value
+			if (cat && is.factor(x)[i]) {
 
-        } # next raster
-        out <- .makeGRaster(gnsUpdate, names(x))
+				levs <- levels(x[[i]])[[1L]]
+				thisCat <- levs[match(vals, levs[[1L]]), 2L]
+				names(thisCat) <- paste0(names(x)[i], "_cat")
 
-    } else {
-        out <- .makeGRaster(srcs, names(x))
-    }
-    out
+				if (values) {
+					this <- cbind(this, thisCat)
+				}
+			}
 
-    } # EOF
+			if (exists("out", inherits = FALSE)) {
+				out <- cbind(out, this)
+			} else {
+				out <- this
+			}
+
+		} # next raster
+
+	} # if wanting values
+
+	if (as.points) {
+		.vAttachTable(src)
+		out <- .makeGVector(src, table = out)
+	} else {
+		if (!getFastOptions("useDataTable")) out <- as.data.frame(out)
+	}
+	out
+
+	} # EOF
+
 )
