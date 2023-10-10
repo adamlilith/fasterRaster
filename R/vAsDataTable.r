@@ -24,7 +24,15 @@
 
 	# data <- rgrass::execGRASS("v.db.select", map = src, intern = TRUE, separator = "pipe", null_value = "NA")
 	tf <- tempfile(fileext = ".csv")
-	rgrass::execGRASS("v.db.select", map = src, intern = TRUE, separator = "comma", null_value = "NA", file = tf)
+	rgrass::execGRASS(
+		"v.db.select",
+		map = src,
+		intern = TRUE,
+		separator = "comma",
+		null_value = "NA",
+		file = tf,
+		flags = "overwrite"
+	)
 	out <- data.table::fread(tf)
 
 	# ### "data" can be
