@@ -27,15 +27,23 @@ workDir = tempdir(), location = "examples") # line only needed for examples
 
 # convert sf vectors to GVectors
 dypsis <- fast(madDypsis)
-coast <- fast(madCoast4)
+coast4 <- fast(madCoast4)
+ant <- coast4[coast4$NAME_4 == "Antanambe"]
 
 # Delaunay triangulation
 dypsisDel <- delaunay(dypsis)
+plot(dypsisDel)
+plot(dypsis, pch = 1, col = "red", add = TRUE)
 
 # Voronoi tessellation
 dypsisVor <- voronoi(dypsis)
-coastVor <- voronoi(coast)
+plot(dypsisVor)
+plot(dypsis, pch = 1, col = "red", add = TRUE)
 
+# Random Voronoi tessellation
+randVor <- rvoronoi(ant, size = 100)
+plot(randVor, col = 1:20)
+plot(ant, add = TRUE, lwd = 3)
 
 # IMPORTANT #3: Revert back to original GRASS session if needed.
 restoreSession(opts.)
