@@ -107,9 +107,26 @@ methods::setMethod(
     if (ncol(y) > 2L) warning("Argument ", sQuote("y"), " has more than two columns. The first will be assumed to represent longitude and the second latitude.")
 
     y <- terra::vect(y, geom = colnames(y)[1L:2L], crs = crs(x), keepgeom = FALSE)
-
     y <- fast(y)
+    extract(x = x, y = y, xy = xy, cats = cats)
 
+    } # EOF
+)
+
+#' @aliases extract
+#' @rdname extract
+#' @exportMethod extract
+methods::setMethod(
+    f = "extract",
+    signature = c(x = "GRaster", y = "data.table"),
+    function(
+        x,
+        y,
+        xy = FALSE,
+        cats = FALSE
+    ) {
+
+    y <- as.data.frame(y)
     extract(x = x, y = y, xy = xy, cats = cats)
 
     } # EOF
@@ -165,15 +182,75 @@ methods::setMethod(
              y,
              xy = FALSE
     ) {
-    
+
     if (geomtype(y) != "points") stop("Argument", sQuote("y"), " must be a points vector.")
     if (is.3d(y)) warning("Coordinates in the z-dimension will be ignored.")
 
-    coordsXY <- crds(y, z = FALSE)
-    n <- nrow(coordsXY)
+    coords <- crds(y, z = FALSE)
+    .extractFromVect(x, coords, xy)
+
+    } # EOF
+
+)
+
+#' @aliases extract
+#' @rdname extract
+#' @exportMethod extract
+methods::setMethod(
+    f = "extract",
+    signature = c(x = "GVector", y = "data.frame"),
+    function(x, y, xy = FALSE) .extractFromVect(x, y[ , 1L:2L], xy)
+)
+
+#' @aliases extract
+#' @rdname extract
+#' @exportMethod extract
+methods::setMethod(
+    f = "extract",
+    signature = c(x = "GVector", y = "data.table"),
+    function(x, y, xy = FALSE) {
+
+    y <- as.data.frame(y)
+    .extractFromVect(x, y[ , 1L:2L], xy)
+
+    } # EOF
+)
+
+#' @aliases extract
+#' @rdname extract
+#' @exportMethod extract
+methods::setMethod(
+    f = "extract",
+    signature = c(x = "GVector", y = "matrix"),
+    function(x, y, xy = FALSE) .extractFromVect(x, y[ , 1L:2L], xy)
+)
+
+#' @aliases extract
+#' @rdname extract
+#' @exportMethod extract
+methods::setMethod(
+    f = "extract",
+    signature = c(x = "GVector", y = "numeric"),
+    function(x, y, xy = FALSE) {
+        
+    y <- cbind(y)
+    .extractFromVect(x, y, xy)
+
+    } # EOF
+)
+
+#' @param x GVector
+#' @param coords 2-column matrix of coordinates
+#' @param xy T/F
+#' 
+#' @noRd
+.extractFromVect <- function(x, y, xy) {
+
+    colnames(y) <- c("x", "y")
+    n <- nrow(y)
     coords <- rep(NA_real_, 2L * n)
-    coords[seq(1L, 2 * n, by = 2L)] <- coordsXY$x
-    coords[seq(2L, 2 * n, by = 2L)] <- coordsXY$y
+    coords[seq(1L, 2 * n, by = 2L)] <- y[ , "x"]
+    coords[seq(2L, 2 * n, by = 2L)] <- y[ , "y"]
 
     args <- list(
         cmd = "v.what",
@@ -273,6 +350,5 @@ methods::setMethod(
     if (!getFastOptions("useDataTable")) out <- as.data.frame(out)
     out
     
-    } # EOF
-)
+} # EOF
 
