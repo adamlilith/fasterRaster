@@ -20,18 +20,33 @@ library(terra)
 
 # Example data: elevation raster and points vector
 madElev <- fastData("madElev")
+madCover <- fastData("madCover")
+madCoast4 <- fastData("madCoast4")
 madDypsis <- fastData("madDypsis")
 
 # start GRASS session for examples only
 faster(x = madElev, grassDir = grassDir,
 workDir = tempdir(), location = "examples") # line only needed for examples
 
-# Convert to fasterRaster format(s):
+# Convert to fasterRaster formats:
 elev <- fast(madElev)
+cover <- fast(madCover)
+coast <- fast(madCoast4)
 dypsis <- fast(madDypsis)
 
 # Get values of elevation at points where Dypsis species are located:
-vals <- extract(elev, dypsis, xy = TRUE)
+extract(elev, dypsis, xy = TRUE)
+
+# Extract from categorical raster
+vals <- extract(cover, dypsis)
+vals
+
+cats <- extract(cover, dypsis, cats = TRUE)
+cats
+
+# Extract from a vector:
+tab <- extract(coast, dypsis, xy = TRUE)
+tab
 
 # IMPORTANT #3: Revert back to original GRASS session if needed.
 restoreSession(opts.)

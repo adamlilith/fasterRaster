@@ -1,16 +1,16 @@
-#' Extract values from a raster at locations in a points vector
+#' Extract values from a GRaster at locations in a points GVector
 #'
-#' @description `extract()` obtains the values of a raster associated with the locations of a points vector. Note that only points vectors are accommodated--lines and areas vectors cannot me used.
+#' @description `extract()` obtains the values of a `GRaster` or `GVector` associated with the locations of a set of points.
 #'
-#' @param x A `GRaster`.
+#' @param x A `GRaster` or `GVector`.
 #'
-#' @param y A `points` `GVector`, a `data.frame` or `matrix` where the first two columns represent longitude and latitude (in that order), or a two-element numeric vector where the first column represents longitude and the second latitude.
+#' @param y A `points` `GVector`, *or* a `data.frame` or `matrix` where the first two columns represent longitude and latitude (in that order), *or* a two-element numeric vector where the first column represents longitude and the second latitude. Values of `x` will be extracted from the points in `y`.
 #'
 #' @param xy Logical: If `TRUE`, also return the coordinates of each point. Default is `FALSE.`
 #'
-#' @param cat Logical: If `TRUE`, report the category label rather of [categorical rasters][tutorial_raster_data_types] than the cell value. Default is `FALSE.
+#' @param cats Logical: If `TRUE` and `x` is a [categorical raster][tutorial_raster_data_types], then return the category labels instead of the values. If `TRUE` and `x` is a `GVector`, then ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Default is `FALSE.
 #'
-#' @returns A `data.frame`.
+#' @returns A `data.frame` or `data.table`.
 #'
 #' @example man/examples/ex_extract.r
 #'
@@ -22,7 +22,12 @@
 methods::setMethod(
     f = "extract",
     signature = c(x = "GRaster", y = "GVector"),
-    function(x, y, xy = FALSE, cat = FALSE) {
+    function(
+        x,
+        y,
+        xy = FALSE,
+        cats = FALSE
+    ) {
 
     if (geomtype(y) != "points") stop("Argument", sQuote("y"), " must be a points vector.")
     
@@ -59,7 +64,7 @@ methods::setMethod(
 
             levs <- levels(x[[i]])[[1L]]
             this <- levs[match(vals, levs[[1L]]), 2L]
-            names(this) <- paste0(names(x)[i], "_label")
+            names(this) <- paste0(names(x)[i], "_cat")
 
         }
 
@@ -91,7 +96,12 @@ methods::setMethod(
 methods::setMethod(
     f = "extract",
     signature = c(x = "GRaster", y = "data.frame"),
-    function(x, y, xy = FALSE, cat = FALSE) {
+    function(
+        x,
+        y,
+        xy = FALSE,
+        cats = FALSE
+    ) {
 
     if (ncol(y) < 2L) stop("Argument ", sQuote("y"), " must have at least two columns. The first must represent longitude and the second latitude.")
     if (ncol(y) > 2L) warning("Argument ", sQuote("y"), " has more than two columns. The first will be assumed to represent longitude and the second latitude.")
@@ -100,7 +110,7 @@ methods::setMethod(
 
     y <- fast(y)
 
-    extract(x = x, y = y, xy = xy, cat = cat)
+    extract(x = x, y = y, xy = xy, cats = cats)
 
     } # EOF
 )
@@ -111,16 +121,15 @@ methods::setMethod(
 methods::setMethod(
     f = "extract",
     signature = c(x = "GRaster", y = "matrix"),
-    function(x, y, xy = FALSE, cat = FALSE) {
+    function(
+        x,
+        y,
+        xy = FALSE,
+        cats = FALSE
+    ) {
 
-    if (ncol(y) < 2L) stop("Argument ", sQuote("y"), " must have at least two columns. The first must represent longitude and the second latitude.")
-    if (ncol(y) > 2L) warning("Argument ", sQuote("y"), " has more than two columns. The first will be assumed to represent longitude and the second latitude.")
-
-    y <- terra::vect(y, geom = colnames(y)[1L:2L], crs = crs(x), keepgeom = FALSE)
-
-    y <- fast(y)
-
-    extract(x = x, y = y, xy = xy, cat = cat)
+    y <- as.data.frame(y)
+    extract(x = x, y = y, xy = xy, cats = cats)
 
     } # EOF
 )
@@ -131,16 +140,139 @@ methods::setMethod(
 methods::setMethod(
     f = "extract",
     signature = c(x = "GRaster", y = "numeric"),
-    function(x, y, xy = FALSE, cat = FALSE) {
+    function(
+        x,
+        y,
+        xy = FALSE,
+        cats = FALSE
+    ) {
 
-    if (length(y) != 2L) stop("Argument ", sQuote("y"), " must have two values (longitude and latitude).")
+    if (length(y) != 2L) stop("Argument ", sQuote("y"), " must have two values, longitude and latitude.")
     y <- cbind(y)
     colnames(y) <- c("x", "y")
-    y <- terra::vect(y, geom = colnames(y)[1L:2L], crs = crs(x), keepgeom = FALSE)
-
-    y <- fast(y)
-
-    extract(x = x, y = y, xy = xy, cat = cat)
+    extract(x = x, y = y, xy = xy, cats = cats)
 
     } # EOF
 )
+
+#' @aliases extract
+#' @rdname extract
+#' @exportMethod extract
+methods::setMethod(
+    f = "extract",
+    signature = c(x = "GVector", y = "GVector"),
+    function(x,
+             y,
+             xy = FALSE
+    ) {
+    
+    if (geomtype(y) != "points") stop("Argument", sQuote("y"), " must be a points vector.")
+    if (is.3d(y)) warning("Coordinates in the z-dimension will be ignored.")
+
+    coordsXY <- crds(y, z = FALSE)
+    n <- nrow(coordsXY)
+    coords <- rep(NA_real_, 2L * n)
+    coords[seq(1L, 2 * n, by = 2L)] <- coordsXY$x
+    coords[seq(2L, 2 * n, by = 2L)] <- coordsXY$y
+
+    args <- list(
+        cmd = "v.what",
+        map = sources(x),
+        coordinates = coords,
+        type = geomtype(x, TRUE),
+        flags = "quiet",
+        intern = TRUE
+    )
+
+    vals <- do.call(rgrass::execGRASS, args = args)
+
+    nonnas <- which(grepl(vals, pattern = "Category: "))
+    nas <- which(grepl(vals, pattern = "Nothing found."))
+
+    lenNonnas <- length(nonnas)
+    lenNas <- length(nas)
+
+    # get index of non-NAs
+    if (lenNonnas > 0L & lenNas >= 0L) {
+        
+        names(nonnas) <- rep("notna", lenNonnas)
+        names(nas) <- rep("na", lenNas)
+        together <- c(nonnas, nas)
+        together <- sort(together)
+
+        nonnasIndex <- which(names(together) == "notna")
+
+    } else if (lenNonnas > 0L & lenNas == 0) {
+        nonnasIndex <- 1L:n
+    }
+
+    ### at least one point was on the vector
+    if (lenNonnas > 0L) {
+
+        nons <- vals[nonnas]
+        nons <- sub(nons, pattern = "Category: ", replacement = "")
+        nons <- as.integer(nons)
+
+    }
+
+    # vector has no data table (return IDs)
+    if (nrow(x) == 0L) {
+
+        id.x <- NULL
+
+        out <- data.table::data.table(id.y = 1L:n, id.x = NA_integer_)
+
+        if (lenNonnas > 0L) out[nonnasIndex, id.x := nons]
+
+    # vector has data table
+    } else {
+
+        # make template of data table (1 row, all NAs)
+        out <- as.data.table(x)[1L]
+
+        classes <- sapply(out, class)
+        
+        for (i in seq_along(classes)) {
+
+            if (classes[i] == "integer") {
+                assign <- NA_integer_
+            } else if (classes[i] == "numeric") {
+                assign <- NA_real_
+            } else if (classes[i] == "character") {
+                assign <- NA_character_
+            } else {
+                assign <- NA
+            }
+
+            col <- cols[i]
+            out[1L, (col) := assign]
+
+        }
+
+        # create template data table with all NAs
+        out <- out[rep(1L, n)]
+        id.y <- data.table::data.table(id.y = 1L:n)
+        out <- cbind(id.y, out)
+
+        # assign values to rows
+        if (lenNonnas > 0L) {
+        
+            for (i in seq_along(cols)) {
+                
+                col <- cols[i]
+                out[nonnasIndex, (col) := x@table[nons, get(col)]]
+            
+            }
+
+        }
+
+    } # vector has a data.table
+
+    if (xy) out <- cbind(coordsXY, out)
+    
+    if (!getFastOptions("useDataTable")) out <- as.data.frame(out)
+    out
+    
+    } # EOF
+)
+
