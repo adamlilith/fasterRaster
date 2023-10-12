@@ -12,7 +12,7 @@
 #' [restoreSession()]: Revert to another **GRASS** ["location" or "mapset"][tutorial_sessions], or restart a **GRASS** session saved to disk\cr
 #' [setFastOptions()] and [getFastOptions()]: Set options for working with **fasterRaster**\cr
 #'
-#' ## Properties of **fasterRaster** rasters (`GRasters`)
+#' ## Properties of `GRasters`
 #' [crs()]: Coordinate reference system\cr
 #' [datatype()]: Data type\cr
 #' [dim()]: Number of rows and columns\cr
@@ -82,7 +82,7 @@
 #' [denoise()]: Remove "noise" from a `GRaster` using a principal components analysis (PCA)\cr
 #' [distance()]: Distance to non-`NA` cells, or vice versa\cr
 #' [extend()]: Add rows and columns to a `GRaster`\cr
-#' [extract()]: Extract values from a `GRaster` at locations in a points vector\cr
+#' [extract()]: Extract values from a `GRaster` at specific points\cr
 #' [focal()]: Calculate cell values based on values of nearby cells\cr
 #' [fractalRast()]: Create a fractal `GRaster`\cr
 #' [global()]: Summary statistics across cells of each `GRaster` layer\cr
@@ -170,6 +170,7 @@
 #' [delaunay()]: Delaunay triangulation\cr
 #' [disagg()]: Separate multipart geometries into singlepart geometries\cr
 #' [distance()]: Distance between geometries in two vectors, or from a vector to cells of a raster\cr
+#' [extract()]: Extract values from a `GVector` at specific points\cr
 #' [head()]: First rows of a vector's data table\cr
 #' [project()]: Change coordinate reference system\cr
 #' [simplifyGeom()]: Remove vertices\cr
