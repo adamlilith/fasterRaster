@@ -37,7 +37,7 @@ dypsis <- fast(madDypsis)
 # Get values of elevation at points where Dypsis species are located:
 extract(elev, dypsis, xy = TRUE)
 
-# Extract from categorical raster
+# Extract from categorical raster:
 vals <- extract(cover, dypsis)
 vals
 
@@ -45,8 +45,8 @@ cats <- extract(cover, dypsis, cats = TRUE)
 cats
 
 # Extract from a vector:
-tab <- extract(coast, dypsis, xy = TRUE)
-tab
+table <- extract(coast, dypsis, xy = TRUE)
+head(table) # first 3 are outside vector, next 3 are inside
 
 # IMPORTANT #3: Revert back to original GRASS session if needed.
 restoreSession(opts.)
