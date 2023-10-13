@@ -99,27 +99,26 @@ methods::setMethod(
 	####################
 	
 	if (rastOrVect == "raster") {
-
+		
 		xRast <- terra::rast(x)
 		nLayers <- terra::nlyr(xRast)
 		xNames <- names(xRast)
 
 		### load raster (no projecting needed)
 		if (!checkCRS || terra::crs(xRast) == crs()) {
-
+			
 			region(xRast)
-
-			src <- .makeSourceName("r.in.gdal", type = "raster")
+			
+			src <- .makeSourceName("r_in_gdal", type = "raster")
 			args <- list(
 				cmd = "r.in.gdal",
 				input = x,
 				output = src,
-				flags = "quiet",
-				intern = TRUE
+				flags = "quiet"
 			)
 
 			if (!checkCRS) args$flags <- c(args$flags, "o")
-
+		
 		### load and project raster
 		} else {
 		
@@ -145,12 +144,12 @@ methods::setMethod(
 			# define region settings using a projected SpatRaster that matches x
 			xRast <- xRast[[1L]]
 cat("Time-consuming step here for large rasters:")
-			xRast <- xRast * NA_real_
+			xRast <- xRast * NA_integer_
 			xRast <- terra::project(xRast, crs(), align = TRUE)
 cat("Time-consuming step here for large rasters^^^")
 			region(xRast)
 
-   			src <- .makeSourceName("r.import", type = "raster")
+   			src <- .makeSourceName("r_import", type = "raster")
 			args <- list(
 				cmd = "r.import",
 				input = x,
@@ -159,8 +158,7 @@ cat("Time-consuming step here for large rasters^^^")
 				memory = getFastOptions("memory"),
 				extent = "region",
 				resolution = "region",
-				flags = c("quiet", "overwrite"),
-				intern = TRUE
+				flags = c("quiet", "overwrite")
 			)
 
 			if (wrap) args$flags <- c(args$flags, "n")
@@ -178,8 +176,9 @@ cat("Time-consuming step here for large rasters^^^")
 		}
 		out <- .makeGRaster(src, names = xNames, levels = levels)
 
-	### vector from disk (and project on the fly if needed)
-	#######################################################
+	### vector from disk
+	### (and project on the fly if needed)
+	######################################
 	
 	} else if (rastOrVect == "vector") {
 
@@ -207,11 +206,11 @@ cat("Time-consuming step here for large rasters^^^")
 		
 		xCrs <- terra::crs(xVect)
 		currentCrs <- crs()
-		src <- .makeSourceName("v_in_ogr", type = "vector")
 
 		# vector is in same CRS as current location
 		if (!checkCRS || xCrs == currentCrs) {
 
+			src <- .makeSourceName("v_in_ogr", type = "vector")
 			args <- list(
 				cmd = "v.in.ogr",
 				input = x,
@@ -227,13 +226,13 @@ cat("Time-consuming step here for large rasters^^^")
 
 			if (warn) warning("Vector has a different coordinate reference system than this GRASS ", dQuote("location"), ".\n  Vector will be projected to the current location\'s coordinate reference system.")
 
+			src <- .makeSourceName("v_import", type = "vector")
 			args <- list(
 				cmd = "v.import",
 				input = x,
 				output = src,
 				extent = "input",
-				flags = c("quiet", "overwrite"),
-				intern = TRUE
+				flags = c("quiet", "overwrite")
 			)
 			
 			if (!is.null(snap)) args$snap <- snap
@@ -360,7 +359,7 @@ methods::setMethod(
 ) {
     
 	if (!inherits(x, "SpatVector")) x <- terra::vect(x)
-	x$frKEY <- 1L:dim(x)[1L]
+	# x$frKEY <- 1L:dim(x)[1L]
 
 	table <- data.table::as.data.table(x)
 	
@@ -377,6 +376,6 @@ methods::setMethod(
 		vectFile <- terra::sources(x)
 	}
     
-  fast(x = vectFile, checkCRS = checkCRS, snap = snap, warn = warn, table = table, rastOrVect = "vector", )
+  fast(x = vectFile, checkCRS = checkCRS, snap = snap, warn = warn, table = table, rastOrVect = "vector")
 	
 }
