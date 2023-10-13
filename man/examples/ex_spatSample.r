@@ -40,12 +40,13 @@ randVals <- spatSample(elev, size = 20, values = TRUE)
 randVals
 
 randPoints <- spatSample(elev, size = 20, as.points = TRUE)
+randPoints
 plot(elev)
 plot(randPoints, add = TRUE)
 
 # Random categories
-randCover <- spatSample(cover, size = 20, values = TRUE, cat = TRUE,
-     xy = TRUE)
+randCover <- spatSample(cover, size = 20, values = TRUE,
+     cat = TRUE, xy = TRUE)
 randCover
 
 # IMPORTANT #3: Revert back to original GRASS session if needed.
