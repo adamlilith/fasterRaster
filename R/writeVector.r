@@ -41,22 +41,28 @@ setMethod(
 	if (!overwrite && file.exists(filename)) stop(paste0("File already exists and ", sQuote("overwrite"), " is FALSE:\n ", filename))
 
 	### general arguments
-	args <- list(...)
-	args$input <- sources(x)
-	args$output <- filename
-	args$cmd <- "v.out.ogr"
-	args$flags <- c("quiet", "s", "m")
-	args$ignore.stderr <- TRUE
+	args <- list(
+		cmd = "v.out.ogr",
+		input = sources(x),
+		output = filename,
+		flags = c("quiet", "s", "m")
+	)
 	if (overwrite) args$flags <- c(args$flags, "overwrite")
-
-	### save
 	do.call(rgrass::execGRASS, args)
 	
 	out <- terra::vect(filename)
 
 	if (nrow(x) > 0L) {
+		
 		df <- as.data.frame(x)
-		out <- terra::merge(out, df)
+		cols <- names(df)
+		out$DUMMYDUMMY_ <- NA
+		for (i in seq_along(cols)) {
+			out$DUMMYDUMMY_ <- df[ , i]
+			names(out)[i] <- cols[i]
+		}
+
+		# out <- terra::merge(out, df)
 	}
 
 	invisible(out)
