@@ -45,10 +45,11 @@
 		cmd = "v.db.addtable",
 		map = src,
 		columns = columns,
-		flags = "quiet"
+		flags = "quiet",
+		intern = TRUE
 	)
 
-	suppressMessages(do.call(rgrass::execGRASS, args = args))
+	info <- do.call(rgrass::execGRASS, args = args)
 	invisible(x)
 
 }
