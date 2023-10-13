@@ -239,6 +239,24 @@ methods::setMethod(
     } # EOF
 )
 
+#' For internal use by other functions
+#' 
+#' @param y Character: [sources()] of points vector
+#' 
+#' @aliases extract
+#' @rdname extract
+#' @noRd
+methods::setMethod(
+    f = "extract",
+    signature = c(x = "GVector", y = "character"),
+    function(x, y, xy = FALSE) {
+
+    y <- .crdsVect(y, z = FALSE, gm = "points")
+    .extractFromVect(x, y, xy)
+
+    } # EOF
+)
+
 #' @param x GVector
 #' @param coords 2-column matrix of coordinates
 #' @param xy T/F
@@ -246,11 +264,13 @@ methods::setMethod(
 #' @noRd
 .extractFromVect <- function(x, y, xy) {
 
+    if (!inherits(y, "data.table")) y <- data.table::as.data.table(y)
+
     colnames(y) <- c("x", "y")
     n <- nrow(y)
     coords <- rep(NA_real_, 2L * n)
-    coords[seq(1L, 2 * n, by = 2L)] <- y[ , "x"]
-    coords[seq(2L, 2 * n, by = 2L)] <- y[ , "y"]
+    coords[seq(1L, 2 * n, by = 2L)] <- y[["x"]]
+    coords[seq(2L, 2 * n, by = 2L)] <- y[["y"]]
 
     args <- list(
         cmd = "v.what",
@@ -308,6 +328,7 @@ methods::setMethod(
         out <- as.data.table(x)[1L]
 
         classes <- sapply(out, class)
+        cols <- names(x)
         
         for (i in seq_along(classes)) {
 
@@ -345,7 +366,7 @@ methods::setMethod(
 
     } # vector has a data.table
 
-    if (xy) out <- cbind(coordsXY, out)
+    if (xy) out <- cbind(y, out)
     
     if (!getFastOptions("useDataTable")) out <- as.data.frame(out)
     out
