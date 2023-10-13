@@ -57,28 +57,28 @@ setValidity("GVector",
 	if (is.null(table)) table <- data.table::data.table(NULL)
 	if (!inherits(table, "data.table")) table <- data.table::as.data.table(table)
 
-	if (any(names(table) == "frKEY")) {
+	# if (any(names(table) == "frKEY")) {
 
-		catTable <- table[ , "frKEY"]
-		names(catTable) <- "cat"
-		table$frKEY <- NULL
-		### create GRASS attribute table
-		### 1 Save table and format file
-		### 2 Read in with db.in
-		### 3 Attach to vector and set "cat" column
-		### attach table
-		.vRecat(catTable, src)
-		nGeoms <- nrow(catTable[ , .N, by = "cat"])
+	# 	catTable <- table[ , "frKEY"]
+	# 	# names(catTable) <- "cat"
+	# 	table$frKEY <- NULL
+	# 	### create GRASS attribute table
+	# 	### 1 Save table and format file
+	# 	### 2 Read in with db.in
+	# 	### 3 Attach to vector and set "cat" column
+	# 	### attach table
+	# 	.vRecat(catTable, src)
+	# 	nGeoms <- nrow(catTable[ , .N, by = "cat"])
 
-	# GRASS made its own cat column
-	} else {
+	# # GRASS made its own cat column
+	# } else {
 
-		nGeoms <- length(unique(.vCats(src)))
-
-	}
+		if (!.vHasTable(src)) .vAttachTable(src)
+		cats <- .vCats(src)
+		nGeoms <- length(unique(cats))
+	# }
 
 	info <- .vectInfo(src)
-	nSubgeoms <- info[["nGeometries"]]
 
 	new(
 		"GVector",
@@ -90,7 +90,6 @@ setValidity("GVector",
 		sources = src,
 		geometry = info[["geometry"]][1L],
 		nGeometries = nGeoms,
-		# nSubgeometries = nSubgeoms,
 		extent = c(info[["west"]][1L], info[["east"]][1L], info[["south"]][1L], info[["north"]][1L]),
 		zextent = c(info[["zbottom"]], info[["ztop"]]),
 		table = table
