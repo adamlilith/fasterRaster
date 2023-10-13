@@ -21,14 +21,13 @@ methods::setMethod(
 
 	if (by == "") {
 		
-		src <- .makeSourceName("convHull", "vector")
+		src <- .makeSourceName("v_hull", "vector")
 	
 		args <- list(
 			cmd = "v.hull",
 			input = sources(x),
 			output = src,
-			flags = c("quiet", "overwrite"),
-			intern = TRUE
+			flags = c("quiet", "overwrite")
 		)
 
 		do.call(rgrass::execGRASS, args = args)
