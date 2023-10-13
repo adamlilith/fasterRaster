@@ -93,6 +93,7 @@
 #' [mask()]: Remove values in a `GRaster` based on values in another `GRaster` or vector\cr
 #' [merge()]: Combine two or more rasters with different extents and fill in `NA`s\cr
 #' [noise()]: Remove coarse-scale trends from a `GRaster`, leaving just fine-scale "noise"\cr
+#' [pairs()]: Plot correlations between `GRaster` layers\cr
 #' [pca()]: Apply a principal components analysis (PCA) to a `GRaster`\cr
 #' [pcs()]: Retrieve a principal components model from a PCA `GRaster` generated using `pca()`\cr
 #' [plot()]: Display a `GRaster`\cr
