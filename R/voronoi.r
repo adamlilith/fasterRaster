@@ -9,7 +9,7 @@
 #'
 #' @seealso [terra::voronoi()], [sf::st_voronoi()], module `v.voronoi` in **GRASS**
 #'
-#' @example man/examples/ex_pointOperations.r
+#' @example man/examples/ex_delaunay_voronoi.r
 #'
 #' @aliases voronoi
 #' @rdname voronoi
@@ -24,7 +24,7 @@ methods::setMethod(
 	.restore(x)
 
 	# do not expand region beyond x
-	regionExt(x)
+	regionExt(x, respect = "dimensions")
 	if (buffer != 0) {
 		
 		# set region extent to buffered vector
@@ -44,20 +44,19 @@ methods::setMethod(
 		s <- as.character(s)
 		n <- as.character(n)
 		
-		rgrass::execGRASS("g.region", n=n, s=s, e=e, w=w, flags=c("o", "quiet", "overwrite"))
+		rgrass::execGRASS("g.region", n = n, s = s, e = e, w = w, flags = c("o", "quiet", "overwrite"))
 		
 	}
 
-	src <- .makeSourceName("voronoi", "vect")
+	src <- .makeSourceName("v_voronoi", "vect")
 	args <- list(
 		cmd = "v.voronoi",
 		input = sources(x),
 		output = src,
-		flags = c("quiet", "overwrite"),
-		intern = TRUE
+		flags = c("quiet", "overwrite")
 	)
 
-	if (geomtype(x) == "polygons") args$flags <- c(args$clags, "a")
+	if (geomtype(x) == "polygons") args$flags <- c(args$flags, "a")
 
 	do.call(rgrass::execGRASS, args = args)
 	.makeGVector(src)
