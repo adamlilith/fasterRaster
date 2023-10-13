@@ -143,3 +143,103 @@ methods::setMethod(
 	} # EOF
 
 )
+
+#' @aliases spatSample
+#' @rdname spatSample
+#' @exportMethod spatSample
+methods::setMethod(
+	f = "spatSample",
+	signature = "GVector",
+	function(
+		x,
+		size,
+		as.points = FALSE,
+		values = TRUE,
+		xy = FALSE,
+		strata = NULL,
+		zlim = NULL,
+		seed = NULL
+	) {
+
+	.restore(x)
+
+	if (geomtype(x) != "polygons") x <- convHull(x)
+	if (!xy) values <- TRUE
+
+	# if sampling by strata, keey polygons as-is
+	if (!is.null(strata)) {
+
+		srcRestrict <- sources(x)
+
+	# if not sampling by strata, dissolve all polygons
+	} else {
+
+		# make copy of vector and force all categories to 1
+		col <- rstring(1L)
+		.vAddColumn(x, name = col, type = "integer")
+		.vUpdateColumn(x, column = col, value = 1L)
+
+		srcRestrict <- .makeSourceName("v_dissolve", "vector")
+		args <- list(
+			cmd = "v.dissolve",
+			input = sources(x),
+			output = srcRestrict,
+			column = col,
+			flags = c("quiet", "overwrite")
+		)	
+		do.call(rgrass::execGRASS, args = args)
+
+	}
+	
+
+	src <- .makeSourceName("v_random", "vector")
+	args <- list(
+		cmd = "v.random",
+		output = src,
+		npoints = size,
+		restrict = srcRestrict,
+		flags = c("quiet", "overwrite")
+	)
+
+	if (!is.null(strata)) args$flags <- c(args$flags, "a")
+
+	if (!is.null(zlim)) {
+		args$zmin <- zlim[1L]
+		args$zmax <- zlim[2L]
+		args$flags <- c(args$flags, "z")
+	}
+
+	if (!is.null(seed)) args$seed <- seed
+
+	do.call(rgrass::execGRASS, args = args)
+
+	# return coordinates
+	if (xy) {
+		out <- .crdsVect(src, z = is.3d(x), gm = "points")
+	}
+
+	# extract values from vector
+	if (values) {
+
+		vals <- extract(x, src)
+		vals$id.y <- NULL
+
+		if (exists("out", inherits = FALSE)) {
+			out <- cbind(out, vals)
+		} else {
+			out <- vals
+		}
+
+	} # if wanting values
+
+	if (as.points) {
+		.vAttachTable(src)
+		out <- .makeGVector(src, table = out)
+	} else {
+		if (!getFastOptions("useDataTable")) out <- as.data.frame(out)
+	}
+	out
+
+	} # EOF
+
+)
