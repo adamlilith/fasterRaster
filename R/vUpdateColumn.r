@@ -24,9 +24,11 @@
 
 	if (!(column %in% .vNames(x))) stop("Column does not exist in this vector.")
 
+	value <- as.character(value)
+
 	args <- list(
 		cmd = "v.db.update",
-		map = x,
+		map = src,
 		column = column,
 		value = value,
 		flags = "quiet"
