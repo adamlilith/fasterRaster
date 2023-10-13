@@ -8,7 +8,7 @@
 #'
 #' @seealso [terra::delaunay()], module `v.delaunay` in **GRASS**
 #'
-#' @example man/examples/ex_pointOperations.r
+#' @example man/examples/ex_delaunay_voronoi.r
 #'
 #' @aliases delaunay
 #' @rdname delaunay
@@ -20,16 +20,15 @@ methods::setMethod(
 
 	if (geomtype(x) != "points") stop("The vector must represent spatial points.")
 	
-	src <- .makeSourceName("delaunay", "vect")
+	src <- .makeSourceName("v_delaunay", "vect")
 	args <- list(
 		cmd = "v.delaunay",
 		input = sources(x),
 		output = src,
-		flags = c("quiet", "overwrite"),
-		intern = TRUE
+		flags = c("quiet", "overwrite")
 	)
 
-	do.call(rgrass::execGRASS, args=args)
+	do.call(rgrass::execGRASS, args = args)
 	.makeGVector(src)
 	
 	} # EOF
