@@ -162,6 +162,7 @@ methods::setMethod(
 	) {
 
 	.restore(x)
+	region(x)
 
 	if (geomtype(x) != "polygons") x <- convHull(x)
 	if (!xy) values <- TRUE
@@ -233,7 +234,7 @@ methods::setMethod(
 	} # if wanting values
 
 	if (as.points) {
-		.vAttachTable(src)
+		# .vAttachTable(src)
 		out <- .makeGVector(src, table = out)
 	} else {
 		if (!getFastOptions("useDataTable")) out <- as.data.frame(out)
