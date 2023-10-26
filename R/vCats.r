@@ -4,12 +4,14 @@
 #'
 #' @param x A `GVector` or the name of a vector in **GRASS**.
 #'
-#' @returns An integer vector with the category of each geometry in the vector
+#' @param long Logical: If `TRUE`, return category numbers for all sub-geometries. If `FALSE` (default), return category numbers for all geometries.
+#'
+#' @returns An integer vector.
 #'
 #' @aliases .vCats
 #' @rdname vCats
 #' @noRd
-.vCats <- function(x) {
+.vCats <- function(x, long = FALSE) {
 
 	if (inherits(x, "GVector")) {
 		.restore(x)
@@ -18,19 +20,16 @@
 		src <- x
 	}
 
-	out <- .vAsDataTable(src)
-	out <- out[["cat"]]
+	if (long) {
 
-	# args <- list(
-	# 	cmd = "v.category",
-	# 	input = src,
-	# 	option = "print",
-	# 	flags = c("quiet", "overwrite"),
-	# 	intern = TRUE
-	# )
+		out <- rgrass::execGRASS("v.category", input = src, option = "print", flags = "quiet", intern = TRUE)
 
-	# out <- do.call(rgrass::execGRASS, args = args)
-	out <- as.integer(out)
-	out
+		as.integer(out)
+
+	} else {
+
+		as.integer(.vAsDataTable(src)$cat)
+	
+	}
 
 }
