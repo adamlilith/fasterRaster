@@ -91,7 +91,7 @@ methods::setMethod(
 }
 
 #' @noRd
-.copyGVector <- function(x = NULL) {
+.copyGVector <- function(x) {
 
 	.restore(x)
 
