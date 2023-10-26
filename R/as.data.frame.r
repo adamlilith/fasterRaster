@@ -33,11 +33,12 @@ methods::setMethod(
 	f = "as.data.table",
 	signature = c(x = "GVector"),
 	definition = function(x) {
-		if (nrow(x) > 0L) {
-			x@table
-		} else {
-			NULL
-		}
+		
+	if (nrow(x) > 0L) {
+		x@table
+	} else {
+		NULL
+	}
 
 	} # EOF
 )
