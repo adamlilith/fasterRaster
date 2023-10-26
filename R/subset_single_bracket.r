@@ -24,20 +24,21 @@ methods::setMethod(
 
 	.restore(x)
 
-	nr <- ngeom(x)
+	nGeoms <- ngeom(x)
 
 	if (missing(i)) {
 		out <- x[[j]]
 	} else {
 
 		if (is.logical(i)) {
-			if (length(i) < nr) i <- rep(i, length.out = nr)
+			if (length(i) < nGeoms) i <- rep(i, length.out = nGeoms)
 			i <- which(i)
 		}
 
 		if (any(i > 0L) & any(i < 0L)) stop("Cannot mix positive and negative indices.")
 
 		if (all(i < 0L)) {
+
 			reverseRowSelect <- TRUE
 			iRev <- i
 			i <- -1L * i
@@ -46,31 +47,36 @@ methods::setMethod(
 		} else {
 			reverseRowSelect <- removeAll <- FALSE
 		}
-		if (any(i > nr)) stop("Index out of bounds.")
+		if (any(i > nGeoms)) stop("Index out of bounds.")
 
 		if (removeAll) {
-			out <- NULL # removed all rows
+			out <- NULL # removed all
 		} else {
 
 			# **keep** rows
-			iSeq <- seqToSQL(i)
+			cats <- .vCats(x)
+			keepCats <- cats[i]
+			keepCats <- sort(keepCats)
+			keepCats <- seqToSQL(keepCats)
+
 			src <- .makeSourceName("v_extract", "vector")
 
 			args <- list(
 				cmd = "v.extract",
 				input = sources(x),
-				cats = iSeq,
+				cats = keepCats,
 				output = src,
 				new = -1,
-				flags = c("quiet", "overwrite"),
-				intern = FALSE
+				flags = c("quiet", "overwrite")
 			)
 
 			if (reverseRowSelect) args$flags <- c(args$flags, "r")
+
 			do.call(rgrass::execGRASS, args = args)
+			
 			vCats <- .vCats(src)
 			vCats <- omnibus::renumSeq(vCats)
-			.vRecat(data.frame(cat = vCats), src)
+			.vRecat(src, vCats, removeTable = TRUE)
 			
 			if (nrow(x) == 0L) {
 				table <- NULL
