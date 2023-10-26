@@ -1,14 +1,16 @@
 #' Aggregate values of raster cells into larger cells
 #'
-#' @description `aggregate()` creates a new raster with cells that are a multiple of the size of the cells of the original raster. The new cells can be larger or smaller than the original cells (this function thus emulates the `terra::aggregate()` and [terra::disagg()] functions in **terra**.)
+#' @description When applied to a `GRaster`, `aggregate()` creates a new raster with cells that are a multiple of the size of the cells of the original raster. The new cells can be larger or smaller than the original cells (this function thus emulates the `terra::aggregate()` and [terra::disagg()] functions in **terra**.)
+#' 
+#' When applied to a `GVector`, `aggregate()` all geometries into a single "multipart" geometry, in which sets of points, lines, or polygons are treated as if they were a unit. If the `GVector` has a data table associated with it, the output will also have a data table as long as there is at least one column with values that are all the same. Columns that do not have duplicated values will be converted to `NA`.
 #'
-#' @param x A `GRaster`.
+#' @param x A `GRaster` or `GVector`.
 #'
-#' @param fact Numeric vector: One, two, or three positive values. These reflect the size of the new cells as multiples of the size of the old cells. If just one value is supplied, this is used for all two or three dimensions. If two values are supplied, the first is multiplied by the east-west size of cells, and the second north-south size of cells (the raster must be 2D). If three values are supplied, the third value is used as the multiplier of the vertical dimension of cells. Values are calculated using all cells that have their centers contained by the target cell.
+#' @param fact Numeric vector (rasters only): One, two, or three positive values. These reflect the size of the new cells as multiples of the size of the old cells. If just one value is supplied, this is used for all two or three dimensions. If two values are supplied, the first is multiplied by the east-west size of cells, and the second north-south size of cells (the raster must be 2D). If three values are supplied, the third value is used as the multiplier of the vertical dimension of cells. Values are calculated using all cells that have their centers contained by the target cell.
 #'
 #' Note that unlike `terra::aggregate()` and [terra::disagg()], these values need not be integers.
 #'
-#' @param fun Character: Name of the function used to aggregate:
+#' @param fun Character (rasters only): Name of the function used to aggregate. For `GRaster`s, this is the function that summarizes across cells. For `GVector`s, this function will be used to calculate new values of numeric or integer cells.
 #' * `mean``: Average (default)
 #' * `median`: Median
 #' * `mode`: Most common value
@@ -22,15 +24,22 @@
 #' * `count`: Number of non-`NA` cell
 #' * `diversity`: Number of unique values
 #'
-#' @param prob Numeric: Quantile at which to calculate `quantile`.
+#' @param prob Numeric (rasters only): Quantile at which to calculate `quantile`.
 #'
-#' @param na.rm Logical: If `FALSE` (default), propagate `NA` cells.
+#' @param na.rm Logical (rasters only): If `FALSE` (default), propagate `NA` cells or `NA` values.
 #'
-#' @param weight Logical: If `FALSE`, each source cell that has its center in the destination cell will be counted equally. If `TRUE`, the value of each source will be weighted the proportion of the destination cell the source cell covers.
-#'
-#' @returns A `GRaster`.
+#' @param weight Logical (rasters only): If `FALSE`, each source cell that has its center in the destination cell will be counted equally. If `TRUE`, the value of each source will be weighted the proportion of the destination cell the source cell covers.
 #' 
-#' @seealso [stats::aggregate()], [terra::disagg()], **GRASS** module `r.resamp.stats`
+#' @param by Either a character, a numeric or integer vector, or `NULL` (vectors only):
+#' * If `NULL` (default), then all geometries will be collated into a single multipart geometry.
+#' * If a character, then rows with the same value in this column of the vector's data table will be aggregated.
+#' * If a numeric or integer vector, the vector must have the same length as the number of geometries (see [ngeom()]). The values must be integers. Geometries with the same value will be aggregated together.
+#' 
+#' @param dissolve Logical (vectors only): If `TRUE` (default), then aggregated geometries will have their borders dissolved.
+#' 
+#' @returns A `GRaster` or `GVector`.
+#' 
+#' @seealso [stats::aggregate()], [terra::aggregate()], [terra::disagg()], **GRASS** module `r.resamp.stats`
 #'
 #' @example man/examples/ex_aggregate.r
 #'
@@ -130,6 +139,105 @@ methods::setMethod(
 		
 	}
 	out
+
+	} # EOF
+)
+
+#' @aliases aggregate
+#' @rdname aggregate
+#' @exportMethod aggregate
+methods::setMethod(
+	f = "aggregate",
+	signature = c(x = "GVector"),
+	function(x, dissolve = TRUE) {
+
+	.restore(x)
+
+	# use v.reclass to reclassify
+	oldcats <- .vCats(x, long = TRUE)
+	
+	newcats <- data.frame(oldcat = oldcats, newcat = rep(1L, length(oldcats)))
+	
+	tf <- tempfile(fileext = ".csv")
+	tft <- paste0(tf, "t")
+	utils::write.csv(newcats, tf, row.names = FALSE)
+	tableType <- '"Integer"'
+	write(tableType, tft)
+
+	# import table with new categories
+	srcTable <- .makeSourceName("db_in_ogr", "table")
+	
+	rgrass::execGRASS("db.in.ogr", input = tf, output = srcTable, flags = c("quiet", "overwrite"))
+
+	# connect table to copy of vector
+	srcIn <- .copyGVector(x)
+
+	rgrass::execGRASS("v.db.join", map = srcIn, column = "cat", other_table = srcTable, other_column = "oldcat", flags = "quiet")
+
+	src <- .makeSourceName("v_reclass", "vector")
+	
+	rgrass::execGRASS("v.reclass", input = srcIn, output = src, column = "newcat", flags = c("quiet", "overwrite"))
+
+	if (dissolve & geomtype(x) == "polygons") {
+	
+		srcIn <- src
+		src <- .makeSourceName("v_dissolve", "vector")
+
+		rgrass::execGRASS("v.dissolve", input = srcIn, output = src, column = "cat", flags = c("quiet", "overwrite"))
+	
+	}
+
+	# aggregate data table
+	if (nrow(x) == 0L) {
+
+		aggTable <- NULL
+	
+	} else {
+
+		table <- as.data.table(x)
+			
+		if (nrow(x) == 1L) {
+			aggTable <- table
+		} else {
+
+			dups <- rep(FALSE, ncol(table))
+			rowsMinus1 <- nrow(table) - 1L
+			
+			for (i in 1L:ncol(table)) {
+				if (sum(duplicated(table[ , ..i])) == rowsMinus1) dups[i] <- TRUE
+			}
+
+			if (!any(dups)) {
+				aggTable <- NULL
+			} else {
+
+				aggTable <- table[1L, ]
+				classes <- sapply(table, class)
+				
+				for (i in 1L:ncol(table)) {
+
+					if (!dups[i]) {
+						
+						if (classes[i] == "character") {
+							assign <- NA_character_
+						} else if (classes[i] == "integer") {
+							assign <- NA_integer_
+						} else if (classes[i] == "numeric") {
+							assign <- NA_real_
+						} else {
+							assign <- NA
+						}
+						aggTable[1L, i] <- assign
+					}
+				} # for each data table column
+
+			} # if there is at least one entirely-duplicated row
+
+		} # if table has >= 1 row
+
+	} # if data table has >= 2 rows
+
+	.makeGVector(src, table = aggTable)
 
 	} # EOF
 )
