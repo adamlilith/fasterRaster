@@ -74,7 +74,7 @@ setValidity("GVector",
 	# } else {
 
 		if (!.vHasTable(src)) .vAttachTable(src)
-		cats <- .vCats(src)
+		cats <- .vCats(src, long = FALSE)
 		nGeoms <- length(unique(cats))
 	# }
 
