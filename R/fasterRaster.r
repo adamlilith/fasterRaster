@@ -159,27 +159,28 @@
 #' The `[` ([single bracket][subset_single_bracket]) operator, can be used to subset geometries of a `GRaster`.\cr
 #' The `$` [dollar][subset_dollar] and `[[` ([double-square brackets][subset_double_square_brackets]) operators can be used to get columns of a `GVector`'s data table.\cr
 #' The `$<-` ([dollar replace][replace_dollar]) operator can be used to replace specific columns of a `GVector`'s data table.\cr
-#' [as.data.frame()]: Convert a vector's attribute table to a `data.frame`\cr
-#' [as.data.table()]: Convert a vector's attribute table to a `data.table`\cr
+#' [aggregate()]: Combine `GVector` geometries\cr
+#' [as.data.frame()]: Convert a `GVector`'s attribute table to a `data.frame`\cr
+#' [as.data.table()]: Convert a `GVector`'s attribute table to a `data.table`\cr
 #' [as.points()]: Extract vertex coordinates from a "lines" or "polygons" `GVector`\cr
-#' [buffer()]: Create a polygon around/inside a vector\cr
-#' [cleanGeom()]: Fix undesirable geometries of a vector\cr
-#' [connectors()]: Create lines connecting nearest features of two vectors\cr
+#' [buffer()]: Create a polygon around/inside a `GVector`\cr
+#' [cleanGeom()]: Fix undesirable geometries of a `GVector`\cr
+#' [connectors()]: Create lines connecting nearest features of two `GVector`\cr
 #' [convHull()]: Minimum convex hull\cr
-#' [crds()]: Extract coordinates of a vector\cr
-#' [crop()]: Remove parts of a vector\cr
+#' [crds()]: Extract coordinates of a `GVector`\cr
+#' [crop()]: Remove parts of a `GVector`\cr
 #' [delaunay()]: Delaunay triangulation\cr
 #' [disagg()]: Separate multipart geometries into singlepart geometries\cr
-#' [distance()]: Distance between geometries in two vectors, or from a vector to cells of a raster\cr
+#' [distance()]: Distance between geometries in two `GVector`, or from a `GVector` to cells of a `GRaster`\cr
 #' [extract()]: Extract values from a `GVector` at specific points\cr
-#' [head()]: First rows of a vector's data table\cr
+#' [head()]: First rows of a `GVector`'s data table\cr
 #' [project()]: Change coordinate reference system\cr
 #' [simplifyGeom()]: Remove vertices\cr
 #' [smoothGeom()]: Remove "angular" aspects of features\cr
 #' [st_as_sf()]: Convert a `GVector` to a `sf` vector\cr
-#' [st_buffer()]: Create a polygon around/inside a vector\cr
-#' [st_distance()]: Distance between geometries in two vectors\cr
-#' [tail()]: Last rows of a vector's data table\cr
+#' [st_buffer()]: Create a polygon around/inside a `GVector`\cr
+#' [st_distance()]: Distance between geometries in two `GVector`\cr
+#' [tail()]: Last rows of a `GVector`'s data table\cr
 #'
 #' ## Converting between data types
 #' [as.contour()]: Convert a `GRaster` to a `GVector` representing contour lines\cr
