@@ -8,7 +8,7 @@
 #'
 #' @param xy Logical: If `TRUE`, also return the coordinates of each point. Default is `FALSE.`
 #'
-#' @param cats Logical: If `TRUE` and `x` is a [categorical raster][tutorial_raster_data_types], then return the category labels instead of the values. If `TRUE` and `x` is a `GVector`, then ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Default is `FALSE.
+#' @param cats Logical (extracting from a raster): If `TRUE` and `x` is a [categorical raster][tutorial_raster_data_types], then return the category labels instead of the values. Default is `FALSE.
 #'
 #' @returns A `data.frame` or `data.table`.
 #'
@@ -31,6 +31,9 @@ methods::setMethod(
 
     if (geomtype(y) != "points") stop("Argument", sQuote("y"), " must be a points vector.")
     
+    .restore(x)
+    compareGeom(x, y)
+
     nLayers <- nlyr(x)
     for (i in seq_len(nLayers)) {
 
@@ -178,14 +181,12 @@ methods::setMethod(
 methods::setMethod(
     f = "extract",
     signature = c(x = "GVector", y = "GVector"),
-    function(x,
-             y,
-             xy = FALSE
-    ) {
+    function(x, y, xy = FALSE) {
 
     if (geomtype(y) != "points") stop("Argument", sQuote("y"), " must be a points vector.")
     if (is.3d(y)) warning("Coordinates in the z-dimension will be ignored.")
 
+    .restore(x)
     coords <- crds(y, z = FALSE)
     .extractFromVect(x, coords, xy)
 
@@ -263,6 +264,8 @@ methods::setMethod(
 #' 
 #' @noRd
 .extractFromVect <- function(x, y, xy) {
+
+    .restore(x)
 
     if (!inherits(y, "data.table")) y <- data.table::as.data.table(y)
 
