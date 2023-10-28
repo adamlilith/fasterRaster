@@ -74,9 +74,9 @@ methods::setMethod(
 
 			do.call(rgrass::execGRASS, args = args)
 			
-			vCats <- .vCats(src)
-			vCats <- omnibus::renumSeq(vCats)
-			.vRecat(src, vCats, removeTable = TRUE)
+			# vCats <- .vCats(src)
+			# vCats <- omnibus::renumSeq(vCats)
+			# .vRecat(src, vCats, removeTable = TRUE)
 			
 			if (nrow(x) == 0L) {
 				table <- NULL
@@ -111,20 +111,13 @@ methods::setMethod(
 						table <- data.table::data.table(NULL)
 					} else {
 					
-						..j <- NULL
+						# ..j <- NULL
 
 						if (reverseColSelect) {
 							j <- setdiff(names(x), names(x)[j])
 						} else {
 							j <- names(x)[j]
 						}
-						
-						
-						# .. <- function(x, env = parent.frame()) {
-						# 	stopifnot(inherits(x, "character"))
-						# 	stopifnot(length(x) == 1)
-						# 	get(x, envir = parent.env(env))
-						# }
 						
 						table <- table[ , ..j, with = FALSE]
 
@@ -151,71 +144,3 @@ methods::setMethod(
 
 	} # EOF
 )
-
-
-# # #' @aliases subset_single
-# # #' @rdname subset_single
-# # #' @exportMethod [
-# # methods::setMethod(
-	# # "[",
-	# # signature = c(x = "GVector"),
-	# # function(x, i) {
-
-	# # .restore(x)
-
-	# # nr <- ngeom(x)
-	# # if (is.logical(i)) {
-		# # if (length(i) < nr) i <- rep(i, length.out = nr)
-		# # i <- which(i)
-	# # }
-
-	# # if (any(i > 0L) & any(i < 0L)) stop("Cannot mix positive and negative indices.")
-
-	# # if (all(i < 0L)) {
-		# # reverseSelect <- TRUE
-		# # iRev <- i
-		# # i <- -1L * i
-		# # removeAll <- length(i) == nrow(x) && all(sort(i) == seq_len(nrow(x)))
-	# # } else {
-		# # reverseSelect <- removeAll <- FALSE
-	# # }
-	# # if (any(i > nr)) stop("Index out of bounds.")
-
-	# # if (removeAll) {
-		# # out <- NULL # removed all rows
-	# # } else {
-
-		# # # **keep** rows
-		# # iSeq <- seqToSQL(i)
-		# # src <- .makeSourceName("v_extract", "vector")
-
-		# # args <- list(
-			# # cmd = "v.extract",
-			# # input = sources(x),
-			# # cats = iSeq,
-			# # output = src,
-			# # new = 1,
-			# # flags = c("quiet", "overwrite", "t"),
-			# # intern = FALSE
-		# # )
-
-		# # if (reverseSelect) args$flags <- c(args$flags, "r")
-		# # do.call(rgrass::execGRASS, args = args)
-		
-		# # if (nrow(x) == 0L) {
-			# # table <- NULL
-		# # } else if (reverseSelect) {
-			# # table <- x@table[iRev]
-		# # } else {
-			# # table <- x@table[i]
-		# # }
-
-		# # out <- .makeGVector(src, table = table)
-
-	# # } # not removing all rows
-	# # out
-
-	# # } # EOF
-# # )
-
-

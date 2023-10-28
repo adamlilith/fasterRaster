@@ -79,7 +79,7 @@ setValidity("GVector",
 	# }
 
 	info <- .vectInfo(src)
-
+	
 	new(
 		"GVector",
 		location = getFastOptions("location"),
