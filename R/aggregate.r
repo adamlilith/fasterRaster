@@ -32,10 +32,10 @@
 #' 
 #' @param by Either a character, a numeric or integer vector, or `NULL` (vectors only):
 #' * If `NULL` (default), then all geometries will be collated into a single multipart geometry.
-#' * If a character, then rows with the same value in this column of the vector's data table will be aggregated.
-#' * If a numeric or integer vector, the vector must have the same length as the number of geometries (see [ngeom()]). The values must be integers. Geometries with the same value will be aggregated together.
+#' * If a character, then rows with the same value in the named column of the vector's data table will be aggregated.
+#' * If a numeric integer or integer vector, the vector must have the same length as the number of geometries (see [ngeom()]). The values must be integers. Geometries with the same value will be aggregated together.
 #' 
-#' @param dissolve Logical (vectors only): If `TRUE` (default), then aggregated geometries will have their borders dissolved.
+#' @param dissolve Logical (vectors only): If `TRUE` (default), then aggregated geometries will have their borders dissolved. This is ignored if the input `GVector` is not a "polygons" vector.
 #' 
 #' @returns A `GRaster` or `GVector`.
 #' 
