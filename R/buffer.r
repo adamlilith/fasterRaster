@@ -178,7 +178,8 @@ methods::setMethod(
 	do.call(rgrass::execGRASS, args)
 
 	# dissolve by category
-	if (!union && length(.vCats(src) != x@nGeometries)) {
+	# if (!union && length(.vCats(src) != x@nGeometries)) {
+	if (union) {
 
 		# dissolve
 		srcBuff <- src
@@ -193,8 +194,8 @@ methods::setMethod(
 		do.call(rgrass::execGRASS, args = args)
 
 		# add categories
-		nGeoms <- x@nGeometries
-		.vRecat(1L:nGeoms, src, removeTable = FALSE)
+		# nGeoms <- length(.vCats(src, table = FALSE, integer = FALSE))
+		# .vRecat(1L:nGeoms, src, removeTable = FALSE)
 
 	}
 
