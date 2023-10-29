@@ -31,5 +31,5 @@ methods::setMethod(
 methods::setMethod(
 	f = "nsubgeom",
 	signature = c(x = "GVector"),
-	function(x) length(.vCats(x))
+	function(x) length(.vCats(x, table = FALSE))
 )

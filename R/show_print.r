@@ -449,8 +449,8 @@ methods::setMethod(
 		cat("source      :", object@sources, "\n")
 	}
  	cat("geometry    :", object@topology, object@geometry, "\n")
-	# cat("dimensions  :", paste0(object@nGeometries, ", ", object@nSubgeometries, ", ", nFields), "(geometries, sub-geometries, columns)\n")
-	cat("dimensions  :", paste0(object@nGeometries, ", ", nFields), "(geometries, columns)\n")
+	cat("dimensions  :", paste0(object@nGeometries, ", ", object@nSubgeometries, ", ", nFields), "(geometries, sub-geometries, columns)\n")
+	# cat("dimensions  :", paste0(object@nGeometries, ", ", nFields), "(geometries, columns)\n")
 	cat("extent      :", paste(extent, collapse=", "), "(xmin, xmax, ymin, ymax)\n")
 	if (details | object@topology == "3D") cat("z extent    :", paste(zextent, collapse=", "), "(bottom, top)\n")
 	cat("coord ref.  :", format(st_crs(object)), "\n")
