@@ -20,7 +20,7 @@ setMethod(
 	function(x, ...) {
 
 	filename <- paste0(forwardSlash(tempfile()), ".gpkg")
-	out <- writeVector(x, filename=filename, ...)
+	out <- writeVector(x, filename = filename, ...)
 	out
 	} # EOF
 )
