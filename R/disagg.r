@@ -8,7 +8,7 @@
 #' 
 #' @seealso [aggregate()]
 #' 
-#' @example man/examples/ex_GVector.r
+#' @example man/examples/ex_aggregate_disagg.r
 #' 
 #' @aliases disagg
 #' @rdname disagg
@@ -20,15 +20,43 @@ methods::setMethod(
 
 	.restore(x)
 
-	# copying vector to obviate cases where multiple GVectors point to the same GRASS vector 
-	src <- .copyGVector(x)
+	srcDel <- .makeSourceName("v_category_del", "vector")
+	rgrass::execGRASS(
+		cmd = "v.category",
+		input = sources(x),
+		output = srcDel,
+		option = "del",
+		cat = -1,
+		flags = c("quiet", "overwrite")
+	)
 
-	.vRemoveTable(src)
+	src <- .makeSourceName("v_category_add", "vector")
+	rgrass::execGRASS(
+		cmd = "v.category",
+		input = srcDel,
+		output = src,
+		option = "add",
+		flags = c("quiet", "overwrite")
+	)
 
-	n <- nsubgeom(x)
-	catTable <- data.table(cat = 1L:n)
-	.vRecat(catTable, src)
-	.makeGVector(src, table = NULL)
+	# replicate data table
+	
+	if (nrow(x) == 0L) {
+		table <- NULL
+	} else {
+		
+		cats <- .vCats(x, table = FALSE, integer = TRUE)
+		if (anyNA(cats)) {
+			warning("At least one geometry has a combined category. Data table cannot be copied.")
+			table <- NULL
+		} else {
+			table <- x@table
+			table <- table[cats]
+		}
+
+	}
+
+	.makeGVector(src, table = table)
 
 	} # EOF
 )
