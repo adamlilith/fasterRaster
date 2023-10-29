@@ -45,7 +45,7 @@ setMethod(
 		cmd = "v.out.ogr",
 		input = sources(x),
 		output = filename,
-		flags = c("quiet", "s", "m")
+		flags = c("quiet", "s", "m", "c")
 	)
 	if (overwrite) args$flags <- c(args$flags, "overwrite")
 	do.call(rgrass::execGRASS, args)
