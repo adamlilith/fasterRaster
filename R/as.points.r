@@ -65,7 +65,7 @@ methods::setMethod(
 
     .restore(x)
 
-    src <- .makeSourceName(NULL, "vector")
+    src <- .makeSourceName("v_to_points", "vector")
     args <- list(
         cmd = "v.to.points",
         input = sources(x),
@@ -76,7 +76,7 @@ methods::setMethod(
         intern = TRUE
     )
     do.call(rgrass::execGRASS, args = args)
-    .makeGVector(src)
+    .makeGVector(src, table = NULL)
 
     } # E#OF
 )
