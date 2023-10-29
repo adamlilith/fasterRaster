@@ -31,28 +31,24 @@ methods::setMethod(
 	signature = c(x = "character"),
 	function(x, reshapeRegion = TRUE) {
 	
-	nLayers <- length(x)
-	gnsTo <- rep(NA_character_, nLayers)
-	
 	srcs <- .ls()
 	rastsOrVects <- names(srcs)
 	rastOrVect <- rastsOrVects[match(x, srcs)]
-	
-	# rastOrVect <- pmatchSafe(tolower(rastOrVect), c("raster", "vector"))
-	# rastOrVect <- rep(rastOrVect, nLayers)
+	n <- length(x)
+	srcs <- rep(NA_character_, n)
 
-	for (i in seq_len(nLayers)) {
+	for (i in seq_len(n)) {
 		
 		if (rastOrVect[i] == "raster") {
-			x <- .makeGRaster(x[i])
-			gnsTo[i] <- .copyGRaster(x, reshapeRegion = reshapeRegion)
+			y <- .makeGVector(x)
+			srcsTo[i] <- .copyGRaster(y, reshapeRegion = reshapeRegion)
 		} else if (rastOrVect[i] == "vector") {
-			.makeGVector(x[i])
-			gnsTo[i] <- .copyGVector(x)
+			y <- .makeGRaster(x)
+			srcsTo[i] <- .copyGVector(y)
 		}
 	
 	}
-	gnsTo
+	srcsTo
 		
 	} # EOF
 
@@ -93,13 +89,16 @@ methods::setMethod(
 #' @noRd
 .copyGVector <- function(x) {
 
-	.restore(x)
+	if (inherits(x, "GVector")) {
+		.restore(x)
+		srcFrom <- sources(x)
+	} else {
+		srcFrom <- sources(x)
+	}
 
-	### copy vector
-	gnFrom <- sources(x)
-	gnTo <- .makeSourceName("g_copy", type="vector")
+	srcTo <- .makeSourceName("g_copy", type="vector")
 
-	fromTo <- paste0(gnFrom, ",", gnTo)
+	fromTo <- paste0(srcFrom, ",", srcTo)
 	args <- list(
 		cmd = "g.copy",
 		vector = fromTo,
@@ -130,14 +129,14 @@ methods::setMethod(
 	# ### connect database to vector
 	# args <- list(
 	# 	cmd = "v.db.connect",
-	# 	map = gnTo,
+	# 	map = srcTo,
 	# 	driver = "sqlite",
 	# 	database = grassDB,
-	# 	table = gnTo,
+	# 	table = srcTo,
 	# 	flags = c("o", "quiet", "overwrite"),
 	# 	intern = FALSE
 	# )
 	# do.call(rgrass::execGRASS, args=args)
-	gnTo
+	srcTo
 
 }
