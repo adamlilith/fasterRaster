@@ -118,12 +118,6 @@ setFastOptions <- function(
 	
 	}
 
-	# if (any(names(opts) %in% "vectClass")) {
-		# if (is.null(opts$vectClass) || is.na(opts$vectClass) || !(opts$vectClass %in% c("SpatVector", "sf"))) {
-			# stop("Option <vectClass> must be either <SpatVector> or <sf>. The default is <", .vectClassDefault(), ">.")
-		# }
-	# }
-
 	if (any(names(opts) %in% "grassVer")) {
 
 		if (is.null(opts$grassVer) || is.na(opts$grassVer) || !inherits(opts$grassVer, c("numeric", "character"))) {
