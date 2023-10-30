@@ -15,6 +15,7 @@
 #'	* `"KML"`: Keyhole Markup Language (KML)
 #'	* `"netCDF"`: NetCDF (argument `filename` should not end in an extension).
 #'	* `"XLSX"`: MS Office Open XML spreadsheet
+#' @param attachTable Logical: If `TRUE` (default), attach the attribute to table to the vector before saving it. If `FALSE`, the attribute table will not be attached.
 #' @param ... Additional arguments to send to **GRASS** module `v.out.ogr`.
 #'
 #' @return Invisibly returns a `SpatVector`. Importantly, the function also writes one or more files to disk.
@@ -34,38 +35,85 @@ setMethod(
 		filename,
 		overwrite = FALSE,
 		format = "GPKG",
+		attachTable = TRUE,
 		...
 	) {
 
 	### going to overwrite anything?
 	if (!overwrite && file.exists(filename)) stop(paste0("File already exists and ", sQuote("overwrite"), " is FALSE:\n ", filename))
 
+	# ### remove table
+	# if (.vHasTable(x)) {
+
+	# 	src <- .copyGVector(x)
+
+	# 	rgrass::execGRASS(
+	# 		cmd = "v.db.connect",
+	# 		map = src,
+	# 		layer = "1",
+	# 		flags = c("quiet", "overwrite", "d")
+	# 	)
+
+	# }
+
+	if (attachTable & nrow(x) > 0L) {
+
+		# export table to GRASS
+		table <- x@table
+		cats <- data.table::data.table(cat = .vCats(x))
+		table <- cbind(cats, table)
+
+		tf <- tempfile(fileext = ".csv")
+		tft <- paste0(tf, "t")
+		utils::write.csv(table, tf, row.names = FALSE)
+		
+		classes <- sapply(table, class)
+		classes[!(classes %in% c("numeric", "integer", "character", "Date"))] <- '"String"'
+		classes[classes == "numeric"] <- '"Real"'
+		classes[classes == "integer"] <- '"Integer"'
+		classes[classes == "character"] <- '"String"'
+		classes[classes == "Date"] <- '"Date"'
+		classes <- paste(classes, collapse = ",")
+		
+		write(classes, tft)
+
+		srcTable <- .makeSourceName("db_in_ogr_table", NULL)
+		rgrass::execGRASS(
+			cmd = "db.in.ogr",
+			input = tf,
+			output = srcTable,
+			# key = "cat",
+			flags = c("quiet", "overwrite")
+		)
+
+		# connect database to vector
+		rgrass::execGRASS(
+			cmd = "v.db.connect",
+			map = sources(x),
+			table = srcTable,
+			layer = "1",
+			key = "cat_",
+			flags = c("quiet", "overwrite", "o")
+		)
+
+	}
+
 	### general arguments
 	args <- list(
 		cmd = "v.out.ogr",
 		input = sources(x),
 		output = filename,
-		flags = c("quiet", "s", "m", "c")
+		flags = c("quiet", "s")
 	)
 	if (overwrite) args$flags <- c(args$flags, "overwrite")
 	do.call(rgrass::execGRASS, args)
 	
 	out <- terra::vect(filename)
 
-	if (nrow(x) > 0L) {
-		
-		df <- as.data.frame(x)
-		cols <- names(df)
-		out$DUMMYDUMMY_ <- NA
-		for (i in seq_along(cols)) {
-			out$DUMMYDUMMY_ <- df[ , i]
-			names(out)[i] <- cols[i]
-		}
-
-		# out <- terra::merge(out, df)
-	}
+	if (nrow(x) > 0L && any(names(out) == "cat_")) out$cat_ <- NULL
 
 	invisible(out)
+
 	} # EOF
 )
 
@@ -89,4 +137,3 @@ setMethod(
 		
 	} # EOF
 )
-
