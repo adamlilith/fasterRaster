@@ -154,7 +154,7 @@ methods::setMethod(
 	.restore(x)
 
 	# use v.reclass to reclassify
-	oldcats <- .vCats(x, long = TRUE)
+	oldcats <- .vCats(x, table = TRUE)
 	
 	newcats <- data.frame(oldcat = oldcats, newcat = rep(1L, length(oldcats)))
 	
@@ -167,12 +167,24 @@ methods::setMethod(
 	# import table with new categories
 	srcTable <- .makeSourceName("db_in_ogr", "table")
 	
-	rgrass::execGRASS("db.in.ogr", input = tf, output = srcTable, flags = c("quiet", "overwrite"))
+	rgrass::execGRASS(
+		cmd = "db.in.ogr",
+		input = tf,
+		output = srcTable,
+		flags = c("quiet", "overwrite")
+	)
 
 	# connect table to copy of vector
 	srcIn <- .copyGVector(x)
 
-	rgrass::execGRASS("v.db.join", map = srcIn, column = "cat", other_table = srcTable, other_column = "oldcat", flags = "quiet")
+	rgrass::execGRASS(
+		cmd = "v.db.join",
+		map = srcIn,
+		column = "cat",
+		other_table = srcTable,
+		other_column = "oldcat",
+		flags = "quiet"
+	)
 
 	src <- .makeSourceName("v_reclass", "vector")
 	
@@ -183,7 +195,13 @@ methods::setMethod(
 		srcIn <- src
 		src <- .makeSourceName("v_dissolve", "vector")
 
-		rgrass::execGRASS("v.dissolve", input = srcIn, output = src, column = "cat", flags = c("quiet", "overwrite"))
+		rgrass::execGRASS(
+			cmd = "v.dissolve",
+			input = srcIn,
+			output = src,
+			column = "cat",
+			flags = c("quiet", "overwrite")
+		)
 	
 	}
 
