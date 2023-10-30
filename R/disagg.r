@@ -40,7 +40,6 @@ methods::setMethod(
 	)
 
 	# replicate data table
-	
 	if (nrow(x) == 0L) {
 		table <- NULL
 	} else {
@@ -55,6 +54,49 @@ methods::setMethod(
 		}
 
 	}
+
+	# remove existing database
+ 	rgrass::execGRASS(
+ 		cmd = "v.db.connect",
+ 		map = src,
+ 		layer = "1",
+ 		flags = c("quiet", "overwrite", "d")
+ 	)
+
+	# attach new database with same number of rows as categories in vector
+	db <- data.frame(cat = .vCats(src))
+	tf <- tempfile(fileext = ".csv")
+	tft <- paste0(tf, "t")
+	utils::write.csv(db, tf, row.names = FALSE)
+
+	classes <- sapply(table, class)
+	classes[!(classes %in% c("numeric", "integer", "character", "Date"))] <- '"String"'
+	classes[classes == "numeric"] <- '"Real"'
+	classes[classes == "integer"] <- '"Integer"'
+	classes[classes == "character"] <- '"String"'
+	classes[classes == "Date"] <- '"Date"'
+	classes <- paste(classes, collapse = ",")
+
+	write(classes, tft)
+
+	srcTable <- .makeSourceName("db_in_ogr_table", NULL)
+	rgrass::execGRASS(
+		cmd = "db.in.ogr",
+		input = tf,
+		output = srcTable,
+		# key = "cat",
+		flags = c("quiet", "overwrite")
+	)
+
+	# connect database to vector
+	rgrass::execGRASS(
+		cmd = "v.db.connect",
+		map = sources(x),
+		table = srcTable,
+		layer = "1",
+		key = "cat_",
+		flags = c("quiet", "overwrite", "o")
+	)
 
 	.makeGVector(src, table = table)
 
