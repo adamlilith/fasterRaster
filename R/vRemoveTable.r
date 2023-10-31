@@ -22,14 +22,15 @@
 		src <- x
 	}
 
-	args <- list(
-		cmd = "v.db.droptable",
-		map = src,
-		flags = c("quiet", "f"),
-		intern = TRUE
-	)
-	do.call(rgrass::execGRASS, args = args)
+	if (.vHasTable(src)) {
 
+		rgrass::execGRASS(
+			cmd = "v.db.droptable",
+			map = src,
+			flags = c("quiet", "f")
+		)
+
+	}
 	invisible(x)
-	
+		
 }
