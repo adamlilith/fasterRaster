@@ -58,50 +58,18 @@ setMethod(
 
 	if (attachTable & nrow(x) > 0L) {
 
-		# export table to GRASS
-		table <- x@table
-		cats <- data.table::data.table(cat = .vCats(x))
-		table <- cbind(cats, table)
+		src <- .copyGVector(x)
+		table <- as.data.frame(x)
+		.vAttachTable(src, table = table, replace = TRUE)
 
-		tf <- tempfile(fileext = ".csv")
-		tft <- paste0(tf, "t")
-		utils::write.csv(table, tf, row.names = FALSE)
-		
-		classes <- sapply(table, class)
-		classes[!(classes %in% c("numeric", "integer", "character", "Date"))] <- '"String"'
-		classes[classes == "numeric"] <- '"Real"'
-		classes[classes == "integer"] <- '"Integer"'
-		classes[classes == "character"] <- '"String"'
-		classes[classes == "Date"] <- '"Date"'
-		classes <- paste(classes, collapse = ",")
-		
-		write(classes, tft)
-
-		srcTable <- .makeSourceName("db_in_ogr_table", NULL)
-		rgrass::execGRASS(
-			cmd = "db.in.ogr",
-			input = tf,
-			output = srcTable,
-			# key = "cat",
-			flags = c("quiet", "overwrite")
-		)
-
-		# connect database to vector
-		rgrass::execGRASS(
-			cmd = "v.db.connect",
-			map = sources(x),
-			table = srcTable,
-			layer = "1",
-			key = "cat_",
-			flags = c("quiet", "overwrite", "o")
-		)
-
+	} else {
+		src <- sources(x)
 	}
 
 	### general arguments
 	args <- list(
 		cmd = "v.out.ogr",
-		input = sources(x),
+		input = src,
 		output = filename,
 		flags = c("quiet", "s")
 	)
