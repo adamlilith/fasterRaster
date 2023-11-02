@@ -1,15 +1,18 @@
 #' "Stack" GRasters and combine GVectors
 #'
-#' @description `GRaster`s can be "stacked" using this function, effectively creating a multi-layered raster. Note that this is different from creating a 3-dimensional raster, though such an effect can be emulated using stacking. `GVector`s can be combined into a single vector.  Stacks can only be created when:
-#' * All objects are in the same **GRASS** ["location" and "mapset"][tutorial_sessions].
+#' @description `GRaster`s can be "stacked" using this function, effectively creating a multi-layered raster. This is different from creating a 3-dimensional raster, though such an effect can be emulated using stacking. `GVector`s can be combined into a single vector.  Stacks can only be created when:
 #' * All objects are the same class (either all `GRaster`s or all `GVector`s).
+#' * All objects are in the same **GRASS** ["location" and "mapset"][tutorial_sessions].
 #' * For `GRaster`s:
 #'      * Horizontal extents are the same.
 #'      * Horizontal dimensions are the same.
 #'      * The topology (2- or 3-dimensional) must be the same. If 3D, then all rasters must have the same number of depths and vertical extents.
 #' * For `GVector`s:
 #'      * The geometry (points, lines, or polygons) must be the same.
+#'
 #' If features (boundaries, lines, etc.) of `GVector`s that are combined are identical or nearly identical, they can be cleaned using [removeDupNodes()] and [snap()].
+#'
+#' Data tables associated with `GVector`s will be combined if each vector has a table and if each table has the same columns and data types. Otherwise, the data table will be dropped.
 #'
 #' @param x A `GRaster` or a `GVector`.
 #' @param ... One or more `GRaster`s, one or more `GVector`s, a list of `GRaster`s, or a list of `GVector`s. You can use a mix of lists and individual rasters or vectors.
@@ -23,7 +26,8 @@
 #' @aliases c
 #' @rdname c
 #' @exportMethod c
-setMethod(f = "c",
+setMethod(
+	f = "c",
 	signature = "GRaster",
 	definition = function(x, ...) {
 
@@ -34,7 +38,7 @@ setMethod(f = "c",
 	out <- x
 	z <- zext(out)
 	dims <- dim(out)
-	
+
 	if (length(dots) >= 1L) {
 
 		for (i in seq_along(dots)) {
@@ -77,7 +81,8 @@ setMethod(f = "c",
 #' @aliases c
 #' @rdname c
 #' @exportMethod c
-setMethod(f = "c",
+setMethod(
+	f = "c",
 	signature = "GVector",
 	definition = function(x, ...) {
 
@@ -110,19 +115,75 @@ setMethod(f = "c",
 	if (length(dots) > 0L) input <- c(input, sapply(dots, sources))
 	input <- paste(input, collapse=",")
 
-	src <- .makeSourceName("combined", "vector")
+	# increment category numbers
+	cats <- list()
+	for (i in seq_along(dots)) {
+		cats[[i]] <- .vCats(dots[[i]])
+	}
 
-	args = list(
+	if (any(.vCats(x) != 1L)) .vRecat(x)
+	catsSoFar <- sort(unique(.vCats(x)))
+	for (i in seq_along(dots)) {
+		if (any(cats[[i]] %in% catsSoFar)) {
+			maxCat <- max(catsSoFar)
+			.vRecat(dots[[i]], start = maxcat + 1L)
+			dotCats <- .vCats(dots[[i]])
+			dotCats <- sort(unique(dotCats))
+			catsSoFar <- c(catsSoFar, dotCats)
+		}
+	}
+
+	src <- .makeSourceName("v_patch", "vector")
+	rgrass::execGRASS(
 		cmd = "v.patch",
 		input = input,
 		output = src,
-  		flags = c("quiet", "overwrite", "e"), ### ??? "e"???
-		intern = TRUE
+  		# flags = c("quiet", "overwrite", "e") ### ??? "e"???
+  		flags = c("quiet", "overwrite") ### ??? "e"???
 	)
+	
+	table <- as.data.table(x)
+	if (nrow(table) > 0L) {
+	
+		xNames <- names(table)
+		xClasses <- sapply(table, class)
+		xNcol <- ncol(table)
 
-	do.call(rgrass::execGRASS, args=args)
+		valid <- TRUE
+		i <- 1L
+		while (valid & i <= length(dots)) {
 
-	.makeGVector(src)
+			dotTable <- as.data.table(dots[[i]])
+
+			if (nrow(dotTable) == 0L) {
+				valid <- FALSE
+			} else {
+				
+				if (ncol(dotTable) != xNcol) {
+					valid <- FALSE
+				} else {
+					
+					dotNames <- names(dotTable)
+					dotClasses <- sapply(dotTable, class)
+
+					if (any(dotNames != xNames) | any(dotClasses != xClasses)) {
+						valid <- FALSE
+					} else {
+						table <- rbind(table, dotTable)
+					}
+
+				}
+			}
+
+			i <- i + 1L
+
+		} # while valid
+
+		if (!valid) table <- data.table::data.table(NULL)
+
+	}
+	
+	.makeGVector(src, table = table)
 	
 	} # EOF
 )
