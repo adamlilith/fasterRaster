@@ -1,6 +1,6 @@
 #' Reduce linear features on a raster so linear features are 1 cell wide
 #'
-#' @description The `thin()` function attempts to reduce linear features on a raster to just 1 cell wide. You may need to run `thin()` multiple times on the same raster (or experiment with the `iter` argument) to get acceptable output. `thin()` can be helpful run on a raster before using `as.lines()`.
+#' @description The `thinLines()` function attempts to reduce linear features on a raster to just 1 cell wide. You may need to run `thinLines()` multiple times on the same raster (or experiment with the `iter` argument) to get acceptable output. `thinLines()` can be helpful run on a raster before using `as.lines()`.
 #' 
 #' @param x A `GRaster`.
 #' 
@@ -10,11 +10,11 @@
 #' 
 #' @example man/examples/ex_asLines.r
 #' 
-#' @aliases thin
-#' @rdname thin
-#' @exportMethod thin
+#' @aliases thinLines
+#' @rdname thinLines
+#' @exportMethod thinLines
 methods::setMethod(
-    f = "thin",
+    f = "thinLines",
     signature = c(x = "GRaster"),
     function(x, iter = 200) {
     .restore(x)
@@ -33,6 +33,7 @@ methods::setMethod(
         )
         do.call(rgrass::execGRASS, args = args)
     }
+    
     .makeGRaster(srcs, names(x))
     
     } # EOF
