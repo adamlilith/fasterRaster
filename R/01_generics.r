@@ -210,7 +210,8 @@ methods::setGeneric(name = "summary", def = function(object, ...) standardGeneri
 
 methods::setGeneric(name = "tail", package = "utils")
 methods::setGeneric(name = "terrain", package = "terra")
-methods::setGeneric(name = "thin", def = function(x, ...) standardGeneric("thin"))
+methods::setGeneric(name = "thinLines", def = function(x, ...) standardGeneric("thinLines"))
+methods::setGeneric(name = "thinPoints", def = function(x, y, ...) standardGeneric("thinPoints"))
 methods::setGeneric(name = "top", def = function(x, ...) standardGeneric("top"))
 methods::setGeneric(name = "topology", def = function(x, ...) standardGeneric("topology"))
 methods::setGeneric(name = "trim", package = "terra")

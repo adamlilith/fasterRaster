@@ -107,7 +107,7 @@
 #' [spDepRast()]: Create a random `GRaster` with or without spatial dependence\cr
 #' [sun()]: Solar radiance and irradiance\cr
 #' [terrain()]: Slope, aspect, curvature, and partial slopes\cr
-#' [thin()]: Reduce linear features on a `GRaster` so linear features are 1 cell wide\cr
+#' [thinLines()]: Reduce linear features on a `GRaster` so linear features are 1 cell wide\cr
 #' [trim()]: Remove rows and columns from a `GRaster` that are all `NA`\cr
 #' [viewshed()]: Areas visible from points on a raster\cr
 #'
@@ -181,11 +181,13 @@
 #' [st_buffer()]: Create a polygon around/inside a `GVector`\cr
 #' [st_distance()]: Distance between geometries in two `GVector`\cr
 #' [tail()]: Last rows of a `GVector`'s data table\cr
+#' [thinPoints()]: Reduce number of points in same raster cell\cr
 #'
 #' ## Converting between data types
 #' [as.contour()]: Convert a `GRaster` to a `GVector` representing contour lines\cr
 #' [as.doub()]: Convert a `GRaster` to a double-floating point raster (***GRASS** data type `DCELL`)\cr
 #' [as.data.frame()]: Convert `GVector` to a `data.frame`\cr
+#' [as.data.table()]: Convert `GVector` to a `data.table`\cr
 #' [as.float()]: Convert a `GRaster` to a floating-point raster (***GRASS** data type `FCELL`)\cr
 #' [as.int()]: Convert a `GRaster` to an integer raster (***GRASS** data type `CELL`)\cr
 #' [as.points()], [as.lines()], and [as.polygons()]: Convert a `GRaster` to a `GVector`\cr
