@@ -105,7 +105,8 @@ methods::setMethod(
 		xNames <- names(xRast)
 
 		### load raster (no projecting needed)
-		if (!checkCRS || terra::crs(xRast) == crs()) {
+		# if (!checkCRS || terra::crs(xRast) == crs()) {
+		if (!checkCRS || terra::same.crs(xRast, crs())) {
 			
 			region(xRast)
 			
@@ -144,7 +145,7 @@ methods::setMethod(
 			# define region settings using a projected SpatRaster that matches x
 			xRast <- xRast[[1L]]
 cat("Time-consuming step here for large rasters:")
-			xRast <- xRast * NA_integer_
+			xRast <- xRast * NA
 			xRast <- terra::project(xRast, crs(), align = TRUE)
 cat("Time-consuming step here for large rasters^^^")
 			region(xRast)
@@ -208,7 +209,8 @@ cat("Time-consuming step here for large rasters^^^")
 		currentCrs <- crs()
 
 		# vector is in same CRS as current location
-		if (!checkCRS || xCrs == currentCrs) {
+		# if (!checkCRS || xCrs !=currentCrs)) {
+		if (!checkCRS || terra::same.crs(xCrs, currentCrs)) {
 
 			src <- .makeSourceName("v_in_ogr", type = "vector")
 			args <- list(
