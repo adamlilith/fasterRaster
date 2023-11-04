@@ -141,7 +141,7 @@ methods::setMethod(
 		union = FALSE
 	) {
 
-	.message(msg = "buffer", message = "As of GRASS 8.4, terra's buffer() function is much faster, even for very large vectors.")
+	# .message(msg = "buffer", message = "As of GRASS 8.4, terra's buffer() function is much faster, even for very large vectors.")
 	
 	.restore(x)
 
@@ -178,7 +178,6 @@ methods::setMethod(
 	do.call(rgrass::execGRASS, args)
 
 	# dissolve by category
-	# if (!union && length(.vCats(src) != x@nGeometries)) {
 	if (union) {
 
 		# dissolve
@@ -192,10 +191,6 @@ methods::setMethod(
 			flags = c("quiet", "overwrite")
 		)
 		do.call(rgrass::execGRASS, args = args)
-
-		# add categories
-		# nGeoms <- length(.vCats(src, table = FALSE, integer = FALSE))
-		# .vRecat(1L:nGeoms, src, removeTable = FALSE)
 
 	}
 
