@@ -50,13 +50,13 @@ methods::setMethod(
 
 			if (out[i] == "CELL") {
 			
-				if (min >= 0 & max <= 255) {
+				if (min[i] >= 0 & max[i] <= 255) {
 					out[i] <- if (type == "GDAL") { "Byte" } else { "INT1U" }
-				} else if (min >= 0 & max <= 65534) {
+				} else if (min[i] >= 0 & max[i] <= 65534) {
 					out[i] <- if (type == "GDAL") { "UInt16" } else { "INT2U" }
-				} else if (min >= -32767 & max <= -32767) {
+				} else if (min[i] >= -32767 & max[i] <= -32767) {
 					out[i] <- if (type == "GDAL") { "Int16" } else { "INT2S" }
-				} else if (min >= -2147483647 & max <= 2147483647) {
+				} else if (min[i] >= -2147483647 & max[i] <= 2147483647) {
 					out[i] <- if (type == "GDAL") { "Int32" } else { "INT4S" }
 				}
 				
