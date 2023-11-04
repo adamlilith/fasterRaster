@@ -9,7 +9,7 @@
 #' @returns `TRUE` (invisibly).
 #' 
 #' @aliases .message
-#' @rdName .message
+#' @rdname .message
 #' @noRd
 .message <- function(msg, message) {
 
