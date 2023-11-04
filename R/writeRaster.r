@@ -100,8 +100,17 @@ setMethod(
 
 	### save
 	if (ascii) {
+		
 		if (nlyr(x) > 1L) stop("Cannot save multi-layer GRaster as a single ASCII file. Save each layer individually.")
-		rgrass::execGRASS("r.out.ascii", input = x, output = filename, flags = flags, intern = TRUE, ...)
+		
+		rgrass::execGRASS(
+			dmc = "r.out.ascii",
+			input = x,
+			output = filename,
+			flags = flags,
+			...
+		)
+
 	} else {
 
 		thisFlags <- c(flags, "c")
@@ -109,18 +118,16 @@ setMethod(
 		## if multi-layered raster stack, then group first... only guaranteed to work with GeoTIFFs
 		if (nLayers > 1L) {
 
-			groupName <- .makeSourceName(rastOrVect="group")
+			groupName <- .makeSourceName(type = "group")
 			input <- sources(x)
 			
-			args <- list(
+			rgrass::execGRASS(
 				cmd = "i.group",
 				group = groupName,
 				input = input,
-				flags = "quiet",
-				intern = TRUE
+				flags = "quiet"
 			)
 
-			do.call(rgrass::execGRASS, args=args)
 			src <- groupName
 
 		} else {
@@ -184,17 +191,14 @@ setMethod(
 
 		# save
 		# rgrass::execGRASS("r.out.gdal", input=sources, output=filename, type=datatype, createopt=createopt, metaopt=metaopt, flags=thisFlags, intern=TRUE, ...)
-		args <- list(
+		rgrass::execGRASS(
 			cmd = "r.out.gdal",
 			input = src,
 			output = filename,
 			type = datatype,
 			createopt = createopt,
-			flags = thisFlags,
-			intern = TRUE
+			flags = thisFlags
 		)
-
-		do.call(rgrass::execGRASS, args=args)
 
 	}
 	isFact <- is.factor(x)
@@ -232,7 +236,12 @@ setMethod(
 	signature(x = "missing", filename = "missing"),
 	function(x, filename) {
 	
-	forms <- rgrass::execGRASS("r.out.gdal", flags="l", intern=TRUE)
+	forms <- rgrass::execGRASS(
+		cmd = "r.out.gdal",
+		flags = "l",
+		intern = TRUE
+	)
+	
 	forms <- forms[forms != "Supported formats:"]
 	forms <- trimws(forms)
 	forms <- sort(forms)
