@@ -89,6 +89,7 @@
 #' [`hillshade()`][shade]: Create a hillshade `GRaster`\cr
 #' [hist()]: Histogram of `GRaster` values\cr
 #' [horizonHeight()]: Horizon height\cr
+#' [kernel()]: Kernel density estimator of points.\cr
 #' [longlat()]: Create longitude/latitude rasters.\cr
 #' [mask()]: Remove values in a `GRaster` based on values in another `GRaster` or vector\cr
 #' [merge()]: Combine two or more rasters with different extents and fill in `NA`s\cr
@@ -174,6 +175,7 @@
 #' [distance()]: Distance between geometries in two `GVector`, or from a `GVector` to cells of a `GRaster`\cr
 #' [extract()]: Extract values from a `GVector` at specific points\cr
 #' [head()]: First rows of a `GVector`'s data table\cr
+#' [kernel()]: Kernel density estimator of points.\cr
 #' [project()]: Change coordinate reference system\cr
 #' [simplifyGeom()]: Remove vertices\cr
 #' [smoothGeom()]: Remove "angular" aspects of features\cr

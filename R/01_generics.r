@@ -128,7 +128,8 @@ methods::setGeneric(name = "is.points", package = "terra")
 methods::setGeneric(name = "is.polygons", package = "terra")
 methods::setGeneric(name = "intercept", def = function(x, ...) standardGeneric("intercept"))
 
-methods::setGeneric(name = "keepRows", def = function(x, ...) standardGeneric("keepRows"))
+# methods::setGeneric(name = "keepRows", def = function(x, ...) standardGeneric("keepRows"))
+methods::setGeneric(name = "kernel", def = function(x, ...) standardGeneric("kernel"))
 methods::setGeneric(name = "kurtosis", def = function(x, ...) standardGeneric("kurtosis"))
 
 # levels (in base) is generic
