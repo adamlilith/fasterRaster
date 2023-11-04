@@ -110,28 +110,31 @@ setMethod(
 		for (i in seq_along(dots)) compareGeom(x, dots[[i]], geometry = TRUE, topo = TRUE)
 	}
 
-	# sources of inputs
-	input <- sources(x)
-	if (length(dots) > 0L) input <- c(input, sapply(dots, sources))
-	input <- paste(input, collapse=",")
-
 	# increment category numbers
-	cats <- list()
+	input <- rep(NA_character_, length(dots) + 1L)
+	input[1L] <- sources(x) # collects names of all vectors
+
 	for (i in seq_along(dots)) {
 		cats[[i]] <- .vCats(dots[[i]])
 	}
 
-	if (any(.vCats(x) != 1L)) .vRecat(x)
 	catsSoFar <- sort(unique(.vCats(x)))
 	for (i in seq_along(dots)) {
 		if (any(cats[[i]] %in% catsSoFar)) {
+
 			maxCat <- max(catsSoFar)
-			.vRecat(dots[[i]], start = maxcat + 1L)
-			dotCats <- .vCats(dots[[i]])
+			input[i + 1L] <- .vIncrementCats(dots[[i]], add = maxCat, return = "sources")
+			dotCats <- .vCats(input[i + 1])
 			dotCats <- sort(unique(dotCats))
 			catsSoFar <- c(catsSoFar, dotCats)
+
+		} else {
+			input[i + 1L] <- sources(dots[[i]])
 		}
 	}
+
+	# sources of inputs
+	input <- paste(input, collapse = ",")
 
 	src <- .makeSourceName("v_patch", "vector")
 	rgrass::execGRASS(
