@@ -92,7 +92,7 @@ methods::setMethod(
 
 	if (is.null(method)) {
 		
-		dt <- datatype(x)
+		dt <- datatype(x, "grass")
 		method <- if (all(dt == "CELL")) {
 			"nearest"
 		} else if (all(dt %in% c("DCELL", "FCELL"))) {
@@ -136,7 +136,7 @@ methods::setMethod(
 
 		# make template raster to match raster to be projected
 		extent <- ext(x, vector=TRUE)
-		xMat <- matrix(NA_real_, nrow=nrow(x), ncol=ncol(x))
+		xMat <- matrix(NA, nrow=nrow(x), ncol=ncol(x))
 		xRast <- terra::rast(xMat, crs=crs(x), extent=extent)
 
 	}
@@ -144,7 +144,7 @@ methods::setMethod(
 	### reshape region in "to" location
 	###################################
 
-	xRast <- terra::project(xRast, toCrs, method="near", align=TRUE)
+	xRast <- terra::project(xRast, toCrs, method = "near", align = TRUE)
 cat("Slow step!")
 	region(xRast)
 cat("Slow step^^^")
