@@ -13,7 +13,7 @@
 #' 
 #' @returns Nothing (creates a plot).
 #' 
-#' @example man/examples/ex_GRaster.
+#' @example man/examples/ex_GRaster.r
 #' 
 #' @aliases pairs
 #' @rdname pairs
