@@ -23,29 +23,53 @@ methods::setMethod(
         .restore(x)
         region(x)
 
-        if (nlyr(x) > 1L) warning("The raster has more than one layer. Only the first layer will be converted to points.")
+        src <- .makeSourceName("r_to_vect", "vector")
 
-        src <- .makeSourceName(NULL, "vector")
-
-        args <- list(
+        rgrass::execGRASS(
             cmd = "r.to.vect",
             input = sources(x)[1L],
             output = src,
             type = "point",
             column = names(x)[1L],
-            flags = c("quiet", "overwrite"),
-            intern = TRUE
+            flags = c("quiet", "overwrite")
         )
-        if (!values) args$flags <- c(args$flags, "t")
-        do.call(rgrass::execGRASS, args = args)
 
-        # drop "label" column
-        info <- rgrass::execGRASS("v.info", map = src, flags = c("c", "quiet"), intern = TRUE)
-        if (length(info) == 3L & info[3L] == "CHARACTER|label") {
-            rgrass::execGRASS("v.db.dropcolumn", map = src, columns = "label", flags = "verbose", intern = TRUE)
+        if (values) {
+            table <- .vAsDataTable(src)
+            table$cat <- NULL
+        } else {
+            table <- NULL
         }
 
-        .makeGVector(src)
+        nLayers <- nlyr(x)
+
+        if (nLayers > 1L & values) {
+        
+            for (i in 2L:nLayers) {
+
+                thisSrc <- .makeSourceName("r_to_vect", "vector")
+
+                rgrass::execGRASS(
+                    cmd = "r.to.vect",
+                    input = sources(x)[i],
+                    output = thisSrc,
+                    type = "point",
+                    column = names(x)[i],
+                    flags = c("quiet", "overwrite")
+                )
+
+                thisTable <- .vAsDataTable(thisSrc)
+                col <- names(x)[i]
+                thisTable <- thisTable[ , ..col]
+
+                table <- cbind(table, thisTable)
+
+            }
+        
+        } # next layer
+
+        .makeGVector(src, table = table)
+
     } # EOF
 )
 
