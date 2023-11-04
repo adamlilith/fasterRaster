@@ -177,6 +177,11 @@ rivers[ , c(TRUE, FALSE)] # select every other column (T/F vector is recycled)
 # since the rivers object is up-to-date):
 rivers <- refresh(rivers)
 
+# Concatenating multiple vectors
+rivers2 <- c(rivers, rivers)
+dim(rivers)
+dim(rivers2)
+
 # IMPORTANT #3: Revert back to original GRASS session if needed.
 restoreSession(opts.)
 removeSession("examples")
