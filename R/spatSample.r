@@ -24,7 +24,7 @@
 #' 
 #' @seealso [sampleRast()], [terra::spatSample()], module `v.random` in **GRASS**
 #'
-#' @example man/examples/ex_spatSample_sampleRast.r
+#' @example man/examples/ex_sampleRast_spatSample.r
 #'
 #' @aliases spatSample
 #' @rdname spatSample
