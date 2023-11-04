@@ -27,7 +27,7 @@ methods::setMethod(
 methods::setMethod(
 	f = "rvoronoi",
 	signature = c(x = "GVector"),
-	function(x, size = 100, seed = seed) .rvoronoi(x = x, size = size, seed = seed)
+	function(x, size = 100, seed = NULL) .rvoronoi(x = x, size = size, seed = seed)
 )
 
 #' @noRd
