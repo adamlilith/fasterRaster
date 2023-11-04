@@ -36,14 +36,13 @@ plot(dypsisDel)
 plot(dypsis, pch = 1, col = "red", add = TRUE)
 
 # Voronoi tessellation
-dypsisVor <- voronoi(dypsis)
-plot(dypsisVor)
+vor <- voronoi(dypsis)
+plot(vor)
 plot(dypsis, pch = 1, col = "red", add = TRUE)
 
 # Random Voronoi tessellation
-randVor <- rvoronoi(ant, size = 100)
-plot(randVor, col = 1:20)
-plot(ant, add = TRUE, lwd = 3)
+rand <- rvoronoi(coast4, size = 100)
+plot(rand)
 
 # IMPORTANT #3: Revert back to original GRASS session if needed.
 restoreSession(opts.)
