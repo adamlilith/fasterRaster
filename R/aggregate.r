@@ -41,7 +41,7 @@
 #' 
 #' @seealso [stats::aggregate()], [terra::aggregate()], [terra::disagg()], **GRASS** module `r.resamp.stats`
 #'
-#' @example man/examples/ex_aggregate.r
+#' @example man/examples/ex_aggregate_disagg.r
 #'
 #' @aliases aggregate
 #' @rdname aggregate
