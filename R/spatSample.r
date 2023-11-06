@@ -176,23 +176,25 @@ methods::setMethod(
 	} else {
 
 		# make copy of vector and force all categories to 1
-		col <- rstring(1L)
-		.vAddColumn(x, name = col, type = "integer")
-		.vUpdateColumn(x, column = col, value = 1L)
+		gtype <- geomtype(x)
+		srcRestrict <- .aggregate(sources(x), dissolve = TRUE, gtype = gtype)
 
-		srcRestrict <- .makeSourceName("v_dissolve", "vector")
-		args <- list(
-			cmd = "v.dissolve",
-			input = sources(x),
-			output = srcRestrict,
-			column = col,
-			flags = c("quiet", "overwrite")
-		)	
-		do.call(rgrass::execGRASS, args = args)
+		# col <- rstring(1L)
+		# .vAddColumn(x, name = col, type = "integer")
+		# .vUpdateColumn(x, column = col, value = 1L)
+
+		# srcRestrict <- .makeSourceName("v_dissolve", "vector")
+		# args <- list(
+		# 	cmd = "v.dissolve",
+		# 	input = sources(x),
+		# 	output = srcRestrict,
+		# 	column = col,
+		# 	flags = c("quiet", "overwrite")
+		# )	
+		# do.call(rgrass::execGRASS, args = args)
 
 	}
 	
-
 	src <- .makeSourceName("v_random", "vector")
 	args <- list(
 		cmd = "v.random",
@@ -214,6 +216,8 @@ methods::setMethod(
 
 	do.call(rgrass::execGRASS, args = args)
 
+	out <- NULL
+
 	# return coordinates
 	if (xy) {
 		out <- .crdsVect(src, z = is.3d(x), gm = "points")
@@ -234,7 +238,6 @@ methods::setMethod(
 	} # if wanting values
 
 	if (as.points) {
-		# .vAttachTable(src)
 		out <- .makeGVector(src, table = out)
 	} else {
 		if (!getFastOptions("useDataTable")) out <- as.data.frame(out)
