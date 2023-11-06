@@ -88,6 +88,15 @@ nrow(selected)
 plot(rivers)
 plot(selected, col = "red", add = TRUE)
 
+# vector math
+hull <- convHull(dypsis)
+
+plus <- coast + hull
+plot(plus)
+
+minus <- coast - hull
+plot(minus)
+
 # IMPORTANT #3: Revert back to original GRASS session if needed.
 restoreSession(opts.)
 removeSession("examples")
