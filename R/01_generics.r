@@ -108,6 +108,7 @@ methods::setGeneric(name = "geomtype", package = "terra")
 methods::setGeneric(name = "global", package = "terra")
 
 methods::setGeneric(name = "head", package = "utils")
+methods::setGeneric(name = "hexagons", def = function(x, ...) standardGeneric("hexagons"))
 methods::setGeneric(name = "hillshade", def = function(x, ...) standardGeneric("hillshade"))
 methods::setGeneric(name = "hist", package = "terra")
 methods::setGeneric(name = "horizonHeight", def = function(x, ...) standardGeneric("horizonHeight"))
