@@ -19,6 +19,7 @@ methods::setMethod(
 	f = "geomtype",
 	signature = "GVector",
 	definition = function(x, grass = FALSE) {
+
   	out <- x@geometry
 	if (grass) {
 		if (out == "points") {
@@ -30,6 +31,7 @@ methods::setMethod(
 		}
 	}
 	out
+
   } # EOF
 )
 
