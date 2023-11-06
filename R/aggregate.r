@@ -151,59 +151,8 @@ methods::setMethod(
 	signature = c(x = "GVector"),
 	function(x, dissolve = TRUE) {
 
-	.restore(x)
-
-	# use v.reclass to reclassify
-	oldcats <- .vCats(x, table = TRUE)
-	
-	newcats <- data.frame(oldcat = oldcats, newcat = rep(1L, length(oldcats)))
-	
-	tf <- tempfile(fileext = ".csv")
-	tft <- paste0(tf, "t")
-	utils::write.csv(newcats, tf, row.names = FALSE)
-	tableType <- '"Integer"'
-	write(tableType, tft)
-
-	# import table with new categories
-	srcTable <- .makeSourceName("db_in_ogr", "table")
-	
-	rgrass::execGRASS(
-		cmd = "db.in.ogr",
-		input = tf,
-		output = srcTable,
-		flags = c("quiet", "overwrite")
-	)
-
-	# connect table to copy of vector
-	srcIn <- .copyGVector(x)
-
-	rgrass::execGRASS(
-		cmd = "v.db.join",
-		map = srcIn,
-		column = "cat",
-		other_table = srcTable,
-		other_column = "oldcat",
-		flags = "quiet"
-	)
-
-	src <- .makeSourceName("v_reclass", "vector")
-	
-	rgrass::execGRASS("v.reclass", input = srcIn, output = src, column = "newcat", flags = c("quiet", "overwrite"))
-
-	if (dissolve & geomtype(x) == "polygons") {
-	
-		srcIn <- src
-		src <- .makeSourceName("v_dissolve", "vector")
-
-		rgrass::execGRASS(
-			cmd = "v.dissolve",
-			input = srcIn,
-			output = src,
-			column = "cat",
-			flags = c("quiet", "overwrite")
-		)
-	
-	}
+	gtype <- geomtype(x)
+	src <- .aggregate(x, dissolve = dissolve, gtype = gtype)
 
 	# aggregate data table
 	if (nrow(x) == 0L) {
@@ -259,3 +208,82 @@ methods::setMethod(
 
 	} # EOF
 )
+
+#' @param x `GVector` or [sources()] name
+#' @param gtype geomtype (fasterRaster)
+#' @param gtype dissolve Logical
+#' @noRd
+.aggregate <- function(x, gtype, dissolve) {
+
+	if (inherits(x, "GVector")) {
+		.restore(x)
+		src <- source(x)
+	} else {
+		src <- x
+	}
+
+	# use v.reclass to reclassify
+	oldcats <- .vCats(src, table = TRUE)
+	
+	if (length(oldcats) > 1L) {
+
+		newcats <- data.frame(oldcat = oldcats, newcat = rep(1L, length(oldcats)))
+		
+		tf <- tempfile(fileext = ".csv")
+		tft <- paste0(tf, "t")
+		utils::write.csv(newcats, tf, row.names = FALSE)
+		tableType <- '"Integer"'
+		write(tableType, tft)
+
+		# import table with new categories
+		srcTable <- .makeSourceName("db_in_ogr", "table")
+		
+		rgrass::execGRASS(
+			cmd = "db.in.ogr",
+			input = tf,
+			output = srcTable,
+			flags = c("quiet", "overwrite")
+		)
+
+		# connect table to copy of vector
+		srcIn <- .copyGVector(src)
+
+		rgrass::execGRASS(
+			cmd = "v.db.join",
+			map = srcIn,
+			column = "cat",
+			other_table = srcTable,
+			other_column = "oldcat",
+			flags = "quiet"
+		)
+
+		src <- .makeSourceName("v_reclass", "vector")
+		
+		rgrass::execGRASS(
+			"v.reclass",
+			input = srcIn,
+			output = src,
+			column = "newcat",
+			flags = c("quiet", "overwrite")
+		)
+
+		if (dissolve & gtype == "polygons") {
+		
+			srcIn <- src
+			src <- .makeSourceName("v_dissolve", "vector")
+
+			rgrass::execGRASS(
+				cmd = "v.dissolve",
+				input = srcIn,
+				output = src,
+				column = "cat",
+				flags = c("quiet", "overwrite")
+			)
+		
+		}
+
+	} # if >1 geometry
+
+	src
+
+} # EOF
