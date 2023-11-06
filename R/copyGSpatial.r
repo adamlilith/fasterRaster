@@ -93,7 +93,7 @@ methods::setMethod(
 		.restore(x)
 		srcFrom <- sources(x)
 	} else {
-		srcFrom <- sources(x)
+		srcFrom <- x
 	}
 
 	srcTo <- .makeSourceName("g_copy", type="vector")
