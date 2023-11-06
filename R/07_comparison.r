@@ -36,7 +36,7 @@ methods::setMethod(
 			src <- .makeSourceName(name, "rast")
 
 			ex <- paste(src, "= int(if(", sources(e1)[i], " ", oper, " ", sources(e2)[i], "))")
-			this <- .genericArith(name = name, src = src, ex = ex)
+			this <- .genericArithRast(name = name, src = src, ex = ex)
 			
 			if (i == 1L) {
 				out <- this
@@ -72,7 +72,7 @@ methods::setMethod(
 			src <- .makeSourceName(name, "rast")
 
 			ex <- paste(src, "= int(if(", e1, " ", oper, " ", sources(e2)[i], "))")
-			this <- .genericArith(name = name, src = src, ex = ex)
+			this <- .genericArithRast(name = name, src = src, ex = ex)
 			
 			if (i == 1L) {
 				out <- this
@@ -108,7 +108,7 @@ methods::setMethod(
 			src <- .makeSourceName(name, "rast")
 			
 			ex <- paste(src, "= int(if(", sources(e1)[i], " ", oper, " ", e2, "))")
-			this <- .genericArith(name = name, src = src, ex = ex)
+			this <- .genericArithRast(name = name, src = src, ex = ex)
 			
 			if (i == 1L) {
 				out <- this
@@ -143,7 +143,7 @@ methods::setMethod(
 			src <- .makeSourceName(name, "rast")
 
 			ex <- paste(src, "= int(if(", e1, " ", oper, " ", sources(e2)[i], "))")
-			this <- .genericArith(name = name, src = src, ex = ex)
+			this <- .genericArithRast(name = name, src = src, ex = ex)
 			
 			if (i == 1L) {
 				out <- this
@@ -178,7 +178,7 @@ methods::setMethod(
 			src <- .makeSourceName(name, "rast")
 
 			ex <- paste(src, "= int(if(", sources(e1)[i], " ", oper, " ", e2, "))")
-			this <- .genericArith(name = name, src = src, ex = ex)
+			this <- .genericArithRast(name = name, src = src, ex = ex)
 			
 			if (i == 1L) {
 				out <- this
@@ -213,7 +213,7 @@ methods::setMethod(
 			src <- .makeSourceName(name, "rast")
 
 			ex <- paste(src, "= int(if(", sources(e1)[i], " ", oper, " ", e2, "))")
-			this <- .genericArith(name = name, src = src, ex = ex)
+			this <- .genericArithRast(name = name, src = src, ex = ex)
 			
 			if (i == 1L) {
 				out <- this
@@ -246,7 +246,7 @@ methods::setMethod(
             src <- .makeSourceName(name, "rast")
 
             ex <- paste(src, "= int(if(", e1, " ", oper, " ", sources(e2)[i], "))")
-            this <- .genericArith(name = name, src = src, ex = ex)
+            this <- .genericArithRast(name = name, src = src, ex = ex)
 
             if (i == 1L) {
                 out <- this
