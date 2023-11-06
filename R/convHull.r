@@ -23,14 +23,13 @@ methods::setMethod(
 		
 		src <- .makeSourceName("v_hull", "vector")
 	
-		args <- list(
+		rgrass::execGRASS(
 			cmd = "v.hull",
 			input = sources(x),
 			output = src,
 			flags = c("quiet", "overwrite")
 		)
 
-		do.call(rgrass::execGRASS, args = args)
 		out <- .makeGVector(src)
 		
 	} else {
