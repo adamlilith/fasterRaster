@@ -17,12 +17,14 @@ grassDir <- "/usr/local/grass" # Linux
 # Setup
 library(terra)
 
+# Elevation raster
+madElev <- fastData("madElev")
+
 # Start GRASS session for examples only:
 faster(x = madElev, grassDir = grassDir,
 workDir = tempdir(), location = "examples") # line only needed for examples
 
 # Convert a SpatRaster to a GRaster:
-madElev <- fastData("madElev") # elevation raster
 elev <- fast(madElev)
 
 # Calculate contour lines:
