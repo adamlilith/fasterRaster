@@ -7,7 +7,7 @@
 \usage{
 \S4method{vegIndex}{GRaster}(
   x,
-  metric = "NDVI",
+  index = "NDVI",
   r = NULL,
   g = NULL,
   b = NULL,
@@ -16,44 +16,86 @@
   b7 = NULL,
   soilSlope = NULL,
   soilIntercept = NULL,
-  soilNR = 0.08
+  soilNR = 0.08,
+  bits = NULL
 )
 }
 \arguments{
 \item{x}{A \code{GRaster} with one layer per required band. Values should be between 0 and 1.}
 
-\item{metric}{Character or character vector: The vegetation index or indices to calculate. Partial matching is used, and case is ignored. More infomration on each index can be found on the \strong{GRASS} help page for the \code{i.vi} module.
+\item{index}{Character or character vector: The vegetation index or indices to calculate. You can find a list of available indices using \link[=fastData]{fastData("vegIndices")} (also see \link{vegIndices}). The first column, "\code{index}" provides the name of the index, and these are the values that this argument will accept (e.g., "NDVI", "EVI2"). Partial matching is used, and case is ignored. You can also use these shortcuts:
 \itemize{
-\item \code{ARVI}: Atmospherically Resistant Vegetation Index - Less sensitive to atmospheric interference than NDVI. Requires RGB channels.
-\item \code{CI}: Crust Index - Suitable for detecting biogenic crust on soil. Requires RB channels.
-\item \code{DVI}: Difference Vegetation Index - Requires R and NIR channels.
-\item \code{EVI}: Enhanced Vegetation Index - Saturates more slowly than NDVI in high-biomass areas.  Requires RB an NIR channels.
-\item \code{EVI2}: Enhanced Vegetation Index 2 - As EVI.  Requires R and NIR channels.
-\item \code{GARI}: Green atmospherically resistant vegetation index.  Requires RGB and NIR channels.
-\item \code{GEMI}: Global Environmental Monitoring Index.  Requires R and NIR channels.
-\item \code{GVI}: Green Vegetation Index - Requires RGB, NIR, plus channels 5 and 7.
-\item \code{IPVI}: Infrared Percentage Vegetation Index.  Requires R and NIR channels.
-\item \code{MSAVI}: Modified Soil Adjusted Vegetation Index. Requires R and NIR channels, plus soil line slope, intercept, and a noise reduction factor.
-\item \code{MSAVI2}: Second Modified Soil Adjusted Vegetation Index. Requires R and NIR channels.
-\item \code{NDVI}: Normalized Difference Vegetation Index.  Requires R and NIR channels.
-\item \code{NDWI}: Normalized Difference Water Index. Requires G and NIR channels.
-\item \code{PVI}: Perpendicular Vegetation Index. Requires R and NIR channels.
-\item \code{SAVI}: Soil Adjusted Vegetation Index. Requires R and NIR channels.
-\item \code{SR}: Simple Vegetation ratio. Requires R and NIR channels.
-\item \code{WDVI}: Weighted Difference Vegetation Index. Requires R, NIR, and soil line weight channels.
+\item \code{"*"}: Calculate \emph{all} indices
+\item \code{"RNIR"}: Calculate all indices that use R and NIR channels (but not other channels).
+\item \code{"NotSoil"}: Calculate all indices that use any channels but do not require \code{soilSlope} or \code{soilIntercept}.
+\strong{Note}: A near-comprehensive table of indices can be found on the (Index Database: A database for remote sensing indices)\link{https://www.indexdatabase.de}
 }}
 
-\item{r, g, b, nir}{Numeric or character: Index or \code{\link[=names]{names()}} of the layers in \code{x} that represent the red, green, blue, and near infrared channels.}
+\item{r, g, b, nir}{Numeric or character: Index or \code{\link[=names]{names()}} of the layers in \code{x} that represent the red, green, blue, and near infrared channels. Values must be in the range fromm 0 to 1 or integers.}
 
-\item{b5, b7}{Numeric or character: Index of names of the layers representing bands 5 and 7. These are used only for GVI.}
+\item{b5, b7}{Numeric or character: Index of names of the layers representing bands 5 and 7. These are used only for GVI and PVI. Values must be in the range fromm 0 to 1 or integers.}
 
 \item{soilSlope, soilIntercept, soilNR}{Numeric: Values of the soil slope, intercept, and soil noise reduction factor (0.08, by default). Used only for calculation of MSAVI.}
+
+\item{bits}{Either \code{NULL} (default) or numeric integer or integer with a value of 7, 8, 10, or 16: If the rasters are represented by integers (so do not fall in the range of 0 to 1), then the number of bits can be supplied using \code{bits}. If this is the case, then they will range from 0 to 2^\code{n}, where \code{n} is 7, 8, 10, or 16. If bit rasters are supplied, they must be of \code{\link[=datatype]{datatype()}} "integer". If raster values are in the range from 0 to 1, then \code{bits} should be \code{NULL} (default).}
 }
 \value{
 A \code{GRaster}.
 }
 \description{
-This function calculates one of many types of vegetation indices from a raster with four bands representing blue (B), green (G), red (R), and near infrared (NIR), plus possibly channels 5 and 7. The function requires rasters that represent reflectance, so should have values that fall in the range 0 to 1.
+This function calculates one of many types of vegetation indices from a raster with four bands representing blue (B), green (G), red (R), and near infrared (NIR), plus possibly channels 5 and 7. The function requires rasters that represent surface reflectance, so should have values that fall in the range 0 to 1, unless they are digital number rasters (e.g., integers in the range 0 to 255). If digital number format is used, then the \code{bits} argument should be defined.
 
 The \code{\link[=toarLandsat]{toarLandsat()}} or \code{\link[=toarAster]{toarAster()}} functions can convert LANDSAT and ASTER digital-number rasters to radiance rasters, and then to reflectance rasters.
+}
+\examples{
+\dontrun{
+# NB This example is in a "dontrun{}" block because it requires users to have
+# GRASS GIS Version 8+ installed on their system.
+
+# IMPORTANT #1: If you already have a GRASS session started, you will need to
+# run the line below and the last line in this example to work with it again.
+# If you have not started a GRASS session, you can skip this step and go to
+# step #2.
+opts. <- getFastOptions()
+
+# IMPORTANT #2: Select the appropriate line below and change as necessary to
+# where GRASS is installed on your system.
+grassDir <- "/Applications/GRASS-8.3.app/Contents/Resources" # Mac
+grassDir <- "C:/Program Files/GRASS GIS 8.3" # Windows
+grassDir <- "/usr/local/grass" # Linux
+
+# Setup
+library(terra)
+
+# Elevation raster, rivers vector
+madLANDSAT <- fastData("madLANDSAT")
+
+# Start GRASS session for examples only:
+faster(x = madLANDSAT, grassDir = grassDir,
+workDir = tempdir(), location = "examples") # line only needed for examples
+
+# Convert a SpatRaster to a GRaster:
+landsat <- fast(madLANDSAT)
+
+# Normalized Difference Vegetation Index and Enhanced Vegetation Index:
+indices <- c("ndvi", "evi")
+vi <- vegIndex(landsat, index = indices, r = 1, b = 3, nir = 4, bits = 8)
+
+plot(vi)
+
+# All indices using R and NIR:
+rnir <- vegIndex(landsat, index = c("rnir"), r = 1, nir = 4, bits = 8)
+
+# Note: Some values are highly skewed, likely due to cloud cover and other
+# anomalies that should be corrected.
+plot(rnir)
+
+# IMPORTANT #3: Revert back to original GRASS session if needed.
+restoreSession(opts.)
+removeSession("examples")
+
+}
+}
+\seealso{
+Module \code{i.vi} in \strong{GRASS}.
 }

@@ -10,7 +10,7 @@
 Creates in \strong{GRASS} a copy of a \code{GSpatial} object (typically, a \code{GRaster} or a \code{GVector}).
 }
 
-\subsection{\code{.dbCats()}}{
+\subsection{\code{.vCats()}}{
 
 Get a \code{data.table} with a single column named \code{cat}, which corresponds to the \strong{GRASS} attribute table's \code{cat} column.
 

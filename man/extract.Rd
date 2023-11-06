@@ -4,32 +4,50 @@
 \alias{extract,GRaster,GVector-method}
 \alias{extract}
 \alias{extract,GRaster,data.frame-method}
+\alias{extract,GRaster,data.table-method}
 \alias{extract,GRaster,matrix-method}
 \alias{extract,GRaster,numeric-method}
-\title{Extract values from a raster at locations in a points vector}
+\alias{extract,GVector,GVector-method}
+\alias{extract,GVector,data.frame-method}
+\alias{extract,GVector,data.table-method}
+\alias{extract,GVector,matrix-method}
+\alias{extract,GVector,numeric-method}
+\title{Extract values from a GRaster at locations in a points GVector}
 \usage{
-\S4method{extract}{GRaster,GVector}(x, y, xy = FALSE, cat = FALSE)
+\S4method{extract}{GRaster,GVector}(x, y, xy = FALSE, cats = FALSE)
 
-\S4method{extract}{GRaster,data.frame}(x, y, xy = FALSE, cat = FALSE)
+\S4method{extract}{GRaster,data.frame}(x, y, xy = FALSE, cats = FALSE)
 
-\S4method{extract}{GRaster,matrix}(x, y, xy = FALSE, cat = FALSE)
+\S4method{extract}{GRaster,data.table}(x, y, xy = FALSE, cats = FALSE)
 
-\S4method{extract}{GRaster,numeric}(x, y, xy = FALSE, cat = FALSE)
+\S4method{extract}{GRaster,matrix}(x, y, xy = FALSE, cats = FALSE)
+
+\S4method{extract}{GRaster,numeric}(x, y, xy = FALSE, cats = FALSE)
+
+\S4method{extract}{GVector,GVector}(x, y, xy = FALSE)
+
+\S4method{extract}{GVector,data.frame}(x, y, xy = FALSE)
+
+\S4method{extract}{GVector,data.table}(x, y, xy = FALSE)
+
+\S4method{extract}{GVector,matrix}(x, y, xy = FALSE)
+
+\S4method{extract}{GVector,numeric}(x, y, xy = FALSE)
 }
 \arguments{
-\item{x}{A \code{GRaster}.}
+\item{x}{A \code{GRaster} or \code{GVector}.}
 
-\item{y}{A \code{points} \code{GVector}, a \code{data.frame} or \code{matrix} where the first two columns represent longitude and latitude (in that order), or a two-element numeric vector where the first column represents longitude and the second latitude.}
+\item{y}{A \code{points} \code{GVector}, \emph{or} a \code{data.frame} or \code{matrix} where the first two columns represent longitude and latitude (in that order), \emph{or} a two-element numeric vector where the first column represents longitude and the second latitude. Values of \code{x} will be extracted from the points in \code{y}.}
 
 \item{xy}{Logical: If \code{TRUE}, also return the coordinates of each point. Default is \code{FALSE.}}
 
-\item{cat}{Logical: If \code{TRUE}, report the category label rather of \link[=tutorial_raster_data_types]{categorical rasters} than the cell value. Default is `FALSE.}
+\item{cats}{Logical (extracting from a raster): If \code{TRUE} and \code{x} is a \link[=tutorial_raster_data_types]{categorical raster}, then return the category labels instead of the values. Default is `FALSE.}
 }
 \value{
-A \code{data.frame}.
+A \code{data.frame} or \code{data.table}.
 }
 \description{
-\code{extract()} obtains the values of a raster associated with the locations of a points vector. Note that only points vectors are accommodated--lines and areas vectors cannot me used.
+\code{extract()} obtains the values of a \code{GRaster} or \code{GVector} associated with the locations of a set of points.
 }
 \examples{
 \dontrun{
@@ -54,18 +72,33 @@ library(terra)
 
 # Example data: elevation raster and points vector
 madElev <- fastData("madElev")
+madCover <- fastData("madCover")
+madCoast4 <- fastData("madCoast4")
 madDypsis <- fastData("madDypsis")
 
 # start GRASS session for examples only
 faster(x = madElev, grassDir = grassDir,
 workDir = tempdir(), location = "examples") # line only needed for examples
 
-# Convert to fasterRaster format(s):
+# Convert to fasterRaster formats:
 elev <- fast(madElev)
+cover <- fast(madCover)
+coast <- fast(madCoast4)
 dypsis <- fast(madDypsis)
 
 # Get values of elevation at points where Dypsis species are located:
-vals <- extract(elev, dypsis, xy = TRUE)
+extract(elev, dypsis, xy = TRUE)
+
+# Extract from categorical raster:
+vals <- extract(cover, dypsis)
+vals
+
+cats <- extract(cover, dypsis, cats = TRUE)
+cats
+
+# Extract from a vector:
+table <- extract(coast, dypsis, xy = TRUE)
+head(table) # first 3 are outside vector, next 3 are inside
 
 # IMPORTANT #3: Revert back to original GRASS session if needed.
 restoreSession(opts.)

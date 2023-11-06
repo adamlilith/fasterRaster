@@ -10,21 +10,27 @@
 \usage{
 \S4method{fast}{character}(
   x,
-  rastOrVect = NULL,
-  levels = NULL,
-  table = NULL,
+  checkCRS = TRUE,
   method = NULL,
   fallback = TRUE,
   wrap = FALSE,
   snap = NULL,
+  warn = TRUE,
+  ...
+)
+
+\S4method{fast}{SpatRaster}(
+  x,
+  checkCRS = TRUE,
+  method = NULL,
+  fallback = TRUE,
+  wrap = FALSE,
   warn = TRUE
 )
 
-\S4method{fast}{SpatRaster}(x, method = NULL, fallback = TRUE, wrap = FALSE, warn = TRUE)
+\S4method{fast}{SpatVector}(x, checkCRS = TRUE, snap = NULL, warn = TRUE)
 
-\S4method{fast}{SpatVector}(x, snap = NULL, warn = TRUE)
-
-\S4method{fast}{sf}(x, snap = NULL, warn = TRUE)
+\S4method{fast}{sf}(x, checkCRS = TRUE, snap = NULL, warn = TRUE)
 }
 \arguments{
 \item{x}{Any one of:
@@ -34,18 +40,7 @@
 \item A character string with the path and filename of a raster or vector to be loaded directly into \strong{GRASS}. The function will attempt to ascertain the type of object from the file extension (raster or vector), but it can help to indicate which it is using the \code{rastOrVect} argument if it is unclear.
 }}
 
-\item{rastOrVect}{Either \code{NULL} (default) or character (\code{"raster"} or \code{"vector"}). If \code{x} is a raster or vector already in \strong{R}, this does not need to be specified. However, if \code{x} is a filename, then the function will try to ascertain whether it represents a raster or a vector, but sometimes this will fail. In that case, it can help to specify if the file holds a raster or vector. Partial matching is used.}
-
-\item{levels}{Specifies the \code{\link[=levels]{levels()}} of a categorical raster:
-\itemize{
-\item \code{NULL} (default): If \code{x} is a \code{SpatRaster} and it already has levels, these will be attached to the \code{GRaster}. Otherwise, the raster is assumed to have no levels.
-\item An empty string: Same as \code{NULL} (no levels).
-\item \code{data.frame} or \code{data.table}: Must have at least two columns. The first column must be integers indicating which values in the raster correspond to what categories. The second column is assumed to have category labels. This can be changed using \link[=activeCat]{activeCat<-}.
-\item A list with one element per raster layer: Each element can be a \code{data.frame}, \code{data.table}, or a empty string. A list can have a mix of any of these.
-\item A non-empty string: Specifies name of a file containing a \code{data.frame}, \code{data.table}, or \code{list} with levels. Files can be ".csv", ".tab", ".rds", or ".rda" files.
-}}
-
-\item{table}{Either \code{NULL} (default), or a \code{data.frame} or \code{data.table}: Metadata associated with each feature in a vector. This is usually not useful for most users, as the attribute table of a \code{SpatVector} will be automatically copied over from the file, \code{SpatVector}, or \code{sf} vector to the \code{GVector}. Leaving this as \code{NULL} will copy this table automatically.}
+\item{checkCRS}{Logical: If \code{TRUE} (default), compare the coordinate reference system (CRS) of the raster or vector to that of the current location. If it is different, then project the raster or vector while importing. If \code{FALSE}, ignore differences in CRS (if any), and import the raster or vector.}
 
 \item{method}{Character or \code{NULL} (rasters only): If \code{x} does not have the same coordinate reference system as the currently active \strong{GRASS} "\link[=tutorial_sessions]{location}", then it will be projected when it is imported. You may need to specify which method is used to conduction the transformation. Partial matching is used.
 \itemize{
@@ -63,6 +58,13 @@
 \item{snap}{\code{NULL} (default) or a positive numeric value (vectors only): Sometimes, polygons created in other software are topologically incorrect--the borders of adjacent polygons may cross one another, or there may be small gaps between them. These errors can be corrected by slightly moving vertices. The value of \code{snap} indicates how close vertices need to be for them to be shifted to to the same location for a correct topology. Small values are recommended, and units are in map units (usually meters). By default, this is \code{NULL}, meaning no snapping is done. Vectors that have been snapped may need to be cleaned using \code{\link[=cleanGeom]{cleanGeom()}} with the \code{break}, \code{duplicated}, and \code{smallAngles} tools.}
 
 \item{warn}{Logical: If \code{TRUE}, display a warning when projecting the vector or raster.}
+
+\item{...}{Other arguments. These are typically used internally so not of use to most users. They can include:
+\itemize{
+\item \code{rastOrVect} Character (\code{"raster"} or \code{"vector"}). If \code{x} is a filename, then the function will try to ascertain whether it represents a raster or a vector, but sometimes this will fail. In that case, it can help to specify if the file holds a raster or vector. Partial matching is used.
+\item \code{levels} (\code{GRaster}s): A \code{data.frame}, \code{data.table}, or list of \code{data.frame}s or \code{data.table}s with categories for categorical rasters: The first column of a table corresponds to raster values. A subsequent column corresponds to category labels. By default, the second column is assumed to represent labels, but his can be changed with \verb{[activeCat<-]}. Tables can also be \code{NULL} (e.g., \code{data.fame(NULL)}).
+\item \code{table} (\code{GVector}s): A \code{data.frame} or \code{data.table} with one row per geometry in a \code{GVector}: Serves as an attribute table.
+}}
 }
 \value{
 A \code{GRaster} or \code{GVector}.

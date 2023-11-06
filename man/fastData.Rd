@@ -11,30 +11,31 @@ fastData(x)
 
 Spatial vectors (objects of class \code{sf} from the \strong{sf} `package):
 \itemize{
-\item `madCoast0: Outline of the region (polygon)
-\item \code{madCoast4}: Outlines of the Fokontanies (Communes) of the region (polygons)
-\item \code{madDypsis}: Records of plants of the genus \emph{Dypsis} (points)
-\item \code{madRivers}: Major rivers (lines)
+\item \link{madCoast0}: Outline of the region (polygon)
+\item \link{madCoast4}: Outlines of the Fokontanies (Communes) of the region (polygons)
+\item \link{madDypsis}: Records of plants of the genus \emph{Dypsis} (points)
+\item \link{madRivers}: Major rivers (lines)
 }
 
 Rasters (objects of class \code{SpatRaster} from the \strong{terra} package):
 \itemize{
-\item \code{madChelsa}: Bioclimatic variables
-\item \code{madCover}: Land cover (also see `madCoverCats)
-\item \code{madElev}: Elevation
-\item \code{madForest2000}: Forest cover in year 2000
-\item \code{madForest2014}: Forest cover in year 2014
-\item \code{madLand}: Surface reflectance in 2023
+\item \link{madChelsa}: Bioclimatic variables
+\item \link{madCover}: Land cover (also see `madCoverCats)
+\item 
+\item \link{madForest2000}: Forest cover in year 2000
+\item \link{madForest2014}: Forest cover in year 2014
+\item \link{madLANDSAT}: Surface reflectance in 2023
 }
 
 Data frames
 \itemize{
-\item \code{appFunsTable}: Table of functions usable by \code{\link[=app]{app()}}.
-\item \code{madCoverCats}: Land cover values and categories.
+\item \link{appFunsTable}: Table of functions usable by \code{\link[=app]{app()}}.
+\item \link{madCoverCats}: Land cover values and categories.
+\item \link{vegIndices}: Vegetation indices that can be calculated with \code{\link[=vegIndex]{vegIndex()}}.
 }}
 }
 \value{
-A \code{SpatRaster} or \code{sf} spatial vector.
+A \code{SpatRaster}, \code{sf} spatial vector, or a \code{data.frame}.
 }
 \description{
 This function is a simple way to get example rasters or spatial vector datasets that come with \strong{fasterRaster}.
@@ -85,9 +86,9 @@ madChelsa <- fastData("madChelsa")
 madChelsa
 plot(madChelsa)
 
-madLand <- fastData("madLand")
-madLand
-plotRGB(madLand, 4, 1, 2, stretch = "lin")
+madLANDSAT <- fastData("madLANDSAT")
+madLANDSAT
+plotRGB(madLANDSAT, 4, 1, 2, stretch = "lin")
 
 madCover <- fastData("madCover")
 madCover
@@ -97,7 +98,4 @@ nlevels(madCover) # number of categories
 catNames(madCover) # names of categories table
 
 plot(madCover)
-}
-\seealso{
-\link{madCoast0}, \link{madCoast4}, \link{madCover}, \link{madCoverCats}, \link{madDypsis}, \link{madElev}, \link{madForest2000}, \link{madForest2014}, \link{madRivers}
 }

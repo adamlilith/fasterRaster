@@ -24,16 +24,18 @@
 \arguments{
 \item{x}{A \code{GRaster} or \code{GVector}.}
 
-\item{width}{Numeric: Maximum distance cells must be from focal cells to be within the buffer. For rasters, if the buffering unit is \verb{"cells}", then to get \code{n} cell widths, use \code{n + epsilon}, where \code{epsilon} is a small number (e.g., 0.001). The larger the buffer, this smaller this must be to ensure just \code{n} cells are included.}
+\item{width}{Numeric: For rasters -- Maximum distance cells must be from focal cells to be within the buffer. For rasters, if the buffering unit is \verb{"cells}", then to get \code{n} cell widths, use \code{n + epsilon}, where \code{epsilon} is a small number (e.g., 0.001). The larger the buffer, this smaller this must be to ensure just \code{n} cells are included.
 
-\item{unit}{Character: Indicates the units of \code{width}. Can be one of:
+For vectors, distance from the object to place the buffer. Negative values create "inside" buffers. Units are in the same units as the current coordinate reference system (e.g., degrees for WGS84 or NAD83, often meters for projected systems).}
+
+\item{unit}{Character: Rasters -- Indicates the units of \code{width}. Can be one of:
 * \code{"cells"}: Units are numbers of cells.
 \itemize{
 \item \code{"meters"} (default), \code{"kilometers"} or \code{"km"}, \code{"feet"}, \code{"miles"}, or \code{"nautmiles"} (nautical miles).
 Partial matching is used and case is ignored.
 }}
 
-\item{method}{Character: Only used if \code{units} is \code{"cells"}. Indicates the manner in which distances are calculated for adding of cells:
+\item{method}{Character: Rasters -- Only used if \code{units} is \code{"cells"}. Indicates the manner in which distances are calculated for adding of cells:
 \itemize{
 \item \code{"Euclidean"}: Euclidean distance
 \item \code{"Manhattan"}: "taxi-cab" distance)
@@ -41,17 +43,15 @@ Partial matching is used and case is ignored.
 Partial matching is used and case is ignored.
 }}
 
-\item{background}{Numeric: Value to assign to cells that are not \code{NA} and not part of the buffer (default is 0).}
+\item{background}{Numeric: Rasters -- Value to assign to cells that are not \code{NA} and not part of the buffer (default is 0).}
 
-\item{lowMemory}{Logical: Only used if buffering a raster and \code{units} is not \code{"meters"}. If \code{FALSE} (default) use faster, memory-intensive procedure. If \code{TRUE} then use the slower, low-memory version. To help decide which to use, consider using the low-memory version on a system with 1 GB of RAM for a raster larger than about 32000x32000 cells, or for a system with  with 8 GB of RAM a raster larger than about 90000x90000 cells.}
+\item{lowMemory}{Logical: Rasters -- Only used if buffering a raster and \code{units} is not \code{"meters"}. If \code{FALSE} (default) use faster, memory-intensive procedure. If \code{TRUE} then use the slower, low-memory version. To help decide which to use, consider using the low-memory version on a system with 1 GB of RAM for a raster larger than about 32000x32000 cells, or for a system with  with 8 GB of RAM a raster larger than about 90000x90000 cells.}
 
-\item{capstyle}{Character: Style for ending the "cap" of buffers around lines. Valid options include \code{"rounded"}, \code{"square"}, and "\code{flat}".}
+\item{capstyle, endCapStyle}{Character: Vectors -- Style for ending the "cap" of buffers around lines. Valid options include \code{"rounded"}, \code{"square"}, and "\code{flat}".}
 
-\item{union}{Logical: If \code{FALSE} (default), construct a buffer for each geometry. If \code{TRUE}, union all buffers after creation.}
+\item{union}{LogicalVectors --: If \code{FALSE} (default), construct a buffer for each geometry. If \code{TRUE}, union all buffers after creation.}
 
-\item{dist}{Same as \code{width}.}
-
-\item{endCapStyle}{Same as \code{capstyle}.}
+\item{dist}{Vectors -- Same as \code{width}.}
 }
 \description{
 Buffers can be constructed for \code{GRaster}s or \code{GVector}s. For rasters, the \code{buffer()} function creates a buffer around non-\code{NA} cells. The output will be a raster. For vectors, the \code{buffer()} and \code{st_buffer()} functions create a vector polygon larger or smaller than the focal vector.

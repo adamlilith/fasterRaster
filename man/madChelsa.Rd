@@ -63,9 +63,9 @@ madChelsa <- fastData("madChelsa")
 madChelsa
 plot(madChelsa)
 
-madLand <- fastData("madLand")
-madLand
-plotRGB(madLand, 4, 1, 2, stretch = "lin")
+madLANDSAT <- fastData("madLANDSAT")
+madLANDSAT
+plotRGB(madLANDSAT, 4, 1, 2, stretch = "lin")
 
 madCover <- fastData("madCover")
 madCover

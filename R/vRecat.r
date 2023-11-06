@@ -1,52 +1,87 @@
 #' Import a vector attribute "cat" table into GRASS and attach to a 
 #' 
-#' @description This function assigns new category values to geometries of a `GVector`. It first saves a `data.frame` containing a single column named "cat" with integer values to a temporary file. It then imports the table into **GRASS*. It ends by attaching the table to a *GRASS** vector.
+#' @description This function assigns new category values to geometries of a `GVector`. It can be run in three modes:
+#' * Retain eExisting categories will be retained but renumbered starting with 1. Both `cats` and `start` must be `NULL`.
+#' * Re-assign categories based on values in `cats`. Argument `start` is ignored.
+#' * Re-assign categories, starting with the value given in `start`. Argument `cats` must be `NULL`.
 #'
-#' @param catTable A numeric vector with integers, an integer vector, or a `data.frame` with one column named "cat" with integer values, one per geometry in a `GVector`.
-#' 
 #' @param src The [sources()] name of the vector in **GRASS** to which to attach the table.
 #' 
-#' @param removeTable Logical: If `TRUE` (default), remove existing attribute table before attaching new one with categories.
-#' 
-#' @returns The [sources()] name of the table imported into **GRASS**.
+#' @param cats Either `NULL` (default) or a numeric vector with integers or an integer vector: New category values. If `NULL` and `start` is `NULL`, then new category numbers will be assigned so that they start at 1 and correspond to existing category numbers.
+#'
+#' @param start Either `NULL` (default) or an integer or numeric integer: Category number to start at.
+#'
+#' @returns The [sources()] name of the vector.
 #' 
 #' @aliases .vMakeCatTable
 #' @rdname .vMakeCatTable
 #' @noRd
-.vRecat <- function(catTable, src, removeTable = TRUE) {
+.vRecat <- function(x, cats = NULL, start = NULL) {
 
-	if (inherits(src, "GVector")) src <- sources(x)
-	if (inherits(catTable, c("numeric", "integer"))) catTable <- data.frame(cat = catTable)
+	if (inherits(x, "GVector")) {
+		.restore(x)
+		src <- sources(x)
+	} else {
+		src <- x
+	}
 
-	# save cat table
+	if (is.null(cats) & is.null(start)) {
+
+		cats <- .vCats(src)
+		cats <- omnibus::renumSeq(cats)
+		cats <- data.frame(newcat = cats)
+	
+	} else if (!is.null(cats)) {
+	
+		cats <- data.frame(newcat = as.integer(cats))
+	
+	} else {
+	
+		cats <- .vCats(src)
+		cats <- cats + (start - min(cats))
+	
+	}
+
 	tf <- tempfile(fileext = ".csv")
 	tft <- paste0(tf, "t")
-	utils::write.csv(catTable, tf, row.names = FALSE)
+	utils::write.csv(cats, tf, row.names = FALSE)
 	keyTableType <- '"Integer"'
 	write(keyTableType, tft)
 
-	# import into GRASS
-	attsSrc <- .makeSourceName("db_in_ogr", "table")
-	args <- list(
+	# import table
+	srcTable <- .makeSourceName("db_in_ogr_table", "table")
+	rgrass::execGRASS(
 		cmd = "db.in.ogr",
 		input = tf,
-		output = attsSrc,
-		key = "cat",
+		output = srcTable,
 		flags = c("quiet", "overwrite")
 	)
-	do.call(rgrass::execGRASS, args = args)
-	
-	# attach to vector
-	if (removeTable) .vRemoveTable(src)
-	args <- list(
+
+	# detach existing table
+	.vDetachDatabase(src)
+
+	# attach table
+	rgrass::execGRASS(
 		cmd = "v.db.connect",
 		map = src,
-		table = attsSrc,
-		key = "cat",
+		table = srcTable,
+		key = "newcat",
+		flags = c("quiet", "o")
+	)
+
+	# reclass
+	srcIn <- src
+	src <- .makeSourceName("v_reclass", "vector")
+	rgrass::execGRASS(
+		cmd = "v.reclass",
+		input = srcIn,
+		output = src,
+		layer = srcTable,
+		column = "newcat",
+		type = "centroid",
 		flags = c("quiet", "overwrite")
 	)
-	do.call(rgrass::execGRASS, args = args)
 
-	invisible(attsSrc)
+	invisible(src)
 
 }

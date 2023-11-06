@@ -11,7 +11,7 @@
 
 \S4method{crds}{GVector}(x, z = TRUE)
 
-st_coordinates(x, z = TRUE)
+st_coordinates(x)
 }
 \arguments{
 \item{x}{A \code{GVector} or a \code{GRaster}.}
@@ -44,7 +44,6 @@ grassDir <- "C:/Program Files/GRASS GIS 8.3" # Windows
 grassDir <- "/usr/local/grass" # Linux
 
 # Setup
-library(sf)
 library(terra)
 
 # Plant specimens (points), elevation (raster)

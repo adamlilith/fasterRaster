@@ -4,12 +4,14 @@
 \alias{rstring}
 \title{Make a nearly-guaranteed unique string}
 \usage{
-rstring(n, x = 10)
+rstring(n, x = 12, filesafe = TRUE)
 }
 \arguments{
 \item{n}{Numeric integer: How many strings to make (default is 1).}
 
-\item{x}{Numeric integer: Number of letters and digits to use to make the string. Default is 10, leading to a probability of two matching random strings of <1E-38.}
+\item{x}{Numeric integer: Number of letters and digits to use to make the string. Default is 12, leading to a probability of two matching random strings of <3.7E-18 if \code{filesafe = TRUE} and <3.1E-22 if \code{FALSE}.}
+
+\item{filesafe}{Logical: If \code{TRUE} (default), make file-safe names (leading character is a letter, only use letters and digits).}
 }
 \value{
 Character.
@@ -21,6 +23,6 @@ Character.
 
 rstring(1)
 rstring(5)
-rstring(5, 2)
+rstring(5, 3)
 
 }

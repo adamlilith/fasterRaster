@@ -214,5 +214,5 @@ removeSession("examples")
 }
 }
 \seealso{
-\code{\link[terra:geomtype]{terra::datatype()}}, \link[=tutorial_raster_data_types]{raster data types} in \strong{fasterRaster}
+\code{\link[terra:datatype]{terra::datatype()}}, \link[=tutorial_raster_data_types]{raster data types} in \strong{fasterRaster}
 }

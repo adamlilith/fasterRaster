@@ -10,7 +10,7 @@
 \arguments{
 \item{x}{A \code{GVector} "points" object.}
 
-\item{buffer}{Numeric: By default, this function creates a vector that has an extent exactly the same as the input data. However, the apparent extent can be changed by setting this value to one different from 0. Negative values reduce the size of the extent, and positive extend it.  Units are in map units.}
+\item{buffer}{Numeric: By default, this function creates a vector that has an extent exactly the same as the input data. However, the apparent extent can be changed by setting this value to a value different from 0. Negative values reduce the size of the extent, and positive extend it.  Units are in map units.}
 }
 \value{
 A \code{GVector}.
@@ -48,15 +48,25 @@ workDir = tempdir(), location = "examples") # line only needed for examples
 
 # convert sf vectors to GVectors
 dypsis <- fast(madDypsis)
-coast <- fast(madCoast4)
+coast4 <- fast(madCoast4)
+ant <- coast4[coast4$NAME_4 == "Antanambe"]
 
 # Delaunay triangulation
 dypsisDel <- delaunay(dypsis)
+plot(dypsisDel)
+plot(dypsis, pch = 1, col = "red", add = TRUE)
 
 # Voronoi tessellation
-dypsisVor <- voronoi(dypsis)
-coastVor <- voronoi(coast)
+vor <- voronoi(dypsis)
+plot(vor)
+plot(dypsis, pch = 1, col = "red", add = TRUE)
 
+# Random Voronoi tessellation
+rand <- rvoronoi(coast4, size = 100)
+plot(rand, col = 1:40)
+plot(coast4, add = TRUE, lwd = 3)
+
+rand <- rvoronoi(dypsis, size = 100)
 
 # IMPORTANT #3: Revert back to original GRASS session if needed.
 restoreSession(opts.)

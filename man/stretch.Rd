@@ -14,7 +14,7 @@
 
 \item{minq, maxq}{Numeric: Specifies range of values to rescale, given by their quantiles. The default is to stretch all values (the 0th and 100th quantiles). One or both are  ignored if \code{smin} and/or \code{smax} are provided.}
 
-\item{smin, smax}{Numeric: Specifies range of values to rescale.}
+\item{smin, smax}{Numeric or \code{NA}: Specifies range of values to rescale. If \code{NA} (default), then all values are rescaled.}
 }
 \value{
 A \code{GRaster}.

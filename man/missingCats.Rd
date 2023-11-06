@@ -12,6 +12,9 @@
 
 \item{layer}{Numeric integers, logical vector, or character: Layer(s) for which to obtain missing categories.}
 }
+\value{
+A numeric vector (if \code{x}is just one layer), or a named list of numeric vectors, one per layer in \code{x}.
+}
 \description{
 This function reports the values that appear in a categorical raster that have no matching category label.
 

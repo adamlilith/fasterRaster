@@ -122,9 +122,9 @@ as.float(elev) # floating-precision
 as.double(elev) # double-precision
 
 # assigning
-copy <- elev
-copy[] <- pi # assign all cells to the value of pi
-copy
+pie <- elev
+pie[] <- pi # assign all cells to the value of pi
+pie
 
 # concatenating multiple GRasters
 rasts <- c(elev, forest)
@@ -133,6 +133,10 @@ rasts
 # subsetting
 rasts[[1]]
 rasts[["madForest2000"]]
+
+plot(madElev == 10)
+plot(madElev <= 10)
+plot(madElev \%in\% c(10, 20, 30, 40, 50))
 
 # replacing
 rasts[[2]] <- 2 * forest
@@ -159,6 +163,16 @@ freq(elev)
 freq(2 * elev)
 freq(rasts)
 freq(rasts, value = 1)
+
+# projecting a raster from disk to location's CRS
+madLANDSAT <- fastData("madLANDSAT")
+landsat <- fast(madLANDSAT) # projects matrix
+
+# correlation and covariance matrices
+cor(landsat) # correlation
+cov(landsat) # covariance
+
+
 
 # IMPORTANT #3: Revert back to original GRASS session if needed.
 restoreSession(opts.)

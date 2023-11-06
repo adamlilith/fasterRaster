@@ -19,10 +19,10 @@
 A \code{GRaster}.
 }
 \description{
-\code{GRaster}s can be "stacked" using this function, effectively creating a multi-layered raster. Note that this is different from creating a 3-dimensional raster, though such an effect can be emulated using stacking. \code{GVector}s can be combined into a single vector.  Stacks can only be created when:
+\code{GRaster}s can be "stacked" using this function, effectively creating a multi-layered raster. This is different from creating a 3-dimensional raster, though such an effect can be emulated using stacking. \code{GVector}s can be combined into a single vector.  Stacks can only be created when:
 \itemize{
-\item All objects are in the same \strong{GRASS} \link[=tutorial_sessions]{"location" and "mapset"}.
 \item All objects are the same class (either all \code{GRaster}s or all \code{GVector}s).
+\item All objects are in the same \strong{GRASS} \link[=tutorial_sessions]{"location" and "mapset"}.
 \item For \code{GRaster}s:
 \itemize{
 \item Horizontal extents are the same.
@@ -32,9 +32,12 @@ A \code{GRaster}.
 \item For \code{GVector}s:
 \itemize{
 \item The geometry (points, lines, or polygons) must be the same.
+}
+}
+
 If features (boundaries, lines, etc.) of \code{GVector}s that are combined are identical or nearly identical, they can be cleaned using \code{\link[=removeDupNodes]{removeDupNodes()}} and \code{\link[=snap]{snap()}}.
-}
-}
+
+Data tables associated with \code{GVector}s will be combined if each vector has a table and if each table has the same columns and data types. Otherwise, the data table will be dropped.
 }
 \examples{
 \dontrun{

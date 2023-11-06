@@ -22,11 +22,11 @@
 		src <- x
 	}
 
-	if (!(column %in% .vNames(x))) stop("Column does not exist in this vector.")
+	if (!(column %in% .vNames(src))) stop("Column does not exist in this vector.")
 
 	value <- as.character(value)
 
-	args <- list(
+	rgrass::execGRASS(
 		cmd = "v.db.update",
 		map = src,
 		column = column,
@@ -34,8 +34,6 @@
 		flags = "quiet"
 	)
 
-	do.call(rgrass::execGRASS, args = args)
-
-	invisible(TRUE)
+	invisible(src)
 
 }

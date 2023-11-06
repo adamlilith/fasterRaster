@@ -10,6 +10,10 @@ setwd(paste0(drive, "/ecology/Drive/R/fasterRaster"))
 # devtools::document()
 devtools::load_all()
 
+library(terra)
+library(sf)
+library(rgrass)
+
 grassDir <- "C:/Program Files/GRASS GIS 8.3"
 
 madElev <- fastData("madElev")
@@ -18,135 +22,33 @@ madDypsis <- fastData("madDypsis")
 madCoast0 <- fastData("madCoast0")
 madCoast4 <- fastData("madCoast4")
 
-session <- faster(grassDir = grassDir, x = madRivers, workDir = tempdir(), location = 'examples', overwrite = TRUE, warn = FALSE)
+session <- faster(x = madCoast4, grassDir = grassDir, workDir = tempdir(), location = 'examples', overwrite = TRUE, warn = FALSE)
 
-mc <- fast(madCoast4)
-.vRemoveTable(mc)
+mcFile <- "C:/!Scratch/madCoast4.gpkg"
+# madCoast4 <- vect(madCoast4)
 
-dt <- data.frame(cat = 1L:18L)
-write.csv(dt, "C:/!Scratch/madCoast4TableReCat.csv", row.names = F)
+execGRASS("v.in.ogr", input = mcFile, output = "coast")
+execGRASS("v.category", input = "coast", option = "print")
 
-args <- list("db.in.ogr", input = "C:/!Scratch/madCoast4TableReCat.csv", output = "madCoast4TableReCat")
-do.call(rgrass::execGRASS, args = args)
+# save cat table
+newcats <- data.frame(newcat = c(rep(1, 9), 2:10))
 
-rgrass::execGRASS("v.db.connect", map = sources(mc), table = "madCoast4TableReCat", key = "cat")
+tf <- tempfile(fileext = ".csv")
+tft <- paste0(tf, "t")
+utils::write.csv(newcats, tf, row.names = FALSE)
+keyTableType <- '"Integer"'
+write(keyTableType, tft)
 
-.vCats(mc)
-.vAsDataTable(mc)
+execGRASS("db.in.ogr", input = tf, output = "newcat_table", flags = "overwrite")
+execGRASS("v.db.connect", map = "coast", flags = "d")
+execGRASS("v.info", map = "coast", flags = "e")
 
-# # NB no disagg!
+execGRASS("v.db.connect", map = "coast", table = "newcat_table", key = "newcat", flags = "o")
+execGRASS("v.info", map = "coast", flags = "e")
 
-# writeVector(vect(madCoast4), "C:/!Scratch/madCoast4.gpkg", overwrite = TRUE
-# )
-# rgrass::execGRASS("v.in.ogr", input = "C:/!Scratch//madCoast4.gpkg", output = "coastXYZ")
+# execGRASS("v.edit", input = "coast", output = "nocats", option = "delcat")
+execGRASS("v.reclass", input = "coast", output = "reclassed", layer = "newcat_table", column = "newcat", type = "centroid", flags = "overwrite")
+execGRASS("v.category", input = "reclassed", option = "print")
 
-# dt <- .vAsDataTable("coastXYZ")
-# dt <- as.data.frame(dt)
-# write.csv(dt, "C:/!Scratch/madCoast4Table.csv", row.names = F)
-
-
-# args <- list("db.in.ogr", input = "C:/!Scratch/madCoast4Table.csv", output = "madCoast4Table")
-# do.call(rgrass::execGRASS, args = args)
-
-
-# rgrass::execGRASS("v.db.connect", map = "coastXYZ", table = "madCoast4Table", key = "cat")
-
-
-### METHODS DEVELOPMENT FOR AD HOC CATEGORIES USING UNIUQE KEY
-# y <- fast(madCoast4)
-
-
-# # print categories
-# .vCats(y)
-
-# # see atts table
-# .vAsDataTable(y)
-
-# # remove atts table
-# .vRemoveTable(y)
-
-# # see atts table
-# .vAsDataTable(y) # error bc removed
-
-# # print categories
-# .vCats(y)
-
-# # attach new table with random column
-# .vAttachTable(y)
-
-# tb <- data.frame(yes = letters[ngeom(y, "GRASS")])
-# .vAttachTable(y, table = tb) # already table linked
-
-# # see atts table
-# .vAsDataTable(y)
-
-# .vAddColumn(y, name = "MINE", type = "int", nchar = 100)
-
-# # see atts table
-# .vAsDataTable(y)
-
-# # db columns
-# .vNames(y)
-
-# # remove column
-# .vDropColumn(y, 2)
-
-# # see atts table
-# .vAsDataTable(y)
-
-# # add values to a column
-# args <- list(
-# 	cmd = "v.db.update",
-# 	map = sources(y),
-# 	column = "MINE",
-# 	value = "12",
-# 	where = "cat = 17"
-# )
-
-# do.call(rgrass::execGRASS, args = args)
-
-# # see atts table
-# .vAsDataTable(y)
-
-# .vMakeKey(y)
-# .vKeys(y)
-# .vAsDataTable(y)
-
-# sql <- matrix(NA_character_, nrow = 2, ncol = 1)
-# sql[1, 1] <- "cat 1"
-# sql[2, 1] <- "WHERE key = 'wfwfO7A5cjTS'"
-
-# keys <- .vKeys(y)
-# nGeoms <- ngeom(y, "GRASS")
-# sql <- matrix(NA_character_, nrow = 2 * nGeoms, ncol = 1)
-# for (i in seq_len(nGeoms)) {
-# 	sql[2 * i - 1L, 1L] <- paste0("cat ", 1)
-# 	sql[2 * i, 1L] <- paste0("WHERE key = '", keys[i], "'")
-# }
-
-# tf <- tempfile(fileext = ".sql")
-# write(sql, tf)
-
-# src <- .makeSourceName("recat", "vector")
-# args <- list(
-# 	cmd = "v.reclass",
-# 	input = sources(y),
-# 	output = src,
-# 	rules = tf,
-# 	flags = c("quiet", "overwrite")
-# )
-# do.call(rgrass::execGRASS, args = args)
-# out <- .makeGVector(src)
-
-# # dt <- data.frame(key = "character")
-# # .vAttachTable(out, dt)
-# # .vMakeKey(out)
-
-# .vKeys(out)
-# .vCats(out)
-# .vAsDataTable(out)
-
-
-
-
+execGRASS("v.info", map = "reclassed", flags = "e")
 

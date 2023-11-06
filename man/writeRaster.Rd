@@ -55,7 +55,7 @@
 }}
 }
 \value{
-A \code{GRaster} or a \code{stars} raster. A raster is also saved to disk.
+A \code{GRaster} (invisibly). A raster is also saved to disk.
 }
 \description{
 This function saves a \code{GRaster} to disk directly from a \strong{GRASS} session. It is faster than using \code{\link[=rast]{rast()}}, then saving the output of that to disk (because \code{rast()} actually save the raster to disk, anyway).

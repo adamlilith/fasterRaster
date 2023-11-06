@@ -3,38 +3,56 @@
 \name{spatSample,GRaster-method}
 \alias{spatSample,GRaster-method}
 \alias{spatSample}
-\title{Random points from a raster}
+\alias{spatSample,GVector-method}
+\title{Sample random points from a GRaster or GVector}
 \usage{
 \S4method{spatSample}{GRaster}(
   x,
   size,
-  prop = FALSE,
-  maskvalues = NA,
-  updatevalue = NULL,
-  fail = TRUE,
+  as.points = FALSE,
+  values = TRUE,
+  cat = FALSE,
+  xy = FALSE,
+  strata = NULL,
+  zlim = NULL,
+  seed = NULL
+)
+
+\S4method{spatSample}{GVector}(
+  x,
+  size,
+  as.points = FALSE,
+  values = TRUE,
+  xy = FALSE,
+  strata = NULL,
+  zlim = NULL,
   seed = NULL
 )
 }
 \arguments{
-\item{x}{A \code{GRaster}.}
+\item{x}{A \code{GRaster} or \code{GVector}.}
 
-\item{size}{Integer > 0: Number of cells or proportion of cells to select.}
+\item{size}{Numeric integer or integer > 0: Number of points to create.}
 
-\item{prop}{Logical: If \code{TRUE}, the value of \code{size} will be interpreted as a proportion of cells. The default is \code{FALSE} (\code{size} is interpreted as the number of cells to select).}
+\item{as.points}{Logical: If \code{FALSE} (default), the output is a \code{data.frame} or \code{data.table}. If \code{TRUE}, the output is a "points" \code{GVector}.}
 
-\item{maskvalues}{Numeric vector, including \code{NA}, or \code{NULL} (default): Values in the raster to select from. All others will be ignored. If this is \code{NULL}, then only non-\code{NA} cells will be selected for retention.}
+\item{values}{Logical: If \code{TRUE} (default), values of the \code{GRaster} at points are returned.}
 
-\item{updatevalue}{Numeric or \code{NULL} (default): Value to assign to masked cells. If \code{NULL}, then the values in the input raster are retained.}
+\item{cat}{Logical: If \code{TRUE} and the \code{GRaster} is \link[=tutorial_raster_data_types]{categorical}, then return the category label of each cell. If \code{values} is also \code{TRUE}, then the cell value will also be returned.}
 
-\item{fail}{Logical: If \code{TRUE} (default), and \code{size} is greater than the number of non-\code{NA} cells in \code{x}, then fail.}
+\item{xy}{Logical: If \code{TRUE}, return the longitude and latitude of each point. Default is \code{FALSE}.}
 
-\item{seed}{\code{NULL} (default) or numeric: If \code{NULL}, then a random seed will be generated for the random number generator. Otherwise a seed can be provided.}
+\item{strata}{Either \code{NULL} (default), or a \code{GVector} defining strata. If supplied, the \code{size} argument will be interpreted as number of points to place per geometry in \code{strata}.}
+
+\item{zlim}{Either \code{NULL} (default), or a vector of two numbers defining the lower and upper altitudinal bounds of coordinates.}
+
+\item{seed}{Either \code{NULL} (default) or an integer: Used as the random seed. If \code{NULL}, then \strong{GRASS} will generate its own seed.}
 }
 \value{
-A \code{GRaster}.
+A \code{data.frame}, \code{data.table}, or \code{GVector}.
 }
 \description{
-\code{spatSample()} randomly samples points from non-\code{NA} cells of a raster. Points will be located at cell centers.
+\code{spatSample()} randomly locates points across a \code{GRaster} or \code{GVector}. It can return the coordinates, values associated with the points, or both.
 }
 \examples{
 \dontrun{
@@ -74,20 +92,20 @@ forest <- fast(madForest)
 ant <- fast(madAnt)
 
 # Random cells in non-NA cells:
-rand <- spatSample(elev, 10000)
+rand <- sampleRast(elev, 10000)
 plot(rand)
 nonnacell(rand)
 
 # Use custom values for the mask:
-randCustomMask <- spatSample(elev, 10000, maskvalues = 1:20)
+randCustomMask <- sampleRast(elev, 10000, maskvalues = 1:20)
 plot(randCustomMask)
 
 # Force selected values to a custom value:
-randCustomUpdate <- spatSample(elev, 10000, updatevalue = 7)
+randCustomUpdate <- sampleRast(elev, 10000, updatevalue = 7)
 plot(randCustomUpdate)
 
 # Custom values for mask and set selected cells to custom value:
-randAll <- spatSample(elev, 10000, maskvalues = 1:20, updatevalue = 7)
+randAll <- sampleRast(elev, 10000, maskvalues = 1:20, updatevalue = 7)
 plot(randAll)
 
 # IMPORTANT #3: Revert back to original GRASS session if needed.
@@ -97,5 +115,5 @@ removeSession("examples")
 }
 }
 \seealso{
-\code{\link[=spatSample]{spatSample()}}, \strong{GRASS} module \code{r.random}
+\code{\link[=sampleRast]{sampleRast()}}, \code{\link[terra:sample]{terra::spatSample()}}, module \code{v.random} in \strong{GRASS}
 }

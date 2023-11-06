@@ -6,7 +6,14 @@
 \alias{writeVector,missing,missing-method}
 \title{Save a GVector to disk}
 \usage{
-\S4method{writeVector}{GVector,character}(x, filename, overwrite = FALSE, format = "GPKG", ...)
+\S4method{writeVector}{GVector,character}(
+  x,
+  filename,
+  overwrite = FALSE,
+  format = "GPKG",
+  attachTable = TRUE,
+  ...
+)
 
 \S4method{writeVector}{missing,missing}(x, filename)
 }
@@ -27,6 +34,8 @@
 \item \code{"netCDF"}: NetCDF (argument \code{filename} should not end in an extension).
 \item \code{"XLSX"}: MS Office Open XML spreadsheet
 }}
+
+\item{attachTable}{Logical: If \code{TRUE} (default), attach the attribute to table to the vector before saving it. If \code{FALSE}, the attribute table will not be attached.}
 
 \item{...}{Additional arguments to send to \strong{GRASS} module \code{v.out.ogr}.}
 }

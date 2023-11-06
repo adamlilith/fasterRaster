@@ -5,35 +5,51 @@
 \alias{show}
 \alias{print,GSession-method}
 \alias{print}
+\alias{summary,GSession-method}
+\alias{summary}
 \alias{show,GSpatial-method}
 \alias{print,GSpatial-method}
+\alias{summary,GSpatial-method}
 \alias{show,GRegion-method}
 \alias{print,GRegion-method}
+\alias{summary,GRegion-method}
 \alias{show,GRaster-method}
 \alias{print,GRaster-method}
+\alias{summary,GRaster-method}
 \alias{show,GVector-method}
 \alias{print,GVector-method}
+\alias{summary,GVector-method}
 \title{Display a fasterRaster object}
 \usage{
 \S4method{show}{GSession}(object)
 
 \S4method{print}{GSession}(x)
 
+\S4method{summary}{GSession}(object)
+
 \S4method{show}{GSpatial}(object)
 
 \S4method{print}{GSpatial}(x)
+
+\S4method{summary}{GSpatial}(object)
 
 \S4method{show}{GRegion}(object)
 
 \S4method{print}{GRegion}(x)
 
+\S4method{summary}{GRegion}(object)
+
 \S4method{show}{GRaster}(object)
 
 \S4method{print}{GRaster}(x)
 
+\S4method{summary}{GRaster}(object)
+
 \S4method{show}{GVector}(object)
 
 \S4method{print}{GVector}(x)
+
+\S4method{summary}{GVector}(object)
 }
 \arguments{
 \item{object, x}{An object of class \code{GSession}, \code{GSpatial}, \code{GRegion}, \code{GRaster}, or \code{GVector}.}

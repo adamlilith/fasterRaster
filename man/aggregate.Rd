@@ -3,6 +3,7 @@
 \name{aggregate,GRaster-method}
 \alias{aggregate,GRaster-method}
 \alias{aggregate}
+\alias{aggregate,GVector-method}
 \title{Aggregate values of raster cells into larger cells}
 \usage{
 \S4method{aggregate}{GRaster}(
@@ -13,15 +14,17 @@
   prob = NULL,
   na.rm = FALSE
 )
+
+\S4method{aggregate}{GVector}(x, dissolve = TRUE)
 }
 \arguments{
-\item{x}{A \code{GRaster}.}
+\item{x}{A \code{GRaster} or \code{GVector}.}
 
-\item{fact}{Numeric vector: One, two, or three positive values. These reflect the size of the new cells as multiples of the size of the old cells. If just one value is supplied, this is used for all two or three dimensions. If two values are supplied, the first is multiplied by the east-west size of cells, and the second north-south size of cells (the raster must be 2D). If three values are supplied, the third value is used as the multiplier of the vertical dimension of cells. Values are calculated using all cells that have their centers contained by the target cell.
+\item{fact}{Numeric vector (rasters only): One, two, or three positive values. These reflect the size of the new cells as multiples of the size of the old cells. If just one value is supplied, this is used for all two or three dimensions. If two values are supplied, the first is multiplied by the east-west size of cells, and the second north-south size of cells (the raster must be 2D). If three values are supplied, the third value is used as the multiplier of the vertical dimension of cells. Values are calculated using all cells that have their centers contained by the target cell.
 
 Note that unlike \code{terra::aggregate()} and \code{\link[terra:disaggregate]{terra::disagg()}}, these values need not be integers.}
 
-\item{fun}{Character: Name of the function used to aggregate:
+\item{fun}{Character (rasters only): Name of the function used to aggregate. For \code{GRaster}s, this is the function that summarizes across cells. For \code{GVector}s, this function will be used to calculate new values of numeric or integer cells.
 \itemize{
 \item `mean``: Average (default)
 \item \code{median}: Median
@@ -37,17 +40,28 @@ Note that unlike \code{terra::aggregate()} and \code{\link[terra:disaggregate]{t
 \item \code{diversity}: Number of unique values
 }}
 
-\item{weight}{Logical: If \code{FALSE}, each source cell that has its center in the destination cell will be counted equally. If \code{TRUE}, the value of each source will be weighted the proportion of the destination cell the source cell covers.}
+\item{weight}{Logical (rasters only): If \code{FALSE}, each source cell that has its center in the destination cell will be counted equally. If \code{TRUE}, the value of each source will be weighted the proportion of the destination cell the source cell covers.}
 
-\item{prob}{Numeric: Quantile at which to calculate \code{quantile}.}
+\item{prob}{Numeric (rasters only): Quantile at which to calculate \code{quantile}.}
 
-\item{na.rm}{Logical: If \code{FALSE} (default), propagate \code{NA} cells.}
+\item{na.rm}{Logical (rasters only): If \code{FALSE} (default), propagate \code{NA} cells or \code{NA} values.}
+
+\item{dissolve}{Logical (vectors only): If \code{TRUE} (default), then aggregated geometries will have their borders dissolved. This is ignored if the input \code{GVector} is not a "polygons" vector.}
+
+\item{by}{Either a character, a numeric or integer vector, or \code{NULL} (vectors only):
+\itemize{
+\item If \code{NULL} (default), then all geometries will be collated into a single multipart geometry.
+\item If a character, then rows with the same value in the named column of the vector's data table will be aggregated.
+\item If a numeric integer or integer vector, the vector must have the same length as the number of geometries (see \code{\link[=ngeom]{ngeom()}}). The values must be integers. Geometries with the same value will be aggregated together.
+}}
 }
 \value{
-A \code{GRaster}.
+A \code{GRaster} or \code{GVector}.
 }
 \description{
-\code{aggregate()} creates a new raster with cells that are a multiple of the size of the cells of the original raster. The new cells can be larger or smaller than the original cells (this function thus emulates the \code{terra::aggregate()} and \code{\link[terra:disaggregate]{terra::disagg()}} functions in \strong{terra}.)
+When applied to a \code{GRaster}, \code{aggregate()} creates a new raster with cells that are a multiple of the size of the cells of the original raster. The new cells can be larger or smaller than the original cells (this function thus emulates the \code{terra::aggregate()} and \code{\link[terra:disaggregate]{terra::disagg()}} functions in \strong{terra}.)
+
+When applied to a \code{GVector}, \code{aggregate()} all geometries into a single "multipart" geometry, in which sets of points, lines, or polygons are treated as if they were a unit. If the \code{GVector} has a data table associated with it, the output will also have a data table as long as there is at least one column with values that are all the same. Columns that do not have duplicated values will be converted to \code{NA}.
 }
 \examples{
 \dontrun{
@@ -72,15 +86,19 @@ library(terra)
 
 # Example data
 madElev <- fastData("madElev")
+madCoast4 <- fastData("madCoast4")
 
 # Start GRASS session for examples only:
 faster(x = madElev, grassDir = grassDir,
 workDir = tempdir(), location = "examples") # line only needed for examples
 
-# Convert a SpatRaster to a GRaster:
+### aggregating a GRaster
+#########################
+
+# Convert:
 elev <- fast(madElev)
 
-### Aggregate by same factor in 2 dimensions
+### Aggregate GRaster by same factor in 2 dimensions
 # fasterRaster
 agg2 <- aggregate(elev, 2, "mean")
 agg2
@@ -89,12 +107,13 @@ agg2
 agg2terra <- aggregate(madElev, 2, "mean")
 agg2terra
 
-# Compare fasterRaster and terra... These should be the same.
+# Compare rasters aggregated by fasterRaster and terra.
+# These should be the same.
 agg2 <- rast(agg2)
 agg2 <- extend(agg2, agg2terra)
 agg2 - agg2terra
 
-### Aggregate by a non-integer factor in 2 dimensions
+### Aggregate GRaster by a non-integer factor in 2 dimensions
 # fasterRaster
 agg2.9 <- aggregate(elev, 2.9, "mean")
 agg2.9
@@ -103,14 +122,33 @@ agg2.9
 agg2.9terra <- aggregate(madElev, 2.9, "mean")
 agg2.9terra
 
-# Compare fasterRaster and terra... These should be different.
+# Compare rasters aggregated by fasterRaster and terra.
+# These should be different.
 res(agg2.9)
 res(agg2.9terra) # terra rounds aggregation factor down
 2 * res(madElev) # original resolution multipled by 2
 
-### Aggregate by different factor in 2 dimensions
+### Aggregate GRaster by different factor in 2 dimensions
 agg2x3 <- aggregate(elev, c(2, 3), "mean")
 agg2x3
+
+### aggregating a GVector
+#########################
+
+# Convert:
+coast <- fast(madCoast4)
+
+# Aggregate:
+aggCoast <- aggregate(coast)
+
+ngeom(coast)
+ngeom(aggCoast)
+
+# plot
+oldpar <- par(mfrow = c(1, 2))
+plot(coast, main = "Original")
+plot(aggCoast, main = "Aggregated")
+par(oldpar)
 
 # IMPORTANT #3: Revert back to original GRASS session if needed.
 restoreSession(opts.)
@@ -119,5 +157,5 @@ removeSession("examples")
 }
 }
 \seealso{
-\code{\link[stats:aggregate]{stats::aggregate()}}, \code{\link[terra:disaggregate]{terra::disagg()}}, \strong{GRASS} module \code{r.resamp.stats}
+\code{\link[stats:aggregate]{stats::aggregate()}}, \code{\link[terra:aggregate]{terra::aggregate()}}, \code{\link[terra:disaggregate]{terra::disagg()}}, \strong{GRASS} module \code{r.resamp.stats}
 }
