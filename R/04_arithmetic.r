@@ -1,8 +1,10 @@
 #' Arithmetic operations on GRasters
 #'
-#' @description You can do arithmetic operations on `GRaster`s using normal operators in **R**: `+`, `-`, `*`, `/`, `^`, `%%` (modulus), and `%/%` (integer division).
+#' @description **`GRaster`s**: You can do arithmetic operations on `GRaster`s and using normal operators in **R**: `+`, `-`, `*`, `/`, `^`, `%%` (modulus), and `%/%` (integer division). 
 #'
-#' Note that the precision of the result will be determined by the `rasterPrecision` option, which can be set using [setFastOptions()]. The default is `"float"`, which is precise to about the 7th decimal place. This be increased to about the 15th decimal place by setting this to `"double"`, though it can substantially increase the size of the raster output in memory and when saved to disk.
+#' Note that for `GRaster`s, the precision of the result will be determined by the `rasterPrecision` option, which can be set using [setFastOptions()]. The default is `"float"`, which is precise to about the 7th decimal place. This be increased to about the 15th decimal place by setting this to `"double"`, though it can substantially increase the size of the raster output in memory and when saved to disk.
+#'
+#' **`GVector`s**: You can also do arithmetic operations on `GVector`s using the `+` and `-` operators. The `+ operator is the same as [union()] and the `-` operator the same as [not()].
 #' 
 #' @param name Character: Name of the new `GRaster`.
 #' @param src `sources` of the `GRaster` being operated on
@@ -14,7 +16,7 @@
 #'
 #' @rdname Arithmetic
 #' @noRd
-.genericArith <- function(name, src, ex) {
+.genericArithRast <- function(name, src, ex) {
 
 	args <- list(
 		cmd = "r.mapcalc",
@@ -54,9 +56,9 @@ methods::setMethod(
 
 			name <- "layer"
 			if (i == 1L) {
-				out <- .genericArith(name = name, src = src, ex = ex)
+				out <- .genericArithRast(name = name, src = src, ex = ex)
 			} else {
-				out <- c(out, .genericArith(name = name, src = src, ex = ex))
+				out <- c(out, .genericArithRast(name = name, src = src, ex = ex))
 			}
 		
 		} # next layer
@@ -93,9 +95,9 @@ methods::setMethod(
 
 			name <- "layer"
 			if (i == 1L) {
-				out <- .genericArith(name = name, src = src, ex = ex)
+				out <- .genericArithRast(name = name, src = src, ex = ex)
 			} else {
-				out <- c(out, .genericArith(name = name, src = src, ex = ex))
+				out <- c(out, .genericArithRast(name = name, src = src, ex = ex))
 			}
 		
 		} # next layer
@@ -131,9 +133,9 @@ methods::setMethod(
 
 			name <- "layer"
 			if (i == 1L) {
-				out <- .genericArith(name = name, src = src, ex = ex)
+				out <- .genericArithRast(name = name, src = src, ex = ex)
 			} else {
-				out <- c(out, .genericArith(name = name, src = src, ex = ex))
+				out <- c(out, .genericArithRast(name = name, src = src, ex = ex))
 			}
 		
 		} # next layer
@@ -169,9 +171,9 @@ methods::setMethod(
 
 			name <- "layer"
 			if (i == 1L) {
-				out <- .genericArith(name = name, src = src, ex = ex)
+				out <- .genericArithRast(name = name, src = src, ex = ex)
 			} else {
-				out <- c(out, .genericArith(name = name, src = src, ex = ex))
+				out <- c(out, .genericArithRast(name = name, src = src, ex = ex))
 			}
 		
 		} # next layer
@@ -207,9 +209,9 @@ methods::setMethod(
 
 			name <- "layer"
 			if (i == 1L) {
-				out <- .genericArith(name = name, src = src, ex = ex)
+				out <- .genericArithRast(name = name, src = src, ex = ex)
 			} else {
-				out <- c(out, .genericArith(name = name, src = src, ex = ex))
+				out <- c(out, .genericArithRast(name = name, src = src, ex = ex))
 			}
 		
 		} # next layer
@@ -245,9 +247,9 @@ methods::setMethod(
 
    			name <- "layer"
 			if (i == 1L) {
-				out <- .genericArith(name = name, src = src, ex = ex)
+				out <- .genericArithRast(name = name, src = src, ex = ex)
 			} else {
-				out <- c(out, .genericArith(name = name, src = src, ex = ex))
+				out <- c(out, .genericArithRast(name = name, src = src, ex = ex))
 			}
 		
 		} # next layer
@@ -275,7 +277,7 @@ methods::setMethod(
 		# } else {
 			# paste0(src, " = ", sources(e2))
 		# }
-		# .genericArith(x = e2, src = src, ex = ex)
+		# .genericArithRast(x = e2, src = src, ex = ex)
 		
 	# }
 # )
@@ -311,9 +313,9 @@ methods::setMethod(
 				}
 				
 				if (i == 1L) {
-					out <- .genericArith(name = name, src = src, ex = ex)
+					out <- .genericArithRast(name = name, src = src, ex = ex)
 				} else {
-					this <- .genericArith(name = name, src = src, ex = ex)
+					this <- .genericArithRast(name = name, src = src, ex = ex)
 					out <- c(out, this)
 				}
 				
@@ -337,9 +339,9 @@ methods::setMethod(
 				}
 				
 				if (i == 1L) {
-					out <- .genericArith(name = name, src = src, ex = ex)
+					out <- .genericArithRast(name = name, src = src, ex = ex)
 				} else {
-					this <- .genericArith(name = name, src = src, ex = ex)
+					this <- .genericArithRast(name = name, src = src, ex = ex)
 					out <- c(out, this)
 				}
 				
@@ -363,9 +365,9 @@ methods::setMethod(
 				}
 				
 				if (i == 1L) {
-					out <- .genericArith(name = name, src = src, ex = ex)
+					out <- .genericArithRast(name = name, src = src, ex = ex)
 				} else {
-					this <- .genericArith(name = name, src = src, ex = ex)
+					this <- .genericArithRast(name = name, src = src, ex = ex)
 					out <- c(out, this)
 				}
 				
@@ -374,6 +376,30 @@ methods::setMethod(
 		} else {
 			stop("Both rasters must have the same number of layers, or at least one raster must have a single layer.")
 		}
+		out
+			
+	} # EOF
+)
+
+# vector vector
+methods::setMethod(
+	f = "Arith",
+	signature(e1 = "GVector", e2 = "GVector"),
+    function(e1, e2) {
+	
+		compareGeom(e1, e2)
+		.restore(e1)
+
+		oper <- as.vector(.Generic)[1L]
+
+		if (oper == "+") {
+			out <- union(e1, e2)
+		} else if (oper == "-") {
+			out <- not(e1, e2)
+		} else {
+			stop("Only the + and - operators are defined for GVectors.")
+		}
+		
 		out
 			
 	} # EOF

@@ -112,6 +112,8 @@ methods::setGeneric(name = "hillshade", def = function(x, ...) standardGeneric("
 methods::setGeneric(name = "hist", package = "terra")
 methods::setGeneric(name = "horizonHeight", def = function(x, ...) standardGeneric("horizonHeight"))
 
+methods::setGeneric(name = "intersect", package = "terra")
+methods::setGeneric(name = "intercept", def = function(x, ...) standardGeneric("intercept"))
 methods::setGeneric(name = "is.2d", def = function(x) standardGeneric("is.2d"))
 methods::setGeneric(name = "is.3d", def = function(x) standardGeneric("is.3d"))
 if (!isGeneric("is.factor")) { methods::setGeneric(name = "is.factor", def = function(x) standardGeneric("is.factor")) }
@@ -126,7 +128,6 @@ methods::setGeneric(name = "is.lonlat", package = "terra")
 if (!isGeneric("is.na")) { methods::setGeneric(name = "is.na", def = function(x) standardGeneric("is.na")) }
 methods::setGeneric(name = "is.points", package = "terra")
 methods::setGeneric(name = "is.polygons", package = "terra")
-methods::setGeneric(name = "intercept", def = function(x, ...) standardGeneric("intercept"))
 
 # methods::setGeneric(name = "keepRows", def = function(x, ...) standardGeneric("keepRows"))
 methods::setGeneric(name = "kernel", def = function(x, ...) standardGeneric("kernel"))
@@ -160,6 +161,7 @@ methods::setGeneric(name = "ngeom", def = function(x, ...) standardGeneric("ngeo
 methods::setGeneric(name = "nlevels", package = "terra")
 methods::setGeneric(name = "noise", def = function(x, ...) standardGeneric("noise"))
 methods::setGeneric(name = "nonnacell", def = function(x) standardGeneric("nonnacell"))
+methods::setGeneric(name = "not", def = function(x, y, ...) standardGeneric("not"))
 methods::setGeneric(name = "not.na", def = function(x, ...) standardGeneric("not.na")) # in base
 methods::setGeneric(name = "nrow", def = function(x) standardGeneric("nrow")) # in base
 methods::setGeneric(name = "nsubgeom", def = function(x, ...) standardGeneric("nsubgeom"))
@@ -219,6 +221,7 @@ methods::setGeneric(name = "trim", package = "terra")
 methods::setGeneric(name = "tvalue", def = function(x, ...) standardGeneric("tvalue"))
 
 methods::setGeneric(name = "update", package = "terra")
+methods::setGeneric(name = "union", package = "terra")
 
 methods::setGeneric(name = "varpop", def = function(x, ...) standardGeneric("varpop"))
 methods::setGeneric(name = "vegIndex", def = function(x, ...) standardGeneric("vegIndex"))
@@ -231,6 +234,7 @@ methods::setGeneric(name = "writeRaster", package = "terra")
 methods::setGeneric(name = "writeVector", package = "terra")
 
 methods::setGeneric(name = "xres", package = "terra")
+methods::setGeneric(name = "xor", def = function(x, y, ...) standardGeneric("xor"))
 
 methods::setGeneric(name = "yres", package = "terra")
 

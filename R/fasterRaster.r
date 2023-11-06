@@ -157,6 +157,7 @@
 #' [zext()]: Vertical extent\cr
 #'
 #' ## Functions that operate on or create `GVector`s
+#' [Arithmetic]: Mathematical operations on `GVector`s: `+` (same as [union()]) and  `-` (same as [not()])\cr
 #' The `[` ([single bracket][subset_single_bracket]) operator, can be used to subset geometries of a `GRaster`.\cr
 #' The `$` [dollar][subset_dollar] and `[[` ([double-square brackets][subset_double_square_brackets]) operators can be used to get columns of a `GVector`'s data table.\cr
 #' The `$<-` ([dollar replace][replace_dollar]) operator can be used to replace specific columns of a `GVector`'s data table.\cr
@@ -175,7 +176,9 @@
 #' [distance()]: Distance between geometries in two `GVector`, or from a `GVector` to cells of a `GRaster`\cr
 #' [extract()]: Extract values from a `GVector` at specific points\cr
 #' [head()]: First rows of a `GVector`'s data table\cr
+#' [intersect()]: Intersection of two `GVectors`.\cr
 #' [kernel()]: Kernel density estimator of points.\cr
+#' [not()]: Remove part of a `GVector` that overlaps with another\cr
 #' [project()]: Change coordinate reference system\cr
 #' [simplifyGeom()]: Remove vertices\cr
 #' [smoothGeom()]: Remove "angular" aspects of features\cr
@@ -184,6 +187,8 @@
 #' [st_distance()]: Distance between geometries in two `GVector`\cr
 #' [tail()]: Last rows of a `GVector`'s data table\cr
 #' [thinPoints()]: Reduce number of points in same raster cell\cr
+#' [union()]: Combine two `GVector`s\cr
+#' [xor()]: Select parts of polygons not shared by two `GVector`s\cr
 #'
 #' ## Converting between data types
 #' [as.contour()]: Convert a `GRaster` to a `GVector` representing contour lines\cr
