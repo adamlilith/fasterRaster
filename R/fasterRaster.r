@@ -175,6 +175,7 @@
 #' [disagg()]: Separate multipart geometries into singlepart geometries\cr
 #' [distance()]: Distance between geometries in two `GVector`, or from a `GVector` to cells of a `GRaster`\cr
 #' [extract()]: Extract values from a `GVector` at specific points\cr
+#' [grid()]: Create a grid `GVector`\cr
 #' [head()]: First rows of a `GVector`'s data table\cr
 #' [hexagons()]: Create a hexagonal grid\cr
 #' [intersect()]: Intersection of two `GVectors`.\cr

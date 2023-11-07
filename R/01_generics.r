@@ -106,6 +106,7 @@ methods::setGeneric(name = "freq", package = "terra")
 
 methods::setGeneric(name = "geomtype", package = "terra")
 methods::setGeneric(name = "global", package = "terra")
+methods::setGeneric(name = "grid", def = function(x, ...) standardGeneric("grid"))
 
 methods::setGeneric(name = "head", package = "utils")
 methods::setGeneric(name = "hexagons", def = function(x, ...) standardGeneric("hexagons"))
