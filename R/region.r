@@ -34,7 +34,7 @@
 #' * If used with no arguments, `regionDim()`, `regionExt()`, and `regionRes()` return numeric or integer vectors.
 #' * If the function is used to change reshape/resample the region, it returns a `GRegion` object reflecting the region *before* it was changed. This allows users to revert to the original region if desired.
 #' 
-#' @details When resizing extent, **terra** keeps the `xmin`` (west) and `ymax` (north) the fixed and shifts `xmax` (east) and `ymin` (south) as needed. To retain as much fidelity between **fasterRaster** and **terra** as possible, these functions do the same to the region.
+#' @details When resizing extent, **terra** keeps the `xmin` (west) and `ymax` (north) the fixed and shifts `xmax` (east) and `ymin` (south) as needed. To retain as much fidelity between **fasterRaster** and **terra** as possible, these functions do the same to the region.
 #'
 #' @example man/examples/ex_regions.r
 #'
