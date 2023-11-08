@@ -48,9 +48,13 @@ plot(g3, add = TRUE)
 ### hexagons
 ############
 
-hexes <- hexagons(coast, 20)
-plot(coast)
-plot(hexes, add = TRUE)
+hexes <- hexagons(coast, ny = 10)
+plot(hexes)
+plot(coast, lwd = 2, add = TRUE)
+
+hexes <- hexagons(coast, ny = 10, expand = c(0.3, 0.1))
+plot(hexes)
+plot(coast, lwd = 2, add = TRUE)
 
 # IMPORTANT #3: Revert back to original GRASS session if needed.
 restoreSession(opts.)
