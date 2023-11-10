@@ -270,7 +270,7 @@ methods::setMethod(
 
 	if (any(rastFile == "")) {
 		tempFile <- tempfile(fileext = ".tif")
-		terra::writeRaster(x, tempFile, overwrite = TRUE, datatype = datatype(x, "terra"))
+		terra::writeRaster(x, filename = tempFile, overwrite = TRUE, datatype = datatype(x, "terra"))
 		x <- tempFile
 	} else {
 		x <- terra::sources(x)
