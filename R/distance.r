@@ -59,9 +59,9 @@ methods::setMethod(
 	if (!is.null(maxDist) && maxDist < 0) stop("Argument ", sQuote("maxDist"), " must be positive or NULL.")
 	if ((!is.null(maxDist) & !is.null(maxDist)) && (minDist > maxDist)) stop("Argument ", sQuote("minDist"), " is greater than ", sQuote("maxDist"), ".")
 
-	metric <- tolower(method)
-	metric <- pmatchSafe(metric, c("euclidean", "squared", "maximum", "manhattan", "geodesic"))
-	if (is.lonlat(x) & metric != "geodesic") warning("Argument ", sQuote("method"), " should be ", sQuote("geodesic"), " for rasters with longitude/latitude coordinate reference systems.")
+	method <- tolower(method)
+	method <- pmatchSafe(method, c("euclidean", "squared", "maximum", "manhattan", "geodesic"))
+	if (is.lonlat(x) & method != "geodesic") warning("Argument ", sQuote("method"), " should be ", sQuote("geodesic"), " for rasters with longitude/latitude coordinate reference systems.")
 
 	.restore(x)
 	region(x)
@@ -79,12 +79,12 @@ methods::setMethod(
 		
 	}
 	
-	gnOut <- .makeSourceName(NULL, "raster")
+	srcOut <- .makeSourceName(NULL, "raster")
 	args <- list(
 		cmd = "r.grow.distance",
 		input = src,
-		distance = gnOut,
-		metric = metric,
+		distance = srcOut,
+		metric = method,
 		flags = c("quiet", "overwrite", "m"),
 		intern = TRUE
 	)
@@ -95,7 +95,7 @@ methods::setMethod(
 	do.call(rgrass::execGRASS, args)
 	
 	# convert units
-	src <- .convertRastUnits(gnOut, unit)
+	src <- .convertRastUnits(srcOut, unit)
 	.makeGRaster(src, "distance")
 	
 	} # EOF
@@ -113,37 +113,36 @@ methods::setMethod(
 	if (!is.null(maxDist) && maxDist < 0) stop("Argument ", sQuote("maxDist"), " must be positive or NULL.")
 	if ((!is.null(maxDist) & !is.null(maxDist)) && (minDist > maxDist)) stop("Argument ", sQuote("minDist"), " is greater than ", sQuote("maxDist"), ".")
 
-	metric <- tolower(method)
-	metric <- pmatchSafe(metric, c("euclidean", "squared", "maximum", "manhattan", "geodesic"))
-	if (is.lonlat(x) & metric != "geodesic") warning("Argument ", sQuote("method"), " should be ", sQuote("geodesic"), " for rasters with longitude/latitude coordinate reference systems.")
+	method <- pmatchSafe(method, c("euclidean", "squared", "maximum", "manhattan", "geodesic"))
+	if (is.lonlat(x) & method != "geodesic") warning("Argument ", sQuote("method"), " should be ", sQuote("geodesic"), " for rasters with longitude/latitude coordinate reference systems.")
 
 	compareGeom(x, y)
 	.restore(x)
 	
+	# rasterize
  	gtype <- geomtype(y, grass = TRUE)
 
-	gnRasterized <- .makeSourceName("rasterized", "raster")
+	srcRasterized <- .makeSourceName("v_to_rast", "raster")
 	args <- list(
 		cmd = "v.to.rast",
 		input = sources(y),
-		output = gnRasterized,
+		output = srcRasterized,
 		use = "val",
 		value = 1,
 		type = gtype,
-		flags = c("quiet", "overwrite"),
-		intern = TRUE
+		flags = c("quiet", "overwrite")
 	)
-	if (dense) args$flags <- c(args$flags, "d")
+	if (dense & gtype == "line") args$flags <- c(args$flags, "d")
 	do.call(rgrass::execGRASS, args = args)
 	
-	src <- .makeSourceName("distance", "raster")
+	# distance
+	src <- .makeSourceName("r_grow_distance", "raster")
 	args <- list(
 		cmd = "r.grow.distance",
-		input = gnRasterized,
+		input = srcRasterized,
 		distance = src,
-		metric = metric,
-		flags = c("m", "quiet", "overwrite"),
-		intern = TRUE
+		metric = method,
+		flags = c("m", "quiet", "overwrite")
 	)
 	if (!fillNA) args$flags <- c(args$flags, "n")
 	do.call(rgrass::execGRASS, args = args)
@@ -234,21 +233,21 @@ st_distance <- function(x) UseMethod("st_distance", x)
     unit <- pmatchSafe(unit, c("meters", "metres", "kilometers", "km", "miles", "nautical miles", "nm", "yards", "yds", "feet", "ft"))
     if (!(unit %in% c("meters", "metres"))) {
 
-        gnIn <- src
-        gnOut <- .makeSourceName("unitConvert", "raster")
+        srcIn <- src
+        srcOut <- .makeSourceName("unitConvert", "raster")
 
         ex <- if (unit %in% c("kilometers", "km")) {
-            paste0(gnOut, " = ", gnIn, " / 1000")
+            paste0(srcOut, " = ", srcIn, " / 1000")
         } else if (unit == "miles") {
-            paste0(gnOut, " = ", gnIn, " * 0.0006213712")
+            paste0(srcOut, " = ", srcIn, " * 0.0006213712")
         } else if (unit %in% c("nautical miles", "nm")) {
-            paste0(gnOut, " = ", gnIn, " * 0.0005399568")
+            paste0(srcOut, " = ", srcIn, " * 0.0005399568")
         } else if (unit %in% c("yards", "yds")) {
-            paste0(gnOut, " = ", gnIn, " * 1.0936132983")
+            paste0(srcOut, " = ", srcIn, " * 1.0936132983")
         } else if (unit %in% c("feet", "ft")) {
-            paste0(gnOut, " = ", gnIn, " * 3.28084")
+            paste0(srcOut, " = ", srcIn, " * 3.28084")
         } else if (unit %in% c("survey feet", "sft")) {
-            paste0(gnOut, " = ", gnIn, " * 3.280839895")
+            paste0(srcOut, " = ", srcIn, " * 3.280839895")
         }
 
         args <- list(
@@ -258,7 +257,7 @@ st_distance <- function(x) UseMethod("st_distance", x)
             intern = TRUE
         )
         do.call(rgrass::execGRASS, args = args)
-        out <- gnOut
+        out <- srcOut
     } else {
         out <- src
     }
