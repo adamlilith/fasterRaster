@@ -9,7 +9,7 @@
 #' @param h Numeric or `NULL` (default): Smoothing bandwidth of kernel estimator.
 #'
 #' If this is `NULL`, the Epanechnikov kernel is used, and `optimize` is `TRUE`, then Silverman's rule-of-thumb is used to estimate the optimal value of `h`:
-#' \dqen{h = 0.9 * min(\sigma_x / n^1/6, \sigma_y / n^1/6)}
+#' \deqn{h = 0.9 * min(\sigma_x / n^1/6, \sigma_y / n^1/6)}
 #'
 #' If the Gaussian kernel is used, and `optimize` is `TRUE`, then the **GRASS** `v.kernel` function will attempt to identify the optimal bandwidth, up to the value of `h`, if `h` is defined.
 #'
@@ -25,6 +25,7 @@
 #' * `"quartic"`
 #' * `"triweight"`
 #' * `"cosine"`
+#'
 #' Partial matching is used, and case is ignored.
 #'
 #' @returns A `GRaster`.
