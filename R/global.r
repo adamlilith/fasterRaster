@@ -5,8 +5,8 @@
 #' @param x A `GRaster` or missing.  If missing, then a vector of all of the accepted function names is returned.
 #'
 #' @param fun Character vector: The name of the function(s):
-#' * `"countNA"`: Total number of `NA` cells.
 #' * `"countNonNA"`: Total number of non-`NA` cells.
+#' * `"countNA"`: Total number of `NA` cells.
 #' * `"cv"`: Sample coefficient of variation (expressed as a proportion of the mean).
 #' * `"cvpop"`: Population coefficient of variation (expressed as a proportion of the mean).
 #' * `"max"` and `"min"`: Highest and lowest values across non-`NA` cells.
