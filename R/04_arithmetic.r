@@ -4,7 +4,11 @@
 #'
 #' Note that for `GRaster`s, the precision of the result will be determined by the `rasterPrecision` option, which can be set using [setFastOptions()]. The default is `"float"`, which is precise to about the 7th decimal place. This be increased to about the 15th decimal place by setting this to `"double"`, though it can substantially increase the size of the raster output in memory and when saved to disk.
 #'
-#' **`GVector`s**: You can also do arithmetic operations on `GVector`s using the `+` and `-` operators. The `+ operator is the same as [union()] and the `-` operator the same as [not()].
+#' **`GVector`s**: You can also do arithmetic operations on `GVector`s:
+#' `+` operator: Same as [union()]
+#' `-` operator: Same as [erase()].
+#' `*` operator: Same as [intersect()].
+#' `/` operator: Same as [xor()].
 #' 
 #' @param name Character: Name of the new `GRaster`.
 #' @param src `sources` of the `GRaster` being operated on
@@ -395,9 +399,13 @@ methods::setMethod(
 		if (oper == "+") {
 			out <- union(e1, e2)
 		} else if (oper == "-") {
-			out <- not(e1, e2)
+			out <- erase(e1, e2)
+		} else if (oper == "*") {
+			out <- intersect(e1, e2)
+		} else if (oper == "/") {
+			out <- intersect(e1, e2)
 		} else {
-			stop("Only the + and - operators are defined for GVectors.")
+			stop("Only the +, -, *, and / operators are defined for GVectors.")
 		}
 		
 		out
