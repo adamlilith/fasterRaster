@@ -4,7 +4,7 @@
 #'
 #' @param x The name of the raster or spatial vector to get. All of these represent a portion of the eastern coast of Madagascar.
 #'
-#' Spatial vectors (objects of class `sf` from the **sf** `package):
+#' Spatial vectors (objects of class `sf` from the **sf** package):
 #' * [madCoast0]: Outline of the region (polygon)
 #' * [madCoast4]: Outlines of the Fokontanies (Communes) of the region (polygons)
 #' * [madDypsis]: Records of plants of the genus *Dypsis* (points)
@@ -12,7 +12,7 @@
 #'
 #' Rasters (objects of class `SpatRaster` from the **terra** package):
 #' * [madChelsa]: Bioclimatic variables
-#' * [madCover]: Land cover (also see `madCoverCats)
+#' * [madCover]: Land cover (also see [madCoverCats])
 #' * [madElev]: Elevation
 #' * [madForest2000]: Forest cover in year 2000
 #' * [madForest2014]: Forest cover in year 2014
