@@ -12,7 +12,7 @@
 #'
 #' @returns A `GVector`.
 #'
-#' @example man/examples/ex_grid_gridPoints_hexagons.r
+#' @example man/examples/ex_grid_hexagons.r
 #'
 #' @seealso [grid()], module `v.mkgrid` in **GRASS**
 #'
