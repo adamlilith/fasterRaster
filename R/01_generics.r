@@ -23,7 +23,7 @@
 
 if (getRversion() >= "2.15.1") {
     utils::globalVariables(c(".", ".I", ".N", ".SD"), utils::packageName())
-    utils::globalVariables(c("..ac", "..cols", "..i", "..j", "j", "i"), utils::packageName())
+    utils::globalVariables(c("..ac", "..cols", "..i", "..j", "j", "i", "..fun"), utils::packageName())
 }
 
 ### GENERICS
