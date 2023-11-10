@@ -1,6 +1,6 @@
 #' Intersection of two GVectors
 #'
-#' @description The `intersect()` function selects the area of overlap between two `GVector`s of the same type (points, lines or polygons).
+#' @description The `intersect()` function selects the area of overlap between two `GVector`s of the same type (points, lines or polygons). You can also use the `*` operator (e.g., `vect1 * vect2`).
 #'
 #' @param x,y `GVector`s.
 #'
