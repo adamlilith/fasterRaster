@@ -114,6 +114,7 @@ setMethod(
 	input <- rep(NA_character_, length(dots) + 1L)
 	input[1L] <- sources(x) # collects names of all vectors
 
+	cats <- list()
 	for (i in seq_along(dots)) {
 		cats[[i]] <- .vCats(dots[[i]])
 	}
