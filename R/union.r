@@ -1,12 +1,12 @@
 #' Combine two GVectors
 #'
-#' @description The `union()` function combines two "polgons" `GVector`s. The output will have at least as many geometries as both `GVector`s, plus more if polygons of one divide polygons of the other, and vice versa.
+#' @description The `union()` function combines two "polygons" `GVector`s. The output will have at least as many geometries as both `GVector`s, plus more if polygons of one divide polygons of the other, and vice versa. You can also use the `+` operator (e.g., `vect1 + vect2`).
 #'
 #' @param x,y `GVector`s representing polygons.
 #'
 #' @returns A `GVector`.
 #'
-#' @seealso [c()], [aggregate()], [crop()], [intersect()], [xor()], [not()]
+#' @seealso [c()], [aggregate()], [crop()], [intersect()], [xor()], [erase()]
 #' 
 #' @example man/examples/ex_union_intersect_xor_not.r
 #'
