@@ -157,7 +157,6 @@
 #' [zext()]: Vertical extent\cr
 #'
 #' ## Functions that operate on or create `GVector`s
-#' [Arithmetic]: Mathematical operations on `GVector`s: `+` (same as [union()]) and  `-` (same as [not()])\cr
 #' The `[` ([single bracket][subset_single_bracket]) operator, can be used to subset geometries of a `GRaster`.\cr
 #' The `$` [dollar][subset_dollar] and `[[` ([double-square brackets][subset_double_square_brackets]) operators can be used to get columns of a `GVector`'s data table.\cr
 #' The `$<-` ([dollar replace][replace_dollar]) operator can be used to replace specific columns of a `GVector`'s data table.\cr
@@ -167,20 +166,20 @@
 #' [as.points()]: Extract vertex coordinates from a "lines" or "polygons" `GVector`\cr
 #' [buffer()]: Create a polygon around/inside a `GVector`\cr
 #' [cleanGeom()]: Fix undesirable geometries of a `GVector`\cr
-#' [connectors()]: Create lines connecting nearest features of two `GVector`\cr
+#' [connectors()]: Create lines connecting nearest features of two `GVector`s\cr
 #' [convHull()]: Minimum convex hull\cr
 #' [crds()]: Extract coordinates of a `GVector`\cr
 #' [crop()]: Remove parts of a `GVector`\cr
 #' [delaunay()]: Delaunay triangulation\cr
 #' [disagg()]: Separate multipart geometries into singlepart geometries\cr
 #' [distance()]: Distance between geometries in two `GVector`, or from a `GVector` to cells of a `GRaster`\cr
+#' [erase()] or `-`: Remove part of a `GVector` that overlaps with another\cr
 #' [extract()]: Extract values from a `GVector` at specific points\cr
 #' [grid()]: Create a grid `GVector`\cr
 #' [head()]: First rows of a `GVector`'s data table\cr
 #' [hexagons()]: Create a hexagonal grid\cr
-#' [intersect()]: Intersection of two `GVectors`.\cr
+#' [intersect()] or `*`: Intersection of two `GVectors`.\cr
 #' [kernel()]: Kernel density estimator of points.\cr
-#' [not()]: Remove part of a `GVector` that overlaps with another\cr
 #' [project()]: Change coordinate reference system\cr
 #' [simplifyGeom()]: Remove vertices\cr
 #' [smoothGeom()]: Remove "angular" aspects of features\cr
@@ -189,8 +188,8 @@
 #' [st_distance()]: Distance between geometries in two `GVector`\cr
 #' [tail()]: Last rows of a `GVector`'s data table\cr
 #' [thinPoints()]: Reduce number of points in same raster cell\cr
-#' [union()]: Combine two `GVector`s\cr
-#' [xor()]: Select parts of polygons not shared by two `GVector`s\cr
+#' [union()] or `+`: Combine two `GVector`s\cr
+#' [xor()] or `/`: Select parts of polygons not shared by two `GVector`s\cr
 #'
 #' ## Converting between data types
 #' [as.contour()]: Convert a `GRaster` to a `GVector` representing contour lines\cr
@@ -244,7 +243,7 @@
 #' [madForest2000][madForest2000] and [madForest2014][madForest2014]: Forest cover in 2000 and 2014\cr
 #' [madLANDSAT][madLANDSAT]: Surface reflectance in 2023\cr
 #' [madRivers][madRivers]: Rivers vector\cr
-#' [madVegIndices][madVegIndices]: Vegetation indices that can be calculated using [vegIndex()].
+#' [vegIndices][vegIndices]: Vegetation indices that can be calculated using [vegIndex()].
 #' 
 #' ## Esoteric tutorials
 #' [Sessions, locations, and mapsets][tutorial_sessions]\cr
