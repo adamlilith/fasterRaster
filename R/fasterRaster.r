@@ -138,6 +138,7 @@
 #' [crs()]: Coordinate reference system\cr
 #' [datatype()]: Data type of fields\cr
 #' [dim()]: Number of geometries and columns\cr
+#' [expanse()]: Area of polygons or length of lines\cr
 #' [ext()], [N()], [S()], [E()], [W()], [top()], and [bottom()]: Spatial extent\cr
 #' [geomtype()]: Type of vector (points, lines, polygons)\cr
 #' [is.2d()] and [is.3d()]: Is an object 2- or 3-dimensional?\cr
@@ -174,13 +175,16 @@
 #' [disagg()]: Separate multipart geometries into singlepart geometries\cr
 #' [distance()]: Distance between geometries in two `GVector`, or from a `GVector` to cells of a `GRaster`\cr
 #' [erase()] or `-`: Remove part of a `GVector` that overlaps with another\cr
+#' [expanse()]: Area of polygons or length of lines\cr
 #' [extract()]: Extract values from a `GVector` at specific points\cr
+#' [fillHoles()]: Fill holes in a `GVector` (requires 8.4+)\cr
 #' [grid()]: Create a grid `GVector`\cr
 #' [head()]: First rows of a `GVector`'s data table\cr
 #' [hexagons()]: Create a hexagonal grid\cr
 #' [intersect()] or `*`: Intersection of two `GVectors`.\cr
 #' [kernel()]: Kernel density estimator of points.\cr
 #' [project()]: Change coordinate reference system\cr
+#' [rasterize()]: Convert a `GVector` to a `GRaster`\cr
 #' [simplifyGeom()]: Remove vertices\cr
 #' [smoothGeom()]: Remove "angular" aspects of features\cr
 #' [st_as_sf()]: Convert a `GVector` to a `sf` vector\cr
