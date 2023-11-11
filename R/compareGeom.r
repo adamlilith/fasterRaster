@@ -329,7 +329,7 @@ methods::setMethod(f = "compareGeom",
 .locationCompare <- function(out, x, y, stopOnError, messages) {
 
 	if (location(x) != location(y)) {
-		msg <- "The objects are in different GRASS locations."
+		msg <- paste0("The objects are in different GRASS ", sQuote("locations"), ". See the short tutorial on ", sQuote("locations"), " using ?tutorial_sessions.")
 		if (stopOnError) stop(msg)
 		if (messages & !stopOnError) warning(msg)
 		out <- FALSE
