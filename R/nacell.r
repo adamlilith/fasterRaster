@@ -27,7 +27,7 @@ methods::setMethod(
         intern = TRUE
     )
 
-    if (getFastOptions("grassVer") >= "8.3") args$nprocs <- getFastOptions("cores")
+    if (grassInfo("versionNumber") >= 8.3) args$nprocs <- getFastOptions("cores")
 
     stats <- do.call(rgrass::execGRASS, args = args)
     pattern <- "total null cells: "
