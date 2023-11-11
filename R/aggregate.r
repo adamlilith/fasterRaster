@@ -217,7 +217,7 @@ methods::setMethod(
 
 	if (inherits(x, "GVector")) {
 		.restore(x)
-		src <- source(x)
+		src <- sources(x)
 	} else {
 		src <- x
 	}
