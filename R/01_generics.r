@@ -95,11 +95,14 @@ methods::setGeneric(name = "droplevels", package = "terra")
 methods::setGeneric(name = "dropRows", def = function(x, ...) standardGeneric("dropRows"))
 
 methods::setGeneric(name = "E", def = function(x, ...) standardGeneric("E"))
+methods::setGeneric(name = "erase", package = "terra") 
 methods::setGeneric(name = "ext", package = "terra") 
 methods::setGeneric(name = "extend", package = "terra")
+methods::setGeneric(name = "expanse", package = "terra")
 methods::setGeneric(name = "extract", package = "terra")
 
 methods::setGeneric(name = "fast", def = function(x, ...) standardGeneric("fast"))
+methods::setGeneric(name = "fillHoles", package = "terra")
 methods::setGeneric(name = "focal", package = "terra")
 methods::setGeneric(name = "fractalRast", def = function(x, ...) standardGeneric("fractalRast"))
 methods::setGeneric(name = "freq", package = "terra")
@@ -163,7 +166,6 @@ methods::setGeneric(name = "ngeom", def = function(x, ...) standardGeneric("ngeo
 methods::setGeneric(name = "nlevels", package = "terra")
 methods::setGeneric(name = "noise", def = function(x, ...) standardGeneric("noise"))
 methods::setGeneric(name = "nonnacell", def = function(x) standardGeneric("nonnacell"))
-methods::setGeneric(name = "not", def = function(x, y, ...) standardGeneric("not"))
 methods::setGeneric(name = "not.na", def = function(x, ...) standardGeneric("not.na")) # in base
 methods::setGeneric(name = "nrow", def = function(x) standardGeneric("nrow")) # in base
 methods::setGeneric(name = "nsubgeom", def = function(x, ...) standardGeneric("nsubgeom"))
@@ -179,6 +181,7 @@ methods::setGeneric(name = "quantile", package = "terra")
 
 methods::setGeneric(name = "r2", def = function(x, ...) standardGeneric("r2"))
 methods::setGeneric(name = "rast", package = "terra")
+methods::setGeneric(name = "rasterize", package = "terra")
 methods::setGeneric(name = "replaceNAs", def = function(x, ...) standardGeneric("replaceNAs"))
 methods::setGeneric(name = "rnormRast", def = function(x, ...) standardGeneric("rnormRast"))
 methods::setGeneric(name = "runifRast", def = function(x, ...) standardGeneric("runifRast"))
