@@ -1,4 +1,4 @@
-# fasterRaster 3.0.0 (2023-XX-XX)
+# fasterRaster 3.0.0 (2024-XX-XX)
 First release of new, intuitive **fasterRaster** emulating and interoperable with **terra** and **sf**!!!
 
 ## Breaking changes
