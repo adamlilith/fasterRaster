@@ -61,10 +61,7 @@ plot(dypsis, pch = 1, col = "red", add = TRUE)
 
 # Random Voronoi tessellation
 rand <- rvoronoi(coast4, size = 100)
-plot(rand, col = 1:40)
-plot(coast4, add = TRUE, lwd = 3)
-
-rand <- rvoronoi(dypsis, size = 100)
+plot(rand)
 
 # IMPORTANT #3: Revert back to original GRASS session if needed.
 restoreSession(opts.)

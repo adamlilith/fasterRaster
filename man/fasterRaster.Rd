@@ -105,6 +105,7 @@ The assign operators, \verb{$<-} (\link[=replace_dollar]{dollar assign}), \verb{
 \code{\link[=shade]{hillshade()}}: Create a hillshade \code{GRaster}\cr
 \code{\link[=hist]{hist()}}: Histogram of \code{GRaster} values\cr
 \code{\link[=horizonHeight]{horizonHeight()}}: Horizon height\cr
+\code{\link[=kernel]{kernel()}}: Kernel density estimator of points.\cr
 \code{\link[=longlat]{longlat()}}: Create longitude/latitude rasters.\cr
 \code{\link[=mask]{mask()}}: Remove values in a \code{GRaster} based on values in another \code{GRaster} or vector\cr
 \code{\link[=merge]{merge()}}: Combine two or more rasters with different extents and fill in \code{NA}s\cr
@@ -159,6 +160,7 @@ The assign operators, \verb{$<-} (\link[=replace_dollar]{dollar assign}), \verb{
 \code{\link[=crs]{crs()}}: Coordinate reference system\cr
 \code{\link[=datatype]{datatype()}}: Data type of fields\cr
 \code{\link[=dim]{dim()}}: Number of geometries and columns\cr
+\code{\link[=expanse]{expanse()}}: Area of polygons or length of lines\cr
 \code{\link[=ext]{ext()}}, \code{\link[=N]{N()}}, \code{\link[=S]{S()}}, \code{\link[=E]{E()}}, \code{\link[=W]{W()}}, \code{\link[=top]{top()}}, and \code{\link[=bottom]{bottom()}}: Spatial extent\cr
 \code{\link[=geomtype]{geomtype()}}: Type of vector (points, lines, polygons)\cr
 \code{\link[=is.2d]{is.2d()}} and \code{\link[=is.3d]{is.3d()}}: Is an object 2- or 3-dimensional?\cr
@@ -189,16 +191,24 @@ The \verb{$<-} (\link[=replace_dollar]{dollar replace}) operator can be used to 
 \code{\link[=as.points]{as.points()}}: Extract vertex coordinates from a "lines" or "polygons" \code{GVector}\cr
 \code{\link[=buffer]{buffer()}}: Create a polygon around/inside a \code{GVector}\cr
 \code{\link[=cleanGeom]{cleanGeom()}}: Fix undesirable geometries of a \code{GVector}\cr
-\code{\link[=connectors]{connectors()}}: Create lines connecting nearest features of two \code{GVector}\cr
+\code{\link[=connectors]{connectors()}}: Create lines connecting nearest features of two \code{GVector}s\cr
 \code{\link[=convHull]{convHull()}}: Minimum convex hull\cr
 \code{\link[=crds]{crds()}}: Extract coordinates of a \code{GVector}\cr
 \code{\link[=crop]{crop()}}: Remove parts of a \code{GVector}\cr
 \code{\link[=delaunay]{delaunay()}}: Delaunay triangulation\cr
 \code{\link[=disagg]{disagg()}}: Separate multipart geometries into singlepart geometries\cr
 \code{\link[=distance]{distance()}}: Distance between geometries in two \code{GVector}, or from a \code{GVector} to cells of a \code{GRaster}\cr
+\code{\link[=erase]{erase()}} or \code{-}: Remove part of a \code{GVector} that overlaps with another\cr
+\code{\link[=expanse]{expanse()}}: Area of polygons or length of lines\cr
 \code{\link[=extract]{extract()}}: Extract values from a \code{GVector} at specific points\cr
+\code{\link[=fillHoles]{fillHoles()}}: Fill holes in a \code{GVector} (requires 8.4+)\cr
+\code{\link[=grid]{grid()}}: Create a grid \code{GVector}\cr
 \code{\link[=head]{head()}}: First rows of a \code{GVector}'s data table\cr
+\code{\link[=hexagons]{hexagons()}}: Create a hexagonal grid\cr
+\code{\link[=intersect]{intersect()}} or \code{*}: Intersection of two \code{GVectors}.\cr
+\code{\link[=kernel]{kernel()}}: Kernel density estimator of points.\cr
 \code{\link[=project]{project()}}: Change coordinate reference system\cr
+\code{\link[=rasterize]{rasterize()}}: Convert a \code{GVector} to a \code{GRaster}\cr
 \code{\link[=simplifyGeom]{simplifyGeom()}}: Remove vertices\cr
 \code{\link[=smoothGeom]{smoothGeom()}}: Remove "angular" aspects of features\cr
 \code{\link[=st_as_sf]{st_as_sf()}}: Convert a \code{GVector} to a \code{sf} vector\cr
@@ -206,6 +216,8 @@ The \verb{$<-} (\link[=replace_dollar]{dollar replace}) operator can be used to 
 \code{\link[=st_distance]{st_distance()}}: Distance between geometries in two \code{GVector}\cr
 \code{\link[=tail]{tail()}}: Last rows of a \code{GVector}'s data table\cr
 \code{\link[=thinPoints]{thinPoints()}}: Reduce number of points in same raster cell\cr
+\code{\link[=union]{union()}} or \code{+}: Combine two \code{GVector}s\cr
+\code{\link[=xor]{xor()}} or \code{/}: Select parts of polygons not shared by two \code{GVector}s\cr
 }
 
 \subsection{Converting between data types}{
@@ -269,7 +281,7 @@ The \verb{$<-} (\link[=replace_dollar]{dollar replace}) operator can be used to 
 \link{madForest2000} and \link{madForest2014}: Forest cover in 2000 and 2014\cr
 \link{madLANDSAT}: Surface reflectance in 2023\cr
 \link{madRivers}: Rivers vector\cr
-\link{madVegIndices}: Vegetation indices that can be calculated using \code{\link[=vegIndex]{vegIndex()}}.
+\link{vegIndices}: Vegetation indices that can be calculated using \code{\link[=vegIndex]{vegIndex()}}.
 }
 
 \subsection{Esoteric tutorials}{

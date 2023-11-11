@@ -7,13 +7,21 @@
 grassInfo(x = "citation")
 }
 \arguments{
-\item{x}{Character: What to return. Any of: \code{"citation"} (default), \code{"version"}, "\code{copyright}" Partial matching is used.}
+\item{x}{Character: What to return. Any of:
+\itemize{
+\item \code{"citation"} (default)
+\item \code{"version"}: Version number and release year
+\item \code{"version"}: Version number as numeric, major and minor only (e.g., 8.3)
+\item "\code{copyright}"
+}
+
+Partial matching is used.}
 }
 \value{
 Character.
 }
 \description{
-Report the \strong{GRASS} citation, version, or copyright information.
+Report the \strong{GRASS} citation, version/release year, version number, or copyright information.
 }
 \examples{
 \dontrun{

@@ -8,7 +8,7 @@
 \usage{
 \S4method{rvoronoi}{GRaster}(x, size = 100, seed = NULL)
 
-\S4method{rvoronoi}{GVector}(x, size = 100, seed = seed)
+\S4method{rvoronoi}{GVector}(x, size = 100, seed = NULL)
 }
 \arguments{
 \item{x}{A \code{GRaster} or \code{GVector} used to constrain the location of random points used to create the tesselation.}
@@ -68,10 +68,7 @@ plot(dypsis, pch = 1, col = "red", add = TRUE)
 
 # Random Voronoi tessellation
 rand <- rvoronoi(coast4, size = 100)
-plot(rand, col = 1:40)
-plot(coast4, add = TRUE, lwd = 3)
-
-rand <- rvoronoi(dypsis, size = 100)
+plot(rand)
 
 # IMPORTANT #3: Revert back to original GRASS session if needed.
 restoreSession(opts.)

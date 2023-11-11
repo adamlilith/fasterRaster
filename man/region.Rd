@@ -81,7 +81,7 @@ Note: In most cases extent cannot be retained exactly if the resolution is chang
 The value returned depends on how the function is used:
 \itemize{
 \item If used with no arguments, \code{region()} returns a \code{GRegion} object.
-\item If used with no arguments, \code{regionDim()}, \code{regionExt()}, and \code{regionres()} return numeric or integer vectors.
+\item If used with no arguments, \code{regionDim()}, \code{regionExt()}, and \code{regionRes()} return numeric or integer vectors.
 \item If the function is used to change reshape/resample the region, it returns a \code{GRegion} object reflecting the region \emph{before} it was changed. This allows users to revert to the original region if desired.
 }
 }
@@ -95,7 +95,7 @@ These functions either change the extent, dimensions, and/or resolution of a \st
 }
 }
 \details{
-When resizing extent, \strong{terra} keeps the \verb{xmin`` (west) and }ymax`` (north) the fixed and shifts \code{xmax} (east) and `ymin` (south) as needed. To retain as much fidelity between \strong{fasterRaster} and \strong{terra} as possible, these functions do the same to the region.
+When resizing extent, \strong{terra} keeps the \code{xmin} (west) and \code{ymax} (north) the fixed and shifts \code{xmax} (east) and \code{ymin} (south) as needed. To retain as much fidelity between \strong{fasterRaster} and \strong{terra} as possible, these functions do the same to the region.
 }
 \examples{
 \dontrun{

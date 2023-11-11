@@ -15,8 +15,8 @@
 
 \item{fun}{Character vector: The name of the function(s):
 \itemize{
-\item \code{"countNA"}: Total number of \code{NA} cells.
 \item \code{"countNonNA"}: Total number of non-\code{NA} cells.
+\item \code{"countNA"}: Total number of \code{NA} cells.
 \item \code{"cv"}: Sample coefficient of variation (expressed as a proportion of the mean).
 \item \code{"cvpop"}: Population coefficient of variation (expressed as a proportion of the mean).
 \item \code{"max"} and \code{"min"}: Highest and lowest values across non-\code{NA} cells.

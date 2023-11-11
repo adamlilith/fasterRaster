@@ -9,7 +9,7 @@ fastData(x)
 \arguments{
 \item{x}{The name of the raster or spatial vector to get. All of these represent a portion of the eastern coast of Madagascar.
 
-Spatial vectors (objects of class \code{sf} from the \strong{sf} `package):
+Spatial vectors (objects of class \code{sf} from the \strong{sf} package):
 \itemize{
 \item \link{madCoast0}: Outline of the region (polygon)
 \item \link{madCoast4}: Outlines of the Fokontanies (Communes) of the region (polygons)
@@ -20,7 +20,7 @@ Spatial vectors (objects of class \code{sf} from the \strong{sf} `package):
 Rasters (objects of class \code{SpatRaster} from the \strong{terra} package):
 \itemize{
 \item \link{madChelsa}: Bioclimatic variables
-\item \link{madCover}: Land cover (also see `madCoverCats)
+\item \link{madCover}: Land cover (also see \link{madCoverCats})
 \item 
 \item \link{madForest2000}: Forest cover in year 2000
 \item \link{madForest2014}: Forest cover in year 2014

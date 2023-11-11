@@ -8,7 +8,7 @@
 An object of class \code{data.frame}.
 }
 \source{
-\url{http://due.esrin.esa.int}{http://due.esrin.esa.int}
+\url{http://due.esrin.esa.int}
 }
 \description{
 This data frame corresponds to the \link{madCover} raster, which represents land cover for an eastern portion of Madagascar. Note that the land cover classes have been simplified, so this table and raster should \emph{not} be used for "real" analyses.
@@ -73,7 +73,7 @@ catNames(madCover) # names of categories table
 plot(madCover)
 }
 \references{
-Arino O., P. Bicheron, F. Achard, J. Latham, R. Witt and J.-L. Weber. 2008. GlobCover: The most detailed portrait of Earth. European Space Agency Bulletin 136:25-31. \url{http://due.esrin.esa.int}{http://due.esrin.esa.int}.
+Arino O., P. Bicheron, F. Achard, J. Latham, R. Witt and J.-L. Weber. 2008. GlobCover: The most detailed portrait of Earth. European Space Agency Bulletin 136:25-31. \url{http://due.esrin.esa.int}.
 }
 \seealso{
 \link{madCover}, \link[=tutorial_raster_data_types]{raster data types}
