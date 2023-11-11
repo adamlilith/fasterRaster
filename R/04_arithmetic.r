@@ -403,7 +403,7 @@ methods::setMethod(
 		} else if (oper == "*") {
 			out <- intersect(e1, e2)
 		} else if (oper == "/") {
-			out <- intersect(e1, e2)
+			out <- xor(e1, e2)
 		} else {
 			stop("Only the +, -, *, and / operators are defined for GVectors.")
 		}
