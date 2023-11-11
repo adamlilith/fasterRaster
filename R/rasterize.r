@@ -1,0 +1,129 @@
+#' Convert a GVector to a GRaster
+#'
+#' @description The `rasterize()` function converts a `GVector` into a `GRaster`.
+#'
+#' @param x A `GVector`.
+#'
+#' @param y A `GRaster`: The new raster will have the same extent and resolution as this raster.
+#'
+#' @param background Numeric or `NA` (default): Value to put in cells that are not `NA`.
+#'
+#' @param byGeom,collapse Logical:
+#' * If `byGeom` is `TRUE` and `collapse` is `TRUE`, the output will have just one raster layer, but with values that correspond to each geometry (i.e., each geometry will get a different value). If geometries overlap, then category value of the one on top will be assigned to the relevant cells. 
+#' * If `byGeom` is `TRUE`, and `collapse` is `FALSE`, then create a separate raster layer for each geometry in `x`.
+#'
+#' @param collapse Logical: If `TRUE` (default), and if `byGeom` is `TRUE`, then the output will have just one raster layer, but with values that correspond to each geometry (i.e., each geometry will get a different value). If geometries overlap, then category value of the one on top will be assigned to the relevant cells. 
+#'
+#' @returns A `GRaster`.
+#'
+#' @seealso [terra::rasterize()], module [`v.to.rast`](https://grass.osgeo.org/grass84/manuals/v.to.rast.html) in **GRASS**
+#'
+#' @example man/examples/ex_rasterize.r
+#'
+#' @aliases rasterize
+#' @rdname rasterize
+#' @exportMethod rasterize
+methods::setMethod(
+	f = "rasterize",
+	signature = c(x = "GVector", y = "GRaster"),
+	function(
+		x,
+		y,
+		background = NA,
+		byGeom = FALSE,
+		collapse = TRUE
+	) {
+	
+	compareGeom(x, y)
+	.restore(x)
+	region(y)
+
+	### create different raster layer for each geometry
+	if (byGeom) {
+
+		# if by geometry but burned to the same raster
+		if (collapse) {
+
+			gtype <- geomtype(x, grass = TRUE)
+			src <- .makeSourceName("v_to_rast", "raster")
+			args <- list(
+				cmd = "v.to.rast",
+				input = sources(x),
+				output = src,
+				use = "cat",
+				type = gtype,
+				memory = getFastOptions("memory"),
+				flags = c("quiet", "overwrite")
+			)
+
+			if (gtype == "line") args$flags <- c(args$flags, "d")
+
+			do.call(rgrass::execGRASS, args = args)
+			out <- .makeGRaster(src, "rasterize")
+
+		} else {
+			
+			ng <- ngeom(x)
+			for (i in seq_len(ng)) {
+			
+				xx <- x[i]
+
+				thisOut <- rasterize(
+					x = xx, y = y,
+					background = background,
+					byGeom = FALSE
+				)
+
+				if (i == 1L) {
+					out <- thisOut
+				} else {
+					out <- c(out, thisOut)
+				}
+
+			} # next geometry
+
+
+		} # if one raster per geometry, not collapsed
+
+	### all geometries at once
+	} else {
+
+		gtype <- geomtype(x, grass = TRUE)
+		src <- .makeSourceName("v_to_rast", "raster")
+		args <- list(
+			cmd = "v.to.rast",
+			input = sources(x),
+			output = src,
+			use = "val",
+			value = 1,
+			type = gtype,
+			memory = getFastOptions("memory"),
+			flags = c("quiet", "overwrite")
+		)
+
+		if (gtype == "line") args$flags <- c(args$flags, "d")
+
+		do.call(rgrass::execGRASS, args = args)
+
+		if (!is.na(background)) {
+
+			srcIn <- src
+			src <- .makeSourceName("r_mapcalc", "vector")
+			ex <- paste0(src, " = if(isnull(", srcIn, "), ", background, ", ", srcIn, ")")
+
+			rgrass::execGRASS(
+				cmd = "r.mapcalc",
+				expression  = ex,
+				flags = c("quiet", "overwrite")
+			)
+
+		}
+
+		out <- .makeGRaster(src, "rasterize")
+
+	}
+	
+	out
+	
+	} # EOF
+)
