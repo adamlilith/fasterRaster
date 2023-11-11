@@ -28,7 +28,7 @@ methods::setMethod(
 		ainput = sources(x),
 		binput = sources(y),
 		output = src,
-		operator = "erase",
+		operator = "not",
 		snap = -1,
 		flags = c("quiet", "overwrite")
 	)
