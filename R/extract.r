@@ -19,7 +19,7 @@
 #' * `"max"`: Minimum.
 #' * `"sum"`: Sum.
 #' * `"range"`: Maximum - minimum.
-#' * `"std"`: Sample standard deviation (same as [stats::sd()]).
+#' * `"sd"`: Sample standard deviation (same as [stats::sd()]).
 #' * `"sdpop"`: Population standard deviation.
 #' * `"var"`: Sample variance (same as [stats::var()]).
 #' * `"varpop"`: Population variance.
@@ -75,7 +75,9 @@ methods::setMethod(
             for (i in seq_len(numGeoms)) {
             
                 yy <- y[i]
-                yy <- aggregate(yy)
+                yy <- .aggregate(yy, gtype = "polygons", dissolve = FALSE)
+                yy <- .makeGVector(yy)
+                
                 thisOut <- extract(
                     x = x, y = yy,
                     fun = fun,
