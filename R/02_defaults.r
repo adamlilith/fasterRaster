@@ -5,7 +5,6 @@
 .detailsDefault <- function() TRUE
 .grassMessagesDefault <- function() TRUE
 .grassDirDefault <- function() NULL
-.grassVerDefault <- function() 8.3
 .addonDirDefault <- function() NULL
 .memoryDefault <- function() 300 # in MB
 .rasterPrecisionDefault <- function() "double" # "FCELL"/"float", or "DCELL"/"double"
@@ -23,7 +22,6 @@
 		name = c(
 			"grassDir",
 			"addonDir",
-			"grassVer",
 			"grassMessages",
 			"details",
 			"cores",
@@ -35,7 +33,6 @@
    			"rasterPrecision"
 		),
 		type = c(
-			"character",
 			"character",
 			"character",
 			"logical",

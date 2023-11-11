@@ -40,9 +40,11 @@ methods::setMethod(
 
     .restore(x)
     region(x)
+	
+	versionNumber <- grassInfo("versionNumber")
 
     mm <- minmax(x)
-
+	
     for (i in 1L:nlyr(x)) {
         
         ### lower "from" bound
@@ -65,7 +67,7 @@ methods::setMethod(
                     percentile = minq * 100
                 )
 
-                if (getFastOptions("grassVer") >= "8.3") args$nprocs <- getFastOptions("cores")
+                if (versionNumber >= 8.3) args$nprocs <- getFastOptions("cores")
 
                 info <- do.call(rgrass::execGRASS, args)
                 pattern <- "percentile: "
@@ -96,7 +98,7 @@ methods::setMethod(
                     percentile = maxq * 100
                 )
 
-                if (getFastOptions("grassVer") >= "8.3") args$nprocs <- getFastOptions("cores")
+                if (versionNumber >= 8.3) args$nprocs <- getFastOptions("cores")
 
                 info <- do.call(rgrass::execGRASS, args)
                 pattern <- "percentile: "

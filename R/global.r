@@ -51,6 +51,8 @@ methods::setMethod(
 	
 	if (any(fun == "quantile") & is.null(prob)) stop("You must specify a value for ", sQuote("prob"), " when calculating quantile statistics.")
 	
+	versionNumber <- grassInfo("versionNumber")
+
 	nLayers <- nlyr(x)
 	out <- data.frame()
 
@@ -66,7 +68,7 @@ methods::setMethod(
 			intern = TRUE
 		)
 
-		if (getFastOptions("grassVer") >= "8.3") args$nprocs <- getFastOptions("cores")
+		if (versionNumber >= 8.3) args$nprocs <- getFastOptions("cores")
 	
 		if (any(fun %in% c("quantile", "median"))) args$flags <- c(args$flags, "e")
 		if (any(fun == "quantile")) {
@@ -171,7 +173,7 @@ methods::setMethod(
 						intern = TRUE
 					)
 
-					if (getFastOptions("grassVer") >= "8.3") args$nprocs <- getFastOptions("cores")
+					if (versionNumber >= 8.3) args$nprocs <- getFastOptions("cores")
 
 					pattern <- "sum: "
 					ss <- thisInfo[grepl(info, pattern=pattern)]
@@ -213,7 +215,7 @@ methods::setMethod(
 						intern = TRUE
 					)
 
-					if (getFastOptions("grassVer") >= "8.3") args$nprocs <- getFastOptions("cores")
+					if (versionNumber >= 8.3) args$nprocs <- getFastOptions("cores")
 
 					pattern <- "sum: "
 					ss <- thisInfo[grepl(info, pattern=pattern)]

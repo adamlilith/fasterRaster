@@ -43,6 +43,7 @@ methods::setMethod(
 
 .resample <- function(x, y, method, fallback) {
 
+
 	# method
 	if (!is.null(method)) method <- pmatchSafe(method, c("nearest", "bilinear", "bicubic", "lanczos"))
 	if (is.null(method)) {
@@ -53,6 +54,8 @@ methods::setMethod(
 		}
 	}
 	
+	versionNumber <- grassInfo("versionNumber")
+
 	# reshape region
 	if (inherits(y, "GRaster")) {
 
@@ -147,7 +150,7 @@ methods::setMethod(
 				flags = c("quiet", "overwrite"),
 				intern = TRUE
 			)
-			if (getFastOptions("grassVer") >= "8.3") args$nprocs <- getFastOptions("cores")
+			if (versionNumber >= 8.3) args$nprocs <- getFastOptions("cores")
 
 			do.call(rgrass::execGRASS, args=args)
 
@@ -165,7 +168,7 @@ methods::setMethod(
 				flags = c("quiet", "overwrite"),
 				intern = TRUE
 			)
-			if (getFastOptions("grassVer") >= "8.3") args$nprocs <- getFastOptions("cores")
+			if (versionNumber >= 8.3) args$nprocs <- getFastOptions("cores")
 			do.call(rgrass::execGRASS, args=args)
 
 		}
@@ -182,7 +185,7 @@ methods::setMethod(
 				flags = c("quiet", "overwrite"),
 				intern = TRUE
 			)
-			if (getFastOptions("grassVer") >= "8.3") args$nprocs <- getFastOptions("cores")
+			if (versionNumber > 8.3) args$nprocs <- getFastOptions("cores")
 			do.call(rgrass::execGRASS, args=args)
 
 		}

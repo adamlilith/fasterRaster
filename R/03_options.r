@@ -17,8 +17,6 @@
 #'
 #' *  `addonDir` (character): Folder in which **GRASS** addons are stored. If `NULL` and `grassDir` is not `NULL`, this will be taken to be `file.path(grassDir, "addons")`.
 #'
-#' * `grassVer` (character): Version of **GRASS** being used. This should be supplied as a character string, not as a numeric value. Do not include the minor version (e.g., use `"8.3"`, not `"8.3.1"``). As **GRASS** is developed, new modules and functionalities for existing modules are added. Setting the version correctly allows you to take advantage of these options.
-#' 
 #' * `rasterPrecision` (character): The [precision][tutorial_raster_data_types] of values when applying mathematical operations to a `GRaster`. By default, this is `"double"`, which allows for precision to about the 16th decimal place. However, it can be set to `"float"`, which allows for precision to about the 7th decimal place. `float` rasters are smaller in memory and on disk. The default is `"double"`.`
 #'
 #' * `useDataTable` (logical): If `FALSE` (default), use `data.frame`s when going back and forth between data tables of `GVector`s and **R**. This can be slow for very large data tables. If `TRUE`, use `data.table`s from the **data.table** package. This can be much faster, but it might require you to know how to use `data.table`s if you want to manipulate them in **R**. You can always convert them to `data.frame`s using [base::as.data.frame()].
@@ -116,21 +114,6 @@ setFastOptions <- function(
 
 		if (is.na(opts$useDataTable) || !is.logical(opts$useDataTable)) stop("Option ", sQuote("useDataTable"), " must be a logical. The default is ", .useDataTableDefault(), ".")
 	
-	}
-
-	if (any(names(opts) %in% "grassVer")) {
-
-		if (is.null(opts$grassVer) || is.na(opts$grassVer) || !inherits(opts$grassVer, c("numeric", "character"))) {
-			stop("Option ", sQuote("grassVer"), " must be the version number of GRASS installed on your system. The default is ", .grassVerDefault(), ".")
-		}
-
-		opts$grassVer <- as.character(opts$grassVer)
-		opts$grassVer <- gsub(opts$grassVer, pattern=".", replacement="", fixed=TRUE)
-
-		if (nchar(opts$grassVer) != 2L) stop("Please supply <grassVer> as a character string (including the trailing zero if 8.0).\n  Do not include the minor version (e.g., 8.3, not 8.3.1).\n  The default is ", .grassVerDefault(), ".")
-
-		if (as.numeric(substr(opts$grassVer, 1, 1) < 8)) stop("fasterRaster only supports GRASS GIS version 8.0 or above.\n  The default is ", .grassVerDefault(), ".")
-		
 	}
 
 	### set the options

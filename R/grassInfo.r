@@ -1,8 +1,14 @@
 #' GRASS citation, version, and copyright information
 #'
-#' Report the **GRASS** citation, version, or copyright information.
+#' Report the **GRASS** citation, version/release year, version number, or copyright information.
 #'
-#' @param x Character: What to return. Any of: `"citation"` (default), `"version"`, "`copyright`" Partial matching is used.
+#' @param x Character: What to return. Any of:
+#' * `"citation"` (default)
+#' * `"version"`: Version number and release year
+#' * `"version"`: Version number as numeric, major and minor only (e.g., 8.3)
+#' * "`copyright`"
+#'
+#' Partial matching is used.
 #' 
 #' @return Character.
 #'
@@ -13,14 +19,20 @@
 #' @export grassInfo
 grassInfo <- function(x = "citation") {
 	
-	match <- pmatchSafe(x, table = c("citation", "version", "copyright"))
+	match <- pmatchSafe(x, table = c("citation", "version", "versionNumber", "copyright"))
 
 	if (match == "citation") {
-		rgrass::execGRASS("g.version", flags="x")
+		out <- rgrass::execGRASS("g.version", flags = "x", intern = TRUE)
 	} else if (match == "copyright") {
-		rgrass::execGRASS("g.version", flags="c")
+		out <- rgrass::execGRASS("g.version", flags = "c", intern = TRUE)
 	} else if (match == "version") {
-		rgrass::execGRASS("g.version")
+		out <- rgrass::execGRASS("g.version", intern = TRUE)
+	} else if (match == "versionNumber") {
+		out <- rgrass::execGRASS("g.version", intern = TRUE)
+		out <- strsplit(out, split = " ")[[1L]]
+		out <- out[2L]
+		out <- substr(out, 1L, 3L)
+		out <- as.numeric(out)
 	}
-
+	out
 }
