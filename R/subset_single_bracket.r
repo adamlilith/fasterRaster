@@ -47,6 +47,7 @@ methods::setMethod(
 		} else {
 			reverseRowSelect <- removeAll <- FALSE
 		}
+		
 		if (any(i > nGeoms)) stop("Index out of bounds.")
 
 		if (removeAll) {
@@ -55,7 +56,8 @@ methods::setMethod(
 
 			# **keep** rows
 			cats <- .vCats(x)
-			keepCats <- cats[i]
+			ucats <- unique(cats)
+			keepCats <- ucats[i]
 			keepCats <- sort(keepCats)
 			keepCats <- seqToSQL(keepCats)
 
