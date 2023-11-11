@@ -6,17 +6,6 @@
 #'
 #' @param y A `GRaster`: The extent and resolution of this raster will be used to create the density raster. Otherwise, values in this raster are ignored.
 #'
-#' @param h Numeric or `NULL` (default): Smoothing bandwidth of kernel estimator.
-#'
-#' If this is `NULL`, the Epanechnikov kernel is used, and `optimize` is `TRUE`, then Silverman's rule-of-thumb is used to estimate the optimal value of `h`:
-#' \deqn{h = 0.9 * min(\sigma_x / n^1/6, \sigma_y / n^1/6)}
-#'
-#' If the Gaussian kernel is used, and `optimize` is `TRUE`, then the **GRASS** `v.kernel` function will attempt to identify the optimal bandwidth, up to the value of `h`, if `h` is defined.
-#'
-#' Otherwise, if `h` is `NULL`, then the value will be arbitrarily set at 1/5th of the shorter of the distance of the x- and y-extent of the points.
-#'
-#' @param optimize Logical: If `TRUE` (default), then attempt to find the optimal radius less than or equal to the `radius` value using the "Gaussian" kernel. If `FALSE`, use the `radius` value as-is.
-#'
 #' @param kernel Character: Name of the kernel function to use. Possible values include:
 #' * `"Epanechnikov"` (default)
 #' * `"Gaussian"`
@@ -27,6 +16,17 @@
 #' * `"cosine"`
 #'
 #' Partial matching is used, and case is ignored.
+#'
+#' @param optimize Logical: If `TRUE` (default), then attempt to find the optimal radius less than or equal to the `radius` value using the "Gaussian" kernel. If `FALSE`, use the `radius` value as-is.
+#'
+#' @param h Numeric or `NULL` (default): Smoothing bandwidth of kernel estimator.
+#'
+#' If this is `NULL`, the Epanechnikov kernel is used, and `optimize` is `TRUE`, then Silverman's rule-of-thumb is used to estimate the optimal value of `h`:
+#' \deqn{h = 0.9 * min(\sigma_x / n^1/6, \sigma_y / n^1/6)}
+#'
+#' If the Gaussian kernel is used, and `optimize` is `TRUE`, then the **GRASS** `v.kernel` function will attempt to identify the optimal bandwidth, up to the value of `h`, if `h` is defined.
+#'
+#' Otherwise, if `h` is `NULL`, then the value will be arbitrarily set at 1/5th of the shorter of the distance of the x- and y-extent of the points.
 #'
 #' @returns A `GRaster`.
 #'
@@ -41,9 +41,9 @@ methods::setMethod(
 	function(
 		x,
 		y,
-		h = NULL,
+  		kernel = "Epanechnikov",
 		optimize = TRUE,
-  		kernel = "Epanechnikov"
+		h = NULL
 	) {
 	
  	kernFx <- pmatchSafe(kernel, c("gaussian", "uniform", "triangular", "epanechnikov", "quartic", "triweight", "cosine"), nmax = 1L)
