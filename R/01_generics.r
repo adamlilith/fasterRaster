@@ -74,6 +74,7 @@ methods::setGeneric(name = "catNames", def = function(x, ...) standardGeneric("c
 methods::setGeneric(name = "cats", package = "terra")
 methods::setGeneric(name = "cleanGeom", def = function(x, ...) standardGeneric("cleanGeom"))
 methods::setGeneric(name = "clump", def = function(x, ...) standardGeneric("clump"))
+methods::setGeneric(name = "clusterPoints", def = function(x, ...) standardGeneric("clusterPoints"))
 methods::setGeneric(name = "compareGeom", package = "terra")
 methods::setGeneric(name = "connectors", def = function(x, y, ...) standardGeneric("connectors"))
 setGeneric("cor", function(x, y, ...) standardGeneric("cor"), package = "stats")
