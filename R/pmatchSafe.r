@@ -42,20 +42,35 @@ pmatchSafe <- function(x, table, error = TRUE, ignoreCase = TRUE, nmax = length(
 	if (ignoreCase) {
 		x <- tolower(x)
 		lowerTable <- tolower(table)
-		match <- pmatch(x, lowerTable, ...)
+		match <- .pmatch(x, lowerTable)
 	} else {
-		match <- pmatch(x, table, ...)
+		match <- .pmatch(x, table)
 	}
 	
-	if (length(match) > nmax) stop("Only ", nmax, " matches can be returned.")
-	out <- rep(NA_character_, length(match))
-	
-	if (any(!is.na(match))) out[!is.na(match)] <- table[match[!is.na(match)]]
+	if (length(match) > nmax) stop("Only ", nmax, " match(es) can be returned.")
 
-	if (any(is.na(match))) {
+	if (length(match) < length(x)) {
 		if (error) stop("Cannot find a match. Valid options include: ", paste(table, collapse=", "))
 	}
 
-	out
+	match
+
+}
+
+#' @noRd
+.pmatch <- function(x, table) {
+
+	nc <- nchar(x)
+
+	matches <- integer()
+	for (i in seq_along(x)) {
+	
+		theseMatches <- which(x[i] == substr(table, 1L, nc))
+		matches <- c(matches, theseMatches)
+	
+	}
+
+	matches <- sort(unique(matches))
+	table[matches]
 
 }
