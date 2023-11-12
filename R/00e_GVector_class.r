@@ -56,6 +56,7 @@ setValidity("GVector",
 #' @noRd
 .makeGVector <- function(src, table = NULL) {
 
+	if (inherits(table, "GVector")) table <- x@table
 	if (is.null(table)) table <- data.table::data.table(NULL)
 	if (!inherits(table, "data.table")) table <- data.table::as.data.table(table)
 
