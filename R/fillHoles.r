@@ -39,8 +39,7 @@ methods::setMethod(
 			flags = c("quiet", "overwrite")
 		)
 
-		table <- as.data.table(x)
-		out <- .makeGVector(src, table = table)
+		out <- .makeGVector(src, table = x)
 
 	}
 
