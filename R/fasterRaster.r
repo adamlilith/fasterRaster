@@ -167,6 +167,7 @@
 #' [as.points()]: Extract vertex coordinates from a "lines" or "polygons" `GVector`\cr
 #' [buffer()]: Create a polygon around/inside a `GVector`\cr
 #' [cleanGeom()]: Fix undesirable geometries of a `GVector`\cr
+#' [clusterPoints()]: Identify clusters of points\cr
 #' [connectors()]: Create lines connecting nearest features of two `GVector`s\cr
 #' [convHull()]: Minimum convex hull\cr
 #' [crds()]: Extract coordinates of a `GVector`\cr
