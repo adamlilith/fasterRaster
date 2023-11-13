@@ -6,7 +6,7 @@
 #'
 #' @returns A `GVector`.
 #'
-#' @seealso [c()], [aggregate()], [crop()], [intersect()], [union()], [not()]
+#' @seealso [c()], [aggregate()], [crop()], [intersect()], [union()], [erase()]
 #' 
 #' @example man/examples/ex_union_intersect_xor_not.r
 #'
@@ -30,7 +30,7 @@ methods::setMethod(
 		output = src,
 		operator = "xor",
 		snap = -1,
-		flags = c("quiet", "overwrite")
+		flags = c(.quiet(), "overwrite")
 	)
 
 	.makeGVector(src)

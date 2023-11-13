@@ -30,7 +30,7 @@ methods::setMethod(
 		output = src,
 		operator = "not",
 		snap = -1,
-		flags = c("quiet", "overwrite")
+		flags = c(.quiet(), "overwrite")
 	)
 
 	.makeGVector(src)

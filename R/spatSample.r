@@ -55,7 +55,7 @@ methods::setMethod(
 		cmd = "v.random",
 		output = src,
 		npoints = size,
-		flags = c("quiet", "overwrite")
+		flags = c(.quiet(), "overwrite")
 	)
 
 	if (!is.null(strata)) {
@@ -89,7 +89,7 @@ methods::setMethod(
 				map = sources(x)[i],
 				points = src,
 				null_value = "NA",
-				flags = c("quiet", "overwrite"),
+				flags = c(.quiet(), "overwrite"),
 				intern = TRUE
 			)
 
@@ -189,7 +189,7 @@ methods::setMethod(
 		# 	input = sources(x),
 		# 	output = srcRestrict,
 		# 	column = col,
-		# 	flags = c("quiet", "overwrite")
+		# 	flags = c(.quiet(), "overwrite")
 		# )	
 		# do.call(rgrass::execGRASS, args = args)
 
@@ -201,7 +201,7 @@ methods::setMethod(
 		output = src,
 		npoints = size,
 		restrict = srcRestrict,
-		flags = c("quiet", "overwrite")
+		flags = c(.quiet(), "overwrite")
 	)
 
 	if (!is.null(strata)) args$flags <- c(args$flags, "a")
@@ -219,21 +219,15 @@ methods::setMethod(
 	out <- NULL
 
 	# return coordinates
-	if (xy) {
+	if (xy & !values) {
+
 		out <- .crdsVect(src, z = is.3d(x), gm = "points")
-	}
 
 	# extract values from vector
-	if (values) {
+	} else if (values) {
 
-		vals <- extract(x, src)
-		vals$id.y <- NULL
-
-		if (exists("out", inherits = FALSE)) {
-			out <- cbind(out, vals)
-		} else {
-			out <- vals
-		}
+		out <- .extractFromVect(x, y = coords, xy = xy)
+		out$id.y <- NULL
 
 	} # if wanting values
 

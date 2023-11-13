@@ -50,7 +50,7 @@ methods::setMethod(
         
         args <- list(
             cmd = "r.mask",
-            flags = c("r", "quiet", "overwrite"),
+            flags = c("r", .quiet(), "overwrite"),
             intern = TRUE
         )
 
@@ -63,7 +63,7 @@ methods::setMethod(
     ### create a mask
     args <- list(
         cmd = "r.mask",
-        flags = c("quiet", "overwrite"),
+        flags = c(.quiet(), "overwrite"),
         intern = TRUE
     )
 
@@ -95,7 +95,7 @@ methods::setMethod(
             maskvalues <- paste(maskvalues, collapse = " | ")
 
             ex <- paste0(maskGn, " = if(", maskvalues, ", 1, null())")
-            rgrass::execGRASS("r.mapcalc", expression = ex, flags = c("quiet", "overwrite"), intern = TRUE)
+            rgrass::execGRASS("r.mapcalc", expression = ex, flags = c(.quiet(), "overwrite"), intern = TRUE)
 
         } else {
             maskGn <- sources(mask)
@@ -120,7 +120,7 @@ methods::setMethod(
     # for (i in seq_len(n)) {
 
         # ex <- paste0(srcs[i], " = ", sources(x))
-        # rgrass::execGRASS("r.mapcalc", expression = ex, flags = c("quiet", "overwrite"), intern = TRUE)
+        # rgrass::execGRASS("r.mapcalc", expression = ex, flags = c(.quiet(), "overwrite"), intern = TRUE)
 
     # }
 
@@ -132,7 +132,7 @@ methods::setMethod(
         for (i in seq_len(nLayers)) {
 
             ex <- paste0(gnsUpdate[i], " = if(!isnull(", srcs[i], "), ", updatevalue, ", null())")
-            rgrass::execGRASS("r.mapcalc", expression = ex, flags = c("quiet", "overwrite"), intern = TRUE)
+            rgrass::execGRASS("r.mapcalc", expression = ex, flags = c(.quiet(), "overwrite"), intern = TRUE)
 
         } # next raster
         out <- .makeGRaster(gnsUpdate, names(x))

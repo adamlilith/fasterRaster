@@ -40,7 +40,7 @@ methods::setMethod(
 	args <- list(
 		cmd = "r.covar",
 		map = paste(sources(x), collapse = ","),
-		flags = c("quiet"),
+		flags = c(.quiet()),
 		intern = TRUE
 	)
 

@@ -43,7 +43,7 @@ methods::setMethod(
             altitude = angle,
             azimuth = direction,
             zscale = zscale,
-            flags = c("quiet", "overwrite"),
+            flags = c(.quiet(), "overwrite"),
             intern = TRUE
         )
 

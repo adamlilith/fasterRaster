@@ -41,7 +41,7 @@ methods::setMethod(
 	args <- list(
 		cmd = "r.mapcalc",
 		expression = ex,
-		flags = c("quiet", "overwrite"),
+		flags = c(.quiet(), "overwrite"),
 		intern = TRUE
 	)
 	do.call(rgrass::execGRASS, args = args)

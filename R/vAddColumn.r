@@ -33,7 +33,7 @@
 		map = src,
 		layer = "1",
 		columns = column,
-		flags = "quiet",
+		flags = .quiet(),
 		intern = F
 	)
 

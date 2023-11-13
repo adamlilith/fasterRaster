@@ -45,7 +45,7 @@ methods::setMethod(
 		output = src,
 		rescale = c(0, 0),
 		percent = percent,
-		flags = c("quiet", "overwrite", "f"),
+		flags = c(.quiet(), "overwrite", "f"),
 		intern = TRUE
 	)
 

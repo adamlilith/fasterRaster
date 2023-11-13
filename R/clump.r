@@ -33,7 +33,7 @@ methods::setMethod(
         output = NA_character_,
         threshold = minDiff,
         minsize = minClumpSize,
-        flags = c("quiet", "overwrite"),
+        flags = c(.quiet(), "overwrite"),
         intern = TRUE
     )
 

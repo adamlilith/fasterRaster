@@ -27,7 +27,7 @@
 		rgrass::execGRASS(
 			cmd = "v.db.droptable",
 			map = src,
-			flags = c("quiet", "f")
+			flags = c(.quiet(), "f")
 		)
 
 	}

@@ -22,7 +22,7 @@
 		cmd = "v.category",
 		input = src,
 		option = "report",
-		flags = c("quiet", "overwrite"),
+		flags = c(.quiet(), "overwrite"),
 		intern = TRUE
 	)
 

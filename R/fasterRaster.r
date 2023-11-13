@@ -1,6 +1,6 @@
 #' "fasterRaster": Faster raster and spatial vector processing using "GRASS GIS"
 #'
-#' @description Processing of large-in-memory/-on disk rasters and spatial vectors using **GRASS GIS**. Most functions in the **terra** and **sf** packages are recreated. Processing of medium-sized and smaller spatial objects will nearly always be faster using **terra** or **sf**. To use most of the functions you must have the stand-alone version of **GRASS** version 8.0 or higher (not the **OSGeoW4** installer version). Note that due to developer choices, results will not always be strictly comparable between **terra**, **sf**, and **fasterRaster**.
+#' @description Processing of large-in-memory/-on disk rasters and spatial vectors in using **GRASS GIS**. Most functions in the **terra** and **sf** packages are recreated. Processing of medium-sized and smaller spatial objects will nearly always be faster using **terra** or **sf**. To use most of the functions you must have the stand-alone version of **GRASS** version 8.0 or higher (not the **OSGeoW4** installer version). Note that due to developer choices, results will not always be strictly comparable between **terra**, **sf**, and **fasterRaster**.
 #'
 #' ## Most useful tutorials and functions:
 #' A [quick-start][tutorial_getting_started] tutorial\cr
@@ -63,9 +63,9 @@
 #' - Extremes: [min()], [max()], [which.min()], [which.max()] \cr
 #' 
 #' ## Functions that operate on or create `GRaster`s
-#' The operators `$` ([dollar][subset_dollar]) and `[[` ([double-square brackets][subset_double_square_brackets]) can be used to subset or remove specific layers of a `GRaster`.\cr
-#' The `[<-` ([single-bracket assign][replace_single_square_bracket]) operator can be used to replace values of cells of a `GRaster`.\cr
-#' The assign operators, `$<-` ([dollar assign][replace_dollar]), `[[<-` ([double-square brackets assign][replace_double_square_brackets]), and `[add<-][add]` can be used to replace specific layers of a `GRaster`.\cr
+#' The operators [$] and \code{\link[fasterRaster]{[[}} can be used to subset or remove specific layers of a `GRaster`.\cr
+#' The \code{\link[fasterRaster]{[<-}} operator can be used to replace values of cells of a `GRaster`.\cr
+#' The assign operators, \code{\link[fasterRaster]{$<-}}, \code{\link[fasterRaster]{[[<-}}, and \code{\link[fasterRaster]{add<-}} can be used to replace specific layers of a `GRaster`.\cr
 #' [as.int()], [as.float()], [as.doub()]: Change data type (integer/float/double)\cr
 #' [as.contour()]: Contour lines from a `GRaster`\cr
 #' [as.lines()]: Convert a `GRaster` to a "lines" vector\cr
@@ -111,12 +111,13 @@
 #' [thinLines()]: Reduce linear features on a `GRaster` so linear features are 1 cell wide\cr
 #' [trim()]: Remove rows and columns from a `GRaster` that are all `NA`\cr
 #' [viewshed()]: Areas visible from points on a raster\cr
+#' [zonalGeog()]: Geographic statistics (area, perimeter, fractal dimension, etc.) for sets of cells with the same values
 #'
 #' ## Functions operating on categorical rasters
 #' [activeCat()]: Column that defines category labels\cr
-#' `[activeCat<-]`: Set column that defines category labels\cr
+#' \code{\link[fasterRaster]{activeCat<-}}: Set column that defines category labels\cr
 #' [addCats()]: Add new columns to a "levels" table\cr
-#' `[addCats<-]`: Add new rows (levels) to a "levels" table\cr
+#' \code{\link[fasterRaster]{addCats<-}}: Add new rows (levels) to a "levels" table\cr
 #' [categories()]: Set "levels" table for specific layers of a categorical raster\cr
 #' [catNames()]: Names of each "levels" table\cr
 #' [cats()]: "Levels" table of a categorical raster\cr
@@ -124,17 +125,17 @@
 #' [freq()]: Frequency of each category across cells of a raster\cr
 #' [is.factor()]: Is a raster categorical?\cr
 #' [levels()]: "Levels" table of a categorical raster\cr
-#' [levels<-]: Set "levels" table of a categorical raster\cr
+#' \code{\link[fasterRaster]{levels<-}}: Set "levels" table of a categorical raster\cr
 #' [minmax()]: "Lowest" and "highest" category values of categorical rasters (when argument `levels = TRUE`)\cr
 #' [missingCats()]: Values that have no category assigned to them\cr
 #' [nlevels()]: Number of levels\cr
+#' [zonalGeog()]: Geographic statistics (area, perimeter, fractal dimension, etc.) for sets of cells with the same values
 #' 
 #' ## Functions for analysis of remote sensing rasters
-#' [toarAster()]: Convert digital number ASTER rasters to radiance, and radiance to reflectance\cr
-#' [toarLandsat()]: Convert digital number LANDSAT rasters to radiance, and radiance to reflectance\cr
+#' [plotRGB()]: Display a multispectral `GRaster` using red, blue, green, and alpha channels\cr
 #' [vegIndex()]: Vegetation indices from surface reflectance\cr
 #'
-#' ## Properties of **fasterRaster** vectors (`GVector`s)
+#' ## Properties of `GVector`s
 #' [crs()]: Coordinate reference system\cr
 #' [datatype()]: Data type of fields\cr
 #' [dim()]: Number of geometries and columns\cr
@@ -158,9 +159,9 @@
 #' [zext()]: Vertical extent\cr
 #'
 #' ## Functions that operate on or create `GVector`s
-#' The `[` ([single bracket][subset_single_bracket]) operator, can be used to subset geometries of a `GRaster`.\cr
-#' The `$` [dollar][subset_dollar] and `[[` ([double-square brackets][subset_double_square_brackets]) operators can be used to get columns of a `GVector`'s data table.\cr
-#' The `$<-` ([dollar replace][replace_dollar]) operator can be used to replace specific columns of a `GVector`'s data table.\cr
+#' The \code{\link[fasterRaster]{[}} operator can be used to subset geometries of a `GVector`.\cr
+#' The [$] and \code{\link[fasterRaster]{[[}} operators can be used to get columns of a `GVector`'s data table.\cr
+#' The \code{\link[fasterRaster]{$<-}} operator can be used to replace specific columns of a `GVector`'s data table.\cr
 #' [aggregate()]: Combine `GVector` geometries\cr
 #' [as.data.frame()]: Convert a `GVector`'s attribute table to a `data.frame`\cr
 #' [as.data.table()]: Convert a `GVector`'s attribute table to a `data.table`\cr

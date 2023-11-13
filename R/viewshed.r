@@ -66,7 +66,7 @@ methods::setMethod(
         refraction_coeff = refractCoeff,
         memory = getFastOptions("memory"),
         directory = tempdir(),
-        flags = c("b", "quiet", "overwrite"),
+        flags = c("b", .quiet(), "overwrite"),
         intern = TRUE
     )
 

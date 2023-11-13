@@ -1,4 +1,4 @@
-#' @title Replace the layers of a GRaster
+#' @title Replace layers of a GRaster
 #'
 #' @description The `[[<-` operator can be used to replace a layer in a multi-layer `GRaster`.
 #'

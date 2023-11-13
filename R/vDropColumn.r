@@ -30,7 +30,7 @@
 		cmd = "v.db.dropcolumn",
 		map = src,
 		columns = col,
-		flags = c("quiet"),
+		flags = c(.quiet()),
 		intern = TRUE
 	)
 

@@ -28,7 +28,8 @@ rstring <- function(n, x = 12, filesafe = TRUE) {
 		start <- sample(froms, n, replace = TRUE)
 		x <- x - 1L
 	} else {
-		start <- sample(lettersDigits, n, replace = TRUE)
+		froms <- c(letters, LETTERS, 0L:9L)
+		start <- sample(froms, n, replace = TRUE)
 	}
 
 	froms <- c(letters, LETTERS, 0L:9L)

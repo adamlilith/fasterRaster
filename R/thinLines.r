@@ -28,7 +28,7 @@ methods::setMethod(
             input = sources(x)[i],
             output = srcs[i],
             iterations = iter,
-            flags = c("quiet", "overwrite"),
+            flags = c(.quiet(), "overwrite"),
             intern = TRUE
         )
         do.call(rgrass::execGRASS, args = args)

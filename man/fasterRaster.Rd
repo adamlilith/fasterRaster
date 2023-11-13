@@ -6,7 +6,7 @@
 \alias{fasterRaster-package}
 \title{"fasterRaster": Faster raster and spatial vector processing using "GRASS GIS"}
 \description{
-Processing of large-in-memory/-on disk rasters and spatial vectors using \strong{GRASS GIS}. Most functions in the \strong{terra} and \strong{sf} packages are recreated. Processing of medium-sized and smaller spatial objects will nearly always be faster using \strong{terra} or \strong{sf}. To use most of the functions you must have the stand-alone version of \strong{GRASS} version 8.0 or higher (not the \strong{OSGeoW4} installer version). Note that due to developer choices, results will not always be strictly comparable between \strong{terra}, \strong{sf}, and \strong{fasterRaster}.
+Processing of large-in-memory/-on disk rasters and spatial vectors in using \strong{GRASS GIS}. Most functions in the \strong{terra} and \strong{sf} packages are recreated. Processing of medium-sized and smaller spatial objects will nearly always be faster using \strong{terra} or \strong{sf}. To use most of the functions you must have the stand-alone version of \strong{GRASS} version 8.0 or higher (not the \strong{OSGeoW4} installer version). Note that due to developer choices, results will not always be strictly comparable between \strong{terra}, \strong{sf}, and \strong{fasterRaster}.
 \subsection{Most useful tutorials and functions:}{
 
 A \link[=tutorial_getting_started]{quick-start} tutorial\cr
@@ -79,9 +79,9 @@ Multi-layer functions (applied across layers of a "stack" of \code{GRaster}s):
 
 \subsection{Functions that operate on or create \code{GRaster}s}{
 
-The operators \code{$} (\link[=subset_dollar]{dollar}) and \code{[[} (\link[=subset_double_square_brackets]{double-square brackets}) can be used to subset or remove specific layers of a \code{GRaster}.\cr
-The \verb{[<-} (\link[=replace_single_square_bracket]{single-bracket assign}) operator can be used to replace values of cells of a \code{GRaster}.\cr
-The assign operators, \verb{$<-} (\link[=replace_dollar]{dollar assign}), \verb{[[<-} (\link[=replace_double_square_brackets]{double-square brackets assign}), and \verb{[add<-][add]} can be used to replace specific layers of a \code{GRaster}.\cr
+The operators \link{$} and \code{\link[fasterRaster]{[[}} can be used to subset or remove specific layers of a \code{GRaster}.\cr
+The \code{\link[fasterRaster]{[<-}} operator can be used to replace values of cells of a \code{GRaster}.\cr
+The assign operators, \code{\link[fasterRaster]{$<-}}, \code{\link[fasterRaster]{[[<-}}, and \code{\link[fasterRaster]{add<-}} can be used to replace specific layers of a \code{GRaster}.\cr
 \code{\link[=as.int]{as.int()}}, \code{\link[=as.float]{as.float()}}, \code{\link[=as.doub]{as.doub()}}: Change data type (integer/float/double)\cr
 \code{\link[=as.contour]{as.contour()}}: Contour lines from a \code{GRaster}\cr
 \code{\link[=as.lines]{as.lines()}}: Convert a \code{GRaster} to a "lines" vector\cr
@@ -132,9 +132,9 @@ The assign operators, \verb{$<-} (\link[=replace_dollar]{dollar assign}), \verb{
 \subsection{Functions operating on categorical rasters}{
 
 \code{\link[=activeCat]{activeCat()}}: Column that defines category labels\cr
-\verb{[activeCat<-]}: Set column that defines category labels\cr
+\code{\link[fasterRaster]{activeCat<-}}: Set column that defines category labels\cr
 \code{\link[=addCats]{addCats()}}: Add new columns to a "levels" table\cr
-\verb{[addCats<-]}: Add new rows (levels) to a "levels" table\cr
+\code{\link[fasterRaster]{addCats<-}}: Add new rows (levels) to a "levels" table\cr
 \code{\link[=categories]{categories()}}: Set "levels" table for specific layers of a categorical raster\cr
 \code{\link[=catNames]{catNames()}}: Names of each "levels" table\cr
 \code{\link[=cats]{cats()}}: "Levels" table of a categorical raster\cr
@@ -142,7 +142,7 @@ The assign operators, \verb{$<-} (\link[=replace_dollar]{dollar assign}), \verb{
 \code{\link[=freq]{freq()}}: Frequency of each category across cells of a raster\cr
 \code{\link[=is.factor]{is.factor()}}: Is a raster categorical?\cr
 \code{\link[=levels]{levels()}}: "Levels" table of a categorical raster\cr
-\link{levels<-}: Set "levels" table of a categorical raster\cr
+\code{\link[fasterRaster]{levels<-}}: Set "levels" table of a categorical raster\cr
 \code{\link[=minmax]{minmax()}}: "Lowest" and "highest" category values of categorical rasters (when argument \code{levels = TRUE})\cr
 \code{\link[=missingCats]{missingCats()}}: Values that have no category assigned to them\cr
 \code{\link[=nlevels]{nlevels()}}: Number of levels\cr
@@ -155,7 +155,7 @@ The assign operators, \verb{$<-} (\link[=replace_dollar]{dollar assign}), \verb{
 \code{\link[=vegIndex]{vegIndex()}}: Vegetation indices from surface reflectance\cr
 }
 
-\subsection{Properties of \strong{fasterRaster} vectors (\code{GVector}s)}{
+\subsection{Properties of \code{GVector}s}{
 
 \code{\link[=crs]{crs()}}: Coordinate reference system\cr
 \code{\link[=datatype]{datatype()}}: Data type of fields\cr
@@ -182,15 +182,16 @@ The assign operators, \verb{$<-} (\link[=replace_dollar]{dollar assign}), \verb{
 
 \subsection{Functions that operate on or create \code{GVector}s}{
 
-The \code{[} (\link[=subset_single_bracket]{single bracket}) operator, can be used to subset geometries of a \code{GRaster}.\cr
-The \code{$} \link[=subset_dollar]{dollar} and \code{[[} (\link[=subset_double_square_brackets]{double-square brackets}) operators can be used to get columns of a \code{GVector}'s data table.\cr
-The \verb{$<-} (\link[=replace_dollar]{dollar replace}) operator can be used to replace specific columns of a \code{GVector}'s data table.\cr
+The \code{\link[fasterRaster]{[}} operator can be used to subset geometries of a \code{GRaster}.\cr
+The \link{$} and \code{\link[fasterRaster]{[[}} operators can be used to get columns of a \code{GVector}'s data table.\cr
+The \code{\link[fasterRaster]{$<-}} operator can be used to replace specific columns of a \code{GVector}'s data table.\cr
 \code{\link[=aggregate]{aggregate()}}: Combine \code{GVector} geometries\cr
 \code{\link[=as.data.frame]{as.data.frame()}}: Convert a \code{GVector}'s attribute table to a \code{data.frame}\cr
 \code{\link[=as.data.table]{as.data.table()}}: Convert a \code{GVector}'s attribute table to a \code{data.table}\cr
 \code{\link[=as.points]{as.points()}}: Extract vertex coordinates from a "lines" or "polygons" \code{GVector}\cr
 \code{\link[=buffer]{buffer()}}: Create a polygon around/inside a \code{GVector}\cr
 \code{\link[=cleanGeom]{cleanGeom()}}: Fix undesirable geometries of a \code{GVector}\cr
+\code{\link[=clusterPoints]{clusterPoints()}}: Identify clusters of points\cr
 \code{\link[=connectors]{connectors()}}: Create lines connecting nearest features of two \code{GVector}s\cr
 \code{\link[=convHull]{convHull()}}: Minimum convex hull\cr
 \code{\link[=crds]{crds()}}: Extract coordinates of a \code{GVector}\cr

@@ -6,9 +6,9 @@
 \alias{hexagons,GVector-method}
 \title{Create a hexagonal grid}
 \usage{
-\S4method{hexagons}{GRaster}(x, ny = 10, use = "number", expand = 0, angle = 0)
+\S4method{hexagons}{GRaster}(x, ny = 10, expand = 0, angle = 0)
 
-\S4method{hexagons}{GVector}(x, ny = 10, use = "number", expand = 0, angle = 0)
+\S4method{hexagons}{GVector}(x, ny = 10, expand = 0, angle = 0)
 }
 \arguments{
 \item{x}{A \code{GRaster} or \code{GVector}.}

@@ -111,7 +111,7 @@ methods::setMethod(
 		cmd = "g.region",
 		n = n, s = s, e = e, w = w,
 		ewres = ewres, nsres = nsres,
-		flags = c("o", "quiet"),
+		flags = c("o", .quiet()),
 		intern = TRUE
 	)
 	if (!is.na(t)) args <- c(args, t=t)
@@ -131,7 +131,7 @@ methods::setMethod(
 				cmd = "r.resample",
 				input = sources(x)[i],
 				output = gnNearest,
-				flags = c("quiet", "overwrite"),
+				flags = c(.quiet(), "overwrite"),
 				intern = TRUE
 			)
 			do.call(rgrass::execGRASS, args=args)
@@ -147,7 +147,7 @@ methods::setMethod(
 				output = gnBilinear,
 				method = "bilinear",
 				memory = getFastOptions("memory"),
-				flags = c("quiet", "overwrite"),
+				flags = c(.quiet(), "overwrite"),
 				intern = TRUE
 			)
 			if (versionNumber >= 8.3) args$nprocs <- getFastOptions("cores")
@@ -165,7 +165,7 @@ methods::setMethod(
 				output = gnBicubic,
 				method = "bicubic",
 				memory = getFastOptions("memory"),
-				flags = c("quiet", "overwrite"),
+				flags = c(.quiet(), "overwrite"),
 				intern = TRUE
 			)
 			if (versionNumber >= 8.3) args$nprocs <- getFastOptions("cores")
@@ -182,7 +182,7 @@ methods::setMethod(
 				output = gnLanczos,
 				method = "lanczos",
 				memory = getFastOptions("memory"),
-				flags = c("quiet", "overwrite"),
+				flags = c(.quiet(), "overwrite"),
 				intern = TRUE
 			)
 			if (versionNumber > 8.3) args$nprocs <- getFastOptions("cores")
@@ -222,7 +222,7 @@ methods::setMethod(
 			args <- list(
 				cmd = "r.mapcalc",
 				expression = ex,
-				flags = c("quiet", "overwrite"),
+				flags = c(.quiet(), "overwrite"),
 				intern = TRUE
 			)
 			do.call(rgrass::execGRASS, args=args)

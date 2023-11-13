@@ -36,7 +36,7 @@ methods::setMethod(
 			cmd = "v.fill.holes",
 			input = sources(x),
 			output = src,
-			flags = c("quiet", "overwrite")
+			flags = c(.quiet(), "overwrite")
 		)
 
 		out <- .makeGVector(src, table = x)

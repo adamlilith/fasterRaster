@@ -1,4 +1,4 @@
-#' Subset a raster layer or values from a column of a vector's data table
+#' Subset a GRaster layer, or return values from a column of a GVector's table
 #'
 #' @description The `dollar` notation can be used to get a single layer of a multi-layer `GRaster` or the values of a column from a `GVector`'s data table.
 #'

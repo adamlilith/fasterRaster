@@ -150,7 +150,7 @@ methods::setMethod(
         cmd = "g.region",
         w = w, e = e, s = s, n = n,
         ewres = ewres, nsres = nsres,
-        flags = c("quiet", "overwrite"),
+        flags = c(.quiet(), "overwrite"),
         intern = TRUE
     )
     do.call(rgrass::execGRASS, args = args)
@@ -174,7 +174,7 @@ methods::setMethod(
                 cmd = "r.mapcalc",
                 expression = ex,
                 region = "current",
-                flags = c("quiet", "overwrite"),
+                flags = c(.quiet(), "overwrite"),
                 intern = TRUE
             )
             do.call(rgrass::execGRASS, args = args)

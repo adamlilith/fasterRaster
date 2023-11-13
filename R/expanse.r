@@ -54,7 +54,7 @@ methods::setMethod(
 		map = sources(x),
 		option = option,
 		units = unit,
-		flags = c("quiet", "d"),
+		flags = c(.quiet(), "d"),
 		intern = TRUE
 	)
 

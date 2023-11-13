@@ -51,7 +51,7 @@ setMethod(
 	# 		cmd = "v.db.connect",
 	# 		map = src,
 	# 		layer = "1",
-	# 		flags = c("quiet", "overwrite", "d")
+	# 		flags = c(.quiet(), "overwrite", "d")
 	# 	)
 
 	# }
@@ -71,7 +71,7 @@ setMethod(
 		cmd = "v.out.ogr",
 		input = src,
 		output = filename,
-		flags = c("quiet", "s")
+		flags = c(.quiet(), "s")
 	)
 	if (overwrite) args$flags <- c(args$flags, "overwrite")
 	do.call(rgrass::execGRASS, args)

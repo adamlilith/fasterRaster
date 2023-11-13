@@ -78,7 +78,7 @@ methods::setMethod(
 		output = src,
 		radius = h,
 		kernel = kernFx,
-		flags = c("quiet", "overwrite")
+		flags = c(.quiet(), "overwrite")
 	)
 
 	if (optimize & kernFx == "gaussian") args$flags <- c(args$flags, "o")

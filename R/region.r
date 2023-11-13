@@ -229,7 +229,7 @@ methods::setMethod(
 		w = w,
 		rows = rows,
 		cols = cols,
-		flags=c("o", "quiet"),
+		flags=c("o", .quiet()),
 		intern=TRUE
 	)
 
@@ -267,7 +267,7 @@ methods::setMethod(
 			cmd = "g.region",
 			n = n, s = s, e = e, w = w,
 			rows = rows, cols = cols,
-			flags = c("o", "quiet"),
+			flags = c("o", .quiet()),
 			intern = TRUE
 		)
 
@@ -310,13 +310,13 @@ methods::setMethod(
 	src <- sources(x)[1L]
 
 	if (all(topo == "2D") & is.null(trim)) {
-		rgrass::execGRASS("g.region", raster=src, flags=c("o", "quiet"), intern=TRUE)
+		rgrass::execGRASS("g.region", raster=src, flags=c("o", .quiet()), intern=TRUE)
 	} else if (all(topo == "2D") & !is.null(trim)) {
-		rgrass::execGRASS("g.region", raster=src, zoom=trim, flags=c("o", "quiet"), intern=TRUE)
+		rgrass::execGRASS("g.region", raster=src, zoom=trim, flags=c("o", .quiet()), intern=TRUE)
 	} else if (all(topo == "3D") & is.null(trim)) {
-		rgrass::execGRASS("g.region", raster_3d=src, flags=c("o", "quiet"), intern=TRUE)
+		rgrass::execGRASS("g.region", raster_3d=src, flags=c("o", .quiet()), intern=TRUE)
 	} else if (all(topo == "3D") & !is.null(trim)) {
-		rgrass::execGRASS("g.region", raster_3d=src, zoom=trim, flags=c("o", "quiet"), intern=TRUE)
+		rgrass::execGRASS("g.region", raster_3d=src, zoom=trim, flags=c("o", .quiet()), intern=TRUE)
 	} else {
 		stop("Could not reshape region.")
 	}
@@ -337,7 +337,7 @@ methods::setMethod(
 		.restore(x)
 		initials <- region()
 	
-		rgrass::execGRASS("g.region", vector=sources(x), flags=c("o", "quiet"), intern=TRUE)
+		rgrass::execGRASS("g.region", vector=sources(x), flags=c("o", .quiet()), intern=TRUE)
 		invisible(initials)
 		
 	}
@@ -426,7 +426,7 @@ methods::setMethod(
 		cmd = "g.region",
 		w = w, e = e, s = s, n = n,
 		ewres = ewres, nsres = nsres,
-		flags = c("o", "quiet"),
+		flags = c("o", .quiet()),
 		intern = TRUE
 	)
 
@@ -521,7 +521,7 @@ methods::setMethod(
 		w = w, e = e, s = s, n = n,
 		rows = rows, cols = cols,
 		ewres = ewres, nsres = nsres,
-		flags = c("o", "quiet"),
+		flags = c("o", .quiet()),
 		intern = TRUE
 	)
 
@@ -611,7 +611,7 @@ methods::setMethod(
 		cmd = "g.region",
 		w = w, e = e, s = s, n = n,
 		ewres = ewres, nsres=nsres,
-		flags = c("o", "quiet"),
+		flags = c("o", .quiet()),
 		intern = TRUE
 	)
 

@@ -157,7 +157,7 @@ methods::setMethod(
                         map = sources(y),
                         column_prefix = prefix,
                         method = method,
-                        flags = c("quiet")
+                        flags = c(.quiet())
                     )
                     if (gtype == "lines") args$flags <- c(args$flags, "d")
                     if (any(method == "percentile")) args$percentile <- prob
@@ -222,7 +222,7 @@ methods::setMethod(
                 map = sources(x)[i],
                 points = sources(y),
                 null_value = "NA",
-                flags = c("quiet", "overwrite"),
+                flags = c(.quiet(), "overwrite"),
                 intern = TRUE
             )
 
@@ -522,23 +522,21 @@ methods::setMethod(
     } # EOF
 )
 
-#' For internal use by other functions
-#' 
-#' @param y Character: [sources()] of points vector
-#' 
-#' @aliases extract
-#' @rdname extract
-#' @noRd
-methods::setMethod(
-    f = "extract",
-    signature = c(x = "GVector", y = "character"),
-    function(x, y, xy = FALSE) {
+# #' For internal use by other functions
+# #' 
+# #' @param y Character: [sources()] of points vector
+# #' 
+# #' @noRd
+# methods::setMethod(
+#     f = "extract",
+#     signature = c(x = "GVector", y = "character"),
+#     function(x, y, xy = FALSE) {
 
-    y <- .crdsVect(y, z = FALSE, gm = "points")
-    .extractFromVect(x, y, xy)
+#     y <- .crdsVect(y, z = FALSE, gm = "points")
+#     .extractFromVect(x, y, xy)
 
-    } # EOF
-)
+#     } # EOF
+# )
 
 #' @param x GVector
 #' @param coords 2-column matrix of coordinates
@@ -562,7 +560,7 @@ methods::setMethod(
         map = sources(x),
         coordinates = coords,
         type = geomtype(x, TRUE),
-        flags = "quiet",
+        flags = .quiet(),
         intern = TRUE
     )
 

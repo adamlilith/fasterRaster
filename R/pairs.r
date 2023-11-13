@@ -76,7 +76,7 @@ methods::setMethod(
 }
 
 #' @noRd
-.panelSS <- function(x, y, colramp = colorRampPalette(c("white", blues9)), ...) {
+.panelSS <- function(x, y, colramp = grDevices::colorRampPalette(c("white", grDevices::blues9)), ...) {
 
 	usr <- par(usr = c(0, 1, 0, 1), new = TRUE)
 	on.exit(graphics::par(usr = usr), add = TRUE)

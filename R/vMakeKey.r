@@ -35,7 +35,7 @@
 	args <- list(
 		cmd = "db.execute",
 		input = tf,
-		flags = "quiet"
+		flags = .quiet()
 	)
 
 	do.call(rgrass::execGRASS, args = args)

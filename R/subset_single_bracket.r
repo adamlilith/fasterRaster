@@ -1,4 +1,4 @@
-#' Subset features of a GVector
+#' Subset geometries of a GVector
 #'
 #' @description The `[` operator returns a subset or remove specific geometries of a `GVector`. You can get the number of geometries using [ngeom()].
 #'
@@ -69,7 +69,7 @@ methods::setMethod(
 				cats = keepCats,
 				output = src,
 				new = -1,
-				flags = c("quiet", "overwrite")
+				flags = c(.quiet(), "overwrite")
 			)
 
 			if (reverseRowSelect) args$flags <- c(args$flags, "r")

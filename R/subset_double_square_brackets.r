@@ -1,4 +1,4 @@
-#' Subset layer(s) from a GRaster or a GVector with selected columns
+#' Subset layers from a GRaster, or specific columns from a GVector
 #'
 #' @description The `[[` operator can be used to subset or remove one or more layers from a `GRaster`. It can also be used to subset or remove columns from a `GVector` with a data table.
 #'

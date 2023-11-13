@@ -32,28 +32,28 @@
 		
 		# rasters
 		if (any(match == 1L)) {
-			rasts <- rgrass::execGRASS("g.list", flags="quiet", type="raster", intern=TRUE, echoCmd=FALSE)
+			rasts <- rgrass::execGRASS("g.list", flags=.quiet(), type="raster", intern=TRUE, echoCmd=FALSE)
 			if (length(rasts) > 0L) names(rasts) <- rep("raster", length(rasts))
 			rasts <- sort(rasts)
 		}
 		
 		# 3D rasters
 		if (any(match == 3L)) {
-			rasts3d <- rgrass::execGRASS("g.list", flags="quiet", type="raster_3d", intern=TRUE, echoCmd=FALSE)
+			rasts3d <- rgrass::execGRASS("g.list", flags=.quiet(), type="raster_3d", intern=TRUE, echoCmd=FALSE)
 			if (length(rasts3d) > 0L) names(rasts3d) <- rep("raster3d", length(rasts3d))
 			rasts3d <- sort(rasts3d)
 		}
 		
 		# vectors
 		if (any(match == 2L)) {
-			vects <- rgrass::execGRASS("g.list", flags="quiet", type="vector", intern=TRUE, echoCmd=FALSE)
+			vects <- rgrass::execGRASS("g.list", flags=.quiet(), type="vector", intern=TRUE, echoCmd=FALSE)
 			if (length(vects) > 0L) names(vects) <- rep("vector", length(vects))
 			vects <- sort(vects)
 		}
 		
 		# groups
 		if (any(match == 4L)) {
-			groups <- rgrass::execGRASS("g.list", flags="quiet", type="group", intern=TRUE, echoCmd=FALSE)
+			groups <- rgrass::execGRASS("g.list", flags=.quiet(), type="group", intern=TRUE, echoCmd=FALSE)
 			if (length(groups) > 0L) names(groups) <- rep("group", length(groups))
 			groups <- sort(groups)
 		}

@@ -27,7 +27,7 @@ methods::setMethod(
 		output = srcDel,
 		option = "del",
 		cat = -1,
-		flags = c("quiet", "overwrite")
+		flags = c(.quiet(), "overwrite")
 	)
 
 	src <- .makeSourceName("v_category_add", "vector")
@@ -36,7 +36,7 @@ methods::setMethod(
 		input = srcDel,
 		output = src,
 		option = "add",
-		flags = c("quiet", "overwrite")
+		flags = c(.quiet(), "overwrite")
 	)
 
 	# replicate data table
@@ -44,7 +44,7 @@ methods::setMethod(
 		table <- NULL
 	} else {
 		
-		cats <- .vCats(x, table = FALSE, integer = TRUE)
+		cats <- .vCats(x, db = FALSE, integer = TRUE)
 		if (anyNA(cats)) {
 			warning("At least one geometry has a combined category. Data table cannot be copied.")
 			table <- NULL
@@ -60,7 +60,7 @@ methods::setMethod(
  		cmd = "v.db.connect",
  		map = src,
  		layer = "1",
- 		flags = c("quiet", "overwrite", "d")
+ 		flags = c(.quiet(), "overwrite", "d")
  	)
 
 	# attach new database with same number of rows as categories in vector
@@ -85,7 +85,7 @@ methods::setMethod(
 		input = tf,
 		output = srcTable,
 		# key = "cat",
-		flags = c("quiet", "overwrite")
+		flags = c(.quiet(), "overwrite")
 	)
 
 	# connect database to vector
@@ -95,7 +95,7 @@ methods::setMethod(
 		table = srcTable,
 		layer = "1",
 		key = "cat_",
-		flags = c("quiet", "overwrite", "o")
+		flags = c(.quiet(), "overwrite", "o")
 	)
 
 	.makeGVector(src, table = table)

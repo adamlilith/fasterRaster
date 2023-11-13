@@ -31,7 +31,7 @@ methods::setMethod(
 		output = src,
 		operator = "or",
 		snap = -1,
-		flags = c("quiet", "overwrite")
+		flags = c(.quiet(), "overwrite")
 	)
 
 	.makeGVector(src)

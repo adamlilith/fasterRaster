@@ -97,7 +97,7 @@ sun <- function(
 		
 	args <- list(
 		cmd = "r.sun",
-		flags = c("quiet", "overwrite"),
+		flags = c(.quiet(), "overwrite"),
 		day = day,
 		step = step,
 		nprocs = getFastOptions("cores"),

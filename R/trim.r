@@ -37,7 +37,7 @@ methods::setMethod(
 			cmd = "g.region",
 			raster = sources(x)[i],
 			zoom = sources(x)[i],
-			flags = c("quiet", "overwrite"),
+			flags = c(.quiet(), "overwrite"),
 			intern = TRUE
 		)
 
@@ -85,7 +85,7 @@ methods::setMethod(
 		cmd = "g.region",
 		w = w, e = e, s = s, n = n,
 		ewres = ewres, nsres = nsres,
-		flags = c("quiet", "overwrite"),
+		flags = c(.quiet(), "overwrite"),
 		intern = TRUE
 	)
 	do.call(rgrass::execGRASS, args = args)

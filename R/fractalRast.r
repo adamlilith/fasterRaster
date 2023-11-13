@@ -46,7 +46,7 @@ methods::setMethod(
             cmd = "r.surf.fractal",
             output = gnFracts[i],
             dimension = dimension[i],
-            flags = c("quiet", "overwrite"),
+            flags = c(.quiet(), "overwrite"),
             intern = TRUE
         )
         do.call(rgrass::execGRASS, args = args)
@@ -61,7 +61,7 @@ methods::setMethod(
         args <- list(
             cmd = "r.mapcalc",
             expression = ex,
-            flags = c("quiet", "overwrite"),
+            flags = c(.quiet(), "overwrite"),
             intern = TRUE
         )
         do.call(rgrass::execGRASS, args = args)

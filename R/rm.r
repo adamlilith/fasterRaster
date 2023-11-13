@@ -52,7 +52,7 @@
 	for (i in seq_along(dels)) {
 		del <- dels[i]
 		typ <- type[i]
-		rgrass::execGRASS("g.remove", name=del, type=typ, flags=c("quiet", "f"))
+		rgrass::execGRASS("g.remove", name=del, type=typ, flags=c(.quiet(), "f"))
 	}
 	
 	invisible(TRUE)

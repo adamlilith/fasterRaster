@@ -25,7 +25,7 @@ methods::setMethod(
         .restore(x)
         region(x)
 
-        flags <- c("quiet", "overwrite")
+        flags <- c(.quiet(), "overwrite")
         if (!na.rm) flags <- c(flags, "i")
 
         temp <- paste0(tempfile(), ".csv")
@@ -57,28 +57,14 @@ methods::setMethod(
 methods::setMethod(
 	f = "crds",
 	signature = c(x = "GVector"),
-	function(x, z = TRUE) {
-	.crdsVect(x, z = z)
-	} # EOF
-)
-
-#' For use by other functions where we pass the GRASS name
-#' @aliases crds
-#' @rdname crds
-#' @noRd
-methods::setMethod(
-	f = "crds",
-	signature = c(x = "character"),
-	function(x) {
-	.crdsVect(x)
-	} # EOF
+	function(x, z = TRUE) .crdsVect(x, z = z)
 )
 
 #' @rdname crds
 #' @export
 st_coordinates <- function(x) {
 	if (inherits(x, "GSpatial")) {
-		.crdsVect(x, z = z)
+		.crdsVect(x, z = FALSE)
 	} else {
 		sf::st_coordinates(x)
 	}
@@ -111,7 +97,7 @@ st_coordinates <- function(x) {
 		# if (z && is.3d(x)) warning("z coordinates ignored.")
 	
 		# src <- .makeSourceName("points", "vect")
-		# rgrass::execGRASS("v.to.points", input=sources(x), output=src, use="vertex", flags=c("quiet", "overwrite"), intern=TRUE)
+		# rgrass::execGRASS("v.to.points", input=sources(x), output=src, use="vertex", flags=c(.quiet(), "overwrite"), intern=TRUE)
 		# pts <- .makeGVector(src)
 		# pts <- vect(pts)
 
@@ -119,7 +105,7 @@ st_coordinates <- function(x) {
 
 	} else if (gm == "points") {
 		
-		data <- rgrass::execGRASS("v.to.db", map = src, flags=c("p", "quiet"), option="coor", type="point", intern=TRUE)
+		data <- rgrass::execGRASS("v.to.db", map = src, flags=c("p", .quiet()), option="coor", type="point", intern=TRUE)
 		# data <- data[-1L]
 		# cutAt <- which(data == "Reading features...")
 		# data <- data[1L:(cutAt - 1L)]

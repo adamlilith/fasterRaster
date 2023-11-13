@@ -51,20 +51,20 @@ methods::setMethod(
 	signature = "GSpatial",
 	definition = function(object) {
 
-	details <- getFastOptions("details")
+	verbose <- getFastOptions("verbose")
 
 	digs <- min(3, getOption("digits"))
 	extent <- round(object@extent, digs)
 	
 	cat("class       :", paste(class(object), collapse=", "), "\n")
-	if (getFastOptions("details")) {
+	if (getFastOptions("verbose")) {
 		cat("sources(s)   :", object@sources, "\n")
 		cat("location    :", object@location, "\n")
 		cat("mapset      :", object@mapset, "\n")
 	}
 	cat("topology    :", object@topology, "\n")
 	cat("extent      :", paste(extent, collapse=", "), "(xmin, xmax, ymin, ymax)\n")
-	if (details & object@topology == "3D") cat("z extent    :", paste(object@zextent, collapse=", "), " (bottom, top)\n")
+	if (verbose & object@topology == "3D") cat("z extent    :", paste(object@zextent, collapse=", "), " (bottom, top)\n")
 	cat("coord ref.  :", format(st_crs(object)), "\n")
 	
 	}
@@ -96,7 +96,7 @@ methods::setMethod(
 	signature = "GRegion",
 	definition = function(object) {
 
-	details <- getFastOptions("details")
+	verbose <- getFastOptions("verbose")
 
 	digs <- min(5, getOption("digits"))
 	resol <- round(object@resolution, digs)
@@ -105,7 +105,7 @@ methods::setMethod(
 	zextent <- round(object@zextent, max(round(digs / 2), 2))
 	
 	cat("class       :", paste(class(object), collapse=", "), "\n")
-	if (getFastOptions("details")) {
+	if (getFastOptions("verbose")) {
 		# cat("sources(s)   :", object@sources, "\n")
 		cat("location    :", object@location, "\n")
 		cat("mapset      :", object@mapset, "\n")
@@ -153,7 +153,7 @@ methods::setMethod(
   		minColWidth <- 4L
 	}
 	maxColWidth <- 30L
-	details <- getFastOptions("details")
+	verbose <- getFastOptions("verbose")
 
 	digs <- min(7, getOption("digits"))
 	resol <- round(object@resolution, digs)
@@ -179,7 +179,7 @@ methods::setMethod(
 	maxCat[is.na(maxCat)] <- "NA"
 	nCats <- nlevels(object)
 	
-	if (details) {
+	if (verbose) {
 		activeCat <- object@activeCat - 1L
 		if (anyNA(activeCat)) activeCat[is.na(activeCat)] <- "NA"
 	}
@@ -193,7 +193,7 @@ methods::setMethod(
 	}
 
 	# truncate long sources
-	if (details) {
+	if (verbose) {
 	
 		sources <- object@sources
 		ncharNames <- nchar(sources)
@@ -205,7 +205,7 @@ methods::setMethod(
 
 	# datatype
 	datatypeFR <- datatype(object, "fasterRaster")
-	if (details) datatypeGRASS <- datatype(object, "GRASS")
+	if (verbose) datatypeGRASS <- datatype(object, "GRASS")
 
 	# number of characters of longest display item
 	nc <- pmax(
@@ -215,7 +215,7 @@ methods::setMethod(
 		nchar(nCats),
 		minValLength, maxValLength
 	)
- 	if (details) {
+ 	if (verbose) {
 		nc <- pmax(
 			nc,
 			nchar(activeCat),
@@ -240,7 +240,7 @@ methods::setMethod(
 	for (i in seq_len(object@nLayers)) {
 
 		fmt <- paste0("%", nc[i], "s")
-		if (details) {
+		if (verbose) {
 			sourcesNice[i] <- sprintf(fmt, sources[i])
     		activeCat[i] <- sprintf(fmt, activeCat[i])
    			datatypeNiceGRASS[i] <- sprintf(fmt, datatypeGRASS[i])
@@ -264,14 +264,14 @@ methods::setMethod(
 	minCatNice <- paste(minCatNice, collapse=" ")
 	maxCatNice <- paste(maxCatNice, collapse=" ")
 
-	if (details) {
+	if (verbose) {
 		sources <- paste(sourcesNice, collapse=" ")
   		datatypeNiceGRASS <- paste(datatypeNiceGRASS, collapse = " ")
 		activeCat <- paste(activeCat, collapse = "")
 	}
 	
 	cat("class       : GRaster\n")
-	if (details) {
+	if (verbose) {
 		cat("location    :", object@location, "\n")
 		cat("mapset      :", object@mapset, "\n")
 	}
@@ -279,14 +279,14 @@ methods::setMethod(
 	cat("dimensions  :", paste(c(object@dimensions, object@nLayers), collapse=", "), "(nrow, ncol, ndepth, nlyr)\n")
 	cat("resolution  :", paste(resol, collapse=", "), "(x, y, z)\n")
 	cat("extent      :", paste(extent, collapse=", "), "(xmin, xmax, ymin, ymax)\n")
-	if (details | object@topology == "3D") {
+	if (verbose | object@topology == "3D") {
 		cat("z extent    :", paste(object@zextent, collapse=", "), "(bottom, top)\n")
 	}
 	cat("coord ref.  :", format(st_crs(object)), "\n")
-	if (details) cat("projection  :", object@projection, "\n")
-	if (details) cat("sources     :", sources, "\n")
+	if (verbose) cat("projection  :", object@projection, "\n")
+	if (verbose) cat("sources     :", sources, "\n")
 	cat("name        :", names, "\n")
-	if (!details) {
+	if (!verbose) {
 		cat("datatype    :", datatypeNiceFR, "\n")
 	} else {
 		cat("type (fR)   :", datatypeNiceFR, "\n")
@@ -296,7 +296,7 @@ methods::setMethod(
 	cat("max. value  :", maxValNice, "\n")
 	if (any(numLevels > 0L)) {
   		cat("categories  :", nCatsNice, "\n")
-  		if (details) cat("active cat. :", activeCat, "\n")
+  		if (verbose) cat("active cat. :", activeCat, "\n")
 		cat("min. categ. :", minCatNice, "\n")
 		cat("max. categ. :", maxCatNice, "\n")
 	}
@@ -334,7 +334,7 @@ methods::setMethod(
 	maxFieldsToShow <- 7L
   	maxColWidth <- 20L
 
-	details <- getFastOptions("details")
+	verbose <- getFastOptions("verbose")
 
 	digs <- min(3, getOption("digits"))
 	extent <- round(object@extent, digs)
@@ -443,7 +443,7 @@ methods::setMethod(
 	}
 	
 	cat("class       : GVector\n")
-	if (details) {
+	if (verbose) {
 		cat("location    :", object@location, "\n")
 		cat("mapset      :", object@mapset, "\n")
 		cat("source      :", object@sources, "\n")
@@ -452,9 +452,9 @@ methods::setMethod(
 	cat("dimensions  :", paste0(object@nGeometries, ", ", object@nSubgeometries, ", ", nFields), "(geometries, sub-geometries, columns)\n")
 	# cat("dimensions  :", paste0(object@nGeometries, ", ", nFields), "(geometries, columns)\n")
 	cat("extent      :", paste(extent, collapse=", "), "(xmin, xmax, ymin, ymax)\n")
-	if (details | object@topology == "3D") cat("z extent    :", paste(zextent, collapse=", "), "(bottom, top)\n")
+	if (verbose | object@topology == "3D") cat("z extent    :", paste(zextent, collapse=", "), "(bottom, top)\n")
 	cat("coord ref.  :", format(st_crs(object)), "\n")
-	if (details) cat("projection  :", object@projection, "\n")
+	if (verbose) cat("projection  :", object@projection, "\n")
 
 	if (nFields > 0L) {
 		cat("names       :", fields, "\n")
@@ -491,7 +491,7 @@ methods::setMethod(
 #' @noRd
 .showCRS <- function(x) {
 
-	format(st_crs(object))(stcrs(x))
+	format(st_crs(x))(st_crs(x))
 
 	if (inherits(x, c("SpatRaster", "SpatVector", "sf"))) {
 		x <- sf::st_crs(x)

@@ -89,7 +89,7 @@ methods::setMethod(
 		cmd = "g.region",
 		w = w, e = e, s = s, n = n,
 		ewres = ewres, nsres = nsres,
-		flags = c("quiet", "overwrite"),
+		flags = c(.quiet(), "overwrite"),
 		intern = TRUE
 	)
 
@@ -124,7 +124,7 @@ methods::setMethod(
 			cmd = "v.clip",
 			input = sources(x),
 			output = src,
-			flags = c("quiet", "overwrite"),
+			flags = c(.quiet(), "overwrite"),
 			intern = TRUE
 		)
 		
@@ -146,7 +146,7 @@ methods::setMethod(
 			input = sources(x),
 			clip = sources(y),
 			output = src,
-			flags = c("r", "quiet", "overwrite"),
+			flags = c("r", .quiet(), "overwrite"),
 			intern = TRUE
 		)
 

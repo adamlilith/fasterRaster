@@ -1,8 +1,6 @@
-#' Add rows or columns to the "levels" table of a categorical raster
+#' Remove rows from the "levels" table of a categorical raster
 #'
-#' @description `addCats()` and `addCats()<-` add information to a categorical raster's "levels" table. The `addCats()` function uses [data.table::merge()] or [cbind()] to do this--it does not add new rows, but rather new columns. The `addCats()<-` function uses [rbind()] to add new categories (rows) to the "levels" table.
-#'
-#' GRaster`s can represent [categorical data][tutorial_raster_data_types]. Cell values are actually integers, each corresponding to a category, such as "desert" or "wetland." A categorical raster is associated with a "levels" table that matches each value to a category name. The table must be `NULL` (i.e., no categories--so not a categorical raster), or have at least two columns. The first column must have integers and represent raster values. One or more subsequent columns must have category labels. The column with these labels is the "active category".
+#' @description `droplevels()` removes levels (category values) from the "levels" table of a [categorical raster][tutorial_raster_data_types].
 #'
 #' @param x A `GRaster`.
 #'
@@ -37,12 +35,13 @@ methods::setMethod(
 
 			    freqs <- freq(x[[i]])
 
-				data.table::setkeyv(freqs, names(freqs))
+				data.table::setkeyv(freqs, names(freqs)[1L])
 				data.table::setkeyv(levs[[i]], names(levs[[i]])[1L])
 
 				cols <- names(levs[[i]])
 
-    			x@levels[[i]] <- levs[[i]][unique(levs[[i]][freqs, which = TRUE]), ]
+    			# x@levels[[i]] <- levs[[i]][unique(levs[[i]][freqs$value != 0L, which = TRUE]), ]
+    			x@levels[[i]] <- levs[[i]][freqs$count != 0L]
 
 			} else if (is.character(level)) {
 			

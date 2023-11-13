@@ -60,7 +60,7 @@ setMethod(
 		args <- list(
 			cmd = "r.mapcalc",
 			expression = ex,
-			flags = c("quiet", "overwrite"),
+			flags = c(.quiet(), "overwrite"),
 			intern = TRUE
 		)
 		do.call(rgrass::execGRASS, args = args)
@@ -93,7 +93,7 @@ methods::setMethod(
 		args <- list(
 			cmd = "r.mapcalc",
 			expression = ex,
-			flags = c("quiet", "overwrite"),
+			flags = c(.quiet(), "overwrite"),
 			intern = TRUE
 		)
 		do.call(rgrass::execGRASS, args = args)
@@ -206,7 +206,7 @@ setMethod(
 			name <- paste0(names(y)[i], "_", names(x)[i])
 			src <- .makeSourceName(name, "rast")
 			ex <- paste0(src, " = atan(", prec, "(", sources(x)[i], ") , double(", sources(y)[i], "))  * (", pi, " / 180)")
-			this <- .genericArith(name = name, src = src, ex = ex)
+			this <- .genericArithRast(name = name, src = src, ex = ex)
 			if (i == 1L) {
 				out <- this
 			} else {
@@ -246,7 +246,7 @@ setMethod(
 			args <- list(
 				cmd = "r.mapcalc",
 				expression = ex,
-				flags = c("quiet", "overwrite"),
+				flags = c(.quiet(), "overwrite"),
 				intern = TRUE
 			)
 			do.call(rgrass::execGRASS, args = args)
@@ -373,7 +373,7 @@ setMethod(
 		prec <- getFastOptions("rasterPrecision")
 
   		ex <- paste0(srcs[i], " = ", fx, "(", prec, "(", sources(x)[i], ") * 180 / ", pi, ")")
-		rgrass::execGRASS("r.mapcalc", expression=ex, flags=c("quiet", "overwrite"), intern=TRUE)
+		rgrass::execGRASS("r.mapcalc", expression=ex, flags=c(.quiet(), "overwrite"), intern=TRUE)
 		this <- .makeGRaster(srcs[i], name)
 		
 	}
@@ -397,7 +397,7 @@ setMethod(
 	
 		name <- names(x)[i]
 		ex <- paste0(srcs[i], " = ", fx, "(", prec, "(", sources(x)[i], ") * ", pi, " / 180)")
-		rgrass::execGRASS("r.mapcalc", expression=ex, flags=c("quiet", "overwrite"), intern=TRUE)
+		rgrass::execGRASS("r.mapcalc", expression=ex, flags=c(.quiet(), "overwrite"), intern=TRUE)
 	}
 	.makeGRaster(srcs, fx)
 
@@ -424,7 +424,7 @@ setMethod(
 		args <- list(
 			cmd = "r.mapcalc",
 			expression = ex,
-			flags = c("quiet", "overwrite"),
+			flags = c(.quiet(), "overwrite"),
 			intern=TRUE	
 		)
 		do.call(rgrass::execGRASS, args = args)
@@ -456,7 +456,7 @@ setMethod(
 		args <- list(
 			cmd = "r.mapcalc",
 			expression = ex,
-			flags = c("quiet", "overwrite"),
+			flags = c(.quiet(), "overwrite"),
 			intern = TRUE
 		)
 		do.call(rgrass::execGRASS, args = args)

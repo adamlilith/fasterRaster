@@ -46,7 +46,7 @@ methods::setMethod(
 	
 	if (any(directions < 0 | directions >= 360)) stop("Values in argument ", sQuote("directions"), " must be in the range [0, 359].")
 	
-	flags <- c("quiet", "overwrite")
+	flags <- c(.quiet(), "overwrite")
 	if (northIs0) flags <- c(flags, "c")
 	if (units == "degrees") flags <- c(flags, "d")
 	

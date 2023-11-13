@@ -1,6 +1,6 @@
 #' @name vegIndices
 #'
-#' @title Table of vegetation indices that can be calculated from remote sensing surface reflectance data using [vegIndex()]. A near-comprehensive table of indices can be found on the (Index Database: A database for remote sensing indices)[https://www.indexdatabase.de].
+#' @title Table of vegetation indices that can be calculated from remote sensing surface reflectance data using [vegIndex()]. A near-comprehensive table of indices can be found on the [Index Database: A Database for Remote Sensing Indices](https://www.indexdatabase.de).
 #'
 #' @description A table of vegetation indices that ca be calculated using [vegIndex()]. Columns include:
 #' * `index``: Abbreviation of the index.

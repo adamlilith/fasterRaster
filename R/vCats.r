@@ -34,7 +34,7 @@
 			input = src,
 			layer = layer,
 			option = "print",
-			flags = "quiet",
+			flags = .quiet(),
 			intern = TRUE
 		)
 	}

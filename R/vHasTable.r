@@ -23,7 +23,7 @@
 	info <- rgrass::execGRASS(
 		"v.db.connect",
 		map = src,
-		flags = c("quiet", "p"),
+		flags = c(.quiet(), "p"),
 		intern = TRUE
 	)
 

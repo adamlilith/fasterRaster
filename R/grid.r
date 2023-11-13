@@ -128,7 +128,7 @@ methods::setMethod(
 		map = src,
 		position = "region",
 		box = c(xsize, ysize),
-		flags = c("quiet", "overwrite")
+		flags = c(.quiet(), "overwrite")
 	)
 
 	angle <- 360 - angle

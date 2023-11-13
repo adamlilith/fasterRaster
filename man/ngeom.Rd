@@ -7,7 +7,7 @@
 \alias{nsubgeom}
 \title{Number of geometries and subgeometries in a vector}
 \usage{
-\S4method{ngeom}{GVector}(x, type = "fasterRaster")
+\S4method{ngeom}{GVector}(x)
 
 \S4method{nsubgeom}{GVector}(x)
 }

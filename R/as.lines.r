@@ -1,12 +1,12 @@
 #' Convert a raster to a lines vector
 #'
-#' @description [as.lines()] converts a `GRaster` to a "lines" `GVector`. Before you apply this function, you may need to run [thin()] on the raster to reduce linear features to a single-cell width. You may also need to use [cleanGeom()] (especially the "duplicated" and "removeDangles" `method`s) afterward to remove duplicated vertices and "dangling" lines.
+#' @description [as.lines()] converts a `GRaster` to a "lines" `GVector`. Before you apply this function, you may need to run [thinLines()] on the raster to reduce linear features to a single-cell width. You may also need to use [cleanGeom()] (especially the "duplicated" and "removeDangles" `method`s) afterward to remove duplicated vertices and "dangling" lines.
 #' 
 #' @param x A `GRaster`. If more than one layer is in the `GRaster`, only the first will be used (with a warning).
 #'
 #' @returns A `GVector`.
 #' 
-#' @seealso [as.points()], [as.polygons()], [terra::as.lines()], [thin()], [cleanGeom()], and **GRASS** module `r.to.vect`
+#' @seealso [as.points()], [as.polygons()], [terra::as.lines()], [thinLines()], [cleanGeom()], and **GRASS** module `r.to.vect`
 #' 
 #' @example man/examples/ex_asLines.r
 #' 
@@ -30,7 +30,7 @@ methods::setMethod(
         input = sources(x),
         output = src,
         type = "line",
-        flags = c("quiet", "overwrite"),
+        flags = c(.quiet(), "overwrite"),
         intern = TRUE
     )
     do.call(rgrass::execGRASS, args = args)

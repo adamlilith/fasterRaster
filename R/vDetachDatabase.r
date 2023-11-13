@@ -17,7 +17,7 @@
 	rgrass::execGRASS(
 		cmd = "v.db.connect",
 		map = src,
-		flags = c("quiet", "d")
+		flags = c(.quiet(), "d")
 	)
 
 	invisible(src)

@@ -2,15 +2,14 @@
 #'
 #' @description This function calculates one of many types of vegetation indices from a raster with four bands representing blue (B), green (G), red (R), and near infrared (NIR), plus possibly channels 5 and 7. The function requires rasters that represent surface reflectance, so should have values that fall in the range 0 to 1, unless they are digital number rasters (e.g., integers in the range 0 to 255). If digital number format is used, then the `bits` argument should be defined.
 #' 
-#' The [toarLandsat()] or [toarAster()] functions can convert LANDSAT and ASTER digital-number rasters to radiance rasters, and then to reflectance rasters.
-#'
 #' @param x A `GRaster` with one layer per required band. Values should be between 0 and 1.
 #' 
 #' @param index Character or character vector: The vegetation index or indices to calculate. You can find a list of available indices using [fastData("vegIndices")][fastData] (also see [vegIndices]). The first column, "`index`" provides the name of the index, and these are the values that this argument will accept (e.g., "NDVI", "EVI2"). Partial matching is used, and case is ignored. You can also use these shortcuts:
 #' * `"*"`: Calculate *all* indices
 #' * `"RNIR"`: Calculate all indices that use R and NIR channels (but not other channels).
 #' * `"NotSoil"`: Calculate all indices that use any channels but do not require `soilSlope` or `soilIntercept`.
-#' **Note**: A near-comprehensive table of indices can be found on the (Index Database: A database for remote sensing indices)[https://www.indexdatabase.de]
+#'
+#' *Note*: A near-comprehensive table of indices can be found on the (Index Database: A Database for Remote Sensing Indices)[https://www.indexdatabase.de]
 #' 
 #' @param r,g,b,nir Numeric or character: Index or [names()] of the layers in `x` that represent the red, green, blue, and near infrared channels. Values must be in the range fromm 0 to 1 or integers.
 #' 
@@ -102,7 +101,7 @@ methods::setMethod(
 			cmd = "i.vi",
 			viname = index[i],
 			output = srcs[i],
-			flags = c("quiet", "overwrite"),
+			flags = c(.quiet(), "overwrite"),
 			intern = TRUE
 		)
 

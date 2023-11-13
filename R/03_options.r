@@ -8,7 +8,11 @@
 #'
 #' * `memory` (integer/numeric): The amount of memory to allocate to a task, in MB. The default is 300 MB. Only some **GRASS** modules allow this option.
 #'
-#' * `details` (logical): If `TRUE`, show details on run-time and otherwise hidden slots in classes. This is mainly used for debugging, so most users will want to keep this at its default, `FALSE`.
+#' * `useDataTable` (logical): If `FALSE` (default), use `data.frame`s when going back and forth between data tables of `GVector`s and **R**. This can be slow for very large data tables. If `TRUE`, use `data.table`s from the **data.table** package. This can be much faster, but it might require you to know how to use `data.table`s if you want to manipulate them in **R**. You can always convert them to `data.frame`s using [base::as.data.frame()].
+#' 
+#' * `rasterPrecision` (character): The [precision][tutorial_raster_data_types] of values when applying mathematical operations to a `GRaster`. By default, this is `"double"`, which allows for precision to about the 16th decimal place. However, it can be set to `"float"`, which allows for precision to about the 7th decimal place. `float` rasters are smaller in memory and on disk. The default is `"double"`.`
+#'
+#' * `verbose` (logical): If `TRUE`, show **GRASS** messages and otherwise hidden slots in classes. This is mainly used for debugging, so most users will want to keep this at its default, `FALSE`.
 #'
 #' * `grassDir` (character): The folder in which **GRASS** is installed on your computer. Typically, this option is set when you run [faster()], but you can define it before you run that function. All subsequent calls of `faster()` do not need `grassDir` set because it will be obtained from the options. By default, `grassDir` is `NULL`, which causes the function to search for your installation of **GRASS** (and which usually fails). Depending on your operating system, your install directory will look something like this:
 #'     * Windows: `"C:/Program Files/GRASS GIS 8.3"`
@@ -16,12 +20,6 @@
 #'     * Linux: `"/usr/local/grass"`
 #'
 #' *  `addonDir` (character): Folder in which **GRASS** addons are stored. If `NULL` and `grassDir` is not `NULL`, this will be taken to be `file.path(grassDir, "addons")`.
-#'
-#' * `rasterPrecision` (character): The [precision][tutorial_raster_data_types] of values when applying mathematical operations to a `GRaster`. By default, this is `"double"`, which allows for precision to about the 16th decimal place. However, it can be set to `"float"`, which allows for precision to about the 7th decimal place. `float` rasters are smaller in memory and on disk. The default is `"double"`.`
-#'
-#' * `useDataTable` (logical): If `FALSE` (default), use `data.frame`s when going back and forth between data tables of `GVector`s and **R**. This can be slow for very large data tables. If `TRUE`, use `data.table`s from the **data.table** package. This can be much faster, but it might require you to know how to use `data.table`s if you want to manipulate them in **R**. You can always convert them to `data.frame`s using [base::as.data.frame()].
-#' 
-#' * `grassMessages` (logical): If `TRUE`, display messages produced by **GRASS**. Usually, these are warnings, but sometimes error messages. The default is `FALSE`.
 #'
 #'  * `workDir` (character): The folder in which **GRASS** rasters, vectors, and other objects are created and manipulated. Typically, this is set when you first call [faster()]. All subsequent calls to `faster()` will not do not need `workDir` defined because it will be obtained from the options. By default, this is set to the temporary directory on your operating system (from [tempdir()]).
 #'
@@ -83,6 +81,10 @@ setFastOptions <- function(
 		if (!is.numeric(opts$cores) | (opts$cores <= 0 & opts$cores %% 1 != 0)) stop("Option ", sQuote("cores"), " must be an integer >= 1. The default is ", .coresDefault(), ".")
 	}
 
+	if (any(names(opts) %in% "verbose")) {
+  		if (is.na(opts$verbose) || !is.logical(opts$verbose)) stop("Option ", sQuote("verbose"), " must be a logical. The default is ", .grassVerbose(), ".")
+	}
+
 	if (any(names(opts) %in% "memory")) {
 		if (!is.numeric(opts$memory) || opts$memory <= 0) stop("Option ", sQuote("memory"), " must be a positive number. The default is ", .memoryDefault(), " (MB).")
 	}
@@ -102,12 +104,6 @@ setFastOptions <- function(
 		} else if (opts$rasterPrecision == "DCELL") {
 			"double"
 		}
-	}
-
-	if (any(names(opts) %in% "grassMessages")) {
-
-  		if (is.na(opts$grassMessages) || !is.logical(opts$grassMessages)) stop("Option ", sQuote("grassMessages"), " must be a logical. The default is ", .grassMessagesDefault(), ".")
-	
 	}
 
 	if (any(names(opts) %in% "useDataTable")) {
@@ -138,8 +134,8 @@ setFastOptions <- function(
 		}
 	}
 
-	if (any(names(opt) %in% "grassMessages")) {
-		rgrass::set.ignore.stderrOption(!getFastOptions("grassMessages"))
+	if (any(names(opt) %in% "verbose")) {
+		rgrass::set.ignore.stderrOption(!getFastOptions("verbose"))
 	}
 
 	invisible(out)

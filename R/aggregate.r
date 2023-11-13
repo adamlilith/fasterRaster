@@ -30,11 +30,6 @@
 #'
 #' @param weight Logical (rasters only): If `FALSE`, each source cell that has its center in the destination cell will be counted equally. If `TRUE`, the value of each source will be weighted the proportion of the destination cell the source cell covers.
 #' 
-#' @param by Either a character, a numeric or integer vector, or `NULL` (vectors only):
-#' * If `NULL` (default), then all geometries will be collated into a single multipart geometry.
-#' * If a character, then rows with the same value in the named column of the vector's data table will be aggregated.
-#' * If a numeric integer or integer vector, the vector must have the same length as the number of geometries (see [ngeom()]). The values must be integers. Geometries with the same value will be aggregated together.
-#' 
 #' @param dissolve Logical (vectors only): If `TRUE` (default), then aggregated geometries will have their borders dissolved. This is ignored if the input `GVector` is not a "polygons" vector.
 #' 
 #' @returns A `GRaster` or `GVector`.
@@ -112,7 +107,7 @@ methods::setMethod(
 		input = NA_character_,
 		output = NA_character_,
 		method = fun,
-		flags = c("quiet", "overwrite"),
+		flags = c(.quiet(), "overwrite"),
 		intern = TRUE
 	)
 	
@@ -223,7 +218,7 @@ methods::setMethod(
 	}
 
 	# use v.reclass to reclassify
-	oldcats <- .vCats(src, table = TRUE)
+	oldcats <- .vCats(src, db = TRUE)
 	
 	if (length(oldcats) > 1L) {
 
@@ -242,7 +237,7 @@ methods::setMethod(
 			cmd = "db.in.ogr",
 			input = tf,
 			output = srcTable,
-			flags = c("quiet", "overwrite")
+			flags = c(.quiet(), "overwrite")
 		)
 
 		# connect table to copy of vector
@@ -254,7 +249,7 @@ methods::setMethod(
 			column = "cat",
 			other_table = srcTable,
 			other_column = "oldcat",
-			flags = "quiet"
+			flags = .quiet()
 		)
 
 		src <- .makeSourceName("v_reclass", "vector")
@@ -264,7 +259,7 @@ methods::setMethod(
 			input = srcIn,
 			output = src,
 			column = "newcat",
-			flags = c("quiet", "overwrite")
+			flags = c(.quiet(), "overwrite")
 		)
 
 		if (dissolve & gtype == "polygons") {
@@ -277,7 +272,7 @@ methods::setMethod(
 				input = srcIn,
 				output = src,
 				column = "cat",
-				flags = c("quiet", "overwrite")
+				flags = c(.quiet(), "overwrite")
 			)
 		
 		}

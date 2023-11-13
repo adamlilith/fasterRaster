@@ -46,7 +46,7 @@ methods::setMethod(
 		output = src,
 		method = method,
 		layer = "2",
-		flags = c("quiet", "overwrite")
+		flags = c(.quiet(), "overwrite")
 	)
 	if (!is.null(minIn)) args$min <- minIn
 	if (!is.null(maxDist)) args$distance <- maxDist

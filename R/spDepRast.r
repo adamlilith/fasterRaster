@@ -62,7 +62,7 @@ methods::setMethod(
             distance = dist[i],
             exponent = exponent[i],
             flat = delay[i],
-            flags = c("quiet", "overwrite"),
+            flags = c(.quiet(), "overwrite"),
             intern = TRUE
         )
         if (!is.null(seed)) args$seed <- seed[i]
@@ -78,7 +78,7 @@ methods::setMethod(
         args <- list(
             cmd = "r.mapcalc",
             expression = ex,
-            flags = c("quiet", "overwrite"),
+            flags = c(.quiet(), "overwrite"),
             intern = TRUE
         )
         do.call(rgrass::execGRASS, args = args)

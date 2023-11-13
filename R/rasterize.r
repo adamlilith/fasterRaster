@@ -12,8 +12,6 @@
 #' * If `byGeom` is `TRUE` and `collapse` is `TRUE`, the output will have just one raster layer, but with values that correspond to each geometry (i.e., each geometry will get a different value). If geometries overlap, then category value of the one on top will be assigned to the relevant cells. 
 #' * If `byGeom` is `TRUE`, and `collapse` is `FALSE`, then create a separate raster layer for each geometry in `x`.
 #'
-#' @param collapse Logical: If `TRUE` (default), and if `byGeom` is `TRUE`, then the output will have just one raster layer, but with values that correspond to each geometry (i.e., each geometry will get a different value). If geometries overlap, then category value of the one on top will be assigned to the relevant cells. 
-#'
 #' @returns A `GRaster`.
 #'
 #' @seealso [terra::rasterize()], module [`v.to.rast`](https://grass.osgeo.org/grass84/manuals/v.to.rast.html) in **GRASS**
@@ -53,7 +51,7 @@ methods::setMethod(
 				use = "cat",
 				type = gtype,
 				memory = getFastOptions("memory"),
-				flags = c("quiet", "overwrite")
+				flags = c(.quiet(), "overwrite")
 			)
 
 			if (gtype == "line") args$flags <- c(args$flags, "d")
@@ -98,7 +96,7 @@ methods::setMethod(
 			value = 1,
 			type = gtype,
 			memory = getFastOptions("memory"),
-			flags = c("quiet", "overwrite")
+			flags = c(.quiet(), "overwrite")
 		)
 
 		if (gtype == "line") args$flags <- c(args$flags, "d")
@@ -114,7 +112,7 @@ methods::setMethod(
 			rgrass::execGRASS(
 				cmd = "r.mapcalc",
 				expression  = ex,
-				flags = c("quiet", "overwrite")
+				flags = c(.quiet(), "overwrite")
 			)
 
 		}

@@ -77,7 +77,7 @@ methods::setMethod(
 				metric = method,
 				old = 1,
 				new = 1,
-				flags = c("quiet", "overwrite")#,
+				flags = c(.quiet(), "overwrite")#,
 				# intern = TRUE
 			)
 		
@@ -96,7 +96,7 @@ methods::setMethod(
 				output = gnBuffer,
 				distances = width,
 				units = unit,
-				flags = c("quiet", "overwrite"),
+				flags = c(.quiet(), "overwrite"),
 				intern = TRUE
 			)
 			
@@ -112,7 +112,7 @@ methods::setMethod(
 		} else {
 			paste0(src, " = if(", gnBuffer, " == 2, 1, 1)")
 		}
-		rgrass::execGRASS("r.mapcalc", expression=ex, flags=c("quiet", "overwrite"))
+		rgrass::execGRASS("r.mapcalc", expression=ex, flags=c(.quiet(), "overwrite"))
 		
 		if (nlyr(x) > 1L) {
 			group[[i]] <- .makeGRaster(src, names(x[[i]]))
@@ -152,7 +152,7 @@ methods::setMethod(
 		input = sources(x),
 		output = src,
 		distance = width,
-		flags = c("quiet", "overwrite"),
+		flags = c(.quiet(), "overwrite"),
 		intern = TRUE
 	)
 
@@ -188,7 +188,7 @@ methods::setMethod(
 			input = srcBuff,
 			output = src,
 			column = "cat",
-			flags = c("quiet", "overwrite")
+			flags = c(.quiet(), "overwrite")
 		)
 		do.call(rgrass::execGRASS, args = args)
 

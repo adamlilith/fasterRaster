@@ -51,7 +51,7 @@ methods::setMethod(
 		elevation = sources(x),
 		nprocs = getFastOptions("cores"),
 		memory = getFastOptions("memory"),
-		flags = c("quiet", "overwrite", "e")
+		flags = c(.quiet(), "overwrite", "e")
 	)
 	
 	if ("slope" %in% v) {

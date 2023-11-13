@@ -104,7 +104,7 @@ methods::setMethod(
     args <- list(
         cmd = "r.mapcalc",
         expression = fun,
-        flags = c("quiet", "overwrite"),
+        flags = c(.quiet(), "overwrite"),
         intern = TRUE
     )
     if (is.null(seed)) {

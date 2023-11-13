@@ -18,7 +18,7 @@
 	### function globals
 	####################
 	
-	flags <- c("quiet", "overwrite")
+	flags <- c(.quiet(), "overwrite")
 	rastOrVect <- pmatchSafe(rastOrVect, c("raster", "vector"), error=TRUE)
 	
 	fromTo <- c(from, to)

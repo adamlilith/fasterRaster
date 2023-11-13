@@ -31,7 +31,7 @@
 		map = src,
 		column = column,
 		value = value,
-		flags = "quiet"
+		flags = .quiet()
 	)
 
 	invisible(src)

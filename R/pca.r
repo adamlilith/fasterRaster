@@ -35,7 +35,7 @@ methods::setMethod(
 		input = input,
 		output = src,
 		rescale = c(0, 0),
-		flags = c("quiet", "overwrite")
+		flags = c(.quiet(), "overwrite")
 	)
 
 	if (scale) args$flags <- c(args$flags, "n")

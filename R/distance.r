@@ -28,7 +28,8 @@
 #' * `"yards"` or `"yds"`
 #' * `"survey feet"` or `"sft"` -- US survey, obsolete after January 1, 2023, 1 foot approximately equal to 0.304800000001219 meters
 #' * `"feet"` or `"ft"` -- international, 1 foot exactly equal to 0.3048 meters
-#' Partial matching is used.
+#'
+#' Partial matching is used and case is ignored.
 #'
 #' @param dense Logical: Only applicable for case 2, when `x` is a `GRaster` and `y` is a `GVector`. If `TRUE` (default), then the vector will be represented by "densified" lines (i.e., any cell that the line/boundary touches, not just the ones on the rendering path).
 #'
@@ -73,7 +74,7 @@ methods::setMethod(
 		
 		src <- .makeSourceName("distMask", "raster") # note: redefining "src"
 		ex <- paste0(src, " = if(", sources(x), " == ", target, ", 1, null())")
-  		rgrass::execGRASS("r.mapcalc", expression = ex, flags = c("quiet", "overwrite"))
+  		rgrass::execGRASS("r.mapcalc", expression = ex, flags = c(.quiet(), "overwrite"))
 		
 		fillNA <- !fillNA
 		
@@ -85,7 +86,7 @@ methods::setMethod(
 		input = src,
 		distance = srcOut,
 		metric = method,
-		flags = c("quiet", "overwrite", "m"),
+		flags = c(.quiet(), "overwrite", "m"),
 		intern = TRUE
 	)
 	if (!fillNA) args$flags <- c(args$flags, "n")
@@ -130,7 +131,7 @@ methods::setMethod(
 		use = "val",
 		value = 1,
 		type = gtype,
-		flags = c("quiet", "overwrite")
+		flags = c(.quiet(), "overwrite")
 	)
 	if (dense & gtype == "line") args$flags <- c(args$flags, "d")
 	do.call(rgrass::execGRASS, args = args)
@@ -142,7 +143,7 @@ methods::setMethod(
 		input = srcRasterized,
 		distance = src,
 		metric = method,
-		flags = c("m", "quiet", "overwrite")
+		flags = c("m", .quiet(), "overwrite")
 	)
 	if (!fillNA) args$flags <- c(args$flags, "n")
 	do.call(rgrass::execGRASS, args = args)
@@ -179,7 +180,7 @@ methods::setMethod(
 		upload = "dist",
 		dmin = minDist,
 		dmax = maxDist,
-		flags = c("p", "quiet", "overwrite"),
+		flags = c("p", .quiet(), "overwrite"),
 		intern = TRUE
 	)
 	dists <- do.call(rgrass::execGRASS, args = args)
@@ -253,7 +254,7 @@ st_distance <- function(x) UseMethod("st_distance", x)
         args <- list(
             "r.mapcalc",
             expression = ex,
-            flags = c("quiet", "overwrite"),
+            flags = c(.quiet(), "overwrite"),
             intern = TRUE
         )
         do.call(rgrass::execGRASS, args = args)

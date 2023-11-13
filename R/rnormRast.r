@@ -45,7 +45,7 @@ methods::setMethod(
             output = srcs[i],
             mean = mu[i],
             sigma = sigma[i],
-            flags = c("quiet", "overwrite"),
+            flags = c(.quiet(), "overwrite"),
             intern = TRUE
         )
         if (!is.null(seed)) args$seed <- seed[i]

@@ -10,7 +10,7 @@
 #'
 #' @returns A "points" `GVector`.
 #'
-#' @examples man/examples/ex_thinPoints.r
+#' @example man/examples/ex_thinPoints.r
 #'
 #' @aliases thinPoints
 #' @rdname thinPoints
@@ -30,7 +30,7 @@ methods::setMethod(
 		input = sources(x),
 		output = src,
 		cell_limit = n,
-		flags = c("quiet", "overwrite", "g", "t")
+		flags = c(.quiet(), "overwrite", "g", "t")
 	)
 
 	if (nrow(x) > 0L) {

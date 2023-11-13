@@ -6,7 +6,7 @@
 #' 
 #' **Case #2: Change the projection of rasters or vectors stored on disk**: Simply use the [fast()] function with the file name of the object. Again, the `method`, `fallback`, and `wrap` arguments may be important .
 #'
-#' **Case #3: Change the CRS of a `GRaster` or `GVector`: Use the `project()` function (this function). First, initiate a new **GRASS** [location][tutorial_sessions] using [faster()] with the CRS to which you want to transform the object. This means you need to keep track of which **GRASS** "location" in which you are working.  Second, apply this function. If you want to return to the original "location," use [location('original_location_name')]. You can get the name of the current location with [location()] (with no arguments), and its coordinate reference system with [crs()] or [st_crs()] (also no arguments).
+#' **Case #3: Change the CRS of a `GRaster` or `GVector`: Use the `project()` function (this function). First, initiate a new **GRASS** [location][tutorial_sessions] using [faster()] with the CRS to which you want to transform the object. This means you need to keep track of which **GRASS** "location" in which you are working.  Second, apply this function. If you want to return to the original "location," use `location('original_location_name')`. You can get the name of the current location with [location()] (with no arguments), and its coordinate reference system with [crs()] or [st_crs()] (also no arguments).
 #'
 #' @param x A `GRaster` or `GVector` to be projected.
 #'
@@ -165,7 +165,7 @@ cat("Slow step^^^")
 			output = srcs[i],
 			method = method,
 			memory = getFastOptions("memory"),
-			flags = c("quiet", "overwrite")
+			flags = c(.quiet(), "overwrite")
 		)
 
 		if (wrap) args$flags <- c(args$flags, "n")
@@ -239,7 +239,7 @@ methods::setMethod(
 		mapset = mapset(x),
 		input = sources(x),
 		output = src,
-		flags = c("quiet", "overwrite"),
+		flags = c(.quiet(), "overwrite"),
 		intern = TRUE
 	)
 

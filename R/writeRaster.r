@@ -76,7 +76,7 @@ setMethod(
 	dots <- list(...)
 	filename <- trimws(filename)
 
-	flags <- c("quiet")
+	flags <- c(.quiet())
 	if (overwrite) flags <- c(flags, "overwrite")
 
 	### going to overwrite anything?
@@ -125,7 +125,7 @@ setMethod(
 				cmd = "i.group",
 				group = groupName,
 				input = input,
-				flags = "quiet"
+				flags = .quiet()
 			)
 
 			src <- groupName

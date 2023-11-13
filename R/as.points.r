@@ -31,7 +31,7 @@ methods::setMethod(
             output = src,
             type = "point",
             column = names(x)[1L],
-            flags = c("quiet", "overwrite")
+            flags = c(.quiet(), "overwrite")
         )
 
         if (values) {
@@ -55,12 +55,12 @@ methods::setMethod(
                     output = thisSrc,
                     type = "point",
                     column = names(x)[i],
-                    flags = c("quiet", "overwrite")
+                    flags = c(.quiet(), "overwrite")
                 )
 
                 thisTable <- .vAsDataTable(thisSrc)
-                col <- names(x)[i]
-                thisTable <- thisTable[ , ..col]
+                cols <- names(x)[i]
+                thisTable <- thisTable[ , ..cols]
 
                 table <- cbind(table, thisTable)
 
@@ -96,7 +96,7 @@ methods::setMethod(
         output = src,
         use = "vertex",
         type = gtype,
-        flags = c("quiet", "overwrite"),
+        flags = c(.quiet(), "overwrite"),
         intern = TRUE
     )
     do.call(rgrass::execGRASS, args = args)

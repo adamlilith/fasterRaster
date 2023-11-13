@@ -74,7 +74,7 @@ methods::setMethod(
 		args <- list(
 			cmd = "r.mapcalc",
 			expression = ex,
-			flags = c("quiet", "overwrite"),
+			flags = c(.quiet(), "overwrite"),
 			intern = TRUE
 		)
 
@@ -102,7 +102,7 @@ methods::setMethod(
 	args <- list(
 		cmd = "g.copy",
 		vector = fromTo,
-		flags = c("quiet", "overwrite")
+		flags = c(.quiet(), "overwrite")
 	)
 	
 	do.call(rgrass::execGRASS, args = args)
@@ -120,7 +120,7 @@ methods::setMethod(
 	# 	from_table = sources(x),
 	# 	to_database = grassDB,
 	# 	to_table = gnDb,
-	# 	flags = c("quiet", "overwrite"),
+	# 	flags = c(.quiet(), "overwrite"),
 	# 	intern = FALSE
 	# )
 	
@@ -133,7 +133,7 @@ methods::setMethod(
 	# 	driver = "sqlite",
 	# 	database = grassDB,
 	# 	table = srcTo,
-	# 	flags = c("o", "quiet", "overwrite"),
+	# 	flags = c("o", .quiet(), "overwrite"),
 	# 	intern = FALSE
 	# )
 	# do.call(rgrass::execGRASS, args=args)

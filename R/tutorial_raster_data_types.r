@@ -19,7 +19,7 @@
 #' ## Functions relevant to raster data types
 #' * [activeCat()] and `[activeCat<-]` can be used to see or assign which column in a "levels" table associated with a categorical raster is used as category labels.
 #' * [addCats()] adds information to the "levels" table using [data.table::merge()] (same as [merge()]).
-#' * `[addCats<-]` add new levels to a "levels" table.
+#' * \code{\link[fasterRaster]{addCats<-}} add new levels to a "levels" table.
 #' * [as.int()], [as.float()], and [as.doub()] coerce a raster to an integer, float, or double.
 #' * [catNames()] reports the column names of the "levels" table of each layer of a raster.
 #' * [cats()] returns the entire "levels" table of a categorical raster.
@@ -28,7 +28,7 @@
 #' * [freq()]: Frequency of each category across cells of a raster\cr
 #' * [is.factor()] indicates if the raster is a categorical raster.
 #' * [levels()] returns the "levels" table of a categorical raster (just the value column and the active column).
-#' * `[levels<-]` and [categories()] can be used to assign categories to an integer raster and make it categorical (i.e., a "factor" raster). 
+#' * \code{\link[fasterRaster]{levels<-}} and [categories()] can be used to assign categories to an integer raster and make it categorical (i.e., a "factor" raster).
 #' * [missingCats()] finds values in categorical rasters that do not have a category assigned to them.
 #' * [nlevels()] returns the number of levels represented by a categorical raster.
 #'

@@ -64,7 +64,7 @@ methods::setMethod(
             cover = sources(x)[i],
             npoints = npoints,
             raster = srcs[i],
-            flags = c("quiet", "overwrite"),
+            flags = c(.quiet(), "overwrite"),
             intern = TRUE
         )
 
@@ -94,7 +94,7 @@ methods::setMethod(
             maskvalues <- paste(maskvalues, collapse = " | ")
 
             ex <- paste0(maskGn, " = if(", maskvalues, ", 1, null())")
-            rgrass::execGRASS("r.mapcalc", expression = ex, flags = c("quiet", "overwrite"), intern = TRUE)
+            rgrass::execGRASS("r.mapcalc", expression = ex, flags = c(.quiet(), "overwrite"), intern = TRUE)
 
         } else {
             maskGn <- sources(x)[i]
@@ -112,7 +112,7 @@ methods::setMethod(
         for (i in seq_len(nLayers)) {
 
             ex <- paste0(gnsUpdate[i], " = if(!isnull(", srcs[i], "), ", updatevalue, ", null())")
-            rgrass::execGRASS("r.mapcalc", expression = ex, flags = c("quiet", "overwrite"), intern = TRUE)
+            rgrass::execGRASS("r.mapcalc", expression = ex, flags = c(.quiet(), "overwrite"), intern = TRUE)
 
         } # next raster
         out <- .makeGRaster(gnsUpdate, names(x))

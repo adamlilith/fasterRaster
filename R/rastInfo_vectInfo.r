@@ -40,7 +40,7 @@
 			suppressMessages(
 				niceinfo <- rgrass::execGRASS(
 					"r.info",
-					flags = c("quiet"),
+					flags = c(.quiet()),
 					map = src,
 					intern = TRUE,
 					Sys_show.output.on.console = FALSE,
@@ -51,7 +51,7 @@
 			suppressMessages(
 				extentinfo <- rgrass::execGRASS(
 					"r.info",
-					flags = c("g", "quiet"),
+					flags = c("g", .quiet()),
 					map = src,
 					intern = TRUE,
 					Sys_show.output.on.console = FALSE,
@@ -62,7 +62,7 @@
 			suppressMessages(
 				rangeinfo <- rgrass::execGRASS(
 					"r.info",
-					flags = c("r", "quiet"),
+					flags = c("r", .quiet()),
 					map = src,
 					intern = TRUE,
 					Sys_show.output.on.console = FALSE,
@@ -81,7 +81,7 @@
 			suppressMessages(
 				niceinfo <- rgrass::execGRASS(
 					"r3.info",
-					flags = c("quiet"),
+					flags = c(.quiet()),
 					map = src,
 					intern = TRUE,
 					Sys_show.output.on.console = FALSE,
@@ -92,7 +92,7 @@
 			suppressMessages(
 				extentinfo <- rgrass::execGRASS(
 					"r3.info",
-					flags = c("g", "quiet"),
+					flags = c("g", .quiet()),
 					map = src,
 					intern = TRUE,
 					Sys_show.output.on.console = FALSE,
@@ -103,7 +103,7 @@
 			suppressMessages(
 				rangeinfo <- rgrass::execGRASS(
 					"r3.info",
-					flags = c("r", "quiet"),
+					flags = c("r", .quiet()),
 					map = src,
 					intern = TRUE,
 					Sys_show.output.on.console = FALSE,
@@ -195,7 +195,7 @@
 		# 	catinfo <- rgrass::execGRASS(
 		# 		"r.category",
 		# 		map = src,
-		# 		flags = "quiet",
+		# 		flags = .quiet(),
 		# 		separator = "pipe",
 		# 		intern = TRUE
 		# 	)
@@ -263,7 +263,7 @@
 	suppressMessages(
 		extentinfo <- rgrass::execGRASS(
 			"v.info",
-			flags = c("g", "quiet"),
+			flags = c("g", .quiet()),
 			map = src,
 			intern = TRUE,
 			Sys_show.output.on.console = FALSE,
@@ -275,7 +275,7 @@
 	suppressMessages(
 		geominfo <- rgrass::execGRASS(
 			"v.info",
-			flags = c("t", "quiet"),
+			flags = c("t", .quiet()),
 			map = src,
 			intern = TRUE,
 			Sys_show.output.on.console = FALSE,
@@ -361,7 +361,7 @@
 	# suppressWarnings(
 	# 	fieldinfo <- rgrass::execGRASS(
 	# 		"v.info",
-	# 		flags = c("c", "quiet"),
+	# 		flags = c("c", .quiet()),
 	# 		map = src,
 	# 		intern = TRUE,
 	# 		Sys_show.output.on.console = FALSE,
@@ -372,7 +372,7 @@
 	# fieldData <- rgrass::execGRASS(
 	# 	"v.db.connect",
 	# 	map = src,
-	# 	flags = c("g", "quiet"),
+	# 	flags = c("g", .quiet()),
 	# 	intern = TRUE
 	# )
 

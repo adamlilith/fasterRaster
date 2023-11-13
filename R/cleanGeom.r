@@ -86,7 +86,7 @@ methods::setMethod(
 		output = src,
 		tool = method,
 		threshold = tolerance,
-		flags = c("c", "quiet", "overwrite"),
+		flags = c("c", .quiet(), "overwrite"),
 		intern = TRUE
 	)
 

@@ -54,7 +54,7 @@
 		cmd = "db.in.ogr",
 		input = tf,
 		output = srcTable,
-		flags = c("quiet", "overwrite")
+		flags = c(.quiet(), "overwrite")
 	)
 
 	# detach existing table
@@ -66,7 +66,7 @@
 		map = src,
 		table = srcTable,
 		key = "newcat",
-		flags = c("quiet", "o")
+		flags = c(.quiet(), "o")
 	)
 
 	# reclass
@@ -79,7 +79,7 @@
 		layer = srcTable,
 		column = "newcat",
 		type = "centroid",
-		flags = c("quiet", "overwrite")
+		flags = c(.quiet(), "overwrite")
 	)
 
 	invisible(src)

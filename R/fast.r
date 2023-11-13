@@ -115,7 +115,7 @@ methods::setMethod(
 				cmd = "r.in.gdal",
 				input = x,
 				output = src,
-				flags = "quiet"
+				flags = .quiet()
 			)
 
 			if (!checkCRS) args$flags <- c(args$flags, "o")
@@ -159,7 +159,7 @@ cat("Time-consuming step here for large rasters^^^")
 				memory = getFastOptions("memory"),
 				extent = "region",
 				resolution = "region",
-				flags = c("quiet", "overwrite")
+				flags = c(.quiet(), "overwrite")
 			)
 
 			if (wrap) args$flags <- c(args$flags, "n")
@@ -217,7 +217,7 @@ cat("Time-consuming step here for large rasters^^^")
 				cmd = "v.in.ogr",
 				input = x,
 				output = src,
-				flags = c("quiet", "overwrite")
+				flags = c(.quiet(), "overwrite")
 			)
 
 			if (!checkCRS) args$flags <- c(args$flags, "o")
@@ -234,7 +234,7 @@ cat("Time-consuming step here for large rasters^^^")
 				input = x,
 				output = src,
 				extent = "input",
-				flags = c("quiet", "overwrite")
+				flags = c(.quiet(), "overwrite")
 			)
 			
 			if (!is.null(snap)) args$snap <- snap

@@ -22,7 +22,7 @@
 methods::setMethod(
 	f = "hexagons",
 	signature = c(x = "GRaster"),
-	function(x, ny = 10, use = "number", expand = 0, angle = 0) .hexagons(x, ny = ny, use = use, expand = expand, angle = angle)
+	function(x, ny = 10, expand = 0, angle = 0) .hexagons(x, ny = ny, expand = expand, angle = angle)
 )
 
 #' @aliases hexagons
@@ -31,13 +31,11 @@ methods::setMethod(
 methods::setMethod(
 	f = "hexagons",
 	signature = c(x = "GVector"),
-	function(x, ny = 10, use = "number", expand = 0, angle = 0) .hexagons(x, ny = ny, use = use, expand = expand, angle = angle)
+	function(x, ny = 10, expand = 0, angle = 0) .hexagons(x, ny = ny, expand = expand, angle = angle)
 )
 
 #' @noRd
-.hexagons <- function(x, ny, use, expand, angle) {
-
-	use <- pmatchSafe(use, c("number", "size"), nmax = 1L)
+.hexagons <- function(x, ny, expand, angle) {
 
 	.restore(x)
 	region(x)
@@ -85,7 +83,7 @@ methods::setMethod(
 		position = "region",
 		# grid = c(ycells, 0), # order is reversed
 		box = c(ysize, ysize),
-		flags = c("quiet", "overwrite", "h")
+		flags = c(.quiet(), "overwrite", "h")
 	)
 
 	angle <- 360 - angle

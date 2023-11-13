@@ -19,8 +19,6 @@
 \item If \code{byGeom} is \code{TRUE} and \code{collapse} is \code{TRUE}, the output will have just one raster layer, but with values that correspond to each geometry (i.e., each geometry will get a different value). If geometries overlap, then category value of the one on top will be assigned to the relevant cells.
 \item If \code{byGeom} is \code{TRUE}, and \code{collapse} is \code{FALSE}, then create a separate raster layer for each geometry in \code{x}.
 }}
-
-\item{collapse}{Logical: If \code{TRUE} (default), and if \code{byGeom} is \code{TRUE}, then the output will have just one raster layer, but with values that correspond to each geometry (i.e., each geometry will get a different value). If geometries overlap, then category value of the one on top will be assigned to the relevant cells.}
 }
 \value{
 A \code{GRaster}.

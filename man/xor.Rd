@@ -90,5 +90,5 @@ removeSession("examples")
 }
 }
 \seealso{
-\code{\link[=c]{c()}}, \code{\link[=aggregate]{aggregate()}}, \code{\link[=crop]{crop()}}, \code{\link[=intersect]{intersect()}}, \code{\link[=union]{union()}}, \code{\link[=not]{not()}}
+\code{\link[=c]{c()}}, \code{\link[=aggregate]{aggregate()}}, \code{\link[=crop]{crop()}}, \code{\link[=intersect]{intersect()}}, \code{\link[=union]{union()}}, \code{\link[=erase]{erase()}}
 }

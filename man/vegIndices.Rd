@@ -3,7 +3,7 @@
 \docType{data}
 \name{vegIndices}
 \alias{vegIndices}
-\title{Table of vegetation indices that can be calculated from remote sensing surface reflectance data using \code{\link[=vegIndex]{vegIndex()}}. A near-comprehensive table of indices can be found on the (Index Database: A database for remote sensing indices)\link{https://www.indexdatabase.de}.}
+\title{Table of vegetation indices that can be calculated from remote sensing surface reflectance data using \code{\link[=vegIndex]{vegIndex()}}. A near-comprehensive table of indices can be found on the \href{https://www.indexdatabase.de}{Index Database: A Database for Remote Sensing Indices}.}
 \format{
 An object of class \code{data.frame}.
 }

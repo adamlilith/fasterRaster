@@ -59,7 +59,7 @@ methods::setMethod(
                 # get lower quantile
                 args <- list(
                     cmd = "r.univar",
-                    flags = c("quiet", "r", "e"),
+                    flags = c(.quiet(), "r", "e"),
                     map = sources(x)[i],
                     Sys_show.output.on.console = FALSE,
                     echoCmd = FALSE,
@@ -90,7 +90,7 @@ methods::setMethod(
                 # get lower quantile
                 args <- list(
                     cmd = "r.univar",
-                    flags = c("quiet", "r", "e"),
+                    flags = c(.quiet(), "r", "e"),
                     map = sources(x)[i],
                     Sys_show.output.on.console = FALSE,
                     echoCmd = FALSE,
@@ -119,7 +119,7 @@ methods::setMethod(
             args <- list(
                 cmd = "r.mapcalc",
                 expression = ex,
-                flags = c("quiet", "overwrite"),
+                flags = c(.quiet(), "overwrite"),
                 intern = TRUE
             )
 
@@ -136,7 +136,7 @@ methods::setMethod(
         args <- list(
             cmd = "r.mapcalc",
             expression = ex,
-            flags = c("quiet", "overwrite"),
+            flags = c(.quiet(), "overwrite"),
             intern = TRUE
         )
 

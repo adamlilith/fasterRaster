@@ -4,8 +4,8 @@
 #'
 #' @param x A `GRaster`.
 #' @param digits Numeric integer: Number of digits by which to round raster values.
-#' @param value Numeric or `NULL` (default): If numeric, only cells with this value will be counted. If `NULL`, all values will be counted.
 #' @param bins Positive numeric integer: Number of bins in which to divide values of `numeric` rasters. The default is 100. For `integer` and categorical rasters, each value is tallied.
+#' @param value Numeric or `NULL` (default): If numeric, only cells with this value will be counted. If `NULL`, all values will be counted.
 #'
 #' @returns A `data.frame` or a named `list` of `data.frame`s, one per layer in `x`.
 #'
@@ -22,8 +22,8 @@ methods::setMethod(
 	definition = function(
 		x,
 		digits = 3,
-		value = NULL,
-		bins = 100
+		bins = 100,
+		value = NULL
 	) {
 
 	.restore(x)
@@ -44,7 +44,7 @@ methods::setMethod(
 			info <- rgrass::execGRASS(
 				"r.mapcalc",
 				expression=ex,
-				flags=c("quiet", "overwrite"),
+				flags=c(.quiet(), "overwrite"),
 				intern=TRUE
 			)
 		
@@ -54,7 +54,7 @@ methods::setMethod(
 			cmd = "r.stats",
 			input = thisGn,
    			separator = "pipe",
-			flags = c("c", "n", "quiet"),
+			flags = c("c", "n", .quiet()),
 			intern = TRUE
 		)
 		

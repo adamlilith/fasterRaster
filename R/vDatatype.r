@@ -21,7 +21,7 @@
 	args <- list(
 		cmd = "db.describe",
 		table = src,
-		flags = c("quiet", "c"),
+		flags = c(.quiet(), "c"),
 		intern = TRUE
 	)
 

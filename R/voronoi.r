@@ -44,7 +44,7 @@ methods::setMethod(
 		s <- as.character(s)
 		n <- as.character(n)
 		
-		rgrass::execGRASS("g.region", n = n, s = s, e = e, w = w, flags = c("o", "quiet", "overwrite"))
+		rgrass::execGRASS("g.region", n = n, s = s, e = e, w = w, flags = c("o", .quiet(), "overwrite"))
 		
 	}
 
@@ -53,7 +53,7 @@ methods::setMethod(
 		cmd = "v.voronoi",
 		input = sources(x),
 		output = src,
-		flags = c("quiet", "overwrite")
+		flags = c(.quiet(), "overwrite")
 	)
 
 	if (geomtype(x) == "polygons") args$flags <- c(args$flags, "a")

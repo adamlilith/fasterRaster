@@ -24,7 +24,7 @@ methods::setMethod(
         cmd = "r.latlong",
         input = sources(x)[1L],
         output = srcs[1L],
-        flags = c("l", "quiet", "overwrite"),
+        flags = c("l", .quiet(), "overwrite"),
         intern = TRUE
     )
 
@@ -35,7 +35,7 @@ methods::setMethod(
         cmd = "r.latlong",
         input = sources(x)[1L],
         output = srcs[2L],
-        flags = c("quiet", "overwrite"),
+        flags = c(.quiet(), "overwrite"),
         intern = TRUE
     )
     do.call(rgrass::execGRASS, args=args)

@@ -61,7 +61,7 @@ methods::setMethod(
 
 		args <- list(
 			cmd = "r.univar",
-			flags = c("quiet", "r"),
+			flags = c(.quiet(), "r"),
 			map = sources(x)[i],
 			Sys_show.output.on.console = FALSE,
 			echoCmd = FALSE,
@@ -161,11 +161,11 @@ methods::setMethod(
 
 					gnSS <- .makeSourceName("delta", "rast")
 					ex <- paste0(gnSS, " = (", sources(x)[i], " - ", mean., ")^2")
-					rgrass::execGRASS("r.mapcalc", expression=ex, flags=c("quiet", "overwrite"), intern=TRUE)
+					rgrass::execGRASS("r.mapcalc", expression=ex, flags=c(.quiet(), "overwrite"), intern=TRUE)
 				
 					thisInfo <- rgrass::execGRASS(
 						cmd = "r.univar",
-						flags = c("r", "quiet"),
+						flags = c("r", .quiet()),
 						map = gnSS,
 						nprocs = getFastOptions("cores"),
 						Sys_show.output.on.console = FALSE,
@@ -203,11 +203,11 @@ methods::setMethod(
 
 					gnSS <- .makeSourceName("delta", "rast")
 					ex <- paste0(gnSS, " = (", sources(x)[i], " - ", mean., ")^2")
-					rgrass::execGRASS("r.mapcalc", expression=ex, flags=c("quiet", "overwrite"), intern=TRUE)
+					rgrass::execGRASS("r.mapcalc", expression=ex, flags=c(.quiet(), "overwrite"), intern=TRUE)
 				
 					thisInfo <- rgrass::execGRASS(
 						cmd = "r.univar",
-						flags = c("r", "quiet"),
+						flags = c("r", .quiet()),
 						map = gnSS,
 						nprocs = getFastOptions("cores"),
 						Sys_show.output.on.console = FALSE,

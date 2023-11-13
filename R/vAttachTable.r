@@ -73,7 +73,7 @@
 			input = tf,
 			output = srcTable,
 			# key = "cat",
-			flags = c("quiet", "overwrite")
+			flags = c(.quiet(), "overwrite")
 		)
 
 		# connect database to vector
@@ -83,7 +83,7 @@
 			table = srcTable,
 			layer = "1",
 			key = "cat_",
-			flags = c("quiet", "overwrite", "o")
+			flags = c(.quiet(), "overwrite", "o")
 		)
 
 
@@ -91,7 +91,7 @@
 		# 	cmd = "v.db.addtable",
 		# 	map = src,
 		# 	columns = columns,
-		# 	flags = "quiet",
+		# 	flags = .quiet(),
 		# 	intern = TRUE
 		# )
 

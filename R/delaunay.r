@@ -25,7 +25,7 @@ methods::setMethod(
 		cmd = "v.delaunay",
 		input = sources(x),
 		output = src,
-		flags = c("quiet", "overwrite")
+		flags = c(.quiet(), "overwrite")
 	)
 
 	do.call(rgrass::execGRASS, args = args)

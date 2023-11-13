@@ -37,7 +37,7 @@ methods::setMethod(
         output = src,
         type = "area",
         column = names(x),
-        flags = c("quiet", "overwrite"),
+        flags = c(.quiet(), "overwrite"),
         intern = TRUE
     )
     if (smooth) args$flags <- c(args$flags, "s")

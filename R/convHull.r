@@ -27,7 +27,7 @@ methods::setMethod(
 			cmd = "v.hull",
 			input = sources(x),
 			output = src,
-			flags = c("quiet", "overwrite")
+			flags = c(.quiet(), "overwrite")
 		)
 
 		out <- .makeGVector(src)
@@ -60,7 +60,7 @@ methods::setMethod(
 					cmd = "v.hull",
 					input = sources(xx),
 					output = srcs[i],
-					flags = c("quiet", "overwrite"),
+					flags = c(.quiet(), "overwrite"),
 					intern = TRUE
 				)
 				

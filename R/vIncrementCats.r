@@ -28,7 +28,7 @@
 		output = src,
 		option = "sum",
 		cat = add,
-		flags = c("quiet", "overwrite")
+		flags = c(.quiet(), "overwrite")
 	)
 
 	return <- pmatchSafe(return, c("GVector", "sources"))

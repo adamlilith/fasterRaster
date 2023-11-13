@@ -2,8 +2,7 @@
 
 # global PUBLIC options
 .coresDefault <- function() 1
-.detailsDefault <- function() TRUE
-.grassMessagesDefault <- function() TRUE
+.verboseDefault <- function() FALSE
 .grassDirDefault <- function() NULL
 .addonDirDefault <- function() NULL
 .memoryDefault <- function() 300 # in MB
@@ -22,8 +21,7 @@
 		name = c(
 			"grassDir",
 			"addonDir",
-			"grassMessages",
-			"details",
+			"verbose",
 			"cores",
 			"memory",
 			"location",
@@ -35,7 +33,6 @@
 		type = c(
 			"character",
 			"character",
-			"logical",
 			"logical",
 			"numeric",
 			"numeric",

@@ -142,8 +142,8 @@ setMethod(
 		cmd = "v.patch",
 		input = input,
 		output = src,
-  		# flags = c("quiet", "overwrite", "e") ### ??? "e"???
-  		flags = c("quiet", "overwrite") ### ??? "e"???
+  		# flags = c(.quiet(), "overwrite", "e") ### ??? "e"???
+  		flags = c(.quiet(), "overwrite") ### ??? "e"???
 	)
 	
 	table <- as.data.table(x)

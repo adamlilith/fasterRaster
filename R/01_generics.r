@@ -245,4 +245,5 @@ methods::setGeneric(name = "xor", def = function(x, y, ...) standardGeneric("xor
 methods::setGeneric(name = "yres", package = "terra")
 
 methods::setGeneric(name = "zext", def = function(x) standardGeneric("zext"))
+methods::setGeneric(name = "zonalGeog", def = function(x, ...) standardGeneric("zonalGeog"))
 methods::setGeneric(name = "zres", def = function(x) standardGeneric("zres"))

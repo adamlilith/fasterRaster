@@ -25,7 +25,7 @@ methods::setMethod(
 
 	# set region to combined extent
 	rasts <- paste(sapply(x, sources), collapse=",")
-	rgrass::execGRASS("g.region", raster=rasts, flags=c("o", "quiet"), intern=TRUE)
+	rgrass::execGRASS("g.region", raster=rasts, flags=c("o", .quiet()), intern=TRUE)
 
 	# combine
 	src <- .makeSourceName("merge", "rast")
@@ -35,7 +35,7 @@ methods::setMethod(
 		output = src,
 		nprocs = getFastOptions("cores"),
 		memory = getFastOptions("memory"),
-		flags = c("quiet", "overwrite"),
+		flags = c(.quiet(), "overwrite"),
 		intern = TRUE
 	)
 	

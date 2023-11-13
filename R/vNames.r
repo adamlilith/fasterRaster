@@ -21,7 +21,7 @@
 	args <- list(
 		cmd = "db.columns",
 		table = src,
-		flags = "quiet",
+		flags = .quiet(),
 		intern = TRUE
 	)
 

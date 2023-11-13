@@ -232,7 +232,7 @@ setMethod(
 		rgrass::execGRASS(
 			cmd = "r.mapcalc",
 			expression = ex,
-			flags = c("quiet", "overwrite"),
+			flags = c(.quiet(), "overwrite"),
 			intern = TRUE
 		)
 
@@ -242,7 +242,7 @@ setMethod(
 		rgrass::execGRASS(
 			cmd = "r.mapcalc",
 			expression = ex,
-			flags = c("quiet", "overwrite"),
+			flags = c(.quiet(), "overwrite"),
 			intern = TRUE
 		)
 
@@ -254,7 +254,7 @@ setMethod(
 		rgrass::execGRASS(
 			cmd = "r.mapcalc",
 			expression = ex,
-			flags = c("quiet", "overwrite"),
+			flags = c(.quiet(), "overwrite"),
 			intern = TRUE
 		)
 		
@@ -277,19 +277,19 @@ setMethod(
 		gnSS <- .makeSourceName("ss", "rast")
 		gnMean <- .genericMultiLayer(fx="average", fxName="mean", x=x, na.rm=na.rm, return="source")
 		ex <- paste0(gnSS, " = ", paste0("(", sources(x), " - ", gnMean, ")^2", collapse=" + "))
-		rgrass::execGRASS("r.mapcalc", expression=ex, flags=c("quiet", "overwrite"), intern=TRUE)
+		rgrass::execGRASS("r.mapcalc", expression=ex, flags=c(.quiet(), "overwrite"), intern=TRUE)
 
 		gnCount <- .genericMultiLayer(fx="count", fxName="count", x=x, na.rm=na.rm, return="source")
 		gnCountMinus1 <- .makeSourceName("nMinus1", "rast")
 		ex <- paste0(gnCountMinus1, " = ", gnCount, " - 1")
-		rgrass::execGRASS("r.mapcalc", expression=ex, flags=c("quiet", "overwrite"), intern=TRUE)
+		rgrass::execGRASS("r.mapcalc", expression=ex, flags=c(.quiet(), "overwrite"), intern=TRUE)
 
   		prec <- getFastOptions("rasterPrecision")
 
 		src <- .makeSourceName("var", "rast")
 		ex <- paste0(src, " = ", prec, "(", gnSS, " / ", gnCountMinus1, ")")
 		
-		rgrass::execGRASS("r.mapcalc", expression=ex, flags=c("quiet", "overwrite"), intern=TRUE)
+		rgrass::execGRASS("r.mapcalc", expression=ex, flags=c(.quiet(), "overwrite"), intern=TRUE)
 		
 		.makeGRaster(src, "var")
 		
@@ -439,7 +439,7 @@ setMethod(
 		quantile = prob,
 		nprocs = getFastOptions("cores"),
 		memory = getFastOptions("memory"),
-		flags = c("quiet", "overwrite")
+		flags = c(.quiet(), "overwrite")
 	)
 	
 	if (na.rm) args$flags <- c(args$flags, "n")
@@ -470,7 +470,7 @@ setMethod(
 		method = fx,
 		nprocs = getFastOptions("cores"),
 		memory = getFastOptions("memory"),
-		flags = c("quiet", "overwrite")
+		flags = c(.quiet(), "overwrite")
 	)
 	
 	if (!na.rm) args$flags <- c(args$flags, "n")
