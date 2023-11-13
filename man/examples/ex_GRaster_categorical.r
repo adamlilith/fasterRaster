@@ -40,6 +40,7 @@ minmax(cover, levels = TRUE) # min/max categories
 catNames(cover) # column names of the levels table
 missingCats(cover) # categories in table with no values in raster
 freq(cover) # frequency of each category (number of cells)
+zonalGeog(cover) # geometric statistics
 
 ### Active column
 #################
