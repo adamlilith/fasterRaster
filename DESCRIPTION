@@ -25,6 +25,8 @@ Imports:
 	data.table (>= 1.14.8),
 	DT,
 	graphics,
+	grDevices,
+	omnibus,
 	rgrass,
 	sf,
 	shiny,
