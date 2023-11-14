@@ -76,10 +76,6 @@ methods::setMethod(
 
 			do.call(rgrass::execGRASS, args = args)
 			
-			# vCats <- .vCats(src)
-			# vCats <- omnibus::renumSeq(vCats)
-			# .vRecat(src, vCats, removeTable = TRUE)
-			
 			if (nrow(x) == 0L) {
 				table <- NULL
 			} else {
