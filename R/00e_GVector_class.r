@@ -60,7 +60,7 @@ setValidity("GVector",
 	if (is.null(table)) table <- data.table::data.table(NULL)
 	if (!inherits(table, "data.table")) table <- data.table::as.data.table(table)
 
-	.vAttachTable(src)
+	.vAttachDatabase(src)
 
 	cats <- .vCats(src, db = FALSE)
 	nGeoms <- length(unique(cats))
