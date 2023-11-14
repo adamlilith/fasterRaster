@@ -28,7 +28,7 @@
 methods::setMethod(
 	f = "resample",
 	signature = c(x = "GRaster", y = "GRaster"),
-	definition = function(x, y, method = NULL, fallback = TRUE) .resample(x=x, y=y, method=method, fallback=fallback)
+	definition = function(x, y, method = NULL, fallback = TRUE) .resample(x = x, y = y, method = method, fallback = fallback)
 )
 
 #' @aliases resample 
