@@ -19,7 +19,7 @@
 #' @export grassInfo
 grassInfo <- function(x = "citation") {
 	
-	match <- pmatchSafe(x, table = c("citation", "version", "versionNumber", "copyright"))
+	match <- pmatchSafe(x, table = c("citation", "version", "versionnumber", "copyright"))
 
 	if (match == "citation") {
 		out <- rgrass::execGRASS("g.version", flags = "x", intern = TRUE)
@@ -27,7 +27,7 @@ grassInfo <- function(x = "citation") {
 		out <- rgrass::execGRASS("g.version", flags = "c", intern = TRUE)
 	} else if (match == "version") {
 		out <- rgrass::execGRASS("g.version", intern = TRUE)
-	} else if (match == "versionNumber") {
+	} else if (match == "versionnumber") {
 		out <- rgrass::execGRASS("g.version", intern = TRUE)
 		out <- strsplit(out, split = " ")[[1L]]
 		out <- out[2L]
