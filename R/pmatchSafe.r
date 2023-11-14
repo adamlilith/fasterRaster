@@ -4,6 +4,7 @@
 #'
 #' @param x Character: String to match.
 #' @param table Character vector: Values to which to match.
+#' @param useFirst Logical: If `TRUE`, and there is more than one match for a given `x`, then the first value in `table` that matches `x` will be returned (without an error or warning).
 #' @param error Logical: If no match is found, return an error?
 #' @param ignoreCase Logical: If `TRUE` (default), ignore the case of values in `x` and `table` when checking for matches.
 #' @param nmax Positive numeric integer: Maximum allowable number of matches. If more than this number of matches is found, an error will be thrown (regardless of the value of `error`).
@@ -37,14 +38,14 @@
 #' )
 #' 
 #' @export 
-pmatchSafe <- function(x, table, error = TRUE, ignoreCase = TRUE, nmax = length(x), ...) {
+pmatchSafe <- function(x, table, useFirst = FALSE, error = TRUE, ignoreCase = TRUE, nmax = length(x), ...) {
 
 	if (ignoreCase) {
 		x <- tolower(x)
 		lowerTable <- tolower(table)
-		match <- .pmatch(x, lowerTable)
+		match <- .pmatch(x, table = lowerTable, useFirst = useFirst, error = error)
 	} else {
-		match <- .pmatch(x, table)
+		match <- .pmatch(x, table = table, useFirst = useFirst, error = error)
 	}
 	
 	if (length(match) > nmax) stop("Only ", nmax, " match(es) can be returned.")
@@ -58,7 +59,7 @@ pmatchSafe <- function(x, table, error = TRUE, ignoreCase = TRUE, nmax = length(
 }
 
 #' @noRd
-.pmatch <- function(x, table) {
+.pmatch <- function(x, table, useFirst, error) {
 
 	nc <- nchar(x)
 
@@ -66,6 +67,10 @@ pmatchSafe <- function(x, table, error = TRUE, ignoreCase = TRUE, nmax = length(
 	for (i in seq_along(x)) {
 	
 		theseMatches <- which(x[i] == substr(table, 1L, nc))
+
+		if (length(theseMatches) == 0L & error) stop("Cannot find a match. Valid options include: ", paste(table, collapse=", "))
+
+		if (useFirst) theseMatches <- theseMatches[1L]
 		matches <- c(matches, theseMatches)
 	
 	}
