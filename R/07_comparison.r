@@ -175,7 +175,7 @@ methods::setMethod(
 		for (i in 1L:nlyr(e1)) {
 		
 			name <- names(e1)[i]
-			src <- .makeSourceName(name, "rast")
+			src <- .makeSourceName(name, "raster")
 
 			ex <- paste(src, "= int(if(", sources(e1)[i], " ", oper, " ", e2, "))")
 			this <- .genericArithRast(name = name, src = src, ex = ex)
