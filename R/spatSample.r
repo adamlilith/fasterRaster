@@ -133,7 +133,7 @@ methods::setMethod(
 	} # if wanting values
 
 	if (as.points) {
-		.vAttachTable(src)
+		.vAttachDatabase(src)
 		out <- .makeGVector(src, table = out)
 	} else {
 		if (!getFastOptions("useDataTable")) out <- as.data.frame(out)
@@ -178,20 +178,6 @@ methods::setMethod(
 		# make copy of vector and force all categories to 1
 		gtype <- geomtype(x)
 		srcRestrict <- .aggregate(sources(x), dissolve = TRUE, gtype = gtype)
-
-		# col <- rstring(1L)
-		# .vAddColumn(x, name = col, type = "integer")
-		# .vUpdateColumn(x, column = col, value = 1L)
-
-		# srcRestrict <- .makeSourceName("v_dissolve", "vector")
-		# args <- list(
-		# 	cmd = "v.dissolve",
-		# 	input = sources(x),
-		# 	output = srcRestrict,
-		# 	column = col,
-		# 	flags = c(.quiet(), "overwrite")
-		# )	
-		# do.call(rgrass::execGRASS, args = args)
 
 	}
 	
