@@ -60,7 +60,7 @@ setMethod(
 
 		src <- .copyGVector(x)
 		table <- as.data.frame(x)
-		.vAttachTable(src, table = table, replace = TRUE)
+		.vAttachDatabase(src, table = table, replace = TRUE)
 
 	} else {
 		src <- sources(x)
