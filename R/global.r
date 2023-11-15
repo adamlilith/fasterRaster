@@ -43,17 +43,40 @@ methods::setMethod(
 		prob = NULL,
 		...
 	) {
-	
+
+	nLayers <- nlyr(x)
+	.global(x = x, fun = fun, prob = prob, nLayers = nLayers)
+
+	} # EOF
+)
+
+# x 		[sources()] name
+# fun 		character
+# prob		numeric in [0, 1]
+# nLayers	integer >= 1
+#' @noRd
+.global <- function(x, fun, prob, nLayers) {
+
+	if (inherits(x, "GRaster")) {
+		.restore(x)
+		region(x)
+		src <- sources(x)
+	} else {
+		src <- x
+	}
+
 	funs <- c("sum", "mean", "median", "min", "max", "cv", "cvpop", "meanAbs", "countNA", "countNonNA", "range", "sd", "var", "sdpop", "varpop", "quantile")
+	
 	funNames <- fun
 	funs <- tolower(funs)
 	fun <- tolower(fun)
 	
+	fun <- pmatchSafe(fun, funs, useFirst = TRUE, error = TRUE)
+
 	if (any(fun == "quantile") & is.null(prob)) stop("You must specify a value for ", sQuote("prob"), " when calculating quantile statistics.")
 	
 	versionNumber <- grassInfo("versionNumber")
 
-	nLayers <- nlyr(x)
 	out <- data.frame()
 
 	### for each layer
@@ -62,7 +85,7 @@ methods::setMethod(
 		args <- list(
 			cmd = "r.univar",
 			flags = c(.quiet(), "r"),
-			map = sources(x)[i],
+			map = src[i],
 			Sys_show.output.on.console = FALSE,
 			echoCmd = FALSE,
 			intern = TRUE
@@ -71,16 +94,25 @@ methods::setMethod(
 		if (versionNumber >= 8.3) args$nprocs <- getFastOptions("cores")
 	
 		if (any(fun %in% c("quantile", "median"))) args$flags <- c(args$flags, "e")
+
 		if (any(fun == "quantile")) {
+
 			if (prob < 0 | prob > 1) stop("Values of ", sQuote("prob"), " must be in the range [0, 1].")
 			perc <- 100 * prob
 			args <- c(args, percentile=perc)
+
 		}
 
 		info <- do.call(rgrass::execGRASS, args)
 		
 		# values for this layer
-		thisOut <- data.frame(matrix(NA_real_, ncol=length(fun), nrow=1L), row.names=names(x)[i])
+		thisOut <- data.frame(
+			matrix(NA_real_,
+				ncol = length(fun),
+				nrow = 1L),
+			row.names = src[i]
+		)
+		
 		names(thisOut) <- funNames
 			
 		### for each function
@@ -88,7 +120,7 @@ methods::setMethod(
 		
 			thisFun <- fun[countFun]
 			funName <- funNames[countFun]
-			matchFun <- pmatchSafe(thisFun, funs)
+			matchFun <- pmatchSafe(thisFun, funs, useFirst = TRUE)
 
 			pattern <- if (matchFun == "meanabs") {
 				"mean of absolute values: "
@@ -117,7 +149,7 @@ methods::setMethod(
 			if (!is.na(pattern)) {
 			
 				this <- info[grepl(info, pattern=pattern)]
-				this <- sub(this, pattern=pattern, replacement="")
+				this <- sub(this, pattern = pattern, replacement = "")
 				this <- as.numeric(this)
 			
 			} else {
@@ -159,14 +191,20 @@ methods::setMethod(
 					mean. <- sub(mean., pattern=pattern, replacement="")
 					mean. <- as.numeric(mean.)
 
-					gnSS <- .makeSourceName("delta", "rast")
-					ex <- paste0(gnSS, " = (", sources(x)[i], " - ", mean., ")^2")
-					rgrass::execGRASS("r.mapcalc", expression=ex, flags=c(.quiet(), "overwrite"), intern=TRUE)
+					srcSS <- .makeSourceName("r_mapcalc", "rast")
+					ex <- paste0(srcSS, " = (", x[i], " - ", mean., ")^2")
+					
+					rgrass::execGRASS(
+						"r.mapcalc",
+						expression = ex,
+						flags = c(.quiet(), "overwrite"),
+						intern = TRUE
+					)
 				
-					thisInfo <- rgrass::execGRASS(
+					args <- list(
 						cmd = "r.univar",
 						flags = c("r", .quiet()),
-						map = gnSS,
+						map = srcSS,
 						nprocs = getFastOptions("cores"),
 						Sys_show.output.on.console = FALSE,
 						echoCmd = FALSE,
@@ -174,6 +212,8 @@ methods::setMethod(
 					)
 
 					if (versionNumber >= 8.3) args$nprocs <- getFastOptions("cores")
+
+					thisInfo <- do.call(rgrass::execGRASS, args = args)
 
 					pattern <- "sum: "
 					ss <- thisInfo[grepl(info, pattern=pattern)]
@@ -201,14 +241,19 @@ methods::setMethod(
 					mean. <- sub(mean., pattern=pattern, replacement="")
 					mean. <- as.numeric(mean.)
 
-					gnSS <- .makeSourceName("delta", "rast")
-					ex <- paste0(gnSS, " = (", sources(x)[i], " - ", mean., ")^2")
-					rgrass::execGRASS("r.mapcalc", expression=ex, flags=c(.quiet(), "overwrite"), intern=TRUE)
+					srcSS <- .makeSourceName("r_mapcalc", "rast")
+					
+					ex <- paste0(srcSS, " = (", x[i], " - ", mean., ")^2")
+
+					rgrass::execGRASS(
+						cmd = "r.mapcalc", expression = ex,
+						flags = c(.quiet(), "overwrite")
+					)
 				
-					thisInfo <- rgrass::execGRASS(
+					args <- list(
 						cmd = "r.univar",
 						flags = c("r", .quiet()),
-						map = gnSS,
+						map = srcSS,
 						nprocs = getFastOptions("cores"),
 						Sys_show.output.on.console = FALSE,
 						echoCmd = FALSE,
@@ -216,6 +261,8 @@ methods::setMethod(
 					)
 
 					if (versionNumber >= 8.3) args$nprocs <- getFastOptions("cores")
+
+					thisInfo <- do.call(rgrass::execGRASS, args = args)
 
 					pattern <- "sum: "
 					ss <- thisInfo[grepl(info, pattern=pattern)]
@@ -248,12 +295,10 @@ methods::setMethod(
 		
 	} # next layer
 
-	rownames(out) <- names(x)
+	rownames(out) <- src
 	out
-	
-	} # EOF
-)
 
+}
 
 #' @aliases global
 #' @rdname global
