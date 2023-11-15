@@ -42,7 +42,7 @@ methods::setMethod(
 	}
 	
 	tf <- tempfile(fileext = ".tif")
-	y <- writeRaster(x, tf, overwrite = TRUE)
+	y <- writeRaster(x, filename = tf, overwrite = TRUE)
 	terra::plot(y, ...)
 	
 	} # EOF
