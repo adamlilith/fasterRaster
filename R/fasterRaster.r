@@ -111,7 +111,8 @@
 #' [thinLines()]: Reduce linear features on a `GRaster` so linear features are 1 cell wide\cr
 #' [trim()]: Remove rows and columns from a `GRaster` that are all `NA`\cr
 #' [viewshed()]: Areas visible from points on a raster\cr
-#' [zonalGeog()]: Geographic statistics (area, perimeter, fractal dimension, etc.) for sets of cells with the same values
+#' [zonal()]: Statistics (mean, sum, etc.) on areas of a `GRaster` defined by sets of cells with the same values in another `GRaster`\cr
+#' [zonalGeog()]: Geographic statistics (area, perimeter, fractal dimension, etc.) for sets of cells with the same values\cr
 #'
 #' ## Functions operating on categorical rasters
 #' [activeCat()]: Column that defines category labels\cr
