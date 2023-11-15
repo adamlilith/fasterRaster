@@ -66,7 +66,7 @@ pmatchSafe <- function(x, table, useFirst = FALSE, error = TRUE, ignoreCase = TR
 	matches <- integer()
 	for (i in seq_along(x)) {
 	
-		theseMatches <- which(x[i] == substr(table, 1L, nc))
+		theseMatches <- which(x[i] == substr(table, 1L, nc[i]))
 
 		if (length(theseMatches) == 0L & error) stop("Cannot find a match. Valid options include: ", paste(table, collapse=", "))
 
@@ -75,7 +75,6 @@ pmatchSafe <- function(x, table, useFirst = FALSE, error = TRUE, ignoreCase = TR
 	
 	}
 
-	matches <- sort(unique(matches))
 	table[matches]
 
 }
