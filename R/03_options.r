@@ -82,7 +82,7 @@ setFastOptions <- function(
 	}
 
 	if (any(names(opts) %in% "verbose")) {
-  		if (is.na(opts$verbose) || !is.logical(opts$verbose)) stop("Option ", sQuote("verbose"), " must be a logical. The default is ", .grassVerbose(), ".")
+  		if (is.na(opts$verbose) || !is.logical(opts$verbose)) stop("Option ", sQuote("verbose"), " must be a logical. The default is ", .verboseDefault(), ".")
 	}
 
 	if (any(names(opts) %in% "memory")) {
@@ -98,7 +98,7 @@ setFastOptions <- function(
 	
 		if (is.na(opts$rasterPrecision) || !is.character(opts$rasterPrecision)) stop("Option ", sQuote("rasterPrecision"), " must be ", sQuote("float"), ") or ", sQuote("double"), ".\n  The default is ", .rasterPrecisionDefault(), ".")
 
-     	opts$rasterPrecision <- pmatchSafe(opts$rasterPrecision, c("FCELL", "float", "DCELL", "double"))
+     	opts$rasterPrecision <- omnibus::pmatchSafe(opts$rasterPrecision, c("FCELL", "float", "DCELL", "double"))
 		opts$rasterPrecision <- if (opts$rasterPrecision == "FCELL") {
    			"float"
 		} else if (opts$rasterPrecision == "DCELL") {
