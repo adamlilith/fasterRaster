@@ -3,7 +3,7 @@
 	.fasterRaster <<- new.env(parent = emptyenv())
 	.fasterRaster$grassStarted <- FALSE
 	.fasterRaster$options <- list()
-	.fasterRaster$locations <- list()
+	.fasterRaster$locations <- data.frame()
 	.fasterRaster$messages <- list()
 	setFastOptions(restore = TRUE)
 	
