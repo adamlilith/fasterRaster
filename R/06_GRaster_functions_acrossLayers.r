@@ -207,9 +207,9 @@ setMethod(
 	signature(x = "numeric"),
 	function(x, na.rm = FALSE) {
 
-	if (na.rm && anyNA(x)) x <- x[!is.na(x)]
+	if (na.rm & anyNA(x)) x <- x[!is.na(x)]
 	ss <- sum((x - mean(x))^2)
-	n <- length(n)
+	n <- length(x)
 	ss / n
 		
 	} # EOF
