@@ -31,7 +31,7 @@
 		flags = c(.quiet(), "overwrite")
 	)
 
-	return <- pmatchSafe(return, c("GVector", "sources"))
+	return <- omnibus::pmatchSafe(return, c("GVector", "sources"))
 	if (return == "GVector") {
 		.makeGVector(src, table = as.data.table(x))
 	} else {
