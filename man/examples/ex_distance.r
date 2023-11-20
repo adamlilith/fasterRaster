@@ -64,7 +64,7 @@ plot(st_geometry(madRivers), add = TRUE)
 plot(st_geometry(madRivers))
 plot(st_geometry(madDypsis), add = TRUE)
 
-distToRivers <- distance(dypsis, rivers)
+distToRivers <- distance(dypsis, rivers, unit = "yd")
 distToPlants <- distance(rivers, dypsis)
 distToRivers
 distToPlants
