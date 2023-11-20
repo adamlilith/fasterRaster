@@ -31,11 +31,11 @@
 		rgrass::execGRASS(
 			"v.db.select",
 			map = src,
-			intern = TRUE,
 			separator = "comma",
 			null_value = "NA",
 			file = tf,
-			flags = "overwrite"
+			flags = "overwrite",
+			intern = TRUE
 		)
 		out <- data.table::fread(tf)
 	
