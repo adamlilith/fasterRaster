@@ -94,9 +94,9 @@ is.double(elev)
 is.factor(elev)
 
 # convert data type
-as.integer(elev) # integer; note that "elev" is already of type "integer"
+as.int(elev) # integer; note that "elev" is already of type "integer"
 as.float(elev) # floating-precision
-as.double(elev) # double-precision
+as.doub(elev) # double-precision
 
 # assigning
 pie <- elev
@@ -111,15 +111,12 @@ rasts
 rasts[[1]]
 rasts[["madForest2000"]]
 
-plot(madElev == 10)
-plot(madElev <= 10)
-plot(madElev %in% c(10, 20, 30, 40, 50))
-
 # replacing
 rasts[[2]] <- 2 * forest
+rasts
 
 # adding layers
-rasts[[4]] <- elev > 500 # add a layer
+rasts[[3]] <- elev > 500 # add a layer
 rasts <- c(rasts, sqrt(elev)) # add another
 add(rasts) <- ln(elev)
 
@@ -149,7 +146,10 @@ landsat <- fast(madLANDSAT) # projects matrix
 cor(landsat) # correlation
 cov(landsat) # covariance
 
-
+# logical operations
+plot(madElev == 10)
+plot(madElev <= 10)
+plot(madElev %in% c(10, 20, 30, 40, 50))
 
 # IMPORTANT #3: Revert back to original GRASS session if needed.
 restoreSession(opts.)

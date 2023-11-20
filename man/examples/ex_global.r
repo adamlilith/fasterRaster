@@ -28,9 +28,8 @@ workDir = tempdir(), location = "examples") # line only needed for examples
 # Convert a SpatRaster to a GRaster:
 elev <- fast(madElev)
 
-# Create a random raster without spatial dependence:
-rand <- randRast(elev)
-plot(rand)
+# Calculate global statistics:
+global(elev, fun = c("mean", "countNonNA", "countNA", "var", "varpop"))
 
 # IMPORTANT #3: Revert back to original GRASS session if needed.
 restoreSession(opts.)

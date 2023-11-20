@@ -12,7 +12,7 @@ opts. <- getFastOptions()
 # where GRASS is installed on your system.
 
 grassDir <- "/Applications/GRASS-8.2.app/Contents/Resources" # Mac
-grassDir <- "C:/Program Files/GRASS GIS 8.2" # Windows
+grassDir <- "C:/Program Files/GRASS GIS 8.3" # Windows
 grassDir <- "/usr/local/grass" # Linux
 
 # setup
@@ -33,8 +33,8 @@ sums <- focal(elev, fun = "sum")
 means <- focal(elev, fun = "mean")
 
 # Focal calculations on a circular window:
-sds <- focal(elev, fun = "sd")
-sdsCircle <- focal(elev, fun = "sd", circle = TRUE)
+sds <- focal(elev, fun = "sd") # square
+sdsCircle <- focal(elev, fun = "sd", circle = TRUE) # circle
 
 sds
 sdsCircle

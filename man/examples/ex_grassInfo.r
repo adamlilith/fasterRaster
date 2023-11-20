@@ -15,18 +15,26 @@ grassDir <- "/Applications/GRASS-8.3.app/Contents/Resources" # Mac
 grassDir <- "C:/Program Files/GRASS GIS 8.3" # Windows
 grassDir <- "/usr/local/grass" # Linux
 
-### start GRASS session for examples only
+# Load raster
+madElev <- fastData("madElev")
+
+### Start GRASS session for examples only:
 faster(x = madElev, grassDir = grassDir,
 workDir = tempdir(), location = "examples") # line only needed for examples
 
-### GRASS information
-# citation
+# Citation
 grassInfo()
 
-# version
-grassInfo("v")
+# Version number
+grassInfo("version")
 
-# copyright
+# Version number
+grassInfo("versionNumber")
+
+# Version number
+grassInfo("versionNumber")
+
+# Copyright
 grassInfo("copyright")
 
 # IMPORTANT #3: Revert back to original GRASS session if needed.
