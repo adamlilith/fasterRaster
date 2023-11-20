@@ -62,7 +62,6 @@
 #' - Dispersion: [sd()], [var()], [sdpop()], [varpop()], [nunique()], [range()], [quantile()], [skewness()], [kurtosis()]
 #' - Extremes: [min()], [max()], [which.min()], [which.max()] \cr
 #' 
-#' ## Functions that operate on or create `GRaster`s
 #' The operators [$] and \code{\link[fasterRaster]{[[}} can be used to subset or remove specific layers of a `GRaster`.\cr
 #' The \code{\link[fasterRaster]{[<-}} operator can be used to replace values of cells of a `GRaster`.\cr
 #' The assign operators, \code{\link[fasterRaster]{$<-}}, \code{\link[fasterRaster]{[[<-}}, and \code{\link[fasterRaster]{add<-}} can be used to replace specific layers of a `GRaster`.\cr
@@ -75,6 +74,7 @@
 #' [buffer()]: Create a buffer around non-`NA` cells\cr
 #' [app()]: Apply a user-defined function to multiple layers of a `GRaster` (with helper functions [appFuns()] and [appCheck()])\cr
 #' [c()]: "Stack" two or more rasters\cr
+#' [cellSize()]: Cell area\cr
 #' [clump()]: Group adjacent cells with similar values\cr
 #' [cor()]: Correlation matrix between layers of a `GRaster`\cr
 #' [cov()]: Covariance matrix between layers of a `GRaster`\cr
@@ -111,7 +111,7 @@
 #' [thinLines()]: Reduce linear features on a `GRaster` so linear features are 1 cell wide\cr
 #' [trim()]: Remove rows and columns from a `GRaster` that are all `NA`\cr
 #' [viewshed()]: Areas visible from points on a raster\cr
-#' [zonal()]: Statistics (mean, sum, etc.) on areas of a `GRaster` defined by sets of cells with the same values in another `GRaster`\cr
+#' [zonal()]: Statistics (mean, sum, etc.) on areas of a `GRaster` defined by sets of cells with the same values in another `GRaster`, or by geometries in a `GVector`\cr
 #' [zonalGeog()]: Geographic statistics (area, perimeter, fractal dimension, etc.) for sets of cells with the same values\cr
 #'
 #' ## Functions operating on categorical rasters
@@ -216,6 +216,7 @@
 #' ## Functions that operate on **GRASS** "sessions":
 #' [crs()]: Coordinate reference system of the current location\cr
 #' [location()]: **GRASS** "location" of an object or the active session\cr
+#' [locations()]: Meta-data on all active **GRASS** "locations" in the active session\cr
 #' [mapset()]: **GRASS** "mapset" of an object or the active session\cr
 #' [restoreSession()]: Restore a previous **GRASS** session or switch **GRASS** locations/mapsets\cr
 #' [removeSession()]: Delete a **GRASS** session (location, mapset(s), and all associated files)\cr
@@ -227,9 +228,7 @@
 #' [dropRows()]: Remove rows from a `data.frame` or `data.table`\cr
 #' [forwardSlash()]: Replace backslash with forward slash\cr
 #' [grassInfo()]: **GRASS** version and citation\cr
-#' [pmatchSafe()]: Partial matching of strings with error checking\cr
 #' [replaceNAs()]: Replace `NA`s in columns of a `data.table` or `data.frame`, or in a vector\cr
-#' [rstring()]: Create a string statistically likely to be unique\cr
 #' [seqToSQL()]: Format a numeric series into an SQL value call.\cr
 #' [update()]: Refresh metadata in a `GRaster` or `GVector` object.\cr
 #'

@@ -41,7 +41,7 @@ methods::setMethod(
 	.restore(x)
 	
 	method <- tolower(method)
-	method <- pmatchSafe(method, c("hermite", "chaiken"))
+	method <- omnibus::pmatchSafe(method, c("hermite", "chaiken"))
 	
 	if (method == "hermite" && angle < 0) stop("Argument ", sQuote("angle"), " must be >0.")
 	

@@ -30,7 +30,7 @@ methods::setMethod(
 # stat "cov" or "cor"
 .corCovar <- function(x, stat) {
 
-	stat <- pmatchSafe(stat, c("cor", "cov"))
+	stat <- omnibus::pmatchSafe(stat, c("cor", "cov"))
 
 	if (nlyr(x) == 1L) stop("The raster must have >= 2 layers.")
 	

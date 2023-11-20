@@ -46,7 +46,7 @@ methods::setMethod(
 		h = NULL
 	) {
 	
- 	kernFx <- pmatchSafe(kernel, c("gaussian", "uniform", "triangular", "epanechnikov", "quartic", "triweight", "cosine"), nmax = 1L)
+ 	kernFx <- omnibus::pmatchSafe(kernel, c("gaussian", "uniform", "triangular", "epanechnikov", "quartic", "triweight", "cosine"), nmax = 1L)
 
 	.restore(y)
 	compareGeom(x, y)

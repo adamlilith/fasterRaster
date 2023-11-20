@@ -79,7 +79,7 @@ methods::setMethod(
 		rastExtensions <- c("asc", "grd", "img", "mem", "tif", "saga")
 		vectExtensions <- c("shp", "gpkg")
 
-		ext <- tools::file_ext(x)
+		ext <- .fileExt(x)
 		ext <- tolower(ext)
 
 		if (ext %in% rastExtensions) {
@@ -92,7 +92,7 @@ methods::setMethod(
 
 	} else {
 		### user supplied rastOrVect
-		rastOrVect <- pmatchSafe(rastOrVect, c("raster", "vector"))
+		rastOrVect <- omnibus::pmatchSafe(rastOrVect, c("raster", "vector"))
 	}
 
 	### raster from disk
@@ -126,7 +126,7 @@ methods::setMethod(
 			if (warn) warning("Raster has a different coordinate reference system than this GRASS ", dQuote("location"), ".\n  Raster will be projected to the current location\'s coordinate reference system.")
 
 			# method
-			if (!is.null(method)) method <- pmatchSafe(method, c("nearest", "bilinear", "bicubic", "lanczos"))
+			if (!is.null(method)) method <- omnibus::pmatchSafe(method, c("nearest", "bilinear", "bicubic", "lanczos"))
 
 			if (is.null(method)) {
 
@@ -270,7 +270,7 @@ methods::setMethod(
 
 	if (any(rastFile == "")) {
 		tempFile <- tempfile(fileext = ".tif")
-		terra::writeRaster(x, filename = tempFile, overwrite = TRUE, datatype = datatype(x, "terra"))
+		terra::writeRaster(x, filename = tempFile, overwrite = TRUE, datatype = datatype(x, "terra", forceDouble = TRUE))
 		x <- tempFile
 	} else {
 		x <- terra::sources(x)

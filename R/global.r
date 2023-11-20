@@ -5,6 +5,7 @@
 #' @param x A `GRaster` or missing.  If missing, then a vector of all of the accepted function names is returned.
 #'
 #' @param fun Character vector: The name of the function(s):
+#' * `"*"`: All of the statistics below.
 #' * `"countNonNA"`: Total number of non-`NA` cells.
 #' * `"countNA"`: Total number of `NA` cells.
 #' * `"cv"`: Sample coefficient of variation (expressed as a proportion of the mean).
@@ -14,7 +15,7 @@
 #' * `"meanAbs"`: Mean of absolute values.
 #' * `"median"`: Median.
 #' * `"quantile"`: Quantile (see also argument `prob`).
-#' * `"range"`: Range.
+#' * `"range"`: Range--note that as per [terra::global()], the minimum and maximum are reported, not the actual range.
 #' * `"sd"`: Sample standard deviation.
 #' * `"sdpop"`: Population standard deviation.
 #' * `"sum"`: Sum.
@@ -40,12 +41,12 @@ methods::setMethod(
 	definition = function(
 		x,
 		fun = "mean",
-		prob = NULL,
+		prob = 0.5,
 		...
 	) {
 
 	nLayers <- nlyr(x)
-	.global(x = x, fun = fun, prob = prob, nLayers = nLayers)
+	.global(x = x, fun = fun, prob = prob)
 
 	} # EOF
 )
@@ -53,9 +54,8 @@ methods::setMethod(
 # x 		[sources()] name
 # fun 		character
 # prob		numeric in [0, 1]
-# nLayers	integer >= 1
 #' @noRd
-.global <- function(x, fun, prob, nLayers) {
+.global <- function(x, fun, prob) {
 
 	if (inherits(x, "GRaster")) {
 		.restore(x)
@@ -65,19 +65,37 @@ methods::setMethod(
 		src <- x
 	}
 
-	funs <- c("sum", "mean", "median", "min", "max", "cv", "cvpop", "meanAbs", "countNA", "countNonNA", "range", "sd", "var", "sdpop", "varpop", "quantile")
+	funs <- c("sum", "mean", "median", "min", "max", "meanAbs", "countNA", "countNonNA", "range", "sd", "sdpop", "var", "varpop", "cv", "cvpop", "quantile")
 	
-	funNames <- fun
-	funs <- tolower(funs)
-	fun <- tolower(fun)
-	
-	fun <- pmatchSafe(fun, funs, useFirst = TRUE, error = TRUE)
+	if (any(fun == "*")) fun <- funs
 
-	if (any(fun == "quantile") & is.null(prob)) stop("You must specify a value for ", sQuote("prob"), " when calculating quantile statistics.")
+	fun <- omnibus::pmatchSafe(fun, funs, useFirst = TRUE, error = TRUE)
+
+	if (any(fun == "range")) {
+		if (length(fun) == 1L) {
+			fun <- c("min", "max")
+		} else {
+			where <- which(fun == "range")
+			lf <- length(fun)
+			if (where == 1L) {
+				fun <- c("min", "max", fun[2L:lf])
+			} else if (where == lf) {
+				fun <- c(fun[1L:(lf - 1L)], "min", "max")
+			} else {
+				fun <- c(fun[1L:(where - 1L)], "min", "max", fun[(where + 1L):lf])
+			}
+		}
+	}
+
+	fun <- unique(fun)
+
+	if (any(fun == "quantile") & (prob < 0 | prob > 1)) stop("The value for ", sQuote("prob"), " must be in the range [0, 1].")
 	
 	versionNumber <- grassInfo("versionNumber")
 
 	out <- data.frame()
+
+	nLayers <- length(src)
 
 	### for each layer
 	for (i in seq_len(nLayers)) {
@@ -113,34 +131,30 @@ methods::setMethod(
 			row.names = src[i]
 		)
 		
-		names(thisOut) <- funNames
+		names(thisOut) <- fun
 			
 		### for each function
 		for (countFun in seq_along(fun)) {
-		
-			thisFun <- fun[countFun]
-			funName <- funNames[countFun]
-			matchFun <- pmatchSafe(thisFun, funs, useFirst = TRUE)
 
-			pattern <- if (matchFun == "meanabs") {
+			thisFun <- fun[countFun]
+
+			pattern <- if (thisFun == "meanAbs") {
 				"mean of absolute values: "
-			} else if (matchFun == "mean") {
+			} else if (thisFun == "mean") {
 				"mean: "
-			} else if (matchFun == "median") {
-				"median \\(even number of cells\\): "
-			} else if (matchFun == "min") {
+			} else if (thisFun == "min") {
 				"minimum: "
-			} else if (matchFun == "max") {
+			} else if (thisFun == "max") {
 				"maximum: "
-			} else if (matchFun == "countna") {
+			} else if (thisFun == "countNA") {
 				"total null cells: "
-			} else if (matchFun == "range") {
+			} else if (thisFun == "range") {
 				"range: "
-			} else if (matchFun == "sd") {
+			} else if (thisFun == "sdpop") {
 				"standard deviation: "
-			} else if (matchFun == "var") {
+			} else if (thisFun == "varpop") {
 				"variance: "
-			} else if (matchFun == "sum") {
+			} else if (thisFun == "sum") {
 				"sum: "
 			} else { 
 				NA
@@ -154,14 +168,31 @@ methods::setMethod(
 			
 			} else {
 			
-				if (matchFun == "quantile") {
+				if (thisFun == "quantile") {
 				
 					pattern <- "percentile: "
 					this <- info[grepl(info, pattern=pattern)]
 					this <- strsplit(this, split=":")[[1L]][2L]
 					this <- as.numeric(this)
 					
-				} else if (matchFun == "countnonna") {
+				} else if (thisFun == "median") {
+				
+					pattern <- "median \\(even number of cells\\): "
+
+					this <- info[grepl(info, pattern = pattern)]
+
+					if (length(this) == 0L) {
+
+						pattern <- "median \\(odd number of cells\\): "
+
+						this <- info[grepl(info, pattern = pattern)]
+
+					}
+
+					this <- sub(this, pattern = pattern, replacement = "")
+					this <- as.numeric(this)
+
+				} else if (thisFun == "countNonNA") {
 				
 					pattern <- "total null and non-null cells: "
 					this1 <- info[grepl(info, pattern=pattern)]
@@ -175,7 +206,7 @@ methods::setMethod(
 					
 					this <- this1 - this2
 					
-				} else if (matchFun == "cv") {
+				} else if (thisFun == "cvpop") {
 				
 					pattern <- "variation coefficient: "
 					this <- info[grepl(info, pattern=pattern)]
@@ -184,7 +215,7 @@ methods::setMethod(
 					this <- as.numeric(this)
 					this <- this / 100
 					
-				} else if (thisFun == "cvpop") {
+				} else if (thisFun == "cv") {
 				
 					pattern <- "mean: "
 					mean. <- info[grepl(info, pattern=pattern)]
@@ -192,7 +223,7 @@ methods::setMethod(
 					mean. <- as.numeric(mean.)
 
 					srcSS <- .makeSourceName("r_mapcalc", "rast")
-					ex <- paste0(srcSS, " = (", x[i], " - ", mean., ")^2")
+					ex <- paste0(srcSS, " = (", sources(x)[i], " - ", mean., ")^2")
 					
 					rgrass::execGRASS(
 						"r.mapcalc",
@@ -231,25 +262,26 @@ methods::setMethod(
 					n2 <- as.numeric(n2)
 					
 					n <- n1 - n2
-					stdev <- sqrt(ss / n)
+					stdev <- sqrt(ss / (n - 1))
 					this <- stdev / mean.
 
-				} else if (thisFun %in% c("varpop", "sdpop")) {
-				
+				} else if (thisFun %in% c("var", "sd")) {
+	
 					pattern <- "mean: "
 					mean. <- info[grepl(info, pattern=pattern)]
 					mean. <- sub(mean., pattern=pattern, replacement="")
 					mean. <- as.numeric(mean.)
 
-					srcSS <- .makeSourceName("r_mapcalc", "rast")
+					srcSS <- .makeSourceName("r_mapcalc", "raster")
 					
-					ex <- paste0(srcSS, " = (", x[i], " - ", mean., ")^2")
+					ex <- paste0(srcSS, " = (", src[i], " - ", mean., ")^2")
 
 					rgrass::execGRASS(
-						cmd = "r.mapcalc", expression = ex,
+						cmd = "r.mapcalc",
+						expression = ex,
 						flags = c(.quiet(), "overwrite")
 					)
-				
+
 					args <- list(
 						cmd = "r.univar",
 						flags = c("r", .quiet()),
@@ -280,22 +312,22 @@ methods::setMethod(
 					n2 <- as.numeric(n2)
 					
 					n <- n1 - n2
-					this <- ss / n
-					if (thisFun == "sdpop") this <- sqrt(this)
+					this <- ss / (n - 1)
+					if (thisFun == "sd") this <- sqrt(this)
 
 				} # custom function
 				
 			} # match function
 			
-			thisOut[1L, funName] <- this
+			thisOut[1L, fun[countFun]] <- this
 				
 		} # next function
 
 		out <- rbind(out, thisOut)
-		
+
 	} # next layer
 
-	rownames(out) <- src
+	rownames(out) <- names(x)
 	out
 
 }

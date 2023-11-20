@@ -2,7 +2,7 @@
 #'
 #' @title Spatial points vector of records of Dypsis in eastern Madagascar
 #'
-#' @description Spatial points vector of herbarium specimens and observations of plants in the genus \emph{Dypsis}  (slender, evergreen palms) from a portion of eastern Madagascar.
+#' @description Spatial points vector of herbarium specimens and observations of plants in the genus *Dypsis* (slender, evergreen palms) from a portion of eastern Madagascar.
 #'
 #' @docType data
 #'

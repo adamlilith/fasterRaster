@@ -1,8 +1,8 @@
 #' Revert to a previous "GRASS" session (working folder, location, and mapset)
 #'
-#' @description This function is useful for reverting to a previous **GRASS** session (`workDir`, `location`, and/or `mapset`). The session must have been already initiated using [faster()] in the current **R** session or a previous one.
+#' @description This function is useful for reverting to a previous **GRASS** session (`workDir`, `location`, and/or `mapset`). The session must have been already initiated using [faster()] in the current **R** session.
 #'
-#' @param ... Either a sequence of arguments with the pattern `<argument = value>`, or a list of arguments. These arguments can be any option available in [setFastOptions()]. Of particular note, the `workDir`, `location`, and `mapset` options allow one to revert to a previous **GRASS** session. The current session's `workDir`, `location`, and `mapset` can be seen using [getFastOptions()], plus  [location()] and [mapset()].
+#' @param ... Either a sequence of arguments with the pattern `<argument = value>`, or a list of arguments. These arguments can be any option available in [setFastOptions()]. Of particular note, the `workDir`, `location`, and `mapset` options allow one to revert to a previous **GRASS** session. The current session's `workDir` can be seen using `getFastOptions("workDir")`, and the current location and mapset using [location()] and [mapset()]. Meta-data on all sessions can be seen using [locations()].
 #'
 #' @return An object of class `GSession` (invisibly) if successful. An error will likely result if not.
 #'
@@ -79,7 +79,8 @@ restoreSession <- function(...) {
 	session <- GSession(
 		location = location,
 		mapset = mapset,
-		crs = crs
+		crs = crs,
+		workDir = workDir
 	)
 	
 	invisible(session)

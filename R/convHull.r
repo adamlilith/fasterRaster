@@ -40,7 +40,7 @@ methods::setMethod(
 	
 		n <- length(uniques)
 
-		srcs <- .makeSourceName("convHull", "vector", n)
+		srcs <- .makeSourceName("v_hull", "vector", n)
 		vects <- list()
 		for (i in seq_len(n)) {
 

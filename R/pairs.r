@@ -80,6 +80,6 @@ methods::setMethod(
 
 	usr <- par(usr = c(0, 1, 0, 1), new = TRUE)
 	on.exit(graphics::par(usr = usr), add = TRUE)
-  graphics::smoothScatter(x, y, colramp = colramp, nrpoints = Inf, ...)
+	graphics::smoothScatter(x, y, colramp = colramp, nrpoints = Inf, ...)
 
 }

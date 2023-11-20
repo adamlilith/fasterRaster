@@ -9,6 +9,8 @@
 #' * `"GRASS"`: Will return "CELL" (integer), "FCELL" (floating-point value), or "DCELL" (double-floating point value)
 #' * `"GDAL"`: See [GDAL: Raster Band](https://gdal.org/user/raster_data_model.html#raster-band). Please also see the table in the [tutorial on raster data types][tutorial_raster_data_types].
 #'
+#' @param forceDouble Logical (`GRaster`s and `SpatRaster`s only): If `TRUE` (default), and the raster appears to represent non-integer values, then the raster will be assumed to represent double-floating point values (**GRASS**: type "DCELL", **terra**: type "FLT8S", **fasterRaster**: type "double", and **GDAL**: type "Float64"). `forceDouble` reports the actual datatype if `type = "fasterRaster"` (i.e., the type is not forced to "double").
+#'
 #' @returns `datatype()` for a `GRaster` returns a character. `datatype()` for a `GVector` returns a data frame, with one row per field. If the `GVector` has no attribute table, the function returns `NULL`.
 #'
 #' @seealso [terra::datatype()], [raster data types][tutorial_raster_data_types] in **fasterRaster**
@@ -21,9 +23,10 @@
 methods::setMethod(
 	f = "datatype",
 	signature = c(x = "GRaster"),
-	definition = function(x, type = "fasterRaster") {
+	definition = function(x, type = "fasterRaster", forceDouble = TRUE) {
 	
-	type <- pmatchSafe(type, c("fasterRaster", "GRASS", "terra", "GDAL"))
+	type <- omnibus::pmatchSafe(type, c("fasterRaster", "GRASS", "terra", "GDAL"))
+
 	out <- x@datatypeGRASS
 	
 	if (type == "fasterRaster") {
@@ -36,11 +39,10 @@ methods::setMethod(
 	
 	} else if (type %in% c("terra", "GDAL")) {
 
-		stats <- global(x, fun = c("min", "max", "range", "sum"))
+		stats <- global(x, fun = c("min", "max", "sum"))
 
 		min <- stats[ , "min"]
 		max <- stats[ , "max"]
-		range <- stats[ , "range"]
 		sum <- stats[ , "sum"]
 
 	    remainder <- stats %% 1
@@ -60,18 +62,96 @@ methods::setMethod(
 					out[i] <- if (type == "GDAL") { "Int32" } else { "INT4S" }
 				}
 				
+			} else if (forceDouble) {
+				out[i] <- if (type == "GDAL") { "Float64" } else { "FLT8S" }
 			} else if (out[i] == "FCELL") {
 				out[i] <- if (type == "GDAL") { "Float32" } else { "FLT4S" }
 			} else if (out[i] == "DCELL") {
 				out[i] <- if (type == "GDAL") { "Float64" } else { "FLT8S" }
 			} else {
-				warning("Values are too small/large to represent.")
+				warning("Values are too small/large to represent. Assigning ", sQuote("double"), " type.")
 				out[i] <- if (type == "GDAL") { "Float64" } else { "FLT8S" }
 			}
 
 		} # next raster
 
 	} # want non-fasterRaster type
+	out
+	
+	} # EOF
+)
+
+#' @aliases datatype
+#' @rdname datatype
+#' @exportMethod datatype
+methods::setMethod(
+	f = "datatype",
+	signature = c(x = "SpatRaster"),
+	definition = function(x, type = "fasterRaster", forceDouble = TRUE) {
+	
+	type <- omnibus::pmatchSafe(type, c("fasterRaster", "GRASS", "terra", "GDAL"))
+
+	stats <- terra::global(x, fun = c("min", "max", "sum"), na.rm = TRUE)
+
+	min <- stats[ , "min"]
+	max <- stats[ , "max"]
+	sum <- stats[ , "sum"]
+
+	remainder <- stats %% 1
+	integer <- rowSums(abs(remainder)) == 0
+
+	nl <- terra::nlyr(x)
+	
+	out <- rep(NA_character_, nl)
+	for (i in seq_len(nl)) {
+	
+		# integer
+		if (integer[i]) {
+
+			if (type == "GRASS") {
+				out[i] <- "CELL"
+			} else if (type == "fasterRaster") {
+				out[i] <- "integer"
+			} else {
+
+				if (min[i] >= 0 & max[i] <= 255) {
+					out[i] <- if (type == "GDAL") { "Byte" } else if (type == "terra") { "INT1U" }
+				} else if (min[i] >= 0 & max[i] <= 65534) {
+					out[i] <- if (type == "GDAL") { "UInt16" } else if (type == "terra") { "INT2U" }
+				} else if (min[i] >= -32767 & max[i] <= -32767) {
+					out[i] <- if (type == "GDAL") { "Int16" } else if (type == "terra") { "INT2S" }
+				} else if (min[i] >= -2147483647 & max[i] <= 2147483647) {
+					out[i] <- if (type == "GDAL") { "Int32" } else if (type == "terra") { "INT4S" }
+				}
+				
+			}
+			
+		# not integer
+		} else {
+			
+			if (forceDouble) {
+				out[i] <- if (type == "GDAL") { "Float64" } else if (type == "terra") { "FLT8S" } else if (type == "GRASS") { "DCELL" } else if (type == "fasterRaster") { "double" }
+			} else if (min[i] > -3.4e+38 & max[i] < 3.4e+38) {
+				out[i] <- if (type == "GDAL") { "Float32" } else if (type == "terra") { "FLT4S" } else if (type == "GRASS") { "FCELL" } else if (type == "fasterRaster") { "float" }
+			} else if (min[i] > -1.79e+308 & max[i] < 1.79e+308) {
+				out[i] <- if (type == "GDAL") { "Float64" } else if (type == "terra") { "FLT8S" } else if (type == "GRASS") { "DCELL" } else if (type == "fasterRaster") { "double" }
+			} else {
+				warning("Values are too small/large to represent. Assigning ", sQuote("double"), " type.")
+				out[i] <- if (type == "GDAL") { "Float64" } else if (type == "terra") { "FLT8S" } else if (type == "GRASS") { "DCELL"} else if (type == "fasterRaster") { "double" }
+			}
+		}
+
+	} # next raster
+
+	if (type == "fasterRaster") {
+
+		isFact <- is.factor(x)
+		out[out == "CELL" & isFact] <- "factor"
+		out[out == "CELL" & !isFact] <- "integer"
+		out[out == "FCELL"] <- "float"
+		out[out == "DCELL"] <- "double"
+	
+	}
 	out
 	
 	} # EOF

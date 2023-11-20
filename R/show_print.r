@@ -16,9 +16,12 @@ methods::setMethod(
 	signature = "GSession",
 	definition = function(object) {
 	
+	verbose <- getFastOptions("verbose")
+	
 	cat("class       :", paste(class(object), collapse=", "), "\n")
 	cat("location    :", object@location, "\n")
 	cat("mapset      :", object@mapset, "\n")
+	cat("workDir     :", object@workDir, "\n")
 	cat("coord ref.  :", format(st_crs(object)), "\n")
 
 	}
@@ -57,10 +60,11 @@ methods::setMethod(
 	extent <- round(object@extent, digs)
 	
 	cat("class       :", paste(class(object), collapse=", "), "\n")
-	if (getFastOptions("verbose")) {
-		cat("sources(s)   :", object@sources, "\n")
+	if (verbose) {
+		# cat("sources(s)  :", object@sources, "\n")
 		cat("location    :", object@location, "\n")
 		cat("mapset      :", object@mapset, "\n")
+		cat("workDir     :", object@workDir, "\n")
 	}
 	cat("topology    :", object@topology, "\n")
 	cat("extent      :", paste(extent, collapse=", "), "(xmin, xmax, ymin, ymax)\n")
@@ -105,10 +109,10 @@ methods::setMethod(
 	zextent <- round(object@zextent, max(round(digs / 2), 2))
 	
 	cat("class       :", paste(class(object), collapse=", "), "\n")
-	if (getFastOptions("verbose")) {
-		# cat("sources(s)   :", object@sources, "\n")
+	if (verbose) {
 		cat("location    :", object@location, "\n")
 		cat("mapset      :", object@mapset, "\n")
+		cat("workDir     :", object@workDir, "\n")
 	}
 	cat("topology    :", object@topology, "\n")
 	cat("coord ref.  :", format(st_crs(object)), "\n")
@@ -274,6 +278,7 @@ methods::setMethod(
 	if (verbose) {
 		cat("location    :", object@location, "\n")
 		cat("mapset      :", object@mapset, "\n")
+		cat("workDir     :", object@workDir, "\n")
 	}
 	cat("topology    :", object@topology, "\n")
 	cat("dimensions  :", paste(c(object@dimensions, object@nLayers), collapse=", "), "(nrow, ncol, ndepth, nlyr)\n")
@@ -447,6 +452,7 @@ methods::setMethod(
 		cat("location    :", object@location, "\n")
 		cat("mapset      :", object@mapset, "\n")
 		cat("source      :", object@sources, "\n")
+		cat("workDir     :", object@workDir, "\n")
 	}
  	cat("geometry    :", object@topology, object@geometry, "\n")
 	cat("dimensions  :", paste0(object@nGeometries, ", ", object@nSubgeometries, ", ", nFields), "(geometries, sub-geometries, columns)\n")
@@ -491,7 +497,7 @@ methods::setMethod(
 #' @noRd
 .showCRS <- function(x) {
 
-	format(st_crs(x))(st_crs(x))
+	# format(st_crs(x))
 
 	if (inherits(x, c("SpatRaster", "SpatVector", "sf"))) {
 		x <- sf::st_crs(x)

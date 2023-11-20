@@ -143,7 +143,8 @@ faster <- function(
 	session <- GSession(
 		location = location,
 		mapset = mapset,
-		crs = x
+		crs = x,
+		workDir = workDir
 	)
 
 	### remember session
@@ -157,10 +158,9 @@ faster <- function(
 		put <- match
 	}
 
-	remember <- list(session = session, workDir = workDir)
-	.fasterRaster$locations[[put]] <- remember
+	.fasterRaster$locations[[put]] <- session
 	names(.fasterRaster$locations)[put] <- thisSessionName
-
+	
 	invisible(session)
 
 }

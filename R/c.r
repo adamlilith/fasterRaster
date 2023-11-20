@@ -15,6 +15,7 @@
 #' Data tables associated with `GVector`s will be combined if each vector has a table and if each table has the same columns and data types. Otherwise, the data table will be dropped.
 #'
 #' @param x A `GRaster` or a `GVector`.
+#'
 #' @param ... One or more `GRaster`s, one or more `GVector`s, a list of `GRaster`s, or a list of `GVector`s. You can use a mix of lists and individual rasters or vectors.
 #'
 #' @return A `GRaster`.
@@ -52,6 +53,7 @@ setMethod(
 			out <- GRaster(
 				location = location(out),
 				mapset = mapset(out),
+				workDir = getFastOptions("workDir"),
 				crs = crs(out),
 				projection = .projection(out),
 				topology = topology(out),
@@ -142,12 +144,11 @@ setMethod(
 		cmd = "v.patch",
 		input = input,
 		output = src,
-  		# flags = c(.quiet(), "overwrite", "e") ### ??? "e"???
   		flags = c(.quiet(), "overwrite") ### ??? "e"???
 	)
 	
 	table <- as.data.table(x)
-	if (nrow(table) > 0L) {
+	if (!is.null(table) && nrow(table) > 0L) {
 	
 		xNames <- names(table)
 		xClasses <- sapply(table, class)

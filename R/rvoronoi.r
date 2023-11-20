@@ -33,7 +33,7 @@ methods::setMethod(
 #' @noRd
 .rvoronoi <- function(x, size, seed) {
 	
-	rp <- spatSample(x = x, size = size, as.points = TRUE, values = FALSE, seed = seed)
+	rp <- spatSample(x = x, size = size, as.points = TRUE, xy = FALSE, values = FALSE, seed = seed)
 
 	out <- voronoi(rp, buffer = 0)
 	out

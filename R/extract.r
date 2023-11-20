@@ -114,7 +114,7 @@ methods::setMethod(
                 "quantile"
             )
 
-            fun <- pmatchSafe(fun, funs)
+            fun <- omnibus::pmatchSafe(fun, funs)
 
             # get sample versions
             sampleSd <- any(fun == "sd")
@@ -147,7 +147,7 @@ methods::setMethod(
 
             for (i in seq_len(nLayers)) {
 
-                prefix <- rstring(1L)
+                prefix <- omnibus::rstring(1L)
 
                 if (length(method) > 0L) {
                     
@@ -540,7 +540,7 @@ methods::setMethod(
 
 #' @param x GVector
 #' @param coords 2-column matrix of coordinates
-#' @param xy T/F
+#' @param xy T/F: Return coordinates
 #' 
 #' @noRd
 .extractFromVect <- function(x, y, xy) {

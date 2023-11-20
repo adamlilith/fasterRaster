@@ -36,6 +36,105 @@ methods::setMethod(
 	.restore(x)
 	region(y)
 
+	gtype <- geomtype(x, grass = TRUE)
+
+	### create different raster layer for each geometry
+	if (byGeom) {
+
+		# if by geometry but burned to the same raster
+		if (collapse) {
+
+			src <- .makeSourceName("v_to_rast", "raster")
+			args <- list(
+				cmd = "v.to.rast",
+				input = sources(x),
+				output = src,
+				use = "cat",
+				type = gtype,
+				memory = getFastOptions("memory"),
+				flags = c(.quiet(), "overwrite")
+			)
+
+			if (gtype == "line") args$flags <- c(args$flags, "d")
+
+			do.call(rgrass::execGRASS, args = args)
+			out <- .makeGRaster(src, "layer")
+
+		} else {
+			
+			ng <- ngeom(x)
+			for (i in seq_len(ng)) {
+			
+				xSubset <- x[i]
+
+				thisOut <- rasterize(
+					x = xSubset,
+					y = y,
+					background = background,
+					byGeom = FALSE
+				)
+
+				if (i == 1L) {
+					out <- thisOut
+				} else {
+					out <- c(out, thisOut)
+				}
+
+			} # next geometry
+
+		} # if one raster per geometry, not collapsed
+
+	### all geometries at once
+	} else {
+
+		src <- .makeSourceName("v_to_rast", "raster")
+		args <- list(
+			cmd = "v.to.rast",
+			input = sources(x),
+			output = src,
+			use = "val",
+			value = 1,
+			type = gtype,
+			memory = getFastOptions("memory"),
+			flags = c(.quiet(), "overwrite")
+		)
+
+		if (gtype == "line") args$flags <- c(args$flags, "d")
+
+		do.call(rgrass::execGRASS, args = args)
+
+		if (!is.na(background)) {
+
+			srcIn <- src
+			src <- .makeSourceName("r_mapcalc", "vector")
+			ex <- paste0(src, " = if(isnull(", srcIn, "), ", background, ", ", srcIn, ")")
+
+			rgrass::execGRASS(
+				cmd = "r.mapcalc",
+				expression  = ex,
+				flags = c(.quiet(), "overwrite")
+			)
+
+		}
+
+		out <- .makeGRaster(src, "layer")
+
+	}
+
+	out
+
+	} # EOF
+)
+
+#' @param x [sources()] name of a `GVector`.
+#' @param y [sources()] name of a `GRaster`
+#' @param background Numeric or `NA`.
+#' @param byGeom Logical.
+#' @param collapse Logical.
+#'
+#' @noRd
+.rasterize <- function(x, y, background, byGeom, collapse) {
+
 	### create different raster layer for each geometry
 	if (byGeom) {
 
@@ -117,11 +216,7 @@ methods::setMethod(
 
 		}
 
-		out <- .makeGRaster(src, "rasterize")
-
 	}
-	
-	out
-	
-	} # EOF
-)
+	src
+
+}

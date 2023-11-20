@@ -165,7 +165,6 @@ methods::setMethod(
 	region(x)
 
 	if (geomtype(x) != "polygons") x <- convHull(x)
-	if (!xy) values <- TRUE
 
 	# if sampling by strata, keey polygons as-is
 	if (!is.null(strata)) {
@@ -202,23 +201,29 @@ methods::setMethod(
 
 	do.call(rgrass::execGRASS, args = args)
 
-	out <- NULL
-
 	# return coordinates
-	if (xy & !values) {
-
-		out <- .crdsVect(src, z = is.3d(x), gm = "points")
+	if (xy) coords <- .crdsVect(src, z = is.3d(x), gm = "points")
 
 	# extract values from vector
-	} else if (values) {
+	if (values) {
 
-		out <- .extractFromVect(x, y = coords, xy = xy)
-		out$id.y <- NULL
+		if (!xy) coords <- .crdsVect(x = src, z = !is.null(zlim), gtype = "points")
+		vals <- .extractFromVect(x, y = coords, xy = xy)
+		vals$id.y <- NULL
 
 	} # if wanting values
 
+	table <- NULL
+	if (xy & values) {
+		table <- cbind(xy, vals)
+	} else if (!xy & values) {
+		table <- vals
+	} else if (xy & !values) {
+		table <- coords
+	}
+
 	if (as.points) {
-		out <- .makeGVector(src, table = out)
+		out <- .makeGVector(src, table = table)
 	} else {
 		if (!getFastOptions("useDataTable")) out <- as.data.frame(out)
 	}

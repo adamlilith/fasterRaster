@@ -44,7 +44,7 @@ methods::setMethod(
 	.restore(x)
 	
 	method <- tolower(method)
-	method <- pmatchSafe(method, c("vr", "dp", "dpr", "rw"))
+	method <- omnibus::pmatchSafe(method, c("vr", "dp", "dpr", "rw"))
 	method <- if (method == "vr") {
 		"reduction"
 	} else if (method == "dp") {

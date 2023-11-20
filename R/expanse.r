@@ -4,8 +4,8 @@
 #'
 #' @param x A "polygons" or "lines" `GVector`.
 #'
-#' @param unit Character: Units in which to report values. Can be any of:
-#' * `"meters"` (default)
+#' @param unit Character: Units in which to report values. Areal units are squared, linear are not. Can be any of:
+#' * `"meters"`(default), `"metres"`, or `"m"`
 #' * `"km"` or `"kilometers"`
 #' * `"ha"` or `"hectares"`
 #' * `"ft"` or `"feet"`
@@ -30,18 +30,11 @@ methods::setMethod(
 
 	.restore(x)
 	
-	if (unit == "m") unit <- "meters"
-	units <- c("meters", "km", "kilometers", "ha", "hectares", "ft", "feet", "miles", "percent")
-	
-	unit <- pmatchSafe(unit, units, nmax = 1L)
-
-	if (unit == "km") {
-		unit <- "kilometers"
-	} else if (unit == "ha") {
-		unit <- "hectares"
-	} else if (unit == "ft") {
-		unit <- "feet"
-	}
+	units <- c("m", "meters", "metres", "km", "kilometers", "ha", "hectares", "ft", "feet", "mi", "miles", "%", "percent")
+	unit <- omnibus::pmatchSafe(unit, units, useFirst = TRUE, nmax = 1L)
+	if (unit == "metres") unit <- "meters"
+	if (unit == "%") unit <- "percent"
+	unit <- omnibus::expandUnits(unit)
 
 	option <- if (gtype == "area") {
 		"area"

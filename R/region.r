@@ -189,6 +189,7 @@ methods::setMethod(
 		GRegion(
 			location = location(),
 			mapset = mapset(),
+			workDir = getFastOptions("workDir"),
 			crs = crs(),
 			topology = "3D",
 			extent = extent,
@@ -376,7 +377,7 @@ methods::setMethod(
 
 .regionExt <- function(x, respect) {
 
-	respect <- pmatchSafe(respect, c("resolution", "dimensions"))
+	respect <- omnibus::pmatchSafe(respect, c("resolution", "dimensions"))
 
 	if (inherits(x, "GSpatial")) {
 		.restore(x)
@@ -469,7 +470,7 @@ methods::setMethod(
 
 .regionDim <- function(x, respect) {
 
-	respect <- pmatchSafe(respect, c("extent", "resolution"))
+	respect <- omnibus::pmatchSafe(respect, c("extent", "resolution"))
 
 	if (inherits(x, "GRegion")) {
 		x <- dim(x)[1L:2L]
@@ -563,7 +564,7 @@ methods::setMethod(
 # set resolution of region
 .regionRes <- function(x, respect) {
 
-	respect <- pmatchSafe(respect, c("extent", "dimensions"))
+	respect <- omnibus::pmatchSafe(respect, c("extent", "dimensions"))
 
 	if (inherits(x, "GRegion")) {
 		x <- res(x)[1L:2L]

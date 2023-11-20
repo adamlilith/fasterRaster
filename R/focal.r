@@ -53,7 +53,7 @@ methods::setMethod(
 	
     funs <- c("mean", "sum", "sd", "sdpop", "var", "varpop", "median", "mode", "max", "min", "count", "range", "nunique", "interspersion", "quantile")
 
-    fun <- pmatchSafe(fun, funs)
+    fun <- omnibus::pmatchSafe(fun, funs, useFirst = TRUE)
     if (fun == "mean") fun <- "average"
     if (fun == "min") fun <- "minimum"
     if (fun == "max") fun <- "maximum"
@@ -97,7 +97,7 @@ methods::setMethod(
 		colnames(weight) <- NULL
 		
         # GRASS wants backslashes
-		rand <- rstring(1L)
+		rand <- omnibus::rstring(1L)
 		weightFile <- paste0(tempdir(), "/TEMPTEMPweights", rand, ".txt")
 		weightFileBack <- paste0(tempdir(), "\\TEMPTEMPweights", rand, ".txt")
 		

@@ -72,23 +72,23 @@ st_coordinates <- function(x) {
 
 #' Extract coordinates for vector
 #'
-#' @param x A GVector
+#' @param x A GVector or [sources()] name of one.
 #' @param z T/F Extract z-coordinate?
-#' @param gm Character: [geomtype()] of the vector.
+#' @param gtype Character: [geomtype()] of the vector.
 #' 
 #' @noRd
-.crdsVect <- function(x, z, gm = NULL) {
+.crdsVect <- function(x, z, gtype = NULL) {
 
 	if (inherits(x, "GVector")) {
 		.restore(x)
-		gm <- geomtype(x)
+		gtype <- geomtype(x)
 		src <- sources(x)
 	} else {
 		src <- x
 	}
 
 	# if lines or polygons, convert to points first
-	if (gm %in% c("lines", "polygons")) {
+	if (gtype %in% c("lines", "polygons")) {
 
 		stop("crds() will only work on points vectors.")
 		
@@ -103,10 +103,18 @@ st_coordinates <- function(x) {
 
 		# out <- terra::crds(pts)
 
-	} else if (gm == "points") {
+	} else if (gtype == "points") {
 		
-		data <- rgrass::execGRASS("v.to.db", map = src, flags=c("p", .quiet()), option="coor", type="point", intern=TRUE)
-		# data <- data[-1L]
+		data <- rgrass::execGRASS(
+			cmd = "v.to.db",
+			map = src,
+			flags = c(.quiet(), "p"),
+			option = "coor",
+			type = "point",
+			intern = TRUE
+		)
+		
+		data <- data[-1L]
 		# cutAt <- which(data == "Reading features...")
 		# data <- data[1L:(cutAt - 1L)]
 		

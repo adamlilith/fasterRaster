@@ -45,7 +45,7 @@ methods::setMethod(
 
 
 	# method
-	if (!is.null(method)) method <- pmatchSafe(method, c("nearest", "bilinear", "bicubic", "lanczos"))
+	if (!is.null(method)) method <- omnibus::pmatchSafe(method, c("nearest", "bilinear", "bicubic", "lanczos"))
 	if (is.null(method)) {
 		method <- if (all(nlevels(x) > 0)) {
 			"bilinear"

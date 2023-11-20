@@ -13,8 +13,8 @@
 #' @param unit Character: Units of the output. Any of:
 #' * `"meters"` (default)
 #' * `"kilometers"` or `"km"`
-#' * `"miles"`
-#' * `"yards"` or `"yds"`
+#' * `"miles"` or `"mi"`
+#' * `"yards"` or `"yd"`
 #' * `"feet"` or `"ft"`: International foot; 1 foot exactly equal to 0.3048 meters
 #' * `"cells"`: Number or cells
 #'
@@ -35,8 +35,9 @@ methods::setMethod(
 	.restore(x)
 	region(x)
 
-	units <- c("meters", "kilometers", "km", "miles", "feet", "ft", "yards", "yds", "cells")
-	unit <- pmatchSafe(unit, units, nmax = 1L)
+	units <- c("m", "meters", "kilometers", "km", "miles", "feet", "ft", "yards", "yd", "cells")
+	unit <- omnibus::pmatchSafe(unit, units, useFirst = TRUE, nmax = 1L)
+	unit <- omnibus::expandUnits(unit)
 
 	flags <- if (unit != "cells") {
 		c(.quiet(), "m")
@@ -64,8 +65,7 @@ methods::setMethod(
 
 			info <- strsplit(info, split = "\\|")
 			n <- length(info) - 1L
-			if (isFact
-			[i]) {
+			if (isFact[i]) {
 
 				xDrop <- x[[i]]
 				xDrop <- droplevels(xDrop)
@@ -121,18 +121,26 @@ methods::setMethod(
 			}
 
 			area <- perimeter <- NULL
-			if (unit %in% c("kilometers", "km")) {
-				thisOut[ , area := area * 1E-6]
-				thisOut[ , perimeter := perimeter * 0.001]
+			if (unit == "kilometers") {
+				f <- omnibus::convertUnits(from = "meters2", to = "kilometers2")
+				thisOut[ , area := area * f]
+				f <- omnibus::convertUnits(from = "meters", to = "kilometers")
+				thisOut[ , perimeter := perimeter * f]
 			} else if (unit == "miles") {
-				thisOut[ , area := area * 3.86102e-7]
-				thisOut[ , perimeter := perimeter * 0.000621371]
-			} else if (unit %in% c("ft", "feet")) {
-				thisOut[ , area := area * 10.7639]
-				thisOut[ , perimeter := perimeter * 3.28084]
-			} else if (unit %in% c("yards", "yds")) {
-				thisOut[ , area := area * 1.19599]
-				thisOut[ , perimeter := perimeter * 1.09361]
+				f <- omnibus::convertUnits(from = "meters2", to = "miles2")
+				thisOut[ , area := area * f]
+				f <- omnibus::convertUnits(from = "meters", to = "miles")
+				thisOut[ , perimeter := perimeter * f]
+			} else if (unit == "feet") {
+				f <- omnibus::convertUnits(from = "meters2", to = "feet2")
+				thisOut[ , area := area * f]
+				f <- omnibus::convertUnits(from = "meters", to = "feet")
+				thisOut[ , perimeter := perimeter * f]
+			} else if (unit == "yards") {
+				f <- omnibus::convertUnits(from = "meters2", to = "yards2")
+				thisOut[ , area := area * f]
+				f <- omnibus::convertUnits(from = "meters", to = "yards")
+				thisOut[ , perimeter := perimeter * f]
 			}
 
 		# if raster is NOT integer or factor

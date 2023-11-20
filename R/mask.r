@@ -25,7 +25,9 @@ methods::setMethod(
     f = "mask",
     signature = c(x = "GRaster", mask = "GRaster"),
     function(x, mask, inverse = FALSE, maskvalues = NA, updatevalue = NA) {
-        .mask(x, mask, inverse = inverse, maskvalues = maskvalues, updatevalue = updatevalue)
+    
+    .mask(x, mask, inverse = inverse, maskvalues = maskvalues, updatevalue = updatevalue)
+
     } # EOF
 )
 
@@ -36,7 +38,9 @@ methods::setMethod(
     f = "mask",
     signature = c(x = "GRaster", mask = "GVector"),
     function(x, mask, inverse = FALSE, updatevalue = NA) {
-        .mask(x, mask, inverse = inverse, maskvalues = NA, updatevalue = updatevalue)
+
+    .mask(x, mask, inverse = inverse, maskvalues = NA, updatevalue = updatevalue)
+    
     } # EOF
 )
 
@@ -45,19 +49,7 @@ methods::setMethod(
     .restore(x)
     region(x)
 
-    ### remove mask on exit
-    .removeMask <- function() {
-        
-        args <- list(
-            cmd = "r.mask",
-            flags = c("r", .quiet(), "overwrite"),
-            intern = TRUE
-        )
-
-        do.call(rgrass::execGRASS, args = args)
-    
-    }
-
+    # remove mask on exit
     on.exit(.removeMask(), add = TRUE)
 
     ### create a mask
@@ -95,7 +87,12 @@ methods::setMethod(
             maskvalues <- paste(maskvalues, collapse = " | ")
 
             ex <- paste0(maskGn, " = if(", maskvalues, ", 1, null())")
-            rgrass::execGRASS("r.mapcalc", expression = ex, flags = c(.quiet(), "overwrite"), intern = TRUE)
+            
+            rgrass::execGRASS(
+                cmd = "r.mapcalc",
+                expression = ex,
+                flags = c(.quiet(), "overwrite")
+            )
 
         } else {
             maskGn <- sources(mask)
@@ -143,3 +140,15 @@ methods::setMethod(
     out
 
 } # EOF
+
+### remove mask on exit from within a function
+#' @noRd
+.removeMask <- function() {
+    args <- list(
+        cmd = "r.mask",
+        flags = c(.quiet(), "overwrite", "r")
+    )
+
+    do.call(rgrass::execGRASS, args = args)
+    
+}

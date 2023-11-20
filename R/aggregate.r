@@ -56,7 +56,7 @@ methods::setMethod(
 	if (any(fact <= 0)) stop("Values of ", sQuote("fact"), " must be > 0.")
 
 	funs <- c("mean", "median", "mode", "min", "maximum", "range", "quantile", "sum", "varpop", "sdpop", "count", "diversity")
-	fun <- pmatchSafe(tolower(fun), funs)
+	fun <- omnibus::pmatchSafe(tolower(fun), funs)
 	
 	if (fun == "mean") {
 		fun <- "average"

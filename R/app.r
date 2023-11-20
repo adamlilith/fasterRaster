@@ -71,7 +71,7 @@ methods::setMethod(
     nchars <- nchar(xn)
     xn <- xn[order(nchars, decreasing = TRUE)]
 
-    ensure <- pmatchSafe(ensure, c("integer", "float", "double", "auto"))
+    ensure <- omnibus::pmatchSafe(ensure, c("integer", "float", "double", "auto"))
     if (ensure == "integer") ensure = "int"
 
     for (name in xn) {
@@ -98,7 +98,7 @@ methods::setMethod(
         fun <- gsub(fun, pattern = name, replacement = src)
     }
 
-    src <- .makeSourceName("app", "raster")
+    src <- .makeSourceName("r_mapcalc", "raster")
     fun <- paste(src, fun)
 
     args <- list(
@@ -133,9 +133,8 @@ appFuns <- function(warn = TRUE) {
 	
 	# appFunsTable <- NULL
     utils::data("appFunsTable", envir = environment(), package = "fasterRaster")
-print('appFuns A')
 	if (interactive()) {
-print('appFuns B')
+
 		showableCols <- c("Type", "GRASS_Function", "R_Function", "Definition", "Returns")
 
 		shiny::shinyApp(
@@ -176,7 +175,7 @@ methods::setMethod(
 
     # any forbidden names in rasters?
     ns <- names(x)
-    funs <- appFuns(FALSE)
+    funs <- appFuns(warn = FALSE)
     
     if (inherits(funs, "data.table")) {
         funs <- funs[["GRASS_Function"]]

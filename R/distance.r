@@ -21,17 +21,16 @@
 #' * Case 3, when `x` is a `GVector` and `y` is a `GVector`: This argument is not used in this case.
 #'
 #' @param unit Character: Units of the output. Any of:
-#' * `"meters"`, "metres", or `"m"`
+#' * `"meters"`, `"metres"`, or `"m"`
 #' * `"kilometers"` or `"km"`
-#' * `"miles"`
-#' * `"nautical miles"` or `"nm"`
-#' * `"yards"` or `"yds"`
-#' * `"survey feet"` or `"sft"` -- US survey, obsolete after January 1, 2023, 1 foot approximately equal to 0.304800000001219 meters
+#' * `"miles"` or `"mi"`
+#' * `"nautical miles"` or `"nmi"`
+#' * `"yards"` or `"yd"`
 #' * `"feet"` or `"ft"` -- international, 1 foot exactly equal to 0.3048 meters
 #'
 #' Partial matching is used and case is ignored.
 #'
-#' @param dense Logical: Only applicable for case 2, when `x` is a `GRaster` and `y` is a `GVector`. If `TRUE` (default), then the vector will be represented by "densified" lines (i.e., any cell that the line/boundary touches, not just the ones on the rendering path).
+#' @param thick Logical: Only applicable for case 2, when `x` is a `GRaster` and `y` is a `GVector`. If `TRUE` (default), then the vector will be represented by "thickened" lines (i.e., any cell that the line/boundary touches, not just the ones on the rendering path).
 #'
 #' @param method Character: The type of distance to calculate. Partial matching is used and capitalization is ignored. Possible values include:
 #' * `Euclidean` (default for projected rasters): Euclidean distance.
@@ -42,7 +41,7 @@
 #'
 #' @param minDist,maxDist Either `NULL` (default) or numeric values: Ignore distances less than or greater than these distances.
 #'
-#' @return If `x` is a `GRaster`, then the output is a `GRaster`. If `x` is a `GVector`, then the output is a numeric vector.
+#' @returns If `x` is a `GRaster`, then the output is a `GRaster`. If `x` is a `GVector`, then the output is a numeric vector.
 #'
 #' @seealso [terra::distance()]; [sf::st_distance()], **GRASS** modules `r.grow.distance` and `v.distance`
 #'
@@ -54,14 +53,24 @@
 methods::setMethod(
 	"distance",
 	signature(x = "GRaster", y = "missing"),
-	function(x, y, target = NA, fillNA = TRUE, unit = "meters", method = ifelse(is.lonlat(x), "geodesic", "Euclidean"), minDist = NULL, maxDist = NULL) {
+	function(
+		x,
+		y,
+		target = NA,
+		fillNA = TRUE,
+		unit = "meters",
+		method = ifelse(is.lonlat(x), "geodesic", "Euclidean"),
+		minDist = NULL,
+		maxDist = NULL
+	) {
 	
 	if (!is.null(minDist) && minDist < 0) stop("Argument ", sQuote("minDist"), " must be positive or NULL.")
 	if (!is.null(maxDist) && maxDist < 0) stop("Argument ", sQuote("maxDist"), " must be positive or NULL.")
 	if ((!is.null(maxDist) & !is.null(maxDist)) && (minDist > maxDist)) stop("Argument ", sQuote("minDist"), " is greater than ", sQuote("maxDist"), ".")
 
 	method <- tolower(method)
-	method <- pmatchSafe(method, c("euclidean", "squared", "maximum", "manhattan", "geodesic"))
+	methods <- c("euclidean", "squared", "maximum", "manhattan", "geodesic")
+	method <- omnibus::pmatchSafe(method, methods)
 	if (is.lonlat(x) & method != "geodesic") warning("Argument ", sQuote("method"), " should be ", sQuote("geodesic"), " for rasters with longitude/latitude coordinate reference systems.")
 
 	.restore(x)
@@ -72,15 +81,19 @@ methods::setMethod(
 	# create mask
 	if (!is.na(target)) {
 		
-		src <- .makeSourceName("distMask", "raster") # note: redefining "src"
+		src <- .makeSourceName("r_mapcalc", "raster") # note: redefining "src"
 		ex <- paste0(src, " = if(", sources(x), " == ", target, ", 1, null())")
-  		rgrass::execGRASS("r.mapcalc", expression = ex, flags = c(.quiet(), "overwrite"))
+  		rgrass::execGRASS(
+			"r.mapcalc",
+			expression = ex,
+			flags = c(.quiet(), "overwrite")
+		)
 		
 		fillNA <- !fillNA
 		
 	}
 	
-	srcOut <- .makeSourceName(NULL, "raster")
+	srcOut <- .makeSourceName("r_grow_distance", "raster")
 	args <- list(
 		cmd = "r.grow.distance",
 		input = src,
@@ -96,7 +109,7 @@ methods::setMethod(
 	do.call(rgrass::execGRASS, args)
 	
 	# convert units
-	src <- .convertRastUnits(srcOut, unit)
+	src <- .convertRastFromMeters(srcOut, unit)
 	.makeGRaster(src, "distance")
 	
 	} # EOF
@@ -108,13 +121,23 @@ methods::setMethod(
 methods::setMethod(
 	"distance",
 	signature(x = "GRaster", y = "GVector"),
-	function(x, y, fillNA = TRUE, dense = TRUE, unit = "meters", method = ifelse(is.lonlat(x), "geodesic", "Euclidean"), minDist = NULL, maxDist = NULL) {
+	function(
+		x,
+		y,
+		fillNA = TRUE,
+		thick = TRUE,
+		unit = "meters",
+		method = ifelse(is.lonlat(x), "geodesic", "Euclidean"),
+		minDist = NULL,
+		maxDist = NULL
+	) {
 	
 	if (!is.null(minDist) && minDist < 0) stop("Argument ", sQuote("minDist"), " must be positive or NULL.")
 	if (!is.null(maxDist) && maxDist < 0) stop("Argument ", sQuote("maxDist"), " must be positive or NULL.")
 	if ((!is.null(maxDist) & !is.null(maxDist)) && (minDist > maxDist)) stop("Argument ", sQuote("minDist"), " is greater than ", sQuote("maxDist"), ".")
 
-	method <- pmatchSafe(method, c("euclidean", "squared", "maximum", "manhattan", "geodesic"))
+	methods <- c("euclidean", "squared", "maximum", "manhattan", "geodesic")
+	method <- omnibus::pmatchSafe(method, methods)
 	if (is.lonlat(x) & method != "geodesic") warning("Argument ", sQuote("method"), " should be ", sQuote("geodesic"), " for rasters with longitude/latitude coordinate reference systems.")
 
 	compareGeom(x, y)
@@ -133,7 +156,7 @@ methods::setMethod(
 		type = gtype,
 		flags = c(.quiet(), "overwrite")
 	)
-	if (dense & gtype == "line") args$flags <- c(args$flags, "d")
+	if (thick & gtype == "line") args$flags <- c(args$flags, "d")
 	do.call(rgrass::execGRASS, args = args)
 	
 	# distance
@@ -149,7 +172,7 @@ methods::setMethod(
 	do.call(rgrass::execGRASS, args = args)
 	
 	# convert units
-	src <- .convertRastUnits(src = src, unit = unit)
+	src <- .convertRastFromMeters(src = src, unit = unit)
 	.makeGRaster(src, "distance")
 	
 	} # EOF
@@ -161,7 +184,13 @@ methods::setMethod(
 methods::setMethod(
 	"distance",
 	signature(x = "GVector", y = "GVector"),
-	function(x, y, unit = "meters", minDist = NULL, maxDist = NULL) {
+	function(
+		x,
+		y,
+		unit = "meters",
+		minDist = NULL,
+		maxDist = NULL
+	) {
 	
 	if (!is.null(minDist) && minDist < 0) stop("Argument ", sQuote("minDist"), " must be positive or NULL.")
 	if (!is.null(maxDist) && maxDist < 0) stop("Argument ", sQuote("maxDist"), " must be positive or NULL.")
@@ -173,42 +202,29 @@ methods::setMethod(
 	if (is.null(minDist)) minDist <- -1
 	if (is.null(maxDist)) maxDist <- -1
 
-	args <- list(
+	out <- rgrass::execGRASS(
 		cmd = "v.distance",
 		from = sources(x),
 		to = sources(y),
 		upload = "dist",
 		dmin = minDist,
 		dmax = maxDist,
-		flags = c("p", .quiet(), "overwrite"),
+		flags = c(.quiet(), "overwrite", "p"),
 		intern = TRUE
 	)
-	dists <- do.call(rgrass::execGRASS, args = args)
 	
-	dists <- dists[-which(dists=="from_cat|dist")]
-	dists <- strsplit(dists, split="\\|")
-	
-	out <- rep(NA, nrow(x))
-	for (i in seq_along(out)) out[i] <- dists[[i]][2L]
-	out <- as.numeric(out)
+	out <- out[-1L]
+	out <- strsplit(out, split="\\|")
+	out <- lapply(out, as.numeric)
+	out <- do.call(rbind, out)
+	out <- out[ , 2L, drop = TRUE]
 	
 	# convert units
-    unit <- pmatchSafe(unit, c("meters", "metres", "kilometers", "km", "miles", "nautical miles", "nm", "yards", "yds", "feet", "ft"))
-	if (unit %in% c("kilometers", "km")) {
-		out <- out / 1000
-	} else if (unit == "miles") {
-		out <- out * 0.0006213712
-	} else if (unit %in% c("nautical miles", "nm")) {
-		out <- out * 0.0005399568
-	} else if (unit %in% c("yards", "yds")) {
-		out <- out * 1.0936132983
-	} else if (unit %in% c("survey feet", "sft")) {
-		out <- out * 3.2804
-	} else if (unit %in% c("feet", "ft")) {
-		out <- out * 3.280839895
-	}
-
-	out
+	units <- c("m", "meters", "metres", "kilometers", "km", "miles", "nautical miles", "nmi", "yards", "yd", "feet", "ft")
+    unit <- omnibus::pmatchSafe(unit, units, useFirst = TRUE)
+	unit <- omnibus::expandUnits(unit)
+	if (unit == "metres") unit <- "meters"
+	omnibus::convertUnits(from = "meters", to = unit, x = out)
 	
 	} # EOF
 )
@@ -226,41 +242,36 @@ methods::setMethod(
 
 st_distance <- function(x) UseMethod("st_distance", x)
 
-.convertRastUnits <- function(src, unit) {
+.convertRastFromMeters <- function(src, unit) {
     
 	if (inherits(src, "GRaster")) src <- sources(src)
 
     # convert raster units
-    unit <- pmatchSafe(unit, c("meters", "metres", "kilometers", "km", "miles", "nautical miles", "nm", "yards", "yds", "feet", "ft"))
-    if (!(unit %in% c("meters", "metres"))) {
+	units <- c("m", "meters", "metres", "km", "kilometers", "mi", "miles", "nmi", "nautical miles", "yd", "yards", "ft", "feet")
+	
+    unit <- omnibus::pmatchSafe(unit, units, useFirst = TRUE)
+    unit <- omnibus::expandUnits(unit)
+	if (unit == "metres") units <- "meters"
+
+	if (unit != "meters") {
+	
+		convFact <- omnibus::convertUnits(from = "meters", to = unit)
 
         srcIn <- src
-        srcOut <- .makeSourceName("unitConvert", "raster")
+        srcOut <- .makeSourceName("convertRastFromMeters", "raster")
 
-        ex <- if (unit %in% c("kilometers", "km")) {
-            paste0(srcOut, " = ", srcIn, " / 1000")
-        } else if (unit == "miles") {
-            paste0(srcOut, " = ", srcIn, " * 0.0006213712")
-        } else if (unit %in% c("nautical miles", "nm")) {
-            paste0(srcOut, " = ", srcIn, " * 0.0005399568")
-        } else if (unit %in% c("yards", "yds")) {
-            paste0(srcOut, " = ", srcIn, " * 1.0936132983")
-        } else if (unit %in% c("feet", "ft")) {
-            paste0(srcOut, " = ", srcIn, " * 3.28084")
-        } else if (unit %in% c("survey feet", "sft")) {
-            paste0(srcOut, " = ", srcIn, " * 3.280839895")
-        }
-
-        args <- list(
+		ex <- paste0(srcOut, " = ", srcIn, " * ", convFact)
+	
+        rgrass::execGRASS(
             "r.mapcalc",
             expression = ex,
-            flags = c(.quiet(), "overwrite"),
-            intern = TRUE
+            flags = c(.quiet(), "overwrite")
         )
-        do.call(rgrass::execGRASS, args = args)
         out <- srcOut
-    } else {
-        out <- src
-    }
-    out
+	
+	} else {
+		out <- src
+	}
+	out
+	
 }

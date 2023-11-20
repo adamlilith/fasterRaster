@@ -37,7 +37,7 @@
 			type <- x
 		}
 	} else {
-		type <- pmatchSafe(type, c("raster", "raster3d", "vector", "group", "region", "table"))
+		type <- omnibus::pmatchSafe(type, c("raster", "raster3d", "vector", "group", "region", "table"))
 	}
 
 	if (type == "raster3d") type <- "rast3d"
@@ -47,7 +47,7 @@
 	if (type == "region") type <- "region"
 	if (type == "table") type <- "table"
 
-	src <- rstring(1L)
+	src <- omnibus::rstring(1L)
 	if (n > 1L) src <- paste0(src, "_", 1L:n)
 	src <- if (names[1L] != "") {
   		paste0(type, "_", names, "_", src)

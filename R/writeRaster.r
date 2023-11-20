@@ -64,14 +64,8 @@ setMethod(
 		...
 	) {
 	
-	### commons
-	###########
-	
 	.restore(x)
 	region(x)
-
-	### end commons
-	###############
 
 	dots <- list(...)
 	filename <- trimws(filename)
@@ -85,7 +79,7 @@ setMethod(
 	}
 
 	### format
-	extension <- tools::file_ext(filename)
+	extension <- .fileExt(filename)
 	extension <- tolower(extension)
 	
 	ascii <- if ("format" %in% names(dots)) {
@@ -118,7 +112,7 @@ setMethod(
 		## if multi-layered raster stack, then group first... only guaranteed to work with GeoTIFFs
 		if (nLayers > 1L) {
 
-			groupName <- .makeSourceName(type = "group")
+			groupName <- .makeSourceName("i_group", type = "group")
 			input <- sources(x)
 			
 			rgrass::execGRASS(
@@ -196,6 +190,7 @@ setMethod(
 			input = src,
 			output = filename,
 			type = datatype,
+			format = "GTiff",
 			createopt = createopt,
 			flags = thisFlags
 		)

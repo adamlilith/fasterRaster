@@ -14,7 +14,7 @@
 #' 
 #' @param unit Character: Rasters -- Indicates the units of \code{width}. Can be one of:
 #' 	* `"cells"`: Units are numbers of cells.
-#'	* `"meters"` (default), `"kilometers"` or `"km"`, `"feet"`, `"miles"`, or `"nautmiles"` (nautical miles).
+#'	* `"meters"` (default), `"metres"`, or `"m"`; `"kilometers"` or `"km"`; `"feet"` or `"ft"`; `"miles"` or `"mi"`; `"nautical miles"` or `"nmi"`.
 #' Partial matching is used and case is ignored.
 #'
 #' @param method Character: Rasters -- Only used if `units` is `"cells"`. Indicates the manner in which distances are calculated for adding of cells:
@@ -51,34 +51,34 @@ methods::setMethod(
 	.restore(x)
 	region(x)
 
-	units <- c("cells", "meters", "kilometers", "km", "feet", "miles", "nautmiles")
-	unit <- pmatchSafe(unit, units)
-	if (unit == "km") unit <- "kilometers"
+	units <- c("cells", "m", "meters", "metres", "km", "kilometers", "ft", "feet", "mi", "miles", "nmi", "nautical miles")
+	unit <- omnibus::pmatchSafe(unit, units, useFirst = TRUE, nmax = 1L)
+	if (unit != "cells") unit <- omnibus::expandUnits(unit)
+	if (unit == "nautical miles") unit <- "nautmiles"
 
 	if (nlyr(x) > 1L) out <- list()
 
 	# for each layer
 	for (i in 1L:nlyr(x)) {
 
-		gnBuffer <- .makeSourceName("buffer", "raster")
+		srcBuffer <- .makeSourceName("r_grow_r_buffer", "raster")
 
 		### buffering by cells
 		if (unit == "cells") {
 		
 			methods <- c("euclidean", "manhattan", "maximum")
 			method <- tolower(method)
-			method <- pmatchSafe(method, method)
+			method <- omnibus::pmatchSafe(method, method)
 
 			args <- list(
 				cmd = "r.grow",
-				input = sources(x[[i]]),
-				output = gnBuffer,
+				input = sources(x)[i],
+				output = srcBuffer,
 				radius = width,
 				metric = method,
 				old = 1,
 				new = 1,
-				flags = c(.quiet(), "overwrite")#,
-				# intern = TRUE
+				flags = c(.quiet(), "overwrite")
 			)
 		
 		### buffering by distance
@@ -92,12 +92,11 @@ methods::setMethod(
 
 			args <- list(
 				cmd = ifelse (lowMemory, "r.buffer.lowmem", "r.buffer"),
-				input = sources(x),
-				output = gnBuffer,
+				input = sources(x)[i],
+				output = srcBuffer,
 				distances = width,
 				units = unit,
-				flags = c(.quiet(), "overwrite"),
-				intern = TRUE
+				flags = c(.quiet(), "overwrite")
 			)
 			
 		}
@@ -108,11 +107,15 @@ methods::setMethod(
 		### reclass
 		src <- .makeSourceName("buffer", "raster")
 		ex <- if (!is.na(background)) {
-			paste0(src, " = if(isnull(", gnBuffer, "), ", background, ", if(", gnBuffer, " == 2, 1, 1))")
+			paste0(src, " = if(isnull(", srcBuffer, "), ", background, ", if(", srcBuffer, " == 2, 1, 1))")
 		} else {
-			paste0(src, " = if(", gnBuffer, " == 2, 1, 1)")
+			paste0(src, " = if(", srcBuffer, " == 2, 1, 1)")
 		}
-		rgrass::execGRASS("r.mapcalc", expression=ex, flags=c(.quiet(), "overwrite"))
+		rgrass::execGRASS(
+			"r.mapcalc",
+			expression = ex,
+			flags=c(.quiet(), "overwrite")
+		)
 		
 		if (nlyr(x) > 1L) {
 			group[[i]] <- .makeGRaster(src, names(x[[i]]))
@@ -152,8 +155,7 @@ methods::setMethod(
 		input = sources(x),
 		output = src,
 		distance = width,
-		flags = c(.quiet(), "overwrite"),
-		intern = TRUE
+		flags = c(.quiet(), "overwrite")
 	)
 
 	gt <- geomtype(x)
@@ -168,7 +170,7 @@ methods::setMethod(
 	if (!union) args$flags <- c(args$flags, "t")
 
 	capstyle <- tolower(capstyle)
-	capstyle <- pmatchSafe(capstyle, c("round", "square", "flat"))
+	capstyle <- omnibus::pmatchSafe(capstyle, c("round", "square", "flat"))
 	if (capstyle == "square") {
 		args$flags <- c(args$flags, "s")
 	} else if (capstyle == "flat") {

@@ -41,7 +41,7 @@ methods::setMethod(
 
 	metrics <- c("slope", "aspect", "profileCurve", "tanCurve", "dx", "dy", "dxx", "dyy", "dxy")
 	if (length(v) == 1L && v == "*") v <- metrics
-	v <- pmatchSafe(v, metrics)
+	v <- omnibus::pmatchSafe(v, metrics)
 	
 	.restore(x)
 	region(x)
@@ -56,13 +56,13 @@ methods::setMethod(
 	
 	if ("slope" %in% v) {
 		args$slope <- .makeSourceName("slope", "rast")
-		units <- pmatchSafe(units, c("degrees", "percent"))
+		units <- omnibus::pmatchSafe(units, c("degrees", "percent"))
 		args$format <- units
 	}
 
 	if ("aspect" %in% v) {
 		args$aspect <- .makeSourceName("aspect", "rast")
-		units <- pmatchSafe(units, c("degrees", "percent"))
+		units <- omnibus::pmatchSafe(units, c("degrees", "percent"))
 		args$format <- units
 		if (northIs0) args$flags <- c(args$flags, "n")
 	}

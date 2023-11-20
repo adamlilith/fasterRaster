@@ -51,7 +51,7 @@ methods::setMethod(
 	.restore(x)
 	
 	methods <- c("duplicated", "break", "removeDangles", "changeDangles", "removeBridges", "changeBridges", "snap", "dupAreaCentroids", "topoClean", "smallAreas", "remove0", "smallAngles")
-	method <- pmatchSafe(method, methods)
+	method <- omnibus::pmatchSafe(method, methods)
 	
 	method <- if (method == "duplicated") {
 		"rmdupl"

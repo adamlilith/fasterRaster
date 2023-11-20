@@ -43,7 +43,7 @@ methods::setMethod(
 	.restore(x)
 	region(x)
 
-	use <- pmatchSafe(use, c("number", "size"), nmax = 1L)
+	use <- omnibus::pmatchSafe(use, c("number", "size"), nmax = 1L)
 
 	# calculate cell number and re-calibrate GRASS region
 	if (is.null(nx) & is.null(ny)) {
