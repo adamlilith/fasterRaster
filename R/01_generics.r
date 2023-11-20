@@ -73,6 +73,7 @@ methods::setGeneric(name = "categories", package = "terra")
 methods::setGeneric(name = "catNames", def = function(x, ...) standardGeneric("catNames"))
 methods::setGeneric(name = "cats", package = "terra")
 methods::setGeneric(name = "cleanGeom", def = function(x, ...) standardGeneric("cleanGeom"))
+methods::setGeneric(name = "cellSize", package = "terra")
 methods::setGeneric(name = "clump", def = function(x, ...) standardGeneric("clump"))
 methods::setGeneric(name = "clusterPoints", def = function(x, ...) standardGeneric("clusterPoints"))
 methods::setGeneric(name = "compareGeom", package = "terra")
@@ -236,6 +237,7 @@ methods::setGeneric(name = "viewshed", package = "terra")
 methods::setGeneric(name = "voronoi", package = "terra")
 
 methods::setGeneric(name = "W", def = function(x, ...) standardGeneric("W"))
+methods::setGeneric(name = "workDir", def = function(x, ...) standardGeneric("workDir"))
 methods::setGeneric(name = "writeRaster", package = "terra")
 methods::setGeneric(name = "writeVector", package = "terra")
 
@@ -245,5 +247,6 @@ methods::setGeneric(name = "xor", def = function(x, y, ...) standardGeneric("xor
 methods::setGeneric(name = "yres", package = "terra")
 
 methods::setGeneric(name = "zext", def = function(x) standardGeneric("zext"))
+methods::setGeneric(name = "zonal", package = "terra")
 methods::setGeneric(name = "zonalGeog", def = function(x, ...) standardGeneric("zonalGeog"))
 methods::setGeneric(name = "zres", def = function(x) standardGeneric("zres"))
