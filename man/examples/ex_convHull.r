@@ -27,14 +27,14 @@ workDir = tempdir(), location = "examples") # line only needed for examples
 # Convert sf to a GVector:
 dypsis <- fast(madDypsis)
 
-### Convex hull for all plant specimens together
+### Convex hull for all plant specimens together:
 ch <- convHull(dypsis)
 
-### Convex hull for each species
+### Convex hull for each species:
 head(dypsis) # See the "species" column?
 chSpecies <- convHull(dypsis, by = "species")
 
-### Plot
+### Plot:
 plot(st_geometry(madDypsis))
 plot(ch, add = TRUE)
 n <- nrow(chSpecies)
