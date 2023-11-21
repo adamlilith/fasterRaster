@@ -47,7 +47,7 @@
 #' 
 #' ## Functions that operate on or create `GRasters`
 #' [Arithmetic]: Mathematical operations on `GRaster`s: `+`, `-`, `*`, `/`, `^`, `%%` (modulus), `%/%` (integer division)\cr
-#' [Equality][Comparison]: `<`, `<=`, `==`, `!=`, `>=`, and `>`, plus `%in%` (for categorical rasters only)\cr
+#' [Logical comparisons][Compare-methods]: `<`, `<=`, `==`, `!=`, `>=`, and `>`, plus `%in%` (for categorical rasters only)\cr
 #'
 #' Single-layer functions (applied to each layer of a `GRaster`):
 #' - `NA`s: [is.na()] and [not.na()] \cr
@@ -76,6 +76,7 @@
 #' [c()]: "Stack" two or more rasters\cr
 #' [cellSize()]: Cell area\cr
 #' [clump()]: Group adjacent cells with similar values\cr
+#' [combineCats()]: Combine values from two or more categorical and/or integer rasters\cr
 #' [cor()]: Correlation matrix between layers of a `GRaster`\cr
 #' [cov()]: Covariance matrix between layers of a `GRaster`\cr
 #' [crop()]: Remove parts of a `GRaster`\cr
@@ -114,7 +115,7 @@
 #' [zonal()]: Statistics (mean, sum, etc.) on areas of a `GRaster` defined by sets of cells with the same values in another `GRaster`, or by geometries in a `GVector`\cr
 #' [zonalGeog()]: Geographic statistics (area, perimeter, fractal dimension, etc.) for sets of cells with the same values\cr
 #'
-#' ## Functions operating on categorical rasters
+#' ## Functions operating on categorical (factor) rasters
 #' [activeCat()]: Column that defines category labels\cr
 #' \code{\link[fasterRaster]{activeCat<-}}: Set column that defines category labels\cr
 #' [addCats()]: Add new columns to a "levels" table\cr
@@ -122,6 +123,7 @@
 #' [categories()]: Set "levels" table for specific layers of a categorical raster\cr
 #' [catNames()]: Names of each "levels" table\cr
 #' [cats()]: "Levels" table of a categorical raster\cr
+#' [combineCats()]: Combine categories from two or more categorical rasters\cr
 #' [droplevels()]: Remove one or more levels\cr
 #' [freq()]: Frequency of each category across cells of a raster\cr
 #' [is.factor()]: Is a raster categorical?\cr
@@ -133,6 +135,7 @@
 #' [zonalGeog()]: Geographic statistics (area, perimeter, fractal dimension, etc.) for sets of cells with the same values
 #' 
 #' ## Functions for analysis of remote sensing rasters
+#' [compositeRGB()]: Combine red, green, and blue color bands to make a composite `GRaster`\cr
 #' [plotRGB()]: Display a multispectral `GRaster` using red, blue, green, and alpha channels\cr
 #' [vegIndex()]: Vegetation indices from surface reflectance\cr
 #'
