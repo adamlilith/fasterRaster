@@ -6,7 +6,7 @@
 #' * `cats()` displays the entire "levels" table of a raster
 #' * `levels()<-` (re)assigns the "levels" table to each layer of a raster. Assigning a "levels" table to an integer raster makes it a categorical raster.
 #' * `categories()` (re)assigns the "levels" table to specific layer(s) of a raster.
-#' * For a complete list of functions relevant to categorical rasters, open the package help index using `?fasterRaster`, then see the **Functions operating on categorical rasters** section.
+#' * For a complete list of functions relevant to categorical rasters, see [raster data types][tutorial_raster_data_types].
 #'
 #' @param x A `GRaster`.
 #'
@@ -225,7 +225,7 @@ methods::setMethod(
 		}
 
 		# set value to integer and sort by value
-		if (!is.character(value[[i]])) {
+		# if (!is.character(value[[i]])) {
 			
 			names <- names(value[[i]])
 			valueCol <- names[1L]
@@ -241,7 +241,7 @@ methods::setMethod(
 			# sort by first column
    			data.table::setorderv(value[[i]], col = valueCol)
 
-		}
+		# }
 
 	}
 
