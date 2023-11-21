@@ -146,11 +146,6 @@ landsat <- fast(madLANDSAT) # projects matrix
 cor(landsat) # correlation
 cov(landsat) # covariance
 
-# logical operations
-plot(madElev == 10)
-plot(madElev <= 10)
-plot(madElev %in% c(10, 20, 30, 40, 50))
-
 # IMPORTANT #3: Revert back to original GRASS session if needed.
 restoreSession(opts.)
 removeSession("examples")
