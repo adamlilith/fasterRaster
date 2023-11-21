@@ -35,6 +35,9 @@ setMethod(
 	.restore(x)
 	dots <- list(...)
 
+	# unlist any lists
+	if (length(dots) > 0L) dots <- omnibus::unlistRecursive(dots)
+
 	### concatenate
 	out <- x
 	z <- zext(out)
@@ -44,11 +47,14 @@ setMethod(
 
 		for (i in seq_along(dots)) {
 
-			if (is.list(dots[[i]])) dots[[i]] <- c(dots[[i]])
 			if (!inherits(dots[[i]], "GRaster")) stop("Can only combine GRasters with GRasters.")
 			
 			compareGeom(out, dots[[i]])
+			mmx <- minmax(out)
 			mmdots <- minmax(dots[[i]])
+
+			mn <- c(.minVal(out), .minVal(dots[[i]]))
+			mx <- c(.maxVal(out), .maxVal(dots[[i]]))
 			
 			out <- GRaster(
 				location = location(out),
@@ -65,8 +71,8 @@ setMethod(
 				dimensions = dims,
 				nLayers = nlyr(out) + nlyr(dots[[i]]),
 				resolution = res(out),
-				minVal = c(.minVal(out), .minVal(dots[[i]])),
-				maxVal = c(.maxVal(out), .maxVal(dots[[i]])),
+				minVal = mn,
+				maxVal = mx,
 				activeCat = c(out@activeCat, dots[[i]]@activeCat),
 				levels = c(out@levels, dots[[i]]@levels)
 			)
@@ -92,20 +98,7 @@ setMethod(
 	dots <- list(...)
 
 	# unlist any lists
-	if (length(dots) > 0L) {
-		
-		if (any(sapply(dots, is.list))) {
-			newdots <- list()
-			for (i in seq_along(dots)) {
-				if (is.list(dots[[i]])) {
-					newdots <- c(newdots, unlist(dots[[i]]))
-				} else {
-					newdots <- c(newdots, dots[[i]])
-				}
-			}
-			dots <- newdots
-		}
-	}
+	if (length(dots) > 0L) dots <- omnibus::unlistRecursive(dots)
 
 	# comparable?
 	if (length(dots) > 0L) {
