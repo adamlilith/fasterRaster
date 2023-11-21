@@ -7,7 +7,7 @@
 #' @param y Either a `GRaster` to serve as a template, or a numeric vector with two or three values. If a numeric vector, the values represent east-west and north-south resolution for 2D rasters, or east-west, north-south, and top-bottom resolution for 3D rasters.
 #'
 #' @param method Character or `NULL`: Method to use to assign values to cells. Partial matching is used.
-#' * `NULL` (default): Automatically choose based on raster properties (`near` for categorical data, `bilinear` for continuous data)
+#' * `NULL` (default): Automatically choose based on raster properties (`near` for categorical data, `bilinear` for continuous data).
 #' * `"near"`: Nearest neighbor. Best for categorical data, and often a poor choice for continuous data.  If [nlevels()] is >0 for all rasters, this method will be used by default.
 #' * `"bilinear"`: Bilinear interpolation (default for non-categorical data; uses weighted values from 4 cells).
 #' * `"bicubic"`: Bicubic interpolation (uses weighted values from 16 cells).
@@ -41,8 +41,8 @@ methods::setMethod(
 		x, y, method = NULL, fallback = TRUE) .resample(x=x, y=y, method=method, fallback=fallback)
 )
 
+#' @noRd
 .resample <- function(x, y, method, fallback) {
-
 
 	# method
 	if (!is.null(method)) method <- omnibus::pmatchSafe(method, c("nearest", "bilinear", "bicubic", "lanczos"))
@@ -62,14 +62,20 @@ methods::setMethod(
 		ewres <- xres(y)
 		nsres <- yres(y)
 		zres <- zres(y)
-		tbres <- t <- b <- NA_real_
 		
 		if (is.3d(x) & is.3d(y)) {
 			t <- top(y)
 			b <- bottom(y)
 			tbres <- zres(y)
+		} else {
+			tbres <- t <- b <- NA_real_
 		}
 		
+		w <- W(y)
+		e <- E(y)
+		s <- S(y)
+		n <- N(y)
+
 	} else {
 	
 		ewres <- y[1L]
@@ -83,13 +89,13 @@ methods::setMethod(
 		t <- top(x)
 		b <- bottom(x)
 	
+		w <- W(x)
+		e <- E(x)
+		s <- S(x)
+		n <- N(x)
+
 	}
 	
-	w <- W(x)
-	e <- E(x)
-	s <- S(x)
-	n <- N(x)
-
 	cols <- ceiling((e - w) / ewres)
 	rows <- ceiling((n - s) / nsres)
 
@@ -126,25 +132,23 @@ methods::setMethod(
 		### resample
 		if (method == "nearest" | fallback) {
 
-			gnNearest <- .makeSourceName("nearest", "raster")
-			args <- list(
+			srcNearest <- .makeSourceName("nearest", "raster")
+			rgrass::execGRASS(
 				cmd = "r.resample",
 				input = sources(x)[i],
-				output = gnNearest,
-				flags = c(.quiet(), "overwrite"),
-				intern = TRUE
+				output = srcNearest,
+				flags = c(.quiet(), "overwrite")
 			)
-			do.call(rgrass::execGRASS, args=args)
 
 		}
 
 		if (method == "bilinear" | (fallback & method %in% c("bicubic", "lanczos"))) {
 
-			gnBilinear <- .makeSourceName("bilinear", "raster")
+			srcBilinear <- .makeSourceName("bilinear", "raster")
 			args <- list(
 				cmd = "r.resamp.interp",
 				input = sources(x)[i],
-				output = gnBilinear,
+				output = srcBilinear,
 				method = "bilinear",
 				memory = getFastOptions("memory"),
 				flags = c(.quiet(), "overwrite"),
@@ -152,70 +156,70 @@ methods::setMethod(
 			)
 			if (versionNumber >= 8.3) args$nprocs <- getFastOptions("cores")
 
-			do.call(rgrass::execGRASS, args=args)
+			do.call(rgrass::execGRASS, args = args)
 
 		}
 
 		if (method == "bicubic" | (fallback & method == "lanczos")) {
 
-			gnBicubic <- .makeSourceName("bicubic", "raster")
+			srcBicubic <- .makeSourceName("bicubic", "raster")
 			args <- list(
 				cmd = "r.resamp.interp",
 				input = sources(x)[i],
-				output = gnBicubic,
+				output = srcBicubic,
 				method = "bicubic",
 				memory = getFastOptions("memory"),
 				flags = c(.quiet(), "overwrite"),
 				intern = TRUE
 			)
 			if (versionNumber >= 8.3) args$nprocs <- getFastOptions("cores")
-			do.call(rgrass::execGRASS, args=args)
+			do.call(rgrass::execGRASS, args = args)
 
 		}
 
 		if (method == "lanczos") {
 
-			gnLanczos <- .makeSourceName("lanczos", "raster")
+			srcLanczos <- .makeSourceName("lanczos", "raster")
 			args <- list(
 				cmd = "r.resamp.interp",
 				input = sources(x)[i],
-				output = gnLanczos,
+				output = srcLanczos,
 				method = "lanczos",
 				memory = getFastOptions("memory"),
 				flags = c(.quiet(), "overwrite"),
 				intern = TRUE
 			)
 			if (versionNumber > 8.3) args$nprocs <- getFastOptions("cores")
-			do.call(rgrass::execGRASS, args=args)
+			do.call(rgrass::execGRASS, args = args)
 
 		}
 
 		### output/fallback
 		if (method == "nearest") {
-			thisOut <- .makeGRaster(gnNearest, names(x)[i])
+			thisOut <- .makeGRaster(srcNearest, names(x)[i])
 		} else if (method == "bilinear" & !fallback) {
-			thisOut <- .makeGRaster(gnBilinear, names(x)[i])
+			thisOut <- .makeGRaster(srcBilinear, names(x)[i])
 		} else if (method == "bicubic" & !fallback) {
-			thisOut <- .makeGRaster(gnBicubic, names(x)[i])
+			thisOut <- .makeGRaster(srcBicubic, names(x)[i])
 		} else if (method == "lanczos" & !fallback) {
-			thisOut <- .makeGRaster(gnLanczos, names(x)[i])
+			thisOut <- .makeGRaster(srcLanczos, names(x)[i])
 		} else if (fallback) {
 			
 			src <- .makeSourceName("resample", "rast")
 			if (method == "bilinear") {
 
 				# merge bilinear and nearest
-				ex <- paste0(src, " = if(!isnull(", gnBilinear, "), ", gnBilinear, ", ", gnNearest, ")")
+				ex <- paste0(src, " = if(!isnull(", srcBilinear, "), ", srcBilinear, ", ", srcNearest, ")")
 
 			} else if (method == "bicubic") {
 			
 				# merge bicubic, bilinear, and nearest
-				ex <- paste0(src, " = if(!isnull(", gnBicubic, "), ", gnBicubic, ", if(!isnull(", gnBilinear, "), ", gnBilinear, ", ", gnNearest, "))")
+				ex <- paste0(src, " = if(!isnull(", srcBicubic, "), ", srcBicubic, ", if(!isnull(", srcBilinear, "), ", srcBilinear, ", ", srcNearest, "))")
 				
 			} else if (method == "lanczos") {
 
 				# merge bicubic, bilinear, and nearest
-				ex = paste0(src, " = if(!isnull(", gnLanczos, "), ", gnLanczos, ", if(!isnull(", gnBicubic, "), ", gnBicubic, ", if(!isnull(", gnBilinear, "), ", gnBilinear, ", ", gnNearest, ")))")
+				ex = paste0(src, " = if(!isnull(", srcLanczos, "), ", srcLanczos, ", if(!isnull(", srcBicubic, "), ", srcBicubic, ", if(!isnull(", srcBilinear, "), ", srcBilinear, ", ", srcNearest, ")))")
 
 			}
 
@@ -227,9 +231,14 @@ methods::setMethod(
 			)
 			do.call(rgrass::execGRASS, args=args)
 
-			thisOut <- .makeGRaster(src, names(x)[i])
+			if (is.factor(x)[[i]] & method == "near") {
+				levs <- levels(x[[i]])
+			} else {
+				levs <- NULL
+			}
+			thisOut <- .makeGRaster(src, names(x)[i], levels = NULL)
 
-		}
+		} # next layer
 
 		if (i == 1L) {
 			out <- thisOut
@@ -239,4 +248,5 @@ methods::setMethod(
 
 	} # next layer
 	out
+
 }
