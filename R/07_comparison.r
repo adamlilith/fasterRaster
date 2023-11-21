@@ -1,20 +1,19 @@
-#' Comparison operations on GRasters
+#' Compare-methods operations on GRasters
 #'
 #' @description You can do comparative operations on `GRaster`s using normal operators in **R**: `<`, `<=`, `==`, `!=`, `>=`, and `>`.
 #' 
 #' @param e1,e2 `GRaster`, logical, numeric, or character. Character is useful when using a [categorical raster][tutorial_raster_data_types], in which case you can use something like `raster1 == "Wetlands"` to force all "wetland" cells to be 1 (TRUE) and all others 0 (FALSE) or `NA` (if it was originally `NA`).
 #'
-#' @returns A `GRaster` of [type][tutorial_raster_data_types] `CELL`.
+#' @returns An "integer `GRaster` with values of 0 (FALSE), 1 (TRUE), or `NA` (neither).
 #'
 #' @example man/examples/ex_GRaster_arithmetic.r
 #'
-#' @aliases Comparison
-#' @rdname Comparison
-#' @exportMethod Logic
+#' @aliases Compare-methods
+#' @rdname Compare-methods
+#' @exportMethod Ops
 # raster raster
 methods::setMethod(
-	# f = "Ops",
-	f = "Logic",
+	f = "Ops",
 	signature(e1 = "GRaster", e2 = "GRaster"),
     function(e1, e2) {
 	
@@ -33,9 +32,10 @@ methods::setMethod(
 		for (i in 1L:nlyr(e1)) {
 
 			name <- paste0(names(e1)[i], "_", names(e2)[i])
-			src <- .makeSourceName(name, "rast")
+			src <- .makeSourceName(name, "raster")
 
 			ex <- paste(src, "= int(if(", sources(e1)[i], " ", oper, " ", sources(e2)[i], "))")
+			
 			this <- .genericArithRast(name = name, src = src, ex = ex)
 			
 			if (i == 1L) {
@@ -51,12 +51,11 @@ methods::setMethod(
 )
 
 # logical raster
-#' @aliases Comparison
-#' @rdname Comparison
-#' @exportMethod Logic
+#' @aliases Compare-methods
+#' @rdname Compare-methods
+#' @exportMethod Ops
 methods::setMethod(
-	# f = "Ops",
-	f = "Logic",
+	f = "Ops",
 	signature(e1 = "logical", e2 = "GRaster"),
     function(e1, e2) {
 	
@@ -87,12 +86,11 @@ methods::setMethod(
 )
 
 # raster logical
-#' @aliases Comparison
-#' @rdname Comparison
-#' @exportMethod Logic
+#' @aliases Compare-methods
+#' @rdname Compare-methods
+#' @exportMethod Ops
 methods::setMethod(
-	# f = "Ops",
-	f = "Logic",
+	f = "Ops",
 	signature(e1 = "GRaster", e2 = "logical"),
     function(e1, e2) {
 	
@@ -123,12 +121,11 @@ methods::setMethod(
 )
 
 # numeric raster
-#' @aliases Comparison
-#' @rdname Comparison
-#' @exportMethod Logic
+#' @aliases Compare-methods
+#' @rdname Compare-methods
+#' @exportMethod Ops
 methods::setMethod(
-	# f = "Ops",
-	f = "Logic",
+	f = "Ops",
 	signature(e1 = "numeric", e2 = "GRaster"),
     function(e1, e2) {
 	
@@ -158,12 +155,11 @@ methods::setMethod(
 )
 
 # raster numeric
-#' @aliases Comparison
-#' @rdname Comparison
-#' @exportMethod Logic
+#' @aliases Compare-methods
+#' @rdname Compare-methods
+#' @exportMethod Ops
 methods::setMethod(
-	# f = "Ops",
-	f = "Logic",
+	f = "Ops",
 	signature(e1 = "GRaster", e2 = "numeric"),
     function(e1, e2) {
 	
@@ -193,12 +189,11 @@ methods::setMethod(
 )
 
 # raster integer
-#' @aliases Comparison
-#' @rdname Comparison
-#' @exportMethod Logic
+#' @aliases Compare-methods
+#' @rdname Compare-methods
+#' @exportMethod Ops
 methods::setMethod(
-	# f = "Ops",
-	f = "Logic",
+	f = "Ops",
 	signature(e1 = "GRaster", e2 = "integer"),
     function(e1, e2) {
 	
@@ -228,12 +223,11 @@ methods::setMethod(
 )
 
 # integer raster
-#' @aliases Comparison
-#' @rdname Comparison
-#' @exportMethod Logic
+#' @aliases Compare-methods
+#' @rdname Compare-methods
+#' @exportMethod Ops
 methods::setMethod(
-    # f = "Ops",
-    f = "Logic",
+    f = "Ops",
     signature(e1 = "integer", e2 = "GRaster"),
     function(e1, e2) {
         .restore(e2)
@@ -259,12 +253,11 @@ methods::setMethod(
 )
 
 # raster character
-#' @aliases Comparison
-#' @rdname Comparison
-#' @exportMethod Logic
+#' @aliases Compare-methods
+#' @rdname Compare-methods
+#' @exportMethod Ops
 methods::setMethod(
-	# f = "Ops",
-	f = "Logic",
+	f = "Ops",
 	signature(e1 = "GRaster", e2 = "character"),
     function(e1, e2) {
 	
@@ -350,12 +343,11 @@ methods::setMethod(
 )
 
 # character raster
-#' @aliases Comparison
-#' @rdname Comparison
-#' @exportMethod Logic
+#' @aliases Compare-methods
+#' @rdname Compare-methods
+#' @exportMethod Ops
 methods::setMethod(
-	# f = "Ops",
-	f = "Logic",
+	f = "Ops",
 	signature(e1 = "character", e2 = "GRaster"),
     function(e1, e2) {
 	
