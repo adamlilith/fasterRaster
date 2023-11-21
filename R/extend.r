@@ -161,6 +161,7 @@ methods::setMethod(
 
     ### extent
     nLayers <- nlyr(x)
+    srcs <- rep(NA_character_, nLayers)
     for (i in seq_len(nLayers)) {
 
         if (is.na(fill)) {
@@ -174,20 +175,15 @@ methods::setMethod(
                 cmd = "r.mapcalc",
                 expression = ex,
                 region = "current",
-                flags = c(.quiet(), "overwrite"),
-                intern = TRUE
+                flags = c(.quiet(), "overwrite")
             )
             do.call(rgrass::execGRASS, args = args)
         }
-        
-        this <- .makeGRaster(src, names(x)[i])
-        if (i == 1L) {
-            out <- this
-        } else {
-            out <- c(out, this)
-        }
 
+        srcs[i] <- src
+        
     } # next raster
-    out
+    
+    .makeGRaster(srcs, names = names(x), levels = levels(x))
 
 } # EOF
