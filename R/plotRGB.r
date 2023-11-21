@@ -16,7 +16,7 @@
 #'
 #' @returns Nothing (makes a plot).
 #'
-#' @seealso [terra::plotRGB()], [plot()]
+#' @seealso [terra::plotRGB()], [plot()], [compositeRGB()]
 #'
 #' @example man/examples/ex_plot.r
 #'
