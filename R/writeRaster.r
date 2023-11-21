@@ -112,17 +112,17 @@ setMethod(
 		## if multi-layered raster stack, then group first... only guaranteed to work with GeoTIFFs
 		if (nLayers > 1L) {
 
-			groupName <- .makeSourceName("i_group", type = "group")
+			srcGroup <- .makeSourceName("i_group", type = "group")
 			input <- sources(x)
 			
 			rgrass::execGRASS(
 				cmd = "i.group",
-				group = groupName,
+				group = srcGroup,
 				input = input,
 				flags = .quiet()
 			)
 
-			src <- groupName
+			src <- srcGroup
 
 		} else {
 			src <- sources(x)
@@ -200,22 +200,21 @@ setMethod(
 	if (any(isFact)) {
 
 		extension <- paste0(".", extension)
-		filename <- substr(filename, 1L, nchar(filename) - nchar(extension))
-		filename <- paste0(filename, ".csv")
-		utils::write.csv(levels(x), filename)
+		levelFileName <- substr(filename, 1L, nchar(filename) - nchar(extension))
+		levelFileName <- paste0(levelFileName, ".csv")
+		utils::write.csv(levels(x), levelFileName)
 
 	}
+
 	out <- terra::rast(filename)
-	# out <- terra::trim(out)
 	names(out) <- names(x)
 	
 	if (any(isFact)) {
 		for (i in which(isFact)) {
-			out[[i]] <- categories(out[[i]], layer = i, value = cats(x)[[i]], active = activeCat(x)[i])
+			out[[i]] <- terra::categories(out[[i]], layer = i, value = cats(x)[[i]], active = activeCat(x)[i])
 		}
 	}
 	
-	# levels(out) <- levels(x)
 	invisible(out)
 	
 	} # EOF
