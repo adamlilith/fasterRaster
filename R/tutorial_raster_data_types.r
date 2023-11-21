@@ -23,6 +23,7 @@
 #' * [as.int()], [as.float()], and [as.doub()] coerce a raster to an integer, float, or double.
 #' * [catNames()] reports the column names of the "levels" table of each layer of a raster.
 #' * [cats()] returns the entire "levels" table of a categorical raster.
+#' * [combineCats()] combines levels of two or more categorical or integer rasters.
 #' * [datatype()] returns the data type of a `GRaster`.
 #' * [droplevels()] removes "unused" levels in a "levels" table.
 #' * [freq()]: Frequency of each category across cells of a raster\cr
