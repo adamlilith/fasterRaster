@@ -31,7 +31,6 @@ Imports:
 	sf,
 	shiny,
 	terra,
-	tools,
 	utils
 Suggests:
 	knitr
