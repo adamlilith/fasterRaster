@@ -57,16 +57,14 @@ setMethod(
 	for (i in seq_len(nlyr(x))) {
 	
 		ex <- paste0(srcs[i], " = int(if(isnull(", sources(x)[i], "), 1, 0))")
-		args <- list(
+		rgrass::execGRASS(
 			cmd = "r.mapcalc",
 			expression = ex,
-			flags = c(.quiet(), "overwrite"),
-			intern = TRUE
+			flags = c(.quiet(), "overwrite")
 		)
-		do.call(rgrass::execGRASS, args = args)
 	
 	}
-	.makeGRaster(srcs, "layer")
+	.makeGRaster(srcs, names(x))
 
 	} # EOF
 )
@@ -90,16 +88,14 @@ methods::setMethod(
 		} else {
    			paste0(srcs[i], " = int(if(isnull(", sources(x)[i], "), 1, 0))")
 		}
-		args <- list(
+		rgrass::execGRASS(
 			cmd = "r.mapcalc",
 			expression = ex,
-			flags = c(.quiet(), "overwrite"),
-			intern = TRUE
+			flags = c(.quiet(), "overwrite")
 		)
-		do.call(rgrass::execGRASS, args = args)
 	
 	}
-	.makeGRaster(srcs, "layer")
+	.makeGRaster(srcs, names(x))
 
 	}
 )
@@ -110,7 +106,7 @@ methods::setMethod(
 setMethod(
 	"abs",
 	signature(x = "GRaster"),
-	function(x) .genericFx("abs", x)
+	function(x) .genericRastFx("abs", x)
 )
 
 #' @aliases sin
@@ -224,7 +220,7 @@ setMethod(
 setMethod(
 	"exp",
 	signature = "GRaster",
-	function(x) .genericFx("exp", x)
+	function(x) .genericRastFx("exp", x)
 )
 
 #' @aliases log1p
@@ -238,21 +234,18 @@ setMethod(
 		.restore(x)
 		region(x)
 
-		srcs <- .makeSourceName(name, "rast", nlyr(x))
+		srcs <- .makeSourceName(names(x), "rast", nlyr(x))
 		for (i in seq_len(nlyr(x))) {
 
-			name <- names(x)[i]
 			ex <- paste0(srcs[i], " = log(", sources(x)[i], " + 1)")
-			args <- list(
+			rgrass::execGRASS(
 				cmd = "r.mapcalc",
 				expression = ex,
-				flags = c(.quiet(), "overwrite"),
-				intern = TRUE
+				flags = c(.quiet(), "overwrite")
 			)
-			do.call(rgrass::execGRASS, args = args)
 
 		}
-		.makeGRaster(srcs, "log1p")
+		.makeGRaster(srcs, names(x))
 		
 	} # EOF
 )
@@ -301,7 +294,7 @@ setMethod(
 setMethod(
 	"sqrt",
 	signature = "GRaster",
-	function(x) .genericFx("sqrt", x)
+	function(x) .genericRastFx("sqrt", x)
 )
 
 #' @aliases round
@@ -333,7 +326,7 @@ setMethod(
 setMethod(
 	"floor",
 	signature = "GRaster",
-	function(x) .genericFx("floor", x)
+	function(x) .genericRastFx("floor", x)
 )
 
 #' @aliases ceiling
@@ -343,7 +336,7 @@ setMethod(
 setMethod(
 	"ceiling",
 	signature = "GRaster",
-	function(x) .genericFx("ceil", x)
+	function(x) .genericRastFx("ceil", x)
 )
 
 #' @aliases trunc
@@ -353,7 +346,7 @@ setMethod(
 setMethod(
 	"trunc",
 	signature = "GRaster",
-	function(x) .genericFx("int", x)
+	function(x) .genericRastFx("int", x)
 )
 
 #' Generic trigonometry function
@@ -365,19 +358,20 @@ setMethod(
 	.restore(x)
 	region(x)
 	
+	precision <- getFastOptions("rasterPrecision")
+
 	srcs <- .makeSourceName("r.mapcalc", "rast", nlyr(x))
 	for (i in 1L:nlyr(x)) {
 	
-		name <- names(x)[i]
-
-		prec <- getFastOptions("rasterPrecision")
-
-  		ex <- paste0(srcs[i], " = ", fx, "(", prec, "(", sources(x)[i], ") * 180 / ", pi, ")")
-		rgrass::execGRASS("r.mapcalc", expression=ex, flags=c(.quiet(), "overwrite"), intern=TRUE)
-		this <- .makeGRaster(srcs[i], name)
+  		ex <- paste0(srcs[i], " = ", fx, "(", precision, "(", sources(x)[i], ") * 180 / ", pi, ")")
+		rgrass::execGRASS(
+			"r.mapcalc",
+			expression = ex,
+			flags = c(.quiet(), "overwrite")
+		)
 		
 	}
-	.makeGRaster(srcs, fx)
+	.makeGRaster(srcs, names(x))
 
 }
 
@@ -390,16 +384,20 @@ setMethod(
 	.restore(x)
 	region(x)
 
- 	prec <- getFastOptions("rasterPrecision")
+ 	precision <- getFastOptions("rasterPrecision")
 
-	srcs <- .makeSourceName(name, "rast", nlyr(x))
+	srcs <- .makeSourceName(names(x), "rast", nlyr(x))
 	for (i in 1L:nlyr(x)) {
 	
-		name <- names(x)[i]
-		ex <- paste0(srcs[i], " = ", fx, "(", prec, "(", sources(x)[i], ") * ", pi, " / 180)")
-		rgrass::execGRASS("r.mapcalc", expression=ex, flags=c(.quiet(), "overwrite"), intern=TRUE)
+		ex <- paste0(srcs[i], " = ", fx, "(", precision, "(", sources(x)[i], ") * ", pi, " / 180)")
+		rgrass::execGRASS(
+			"r.mapcalc",
+			expression = ex,
+			flags = c(.quiet(), "overwrite")
+		)
 	}
-	.makeGRaster(srcs, fx)
+
+	.makeGRaster(srcs, names(x))
 
 }
 
@@ -407,7 +405,7 @@ setMethod(
 #' @param fx	Character: Name of the function in **GRASS** module `r.series`.
 #' @param x		A `GRaster`.
 #' @noRd
-.genericFx <- function(fx, x) {
+.genericRastFx <- function(fx, x) {
 
 	.restore(x)
 	region(x)
@@ -421,16 +419,14 @@ setMethod(
 	
 		ex <- paste0(srcs[i], " = ", fx, "(", prec, "(", sources(x)[i], "))")
 
-		args <- list(
+		rgrass::execGRASS(
 			cmd = "r.mapcalc",
 			expression = ex,
-			flags = c(.quiet(), "overwrite"),
-			intern=TRUE	
+			flags = c(.quiet(), "overwrite")
 		)
-		do.call(rgrass::execGRASS, args = args)
 		
 	}
-	.makeGRaster(srcs, fx)
+	.makeGRaster(srcs, names(x))
 
 }
 
@@ -453,13 +449,11 @@ setMethod(
 	
 		ex <- paste0(srcs[i], " = ", fx, "(", prec, "(", sources(x)[i], "), ", y, ")")
 
-		args <- list(
+		rgrass::execGRASS(
 			cmd = "r.mapcalc",
 			expression = ex,
-			flags = c(.quiet(), "overwrite"),
-			intern = TRUE
+			flags = c(.quiet(), "overwrite")
 		)
-		do.call(rgrass::execGRASS, args = args)
 	}
 	.makeGRaster(srcs, fx)
 
