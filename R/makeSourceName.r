@@ -40,12 +40,12 @@
 		type <- omnibus::pmatchSafe(type, c("raster", "raster3d", "vector", "group", "region", "table"))
 	}
 
-	if (type == "raster3d") type <- "rast3d"
-	if (type %in% c("GRaster", "raster")) type <- "rast"
-	if (type %in% c("GVector", "vector")) type <- "vect"
-	if (type == "group") type <- "group"
-	if (type == "region") type <- "region"
-	if (type == "table") type <- "table"
+	type[type == "raster3d"] <- "rast3d"
+	type[type %in% c("GRaster", "raster")] <- "rast"
+	type[type %in% c("GVector", "vector")] <- "vect"
+ 	type[type == "group"] <- "group"
+	type[type == "region"] <- "region"
+	type[type == "table"] <- "table"
 
 	src <- omnibus::rstring(1L)
 	if (n > 1L) src <- paste0(src, "_", 1L:n)
