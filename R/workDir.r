@@ -8,7 +8,7 @@
 #'
 #' @aliases workDir
 #' @rdname workDir
-#' @exportMethod
+#' @exportMethod workDir
 methods::setMethod(
 	f = "workDir",
 	signature = c(x = "GSession"),
