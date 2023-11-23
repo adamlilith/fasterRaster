@@ -152,7 +152,7 @@ methods::setMethod(
 
 	numLevels <- nlevels(object)
 	if (any(numLevels > 0L)) {
-  		minColWidth <- 10L
+  		minColWidth <- 14L
 	} else {
   		minColWidth <- 4L
 	}
