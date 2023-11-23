@@ -63,8 +63,8 @@ methods::setMethod(
 methods::setMethod(
 	f = "addCats<-",
 	signature = c(x = "GRaster", value = "data.frame"),
-	function(x, layer = 1, value) {
-		.addCatsAssign(x = x, layer = 1, value = value)
+	function(x, value, layer = 1) {
+		.addCatsAssign(x = x, layer = layer, value = value)
 	}
 )
 
@@ -74,8 +74,8 @@ methods::setMethod(
 methods::setMethod(
 	f = "addCats<-",
 	signature = c(x = "GRaster", value = "data.table"),
-	function(x, layer = 1, value) {
-		.addCatsAssign(x = x, layer = 1, value = value)
+	function(x, value, layer = 1) {
+		.addCatsAssign(x = x, layer = layer, value = value)
 	}
 )
 
@@ -97,11 +97,15 @@ methods::setMethod(
 
 	for (i in layer) {
 
+		val <- names(value)[1L]
+		value[ , (val) := lapply(.SD, as.integer), .SDcols = val]
   		x@levels[[i]] <- rbind(x@levels[[i]], value)
-		val <- names(x@levels[[i]])[1L]
 		data.table::setkeyv(x@levels[[i]], val)
+
+		if (length(unique(x@levels[[i]][[val]])) < nrow(x@levels[[i]])) stop("More than one label assigned to the same value in the levels table.")
 	
 	}
+
  	methods::validObject(x)
 	x
 
