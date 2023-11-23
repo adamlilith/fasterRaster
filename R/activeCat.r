@@ -52,8 +52,10 @@ methods::setMethod(
 methods::setMethod(
 	f = "activeCat<-",
 	signature = c(x = "GRaster", value = "numeric"),
-	function(x, layer = 1, value) {
-		.activeCatAssign(x = x, layer = layer, value = value)
+	function(x, value, layer = 1) {
+	
+	.activeCatAssign(x = x, layer = layer, value = value)
+	
 	} # EOF
 )
 
@@ -63,8 +65,10 @@ methods::setMethod(
 methods::setMethod(
 	f = "activeCat<-",
 	signature = c(x = "GRaster", value = "integer"),
-	function(x, layer = 1, value) {
-		.activeCatAssign(x = x, layer = layer, value = value)
+	function(x, value, layer = 1) {
+	
+	.activeCatAssign(x = x, layer = layer, value = value)
+	
 	} # EOF
 )
 
@@ -74,8 +78,10 @@ methods::setMethod(
 methods::setMethod(
 	f = "activeCat<-",
 	signature = c(x = "GRaster", value = "character"),
-	function(x, layer = 1, value) {
-		.activeCatAssign(x = x, layer = layer, value = value)
+	function(x, value, layer = 1) {
+	
+	.activeCatAssign(x = x, layer = layer, value = value)
+	
 	} # EOF
 )
 
@@ -91,7 +97,7 @@ methods::setMethod(
 .activeCatAssign <- function(x, layer, value) {
 
 	layer <- .layerIndex(layer, x, recycle = TRUE)
-
+	
 	facts <- is.factor(x)
 	if (any(!(which(facts) %in% layer))) stop("At least one layer is not categorical.\n  The active category cannot be set for this layer.")
 
