@@ -30,6 +30,7 @@ methods::setMethod(
 		"GRaster",
 		location = location(x),
 		mapset = mapset(x),
+		workDir = getFastOptions("workDir"),
 		crs = crs(x),
 		projection = .projection(x),
 		nLayers = length(i),

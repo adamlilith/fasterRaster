@@ -16,6 +16,8 @@
 #'
 #' @slot mapset		Character (all classes): The **GRASS** ["mapset"][tutorial_sessions]. Default value is `PERMANENT`. Typically hidden to users. Can be obtained using [mapset()].
 #'
+#' @slot workDir	Character (all classes): Directory in which **GRASS** stores files.
+#'
 #' @slot topology	Character (`GSpatial` objects, including `GRegion`s, `GRaster`s, and `GVector`s): Valid values are `2D` (2-dimensional--most rasters and vectors) or `3D` (3-dimensional--e.g., LIDAR data). Can be obtained using [topology()].
 #'
 #' @slot sources		Character (`GRaster`s and `GVector`s): Name of the object in **GRASS**. These are typically made on-the-fly and provide the pointer to the object from **R** to **GRASS**. Changing them manually will break the connection. Can be obtained using [sources()].
@@ -62,12 +64,14 @@ GSession <- methods::setClass(
 	slots = list(
 		location = "character",			# GRASS location
 		mapset = "character",			# GRASS MAPSET
-		crs = "character"				# coordinate reference system
+		crs = "character",				# coordinate reference system
+		workDir = "character" 			# working directory
 	),
 	prototype = prototype(
 		location = NA_character_,
 		mapset = NA_character_,
-		crs = NA_character_
+		crs = NA_character_,
+		workDir = NA_character_
 	)
 )
 
@@ -79,6 +83,8 @@ setValidity("GSession",
 			"@mapset can only be a single character string."
 		} else if (length(object@crs) != 1L) {
 			"@crs can only be a single character string."
+		} else if (length(object@workDir) != 1L) {
+			"@workDir can only be a single character string."
 		} else {
 			TRUE
 		}

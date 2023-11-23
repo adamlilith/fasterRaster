@@ -172,19 +172,26 @@ setValidity("GRaster",
 		} else if (!inherits(levels[[i]], "data.table")) {
 			ac[i] <- 2L
    			levels[[i]] <- data.table::data.table(levels[[i]])
+		} else if (inherits(levels[[i]], "data.table")) {
+			ac[i] <- 2L
 		}
 	}
+
 	info <- .rastInfo(src)
+	nLayers <- length(info$sources)
+	if (length(names) < nLayers) names <- rep(names, length.out = nLayers)
+
 	out <- new(
 		"GRaster",
 		location = getFastOptions("location"),
 		mapset = getFastOptions("mapset"),
+		workDir = getFastOptions("workDir"),
 		crs = crs(),
 		projection = info[["projection"]][1L],
 		topology = info[["topology"]][1L],
 		extent = c(info[["west"]][1L], info[["east"]][1L], info[["south"]][1L], info[["north"]][1L]),
 		zextent = c(info[["zbottom"]][1L], info[["ztop"]][1L]),
-		nLayers = length(info$sources),
+		nLayers = nLayers,
 		dimensions = c(info[["rows"]][1L], info[["cols"]][1L], info[["depths"]][1L]),
 		resolution = c(info[["ewres"]][1L], info[["nsres"]][1L], info[["tbres"]][1L]),
 		sources = src,
