@@ -167,6 +167,7 @@ methods::setMethod(
 	
 	value <- list(value)
 	levels(x) <- value
+	x
 	
 	} # EOF
 )
@@ -181,6 +182,7 @@ methods::setMethod(
 	
 	value <- list(value)
 	levels(x) <- value
+	x
 	
 	} # EOF
 )
@@ -207,7 +209,7 @@ methods::setMethod(
 	f = "levels<-",
 	signature = c(x = "GRaster", value = "list"),
 	function(x, value) {
-
+	
 	if (length(value) != nlyr(x)) stop("The number of level tables is not the same as the number of raster layers. \n  If you want to change the level table of select layers, use categories().")
 
 	for (i in seq_along(value)) {
@@ -224,30 +226,25 @@ methods::setMethod(
 
 		}
 
-		# set value to integer and sort by value
-		# if (!is.character(value[[i]])) {
-			
-			names <- names(value[[i]])
-			valueCol <- names[1L]
+		names <- names(value[[i]])
+		valueCol <- names[1L]
 
-			# convert first column to integer
-			value[[i]][, (valueCol) := lapply(.SD, as.integer), .SDcols = valueCol]
+		# convert first column to integer
+		value[[i]][ , (valueCol) := lapply(.SD, as.integer), .SDcols = valueCol]
 
-			# detect non-unique values
-			unis <- unique(value[[i]][ , 1L])
-			numUnis <- nrow(unis)
-			if (numUnis < nrow(value[[i]])) stop("The value column (the first column) must have unique values.")
+		# detect non-unique values
+		unis <- unique(value[[i]][ , 1L])
+		numUnis <- nrow(unis)
+		if (numUnis < nrow(value[[i]])) stop("The value column (the first column) must have unique values.")
 
-			# sort by first column
-   			data.table::setorderv(value[[i]], col = valueCol)
-
-		# }
+		# sort by first column
+		data.table::setorderv(value[[i]], col = valueCol)
 
 	}
 
 	x@activeCat <- rep(2L, nlyr(x))
 	x@levels <- value
- 	methods::validObject(x)
+ 	a <- methods::validObject(x)
 	x
 
 	} # EOF
