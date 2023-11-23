@@ -22,13 +22,13 @@
 #'
 #' Once you have installed **GRASS**, you will need to know where on your computer it was installed. The exact folder will depend on your operating system, the version installed, and perhaps other things, but in general, the install folder will look something like:
 #'
-#' Windows: `"C:/Program Files/GRASS GIS 8.3"`\cr
+#' Windows: `"C:/Program Files/GRASS GIS 8.4"`\cr
 #' Mac: `"/Applications/GRASS-8.3.app/Contents/Resources"`\cr
 #' Linux: `"/usr/local/grass"`\cr
 #'
 #' Whatever the name of this folder, it is passed to functions using an argument named `grassDir`. So, it is helpful to define `grassDir`, as in:
 #' ```
-#' grassDir <- "C:/Program Files/GRASS GIS 8.3" # Windows
+#' grassDir <- "C:/Program Files/GRASS GIS 8.4" # Windows
 #' grassDir <- "/Applications/GRASS-8.3.app/Contents/Resources" # Mac
 #' grassDir <- "/usr/local/grass" # Linux
 #' ```
@@ -46,7 +46,7 @@
 #' The `crs` argument takes a coordinate reference string or an object from which such a string can be obtained. We will use a raster that comes with **fasterRaster** to set the `crs` argument.
 #' ```
 #' madElev <- fastData("madElev") # get raster
-#' faster(madElev, grassDir = grassDir)
+#' faster(madElev, grassDir = grassDir) # start session
 #' ```
 #' Here, the `grassDir` is the installation directory we defined earlier. Now, we can start using **fasterRaster**!
 #'
@@ -59,7 +59,7 @@
 #' ```
 #' You can see the properties of the `GRaster` representation of the `madElev` raster. Converting rasters that are already in **R** to `GRaster`s takes some time. Instead, you can load a raster directly from disk to a **fasterRaster** session using `fast()`. To do this, you just replace the argument in [fast()] with a string representing the folder path and file name of the raster you want to load into the session.
 #' 
-#' Now, let"s create a `GVector`. The [fast()] function can take a `SpatVector` from the **terra** package, an `sf` object from the **sf** package, or a string representing the file path and file name of a vector file (e.g., a GeoPackage file or a shapefile).
+#' Now, let's create a `GVector`. The [fast()] function can take a `SpatVector` from the **terra** package, an `sf` object from the **sf** package, or a string representing the file path and file name of a vector file (e.g., a GeoPackage file or a shapefile).
 #' ```
 #' madRivers <- fastData("madRivers")
 #' rivers <- fast(madRivers)
@@ -77,7 +77,7 @@
 #' logElev
 #' ```
 #'
-#' You can also use the many **fasterRaster** functions. In general, these functions have the same names as their **terra** and *8sf(( counterparts and usually the same arguments. The following code creates a raster where cell values reflect the distance between them and the nearest river, then converts the output to a `SpatRaster` for plotting:
+#' You can also use the many **fasterRaster** functions. In general, these functions have the same names as their **terra** and **sf** counterparts and usually the same arguments. The following code creates a raster where cell values reflect the distance between them and the nearest river, then converts the output to a `SpatRaster` for plotting:
 #' ```
 #' dist <- distance(elev, rivers)
 #' plot(dist)
