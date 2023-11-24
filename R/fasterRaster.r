@@ -236,6 +236,7 @@
 #' [update()]: Refresh metadata in a `GRaster` or `GVector` object.\cr
 #'
 #' ## Functions that operate on **GRASS** "regions" (useful mostly to developers):
+#' Comparisons between `GRegion`s using the `==` and `!=` operators.
 #' [region()]: Change or report the active region's extent and resolution\cr
 #' [regionDim()]: Change or report the active region's resolution (also [dim()] and related functions, with no arguments)
 #' [regionExt()]: Change or report the active region's extent (also [ext()] and related functions, with no arguments)\cr
