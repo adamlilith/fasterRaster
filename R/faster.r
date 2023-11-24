@@ -160,7 +160,7 @@ faster <- function(
 
 	.fasterRaster$locations[[put]] <- session
 	names(.fasterRaster$locations)[put] <- thisSessionName
-	
+
 	invisible(session)
 
 }
