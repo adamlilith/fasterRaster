@@ -64,7 +64,7 @@ methods::setMethod(
 	startLoc <- location()
 	startMapset <- mapset()
 
-	on.exit(restoreSession(location=startLoc, mapset=startMapset), add=TRUE)
+	on.exit(restoreSession(location = startLoc, mapset = startMapset), add=TRUE)
 	
 	# target location and mapset
 	if (is.null(y)) {
