@@ -1,10 +1,15 @@
-#' Compare-methods operations on GRasters
+#' Compare-methods operations on GRasters and GRegions
 #'
 #' @description You can do comparative operations on `GRaster`s using normal operators in **R**: `<`, `<=`, `==`, `!=`, `>=`, and `>`.
-#' 
-#' @param e1,e2 `GRaster`, logical, numeric, or character. Character is useful when using a [categorical raster][tutorial_raster_data_types], in which case you can use something like `raster1 == "Wetlands"` to force all "wetland" cells to be 1 (TRUE) and all others 0 (FALSE) or `NA` (if it was originally `NA`).
 #'
-#' @returns An "integer `GRaster` with values of 0 (FALSE), 1 (TRUE), or `NA` (neither).
+#' You can also compare two `GRegion`s using the `==` and `!=` operators. Most users of **fasterRaster** will not have to work much with [regions][tutorial_regions], so can ignore this functionality.
+#' * `GRegion`s are the same if they have the same [location and mapset][tutorial_sessions], topology (2D or 3D), coordinate reference system (CRS), extent, and resolution. If both are 3D, then they must also have the same vertical extent and number of depths.
+#' 
+#' @param e1,e2 Values depend on the type of comparison:
+# * Comparing `GRaster`s to logical, numeric, character values: `e1` and `e2` can be any one of these. Character is useful when using a [categorical raster][tutorial_raster_data_types], in which case you can use something like `raster1 == "Wetlands"` to force all "wetland" cells to be 1 (TRUE) and all others 0 (FALSE) or `NA` (if it was originally `NA`).
+#' * Comparing a `GRegion` to another `GRegion`: `e1` and `e2` must be `GRegion`s!
+#'
+#' @returns Comparing `GRaster`s: An "integer `GRaster` with values of 0 (FALSE), 1 (TRUE), or `NA` (neither). Comparing `GRegion`s: Logical.
 #'
 #' @example man/examples/ex_GRaster_arithmetic.r
 #'
@@ -261,84 +266,84 @@ methods::setMethod(
 	signature(e1 = "GRaster", e2 = "character"),
     function(e1, e2) {
 	
-		if (!all(is.factor(e1))) stop("Raster must be categorical for this type of comparison.")
-		.restore(e1)
+	if (!all(is.factor(e1))) stop("Raster must be categorical for this type of comparison.")
+	.restore(e1)
 
-		oper <- as.vector(.Generic)[1L]
-		levs <- levels(e1)
-		acs <- activeCat(e1, names = TRUE)
+	oper <- as.vector(.Generic)[1L]
+	levs <- levels(e1)
+	acs <- activeCat(e1, names = TRUE)
 
-		srcs <- .makeSourceName("logical", "raster", nlyr(e1))
+	nLayers <- nlyr(e1)
+	srcs <- .makeSourceName("r_mapcalc", "raster", nLayers)
 
-		for (i in seq_len(nlyr(e1))) {
+	for (i in seq_len(nLayers)) {
 
-			# get value of this category
-			ac <- acs[i]
-			thisVal <- eval(parse(text = paste0("levs[[", i, "]][", ac, " == e2]")))
-			thisVal <- thisVal[[1L]]
+		# get value of this category
+		ac <- acs[i]
+		thisVal <- eval(parse(text = paste0("levs[[", i, "]][", ac, " == e2]")))
+		thisVal <- thisVal[[1L]]
 
-			if (length(thisVal) == 0L) {
-				this <- 0L * not.na(e1)
-			} else {
+		if (length(thisVal) == 0L) {
+			this <- 0L * not.na(e1)
+		} else {
 
-				if (oper %in% c("<", "<=", ">=", ">")) {
+			if (oper == "<") {
 
-					thisVal <- max(thisVal)
-					
-					ex <- paste0(srcs[i], " = if(", sources(e1)[i], " ", oper, " ", thisVal, ", 1, 0)")
+				thisVal <- min(thisVal)
+				ex <- paste0(srcs[i], " = if(", sources(e1)[i], " ", oper, " ", thisVal, ", 1, 0)")
+
+			} else if (oper == "<=") {
 
 				thisVal <- max(thisVal)
-				} else if (oper %in% c(">", ">=")) {
-					
-					thisVal <- min(thisVal)
+				ex <- paste0(srcs[i], " = if(", sources(e1)[i], " ", oper, " ", thisVal, ", 1, 0)")
 
-					ex <- paste0(srcs[i], " = if(", sources(e1)[i], " ", oper, " ", thisVal, ", 1, 0)")
-
-				} else if (oper == "==") {
-
-     				ex <- paste0(srcs[i], " = if(", sources(e1)[i], " == ", thisVal[1L])
-
-					if (length(thisVal) > 1L) {
-						
-						for (count in 2L:length(thisVal)) {
-							
-							ex <- paste0(ex, " | ", sources(e1)[i], " == ", thisVal)
-
-						}
-					}
-
-					ex <- paste0(ex, ", 1, 0)")
-
-				} else if (oper == "!=") {
+			} else if (oper == ">") {
 				
-					ex <- paste0(srcs[i], " = if(", sources(e1)[i], " != ", thisVal[1L])
+				thisVal <- max(thisVal)
+				ex <- paste0(srcs[i], " = if(", sources(e1)[i], " ", oper, " ", thisVal, ", 1, 0)")
 
-					if (length(thisVal) > 1L) {
-
-						for (count in 2L:length(thisVal)) {
-							ex <- paste0(ex, " & ", sources(e1)[i], " != ", thisVal)
-						}
-
-					}
-
-					ex <- paste0(ex, ", 1, 0)")
+			} else if (oper == ">=") {
 				
+				thisVal <- min(thisVal)
+				ex <- paste0(srcs[i], " = if(", sources(e1)[i], " ", oper, " ", thisVal, ", 1, 0)")
+
+			} else if (oper == "==") {
+
+				ex <- paste0(srcs[i], " = if(", sources(e1)[i], " == ", thisVal[1L])
+
+				if (length(thisVal) > 1L) {
+					for (count in 2L:length(thisVal)) {
+						ex <- paste0(ex, " | ", sources(e1)[i], " == ", thisVal[count])
+					}
 				}
 
-				args <- list(
-					cmd = "r.mapcalc",
-					expression = ex,
-					flags = c(.quiet(), "overwrite"),
-					intern = TRUE
-				)
+				ex <- paste0(ex, ", 1, 0)")
 
-				do.call(rgrass::execGRASS, args = args)
+			} else if (oper == "!=") {
+			
+				ex <- paste0(srcs[i], " = if(", sources(e1)[i], " != ", thisVal[1L])
 
+				if (length(thisVal) > 1L) {
+					for (count in 2L:length(thisVal)) {
+						ex <- paste0(ex, " & ", sources(e1)[i], " != ", thisVal[count])
+					}
+				}
+
+				ex <- paste0(ex, ", 1, 0)")
+			
 			}
 
-		} # next layer
-		.makeGRaster(srcs, "logical")
-		
+			rgrass::execGRASS(
+				cmd = "r.mapcalc",
+				expression = ex,
+				flags = c(.quiet(), "overwrite")
+			)
+
+		}
+
+	} # next layer
+	.makeGRaster(srcs, "logical")
+	
 	} # EOF
 )
 
@@ -351,83 +356,224 @@ methods::setMethod(
 	signature(e1 = "character", e2 = "GRaster"),
     function(e1, e2) {
 	
-		if (!all(is.factor(e2))) stop("Raster must be categorical for this type of comparison.")
-		.restore(e2)
+	if (!all(is.factor(e2))) stop("Raster must be categorical for this type of comparison.")
+	.restore(e2)
 
-		oper <- as.vector(.Generic)[1L]
-		levs <- levels(e2)
-		acs <- activeCat(e2, names = TRUE)
+	oper <- as.vector(.Generic)[1L]
+	levs <- levels(e2)
+	acs <- activeCat(e2, names = TRUE)
 
-		srcs <- .makeSourceName("logical", "raster", nlyr(e2))
+	nLayers <- nlyr(e2)
+	srcs <- .makeSourceName("r_mapcalc", "raster", nLayers)
 
-		for (i in seq_len(nlyr(e2))) {
+	for (i in seq_len(nLayers)) {
 
-			# get value of this category
-			ac <- acs[i]
-			thisVal <- eval(parse(text = paste0("levs[[", i, "]][", ac, " == e1]")))
-			thisVal <- thisVal[[1L]]
+		# get value of this category
+		ac <- acs[i]
+		thisVal <- eval(parse(text = paste0("levs[[", i, "]][", ac, " == e1]")))
+		thisVal <- thisVal[[1L]]
 
-			if (length(thisVal) == 0L) {
-				this <- 0L * not.na(e2)
-			} else {
+		if (length(thisVal) == 0L) {
+			this <- 0L * not.na(e2)
+		} else {
 
-				if (oper %in% c("<", "<=", ">=", ">")) {
+			if (oper == "<") {
 
-					thisVal <- max(thisVal)
-					
-					ex <- paste0(srcs[i], " = if(", sources(e2)[i], " ", oper, " ", thisVal, ", 1, 0)")
+				thisVal <- min(thisVal)
+				ex <- paste0(srcs[i], " = if(", sources(e2)[i], " ", oper, " ", thisVal, ", 1, 0)")
+
+			} else if (oper == "<=") {
 
 				thisVal <- max(thisVal)
-				} else if (oper %in% c(">", ">=")) {
-					
-					thisVal <- min(thisVal)
+				ex <- paste0(srcs[i], " = if(", sources(e2)[i], " ", oper, " ", thisVal, ", 1, 0)")
 
-					ex <- paste0(srcs[i], " = if(", sources(e2)[i], " ", oper, " ", thisVal, ", 1, 0)")
-
-				} else if (oper == "==") {
-
-     				ex <- paste0(srcs[i], " = if(", sources(e2)[i], " == ", thisVal[1L])
-
-					if (length(thisVal) > 1L) {
-						
-						for (count in 2L:length(thisVal)) {
-							
-							ex <- paste0(ex, " | ", sources(e2)[i], " == ", thisVal)
-
-						}
-					}
-
-					ex <- paste0(ex, ", 1, 0)")
-
-				} else if (oper == "!=") {
+			} else if (oper == ">") {
 				
-					ex <- paste0(srcs[i], " = if(", sources(e2)[i], " != ", thisVal[1L])
+				thisVal <- max(thisVal)
+				ex <- paste0(srcs[i], " = if(", sources(e2)[i], " ", oper, " ", thisVal, ", 1, 0)")
 
-					if (length(thisVal) > 1L) {
-
-						for (count in 2L:length(thisVal)) {
-							ex <- paste0(ex, " & ", sources(e2)[i], " != ", thisVal)
-						}
-
-					}
-
-					ex <- paste0(ex, ", 1, 0)")
+			} else if (oper == ">=") {
 				
+				thisVal <- min(thisVal)
+				ex <- paste0(srcs[i], " = if(", sources(e2)[i], " ", oper, " ", thisVal, ", 1, 0)")
+
+			} else if (oper == "==") {
+
+				ex <- paste0(srcs[i], " = if(", sources(e2)[i], " == ", thisVal[1L])
+
+				if (length(thisVal) > 1L) {
+					for (count in 2L:length(thisVal)) {
+						ex <- paste0(ex, " | ", sources(e2)[i], " == ", thisVal[count])
+					}
 				}
 
-				args <- list(
-					cmd = "r.mapcalc",
-					expression = ex,
-					flags = c(.quiet(), "overwrite"),
-					intern = TRUE
-				)
+				ex <- paste0(ex, ", 1, 0)")
 
-				do.call(rgrass::execGRASS, args = args)
+			} else if (oper == "!=") {
+			
+				ex <- paste0(srcs[i], " = if(", sources(e2)[i], " != ", thisVal[1L])
 
+				if (length(thisVal) > 1L) {
+					for (count in 2L:length(thisVal)) {
+						ex <- paste0(ex, " & ", sources(e2)[i], " != ", thisVal[count])
+					}
+				}
+
+				ex <- paste0(ex, ", 1, 0)")
+			
 			}
 
-		} # next layer
-		.makeGRaster(srcs, "logical")
+			rgrass::execGRASS(
+				cmd = "r.mapcalc",
+				expression = ex,
+				flags = c(.quiet(), "overwrite")
+			)
+
+		}
+
+	} # next layer
+	.makeGRaster(srcs, "logical")
 		
 	} # EOF
 )
+
+# GRegion GRegion
+#' @aliases Compare-methods
+#' @rdname Compare-methods
+#' @exportMethod Ops
+methods::setMethod(
+	f = "Ops",
+	signature(e1 = "GRegion", e2 = "GRegion"),
+    function(e1, e2) {
+	
+	oper <- as.vector(.Generic)[1L]
+	if (!(oper %in% c("==", "!="))) stop("Can only use == and != operators when performing comparisons involving GRegions.")
+
+	out <- TRUE
+	if (location(e1) != location(e2)) out <- FALSE
+	if (!terra::same.crs(e1, e2)) out <- out & FALSE
+
+	if ((is.3d(e1) & !is.3d(e2)) | (!is.3d(e1) & is.3d(e2))) {
+		out <- out & FALSE
+	} else if (is.3d(e1) & is.3d(e2)) {
+		top1 <- top(e1)
+		top2 <- top(e2)
+		bottom1 <- bottom(e1)
+		bottom2 <- bottom(e2)
+		out <- out & compareFloat(top1, top2, "==") & compareFloat(bottom1, bottom2, "==") & ndepth(e1) == ndepth(e2)
+	}
+
+	ext1 <- ext(e1, vector = TRUE)
+	ext2 <- ext(e2, vector = TRUE)
+	res1 <- res(e1)
+	res2 <- res(e2)
+	out <- out & all(compareFloat(ext1, ext2, "==")) & all(compareFloat(res1, res2, "=="))
+
+	if (oper == "!=") out <- !out
+	out
+
+	} # EOF
+)
+
+### The problem with comparing GRasters and GRegions is that GRegions are always 3D, and GRasters may not be, so the test will always fail.
+# # # # GRegion GRaster
+# # # #' @aliases Compare-methods
+# # # #' @rdname Compare-methods
+# # # #' @exportMethod Ops
+# # # methods::setMethod(
+# # # 	f = "Ops",
+# # # 	signature(e1 = "GRegion", e2 = "GRaster"),
+# # #     function(e1, e2) {
+
+# # # 	oper <- as.vector(.Generic)[1L]
+# # # 	.compareGRegionGRaster(e1 = e1, e2 = e2, oper = oper)
+
+# # # 	} # EOF
+# # # )
+
+# # # # GRaster GRegion
+# # # #' @aliases Compare-methods
+# # # #' @rdname Compare-methods
+# # # #' @exportMethod Ops
+# # # methods::setMethod(
+# # # 	f = "Ops",
+# # # 	signature(e1 = "GRaster", e2 = "GRegion"),
+# # #     function(e1, e2) {
+
+# # # 	oper <- as.vector(.Generic)[1L]
+# # # 	.compareGRegionGRaster(e1 = e1, e2 = e2, oper = oper)
+
+# # # 	} # EOF
+# # # )
+
+# # # #' @noRd
+# # # .compareGRegionGRaster <- function(e1, e2, oper) {
+	
+# # # 	if (!(oper %in% c("==", "!="))) stop("Can only use == and != operators when performing comparisons involving GRegions.")
+
+# # # 	out <- TRUE
+# # # 	if (location(e1) != location(e2)) out <- FALSE
+# # # 	if (!terra::same.crs(e1, e2)) out <- out & FALSE
+
+# # # 	if (is.3d(e1) & is.3d(e2)) {
+# # # 		top1 <- top(e1)
+# # # 		top2 <- top(e2)
+# # # 		bottom1 <- bottom(e1)
+# # # 		bottom2 <- bottom(e2)
+# # # 		out <- out & compareFloat(top1, top2, "==") & compareFloat(bottom1, bottom2, "==") & ndepth(e1) == ndepth(e2)
+# # # 	}
+
+# # # 	ext1 <- ext(e1, vector = TRUE)
+# # # 	ext2 <- ext(e2, vector = TRUE)
+# # # 	res1 <- res(e1)
+# # # 	res2 <- res(e2)
+# # # 	out <- out & all(compareFloat(ext1, ext2, "==")) & all(compareFloat(res1, res2, "=="))
+
+# # # 	if (oper == "!=") out <- !out
+# # # 	out
+
+# # # }
+
+# # # # GRegion GVector
+# # # #' @aliases Compare-methods
+# # # #' @rdname Compare-methods
+# # # #' @exportMethod Ops
+# # # methods::setMethod(
+# # #     f = "Ops",
+# # #     signature(e1 = "GRegion", e2 = "GVector"),
+# # #     function(e1, e2) {
+# # #         oper <- as.vector(.Generic)[1L]
+# # #         .compareGRegionGVector(e1 = e1, e2 = e2, oper = oper)
+# # #     } # EOF
+# # # )
+
+# # # # GVector GRegion
+# # # #' @aliases Compare-methods
+# # # #' @rdname Compare-methods
+# # # #' @exportMethod Ops
+# # # methods::setMethod(
+# # #     f = "Ops",
+# # #     signature(e1 = "GVector", e2 = "GRegion"),
+# # #     function(e1, e2) {
+# # #         oper <- as.vector(.Generic)[1L]
+# # #         .compareGRegionGVector(e1 = e1, e2 = e2, oper = oper)
+# # #     } # EOF
+# # # )
+
+# # # #' @noRd
+# # # .compareGRegionGVector <- function(e1, e2, oper) {
+	
+# # # 	if (!(oper %in% c("==", "!="))) stop("Can only use == and != operators when performing comparisons involving GRegions.")
+
+# # # 	out <- TRUE
+# # # 	if (location(e1) != location(e2)) out <- FALSE
+# # # 	if (!terra::same.crs(e1, e2)) out <- out & FALSE
+
+# # # 	ext1 <- ext(e1, vector = TRUE)
+# # # 	ext2 <- ext(e2, vector = TRUE)
+# # # 	out <- out & all(compareFloat(ext1, ext2, "==")) & all(compareFloat(res1, res2, "=="))
+
+# # # 	if (oper == "!=") out <- !out
+# # # 	out
+
+# # # }
