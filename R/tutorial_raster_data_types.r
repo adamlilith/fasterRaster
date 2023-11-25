@@ -30,6 +30,7 @@
 #' * [is.factor()] indicates if the raster is a categorical raster.
 #' * [levels()] returns the "levels" table of a categorical raster (just the value column and the active column).
 #' * \code{\link[fasterRaster]{levels<-}} and [categories()] can be used to assign categories to an integer raster and make it categorical (i.e., a "factor" raster).
+#' * [match()], `%in%`, and %notin%: Find which cells of a `GRaster` match or do not match certain category labels\cr
 #' * [missingCats()] finds values in categorical rasters that do not have a category assigned to them.
 #' * [nlevels()] returns the number of levels represented by a categorical raster.
 #'
