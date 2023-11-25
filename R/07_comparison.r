@@ -24,6 +24,7 @@ methods::setMethod(
 	
 		compareGeom(e1, e2)
 		.restore(e1)
+		region(e1)
 
 		if (nlyr(e1) > 1L & nlyr(e2) == 1L) {
 			e2 <- e2[[rep(1L, nlyr(e1))]]
@@ -65,6 +66,7 @@ methods::setMethod(
     function(e1, e2) {
 	
 		.restore(e2)
+		region(e2)
 
 		e1 <- as.integer(e1)
 		if (is.na(e1)) e1 <- "null()"
@@ -100,6 +102,7 @@ methods::setMethod(
     function(e1, e2) {
 	
 		.restore(e1)
+		region(e1)
 
 		e2 <- as.integer(e2)
 		if (is.na(e2)) e2 <- "null()"
@@ -135,6 +138,7 @@ methods::setMethod(
     function(e1, e2) {
 	
 		.restore(e2)
+		region(e2)
 
 		if (is.na(e1)) e1 <- "null()"
 
@@ -169,6 +173,7 @@ methods::setMethod(
     function(e1, e2) {
 	
 		.restore(e1)
+		region(e1)
 
 		if (is.na(e2)) e2 <- "null()"
 		oper <- as.vector(.Generic)[1L]
@@ -203,6 +208,7 @@ methods::setMethod(
     function(e1, e2) {
 	
 		.restore(e1)
+		region(e1)
 
 		if (is.na(e2)) e2 <- "null()"
 		oper <- as.vector(.Generic)[1L]
@@ -235,7 +241,9 @@ methods::setMethod(
     f = "Ops",
     signature(e1 = "integer", e2 = "GRaster"),
     function(e1, e2) {
+
         .restore(e2)
+		region(e2)
 
         if (is.na(e1)) e1 <- "null()"
 
@@ -267,7 +275,9 @@ methods::setMethod(
     function(e1, e2) {
 	
 	if (!all(is.factor(e1))) stop("Raster must be categorical for this type of comparison.")
+	
 	.restore(e1)
+	region(e1)
 
 	oper <- as.vector(.Generic)[1L]
 	levs <- levels(e1)
@@ -358,6 +368,7 @@ methods::setMethod(
 	
 	if (!all(is.factor(e2))) stop("Raster must be categorical for this type of comparison.")
 	.restore(e2)
+	region(e2)
 
 	oper <- as.vector(.Generic)[1L]
 	levs <- levels(e2)
