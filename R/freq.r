@@ -3,8 +3,8 @@
 #' @description `freq()` tabulates the frequency of cell values in a raster. For rasters where [datatype()] is `integer` or `factor`, the frequency of each value or level is reported. For other rasters, the range of values is divided into bins, and the number of cells with values in each bin is reported.
 #'
 #' @param x A `GRaster`.
-#' @param digits Numeric integer: Number of digits by which to round raster values.
-#' @param bins Positive numeric integer: Number of bins in which to divide values of `numeric` rasters. The default is 100. For `integer` and categorical rasters, each value is tallied.
+#' @param digits Numeric integer: Number of digits by which to round raster values. Ignored for integer and categorical rasters.
+#' @param bins Positive numeric integer: Number of bins in which to divide values of `numeric` rasters. The default is 100. For `integer` and categorical rasters, each value is tallied (i.e., this is ignored).
 #' @param value Numeric or `NULL` (default): If numeric, only cells with this value will be counted. If `NULL`, all values will be counted.
 #'
 #' @returns A `data.frame` or a named `list` of `data.frame`s, one per layer in `x`.
@@ -26,52 +26,73 @@ methods::setMethod(
 		value = NULL
 	) {
 
-	.restore(x)
-	region(x)
+	dtype <- datatype(x, type = "GRASS")
+	.freq(src = x, digits = digits, bins = bins, value = value, dtype = dtype)
+	
+	} # EOF
+)
+
+#' @param x `GRaster` or [sources()] name(s)
+#' @param digits Integer
+#' @param bins Integer > 0
+#' @param value NULL or numeric
+#' @param dtype [datatype()] using `GRASS`-style output
+#'
+#' @noRd
+.freq <- function(x, digits, bins, value, dtype) {
+
+	if (inherits(x, "GRaster")) {
+		.restore(x)
+		region(x)
+		src <- sources(x)
+	} else {
+		src <- x
+	}
+
+	nLayers <- length(src)
 
 	if (bins <= 0) stop("Argument ", sQuote("bins"), " must be a positive integer.")
 	
 	# get values for each raster
 	out <- list()
-	for (i in 1L:nlyr(x)) {
+	for (i in seq_len(nLayers)) {
 
-		thisGn <- sources(x)[i]
-	
+		thisSrc <- src[i]
+
 		if (!is.null(value)) {
 
-			thisGn <- .makeSourceName("value", "rast")
-			ex <- paste0(thisGn, " = if(", sources(x)[i], " == ", value, ", ", value, ", null())")
-			info <- rgrass::execGRASS(
-				"r.mapcalc",
-				expression=ex,
-				flags=c(.quiet(), "overwrite"),
-				intern=TRUE
+			thisSrc <- .makeSourceName("r_mapcalc", "raster")
+			ex <- paste0(thisSrc, " = if(", src[i], " == ", value, ", ", value, ", null())")
+			rgrass::execGRASS(
+				cmd = "r.mapcalc",
+				expression = ex,
+				flags = c(.quiet(), "overwrite")
 			)
 		
 		}
 
 		args <- list(
 			cmd = "r.stats",
-			input = thisGn,
+			input = thisSrc,
    			separator = "pipe",
 			flags = c("c", "n", .quiet()),
 			intern = TRUE
 		)
 		
-		if (datatype(x, "GRASS")[i] != "CELL") args$nsteps = bins
+		if (dtype[i] != "CELL") args$nsteps = bins
 		
-		data <- do.call(rgrass::execGRASS, args=args)
+		data <- do.call(rgrass::execGRASS, args = args)
 		
 		# bads <- which(grepl(data, pattern="no data"))
 		# if (length(bads) > 0L) data <- data[-bads]
 		
-		bads <- which(grepl(data, pattern="\b"))
+		bads <- which(grepl(data, pattern = "\b"))
 		if (length(bads) > 0L) data <- data[-bads]
 	
 		data <- strsplit(data, split = "\\|")
 
 		# categorical/integer data
-		if (datatype(x, "GRASS")[i] == "CELL") {
+		if (dtype[i] == "CELL") {
 			
 			n <- length(data)
 
@@ -148,6 +169,5 @@ methods::setMethod(
 	} # next layer
 	if (length(out) == 1L) out <- out[[1L]]
 	out
-	
-	} # EOF
-)
+
+}
