@@ -38,6 +38,8 @@ if (getRversion() >= "2.15.1") {
 # [[ is already generic
 # [[<- is already generic
 
+methods::setGeneric(name = "%in%", package = "terra")
+methods::setGeneric(name = "%notin%", package = "omnibus")
 methods::setGeneric(name = ".copyGSpatial", def = function(x, ...) standardGeneric(".copyGSpatial"))
 # methods::setGeneric(name = ".dbCats", def = function(x, ...) standardGeneric(".dbCats"))
 # methods::setGeneric(name = ".dbToDataTable", def = function(x, ...) standardGeneric(".dbToDataTable"))
@@ -150,6 +152,7 @@ methods::setGeneric(name = "longlat", def = function(x) standardGeneric("longlat
 
 methods::setGeneric(name = "mapset", def = function(x) standardGeneric("mapset"))
 methods::setGeneric(name = "mask", package = "terra")
+methods::setGeneric(name = "match", package = "terra")
 methods::setGeneric(name = "minmax", package = "terra")
 methods::setGeneric(name = "missingCats", def = function(x, ...) standardGeneric("missingCats"))
 methods::setGeneric(name = "merge", package = "terra")
