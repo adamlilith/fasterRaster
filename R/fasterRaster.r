@@ -93,6 +93,7 @@
 #' [kernel()]: Kernel density estimator of points.\cr
 #' [longlat()]: Create longitude/latitude rasters.\cr
 #' [mask()]: Remove values in a `GRaster` based on values in another `GRaster` or vector\cr
+#' [match()], `%in%`, and %notin%: Find which cells of a `GRaster` match or do not match certain values\cr
 #' [merge()]: Combine two or more rasters with different extents and fill in `NA`s\cr
 #' [noise()]: Remove coarse-scale trends from a `GRaster`, leaving just fine-scale "noise"\cr
 #' [pairs()]: Plot correlations between `GRaster` layers\cr
@@ -129,6 +130,7 @@
 #' [is.factor()]: Is a raster categorical?\cr
 #' [levels()]: "Levels" table of a categorical raster\cr
 #' \code{\link[fasterRaster]{levels<-}}: Set "levels" table of a categorical raster\cr
+#' [match()], `%in%`, and %notin%: Find which cells of a `GRaster` match or do not match certain category labels\cr
 #' [minmax()]: "Lowest" and "highest" category values of categorical rasters (when argument `levels = TRUE`)\cr
 #' [missingCats()]: Values that have no category assigned to them\cr
 #' [nlevels()]: Number of levels\cr
