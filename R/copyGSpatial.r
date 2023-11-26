@@ -2,7 +2,11 @@
 #'
 #' Create a copy of a `GRaster` or `GVector` in **GRASS**.  This function is used internally and is of little use to most users.  This only creates a copy of the object in the **GRASS** session--to make a `GRaster` or `GVector`, [.makeGRaster()] or [.makeGVector()] need to be called after making the copy. Note that if the object is multi-layered, then a copy is made of each layer.
 #'
-#' @param x `GRaster`, `GVector`, or character: The object or the `sources` of the object to be copied. Can take multi-layered objects or multiple `sources`.
+#' @param x `GRaster`, `GVector`, or character: The object or the [sources()] name(s) of the object(s) to be copied. Can take multi-layered objects or multiple `sources`.
+#'
+#' @param type Character or `NULL` (default): Either "raster" or "vector". If a character, there must be one per value in `x`. If `NULL`, will attempt to auto-detect (takes longer).
+#'
+#' @param topo `NULL` (default) or `"2D"` or `"3D"`.
 #' 
 #' @param reshapeRegion Logical: If `TRUE`, reshape the region to match `x` (`GRaster`s only).
 #'
@@ -13,7 +17,7 @@
 methods::setMethod(
 	f = ".copyGSpatial",
 	signature = c(x = "GRaster"),
-	function(x, reshapeRegion = TRUE) .copyGRaster(x, reshapeRegion = reshapeRegion)
+	function(x, reshapeRegion = TRUE) .copyGRaster(x, topo = topology(x), reshapeRegion = reshapeRegion)
 )
 
 #' @aliases .copyGSpatial
@@ -29,114 +33,131 @@ methods::setMethod(
 methods::setMethod(
 	f = ".copyGSpatial",
 	signature = c(x = "character"),
-	function(x, reshapeRegion = TRUE) {
+	function(x, type = NULL, topo = NULL, reshapeRegion = TRUE) {
 	
-	srcs <- .ls()
-	rastsOrVects <- names(srcs)
-	rastOrVect <- rastsOrVects[match(x, srcs)]
+	if (is.null(type)) {
+
+		srcs <- .ls()
+		types <- names(srcs)
+		type <- types[match(x, srcs)]
+
+	} else {
+
+		type <- omnibus::pmatchSafe(type, c("raster", "vector", "raster3d", "vector3d"))
+	
+	}
+
 	n <- length(x)
 	srcs <- rep(NA_character_, n)
 
 	for (i in seq_len(n)) {
 		
-		if (rastOrVect[i] == "raster") {
-			y <- .makeGVector(x)
-			srcsTo[i] <- .copyGRaster(y, reshapeRegion = reshapeRegion)
-		} else if (rastOrVect[i] == "vector") {
-			y <- .makeGRaster(x)
-			srcsTo[i] <- .copyGVector(y)
+		if (type[i] %in% c("raster", "raster3d")) {
+			srcs[i] <- .copyGRaster(x[i], topo = topo, reshapeRegion = reshapeRegion)
+		} else if (type[i] %in% c("vector", "vector3d")) {
+			srcs[i] <- .copyGVector(x[i])
 		}
 	
 	}
-	srcsTo
+	srcs
 		
 	} # EOF
 
 )
 
+#' @param x A `GRaster` or [sources()] name of one.
+#' @param topo "2D" or "3D"
+#' @param reshapeRegion Logical.
+#'
+#' @returns [sources()] names of copied rasters.
+#'
 #' @noRd
-.copyGRaster <- function(x, reshapeRegion) {
+.copyGRaster <- function(x, topo = "2D", reshapeRegion = TRUE) {
 
 	# NB This function could use `g.copy`, but in some cases it does not have the desired effect. For example, when a MASK raster is present, it correctly copies cells that are not masked, but when the MASK is removed, the masked cells re-appear. Similarly, it ignores the region when copying.
 
-	nLayers <- nlyr(x)
-	topo <- topology(x)
-	rastOrVect <- if (topo == "2D") { "raster" } else { "raster3d" }
+	if (inherits(x, "GRaster")) {
 
-	.restore(x)
-	if (reshapeRegion) region(x)
-	srcs <- .makeSourceName(x, type = "raster", nLayers)
+		.restore(x)
+		if (reshapeRegion) region(x)
+		srcs <- sources(x)
 
-	for (i in seq_len(nLayers)) {
+	} else {
 
-		ex <- paste0(srcs[i], " = ", sources(x)[i])
+		srcs <- x
+		if (reshapeRegion) {
 
-		args <- list(
-			cmd = "r.mapcalc",
-			expression = ex,
-			flags = c(.quiet(), "overwrite"),
-			intern = TRUE
-		)
+			args <- list(
+				cmd = "g.region",
+				flags = .quiet()
+			)
 
-		do.call(rgrass::execGRASS, args = args)
+			if (is.null(topo)) {
+
+				topo <- "2D" # guessing!
+				
+				if (!is.null(.quiet)) warning("Assuming raster is 2D.")
+
+				args$raster <- srcs[1L]
+
+			} else if (topo == "2D") {
+				args$raster <- srcs[1L]
+			} else if (topo == "3D") {
+				args$raster_3d <- srcs[1L]
+			}
+
+			do.call(rgrass::execGRASS, args = args)
+
+		}
 
 	}
 
-	srcs
+	nLayers <- length(srcs)
+
+	out <- .makeSourceName("r_mapcalc", type = "raster", nLayers)
+
+	for (i in seq_len(nLayers)) {
+
+		ex <- paste0(out[i], " = ", srcs[i])
+
+		rgrass::execGRASS(
+			cmd = "r.mapcalc",
+			expression = ex,
+			flags = c(.quiet(), "overwrite")
+		)
+
+	}
+
+	out
 	
 }
 
+#' @param x A `GVector` or the [sources()] name of one.
 #' @noRd
 .copyGVector <- function(x) {
 
 	if (inherits(x, "GVector")) {
 		.restore(x)
-		srcFrom <- sources(x)
+		srcs <- sources(x)
 	} else {
-		srcFrom <- x
+		srcs <- x
 	}
 
-	srcTo <- .makeSourceName("g_copy", type="vector")
+	n <- length(srcs)
 
-	fromTo <- paste0(srcFrom, ",", srcTo)
-	args <- list(
-		cmd = "g.copy",
-		vector = fromTo,
-		flags = c(.quiet(), "overwrite")
-	)
-	
-	do.call(rgrass::execGRASS, args = args)
+	out <- .makeSourceName("g_copy", type = "vector", n = n)
 
-	# ### copy database file
-	# gnDb <- .makeSourceName("db", rastOrVect = "vector")
-	
-	# opts <- getFastOptions(c("workDir", "location", "mapset"))
-	# grassDB <- paste(c(opts$workDir, opts$location, opts$mapset, "/sqlite/sqlite.db"), collapse="/")
+	for (i in seq_len(n)) {
+		
+		fromTo <- paste0(srcs[i], ",", out[i])
+		rgrass::execGRASS(
+			cmd = "g.copy",
+			vector = fromTo,
+			flags = c(.quiet(), "overwrite")
+		)
 
-	# args <- list(
-	# 	cmd = "db.copy",
-	# 	# from_database = fromDatabase,
-	# 	from_database = grassDB,
-	# 	from_table = sources(x),
-	# 	to_database = grassDB,
-	# 	to_table = gnDb,
-	# 	flags = c(.quiet(), "overwrite"),
-	# 	intern = FALSE
-	# )
-	
-	# do.call(rgrass::execGRASS, args=args)
-	
-	# ### connect database to vector
-	# args <- list(
-	# 	cmd = "v.db.connect",
-	# 	map = srcTo,
-	# 	driver = "sqlite",
-	# 	database = grassDB,
-	# 	table = srcTo,
-	# 	flags = c("o", .quiet(), "overwrite"),
-	# 	intern = FALSE
-	# )
-	# do.call(rgrass::execGRASS, args=args)
-	srcTo
+	}
+
+	out
 
 }
