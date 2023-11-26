@@ -26,7 +26,17 @@ methods::setMethod(
     signature = c(x = "GRaster", mask = "GRaster"),
     function(x, mask, inverse = FALSE, maskvalues = NA, updatevalue = NA) {
     
-    .mask(x, mask, inverse = inverse, maskvalues = maskvalues, updatevalue = updatevalue)
+    .restore(x)
+    region(x)
+
+    if (nlyr(mask) > 1L) warning("The mask raster has >1 layer. Only the first layer will be used.")
+
+    x <- sources(x)
+    mask <- sources(mask)[1L]
+
+    srcs <- .mask(x = x, mask = mask, maskType = "raster", inverse = inverse, maskvalues = maskvalues, updatevalue = updatevalue)
+
+    .makeGRaster(srcs, names(x))
 
     } # EOF
 )
@@ -39,15 +49,27 @@ methods::setMethod(
     signature = c(x = "GRaster", mask = "GVector"),
     function(x, mask, inverse = FALSE, updatevalue = NA) {
 
-    .mask(x, mask, inverse = inverse, maskvalues = NA, updatevalue = updatevalue)
+    .restore(x)
+    region(x)
+
+    x <- sources(x)
+    mask <- sources(mask)
+
+    srcs <- .mask(x = x, mask = mask, maskType = "vector", inverse = inverse, maskvalues = NA, updatevalue = updatevalue)
+
+    .makeGRaster(srcs, names(x))
     
     } # EOF
 )
 
-.mask <- function(x, mask, inverse, maskvalues, updatevalue) {
-
-    .restore(x)
-    region(x)
+#' @param x [sources()] name of a `GRaster`.
+#' @param mask [sources()] name of the mask `GRaster` or `GVector`.
+#' @param maskType "raster" or "vector".
+#' @param inverse Logical.
+#' @param maskvalues Numeric or `NA`.
+#' @param updatevalue Numeric or `NA`
+#' @noRd
+.mask <- function(x, mask, maskType, inverse = FALSE, maskvalues = NA, updatevalue = NA) {
 
     # remove mask on exit
     on.exit(.removeMask(), add = TRUE)
@@ -55,23 +77,19 @@ methods::setMethod(
     ### create a mask
     args <- list(
         cmd = "r.mask",
-        flags = c(.quiet(), "overwrite"),
-        intern = TRUE
+        flags = c(.quiet(), "overwrite")
     )
 
     if (inverse) args$flags <- c(args$flags, "i")
 
     ### mask is a raster
     ####################
-    if (inherits(mask, "GRaster")) {
-
-        if (nlyr(mask) > 1L) warning("The mask raster has >1 layer. Only the first layer will be used.")
-        mask <- mask[[1L]]
+    if (maskType == "raster") {
 
         # custom mask values
-        if (length(maskvalues) > 1L || !is.na(maskvalues)) {
+        if (length(maskvalues) > 1L | !is.na(maskvalues)) {
 
-            maskGn <- .makeSourceName("mask", "raster")
+            maskSrc <- .makeSourceName("r_mapcalc", "raster")
 
             if (anyNA(maskvalues)) {
                 maskValuesHaveNAs <- TRUE
@@ -86,23 +104,23 @@ methods::setMethod(
 
             maskvalues <- paste(maskvalues, collapse = " | ")
 
-            ex <- paste0(maskGn, " = if(", maskvalues, ", 1, null())")
+            ex <- paste0(maskSrc, " = if(", maskvalues, ", 1, null())")
             
-            rgrass::execGRASS(
+            args <- list(
                 cmd = "r.mapcalc",
                 expression = ex,
                 flags = c(.quiet(), "overwrite")
             )
 
         } else {
-            maskGn <- sources(mask)
+            maskSrc <- mask
         }
 
-        args$raster <- maskGn
+        args$raster <- maskSrc
     
     ### mask is a vector
-    } else if (inherits(mask, "GVector")) {
-        args$vector <- sources(mask)
+    } else if (maskType == "vector") {
+        args$vector <- mask
     }
 
     ### create mask
@@ -110,8 +128,8 @@ methods::setMethod(
 
     ### copy rasters with mask operative
     ### NOT CORRECT AS OF 2023/07/19: Using g.copy/.copyGSpatial() will not allow the mask to be retained on exiting the function when the mask is automatically removed.
-    n <- nlyr(x)
-    srcs <- .copyGSpatial(x, reshapeRegion = FALSE)
+    n <- length(x)
+    srcs <- .copyGRaster(x, topo = topology(x), reshapeRegion = FALSE)
     # srcs <- .makeSourceName("mask", "raster", n)
 
     # for (i in seq_len(n)) {
@@ -125,30 +143,35 @@ methods::setMethod(
     if (!is.na(updatevalue)) {
 
 		nLayers <- nlyr(x)
-        gnsUpdate <- .makeSourceName("mask", "raster", nLayers)
+        srcsUpdate <- .makeSourceName("r_mapcalc", "raster", nLayers)
+
         for (i in seq_len(nLayers)) {
 
-            ex <- paste0(gnsUpdate[i], " = if(!isnull(", srcs[i], "), ", updatevalue, ", null())")
-            rgrass::execGRASS("r.mapcalc", expression = ex, flags = c(.quiet(), "overwrite"), intern = TRUE)
+            ex <- paste0(srcsUpdate[i], " = if(!isnull(", srcs[i], "), ", updatevalue, ", null())")
+            
+            rgrass::execGRASS(
+                "r.mapcalc",
+                expression = ex,
+                flags = c(.quiet(), "overwrite")
+            )
 
         } # next raster
-        out <- .makeGRaster(gnsUpdate, names(x))
+        srcs <- srcsUpdate
 
     } else {
-        out <- .makeGRaster(srcs, names(x))
+        out <- srcs
     }
-    out
+    srcs
 
 } # EOF
 
 ### remove mask on exit from within a function
 #' @noRd
 .removeMask <- function() {
-    args <- list(
+
+    rgrass::execGRASS(
         cmd = "r.mask",
         flags = c(.quiet(), "overwrite", "r")
     )
-
-    do.call(rgrass::execGRASS, args = args)
     
 }
