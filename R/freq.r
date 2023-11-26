@@ -27,19 +27,19 @@ methods::setMethod(
 	) {
 
 	dtype <- datatype(x, type = "GRASS")
-	.freq(src = x, digits = digits, bins = bins, value = value, dtype = dtype)
+	.freq(x = x, dtype = dtype, digits = digits, bins = bins, value = value)
 	
 	} # EOF
 )
 
 #' @param x `GRaster` or [sources()] name(s)
+#' @param dtype [datatype()] using `GRASS`-style output
 #' @param digits Integer
 #' @param bins Integer > 0
 #' @param value NULL or numeric
-#' @param dtype [datatype()] using `GRASS`-style output
 #'
 #' @noRd
-.freq <- function(x, digits, bins, value, dtype) {
+.freq <- function(x, dtype, digits = 3, bins = 100, value = NA) {
 
 	if (inherits(x, "GRaster")) {
 		.restore(x)
@@ -51,7 +51,7 @@ methods::setMethod(
 
 	nLayers <- length(src)
 
-	if (bins <= 0) stop("Argument ", sQuote("bins"), " must be a positive integer.")
+	if (dtype != "CELL" & bins <= 0) stop("Argument ", sQuote("bins"), " must be a positive integer.")
 	
 	# get values for each raster
 	out <- list()
