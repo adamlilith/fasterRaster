@@ -39,7 +39,7 @@ methods::setMethod(
 #' @param value NULL or numeric
 #'
 #' @noRd
-.freq <- function(x, dtype, digits = 3, bins = 100, value = NA) {
+.freq <- function(x, dtype, digits = 3, bins = 100, value = NULL) {
 
 	if (inherits(x, "GRaster")) {
 		.restore(x)
@@ -75,6 +75,7 @@ methods::setMethod(
 			cmd = "r.stats",
 			input = thisSrc,
    			separator = "pipe",
+			# flags = c("c", "n")
 			flags = c("c", "n", .quiet()),
 			intern = TRUE
 		)
@@ -82,9 +83,6 @@ methods::setMethod(
 		if (dtype[i] != "CELL") args$nsteps = bins
 		
 		data <- do.call(rgrass::execGRASS, args = args)
-		
-		# bads <- which(grepl(data, pattern="no data"))
-		# if (length(bads) > 0L) data <- data[-bads]
 		
 		bads <- which(grepl(data, pattern = "\b"))
 		if (length(bads) > 0L) data <- data[-bads]
@@ -94,17 +92,12 @@ methods::setMethod(
 		# categorical/integer data
 		if (dtype[i] == "CELL") {
 			
-			n <- length(data)
+			freqs <- do.call(rbind, data)
+			freqs <- data.table::as.data.table(freqs)
+			names(freqs) <- c("value", "count")
 
-			freqs <- data.table::data.table(value = rep(NA_character_, n), count = rep(NA_integer_, n))
+			freqs[ , c("value", "count") := lapply(.SD, as.integer), .SDcols = c("value", "count")]
 
-			for (j in seq_along(data)) {
-				freqs$value[j] <- data[[j]][1L]
-				freqs$count[j] <- data[[j]][2L]
-			}
-			
-			freqs$value <- as.numeric(freqs$value)
-			freqs$count <- as.numeric(freqs$count)
 			data.table::setkeyv(freqs, "value")
 
 			# add level labels
@@ -119,8 +112,6 @@ methods::setMethod(
 
 			}
 		
-	  		data.table::setkeyv(freqs, "value")
-
 		# continuous data
 		} else {
 	
