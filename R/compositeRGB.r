@@ -12,7 +12,7 @@
 #'
 #' @returns A `GRaster`.
 #'
-#' @exmaple man/examples/ex_plot.r
+#' @example man/examples/ex_plot.r
 #'
 #' @seealso [plotRGB()], [terra::plotRGB()]
 #'
