@@ -3,10 +3,13 @@
 \name{datatype,GRaster-method}
 \alias{datatype,GRaster-method}
 \alias{datatype}
+\alias{datatype,SpatRaster-method}
 \alias{datatype,GVector-method}
 \title{Get the datatype of a GRaster or of GVector columns}
 \usage{
-\S4method{datatype}{GRaster}(x, type = "fasterRaster")
+\S4method{datatype}{GRaster}(x, type = "fasterRaster", forceDouble = TRUE)
+
+\S4method{datatype}{SpatRaster}(x, type = "fasterRaster", forceDouble = TRUE)
 
 \S4method{datatype}{GVector}(x)
 }
@@ -20,6 +23,8 @@
 \item \code{"GRASS"}: Will return "CELL" (integer), "FCELL" (floating-point value), or "DCELL" (double-floating point value)
 \item \code{"GDAL"}: See \href{https://gdal.org/user/raster_data_model.html#raster-band}{GDAL: Raster Band}. Please also see the table in the \link[=tutorial_raster_data_types]{tutorial on raster data types}.
 }}
+
+\item{forceDouble}{Logical (\code{GRaster}s and \code{SpatRaster}s only): If \code{TRUE} (default), and the raster appears to represent non-integer values, then the raster will be assumed to represent double-floating point values (\strong{GRASS}: type "DCELL", \strong{terra}: type "FLT8S", \strong{fasterRaster}: type "double", and \strong{GDAL}: type "Float64"). \code{forceDouble} reports the actual datatype if \code{type = "fasterRaster"} (i.e., the type is not forced to "double").}
 }
 \value{
 \code{datatype()} for a \code{GRaster} returns a character. \code{datatype()} for a \code{GVector} returns a data frame, with one row per field. If the \code{GVector} has no attribute table, the function returns \code{NULL}.

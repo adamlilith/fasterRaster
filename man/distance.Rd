@@ -24,7 +24,7 @@
   x,
   y,
   fillNA = TRUE,
-  dense = TRUE,
+  thick = TRUE,
   unit = "meters",
   method = ifelse(is.lonlat(x), "geodesic", "Euclidean"),
   minDist = NULL,
@@ -51,15 +51,15 @@
 
 \item{unit}{Character: Units of the output. Any of:
 \itemize{
-\item \code{"meters"}, "metres", or \code{"m"}
+\item \code{"meters"}, \code{"metres"}, or \code{"m"}
 \item \code{"kilometers"} or \code{"km"}
-\item \code{"miles"}
-\item \code{"nautical miles"} or \code{"nm"}
-\item \code{"yards"} or \code{"yds"}
-\item \code{"survey feet"} or \code{"sft"} -- US survey, obsolete after January 1, 2023, 1 foot approximately equal to 0.304800000001219 meters
+\item \code{"miles"} or \code{"mi"}
+\item \code{"nautical miles"} or \code{"nmi"}
+\item \code{"yards"} or \code{"yd"}
 \item \code{"feet"} or \code{"ft"} -- international, 1 foot exactly equal to 0.3048 meters
-Partial matching is used.
-}}
+}
+
+Partial matching is used and case is ignored.}
 
 \item{method}{Character: The type of distance to calculate. Partial matching is used and capitalization is ignored. Possible values include:
 \itemize{
@@ -72,7 +72,7 @@ Partial matching is used.
 
 \item{minDist, maxDist}{Either \code{NULL} (default) or numeric values: Ignore distances less than or greater than these distances.}
 
-\item{dense}{Logical: Only applicable for case 2, when \code{x} is a \code{GRaster} and \code{y} is a \code{GVector}. If \code{TRUE} (default), then the vector will be represented by "densified" lines (i.e., any cell that the line/boundary touches, not just the ones on the rendering path).}
+\item{thick}{Logical: Only applicable for case 2, when \code{x} is a \code{GRaster} and \code{y} is a \code{GVector}. If \code{TRUE} (default), then the vector will be represented by "thickened" lines (i.e., any cell that the line/boundary touches, not just the ones on the rendering path).}
 }
 \value{
 If \code{x} is a \code{GRaster}, then the output is a \code{GRaster}. If \code{x} is a \code{GVector}, then the output is a numeric vector.
@@ -153,7 +153,7 @@ plot(st_geometry(madRivers), add = TRUE)
 plot(st_geometry(madRivers))
 plot(st_geometry(madDypsis), add = TRUE)
 
-distToRivers <- distance(dypsis, rivers)
+distToRivers <- distance(dypsis, rivers, unit = "yd")
 distToPlants <- distance(rivers, dypsis)
 distToRivers
 distToPlants

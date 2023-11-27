@@ -47,13 +47,6 @@ Note that unlike \code{terra::aggregate()} and \code{\link[terra:disaggregate]{t
 \item{na.rm}{Logical (rasters only): If \code{FALSE} (default), propagate \code{NA} cells or \code{NA} values.}
 
 \item{dissolve}{Logical (vectors only): If \code{TRUE} (default), then aggregated geometries will have their borders dissolved. This is ignored if the input \code{GVector} is not a "polygons" vector.}
-
-\item{by}{Either a character, a numeric or integer vector, or \code{NULL} (vectors only):
-\itemize{
-\item If \code{NULL} (default), then all geometries will be collated into a single multipart geometry.
-\item If a character, then rows with the same value in the named column of the vector's data table will be aggregated.
-\item If a numeric integer or integer vector, the vector must have the same length as the number of geometries (see \code{\link[=ngeom]{ngeom()}}). The values must be integers. Geometries with the same value will be aggregated together.
-}}
 }
 \value{
 A \code{GRaster} or \code{GVector}.

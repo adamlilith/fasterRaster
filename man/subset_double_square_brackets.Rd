@@ -5,7 +5,7 @@
 \alias{[[}
 \alias{[[,GRaster,ANY,ANY-method}
 \alias{[[,GVector,ANY,ANY-method}
-\title{Subset layer(s) from a GRaster or a GVector with selected columns}
+\title{Subset layers from a GRaster, or specific columns from a GVector}
 \usage{
 \S4method{[[}{GRaster,ANY,ANY}(x, i, j)
 

@@ -10,9 +10,9 @@
 \arguments{
 \item{x}{A "polygons" or "lines" \code{GVector}.}
 
-\item{unit}{Character: Units in which to report values. Can be any of:
+\item{unit}{Character: Units in which to report values. Areal units are squared, linear are not. Can be any of:
 \itemize{
-\item \code{"meters"} (default)
+\item \code{"meters"}(default), \code{"metres"}, or \code{"m"}
 \item \code{"km"} or \code{"kilometers"}
 \item \code{"ha"} or \code{"hectares"}
 \item \code{"ft"} or \code{"feet"}

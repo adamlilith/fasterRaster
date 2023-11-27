@@ -26,13 +26,13 @@ and the latest development version using:
 
 Once you have installed \strong{GRASS}, you will need to know where on your computer it was installed. The exact folder will depend on your operating system, the version installed, and perhaps other things, but in general, the install folder will look something like:
 
-Windows: \code{"C:/Program Files/GRASS GIS 8.3"}\cr
+Windows: \code{"C:/Program Files/GRASS GIS 8.4"}\cr
 Mac: \code{"/Applications/GRASS-8.3.app/Contents/Resources"}\cr
 Linux: \code{"/usr/local/grass"}\cr
 
 Whatever the name of this folder, it is passed to functions using an argument named \code{grassDir}. So, it is helpful to define \code{grassDir}, as in:
 
-\if{html}{\out{<div class="sourceCode">}}\preformatted{grassDir <- "C:/Program Files/GRASS GIS 8.3" # Windows
+\if{html}{\out{<div class="sourceCode">}}\preformatted{grassDir <- "C:/Program Files/GRASS GIS 8.4" # Windows
 grassDir <- "/Applications/GRASS-8.3.app/Contents/Resources" # Mac
 grassDir <- "/usr/local/grass" # Linux
 }\if{html}{\out{</div>}}
@@ -52,7 +52,7 @@ Now, we need to start a \strong{fasterRaster} "session", which makes a connectio
 The \code{crs} argument takes a coordinate reference string or an object from which such a string can be obtained. We will use a raster that comes with \strong{fasterRaster} to set the \code{crs} argument.
 
 \if{html}{\out{<div class="sourceCode">}}\preformatted{madElev <- fastData("madElev") # get raster
-faster(madElev, grassDir = grassDir)
+faster(madElev, grassDir = grassDir) # start session
 }\if{html}{\out{</div>}}
 
 Here, the \code{grassDir} is the installation directory we defined earlier. Now, we can start using \strong{fasterRaster}!
@@ -67,7 +67,7 @@ elev
 
 You can see the properties of the \code{GRaster} representation of the \code{madElev} raster. Converting rasters that are already in \strong{R} to \code{GRaster}s takes some time. Instead, you can load a raster directly from disk to a \strong{fasterRaster} session using \code{fast()}. To do this, you just replace the argument in \code{\link[=fast]{fast()}} with a string representing the folder path and file name of the raster you want to load into the session.
 
-Now, let"s create a \code{GVector}. The \code{\link[=fast]{fast()}} function can take a \code{SpatVector} from the \strong{terra} package, an \code{sf} object from the \strong{sf} package, or a string representing the file path and file name of a vector file (e.g., a GeoPackage file or a shapefile).
+Now, let's create a \code{GVector}. The \code{\link[=fast]{fast()}} function can take a \code{SpatVector} from the \strong{terra} package, an \code{sf} object from the \strong{sf} package, or a string representing the file path and file name of a vector file (e.g., a GeoPackage file or a shapefile).
 
 \if{html}{\out{<div class="sourceCode">}}\preformatted{madRivers <- fastData("madRivers")
 rivers <- fast(madRivers)
@@ -84,7 +84,7 @@ logElev <- log10(elev)
 logElev
 }\if{html}{\out{</div>}}
 
-You can also use the many \strong{fasterRaster} functions. In general, these functions have the same names as their \strong{terra} and *8sf(( counterparts and usually the same arguments. The following code creates a raster where cell values reflect the distance between them and the nearest river, then converts the output to a \code{SpatRaster} for plotting:
+You can also use the many \strong{fasterRaster} functions. In general, these functions have the same names as their \strong{terra} and \strong{sf} counterparts and usually the same arguments. The following code creates a raster where cell values reflect the distance between them and the nearest river, then converts the output to a \code{SpatRaster} for plotting:
 
 \if{html}{\out{<div class="sourceCode">}}\preformatted{dist <- distance(elev, rivers)
 plot(dist)

@@ -4,7 +4,7 @@
 \name{[}
 \alias{[}
 \alias{[,GVector,ANY,ANY-method}
-\title{Subset features of a GVector}
+\title{Subset geometries of a GVector}
 \usage{
 \S4method{[}{GVector,ANY,ANY}(x, i, j)
 }

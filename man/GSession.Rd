@@ -34,6 +34,8 @@ The \code{G} suite of S4 classes contain pointers to \strong{GRASS} objects or m
 
 \item{\code{mapset}}{Character (all classes): The \strong{GRASS} \link[=tutorial_sessions]{"mapset"}. Default value is \code{PERMANENT}. Typically hidden to users. Can be obtained using \code{\link[=mapset]{mapset()}}.}
 
+\item{\code{workDir}}{Character (all classes): Directory in which \strong{GRASS} stores files.}
+
 \item{\code{topology}}{Character (\code{GSpatial} objects, including \code{GRegion}s, \code{GRaster}s, and \code{GVector}s): Valid values are \verb{2D} (2-dimensional--most rasters and vectors) or \verb{3D} (3-dimensional--e.g., LIDAR data). Can be obtained using \code{\link[=topology]{topology()}}.}
 
 \item{\code{sources}}{Character (\code{GRaster}s and \code{GVector}s): Name of the object in \strong{GRASS}. These are typically made on-the-fly and provide the pointer to the object from \strong{R} to \strong{GRASS}. Changing them manually will break the connection. Can be obtained using \code{\link[=sources]{sources()}}.}

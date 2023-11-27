@@ -57,7 +57,7 @@ A tutorial on \link[=tutorial_raster_data_types]{raster data types}\cr
 \subsection{Functions that operate on or create \code{GRasters}}{
 
 \link{Arithmetic}: Mathematical operations on \code{GRaster}s: \code{+}, \code{-}, \code{*}, \code{/}, \code{^}, \code{\%\%} (modulus), \code{\%/\%} (integer division)\cr
-\link[=Comparison]{Equality}: \code{<}, \code{<=}, \code{==}, \code{!=}, \code{>=}, and \code{>}, plus \code{\%in\%} (for categorical rasters only)\cr
+\link[=Compare-methods]{Logical comparisons}: \code{<}, \code{<=}, \code{==}, \code{!=}, \code{>=}, and \code{>}, plus \code{\%in\%} (for categorical rasters only)\cr
 
 Single-layer functions (applied to each layer of a \code{GRaster}):
 \itemize{
@@ -75,9 +75,6 @@ Multi-layer functions (applied across layers of a "stack" of \code{GRaster}s):
 \item Dispersion: \code{\link[=sd]{sd()}}, \code{\link[=var]{var()}}, \code{\link[=sdpop]{sdpop()}}, \code{\link[=varpop]{varpop()}}, \code{\link[=nunique]{nunique()}}, \code{\link[=range]{range()}}, \code{\link[=quantile]{quantile()}}, \code{\link[=skewness]{skewness()}}, \code{\link[=kurtosis]{kurtosis()}}
 \item Extremes: \code{\link[=min]{min()}}, \code{\link[=max]{max()}}, \code{\link[=which.min]{which.min()}}, \code{\link[=which.max]{which.max()}} \cr
 }
-}
-
-\subsection{Functions that operate on or create \code{GRaster}s}{
 
 The operators \link{$} and \code{\link[fasterRaster]{[[}} can be used to subset or remove specific layers of a \code{GRaster}.\cr
 The \code{\link[fasterRaster]{[<-}} operator can be used to replace values of cells of a \code{GRaster}.\cr
@@ -91,7 +88,9 @@ The assign operators, \code{\link[fasterRaster]{$<-}}, \code{\link[fasterRaster]
 \code{\link[=buffer]{buffer()}}: Create a buffer around non-\code{NA} cells\cr
 \code{\link[=app]{app()}}: Apply a user-defined function to multiple layers of a \code{GRaster} (with helper functions \code{\link[=appFuns]{appFuns()}} and \code{\link[=appCheck]{appCheck()}})\cr
 \code{\link[=c]{c()}}: "Stack" two or more rasters\cr
+\code{\link[=cellSize]{cellSize()}}: Cell area\cr
 \code{\link[=clump]{clump()}}: Group adjacent cells with similar values\cr
+\code{\link[=combineCats]{combineCats()}}: Combine values from two or more categorical and/or integer rasters\cr
 \code{\link[=cor]{cor()}}: Correlation matrix between layers of a \code{GRaster}\cr
 \code{\link[=cov]{cov()}}: Covariance matrix between layers of a \code{GRaster}\cr
 \code{\link[=crop]{crop()}}: Remove parts of a \code{GRaster}\cr
@@ -108,6 +107,7 @@ The assign operators, \code{\link[fasterRaster]{$<-}}, \code{\link[fasterRaster]
 \code{\link[=kernel]{kernel()}}: Kernel density estimator of points.\cr
 \code{\link[=longlat]{longlat()}}: Create longitude/latitude rasters.\cr
 \code{\link[=mask]{mask()}}: Remove values in a \code{GRaster} based on values in another \code{GRaster} or vector\cr
+\code{\link[=match]{match()}}, \code{\%in\%}, and \%notin\%: Find which cells of a \code{GRaster} match or do not match certain values\cr
 \code{\link[=merge]{merge()}}: Combine two or more rasters with different extents and fill in \code{NA}s\cr
 \code{\link[=noise]{noise()}}: Remove coarse-scale trends from a \code{GRaster}, leaving just fine-scale "noise"\cr
 \code{\link[=pairs]{pairs()}}: Plot correlations between \code{GRaster} layers\cr
@@ -126,10 +126,11 @@ The assign operators, \code{\link[fasterRaster]{$<-}}, \code{\link[fasterRaster]
 \code{\link[=terrain]{terrain()}}: Slope, aspect, curvature, and partial slopes\cr
 \code{\link[=thinLines]{thinLines()}}: Reduce linear features on a \code{GRaster} so linear features are 1 cell wide\cr
 \code{\link[=trim]{trim()}}: Remove rows and columns from a \code{GRaster} that are all \code{NA}\cr
-\code{\link[=viewshed]{viewshed()}}: Areas visible from points on a raster\cr
+\code{\link[=zonal]{zonal()}}: Statistics (mean, sum, etc.) on areas of a \code{GRaster} defined by sets of cells with the same values in another \code{GRaster}, or by geometries in a \code{GVector}\cr
+\code{\link[=zonalGeog]{zonalGeog()}}: Geographic statistics (area, perimeter, fractal dimension, etc.) for sets of cells with the same values\cr
 }
 
-\subsection{Functions operating on categorical rasters}{
+\subsection{Functions operating on categorical (factor) rasters}{
 
 \code{\link[=activeCat]{activeCat()}}: Column that defines category labels\cr
 \code{\link[fasterRaster]{activeCat<-}}: Set column that defines category labels\cr
@@ -138,20 +139,23 @@ The assign operators, \code{\link[fasterRaster]{$<-}}, \code{\link[fasterRaster]
 \code{\link[=categories]{categories()}}: Set "levels" table for specific layers of a categorical raster\cr
 \code{\link[=catNames]{catNames()}}: Names of each "levels" table\cr
 \code{\link[=cats]{cats()}}: "Levels" table of a categorical raster\cr
+\code{\link[=combineCats]{combineCats()}}: Combine categories from two or more categorical rasters\cr
 \code{\link[=droplevels]{droplevels()}}: Remove one or more levels\cr
 \code{\link[=freq]{freq()}}: Frequency of each category across cells of a raster\cr
 \code{\link[=is.factor]{is.factor()}}: Is a raster categorical?\cr
 \code{\link[=levels]{levels()}}: "Levels" table of a categorical raster\cr
 \code{\link[fasterRaster]{levels<-}}: Set "levels" table of a categorical raster\cr
+\code{\link[=match]{match()}}, \code{\%in\%}, and \%notin\%: Find which cells of a \code{GRaster} match or do not match certain category labels\cr
 \code{\link[=minmax]{minmax()}}: "Lowest" and "highest" category values of categorical rasters (when argument \code{levels = TRUE})\cr
 \code{\link[=missingCats]{missingCats()}}: Values that have no category assigned to them\cr
 \code{\link[=nlevels]{nlevels()}}: Number of levels\cr
+\code{\link[=zonalGeog]{zonalGeog()}}: Geographic statistics (area, perimeter, fractal dimension, etc.) for sets of cells with the same values
 }
 
 \subsection{Functions for analysis of remote sensing rasters}{
 
-\code{\link[=toarAster]{toarAster()}}: Convert digital number ASTER rasters to radiance, and radiance to reflectance\cr
-\code{\link[=toarLandsat]{toarLandsat()}}: Convert digital number LANDSAT rasters to radiance, and radiance to reflectance\cr
+\code{\link[=compositeRGB]{compositeRGB()}}: Combine red, green, and blue color bands to make a composite \code{GRaster}\cr
+\code{\link[=plotRGB]{plotRGB()}}: Display a multispectral \code{GRaster} using red, blue, green, and alpha channels\cr
 \code{\link[=vegIndex]{vegIndex()}}: Vegetation indices from surface reflectance\cr
 }
 
@@ -182,7 +186,7 @@ The assign operators, \code{\link[fasterRaster]{$<-}}, \code{\link[fasterRaster]
 
 \subsection{Functions that operate on or create \code{GVector}s}{
 
-The \code{\link[fasterRaster]{[}} operator can be used to subset geometries of a \code{GRaster}.\cr
+The \code{\link[fasterRaster]{[}} operator can be used to subset geometries of a \code{GVector}.\cr
 The \link{$} and \code{\link[fasterRaster]{[[}} operators can be used to get columns of a \code{GVector}'s data table.\cr
 The \code{\link[fasterRaster]{$<-}} operator can be used to replace specific columns of a \code{GVector}'s data table.\cr
 \code{\link[=aggregate]{aggregate()}}: Combine \code{GVector} geometries\cr
@@ -242,6 +246,7 @@ The \code{\link[fasterRaster]{$<-}} operator can be used to replace specific col
 
 \code{\link[=crs]{crs()}}: Coordinate reference system of the current location\cr
 \code{\link[=location]{location()}}: \strong{GRASS} "location" of an object or the active session\cr
+\code{\link[=locations]{locations()}}: Meta-data on all active \strong{GRASS} "locations" in the active session\cr
 \code{\link[=mapset]{mapset()}}: \strong{GRASS} "mapset" of an object or the active session\cr
 \code{\link[=restoreSession]{restoreSession()}}: Restore a previous \strong{GRASS} session or switch \strong{GRASS} locations/mapsets\cr
 \code{\link[=removeSession]{removeSession()}}: Delete a \strong{GRASS} session (location, mapset(s), and all associated files)\cr
@@ -255,15 +260,14 @@ The \code{\link[fasterRaster]{$<-}} operator can be used to replace specific col
 \code{\link[=dropRows]{dropRows()}}: Remove rows from a \code{data.frame} or \code{data.table}\cr
 \code{\link[=forwardSlash]{forwardSlash()}}: Replace backslash with forward slash\cr
 \code{\link[=grassInfo]{grassInfo()}}: \strong{GRASS} version and citation\cr
-\code{\link[=pmatchSafe]{pmatchSafe()}}: Partial matching of strings with error checking\cr
 \code{\link[=replaceNAs]{replaceNAs()}}: Replace \code{NA}s in columns of a \code{data.table} or \code{data.frame}, or in a vector\cr
-\code{\link[=rstring]{rstring()}}: Create a string statistically likely to be unique\cr
 \code{\link[=seqToSQL]{seqToSQL()}}: Format a numeric series into an SQL value call.\cr
 \code{\link[=update]{update()}}: Refresh metadata in a \code{GRaster} or \code{GVector} object.\cr
 }
 
 \subsection{Functions that operate on \strong{GRASS} "regions" (useful mostly to developers):}{
 
+Comparisons between \code{GRegion}s using the \code{==} and \code{!=} operators.
 \code{\link[=region]{region()}}: Change or report the active region's extent and resolution\cr
 \code{\link[=regionDim]{regionDim()}}: Change or report the active region's resolution (also \code{\link[=dim]{dim()}} and related functions, with no arguments)
 \code{\link[=regionExt]{regionExt()}}: Change or report the active region's extent (also \code{\link[=ext]{ext()}} and related functions, with no arguments)\cr

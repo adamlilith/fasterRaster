@@ -5,7 +5,7 @@
 \alias{$}
 \alias{$,GRaster-method}
 \alias{$,GVector-method}
-\title{Subset a raster layer or values from a column of a vector's data table}
+\title{Subset a GRaster layer, or return values from a column of a GVector's table}
 \usage{
 \S4method{$}{GRaster}(x, name)
 

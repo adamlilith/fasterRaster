@@ -64,6 +64,7 @@ minmax(cover, levels = TRUE) # min/max categories
 catNames(cover) # column names of the levels table
 missingCats(cover) # categories in table with no values in raster
 freq(cover) # frequency of each category (number of cells)
+zonalGeog(cover) # geometric statistics
 
 ### Active column
 #################
@@ -119,7 +120,6 @@ cats(cover)
 ### Logical operations on categorical rasters
 #############################################
 
-
 cover < "Forest" # 1 for cells with a value < 40, 0 otherwise
 cover <= "Forest" # 1 for cells with a value < 120, 0 otherwise
 cover == "Forest" # 1 for cells with value of 40-120, 0 otherwise
@@ -128,6 +128,35 @@ cover > "Forest" # 1 for cells with a value > 120, 0 otherwise
 cover >= "Forest" # 1 for cells with a value >= 120, 0 otherwise
 
 cover \%in\% c("Cropland", "Forest") # 1 for cropland/forest cells, 0 otherwise
+
+### Combine a categories from different rasters
+###############################################
+
+# NB Only have one categorical raster ships with fasterRaster, so we will
+# create a second one from the elevation raster.
+
+# Divide elevation raster into "low/medium/high" levels:
+madElev <- fastData("madElev")
+elev <- fast(madElev)
+fun <- "= if(madElev < 100, 0, if(madElev < 400, 1, 2))"
+elevCat <- app(elev, fun)
+elevCat <- resample(elevCat, cover, method = "near")
+
+levs <- data.frame(
+     value = c(0, 1, 2),
+     elevation = c("low", "medium", "high")
+)
+levels(elevCat) <- list(levs)
+
+# Combine levels:
+combined <- combineCats(cover, elevCat)
+combined
+levels(combined)
+
+# Combine levels, treating value/NA combinations as new categories:
+combinedNA <- combineCats(cover, elevCat, na.rm = FALSE)
+combinedNA
+levels(combinedNA)
 
 # IMPORTANT #3: Revert back to original GRASS session if needed.
 restoreSession(opts.)

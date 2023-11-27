@@ -11,7 +11,8 @@
 \alias{Ops,integer,GRaster-method}
 \alias{Ops,GRaster,character-method}
 \alias{Ops,character,GRaster-method}
-\title{Compare-methods operations on GRasters}
+\alias{Ops,GRegion,GRegion-method}
+\title{Compare-methods operations on GRasters and GRegions}
 \usage{
 \S4method{Ops}{GRaster,GRaster}(e1, e2)
 
@@ -30,15 +31,25 @@
 \S4method{Ops}{GRaster,character}(e1, e2)
 
 \S4method{Ops}{character,GRaster}(e1, e2)
+
+\S4method{Ops}{GRegion,GRegion}(e1, e2)
 }
 \arguments{
-\item{e1, e2}{\code{GRaster}, logical, numeric, or character. Character is useful when using a \link[=tutorial_raster_data_types]{categorical raster}, in which case you can use something like \code{raster1 == "Wetlands"} to force all "wetland" cells to be 1 (TRUE) and all others 0 (FALSE) or \code{NA} (if it was originally \code{NA}).}
+\item{e1, e2}{Values depend on the type of comparison:
+\itemize{
+\item Comparing a \code{GRegion} to another \code{GRegion}: \code{e1} and \code{e2} must be \code{GRegion}s!
+}}
 }
 \value{
-An "integer \code{GRaster} with values of 0 (FALSE), 1 (TRUE), or \code{NA} (neither).
+Comparing \code{GRaster}s: An "integer \code{GRaster} with values of 0 (FALSE), 1 (TRUE), or \code{NA} (neither). Comparing \code{GRegion}s: Logical.
 }
 \description{
 You can do comparative operations on \code{GRaster}s using normal operators in \strong{R}: \code{<}, \code{<=}, \code{==}, \code{!=}, \code{>=}, and \code{>}.
+
+You can also compare two \code{GRegion}s using the \code{==} and \code{!=} operators. Most users of \strong{fasterRaster} will not have to work much with \link[=tutorial_regions]{regions}, so can ignore this functionality.
+\itemize{
+\item \code{GRegion}s are the same if they have the same \link[=tutorial_sessions]{location and mapset}, topology (2D or 3D), coordinate reference system (CRS), extent, and resolution. If both are 3D, then they must also have the same vertical extent and number of depths.
+}
 }
 \examples{
 \dontrun{

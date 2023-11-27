@@ -3,7 +3,7 @@
 \name{droplevels,GRaster-method}
 \alias{droplevels,GRaster-method}
 \alias{droplevels}
-\title{Add rows or columns to the "levels" table of a categorical raster}
+\title{Remove rows from the "levels" table of a categorical raster}
 \usage{
 \S4method{droplevels}{GRaster}(x, level = NULL, layer = 1)
 }
@@ -18,9 +18,7 @@
 A \code{GRaster}. The "levels" table of the raster is modified.
 }
 \description{
-\code{addCats()} and \verb{addCats()<-} add information to a categorical raster's "levels" table. The \code{addCats()} function uses \code{\link[data.table:merge]{data.table::merge()}} or \code{\link[=cbind]{cbind()}} to do this--it does not add new rows, but rather new columns. The \verb{addCats()<-} function uses \code{\link[=rbind]{rbind()}} to add new categories (rows) to the "levels" table.
-
-GRaster\verb{s can represent [categorical data][tutorial_raster_data_types]. Cell values are actually integers, each corresponding to a category, such as "desert" or "wetland." A categorical raster is associated with a "levels" table that matches each value to a category name. The table must be }NULL` (i.e., no categories--so not a categorical raster), or have at least two columns. The first column must have integers and represent raster values. One or more subsequent columns must have category labels. The column with these labels is the "active category".
+\code{droplevels()} removes levels (category values) from the "levels" table of a \link[=tutorial_raster_data_types]{categorical raster}.
 }
 \examples{
 \dontrun{
@@ -65,6 +63,7 @@ minmax(cover, levels = TRUE) # min/max categories
 catNames(cover) # column names of the levels table
 missingCats(cover) # categories in table with no values in raster
 freq(cover) # frequency of each category (number of cells)
+zonalGeog(cover) # geometric statistics
 
 ### Active column
 #################
@@ -120,7 +119,6 @@ cats(cover)
 ### Logical operations on categorical rasters
 #############################################
 
-
 cover < "Forest" # 1 for cells with a value < 40, 0 otherwise
 cover <= "Forest" # 1 for cells with a value < 120, 0 otherwise
 cover == "Forest" # 1 for cells with value of 40-120, 0 otherwise
@@ -129,6 +127,35 @@ cover > "Forest" # 1 for cells with a value > 120, 0 otherwise
 cover >= "Forest" # 1 for cells with a value >= 120, 0 otherwise
 
 cover \%in\% c("Cropland", "Forest") # 1 for cropland/forest cells, 0 otherwise
+
+### Combine a categories from different rasters
+###############################################
+
+# NB Only have one categorical raster ships with fasterRaster, so we will
+# create a second one from the elevation raster.
+
+# Divide elevation raster into "low/medium/high" levels:
+madElev <- fastData("madElev")
+elev <- fast(madElev)
+fun <- "= if(madElev < 100, 0, if(madElev < 400, 1, 2))"
+elevCat <- app(elev, fun)
+elevCat <- resample(elevCat, cover, method = "near")
+
+levs <- data.frame(
+     value = c(0, 1, 2),
+     elevation = c("low", "medium", "high")
+)
+levels(elevCat) <- list(levs)
+
+# Combine levels:
+combined <- combineCats(cover, elevCat)
+combined
+levels(combined)
+
+# Combine levels, treating value/NA combinations as new categories:
+combinedNA <- combineCats(cover, elevCat, na.rm = FALSE)
+combinedNA
+levels(combinedNA)
 
 # IMPORTANT #3: Revert back to original GRASS session if needed.
 restoreSession(opts.)

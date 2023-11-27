@@ -4,7 +4,7 @@
 \name{[[<-}
 \alias{[[<-}
 \alias{[[<-,GRaster,ANY-method}
-\title{Replace the layers of a GRaster}
+\title{Replace layers of a GRaster}
 \usage{
 \S4method{[[}{GRaster,ANY}(x, i) <- value
 }

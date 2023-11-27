@@ -14,7 +14,7 @@ An object of class \code{sf}.
 data(madDypsis)
 }
 \description{
-Spatial points vector of herbarium specimens and observations of plants in the genus \emph{Dypsis}  (slender, evergreen palms) from a portion of eastern Madagascar.
+Spatial points vector of herbarium specimens and observations of plants in the genus \emph{Dypsis} (slender, evergreen palms) from a portion of eastern Madagascar.
 }
 \examples{
 

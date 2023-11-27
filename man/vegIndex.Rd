@@ -28,12 +28,13 @@
 \item \code{"*"}: Calculate \emph{all} indices
 \item \code{"RNIR"}: Calculate all indices that use R and NIR channels (but not other channels).
 \item \code{"NotSoil"}: Calculate all indices that use any channels but do not require \code{soilSlope} or \code{soilIntercept}.
-\strong{Note}: A near-comprehensive table of indices can be found on the (Index Database: A database for remote sensing indices)\link{https://www.indexdatabase.de}
-}}
+}
 
-\item{r, g, b, nir}{Numeric or character: Index or \code{\link[=names]{names()}} of the layers in \code{x} that represent the red, green, blue, and near infrared channels. Values must be in the range fromm 0 to 1 or integers.}
+\emph{Note}: A near-comprehensive table of indices can be found on the \href{https://www.indexdatabase.de}{Index Database: A Database for Remote Sensing Indices}.}
 
-\item{b5, b7}{Numeric or character: Index of names of the layers representing bands 5 and 7. These are used only for GVI and PVI. Values must be in the range fromm 0 to 1 or integers.}
+\item{r, g, b, nir}{Numeric or character: Index or \code{\link[=names]{names()}} of the layers in \code{x} that represent the red, green, blue, and near infrared channels. Values must be in the range from 0 to 1 or integers.}
+
+\item{b5, b7}{Numeric or character: Index of names of the layers representing bands 5 and 7. These are used only for GVI and PVI. Values must be in the range from 0 to 1 or integers.}
 
 \item{soilSlope, soilIntercept, soilNR}{Numeric: Values of the soil slope, intercept, and soil noise reduction factor (0.08, by default). Used only for calculation of MSAVI.}
 
@@ -44,8 +45,6 @@ A \code{GRaster}.
 }
 \description{
 This function calculates one of many types of vegetation indices from a raster with four bands representing blue (B), green (G), red (R), and near infrared (NIR), plus possibly channels 5 and 7. The function requires rasters that represent surface reflectance, so should have values that fall in the range 0 to 1, unless they are digital number rasters (e.g., integers in the range 0 to 255). If digital number format is used, then the \code{bits} argument should be defined.
-
-The \code{\link[=toarLandsat]{toarLandsat()}} or \code{\link[=toarAster]{toarAster()}} functions can convert LANDSAT and ASTER digital-number rasters to radiance rasters, and then to reflectance rasters.
 }
 \examples{
 \dontrun{

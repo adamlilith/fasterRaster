@@ -74,6 +74,11 @@ hist(land)
 plotRGB(land, 3, 2, 1) # "natural" color
 plotRGB(land, 4, 1, 2, stretch = "lin") # emphasize near-infrared (vegetation)
 
+# Make composite map from RGB and plot in grayscale:
+comp <- compositeRGB(r = land[[3]], g = land[[2]], b = land[[1]])
+grays <- paste0("gray", 0:100)
+plot(comp, col = grays)
+
 # IMPORTANT #3: Revert back to original GRASS session if needed.
 restoreSession(opts.)
 removeSession("examples")

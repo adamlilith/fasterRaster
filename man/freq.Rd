@@ -5,16 +5,16 @@
 \alias{freq}
 \title{Frequencies of cell values in a raster}
 \usage{
-\S4method{freq}{GRaster}(x, digits = 3, value = NULL, bins = 100)
+\S4method{freq}{GRaster}(x, digits = 3, bins = 100, value = NULL)
 }
 \arguments{
 \item{x}{A \code{GRaster}.}
 
-\item{digits}{Numeric integer: Number of digits by which to round raster values.}
+\item{digits}{Numeric integer: Number of digits by which to round raster values. Ignored for integer and categorical rasters.}
+
+\item{bins}{Positive numeric integer: Number of bins in which to divide values of \code{numeric} rasters. The default is 100. For \code{integer} and categorical rasters, each value is tallied (i.e., this is ignored).}
 
 \item{value}{Numeric or \code{NULL} (default): If numeric, only cells with this value will be counted. If \code{NULL}, all values will be counted.}
-
-\item{bins}{Positive numeric integer: Number of bins in which to divide values of \code{numeric} rasters. The default is 100. For \code{integer} and categorical rasters, each value is tallied.}
 }
 \value{
 A \code{data.frame} or a named \code{list} of \code{data.frame}s, one per layer in \code{x}.
@@ -119,9 +119,9 @@ is.double(elev)
 is.factor(elev)
 
 # convert data type
-as.integer(elev) # integer; note that "elev" is already of type "integer"
+as.int(elev) # integer; note that "elev" is already of type "integer"
 as.float(elev) # floating-precision
-as.double(elev) # double-precision
+as.doub(elev) # double-precision
 
 # assigning
 pie <- elev
@@ -136,15 +136,12 @@ rasts
 rasts[[1]]
 rasts[["madForest2000"]]
 
-plot(madElev == 10)
-plot(madElev <= 10)
-plot(madElev \%in\% c(10, 20, 30, 40, 50))
-
 # replacing
 rasts[[2]] <- 2 * forest
+rasts
 
 # adding layers
-rasts[[4]] <- elev > 500 # add a layer
+rasts[[3]] <- elev > 500 # add a layer
 rasts <- c(rasts, sqrt(elev)) # add another
 add(rasts) <- ln(elev)
 
@@ -173,8 +170,6 @@ landsat <- fast(madLANDSAT) # projects matrix
 # correlation and covariance matrices
 cor(landsat) # correlation
 cov(landsat) # covariance
-
-
 
 # IMPORTANT #3: Revert back to original GRASS session if needed.
 restoreSession(opts.)

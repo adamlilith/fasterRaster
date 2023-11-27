@@ -63,6 +63,9 @@ location(me2)
 location()
 mapset()
 
+# Meta-data on all active GRASS Locations
+locations()
+
 # What coordinate reference system?
 crs()
 

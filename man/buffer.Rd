@@ -31,7 +31,7 @@ For vectors, distance from the object to place the buffer. Negative values creat
 \item{unit}{Character: Rasters -- Indicates the units of \code{width}. Can be one of:
 * \code{"cells"}: Units are numbers of cells.
 \itemize{
-\item \code{"meters"} (default), \code{"kilometers"} or \code{"km"}, \code{"feet"}, \code{"miles"}, or \code{"nautmiles"} (nautical miles).
+\item \code{"meters"} (default), \code{"metres"}, or \code{"m"}; \code{"kilometers"} or \code{"km"}; \code{"feet"} or \code{"ft"}; \code{"miles"} or \code{"mi"}; \code{"nautical miles"} or \code{"nmi"}.
 Partial matching is used and case is ignored.
 }}
 

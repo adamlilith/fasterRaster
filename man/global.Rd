@@ -6,7 +6,7 @@
 \alias{global,missing-method}
 \title{Summary statistics for GRasters}
 \usage{
-\S4method{global}{GRaster}(x, fun = "mean", prob = NULL, ...)
+\S4method{global}{GRaster}(x, fun = "mean", prob = 0.5, ...)
 
 \S4method{global}{missing}(x, ...)
 }
@@ -15,6 +15,7 @@
 
 \item{fun}{Character vector: The name of the function(s):
 \itemize{
+\item \code{"*"}: All of the statistics below.
 \item \code{"countNonNA"}: Total number of non-\code{NA} cells.
 \item \code{"countNA"}: Total number of \code{NA} cells.
 \item \code{"cv"}: Sample coefficient of variation (expressed as a proportion of the mean).
@@ -24,7 +25,7 @@
 \item \code{"meanAbs"}: Mean of absolute values.
 \item \code{"median"}: Median.
 \item \code{"quantile"}: Quantile (see also argument \code{prob}).
-\item \code{"range"}: Range.
+\item \code{"range"}: Range--note that as per \code{\link[terra:global]{terra::global()}}, the minimum and maximum are reported, not the actual range.
 \item \code{"sd"}: Sample standard deviation.
 \item \code{"sdpop"}: Population standard deviation.
 \item \code{"sum"}: Sum.
@@ -73,9 +74,8 @@ workDir = tempdir(), location = "examples") # line only needed for examples
 # Convert a SpatRaster to a GRaster:
 elev <- fast(madElev)
 
-# Create a random raster without spatial dependence:
-rand <- randRast(elev)
-plot(rand)
+# Calculate global statistics:
+global(elev, fun = c("mean", "countNonNA", "countNA", "var", "varpop"))
 
 # IMPORTANT #3: Revert back to original GRASS session if needed.
 restoreSession(opts.)

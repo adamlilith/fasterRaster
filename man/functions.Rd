@@ -5,7 +5,7 @@
 \alias{mean}
 \alias{mmode,GRaster-method}
 \alias{mmode}
-\alias{median,GRaster,logical-method}
+\alias{median,GRaster-method}
 \alias{median}
 \alias{count,GRaster-method}
 \alias{count}
@@ -53,7 +53,7 @@
 
 \S4method{mmode}{GRaster}(x, na.rm = FALSE)
 
-\S4method{median}{GRaster,logical}(x, na.rm = FALSE)
+\S4method{median}{GRaster}(x, na.rm = FALSE)
 
 \S4method{count}{GRaster}(x)
 
@@ -108,7 +108,7 @@
 A \code{GRaster}.
 }
 \description{
-These functions can be applied to a "stack" of \code{GRaster}s with two or more layers:
+These functions can be applied to a "stack" of \code{GRaster}s with two or more layers. They return a single-layered \code{GRaster}.  If you want to summarize across cells in a raster (e.g., calculate the mean value of all cells on a raster), use \code{\link[=global]{global()}}. Options include:
 \itemize{
 \item Numeration: \code{count()} (number of non-\code{NA} cells), \code{sum()}.
 \item Central tendency: \code{mean()}, \code{mmode()} (mode), \code{median()}.
@@ -116,8 +116,6 @@ These functions can be applied to a "stack" of \code{GRaster}s with two or more 
 \item Dispersion: \code{range()}, \code{sd()} (sample standard deviation), \code{var()} (sample variance), \code{sdpop()} (population standard deviation), \code{varpop()} (population variance), \code{nunique()} (number of unique values), \code{quantile()} (use argument \code{probs}), \code{skewness()}, and \code{kurtosis()}.
 \item Regression: Assuming we calculate a linear regression for each set of cells through all values of the cells, we can calculate its \code{slope()}, \code{intercept()}, \code{r2()}, and \code{tvalue()}.
 }
-
-This function returns a raster. If you want to summarize across cells in a raster (e.g., calculate the mean value of all cells on a raster), use \code{\link[=global]{global()}}.
 }
 \examples{
 \dontrun{
