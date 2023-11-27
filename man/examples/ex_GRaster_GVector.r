@@ -20,6 +20,7 @@ library(terra)
 
 # example data
 madElev <- fastData("madElev")
+madForest2000 <- fastData("madForest2000")
 madCoast0 <- fastData("madCoast0")
 madRivers <- fastData("madRivers")
 madDypsis <- fastData("madDypsis")
@@ -33,6 +34,9 @@ workDir = tempdir(), location = "examples") # line only needed for examples
 
 # convert SpatRasters to GRasters
 elev <- fast(madElev)
+forest <- fast(madForest2000)
+
+# plot
 plot(elev)
 
 dim(elev) # rows, columns, depths, layers
@@ -65,7 +69,6 @@ st_crs(elev)
 
 # extent (bounding box)
 ext(elev)
-st_bbox(elev)
 
 # data type
 datatype(elev)
@@ -108,7 +111,6 @@ dypsis <- fast(madDypsis)
 
 # extent
 ext(rivers)
-st_bbox(rivers) # extent
 
 W(rivers) # western extent
 E(rivers) # eastern extent
