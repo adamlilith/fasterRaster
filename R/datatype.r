@@ -39,26 +39,26 @@ methods::setMethod(
 	
 	} else if (type %in% c("terra", "GDAL")) {
 
-		stats <- global(x, fun = c("min", "max", "sum"))
+		stats <- .global(x, fun = c("min", "max", "sum"))
 
 		min <- stats[ , "min"]
 		max <- stats[ , "max"]
 		sum <- stats[ , "sum"]
 
-	    remainder <- stats %% 1
-		integer <- rowSums(abs(remainder)) == 0
+	    remainder <- stats %% 1L
+		integer <- rowSums(abs(remainder)) == 0L
 
 		for (i in seq_along(out)) {
 
 			if (out[i] == "CELL") {
 			
-				if (min[i] >= 0 & max[i] <= 255) {
+				if (min[i] >= 0L & max[i] <= 255L) {
 					out[i] <- if (type == "GDAL") { "Byte" } else { "INT1U" }
-				} else if (min[i] >= 0 & max[i] <= 65534) {
+				} else if (min[i] >= 0L & max[i] <= 65534L) {
 					out[i] <- if (type == "GDAL") { "UInt16" } else { "INT2U" }
-				} else if (min[i] >= -32767 & max[i] <= -32767) {
+				} else if (min[i] >= -32767L & max[i] <= -32767L) {
 					out[i] <- if (type == "GDAL") { "Int16" } else { "INT2S" }
-				} else if (min[i] >= -2147483647 & max[i] <= 2147483647) {
+				} else if (min[i] >= -2147483647L & max[i] <= 2147483647L) {
 					out[i] <- if (type == "GDAL") { "Int32" } else { "INT4S" }
 				}
 				
