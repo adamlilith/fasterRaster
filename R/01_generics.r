@@ -238,7 +238,6 @@ methods::setGeneric(name = "union", package = "terra")
 methods::setGeneric(name = "varpop", def = function(x, ...) standardGeneric("varpop"))
 methods::setGeneric(name = "vegIndex", def = function(x, ...) standardGeneric("vegIndex"))
 methods::setGeneric(name = "vect", package = "terra")
-methods::setGeneric(name = "viewshed", package = "terra")
 methods::setGeneric(name = "voronoi", package = "terra")
 
 methods::setGeneric(name = "W", def = function(x, ...) standardGeneric("W"))
