@@ -165,22 +165,30 @@ methods::setMethod(
 			vals <- table
 		}
 
-		ex <- paste0(srcs[i], " = if(isnull(", sources(x)[i], "), null(), if(", sources(x)[i], "==", vals[1L])
+		if (is.na(vals[1L])) {
 
-		if (length(vals) > 1L) {
-			for (count in 2L:length(vals)) {
-				ex <- paste0(ex, "|", sources(x)[i], "==", vals[count])
+			ex <- paste0(srcs[i], " = 0 * ", sources(x))
+
+		} else {
+
+			ex <- paste0(srcs[i], " = if(isnull(", sources(x)[i], "), null(), if(", sources(x)[i], "==", vals[1L])
+
+			if (length(vals) > 1L) {
+				for (count in 2L:length(vals)) {
+					ex <- paste0(ex, "|", sources(x)[i], "==", vals[count])
+				}
 			}
+
+			ex <- paste0(ex, ",1,0))")
+
 		}
-
-		ex <- paste0(ex, ",1,0))")
-
+		
 		rgrass::execGRASS(
 			cmd = "r.mapcalc",
 			expression = ex,
 			flags = c(.quiet(), "overwrite")
 		)
-	
+		
 	} # next raster
 
 	.makeGRaster(srcs, names(x))
