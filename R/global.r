@@ -55,7 +55,7 @@ methods::setMethod(
 # fun 		character
 # prob		numeric in [0, 1]
 #' @noRd
-.global <- function(x, fun, prob) {
+.global <- function(x, fun, prob = 0.5) {
 
 	if (inherits(x, "GRaster")) {
 		.restore(x)
@@ -144,8 +144,6 @@ methods::setMethod(
 				"mean: "
 			} else if (thisFun == "min") {
 				"minimum: "
-			} else if (thisFun == "max") {
-				"maximum: "
 			} else if (thisFun == "countNA") {
 				"total null cells: "
 			} else if (thisFun == "range") {
@@ -165,10 +163,25 @@ methods::setMethod(
 				this <- info[grepl(info, pattern=pattern)]
 				this <- sub(this, pattern = pattern, replacement = "")
 				this <- as.numeric(this)
-			
+
 			} else {
 			
-				if (thisFun == "quantile") {
+				# r.stats returns "nan" if all vales on the raster are the same... but the minimum is the given value, so use that
+				if (thisFun == "max") {
+				
+					pattern <- "maximum: "
+					this <- info[grepl(info, pattern = pattern)]
+					this <- strsplit(this, split=":")[[1L]][2L]
+					this <- as.numeric(this)
+
+					if (is.nan(this)) {
+						pattern <- "minimum: "
+						this <- info[grepl(info, pattern = pattern)]
+						this <- strsplit(this, split=":")[[1L]][2L]
+						this <- as.numeric(this)
+					}
+					
+				} else if (thisFun == "quantile") {
 				
 					pattern <- "percentile: "
 					this <- info[grepl(info, pattern=pattern)]
