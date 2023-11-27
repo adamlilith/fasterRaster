@@ -32,9 +32,9 @@ elev <- fast(madElev)
 
 # Cells in elevation raster replaced with index in which they appear
 # in the table:
-table <- c(1, 100, 200, 300, 400, 500)
+table <- c(10, 20, 30, 40, 50)
 elevIndex <- match(elev, table)
-elevIndexNeg <- match(elev, table, nomatch = -1)
+elevIndexNeg <- match(elev, table, nomatch = -100)
 
 plot(c(elevIndex, elevIndexNeg))
 
@@ -42,7 +42,7 @@ plot(c(elevIndex, elevIndexNeg))
 #################################################
 
 elev <- fast(madElev)
-table <- c(1, 100, 200, 300, 400, 500)
+table <- c(10, 20, 30, 40, 50)
 
 ins <- elev %in% table
 notins <- elev %notin% table
@@ -65,9 +65,11 @@ forestLabels <- c(
 
 forestClasses <- match(cover, forestLabels)
 plot(forestClasses)
+levels(forestClasses)
 
-forestNoMatch <- match(cover, forestLabels, nomatch = -1)
+forestNoMatch <- match(cover, forestLabels, nomatch = -100)
 plot(forestNoMatch)
+levels(forestNoMatch)
 
 ### Using %in% and %notin% on a categorical GRaster:
 ####################################################
