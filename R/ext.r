@@ -2,7 +2,7 @@
 #'
 #' @description These functions return the extent of a `GSpatial` object (`GRegions`, `GRaster`s, and `GVector`s):
 #' 
-#' * `ext()` and `st_bbox()`: 2-dimensional spatial extent (i.e., westernmost/easternmost and southernmost/northernmost coordinates of area represented).\cr\cr
+#' * `ext()``: 2-dimensional spatial extent (i.e., westernmost/easternmost and southernmost/northernmost coordinates of area represented).\cr\cr
 #' * `zext()`: Vertical extent (i.e., topmost and bottom-most elevation of the volume represented). The vertical extent is not `NA` only if the object is 3-dimensional.\cr\cr
 #' * `W()`, `E()`, `N()`, `S()`: Coordinates of one side of horizontal extent.\cr\cr
 #' * `top()` and `bottom()`: Coordinates of top and bottom of vertical extent.\cr\cr
@@ -19,7 +19,6 @@
 #' * `ext()`: A `SpatExtent` object (**terra** package) or a numeric vector.
 #' * `zext()`: A numeric vector.
 #' * `W()`, `E()`, `N()`, `S()`, `top()`, and `bottom()`: A numeric value or character.
-#' * `st_bbox()` returns a `bbox` object (**sf** package).
 #'
 #' @seealso [terra::ext()], [sf::st_bbox()]
 #' 
@@ -208,38 +207,41 @@ methods::setMethod(
 	f = "bottom",
 	signature = "GSpatial",
 	definition = function(x, char = FALSE) {
+
 	out <- unname(zext(x)["bottom"])
 	if (char) out <- as.character(out)
 	out
-})
 
-#' @aliases st_bbox
-#' @rdname ext
-#' @exportMethod st_bbox
-methods::setMethod(
-    f = "st_bbox",
-    signature = c(obj = "missing"),
-    function(obj, ...) {
-        out <- ext(vector = TRUE)
-        names(out) <- c("xmin", "xmax", "ymin", "ymax")
-        sf::st_bbox(out, crs = st_crs())
-    } # EOF
-)
-
-#' @aliases st_bbox
-#' @rdname ext
-#' @exportMethod st_bbox
-methods::setMethod(
-	f = "st_bbox",
-	signature = c(obj = "GSpatial"),
-	function(obj, ...) {
-
-	out <- obj@extent
-	names(out) <- c('xmin', 'xmax', 'ymin', 'ymax')
-	sf::st_bbox(out, crs = st_crs(obj))
-	
 	} # EOF
 )
+
+# #' @aliases st_bbox
+# #' @rdname ext
+# #' @exportMethod st_bbox
+# methods::setMethod(
+#     f = "st_bbox",
+#     signature = c(obj = "missing"),
+#     function(obj, ...) {
+#         out <- ext(vector = TRUE)
+#         names(out) <- c("xmin", "xmax", "ymin", "ymax")
+#         sf::st_bbox(out, crs = st_crs())
+#     } # EOF
+# )
+
+# #' @aliases st_bbox
+# #' @rdname ext
+# #' @exportMethod st_bbox
+# methods::setMethod(
+# 	f = "st_bbox",
+# 	signature = c(obj = "GSpatial"),
+# 	function(obj, ...) {
+
+# 	out <- obj@extent
+# 	names(out) <- c('xmin', 'xmax', 'ymin', 'ymax')
+# 	sf::st_bbox(out, crs = st_crs(obj))
+	
+# 	} # EOF
+# )
 
 # #' @rdname ext
 # #' @export
@@ -267,4 +269,9 @@ methods::setMethod(
 # #' @exportMethod st_bbox
 # setMethod("st_bbox", definition = function(obj, ...) st_bbox(obj, ...))
 
-st_bbox <- function(obj, ...) UseMethod("st_bbox", obj)
+# st_bbox <- function(obj, ...) UseMethod("st_bbox", obj)
+
+# #' @aliases st_bbox
+# #' @rdname ext
+# #' @export
+# st_bbox <- function(obj, ...) UseMethod("st_crs", obj)

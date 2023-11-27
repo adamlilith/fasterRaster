@@ -39,7 +39,6 @@
 #' [nlevels()]: Number of categories\cr
 #' [res()], [xres()], [yres()], and [zres()]: Spatial resolution\cr
 #' [sources()]: Name of the `GRaster` in **GRASS**\cr
-#' [st_bbox()]: Spatial extent\cr
 #' [st_crs()]: Coordinate reference system\cr
 #' [topology()]: Dimensionality (2D or 3D)\cr
 #' [zext()]: Vertical extent\cr
@@ -158,7 +157,6 @@
 #' [nrow()]: Number of rows in a vector data table\cr
 #' [nsubgeom()]: Number of subgeometries (points, lines, polygons that make up single- and multipart geometries)\cr
 #' [sources()]: Name of the vector in **GRASS**\cr
-#' [st_bbox()]: Spatial extent\cr
 #' [st_crs()]: Coordinate reference system\cr
 #' [topology()]: Dimensionality (2D or 3D)\cr
 #' [zext()]: Vertical extent\cr

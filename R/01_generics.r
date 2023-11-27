@@ -101,6 +101,7 @@ methods::setGeneric(name = "droplevels", package = "terra")
 methods::setGeneric(name = "dropRows", def = function(x, ...) standardGeneric("dropRows"))
 
 methods::setGeneric(name = "E", def = function(x, ...) standardGeneric("E"))
+# methods::setGeneric(name = "elide", def = function(x, ...) standardGeneric("elide"))
 methods::setGeneric(name = "erase", package = "terra") 
 methods::setGeneric(name = "ext", package = "terra") 
 methods::setGeneric(name = "extend", package = "terra")
