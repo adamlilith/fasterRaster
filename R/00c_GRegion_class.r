@@ -16,7 +16,7 @@ GRegion <- methods::setClass(
 	)
 )
 
-setValidity("GRegion",
+methods::setValidity("GRegion",
 	function(object) {
 		if (any(object@dimensions[1L:2L] <= 0L)) {
 			"First two values in @dimensions must be positive integers."

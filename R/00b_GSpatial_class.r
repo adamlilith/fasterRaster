@@ -3,7 +3,7 @@
 #' @aliases GSpatial
 #' @rdname GSession
 #' @exportClass GSpatial
-GSpatial <- setClass(
+GSpatial <- methods::setClass(
 	Class = "GSpatial",
 	contains = "GSession",
 	slots = list(
@@ -20,7 +20,7 @@ GSpatial <- setClass(
 	)
 )
 
-setValidity("GSpatial",
+methods::setValidity("GSpatial",
 	function(object) {
 		if (length(object@location) != 1L) {
 			"@location can only be a single character string."
@@ -52,7 +52,7 @@ setValidity("GSpatial",
 	# ztop = NA_real_,
 	# zbottom = NA_real_
 # ) {
-	# new(
+	# methods::new(
 		# "GSpatial",
 		# location = location,
 		# mapset = mapset,

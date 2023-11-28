@@ -23,7 +23,7 @@ GVector <- methods::setClass(
 )
 
 
-setValidity("GVector",
+methods::setValidity("GVector",
 	function(object) {
 		if (!all(object@geometry %in% c(NA_character_, "points", "lines", "polygons"))) {
 			paste0("@geometry can only be NA, ", sQuote("points"), ", ", sQuote("lines"), ", or ", sQuote("polygons"), ".")
@@ -68,7 +68,7 @@ setValidity("GVector",
 
 	info <- .vectInfo(src)
 	
-	new(
+	methods::new(
 		"GVector",
 		location = getFastOptions("location"),
 		mapset = getFastOptions("mapset"),

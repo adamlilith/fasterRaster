@@ -96,6 +96,6 @@ setValidity("GSession",
 	# mapset = NA_character_,
 	# crs = NA_character_
 # ) {
-	# new("GSession", location = location, mapset = mapset, crs = crs)
+	# methods::new("GSession", location = location, mapset = mapset, crs = crs)
 # }
 

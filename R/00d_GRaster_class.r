@@ -105,7 +105,7 @@ GRaster <- methods::setClass(
 #' Test if GRaster is valid
 #'
 #' @noRd
-setValidity("GRaster",
+methods::setValidity("GRaster",
 	function(object) {
 		if (!all(object@datatypeGRASS %in% c("CELL", "FCELL", "DCELL"))) {
 			paste0("@datatypeGRASS can only be NA, ", sQuote("CELL"), ", ", sQuote("FCELL"), ", or ", sQuote("DCELL"), ".")
@@ -181,7 +181,7 @@ setValidity("GRaster",
 	nLayers <- length(info$sources)
 	if (length(names) < nLayers) names <- rep(names, length.out = nLayers)
 
-	out <- new(
+	out <- methods::new(
 		"GRaster",
 		location = getFastOptions("location"),
 		mapset = getFastOptions("mapset"),
