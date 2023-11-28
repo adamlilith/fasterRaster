@@ -48,19 +48,17 @@ grassDir <- "C:/Program Files/GRASS GIS 8.3" # Windows
 grassDir <- "/usr/local/grass" # Linux
 
 # setup
+library(data.table)
 library(sf)
-
-# sample data raster
-madRivers <- fastData("madRivers")
-
-# start GRASS session for examples only
-faster(x = madRivers, grassDir = grassDir,
-workDir = tempdir(), location = "examples") # line only needed for examples
 
 # Example data:
 madCoast4 <- fastData("madCoast4")
 madRivers <- fastData("madRivers")
 madDypsis <- fastData("madDypsis")
+
+# start GRASS session for examples only
+faster(x = madCoast4, grassDir = grassDir,
+workDir = tempdir(), location = "examples") # line only needed for examples
 
 # Convert sf vectors to GVectors:
 coast <- fast(madCoast4)
@@ -146,15 +144,15 @@ plot(xr)
 plot(sameAsXor)
 
 # Vector area and length:
-expanse(coast4, unit = "km") # polygons areas
-expanse(rivers, unit = "km") # line lengths
+expanse(coast, unit = "km") # polygons areas
+expanse(rivers, unit = "km") # river lengths
 
 # Fill holes
 # First, we will make some holes by creating buffers around points, then
 # removing them from a polygons GVector.
 buffs <- buffer(dypsis, 500)
 
-holes <- coast4 - buffs
+holes <- coast - buffs
 plot(holes)
 
 filled <- fillHoles(holes, fail = FALSE)

@@ -61,7 +61,7 @@ elev <- fast(madElev)
 forest2000 <- fast(madForest2000)
 forest2014 <- fast(madForest2014)
 
-### Re-assigning values
+### Re-assigning values of a GRaster
 
 constant <- elev
 constant[] <- 14
@@ -89,18 +89,18 @@ rasts
 
 # Subset:
 rasts[[2:3]]
-rasts[[c("forest2000", "forest2014")]]
-rasts$forest2000
+rasts[[c("madForest2000", "elev_x2")]]
+rasts$madForest2000
 
 # Get every other layer:
-rasts[[c(FALSE, TRUE])]]
+rasts[[c(FALSE, TRUE)]]
 
-### Replace layers of a GRaster
+### Replacing layers of a GRaster
 
 # Replace a layer
 logElev <- log(elev)
 names(logElev) <- "logElev"
-rasts$forest2000 <- logElev
+rasts$madForest2000 <- logElev
 rasts
 
 # Replace a layer:
@@ -111,19 +111,19 @@ rasts
 ############
 
 # example data
-madDypsis <- fastData("madRivers") # vector of points
+madDypsis <- fastData("madDypsis") # vector of points
 
 # Convert SpatVector to GVector
 dypsis <- fast(madDypsis)
 
-### Retrieve columns
+### Retrieving GVector columns
 
 dypsis$species # Returns the column
 
 dypsis[[c("year", "species")]] # Returns a GRaster with these columns
 dypsis[ , c("year", "species")] # Same as above
 
-### Subset geometries
+### Subsetting GVector geometries
 
 # Subset first three geometries
 dypsis[1:3]
@@ -132,7 +132,7 @@ dypsis[1:3, "species"]
 # Get geometries by data table condition
 dypsis[dypsis$species == "Dypsis betsimisarakae"]
 
-### (Re)assign values
+### (Re)assigning GVector column values
 
 # New column
 dypsis$pi <- pi

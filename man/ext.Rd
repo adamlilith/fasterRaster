@@ -24,9 +24,6 @@
 \alias{top,GSpatial-method}
 \alias{bottom,GSpatial-method}
 \alias{bottom}
-\alias{st_bbox,missing-method}
-\alias{st_bbox}
-\alias{st_bbox,GSpatial-method}
 \title{Spatial bounds of a GRaster or GVector}
 \usage{
 \S4method{ext}{missing}(x, vector = FALSE)
@@ -60,10 +57,6 @@
 \S4method{bottom}{GSpatial}(x, char = FALSE)
 
 \S4method{bottom}{GSpatial}(x, char = FALSE)
-
-\S4method{st_bbox}{missing}(obj, ...)
-
-\S4method{st_bbox}{GSpatial}(obj, ...)
 }
 \arguments{
 \item{x, obj}{An object that inherits from \code{GSpatial} (i.e., a \code{GRaster} or \code{GVector}) or missing. If missing, then the horizontal or vertical extent of the currently active \link[=tutorial_regions]{region} is returned.}
@@ -80,13 +73,12 @@ The returned values depend on the function:
 \item \code{ext()}: A \code{SpatExtent} object (\strong{terra} package) or a numeric vector.
 \item \code{zext()}: A numeric vector.
 \item \code{W()}, \code{E()}, \code{N()}, \code{S()}, \code{top()}, and \code{bottom()}: A numeric value or character.
-\item \code{st_bbox()} returns a \code{bbox} object (\strong{sf} package).
 }
 }
 \description{
 These functions return the extent of a \code{GSpatial} object (\code{GRegions}, \code{GRaster}s, and \code{GVector}s):
 \itemize{
-\item \code{ext()} and \code{st_bbox()}: 2-dimensional spatial extent (i.e., westernmost/easternmost and southernmost/northernmost coordinates of area represented).\cr\cr
+\item `ext()``: 2-dimensional spatial extent (i.e., westernmost/easternmost and southernmost/northernmost coordinates of area represented).\cr\cr
 \item \code{zext()}: Vertical extent (i.e., topmost and bottom-most elevation of the volume represented). The vertical extent is not \code{NA} only if the object is 3-dimensional.\cr\cr
 \item \code{W()}, \code{E()}, \code{N()}, \code{S()}: Coordinates of one side of horizontal extent.\cr\cr
 \item \code{top()} and \code{bottom()}: Coordinates of top and bottom of vertical extent.\cr\cr
@@ -115,6 +107,7 @@ library(terra)
 
 # example data
 madElev <- fastData("madElev")
+madForest2000 <- fastData("madForest2000")
 madCoast0 <- fastData("madCoast0")
 madRivers <- fastData("madRivers")
 madDypsis <- fastData("madDypsis")
@@ -128,6 +121,9 @@ workDir = tempdir(), location = "examples") # line only needed for examples
 
 # convert SpatRasters to GRasters
 elev <- fast(madElev)
+forest <- fast(madForest2000)
+
+# plot
 plot(elev)
 
 dim(elev) # rows, columns, depths, layers
@@ -160,7 +156,6 @@ st_crs(elev)
 
 # extent (bounding box)
 ext(elev)
-st_bbox(elev)
 
 # data type
 datatype(elev)
@@ -180,7 +175,7 @@ rasts
 
 # subsetting
 rasts[[1]]
-rasts[["forest"]]
+rasts[["madForest2000"]]
 
 # assigning
 rasts[[4]] <- elev > 500
@@ -203,7 +198,6 @@ dypsis <- fast(madDypsis)
 
 # extent
 ext(rivers)
-st_bbox(rivers) # extent
 
 W(rivers) # western extent
 E(rivers) # eastern extent
@@ -247,9 +241,9 @@ topology(rivers) # dimensionality
 is.2d(elev) # is it 2D?
 is.3d(elev) # is it 3D?
 
-# refresh values from GRASS
-# (reads values from GRASS... does not appear to do anything in this case)
-refresh(elev)
+# Update values from GRASS
+# (Reads values from GRASS... will not appear to do anything in this case)
+update(elev)
 
 ### operations on GVectors
 ##########################
@@ -258,19 +252,19 @@ refresh(elev)
 as.data.frame(rivers)
 
 # subsetting
-rivers[c(1:2, 5)] # select 3 geometries
-rivers[-5:-11] # reverse select
-rivers[ , 1] # columns
+rivers[c(1:2, 5)] # select 3 rows/geometries
+rivers[-5:-11] # remove rows/geometries 5 through 11
+rivers[ , 1] # column 1
 rivers[ , "NAM"] # select column
 rivers[["NAM"]] # select column
-rivers[1, 1] # rows and columns
+rivers[1, 2] # row/geometry 1 and column 1
 rivers[c(TRUE, FALSE)] # select every other geometry (T/F vector is recycled)
 rivers[ , c(TRUE, FALSE)] # select every other column (T/F vector is recycled)
 
 # Refresh values from GRASS
 # (Reads values from GRASS... will not appear to do anything in this case
 # since the rivers object is up-to-date):
-rivers <- refresh(rivers)
+rivers <- update(rivers)
 
 # Concatenating multiple vectors
 rivers2 <- c(rivers, rivers)

@@ -47,7 +47,6 @@ A tutorial on \link[=tutorial_raster_data_types]{raster data types}\cr
 \code{\link[=nlevels]{nlevels()}}: Number of categories\cr
 \code{\link[=res]{res()}}, \code{\link[=xres]{xres()}}, \code{\link[=yres]{yres()}}, and \code{\link[=zres]{zres()}}: Spatial resolution\cr
 \code{\link[=sources]{sources()}}: Name of the \code{GRaster} in \strong{GRASS}\cr
-\code{\link[=st_bbox]{st_bbox()}}: Spatial extent\cr
 \code{\link[=st_crs]{st_crs()}}: Coordinate reference system\cr
 \code{\link[=topology]{topology()}}: Dimensionality (2D or 3D)\cr
 \code{\link[=zext]{zext()}}: Vertical extent\cr
@@ -178,7 +177,6 @@ The assign operators, \code{\link[fasterRaster]{$<-}}, \code{\link[fasterRaster]
 \code{\link[=nrow]{nrow()}}: Number of rows in a vector data table\cr
 \code{\link[=nsubgeom]{nsubgeom()}}: Number of subgeometries (points, lines, polygons that make up single- and multipart geometries)\cr
 \code{\link[=sources]{sources()}}: Name of the vector in \strong{GRASS}\cr
-\code{\link[=st_bbox]{st_bbox()}}: Spatial extent\cr
 \code{\link[=st_crs]{st_crs()}}: Coordinate reference system\cr
 \code{\link[=topology]{topology()}}: Dimensionality (2D or 3D)\cr
 \code{\link[=zext]{zext()}}: Vertical extent\cr
