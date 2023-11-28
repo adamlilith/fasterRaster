@@ -44,7 +44,6 @@ grassDir <- "C:/Program Files/GRASS GIS 8.3" # Windows
 grassDir <- "/usr/local/grass" # Linux
 
 # setup
-library(data.table)
 library(sf)
 
 # Example data:

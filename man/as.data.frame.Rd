@@ -3,13 +3,13 @@
 \name{as.data.frame,GVector-method}
 \alias{as.data.frame,GVector-method}
 \alias{as.data.frame}
-\alias{as.data.table,ANY-method}
+\alias{as.data.table,GVector-method}
 \alias{as.data.table}
 \title{Convert GVector to a data frame}
 \usage{
 \S4method{as.data.frame}{GVector}(x)
 
-\S4method{as.data.table}{ANY}(x, ...)
+\S4method{as.data.table}{GVector}(x)
 }
 \arguments{
 \item{x}{A \code{GVector}.}
