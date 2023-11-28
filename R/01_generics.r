@@ -7,16 +7,17 @@
 
 # creates conflicts with terra::shift and data.table::shift
 # #' @import terra
-# #' @import data.table
+#' @importFrom data.table as.data.table
 # #' @import terra
 
 #' @import sf
 #' @rawNamespace import(data.table, except = shift)
 #' @rawNamespace import(terra, except = shift)
-#' @importFrom methods new
-#' @importFrom methods setMethod
-#' @importFrom methods setValidity
-#' @importFrom methods validObject
+# #' @importFrom data.table as.data.table
+# #' @importFrom methods new
+# #' @importFrom methods setMethod
+# #' @importFrom methods setValidity
+# #' @importFrom methods validObject
 
 ### data.table
 .datatable.aware <- TRUE
@@ -55,8 +56,9 @@ methods::setGeneric(name = "app", package = "terra")
 # methods::setGeneric(name = "appFuns", def = function(x, ...) standardGeneric("appFuns"))
 methods::setGeneric(name = "appCheck", def = function(x, fun, ...) standardGeneric("appCheck"))
 methods::setGeneric(name = "as.contour", package = "terra")
-setGeneric("as.data.frame")
+methods::setGeneric("as.data.frame")
 methods::setGeneric(name = "as.data.table", package = "data.table")
+# methods::setGeneric(name = "as.data.table", def = function(x, ...) standardGeneric("as.data.table"))
 methods::setGeneric(name = "as.doub", def = function(x, ...) standardGeneric("as.doub"))
 methods::setGeneric(name = "as.float", def = function(x, ...) standardGeneric("as.float"))
 # as.integer() is primitive

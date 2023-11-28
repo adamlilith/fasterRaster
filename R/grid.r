@@ -45,12 +45,13 @@ methods::setMethod(
 
 	use <- omnibus::pmatchSafe(use, c("number", "size"), nmax = 1L)
 
+	extent <- ext(x, vector = TRUE)
+
 	# calculate cell number and re-calibrate GRASS region
 	if (is.null(nx) & is.null(ny)) {
 		stop("At least one of ", sQuote("nx"), " or ", sQuote("ny"), " must be defined.")
 	} else if (!is.null(nx) & is.null(ny)) {
 
-		extent <- ext(x, vector = TRUE)
 		if (use == "number") {
 		
 			dim <- extent[2L] - extent[1L]
@@ -70,7 +71,6 @@ methods::setMethod(
 
 	} else if (is.null(nx) & !is.null(ny)) {
 
-		extent <- ext(x, vector = TRUE)
 		if (use == "number") {
 		
 			dim <- extent[4L] - extent[3L]
@@ -92,7 +92,6 @@ methods::setMethod(
 
 		if (use == "number") {
 
-			extent <- ext(x, vector = TRUE)
 			xsize <- (extent[2L] - extent[1L]) / nx
 			ysize <- (extent[4L] - extent[3L]) / ny
 

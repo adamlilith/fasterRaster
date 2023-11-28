@@ -19,7 +19,7 @@ methods::setMethod(
     function(x, name) {
 	
 	# test indices
-	i <- .layerIndex(i, x, recycle = TRUE)
+	i <- .layerIndex(name, x, recycle = TRUE)
 	mm <- minmax(x)
 	
 	new(
