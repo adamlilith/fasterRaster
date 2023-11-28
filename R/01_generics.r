@@ -40,7 +40,7 @@ if (getRversion() >= "2.15.1") {
 # [[<- is already generic
 
 methods::setGeneric(name = "%in%", package = "terra")
-methods::setGeneric(name = "%notin%", package = "omnibus")
+methods::setGeneric(name = "%notin%", def = function(x, ...) package = "omnibus")
 methods::setGeneric(name = ".copyGSpatial", def = function(x, ...) standardGeneric(".copyGSpatial"))
 # methods::setGeneric(name = ".dbCats", def = function(x, ...) standardGeneric(".dbCats"))
 # methods::setGeneric(name = ".dbToDataTable", def = function(x, ...) standardGeneric(".dbToDataTable"))
