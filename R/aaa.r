@@ -20,8 +20,8 @@
 	
 	ver <- read.dcf(file = system.file("DESCRIPTION", package = pkg), fields = "Version")
 	packageStartupMessage(paste(pkg, ver))
-	# packageStartupMessage("It is recommended to attach the terra and sf packages before")
-	# packageStartupMessage("fasterRaster using, for example, "library(terra)".")
-	# packageStartupMessage("To use fasterRaster functions, please connect to GRASS using faster().")
+	packageStartupMessage("It is recommended to attach the data.table, terra, and sf packages")
+	packageStartupMessage("before fasterRaster using, for example, ", dQuote("library(terra)"), ".")
+	packageStartupMessage("For guides and table of contents, see ", dQuote("?fasterRaster"), ".")
 	
 }
