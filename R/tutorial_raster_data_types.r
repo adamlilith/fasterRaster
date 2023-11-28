@@ -11,13 +11,13 @@
 #' Floating-point values are accurate to about the 6th to 9th decimal place. These are called "float" rasters in **fasterRaster** and `FCELL` rasters in **GRASS**. By default, operations conducted using raster math (e.g., `raster1 * raster2`) return double floating-point valued rasters, but this can be changed to floating point precision using [setFastOptions()] (e.g., `setFastOptions(rasterDataType = "float")`). Floating-point rasters typically take more memory than integer rasters, but less than double-floating point rasters.
 #'
 #' ## Double-floating point values
-#' Double-floating point values are accurate to about the 15th to 17th decimal place. These are called "double" rasters in **fasterRaster** and `DCELL` rasters in **GRASS**. These rasters typically take the most memory. All "`numeric`" values in **R** are double-floating point values. **R** does not use single floating-point values.
+#' Double-floating point values are accurate to about the 15th to 17th decimal place. These are called "double" rasters in **fasterRaster** and `DCELL` rasters in **GRASS**. These rasters typically take the most memory. All "`numeric`" values in **R** are double-floating point values.
 #' 
 #' ## Categorical rasters
-#' Categorical rasters (also called "factor" rasters) are actually integer rasters, but have an associated attribute table that maps each integer value to a category label, such as "wetland" or "forest". The table has at least two columns. The first is integer values, and (by default) the second is category names. This second column is the "active" category column, but can be changed using [activeCat<-].
+#' Categorical rasters (also called "factor" rasters) are actually integer rasters, but have an associated attribute table that maps each integer value to a category label, such as "wetland" or "forest". The table has at least two columns. The first is integer values, and (by default) the second is category names. This second column is the "active" category column, but can be changed using \code{\link[fasterRaster]{activeCat<-}}.
 #'
 #' ## Functions relevant to raster data types
-#' * [activeCat()] and `[activeCat<-]` can be used to see or assign which column in a "levels" table associated with a categorical raster is used as category labels.
+#' * [activeCat()] and \code{\link[fasterRaster]{activeCat<-}} can be used to see or assign which column in a "levels" table associated with a categorical raster is used as category labels.
 #' * [addCats()] adds information to the "levels" table using [data.table::merge()] (same as [merge()]).
 #' * \code{\link[fasterRaster]{addCats<-}} add new levels to a "levels" table.
 #' * [as.int()], [as.float()], and [as.doub()] coerce a raster to an integer, float, or double.
@@ -28,9 +28,10 @@
 #' * [droplevels()] removes "unused" levels in a "levels" table.
 #' * [freq()]: Frequency of each category across cells of a raster\cr
 #' * [is.factor()] indicates if the raster is a categorical raster.
+#' * [is.int()], [is.float()], and [is.doub()] indicate if values in a a raster are integers, floating-point, or double-floating point precision.
 #' * [levels()] returns the "levels" table of a categorical raster (just the value column and the active column).
 #' * \code{\link[fasterRaster]{levels<-}} and [categories()] can be used to assign categories to an integer raster and make it categorical (i.e., a "factor" raster).
-#' * [match()], `%in%`, and %notin%: Find which cells of a `GRaster` match or do not match certain category labels\cr
+#' * [match()], \code{\link[fasterRaster]{%in%}}, and \code{\link[fasterRaster]{%notin%}}: Find which cells of a `GRaster` match or do not match certain category labels\cr
 #' * [missingCats()] finds values in categorical rasters that do not have a category assigned to them.
 #' * [nlevels()] returns the number of levels represented by a categorical raster.
 #'

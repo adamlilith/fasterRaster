@@ -2,7 +2,7 @@
 #'
 #' @description This function saves a `GVector` to disk directly from a **GRASS** session.
 #'
-#' By default, files will be of OGC GeoPackage format (extension "`.gpkg`"), but this can be changed with the `format` argument. You can see a list of supported formats by simply using this function with no arguments, as in `writeVector()`, or by consulting the online help page for **GRASS** module `v.out.ogr`.
+#' By default, files will be of OGC GeoPackage format (extension "`.gpkg`"), but this can be changed with the `format` argument. You can see a list of supported formats by simply using this function with no arguments, as in `writeVector()`, or by consulting the online help page for **GRASS** module [`v.out.ogr`](https://grass.osgeo.org/grass84/manuals/v.out.ogr.html).
 #'
 #' @param x A `GVector`.
 #' @param filename Character: Path and file name.
@@ -16,11 +16,11 @@
 #'	* `"netCDF"`: NetCDF (argument `filename` should not end in an extension).
 #'	* `"XLSX"`: MS Office Open XML spreadsheet
 #' @param attachTable Logical: If `TRUE` (default), attach the attribute to table to the vector before saving it. If `FALSE`, the attribute table will not be attached.
-#' @param ... Additional arguments to send to **GRASS** module `v.out.ogr`.
+#' @param ... Additional arguments to send to **GRASS** module [`v.out.ogr`](https://grass.osgeo.org/grass84/manuals/v.out.ogr.html) in **GRASS**.
 #'
-#' @return Invisibly returns a `SpatVector`. Importantly, the function also writes one or more files to disk.
+#' @returns Invisibly returns a `SpatVector`. Also saves the vector to disk.
 #'
-#' @seealso [terra::writeVector()], [sf::st_write()]
+#' @seealso [terra::writeVector()], [sf::st_write()], module [`v.out.ogr`](https://grass.osgeo.org/grass84/manuals/v.out.ogr.html) in **GRASS**
 #'
 #' @example man/examples/ex_writeVector.r
 #'
@@ -77,7 +77,6 @@ setMethod(
 	do.call(rgrass::execGRASS, args)
 	
 	out <- terra::vect(filename)
-
 	if (nrow(x) > 0L && any(names(out) == "cat_")) out$cat_ <- NULL
 
 	invisible(out)

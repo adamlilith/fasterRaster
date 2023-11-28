@@ -1,24 +1,24 @@
 #' Create a GRaster or GVector
 #'
-#' @description `fast()` imports a raster or vector into the active **GRASS** session and from it creates a `GRaster` or `GVector`.
+#' @description `fast()` imports a raster or vector into the active **GRASS** "[location][tutorial_sessions]" and from it creates a `GRaster` or `GVector`.
 #'
-#' Rasters and vectors can be imported from `SpatRaster`s, `SpatVector`s, or `sf` objects, or from files on disk. **GRASS** supports loading from disk a variety of raster formats (see the **GRASS** manual page for `r.in.gdal`) and vector formats (see the **GRASS** manual page for `v.in.ogr`), though not all of them will work with this function. 
+#' `GRaster`s and `GVector`s can be created from `SpatRaster`s, `SpatVector`s, or `sf` objects, or from files on disk. **GRASS** supports loading from disk a variety of raster formats (see the **GRASS** manual page for [`r.in.gdal`](https://grass.osgeo.org/grass84/manuals/r.in.gdal.html)) and vector formats (see the **GRASS** manual page for [`v.in.ogr`](https://grass.osgeo.org/grass84/manuals/v.in.ogr.html)), though not all of them will work with this function.
 #'
-#' Rasters can have "levels" (i.e., categories associated with values). This can be specified using the `levels` argument. If a `SpatRaster` already has levels associated with it, these will be attached to the `GRaster` automatically. Vectors can also have attribute tables, though they do not need to. If they do, there must be one row per geometry (point, line, or polygon).
+#' `GRaster`s can have "levels" (i.e., categories associated with values). This can be specified using the `levels` argument. If a `SpatRaster` already has levels associated with it, these will be attached to the `GRaster` automatically. Vectors can also have attribute tables, though they do not need to. If they do, there must be one row per geometry (point, line, or polygon).
 #'
-#' The `fast()` function will project a raster or vector to the current "[location's][tutorial_sessions]" coordinate reference system. Users can specify how to do this using the `method`, `fallback`, and `wrap` arguments.
+#' The `fast()` function will project a raster or vector to the current "location's" coordinate reference system. Users can specify how to do this using the `method`, `fallback`, and `wrap` arguments.
 #'
 #' @param x Any one of:
-#' * A `SpatRaster` raster. Rasters can have one or more layers. They will retain their "layerdness" in most **fasterRaster** functions.
+#' * A `SpatRaster` raster. Rasters can have one or more layers.
 #' * A `SpatVector` or `sf` spatial vector.
 #' * A character string with the path and filename of a raster or vector to be loaded directly into **GRASS**. The function will attempt to ascertain the type of object from the file extension (raster or vector), but it can help to indicate which it is using the `rastOrVect` argument if it is unclear.
 #'
 #' @param checkCRS Logical: If `TRUE` (default), compare the coordinate reference system (CRS) of the raster or vector to that of the current location. If it is different, then project the raster or vector while importing. If `FALSE`, ignore differences in CRS (if any), and import the raster or vector.
 #' 
-#' @param method Character or `NULL` (rasters only): If `x` does not have the same coordinate reference system as the currently active **GRASS** "[location][tutorial_sessions]", then it will be projected when it is imported. You may need to specify which method is used to conduction the transformation. Partial matching is used.
-#' * `NULL` (default): Automatically choose based on raster properties (`near` for categorical data, `bilinear` for continuous data)
+#' @param method Character or `NULL` (rasters only): If `x` does not have the same coordinate reference system as the currently active **GRASS** "location", then it will be projected when it is imported. You may need to specify which method is used to conduct the transformation. Partial matching is used.
+#' * `NULL` (default): Automatically choose based on raster properties (`near` for categorical data, `bilinear` for continuous data).
 #' * `"near"`: Nearest neighbor. Best for categorical data, and often a poor choice for continuous data.
-#' * `"bilinear"`: Bilinear interpolation (default for non-categorical data; uses weighted values from 4 cells).
+#' * `"bilinear"`: Bilinear interpolation (uses weighted values from 4 cells).
 #' * `"bicubic"`: Bicubic interpolation (uses weighted values from 16 cells).
 #' * `"lanczos"`: Lanczos interpolation (uses weighted values from 25 cells).
 #'
@@ -33,13 +33,13 @@
 #' @param ... Other arguments. These are typically used internally so not of use to most users. They can include:
 #' * `rastOrVect` Character (`"raster"` or `"vector"`). If `x` is a filename, then the function will try to ascertain whether it represents a raster or a vector, but sometimes this will fail. In that case, it can help to specify if the file holds a raster or vector. Partial matching is used.
 #'
-#' * `levels` (`GRaster`s): A `data.frame`, `data.table`, or list of `data.frame`s or `data.table`s with categories for categorical rasters: The first column of a table corresponds to raster values. A subsequent column corresponds to category labels. By default, the second column is assumed to represent labels, but his can be changed with `[activeCat<-]`. Tables can also be `NULL` (e.g., `data.fame(NULL)`).
+#' * `levels` (`GRaster`s): A `data.frame`, `data.table`, or list of `data.frame`s or `data.table`s with categories for categorical rasters: The first column of a table corresponds to raster values and must be of type `integer`. A subsequent column corresponds to category labels. By default, the second column is assumed to represent labels, but this can be changed with \code{\link[fasterRaster]{activeCat<-}}. Level tables can also be `NULL` (e.g., `data.fame(NULL)`).
 #'
 #' * `table` (`GVector`s): A `data.frame` or `data.table` with one row per geometry in a `GVector`: Serves as an attribute table.
 #'
-#' @details When projecting a raster, the "fallback" methods in `r.import` are actually used, even though the `method` argument takes the strings for non-fallback methods. See the manual page for the `r.import` **GRASS** module.
+#' @details When projecting a raster, the "fallback" methods in [`r.import`](https://grass.osgeo.org/grass84/manuals/r.import.html) are actually used, even though the `method` argument takes the strings for non-fallback methods.
 #' 
-#' @seealso [rgrass::read_RAST()] and [rgrass::read_VECT()], plus **GRASS** modules `r.in.gdal`, `r.import`, and `v.in.ogr`.
+#' @seealso [rgrass::read_RAST()] and [rgrass::read_VECT()], plus **GRASS** modules [`v.in.ogr`](https://grass.osgeo.org/grass84/manuals/r.in.gdal.html), [`v.in.ogr`](https://grass.osgeo.org/grass84/manuals/v.in.ogr.html), and [`r.import`](https://grass.osgeo.org/grass84/manuals/r.import.html).
 #'
 #' @return A `GRaster` or `GVector`.
 #'

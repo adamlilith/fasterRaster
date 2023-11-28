@@ -3,9 +3,7 @@
 #' @description
 #' This function saves a `GRaster` to disk directly from a **GRASS** session. It is faster than using [rast()], then saving the output of that to disk (because `rast()` actually save the raster to disk, anyway).
 #'
-#' The function will attempt to ascertain the file type to be ascertained from the file extension, but you can specify the format using the `format` argument (see entry for `...`). You can see a list of supported formats by simply using this function with no arguments, as in `writeRaster()`, or by consulting the online help page for the **GRASS** module `r.out.gdal`. Only the `GeoTIFF` file format is guaranteed to work for multi-layered rasters.
-#'
-#' **Note**: Rasters will be trimmed to their smallest extent such that no rows or columns are all `NA`s. You can add `NA` rows and columns to a `SpatRaster` using [terra::extend()].
+#' The function will attempt to ascertain the file type to be ascertained from the file extension, but you can specify the format using the `format` argument (see entry for `...`). You can see a list of supported formats by simply using this function with no arguments, as in `writeRaster()`, or by consulting the online help page for the **GRASS** module [`r.out.gdal`](https://grass.osgeo.org/grass84/manuals/r.out.gdal.html). Only the `GeoTIFF` file format is guaranteed to work for multi-layered rasters.
 #'
 #' @param x A `GRaster` or missing: If missing, a table of supported file types is reported.
 #' @param filename Character: Path and file name.
@@ -41,9 +39,9 @@
 #' * Additional arguments to send to **GRASS** modules `r.out.gdal` and `r.out.ascii`.
 #' * `precision`: Numeric: For ASCII files, you may need to state the number of significant digits. 32-bit values have 7 digits and 64-bit values have 16. So in these cases the argument would be `precision=7` or `precision=16`.
 #'
-#' @return A `GRaster` (invisibly). A raster is also saved to disk.
+#' @return A `SpatRaster` (invisibly). A raster is also saved to disk.
 #'
-#' @seealso [terra::writeRaster()]
+#' @seealso [terra::writeRaster()], module [`r.out.gdal`](https://grass.osgeo.org/grass84/manuals/r.out.gdal.html) in **GRASS**
 #'
 #' @example man/examples/ex_writeRaster.r
 #'
@@ -58,8 +56,8 @@ setMethod(
 	function(
 		x,
 		filename,
-		datatype = NULL,
 		overwrite = FALSE,
+		datatype = NULL,
 		warn = TRUE,
 		...
 	) {

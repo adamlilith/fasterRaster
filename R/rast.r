@@ -9,6 +9,8 @@
 #' 
 #' @seealso [terra::rast()]
 #'
+#' @example man/examples/ex_GRaster.r
+#'
 #' @aliases rast
 #' @rdname rast
 #' @exportMethod rast

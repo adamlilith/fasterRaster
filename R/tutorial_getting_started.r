@@ -20,39 +20,39 @@
 #'
 #' **fasterRaster** uses **GRASS** to do its operations. To use **fasterRaster**, you will need to install **GRASS** using the "stand-alone" installer, available through the [GRASS GIS](https://grass.osgeo.org/). Be sure to *use the "stand-alone" installer, not the "OSGeo4W" installer!*
 #'
-#' Once you have installed **GRASS**, you will need to know where on your computer it was installed. The exact folder will depend on your operating system, the version installed, and perhaps other things, but in general, the install folder will look something like:
+#' ## Starting a **fasterRaster** session
 #'
-#' Windows: `"C:/Program Files/GRASS GIS 8.4"`\cr
-#' Mac: `"/Applications/GRASS-8.3.app/Contents/Resources"`\cr
-#' Linux: `"/usr/local/grass"`\cr
+#' I recommend attaching the **data.table**, **terra**, and **sf** packages before attaching **fasterRaster** package to avoid function conflicts. The **data.table** package is not required, but you most surely will use at least one of the other two.
+#' ```
+#' library(data.table)
+#' library(sf)
+#' library(terra)
+#' library(fasterRaster)
+#' ```
+#' Now, we need to start a **fasterRaster** "session", which makes a connection to **GRASS**. When you start **GRASS**, you create a "location". A "location" has a coordinate reference system (CRS).  All objects (rasters and vectors) in that "location" have to have the same CRS. However, these objects do not have to actually represent the same location on Earth--they just need to have the same CRS. To help differentiate, throughout **fasterRaster** documentation, we'll use "location" (in quotes) to refer to a **GRASS** location, and *location* (no quotes--only italicized this once) to refer to a place on Earth (or any other spherical heavenly body).
 #'
-#' Whatever the name of this folder, it is passed to functions using an argument named `grassDir`. So, it is helpful to define `grassDir`, as in:
+#' To make your first location, use the [faster()] function. This function needs at least two arguments:
+#' 1. `x`: A spatial object from which a coordinate reference system (CRS) can be obtained. This can be a `SpatRaster` or `SpatVector` (both from **terra**), an `sf` vector (**sf** package), or the Well-Known Text representation of a CRS. For our example, we'll use a raster that ships with **fasterRaster** that represents elevation along a portion of the eastern coast of Madagascar:
+#' ```
+#' madElev <- fastData("madElev") # get raster
+#' madElev # look at raster properties
+#' plot(madElev) # look at the raster
+#' ```
+#' 
+#' 2. `grassDir`: The folder in which **GRASS** is installed on your system. Depending on your operating system and the version of **GRASS** installed, this will look something like:
 #' ```
 #' grassDir <- "C:/Program Files/GRASS GIS 8.4" # Windows
 #' grassDir <- "/Applications/GRASS-8.3.app/Contents/Resources" # Mac
 #' grassDir <- "/usr/local/grass" # Linux
 #' ```
 #' 
-#' ## Starting a **fasterRaster** session
-#'
-#' First, we attach **fasterRaster** in **R**. In most cases, we will also want to be using the **terra** and/or **sf** package, so let"s attach them, too.
+#' To initiate the **GRASS** connection, using [faster()]:
+#' ````
+#' faster(madElev, grassDir = grassDir)
 #' ```
-#' library(fasterRaster)
-#' library(sf)
-#' library(terra)
-#' ```
-#' Now, we need to start a **fasterRaster** "session", which makes a connection to **GRASS**. You generally only need to do this one time each time you start **R** and wish to use **fasterRaster**. We do this with the [faster()] function, which needs the `grassDir` argument and a `crs` argument. This latter sets the coordinate reference system (CRS) for the session--all rasters and vectors used in the session must have the same CRS, or be projected so they have this CRS.  You can start other sessions using `fasteStart()` with different CRSs, and switch between them using [restoreSession()].
-#'
-#' The `crs` argument takes a coordinate reference string or an object from which such a string can be obtained. We will use a raster that comes with **fasterRaster** to set the `crs` argument.
-#' ```
-#' madElev <- fastData("madElev") # get raster
-#' faster(madElev, grassDir = grassDir) # start session
-#' ```
-#' Here, the `grassDir` is the installation directory we defined earlier. Now, we can start using **fasterRaster**!
-#'
 #' # Importing rasters and vectors using `fast()`
 #'
-#' In **fasterRaster**, rasters are called `GRaster`s and vectors are called `GVector`s. The easiest way to start using a `GRaster` or `GVector` is to convert it from one already in **R**. In the example below, we use a raster that comes with the **fasterRaster** package. This raster represents elevation of an eastern portion of Madagascar. First, we use [fastData()] to get the raster. This is a `SPatRaster`, which is a type of raster representation used in the **terra** package.  Then, we use [fast()] to convert it to a `GRaster`. **fasterRaster** can also handle `stars` rasters (**stars** packages).
+#' In **fasterRaster**, rasters are called `GRaster`s and vectors are called `GVector`s. The easiest (but not always fastest) way to start using a `GRaster` or `GVector` is to convert it from one already in **R**. In the example below, we use a raster that comes with the **fasterRaster** package. We will convert the elevation `SpatRaster` we loaded into a `GRaster` using [fast()].
 #' ```
 #' elev <- fast(madElev)
 #' elev
@@ -77,12 +77,12 @@
 #' logElev
 #' ```
 #'
-#' You can also use the many **fasterRaster** functions. In general, these functions have the same names as their **terra** and **sf** counterparts and usually the same arguments. The following code creates a raster where cell values reflect the distance between them and the nearest river, then converts the output to a `SpatRaster` for plotting:
+#' You can also use the many **fasterRaster** functions. In general, these functions have the same names as their **terra** counterparts and usually the same arguments. The following code creates a raster where cell values reflect the distance between them and the nearest river, then converts the output to a `SpatRaster` for plotting:
 #' ```
 #' dist <- distance(elev, rivers)
 #' plot(dist)
 #' ```
-#' And that's how you get started! Now that you have a raster and a vector in your **fasterRaster** session, you can start doing manipulations and analyses using any of the **fasterRaster** functions!  To see an annotated list of these functions, use `?fasterRaster`.
+#' And that's how you get started! Now that you have a raster and a vector in your **fasterRaster** "location", you can start doing manipulations and analyses using any of the **fasterRaster** functions!  To see an annotated list of these functions, use `?fasterRaster`.
 #' 
 #' ## Exporting `GRaster`s and `GVector`s from a **GRASS** session
 #'
@@ -90,7 +90,7 @@
 #' ```
 #' terraRast <- rast(elev)
 #' ```
-#' To convert a `GVector` to the **terra** package"s `SpatVector` format or to an `sf` vector, use [vect()] or [st_as_sf():
+#' To convert a `GVector` to the **terra** package's `SpatVector` format or to an `sf` vector, use [vect()] or [st_as_sf()]:
 #' ```
 #' terraVect <- vect(rivers)
 #' sfVect <- st_as_sf(rivers)
