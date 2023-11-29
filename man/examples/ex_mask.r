@@ -23,7 +23,6 @@ library(terra)
 madElev <- fastData("madElev") # raster
 madForest <- fastData("madForest2000") # raster
 madCoast <- fastData("madCoast4") # vector
-madAnt <- madCoast[madCoast$NAME_4 == "Antanambe", ]
 
 # start GRASS session for examples only
 faster(x = madElev, grassDir = grassDir,
@@ -32,25 +31,29 @@ workDir = tempdir(), location = "examples") # line only needed for examples
 # convert to GRasters and GVectors
 elev <- fast(madElev)
 forest <- fast(madForest)
-ant <- fast(madAnt)
+coast <- fast(madCoast)
+
+ant <- coast[coast$NAME_4 == "Antanambe"]
 
 # Mask by a raster or  vector:
-byRast <- mask(elev, forest)
-plot(byRast)
+maskByRast <- mask(elev, forest)
+plot(c(forest, maskByRast))
 
-byVect <- mask(elev, ant)
-plot(byVect)
+maskByVect <- mask(elev, ant)
+plot(maskByVect)
+plot(ant, add = TRUE)
 
 # Mask by a raster or vector, but invert mask:
-byRastInvert <- mask(elev, forest, inverse = TRUE)
-plot(byRastInvert)
+maskByRastInvert <- mask(elev, forest, inverse = TRUE)
+plot(c(forest, maskByRastInvert))
 
-byVectInvert <- mask(elev, ant, inverse = TRUE)
-plot(byVectInvert)
+maskByVectInvert <- mask(elev, ant, inverse = TRUE)
+plot(maskByVectInvert)
+plot(ant, add = TRUE)
 
 # Mask by a raster, but use custom values for the mask:
-byRastCustomMask <- mask(elev, elev, maskvalues = 1:20)
-plot(byRastCustomMask)
+maskByRastCustomMask <- mask(elev, elev, maskvalues = 1:20)
+plot(c(elev <= 20, maskByRastCustomMask))
 
 # Mask by a raster or vector, but force masked values to a custom value:
 byRastCustomUpdate <- mask(elev, forest, updatevalue = 7)
@@ -60,9 +63,10 @@ byVectCustomUpdate <- mask(elev, ant, updatevalue = 7)
 plot(byVectCustomUpdate)
 
 # Mask by a raster, inverse, custom values, and custom update:
-byVectAll <-
-   mask(elev, forest, inverse = TRUE, maskvalues = 1:20, updatevalue = 7)
-plot(byVectAll)
+byRastAll <-
+   mask(elev, elev, inverse = TRUE, maskvalues = 1:20, updatevalue = 7)
+
+plot(c(elev, byRastAll))
 
 # IMPORTANT #3: Revert back to original GRASS session if needed.
 restoreSession(opts.)

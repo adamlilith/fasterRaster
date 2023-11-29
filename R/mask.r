@@ -28,6 +28,7 @@ methods::setMethod(
     
     .restore(x)
     region(x)
+    xname <- names(x)
 
     if (nlyr(mask) > 1L) warning("The mask raster has >1 layer. Only the first layer will be used.")
 
@@ -36,7 +37,7 @@ methods::setMethod(
 
     srcs <- .mask(x = x, mask = mask, maskType = "raster", inverse = inverse, maskvalues = maskvalues, updatevalue = updatevalue)
 
-    .makeGRaster(srcs, names(x))
+    .makeGRaster(srcs, xname)
 
     } # EOF
 )
@@ -51,13 +52,14 @@ methods::setMethod(
 
     .restore(x)
     region(x)
+    xname <- names(x)
 
     x <- sources(x)
     mask <- sources(mask)
 
     srcs <- .mask(x = x, mask = mask, maskType = "vector", inverse = inverse, maskvalues = NA, updatevalue = updatevalue)
 
-    .makeGRaster(srcs, names(x))
+    .makeGRaster(srcs, xname)
     
     } # EOF
 )
@@ -74,20 +76,12 @@ methods::setMethod(
     # remove mask on exit
     on.exit(.removeMask(), add = TRUE)
 
-    ### create a mask
-    args <- list(
-        cmd = "r.mask",
-        flags = c(.quiet(), "overwrite")
-    )
-
-    if (inverse) args$flags <- c(args$flags, "i")
-
     ### mask is a raster
     ####################
     if (maskType == "raster") {
 
         # custom mask values
-        if (length(maskvalues) > 1L | !is.na(maskvalues)) {
+        if (length(maskvalues) > 1L || !is.na(maskvalues)) {
 
             maskSrc <- .makeSourceName("r_mapcalc", "raster")
 
@@ -99,12 +93,12 @@ methods::setMethod(
             }
 
             maskvalues <- as.character(maskvalues)
-            maskvalues <- paste(paste0(sources(mask), " == "), maskvalues)
+            maskvalues <- paste(paste0(sources(mask), "=="), maskvalues)
             if (maskValuesHaveNAs) maskvalues <- c(maskvalues, paste0("isnull(", sources(mask), ")"))
 
             maskvalues <- paste(maskvalues, collapse = " | ")
 
-            ex <- paste0(maskSrc, " = if(", maskvalues, ", 1, null())")
+            ex <- paste0(maskSrc, " = if(", maskvalues, ",1,null())")
             
             args <- list(
                 cmd = "r.mapcalc",
@@ -112,16 +106,30 @@ methods::setMethod(
                 flags = c(.quiet(), "overwrite")
             )
 
+            do.call(rgrass::execGRASS, args = args)
+
         } else {
             maskSrc <- mask
         }
+
+        ### create a mask
+        args <- list(
+            cmd = "r.mask",
+            flags = c(.quiet(), "overwrite")
+        )
 
         args$raster <- maskSrc
     
     ### mask is a vector
     } else if (maskType == "vector") {
+        args <- list(
+            cmd = "r.mask",
+            flags = c(.quiet(), "overwrite")
+        )
         args$vector <- mask
     }
+
+    if (inverse) args$flags <- c(args$flags, "i")
 
     ### create mask
     do.call(rgrass::execGRASS, args = args)
@@ -142,7 +150,7 @@ methods::setMethod(
     ### change masked values
     if (!is.na(updatevalue)) {
 
-		nLayers <- nlyr(x)
+		nLayers <- length(x)
         srcsUpdate <- .makeSourceName("r_mapcalc", "raster", nLayers)
 
         for (i in seq_len(nLayers)) {
