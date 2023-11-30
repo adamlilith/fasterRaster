@@ -35,7 +35,8 @@ methods::setMethod(
 		input = input,
 		output = src,
 		rescale = c(0, 0),
-		flags = c(.quiet(), "overwrite")
+		flags = c(.quiet(), "overwrite"),
+		intern = TRUE
 	)
 
 	if (scale) args$flags <- c(args$flags, "n")
@@ -81,7 +82,7 @@ methods::setMethod(
 	}
 
 	# center
-	center <- global(x, c("mean"))
+	center <- global(x, "mean")
 	center <- c(center)[[1L]]
 	names(center) <- names(x)
 
