@@ -1,7 +1,7 @@
 # DEFAULTS FOR ALL GLOBAL SETTINGS
 
 # global PUBLIC options
-.coresDefault <- function() 1
+.coresDefault <- function() 2
 .verboseDefault <- function() FALSE
 .grassDirDefault <- function() NULL
 .addonDirDefault <- function() NULL
