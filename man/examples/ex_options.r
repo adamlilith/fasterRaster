@@ -9,9 +9,11 @@ opts. <- getFastOptions()
 # see current values for options
 getFastOptions("cores")
 getFastOptions("memory")
-getFastOptions("details")
-getFastOptions("grassVer")
+getFastOptions("useDataTable")
+getFastOptions("rasterPrecision")
+getFastOptions("verbose")
 getFastOptions("grassDir")
+getFastOptions("addonDir")
 getFastOptions("workDir")
 getFastOptions() # all options
 
@@ -21,7 +23,7 @@ getFastOptions(default = TRUE) # all options
 
 # set options (change accordingly for your system!!!)
 setFastOptions(grassDir = "C:/Program Files/GRASS GIS 8.3")
-setFastOptions(details = TRUE, memory = 600, cores = 4)
+setFastOptions(verbose = TRUE, memory = 600, cores = 4)
 
 # IMPORTANT #2: Revert back to original GRASS session if needed.
 restoreSession(opts.)
