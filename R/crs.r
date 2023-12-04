@@ -43,7 +43,7 @@ methods::setMethod(
 	signature = "missing",
 	definition = function(x, ...) {
 		
-	out <- crs(location())
+	out <- crs()
 	sf::st_crs(out)
 
 	} # EOF
