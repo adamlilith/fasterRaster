@@ -18,29 +18,34 @@ grassDir <- "/usr/local/grass" # Linux
 library(terra)
 
 # Example data
-madLand <- fastData("madLand")
-madRivers <- fastData("madRivers")
+madElev <- fastData("madElev") # elevation raster
+madLANDSAT <- fastData("madLANDSAT") # multi-layer raster
+madRivers <- fastData("madRivers") # lines vector
 
 # Start GRASS session for examples only:
-faster(x = madLand, grassDir = grassDir,
-workDir = tempdir(), location = "examples") # line only needed for examples
+faster(x = madLANDSAT, grassDir = grassDir,
+workDir = tempdir(), location = "examples", overwrite = TRUE)
 
 # Convert SpatRaster to GRaster and SpatVector to GVector
-land <- fast(madLand)
+elev <- fast(madElev)
 rivers <- fast(madRivers)
+land <- fast(madLANDSAT, checkCRS = FALSE) # NB Need checkCRS = FALSE for this
+# raster... We know it has the same CRS as the location, so this is OK, but
+# checkCRS = TRUE (default behavior) does not work.
 
 # Plot:
-plot(land[[1L]])
+plot(elev)
 plot(rivers, add = TRUE)
 
-# Histogram:
+# Histograms:
+hist(elev)
 hist(land)
 
 # Plot surface reflectance in RGB:
 plotRGB(land, 3, 2, 1) # "natural" color
 plotRGB(land, 4, 1, 2, stretch = "lin") # emphasize near-infrared (vegetation)
 
-# Make composite map from RGB and plot in grayscale:
+# Make composite map from RGB layers and plot in grayscale:
 comp <- compositeRGB(r = land[[3]], g = land[[2]], b = land[[1]])
 grays <- paste0("gray", 0:100)
 plot(comp, col = grays)
