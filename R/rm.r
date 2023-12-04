@@ -18,8 +18,6 @@
 #' @seealso [rm()]
 #'
 #' @aliases .rm
-#' @rdname .rm
-#' @export
 #' @noRd
 .rm <- function(x, type = NULL, warn = TRUE) {
 
