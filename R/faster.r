@@ -7,16 +7,16 @@
 #' * A `crs` object (i.e., from [sf::st_crs()]).
 #' * A CRS (coordinate reference system) WKT string. Some PROJ4 strings *might* work, too.
 #'
-#' @param grassDir Character or `NULL` (default): Folder in which **GRASS** is installed on your computer. This will look different depending on the operating system and version of **GRASS** you have installed. Here are some examples:
+#' @param grassDir Character or `NA` (default): Folder in which **GRASS** is installed on your computer. This will look different depending on the operating system and version of **GRASS** you have installed. Here are some examples:
 #' * Windows: `"C:/Program Files/GRASS GIS 8.3"`
 #' * Mac OS: `"/Applications/GRASS-8.3.app/Contents/Resources"`
 #' * Linux: `"/usr/local/grass"`
 #'
-#' If `NULL`, then the function will use [getFastOptions()] to attempt to get it. If it fails, `grassDir` will stay as `NULL` and likely result in an error.
+#' If `NA`, then the function will use [getFastOptions()] to attempt to get it. If it fails, `grassDir` will stay as `NULL` and likely result in an error.
 #'
-#' @param addonDir Character or `NULL` (deafult): Folder in which **GRASS** add-ons are stored. If `NULL`, this is assumed to be in `file.path(grassDir, "addons")`.
+#' @param addonDir Character or `NA` (deafult): Folder in which **GRASS** add-ons are stored. If `NA`, this is assumed to be in `file.path(grassDir, "addons")`.
 #' 
-#' @param workDir `NULL` or character: The name of the folder in which **GRASS** will store rasters and vectors. If this is `NULL` (default), then the [tempdir()] on the user's system will be used. If users wish to create persistent **GRASS** sessions that can be used in a different instance of **R** (i.e., if **R** is stopped then restarted), then this needs to be specified.
+#' @param workDir Character or `NA`: The name of the folder in which **GRASS** will store rasters and vectors. If this is `NA` (default), then the [tempdir()] on the user's system will be used.
 #'
 #' @param overwrite Logical: If `FALSE` (default), and a **GRASS** "location" with the given name has already been created, then the function will fail. If `TRUE`, then the existing **GRASS** "location" of the same name will be overwritten. *NOTE*: This will **not** remove any **R** objects associated with rasters or vectors in the session, but they will no longer work because the objects they point to will be overwritten.
 #
@@ -33,9 +33,9 @@
 #' @export
 faster <- function(
 	x,
-	grassDir = NULL,
-	addonDir = NULL,
-	workDir = NULL,
+	grassDir = NA,
+	addonDir = NA,
+	workDir = NA,
 	overwrite = FALSE,
 	warn = TRUE,
 	...
@@ -45,9 +45,9 @@ faster <- function(
 	if (FALSE) {
 
 		grassDir <- "C:/Program Files/GRASS GIS 8.3" # Windows
-		addonDir <- NULL
+		addonDir <- NA
 		dots <- list()
-		workDir <- NULL
+		workDir <- NA
 		x <- madElev
 		overwrite <- TRUE
 		warn <- TRUE
@@ -58,13 +58,13 @@ faster <- function(
 
 	### function globals
 	dots <- list(...)
-	if (is.null(workDir)) workDir <- getFastOptions("workDir")
+	if (is.na(workDir)) workDir <- getFastOptions("workDir")
 	workDir <- forwardSlash(workDir)
 	dir.create(workDir, showWarnings=FALSE, recursive=TRUE)
 
-	if (is.null(grassDir)) grassDir <- getFastOptions("grassDir")
+	if (is.na(grassDir)) grassDir <- getFastOptions("grassDir")
 	if (is.na(grassDir)) grassDir <- NULL
-	if (!is.null(grassDir) && is.null(addonDir) && is.null(getFastOptions("addonDir"))) addonDir <- file.path(grassDir, "addons")
+	if (!is.na(grassDir) && is.na(addonDir) && is.na(getFastOptions("addonDir"))) addonDir <- file.path(grassDir, "addons")
 
 	mapset <- if (!("mapset" %in% names(dots))) {
 		mapset()
@@ -133,12 +133,12 @@ faster <- function(
 			ignore.stderr = TRUE
 		)
 	)
-		
+
 	### set options
 	setFastOptions(grassDir = grassDir, addonDir = addonDir, workDir = workDir)
 	if (length(dots) > 0L) setFastOptions(...)
 	.fasterRaster$grassStarted <- TRUE
-	
+
 	saveRDS(x, file=crsFile)
 	
 	session <- GSession(
