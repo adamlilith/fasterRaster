@@ -105,17 +105,16 @@ methods::setMethod(
 		xNames <- names(xRast)
 
 		### load raster (no projecting needed)
-		# if (!checkCRS || terra::crs(xRast) == crs()) {
 		if (!checkCRS || terra::same.crs(xRast, crs())) {
 			
 			region(xRast)
 			
-			src <- .makeSourceName("r_in_gdal", type = "raster")
+			src <- .makeSourceName("r_in_gdal", type = "raster", n = 1L)
 			args <- list(
 				cmd = "r.in.gdal",
 				input = x,
 				output = src,
-				flags = .quiet()
+				flags = c(.quiet(), "overwrite")
 			)
 
 			if (!checkCRS) args$flags <- c(args$flags, "o")
@@ -165,7 +164,7 @@ cat("Time-consuming step here for large rasters^^^")
 			if (wrap) args$flags <- c(args$flags, "n")
 		
 		} # projected raster from disk
-
+		
 		do.call(rgrass::execGRASS, args = args)
 		if (nLayers > 1L) src <- paste0(src, ".", seq_len(nLayers))
 
@@ -175,6 +174,7 @@ cat("Time-consuming step here for large rasters^^^")
 		} else {
 			levels <- NULL
 		}
+
 		out <- .makeGRaster(src, names = xNames, levels = levels)
 
 	### vector from disk
@@ -276,7 +276,7 @@ methods::setMethod(
 		x <- terra::sources(x)
 	}
 
-	fast(x = x, method = method, fallback = fallback, wrap = wrap, warn = warn, levels = levels, rastOrVect = "raster")
+	fast(x = x, checkCRS = checkCRS, method = method, fallback = fallback, wrap = wrap, warn = warn, levels = levels, rastOrVect = "raster")
 
 	} # EOF
 )
