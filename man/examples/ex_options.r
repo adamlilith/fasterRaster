@@ -6,7 +6,7 @@
 # them, run the last line in this example.
 opts. <- getFastOptions()
 
-# see current values for options
+# See current values for options:
 getFastOptions("cores")
 getFastOptions("memory")
 getFastOptions("useDataTable")
@@ -17,13 +17,19 @@ getFastOptions("addonDir")
 getFastOptions("workDir")
 getFastOptions() # all options
 
-# see default values for options
+# See default values for options:
 getFastOptions("cores", default = TRUE)
 getFastOptions(default = TRUE) # all options
 
-# set options (change accordingly for your system!!!)
-setFastOptions(grassDir = "C:/Program Files/GRASS GIS 8.3")
+# Set options (change accordingly for your system!!!)
+if (FALSE) {
+
+setFastOptions(grassDir = "C:/Program Files/GRASS GIS 8.4")
 setFastOptions(verbose = TRUE, memory = 600, cores = 4)
+
+getFastOptions(c("grassDir", "verbose", "memory", "cores"))
+
+}
 
 # IMPORTANT #2: Revert back to original GRASS session if needed.
 restoreSession(opts.)

@@ -4,24 +4,24 @@
 #'
 #' @param ... Either a character (the name of an option), or **fasterRaster** option that can be defined using an `option = value` pattern. These include:
 #'
-#' * `cores` (integer/numeric): Number of processor cores to use on a task. The default is 1. Only some **GRASS** modules allow this option.
+#' *  `addonDir` (character): Folder in which **GRASS** addons are stored. If `NA` and `grassDir` is not `NA`, this will be taken to be `file.path(grassDir, "addons")`. The default values is `NA`.
 #'
-#' * `memory` (integer/numeric): The amount of memory to allocate to a task, in MB. The default is 300 MB. Only some **GRASS** modules allow this option.
+#' * `cores` (integer/numeric integer): Number of processor cores to use on a task. The default is 2. Some **GRASS** modules can run on more than one processor.
 #'
-#' * `useDataTable` (logical): If `FALSE` (default), use `data.frame`s when going back and forth between data tables of `GVector`s and **R**. This can be slow for very large data tables. If `TRUE`, use `data.table`s from the **data.table** package. This can be much faster, but it might require you to know how to use `data.table`s if you want to manipulate them in **R**. You can always convert them to `data.frame`s using [base::as.data.frame()].
-#' 
-#' * `rasterPrecision` (character): The [precision][tutorial_raster_data_types] of values when applying mathematical operations to a `GRaster`. By default, this is `"double"`, which allows for precision to about the 16th decimal place. However, it can be set to `"float"`, which allows for precision to about the 7th decimal place. `float` rasters are smaller in memory and on disk. The default is `"double"`.`
-#'
-#' * `verbose` (logical): If `TRUE`, show **GRASS** messages and otherwise hidden slots in classes. This is mainly used for debugging, so most users will want to keep this at its default, `FALSE`.
-#'
-#' * `grassDir` (character): The folder in which **GRASS** is installed on your computer. Typically, this option is set when you run [faster()], but you can define it before you run that function. All subsequent calls of `faster()` do not need `grassDir` set because it will be obtained from the options. By default, `grassDir` is `NULL`, which causes the function to search for your installation of **GRASS** (and which usually fails). Depending on your operating system, your install directory will look something like this:
+#' * `grassDir` (character): The folder in which **GRASS** is installed on your computer. Typically, this option is set when you run [faster()], but you can define it before you run that function. All subsequent calls of `faster()` do not need `grassDir` set because it will be obtained from the options. By default, `grassDir` is `NA`, which causes the function to search for your installation of **GRASS** (and which usually fails). Depending on your operating system, your install directory will look something like this:
 #'     * Windows: `"C:/Program Files/GRASS GIS 8.3"`
 #'     * Mac OS: `"/Applications/GRASS-8.3.app/Contents/Resources"`
 #'     * Linux: `"/usr/local/grass"`
 #'
-#' *  `addonDir` (character): Folder in which **GRASS** addons are stored. If `NULL` and `grassDir` is not `NULL`, this will be taken to be `file.path(grassDir, "addons")`.
+#' * `memory` (integer/numeric): The amount of memory to allocate to a task, in MB. The default is 300 MB. Some **GRASS** modules can take advantage of more memory.
 #'
-#'  * `workDir` (character): The folder in which **GRASS** rasters, vectors, and other objects are created and manipulated. Typically, this is set when you first call [faster()]. All subsequent calls to `faster()` will not do not need `workDir` defined because it will be obtained from the options. By default, this is set to the temporary directory on your operating system (from [tempdir()]).
+#' * `rasterPrecision` (character): The [precision][tutorial_raster_data_types] of values when applying mathematical operations to a `GRaster`. By default, this is `"double"`, which allows for precision to about the 16th decimal place. However, it can be set to `"float"`, which allows for precision to about the 7th decimal place. `float` rasters are smaller in memory and on disk. The default is `"double"`.`
+#'
+#' * `useDataTable` (logical): If `FALSE` (default), use `data.frame`s when going back and forth between data tables of `GVector`s and **R**. This can be slow for very large data tables. If `TRUE`, use `data.table`s from the **data.table** package. This can be much faster, but it might require you to know how to use `data.table`s if you want to manipulate them in **R**. You can always convert them to `data.frame`s using [base::as.data.frame()].
+#' 
+#' * `verbose` (logical): If `TRUE`, show **GRASS** messages and otherwise hidden slots in classes. This is mainly used for debugging, so most users will want to keep this at its default, `FALSE`.
+#'
+#'  * `workDir` (character): The folder in which **GRASS** rasters, vectors, and other objects are created and manipulated. Typically, this is set when you first call [faster()]. All subsequent calls to `faster()` will not do not need `workDir` defined because it will be obtained from the options. By default, this is set to the temporary directory on your operating system (using [tempdir()]).
 #'
 #' @param restore If `TRUE`, the all options will be reset to their default values. The default is `FALSE`.
 #'
@@ -50,14 +50,14 @@ setFastOptions <- function(
 	### check for validity
 	error <- paste0("Option ", sQuote("grassDir"), " must be ", dQuote("NULL"), " (which is likely to fail)\n  or a single character string. The default is ", dQuote(.grassDirDefault()), ".")
 	if (any(names(opts) %in% "grassDir")) {
-		if (!is.null(opts$grassDir)) {
+		if (!is.na(opts$grassDir)) {
    			if (!is.character(opts$grassDir) || length(opts$grassDir) != 1L) stop(error)
 		}
 	}
 
 	error <- paste0("Option ", sQuote("addonDir"), " must be ", sQuote("NULL"), " or a single character string. The default is ", dQuote(.addonDirDefault()), ".")
 	if (any(names(opts) %in% "addonDir")) {
-		if (!is.null(opts$addonDir)) {
+		if (!is.na(opts$addonDir)) {
    			if (!is.character(opts$addonDir) || length(opts$addonDir) != 1L) stop(error)
 		}
 	}
@@ -119,15 +119,15 @@ setFastOptions <- function(
 	}
 	
 	for (opt in names(opts)) {
-	
+
 		# default
-		if (restore | is.null(.fasterRaster$options[[opt]])) {
+		if (restore | is.na(.fasterRaster$options[[opt]])) {
 			val <- paste0(".", opt, "Default()")
 			val <- eval(str2expression(val))
 		} else {
 			val <- opts[[opt]]
 		}
-		if (is.null(val)) {
+		if (is.na(val)) {
 			.fasterRaster$options[[opt]] <- list(val)
 		} else {
 			.fasterRaster$options[[opt]] <- val
