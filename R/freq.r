@@ -51,7 +51,7 @@ methods::setMethod(
 
 	nLayers <- length(src)
 
-	if (dtype != "CELL" & bins <= 0) stop("Argument ", sQuote("bins"), " must be a positive integer.")
+	if (any(dtype != "CELL") & bins <= 0) stop("Argument ", sQuote("bins"), " must be a positive integer.")
 	
 	# get values for each raster
 	out <- list()
