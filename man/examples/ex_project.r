@@ -43,19 +43,23 @@ workDir = wd, location = "examples") # line only needed for examples
 riversFromVect <- fast(madRivers)
 chelsaFromRast <- fast(madChelsa)
 
+crs(riversFromVect)
+crs(chelsaFromRast)
+
 ### Method 2: Project while loading rasters/vectors from disk
 #############################################################
 
-vectFile <- system.file("extdata", "shapes/madCoast.shp", package="fasterRaster")
+vectFile <- system.file("extdata", "shapes/madCoast.shp",
+   package = "fasterRaster")
 coastProj <- fast(vectFile)
-coastProj
+crs(coastProj)
 
-rastFile <- system.file("extdata", "madChelsa.tif", package="fasterRaster")
-chelsaFromFile <- fast(rastFile, method="bilinear")
-chelsaFromFile
+rastFile <- system.file("extdata", "madChelsa.tif", package = "fasterRaster")
+chelsaFromFile <- fast(rastFile, method = "bilinear")
+crs(chelsaFromFile)
 
-### Method 3a: Projecting between GRASS "locations" but do not resample
-#######################################################################
+### Method 3a: Projecting GRaster between GRASS "locations" but do not resample
+###############################################################################
 
 # Set up "to" location:
 faster(x = madElev, grassDir = grassDir,
@@ -71,7 +75,7 @@ chelsa <- fast(madChelsa)
 rivers <- fast(madRivers)
 
 # Re-activate the "exampleTo" "location":
-restoreSession(location="exampleTo")
+restoreSession(location = "exampleTo")
 
 ### Project vector into the "exampleTo" location:
 riversProj <- project(rivers)
@@ -91,8 +95,8 @@ minmax(chelsaSameResTerra)
 chelsaSameResSpat <- rast(chelsaSameRes)
 plot(chelsaSameResSpat - chelsaSameResTerra)
 
-### Method 3b: Projecting between GRASS "locations" and resample
-################################################################
+### Method 3b: Projecting GRaster between GRASS "locations" and resample
+########################################################################
 
 chelsaResamp <- project(chelsa, elev)
 chelsaResamp
