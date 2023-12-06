@@ -65,7 +65,6 @@ names(elev)
 
 # coordinate reference system
 crs(elev)
-st_crs(elev)
 
 # extent (bounding box)
 ext(elev)
@@ -121,7 +120,6 @@ bottom(rivers) # bottom extent
 
 # coordinate reference system
 crs(rivers)
-st_crs(rivers)
 
 # column names and data types
 names(coast)
