@@ -60,9 +60,9 @@ methods::setMethod(
 	extent <- round(object@extent, digs)
 	
 	cat("class       :", paste(class(object), collapse=", "), "\n")
+	cat("location    :", object@location, "\n")
 	if (verbose) {
 		# cat("sources(s)  :", object@sources, "\n")
-		cat("location    :", object@location, "\n")
 		cat("mapset      :", object@mapset, "\n")
 		cat("workDir     :", object@workDir, "\n")
 	}
@@ -109,8 +109,8 @@ methods::setMethod(
 	zextent <- round(object@zextent, max(round(digs / 2), 2))
 	
 	cat("class       :", paste(class(object), collapse=", "), "\n")
+	cat("location    :", object@location, "\n")
 	if (verbose) {
-		cat("location    :", object@location, "\n")
 		cat("mapset      :", object@mapset, "\n")
 		cat("workDir     :", object@workDir, "\n")
 	}
@@ -273,10 +273,9 @@ methods::setMethod(
   		datatypeNiceGRASS <- paste(datatypeNiceGRASS, collapse = " ")
 		activeCat <- paste(activeCat, collapse = "")
 	}
-	
 	cat("class       : GRaster\n")
+	cat("location    :", object@location, "\n")
 	if (verbose) {
-		cat("location    :", object@location, "\n")
 		cat("mapset      :", object@mapset, "\n")
 		cat("workDir     :", object@workDir, "\n")
 	}
@@ -448,8 +447,8 @@ methods::setMethod(
 	}
 	
 	cat("class       : GVector\n")
+	cat("location    :", object@location, "\n")
 	if (verbose) {
-		cat("location    :", object@location, "\n")
 		cat("mapset      :", object@mapset, "\n")
 		cat("source      :", object@sources, "\n")
 		cat("workDir     :", object@workDir, "\n")
