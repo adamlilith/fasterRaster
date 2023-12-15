@@ -44,6 +44,9 @@ methods::setMethod(
 #' @noRd
 .resample <- function(x, y, method, fallback) {
 
+	if (inherits(y, "GRaster")) compareGeom(x, y)
+	.locationRestore(x)
+
 	# method
 	if (!is.null(method)) method <- omnibus::pmatchSafe(method, c("nearest", "bilinear", "bicubic", "lanczos"))
 	if (is.null(method)) {
@@ -127,7 +130,7 @@ methods::setMethod(
 	do.call(rgrass::execGRASS, args=args)
 	
 	# resample each layer
-	for (i in 1L:nlyr(x)) {
+	for (i in seq_len(nlyr(x))) {
 
 		### resample
 		if (method == "nearest" | fallback) {
@@ -150,11 +153,11 @@ methods::setMethod(
 				input = sources(x)[i],
 				output = srcBilinear,
 				method = "bilinear",
-				memory = getFastOptions("memory"),
+				memory = faster("memory"),
 				flags = c(.quiet(), "overwrite"),
 				intern = TRUE
 			)
-			if (versionNumber >= 8.3) args$nprocs <- getFastOptions("cores")
+			if (versionNumber >= 8.3) args$nprocs <- faster("cores")
 
 			do.call(rgrass::execGRASS, args = args)
 
@@ -168,11 +171,11 @@ methods::setMethod(
 				input = sources(x)[i],
 				output = srcBicubic,
 				method = "bicubic",
-				memory = getFastOptions("memory"),
+				memory = faster("memory"),
 				flags = c(.quiet(), "overwrite"),
 				intern = TRUE
 			)
-			if (versionNumber >= 8.3) args$nprocs <- getFastOptions("cores")
+			if (versionNumber >= 8.3) args$nprocs <- faster("cores")
 			do.call(rgrass::execGRASS, args = args)
 
 		}
@@ -185,11 +188,11 @@ methods::setMethod(
 				input = sources(x)[i],
 				output = srcLanczos,
 				method = "lanczos",
-				memory = getFastOptions("memory"),
+				memory = faster("memory"),
 				flags = c(.quiet(), "overwrite"),
 				intern = TRUE
 			)
-			if (versionNumber > 8.3) args$nprocs <- getFastOptions("cores")
+			if (versionNumber > 8.3) args$nprocs <- faster("cores")
 			do.call(rgrass::execGRASS, args = args)
 
 		}

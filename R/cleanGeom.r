@@ -48,7 +48,7 @@ methods::setMethod(
 		tolerance <- 0
 	}
 
-	.restore(x)
+	.locationRestore(x)
 	
 	methods <- c("duplicated", "break", "removeDangles", "changeDangles", "removeBridges", "changeBridges", "snap", "dupAreaCentroids", "topoClean", "smallAreas", "remove0", "smallAngles")
 	method <- omnibus::pmatchSafe(method, methods)

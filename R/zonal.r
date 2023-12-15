@@ -65,8 +65,8 @@ methods::setMethod(
 	}
 
 	compareGeom(x, z)
-	.restore(x)
-	region(x)
+	.locationRestore(x)
+	.region(x)
 
 	### get zone labels
 	if (is.factor(z)) z <- droplevels(z)
@@ -88,8 +88,8 @@ methods::setMethod(
 .zonalByVector <- function(x, z, fun, prob) {
 
 	compareGeom(x, z)
-	.restore(x)
-	region(x)
+	.locationRestore(x)
+	.region(x)
 
 	z <- rasterize(z, y = x, background = NA, byGeom = TRUE, collapse = TRUE)
 	
@@ -152,7 +152,7 @@ methods::setMethod(
 	
 	} # next x layer
 
-	if (!getFastOptions("useDataTable")) out <- as.data.frame(out)
+	if (!faster("useDataTable")) out <- as.data.frame(out)
 	out
 
 }

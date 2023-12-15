@@ -17,33 +17,18 @@ A \code{GRaster}.
 \code{merge()} combines two or more \code{GRaster}s, possibly with different extents, into a single larger \code{GRaster}. Where the same cell has different values in each raster, the value of the first raster's cell is used. If this is \code{NA}, then the value of the second raster's cell is used, and so on.
 }
 \examples{
-\dontrun{
-# NB This example is in a "dontrun{}" block because it requires users to have
-# GRASS GIS Version 8+ installed on their system.
+if (grassStarted()) {
 
-# IMPORTANT #1: If you already have a GRASS session started, you will need to
-# run the line below and the last line in this example to work with it again.
-# If you have not started a GRASS session, you can skip this step and go to
-# step #2.
-opts. <- getFastOptions()
-
-# IMPORTANT #2: Select the appropriate line below and change as necessary to
-# where GRASS is installed on your system.
-
-grassDir <- "/Applications/GRASS-8.3.app/Contents/Resources" # Mac
-grassDir <- "C:/Program Files/GRASS GIS 8.3" # Windows
-grassDir <- "/usr/local/grass" # Linux
-
-# setup
+# Setup
 library(sf)
 library(terra)
 
-# example data
+# Example data
 madElev <- fastData("madElev")
 madCoast4 <- fastData("madCoast4")
 madCoast4 <- vect(madCoast4)
 
-# for the example, crop the elevation raster to two communes
+# For the example, crop the elevation raster to two communes
 madAnt <- madCoast4[madCoast4$NAME_4 == "Antanambe", ]
 madMan <- madCoast4[madCoast4$NAME_4 == "Manompana", ]
 
@@ -51,24 +36,16 @@ elevAnt <- crop(madElev, madAnt)
 elevMan <- crop(madElev, madMan)
 
 plot(madElev)
-plot(elevAnt, col="red", legend=FALSE, add=TRUE)
-plot(elevMan, col="blue", legend = FALSE, add=TRUE)
+plot(elevAnt, col = "red", legend = FALSE, add = TRUE)
+plot(elevMan, col = "blue", legend = FALSE, add = TRUE)
 
-# start GRASS session for examples only
-faster(x = madElev, grassDir = grassDir,
-workDir = tempdir(), location = "examples") # line only needed for examples
-
-# convert a SpatRaster to a GRaster
+# Convert a SpatRaster to a GRaster
 ant <- fast(elevAnt)
 man <- fast(elevMan)
 
 # merge
 antMan <- merge(ant, man)
-plot(antMan, main="Antman!")
-
-# IMPORTANT #3: Revert back to original GRASS session if needed.
-restoreSession(opts.)
-removeSession("examples")
+plot(antMan, main = "Antman!")
 
 }
 }

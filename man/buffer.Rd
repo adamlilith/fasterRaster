@@ -57,21 +57,7 @@ Partial matching is used and case is ignored.
 Buffers can be constructed for \code{GRaster}s or \code{GVector}s. For rasters, the \code{buffer()} function creates a buffer around non-\code{NA} cells. The output will be a raster. For vectors, the \code{buffer()} and \code{st_buffer()} functions create a vector polygon larger or smaller than the focal vector.
 }
 \examples{
-\dontrun{
-# NB This example is in a "dontrun{}" block because it requires users to have
-# GRASS GIS Version 8+ installed on their system.
-
-# IMPORTANT #1: If you already have a GRASS session started, you will need to
-# run the line below and the last line in this example to work with it again.
-# If you have not started a GRASS session, you can skip this step and go to
-# step #2.
-opts. <- getFastOptions()
-
-# IMPORTANT #2: Select the appropriate line below and change as necessary to
-# where GRASS is installed on your system.
-grassDir <- "/Applications/GRASS-8.3.app/Contents/Resources" # Mac
-grassDir <- "C:/Program Files/GRASS GIS 8.3" # Windows
-grassDir <- "/usr/local/grass" # Linux
+if (grassStarted()) {
 
 # Setup
 library(sf)
@@ -80,10 +66,6 @@ library(terra)
 # Elevation raster, rivers vector
 madElev <- fastData("madElev")
 madRivers <- fastData("madRivers")
-
-# Start GRASS session for examples only:
-faster(x = madElev, grassDir = grassDir,
-workDir = tempdir(), location = "examples") # line only needed for examples
 
 # Convert a SpatRaster to a GRaster, and sf to a GVector
 elev <- fast(madElev)
@@ -103,10 +85,6 @@ plot(madElev, add = TRUE)
 buffRivers <- buffer(rivers, width = 2000) # 2000-m buffer
 plot(buffRivers)
 plot(st_geometry(madRivers), col = "blue", add = TRUE)
-
-# IMPORTANT #3: Revert back to original GRASS session if needed.
-restoreSession(opts.)
-removeSession("examples")
 
 }
 }

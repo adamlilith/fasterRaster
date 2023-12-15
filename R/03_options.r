@@ -1,17 +1,17 @@
 #' Set or get options shared across "fasterRaster" functions
 #'
-#' @description These functions allows you to either 1) view or 2) define options shared by **fasterRaster** functions. 
+#' @description `faster()` either sets or gets options used across **fasterRaster** functions. If the `default` argument is `TRUE`, then the default value(s) of options is returned (but value(s) are kept unchanged). If the `restore` argument is `TRUE`, then all options will be set to their default values. You cannot simultaneously set options and restore their default values.
 #'
-#' @param ... Either a character (the name of an option), or **fasterRaster** option that can be defined using an `option = value` pattern. These include:
+#' @param ... Either a character (the name of an option), or an option and the value of the option using an `option = value` pattern. These include:
 #'
-#' *  `addonDir` (character): Folder in which **GRASS** addons are stored. If `NA` and `grassDir` is not `NA`, this will be taken to be `file.path(grassDir, "addons")`. The default values is `NA`.
-#'
-#' * `cores` (integer/numeric integer): Number of processor cores to use on a task. The default is 2. Some **GRASS** modules can run on more than one processor.
-#'
-#' * `grassDir` (character): The folder in which **GRASS** is installed on your computer. Typically, this option is set when you run [faster()], but you can define it before you run that function. All subsequent calls of `faster()` do not need `grassDir` set because it will be obtained from the options. By default, `grassDir` is `NA`, which causes the function to search for your installation of **GRASS** (and which usually fails). Depending on your operating system, your install directory will look something like this:
+#' * `grassDir` (character): The folder in which **GRASS** is installed on your computer. Typically, this option is set when you run [faster()]. Depending on your operating system, your install directory will look something like this:
 #'     * Windows: `"C:/Program Files/GRASS GIS 8.3"`
 #'     * Mac OS: `"/Applications/GRASS-8.3.app/Contents/Resources"`
 #'     * Linux: `"/usr/local/grass"`
+#'
+#' *  `addonsDir` (character): Folder in which **GRASS** addons are stored. If `NA` and `grassDir` is not `NA`, this will be assumed to be `file.path(grassDir, "addons")`. The default values is `NA`.
+#'
+#' * `cores` (integer/numeric integer): Number of processor cores to use on a task. The default is 2. Some **GRASS** modules are parallelized.
 #'
 #' * `memory` (integer/numeric): The amount of memory to allocate to a task, in MB. The default is 300 MB. Some **GRASS** modules can take advantage of more memory.
 #'
@@ -21,31 +21,69 @@
 #' 
 #' * `verbose` (logical): If `TRUE`, show **GRASS** messages and otherwise hidden slots in classes. This is mainly used for debugging, so most users will want to keep this at its default, `FALSE`.
 #'
-#'  * `workDir` (character): The folder in which **GRASS** rasters, vectors, and other objects are created and manipulated. Typically, this is set when you first call [faster()]. All subsequent calls to `faster()` will not do not need `workDir` defined because it will be obtained from the options. By default, this is set to the temporary directory on your operating system (using [tempdir()]).
+#'  * `workDir` (character): The folder in which **GRASS** rasters, vectors, and other objects are created and manipulated. By default, this is given by [tempdir()].
 #'
-#' @param restore If `TRUE`, the all options will be reset to their default values. The default is `FALSE`.
+#' @param restore Logical: If `TRUE`, the all options will be reset to their default values. The default is `FALSE`.
 #'
-#' @param default Supplies the default value of the option(s).
+#' @param default Logical: Return the default value(s) of the option(s). The default value of `default` is `FALSE`.
 #'
-#' @return If just one option is specified, `getFastOptions()` returns a vector with a single value. If more than one option is specified, `gastFasterOptions()` returns a named list with values. The `setFasterOptions()` function changes the values of these settings and returns the pre-existing values as a list (invisibly--i.e., so you can revert to them if you want).
+#' @return If values of options changed, then a named list of option values *before* they were changed is returned invisibly.
 #'
-#' @example man/examples/ex_options.r
+#' If option values are requested, a named list with option values is returned (not invisibly).
 #'
-#' @export
+#' @example man/examples/ex_faster.r
 
-setFastOptions <- function(
+#' @aliases faster
+#' @rdname faster
+#' @export
+faster <- function(
 	...,
+	default = FALSE,
 	restore = FALSE
 ) {
 
 	opts <- list(...)
 	if (length(opts) == 1L && inherits(opts[[1L]], "list")) opts <- opts[[1L]]
+	nd <- length(opts)
+	
+	if (default & restore) {
+		
+		stop("Cannot request default values and restore to default values at the same time.")
+
+	} else if (nd > 0L & restore) {
+	
+		stop("Cannot simultaneously set options and restore options to default values.")
+
+	}
+
+	# getting options if ... has no names
+	gettingOpts <- is.null(names(opts)) & !restore
+
+	# retrieve options
+	if (gettingOpts) {
+		out <- .getFastOptions(..., default = default)
+		out
+	} else {
+		out <- .setFastOptions(..., restore = restore)
+		invisible(out)
+	}
+
+}
+
+#' Set arguments shared across functions
+#' @noRd
+.setFastOptions <- function(
+	...,
+	restore = FALSE
+) {
+
+	opts <- list(...)
 
 	namesOfOpts <- .namesOfOptions()
 	if (!is.null(opts) && any(!(names(opts) %in% namesOfOpts))) stop("Invalid option(s): ", paste(names(opts[!(opts %in% namesOfOpts)]), collapse=", "))
 	
 	# retrieve in case we want to reset them
-	out <- getFastOptions()
+	out <- faster()
 
 	### check for validity
 	error <- paste0("Option ", sQuote("grassDir"), " must be ", dQuote("NULL"), " (which is likely to fail)\n  or a single character string. The default is ", dQuote(.grassDirDefault()), ".")
@@ -53,29 +91,42 @@ setFastOptions <- function(
 		if (!is.na(opts$grassDir)) {
    			if (!is.character(opts$grassDir) || length(opts$grassDir) != 1L) stop(error)
 		}
+		if (!file.exists(grassDir)) {
+			opts$grassDir <- NA_character_
+			warning(sQuote("grassDir"), " invalid. This directory does not exist. Value has been set to NA.")
+		}
 	}
 
-	error <- paste0("Option ", sQuote("addonDir"), " must be ", sQuote("NULL"), " or a single character string. The default is ", dQuote(.addonDirDefault()), ".")
-	if (any(names(opts) %in% "addonDir")) {
-		if (!is.na(opts$addonDir)) {
-   			if (!is.character(opts$addonDir) || length(opts$addonDir) != 1L) stop(error)
+	error <- paste0("Option ", sQuote("addonsDir"), " must be ", sQuote("NULL"), " or a single character string. The default is ", dQuote(.addonsDirDefault()), ".")
+	if (any(names(opts) %in% "addonsDir")) {
+		if (!is.na(opts$addonsDir)) {
+   			if (!is.character(opts$addonsDir) || length(opts$addonsDir) != 1L) stop(error)
 		}
+
+	} else if ((any(names(opts) %in% "grassDir") && !is.na(opts$grassDir)) & (is.null(.fasterRaster$options$addonsDir) || is.na(.fasterRaster$options$addonsDir))) {
+	
+		opts$addonsDir <- file.path(opts$grassDir, "addons")
+	
 	}
 
 	error <- paste0("Option ", sQuote("workDir"), " must be a single character string. The default is\n  ", dQuote(.workDirDefault()), ".")
 	if (any(names(opts) %in% "workDir")) {
+
   		if (!is.character(opts$workDir) || length(opts$workDir) != 1L) stop(error)
+
+		workDir <- forwardSlash(workDir)
+
 	}
 
-	error <- paste0("Option ", sQuote("location"), " must be a single character string. The default is ", dQuote(.locationDefault()), ".")
-	if (any(names(opts) %in% "location")) {
-  		if (!is.character(opts$location) || length(opts$location) != 1L) stop(error)
-	}
+	# error <- paste0("Option ", sQuote("location"), " must be a single character string. The default is ", dQuote(.locationDefault()), ".")
+	# if (any(names(opts) %in% "location")) {
+  	# 	if (!is.character(opts$location) || length(opts$location) != 1L) stop(error)
+	# }
 
-	error <- paste0("Option ", sQuote("mapset"), " must be a single character string. The default is ", dQuote(.mapsetDefault()), ".")
-	if (any(names(opts) %in% "mapset")) {
-  		if (!is.character(opts$mapset) || length(opts$mapset) != 1L) stop(error)
-	}
+	# error <- paste0("Option ", sQuote("mapset"), " must be a single character string. The default is ", dQuote(.mapsetDefault()), ".")
+	# if (any(names(opts) %in% "mapset")) {
+  	# 	if (!is.character(opts$mapset) || length(opts$mapset) != 1L) stop(error)
+	# }
 
 	if (any(names(opts) %in% "cores")) {
 		if (!is.numeric(opts$cores) | (opts$cores <= 0 & opts$cores %% 1 != 0)) stop("Option ", sQuote("cores"), " must be an integer >= 1. The default is ", .coresDefault(), ".")
@@ -121,35 +172,33 @@ setFastOptions <- function(
 	for (opt in names(opts)) {
 
 		# default
-		if (restore | is.na(.fasterRaster$options[[opt]])) {
+		if (restore) {
 			val <- paste0(".", opt, "Default()")
 			val <- eval(str2expression(val))
 		} else {
 			val <- opts[[opt]]
 		}
-		if (is.na(val)) {
-			.fasterRaster$options[[opt]] <- list(val)
-		} else {
-			.fasterRaster$options[[opt]] <- val
-		}
+
+		.fasterRaster$options[[opt]] <- val
+
 	}
 
 	if (any(names(opt) %in% "verbose")) {
-		rgrass::set.ignore.stderrOption(!getFastOptions("verbose"))
+		rgrass::set.ignore.stderrOption(!faster("verbose"))
 	}
 
 	invisible(out)
 
 }
 
-#' @name getFastOptions
-#' @title Report arguments shared across functions
-#' @rdname setFastOptions
-#' @export
-getFastOptions <- function(..., default = FALSE) {
+#' Report arguments shared across functions
+#' @noRd
+.getFastOptions <- function(..., default = FALSE) {
 
 	namesOfOpts <- .namesOfOptions()
+	
 	opts <- unlist(list(...))
+	
 	if (!is.null(opts) && any(!(opts %in% namesOfOpts))) stop("Invalid option(s): ", paste(opts[!(opts %in% namesOfOpts)], collapse=", "))
 
 	### return default values

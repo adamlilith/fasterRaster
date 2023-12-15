@@ -45,8 +45,8 @@ methods::setMethod(
         if (fail) { stop(msg) } else { warning(msg) }
     }
 
-    .restore(x)
-    region(x)
+    .locationRestore(x)
+    .region(x)
 
     if (!prop) {
         npoints <- as.character(size)

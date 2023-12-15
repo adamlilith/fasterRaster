@@ -1,8 +1,8 @@
 #' Display a fasterRaster object
 #'
-#' @description Display a `GSession`, `GSpatial`, `GRegion`, `GRaster`, or `GVector` object.
+#' @description Display a `GLocation`, `GSpatial`, `GRegion`, `GRaster`, or `GVector` object.
 #'
-#' @param object,x An object of class `GSession`, `GSpatial`, `GRegion`, `GRaster`, or `GVector`.
+#' @param object,x An object of class `GLocation`, `GSpatial`, `GRegion`, `GRaster`, or `GVector`.
 #'
 #' @returns Nothing (side effect is to display metadata on the given object).
 #'
@@ -13,16 +13,16 @@
 #' @exportMethod show
 methods::setMethod(
 	f = "show", 
-	signature = "GSession",
+	signature = "GLocation",
 	definition = function(object) {
 	
-	verbose <- getFastOptions("verbose")
+	verbose <- faster("verbose")
 	
 	cat("class       :", paste(class(object), collapse=", "), "\n")
 	cat("location    :", object@location, "\n")
 	cat("mapset      :", object@mapset, "\n")
+	cat("coord ref.  :", .showCRS(object), "\n")
 	cat("workDir     :", object@workDir, "\n")
-	cat("coord ref.  :", format(st_crs(object)), "\n")
 
 	}
 )
@@ -32,7 +32,7 @@ methods::setMethod(
 #' @exportMethod print
 methods::setMethod(
 	f = "print",
-	signature = "GSession",
+	signature = "GLocation",
 	definition = function(x) show(x)
 )
 
@@ -41,7 +41,7 @@ methods::setMethod(
 #' @exportMethod summary
 methods::setMethod(
 	f = "summary",
-	signature = "GSession",
+	signature = "GLocation",
 	definition = function(object) show(object)
 )
 
@@ -54,15 +54,14 @@ methods::setMethod(
 	signature = "GSpatial",
 	definition = function(object) {
 
-	verbose <- getFastOptions("verbose")
+	verbose <- faster("verbose")
 
 	digs <- min(3, getOption("digits"))
 	extent <- round(object@extent, digs)
 	
 	cat("class       :", paste(class(object), collapse=", "), "\n")
-	cat("location    :", object@location, "\n")
 	if (verbose) {
-		# cat("sources(s)  :", object@sources, "\n")
+		cat("location    :", object@location, "\n")
 		cat("mapset      :", object@mapset, "\n")
 		cat("workDir     :", object@workDir, "\n")
 	}
@@ -100,7 +99,7 @@ methods::setMethod(
 	signature = "GRegion",
 	definition = function(object) {
 
-	verbose <- getFastOptions("verbose")
+	verbose <- faster("verbose")
 
 	digs <- min(5, getOption("digits"))
 	resol <- round(object@resolution, digs)
@@ -109,8 +108,8 @@ methods::setMethod(
 	zextent <- round(object@zextent, max(round(digs / 2), 2))
 	
 	cat("class       :", paste(class(object), collapse=", "), "\n")
-	cat("location    :", object@location, "\n")
 	if (verbose) {
+		cat("location    :", object@location, "\n")
 		cat("mapset      :", object@mapset, "\n")
 		cat("workDir     :", object@workDir, "\n")
 	}
@@ -157,7 +156,7 @@ methods::setMethod(
   		minColWidth <- 4L
 	}
 	maxColWidth <- 30L
-	verbose <- getFastOptions("verbose")
+	verbose <- faster("verbose")
 
 	digs <- min(7, getOption("digits"))
 	resol <- round(object@resolution, digs)
@@ -274,8 +273,8 @@ methods::setMethod(
 		activeCat <- paste(activeCat, collapse = "")
 	}
 	cat("class       : GRaster\n")
-	cat("location    :", object@location, "\n")
 	if (verbose) {
+		cat("location    :", object@location, "\n")
 		cat("mapset      :", object@mapset, "\n")
 		cat("workDir     :", object@workDir, "\n")
 	}
@@ -338,7 +337,7 @@ methods::setMethod(
 	maxFieldsToShow <- 7L
   	maxColWidth <- 20L
 
-	verbose <- getFastOptions("verbose")
+	verbose <- faster("verbose")
 
 	digs <- min(3, getOption("digits"))
 	extent <- round(object@extent, digs)
@@ -447,8 +446,8 @@ methods::setMethod(
 	}
 	
 	cat("class       : GVector\n")
-	cat("location    :", object@location, "\n")
 	if (verbose) {
+		cat("location    :", object@location, "\n")
 		cat("mapset      :", object@mapset, "\n")
 		cat("source      :", object@sources, "\n")
 		cat("workDir     :", object@workDir, "\n")
@@ -498,13 +497,8 @@ methods::setMethod(
 
 	# format(st_crs(x))
 
-	if (inherits(x, c("SpatRaster", "SpatVector", "sf"))) {
-		x <- sf::st_crs(x)
-	} else if (inherits(x, "GSession")) {
-		x <- st_crs(x)
-	} else if (!inherits(x, "crs")) {
-		x <- sf::st_crs(x)
-	}
+	x <- crs(x)
+	x <- sf::st_crs(x)
 
 	if (!is.na(x$input) && x$input != x$wkt) {
 		out <- x$input # pre-made

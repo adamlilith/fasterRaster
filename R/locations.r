@@ -1,43 +1,27 @@
 #' Meta-data on active GRASS locations
 #'
-#' @description **GRASS** uses ["locations"][tutorial_sessions] to store sets of rasters and vectors with the same coordinate reference system (CRS). These rasters and vectors may or may not be in the same actual location on Earth--they just have the same CRS. This function returns information on all of the **GRASS** "locations" that have been initialized.
+#' @description **GRASS** uses "locations"to store sets of rasters and vectors with the same coordinate reference system (CRS). These rasters and vectors may or may not be in the same actual location on Earth--they just have the same CRS. This function returns information on all of the **GRASS** "locations" that have been initialized. It is mainly useful for developers.
 #'
-#' @returns A `data.frame`.
+#' NB: **fasterRaster** always uses the "PERMANENT" mapset.
 #'
-#' @example man/examples/ex_sessions.r
+#' @param warn Logical: If `TRUE` (default), display a warning if no **GRASS** "locations" have been created.
 #'
-#' @aliases locations
-#' @rdname locations
+#' @returns A named `list`. The names are the "location's" names and the values are the coordinate reference strings.
+#'
+#' @example man/examples/ex_location_mapset.r
+#'
+#' @aliases .locations
 #' @export
-locations <- function() {
+#' @rdname locations
+.locations <- function(warn = TRUE) {
 
-	if (!.fasterRaster$grassStarted) {
+	if (!grassStarted()) {
 	
-		warning("No GRASS sessions have been initialized.")
+		if (warn) warning("No GRASS locations have been created.")
 		out <- NULL
 		
 	} else {
-	
-		locs <- .fasterRaster$locations
-		n <- length(locs)
-		
-		locLocs <- sapply(locs, location)
-		locMapsets <- sapply(locs, mapset)
-		locCRS <- lapply(locs, crs)
-		locCRS <- sapply(locCRS, .showCRS)
-		locWorkDirs <- sapply(locs, workDir)
-		
-		active <- locLocs == location()
-		
-		out <- data.frame(
-			active = active,
-			location = locLocs,
-			mapset = locMapsets,
-			crs = locCRS,
-			workDir = locWorkDirs,
-			row.names = NULL
-		)
-		
+		out <- .fasterRaster$locations
 	}
 	out
 

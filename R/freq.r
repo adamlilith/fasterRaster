@@ -42,8 +42,8 @@ methods::setMethod(
 .freq <- function(x, dtype, digits = 3, bins = 100, value = NULL) {
 
 	if (inherits(x, "GRaster")) {
-		.restore(x)
-		region(x)
+		.locationRestore(x)
+		.region(x)
 		src <- sources(x)
 	} else {
 		src <- x
@@ -153,7 +153,7 @@ methods::setMethod(
 		
 		}
 
-		if (!getFastOptions("useDataTable")) freqs <- as.data.frame(freqs)
+		if (!faster("useDataTable")) freqs <- as.data.frame(freqs)
 		out[[i]] <- freqs
 		names(out)[i] <- names(x)[i]
 

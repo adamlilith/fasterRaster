@@ -18,7 +18,7 @@ methods::setMethod(
 	signature = c(x = "GVector"),
 	function(x) {
 
-	.restore(x)
+	.locationRestore(x)
 
 	srcDel <- .makeSourceName("v_category_del", "vector")
 	rgrass::execGRASS(

@@ -155,7 +155,7 @@ methods::setMethod(
     )
     do.call(rgrass::execGRASS, args = args)
 
-    reg <- region()
+    reg <- .region()
     nc <- ncol(reg)
     nr <- nrow(reg)
 

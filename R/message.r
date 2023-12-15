@@ -1,6 +1,6 @@
 #' Display warning or message
 #'
-#' Display a warning or message if not yet displayed in this **GRASS** session or if a certain time period has passed.
+#' @description Display a warning or message if the given warning has not been displayed since **fasterRaster** was attached or if a given number or hours has passed since then.
 #'
 #' @param msg Character: Name for the message. See code for accepted names.
 #' 

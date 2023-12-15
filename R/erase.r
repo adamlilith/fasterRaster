@@ -20,7 +20,7 @@ methods::setMethod(
 
 	compareGeom(x, y, geometry = TRUE)
 	if (geomtype(x) != "polygons") stop("Only polygon GVectors can be notted.")
-	.restore(x)
+	.locationRestore(x)
 		
 	src <- .makeSourceName("v_overlay", "vector")
 	rgrass::execGRASS(

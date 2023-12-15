@@ -24,7 +24,7 @@ methods::setMethod(
 	if ((!is.null(maxDist) & !is.null(maxDist)) && (minDist > maxDist)) stop("Argument ", sQuote("minDist"), " is greater than ", sQuote("maxDist"), ".")
 
 	compareGeom(x, y)
-	.restore(x)
+	.locationRestore(x)
 
 	if (is.null(minDist)) minDist <- -1
 	if (is.null(maxDist)) maxDist <- -1

@@ -26,8 +26,8 @@ methods::setMethod(
     signature = c(x = "GRaster", mask = "GRaster"),
     function(x, mask, inverse = FALSE, maskvalues = NA, updatevalue = NA) {
     
-    .restore(x)
-    region(x)
+    .locationRestore(x)
+    .region(x)
     xname <- names(x)
 
     if (nlyr(mask) > 1L) warning("The mask raster has >1 layer. Only the first layer will be used.")
@@ -50,8 +50,8 @@ methods::setMethod(
     signature = c(x = "GRaster", mask = "GVector"),
     function(x, mask, inverse = FALSE, updatevalue = NA) {
 
-    .restore(x)
-    region(x)
+    .locationRestore(x)
+    .region(x)
     xname <- names(x)
 
     x <- sources(x)

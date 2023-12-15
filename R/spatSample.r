@@ -44,8 +44,8 @@ methods::setMethod(
 		seed = NULL
 	) {
 
-	.restore(x)
-	region(x)
+	.locationRestore(x)
+	.region(x)
 
 	if (!xy) values <- TRUE
 
@@ -75,7 +75,7 @@ methods::setMethod(
 
 	# return coordinates
 	if (xy) {
-		out <- .crdsVect(src, z = is.3d(x), gm = "points")
+		out <- .crdsVect(src, z = is.3d(x), gtype = "points")
 	}
 
 	# extract values from raster
@@ -136,7 +136,7 @@ methods::setMethod(
 		.vAttachDatabase(src)
 		out <- .makeGVector(src, table = out)
 	} else {
-		if (!getFastOptions("useDataTable")) out <- as.data.frame(out)
+		if (!faster("useDataTable")) out <- as.data.frame(out)
 	}
 	out
 
@@ -161,8 +161,8 @@ methods::setMethod(
 		seed = NULL
 	) {
 
-	.restore(x)
-	region(x)
+	.locationRestore(x)
+	.region(x)
 
 	if (geomtype(x) != "polygons") x <- convHull(x)
 
@@ -202,7 +202,7 @@ methods::setMethod(
 	do.call(rgrass::execGRASS, args = args)
 
 	# return coordinates
-	if (xy) coords <- .crdsVect(src, z = is.3d(x), gm = "points")
+	if (xy) coords <- .crdsVect(src, z = is.3d(x), gtype = "points")
 
 	# extract values from vector
 	if (values) {
@@ -225,7 +225,7 @@ methods::setMethod(
 	if (as.points) {
 		out <- .makeGVector(src, table = table)
 	} else {
-		if (!getFastOptions("useDataTable")) out <- as.data.frame(out)
+		if (!faster("useDataTable")) out <- as.data.frame(out)
 	}
 	out
 

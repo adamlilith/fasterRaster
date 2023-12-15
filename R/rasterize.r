@@ -33,8 +33,8 @@ methods::setMethod(
 	) {
 	
 	compareGeom(x, y)
-	.restore(x)
-	region(y)
+	.locationRestore(x)
+	.region(y)
 
 	gtype <- geomtype(x, grass = TRUE)
 
@@ -51,7 +51,7 @@ methods::setMethod(
 				output = src,
 				use = "cat",
 				type = gtype,
-				memory = getFastOptions("memory"),
+				memory = faster("memory"),
 				flags = c(.quiet(), "overwrite")
 			)
 
@@ -95,7 +95,7 @@ methods::setMethod(
 			use = "val",
 			value = 1,
 			type = gtype,
-			memory = getFastOptions("memory"),
+			memory = faster("memory"),
 			flags = c(.quiet(), "overwrite")
 		)
 
@@ -149,7 +149,7 @@ methods::setMethod(
 				output = src,
 				use = "cat",
 				type = gtype,
-				memory = getFastOptions("memory"),
+				memory = faster("memory"),
 				flags = c(.quiet(), "overwrite")
 			)
 
@@ -194,7 +194,7 @@ methods::setMethod(
 			use = "val",
 			value = 1,
 			type = gtype,
-			memory = getFastOptions("memory"),
+			memory = faster("memory"),
 			flags = c(.quiet(), "overwrite")
 		)
 

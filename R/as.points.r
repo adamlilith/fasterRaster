@@ -20,8 +20,8 @@ methods::setMethod(
     signature = c(x = "GRaster"),
     function(x, values = TRUE) {
         
-        .restore(x)
-        region(x)
+        .locationRestore(x)
+        .region(x)
 
         src <- .makeSourceName("r_to_vect", "vector")
 
@@ -87,7 +87,7 @@ methods::setMethod(
         return(x)
     }
 
-    .restore(x)
+    .locationRestore(x)
 
     src <- .makeSourceName("v_to_points", "vector")
     args <- list(

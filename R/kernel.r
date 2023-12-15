@@ -48,9 +48,9 @@ methods::setMethod(
 	
  	kernFx <- omnibus::pmatchSafe(kernel, c("gaussian", "uniform", "triangular", "epanechnikov", "quartic", "triweight", "cosine"), nmax = 1L)
 
-	.restore(y)
+	.locationRestore(y)
 	compareGeom(x, y)
-	region(y)
+	.region(y)
 
 	# assign value to radius
 	if (is.null(h) & optimize & kernFx == "epanechinokov") {

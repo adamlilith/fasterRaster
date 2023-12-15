@@ -8,7 +8,7 @@ A \strong{GRASS} \emph{region} is a data structure like a raster in that it is c
 
 Generally, most users of \strong{fasterRaster} will not need to know how regions work because their management is handled automatically.  This help page is provided to assist power users who may wish to use regions explicitly or develop their own applications based on \strong{fasterRaster}.
 
-Each \strong{GRASS} \link[=tutorial_sessions]{session} typically has one active region. The extent and resolution of this region is initially set by the first raster that is imported into it.
+Each \strong{GRASS} \link[=tutorial_locations_mapsets]{session} typically has one active region. The extent and resolution of this region is initially set by the first raster that is imported into it.
 \subsection{Functions for managing regions in \strong{fasterRaster}}{
 
 \strong{fasterRaster} provides functions for managing regions:\cr
@@ -30,48 +30,28 @@ Regions are inherently 3-dimensional, but often have a single depth (i.e., one "
 }
 }
 \examples{
-\dontrun{
-# NB This example is in a "dontrun{}" block because it requires users to have
-# GRASS GIS Version 8+ installed on their system.
+if (grassStarted()) {
 
-# IMPORTANT #1: If you already have a GRASS session started, you will need to
-# run the line below and the last line in this example to work with it again.
-# If you have not started a GRASS session, you can skip this step and go to
-# step #2.
-opts. <- getFastOptions()
-
-# IMPORTANT #2: Select the appropriate line below and change as necessary to
-# where GRASS is installed on your system.
-
-grassDir <- "/Applications/GRASS-8.3.app/Contents/Resources" # Mac
-grassDir <- "C:/Program Files/GRASS GIS 8.3" # Windows
-grassDir <- "/usr/local/grass" # Linux
-
-# setup
+# Setup
 library(terra)
 
-# example data
+# Example data
 madElev <- fastData("madElev")
 madRivers <- fastData("madRivers")
 
-# set up one location
-faster(x = madElev, grassDir = grassDir,
-workDir = tempdir(), location = "examples") # line only needed for examples
-
-# Importing a raster sets the region to match its extent and dimensions.
+# Importing a raster sets the region to match its extent and dimensions:
 elev <- fast(madElev)
 elev
-region()
+.region()
 
-# Importing a vector does not change the region.
+# Importing a vector does not change the region:
 dypsis <- fast(madDypsis)
-region()
+.region()
 
-# report information on current region
-(start <- region())
-regionDim()
-regionExt()
-regionRes()
+# report information on current region:
+.regionDim()
+.regionExt()
+.regionRes()
 
 dim()
 nrow()
@@ -93,30 +73,25 @@ xres()
 yres()
 zres()
 
-# coarsen grid... sets region to match aggregated raster"s extent and dimensions
-aggElev <- aggregate(elev, 2) 
+# Operations on rasters can change the region:
+(startingRegion <- .region())
+aggElev <- aggregate(elev, 2)
+.region()
 
 # reset region dimensions
 dim()
-regionDim(elev, respect = "resolution")
+.regionDim(elev, respect = "resolution")
 dim()
 
 # reset region extent
 ext()
-regionExt(dypsis, respect="resolution")
+.regionExt(dypsis, respect="resolution")
 ext()
 
 # reset region resolution
 res()
-regionRes(elev, respect="extent")
+.regionRes(elev, respect="extent")
 res()
-
-# reset region
-(region(start))
-
-# IMPORTANT #3: Revert back to original GRASS session if needed.
-restoreSession(opts.)
-removeSession("examples")
 
 }
 }

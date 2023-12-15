@@ -23,7 +23,7 @@ methods::setMethod(
 
 		nr <- nrow(x)
 		out <- x@table[1L:n]
-		if (!getFastOptions("useDataTable")) out <- as.data.frame(out)
+		if (!faster("useDataTable")) out <- as.data.frame(out)
 		out
 
 	} # EOF
@@ -39,7 +39,7 @@ methods::setMethod(
 
 	nr <- nrow(x)
 	out <- x@table[(nr - n + 1L):nr]
-	if (!getFastOptions("useDataTable")) out <- as.data.frame(out)
+	if (!faster("useDataTable")) out <- as.data.frame(out)
 	out
 
     } # EOF

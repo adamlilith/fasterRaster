@@ -76,8 +76,8 @@ methods::setMethod(
 	
 	}
 	
-	.restore(x)
-	region(x)
+	.locationRestore(x)
+	.region(x)
 
 	if (is.2d(x)) {
 		
@@ -86,7 +86,7 @@ methods::setMethod(
 	
 		resol <- res(x)
 		resol <- resol * fact
-		regionRes(resol, respect="extent")
+		.regionRes(resol, respect="extent")
 	
 	} else if (is.3d(x)) {
 	
@@ -98,7 +98,7 @@ methods::setMethod(
 	
 		resol <- res3d()
 		resol <- resol * fact
-		regionRes(resol)
+		.regionRes(resol)
 
 	}
 
@@ -211,7 +211,7 @@ methods::setMethod(
 .aggregate <- function(x, gtype, dissolve) {
 
 	if (inherits(x, "GVector")) {
-		.restore(x)
+		.locationRestore(x)
 		src <- sources(x)
 	} else {
 		src <- x

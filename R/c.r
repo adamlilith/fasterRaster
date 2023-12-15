@@ -2,7 +2,7 @@
 #'
 #' @description `GRaster`s can be "stacked" using this function, effectively creating a multi-layered raster. This is different from creating a 3-dimensional raster, though such an effect can be emulated using stacking. `GVector`s can be combined into a single vector.  Stacks can only be created when:
 #' * All objects are the same class (either all `GRaster`s or all `GVector`s).
-#' * All objects are in the same **GRASS** ["location" and "mapset"][tutorial_sessions].
+#' * All objects are in the same **GRASS** ["location" and "mapset"][tutorial_locations_mapsets].
 #' * For `GRaster`s:
 #'      * Horizontal extents are the same.
 #'      * Horizontal dimensions are the same.
@@ -32,7 +32,7 @@ setMethod(
 	signature = "GRaster",
 	definition = function(x, ...) {
 
-	.restore(x)
+	.locationRestore(x)
 	dots <- list(...)
 
 	# unlist any lists
@@ -57,9 +57,9 @@ setMethod(
 			mx <- c(.maxVal(out), .maxVal(dots[[i]]))
 			
 			out <- GRaster(
-				location = location(out),
-				mapset = mapset(out),
-				workDir = getFastOptions("workDir"),
+				location = .location(out),
+				mapset = .mapset(out),
+				workDir = faster("workDir"),
 				crs = crs(out),
 				projection = .projection(out),
 				topology = topology(out),
@@ -94,7 +94,7 @@ setMethod(
 	signature = "GVector",
 	definition = function(x, ...) {
 
-	.restore(x)
+	.locationRestore(x)
 	dots <- list(...)
 
 	# unlist any lists

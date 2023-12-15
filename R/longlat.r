@@ -16,8 +16,8 @@ methods::setMethod(
     signature(x = "GRaster"),
     function(x) {
 
-    .restore(x)
-    region(x)
+    .locationRestore(x)
+    .region(x)
     
     srcs <- .makeSourceName(c("long", "lat"), "raster")
     args <- list(

@@ -33,8 +33,8 @@ methods::setMethod(
 
 	if (percent < 50 | percent > 99) stop("Argument ", sQuote("percent"), " must be an integer in the range [50, 99].")
 
-	.restore(x)
-	region(x)
+	.locationRestore(x)
+	.region(x)
 
 	input <- paste(sources(x), collapse = ",")
 	src <- .makeSourceName("i_pca", "raster")

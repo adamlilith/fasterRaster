@@ -22,8 +22,8 @@ methods::setMethod(
 
         ..char <- NULL
 
-        .restore(x)
-        region(x)
+        .locationRestore(x)
+        .region(x)
 
         flags <- c(.quiet(), "overwrite")
         if (!na.rm) flags <- c(flags, "i")
@@ -46,7 +46,7 @@ methods::setMethod(
             for (char in chars) out[, ..char] <- as.numeric(out[, ..char])
         }
 
-        if (!getFastOptions("useDataTable")) out <- as.data.frame(out)
+        if (!faster("useDataTable")) out <- as.data.frame(out)
         out
     } # EOF
 )
@@ -80,7 +80,7 @@ st_coordinates <- function(x) {
 .crdsVect <- function(x, z, gtype = NULL) {
 
 	if (inherits(x, "GVector")) {
-		.restore(x)
+		.locationRestore(x)
 		gtype <- geomtype(x)
 		src <- sources(x)
 	} else {
@@ -132,7 +132,7 @@ st_coordinates <- function(x) {
 		
 	}	
 		
-	if (getFastOptions("useDataTable")) out <- data.table::as.data.table(out)
+	if (faster("useDataTable")) out <- data.table::as.data.table(out)
 	out
 	
 }

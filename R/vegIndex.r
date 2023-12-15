@@ -62,8 +62,8 @@ methods::setMethod(
 
 	}
 
-	.restore(x)
-	region(x)
+	.locationRestore(x)
+	.region(x)
 
 	vegIndices <- NULL
 	utils::data("vegIndices", envir = environment(), package = "fasterRaster")

@@ -50,8 +50,8 @@ setMethod(
 	signature(x = "GRaster"),
 	function(x) {
 	
-	.restore(x)
-	region(x)
+	.locationRestore(x)
+	.region(x)
 
 	srcs <- .makeSourceName("isNA", "raster", nlyr(x))
 	for (i in seq_len(nlyr(x))) {
@@ -77,8 +77,8 @@ methods::setMethod(
 	signature(x = "GRaster"),
 	function(x, falseNA = FALSE) {
 	
-	.restore(x)
-	region(x)
+	.locationRestore(x)
+	.region(x)
 
 	srcs <- .makeSourceName("notNA", "raster", nlyr(x))
 	for (i in seq_len(nlyr(x))) {
@@ -179,8 +179,8 @@ setMethod(
 	function(y, x) {
 	
 		compareGeom(y, x)
-		.restore(x)
-  		region(x)
+		.locationRestore(x)
+  		.region(x)
 		
 		ny <- nlyr(y)
 		nx <- nlyr(x)
@@ -195,7 +195,7 @@ setMethod(
 		
 		n <- max(ny, nx)
   		
-		prec <- getFastOptions("rasterPrecision")
+		prec <- faster("rasterPrecision")
 
 		for (i in seq_len(n)) {
 			
@@ -231,8 +231,8 @@ setMethod(
 	signature = "GRaster",
 	function(x) {
 
-		.restore(x)
-		region(x)
+		.locationRestore(x)
+		.region(x)
 
 		srcs <- .makeSourceName(names(x), "rast", nlyr(x))
 		for (i in seq_len(nlyr(x))) {
@@ -355,10 +355,10 @@ setMethod(
 #' @noRd
 .genericTrig <- function(fx, x) {
 
-	.restore(x)
-	region(x)
+	.locationRestore(x)
+	.region(x)
 	
-	precision <- getFastOptions("rasterPrecision")
+	precision <- faster("rasterPrecision")
 
 	srcs <- .makeSourceName("r.mapcalc", "rast", nlyr(x))
 	for (i in 1L:nlyr(x)) {
@@ -381,10 +381,10 @@ setMethod(
 #' @noRd
 .genericArcTrig <- function(fx, x) {
 
-	.restore(x)
-	region(x)
+	.locationRestore(x)
+	.region(x)
 
- 	precision <- getFastOptions("rasterPrecision")
+ 	precision <- faster("rasterPrecision")
 
 	srcs <- .makeSourceName(names(x), "rast", nlyr(x))
 	for (i in 1L:nlyr(x)) {
@@ -407,13 +407,13 @@ setMethod(
 #' @noRd
 .genericRastFx <- function(fx, x) {
 
-	.restore(x)
-	region(x)
+	.locationRestore(x)
+	.region(x)
 	
 	nLayers <- nlyr(x)
 	srcs <- .makeSourceName(names(x), "raster", nLayers)
 	
-	prec <- getFastOptions("rasterPrecision")
+	prec <- faster("rasterPrecision")
 
 	for (i in seq_len(nLayers)) {
 	
@@ -437,10 +437,10 @@ setMethod(
 #' @noRd
 .genericFx2 <- function(fx, x, y) {
 
-	.restore(x)
-	region(x)
+	.locationRestore(x)
+	.region(x)
 
- 	prec <- getFastOptions("rasterPrecision")
+ 	prec <- faster("rasterPrecision")
 
 	nLayers <- nlyr(x)
 	srcs <- .makeSourceName(names(x), "raster", nLayers)

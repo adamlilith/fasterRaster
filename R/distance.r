@@ -73,8 +73,8 @@ methods::setMethod(
 	method <- omnibus::pmatchSafe(method, methods)
 	if (is.lonlat(x) & method != "geodesic") warning("Argument ", sQuote("method"), " should be ", sQuote("geodesic"), " for rasters with longitude/latitude coordinate reference systems.")
 
-	.restore(x)
-	region(x)
+	.locationRestore(x)
+	.region(x)
 	
 	src <- sources(x)
 	
@@ -141,7 +141,7 @@ methods::setMethod(
 	if (is.lonlat(x) & method != "geodesic") warning("Argument ", sQuote("method"), " should be ", sQuote("geodesic"), " for rasters with longitude/latitude coordinate reference systems.")
 
 	compareGeom(x, y)
-	.restore(x)
+	.locationRestore(x)
 	
 	# rasterize
  	gtype <- geomtype(y, grass = TRUE)
@@ -197,7 +197,7 @@ methods::setMethod(
 	if ((!is.null(maxDist) & !is.null(maxDist)) && (minDist > maxDist)) stop("Argument ", sQuote("minDist"), " is greater than ", sQuote("maxDist"), ".")
 
 	compareGeom(x, y)
-	.restore(x)
+	.locationRestore(x)
 
 	if (is.null(minDist)) minDist <- -1
 	if (is.null(maxDist)) maxDist <- -1

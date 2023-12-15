@@ -58,7 +58,7 @@ methods::setMethod(
         cats = FALSE
     ) {
 
-    .restore(x)
+    .locationRestore(x)
     compareGeom(x, y)
 
     nLayers <- nlyr(x)
@@ -270,7 +270,7 @@ methods::setMethod(
 
     } # if lines/polygons or points
     
-    if (!getFastOptions("useDataTable")) out <- as.data.frame(out)
+    if (!faster("useDataTable")) out <- as.data.frame(out)
     out
 
     } # EOF
@@ -468,7 +468,7 @@ methods::setMethod(
     if (geomtype(y) != "points") stop("Argument", sQuote("y"), " must be a points vector.")
     if (is.3d(y)) warning("Coordinates in the z-dimension will be ignored.")
 
-    .restore(x)
+    .locationRestore(x)
     coords <- crds(y, z = FALSE)
     .extractFromVect(x, coords, xy)
 
@@ -545,7 +545,7 @@ methods::setMethod(
 #' @noRd
 .extractFromVect <- function(x, y, xy) {
 
-    .restore(x)
+    .locationRestore(x)
 
     if (!inherits(y, "data.table")) y <- data.table::as.data.table(y)
 
@@ -651,7 +651,7 @@ methods::setMethod(
 
     if (xy) out <- cbind(y, out)
     
-    if (!getFastOptions("useDataTable")) out <- as.data.frame(out)
+    if (!faster("useDataTable")) out <- as.data.frame(out)
     out
     
 } # EOF

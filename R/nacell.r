@@ -18,7 +18,7 @@ methods::setMethod(
     signature = c(x = "GRaster"),
     function(x) {
 
-    .restore(x)
+    .locationRestore(x)
 
     args <- list(
         cmd = "r.univar",
@@ -27,7 +27,7 @@ methods::setMethod(
         intern = TRUE
     )
 
-    if (grassInfo("versionNumber") >= 8.3) args$nprocs <- getFastOptions("cores")
+    if (grassInfo("versionNumber") >= 8.3) args$nprocs <- faster("cores")
 
     stats <- do.call(rgrass::execGRASS, args = args)
     pattern <- "total null cells: "

@@ -9,7 +9,7 @@
 #' @seealso [ls()]
 #'
 #' @aliases .ls
-#' @rdname .ls
+#' @rdname ls
 #' @export
 #' @noRd
 .ls <- function(type = c("rasters", "vectors", "rasters3d", "groups")) {

@@ -10,7 +10,7 @@
   x,
   filename,
   overwrite = FALSE,
-  format = "GPKG",
+  format = NULL,
   attachTable = TRUE,
   ...
 )
@@ -24,75 +24,77 @@
 
 \item{overwrite}{Logical: If \code{FALSE} (default), do not save over existing files.}
 
-\item{format}{File format. Some common formats include:
+\item{format}{Character or \code{NULL}: File format. If \code{NULL} (default), then the function will attempt to get the format from the file name extension. Partial matching is used and case is ignored. You can see a list of formats using \code{writeVector()} (no arguments). Some common formats include:
 \itemize{
-\item \code{"GPKG"}: OGC GeoPackage (default).
-\item \code{"CSV"}: Comma-separated value... saves the data table only, not the geometries.
-\item \code{"ESRI_Shapefile"}: ESRI shapefile... \code{filename} should not end in an extension.
-\item \code{"GeoJSON"}: GeoJSON
-\item \code{"KML"}: Keyhole Markup Language (KML)
-\item \code{"netCDF"}: NetCDF (argument \code{filename} should not end in an extension).
-\item \code{"XLSX"}: MS Office Open XML spreadsheet
+\item \code{"GPKG"}: OGC GeoPackage (extension \code{.gpkg}).
+\item \code{"CSV"}: Comma-separated value... saves the data table only, not the geometries (extension \code{.csv}).
+\item \code{"ESRI Shapefile"}: ESRI shapefile (extension \code{.shp}).
+\item \code{"GeoJSON"}: GeoJSON (extension \code{GeoJSON})
+\item \code{"KML"}: Keyhole Markup Language (extension \code{.kml})
+\item \code{"netCDF"}: NetCDF (extension \code{.ncdf})
+\item \code{"XLSX"}: MS Office Open XML spreadsheet (extension \code{.xlsx}).
 }}
 
 \item{attachTable}{Logical: If \code{TRUE} (default), attach the attribute to table to the vector before saving it. If \code{FALSE}, the attribute table will not be attached.}
 
-\item{...}{Additional arguments to send to \strong{GRASS} module \code{v.out.ogr}.}
+\item{...}{Additional arguments to send to \strong{GRASS} module \href{https://grass.osgeo.org/grass84/manuals/v.out.ogr.html}{\code{v.out.ogr}} in \strong{GRASS}.}
 }
 \value{
-Invisibly returns a \code{SpatVector}. Importantly, the function also writes one or more files to disk.
+Invisibly returns a \code{SpatVector}. Also saves the vector to disk.
 }
 \description{
 This function saves a \code{GVector} to disk directly from a \strong{GRASS} session.
 
-By default, files will be of OGC GeoPackage format (extension "\code{.gpkg}"), but this can be changed with the \code{format} argument. You can see a list of supported formats by simply using this function with no arguments, as in \code{writeVector()}, or by consulting the online help page for \strong{GRASS} module \code{v.out.ogr}.
+By default, files will be of OGC GeoPackage format (extension "\code{.gpkg}"), but this can be changed with the \code{format} argument. You can see a list of supported formats by simply using this function with no arguments, as in \code{writeVector()}, or by consulting the online help page for \strong{GRASS} module \href{https://grass.osgeo.org/grass84/manuals/v.out.ogr.html}{\code{v.out.ogr}}.
 }
 \examples{
-\dontrun{
-# NB This example is in a "dontrun{}" block because it requires users to have
-# GRASS GIS Version 8+ installed on their system.
+if (grassStarted()) {
 
-# IMPORTANT #1: If you already have a GRASS session started, you will need to
-# run the line below and the last line in this example to work with it again.
-# If you have not started a GRASS session, you can skip this step and go to
-# step #2.
-opts. <- getFastOptions()
-
-# IMPORTANT #2: Select the appropriate line below and change as necessary to
-# where GRASS is installed on your system.
-grassDir <- "/Applications/GRASS-8.3.app/Contents/Resources" # Mac
-grassDir <- "C:/Program Files/GRASS GIS 8.3" # Windows
-grassDir <- "/usr/local/grass" # Linux
-
-# setup
+# Setup
 library(terra)
 
-# example data
+# Example data
 madRivers <- fastData("madRivers")
 
-# start GRASS session for examples only
-faster(x = madRivers, grassDir = grassDir,
-workDir = tempdir(), location = "examples") # line only needed for examples
-
-# convert SpatRasters to GRasters
+# Convert SpatRasters to GRasters
 rivers <- fast(madRivers)
 rivers
 
-### save GVector to disk (using temporary file)
+# Save using a temporary file name
 filename <- tempfile()
-filename <- paste0(filename, ".gpkg")
-writeRaster(rivers, filename)
+
+### Save GVector to disk as GeoPackage
+fn <- paste0(filename, ".gpkg")
+writeVector(rivers, fn)
+
+### Save GVector to disk as ESRI Shapefile
+fn <- paste0(filename, ".shp")
+writeVector(rivers, filename)
+
+### Save GVector to disk as Google Earth KML
+fn <- paste0(filename, ".kml")
+writeVector(rivers, filename)
+
+### Save GVector data table to disk as comma-separated file
+fn <- paste0(filename, ".csv")
+writeVector(rivers, filename)
+
+### Save GVector data table to disk as NetCDF
+fn <- paste0(filename, ".ncdf")
+writeVector(rivers, filename)
+
+### Save GVector data table to disk as Excel file
+fn <- paste0(filename, ".xlsx")
+writeVector(rivers, filename)
 
 ### load raster from disk
-rivers2 <- fast(filename)
+rivers2 <- fast(paste0(filename, ".gpkg"))
 rivers2
-
-# IMPORTANT #3: Revert back to original GRASS session if needed.
-restoreSession(opts.)
-removeSession("examples")
 
 }
 }
 \seealso{
-\code{\link[terra:writeVector]{terra::writeVector()}}, \code{\link[sf:st_write]{sf::st_write()}}
+\code{\link[terra:writeVector]{terra::writeVector()}}, \code{\link[sf:st_write]{sf::st_write()}}, module \href{https://grass.osgeo.org/grass84/manuals/v.out.ogr.html}{\code{v.out.ogr}} in \strong{GRASS}
+
+\code{\link[terra:writeVector]{terra::writeVector()}}
 }

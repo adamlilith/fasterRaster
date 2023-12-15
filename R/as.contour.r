@@ -21,8 +21,8 @@ setMethod(
 	signature(x = "GRaster"),
 	function(x, nlevels, levels) {
 	
-	.restore(x)
-	region(x)
+	.locationRestore(x)
+	.region(x)
 
 	if (!missing(nlevels) & !missing(levels)) stop("Please specify either ", sQuote("nlevels"), " or ", sQuote("levels"), ", but not both.")
 	if (missing(nlevels) & missing(levels)) stop("Please specify either ", sQuote("nlevels"), " or ", sQuote("levels"), ".")

@@ -2,9 +2,9 @@
 #'
 #' @description The `G` suite of S4 classes contain pointers to **GRASS** objects or metadata about the current **GRASS** session. Most users will manipulate objects using these classes, but do not need to know the details.
 #'
-#' * The `GSession` class stores information about the **GRASS** session ("[location][tutorial_sessions]"), mapset, and coordinate reference system. Contained by all the rest.
+#' * The `GLocation` class stores information about the **GRASS** "session" (["location" and mapse][tutorial_location_mapset]"), and coordinate reference system. Contained by all the rest.
 #'
-#' * The `GSpatial` class contains the `GSession` class and stores information about spatial objects (extent, topology) plus the name of the file representing it in **GRASS** (its `source`). Contained by `GRegion`, `GRaster`, and `GVector`.
+#' * The `GSpatial` class contains the `GLocation` class and stores information about spatial objects (extent, topology) plus the name of the file representing it in **GRASS** (its `source`). Contained by `GRegion`, `GRaster`, and `GVector`.
 #'
 #' * The `GRegion` class contains the `GSpatial` class and stores information about grids (dimensions and resolution). They do have `sources`, but these are not used (they're always `NA`). Contained by `GRaster`. The `GRegion` corresponds to **GRASS** "[regions][tutorial_regions]", though `GRegion` objects are not actually pointers to **GRASS** "region" files.
 #'
@@ -12,9 +12,9 @@
 #'
 #' * The `GVector` class contains the `GSpatial` class and represents spatial vectors. It may or may not have an associated `data.table` (i.e., a `data.frame`), which contains metadata about each geometry in the vector.
 #'
-#' @slot location	Character (all classes): The **GRASS** ["location"][tutorial_sessions] of the object. The default value is `default`. Can be obtained using [location()].
+#' @slot location	Character (all classes): The **GRASS** ["location"][tutorial_locations_mapsets] of the object. The default value is `default`. Can be obtained using [.location()].
 #'
-#' @slot mapset		Character (all classes): The **GRASS** ["mapset"][tutorial_sessions]. Default value is `PERMANENT`. Typically hidden to users. Can be obtained using [mapset()].
+#' @slot mapset		Character (all classes): The **GRASS** ["mapset"][tutorial_locations_mapsets]. Default value is `PERMANENT`. Typically hidden to users. Can be obtained using [.mapset()].
 #'
 #' @slot workDir	Character (all classes): Directory in which **GRASS** stores files.
 #'
@@ -54,13 +54,13 @@
 #'
 #' @slot table `data.table` (`GVector`s): Table with metadata, one row per geometry (point, line, or plane). If no table is associated with the vector, this must be `data.table(NULL)`.
 #'
-#' @return An object of class `GSession`, `GSpatial`, `GRegion`, `GRaster`, or `GVector`.
+#' @return An object of class `GLocation`, `GSpatial`, `GRegion`, `GRaster`, or `GVector`.
 #'
-#' @aliases GSession
-#' @rdname GSession
-#' @exportClass GSession
-GSession <- methods::setClass(
-	Class = "GSession",
+#' @aliases GLocation
+#' @rdname GLocation
+#' @exportClass GLocation
+GLocation <- methods::setClass(
+	Class = "GLocation",
 	slots = list(
 		location = "character",			# GRASS location
 		mapset = "character",			# GRASS MAPSET
@@ -75,7 +75,7 @@ GSession <- methods::setClass(
 	)
 )
 
-setValidity("GSession",
+setValidity("GLocation",
 	function(object) {
 		if (length(object@location) != 1L) {
 			"@location can only be a single character string."
@@ -91,11 +91,11 @@ setValidity("GSession",
 	} # EOF
 )
 
-# GSession <- function(
+# GLocation <- function(
 	# location = NA_character_,
 	# mapset = NA_character_,
 	# crs = NA_character_
 # ) {
-	# methods::new("GSession", location = location, mapset = mapset, crs = crs)
+	# methods::new("GLocation", location = location, mapset = mapset, crs = crs)
 # }
 

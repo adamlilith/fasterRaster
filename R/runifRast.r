@@ -32,8 +32,8 @@ methods::setMethod(
 
     if (!is.null(seed)) if (length(seed) != n) stop("You must provide one value of ", sQuote("seed"), " per raster, or set it to NULL.")
 
-    .restore(x)
-    region(x)
+    .locationRestore(x)
+    .region(x)
 
     srcs <- .makeSourceName("runif", "raster", n)
 

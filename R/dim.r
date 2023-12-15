@@ -49,7 +49,7 @@ methods::setMethod(
 setMethod(
 	f = "nrow",
 	signature = "missing",
- 	definition = function(x) nrow(region())
+ 	definition = function(x) nrow(.region())
 )
 
 #' @rdname dim
@@ -67,7 +67,7 @@ setMethod(
 setMethod(
 	f = "ncol",
 	signature = "missing",
- 	definition = function(x) ncol(region())
+ 	definition = function(x) ncol(.region())
 )
 
 #' @rdname dim
@@ -85,7 +85,7 @@ setMethod(
 setMethod(
 	f = "ndepth",
 	signature = "missing",
-	definition = function(x) ndepth(region)
+	definition = function(x) ndepth(.region())
 )
 
 #' @rdname dim
@@ -103,7 +103,7 @@ setMethod(
 setMethod(
 	f = "ncell",
 	signature = "missing",
-	definition = function(x) ncell(region())
+	definition = function(x) ncell(.region())
 )
 
 #' @rdname dim
@@ -121,7 +121,7 @@ setMethod(
 setMethod(
 	f = "ncell3d",
 	signature = "missing",
- 	definition = function(x) ncell3d(region())
+ 	definition = function(x) ncell3d(.region())
 )
 
 #' @rdname dim
@@ -166,7 +166,7 @@ setMethod(
 setMethod(
 	f = "nlyr",
 	signature = "missing",
- 	definition = function(x) nlyr(region())
+ 	definition = function(x) nlyr(.region())
 )
 
 #' @rdname dim

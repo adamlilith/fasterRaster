@@ -38,7 +38,7 @@ methods::setMethod(
 		if (dist < 0) stop("Argument ", sQuote("dist"), " must be > 0.")
 	}
 
-	.restore(x)
+	.locationRestore(x)
 	
 	method <- tolower(method)
 	method <- omnibus::pmatchSafe(method, c("hermite", "chaiken"))

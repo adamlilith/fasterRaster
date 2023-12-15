@@ -22,7 +22,7 @@ methods::setMethod(
 	signature = c(x = "GVector", i = "ANY", j = "ANY"),
 	function(x, i, j) {
 
-	.restore(x)
+	.locationRestore(x)
 
 	nGeoms <- ngeom(x)
 

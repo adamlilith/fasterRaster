@@ -34,8 +34,8 @@ methods::setMethod(
 
 	if (nlyr(x) == 1L) stop("The raster must have >= 2 layers.")
 	
-	.restore(x)
-	region(x)
+	.locationRestore(x)
+	.region(x)
 
 	args <- list(
 		cmd = "r.covar",

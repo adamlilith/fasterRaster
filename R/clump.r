@@ -24,8 +24,8 @@ methods::setMethod(
 
     if (minDiff < 0 | minDiff >= 1) stop(sQuote("minDiff"), " must be >= 0 and < 1.")
 
-    .restore(x)
-    region(x)
+    .locationRestore(x)
+    .region(x)
 
     args <- list(
         cmd = "r.clump",

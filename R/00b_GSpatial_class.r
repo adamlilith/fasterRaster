@@ -1,11 +1,11 @@
 #' @title Classes for "fasterRaster" locations, rasters, and vectors
 #'
 #' @aliases GSpatial
-#' @rdname GSession
+#' @rdname GLocation
 #' @exportClass GSpatial
 GSpatial <- methods::setClass(
 	Class = "GSpatial",
-	contains = "GSession",
+	contains = "GLocation",
 	slots = list(
 		topology = "character",			# 2D or 3D
 		extent = "numeric",				# horizontal extent (4 numerics)

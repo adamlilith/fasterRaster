@@ -40,7 +40,7 @@ methods::setMethod(
 
 	f <- omnibus::convertUnits(from = "meters2", to = unit)
 
-	region(x)
+	.region(x)
 
 	if (lyrs & mask) {
 		nLayers <- nlyr(x)

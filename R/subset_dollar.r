@@ -24,9 +24,9 @@ methods::setMethod(
 	
 	new(
 		"GRaster",
-		location = location(x),
-		mapset = mapset(x),
-		workDir = getFastOptions("workDir"),
+		location = .location(x),
+		mapset = .mapset(x),
+		workDir = faster("workDir"),
 		crs = crs(x),
 		projection = .projection(x),
 		nLayers = length(i),

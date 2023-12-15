@@ -37,8 +37,8 @@ methods::setMethod(
 #' @noRd
 .hexagons <- function(x, ny, expand, angle) {
 
-	.restore(x)
-	region(x)
+	.locationRestore(x)
+	.region(x)
 
 	extent <- ext(vector = TRUE)
 	ysize <- (extent[4L] - extent[3L]) / ny
@@ -72,7 +72,7 @@ methods::setMethod(
 			extent[4L] + ydelta
 		)
 
-		regionExt(extent, respect = "dimensions")
+		.regionExt(extent, respect = "dimensions")
 
 	}
 

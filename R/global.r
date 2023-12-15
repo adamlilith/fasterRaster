@@ -58,8 +58,8 @@ methods::setMethod(
 .global <- function(x, fun, prob = 0.5) {
 
 	if (inherits(x, "GRaster")) {
-		.restore(x)
-		region(x)
+		.locationRestore(x)
+		.region(x)
 		src <- sources(x)
 	} else {
 		src <- x
@@ -109,7 +109,7 @@ methods::setMethod(
 			intern = TRUE
 		)
 
-		if (versionNumber >= 8.3) args$nprocs <- getFastOptions("cores")
+		if (versionNumber >= 8.3) args$nprocs <- faster("cores")
 	
 		if (any(fun %in% c("quantile", "median"))) args$flags <- c(args$flags, "e")
 
@@ -249,13 +249,13 @@ methods::setMethod(
 						cmd = "r.univar",
 						flags = c("r", .quiet()),
 						map = srcSS,
-						nprocs = getFastOptions("cores"),
+						nprocs = faster("cores"),
 						Sys_show.output.on.console = FALSE,
 						echoCmd = FALSE,
 						intern = TRUE
 					)
 
-					if (versionNumber >= 8.3) args$nprocs <- getFastOptions("cores")
+					if (versionNumber >= 8.3) args$nprocs <- faster("cores")
 
 					thisInfo <- do.call(rgrass::execGRASS, args = args)
 
@@ -299,13 +299,13 @@ methods::setMethod(
 						cmd = "r.univar",
 						flags = c("r", .quiet()),
 						map = srcSS,
-						nprocs = getFastOptions("cores"),
+						nprocs = faster("cores"),
 						Sys_show.output.on.console = FALSE,
 						echoCmd = FALSE,
 						intern = TRUE
 					)
 
-					if (versionNumber >= 8.3) args$nprocs <- getFastOptions("cores")
+					if (versionNumber >= 8.3) args$nprocs <- faster("cores")
 
 					thisInfo <- do.call(rgrass::execGRASS, args = args)
 

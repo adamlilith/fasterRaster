@@ -16,7 +16,7 @@
 .vAsDataTable <- function(x) {
 
 	if (inherits(x, "GVector")) {
-		.restore(x)
+		.locationRestore(x)
 		src <- sources(x)
 	} else {
 		src <- x

@@ -1,8 +1,8 @@
 #' Coordinate reference system of a GRaster or GVector
 #' 
-#' @description Get the coordinate reference system (CRS) of a `GSession` object, or any that contain it (especially `GRaster`s and `GVector`s), or from the currently active **GRASS** [location][tutorial_sessions].
+#' @description Get the coordinate reference system (CRS) of a `GLocation` object, or any that contain it (especially `GRaster`s and `GVector`s), or from the currently active **GRASS** [location][tutorial_locations_mapsets].
 #'
-#' @param x An object that inherits from a `GSession` (i.e., a `GRaster` or `GVector`) or missing. If missing, the coordinate reference system of the currently active **GRASS** [location][tutorial_sessions] is reported.
+#' @param x An object that inherits from a `GLocation` (i.e., a `GRaster` or `GVector`) or missing. If missing, the coordinate reference system of the currently active **GRASS** [location][tutorial_locations_mapsets] is reported.
 #' 
 #' @param ... Other arguments (generally unused).
 #'
@@ -19,10 +19,11 @@ methods::setMethod(
     f = "crs",
     signature = c(x = "missing"),
     definition = function(x) {
-        workDir <- getFastOptions("workDir")
-        loc <- location()
-        crsFile <- file.path(workDir, loc, "crs.rds")
-        readRDS(crsFile)
+
+	locs <- .locations()
+	al <- .fasterRaster$activeLocation
+	locs[[al]]
+
     } # EOF
 )
 
@@ -31,7 +32,7 @@ methods::setMethod(
 #' @exportMethod crs
 methods::setMethod(
 	f = "crs",
-	signature = "GSession",
+	signature = "GLocation",
 	definition = function(x) x@crs
 )
 
@@ -54,7 +55,7 @@ methods::setMethod(
 #' @exportMethod st_crs
 methods::setMethod(
 	f = "st_crs",
-	signature = "GSession",
+	signature = "GLocation",
 	definition = function(x, ...) {
 
 	out <- x@crs

@@ -2,19 +2,17 @@
 #'
 #' @description These functions return the extent of a `GSpatial` object (`GRegions`, `GRaster`s, and `GVector`s):
 #' 
-#' * `ext()``: 2-dimensional spatial extent (i.e., westernmost/easternmost and southernmost/northernmost coordinates of area represented).\cr\cr
-#' * `zext()`: Vertical extent (i.e., topmost and bottom-most elevation of the volume represented). The vertical extent is not `NA` only if the object is 3-dimensional.\cr\cr
-#' * `W()`, `E()`, `N()`, `S()`: Coordinates of one side of horizontal extent.\cr\cr
-#' * `top()` and `bottom()`: Coordinates of top and bottom of vertical extent.\cr\cr
+#' * `ext()`: 2-dimensional spatial extent (i.e., westernmost/easternmost and southernmost/northernmost coordinates of area represented).\cr
+#' * `zext()`: Vertical extent (i.e., topmost and bottom-most elevation of the volume represented). The vertical extent is not `NA` only if the object is 3-dimensional.\cr
+#' * `W()`, `E()`, `N()`, `S()`: Coordinates of one side of horizontal extent.\cr
+#' * `top()` and `bottom()`: Coordinates of top and bottom of vertical extent.\cr
 #' 
-#' @param x,obj An object that inherits from `GSpatial` (i.e., a `GRaster` or `GVector`) or missing. If missing, then the horizontal or vertical extent of the currently active [region][tutorial_regions] is returned.
+#' @param x An object that inherits from `GSpatial` (i.e., a `GRaster` or `GVector`) or missing. If missing, then the horizontal or vertical extent of the currently active [region][tutorial_regions] is returned.
 #' 
 #' @param vector Logical: If `FALSE` (default), return a `SpatExtent` object. If `TRUE`, return the extent as a named vector.
 #' 
 #' @param char Logical: If `FALSE` (default), return a numeric value. If `TRUE`, return as a character.
 #' 
-#' @param ... Other arguments (generally unused).
-#'
 #' @returns The returned values depend on the function:
 #' * `ext()`: A `SpatExtent` object (**terra** package) or a numeric vector.
 #' * `zext()`: A numeric vector.
@@ -30,7 +28,7 @@
 methods::setMethod(
 	f = "ext",
 	signature = "missing",
-	definition = function(x, vector = FALSE) ext(region(), vector = vector)
+	definition = function(x, vector = FALSE) ext(.region(), vector = vector)
 )
 
 #' @aliases ext
@@ -55,7 +53,7 @@ methods::setMethod(
 methods::setMethod(
 	f = "zext",
 	signature = "missing",
- 	definition = function(x) zext(region())
+ 	definition = function(x) zext(.region())
 )
 
 #' @aliases zext
@@ -75,7 +73,7 @@ methods::setMethod(
 	f = "W",
 	signature = "missing",
 	definition = function(x, char = FALSE) {
-	out <- unname(ext(region(), vector = TRUE)["xmin"])
+	out <- unname(ext(.region(), vector = TRUE)["xmin"])
 	if (char) out <- as.character(out)
 	out
 })
@@ -99,7 +97,7 @@ methods::setMethod(
 	f = "E",
 	signature = "missing",
 	definition = function(x, char = FALSE) {
-	out <- unname(ext(region(), vector = TRUE)["xmax"])
+	out <- unname(ext(.region(), vector = TRUE)["xmax"])
 	if (char) out <- as.character(out)
 	out
 })
@@ -123,7 +121,7 @@ methods::setMethod(
 	f = "N",
 	signature = "missing",
 	definition = function(x, char = FALSE) {
-	out <- unname(ext(region(), vector = TRUE)["ymax"])
+	out <- unname(ext(.region(), vector = TRUE)["ymax"])
 	if (char) out <- as.character(out)
 	out
 })
@@ -147,7 +145,7 @@ methods::setMethod(
 	f = "S",
 	signature = "missing",
 	definition = function(x, char = FALSE) {
-	out <- unname(ext(region(), vector = TRUE)["ymin"])
+	out <- unname(ext(.region(), vector = TRUE)["ymin"])
 	if (char) out <- as.character(out)
 	out
 })
@@ -171,7 +169,7 @@ methods::setMethod(
 	f = "top",
 	signature = c(x = "missing"),
 	definition = function(x, char = FALSE) {
-	out <- unname(zext(region())["top"])
+	out <- unname(zext(.region())["top"])
 	if (char) out <- as.character(out)
 	out
 })
@@ -195,7 +193,7 @@ methods::setMethod(
 	f = "bottom",
 	signature = c(x = "GSpatial"),
 	definition = function(x, char = FALSE) {
-	out <- unname(zext(region())["bottom"])
+	out <- unname(zext(.region())["bottom"])
 	if (char) out <- as.character(out)
 	out
 })
@@ -252,7 +250,7 @@ methods::setMethod(
 # 	} else {
 # 		vector <- FALSE
 # 	}
-#     if (missing(obj)) obj <- region()
+#     if (missing(obj)) obj <- .region()
 #     if (inherits(obj, "GSpatial")) {
 #         out <- obj@extent
 #         out <- c(out[1L], out[3L], out[2L], out[4L])

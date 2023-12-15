@@ -1,7 +1,7 @@
 #' @title Classes for fasterRaster locations, rasters, and vectors
 #'
 #' @aliases GVector
-#' @rdname GSession
+#' @rdname GLocation
 #' @exportClass GVector
 GVector <- methods::setClass(
 	"GVector",
@@ -70,9 +70,9 @@ methods::setValidity("GVector",
 	
 	methods::new(
 		"GVector",
-		location = getFastOptions("location"),
-		mapset = getFastOptions("mapset"),
-		workDir = getFastOptions("workDir"),
+		location = .location(),
+		mapset = "PERMANENT",
+		workDir = faster("workDir"),
 		crs = crs(),
   		projection = info[["projection"]][1L],
 		topology = info[["topology"]][1L],

@@ -28,8 +28,8 @@ methods::setMethod(
 	signature = c(x = "GRaster"),
 	function(x, r = 1, g = 2, b = 3, a = NULL, simplify = TRUE, maxcell = 500000, ...) {
 	
-	.restore(x)
-	region(x)
+	.locationRestore(x)
+	.region(x)
 	
 	# simplify
 	nc <- ncell(x)

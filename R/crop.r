@@ -31,7 +31,7 @@ methods::setMethod(
 	} else {
 		if (crs(x) != crs(y)) stop("Rasters have different coordinate references systems.")
 	}
-	.restore(x)
+	.locationRestore(x)
 
 	### change region to match the extent of y but have the same resolution and registration as x
 	if (W(y) <= W(x)) {
@@ -111,7 +111,7 @@ methods::setMethod(
 	definition = function(x, y, ext = FALSE) {
 
 	compareGeom(x, y)
-	.restore(x)
+	.locationRestore(x)
 
 	### crop
 	src <- .makeSourceName("crop", "vector")
@@ -129,7 +129,7 @@ methods::setMethod(
 		)
 		
 		if (ext) {
-			regionExt(y, respect = "dim")
+			.regionExt(y, respect = "dim")
 			args$flags <- c(args$flags, "r")
 			args$clip <- sources(y)
 		} else if (ygeom %in% c("point", "line")) {

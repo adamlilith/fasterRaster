@@ -1,7 +1,7 @@
 #' @title Classes for "fasterRaster" locations, rasters, and vectors
 #'
 #' @aliases GRaster
-#' @rdname GSession
+#' @rdname GLocation
 #' @exportClass GRaster
 GRaster <- methods::setClass(
 	"GRaster",
@@ -183,9 +183,9 @@ methods::setValidity("GRaster",
 
 	out <- methods::new(
 		"GRaster",
-		location = getFastOptions("location"),
-		mapset = getFastOptions("mapset"),
-		workDir = getFastOptions("workDir"),
+		location = .location(),
+		mapset = "PERMANENT",
+		workDir = faster("workDir"),
 		crs = crs(),
 		projection = info[["projection"]][1L],
 		topology = info[["topology"]][1L],

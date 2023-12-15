@@ -1,4 +1,4 @@
-#' Tests if vector has a database
+#' Tests if "GRASS" vector has a database
 #'
 #' @description **GRASS** vectors typically have a database with the first column named `cat` and holding integer values indexing each feature. This table is mostly independent from the **fasterRaster** attribute table, which is stored as a `data.table` in the `@table` slot of a `GRaster`. This function tests to see if the vector does indeed have a database.
 #'
@@ -14,7 +14,7 @@
 .vHasTable <- function(x) {
 
 	if (inherits(x, "GVector")) {
-		.restore(x)
+		.locationRestore(x)
 		src <- sources(x)
 	} else {
 		src <- x

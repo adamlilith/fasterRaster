@@ -62,8 +62,8 @@ methods::setMethod(
 
     appCheck(x, fun, msgOnGood = FALSE, failOnBad = TRUE)
 
-    .restore(x)
-    region(x)
+    .locationRestore(x)
+    .region(x)
 
     # replace raster names with sources
     # replacing from longest to shortest to avoid issues with nestedness
@@ -157,7 +157,7 @@ appFuns <- function(warn = TRUE) {
         warning("You must be running R interactively to view the table using appFuns().")
     }
 
-    if (getFastOptions("useDataTable")) appFunsTable <- data.table::data.table(appFunsTable)
+    if (faster("useDataTable")) appFunsTable <- data.table::data.table(appFunsTable)
 	invisible(appFunsTable)
 	
 }

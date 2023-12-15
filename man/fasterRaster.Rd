@@ -11,12 +11,10 @@ Processing of large-in-memory/-on disk rasters and spatial vectors in using \str
 
 A \link[=tutorial_getting_started]{quick-start} tutorial\cr
 A tutorial on \link[=tutorial_raster_data_types]{raster data types}\cr
-\code{\link[=faster]{faster()}}: Initiate a \strong{GRASS} session\cr
+\code{\link[=faster]{faster()}}: Set the directory where \strong{GRASS} is installed on your system, and set or get other package-wide options\cr
 \code{\link[=fast]{fast()}}: Convert a \code{SpatRaster}, \code{SpatVector}, or \code{sf} vector to \strong{fasterRaster}'s raster format (\code{GRaster}s) or vector format (\code{GVector}s), or load one from a file\cr
 \code{\link[=rast]{rast()}}, \code{\link[=vect]{vect()}}, and \code{\link[=st_as_sf]{st_as_sf()}}: Convert \code{GRaster}s and \code{GVector}s to \code{SpatRaster}s, \code{SpatVector}s, or \code{sf} vectors\cr
 \code{\link[=writeRaster]{writeRaster()}} and \code{\link[=writeVector]{writeVector()}}: Save \code{GRaster}s or \code{GVector}s to disk\cr
-\code{\link[=restoreSession]{restoreSession()}}: Revert to another \strong{GRASS} \link[=tutorial_sessions]{"location" or "mapset"}, or restart a \strong{GRASS} session saved to disk\cr
-\code{\link[=setFastOptions]{setFastOptions()}} and \code{\link[=getFastOptions]{getFastOptions()}}: Set options for working with \strong{fasterRaster}\cr
 }
 
 \subsection{Properties of \code{GRasters}}{
@@ -26,14 +24,11 @@ A tutorial on \link[=tutorial_raster_data_types]{raster data types}\cr
 \code{\link[=dim]{dim()}}: Number of rows and columns\cr
 \code{\link[=ext]{ext()}}, \code{\link[=N]{N()}}, \code{\link[=S]{S()}}, \code{\link[=E]{E()}}, \code{\link[=W]{W()}}, \code{\link[=top]{top()}}, and \code{\link[=bottom]{bottom()}}: Spatial extent\cr
 \code{\link[=freq]{freq()}}: Frequencies of cell values in a raster\cr
-\code{\link[=global]{global()}}: Summary statistics\cr
 \code{\link[=is.2d]{is.2d()}} and \code{\link[=is.3d]{is.3d()}}: Is an object 2- or 3-dimensional?\cr
 \code{\link[=is.int]{is.int()}}, \code{\link[=is.float]{is.float()}}, \code{\link[=is.doub]{is.doub()}}: \code{GRaster} data type (integer/float/double)\cr
 \code{\link[=is.factor]{is.factor()}}: Does a raster represent categorical data?\cr
 \code{\link[=is.lonlat]{is.lonlat()}}: Is an object projected (e.g., in WGS84)?\cr
 \code{\link[=levels]{levels()}}: Names of levels in a categorical \code{GRaster}\cr
-\code{\link[=location]{location()}}: \strong{GRASS} "location" of an object or the active session\cr
-\code{\link[=mapset]{mapset()}}: \strong{GRASS} "mapset" of an object or the active session\cr
 \code{\link[=minmax]{minmax()}}: Minimum and maximum values across all non-\code{NA} cells\cr
 \code{\link[=names]{names()}}: \code{GRaster} names\cr
 \code{\link[=ncol]{ncol()}}: Number of columns\cr
@@ -47,7 +42,6 @@ A tutorial on \link[=tutorial_raster_data_types]{raster data types}\cr
 \code{\link[=nlevels]{nlevels()}}: Number of categories\cr
 \code{\link[=res]{res()}}, \code{\link[=xres]{xres()}}, \code{\link[=yres]{yres()}}, and \code{\link[=zres]{zres()}}: Spatial resolution\cr
 \code{\link[=sources]{sources()}}: Name of the \code{GRaster} in \strong{GRASS}\cr
-\code{\link[=st_crs]{st_crs()}}: Coordinate reference system\cr
 \code{\link[=topology]{topology()}}: Dimensionality (2D or 3D)\cr
 \code{\link[=zext]{zext()}}: Vertical extent\cr
 \code{\link[=zres]{zres()}}: Vertical resolution\cr
@@ -60,7 +54,7 @@ A tutorial on \link[=tutorial_raster_data_types]{raster data types}\cr
 
 Single-layer functions (applied to each layer of a \code{GRaster}):
 \itemize{
-\item \code{NA}s: \code{\link[=is.na]{is.na()}} and \code{\link[=not.na]{not.na()}} \cr
+\item Working with \code{NA}s: \code{\link[=is.na]{is.na()}} and \code{\link[=not.na]{not.na()}} \cr
 \item Trigonometry: \code{\link[=sin]{sin()}}, \code{\link[=cos]{cos()}}, \code{\link[=tan]{tan()}}, \code{\link[=asin]{asin()}}, \code{\link[=acos]{acos()}}, \code{\link[=atan]{atan()}}, \code{\link[=atan2]{atan2()}} \cr
 \item Logarithms and powers: \code{\link[=exp]{exp()}}, \code{\link[=log]{log()}}, \code{\link[=ln]{ln()}}, \code{\link[=log1p]{log1p()}}, \code{\link[=log2]{log2()}}, \code{\link[=log10]{log10()}}, \code{\link[=sqrt]{sqrt()}} \cr
 \item Rounding: \code{\link[=round]{round()}}, \code{\link[=floor]{floor()}}, \code{\link[=ceiling]{ceiling()}}, \code{\link[=trunc]{trunc()}} \cr
@@ -169,15 +163,12 @@ The assign operators, \code{\link[fasterRaster]{$<-}}, \code{\link[fasterRaster]
 \code{\link[=is.2d]{is.2d()}} and \code{\link[=is.3d]{is.3d()}}: Is an object 2- or 3-dimensional?\cr
 \code{\link[=is.lonlat]{is.lonlat()}}: Is an object projected (e.g., in WGS84)?\cr
 \code{\link[=is.points]{is.points()}}, \code{\link[=is.lines]{is.lines()}}, \code{\link[=is.polygons]{is.polygons()}}: Does a \code{GVector} represent points, lines, or polygons?\cr
-\code{\link[=location]{location()}}: \strong{GRASS} "location" of an object or the active session\cr
-\code{\link[=mapset]{mapset()}}: \strong{GRASS} "mapset" of an object or the active session\cr
 \code{\link[=names]{names()}}: Names of \code{GVector} fields\cr
 \code{\link[=ncol]{ncol()}}: Number of fields\cr
 \code{\link[=ngeom]{ngeom()}}: Number of geometries (points, lines, polygons)\cr
 \code{\link[=nrow]{nrow()}}: Number of rows in a vector data table\cr
 \code{\link[=nsubgeom]{nsubgeom()}}: Number of subgeometries (points, lines, polygons that make up single- and multipart geometries)\cr
 \code{\link[=sources]{sources()}}: Name of the vector in \strong{GRASS}\cr
-\code{\link[=st_crs]{st_crs()}}: Coordinate reference system\cr
 \code{\link[=topology]{topology()}}: Dimensionality (2D or 3D)\cr
 \code{\link[=zext]{zext()}}: Vertical extent\cr
 }
@@ -194,6 +185,7 @@ The \code{\link[fasterRaster]{$<-}} operator can be used to replace specific col
 \code{\link[=buffer]{buffer()}}: Create a polygon around/inside a \code{GVector}\cr
 \code{\link[=cleanGeom]{cleanGeom()}}: Fix undesirable geometries of a \code{GVector}\cr
 \code{\link[=clusterPoints]{clusterPoints()}}: Identify clusters of points\cr
+\code{\link[=complete.cases]{complete.cases()}}: Find rows of a \code{GVector}'s data table that have no \code{NA}s in them\cr
 \code{\link[=connectors]{connectors()}}: Create lines connecting nearest features of two \code{GVector}s\cr
 \code{\link[=convHull]{convHull()}}: Minimum convex hull\cr
 \code{\link[=crds]{crds()}}: Extract coordinates of a \code{GVector}\cr
@@ -210,6 +202,7 @@ The \code{\link[fasterRaster]{$<-}} operator can be used to replace specific col
 \code{\link[=hexagons]{hexagons()}}: Create a hexagonal grid\cr
 \code{\link[=intersect]{intersect()}} or \code{*}: Intersection of two \code{GVectors}.\cr
 \code{\link[=kernel]{kernel()}}: Kernel density estimator of points.\cr
+\code{\link[=missing.cases]{missing.cases()}}: Find rows of a \code{GVector}'s data table that have at least \code{NA} in them\cr
 \code{\link[=project]{project()}}: Change coordinate reference system\cr
 \code{\link[=rasterize]{rasterize()}}: Convert a \code{GVector} to a \code{GRaster}\cr
 \code{\link[=simplifyGeom]{simplifyGeom()}}: Remove vertices\cr
@@ -240,16 +233,6 @@ The \code{\link[fasterRaster]{$<-}} operator can be used to replace specific col
 \code{\link[=vect]{vect()}}: Convert a \code{GVector} to a \code{SpatVector}\cr
 }
 
-\subsection{Functions that operate on \strong{GRASS} "sessions":}{
-
-\code{\link[=crs]{crs()}}: Coordinate reference system of the current location\cr
-\code{\link[=location]{location()}}: \strong{GRASS} "location" of an object or the active session\cr
-\code{\link[=locations]{locations()}}: Meta-data on all active \strong{GRASS} "locations" in the active session\cr
-\code{\link[=mapset]{mapset()}}: \strong{GRASS} "mapset" of an object or the active session\cr
-\code{\link[=restoreSession]{restoreSession()}}: Restore a previous \strong{GRASS} session or switch \strong{GRASS} locations/mapsets\cr
-\code{\link[=removeSession]{removeSession()}}: Delete a \strong{GRASS} session (location, mapset(s), and all associated files)\cr
-}
-
 \subsection{General purpose functions}{
 
 \code{\link[=appendLists]{appendLists()}}: Append values to elements of a list from another list\cr
@@ -261,15 +244,6 @@ The \code{\link[fasterRaster]{$<-}} operator can be used to replace specific col
 \code{\link[=replaceNAs]{replaceNAs()}}: Replace \code{NA}s in columns of a \code{data.table} or \code{data.frame}, or in a vector\cr
 \code{\link[=seqToSQL]{seqToSQL()}}: Format a numeric series into an SQL value call.\cr
 \code{\link[=update]{update()}}: Refresh metadata in a \code{GRaster} or \code{GVector} object.\cr
-}
-
-\subsection{Functions that operate on \strong{GRASS} "regions" (useful mostly to developers):}{
-
-Comparisons between \code{GRegion}s using the \code{==} and \code{!=} operators.
-\code{\link[=region]{region()}}: Change or report the active region's extent and resolution\cr
-\code{\link[=regionDim]{regionDim()}}: Change or report the active region's resolution (also \code{\link[=dim]{dim()}} and related functions, with no arguments)
-\code{\link[=regionExt]{regionExt()}}: Change or report the active region's extent (also \code{\link[=ext]{ext()}} and related functions, with no arguments)\cr
-\code{\link[=regionRes]{regionRes()}}: Change or report the active region's dimensions (also \code{\link[=res]{res()}} and related functions, with no arguments)\cr
 }
 
 \subsection{Example data}{
@@ -287,12 +261,42 @@ Comparisons between \code{GRegion}s using the \code{==} and \code{!=} operators.
 \link{vegIndices}: Vegetation indices that can be calculated using \code{\link[=vegIndex]{vegIndex()}}.
 }
 
-\subsection{Esoteric tutorials}{
+\subsection{Esoteric, exported yet often (publicly) undocumented functions for developers, plus tutorials}{
 
-\link[=tutorial_sessions]{Sessions, locations, and mapsets}\cr
-\link[=tutorial_raster_data_types]{Raster data types}\cr
-\link[=tutorial_regions]{Regions}\cr
-\link[=tutorial_undocumented_functions]{Undocumented functions}\cr
+Comparisons between \code{GRegion}s can be performed using the \code{==} and \code{!=} operators.\cr
+Tutorial on \strong{GRASS} \link[=tutorial_regions]{regions}\cr
+Tutorial on \strong{GRASS} \link[=tutorial_locations_mapsets]{"locations" and mapsets}\cr
+\code{.copyGSpatial()}: Make a copy of the \strong{GRASS} file pointed to by a \code{GRaster} or \code{GVector}\cr
+\code{.fileExt()}: Get file extension\cr
+\code{.layerIndex()}: Gets the index of \code{GRaster} layers from a numeric, integer, character, or logical vector\cr
+\code{.locationCreate()} Make a connection to \strong{GRASS} (i.e., start \strong{GRASS} from within \strong{R}) and create a location\cr
+\code{.locationDelete()} Deletes all files associated with a \strong{GRASS} "location" and mapset\cr
+\code{.locationFind()}: Find a specific \strong{GRASS} "location" that already exists\cr
+\code{.locationRestore()} Reconnect \strong{GRASS} to a previously-created \strong{GRASS} "location"\cr
+\code{.locations()}: List of all available "locations"\cr
+\code{.ls()}: Lists the \code{sources} of all objects in the active \strong{GRASS} "location"\cr
+\code{.makeGRaster()} and \code{.makeGVector()}: Make \code{GRaster}s or \code{GVector}s from a vector of \code{sources}, which are pointers to files in \strong{GRASS}\cr
+\code{.makeSourceNames()}: Makes one or more statistically unique strings that can be used as file names to represent rasters or vectors in \strong{GRASS}\cr
+\code{.mapset()}: \strong{GRASS} "mapset" of an object or the active session\cr
+\code{.message()}: Display a warning or message if the given warning has not been displayed since \strong{fasterRaster} was attached or if a given number or hours has passed since then\cr
+\code{.minVal()} and \code{.maxVal()}: Values in the \verb{@minVal} and \verb{@maxVal} slots in a \code{GRaster}\cr
+\code{.nlevels()}: Number of levels in a \code{SpatVector}, \code{data.frame}, \code{data.table}, empty string, or a list of \code{data.frame}s, \code{data.table}s, and/or empty strings.\cr
+\code{.projection()}: Value of the \verb{@projection} slot in a \code{GRaster} or \code{GVector}\cr
+\code{.quiet()}: Returns "quiet" if \code{faster("verbose")} is \code{TRUE}\cr
+\code{.rastInfo()} and \code{.vectInfo()}: Metadata for a \strong{GRASS} raster or vector\cr
+\code{.region()}: Change or report the active region's extent and resolution\cr
+\code{.regionDim()}: Change or report the active region's resolution (also \code{\link[=dim]{dim()}} and related functions, with no arguments)\cr
+\code{.regionExt()}: Change or report the active region's extent (also \code{\link[=ext]{ext()}} and related functions, with no arguments)\cr
+\code{.regionRes()}: Change or report the active region's dimensions (also \code{\link[=res]{res()}} and related functions, with no arguments)\cr
+\code{.rename()}: Rename a \strong{GRASS} raster or vector\cr
+\code{.rm()}: Delete rasters or vectors in \strong{GRASS}\cr
+\code{.vAsDataTable()}: Convert the attribute table linked to a vector in \strong{GRASS} to a \code{data.table}. This table is distinct from the attribute table attached to a \code{GVector}\cr
+\code{.vAttachDatabase()}: Add a database table to the \strong{GRASS} representation of a \code{GVector}\cr
+\code{.vCats()}: Get a \code{data.table} with a single column named \code{cat}, which corresponds to the \strong{GRASS} attribute table's \code{cat} column\cr
+\code{.vHasTable()}: Tests if \strong{GRASS} vector has a database\cr
+\code{.vIncrementCats()}: Increment category values of a \code{GVector}\cr
+\code{.vNames()}: "GRASS" vector attribute table column names\cr
+\code{grassStarted()}: Has a connection \strong{GRASS} been made within the current \strong{R} session?\cr
 }
 }
 \seealso{

@@ -83,37 +83,20 @@ A raster or raster stack stack with the same extent, resolution, and coordinate 
 The \code{sun()} function calculates beam (direct), diffuse and ground reflected solar irradiation for a given day and set of topographic and atmospheric conditions. The function relies on the \strong{GRASS} module \code{r.sun}, which contains a detailed explanation.
 }
 \examples{
-\dontrun{
-# NB This example is in a "dontrun{}" block because it requires users to have
-# GRASS GIS Version 8+ installed on their system.
+if (grassStarted()) {
 
-# IMPORTANT #1: If you already have a GRASS session started, you will need to
-# run the line below and the last line in this example to work with it again.
-# If you have not started a GRASS session, you can skip this step and go to
-# step #2.
-opts. <- getFastOptions()
-
-# IMPORTANT #2: Select the appropriate line below and change as necessary to
-# where GRASS is installed on your system.
-
-grassDir <- "/Applications/GRASS-8.3.app/Contents/Resources" # Mac
-grassDir <- "C:/Program Files/GRASS GIS 8.3" # Windows
-grassDir <- "/usr/local/grass" # Linux
-
-# setup
+# Setup
 library(terra)
 
-# example data
+# Example data
 madElev <- fastData("madElev")
 
-# start GRASS session for examples only
-faster(x = madElev, grassDir = grassDir,
-workDir = tempdir(), location = "examples") # line only needed for examples
-
-# convert a SpatRaster to a GRaster
+# Convert a SpatRaster to a GRaster
 elev <- fast(madElev)
 
-### calculate input rasters
+### Calculate input rasters
+###########################
+
 coeff_bh <- elev * 0 + 0.4 # just a guess
 coeff_dh <- elev * 0 + 0.6 # just a guess
 
@@ -125,6 +108,8 @@ directions <- seq(0, 359, horizon_step)
 hh <- horizonHeight(elev, directions = directions, northIs0 = FALSE)
 
 ### calculate solar ir/radiance
+###############################
+
 solar <- sun(
 	elevation = elev,
 	coeff_bh = coeff_bh,
@@ -151,10 +136,6 @@ solar <- sun(
 )
 
 solar
-
-# IMPORTANT #3: Revert back to original GRASS session if needed.
-restoreSession(opts.)
-removeSession("examples")
 
 }
 }

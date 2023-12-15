@@ -6,7 +6,7 @@
 \alias{writeRaster,missing,missing-method}
 \title{Save a GRaster to disk}
 \usage{
-\S4method{writeRaster}{GRaster,character}(x, filename, datatype = NULL, overwrite = FALSE, warn = TRUE, ...)
+\S4method{writeRaster}{GRaster,character}(x, filename, overwrite = FALSE, datatype = NULL, warn = TRUE, ...)
 
 \S4method{writeRaster}{missing,missing}(x, filename)
 }
@@ -14,6 +14,8 @@
 \item{x}{A \code{GRaster} or missing: If missing, a table of supported file types is reported.}
 
 \item{filename}{Character: Path and file name.}
+
+\item{overwrite}{Logical: If \code{FALSE} (default), do not save over existing file(s).}
 
 \item{datatype}{\code{NULL} (default) or character: The datatype of the values stored in non-ASCII rasters. If \code{NULL}, this will be ascertained from the raster. This can any of:\tabular{lllll}{
    \strong{\code{fasterRaster}} \tab \strong{\code{terra}} \tab \strong{\code{GRASS}} \tab \strong{\code{GDAL}} \tab \strong{Values} \cr
@@ -29,8 +31,6 @@
 
 
 \code{*} Depends on the integers (signed/unsigned, range of values). Categorical rasters will have a CSV file with category values and labels saved with them. The file name will be the same as the raster's file name, but end in extension ".csv".}
-
-\item{overwrite}{Logical: If \code{FALSE} (default), do not save over existing file(s).}
 
 \item{warn}{Logical: If \code{TRUE} (default), display a warning if the \code{datatype} argument does not match the value given by \code{datatype(x, "GDAL")}.}
 
@@ -55,60 +55,36 @@
 }}
 }
 \value{
-A \code{GRaster} (invisibly). A raster is also saved to disk.
+A \code{SpatRaster} (invisibly). A raster is also saved to disk.
 }
 \description{
 This function saves a \code{GRaster} to disk directly from a \strong{GRASS} session. It is faster than using \code{\link[=rast]{rast()}}, then saving the output of that to disk (because \code{rast()} actually save the raster to disk, anyway).
 
-The function will attempt to ascertain the file type to be ascertained from the file extension, but you can specify the format using the \code{format} argument (see entry for \code{...}). You can see a list of supported formats by simply using this function with no arguments, as in \code{writeRaster()}, or by consulting the online help page for the \strong{GRASS} module \code{r.out.gdal}. Only the \code{GeoTIFF} file format is guaranteed to work for multi-layered rasters.
-
-\strong{Note}: Rasters will be trimmed to their smallest extent such that no rows or columns are all \code{NA}s. You can add \code{NA} rows and columns to a \code{SpatRaster} using \code{\link[terra:extend]{terra::extend()}}.
+The function will attempt to ascertain the file type to be ascertained from the file extension, but you can specify the format using the \code{format} argument (see entry for \code{...}). You can see a list of supported formats by simply using this function with no arguments, as in \code{writeRaster()}, or by consulting the online help page for the \strong{GRASS} module \href{https://grass.osgeo.org/grass84/manuals/r.out.gdal.html}{\code{r.out.gdal}}. Only the \code{GeoTIFF} file format is guaranteed to work for multi-layered rasters.
 }
 \examples{
-\dontrun{
-# NB This example is in a "dontrun{}" block because it requires users to have
-# GRASS GIS Version 8+ installed on their system.
+if (grassStarted()) {
 
-# IMPORTANT #1: If you already have a GRASS session started, you will need to
-# run the line below and the last line in this example to work with it again.
-# If you have not started a GRASS session, you can skip this step and go to
-# step #2.
-opts. <- getFastOptions()
-
-# IMPORTANT #2: Select the appropriate line below and change as necessary to
-# where GRASS is installed on your system.
-grassDir <- "/Applications/GRASS-8.3.app/Contents/Resources" # Mac
-grassDir <- "C:/Program Files/GRASS GIS 8.3" # Windows
-grassDir <- "/usr/local/grass" # Linux
-
-# setup
+# Setup
 library(terra)
 
-# example data
+# Example data
 madElev <- fastData("madElev")
 
-# start GRASS session for examples only
-faster(x = madElev, grassDir = grassDir,
-workDir = tempdir(), location = "examples") # line only needed for examples
-
-# convert SpatRaster to GRaster
+# Convert SpatRaster to GRaster
 elev <- fast(madElev)
 
-### save GRaster to disk (using temporary file)
+### Save GRaster to disk (using temporary file)
 filename <- tempfile()
 filename <- paste0(filename, ".tif")
 writeRaster(elev, filename)
 
-### load raster from disk
+### Load raster from disk
 elev2 <- fast(filename)
 elev2
-
-# IMPORTANT #3: Revert back to original GRASS session if needed.
-restoreSession(opts.)
-removeSession("examples")
 
 }
 }
 \seealso{
-\code{\link[terra:writeRaster]{terra::writeRaster()}}
+\code{\link[terra:writeRaster]{terra::writeRaster()}}, module \href{https://grass.osgeo.org/grass84/manuals/r.out.gdal.html}{\code{r.out.gdal}} in \strong{GRASS}
 }

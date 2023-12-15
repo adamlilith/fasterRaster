@@ -33,8 +33,8 @@ methods::setMethod(
 	signature = c(x = "GRaster"),
 	function(x, ..., na.rm = TRUE) {
 
-	.restore(x)
-	region(x)
+	.locationRestore(x)
+	.region(x)
 
 	dt <- datatype(x)
 	if (any(!(dt %in% c("integer", "factor")))) stop("All rasters must be of type integer or factor.")

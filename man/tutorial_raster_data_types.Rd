@@ -12,22 +12,22 @@ Rasters that represent integers are called "integer" rasters in \strong{fasterRa
 
 \subsection{Floating-point values}{
 
-Floating-point values are accurate to about the 6th to 9th decimal place. These are called "float" rasters in \strong{fasterRaster} and \code{FCELL} rasters in \strong{GRASS}. By default, operations conducted using raster math (e.g., \code{raster1 * raster2}) return double floating-point valued rasters, but this can be changed to floating point precision using \code{\link[=setFastOptions]{setFastOptions()}} (e.g., \code{setFastOptions(rasterDataType = "float")}). Floating-point rasters typically take more memory than integer rasters, but less than double-floating point rasters.
+Floating-point values are accurate to about the 6th to 9th decimal place. These are called "float" rasters in \strong{fasterRaster} and \code{FCELL} rasters in \strong{GRASS}. By default, operations conducted using raster math (e.g., \code{raster1 * raster2}) return double floating-point valued rasters, but this can be changed to floating point precision using \code{\link[=faster]{faster()}} (e.g., \code{faster(rasterDataType = "float")}). Floating-point rasters typically take more memory than integer rasters, but less than double-floating point rasters.
 }
 
 \subsection{Double-floating point values}{
 
-Double-floating point values are accurate to about the 15th to 17th decimal place. These are called "double" rasters in \strong{fasterRaster} and \code{DCELL} rasters in \strong{GRASS}. These rasters typically take the most memory. All "\code{numeric}" values in \strong{R} are double-floating point values. \strong{R} does not use single floating-point values.
+Double-floating point values are accurate to about the 15th to 17th decimal place. These are called "double" rasters in \strong{fasterRaster} and \code{DCELL} rasters in \strong{GRASS}. These rasters typically take the most memory. All "\code{numeric}" values in \strong{R} are double-floating point values.
 }
 
 \subsection{Categorical rasters}{
 
-Categorical rasters (also called "factor" rasters) are actually integer rasters, but have an associated attribute table that maps each integer value to a category label, such as "wetland" or "forest". The table has at least two columns. The first is integer values, and (by default) the second is category names. This second column is the "active" category column, but can be changed using \link{activeCat<-}.
+Categorical rasters (also called "factor" rasters) are actually integer rasters, but have an associated attribute table that maps each integer value to a category label, such as "wetland" or "forest". The table has at least two columns. The first is integer values, and (by default) the second is category names. This second column is the "active" category column, but can be changed using \code{\link[fasterRaster]{activeCat<-}}.
 }
 
 \subsection{Functions relevant to raster data types}{
 \itemize{
-\item \code{\link[=activeCat]{activeCat()}} and \verb{[activeCat<-]} can be used to see or assign which column in a "levels" table associated with a categorical raster is used as category labels.
+\item \code{\link[=activeCat]{activeCat()}} and \code{\link[fasterRaster]{activeCat<-}} can be used to see or assign which column in a "levels" table associated with a categorical raster is used as category labels.
 \item \code{\link[=addCats]{addCats()}} adds information to the "levels" table using \code{\link[data.table:merge]{data.table::merge()}} (same as \code{\link[=merge]{merge()}}).
 \item \code{\link[fasterRaster]{addCats<-}} add new levels to a "levels" table.
 \item \code{\link[=as.int]{as.int()}}, \code{\link[=as.float]{as.float()}}, and \code{\link[=as.doub]{as.doub()}} coerce a raster to an integer, float, or double.
@@ -38,9 +38,10 @@ Categorical rasters (also called "factor" rasters) are actually integer rasters,
 \item \code{\link[=droplevels]{droplevels()}} removes "unused" levels in a "levels" table.
 \item \code{\link[=freq]{freq()}}: Frequency of each category across cells of a raster\cr
 \item \code{\link[=is.factor]{is.factor()}} indicates if the raster is a categorical raster.
+\item \code{\link[=is.int]{is.int()}}, \code{\link[=is.float]{is.float()}}, and \code{\link[=is.doub]{is.doub()}} indicate if values in a a raster are integers, floating-point, or double-floating point precision.
 \item \code{\link[=levels]{levels()}} returns the "levels" table of a categorical raster (just the value column and the active column).
 \item \code{\link[fasterRaster]{levels<-}} and \code{\link[=categories]{categories()}} can be used to assign categories to an integer raster and make it categorical (i.e., a "factor" raster).
-\item \code{\link[=match]{match()}}, \code{\%in\%}, and \%notin\%: Find which cells of a \code{GRaster} match or do not match certain category labels\cr
+\item \code{\link[=match]{match()}}, \code{\link[fasterRaster]{\%in\%}}, and \code{\link[fasterRaster]{\%notin\%}}: Find which cells of a \code{GRaster} match or do not match certain category labels\cr
 \item \code{\link[=missingCats]{missingCats()}} finds values in categorical rasters that do not have a category assigned to them.
 \item \code{\link[=nlevels]{nlevels()}} returns the number of levels represented by a categorical raster.
 }
@@ -64,36 +65,18 @@ You can save substantial space on disk if you set the \code{datatype} argument i
 }
 }
 \examples{
-\dontrun{
-# NB This example is in a "dontrun{}" block because it requires users to have
-# GRASS GIS Version 8+ installed on their system.
+if (grassStarted()) {
 
-# IMPORTANT #1: If you already have a GRASS session started, you will need to
-# run the line below and the last line in this example to work with it again.
-# If you have not started a GRASS session, you can skip this step and go to
-# step #2.
-opts. <- getFastOptions()
-
-# IMPORTANT #2: Select the appropriate line below and change as necessary to
-# where GRASS is installed on your system.
-grassDir <- "/Applications/GRASS-8.3.app/Contents/Resources" # Mac
-grassDir <- "C:/Program Files/GRASS GIS 8.3" # Windows
-grassDir <- "/usr/local/grass" # Linux
-
-# setup
+# Setup
 library(sf)
 library(terra)
 
-# example data
+# Example data
 madElev <- fastData("madElev")
 madForest2000 <- fastData("madForest2000")
 madCoast0 <- fastData("madCoast0")
 madRivers <- fastData("madRivers")
 madDypsis <- fastData("madDypsis")
-
-# start GRASS session for examples only
-faster(x = madElev, grassDir = grassDir,
-workDir = tempdir(), location = "examples") # line only needed for examples
 
 ### GRaster properties
 ######################
@@ -131,7 +114,6 @@ names(elev)
 
 # coordinate reference system
 crs(elev)
-st_crs(elev)
 
 # extent (bounding box)
 ext(elev)
@@ -187,7 +169,6 @@ bottom(rivers) # bottom extent
 
 # coordinate reference system
 crs(rivers)
-st_crs(rivers)
 
 # column names and data types
 names(coast)
@@ -249,10 +230,6 @@ rivers <- update(rivers)
 rivers2 <- c(rivers, rivers)
 dim(rivers)
 dim(rivers2)
-
-# IMPORTANT #3: Revert back to original GRASS session if needed.
-restoreSession(opts.)
-removeSession("examples")
 
 }
 }

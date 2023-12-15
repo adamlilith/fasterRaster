@@ -38,8 +38,8 @@ methods::setMethod(
     if (is.na(maxq) & is.na(smax)) stop("Invalid upper bound of range to stretch.")
     if (!is.na(maxq) && maxq > 1) stop("Invalid upper bound of range to stretch.")
 
-    .restore(x)
-    region(x)
+    .locationRestore(x)
+    .region(x)
 	
 	versionNumber <- grassInfo("versionNumber")
 
@@ -67,7 +67,7 @@ methods::setMethod(
                     percentile = minq * 100
                 )
 
-                if (versionNumber >= 8.3) args$nprocs <- getFastOptions("cores")
+                if (versionNumber >= 8.3) args$nprocs <- faster("cores")
 
                 info <- do.call(rgrass::execGRASS, args)
                 pattern <- "percentile: "
@@ -98,7 +98,7 @@ methods::setMethod(
                     percentile = maxq * 100
                 )
 
-                if (versionNumber >= 8.3) args$nprocs <- getFastOptions("cores")
+                if (versionNumber >= 8.3) args$nprocs <- faster("cores")
 
                 info <- do.call(rgrass::execGRASS, args)
                 pattern <- "percentile: "

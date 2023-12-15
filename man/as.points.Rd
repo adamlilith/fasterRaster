@@ -22,21 +22,7 @@ A \code{points} \code{GVector}.
 \code{as.points()} converts a \code{GRaster} or \code{GVector} to a points \code{GVector}. For rasters, the points have the coordinates of cell centers and are assigned the cells' values. Only non-\code{NA} cells will be converted to a point. For vectors, each point will have the attributes of the line or polygon to which it belonged. Points are extracted from each vertex.
 }
 \examples{
-\dontrun{
-# NB This example is in a "dontrun{}" block because it requires users to have
-# GRASS GIS Version 8+ installed on their system.
-
-# IMPORTANT #1: If you already have a GRASS session started, you will need to
-# run the line below and the last line in this example to work with it again.
-# If you have not started a GRASS session, you can skip this step and go to
-# step #2.
-opts. <- getFastOptions()
-
-# IMPORTANT #2: Select the appropriate line below and change as necessary to
-# where GRASS is installed on your system.
-grassDir <- "/Applications/GRASS-8.3.app/Contents/Resources" # Mac
-grassDir <- "C:/Program Files/GRASS GIS 8.3" # Windows
-grassDir <- "/usr/local/grass" # Linux
+if (grassStarted()) {
 
 # Setup
 library(sf)
@@ -46,10 +32,6 @@ library(terra)
 madElev <- fastData("madElev")
 madCoast0 <- fastData("madCoast0")
 madRivers <- fastData("madRivers")
-
-# Start GRASS session for examples only:
-faster(x = madElev, grassDir = grassDir,
-workDir = tempdir(), location = "examples") # line only needed for examples
 
 # Convert to GRaster and GVectors:
 elev <- fast(madElev)
@@ -75,10 +57,6 @@ plot(coastPoints, add = TRUE)
 
 plot(rivers, col = "blue", add = TRUE)
 plot(riversPoints, col = "blue", add = TRUE)
-
-# IMPORTANT #3: Revert back to original GRASS session if needed.
-restoreSession(opts.)
-removeSession("examples")
 
 }
 }

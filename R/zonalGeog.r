@@ -32,8 +32,8 @@ methods::setMethod(
 	signature(x = "GRaster"),
 	function(x, unit = "meters") {
 	
-	.restore(x)
-	region(x)
+	.locationRestore(x)
+	.region(x)
 
 	units <- c("m", "meters", "kilometers", "km", "miles", "feet", "ft", "yards", "yd", "cells")
 	unit <- omnibus::pmatchSafe(unit, units, useFirst = TRUE, nmax = 1L)
@@ -153,7 +153,7 @@ methods::setMethod(
 	} # next layer
 
 	names(out) <- names(x)
-	if (!getFastOptions("useDataTable")) {
+	if (!faster("useDataTable")) {
 		for (i in seq_along(out)) out[[i]] <- as.data.frame(out)
 	}
 	out

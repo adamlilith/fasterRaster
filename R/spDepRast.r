@@ -48,8 +48,8 @@ methods::setMethod(
     exponent <- rep(exponent, length.out = n)
     delay <- rep(delay, length.out = n)
 
-    .restore(x)
-    region(x)
+    .locationRestore(x)
+    .region(x)
 
     gnRands <- .makeSourceName("rand", "raster", n)
     srcs <- .makeSourceName("randScaled", "raster", n)

@@ -15,8 +15,6 @@
 #'
 #' @keywords land Madagascar
 #'
-#' @details *IMPORTANT*: To import this raster into **GRASS** using [fast()], you typically must set the `checkCRS` argument to `FALSE`. If you do this, be sure, though that the [location][tutorial_sessions] has the same coordinate reference system as this raster (WGS84 / UTM 39N).
-#'
 #' @source United States Geological Survey's [EarthExplorer](https://earthexplorer.usgs.gov). Also see [band definitions](https://www.usgs.gov/faqs/what-are-band-designations-landsat-satellites).
 #'
 #' @example man/examples/ex_fastData.r

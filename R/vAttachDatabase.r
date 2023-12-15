@@ -16,7 +16,7 @@
 .vAttachDatabase <- function(x, table = NULL, replace = FALSE) {
 
 	if (inherits(x, "GVector")) {
-		.restore(x)
+		.locationRestore(x)
 		src <- sources(x)
 	} else {
 		src <- x

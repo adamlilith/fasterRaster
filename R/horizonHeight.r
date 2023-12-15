@@ -62,8 +62,8 @@ methods::setMethod(
 	
 	if (!is.null(maxDist)) args$maxdistance <- maxDist
 	
-	.restore(x)
-	region(x)
+	.locationRestore(x)
+	.region(x)
 	
 	src <- .makeSourceName("horizon", "rast")
 	for (i in seq_along(directions)) {

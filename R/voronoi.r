@@ -21,14 +21,14 @@ methods::setMethod(
 
 	if (!(geomtype(x) %in% c("points", "polygons"))) stop("The vector must represent spatial points or polygons.")
 	
-	.restore(x)
+	.locationRestore(x)
 
 	# do not expand region beyond x
-	regionExt(x, respect = "dimensions")
+	.regionExt(x, respect = "dimensions")
 	if (buffer != 0) {
 		
 		# set region extent to buffered vector
-		extent <- regionExt()
+		extent <- .regionExt()
 		w <- extent["xmin"]
 		e <- extent["xmax"]
 		s <- extent["ymin"]

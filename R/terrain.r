@@ -43,14 +43,14 @@ methods::setMethod(
 	if (length(v) == 1L && v == "*") v <- metrics
 	v <- omnibus::pmatchSafe(v, metrics)
 	
-	.restore(x)
-	region(x)
+	.locationRestore(x)
+	.region(x)
 	
 	args <- list(
 		cmd = "r.slope.aspect",
 		elevation = sources(x),
-		nprocs = getFastOptions("cores"),
-		memory = getFastOptions("memory"),
+		nprocs = faster("cores"),
+		memory = faster("memory"),
 		flags = c(.quiet(), "overwrite", "e")
 	)
 	

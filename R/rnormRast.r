@@ -33,8 +33,8 @@ methods::setMethod(
     mu <- rep(mu, length.out = n)
     sigma <- rep(sigma, length.out = n)
 
-    .restore(x)
-    region(x)
+    .locationRestore(x)
+    .region(x)
 
     srcs <- .makeSourceName("rnormScaled", "raster", n)
 

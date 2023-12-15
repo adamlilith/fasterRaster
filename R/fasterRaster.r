@@ -5,12 +5,10 @@
 #' ## Most useful tutorials and functions:
 #' A [quick-start][tutorial_getting_started] tutorial\cr
 #' A tutorial on [raster data types][tutorial_raster_data_types]\cr
-#' [faster()]: Initiate a **GRASS** session\cr
+#' [faster()]: Set the directory where **GRASS** is installed on your system, and set or get other package-wide options\cr
 #' [fast()]: Convert a `SpatRaster`, `SpatVector`, or `sf` vector to **fasterRaster**'s raster format (`GRaster`s) or vector format (`GVector`s), or load one from a file\cr
 #' [rast()], [vect()], and [st_as_sf()]: Convert `GRaster`s and `GVector`s to `SpatRaster`s, `SpatVector`s, or `sf` vectors\cr
 #' [writeRaster()] and [writeVector()]: Save `GRaster`s or `GVector`s to disk\cr
-#' [restoreSession()]: Revert to another **GRASS** ["location" or "mapset"][tutorial_sessions], or restart a **GRASS** session saved to disk\cr
-#' [setFastOptions()] and [getFastOptions()]: Set options for working with **fasterRaster**\cr
 #'
 #' ## Properties of `GRasters`
 #' [crs()]: Coordinate reference system\cr
@@ -18,14 +16,11 @@
 #' [dim()]: Number of rows and columns\cr
 #' [ext()], [N()], [S()], [E()], [W()], [top()], and [bottom()]: Spatial extent\cr
 #' [freq()]: Frequencies of cell values in a raster\cr
-#' [global()]: Summary statistics\cr
 #' [is.2d()] and [is.3d()]: Is an object 2- or 3-dimensional?\cr
-#' [is.int()], [is.float()], [is.doub()]: `GRaster` data type (integer/float/double)\cr
+#' [is.int()] / [is.cell()], [is.float()], [is.doub()]: `GRaster` data type (integer/float/double)\cr
 #' [is.factor()]: Does a raster represent categorical data?\cr
 #' [is.lonlat()]: Is an object projected (e.g., in WGS84)?\cr
 #' [levels()]: Names of levels in a categorical `GRaster`\cr
-#' [location()]: **GRASS** "location" of an object or the active session\cr
-#' [mapset()]: **GRASS** "mapset" of an object or the active session\cr
 #' [minmax()]: Minimum and maximum values across all non-`NA` cells\cr
 #' [names()]: `GRaster` names\cr
 #' [ncol()]: Number of columns\cr
@@ -39,7 +34,6 @@
 #' [nlevels()]: Number of categories\cr
 #' [res()], [xres()], [yres()], and [zres()]: Spatial resolution\cr
 #' [sources()]: Name of the `GRaster` in **GRASS**\cr
-#' [st_crs()]: Coordinate reference system\cr
 #' [topology()]: Dimensionality (2D or 3D)\cr
 #' [zext()]: Vertical extent\cr
 #' [zres()]: Vertical resolution\cr
@@ -49,7 +43,7 @@
 #' [Logical comparisons][Compare-methods]: `<`, `<=`, `==`, `!=`, `>=`, and `>`, plus `%in%` (for categorical rasters only)\cr
 #'
 #' Single-layer functions (applied to each layer of a `GRaster`):
-#' - `NA`s: [is.na()] and [not.na()] \cr
+#' - Working with `NA`s: [is.na()] and [not.na()] \cr
 #' - Trigonometry: [sin()], [cos()], [tan()], [asin()], [acos()], [atan()], [atan2()] \cr
 #' - Logarithms and powers: [exp()], [log()], [ln()], [log1p()], [log2()], [log10()], [sqrt()] \cr
 #' - Rounding: [round()], [floor()], [ceiling()], [trunc()] \cr
@@ -123,6 +117,7 @@
 #' [catNames()]: Names of each "levels" table\cr
 #' [cats()]: "Levels" table of a categorical raster\cr
 #' [combineCats()]: Combine categories from two or more categorical rasters\cr
+#' [complete.cases()]: Find rows of a categorical `GRaster`'s "levels" table that have no `NA`s in them\cr
 #' [droplevels()]: Remove one or more levels\cr
 #' [freq()]: Frequency of each category across cells of a raster\cr
 #' [is.factor()]: Is a raster categorical?\cr
@@ -130,6 +125,7 @@
 #' \code{\link[fasterRaster]{levels<-}}: Set "levels" table of a categorical raster\cr
 #' [match()], `%in%`, and %notin%: Find which cells of a `GRaster` match or do not match certain category labels\cr
 #' [minmax()]: "Lowest" and "highest" category values of categorical rasters (when argument `levels = TRUE`)\cr
+#' [missing.cases()]: Find rows of a categorical `GRaster`'s "levels" table that have at least one `NA` in them\cr
 #' [missingCats()]: Values that have no category assigned to them\cr
 #' [nlevels()]: Number of levels\cr
 #' [zonalGeog()]: Geographic statistics (area, perimeter, fractal dimension, etc.) for sets of cells with the same values
@@ -149,15 +145,12 @@
 #' [is.2d()] and [is.3d()]: Is an object 2- or 3-dimensional?\cr
 #' [is.lonlat()]: Is an object projected (e.g., in WGS84)?\cr
 #' [is.points()], [is.lines()], [is.polygons()]: Does a `GVector` represent points, lines, or polygons?\cr
-#' [location()]: **GRASS** "location" of an object or the active session\cr
-#' [mapset()]: **GRASS** "mapset" of an object or the active session\cr
 #' [names()]: Names of `GVector` fields\cr
 #' [ncol()]: Number of fields\cr
 #' [ngeom()]: Number of geometries (points, lines, polygons)\cr
 #' [nrow()]: Number of rows in a vector data table\cr
 #' [nsubgeom()]: Number of subgeometries (points, lines, polygons that make up single- and multipart geometries)\cr
 #' [sources()]: Name of the vector in **GRASS**\cr
-#' [st_crs()]: Coordinate reference system\cr
 #' [topology()]: Dimensionality (2D or 3D)\cr
 #' [zext()]: Vertical extent\cr
 #'
@@ -172,6 +165,7 @@
 #' [buffer()]: Create a polygon around/inside a `GVector`\cr
 #' [cleanGeom()]: Fix undesirable geometries of a `GVector`\cr
 #' [clusterPoints()]: Identify clusters of points\cr
+#' [complete.cases()]: Find rows of a `GVector`'s data table that have no `NA`s in them\cr
 #' [connectors()]: Create lines connecting nearest features of two `GVector`s\cr
 #' [convHull()]: Minimum convex hull\cr
 #' [crds()]: Extract coordinates of a `GVector`\cr
@@ -188,6 +182,7 @@
 #' [hexagons()]: Create a hexagonal grid\cr
 #' [intersect()] or `*`: Intersection of two `GVectors`.\cr
 #' [kernel()]: Kernel density estimator of points.\cr
+#' [missing.cases()]: Find rows of a `GVector`'s data table that have at least `NA` in them\cr
 #' [project()]: Change coordinate reference system\cr
 #' [rasterize()]: Convert a `GVector` to a `GRaster`\cr
 #' [simplifyGeom()]: Remove vertices\cr
@@ -202,11 +197,11 @@
 #'
 #' ## Converting between data types
 #' [as.contour()]: Convert a `GRaster` to a `GVector` representing contour lines\cr
-#' [as.doub()]: Convert a `GRaster` to a double-floating point raster (***GRASS** data type `DCELL`)\cr
+#' [as.doub()]: Convert a `GRaster` to a double-floating point raster (**GRASS** data type `DCELL`)\cr
 #' [as.data.frame()]: Convert `GVector` to a `data.frame`\cr
 #' [as.data.table()]: Convert `GVector` to a `data.table`\cr
-#' [as.float()]: Convert a `GRaster` to a floating-point raster (***GRASS** data type `FCELL`)\cr
-#' [as.int()]: Convert a `GRaster` to an integer raster (***GRASS** data type `CELL`)\cr
+#' [as.float()]: Convert a `GRaster` to a floating-point raster (**GRASS** data type `FCELL`)\cr
+#' [as.int()]: Convert a `GRaster` to an integer raster (**GRASS** data type `CELL`)\cr
 #' [as.points()], [as.lines()], and [as.polygons()]: Convert a `GRaster` to a `GVector`\cr
 #' [fast()]: Convert a `SpatRaster`, `SpatVector`, or `sf` vector to a `GRaster` or `GVector`, or load one from a file\cr
 #' [categories()] and [levels<-]: Convert an integer raster to a categorical ("factor") raster.
@@ -214,14 +209,6 @@
 #' [rasterize()]: Convert a `GVector` to a `GRaster`\cr
 #' [st_as_sf()]: Convert a `GVector` to a `sf` vector\cr
 #' [vect()]: Convert a `GVector` to a `SpatVector`\cr
-#'
-#' ## Functions that operate on **GRASS** "sessions":
-#' [crs()]: Coordinate reference system of the current location\cr
-#' [location()]: **GRASS** "location" of an object or the active session\cr
-#' [locations()]: Meta-data on all active **GRASS** "locations" in the active session\cr
-#' [mapset()]: **GRASS** "mapset" of an object or the active session\cr
-#' [restoreSession()]: Restore a previous **GRASS** session or switch **GRASS** locations/mapsets\cr
-#' [removeSession()]: Delete a **GRASS** session (location, mapset(s), and all associated files)\cr
 #'
 #' ## General purpose functions
 #' [appendLists()]: Append values to elements of a list from another list\cr
@@ -233,13 +220,6 @@
 #' [replaceNAs()]: Replace `NA`s in columns of a `data.table` or `data.frame`, or in a vector\cr
 #' [seqToSQL()]: Format a numeric series into an SQL value call.\cr
 #' [update()]: Refresh metadata in a `GRaster` or `GVector` object.\cr
-#'
-#' ## Functions that operate on **GRASS** "regions" (useful mostly to developers):
-#' Comparisons between `GRegion`s using the `==` and `!=` operators.
-#' [region()]: Change or report the active region's extent and resolution\cr
-#' [regionDim()]: Change or report the active region's resolution (also [dim()] and related functions, with no arguments)
-#' [regionExt()]: Change or report the active region's extent (also [ext()] and related functions, with no arguments)\cr
-#' [regionRes()]: Change or report the active region's dimensions (also [res()] and related functions, with no arguments)\cr
 #'
 #' ## Example data
 #' [appFunsTable][appFunsTable] (see also [appFuns()]): Functions usable by the [app()] function\cr
@@ -254,11 +234,41 @@
 #' [madRivers][madRivers]: Rivers vector\cr
 #' [vegIndices][vegIndices]: Vegetation indices that can be calculated using [vegIndex()].
 #' 
-#' ## Esoteric tutorials
-#' [Sessions, locations, and mapsets][tutorial_sessions]\cr
-#' [Raster data types][tutorial_raster_data_types]\cr
-#' [Regions][tutorial_regions]\cr
-#' [Undocumented functions][tutorial_undocumented_functions]\cr
+#' ## Esoteric, exported yet often (publicly) undocumented functions for developers, plus tutorials
+#' Comparisons between `GRegion`s can be performed using the `==` and `!=` operators.\cr
+#' Tutorial on **GRASS** [regions][tutorial_regions]\cr
+#' Tutorial on **GRASS** ["locations" and mapsets][tutorial_locations_mapsets]\cr
+#' `.copyGSpatial()`: Make a copy of the **GRASS** file pointed to by a `GRaster` or `GVector`\cr
+#' `.fileExt()`: Get file extension\cr
+#' `.layerIndex()`: Gets the index of `GRaster` layers from a numeric, integer, character, or logical vector\cr
+#' [.locationCreate()] Make a connection to **GRASS** (i.e., start **GRASS** from within **R**) and create a location\cr
+#' [.locationDelete()] Deletes all files associated with a **GRASS** "location" and mapset\cr
+#' [.locationFind()]: Find a specific **GRASS** "location" that already exists\cr
+#' [.locationRestore()] Reconnect **GRASS** to a previously-created **GRASS** "location"\cr
+#' [.locations()]: List of all available "locations"\cr
+#' `.ls()`: Lists the `sources` of all objects in the active **GRASS** "location"\cr
+#' `.makeGRaster()` and `.makeGVector()`: Make `GRaster`s or `GVector`s from a vector of `sources`, which are pointers to files in **GRASS**\cr
+#' `.makeSourceNames()`: Makes one or more statistically unique strings that can be used as file names to represent rasters or vectors in **GRASS**\cr
+#' `.mapset()`: **GRASS** "mapset" of an object or the active session\cr
+#' `.message()`: Display a warning or message if the given warning has not been displayed since **fasterRaster** was attached or if a given number or hours has passed since then\cr
+#' `.minVal()` and `.maxVal()`: Values in the `@minVal` and `@maxVal` slots in a `GRaster`\cr
+#' `.nlevels()`: Number of levels in a `SpatVector`, `data.frame`, `data.table`, empty string, or a list of `data.frame`s, `data.table`s, and/or empty strings.\cr
+#' `.projection()`: Value of the `@projection` slot in a `GRaster` or `GVector`\cr
+#' `.quiet()`: Returns "quiet" if `faster("verbose")` is `TRUE`\cr
+#' `.rastInfo()` and `.vectInfo()`: Metadata for a **GRASS** raster or vector\cr
+#' [.region()]: Change or report the active region's extent and resolution\cr
+#' [.regionDim()]: Change or report the active region's resolution (also [dim()] and related functions, with no arguments)\cr
+#' [.regionExt()]: Change or report the active region's extent (also [ext()] and related functions, with no arguments)\cr
+#' [.regionRes()]: Change or report the active region's dimensions (also [res()] and related functions, with no arguments)\cr
+#' `.rename()`: Rename a **GRASS** raster or vector\cr
+#' `.rm()`: Delete rasters or vectors in **GRASS**\cr
+#' `.vAsDataTable()`: Convert the attribute table linked to a vector in **GRASS** to a `data.table`. This table is distinct from the attribute table attached to a `GVector`\cr
+#' `.vAttachDatabase()`: Add a database table to the **GRASS** representation of a `GVector`\cr
+#' `.vCats()`: Get a `data.table` with a single column named `cat`, which corresponds to the **GRASS** attribute table's `cat` column\cr
+#' `.vHasTable()`: Tests if **GRASS** vector has a database\cr
+#' `.vIncrementCats()`: Increment category values of a `GVector`\cr
+#' `.vNames()`: "GRASS" vector attribute table column names\cr
+#' `grassStarted()`: Has a connection **GRASS** been made within the current **R** session?\cr
 #'
 #' @docType package
 #' @author Adam B. Smith

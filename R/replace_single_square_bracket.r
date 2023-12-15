@@ -34,8 +34,8 @@ setMethod(
 	if (!inherits(value, c("numeric", "integer", "logical"))) stop("Can only assign numeric, integer, or logical values to a raster.")
 	if (length(value) != 1L) stop("Cannot assign multiple values to a raster.")
 	
-	.restore(x)
-	region(x)
+	.locationRestore(x)
+	.region(x)
 	
 	if (is.na(value)) {
 		value <- "null()"

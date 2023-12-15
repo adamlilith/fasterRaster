@@ -23,34 +23,16 @@ Character.
 \code{sources()} retrieves the name of a raster or vector in \strong{GRASS}. \code{GRaster}s and \code{GVector}s are actually pointers to objects stored in a *\emph{GRASS} database. When using \strong{fasterRaster} functions on rasters and vectors, the commands are translated into \strong{GRASS} commands and executed on the objects named in the pointers. These objects use a "source" (which is really a filename) to refer to the \strong{GRASS} objects. In select cases, it can help to get the "sources" of a \code{GRaster} or \code{GVector}. This function is not of use to most users.
 }
 \examples{
-\dontrun{
-# NB This example is in a "dontrun{}" block because it requires users to have
-# GRASS GIS Version 8+ installed on their system.
+if (grassStarted()) {
 
-# IMPORTANT #1: If you already have a GRASS session started, you will need to
-# run the line below and the last line in this example to work with it again.
-# If you have not started a GRASS session, you can skip this step and go to
-# step #2.
-opts. <- getFastOptions()
-
-# IMPORTANT #2: Select the appropriate line below and change as necessary to
-# where GRASS is installed on your system.
-grassDir <- "/Applications/GRASS-8.3.app/Contents/Resources" # Mac
-grassDir <- "C:/Program Files/GRASS GIS 8.3" # Windows
-grassDir <- "/usr/local/grass" # Linux
-
-# setup
+# Setup
 library(terra)
 
-# example data
+# Example data
 madElev <- fastData("madElev")
 madForest2000 <- fastData("madForest2000")
 
-# start GRASS session for examples only
-faster(x = madElev, grassDir = grassDir,
-workDir = tempdir(), location = "examples") # line only needed for examples
-
-# convert SpatRasters to GRasters
+# Convert SpatRasters to GRasters
 elev <- fast(madElev)
 forest <- fast(madForest2000)
 
@@ -170,10 +152,6 @@ landsat <- fast(madLANDSAT) # projects matrix
 # correlation and covariance matrices
 cor(landsat) # correlation
 cov(landsat) # covariance
-
-# IMPORTANT #3: Revert back to original GRASS session if needed.
-restoreSession(opts.)
-removeSession("examples")
 
 }
 }

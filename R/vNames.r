@@ -1,4 +1,4 @@
-#' GRASS vector attribute table column names
+#' "GRASS" vector attribute table column names
 #'
 #' @description This function returns the column names of a **GRASS** vector's attribute table.
 #'
@@ -12,7 +12,7 @@
 .vNames <- function(x) {
 
 	if (inherits(x, "GVector")) {
-		.restore(x)
+		.locationRestore(x)
 		src <- sources(x)
 	} else {
 		src <- x

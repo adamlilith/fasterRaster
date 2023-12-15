@@ -18,8 +18,8 @@ methods::setMethod(
 	signature = c(x = "GRaster"),
 	function(x, y) {
 	
-	.restore(x)
-	region(x)
+	.locationRestore(x)
+	.region(x)
 
 	if (nlyr(y) > 1L) {
 		warning("The ", sQuote("y"), " raster has more than one layer. On the first will be used.")

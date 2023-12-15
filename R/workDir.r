@@ -1,8 +1,8 @@
-#' Get a GSession's working directory
+#' Get a GLocation's working directory
 #'
-#' @description This function returns the working directory of a `GSession` object.
+#' @description This function returns the working directory of a `GLocation` object.
 #'
-#' @param x A `GSession` object.
+#' @param x A `GLocation` object.
 #'
 #' @returns Character.
 #'
@@ -11,6 +11,6 @@
 #' @exportMethod workDir
 methods::setMethod(
 	f = "workDir",
-	signature = c(x = "GSession"),
+	signature = c(x = "GLocation"),
 	function(x)	x@workDir
 )

@@ -8,61 +8,29 @@
 \alias{fast,sf-method}
 \title{Create a GRaster or GVector}
 \usage{
-\S4method{fast}{character}(
-  x,
-  checkCRS = TRUE,
-  method = NULL,
-  fallback = TRUE,
-  wrap = FALSE,
-  snap = NULL,
-  warn = TRUE,
-  ...
-)
+\S4method{fast}{character}(x, rastOrVect = NULL, snap = NULL, ...)
 
-\S4method{fast}{SpatRaster}(
-  x,
-  checkCRS = TRUE,
-  method = NULL,
-  fallback = TRUE,
-  wrap = FALSE,
-  warn = TRUE
-)
+\S4method{fast}{SpatRaster}(x)
 
-\S4method{fast}{SpatVector}(x, checkCRS = TRUE, snap = NULL, warn = TRUE)
+\S4method{fast}{SpatVector}(x, snap = NULL)
 
-\S4method{fast}{sf}(x, checkCRS = TRUE, snap = NULL, warn = TRUE)
+\S4method{fast}{sf}(x, snap = NULL)
 }
 \arguments{
 \item{x}{Any one of:
 \itemize{
-\item A \code{SpatRaster} raster. Rasters can have one or more layers. They will retain their "layerdness" in most \strong{fasterRaster} functions.
+\item A \code{SpatRaster} raster. Rasters can have one or more layers.
 \item A \code{SpatVector} or \code{sf} spatial vector.
 \item A character string with the path and filename of a raster or vector to be loaded directly into \strong{GRASS}. The function will attempt to ascertain the type of object from the file extension (raster or vector), but it can help to indicate which it is using the \code{rastOrVect} argument if it is unclear.
 }}
 
-\item{checkCRS}{Logical: If \code{TRUE} (default), compare the coordinate reference system (CRS) of the raster or vector to that of the current location. If it is different, then project the raster or vector while importing. If \code{FALSE}, ignore differences in CRS (if any), and import the raster or vector.}
+\item{rastOrVect}{Either \code{NULL} (default), or \code{"raster"} or \code{"vector"}: If \code{x} is a filename, then the function will try to ascertain whether it represents a raster or a vector, but sometimes this will fail. In that case, it can help to specify if the file holds a raster or vector. Partial matching is used.}
 
-\item{method}{Character or \code{NULL} (rasters only): If \code{x} does not have the same coordinate reference system as the currently active \strong{GRASS} "\link[=tutorial_sessions]{location}", then it will be projected when it is imported. You may need to specify which method is used to conduction the transformation. Partial matching is used.
-\itemize{
-\item \code{NULL} (default): Automatically choose based on raster properties (\code{near} for categorical data, \code{bilinear} for continuous data)
-\item \code{"near"}: Nearest neighbor. Best for categorical data, and often a poor choice for continuous data.
-\item \code{"bilinear"}: Bilinear interpolation (default for non-categorical data; uses weighted values from 4 cells).
-\item \code{"bicubic"}: Bicubic interpolation (uses weighted values from 16 cells).
-\item \code{"lanczos"}: Lanczos interpolation (uses weighted values from 25 cells).
-}}
-
-\item{fallback}{Logical (rasters only): If \code{TRUE} (default), then use "lower" resampling methods to fill in \code{NA} cells when a "higher" method is used. For example, if \code{method = "bicubic"}, \code{NA} cells will be filled in using the \code{bilinear} method, except when that results in \code{NA}s, in which case the \code{near} method will be used. Fallback causes fewer cells to revert to \code{NA} values, so may be better at capturing complex "edges" (e.g., coastlines). Fallback does increase processing time because each "lower" method must be applied, then results merged.}
-
-\item{wrap}{Logical (rasters only): When projecting rasters that "wrap around" (i.e., whole-world rasters or rasters that have edges that actually circle around to meet on the globe), \code{wrap} should be \code{TRUE} to avoid removing rows and columns from the "edge" of the map. The default is \code{FALSE}.}
-
-\item{snap}{\code{NULL} (default) or a positive numeric value (vectors only): Sometimes, polygons created in other software are topologically incorrect--the borders of adjacent polygons may cross one another, or there may be small gaps between them. These errors can be corrected by slightly moving vertices. The value of \code{snap} indicates how close vertices need to be for them to be shifted to to the same location for a correct topology. Small values are recommended, and units are in map units (usually meters). By default, this is \code{NULL}, meaning no snapping is done. Vectors that have been snapped may need to be cleaned using \code{\link[=cleanGeom]{cleanGeom()}} with the \code{break}, \code{duplicated}, and \code{smallAngles} tools.}
-
-\item{warn}{Logical: If \code{TRUE}, display a warning when projecting the vector or raster.}
+\item{snap}{For polygon \code{GVector}s only: Either \code{NULL} (default) or a positive numeric value: Sometimes, polygons created in other software are topologically incorrect--the borders of adjacent polygons may cross one another, or there may be small gaps between them. These errors can be corrected by slightly moving vertices. The value of \code{snap} indicates how close vertices need to be for them to be shifted to to the same location for a correct topology. Small values are recommended, and units are in map units (usually meters). By default, this is \code{NULL}, meaning no snapping is done. Vectors that have been snapped may need to be cleaned using \code{\link[=cleanGeom]{cleanGeom()}} with the \code{break}, \code{duplicated}, and \code{smallAngles} tools.}
 
 \item{...}{Other arguments. These are typically used internally so not of use to most users. They can include:
 \itemize{
-\item \code{rastOrVect} Character (\code{"raster"} or \code{"vector"}). If \code{x} is a filename, then the function will try to ascertain whether it represents a raster or a vector, but sometimes this will fail. In that case, it can help to specify if the file holds a raster or vector. Partial matching is used.
-\item \code{levels} (\code{GRaster}s): A \code{data.frame}, \code{data.table}, or list of \code{data.frame}s or \code{data.table}s with categories for categorical rasters: The first column of a table corresponds to raster values. A subsequent column corresponds to category labels. By default, the second column is assumed to represent labels, but his can be changed with \verb{[activeCat<-]}. Tables can also be \code{NULL} (e.g., \code{data.fame(NULL)}).
+\item \code{levels} (\code{GRaster}s): A \code{data.frame}, \code{data.table}, or list of \code{data.frame}s or \code{data.table}s with categories for categorical rasters: The first column of a table corresponds to raster values and must be of type \code{integer}. A subsequent column corresponds to category labels. By default, the second column is assumed to represent labels, but this can be changed with \code{\link[fasterRaster]{activeCat<-}}. Level tables can also be \code{NULL} (e.g., \code{data.fame(NULL)}).
 \item \code{table} (\code{GVector}s): A \code{data.frame} or \code{data.table} with one row per geometry in a \code{GVector}: Serves as an attribute table.
 }}
 }
@@ -70,61 +38,179 @@
 A \code{GRaster} or \code{GVector}.
 }
 \description{
-\code{fast()} imports a raster or vector into the active \strong{GRASS} session and from it creates a \code{GRaster} or \code{GVector}.
+\code{fast()} creates a \code{GRaster} or \code{GVector} from a file, or from a \code{SpatRaster}, \code{SpatVector}, or \code{sf} vector. If \strong{GRASS} has not yet been started with an object that has the same coordinate reference system, this function will also create a connection to \strong{GRASS} for the given coordinate reference system.
 
-Rasters and vectors can be imported from \code{SpatRaster}s, \code{SpatVector}s, or \code{sf} objects, or from files on disk. \strong{GRASS} supports loading from disk a variety of raster formats (see the \strong{GRASS} manual page for \code{r.in.gdal}) and vector formats (see the \strong{GRASS} manual page for \code{v.in.ogr}), though not all of them will work with this function.
-
-Rasters can have "levels" (i.e., categories associated with values). This can be specified using the \code{levels} argument. If a \code{SpatRaster} already has levels associated with it, these will be attached to the \code{GRaster} automatically. Vectors can also have attribute tables, though they do not need to. If they do, there must be one row per geometry (point, line, or polygon).
-
-The \code{fast()} function will project a raster or vector to the current "\link[=tutorial_sessions]{location's}" coordinate reference system. Users can specify how to do this using the \code{method}, \code{fallback}, and \code{wrap} arguments.
-}
-\details{
-When projecting a raster, the "fallback" methods in \code{r.import} are actually used, even though the \code{method} argument takes the strings for non-fallback methods. See the manual page for the \code{r.import} \strong{GRASS} module.
+\strong{GRASS} supports loading from disk a variety of raster formats (see the \strong{GRASS} manual page for \href{https://grass.osgeo.org/grass84/manuals/r.in.gdal.html}{\code{r.in.gdal}}) and vector formats (see the \strong{GRASS} manual page for \href{https://grass.osgeo.org/grass84/manuals/v.in.ogr.html}{\code{v.in.ogr}}), though not all of them will work with this function.
 }
 \examples{
-\dontrun{
-# NB This example is in a "dontrun{}" block because it requires users to have
-# GRASS GIS Version 8+ installed on their system.
+if (grassStarted()) {
 
-# IMPORTANT #1: If you already have a GRASS session started, you will need to
-# run the line below and the last line in this example to work with it again.
-# If you have not started a GRASS session, you can skip this step and go to
-# step #2.
-opts. <- getFastOptions()
-
-# IMPORTANT #2: Select the appropriate line below and change as necessary to
-# where GRASS is installed on your system.
-
-grassDir <- "/Applications/GRASS-8.3.app/Contents/Resources" # Mac
-grassDir <- "C:/Program Files/GRASS GIS 8.3" # Windows
-grassDir <- "/usr/local/grass" # Linux
-
-# setup
+# Setup
 library(sf)
 library(terra)
 
-# example data
+# Example data
 madElev <- fastData("madElev")
+madForest2000 <- fastData("madForest2000")
+madCoast0 <- fastData("madCoast0")
 madRivers <- fastData("madRivers")
+madDypsis <- fastData("madDypsis")
 
-# start GRASS session for examples only
-faster(x = madElev, grassDir = grassDir,
-workDir = tempdir(), location = "examples") # line only needed for examples
+### GRaster properties
+######################
 
-# convert a SpatRaster to a GRaster
+# convert SpatRasters to GRasters
 elev <- fast(madElev)
-elev
+forest <- fast(madForest2000)
 
-# convert an sf vector to a GVector
+# plot
+plot(elev)
+
+dim(elev) # rows, columns, depths, layers
+nrow(elev) # rows
+ncol(elev) # columns
+ndepth(elev) # depths
+nlyr(elev) # layers
+
+res(elev) # resolution
+
+ncell(elev) # cells
+ncell3d(elev) # cells (3D rasters only)
+
+topology(elev) # number of dimensions
+is.2d(elev) # is it 2D?
+is.3d(elev) # is it 3D?
+
+minmax(elev) # min/max values
+
+# information on the GRASS session in which the GRaster is located
+location(elev) # location
+mapset(elev) # mapset
+
+# "names" of the object
+names(elev)
+
+# coordinate reference system
+crs(elev)
+
+# extent (bounding box)
+ext(elev)
+
+# data type
+datatype(elev)
+
+# assigning
+copy <- elev
+copy[] <- pi # assign all cells to the value of pi
+copy
+
+# concatenating multiple GRasters
+rasts <- c(elev, forest)
+rasts
+
+# adding a raster "in place"
+add(rasts) <- ln(elev)
+rasts
+
+# subsetting
+rasts[[1]]
+rasts[["madForest2000"]]
+
+# assigning
+rasts[[4]] <- elev > 500
+
+# number of layers
+nlyr(rasts)
+
+# names
+names(rasts)
+names(rasts) <- c("elev_meters", "forest", "ln_elev", "high_elevation")
+rasts
+
+### GVector properties
+######################
+
+# convert sf vectors to GVectors
+coast <- fast(madCoast4)
 rivers <- fast(madRivers)
-rivers
+dypsis <- fast(madDypsis)
 
-# IMPORTANT #3: Revert back to original GRASS session if needed.
-restoreSession(opts.)
-removeSession("examples")
+# extent
+ext(rivers)
+
+W(rivers) # western extent
+E(rivers) # eastern extent
+S(rivers) # southern extent
+N(rivers) # northern extent
+top(rivers) # top extent
+bottom(rivers) # bottom extent
+
+# coordinate reference system
+crs(rivers)
+
+# column names and data types
+names(coast)
+datatype(coast)
+
+# session information
+location(rivers) # GRASS location
+mapset(rivers) # GRASS mapset
+
+# points, lines, or polygons?
+geomtype(dypsis)
+geomtype(rivers)
+geomtype(coast)
+
+is.points(dypsis)
+is.points(coast)
+
+is.lines(rivers)
+is.lines(dypsis)
+
+is.polygons(coast)
+is.polygons(dypsis)
+
+# dimensions
+nrow(rivers) # how many spatial features
+ncol(rivers) # hay many columns in the data frame
+
+# 2- or 3D
+topology(rivers) # dimensionality
+is.2d(elev) # is it 2D?
+is.3d(elev) # is it 3D?
+
+# Update values from GRASS
+# (Reads values from GRASS... will not appear to do anything in this case)
+update(elev)
+
+### operations on GVectors
+##########################
+
+# convert to data frame
+as.data.frame(rivers)
+
+# subsetting
+rivers[c(1:2, 5)] # select 3 rows/geometries
+rivers[-5:-11] # remove rows/geometries 5 through 11
+rivers[ , 1] # column 1
+rivers[ , "NAM"] # select column
+rivers[["NAM"]] # select column
+rivers[1, 2] # row/geometry 1 and column 1
+rivers[c(TRUE, FALSE)] # select every other geometry (T/F vector is recycled)
+rivers[ , c(TRUE, FALSE)] # select every other column (T/F vector is recycled)
+
+# Refresh values from GRASS
+# (Reads values from GRASS... will not appear to do anything in this case
+# since the rivers object is up-to-date):
+rivers <- update(rivers)
+
+# Concatenating multiple vectors
+rivers2 <- c(rivers, rivers)
+dim(rivers)
+dim(rivers2)
 
 }
 }
 \seealso{
-\code{\link[rgrass:readRAST]{rgrass::read_RAST()}} and \code{\link[rgrass:readVECT]{rgrass::read_VECT()}}, plus \strong{GRASS} modules \code{r.in.gdal}, \code{r.import}, and \code{v.in.ogr}.
+\code{\link[rgrass:readRAST]{rgrass::read_RAST()}} and \code{\link[rgrass:readVECT]{rgrass::read_VECT()}}, plus \strong{GRASS} modules \href{https://grass.osgeo.org/grass84/manuals/r.in.gdal.html}{\code{v.in.ogr}}, \href{https://grass.osgeo.org/grass84/manuals/v.in.ogr.html}{\code{v.in.ogr}}, and \href{https://grass.osgeo.org/grass84/manuals/r.import.html}{\code{r.import}}.
 }

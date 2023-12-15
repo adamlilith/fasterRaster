@@ -20,9 +20,9 @@ methods::setMethod(
 	signature = c(x = "GVector", y = "GRaster"),
 	function(x, y, n = 1) {
 	
-	.restore(x)
+	.locationRestore(x)
 	compareGeom(x, y)
-	region(y)
+	.region(y)
 
 	src <- .makeSourceName("v_decimate", "vector")
 	rgrass::execGRASS(

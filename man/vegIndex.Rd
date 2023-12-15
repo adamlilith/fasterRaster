@@ -47,31 +47,13 @@ A \code{GRaster}.
 This function calculates one of many types of vegetation indices from a raster with four bands representing blue (B), green (G), red (R), and near infrared (NIR), plus possibly channels 5 and 7. The function requires rasters that represent surface reflectance, so should have values that fall in the range 0 to 1, unless they are digital number rasters (e.g., integers in the range 0 to 255). If digital number format is used, then the \code{bits} argument should be defined.
 }
 \examples{
-\dontrun{
-# NB This example is in a "dontrun{}" block because it requires users to have
-# GRASS GIS Version 8+ installed on their system.
-
-# IMPORTANT #1: If you already have a GRASS session started, you will need to
-# run the line below and the last line in this example to work with it again.
-# If you have not started a GRASS session, you can skip this step and go to
-# step #2.
-opts. <- getFastOptions()
-
-# IMPORTANT #2: Select the appropriate line below and change as necessary to
-# where GRASS is installed on your system.
-grassDir <- "/Applications/GRASS-8.3.app/Contents/Resources" # Mac
-grassDir <- "C:/Program Files/GRASS GIS 8.3" # Windows
-grassDir <- "/usr/local/grass" # Linux
+if (grassStarted()) {
 
 # Setup
 library(terra)
 
 # Elevation raster, rivers vector
 madLANDSAT <- fastData("madLANDSAT")
-
-# Start GRASS session for examples only:
-faster(x = madLANDSAT, grassDir = grassDir,
-workDir = tempdir(), location = "examples") # line only needed for examples
 
 # Convert a SpatRaster to a GRaster:
 landsat <- fast(madLANDSAT)
@@ -88,10 +70,6 @@ rnir <- vegIndex(landsat, index = c("rnir"), r = 1, nir = 4, bits = 8)
 # Note: Some values are highly skewed, likely due to cloud cover and other
 # anomalies that should be corrected.
 plot(rnir)
-
-# IMPORTANT #3: Revert back to original GRASS session if needed.
-restoreSession(opts.)
-removeSession("examples")
 
 }
 }

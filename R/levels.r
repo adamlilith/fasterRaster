@@ -74,7 +74,7 @@ methods::setMethod(
 	
 	# out <- lapply(out, .replace0LevelsWithNull)
 
-	if (!getFastOptions("useDataTable")) {
+	if (!faster("useDataTable")) {
 		for (i in seq_along(out)) {
 			if (numLevels[i] > 0L) out[[i]] <- as.data.frame(out[[i]])
 		}

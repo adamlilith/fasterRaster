@@ -30,7 +30,7 @@ methods::setMethod(
 
 	} else {
 
-		.restore(x)
+		.locationRestore(x)
 		src <- .makeSourceName("v_fill_holes", "vector")
 		rgrass::execGRASS(
 			cmd = "v.fill.holes",

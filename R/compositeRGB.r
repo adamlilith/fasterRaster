@@ -39,8 +39,8 @@ methods::setMethod(
 
 	compareGeom(r, g)
 	compareGeom(r, b)
-	.restore(r)
-	region(r)
+	.locationRestore(r)
+	.region(r)
 
 	if (!(length(levels %in% c(1L, 3L)))) stop("Argument ", sQuote("levels"), " must have 1 or 3 values.")
 	if (length(levels) == 1L) levels <- rep(levels, 3L)

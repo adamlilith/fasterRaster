@@ -4,7 +4,7 @@
 #'
 #' @param x,y,... `GRaster`s or `GVector`s. If `y` is `GRaster`, then the `...` must also be `GRaster`s (or missing). If `y` is `GVector`, then the `...` must also be `GVector`s (or missing).
 #'
-#' @param location,mapset Logical: Compare **GRASS** ["locations" and "mapsets"][tutorial_sessions]. Default is `TRUE`.
+#' @param location,mapset Logical: Compare **GRASS** ["locations" and "mapsets"][tutorial_locations_mapsets]. Default is `TRUE`.
 #' 
 #' @param crs Logical: Compare coordinate reference systems. Default is `TRUE`.
 #' 
@@ -62,9 +62,9 @@ methods::setMethod(
 	y <- list(y, ...)
 	for (i in seq_along(y)) {
 
-		if (location) out <- .locationCompare(out=out, x=x, y=y[[i]], stopOnError=stopOnError, messages=messages)
-		if (mapset) out <- .mapsetCompare(out=out, x=x, y=y[[i]], stopOnError=stopOnError, messages=messages)
-		if (crs) out <- .crsCompare(out=out, x=x, y=y[[i]], stopOnError=stopOnError, messages=messages)
+		if (location) out <- .locationCompare(out=out, x=x, y=y[[i]], stopOnError = stopOnError, messages = messages)
+		if (mapset) out <- .mapsetCompare(out = out, x=x, y=y[[i]], stopOnError = stopOnError, messages = messages)
+		if (crs) out <- .crsCompare(out = out, x = x, y = y[[i]], stopOnError = stopOnError, messages = messages)
 
 		if (lyrs) {
 			if (nlyr(x) != nlyr(y[[i]])) {
@@ -328,8 +328,8 @@ methods::setMethod(f = "compareGeom",
 ### compare locations
 .locationCompare <- function(out, x, y, stopOnError, messages) {
 
-	if (location(x) != location(y)) {
-		msg <- paste0("The objects are in different GRASS ", sQuote("locations"), ". See the short tutorial on ", sQuote("locations"), " using ?tutorial_sessions.")
+	if (.location(x) != .location(y)) {
+		msg <- paste0("The objects have different coordinate reference systems. You can\n  use project() to warp one of them to the reference system of the other.")
 		if (stopOnError) stop(msg)
 		if (messages & !stopOnError) warning(msg)
 		out <- FALSE
@@ -340,7 +340,7 @@ methods::setMethod(f = "compareGeom",
 ### compare mapsets
 .mapsetCompare <- function(out, x, y, stopOnError, messages) {
 
-	if (mapset(x) != mapset(y)) {
+	if (.mapset(x) != .mapset(y)) {
 		msg <- "The objects are in different GRASS mapsets."
 		if (stopOnError) stop(msg)
 		if (messages & !stopOnError) warning(msg)

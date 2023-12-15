@@ -59,13 +59,11 @@
 \S4method{bottom}{GSpatial}(x, char = FALSE)
 }
 \arguments{
-\item{x, obj}{An object that inherits from \code{GSpatial} (i.e., a \code{GRaster} or \code{GVector}) or missing. If missing, then the horizontal or vertical extent of the currently active \link[=tutorial_regions]{region} is returned.}
+\item{x}{An object that inherits from \code{GSpatial} (i.e., a \code{GRaster} or \code{GVector}) or missing. If missing, then the horizontal or vertical extent of the currently active \link[=tutorial_regions]{region} is returned.}
 
 \item{vector}{Logical: If \code{FALSE} (default), return a \code{SpatExtent} object. If \code{TRUE}, return the extent as a named vector.}
 
 \item{char}{Logical: If \code{FALSE} (default), return a numeric value. If \code{TRUE}, return as a character.}
-
-\item{...}{Other arguments (generally unused).}
 }
 \value{
 The returned values depend on the function:
@@ -78,43 +76,25 @@ The returned values depend on the function:
 \description{
 These functions return the extent of a \code{GSpatial} object (\code{GRegions}, \code{GRaster}s, and \code{GVector}s):
 \itemize{
-\item `ext()``: 2-dimensional spatial extent (i.e., westernmost/easternmost and southernmost/northernmost coordinates of area represented).\cr\cr
-\item \code{zext()}: Vertical extent (i.e., topmost and bottom-most elevation of the volume represented). The vertical extent is not \code{NA} only if the object is 3-dimensional.\cr\cr
-\item \code{W()}, \code{E()}, \code{N()}, \code{S()}: Coordinates of one side of horizontal extent.\cr\cr
-\item \code{top()} and \code{bottom()}: Coordinates of top and bottom of vertical extent.\cr\cr
+\item \code{ext()}: 2-dimensional spatial extent (i.e., westernmost/easternmost and southernmost/northernmost coordinates of area represented).\cr
+\item \code{zext()}: Vertical extent (i.e., topmost and bottom-most elevation of the volume represented). The vertical extent is not \code{NA} only if the object is 3-dimensional.\cr
+\item \code{W()}, \code{E()}, \code{N()}, \code{S()}: Coordinates of one side of horizontal extent.\cr
+\item \code{top()} and \code{bottom()}: Coordinates of top and bottom of vertical extent.\cr
 }
 }
 \examples{
-\dontrun{
-# NB This example is in a "dontrun{}" block because it requires users to have
-# GRASS GIS Version 8+ installed on their system.
+if (grassStarted()) {
 
-# IMPORTANT #1: If you already have a GRASS session started, you will need to
-# run the line below and the last line in this example to work with it again.
-# If you have not started a GRASS session, you can skip this step and go to
-# step #2.
-opts. <- getFastOptions()
-
-# IMPORTANT #2: Select the appropriate line below and change as necessary to
-# where GRASS is installed on your system.
-grassDir <- "/Applications/GRASS-8.3.app/Contents/Resources" # Mac
-grassDir <- "C:/Program Files/GRASS GIS 8.3" # Windows
-grassDir <- "/usr/local/grass" # Linux
-
-# setup
+# Setup
 library(sf)
 library(terra)
 
-# example data
+# Example data
 madElev <- fastData("madElev")
 madForest2000 <- fastData("madForest2000")
 madCoast0 <- fastData("madCoast0")
 madRivers <- fastData("madRivers")
 madDypsis <- fastData("madDypsis")
-
-# start GRASS session for examples only
-faster(x = madElev, grassDir = grassDir,
-workDir = tempdir(), location = "examples") # line only needed for examples
 
 ### GRaster properties
 ######################
@@ -152,7 +132,6 @@ names(elev)
 
 # coordinate reference system
 crs(elev)
-st_crs(elev)
 
 # extent (bounding box)
 ext(elev)
@@ -208,7 +187,6 @@ bottom(rivers) # bottom extent
 
 # coordinate reference system
 crs(rivers)
-st_crs(rivers)
 
 # column names and data types
 names(coast)
@@ -270,10 +248,6 @@ rivers <- update(rivers)
 rivers2 <- c(rivers, rivers)
 dim(rivers)
 dim(rivers2)
-
-# IMPORTANT #3: Revert back to original GRASS session if needed.
-restoreSession(opts.)
-removeSession("examples")
 
 }
 }

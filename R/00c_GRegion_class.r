@@ -1,7 +1,7 @@
 #' @title Classes for "fasterRaster" locations, rasters, and vectors#'
 #'
 #' @aliases GRegion
-#' @rdname GSession
+#' @rdname GLocation
 #' @exportClass GRegion
 GRegion <- methods::setClass(
 	Class = "GRegion",

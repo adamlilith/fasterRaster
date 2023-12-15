@@ -2,13 +2,13 @@
 #'
 #' @description **`GRaster`s**: You can do arithmetic operations on `GRaster`s and using normal operators in **R**: `+`, `-`, `*`, `/`, `^`, `%%` (modulus), and `%/%` (integer division). 
 #'
-#' Note that for `GRaster`s, the precision of the result will be determined by the `rasterPrecision` option, which can be set using [setFastOptions()]. The default is `"float"`, which is precise to about the 7th decimal place. This be increased to about the 15th decimal place by setting this to `"double"`, though it can substantially increase the size of the raster output in memory and when saved to disk.
+#' Note that for `GRaster`s, the precision of the result will be determined by the `rasterPrecision` option, which can be set using [faster()]. The default is `"double"`, which is precise to about the 15th to 17th decimal place. This be reduced to the 6th to 9th decimal place by setting this to `"float"`. This reduces accuracy but also reduces memory requirements.
 #'
-#' **`GVector`s**: You can also do arithmetic operations on `GVector`s:
-#' `+` operator: Same as [union()]
-#' `-` operator: Same as [erase()].
-#' `*` operator: Same as [intersect()].
-#' `/` operator: Same as [xor()].
+#' **`GVector`s**: You can also do arithmetic operations on `GVector`s:\cr\cr
+#' `+` operator: Same as [union()]\cr
+#' `-` operator: Same as [erase()]\cr
+#' `*` operator: Same as [intersect()]\cr
+#' `/` operator: Same as [xor()]\cr
 #' 
 #' @param name Character: Name of the new `GRaster`.
 #' @param src `sources` of the `GRaster` being operated on
@@ -18,33 +18,20 @@
 #'
 #' @example man/examples/ex_GRaster_arithmetic.r
 #'
+#' @aliases Arith
 #' @rdname Arithmetic
-#' @noRd
-.genericArithRast <- function(name, src, ex) {
-
-	args <- list(
-		cmd = "r.mapcalc",
-		expression = ex,
-		flags = c(.quiet(), "overwrite"),
-		intern = TRUE
-	)
-	do.call(rgrass::execGRASS, args = args)
-	.makeGRaster(src, name)
-	
-}
-
-# raster math
+#' @exportMethod Arith
 methods::setMethod(
 	f = "Arith",
 	signature(e1 = "GRaster", e2 = "logical"),
     function(e1, e2) {
 	
-		.restore(e1)
-  		region(e1)
+		.locationRestore(e1)
+  		.region(e1)
 
 		e2 <- as.integer(e2)
 		if (is.na(e2)) e2 <- "null()"
-		prec <- getFastOptions("rasterPrecision")
+		prec <- faster("rasterPrecision")
 		
 		for (i in 1L:nlyr(e1)) {
 		
@@ -73,17 +60,20 @@ methods::setMethod(
 )
 
 # logical raster
+#' @aliases Arith
+#' @rdname Arithmetic
+#' @exportMethod Arith
 methods::setMethod(
 	f = "Arith",
 	signature(e1 = "logical", e2 = "GRaster"),
     function(e1, e2) {
 	
-		.restore(e2)
-  		region(e2)
+		.locationRestore(e2)
+  		.region(e2)
 
 		e1 <- as.integer(e1)
 		if (is.na(e1)) e1 <- "null()"
-  		prec <- getFastOptions("rasterPrecision")
+  		prec <- faster("rasterPrecision")
 		
 		for (i in 1L:nlyr(e2)) {
 		
@@ -112,16 +102,19 @@ methods::setMethod(
 )
 
 # raster numeric
+#' @aliases Arith
+#' @rdname Arithmetic
+#' @exportMethod Arith
 methods::setMethod(
 	f = "Arith",
 	signature(e1 = "GRaster", e2 = "numeric"),
     function(e1, e2) {
 	
-		.restore(e1)
-		region(e1)
+		.locationRestore(e1)
+		.region(e1)
 
 		if (is.na(e2)) e2 <- "null()"
-  		prec <- getFastOptions("rasterPrecision")
+  		prec <- faster("rasterPrecision")
 		
 		for (i in 1L:nlyr(e1)) {
 		
@@ -150,16 +143,19 @@ methods::setMethod(
 )
 
 # raster integer
+#' @aliases Arith
+#' @rdname Arithmetic
+#' @exportMethod Arith
 methods::setMethod(
 	f = "Arith",
 	signature(e1 = "GRaster", e2 = "integer"),
     function(e1, e2) {
 	
-		.restore(e1)
-  		region(e1)
+		.locationRestore(e1)
+  		.region(e1)
 
 		if (is.na(e2)) e2 <- "null()"
-  		prec <- getFastOptions("rasterPrecision")
+  		prec <- faster("rasterPrecision")
 		
 		for (i in 1L:nlyr(e1)) {
 		
@@ -188,17 +184,20 @@ methods::setMethod(
 )
 
 # numeric raster
+#' @aliases Arith
+#' @rdname Arithmetic
+#' @exportMethod Arith
 methods::setMethod(
 	f = "Arith",
 	signature(e1 = "numeric", e2 = "GRaster"),
     function(e1, e2) {
 	
-		.restore(e2)
-  		region(e2)
+		.locationRestore(e2)
+  		.region(e2)
 
 		if (is.na(e1)) e1 <- "null()"
 		oper <- as.vector(.Generic)[1L]
-  		prec <- getFastOptions("rasterPrecision")
+  		prec <- faster("rasterPrecision")
 		
 		for (i in 1L:nlyr(e2)) {
 		
@@ -226,16 +225,19 @@ methods::setMethod(
 )
 
 # integer raster
+#' @aliases Arith
+#' @rdname Arithmetic
+#' @exportMethod Arith
 methods::setMethod(
 	f = "Arith",
 	signature(e1 = "integer", e2 = "GRaster"),
     function(e1, e2) {
 	
-		.restore(e2)
-		region(e2)
+		.locationRestore(e2)
+		.region(e2)
 
 		if (is.na(e1)) e1 <- "null()"
-  		prec <- getFastOptions("rasterPrecision")
+  		prec <- faster("rasterPrecision")
 		
 		for (i in 1L:nlyr(e2)) {
 		
@@ -265,39 +267,46 @@ methods::setMethod(
 
 # # missing raster
 # methods::setMethod(
-	# f = "Arith",
-	# signature(e1 = "missing", e2 = "GRaster"),
-    # function(e1, e2) {
-	
-		# .restore(e2)
-		# region(e2)
+# 	f = "Arith",
+# 	signature(e1 = "missing", e2 = "GRaster"),
+#     function(e1, e2) {
 
-		# src <- .makeSourceName("math", "rast")
+# 	.locationRestore(e2)
+# 	.region(e2)
 
-		# oper <- as.vector(.Generic)[1L]
-		# print(oper)
-		# ex <- if (oper == "-") {
-			# paste0(src, " = -1 * ", sources(e2))
-		# } else {
-			# paste0(src, " = ", sources(e2))
-		# }
-		# .genericArithRast(x = e2, src = src, ex = ex)
+# 	src <- .makeSourceName("math", "rast")
+
+# 	oper <- as.vector(.Generic)[1L]
+# 	print(oper)
+# 	if (oper == "-") {
 		
-	# }
+# 		ex <- paste0(src, " = -1 * ", sources(e2))
+# 		out <- .genericArithRast(x = e2, src = src, ex = ex)
+
+# 	} else {
+# 		out <- e2
+# 	}
+
+# 	out
+		
+# 	} # EOF
 # )
 
 # raster raster
+#' @aliases Arith
+#' @rdname Arithmetic
+#' @exportMethod Arith
 methods::setMethod(
 	f = "Arith",
 	signature(e1 = "GRaster", e2 = "GRaster"),
     function(e1, e2) {
 	
 		compareGeom(e1, e2)
-		.restore(e1)
-		region(e1)
+		.locationRestore(e1)
+		.region(e1)
 
 		oper <- as.vector(.Generic)[1L]
-  		prec <- getFastOptions("rasterPrecision")
+  		prec <- faster("rasterPrecision")
 		
 		if (nlyr(e1) == nlyr(e2)) {
 
@@ -386,13 +395,16 @@ methods::setMethod(
 )
 
 # vector vector
+#' @aliases Arith
+#' @rdname Arithmetic
+#' @exportMethod Arith
 methods::setMethod(
 	f = "Arith",
 	signature(e1 = "GVector", e2 = "GVector"),
     function(e1, e2) {
 	
 		compareGeom(e1, e2)
-		.restore(e1)
+		.locationRestore(e1)
 
 		oper <- as.vector(.Generic)[1L]
 
@@ -412,3 +424,19 @@ methods::setMethod(
 			
 	} # EOF
 )
+
+#' @noRd
+.genericArithRast <- function(name, src, ex) {
+
+	args <- list(
+		cmd = "r.mapcalc",
+		expression = ex,
+		flags = c(.quiet(), "overwrite"),
+		intern = TRUE
+	)
+	do.call(rgrass::execGRASS, args = args)
+	.makeGRaster(src, name)
+	
+}
+
+

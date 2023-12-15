@@ -32,8 +32,8 @@ methods::setMethod(
 		stop("Can only match category labels to categorical rasters.")
 	}
 
-	.restore(x)
-	region(x)
+	.locationRestore(x)
+	.region(x)
 
 	nLayers <- nlyr(x)
 	srcs <- .makeSourceName("r_mapcalc", "raster", nLayers)
@@ -141,8 +141,8 @@ methods::setMethod(
 	signature = c(x = "GRaster"),
 	function(x, table) {
 	
-	.restore(x)
-	region(x)
+	.locationRestore(x)
+	.region(x)
 
 	if (is.character(table) & !all(is.factor(x))) {
 		stop("Can only match category labels to categorical rasters.")
@@ -204,8 +204,8 @@ methods::setMethod(
 	signature = c(x = "GRaster"),
 	function(x, table) {
 	
-	.restore(x)
-	region(x)
+	.locationRestore(x)
+	.region(x)
 
 	if (is.character(table) & !all(is.factor(x))) {
 		stop("Can only match category labels to categorical rasters.")

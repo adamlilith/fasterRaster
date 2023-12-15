@@ -15,7 +15,7 @@
 .vIncrementCats <- function(x, add, return = "GVector") {
 
 	if (inherits(x, "GVector")) {
-		.restore(x)
+		.locationRestore(x)
 		srcIn <- sources(x)
 	} else {
 		srcIn <- x

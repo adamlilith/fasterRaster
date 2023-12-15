@@ -44,9 +44,9 @@ methods::setMethod(
 
 			out <- new(
 				"GRaster",
-				location = location(out),
-				mapset = mapset(out),
-				workDir = getFastOptions("workDir"),
+				location = .location(out),
+				mapset = .mapset(out),
+				workDir = faster("workDir"),
 				crs = crs(out),
 				projection = .projection(out),
 				nLayers = length(notNulls),
@@ -116,9 +116,9 @@ methods::setMethod(
 
 			out <- new(
 				"GRaster",
-				location = location(out),
-				mapset = mapset(out),
-				workDir = getFastOptions("workDir"),
+				location = .location(out),
+				mapset = .mapset(out),
+				workDir = faster("workDir"),
 				crs = crs(out),
 				projection = .projection(out),
 				nLayers = nlyr(out),

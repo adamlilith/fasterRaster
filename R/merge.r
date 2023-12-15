@@ -18,7 +18,7 @@ methods::setMethod(
 	signature = c(x = "GRaster", y = "GRaster"),
 	definition = function(x, y, ...) {
 
-	.restore(x)
+	.locationRestore(x)
 	compareGeom(x, y, lyrs=TRUE, ext=FALSE, rowcol=FALSE, depths=TRUE, res=TRUE, zres=TRUE)
 	
 	x <- list(x, y, ...)
@@ -33,8 +33,8 @@ methods::setMethod(
 		cmd = "r.patch",
 		input = rasts,
 		output = src,
-		nprocs = getFastOptions("cores"),
-		memory = getFastOptions("memory"),
+		nprocs = faster("cores"),
+		memory = faster("memory"),
 		flags = c(.quiet(), "overwrite"),
 		intern = TRUE
 	)

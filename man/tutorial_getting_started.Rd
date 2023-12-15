@@ -2,9 +2,9 @@
 % Please edit documentation in R/tutorial_getting_started.r
 \name{tutorial_getting_started}
 \alias{tutorial_getting_started}
-\title{Getting started with fasterRaster}
+\title{Getting started with "fasterRaster"}
 \description{
-\strong{fasterRaster} interfaces with \strong{GRASS GIS} to process rasters and spatial vector data. It is intended as an add-on to the \strong{terra} and \strong{sf} packages, and relies heavily on them. For most rasters and vectors that are small or medium-sized in memory/disk, those packages will almost always be faster. They may also be faster for very large objects.  But when they aren't, \strong{fasterRaster} can step in.
+\strong{fasterRaster} interfaces with \strong{GRASS GIS} to process rasters and spatial vector data. It is intended as an add-on to the \strong{terra} and \strong{sf} packages, and relies heavily upon them. For most rasters and vectors that are small or medium-sized in memory/disk, those packages will almost always be faster. They may also be faster for very large objects.  But when they aren't, \strong{fasterRaster} can step in.
 \subsection{Installing \strong{fasterRaster}}{
 
 You probably already have \strong{fasterRaster} installed on your computer, but if not, you can install the latest release version from CRAN using:
@@ -22,57 +22,57 @@ and the latest development version using:
 
 \subsection{Installing \strong{GRASS GIS}}{
 
-\strong{fasterRaster} uses \strong{GRASS} to do its operations. To use \strong{fasterRaster}, you will need to install \strong{GRASS} using the "stand-alone" installer, available through the \href{https://grass.osgeo.org/}{GRASS GIS}. Be sure to \emph{use the "stand-alone" installer, not the "OSGeo4W" installer!}
-
-Once you have installed \strong{GRASS}, you will need to know where on your computer it was installed. The exact folder will depend on your operating system, the version installed, and perhaps other things, but in general, the install folder will look something like:
-
-Windows: \code{"C:/Program Files/GRASS GIS 8.4"}\cr
-Mac: \code{"/Applications/GRASS-8.3.app/Contents/Resources"}\cr
-Linux: \code{"/usr/local/grass"}\cr
-
-Whatever the name of this folder, it is passed to functions using an argument named \code{grassDir}. So, it is helpful to define \code{grassDir}, as in:
-
-\if{html}{\out{<div class="sourceCode">}}\preformatted{grassDir <- "C:/Program Files/GRASS GIS 8.4" # Windows
-grassDir <- "/Applications/GRASS-8.3.app/Contents/Resources" # Mac
-grassDir <- "/usr/local/grass" # Linux
-}\if{html}{\out{</div>}}
+\strong{fasterRaster} uses \strong{GRASS} to do its operations. You will need to install \strong{GRASS} using the "stand-alone" installer, available through the \href{https://grass.osgeo.org/}{GRASS GIS}. \emph{Be sure to use the "stand-alone" installer, not the "OSGeo4W" installer!}
 }
 
 \subsection{Starting a \strong{fasterRaster} session}{
 
-First, we attach \strong{fasterRaster} in \strong{R}. In most cases, we will also want to be using the \strong{terra} and/or \strong{sf} package, so let"s attach them, too.
+I recommend attaching the \strong{data.table}, \strong{terra}, and \strong{sf} packages before attaching \strong{fasterRaster} package to avoid function conflicts. The \strong{data.table} package is not required, but you most surely will use at least one of the other two.
 
-\if{html}{\out{<div class="sourceCode">}}\preformatted{library(fasterRaster)
+\if{html}{\out{<div class="sourceCode">}}\preformatted{library(data.table)
 library(sf)
 library(terra)
+library(fasterRaster)
 }\if{html}{\out{</div>}}
 
-Now, we need to start a \strong{fasterRaster} "session", which makes a connection to \strong{GRASS}. You generally only need to do this one time each time you start \strong{R} and wish to use \strong{fasterRaster}. We do this with the \code{\link[=faster]{faster()}} function, which needs the \code{grassDir} argument and a \code{crs} argument. This latter sets the coordinate reference system (CRS) for the session--all rasters and vectors used in the session must have the same CRS, or be projected so they have this CRS.  You can start other sessions using \code{fasteStart()} with different CRSs, and switch between them using \code{\link[=restoreSession]{restoreSession()}}.
+To begin, you need to tell \strong{fasterRaster} the full file path of the folder where \strong{GRASS} is installed on your system. Where this is well depend on your operating system and the version of \strong{GRASS} installed.  Three examples below show you what this might look like, but you may need to change the file path to match your case:
 
-The \code{crs} argument takes a coordinate reference string or an object from which such a string can be obtained. We will use a raster that comes with \strong{fasterRaster} to set the \code{crs} argument.
-
-\if{html}{\out{<div class="sourceCode">}}\preformatted{madElev <- fastData("madElev") # get raster
-faster(madElev, grassDir = grassDir) # start session
+\if{html}{\out{<div class="sourceCode">}}\preformatted{grassDir <- "C:/Program Files/GRASS GIS 8.4" # Windows
+grassDir <- "/Applications/GRASS-8.3.app/Contents/Resources" # Mac OS
+grassDir <- "/usr/local/grass" # Linux
 }\if{html}{\out{</div>}}
 
-Here, the \code{grassDir} is the installation directory we defined earlier. Now, we can start using \strong{fasterRaster}!
-}
-}
-\section{Importing rasters and vectors using \code{fast()}}{
-In \strong{fasterRaster}, rasters are called \code{GRaster}s and vectors are called \code{GVector}s. The easiest way to start using a \code{GRaster} or \code{GVector} is to convert it from one already in \strong{R}. In the example below, we use a raster that comes with the \strong{fasterRaster} package. This raster represents elevation of an eastern portion of Madagascar. First, we use \code{\link[=fastData]{fastData()}} to get the raster. This is a \code{SPatRaster}, which is a type of raster representation used in the \strong{terra} package.  Then, we use \code{\link[=fast]{fast()}} to convert it to a \code{GRaster}. \strong{fasterRaster} can also handle \code{stars} rasters (\strong{stars} packages).
+To tell \strong{fasterRaster} where \strong{GRASS} is installed, use the \code{\link[=faster]{faster()}} function:
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{faster(grassDir = grassDir)
+}\if{html}{\out{</div>}}
+
+You can also use the \code{\link[=faster]{faster()}} function to set options that affect how \strong{fasterRaster} functions run.
+
+In \strong{fasterRaster}, rasters are called \code{GRaster}s and vectors are called \code{GVector}s. The easiest (but not always fastest) way to start using a \code{GRaster} or \code{GVector} is to convert it from one already in \strong{R}. In the example below, we use a raster that comes with the \strong{fasterRaster} package. The raster represents elevation of a portion of eastern Madagascar. We first load the \code{SpatRaster} using \code{\link[=fastData]{fastData()}}, a helper function for loading example data objects that come with the \strong{fasterRaster} package.
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{madElev <- fastData("madElev") # example SpatRaster
+madElev
+}\if{html}{\out{</div>}}
+
+Now, we do the conversion to a \code{GRaster} and a \code{GVector} using \code{\link[=fast]{fast()}}. This function can create a \code{GRaster} or \code{GVector} from a \code{SpatRaster}, a \code{SpatVector}, a \code{sf} vector, or a file representing a raster or vector.
 
 \if{html}{\out{<div class="sourceCode">}}\preformatted{elev <- fast(madElev)
 elev
 }\if{html}{\out{</div>}}
 
-You can see the properties of the \code{GRaster} representation of the \code{madElev} raster. Converting rasters that are already in \strong{R} to \code{GRaster}s takes some time. Instead, you can load a raster directly from disk to a \strong{fasterRaster} session using \code{fast()}. To do this, you just replace the argument in \code{\link[=fast]{fast()}} with a string representing the folder path and file name of the raster you want to load into the session.
+Converting rasters and vectors that are already in \strong{R} to \code{GRaster}s and \code{GVector}s takes some time. Instead, you can load a raster or vector directly from disk to a \strong{fasterRaster} session using \code{fast()}. To do this, you just replace the argument in \code{\link[=fast]{fast()}} with a string representing the folder path and file name of the raster you want to load into the session.
 
 Now, let's create a \code{GVector}. The \code{\link[=fast]{fast()}} function can take a \code{SpatVector} from the \strong{terra} package, an \code{sf} object from the \strong{sf} package, or a string representing the file path and file name of a vector file (e.g., a GeoPackage file or a shapefile).
 
-\if{html}{\out{<div class="sourceCode">}}\preformatted{madRivers <- fastData("madRivers")
+\if{html}{\out{<div class="sourceCode">}}\preformatted{madRivers <- fastData("madRivers") # sf vector
+madRivers
+
 rivers <- fast(madRivers)
 rivers
 }\if{html}{\out{</div>}}
+}
+
 \subsection{Operations on \code{GRaster}s and \code{GVector}s}{
 
 You can do operations on these objects just like you would if they were \code{SpatRaster}s, \code{SpatVector}s, and \code{sf} objects. For example, you can use mathematical operators and functions:
@@ -80,41 +80,61 @@ You can do operations on these objects just like you would if they were \code{Sp
 \if{html}{\out{<div class="sourceCode">}}\preformatted{elev_feet <- elev * 3.28084
 elev_feet
 
-logElev <- log10(elev)
-logElev
+log10Elev <- log10(elev)
+log10Elev
 }\if{html}{\out{</div>}}
 
-You can also use the many \strong{fasterRaster} functions. In general, these functions have the same names as their \strong{terra} and \strong{sf} counterparts and usually the same arguments. The following code creates a raster where cell values reflect the distance between them and the nearest river, then converts the output to a \code{SpatRaster} for plotting:
+You can also use the many \strong{fasterRaster} functions. In general, these functions have the same names as their \strong{terra} counterparts and often the same arguments. Note that even many \strong{terra} and \strong{fasterRaster} functions have the same name, they do not necessarily produce the exact same output. Much care has been taken to ensure they do, but sometimes there are multiple ways to do the same task, so choices made by the authors of \strong{terra} and \strong{GRASS} may can lead to differences.
+
+The following code creates a raster where cell values reflect the distance between them and the nearest river, then plots the output:
 
 \if{html}{\out{<div class="sourceCode">}}\preformatted{dist <- distance(elev, rivers)
+dist
 plot(dist)
 }\if{html}{\out{</div>}}
 
-And that's how you get started! Now that you have a raster and a vector in your \strong{fasterRaster} session, you can start doing manipulations and analyses using any of the \strong{fasterRaster} functions!  To see an annotated list of these functions, use \code{?fasterRaster}.
+And that's how you get started! Now that you have a raster and a vector in your \strong{fasterRaster} "location", you can start doing manipulations and analyses using any of the \strong{fasterRaster} functions!  To see an annotated list of these functions, use \code{?fasterRaster}.
 }
 
 \subsection{Exporting \code{GRaster}s and \code{GVector}s from a \strong{GRASS} session}{
 
 You can convert a \code{GRaster} to a \code{SpatRaster} raster using \code{\link[=rast]{rast()}}:
 
-\if{html}{\out{<div class="sourceCode">}}\preformatted{terraRast <- rast(elev)
+\if{html}{\out{<div class="sourceCode">}}\preformatted{terraElev <- rast(elev)
 }\if{html}{\out{</div>}}
 
-To convert a \code{GVector} to the \strong{terra} package"s \code{SpatVector} format or to an \code{sf} vector, use \code{\link[=vect]{vect()}} or [st_as_sf():
+To convert a \code{GVector} to the \strong{terra} package's \code{SpatVector} format or to an \code{sf} vector, use \code{\link[=vect]{vect()}} or \code{\link[=st_as_sf]{st_as_sf()}}:
 
-\if{html}{\out{<div class="sourceCode">}}\preformatted{terraVect <- vect(rivers)
-sfVect <- st_as_sf(rivers)
+\if{html}{\out{<div class="sourceCode">}}\preformatted{terraRivers <- vect(rivers)
+sfRivers <- st_as_sf(rivers)
 }\if{html}{\out{</div>}}
 
-Finally, you can use \code{\link[=writeRaster]{writeRaster()}} and \code{\link[=writeVector]{writeVector()}} to save \strong{fasterRaster} rasters and vectors directly to disk. This will be faster than converting to another format then saving.
+Finally, you can use \code{\link[=writeRaster]{writeRaster()}} and \code{\link[=writeVector]{writeVector()}} to save \strong{fasterRaster} rasters and vectors directly to disk. This will always be faster than using \code{\link[=rast]{rast()}}, \code{\link[=vect]{vect()}}, or \code{\link[=st_as_sf]{st_as_sf()}} then saving.
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{elevTempFile <- tempfile(fileext = ".tif") # save as GeoTIFF
+writeRaster(elev, elevTempFile)
+
+vectTempFile <- tempfile(fileext = ".shp") # save as shapefile
+writeRaster(rivers, vectTempFile)
+}\if{html}{\out{</div>}}
+}
+
+\subsection{Tips for masking \strong{fasterRaster} faster}{
+\enumerate{
+\item Loading rasters and vectors directly from disk using \code{\link[=fast]{fast()}}, rather than converting \strong{terra} or \strong{sf} objects is faster. Why? Because if the object does not have a file to which the \strong{R} object points, \code{fast()} has to save it to disk first as a GeoTIFF or GeoPackage file, then load it into \strong{GRASS}.
+\item Similarly, saving \code{GRaster}s and \code{GVector}s directly to disk will always be faster than converting them to \code{SpatRaster}s, \code{SpatVector}s, or \code{sf} vectors using \code{\link[=rast]{rast()}}, \code{\link[=vect]{vect()}}, or \code{\link[=st_as_sf]{st_as_sf()}}, then saving them. Why? Because these functions actually save the file to disk then uses the respective function from the respective package to connect to the file.
+\item Every time you switch between using a \code{GRaster} or \code{GVector} with a different coordinate reference system (CRS), \strong{GRASS} has to spend a few second changing to that CRS. So, you can save some time by doing as much work as possible with objects in one CRS, then switching to work on objects in another CRS.
+\item By default, \strong{GRASS}/\strong{fasterRaster} uses 2 cores and 300 MB of memory for functions that allow users to specify these values. You can set these to higher values using \code{\link[=faster]{faster()}} and thus potentially speed up some calculations. Functions in newer versions of \strong{GRASS} have more capacity to use these options, so updating \strong{GRASS} to the latest version can help, too.
+}
 }
 
 \subsection{Further reading}{
 \itemize{
-\item The \href{https://grass.osgeo.org/}{GRASS GIS} website is authoritative and contains the manual on all the \strong{GRASS} functions used in this package.
-\item The Wiki on \href{https://grasswiki.osgeo.org/wiki/R_statistics/rgrass}{how to run GRASS in R or R in GRASS} is a good place to start if you want to become a power-user of \strong{GRASS} in \strong{R}.
+\item Robert Hijman's \href{https://cran.r-project.org/package=terra}{\strong{terra}} package and Edzer Pebesma's \href{https://cran.r-project.org/package=sf}{\strong{sf}} package are good places to start if you are not familiar with doing GIS in \strong{R}.
+\item The \href{https://grass.osgeo.org/}{GRASS GIS} website is authoritative and contains the manual on all the \strong{GRASS} functions used in this package and more.
+\item The Wiki on \href{https://grasswiki.osgeo.org/wiki/R_statistics/rgrass}{how to run \strong{GRASS} in \strong{R} or \strong{R} in \strong{GRASS}} is a good place to start if you want to become a power-user of \strong{GRASS} in \strong{R}.
+\item Roger Bivand's \href{https://cran.r-project.org/package=rgrass}{\strong{rgrass}} package allows users to call any \strong{GRASS} function with all of its functionality, which in some cases is far beyond what is allowed by \strong{fasterRaster}.
 }
 }
 }
-
 \keyword{tutorial}

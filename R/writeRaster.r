@@ -62,8 +62,8 @@ setMethod(
 		...
 	) {
 	
-	.restore(x)
-	region(x)
+	.locationRestore(x)
+	.region(x)
 
 	dots <- list(...)
 	filename <- trimws(filename)

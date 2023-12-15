@@ -24,8 +24,8 @@ methods::setMethod(
 
 	if (nlyr(x) < 2L) stop("Input raster must have 2 or more layers.")
 
-	.restore(x)
-	region(x)
+	.locationRestore(x)
+	.region(x)
 
 	input <- paste(sources(x), collapse = ",")
 	src <- .makeSourceName("i_pca", "raster")

@@ -8,7 +8,7 @@
 #' Rasters that represent integers are called "integer" rasters in **fasterRaster** and `CELL` rasters in **GRASS**. You can force a raster to be an integer using [as.int()]. Some of the functions in [app()] function will also return integer-type rasters. Integer rasters typically take the least memory.
 #'
 #' ## Floating-point values
-#' Floating-point values are accurate to about the 6th to 9th decimal place. These are called "float" rasters in **fasterRaster** and `FCELL` rasters in **GRASS**. By default, operations conducted using raster math (e.g., `raster1 * raster2`) return double floating-point valued rasters, but this can be changed to floating point precision using [setFastOptions()] (e.g., `setFastOptions(rasterDataType = "float")`). Floating-point rasters typically take more memory than integer rasters, but less than double-floating point rasters.
+#' Floating-point values are accurate to about the 6th to 9th decimal place. These are called "float" rasters in **fasterRaster** and `FCELL` rasters in **GRASS**. By default, operations conducted using raster math (e.g., `raster1 * raster2`) return double floating-point valued rasters, but this can be changed to floating point precision using [faster()] (e.g., `faster(rasterPrecision = "float")`). Floating-point rasters typically take more memory than integer rasters, but less than double-floating point rasters.
 #'
 #' ## Double-floating point values
 #' Double-floating point values are accurate to about the 15th to 17th decimal place. These are called "double" rasters in **fasterRaster** and `DCELL` rasters in **GRASS**. These rasters typically take the most memory. All "`numeric`" values in **R** are double-floating point values.
@@ -24,6 +24,7 @@
 #' * [catNames()] reports the column names of the "levels" table of each layer of a raster.
 #' * [cats()] returns the entire "levels" table of a categorical raster.
 #' * [combineCats()] combines levels of two or more categorical or integer rasters.
+#' * [complete.cases()] finds rows in the levels table that have no `NA`s.
 #' * [datatype()] returns the data type of a `GRaster`.
 #' * [droplevels()] removes "unused" levels in a "levels" table.
 #' * [freq()]: Frequency of each category across cells of a raster\cr
@@ -32,6 +33,7 @@
 #' * [levels()] returns the "levels" table of a categorical raster (just the value column and the active column).
 #' * \code{\link[fasterRaster]{levels<-}} and [categories()] can be used to assign categories to an integer raster and make it categorical (i.e., a "factor" raster).
 #' * [match()], \code{\link[fasterRaster]{%in%}}, and \code{\link[fasterRaster]{%notin%}}: Find which cells of a `GRaster` match or do not match certain category labels\cr
+#' * [missing.cases()] finds rows in the levels table that have at least one `NA`.
 #' * [missingCats()] finds values in categorical rasters that do not have a category assigned to them.
 #' * [nlevels()] returns the number of levels represented by a categorical raster.
 #'

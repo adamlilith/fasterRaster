@@ -21,8 +21,8 @@ methods::setMethod(
     if (nlyr(x) > 1L) warning("The raster has >1 layer. Only the first will be used.")
     x <- x[[1L]]
 
-    .restore(x)
-    region(x)
+    .locationRestore(x)
+    .region(x)
 
     src <- .makeSourceName("asLines", "raster")
     args <- list(

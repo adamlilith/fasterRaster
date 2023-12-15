@@ -8,15 +8,19 @@ library(sf)
 data(madCoast0) # same as next line
 madCoast0 <- fastData("madCoast0") # same as previous
 madCoast0
+plot(st_geometry(madCoast))
 
 madCoast4 <- fastData("madCoast4")
 madCoast4
+plot(st_geometry(madCoast4), add = TRUE)
 
 madRivers <- fastData("madRivers")
 madRivers
+plot(st_geometry(madCoastRivers), col = "blue", add = TRUE)
 
 madDypsis <- fastData("madDypsis")
 madDypsis
+plot(st_geometry(madDypsis), col = "red", add = TRUE)
 
 ### raster data
 ###############

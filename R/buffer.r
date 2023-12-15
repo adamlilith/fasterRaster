@@ -48,8 +48,8 @@ methods::setMethod(
 		lowMemory = FALSE
 	) {
 
-	.restore(x)
-	region(x)
+	.locationRestore(x)
+	.region(x)
 
 	units <- c("cells", "m", "meters", "metres", "km", "kilometers", "ft", "feet", "mi", "miles", "nmi", "nautical miles")
 	unit <- omnibus::pmatchSafe(unit, units, useFirst = TRUE, nmax = 1L)
@@ -146,7 +146,7 @@ methods::setMethod(
 
 	# .message(msg = "buffer", message = "As of GRASS 8.4, terra's buffer() function is much faster, even for very large vectors.")
 	
-	.restore(x)
+	.locationRestore(x)
 
 	### buffer
 	src <- .makeSourceName("v_buffer", "vector")

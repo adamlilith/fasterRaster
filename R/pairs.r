@@ -23,8 +23,8 @@ methods::setMethod(
 	signature = c(x = "GRaster"),
 	function(x, n = NULL, ...) {
 
-	.restore(x)
-	region(x)
+	.locationRestore(x)
+	.region(x)
 
  	if (is.null(n)) n <- round(0.5 * ncell(x))
 

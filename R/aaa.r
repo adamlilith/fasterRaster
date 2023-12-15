@@ -2,23 +2,11 @@
 
 	.fasterRaster <<- new.env(parent = emptyenv())
 	.fasterRaster$grassStarted <- FALSE
-	.fasterRaster$options <- list(
-		grassDir = .grassDirDefault(),
-		addonDir = .addonDirDefault(),
-		workDir = .workDirDefault(),
-
-		location = .locationDefault(),
-		mapset = .mapsetDefault(),
-
-		cores = .coresDefault(),
-		verbose = .verboseDefault(),
-		memory = .memoryDefault(),
-		rasterPrecision = .rasterPrecisionDefault(),
-		useDataTable = .useDataTableDefault()
-	)
 	.fasterRaster$locations <- list()
+	.fasterRaster$activeLocation <- NA_character_
 	.fasterRaster$messages <- list()
-	setFastOptions(restore = TRUE)
+	.fasterRaster$options <- list()
+	faster(restore = TRUE)
 	
 }
 
@@ -26,23 +14,11 @@
 
 	.fasterRaster <<- new.env(parent = emptyenv())
 	.fasterRaster$grassStarted <- FALSE
-	.fasterRaster$options <- list(
-		grassDir = .grassDirDefault(),
-		addonDir = .addonDirDefault(),
-		workDir = .workDirDefault(),
-
-		location = .locationDefault(),
-		mapset = .mapsetDefault(),
-
-		cores = .coresDefault(),
-		verbose = .verboseDefault(),
-		memory = .memoryDefault(),
-		rasterPrecision = .rasterPrecisionDefault(),
-		useDataTable = .useDataTableDefault()
-	)
 	.fasterRaster$locations <- list()
+	.fasterRaster$activeLocation <- NA_character_
 	.fasterRaster$messages <- list()
-	setFastOptions(restore = TRUE)
+	.fasterRaster$options <- list()
+	faster(restore = TRUE)
 	
 	ver <- read.dcf(file = system.file("DESCRIPTION", package = pkg), fields = "Version")
 	packageStartupMessage(paste(pkg, ver))

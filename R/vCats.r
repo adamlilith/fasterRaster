@@ -18,7 +18,7 @@
 .vCats <- function(x, layer = 1, db = FALSE, integer = TRUE) {
 
 	if (inherits(x, "GVector")) {
-		.restore(x)
+		.locationRestore(x)
 		src <- sources(x)
 	} else {
 		src <- x

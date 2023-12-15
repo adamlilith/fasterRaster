@@ -52,33 +52,14 @@ A \code{GRaster}.
 Known issues: When \code{GRaster}s are saved to disk explicitly using \code{\link[=writeRaster]{writeRaster()}}, or implicitly using \code{\link[=rast]{rast()}} or \code{\link[=plot]{plot()}}, rows and columns that are entirely \code{NA} are dropped.
 }
 \examples{
-\dontrun{
-# NB This example is in a "dontrun{}" block because it requires users to have
-# GRASS GIS Version 8+ installed on their system.
+if (grassStarted()) {
 
-# IMPORTANT #1: If you already have a GRASS session started, you will need to
-# run the line below and the last line in this example to work with it again.
-# If you have not started a GRASS session, you can skip this step and go to
-# step #2.
-opts. <- getFastOptions()
-
-# IMPORTANT #2: Select the appropriate line below and change as necessary to
-# where GRASS is installed on your system.
-
-grassDir <- "/Applications/GRASS-8.3.app/Contents/Resources" # Mac
-grassDir <- "C:/Program Files/GRASS GIS 8.3" # Windows
-grassDir <- "/usr/local/grass" # Linux
-
-# setup
+# Setup
 library(terra)
 
-# example data
+# Example data
 madElev <- fastData("madElev")
 madRivers <- fastData("madRivers")
-
-# start GRASS session for examples only
-faster(x = madElev, grassDir = grassDir,
-workDir = tempdir(), location = "examples") # line only needed for examples
 
 # Send spatial objects to GRASS:
 elev <- fast(madElev)
@@ -111,10 +92,6 @@ plot(extended4)
 elevCrop <- crop(elev, rivers)
 uncrop <- extend(elevCrop, elev, fill = 900)
 plot(uncrop)
-
-# IMPORTANT #3: Revert back to original GRASS session if needed.
-restoreSession(opts.)
-removeSession("examples")
 
 }
 }

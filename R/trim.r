@@ -24,8 +24,8 @@ methods::setMethod(
 	
 	if (pad < 0) stop("Argument ", sQuote("pad"), " must be >= 0.")
 
-	.restore(x)
-	region(x)
+	.locationRestore(x)
+	.region(x)
 
 	nLayers <- nlyr(x)
 
@@ -43,7 +43,7 @@ methods::setMethod(
 
 		do.call(rgrass::execGRASS, args = args)
 
-		reg <- region()
+		reg <- .region()
 		w[i] <- W(reg)
 		e[i] <- E(reg)
 		s[i] <- S(reg)

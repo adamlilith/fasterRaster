@@ -88,8 +88,8 @@ sun <- function(
 
 	compareGeom(elevation, coeff_bh, coeff_dh, slope, aspect, hh)
 	
-	.restore(elevation)
-	region(elevation)
+	.locationRestore(elevation)
+	.region(elevation)
 
 	hhGn <- sources(hh)[1L]
 	directions <- seq(0, 359.9999999, by=horizon_step)
@@ -100,7 +100,7 @@ sun <- function(
 		flags = c(.quiet(), "overwrite"),
 		day = day,
 		step = step,
-		nprocs = getFastOptions("cores"),
+		nprocs = faster("cores"),
 		distance_step = distance_step,
 		npartitions = npartitions,
 		elevation = sources(elevation),

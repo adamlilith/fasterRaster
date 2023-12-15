@@ -17,8 +17,8 @@ methods::setMethod(
     f = "thinLines",
     signature = c(x = "GRaster"),
     function(x, iter = 200) {
-    .restore(x)
-    region(x)
+    .locationRestore(x)
+    .region(x)
 
     nLayer <- nlyr(x)
     srcs <- .makeSourceName("thin", "raster", nLayer)

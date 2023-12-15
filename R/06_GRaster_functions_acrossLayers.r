@@ -115,7 +115,7 @@ setMethod(
 	signature(x = "GRaster"),
 	function(x, na.rm = FALSE) {
 
-		.restore(x)
+		.locationRestore(x)
 		
 		fx <- "maximum"
 		fxName <- "max"
@@ -221,8 +221,8 @@ setMethod(
 	signature(x = "GRaster"),
 	function(x, na.rm = FALSE) {
 
-  		.restore(x)
-  		region(x)
+  		.locationRestore(x)
+  		.region(x)
 
 		# sum of squares
 		srcSS <- .makeSourceName("ss", "raster")
@@ -245,7 +245,7 @@ setMethod(
 		)
 
 		# SD
-  		precision <- getFastOptions("rasterPrecision")
+  		precision <- faster("rasterPrecision")
 
 		src <- .makeSourceName("sd", "rast")
 		ex <- paste0(src, " = ", precision, "(sqrt(", srcSS, " / ", srcCountMinus1, "))")
@@ -269,8 +269,8 @@ setMethod(
 	signature(x = "GRaster"),
 	function(x, na.rm = FALSE) {
 
-		.restore(x)
-		region(x)
+		.locationRestore(x)
+		.region(x)
 	
 		# sum of squares
 		srcSS <- .makeSourceName("ss", "rast")
@@ -293,7 +293,7 @@ setMethod(
 		)
 
 		# variance
-    	precision <- getFastOptions("rasterPrecision")
+    	precision <- faster("rasterPrecision")
 
 		src <- .makeSourceName("var", "rast")
 		ex <- paste0(src, " = ", precision, "(", srcSS, " / ", srcCountMinus1, ")")
@@ -437,8 +437,8 @@ setMethod(
 	signature(x = "GRaster"),
 	function(x, prob, na.rm = FALSE) {
 
-    .restore(x)
-    region(x)
+    .locationRestore(x)
+    .region(x)
 
 	fx <- "quantile"
 	fxName <- "quantile"
@@ -450,8 +450,8 @@ setMethod(
 		output = src,
 		method = fx,
 		quantile = prob,
-		nprocs = getFastOptions("cores"),
-		memory = getFastOptions("memory"),
+		nprocs = faster("cores"),
+		memory = faster("memory"),
 		flags = c(.quiet(), "overwrite")
 	)
 	
@@ -473,8 +473,8 @@ setMethod(
 #' @noRd
 .genericMultiLayer <- function(fx, fxName, x, na.rm, return = "GRaster") {
 
-    .restore(x)
-    region(x)
+    .locationRestore(x)
+    .region(x)
 
 	src <- .makeSourceName(fx, "rast")
 	args <- list(
@@ -482,8 +482,8 @@ setMethod(
 		input = paste(sources(x), collapse=","),
 		output = src,
 		method = fx,
-		nprocs = getFastOptions("cores"),
-		memory = getFastOptions("memory"),
+		nprocs = faster("cores"),
+		memory = faster("memory"),
 		flags = c(.quiet(), "overwrite")
 	)
 	

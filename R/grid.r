@@ -40,8 +40,8 @@ methods::setMethod(
 #' @noRd
 .grid <- function(x, nx, ny, use, angle) {
 
-	.restore(x)
-	region(x)
+	.locationRestore(x)
+	.region(x)
 
 	use <- omnibus::pmatchSafe(use, c("number", "size"), nmax = 1L)
 
@@ -67,7 +67,7 @@ methods::setMethod(
 		newNorth <- extent[4L] + delta * ysize
 		newSouth <- extent[3L] - delta * ysize
 
-		regionExt(c(extent[1L], extent[2L], newSouth, newNorth), respect = "dimensions")
+		.regionExt(c(extent[1L], extent[2L], newSouth, newNorth), respect = "dimensions")
 
 	} else if (is.null(nx) & !is.null(ny)) {
 
@@ -86,7 +86,7 @@ methods::setMethod(
 		newWest <- extent[1L] - delta * xsize
 		newEast <- extent[2L] + delta * xsize
 	
-		regionExt(c(newWest, newEast, extent[3L], extent[4L]), respect = "dimensions")
+		.regionExt(c(newWest, newEast, extent[3L], extent[4L]), respect = "dimensions")
 
 	} else {
 
@@ -115,7 +115,7 @@ methods::setMethod(
 			newNorth <- extent[4L] + ydelta * ysize
 			newSouth <- extent[3L] - ydelta * ysize
 
-			regionExt(c(newWest, newEast, newSouth, newNorth), respect = "dimensions")
+			.regionExt(c(newWest, newEast, newSouth, newNorth), respect = "dimensions")
 		
 		}
 

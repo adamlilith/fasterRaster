@@ -63,8 +63,8 @@ methods::setMethod(
         if (quantile < 0 | quantile > 1) stop("Argument ", sQuote("quantile"), " must be in the range [0, 1].")
     }
 
-    .restore(x)
-    region(x)
+    .locationRestore(x)
+    .region(x)
 
 	# size of neighborhood
 	size <- if (inherits(w, "matrix")) {
@@ -79,8 +79,8 @@ methods::setMethod(
         output = NA_character_,
         method = fun,
         size = size,
-        nprocs = getFastOptions("cores"),
-        memory = getFastOptions("memory"),
+        nprocs = faster("cores"),
+        memory = faster("memory"),
         flags = c(.quiet(), "overwrite"),
         intern = TRUE
     )

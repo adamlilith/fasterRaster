@@ -12,21 +12,19 @@
   align = FALSE,
   method = NULL,
   fallback = TRUE,
-  wrap = FALSE,
-  toLocation = NULL,
-  toMapset = NULL
+  wrap = FALSE
 )
 
-\S4method{project}{GVector}(x, y = NULL, toLocation = NULL, toMapset = NULL)
+\S4method{project}{GVector}(x, y = NULL)
 }
 \arguments{
 \item{x}{A \code{GRaster} or \code{GVector} to be projected.}
 
-\item{y}{\code{NULL} (default), or a \code{GSession} object or any that contain it (i.e., a \code{GRaster}, \code{GVector}, or \code{GRegion}):
+\item{y}{A character or \code{GLocation} object (i.e., typically a \code{GRaster} or \code{GVector}):
 \itemize{
-\item If \code{y} is \code{NULL}, then \code{x} is projected to the CRS of the current "\link[=tutorial_sessions]{location}" (i.e., \code{x} should not be in the current "location"). If \code{x} is a \code{GRaster}, it will not be resampled to a different resolution.
-\item If \code{x} is a \code{GRaster} and \code{y} is a \code{GRaster} or \code{GRegion}, then \code{x} will be projected to the CRS of \code{y} and resampled to the same resolution as \code{y}. \code{x} will be cropped to the extent of \code{y} if \code{align} is \code{TRUE}. \code{x} should not be the same \link[=tutorial_sessions]{location} as \code{y}.
-\item If \code{x} is a \code{GRaster} and \code{y} is a \code{GVector}, then \code{x} will be projected to the CRS of \code{y}. \code{x} will not be resampled. \code{x} should not be the same "\link[=tutorial_sessions]{location}" as \code{y}.
+\item If \code{x} is a \code{GRaster} and \code{y} is a character string representing a coordinate reference system in WKT format, the raster will be projected but not resampled.
+\item If \code{x} is a \code{GRaster} and \code{y} is a \code{GRaster} or \code{GRegion}, then \code{x} will be projected to the CRS of \code{y} and resampled to the same resolution as \code{y}. \code{x} will be cropped to the extent of \code{y} if \code{align} is \code{TRUE}.
+\item If \code{x} is a \code{GRaster} and \code{y} is a \code{GVector}, then \code{x} will be projected to the CRS of \code{y}. \code{x} will not be resampled.
 \item If \code{x} is a \code{GVector}, then \code{x} will be projected to the CRS of \code{y}.
 }}
 
@@ -48,8 +46,6 @@
 \item{fallback}{Logical (projecting \code{GRaster}s only): If \code{TRUE} (default), then use "lower" methods to fill in \code{NA} cells when a "higher" method is used. For example, if \code{method = "bicubic"}, \code{NA} cells will be filled in using the \code{bilinear} method, except when that results in \code{NA}s, in which case the \code{near} method will be used. Fallback causes fewer cells to revert to \code{NA} values, so may be better at capturing complex "edges" (e.g., coastlines). Fallback does increase processing time because each "lower" method must be applied, then results merged. Fallback is not used if \code{method = "near"}.}
 
 \item{wrap}{Logical (\code{GRaster}s only): When projecting rasters that "wrap around" (i.e., whole-world rasters or rasters that have edges that actually circle around to meet on the globe), \code{wrap} should be \code{TRUE} to avoid removing rows and columns from the "edge" of the map. The default is \code{FALSE}.}
-
-\item{toLocation, toMapset}{Character or \code{NULL} (default): The name of the \link[=tutorial_sessions]{"location" and "mapset"} which have the CRS you to which you want to transform the \code{GRaster} or \code{GVector}. You can get the current location and mapset or the location and mapset of an object using \code{\link[=location]{location()}} and \code{\link[=mapset]{mapset()}}. If left as \code{NULL}, then it will be assumed that you want to project the object to the currently active location and mapset.}
 }
 \value{
 A \code{GRaster} or \code{GVector}.
@@ -57,129 +53,51 @@ A \code{GRaster} or \code{GVector}.
 \description{
 \strong{fasterRaster} offers three ways to project rasters and vectors into a different coordinate reference system (CRS). Each of these ways are different from how they are implemented in \strong{terra}, so it is important to understand how it works in \strong{fasterRaster}.
 
-\strong{Case #1: Changing the CRS for a \code{SpatRaster}, \code{SpatVector}, or \code{sf} object already in R}: Use the \code{\link[=fast]{fast()}} function. This function will project the object to the CRS of the current \strong{GRASS} \link[=tutorial_sessions]{location}. Note that for rasters, the \code{method}, \code{fallback}, and \code{wrap} arguments in the \code{fast()} function may be important to what you want to achieve.
+\strong{Case #1: Changing the CRS for a \code{SpatRaster}, \code{SpatVector}, or \code{sf} object already in R}: Use the \code{\link[=fast]{fast()}} function. This function will project the object to the CRS of the current \strong{GRASS} \link[=tutorial_locations_mapsets]{location}. Note that for rasters, the \code{method}, \code{fallback}, and \code{wrap} arguments in the \code{fast()} function may be important to what you want to achieve.
 
 \strong{Case #2: Change the projection of rasters or vectors stored on disk}: Simply use the \code{\link[=fast]{fast()}} function with the file name of the object. Again, the \code{method}, \code{fallback}, and \code{wrap} arguments may be important .
 
-**Case #3: Change the CRS of a \code{GRaster} or \code{GVector}: Use the \code{project()} function (this function). First, initiate a new \strong{GRASS} \link[=tutorial_sessions]{location} using \code{\link[=faster]{faster()}} with the CRS to which you want to transform the object. This means you need to keep track of which \strong{GRASS} "location" in which you are working.  Second, apply this function. If you want to return to the original "location," use \code{location('original_location_name')}. You can get the name of the current location with \code{\link[=location]{location()}} (with no arguments), and its coordinate reference system with \code{\link[=crs]{crs()}} or \code{\link[=st_crs]{st_crs()}} (also no arguments).
+**Case #3: Change the CRS of a \code{GRaster} or \code{GVector}: Use the \code{project()} function (this function). First, initiate a new \strong{GRASS} \link[=tutorial_locations_mapsets]{location} using \code{\link[=faster]{faster()}} with the CRS to which you want to transform the object. This means you need to keep track of which \strong{GRASS} "location" in which you are working.  Second, apply this function. If you want to return to the original "location," use \code{location('original_location_name')}. You can get the name of the current location with \code{\link[=location]{location()}} (with no arguments), and its coordinate reference system with \code{\link[=crs]{crs()}} or \code{\link[=st_crs]{st_crs()}} (also no arguments).
 }
 \details{
 When projecting a raster, the "fallback" methods in \strong{GRASS} module \code{r.import} are actually used, even though the \code{method} argument takes the strings specifying non-fallback methods. See the manual page for the \code{r.import} \strong{GRASS} module.
 }
 \examples{
-\dontrun{
-# NB This example is in a "dontrun{}" block because it requires users to have
-# GRASS GIS Version 8+ installed on their system.
+if (grassStarted()) {
 
-# IMPORTANT #1: If you already have a GRASS session started, you will need to
-# run the line below and the last line in this example to work with it again.
-# If you have not started a GRASS session, you can skip this step and go to
-# step #2.
-opts. <- getFastOptions()
-
-# IMPORTANT #2: Select the appropriate line below and change as necessary to
-# where GRASS is installed on your system.
-grassDir <- "/Applications/GRASS-8.3.app/Contents/Resources" # Mac
-grassDir <- "C:/Program Files/GRASS GIS 8.3" # Windows
-grassDir <- "/usr/local/grass" # Linux
-
-### setup for all examples
+### Setup for all examples
 ##########################
 
 library(sf)
 library(terra)
 
-# elevation raster, climate raster, rivers vector
+# Climate raster, elevation raster, rivers vector
 madElev <- fastData("madElev")
-madChelsa <- fastData("madChelsa")
 madRivers <- fastData("madRivers")
+madChelsa <- fastData("madChelsa")
 
-# For this example, we"ll project the madRivers vector to WGS84 using terra.
-# (The CHELSA raster stack is already in WGS84.)
-madRivers <- vect(madRivers)
-madRivers <- project(madRivers, madChelsa)
-
-# working directory
-wd <- forwardSlash(tempdir())
-
-### Method 1: Project SpatRasters, SpatVectors, or sf vectors
-#############################################################
-
-# Initiate GRASS session:
-faster(x = madElev, grassDir = grassDir,
-workDir = wd, location = "examples") # line only needed for examples
-
-riversFromVect <- fast(madRivers)
-chelsaFromRast <- fast(madChelsa)
-
-### Method 2: Project while loading rasters/vectors from disk
-#############################################################
-
-vectFile <- system.file("extdata", "shapes/madCoast.shp", package="fasterRaster")
-coastProj <- fast(vectFile)
-coastProj
-
-rastFile <- system.file("extdata", "madChelsa.tif", package="fasterRaster")
-chelsaFromFile <- fast(rastFile, method="bilinear")
-chelsaFromFile
-
-### Method 3a: Projecting between GRASS "locations" but do not resample
-#######################################################################
-
-# Set up "to" location:
-faster(x = madElev, grassDir = grassDir,
-workDir = wd, location = "exampleTo") # line only needed for examples
-
-elev <- fast(madElev)
-
-# Set up "from" location and put a raster and vector in it:
-faster(x = madChelsa, grassDir = grassDir,
-workDir = wd, location = "exampleFrom") # line only needed for examples
-
+# Convert objects into fasterRaster formats
 chelsa <- fast(madChelsa)
+elev <- fast(madElev)
 rivers <- fast(madRivers)
 
-# Re-activate the "exampleTo" "location":
-restoreSession(location="exampleTo")
+### Project raster without resampling
+elevWGS84 <- project(elev, crs(chelsa))
+elevWGS84
 
-### Project vector into the "exampleTo" location:
-riversProj <- project(rivers)
-rivers
-riversProj
+### Project raster and resample to resolution of another raster
+elevWGS84Resamp <- project(elev, chelsa)
+elevWGS84Resamp
 
-### Project raster into the "exampleTo" location but do not resample:
-chelsaSameRes <- project(chelsa)
-chelsaSameRes
+res(elevWGS84)
+res(elevWGS84Resamp)
+res(chelsa)
 
-# Compare to terra:
-chelsaSameResTerra <- project(madChelsa, crs(madElev))
-
-minmax(chelsaSameRes)
-minmax(chelsaSameResTerra)
-
-chelsaSameResSpat <- rast(chelsaSameRes)
-plot(chelsaSameResSpat - chelsaSameResTerra)
-
-### Method 3b: Projecting between GRASS "locations" and resample
-################################################################
-
-chelsaResamp <- project(chelsa, elev)
-chelsaResamp
-
-# Compare to terra:
-chelsaResampTerra <- project(madChelsa, madElev)
-
-minmax(chelsaResamp)
-minmax(chelsaResampTerra)
-
-chelsaNewResSpat <- rast(chelsaResamp)
-plot(chelsaNewResSpat - chelsaResampTerra)
-
-# IMPORTANT #3: Revert back to original GRASS session if needed.
-restoreSession(opts.)
-removeSession("examples")
-removeSession("exampleFrom")
-removeSession("exampleTo")
+### Project vector
+riversWGS84 <- project(rivers, chelsa)
+riversWGS84
+cat(crs(rivers)) # using "cat()" to make it look nice
+cat(crs(riversWGS84))
 
 }
 }

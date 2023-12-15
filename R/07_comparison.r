@@ -3,28 +3,32 @@
 #' @description You can do comparative operations on `GRaster`s using normal operators in **R**: `<`, `<=`, `==`, `!=`, `>=`, and `>`.
 #'
 #' You can also compare two `GRegion`s using the `==` and `!=` operators. Most users of **fasterRaster** will not have to work much with [regions][tutorial_regions], so can ignore this functionality.
-#' * `GRegion`s are the same if they have the same [location and mapset][tutorial_sessions], topology (2D or 3D), coordinate reference system (CRS), extent, and resolution. If both are 3D, then they must also have the same vertical extent and number of depths.
+#'
+#' `*` `GRegion`s are the same if they have the same coordinate reference system, [location and mapset][tutorial_locations_mapsets], topology (2D or 3D), extent, and resolution. If both are 3D, then they must also have the same vertical extent and number of depths.
 #' 
 #' @param e1,e2 Values depend on the type of comparison:
-# * Comparing `GRaster`s to logical, numeric, character values: `e1` and `e2` can be any one of these. Character is useful when using a [categorical raster][tutorial_raster_data_types], in which case you can use something like `raster1 == "Wetlands"` to force all "wetland" cells to be 1 (TRUE) and all others 0 (FALSE) or `NA` (if it was originally `NA`).
+#'
+#' * Comparing `GRaster`s to logical, numeric, character values: `e1` and `e2` can be any one of these. Comparison to a character string can be useful when using a [categorical raster][tutorial_raster_data_types], in which case you can use something like `raster1 == "Wetlands"` to coerce all "wetland" cells to be 1 (TRUE) and all others 0 (FALSE) or `NA` (if it was originally `NA`).
 #' * Comparing a `GRegion` to another `GRegion`: `e1` and `e2` must be `GRegion`s!
 #'
-#' @returns Comparing `GRaster`s: An "integer `GRaster` with values of 0 (FALSE), 1 (TRUE), or `NA` (neither). Comparing `GRegion`s: Logical.
+#' @returns Comparing `GRaster`s: An "integer" `GRaster` with values of 0 (FALSE), 1 (TRUE), or `NA` (neither).
+#'
+#' Comparing `GRegion`s: Output is logical.
 #'
 #' @example man/examples/ex_GRaster_arithmetic.r
 #'
 #' @aliases Compare-methods
 #' @rdname Compare-methods
-#' @exportMethod Ops
+#' @exportMethod Arith
 # raster raster
 methods::setMethod(
-	f = "Ops",
+	f = "Arith",
 	signature(e1 = "GRaster", e2 = "GRaster"),
     function(e1, e2) {
 	
 		compareGeom(e1, e2)
-		.restore(e1)
-		region(e1)
+		.locationRestore(e1)
+		.region(e1)
 
 		if (nlyr(e1) > 1L & nlyr(e2) == 1L) {
 			e2 <- e2[[rep(1L, nlyr(e1))]]
@@ -59,14 +63,14 @@ methods::setMethod(
 # logical raster
 #' @aliases Compare-methods
 #' @rdname Compare-methods
-#' @exportMethod Ops
+#' @exportMethod Arith
 methods::setMethod(
-	f = "Ops",
+	f = "Arith",
 	signature(e1 = "logical", e2 = "GRaster"),
     function(e1, e2) {
 	
-		.restore(e2)
-		region(e2)
+		.locationRestore(e2)
+		.region(e2)
 
 		e1 <- as.integer(e1)
 		if (is.na(e1)) e1 <- "null()"
@@ -95,14 +99,14 @@ methods::setMethod(
 # raster logical
 #' @aliases Compare-methods
 #' @rdname Compare-methods
-#' @exportMethod Ops
+#' @exportMethod Arith
 methods::setMethod(
-	f = "Ops",
+	f = "Arith",
 	signature(e1 = "GRaster", e2 = "logical"),
     function(e1, e2) {
 	
-		.restore(e1)
-		region(e1)
+		.locationRestore(e1)
+		.region(e1)
 
 		e2 <- as.integer(e2)
 		if (is.na(e2)) e2 <- "null()"
@@ -131,14 +135,14 @@ methods::setMethod(
 # numeric raster
 #' @aliases Compare-methods
 #' @rdname Compare-methods
-#' @exportMethod Ops
+#' @exportMethod Arith
 methods::setMethod(
-	f = "Ops",
+	f = "Arith",
 	signature(e1 = "numeric", e2 = "GRaster"),
     function(e1, e2) {
 	
-		.restore(e2)
-		region(e2)
+		.locationRestore(e2)
+		.region(e2)
 
 		if (is.na(e1)) e1 <- "null()"
 
@@ -166,14 +170,14 @@ methods::setMethod(
 # raster numeric
 #' @aliases Compare-methods
 #' @rdname Compare-methods
-#' @exportMethod Ops
+#' @exportMethod Arith
 methods::setMethod(
-	f = "Ops",
+	f = "Arith",
 	signature(e1 = "GRaster", e2 = "numeric"),
     function(e1, e2) {
 	
-		.restore(e1)
-		region(e1)
+		.locationRestore(e1)
+		.region(e1)
 
 		if (is.na(e2)) e2 <- "null()"
 		oper <- as.vector(.Generic)[1L]
@@ -201,14 +205,14 @@ methods::setMethod(
 # raster integer
 #' @aliases Compare-methods
 #' @rdname Compare-methods
-#' @exportMethod Ops
+#' @exportMethod Arith
 methods::setMethod(
-	f = "Ops",
+	f = "Arith",
 	signature(e1 = "GRaster", e2 = "integer"),
     function(e1, e2) {
 	
-		.restore(e1)
-		region(e1)
+		.locationRestore(e1)
+		.region(e1)
 
 		if (is.na(e2)) e2 <- "null()"
 		oper <- as.vector(.Generic)[1L]
@@ -236,14 +240,14 @@ methods::setMethod(
 # integer raster
 #' @aliases Compare-methods
 #' @rdname Compare-methods
-#' @exportMethod Ops
+#' @exportMethod Arith
 methods::setMethod(
-    f = "Ops",
+    f = "Arith",
     signature(e1 = "integer", e2 = "GRaster"),
     function(e1, e2) {
 
-        .restore(e2)
-		region(e2)
+        .locationRestore(e2)
+		.region(e2)
 
         if (is.na(e1)) e1 <- "null()"
 
@@ -268,16 +272,16 @@ methods::setMethod(
 # raster character
 #' @aliases Compare-methods
 #' @rdname Compare-methods
-#' @exportMethod Ops
+#' @exportMethod Arith
 methods::setMethod(
-	f = "Ops",
+	f = "Arith",
 	signature(e1 = "GRaster", e2 = "character"),
     function(e1, e2) {
 	
 	if (!all(is.factor(e1))) stop("Raster must be categorical for this type of comparison.")
 	
-	.restore(e1)
-	region(e1)
+	.locationRestore(e1)
+	.region(e1)
 
 	oper <- as.vector(.Generic)[1L]
 	levs <- levels(e1)
@@ -360,15 +364,15 @@ methods::setMethod(
 # character raster
 #' @aliases Compare-methods
 #' @rdname Compare-methods
-#' @exportMethod Ops
+#' @exportMethod Arith
 methods::setMethod(
-	f = "Ops",
+	f = "Arith",
 	signature(e1 = "character", e2 = "GRaster"),
     function(e1, e2) {
 	
 	if (!all(is.factor(e2))) stop("Raster must be categorical for this type of comparison.")
-	.restore(e2)
-	region(e2)
+	.locationRestore(e2)
+	.region(e2)
 
 	oper <- as.vector(.Generic)[1L]
 	levs <- levels(e2)
@@ -451,9 +455,9 @@ methods::setMethod(
 # GRegion GRegion
 #' @aliases Compare-methods
 #' @rdname Compare-methods
-#' @exportMethod Ops
+#' @exportMethod Arith
 methods::setMethod(
-	f = "Ops",
+	f = "Arith",
 	signature(e1 = "GRegion", e2 = "GRegion"),
     function(e1, e2) {
 	
@@ -461,7 +465,7 @@ methods::setMethod(
 	if (!(oper %in% c("==", "!="))) stop("Can only use == and != operators when performing comparisons involving GRegions.")
 
 	out <- TRUE
-	if (location(e1) != location(e2)) out <- FALSE
+	if (.location(e1) != .location(e2)) out <- FALSE
 	if (!terra::same.crs(e1, e2)) out <- out & FALSE
 
 	if ((is.3d(e1) & !is.3d(e2)) | (!is.3d(e1) & is.3d(e2))) {
@@ -490,9 +494,9 @@ methods::setMethod(
 # # # # GRegion GRaster
 # # # #' @aliases Compare-methods
 # # # #' @rdname Compare-methods
-# # # #' @exportMethod Ops
+# # # #' @exportMethod Arith
 # # # methods::setMethod(
-# # # 	f = "Ops",
+# # # 	f = "Arith",
 # # # 	signature(e1 = "GRegion", e2 = "GRaster"),
 # # #     function(e1, e2) {
 
@@ -505,9 +509,9 @@ methods::setMethod(
 # # # # GRaster GRegion
 # # # #' @aliases Compare-methods
 # # # #' @rdname Compare-methods
-# # # #' @exportMethod Ops
+# # # #' @exportMethod Arith
 # # # methods::setMethod(
-# # # 	f = "Ops",
+# # # 	f = "Arith",
 # # # 	signature(e1 = "GRaster", e2 = "GRegion"),
 # # #     function(e1, e2) {
 
@@ -523,7 +527,7 @@ methods::setMethod(
 # # # 	if (!(oper %in% c("==", "!="))) stop("Can only use == and != operators when performing comparisons involving GRegions.")
 
 # # # 	out <- TRUE
-# # # 	if (location(e1) != location(e2)) out <- FALSE
+# # # 	if (.location(e1) != .location(e2)) out <- FALSE
 # # # 	if (!terra::same.crs(e1, e2)) out <- out & FALSE
 
 # # # 	if (is.3d(e1) & is.3d(e2)) {
@@ -548,9 +552,9 @@ methods::setMethod(
 # # # # GRegion GVector
 # # # #' @aliases Compare-methods
 # # # #' @rdname Compare-methods
-# # # #' @exportMethod Ops
+# # # #' @exportMethod Arith
 # # # methods::setMethod(
-# # #     f = "Ops",
+# # #     f = "Arith",
 # # #     signature(e1 = "GRegion", e2 = "GVector"),
 # # #     function(e1, e2) {
 # # #         oper <- as.vector(.Generic)[1L]
@@ -561,9 +565,9 @@ methods::setMethod(
 # # # # GVector GRegion
 # # # #' @aliases Compare-methods
 # # # #' @rdname Compare-methods
-# # # #' @exportMethod Ops
+# # # #' @exportMethod Arith
 # # # methods::setMethod(
-# # #     f = "Ops",
+# # #     f = "Arith",
 # # #     signature(e1 = "GVector", e2 = "GRegion"),
 # # #     function(e1, e2) {
 # # #         oper <- as.vector(.Generic)[1L]
@@ -577,7 +581,7 @@ methods::setMethod(
 # # # 	if (!(oper %in% c("==", "!="))) stop("Can only use == and != operators when performing comparisons involving GRegions.")
 
 # # # 	out <- TRUE
-# # # 	if (location(e1) != location(e2)) out <- FALSE
+# # # 	if (.location(e1) != .location(e2)) out <- FALSE
 # # # 	if (!terra::same.crs(e1, e2)) out <- out & FALSE
 
 # # # 	ext1 <- ext(e1, vector = TRUE)

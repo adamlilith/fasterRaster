@@ -78,8 +78,8 @@ methods::setMethod(
 
 	if (inherits(x, "GRaster")) {
 
-		.restore(x)
-		if (reshapeRegion) region(x)
+		.locationRestore(x)
+		if (reshapeRegion) .region(x)
 		srcs <- sources(x)
 
 	} else {
@@ -137,7 +137,7 @@ methods::setMethod(
 .copyGVector <- function(x) {
 
 	if (inherits(x, "GVector")) {
-		.restore(x)
+		.locationRestore(x)
 		srcs <- sources(x)
 	} else {
 		srcs <- x

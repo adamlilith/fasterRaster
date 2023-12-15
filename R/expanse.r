@@ -28,7 +28,7 @@ methods::setMethod(
 	gtype <- geomtype(x, grass = TRUE)
 	if (!(gtype %in% c("area", "line"))) stop("GVector must represent lines or polygons.")
 
-	.restore(x)
+	.locationRestore(x)
 	
 	units <- c("m", "meters", "metres", "km", "kilometers", "ha", "hectares", "ft", "feet", "mi", "miles", "%", "percent")
 	unit <- omnibus::pmatchSafe(unit, units, useFirst = TRUE, nmax = 1L)

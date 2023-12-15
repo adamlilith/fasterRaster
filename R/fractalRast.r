@@ -34,8 +34,8 @@ methods::setMethod(
     sigma <- rep(sigma, length.out = n)
     dimension <- rep(dimension, length.out = n)
 
-    .restore(x)
-    region(x)
+    .locationRestore(x)
+    .region(x)
 
     gnFracts <- .makeSourceName("fractal", "raster", n)
     srcs <- .makeSourceName("fractalScaled", "raster", n)

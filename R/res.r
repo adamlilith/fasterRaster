@@ -20,7 +20,7 @@
 setMethod(
 	f = "res",
 	signature = "missing",
- 	definition = function(x) res(region())
+ 	definition = function(x) res(.region())
 )
 
 #' @aliases res
@@ -38,7 +38,7 @@ setMethod(
 setMethod(
 	f = "xres",
 	signature = "missing",
- 	definition = function(x) xres(region())
+ 	definition = function(x) xres(.region())
 )
 
 #' @aliases xres
@@ -56,7 +56,7 @@ setMethod(
 setMethod(
 	f = "yres",
 	signature = "missing",
- 	definition = function(x) yres(region())
+ 	definition = function(x) yres(.region())
 )
 
 #' @aliases yres
@@ -74,7 +74,7 @@ setMethod(
 setMethod(
 	f = "zres",
 	signature = "missing",
- 	definition = function(x) zres(region())
+ 	definition = function(x) zres(.region())
 )
 
 #' @aliases zres
@@ -92,7 +92,7 @@ setMethod(
 setMethod(
 	f = "res3d",
 	signature = "missing",
- 	definition = function(x) res3d(region())
+ 	definition = function(x) res3d(.region())
 )
 
 #' @aliases res3d

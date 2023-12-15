@@ -46,8 +46,8 @@ methods::setMethod(
 # fx: "int", "float", "double"
 .as.type <- function(x, fx) {
 
-    .restore(x)
-    region(x)
+    .locationRestore(x)
+    .region(x)
 
     for (i in 1L:nlyr(x)) {
 

@@ -2,11 +2,11 @@
 
 # global PUBLIC options
 .grassDirDefault <- function() NA_character_
-.addonDirDefault <- function() NA_character_
+.addonsDirDefault <- function() NA_character_
 .workDirDefault <- function() file.path(forwardSlash(tempdir()))
 
 .locationDefault <- function() "default"
-.mapsetDefault <- function() "PERMANENT"
+# .mapsetDefault <- function() "PERMANENT"
 
 .coresDefault <- function() 2
 .verboseDefault <- function() FALSE
@@ -22,12 +22,12 @@
 	opts <- data.frame(
 		name = c(
 			"grassDir",
-			"addonDir",
+			"addonsDir",
 			"verbose",
 			"cores",
 			"memory",
 			"location",
-			"mapset",
+			# "mapset",
 			"workDir",
 			"useDataTable",
    			"rasterPrecision"
@@ -39,7 +39,7 @@
 			"numeric",
 			"numeric",
 			"character",
-			"character",
+			# "character",
 			"character",
 			"logical",
 			"character"

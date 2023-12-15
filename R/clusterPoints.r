@@ -37,7 +37,7 @@ methods::setMethod(
 
 	method <- tolower(method)
 
-	.restore(x)
+	.locationRestore(x)
 
 	src <- .makeSourceName("v_cluster", "vector")
 	args <- list(

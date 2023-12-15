@@ -27,8 +27,8 @@ methods::setMethod(
     if (angle < 0 | angle > 90) stop("Argument ", sQuote("angle"), " must be in the range [0, 90].")
     if (direction < 0 | direction > 360) stop("Argument ", sQuote("angle"), " must be in the range [0, 360].")
 
-    .restore(x)
-    region(x)
+    .locationRestore(x)
+    .region(x)
 
     # convert from east to north orientation
     direction <- ((360 - direction) %% 360 + 90) %% 360
