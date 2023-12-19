@@ -1,15 +1,15 @@
 #' Combine values/categories of multiple GRasters into a single GRaster
 #'
-#' @description This function takes from 2 to 10 integer or categorical (factor) `GRaster`s and creates a single `GRaster` that has one value per combination of values in the inputs. For example, say that there were two input rasters, with values 1 and 2 in the one raster, and 3 and 4 in the other. If the following combinations of values occurred between the two rasters, then the output raster would be re-coded with the new values:
+#' @description This function takes from 2 to 10 integer or []categorical][tutorial_raster_data_types] (factor) `GRaster`s and creates a single `GRaster` that has one value per combination of values in the inputs. For example, say that there were two input rasters, with values 1 and 2 in the one raster, and 3 and 4 in the other. If the following combinations of values occurred between the two rasters, then the output raster would be re-coded with the new values:
 #'
 #' | `input_raster1` | `input_raster2` | `output_raster` |
-#' -------------------------------------------------------
+#' | --------------- | --------------- | --------------- |
 #' | 1               | 3               | 0               |
 #' | 1               | 4               | 1               |
 #' | 2               | 3               | 2               |
 #' | 2               | 4               | 3               |
 #'
-#' If the argument `na.rm` is set to `TRUE` (which it is, by default), then whenever at least one cell has an `NA` value, then the output will also have an `NA` (i.e., a new category number is not created). However, if `na.rm` is `FALSE`, then combinations that include an `NA` are assigned a new category number, unless all values are `NA` (in which case the output is also `NA`).
+#' If the argument `na.rm` is set to `TRUE` (which it is, by default), then whenever at least one cell has an `NA` value, then the output will also have an `NA` (i.e., a new category number is not created). However, if `na.rm` is `FALSE`, then combinations that include an `NA` are assigned a new category number, unless all values are `NA` (in which case the output will be `NA`).
 #'
 #' If the inputs are all categorical rasters, then a [levels()] table will also be returned with the new levels.
 #'
@@ -23,7 +23,7 @@
 #'
 #' @example man/examples/ex_GRaster_categorical.r
 #'
-#' @seealso [GRaster data types][tutorial_raster_data_types]
+#' @seealso [`GRaster` data types][tutorial_raster_data_types]
 #'
 #' @aliases combineCats
 #' @rdname combineCats
