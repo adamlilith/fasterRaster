@@ -12,5 +12,5 @@
 #' @rdname grassStarted
 #' @export
 grassStarted <- function() {
-	exists(".fasterRaster"), inherits = TRUE && .fasterRaster$grassStarted
+	exists(".fasterRaster", inherits = TRUE) && .fasterRaster$grassStarted
 }
