@@ -1,10 +1,9 @@
 #' Spatial resolution
 #'
 #' @description Spatial resolution of a `GRaster`:
-#' 
-#' `res()`: 2-dimensional resolution (x and y).\cr\cr
-#' `res3d()`: 3-dimensinal resolution (z, y, and z).\cr\cr
-#' `xres()`, `yres()`, and `zres()`: East-west resolution, north-south resolution, and top-bottom resolution.
+#' * `res()`: 2-dimensional resolution (x and y).\cr\cr
+#' * `res3d()`: 3-dimensinal resolution (z, y, and z).\cr\cr
+#' * `xres()`, `yres()`, and `zres()`: East-west resolution, north-south resolution, and top-bottom resolution.
 #'
 #' @param x A `GRaster`, `GRegion`, or missing. If missing, the resolution of the currently active [region][tutorial_regions] is returned.
 #'
