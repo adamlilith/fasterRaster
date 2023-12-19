@@ -1,7 +1,7 @@
 #' @title Number of rows, columns, depths, cells, and layers
 #'
 #' @description
-#' Number of rows, columns, depths, and cells of a `GRegion`:
+#' For `GRegion`s: Number of rows, columns, depths, and cells:
 #' * `dim()`: Rows, columns, depths, and layers
 #' * `nrow()`: Rows
 #' * `ncol()`: Columns
@@ -13,15 +13,15 @@
 #' * `nlyr()`: Layers (number of "stacked" rasters--different from depths of a raster).
 #'
 #' For `GVector`s: Number of geometries and fields (columns):
-#' * `dim()`: Number of geometries and fields
+#' * `dim()`: Number of geometries and number of columns in data table
 #' * `nrow()`: Number of geometries
-#' * `ncol()`: Number of fields (columns)
+#' * `ncol()`: Number of columns in data table
 #'
 #' @param x A `GRegion`, `GRaster`, `GVector`, or missing. If missing, then the dimensions of the currently active [region][tutorial_regions] are returned.
 #'
 #' @return A numeric value or vector.
 #' 
-#' @seealso [terra::dim()]
+#' @seealso [ngeom()], [nsubgeom()], [nacell()], [nonnacell()], [terra::dim()]
 #'
 #' @example man/examples/ex_GRaster_GVector.r
 #'
