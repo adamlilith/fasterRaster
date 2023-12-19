@@ -18,14 +18,18 @@
 		src <- x
 	}
 
-	args <- list(
-		cmd = "db.columns",
-		table = src,
-		flags = .quiet(),
-		intern = TRUE
-	)
+	if (.vHasTable(src)) {
 
-	out <- do.call(rgrass::execGRASS, args = args)
+		out <- rgrass::execGRASS(
+			cmd = "db.columns",
+			table = src,
+			flags = .quiet(),
+			intern = TRUE
+		)
+		
+	} else {
+		out <- NULL
+	}
 	out
 
 }
