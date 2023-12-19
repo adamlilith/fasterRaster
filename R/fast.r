@@ -82,7 +82,7 @@ methods::setMethod(
 
 		}
 
-		.locationRestore(x = location, match = "name")
+		.locationRestore(x = location)
 
 		src <- .makeSourceName("r_in_gdal", type = "raster", n = 1L)
 		rgrass::execGRASS(
@@ -133,6 +133,8 @@ methods::setMethod(
 			location <- .location()
 
 		}
+
+		.locationRestore(x = location)
 
 		src <- .makeSourceName("v_in_ogr", type = "vector")
 		rgrass::execGRASS(
@@ -246,6 +248,7 @@ methods::setMethod(
 
 # 1. Write vector to disk (if needed)
 # 2. Send to fast(signature = "character")
+#' @noRd
 .fastVector <- function(
 	x,		# SpatVector or sf
 	snap	# NULL or numeric
