@@ -1,6 +1,10 @@
 #' Convert a raster or lines or polygons vector to a points vector
 #'
-#' @description `as.points()` converts a `GRaster` or `GVector` to a points `GVector`. For rasters, the points have the coordinates of cell centers and are assigned the cells' values. Only non-`NA` cells will be converted to a point. For vectors, each point will have the attributes of the line or polygon to which it belonged. Points are extracted from each vertex.
+#' @description `as.points()` converts a `GRaster` or `GVector` to a points `GVector`.
+#'
+#' For `GRasters`, the points have the coordinates of cell centers and are assigned the cells' values. Only non-`NA` cells will be converted to points.
+#'
+#' For `GVectors`, each point will have the attributes of the line or polygon to which it belonged. Points are extracted from each vertex.
 #' 
 #' @param x A `GRaster`, `GVector`.
 #' 
@@ -8,7 +12,7 @@
 #' 
 #' @returns A `points` `GVector`.
 #' 
-#' @seealso [as.lines()], [as.polygons()], [terra::as.points()], and modules `v.to.points` and `r.to.vect` in **GRASS**
+#' @seealso [crds()], [as.lines()], [as.polygons()], [terra::as.points()], and modules `v.to.points` and `r.to.vect` in **GRASS**
 #' 
 #' @example man/examples/ex_asPoints.r
 #' 
