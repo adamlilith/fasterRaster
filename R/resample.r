@@ -44,9 +44,6 @@ methods::setMethod(
 #' @noRd
 .resample <- function(x, y, method, fallback) {
 
-	if (inherits(y, "GRaster")) compareGeom(x, y)
-	.locationRestore(x)
-
 	# method
 	if (!is.null(method)) method <- omnibus::pmatchSafe(method, c("nearest", "bilinear", "bicubic", "lanczos"))
 	if (is.null(method)) {
@@ -120,8 +117,7 @@ methods::setMethod(
 		cmd = "g.region",
 		n = n, s = s, e = e, w = w,
 		ewres = ewres, nsres = nsres,
-		flags = c("o", .quiet()),
-		intern = TRUE
+		flags = c("o", .quiet())
 	)
 	if (!is.na(t)) args <- c(args, t=t)
 	if (!is.na(b)) args <- c(args, t=b)
@@ -130,12 +126,12 @@ methods::setMethod(
 	do.call(rgrass::execGRASS, args=args)
 	
 	# resample each layer
-	for (i in seq_len(nlyr(x))) {
+	for (i in 1L:nlyr(x)) {
 
 		### resample
 		if (method == "nearest" | fallback) {
 
-			srcNearest <- .makeSourceName("nearest", "raster")
+			srcNearest <- .makeSourceName("r_resample", "raster")
 			rgrass::execGRASS(
 				cmd = "r.resample",
 				input = sources(x)[i],
@@ -147,15 +143,14 @@ methods::setMethod(
 
 		if (method == "bilinear" | (fallback & method %in% c("bicubic", "lanczos"))) {
 
-			srcBilinear <- .makeSourceName("bilinear", "raster")
+			srcBilinear <- .makeSourceName("r_resamp_interp", "raster")
 			args <- list(
 				cmd = "r.resamp.interp",
 				input = sources(x)[i],
 				output = srcBilinear,
 				method = "bilinear",
 				memory = faster("memory"),
-				flags = c(.quiet(), "overwrite"),
-				intern = TRUE
+				flags = c(.quiet(), "overwrite")
 			)
 			if (versionNumber >= 8.3) args$nprocs <- faster("cores")
 
@@ -165,34 +160,34 @@ methods::setMethod(
 
 		if (method == "bicubic" | (fallback & method == "lanczos")) {
 
-			srcBicubic <- .makeSourceName("bicubic", "raster")
+			srcBicubic <- .makeSourceName("r_resamp_interp", "raster")
 			args <- list(
 				cmd = "r.resamp.interp",
 				input = sources(x)[i],
 				output = srcBicubic,
 				method = "bicubic",
 				memory = faster("memory"),
-				flags = c(.quiet(), "overwrite"),
-				intern = TRUE
+				flags = c(.quiet(), "overwrite")
 			)
 			if (versionNumber >= 8.3) args$nprocs <- faster("cores")
+			
 			do.call(rgrass::execGRASS, args = args)
 
 		}
 
 		if (method == "lanczos") {
 
-			srcLanczos <- .makeSourceName("lanczos", "raster")
+			srcLanczos <- .makeSourceName("r_resamp_interp", "raster")
 			args <- list(
 				cmd = "r.resamp.interp",
 				input = sources(x)[i],
 				output = srcLanczos,
 				method = "lanczos",
 				memory = faster("memory"),
-				flags = c(.quiet(), "overwrite"),
-				intern = TRUE
+				flags = c(.quiet(), "overwrite")
 			)
 			if (versionNumber > 8.3) args$nprocs <- faster("cores")
+			
 			do.call(rgrass::execGRASS, args = args)
 
 		}
@@ -229,8 +224,7 @@ methods::setMethod(
 			args <- list(
 				cmd = "r.mapcalc",
 				expression = ex,
-				flags = c(.quiet(), "overwrite"),
-				intern = TRUE
+				flags = c(.quiet(), "overwrite")
 			)
 			do.call(rgrass::execGRASS, args=args)
 
