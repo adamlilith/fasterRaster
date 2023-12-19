@@ -7,8 +7,6 @@
 #' * An integer: Index of the "location" in `.fasterRaster$locations`.
 #' * A `GSpatial` object (usually a `GRaster` or `GVector`).
 #'
-#' @param match Character: Method used to find the location. If `match` is "`name`"" (default), then the name of the location is used. If `match` is "`crs`", then the coordinate reference system of each location is checked for a match.
-#'
 #' @return An object of class `GLocation` (invisibly) if successful. An error will likely result if not.
 #'
 #' @aliases .locationRestore
@@ -16,7 +14,7 @@
 methods::setMethod(
 	f = ".locationRestore",
 	signature = c(x = "character"),
-	function(x, match = "name") ..restoreLocation(x, match = match)
+	function(x) ..locationRestore(x)
 )
 
 #' @aliases .locationRestore
@@ -24,7 +22,7 @@ methods::setMethod(
 methods::setMethod(
 	f = ".locationRestore",
 	signature = c(x = "integer"),
-	function(x, match = "name") ..restoreLocation(x, match = match)
+	function(x) ..locationRestore(x)
 )
 
 #' @aliases .locationRestore
@@ -32,7 +30,7 @@ methods::setMethod(
 methods::setMethod(
 	f = ".locationRestore",
 	signature = c(x = "numeric"),
-	function(x, match = "name") ..restoreLocation(x, match = match)
+	function(x) ..locationRestore(x)
 )
 
 #' @aliases .locationRestore
@@ -40,26 +38,33 @@ methods::setMethod(
 methods::setMethod(
 	f = ".locationRestore",
 	signature = c(x = "GSpatial"),
-	function(x, match = "name") ..restoreLocation(x, match = match)
+	function(x) ..locationRestore(x)
 )
 
 #' @noRd
-..restoreLocation <- function(x, match) {
+..locationRestore <- function(x) {
 
-	index <- .locationFind(x = x, return = "index", match = match)
+	if (inherits(x, "character")) {
+		location <- x
+	} else if (inherits(x, c("numeric", "integer"))) {
+		location <- names(.fasterRaster$locations)[x]
+	} else if (inherits(x, "GSpatial")) {
+		location <- x@location
+	}
+
+	index <- .locationFind(location, return = "index")
 
 	if (is.null(index)) {
 		stop("Location has not been created.")
 	}
-
-	location <- names(.fasterRaster$locations)[index]
-	coordRef <- .fasterRaster$locations[[index]]
 
 	opts <- faster()
 	grassDir <- opts$grassDir
 	addonsDir <- opts$addonsDir
 	workDir <- 	opts$workDir
 	mapset <- "PERMANENT"
+
+	coordRef <- .fasterRaster$locations[[index]]
 
 	if (location != .fasterRaster$activeLocation) {
 

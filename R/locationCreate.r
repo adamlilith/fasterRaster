@@ -141,6 +141,7 @@ methods::setMethod(
 		)
 	)
 
+	rgrass::set.ignore.stderrOption(!faster("verbose"))
 	.fasterRaster$grassStarted <- TRUE
 	
 	n <- length(.fasterRaster$locations)
