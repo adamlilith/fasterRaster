@@ -57,7 +57,7 @@ methods::setMethod(
 	) {
 
 	xLocation <- .location(x)
-	yLocation <- .locationFind(y, return = "name")
+	yLocation <- .locationFind(y, match = "crs", return = "name")
 
 	if (!is.null(yLocation)) {
 	
@@ -132,7 +132,7 @@ methods::setMethod(
 	}
 
 	xRast <- terra::project(xRast, yCrs, method = "near", align = TRUE)
-	.locationRestore(yLocation, match = "name")
+	.locationRestore(yLocation)
 # cat("Slow step!")
 	.region(xRast)
 # cat("Slow step^^^")
@@ -187,7 +187,7 @@ methods::setMethod(
 	) {
 
 	xLocation <- .location(x)
-	yLocation <- .locationFind(y, return = "name")
+	yLocation <- .locationFind(y, match = "crs", return = "name")
 
 	if (!is.null(yLocation)) {
 	
@@ -201,7 +201,7 @@ methods::setMethod(
 		yLocation <- .location(yLocation)
 	}
 
-	.locationRestore(yLocation, match = "name")
+	.locationRestore(yLocation)
 	src <- .makeSourceName("projected", "vector")
 	
 	args <- list(
