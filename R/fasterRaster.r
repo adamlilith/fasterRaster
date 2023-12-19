@@ -40,7 +40,7 @@
 #' 
 #' ## Functions that operate on or create `GRasters`
 #' [Arithmetic]: Mathematical operations on `GRaster`s: `+`, `-`, `*`, `/`, `^`, `%%` (modulus), `%/%` (integer division)\cr
-#' [Logical comparisons][Compare-methods]: `<`, `<=`, `==`, `!=`, `>=`, and `>`, plus `%in%` (for categorical rasters only)\cr
+#' [Logical comparisons][Compare-methods]: `<`, `<=`, `==`, `!=`, `>=`, and `>`, plus \code{\link[fasterRaster]{%in%}} and \code{\link[fasterRaster]{%notin%}} (for categorical rasters only)\cr
 #'
 #' Single-layer functions (applied to each layer of a `GRaster`):
 #' - Working with `NA`s: [is.na()] and [not.na()] \cr
@@ -86,7 +86,7 @@
 #' [kernel()]: Kernel density estimator of points.\cr
 #' [longlat()]: Create longitude/latitude rasters.\cr
 #' [mask()]: Remove values in a `GRaster` based on values in another `GRaster` or vector\cr
-#' [match()], `%in%`, and %notin%: Find which cells of a `GRaster` match or do not match certain values\cr
+#' [match()], \code{\link[fasterRaster]{%in%}}, and \code{\link[fasterRaster]{%notin%}}: Find which cells of a `GRaster` match or do not match certain values\cr
 #' [merge()]: Combine two or more rasters with different extents and fill in `NA`s\cr
 #' [noise()]: Remove coarse-scale trends from a `GRaster`, leaving just fine-scale "noise"\cr
 #' [pairs()]: Plot correlations between `GRaster` layers\cr
@@ -123,7 +123,7 @@
 #' [is.factor()]: Is a raster categorical?\cr
 #' [levels()]: "Levels" table of a categorical raster\cr
 #' \code{\link[fasterRaster]{levels<-}}: Set "levels" table of a categorical raster\cr
-#' [match()], `%in%`, and %notin%: Find which cells of a `GRaster` match or do not match certain category labels\cr
+#' [match()], \code{\link[fasterRaster]{%in%}}, and \code{\link[fasterRaster]{%notin%}}: Find which cells of a `GRaster` match or do not match certain category labels\cr
 #' [minmax()]: "Lowest" and "highest" category values of categorical rasters (when argument `levels = TRUE`)\cr
 #' [missing.cases()]: Find rows of a categorical `GRaster`'s "levels" table that have at least one `NA` in them\cr
 #' [missingCats()]: Values that have no category assigned to them\cr
@@ -146,6 +146,7 @@
 #' [is.lonlat()]: Is an object projected (e.g., in WGS84)?\cr
 #' [is.points()], [is.lines()], [is.polygons()]: Does a `GVector` represent points, lines, or polygons?\cr
 #' [names()]: Names of `GVector` fields\cr
+#' \code{\link[fasterRaster]{names<-}}: Assign names to columns of a `GVector`s data table\cr
 #' [ncol()]: Number of fields\cr
 #' [ngeom()]: Number of geometries (points, lines, polygons)\cr
 #' [nrow()]: Number of rows in a vector data table\cr
@@ -165,6 +166,7 @@
 #' [buffer()]: Create a polygon around/inside a `GVector`\cr
 #' [cleanGeom()]: Fix undesirable geometries of a `GVector`\cr
 #' [clusterPoints()]: Identify clusters of points\cr
+#' [colbind()]: Add columns to the data table of a `GVector`\cr
 #' [complete.cases()]: Find rows of a `GVector`'s data table that have no `NA`s in them\cr
 #' [connectors()]: Create lines connecting nearest features of two `GVector`s\cr
 #' [convHull()]: Minimum convex hull\cr
@@ -240,6 +242,7 @@
 #' Tutorial on **GRASS** ["locations" and mapsets][tutorial_locations_mapsets]\cr
 #' `.copyGSpatial()`: Make a copy of the **GRASS** file pointed to by a `GRaster` or `GVector`\cr
 #' `.fileExt()`: Get file extension\cr
+#' [.exists()]: Does the **GRASS** file of a `GRaster` or `GVector` exist?\cr
 #' `.layerIndex()`: Gets the index of `GRaster` layers from a numeric, integer, character, or logical vector\cr
 #' [.locationCreate()] Make a connection to **GRASS** (i.e., start **GRASS** from within **R**) and create a location\cr
 #' [.locationDelete()] Deletes all files associated with a **GRASS** "location" and mapset\cr
