@@ -45,6 +45,8 @@ setMethod(
 	### going to overwrite anything?
 	if (!overwrite && file.exists(filename)) stop(paste0("File already exists and ", sQuote("overwrite"), " is FALSE:\n ", filename))
 
+	.locationRestore(x)
+
 	if (attachTable & nrow(x) > 0L) {
 
 		src <- .copyGVector(x)
@@ -61,6 +63,7 @@ setMethod(
 		input = src,
 		output = filename,
 		flags = c(.quiet(), "s")
+		# flags = c(.quiet(), "s", "c") # save geometries lacking a cat number
 	)
 	if (overwrite) args$flags <- c(args$flags, "overwrite")
 
