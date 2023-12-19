@@ -1,6 +1,6 @@
 #' Data type of a raster
 #'
-#' @description In **fasterRaster**, rasters can have three [data types][tutorial_raster_data_types]: "factor" (categorical rasters), "integer" (integers), "float" (floating point values, accurate to ~7 decimal places), and "double" (double-precision values, accurate to ~16 decimal places). The type of raster can be checked with:
+#' @description In **fasterRaster**, rasters can have three [data types][tutorial_raster_data_types]: "factor" (categorical rasters), "integer" (integers), "float" (floating point values, accurate to the 6th to 9th decimal places), and "double" (double-precision values, accurate to the 15th to 17th decimal places). The type of raster can be checked with:
 #'
 #' * `is.factor()`: The raster will have integer values and categories matched to the integers (see levels()).
 #' * `is.int()`: Are values integers? Note that `is.int()` will return `FALSE` for categorical rasters, even though cell values are technically integers.
