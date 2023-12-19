@@ -2,11 +2,13 @@
 #'
 #' @description `cor()` returns a correlation matrix between two or more `GRaster` layers, and `cov()` returns a covariance matrix between two or more `GRaster` layers.
 #' 
-#' @param x A `GRaster`.
+#' @param x A `GRaster` with two or more layers.
 #' 
 #' @returns A numeric `matrix`.
 #' 
 #' @example man/examples/ex_GRaster.r
+#'
+#' @seealso [stats::cor()], [stats::cov()]
 #' 
 #' @aliases cor
 #' @rdname cor
