@@ -1,10 +1,8 @@
 #' Compare-methods operations on GRasters and GRegions
 #'
-#' @description You can do comparative operations on `GRaster`s using normal operators in **R**: `<`, `<=`, `==`, `!=`, `>=`, and `>`.
+#' @description You can do comparative operations on `GRaster`s using normal operators in **R**: `<`, `<=`, `==`, `!=`, `>=`, and `>`. You can also use \code{\link[fasterRaster]{%in%}} for [categorical][tutorial_raster_data_types] `GRasters`.
 #'
-#' You can also compare two `GRegion`s using the `==` and `!=` operators. Most users of **fasterRaster** will not have to work much with [regions][tutorial_regions], so can ignore this functionality.
-#'
-#' `*` `GRegion`s are the same if they have the same coordinate reference system, [location and mapset][tutorial_locations_mapsets], topology (2D or 3D), extent, and resolution. If both are 3D, then they must also have the same vertical extent and number of depths.
+#' You can also compare two `GRegion`s using the `==` and `!=` operators. Most users of **fasterRaster** will not have to work much with [regions][tutorial_regions], so can ignore this functionality. `GRegion`s are the same if they have the same coordinate reference system, [location and mapset][tutorial_locations_mapsets], topology (2D or 3D), extent, and resolution. If both are 3D, then they must also have the same vertical extent and number of depths.
 #' 
 #' @param e1,e2 Values depend on the type of comparison:
 #'
@@ -19,10 +17,10 @@
 #'
 #' @aliases Compare-methods
 #' @rdname Compare-methods
-#' @exportMethod Arith
+#' @exportMethod Compare
 # raster raster
 methods::setMethod(
-	f = "Arith",
+	f = "Compare",
 	signature(e1 = "GRaster", e2 = "GRaster"),
     function(e1, e2) {
 	
@@ -63,9 +61,9 @@ methods::setMethod(
 # logical raster
 #' @aliases Compare-methods
 #' @rdname Compare-methods
-#' @exportMethod Arith
+#' @exportMethod Compare
 methods::setMethod(
-	f = "Arith",
+	f = "Compare",
 	signature(e1 = "logical", e2 = "GRaster"),
     function(e1, e2) {
 	
@@ -99,9 +97,9 @@ methods::setMethod(
 # raster logical
 #' @aliases Compare-methods
 #' @rdname Compare-methods
-#' @exportMethod Arith
+#' @exportMethod Compare
 methods::setMethod(
-	f = "Arith",
+	f = "Compare",
 	signature(e1 = "GRaster", e2 = "logical"),
     function(e1, e2) {
 	
@@ -135,9 +133,9 @@ methods::setMethod(
 # numeric raster
 #' @aliases Compare-methods
 #' @rdname Compare-methods
-#' @exportMethod Arith
+#' @exportMethod Compare
 methods::setMethod(
-	f = "Arith",
+	f = "Compare",
 	signature(e1 = "numeric", e2 = "GRaster"),
     function(e1, e2) {
 	
@@ -170,9 +168,9 @@ methods::setMethod(
 # raster numeric
 #' @aliases Compare-methods
 #' @rdname Compare-methods
-#' @exportMethod Arith
+#' @exportMethod Compare
 methods::setMethod(
-	f = "Arith",
+	f = "Compare",
 	signature(e1 = "GRaster", e2 = "numeric"),
     function(e1, e2) {
 	
@@ -205,9 +203,9 @@ methods::setMethod(
 # raster integer
 #' @aliases Compare-methods
 #' @rdname Compare-methods
-#' @exportMethod Arith
+#' @exportMethod Compare
 methods::setMethod(
-	f = "Arith",
+	f = "Compare",
 	signature(e1 = "GRaster", e2 = "integer"),
     function(e1, e2) {
 	
@@ -240,9 +238,9 @@ methods::setMethod(
 # integer raster
 #' @aliases Compare-methods
 #' @rdname Compare-methods
-#' @exportMethod Arith
+#' @exportMethod Compare
 methods::setMethod(
-    f = "Arith",
+    f = "Compare",
     signature(e1 = "integer", e2 = "GRaster"),
     function(e1, e2) {
 
@@ -272,9 +270,9 @@ methods::setMethod(
 # raster character
 #' @aliases Compare-methods
 #' @rdname Compare-methods
-#' @exportMethod Arith
+#' @exportMethod Compare
 methods::setMethod(
-	f = "Arith",
+	f = "Compare",
 	signature(e1 = "GRaster", e2 = "character"),
     function(e1, e2) {
 	
@@ -364,9 +362,9 @@ methods::setMethod(
 # character raster
 #' @aliases Compare-methods
 #' @rdname Compare-methods
-#' @exportMethod Arith
+#' @exportMethod Compare
 methods::setMethod(
-	f = "Arith",
+	f = "Compare",
 	signature(e1 = "character", e2 = "GRaster"),
     function(e1, e2) {
 	
@@ -455,9 +453,9 @@ methods::setMethod(
 # GRegion GRegion
 #' @aliases Compare-methods
 #' @rdname Compare-methods
-#' @exportMethod Arith
+#' @exportMethod Compare
 methods::setMethod(
-	f = "Arith",
+	f = "Compare",
 	signature(e1 = "GRegion", e2 = "GRegion"),
     function(e1, e2) {
 	
@@ -494,9 +492,9 @@ methods::setMethod(
 # # # # GRegion GRaster
 # # # #' @aliases Compare-methods
 # # # #' @rdname Compare-methods
-# # # #' @exportMethod Arith
+# # # #' @exportMethod Compare
 # # # methods::setMethod(
-# # # 	f = "Arith",
+# # # 	f = "Compare",
 # # # 	signature(e1 = "GRegion", e2 = "GRaster"),
 # # #     function(e1, e2) {
 
@@ -509,9 +507,9 @@ methods::setMethod(
 # # # # GRaster GRegion
 # # # #' @aliases Compare-methods
 # # # #' @rdname Compare-methods
-# # # #' @exportMethod Arith
+# # # #' @exportMethod Compare
 # # # methods::setMethod(
-# # # 	f = "Arith",
+# # # 	f = "Compare",
 # # # 	signature(e1 = "GRaster", e2 = "GRegion"),
 # # #     function(e1, e2) {
 
@@ -552,9 +550,9 @@ methods::setMethod(
 # # # # GRegion GVector
 # # # #' @aliases Compare-methods
 # # # #' @rdname Compare-methods
-# # # #' @exportMethod Arith
+# # # #' @exportMethod Compare
 # # # methods::setMethod(
-# # #     f = "Arith",
+# # #     f = "Compare",
 # # #     signature(e1 = "GRegion", e2 = "GVector"),
 # # #     function(e1, e2) {
 # # #         oper <- as.vector(.Generic)[1L]
@@ -565,9 +563,9 @@ methods::setMethod(
 # # # # GVector GRegion
 # # # #' @aliases Compare-methods
 # # # #' @rdname Compare-methods
-# # # #' @exportMethod Arith
+# # # #' @exportMethod Compare
 # # # methods::setMethod(
-# # #     f = "Arith",
+# # #     f = "Compare",
 # # #     signature(e1 = "GVector", e2 = "GRegion"),
 # # #     function(e1, e2) {
 # # #         oper <- as.vector(.Generic)[1L]
