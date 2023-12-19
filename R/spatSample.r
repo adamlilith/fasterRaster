@@ -1,6 +1,6 @@
 #' Sample random points from a GRaster or GVector
 #'
-#' @description `spatSample()` randomly locates points across a `GRaster` or `GVector`. It can return the coordinates, values associated with the points, or both.
+#' @description `spatSample()` randomly locates points across a `GRaster` or `GVector`. It can return a `GVector`, the coordinates, values associated with the points, or all of these. If you want to generate a raster with randomly-sampled cells, see [sampleRast()].
 #' 
 #' @param x A `GRaster` or `GVector`.
 #' 
