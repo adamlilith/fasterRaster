@@ -8,6 +8,8 @@
 #' **Case 2: Argument `x` is a `GRaster` and `y` is a `GVector` (`distance()`):** All cells in the raster have their value replaced by the distance to the nearest features in the `GVector`. Alternatively, calculate the distance from any cell covered by a vector object and the nearest cell *not* covered by a vector object. Note that the vector is rasterized first.
 #'
 #' **Case 3: Argument `x` is a `GVector` and `y` is a `GVector` (`distance()` and `st_distance()`):** A matrix of pairwise distances between all features in one versus the other `GVector` is returned.
+#'
+#' **Case 4: Argument `x` is a `GVector` and `y` is missing:** A matrix of pairwise distances between all features in the `GVector` is returned.
 #' 
 #' @param x A `GRaster` or `GVector`.
 #'
@@ -225,6 +227,26 @@ methods::setMethod(
 	unit <- omnibus::expandUnits(unit)
 	if (unit == "metres") unit <- "meters"
 	omnibus::convertUnits(from = "meters", to = unit, x = out)
+	
+	} # EOF
+)
+
+#' @aliases distance
+#' @rdname distance
+#' @exportMethod distance
+methods::setMethod(
+	"distance",
+	signature(x = "GVector", y = "missing"),
+	function(
+		x,
+		y,
+		unit = "meters",
+		minDist = NULL,
+		maxDist = NULL
+	) {
+
+	y <- x
+	distance(x = x, y = y, unit = unit, minDist = minDist, maxDist = maxDist)
 	
 	} # EOF
 )
