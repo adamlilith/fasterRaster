@@ -42,9 +42,7 @@ methods::setMethod(
 		type <- types[match(x, srcs)]
 
 	} else {
-
 		type <- omnibus::pmatchSafe(type, c("raster", "vector", "raster3d", "vector3d"))
-	
 	}
 
 	n <- length(x)
