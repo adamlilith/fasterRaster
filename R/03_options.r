@@ -91,7 +91,7 @@ faster <- function(
 		if (!is.na(opts$grassDir)) {
    			if (!is.character(opts$grassDir) || length(opts$grassDir) != 1L) stop(error)
 		}
-		if (!file.exists(grassDir)) {
+		if (!file.exists(opts$grassDir)) {
 			opts$grassDir <- NA_character_
 			warning(sQuote("grassDir"), " invalid. This directory does not exist. Value has been set to NA.")
 		}
@@ -184,6 +184,7 @@ faster <- function(
 	}
 
 	if (any(names(opt) %in% "verbose")) {
+		# rgrass::set.ignore.stderrOption(faster("verbose"))
 		rgrass::set.ignore.stderrOption(!faster("verbose"))
 	}
 
