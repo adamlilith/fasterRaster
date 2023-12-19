@@ -431,8 +431,7 @@ methods::setMethod(
 	args <- list(
 		cmd = "r.mapcalc",
 		expression = ex,
-		flags = c(.quiet(), "overwrite"),
-		intern = TRUE
+		flags = c(.quiet(), "overwrite")
 	)
 	do.call(rgrass::execGRASS, args = args)
 	.makeGRaster(src, name)
