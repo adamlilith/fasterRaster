@@ -5,9 +5,9 @@
 #' @param x A `GRaster`.
 #' 
 #' @param w Numeric integer or a square matrix with an odd number of rows and columns: The size and nature of the neighborhood:
-#' 	* "Square" neighborhoods (when `circle = FALSE`): An odd integer >= 3, indicating indicates the size of a "square" neighborhood (number of cells wide and number or cells tall).
-#' 	* "Circular" neighborhoods (when `circle = TRUE`): An odd integer >=3, indicating the diameter of the circle.
-#' 	* A matrix of cell weights: The matrix must be square and have an odd number of rows and columns (example: `matrix(c(0.5, 1, 0.5, 1, 2, 1, 0.5, 1, 0.5), nrow=3)`). You cannot use a weights matrix when `circle = TRUE. Cells with `NA` as a weight will be ignored. Note that weighted matrices should not be used for function `min`, `max`, `count`, `nunique`, or `interspersion`.
+#' * "Square" neighborhoods (when `circle = FALSE`): An odd integer >= 3, indicating indicates the size of a "square" neighborhood (number of cells wide and number or cells tall).
+#' * "Circular" neighborhoods (when `circle = TRUE`): An odd integer >=3, indicating the diameter of the circle.
+#' * A matrix of cell weights: The matrix must be square and have an odd number of rows and columns (example: `matrix(c(0.5, 1, 0.5, 1, 2, 1, 0.5, 1, 0.5), nrow=3)`). You cannot use a weights matrix when `circle = TRUE`. Cells with `NA` as a weight will be ignored. Note that weighted matrices should not be used for function `min`, `max`, `count`, `nunique`, or `interspersion`.
 #' 
 #' @param fun Character: Name of the function to apply to the neighborhood:
 #' * "`mean`" (default)
@@ -27,7 +27,7 @@
 #' 
 #' The center cell value is always included in the calculations, and all calculations ignore `NA` cells (i.e., they do not count as cells in the focal neighborhood).
 #'
-#' @param circle Logical: If `FALSE` (default), use a "square" neighborhood. If `TRUE, use a "circular" neighborhood. When this is `TRUE`, argument `w cannot be a matrix.
+#' @param circle Logical: If `FALSE` (default), use a "square" neighborhood. If `TRUE`, use a "circular" neighborhood. When this is `TRUE`, argument `w` cannot be a matrix.
 #'
 #' @param quantile Numeric between 0 and 1, inclusive: Quantile to calculate when `fun = "quantile"`. The default value is 0.5 (median), and valid values must be in the range between 0 and 1, inclusive.
 #'
