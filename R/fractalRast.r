@@ -1,6 +1,6 @@
 #' Create fractal raster
 #'
-#' @description 'fractalRast()' creates a raster with a fractal pattern.
+#' @description `fractalRast()` creates a raster with a fractal pattern.
 #'
 #' @param x A `GRaster`. The output will have the same extent and dimensions as this raster.
 #'
