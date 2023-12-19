@@ -16,10 +16,10 @@
 #' * `"median"`: Median.
 #' * `"quantile"`: Quantile (see also argument `prob`).
 #' * `"range"`: Range--note that as per [terra::global()], the minimum and maximum are reported, not the actual range.
-#' * `"sd"`: Sample standard deviation.
+#' * `"sd"`: Sample standard deviation (same as [stats::sd()]).
 #' * `"sdpop"`: Population standard deviation.
 #' * `"sum"`: Sum.
-#' * `"var"`: Sample variance.
+#' * `"var"`: Sample variance (same as [stats::var()]).
 #' * `"varpop"`: Population variance.
 #'
 #' @param prob Numeric: Quantile at which to calculate `quantile`. Only a single value between 0 and 1 is allowed.
