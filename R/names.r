@@ -1,12 +1,12 @@
-#' Name(s) of a GRaster or fields of a GVector
+#' Name(s) of a GRaster or columns of a GVector's data table
 #'
-#' Names(s) of a `GRaster` or of fields of a `GVector`.
+#' `names()` returns that names(s) of a `GRaster` or of columns of a `GVector`'s data table'.
+#'
+#' `names(value) <-` assigns a new name to the `GRaster` or to the columns of a `GVector`'s data table.
 #'
 #' @param x A `GRaster` or `GVector`.
 #' @param value Character: Name(s) to assign to the raster(s).
 #' 
-#' @details `GRaster`s have two types of names, a "sources", which is used internally to point to the **GRASS** representation of the raster (this is not of use to most users and is hidden by default), and an "rname", which is taken from the "**R**" name of the raster or the filename. This function returns the "rname".
-#'
 #' @return Character vector.
 #' 
 #' @seealso [terra::names()]
@@ -52,6 +52,19 @@ setMethod(
 	} # EOF
 )
 
+#' @rdname names
+#' @aliases names<-
+#' @exportMethod names<-
+setMethod(
+	f = "names<-",
+	signature = "GVector",
+	definition = function(x, value) {
+	
+	if (ncol(x) > 0L) names(x@table) <- value
+	x
+	
+	} # EOF
+)
 
 #' Make unique names
 #'
