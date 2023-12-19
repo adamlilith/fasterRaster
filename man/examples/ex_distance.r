@@ -51,4 +51,8 @@ distToPlants <- distance(rivers, dypsis)
 distToRivers
 distToPlants
 
+### Case 4: GVector vs itself
+distToItself <- distance(dypsis)
+distToItself
+
 }
