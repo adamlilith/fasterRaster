@@ -52,7 +52,9 @@
 #'
 #' @slot levels List of `data.table`s (`GRaster`s): Tables for categorical rasters. If a raster is not categorical, the `data.table` is `NULL`, as in `data.table(NULL)`. Can be obtained using `levels()` or `cats()`.
 #'
-#' @slot table `data.table` (`GVector`s): Table with metadata, one row per geometry (point, line, or plane). If no table is associated with the vector, this must be `data.table(NULL)`.
+#' @slot table `data.table` (`GVector`s): Table with metadata, one row per geometry (point, line, or plane). If no table is associated with the vector, this must be `data.table(NULL)`. The column with the category value is given in `@catName`.
+#'
+#' @slot catName Character (`GVector`s): Name of the column in the vector's database that contains category values (integers).
 #'
 #' @return An object of class `GLocation`, `GSpatial`, `GRegion`, `GRaster`, or `GVector`.
 #'
