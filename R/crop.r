@@ -4,13 +4,13 @@
 #'
 #' @param x A `GRaster` or `GVector` to be cropped.
 #' @param y A `GRaster` or `GVector` to serve as a template for cropping.
-#' @param ext Logical:
+#' @param extent Logical:
 #' * If `y` is a "points" `GVector`: Use the convex hull around `y` to crop `x`.
 #' * If `y` is a "lines" or "polygons" `GVector`: If `TRUE`, use the extent of `y` to crop `x`.
 #' 
 #' @details Known differences from [terra::crop()]:
-#' * If `x` and `y` are "points" vectors, and `ext` is `TRUE`, **terra** removes points that fall on the extent boundary. **fasterRaster** does not remove points on the extent boundary.
-#' * If `x` is a "points" vector and `y` is a "lines" vectors, and `ext` is `FALSE`, **terra** uses the extent of `y` to crop the points.  **fasterRaster** uses the minimum convex hull of the lines vector.
+#' * If `x` and `y` are "points" vectors, and `extent` is `TRUE`, **terra** removes points that fall on the extent boundary. **fasterRaster** does not remove points on the extent boundary.
+#' * If `x` is a "points" vector and `y` is a "lines" vectors, and `extent` is `FALSE`, **terra** uses the extent of `y` to crop the points.  **fasterRaster** uses the minimum convex hull of the lines vector.
 #'
 #' @return A `GRaster` or `GVector`.
 #' 
@@ -108,7 +108,7 @@ methods::setMethod(
 methods::setMethod(
 	f = "crop",
 	signature = c(x = "GVector"),
-	definition = function(x, y, ext = FALSE) {
+	definition = function(x, y, extent = FALSE) {
 
 	compareGeom(x, y)
 	.locationRestore(x)
@@ -128,7 +128,7 @@ methods::setMethod(
 			intern = TRUE
 		)
 		
-		if (ext) {
+		if (extent) {
 			.regionExt(y, respect = "dim")
 			args$flags <- c(args$flags, "r")
 			args$clip <- sources(y)
