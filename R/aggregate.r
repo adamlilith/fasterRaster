@@ -1,8 +1,8 @@
 #' Aggregate values of raster cells into larger cells
 #'
-#' @description When applied to a `GRaster`, `aggregate()` creates a new raster with cells that are a multiple of the size of the cells of the original raster. The new cells can be larger or smaller than the original cells (this function thus emulates the `terra::aggregate()` and [terra::disagg()] functions in **terra**.)
+#' @description When applied to a `GRaster`, `aggregate()` creates a new raster with cells that are a multiple of the size of the cells of the original raster. The new cells can be larger or smaller than the original cells (this function thus emulates both the `terra::aggregate()` and [terra::disagg()] functions in **terra**.)
 #' 
-#' When applied to a `GVector`, `aggregate()` all geometries into a single "multipart" geometry, in which sets of points, lines, or polygons are treated as if they were a unit. If the `GVector` has a data table associated with it, the output will also have a data table as long as there is at least one column with values that are all the same. Columns that do not have duplicated values will be converted to `NA`.
+#' When applied to a `GVector`, `aggregate()` all geometries are combined into a "multipart" geometry, in which geometries are treated as if they were a single unit. If the `GVector` has a data table associated with it, the output will also have a data table as long as there is at least one column with values that are all the same. Values of columns that do not have duplicated values will be converted to `NA`.
 #'
 #' @param x A `GRaster` or `GVector`.
 #'
@@ -146,8 +146,9 @@ methods::setMethod(
 	signature = c(x = "GVector"),
 	function(x, dissolve = TRUE) {
 
+	.locationRestore(x)
 	gtype <- geomtype(x)
-	src <- .aggregate(x, dissolve = dissolve, gtype = gtype)
+	src <- .aggregate(x, dissolve = dissolve, gtype = gtype, copy = TRUE)
 
 	# aggregate data table
 	if (nrow(x) == 0L) {
@@ -206,9 +207,10 @@ methods::setMethod(
 
 #' @param x `GVector` or [sources()] name
 #' @param gtype geomtype (fasterRaster)
-#' @param gtype dissolve Logical
+#' @param dissolve Logical
+#' @param copy Logical: If TRUE, make copy of vector before operations
 #' @noRd
-.aggregate <- function(x, gtype, dissolve) {
+.aggregate <- function(x, gtype, dissolve, copy) {
 
 	if (inherits(x, "GVector")) {
 		.locationRestore(x)
@@ -216,63 +218,73 @@ methods::setMethod(
 	} else {
 		src <- x
 	}
-
-	# use v.reclass to reclassify
-	oldcats <- .vCats(src, db = TRUE)
 	
+	if (copy) src <- .copyGVector(src)
+	
+	oldcats <- .vCats(src, db = FALSE)
 	if (length(oldcats) > 1L) {
 
-		newcats <- data.frame(oldcat = oldcats, newcat = rep(1L, length(oldcats)))
+		table <- data.table::data.table(fr = rep(1L, length(oldcats)))
+		.vAttachDatabase(src, table = table, replace = TRUE)
+
+		# newcats <- data.frame(oldfr = oldcats, fr = rep(1L, length(oldcats)))
 		
-		tf <- tempfile(fileext = ".csv")
-		tft <- paste0(tf, "t")
-		utils::write.csv(newcats, tf, row.names = FALSE)
-		tableType <- '"Integer"'
-		write(tableType, tft)
+		# tf <- tempfile(fileext = ".csv")
+		# tft <- paste0(tf, "t")
+		# utils::write.csv(newcats, tf, row.names = FALSE)
+		# # tableType <- '"Integer","Integer"'
+		# tableType <- '"Integer"'
+		# write(tableType, tft)
 
-		# import table with new categories
-		srcTable <- .makeSourceName("db_in_ogr", "table")
+		# # import table with new categories
+		# srcTable <- .makeSourceName("db_in_ogr", "table")
 		
-		rgrass::execGRASS(
-			cmd = "db.in.ogr",
-			input = tf,
-			output = srcTable,
-			flags = c(.quiet(), "overwrite")
-		)
+		# rgrass::execGRASS(
+			# cmd = "db.in.ogr",
+			# input = tf,
+			# output = srcTable,
+			# flags = c(.quiet(), "overwrite")
+		# )
 
-		# connect table to copy of vector
-		srcIn <- .copyGVector(src)
+		# # connect table to copy of vector
+		# srcIn <- .copyGVector(src)
 
-		rgrass::execGRASS(
-			cmd = "v.db.join",
-			map = srcIn,
-			column = "cat",
-			other_table = srcTable,
-			other_column = "oldcat",
-			flags = .quiet()
-		)
+		# rgrass::execGRASS(
+			# cmd = "v.db.join",
+			# map = srcIn,
+			# other_table = srcTable,
+			# other_column = "oldfr",
+			# column = "fr",
+			# flags = .quiet()
+		# )
 
+		srcIn <- src
 		src <- .makeSourceName("v_reclass", "vector")
 		
 		rgrass::execGRASS(
 			"v.reclass",
 			input = srcIn,
 			output = src,
-			column = "newcat",
+			column = "fr",
 			flags = c(.quiet(), "overwrite")
 		)
 
 		if (dissolve & gtype == "polygons") {
-		
+					
+			table <- data.table::data.table(fr = rep(1L, length(oldcats)))
+
+			src <- .copyGSpatial(x)
+			.vAttachDatabase(src, table = table, replace = TRUE)
+
 			srcIn <- src
 			src <- .makeSourceName("v_dissolve", "vector")
 
 			rgrass::execGRASS(
-				cmd = "v.dissolve",
+				cmd = "v.extract",
 				input = srcIn,
 				output = src,
-				column = "cat",
-				flags = c(.quiet(), "overwrite")
+				new = 1L,
+				flags = c("d", "t")
 			)
 		
 		}
