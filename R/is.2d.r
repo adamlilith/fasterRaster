@@ -6,6 +6,8 @@
 #'
 #' @returns Logical.
 #'
+#' @seealso [topology()]
+#'
 #' @example man/examples/ex_GRaster_GVector.r
 #'
 #' @aliases is.2d
