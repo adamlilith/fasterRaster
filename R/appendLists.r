@@ -6,7 +6,7 @@
 #'
 #' @param ... Two or more lists. All elements must have names.
 #'
-#' @details Adapted from nswer by user *polkas* on [https://stackoverflow.com/questions/18538977/combine-merge-lists-by-elements-names](StackOverflow).
+#' @details Adapted from answer by user *polkas* on [https://stackoverflow.com/questions/18538977/combine-merge-lists-by-elements-names](StackOverflow).
 #'
 #' @returns A `list`. 
 #'
