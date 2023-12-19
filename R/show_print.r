@@ -165,8 +165,12 @@ methods::setMethod(
 	extent <- round(object@extent, min(digs, 3))
 
 	### pad everything by same amount so display of data for each later appears in neat columns
-	minVal <- round(object@minVal, digs)
-	maxVal <- round(object@maxVal, digs)		
+	minVal <- object@minVal
+	maxVal <- object@maxVal
+	sigs <- omnibus::roundedSigDigits(c(minVal, maxVal))
+	sigs <- -1 * min(sigs) + 3
+	minVal <- round(minVal, sigs)
+	maxVal <- round(maxVal, sigs)
 	
 	minValLength <- nchar(minVal)
 	maxValLength <- nchar(maxVal)
@@ -288,7 +292,7 @@ methods::setMethod(
 	cat("coord ref.  :", format(st_crs(object)), "\n")
 	if (verbose) cat("projection  :", object@projection, "\n")
 	if (verbose) cat("sources     :", sources, "\n")
-	cat("name        :", names, "\n")
+	cat("name(s)     :", names, "\n")
 	if (!verbose) {
 		cat("datatype    :", datatypeNiceFR, "\n")
 	} else {
