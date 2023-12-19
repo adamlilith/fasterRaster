@@ -158,15 +158,7 @@ methods::setMethod(
 		flags = c(.quiet(), "overwrite")
 	)
 
-	gt <- geomtype(x)
-	if (gt == "points") {
-		type <- "point"
-	} else if (gt == "lines") {
-		type <- "line"
-	} else if (gt == "polygons") {
-		type <- "area"
-	}
-	args$type <- type
+	args$type <- geomtype(x, grass = TRUE)
 	if (!union) args$flags <- c(args$flags, "t")
 
 	capstyle <- tolower(capstyle)
@@ -185,13 +177,16 @@ methods::setMethod(
 		# dissolve
 		srcBuff <- src
 		src <- .makeSourceName("v_dissolve", "vector")
+		# catCol <- .vNames(srcBuff)
 		args <- list(
 			cmd = "v.dissolve",
 			input = srcBuff,
 			output = src,
-			column = "cat",
+			# column = "cat",
 			flags = c(.quiet(), "overwrite")
 		)
+		
+		if (.vHasTable(srcBuff)) args$column <- .vNames(srcBuff)[1L]
 		do.call(rgrass::execGRASS, args = args)
 
 	}
