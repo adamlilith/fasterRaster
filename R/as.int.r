@@ -1,6 +1,6 @@
 #' Coerce raster to integer, float, or double precision
 #'
-#' @description In **fasterRaster**, rasters can have three [data types][tutorial_raster_data_types]: "factor" (categorical rasters), "integer" (integers), "float" (floating point values, accurate to ~7 decimal places), and "double" (double-precision values, accurate to ~15 decimal places). The type of raster can be checked with:
+#' @description In **fasterRaster**, rasters can have three [data types][tutorial_raster_data_types]: "factor" (categorical rasters), "integer" (integers), "float" (floating point values, accurate to 6th to 9th decimal places), and "double" (double-precision values, accurate to the 15th to 17th decimal places). The type of raster can be checked with:
 #'
 #' * `as.int()`: Coerce values to integers (**GRASS** type `CELL`).
 #' * `as.float()`: Coerce values to floating-point precision.
