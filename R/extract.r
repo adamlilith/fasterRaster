@@ -2,10 +2,10 @@
 #'
 #' @description `extract()` obtains the values of a `GRaster` or `GVector` associated with the locations of a set of points. The output depends on the input:
 #' * **Case #1: `x` is a numeric or integer `GRaster` and `y` is a points `GVector`**: Returns values of cells that have points. If `xy` is `TRUE`, also returns the coordinates of the points.
-#' * **Case #2: `x` is a factor `GRaster` and `y` is a points `GVector`**: Same as case #1, but if `cats` is `TRUE`, returns category labels of cells that have points. If `xy` is `TRUE`, also returns the coordinates of the points.
-#' * **Case #3: `x` is a factor `GRaster` and `y` is a lines or polygons `GVector`**: Returns a summary (e.g., mean, standard deviation, etc.) of all cells that overlap the line(s) or polygon(s).
+#' * **Case #2: `x` is a [categorical][tutorial_raster_data_types] (factor) `GRaster` and `y` is a points `GVector`**: Same as case #1, but if `cats` is `TRUE`, returns category labels of cells that have points. If `xy` is `TRUE`, also returns the coordinates of the points.
+#' * **Case #3: `x` is a categorical `GRaster` and `y` is a lines or polygons `GVector`**: Returns a summary (e.g., mean, standard deviation, etc.) of all cells that overlap the line(s) or polygon(s).
 #' * **Case #4: `x` is a `GVector` and `y` is a points `GVector`**: Returns the data table row associated each point. If `xy` is `TRUE`, also returns the coordinates of the points.
-#' Note that whenever a points `GVector` is allowed for `y`, a `data.frame`, `data.table`, `matrix`, or `numeric` values representing points can also be used.
+#' Note that whenever a points `GVector` is allowed for `y`, a `data.frame`, `data.table`, `matrix`, or `numeric` values representing points can be used instead.
 #'
 #' @param x A `GRaster` or `GVector`.
 #'
@@ -226,31 +226,30 @@ methods::setMethod(
                 intern = TRUE
             )
 
-            vals <- do.call(rgrass::execGRASS, args = args)
+            info <- do.call(rgrass::execGRASS, args = args)
 
-            pillars <- gregexpr(vals, pattern = "\\|\\|")
+            pillars <- gregexpr(info, pattern = "\\|\\|")
             pillars <- unlist(pillars)
-            ncs <- nchar(vals)
-            vals <- substr(vals, pillars + 2L, ncs)
+            ncs <- nchar(info)
+            info <- substr(info, pillars + 2L, ncs)
 
             if (is.cell(x)[i]) {
-                vals <- as.integer(vals)
+                info <- as.integer(info)
             } else {
-                vals <- as.numeric(vals)
+                info <- as.numeric(info)
             }
 
-            this <- data.table::data.table(TEMPTEMP__ = vals)
+            this <- data.table::data.table(TEMPTEMP__ = info)
             names(this) <- names(x)[i]
 
             # category label instead of value
             if (cats && is.factor(x)[i]) {
 
                 levs <- levels(x[[i]])[[1L]]
-                this <- levs[match(vals, levs[[1L]]), 2L]
+                this <- levs[match(info, levs[[1L]]), 2L]
                 names(this) <- paste0(names(x)[i], "_cat")
 
             }
-
 
             if (i == 1L) {
                 out <- this
@@ -564,10 +563,10 @@ methods::setMethod(
         intern = TRUE
     )
 
-    vals <- do.call(rgrass::execGRASS, args = args)
+    info <- do.call(rgrass::execGRASS, args = args)
 
-    nonnas <- which(grepl(vals, pattern = "Category: "))
-    nas <- which(grepl(vals, pattern = "Nothing found."))
+    nonnas <- which(grepl(info, pattern = "Category: "))
+    nas <- which(grepl(info, pattern = "Nothing found."))
 
     lenNonnas <- length(nonnas)
     lenNas <- length(nas)
@@ -589,7 +588,7 @@ methods::setMethod(
     ### at least one point was on the vector
     if (lenNonnas > 0L) {
 
-        nons <- vals[nonnas]
+        nons <- info[nonnas]
         nons <- sub(nons, pattern = "Category: ", replacement = "")
         nons <- as.integer(nons)
 
