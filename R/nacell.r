@@ -1,6 +1,6 @@
 #' Number of NA or non-NA cells in a raster
 #'
-#' @description Number of non-`NA` or number of `NA` cells in a raster. If the raster is 3D, then all cells in all layers are counted.
+#' @description Number of `NA` cells or number of non-`NA` cells in a raster. If the raster is 3D, then all cells in all layers are counted.
 #'
 #' @param x A `GRaster`.
 #'
@@ -8,7 +8,7 @@
 #'
 #' @example man/examples/ex_GRaster.r
 #'
-#' @seealso [ncell()], [ncell3d()], [terra::ncell()]
+#' @seealso [ncell()], [ncell3d()], [terra::ncell()], [dim()], [terra::dim()]
 #' 
 #' @aliases nacell
 #' @rdname nacell
