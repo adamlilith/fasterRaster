@@ -11,10 +11,10 @@
 #' * If `lyrs` is `TRUE`, then the output has the same number of layers as `x` if `mask` is also `TRUE`. In this case, cells that area `NA` in the input will also be `NA` in the output in the respective layer.
 #'
 #' @param unit Character: Units of area. Partial matching is used, and case is ignored. Can be any of:
-#' * `"meters2"`(default), `"metres2"`, or `"m2"`
+#' * `"meters2"` (default), `"metres2"`, or `"m2"`
 #' * `"km2"` or `"kilometers2"`
 #' * `"ha"` or `"hectares"`
-#' * `"ac"` or `"acres"`
+#' * `"acres"`
 #' * `"mi2"` or `"miles2"`
 #' * `"ft2"` or `"feet2"`
 #'
@@ -22,7 +22,7 @@
 #'
 #' @example man/examples/ex_cellSize.r
 #'
-#' @seealso [terra::cellSize()], [expanse()], [zonalGeog()], module `r.mapcalc` in **GRASS**
+#' @seealso [terra::cellSize()], [expanse()], [zonalGeog()], [omnibus::convertUnits()]
 #'
 #' @aliases cellSize
 #' @rdname cellSize
@@ -30,7 +30,7 @@
 methods::setMethod(
 	f = "cellSize",
 	signature = c(x = "GRaster"),
-	function(x, mask = FALSE, lyrs = FALSE, unit = "meters") {
+	function(x, mask = FALSE, lyrs = FALSE, unit = "meters2") {
 	
 	units <- c("m2", "meters2", "metres2", "km2", "kilometers2", "ha", "hectares", "ac", "acres", "mi2", "miles2", "ft2", "feet2")
 	unit <- omnibus::pmatchSafe(unit, units, useFirst = TRUE, nmax = 1L)
@@ -39,13 +39,14 @@ methods::setMethod(
 	unit <- omnibus::expandUnits(unit)
 
 	f <- omnibus::convertUnits(from = "meters2", to = unit)
+	f <- format(f, scientific = FALSE)
 
 	.region(x)
 
 	if (lyrs & mask) {
 		nLayers <- nlyr(x)
 	} else {
-		nLayers <- 1
+		nLayers <- 1L
 	}
 
 	### mask
