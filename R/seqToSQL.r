@@ -4,7 +4,7 @@
 #'
 #' @param x A vector of numerical values. The vector should be sorted from  lowers to highest for the most efficient "compression" of sequential ranges. Values will be coerced to class `integer`.
 #'
-#' @param maxChar Integer or numeric: Maximum number of characters to include in the output. If the output has more than this number of characters, the remainder is dropped, and the `trim` attribute of the output is set to `TRUE`. The default is 64000, which is the maximum length of an SQL statement (minus 1000 characters for other functions). Note that this limit is "soft"--the output can exceed this number of characters by a bit.
+#' @param maxChar Integer or numeric: Maximum number of characters to include in the output. If the output has more than this number of characters, the remainder is dropped, and the `trim` attribute of the output is set to `TRUE`. The default is 29900, which is the maximum length of an SQL statement that **GRASS** seems to be able to handle (minus a safety margin).
 #'
 #' @returns A character string. The string has two attributes. The `trim` attribute is `TRUE` or `FALSE`, depending on whether `maxChar` was reached or not (and subsequent numbers dropped from the string). The `lastIndex` attribute is the last index of `x` that was processed (i.e., the index of the last value in the output).
 #'
@@ -25,7 +25,7 @@
 #' seqToSQL(y, maxChar = 8)
 #'
 #' @export
-seqToSQL <- function(x, maxChar = 64000) {
+seqToSQL <- function(x, maxChar = 29900) {
 
 	x <- as.integer(x)
 	n <- length(x)
