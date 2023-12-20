@@ -47,6 +47,8 @@ methods::setValidity("GVector",
 #'
 #' @param table A `data.table`, `data.frame`, or character. This can be `data.table(NULL)` or `data.frame(NULL)` if there is no table associated with the vector. If a character, this is interpreted as the name of the table in **GRASS**.
 #'
+#' @param cats Either `NULL` (default) or an integer vector: Used to pass `cats` to `.vAttachDatabase()` so it does not need to spend time calling `.vCats()` again.
+#'
 #' @returns A `GVector`.
 #'
 #' @seealso [.makeGRaster()]
@@ -54,15 +56,27 @@ methods::setValidity("GVector",
 #' @example man/examples/ex_GRaster_GVector.r
 #'
 #' @noRd
-.makeGVector <- function(src, table = NULL) {
+.makeGVector <- function(src, table = NULL, cats = NULL) {
 
 	if (inherits(table, "GVector")) table <- src@table
 	if (is.null(table)) table <- data.table::data.table(NULL)
 	if (!inherits(table, "data.table")) table <- data.table::as.data.table(table)
 
-	.vAttachDatabase(src)
+	if (is.null(cats)) cats <- .vCats(src, db = FALSE)
+	dt <- data.table::data.table(fr = cats)
+	.vAttachDatabase(src, table = dt, replace = TRUE, cats = cats)
+	
+	# srcIn <- src
+	# src <- .makeSourceName("v_category", "vector")
+	# rgrass::execGRASS(
+		# cmd = "v.category",
+		# input = srcIn,
+		# output = src,
+		# option = "add",
+		# flags = c(.quiet(), "overwrite", "t")
+		# # flags = c(.quiet(), "overwrite")
+	# )
 
-	cats <- .vCats(src, db = FALSE)
 	nGeoms <- length(unique(cats))
 	nSubgeoms <- length(cats)
 
