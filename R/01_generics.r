@@ -1,3 +1,5 @@
+# NB SQL WHERE queries can be up to 30000 character long... longer fails in GRASS
+
 .restore <- NULL
 
 # bad form:
