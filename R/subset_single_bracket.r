@@ -1,6 +1,6 @@
 #' Subset geometries of a GVector
 #'
-#' @description The `[` operator returns a subset or remove specific geometries of a `GVector`. You can get the number of geometries using [ngeom()].
+#' @description The `[` operator returns a subset or remove specific geometries of a `GVector`. You can get the number of geometries using [ngeom()]. Note that you cannot use this function to change the "order" in which geometries or their associated records in a data table appear. For example, `vector[1:3]` and `vector[3:1]` will yield the exact same results, where the first geometry in `vector` will also be the first geometry in either of the outputs.
 #'
 #' @param x A `GVector`.
 #'
@@ -11,6 +11,8 @@
 #' @returns A `GVector`.
 #'
 #' @example man/examples/ex_GRaster_GVector_subset_assign.r
+#'
+#' @seealso [$], \code{\link[fasterRaster]{[[}}
 #'
 #' @name [
 #' @aliases [,GVector,ANY,ANY-method
@@ -24,12 +26,11 @@ methods::setMethod(
 
 	.locationRestore(x)
 
-	nGeoms <- ngeom(x)
-
 	if (missing(i)) {
 		out <- x[[j]]
 	} else {
 
+		nGeoms <- ngeom(x)
 		if (is.logical(i)) {
 			if (length(i) < nGeoms) i <- rep(i, length.out = nGeoms)
 			i <- which(i)
@@ -48,40 +49,48 @@ methods::setMethod(
 			reverseRowSelect <- removeAll <- FALSE
 		}
 		
-		if (any(i > nGeoms)) stop("Index out of bounds.")
+		if (any(i > nGeoms) | any(i == 0L)) stop("Index out of bounds.")
+		i <- sort(i)
 
 		if (removeAll) {
 			out <- NULL # removed all
 		} else {
 
-			# **keep** rows
-			cats <- .vCats(x)
-			ucats <- unique(cats)
-			keepCats <- ucats[i]
-			keepCats <- sort(keepCats)
-			keepCats <- seqToSQL(keepCats)
+			# create database with frid value = -1 for records we do not want
+			cats <- .vCats(x, db = FALSE)
+			frid <- omnibus::renumSeq(cats)
+			
+			if (reverseRowSelect) {
+				frid[i] <- -1L
+			} else {
+				frid[omnibus::notIn(frid, i)] <- -1L
+			}	
+			
+			.vAttachDatabase(x, table = frid, replace = TRUE)
 
+			srcIn <- sources(x)
 			src <- .makeSourceName("v_extract", "vector")
+			
+			where <- paste0("frid > 0")
 
-			args <- list(
+			rgrass::execGRASS(
 				cmd = "v.extract",
-				input = sources(x),
-				cats = keepCats,
+				input = srcIn,
+				where = where,
 				output = src,
 				new = -1,
-				flags = c(.quiet(), "overwrite")
+				# layer = "-1",
+				flags = c(.quiet(), "overwrite", "t")
+				# flags = c(.quiet(), "overwrite", "t")
 			)
 
-			if (reverseRowSelect) args$flags <- c(args$flags, "r")
-
-			do.call(rgrass::execGRASS, args = args)
-			
+			### select data table rows
 			if (nrow(x) == 0L) {
 				table <- NULL
 			} else {
 
 				table <- x@table
-
+			
 				# select columns
 				if (missing(j)) {
 					removeAllCols <- FALSE
@@ -131,8 +140,17 @@ methods::setMethod(
 						table <- table[i]
 					}
 				}
-			
+
 			} # vector has table
+
+			if (reverseRowSelect) {
+				keepCats <- cats[-i]
+			} else {
+
+				keepCats <- cats[i]
+			}
+
+			src <- .vRecat(src, gtype = geomtype(x, grass = TRUE))
 			out <- .makeGVector(src, table = table)
 
 		} # keep some rows (vs discarding all)
