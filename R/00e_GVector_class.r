@@ -56,25 +56,26 @@ methods::setValidity("GVector",
 #' @example man/examples/ex_GRaster_GVector.r
 #'
 #' @noRd
-.makeGVector <- function(src, table = NULL, cats = NULL) {
+.makeGVector <- function(src, table = NULL) {
 
 	if (inherits(table, "GVector")) table <- src@table
 	if (is.null(table)) table <- data.table::data.table(NULL)
 	if (!inherits(table, "data.table")) table <- data.table::as.data.table(table)
 
-	if (is.null(cats)) cats <- .vCats(src, db = FALSE)
-	dt <- data.table::data.table(fr = cats)
-	.vAttachDatabase(src, table = dt, replace = TRUE, cats = cats)
+	cats <- .vCats(src, db = FALSE)
+	# if (is.null(cats)) cats <- .vCats(src, db = FALSE)
+	# dt <- data.table::data.table(frid = cats)
+	# .vAttachDatabase(src, table = dt, replace = TRUE)
 	
 	# srcIn <- src
 	# src <- .makeSourceName("v_category", "vector")
 	# rgrass::execGRASS(
-		# cmd = "v.category",
-		# input = srcIn,
-		# output = src,
-		# option = "add",
-		# flags = c(.quiet(), "overwrite", "t")
-		# # flags = c(.quiet(), "overwrite")
+	# 	cmd = "v.category",
+	# 	input = srcIn,
+	# 	output = src,
+	# 	option = "del",
+	# 	flags = c(.quiet(), "overwrite", "t")
+	# 	# flags = c(.quiet(), "overwrite")
 	# )
 
 	nGeoms <- length(unique(cats))
