@@ -259,18 +259,19 @@
 #' `.projection()`: Value of the `@projection` slot in a `GRaster` or `GVector`\cr
 #' `.quiet()`: Returns "quiet" if `faster("verbose")` is `TRUE`\cr
 #' `.rastInfo()` and `.vectInfo()`: Metadata for a **GRASS** raster or vector\cr
-#' [.region()]: Change or report the active region's extent and resolution\cr
-#' [.regionDim()]: Change or report the active region's resolution (also [dim()] and related functions, with no arguments)\cr
-#' [.regionExt()]: Change or report the active region's extent (also [ext()] and related functions, with no arguments)\cr
-#' [.regionRes()]: Change or report the active region's dimensions (also [res()] and related functions, with no arguments)\cr
+#' `.region()`: Change or report the active region's extent and resolution\cr
+#' `.regionDim()]`: Change or report the active region's resolution (also [dim()] and related functions, with no arguments)\cr
+#' `.regionExt()`: Change or report the active region's extent (also [ext()] and related functions, with no arguments)\cr
+#' `.regionRes()`: Change or report the active region's dimensions (also [res()] and related functions, with no arguments)\cr
 #' `.rename()`: Rename a **GRASS** raster or vector\cr
 #' `.rm()`: Delete rasters or vectors in **GRASS**\cr
 #' `.vAsDataTable()`: Convert the attribute table linked to a vector in **GRASS** to a `data.table`. This table is distinct from the attribute table attached to a `GVector`\cr
 #' `.vAttachDatabase()`: Add a database table to the **GRASS** representation of a `GVector`\cr
 #' `.vCats()`: Get a `data.table` with a single column named `cat`, which corresponds to the **GRASS** attribute table's `cat` column\cr
-#' `.vHasTable()`: Tests if **GRASS** vector has a database\cr
+#' `.vHasDatabase()`: Tests if **GRASS** vector has a database\cr
 #' `.vIncrementCats()`: Increment category values of a `GVector`\cr
-#' `.vNames()`: "GRASS" vector attribute table column names\cr
+#' `.vNames()`: "**GRASS**" vector attribute table column names\cr
+#' `.vRecat()`: Change **GRASS** category indices of a **GRASS** vector\cr
 #' `grassStarted()`: Has a connection **GRASS** been made within the current **R** session?\cr
 #'
 #' @docType package
