@@ -1,10 +1,12 @@
-#' "GRASS" vector attribute table column names
+#' Names of columns of a GRASS vector's attribute table
 #'
 #' @description This function returns the column names of a **GRASS** vector's attribute table.
 #'
 #' @param x A `GVector` or the name of a vector in **GRASS**.
 #' 
 #' @returns Character vector.
+#'
+#' @example man/examples/ex_vFunctions.r
 #' 
 #' @aliases .vNames
 #' @rdname vNames
@@ -18,7 +20,7 @@
 		src <- x
 	}
 
-	if (.vHasTable(src)) {
+	if (.vHasDatabase(src)) {
 
 		out <- rgrass::execGRASS(
 			cmd = "db.columns",
