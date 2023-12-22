@@ -1,4 +1,4 @@
-#' Category column values of a vector in GRASS
+#' Category column values of a GRASS vector
 #'
 #' @description Returns values in the `cat` column of a vector in **GRASS**.
 #'
@@ -10,7 +10,9 @@
 #'
 #' @param integer Logical: If `TRUE` (default), return category values as integers. In some cases, a geometry can have multiple categories, in which case `NA` is returned. If `FALSE`, return category values as strings (and thus, if a geometry has more than one category, does not convert to `NA`).
 #'
-#' @returns An integer vector.
+#' @returns A vector.
+#'
+#' @example man/examples/ex_vFunctions.r
 #'
 #' @aliases .vCats
 #' @rdname vCats
@@ -27,7 +29,7 @@
 	layer <- as.character(layer)
 
 	if (db) {
-		out <- .vAsDataTable(src)$cat
+		out <- .vAsDataTable(src)[["frid"]]
 	} else {
 		out <- rgrass::execGRASS(
 			"v.category",
@@ -38,7 +40,25 @@
 			intern = TRUE
 		)
 	}
-	if (integer) out <- as.integer(out)
+
+	if (integer) {
+		
+		# # ensure categories are ordered
+		# out <- strsplit(out, split = "/")
+		# out <- lapply(out, as.integer)
+		# out <- lapply(out, sort)
+		# out <- sapply(out, paste, collapse = "/")
+		
+		# # assign each category combination a new category value
+		# uniq <- unique(out)
+		# nuniq <- length(uniq)
+		
+		# out <- factor(out, seq_len(nuniq))
+		# out <- levels(out)
+		
+		out <- as.integer(out)
+		
+	}
 	out
 
 }
