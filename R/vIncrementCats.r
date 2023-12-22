@@ -1,18 +1,19 @@
-#' Increment category values of a GVector
+#' Increment category values of a "GRASS" vector
 #'
-#' @description Adds a constant to all category values of a `GVector`.
+#' @description Adds a constant to all category values of a **GRASS** vector. **This function is mostly of use to developers.**
 #'
 #' @param x A `GVector` or the [sources()] name of one.
 #'
 #' @param add Integer: Value to add to each category value.
 #'
-#' @param return Character: What to return. Either `"GVector"` or "`sources`" ([sources()] name of the new vector).
+#' @returns The [sources()] name of a **GRASS** vector with category values incremented.
 #'
-#' @returns The same `GVector` as in `x`, but with incremented category values.
+#' @example man/examples/ex_vFunctions.r
 #'
 #' @aliases .vIncrementCats
+#' @rdname vIncrementCats
 #' @noRd
-.vIncrementCats <- function(x, add, return = "GVector") {
+.vIncrementCats <- function(x, add) {
 
 	if (inherits(x, "GVector")) {
 		.locationRestore(x)
@@ -28,14 +29,8 @@
 		output = src,
 		option = "sum",
 		cat = add,
-		flags = c(.quiet(), "overwrite")
+		flags = c(.quiet(), "overwrite", "t")
 	)
-
-	return <- omnibus::pmatchSafe(return, c("GVector", "sources"))
-	if (return == "GVector") {
-		.makeGVector(src, table = as.data.table(x))
-	} else {
-		src
-	}
+	src
 
 }
