@@ -1,6 +1,6 @@
-#' Convert the attribute table of a vector to a data.table
+#' Convert a GRASS vector's attribute table to a data.table
 #'
-#' @description **GRASS** vectors typically have a database with the first column named `cat` and holding integer values indexing each feature. This table is mostly independent from the **fasterRaster** attribute table, which is stored as a `data.table` in the `@table` slot of a `GRaster`. This function exports the **GRASS** database to **R**.
+#' @description **GRASS** vectors can be linked to an attribute table, which can be exported from **GRASS** to **R** using this function. **This function is mostly of use to developers.**
 #'
 #' Values in the `cat` column are not necessarily unique--if a value appears more than once, the set of features they index are (in other software) called "multipart" features. The table can have more columns with metadata for each feature.
 #'
@@ -9,6 +9,8 @@
 #' @param x A `GVector` or the name of a vector in **GRASS**.
 #'
 #' @returns A `data.table` or `NULL` if the vector is not attached to a database.
+#'
+#' @example man/examples/ex_vFunctions.r
 #'
 #' @aliases .vAsDataTable
 #' @rdname dbToDataTable
@@ -22,7 +24,7 @@
 		src <- x
 	}
 
-	hasTable <- .vHasTable(src)
+	hasTable <- .vHasDatabase(src)
 	if (!hasTable) {
 		out <- NULL
 	} else {
