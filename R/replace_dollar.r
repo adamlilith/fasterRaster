@@ -10,6 +10,8 @@
 #'
 #' @example man/examples/ex_GRaster_GVector_subset_assign.r
 #'
+#' @seealso [$], \code{\link[fasterRaster]{[[<-}}, and \code{\link[fasterRaster]{add<-}}
+#'
 #' @name $<-
 #' @aliases $<-,GRaster-method
 #' @docType methods
@@ -20,16 +22,16 @@ methods::setMethod(
     signature = c(x = "GRaster"),
     function(x, name, value) {
 
-		if (is.logical(name)) {
-			if (length(name) < nlyr(x)) name <- rep(name, length.out = nlyr(x))
-			i <- which(name)
-		} else if (is.character(name)) {
-			i <- match(name, names(x))
-		}
+	if (is.logical(name)) {
+		if (length(name) < nlyr(x)) name <- rep(name, length.out = nlyr(x))
+		i <- which(name)
+	} else if (is.character(name)) {
+		i <- match(name, names(x))
+	}
 
-		x[[name]] <- value
-		names(x)[i] <- names(value)
-		x
+	x[[name]] <- value
+	names(x)[i] <- names(value)
+	x
 
 	} # EOF
 )
@@ -44,6 +46,11 @@ methods::setMethod(
 	signature = c(x = "GVector"),
 	function(x, name, value) {
 
+	ng <- ngeom(x)
+	if (!is.null(value)) {
+		lvalue <- length(value)
+		if (lvalue < ng) value <- rep(value, length.out = ng) 
+	}
 	x@table <- data.table::set(x@table, i = NULL, j = name, value = value)
 	x
 
