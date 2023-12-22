@@ -40,7 +40,7 @@
 #'
 #' @aliases .region
 #' @rdname region
-#' @exportMethod .region
+#' @noRd
 methods::setMethod(
 	f = ".region",
 	signature = "missing",
@@ -208,7 +208,7 @@ methods::setMethod(
 
 #' @rdname region
 #' @aliases .region
-#' @exportMethod .region
+#' @noRd
 methods::setMethod(
 	f = ".region",
 	signature = "SpatRaster",
@@ -244,7 +244,7 @@ methods::setMethod(
 
 #' @rdname region
 #' @aliases .region
-#' @exportMethod .region
+#' @noRd
 methods::setMethod(
 	f = ".region",
 	signature = c(x = "GRegion"),
@@ -285,7 +285,7 @@ methods::setMethod(
 
 #' @rdname region
 #' @aliases .region
-#' @exportMethod .region
+#' @noRd
 methods::setMethod(
 	f = ".region",
 	signature = c(x = "GRaster"),
@@ -330,7 +330,7 @@ methods::setMethod(
 
 #' @rdname region
 #' @aliases .region
-#' @exportMethod .region
+#' @noRd
 methods::setMethod(
 	f = ".region",
 	signature = c(x = "GVector"),
@@ -355,7 +355,7 @@ methods::setMethod(
 
 #' @rdname region
 #' @aliases .regionExt
-#' @exportMethod .regionExt
+#' @noRd
 methods::setMethod(
 	f = ".regionExt",
 	signature = "missing",
@@ -364,7 +364,7 @@ methods::setMethod(
 
 #' @rdname region
 #' @aliases .regionExt
-#' @exportMethod .regionExt
+#' @noRd
 methods::setMethod(
 	f = ".regionExt",
 	signature = "numeric",
@@ -373,7 +373,7 @@ methods::setMethod(
 
 #' @rdname region
 #' @aliases .regionExt
-#' @exportMethod .regionExt
+#' @noRd
 methods::setMethod(
 	f = ".regionExt",
 	signature = "GSpatial",
@@ -444,7 +444,7 @@ methods::setMethod(
 
 #' @rdname region
 #' @aliases .regionDim
-#' @exportMethod .regionDim
+#' @noRd
 methods::setMethod(f = ".regionDim",
 	signature = c(x = "missing"),
 	definition = function(x) .region()@dimensions
@@ -452,7 +452,7 @@ methods::setMethod(f = ".regionDim",
 
 #' @rdname region
 #' @aliases .regionDim
-#' @exportMethod .regionDim
+#' @noRd
 methods::setMethod(
 	f = ".regionDim",
 	signature = "numeric",
@@ -461,7 +461,7 @@ methods::setMethod(
 
 #' @rdname region
 #' @aliases .regionDim
-#' @exportMethod .regionDim
+#' @noRd
 methods::setMethod(
 	f = ".regionDim",
 	signature = "GRegion",
@@ -536,7 +536,7 @@ methods::setMethod(
 
 #' @rdname region
 #' @aliases .regionRes
-#' @exportMethod .regionRes
+#' @noRd
 methods::setMethod(f = ".regionRes",
 	signature = c(x = "missing"),
 	definition = function(x) .region()@resolution[1L:2L]
@@ -544,7 +544,7 @@ methods::setMethod(f = ".regionRes",
 
 #' @rdname region
 #' @aliases .regionRes
-#' @exportMethod .regionRes
+#' @noRd
 methods::setMethod(
 	f = ".regionRes",
 	signature = "numeric",
@@ -553,7 +553,7 @@ methods::setMethod(
 
 #' @rdname region
 #' @aliases .regionRes
-#' @exportMethod .regionRes
+#' @noRd
 methods::setMethod(
 	f = ".regionRes",
 	signature = "GRegion",
