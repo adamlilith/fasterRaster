@@ -186,7 +186,7 @@ methods::setMethod(
 			flags = c(.quiet(), "overwrite")
 		)
 		
-		if (.vHasTable(srcBuff)) args$column <- .vNames(srcBuff)[1L]
+		if (.vHasDatabase(srcBuff)) args$column <- .vNames(srcBuff)[1L]
 		do.call(rgrass::execGRASS, args = args)
 
 	}
