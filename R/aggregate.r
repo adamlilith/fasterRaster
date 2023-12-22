@@ -284,7 +284,7 @@ methods::setMethod(
 				input = srcIn,
 				output = src,
 				new = 1L,
-				flags = c("d", "t")
+				flags = c(.quiet(), "overwrite", "d", "t")
 			)
 		
 		}
