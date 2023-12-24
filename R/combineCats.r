@@ -23,7 +23,7 @@
 #'
 #' @example man/examples/ex_GRaster_categorical.r
 #'
-#' @seealso [`GRaster` data types][tutorial_raster_data_types]
+#' @seealso `GRaster` [data types][tutorial_raster_data_types]
 #'
 #' @aliases combineCats
 #' @rdname combineCats
