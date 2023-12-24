@@ -1,21 +1,14 @@
 #' Change the coordinate reference system of a GRaster or GVector
 #'
-#' @description **fasterRaster** offers three ways to project rasters and vectors into a different coordinate reference system (CRS). Each of these ways are different from how they are implemented in **terra**, so it is important to understand how it works in **fasterRaster**.
-#'
-#' **Case #1: Changing the CRS for a `SpatRaster`, `SpatVector`, or `sf` object already in R**: Use the [fast()] function. This function will project the object to the CRS of the current **GRASS** [location][tutorial_locations_mapsets]. Note that for rasters, the `method`, `fallback`, and `wrap` arguments in the `fast()` function may be important to what you want to achieve.
-#' 
-#' **Case #2: Change the projection of rasters or vectors stored on disk**: Simply use the [fast()] function with the file name of the object. Again, the `method`, `fallback`, and `wrap` arguments may be important .
-#'
-#' **Case #3: Change the CRS of a `GRaster` or `GVector`: Use the `project()` function (this function). First, initiate a new **GRASS** [location][tutorial_locations_mapsets] using [faster()] with the CRS to which you want to transform the object. This means you need to keep track of which **GRASS** "location" in which you are working.  Second, apply this function. If you want to return to the original "location," use `location('original_location_name')`. You can get the name of the current location with [location()] (with no arguments), and its coordinate reference system with [crs()] or [st_crs()] (also no arguments).
+#' @description `project()` changes the coordinate reference system (CRS) of a `GRaster` or `GVector`. It has three use cases:
+#' * `x` is a `GRaster` and `y` is a `GRaster`: `x` will be projected to the CRS of `y` and resampled to have the same resolution as `y`. If argument `align` is `FALSE`, then it will also be cropped to the extent of `y`.
+#' * `x` is a `GRaster` and `y` is a `GVector` or a CRS string (typically in WKT format): `x` will be projected to the CRS specified by `y` but not resampled or cropped.
+#' * `x` is a `GVector` and `y` is a `GRaster`, `GVector`, or CRS string: The vector will be projected to the CRS of `y`.
 #'
 #' @param x A `GRaster` or `GVector` to be projected.
 #'
 #' @param y A character or `GLocation` object (i.e., typically a `GRaster` or `GVector`):
-#' * If `x` is a `GRaster` and `y` is a character string representing a coordinate reference system in WKT format, the raster will be projected but not resampled.
-#' * If `x` is a `GRaster` and `y` is a `GRaster` or `GRegion`, then `x` will be projected to the CRS of `y` and resampled to the same resolution as `y`. `x` will be cropped to the extent of `y` if `align` is `TRUE`.
-#' * If `x` is a `GRaster` and `y` is a `GVector`, then `x` will be projected to the CRS of `y`. `x` will not be resampled.
-#' * If `x` is a `GVector`, then `x` will be projected to the CRS of `y`.
-#' 
+#'
 #' @param align Logical: If `FALSE` (default), and `x` and `y` are `GRaster`s, then the extent of `x` will be cropped to the extent of `y`.
 #'
 #' @param method Character or `NULL` (`GRaster`s only): Method to use to conduct the transformation (rasters only). Partial matching is used.
