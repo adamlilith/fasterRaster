@@ -1,6 +1,6 @@
 #' Add a database table to a GRASS attribute table
 #'
-#' @description `.vAttachDatabase()` adds a table to a **GRASS** vector. The existing table should be removed first with [.dbRemove()]. This table is meant to be "invisible" to most users--they should use interact with attribute tables using the `GVector` slot @table. Some functions require tables (e.g., [extract()] and [spatSample()]). **This function is mostly of use to developers.**
+#' @description `.vAttachDatabase()` adds a table to a **GRASS** vector. This table is meant to be "invisible" to most users--they should use interact with attribute tables using the `GVector` slot @table. Some functions require tables (e.g., [extract()] and [spatSample()]). **This function is mostly of use to developers.**
 #'
 #' @param x A `GVector` or the name of a vector in **GRASS**.
 #' 
