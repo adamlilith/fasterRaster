@@ -2,7 +2,7 @@
 #'
 #' @description The `G` suite of S4 classes contain pointers to **GRASS** objects or metadata about the current **GRASS** session. Most users will manipulate objects using these classes, but do not need to know the details.
 #'
-#' * The `GLocation` class stores information about the **GRASS** "session" (["location" and mapse][tutorial_location_mapset]"), and coordinate reference system. Contained by all the rest.
+#' * The `GLocation` class stores information about the **GRASS** "session" (["location" and mapsets][tutorial_locations_mapsets]"), and coordinate reference system. Contained by all the rest.
 #'
 #' * The `GSpatial` class contains the `GLocation` class and stores information about spatial objects (extent, topology) plus the name of the file representing it in **GRASS** (its `source`). Contained by `GRegion`, `GRaster`, and `GVector`.
 #'
