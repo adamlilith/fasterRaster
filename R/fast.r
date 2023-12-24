@@ -84,9 +84,11 @@ methods::setMethod(
 
 		.locationRestore(x = location)
 
-		src <- .makeSourceName("r_in_gdal", type = "raster", n = 1L)
+		# src <- .makeSourceName("r_in_gdal", type = "raster", n = 1L)
+		src <- .makeSourceName("r_external", type = "raster", n = 1L)
 		rgrass::execGRASS(
-			cmd = "r.in.gdal",
+			# cmd = "r.in.gdal",
+			cmd = "r.external",
 			input = x,
 			output = src,
 			flags = c(.quiet(), "overwrite")
