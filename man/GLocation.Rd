@@ -20,7 +20,7 @@ An object of class \code{GLocation}, \code{GSpatial}, \code{GRegion}, \code{GRas
 \description{
 The \code{G} suite of S4 classes contain pointers to \strong{GRASS} objects or metadata about the current \strong{GRASS} session. Most users will manipulate objects using these classes, but do not need to know the details.
 \itemize{
-\item The \code{GLocation} class stores information about the \strong{GRASS} "session" (\link[=tutorial_location_mapset]{"location" and mapse}"), and coordinate reference system. Contained by all the rest.
+\item The \code{GLocation} class stores information about the \strong{GRASS} "session" (\link[=tutorial_locations_mapsets]{"location" and mapsets}"), and coordinate reference system. Contained by all the rest.
 \item The \code{GSpatial} class contains the \code{GLocation} class and stores information about spatial objects (extent, topology) plus the name of the file representing it in \strong{GRASS} (its \code{source}). Contained by \code{GRegion}, \code{GRaster}, and \code{GVector}.
 \item The \code{GRegion} class contains the \code{GSpatial} class and stores information about grids (dimensions and resolution). They do have \code{sources}, but these are not used (they're always \code{NA}). Contained by \code{GRaster}. The \code{GRegion} corresponds to \strong{GRASS} "\link[=tutorial_regions]{regions}", though \code{GRegion} objects are not actually pointers to \strong{GRASS} "region" files.
 \item The \code{GRaster} class contains the \code{GRegion} class and represents rasters. It stores information on number of layers, categories, min/max values, and user-friendly names. \link[=tutorial_raster_data_types]{Categorical rasters} can also be associated with a "levels" table for representing categorical data (e.g., wetlands, forest, etc.).
@@ -72,6 +72,8 @@ The \code{G} suite of S4 classes contain pointers to \strong{GRASS} objects or m
 
 \item{\code{levels}}{List of \code{data.table}s (\code{GRaster}s): Tables for categorical rasters. If a raster is not categorical, the \code{data.table} is \code{NULL}, as in \code{data.table(NULL)}. Can be obtained using \code{levels()} or \code{cats()}.}
 
-\item{\code{table}}{\code{data.table} (\code{GVector}s): Table with metadata, one row per geometry (point, line, or plane). If no table is associated with the vector, this must be \code{data.table(NULL)}.}
+\item{\code{table}}{\code{data.table} (\code{GVector}s): Table with metadata, one row per geometry (point, line, or plane). If no table is associated with the vector, this must be \code{data.table(NULL)}. The column with the category value is given in \verb{@catName}.}
+
+\item{\code{catName}}{Character (\code{GVector}s): Name of the column in the vector's database that contains category values (integers).}
 }}
 

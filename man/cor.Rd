@@ -12,7 +12,7 @@
 \S4method{cov}{GRaster}(x)
 }
 \arguments{
-\item{x}{A \code{GRaster}.}
+\item{x}{A \code{GRaster} with two or more layers.}
 }
 \value{
 A numeric \code{matrix}.
@@ -152,4 +152,7 @@ cor(landsat) # correlation
 cov(landsat) # covariance
 
 }
+}
+\seealso{
+\code{\link[stats:cor]{stats::cor()}}, \code{\link[stats:cor]{stats::cov()}}
 }

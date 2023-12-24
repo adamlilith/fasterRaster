@@ -29,11 +29,7 @@
 \S4method{Arith}{GVector,GVector}(e1, e2)
 }
 \arguments{
-\item{name}{Character: Name of the new \code{GRaster}.}
-
-\item{src}{\code{sources} of the \code{GRaster} being operated on}
-
-\item{ex}{expression for \code{r.mapcalc}}
+\item{e1, e2}{\code{GRaster}s, \code{numeric}s, \code{integer}s, or \code{logical}s.}
 }
 \value{
 A \code{GRaster}.
@@ -41,13 +37,13 @@ A \code{GRaster}.
 \description{
 \strong{\code{GRaster}s}: You can do arithmetic operations on \code{GRaster}s and using normal operators in \strong{R}: \code{+}, \code{-}, \code{*}, \code{/}, \code{^}, \code{\%\%} (modulus), and \code{\%/\%} (integer division).
 
-Note that for \code{GRaster}s, the precision of the result will be determined by the \code{rasterPrecision} option, which can be set using \code{\link[=faster]{faster()}}. The default is \code{"float"}, which is precise to about the 7th decimal place. This be increased to about the 15th decimal place by setting this to \code{"double"}, though it can substantially increase the size of the raster output in memory and when saved to disk.
+Note that for \code{GRaster}s, the precision of the result will be determined by the \code{rasterPrecision} option, which can be set using \code{\link[=faster]{faster()}}. The default is \code{"double"}, which is precise to about the 15th to 17th decimal place. This be reduced to the 6th to 9th decimal place by setting this to \code{"float"}. This reduces accuracy but also reduces memory requirements.
 
-\strong{\code{GVector}s}: You can also do arithmetic operations on \code{GVector}s:
-\code{+} operator: Same as \code{\link[=union]{union()}}
-\code{-} operator: Same as \code{\link[=erase]{erase()}}.
-\code{*} operator: Same as \code{\link[=intersect]{intersect()}}.
-\code{/} operator: Same as \code{\link[=xor]{xor()}}.
+\strong{\code{GVector}s}: You can also do arithmetic operations on \code{GVector}s:\cr\cr
+\code{+} operator: Same as \code{\link[=union]{union()}}\cr
+\code{-} operator: Same as \code{\link[=erase]{erase()}}\cr
+\code{*} operator: Same as \code{\link[=intersect]{intersect()}}\cr
+\code{/} operator: Same as \code{\link[=xor]{xor()}}\cr
 }
 \examples{
 if (grassStarted()) {

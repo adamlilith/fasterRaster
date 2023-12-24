@@ -12,7 +12,7 @@ Rasters that represent integers are called "integer" rasters in \strong{fasterRa
 
 \subsection{Floating-point values}{
 
-Floating-point values are accurate to about the 6th to 9th decimal place. These are called "float" rasters in \strong{fasterRaster} and \code{FCELL} rasters in \strong{GRASS}. By default, operations conducted using raster math (e.g., \code{raster1 * raster2}) return double floating-point valued rasters, but this can be changed to floating point precision using \code{\link[=faster]{faster()}} (e.g., \code{faster(rasterDataType = "float")}). Floating-point rasters typically take more memory than integer rasters, but less than double-floating point rasters.
+Floating-point values are accurate to about the 6th to 9th decimal place. These are called "float" rasters in \strong{fasterRaster} and \code{FCELL} rasters in \strong{GRASS}. By default, operations conducted using raster math (e.g., \code{raster1 * raster2}) return double floating-point valued rasters, but this can be changed to floating point precision using \code{\link[=faster]{faster()}} (e.g., \code{faster(rasterPrecision = "float")}). Floating-point rasters typically take more memory than integer rasters, but less than double-floating point rasters.
 }
 
 \subsection{Double-floating point values}{
@@ -34,6 +34,7 @@ Categorical rasters (also called "factor" rasters) are actually integer rasters,
 \item \code{\link[=catNames]{catNames()}} reports the column names of the "levels" table of each layer of a raster.
 \item \code{\link[=cats]{cats()}} returns the entire "levels" table of a categorical raster.
 \item \code{\link[=combineCats]{combineCats()}} combines levels of two or more categorical or integer rasters.
+\item \code{\link[=complete.cases]{complete.cases()}} finds rows in the levels table that have no \code{NA}s.
 \item \code{\link[=datatype]{datatype()}} returns the data type of a \code{GRaster}.
 \item \code{\link[=droplevels]{droplevels()}} removes "unused" levels in a "levels" table.
 \item \code{\link[=freq]{freq()}}: Frequency of each category across cells of a raster\cr
@@ -42,6 +43,7 @@ Categorical rasters (also called "factor" rasters) are actually integer rasters,
 \item \code{\link[=levels]{levels()}} returns the "levels" table of a categorical raster (just the value column and the active column).
 \item \code{\link[fasterRaster]{levels<-}} and \code{\link[=categories]{categories()}} can be used to assign categories to an integer raster and make it categorical (i.e., a "factor" raster).
 \item \code{\link[=match]{match()}}, \code{\link[fasterRaster]{\%in\%}}, and \code{\link[fasterRaster]{\%notin\%}}: Find which cells of a \code{GRaster} match or do not match certain category labels\cr
+\item \code{\link[=missing.cases]{missing.cases()}} finds rows in the levels table that have at least one \code{NA}.
 \item \code{\link[=missingCats]{missingCats()}} finds values in categorical rasters that do not have a category assigned to them.
 \item \code{\link[=nlevels]{nlevels()}} returns the number of levels represented by a categorical raster.
 }

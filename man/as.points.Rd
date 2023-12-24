@@ -19,7 +19,11 @@
 A \code{points} \code{GVector}.
 }
 \description{
-\code{as.points()} converts a \code{GRaster} or \code{GVector} to a points \code{GVector}. For rasters, the points have the coordinates of cell centers and are assigned the cells' values. Only non-\code{NA} cells will be converted to a point. For vectors, each point will have the attributes of the line or polygon to which it belonged. Points are extracted from each vertex.
+\code{as.points()} converts a \code{GRaster} or \code{GVector} to a points \code{GVector}.
+
+For \code{GRasters}, the points have the coordinates of cell centers and are assigned the cells' values. Only non-\code{NA} cells will be converted to points.
+
+For \code{GVectors}, each point will have the attributes of the line or polygon to which it belonged. Points are extracted from each vertex.
 }
 \examples{
 if (grassStarted()) {
@@ -61,5 +65,5 @@ plot(riversPoints, col = "blue", add = TRUE)
 }
 }
 \seealso{
-\code{\link[=as.lines]{as.lines()}}, \code{\link[=as.polygons]{as.polygons()}}, \code{\link[terra:as.points]{terra::as.points()}}, and modules \code{v.to.points} and \code{r.to.vect} in \strong{GRASS}
+\code{\link[=crds]{crds()}}, \code{\link[=as.lines]{as.lines()}}, \code{\link[=as.polygons]{as.polygons()}}, \code{\link[terra:as.points]{terra::as.points()}}, and modules \code{v.to.points} and \code{r.to.vect} in \strong{GRASS}
 }

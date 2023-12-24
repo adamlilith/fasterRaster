@@ -27,7 +27,7 @@
 A \code{GRaster}. The "levels" table of the raster is modified.
 }
 \description{
-\code{addCats()} and \verb{addCats()<-} add information to a categorical raster's "levels" table. The \code{addCats()} function uses \code{\link[data.table:merge]{data.table::merge()}} or \code{\link[=cbind]{cbind()}} to do this--it does not add new rows, but rather new columns. The \verb{addCats()<-} function uses \code{\link[=rbind]{rbind()}} to add new categories (rows) to the "levels" table.
+\code{addCats()} and \verb{addCats()<-} add information to a categorical \verb{GRaster's "levels" table. The }addCats()\verb{function uses [data.table::merge()] or [cbind()] to do this--it does not add new rows, but rather new columns. The}addCats()<-` function uses \code{\link[=rbind]{rbind()}} to add new categories (rows) to the "levels" table.
 
 GRaster\verb{s can represent [categorical data][tutorial_raster_data_types]. Cell values are actually integers, each corresponding to a category, such as "desert" or "wetland." A categorical raster is associated with a "levels" table that matches each value to a category name. The table must be }NULL` (i.e., no categories--so not a categorical raster), or have at least two columns. The first column must have integers and represent raster values. One or more subsequent columns must have category labels. The column with these labels is the "active category".
 }

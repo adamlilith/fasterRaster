@@ -4,25 +4,25 @@
 \alias{tutorial_regions}
 \title{An explanation of GRASS "regions"}
 \description{
-A \strong{GRASS} \emph{region} is a data structure like a raster in that it is composed of "cells", but different in that these cells do not contain values. Rather, their resolution and the extent of the region influence how rasters are imported, created, processed, and exported. In most cases, whenever a raster undergoes one of these processes using a \strong{GRASS} module, the raster will be resampled and/or crop/extend it so that matches the region"s extent and resolution. If ignored, this can cause unintended side effects if the region"s geometry doesn"t match the raster being processed.
+A \strong{GRASS} \emph{region} is a data structure like a raster in that it is composed of "cells", but different in that these cells do not contain values. Rather, their resolution and the extent of the region influence how rasters are imported, created, processed, and exported. In most cases, whenever a raster undergoes one of these processes using a \strong{GRASS} module, the raster will be resampled and/or crop/extend it so that matches the region"s extent and resolution. If ignored, this can cause unintended side effects if the region's geometry doesn't match the raster being processed.
 
 Generally, most users of \strong{fasterRaster} will not need to know how regions work because their management is handled automatically.  This help page is provided to assist power users who may wish to use regions explicitly or develop their own applications based on \strong{fasterRaster}.
 
-Each \strong{GRASS} \link[=tutorial_locations_mapsets]{session} typically has one active region. The extent and resolution of this region is initially set by the first raster that is imported into it.
+Each \strong{GRASS} \link[=tutorial_locations_mapsets]{"location"} typically has one active region. The extent and resolution of this region is initially set by the first raster that is imported into it.
 \subsection{Functions for managing regions in \strong{fasterRaster}}{
 
-\strong{fasterRaster} provides functions for managing regions:\cr
+\strong{fasterRaster} provides functions for managing regions:
 \itemize{
-\item \code{\link[=region]{region()}}: Extent \emph{and} dimensions/resolution of a region. This function is used by many other \strong{fasterRaster} functions before raster processing to ensure the raster is not changed (by the region).
-\item 
-\item 
-\item 
+\item `.region(): Extent \emph{and} dimensions/resolution of a region. This function is used by many other \strong{fasterRaster} functions before raster processing to ensure the raster is not changed (by the region).
+\item \code{.regionDim()}: Dimensions (number of rows and columns)
+\item \code{.regionExt()}: Extent
+\item \code{.regionRes()}: Resolution
 }
 
 Most of these functions can be used in three different ways:
 \itemize{
 \item No arguments: The function reports the respective value(s) (e.g., \code{regionExt()} reports the extent of the region).
-\item With a \code{GRaster}, \code{GVector}, \code{SpatRaster}, \code{SpatVector}, or \code{sf} object: Resizes and/or resamples the region so it has the same extent and/or resolution as the spatial object. Note that vector objects do not have a resolution, so cannot be used in functions that resample the region's resolution.
+\item With a \code{GRaster}, \code{GVector}, \code{SpatRaster}, \code{SpatVector}, or \code{sf} object: Resizes and/or resamples the region so it has the same extent and/or resolution as the spatial object. Note that vector objects do not have a resolution, so cannot be used in \verb{.region*()} functions that resample the region's resolution.
 \item With numeric values (i.e., representing extent, resolution, or dimensions): Resize or resample the region so it has these dimensions. When a region's extent is resized or resolution is changed, it will be extended to have the next-larger number of rows and/or columns so it can accommodate cells of the desired size.
 }
 

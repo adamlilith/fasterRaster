@@ -19,7 +19,7 @@ appFuns(warn = TRUE)
 
 \item{fun}{Character: The function to apply. This must be written as a character string that follows these rules:
 \itemize{
-\item It must begin with an equals sign ("\code{=}"").
+\item It must begin with an equals sign ("\code{=}").
 \item It must use typical arithmetic operators like \code{+}, \code{-}, \code{*}, \code{/} and/or functions that can be seen using \code{appFuns(TRUE)}.
 \item The \code{\link[=names]{names()}} of the rasters do not match any of the functions in the \code{appFuns(TRUE)} table. Note that \code{x} and \code{y} are forbidden names :(
 }
@@ -61,7 +61,7 @@ Tips:
 \item In \strong{GRASS}, \code{null()} is the same as \code{NA} in \strong{R}.
 \item If you want to calculate values using while ignoring \code{NA} (or \code{null}) values, see the functions that begin with \code{n} (like \code{nmean}).
 \item Be mindful of the data type that a function returns. In \strong{GRASS}, these are \code{CELL} (integer), \code{FCELL} (floating point values--precise to about the 7th decimal place), and \code{DCELL} (double-floating point values--precise to about the 15th decimal place). In cases where you want to ensure a raster to be treated like a float or double data type raster, wrap the raster in the \code{float()} or \code{double()} functions to ensure it is treated as such. This is especially useful if the raster might be assumed to be the \code{CELL} type because it only contains integer values. You can get the data type of a raster using \code{\link[=datatype]{datatype()}} with the \code{type} argument set to \code{GRASS}. You can change the data type of a \code{GRaster} using \code{\link[=as.int]{as.int()}}, \code{\link[=as.float]{as.float()}}, and \code{\link[=as.doub]{as.doub()}}. Note that \link[=tutorial_raster_data_types]{categorical} rasters are really \code{CELL} (integer) rasters with an associated "levels" table. You can also change a \code{CELL} raster to a \code{FCELL} raster by adding then subtracting a decimal value, as in \code{x - 0.1 + 0.1}.
-\item The \code{rand()} function returns \code{CELL} (integer) values by default. If you want non-integer values, use the tricks mentioned above to ensure non-integer values. For example, the \code{\link[=runifRast]{runifRast()}} function's expression is (essentially) \verb{= float(rand(0 + 0.1, 1 + 0.1) - 0.1)}
+\item The \code{rand()} function returns integer values by default. If you want non-integer values, use the tricks mentioned above to ensure non-integer values. For example, the \code{\link[=runifRast]{runifRast()}} function's \code{app()}-like expression is (essentially) \verb{= float(rand(0 + 0.1, 1 + 0.1) - 0.1)}
 }
 }
 \examples{

@@ -18,7 +18,7 @@
 A numeric value, one per raster layer in the input.
 }
 \description{
-Number of non-\code{NA} or number of \code{NA} cells in a raster. If the raster is 3D, then all cells in all layers are counted.
+Number of \code{NA} cells or number of non-\code{NA} cells in a raster. If the raster is 3D, then all cells in all layers are counted.
 }
 \examples{
 if (grassStarted()) {
@@ -154,5 +154,5 @@ cov(landsat) # covariance
 }
 }
 \seealso{
-\code{\link[=ncell]{ncell()}}, \code{\link[=ncell3d]{ncell3d()}}, \code{\link[terra:dimensions]{terra::ncell()}}
+\code{\link[=ncell]{ncell()}}, \code{\link[=ncell3d]{ncell3d()}}, \code{\link[terra:dimensions]{terra::ncell()}}, \code{\link[=dim]{dim()}}, \code{\link[terra:dimensions]{terra::dim()}}
 }

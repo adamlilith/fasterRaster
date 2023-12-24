@@ -26,10 +26,10 @@
 \item \code{"median"}: Median.
 \item \code{"quantile"}: Quantile (see also argument \code{prob}).
 \item \code{"range"}: Range--note that as per \code{\link[terra:global]{terra::global()}}, the minimum and maximum are reported, not the actual range.
-\item \code{"sd"}: Sample standard deviation.
+\item \code{"sd"}: Sample standard deviation (same as \code{\link[stats:sd]{stats::sd()}}).
 \item \code{"sdpop"}: Population standard deviation.
 \item \code{"sum"}: Sum.
-\item \code{"var"}: Sample variance.
+\item \code{"var"}: Sample variance (same as \code{\link[stats:cor]{stats::var()}}).
 \item \code{"varpop"}: Population variance.
 }}
 

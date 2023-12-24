@@ -18,18 +18,18 @@
 A \code{GRaster}. If the inputs are all categorical (factor) rasters, then a levels table will also be returned with the new combined levels.
 }
 \description{
-This function takes from 2 to 10 integer or categorical (factor) \code{GRaster}s and creates a single \code{GRaster} that has one value per combination of values in the inputs. For example, say that there were two input rasters, with values 1 and 2 in the one raster, and 3 and 4 in the other. If the following combinations of values occurred between the two rasters, then the output raster would be re-coded with the new values:
-\subsection{| \code{input_raster1} | \code{input_raster2} | \code{output_raster} |}{
+This function takes from 2 to 10 integer or []categorical][tutorial_raster_data_types] (factor) \code{GRaster}s and creates a single \code{GRaster} that has one value per combination of values in the inputs. For example, say that there were two input rasters, with values 1 and 2 in the one raster, and 3 and 4 in the other. If the following combinations of values occurred between the two rasters, then the output raster would be re-coded with the new values:\tabular{lll}{
+   \code{input_raster1} \tab \code{input_raster2} \tab \code{output_raster} \cr
+   1 \tab 3 \tab 0 \cr
+   1 \tab 4 \tab 1 \cr
+   2 \tab 3 \tab 2 \cr
+   2 \tab 4 \tab 3 \cr
+}
 
-| 1               | 3               | 0               |
-| 1               | 4               | 1               |
-| 2               | 3               | 2               |
-| 2               | 4               | 3               |
 
-If the argument \code{na.rm} is set to \code{TRUE} (which it is, by default), then whenever at least one cell has an \code{NA} value, then the output will also have an \code{NA} (i.e., a new category number is not created). However, if \code{na.rm} is \code{FALSE}, then combinations that include an \code{NA} are assigned a new category number, unless all values are \code{NA} (in which case the output is also \code{NA}).
+If the argument \code{na.rm} is set to \code{TRUE} (which it is, by default), then whenever at least one cell has an \code{NA} value, then the output will also have an \code{NA} (i.e., a new category number is not created). However, if \code{na.rm} is \code{FALSE}, then combinations that include an \code{NA} are assigned a new category number, unless all values are \code{NA} (in which case the output will be \code{NA}).
 
 If the inputs are all categorical rasters, then a \code{\link[=levels]{levels()}} table will also be returned with the new levels.
-}
 }
 \examples{
 if (grassStarted()) {
@@ -153,5 +153,5 @@ levels(combinedNA)
 }
 }
 \seealso{
-\link[=tutorial_raster_data_types]{GRaster data types}
+\code{GRaster} \link[=tutorial_raster_data_types]{data types}
 }

@@ -25,7 +25,7 @@ A tutorial on \link[=tutorial_raster_data_types]{raster data types}\cr
 \code{\link[=ext]{ext()}}, \code{\link[=N]{N()}}, \code{\link[=S]{S()}}, \code{\link[=E]{E()}}, \code{\link[=W]{W()}}, \code{\link[=top]{top()}}, and \code{\link[=bottom]{bottom()}}: Spatial extent\cr
 \code{\link[=freq]{freq()}}: Frequencies of cell values in a raster\cr
 \code{\link[=is.2d]{is.2d()}} and \code{\link[=is.3d]{is.3d()}}: Is an object 2- or 3-dimensional?\cr
-\code{\link[=is.int]{is.int()}}, \code{\link[=is.float]{is.float()}}, \code{\link[=is.doub]{is.doub()}}: \code{GRaster} data type (integer/float/double)\cr
+\code{\link[=is.int]{is.int()}} / \code{\link[=is.cell]{is.cell()}}, \code{\link[=is.float]{is.float()}}, \code{\link[=is.doub]{is.doub()}}: \code{GRaster} data type (integer/float/double)\cr
 \code{\link[=is.factor]{is.factor()}}: Does a raster represent categorical data?\cr
 \code{\link[=is.lonlat]{is.lonlat()}}: Is an object projected (e.g., in WGS84)?\cr
 \code{\link[=levels]{levels()}}: Names of levels in a categorical \code{GRaster}\cr
@@ -50,7 +50,7 @@ A tutorial on \link[=tutorial_raster_data_types]{raster data types}\cr
 \subsection{Functions that operate on or create \code{GRasters}}{
 
 \link{Arithmetic}: Mathematical operations on \code{GRaster}s: \code{+}, \code{-}, \code{*}, \code{/}, \code{^}, \code{\%\%} (modulus), \code{\%/\%} (integer division)\cr
-\link[=Compare-methods]{Logical comparisons}: \code{<}, \code{<=}, \code{==}, \code{!=}, \code{>=}, and \code{>}, plus \code{\%in\%} (for categorical rasters only)\cr
+\link[=Compare-methods]{Logical comparisons}: \code{<}, \code{<=}, \code{==}, \code{!=}, \code{>=}, and \code{>}, plus \code{\link[fasterRaster]{\%in\%}} and \code{\link[fasterRaster]{\%notin\%}} (for categorical rasters only)\cr
 
 Single-layer functions (applied to each layer of a \code{GRaster}):
 \itemize{
@@ -100,7 +100,7 @@ The assign operators, \code{\link[fasterRaster]{$<-}}, \code{\link[fasterRaster]
 \code{\link[=kernel]{kernel()}}: Kernel density estimator of points.\cr
 \code{\link[=longlat]{longlat()}}: Create longitude/latitude rasters.\cr
 \code{\link[=mask]{mask()}}: Remove values in a \code{GRaster} based on values in another \code{GRaster} or vector\cr
-\code{\link[=match]{match()}}, \code{\%in\%}, and \%notin\%: Find which cells of a \code{GRaster} match or do not match certain values\cr
+\code{\link[=match]{match()}}, \code{\link[fasterRaster]{\%in\%}}, and \code{\link[fasterRaster]{\%notin\%}}: Find which cells of a \code{GRaster} match or do not match certain values\cr
 \code{\link[=merge]{merge()}}: Combine two or more rasters with different extents and fill in \code{NA}s\cr
 \code{\link[=noise]{noise()}}: Remove coarse-scale trends from a \code{GRaster}, leaving just fine-scale "noise"\cr
 \code{\link[=pairs]{pairs()}}: Plot correlations between \code{GRaster} layers\cr
@@ -109,9 +109,11 @@ The assign operators, \code{\link[fasterRaster]{$<-}}, \code{\link[fasterRaster]
 \code{\link[=plot]{plot()}}: Display a \code{GRaster}\cr
 \code{\link[=plotRGB]{plotRGB()}}: Display a multispectral \code{GRaster} using red, blue, green, and alpha channels\cr
 \code{\link[=project]{project()}}: Change coordinate reference system and cell size\cr
+\code{\link[=predict]{predict()}}: Make predictions to a \code{GRaster} from a linear model or generalized linear model\cr
 \code{\link[=resample]{resample()}}: Change cell size\cr
 \code{\link[=rnormRast]{rnormRast()}}: A random \code{GRaster} with values drawn from a normal distribution\cr
 \code{\link[=runifRast]{runifRast()}}: A random \code{GRaster} with values drawn from a uniform distribution\cr
+\code{\link[=scale]{scale()}}: Subtract means and divide by standard deviations\cr
 \code{\link[=selectRange]{selectRange()}}: Select values from rasters in a stack based on values in another \code{GRaster}\cr
 \code{\link[=spatSample]{spatSample()}}: Randomly points from a \code{GRaster}\cr
 \code{\link[=spDepRast]{spDepRast()}}: Create a random \code{GRaster} with or without spatial dependence\cr
@@ -133,13 +135,15 @@ The assign operators, \code{\link[fasterRaster]{$<-}}, \code{\link[fasterRaster]
 \code{\link[=catNames]{catNames()}}: Names of each "levels" table\cr
 \code{\link[=cats]{cats()}}: "Levels" table of a categorical raster\cr
 \code{\link[=combineCats]{combineCats()}}: Combine categories from two or more categorical rasters\cr
+\code{\link[=complete.cases]{complete.cases()}}: Find rows of a categorical \code{GRaster}'s "levels" table that have no \code{NA}s in them\cr
 \code{\link[=droplevels]{droplevels()}}: Remove one or more levels\cr
 \code{\link[=freq]{freq()}}: Frequency of each category across cells of a raster\cr
 \code{\link[=is.factor]{is.factor()}}: Is a raster categorical?\cr
 \code{\link[=levels]{levels()}}: "Levels" table of a categorical raster\cr
 \code{\link[fasterRaster]{levels<-}}: Set "levels" table of a categorical raster\cr
-\code{\link[=match]{match()}}, \code{\%in\%}, and \%notin\%: Find which cells of a \code{GRaster} match or do not match certain category labels\cr
+\code{\link[=match]{match()}}, \code{\link[fasterRaster]{\%in\%}}, and \code{\link[fasterRaster]{\%notin\%}}: Find which cells of a \code{GRaster} match or do not match certain category labels\cr
 \code{\link[=minmax]{minmax()}}: "Lowest" and "highest" category values of categorical rasters (when argument \code{levels = TRUE})\cr
+\code{\link[=missing.cases]{missing.cases()}}: Find rows of a categorical \code{GRaster}'s "levels" table that have at least one \code{NA} in them\cr
 \code{\link[=missingCats]{missingCats()}}: Values that have no category assigned to them\cr
 \code{\link[=nlevels]{nlevels()}}: Number of levels\cr
 \code{\link[=zonalGeog]{zonalGeog()}}: Geographic statistics (area, perimeter, fractal dimension, etc.) for sets of cells with the same values
@@ -164,6 +168,7 @@ The assign operators, \code{\link[fasterRaster]{$<-}}, \code{\link[fasterRaster]
 \code{\link[=is.lonlat]{is.lonlat()}}: Is an object projected (e.g., in WGS84)?\cr
 \code{\link[=is.points]{is.points()}}, \code{\link[=is.lines]{is.lines()}}, \code{\link[=is.polygons]{is.polygons()}}: Does a \code{GVector} represent points, lines, or polygons?\cr
 \code{\link[=names]{names()}}: Names of \code{GVector} fields\cr
+\code{\link[fasterRaster]{names<-}}: Assign names to columns of a \code{GVector}s data table\cr
 \code{\link[=ncol]{ncol()}}: Number of fields\cr
 \code{\link[=ngeom]{ngeom()}}: Number of geometries (points, lines, polygons)\cr
 \code{\link[=nrow]{nrow()}}: Number of rows in a vector data table\cr
@@ -185,6 +190,7 @@ The \code{\link[fasterRaster]{$<-}} operator can be used to replace specific col
 \code{\link[=buffer]{buffer()}}: Create a polygon around/inside a \code{GVector}\cr
 \code{\link[=cleanGeom]{cleanGeom()}}: Fix undesirable geometries of a \code{GVector}\cr
 \code{\link[=clusterPoints]{clusterPoints()}}: Identify clusters of points\cr
+\code{\link[=colbind]{colbind()}}: Add columns to the data table of a \code{GVector}\cr
 \code{\link[=complete.cases]{complete.cases()}}: Find rows of a \code{GVector}'s data table that have no \code{NA}s in them\cr
 \code{\link[=connectors]{connectors()}}: Create lines connecting nearest features of two \code{GVector}s\cr
 \code{\link[=convHull]{convHull()}}: Minimum convex hull\cr
@@ -219,11 +225,11 @@ The \code{\link[fasterRaster]{$<-}} operator can be used to replace specific col
 \subsection{Converting between data types}{
 
 \code{\link[=as.contour]{as.contour()}}: Convert a \code{GRaster} to a \code{GVector} representing contour lines\cr
-\code{\link[=as.doub]{as.doub()}}: Convert a \code{GRaster} to a double-floating point raster (*\strong{GRASS} data type \code{DCELL})\cr
+\code{\link[=as.doub]{as.doub()}}: Convert a \code{GRaster} to a double-floating point raster (\strong{GRASS} data type \code{DCELL})\cr
 \code{\link[=as.data.frame]{as.data.frame()}}: Convert \code{GVector} to a \code{data.frame}\cr
 \code{\link[=as.data.table]{as.data.table()}}: Convert \code{GVector} to a \code{data.table}\cr
-\code{\link[=as.float]{as.float()}}: Convert a \code{GRaster} to a floating-point raster (*\strong{GRASS} data type \code{FCELL})\cr
-\code{\link[=as.int]{as.int()}}: Convert a \code{GRaster} to an integer raster (*\strong{GRASS} data type \code{CELL})\cr
+\code{\link[=as.float]{as.float()}}: Convert a \code{GRaster} to a floating-point raster (\strong{GRASS} data type \code{FCELL})\cr
+\code{\link[=as.int]{as.int()}}: Convert a \code{GRaster} to an integer raster (\strong{GRASS} data type \code{CELL})\cr
 \code{\link[=as.points]{as.points()}}, \code{\link[=as.lines]{as.lines()}}, and \code{\link[=as.polygons]{as.polygons()}}: Convert a \code{GRaster} to a \code{GVector}\cr
 \code{\link[=fast]{fast()}}: Convert a \code{SpatRaster}, \code{SpatVector}, or \code{sf} vector to a \code{GRaster} or \code{GVector}, or load one from a file\cr
 \code{\link[=categories]{categories()}} and \link{levels<-}: Convert an integer raster to a categorical ("factor") raster.
@@ -268,6 +274,7 @@ Tutorial on \strong{GRASS} \link[=tutorial_regions]{regions}\cr
 Tutorial on \strong{GRASS} \link[=tutorial_locations_mapsets]{"locations" and mapsets}\cr
 \code{.copyGSpatial()}: Make a copy of the \strong{GRASS} file pointed to by a \code{GRaster} or \code{GVector}\cr
 \code{.fileExt()}: Get file extension\cr
+\code{.exists()}: Does the \strong{GRASS} file of a \code{GRaster} or \code{GVector} exist?\cr
 \code{.layerIndex()}: Gets the index of \code{GRaster} layers from a numeric, integer, character, or logical vector\cr
 \code{.locationCreate()} Make a connection to \strong{GRASS} (i.e., start \strong{GRASS} from within \strong{R}) and create a location\cr
 \code{.locationDelete()} Deletes all files associated with a \strong{GRASS} "location" and mapset\cr
@@ -285,7 +292,7 @@ Tutorial on \strong{GRASS} \link[=tutorial_locations_mapsets]{"locations" and ma
 \code{.quiet()}: Returns "quiet" if \code{faster("verbose")} is \code{TRUE}\cr
 \code{.rastInfo()} and \code{.vectInfo()}: Metadata for a \strong{GRASS} raster or vector\cr
 \code{.region()}: Change or report the active region's extent and resolution\cr
-\code{.regionDim()}: Change or report the active region's resolution (also \code{\link[=dim]{dim()}} and related functions, with no arguments)\cr
+\verb{.regionDim()]}: Change or report the active region's resolution (also \code{\link[=dim]{dim()}} and related functions, with no arguments)\cr
 \code{.regionExt()}: Change or report the active region's extent (also \code{\link[=ext]{ext()}} and related functions, with no arguments)\cr
 \code{.regionRes()}: Change or report the active region's dimensions (also \code{\link[=res]{res()}} and related functions, with no arguments)\cr
 \code{.rename()}: Rename a \strong{GRASS} raster or vector\cr
@@ -293,9 +300,10 @@ Tutorial on \strong{GRASS} \link[=tutorial_locations_mapsets]{"locations" and ma
 \code{.vAsDataTable()}: Convert the attribute table linked to a vector in \strong{GRASS} to a \code{data.table}. This table is distinct from the attribute table attached to a \code{GVector}\cr
 \code{.vAttachDatabase()}: Add a database table to the \strong{GRASS} representation of a \code{GVector}\cr
 \code{.vCats()}: Get a \code{data.table} with a single column named \code{cat}, which corresponds to the \strong{GRASS} attribute table's \code{cat} column\cr
-\code{.vHasTable()}: Tests if \strong{GRASS} vector has a database\cr
+\code{.vHasDatabase()}: Tests if \strong{GRASS} vector has a database\cr
 \code{.vIncrementCats()}: Increment category values of a \code{GVector}\cr
-\code{.vNames()}: "GRASS" vector attribute table column names\cr
+\code{.vNames()}: "\strong{GRASS}" vector attribute table column names\cr
+\code{.vRecat()}: Change \strong{GRASS} category indices of a \strong{GRASS} vector\cr
 \code{grassStarted()}: Has a connection \strong{GRASS} been made within the current \strong{R} session?\cr
 }
 }

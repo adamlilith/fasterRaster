@@ -20,7 +20,7 @@
 A \code{GRaster}.
 }
 \description{
-'fractalRast()' creates a raster with a fractal pattern.
+\code{fractalRast()} creates a raster with a fractal pattern.
 }
 \examples{
 if (grassStarted()) {

@@ -31,7 +31,7 @@ library(sf)
 data(madCoast0) # same as next line
 madCoast0 <- fastData("madCoast0") # same as previous
 madCoast0
-plot(st_geometry(madCoast))
+plot(st_geometry(madCoast0))
 
 madCoast4 <- fastData("madCoast4")
 madCoast4
@@ -39,7 +39,7 @@ plot(st_geometry(madCoast4), add = TRUE)
 
 madRivers <- fastData("madRivers")
 madRivers
-plot(st_geometry(madCoastRivers), col = "blue", add = TRUE)
+plot(st_geometry(madRivers), col = "blue", add = TRUE)
 
 madDypsis <- fastData("madDypsis")
 madDypsis
@@ -66,14 +66,17 @@ madForest2014 <- fastData("madForest2014")
 madForest2014
 plot(madForest2014)
 
+# multi-layer raster
 madChelsa <- fastData("madChelsa")
 madChelsa
 plot(madChelsa)
 
+# RGB raster
 madLANDSAT <- fastData("madLANDSAT")
 madLANDSAT
 plotRGB(madLANDSAT, 4, 1, 2, stretch = "lin")
 
+# categorical raster
 madCover <- fastData("madCover")
 madCover
 madCover <- droplevels(madCover)

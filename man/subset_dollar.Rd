@@ -126,3 +126,6 @@ dypsis$institutionCode[dypsis$institutionCode == "MO"] <-
 
 }
 }
+\seealso{
+\code{\link[fasterRaster]{[}}, \code{\link[fasterRaster]{[[}}
+}

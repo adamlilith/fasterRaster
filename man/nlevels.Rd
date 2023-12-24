@@ -138,5 +138,5 @@ levels(combinedNA)
 }
 }
 \seealso{
-\code{\link[=levels]{levels()}}, \code{\link[terra:factors]{terra::levels()}}, \link[=tutorial_raster_data_types]{categorical rasters}
+\code{\link[=levels]{levels()}}, \code{\link[terra:factors]{terra::levels()}}, \code{\link[=droplevels]{droplevels()}}, \link[=tutorial_raster_data_types]{categorical rasters}
 }

@@ -38,7 +38,7 @@
 A \code{GRaster} or \code{GVector}.
 }
 \description{
-\code{fast()} creates a \code{GRaster} or \code{GVector} from a file, or from a \code{SpatRaster}, \code{SpatVector}, or \code{sf} vector. If \strong{GRASS} has not yet been started with an object that has the same coordinate reference system, this function will also create a connection to \strong{GRASS} for the given coordinate reference system.
+\code{fast()} creates a \code{GRaster} or \code{GVector} from a file, or from a \code{SpatRaster}, \code{SpatVector}, or \code{sf} vector. This function will also create a connection to \strong{GRASS} the given coordinate reference system of the raster or vector if none has been made yet.
 
 \strong{GRASS} supports loading from disk a variety of raster formats (see the \strong{GRASS} manual page for \href{https://grass.osgeo.org/grass84/manuals/r.in.gdal.html}{\code{r.in.gdal}}) and vector formats (see the \strong{GRASS} manual page for \href{https://grass.osgeo.org/grass84/manuals/v.in.ogr.html}{\code{v.in.ogr}}), though not all of them will work with this function.
 }

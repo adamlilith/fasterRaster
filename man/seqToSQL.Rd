@@ -4,12 +4,12 @@
 \alias{seqToSQL}
 \title{Format a numeric series into an SQL value call}
 \usage{
-seqToSQL(x, maxChar = 64000)
+seqToSQL(x, maxChar = 29900)
 }
 \arguments{
 \item{x}{A vector of numerical values. The vector should be sorted from  lowers to highest for the most efficient "compression" of sequential ranges. Values will be coerced to class \code{integer}.}
 
-\item{maxChar}{Integer or numeric: Maximum number of characters to include in the output. If the output has more than this number of characters, the remainder is dropped, and the \code{trim} attribute of the output is set to \code{TRUE}. The default is 64000, which is the maximum length of an SQL statement (minus 1000 characters for other functions). Note that this limit is "soft"--the output can exceed this number of characters by a bit.}
+\item{maxChar}{Integer or numeric: Maximum number of characters to include in the output. If the output has more than this number of characters, the remainder is dropped, and the \code{trim} attribute of the output is set to \code{TRUE}. The default is 29900, which is the maximum length of an SQL statement that \strong{GRASS} seems to be able to handle (minus a safety margin).}
 }
 \value{
 A character string. The string has two attributes. The \code{trim} attribute is \code{TRUE} or \code{FALSE}, depending on whether \code{maxChar} was reached or not (and subsequent numbers dropped from the string). The \code{lastIndex} attribute is the last index of \code{x} that was processed (i.e., the index of the last value in the output).

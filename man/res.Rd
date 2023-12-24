@@ -46,10 +46,11 @@ A numeric vector. For both \code{res()} and \code{res3d()}, the first value is t
 }
 \description{
 Spatial resolution of a \code{GRaster}:
-
-\code{res()}: 2-dimensional resolution (x and y).\cr\cr
-\code{res3d()}: 3-dimensinal resolution (z, y, and z).\cr\cr
-\code{xres()}, \code{yres()}, and \code{zres()}: East-west resolution, north-south resolution, and top-bottom resolution.
+\itemize{
+\item \code{res()}: 2-dimensional resolution (x and y).\cr\cr
+\item \code{res3d()}: 3-dimensinal resolution (z, y, and z).\cr\cr
+\item \code{xres()}, \code{yres()}, and \code{zres()}: East-west resolution, north-south resolution, and top-bottom resolution.
+}
 }
 \examples{
 if (grassStarted()) {

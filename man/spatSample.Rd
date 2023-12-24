@@ -52,7 +52,7 @@
 A \code{data.frame}, \code{data.table}, or \code{GVector}.
 }
 \description{
-\code{spatSample()} randomly locates points across a \code{GRaster} or \code{GVector}. It can return the coordinates, values associated with the points, or both.
+\code{spatSample()} randomly locates points across a \code{GRaster} or \code{GVector}. It can return a \code{GVector}, the coordinates, values associated with the points, or all of these. If you want to generate a raster with randomly-sampled cells, see \code{\link[=sampleRast]{sampleRast()}}.
 }
 \examples{
 if (grassStarted()) {

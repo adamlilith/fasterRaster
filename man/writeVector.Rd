@@ -46,6 +46,13 @@ Invisibly returns a \code{SpatVector}. Also saves the vector to disk.
 This function saves a \code{GVector} to disk directly from a \strong{GRASS} session.
 
 By default, files will be of OGC GeoPackage format (extension "\code{.gpkg}"), but this can be changed with the \code{format} argument. You can see a list of supported formats by simply using this function with no arguments, as in \code{writeVector()}, or by consulting the online help page for \strong{GRASS} module \href{https://grass.osgeo.org/grass84/manuals/v.out.ogr.html}{\code{v.out.ogr}}.
+
+Note that if the vector has a data table attached and at least one numeric or integer column has an \code{NA} or \code{NaN} value, the function will yield a warning like:
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{Warning 1: Invalid value type found in record 2 for field column_with_NA_or_NaN. This warning will no longer be emitted.
+}\if{html}{\out{</div>}}
+
+Also note that despite the promise, this warning will be displayed again.
 }
 \examples{
 if (grassStarted()) {

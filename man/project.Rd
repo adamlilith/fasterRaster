@@ -20,13 +20,7 @@
 \arguments{
 \item{x}{A \code{GRaster} or \code{GVector} to be projected.}
 
-\item{y}{A character or \code{GLocation} object (i.e., typically a \code{GRaster} or \code{GVector}):
-\itemize{
-\item If \code{x} is a \code{GRaster} and \code{y} is a character string representing a coordinate reference system in WKT format, the raster will be projected but not resampled.
-\item If \code{x} is a \code{GRaster} and \code{y} is a \code{GRaster} or \code{GRegion}, then \code{x} will be projected to the CRS of \code{y} and resampled to the same resolution as \code{y}. \code{x} will be cropped to the extent of \code{y} if \code{align} is \code{TRUE}.
-\item If \code{x} is a \code{GRaster} and \code{y} is a \code{GVector}, then \code{x} will be projected to the CRS of \code{y}. \code{x} will not be resampled.
-\item If \code{x} is a \code{GVector}, then \code{x} will be projected to the CRS of \code{y}.
-}}
+\item{y}{A character or \code{GLocation} object (i.e., typically a \code{GRaster} or \code{GVector}):}
 
 \item{align}{Logical: If \code{FALSE} (default), and \code{x} and \code{y} are \code{GRaster}s, then the extent of \code{x} will be cropped to the extent of \code{y}.}
 
@@ -51,13 +45,12 @@
 A \code{GRaster} or \code{GVector}.
 }
 \description{
-\strong{fasterRaster} offers three ways to project rasters and vectors into a different coordinate reference system (CRS). Each of these ways are different from how they are implemented in \strong{terra}, so it is important to understand how it works in \strong{fasterRaster}.
-
-\strong{Case #1: Changing the CRS for a \code{SpatRaster}, \code{SpatVector}, or \code{sf} object already in R}: Use the \code{\link[=fast]{fast()}} function. This function will project the object to the CRS of the current \strong{GRASS} \link[=tutorial_locations_mapsets]{location}. Note that for rasters, the \code{method}, \code{fallback}, and \code{wrap} arguments in the \code{fast()} function may be important to what you want to achieve.
-
-\strong{Case #2: Change the projection of rasters or vectors stored on disk}: Simply use the \code{\link[=fast]{fast()}} function with the file name of the object. Again, the \code{method}, \code{fallback}, and \code{wrap} arguments may be important .
-
-**Case #3: Change the CRS of a \code{GRaster} or \code{GVector}: Use the \code{project()} function (this function). First, initiate a new \strong{GRASS} \link[=tutorial_locations_mapsets]{location} using \code{\link[=faster]{faster()}} with the CRS to which you want to transform the object. This means you need to keep track of which \strong{GRASS} "location" in which you are working.  Second, apply this function. If you want to return to the original "location," use \code{location('original_location_name')}. You can get the name of the current location with \code{\link[=location]{location()}} (with no arguments), and its coordinate reference system with \code{\link[=crs]{crs()}} or \code{\link[=st_crs]{st_crs()}} (also no arguments).
+\code{project()} changes the coordinate reference system (CRS) of a \code{GRaster} or \code{GVector}. It has three use cases:
+\itemize{
+\item \code{x} is a \code{GRaster} and \code{y} is a \code{GRaster}: \code{x} will be projected to the CRS of \code{y} and resampled to have the same resolution as \code{y}. If argument \code{align} is \code{FALSE}, then it will also be cropped to the extent of \code{y}.
+\item \code{x} is a \code{GRaster} and \code{y} is a \code{GVector} or a CRS string (typically in WKT format): \code{x} will be projected to the CRS specified by \code{y} but not resampled or cropped.
+\item \code{x} is a \code{GVector} and \code{y} is a \code{GRaster}, \code{GVector}, or CRS string: The vector will be projected to the CRS of \code{y}.
+}
 }
 \details{
 When projecting a raster, the "fallback" methods in \strong{GRASS} module \code{r.import} are actually used, even though the \code{method} argument takes the strings specifying non-fallback methods. See the manual page for the \code{r.import} \strong{GRASS} module.

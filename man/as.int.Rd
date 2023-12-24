@@ -22,7 +22,7 @@
 A \code{GRaster}.
 }
 \description{
-In \strong{fasterRaster}, rasters can have three \link[=tutorial_raster_data_types]{data types}: "factor" (categorical rasters), "integer" (integers), "float" (floating point values, accurate to ~7 decimal places), and "double" (double-precision values, accurate to ~15 decimal places). The type of raster can be checked with:
+In \strong{fasterRaster}, rasters can have three \link[=tutorial_raster_data_types]{data types}: "factor" (categorical rasters), "integer" (integers), "float" (floating point values, accurate to 6th to 9th decimal places), and "double" (double-precision values, accurate to the 15th to 17th decimal places). The type of raster can be checked with:
 \itemize{
 \item \code{as.int()}: Coerce values to integers (\strong{GRASS} type \code{CELL}).
 \item \code{as.float()}: Coerce values to floating-point precision.

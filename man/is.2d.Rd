@@ -189,3 +189,6 @@ dim(rivers2)
 
 }
 }
+\seealso{
+\code{\link[=topology]{topology()}}
+}

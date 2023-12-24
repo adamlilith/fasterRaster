@@ -8,14 +8,14 @@
 \usage{
 \S4method{crop}{GRaster}(x, y)
 
-\S4method{crop}{GVector}(x, y, ext = FALSE)
+\S4method{crop}{GVector}(x, y, extent = FALSE)
 }
 \arguments{
 \item{x}{A \code{GRaster} or \code{GVector} to be cropped.}
 
 \item{y}{A \code{GRaster} or \code{GVector} to serve as a template for cropping.}
 
-\item{ext}{Logical:
+\item{extent}{Logical:
 \itemize{
 \item If \code{y} is a "points" \code{GVector}: Use the convex hull around \code{y} to crop \code{x}.
 \item If \code{y} is a "lines" or "polygons" \code{GVector}: If \code{TRUE}, use the extent of \code{y} to crop \code{x}.
@@ -30,8 +30,8 @@ A \code{GRaster} or \code{GVector}.
 \details{
 Known differences from \code{\link[terra:crop]{terra::crop()}}:
 \itemize{
-\item If \code{x} and \code{y} are "points" vectors, and \code{ext} is \code{TRUE}, \strong{terra} removes points that fall on the extent boundary. \strong{fasterRaster} does not remove points on the extent boundary.
-\item If \code{x} is a "points" vector and \code{y} is a "lines" vectors, and \code{ext} is \code{FALSE}, \strong{terra} uses the extent of \code{y} to crop the points.  \strong{fasterRaster} uses the minimum convex hull of the lines vector.
+\item If \code{x} and \code{y} are "points" vectors, and \code{extent} is \code{TRUE}, \strong{terra} removes points that fall on the extent boundary. \strong{fasterRaster} does not remove points on the extent boundary.
+\item If \code{x} is a "points" vector and \code{y} is a "lines" vectors, and \code{extent} is \code{FALSE}, \strong{terra} uses the extent of \code{y} to crop the points.  \strong{fasterRaster} uses the minimum convex hull of the lines vector.
 }
 }
 \examples{

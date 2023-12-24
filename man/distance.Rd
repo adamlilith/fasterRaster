@@ -5,6 +5,7 @@
 \alias{distance}
 \alias{distance,GRaster,GVector-method}
 \alias{distance,GVector,GVector-method}
+\alias{distance,GVector,missing-method}
 \alias{st_distance,GVector,GVector-method}
 \alias{st_distance}
 \title{Geographic distance}
@@ -32,6 +33,8 @@
 )
 
 \S4method{distance}{GVector,GVector}(x, y, unit = "meters", minDist = NULL, maxDist = NULL)
+
+\S4method{distance}{GVector,missing}(x, y, unit = "meters", minDist = NULL, maxDist = NULL)
 
 \S4method{st_distance}{GVector,GVector}(x, y, unit = "meters", minDist = NULL, maxDist = NULL)
 }
@@ -85,6 +88,8 @@ This function produces a raster or a matrix of geographic distances, depending o
 \strong{Case 2: Argument \code{x} is a \code{GRaster} and \code{y} is a \code{GVector} (\code{distance()}):} All cells in the raster have their value replaced by the distance to the nearest features in the \code{GVector}. Alternatively, calculate the distance from any cell covered by a vector object and the nearest cell \emph{not} covered by a vector object. Note that the vector is rasterized first.
 
 \strong{Case 3: Argument \code{x} is a \code{GVector} and \code{y} is a \code{GVector} (\code{distance()} and \code{st_distance()}):} A matrix of pairwise distances between all features in one versus the other \code{GVector} is returned.
+
+\strong{Case 4: Argument \code{x} is a \code{GVector} and \code{y} is missing:} A matrix of pairwise distances between all features in the \code{GVector} is returned.
 }
 \examples{
 if (grassStarted()) {
@@ -139,6 +144,10 @@ distToRivers <- distance(dypsis, rivers, unit = "yd")
 distToPlants <- distance(rivers, dypsis)
 distToRivers
 distToPlants
+
+### Case 4: GVector vs itself
+distToItself <- distance(dypsis)
+distToItself
 
 }
 }

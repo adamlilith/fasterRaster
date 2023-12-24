@@ -20,7 +20,7 @@
 Character.
 }
 \description{
-\code{sources()} retrieves the name of a raster or vector in \strong{GRASS}. \code{GRaster}s and \code{GVector}s are actually pointers to objects stored in a *\emph{GRASS} database. When using \strong{fasterRaster} functions on rasters and vectors, the commands are translated into \strong{GRASS} commands and executed on the objects named in the pointers. These objects use a "source" (which is really a filename) to refer to the \strong{GRASS} objects. In select cases, it can help to get the "sources" of a \code{GRaster} or \code{GVector}. This function is not of use to most users.
+\code{sources()} retrieves the name of a raster or vector in \strong{GRASS}. \code{GRaster}s and \code{GVector}s are actually pointers to objects stored in a \strong{GRASS} database. When using \strong{fasterRaster} functions on rasters and vectors, the commands are translated into \strong{GRASS} commands and executed on the objects named in the pointers. These objects use a "source" (which is really a filename) to refer to the \strong{GRASS} objects. This function is mostly of use to developers.
 }
 \examples{
 if (grassStarted()) {

@@ -68,7 +68,7 @@
 A numeric value or vector.
 }
 \description{
-Number of rows, columns, depths, and cells of a \code{GRegion}:
+For \code{GRegion}s: Number of rows, columns, depths, and cells:
 \itemize{
 \item \code{dim()}: Rows, columns, depths, and layers
 \item \code{nrow()}: Rows
@@ -85,9 +85,9 @@ For \code{GRaster}s: As above, plus number of layers:
 
 For \code{GVector}s: Number of geometries and fields (columns):
 \itemize{
-\item \code{dim()}: Number of geometries and fields
+\item \code{dim()}: Number of geometries and number of columns in data table
 \item \code{nrow()}: Number of geometries
-\item \code{ncol()}: Number of fields (columns)
+\item \code{ncol()}: Number of columns in data table
 }
 }
 \examples{
@@ -260,5 +260,5 @@ dim(rivers2)
 }
 }
 \seealso{
-\code{\link[terra:dimensions]{terra::dim()}}
+\code{\link[=ngeom]{ngeom()}}, \code{\link[=nsubgeom]{nsubgeom()}}, \code{\link[=nacell]{nacell()}}, \code{\link[=nonnacell]{nonnacell()}}, \code{\link[terra:dimensions]{terra::dim()}}
 }

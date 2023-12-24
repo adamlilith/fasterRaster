@@ -15,10 +15,10 @@
 \item{x}{A \code{GVector}.}
 }
 \value{
-A \code{data.frame} or \code{NULL} (if the \code{GRaster} has no attribute table).
+A \code{data.frame} or \code{NULL} (if the \code{GRaster} has no data table).
 }
 \description{
-Convert a \code{GVector}'s attribute table to a \code{data.frame} or \code{data.table}.
+Convert a \code{GVector}'s data table to a \code{data.frame} or \code{data.table}.
 }
 \examples{
 if (grassStarted()) {

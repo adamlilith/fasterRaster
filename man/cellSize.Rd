@@ -5,7 +5,7 @@
 \alias{cellSize}
 \title{Area of GRaster cells}
 \usage{
-\S4method{cellSize}{GRaster}(x, mask = FALSE, lyrs = FALSE, unit = "meters")
+\S4method{cellSize}{GRaster}(x, mask = FALSE, lyrs = FALSE, unit = "meters2")
 }
 \arguments{
 \item{x}{A \code{GRaster}.}
@@ -20,10 +20,10 @@
 
 \item{unit}{Character: Units of area. Partial matching is used, and case is ignored. Can be any of:
 \itemize{
-\item \code{"meters2"}(default), \code{"metres2"}, or \code{"m2"}
+\item \code{"meters2"} (default), \code{"metres2"}, or \code{"m2"}
 \item \code{"km2"} or \code{"kilometers2"}
 \item \code{"ha"} or \code{"hectares"}
-\item \code{"ac"} or \code{"acres"}
+\item \code{"acres"}
 \item \code{"mi2"} or \code{"miles2"}
 \item \code{"ft2"} or \code{"feet2"}
 }}
@@ -70,5 +70,5 @@ plot(cs5)
 }
 }
 \seealso{
-\code{\link[terra:cellSize]{terra::cellSize()}}, \code{\link[=expanse]{expanse()}}, \code{\link[=zonalGeog]{zonalGeog()}}, module \code{r.mapcalc} in \strong{GRASS}
+\code{\link[terra:cellSize]{terra::cellSize()}}, \code{\link[=expanse]{expanse()}}, \code{\link[=zonalGeog]{zonalGeog()}}, \code{\link[omnibus:convertUnits]{omnibus::convertUnits()}}
 }

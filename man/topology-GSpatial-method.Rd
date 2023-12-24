@@ -11,10 +11,10 @@
 \item{x}{A \code{GSpatial} object (i.e., a \code{GRaster} or \code{GVector}).}
 }
 \value{
-Either \verb{2D} or \verb{3D}.
+Either "2D" or "3D".
 }
 \description{
-Rasters and vectors in \strong{GRASS} can have 2-dimensional or 3-dimensional coordinates. This function returns the dimension of the coordinates of a \code{GSpatial} object or any that inherits from it (i.e., a \code{GRaster} or \code{GVector}).
+\code{GRaster}s and \code{GVector}s can have 2-dimensional or 3-dimensional coordinates. This function returns the dimensions of the object.
 }
 \examples{
 if (grassStarted()) {
@@ -148,4 +148,7 @@ cor(landsat) # correlation
 cov(landsat) # covariance
 
 }
+}
+\seealso{
+\code{\link[=is.2d]{is.2d()}}, \code{\link[=is.3d]{is.3d()}}
 }

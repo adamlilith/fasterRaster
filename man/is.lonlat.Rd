@@ -3,21 +3,18 @@
 \name{is.lonlat,character-method}
 \alias{is.lonlat,character-method}
 \alias{is.lonlat}
-\alias{is.lonlat,GRaster-method}
-\alias{is.lonlat,GVector-method}
+\alias{is.lonlat,GLocation-method}
 \alias{is.lonlat,sf-method}
 \title{Test if a coordinate reference system is unprojected}
 \usage{
 \S4method{is.lonlat}{character}(x)
 
-\S4method{is.lonlat}{GRaster}(x)
-
-\S4method{is.lonlat}{GVector}(x)
+\S4method{is.lonlat}{GLocation}(x)
 
 \S4method{is.lonlat}{sf}(x)
 }
 \arguments{
-\item{x}{A WKT coordinate reference string or an object from which on can be obtained (e.g., a \code{GRaster}, \code{GVector}, \code{SpatRaster}, \code{SpatVector}, or \code{sf} object).}
+\item{x}{A WKT coordinate reference string or an object from which on can be obtained (e.g., a \code{GRaster}, \code{GVector}, \code{GRegion}, \code{GLocation}, \code{SpatRaster}, \code{SpatVector}, or \code{sf} object).}
 }
 \value{
 Logical (\code{TRUE} if unprojected, \code{FALSE} otherwise).

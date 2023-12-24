@@ -6,13 +6,16 @@
 \alias{names<-,GRaster-method}
 \alias{names<-}
 \alias{names,GVector-method}
-\title{Name(s) of a GRaster or fields of a GVector}
+\alias{names<-,GVector-method}
+\title{Name(s) of a GRaster or columns of a GVector's data table}
 \usage{
 \S4method{names}{GRaster}(x)
 
 \S4method{names}{GRaster}(x) <- value
 
 \S4method{names}{GVector}(x)
+
+\S4method{names}{GVector}(x) <- value
 }
 \arguments{
 \item{x}{A \code{GRaster} or \code{GVector}.}
@@ -23,10 +26,10 @@
 Character vector.
 }
 \description{
-Names(s) of a \code{GRaster} or of fields of a \code{GVector}.
+\code{names()} returns that names(s) of a \code{GRaster} or of columns of a \code{GVector}'s data table'.
 }
 \details{
-\code{GRaster}s have two types of names, a "sources", which is used internally to point to the \strong{GRASS} representation of the raster (this is not of use to most users and is hidden by default), and an "rname", which is taken from the "\strong{R}" name of the raster or the filename. This function returns the "rname".
+\verb{names(value) <-} assigns a new name to the \code{GRaster} or to the columns of a \code{GVector}'s data table.
 }
 \examples{
 if (grassStarted()) {

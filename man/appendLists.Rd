@@ -18,7 +18,7 @@ This function "adds" two lists with the same or different names together. For ex
 \details{
 If two lists share the same name and these elements have the same class, then they will be merged as-is. If the classes are different, one of them will be coerced to the other (see \emph{Examples}). The output will have elements with the names of all lists.
 
-Adapted from nswer by user \emph{polkas} on \href{StackOverflow}{https://stackoverflow.com/questions/18538977/combine-merge-lists-by-elements-names}.
+Adapted from answer by user \emph{polkas} on \href{StackOverflow}{https://stackoverflow.com/questions/18538977/combine-merge-lists-by-elements-names}.
 }
 \examples{
 

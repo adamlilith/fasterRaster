@@ -11,9 +11,11 @@
 \item{x}{A \code{GRaster}.}
 
 \item{w}{Numeric integer or a square matrix with an odd number of rows and columns: The size and nature of the neighborhood:
-* "Square" neighborhoods (when \code{circle = FALSE}): An odd integer >= 3, indicating indicates the size of a "square" neighborhood (number of cells wide and number or cells tall).
-* "Circular" neighborhoods (when \code{circle = TRUE}): An odd integer >=3, indicating the diameter of the circle.
-* A matrix of cell weights: The matrix must be square and have an odd number of rows and columns (example: \code{matrix(c(0.5, 1, 0.5, 1, 2, 1, 0.5, 1, 0.5), nrow=3)}). You cannot use a weights matrix when \verb{circle = TRUE. Cells with }NA\verb{as a weight will be ignored. Note that weighted matrices should not be used for function}min\verb{, }max\verb{, }count\verb{, }nunique\verb{, or }interspersion`.}
+\itemize{
+\item "Square" neighborhoods (when \code{circle = FALSE}): An odd integer >= 3, indicating indicates the size of a "square" neighborhood (number of cells wide and number or cells tall).
+\item "Circular" neighborhoods (when \code{circle = TRUE}): An odd integer >=3, indicating the diameter of the circle.
+\item A matrix of cell weights: The matrix must be square and have an odd number of rows and columns (example: \code{matrix(c(0.5, 1, 0.5, 1, 2, 1, 0.5, 1, 0.5), nrow=3)}). You cannot use a weights matrix when \code{circle = TRUE}. Cells with \code{NA} as a weight will be ignored. Note that weighted matrices should not be used for function \code{min}, \code{max}, \code{count}, \code{nunique}, or \code{interspersion}.
+}}
 
 \item{fun}{Character: Name of the function to apply to the neighborhood:
 \itemize{
@@ -35,7 +37,7 @@
 
 The center cell value is always included in the calculations, and all calculations ignore \code{NA} cells (i.e., they do not count as cells in the focal neighborhood).}
 
-\item{circle}{Logical: If \code{FALSE} (default), use a "square" neighborhood. If \verb{TRUE, use a "circular" neighborhood. When this is }TRUE\verb{, argument }w cannot be a matrix.}
+\item{circle}{Logical: If \code{FALSE} (default), use a "square" neighborhood. If \code{TRUE}, use a "circular" neighborhood. When this is \code{TRUE}, argument \code{w} cannot be a matrix.}
 
 \item{quantile}{Numeric between 0 and 1, inclusive: Quantile to calculate when \code{fun = "quantile"}. The default value is 0.5 (median), and valid values must be in the range between 0 and 1, inclusive.}
 }

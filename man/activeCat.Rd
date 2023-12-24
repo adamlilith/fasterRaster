@@ -24,7 +24,7 @@
 
 \item{names}{Logical: If \code{TRUE}, display the name(s) of the active column(s). If \code{FALSE} (default), report the index of the active column. Following \code{\link[terra:activeCat]{terra::activeCat()}}, the first column in the levels table is ignored. So, an active column of "1" means the second column is active. "2" means the third column is active, and so on.}
 
-\item{value}{Numeric, integer, or character. Following \code{\link[terra:activeCat]{terra::activeCat()}}, the first column in each levels table is ignored. So, if you want the second column to be the category label, the use 1. If you want the third column, use 2, and so on. You can also specify the active column by its column name (though this can't be the first column).}
+\item{value}{Numeric, integer, or character. Following \code{\link[terra:activeCat]{terra::activeCat()}}, the first column in each levels table is ignored. So, if you want the second column to be the category label, use 1. If you want the third column, use 2, and so on. You can also specify the active column by its column name (though this can't be the first column's name).}
 }
 \value{
 \code{activeCat()} returns an integer or character vector of active column indices or names. \verb{activeCat()<-} returns a \code{GRaster}.

@@ -52,9 +52,9 @@ Note that unlike \code{terra::aggregate()} and \code{\link[terra:disaggregate]{t
 A \code{GRaster} or \code{GVector}.
 }
 \description{
-When applied to a \code{GRaster}, \code{aggregate()} creates a new raster with cells that are a multiple of the size of the cells of the original raster. The new cells can be larger or smaller than the original cells (this function thus emulates the \code{terra::aggregate()} and \code{\link[terra:disaggregate]{terra::disagg()}} functions in \strong{terra}.)
+When applied to a \code{GRaster}, \code{aggregate()} creates a new raster with cells that are a multiple of the size of the cells of the original raster. The new cells can be larger or smaller than the original cells (this function thus emulates both the \code{terra::aggregate()} and \code{\link[terra:disaggregate]{terra::disagg()}} functions in \strong{terra}.)
 
-When applied to a \code{GVector}, \code{aggregate()} all geometries into a single "multipart" geometry, in which sets of points, lines, or polygons are treated as if they were a unit. If the \code{GVector} has a data table associated with it, the output will also have a data table as long as there is at least one column with values that are all the same. Columns that do not have duplicated values will be converted to \code{NA}.
+When applied to a \code{GVector}, \code{aggregate()} all geometries are combined into a "multipart" geometry, in which geometries are treated as if they were a single unit. If the \code{GVector} has a data table associated with it, the output will also have a data table as long as there is at least one column with values that are all the same. Values of columns that do not have duplicated values will be converted to \code{NA}.
 }
 \examples{
 if (grassStarted()) {
