@@ -14,6 +14,8 @@
 #'
 #' Data tables associated with `GVector`s will be combined if each vector has a table and if each table has the same columns and data types. Otherwise, the data table will be dropped.
 #'
+#' You can speed operations by putting the largest vector first in `c(x, ...)`.
+#'
 #' @param x A `GRaster` or a `GVector`.
 #'
 #' @param ... One or more `GRaster`s, one or more `GVector`s, a list of `GRaster`s, or a list of `GVector`s. You can use a mix of lists and individual rasters or vectors.
