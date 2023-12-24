@@ -95,9 +95,11 @@
 #' [plot()]: Display a `GRaster`\cr
 #' [plotRGB()]: Display a multispectral `GRaster` using red, blue, green, and alpha channels\cr
 #' [project()]: Change coordinate reference system and cell size\cr
+#' [predict()]: Make predictions to a `GRaster` from a linear model or generalized linear model\cr
 #' [resample()]: Change cell size\cr
 #' [rnormRast()]: A random `GRaster` with values drawn from a normal distribution\cr
 #' [runifRast()]: A random `GRaster` with values drawn from a uniform distribution\cr
+#' [scale()]: Subtract means and divide by standard deviations\cr
 #' [selectRange()]: Select values from rasters in a stack based on values in another `GRaster`\cr
 #' [spatSample()]: Randomly points from a `GRaster`\cr
 #' [spDepRast()]: Create a random `GRaster` with or without spatial dependence\cr
@@ -242,13 +244,13 @@
 #' Tutorial on **GRASS** ["locations" and mapsets][tutorial_locations_mapsets]\cr
 #' `.copyGSpatial()`: Make a copy of the **GRASS** file pointed to by a `GRaster` or `GVector`\cr
 #' `.fileExt()`: Get file extension\cr
-#' [.exists()]: Does the **GRASS** file of a `GRaster` or `GVector` exist?\cr
+#' `.exists()`: Does the **GRASS** file of a `GRaster` or `GVector` exist?\cr
 #' `.layerIndex()`: Gets the index of `GRaster` layers from a numeric, integer, character, or logical vector\cr
-#' [.locationCreate()] Make a connection to **GRASS** (i.e., start **GRASS** from within **R**) and create a location\cr
-#' [.locationDelete()] Deletes all files associated with a **GRASS** "location" and mapset\cr
-#' [.locationFind()]: Find a specific **GRASS** "location" that already exists\cr
-#' [.locationRestore()] Reconnect **GRASS** to a previously-created **GRASS** "location"\cr
-#' [.locations()]: List of all available "locations"\cr
+#' `.locationCreate()` Make a connection to **GRASS** (i.e., start **GRASS** from within **R**) and create a location\cr
+#' `.locationDelete()` Deletes all files associated with a **GRASS** "location" and mapset\cr
+#' `.locationFind()`: Find a specific **GRASS** "location" that already exists\cr
+#' `.locationRestore()` Reconnect **GRASS** to a previously-created **GRASS** "location"\cr
+#' `.locations()`: List of all available "locations"\cr
 #' `.ls()`: Lists the `sources` of all objects in the active **GRASS** "location"\cr
 #' `.makeGRaster()` and `.makeGVector()`: Make `GRaster`s or `GVector`s from a vector of `sources`, which are pointers to files in **GRASS**\cr
 #' `.makeSourceNames()`: Makes one or more statistically unique strings that can be used as file names to represent rasters or vectors in **GRASS**\cr
