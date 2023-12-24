@@ -10,9 +10,7 @@
 #' `*` operator: Same as [intersect()]\cr
 #' `/` operator: Same as [xor()]\cr
 #' 
-#' @param name Character: Name of the new `GRaster`.
-#' @param src `sources` of the `GRaster` being operated on
-#' @param ex expression for `r.mapcalc`
+#' @param e1,e2 `GRaster`s, `numeric`s, `integer`s, or `logical`s.
 #'
 #' @return A `GRaster`.
 #'
