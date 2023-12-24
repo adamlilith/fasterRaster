@@ -10,7 +10,7 @@
 #'
 #' @aliases .vHasDatabase
 #' @rdname vHasDatabase
-#' @export .vHasDatabase
+#' @noRd
 .vHasDatabase <- function(x) {
 
 	if (inherits(x, "GVector")) {
