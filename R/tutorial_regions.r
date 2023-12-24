@@ -2,7 +2,7 @@
 #'
 #' @title An explanation of GRASS "regions"
 #'
-#' @description A **GRASS** *region* is a data structure like a raster in that it is composed of "cells", but different in that these cells do not contain values. Rather, their resolution and the extent of the region influence how rasters are imported, created, processed, and exported. In most cases, whenever a raster undergoes one of these processes using a **GRASS** module, the raster will be resampled and/or crop/extend it so that matches the region"s extent and resolution. If ignored, this can cause unintended side effects if the region"s geometry doesn't match the raster being processed.
+#' @description A **GRASS** *region* is a data structure like a raster in that it is composed of "cells", but different in that these cells do not contain values. Rather, their resolution and the extent of the region influence how rasters are imported, created, processed, and exported. In most cases, whenever a raster undergoes one of these processes using a **GRASS** module, the raster will be resampled and/or crop/extend it so that matches the region"s extent and resolution. If ignored, this can cause unintended side effects if the region's geometry doesn't match the raster being processed.
 #'
 #' Generally, most users of **fasterRaster** will not need to know how regions work because their management is handled automatically.  This help page is provided to assist power users who may wish to use regions explicitly or develop their own applications based on **fasterRaster**.
 #'
@@ -12,10 +12,10 @@
 #'
 #' **fasterRaster** provides functions for managing regions:
 #'
-#' * [.region()]: Extent *and* dimensions/resolution of a region. This function is used by many other **fasterRaster** functions before raster processing to ensure the raster is not changed (by the region).
-#' * [.regionDim()]: Dimensions (number of rows and columns)
-#' * [.regionExt()]: Extent
-#' * [.regionRes()]: Resolution
+#' * `.region(): Extent *and* dimensions/resolution of a region. This function is used by many other **fasterRaster** functions before raster processing to ensure the raster is not changed (by the region).
+#' * `.regionDim()`: Dimensions (number of rows and columns)
+#' * `.regionExt()`: Extent
+#' * `.regionRes()`: Resolution
 #'
 #' Most of these functions can be used in three different ways:
 #' * No arguments: The function reports the respective value(s) (e.g., `regionExt()` reports the extent of the region).
