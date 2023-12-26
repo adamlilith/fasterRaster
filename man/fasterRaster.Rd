@@ -121,6 +121,7 @@ The assign operators, \code{\link[fasterRaster]{$<-}}, \code{\link[fasterRaster]
 \code{\link[=terrain]{terrain()}}: Slope, aspect, curvature, and partial slopes\cr
 \code{\link[=thinLines]{thinLines()}}: Reduce linear features on a \code{GRaster} so linear features are 1 cell wide\cr
 \code{\link[=trim]{trim()}}: Remove rows and columns from a \code{GRaster} that are all \code{NA}\cr
+\code{\link[=unscale]{unscale()}}: Multiply raster by standard deviation and add the mean (opposite of \code{\link[=scale]{scale()}})\cr
 \code{\link[=zonal]{zonal()}}: Statistics (mean, sum, etc.) on areas of a \code{GRaster} defined by sets of cells with the same values in another \code{GRaster}, or by geometries in a \code{GVector}\cr
 \code{\link[=zonalGeog]{zonalGeog()}}: Geographic statistics (area, perimeter, fractal dimension, etc.) for sets of cells with the same values\cr
 }
@@ -215,7 +216,6 @@ The \code{\link[fasterRaster]{$<-}} operator can be used to replace specific col
 \code{\link[=smoothGeom]{smoothGeom()}}: Remove "angular" aspects of features\cr
 \code{\link[=st_as_sf]{st_as_sf()}}: Convert a \code{GVector} to a \code{sf} vector\cr
 \code{\link[=st_buffer]{st_buffer()}}: Create a polygon around/inside a \code{GVector}\cr
-\code{\link[=st_distance]{st_distance()}}: Distance between geometries in two \code{GVector}\cr
 \code{\link[=tail]{tail()}}: Last rows of a \code{GVector}'s data table\cr
 \code{\link[=thinPoints]{thinPoints()}}: Reduce number of points in same raster cell\cr
 \code{\link[=union]{union()}} or \code{+}: Combine two \code{GVector}s\cr

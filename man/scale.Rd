@@ -3,29 +3,42 @@
 \name{scale,GRaster-method}
 \alias{scale,GRaster-method}
 \alias{scale}
-\title{Center and scale a GRaster}
+\alias{unscale,GRaster-method}
+\alias{unscale}
+\title{Center and scale a GRaster, or the opposite}
 \usage{
 \S4method{scale}{GRaster}(x, center = TRUE, scale = TRUE, sample = TRUE)
+
+\S4method{unscale}{GRaster}(x, center = NULL, scale = NULL)
 }
 \arguments{
 \item{x}{A \code{GRaster}.}
 
-\item{center}{Logical: If \code{TRUE} (default), subtract from each raster layer its mean.}
+\item{center}{Value depends on the function:
+\itemize{
+\item \code{scale()}: Logical: If \code{TRUE} (default), subtract from each raster layer its mean.
+\item \code{unscale()}: Numeric vector or \code{NULL} (default): This can be a single value, which will be recycled if there is more than one layer in the raster, or one value per raster layer. If \code{NULL}, then no un-centering is done.
+}}
 
-\item{scale}{Logical: If \code{TRUE} (default), divide each layer by its standard deviation.}
+\item{scale}{Value depends on the function:
+\itemize{
+\item \code{scale()}: Logical: If \code{TRUE} (default), divide each layer by its standard deviation.
+\item \code{unscale()}: Numeric vector or \code{NULL} (default): This can be a single value, which will be recycled if there is more than one layer in the raster, or one value per raster layer. If \code{NULL}, then no un-scaling is done.
+}}
 
 \item{sample}{Logical: If \code{TRUE} (default), use the sample standard deviation to scale (this is slower). If \code{FALSE}, use the population standard deviation. Note that these will be the same to several decimal places whenever the raster has more than a few thousand cells (i.e., most cases). The \code{\link[base:scale]{base::scale()}} and \code{\link[terra:scale]{terra::scale()}} functions use the sample standard deviation.}
 }
 \value{
-A \code{GRaster}. The \code{GRaster} will have two attributes, "center" and "scale", which have the means and standard deviations of the original rasters (if \code{center} and \code{scale} are \code{TRUE}, otherwise, they will be \code{NA}). These can be obtained using \code{attributes(output_raster)$center} and \code{attributes(output_raster)$scale}.
+Value depends on the function:
+\itemize{
+\item \code{scale()}: The \code{GRaster} will have two attributes, "center" and "scale", which have the means and standard deviations of the original rasters (if \code{center} and \code{scale} are \code{TRUE}, otherwise, they will be \code{NA}). These can be obtained using \code{attributes(output_raster)$center} and \code{attributes(output_raster)$scale}.
+\item \code{unscale()}: A \code{GRaster}.
+}
 }
 \description{
-This function has three modes of operation:
-\itemize{
-\item Arguments \code{center} or \code{scale} are either \code{TRUE} or \code{FALSE}: Subtracts the mean value from each layer of a \code{GRaster} and divides it by its standard deviation. This is useful for when rasters are used in linear models, which can become numerically unstable when predictors are on very different scales.
-\item Arguments \code{center} or \code{scale} are numeric vectors: Multiplies each layer by its corresponding \code{scale} value and adds the \code{center} value. For both \code{center} and \code{scale}, either a single value can be provided or one value per raster layer.
-\item Mixed cases of above (either \code{center} or \code{scale} is a vector and the other is either \code{TRUE} or \code{FALSE}): If \code{TRUE}, then the corresponding operation is conducted (subtraction of the mean or division by standard deviation). Note that the \code{center}(s) will always be subtracted before division by the \code{scale} value(s).
-}
+The \code{scale()} function centers and scales layers in a \code{GRaster} by subtracting from each raster its mean value (centering), then dividing by its standard deviation (scaling). This is useful for using the raster in a linear model, for example, because unscaled predictors can lead to numerical instability.
+
+The \code{unscale()} function does the opposite of \code{scale()}: it multiples each layer by a value (presumably, its standard deviation), and adds another value (presumably, its mean).
 }
 \examples{
 if (grassStarted()) {
@@ -39,13 +52,18 @@ madChelsa <- fastData("madChelsa")
 # Convert to GRasters:
 chelsa <- fast(madChelsa)
 
-# Scale rasters:
+### Scale rasters:
 chScaled <- scale(chelsa)
 chScaled
 
 # Get original means and sd's:
-attributes(chScaled)$center
-attributes(chScaled)$scale
+centers <- attributes(chScaled)$center
+scales <- attributes(chScaled)$scale
+centers
+scales
+
+### Unscale rasters:
+chUnscaled <- unscale(chScaled, center = centers, scale = scales)
 
 # Means and SD are now ~ 0 and 1, respectively:
 global(chScaled, c("mean", "sd"))
