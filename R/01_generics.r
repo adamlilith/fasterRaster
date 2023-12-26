@@ -213,7 +213,8 @@ methods::setGeneric(name = "resample", package = "terra")
 methods::setGeneric(name = "res3d", def = function(x) standardGeneric("res3d"))
 
 methods::setGeneric(name = "sampleRast", def = function(x, ...) standardGeneric("sampleRast"))
-methods::setGeneric(name = "scale", def = function(x, ...) standardGeneric("scale"))
+methods::setGeneric(name = "scale", package = "terra")
+#  if (!isGeneric("scale")) { setGeneric("scale", function(x, center=TRUE, scale=TRUE) standardGeneric("scale")) }
 methods::setGeneric(name = "sdpop", def = function(x, ...) standardGeneric("sdpop"))
 methods::setGeneric(name = "selectRange", def = function(x, ...) standardGeneric("selectRange"))
 methods::setGeneric(name = "show", package = "methods")
@@ -230,8 +231,7 @@ methods::setGeneric(name = "st_as_sf", package = "sf")
 methods::setGeneric(name = "st_bbox", package = "sf")
 methods::setGeneric(name = "st_buffer", package = "sf")
 methods::setGeneric(name = "st_crs", package = "sf")
-methods::setGeneric(name = "st_distance", package = "sf")
-methods::setGeneric(name = "st_distance", package = "sf")
+# methods::setGeneric(name = "st_distance", package = "sf")
 methods::setGeneric(name = "summary", def = function(object, ...) standardGeneric("summary"))
 
 methods::setGeneric(name = "tail", package = "utils")
@@ -245,6 +245,7 @@ methods::setGeneric(name = "tvalue", def = function(x, ...) standardGeneric("tva
 
 methods::setGeneric(name = "update", package = "terra")
 methods::setGeneric(name = "union", package = "terra")
+methods::setGeneric(name = "unscale", def = function(x, ...) standardGeneric("unscale"))
 
 methods::setGeneric(name = "varpop", def = function(x, ...) standardGeneric("varpop"))
 methods::setGeneric(name = "vegIndex", def = function(x, ...) standardGeneric("vegIndex"))
