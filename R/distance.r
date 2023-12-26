@@ -3,11 +3,11 @@
 #' @description
 #' This function produces a raster or a matrix of geographic distances, depending on the input:
 #'
-#' **Case 1: Argument `x` is a `GRaster` and `y` is missing: (`distance()`)** By default, this function replaces values in all `NA` cells with the distance between them and their closest non-`NA` cell. Alternatively, all non-`NA` cells can have their values replaced by the distance to `NA` cells. You can also specify which cells (by value) have their values replaced by distance to other cells.
+#' **Case 1: Argument `x` is a `GRaster` and `y` is missing:** By default, this function replaces values in all `NA` cells with the distance between them and their closest non-`NA` cell. Alternatively, all non-`NA` cells can have their values replaced by the distance to `NA` cells. You can also specify which cells (by value) have their values replaced by distance to other cells.
 #'
-#' **Case 2: Argument `x` is a `GRaster` and `y` is a `GVector` (`distance()`):** All cells in the raster have their value replaced by the distance to the nearest features in the `GVector`. Alternatively, calculate the distance from any cell covered by a vector object and the nearest cell *not* covered by a vector object. Note that the vector is rasterized first.
+#' **Case 2: Argument `x` is a `GRaster` and `y` is a `GVector`:** All cells in the raster have their value replaced by the distance to the nearest features in the `GVector`. Alternatively, calculate the distance from any cell covered by a vector object and the nearest cell *not* covered by a vector object. Note that the vector is rasterized first.
 #'
-#' **Case 3: Argument `x` is a `GVector` and `y` is a `GVector` (`distance()` and `st_distance()`):** A matrix of pairwise distances between all features in one versus the other `GVector` is returned.
+#' **Case 3: Argument `x` is a `GVector` and `y` is a `GVector`:** A matrix of pairwise distances between all features in one versus the other `GVector` is returned.
 #'
 #' **Case 4: Argument `x` is a `GVector` and `y` is missing:** A matrix of pairwise distances between all features in the `GVector` is returned.
 #' 
@@ -45,7 +45,7 @@
 #'
 #' @returns If `x` is a `GRaster`, then the output is a `GRaster`. If `x` is a `GVector`, then the output is a numeric vector.
 #'
-#' @seealso [terra::distance()]; [sf::st_distance()], **GRASS** modules `r.grow.distance` and `v.distance`
+#' @seealso [terra::distance()]; **GRASS** modules `r.grow.distance` and `v.distance`
 #'
 #' @example man/examples/ex_distance.r
 #'
@@ -251,18 +251,18 @@ methods::setMethod(
 	} # EOF
 )
 
-#' @aliases st_distance
-#' @rdname distance
-#' @exportMethod st_distance
-methods::setMethod(
-	"st_distance",
-	signature(x = "GVector", y = "GVector"),
-	function(x, y, unit = "meters", minDist = NULL, maxDist = NULL) {
-  		distance(x = x, y = y, unit = unit, minDist = minDist, maxDist = maxDist)
-	}
-)
+# #' @aliases st_distance
+# #' @rdname distance
+# #' @exportMethod st_distance
+# methods::setMethod(
+	# "st_distance",
+	# signature(x = "GVector", y = "GVector"),
+	# function(x, y, unit = "meters", minDist = NULL, maxDist = NULL) {
+  		# distance(x = x, y = y, unit = unit, minDist = minDist, maxDist = maxDist)
+	# }
+# )
 
-st_distance <- function(x) UseMethod("st_distance", x)
+# st_distance <- function(x) UseMethod("st_distance", x)
 
 .convertRastFromMeters <- function(src, unit) {
     
