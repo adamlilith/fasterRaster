@@ -1,21 +1,24 @@
-#' Center and scale a GRaster
+#' Center and scale a GRaster, or the opposite
 #'
-#' @description This function has three modes of operation:
-#' * Arguments `center` or `scale` are either `TRUE` or `FALSE`: Subtracts the mean value from each layer of a `GRaster` and divides it by its standard deviation. This is useful for when rasters are used in linear models, which can become numerically unstable when predictors are on very different scales.
-#' * Arguments `center` or `scale` are numeric vectors: Multiplies each layer by its corresponding `scale` value and adds the `center` value. For both `center` and `scale`, either a single value can be provided or one value per raster layer.
-#' * Mixed cases of above (either `center` or `scale` is a vector and the other is either `TRUE` or `FALSE`): If `TRUE`, then the corresponding operation is conducted (subtraction of the mean or division by standard deviation). Note that the `center`(s) will always be subtracted before division by the `scale` value(s).
+#' @description The `scale()` function centers and scales layers in a `GRaster` by subtracting from each raster its mean value (centering), then dividing by its standard deviation (scaling). This is useful for using the raster in a linear model, for example, because unscaled predictors can lead to numerical instability.
+#'
+#' The `unscale()` function does the opposite of `scale()`: it multiples each layer by a value (presumably, its standard deviation), and adds another value (presumably, its mean).
 #'
 #' @param x A `GRaster`.
 #'
-#' @param center Logical: If `TRUE` (default), subtract from each raster layer its mean.
+#' @param center Value depends on the function:
+#' * `scale()`: Logical: If `TRUE` (default), subtract from each raster layer its mean.
+#' * `unscale()`: Numeric vector or `NULL` (default): This can be a single value, which will be recycled if there is more than one layer in the raster, or one value per raster layer. If `NULL`, then no un-centering is done.
 #'
-#' @param scale Logical: If `TRUE` (default), divide each layer by its standard deviation.
+#' @param scale Value depends on the function:
+#' * `scale()`: Logical: If `TRUE` (default), divide each layer by its standard deviation.
+#' * `unscale()`: Numeric vector or `NULL` (default): This can be a single value, which will be recycled if there is more than one layer in the raster, or one value per raster layer. If `NULL`, then no un-scaling is done.
 #'
-#' @param sample Logical: If `TRUE` (default), use the sample standard deviation to scale (this is slower). If `FALSE`, use the population standard deviation. Note that these will be the same to several decimal places whenever the raster has more than a few thousand cells (i.e., most cases). The [base::scale()] and [terra::scale()] functions use the sample standard deviation.
+#' @returns Value depends on the function:
+#' * `scale()`: The `GRaster` will have two attributes, "center" and "scale", which have the means and standard deviations of the original rasters (if `center` and `scale` are `TRUE`, otherwise, they will be `NA`). These can be obtained using `attributes(output_raster)$center` and `attributes(output_raster)$scale`.
+#' * `unscale()`: A `GRaster`.
 #'
-#' @returns A `GRaster`. The `GRaster` will have two attributes, "center" and "scale", which have the means and standard deviations of the original rasters (if `center` and `scale` are `TRUE`, otherwise, they will be `NA`). These can be obtained using `attributes(output_raster)$center` and `attributes(output_raster)$scale`.
-#'
-#' @example man/examples/ex_scale.r
+#' @example man/examples/ex_scale_unscale.r
 #'
 #' @aliases scale
 #' @rdname scale
@@ -23,11 +26,13 @@
 methods::setMethod(
 	f = "scale",
 	signature = c(x = "GRaster"),
-	function(x, center = TRUE, scale = TRUE, sample = TRUE) {
+	function(x, center = TRUE, scale = TRUE) {
 
-	if ((is.null(center) & is.null(scale)) || (!center & !scale)) {
+	sample <- TRUE
+
+	if (!center & !scale) {
 	
-		warning("No scaling performed. At least one of ", sQuote("center"), " and ", sQuote("scale"), " should be TRUE.")
+		warning("No scaling performed because neither ", sQuote("center"), " nor ", sQuote("scale"), " are TRUE.")
 
 		return(x)
 
@@ -93,6 +98,69 @@ methods::setMethod(
 	}
 
 	out
+
+	} # EOF
+)
+
+#' @aliases unscale
+#' @rdname scale
+#' @exportMethod unscale
+methods::setMethod(
+	f = "unscale",
+	signature = c(x = "GRaster"),
+	function(x, center = NULL, scale = NULL) {
+
+	if (is.null(center) & is.null(scale)) {
+	
+		warning("No unscaling performed because both ", sQuote("center"), " nor ", sQuote("scale"), " are NULL.")
+
+		return(x)
+
+	}
+	
+	.locationRestore(x)
+	.region(x)
+
+	nLayers <- nlyr(x)
+
+	if (!is.null(center)) {
+
+		if (length(center) == 1L) center <- rep(center, nLayers)
+
+		if (length(center) != nLayers) stop("The ", sQuote("center"), " argument must be a single value, one value per layer in the GRaster, or NULL.")
+
+	}
+
+	if (!is.null(scale)) {
+
+		if (length(scale) == 1L) scale <- rep(scale, nLayers)
+
+		if (length(scale) != nLayers) stop("The ", sQuote("scale"), " argument must be a single value, one value per layer in the GRaster, or NULL.")
+
+	}
+
+	srcs <- .makeSourceName("r_mapcalc", "raster", n = nLayers)
+	for (i in seq_len(nLayers)) {
+	
+		if (!is.null(center)) mu <- center[i]
+		if (!is.null(scale)) sigma <- scale[i]
+
+		if (!is.null(center) & !is.null(scale)) {
+			ex <- paste0(srcs[i], " = (", sources(x)[i], " * ", sigma, ") + ", mu)
+		} else if (!is.null(center) & is.null(scale)) {
+			ex <- paste0(srcs[i], " = ", sources(x)[i], " + ", mu)
+		} else if (is.null(center) & !is.null(scale)) {
+			ex <- paste0(srcs[i], " = ", sources(x)[i], " * ", sigma)
+		}
+
+		rgrass::execGRASS(
+			cmd = "r.mapcalc",
+			expression = ex,
+			flags = c(.quiet(), "overwrite")
+		)
+	
+	} # next layer
+	.makeGRaster(srcs, names(x))
 
 	} # EOF
 )
