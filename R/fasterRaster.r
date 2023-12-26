@@ -107,6 +107,7 @@
 #' [terrain()]: Slope, aspect, curvature, and partial slopes\cr
 #' [thinLines()]: Reduce linear features on a `GRaster` so linear features are 1 cell wide\cr
 #' [trim()]: Remove rows and columns from a `GRaster` that are all `NA`\cr
+#' [unscale()]: Multiply raster by standard deviation and add the mean (opposite of [scale()])\cr
 #' [zonal()]: Statistics (mean, sum, etc.) on areas of a `GRaster` defined by sets of cells with the same values in another `GRaster`, or by geometries in a `GVector`\cr
 #' [zonalGeog()]: Geographic statistics (area, perimeter, fractal dimension, etc.) for sets of cells with the same values\cr
 #'
@@ -193,7 +194,6 @@
 #' [smoothGeom()]: Remove "angular" aspects of features\cr
 #' [st_as_sf()]: Convert a `GVector` to a `sf` vector\cr
 #' [st_buffer()]: Create a polygon around/inside a `GVector`\cr
-#' [st_distance()]: Distance between geometries in two `GVector`\cr
 #' [tail()]: Last rows of a `GVector`'s data table\cr
 #' [thinPoints()]: Reduce number of points in same raster cell\cr
 #' [union()] or `+`: Combine two `GVector`s\cr
