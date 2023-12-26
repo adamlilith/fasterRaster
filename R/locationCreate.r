@@ -1,11 +1,13 @@
 #' Connect to "GRASS"
 #'
-#' @description This function initializes a **GRASS** ["coordinate reference frame"][tutorial_crf] in a particular folder. You need to run this function (often just once) before you use most functions in **fasterRaster**. You can use [reframe()] to switch between [coordinate reference frames][tutorial_crf].
+#' @description This function initializes a **GRASS** ["location"][tutorial_locations_mapsets]. You need to run this function (often just once) before you use most functions in **fasterRaster**.
 #'
-#' @param crs Any object from which a coordinate reference system (CRS) can be acquired. Ergo, any of:
+#' @param x Any object from which a coordinate reference system (CRS) can be acquired. Ergo, any of:
 #' * A `SpatRaster`, `SpatVector`, `SpatExtent`, `stars`, or `sf` object
 #' * A `crs` object (i.e., from [sf::st_crs()]).
 #' * A CRS (coordinate reference system) WKT string. Some PROJ4 strings *might* work, too.
+#'
+#' @param location Character or `NULL` (default): Name of the location.
 #'
 #' @param overwrite Logical: If `FALSE` (default), and a **GRASS** "coordinate reference frame" with the given name has already been created, then the function will fail. If `TRUE`, then the existing **GRASS** "coordinate reference frame" of the same name will be overwritten. *NOTE*: This will **not** remove any **R** objects associated with rasters or vectors in the session, but they will no longer work because the objects they point to will be overwritten.
 #
@@ -59,8 +61,8 @@ methods::setMethod(
 	if (FALSE) {
 
 		x <- madElev
-		location <- "examples"
-		overwrite <= TRUE
+		location <- NULL
+		overwrite <- TRUE
 		warn <= TRUE
 	
 	}
