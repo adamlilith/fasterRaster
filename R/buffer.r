@@ -27,7 +27,7 @@
 #'
 #' @param capstyle,endCapStyle Character: Vectors -- Style for ending the "cap" of buffers around lines. Valid options include `"rounded"`, `"square"`, and "`flat`".
 #'
-#' @param union LogicalVectors --: If `FALSE` (default), construct a buffer for each geometry. If `TRUE`, union all buffers after creation.
+#' @param dissolve Logical (`GVector`s): If `FALSE` (default), construct a buffer for each geometry. If `TRUE`, dissolve all buffers after creation.
 #'
 #' @seealso [terra::buffer()], [sf::st_buffer()], and modules `r.buffer`, `r.grow`, and `v.buffer` in **GRASS**
 #'
@@ -141,7 +141,7 @@ methods::setMethod(
 		x,
 		width,
 		capstyle = "round",
-		union = FALSE
+		dissolve = FALSE
 	) {
 
 	# .message(msg = "buffer", message = "As of GRASS 8.4, terra's buffer() function is much faster, even for very large vectors.")
@@ -159,7 +159,7 @@ methods::setMethod(
 	)
 
 	args$type <- geomtype(x, grass = TRUE)
-	if (!union) args$flags <- c(args$flags, "t")
+	if (!dissolve) args$flags <- c(args$flags, "t")
 
 	capstyle <- tolower(capstyle)
 	capstyle <- omnibus::pmatchSafe(capstyle, c("round", "square", "flat"))
@@ -172,7 +172,7 @@ methods::setMethod(
 	do.call(rgrass::execGRASS, args)
 
 	# dissolve by category
-	if (union) {
+	if (dissolve) {
 
 		# dissolve
 		srcBuff <- src
@@ -202,8 +202,8 @@ methods::setMethod(
 methods::setMethod(
 	"st_buffer",
 	signature(x = "GVector"),
-	function(x, dist, endCapStyle = "round", union = FALSE) {
-		buffer(x, width = dist, capstyle = endCapStyle, union = union)
+	function(x, dist, endCapStyle = "round", dissolve = FALSE) {
+		buffer(x, width = dist, capstyle = endCapStyle, dissolve = dissolve)
 	} # EOF
 )
 
