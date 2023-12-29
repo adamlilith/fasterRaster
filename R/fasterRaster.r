@@ -76,7 +76,8 @@
 #' [denoise()]: Remove "noise" from a `GRaster` using a principal components analysis (PCA)\cr
 #' [distance()]: Distance to non-`NA` cells, or vice versa\cr
 #' [extend()]: Add rows and columns to a `GRaster`\cr
-#' [extract()]: Extract values from a `GRaster` at specific points\cr
+#' [extract()]: Extract values from a `GRaster` at locations of a `GVector`\cr
+#' [fillNAs()]: Fill `NA` cells\cr
 #' [focal()]: Calculate cell values based on values of nearby cells\cr
 #' [fractalRast()]: Create a fractal `GRaster`\cr
 #' [global()]: Summary statistics across cells of each `GRaster` layer\cr
