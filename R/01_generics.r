@@ -123,6 +123,7 @@ methods::setGeneric(name = "extract", package = "terra")
 
 methods::setGeneric(name = "fast", def = function(x, ...) standardGeneric("fast"))
 methods::setGeneric(name = "fillHoles", package = "terra")
+methods::setGeneric(name = "fillNAs", def = function(x, ...) standardGeneric("fillNAs"))
 methods::setGeneric(name = "focal", package = "terra")
 methods::setGeneric(name = "fractalRast", def = function(x, ...) standardGeneric("fractalRast"))
 methods::setGeneric(name = "freq", package = "terra")
