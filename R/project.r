@@ -89,21 +89,28 @@ methods::setMethod(
 		extent <- ext(x, vector = TRUE)
 		xMat <- matrix(NA_real_, nrow = nrow(x), ncol = ncol(x))
 		xRast <- terra::rast(xMat, crs = crs(x), extent = extent)
-
+		
 		extent <- ext(y, vector = TRUE)
 		yMat <- matrix(NA_real_, nrow = nrow(y), ncol = ncol(y))
 		yRast <- terra::rast(yMat, crs = crs(y), extent = extent)
 
-		yRast <- terra::project(yRast, crs(x), method = "near")
-		xRast <- terra::resample(xRast, yRast, method = "near")
+		xRast <- terra::project(xRast, yRast, align = TRUE)
+		xRast <- terra::project(xRast, crs(x))
+		
+		xSR <- xRast
+
+		xRast[] <- 1L
+		xRast <- fast(xRast)
 
 		# resample x in its native location to the resolution it will have in the target location
 		x <- resample(
 			x = x,
-			y = terra::res(xRast),
+			y = xRast,
 			method = method,
 			fallback = fallback
 		)
+
+		xRast <- terra::project(xSR, yRast, method = "near", align = align)
 
 	### "y" is not a raster (no resampling)
 	} else {
@@ -111,7 +118,9 @@ methods::setMethod(
 		# make template raster to match raster to be projected
 		extent <- ext(x, vector = TRUE)
 		xMat <- matrix(NA_integer_, nrow = nrow(x), ncol = ncol(x))
-		xRast <- terra::rast(xMat, crs = crs(x), extent = extent)
+		xSR <- terra::rast(xMat, crs = crs(x), extent = extent)
+		
+		xRast <- terra::project(xSR, crs(y), method = "near", align = align)
 
 	}
 
@@ -124,11 +133,8 @@ methods::setMethod(
 		yCrs <- y
 	}
 
-	xRast <- terra::project(xRast, yCrs, method = "near", align = TRUE)
 	.locationRestore(yLocation)
-# cat("Slow step!")
 	.region(xRast)
-# cat("Slow step^^^")
 
 	### project raster
 	##################
