@@ -177,8 +177,19 @@ methods::setMethod(
 		ewres <- as.numeric(ewres)
 		nsres <- as.numeric(nsres)
 	
-		if (length(ewres) == 3L) ewres <- ewres[1L] + ewres[2L] / 60 + ewres[3L] / 3600
-		if (length(nsres) == 3L) nsres <- nsres[1L] + nsres[2L] / 60 + nsres[3L] / 3600
+		len <- length(ewres)
+		if (len == 2L) {
+			ewres <- ewres[1L] + ewres[2L] / 60
+		} else if (len == 3L) {
+			ewres <- ewres[1L] + ewres[2L] / 60 + ewres[3L] / 3600
+		}
+		
+		len <- length(nsres)
+		if (length(nsres) == 2L) {
+			nsres <- nsres[1L] + nsres[2L] / 60
+		} else if (len == 3L) {
+			nsres <- nsres[1L] + nsres[2L] / 60 + nsres[3L] / 3600
+		}
 	
 	} else {
 		
