@@ -140,6 +140,8 @@ methods::setGeneric(name = "horizonHeight", def = function(x, ...) standardGener
 
 methods::setGeneric(name = "intersect", package = "terra")
 methods::setGeneric(name = "intercept", def = function(x, ...) standardGeneric("intercept"))
+methods::setGeneric(name = "interpIDW", package = "terra")
+methods::setGeneric(name = "interpSplines", def = function(x, y, ...) standardGeneric("interpSplines"))
 methods::setGeneric(name = "is.2d", def = function(x) standardGeneric("is.2d"))
 methods::setGeneric(name = "is.3d", def = function(x) standardGeneric("is.3d"))
 if (!isGeneric("is.factor")) { methods::setGeneric(name = "is.factor", def = function(x) standardGeneric("is.factor")) }

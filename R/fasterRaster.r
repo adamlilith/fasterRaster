@@ -84,8 +84,9 @@
 #' [`hillshade()`][shade]: Create a hillshade `GRaster`\cr
 #' [hist()]: Histogram of `GRaster` values\cr
 #' [horizonHeight()]: Horizon height\cr
-#' [kernel()]: Kernel density estimator of points.\cr
-#' [longlat()]: Create longitude/latitude rasters.\cr
+#' [interpIDW()]: Interpolate values at points to a `GRaster`\cr
+#' [kernel()]: Kernel density estimator of points\cr
+#' [longlat()]: Create longitude/latitude rasters\cr
 #' [mask()]: Remove values in a `GRaster` based on values in another `GRaster` or vector\cr
 #' [match()], \code{\link[fasterRaster]{%in%}}, and \code{\link[fasterRaster]{%notin%}}: Find which cells of a `GRaster` match or do not match certain values\cr
 #' [merge()]: Combine two or more rasters with different extents and fill in `NA`s\cr
@@ -186,6 +187,8 @@
 #' [grid()]: Create a grid `GVector`\cr
 #' [head()]: First rows of a `GVector`'s data table\cr
 #' [hexagons()]: Create a hexagonal grid\cr
+#' [interpIDW()]: Interpolate values at points to a `GRaster`\cr
+#' [interpSplines()]: Interpolate values at points to a `GRaster`\cr
 #' [intersect()] or `*`: Intersection of two `GVectors`.\cr
 #' [kernel()]: Kernel density estimator of points.\cr
 #' [missing.cases()]: Find rows of a `GVector`'s data table that have at least `NA` in them\cr
