@@ -108,6 +108,7 @@
 #' [sun()]: Solar radiance and irradiance\cr
 #' [terrain()]: Slope, aspect, curvature, and partial slopes\cr
 #' [thinLines()]: Reduce linear features on a `GRaster` so linear features are 1 cell wide\cr
+#' [topoWetnessIndex()]: Topographic wetness index\cr
 #' [trim()]: Remove rows and columns from a `GRaster` that are all `NA`\cr
 #' [unscale()]: Multiply raster by standard deviation and add the mean (opposite of [scale()])\cr
 #' [zonal()]: Statistics (mean, sum, etc.) on areas of a `GRaster` defined by sets of cells with the same values in another `GRaster`, or by geometries in a `GVector`\cr
