@@ -1,6 +1,6 @@
 #' Change the cell size of a GRaster
 #'
-#' @description `resample()` changes the cell size (resolution) of a `GRaster` using either another raster as a template or a user-defined resolution. Note that the extent of the output raster may be expanded to accommodate an integer number of cells. The function is not guaranteed to recreate the same output as **terra**, even when the same resampling method is used.
+#' @description `resample()` changes the cell size (resolution) of a `GRaster` using either another raster as a template or a user-defined resolution. Note that the extent of the output raster may be expanded to accommodate an integer number of cells. The function is not guaranteed to recreate the same output as [terra::resample()], even when the same resampling method is used.
 #'
 #' @param x The `GRaster` to resample.
 #'
@@ -18,7 +18,7 @@
 #'
 #' @returns A `GRaster`.
 #' 
-#' @seealso [terra::resample()] and modules `r.resample` and `r.resamp.interp` in **GRASS**
+#' @seealso [terra::resample()], modules [`r.resample`](https://grass.osgeo.org/grass84/manuals/r.resample.html) and [`r.resamp.interp`](https://grass.osgeo.org/grass84/manuals/r.resamp.interp.html) in **GRASS**
 #'
 #' @example man/examples/ex_resample.r
 #'
