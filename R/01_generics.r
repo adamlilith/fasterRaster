@@ -243,6 +243,7 @@ methods::setGeneric(name = "thinLines", def = function(x, ...) standardGeneric("
 methods::setGeneric(name = "thinPoints", def = function(x, y, ...) standardGeneric("thinPoints"))
 methods::setGeneric(name = "top", def = function(x, ...) standardGeneric("top"))
 methods::setGeneric(name = "topology", def = function(x, ...) standardGeneric("topology"))
+methods::setGeneric(name = "topoWetnessIndex", def = function(x, ...) standardGeneric("topoWetnessIndex"))
 methods::setGeneric(name = "trim", package = "terra")
 methods::setGeneric(name = "tvalue", def = function(x, ...) standardGeneric("tvalue"))
 
