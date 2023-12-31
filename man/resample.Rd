@@ -31,7 +31,7 @@ Note that methods that use multiple cells will cause the focal cell to become \c
 A \code{GRaster}.
 }
 \description{
-\code{resample()} changes the cell size (resolution) of a \code{GRaster} using either another raster as a template or a user-defined resolution. Note that the extent of the output raster may be expanded to accommodate an integer number of cells. The function is not guaranteed to recreate the same output as \strong{terra}, even when the same resampling method is used.
+\code{resample()} changes the cell size (resolution) of a \code{GRaster} using either another raster as a template or a user-defined resolution. Note that the extent of the output raster may be expanded to accommodate an integer number of cells. The function is not guaranteed to recreate the same output as \code{\link[terra:resample]{terra::resample()}}, even when the same resampling method is used.
 }
 \examples{
 if (grassStarted()) {
@@ -105,5 +105,5 @@ plot(terraLanczos, add=TRUE)
 }
 }
 \seealso{
-\code{\link[terra:resample]{terra::resample()}} and modules \code{r.resample} and \code{r.resamp.interp} in \strong{GRASS}
+\code{\link[terra:resample]{terra::resample()}}, modules \href{https://grass.osgeo.org/grass84/manuals/r.resample.html}{\code{r.resample}} and \href{https://grass.osgeo.org/grass84/manuals/r.resample.interp.html}{\code{r.resamp.interp}} in \strong{GRASS}
 }

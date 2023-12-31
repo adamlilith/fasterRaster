@@ -7,7 +7,7 @@
 \alias{unscale}
 \title{Center and scale a GRaster, or the opposite}
 \usage{
-\S4method{scale}{GRaster}(x, center = TRUE, scale = TRUE, sample = TRUE)
+\S4method{scale}{GRaster}(x, center = TRUE, scale = TRUE)
 
 \S4method{unscale}{GRaster}(x, center = NULL, scale = NULL)
 }
@@ -25,8 +25,6 @@
 \item \code{scale()}: Logical: If \code{TRUE} (default), divide each layer by its standard deviation.
 \item \code{unscale()}: Numeric vector or \code{NULL} (default): This can be a single value, which will be recycled if there is more than one layer in the raster, or one value per raster layer. If \code{NULL}, then no un-scaling is done.
 }}
-
-\item{sample}{Logical: If \code{TRUE} (default), use the sample standard deviation to scale (this is slower). If \code{FALSE}, use the population standard deviation. Note that these will be the same to several decimal places whenever the raster has more than a few thousand cells (i.e., most cases). The \code{\link[base:scale]{base::scale()}} and \code{\link[terra:scale]{terra::scale()}} functions use the sample standard deviation.}
 }
 \value{
 Value depends on the function:
@@ -56,6 +54,9 @@ chelsa <- fast(madChelsa)
 chScaled <- scale(chelsa)
 chScaled
 
+# Means are very close to 0 and SDs to 1:
+global(chScaled, c("mean", "sd"))
+
 # Get original means and sd's:
 centers <- attributes(chScaled)$center
 scales <- attributes(chScaled)$scale
@@ -65,8 +66,8 @@ scales
 ### Unscale rasters:
 chUnscaled <- unscale(chScaled, center = centers, scale = scales)
 
-# Means and SD are now ~ 0 and 1, respectively:
-global(chScaled, c("mean", "sd"))
+# Means and SD are returned to original values:
+global(chUnscaled, c("mean", "sd"))
 
 }
 }

@@ -4,8 +4,6 @@
 \alias{distance,GRaster,missing-method}
 \alias{distance}
 \alias{distance,GRaster,GVector-method}
-\alias{distance,GVector,GVector-method}
-\alias{distance,GVector,missing-method}
 \title{Geographic distance}
 \usage{
 \S4method{distance}{GRaster,missing}(
@@ -29,10 +27,6 @@
   minDist = NULL,
   maxDist = NULL
 )
-
-\S4method{distance}{GVector,GVector}(x, y, unit = "meters", minDist = NULL, maxDist = NULL)
-
-\S4method{distance}{GVector,missing}(x, y, unit = "meters", minDist = NULL, maxDist = NULL)
 }
 \arguments{
 \item{x}{A \code{GRaster} or \code{GVector}.}

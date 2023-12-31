@@ -17,9 +17,9 @@
   lowMemory = FALSE
 )
 
-\S4method{buffer}{GVector}(x, width, capstyle = "round", union = FALSE)
+\S4method{buffer}{GVector}(x, width, capstyle = "round", dissolve = FALSE)
 
-\S4method{st_buffer}{GVector}(x, dist, endCapStyle = "round", union = FALSE)
+\S4method{st_buffer}{GVector}(x, dist, endCapStyle = "round", dissolve = FALSE)
 }
 \arguments{
 \item{x}{A \code{GRaster} or \code{GVector}.}
@@ -49,7 +49,7 @@ Partial matching is used and case is ignored.
 
 \item{capstyle, endCapStyle}{Character: Vectors -- Style for ending the "cap" of buffers around lines. Valid options include \code{"rounded"}, \code{"square"}, and "\code{flat}".}
 
-\item{union}{LogicalVectors --: If \code{FALSE} (default), construct a buffer for each geometry. If \code{TRUE}, union all buffers after creation.}
+\item{dissolve}{Logical (\code{GVector}s): If \code{FALSE} (default), construct a buffer for each geometry. If \code{TRUE}, dissolve all buffers after creation.}
 
 \item{dist}{Vectors -- Same as \code{width}.}
 }
