@@ -15,7 +15,7 @@
 #' @exportMethod topoWetnessIndex
 methods::setMethod(
 	f = "topoWetnessIndex",
-	signature = c(x = "Graster"),
+	signature = c(x = "GRaster"),
 	function(x) {
 	
 	.locationRestore(x)
