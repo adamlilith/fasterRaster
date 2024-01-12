@@ -5,11 +5,13 @@
 #' @param type Character: `raster`, `raster3D`, `vector`, or `table`.
 #' 
 #' @param n Numeric integer: Number of names to make
+#'
+#' @param name `NULL` (default) or `character`: Name of the output, attached as an attribute.
 #' 
 #' @returns Character vector.
 #' 
 #' @noRd
-.makeSourceName <- function(x = NULL, type = NULL, n = 1L) {
+.makeSourceName <- function(x = NULL, type = NULL, n = 1L, name = NULL) {
 
 	if (is.null(x) & is.null(type)) stop("Both ", sQuote("x"), " and ", sQuote("type"), " cannot be ", dQuote("NULL"), " at the same time.")
 
@@ -54,6 +56,7 @@
 	} else {
   		paste0(type, "_", src)
 	}
+	if (!is.null(name)) names(src) <- name
 	src
 
 }
