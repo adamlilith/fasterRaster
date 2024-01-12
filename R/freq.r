@@ -75,7 +75,6 @@ methods::setMethod(
 			cmd = "r.stats",
 			input = thisSrc,
    			separator = "pipe",
-			# flags = c("c", "n")
 			flags = c("c", "n", .quiet()),
 			intern = TRUE
 		)
