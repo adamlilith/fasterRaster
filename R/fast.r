@@ -7,7 +7,7 @@
 #' @param x Any one of:
 #' * A `SpatRaster` raster. Rasters can have one or more layers.
 #' * A `SpatVector` or `sf` spatial vector.
-#' * A character string with the path and filename of a raster or vector to be loaded directly into **GRASS**. The function will attempt to ascertain the type of object from the file extension (raster or vector), but it can help to indicate which it is using the `rastOrVect` argument if it is unclear.
+#' * A character string or a vector of strinngs with the path(s) and filename(s) of one or more rasters or one vector to be loaded directly into **GRASS**. The function will attempt to ascertain the type of object from the file extension (raster or vector), but it can help to indicate which it is using the `rastOrVect` argument if it is unclear.
 #'
 #' @param rastOrVect Either `NULL` (default), or `"raster"` or `"vector"`: If `x` is a filename, then the function will try to ascertain whether it represents a raster or a vector, but sometimes this will fail. In that case, it can help to specify if the file holds a raster or vector. Partial matching is used.
 #'
@@ -51,9 +51,9 @@ methods::setMethod(
 		ext <- .fileExt(x)
 		ext <- tolower(ext)
 
-		if (ext %in% rastExtensions) {
+		if (all(ext %in% rastExtensions)) {
 			rastOrVect <- "raster"
-		} else if (ext %in% vectExtensions) {
+		} else if (all(ext %in% vectExtensions)) {
 			rastOrVect <- "vector"
 		} else {
 			stop("Cannot determine data if raster or vector from file name. Please use argument ", sQuote("rastOrVect"), ".")
@@ -64,46 +64,68 @@ methods::setMethod(
 		rastOrVect <- omnibus::pmatchSafe(rastOrVect, c("raster", "vector"))
 	}
 
+	if (rastOrVect == "vector" & length(x) > 1L) stop("Cannot load more than one vector at a time.")
+
 	### raster from disk
 	####################
 	
 	if (rastOrVect == "raster") {
 		
-		xRast <- terra::rast(x)
-		nLayers <- terra::nlyr(xRast)
-		xNames <- names(xRast)
-		
-		location <- .locationFind(xRast, match = "crs")
-		
-		if (is.null(location) | !grassStarted()) {
+		# multiple rasters
+		if (length(x) > 1L) {
 
-			.locationCreate(x = xRast)
-			location <- .location()
+			for (i in seq_along(x)) {
+			
+				thisOut <- fast(x[i], rastOrVect = "raster", ...)
+			
+				if (i == 1L) {
+					out <- thisOut
+				} else {
+					out <- c(out, thisOut)
+				}
+			
+			}
 
-		}
-
-		.locationRestore(x = location)
-
-		# src <- .makeSourceName("r_in_gdal", type = "raster", n = 1L)
-		src <- .makeSourceName("r_external", type = "raster", n = 1L)
-		rgrass::execGRASS(
-			# cmd = "r.in.gdal",
-			cmd = "r.external",
-			input = x,
-			output = src,
-			flags = c(.quiet(), "overwrite")
-		)
-		
-		if (nLayers > 1L) src <- paste0(src, ".", seq_len(nLayers))
-
-		# raster levels
-		if (any(names(dots) == "levels")) {
-			if (!is.null(levels)) levels <- dots$levels
+		# load just one raster
 		} else {
-			levels <- NULL
-		}
 
-		out <- .makeGRaster(src, names = xNames, levels = levels)
+			xRast <- terra::rast(x)
+			nLayers <- terra::nlyr(xRast)
+			xNames <- names(xRast)
+			
+			location <- .locationFind(xRast, match = "crs")
+			
+			if (is.null(location) | !grassStarted()) {
+
+				.locationCreate(x = xRast)
+				location <- .location()
+
+			}
+
+			.locationRestore(x = location)
+
+			# src <- .makeSourceName("r_in_gdal", type = "raster", n = 1L)
+			src <- .makeSourceName("r_external", type = "raster", n = 1L)
+			rgrass::execGRASS(
+				# cmd = "r.in.gdal",
+				cmd = "r.external",
+				input = x,
+				output = src,
+				flags = c(.quiet(), "overwrite")
+			)
+			
+			if (nLayers > 1L) src <- paste0(src, ".", seq_len(nLayers))
+
+			# raster levels
+			if (any(names(dots) == "levels")) {
+				if (!is.null(levels)) levels <- dots$levels
+			} else {
+				levels <- NULL
+			}
+
+			out <- .makeGRaster(src, names = xNames, levels = levels)
+
+		}
 
 	### vector from disk
 	####################
