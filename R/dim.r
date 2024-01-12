@@ -31,7 +31,15 @@
 methods::setMethod(
 	f = "dim",
 	signature = "GRegion",
-	definition = function(x) c(rows = x@dimensions[1L], cols = x@dimensions[2L], depths = x@dimensions[3L])
+	definition = function(x) {
+	
+	c(
+		rows = unname(x@dimensions[1L]),
+		cols = unname(x@dimensions[2L]),
+		depths = unname(x@dimensions[3L])
+	)
+	
+	} # EOF
 )
 
 #' @aliases dim
@@ -40,7 +48,16 @@ methods::setMethod(
 methods::setMethod(
 	f = "dim",
 	signature = "GRaster",
-	definition = function(x) c(rows = x@dimensions[1L], cols = x@dimensions[2L], depths = x@dimensions[3L], nlyr = x@nLayers)
+	definition = function(x) {
+	
+	c(
+		rows = unname(x@dimensions[1L]),
+		cols = unname(x@dimensions[2L]),
+		depths = unname(x@dimensions[3L]),
+		nlyr = unname(x@nLayers)
+	)
+
+	} # EOF
 )
 
 #' @rdname dim
