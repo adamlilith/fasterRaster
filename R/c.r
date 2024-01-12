@@ -43,7 +43,7 @@ setMethod(
 	### concatenate
 	out <- x
 	z <- zext(out)
-	dims <- dim(out)
+	dims <- dim(out)[1L:3L]
 
 	if (length(dots) >= 1L) {
 
@@ -72,7 +72,7 @@ setMethod(
 				datatypeGRASS = c(out@datatypeGRASS, dots[[i]]@datatypeGRASS),
 				dimensions = dims,
 				nLayers = nlyr(out) + nlyr(dots[[i]]),
-				resolution = res(out),
+				resolution = res3d(out),
 				minVal = mn,
 				maxVal = mx,
 				activeCat = c(out@activeCat, dots[[i]]@activeCat),
