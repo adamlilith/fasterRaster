@@ -6,7 +6,7 @@
 #' 	* `bio1`: Mean annual temperature (deg C)
 #' 	* `bio7`: Temperature annual range (hottest - coldest month temperature; deg C)
 #' 	* `bio12`: Total annual precipitation (mm)
-#' 	* `bio15`: Precipitation seasonality (unitless)
+#' 	* `bio15`: Precipitation seasonality (unit-less)
 #'
 #' @docType data
 #'
