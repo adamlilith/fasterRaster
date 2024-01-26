@@ -25,6 +25,7 @@ methods::setMethod(
 	# test indices
 	i <- .layerIndex(i, x, recycle = TRUE)
 	mm <- minmax(x)
+	dims <- dim(x)[1L:3L]
 	
 	out <- new(
 		"GRaster",
@@ -34,14 +35,14 @@ methods::setMethod(
 		crs = crs(x),
 		projection = .projection(x),
 		nLayers = length(i),
-		dimensions = dim(x),
+		dimensions = dims,
 		topology = topology(x),
 		extent = as.vector(ext(x)),
 		zextent = zext(x),
 		sources = sources(x)[i],
 		names = names(x)[i],
 		datatypeGRASS = datatype(x, "GRASS")[i],
-		resolution = res(x),
+		resolution = res3d(x),
 		minVal = mm["min", i],
 		maxVal = mm["max", i],
 		activeCat = x@activeCat[i],
