@@ -158,7 +158,7 @@ methods::setMethod(
 	maxColWidth <- 30L
 	verbose <- faster("verbose")
 
-	digs <- min(7, getOption("digits"))
+	digs <- min(5, getOption("digits"))
 	resol <- round(object@resolution, digs)
 	if (length(resol) == 2L) resol <- c(resol, NA_real_)
 	
