@@ -9,7 +9,7 @@
 #' @param x Any of:
 #'	* Missing (default): Reports the extent, resolution, and dimensions of the current region. All other arguments will be ignored. You can also use [ext()], [dim()], and [res()] and related functions with missing arguments.
 #'	* A `GSpatial`, `GRegion`, `GRaster`, `GVector` object: Sets the region"s extent, dimensions, and/or resolution to those of the object.
-#'	* A `numeric` vector. This will resize the region"s extent, resample the region"s resolution/dimensions, or both, to ensure the desired dimensions or resolution are retained:
+#'	* A `numeric` vector. This will resize the region's extent, resample the region's resolution/dimensions, or both, to ensure the desired dimensions or resolution are retained:
 #'       * 2 values for `.regionDim()`: Number of rows and columns
 #'       * 4 values for `.regionExt()`: Westernmost and easternmost easting (longitude), and southernmost and northernmost northing (latitude)
 #'       * 2 values for `.regionRes()`: Size of cells in the x- and y-dimensions
