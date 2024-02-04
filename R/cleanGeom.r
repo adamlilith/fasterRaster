@@ -23,7 +23,7 @@
 #'
 #' @param minArea Numeric >= 0: Minimum area of a polygon to be retained when using the `smallAreas` tool.
 #'
-#' @seealso [simplifyGeom()], [terra::simplifyGeom()], [smoothGeom()]
+#' @seealso [repirVector()], [simplifyGeom()], [terra::simplifyGeom()], [smoothGeom()]
 #'
 #' @returns A `GVector`.
 #'
@@ -79,18 +79,15 @@ methods::setMethod(
 		"rmsa"
 	}
 	
-	src <- .makeSourceName("generalized", "vect")
-	args <- list(
+	src <- .makeSourceName("v_clean", "vector")
+	rgrass::execGRASS(
 		cmd = "v.clean",
 		input = sources(x),
 		output = src,
 		tool = method,
 		threshold = tolerance,
-		flags = c("c", .quiet(), "overwrite"),
-		intern = TRUE
+		flags = c("c", .quiet(), "overwrite")
 	)
-
-	do.call(rgrass::execGRASS, args=args)
 	.makeGVector(src)
 
 	} # EOF
