@@ -70,3 +70,27 @@ methods::setMethod(
 		gt == "polygons"
 	} # EOF
 )
+
+#' Get geometry type from the sources() name of a vector
+#'
+#' @param x A `GVector` or the [sources()] name of one.
+#'
+#' @returns Character ("point", "line", or "area"; i.e., in **GRASS** nomenclature).
+#'
+#' @noRd
+.geomtype <- function(x) {
+
+	if (inherits(x, "GVector")) x <- sources(x)
+	info <- .vectInfo(x)
+	out <- info$geometry
+
+	if (out == "points") {
+		out <- "point"
+	} else if (out == "lines") {
+		out <- "line"
+	} else if (out == "polygons") {
+		out <- "area"
+	}
+	out
+
+}
