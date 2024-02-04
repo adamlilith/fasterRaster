@@ -40,7 +40,7 @@
 			suppressMessages(
 				niceinfo <- rgrass::execGRASS(
 					"r.info",
-					flags = c(.quiet()),
+					flags = .quiet(),
 					map = src,
 					intern = TRUE,
 					Sys_show.output.on.console = FALSE,
