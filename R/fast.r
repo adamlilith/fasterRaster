@@ -610,7 +610,7 @@ methods::setMethod(
 	ndots <- names(dots)
 	
 	if (any('snap' %in% ndots) && (is.null(dots$snap) & !any('iter' %in% ndots))) stop("If you use the ", sQuote("snap"), " argument and set it to NULL,\n  you must also provide an ", sQuote("iter"), " argument.")
-	if (any('area' %in% ndots) && ((is.null(dots$area) & !any('iter' %in% ndots))) stop("If you use the ", sQuote("area"), " argument and set it to NULL,\n  you must also provide an ", sQuote("iter"), " argument.")
+	if (any('area' %in% ndots) && (is.null(dots$area) & !any('iter' %in% ndots))) stop("If you use the ", sQuote("area"), " argument and set it to NULL,\n  you must also provide an ", sQuote("iter"), " argument.")
 
 	if (!inherits(x, "SpatVector")) x <- terra::vect(x)
 	if (any('area' %in% ndots) && terra::geomtype(x) != "polygons") stop("The ", sQuote("area"), " argument can only be used with a polygons vector.")
