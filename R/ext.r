@@ -213,6 +213,38 @@ methods::setMethod(
 	} # EOF
 )
 
+#' Function to get extent from a "sources" name of a raster or vector
+#'
+#' @param x A `GRaster`, `GSpatial`, or a character ([sources()] name of a `GRaster` or `GVector`).
+#'
+#' @param rastOrVect Either `NULL` (class taken from `x`, but `x` cannot be a character), or "`raster`" or "`vector`" (partial matching is used).
+#'
+#' @returns A numeric vector.
+#'
+#' @noRd
+.ext <- function(x, rastOrVect = NULL) {
+
+	if (inherits(x, "GRaster")) {
+		x <- sources(x)
+		rastOrVect <- "raster"
+	} else if (inherits(x, "GVector")) {
+		x <- sources(x)
+		rastOrVect <- "vector"
+	}
+
+	if (is.null(rastOrVect)) stop("Cannot determine if x is a raster or vector. Use argument rastOrVect.")
+	rastOrVect <- omnibus::pmatchSafe(rastOrVect, c("raster", "vector"), nmax = 1L)
+
+	if (rastOrVect == "raster") {
+		info <- .rastInfo(x)
+	} else {
+		info <- .vectInfo(x)
+	}
+
+	c(xmin = info$west, xmax = info$east, ymin = info$south, ymax = info$north)	
+
+}
+
 # #' @aliases st_bbox
 # #' @rdname ext
 # #' @exportMethod st_bbox
