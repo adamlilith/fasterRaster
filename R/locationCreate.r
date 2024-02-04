@@ -103,6 +103,8 @@ methods::setMethod(
 	grassDir <- opts$grassDir
 	addonsDir <- opts$addonsDir
 	workDir <- opts$workDir
+
+	if (is.na(grassDir)) stop("You must specify the folder in which GRASS is installed using faster().")
 	
 	### do we need a new GRASS session or to switch the location/working directory?
 	if (!overwrite & locationExists) {
@@ -126,7 +128,7 @@ methods::setMethod(
 	}
 		
 	### start new GRASS session
-	emptyRast <- terra::rast(matrix(1L), type = "xy", crs = coordRef)
+	emptyRast <- terra::rast(matrix(1L), crs = coordRef)
 
 	### start the GRASS session
 	suppressWarnings(
