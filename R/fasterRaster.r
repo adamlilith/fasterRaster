@@ -170,6 +170,7 @@
 #' [as.data.table()]: Convert a `GVector`'s attribute table to a `data.table`\cr
 #' [as.points()]: Extract vertex coordinates from a "lines" or "polygons" `GVector`\cr
 #' [buffer()]: Create a polygon around/inside a `GVector`\cr
+#' [c()]: Combine two or more `GVector`s\cr
 #' [cleanGeom()]: Fix undesirable geometries of a `GVector`\cr
 #' [clusterPoints()]: Identify clusters of points\cr
 #' [colbind()]: Add columns to the data table of a `GVector`\cr
@@ -250,6 +251,8 @@
 #' `.copyGSpatial()`: Make a copy of the **GRASS** file pointed to by a `GRaster` or `GVector`\cr
 #' `.fileExt()`: Get file extension\cr
 #' `.exists()`: Does the **GRASS** file of a `GRaster` or `GVector` exist?\cr
+#' `.ext()`: Extent from the [sources()] name of a `GRaster` or `GVector`\cr
+#' `.geomtype()`: Geometry type ("point", "line", or "area") from the [sources()] name of a `GVector`\cr
 #' `.layerIndex()`: Gets the index of `GRaster` layers from a numeric, integer, character, or logical vector\cr
 #' `.locationCreate()` Make a connection to **GRASS** (i.e., start **GRASS** from within **R**) and create a location\cr
 #' `.locationDelete()` Deletes all files associated with a **GRASS** "location" and mapset\cr
@@ -279,6 +282,7 @@
 #' `.vIncrementCats()`: Increment category values of a `GVector`\cr
 #' `.vNames()`: "**GRASS**" vector attribute table column names\cr
 #' `.vRecat()`: Change **GRASS** category indices of a **GRASS** vector\cr
+#' `.vValidCats()`: Are category values of a vector valid?\cr
 #' `grassStarted()`: Has a connection **GRASS** been made within the current **R** session?\cr
 #'
 #' @docType package
