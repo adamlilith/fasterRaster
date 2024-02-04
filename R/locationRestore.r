@@ -69,7 +69,7 @@ methods::setMethod(
 	if (location != .fasterRaster$activeLocation) {
 
 		### reconnect to location
-		emptyRast <- terra::rast(matrix(1L), type = "xy", crs = coordRef)
+		emptyRast <- terra::rast(matrix(1L), crs = coordRef)
 
 		### start the GRASS session
 		suppressWarnings(
