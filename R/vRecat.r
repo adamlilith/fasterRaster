@@ -4,9 +4,7 @@
 #'
 #' @param x A `GVector` or the [sources()] name of a vector in **GRASS**.
 #' 
-#' @param type Character: Type of vector features in **GRASS** format (i.e., either `point`, `line`, or `area`). See [geomtype()].
-#'
-#' @param add `NULL` (default), or integer or numeric integer: Value to add to category values.
+#' @param gtype Character: Type of vector features in **GRASS** format (i.e., either `point`, `line`, or `area`). See [geomtype()].
 #'
 #' @returns The [sources()] name of a vector.
 #'
