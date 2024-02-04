@@ -105,5 +105,5 @@ plot(terraLanczos, add=TRUE)
 }
 }
 \seealso{
-\code{\link[terra:resample]{terra::resample()}}, modules \href{https://grass.osgeo.org/grass84/manuals/r.resample.html}{\code{r.resample}} and \href{https://grass.osgeo.org/grass84/manuals/r.resample.interp.html}{\code{r.resamp.interp}} in \strong{GRASS}
+\code{\link[terra:resample]{terra::resample()}}, modules \href{https://grass.osgeo.org/grass84/manuals/r.resample.html}{\code{r.resample}} and \href{https://grass.osgeo.org/grass84/manuals/r.resamp.interp.html}{\code{r.resamp.interp}} in \strong{GRASS}
 }

@@ -45,7 +45,7 @@ sun(
 
 \item{albedo}{A \code{GRaster} or a numeric value: This is either a raster with values of ground albedo or a numeric value (in which case albedo is assumed to be the same everywhere). Albedo is unit-less, and the default value is 0.2.}
 
-\item{linke}{A \code{GRaster} or a numeric value: This is either a raster with values of the Linke atmospheric turbidity coefficient or a numeric value (in which case the same value is assumed for all locations). The Linke coefficient is unit-less. The default value is 3, but see also the \strong{GRASS} manual page for module \code{r.sun}.}
+\item{linke}{A \code{GRaster} or a numeric value: This is either a raster with values of the Linke atmospheric turbidity coefficient or a numeric value (in which case the same value is assumed for all locations). The Linke coefficient is unit-less. The default value is 3, but see also the \strong{GRASS} manual page for module \verb{[r.sun](https://grass.osgeo.org/grass84/manuals/r.sun.html)}.}
 
 \item{day}{Positive integer between 1 to 365, inclusive: Day of year for which to calculate ir/radiation. Default is 1 (January 1st).}
 
@@ -80,7 +80,7 @@ A raster or raster stack stack with the same extent, resolution, and coordinate 
 }
 }
 \description{
-The \code{sun()} function calculates beam (direct), diffuse and ground reflected solar irradiation for a given day and set of topographic and atmospheric conditions. The function relies on the \strong{GRASS} module \code{r.sun}, which contains a detailed explanation.
+The \code{sun()} function calculates beam (direct), diffuse and ground reflected solar irradiation for a given day and set of topographic and atmospheric conditions. The function relies on the \strong{GRASS} module \verb{[r.sun](https://grass.osgeo.org/grass84/manuals/r.sun.html)}, which contains a detailed explanation.
 }
 \examples{
 if (grassStarted()) {
@@ -140,5 +140,5 @@ solar
 }
 }
 \seealso{
-Module \code{r.sun} in \strong{GRASS}
+Module \verb{[r.sun](https://grass.osgeo.org/grass84/manuals/r.sun.html)} in \strong{GRASS}
 }

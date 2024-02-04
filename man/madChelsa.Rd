@@ -15,7 +15,7 @@ Rasters of bioclimatic variables for an eastern portion of Madagascar from CHELS
 * \code{bio1}: Mean annual temperature (deg C)
 * \code{bio7}: Temperature annual range (hottest - coldest month temperature; deg C)
 * \code{bio12}: Total annual precipitation (mm)
-* \code{bio15}: Precipitation seasonality (unitless)
+* \code{bio15}: Precipitation seasonality (unit-less)
 }
 \examples{
 

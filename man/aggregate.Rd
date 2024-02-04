@@ -127,5 +127,5 @@ par(oldpar)
 }
 }
 \seealso{
-\code{\link[stats:aggregate]{stats::aggregate()}}, \code{\link[terra:aggregate]{terra::aggregate()}}, \code{\link[terra:disaggregate]{terra::disagg()}}, \strong{GRASS} module \code{r.resamp.stats}
+\code{\link[stats:aggregate]{stats::aggregate()}}, \code{\link[terra:aggregate]{terra::aggregate()}}, \code{\link[terra:disaggregate]{terra::disagg()}}
 }
