@@ -31,14 +31,18 @@
 	if (db) {
 		out <- .vAsDataTable(src)[["frid"]]
 	} else {
-		out <- rgrass::execGRASS(
-			"v.category",
+
+		suppressMessages(out <- rgrass::execGRASS(
+			cmd = "v.category",
 			input = src,
 			layer = layer,
 			option = "print",
 			flags = .quiet(),
-			intern = TRUE
-		)
+			intern = TRUE,
+			Sys_show.output.on.console = FALSE,
+			echoCmd = FALSE
+		))
+	
 	}
 
 	if (integer) {
@@ -56,7 +60,7 @@
 		# out <- factor(out, seq_len(nuniq))
 		# out <- levels(out)
 		
-		out <- as.integer(out)
+		out <- suppressWarnings(as.integer(out))
 		
 	}
 	out
