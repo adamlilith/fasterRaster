@@ -15,7 +15,7 @@
 #' @noRd
 .quiet <- function() {
 
-	if (faster("verbose")) {
+	if (!faster("verbose")) {
 		"quiet"
 	} else {
 		NULL
