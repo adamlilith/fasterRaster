@@ -7,18 +7,28 @@
 #' @param x Any one of:
 #' * A `SpatRaster` raster. Rasters can have one or more layers.
 #' * A `SpatVector` or `sf` spatial vector.
-#' * A character string or a vector of strinngs with the path(s) and filename(s) of one or more rasters or one vector to be loaded directly into **GRASS**. The function will attempt to ascertain the type of object from the file extension (raster or vector), but it can help to indicate which it is using the `rastOrVect` argument if it is unclear.
+#' * A character string or a vector of strings with the path(s) and filename(s) of one or more rasters or one vector to be loaded directly into **GRASS**. The function will attempt to ascertain the type of object from the file extension (raster or vector), but it can help to indicate which it is using the `rastOrVect` argument if it is unclear.
 #'
 #' @param rastOrVect Either `NULL` (default), or `"raster"` or `"vector"`: If `x` is a filename, then the function will try to ascertain whether it represents a raster or a vector, but sometimes this will fail. In that case, it can help to specify if the file holds a raster or vector. Partial matching is used.
 #'
-#' @param snap For polygon `GVector`s only: Either `NULL` (default) or a positive numeric value: Sometimes, polygons created in other software are topologically incorrect--the borders of adjacent polygons may cross one another, or there may be small gaps between them. These errors can be corrected by slightly moving vertices. The value of `snap` indicates how close vertices need to be for them to be shifted to to the same location for a correct topology. Small values are recommended, and units are in map units (usually meters). By default, this is `NULL`, meaning no snapping is done. Vectors that have been snapped may need to be cleaned using [cleanGeom()] with the `break`, `duplicated`, and `smallAngles` tools.
+#' @param ... Other arguments:
+#' * `snap` (`GVector`s): Either `NULL` or a positive numeric value: The value of `snap` indicates how close vertices need to be for them to be shifted to to the same location. If the purpose of using `snap` is to fix topology (see **Details), small values are recommended, as values that are too large can dramatically change the shape of polygons. Units are in map units (usually meters). A value of `NULL` will use an iterative procedure starting with `snap = 0` (i.e., no snapping) to find the minimum value that produces a topologically vector. This is not guaranteed to find the best value of `snap`, it can produce undesirable changes in shapes, and for large vectors can take a long time. You must also set the `iter` argument if `snap` is NULL.  Vectors that have been snapped may need to be cleaned using [cleanGeom()] with the `break`, `duplicated`, and `smallAngles` tools.
 #'
-#' @param ... Other arguments. These are typically used internally so not of use to most users. They can include:
-#' * `levels` (`GRaster`s): A `data.frame`, `data.table`, or list of `data.frame`s or `data.table`s with categories for categorical rasters: The first column of a table corresponds to raster values and must be of type `integer`. A subsequent column corresponds to category labels. By default, the second column is assumed to represent labels, but this can be changed with \code{\link[fasterRaster]{activeCat<-}}. Level tables can also be `NULL` (e.g., `data.fame(NULL)`).
+#' * `area` (polygon `GVector`s): Either `NULL` or a positive numeric value: Remove polygons with an area smaller than this value. This argument can be used to correct topologically incorrect polygons with borders that cross one another (see *Details*). If `NULL`, then an iterative procedure is applied that increases the size of `area` starting from 0 (i.e., no removal of polygons). This procedure is not guaranteed to find the optimal value of `area`, and it may remove polygons that are legitimate. You must also set the `iter` argument if `area` is NULL.
 #'
-#' * `table` (`GVector`s): A `data.frame` or `data.table` with one row per geometry in a `GVector`: Serves as an attribute table.
+#' * `iter` (`GVector`s only): Positive integer: Number of times to increment values of `snap` and/or `area` when using automated topology correction (either `snap` or `area` is `NULL`).
 #'
-#' @seealso [rgrass::read_RAST()] and [rgrass::read_VECT()], plus **GRASS** modules [`v.in.ogr`](https://grass.osgeo.org/grass84/manuals/r.in.gdal.html), [`v.in.ogr`](https://grass.osgeo.org/grass84/manuals/v.in.ogr.html), and [`r.import`](https://grass.osgeo.org/grass84/manuals/r.import.html).
+#' * `levels` (`GRaster`s--useful mainly to developers, not most users): A `data.frame`, `data.table`, or list of `data.frame`s or `data.table`s with categories for categorical rasters: The first column of a table corresponds to raster values and must be of type `integer`. A subsequent column corresponds to category labels. By default, the second column is assumed to represent labels, but this can be changed with \code{\link[fasterRaster]{activeCat<-}}. Level tables can also be `NULL` (e.g., `data.fame(NULL)`).
+#'
+#' * `table` (`GVector`s--useful mainly to developers, not most users): A `data.frame` or `data.table` with one row per geometry in a `GVector`: Serves as an attribute table.
+#'
+#' @details Sometimes, polygons created in other software are topologically incorrect--the borders of adjacent polygons may cross one another, or there may be small gaps between them. These errors can be corrected by slightly shifting vertices and/or removing small polygons that result from intersections of larger ones that border one another.
+#' 
+#' You can attempt to correct vectors that have invalid topology using the optional arguments `snap` and `area`. These arguments take numeric values or `NULL` values. If you set one or both of these to `NULL`, the function will attempt to correct for invalid topology automatically by incrementally increasing their values until a topologically valid vector is created or a maximum number of iterations is surpassed.
+#'
+#' When implementing automatic topology correction, for both `snap` and `area`, the first increment attempted is 0 (no snapping, no area removal). If this does not yield a valid topology, then the value of `snap` is set to 0.000001 * *d*, and `area` to 0.000001 * `d^2`, where *d* is the minimum extent of the vector in the x- and y-directions. For each iteration `i`, the value of `snap` is set to *d* * 0.000001 * 2^(`i` - 1), and of `area` to  *d*^2 * 0.000001 * 2^(`i` - 1).
+#'
+#' @seealso [rgrass::read_RAST()] and [rgrass::read_VECT()], [cleanGeom()], plus modules [`v.in.ogr`](https://grass.osgeo.org/grass84/manuals/r.in.gdal.html), [`v.in.ogr`](https://grass.osgeo.org/grass84/manuals/v.in.ogr.html), and [`r.import`](https://grass.osgeo.org/grass84/manuals/r.import.html) in **GRASS**.
 #'
 #' @return A `GRaster` or `GVector`.
 #'
@@ -33,7 +43,6 @@ methods::setMethod(
 	function(
 		x,
 		rastOrVect = NULL,
-		snap = NULL,
 		...
 	) {
 
@@ -46,7 +55,7 @@ methods::setMethod(
 		### attempt to get type from extension
 		# 3-letter extensions
 		rastExtensions <- c("asc", "grd", "img", "mem", "tif", "saga")
-		vectExtensions <- c("shp", "gpkg")
+		vectExtensions <- c("shp", "gpkg", "kml")
 
 		ext <- .fileExt(x)
 		ext <- tolower(ext)
@@ -104,10 +113,8 @@ methods::setMethod(
 
 			.locationRestore(x = location)
 
-			# src <- .makeSourceName("r_in_gdal", type = "raster", n = 1L)
 			src <- .makeSourceName("r_external", type = "raster", n = 1L)
 			rgrass::execGRASS(
-				# cmd = "r.in.gdal",
 				cmd = "r.external",
 				input = x,
 				output = src,
@@ -160,13 +167,334 @@ methods::setMethod(
 
 		.locationRestore(x = location)
 
+		### load vector while using use snap and area to fix broken topology
+		ndots <- names(dots)
+		hasSnap <- any(ndots == "snap")
+		hasArea <- any(ndots == "area")
+		hasBoth <- hasSnap & hasArea
+		
+		if ((hasSnap && is.null(dots$snap)) | (hasArea && is.null(dots$area))) {
+
+			if (!("iter" %in% ndots)) stop("If you use the ", sQuote("snap"), " or ", sQuote("area"), " arguments\n  and set at least one of them to NULL, you must also supply the ", sQuote("iter"), " argument.")
+
+			iter <- dots$iter
+
+		}
+
+		# base value by which to increase snap and area when automated
+		# actual value will be increment[prior value] + increment^iter
+		increment <- 0.000001
+
+		msg <- paste0("Vector has an invalid topology.\n  Try using (or increasing) the values of the ", sQuote("snap"), " and/or ", sQuote("area"), " arguments,\n  or increasing the value of ", sQuote("iter"), " if either ", sQuote("snap"), " or ", sQuote("area"), " is NULL.")
+
+		# snap and area are both NULL
 		src <- .makeSourceName("v_in_ogr", type = "vector")
-		rgrass::execGRASS(
-			cmd = "v.in.ogr",
-			input = x,
-			output = src,
-			flags = c(.quiet(), "overwrite")
-		)
+		if (hasBoth && is.null(dots$snap) && is.null(dots$area)) {
+
+			rgrass::execGRASS(
+				cmd = "v.in.ogr",
+				input = x,
+				output = src,
+				flags = c(.quiet(), "overwrite")
+			)
+
+			i <- 1L
+			while (!.vValidCats(src) & i <= iter) {
+
+				info <- .vectInfo(src)
+				
+				# geomtype
+				gtype <- info$geometry
+				if (gtype != "polygons") {
+					stop("Argument ", sQuote("area"), " can only be used with polygon vectors.")
+				}
+
+				# get threshold values of snap and area
+				diffs <- c(info$east - info$west, info$north - info$south)
+				minDiff <- min(diffs)
+				snap <- minDiff * increment * 2^(i - 1L)
+				area <- minDiff^2 * increment * 2^(i - 1L)
+
+				srcIn <- src
+				src <- .makeSourceName("v_clean", type = "vector")
+
+				rgrass::execGRASS(
+					cmd = "v.clean",
+					input = srcIn,
+					output = src,
+					tool = c("snap", "rmarea"),
+					threshold = c(snap, area),
+					type = "area",
+					flags = c(.quiet(), "overwrite")
+				)
+
+				i <- i + 1L
+
+			}
+
+		# snap is NUMERIC, area is NUMERIC
+		} else if (hasBoth && (!is.null(dots$snap) & !is.null(dots$area))) {
+
+			rgrass::execGRASS(
+				cmd = "v.in.ogr",
+				input = x,
+				output = src,
+				snap = dots$snap,
+				flags = c(.quiet(), "overwrite")
+			)
+
+			info <- .vectInfo(src)
+
+			# geomtype
+			gtype <- info$geometry
+			if (gtype != "polygons") {
+				stop("Argument ", sQuote("area"), " can only be used with polygon vectors.")
+			}
+
+			area <- dots$area
+
+			srcIn <- src
+			src <- .makeSourceName("v_clean", type = "vector")
+
+			rgrass::execGRASS(
+				cmd = "v.clean",
+				input = srcIn,
+				output = src,
+				tool = "rmarea",
+				threshold = area,
+				type = "area",
+				flags = c(.quiet(), "overwrite")
+			)
+
+		# snap is NUMERIC, area is NULL
+		} else if (hasBoth && !is.null(dots$snap) && is.null(dots$area)) {
+
+			rgrass::execGRASS(
+				cmd = "v.in.ogr",
+				input = x,
+				output = src,
+				snap = dots$snap,
+				flags = c(.quiet(), "overwrite")
+			)
+
+			i <- 1L
+			while (!.vValidCats(src) & i <= iter) {
+
+				info <- .vectInfo(src)
+				
+				# geomtype
+				gtype <- info$geometry
+				if (gtype != "polygons") {
+					stop("Argument ", sQuote("area"), " can only be used with polygon vectors.")
+				}
+
+				# get threshold values of snap and area
+				diffs <- c(info$east - info$west, info$north - info$south)
+				minDiff <- min(diffs)
+				area <- minDiff^2 * increment * 2^(i - 1L)
+
+				srcIn <- src
+				src <- .makeSourceName("v_clean", type = "vector")
+
+				rgrass::execGRASS(
+					cmd = "v.clean",
+					input = srcIn,
+					output = src,
+					tool = "rmarea",
+					threshold = area,
+					type = "area",
+					flags = c(.quiet(), "overwrite")
+				)
+
+				i <- i + 1L
+
+			}
+
+		# snap is NULL, area is NUMERIC
+		} else if ((hasSnap & hasArea) && is.null(dots$snap) && !is.null(dots$area)) {
+
+			rgrass::execGRASS(
+				cmd = "v.in.ogr",
+				input = x,
+				output = src,
+				flags = c(.quiet(), "overwrite")
+			)
+
+			i <- 1L
+			while (!.vValidCats(src) & i <= iter) {
+
+				info <- .vectInfo(src)
+				
+				# geomtype
+				gtype <- info$geometry
+				if (gtype != "polygons") {
+					stop("Argument ", sQuote("area"), " can only be used with polygon vectors.")
+				}
+
+				# get threshold values of snap and area
+				diffs <- c(info$east - info$west, info$north - info$south)
+				minDiff <- min(diffs)
+				snap <- minDiff * increment * 2^(i - 1L)
+				area <- dots$area
+
+				srcIn <- src
+				src <- .makeSourceName("v_clean", type = "vector")
+
+				rgrass::execGRASS(
+					cmd = "v.clean",
+					input = srcIn,
+					output = src,
+					tool = c("snap", "rmarea"),
+					threshold = c(snap, area),
+					type = "area",
+					flags = c(.quiet(), "overwrite")
+				)
+
+				i <- i + 1L
+
+			}
+
+		# snap is NULL, area is MISSING
+		} else if ((hasSnap & !hasArea) && is.null(dots$snap)) {
+
+			rgrass::execGRASS(
+				cmd = "v.in.ogr",
+				input = x,
+				output = src,
+				flags = c(.quiet(), "overwrite")
+			)
+
+			i <- 1L
+			while (!.vValidCats(src) & i <= iter) {
+
+				info <- .vectInfo(src)
+				
+				# geomtype
+				gtype <- info$geometry
+				gtype <- c("point", "line", "area")[gtype == c("points", "lines", "polygons")]
+
+				# get threshold values of snap and area
+				diffs <- c(info$east - info$west, info$north - info$south)
+				minDiff <- min(diffs)
+				snap <- minDiff * increment * 2^(i - 1L)
+
+				srcIn <- src
+				src <- .makeSourceName("v_clean", type = "vector")
+
+				rgrass::execGRASS(
+					cmd = "v.clean",
+					input = srcIn,
+					output = src,
+					tool = "snap",
+					threshold = snap,
+					type = gtype,
+					flags = c(.quiet(), "overwrite")
+				)
+
+				i <- i + 1L
+
+			}
+
+		# snap is NUMERIC, area is MISSING
+		} else if ((hasSnap & !hasArea) && !is.null(dots$snap)) {
+
+			rgrass::execGRASS(
+				cmd = "v.in.ogr",
+				input = x,
+				output = src,
+				snap = dots$snap,
+				flags = c(.quiet(), "overwrite")
+			)
+
+		# snap is MISSING, area is NUMERIC
+		} else if ((!hasSnap & hasArea) && !is.null(dots$area)) {
+
+			rgrass::execGRASS(
+				cmd = "v.in.ogr",
+				input = x,
+				output = src,
+				flags = c(.quiet(), "overwrite")
+			)
+
+			info <- .vectInfo(src)
+			
+			# geomtype
+			gtype <- info$geometry
+			if (gtype != "polygons") {
+				stop("Argument ", sQuote("area"), " can only be used with polygon vectors.")
+			}
+
+			area <- dots$area
+
+			srcIn <- src
+			src <- .makeSourceName("v_clean", type = "vector")
+
+			rgrass::execGRASS(
+				cmd = "v.clean",
+				input = srcIn,
+				output = src,
+				tool = "rmarea",
+				threshold = area,
+				type = "area",
+				flags = c(.quiet(), "overwrite")
+			)
+
+		# snap is MISSING, area is NULL
+		} else if ((!hasSnap & hasArea) && is.null(dots$area)) {
+
+			rgrass::execGRASS(
+				cmd = "v.in.ogr",
+				input = x,
+				output = src,
+				flags = c(.quiet(), "overwrite")
+			)
+
+			i <- 1L
+			while (!.vValidCats(src) & i <= iter) {
+
+				info <- .vectInfo(src)
+				
+				# geomtype
+				gtype <- info$geometry
+				if (gtype != "polygons") {
+					stop("Argument ", sQuote("area"), " can only be used with polygon vectors.")
+				}
+
+				# get threshold values of snap and area
+				diffs <- c(info$east - info$west, info$north - info$south)
+				minDiff <- min(diffs)
+				area <- minDiff^2 * increment * 2^(i - 1L)
+
+				srcIn <- src
+				src <- .makeSourceName("v_clean", type = "vector")
+
+				rgrass::execGRASS(
+					cmd = "v.clean",
+					input = srcIn,
+					output = src,
+					tool = "rmarea",
+					threshold = area,
+					type = "area",
+					flags = c(.quiet(), "overwrite")
+				)
+
+				i <- i + 1L
+
+			}
+
+		# snap is MISSING and area is MISSING
+		} else if (!hasSnap & !hasArea) {
+
+			rgrass::execGRASS(
+				cmd = "v.in.ogr",
+				input = x,
+				output = src,
+				flags = c(.quiet(), "overwrite")
+			)
+
+		}
+			
+		if (!.vValidCats(src)) stop(msg)
 
 		out <- .makeGVector(src, table = table)
 
@@ -258,7 +586,7 @@ methods::setMethod(
 methods::setMethod(
 	"fast",
 	signature(x = "SpatVector"),
-	function(x, snap = NULL) .fastVector(x, snap = snap)
+	function(x, ...) .fastVector(x, ...)
 )
 
 #' @rdname fast
@@ -267,7 +595,7 @@ methods::setMethod(
 methods::setMethod(
 	"fast",
 	signature(x = "sf"),
-	function(x, snap = NULL) .fastVector(x, snap = snap)
+	function(x, ...) .fastVector(x, ...)
 )
 
 # 1. Write vector to disk (if needed)
@@ -275,13 +603,20 @@ methods::setMethod(
 #' @noRd
 .fastVector <- function(
 	x,		# SpatVector or sf
-	snap	# NULL or numeric
+	...
 ) {
-    
-	if (!inherits(x, "SpatVector")) x <- terra::vect(x)
-	table <- data.table::as.data.table(x)
+
+	dots <- list(...)
+	ndots <- names(dots)
 	
+	if (any('snap' %in% ndots) && (is.null(dots$snap) & !any('iter' %in% ndots))) stop("If you use the ", sQuote("snap"), " argument and set it to NULL,\n  you must also provide an ", sQuote("iter"), " argument.")
+	if (any('area' %in% ndots) && ((is.null(dots$area) & !any('iter' %in% ndots))) stop("If you use the ", sQuote("area"), " argument and set it to NULL,\n  you must also provide an ", sQuote("iter"), " argument.")
+
+	if (!inherits(x, "SpatVector")) x <- terra::vect(x)
+	if (any('area' %in% ndots) && terra::geomtype(x) != "polygons") stop("The ", sQuote("area"), " argument can only be used with a polygons vector.")
+
 	# remove data frame
+	table <- data.table::as.data.table(x)
 	if (nrow(table) != 0L) {
 		nc <- ncol(x)
 		x[ , seq_len(nc)] <- NULL 
@@ -293,7 +628,13 @@ methods::setMethod(
 	} else {
 		vectFile <- terra::sources(x)
 	}
-    
-  fast(x = vectFile, snap = snap, rastOrVect = "vector", table = table)
+
+	args <- list(
+		x = vectFile,
+		rastOrVect = "vector",
+		table = table
+	)
+	args <- c(args, list(...))
+	do.call(fast, args = args)
 	
 }
