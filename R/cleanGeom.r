@@ -23,7 +23,7 @@
 #'
 #' @param minArea Numeric >= 0: Minimum area of a polygon to be retained when using the `smallAreas` tool.
 #'
-#' @seealso [repirVector()], [simplifyGeom()], [terra::simplifyGeom()], [smoothGeom()]
+#' @seealso [simplifyGeom()], [terra::simplifyGeom()], [smoothGeom()]
 #'
 #' @returns A `GVector`.
 #'
