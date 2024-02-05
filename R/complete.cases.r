@@ -15,6 +15,8 @@
 #' * A `GVector` with a data table: A logical vector.
 #' * A `GVector` without a data table: `NA`.
 #'
+#' @seealso [missingCats()] 
+#'
 #' @example man/examples/ex_complete.cases.r
 #'
 #' @aliases complete.cases
