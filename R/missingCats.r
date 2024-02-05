@@ -1,6 +1,6 @@
 #' Values in a categorical raster with no assigned category
 #'
-#' @description This function reports the values that appear in a categorical raster that have no matching category label.
+#' @description This function reports the values in a categorical `GRaster` that have no matching category label in its "levels" table.
 #'
 #' `GRaster`s can represent [categorical data][tutorial_raster_data_types]. Cell values are actually integers, each corresponding to a category, such as "desert" or "wetland." A categorical raster is associated with a table that matches each value to a category name.
 #'
@@ -10,7 +10,7 @@
 #' 
 #' @returns A numeric vector (if `x`is just one layer), or a named list of numeric vectors, one per layer in `x`.
 #'
-#' @seealso [categorical rasters][tutorial_raster_data_types] in **fasterRaster**
+#' @seealso [missingCats()], [missing.cases()], [droplevels()], [categorical rasters][tutorial_raster_data_types] in **fasterRaster**
 #'
 #' @example man/examples/ex_GRaster_categorical.r
 #'

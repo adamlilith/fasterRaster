@@ -1,6 +1,6 @@
 #' Find which cells of a GRaster match certain values
 #'
-#' @description The `match()` takes a `GRaster` and a vector as inputs and returns a `GRaster` with cell values that correspond to the index of each element in the vector that equaled the original cell value. For example, if a 4-cell raster had values {3, `NA`, 5, 4}, and the vector was `c(3, 4)`, then the output would be a 3-cell raster with values {1, `NA`, `NA`, 2} because the first value in the vector was 3 (so the cell with 3 is assigned 1), and because the second value in the vector was 4 (so the cell with 4 was assigned 2).
+#' @description The `match()` function takes a `GRaster` and a vector as inputs and returns a `GRaster` with cell values that correspond to the index of each element in the vector that equaled the original cell value (note that "vector" is a set of values such as `c(1, 2, 3)`, not a geographic vector object). For example, if a 4-cell raster had values {3, `NA`, 5, 4}, and the vector was `c(3, 4)`, then the output would be a 4-cell raster with values {1, `NA`, `NA`, 2} because the first value in the vector was 3 (so the cell with 3 is assigned 1), and because the second value in the vector was 4 (so the cell with 4 was assigned 2).
 #'
 #' If the `GRaster` is [categorical][tutorial_raster_data_types], then the vector can be category labels instead of numeric values.
 #'

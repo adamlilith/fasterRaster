@@ -2,7 +2,7 @@
 #'
 #' @description This version of the `predict()` function make predictions to a set of `GRaster`s from a model object.
 #'
-#' The model must be either a linear model, which is of class `lm` and typically created using the [stats::lm()] function or a generalized linear model (GLM), which is class `glm` and typically created using [stats::glm()]. Other packages can also create `lm` or `glm` objects, but they will probably not work in this function. For example, generalized additive models, which can be created using the `gam()` function in the **mgcv** package, inherit the `glm` class, but cannot be used in this function.
+#' The model must be either a linear model, which is of class `lm` and typically created using the [stats::lm()] function or a generalized linear model (GLM), which is class `glm` and typically created using [stats::glm()]. Other packages can also create `lm` or `glm` objects, but they may not work in this function. For example, generalized additive models, which can be created using the `gam()` function in the **mgcv** package, inherit the `glm` class, but cannot be used in this function.
 #'
 #' @param object A `GRaster` with one or more layers.
 #'

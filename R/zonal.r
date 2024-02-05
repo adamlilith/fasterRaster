@@ -1,6 +1,6 @@
 #' Statistics on cells of a GRaster stratified by cells of another raster
 #'
-#' @description Function `zonal()` calculates statistics (mean, sum, etc.) on cells of a raster by "zones" created by cells of another or vector.
+#' @description Function `zonal()` calculates statistics (mean, sum, etc.) on cells of a `GRaster` by "zones" created by cells of another `GRaster` or `GVector`.
 #'
 #' @param x A `GRaster` for which to calculate summary statistics.
 #'

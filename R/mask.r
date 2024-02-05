@@ -1,6 +1,6 @@
 #' Mask values in a raster
 #'
-#' @description The output of `mask()` is a `GRaster` that has the same as values as the input raster. However, if the `mask` argument is a `GRaster`, the output will have `NA` values in the sample cells that the `mask` raster has `NA` cells. If the `mask` argument is a `GVector`, then the output raster will have `NA` values in cells the `GVector` does not cover.
+#' @description The output of `mask()` is a `GRaster` that has the same as values as the input raster. However, if the `mask` argument is a `GRaster`, the output will have `NA` values in the same cells that the `mask` raster has `NA` cells. If the `mask` argument is a `GVector`, then the output raster will have `NA` values in cells the `GVector` does not cover.
 #'
 #' @param x A `GRaster`.
 #' 

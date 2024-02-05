@@ -1,12 +1,14 @@
 #' Reduce linear features on a raster so linear features are 1 cell wide
 #'
-#' @description The `thinLines()` function attempts to reduce linear features on a raster to just 1 cell wide. You may need to run `thinLines()` multiple times on the same raster (or experiment with the `iter` argument) to get acceptable output. `thinLines()` can be helpful run on a raster before using `as.lines()`.
+#' @description The `thinLines()` function attempts to reduce linear features on a raster to just 1 cell wide. You may need to run `thinLines()` multiple times on the same raster (or experiment with the `iter` argument) to get acceptable output. `thinLines()` can be helpful to run on a raster before using [as.lines()].
 #' 
 #' @param x A `GRaster`.
 #' 
 #' @param iter Numeric integer: Number of iterations (default is 200).
 #' 
 #' @returns A `GRaster`.
+#'
+#' @seealso [as.lines()]
 #' 
 #' @example man/examples/ex_asLines.r
 #' 

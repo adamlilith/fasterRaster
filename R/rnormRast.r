@@ -1,10 +1,10 @@
 #' Create a raster with random values drawn from a normal distribution
 #'
-#' @description 'rnormRast()' creates a raster with values drawn from a normal distribution.
+#' @description `rnormRast()` creates a raster with values drawn from a normal distribution.
 #'
-#' @param x A `GRaster`. The output will have the same extent and dimensions as this raster.
+#' @param x A `GRaster`: The output will have the same extent and dimensions as this raster.
 #'
-#' @param n A numeric integer: Number of rasters to generate. 
+#' @param n An integer: Number of rasters to generate. 
 #'
 #' @param mu,sigma Numeric: Mean and sample standard deviation of output. If creating more than one raster, you can provide one value per raster. If there are fewer, they will be recycled.
 #'

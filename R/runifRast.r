@@ -1,6 +1,6 @@
 #' Create a raster with random values drawn from a uniform distribution
 #'
-#' @description 'runifRast()' creates a raster with values drawn from a uniform (flat) distribution.
+#' @description `runifRast()` creates a raster with values drawn from a uniform (flat) distribution.
 #'
 #' @param x A `GRaster`. The output will have the same extent and dimensions as this raster.
 #'

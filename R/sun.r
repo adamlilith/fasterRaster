@@ -1,6 +1,6 @@
 #' Solar radiance and irradiance
 #'
-#' The `sun()` function calculates beam (direct), diffuse and ground reflected solar irradiation for a given day and set of topographic and atmospheric conditions. The function relies on the **GRASS** module `[r.sun](https://grass.osgeo.org/grass84/manuals/r.sun.html)`, which contains a detailed explanation.
+#' The `sun()` function calculates beam (direct), diffuse and ground reflected solar irradiation for a given day and set of topographic and atmospheric conditions. The function relies on the **GRASS** module `(r.sun)[https://grass.osgeo.org/grass84/manuals/r.sun.html]`, which contains a detailed explanation.
 #'
 #' @param elevation A `GRaster` with values representing elevation (typically in meters).
 #'

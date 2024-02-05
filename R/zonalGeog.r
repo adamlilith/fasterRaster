@@ -4,8 +4,8 @@
 #' * Area
 #' * Perimeter length
 #' * "Compact square" statistic: \eqn{4 \sqrt(area) / perimeter)}
-#' * "Compact circle" statistic: \eqn{4 * P / ( 2 \sqrt(\pi * A))} where `P` is the perimeter length and `A` the area.
-#' * fractal dimension: \eqn{2 ( log(P) / log(A + 0.001))} where `P` is perimeter length and `A` is area.
+#' * "Compact circle" statistic: \eqn{4 * P / ( 2 \sqrt(\pi * A))} where *P* is the perimeter length and *A* the area.
+#' * fractal dimension: \eqn{2 ( log(P) / log(A + 0.001))} where *P* is perimeter length and *A* is area.
 #' * The average x- and y-coordinates of each zone.
 #'
 #' @param x A `GRaster`.

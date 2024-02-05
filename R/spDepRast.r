@@ -1,10 +1,10 @@
 #' Create a random raster with or without spatial dependence
 #'
-#' @description 'spDepRast()' creates a raster with random values in cells. Across the raster, values are approximately normally distributed, though a raster with a "true" normal distribution can be made with [rnormRast()]. Spatial dependence can be introduced, though all together the values will still be approximately normally distributed.
+#' @description `spDepRast()` creates a raster with random values in cells. Across the raster, values are approximately normally distributed, though a raster with a "true" normal distribution can be made with [rnormRast()]. Spatial dependence can be introduced, though all together the values will still be approximately normally distributed.
 #'
-#' @param x A `GRaster`. The output will have the same extent and dimensions as this raster.
+#' @param x A `GRaster`: The output will have the same extent and dimensions as this raster.
 #'
-#' @param n A numeric integer: Number of rasters to generate. 
+#' @param n An integer: Number of rasters to generate. 
 #'
 #' @param mu,sigma Numeric: Mean and sample standard deviation of output. If creating more than one raster, you can provide one value per raster. If there are fewer, they will be recycled.
 #'
