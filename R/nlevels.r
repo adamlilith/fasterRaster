@@ -6,7 +6,7 @@
 #'
 #' @return A named, numeric vector of integers. The values represent the number of levels (rows) that appear in the raster's levels table.
 #'
-#' @seealso [levels()], [terra::levels()], [droplevels()], [categorical rasters][tutorial_raster_data_types]
+#' @seealso [levels()], [terra::levels()], [droplevels()], [raster data types][tutorial_raster_data_types]
 #'
 #' @example man/examples/ex_GRaster_categorical.r
 #'
