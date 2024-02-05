@@ -20,7 +20,7 @@
 #' * `levels()` and `cats()`: A list of `data.frame`s or `data.table`s, one per raster layer.
 #' * `levels()<-` and `categories()`: A `GRaster`.
 #'
-#' @seealso [terra::levels()], [levels<-], [terra::cats()], [terra::categories()], [categorical rasters][tutorial_raster_data_types] in **fasterRaster**
+#' @seealso [terra::levels()], \code{\link[fasterRaster]{levels<-}}, [terra::cats()], [terra::categories()], [categorical rasters][tutorial_raster_data_types] in **fasterRaster**
 #'
 #' @example man/examples/ex_GRaster_categorical.r
 #'
