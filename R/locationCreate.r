@@ -130,6 +130,8 @@ methods::setMethod(
 	### start new GRASS session
 	emptyRast <- terra::rast(matrix(1L), crs = coordRef)
 
+	dir.create(workDir, showWarnings = FALSE, recursive = TRUE)
+
 	### start the GRASS session
 	suppressWarnings(
 		session <- rgrass::initGRASS(
