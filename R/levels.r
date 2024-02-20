@@ -32,26 +32,26 @@ methods::setMethod(
     signature = c(x = "GRaster"),
     function(x) {
 
-		out <- cats(x)
-		numLevels <- nlevels(x)
+	out <- cats(x)
+	numLevels <- nlevels(x)
 
-		for (i in seq_along(out)) {
+	for (i in seq_along(out)) {
 
-			if (numLevels[i] > 0L) {
-			
-				names <- catNames(x, i)[[1L]]
-				active <- activeCat(x, name = TRUE)[i]
-				value <- names[1L]
+		if (numLevels[i] > 0L) {
+		
+			names <- catNames(x, i)[[1L]]
+			active <- activeCat(x, name = TRUE)[i]
+			value <- names[1L]
 
-				cols <- c(value, active)
+			cols <- c(value, active)
 
-				out[[i]] <- out[[i]][ , ..cols]
+			out[[i]] <- out[[i]][ , ..cols]
 
-			}
 		}
+	}
 
-		names(out) <- names(x)
-        out
+	names(out) <- names(x)
+	out
 
     } # EOF
 )
