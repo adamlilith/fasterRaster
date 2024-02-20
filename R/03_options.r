@@ -9,6 +9,8 @@
 #'     * Mac OS: `"/Applications/GRASS-8.3.app/Contents/Resources"`
 #'     * Linux: `"/usr/local/grass"`
 #'
+#' Since it is required to set the `grassDir` each time **fasterRaster** is used, this option can be set without defining ints name. For example, `faster("C:/Program Files/GRASS GIS 8.3")` will work, as will `faster(grassDir = "C:/Program Files/GRASS GIS 8.3")`. Any other argument must be named, as in, for example, `faster("C:/Program Files/GRASS GIS 8.3", cores = 4)`.
+#'
 #' *  `addonsDir` (character): Folder in which **GRASS** addons are stored. If `NA` and `grassDir` is not `NA`, this will be assumed to be `file.path(grassDir, "addons")`. The default values is `NA`.
 #'
 #' * `cores` (integer/numeric integer): Number of processor cores to use on a task. The default is 2. Some **GRASS** modules are parallelized.
@@ -32,7 +34,7 @@
 #' If option values are requested, a named list with option values is returned (not invisibly).
 #'
 #' @example man/examples/ex_faster.r
-
+#'
 #' @aliases faster
 #' @rdname faster
 #' @export
@@ -44,6 +46,8 @@ faster <- function(
 
 	opts <- list(...)
 	if (length(opts) == 1L && inherits(opts[[1L]], "list")) opts <- opts[[1L]]
+	if (length(opts) == 1L && is.null(names(opts))) names(opts) <- "grassDir"
+	if (length(opts) > 1L && any(names(opts) == "")) names(opts)[names(opts) == ""] <- "grassDir"
 	nd <- length(opts)
 	
 	if (default & restore) {
