@@ -3,8 +3,11 @@
 #' @description `freq()` tabulates the frequency of cell values in a raster. For rasters where [datatype()] is `integer` or `factor`, the frequency of each value or level is reported. For other rasters, the range of values is divided into bins, and the number of cells with values in each bin is reported.
 #'
 #' @param x A `GRaster`.
+#'
 #' @param digits Numeric integer: Number of digits by which to round raster values. Ignored for integer and categorical rasters.
+#'
 #' @param bins Positive numeric integer: Number of bins in which to divide values of `numeric` rasters. The default is 100. For `integer` and categorical rasters, each value is tallied (i.e., this is ignored).
+#'
 #' @param value Numeric or `NULL` (default): If numeric, only cells with this value will be counted. If `NULL`, all values will be counted.
 #'
 #' @returns A `data.frame` or a named `list` of `data.frame`s, one per layer in `x`.
