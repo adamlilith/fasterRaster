@@ -152,9 +152,7 @@ methods::setMethod(
 
 	# aggregate data table
 	if (nrow(x) == 0L) {
-
 		aggTable <- NULL
-	
 	} else {
 
 		table <- as.data.table(x)
@@ -277,7 +275,7 @@ methods::setMethod(
 			.vAttachDatabase(src, table = table, replace = TRUE)
 
 			srcIn <- src
-			src <- .makeSourceName("v_dissolve", "vector")
+			src <- .makeSourceName("v_extract", "vector")
 
 			rgrass::execGRASS(
 				cmd = "v.extract",
