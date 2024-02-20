@@ -9,17 +9,12 @@
 #' * A `SpatVector` or `sf` spatial vector.
 #' * A character string or a vector of strings with the path(s) and filename(s) of one or more rasters or one vector to be loaded directly into **GRASS**. The function will attempt to ascertain the type of object from the file extension (raster or vector), but it can help to indicate which it is using the `rastOrVect` argument if it is unclear.
 #'
-#' @param rastOrVect Either `NULL` (default), or `"raster"` or `"vector"`: If `x` is a filename, then the function will try to ascertain whether it represents a raster or a vector, but sometimes this will fail. In that case, it can help to specify if the file holds a raster or vector. Partial matching is used.
-#'
 #' @param ... Other arguments:
+#' * `rastOrVect`: Either `NULL` (default), or `"raster"` or `"vector"`: If `x` is a filename, then the function will try to ascertain whether it represents a raster or a vector, but sometimes this will fail. In that case, it can help to specify if the file holds a raster or vector. Partial matching is used.
 #' * `snap` (`GVector`s): Either `NULL` or a positive numeric value: The value of `snap` indicates how close vertices need to be for them to be shifted to to the same location. If the purpose of using `snap` is to fix topology (see **Details), small values are recommended, as values that are too large can dramatically change the shape of polygons. Units are in map units (usually meters). A value of `NULL` will use an iterative procedure starting with `snap = 0` (i.e., no snapping) to find the minimum value that produces a topologically vector. This is not guaranteed to find the best value of `snap`, it can produce undesirable changes in shapes, and for large vectors can take a long time. You must also set the `iter` argument if `snap` is NULL.  Vectors that have been snapped may need to be cleaned using [cleanGeom()] with the `break`, `duplicated`, and `smallAngles` tools.
-#'
 #' * `area` (polygon `GVector`s): Either `NULL` or a positive numeric value: Remove polygons with an area smaller than this value. This argument can be used to correct topologically incorrect polygons with borders that cross one another (see *Details*). If `NULL`, then an iterative procedure is applied that increases the size of `area` starting from 0 (i.e., no removal of polygons). This procedure is not guaranteed to find the optimal value of `area`, and it may remove polygons that are legitimate. You must also set the `iter` argument if `area` is NULL.
-#'
 #' * `iter` (`GVector`s only): Positive integer: Number of times to increment values of `snap` and/or `area` when using automated topology correction (either `snap` or `area` is `NULL`).
-#'
 #' * `levels` (`GRaster`s--useful mainly to developers, not most users): A `data.frame`, `data.table`, or list of `data.frame`s or `data.table`s with categories for categorical rasters: The first column of a table corresponds to raster values and must be of type `integer`. A subsequent column corresponds to category labels. By default, the second column is assumed to represent labels, but this can be changed with \code{\link[fasterRaster]{activeCat<-}}. Level tables can also be `NULL` (e.g., `data.fame(NULL)`).
-#'
 #' * `table` (`GVector`s--useful mainly to developers, not most users): A `data.frame` or `data.table` with one row per geometry in a `GVector`: Serves as an attribute table.
 #'
 #' @details Sometimes, polygons created in other software are topologically incorrect--the borders of adjacent polygons may cross one another, or there may be small gaps between them. These errors can be corrected by slightly shifting vertices and/or removing small polygons that result from intersections of larger ones that border one another.
@@ -42,11 +37,19 @@ methods::setMethod(
 	signature(x = "character"),
 	function(
 		x,
-		rastOrVect = NULL,
 		...
 	) {
 
+	### dots
+	########
 	dots <- list(...)
+	dotNames <- names(dots)
+
+	rastOrVect <- if (any(dotNames == "rastOrVect")) {
+		dots$rastOrVect
+	} else {
+		NULL
+	}
 
 	### raster or vector?
 	#####################
@@ -124,8 +127,8 @@ methods::setMethod(
 			if (nLayers > 1L) src <- paste0(src, ".", seq_len(nLayers))
 
 			# raster levels
-			if (any(names(dots) == "levels")) {
-				if (!is.null(levels)) levels <- dots$levels
+			if (any(dotNames == "levels")) {
+				levels <- dots$levels
 			} else {
 				levels <- NULL
 			}
@@ -142,7 +145,7 @@ methods::setMethod(
 		xVect <- terra::vect(x)
 		
 		# table from ...
-		if (any(names(dots) == "table")) {
+		if (any(dotNames == "table")) {
 			
 			table <- dots$table
 		
@@ -168,14 +171,13 @@ methods::setMethod(
 		.locationRestore(x = location)
 
 		### load vector while using use snap and area to fix broken topology
-		ndots <- names(dots)
-		hasSnap <- any(ndots == "snap")
-		hasArea <- any(ndots == "area")
+		hasSnap <- any(dotNames == "snap")
+		hasArea <- any(dotNames == "area")
 		hasBoth <- hasSnap & hasArea
 		
-		if ((hasSnap && is.null(dots$snap)) | (hasArea && is.null(dots$area))) {
+		if ((hasSnap && is.null(snap)) | (hasArea && is.null(dots$area))) {
 
-			if (!("iter" %in% ndots)) stop("If you use the ", sQuote("snap"), " or ", sQuote("area"), " arguments\n  and set at least one of them to NULL, you must also supply the ", sQuote("iter"), " argument.")
+			if (!("iter" %in% dotNames)) stop("If you use the ", sQuote("snap"), " or ", sQuote("area"), " arguments\n  and set at least one of them to NULL, you must also supply the ", sQuote("iter"), " argument.")
 
 			iter <- dots$iter
 
@@ -495,7 +497,6 @@ methods::setMethod(
 		}
 			
 		if (!.vValidCats(src)) stop(msg)
-
 		out <- .makeGVector(src, table = table)
 
 	}
@@ -607,13 +608,13 @@ methods::setMethod(
 ) {
 
 	dots <- list(...)
-	ndots <- names(dots)
+	dotNames <- names(dots)
 	
-	if (any('snap' %in% ndots) && (is.null(dots$snap) & !any('iter' %in% ndots))) stop("If you use the ", sQuote("snap"), " argument and set it to NULL,\n  you must also provide an ", sQuote("iter"), " argument.")
-	if (any('area' %in% ndots) && (is.null(dots$area) & !any('iter' %in% ndots))) stop("If you use the ", sQuote("area"), " argument and set it to NULL,\n  you must also provide an ", sQuote("iter"), " argument.")
+	if (any('snap' %in% dotNames) && (is.null(dots$snap) & !any('iter' %in% dotNames))) stop("If you use the ", sQuote("snap"), " argument and set it to NULL,\n  you must also provide an ", sQuote("iter"), " argument.")
+	if (any('area' %in% dotNames) && (is.null(dots$area) & !any('iter' %in% dotNames))) stop("If you use the ", sQuote("area"), " argument and set it to NULL,\n  you must also provide an ", sQuote("iter"), " argument.")
 
 	if (!inherits(x, "SpatVector")) x <- terra::vect(x)
-	if (any('area' %in% ndots) && terra::geomtype(x) != "polygons") stop("The ", sQuote("area"), " argument can only be used with a polygons vector.")
+	if (any('area' %in% dotNames) && terra::geomtype(x) != "polygons") stop("The ", sQuote("area"), " argument can only be used with a polygons vector.")
 
 	# remove data frame
 	table <- data.table::as.data.table(x)
