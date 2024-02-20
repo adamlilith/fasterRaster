@@ -129,7 +129,8 @@ setMethod(
 		# data type
 		if (is.null(datatype)) datatype <- datatype(x, "GDAL")
 		
-		if (any(datatype == "INT1U")) datatype[datatype == "INT1U"] <- "Byte"
+		# if (any(datatype == "INT1U")) datatype[datatype == "INT1U"] <- "Byte" # will not write, for some reason
+		if (any(datatype == "INT1U")) datatype[datatype == "INT1U"] <- "UInt16"
 		if (any(datatype == "INT2U")) datatype[datatype == "INT2U"] <- "UInt16"
 		if (any(datatype == "INT2S")) datatype[datatype == "INT2S"] <- "Int32"
 		if (any(datatype == "FLT4S")) datatype[datatype == "FLT4S"] <- "Float32"
@@ -145,7 +146,8 @@ setMethod(
 			} else if (any(datatype == "UInt16")) {
 				"UInt16"
 			} else if (any(datatype == "Byte")) {
-				"Byte"
+				# "Byte"
+				"UInt16"
 			}
 			
 		}
@@ -182,7 +184,6 @@ setMethod(
 		}
 
 		# save
-		# rgrass::execGRASS("r.out.gdal", input=sources, output=filename, type=datatype, createopt=createopt, metaopt=metaopt, flags=thisFlags, intern=TRUE, ...)
 		rgrass::execGRASS(
 			cmd = "r.out.gdal",
 			input = src,
@@ -200,7 +201,7 @@ setMethod(
 		extension <- paste0(".", extension)
 		levelFileName <- substr(filename, 1L, nchar(filename) - nchar(extension))
 		levelFileName <- paste0(levelFileName, ".csv")
-		utils::write.csv(levels(x), levelFileName)
+		utils::write.csv(cats(x), levelFileName, row.names = FALSE)
 
 	}
 
