@@ -80,6 +80,7 @@
 #' [fillNAs()]: Fill `NA` cells\cr
 #' [focal()]: Calculate cell values based on values of nearby cells\cr
 #' [fractalRast()]: Create a fractal `GRaster`\cr
+#' [fragmentation()]: Landscape fragmentation class from Riitters et al. (2020)\cr
 #' [global()]: Summary statistics across cells of each `GRaster` layer\cr
 #' [`hillshade()`][shade]: Create a hillshade `GRaster`\cr
 #' [hist()]: Histogram of `GRaster` values\cr
@@ -182,7 +183,8 @@
 #' [delaunay()]: Delaunay triangulation\cr
 #' [disagg()]: Separate multipart geometries into singlepart geometries\cr
 #' [distance()]: Distance between geometries in two `GVector`, or from a `GVector` to cells of a `GRaster`\cr
-#' [erase()] or `-`: Remove part of a `GVector` that overlaps with another\cr
+#' [dropTable()]: Remove the data table from a `GVector`\cr
+#' [erase()] or \code{\link[fasterRaster]{-}}: Remove part of a `GVector` that overlaps with another\cr
 #' [expanse()]: Area of polygons or length of lines\cr
 #' [extract()]: Extract values from a `GVector` at specific points\cr
 #' [fillHoles()]: Fill holes in a `GVector` (requires 8.4+)\cr
@@ -191,7 +193,7 @@
 #' [hexagons()]: Create a hexagonal grid\cr
 #' [interpIDW()]: Interpolate values at points to a `GRaster`\cr
 #' [interpSplines()]: Interpolate values at points to a `GRaster`\cr
-#' [intersect()] or `*`: Intersection of two `GVectors`.\cr
+#' [intersect()] or \code{\link[fasterRaster]{*}}: Intersection of two `GVectors`.\cr
 #' [kernel()]: Kernel density estimator of points.\cr
 #' [missing.cases()]: Find rows of a `GVector`'s data table that have at least `NA` in them\cr
 #' [project()]: Change coordinate reference system\cr
@@ -202,8 +204,8 @@
 #' [st_buffer()]: Create a polygon around/inside a `GVector`\cr
 #' [tail()]: Last rows of a `GVector`'s data table\cr
 #' [thinPoints()]: Reduce number of points in same raster cell\cr
-#' [union()] or `+`: Combine two `GVector`s\cr
-#' [xor()] or `/`: Select parts of polygons not shared by two `GVector`s\cr
+#' [union()] or \code{\link[fasterRaster]{+}}: Combine two `GVector`s\cr
+#' [xor()] or \code{\link[fasterRaster]{/}}: Select parts of polygons not shared by two `GVector`s\cr
 #'
 #' ## Converting between data types
 #' [as.contour()]: Convert a `GRaster` to a `GVector` representing contour lines\cr
