@@ -154,6 +154,12 @@ rivers[1, 2] # row/geometry 1 and column 1
 rivers[c(TRUE, FALSE)] # select every other geometry (T/F vector is recycled)
 rivers[ , c(TRUE, FALSE)] # select every other column (T/F vector is recycled)
 
+# removing data table
+noTable <- dropTable(river)
+noTable
+nrow(rivers)
+nrow(noTable)
+
 # Refresh values from GRASS
 # (Reads values from GRASS... will not appear to do anything in this case
 # since the rivers object is up-to-date):
