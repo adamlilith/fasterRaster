@@ -6,6 +6,8 @@
 #'
 #' @param x A `SpatRaster` or `GRaster`.
 #'
+#' @param w An odd, positive integer: Size of the window across which fragmentation is calculated (in units of "rows" and "columns"). The default is 3, meaning the function uses a 3x3 moving window to calculate fragmentation.
+#'
 #' @param undet Character: How to assign the "undetermined" case. Valid values are `"perforated"` (default), `"edge"`, and `"undetermined"`. Partial matching is used. If `Pf` is the proportional density raster cell value and `Pff` the proportional connectivity raster cell value, the undetermined case occurs when `Pf` > 0.6 and `Pf == Pff`.
 #'
 #' @param restrict Logical: If `TRUE`, then fragmentation will only be assigned to cells that have the focal habitat within them. If `FALSE` (default), cells surrounding the focal habitat class can also be assigned a fragmentation class other than 0, even if they do not have the focal habitat in them. Note that the case where `restrict = TRUE` is a departure from Riitters et al. (2020), but it allows you to create a series of fragmentation rasters for different habitat classes where cells with classes(other than 0) do not overlap.
@@ -24,31 +26,57 @@
 methods::setMethod(
 	f = "fragmentation",
 	signature = c(x = "SpatRaster"),
-	function(x, undet = "perforated", restrict = FALSE, cores = faster("cores")) {
+	function(x, w = 3, undet = "perforated", restrict = FALSE, cores = faster("cores")) {
+
+	# errors?
+	if (w %% 2 == 0 | w < 1L) stop("Argument ", sQuote("w"), " must be an odd, positive integer.")
+	undet <- omnibus::pmatchSafe(undet, c("undetermined", "perforated", "edge"), nmax = 1L)
 
 	undet <- omnibus::pmatchSafe(undet, c("undetermined", "perforated", "edge"), nmax = 1L)
 
-	# assess if each pair of neighboring cell in cardinal direction has 1 or 2 forested cells or not (0 = no, 1 = 1 cell, 2 = 2 cells)
-	window <- 3L
-	ww <- matrix(0L, window, window)
-
+	# setup
 	nLayers <- terra::nlyr(x)
 
-	# list of cell pairs in cardinal directions
-	cells <- list(
-		c(1L, 2L),
-		c(1L, 4L),
-		c(4L, 5L),
-		c(4L, 7L),
-		c(7L, 8L),
-		c(2L, 3L),
-		c(2L, 5L),
-		c(5L, 6L),
-		c(5L, 8L),
-		c(8L, 9L),
-		c(3L, 6L),
-		c(6L, 9L)
-	)
+	# zeros matrix to store each set of neighbors
+	ww <- matrix(0L, w, w)
+
+	# assess if each pair of neighboring cell in cardinal direction has 1 or 2 forested cells or not (0 = no, 1 = 1 cell, 2 = 2 cells)
+	# 1st make a list of possible cell neighbors by cell index
+	# 2nd assess if neighbors both have target habitat type
+	cells <- list()
+	w1 <- matrix(1L:(w^2), nrow = w, ncol = w)
+	w2 <- w1[1L:(w - 1), 1L:(w - 1)]
+
+	for (i in 1L:(w - 1L)^2) {
+			
+		len <- length(cells)
+		wFrom <- w2[i]
+		
+		# left-to-right neighbors
+		cells[[len + 1L]] <- c(wFrom, wFrom + w)
+
+		# top-to-bottom neighbors
+		cells[[len + 2L]] <- c(wFrom, wFrom + 1L)
+
+	}
+
+	# add left-to-right neighbors of bottom row
+	for (i in w1[w, 1L:(w - 1L)]) {
+	
+		len <- length(cells)
+		wFrom <- w1[i]
+		cells[[len + 1L]] <- c(wFrom, wFrom + w)
+
+	}
+
+	# add top-to-bottom neighbors of right column
+	for (i in w1[1L:(w - 1L), w]) {
+	
+		len <- length(cells)
+		wFrom <- w1[i]
+		cells[[len + 1L]] <- c(wFrom, wFrom + 1L)
+
+	}
 
 	# for each layer
 	for (i in seq_len(nLayers)) {
@@ -174,24 +202,37 @@ methods::setMethod(
 	signature = c(x = "GRaster"),
 	function(x, undet = "perforated", restrict = FALSE) {
 
-	undet <- omnibus::pmatchSafe(undet, c("undetermined", "perforated", "edge"), nmax = 1L)
+stop("As of 2024.02.26, fragmentation() does not work for GRasters. A fix is in process.")
 
 	mm <- minmax(x)
 	msg <- "Raster must be binary (only 1 and/or 0, with NAs allowed."
 	if (any(!(mm[1L, ] %in% c(0L, 1L))) | any(mm[2L, ] != 1L)) stop(msg)
 
+	# setup
 	.locationRestore(x)
 	.region(x)
 
-	# assess if each pair of neighboring cell in cardinal direction has 1 or 2 forested cells or not (0 = no, 1 = 1 cell, 2 = 2 cells)
-	window <- 3L
-	ww <- matrix(0L, window, window)
-
 	nLayers <- terra::nlyr(x)
+
+	# assess if each pair of neighboring cell in cardinal direction has 1 or 2 forested cells or not (0 = no, 1 = 1 cell, 2 = 2 cells)
+	ww <- matrix(0L, w, w)
 
 	# list of offset pairs relative to focal cell in cardinal directions
 	# first 2 values are offset from focal cell in rows/cols of 1st cell
 	# second 2 values are offset from focal cell in rows/cols of 2nd cell
+	offsets <- list()
+	split <- (w - 1L) / 2L
+
+	# left-to-right neighbors
+	for (i in split:(-1L * split + 1L)) {
+		for (j in split:(-1L * split)) {
+		
+			offsets[[length(offsets) + 1L]] <- c(i, i + 1L)
+		
+		}
+	}
+
+
 	offsets <- list(
 		c(1L, 2L),
 		c(1L, 4L),
