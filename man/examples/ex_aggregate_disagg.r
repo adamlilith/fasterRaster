@@ -50,19 +50,24 @@ agg2x3
 ### aggregating a GVector
 #########################
 
+madCoast4 <- fastData("madCoast4")
+
 # Convert:
 coast <- fast(madCoast4)
 
-# Aggregate:
+# Aggregate and disaggregate:
 aggCoast <- aggregate(coast)
+disaggCoast <- disagg(coast)
 
 ngeom(coast)
 ngeom(aggCoast)
+ngeom(disaggCoast)
 
 # plot
-oldpar <- par(mfrow = c(1, 2))
-plot(coast, main = "Original")
-plot(aggCoast, main = "Aggregated")
+oldpar <- par(mfrow = c(1, 3))
+plot(coast, main = "Original", col = 1:nrow(coast))
+plot(aggCoast, main = "Aggregated", col = 1:nrow(aggCoast))
+plot(disaggCoast, main = "Disaggregated", col = 1:nrow(disaggCoast))
 par(oldpar)
 
 }
