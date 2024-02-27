@@ -9,13 +9,11 @@
 #'     * Mac OS: `"/Applications/GRASS-8.3.app/Contents/Resources"`
 #'     * Linux: `"/usr/local/grass"`
 #'
-#' Since it is required to set the `grassDir` each time **fasterRaster** is used, this option can be set without defining ints name. For example, `faster("C:/Program Files/GRASS GIS 8.3")` will work, as will `faster(grassDir = "C:/Program Files/GRASS GIS 8.3")`. Any other argument must be named, as in, for example, `faster("C:/Program Files/GRASS GIS 8.3", cores = 4)`.
-#'
 #' *  `addonsDir` (character): Folder in which **GRASS** addons are stored. If `NA` and `grassDir` is not `NA`, this will be assumed to be `file.path(grassDir, "addons")`. The default values is `NA`.
 #'
 #' * `cores` (integer/numeric integer): Number of processor cores to use on a task. The default is 2. Some **GRASS** modules are parallelized.
 #'
-#' * `memory` (integer/numeric): The amount of memory to allocate to a task, in MB. The default is 300 MB. Some **GRASS** modules can take advantage of more memory.
+#' * `memory` (integer/numeric): The amount of memory to allocate to a task, in GB. The default is 1024 MB (i.e., 1 GB). Some **GRASS** modules can take advantage of more memory.
 #'
 #' * `rasterPrecision` (character): The [precision][tutorial_raster_data_types] of values when applying mathematical operations to a `GRaster`. By default, this is `"double"`, which allows for precision to about the 16th decimal place. However, it can be set to `"float"`, which allows for precision to about the 7th decimal place. `float` rasters are smaller in memory and on disk. The default is `"double"`.`
 #'
@@ -46,8 +44,8 @@ faster <- function(
 
 	opts <- list(...)
 	if (length(opts) == 1L && inherits(opts[[1L]], "list")) opts <- opts[[1L]]
-	if (length(opts) == 1L && is.null(names(opts))) names(opts) <- "grassDir"
-	if (length(opts) > 1L && any(names(opts) == "")) names(opts)[names(opts) == ""] <- "grassDir"
+	# # if (length(opts) == 1L && is.null(names(opts))) names(opts) <- "grassDir"
+	# # if (length(opts) > 1L && any(names(opts) == "")) names(opts)[names(opts) == ""] <- "grassDir"
 	nd <- length(opts)
 	
 	if (default & restore) {
@@ -141,7 +139,7 @@ faster <- function(
 	}
 
 	if (any(names(opts) %in% "memory")) {
-		if (!is.numeric(opts$memory) || opts$memory <= 0) stop("Option ", sQuote("memory"), " must be a positive number. The default is ", .memoryDefault(), " (MB).")
+		if (!is.numeric(opts$memory) || opts$memory <= 0) stop("Option ", sQuote("memory"), " must be a positive number. The default is ", .memoryDefault(), " (GB).")
 	}
 
 	# if (any(names(opts) %in% "autoRegion")) {
