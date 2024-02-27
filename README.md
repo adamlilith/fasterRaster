@@ -13,9 +13,16 @@ Faster raster processing in **R** using **GRASS GIS**
  
 <img align="right" src="fasterRaster.png" height="230"/>  
 
-**fasterRaster** uses the stand-alone installer of Open Source Geospatial's <a href="https://grass.osgeo.org/rgrass/">**GRASS GIS**</a> Version 8 to speed up some commonly used raster and vector operations. Most of these operations can be done using the **terra** package by Robert Hijmans, or the **sf** package by Edzer Pebesma and Roger Bivand.  However, when large-in-memory/large-on-disk rasters and vectors can still be hard for these packages to handle. Processing them can take days, and cause **R** to crash. The **fasterRaster** package attempts to address these problems by calls to **GRASS**, which can be faster. Please note that **terra** and **sf** may be faster and thus the better solution for functions that this package implements. However, in some cases **fasterRaster** is still faster!
+**fasterRaster** is a package desiged specifically to handle large-in-memory/large-on-disk spatial rasters and vectors. **fasterRaster** does this using the stand-alone installer of Open Source Geospatial's <a href="https://grass.osgeo.org/rgrass/">**GRASS GIS**</a>
 
-**fasterRaster** makes heavy use of the <a href="https://cran.r-project.org/package=rgrass">**rgrass**</a> package by Roger Bivand and others, the <a href="https://cran.r-project.org/package=rgrass">**terra**</a> package by Robert Hijmans, the <a href="https://cran.r-project.org/package=sf">**sf**</a> package by Edzer Pebesma and others, and of course <a href="https://grass.osgeo.org/">**GRASS GIS**</a>, so is greatly indebted to all of these creators.
+**fasterRaster** was created with four design principles:
+* Value added: **fasterRaster** complements **terra** and **sf**, and is highly dependent on them! It is useful for analyzing large-in-memory/large-on-disk rasters and vectors that those packages struggle to handle. For medium- and small-size objects, **terra** and **sf** will almost always be faster.
+* Familiar: If you know how to use **terra**, you basically know how to use **fasterRaster**! That's because most of the functions have the same name and almost the same arguments as **terra** functions.
+* Comparabile: To the degree possible, outputs from **fasterRaster** are the same as those from functions in **terra** with the same name.
+* Simple: **GRASS** requires users to track things like "locations", "mapsets", and "regions" for which there is no comparable analog in the **terra** or **sf** packages. **fasterRaster** handles these behind the scenes so you don't need to.
+* All of the above: The **rgrass** package provides a conduit through which you can run **GRASS** modules from **R**. As such, it provides much more flexibility than **fasterRaster**. However, to use **rgrass**, you need to know what **GRASS** modules you need and be familiar with **GRASS** syntax. **fasterRaster** obviates this step but uses **rgrass** as a backend, allowing you to focus on **R** syntax and look up help for functions the normal way you do in **R**. You don't need to know **GRASS**!
+
+**fasterRaster** makes heavy use of the <a href="https://cran.r-project.org/package=rgrass">**rgrass**</a> package by Roger Bivand and others, the <a href="https://cran.r-project.org/package=rgrass">**terra**</a> package by Robert Hijmans, the <a href="https://cran.r-project.org/package=sf">**sf**</a> package by Edzer Pebesma Roger Bivand, and of course <a href="https://grass.osgeo.org/">**GRASS GIS**</a>, so is greatly indebted to all of these creators!
 
 # Getting started
 
