@@ -144,6 +144,7 @@ methods::setMethod(
 
 	compareGeom(x, y)
 	.locationRestore(x)
+	.region(x)
 	
 	# rasterize
  	gtype <- geomtype(y, grass = TRUE)
