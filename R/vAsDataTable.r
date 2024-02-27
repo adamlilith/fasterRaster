@@ -39,7 +39,8 @@
 			flags = "overwrite",
 			intern = TRUE
 		)
-		out <- data.table::fread(tf)
+		out <- read.csv(tf)
+		out <- data.table::as.data.table(out)
 	
 	}
 
