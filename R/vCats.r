@@ -29,7 +29,14 @@
 	layer <- as.character(layer)
 
 	if (db) {
-		out <- .vAsDataTable(src)[["frid"]]
+		dbase <- .vAsDataTable(src)
+		if (any(names(dbase) == "frid")) {
+			out <- dbase[["frid"]]
+		} else if (any(names(dbase) == "cat")) {
+			out <- dbase[["cat"]]
+		} else {
+			out <- NULL
+		}
 	} else {
 
 		suppressMessages(out <- rgrass::execGRASS(
