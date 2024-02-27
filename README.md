@@ -51,6 +51,7 @@ madRivers <- fastData('madRivers') # sp vector with rivers
 plot(madElev)
 plot(st_geometry(madRivers), col = "blue", add = TRUE)
 ```
+<img src="elev_rivers.png"/>  
 
 Before you use nearly any **fasterRaster** function, you need to tell **fasterRaster** where **GRASS** is installed on your system. The installation folder will vary by operating system and maybe **GRASS** version, but will look something like this:  
 
@@ -112,7 +113,7 @@ Note, though, that the output from **fasterRaster** is not necessarily guarantee
 river_buffers <- buffer(rivers, width = 1000)
 ```
 
-Finally, let's calculate the distances between the buffered areas and all cells on the raster map using `distance()`.
+Now, let's calculate the distances between the buffered areas and all cells on the raster map using `distance()`.
 ```
 dist_to_rivers_meters <- distance(elev, buffs)
 ```
@@ -123,6 +124,8 @@ plot(dist_to_rivers_meters)
 plot(river_buffers, add = TRUE)
 plot(rivers, col = "blue", add = TRUE)
 ```
+
+<img src="dist_to_rivers.png"/>  
 
 And that's how it's done!  You can do almost anything in **fasterRaster**  you can do with **terra**. The examples above do not show the advantage of **fasterRaster** because the they do not use in large-in-memory/large-on-disk spatial datasets. For very large datasets, **fasterRaster** can be much faster! For example, for a large raster (many cells), the `distance()` function in **terra** can take many days to run and even crash **R**, whereas in **fasterRaster**, it could take just a few minutes or hours.
 
@@ -139,17 +142,19 @@ terraRivers <- vect(rivers)
 sfRivers <- st_as_sf(rivers)
 ```
 
-Finally, you can use `writeRaster()` and `writeVector()` to save **fasterRaster** rasters and vectors directly to disk. This will always be faster than using `rast()`, `vect()`, or `st_as_sf()` and then saving.
+You can use `writeRaster()` and `writeVector()` to save **fasterRaster** rasters and vectors directly to disk. This will always be faster than using `rast()`, `vect()`, or `st_as_sf()` and then saving.
 ```
-elevTempFile <- tempfile(fileext = ".tif") # save as GeoTIFF
-writeRaster(elev, elevTempFile)
+elev_temp_file <- tempfile(fileext = ".tif") # save as GeoTIFF
+writeRaster(elev, elev_temp_file)
 
-vectTempFile <- tempfile(fileext = ".shp") # save as shapefile
-writeRaster(rivers, vectTempFile)
+vect_temp_shp <- tempfile(fileext = ".shp") # save as shapefile
+vect_temp_gpkg <- tempfile(fileext = ".gpkg") # save as GeoPackage
+writeRaster(rivers, vect_temp_shp)
+writeRaster(rivers, vect_temp_gpkg)
 ```
 
 # Functions
-To see a detailed list of functions available in **fasterRaster**, attach the package and use `?fasterRaster`.
+To see a detailed list of functions available in **fasterRaster**, attach the package and use `?fasterRaster`. Note the additional tutorials linked from there!
 
 # Tips for masking **fasterRaster** faster
 
