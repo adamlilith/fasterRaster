@@ -60,6 +60,7 @@ methods::setMethod(
 			do.call(rgrass::execGRASS, args = args)
 			out <- .makeGRaster(src, "layer")
 
+		# each geometry burned to a different raster
 		} else {
 			
 			ng <- ngeom(x)
