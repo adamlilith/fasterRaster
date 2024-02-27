@@ -6,18 +6,18 @@
 #'
 #' @param method Character: Method used to clean line segments. Partial matching is used, and case does not matter:
 #'
-#' * `duplicated`: Remove duplicated features and area centroids.
+#' * `duplicated`: Remove duplicated features and area centroids. 
 #' * `break`: Break lines at intersections and lines that form closed loops (e.g., 0, 1, 0).
-#' * `removeDangles`: Remove "dangling" lines if shorter than `tolerance` distance. If `tolerance` is <0, all dangles will be removed.
-#' * `changeDangles`: Change "dangles" to lines if is shorter than `tolerance` distance. If `tolerance` is <0, all dangles will be changed to lines.
-#' * `removeBridges`: Remove "bridges" to "islands" (which are topologically incorrect) within geometries.
-#' * `changeBridges`: Change "bridges" to "islands" (which are topologically incorrect) within geometries to lines.
-#' * `snap`: Snap lines to vertex if they are less than `tolerance` apart. Subsequent removal of dangles may be needed.
-#' * `dupAreaCentroids`: Remove duplicated area centroids. In **GRASS**, closed polygons have their attributes mapped to a (hidden) centroid of the polygon.
-#' * `topoClean`: Break topologically clean areas. This is similar to `break`, except that it does not break loops. Topologically clean vectors may occur if the vector was imported from a format that does not enforce topology, such as a shapefile. Duplicate geometries are automatically removed after breaking.
-#' * `smallAreas`: Remove polygons smaller than `minArea`.
-#' * `remove0`: Remove all boundaries and lines with a length of 0.
-#' * `smallAngles`: Collapse lines that diverge at an angle that is computationally equivalent to 0.
+#' * `removeDangles`: Remove "dangling" lines if shorter than `tolerance` distance. If `tolerance` is <0, all dangles will be removed. Units of `tolerance` are in map units, or in degrees for unprojected CRSs. If `tolerance` <0, all dangles are removed, and the function will retain only closed loops and lines connecting loops. Dangles will be removed from longest to shortest.
+#' * `changeDangles`: Change "dangles" hanging off boundaries to lines if shorter than `tolerance` distance. If `tolerance` is <0, all dangles will be changed to lines.  Units of `tolerance` are in map units, or in degrees for unprojected CRSs. If `tolerance` <0, all dangles are removed, and the function will retain only closed loops and lines connecting loops. Dangles will be removed from longest to shortest.
+#' * `removeBridges`: Remove "bridges" to "islands" (which are topologically incorrect) within geometries. Argument `tolerance` is ignored.
+#' * `changeBridges`: Change "bridges" to "islands" (which are topologically incorrect) within geometries to lines. Argument `tolerance` is ignored.
+#' * `snap`: Snap lines to vertex if they are less than `tolerance` apart. Subsequent removal of dangles may be needed. Units of `tolerance` are map units, or degrees for unprojected CRSs.
+#' * `dupAreaCentroids`: Remove duplicated area centroids. In **GRASS**, closed polygons have their attributes mapped to a (hidden) centroid of the polygon. The `tolerance` argument is ignored.
+#' * `topoClean`: Break topologically clean areas. This is similar to `break`, except that it does not break loops. Topologically clean vectors may occur if the vector was imported from a format that does not enforce topology, such as a shapefile. Duplicate geometries are automatically removed after breaking. Argument `tolerance` is ignored.
+#' * `smallAreas`: Remove polygons smaller than `minArea`. Units of `tolerance` are in square meters (regardless of the CRS).
+#' * `remove0`: Remove all boundaries and lines with a length of 0. Argument `tolerance` is ignored.
+#' * `smallAngles`: Collapse lines that diverge at an angle that is computationally equivalent to 0. This tool often needs to be followed with the `break` and `duplicated` methods.
 #'
 #' @param tolerance Numeric or `NULL` (default): Minimum distance in map units (degrees for unprojected, usually meters for projected) or minimum area (for `smallAreas` in meters-squared, regardless of projection). If `NULL`, then 2% of the minimum of the x-, y-, and z-extent will be used, or this same value but assumed to be in meters-squared (for `smallAreas`).
 #'
