@@ -52,10 +52,10 @@ plot(madElev)
 plot(st_geometry(madRivers), col = "blue", add = TRUE)
 ```
 
-To initiate a **GRASS** session in **R**, you must tell **fasterRaster** where **GRASS** is installed on your system. The installation folder will vary by operating system and maybe **GRASS** version, but will look something like this:  
+Before you use nearly any **fasterRaster** function, you need to tell **fasterRaster** where **GRASS** is installed on your system. The installation folder will vary by operating system and maybe **GRASS** version, but will look something like this:  
 
 ```
-grassDir <- "C:/Program Files/GRASS GIS 8.2" # Windows
+grassDir <- "C:/Program Files/GRASS GIS 8.3" # Windows
 grassDir <- "/Applications/GRASS-8.2.app/Contents/Resources" # Mac OS
 grassDir <- "/usr/local/grass" # Linux
 ```
@@ -65,16 +65,40 @@ Now, use the `faster()` function to tell **fasterRaster** where **GRASS** is ins
 faster(grassDir = grassDir)
 ```
 
-We will now convert the raster from a `SpatRaster` to a `GRaster`, which is **fasterRaster**'s representation of a raster. This is done using the `fast()` function.
+The `fast()` function is the key function for loading a raster or vector into **fasterRaster** format. Rasters in this package are called `GRaster`s and vectors `GVector`s (the "G" stands for **GRASS**). We will now convert the `madElev` raster, which is a `SpatRaster` from the **terra** package, into a `GRaster`.
 ```
 elev <- fast(madElev)
 elev
+
+class       : GRaster
+topology    : 2D 
+dimensions  : 1024, 626, NA, 1 (nrow, ncol, ndepth, nlyr)
+resolution  : 59.85157, 59.85157, NA (x, y, z)
+extent      : 731581.552, 769048.635, 1024437.272, 1085725.279 (xmin, xmax, ymin, ymax)
+coord ref.  : Tananarive (Paris) / Laborde Grid 
+name(s)     : madElev 
+datatype    : integer 
+min. value  :       1 
+max. value  :     570
 ```
 
 Next, we'll do the same for the rivers vector. In this case, the vector is an `sf` object from the **sf** package, but we could also use a `SpatVector` from the **terra** package.
 ```
 rivers <- fast(madRivers)
 rivers
+
+class       : GVector
+geometry    : 2D lines 
+dimensions  : 11, 11, 5 (geometries, sub-geometries, columns)
+extent      : 731627.1, 762990.132, 1024541.235, 1085580.454 (xmin, xmax, ymin, ymax)
+coord ref.  : Tananarive (Paris) / Laborde Grid 
+names       :   F_CODE_DES          HYC_DESCRI      NAM   ISO     NAME_0 
+type        :        <chr>               <chr>    <chr> <chr>      <chr> 
+values      : River/Stream Perennial/Permanent MANANARA   MDG Madagascar 
+              River/Stream Perennial/Permanent MANANARA   MDG Madagascar 
+              River/Stream Perennial/Permanent      UNK   MDG Madagascar 
+             ...and  8  more rows
+
 ```
 
 Now, let's add a 1000-m buffer to the rivers using `buffer()`. As much as possible, **fasterRaster** functions have the same names and same arguments as their counterparts in the **terra** package to help users who are familiar with that package.
@@ -82,7 +106,7 @@ Now, let's add a 1000-m buffer to the rivers using `buffer()`. As much as possib
 Note, though, that the output from **fasterRaster** is not necessarily guaranteed to be the same as output from the respective functions **terra**. This is because there are different methods to do the same thing, and the developers of **GRASS** may have chosen different methods than the developers of other GIS packages.
 ```
 # width in meters because CRS is projected
-buffs <- buffer(madRivers, width = 1000)
+buffs <- buffer(rivers, width = 1000)
 ```
 
 Finally, let's calculate the distances between the buffered areas and all cells on the raster map using `distance()`.
@@ -134,18 +158,16 @@ To see a detailed list of functions available in **fasterRaster**, attach the pa
 
 4. By default, **GRASS**/**fasterRaster** use 2 cores and 1024 MB (1 GB) of memory for functions that allow users to specify these values. You can set these to higher values using `faster()` and thus potentially speed up some calculations. Functions in newer versions of **GRASS** have more capacity to use these options, so updating **GRASS** to the latest version can help, too.
 
-## Versioning
+# Versioning
 
 The latest stable version of **fasterRaster** will mirror the version of **GRASS** for which it was built and tested. For example, **fasterRaster** version 8.3 will work using **GRASS** 8.3 (and any earlier versions starting from 8.0). **fasterRaster** will also have a minor and subminor version. For example, if the **fasterRaster** version is 8.3.2.7, then the "2" refers to changes that potentially break older code developed with a prior version, and the "7" refers to a bug fix or feature update (i.e., usually a new function or added functionality to an existing one). 
 
-## Further reading
+# Further reading
 
 * Robert Hijman's [**terra**](https://cran.r-project.org/package=terra) package and Edzer Pebesma's [**sf**](https://cran.r-project.org/package=sf) package are good places to start if you are not familiar with doing GIS in **R**.
 * The [GRASS GIS](https://grass.osgeo.org/) website is authoritative and contains the manual on all the **GRASS** functions used in this package and more.
 * The Wiki on [how to run **GRASS** in **R** or **R** in **GRASS**](https://grasswiki.osgeo.org/wiki/R_statistics/rgrass) is a good place to start if you want to become a power-user of **GRASS** in **R**.
 * Roger Bivand's [**rgrass**](https://cran.r-project.org/package=rgrass) package allows users to call any **GRASS** function with all of its functionality, which in some cases is far beyond what is allowed by **fasterRaster**.
-
-
 
 # Citation
 A publication is in the works(!), but as of February 2024, there is not as of yet a package-specific citation for **fasterRaster**. However, the package was first used in:
