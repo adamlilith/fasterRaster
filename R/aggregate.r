@@ -1,8 +1,8 @@
-#' Aggregate values of raster cells into larger cells
+#' Aggregate raster cells into larger cells or combine geometries of a vector
 #'
 #' @description When applied to a `GRaster`, `aggregate()` creates a new raster with cells that are a multiple of the size of the cells of the original raster. The new cells can be larger or smaller than the original cells (this function thus emulates both the `terra::aggregate()` and [terra::disagg()] functions in **terra**.)
 #' 
-#' When applied to a `GVector`, `aggregate()` all geometries are combined into a "multipart" geometry, in which geometries are treated as if they were a single unit. If the `GVector` has a data table associated with it, the output will also have a data table as long as there is at least one column with values that are all the same. Values of columns that do not have duplicated values will be converted to `NA`.
+#' When applied to a `GVector`, all geometries are combined into a "multipart" geometry, in which geometries are treated as if they were a single unit. Borders between aggregated geometries can be dissolved if the `dissolve` argument is `TRUE`. If the `GVector` has a data table associated with it, the output will also have a data table as long as there is at least one column with values that are all the same. Values of columns that do not have duplicated values will be converted to `NA`.
 #'
 #' @param x A `GRaster` or `GVector`.
 #'
@@ -34,7 +34,7 @@
 #' 
 #' @returns A `GRaster` or `GVector`.
 #' 
-#' @seealso [stats::aggregate()], [terra::aggregate()], [terra::disagg()]
+#' @seealso [stats::aggregate()], [terra::aggregate()], [diagg()], [terra::disagg()]
 #'
 #' @example man/examples/ex_aggregate_disagg.r
 #'
