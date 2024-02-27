@@ -10,7 +10,7 @@
 
 .coresDefault <- function() 2
 .verboseDefault <- function() FALSE
-.memoryDefault <- function() 300 # in MB
+.memoryDefault <- function() 1024 # in MB
 .rasterPrecisionDefault <- function() "double" # "FCELL"/"float", or "DCELL"/"double"
 .useDataTableDefault <- function() TRUE # logical
 
