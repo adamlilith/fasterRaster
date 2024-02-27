@@ -69,7 +69,9 @@ The `fast()` function is the key function for loading a raster or vector into **
 ```
 elev <- fast(madElev)
 elev
-
+```
+You should see some metadata on the `GRaster`:
+```
 class       : GRaster
 topology    : 2D 
 dimensions  : 1024, 626, NA, 1 (nrow, ncol, ndepth, nlyr)
@@ -86,7 +88,8 @@ Next, we'll do the same for the rivers vector. In this case, the vector is an `s
 ```
 rivers <- fast(madRivers)
 rivers
-
+```
+```
 class       : GVector
 geometry    : 2D lines 
 dimensions  : 11, 11, 5 (geometries, sub-geometries, columns)
@@ -106,18 +109,18 @@ Now, let's add a 1000-m buffer to the rivers using `buffer()`. As much as possib
 Note, though, that the output from **fasterRaster** is not necessarily guaranteed to be the same as output from the respective functions **terra**. This is because there are different methods to do the same thing, and the developers of **GRASS** may have chosen different methods than the developers of other GIS packages.
 ```
 # width in meters because CRS is projected
-buffs <- buffer(rivers, width = 1000)
+river_buffers <- buffer(rivers, width = 1000)
 ```
 
 Finally, let's calculate the distances between the buffered areas and all cells on the raster map using `distance()`.
 ```
-dists <- distance(elev, buffs)
+dist_to_rivers_meters <- distance(elev, buffs)
 ```
 
 Finally, let's plot the output.
 ```
-plot(dists)
-plot(buffs, add = TRUE)
+plot(dist_to_rivers_meters)
+plot(river_buffers, add = TRUE)
 plot(rivers, col = "blue", add = TRUE)
 ```
 
@@ -154,9 +157,11 @@ To see a detailed list of functions available in **fasterRaster**, attach the pa
 
 2. Similarly, saving `GRaster`s and `GVector`s directly to disk will always be faster than converting them to `SpatRaster`s, `SpatVector`s, or `sf` vectors using `rast()`, `vect()`, or `st_as_sf()`, then saving them. Why? Because these functions actually save the file to disk then uses the respective function from the respective package to connect to the file.
 
-3. Every time you switch between using a `GRaster` or `GVector` with a different coordinate reference system (CRS), **GRASS** has to spend a few second changing to that CRS. So, you can save some time by doing as much work as possible with objects in one CRS, then switching to work on objects in another CRS.
+3. When you use `writeRaster()`, set the `datatype` argument appropriately. Otherwise, it will be optimized automatically, and this can take a long time.
 
-4. By default, **GRASS**/**fasterRaster** use 2 cores and 1024 MB (1 GB) of memory for functions that allow users to specify these values. You can set these to higher values using `faster()` and thus potentially speed up some calculations. Functions in newer versions of **GRASS** have more capacity to use these options, so updating **GRASS** to the latest version can help, too.
+4. Every time you switch between using a `GRaster` or `GVector` with a different coordinate reference system (CRS), **GRASS** has to spend a few second changing to that CRS. So, you can save some time by doing as much work as possible with objects in one CRS, then switching to work on objects in another CRS.
+
+5. By default, **fasterRaster** use 2 cores and 1024 MB (1 GB) of memory for **GRASS** modules that allow users to specify these values. You can set these to higher values using `faster()` and thus potentially speed up some calculations. Functions in newer versions of **GRASS** have more capacity to use these options, so updating **GRASS** to the latest version can help, too.
 
 # Versioning
 
