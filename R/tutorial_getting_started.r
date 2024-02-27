@@ -117,7 +117,7 @@
 #'
 #' 3. Every time you switch between using a `GRaster` or `GVector` with a different coordinate reference system (CRS), **GRASS** has to spend a few second changing to that CRS. So, you can save some time by doing as much work as possible with objects in one CRS, then switching to work on objects in another CRS.
 #'
-#' 4. By default, **GRASS**/**fasterRaster** use 2 cores and 300 MB of memory for functions that allow users to specify these values. You can set these to higher values using [faster()] and thus potentially speed up some calculations. Functions in newer versions of **GRASS** have more capacity to use these options, so updating **GRASS** to the latest version can help, too.
+#' 4. By default, **GRASS**/**fasterRaster** use 2 cores and 1024 MB (1 GB) of memory for functions that allow users to specify these values. You can set these to higher values using [faster()] and thus potentially speed up some calculations. Functions in newer versions of **GRASS** have more capacity to use these options, so updating **GRASS** to the latest version can help, too.
 #'
 #' ## Further reading
 #' 
