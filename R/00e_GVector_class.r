@@ -47,7 +47,9 @@ methods::setValidity("GVector",
 #'
 #' @param table A `data.table`, `data.frame`, or character. This can be `data.table(NULL)` or `data.frame(NULL)` if there is no table associated with the vector. If a character, this is interpreted as the name of the table in **GRASS**.
 #'
-#' @param cats Either `NULL` (default) or an integer vector: Used to pass `cats` to `.vAttachDatabase()` so it does not need to spend time calling `.vCats()` again.
+#' @param build Logical: If `TRUE` (default), build topology using **GRASS** module `v.build`.
+#'
+#' @param extensive Logical: If `TRUE`, do extensive topological checks using `v.build`. The default is `FALSE`.
 #'
 #' @returns A `GVector`.
 #'
@@ -56,7 +58,7 @@ methods::setValidity("GVector",
 #' @example man/examples/ex_GRaster_GVector.r
 #'
 #' @noRd
-.makeGVector <- function(src, table = NULL) {
+.makeGVector <- function(src, table = NULL, build = TRUE, extensive = FALSE) {
 
 	if (inherits(table, "GVector")) table <- src@table
 	if (is.null(table)) table <- data.table::data.table(NULL)
@@ -82,6 +84,20 @@ methods::setValidity("GVector",
 	nSubgeoms <- length(cats)
 
 	info <- .vectInfo(src)
+
+	# build topology
+	if (build) {
+
+		args <- list(
+			cmd = "v.build",
+			map = src,
+			option = "build",
+			flags = c(.quiet(), "overwrite")
+		)
+		if (extensive) args$flags <- c(args$flags, "e")
+		do.call(rgrass::execGRASS, args = args)
+
+	}
 	
 	methods::new(
 		"GVector",
