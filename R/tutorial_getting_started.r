@@ -32,7 +32,7 @@
 #' To begin, you need to tell **fasterRaster** the full file path of the folder where **GRASS** is installed on your system. Where this is well depend on your operating system and the version of **GRASS** installed.  Three examples below show you what this might look like, but you may need to change the file path to match your case:
 #'
 #' ```
-#' grassDir <- "C:/Program Files/GRASS GIS 8.4" # Windows
+#' grassDir <- "C:/Program Files/GRASS GIS 8.3" # Windows
 #' grassDir <- "/Applications/GRASS-8.3.app/Contents/Resources" # Mac OS
 #' grassDir <- "/usr/local/grass" # Linux
 #' ```
