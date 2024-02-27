@@ -94,6 +94,7 @@ The assign operators, \code{\link[fasterRaster]{$<-}}, \code{\link[fasterRaster]
 \code{\link[=fillNAs]{fillNAs()}}: Fill \code{NA} cells\cr
 \code{\link[=focal]{focal()}}: Calculate cell values based on values of nearby cells\cr
 \code{\link[=fractalRast]{fractalRast()}}: Create a fractal \code{GRaster}\cr
+\code{\link[=fragmentation]{fragmentation()}}: Landscape fragmentation class from Riitters et al. (2020)\cr
 \code{\link[=global]{global()}}: Summary statistics across cells of each \code{GRaster} layer\cr
 \code{\link[=shade]{hillshade()}}: Create a hillshade \code{GRaster}\cr
 \code{\link[=hist]{hist()}}: Histogram of \code{GRaster} values\cr
@@ -192,6 +193,7 @@ The \code{\link[fasterRaster]{$<-}} operator can be used to replace specific col
 \code{\link[=as.data.table]{as.data.table()}}: Convert a \code{GVector}'s attribute table to a \code{data.table}\cr
 \code{\link[=as.points]{as.points()}}: Extract vertex coordinates from a "lines" or "polygons" \code{GVector}\cr
 \code{\link[=buffer]{buffer()}}: Create a polygon around/inside a \code{GVector}\cr
+\code{\link[=c]{c()}}: Combine two or more \code{GVector}s\cr
 \code{\link[=cleanGeom]{cleanGeom()}}: Fix undesirable geometries of a \code{GVector}\cr
 \code{\link[=clusterPoints]{clusterPoints()}}: Identify clusters of points\cr
 \code{\link[=colbind]{colbind()}}: Add columns to the data table of a \code{GVector}\cr
@@ -203,7 +205,8 @@ The \code{\link[fasterRaster]{$<-}} operator can be used to replace specific col
 \code{\link[=delaunay]{delaunay()}}: Delaunay triangulation\cr
 \code{\link[=disagg]{disagg()}}: Separate multipart geometries into singlepart geometries\cr
 \code{\link[=distance]{distance()}}: Distance between geometries in two \code{GVector}, or from a \code{GVector} to cells of a \code{GRaster}\cr
-\code{\link[=erase]{erase()}} or \code{-}: Remove part of a \code{GVector} that overlaps with another\cr
+\code{\link[=dropTable]{dropTable()}}: Remove the data table from a \code{GVector}\cr
+\code{\link[=erase]{erase()}} or \code{\link[fasterRaster]{-}}: Remove part of a \code{GVector} that overlaps with another\cr
 \code{\link[=expanse]{expanse()}}: Area of polygons or length of lines\cr
 \code{\link[=extract]{extract()}}: Extract values from a \code{GVector} at specific points\cr
 \code{\link[=fillHoles]{fillHoles()}}: Fill holes in a \code{GVector} (requires 8.4+)\cr
@@ -212,7 +215,7 @@ The \code{\link[fasterRaster]{$<-}} operator can be used to replace specific col
 \code{\link[=hexagons]{hexagons()}}: Create a hexagonal grid\cr
 \code{\link[=interpIDW]{interpIDW()}}: Interpolate values at points to a \code{GRaster}\cr
 \code{\link[=interpSplines]{interpSplines()}}: Interpolate values at points to a \code{GRaster}\cr
-\code{\link[=intersect]{intersect()}} or \code{*}: Intersection of two \code{GVectors}.\cr
+\code{\link[=intersect]{intersect()}} or \code{\link[fasterRaster]{*}}: Intersection of two \code{GVectors}.\cr
 \code{\link[=kernel]{kernel()}}: Kernel density estimator of points.\cr
 \code{\link[=missing.cases]{missing.cases()}}: Find rows of a \code{GVector}'s data table that have at least \code{NA} in them\cr
 \code{\link[=project]{project()}}: Change coordinate reference system\cr
@@ -223,8 +226,8 @@ The \code{\link[fasterRaster]{$<-}} operator can be used to replace specific col
 \code{\link[=st_buffer]{st_buffer()}}: Create a polygon around/inside a \code{GVector}\cr
 \code{\link[=tail]{tail()}}: Last rows of a \code{GVector}'s data table\cr
 \code{\link[=thinPoints]{thinPoints()}}: Reduce number of points in same raster cell\cr
-\code{\link[=union]{union()}} or \code{+}: Combine two \code{GVector}s\cr
-\code{\link[=xor]{xor()}} or \code{/}: Select parts of polygons not shared by two \code{GVector}s\cr
+\code{\link[=union]{union()}} or \code{\link[fasterRaster]{+}}: Combine two \code{GVector}s\cr
+\code{\link[=xor]{xor()}} or \code{\link[fasterRaster]{/}}: Select parts of polygons not shared by two \code{GVector}s\cr
 }
 
 \subsection{Converting between data types}{
@@ -280,6 +283,8 @@ Tutorial on \strong{GRASS} \link[=tutorial_locations_mapsets]{"locations" and ma
 \code{.copyGSpatial()}: Make a copy of the \strong{GRASS} file pointed to by a \code{GRaster} or \code{GVector}\cr
 \code{.fileExt()}: Get file extension\cr
 \code{.exists()}: Does the \strong{GRASS} file of a \code{GRaster} or \code{GVector} exist?\cr
+\code{.ext()}: Extent from the \code{\link[=sources]{sources()}} name of a \code{GRaster} or \code{GVector}\cr
+\code{.geomtype()}: Geometry type ("point", "line", or "area") from the \code{\link[=sources]{sources()}} name of a \code{GVector}\cr
 \code{.layerIndex()}: Gets the index of \code{GRaster} layers from a numeric, integer, character, or logical vector\cr
 \code{.locationCreate()} Make a connection to \strong{GRASS} (i.e., start \strong{GRASS} from within \strong{R}) and create a location\cr
 \code{.locationDelete()} Deletes all files associated with a \strong{GRASS} "location" and mapset\cr
@@ -309,6 +314,7 @@ Tutorial on \strong{GRASS} \link[=tutorial_locations_mapsets]{"locations" and ma
 \code{.vIncrementCats()}: Increment category values of a \code{GVector}\cr
 \code{.vNames()}: "\strong{GRASS}" vector attribute table column names\cr
 \code{.vRecat()}: Change \strong{GRASS} category indices of a \strong{GRASS} vector\cr
+\code{.vValidCats()}: Are category values of a vector valid?\cr
 \code{grassStarted()}: Has a connection \strong{GRASS} been made within the current \strong{R} session?\cr
 }
 }

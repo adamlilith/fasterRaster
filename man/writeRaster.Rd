@@ -61,6 +61,8 @@ A \code{SpatRaster} (invisibly). A raster is also saved to disk.
 This function saves a \code{GRaster} to disk directly from a \strong{GRASS} session. It is faster than using \code{\link[=rast]{rast()}}, then saving the output of that to disk (because \code{rast()} actually save the raster to disk, anyway).
 
 The function will attempt to ascertain the file type to be ascertained from the file extension, but you can specify the format using the \code{format} argument (see entry for \code{...}). You can see a list of supported formats by simply using this function with no arguments, as in \code{writeRaster()}, or by consulting the online help page for the \strong{GRASS} module \href{https://grass.osgeo.org/grass84/manuals/r.out.gdal.html}{\code{r.out.gdal}}. Only the \code{GeoTIFF} file format is guaranteed to work for multi-layered rasters.
+
+The function will attempt to optimize the \code{datatype} argument, but this can take a long time. You can speed this up by setting \code{datatype} manually. Note that if you are saving a "stack" of \code{GRaster}s with different \code{datatype}s, the one with the highest information density will be used (e.g., low-bit integer < high-bit integer < floating-point < double-floating point). This can make rasters with lower datatypes much larger on disk. In these cases, it make be best to save rasters with similar \code{datatype}s together.
 }
 \examples{
 if (grassStarted()) {

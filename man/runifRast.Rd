@@ -20,7 +20,7 @@
 A \code{GRaster}.
 }
 \description{
-'runifRast()' creates a raster with values drawn from a uniform (flat) distribution.
+\code{runifRast()} creates a raster with values drawn from a uniform (flat) distribution.
 }
 \examples{
 if (grassStarted()) {

@@ -42,7 +42,7 @@
 A \code{data.frame} or \code{data.table}.
 }
 \description{
-Function \code{zonal()} calculates statistics (mean, sum, etc.) on cells of a raster by "zones" created by cells of another or vector.
+Function \code{zonal()} calculates statistics (mean, sum, etc.) on cells of a \code{GRaster} by "zones" created by cells of another \code{GRaster} or \code{GVector}.
 }
 \examples{
 if (grassStarted()) {

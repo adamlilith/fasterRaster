@@ -37,7 +37,7 @@ library(fasterRaster)
 
 To begin, you need to tell \strong{fasterRaster} the full file path of the folder where \strong{GRASS} is installed on your system. Where this is well depend on your operating system and the version of \strong{GRASS} installed.  Three examples below show you what this might look like, but you may need to change the file path to match your case:
 
-\if{html}{\out{<div class="sourceCode">}}\preformatted{grassDir <- "C:/Program Files/GRASS GIS 8.4" # Windows
+\if{html}{\out{<div class="sourceCode">}}\preformatted{grassDir <- "C:/Program Files/GRASS GIS 8.3" # Windows
 grassDir <- "/Applications/GRASS-8.3.app/Contents/Resources" # Mac OS
 grassDir <- "/usr/local/grass" # Linux
 }\if{html}{\out{</div>}}
@@ -124,7 +124,7 @@ writeRaster(rivers, vectTempFile)
 \item Loading rasters and vectors directly from disk using \code{\link[=fast]{fast()}}, rather than converting \strong{terra} or \strong{sf} objects is faster. Why? Because if the object does not have a file to which the \strong{R} object points, \code{fast()} has to save it to disk first as a GeoTIFF or GeoPackage file, then load it into \strong{GRASS}.
 \item Similarly, saving \code{GRaster}s and \code{GVector}s directly to disk will always be faster than converting them to \code{SpatRaster}s, \code{SpatVector}s, or \code{sf} vectors using \code{\link[=rast]{rast()}}, \code{\link[=vect]{vect()}}, or \code{\link[=st_as_sf]{st_as_sf()}}, then saving them. Why? Because these functions actually save the file to disk then uses the respective function from the respective package to connect to the file.
 \item Every time you switch between using a \code{GRaster} or \code{GVector} with a different coordinate reference system (CRS), \strong{GRASS} has to spend a few second changing to that CRS. So, you can save some time by doing as much work as possible with objects in one CRS, then switching to work on objects in another CRS.
-\item By default, \strong{GRASS}/\strong{fasterRaster} use 2 cores and 300 MB of memory for functions that allow users to specify these values. You can set these to higher values using \code{\link[=faster]{faster()}} and thus potentially speed up some calculations. Functions in newer versions of \strong{GRASS} have more capacity to use these options, so updating \strong{GRASS} to the latest version can help, too.
+\item By default, \strong{GRASS}/\strong{fasterRaster} use 2 cores and 1024 MB (1 GB) of memory for functions that allow users to specify these values. You can set these to higher values using \code{\link[=faster]{faster()}} and thus potentially speed up some calculations. Functions in newer versions of \strong{GRASS} have more capacity to use these options, so updating \strong{GRASS} to the latest version can help, too.
 }
 }
 

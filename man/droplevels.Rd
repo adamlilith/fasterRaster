@@ -142,5 +142,5 @@ levels(combinedNA)
 }
 }
 \seealso{
-\code{\link[terra:factors]{terra::droplevels()}}, \link[=tutorial_raster_data_types]{categorical rasters} in \strong{fasterRaster}
+\code{\link[=missingCats]{missingCats()}}, \code{\link[=missing.cases]{missing.cases()}}, \code{\link[terra:factors]{terra::droplevels()}}, \link[=tutorial_raster_data_types]{categorical rasters} in \strong{fasterRaster}
 }

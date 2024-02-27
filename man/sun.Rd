@@ -80,7 +80,7 @@ A raster or raster stack stack with the same extent, resolution, and coordinate 
 }
 }
 \description{
-The \code{sun()} function calculates beam (direct), diffuse and ground reflected solar irradiation for a given day and set of topographic and atmospheric conditions. The function relies on the \strong{GRASS} module \verb{[r.sun](https://grass.osgeo.org/grass84/manuals/r.sun.html)}, which contains a detailed explanation.
+The \code{sun()} function calculates beam (direct), diffuse and ground reflected solar irradiation for a given day and set of topographic and atmospheric conditions. The function relies on the \strong{GRASS} module \verb{(r.sun)[https://grass.osgeo.org/grass84/manuals/r.sun.html]}, which contains a detailed explanation.
 }
 \examples{
 if (grassStarted()) {

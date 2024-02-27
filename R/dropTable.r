@@ -9,7 +9,7 @@
 #' @example man/examples/ex_GRaster_GVector.r
 #'
 #' @aliases dropTable
-#' @rdName dropTable
+#' @rdname dropTable
 #' @exportMethod dropTable
 methods::setMethod(
 	f = "dropTable",

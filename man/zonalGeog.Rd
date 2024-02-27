@@ -31,8 +31,8 @@ This function calculates geographic statistics for each set of cells in an \link
 \item Area
 \item Perimeter length
 \item "Compact square" statistic: \eqn{4 \sqrt(area) / perimeter)}
-\item "Compact circle" statistic: \eqn{4 * P / ( 2 \sqrt(\pi * A))} where \code{P} is the perimeter length and \code{A} the area.
-\item fractal dimension: \eqn{2 ( log(P) / log(A + 0.001))} where \code{P} is perimeter length and \code{A} is area.
+\item "Compact circle" statistic: \eqn{4 * P / ( 2 \sqrt(\pi * A))} where \emph{P} is the perimeter length and \emph{A} the area.
+\item fractal dimension: \eqn{2 ( log(P) / log(A + 0.001))} where \emph{P} is perimeter length and \emph{A} is area.
 \item The average x- and y-coordinates of each zone.
 }
 }

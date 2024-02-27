@@ -17,9 +17,9 @@
 )
 }
 \arguments{
-\item{x}{A \code{GRaster}. The output will have the same extent and dimensions as this raster.}
+\item{x}{A \code{GRaster}: The output will have the same extent and dimensions as this raster.}
 
-\item{n}{A numeric integer: Number of rasters to generate.}
+\item{n}{An integer: Number of rasters to generate.}
 
 \item{mu, sigma}{Numeric: Mean and sample standard deviation of output. If creating more than one raster, you can provide one value per raster. If there are fewer, they will be recycled.}
 
@@ -35,7 +35,7 @@
 A \code{GRaster}.
 }
 \description{
-'spDepRast()' creates a raster with random values in cells. Across the raster, values are approximately normally distributed, though a raster with a "true" normal distribution can be made with \code{\link[=rnormRast]{rnormRast()}}. Spatial dependence can be introduced, though all together the values will still be approximately normally distributed.
+\code{spDepRast()} creates a raster with random values in cells. Across the raster, values are approximately normally distributed, though a raster with a "true" normal distribution can be made with \code{\link[=rnormRast]{rnormRast()}}. Spatial dependence can be introduced, though all together the values will still be approximately normally distributed.
 }
 \examples{
 if (grassStarted()) {

@@ -14,7 +14,7 @@
 A \code{GVector}.
 }
 \description{
-\code{GVectors} can contain a mix of "singlepart" and "multipart" features. A singlepart feature is a single point, set of connected line segments, or a polygon. A multipart feature is a set of lines, sets of connected line segments, or set of polygons that are treated as a single feature. This function converts all multipart features to singlepart features. If the `GVector has an attribute table, it will be removed from the output.
+\code{GVectors} can contain a mix of "singlepart" and "multipart" features. A singlepart feature is a single point, set of connected line segments, or a polygon. A multipart feature is a set of lines, sets of connected line segments, or set of polygons that are treated as a single feature. This function converts all multipart features to singlepart features. If the \code{GVector} has an attribute table, rows will be duplicated so that each of the new \code{GVector}'s geometries have the rows that correspond to their "parent" geometries.
 }
 \examples{
 if (grassStarted()) {
@@ -69,19 +69,24 @@ agg2x3
 ### aggregating a GVector
 #########################
 
+madCoast4 <- fastData("madCoast4")
+
 # Convert:
 coast <- fast(madCoast4)
 
-# Aggregate:
+# Aggregate and disaggregate:
 aggCoast <- aggregate(coast)
+disaggCoast <- disagg(coast)
 
 ngeom(coast)
 ngeom(aggCoast)
+ngeom(disaggCoast)
 
 # plot
-oldpar <- par(mfrow = c(1, 2))
-plot(coast, main = "Original")
-plot(aggCoast, main = "Aggregated")
+oldpar <- par(mfrow = c(1, 3))
+plot(coast, main = "Original", col = 1:nrow(coast))
+plot(aggCoast, main = "Aggregated", col = 1:nrow(aggCoast))
+plot(disaggCoast, main = "Disaggregated", col = 1:nrow(disaggCoast))
 par(oldpar)
 
 }

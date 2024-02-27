@@ -78,3 +78,6 @@ missing.cases(cover)
 
 }
 }
+\seealso{
+\code{\link[=missingCats]{missingCats()}}
+}

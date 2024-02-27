@@ -14,7 +14,7 @@
 A \code{GRaster}.
 }
 \description{
-This function creates a raster map with values equal to the topographic wetness index (TWI), which is a measure of how much overland water tends to flow away from or accumulate in a location.
+This function creates a raster map with values equal to the topographic wetness index (TWI), which is a measure of how much overland water flow tends to accumulate in or flow away from a location.
 }
 \examples{
 if (grassStarted()) {

@@ -8,9 +8,9 @@
 \S4method{rnormRast}{GRaster}(x, n = 1, mu = 0, sigma = 1, seed = NULL)
 }
 \arguments{
-\item{x}{A \code{GRaster}. The output will have the same extent and dimensions as this raster.}
+\item{x}{A \code{GRaster}: The output will have the same extent and dimensions as this raster.}
 
-\item{n}{A numeric integer: Number of rasters to generate.}
+\item{n}{An integer: Number of rasters to generate.}
 
 \item{mu, sigma}{Numeric: Mean and sample standard deviation of output. If creating more than one raster, you can provide one value per raster. If there are fewer, they will be recycled.}
 
@@ -20,7 +20,7 @@
 A \code{GRaster}.
 }
 \description{
-'rnormRast()' creates a raster with values drawn from a normal distribution.
+\code{rnormRast()} creates a raster with values drawn from a normal distribution.
 }
 \examples{
 if (grassStarted()) {

@@ -20,7 +20,7 @@ A \code{GRaster}.
 \description{
 This version of the \code{predict()} function make predictions to a set of \code{GRaster}s from a model object.
 
-The model must be either a linear model, which is of class \code{lm} and typically created using the \code{\link[stats:lm]{stats::lm()}} function or a generalized linear model (GLM), which is class \code{glm} and typically created using \code{\link[stats:glm]{stats::glm()}}. Other packages can also create \code{lm} or \code{glm} objects, but they will probably not work in this function. For example, generalized additive models, which can be created using the \code{gam()} function in the \strong{mgcv} package, inherit the \code{glm} class, but cannot be used in this function.
+The model must be either a linear model, which is of class \code{lm} and typically created using the \code{\link[stats:lm]{stats::lm()}} function or a generalized linear model (GLM), which is class \code{glm} and typically created using \code{\link[stats:glm]{stats::glm()}}. Other packages can also create \code{lm} or \code{glm} objects, but they may not work in this function. For example, generalized additive models, which can be created using the \code{gam()} function in the \strong{mgcv} package, inherit the \code{glm} class, but cannot be used in this function.
 }
 \examples{
 if (grassStarted()) {

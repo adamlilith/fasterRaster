@@ -4,7 +4,7 @@
 \alias{aggregate,GRaster-method}
 \alias{aggregate}
 \alias{aggregate,GVector-method}
-\title{Aggregate values of raster cells into larger cells}
+\title{Aggregate raster cells into larger cells or combine geometries of a vector}
 \usage{
 \S4method{aggregate}{GRaster}(
   x,
@@ -54,7 +54,7 @@ A \code{GRaster} or \code{GVector}.
 \description{
 When applied to a \code{GRaster}, \code{aggregate()} creates a new raster with cells that are a multiple of the size of the cells of the original raster. The new cells can be larger or smaller than the original cells (this function thus emulates both the \code{terra::aggregate()} and \code{\link[terra:disaggregate]{terra::disagg()}} functions in \strong{terra}.)
 
-When applied to a \code{GVector}, \code{aggregate()} all geometries are combined into a "multipart" geometry, in which geometries are treated as if they were a single unit. If the \code{GVector} has a data table associated with it, the output will also have a data table as long as there is at least one column with values that are all the same. Values of columns that do not have duplicated values will be converted to \code{NA}.
+When applied to a \code{GVector}, all geometries are combined into a "multipart" geometry, in which geometries are treated as if they were a single unit. Borders between aggregated geometries can be dissolved if the \code{dissolve} argument is \code{TRUE}. If the \code{GVector} has a data table associated with it, the output will also have a data table as long as there is at least one column with values that are all the same. Values of columns that do not have duplicated values will be converted to \code{NA}.
 }
 \examples{
 if (grassStarted()) {
@@ -109,23 +109,28 @@ agg2x3
 ### aggregating a GVector
 #########################
 
+madCoast4 <- fastData("madCoast4")
+
 # Convert:
 coast <- fast(madCoast4)
 
-# Aggregate:
+# Aggregate and disaggregate:
 aggCoast <- aggregate(coast)
+disaggCoast <- disagg(coast)
 
 ngeom(coast)
 ngeom(aggCoast)
+ngeom(disaggCoast)
 
 # plot
-oldpar <- par(mfrow = c(1, 2))
-plot(coast, main = "Original")
-plot(aggCoast, main = "Aggregated")
+oldpar <- par(mfrow = c(1, 3))
+plot(coast, main = "Original", col = 1:nrow(coast))
+plot(aggCoast, main = "Aggregated", col = 1:nrow(aggCoast))
+plot(disaggCoast, main = "Disaggregated", col = 1:nrow(disaggCoast))
 par(oldpar)
 
 }
 }
 \seealso{
-\code{\link[stats:aggregate]{stats::aggregate()}}, \code{\link[terra:aggregate]{terra::aggregate()}}, \code{\link[terra:disaggregate]{terra::disagg()}}
+\code{\link[stats:aggregate]{stats::aggregate()}}, \code{\link[terra:aggregate]{terra::aggregate()}}, \code{\link[=diagg]{diagg()}}, \code{\link[terra:disaggregate]{terra::disagg()}}
 }

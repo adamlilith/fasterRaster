@@ -16,7 +16,7 @@
 A \code{GRaster}.
 }
 \description{
-The \code{thinLines()} function attempts to reduce linear features on a raster to just 1 cell wide. You may need to run \code{thinLines()} multiple times on the same raster (or experiment with the \code{iter} argument) to get acceptable output. \code{thinLines()} can be helpful run on a raster before using \code{as.lines()}.
+The \code{thinLines()} function attempts to reduce linear features on a raster to just 1 cell wide. You may need to run \code{thinLines()} multiple times on the same raster (or experiment with the \code{iter} argument) to get acceptable output. \code{thinLines()} can be helpful to run on a raster before using \code{\link[=as.lines]{as.lines()}}.
 }
 \examples{
 if (grassStarted()) {
@@ -45,4 +45,7 @@ plot(rastToLines, col = "red")
 plot(cleanLines, add = TRUE)
 
 }
+}
+\seealso{
+\code{\link[=as.lines]{as.lines()}}
 }

@@ -8,10 +8,11 @@
 \usage{
 \S4method{project}{GRaster}(
   x,
-  y = NULL,
+  y,
   align = FALSE,
   method = NULL,
   fallback = TRUE,
+  res = "fallback",
   wrap = FALSE
 )
 
@@ -20,11 +21,11 @@
 \arguments{
 \item{x}{A \code{GRaster} or \code{GVector} to be projected.}
 
-\item{y}{A character or \code{GLocation} object (i.e., typically a \code{GRaster} or \code{GVector}):}
+\item{y}{A character or \code{GLocation} object (i.e., typically a \code{GRaster} or \code{GVector}): Used to set the focal \code{GRaster} or \code{GVector}'s new CRS (and resolution and possibly extent, for \code{GRaster}s).}
 
-\item{align}{Logical: If \code{FALSE} (default), and \code{x} and \code{y} are \code{GRaster}s, then the extent of \code{x} will be cropped to the extent of \code{y}.}
+\item{align}{Logical: If \code{FALSE} (default), and \code{x} and \code{y} are \code{GRaster}s, then the extent of \code{x} will be cropped to the extent of \code{y}. If \code{TRUE}, no corpping is performed.}
 
-\item{method}{Character or \code{NULL} (\code{GRaster}s only): Method to use to conduct the transformation (rasters only). Partial matching is used.
+\item{method}{Character or \code{NULL} (for \code{GRaster}s only): Method to use to conduct the transformation (rasters only). Partial matching is used.
 \itemize{
 \item \code{NULL} (default): Automatically choose based on raster properties (\code{near} for categorical data, \code{bilinear} for continuous data).
 \item \code{"near"}: Nearest neighbor. Best for categorical data, and often a poor choice for continuous data.  If \code{\link[=datatype]{datatype()}} is \code{integer}, this method will be used by default.
@@ -33,13 +34,22 @@
 \item \code{"lanczos"}: Lanczos interpolation (uses weighted values from 25 cells).
 }
 
-\emph{Note #1}: If \code{x} and \code{y} are \code{GRaster}s, then the same \code{method} is used to resample \code{x} to the resolution of \code{y} before projecting \code{x}.
+\emph{Note #1}: If \code{x} and \code{y} are \code{GRaster}s, and \code{res = "terra"}, then the same \code{method} is used to resample \code{x} to the resolution of \code{y} before projecting \code{x}.
 
-\emph{Note #2}: Methods that use multiple cells will cause the focal cell to become \code{NA} if there is at least one cell with an \code{NA} in the cells it draws from. These \code{NA} cells can often be filled using the \code{fallback} option.}
+\emph{Note #2}: Methods that use multiple cells will cause the focal cell to become \code{NA} if there is at least one cell with an \code{NA} in the cells it draws from. These \code{NA} cells can often be filled using the \code{fallback} argument.}
 
-\item{fallback}{Logical (projecting \code{GRaster}s only): If \code{TRUE} (default), then use "lower" methods to fill in \code{NA} cells when a "higher" method is used. For example, if \code{method = "bicubic"}, \code{NA} cells will be filled in using the \code{bilinear} method, except when that results in \code{NA}s, in which case the \code{near} method will be used. Fallback causes fewer cells to revert to \code{NA} values, so may be better at capturing complex "edges" (e.g., coastlines). Fallback does increase processing time because each "lower" method must be applied, then results merged. Fallback is not used if \code{method = "near"}.}
+\item{fallback}{Logical (for projecting \code{GRaster}s only): If \code{TRUE} (default), then use "lower" resampling methods to fill in \code{NA} cells when a "higher" resampling method is used. For example, if \code{method = "bicubic"}, \code{NA} cells will be filled in using the \code{bilinear} method, except when that results in \code{NA}s, in which case the \code{near} method will be used. Fallback causes fewer cells to revert to \code{NA} values, so may be better at capturing complex "edges" (e.g., coastlines). Fallback does increase processing time because each "lower" method must be applied, then results merged. Fallback is not used if \code{method = "near"}.}
 
-\item{wrap}{Logical (\code{GRaster}s only): When projecting rasters that "wrap around" (i.e., whole-world rasters or rasters that have edges that actually circle around to meet on the globe), \code{wrap} should be \code{TRUE} to avoid removing rows and columns from the "edge" of the map. The default is \code{FALSE}.}
+\item{res}{Character (for projecting \code{GRaster}s only): Method used to set the resolution of a \code{GRaster} in the new CRS. This can be one of three options.  Partial matching is used and case ignored:
+\itemize{
+\item \code{"terra"}: This method creates an output raster that is as close as possible in values and resolution to the one that \code{\link[terra:project]{terra::project()}} would create. However, for large rasters (i.e., many cells), this can fail because \code{terra::project()} encounters memory limits (it is used internally to create a template). This method resamples the focal raster in its starting CRS, then projects it to the destination CRS.
+\item \code{"template"}: This method can only be used of \code{y} is a \code{GRaster}. The output will have the same resolution as \code{y} and possibly the same extent (depending on the value of \code{align}). However, unlike the \code{"terra"} method, cell values will not necessarily be as close as possible to what \code{\link[terra:project]{terra::project()}} would generate (unless \code{method = "near"}). Unlike the \code{"terra"} method, this method does not resample the focal raster in its starting CRS before projecting. For large rasters it will be faster than the \code{"terra"} method (especially if \verb{"method = "neear"}), and it should be less likely to fail because of memory limits.
+\item Two numeric values: Values for the new resolution (x- and y-dimensions).
+\item \code{"center"}: This method locates the centroid of the raster to be projected (in the same CRS as the original raster). It then creates four points north, south, east, and west of the centroid, each spaced one cell's width from the centroid. This set of points is then projected to the new CRS. The new cell size in the x-dimension will be the average of the distance between the east and west points from the centroid, and in the y-dimension the average from the centroid to the north and south points.
+\item \code{"fallback"} (default): This applies the \code{terra} method first, but if that fails, then tries \code{template}, then \code{center}. This process can take a long time for large rasters.
+}}
+
+\item{wrap}{Logical (for projecting \code{GRaster}s only): When projecting rasters that "wrap around" (i.e., whole-world rasters or rasters that have edges that actually circle around to meet on the globe), \code{wrap} should be \code{TRUE} to avoid removing rows and columns from the "edge" of the map. The default is \code{FALSE}.}
 }
 \value{
 A \code{GRaster} or \code{GVector}.
@@ -48,7 +58,7 @@ A \code{GRaster} or \code{GVector}.
 \code{project()} changes the coordinate reference system (CRS) of a \code{GRaster} or \code{GVector}. It has three use cases:
 \itemize{
 \item \code{x} is a \code{GRaster} and \code{y} is a \code{GRaster}: \code{x} will be projected to the CRS of \code{y} and resampled to have the same resolution as \code{y}. If argument \code{align} is \code{FALSE}, then it will also be cropped to the extent of \code{y}.
-\item \code{x} is a \code{GRaster} and \code{y} is a \code{GVector} or a CRS string (typically in WKT format): \code{x} will be projected to the CRS specified by \code{y} but not resampled or cropped.
+\item \code{x} is a \code{GRaster} and \code{y} is a \code{GVector} or a CRS string (typically in Well-Known Text format): \code{x} will be projected to the CRS specified by \code{y} and resampled but not cropped.
 \item \code{x} is a \code{GVector} and \code{y} is a \code{GRaster}, \code{GVector}, or CRS string: The vector will be projected to the CRS of \code{y}.
 }
 }
@@ -95,5 +105,5 @@ cat(crs(riversWGS84))
 }
 }
 \seealso{
-\code{\link[terra:project]{terra::project()}}, \code{\link[sf:st_transform]{sf::st_transform()}}, modules \code{r.proj} and \code{v.proj} in \strong{GRASS}
+\code{\link[terra:project]{terra::project()}}, \code{\link[sf:st_transform]{sf::st_transform()}}, modules \code{r.proj}, \code{r.import}, and \code{v.proj} in \strong{GRASS}
 }

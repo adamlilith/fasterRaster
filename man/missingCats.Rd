@@ -16,7 +16,7 @@
 A numeric vector (if \code{x}is just one layer), or a named list of numeric vectors, one per layer in \code{x}.
 }
 \description{
-This function reports the values that appear in a categorical raster that have no matching category label.
+This function reports the values in a categorical \code{GRaster} that have no matching category label in its "levels" table.
 
 \code{GRaster}s can represent \link[=tutorial_raster_data_types]{categorical data}. Cell values are actually integers, each corresponding to a category, such as "desert" or "wetland." A categorical raster is associated with a table that matches each value to a category name.
 }
@@ -142,5 +142,5 @@ levels(combinedNA)
 }
 }
 \seealso{
-\link[=tutorial_raster_data_types]{categorical rasters} in \strong{fasterRaster}
+\code{\link[=missingCats]{missingCats()}}, \code{\link[=missing.cases]{missing.cases()}}, \code{\link[=droplevels]{droplevels()}}, \link[=tutorial_raster_data_types]{categorical rasters} in \strong{fasterRaster}
 }

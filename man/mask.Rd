@@ -25,7 +25,7 @@
 A \code{GRaster}.
 }
 \description{
-The output of \code{mask()} is a \code{GRaster} that has the same as values as the input raster. However, if the \code{mask} argument is a \code{GRaster}, the output will have \code{NA} values in the sample cells that the \code{mask} raster has \code{NA} cells. If the \code{mask} argument is a \code{GVector}, then the output raster will have \code{NA} values in cells the \code{GVector} does not cover.
+The output of \code{mask()} is a \code{GRaster} that has the same as values as the input raster. However, if the \code{mask} argument is a \code{GRaster}, the output will have \code{NA} values in the same cells that the \code{mask} raster has \code{NA} cells. If the \code{mask} argument is a \code{GVector}, then the output raster will have \code{NA} values in cells the \code{GVector} does not cover.
 }
 \examples{
 if (grassStarted()) {

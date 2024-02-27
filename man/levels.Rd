@@ -176,5 +176,5 @@ levels(combinedNA)
 }
 }
 \seealso{
-\code{\link[terra:factors]{terra::levels()}}, \link{levels<-}, \code{\link[terra:factors]{terra::cats()}}, \code{\link[terra:factors]{terra::categories()}}, \link[=tutorial_raster_data_types]{categorical rasters} in \strong{fasterRaster}
+\code{\link[terra:factors]{terra::levels()}}, \code{\link[fasterRaster]{levels<-}}, \code{\link[terra:factors]{terra::cats()}}, \code{\link[terra:factors]{terra::categories()}}, \link[=tutorial_raster_data_types]{categorical rasters} in \strong{fasterRaster}
 }
