@@ -2,7 +2,7 @@
 #'
 #' @description This function creates a raster map with values equal to the topographic wetness index (TWI), which is a measure of how much overland water flow tends to accumulate in or flow away from a location.
 #'
-#' @param x A `GRaster` (typically representing elevation).
+#' @param x A `GRaster` (typically representing elevation). The raster must be projected (i.e., not in WGS84, NAD83 etc.).
 #'
 #' @returns A `GRaster`.
 #'
@@ -18,6 +18,8 @@ methods::setMethod(
 	signature = c(x = "GRaster"),
 	function(x) {
 	
+	if (.projection(x) == "Latitude-Longitude") stop("Raster must be projected before calculating TWI.")
+
 	.locationRestore(x)
 	.region(x)
 
