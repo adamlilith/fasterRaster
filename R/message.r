@@ -17,7 +17,7 @@
 	lag_hours <- 8
 	lag_sec <- lag_hours * 60 * 60
 
-	message <- paste0(message, "\n  This warning will not be displayed again until ", lag_hours, " hours has passed.")
+	message <- paste0(message, "\n  This warning will not be displayed again until ", lag_hours, " hours have passed.")
 
 	now <- Sys.time()
 	if (any(names(.fasterRaster$messages) == msg)) {
