@@ -58,7 +58,7 @@ methods::setMethod(
 	) {
 
 	if (inherits(res, "character")) {
-		res <- omnibus::pmatchSafe(res, c("terra", "template", "center"), nmax = 1L)
+		res <- omnibus::pmatchSafe(res, c("fallback", "terra", "template", "center"), nmax = 1L)
 		if (!inherits(y, "GRaster") && res == "template") stop("The ", sQuote("template"), " method for setting resolution can only be used if the argument ", sQuote("y"), " is a GRaster.")
 	} else if (inherits(res, "numeric")) {
 		if (length(res) == 1L) res <- c(res, res)
