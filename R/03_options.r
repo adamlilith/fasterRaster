@@ -185,10 +185,10 @@ faster <- function(
 
 	}
 
-	if (any(names(opt) %in% "verbose")) {
-		# rgrass::set.ignore.stderrOption(faster("verbose"))
-		rgrass::set.ignore.stderrOption(!faster("verbose"))
-	}
+	# if (any(names(opt) %in% "verbose")) {
+	# 	# rgrass::set.ignore.stderrOption(faster("verbose"))
+	# 	rgrass::set.ignore.stderrOption(!faster("verbose"))
+	# }
 
 	invisible(out)
 
