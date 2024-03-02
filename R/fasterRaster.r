@@ -171,10 +171,9 @@
 #' [as.data.table()]: Convert a `GVector`'s attribute table to a `data.table`\cr
 #' [as.points()]: Extract vertex coordinates from a "lines" or "polygons" `GVector`\cr
 #' [buffer()]: Create a polygon around/inside a `GVector`\cr
-#' [c()]: Combine two or more `GVector`s\cr
+#' [cbind()]: Add columns to the data table of a `GVector`\cr
 #' [cleanGeom()]: Fix undesirable geometries of a `GVector`\cr
 #' [clusterPoints()]: Identify clusters of points\cr
-#' [colbind()]: Add columns to the data table of a `GVector`\cr
 #' [complete.cases()]: Find rows of a `GVector`'s data table that have no `NA`s in them\cr
 #' [connectors()]: Create lines connecting nearest features of two `GVector`s\cr
 #' [convHull()]: Minimum convex hull\cr
@@ -198,6 +197,7 @@
 #' [missing.cases()]: Find rows of a `GVector`'s data table that have at least `NA` in them\cr
 #' [project()]: Change coordinate reference system\cr
 #' [rasterize()]: Convert a `GVector` to a `GRaster`\cr
+#' [rbind()]: Combine `GVectors\cr
 #' [simplifyGeom()]: Remove vertices\cr
 #' [smoothGeom()]: Remove "angular" aspects of features\cr
 #' [st_as_sf()]: Convert a `GVector` to a `sf` vector\cr
