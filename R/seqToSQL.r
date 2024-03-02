@@ -28,6 +28,7 @@
 seqToSQL <- function(x, maxChar = 29900) {
 
 	x <- as.integer(x)
+	x <- unique(x)
 	n <- length(x)
 	if (n == 0L) {
 		out <- NULL
