@@ -56,32 +56,44 @@ methods::setMethod(
 			out <- NULL # removed all
 		} else {
 
-			# create database with frid value = -1 for records we do not want
-			cats <- .vCats(x, db = FALSE)
-			frid <- omnibus::renumSeq(cats)
+			# # # create database with frid value = -1 for records we do not want
+			# # frid <- .vCats(x, db = FALSE)
+			# # if (reverseRowSelect) {
+			# # 	frid[i] <- -1L
+			# # } else {
+			# # 	frid[omnibus::notIn(frid, i)] <- -1L
+			# # }	
+			# # frid[frid > -1] <- omnibus::renumSeq(frid[frid > -1])
+
+			# # .vAttachDatabase(x, table = frid, replace = TRUE)
+
+			# # srcIn <- sources(x)
+			# # src <- .makeSourceName("v_extract", "vector")
 			
+			# # where <- paste0("frid > -1")
+			# # # # # where <- paste0("(frid = 1) or (frid = 11291)")
+
+			cats <- .vCats(x)
+			index <- omnibus::renumSeq(cats)
 			if (reverseRowSelect) {
-				frid[i] <- -1L
+				select <- which(omnibus::notIn(index, i))
 			} else {
-				frid[omnibus::notIn(frid, i)] <- -1L
-			}	
-			
-			.vAttachDatabase(x, table = frid, replace = TRUE)
+				select <- which(index %in% i)
+			}
+			cats <- cats[select]
+			cats <- seqToSQL(cats)
+			cats <- as.character(cats)
 
-			srcIn <- sources(x)
 			src <- .makeSourceName("v_extract", "vector")
-			
-			where <- paste0("frid > 0")
-
 			rgrass::execGRASS(
 				cmd = "v.extract",
-				input = srcIn,
-				where = where,
+				input = sources(x),
+				# where = where,
 				output = src,
 				new = -1,
+				cats = cats,
 				# layer = "-1",
 				flags = c(.quiet(), "overwrite", "t")
-				# flags = c(.quiet(), "overwrite", "t")
 			)
 
 			### select data table rows
@@ -143,12 +155,14 @@ methods::setMethod(
 
 			} # vector has table
 
-			if (reverseRowSelect) {
-				keepCats <- cats[-i]
-			} else {
+			# if (reverseRowSelect) {
+			# 	keepCats <- cats[-i]
+			# } else {
+			# 	keepCats <- cats[i]
+			# }
 
-				keepCats <- cats[i]
-			}
+			# keepRows <- frid[frid > -1L]
+			# table <- table[keepRows]
 
 			src <- .vRecat(src, gtype = geomtype(x, grass = TRUE))
 			out <- .makeGVector(src, table = table)
