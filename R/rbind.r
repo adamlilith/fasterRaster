@@ -81,33 +81,8 @@ rbind.GVector <- function(...) {
 
 	if (is.logical(table)) {
 
-		warning("Data tables cannot be combined.")
+		warning("Data tables cannot be combined so will be dropped from the output vector.")
 		table <- NULL
-
-		### NB This does not add rows if rows are duplicated between x and y.
-		### NEEDS FIXED!
-		# x <- tables[[1L]]
-		# for (i in 2L:nDots) {
-
-		# 	args <- list(
-		# 		x = x,
-		# 		y = tables[[i]],
-		# 		all = TRUE, all.x = TRUE, all.y = TRUE, sort = FALSE
-		# 	)
-	
-		# 	table <- tryCatch(
-		# 		do.call(merge, args),
-		# 		error = function(cond) FALSE
-		# 	)
-
-		# 	if (is.logical(table)) {
-		# 		table <- NULL
-		# 		break()
-		# 	}
-
-		# 	x <- table
-
-		# } # next table
 
 	}
 
