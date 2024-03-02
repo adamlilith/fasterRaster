@@ -31,16 +31,19 @@
 
 	if (replace || !.vHasDatabase(src)) {
 
+		# if no table
 		if (is.null(table)) {
 			if (is.null(cats)) cats <- .vCats(src, db = FALSE, integer = TRUE)
 			table <- data.frame(frid = cats)
 		}
 
+		# if table is a vector
 		if (inherits(table, c("numeric", "integer"))) {
 			table <- as.integer(table)
 			table <- data.frame(frid = table)
 		}
 
+		# if table does not have a "frid" column
 		if (!any(names(table) %in% "frid")) {
 		
 			if (is.null(cats)) cats <- .vCats(src, db = FALSE, integer = TRUE)
@@ -86,7 +89,7 @@
 			cmd = "db.in.ogr",
 			input = tf,
 			output = srcTable,
-			# key = "cat",
+			# key = "cat", # error
 			flags = c(.quiet(), "overwrite")
 		)
 
@@ -97,6 +100,7 @@
 			table = srcTable,
 			layer = "1",
 			key = "frid",
+			# key = "cat",
 			flags = c(.quiet(), "overwrite", "o")
 		)
 
