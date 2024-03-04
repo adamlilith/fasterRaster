@@ -230,10 +230,10 @@
 #' [forwardSlash()]: Replace backslash with forward slash\cr
 #' [grassInfo()]: **GRASS** version and citation\cr
 #' [replaceNAs()]: Replace `NA`s in columns of a `data.table` or `data.frame`, or in a vector\cr
-#' [seqToSQL()]: Format a numeric series into an SQL value call.\cr
-#' [update()]: Refresh metadata in a `GRaster` or `GVector` object.\cr
+#' [seqToSQL()]: Format a numeric series into an SQL value call\cr
+#' [update()]: Refresh metadata in a `GRaster` or `GVector` object\cr
 #'
-#' ## Example data
+#' ## Data objects
 #' [appFunsTable][appFunsTable] (see also [appFuns()]): Functions usable by the [app()] function\cr
 #' [madChelsa][madChelsa]: Climate rasters for of a portion of eastern Madagascar\cr
 #' [madCoast0][madCoast0], [madCoast4][madCoast4], and [madCoast][madCoast]: Borders of an eastern portion of Madagascar\cr
@@ -250,6 +250,7 @@
 #' Comparisons between `GRegion`s can be performed using the `==` and `!=` operators.\cr
 #' Tutorial on **GRASS** [regions][tutorial_regions]\cr
 #' Tutorial on **GRASS** ["locations" and mapsets][tutorial_locations_mapsets]\cr
+#' Tutorial on [vector topology][tutorial_vector_topology] in **GRASS** and **fasterRaster**\cr
 #' `.copyGSpatial()`: Make a copy of the **GRASS** file pointed to by a `GRaster` or `GVector`\cr
 #' `.fileExt()`: Get file extension\cr
 #' `.exists()`: Does the **GRASS** file of a `GRaster` or `GVector` exist?\cr

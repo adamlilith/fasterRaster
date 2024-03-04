@@ -193,10 +193,9 @@ The \code{\link[fasterRaster]{$<-}} operator can be used to replace specific col
 \code{\link[=as.data.table]{as.data.table()}}: Convert a \code{GVector}'s attribute table to a \code{data.table}\cr
 \code{\link[=as.points]{as.points()}}: Extract vertex coordinates from a "lines" or "polygons" \code{GVector}\cr
 \code{\link[=buffer]{buffer()}}: Create a polygon around/inside a \code{GVector}\cr
-\code{\link[=c]{c()}}: Combine two or more \code{GVector}s\cr
+\code{\link[=cbind]{cbind()}}: Add columns to the data table of a \code{GVector}\cr
 \code{\link[=cleanGeom]{cleanGeom()}}: Fix undesirable geometries of a \code{GVector}\cr
 \code{\link[=clusterPoints]{clusterPoints()}}: Identify clusters of points\cr
-\code{\link[=colbind]{colbind()}}: Add columns to the data table of a \code{GVector}\cr
 \code{\link[=complete.cases]{complete.cases()}}: Find rows of a \code{GVector}'s data table that have no \code{NA}s in them\cr
 \code{\link[=connectors]{connectors()}}: Create lines connecting nearest features of two \code{GVector}s\cr
 \code{\link[=convHull]{convHull()}}: Minimum convex hull\cr
@@ -220,14 +219,7 @@ The \code{\link[fasterRaster]{$<-}} operator can be used to replace specific col
 \code{\link[=missing.cases]{missing.cases()}}: Find rows of a \code{GVector}'s data table that have at least \code{NA} in them\cr
 \code{\link[=project]{project()}}: Change coordinate reference system\cr
 \code{\link[=rasterize]{rasterize()}}: Convert a \code{GVector} to a \code{GRaster}\cr
-\code{\link[=simplifyGeom]{simplifyGeom()}}: Remove vertices\cr
-\code{\link[=smoothGeom]{smoothGeom()}}: Remove "angular" aspects of features\cr
-\code{\link[=st_as_sf]{st_as_sf()}}: Convert a \code{GVector} to a \code{sf} vector\cr
-\code{\link[=st_buffer]{st_buffer()}}: Create a polygon around/inside a \code{GVector}\cr
-\code{\link[=tail]{tail()}}: Last rows of a \code{GVector}'s data table\cr
-\code{\link[=thinPoints]{thinPoints()}}: Reduce number of points in same raster cell\cr
-\code{\link[=union]{union()}} or \code{\link[fasterRaster]{+}}: Combine two \code{GVector}s\cr
-\code{\link[=xor]{xor()}} or \code{\link[fasterRaster]{/}}: Select parts of polygons not shared by two \code{GVector}s\cr
+\code{\link[=rbind]{rbind()}}: Combine \verb{GVectors\\cr [simplifyGeom()]: Remove vertices\\cr [smoothGeom()]: Remove "angular" aspects of features\\cr [st_as_sf()]: Convert a }GVector\verb{to a}sf\verb{vector\\cr [st_buffer()]: Create a polygon around/inside a}GVector\verb{\\cr [tail()]: Last rows of a }GVector\verb{'s data table\\cr [thinPoints()]: Reduce number of points in same raster cell\\cr [union()] or \code{\link[fasterRaster]{+}}: Combine two }GVector\verb{s\\cr [xor()] or \code{\link[fasterRaster]{/}}: Select parts of polygons not shared by two }GVector`s\cr
 }
 
 \subsection{Converting between data types}{
@@ -256,11 +248,11 @@ The \code{\link[fasterRaster]{$<-}} operator can be used to replace specific col
 \code{\link[=forwardSlash]{forwardSlash()}}: Replace backslash with forward slash\cr
 \code{\link[=grassInfo]{grassInfo()}}: \strong{GRASS} version and citation\cr
 \code{\link[=replaceNAs]{replaceNAs()}}: Replace \code{NA}s in columns of a \code{data.table} or \code{data.frame}, or in a vector\cr
-\code{\link[=seqToSQL]{seqToSQL()}}: Format a numeric series into an SQL value call.\cr
-\code{\link[=update]{update()}}: Refresh metadata in a \code{GRaster} or \code{GVector} object.\cr
+\code{\link[=seqToSQL]{seqToSQL()}}: Format a numeric series into an SQL value call\cr
+\code{\link[=update]{update()}}: Refresh metadata in a \code{GRaster} or \code{GVector} object\cr
 }
 
-\subsection{Example data}{
+\subsection{Data objects}{
 
 \link{appFunsTable} (see also \code{\link[=appFuns]{appFuns()}}): Functions usable by the \code{\link[=app]{app()}} function\cr
 \link{madChelsa}: Climate rasters for of a portion of eastern Madagascar\cr
@@ -280,6 +272,7 @@ The \code{\link[fasterRaster]{$<-}} operator can be used to replace specific col
 Comparisons between \code{GRegion}s can be performed using the \code{==} and \code{!=} operators.\cr
 Tutorial on \strong{GRASS} \link[=tutorial_regions]{regions}\cr
 Tutorial on \strong{GRASS} \link[=tutorial_locations_mapsets]{"locations" and mapsets}\cr
+Tutorial on \link[=tutorial_vector_topology]{vector topology} in \strong{GRASS} and \strong{fasterRaster}\cr
 \code{.copyGSpatial()}: Make a copy of the \strong{GRASS} file pointed to by a \code{GRaster} or \code{GVector}\cr
 \code{.fileExt()}: Get file extension\cr
 \code{.exists()}: Does the \strong{GRASS} file of a \code{GRaster} or \code{GVector} exist?\cr

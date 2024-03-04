@@ -8,7 +8,7 @@
 \S4method{topoWetnessIndex}{GRaster}(x)
 }
 \arguments{
-\item{x}{A \code{GRaster} (typically representing elevation).}
+\item{x}{A \code{GRaster} (typically representing elevation). The raster must be projected (i.e., not in WGS84, NAD83 etc.).}
 }
 \value{
 A \code{GRaster}.

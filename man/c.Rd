@@ -3,12 +3,9 @@
 \name{c,GRaster-method}
 \alias{c,GRaster-method}
 \alias{c}
-\alias{c,GVector-method}
-\title{"Stack" GRasters and combine GVectors}
+\title{"Stack" GRasters}
 \usage{
 \S4method{c}{GRaster}(x, ...)
-
-\S4method{c}{GVector}(x, ...)
 }
 \arguments{
 \item{x}{A \code{GRaster} or a \code{GVector}.}
@@ -23,50 +20,29 @@ A \code{GRaster}.
 \itemize{
 \item All objects are the same class (either all \code{GRaster}s or all \code{GVector}s).
 \item All objects have the same coordinate reference system (see crs()).
-\item For \code{GRaster}s:
-\itemize{
 \item Horizontal extents are the same (see \code{\link[=ext]{ext()}}).
 \item Horizontal dimensions are the same (see \code{\link[=res]{res()}}).
 \item The topology (2- or 3-dimensional) must be the same. If 3D, then all rasters must have the same number of depths and vertical extents (see \code{\link[=topology]{topology()}}).
 }
-\item For \code{GVector}s:
-\itemize{
-\item The geometry (points, lines, or polygons) must be the same. See \code{\link[=geomtype]{geomtype()}}.
-}
-}
 
-If features (boundaries, lines, etc.) of \code{GVector}s that are combined are identical or nearly identical, they can be cleaned using \code{\link[=removeDupNodes]{removeDupNodes()}} and \code{\link[=snap]{snap()}}.
-
-Data tables associated with \code{GVector}s will be combined if each vector has a table and if each table has the same columns and data types. Otherwise, the data table will be dropped.
-
-You can speed operations by putting the largest vector first in \code{c(x, ...)}.
+Data tables associated with \code{GVector}s will be combined if each vector has a table and if each table has the same columns and data types. Otherwise, the data table will be combined using \code{\link[=merge]{merge()}}.
 }
 \examples{
 if (grassStarted()) {
 
 # Setup
-library(sf)
+madForest2000 <- madData("madForest2000")
+madForest2014 <- madData("madForest2014")
 
-# Rivers vector
-madRivers <- fastData("madRivers")
+# Convert SpatRasters to GRasters:
+forest2000 <- fast(madForest2000)
+forest2014 <- fast(madForest2014)
 
-# Convert sf to a GVector
-rivers <- fast(madRivers)
+# Combine:
+forest <- c(forest2000, forest2014)
+forest
 
-# Subset rivers vector
-rivers1 <- rivers[1:2]
-rivers2 <- rivers[10:11]
-
-# Concatenate rivers
-riversCombo <- c(rivers1, rivers2)
-riversCombo
-
-# Add columns
-newCol <- data.frame(x = 1:11)
-riversCols <- colbind(rivers, newCol)
-riversCol
-
-as.data.frame(riversCol)
+nlyr(forest)
 
 }
 }
