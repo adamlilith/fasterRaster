@@ -13,6 +13,8 @@
 #'
 #' * `cores` (integer/numeric integer): Number of processor cores to use on a task. The default is 2. Some **GRASS** modules are parallelized.
 #'
+#' * `correct` (logical): Should [fast()] automatically correct the topology of `GVector`s when they are created using [fast()]? By default, this is `FALSE`, which will tend to produce vectors that are similar to [terra::vect()]. If `TRUE`, then topology is corrected, but creation of the `GVector` can take a very long time, and the results may be in error. When you are using `fast()`, you can set the `correct` argument on a case-by-case basis, overriding this setting. If you don't set it when using `fast()`, the value set using `faster(correct = <TRUE or FALSE>)` is used. See [vector topology][tutorial_vector_topology] for more information.
+#'
 #' * `memory` (integer/numeric): The amount of memory to allocate to a task, in GB. The default is 1024 MB (i.e., 1 GB). Some **GRASS** modules can take advantage of more memory.
 #'
 #' * `rasterPrecision` (character): The [precision][tutorial_raster_data_types] of values when applying mathematical operations to a `GRaster`. By default, this is `"double"`, which allows for precision to about the 16th decimal place. However, it can be set to `"float"`, which allows for precision to about the 7th decimal place. `float` rasters are smaller in memory and on disk. The default is `"double"`.`
@@ -132,6 +134,10 @@ faster <- function(
 
 	if (any(names(opts) %in% "cores")) {
 		if (!is.numeric(opts$cores) | (opts$cores <= 0 & opts$cores %% 1 != 0)) stop("Option ", sQuote("cores"), " must be an integer >= 1. The default is ", .coresDefault(), ".")
+	}
+
+	if (any(names(opts) %in% "correct")) {
+  		if (is.na(opts$correct) || !is.logical(opts$correct)) stop("Option ", sQuote("correct"), " must be a logical. The default is ", .correctDefault(), ".")
 	}
 
 	if (any(names(opts) %in% "verbose")) {

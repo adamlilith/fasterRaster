@@ -9,6 +9,7 @@
 # .mapsetDefault <- function() "PERMANENT"
 
 .coresDefault <- function() 2
+.correctDefault <- function() FALSE
 .verboseDefault <- function() FALSE
 .memoryDefault <- function() 1024 # in MB
 .rasterPrecisionDefault <- function() "double" # "FCELL"/"float", or "DCELL"/"double"
@@ -23,6 +24,7 @@
 		name = c(
 			"grassDir",
 			"addonsDir",
+			"correct",
 			"verbose",
 			"cores",
 			"memory",
@@ -35,6 +37,7 @@
 		type = c(
 			"character",
 			"character",
+			"logical",
 			"logical",
 			"numeric",
 			"numeric",
