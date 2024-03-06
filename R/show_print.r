@@ -470,7 +470,7 @@ methods::setMethod(
 		cat("values      :", row1, "\n")
 		if (!is.null(row2)) cat("             ", row2, "\n")
 		if (!is.null(row3)) cat("             ", row3, "\n")
-		if (nRows > 3L) cat("             ...and ", nRows - 3L, " more rows\n")
+		if (nRows > 3L) cat("              ...and ", nRows - 3L, " more rows\n")
 	}
 	
 	} # EOF
