@@ -15,10 +15,11 @@
 #' @noRd
 .quiet <- function() {
 
-	if (!faster("verbose")) {
-		"quiet"
+	if (faster("verbose")) {
+		out <- NULL
 	} else {
-		NULL
+		out <- "quiet"
 	}
+	out
 
 }
