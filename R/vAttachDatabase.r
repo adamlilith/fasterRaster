@@ -1,6 +1,6 @@
 #' Add a database table to a GRASS attribute table
 #'
-#' @description `.vAttachDatabase()` adds a table to a **GRASS** vector. This table is meant to be "invisible" to most users--they should use interact with attribute tables using the `GVector` slot @table. Some functions require tables (e.g., [extract()] and [spatSample()]). **This function is mostly of use to developers.**
+#' @description `.vAttachDatabase()` adds a table to a **GRASS** vector. This table is meant to be "invisible" to most users--they should use interact with attribute tables using the `GVector` slot `@table``. Some functions require tables (e.g., [extract()] and [spatSample()]). **This function is mostly of use to developers.**
 #'
 #' @param x A `GVector` or the name of a vector in **GRASS**.
 #' 
@@ -34,20 +34,21 @@
 		# if no table
 		if (is.null(table)) {
 			if (is.null(cats)) cats <- .vCats(src, db = FALSE, integer = TRUE)
-			table <- data.frame(frid = cats)
+			table <- data.frame(cat = cats)
 		}
 
 		# if table is a vector
 		if (inherits(table, c("numeric", "integer"))) {
 			table <- as.integer(table)
-			table <- data.frame(frid = table)
+			table <- data.frame(cat = table)
 		}
 
-		# if table does not have a "frid" column
-		if (!any(names(table) %in% "frid")) {
+		# if table does not have a "cat" column
+		if (!any(names(table) %in% "cat")) {
 		
 			if (is.null(cats)) cats <- .vCats(src, db = FALSE, integer = TRUE)
-			cats <- data.table::data.table(frid = cats)
+			table <- table[cats, , drop = FALSE]
+			cats <- data.frame(cat = cats)
 			table <- cbind(cats, table)
 		
 		}
@@ -93,14 +94,25 @@
 			flags = c(.quiet(), "overwrite")
 		)
 
+		# disconnect existing table
+		if (.vHasDatabase(src)) {
+		
+			rgrass::execGRASS(
+				cmd = "v.db.droptable",
+				map = src,
+				flags = c(.quiet(), "f")
+			)
+		
+		}
+
 		# connect database to vector
 		rgrass::execGRASS(
 			cmd = "v.db.connect",
 			map = sources(x),
 			table = srcTable,
 			layer = "1",
-			key = "frid",
-			# key = "cat",
+			# key = "frid",
+			key = "cat_",
 			flags = c(.quiet(), "overwrite", "o")
 		)
 
