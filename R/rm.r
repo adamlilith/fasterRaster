@@ -39,12 +39,13 @@
 			"vector"
 		}
 	} else if (inherits(x, "character")) {
-		dels <- .ls(x)
-		if (is.null(dels)) {
-			dels <- x
-		} else {
-			type <- names(dels)
+		dels <- .ls()
+		dels <- dels[dels %in% x]
+		if (length(dels) == 0L) {
+			warning("Object(s) are not in GRASS. Nothing deleted.")
+			return(invisible(FALSE))
 		}
+		type <- names(dels)
 	}
 
 	for (i in seq_along(dels)) {
