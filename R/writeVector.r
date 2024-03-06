@@ -116,12 +116,12 @@ setMethod(
 
 		if (format == "ESRI_Shapefile") {
 
-			gt <- geomtype(x)
-			if (gt == "points") {
+			gtype <- geomtype(x)
+			if (gtype == "points") {
 				args$lco <- "SHPT=POINTZ"
-			} else if (gt == "lines") {
+			} else if (gtype == "lines") {
 				args$lco <- "SHPT=ARCZ"
-			} else if (gt == "polygons") {
+			} else if (gtype == "polygons") {
 				args$lco <- "SHPT=POLYGONZ"
 			}
 		
