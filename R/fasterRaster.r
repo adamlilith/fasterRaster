@@ -281,6 +281,7 @@
 #' `.vAsDataTable()`: Convert the attribute table linked to a vector in **GRASS** to a `data.table`. This table is distinct from the attribute table attached to a `GVector`\cr
 #' `.vAttachDatabase()`: Add a database table to the **GRASS** representation of a `GVector`\cr
 #' `.vCats()`: Get a `data.table` with a single column named `cat`, which corresponds to the **GRASS** attribute table's `cat` column\cr
+#' `.vDetachDatabase(): Detach the **GRASS** database from a **GRASS** vector\cr
 #' `.vHasDatabase()`: Tests if **GRASS** vector has a database\cr
 #' `.vIncrementCats()`: Increment category values of a `GVector`\cr
 #' `.vNames()`: "**GRASS**" vector attribute table column names\cr
