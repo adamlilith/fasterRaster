@@ -32,7 +32,7 @@ To install the development version, you will need to use:
 
 `remotes::install_github('adamlilith/fasterRaster@intuitive_fasterRaster', dependencies = TRUE)`  
 
-To use `fasterRaster` you will musto install [GRASS version 8+](https://grass.osgeo.org/) on your operating system. You will need to use the stand-alone installer, not the Open Source Geospatial (OS Geo) installer.
+To use `fasterRaster` you must install [GRASS version 8+](https://grass.osgeo.org/) on your operating system. You will need to use the stand-alone installer, not the Open Source Geospatial (OS Geo) installer.
 
 ## An example
 
@@ -53,7 +53,7 @@ plot(st_geometry(madRivers), col = "blue", add = TRUE)
 ```
 <img src="elev_rivers.png"/>  
 
-Before you use nearly any `fasterRaster` function, you need to tell `fasterRaster` where `GRASS` is installed on your system. The installation folder will vary by operating system and maybe `GRASS` version, but will look something like this:  
+Before you use nearly any function in the package, you need to tell `fasterRaster` where `GRASS` is installed on your system. The installation folder will vary by operating system and maybe `GRASS` version, but will look something like this:  
 
 ```
 grassDir <- "C:/Program Files/GRASS GIS 8.3" # Windows
