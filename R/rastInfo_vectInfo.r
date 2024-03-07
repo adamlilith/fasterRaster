@@ -275,8 +275,8 @@
 	suppressMessages(
 		geomInfo <- rgrass::execGRASS(
 			"v.info",
-			flags = c("t", .quiet()),
 			map = src,
+			flags = c("t", .quiet()),
 			intern = TRUE,
 			Sys_show.output.on.console = FALSE,
 			echoCmd = FALSE
