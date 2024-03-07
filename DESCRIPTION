@@ -44,4 +44,4 @@ VignetteBuilder: knitr
 Encoding: UTF-8
 LazyData: true
 LazyLoad: yes
-RoxygenNote: 7.3.0
+RoxygenNote: 7.3.1
