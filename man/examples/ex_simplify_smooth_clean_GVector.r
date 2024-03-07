@@ -59,7 +59,7 @@ legend("topright",
 ### Clean geometry
 ##################
 
-noDangs <- cleanGeom(rivers, method = "removeDangles", tolerance = 2000)
+noDangs <- removeDangles(rivers, tolerance = 2000)
 
 plot(st_geometry(madRivers), col="blue")
 plot(noDangs, col="red", add=TRUE)

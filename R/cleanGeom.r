@@ -1,81 +1,173 @@
-#' Fix undesirable geometries of a vector
+#' Fix issues with geometries of a vector
 #'
-#' @description `cleanGeom()` fixes geometries of a vector. These can include, for example, "dangling" lines, removing topologically incorrect features, or lines of zero length.
+#' @description These functions are intended to help fix geometric issues with a `GVector`. Note that the functionality of the `snap()` and `removeAreas()` functions can also be implemented when using [fast()] to create a `GVector`.
+#'
+#' * `breakPolys()`: Break topologically clean areas. This is similar to `fixLines()`, except that it does not break loops. Topologically clean vectors may occur if the vector was imported from a format that does not enforce topology, such as a shapefile. Duplicate geometries are automatically removed after breaking.
+#' * `fixBridges()`: Change "bridges" to "islands" (which are topologically incorrect) within geometries to lines.
+#' * `fixDangles()`: Change "dangles" hanging off boundaries to lines if shorter than `tolerance` distance. If `tolerance` is <0, all dangles will be changed to lines.  Units of `tolerance` are in map units, or in degrees for unprojected CRSs. If `tolerance` <0, all dangles are removed, and the function will retain only closed loops and lines connecting loops. Dangles will be removed from longest to shortest.
+#' * `fixLines()`: Break lines at intersections and lines that form closed loops.
+#' * `remove0()`: Remove all boundaries and lines with a length of 0.
+#' * `removeAngles()`: Collapse lines that diverge at an angle that is computationally equivalent to 0. This tool often needs to be followed with the `break()` and `removeDups()` methods.
+#' * `removeBridges()`: Remove "bridges" to "islands" (which are topologically incorrect) within geometries.
+#' * `removeDangles()`: Remove "dangling" lines if shorter than `tolerance` distance. If `tolerance` is <0, all dangles will be removed. Units of `tolerance` are in map units, or in degrees for unprojected CRSs. If `tolerance` <0, all dangles are removed, and the function will retain only closed loops and lines connecting loops. Dangles will be removed from longest to shortest.
+#' * `removeDupCentroids()`: Remove duplicated area centroids. In **GRASS**, closed polygons have their attributes mapped to a (hidden) centroid of the polygon.
+#' * `removeDups()`: Remove duplicated features and area centroids. 
+#' * `removeSmallPolys()`: Remove polygons smaller than `tolerance`. Units of `tolerance` are in square meters (regardless of the CRS).
+#' * `snap()`: Snap lines/boundaries to each other if they are less than `tolerance` apart. Subsequent removal of dangles may be needed. Units of `tolerance` are map units, or degrees for unprojected CRSs.
 #'
 #' @param x A `GVector`.
 #'
-#' @param method Character: Method used to clean line segments. Partial matching is used, and case does not matter:
+#' @param tolerance Numeric or `NULL` (default): Minimum distance in map units (degrees for unprojected, usually meters for projected) or minimum area (in meters-squared, regardless of projection).
 #'
-#' * `duplicated`: Remove duplicated features and area centroids. 
-#' * `break`: Break lines at intersections and lines that form closed loops.
-#' * `removeDangles`: Remove "dangling" lines if shorter than `tolerance` distance. If `tolerance` is <0, all dangles will be removed. Units of `tolerance` are in map units, or in degrees for unprojected CRSs. If `tolerance` <0, all dangles are removed, and the function will retain only closed loops and lines connecting loops. Dangles will be removed from longest to shortest.
-#' * `changeDangles`: Change "dangles" hanging off boundaries to lines if shorter than `tolerance` distance. If `tolerance` is <0, all dangles will be changed to lines.  Units of `tolerance` are in map units, or in degrees for unprojected CRSs. If `tolerance` <0, all dangles are removed, and the function will retain only closed loops and lines connecting loops. Dangles will be removed from longest to shortest.
-#' * `removeBridges`: Remove "bridges" to "islands" (which are topologically incorrect) within geometries. Argument `tolerance` is ignored.
-#' * `changeBridges`: Change "bridges" to "islands" (which are topologically incorrect) within geometries to lines. Argument `tolerance` is ignored.
-#' * `snap`: Snap lines to vertex if they are less than `tolerance` apart. Subsequent removal of dangles may be needed. Units of `tolerance` are map units, or degrees for unprojected CRSs.
-#' * `dupAreaCentroids`: Remove duplicated area centroids. In **GRASS**, closed polygons have their attributes mapped to a (hidden) centroid of the polygon. The `tolerance` argument is ignored.
-#' * `topoClean`: Break topologically clean areas. This is similar to `break`, except that it does not break loops. Topologically clean vectors may occur if the vector was imported from a format that does not enforce topology, such as a shapefile. Duplicate geometries are automatically removed after breaking. Argument `tolerance` is ignored.
-#' * `smallAreas`: Remove polygons smaller than `tolerance`. Units of `tolerance` are in square meters (regardless of the CRS).
-#' * `remove0`: Remove all boundaries and lines with a length of 0. Argument `tolerance` is ignored.
-#' * `smallAngles`: Collapse lines that diverge at an angle that is computationally equivalent to 0. This tool often needs to be followed with the `break` and `duplicated` methods.
-#'
-#' @param tolerance Numeric or `NULL` (default): Minimum distance in map units (degrees for unprojected, usually meters for projected) or minimum area (for `smallAreas` in meters-squared, regardless of projection). If `NULL`, then 2% of the minimum of the x-, y-, and z-extent will be used, or this same value but assumed to be in meters-squared (for `smallAreas`).
-#'
-#' @seealso [simplifyGeom()], [terra::simplifyGeom()], [smoothGeom()]
+#' @seealso [terra::topology()], [fillHoles()], [simplifyGeom()], [smoothGeom()]
 #'
 #' @returns A `GVector`.
 #'
 #' @example man/examples/ex_simplify_smooth_clean_GVector.r
 #'
-#' @aliases cleanGeom
-#' @rdname cleanGeom
-#' @exportMethod cleanGeom
+#' @aliases breakPolys
+#' @rdname breakPolys
+#' @exportMethod breakPolys
 methods::setMethod(
-	f = "cleanGeom",
+	f = "breakPolys",
 	signature = c(x = "GVector"),
-	function(x, method = "duplicated", tolerance = NULL) {
+	function(x) {
+	
+	if (!is.polygons(x)) stop("This tool can only be applied to polygon GVectors.")
+	.cleanGeom(src = sources(x), method = "bpol", tolerance = NULL)
 
-	# automatic distance
-	if (is.null(tolerance) & !(method %in% c("duplicated"))) {
-		extent <- ext(x, vector = TRUE)
-		xext <- extent[2L] - extent[1L]
-		yext <- extent[4L] - extent[3L]
-  		zext <- diff(zext(x))
-		tolerance <- 0.01 * min(xext, yext, zext, na.rm=TRUE)
-	} else {
-		tolerance <- 0
-	}
+	} # EOF
+)
+
+#' @aliases fixBridges
+#' @rdname breakPolys
+#' @exportMethod fixBridges
+methods::setMethod(
+	f = "fixBridges",
+	signature = c(x = "GVector"),
+	function(x) .cleanGeom(src = sources(x), method = "chbridge", tolerance = NULL)
+)
+
+#' @aliases fixDangles
+#' @rdname breakPolys
+#' @exportMethod fixDangles
+methods::setMethod(
+	f = "fixDangles",
+	signature = c(x = "GVector"),
+	function(x, tolerance = -1) .cleanGeom(src = sources(x), method = "chdangle", tolerance = tolerance)
+)
+
+#' @aliases fixLines
+#' @rdname breakPolys
+#' @exportMethod fixLines
+methods::setMethod(
+	f = "fixLines",
+	signature = c(x = "GVector"),
+	function(x) {
+	
+	if (is.points(x)) stop("This tool can only be applied to line or polygon GVectors.")
+	.cleanGeom(src = sources(x), method = "break", tolerance = NULL)
+
+	} #EOF
+)
+
+#' @aliases remove0
+#' @rdname breakPolys
+#' @exportMethod remove0
+methods::setMethod(
+	f = "remove0",
+	signature = c(x = "GVector"),
+	function(x) {
+	
+	if (is.points(x)) stop("This tool can only be applied to line or polygon GVectors.")
+	.cleanGeom(src = sources(x), method = "rmline", tolerance = NULL)
+
+	} # EOF
+)
+
+#' @aliases removeAngles
+#' @rdname breakPolys
+#' @exportMethod removeAngles
+methods::setMethod(
+	f = "removeAngles",
+	signature = c(x = "GVector"),
+	function(x) .cleanGeom(src = sources(x), method = "rmsa", tolerance = NULL)
+)
+
+#' @aliases removeBridges
+#' @rdname breakPolys
+#' @exportMethod removeBridges
+methods::setMethod(
+	f = "removeBridges",
+	signature = c(x = "GVector"),
+	function(x) .cleanGeom(src = sources(x), method = "rmbridge", tolerance = NULL)
+)
+
+#' @aliases removeDangles
+#' @rdname breakPolys
+#' @exportMethod removeDangles
+methods::setMethod(
+	f = "removeDangles",
+	signature = c(x = "GVector"),
+	function(x, tolerance = -1) .cleanGeom(src = sources(x), method = "rmdangle", tolerance = tolerance)
+)
+
+#' @aliases removeDupCentroids
+#' @rdname breakPolys
+#' @exportMethod removeDupCentroids
+methods::setMethod(
+	f = "removeDupCentroids",
+	signature = c(x = "GVector"),
+	function(x) {
+	
+	if (!is.polygons(x)) stop("This tool can only be applied to polygon GVectors.")
+	.cleanGeom(src = sources(x), method = "rmdac", tolerance = NULL)
+	
+	} # EOF
+)
+
+#' @aliases removeDups
+#' @rdname breakPolys
+#' @exportMethod removeDups
+methods::setMethod(
+	f = "removeDups",
+	signature = c(x = "GVector"),
+	function(x) .cleanGeom(src = sources(x), method = "rmdupl", tolerance = NULL)
+)
+
+#' @aliases removeSmallPolys
+#' @rdname breakPolys
+#' @exportMethod removeSmallPolys
+methods::setMethod(
+	f = "removeSmallPolys",
+	signature = c(x = "GVector"),
+	function(x , tolerance) {
+	
+	if (!is.polygons(x)) stop("This tool can only be applied to polygon GVectors.")
+	.cleanGeom(src = sources(x), method = "rmarea", tolerance = tolerance)
+
+	} # EOF
+)
+
+#' @aliases snap
+#' @rdname breakPolys
+#' @exportMethod snap
+methods::setMethod(
+	f = "snap",
+	signature = c(x = "GVector"),
+	function(x , tolerance) .cleanGeom(src = sources(x), method = "snap", tolerance = tolerance)
+)
+
+#' Implement vector cleaning using `sources()` name of a vector 
+#'
+#' @param src [sources()] name of a `GVector`.
+#' @param method Character.
+#' @param tolerance `NULL` or numeric.
+#'
+#' @noRd
+.cleanGeom <- function(src, method, tolerance) {
 
 	.locationRestore(x)
-	
-	methods <- c("duplicated", "break", "removeDangles", "changeDangles", "removeBridges", "changeBridges", "snap", "dupAreaCentroids", "topoClean", "smallAreas", "remove0", "smallAngles")
-	method <- omnibus::pmatchSafe(method, methods)
-	
-	method <- if (method == "duplicated") {
-		"rmdupl"
-	} else if (method == "break") {
-		"break"
-	} else if (method == "removeDangles") {
-		"rmdangle"
-	} else if (method == "changeDangles") {
-		"chdangle"
-	} else if (method == "removeBridges") {
-		"rmbridge"
-	} else if (method == "changeBridges") {
-		"chbridge"
-	} else if (method == "snap") {
-		"snap"
-	} else if (method == "dupAreaCentroids") {
-		"rmdac"
-	} else if (method == "topoClean") {
-		"bpol"
-	} else if (method == "smallAreas") {
-		"rmarea"
-	} else if (method == "remove0") {
-		"rmline"
-	} else if (method == "smallAngles") {
-		"rmsa"
-	}
 	
 	src <- .makeSourceName("v_clean", "vector")
 	rgrass::execGRASS(
@@ -88,5 +180,4 @@ methods::setMethod(
 	)
 	.makeGVector(src)
 
-	} # EOF
-)
+}

@@ -6,7 +6,7 @@
 \alias{[,GVector,ANY,ANY-method}
 \title{Subset geometries of a GVector}
 \usage{
-\S4method{[}{GVector,ANY,ANY}(x, i, j)
+\S4method{[}{GVector,ANY,ANY}(x, i, j, drop = FALSE)
 }
 \arguments{
 \item{x}{A \code{GVector}.}
@@ -14,6 +14,8 @@
 \item{i}{Numeric integer, integer, or logical vector: Indicates which geometry(ies) to obtain. Negative numeric or integer values will remove the given geometries from the output. If a logical vector is supplied and it is not the same length as the number of geometries, it will be recycled.}
 
 \item{j}{Numeric integer, integer, logical, or character: Indices or name(s) of the column(s) to obtain. You can see column names using \code{\link[=names]{names()}}. Negative numeric or integer values will remove the given columns from the output. If a logical vector is supplied and it is not the same length as the number of columns, it will be recycled.}
+
+\item{drop}{Logical: If \code{FALSE} (default), the appropriate subset of the \code{GVector}s data table will be included in the subset. If \code{TRUE}, the table will be dropped.}
 }
 \value{
 A \code{GVector}.

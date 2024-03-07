@@ -13,7 +13,7 @@
 #'
 #' @param angle Numeric > 0: Maximum angle for the Hermite algorithm. Default is 3.
 #'
-#' @seealso [simplifyGeom()], [terra::simplifyGeom()], [cleanGeom()]
+#' @seealso [simplifyGeom()], [terra::simplifyGeom()], [geometry cleaning][breakPolys]
 #'
 #' @returns A `GVector`.
 #'

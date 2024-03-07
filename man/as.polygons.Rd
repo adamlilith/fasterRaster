@@ -18,7 +18,7 @@
 A \code{GVector}.
 }
 \description{
-\code{\link[=as.polygons]{as.polygons()}} converts a \code{GRaster} to a "polygons" \code{GVector}. After running this function, \code{\link[=cleanGeom]{cleanGeom()}} may be useful to use to "tidy up" the vector.
+\code{\link[=as.polygons]{as.polygons()}} converts a \code{GRaster} to a "polygons" \code{GVector}. After running this function, \link[=breakPolys]{geometry cleaning} may be useful to use to "tidy up" the vector.
 }
 \examples{
 if (grassStarted()) {
@@ -42,5 +42,5 @@ plot(rastToPolys)
 }
 }
 \seealso{
-\code{\link[=as.points]{as.points()}}, \code{\link[=as.lines]{as.lines()}}, \code{\link[terra:as.polygons]{terra::as.polygons()}}, \code{\link[=cleanGeom]{cleanGeom()}}, and \strong{GRASS} module \code{r.to.vect}
+\code{\link[=as.points]{as.points()}}, \code{\link[=as.lines]{as.lines()}}, \code{\link[terra:as.polygons]{terra::as.polygons()}}, \link[=breakPolys]{geometry cleaning}, and \strong{GRASS} module \code{r.to.vect}
 }

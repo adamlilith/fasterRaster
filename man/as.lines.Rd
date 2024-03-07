@@ -14,7 +14,7 @@
 A \code{GVector}.
 }
 \description{
-\code{\link[=as.lines]{as.lines()}} converts a \code{GRaster} to a "lines" \code{GVector}. Before you apply this function, you may need to run \code{\link[=thinLines]{thinLines()}} on the raster to reduce linear features to a single-cell width. You may also need to use \code{\link[=cleanGeom]{cleanGeom()}} (especially the "duplicated" and "removeDangles" \code{method}s) afterward to remove duplicated vertices and "dangling" lines.
+\code{\link[=as.lines]{as.lines()}} converts a \code{GRaster} to a "lines" \code{GVector}. Before you apply this function, you may need to run \code{\link[=thinLines]{thinLines()}} on the raster to reduce linear features to a single-cell width. You may also need to use \link[=breakPolys]{clean geometry} (especially the "duplicated" and "removeDangles" \code{method}s) afterward to remove duplicated vertices and "dangling" lines.
 }
 \examples{
 if (grassStarted()) {
@@ -45,5 +45,5 @@ plot(cleanLines, add = TRUE)
 }
 }
 \seealso{
-\code{\link[=as.points]{as.points()}}, \code{\link[=as.polygons]{as.polygons()}}, \code{\link[terra:as.lines]{terra::as.lines()}}, \code{\link[=thinLines]{thinLines()}}, \code{\link[=cleanGeom]{cleanGeom()}}, and \strong{GRASS} module \code{r.to.vect}
+\code{\link[=as.points]{as.points()}}, \code{\link[=as.polygons]{as.polygons()}}, \code{\link[terra:as.lines]{terra::as.lines()}}, \code{\link[=thinLines]{thinLines()}}, \link[=breakPolys]{geometry cleaning}, and \strong{GRASS} module \code{r.to.vect}
 }

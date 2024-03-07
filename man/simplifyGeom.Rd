@@ -90,7 +90,7 @@ legend("topright",
 ### Clean geometry
 ##################
 
-noDangs <- cleanGeom(rivers, method = "removeDangles", tolerance = 2000)
+noDangs <- removeDangles(rivers, tolerance = 2000)
 
 plot(st_geometry(madRivers), col="blue")
 plot(noDangs, col="red", add=TRUE)
@@ -106,5 +106,5 @@ legend("topright",
 }
 }
 \seealso{
-\code{\link[=smoothGeom]{smoothGeom()}}, \code{\link[=cleanGeom]{cleanGeom()}}, \code{\link[terra:simplify]{terra::simplifyGeom()}}
+\code{\link[=smoothGeom]{smoothGeom()}}, \link[=breakPolys]{geometry cleaning}, \code{\link[terra:simplify]{terra::simplifyGeom()}}
 }

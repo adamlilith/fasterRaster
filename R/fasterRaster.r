@@ -172,7 +172,6 @@
 #' [as.points()]: Extract vertex coordinates from a "lines" or "polygons" `GVector`\cr
 #' [buffer()]: Create a polygon around/inside a `GVector`\cr
 #' [cbind()]: Add columns to the data table of a `GVector`\cr
-#' [cleanGeom()]: Fix undesirable geometries of a `GVector`\cr
 #' [clusterPoints()]: Identify clusters of points\cr
 #' [complete.cases()]: Find rows of a `GVector`'s data table that have no `NA`s in them\cr
 #' [connectors()]: Create lines connecting nearest features of two `GVector`s\cr
@@ -186,7 +185,6 @@
 #' [erase()] or \code{\link[fasterRaster]{-}}: Remove part of a `GVector` that overlaps with another\cr
 #' [expanse()]: Area of polygons or length of lines\cr
 #' [extract()]: Extract values from a `GVector` at specific points\cr
-#' [fillHoles()]: Fill holes in a `GVector` (requires 8.4+)\cr
 #' [grid()]: Create a grid `GVector`\cr
 #' [head()]: First rows of a `GVector`'s data table\cr
 #' [hexagons()]: Create a hexagonal grid\cr
@@ -207,6 +205,21 @@
 #' [union()] or \code{\link[fasterRaster]{+}}: Combine two `GVector`s\cr
 #' [xor()] or \code{\link[fasterRaster]{/}}: Select parts of polygons not shared by two `GVector`s\cr
 #'
+#' ## Functions for fixing issues with `GVector`s
+#' * [breakPolys()]: Break topologically clean areas\cr
+#' * [fillHoles()]: Fill "holes" of a `GVector`\cr
+#' * [fixBridges()]: Change "bridges" to "islands"\cr
+#' * [fixDangles()]: Change "dangles" hanging off boundaries to lines\cr
+#' * [fixLines()]: Break lines at intersections and lines that form closed loops\cr
+#' * [remove0()]: Remove all boundaries and lines with a length of 0\cr
+#' * [removeAngles()]: Collapse lines that diverge at an angle that is computationally equivalent to 0\cr
+#' * [removeBridges()]: Remove "bridges" to "islands"\cr
+#' * [removeDangles()]: Remove "dangling" lines\cr
+#' * [removeDupCentroids()]: Remove duplicated area centroids\cr
+#' * [removeDups()]: Remove duplicated features and area centroids\cr
+#' * [removeSmallPolys()]: Remove small polygons\cr
+#' * [snap()]: Snap lines/boundaries to each other\cr
+#' 
 #' ## Converting between data types
 #' [as.contour()]: Convert a `GRaster` to a `GVector` representing contour lines\cr
 #' [as.doub()]: Convert a `GRaster` to a double-floating point raster (**GRASS** data type `DCELL`)\cr

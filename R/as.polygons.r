@@ -1,6 +1,6 @@
 #' Convert a raster to a polygons vector
 #'
-#' @description [as.polygons()] converts a `GRaster` to a "polygons" `GVector`. After running this function, [cleanGeom()] may be useful to use to "tidy up" the vector.
+#' @description [as.polygons()] converts a `GRaster` to a "polygons" `GVector`. After running this function, [geometry cleaning][breakPolys] may be useful to use to "tidy up" the vector.
 #' 
 #' @param x A `GRaster`. If more than one layer is in the `GRaster`, only the first will be used (with a warning).
 #' 
@@ -10,7 +10,7 @@
 #' 
 #' @returns A `GVector`.
 #' 
-#' @seealso [as.points()], [as.lines()], [terra::as.polygons()], [cleanGeom()], and **GRASS** module `r.to.vect`
+#' @seealso [as.points()], [as.lines()], [terra::as.polygons()], [geometry cleaning][breakPolys], and **GRASS** module `r.to.vect`
 #' 
 #' @example man/examples/ex_asPolygons.r
 #' 

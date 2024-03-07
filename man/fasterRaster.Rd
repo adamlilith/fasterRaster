@@ -194,7 +194,6 @@ The \code{\link[fasterRaster]{$<-}} operator can be used to replace specific col
 \code{\link[=as.points]{as.points()}}: Extract vertex coordinates from a "lines" or "polygons" \code{GVector}\cr
 \code{\link[=buffer]{buffer()}}: Create a polygon around/inside a \code{GVector}\cr
 \code{\link[=cbind]{cbind()}}: Add columns to the data table of a \code{GVector}\cr
-\code{\link[=cleanGeom]{cleanGeom()}}: Fix undesirable geometries of a \code{GVector}\cr
 \code{\link[=clusterPoints]{clusterPoints()}}: Identify clusters of points\cr
 \code{\link[=complete.cases]{complete.cases()}}: Find rows of a \code{GVector}'s data table that have no \code{NA}s in them\cr
 \code{\link[=connectors]{connectors()}}: Create lines connecting nearest features of two \code{GVector}s\cr
@@ -208,7 +207,6 @@ The \code{\link[fasterRaster]{$<-}} operator can be used to replace specific col
 \code{\link[=erase]{erase()}} or \code{\link[fasterRaster]{-}}: Remove part of a \code{GVector} that overlaps with another\cr
 \code{\link[=expanse]{expanse()}}: Area of polygons or length of lines\cr
 \code{\link[=extract]{extract()}}: Extract values from a \code{GVector} at specific points\cr
-\code{\link[=fillHoles]{fillHoles()}}: Fill holes in a \code{GVector} (requires 8.4+)\cr
 \code{\link[=grid]{grid()}}: Create a grid \code{GVector}\cr
 \code{\link[=head]{head()}}: First rows of a \code{GVector}'s data table\cr
 \code{\link[=hexagons]{hexagons()}}: Create a hexagonal grid\cr
@@ -220,6 +218,24 @@ The \code{\link[fasterRaster]{$<-}} operator can be used to replace specific col
 \code{\link[=project]{project()}}: Change coordinate reference system\cr
 \code{\link[=rasterize]{rasterize()}}: Convert a \code{GVector} to a \code{GRaster}\cr
 \code{\link[=rbind]{rbind()}}: Combine \verb{GVectors\\cr [simplifyGeom()]: Remove vertices\\cr [smoothGeom()]: Remove "angular" aspects of features\\cr [st_as_sf()]: Convert a }GVector\verb{to a}sf\verb{vector\\cr [st_buffer()]: Create a polygon around/inside a}GVector\verb{\\cr [tail()]: Last rows of a }GVector\verb{'s data table\\cr [thinPoints()]: Reduce number of points in same raster cell\\cr [union()] or \code{\link[fasterRaster]{+}}: Combine two }GVector\verb{s\\cr [xor()] or \code{\link[fasterRaster]{/}}: Select parts of polygons not shared by two }GVector`s\cr
+}
+
+\subsection{Functions for fixing issues with \code{GVector}s}{
+\itemize{
+\item \code{\link[=breakPolys]{breakPolys()}}: Break topologically clean areas\cr
+\item \code{\link[=fillHoles]{fillHoles()}}: Fill "holes" of a \code{GVector}\cr
+\item \code{\link[=fixBridges]{fixBridges()}}: Change "bridges" to "islands"\cr
+\item \code{\link[=fixDangles]{fixDangles()}}: Change "dangles" hanging off boundaries to lines\cr
+\item \code{\link[=fixLines]{fixLines()}}: Break lines at intersections and lines that form closed loops\cr
+\item \code{\link[=remove0]{remove0()}}: Remove all boundaries and lines with a length of 0\cr
+\item \code{\link[=removeAngles]{removeAngles()}}: Collapse lines that diverge at an angle that is computationally equivalent to 0\cr
+\item \code{\link[=removeBridges]{removeBridges()}}: Remove "bridges" to "islands"\cr
+\item \code{\link[=removeDangles]{removeDangles()}}: Remove "dangling" lines\cr
+\item \code{\link[=removeDupCentroids]{removeDupCentroids()}}: Remove duplicated area centroids\cr
+\item \code{\link[=removeDups]{removeDups()}}: Remove duplicated features and area centroids\cr
+\item \code{\link[=removeSmallPolys]{removeSmallPolys()}}: Remove small polygons\cr
+\item \code{\link[=snap]{snap()}}: Snap lines/boundaries to each other\cr
+}
 }
 
 \subsection{Converting between data types}{
@@ -303,12 +319,7 @@ Tutorial on \link[=tutorial_vector_topology]{vector topology} in \strong{GRASS} 
 \code{.vAsDataTable()}: Convert the attribute table linked to a vector in \strong{GRASS} to a \code{data.table}. This table is distinct from the attribute table attached to a \code{GVector}\cr
 \code{.vAttachDatabase()}: Add a database table to the \strong{GRASS} representation of a \code{GVector}\cr
 \code{.vCats()}: Get a \code{data.table} with a single column named \code{cat}, which corresponds to the \strong{GRASS} attribute table's \code{cat} column\cr
-\code{.vHasDatabase()}: Tests if \strong{GRASS} vector has a database\cr
-\code{.vIncrementCats()}: Increment category values of a \code{GVector}\cr
-\code{.vNames()}: "\strong{GRASS}" vector attribute table column names\cr
-\code{.vRecat()}: Change \strong{GRASS} category indices of a \strong{GRASS} vector\cr
-\code{.vValidCats()}: Are category values of a vector valid?\cr
-\code{grassStarted()}: Has a connection \strong{GRASS} been made within the current \strong{R} session?\cr
+\verb{.vDetachDatabase(): Detach the **GRASS** database from a **GRASS** vector\\cr }.vHasDatabase()\verb{: Tests if **GRASS** vector has a database\\cr }.vIncrementCats()\verb{: Increment category values of a }GVector\verb{\\cr }.vNames()\verb{: "**GRASS**" vector attribute table column names\\cr }.vRecat()\verb{: Change **GRASS** category indices of a **GRASS** vector\\cr }.vValidCats()\verb{: Are category values of a vector valid?\\cr }grassStarted()`: Has a connection \strong{GRASS} been made within the current \strong{R} session?\cr
 }
 }
 \seealso{

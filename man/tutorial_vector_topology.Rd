@@ -25,14 +25,18 @@ You can control topology correction in two ways:
 }
 
 \subsection{Correcting topology}{
+\enumerate{
+\item Automatic basic correction while creating a \code{GVector}: You can set the \code{correct} argument in \code{\link[=fast]{fast()}} to \code{TRUE} to correct issues on a case-by-case basis, or set the \code{correct} option in \code{\link[=faster]{faster()}} to \code{TRUE} to correct issues every time you use \code{\link[=fast]{fast()}}.
+}
 
-As noted, you can cause the \code{v.in.ogr} module to correct topology upon loading a vector by setting the \code{correct} option in \code{\link[=faster]{faster()}} to \code{TRUE} or the \code{correct} argument in \code{\link[=fast]{fast()}} to \code{TRUE}.
+2a. Manual correction while creating a \code{GVector}: Regardless of the value of \code{correct}, you can also use the \code{snap} and/or \code{area} arguments in \code{\link[=fast]{fast()}} to correct topological issues by snapping nearby vertices to one another and/or removing polygons with areas that are smaller than some threshold.
 
-Regardless of the value of \code{correct}, you can also use the \code{snap} and/or \code{area} arguments in \code{fast()} to correct topological issues by snapping nearby vertices to one another and/or removing polygons with areas that are smaller than some threshold. Here, a numeric value can be supplied to either \code{snap} and/or \code{area}. For \code{snap}, vertices closer than this distance apart will be moved to the same location. For \code{area}, polygons smaller than this value will be removed. For projected coordinate systems, the units are in map units (usually meters for \code{snap} and meters-squared for \code{area}), but for unprojected coordinate reference systems (like WGS84), units are in degrees.
+2b. Automatic advanced correction while creating a \code{GVector}: You can also attempt automatic snapping and/or area removal. To do this, set \code{snap} and/or \code{area} to \code{NULL}, and also define the \code{iter} argument to an integer >1. When using automatic correction, \code{fast()} will first try to load the vector without snapping or area removal. If this does not work, it will then use an automated procedure to increase the value(s) or \code{snap} and/or \code{area}, load the vector, and repeat, until either the vector is loaded or \code{iter} attempts have been made.
+\enumerate{
+\item After creating a \code{GVector}: You can apply the \link[=breakPolys]{various tools} to can snap, remove areas, delete dangles and too-small angles, and do several other tasks related to cleaning vectors, plus \code{\link[=fillHoles]{fillHoles()}}.
+}
 
-You can also attempt automatic snapping and/or area removal. To do this, set \code{snap} and/or \code{area} to \code{NULL}, and also define the \code{iter} argument to an integer >1. When using automatic correction, \code{fast()} will first try to load the vector without snapping or area removal. If this does not work, it will then use an automated procedure to increase the value(s) or \code{snap} and/or \code{area}, load the vector, and repeat, until either the vector is loaded or \code{iter} attempts have been made.
-
-A third way to fix topological issues is to apply the \code{\link[=cleanGeom]{cleanGeom()}} function, which can snap, remove areas, delete dangles, and do several other tasks related to cleaning vectors.
+Although not really a cleaning tool, you can use \code{\link[=simplifyGeom]{simplifyGeom()}} or \code{\link[=smoothGeom]{smoothGeom()}} to reduce the complexity of vector geometries.
 }
 }
 \examples{

@@ -20,14 +20,16 @@
 #'
 #' ## Correcting topology
 #'
-#' As noted, you can cause the `v.in.ogr` module to correct topology upon loading a vector by setting the `correct` option in [faster()] to `TRUE` or the `correct` argument in [fast()] to `TRUE`.
+#' 1. Automatic basic correction while creating a `GVector`: You can set the `correct` argument in [fast()] to `TRUE` to correct issues on a case-by-case basis, or set the `correct` option in [faster()] to `TRUE` to correct issues every time you use [fast()].
 #'
-#' Regardless of the value of `correct`, you can also use the `snap` and/or `area` arguments in `fast()` to correct topological issues by snapping nearby vertices to one another and/or removing polygons with areas that are smaller than some threshold. Here, a numeric value can be supplied to either `snap` and/or `area`. For `snap`, vertices closer than this distance apart will be moved to the same location. For `area`, polygons smaller than this value will be removed. For projected coordinate systems, the units are in map units (usually meters for `snap` and meters-squared for `area`), but for unprojected coordinate reference systems (like WGS84), units are in degrees.
+#' 2a. Manual correction while creating a `GVector`: Regardless of the value of `correct`, you can also use the `snap` and/or `area` arguments in [fast()] to correct topological issues by snapping nearby vertices to one another and/or removing polygons with areas that are smaller than some threshold.
 #'
-#' You can also attempt automatic snapping and/or area removal. To do this, set `snap` and/or `area` to `NULL`, and also define the `iter` argument to an integer >1. When using automatic correction, `fast()` will first try to load the vector without snapping or area removal. If this does not work, it will then use an automated procedure to increase the value(s) or `snap` and/or `area`, load the vector, and repeat, until either the vector is loaded or `iter` attempts have been made.
+#' 2b. Automatic advanced correction while creating a `GVector`: You can also attempt automatic snapping and/or area removal. To do this, set `snap` and/or `area` to `NULL`, and also define the `iter` argument to an integer >1. When using automatic correction, `fast()` will first try to load the vector without snapping or area removal. If this does not work, it will then use an automated procedure to increase the value(s) or `snap` and/or `area`, load the vector, and repeat, until either the vector is loaded or `iter` attempts have been made.
 #'
-#' A third way to fix topological issues is to apply the [cleanGeom()] function, which can snap, remove areas, delete dangles, and do several other tasks related to cleaning vectors.
+#' 3. After creating a `GVector`: You can apply the [various tools][breakPolys] to can snap, remove areas, delete dangles and too-small angles, and do several other tasks related to cleaning vectors, plus [fillHoles()].
 #'
+#' Although not really a cleaning tool, you can use [simplifyGeom()] or [smoothGeom()] to reduce the complexity of vector geometries.
+#' 
 #' @keywords tutorial
 #' @example man/examples/ex_GRaster_GVector.r
 NULL
