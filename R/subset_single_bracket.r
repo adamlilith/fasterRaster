@@ -8,6 +8,8 @@
 #'
 #' @param j Numeric integer, integer, logical, or character: Indices or name(s) of the column(s) to obtain. You can see column names using [names()]. Negative numeric or integer values will remove the given columns from the output. If a logical vector is supplied and it is not the same length as the number of columns, it will be recycled.
 #'
+#' @param drop Logical: If `FALSE` (default), the appropriate subset of the `GVector`s data table will be included in the subset. If `TRUE`, the table will be dropped.
+#'
 #' @returns A `GVector`.
 #'
 #' @example man/examples/ex_GRaster_GVector_subset_assign.r
@@ -22,7 +24,7 @@
 methods::setMethod(
 	"[",
 	signature = c(x = "GVector", i = "ANY", j = "ANY"),
-	function(x, i, j) {
+	function(x, i, j, drop = FALSE) {
 
 	.locationRestore(x)
 
@@ -56,6 +58,32 @@ methods::setMethod(
 			out <- NULL # removed all
 		} else {
 
+			gtype <- geomtype(x, grass = TRUE)
+
+			cats <- .vCats(x, db = FALSE)
+			index <- omnibus::renumSeq(cats)
+			if (reverseRowSelect) {
+				select <- which(omnibus::notIn(index, i))
+			} else {
+				select <- which(index %in% i)
+			}
+			cats <- cats[select]
+			cats <- unique(cats)
+			cats <- seqToSQL(cats)
+			cats <- as.character(cats)
+
+			src <- .makeSourceName("v_extract", "vector")
+			rgrass::execGRASS(
+				cmd = 'v.extract',
+				input = sources(x),
+				output = src,
+				cats = cats,
+				new = -1,
+				# type = gtype,
+				flags = c(.quiet(), 'overwrite')
+			)
+
+
 			# # # create database with frid value = -1 for records we do not want
 			# # frid <- .vCats(x, db = FALSE)
 			# # if (reverseRowSelect) {
@@ -73,31 +101,59 @@ methods::setMethod(
 			# # where <- paste0("frid > -1")
 			# # # # # where <- paste0("(frid = 1) or (frid = 11291)")
 
-			cats <- .vCats(x)
-			index <- omnibus::renumSeq(cats)
-			if (reverseRowSelect) {
-				select <- which(omnibus::notIn(index, i))
-			} else {
-				select <- which(index %in% i)
-			}
-			cats <- cats[select]
-			cats <- seqToSQL(cats)
-			cats <- as.character(cats)
+			# where <- paste0("cat IN (", paste(cats, collapse = ","), ")")
+			# where <- paste0("cat = ", paste(cats, collapse = ","))
+			
+			# where <- "id = 'a'"
+			# where <- "id IS 'a'"
+			# where <- "id IS a"
+			# where <- "id = a"
+			# where <- 'id = "a"'
+			# where <- 'id IS "a"'
 
-			src <- .makeSourceName("v_extract", "vector")
-			rgrass::execGRASS(
-				cmd = "v.extract",
-				input = sources(x),
-				# where = where,
-				output = src,
-				new = -1,
-				cats = cats,
-				# layer = "-1",
-				flags = c(.quiet(), "overwrite", "t")
-			)
+			# rgrass::execGRASS('v.db.renamecolumn', map = sources(x), column = 'cat_,cat')
+			# .vAsDataTable(x)
+
+			# rgrass::parseGRASS("v.extract")
+			# # rgrass::stringexecGRASS("v.extract input=kansas output=test2 type=area layer='-1' cats='77'")
+
+			# # rgrass::stringexecGRASS("v.extract input=kansas output=test type=area layer='-1' where='cat = 77'")
+			# .rm("test")
+			# # rgrass::stringexecGRASS(paste0("v.extract input=kansas output=test type=area where='cat = 1'")) # works if db intact and "cat" column exists
+			# rgrass::stringexecGRASS(paste0("v.extract input=", sources(ks), " output=test type=area where='cat IN (1)'")) # works if db intact and "cat" column exists AND needs to have topology corrected!
+			# .makeGVector("test")
+			
+			# cats <- paste(cats, collapse = ",")
+			# src <- .makeSourceName("v_extract", "vector")
+			# quiet <- if (is.null(.quiet())) { NULL } else { "-quiet" }
+			# # string <- paste0("v.extract -overwrite -t ", quiet, " input=", sources(x), " output=", src, " type=", gtype, " new=-1 where='cat IN (", cats, ")'") # works!
+			# string <- paste0("v.extract -overwrite -t ", quiet, " input=", sources(x), " output=", src, " type=", gtype, " new=-1 cats='", cats, "'") # works!
+			# rgrass::stringexecGRASS(string) # works as above
+			# .makeGVector(src)
+
+			# src <- .makeSourceName("v_extract", "vector")
+			# rgrass::execGRASS(
+			# 	cmd = "v.extract",
+			# 	input = sources(x),
+			# 	# where <- "SUB_NAME = 'Nam Loi'", # works
+			# 	# where <- "cat = 481", # works
+			# 	# where = where,
+			# 	output = src,
+			# 	new = -1,
+			# 	type = gtype,
+			# 	cats = cats,
+			# 	# file = 'C:/!scratch/cats.txt',
+			# 	layer = "-1",
+			# 	# layer = "db_in_ogr_table_m6u2SVUBnsE2",
+			# 	flags = c(.quiet(), "overwrite", "t")
+			# 	# flags = c(.quiet(), "overwrite", "r")
+			# 	# flags = c(.quiet(), "overwrite")
+			# )
+
+			# .makeGVector(src)
 
 			### select data table rows
-			if (nrow(x) == 0L) {
+			if (nrow(x) == 0L | drop) {
 				table <- NULL
 			} else {
 
@@ -164,7 +220,8 @@ methods::setMethod(
 			# keepRows <- frid[frid > -1L]
 			# table <- table[keepRows]
 
-			src <- .vRecat(src, gtype = geomtype(x, grass = TRUE))
+			# gtype <- geomtype(x, grass = TRUE)
+			# src <- .vRecat(src, gtype = gtype)
 			out <- .makeGVector(src, table = table)
 
 		} # keep some rows (vs discarding all)
