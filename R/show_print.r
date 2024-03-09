@@ -339,11 +339,12 @@ methods::setMethod(
 
 	# maximum number of fields to show
 	maxFieldsToShow <- 7L
-  	maxColWidth <- 20L
+  	maxColWidth <- 17L
+	maxDigits <- 5L
 
 	verbose <- faster("verbose")
 
-	digs <- min(3, getOption("digits"))
+	digs <- min(maxDigits, getOption("digits"))
 	extent <- round(object@extent, digs)
 	zextent <- round(object@zextent, digs)
 
@@ -353,20 +354,21 @@ methods::setMethod(
 	# will then print each element on one line
 	nFields <- ncol(object@table)
 	nRows <- nrow(object@table)
+	table <- head(object@table, 3)
 	if (nRows > 0L) {
 
-		fields <- colnames(object@table)
-		classes <- sapply(object@table, class)
-		maxFieldsToShow <- min(ncol(object@table), maxFieldsToShow)
+		fields <- colnames(table)
+		classes <- sapply(table, class)
+		maxFieldsToShow <- min(nFields, maxFieldsToShow)
 		
-  		row1 <- object@table[1L, 1L:maxFieldsToShow]
+  		row1 <- table[1L, 1L:maxFieldsToShow]
 		row1 <- as.data.frame(row1)
 		row1 <- unlist(row1)
 		row1 <- as.character(row1)
 		if (anyNA(row1)) row1[is.na(row1)] <- "NA"
 		
 		if (nRows >= 2L) {
-			row2 <- object@table[2L, 1L:maxFieldsToShow]
+			row2 <- table[2L, 1L:maxFieldsToShow]
 			row2 <- as.data.frame(row2)
 			row2 <- unlist(row2)
 			row2 <- as.character(row2)
@@ -376,7 +378,7 @@ methods::setMethod(
 		}
 		
 		if (nRows >= 3L) {
-			row3 <- object@table[3L, 1L:maxFieldsToShow]
+			row3 <- table[3L, 1L:maxFieldsToShow]
    			row3 <- as.data.frame(row3)
 			row3 <- unlist(row3)
 			row3 <- as.character(row3)
@@ -388,14 +390,14 @@ methods::setMethod(
 		fields <- fields[1L:maxFieldsToShow]
 		classes <- classes[1L:maxFieldsToShow]
 		
-		classes <- gsub(classes, pattern="integer", replacement="<int>")
-		classes <- gsub(classes, pattern="numeric", replacement="<num>")
-		classes <- gsub(classes, pattern="complex", replacement="<cpx>")
-		classes <- gsub(classes, pattern="character", replacement="<chr>")
-		classes <- gsub(classes, pattern="logical", replacement="<log>")
-		classes <- gsub(classes, pattern="Date", replacement="<Dte>")
+		classes <- gsub(classes, pattern = "integer", replacement = "<int>")
+		classes <- gsub(classes, pattern = "numeric", replacement = "<num>")
+		classes <- gsub(classes, pattern = "complex", replacement = "<cpx>")
+		classes <- gsub(classes, pattern = "character", replacement = "<chr>")
+		classes <- gsub(classes, pattern = "logical", replacement = "<log>")
+		classes <- gsub(classes, pattern = "Date", replacement = "<Dte>")
 
-		# column widths		
+		# column widths
 		ncFields <- nchar(fields)
 		ncFieldClasses <- nchar(classes)
 		ncRow1 <- nchar(row1)
@@ -403,22 +405,20 @@ methods::setMethod(
 		
 		if (!is.null(row2)) ncTableCells <- nchar(row2)
 		if (!is.null(row3)) ncTableCells <- pmax(ncTableCells, nchar(row3))
-
 		if (!is.null(row2))	nc <- pmax(nc, ncTableCells)
-
 		if (any(nc > maxColWidth)) nc[nc > maxColWidth] <- maxColWidth
 
 		# format table values
 		tooLongIndex <- which(nchar(row1) > maxColWidth)
 		if (length(tooLongIndex) > 0L) {
-			row1[tooLongIndex] <- paste0(substr(row1[tooLongIndex], 1L, nc - 1L), "~")
+			row1[tooLongIndex] <- paste0(substr(row1[tooLongIndex], 1L, nc[tooLongIndex] - 1L), "~")
 		}
 
 		if (!is.null(row2)) {		
 
 			tooLongIndex <- which(nchar(row2) > nc)
 			if (length(tooLongIndex) > 0L) {
-				row2[tooLongIndex] <- paste0(substr(row2[tooLongIndex], 1L, nc - 1L), "~")
+				row2[tooLongIndex] <- paste0(substr(row2[tooLongIndex], 1L, nc[tooLongIndex] - 1L), "~")
 			}
 		
 		}
@@ -427,7 +427,7 @@ methods::setMethod(
 
    			tooLongIndex <- which(nchar(row3) > nc)
 			if (length(tooLongIndex) > 0L) {
-				row3[tooLongIndex] <- paste0(substr(row3[tooLongIndex], 1L, nc - 1L), "~")
+				row3[tooLongIndex] <- paste0(substr(row3[tooLongIndex], 1L, nc[tooLongIndex] - 1L), "~")
 			}
 		
 		}
@@ -444,7 +444,7 @@ methods::setMethod(
 		}
 		
 		if (nFields > maxFieldsToShow) {
-			classes <- c(classes, paste("(and", nFields - maxFieldsToShow, "more columns)"))
+			classes <- c(classes, paste("(and", nFields - maxFieldsToShow, "more column(s))"))
 		}
 		
 	}
@@ -470,7 +470,7 @@ methods::setMethod(
 		cat("values      :", row1, "\n")
 		if (!is.null(row2)) cat("             ", row2, "\n")
 		if (!is.null(row3)) cat("             ", row3, "\n")
-		if (nRows > 3L) cat("              ...and ", nRows - 3L, " more rows\n")
+		if (nRows > 3L) cat("             (and", nRows - 3L, "more rows)\n")
 	}
 	
 	} # EOF
