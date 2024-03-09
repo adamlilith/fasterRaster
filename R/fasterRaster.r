@@ -5,6 +5,7 @@
 #' ## Most useful tutorials and functions:
 #' A [quick-start][tutorial_getting_started] tutorial\cr
 #' A tutorial on [raster data types][tutorial_raster_data_types]\cr
+#' A tutorial on [vector topology and troubleshooting][tutorial_vector_topology_and_troubleshooting] creation of `GVector`s\cr
 #' [faster()]: Set the directory where **GRASS** is installed on your system, and set or get other package-wide options\cr
 #' [fast()]: Convert a `SpatRaster`, `SpatVector`, or `sf` vector to **fasterRaster**'s raster format (`GRaster`s) or vector format (`GVector`s), or load one from a file\cr
 #' [rast()], [vect()], and [st_as_sf()]: Convert `GRaster`s and `GVector`s to `SpatRaster`s, `SpatVector`s, or `sf` vectors\cr
@@ -166,6 +167,7 @@
 #' The \code{\link[fasterRaster]{[}} operator can be used to subset geometries of a `GVector`.\cr
 #' The [$] and \code{\link[fasterRaster]{[[}} operators can be used to get columns of a `GVector`'s data table.\cr
 #' The \code{\link[fasterRaster]{$<-}} operator can be used to replace specific columns of a `GVector`'s data table.\cr
+#' [addTable<-]: Add a data table to a `GVector`\cr
 #' [aggregate()]: Combine `GVector` geometries\cr
 #' [as.data.frame()]: Convert a `GVector`'s attribute table to a `data.frame`\cr
 #' [as.data.table()]: Convert a `GVector`'s attribute table to a `data.table`\cr
@@ -206,19 +208,19 @@
 #' [xor()] or \code{\link[fasterRaster]{/}}: Select parts of polygons not shared by two `GVector`s\cr
 #'
 #' ## Functions for fixing issues with `GVector`s
-#' * [breakPolys()]: Break topologically clean areas\cr
-#' * [fillHoles()]: Fill "holes" of a `GVector`\cr
-#' * [fixBridges()]: Change "bridges" to "islands"\cr
-#' * [fixDangles()]: Change "dangles" hanging off boundaries to lines\cr
-#' * [fixLines()]: Break lines at intersections and lines that form closed loops\cr
-#' * [remove0()]: Remove all boundaries and lines with a length of 0\cr
-#' * [removeAngles()]: Collapse lines that diverge at an angle that is computationally equivalent to 0\cr
-#' * [removeBridges()]: Remove "bridges" to "islands"\cr
-#' * [removeDangles()]: Remove "dangling" lines\cr
-#' * [removeDupCentroids()]: Remove duplicated area centroids\cr
-#' * [removeDups()]: Remove duplicated features and area centroids\cr
-#' * [removeSmallPolys()]: Remove small polygons\cr
-#' * [snap()]: Snap lines/boundaries to each other\cr
+#' [breakPolys()]: Break topologically clean areas\cr
+#' [fillHoles()]: Fill "holes" of a `GVector`\cr
+#' [fixBridges()]: Change "bridges" to "islands"\cr
+#' [fixDangles()]: Change "dangles" hanging off boundaries to lines\cr
+#' [fixLines()]: Break lines at intersections and lines that form closed loops\cr
+#' [remove0()]: Remove all boundaries and lines with a length of 0\cr
+#' [removeAngles()]: Collapse lines that diverge at an angle that is computationally equivalent to 0\cr
+#' [removeBridges()]: Remove "bridges" to "islands"\cr
+#' [removeDangles()]: Remove "dangling" lines\cr
+#' [removeDupCentroids()]: Remove duplicated area centroids\cr
+#' [removeDups()]: Remove duplicated features and area centroids\cr
+#' [removeSmallPolys()]: Remove small polygons\cr
+#' [snap()]: Snap lines/boundaries to each other\cr
 #' 
 #' ## Converting between data types
 #' [as.contour()]: Convert a `GRaster` to a `GVector` representing contour lines\cr
@@ -259,11 +261,10 @@
 #' [madRivers][madRivers]: Rivers vector\cr
 #' [vegIndices][vegIndices]: Vegetation indices that can be calculated using [vegIndex()].
 #' 
-#' ## Esoteric, exported yet often (publicly) undocumented functions for developers, plus tutorials
+#' ## Esoteric, exported yet often (publicly) undocumented functions for developers, plus esoteric tutorials
 #' Comparisons between `GRegion`s can be performed using the `==` and `!=` operators.\cr
 #' Tutorial on **GRASS** [regions][tutorial_regions]\cr
 #' Tutorial on **GRASS** ["locations" and mapsets][tutorial_locations_mapsets]\cr
-#' Tutorial on [vector topology][tutorial_vector_topology] in **GRASS** and **fasterRaster**\cr
 #' `.copyGSpatial()`: Make a copy of the **GRASS** file pointed to by a `GRaster` or `GVector`\cr
 #' `.fileExt()`: Get file extension\cr
 #' `.exists()`: Does the **GRASS** file of a `GRaster` or `GVector` exist?\cr
