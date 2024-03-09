@@ -34,7 +34,7 @@ methods::setMethod(
 	function(x) {
 	
 	if (!is.polygons(x)) stop("This tool can only be applied to polygon GVectors.")
-	.cleanGeom(src = sources(x), method = "bpol", tolerance = NULL)
+	.cleanGeom(x, method = "bpol", tolerance = NULL, topo = topology(x))
 
 	} # EOF
 )
@@ -45,7 +45,7 @@ methods::setMethod(
 methods::setMethod(
 	f = "fixBridges",
 	signature = c(x = "GVector"),
-	function(x) .cleanGeom(src = sources(x), method = "chbridge", tolerance = NULL)
+	function(x) .cleanGeom(x, method = "chbridge", tolerance = NULL, topo = topology(x))
 )
 
 #' @aliases fixDangles
@@ -54,7 +54,7 @@ methods::setMethod(
 methods::setMethod(
 	f = "fixDangles",
 	signature = c(x = "GVector"),
-	function(x, tolerance = -1) .cleanGeom(src = sources(x), method = "chdangle", tolerance = tolerance)
+	function(x, tolerance = -1) .cleanGeom(x, method = "chdangle", tolerance = tolerance, topo = topology(x))
 )
 
 #' @aliases fixLines
@@ -66,7 +66,7 @@ methods::setMethod(
 	function(x) {
 	
 	if (is.points(x)) stop("This tool can only be applied to line or polygon GVectors.")
-	.cleanGeom(src = sources(x), method = "break", tolerance = NULL)
+	.cleanGeom(x, method = "break", tolerance = NULL, topo = topology(x))
 
 	} #EOF
 )
@@ -80,7 +80,7 @@ methods::setMethod(
 	function(x) {
 	
 	if (is.points(x)) stop("This tool can only be applied to line or polygon GVectors.")
-	.cleanGeom(src = sources(x), method = "rmline", tolerance = NULL)
+	.cleanGeom(x, method = "rmline", tolerance = NULL, topo = topology(x))
 
 	} # EOF
 )
@@ -91,7 +91,7 @@ methods::setMethod(
 methods::setMethod(
 	f = "removeAngles",
 	signature = c(x = "GVector"),
-	function(x) .cleanGeom(src = sources(x), method = "rmsa", tolerance = NULL)
+	function(x) .cleanGeom(x, method = "rmsa", tolerance = NULL, topo = topology(x))
 )
 
 #' @aliases removeBridges
@@ -100,7 +100,7 @@ methods::setMethod(
 methods::setMethod(
 	f = "removeBridges",
 	signature = c(x = "GVector"),
-	function(x) .cleanGeom(src = sources(x), method = "rmbridge", tolerance = NULL)
+	function(x) .cleanGeom(x, method = "rmbridge", tolerance = NULL, topo = topology(x))
 )
 
 #' @aliases removeDangles
@@ -109,7 +109,7 @@ methods::setMethod(
 methods::setMethod(
 	f = "removeDangles",
 	signature = c(x = "GVector"),
-	function(x, tolerance = -1) .cleanGeom(src = sources(x), method = "rmdangle", tolerance = tolerance)
+	function(x, tolerance = -1) .cleanGeom(x, method = "rmdangle", tolerance = tolerance, topo = topology(x))
 )
 
 #' @aliases removeDupCentroids
@@ -121,7 +121,7 @@ methods::setMethod(
 	function(x) {
 	
 	if (!is.polygons(x)) stop("This tool can only be applied to polygon GVectors.")
-	.cleanGeom(src = sources(x), method = "rmdac", tolerance = NULL)
+	.cleanGeom(x, method = "rmdac", tolerance = NULL, topo = topology(x))
 	
 	} # EOF
 )
@@ -132,7 +132,7 @@ methods::setMethod(
 methods::setMethod(
 	f = "removeDups",
 	signature = c(x = "GVector"),
-	function(x) .cleanGeom(src = sources(x), method = "rmdupl", tolerance = NULL)
+	function(x) .cleanGeom(x, method = "rmdupl", tolerance = NULL, topo = topology(x))
 )
 
 #' @aliases removeSmallPolys
@@ -144,7 +144,7 @@ methods::setMethod(
 	function(x , tolerance) {
 	
 	if (!is.polygons(x)) stop("This tool can only be applied to polygon GVectors.")
-	.cleanGeom(src = sources(x), method = "rmarea", tolerance = tolerance)
+	.cleanGeom(x, method = "rmarea", tolerance = tolerance, topo = topology(x))
 
 	} # EOF
 )
@@ -155,29 +155,49 @@ methods::setMethod(
 methods::setMethod(
 	f = "snap",
 	signature = c(x = "GVector"),
-	function(x , tolerance) .cleanGeom(src = sources(x), method = "snap", tolerance = tolerance)
+	function(x , tolerance) .cleanGeom(x, method = "snap", tolerance = tolerance, topo = topology(x))
 )
 
 #' Implement vector cleaning using `sources()` name of a vector 
 #'
-#' @param src [sources()] name of a `GVector`.
+#' @param x `GVector` or [sources()] name of a `GVector`.
 #' @param method Character.
 #' @param tolerance `NULL` or numeric.
+#' @param topo "2D" or "3D"
 #'
 #' @noRd
-.cleanGeom <- function(src, method, tolerance) {
+.cleanGeom <- function(x, method, tolerance, topo) {
 
-	.locationRestore(x)
+	if (inherits(x, "GVector")) {
+		.locationRestore(x)
+		src <- sources(x)
+		table <- x@table
+	} else {
+		src <- x
+		table <- NULL
+	}
+
+	src <- .copyGSpatial(src, type = "vector", topo = topo, reshapeRegion = FALSE)
 	
 	src <- .makeSourceName("v_clean", "vector")
-	rgrass::execGRASS(
+	args <- list(
 		cmd = "v.clean",
 		input = sources(x),
 		output = src,
 		tool = method,
-		threshold = tolerance,
 		flags = c("c", .quiet(), "overwrite")
 	)
-	.makeGVector(src)
+
+	if (!is.null(tolerance)) args$threshold <- tolerance
+	do.call(rgrass::execGRASS, args = args)
+
+	out <- .makeGVector(src)
+	if (!is.null(table)) {
+	
+		if (ngeom(out) == nrow(table)) out@table <- table
+		methods::validObject(out)
+	
+	}
+	out
 
 }
