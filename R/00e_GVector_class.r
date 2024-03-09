@@ -31,6 +31,8 @@ methods::setValidity("GVector",
 			# "The number of @nGeometries is not the same as the number of unique ", sQuote("cat"), " values in the vector attribute table in GRASS."
 		# } else if (object@nGeometries > object@nSubgeometries) {
 			# "The number of sub-geometries in @nSubgeometries must be <= the number of geometries in @nGeometries."
+		} else if (object@nGeometries == 0L) {
+			"GVector has no geometries."
 		} else if (nrow(object@table) > 0L && nrow(object@table) != object@nGeometries) {
 			"The data.table in @table must be a NULL table (data.table(NULL)), or it must have the same number of rows as @nGeometries."
 		} else {
