@@ -90,18 +90,18 @@ faster <- function(
 	out <- faster()
 
 	### check for validity
-	error <- paste0("Option ", sQuote("grassDir"), " must be ", dQuote("NULL"), " (which is likely to fail)\n  or a single character string. The default is ", dQuote(.grassDirDefault()), ".")
+	error <- paste0("Option `grassDir` must be NULL (which is likely to fail)\n  or a single character string. The default is `", .grassDirDefault(), "`.")
 	if (any(names(opts) %in% "grassDir")) {
 		if (!is.na(opts$grassDir)) {
    			if (!is.character(opts$grassDir) || length(opts$grassDir) != 1L) stop(error)
 		}
 		if (!file.exists(opts$grassDir)) {
 			opts$grassDir <- NA_character_
-			warning(sQuote("grassDir"), " invalid. This directory does not exist. Value has been set to NA.")
+			warning("`grassDir` is invalid. This directory does not exist. Value has been set to NA.")
 		}
 	}
 
-	error <- paste0("Option ", sQuote("addonsDir"), " must be ", sQuote("NULL"), " or a single character string. The default is ", dQuote(.addonsDirDefault()), ".")
+	error <- paste0("Option `addonsDir` must be NULL or a single character string. The default is `", .addonsDirDefault(), "`.")
 	if (any(names(opts) %in% "addonsDir")) {
 		if (!is.na(opts$addonsDir)) {
    			if (!is.character(opts$addonsDir) || length(opts$addonsDir) != 1L) stop(error)
@@ -113,7 +113,7 @@ faster <- function(
 	
 	}
 
-	error <- paste0("Option ", sQuote("workDir"), " must be a single character string. The default is\n  ", dQuote(.workDirDefault()), ".")
+	error <- paste0("Option `workDir` must be a single character string. The default is\n  ", .workDirDefault(), ".")
 	if (any(names(opts) %in% "workDir")) {
 
   		if (!is.character(opts$workDir) || length(opts$workDir) != 1L) stop(error)
@@ -122,40 +122,25 @@ faster <- function(
 
 	}
 
-	# error <- paste0("Option ", sQuote("location"), " must be a single character string. The default is ", dQuote(.locationDefault()), ".")
-	# if (any(names(opts) %in% "location")) {
-  	# 	if (!is.character(opts$location) || length(opts$location) != 1L) stop(error)
-	# }
-
-	# error <- paste0("Option ", sQuote("mapset"), " must be a single character string. The default is ", dQuote(.mapsetDefault()), ".")
-	# if (any(names(opts) %in% "mapset")) {
-  	# 	if (!is.character(opts$mapset) || length(opts$mapset) != 1L) stop(error)
-	# }
-
 	if (any(names(opts) %in% "cores")) {
-		if (!is.numeric(opts$cores) | (opts$cores <= 0 & opts$cores %% 1 != 0)) stop("Option ", sQuote("cores"), " must be an integer >= 1. The default is ", .coresDefault(), ".")
+		if (!is.numeric(opts$cores) | (opts$cores <= 0 & opts$cores %% 1 != 0)) stop("Option `cores` must be an integer >= 1. The default is ", .coresDefault(), ".")
 	}
 
 	if (any(names(opts) %in% "correct")) {
-  		if (is.na(opts$correct) || !is.logical(opts$correct)) stop("Option ", sQuote("correct"), " must be a logical. The default is ", .correctDefault(), ".")
+  		if (is.na(opts$correct) || !is.logical(opts$correct)) stop("Option `correct` must be a logical. The default is ", .correctDefault(), ".")
 	}
 
 	if (any(names(opts) %in% "verbose")) {
-  		if (is.na(opts$verbose) || !is.logical(opts$verbose)) stop("Option ", sQuote("verbose"), " must be a logical. The default is ", .verboseDefault(), ".")
+  		if (is.na(opts$verbose) || !is.logical(opts$verbose)) stop("Option `verbose` must be a logical. The default is ", .verboseDefault(), ".")
 	}
 
 	if (any(names(opts) %in% "memory")) {
-		if (!is.numeric(opts$memory) || opts$memory <= 0) stop("Option ", sQuote("memory"), " must be a positive number. The default is ", .memoryDefault(), " (GB).")
+		if (!is.numeric(opts$memory) || opts$memory <= 0) stop("Option `memory` must be a positive number. The default is ", .memoryDefault(), " (GB).")
 	}
-
-	# if (any(names(opts) %in% "autoRegion")) {
-	# 	if (!is.logical(opts$autoRegion)) stop("Option ", sQuote("autoRegion"), " must be a logical. The default is ", .autoRegionDefault(), ".")
-	# 	if (is.na(opts$autoRegion)) stop("Option ", sQuote("autoRegion"), " must be TRUE or FALSE (not NA). The default is ", .autoRegionDefault(), ".")
-	# }
 
 	if (any(names(opts) %in% "rasterPrecision")) {
 	
-		if (is.na(opts$rasterPrecision) || !is.character(opts$rasterPrecision)) stop("Option ", sQuote("rasterPrecision"), " must be ", sQuote("float"), ") or ", sQuote("double"), ".\n  The default is ", .rasterPrecisionDefault(), ".")
+		if (is.na(opts$rasterPrecision) || !is.character(opts$rasterPrecision)) stop("Option `rasterPrecision` must be `float` or `double`.\n  The default is ", .rasterPrecisionDefault(), ".")
 
      	opts$rasterPrecision <- omnibus::pmatchSafe(opts$rasterPrecision, c("FCELL", "float", "DCELL", "double"))
 		opts$rasterPrecision <- if (opts$rasterPrecision == "FCELL") {
@@ -167,7 +152,7 @@ faster <- function(
 
 	if (any(names(opts) %in% "useDataTable")) {
 
-		if (is.na(opts$useDataTable) || !is.logical(opts$useDataTable)) stop("Option ", sQuote("useDataTable"), " must be a logical. The default is ", .useDataTableDefault(), ".")
+		if (is.na(opts$useDataTable) || !is.logical(opts$useDataTable)) stop("Option `useDataTable` must be a logical. The default is ", .useDataTableDefault(), ".")
 	
 	}
 
