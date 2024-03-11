@@ -14,28 +14,24 @@
 #' @param ... Other arguments:
 #' * `rastOrVect`: Either `NULL` (default), or `"raster"` or `"vector"`: If `x` is a filename, then the function will try to ascertain whether it represents a raster or a vector, but sometimes this will fail. In that case, it can help to specify if the file holds a raster or vector. Partial matching is used.
 #' * `levels` (`GRaster`s--useful mainly to developers, not most users): A `data.frame`, `data.table`, or list of `data.frame`s or `data.table`s with categories for categorical rasters: The first column of a table corresponds to raster values and must be of type `integer`. A subsequent column corresponds to category labels. By default, the second column is assumed to represent labels, but this can be changed with \code{\link[fasterRaster]{activeCat<-}}. Level tables can also be `NULL` (e.g., `data.fame(NULL)`).
-#' * `area` (polygon `GVector`s): Either `NULL` or a positive numeric value: Remove polygons with an area smaller than this value. This argument can be used to correct topologically incorrect polygons with borders that cross one another (see *Details*). Units of `area` are in square meters (regardless of the CRS). If `NULL`, then an iterative procedure is applied that increases the size of `area` starting from 0 (i.e., no removal of polygons). This procedure is not guaranteed to find the optimal value of `area`, and it may remove polygons that are legitimate. You must also set the `iter` argument if `area` is NULL.
-#' * `increment` (`GVector`s only): Numeric: Multiplier for increasing `snap` and/or `area` each iteration (only when `snap` and/or `area` are `NULL`). The actual increase in the value will be `<starting value> * increment * 2^(i - 1)`, where `i` is the iteration.
-#' * `correct` (`GVector`s only): Logical. If `TRUE`, then [topology][tutorial_vector_topology] of the vector will be corrected. If `FALSE` (default), then topology will not be corrected. Please see *Details* and the [tutorial][tutorial_vector_topology] on vector topology. *NOTE*: You can set the `correct` option for all uses of `fast()` using `faster(correct = TRUE)` or `faster(correct = FALSE)`. You can turn override this global setting by using the `correct  argument when you use `fast()`.
+#' * `area` (polygon `GVector`s): Either `NULL` or a positive numeric value: Remove polygons with an area smaller than this value. This argument can be used to correct topologically incorrect polygons with borders that cross one another (see *Details*). Units of `area` are in square meters (regardless of the CRS). If `NULL`, then an iterative procedure is used to identify a valid value for `area`.
+#' * `correct` (`GVector`s only): Logical. If `TRUE` (default), then [topology][tutorial_vector_topology_and_troubleshooting] of the vector will be corrected. Please see *Details* and the [tutorial][tutorial_vector_topology_and_troubleshooting] on vector topology and troubleshooting.
 #' * `dropTable` (`GVector`s only): Drop any data table associated with the geometries. This can be useful for importing a topologically incorrect vector for which the table is mot needed The general idea is that the vector can have imperfections which appear as "slivers" between polygons or dangling lines. These are treated as legitimate geometries (but can be removed using the `snap` and `area` arguments or after loading with [geometry cleaning][breakPolys])), but they can cause errors because it is usually not possible to match a sliver to a single row in a data table since it is comprised of at least two polygons.
+#' * `increment` (`GVector`s only): Numeric: Multiplier for increasing `snap` and/or `area` each iteration (only when `snap` and/or `area` are `NULL`).
 #' * `iter` (`GVector`s only): Positive integer: Number of times to increment values of `snap` and/or `area` when using automated topology correction (either `snap` or `area` is `NULL`).
-#' * `snap` (`GVector`s only): Either `NULL` or a positive numeric value: The value of `snap` indicates how close vertices need to be for them to be shifted to to the same location. If the purpose of using `snap` is to fix topology (see *Details*), small values are recommended, as values that are too large can dramatically change the shape of polygons. Units of `snap` are map units (usually meters), or degrees for unprojected CRSs. A value of `NULL` will use an iterative procedure starting with `snap = 0` (i.e., no snapping) to find the minimum value that produces a topologically vector. This is not guaranteed to find the best value of `snap`, it can produce undesirable changes in shapes, and for large vectors can take a long time. You must also set the `iter` argument if `snap` is NULL.  Vectors that have been snapped may need to be cleaned using [fixLines()], [removeDups()], and [removeAngles()] tools.
+#' * `snap` (`GVector`s only): Either `NULL` or a positive numeric value: The value of `snap` indicates how close vertices need to be for them to be shifted to to the same location. Units of `snap` are map units (usually meters), or degrees for unprojected CRSs. A value of `NULL` will use an iterative procedure to find the best, smallest value of `snap`. You must also set the `iter` argument if `snap` is NULL.  Please see *Details* and the [tutorial][tutorial_vector_topology_and_troubleshooting] on vector topology and troubleshooting.
 #' * `table` (`GVector`s--useful mainly to developers, not most users): A `data.frame` or `data.table` with one row per geometry in a `GVector`: Serves as an attribute table.
 #' * `verbose`: Displays progress for iterative topological correction (i.e., `snap` and/or `area` are `NULL`).
 #'
-#' @details Sometimes, polygons created in other software are topologically incorrect--the borders of adjacent polygons may cross one another, or there may be small gaps between them. These errors can be corrected by slightly shifting vertices and/or removing small polygons that result from intersections of larger ones that border one another.
+#' @details **GRASS** uses a [topological][tutorial_vector_topology_and_troubleshooting] model for vectors. Sometimes, polygons created in other software are topologically incorrect--the borders of adjacent polygons may cross one another, or there may be small gaps between them. These errors can be corrected by slightly shifting vertices and/or removing small polygons that result from intersections of larger ones that border one another. A topological system also recognizes that boundaries to adjacent polygons are shared by the areas, so should not be ascribed attributes that belong to both areas (e.g., the shared border between two countries "belongs" to both countries).
 #'
-#' By default, `fast()` will *not* correct topological errors in vectors. This will give you a vector that is commensurate with what you get from [terra::vect()], but it will not necessarily be topologically correct. You can force it to correct topology by setting `correct = TRUE`. However, even if you do this, you can still use the `snap` and `area` options to force further corrections. `fast()` has two levels of topology correction: a) correction on loading the vector (`correct = TRUE`), b) and correction after loading the vector (use of the `snap` and/or `area` arguments, plus also maybe the `iter` argument).
+#' By default, `fast()` will correct topological errors in vectors. This will not necessarily give you a vector that is commensurate with what you get from [terra::vect()], but it will be topologically correct. You can force `fast()` not to correct topology by setting `correct = FALSE`, which is more likely to yield what you would get with **terra**. However, even if you do this, you can still use the `snap` and `area` options to force further corrections. `fast()` has two levels of topology correction that can be used simultaneously: a) correction on loading the vector (`correct = TRUE`), b) and correction using the `snap` and/or `area` arguments, plus also maybe the `iter` and `increment` arguments.
 #' 
-#' The `snap` and `area` arguments work to correct topological issues while the vector is read in. They can be used regardless of the value of `correct`. The `snap` and `area` arguments take numeric values or can be assigned to `NULL`. If you set one or both of these to `NULL`, the function will attempt to correct for invalid topology automatically by incrementally increasing their values until a topologically valid vector is created or a maximum number of iterations is surpassed. If you use the automatic option, you can set the number of iterations using `iter`. If you do not supply `iter`, it will be set to a default value of 10.
+#' Topological issues can often be corrected by snapping vertices that are close to one another to the same location, and/or by removing very small polygons (which can be produced when `correct = TRUE` and slight overlaps in polygons are converted to their own polygons). Snapping is performed by using the `snap` argument, and removal of small polygons through the `area` argument. Snapping and area removal can be performed regardless of the value of `correct`. The `snap` and `area` arguments take numeric values or can be assigned to `NULL`. If you set one or both of these to `NULL`, the function will attempt to snap and/or remove small areas by incrementally increasing their values until a topologically valid vector is created or a maximum number of iterations is surpassed. If you use the automatic option, you must set the number of iterations using `iter`. You can also set the rate of increase using `increment` (which is 1E-6 by default).
 #'
-#' When implementing automatic topology with either `snap` and `area`, the first iteration attempted is 0 (no snapping, no area removal). If this does not yield a valid topology, then *d*, the minimum of the extent of the vector in the x- and y-directions, is calculated. For the remaining iterations, the value of `snap` is set to *d* * `increment` * 2^(`i` - 1) and `area` to  *d*^2 * `increment` * 2^(`i` - 1). If `area` is < `snap`^2, then area is increased to `snap`^2.
+#' When implementing automatic topology correction (i.e., either `snap` and/or `area` are `NULL`), the first iteration attempted does no snapping or no area removal. If this does not yield a valid topology, then *d*, the minimum of the extent of the vector in the x- and y-directions, is calculated. For the remaining iterations, the value of `snap` is set to *d* * `increment` * 2^(`i` - 1) and `area` to  *d*^2 * `increment` * 2^(`i` - 1).
 #'
-#' For cases where you set `snap` to a numeric value and `area` to `NULL`, `area` is calculated as above, but increased to `snap`^2 if it is smaller than that.
-#'
-#' For cases where you set `snap` to `NULL` and `area` to a numeric value, `snap` is calculated as above, but increased to `sqrt(area)` if it is smaller than that.
-#'
-#' @seealso [rgrass::read_RAST()] and [rgrass::read_VECT()], [vector cleaning][breakPolys], [removeHoles()], plus modules [`v.in.ogr`](https://grass.osgeo.org/grass84/manuals/r.in.gdal.html), [`v.in.ogr`](https://grass.osgeo.org/grass84/manuals/v.in.ogr.html), and [`r.import`](https://grass.osgeo.org/grass84/manuals/r.import.html) in **GRASS**.
+#' @seealso [tutorial on vector topology and troubleshooting][tutorial_vector_topology_and_troubleshooting], [rgrass::read_RAST()] and [rgrass::read_VECT()], [vector cleaning][breakPolys], [removeHoles()], plus modules [`v.in.ogr`](https://grass.osgeo.org/grass84/manuals/r.in.gdal.html), [`v.in.ogr`](https://grass.osgeo.org/grass84/manuals/v.in.ogr.html), and [`r.import`](https://grass.osgeo.org/grass84/manuals/r.import.html) in **GRASS**.
 #'
 #' @return A `GRaster` or `GVector`.
 #'
@@ -69,18 +65,18 @@ methods::setMethod(
 
 		### attempt to get type from extension
 		# 3-letter extensions
-		rastExtensions <- c("asc", "grd", "img", "mem", "tif", "saga")
+		rastExtensions <- c("asc", "asci", "ascii", "grd", "hgt", "img", "mem", "tif", "tifg", "saga")
 		vectExtensions <- c("shp", "gpkg", "kml")
 
 		ext <- .fileExt(x)
 		ext <- tolower(ext)
 
-		if (all(ext %in% rastExtensions)) {
+		if (any(ext %in% rastExtensions)) {
 			rastOrVect <- "raster"
-		} else if (all(ext %in% vectExtensions)) {
+		} else if (any(ext %in% vectExtensions)) {
 			rastOrVect <- "vector"
 		} else {
-			stop("Cannot determine data if raster or vector from file name. Please use argument ", sQuote("rastOrVect"), ".")
+			stop("Cannot determine data if raster or vector from file name. Please use argument `rastOrVect`.")
 		}
 
 	} else {
@@ -154,16 +150,34 @@ methods::setMethod(
 	
 	} else if (rastOrVect == "vector") {
 
+		digits <- 9 # number of digits to display for "verbose" messages
+
 		xVect <- terra::vect(x)
 
-		if (any(dotNames == "correct")) {
-			if (!dots$correct) {
-				correctTopoFlag <- "c"
-			} else {
-				correctTopoFlag <- NULL
-			}
+		# values of snap, area, iter, verbose, correct topology flag, and increment
+		hasSnap <- any(dotNames == "snap")
+		hasArea <- any(dotNames == "area")
+
+		if (hasSnap) {
+			snap <- dots$snap
+			snapNull <- is.null(snap)
 		} else {
-			correctTopoFlag <- ifelse(faster("correct"), NULL, "c")
+			snap <- -1
+			snapNull <- FALSE
+		}
+
+		if (hasArea) {
+			area <- dots$area
+			areaNull <- is.null(area)
+		} else {
+			area <- 0
+			areaNull <- FALSE
+		}
+		
+		if (any(dotNames == "iter")) {
+			iter <- dots$iter
+		} else {
+			iter <- 1L
 		}
 
 		if (faster("verbose")) {
@@ -174,19 +188,22 @@ methods::setMethod(
 			verbose <- FALSE
 		}
 		
-		### load vector while using use snap and area to fix broken topology
-		hasSnap <- any(dotNames == "snap")
-		hasArea <- any(dotNames == "area")
-		hasBoth <- hasSnap & hasArea
-
-		if (hasSnap) snap <- dots$snap
-		if (hasArea) area <- dots$area
-		if (any(dotNames == "iter")) iter <- dots$iter
+		if (any(dotNames == "correct")) {
+			correct <- dots$correct
+			if (!correct) {
+				correctTopoFlag <- "c"
+			} else {
+				correctTopoFlag <- NULL
+			}
+		} else {
+			correct <- faster("correct")
+			correctTopoFlag <- if (correct) { NULL } else { "c" }
+		}
 
 		# base value by which to increase snap and area when automated
 		# actual value will be increment[prior value] + increment^iter
-		if (!any(dotNames == "increment") | (any(dotNames == "increment") && is.null(dots$increment))) {
-			increment <- 0.000001
+		if (!any(dotNames == "increment")) {
+			increment <- 1E-6
 		} else {
 			increment <- dots$increment
 		}
@@ -217,33 +234,28 @@ methods::setMethod(
 
 		.locationRestore(x = location)
 
-		if ((hasSnap && is.null(snap)) | (hasArea && is.null(area)) & !("iter" %in% dotNames)) {
-			iter <- 10L
-		} else if (any(dotNames == "iter")) {
-			iter <- dots$iter
-		}
-
 		# snap and area are both NULL
-		if (hasBoth && is.null(snap) && is.null(area)) {
+		if ((hasSnap & hasArea) && snapNull && areaNull) {
 
 			i <- 1L
-			while (i == 1L || (!valid & i <= iter)) {
+			valid <- FALSE
+			while (!valid & i <= iter) {
 
 				src <- .makeSourceName("v_in_ogr", type = "vector")
 
 				# try import with no snap and no area
 				if (i == 1L) {
 
-					if (verbose) omnibus::say("Iteration 1: No snap or area correction.")
+					if (verbose) omnibus::say("Iteration 1: No snapping or polygon removal...")
 
 					rgrass::execGRASS(
 						cmd = "v.in.ogr",
 						input = x,
 						output = src,
+						snap = -1,
+						min_area = 0,
 						flags = c(.quiet(), "overwrite", correctTopoFlag)
 					)
-
-					info <- .vectInfo(src)
 
 				} else if (i > 1L) {
 
@@ -251,7 +263,7 @@ methods::setMethod(
 					snap <- snapArea[["snap"]]
 					area <- snapArea[["area"]]
 
-					if (verbose) omnibus::say("Iteration ", i, ": ", snap, " snap and ", area, " area correction.")
+					if (verbose) omnibus::say("Iteration ", i, ": Snapping by ", round(snap, digits), " map units and removing polygons <", round(area, digits), " m2...")
 
 					rgrass::execGRASS(
 						cmd = "v.in.ogr",
@@ -264,21 +276,17 @@ methods::setMethod(
 
 				}
 
-				valid <- .vValidCats(src)
+				valid <- .validVector(src, table)
 				i <- i + 1L
 
 			}
 
 		# snap is NUMERIC, area is NUMERIC
-		} else if (hasBoth && (!is.null(snap) & !is.null(area))) {
+		} else if ((hasSnap & hasArea) && (!snapNull & !areaNull)) {
 
-			if (area < snap^2) {
-				warning("Argument ", sQuote("area"), " should be >= snap^2. Increasing ", sQuote ("area"), " to snap^2./n  Alternatively, you may want to decrease ", sQuote("snap"), ".")
-				area <- snap^2
-			}
+			if (verbose) omnibus::say("Snapping by ", round(snap, digits), " map units and removing polygons <", round(area, digits), " m2...")
 
 			src <- .makeSourceName("v_in_ogr", type = "vector")
-
 			rgrass::execGRASS(
 				cmd = "v.in.ogr",
 				input = x,
@@ -287,14 +295,16 @@ methods::setMethod(
 				min_area = area,
 				flags = c(.quiet(), "overwrite", correctTopoFlag)
 			)
+			valid <- .validVector(src, table)
 		
 		# snap is NUMERIC, area is NULL
-		} else if (hasBoth && !is.null(snap) && is.null(area)) {
+		} else if ((hasSnap & hasArea) && !snapNull && araNull) {
 
 			i <- 1L
-			while (i == 1L || !valid & i <= iter) {
+			valid <- FALSE
+			while (!valid & i <= iter) {
 
-				if (verbose) omnibus::say("Iteration 1: ", snap, " snap and no area correction.")
+				if (verbose) omnibus::say("Iteration 1: Snapping by ", round(snap, digits), " map units snap with no polygon removal...")
 
 				src <- .makeSourceName("v_in_ogr", "vector")
 				if (i == 1L) {
@@ -304,17 +314,16 @@ methods::setMethod(
 						input = x,
 						output = src,
 						snap = snap,
+						min_area = 0,
 						flags = c(.quiet(), "overwrite", correctTopoFlag)
 					)
 
-					info <- .vectInfo(src)
-				
 				} else {
 
 					snapArea <- .snapArea(info = info, i = i, increment = increment, snap = snap, area = NULL)
 					area <- snapArea[["area"]]
 
-					if (verbose) omnibus::say("Iteration ", i, ": ", snap, " snap and ", area, " area correction.")
+					if (verbose) omnibus::say("Iteration ", i, ": Snapping by ", round(snap, digits), " map units snap and removing polygons ", round(area, digits), " m2...")
 
 					rgrass::execGRASS(
 						cmd = "v.in.ogr",
@@ -327,18 +336,19 @@ methods::setMethod(
 
 				}
 
-				valid <- .vValidCats(src)
+				valid <- .validVector(src, table)
 				i <- i + 1L
 
 			} # next iteration
 
 		# snap is NULL, area is NUMERIC
-		} else if ((hasSnap & hasArea) && is.null(snap) && !is.null(area)) {
+		} else if ((hasSnap & hasArea) && snapNull && !areaNull) {
 
 			i <- 1L
-			while (i == 1L || !valid & i <= iter) {
+			valid <- FALSE
+			while (!valid & i <= iter) {
 
-				if (verbose) omnibus::say("Iteration 1: No snap and ", area, " area correction.")
+				if (verbose) omnibus::say("Iteration 1: No snapping but removing polygons <", round(area, digits), " m2...")
 
 				src <- .makeSourceName("v_in_ogr", "vector")
 				if (i == 1L) {
@@ -347,18 +357,17 @@ methods::setMethod(
 						cmd = "v.in.ogr",
 						input = x,
 						output = src,
+						snap = -1,
 						min_area = area,
 						flags = c(.quiet(), "overwrite", correctTopoFlag)
 					)
 
-					info <- .vectInfo(src)
-				
 				} else {
 
 					snapArea <- .snapArea(info = info, i = i, increment = increment, snap = NULL, area = area)
 					snap <- snapArea[["snap"]]
 
-					if (verbose) omnibus::say("Iteration ", i, ": ", snap, " snap and ", area, " area correction.")
+					if (verbose) omnibus::say("Iteration ", i, ": Snapping by ", round(snap, digits), " map units snapping and removing polygons <", round(area, digits), " m2...")
 
 					rgrass::execGRASS(
 						cmd = "v.in.ogr",
@@ -371,18 +380,19 @@ methods::setMethod(
 
 				}
 
-				valid <- .vValidCats(src)
+				valid <- .validVector(src, table)
 				i <- i + 1L
 
 			} # next iteration
 		
 		# snap is NULL, area is MISSING
-		} else if ((hasSnap & !hasArea) && is.null(snap)) {
+		} else if ((hasSnap & !hasArea) && snapNull) {
 
 			i <- 1L
-			while (i == 1L || !valid & i <= iter) {
+			valid <- FALSE
+			while (!valid & i <= iter) {
 
-				if (verbose) omnibus::say("Iteration 1: No snap and area correction.")
+				if (verbose) omnibus::say("Iteration 1: No snapping or polygons removal...")
 
 				src <- .makeSourceName("v_in_ogr", "vector")
 				if (i == 1L) {
@@ -391,64 +401,72 @@ methods::setMethod(
 						cmd = "v.in.ogr",
 						input = x,
 						output = src,
+						snap = -1,
+						min_area = 0,
 						flags = c(.quiet(), "overwrite", correctTopoFlag)
 					)
 
-					info <- .vectInfo(src)
-				
 				} else {
 
-					snapArea <- .snapArea(src, i = i, increment = increment, snap = NULL, area = NULL)
+					snapArea <- .snapArea(info, i = i, increment = increment, snap = NULL, area = NULL)
 					snap <- snapArea[["snap"]]
 
-					if (verbose) omnibus::say("Iteration ", i, ": ", snap, " snap and no area correction.")
+					if (verbose) omnibus::say("Iteration ", i, ": Snapping by ", round(snap, digits), " map units snapping with no polygon removal...")
 
 					rgrass::execGRASS(
 						cmd = "v.in.ogr",
 						input = x,
 						output = src,
 						snap = snap,
+						min_area = 0,
 						flags = c(.quiet(), "overwrite", correctTopoFlag)
 					)
 
 				}
 
-				valid <- .vValidCats(src)
+				valid <- .validVector(src, table)
 				i <- i + 1L
 
 			} # next iteration
 		
 		# snap is NUMERIC, area is MISSING
-		} else if ((hasSnap & !hasArea) && !is.null(snap)) {
-
+		} else if ((hasSnap & !hasArea) && !snapNull) {
+			
+			if (verbose) say("Snapping by ", round(snap, digits), " map units...")
 			src <- .makeSourceName("v_in_ogr", type = "vector")
 			rgrass::execGRASS(
 				cmd = "v.in.ogr",
 				input = x,
 				output = src,
 				snap = snap,
+				min_area = 0,
 				flags = c(.quiet(), "overwrite", correctTopoFlag)
 			)
+			valid <- .validVector(src, table)
 
 		# snap is MISSING, area is NUMERIC
-		} else if ((!hasSnap & hasArea) && !is.null(area)) {
+		} else if ((!hasSnap & hasArea) && !areaNull) {
 
+			if (verbose) say("Removing polygons <", round(area, digits), " m2...")
 			src <- .makeSourceName("v_in_ogr", type = "vector")
 			rgrass::execGRASS(
 				cmd = "v.in.ogr",
 				input = x,
 				output = src,
+				snap = -1,
 				min_area = area,
 				flags = c(.quiet(), "overwrite", correctTopoFlag)
 			)
+			valid <- .validVector(src, table)
 
 		# snap is MISSING, area is NULL
-		} else if ((!hasSnap & hasArea) && is.null(area)) {
+		} else if ((!hasSnap & hasArea) && areaNull) {
 
 			i <- 1L
-			while (i == 1L || !valid & i <= iter) {
+			valid <- FALSE
+			while (!valid & i <= iter) {
 
-				if (verbose) omnibus::say("Iteration 1: No snap and area correction.")
+				if (verbose) omnibus::say("Iteration 1: No snapping or polygon removal...")
 
 				src <- .makeSourceName("v_in_ogr", "vector")
 				if (i == 1L) {
@@ -457,30 +475,30 @@ methods::setMethod(
 						cmd = "v.in.ogr",
 						input = x,
 						output = src,
+						snap = -1,
 						min_area = area,
 						flags = c(.quiet(), "overwrite", correctTopoFlag)
 					)
 
-					info <- .vectInfo(src)
-				
 				} else {
 
 					snapArea <- .snapArea(info = info, i = i, increment = increment, snap = NULL, area = NULL)
 					area <- snapArea[["area"]]
 
-					if (verbose) omnibus::say("Iteration ", i, ": No snap and ", area, " area correction.")
+					if (verbose) omnibus::say("Iteration ", i, ": No snapping but removing polygons <", round(area, digits), " m2...")
 
 					rgrass::execGRASS(
 						cmd = "v.in.ogr",
 						input = x,
 						output = src,
+						snap = -1,
 						min_area = area,
 						flags = c(.quiet(), "overwrite", correctTopoFlag)
 					)
 
 				}
 
-				valid <- .vValidCats(src)
+				valid <- .validVector(src, table)
 				i <- i + 1L
 
 			} # next iteration
@@ -488,13 +506,17 @@ methods::setMethod(
 		# snap is MISSING and area is MISSING
 		} else if (!hasSnap & !hasArea) {
 
+			if (verbose) say("No snapping or polygon removal...")
 			src <- .makeSourceName("v_in_ogr", type = "vector")
 			rgrass::execGRASS(
 				cmd = "v.in.ogr",
 				input = x,
 				output = src,
+				snap = -1,
+				min_area = 0,
 				flags = c(.quiet(), "overwrite", correctTopoFlag)
 			)
+			valid <- .validVector(src, table)
 
 		}
 
@@ -502,10 +524,31 @@ methods::setMethod(
 		# GRASS tables are very slow to work with and confound subsetting
 		# .vDetachDatabase(src)
 
-		msg <- paste0("Vector has an invalid topology.\n  Try using (or increasing) the values of the ", sQuote("snap"), " and/or ", sQuote("area"), " arguments,\n  or increasing the value of ", sQuote("iter"), " if either ", sQuote("snap"), " or ", sQuote("area"), " is NULL.")
+		if (!is.null(table)) {
+		
+			info <- .vectInfo(src)
+			if (nrow(table) > info$nGeometries) {
 
-		if (!.vValidCats(src)) stop(msg)
+				msg <- paste0("Vector has more geometries than rows in its data table. Try:\n  * Setting the `correct` argument to `TRUE`;\n  * Using (or increasing) the value(s) of the `snap` and/or `area` arguments;\n  * Increasing the value of `iter` and/or `increment` if either `snap` or `area` is NULL;\n  * Dropping the data table associated with the vector using `dropTable = FALSE`; or\n  * Correcting the vector outside of fasterRaster with `terra::makeValid()` or `sf::st_make_valid()` before using fast().")
+				stop(msg)
+
+			} else if (nrow(table) < info$nGeometries) {
+			
+				msg <- paste0("Vector has more rows in its data table than geometries. Try:\n  * Setting the `correct` argument to `TRUE`;\n  * Decreasing the value(s) of the `snap` and/or `area` arguments;\n  * If either `snap` or `area` is NULL, decreasing the value of the `increment` argument;\n  * Dropping the data table associated with the vector using `dropTable = FALSE`; or\n  * Correcting the vector outside of fasterRaster with `terra::makeValid()` or `sf::st_make_valid()` before using fast().")
+				stop(msg)
+			
+			}
+		
+		}
+
+		msg <- paste0("Vector has geometries that overlap. Try:\n  * Setting the `correct` argument to `TRUE`;\n  * Increasing the value(s) of the `snap` and/or `area` arguments;\n  * If either `snap` or `area` is NULL, increasing the value of the `iter` or `increment` arguments;\n  * Dropping the data table associated with the vector using `dropTable = FALSE`; or\n  * Correcting the vector outside of fasterRaster with `terra::makeValid()` or `sf::st_make_valid()` before using fast().")
 		out <- .makeGVector(src, table = table)
+
+		# detach GRASS vector table
+		# GRASS tables are very slow to work with and confound subsetting
+		# .vDetachDatabase(src)
+
+		out <- .makeGVector(src, table)
 
 	}
 	out
@@ -584,7 +627,7 @@ methods::setMethod(
 		}
 	
 	} else if (!inherits(x, c("list", "data.frame", "data.table"))) {
-		stop("Argument ", sQuote("levels"), " must be a data.frame, data.table, an empty string, a list of these, OR NULL or a file name.")
+		stop("Argument `levels` must be a data.frame, data.table, an empty string, a list of these, OR NULL or a file name.")
 	}
 	levels
 
@@ -619,11 +662,11 @@ methods::setMethod(
 	dots <- list(...)
 	dotNames <- names(dots)
 	
-	if (any('snap' %in% dotNames) && (is.null(dots$snap) & !any('iter' %in% dotNames))) stop("If you use the ", sQuote("snap"), " argument and set it to NULL,\n  you must also provide an ", sQuote("iter"), " argument.")
-	if (any('area' %in% dotNames) && (is.null(dots$area) & !any('iter' %in% dotNames))) stop("If you use the ", sQuote("area"), " argument and set it to NULL,\n  you must also provide an ", sQuote("iter"), " argument.")
+	if (any('snap' %in% dotNames) && (is.null(dots$snap) & !any("iter" %in% dotNames))) stop("If you use the `snap` argument and set it to NULL,\n  you must also provide an `iter` argument.")
+	if (any('area' %in% dotNames) && (is.null(dots$area) & !any("iter" %in% dotNames))) stop("If you use the `area` argument and set it to NULL,\n  you must also provide an `iter` argument.")
 
 	if (!inherits(x, "SpatVector")) x <- terra::vect(x)
-	if (any('area' %in% dotNames) && terra::geomtype(x) != "polygons") stop("The ", sQuote("area"), " argument can only be used with a polygons vector.")
+	if (any('area' %in% dotNames) && terra::geomtype(x) != "polygons") stop("The `area` argument can only be used with a polygons vector.")
 
 	# remove data frame
 	if (any(dotNames == "dropTable") && dots$dropTable) {
@@ -647,11 +690,7 @@ methods::setMethod(
 		vectFile <- terra::sources(x)
 	}
 
-	args <- list(
-		x = vectFile,
-		rastOrVect = "vector",
-		table = table
-	)
+	args <- list(x = vectFile, rastOrVect = "vector", table = table)
 	args <- c(args, list(...))
 	do.call(fast, args = args)
 	
@@ -674,18 +713,45 @@ methods::setMethod(
 	if (is.null(snap) & is.null(area)) {
 		snap <- minDiff * increment * 2^(i - 1L)
 		area <- minDiff^2 * increment * 2^(i - 1L)
-		snap <- max(snap, sqrt(area))
 	} else if (is.null(snap) & !is.null(area)) {
 		snap <- minDiff * increment * 2^(i - 1L)
-		snap <- max(snap, sqrt(area))
 	} else if (!is.null(snap) & is.null(area)) {
 		area <- minDiff^2 * increment * 2^(i - 1L)
-		area <- max(area, snap^2)
 	} else {
 		stop("Both snap and area cannot be NULL.")
 	}
 	
 	c("snap" = snap, "area" = area)
+
+}
+
+#' Test if a vector is valid
+#'
+#' @param src The [sources()] name of a **GRASS** vector
+#' @param table Either `NULL` (no table) or a `data.frame`, `data.table`, or `matrix`
+#'
+#' @returns Logical.
+#'
+#' @noRd
+.validVector <- function(src, table) {
+
+	if (!is.null(table)) {
+
+		info <- .vectInfo(src)
+		nGeoms <- info$nGeometries
+		tableValid <- nGeoms == nrow(table)
+
+	} else {
+		tableValid <- TRUE
+	}
+
+	if (tableValid) {
+		catsValid <- .vValidCats(src)
+	} else {
+		catsValid <- FALSE
+	}
+
+	tableValid & catsValid
 
 }
 
