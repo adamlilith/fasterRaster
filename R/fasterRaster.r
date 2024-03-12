@@ -5,7 +5,6 @@
 #' ## Most useful tutorials and functions:
 #' A [quick-start][tutorial_getting_started] tutorial\cr
 #' A tutorial on [raster data types][tutorial_raster_data_types]\cr
-#' A tutorial on [vector topology and troubleshooting][tutorial_vector_topology_and_troubleshooting] creation of `GVector`s\cr
 #' [faster()]: Set the directory where **GRASS** is installed on your system, and set or get other package-wide options\cr
 #' [fast()]: Convert a `SpatRaster`, `SpatVector`, or `sf` vector to **fasterRaster**'s raster format (`GRaster`s) or vector format (`GVector`s), or load one from a file\cr
 #' [rast()], [vect()], and [st_as_sf()]: Convert `GRaster`s and `GVector`s to `SpatRaster`s, `SpatVector`s, or `sf` vectors\cr
