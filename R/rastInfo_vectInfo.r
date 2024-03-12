@@ -246,12 +246,35 @@
 		)
 		
 	} # if just one raster
-	
+
+	class(out) <- "grastInfo"
 	out
 
 }
 
-.vectInfo <- function(x) {
+#' @noRd
+print.grastInfo <- function(x) {
+
+	cat("Source(s)     :", x$sources, "\n")
+	cat("Type(s)       :", x$type, "\n")
+	cat("Topology      :", x$topology, "\n")
+	cat("Projection    :", x$projection, "\n")
+	cat("Resolution    :", x$ewres, x$nsres, x$tbres, "(x, y, z)\n")
+	cat("Dimensions    :", x$rows, x$cols, x$depths, "(rows, cols, depths)\n")
+	cat("Extent (WESN) :", paste(x$west, x$east, x$south, x$north, collapse = ", "), "\n")
+	cat("Z extent (BT) :", paste(x$zbottom, x$ztop, collapse = ", "), "\n")
+	cat("Datatype      :", x$grassDataType, "\n")
+	cat("Min/max       :", x$minVal, x$maxVal, "\n")
+
+}
+
+#' @noRd
+show.grastInfo <- function(x) print.grastInfo(x)
+
+#' @noRd
+summary.grastInfo <- function(x) print.grastInfo(x)
+
+.vectInfo <- function(x, integer = TRUE) {
 
 	src <- if (inherits(x, "GVector")) {
 		sources(x)
@@ -343,19 +366,22 @@
 
 	if (points > 0 & lines == 0 & boundaries == 0 & centroids == 0 & areas == 0) {
 		geometry <- "points"
-		nGeometries <- points
+		# nGeometries <- points
 	} else if (points == 0 & lines > 0 & boundaries == 0 & centroids == 0 & areas == 0) {
 		geometry <- "lines"
-		nGeometries <- lines
+		# nGeometries <- lines
 	} else if (points == 0 & lines == 0 & boundaries > 0 & centroids > 0 & areas > 0) {
 		geometry <- "polygons"
-		nGeometries <- centroids
+		# nGeometries <- centroids
 	} else {
 		geometry <- NA_character_
-		nGeometries <- NA_integer_
+		# nGeometries <- NA_integer_
 	}
 	
-	nGeometries <- as.integer(nGeometries)
+	# nGeometries <- as.integer(nGeometries)
+	cats <- .vCats(src, integer = integer)
+	nGeometries <- length(unique(cats))
+	catsValid <- !any(grepl(cats, pattern = "[/]")) & !anyNA(cats)
 
 	# ### fields
 	# suppressWarnings(
@@ -448,6 +474,8 @@
 		topology = topology,
 		geometry = geometry,
 		
+		cats = cats,
+		catsValid = catsValid,
 		nGeometries = nGeometries,
 		
 		west = west,
@@ -464,6 +492,37 @@
 		# classes = classes
 	)
 	
+	class(out) <- "gvectInfo"
 	out
 
 }
+
+#' @export
+print.gvectInfo <- function(x) {
+
+	cats <- x$cats
+	if (length(cats) > 6L) {
+		cats <- paste0(paste(head(x$cats), collapse = ", "), ", ...\n")
+	} else {
+		cats <- paste0(paste(head(x$cats), collapse = ", "), "\n")
+	}
+
+	cat("Source        :", x$sources, "\n")
+	cat("Geometry:     :", x$geometry, "\n")
+	cat("Projection    :", x$projection, "\n")
+	cat("Topology:     :", x$topology, "\n")
+	cat("Extent (WESN) :", paste(x$west, x$east, x$south, x$north, collapse = ", "), "\n")
+	cat("Z extent (BT) :", paste(x$bottom, x$top, collapse = ", "), "\n")
+	cat("Geometries:   :", x$nGeometries, "\n")
+	cat("Cats:         :", cats)
+	cat("Cats Valid?   :", x$catsValid, "\n")
+
+}
+
+#' @export
+summary.gvectInfo <- function(x) print(x)
+
+#' @export
+show.gvectInfo <- function(x) print(x)
+
+
