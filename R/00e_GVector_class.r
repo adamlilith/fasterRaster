@@ -25,7 +25,12 @@ GVector <- methods::setClass(
 
 methods::setValidity("GVector",
 	function(object) {
-		if (!all(object@geometry %in% c(NA_character_, "points", "lines", "polygons"))) {
+
+		info <- .vectInfo(object)
+
+		if (!info$catsValid) {
+			"Invalid vector topology. See the *Details* section in `fast()` on how to correct topology."
+		} else if (!all(object@geometry %in% c(NA_character_, "points", "lines", "polygons"))) {
 			paste0("@geometry can only be NA, ", sQuote("points"), ", ", sQuote("lines"), ", or ", sQuote("polygons"), ".")
 		# } else if (length(unique(.vCats(object)) != object@nGeometries)) {
 			# "The number of @nGeometries is not the same as the number of unique ", sQuote("cat"), " values in the vector attribute table in GRASS."
@@ -34,7 +39,7 @@ methods::setValidity("GVector",
 		} else if (object@nGeometries == 0L) {
 			"GVector has no geometries."
 		} else if (nrow(object@table) > 0L && nrow(object@table) != object@nGeometries) {
-			"The data.table in @table must be a NULL table (data.table(NULL)), or it must have the same number of rows as @nGeometries."
+			"The data.table in @table must be a NULL table (data.table(NULL)), or\n  it must have the same number of rows as @nGeometries.\n  See the *Details* section in `fast()` on how to correct topology."
 		} else {
 			TRUE
 		}
@@ -94,7 +99,8 @@ methods::setValidity("GVector",
 			cmd = "v.build",
 			map = src,
 			option = "build",
-			flags = c(.quiet(), "overwrite")
+			flags = c(.quiet(), "overwrite"),
+			echoCmd = FALSE
 		)
 		if (extensive) args$flags <- c(args$flags, "e")
 		do.call(rgrass::execGRASS, args = args)
