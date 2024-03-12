@@ -13,7 +13,7 @@ Faster raster processing in `R` using `GRASS GIS`
  
 <img align="right" src="fasterRaster.png" height="230"/>  
 
-`fasterRaster` is a package desiged specifically to handle large-in-memory/large-on-disk spatial rasters and vectors. `fasterRaster` does this using the stand-alone installer of Open Source Geospatial's <a href="https://grass.osgeo.org/rgrass/">`GRASS GIS`</a>
+`fasterRaster` is a package designed specifically to handle large-in-memory/large-on-disk spatial rasters and vectors. `fasterRaster` does this using the stand-alone installer of Open Source Geospatial's <a href="https://grass.osgeo.org/rgrass/">`GRASS GIS`</a>
 
 `fasterRaster` was created with five design principles:
 * **Value added**: `fasterRaster` complements `terra` and `sf`, and is highly dependent on them! It is useful for analyzing large-in-memory/large-on-disk rasters and vectors that those packages struggle to handle. For medium- and small-size objects, `terra` and `sf` will almost always be faster.
@@ -26,7 +26,7 @@ Faster raster processing in `R` using `GRASS GIS`
 
 # Getting started
 
-As of 2024/02/26, a new version of this package, `fasterRaster 8.3`, is in development. The new version works well for rasters, but not dependably for vectors. If you need to use vectors in your analysis, I recommend you do the work with rasters (to the degree possible) in `fasterRaster`, but use `terra` or `sf` to do operations on vectors. When the vectors are ready, import them into `GRASS` using `fast(vector_name)`.
+*As of 2024/02/26, a new version of this package, `fasterRaster 8.3`, is in development. The new version works well for rasters, but not dependably for vectors. The main issue is how vectors are loaded using `fast()`. This is an active area of development. When it gets fixed, **fasterRaster** will be mostly done (for now!)!!!*
 
 To install the development version, you will need to use:
 
@@ -133,13 +133,13 @@ And that's how it's done!  You can do almost anything in `fasterRaster`  you can
 
 You can convert a `GRaster` to a `SpatRaster` raster using `rast()`:
 
-`terraElev <- rast(elev)`  
+`terra_elev <- rast(elev)`  
 
 To convert a `GVector` to the `terra` package's `SpatVector` format or to an `sf` vector, use `vect()` or `st_as_sf()`:
 
 ```
-terraRivers <- vect(rivers)
-sfRivers <- st_as_sf(rivers)
+terra_r_ivers <- vect(rivers)
+sf_rivers <- st_as_sf(rivers)
 ```
 
 You can use `writeRaster()` and `writeVector()` to save `fasterRaster` rasters and vectors directly to disk. This will always be faster than using `rast()`, `vect()`, or `st_as_sf()` and then saving.
