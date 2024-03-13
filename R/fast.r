@@ -38,7 +38,7 @@
 #' 3. Automatic snapping and/or area removal: In addition to the correction from step 1, you can use automatic `snap` and/or `area` correction on polygons vectors by setting `snap` and/or `area` to `NULL` (i.e., their default values). If just `snap` is `NULL`, only automatic snapping will be performed, and if just `area` is `NULL`, then only automatic area removal will be performed. Regardless, you will also need to set an integer value for `steps`, which is the number of steps to take between the smallest value of `snap` and/or `area` and the maximum value attempted. The function will then proceed by first attempting `snap = 0` and/or `area = 0`. If this does not produce a topologically correct vector, **GRASS** will (internally) suggest a range for `snap`. The `fast()` function then creates `steps` values from the lowest to the highest values of this range evenly-spaced along the log values of this range, then proceed to repeat the loading process until either the vector is imported correctly or the maximum value suggested is reached and results in a failed topology. Smaller values of `step` will result in more fine-grained attempts so are less likely to yield overcorrection, but can also take more time. The value of `area` in automatic correction is set to `snap^2`. **NB**: Automated snapping and area removal are only able performed on polygons vectors, even if `snap` or `area` is `NULL`. To snap lines or points, you must set `snap` equal to a numeric value.
 #' 4. Data table-vector mismatching: If your vector has a data table ("attribute table") associated with it, errors can occur if there are more/fewer geometries (or multi-geometries) per row in the table. If you do not really need the data table to do your analysis, you can remove it (and thus obviate this error) using `dropTable = TRUE` when using `fast()`.
 #' 5. Pre-load correction: Before you convert the vector into **fasterRaster**'s `GVector` format, you can also try using the [terra::makeValid()] or [sf::st_make_valid()] tools to fix issues, then use `fast()`.
-#' 6. If you do get a vector loaded into `GVector` format, you can also use [tools][cleanGeom] or [fillHoles] to fix issues.
+#' 6. If you do get a vector loaded into `GVector` format, you can also use [tools][breakPolys] or [fillHoles()] to fix issues.
 #'
 #' @seealso [rgrass::read_RAST()] and [rgrass::read_VECT()], [vector cleaning][breakPolys], [removeHoles()], plus modules [`v.in.ogr`](https://grass.osgeo.org/grass84/manuals/r.in.gdal.html), [`v.in.ogr`](https://grass.osgeo.org/grass84/manuals/v.in.ogr.html), and [`r.import`](https://grass.osgeo.org/grass84/manuals/r.import.html) in **GRASS**.
 #'
@@ -202,8 +202,12 @@ methods::setMethod(
 			correctTopoFlag <- "c" # no correction
 		}
 
+		# no snapping/area removal for particular geometry types
+		if (is.null(snap) & gtype == "points") snap <- -1
+		if (is.null(area) & gtype %in% c("lines", "points")) area <- 0
+
 		### first try (no snapping or area removal)
-		if (is.null(snap)) {
+		if (is.null(snap) || snap <= 0) {
 			thisSnap <- -1
 			thisSnapNice <- "no"
 		} else {
@@ -211,26 +215,18 @@ methods::setMethod(
 			thisSnapNice <- paste0(thisSnap, " map-units")
 		}
 
-		if (is.null(area)) {
+		if (is.null(area) || area == 0) {
 			thisArea <- 0
+			thisAreaNice <- "no polygon removal"
 		} else {
 			thisArea <- area
+			thisAreaNice <- paste0("removal of polygons of <", thisArea, " m2")
 		}
 
-		if (verbose & (is.null(snap) | is.null(area))) {
-
-			if (gtype == "polygons") {
-				if (thisArea > 0) {
-					thisAreaNice <- paste0("removal of polygons of <", thisArea, " m2")
-				} else {
-					thisAreaNice <- "no polygon removal"
-				}
-				omnibus::say("Creating GVector with ", thisSnapNice, " snapping and ", thisAreaNice, "...")
-			} else if (gtype %in% c("lines", "points")) {
-				omnibus::say("Creating GVector with ", thisSnapNice, " snapping...")
-print("C")
-			}
-
+		if (verbose & gtype == "polygons") {
+			omnibus::say("Creating GVector with ", thisSnapNice, " snapping and ", thisAreaNice, "...")
+		} else if (verbose) {
+			omnibus::say("Creating GVector with ", thisSnapNice, " snapping of vertices/points...")
 		}
 
 		src <- .makeSourceName("v_in_ogr", "vector")
@@ -273,13 +269,23 @@ print("C")
 		if (!valid & (is.null(snap) | is.null(area))) {
 		
 			stepsMinus1 <- steps - 1L
-
 			snapRange <- run[grepl(run, pattern = "Estimated range of snapping threshold:")]
-			snapRange <- substr(snapRange, 41L, nchar(snapRange))
-			snapRange <- sub(snapRange, pattern = "\\]", replacement = "")
-			snapRange <- strsplit(snapRange, split = ", ")[[1L]]
-			# snapRange <- c(snapRange[[1L]], snapRange[[2L]])
-			snapRange <- as.numeric(snapRange)
+
+			# generic snap range
+			if (length(snapRange) == 0L) {
+
+				snapRange <- c(1E-08, 1)
+
+			# GRASS-suggested snap range
+			} else {
+
+				snapRange <- substr(snapRange, 41L, nchar(snapRange))
+				snapRange <- sub(snapRange, pattern = "\\]", replacement = "")
+				snapRange <- strsplit(snapRange, split = ", ")[[1L]]
+				# snapRange <- c(snapRange[[1L]], snapRange[[2L]])
+				snapRange <- as.numeric(snapRange)
+
+			}
 
 			# create sequence of snap values
 			# evenly-spaced in log space bc suggested min/max values are usually several OOMs apart
@@ -577,7 +583,7 @@ methods::setMethod(
 .validVector <- function(x, table) {
 
 	# does table have same number of rows as vector geometries?
-	if (!is.null(table)) {
+	if (!is.null(table) && nrow(table) > 0L) {
 
 		if (!inherits(x, "gvectInfo")) x <- .vectInfo(x)
 		nGeoms <- x$nGeometries
