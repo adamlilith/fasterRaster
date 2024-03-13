@@ -15,7 +15,7 @@
 #'
 #' @aliases addTable
 #' @rdname addTable
-#' @exportMethod addTable
+#' @exportMethod addTable<-
 methods::setMethod(
 	f = "addTable<-",
 	signature = c(x = "GVector", value = "data.frame"),
@@ -24,7 +24,7 @@ methods::setMethod(
 
 #' @aliases addTable
 #' @rdname addTable
-#' @exportMethod addTable
+#' @exportMethod addTable<-
 methods::setMethod(
 	f = "addTable<-",
 	signature = c(x = "GVector", value = "data.table"),
@@ -33,7 +33,7 @@ methods::setMethod(
 
 #' @aliases addTable
 #' @rdname addTable
-#' @exportMethod addTable
+#' @exportMethod addTable<-
 methods::setMethod(
 	f = "addTable<-",
 	signature = c(x = "GVector", value = "matrix"),

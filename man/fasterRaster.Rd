@@ -188,6 +188,7 @@ The assign operators, \code{\link[fasterRaster]{$<-}}, \code{\link[fasterRaster]
 The \code{\link[fasterRaster]{[}} operator can be used to subset geometries of a \code{GVector}.\cr
 The \link{$} and \code{\link[fasterRaster]{[[}} operators can be used to get columns of a \code{GVector}'s data table.\cr
 The \code{\link[fasterRaster]{$<-}} operator can be used to replace specific columns of a \code{GVector}'s data table.\cr
+\link{addTable<-}: Add a data table to a \code{GVector}\cr
 \code{\link[=aggregate]{aggregate()}}: Combine \code{GVector} geometries\cr
 \code{\link[=as.data.frame]{as.data.frame()}}: Convert a \code{GVector}'s attribute table to a \code{data.frame}\cr
 \code{\link[=as.data.table]{as.data.table()}}: Convert a \code{GVector}'s attribute table to a \code{data.table}\cr
@@ -221,21 +222,20 @@ The \code{\link[fasterRaster]{$<-}} operator can be used to replace specific col
 }
 
 \subsection{Functions for fixing issues with \code{GVector}s}{
-\itemize{
-\item \code{\link[=breakPolys]{breakPolys()}}: Break topologically clean areas\cr
-\item \code{\link[=fillHoles]{fillHoles()}}: Fill "holes" of a \code{GVector}\cr
-\item \code{\link[=fixBridges]{fixBridges()}}: Change "bridges" to "islands"\cr
-\item \code{\link[=fixDangles]{fixDangles()}}: Change "dangles" hanging off boundaries to lines\cr
-\item \code{\link[=fixLines]{fixLines()}}: Break lines at intersections and lines that form closed loops\cr
-\item \code{\link[=remove0]{remove0()}}: Remove all boundaries and lines with a length of 0\cr
-\item \code{\link[=removeAngles]{removeAngles()}}: Collapse lines that diverge at an angle that is computationally equivalent to 0\cr
-\item \code{\link[=removeBridges]{removeBridges()}}: Remove "bridges" to "islands"\cr
-\item \code{\link[=removeDangles]{removeDangles()}}: Remove "dangling" lines\cr
-\item \code{\link[=removeDupCentroids]{removeDupCentroids()}}: Remove duplicated area centroids\cr
-\item \code{\link[=removeDups]{removeDups()}}: Remove duplicated features and area centroids\cr
-\item \code{\link[=removeSmallPolys]{removeSmallPolys()}}: Remove small polygons\cr
-\item \code{\link[=snap]{snap()}}: Snap lines/boundaries to each other\cr
-}
+
+\code{\link[=breakPolys]{breakPolys()}}: Break topologically clean areas\cr
+\code{\link[=fillHoles]{fillHoles()}}: Fill "holes" of a \code{GVector}\cr
+\code{\link[=fixBridges]{fixBridges()}}: Change "bridges" to "islands"\cr
+\code{\link[=fixDangles]{fixDangles()}}: Change "dangles" hanging off boundaries to lines\cr
+\code{\link[=fixLines]{fixLines()}}: Break lines at intersections and lines that form closed loops\cr
+\code{\link[=remove0]{remove0()}}: Remove all boundaries and lines with a length of 0\cr
+\code{\link[=removeAngles]{removeAngles()}}: Collapse lines that diverge at an angle that is computationally equivalent to 0\cr
+\code{\link[=removeBridges]{removeBridges()}}: Remove "bridges" to "islands"\cr
+\code{\link[=removeDangles]{removeDangles()}}: Remove "dangling" lines\cr
+\code{\link[=removeDupCentroids]{removeDupCentroids()}}: Remove duplicated area centroids\cr
+\code{\link[=removeDups]{removeDups()}}: Remove duplicated features and area centroids\cr
+\code{\link[=removeSmallPolys]{removeSmallPolys()}}: Remove small polygons\cr
+\code{\link[=snap]{snap()}}: Snap lines/boundaries to each other\cr
 }
 
 \subsection{Converting between data types}{
@@ -283,12 +283,11 @@ The \code{\link[fasterRaster]{$<-}} operator can be used to replace specific col
 \link{vegIndices}: Vegetation indices that can be calculated using \code{\link[=vegIndex]{vegIndex()}}.
 }
 
-\subsection{Esoteric, exported yet often (publicly) undocumented functions for developers, plus tutorials}{
+\subsection{Esoteric, exported yet often (publicly) undocumented functions for developers, plus esoteric tutorials}{
 
 Comparisons between \code{GRegion}s can be performed using the \code{==} and \code{!=} operators.\cr
 Tutorial on \strong{GRASS} \link[=tutorial_regions]{regions}\cr
 Tutorial on \strong{GRASS} \link[=tutorial_locations_mapsets]{"locations" and mapsets}\cr
-Tutorial on \link[=tutorial_vector_topology]{vector topology} in \strong{GRASS} and \strong{fasterRaster}\cr
 \code{.copyGSpatial()}: Make a copy of the \strong{GRASS} file pointed to by a \code{GRaster} or \code{GVector}\cr
 \code{.fileExt()}: Get file extension\cr
 \code{.exists()}: Does the \strong{GRASS} file of a \code{GRaster} or \code{GVector} exist?\cr

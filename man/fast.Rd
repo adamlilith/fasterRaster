@@ -8,13 +8,41 @@
 \alias{fast,sf-method}
 \title{Create a GRaster or GVector}
 \usage{
-\S4method{fast}{character}(x, ...)
+\S4method{fast}{character}(
+  x,
+  rastOrVect = NULL,
+  correct = TRUE,
+  snap = NULL,
+  area = NULL,
+  steps = 10,
+  dropTable = FALSE,
+  verbose = FALSE,
+  ...
+)
 
-\S4method{fast}{SpatRaster}(x)
+\S4method{fast}{SpatRaster}(x, ...)
 
-\S4method{fast}{SpatVector}(x, ...)
+\S4method{fast}{SpatVector}(
+  x,
+  correct = TRUE,
+  snap = NULL,
+  area = NULL,
+  steps = 10,
+  dropTable = FALSE,
+  verbose = FALSE,
+  ...
+)
 
-\S4method{fast}{sf}(x, ...)
+\S4method{fast}{sf}(
+  x,
+  correct = TRUE,
+  snap = NULL,
+  area = NULL,
+  steps = 10,
+  dropTable = FALSE,
+  verbose = FALSE,
+  ...
+)
 }
 \arguments{
 \item{x}{Any one of:
@@ -24,19 +52,26 @@
 \item A character string or a vector of strings with the path(s) and filename(s) of one or more rasters or one vector to be loaded directly into \strong{GRASS}. The function will attempt to ascertain the type of object from the file extension (raster or vector), but it can help to indicate which it is using the \code{rastOrVect} argument if it is unclear.
 }}
 
-\item{...}{Other arguments:
+\item{correct}{Logical (\code{GVector}s only): Correct topological issues. See \emph{Details} for more details! By default, this is \code{TRUE}.}
+
+\item{snap}{\code{GVector}s only\verb{: Numeric or }NULL\verb{(default). The value of}snap\verb{indicates how close vertices need to be for them to be shifted to to the same location. Units of}snap\verb{are map units (usually meters), or degrees for unprojected CRSs. For lines and polygons vectors, a value of}NULL\verb{will invoke an iterative procedure to find an optimal, smallest value of}snap\verb{. To turn snapping off, set }snap = 0`. See \emph{Details} for more details!}
+
+\item{area}{Polygon \code{GVector}s only: Either a positive numeric value or \code{NULL} (default). Remove polygons with an area smaller than this value. Units of \code{area} are in square meters (regardless of the CRS). If \code{NULL}, then an iterative procedure is used to identify a value of \code{area} that results in a topologically correct polygon vector. For point and lines vectors, this argument is ignored. To turn area removal off, set \code{area = 0}. See \emph{Details} for more details!}
+
+\item{steps}{\code{GVector}s only: A positive integer > 1 (default is 10). When using automatic vector correction (i.e., either \code{snap = NULL} and/or \code{area = NULL}), this is the number of values of \code{snap} and/or \code{area} to try to generate a correct topology, including no snapping or polygon removal (i.e, \code{snap = 0} and \code{area = 0}).}
+
+\item{dropTable}{\code{GVector}s only: Logical. If \code{TRUE}, then drop the data table associated with a vector. By default, this is \code{FALSE}. See \emph{Details} for more details!}
+
+\item{verbose}{\code{GVector}s only: Logical. Displays progress when using automatic topology correction.}
+
+\item{...}{Other arguments::
 \itemize{
-\item \code{rastOrVect}: Either \code{NULL} (default), or \code{"raster"} or \code{"vector"}: If \code{x} is a filename, then the function will try to ascertain whether it represents a raster or a vector, but sometimes this will fail. In that case, it can help to specify if the file holds a raster or vector. Partial matching is used.
-\item \code{levels} (\code{GRaster}s--useful mainly to developers, not most users): A \code{data.frame}, \code{data.table}, or list of \code{data.frame}s or \code{data.table}s with categories for categorical rasters: The first column of a table corresponds to raster values and must be of type \code{integer}. A subsequent column corresponds to category labels. By default, the second column is assumed to represent labels, but this can be changed with \code{\link[fasterRaster]{activeCat<-}}. Level tables can also be \code{NULL} (e.g., \code{data.fame(NULL)}).
-\item \code{area} (polygon \code{GVector}s): Either \code{NULL} or a positive numeric value: Remove polygons with an area smaller than this value. This argument can be used to correct topologically incorrect polygons with borders that cross one another (see \emph{Details}). Units of \code{area} are in square meters (regardless of the CRS). If \code{NULL}, then an iterative procedure is applied that increases the size of \code{area} starting from 0 (i.e., no removal of polygons). This procedure is not guaranteed to find the optimal value of \code{area}, and it may remove polygons that are legitimate. You must also set the \code{iter} argument if \code{area} is NULL.
-\item \code{increment} (\code{GVector}s only): Numeric: Multiplier for increasing \code{snap} and/or \code{area} each iteration (only when \code{snap} and/or \code{area} are \code{NULL}). The actual increase in the value will be \verb{<starting value> * increment * 2^(i - 1)}, where \code{i} is the iteration.
-\item \code{correct} (\code{GVector}s only): Logical. If \code{TRUE}, then \link[=tutorial_vector_topology]{topology} of the vector will be corrected. If \code{FALSE} (default), then topology will not be corrected. Please see \emph{Details} and the \link[=tutorial_vector_topology]{tutorial} on vector topology. \emph{NOTE}: You can set the \code{correct} option for all uses of \code{fast()} using \code{faster(correct = TRUE)} or \code{faster(correct = FALSE)}. You can turn override this global setting by using the \verb{correct  argument when you use }fast()`.
-\item \code{dropTable} (\code{GVector}s only): Drop any data table associated with the geometries. This can be useful for importing a topologically incorrect vector for which the table is mot needed The general idea is that the vector can have imperfections which appear as "slivers" between polygons or dangling lines. These are treated as legitimate geometries (but can be removed using the \code{snap} and \code{area} arguments or after loading with \link[=breakPolys]{geometry cleaning})), but they can cause errors because it is usually not possible to match a sliver to a single row in a data table since it is comprised of at least two polygons.
-\item \code{iter} (\code{GVector}s only): Positive integer: Number of times to increment values of \code{snap} and/or \code{area} when using automated topology correction (either \code{snap} or \code{area} is \code{NULL}).
-\item \code{snap} (\code{GVector}s only): Either \code{NULL} or a positive numeric value: The value of \code{snap} indicates how close vertices need to be for them to be shifted to to the same location. If the purpose of using \code{snap} is to fix topology (see \emph{Details}), small values are recommended, as values that are too large can dramatically change the shape of polygons. Units of \code{snap} are map units (usually meters), or degrees for unprojected CRSs. A value of \code{NULL} will use an iterative procedure starting with \code{snap = 0} (i.e., no snapping) to find the minimum value that produces a topologically vector. This is not guaranteed to find the best value of \code{snap}, it can produce undesirable changes in shapes, and for large vectors can take a long time. You must also set the \code{iter} argument if \code{snap} is NULL.  Vectors that have been snapped may need to be cleaned using \code{\link[=fixLines]{fixLines()}}, \code{\link[=removeDups]{removeDups()}}, a
-\item \code{table} (\code{GVector}s--useful mainly to developers, not most users): A \code{data.frame} or \code{data.table} with one row per geometry in a \code{GVector}: Serves as an attribute table.
-\item \code{verbose}: Displays progress for iterative topological correction (i.e., \code{snap} and/or \code{area} are \code{NULL}).
+\item \code{levels} (\code{GRaster}s): A \code{data.frame}, \code{data.table}, or list of \code{data.frame}s or \code{data.table}s with categories for categorical rasters. The first column of a table corresponds to raster values and must be of type \code{integer}. A subsequent column corresponds to category labels. By default, the second column is assumed to represent labels, but this can be changed with \code{\link[fasterRaster]{activeCat<-}}. Level tables can also be \code{NULL} (e.g., \code{data.fame(NULL)}). You can also assign levels after loading a raster using \code{\link[fasterRaster]{levels<-}}.
+\item \code{table} (\code{GVector}s--useful mainly to developers, not most users): A \code{data.frame} or \code{data.table} with one row per geometry in a \code{GVector}. Serves as an attribute table.
+\item \code{xVect} (\code{GVector}s--useful mainly to developers, not most users): The \code{SpatVector} that corresponds to the file named by \code{x}.
 }}
+
+\item{rastOrVect:}{Either \code{NULL} (default), or \code{"raster"} or \code{"vector"}: If \code{x} is a filename, then the function will try to ascertain whether it represents a raster or a vector, but sometimes this will fail. In that case, it can help to specify if the file holds a raster or vector. Partial matching is used.}
 }
 \value{
 A \code{GRaster} or \code{GVector}.
@@ -49,17 +84,17 @@ A \code{GRaster} or \code{GVector}.
 Note that there are a several methods for fixing issues with vectors. If the vector has already been imported as a \code{GVector}, \link[=breakPolys]{other tools} are also available.
 }
 \details{
-Sometimes, polygons created in other software are topologically incorrect--the borders of adjacent polygons may cross one another, or there may be small gaps between them. These errors can be corrected by slightly shifting vertices and/or removing small polygons that result from intersections of larger ones that border one another.
+\strong{GRASS} uses a \link[=tutorial_vector_topology_and_troubleshooting]{topological} model for vectors. Topological issues generally arise only with polygon vectors, not point or line vectors. Sometimes, polygons created in other software are topologically incorrect--the borders of adjacent polygons may cross one another, or there may be small gaps between them. These errors can be corrected by slightly shifting vertices and/or removing small polygons that result from intersections of larger ones that border one another. A topological system also recognizes that boundaries to adjacent polygons are shared by the areas, so should not be ascribed attributes that belong to both areas (e.g., the shared border between two countries "belongs" to both countries).
 
-By default, \code{fast()} will \emph{not} correct topological errors in vectors. This will give you a vector that is commensurate with what you get from \code{\link[terra:vect]{terra::vect()}}, but it will not necessarily be topologically correct. You can force it to correct topology by setting \code{correct = TRUE}. However, even if you do this, you can still use the \code{snap} and \code{area} options to force further corrections. \code{fast()} has two levels of topology correction: a) correction on loading the vector (\code{correct = TRUE}), b) and correction after loading the vector (use of the \code{snap} and/or \code{area} arguments, plus also maybe the \code{iter} argument).
-
-The \code{snap} and \code{area} arguments work to correct topological issues while the vector is read in. They can be used regardless of the value of \code{correct}. The \code{snap} and \code{area} arguments take numeric values or can be assigned to \code{NULL}. If you set one or both of these to \code{NULL}, the function will attempt to correct for invalid topology automatically by incrementally increasing their values until a topologically valid vector is created or a maximum number of iterations is surpassed. If you use the automatic option, you can set the number of iterations using \code{iter}. If you do not supply \code{iter}, it will be set to a default value of 10.
-
-When implementing automatic topology with either \code{snap} and \code{area}, the first iteration attempted is 0 (no snapping, no area removal). If this does not yield a valid topology, then \emph{d}, the minimum of the extent of the vector in the x- and y-directions, is calculated. For the remaining iterations, the value of \code{snap} is set to \emph{d} * \code{increment} * 2^(\code{i} - 1) and \code{area} to  \emph{d}^2 * \code{increment} * 2^(\code{i} - 1). If \code{area} is < \code{snap}^2, then area is increased to \code{snap}^2.
-
-For cases where you set \code{snap} to a numeric value and \code{area} to \code{NULL}, \code{area} is calculated as above, but increased to \code{snap}^2 if it is smaller than that.
-
-For cases where you set \code{snap} to \code{NULL} and \code{area} to a numeric value, \code{snap} is calculated as above, but increased to \code{sqrt(area)} if it is smaller than that.
+By default, \code{fast()} will try to correct topological errors in vectors. There are three levels of correction, and they are not necessarily mutually exclusive:
+\enumerate{
+\item Automatic correction: By default, \code{fast()} will apply automatic topology correction. You can turn this off using the \code{correct = FALSE} argument, though in most cases this is not recommended.
+\item Manual correction: In addition to correction from step 1, you can cause vertices of polygons close to one another to be "snapped" to same place and/or polygons that are smaller than some threshold to be removed. Problems with mis-aligned vertices arise when adjacent polygons are meant to share borders, but slight differences in the locations of the vertices cause them to  mis-align. This mis-alignment can also produce small "slivers" of polygons that are the areas where they overlap. You can snap vertices within a given distance of one another using the \code{snap} argument followed by a numeric value, like \code{snap = 0.000001}. Units of \code{snap} are in map units (usually meters) for projected coordinate reference systems and degrees for unprojected systems (e.g., WGS84, NAD83, NAD27). You can also remove polygons that are smaller than a particular area using the \code{area} argument followed by a numeric value (e.g., \code{area = 1}). The units of \code{area} are in m2, regardless of the coordinate reference system. Note that using \code{snap} and \code{area} entails some risk, as it is possible for nearby vertices to actually be distinct and for small areas to be legitimate.
+\item Automatic snapping and/or area removal: In addition to the correction from step 1, you can use automatic \code{snap} and/or \code{area} correction on polygons vectors by setting \code{snap} and/or \code{area} to \code{NULL} (i.e., their default values). If just \code{snap} is \code{NULL}, only automatic snapping will be performed, and if just \code{area} is \code{NULL}, then only automatic area removal will be performed. Regardless, you will also need to set an integer value for \code{steps}, which is the number of steps to take between the smallest value of \code{snap} and/or \code{area} and the maximum value attempted. The function will then proceed by first attempting \code{snap = 0} and/or \code{area = 0}. If this does not produce a topologically correct vector, \strong{GRASS} will (internally) suggest a range for \code{snap}. The \code{fast()} function then creates \code{steps} values from the lowest to the highest values of this range evenly-spaced along the log values of this range, then proceed to repeat the loading process until either the vector is imported correctly or the maximum value suggested is reached and results in a failed topology. Smaller values of \code{step} will result in more fine-grained attempts so are less likely to yield overcorrection, but can also take more time. The value of \code{area} in automatic correction is set to \code{snap^2}. \strong{NB}: Automated snapping and area removal are only able performed on polygons vectors, even if \code{snap} or \code{area} is \code{NULL}. To snap lines or points, you must set \code{snap} equal to a numeric value.
+\item Data table-vector mismatching: If your vector has a data table ("attribute table") associated with it, errors can occur if there are more/fewer geometries (or multi-geometries) per row in the table. If you do not really need the data table to do your analysis, you can remove it (and thus obviate this error) using \code{dropTable = TRUE} when using \code{fast()}.
+\item Pre-load correction: Before you convert the vector into \strong{fasterRaster}'s \code{GVector} format, you can also try using the \code{\link[terra:is.valid]{terra::makeValid()}} or \code{\link[sf:valid]{sf::st_make_valid()}} tools to fix issues, then use \code{fast()}.
+\item If you do get a vector loaded into \code{GVector} format, you can also use \link[=breakPolys]{tools} or \code{\link[=fillHoles]{fillHoles()}} to fix issues.
+}
 }
 \examples{
 if (grassStarted()) {

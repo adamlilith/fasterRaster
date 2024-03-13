@@ -62,7 +62,7 @@ A \code{GVector}.
 \description{
 These functions are intended to help fix geometric issues with a \code{GVector}. Note that the functionality of the \code{snap()} and \code{removeAreas()} functions can also be implemented when using \code{\link[=fast]{fast()}} to create a \code{GVector}.
 \itemize{
-\item \code{breakPolys()}: Break topologically clean areas. This is similar to \code{break()}, except that it does not break loops. Topologically clean vectors may occur if the vector was imported from a format that does not enforce topology, such as a shapefile. Duplicate geometries are automatically removed after breaking.
+\item \code{breakPolys()}: Break topologically clean areas. This is similar to \code{fixLines()}, except that it does not break loops. Topologically clean vectors may occur if the vector was imported from a format that does not enforce topology, such as a shapefile. Duplicate geometries are automatically removed after breaking.
 \item \code{fixBridges()}: Change "bridges" to "islands" (which are topologically incorrect) within geometries to lines.
 \item \code{fixDangles()}: Change "dangles" hanging off boundaries to lines if shorter than \code{tolerance} distance. If \code{tolerance} is <0, all dangles will be changed to lines.  Units of \code{tolerance} are in map units, or in degrees for unprojected CRSs. If \code{tolerance} <0, all dangles are removed, and the function will retain only closed loops and lines connecting loops. Dangles will be removed from longest to shortest.
 \item \code{fixLines()}: Break lines at intersections and lines that form closed loops.
@@ -154,5 +154,5 @@ legend("topright",
 }
 }
 \seealso{
-\code{\link[terra:topology]{terra::topology()}}, \code{\link[=fillHoles]{fillHoles()}}, \code{\link[=simplifyGeom]{simplifyGeom()}}, \code{\link[=smoothGeom]{smoothGeom()}}
+\code{\link[terra:topology]{terra::topology()}}, \code{\link[=fillHoles]{fillHoles()}}, \emph{Details} section in \code{\link[=fast]{fast()}}, \code{\link[=simplifyGeom]{simplifyGeom()}}, \code{\link[=smoothGeom]{smoothGeom()}}
 }

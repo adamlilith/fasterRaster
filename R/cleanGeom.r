@@ -1,4 +1,3 @@
-#' @name cleanGeom
 #' Fix issues with geometries of a vector
 #'
 #' @description These functions are intended to help fix geometric issues with a `GVector`. Note that the functionality of the `snap()` and `removeAreas()` functions can also be implemented when using [fast()] to create a `GVector`.
@@ -27,7 +26,7 @@
 #' @example man/examples/ex_simplify_smooth_clean_GVector.r
 #'
 #' @aliases breakPolys
-#' @rdname cleanGeom
+#' @rdname breakPolys
 #' @exportMethod breakPolys
 methods::setMethod(
 	f = "breakPolys",
@@ -41,7 +40,7 @@ methods::setMethod(
 )
 
 #' @aliases fixBridges
-#' @rdname cleanGeom
+#' @rdname breakPolys
 #' @exportMethod fixBridges
 methods::setMethod(
 	f = "fixBridges",
@@ -50,7 +49,7 @@ methods::setMethod(
 )
 
 #' @aliases fixDangles
-#' @rdname cleanGeom
+#' @rdname breakPolys
 #' @exportMethod fixDangles
 methods::setMethod(
 	f = "fixDangles",
@@ -59,7 +58,7 @@ methods::setMethod(
 )
 
 #' @aliases fixLines
-#' @rdname cleanGeom
+#' @rdname breakPolys
 #' @exportMethod fixLines
 methods::setMethod(
 	f = "fixLines",
@@ -73,7 +72,7 @@ methods::setMethod(
 )
 
 #' @aliases remove0
-#' @rdname cleanGeom
+#' @rdname breakPolys
 #' @exportMethod remove0
 methods::setMethod(
 	f = "remove0",
@@ -87,7 +86,7 @@ methods::setMethod(
 )
 
 #' @aliases removeAngles
-#' @rdname cleanGeom
+#' @rdname breakPolys
 #' @exportMethod removeAngles
 methods::setMethod(
 	f = "removeAngles",
@@ -96,7 +95,7 @@ methods::setMethod(
 )
 
 #' @aliases removeBridges
-#' @rdname cleanGeom
+#' @rdname breakPolys
 #' @exportMethod removeBridges
 methods::setMethod(
 	f = "removeBridges",
@@ -105,7 +104,7 @@ methods::setMethod(
 )
 
 #' @aliases removeDangles
-#' @rdname cleanGeom
+#' @rdname breakPolys
 #' @exportMethod removeDangles
 methods::setMethod(
 	f = "removeDangles",
@@ -114,7 +113,7 @@ methods::setMethod(
 )
 
 #' @aliases removeDupCentroids
-#' @rdname cleanGeom
+#' @rdname breakPolys
 #' @exportMethod removeDupCentroids
 methods::setMethod(
 	f = "removeDupCentroids",
@@ -128,7 +127,7 @@ methods::setMethod(
 )
 
 #' @aliases removeDups
-#' @rdname cleanGeom
+#' @rdname breakPolys
 #' @exportMethod removeDups
 methods::setMethod(
 	f = "removeDups",
@@ -137,7 +136,7 @@ methods::setMethod(
 )
 
 #' @aliases removeSmallPolys
-#' @rdname cleanGeom
+#' @rdname breakPolys
 #' @exportMethod removeSmallPolys
 methods::setMethod(
 	f = "removeSmallPolys",
@@ -151,7 +150,7 @@ methods::setMethod(
 )
 
 #' @aliases snap
-#' @rdname cleanGeom
+#' @rdname breakPolys
 #' @exportMethod snap
 methods::setMethod(
 	f = "snap",
