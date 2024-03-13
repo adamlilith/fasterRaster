@@ -208,6 +208,7 @@ methods::setMethod(
 			sources[ncharNames > maxColWidth] <-
 				paste0(substr(sources[ncharNames > maxColWidth], 1L, maxColWidth - 1L), "~")
 		}
+		
 	}
 
 	# datatype
@@ -338,8 +339,8 @@ methods::setMethod(
 	definition = function(object) {
 
 	# maximum number of fields to show
-	maxFieldsToShow <- 7L
-  	maxColWidth <- 17L
+	maxFieldsToShow <- 8L
+  	maxColWidth <- 15L
 	maxDigits <- 5L
 
 	verbose <- faster("verbose")
@@ -470,7 +471,7 @@ methods::setMethod(
 		cat("values      :", row1, "\n")
 		if (!is.null(row2)) cat("             ", row2, "\n")
 		if (!is.null(row3)) cat("             ", row3, "\n")
-		if (nRows > 3L) cat("             (and", nRows - 3L, "more rows)\n")
+		if (nRows > 3L) cat(paste0("              (and ", nRows - 3L, " more rows)\n"))
 	}
 	
 	} # EOF
