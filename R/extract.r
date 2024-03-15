@@ -223,6 +223,7 @@ methods::setMethod(
                 points = sources(y),
                 null_value = "NA",
                 flags = c(.quiet(), "overwrite"),
+                cache = faster("memory"),
                 intern = TRUE
             )
 
