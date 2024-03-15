@@ -11,7 +11,7 @@
 #' Note that unlike `terra::aggregate()` and [terra::disagg()], these values need not be integers.
 #'
 #' @param fun Character (rasters only): Name of the function used to aggregate. For `GRaster`s, this is the function that summarizes across cells. For `GVector`s, this function will be used to calculate new values of numeric or integer cells.
-#' * `mean``: Average (default)
+#' * `mean`: Average (default)
 #' * `median`: Median
 #' * `mode`: Most common value
 #' * `min`: Minimum
