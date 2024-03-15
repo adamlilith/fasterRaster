@@ -13,14 +13,16 @@
 #' @param background Numeric: Rasters -- Value to assign to cells that are not `NA` and not part of the buffer (default is 0).
 #' 
 #' @param unit Character: Rasters -- Indicates the units of \code{width}. Can be one of:
+#'
 #' 	* `"cells"`: Units are numbers of cells.
 #'	* `"meters"` (default), `"metres"`, or `"m"`; `"kilometers"` or `"km"`; `"feet"` or `"ft"`; `"miles"` or `"mi"`; `"nautical miles"` or `"nmi"`.
 #' Partial matching is used and case is ignored.
 #'
 #' @param method Character: Rasters -- Only used if `units` is `"cells"`. Indicates the manner in which distances are calculated for adding of cells:
-#' * `"Euclidean"`: Euclidean distance
-#' * `"Manhattan"`: "taxi-cab" distance)
-#' * `"maximum"`: Maximum of the north-south and east-west distances between points. 
+#' * `"Euclidean"`: Euclidean distance (default)
+#' * `"Manhattan"`: "taxi-cab" distance
+#' * `"maximum"`: Maximum of the north-south and east-west distances between points.
+#'
 #' Partial matching is used and case is ignored.
 #'
 #' @param lowMemory Logical: Rasters -- Only used if buffering a raster and `units` is not `"meters"`. If `FALSE` (default) use faster, memory-intensive procedure. If `TRUE` then use the slower, low-memory version. To help decide which to use, consider using the low-memory version on a system with 1 GB of RAM for a raster larger than about 32000x32000 cells, or for a system with  with 8 GB of RAM a raster larger than about 90000x90000 cells.
