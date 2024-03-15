@@ -59,18 +59,15 @@ setMethod(
 
 	if (attachTable & nrow(x) > 0L) {
 
-		src <- .copyGVector(x)
 		table <- as.data.frame(x)
-		.vAttachDatabase(src, table = table, replace = TRUE)
+		.vAttachDatabase(x, table = table, replace = TRUE)
 
-	} else {
-		src <- sources(x)
 	}
 
 	### general arguments
 	args <- list(
 		cmd = "v.out.ogr",
-		input = src,
+		input = sources(x),
 		output = filename,
 		flags = c(.quiet(), "s")
 		# flags = c(.quiet(), "s", "c") # "c" ==> save geometries lacking a cat number
