@@ -47,7 +47,8 @@
 		if (!any(names(table) %in% "cat")) {
 		
 			if (is.null(cats)) cats <- .vCats(src, db = FALSE, integer = TRUE)
-			table <- table[cats, , drop = FALSE]
+			catsRenum <- omnibus::renumSeq(cats)
+			table <- table[catsRenum, , drop = FALSE]
 			cats <- data.frame(cat = cats)
 			table <- cbind(cats, table)
 		
@@ -112,7 +113,7 @@
 			table = srcTable,
 			layer = "1",
 			# key = "frid",
-			key = "cat_",
+			key = "cat_", # adds an underscore, for some reason
 			flags = c(.quiet(), "overwrite", "o")
 		)
 
