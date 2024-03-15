@@ -13,6 +13,8 @@
 #'
 #' @param rastOrVect: Either `NULL` (default), or `"raster"` or `"vector"`: If `x` is a filename, then the function will try to ascertain whether it represents a raster or a vector, but sometimes this will fail. In that case, it can help to specify if the file holds a raster or vector. Partial matching is used.
 #'
+#' @param levels (`GRaster`s only): A `data.frame`, `data.table`, or list of `data.frame`s or `data.table`s with categories for categorical rasters. The first column of a table corresponds to raster values and must be of type `integer`. A subsequent column corresponds to category labels. By default, the second column is assumed to represent labels, but this can be changed with \code{\link[fasterRaster]{activeCat<-}}. Level tables can also be `NULL` (e.g., `data.fame(NULL)`). You can also assign levels after loading a raster using \code{\link[fasterRaster]{levels<-}}.
+#'
 #' @param correct Logical (`GVector`s only): Correct topological issues. See *Details* for more details! By default, this is `TRUE`.
 #'
 #' @param snap `GVector`s only`: Numeric or `NULL` (default). The value of `snap` indicates how close vertices need to be for them to be shifted to to the same location. Units of `snap` are map units (usually meters), or degrees for unprojected CRSs. For lines and polygons vectors, a value of `NULL` will invoke an iterative procedure to find an optimal, smallest value of `snap`. To turn snapping off, set `snap = 0`. See *Details* for more details!
@@ -26,7 +28,6 @@
 #' @param verbose `GVector`s only: Logical. Displays progress when using automatic topology correction.
 #'
 #' @param ... Other arguments::
-#' * `levels` (`GRaster`s): A `data.frame`, `data.table`, or list of `data.frame`s or `data.table`s with categories for categorical rasters. The first column of a table corresponds to raster values and must be of type `integer`. A subsequent column corresponds to category labels. By default, the second column is assumed to represent labels, but this can be changed with \code{\link[fasterRaster]{activeCat<-}}. Level tables can also be `NULL` (e.g., `data.fame(NULL)`). You can also assign levels after loading a raster using \code{\link[fasterRaster]{levels<-}}.
 #' * `table` (`GVector`s--useful mainly to developers, not most users): A `data.frame` or `data.table` with one row per geometry in a `GVector`. Serves as an attribute table.
 #' * `xVect` (`GVector`s--useful mainly to developers, not most users): The `SpatVector` that corresponds to the file named by `x`.
 #'
@@ -55,6 +56,7 @@ methods::setMethod(
 	function(
 		x,
 		rastOrVect = NULL,
+		levels = NULL,
 		correct = TRUE,
 		snap = NULL,
 		area = NULL,
@@ -139,18 +141,13 @@ methods::setMethod(
 				cmd = "r.external",
 				input = x,
 				output = src,
-				flags = c(.quiet(), "overwrite")
+				flags = c(.quiet(), "overwrite", "o") # overriding projection check!
 			)
 			
+			if (!.exists(src)) stop("Raster not loaded. You may need to use an absolute (not relative) file path.")
 			if (nLayers > 1L) src <- paste0(src, ".", seq_len(nLayers))
 
 			# raster levels
-			if (any(dotNames == "levels")) {
-				levels <- dots$levels
-			} else {
-				levels <- NULL
-			}
-
 			if (is.list(levels)) {
 				if (length(levels) == 1L & length(xNames) > 1L & is.null(levels[[1L]])) levels <- NULL
 			}
