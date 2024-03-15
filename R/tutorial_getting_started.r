@@ -119,6 +119,8 @@
 #'
 #' 4. By default, **GRASS**/**fasterRaster** use 2 cores and 1024 MB (1 GB) of memory for functions that allow users to specify these values. You can set these to higher values using [faster()] and thus potentially speed up some calculations. Functions in newer versions of **GRASS** have more capacity to use these options, so updating **GRASS** to the latest version can help, too.
 #'
+#' 5. Unfortunately, **fasterRaster** is fast with rasters, but not so much vectors. The \code{\link[fasterRaster]{[[}} is especially slow for even moderately-sized vectors. If you have plan on making subsets of subsets, it is advisable to do your subsetting on the index that will be used to subset the vector first, then do just a single subset.
+#'
 #' ## Further reading
 #' 
 #' * Robert Hijman's [**terra**](https://cran.r-project.org/package=terra) package and Edzer Pebesma's [**sf**](https://cran.r-project.org/package=sf) package are good places to start if you are not familiar with doing GIS in **R**.
