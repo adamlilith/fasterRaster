@@ -2,11 +2,17 @@
 #'
 #' @description The `[` operator returns a subset or remove specific geometries of a `GVector`. You can get the number of geometries using [ngeom()]. Note that you cannot use this function to change the "order" in which geometries or their associated records in a data table appear. For example, `vector[1:3]` and `vector[3:1]` will yield the exact same results, where the first geometry in `vector` will also be the first geometry in either of the outputs.
 #'
+#' The subset operation will sometimes fail if `i` has many values. In these cases, try setting the value of the `nAtATime` option lower using [faster()]. Smaller values take more time, but are also less prone to failure.
+#'
+#' Note that subsetting can take a very long time if `i` has many values, even for moderately-sized vectors. In these cases, it may help to set `verbose = TRUE` so you have something exciting to watch as it does its work.
+#'
 #' @param x A `GVector`.
 #'
 #' @param i Numeric integer, integer, or logical vector: Indicates which geometry(ies) to obtain. Negative numeric or integer values will remove the given geometries from the output. If a logical vector is supplied and it is not the same length as the number of geometries, it will be recycled.
 #'
 #' @param j Numeric integer, integer, logical, or character: Indices or name(s) of the column(s) to obtain. You can see column names using [names()]. Negative numeric or integer values will remove the given columns from the output. If a logical vector is supplied and it is not the same length as the number of columns, it will be recycled.
+#'
+#' @param verbose Logical: If `TRUE` (or if `faster("verbose")` is `TRUE`), then display progress.
 #'
 #' @param drop Logical: If `FALSE` (default), the appropriate subset of the `GVector`s data table will be included in the subset. If `TRUE`, the table will be dropped.
 #'
@@ -24,9 +30,9 @@
 methods::setMethod(
 	"[",
 	signature = c(x = "GVector", i = "ANY", j = "ANY"),
-	function(x, i, j, drop = FALSE) {
+	function(x, i, j, verbose = FALSE, drop = FALSE) {
 
-	.message(msg = "subset_single_bracket", message = "Subsetting can take a long time, even for moderately-sized GVectors.\n  If you need to make subsets of subset, try selecting the final set of\n  indices and doing a single subset operation.")
+	.message(msg = "subset_single_bracket", message = "Subsetting can take a long time, even for moderately-sized GVectors.")
 	.locationRestore(x)
 
 	if (missing(i)) {
@@ -69,16 +75,6 @@ methods::setMethod(
 				select <- which(index %in% i)
 			}
 			nSelect <- length(select)
-
-			cats <- .vCats(x, db = FALSE)
-			cats <- unique(cats)
-			index <- omnibus::renumSeq(cats)
-			if (reverseRowSelect) {
-				select <- which(omnibus::notIn(index, i))
-			} else {
-				select <- which(index %in% i)
-			}
-
 			nAtATime <- faster("nAtATime")
 			
 			# select all at once (OK for small number of selected geometries)
@@ -107,12 +103,16 @@ methods::setMethod(
 				starts <- seq(1L, nSelect, by = nAtATime)
 				stops <- pmin(starts + nAtATime - 1L, nSelect)
 
-				if (faster("verbose")) pb <- utils::txtProgressBar(min = 0, max = sets, style = 3, initial = 0) 
+				verbose <- verbose | faster("verbose")
+				if (verbose) {
+					omnibus::say("Selecting geometries...")
+					pb <- utils::txtProgressBar(min = 0, max = sets, style = 3, initial = 0)
+				}
 				
 				srcs <- .makeSourceName("v_extract", "vector", n = sets)
 				for (set in seq_len(sets)) {
 
-					if (faster("verbose")) utils::setTxtProgressBar(pb, set)
+					if (verbose) utils::setTxtProgressBar(pb, set)
 
 					thisCats <- cats[starts[set]:stops[set]]
 					thisCats <- seqToSQL(thisCats)
@@ -134,29 +134,24 @@ methods::setMethod(
 					if (info$nGeometries != nSelected) stop("Subsetting error. Try reducing the value of `nAtATime` using faster().")
 
 				}
-				if (faster("verbose")) close(pb)
-
-				# # # combine vectors
-				# # cats <- .vCats(srcs[1L], db = FALSE)
-				# # topCat <- max(cats)
-				
-				# # for (i in 2L:length(srcs)) {
-
-				# # 	srcs[i] <- .vIncrementCats(srcs[i], add = topCat)
-				# # 	cats <- .vCats(srcs[i], db = FALSE)
-				# # 	topCat <- max(cats)
-				
-				# # }
+				if (verbose) close(pb)
 
 				### combine vectors
-				# seems like we can combine at least 11 vectors at a time, but not a lot at a time
-				srcsAtATime <- 10L # number of sources to combine at a time (plus the running `x` source)
+				# seems like we can combine at least 11 vectors at a time, but not a lot more
+				srcsAtATime <- 10L # number of sources to combine at a time (not including the one being added to)
 
 				nSrcs <- length(srcs)
 				sets <- ceiling(nSrcs / srcsAtATime)
 				
+				if (verbose) {
+					omnibus::say("Combining subvectors...")
+					pb <- utils::txtProgressBar(min = 0, max = sets, style = 3, initial = 0)
+				}
+
 				src <- .makeSourceName("v_patch", "vector")
 				for (set in seq_len(sets)) {
+
+					if (verbose) utils::setTxtProgressBar(pb, set)
 
 					index <- (1L + srcsAtATime * (set - 1L)) : min(nSrcs, set * srcsAtATime)
 					srcIn <- srcs[index]
@@ -171,6 +166,7 @@ methods::setMethod(
 					)
 				
 				}
+				if (verbose) close(pb)
 
 			} # if selecting in sets
 
@@ -232,18 +228,6 @@ methods::setMethod(
 				}
 
 			} # vector has table
-
-			# if (reverseRowSelect) {
-			# 	keepCats <- cats[-i]
-			# } else {
-			# 	keepCats <- cats[i]
-			# }
-
-			# keepRows <- frid[frid > -1L]
-			# table <- table[keepRows]
-
-			# gtype <- geomtype(x, grass = TRUE)
-			# src <- .vRecat(src, gtype = gtype)
 			out <- .makeGVector(src, table = table)
 
 		} # keep some rows (vs discarding all)
