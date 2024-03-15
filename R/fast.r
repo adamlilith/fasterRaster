@@ -535,9 +535,6 @@ methods::setMethod(
 	...
 ) {
 
-	if (is.character(snap)) snap <- omnibus::pmatchSafe(snap, NULL, nmax = 1L)
-	if (is.character(area)) area <- omnibus::pmatchSafe(area, NULL, nmax = 1L)
-
 	dots <- list(...)
 	dotNames <- names(dots)
 	
@@ -554,7 +551,7 @@ methods::setMethod(
 	if (terra::sources(x) == "") {
 
 		# remove table
-		if (!is.null(table)) {
+		if (!is.null(table) && ncol(table) > 0L) {
 			nc <- ncol(x)
 			x[ , seq_len(nc)] <- NULL 
 		}
