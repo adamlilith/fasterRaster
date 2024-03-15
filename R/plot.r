@@ -8,7 +8,7 @@
 #'
 #' @param y Missing--leave as empty.
 #'
-#' @param maxcell Positive integer (rasters only): Maximum number of cells to display. When simplifying, [aggregate()] will be applied so that it has approximately this number of cells. The default is 500000.
+#' @param maxcell Positive integer (rasters only): Maximum number of cells to display. When simplifying, [aggregate()] will be applied so that it has approximately this number of cells. The default is 5000000.
 #'
 #' @param simplify Logical (vectors only): If `TRUE` (default), then simplify the `GVector` before plotting. This can save time for very large vectors. However, details in the vector may appear inaccurate.
 #'
@@ -28,7 +28,7 @@
 methods::setMethod(
 	f = "plot",
 	signature = c(x = "GRaster", y = "missing"),
-	function(x, y, maxcell = 500000, ...) {
+	function(x, y, maxcell = 5000000, ...) {
 
 	# simplify
 	nc <- ncell(x)
@@ -37,7 +37,14 @@ methods::setMethod(
 		rows <- nrow(x)
 		cols <- ncol(x)
 		rescale <- ceiling(nc / (2 * maxcell))
-		if (rescale != 1L) x <- aggregate(x, fact = rescale)
+
+		if (all(datatype(x) %in% c("integer", "factor"))) {
+			fun <- "median"
+		} else {
+			fun <- "mean"
+		}
+
+		if (rescale != 1L) x <- aggregate(x, fact = rescale, fun = fun)
 
 	}
 	
