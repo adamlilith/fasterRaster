@@ -11,10 +11,11 @@
 #' The `app()` function will automatically check for raster names that appear also to be functions that appear in the formula. However, you can check a formula before running `app()` by using the `appCheck()` function. You can obtain a list of `app()` functions using `appFuns()`. Note that these are sometimes different from how they are applied in **R**.
 #'
 #' Tips:
-#' * In **GRASS**, `null()` is the same as `NA` in **R**.
+#' * Make sure your `GRaster`s have `names()`. The function matches on these, not the name of the variable you use in **R** for the `GRaster`.
+#' * In **GRASS**, use `null()` instead of `NA`, and use `isnull()` instead of `is.na()`.
 #' * If you want to calculate values using while ignoring `NA` (or `null`) values, see the functions that begin with `n` (like `nmean`).
-#' * Be mindful of the data type that a function returns. In **GRASS**, these are `CELL` (integer), `FCELL` (floating point values--precise to about the 7th decimal place), and `DCELL` (double-floating point values--precise to about the 15th decimal place). In cases where you want to ensure a raster to be treated like a float or double data type raster, wrap the raster in the `float()` or `double()` functions to ensure it is treated as such. This is especially useful if the raster might be assumed to be the `CELL` type because it only contains integer values. You can get the data type of a raster using [datatype()] with the `type` argument set to `GRASS`. You can change the data type of a `GRaster` using [as.int()], [as.float()], and [as.doub()]. Note that [categorical][tutorial_raster_data_types] rasters are really `CELL` (integer) rasters with an associated "levels" table. You can also change a `CELL` raster to a `FCELL` raster by adding then subtracting a decimal value, as in `x - 0.1 + 0.1`.
-#' * The `rand()` function returns integer values by default. If you want non-integer values, use the tricks mentioned above to ensure non-integer values. For example, the [runifRast()] function's `app()`-like expression is (essentially) `= float(rand(0 + 0.1, 1 + 0.1) - 0.1)`
+#' * Be mindful of the [data type][tutorial_raster_data_types] that a function returns. In **GRASS**, these are `CELL` (integer), `FCELL` (floating point values--precise to about the 7th decimal place), and `DCELL` (double-floating point values--precise to about the 15th decimal place). In cases where you want to ensure a raster to be treated like a float or double data type raster, wrap the raster in the `float()` or `double()` functions to ensure it is treated as such. This is especially useful if the raster might be assumed to be the `CELL` type because it only contains integer values. You can get the data type of a raster using [datatype()] with the `type` argument set to `GRASS`. You can change the data type of a `GRaster` using [as.int()], [as.float()], and [as.doub()]. Note that [categorical][tutorial_raster_data_types] rasters are really `CELL` (integer) rasters with an associated "levels" table. You can also change a `CELL` raster to a `FCELL` raster by adding then subtracting a decimal value, as in `x - 0.1 + 0.1`.
+#' * The `rand()` function returns integer values by default. If you want non-integer values, use the tricks mentioned above to ensure non-integer values. For example, if you want uniform random values in the range between 0 and 1, use something like `= float(rand(0 + 0.1, 1 + 0.1) - 0.1)`
 #'
 #' @param x A `GRaster` with one or more named layers.
 #'
@@ -24,7 +25,7 @@
 #' * It must use typical arithmetic operators like `+`, `-`, `*`, `/` and/or functions that can be seen using `appFuns(TRUE)`.
 #' * The [names()] of the rasters do not match any of the functions in the `appFuns(TRUE)` table. Note that `x` and `y` are forbidden names :(
 #'
-#' The help page for `r.mapcalc` on the **GRASS** website provides more details.
+#' The help page for **GRASS** module [`r.mapcalc`](https://grass.osgeo.org/grass84/manuals/r.mapcalc.html) will be especially helpful.
 #' 
 #' @param ensure Character: This ensures that rasters are treated as a certain type before they are operated on. This is useful when using rasters that have all integer values, which **GRASS** can assume represent integers, even if they are not supposed to. In this case, the output of operations on this raster might be an integer if otherwise not corrected. Partial matching is used, and options include:
 #' * `"integer"`: Force all rasters to integers by truncating their values. The output may still be of type `float` if the operation creates non-integer values.
@@ -42,7 +43,7 @@
 #'
 #' @returns A `GRaster`.
 #'
-#' @seealso [terra::app()], and modules `r.mapcalc` and `r.mapcalc.simple` in **GRASS**.
+#' @seealso [terra::app()], and modules [`r.mapcalc`](https://grass.osgeo.org/grass84/manuals/r.mapcalc.html) and `r.mapcalc.simple` in **GRASS**.
 #'
 #' @example man/examples/ex_app.r
 #'
