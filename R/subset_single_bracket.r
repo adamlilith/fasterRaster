@@ -26,6 +26,7 @@ methods::setMethod(
 	signature = c(x = "GVector", i = "ANY", j = "ANY"),
 	function(x, i, j, drop = FALSE) {
 
+	.message(msg = "subset_single_bracket", message = "Subsetting can take a long time, even for moderately-sized GVectors.\n  If you need to make subsets of subset, try selecting the final set of\n  indices and doing a single subset operation.")
 	.locationRestore(x)
 
 	if (missing(i)) {
@@ -67,90 +68,111 @@ methods::setMethod(
 			} else {
 				select <- which(index %in% i)
 			}
-			cats <- cats[select]
+			nSelect <- length(select)
+
+			cats <- .vCats(x, db = FALSE)
 			cats <- unique(cats)
-			cats <- seqToSQL(cats)
-			cats <- as.character(cats)
+			index <- omnibus::renumSeq(cats)
+			if (reverseRowSelect) {
+				select <- which(omnibus::notIn(index, i))
+			} else {
+				select <- which(index %in% i)
+			}
 
-			src <- .makeSourceName("v_extract", "vector")
-			rgrass::execGRASS(
-				cmd = 'v.extract',
-				input = sources(x),
-				output = src,
-				cats = cats,
-				new = -1,
-				# type = gtype,
-				flags = c(.quiet(), 'overwrite')
-			)
-
-
-			# # # create database with frid value = -1 for records we do not want
-			# # frid <- .vCats(x, db = FALSE)
-			# # if (reverseRowSelect) {
-			# # 	frid[i] <- -1L
-			# # } else {
-			# # 	frid[omnibus::notIn(frid, i)] <- -1L
-			# # }	
-			# # frid[frid > -1] <- omnibus::renumSeq(frid[frid > -1])
-
-			# # .vAttachDatabase(x, table = frid, replace = TRUE)
-
-			# # srcIn <- sources(x)
-			# # src <- .makeSourceName("v_extract", "vector")
+			nAtATime <- faster("nAtATime")
 			
-			# # where <- paste0("frid > -1")
-			# # # # # where <- paste0("(frid = 1) or (frid = 11291)")
+			# select all at once (OK for small number of selected geometries)
+			if (nSelect < nAtATime) {
 
-			# where <- paste0("cat IN (", paste(cats, collapse = ","), ")")
-			# where <- paste0("cat = ", paste(cats, collapse = ","))
+				cats <- cats[select]
+				cats <- seqToSQL(cats)
+				cats <- as.character(cats)
+
+				src <- .makeSourceName("v_extract", "vector")
+				rgrass::execGRASS(
+					cmd = 'v.extract',
+					input = sources(x),
+					output = src,
+					cats = cats,
+					new = -1,
+					# type = gtype,
+					flags = c(.quiet(), 'overwrite')
+				)
+
+			# select in sets
+			# NB this parts obviates an issue where if the `cat` SQL statement is too long, the requested number of geometries is not returned
+			} else {
 			
-			# where <- "id = 'a'"
-			# where <- "id IS 'a'"
-			# where <- "id IS a"
-			# where <- "id = a"
-			# where <- 'id = "a"'
-			# where <- 'id IS "a"'
+				sets <- ceiling(nSelect / nAtATime)
+				starts <- seq(1L, nSelect, by = nAtATime)
+				stops <- pmin(starts + nAtATime - 1L, nSelect)
 
-			# rgrass::execGRASS('v.db.renamecolumn', map = sources(x), column = 'cat_,cat')
-			# .vAsDataTable(x)
+				if (faster("verbose")) pb <- utils::txtProgressBar(min = 0, max = sets, style = 3, initial = 0) 
+				
+				srcs <- .makeSourceName("v_extract", "vector", n = sets)
+				for (set in seq_len(sets)) {
 
-			# rgrass::parseGRASS("v.extract")
-			# # rgrass::stringexecGRASS("v.extract input=kansas output=test2 type=area layer='-1' cats='77'")
+					if (faster("verbose")) utils::setTxtProgressBar(pb, set)
 
-			# # rgrass::stringexecGRASS("v.extract input=kansas output=test type=area layer='-1' where='cat = 77'")
-			# .rm("test")
-			# # rgrass::stringexecGRASS(paste0("v.extract input=kansas output=test type=area where='cat = 1'")) # works if db intact and "cat" column exists
-			# rgrass::stringexecGRASS(paste0("v.extract input=", sources(ks), " output=test type=area where='cat IN (1)'")) # works if db intact and "cat" column exists AND needs to have topology corrected!
-			# .makeGVector("test")
-			
-			# cats <- paste(cats, collapse = ",")
-			# src <- .makeSourceName("v_extract", "vector")
-			# quiet <- if (is.null(.quiet())) { NULL } else { "-quiet" }
-			# # string <- paste0("v.extract -overwrite -t ", quiet, " input=", sources(x), " output=", src, " type=", gtype, " new=-1 where='cat IN (", cats, ")'") # works!
-			# string <- paste0("v.extract -overwrite -t ", quiet, " input=", sources(x), " output=", src, " type=", gtype, " new=-1 cats='", cats, "'") # works!
-			# rgrass::stringexecGRASS(string) # works as above
-			# .makeGVector(src)
+					thisCats <- cats[starts[set]:stops[set]]
+					thisCats <- seqToSQL(thisCats)
+					thisCats <- as.character(thisCats)
 
-			# src <- .makeSourceName("v_extract", "vector")
-			# rgrass::execGRASS(
-			# 	cmd = "v.extract",
-			# 	input = sources(x),
-			# 	# where <- "SUB_NAME = 'Nam Loi'", # works
-			# 	# where <- "cat = 481", # works
-			# 	# where = where,
-			# 	output = src,
-			# 	new = -1,
-			# 	type = gtype,
-			# 	cats = cats,
-			# 	# file = 'C:/!scratch/cats.txt',
-			# 	layer = "-1",
-			# 	# layer = "db_in_ogr_table_m6u2SVUBnsE2",
-			# 	flags = c(.quiet(), "overwrite", "t")
-			# 	# flags = c(.quiet(), "overwrite", "r")
-			# 	# flags = c(.quiet(), "overwrite")
-			# )
+					srcs[set] <- .makeSourceName("v_extract", "vector")
+					rgrass::execGRASS(
+						cmd = 'v.extract',
+						input = sources(x),
+						output = srcs[set],
+						cats = thisCats,
+						# new = -1,
+						# type = gtype,
+						flags = c(.quiet(), 'overwrite')
+					)
 
-			# .makeGVector(src)
+					info <- .vectInfo(srcs[set])
+					nSelected <- stops[set] - starts[set] + 1L
+					if (info$nGeometries != nSelected) stop("Subsetting error. Try reducing the value of `nAtATime` using faster().")
+
+				}
+				if (faster("verbose")) close(pb)
+
+				# # # combine vectors
+				# # cats <- .vCats(srcs[1L], db = FALSE)
+				# # topCat <- max(cats)
+				
+				# # for (i in 2L:length(srcs)) {
+
+				# # 	srcs[i] <- .vIncrementCats(srcs[i], add = topCat)
+				# # 	cats <- .vCats(srcs[i], db = FALSE)
+				# # 	topCat <- max(cats)
+				
+				# # }
+
+				### combine vectors
+				# seems like we can combine at least 11 vectors at a time, but not a lot at a time
+				srcsAtATime <- 10L # number of sources to combine at a time (plus the running `x` source)
+
+				nSrcs <- length(srcs)
+				sets <- ceiling(nSrcs / srcsAtATime)
+				
+				src <- .makeSourceName("v_patch", "vector")
+				for (set in seq_len(sets)) {
+
+					index <- (1L + srcsAtATime * (set - 1L)) : min(nSrcs, set * srcsAtATime)
+					srcIn <- srcs[index]
+					input <- paste(srcIn, collapse = ",")
+					if (set > 1L) input <- paste0(src, ",", input)
+
+					rgrass::execGRASS(
+						cmd = "v.patch",
+						input = input,
+						output = src,
+						flags = c(.quiet(), "overwrite")
+					)
+				
+				}
+
+			} # if selecting in sets
 
 			### select data table rows
 			if (nrow(x) == 0L | drop) {
