@@ -13,7 +13,7 @@
 #'
 #' @example man/examples/ex_addTable_dropTable.r
 #'
-#' @aliases addTable
+#' @aliases addTable<-
 #' @rdname addTable
 #' @exportMethod addTable<-
 methods::setMethod(
@@ -22,7 +22,7 @@ methods::setMethod(
 	function(x, value) .addTable(x = x, table = value)
 )
 
-#' @aliases addTable
+#' @aliases addTable<-
 #' @rdname addTable
 #' @exportMethod addTable<-
 methods::setMethod(
@@ -31,7 +31,7 @@ methods::setMethod(
 	function(x, value) .addTable(x = x, table = value)
 )
 
-#' @aliases addTable
+#' @aliases addTable<-
 #' @rdname addTable
 #' @exportMethod addTable<-
 methods::setMethod(
