@@ -63,6 +63,8 @@ methods::setMethod(
 
 		if (removeAll) {
 			out <- NULL # removed all
+		} else if (all(i %in% 1L:nGeoms) & missing(j)) {
+			out <- x
 		} else {
 
 			gtype <- geomtype(x, grass = TRUE)
@@ -148,7 +150,6 @@ methods::setMethod(
 					pb <- utils::txtProgressBar(min = 0, max = sets, style = 3, initial = 0)
 				}
 
-				src <- .makeSourceName("v_patch", "vector")
 				for (set in seq_len(sets)) {
 
 					if (verbose) utils::setTxtProgressBar(pb, set)
@@ -157,6 +158,7 @@ methods::setMethod(
 					srcIn <- srcs[index]
 					input <- paste(srcIn, collapse = ",")
 					if (set > 1L) input <- paste0(src, ",", input)
+					src <- .makeSourceName("v_patch", "vector")
 
 					rgrass::execGRASS(
 						cmd = "v.patch",
