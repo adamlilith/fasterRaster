@@ -125,7 +125,13 @@ methods::setMethod(
 		
 		do.call(rgrass::execGRASS, args=args)
 		
-		this <- .makeGRaster(src, names(x)[i])
+		if (fun %in% c("median", "mode", "min", "max")) {
+			levs <- levels(x[[i]])
+		} else {
+			levs <- NULL
+		}
+
+		this <- .makeGRaster(src, names(x)[i], levels = levs)
 		if (i == 1L) {
 			out <- this
 		} else {
