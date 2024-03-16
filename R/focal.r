@@ -45,13 +45,15 @@ methods::setMethod(
     signature = c(x = "GRaster"),
     function(x, w = 3, fun = "sum", circle = FALSE, quantile = 0.5) {
 
-	if (inherits(w, "numeric") && (w < 3 | compareFloat(w %% 2, 0, "=="))) stop("Argument ", sQuote("w"), " must be an odd integer >= 3.")
+	if (inherits(w, "numeric") && (w < 3 | compareFloat(w %% 2, 0, "=="))) stop("Argument `w` must be an odd integer >= 3.")
 	
-	if (inherits(w, "matrix") && (nrow(w) != ncol(w) | compareFloat(nrow(w) %% 2, 0, "==") | compareFloat(ncol(w) %% 2, 0, "=="))) stop("Matrix ", sQuote("w"), " must have the same number of rows and columns, and it must have an odd number of each.")
+	if (inherits(w, "matrix") && (nrow(w) != ncol(w) | compareFloat(nrow(w) %% 2, 0, "==") | compareFloat(ncol(w) %% 2, 0, "=="))) stop("Matrix `w` must have the same number of rows and columns, and it must have an odd number of each.")
 	
 	if (is.matrix(w) & circle) ("Cannot use a circular neighborhood and a weights matrix at the same time.")
 	
     funs <- c("mean", "sum", "sd", "sdpop", "var", "varpop", "median", "mode", "max", "min", "count", "range", "nunique", "interspersion", "quantile")
+
+    if (!is.character(fun)) stop("Argument `fun` must be a character.")
 
     fun <- omnibus::pmatchSafe(fun, funs, useFirst = TRUE)
     if (fun == "mean") fun <- "average"
@@ -60,7 +62,7 @@ methods::setMethod(
     if (fun == "nunique") fun <- "diversity"
 	
     if (fun == "quantile") {
-        if (quantile < 0 | quantile > 1) stop("Argument ", sQuote("quantile"), " must be in the range [0, 1].")
+        if (quantile < 0 | quantile > 1) stop("Argument `quantile` must be in the range [0, 1].")
     }
 
     .locationRestore(x)
