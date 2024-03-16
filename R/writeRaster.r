@@ -16,12 +16,12 @@
 #'    | ------------------ | ----------- | ----------- | ---------- | ------ |
 #'    | `integer`          | `INT1U`     | `CELL`      | `Byte`     | Integer values from 0 to 255 |
 #'    | `integer`          | `INT2U`     | `CELL`      | `UInt16`   | Integer values from 0 to 65,534 |
-#'    | `integer`          | `INT2S`     | `CELL`     | `Int16`    | Integer values from -32,767 to -32,767 |
-#'    | `integer`          | na     | `CELL`     | `Unt32`    | Integer values from 0 to 4,294,967,295 |
-#'    | `integer`          | `INT4S`     | `CELL`     | `Int32`    | Integer values from -2,147,483,647 to 2,147,483,647 |
-#'    | `float`            | `FLT4S`     | `FCELL`   | `Float32`    | Values from -3.4e+38 to 3.4e+38, including decimal values |
-#'    | `double`           | `FLT8S`     | `DCELL`   | `Float64`    | Values from -1.79e+308 to 1.79e+308, including decimal values |
-#'    | `factor`           | `INT`*      | `CELL`    | `INT*`        | Integer values corresponding to categories
+#'    | `integer`          | `INT2S`     | `CELL`      | `Int16`    | Integer values from -32,767 to -32,767 |
+#'    | `integer`          | na          | `CELL`      | `Int32`    | Integer values from 0 to 4,294,967,295 |
+#'    | `integer`          | `INT4S`     | `CELL`      | `Int32`    | Integer values from -2,147,483,647 to 2,147,483,647 |
+#'    | `float`            | `FLT4S`     | `FCELL`     | `Float32`  | Values from -3.4e+38 to 3.4e+38, including decimal values |
+#'    | `double`           | `FLT8S`     | `DCELL`     | `Float64`  | Values from -1.79e+308 to 1.79e+308, including decimal values |
+#'    | `factor`           | `INT`*      | `CELL`      | `INT*`     | Integer values corresponding to categories
 #'
 #' `*` Depends on the integers (signed/unsigned, range of values). Categorical rasters will have a CSV file with category values and labels saved with them. The file name will be the same as the raster's file name, but end in extension ".csv".
 #'
