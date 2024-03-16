@@ -43,13 +43,13 @@ app(x, fun = fun)
 # output is of a given type, and the rasters are coerced to integers before
 # the operation is conducted in the second function.
 fun <- "= x1 + x3"
-app(x, fun = fun, ensure = "float") # output is floating-point
-app(x, fun = fun, ensure = "integer") # output is integer
+app(x, fun = fun, datatype = "float") # output is floating-point
+app(x, fun = fun, da = "integer") # output is integer
 
-# Some functions override the "ensure" argument. In this case, the output will
+# Some functions override the "datatype" argument. In this case, the output will
 # not be an integer because the sin() function returns a float value.
 fun <- "= sin(x2)"
-app(x, fun = fun, ensure = "integer")
+app(x, fun = fun, datatype = "integer")
 
 # Make a raster with random numbers between 1 and 4, with equal probability
 # of each:
