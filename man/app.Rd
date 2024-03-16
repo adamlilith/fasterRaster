@@ -8,7 +8,7 @@
 \alias{appCheck}
 \title{Apply a function to a set of rasters}
 \usage{
-\S4method{app}{GRaster}(x, fun, ensure = "auto", seed = NULL)
+\S4method{app}{GRaster}(x, fun, datatype = "auto", seed = NULL)
 
 appFuns(warn = TRUE)
 
@@ -24,9 +24,9 @@ appFuns(warn = TRUE)
 \item The \code{\link[=names]{names()}} of the rasters do not match any of the functions in the \code{appFuns(TRUE)} table. Note that \code{x} and \code{y} are forbidden names :(
 }
 
-The help page for \code{r.mapcalc} on the \strong{GRASS} website provides more details.}
+The help page for \strong{GRASS} module \href{https://grass.osgeo.org/grass84/manuals/r.mapcalc.html}{\code{r.mapcalc}} will be especially helpful.}
 
-\item{ensure}{Character: This ensures that rasters are treated as a certain type before they are operated on. This is useful when using rasters that have all integer values, which \strong{GRASS} can assume represent integers, even if they are not supposed to. In this case, the output of operations on this raster might be an integer if otherwise not corrected. Partial matching is used, and options include:
+\item{datatype}{Character: This ensures that rasters are treated as a certain type before they are operated on. This is useful when using rasters that have all integer values, which \strong{GRASS} can assume represent integers, even if they are not supposed to. In this case, the output of operations on this raster might be an integer if otherwise not corrected. Partial matching is used, and options include:
 \itemize{
 \item \code{"integer"}: Force all rasters to integers by truncating their values. The output may still be of type \code{float} if the operation creates non-integer values.
 \item \code{"float"}: Force rasters to be considered floating-point values.
@@ -58,10 +58,11 @@ The \code{app()} function will automatically check for raster names that appear 
 
 Tips:
 \itemize{
-\item In \strong{GRASS}, \code{null()} is the same as \code{NA} in \strong{R}.
+\item Make sure your \code{GRaster}s have \code{names()}. The function matches on these, not the name of the variable you use in \strong{R} for the \code{GRaster}.
+\item In \strong{GRASS}, use \code{null()} instead of \code{NA}, and use \code{isnull()} instead of \code{is.na()}.
 \item If you want to calculate values using while ignoring \code{NA} (or \code{null}) values, see the functions that begin with \code{n} (like \code{nmean}).
-\item Be mindful of the data type that a function returns. In \strong{GRASS}, these are \code{CELL} (integer), \code{FCELL} (floating point values--precise to about the 7th decimal place), and \code{DCELL} (double-floating point values--precise to about the 15th decimal place). In cases where you want to ensure a raster to be treated like a float or double data type raster, wrap the raster in the \code{float()} or \code{double()} functions to ensure it is treated as such. This is especially useful if the raster might be assumed to be the \code{CELL} type because it only contains integer values. You can get the data type of a raster using \code{\link[=datatype]{datatype()}} with the \code{type} argument set to \code{GRASS}. You can change the data type of a \code{GRaster} using \code{\link[=as.int]{as.int()}}, \code{\link[=as.float]{as.float()}}, and \code{\link[=as.doub]{as.doub()}}. Note that \link[=tutorial_raster_data_types]{categorical} rasters are really \code{CELL} (integer) rasters with an associated "levels" table. You can also change a \code{CELL} raster to a \code{FCELL} raster by adding then subtracting a decimal value, as in \code{x - 0.1 + 0.1}.
-\item The \code{rand()} function returns integer values by default. If you want non-integer values, use the tricks mentioned above to ensure non-integer values. For example, the \code{\link[=runifRast]{runifRast()}} function's \code{app()}-like expression is (essentially) \verb{= float(rand(0 + 0.1, 1 + 0.1) - 0.1)}
+\item Be mindful of the \link[=tutorial_raster_data_types]{data type} that a function returns. In \strong{GRASS}, these are \code{CELL} (integer), \code{FCELL} (floating point values--precise to about the 7th decimal place), and \code{DCELL} (double-floating point values--precise to about the 15th decimal place). In cases where you want to datatype a raster to be treated like a float or double data type raster, wrap the raster in the \code{float()} or \code{double()} functions to datatype it is treated as such. This is especially useful if the raster might be assumed to be the \code{CELL} type because it only contains integer values. You can get the data type of a raster using \code{\link[=datatype]{datatype()}} with the \code{type} argument set to \code{GRASS}. You can change the data type of a \code{GRaster} using \code{\link[=as.int]{as.int()}}, \code{\link[=as.float]{as.float()}}, and \code{\link[=as.doub]{as.doub()}}. Note that \link[=tutorial_raster_data_types]{categorical} rasters are really \code{CELL} (integer) rasters with an associated "levels" table. You can also change a \code{CELL} raster to a \code{FCELL} raster by adding then subtracting a decimal value, as in \code{x - 0.1 + 0.1}.
+\item The \code{rand()} function returns integer values by default. If you want non-integer values, use the tricks mentioned above to datatype non-integer values. For example, if you want uniform random values in the range between 0 and 1, use something like \verb{= float(rand(0 + 0.1, 1 + 0.1) - 0.1)}
 }
 }
 \examples{
@@ -110,13 +111,13 @@ app(x, fun = fun)
 # output is of a given type, and the rasters are coerced to integers before
 # the operation is conducted in the second function.
 fun <- "= x1 + x3"
-app(x, fun = fun, ensure = "float") # output is floating-point
-app(x, fun = fun, ensure = "integer") # output is integer
+app(x, fun = fun, datatype = "float") # output is floating-point
+app(x, fun = fun, da = "integer") # output is integer
 
-# Some functions override the "ensure" argument. In this case, the output will
+# Some functions override the "datatype" argument. In this case, the output will
 # not be an integer because the sin() function returns a float value.
 fun <- "= sin(x2)"
-app(x, fun = fun, ensure = "integer")
+app(x, fun = fun, datatype = "integer")
 
 # Make a raster with random numbers between 1 and 4, with equal probability
 # of each:
@@ -129,5 +130,5 @@ freq(rand) # cell frequencies
 }
 }
 \seealso{
-\code{\link[terra:app]{terra::app()}}, and modules \code{r.mapcalc} and \code{r.mapcalc.simple} in \strong{GRASS}.
+\code{\link[terra:app]{terra::app()}}, and modules \href{https://grass.osgeo.org/grass84/manuals/r.mapcalc.html}{\code{r.mapcalc}} and \code{r.mapcalc.simple} in \strong{GRASS}.
 }

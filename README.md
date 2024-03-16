@@ -1,10 +1,6 @@
 # fasterRaster
 <!-- badges: start -->
 
-[![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
-[![cran version](https://www.r-pkg.org/badges/version/fasterRaster)](https://cran.r-project.org/package=fasterRaster)
-[![CRAN RStudio mirror downloads](https://cranlogs.r-pkg.org/badges/grand-total/fasterRaster?color=yellow)](https://r-pkg.org/pkg/fasterRaster)
-![CRAN RStudio mirror downloads](https://cranlogs.r-pkg.org/badges/fasterRaster?color=lightgrey)
 [![GPLv3 license](https://img.shields.io/badge/License-GPLv3-blue.svg)](http://perso.crans.org/besson/LICENSE.html)
 
 <!-- badges: end -->
@@ -24,11 +20,16 @@ Faster raster processing in `R` using `GRASS GIS`
 
 `fasterRaster` makes heavy use of the <a href="https://cran.r-project.org/package=rgrass">`rgrass`</a> package by Roger Bivand and others, the <a href="https://cran.r-project.org/package=rgrass">`terra`</a> package by Robert Hijmans, the <a href="https://cran.r-project.org/package=sf">`sf`</a> package by Edzer Pebesma Roger Bivand, and of course <a href="https://grass.osgeo.org/">`GRASS GIS`</a>, so is greatly indebted to all of these creators!
 
+# Where we are
+As of 2024/02/26, a new version of this package, `fasterRaster 8.3`, is in development. There are known issues and unknown issues. If you encounter one of the latter, please file an <a href="https://github.com/adamlilith/fasterRaster/issues">issue</a> report.
+
 # Getting started
 
-*As of 2024/02/26, a new version of this package, `fasterRaster 8.3`, is in development. The new version works well for rasters, but not dependably for vectors. The main issue is how vectors are loaded using `fast()`. This is an active area of development. When it gets fixed, **fasterRaster** will be mostly done (for now!)!!!*
+To install **fasterRaster**, please use:
 
-To install the development version, you will need to use:
+`remotes::install_github('adamlilith/fasterRaster', dependencies = TRUE)`  
+
+Alternatively, you can install the development version from:
 
 `remotes::install_github('adamlilith/fasterRaster@intuitive_fasterRaster', dependencies = TRUE)`  
 

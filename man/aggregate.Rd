@@ -26,7 +26,7 @@ Note that unlike \code{terra::aggregate()} and \code{\link[terra:disaggregate]{t
 
 \item{fun}{Character (rasters only): Name of the function used to aggregate. For \code{GRaster}s, this is the function that summarizes across cells. For \code{GVector}s, this function will be used to calculate new values of numeric or integer cells.
 \itemize{
-\item `mean``: Average (default)
+\item \code{mean}: Average (default)
 \item \code{median}: Median
 \item \code{mode}: Most common value
 \item \code{min}: Minimum

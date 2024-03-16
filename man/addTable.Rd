@@ -2,7 +2,7 @@
 % Please edit documentation in R/addTable_dropTable.r
 \name{addTable<-,GVector,data.frame-method}
 \alias{addTable<-,GVector,data.frame-method}
-\alias{addTable}
+\alias{addTable<-}
 \alias{addTable<-,GVector,data.table-method}
 \alias{addTable<-,GVector,matrix-method}
 \alias{dropTable,GVector-method}

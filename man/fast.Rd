@@ -11,6 +11,7 @@
 \S4method{fast}{character}(
   x,
   rastOrVect = NULL,
+  levels = NULL,
   correct = TRUE,
   snap = NULL,
   area = NULL,
@@ -52,6 +53,8 @@
 \item A character string or a vector of strings with the path(s) and filename(s) of one or more rasters or one vector to be loaded directly into \strong{GRASS}. The function will attempt to ascertain the type of object from the file extension (raster or vector), but it can help to indicate which it is using the \code{rastOrVect} argument if it is unclear.
 }}
 
+\item{levels}{(\code{GRaster}s only): A \code{data.frame}, \code{data.table}, or list of \code{data.frame}s or \code{data.table}s with categories for categorical rasters. The first column of a table corresponds to raster values and must be of type \code{integer}. A subsequent column corresponds to category labels. By default, the second column is assumed to represent labels, but this can be changed with \code{\link[fasterRaster]{activeCat<-}}. Level tables can also be \code{NULL} (e.g., \code{data.fame(NULL)}). You can also assign levels after loading a raster using \code{\link[fasterRaster]{levels<-}}.}
+
 \item{correct}{Logical (\code{GVector}s only): Correct topological issues. See \emph{Details} for more details! By default, this is \code{TRUE}.}
 
 \item{snap}{\code{GVector}s only\verb{: Numeric or }NULL\verb{(default). The value of}snap\verb{indicates how close vertices need to be for them to be shifted to to the same location. Units of}snap\verb{are map units (usually meters), or degrees for unprojected CRSs. For lines and polygons vectors, a value of}NULL\verb{will invoke an iterative procedure to find an optimal, smallest value of}snap\verb{. To turn snapping off, set }snap = 0`. See \emph{Details} for more details!}
@@ -66,7 +69,6 @@
 
 \item{...}{Other arguments::
 \itemize{
-\item \code{levels} (\code{GRaster}s): A \code{data.frame}, \code{data.table}, or list of \code{data.frame}s or \code{data.table}s with categories for categorical rasters. The first column of a table corresponds to raster values and must be of type \code{integer}. A subsequent column corresponds to category labels. By default, the second column is assumed to represent labels, but this can be changed with \code{\link[fasterRaster]{activeCat<-}}. Level tables can also be \code{NULL} (e.g., \code{data.fame(NULL)}). You can also assign levels after loading a raster using \code{\link[fasterRaster]{levels<-}}.
 \item \code{table} (\code{GVector}s--useful mainly to developers, not most users): A \code{data.frame} or \code{data.table} with one row per geometry in a \code{GVector}. Serves as an attribute table.
 \item \code{xVect} (\code{GVector}s--useful mainly to developers, not most users): The \code{SpatVector} that corresponds to the file named by \code{x}.
 }}
