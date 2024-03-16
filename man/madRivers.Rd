@@ -3,9 +3,9 @@
 \docType{data}
 \name{madRivers}
 \alias{madRivers}
-\title{Spatial data: major rivers in a selected portion of Madagascar}
+\title{Major rivers in a selected portion of Madagascar}
 \format{
-An object of class \code{'SpatialLinesDataFrame'}. See \code{\link[sp]{SpatialLines}}.
+An object of class \code{sf}.
 }
 \source{
 \href{http://www.diva-gis.org/gdata}{DIVA-GIS}
@@ -17,7 +17,69 @@ data(madRivers)
 Spatial lines object of major rivers in a portion of Madagascar.
 }
 \examples{
-data(madRivers)
-plot(madRivers)
+
+### vector data
+###############
+
+library(sf)
+
+# For vector data, we can use data(*) or fastData(*):
+data(madCoast0) # same as next line
+madCoast0 <- fastData("madCoast0") # same as previous
+madCoast0
+plot(st_geometry(madCoast0))
+
+madCoast4 <- fastData("madCoast4")
+madCoast4
+plot(st_geometry(madCoast4), add = TRUE)
+
+madRivers <- fastData("madRivers")
+madRivers
+plot(st_geometry(madRivers), col = "blue", add = TRUE)
+
+madDypsis <- fastData("madDypsis")
+madDypsis
+plot(st_geometry(madDypsis), col = "red", add = TRUE)
+
+### raster data
+###############
+
+library(terra)
+
+# For raster data, we can get the file directly or using fastData(*):
+rastFile <- system.file("extdata/madElev.tif", package="fasterRaster")
+madElev <- terra::rast(rastFile)
+
+madElev <- fastData("madElev") # same as previous two lines
+madElev
+plot(madElev)
+
+madForest2000 <- fastData("madForest2000")
+madForest2000
+plot(madForest2000)
+
+madForest2014 <- fastData("madForest2014")
+madForest2014
+plot(madForest2014)
+
+# multi-layer raster
+madChelsa <- fastData("madChelsa")
+madChelsa
+plot(madChelsa)
+
+# RGB raster
+madLANDSAT <- fastData("madLANDSAT")
+madLANDSAT
+plotRGB(madLANDSAT, 4, 1, 2, stretch = "lin")
+
+# categorical raster
+madCover <- fastData("madCover")
+madCover
+madCover <- droplevels(madCover)
+levels(madCover) # levels in the raster
+nlevels(madCover) # number of categories
+catNames(madCover) # names of categories table
+
+plot(madCover)
 }
-\keyword{datasets}
+\keyword{Madagascar}

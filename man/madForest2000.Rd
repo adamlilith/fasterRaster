@@ -3,24 +3,80 @@
 \docType{data}
 \name{madForest2000}
 \alias{madForest2000}
-\title{Spatial data: forest cover in 2000 for a portion of Madagascar}
+\title{Forest cover in year 2000 for a portion of Madagascar}
 \format{
-An object of class \code{'raster'}. See \code{\link[raster]{raster}}. Values are forest (1) or not forest (\code{NA}).
-}
-\source{
-\href{https://doi.org/10.1016/j.biocon.2018.04.008}{Viellendent et al. 2018}
-}
-\usage{
-data(madForest2000)
+An object of class \code{SpatRaster}.
 }
 \description{
 Raster of occurrence/non-occurrence of forest cover in a portion of Madagascar. Cells are 30-m in resolution. Values represent forest (1) or non-forest (\code{NA}).
 }
 \examples{
-data(madForest2000)
+
+### vector data
+###############
+
+library(sf)
+
+# For vector data, we can use data(*) or fastData(*):
+data(madCoast0) # same as next line
+madCoast0 <- fastData("madCoast0") # same as previous
+madCoast0
+plot(st_geometry(madCoast0))
+
+madCoast4 <- fastData("madCoast4")
+madCoast4
+plot(st_geometry(madCoast4), add = TRUE)
+
+madRivers <- fastData("madRivers")
+madRivers
+plot(st_geometry(madRivers), col = "blue", add = TRUE)
+
+madDypsis <- fastData("madDypsis")
+madDypsis
+plot(st_geometry(madDypsis), col = "red", add = TRUE)
+
+### raster data
+###############
+
+library(terra)
+
+# For raster data, we can get the file directly or using fastData(*):
+rastFile <- system.file("extdata/madElev.tif", package="fasterRaster")
+madElev <- terra::rast(rastFile)
+
+madElev <- fastData("madElev") # same as previous two lines
+madElev
+plot(madElev)
+
+madForest2000 <- fastData("madForest2000")
+madForest2000
 plot(madForest2000)
+
+madForest2014 <- fastData("madForest2014")
+madForest2014
+plot(madForest2014)
+
+# multi-layer raster
+madChelsa <- fastData("madChelsa")
+madChelsa
+plot(madChelsa)
+
+# RGB raster
+madLANDSAT <- fastData("madLANDSAT")
+madLANDSAT
+plotRGB(madLANDSAT, 4, 1, 2, stretch = "lin")
+
+# categorical raster
+madCover <- fastData("madCover")
+madCover
+madCover <- droplevels(madCover)
+levels(madCover) # levels in the raster
+nlevels(madCover) # number of categories
+catNames(madCover) # names of categories table
+
+plot(madCover)
 }
 \references{
-Vielledent, G., Grinand, C., Rakotomala, F.A., Ranaivosoa, R., Rakotoarijaona, J-R., Allnutt, T.F., and Achard, F.  2018.  Combining global tree cover loss data with historical national forest cover maps to look at six decades of deforestation and forest fragmentation in Madagascar.  Biological Conservation 222:189-197. (\href{https://www.ncbi.nlm.nih.gov/pubmed/23979570}{PubMed})
+Vielledent, G., Grinand, C., Rakotomala, F.A., Ranaivosoa, \pkg{R}., Rakotoarijaona, J-R., Allnutt, T.F., and Achard, F.  2018.  Combining global tree cover loss data with historical national forest cover maps to look at six decades of deforestation and forest fragmentation in Madagascar. \emph{Biological Conservation} 222:189-197. \doi{10.1016/j.biocon.2018.04.008}.
 }
-\keyword{datasets}
+\keyword{Madagascar}

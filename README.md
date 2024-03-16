@@ -1,124 +1,191 @@
 # fasterRaster
-Faster raster processing in R using GRASS GIS
+<!-- badges: start -->
 
-<img align="right" src="fasterRaster.png" height="190"/>  
+[![GPLv3 license](https://img.shields.io/badge/License-GPLv3-blue.svg)](http://perso.crans.org/besson/LICENSE.html)
 
-This package uses the stand-alone installer of Open Source Geospatial's [GRASS GIS Version 7](https://grass.osgeo.org/grass7/) to speed up some commonly used raster operations. Most of these operations can be done using the **raster** or **terra** packages by Robert Hijmans.  However, when the input raster is very large in memory, in some cases functions in those packages can take a long time and fail. The **fasterRaster** package attempts to address these problems by calls to GRASS which is faster for large rasters. The successor to the **raster** package, **terra**, is much faster and may be the better solution for functions that this package implements. However, in some cases **fasterRaster** is still faster!
+<!-- badges: end -->
 
-To use **fasterRaster** Version 7.8 of GRASS must be installed on the local system you are using. Please note version 8 of GRASS (forthcoming?) has not been tested with this package, but it may work, and that in the meantime you'll get warning messages about that when running many of these functions.
+Faster raster processing in `R` using `GRASS GIS`
+ 
+<img align="right" src="fasterRaster.png" height="230"/>  
 
-To install `fasterRaster` and its dependencies, just do the following:  
-`remotes::install_github('adamlilith/fasterRaster', dependencies=TRUE)`  
+`fasterRaster` is a package designed specifically to handle large-in-memory/large-on-disk spatial rasters and vectors. `fasterRaster` does this using the stand-alone installer of Open Source Geospatial's <a href="https://grass.osgeo.org/rgrass/">`GRASS GIS`</a>
 
-NB: If for some reason this command does not work, you can install the package by downloading the latest zip/tar file from the `zipTarFiles` directory and installing the package manually.
+`fasterRaster` was created with five design principles:
+* **Value added**: `fasterRaster` complements `terra` and `sf`, and is highly dependent on them! It is useful for analyzing large-in-memory/large-on-disk rasters and vectors that those packages struggle to handle. For medium- and small-size objects, `terra` and `sf` will almost always be faster.
+* **Familiarity**: If you know how to use `terra`, you basically know how to use `fasterRaster`! That's because most of the functions have the same name and almost the same arguments as `terra` functions.
+* **Comparability**: To the degree possible, outputs from `fasterRaster` are the same as those from functions in `terra` with the same name.
+* **Simplicity**: `GRASS` requires users to track things like "locations", "mapsets", and "regions" for which there is no comparable analog in the `terra` or `sf` packages. `fasterRaster` handles these behind the scenes so you don't need to.
+* **It's R**: The `rgrass` package provides a powerful conduit through which you can run `GRASS` modules from `R`. As such, it provides much more flexibility than `fasterRaster`. However, to use `rgrass`, you need to know what `GRASS` modules you need and be familiar with `GRASS` syntax. `fasterRaster` obviates this step but uses `rgrass` as a backend, allowing you to focus on `R` syntax and look up help for functions the normal way you do in `R`. You don't need to know `GRASS`!
 
-## `raster`, `terra`, `sp`, and `sf` package objects ##
+`fasterRaster` makes heavy use of the <a href="https://cran.r-project.org/package=rgrass">`rgrass`</a> package by Roger Bivand and others, the <a href="https://cran.r-project.org/package=rgrass">`terra`</a> package by Robert Hijmans, the <a href="https://cran.r-project.org/package=sf">`sf`</a> package by Edzer Pebesma Roger Bivand, and of course <a href="https://grass.osgeo.org/">`GRASS GIS`</a>, so is greatly indebted to all of these creators!
 
-**fasterRaster** "works" using rasters from the **raster** package and vectors from the **sp** package. However, as of June 2022, it now supports objects that are of class `SpatRaster`s or `SpatVector`s (**terra** package), or `sf` (**sf** package). It does this cheaply by converting these kind of objects to `raster` or `sp` objects, then sending them to GRASS. Since most of the processing is done in GRASS anyway, there is not much overhead to accommodate these "advanced" formats. The output, though, is still in `raster` or `sp` format. You can re-covert these back to the desired class using:
+# Where we are
+As of 2024/02/26, a new version of this package, `fasterRaster 8.3`, is in development. There are known issues and unknown issues. If you encounter one of the latter, please file an <a href="https://github.com/adamlilith/fasterRaster/issues">issue</a> report.
 
-`terraRastFromRasterRaster <- as(terraRastObject, 'raster') # from raster to terra`  
-`terraVectFromSp <- terra::vect(terraVectorObject) # from raster to terra`  
-`sfVectFromSp <- sf::st_as_sf(spObject) # from sp to sf`  
+# Getting started
 
-## Functions ###
+To install **fasterRaster**, please use:
 
-### *Faster* raster processing functions ##
-* `fasterBufferRast`: Add buffer to cells in a raster (using GRASS).
-* `fasterContour`: Calculate contour vectors from a raster (using GRASS).
-* `fasterConvertDegree`: Convert degrees from GRASS format (0 = east, 90 = north) to standard (0 = north, 90 = east) (using GRASS).
-* `fasterFocal`: Faster focal calculations (using multi-core; see also `fasterMapcalc`).
-* `fasterFragmentation`: Fragmentation indices following Riitters et al. (2000 Conservation Ecology 4:3; using multi-core).
-* `fasterLongLatRasters`: Create rasters with values equal to cell longitude and latitude (using GRASS).
-* `fasterMapcalc`: Apply user-defined function to one or more rasters (using GRASS; see also `fasterFocal`).
-* `fasterProjectRaster`: Project and resample raster (using GRASS).
-* `fasterQuantile`: Quantiles of values in a raster (using GRASS).
-* `fasterRastDistance`: Distance from cells with `NA`s to closest non-`NA` cell (or the inverse of this) (using GRASS).
-* `fasterRasterize`: Convert vector to a raster (using GRASS).
-* `fasterSurfFract`: Generate a raster with a fractal pattern (using GRASS).
-* `fasterTerrain`: Slope, aspect, and curvature (using GRASS).
-* `fasterTopidx`: Topographic wetness index (using GRASS).
-* `fasterVectorize`: Convert raster to spatial points, lines, or polygons (using GRASS).
-* `fasterVectToRastDistance`: Distance between raster cells and a vector (using GRASS).
+`remotes::install_github('adamlilith/fasterRaster', dependencies = TRUE)`  
 
-### Generic "faster" operations: ##
-* `faster`: Generic call to a GRASS module.
+Alternatively, you can install the development version from:
 
-### Normal-speed raster processing ##
-* `fragmentation`: Calculate landscape fragmentation indices as per Riitter et al. (2000 Conservation Ecology 4:3)
+`remotes::install_github('adamlilith/fasterRaster@intuitive_fasterRaster', dependencies = TRUE)`  
 
-### Utility functions ##
-* `exportRastToGrass`: Export raster to an open GRASS session.
-* `exportVectToGrass`: Export vector to an open GRASS session.
-* `initGrass`: Initialize a GRASS session using a raster or vector as a template.
+To use `fasterRaster` you must install [GRASS version 8+](https://grass.osgeo.org/) on your operating system. You will need to use the stand-alone installer, not the Open Source Geospatial (OS Geo) installer.
 
-## Getting started ##
-To use **fasterRaster** you will need to install [GRASS version 7.8](https://grass.osgeo.org/) on your operating system. You will need to use the stand-alone installer, not the Open Source Geospatial (OS Geo) installer (as per Roger Bivand, the main developer and maintainer of the **rgrass7** package on which this package depends). You will also need to know the install path for the program. On my machine (Windows), it is `C:/Program Files/GRASS GIS 7.8`, so before running any **faster** functions that need GRASS I need to define:
+## An example
 
-`grassDir <- 'C:/Program Files/GRASS GIS 7.8'`  
+We'll do a simple operation in which we add a buffer to lines representing rivers, then calculate the distance to the buffers and burn the distance values into a raster. To do this, we'll be using maps representing the middle of the eastern coast of Madagascar. We will also use the `terra` and `sf` packages.
 
-Let's get started! We'll do a simple operation in which we calculate the distance to rivers (represented by a spatial lines vector object) and burn the distance values into a raster. To do this, we'll be using maps representing the middle of the eastern coast of Madagascar.
+```
+library(terra)
+library(sf)
+library(fasterRaster)
 
-`library(fasterRaster)`  
-`library(raster)`  
-`library(sp)`  
+# Get example elevation raster and rivers vector:
+madElev <- fastData('madElev') # SpatRaster with elevation
+madRivers <- fastData('madRivers') # sp vector with rivers
 
-`data(madForest2000)`  
-`data(madRivers)`  
+# Plot inputs:
+plot(madElev)
+plot(st_geometry(madRivers), col = "blue", add = TRUE)
+```
+<img src="elev_rivers.png"/>  
 
-`# calculate and plot distance to rivers`  
-`distToRiver <- fasterVectToRastDistance(madForest2000, madRivers, grassDir=grassDir)`  
-`plot(distToRiver, main='Distance to Rivers (m)')`  
-`plot(madRivers, col='blue', add=TRUE)`  
+Before you use nearly any function in the package, you need to tell `fasterRaster` where `GRASS` is installed on your system. The installation folder will vary by operating system and maybe `GRASS` version, but will look something like this:  
 
-`# calculate quantiles of distance to rivers`  
-`quants <- fasterQuantile(distToRiver, probs=c(0.05, 0.5, 0.95), grassDir=grassDir)`  
-`quants`  
+```
+grassDir <- "C:/Program Files/GRASS GIS 8.3" # Windows
+grassDir <- "/Applications/GRASS-8.2.app/Contents/Resources" # Mac OS
+grassDir <- "/usr/local/grass" # Linux
+```
 
-### Chaining functions for speed ###
-That was easy enough. Under the hood, many of the `faster` functions are:  
-1) starting a GRASS session;  
-2) writing a raster and/or vector to that session;  
-3) doing the requested operation;  
-4) and then exporting the raster/vector output to R.  
+Now, use the `faster()` function to tell `fasterRaster` where `GRASS` is installed:
+```
+faster(grassDir = grassDir)
+```
 
-Note that you really probably aren't interested in steps 1 and 4, but they create a computing overhead.  Thus, it is possible to chain operations together so that they use the same GRASS session by keeping the rasters/vectors in GRASS and then exporting them when you need them in the end.  
+The `fast()` function is the key function for loading a raster or vector into `fasterRaster` format. Rasters in this package are called `GRaster`s and vectors `GVector`s (the "G" stands for `GRASS`). We will now convert the `madElev` raster, which is a `SpatRaster` from the `terra` package, into a `GRaster`.
+```
+elev <- fast(madElev)
+elev
+```
+You should see some metadata on the `GRaster`:
+```
+class       : GRaster
+topology    : 2D 
+dimensions  : 1024, 626, NA, 1 (nrow, ncol, ndepth, nlyr)
+resolution  : 59.85157, 59.85157, NA (x, y, z)
+extent      : 731581.552, 769048.635, 1024437.272, 1085725.279 (xmin, xmax, ymin, ymax)
+coord ref.  : Tananarive (Paris) / Laborde Grid 
+name(s)     : madElev 
+datatype    : integer 
+min. value  :       1 
+max. value  :     570
+```
 
-Here's an example in which we'll chain the `fasterVectToRastDistance` and `fasterQuantile` functions together.  
+Next, we'll do the same for the rivers vector. In this case, the vector is an `sf` object from the `sf` package, but we could also use a `SpatVector` from the `terra` package.
+```
+rivers <- fast(madRivers)
+rivers
+```
+```
+class       : GVector
+geometry    : 2D lines 
+dimensions  : 11, 11, 5 (geometries, sub-geometries, columns)
+extent      : 731627.1, 762990.132, 1024541.235, 1085580.454 (xmin, xmax, ymin, ymax)
+coord ref.  : Tananarive (Paris) / Laborde Grid 
+names       :   F_CODE_DES          HYC_DESCRI      NAM   ISO     NAME_0 
+type        :        <chr>               <chr>    <chr> <chr>      <chr> 
+values      : River/Stream Perennial/Permanent MANANARA   MDG Madagascar 
+              River/Stream Perennial/Permanent MANANARA   MDG Madagascar 
+              River/Stream Perennial/Permanent      UNK   MDG Madagascar 
+             ...and  8  more rows
 
-`distToRiver <- fasterVectToRastDistance(madForest2000, madRivers, grassDir=grassDir, grassToR=FALSE, outGrassName='distToVect')`  
-`quants <- fasterQuantile('distToVect', probs=c(0.05, 0.5, 0.95), grassDir=grassDir, alreadyInGrass=TRUE)`  
-`quants`  
+```
 
-The first function imports the raster and vector, does its calculations, but does not export the output raster to R. Rather, the output raster stays in the GRASS session and is named `distToVect`. In the second function we set the argument `alreadyInGrass` to `TRUE` so it knows the raster is already in GRASS, and we tell it to use `distToVect` so it know under what name to find the raster.  
+Now, let's add a 1000-m buffer to the rivers using `buffer()`. As much as possible, `fasterRaster` functions have the same names and same arguments as their counterparts in the `terra` package to help users who are familiar with that package.
 
-You can see that by chaining a series of `faster~` functions together, the process can be made faster because all of the operations are done in GRASS with less back-and-forth between GRASS and R.  The one exception to this is that some `faster~` functions do not use GRASS (e.g., `fasterFragmentation`, `fasterFocal`, and `fasterCalc`), so you can't use this trick.
+Note, though, that the output from `fasterRaster` is not necessarily guaranteed to be the same as output from the respective functions `terra`. This is because there are different methods to do the same thing, and the developers of `GRASS` may have chosen different methods than the developers of other GIS packages.
+```
+# width in meters because CRS is projected
+river_buffers <- buffer(rivers, width = 1000)
+```
 
-### The generic *faster* function ###
-The `faster` function is a generic wrapper for GRASS modules. You can use it to call many of the modules in GRASS.  It may not always work, but it simplifies the task of initiating a GRASS instance, importing the raster/vector, and executing the call:
+Now, let's calculate the distances between the buffered areas and all cells on the raster map using `distance()`.
+```
+dist_to_rivers_meters <- distance(elev, buffs)
+```
 
-`data(madForest2000)`  
-`latRast <- faster('r.latlong', rast=madForest2000, outType='rast', flags=c('quiet', 'overwrite'), grassDir=grassDir)`  
-`longRast <- faster('r.latlong', rast=madForest2000, outType='rast', flags=c('quiet', 'overwrite', 'l'), grassDir=grassDir)`  
-`ll1 <- stack(latRast, longRast)`  
+Finally, let's plot the output.
+```
+plot(dist_to_rivers_meters)
+plot(river_buffers, add = TRUE)
+plot(rivers, col = "blue", add = TRUE)
+```
 
-By the way, this is the same as:
+<img src="dist_to_rivers.png"/>  
 
-`ll2 <- fasterLongLatRasters(madForest2000, grassDir=grassDir)`
+And that's how it's done!  You can do almost anything in `fasterRaster`  you can do with `terra`. The examples above do not show the advantage of `fasterRaster` because the they do not use in large-in-memory/large-on-disk spatial datasets. For very large datasets, `fasterRaster` can be much faster! For example, for a large raster (many cells), the `distance()` function in `terra` can take many days to run and even crash `R`, whereas in `fasterRaster`, it could take just a few minutes or hours.
 
-However, you can use `faster` to call GRASS functions that do not have a dedicated functon in **fasterRaster**, so `faster` is very flexible!
+## Exporting `GRaster`s and `GVector`s from a `GRASS` session
 
-Here is an example of chaining with the `faster` function. The second function uses the GRASS session initiated by the first function. It then uses the raster created in the GRASS session by the first function as the input for its module.
+You can convert a `GRaster` to a `SpatRaster` raster using `rast()`:
 
-`latRast <- faster('r.latlong', rast=madForest2000, outType='rast', output='latitude', flags=c('quiet', 'overwrite'), grassDir=grassDir)`  
-`longRast <- faster('r.latlong', input='latitude', outType='rast', output='longitude', flags=c('quiet', 'overwrite', 'l'), grassDir=grassDir, alreadyInGrass=TRUE)`  
-`ll3 <- stack(latRast, longRast)`  
-`plot(ll3)`  
+`terra_elev <- rast(elev)`  
 
-### Citation ###
-As of October, 2020, there is not a package-specific citation for **fasterRaster**, but the package was first used in:
+To convert a `GVector` to the `terra` package's `SpatVector` format or to an `sf` vector, use `vect()` or `st_as_sf()`:
 
-Morelli*, T.L., Smith*, A.B., Mancini, A.N., Balko, E. A., Borgenson, C., Dolch, R., Farris, Z., Federman, S., Golden, C.D., Holmes, S., Irwin, M., Jacobs, R.L., Johnson, S., King, T., Lehman, S., Louis, E.E. Jr., Murphy, A., Randriahaingo, H.N.T., Lucien, Randriannarimanana, H.L.L., Ratsimbazafy, J., Razafindratsima, O.H., and Baden, A.L. 2020. The fate of Madagascar’s rainforest habitat.  *Nature Climate Change* 10:89-96. * Equal contribution https://doi.org/10.1038/s41558-019-0647-x
+```
+terra_r_ivers <- vect(rivers)
+sf_rivers <- st_as_sf(rivers)
+```
 
-*Abstract*. Madagascar has experienced extensive deforestation and overharvesting, and anthropogenic climate change will compound these pressures. Anticipating these threats to endangered species and their ecosystems requires considering both climate change and habitat loss effects. The genus Varecia (ruffed lemurs), which is composed of two Critically Endangered forest-obligate species, can serve as a status indicator of the biodiverse eastern rainforest of Madagascar. Here, we combined decades of research to show that the suitable habitat for ruffed lemurs could be reduced by 29–59% from deforestation, 14–75% from climate change (representative concentration pathway 8.5) or 38–93% from both by 2070. If current protected areas avoid further deforestation, climate change will still reduce the suitable habitat by 62% (range: 38–83%). If ongoing deforestation continues, the suitable habitat will decline by 81% (range: 66–93%). Maintaining and enhancing the integrity of protected areas, where rates of forest loss are lower, will be essential for ensuring persistence of the diversity of the rapidly diminishing Malagasy rainforests.
+You can use `writeRaster()` and `writeVector()` to save `fasterRaster` rasters and vectors directly to disk. This will always be faster than using `rast()`, `vect()`, or `st_as_sf()` and then saving.
+```
+elev_temp_file <- tempfile(fileext = ".tif") # save as GeoTIFF
+writeRaster(elev, elev_temp_file)
+
+vect_temp_shp <- tempfile(fileext = ".shp") # save as shapefile
+vect_temp_gpkg <- tempfile(fileext = ".gpkg") # save as GeoPackage
+writeRaster(rivers, vect_temp_shp)
+writeRaster(rivers, vect_temp_gpkg)
+```
+
+# Functions
+To see a detailed list of functions available in `fasterRaster`, attach the package and use `?fasterRaster`. Note the additional tutorials linked from there!
+
+# Tips for masking `fasterRaster` faster
+
+1. Loading rasters and vectors directly from disk using `fast()`, rather than converting `terra` or `sf` objects is faster. Why? Because if the object does not have a file to which the `R` object points, `fast()` has to save it to disk first as a GeoTIFF or GeoPackage file, then load it into `GRASS`.
+
+2. Similarly, saving `GRaster`s and `GVector`s directly to disk will always be faster than converting them to `SpatRaster`s, `SpatVector`s, or `sf` vectors using `rast()`, `vect()`, or `st_as_sf()`, then saving them. Why? Because these functions actually save the file to disk then uses the respective function from the respective package to connect to the file.
+
+3. When you use `writeRaster()`, set the `datatype` argument appropriately. Otherwise, it will be optimized automatically, and this can take a long time.
+
+4. Every time you switch between using a `GRaster` or `GVector` with a different coordinate reference system (CRS), `GRASS` has to spend a few second changing to that CRS. So, you can save some time by doing as much work as possible with objects in one CRS, then switching to work on objects in another CRS.
+
+5. By default, `fasterRaster` use 2 cores and 1024 MB (1 GB) of memory for `GRASS` modules that allow users to specify these values. You can set these to higher values using `faster()` and thus potentially speed up some calculations. Functions in newer versions of `GRASS` have more capacity to use these options, so updating `GRASS` to the latest version can help, too.
+
+# Versioning
+
+The latest stable version of `fasterRaster` will mirror the version of `GRASS` for which it was built and tested. For example, `fasterRaster` version 8.3 will work using `GRASS` 8.3 (and any earlier versions starting from 8.0). `fasterRaster` will also have a minor and subminor version. For example, if the `fasterRaster` version is 8.3.2.7, then the "2" refers to changes that potentially break older code developed with a prior version, and the "7" refers to a bug fix or feature update (i.e., usually a new function or added functionality to an existing one). 
+
+# Further reading
+
+* Robert Hijman's [`terra`](https://cran.r-project.org/package=terra) package and Edzer Pebesma's [`sf`](https://cran.r-project.org/package=sf) package are good places to start if you are not familiar with doing GIS in `R`.
+* The [GRASS GIS](https://grass.osgeo.org/) website is authoritative and contains the manual on all the `GRASS` functions used in this package and more.
+* The Wiki on [how to run `GRASS` in `R` or `R` in `GRASS`](https://grasswiki.osgeo.org/wiki/R_statistics/rgrass) is a good place to start if you want to become a power-user of `GRASS` in `R`.
+* Roger Bivand's [`rgrass`](https://cran.r-project.org/package=rgrass) package allows users to call any `GRASS` function with all of its functionality, which in some cases is far beyond what is allowed by `fasterRaster`.
+
+# Citation
+A publication is in the works(!), but as of February 2024, there is not as of yet a package-specific citation for **fasterRaster**. However, the package was first used in:
+
+Morelli*, T.L., Smith*, A.B., Mancini, A.N., Balko, E. A., Borgenson, C., Dolch,R., Farris, Z., Federman, S., Golden, C.D., Holmes, S., Irwin, M., Jacobs,R.L., Johnson, S., King, T., Lehman, S., Louis, E.E. Jr., Murphy, A.,Randriahaingo, H.N.T., Lucien,Randriannarimanana, H.L.L.,Ratsimbazafy, J.,Razafindratsima, O.H., and Baden, A.L. 2020. The fate of Madagascar’s rainforest habitat.  *Nature Climate Change* 10:89-96. * Equal contribution DOI: <a href="https://doi.org/10.1038/s41558-019-0647-x">https://doi.org/10.1038/s41558-019-0647-x</a>.
+
+*Abstract*. Madagascar has experienced extensive deforestation and overharvesting, and anthropogenic climate change will compound these pressures. Anticipating these threats to endangered species and their ecosystems requires considering both climate change and habitat loss effects. The genus *Varecia* (ruffed lemurs), which is composed of two Critically Endangered forest-obligate species, can serve as a status indicator of the biodiversity eastern rainforests of Madagascar. Here, we combined decades of research to show that the suitable habitat for ruffed lemurs could be reduced by 29–59% from deforestation, 14–75% from climate change (representative concentration pathway 8.5) or 38–93% from both by 2070. If current protected areas avoid further deforestation, climate change will still reduce the suitable habitat by 62% (range: 38–83%). If ongoing deforestation continues, the suitable habitat will decline by 81% (range: 66–93%). Maintaining and enhancing the integrity of protected areas, where rates of forest loss are lower, will be essential for ensuring persistence of the diversity of the rapidly diminishing Malagasy rainforests.
+
 
 ~ Adam

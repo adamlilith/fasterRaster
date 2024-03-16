@@ -3,24 +3,81 @@
 \docType{data}
 \name{madElev}
 \alias{madElev}
-\title{Spatial data: digital elevation model (DEM) of a portion of Madagascar}
+\title{Elevation raster for an eastern portion of Madagascar}
 \format{
-An object of class \code{'raster'}. See \code{\link[raster]{raster}}. Values are mean meters above sea level.
+An object of class \code{SpatRaster}. Values are mean meters above sea level.
 }
 \source{
-\href{https://lta.cr.usgs.gov/GMTED2010}{GMTED2010}
-}
-\usage{
-data(madElev)
+\href{https://worldclim.org}{WorldClim Version 2.1}
 }
 \description{
-Rasterized digital elevation model (DEM) of a portion of Madagascar at 7.5-arcmin spatial resolution.
+Elevation raster for an eastern portion of Madagascar.
 }
 \examples{
-data(madElev)
+
+### vector data
+###############
+
+library(sf)
+
+# For vector data, we can use data(*) or fastData(*):
+data(madCoast0) # same as next line
+madCoast0 <- fastData("madCoast0") # same as previous
+madCoast0
+plot(st_geometry(madCoast0))
+
+madCoast4 <- fastData("madCoast4")
+madCoast4
+plot(st_geometry(madCoast4), add = TRUE)
+
+madRivers <- fastData("madRivers")
+madRivers
+plot(st_geometry(madRivers), col = "blue", add = TRUE)
+
+madDypsis <- fastData("madDypsis")
+madDypsis
+plot(st_geometry(madDypsis), col = "red", add = TRUE)
+
+### raster data
+###############
+
+library(terra)
+
+# For raster data, we can get the file directly or using fastData(*):
+rastFile <- system.file("extdata/madElev.tif", package="fasterRaster")
+madElev <- terra::rast(rastFile)
+
+madElev <- fastData("madElev") # same as previous two lines
+madElev
 plot(madElev)
+
+madForest2000 <- fastData("madForest2000")
+madForest2000
+plot(madForest2000)
+
+madForest2014 <- fastData("madForest2014")
+madForest2014
+plot(madForest2014)
+
+# multi-layer raster
+madChelsa <- fastData("madChelsa")
+madChelsa
+plot(madChelsa)
+
+# RGB raster
+madLANDSAT <- fastData("madLANDSAT")
+madLANDSAT
+plotRGB(madLANDSAT, 4, 1, 2, stretch = "lin")
+
+# categorical raster
+madCover <- fastData("madCover")
+madCover
+madCover <- droplevels(madCover)
+levels(madCover) # levels in the raster
+nlevels(madCover) # number of categories
+catNames(madCover) # names of categories table
+
+plot(madCover)
 }
-\references{
-Danielson, J.J. and Gesch, D.B. 2010. Global Multi-resolution Terrain Elevation Data 2010 (GMTED2010). US Geological Survey. Open-File Report 2011-1073 (\href{https://pubs.usgs.gov/of/2011/1073/pdf/of2011-1073.pdf}{GMTED2010})
-}
-\keyword{datasets}
+\keyword{Madagascar}
+\keyword{elevation}

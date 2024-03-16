@@ -1,0 +1,24 @@
+Value,Short,Long
+11,Irrigated crops,Post-flooding or irrigated croplands (or aquatic)
+14,Rainfed crops,Rainfed croplands
+20,Mosaic crops,Mosaic cropland (50-70%) / vegetation (grassland/shrubland/forest) (20-50%)
+30,Mosaic cropland/vegetation,Mosaic vegetation (grassland/shrubland/forest) (50-70%) / cropland (20-50%) 
+40,Sparse broadleaved evergreen/semi-deciduous forest,Closed to open (>15%) broadleaved evergreen or semi-deciduous forest (>5m)
+50,Broadleaved deciduous forest,Closed (>40%) broadleaved deciduous forest (>5m)
+60,Sparse broadleaved deciduous forest,Open (15-40%) broadleaved deciduous forest/woodland (>5m)
+70,Needleleaved evergreen forest,Closed (>40%) needleleaved evergreen forest (>5m)
+90,Sparse needleleaved deciduous/evergreen forest,Open (15-40%) needleleaved deciduous or evergreen forest (>5m)
+100,Broadleaved/needleleaved forest,Closed to open (>15%) mixed broadleaved and needleleaved forest (>5m)
+110,Forest with mosaic grassland,Mosaic forest or shrubland (50-70%) / grassland (20-50%)
+120,Grassland with mosaic forest,Mosaic grassland (50-70%) / forest or shrubland (20-50%) 
+130,Shrubland,"Closed to open (>15%) (broadleaved or needleleaved, evergreen or deciduous) shrubland (<5m)"
+140,Grassland/savanna/lichen,"Closed to open (>15%) herbaceous vegetation (grassland, savannas or lichens/mosses)"
+150,Sparse vegetation,Sparse (<15%) vegetation
+160,Intermittently flooded broadleaf forest,Closed to open (>15%) broadleaved forest regularly flooded (semi-permanently or temporarily) - Fresh or brackish water
+170,Flooded forest,Closed (>40%) broadleaved forest or shrubland permanently flooded - Saline or brackish water
+180,Flooded grassland,"Closed to open (>15%) grassland or woody vegetation on regularly flooded or waterlogged soil - Fresh, brackish or saline water"
+190,Artificial/urban,Artificial surfaces and associated areas (Urban areas >50%)
+200,Bare,Bare areas
+210,Water,Water bodies
+220,Permanent snow and ice,Permanent snow and ice
+230,"No data (burnt areas, clouds, etc.)","No data (burnt areas, clouds, etc.)"

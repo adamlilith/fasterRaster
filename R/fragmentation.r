@@ -1,111 +1,395 @@
-#' Calculate fragmentation indices for a raster
+#' Landscape fragmentation class following Riitters et al. (2020)
 #'
-#' The function calculates a set of fragmentation indices as per Riitters, K., J. Wickham, R. O'Neill, B. Jones, and E. Smith. 2000. Global-scale patterns of forest fragmentation. Conservation Ecology 4:3. URL: <https://www.jstor.org/stable/26271763>. (Also note the erratum to the paper on their classification scheme at <https://www.ecologyandsociety.org/vol4/iss2/art3/errata/january26.2001.html>). Note that this function does \emph{not} use GRASS but rather the \code{\link[raster]{focal}} function in the \pkg{raster} package, so it is potentially very slow and may not work for very large rasters.
-#' @param rast Raster with binary values (1 or 0 or \code{NA}).
-#' @param size Integer, number of cells wide and high of the window used to calculate fragmentation. This must be an odd integer (default is 3).
-#' @param pad Logical, if \code{TRUE} then add virtual rows and columns around the raster so that there are no edge effects. The virtual rows and columns are set to equal \code{padValue}. Default is \code{FALSE}.
-#' @param padValue Value to which to set the values of the virtual cells used to pad the raster if \code{pad} is \code{TRUE}.
-#' @param calcDensity Logical, if \code{TRUE} (default) then calculate density raster.
-#' @param calcConnect Logical, if \code{TRUE} (default) then calculate connectivity raster.
-#' @param calcConnect Logical, if \code{TRUE} (default) then calculate classification raster. Note that to calculate the classification raster the density and connectivity rasters must also be calculated (\code{calcDensity} and \code{calcConnect} should both be \code{TRUE}). If they are not then the will be forced to \code{TRUE} with a warning.
-#' @param na.rm Logical, if \code{FALSE} (default) then \code{NA} cells count as part of the area potentially occupied in a window (i.e., the count in the denominator when calculating density and they are counted as potential links in the connectance calculations if a neighboring cell has a value of 1). If \code{FALSE} then areas that border \code{NA} cells could still be classified as "interior" or otherwise have less apparent fragmentation if the occupied cells are fully surrounded by other occupied cells (except for the \code{NA} cells).
-#' @param undet Character. When classifying this defines what is done with "undetermined" cases (when density is >= 0.6 and density == connectivity). Possible values include (partial matching of strings is used):
-#' \itemize{
-#' 	\item \code{undetermined}: Undetermined cases will be assigned a value of 5 (which is not assigned to any other case; default).
-#' 	\item \code{perforated}: Undetermined cases will be assigned a value of 3 ("perforated").
-#' 	\item \code{edge}: Undetermined cases will be assigned a value of 4 ("edge").
-#' 	\item \code{random}: Undetermined cases will be assigned a value of 3 or 4 at random ("perforated" or "edge").
-#' }
-#' @param ... Other arguments (not used).
-#' @return A raster stack with four rasters: a fragmentation classification (named \code{class}), the density of "1" pixels in the window (named \code{density}--called "pf" in Riitter et al. 2000), and a connectivity raster (conditional probability a cell with a value of 1 has a value that is also 1; named \code{connect}--called "pff" in Riitter et al. 2000).
-#' The density and connectivity rasters have values in the range [0, 1], but the classification raster has coded values (from the erratum to Ritter et al. (2000):
-#' \itemize{
-#' 	\item \code{NA}: \code{NA}
-#' 	\item \code{0}: No forest (or whatever is being evaluated)
-#'	\item \code{1}: patch (\code{pf} < 0.4)
-#'	\item \code{2}: transitional (0.4 <= \code{pf} < 0.6)
-#'	\item \code{3}: perforated (\code{pf} >= 0.6 & \code{pf - pff} > 0)
-#'	\item \code{4}: edge (\code{pf} >= 0.6 & \code{pf - pff} < 0)
-#'	\item \code{5}: undetermined (\code{pf} >= 0.6 & \code{pf == pff})
-#'	\item \code{6}: interior (\code{pf} == 1)
-#' }
-#' Note that this differs somewhat from the numbering scheme presented by
-#' Riitters et al. (2000) and their errata.
-#' @seealso \code{\link[fasterRaster]{fasterFragmentation}}
-#' @examples
-#' \donttest{
-#' ### forest fragmentation
-#' data(madForest2000)
+#' @description Riitters et al. (2020) propose a classification scheme for forest fragmentation (which can be applied to any habitat type). The scheme relies on calculating density (e.g., number of forested cells in a window around a focal cell) and connectivity (number of cases where neighboring cells are both forested). These values are used to assign classes to each cell: "patch," "transitional," "perforated," "edge," and "interior" (plus an "undetermined" class for an edge case). To this, we also add a "none" class which occurs when the window has no cells with the focal habitat. This function calculates these classes from a `GRaster` or `SpatRaster` in which the focal habitat type has cell values of 1, and non-focal habitat type has cell values of 0 or `NA`.
+#'
+#' *Currently, this function only operates on a 3x3 window of cells.*
+#'
+#' @param x A `SpatRaster` or `GRaster`.
+#'
+#' @param w An odd, positive integer: Size of the window across which fragmentation is calculated (in units of "rows" and "columns"). The default is 3, meaning the function uses a 3x3 moving window to calculate fragmentation.
+#'
+#' @param undet Character: How to assign the "undetermined" case. Valid values are `"perforated"` (default), `"edge"`, and `"undetermined"`. Partial matching is used. If `Pf` is the proportional density raster cell value and `Pff` the proportional connectivity raster cell value, the undetermined case occurs when `Pf` > 0.6 and `Pf == Pff`.
+#'
+#' @param restrict Logical: If `TRUE`, then fragmentation will only be assigned to cells that have the focal habitat within them. If `FALSE` (default), cells surrounding the focal habitat class can also be assigned a fragmentation class other than 0, even if they do not have the focal habitat in them. Note that the case where `restrict = TRUE` is a departure from Riitters et al. (2020), but it allows you to create a series of fragmentation rasters for different habitat classes where cells with classes(other than 0) do not overlap.
+#'
+#' @param cores Integer: Number of processor cores to use for when processing a `SpatRaster`. This is only used if `mask` is `TRUE`. If you want to use multiple cores for processing a `GRaster`, set the `cores` option using `faster(cores = N)` (see [faster()]).
+#'
+#' @returns A categorical `SpatRaster` or `GRaster`. The values assigned to each class can be seen with [levels()].
+#'
+#' @references Riitters, K., J. Wickham, R. O'Neill, B. Jones, and E. Smith. 2000. Global-scale patterns of forest fragmentation. *Conservation Ecology* 4:3. URL: [http://www.consecol.org/vol4/iss2/art3/](http://www.consecol.org/vol4/iss2/art3/). Also note the [errata](https://www.ecologyandsociety.org/vol4/iss2/art3/errata/january26.2001.html).
 #' 
-#' # cells are just 1s or NAs... replace NAs with 0
-#' forest <- calc(madForest2000, function(x) ifelse(is.na(x), 0, 1))
-#' 
-#' # single-core
-#' frag <- fragmentation(forest, size=5, pad=TRUE, undet='perforated')
-#' 
-#' # multi-core
-#' frag <- fasterFragmentation(forest, size=5, pad=TRUE, undet='perforated')
-#' 
-#' par(mfrow=c(2, 2))
-#' plot(madForest2000, col=c('gray90', 'forestgreen'), main='Forest Cover')
-#' plot(frag[['density']], main='Density in 2000')
-#' plot(frag[['connect']], main='Connectivity in 2000')
-#' cols <- c('gray90', 'blue', 'lightblue', 'yellow', 'orange', 'forestgreen')
-#' names(cols) <- c('no forest', 'patch', 'transitional',
-#' 		'perforated', 'edge', 'interior')
-#' plot(frag[['class']], main='Fragmentation Class', col=cols, legend=FALSE)
-#' legend('topright', fill=cols, legend=names(cols))
-#' 
-#' }
-#' @export
+#' @example man/examples/ex_fragmentation.r
+#'
+#' @aliases fragmentation
+#' @rdname fragmentation
+#' @exportMethod fragmentation
+methods::setMethod(
+	f = "fragmentation",
+	signature = c(x = "SpatRaster"),
+	function(x, w = 3, undet = "perforated", restrict = FALSE, cores = faster("cores")) {
 
-fragmentation <- function(
-	rast,
-	size = 3,
-	pad = FALSE,
-	padValue = NA,
-	calcDensity = TRUE,
-	calcConnect = TRUE,
-	calcClass = TRUE,
-	na.rm = FALSE,
-	undet = 'undetermined',
-	...
-) {
+	# errors?
+	if (w %% 2 == 0 | w < 1L) stop("Argument ", sQuote("w"), " must be an odd, positive integer.")
+	undet <- omnibus::pmatchSafe(undet, c("undetermined", "perforated", "edge"), nmax = 1L)
 
-	if (size %% 2 == 0 | size < 3) stop('Argument "size" to function fragmentation() must be an odd integer >= 3.')
-	if (calcClass & (!calcDensity | !calcConnect)) {
-		calcDensity <- calcConnect <- TRUE
-		warning('Forcing "calcDensity" and "calcConnect" in function "fragmentation()" to be TRUE since "calcClass" is TRUE.')
-	}
-	
-	if (inherits(rast, 'SpatRaster')) rast <- raster::raster(rast)
-	
-	halfWindowSize <- (size - 1) / 2
-	
-	# add padding around raster to avoid edge effects
-	if (pad) {
-		origExtent <- raster::extent(rast)
-		rast <- raster::extend(rast, y=halfWindowSize, value=padValue)
+	undet <- omnibus::pmatchSafe(undet, c("undetermined", "perforated", "edge"), nmax = 1L)
+
+	# setup
+	nLayers <- terra::nlyr(x)
+
+	# zeros matrix to store each set of neighbors
+	ww <- matrix(0L, w, w)
+
+	# assess if each pair of neighboring cell in cardinal direction has 1 or 2 forested cells or not (0 = no, 1 = 1 cell, 2 = 2 cells)
+	# 1st make a list of possible cell neighbors by cell index
+	# 2nd assess if neighbors both have target habitat type
+	cells <- list()
+	w1 <- matrix(1L:(w^2), nrow = w, ncol = w)
+	w2 <- w1[1L:(w - 1), 1L:(w - 1)]
+
+	for (i in 1L:(w - 1L)^2) {
+			
+		len <- length(cells)
+		wFrom <- w2[i]
+		
+		# left-to-right neighbors
+		cells[[len + 1L]] <- c(wFrom, wFrom + w)
+
+		# top-to-bottom neighbors
+		cells[[len + 2L]] <- c(wFrom, wFrom + 1L)
+
 	}
 
-	w <- matrix(1, nrow=size, ncol=size)
+	# add left-to-right neighbors of bottom row
+	for (i in w1[w, 1L:(w - 1L)]) {
 	
-	# calculate fragmentation indices
-	if (calcDensity) pf <- raster::focal(rast, w=w, fun=.fragDensity, na.rm=na.rm)
-	if (calcConnect) pff <- raster::focal(rast, w=w, fun=.fragConnect, na.rm=na.rm)
-	
-	# calculate class
-	if (calcClass) {
-		out <- raster::stack(pf, pff)
-		names(out) <- c('density', 'connect')
-		classification <- raster::calc(out, fun=.fragClassify, undet=undet)
-		names(classification) <- 'class'
-		out <- raster::stack(classification, out)
+		len <- length(cells)
+		wFrom <- w1[i]
+		cells[[len + 1L]] <- c(wFrom, wFrom + w)
+
 	}
+
+	# add top-to-bottom neighbors of right column
+	for (i in w1[1L:(w - 1L), w]) {
 	
-	raster::projection(out) <- raster::projection(rast)
-	if (pad) out <- raster::crop(out, origExtent)	
+		len <- length(cells)
+		wFrom <- w1[i]
+		cells[[len + 1L]] <- c(wFrom, wFrom + 1L)
+
+	}
+
+	# for each layer
+	for (i in seq_len(nLayers)) {
+
+		xx <- x[[i]]
+
+		unis <- unique(xx)
+		if (length(unis) > 2L || (length(unis) == 1L & unis != 1L)) {
+			stop("The raster must have values of 0 and 1, NA and 1,\n  or the values must be all NA, all 0, or all 1.")
+		}
+
+		connectivities <- list()
+		for (j in seq_along(cells)) {
+		
+			pair <- cells[[j]]
+			w <- ww
+			w[pair] <- 1L
+
+			connectivities[[j]] <- focal(xx, w = w, fun = 'sum', na.rm = TRUE)
+
+		}
+
+		# stack pff rasters
+		pff_connected <- do.call(c, connectivities)
+
+		# indicate if at least one cell of pair is forested
+		pff_either_occ <- pff_connected >= 1L
+
+		# convert to 1 if both cells are forested
+		pff_connected <- pff_connected == 2L
+
+		# sum forested neighbors across rasters
+		pff_neighs <- sum(pff_connected)
+
+		# sum either forested across rasters
+		pff_forests <- sum(pff_either_occ)
+
+		# calculate pff
+		pff <- pff_neighs / pff_forests
+
+		# calculate cover
+		pf <- terra::focal(x, w = 3, "mean", na.rm = TRUE)
+
+		### assign classes
+		thisOut <- xx * 0L
+
+		# pre-calculate interior mask
+		interiorMask <- pf == 1 & pff == 1
+		notInteriorMask <- 1L - interiorMask
+
+		# pre-calculate difference
+		diff <- pf - pff
+
+		# patch
+		mask <- pf > 0 & pf <= 0.4
+		thisOut <- terra::mask(thisOut, mask, maskvalues = 1L, updatevalue = 1L)
+
+		# transitional
+		mask <- pf > 0.4 & pf <= 0.6
+		thisOut <- terra::mask(thisOut, mask, maskvalues = 1L, updatevalue = 2L)
+
+		# perforated
+		if (undet == 'perforated') {
+			mask <- pf > 0.6 & diff >= 0 & notInteriorMask
+		} else if (undet %in% c('edge', 'undetermined')) {
+			mask <- pf > 0.6 & diff > 0 & notInteriorMask
+		}
+		thisOut <- terra::mask(thisOut, mask, maskvalues = 1L, updatevalue = 3L)
+
+		# edge
+		if (undet == 'perforated') {
+			mask <- pf > 0.6 & diff > 0 & notInteriorMask
+		} else if (undet == 'edge') {
+			mask <- pf > 0.6 & diff >= 0 & notInteriorMask
+		}
+		thisOut <- terra::mask(thisOut, mask, maskvalues = 1L, updatevalue = 4L)
+
+		# undetermined
+		if (undet == 'undetermined') {
+			mask <- diff == 0 & notInteriorMask
+			thisOut <- terra::mask(thisOut, mask, maskvalues = 1L, updatevalue = 5L)
+		}
+
+		# interior
+		thisOut <- terra::mask(thisOut, interiorMask, maskvalues = 1L, updatevalue = 6L)
+
+		# mask
+		if (restrict) {
+			xxMask <- terra::not.na(xx)
+			thisOut <- thisOut * xxMask
+		}
+
+		if (undet %in% c("perforated", "edge")) {
+
+			levs <- data.frame(value = c(0L, 1L, 2L, 3L, 4L, 6L), class = c("none", "patch", "transitional", "perforated", "edge", "interior"))
+
+		} else if (undet == "undetermined") {
+		
+			levs <- data.frame(value = c(0L, 1L, 2L, 3L, 4L, 5L, 6L), class = c("none", "patch", "transitional", "perforated", "edge", "undetermined", "interior"))
+		
+		}
+		levels(thisOut) <- levs
+
+		if (i == 1L) {
+			out <- thisOut
+		} else {
+			out <- c(out, thisOut)
+		}
+
+	} # next layer
+
 	out
-	
-}
 
+	} # EOF
+
+)
+
+#' @aliases fragmentation
+#' @rdname fragmentation
+#' @exportMethod fragmentation
+methods::setMethod(
+	f = "fragmentation",
+	signature = c(x = "GRaster"),
+	function(x, undet = "perforated", restrict = FALSE) {
+
+stop("As of 2024.02.26, fragmentation() does not work for GRasters. A fix is in process.")
+
+	mm <- minmax(x)
+	msg <- "Raster must be binary (only 1 and/or 0, with NAs allowed."
+	if (any(!(mm[1L, ] %in% c(0L, 1L))) | any(mm[2L, ] != 1L)) stop(msg)
+
+	# setup
+	.locationRestore(x)
+	.region(x)
+
+	nLayers <- terra::nlyr(x)
+
+	# assess if each pair of neighboring cell in cardinal direction has 1 or 2 forested cells or not (0 = no, 1 = 1 cell, 2 = 2 cells)
+	ww <- matrix(0L, w, w)
+
+	# list of offset pairs relative to focal cell in cardinal directions
+	# first 2 values are offset from focal cell in rows/cols of 1st cell
+	# second 2 values are offset from focal cell in rows/cols of 2nd cell
+	offsets <- list()
+	split <- (w - 1L) / 2L
+
+	# left-to-right neighbors
+	for (i in split:(-1L * split + 1L)) {
+		for (j in split:(-1L * split)) {
+		
+			offsets[[length(offsets) + 1L]] <- c(i, i + 1L)
+		
+		}
+	}
+
+
+	offsets <- list(
+		c(1L, 2L),
+		c(1L, 4L),
+		c(4L, 5L),
+		c(4L, 7L),
+		c(7L, 8L),
+		c(2L, 3L),
+		c(2L, 5L),
+		c(5L, 6L),
+		c(5L, 8L),
+		c(8L, 9L),
+		c(3L, 6L),
+		c(6L, 9L)
+	)
+
+	# for each layer
+	srcs <- rep(NA_character_, nLayers)
+	for (i in seq_len(nLayers)) {
+
+		### remove NAs
+		srcIn <- sources(x)
+		src <- .makeSourceName("r_mapcalc", "raster")
+		ex <- paste0(src, " = if(isnull(", srcIn, "), 0, ", srcIn, ")")
+		rgrass::execGRASS("r.mapcalc", expression = ex, flags = c(.quiet(), "overwrite"))
+
+		### connectivities (for Pff)
+		srcConnectivities <- .makeSourceName("r_mapcalc", "raster", n = length(cells))
+		srcEither <- .makeSourceName("r.mapcalc", "raster", n = length(offsets))
+		srcBoth <- .makeSourceName("r.mapcalc", "raster", n = length(offsets))
+		for (j in seq_along(offsets)) {
+
+			# tally occurrences of habitat in each pair of cells		
+			y1 <- cells[[i]][1L]
+			x1 <- cells[[i]][2L]
+			
+			y2 <- cells[[i]][3L]
+			x2 <- cells[[i]][4L]
+
+			ex <- paste0(srcConnectivities[j], " = ", inSrc, "[", y, ",", x, "] + ", inSrc, "[", y, ",", x, "])")
+			rgrass::execGRASS("r.mapcalc", expression = ex, flags = c(.quiet(), "overwrite"))
+
+			# does either cell in a pair have habitat?
+			ex <- paste0(srcEither[j], " = if(", srcConnectivities[j], " >= 1)")
+			rgrass::execGRASS("r.mapcalc", expression = ex, flags = c(.quiet(), "overwrite"))
+
+			# do both cells have habitat?
+			ex <- paste0(srcBoth[j], " = if(", srcConnectivities[j], " == 2)")
+			rgrass::execGRASS("r.mapcalc", expression = ex, flags = c(.quiet(), "overwrite"))
+
+		}
+
+		# number of neighbor cell pairs with at least one with habitat
+		srcNumEithers <- .makeSourceName("r_mapcapc", "raster")
+		ex <- paste0(srcNumEithers, " = ", paste(srcBoth, collapse = " + "))
+		rgrass::execGRASS("r.mapcalc", expression = ex, flags = c(.quiet(), "overwrite"))
+
+		# number of neighbor cell pairs both with habitat
+		srcNumBoths <- .makeSourceName("r_mapcapc", "raster")
+		ex <- paste0(srcNumBoths, " = ", paste(srcBoth, collapse = " + "))
+		rgrass::execGRASS("r.mapcalc", expression = ex, flags = c(.quiet(), "overwrite"))
+
+		# calculate Pff
+		srcPff <- .makeSourceName("r_mapcalc", "raster")
+		ex <- paste0(srcPff, " = ", srcNumBoths, " / ", srcNumEithers)
+
+		# calculate cover
+		srcPf <- .makeSourceName("r_neighbors", "raster")
+		rgrass::execGRASS(
+			cmd = "r.neighbors",
+			input = srcIn,
+			output = srcPf,
+			size = 3,
+			method = "average",
+			nprocs = faster("cores"),
+			memory = faster("memory"),
+			flags = c(.quiet(), "overwrite")
+		)
+
+		# calculate difference between pf and pff (used for "perforated", "edge", and "indeterminate" cases)
+		srcDelta <- .makeSourceName("r.mapcalc", "raster")
+		ex <- paste0(srcDelta, " = ", pfSrc, " - ", pffSrc)
+		rgrass::execGRASS("r.mapcalc", expression = ex, flags = c(.quiet(), "overwrite"))
+
+		### assign classes
+		src <- .makeSourceName("r_mapcalc", "raster")
+		
+		if (indet == "indeterminate") {
+		
+			ex <- paste0(src, " = if (", pfSrc, " == 0, 0, if (", pfSrc, " == 1 & ", pffSrc, " == 1, 6, if (", pfSrc, " <= 0.4, 1, if (", pfSrc, " <= 0.6, 2, if (", srcDelta, " > 0, 3, if (", srcDelta, " < 0, 4, if (", srcDelta, ", 5, null())))))))")
+
+		} else if (indet == "edge") {
+		
+			ex <- paste0(src, " = if (", pfSrc, " == 0, 0, if (", pfSrc, " == 1 & ", pffSrc, " == 1, 6, if (", pfSrc, " <= 0.4, 1, if (", pfSrc, " <= 0.6, 2, if (", srcDelta, " > 0, 3, if (", srcDelta, " <= 0, 4, null()))))))")
+
+		} else if (indet == "perfortated") {
+		
+			ex <- paste0(src, " = if (", pfSrc, " == 0, 0, if (", pfSrc, " == 1 & ", pffSrc, " == 1, 6, if (", pfSrc, " <= 0.4, 1, if (", pfSrc, " <= 0.6, 2, if (", srcDelta, " >= 0, 3, if (", srcDelta, " < 0, 4, null()))))))")
+		
+		}
+
+		rgrass::execGRASS("r.mapcalc", expression = ex, flags = c(.quiet(), "overwrite"))
+
+		# ex <- paste0(src, " = ",
+		# 	"if (pf == 0, 0,
+		# 		if (pf == 1 & pff == 1, 6,
+		# 			if (pf <= 0.4, 1,
+		# 				if (pf <= 0.6, 2,
+		# 					if (pf - pff > 0, 3,
+		# 						if (pf - pff < 0, 4,
+		# 							if (pf == pff, 5, null())
+		# 						)
+		# 					)
+		# 				)
+		# 			)
+		# 		)
+		# 	)"
+		# )
+
+		# if masking to just
+		if (restrict) {
+		
+			# make mask
+			rgrass::execGRASS(
+				cmd = "r.mask",
+				raster = srcIn,
+				flags = c(.quiet(), "overwrite")
+			)
+
+			# copy with mask in place
+			src <- .copyGRaster(src, topo = topology(x)[i], reshapeRegion = FALSE)
+		    
+			# remove mask
+			.removeMask()
+
+		}
+
+		srcs[i] <- src
+
+	} # next layer
+
+	if (undet %in% c("perforated", "edge")) {
+
+		levs <- data.frame(value = c(0L, 1L, 2L, 3L, 4L, 6L), class = c("none", "patch", "transitional", "perforated", "edge", "interior"))
+
+	} else if (undet == "undetermined") {
+	
+		levs <- data.frame(value = c(0L, 1L, 2L, 3L, 4L, 5L, 6L), class = c("none", "patch", "transitional", "perforated", "edge", "undetermined", "interior"))
+	
+	}
+
+	levels <- list()
+	for (i in seq_len(nLayers)) {
+		levels[[i]] <- levs
+	}
+
+	.makeGRaster(srcs, levels = levels)
+
+	} # EOF
+
+)

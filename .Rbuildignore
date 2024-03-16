@@ -1,2 +1,14 @@
+^CONDUCT\.md$
+CODE_OF_CONDUCT.md
+^LICENSE\.md$
+^README-.*\.png$
+^\.travis\.yml$
+^cran-comments\.md$
+^fasterRaster.png
 ^.*\.Rproj$
 ^\.Rproj\.user$
+^\.github
+^\.vscode
+^README\.Rmd$
+^.lintr$
+^fasterRaster.code-workspace

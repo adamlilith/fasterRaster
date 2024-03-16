@@ -2,62 +2,334 @@
 % Please edit documentation in R/fasterRaster.r
 \docType{package}
 \name{fasterRaster}
+\alias{fasterRaster-package}
 \alias{fasterRaster}
-\title{fasterRaster: Faster raster processing in R using GRASS GIS}
+\title{"fasterRaster": Faster raster and spatial vector processing using "GRASS GIS"}
 \description{
-This package is meant as an add-on to the \pkg{raster} package. It uses GRASS GIS Version 7 and some multi-core processing to do some of the more laborious raster operations potentially faster than what can be done using the raster package. For smaller rasters functions in the raster package may actually be faster. Also, many typical raster processing functions can now be done faster with \pkg{terra}, the successor to the \pkg{raster} package. Note that to use many of the functions in this package you must have the stand-alone version of GRASS 7 installed on your system.
-}
-\details{
-Create an issue on \href{https://github.com/adamlilith/fasterRaster/issues}{GitHub}.
-}
-\section{Raster operations}{
+Processing of large-in-memory/-on disk rasters and spatial vectors in using \strong{GRASS GIS}. Most functions in the \strong{terra} and \strong{sf} packages are recreated. Processing of medium-sized and smaller spatial objects will nearly always be faster using \strong{terra} or \strong{sf}. To use most of the functions you must have the stand-alone version of \strong{GRASS} version 8.0 or higher (not the \strong{OSGeoW4} installer version). Note that due to developer choices, results will not always be strictly comparable between \strong{terra}, \strong{sf}, and \strong{fasterRaster}.
+\subsection{Most useful tutorials and functions:}{
 
-		\code{\link{fasterBufferRast}}: Add buffer to cells in a raster (using GRASS).\cr
-		\code{\link{fasterContour}}: Calculate contour vectors from a raster.\cr
-		\code{\link{fasterConvertDegree}}: Convert degrees from GRASS format (0 = east, 90 = north) to standard (0 = north, 90 = east) (using GRASS).\cr
-		\code{\link{fasterFocal}}: Faster focal calculations (using multi-core).\cr
-		\code{\link{fasterFragmentation}}: Fragmentation indices following Riitters et al. (2000 Conservation Ecology 4:3; using multi-core).\cr
-		\code{\link{fasterHorizon}}: Horizon angle height from a DEM (using GRASS).\cr
-		\code{\link{fasterLongLatRasters}}: Create rasters with values equal to cell longitude and latitude (using GRASS).\cr
-		\code{\link{fasterMapcalc}}: Apply user-defined function to one or more rasters (using GRASS; see also \code{fasterFocal}).\cr
-		\code{\link{fasterProjectRaster}}: Project and resample raster (using GRASS).\cr
-		\code{\link{fasterQuantile}}: Quantiles of values in a raster (using GRASS).\cr
-		\code{\link{fasterRastDistance}}: Distance from cells with \code{NA}s to closest non-\code{NA} cell (or the inverse of this) (using GRASS).\cr
-		\code{\link{fasterRasterize}}: Convert vector to a raster (using GRASS).\cr
-		\code{\link{fasterSun}}: Solar irradiance and radiance (using GRASS).\cr
-		\code{\link{fasterSurfFractal}}: Generate a raster with a fractal pattern (using GRASS).\cr
-		\code{\link{fasterTerrain}}: Slope, aspect, and curvature (using GRASS).\cr
-		\code{\link{fasterTopidx}}: Topographic wetness index (using GRASS).\cr
-		\code{\link{fasterVectorize}}: Convert raster to spatial points, lines, or polygons (using GRASS).\cr
-		\code{\link{fasterVectToRastDistance}}: Distance between raster cells and a vector (using GRASS).\cr
+A \link[=tutorial_getting_started]{quick-start} tutorial\cr
+A tutorial on \link[=tutorial_raster_data_types]{raster data types}\cr
+\code{\link[=faster]{faster()}}: Set the directory where \strong{GRASS} is installed on your system, and set or get other package-wide options\cr
+\code{\link[=fast]{fast()}}: Convert a \code{SpatRaster}, \code{SpatVector}, or \code{sf} vector to \strong{fasterRaster}'s raster format (\code{GRaster}s) or vector format (\code{GVector}s), or load one from a file\cr
+\code{\link[=rast]{rast()}}, \code{\link[=vect]{vect()}}, and \code{\link[=st_as_sf]{st_as_sf()}}: Convert \code{GRaster}s and \code{GVector}s to \code{SpatRaster}s, \code{SpatVector}s, or \code{sf} vectors\cr
+\code{\link[=writeRaster]{writeRaster()}} and \code{\link[=writeVector]{writeVector()}}: Save \code{GRaster}s or \code{GVector}s to disk\cr
 }
 
-\section{Generic "faster" operations}{
+\subsection{Properties of \code{GRasters}}{
 
-		\code{\link{faster}}: Generic call to a GRASS module.\cr
+\code{\link[=crs]{crs()}}: Coordinate reference system\cr
+\code{\link[=datatype]{datatype()}}: Data type\cr
+\code{\link[=dim]{dim()}}: Number of rows and columns\cr
+\code{\link[=ext]{ext()}}, \code{\link[=N]{N()}}, \code{\link[=S]{S()}}, \code{\link[=E]{E()}}, \code{\link[=W]{W()}}, \code{\link[=top]{top()}}, and \code{\link[=bottom]{bottom()}}: Spatial extent\cr
+\code{\link[=freq]{freq()}}: Frequencies of cell values in a raster\cr
+\code{\link[=is.2d]{is.2d()}} and \code{\link[=is.3d]{is.3d()}}: Is an object 2- or 3-dimensional?\cr
+\code{\link[=is.int]{is.int()}} / \code{\link[=is.cell]{is.cell()}}, \code{\link[=is.float]{is.float()}}, \code{\link[=is.doub]{is.doub()}}: \code{GRaster} data type (integer/float/double)\cr
+\code{\link[=is.factor]{is.factor()}}: Does a raster represent categorical data?\cr
+\code{\link[=is.lonlat]{is.lonlat()}}: Is an object projected (e.g., in WGS84)?\cr
+\code{\link[=levels]{levels()}}: Names of levels in a categorical \code{GRaster}\cr
+\code{\link[=minmax]{minmax()}}: Minimum and maximum values across all non-\code{NA} cells\cr
+\code{\link[=names]{names()}}: \code{GRaster} names\cr
+\code{\link[=ncol]{ncol()}}: Number of columns\cr
+\code{\link[=nacell]{nacell()}}: Number of \code{NA} cells\cr
+\code{\link[=ncell]{ncell()}}: Number of cells\cr
+\code{\link[=ncell3d]{ncell3d()}}: Number of cells of a 3D \code{GRaster}\cr
+\code{\link[=ndepth]{ndepth()}}: Number of depths of a 3D \code{GRaster}\cr
+\code{\link[=nlyr]{nlyr()}}: Number of layers\cr
+\code{\link[=nonnacell]{nonnacell()}}: Number of non-\code{NA} cells\cr
+\code{\link[=nrow]{nrow()}}: Number of rows\cr
+\code{\link[=nlevels]{nlevels()}}: Number of categories\cr
+\code{\link[=res]{res()}}, \code{\link[=xres]{xres()}}, \code{\link[=yres]{yres()}}, and \code{\link[=zres]{zres()}}: Spatial resolution\cr
+\code{\link[=sources]{sources()}}: Name of the \code{GRaster} in \strong{GRASS}\cr
+\code{\link[=topology]{topology()}}: Dimensionality (2D or 3D)\cr
+\code{\link[=zext]{zext()}}: Vertical extent\cr
+\code{\link[=zres]{zres()}}: Vertical resolution\cr
 }
 
-\section{Normal-speed raster processing}{
+\subsection{Functions that operate on or create \code{GRasters}}{
 
-		\code{\link{fragmentation}}: Calculate landscape fragmentation indices as per Riitter et al. (2000 Conservation Ecology 4:3)
+\link{Arithmetic}: Mathematical operations on \code{GRaster}s: \code{+}, \code{-}, \code{*}, \code{/}, \code{^}, \code{\%\%} (modulus), \code{\%/\%} (integer division)\cr
+\link[=Compare-methods]{Logical comparisons}: \code{<}, \code{<=}, \code{==}, \code{!=}, \code{>=}, and \code{>}, plus \code{\link[fasterRaster]{\%in\%}} and \code{\link[fasterRaster]{\%notin\%}} (for categorical rasters only)\cr
+
+Single-layer functions (applied to each layer of a \code{GRaster}):
+\itemize{
+\item Working with \code{NA}s: \code{\link[=is.na]{is.na()}} and \code{\link[=not.na]{not.na()}} \cr
+\item Trigonometry: \code{\link[=sin]{sin()}}, \code{\link[=cos]{cos()}}, \code{\link[=tan]{tan()}}, \code{\link[=asin]{asin()}}, \code{\link[=acos]{acos()}}, \code{\link[=atan]{atan()}}, \code{\link[=atan2]{atan2()}} \cr
+\item Logarithms and powers: \code{\link[=exp]{exp()}}, \code{\link[=log]{log()}}, \code{\link[=ln]{ln()}}, \code{\link[=log1p]{log1p()}}, \code{\link[=log2]{log2()}}, \code{\link[=log10]{log10()}}, \code{\link[=sqrt]{sqrt()}} \cr
+\item Rounding: \code{\link[=round]{round()}}, \code{\link[=floor]{floor()}}, \code{\link[=ceiling]{ceiling()}}, \code{\link[=trunc]{trunc()}} \cr
+\item Signs: \code{\link[=abs]{abs()}} \cr
 }
 
-\section{Utility functions}{
-
-		\code{\link{exportRastToGrass}}: Export raster to an open GRASS session with support for large rasters/vectors.\cr
-		\code{\link{exportVectToGrass}}: Export vector object to an open GRASS session with support for large rasters/vectors.\cr
-		\code{\link{initGrass}}: Initialize a GRASS session using a raster or a vector as a template.\cr
+Multi-layer functions (applied across layers of a "stack" of \code{GRaster}s):
+\itemize{
+\item Numeration: \code{\link[=sum]{sum()}}, \code{\link[=count]{count()}} \cr
+\item Central tendency: \code{\link[=mean]{mean()}}, \code{\link[=mmode]{mmode()}}, \code{\link[=median]{median()}} \cr
+\item Dispersion: \code{\link[=sd]{sd()}}, \code{\link[=var]{var()}}, \code{\link[=sdpop]{sdpop()}}, \code{\link[=varpop]{varpop()}}, \code{\link[=nunique]{nunique()}}, \code{\link[=range]{range()}}, \code{\link[=quantile]{quantile()}}, \code{\link[=skewness]{skewness()}}, \code{\link[=kurtosis]{kurtosis()}}
+\item Extremes: \code{\link[=min]{min()}}, \code{\link[=max]{max()}}, \code{\link[=which.min]{which.min()}}, \code{\link[=which.max]{which.max()}} \cr
 }
 
-\section{Example data}{
-
-	\code{\link{mad0}}: Borders of Madagascar.\cr
-	\code{\link{mad4}}: Borders of selected districts of Madagascar.\cr
-	\code{\link{madElev}}: Elevation raster for a portion of Madagascar.\cr
-	\code{\link{madForest2000}}: Raster of occurrence/non-occurrence of forest in Madagascar.\cr
-	\code{\link{madRivers}}: Major rivers of Madagascar.\cr
+The operators \link{$} and \code{\link[fasterRaster]{[[}} can be used to subset or remove specific layers of a \code{GRaster}.\cr
+The \code{\link[fasterRaster]{[<-}} operator can be used to replace values of cells of a \code{GRaster}.\cr
+The assign operators, \code{\link[fasterRaster]{$<-}}, \code{\link[fasterRaster]{[[<-}}, and \code{\link[fasterRaster]{add<-}} can be used to replace specific layers of a \code{GRaster}.\cr
+\code{\link[=as.int]{as.int()}}, \code{\link[=as.float]{as.float()}}, \code{\link[=as.doub]{as.doub()}}: Change data type (integer/float/double)\cr
+\code{\link[=as.contour]{as.contour()}}: Contour lines from a \code{GRaster}\cr
+\code{\link[=as.lines]{as.lines()}}: Convert a \code{GRaster} to a "lines" vector\cr
+\code{\link[=as.points]{as.points()}}: Convert a \code{GRaster} to a "points" vector\cr
+\code{\link[=as.polygons]{as.polygons()}}: Convert a \code{GRaster} to a "polygons" vector\cr
+\code{\link[=aggregate]{aggregate()}}: Aggregate values of \code{GRaster} cells into larger cells\cr
+\code{\link[=buffer]{buffer()}}: Create a buffer around non-\code{NA} cells\cr
+\code{\link[=app]{app()}}: Apply a user-defined function to multiple layers of a \code{GRaster} (with helper functions \code{\link[=appFuns]{appFuns()}} and \code{\link[=appCheck]{appCheck()}})\cr
+\code{\link[=c]{c()}}: "Stack" two or more rasters\cr
+\code{\link[=cellSize]{cellSize()}}: Cell area\cr
+\code{\link[=clump]{clump()}}: Group adjacent cells with similar values\cr
+\code{\link[=combineCats]{combineCats()}}: Combine values from two or more categorical and/or integer rasters\cr
+\code{\link[=cor]{cor()}}: Correlation matrix between layers of a \code{GRaster}\cr
+\code{\link[=cov]{cov()}}: Covariance matrix between layers of a \code{GRaster}\cr
+\code{\link[=crop]{crop()}}: Remove parts of a \code{GRaster}\cr
+\code{\link[=denoise]{denoise()}}: Remove "noise" from a \code{GRaster} using a principal components analysis (PCA)\cr
+\code{\link[=distance]{distance()}}: Distance to non-\code{NA} cells, or vice versa\cr
+\code{\link[=extend]{extend()}}: Add rows and columns to a \code{GRaster}\cr
+\code{\link[=extract]{extract()}}: Extract values from a \code{GRaster} at locations of a \code{GVector}\cr
+\code{\link[=fillNAs]{fillNAs()}}: Fill \code{NA} cells\cr
+\code{\link[=focal]{focal()}}: Calculate cell values based on values of nearby cells\cr
+\code{\link[=fractalRast]{fractalRast()}}: Create a fractal \code{GRaster}\cr
+\code{\link[=fragmentation]{fragmentation()}}: Landscape fragmentation class from Riitters et al. (2020)\cr
+\code{\link[=global]{global()}}: Summary statistics across cells of each \code{GRaster} layer\cr
+\code{\link[=shade]{hillshade()}}: Create a hillshade \code{GRaster}\cr
+\code{\link[=hist]{hist()}}: Histogram of \code{GRaster} values\cr
+\code{\link[=horizonHeight]{horizonHeight()}}: Horizon height\cr
+\code{\link[=interpIDW]{interpIDW()}}: Interpolate values at points to a \code{GRaster}\cr
+\code{\link[=kernel]{kernel()}}: Kernel density estimator of points\cr
+\code{\link[=longlat]{longlat()}}: Create longitude/latitude rasters\cr
+\code{\link[=mask]{mask()}}: Remove values in a \code{GRaster} based on values in another \code{GRaster} or vector\cr
+\code{\link[=match]{match()}}, \code{\link[fasterRaster]{\%in\%}}, and \code{\link[fasterRaster]{\%notin\%}}: Find which cells of a \code{GRaster} match or do not match certain values\cr
+\code{\link[=merge]{merge()}}: Combine two or more rasters with different extents and fill in \code{NA}s\cr
+\code{\link[=noise]{noise()}}: Remove coarse-scale trends from a \code{GRaster}, leaving just fine-scale "noise"\cr
+\code{\link[=pairs]{pairs()}}: Plot correlations between \code{GRaster} layers\cr
+\code{\link[=pca]{pca()}}: Apply a principal components analysis (PCA) to a \code{GRaster}\cr
+\code{\link[=pcs]{pcs()}}: Retrieve a principal components model from a PCA \code{GRaster} generated using \code{pca()}\cr
+\code{\link[=plot]{plot()}}: Display a \code{GRaster}\cr
+\code{\link[=plotRGB]{plotRGB()}}: Display a multispectral \code{GRaster} using red, blue, green, and alpha channels\cr
+\code{\link[=project]{project()}}: Change coordinate reference system and cell size\cr
+\code{\link[=predict]{predict()}}: Make predictions to a \code{GRaster} from a linear model or generalized linear model\cr
+\code{\link[=resample]{resample()}}: Change cell size\cr
+\code{\link[=rnormRast]{rnormRast()}}: A random \code{GRaster} with values drawn from a normal distribution\cr
+\code{\link[=runifRast]{runifRast()}}: A random \code{GRaster} with values drawn from a uniform distribution\cr
+\code{\link[=scale]{scale()}}: Subtract means and divide by standard deviations\cr
+\code{\link[=selectRange]{selectRange()}}: Select values from rasters in a stack based on values in another \code{GRaster}\cr
+\code{\link[=spatSample]{spatSample()}}: Randomly points from a \code{GRaster}\cr
+\code{\link[=spDepRast]{spDepRast()}}: Create a random \code{GRaster} with or without spatial dependence\cr
+\code{\link[=sun]{sun()}}: Solar radiance and irradiance\cr
+\code{\link[=terrain]{terrain()}}: Slope, aspect, curvature, and partial slopes\cr
+\code{\link[=thinLines]{thinLines()}}: Reduce linear features on a \code{GRaster} so linear features are 1 cell wide\cr
+\code{\link[=topoWetnessIndex]{topoWetnessIndex()}}: Topographic wetness index\cr
+\code{\link[=trim]{trim()}}: Remove rows and columns from a \code{GRaster} that are all \code{NA}\cr
+\code{\link[=unscale]{unscale()}}: Multiply raster by standard deviation and add the mean (opposite of \code{\link[=scale]{scale()}})\cr
+\code{\link[=zonal]{zonal()}}: Statistics (mean, sum, etc.) on areas of a \code{GRaster} defined by sets of cells with the same values in another \code{GRaster}, or by geometries in a \code{GVector}\cr
+\code{\link[=zonalGeog]{zonalGeog()}}: Geographic statistics (area, perimeter, fractal dimension, etc.) for sets of cells with the same values\cr
 }
 
+\subsection{Functions operating on categorical (factor) rasters}{
+
+\code{\link[=activeCat]{activeCat()}}: Column that defines category labels\cr
+\code{\link[fasterRaster]{activeCat<-}}: Set column that defines category labels\cr
+\code{\link[=addCats]{addCats()}}: Add new columns to a "levels" table\cr
+\code{\link[fasterRaster]{addCats<-}}: Add new rows (levels) to a "levels" table\cr
+\code{\link[=categories]{categories()}}: Set "levels" table for specific layers of a categorical raster\cr
+\code{\link[=catNames]{catNames()}}: Names of each "levels" table\cr
+\code{\link[=cats]{cats()}}: "Levels" table of a categorical raster\cr
+\code{\link[=combineCats]{combineCats()}}: Combine categories from two or more categorical rasters\cr
+\code{\link[=complete.cases]{complete.cases()}}: Find rows of a categorical \code{GRaster}'s "levels" table that have no \code{NA}s in them\cr
+\code{\link[=droplevels]{droplevels()}}: Remove one or more levels\cr
+\code{\link[=freq]{freq()}}: Frequency of each category across cells of a raster\cr
+\code{\link[=is.factor]{is.factor()}}: Is a raster categorical?\cr
+\code{\link[=levels]{levels()}}: "Levels" table of a categorical raster\cr
+\code{\link[fasterRaster]{levels<-}}: Set "levels" table of a categorical raster\cr
+\code{\link[=match]{match()}}, \code{\link[fasterRaster]{\%in\%}}, and \code{\link[fasterRaster]{\%notin\%}}: Find which cells of a \code{GRaster} match or do not match certain category labels\cr
+\code{\link[=minmax]{minmax()}}: "Lowest" and "highest" category values of categorical rasters (when argument \code{levels = TRUE})\cr
+\code{\link[=missing.cases]{missing.cases()}}: Find rows of a categorical \code{GRaster}'s "levels" table that have at least one \code{NA} in them\cr
+\code{\link[=missingCats]{missingCats()}}: Values that have no category assigned to them\cr
+\code{\link[=nlevels]{nlevels()}}: Number of levels\cr
+\code{\link[=zonalGeog]{zonalGeog()}}: Geographic statistics (area, perimeter, fractal dimension, etc.) for sets of cells with the same values
+}
+
+\subsection{Functions for analysis of remote sensing rasters}{
+
+\code{\link[=compositeRGB]{compositeRGB()}}: Combine red, green, and blue color bands to make a composite \code{GRaster}\cr
+\code{\link[=plotRGB]{plotRGB()}}: Display a multispectral \code{GRaster} using red, blue, green, and alpha channels\cr
+\code{\link[=vegIndex]{vegIndex()}}: Vegetation indices from surface reflectance\cr
+}
+
+\subsection{Properties of \code{GVector}s}{
+
+\code{\link[=crs]{crs()}}: Coordinate reference system\cr
+\code{\link[=datatype]{datatype()}}: Data type of fields\cr
+\code{\link[=dim]{dim()}}: Number of geometries and columns\cr
+\code{\link[=expanse]{expanse()}}: Area of polygons or length of lines\cr
+\code{\link[=ext]{ext()}}, \code{\link[=N]{N()}}, \code{\link[=S]{S()}}, \code{\link[=E]{E()}}, \code{\link[=W]{W()}}, \code{\link[=top]{top()}}, and \code{\link[=bottom]{bottom()}}: Spatial extent\cr
+\code{\link[=geomtype]{geomtype()}}: Type of vector (points, lines, polygons)\cr
+\code{\link[=is.2d]{is.2d()}} and \code{\link[=is.3d]{is.3d()}}: Is an object 2- or 3-dimensional?\cr
+\code{\link[=is.lonlat]{is.lonlat()}}: Is an object projected (e.g., in WGS84)?\cr
+\code{\link[=is.points]{is.points()}}, \code{\link[=is.lines]{is.lines()}}, \code{\link[=is.polygons]{is.polygons()}}: Does a \code{GVector} represent points, lines, or polygons?\cr
+\code{\link[=names]{names()}}: Names of \code{GVector} fields\cr
+\code{\link[fasterRaster]{names<-}}: Assign names to columns of a \code{GVector}s data table\cr
+\code{\link[=ncol]{ncol()}}: Number of fields\cr
+\code{\link[=ngeom]{ngeom()}}: Number of geometries (points, lines, polygons)\cr
+\code{\link[=nrow]{nrow()}}: Number of rows in a vector data table\cr
+\code{\link[=nsubgeom]{nsubgeom()}}: Number of subgeometries (points, lines, polygons that make up single- and multipart geometries)\cr
+\code{\link[=sources]{sources()}}: Name of the vector in \strong{GRASS}\cr
+\code{\link[=topology]{topology()}}: Dimensionality (2D or 3D)\cr
+\code{\link[=zext]{zext()}}: Vertical extent\cr
+}
+
+\subsection{Functions that operate on or create \code{GVector}s}{
+
+The \code{\link[fasterRaster]{[}} operator can be used to subset geometries of a \code{GVector}.\cr
+The \link{$} and \code{\link[fasterRaster]{[[}} operators can be used to get columns of a \code{GVector}'s data table.\cr
+The \code{\link[fasterRaster]{$<-}} operator can be used to replace specific columns of a \code{GVector}'s data table.\cr
+\link{addTable<-}: Add a data table to a \code{GVector}\cr
+\code{\link[=aggregate]{aggregate()}}: Combine \code{GVector} geometries\cr
+\code{\link[=as.data.frame]{as.data.frame()}}: Convert a \code{GVector}'s attribute table to a \code{data.frame}\cr
+\code{\link[=as.data.table]{as.data.table()}}: Convert a \code{GVector}'s attribute table to a \code{data.table}\cr
+\code{\link[=as.points]{as.points()}}: Extract vertex coordinates from a "lines" or "polygons" \code{GVector}\cr
+\code{\link[=buffer]{buffer()}}: Create a polygon around/inside a \code{GVector}\cr
+\code{\link[=cbind]{cbind()}}: Add columns to the data table of a \code{GVector}\cr
+\code{\link[=clusterPoints]{clusterPoints()}}: Identify clusters of points\cr
+\code{\link[=complete.cases]{complete.cases()}}: Find rows of a \code{GVector}'s data table that have no \code{NA}s in them\cr
+\code{\link[=connectors]{connectors()}}: Create lines connecting nearest features of two \code{GVector}s\cr
+\code{\link[=convHull]{convHull()}}: Minimum convex hull\cr
+\code{\link[=crds]{crds()}}: Extract coordinates of a \code{GVector}\cr
+\code{\link[=crop]{crop()}}: Remove parts of a \code{GVector}\cr
+\code{\link[=delaunay]{delaunay()}}: Delaunay triangulation\cr
+\code{\link[=disagg]{disagg()}}: Separate multipart geometries into singlepart geometries\cr
+\code{\link[=distance]{distance()}}: Distance between geometries in two \code{GVector}, or from a \code{GVector} to cells of a \code{GRaster}\cr
+\code{\link[=dropTable]{dropTable()}}: Remove the data table from a \code{GVector}\cr
+\code{\link[=erase]{erase()}} or \code{\link[fasterRaster]{-}}: Remove part of a \code{GVector} that overlaps with another\cr
+\code{\link[=expanse]{expanse()}}: Area of polygons or length of lines\cr
+\code{\link[=extract]{extract()}}: Extract values from a \code{GVector} at specific points\cr
+\code{\link[=grid]{grid()}}: Create a grid \code{GVector}\cr
+\code{\link[=head]{head()}}: First rows of a \code{GVector}'s data table\cr
+\code{\link[=hexagons]{hexagons()}}: Create a hexagonal grid\cr
+\code{\link[=interpIDW]{interpIDW()}}: Interpolate values at points to a \code{GRaster}\cr
+\code{\link[=interpSplines]{interpSplines()}}: Interpolate values at points to a \code{GRaster}\cr
+\code{\link[=intersect]{intersect()}} or \code{\link[fasterRaster]{*}}: Intersection of two \code{GVectors}.\cr
+\code{\link[=kernel]{kernel()}}: Kernel density estimator of points.\cr
+\code{\link[=missing.cases]{missing.cases()}}: Find rows of a \code{GVector}'s data table that have at least \code{NA} in them\cr
+\code{\link[=project]{project()}}: Change coordinate reference system\cr
+\code{\link[=rasterize]{rasterize()}}: Convert a \code{GVector} to a \code{GRaster}\cr
+\code{\link[=rbind]{rbind()}}: Combine \verb{GVectors\\cr [simplifyGeom()]: Remove vertices\\cr [smoothGeom()]: Remove "angular" aspects of features\\cr [st_as_sf()]: Convert a }GVector\verb{to a}sf\verb{vector\\cr [st_buffer()]: Create a polygon around/inside a}GVector\verb{\\cr [tail()]: Last rows of a }GVector\verb{'s data table\\cr [thinPoints()]: Reduce number of points in same raster cell\\cr [union()] or \code{\link[fasterRaster]{+}}: Combine two }GVector\verb{s\\cr [xor()] or \code{\link[fasterRaster]{/}}: Select parts of polygons not shared by two }GVector`s\cr
+}
+
+\subsection{Functions for fixing issues with \code{GVector}s}{
+
+\code{\link[=breakPolys]{breakPolys()}}: Break topologically clean areas\cr
+\code{\link[=fillHoles]{fillHoles()}}: Fill "holes" of a \code{GVector}\cr
+\code{\link[=fixBridges]{fixBridges()}}: Change "bridges" to "islands"\cr
+\code{\link[=fixDangles]{fixDangles()}}: Change "dangles" hanging off boundaries to lines\cr
+\code{\link[=fixLines]{fixLines()}}: Break lines at intersections and lines that form closed loops\cr
+\code{\link[=remove0]{remove0()}}: Remove all boundaries and lines with a length of 0\cr
+\code{\link[=removeAngles]{removeAngles()}}: Collapse lines that diverge at an angle that is computationally equivalent to 0\cr
+\code{\link[=removeBridges]{removeBridges()}}: Remove "bridges" to "islands"\cr
+\code{\link[=removeDangles]{removeDangles()}}: Remove "dangling" lines\cr
+\code{\link[=removeDupCentroids]{removeDupCentroids()}}: Remove duplicated area centroids\cr
+\code{\link[=removeDups]{removeDups()}}: Remove duplicated features and area centroids\cr
+\code{\link[=removeSmallPolys]{removeSmallPolys()}}: Remove small polygons\cr
+\code{\link[=snap]{snap()}}: Snap lines/boundaries to each other\cr
+}
+
+\subsection{Converting between data types}{
+
+\code{\link[=as.contour]{as.contour()}}: Convert a \code{GRaster} to a \code{GVector} representing contour lines\cr
+\code{\link[=as.doub]{as.doub()}}: Convert a \code{GRaster} to a double-floating point raster (\strong{GRASS} data type \code{DCELL})\cr
+\code{\link[=as.data.frame]{as.data.frame()}}: Convert \code{GVector} to a \code{data.frame}\cr
+\code{\link[=as.data.table]{as.data.table()}}: Convert \code{GVector} to a \code{data.table}\cr
+\code{\link[=as.float]{as.float()}}: Convert a \code{GRaster} to a floating-point raster (\strong{GRASS} data type \code{FCELL})\cr
+\code{\link[=as.int]{as.int()}}: Convert a \code{GRaster} to an integer raster (\strong{GRASS} data type \code{CELL})\cr
+\code{\link[=as.points]{as.points()}}, \code{\link[=as.lines]{as.lines()}}, and \code{\link[=as.polygons]{as.polygons()}}: Convert a \code{GRaster} to a \code{GVector}\cr
+\code{\link[=fast]{fast()}}: Convert a \code{SpatRaster}, \code{SpatVector}, or \code{sf} vector to a \code{GRaster} or \code{GVector}, or load one from a file\cr
+\code{\link[=categories]{categories()}} and \link{levels<-}: Convert an integer raster to a categorical ("factor") raster.
+\code{\link[=rast]{rast()}}: Convert a \code{GRaster} to a \code{SpatRaster}\cr
+\code{\link[=rasterize]{rasterize()}}: Convert a \code{GVector} to a \code{GRaster}\cr
+\code{\link[=st_as_sf]{st_as_sf()}}: Convert a \code{GVector} to a \code{sf} vector\cr
+\code{\link[=vect]{vect()}}: Convert a \code{GVector} to a \code{SpatVector}\cr
+}
+
+\subsection{General purpose functions}{
+
+\code{\link[=appendLists]{appendLists()}}: Append values to elements of a list from another list\cr
+\code{\link[=compareFloat]{compareFloat()}}: Compare values accounting for differences due to floating point precision\cr
+\code{\link[=compareGeom]{compareGeom()}}: Determine if geographic metadata is same between \code{GRaster}s and/or \code{GVector}s\cr
+\code{\link[=dropRows]{dropRows()}}: Remove rows from a \code{data.frame} or \code{data.table}\cr
+\code{\link[=forwardSlash]{forwardSlash()}}: Replace backslash with forward slash\cr
+\code{\link[=grassInfo]{grassInfo()}}: \strong{GRASS} version and citation\cr
+\code{\link[=replaceNAs]{replaceNAs()}}: Replace \code{NA}s in columns of a \code{data.table} or \code{data.frame}, or in a vector\cr
+\code{\link[=seqToSQL]{seqToSQL()}}: Format a numeric series into an SQL value call\cr
+\code{\link[=update]{update()}}: Refresh metadata in a \code{GRaster} or \code{GVector} object\cr
+}
+
+\subsection{Data objects}{
+
+\link{appFunsTable} (see also \code{\link[=appFuns]{appFuns()}}): Functions usable by the \code{\link[=app]{app()}} function\cr
+\link{madChelsa}: Climate rasters for of a portion of eastern Madagascar\cr
+\link{madCoast0}, \link{madCoast4}, and \link{madCoast}: Borders of an eastern portion of Madagascar\cr
+\link{madCover}: Land cover raster\cr
+\link{madCoverCats}: Table of land cover classes\cr
+\link{madDypsis}: Specimens records of species in the genus \emph{Dypsis}\cr
+\link{madElev}: Elevation raster\cr
+\link{madForest2000} and \link{madForest2014}: Forest cover in 2000 and 2014\cr
+\link{madLANDSAT}: Surface reflectance in 2023\cr
+\link{madRivers}: Rivers vector\cr
+\link{vegIndices}: Vegetation indices that can be calculated using \code{\link[=vegIndex]{vegIndex()}}.
+}
+
+\subsection{Esoteric, exported yet often (publicly) undocumented functions for developers, plus esoteric tutorials}{
+
+Comparisons between \code{GRegion}s can be performed using the \code{==} and \code{!=} operators.\cr
+Tutorial on \strong{GRASS} \link[=tutorial_regions]{regions}\cr
+Tutorial on \strong{GRASS} \link[=tutorial_locations_mapsets]{"locations" and mapsets}\cr
+\code{.copyGSpatial()}: Make a copy of the \strong{GRASS} file pointed to by a \code{GRaster} or \code{GVector}\cr
+\code{.fileExt()}: Get file extension\cr
+\code{.exists()}: Does the \strong{GRASS} file of a \code{GRaster} or \code{GVector} exist?\cr
+\code{.ext()}: Extent from the \code{\link[=sources]{sources()}} name of a \code{GRaster} or \code{GVector}\cr
+\code{.geomtype()}: Geometry type ("point", "line", or "area") from the \code{\link[=sources]{sources()}} name of a \code{GVector}\cr
+\code{.layerIndex()}: Gets the index of \code{GRaster} layers from a numeric, integer, character, or logical vector\cr
+\code{.locationCreate()} Make a connection to \strong{GRASS} (i.e., start \strong{GRASS} from within \strong{R}) and create a location\cr
+\code{.locationDelete()} Deletes all files associated with a \strong{GRASS} "location" and mapset\cr
+\code{.locationFind()}: Find a specific \strong{GRASS} "location" that already exists\cr
+\code{.locationRestore()} Reconnect \strong{GRASS} to a previously-created \strong{GRASS} "location"\cr
+\code{.locations()}: List of all available "locations"\cr
+\code{.ls()}: Lists the \code{sources} of all objects in the active \strong{GRASS} "location"\cr
+\code{.makeGRaster()} and \code{.makeGVector()}: Make \code{GRaster}s or \code{GVector}s from a vector of \code{sources}, which are pointers to files in \strong{GRASS}\cr
+\code{.makeSourceNames()}: Makes one or more statistically unique strings that can be used as file names to represent rasters or vectors in \strong{GRASS}\cr
+\code{.mapset()}: \strong{GRASS} "mapset" of an object or the active session\cr
+\code{.message()}: Display a warning or message if the given warning has not been displayed since \strong{fasterRaster} was attached or if a given number or hours has passed since then\cr
+\code{.minVal()} and \code{.maxVal()}: Values in the \verb{@minVal} and \verb{@maxVal} slots in a \code{GRaster}\cr
+\code{.nlevels()}: Number of levels in a \code{SpatVector}, \code{data.frame}, \code{data.table}, empty string, or a list of \code{data.frame}s, \code{data.table}s, and/or empty strings.\cr
+\code{.projection()}: Value of the \verb{@projection} slot in a \code{GRaster} or \code{GVector}\cr
+\code{.quiet()}: Returns "quiet" if \code{faster("verbose")} is \code{TRUE}\cr
+\code{.rastInfo()} and \code{.vectInfo()}: Metadata for a \strong{GRASS} raster or vector\cr
+\code{.region()}: Change or report the active region's extent and resolution\cr
+\verb{.regionDim()]}: Change or report the active region's resolution (also \code{\link[=dim]{dim()}} and related functions, with no arguments)\cr
+\code{.regionExt()}: Change or report the active region's extent (also \code{\link[=ext]{ext()}} and related functions, with no arguments)\cr
+\code{.regionRes()}: Change or report the active region's dimensions (also \code{\link[=res]{res()}} and related functions, with no arguments)\cr
+\code{.rename()}: Rename a \strong{GRASS} raster or vector\cr
+\code{.rm()}: Delete rasters or vectors in \strong{GRASS}\cr
+\code{.vAsDataTable()}: Convert the attribute table linked to a vector in \strong{GRASS} to a \code{data.table}. This table is distinct from the attribute table attached to a \code{GVector}\cr
+\code{.vAttachDatabase()}: Add a database table to the \strong{GRASS} representation of a \code{GVector}\cr
+\code{.vCats()}: Get a \code{data.table} with a single column named \code{cat}, which corresponds to the \strong{GRASS} attribute table's \code{cat} column\cr
+\verb{.vDetachDatabase(): Detach the **GRASS** database from a **GRASS** vector\\cr }.vHasDatabase()\verb{: Tests if **GRASS** vector has a database\\cr }.vIncrementCats()\verb{: Increment category values of a }GVector\verb{\\cr }.vNames()\verb{: "**GRASS**" vector attribute table column names\\cr }.vRecat()\verb{: Change **GRASS** category indices of a **GRASS** vector\\cr }.vValidCats()\verb{: Are category values of a vector valid?\\cr }grassStarted()`: Has a connection \strong{GRASS} been made within the current \strong{R} session?\cr
+}
+}
+\seealso{
+Useful links:
+\itemize{
+  \item \url{http://www.earthSkySea.org}
+  \item Report bugs at \url{https://github.com/adamlilith/fasterRaster/issues}
+}
+
+}
 \author{
 Adam B. Smith
 }
+\keyword{internal}
