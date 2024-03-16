@@ -81,17 +81,15 @@ methods::setMethod(
 	ewres <- as.character(ewres)
 	nsres <- as.character(nsres)
 
-	args <- list(
+	rgrass::execGRASS(
 		cmd = "g.region",
 		w = w, e = e, s = s, n = n,
 		ewres = ewres, nsres = nsres,
-		flags = c(.quiet(), "overwrite"),
-		intern = TRUE
+		flags = c(.quiet(), "overwrite")
 	)
-	do.call(rgrass::execGRASS, args = args)
 
 	src <- .copyGSpatial(x, reshapeRegion = FALSE)
-	.makeGRaster(src, names(x))
+	.makeGRaster(src, names(x), levels = levels(x))
 	
 	} # EOF
 )
