@@ -6,7 +6,7 @@
 \alias{[,GVector,ANY,ANY-method}
 \title{Subset geometries of a GVector}
 \usage{
-\S4method{[}{GVector,ANY,ANY}(x, i, j, verbose = FALSE, drop = FALSE)
+\S4method{[}{GVector,ANY,ANY}(x, i, j, verbose = FALSE, dropTable = FALSE)
 }
 \arguments{
 \item{x}{A \code{GVector}.}
@@ -17,7 +17,7 @@
 
 \item{verbose}{Logical: If \code{TRUE} (or if \code{faster("verbose")} is \code{TRUE}), then display progress.}
 
-\item{drop}{Logical: If \code{FALSE} (default), the appropriate subset of the \code{GVector}s data table will be included in the subset. If \code{TRUE}, the table will be dropped.}
+\item{dropTable}{Logical: If \code{FALSE} (default), the appropriate subset of the \code{GVector}s data table will be included in the subset. If \code{TRUE}, the table will be dropped.}
 }
 \value{
 A \code{GVector}.
