@@ -1,6 +1,6 @@
 #' Combine one or more GVectors
 #'
-#' @description `rbind()` combines two or more `GVector`s of the same type (points, lines, or polygons) and same coordinate reference system. You can speed operations by putting the largest vector first in `rbind(...)`. If the `GVector`s have data tables, these will also be combined using `rbind()` possible.
+#' @description `rbind()` combines two or more `GVector`s of the same type (points, lines, or polygons) and same coordinate reference system. You can speed operations by putting the largest vector first in `rbind(...)`. If the `GVector`s have data tables, these will also be combined using `rbind()` if possible.
 #'
 #' @param ... One or more `GVector`s.
 #'

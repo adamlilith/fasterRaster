@@ -14,7 +14,7 @@ rbind.GVector(...)
 A \code{GVector}.
 }
 \description{
-\code{rbind()} combines two or more \code{GVector}s of the same type (points, lines, or polygons) and same coordinate reference system. You can speed operations by putting the largest vector first in \code{rbind(...)}. If the \code{GVector}s have data tables, these will also be combined using \code{rbind()} possible.
+\code{rbind()} combines two or more \code{GVector}s of the same type (points, lines, or polygons) and same coordinate reference system. You can speed operations by putting the largest vector first in \code{rbind(...)}. If the \code{GVector}s have data tables, these will also be combined using \code{rbind()} if possible.
 }
 \examples{
 if (grassStarted()) {
