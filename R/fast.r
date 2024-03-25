@@ -174,8 +174,8 @@ methods::setMethod(
 		} else if (any(dotNames == "table")) {
 			table <- dots$table
 		} else {
-			if (any(dotNames == "xVect")) {
-				table <- as.data.frame(xVect)
+			if (any(dotNames == "table")) {
+				table <- table
 			} else {
 				table <- terra::vect(x, what = "attributes")
 			}
@@ -549,12 +549,12 @@ methods::setMethod(
 
 		# remove table
 		if (!is.null(table) && ncol(table) > 0L) {
-			nc <- ncol(x)
-			x[ , seq_len(nc)] <- NULL 
+			nc <- ncol(xVect)
+			xVect[ , seq_len(nc)] <- NULL 
 		}
 
 		vectFile <- tempfile(fileext = ".gpkg")
-		terra::writeVector(x, filename = vectFile, filetype = "GPKG", overwrite = TRUE)
+		terra::writeVector(xVect, filename = vectFile, filetype = "GPKG", overwrite = TRUE)
 
 	} else {
 		vectFile <- terra::sources(x)
@@ -579,7 +579,7 @@ methods::setMethod(
 	# does table have same number of rows as vector geometries?
 	if (!is.null(table) && nrow(table) > 0L) {
 
-		if (!inherits(x, "gvectInfo")) x <- .vectInfo(x)
+		if (!inherits(x, "vectInfo")) x <- .vectInfo(x)
 		nGeoms <- x$nGeometries
 		tableValid <- nGeoms == nrow(table)
 
@@ -589,7 +589,7 @@ methods::setMethod(
 
 	# if the table is valid, are its category numbers valid?
 	if (tableValid) {
-		if (!inherits(x, "gvectInfo")) x <- .vectInfo(x)
+		if (!inherits(x, "vectInfo")) x <- .vectInfo(x)
 		catsValid <- x$catsValid
 	} else {
 		catsValid <- FALSE

@@ -247,13 +247,13 @@
 		
 	} # if just one raster
 
-	class(out) <- "grastInfo"
+	class(out) <- "rastInfo"
 	out
 
 }
 
 #' @noRd
-print.grastInfo <- function(x) {
+print.rastInfo <- function(x) {
 
 	cat("Source(s)     :", x$sources, "\n")
 	cat("Type(s)       :", x$type, "\n")
@@ -269,10 +269,10 @@ print.grastInfo <- function(x) {
 }
 
 #' @noRd
-show.grastInfo <- function(x) print.grastInfo(x)
+show.rastInfo <- function(x) print.rastInfo(x)
 
 #' @noRd
-summary.grastInfo <- function(x) print.grastInfo(x)
+summary.rastInfo <- function(x) print.rastInfo(x)
 
 .vectInfo <- function(x, integer = TRUE) {
 
@@ -492,13 +492,13 @@ summary.grastInfo <- function(x) print.grastInfo(x)
 		# classes = classes
 	)
 	
-	class(out) <- "gvectInfo"
+	class(out) <- "vectInfo"
 	out
 
 }
 
 #' @export
-print.gvectInfo <- function(x) {
+print.vectInfo <- function(x) {
 
 	cats <- x$cats
 	if (length(cats) > 6L) {
@@ -512,7 +512,7 @@ print.gvectInfo <- function(x) {
 	cat("Projection    :", x$projection, "\n")
 	cat("Topology:     :", x$topology, "\n")
 	cat("Extent (WESN) :", paste(x$west, x$east, x$south, x$north, collapse = ", "), "\n")
-	cat("Z extent (BT) :", paste(x$bottom, x$top, collapse = ", "), "\n")
+	cat("Z extent (BT) :", paste(x$zbottom, x$ztop, collapse = ", "), "\n")
 	cat("Geometries:   :", x$nGeometries, "\n")
 	cat("Cats:         :", cats)
 	cat("Cats Valid?   :", x$catsValid, "\n")
@@ -520,9 +520,9 @@ print.gvectInfo <- function(x) {
 }
 
 #' @export
-summary.gvectInfo <- function(x) print(x)
+summary.vectInfo <- function(x) print(x)
 
 #' @export
-show.gvectInfo <- function(x) print(x)
+show.vectInfo <- function(x) print(x)
 
 

@@ -14,7 +14,7 @@
 #'
 #' @param verbose Logical: If `TRUE` (or if `faster("verbose")` is `TRUE`), then display progress.
 #'
-#' @param drop Logical: If `FALSE` (default), the appropriate subset of the `GVector`s data table will be included in the subset. If `TRUE`, the table will be dropped.
+#' @param dropTable Logical: If `FALSE` (default), the appropriate subset of the `GVector`s data table will be included in the subset. If `TRUE`, the table will be dropped.
 #'
 #' @returns A `GVector`.
 #'
@@ -30,7 +30,7 @@
 methods::setMethod(
 	"[",
 	signature = c(x = "GVector", i = "ANY", j = "ANY"),
-	function(x, i, j, verbose = FALSE, drop = FALSE) {
+	function(x, i, j, verbose = FALSE, dropTable = FALSE) {
 
 	.message(msg = "subset_single_bracket", message = "Subsetting can take a long time, even for moderately-sized GVectors.")
 	.locationRestore(x)
@@ -63,8 +63,10 @@ methods::setMethod(
 
 		if (removeAll) {
 			out <- NULL # removed all
-		} else if (all(i %in% 1L:nGeoms) & missing(j)) {
+		} else if (all(1L:nGeoms %in% i) & missing(j)) {
 			out <- x
+			print(i)
+			print(nGeoms)
 		} else {
 
 			gtype <- geomtype(x, grass = TRUE)
@@ -108,7 +110,8 @@ methods::setMethod(
 				verbose <- verbose | faster("verbose")
 				if (verbose) {
 					omnibus::say("Selecting geometries...")
-					pb <- utils::txtProgressBar(min = 0, max = sets, style = 3, initial = 0)
+					width <- min(getOption("width"), 80L)
+					pb <- utils::txtProgressBar(min = 0, max = sets, style = 3, initial = 0, width = 80)
 				}
 				
 				srcs <- .makeSourceName("v_extract", "vector", n = sets)
@@ -173,7 +176,7 @@ methods::setMethod(
 			} # if selecting in sets
 
 			### select data table rows
-			if (nrow(x) == 0L | drop) {
+			if (nrow(x) == 0L | dropTable) {
 				table <- NULL
 			} else {
 
