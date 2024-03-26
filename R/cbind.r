@@ -2,7 +2,7 @@
 #'
 #' @description `cbind()` adds columns to the data table of a `GVector`. To combine two `GVector`s, see [rbind()]. You combine multiple a `GVector`'s data table with `data.frame`s, `data.table`s, `matrices`, or the data table(s) from other `GVector`(s).
 #'
-#' @param ... The first argument must be a `GVector`. Subsequent arguments can be `data.frame`s, `data.table`s, `matrices`, or `GVector`s. One the data tables of subsequent `GVector`s are used; the geometries are ignored.
+#' @param ... The first argument must be a `GVector`. Subsequent arguments can be `data.frame`s, `data.table`s, `matrices`, or `GVector`s. Only the data tables of subsequent `GVector`s are added to the table in `x`; the geometries are ignored.
 #'
 #' @returns A `GVector`.
 #'
@@ -13,6 +13,11 @@
 #' @aliases cbind
 #' @rdname cbind
 #' @export cbind
+print <- function(...) {
+	UseMethod("cbind")
+}
+
+#' @export
 cbind.GVector <- function(... ) {
 	
 	dots <- list(...)

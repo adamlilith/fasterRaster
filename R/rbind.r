@@ -13,6 +13,11 @@
 #' @aliases rbind
 #' @rdname rbind
 #' @export rbind
+print <- function(...) {
+	UseMethod("rbind")
+}
+
+#' @export
 rbind.GVector <- function(...) {
 
 	.locationRestore(x)

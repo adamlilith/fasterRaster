@@ -21,7 +21,7 @@ Faster raster processing in `R` using `GRASS GIS`
 `fasterRaster` makes heavy use of the <a href="https://cran.r-project.org/package=rgrass">`rgrass`</a> package by Roger Bivand and others, the <a href="https://cran.r-project.org/package=rgrass">`terra`</a> package by Robert Hijmans, the <a href="https://cran.r-project.org/package=sf">`sf`</a> package by Edzer Pebesma Roger Bivand, and of course <a href="https://grass.osgeo.org/">`GRASS GIS`</a>, so is greatly indebted to all of these creators!
 
 # Where we are
-As of 2024/02/26, a new version of this package, `fasterRaster 8.3`, is in development. There are known issues and unknown issues. If you encounter one of the latter, please file an <a href="https://github.com/adamlilith/fasterRaster/issues">issue</a> report.
+As of 2024/02/26, a new version of this package, `fasterRaster 8.3`, is in alpha release (i.e., near final release). There are known issues and unknown issues. If you encounter one of the latter, please file an <a href="https://github.com/adamlilith/fasterRaster/issues">issue</a> report.
 
 # Getting started
 
@@ -171,7 +171,11 @@ To see a detailed list of functions available in `fasterRaster`, attach the pack
 
 # Versioning
 
-The latest stable version of `fasterRaster` will mirror the version of `GRASS` for which it was built and tested. For example, `fasterRaster` version 8.3 will work using `GRASS` 8.3 (and any earlier versions starting from 8.0). `fasterRaster` will also have a minor and subminor version. For example, if the `fasterRaster` version is 8.3.2.7, then the "2" refers to changes that potentially break older code developed with a prior version, and the "7" refers to a bug fix or feature update (i.e., usually a new function or added functionality to an existing one). 
+`fasterRaster` versions will look something like `8.3.1.2`, or more generally, `M1.M2.S1.S2`. Here, `M1.M2` will mirror the version of `GRASS` for which `fasterRaster` was built and tested. For example, `fasterRaster` version 8.3 will work using `GRASS` 8.3 (and any earlier versions starting from 8.0). The values in `S1.S2` refer to "major" and "minor" versions of **fasterRaster**.  That is, a change in the value of `S1` (e.g., from `8.3.1.0` to `8.3.2.0`) indicates changes that potentially break older code developed with a prior version of **fasterRaster**.  A change in `S2` refers to a bug fix, additional functionaliy in an existing function, or the addition of an entirely new function.
+
+Note that the `M1.M2` and `S1.S2` increment independently. For example, if the version changes from `8.3.1.5` to `8.4.1.5`, then the new version has been tested on `GRASS` 8.4, but code developed with version `8.3.1.X` of `fasterRaster` should still work.
+
+**NOTE**: While `fasterRaster` is still in beta/alpha release, the vesion will look something like `8.3.0.7XXX`, following Hadley Wickham's guidelines for versioning under development.
 
 # Further reading
 

@@ -1,14 +1,19 @@
-# fasterRaster 3.0.0 (2024-XX-XX)
-First release of new, intuitive **fasterRaster** emulating and interoperable with **terra** and **sf**!!!
+# fasterRaster 8.3.0.7003 (2024-03-15)
 
-## Breaking changes
-Nearly nothing is the same in the new version of **fasterRaster**. All of the functions in previous versions have been removed.
-
-## New features
-**fasterRaster** is now compatible with **terra** and **sf** and shares functions with the same names that do (almost always) the same things.
+## Functionality
+`rbind()` and `cbind()` work for `GVector`s.
 
 ## Bug fixes
-NA~!
+o Fix bug setting extent for new raster in `crop()`
+
+# fasterRaster 8.3.0.7001 (2024-03-15)
+Alpha release of new, intuitive **fasterRaster** emulating and interoperable with **terra**!!!
+
+## Breaking changes
+Nearly nothing is the same in the new version of **fasterRaster** comppared to version 0.7 and lower. All of the functions in previous versions have been removed.
+
+## New features
+**fasterRaster** is now compatible with **terra** and **sf** and shares functions with the same names that do (almost always) the same things (esp. with **terra**, less so with **sf**).
 
 # fasterRaster 0.7.1 (2022-08-05a)
 * Changed uses of class() t* inherits()... fixes bug in fasterFocal() (and elsewhere?)
