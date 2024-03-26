@@ -49,9 +49,13 @@ methods::setMethod(
 		if (inherits(y, "GVector")) {
 			cells <- floor(cells)
 		} else if (inherits(y, "GRaster")) {
-			cells <- floor(cells) # !!!
+   			if (compareFloat(cells, round(cells), "==")) {
+				cells <- round(cells)
+			} else {
+				cells <- floor(cells)
+			}
 		}
-  		e <- E(x) - cells * xres(x)
+  		e <- E(x) - cells * xres(x) # !!!???
 	}
 
 	if (S(y) <= S(x)) {
@@ -61,9 +65,13 @@ methods::setMethod(
   		if (inherits(y, "GVector")) {
 			cells <- floor(cells)
 		} else if (inherits(y, "GRaster")) {
-   			cells <- ceiling(cells)
+   			if (compareFloat(cells, round(cells), "==")) {
+				cells <- round(cells)
+			} else {
+				cells <- ceiling(cells)
+			}
 		}
-  		s <- S(x) + cells * yres(x)
+  		s <- S(x) + cells * yres(x) # !!!???
 	}
 
 	if (N(y) >= N(x)) {
