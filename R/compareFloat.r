@@ -4,7 +4,7 @@
 #'
 #' @param x,y Numeric
 #' @param op Operator for comparison (must be in quotes): `"<"`, `">"`, `"<="`, `">="`, `"=="`, or `"!="`
-#' @param tol Tolerance value. If `NULL` (default), then this is set equal to `.Machine$double.eps^0.5`.
+#' @param tol Tolerance value: The largest absolute difference between `x` and `y` that is to be considered equality. Teh default is `.Machine$double.eps^0.5`.
 #'
 #' @return `TRUE`, `FALSE`, or `NA`
 #' 
@@ -32,9 +32,9 @@
 #' 
 #' @export
 
-compareFloat <- function(x, y, op, tol = NULL) {
+compareFloat <- function(x, y, op, tol = .Machine$double.eps^0.5) {
 
-	if (is.null(tol)) tol <- .Machine$double.eps^0.5
+	# if (is.null(tol)) tol <- .Machine$double.eps^0.5
 
 	out <- if (op == "<") {
 		(y - x > tol)
