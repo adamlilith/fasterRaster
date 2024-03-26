@@ -23,31 +23,31 @@
 \usage{
 \S4method{show}{GLocation}(object)
 
-\S4method{print}{GLocation}(x)
+\S4method{print}{GLocation}(...)
 
 \S4method{summary}{GLocation}(object)
 
 \S4method{show}{GSpatial}(object)
 
-\S4method{print}{GSpatial}(x)
+\S4method{print}{GSpatial}(...)
 
 \S4method{summary}{GSpatial}(object)
 
 \S4method{show}{GRegion}(object)
 
-\S4method{print}{GRegion}(x)
+\S4method{print}{GRegion}(...)
 
 \S4method{summary}{GRegion}(object)
 
 \S4method{show}{GRaster}(object)
 
-\S4method{print}{GRaster}(x)
+\S4method{print}{GRaster}(...)
 
 \S4method{summary}{GRaster}(object)
 
 \S4method{show}{GVector}(object)
 
-\S4method{print}{GVector}(x)
+\S4method{print}{GVector}(...)
 
 \S4method{summary}{GVector}(object)
 }
