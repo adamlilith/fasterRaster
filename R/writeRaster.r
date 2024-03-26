@@ -73,6 +73,8 @@ setMethod(
 	flags <- c(.quiet())
 	if (overwrite) flags <- c(flags, "overwrite")
 
+	filename <- normalizePath(filename, mustWork = FALSE)
+
 	### going to overwrite anything?
 	if (!overwrite) {
 		if (file.exists(filename)) stop("File already exists and ", sQuote("overwrite"), " is FALSE:\n  ", filename)
@@ -152,6 +154,10 @@ setMethod(
 				"UInt16"
 			}
 			
+		}
+
+		if (any(datatype(x) != "integer") & any(datatype %in% c("Byte", "UInt16", "Int32"))) {
+			stop("Trying to save non-integer rasters with an integer datatype. Try changing the datatype of\n  the rasters using, for example, as.int() or round(), or set `datatype` to `FLT4S` or `FLT8S`.")
 		}
 
 		# if (any(!(datatype(x, "GDAL") %in% datatype))) {
