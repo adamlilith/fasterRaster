@@ -1,3 +1,4 @@
+
 #' Information on rasters and vectors in "GRASS"
 #'
 #' @param x A `GRaster`, `GVector`, or `sources`.
@@ -508,14 +509,14 @@ print.vectInfo <- function(x) {
 	}
 
 	cat("Source        :", x$sources, "\n")
-	cat("Geometry:     :", x$geometry, "\n")
+	cat("Geometry      :", x$geometry, "\n")
 	cat("Projection    :", x$projection, "\n")
-	cat("Topology:     :", x$topology, "\n")
+	cat("Topology      :", x$topology, "\n")
 	cat("Extent (WESN) :", paste(x$west, x$east, x$south, x$north, collapse = ", "), "\n")
 	cat("Z extent (BT) :", paste(x$zbottom, x$ztop, collapse = ", "), "\n")
-	cat("Geometries:   :", x$nGeometries, "\n")
-	cat("Cats:         :", cats)
-	cat("Cats Valid?   :", x$catsValid, "\n")
+	cat("Geometries    :", x$nGeometries, "\n")
+	cat("Cats          :", cats)
+	cat("Cats valid    :", x$catsValid, "\n")
 
 }
 
@@ -524,5 +525,3 @@ summary.vectInfo <- function(x) print(x)
 
 #' @export
 show.vectInfo <- function(x) print(x)
-
-
