@@ -4,14 +4,14 @@
 \alias{compareFloat}
 \title{Compare values accounting for differences due to floating point precision}
 \usage{
-compareFloat(x, y, op, tol = NULL)
+compareFloat(x, y, op, tol = .Machine$double.eps^0.5)
 }
 \arguments{
 \item{x, y}{Numeric}
 
 \item{op}{Operator for comparison (must be in quotes): \code{"<"}, \code{">"}, \code{"<="}, \code{">="}, \code{"=="}, or \code{"!="}}
 
-\item{tol}{Tolerance value. If \code{NULL} (default), then this is set equal to \code{.Machine$double.eps^0.5}.}
+\item{tol}{Tolerance value: The largest absolute difference between \code{x} and \code{y} that is to be considered equality. Teh default is \code{.Machine$double.eps^0.5}.}
 }
 \value{
 \code{TRUE}, \code{FALSE}, or \code{NA}
