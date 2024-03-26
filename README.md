@@ -171,11 +171,11 @@ To see a detailed list of functions available in `fasterRaster`, attach the pack
 
 # Versioning
 
-`fasterRaster` versions will look something like `8.3.1.2`, or more generally, `M1.M2.S1.S2`. Here, `M1.M2` will mirror the version of `GRASS` for which `fasterRaster` was built and tested. For example, `fasterRaster` version 8.3 will work using `GRASS` 8.3 (and any earlier versions starting from 8.0). The values in `S1.S2` refer to "major" and "minor" versions of **fasterRaster**.  That is, a change in the value of `S1` (e.g., from `8.3.1.0` to `8.3.2.0`) indicates changes that potentially break older code developed with a prior version of **fasterRaster**.  A change in `S2` refers to a bug fix, additional functionaliy in an existing function, or the addition of an entirely new function.
+`fasterRaster` versions will look something like `8.3.1.2`, or more generally, `M1.M2.S1.S2`. Here, `M1.M2` will mirror the version of `GRASS` for which `fasterRaster` was built and tested. For example, `fasterRaster` version 8.3 will work using `GRASS` 8.3 (and any earlier versions starting from 8.0). The values in `S1.S2` refer to "major" and "minor" versions of `fasterRaster`.  That is, a change in the value of `S1` (e.g., from `8.3.1.0` to `8.3.2.0`) indicates changes that potentially break older code developed with a prior version of `fasterRaster`.  A change in `S2` refers to a bug fix, additional functionaliy in an existing function, or the addition of an entirely new function.
 
 Note that the `M1.M2` and `S1.S2` increment independently. For example, if the version changes from `8.3.1.5` to `8.4.1.5`, then the new version has been tested on `GRASS` 8.4, but code developed with version `8.3.1.X` of `fasterRaster` should still work.
 
-**NOTE**: While `fasterRaster` is still in beta/alpha release, the vesion will look something like `8.3.0.7XXX`, following Hadley Wickham's guidelines for versioning under development.
+**NOTE**: While `fasterRaster` is still in beta/alpha release, the version will look something like `8.3.0.7XXX`, following Hadley Wickham's guidelines for versioning under development.
 
 # Further reading
 
