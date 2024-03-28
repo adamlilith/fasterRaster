@@ -258,10 +258,8 @@ The \code{\link[fasterRaster]{$<-}} operator can be used to replace specific col
 \subsection{General purpose functions}{
 
 \code{\link[=appendLists]{appendLists()}}: Append values to elements of a list from another list\cr
-\code{\link[=compareFloat]{compareFloat()}}: Compare values accounting for differences due to floating point precision\cr
 \code{\link[=compareGeom]{compareGeom()}}: Determine if geographic metadata is same between \code{GRaster}s and/or \code{GVector}s\cr
 \code{\link[=dropRows]{dropRows()}}: Remove rows from a \code{data.frame} or \code{data.table}\cr
-\code{\link[=forwardSlash]{forwardSlash()}}: Replace backslash with forward slash\cr
 \code{\link[=grassInfo]{grassInfo()}}: \strong{GRASS} version and citation\cr
 \code{\link[=replaceNAs]{replaceNAs()}}: Replace \code{NA}s in columns of a \code{data.table} or \code{data.frame}, or in a vector\cr
 \code{\link[=seqToSQL]{seqToSQL()}}: Format a numeric series into an SQL value call\cr

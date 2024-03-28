@@ -17,10 +17,10 @@ Spatial vectors (objects of class \code{sf} from the \strong{sf} package):
 \item \link{madRivers}: Major rivers (lines)
 }
 
-Rasters (objects of class \code{SpatRaster} from the \strong{terra} package):
+Rasters (objects of class \code{SpatRaster} from the \strong{terra} package, saved as GeoTIFF files):
 \itemize{
 \item \link{madChelsa}: Bioclimatic variables
-\item \link{madCover}: Land cover (also see \link{madCoverCats})
+\item \link{madCover}: Land cover (also see \code{madCoverCats})
 \item 
 \item \link{madForest2000}: Forest cover in year 2000
 \item \link{madForest2014}: Forest cover in year 2014
