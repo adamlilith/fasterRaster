@@ -39,7 +39,7 @@ methods::setMethod(
 	) {
 	
 	units <- omnibus::pmatchSafe(units, c("radians", "degrees"))
-	if (any(directions %% 1 != 0)) {
+	if (any(!omnibus::is.wholeNumber(directions))) {
 		directions <- floor(directions)
 		warning("Non-integer value(s) used for argument ", sQuote("directions"), ".\n  Value(s) rounded down (GRASS will do this anyway).")
 	}

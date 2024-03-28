@@ -45,13 +45,13 @@ methods::setMethod(
 
 	# expand region?
 	xp <- expand[1L]
-	xp <- compareFloat(xp, 0, "!=")
+	xp <- omnibus::compareFloat(xp, 0, "!=")
 
 	if (length(expand) == 1L) {
 		yp <- xp
 	} else {
 		yp <- expand[2L]
-		yp <- compareFloat(yp, 0, "!=")
+		yp <- omnibus::compareFloat(yp, 0, "!=")
 	}
 
 	if (xp | yp) {

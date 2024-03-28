@@ -26,7 +26,8 @@ methods::setMethod(
 
 	if (nlyr(x) < 2L) stop("Input raster must have 2 or more layers.")
 
-	if (percent %% 1 != 0) {
+	# if (percent %% 1 != 0) {
+	if (!omnibus::is.wholeNumber(percent)) {
 		warning("Argument ", sQuote("percent"), " must be an integer. Value will be rounded.")
 		percent <- round(percent)
 	}

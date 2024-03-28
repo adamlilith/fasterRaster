@@ -473,14 +473,14 @@ methods::setMethod(
 		top2 <- top(e2)
 		bottom1 <- bottom(e1)
 		bottom2 <- bottom(e2)
-		out <- out & compareFloat(top1, top2, "==") & compareFloat(bottom1, bottom2, "==") & ndepth(e1) == ndepth(e2)
+		out <- out & omnibus::compareFloat(top1, top2, "==") & omnibus::compareFloat(bottom1, bottom2, "==") & ndepth(e1) == ndepth(e2)
 	}
 
 	ext1 <- ext(e1, vector = TRUE)
 	ext2 <- ext(e2, vector = TRUE)
 	res1 <- res(e1)
 	res2 <- res(e2)
-	out <- out & all(compareFloat(ext1, ext2, "==")) & all(compareFloat(res1, res2, "=="))
+	out <- out & all(omnibus::compareFloat(ext1, ext2, "==")) & all(omnibus::compareFloat(res1, res2, "=="))
 
 	if (oper == "!=") out <- !out
 	out
@@ -533,14 +533,14 @@ methods::setMethod(
 # # # 		top2 <- top(e2)
 # # # 		bottom1 <- bottom(e1)
 # # # 		bottom2 <- bottom(e2)
-# # # 		out <- out & compareFloat(top1, top2, "==") & compareFloat(bottom1, bottom2, "==") & ndepth(e1) == ndepth(e2)
+# # # 		out <- out & omnibus::compareFloat(top1, top2, "==") & omnibus::compareFloat(bottom1, bottom2, "==") & ndepth(e1) == ndepth(e2)
 # # # 	}
 
 # # # 	ext1 <- ext(e1, vector = TRUE)
 # # # 	ext2 <- ext(e2, vector = TRUE)
 # # # 	res1 <- res(e1)
 # # # 	res2 <- res(e2)
-# # # 	out <- out & all(compareFloat(ext1, ext2, "==")) & all(compareFloat(res1, res2, "=="))
+# # # 	out <- out & all(omnibus::compareFloat(ext1, ext2, "==")) & all(omnibus::compareFloat(res1, res2, "=="))
 
 # # # 	if (oper == "!=") out <- !out
 # # # 	out
@@ -584,7 +584,7 @@ methods::setMethod(
 
 # # # 	ext1 <- ext(e1, vector = TRUE)
 # # # 	ext2 <- ext(e2, vector = TRUE)
-# # # 	out <- out & all(compareFloat(ext1, ext2, "==")) & all(compareFloat(res1, res2, "=="))
+# # # 	out <- out & all(omnibus::compareFloat(ext1, ext2, "==")) & all(omnibus::compareFloat(res1, res2, "=="))
 
 # # # 	if (oper == "!=") out <- !out
 # # # 	out

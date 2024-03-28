@@ -488,7 +488,7 @@ methods::setMethod(
 	} else if (inherits(x, "SpatRaster")) {
 		x <- dim(x)[1L:2L]
 	} else if (inherits(x, c("numeric", "integer"))) {
-		if (length(x) != 2L | any(x <= 0) |any(compareFloat(x %% 1, 0, "!="))) {
+		if (length(x) != 2L | any(x <= 0) | any(!omnibus::is.wholeNumber(x))) {
 			stop("Please supply a numeric vector of two positive integer values.")
 		}
 	}

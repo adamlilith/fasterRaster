@@ -121,7 +121,7 @@ methods::setMethod(
 			xres <- res(x)[1L:2L]
 			yres <- res(y[[i]])[1L:2L]
 			
-			if (!all(compareFloat(xres, yres, "=="))) {
+			if (!all(omnibus::compareFloat(xres, yres, "=="))) {
 				msg <- "The rasters have a different horizontal resolutions."
 				if (stopOnError) stop(msg)
 				if (messages & !stopOnError) warning(msg)
@@ -145,7 +145,7 @@ methods::setMethod(
 					if (stopOnError) stop(msg)
 					if (messages & !stopOnError) warning(msg)
 					out <- FALSE
-				} else if (compareFloat(xzres, yzres, "!=")) {
+				} else if (omnibus::compareFloat(xzres, yzres, "!=")) {
 					if (stopOnError) stop(msg)
 					if (messages & !stopOnError) warning(msg)
 					out <- FALSE
@@ -366,7 +366,7 @@ methods::setMethod(f = "compareGeom",
 	
 	xx <- ext(x, vector=TRUE)
 	yy <- ext(y, vector=TRUE)
-	if (any(compareFloat(xx, yy, "!="))) {
+	if (any(omnibus::compareFloat(xx, yy, "!="))) {
 		msg <- "The objects have different extents."
 		if (stopOnError) stop(msg)
 		if (messages & !stopOnError) warning(msg)
@@ -395,13 +395,13 @@ methods::setMethod(f = "compareGeom",
 			if (messages & !stopOnError) warning(msg)
 			out <- FALSE
 		}
-		if (compareFloat(xbottom, ybottom, "!=")) {
+		if (omnibus::compareFloat(xbottom, ybottom, "!=")) {
 			msg <- "Objects have different vertical extents."
 			if (stopOnError) stop(msg)
 			if (messages & !stopOnError) warning(msg)
 			out <- FALSE
 		}
-		if (compareFloat(xtop, ytop, "!=")) {
+		if (omnibus::compareFloat(xtop, ytop, "!=")) {
 			stop("Objects have different vertical extents.")
 			if (stopOnError) stop(msg)
 			if (messages & !stopOnError) warning(msg)

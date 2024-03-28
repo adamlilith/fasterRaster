@@ -238,10 +238,8 @@
 #'
 #' ## General purpose functions
 #' [appendLists()]: Append values to elements of a list from another list\cr
-#' [compareFloat()]: Compare values accounting for differences due to floating point precision\cr
 #' [compareGeom()]: Determine if geographic metadata is same between `GRaster`s and/or `GVector`s\cr
 #' [dropRows()]: Remove rows from a `data.frame` or `data.table`\cr
-#' [forwardSlash()]: Replace backslash with forward slash\cr
 #' [grassInfo()]: **GRASS** version and citation\cr
 #' [replaceNAs()]: Replace `NA`s in columns of a `data.table` or `data.frame`, or in a vector\cr
 #' [seqToSQL()]: Format a numeric series into an SQL value call\cr

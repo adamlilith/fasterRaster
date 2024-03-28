@@ -19,7 +19,7 @@ setMethod(
 	signature(x = "GVector"),
 	function(x, ...) {
 
-	filename <- paste0(forwardSlash(tempfile()), ".gpkg")
+	filename <- paste0(omnibus::forwardSlash(tempfile()), ".gpkg")
 	out <- writeVector(x, filename = filename, ...)
 	out
 	} # EOF

@@ -45,9 +45,9 @@ methods::setMethod(
     signature = c(x = "GRaster"),
     function(x, w = 3, fun = "sum", circle = FALSE, quantile = 0.5) {
 
-	if (inherits(w, "numeric") && (w < 3 | compareFloat(w %% 2, 0, "=="))) stop("Argument `w` must be an odd integer >= 3.")
+	if (inherits(w, "numeric") && (w < 3 | omnibus::compareFloat(w %% 2, 0, "=="))) stop("Argument `w` must be an odd integer >= 3.")
 	
-	if (inherits(w, "matrix") && (nrow(w) != ncol(w) | compareFloat(nrow(w) %% 2, 0, "==") | compareFloat(ncol(w) %% 2, 0, "=="))) stop("Matrix `w` must have the same number of rows and columns, and it must have an odd number of each.")
+	if (inherits(w, "matrix") && (nrow(w) != ncol(w) | omnibus::compareFloat(nrow(w) %% 2, 0, "==") | omnibus::compareFloat(ncol(w) %% 2, 0, "=="))) stop("Matrix `w` must have the same number of rows and columns, and it must have an odd number of each.")
 	
 	if (is.matrix(w) & circle) ("Cannot use a circular neighborhood and a weights matrix at the same time.")
 	

@@ -49,7 +49,7 @@ methods::setMethod(
 		if (inherits(y, "GVector")) {
 			cells <- floor(cells)
 		} else if (inherits(y, "GRaster")) {
-   			if (compareFloat(cells, round(cells), "==")) {
+   			if (omnibus::is.wholeNumber(cells)) {
 				cells <- round(cells)
 			} else {
 				cells <- floor(cells)
@@ -65,7 +65,7 @@ methods::setMethod(
   		if (inherits(y, "GVector")) {
 			cells <- floor(cells)
 		} else if (inherits(y, "GRaster")) {
-   			if (compareFloat(cells, round(cells), "==")) {
+   			if (omnibus::is.wholeNumber(cells)) {
 				cells <- round(cells)
 			} else {
 				cells <- ceiling(cells)
