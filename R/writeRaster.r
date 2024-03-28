@@ -17,13 +17,16 @@
 #'    | `integer`          | `INT1U`     | `CELL`      | `Byte`     | Integer values from 0 to 255 |
 #'    | `integer`          | `INT2U`     | `CELL`      | `UInt16`   | Integer values from 0 to 65,534 |
 #'    | `integer`          | `INT2S`     | `CELL`      | `Int16`    | Integer values from -32,767 to -32,767 |
-#'    | `integer`          | na          | `CELL`      | `Int32`    | Integer values from 0 to 4,294,967,295 |
-#'    | `integer`          | `INT4S`     | `CELL`      | `Int32`    | Integer values from -2,147,483,647 to 2,147,483,647 |
-#'    | `float`            | `FLT4S`     | `FCELL`     | `Float32`  | Values from -3.4e+38 to 3.4e+38, including decimal values |
-#'    | `double`           | `FLT8S`     | `DCELL`     | `Float64`  | Values from -1.79e+308 to 1.79e+308, including decimal values |
+#'    | `integer`          | na          | `CELL`      | `Int32`*   | Integer values from 0 to 4,294,967,295 |
+#'    | `integer`          | `INT4S`     | `CELL`      | `Int32`*   | Integer values from -2,147,483,647 to 2,147,483,647 |
+#'    | `float`            | `FLT4S`     | `FCELL`     | `Float32`  | Values from -3.4E+38 to 3.4E+38, including decimal values |
+#'    | `double`           | `FLT8S`     | `DCELL`     | `Float64`  | Values from -1.79E+308 to 1.79E+308, including decimal values |
 #'    | `factor`           | `INT`*      | `CELL`      | `INT*`     | Integer values corresponding to categories
 #'
-#' `*` Depends on the integers (signed/unsigned, range of values). Categorical rasters will have a CSV file with category values and labels saved with them. The file name will be the same as the raster's file name, but end in extension ".csv".
+#' `*` Note that when the raster is written to disk, the GDAL datatype is used, regardless of whether the **fasterRaster**-, **terra**-, or **GRASS**-style datatype was provided.
+#' `**` Depends on the integers (signed/unsigned, range of values). Categorical rasters will have a CSV file with category values and labels saved with them. The file name will be the same as the raster's file name, but end in extension ".csv".
+#'
+#' @param mm Logical: If `TRUE`, call [terra::setMinMax()] on the raster to ensure it has metadata on the minimum and maximum values. For large rasters, this can take a long time, so the default value of `mm` is `FALSE`. This is only useful if you assign a raster to the output of `writeRaster`, as in `x <- writeRaster(my_raster, filename = './raster_file.tif', mm = TRUE)`.
 #'
 #' @param warn Logical: If `TRUE` (default), display a warning if the `datatype` argument does not match the value given by `datatype(x, "GDAL")`.
 #'
@@ -41,7 +44,7 @@
 #' * Additional arguments to send to **GRASS** modules `r.out.gdal` and `r.out.ascii`.
 #' * `precision`: Numeric: For ASCII files, you may need to state the number of significant digits. 32-bit values have 7 digits and 64-bit values have 16. So in these cases the argument would be `precision=7` or `precision=16`.
 #'
-#' @return A `SpatRaster` (invisibly). A raster is also saved to disk.
+#' @returns A `SpatRaster` (invisibly). A raster is also saved to disk.
 #'
 #' @seealso [terra::writeRaster()], module [`r.out.gdal`](https://grass.osgeo.org/grass84/manuals/r.out.gdal.html) in **GRASS**
 #'
@@ -60,6 +63,7 @@ setMethod(
 		filename,
 		overwrite = FALSE,
 		datatype = NULL,
+		mm = FALSE,
 		warn = TRUE,
 		...
 	) {
@@ -132,9 +136,31 @@ setMethod(
 		
 		# data type
 		if (is.null(datatype)) datatype <- datatype(x, "GDAL")
+
+		if (any(datatype == "factor")) {
+
+			bounds <- minmax(x)
+			mins <- bounds["min", ]
+			maxs <- bounds["max", ]
+
+			if (all(mins >= 0L & maxs <= 255L)) {
+				datatype <- "Byte"
+			} else if (all(mins >= 0L & maxs <= 65534L)) {
+				datatype <- "UInt16"
+			} else if (any(mins < 0L) & all(maxs >= -32767L) & all(maxs <= 32767L)) {
+				datatype <- "Int16"
+			} else if (any(mins < 0L) & all(maxs >= -2147483647L) & all(maxs <= -2147483647)) {
+				datatype <- "Int32"
+			} else if (all(mins >= -3.4E+38) & all(maxs <= 3.4E+38)) {
+				datatype <- "Float32"
+			} else {
+				datatype <- "Float64"
+			}
+
+		}
 		
-		# if (any(datatype == "INT1U")) datatype[datatype == "INT1U"] <- "Byte" # will not write, for some reason
-		if (any(datatype == "INT1U")) datatype[datatype == "INT1U"] <- "UInt16"
+		if (any(datatype == "INT1U")) datatype[datatype == "INT1U"] <- "Byte" # will not write, for some reason
+		# if (any(datatype == "INT1U")) datatype[datatype == "INT1U"] <- "UInt16"
 		if (any(datatype == "INT2U")) datatype[datatype == "INT2U"] <- "UInt16"
 		if (any(datatype == "INT2S")) datatype[datatype == "INT2S"] <- "Int32"
 		if (any(datatype == "FLT4S")) datatype[datatype == "FLT4S"] <- "Float32"
@@ -150,13 +176,13 @@ setMethod(
 			} else if (any(datatype == "UInt16")) {
 				"UInt16"
 			} else if (any(datatype == "Byte")) {
-				# "Byte"
-				"UInt16"
+				"Byte" # Will not write, for some reason
+				# "UInt16"
 			}
 			
 		}
 
-		if (any(datatype(x) != "integer") & any(datatype %in% c("Byte", "UInt16", "Int32"))) {
+		if (any(datatype(x) %in% c("integer", "factor")) & !(datatype %in% c("Byte", "UInt16", "Int32"))) {
 			stop("Trying to save non-integer rasters with an integer datatype. Try changing the datatype of\n  the rasters using, for example, as.int() or round(), or set `datatype` to `FLT4S` or `FLT8S`.")
 		}
 
@@ -203,6 +229,7 @@ setMethod(
 		)
 
 	}
+	
 	isFact <- is.factor(x)
 	if (any(isFact)) {
 
@@ -222,6 +249,7 @@ setMethod(
 		}
 	}
 	
+	if (mm) out <- terra::setMinMax(out)	
 	invisible(out)
 	
 	} # EOF
