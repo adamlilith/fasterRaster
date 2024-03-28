@@ -14,7 +14,7 @@
   cores = faster("cores")
 )
 
-\S4method{fragmentation}{GRaster}(x, undet = "perforated", restrict = FALSE)
+\S4method{fragmentation}{GRaster}(x, w = 3, undet = "perforated", restrict = FALSE)
 }
 \arguments{
 \item{x}{A \code{SpatRaster} or \code{GRaster}.}
@@ -31,9 +31,7 @@
 A categorical \code{SpatRaster} or \code{GRaster}. The values assigned to each class can be seen with \code{\link[=levels]{levels()}}.
 }
 \description{
-Riitters et al. (2020) propose a classification scheme for forest fragmentation (which can be applied to any habitat type). The scheme relies on calculating density (e.g., number of forested cells in a window around a focal cell) and connectivity (number of cases where neighboring cells are both forested). These values are used to assign classes to each cell: "patch," "transitional," "perforated," "edge," and "interior" (plus an "undetermined" class for an edge case). To this, we also add a "none" class which occurs when the window has no cells with the focal habitat. This function calculates these classes from a \code{GRaster} or \code{SpatRaster} in which the focal habitat type has cell values of 1, and non-focal habitat type has cell values of 0 or \code{NA}.
-
-\emph{Currently, this function only operates on a 3x3 window of cells.}
+Riitters et al. (2020) propose a classification scheme for forest fragmentation (which can be applied to any habitat type). The scheme relies on calculating density (e.g., number of forested cells in a window around a focal cell) and connectivity (number of cases where neighboring cells are both forested). These values are used to assign classes to each cell: "patch," "transitional," "perforated," "edge," and "interior" (plus an optional "undetermined" class for an edge case). To this, we also add a "none" class which occurs when the focal cell's window has no cells with the focal habitat. This function calculates these classes from a \code{GRaster} or \code{SpatRaster} in which the focal habitat type has cell values of 1, and non-focal habitat type has cell values of 0 or \code{NA}.
 }
 \examples{
 if (grassStarted()) {
@@ -59,7 +57,7 @@ plot(fragTerras)
 levels(fragTerras)
 
 ### Fragmentation classes from a GRaster
-########################################
+########################################r
 
 # Convert to GRaster:
 forest <- fast(madForest)
