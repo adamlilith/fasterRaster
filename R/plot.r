@@ -72,3 +72,20 @@ methods::setMethod(
 	
 	} # EOF
 )
+
+#' Plot using a G-object's [sources()] name
+#'
+#' @param x The [sources()] name of a `GRaster` or `GVector`
+#' @param ... Other arguments to pass to [plot()].
+#'
+#' @noRd
+.plot <- function(x, ...) {
+	files <- .ls()
+	what <- names(files)[files == x]
+	if (what == "raster") {
+		x <- .makeGRaster(x)
+	} else if (what == "vector") {
+		x <- .makeGVector(x)
+	}
+	plot(x, ...)
+}

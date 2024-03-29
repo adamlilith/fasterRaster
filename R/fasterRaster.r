@@ -280,6 +280,7 @@
 #' `.message()`: Display a warning or message if the given warning has not been displayed since **fasterRaster** was attached or if a given number or hours has passed since then\cr
 #' `.minVal()` and `.maxVal()`: Values in the `@minVal` and `@maxVal` slots in a `GRaster`\cr
 #' `.nlevels()`: Number of levels in a `SpatVector`, `data.frame`, `data.table`, empty string, or a list of `data.frame`s, `data.table`s, and/or empty strings.\cr
+#' `.plot()`: Plot using the [sources()] name of a `GRaster` or `GVector`\cr
 #' `.projection()`: Value of the `@projection` slot in a `GRaster` or `GVector`\cr
 #' `.quiet()`: Returns "quiet" if `faster("verbose")` is `TRUE`\cr
 #' `.rastInfo()` and `.vectInfo()`: Metadata for a **GRASS** raster or vector\cr
