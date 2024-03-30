@@ -304,6 +304,7 @@ Tutorial on \strong{GRASS} \link[=tutorial_locations_mapsets]{"locations" and ma
 \code{.message()}: Display a warning or message if the given warning has not been displayed since \strong{fasterRaster} was attached or if a given number or hours has passed since then\cr
 \code{.minVal()} and \code{.maxVal()}: Values in the \verb{@minVal} and \verb{@maxVal} slots in a \code{GRaster}\cr
 \code{.nlevels()}: Number of levels in a \code{SpatVector}, \code{data.frame}, \code{data.table}, empty string, or a list of \code{data.frame}s, \code{data.table}s, and/or empty strings.\cr
+\code{.plot()}: Plot using the \code{\link[=sources]{sources()}} name of a \code{GRaster} or \code{GVector}\cr
 \code{.projection()}: Value of the \verb{@projection} slot in a \code{GRaster} or \code{GVector}\cr
 \code{.quiet()}: Returns "quiet" if \code{faster("verbose")} is \code{TRUE}\cr
 \code{.rastInfo()} and \code{.vectInfo()}: Metadata for a \strong{GRASS} raster or vector\cr
