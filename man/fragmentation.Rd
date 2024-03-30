@@ -19,13 +19,13 @@
 \arguments{
 \item{x}{A \code{SpatRaster} or \code{GRaster}.}
 
-\item{w}{An odd, positive integer: Size of the window across which fragmentation is calculated (in units of "rows" and "columns"). The default is 3, meaning the function uses a 3x3 moving window to calculate fragmentation.}
+\item{w}{An odd, positive integer: Size of the window across which fragmentation is calculated (in units of "rows" and "columns"). The default is 3, meaning the function uses a 3x3 moving window to calculate fragmentation. For large rasters, compute time is ~\emph{O}(\code{N}) + \emph{O}(\code{N * w^2}), where \code{N} is the number of cells in the raster. So, even a small increase in \code{w} can increase compute time by a lot.}
 
 \item{undet}{Character: How to assign the "undetermined" case. Valid values are \code{"perforated"} (default), \code{"edge"}, and \code{"undetermined"}. Partial matching is used. If \code{Pf} is the proportional density raster cell value and \code{Pff} the proportional connectivity raster cell value, the undetermined case occurs when \code{Pf} > 0.6 and \code{Pf == Pff}.}
 
-\item{restrict}{Logical: If \code{TRUE}, then fragmentation will only be assigned to cells that have the focal habitat within them. If \code{FALSE} (default), cells surrounding the focal habitat class can also be assigned a fragmentation class other than 0, even if they do not have the focal habitat in them. Note that the case where \code{restrict = TRUE} is a departure from Riitters et al. (2020), but it allows you to create a series of fragmentation rasters for different habitat classes where cells with classes(other than 0) do not overlap.}
+\item{restrict}{Logical: If \code{TRUE}, then fragmentation will only be assigned to cells that have the focal habitat within them. If \code{FALSE} (default), cells surrounding the focal habitat class can also be assigned a fragmentation class other than 0, even if they do not have the focal habitat in them. Note that the case where \code{restrict = TRUE} is a departure from Riitters et al. (2020).}
 
-\item{cores}{Integer: Number of processor cores to use for when processing a \code{SpatRaster}. This is only used if \code{mask} is \code{TRUE}. If you want to use multiple cores for processing a \code{GRaster}, set the \code{cores} option using \code{faster(cores = N)} (see \code{\link[=faster]{faster()}}).}
+\item{cores}{Integer: Number of processor cores to use for when processing a \code{SpatRaster}.}
 }
 \value{
 A categorical \code{SpatRaster} or \code{GRaster}. The values assigned to each class can be seen with \code{\link[=levels]{levels()}}.
@@ -51,13 +51,13 @@ fragTerraMasked <- fragmentation(madForest, restrict = TRUE)
 
 # Compare:
 fragTerras <- c(fragTerra, fragTerraMasked)
-names(fragTerras) <- c("unmasked", "masked")
+names(fragTerras) <- c("unrestricted", "restricted")
 
 plot(fragTerras)
 levels(fragTerras)
 
 ### Fragmentation classes from a GRaster
-########################################r
+########################################
 
 # Convert to GRaster:
 forest <- fast(madForest)
@@ -68,7 +68,7 @@ fragMasked <- fragmentation(forest, restrict = TRUE)
 
 # Compare:
 frags <- c(frag, fragMasked)
-names(frags) <- c("unmasked", "masked")
+names(frags) <- c("unrestricted", "restricted")
 
 plot(frags)
 levels(frags)

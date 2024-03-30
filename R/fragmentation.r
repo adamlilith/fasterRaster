@@ -1,18 +1,16 @@
 #' Landscape fragmentation class following Riitters et al. (2020)
 #'
-#' @description Riitters et al. (2020) propose a classification scheme for forest fragmentation (which can be applied to any habitat type). The scheme relies on calculating density (e.g., number of forested cells in a window around a focal cell) and connectivity (number of cases where neighboring cells are both forested). These values are used to assign classes to each cell: "patch," "transitional," "perforated," "edge," and "interior" (plus an "undetermined" class for an edge case). To this, we also add a "none" class which occurs when the window has no cells with the focal habitat. This function calculates these classes from a `GRaster` or `SpatRaster` in which the focal habitat type has cell values of 1, and non-focal habitat type has cell values of 0 or `NA`.
-#'
-#' *Currently, this function only operates on a 3x3 window of cells.*
+#' @description Riitters et al. (2020) propose a classification scheme for forest fragmentation (which can be applied to any habitat type). The scheme relies on calculating density (e.g., number of forested cells in a window around a focal cell) and connectivity (number of cases where neighboring cells are both forested). These values are used to assign classes to each cell: "patch," "transitional," "perforated," "edge," and "interior" (plus an optional "undetermined" class for an edge case). To this, we also add a "none" class which occurs when the focal cell's window has no cells with the focal habitat. This function calculates these classes from a `GRaster` or `SpatRaster` in which the focal habitat type has cell values of 1, and non-focal habitat type has cell values of 0 or `NA`.
 #'
 #' @param x A `SpatRaster` or `GRaster`.
 #'
-#' @param w An odd, positive integer: Size of the window across which fragmentation is calculated (in units of "rows" and "columns"). The default is 3, meaning the function uses a 3x3 moving window to calculate fragmentation.
+#' @param w An odd, positive integer: Size of the window across which fragmentation is calculated (in units of "rows" and "columns"). The default is 3, meaning the function uses a 3x3 moving window to calculate fragmentation. For large rasters, compute time is ~*O*(`N`) + *O*(`N * w^2`), where `N` is the number of cells in the raster. So, even a small increase in `w` can increase compute time by a lot.
 #'
 #' @param undet Character: How to assign the "undetermined" case. Valid values are `"perforated"` (default), `"edge"`, and `"undetermined"`. Partial matching is used. If `Pf` is the proportional density raster cell value and `Pff` the proportional connectivity raster cell value, the undetermined case occurs when `Pf` > 0.6 and `Pf == Pff`.
 #'
-#' @param restrict Logical: If `TRUE`, then fragmentation will only be assigned to cells that have the focal habitat within them. If `FALSE` (default), cells surrounding the focal habitat class can also be assigned a fragmentation class other than 0, even if they do not have the focal habitat in them. Note that the case where `restrict = TRUE` is a departure from Riitters et al. (2020), but it allows you to create a series of fragmentation rasters for different habitat classes where cells with classes(other than 0) do not overlap.
+#' @param restrict Logical: If `TRUE`, then fragmentation will only be assigned to cells that have the focal habitat within them. If `FALSE` (default), cells surrounding the focal habitat class can also be assigned a fragmentation class other than 0, even if they do not have the focal habitat in them. Note that the case where `restrict = TRUE` is a departure from Riitters et al. (2020).
 #'
-#' @param cores Integer: Number of processor cores to use for when processing a `SpatRaster`. This is only used if `mask` is `TRUE`. If you want to use multiple cores for processing a `GRaster`, set the `cores` option using `faster(cores = N)` (see [faster()]).
+#' @param cores Integer: Number of processor cores to use for when processing a `SpatRaster`.
 #'
 #' @returns A categorical `SpatRaster` or `GRaster`. The values assigned to each class can be seen with [levels()].
 #'
@@ -29,9 +27,7 @@ methods::setMethod(
 	function(x, w = 3, undet = "perforated", restrict = FALSE, cores = faster("cores")) {
 
 	# errors?
-	if (w %% 2 == 0 | w < 1L) stop("Argument ", sQuote("w"), " must be an odd, positive integer.")
-	undet <- omnibus::pmatchSafe(undet, c("undetermined", "perforated", "edge"), nmax = 1L)
-
+	if (!omnibus::is.wholeNumber(w) || w < 1L || w %% 2 == 0) stop("Argument ", sQuote("w"), " must be an odd, positive integer.")
 	undet <- omnibus::pmatchSafe(undet, c("undetermined", "perforated", "edge"), nmax = 1L)
 
 	# setup
@@ -82,9 +78,11 @@ methods::setMethod(
 	for (i in seq_len(nLayers)) {
 
 		xx <- x[[i]]
+		xx <- terra::app(xx, fun = function(x) ifelse(is.na(x), 0L, x), cores = cores)
 
 		unis <- unique(xx)
-		if (length(unis) > 2L || (length(unis) == 1L & unis != 1L)) {
+		unis <- unis[ , 1L]
+		if (length(unis) != 2L) {
 			stop("The raster must have values of 0 and 1, NA and 1,\n  or the values must be all NA, all 0, or all 1.")
 		}
 
@@ -92,10 +90,10 @@ methods::setMethod(
 		for (j in seq_along(cells)) {
 		
 			pair <- cells[[j]]
-			w <- ww
-			w[pair] <- 1L
+			www <- ww
+			www[pair] <- 1L
 
-			connectivities[[j]] <- focal(xx, w = w, fun = 'sum', na.rm = TRUE)
+			connectivities[[j]] <- focal(xx, w = www, fun = 'sum', na.rm = TRUE)
 
 		}
 
@@ -118,7 +116,7 @@ methods::setMethod(
 		pff <- pff_neighs / pff_forests
 
 		# calculate cover
-		pf <- terra::focal(x, w = 3, "mean", na.rm = TRUE)
+		pf <- terra::focal(xx, w = w, "mean", na.rm = TRUE)
 
 		### assign classes
 		thisOut <- xx * 0L
@@ -141,16 +139,16 @@ methods::setMethod(
 		# perforated
 		if (undet == 'perforated') {
 			mask <- pf > 0.6 & diff >= 0 & notInteriorMask
-		} else if (undet %in% c('edge', 'undetermined')) {
+		} else {
 			mask <- pf > 0.6 & diff > 0 & notInteriorMask
 		}
 		thisOut <- terra::mask(thisOut, mask, maskvalues = 1L, updatevalue = 3L)
 
 		# edge
-		if (undet == 'perforated') {
-			mask <- pf > 0.6 & diff > 0 & notInteriorMask
-		} else if (undet == 'edge') {
-			mask <- pf > 0.6 & diff >= 0 & notInteriorMask
+		if (undet == 'edge') {
+			mask <- pf > 0.6 & diff <= 0 & notInteriorMask
+		} else {
+			mask <- pf > 0.6 & diff < 0 & notInteriorMask
 		}
 		thisOut <- terra::mask(thisOut, mask, maskvalues = 1L, updatevalue = 4L)
 
@@ -200,13 +198,22 @@ methods::setMethod(
 methods::setMethod(
 	f = "fragmentation",
 	signature = c(x = "GRaster"),
-	function(x, undet = "perforated", restrict = FALSE) {
+	function(x, w = 3, undet = "perforated", restrict = FALSE) {
 
-stop("As of 2024.02.26, fragmentation() does not work for GRasters. A fix is in process.")
+	undet <- omnibus::pmatchSafe(undet, c("perforated", "edge", "undetermined"), nmax = 1L)
 
 	mm <- minmax(x)
 	msg <- "Raster must be binary (only 1 and/or 0, with NAs allowed."
 	if (any(!(mm[1L, ] %in% c(0L, 1L))) | any(mm[2L, ] != 1L)) stop(msg)
+
+	# force to integer to obviate issues with floating-point precision
+	dtype <- datatype(x)
+	if (any(dtype != "integer")) {
+		nonIntegers <- which(dtype != "integer")
+		for (i in nonIntegers) {
+			x[[i]] <- as.int(x[[i]])
+		}
+	}
 
 	# setup
 	.locationRestore(x)
@@ -217,36 +224,33 @@ stop("As of 2024.02.26, fragmentation() does not work for GRasters. A fix is in 
 	# assess if each pair of neighboring cell in cardinal direction has 1 or 2 forested cells or not (0 = no, 1 = 1 cell, 2 = 2 cells)
 	ww <- matrix(0L, w, w)
 
-	# list of offset pairs relative to focal cell in cardinal directions
-	# first 2 values are offset from focal cell in rows/cols of 1st cell
-	# second 2 values are offset from focal cell in rows/cols of 2nd cell
-	offsets <- list()
-	split <- (w - 1L) / 2L
+	#### calculate connectivities for Pff
 
-	# left-to-right neighbors
-	for (i in split:(-1L * split + 1L)) {
-		for (j in split:(-1L * split)) {
-		
-			offsets[[length(offsets) + 1L]] <- c(i, i + 1L)
-		
+	# list of offset pairs relative to focal cell in cardinal directions
+	offsets <- list()
+	center <- (w + 1L) / 2L
+	
+	# get left-right cell pairs referenced by offset from window center
+	i <- 1L
+	for (row in seq_len(w)) {
+		for (col in 1L:(w - 1L)) {
+
+			offsets[[i]] <- c(row - center, col - center, row - center, col - center + 1L)
+			i <- i + 1L
+
 		}
 	}
 
+	# get up-down cell pairs referenced by offset from window center
+	i <- length(offsets) + 1L
+	for (row in 1L:(w - 1L)) {
+		for (col in seq_len(w)) {
 
-	offsets <- list(
-		c(1L, 2L),
-		c(1L, 4L),
-		c(4L, 5L),
-		c(4L, 7L),
-		c(7L, 8L),
-		c(2L, 3L),
-		c(2L, 5L),
-		c(5L, 6L),
-		c(5L, 8L),
-		c(8L, 9L),
-		c(3L, 6L),
-		c(6L, 9L)
-	)
+			offsets[[i]] <- c(row - center, col - center, row - center + 1L, col - center)
+			i <- i + 1L
+
+		}
+	}
 
 	# for each layer
 	srcs <- rep(NA_character_, nLayers)
@@ -254,24 +258,24 @@ stop("As of 2024.02.26, fragmentation() does not work for GRasters. A fix is in 
 
 		### remove NAs
 		srcIn <- sources(x)
-		src <- .makeSourceName("r_mapcalc", "raster")
+		src <- .makeSourceName("fragmentation_x_noNAs", "raster")
 		ex <- paste0(src, " = if(isnull(", srcIn, "), 0, ", srcIn, ")")
 		rgrass::execGRASS("r.mapcalc", expression = ex, flags = c(.quiet(), "overwrite"))
 
 		### connectivities (for Pff)
-		srcConnectivities <- .makeSourceName("r_mapcalc", "raster", n = length(cells))
-		srcEither <- .makeSourceName("r.mapcalc", "raster", n = length(offsets))
-		srcBoth <- .makeSourceName("r.mapcalc", "raster", n = length(offsets))
+		srcConnectivities <- .makeSourceName("fragmentation_connectivities", "raster", n = length(offsets))
+		srcEither <- .makeSourceName("fragmentation_either", "raster", n = length(offsets))
+		srcBoth <- .makeSourceName("fragmentation_both", n = length(offsets))
 		for (j in seq_along(offsets)) {
 
 			# tally occurrences of habitat in each pair of cells		
-			y1 <- cells[[i]][1L]
-			x1 <- cells[[i]][2L]
+			y1 <- offsets[[j]][1L]
+			x1 <- offsets[[j]][2L]
 			
-			y2 <- cells[[i]][3L]
-			x2 <- cells[[i]][4L]
+			y2 <- offsets[[j]][3L]
+			x2 <- offsets[[j]][4L]
 
-			ex <- paste0(srcConnectivities[j], " = ", inSrc, "[", y, ",", x, "] + ", inSrc, "[", y, ",", x, "])")
+			ex <- paste0(srcConnectivities[j], " = ", src, "[", y1, ",", x1, "] + ", src, "[", y2, ",", x2, "]")
 			rgrass::execGRASS("r.mapcalc", expression = ex, flags = c(.quiet(), "overwrite"))
 
 			# does either cell in a pair have habitat?
@@ -285,26 +289,27 @@ stop("As of 2024.02.26, fragmentation() does not work for GRasters. A fix is in 
 		}
 
 		# number of neighbor cell pairs with at least one with habitat
-		srcNumEithers <- .makeSourceName("r_mapcapc", "raster")
-		ex <- paste0(srcNumEithers, " = ", paste(srcBoth, collapse = " + "))
+		srcNumEithers <- .makeSourceName("fragmentation_sum_eithers", "raster")
+		ex <- paste0(srcNumEithers, " = ", paste(srcEither, collapse = " + "))
 		rgrass::execGRASS("r.mapcalc", expression = ex, flags = c(.quiet(), "overwrite"))
 
 		# number of neighbor cell pairs both with habitat
-		srcNumBoths <- .makeSourceName("r_mapcapc", "raster")
+		srcNumBoths <- .makeSourceName("fragmentation_sum_both", "raster")
 		ex <- paste0(srcNumBoths, " = ", paste(srcBoth, collapse = " + "))
 		rgrass::execGRASS("r.mapcalc", expression = ex, flags = c(.quiet(), "overwrite"))
 
 		# calculate Pff
-		srcPff <- .makeSourceName("r_mapcalc", "raster")
-		ex <- paste0(srcPff, " = ", srcNumBoths, " / ", srcNumEithers)
+		srcPff <- .makeSourceName("fragmentation_pff", "raster")
+		ex <- paste0(srcPff, " = ", faster("rasterPrecision"), "(", srcNumBoths, ") / ", faster("rasterPrecision"), "(", srcNumEithers, ")")
+		rgrass::execGRASS("r.mapcalc", expression = ex, flags = c(.quiet(), "overwrite"))
 
-		# calculate cover
-		srcPf <- .makeSourceName("r_neighbors", "raster")
+		# calculate cover (Pf)
+		srcPf <- .makeSourceName("fragmentation_pf", "raster")
 		rgrass::execGRASS(
 			cmd = "r.neighbors",
-			input = srcIn,
+			input = src,
 			output = srcPf,
-			size = 3,
+			size = w,
 			method = "average",
 			nprocs = faster("cores"),
 			memory = faster("memory"),
@@ -312,24 +317,24 @@ stop("As of 2024.02.26, fragmentation() does not work for GRasters. A fix is in 
 		)
 
 		# calculate difference between pf and pff (used for "perforated", "edge", and "indeterminate" cases)
-		srcDelta <- .makeSourceName("r.mapcalc", "raster")
-		ex <- paste0(srcDelta, " = ", pfSrc, " - ", pffSrc)
+		srcDelta <- .makeSourceName("fragmentation_delta", "raster")
+		ex <- paste0(srcDelta, " = ", srcPf, " - ", srcPff)
 		rgrass::execGRASS("r.mapcalc", expression = ex, flags = c(.quiet(), "overwrite"))
 
 		### assign classes
-		src <- .makeSourceName("r_mapcalc", "raster")
+		src <- .makeSourceName("fragmentation_class", "raster")
 		
-		if (indet == "indeterminate") {
+		if (undet == "indeterminate") {
 		
-			ex <- paste0(src, " = if (", pfSrc, " == 0, 0, if (", pfSrc, " == 1 & ", pffSrc, " == 1, 6, if (", pfSrc, " <= 0.4, 1, if (", pfSrc, " <= 0.6, 2, if (", srcDelta, " > 0, 3, if (", srcDelta, " < 0, 4, if (", srcDelta, ", 5, null())))))))")
+			ex <- paste0(src, " = if (", srcPf, " == 0, 0, if (", srcPf, " == 1 & ", srcPff, " == 1, 6, if (", srcPf, " <= 0.4, 1, if (", srcPf, " <= 0.6, 2, if (", srcDelta, " > 0, 3, if (", srcDelta, " < 0, 4, if (", srcDelta, ", 5, null())))))))")
 
-		} else if (indet == "edge") {
+		} else if (undet == "edge") {
 		
-			ex <- paste0(src, " = if (", pfSrc, " == 0, 0, if (", pfSrc, " == 1 & ", pffSrc, " == 1, 6, if (", pfSrc, " <= 0.4, 1, if (", pfSrc, " <= 0.6, 2, if (", srcDelta, " > 0, 3, if (", srcDelta, " <= 0, 4, null()))))))")
+			ex <- paste0(src, " = if (", srcPf, " == 0, 0, if (", srcPf, " == 1 & ", srcPff, " == 1, 6, if (", srcPf, " <= 0.4, 1, if (", srcPf, " <= 0.6, 2, if (", srcDelta, " > 0, 3, if (", srcDelta, " <= 0, 4, null()))))))")
 
-		} else if (indet == "perfortated") {
+		} else if (undet == "perforated") {
 		
-			ex <- paste0(src, " = if (", pfSrc, " == 0, 0, if (", pfSrc, " == 1 & ", pffSrc, " == 1, 6, if (", pfSrc, " <= 0.4, 1, if (", pfSrc, " <= 0.6, 2, if (", srcDelta, " >= 0, 3, if (", srcDelta, " < 0, 4, null()))))))")
+			ex <- paste0(src, " = if (", srcPf, " == 0, 0, if (", srcPf, " == 1 & ", srcPff, " == 1, 6, if (", srcPf, " <= 0.4, 1, if (", srcPf, " <= 0.6, 2, if (", srcDelta, " >= 0, 3, if (", srcDelta, " < 0, 4, null()))))))")
 		
 		}
 
@@ -351,23 +356,33 @@ stop("As of 2024.02.26, fragmentation() does not work for GRasters. A fix is in 
 		# 	)"
 		# )
 
-		# if masking to just
+		# if masking to just focal habitat
 		if (restrict) {
+
+			# multiply by focal habitat (1)/non-focal habitat (0 or NA)
+			srcMask <- .makeSourceName("fragmentation_mask", "raster")
+			ex <- paste0(srcMask, " = if (", srcIn, " == 1, 1, null())")
+			rgrass::execGRASS("r.mapcalc", expression = ex, flags = c(.quiet(), "overwrite"))
+
+			srcIn <- src
+			src <- .makeSourceName("fragmentation_class_masked")
+			ex <- paste0(src, " = ", srcIn, " * ", srcMask)
+			rgrass::execGRASS("r.mapcalc", expression = ex, flags = c(.quiet(), "overwrite"))
+			
+			# make mask, copy with mask in place, remove mask
+			# # rgrass::execGRASS(cmd = "r.mask", raster = srcIn, flags = c(.quiet(), "overwrite"))
+			# # src <- .copyGRaster(src, topo = topology(x)[i], reshapeRegion = FALSE)
+			# # .removeMask()
+
+		}# else {
 		
-			# make mask
-			rgrass::execGRASS(
-				cmd = "r.mask",
-				raster = srcIn,
-				flags = c(.quiet(), "overwrite")
-			)
+		# 	# mask to non-NA cells in input
+		# 	srcIn <- src
+		# 	src <- .makeSourceName("fragmentation_mask_NAs", "raster")
+		# 	ex <- paste0(src, " = if(isnull(", sources(x)[i], "), null(), ", srcIn, ")")
+		# 	rgrass::execGRASS("r.mapcalc", expression = ex, flags = c(.quiet(), "overwrite"))
 
-			# copy with mask in place
-			src <- .copyGRaster(src, topo = topology(x)[i], reshapeRegion = FALSE)
-		    
-			# remove mask
-			.removeMask()
-
-		}
+		# }
 
 		srcs[i] <- src
 
@@ -391,5 +406,5 @@ stop("As of 2024.02.26, fragmentation() does not work for GRasters. A fix is in 
 	.makeGRaster(srcs, levels = levels)
 
 	} # EOF
-
+	
 )
