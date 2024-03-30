@@ -40,7 +40,7 @@ methods::setMethod(
 		if (numLevels[i] > 0L) {
 		
 			names <- catNames(x, i)[[1L]]
-			active <- activeCat(x, name = TRUE)[i]
+			active <- activeCat(x, layer = i, name = TRUE)[i]
 			value <- names[1L]
 
 			cols <- c(value, active)
