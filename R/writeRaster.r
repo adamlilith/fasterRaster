@@ -245,7 +245,8 @@ setMethod(
 	
 	if (any(isFact)) {
 		for (i in which(isFact)) {
-			out[[i]] <- terra::categories(out[[i]], layer = i, value = cats(x)[[i]], active = activeCat(x)[i])
+			cats <- as.data.frame(cats(x)[[i]])
+			out <- terra::categories(out, layer = i, value = cats, active = activeCat(x, layer = i))
 		}
 	}
 	
