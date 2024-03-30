@@ -1,3 +1,12 @@
+# fasterRaster 8.3.0.7004 (2024-XX-XX)
+
+## Functionality
+o `fragmentation()` works for windows > 3 and for `GRaster`s
+o Added hidden function `.plot()`
+
+## Bug fixes
+o `writeRaster()` correctly assigns levels to categorical rasters with >1 layer
+
 # fasterRaster 8.3.0.7003 (2024-03-15)
 
 ## Functionality
