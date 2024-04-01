@@ -59,7 +59,7 @@ methods::setMethod(
 
     srcs <- .mask(x = x, mask = mask, maskType = "vector", inverse = inverse, maskvalues = NA, updatevalue = updatevalue)
 
-    .makeGRaster(srcs, xname)
+    .makeGRaster(srcs, xname, levels = cats(x), ac = activeCats(x))
     
     } # EOF
 )
