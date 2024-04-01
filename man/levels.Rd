@@ -88,6 +88,8 @@ zonalGeog(cover) # geometric statistics
 activeCat(cover)
 activeCat(cover, names = TRUE)
 
+activeCats(c(cover, cover))
+
 # Choose a different column for category labels:
 levels(cover)
 activeCat(cover) <- 2
