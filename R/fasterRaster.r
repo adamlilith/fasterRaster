@@ -70,6 +70,7 @@
 #' [cellSize()]: Cell area\cr
 #' [clump()]: Group adjacent cells with similar values\cr
 #' [combineCats()]: Combine values from two or more categorical and/or integer rasters\cr
+#' [combineLevels()]: Combine the "levels" tables of two or more categorical `GRaster`s\cr
 #' [cor()]: Correlation matrix between layers of a `GRaster`\cr
 #' [cov()]: Covariance matrix between layers of a `GRaster`\cr
 #' [crop()]: Remove parts of a `GRaster`\cr
@@ -124,6 +125,7 @@
 #' [catNames()]: Names of each "levels" table\cr
 #' [cats()]: "Levels" table of a categorical raster\cr
 #' [combineCats()]: Combine categories from two or more categorical rasters\cr
+#' [combineLevels()]: Combine the "levels" tables of two or more categorical `GRaster`s\cr
 #' [complete.cases()]: Find rows of a categorical `GRaster`'s "levels" table that have no `NA`s in them\cr
 #' [droplevels()]: Remove one or more levels\cr
 #' [freq()]: Frequency of each category across cells of a raster\cr
