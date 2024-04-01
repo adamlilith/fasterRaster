@@ -39,38 +39,8 @@ methods::setMethod(
 	)
 
 	# combine levels
-	if (!any(sapply(x, is.factor))) {
-		levels <- NULL
-	} else {
-
-		cats <- sapply(x, cats)
-		for (i in seq_along(cats)) {
-			if (!inherits(cats[[i]], "data.table")) cats[[i]] <- data.table::as.data.table(cats)
-		}
-
-		levels <- data.table::data.table(NULL)
-		i <- 1L
-		while (nrow(levels) == 0L) {
-			levels <- cats[[i]]
-			ac1 <- activeCat(x[[i]])
-			i <- i + 1L
-		}
-		ac1 <- names(levels)[ac1]
-
-		for (j in i:length(x)) {
-			nextCats <- cats[[j]]
-			if (nrow(nextCats) > 0L) {
-				cats2 <- cats[[j]]
-				ac2 <- activeCat(x[[j]])
-				ac2 <- names(cats2)[ac2]
-				# levels <- merge(levels, cats2, by.x = ac1, by.y = ac2)
-				levels <- merge(levels, cats2, all = TRUE)
-			}
-		}
-
-	}
-		
-	.makeGRaster(src, "layer", levels = levels, ac = ac1)
+	levels <- combineLevels(x)
+	.makeGRaster(src, "layer", levels = levels)
 	
 	} # EOF
 )
