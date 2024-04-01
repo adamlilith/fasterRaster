@@ -146,6 +146,7 @@ methods::setValidity("GRaster",
 #' @param src Character: The name of the raster in **GRASS**.
 #' @param names Character: Name of the raster.
 #' @param levels `NULL` (default), a `data.frame`, `data.table`, an empty string (`""`), or a list of `data.frame`s, `data.table`s, and/or empty strings: These become the raster's [levels()]. If `""`, then no levels are defined.
+#' @param ac vector of numeric or integer values >=1, or `NULL` (default): Active category column (offset by 1, so 1 really means 2, 2 means 3, etc.). A value of `NULL` uses an automated procedure to figure it out.
 #'
 #' @returns A `GRaster`.
 #'
@@ -154,28 +155,31 @@ methods::setValidity("GRaster",
 #' @example man/examples/ex_GRaster_GVector.r
 #'
 #' @noRd
-.makeGRaster <- function(src, names = "raster", levels = "") {
+.makeGRaster <- function(src, names = "raster", levels = "", ac = NULL) {
 
 	# levels: convert empty strings to NULL data.tables and data.frames to data.tables
 	if (is.null(levels)) levels <- data.table::data.table(NULL)
 	if (!inherits(levels, "list")) levels <- list(levels)
-	if (length(levels) == 1L & length(src) > 1L) {
-		for (i in 2L:length(src)) levels[[i]] <- levels[[1L]]
-	}
+	if (length(levels) == 1L & length(src) > 1L) for (i in 2L:length(src)) levels[[i]] <- levels[[1L]]
 
 	# active category and levels
-	ac <- rep(NA_integer_, length(levels))
-	for (i in seq_along(levels)) {
-		if (is.null(levels[[i]]) || (is.character(levels[[i]]) && levels[[i]] == "")) {
-			ac[i] <- NA_integer_
-			levels[[i]] <- data.table::data.table(NULL)
-		} else if (!inherits(levels[[i]], "data.table")) {
-			ac[i] <- 2L
-   			levels[[i]] <- data.table::data.table(levels[[i]])
-		} else if (inherits(levels[[i]], "data.table")) {
-			ac[i] <- 2L
+	if (is.null(ac)) {
+		
+		ac <- rep(NA_integer_, length(levels))
+		for (i in seq_along(levels)) {
+			if (is.null(levels[[i]]) || (is.character(levels[[i]]) && levels[[i]] == "")) {
+				ac[i] <- NA_integer_
+				levels[[i]] <- data.table::data.table(NULL)
+			} else if (!inherits(levels[[i]], "data.table")) {
+				ac[i] <- 2L
+				levels[[i]] <- data.table::data.table(levels[[i]])
+			} else if (inherits(levels[[i]], "data.table")) {
+				ac[i] <- 2L
+			}
 		}
+	
 	}
+	ac <- as.integer(ac)
 
 	info <- .rastInfo(src)
 	nLayers <- length(info$sources)
