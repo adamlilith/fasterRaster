@@ -17,7 +17,7 @@
 #' Categorical rasters (also called "factor" rasters) are actually integer rasters, but have an associated attribute table that maps each integer value to a category label, such as "wetland" or "forest". The table has at least two columns. The first is integer values, and (by default) the second is category names. This second column is the "active" category column, but can be changed using \code{\link[fasterRaster]{activeCat<-}}.
 #'
 #' ## Functions relevant to raster data types
-#' * [activeCat()] and \code{\link[fasterRaster]{activeCat<-}} can be used to see or assign which column in a "levels" table associated with a categorical raster is used as category labels.
+#' * [activeCat()], [activeCats()], and \code{\link[fasterRaster]{activeCat<-}} can be used to see or assign which column in a "levels" table associated with a categorical raster is used as category labels.
 #' * [addCats()] adds information to the "levels" table using [data.table::merge()] (same as [merge()]).
 #' * \code{\link[fasterRaster]{addCats<-}} add new levels to a "levels" table.
 #' * [as.int()], [as.float()], and [as.doub()] coerce a raster to an integer, float, or double.
@@ -44,11 +44,11 @@
 #'    | ------------------ | ----------- | ----------- | ---------- | ------ |
 #'    | `integer`          | `INT1U`     | `CELL`      | `Byte`     | Integer values from 0 to 255 |
 #'    | `integer`          | `INT2U`     | `CELL`      | `UInt16`   | Integer values from 0 to 65,534 |
-#'    | `integer`          | `INT2S`     | `CELL`     | `Int16`    | Integer values from -32,767 to -32,767 |
-#'    | `integer`          | `INT4S`     | `CELL`     | `Int32`    | Integer values from -2,147,483,647 to 2,147,483,647 |
+#'    | `integer`          | `INT2S`     | `CELL`     | `Int16`     | Integer values from -32,767 to -32,767 |
+#'    | `integer`          | `INT4S`     | `CELL`     | `Int32`     | Integer values from -2,147,483,647 to 2,147,483,647 |
 #'    | `float`            | `FLT4S`     | `FCELL`   | `Float32`    | Values from -3.4e+38 to 3.4e+38, including decimal values |
 #'    | `double`           | `FLT8S`     | `DCELL`   | `Float64`    | Values from -1.7e+308 to 1.7e+308, including decimal values |
-#'    | `factor`           | `INT`*      | `CELL`    | *            | Integer values corresponding to categories
+#'    | `factor`           | `INT`*      | `CELL`    | `INT*`       | Integer values corresponding to categories
 #'
 #' `*` Depends on the integers (signed/unsigned, range of values)
 #' 

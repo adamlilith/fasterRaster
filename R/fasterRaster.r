@@ -116,7 +116,7 @@
 #' [zonalGeog()]: Geographic statistics (area, perimeter, fractal dimension, etc.) for sets of cells with the same values\cr
 #'
 #' ## Functions operating on categorical (factor) rasters
-#' [activeCat()]: Column that defines category labels\cr
+#' [activeCat()] and [activeCats()]: Column(s) that defines category labels\cr
 #' \code{\link[fasterRaster]{activeCat<-}}: Set column that defines category labels\cr
 #' [addCats()]: Add new columns to a "levels" table\cr
 #' \code{\link[fasterRaster]{addCats<-}}: Add new rows (levels) to a "levels" table\cr

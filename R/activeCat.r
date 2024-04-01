@@ -1,6 +1,6 @@
 #' Get or set the column with category labels in a categorical raster
 #'
-#' @description `GRaster`s can represent [categorical data][tutorial_raster_data_types]. Cell values are actually integers, each corresponding to a category, such as "desert" or "wetland." A categorical raster is associated with a table that matches each value to a category name. The table must be `NULL` (i.e., no categories--so not a categorical raster), or have at least two columns. The first column must have integers and represent raster values. One or more subsequent columns must have category labels. Which column corresponds to category labels can be seen using `activeCat()` and set using `activeCat()<-`.
+#' @description For a single layer of a [categorical][tutorial_raster_data_types] `GRaster`, `activeCat()` returns the column of the labels to be matched to each value in the raster. `activeCats()` does the same, but for all layers of a `GRaster`. `activeCat()<-` sets the column to be used as category labels. Note that following [terra::activeCat()], the first column in the "levels" table is ignored, so an "active category" value of 1 means the second column is used as labels, a value of 2 means the third is used, and so on.
 #'
 #' @param x A categorical `GRaster`.
 #' 
@@ -42,6 +42,43 @@ methods::setMethod(
 	}
 	names(out) <- names(x)[layer]
 	out
+
+	} # EOF
+)
+
+#' @aliases activeCats
+#' @rdname activeCat
+#' @exportMethod activeCats
+methods::setMethod(
+	f = "activeCats",
+	signature = c(x = "GRaster"),
+	function(x, names = FALSE) {
+	
+	n <- nlyr(x)
+	out <- rep(NA, n)
+	for (i in seq_len(n)) out[i] <- activeCat(x, layer = i, names = names)
+	out
+
+
+	# out <- x@activeCat - 1L
+	# if (names) {
+
+	# 	ac <- out + 1L
+	# 	out <- rep(NA_character_, length(layer))
+	# 	numLevels <- nlevels(x)
+	# 	for (i in layer) {
+		
+	# 		if (numLevels[i] > 0L) {
+	# 			out[i] <- names(x@levels[[i]])[ac[i]]
+	# 		}
+
+	# 	}
+	
+	# } else {
+	# 	out <- out - 1L
+	# }
+	# names(out) <- names(x)[layer]
+	# out
 
 	} # EOF
 )

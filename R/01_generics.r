@@ -57,6 +57,7 @@ methods::setGeneric(name = ".regionRes", def = function(x, ...) standardGeneric(
 
 # methods::setGeneric(name = "activeCat", package = "terra")
 methods::setGeneric(name = "activeCat", def = function(x, ...) standardGeneric("activeCat"))
+methods::setGeneric(name = "activeCats", def = function(x, ...) standardGeneric("activeCats"))
 methods::setGeneric(name = "activeCat<-", package = "terra")
 methods::setGeneric(name = "add<-", package = "terra")
 methods::setGeneric(name = "addCats", package = "terra")
