@@ -102,11 +102,11 @@
 #' [predict()]: Make predictions to a `GRaster` from a linear model or generalized linear model\cr
 #' [resample()]: Change cell size\cr
 #' [rnormRast()]: A random `GRaster` with values drawn from a normal distribution\cr
+#' [rSpatialDepRast()]: Create a random `GRaster` with or without spatial dependence\cr
 #' [runifRast()]: A random `GRaster` with values drawn from a uniform distribution\cr
 #' [scale()]: Subtract means and divide by standard deviations\cr
 #' [selectRange()]: Select values from rasters in a stack based on values in another `GRaster`\cr
 #' [spatSample()]: Randomly points from a `GRaster`\cr
-#' [spDepRast()]: Create a random `GRaster` with or without spatial dependence\cr
 #' [sun()]: Solar radiance and irradiance\cr
 #' [terrain()]: Slope, aspect, curvature, and partial slopes\cr
 #' [thinLines()]: Reduce linear features on a `GRaster` so linear features are 1 cell wide\cr

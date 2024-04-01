@@ -14,7 +14,7 @@
 #'
 #' @example man/examples/ex_randRast.r
 #' 
-#' @seealso [rnormRast()], [spDepRast()], [fractalRast()], and **GRASS** module `r.random.surface`
+#' @seealso [rnormRast()], [rSpatDepRast()], [fractalRast()], and **GRASS** module `r.random.surface`
 #'
 #' @aliases runifRast
 #' @rdname runifRast

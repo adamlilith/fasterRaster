@@ -247,7 +247,7 @@ methods::setGeneric(name = "slope", def = function(x, ...) standardGeneric("slop
 methods::setGeneric(name = "snap", package = "terra")
 methods::setGeneric(name = "sources", package = "terra")
 methods::setGeneric(name = "spatSample", package = "terra")
-methods::setGeneric(name = "spDepRast", def = function(x, ...) standardGeneric("spDepRast"))
+methods::setGeneric(name = "rSpatialDepRast", def = function(x, ...) standardGeneric("rSpatialDepRast"))
 methods::setGeneric(name = "stretch", package = "terra")
 methods::setGeneric(name = "st_as_sf", package = "sf")
 methods::setGeneric(name = "st_bbox", package = "sf")

@@ -1,6 +1,6 @@
 #' Create a random raster with or without spatial dependence
 #'
-#' @description `spDepRast()` creates a raster with random values in cells. Across the raster, values are approximately normally distributed, though a raster with a "true" normal distribution can be made with [rnormRast()]. Spatial dependence can be introduced, though all together the values will still be approximately normally distributed.
+#' @description `rSpatialDepRast()` creates a raster with random values in cells. Across the raster, values are approximately normally distributed, though a raster with a "true" normal distribution can be made with [rnormRast()]. Spatial dependence can be introduced, though all together the values will still be approximately normally distributed.
 #'
 #' @param x A `GRaster`: The output will have the same extent and dimensions as this raster.
 #'
@@ -22,11 +22,11 @@
 #' 
 #' @seealso [rnormRast()], [fractalRast()], [runifRast()], and **GRASS** module `r.random.surface`
 #'
-#' @aliases spDepRast
-#' @rdname spDepRast
-#' @exportMethod spDepRast
+#' @aliases rSpatialDepRast
+#' @rdname rSpatialDepRast
+#' @exportMethod rSpatialDepRast
 methods::setMethod(
-    f = "spDepRast",
+    f = "rSpatialDepRast",
     signature = c(x = "GRaster"),
     function(x,
         n = 1,
