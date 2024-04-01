@@ -1,4 +1,4 @@
-#' Names of levels tables of a categorical raster
+#' Names of columns of the levels table of a categorical raster
 #'
 #' @description This function returns the column names of each "levels" table of a [categorical raster][tutorial_raster_data_types].
 #'
