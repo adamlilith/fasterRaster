@@ -146,7 +146,7 @@ methods::setValidity("GRaster",
 #' @param src Character: The name of the raster in **GRASS**.
 #' @param names Character: Name of the raster.
 #' @param levels `NULL` (default), a `data.frame`, `data.table`, an empty string (`""`), or a list of `data.frame`s, `data.table`s, and/or empty strings: These become the raster's [levels()]. If `""`, then no levels are defined.
-#' @param ac vector of numeric or integer values >=1, or `NULL` (default): Active category column (offset by 1, so 1 really means 2, 2 means 3, etc.). A value of `NULL` uses an automated procedure to figure it out.
+#' @param ac vector of numeric or integer values >=1, or `NULL` (default): Active category column (offset by 1, so 1 really means the second column, 2 means the third, etc.). A value of `NULL` uses an automated procedure to figure it out.
 #'
 #' @returns A `GRaster`.
 #'
@@ -178,8 +178,10 @@ methods::setValidity("GRaster",
 			}
 		}
 	
+	} else {
+		ac <- as.integer(ac)
+		ac <- ac + 1L
 	}
-	ac <- as.integer(ac)
 
 	info <- .rastInfo(src)
 	nLayers <- length(info$sources)
