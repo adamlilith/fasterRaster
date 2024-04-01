@@ -99,7 +99,7 @@ methods::setMethod(
         fun <- gsub(fun, pattern = name, replacement = src)
     }
 
-    src <- .makeSourceName("r_mapcalc", "raster")
+    src <- .makeSourceName("app", "raster")
     fun <- paste(src, fun)
 
     args <- list(
