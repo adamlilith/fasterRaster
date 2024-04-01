@@ -96,8 +96,11 @@ methods::setMethod(
 
 	}
 	
-	cols <- ceiling((e - w) / ewres)
-	rows <- ceiling((n - s) / nsres)
+	cols <- (e - w) / ewres
+	rows <- (n - s) / nsres
+
+	if (!omnibus::is.wholeNumber(cols)) cols <- ceiling(cols)
+	if (!omnibus::is.wholeNumber(rows)) cols <- ceiling(rows)
 
 	e <- w + cols * ewres
 	s <- n - rows * nsres
