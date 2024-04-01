@@ -10,7 +10,7 @@
 #'
 #' @param value Numeric, integer, or character. Following [terra::activeCat()], the first column in each levels table is ignored. So, if you want the second column to be the category label, use 1. If you want the third column, use 2, and so on. You can also specify the active column by its column name (though this can't be the first column's name).
 #'
-#' @returns `activeCat()` returns an integer or character vector of active column indices or names. `activeCat()<-` returns a `GRaster`.
+#' @returns `activeCat()` returns an integer or character of the active column index or name. `activeCats()` returns a vector of indices or names. `activeCat()<-` returns a `GRaster`.
 #'
 #' @example man/examples/ex_GRaster_categorical.r
 #'
