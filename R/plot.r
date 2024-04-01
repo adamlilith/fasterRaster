@@ -39,7 +39,7 @@ methods::setMethod(
 		rescale <- ceiling(nc / (2 * maxcell))
 
 		if (all(datatype(x) %in% c("integer", "factor"))) {
-			fun <- "median"
+			fun <- "mode"
 		} else {
 			fun <- "mean"
 		}
