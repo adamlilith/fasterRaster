@@ -40,7 +40,7 @@ methods::setMethod(
     if (diagonal) args$flags <- c(args$flags, "d")
 
     nLayers <- nlyr(x)
-    srcs <- .makeSourceName("clump", "rast", nLayers)
+    srcs <- .makeSourceName("clump", "raster", nLayers)
     for (i in seq_len(nLayers)) {
 
         args$input <- sources(x)[i]
