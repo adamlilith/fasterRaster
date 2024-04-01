@@ -17,14 +17,12 @@
 #'    | `integer`          | `INT1U`     | `CELL`      | `Byte`     | Integer values from 0 to 255 |
 #'    | `integer`          | `INT2U`     | `CELL`      | `UInt16`   | Integer values from 0 to 65,534 |
 #'    | `integer`          | `INT2S`     | `CELL`      | `Int16`    | Integer values from -32,767 to -32,767 |
-#'    | `integer`          | na          | `CELL`      | `Int32`*   | Integer values from 0 to 4,294,967,295 |
-#'    | `integer`          | `INT4S`     | `CELL`      | `Int32`*   | Integer values from -2,147,483,647 to 2,147,483,647 |
+#'    | `integer`          | `INT4S`     | `CELL`      | `Int32`    | Integer values from -2,147,483,647 to 2,147,483,647 |
 #'    | `float`            | `FLT4S`     | `FCELL`     | `Float32`  | Values from -3.4E+38 to 3.4E+38, including decimal values |
 #'    | `double`           | `FLT8S`     | `DCELL`     | `Float64`  | Values from -1.79E+308 to 1.79E+308, including decimal values |
 #'    | `factor`           | `INT`*      | `CELL`      | `INT*`     | Integer values corresponding to categories
 #'
-#' `*` Note that when the raster is written to disk, the GDAL datatype is used, regardless of whether the **fasterRaster**-, **terra**-, or **GRASS**-style datatype was provided.
-#' `**` Depends on the integers (signed/unsigned, range of values). Categorical rasters will have a CSV file with category values and labels saved with them. The file name will be the same as the raster's file name, but end in extension ".csv".
+#' `*` Depends on the integers (signed/unsigned, range of values). Categorical rasters will have a CSV file with category values and labels saved with them. The file name will be the same as the raster's file name, but end in extension ".csv".
 #'
 #' @param mm Logical: If `TRUE`, call [terra::setMinMax()] on the raster to ensure it has metadata on the minimum and maximum values. For large rasters, this can take a long time, so the default value of `mm` is `FALSE`. This is only useful if you assign a raster to the output of `writeRaster`, as in `x <- writeRaster(my_raster, filename = './raster_file.tif', mm = TRUE)`.
 #'
