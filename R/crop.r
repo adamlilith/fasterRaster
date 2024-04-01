@@ -105,7 +105,7 @@ methods::setMethod(
 
 	### crop by creating copy of focal raster
 	srcs <- .copyGSpatial(x, reshapeRegion = FALSE)
-	.makeGRaster(srcs, names(x))
+	.makeGRaster(srcs, names(x), levels = cats(x))
 
 	} # EOF
 )
