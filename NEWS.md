@@ -3,6 +3,7 @@
 ## Functionality
 o `fragmentation()` works for windows > 3 and for `GRaster`s
 o Added hidden function `.plot()`
+o For functions and cases where it is appropriate, teh "levels" table of an input `GRaster` is passed to the output ()
 
 ## Bug fixes
 o `writeRaster()` correctly assigns levels to categorical rasters with >1 layer
@@ -19,7 +20,7 @@ o Fix bug setting extent for new raster in `crop()`
 Alpha release of new, intuitive **fasterRaster** emulating and interoperable with **terra**!!!
 
 ## Breaking changes
-Nearly nothing is the same in the new version of **fasterRaster** comppared to version 0.7 and lower. All of the functions in previous versions have been removed.
+Nearly nothing is the same in the new version of **fasterRaster** compared to version 0.7 and lower. All of the functions in previous versions have been removed.
 
 ## New features
 **fasterRaster** is now compatible with **terra** and **sf** and shares functions with the same names that do (almost always) the same things (esp. with **terra**, less so with **sf**).
