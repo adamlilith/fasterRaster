@@ -24,6 +24,7 @@
 #' * [catNames()] reports the column names of the "levels" table of each layer of a raster.
 #' * [cats()] returns the entire "levels" table of a categorical raster.
 #' * [combineCats()] combines levels of two or more categorical or integer rasters.
+#' * [combineLevels()]: Combine the "levels" tables of two or more categorical `GRaster`s.
 #' * [complete.cases()] finds rows in the levels table that have no `NA`s.
 #' * [datatype()] returns the data type of a `GRaster`.
 #' * [droplevels()] removes "unused" levels in a "levels" table.
