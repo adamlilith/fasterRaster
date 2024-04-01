@@ -113,7 +113,7 @@ methods::setMethod(
 
 	nLayers <- length(srcs)
 
-	out <- .makeSourceName("r_mapcalc", type = "raster", nLayers)
+	out <- .makeSourceName("copyGSpatial", type = "raster", nLayers)
 
 	for (i in seq_len(nLayers)) {
 
@@ -144,7 +144,7 @@ methods::setMethod(
 
 	n <- length(srcs)
 
-	out <- .makeSourceName("g_copy", type = "vector", n = n)
+	out <- .makeSourceName("copyGSpatial", type = "vector", n = n)
 
 	for (i in seq_len(n)) {
 		
