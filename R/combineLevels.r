@@ -2,6 +2,8 @@
 #'
 #' @description This function creates a single "levels" table from the levels tables of one or more [categorical][tutorial_raster_data_types] `GRaster`s.
 #'
+#' The difference between this function and [combineCats()] is that `combineCats()` creates a "combined" `GRaster` with a combined levels table, whereas this one just merges the levels tables.
+#'
 #' @param x A `GRaster` or a `list` of `GRaster`s.
 #' @param ... Arguments to pass to [data.table::merge()].
 #'
