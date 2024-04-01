@@ -184,6 +184,6 @@ methods::setMethod(
         
     } # next raster
     
-    .makeGRaster(srcs, names = names(x), levels = levels(x))
+    .makeGRaster(srcs, names = names(x), levels = levels(x), ac = activeCats(x))
 
 } # EOF

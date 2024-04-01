@@ -89,7 +89,7 @@ methods::setMethod(
 	)
 
 	src <- .copyGSpatial(x, reshapeRegion = FALSE)
-	.makeGRaster(src, names(x), levels = levels(x))
+	.makeGRaster(src, names(x), levels = cats(x), ac = activeCats(x))
 	
 	} # EOF
 )

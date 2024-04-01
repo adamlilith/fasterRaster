@@ -129,7 +129,8 @@ methods::setMethod(
 	do.call(rgrass::execGRASS, args=args)
 	
 	# resample each layer
-	for (i in 1L:nlyr(x)) {
+	nLayers <- nlyr(x)
+	for (i in seq_len(nLayers)) {
 
 		### resample
 		if (method == "nearest" | fallback) {
@@ -197,7 +198,7 @@ methods::setMethod(
 
 		### output/fallback
 		if (method == "nearest") {
-			thisOut <- .makeGRaster(srcNearest, names(x)[i])
+			thisOut <- .makeGRaster(srcNearest, names(x)[i], levels = levels(x)[i], ac = activeCat(x, layer = i))
 		} else if (method == "bilinear" & !fallback) {
 			thisOut <- .makeGRaster(srcBilinear, names(x)[i])
 		} else if (method == "bicubic" & !fallback) {

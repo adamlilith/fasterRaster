@@ -58,7 +58,6 @@ methods::setMethod(
     mask <- sources(mask)
 
     srcs <- .mask(x = x, mask = mask, maskType = "vector", inverse = inverse, maskvalues = NA, updatevalue = updatevalue)
-
     .makeGRaster(srcs, xname, levels = cats(x), ac = activeCats(x))
     
     } # EOF

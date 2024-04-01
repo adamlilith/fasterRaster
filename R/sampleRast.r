@@ -118,7 +118,9 @@ methods::setMethod(
         out <- .makeGRaster(gnsUpdate, names(x))
 
     } else {
-        out <- .makeGRaster(srcs, names(x))
+			levels <- cats(x)
+			ac <- activeCats(x)
+        out <- .makeGRaster(srcs, names(x), levels = levels, ac = ac)
     }
     out
 
