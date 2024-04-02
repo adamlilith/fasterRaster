@@ -58,7 +58,21 @@ methods::setMethod(
 			if (gtype == "line") args$flags <- c(args$flags, "d")
 
 			do.call(rgrass::execGRASS, args = args)
-			out <- .makeGRaster(src, "layer")
+
+			# add levels table
+			levels <- as.data.table(x)
+			if (nrow(levels) > 0L) {
+				
+				if (any(names(levels) == "value")) names(x)[names(x) == "value"] <- "value_1"
+				names(levels) <- make.unique(names(levels))
+				value <- data.table::data.table(value = 1L:nrow(x))
+				levels <- cbind(value, levels)
+
+			} else {
+				levels <- NULL
+			}
+
+			out <- .makeGRaster(src, "layer", levels = levels)
 
 		# each geometry burned to a different raster
 		} else {
