@@ -32,12 +32,14 @@ methods::setMethod(
 
     if (nlyr(mask) > 1L) warning("The mask raster has >1 layer. Only the first layer will be used.")
 
+    cats <- cats(x)
+    ac <- activeCats(x)
+
     x <- sources(x)
     mask <- sources(mask)[1L]
 
     srcs <- .mask(x = x, mask = mask, maskType = "raster", inverse = inverse, maskvalues = maskvalues, updatevalue = updatevalue)
-
-    .makeGRaster(srcs, xname, levels = cats(x), ac = activeCats(x))
+    .makeGRaster(srcs, xname, levels = cats, ac = ac)
 
     } # EOF
 )
@@ -54,11 +56,14 @@ methods::setMethod(
     .region(x)
     xname <- names(x)
 
+    cats <- cats(x)
+    ac <- activeCats(x)
+
     x <- sources(x)
     mask <- sources(mask)
 
     srcs <- .mask(x = x, mask = mask, maskType = "vector", inverse = inverse, maskvalues = NA, updatevalue = updatevalue)
-    .makeGRaster(srcs, xname, levels = cats(x), ac = activeCats(x))
+    .makeGRaster(srcs, xname, levels = cats, ac = ac)
     
     } # EOF
 )
