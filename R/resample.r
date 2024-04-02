@@ -7,14 +7,14 @@
 #' @param y Either a `GRaster` to serve as a template, or a numeric vector with two or three values. If a numeric vector, the values represent east-west and north-south resolution for 2D rasters, or east-west, north-south, and top-bottom resolution for 3D rasters.
 #'
 #' @param method Character or `NULL`: Method to use to assign values to cells. Partial matching is used.
-#' * `NULL` (default): Automatically choose based on raster properties (`near` for categorical data, `bilinear` for continuous data).
-#' * `"near"`: Nearest neighbor. Best for categorical data, and often a poor choice for continuous data.  If [nlevels()] is >0 for all rasters, this method will be used by default.
+#' * `NULL` (default): Automatically choose based on raster properties (`near` for categorical or integer rasters, `bilinear` for continuous data).
+#' * `"near"`: Nearest neighbor. Best for categorical data, and often a poor choice for continuous data.  If [nlevels()] is >0, this method will be used regardless of the value of `method`. If you still want to use a different method, coerce the raster to a different type using [as.int()], [as.float()], or [as.doub()].
 #' * `"bilinear"`: Bilinear interpolation (default for non-categorical data; uses weighted values from 4 cells).
 #' * `"bicubic"`: Bicubic interpolation (uses weighted values from 16 cells).
 #' * `"lanczos"`: Lanczos interpolation (uses weighted values from 25 cells).
 #' Note that methods that use multiple cells will cause the focal cell to become `NA` if there is at least one cell with an `NA` in the cells it draws from. These `NA` cells can be filled using the `fallback` option.
 #' 
-#' @param fallback Logical: If `TRUE` (default), then use "lower" methods to fill in `NA` cells when a "higher" method is used. For example, if `method = "bicubic"`, `NA` cells will be filled in using the `bilinear` method, except when that results in `NA`s, in which case the `near` method will be used. Fallback causes fewer cells to revert to `NA` values, so may be better at capturing complex "edges" (e.g., coastlines). Fallback does increase processing time because each "lower" method must be applied, then results merged.
+#' @param fallback Logical: If `TRUE` (default), then use "lower" methods to fill in `NA` cells when a "higher" method is used. For example, if `method = "bicubic"`, `NA` cells will be filled in using the `bilinear` method, except when that results in `NA`s, in which case the `near` method will be used. Fallback causes fewer cells to revert to `NA` values, so can be better at resampling the edges of rasters. However, fallback does increase processing time because each "lower" method must be applied, then results merged.
 #'
 #' @returns A `GRaster`.
 #' 
@@ -46,14 +46,7 @@ methods::setMethod(
 
 	# method
 	if (!is.null(method)) method <- omnibus::pmatchSafe(method, c("nearest", "bilinear", "bicubic", "lanczos"))
-	if (is.null(method)) {
-		method <- if (all(nlevels(x) > 0)) {
-			"bilinear"
-		} else if (all(nlevels(x) == 0)) {
-			"nearest"
-		}
-	}
-	
+
 	versionNumber <- grassInfo("versionNumber")
 
 	# reshape region
@@ -129,13 +122,29 @@ methods::setMethod(
 	do.call(rgrass::execGRASS, args=args)
 	
 	# resample each layer
-	nLayers <- nlyr(x)
-	for (i in seq_len(nLayers)) {
+	for (i in 1L:nlyr(x)) {
 
+		# resampling method
+		if (is.null(method)) {
+			thisMethod <- if (datatype(x, type = "GRASS")[i] == "CELL") {
+				"nearest"
+			} else {
+				"bilinear"
+			}
+		} else if (is.factor(x)[i]) {
+			thisMethod <- "nearest"
+		} else {
+			if (method == "near") {
+				thisMethod <- "nearest"
+			} else {
+				thisMethod <- method
+			}
+		}
+		
 		### resample
-		if (method == "nearest" | fallback) {
+		if (thisMethod == "nearest" | fallback) {
 
-			srcNearest <- .makeSourceName("r_resample", "raster")
+			srcNearest <- .makeSourceName("resample", "raster")
 			rgrass::execGRASS(
 				cmd = "r.resample",
 				input = sources(x)[i],
@@ -145,9 +154,9 @@ methods::setMethod(
 
 		}
 
-		if (method == "bilinear" | (fallback & method %in% c("bicubic", "lanczos"))) {
+		if (thisMethod == "bilinear" | (fallback & thisMethod %in% c("bicubic", "lanczos"))) {
 
-			srcBilinear <- .makeSourceName("r_resamp_interp", "raster")
+			srcBilinear <- .makeSourceName("resample_bilinear", "raster")
 			args <- list(
 				cmd = "r.resamp.interp",
 				input = sources(x)[i],
@@ -162,9 +171,9 @@ methods::setMethod(
 
 		}
 
-		if (method == "bicubic" | (fallback & method == "lanczos")) {
+		if (thisMethod == "bicubic" | (fallback & thisMethod == "lanczos")) {
 
-			srcBicubic <- .makeSourceName("r_resamp_interp", "raster")
+			srcBicubic <- .makeSourceName("resample_bicubic", "raster")
 			args <- list(
 				cmd = "r.resamp.interp",
 				input = sources(x)[i],
@@ -179,9 +188,9 @@ methods::setMethod(
 
 		}
 
-		if (method == "lanczos") {
+		if (thisMethod == "lanczos") {
 
-			srcLanczos <- .makeSourceName("r_resamp_interp", "raster")
+			srcLanczos <- .makeSourceName("r_resamp_lanczos", "raster")
 			args <- list(
 				cmd = "r.resamp.interp",
 				input = sources(x)[i],
@@ -197,28 +206,34 @@ methods::setMethod(
 		}
 
 		### output/fallback
-		if (method == "nearest") {
-			thisOut <- .makeGRaster(srcNearest, names(x)[i], levels = levels(x)[i], ac = activeCat(x, layer = i))
-		} else if (method == "bilinear" & !fallback) {
+		if (thisMethod == "nearest") {
+			if (is.factor(x)[i]) {
+				cats <- cats(x)[[i]]
+				ac <- activeCat(x, layer = i)
+			} else {
+				cats <- ac <- NULL
+			}
+			thisOut <- .makeGRaster(srcNearest, names(x)[i], levels = cats, ac = ac)
+		} else if (thisMethod == "bilinear" & !fallback) {
 			thisOut <- .makeGRaster(srcBilinear, names(x)[i])
-		} else if (method == "bicubic" & !fallback) {
+		} else if (thisMethod == "bicubic" & !fallback) {
 			thisOut <- .makeGRaster(srcBicubic, names(x)[i])
-		} else if (method == "lanczos" & !fallback) {
+		} else if (thisMethod == "lanczos" & !fallback) {
 			thisOut <- .makeGRaster(srcLanczos, names(x)[i])
 		} else if (fallback) {
 			
-			src <- .makeSourceName("resample", "rast")
-			if (method == "bilinear") {
+			src <- .makeSourceName("resample_fallback", "raster")
+			if (thisMethod == "bilinear") {
 
 				# merge bilinear and nearest
 				ex <- paste0(src, " = if(!isnull(", srcBilinear, "), ", srcBilinear, ", ", srcNearest, ")")
 
-			} else if (method == "bicubic") {
+			} else if (thisMethod == "bicubic") {
 			
 				# merge bicubic, bilinear, and nearest
 				ex <- paste0(src, " = if(!isnull(", srcBicubic, "), ", srcBicubic, ", if(!isnull(", srcBilinear, "), ", srcBilinear, ", ", srcNearest, "))")
 				
-			} else if (method == "lanczos") {
+			} else if (thisMethod == "lanczos") {
 
 				# merge bicubic, bilinear, and nearest
 				ex = paste0(src, " = if(!isnull(", srcLanczos, "), ", srcLanczos, ", if(!isnull(", srcBicubic, "), ", srcBicubic, ", if(!isnull(", srcBilinear, "), ", srcBilinear, ", ", srcNearest, ")))")
@@ -231,13 +246,7 @@ methods::setMethod(
 				flags = c(.quiet(), "overwrite")
 			)
 			do.call(rgrass::execGRASS, args=args)
-
-			if (is.factor(x)[[i]] & method == "near") {
-				levs <- levels(x[[i]])
-			} else {
-				levs <- NULL
-			}
-			thisOut <- .makeGRaster(src, names(x)[i], levels = NULL)
+			thisOut <- .makeGRaster(src, names = names(x)[i])
 
 		} # next layer
 
