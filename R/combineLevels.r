@@ -23,7 +23,7 @@ methods::setMethod(
 
 	if (!any(is.factor(x))) {
 	
-		out <- data.table::data.table(NULL),
+		out <- data.table::data.table(NULL)
 		if (!faster("useDataTable")) out <- as.data.frame(out)
 	
 	} else {
