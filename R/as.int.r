@@ -53,14 +53,7 @@ methods::setMethod(
 
         src <- .makeSourceName(names(x)[i], "rast")
         ex <- paste0(src, " = ", fx, "(", sources(x)[i], ")")
-        args <- list(
-            cmd = "r.mapcalc",
-            expression = ex,
-            flags = c(.quiet(), "overwrite"),
-            intern = TRUE
-        )
-
-        do.call(rgrass::execGRASS, args=args)
+        rgrass::execGRASS(cmd = "r.mapcalc", expression = ex, flags = c(.quiet(), "overwrite"))
 
         this <- .makeGRaster(src, names(x)[i])
         if (i == 1L) {
