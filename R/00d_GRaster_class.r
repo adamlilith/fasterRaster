@@ -97,8 +97,13 @@ GRaster <- methods::setClass(
 .canMakeRasterCategorical <- function(object) {
 
 	dt <- object@datatypeGRASS
-	numLevels <- sapply(object@levels, nrow)
-	any(numLevels > 0L & dt != "CELL")
+	numLevels <- nlevels(object)
+	if (any(numLevels > 0L)) {
+		out <- any(dt[numLevels > 0L] != "CELL")
+	} else {
+		out <- FALSE
+	}
+	out
 
 }
 
@@ -128,11 +133,11 @@ methods::setValidity("GRaster",
 		} else if (length(object@levels) != object@nLayers) {
 			"The number of tables in @levels must be the same as the number of @nLayers."
 		} else if (.canMakeRasterCategorical(object)) {
-			"Only GRASS datatype of a rasters with levels must be CELL."
+			"Only rasters of datatype `CELL` can be categorical."
 		} else if (.validLevelTable(object)) {
-			"Each table must be a NULL data.table, or if not, the first column must be an integer, and there must be >1 columns."
+			"Each table must be a NULL `data.table`, or if not, the first column must be an integer, and there must be >1 columns."
 		} else if (.validActiveCat(object)) {
-			"@activeCat must be NA_integer, or an integer between 2 and the number of columns in each data.table in @levels."
+			"@activeCat must be `NA_integer_`, or an integer between 2 and the number of columns in each `data.table` in @levels."
 		} else {
 			TRUE
 		}
