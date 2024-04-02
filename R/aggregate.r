@@ -116,22 +116,30 @@ methods::setMethod(
 	if (fun == "quantile") args <- c(args, quantile = prob)
 	
 	nLayers <- nlyr(x)
+	srcs <- .makeSourceName("aggregate", "raster", n = nLayers)
 	for (i in seq_len(nLayers)) {
 		
-		src <- .makeSourceName(names(x)[i], "rast")
-		
 		args$input <- sources(x)[i]
-		args$output <- src
+		args$output <- srcs[i]
 		
-		do.call(rgrass::execGRASS, args=args)
+		do.call(rgrass::execGRASS, args = args)
 		
+		if (datatype(x, type = "GRASS")[i] == "CELL" & fun %in% c("mode", "minimum", "maximum")) {
+			
+			srcIn <- srcs[i]
+			srcs[i] <- .makeSourceName("aggregate_int", "raster")
+			ex <- paste0(srcs[i], " = int(", srcIn, ")")
+			rgrass::execGRASS("r.mapcalc", expression = ex, flags = c(.quiet(), "overwrite"))
+			
+		}
+
 		if (fun %in% c("median", "mode", "min", "max")) {
-			levs <- levels(x[[i]])
+			levs <- cats(x)[[i]]
 		} else {
 			levs <- NULL
 		}
 
-		this <- .makeGRaster(src, names(x)[i], levels = levs)
+		this <- .makeGRaster(srcs[i], names = names(x)[i], levels = levs)
 		if (i == 1L) {
 			out <- this
 		} else {
