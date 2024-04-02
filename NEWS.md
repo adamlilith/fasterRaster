@@ -2,11 +2,13 @@
 
 ## Functionality
 o `fragmentation()` works for windows > 3 and for `GRaster`s
+o Added function `combineLevels()`
 o Added hidden function `.plot()`
-o For functions and cases where it is appropriate, teh "levels" table of an input `GRaster` is passed to the output ()
+o For functions and cases where it is appropriate, the "levels" table of an input `GRaster` is passed to the output ()
 
 ## Bug fixes
 o `writeRaster()` correctly assigns levels to categorical rasters with >1 layer
+o Fixed bug in `[[<-` that passed incorrect dimensions (then failed)
 
 # fasterRaster 8.3.0.7003 (2024-03-15)
 
