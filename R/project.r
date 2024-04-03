@@ -318,7 +318,7 @@ methods::setMethod(
 
 	if (method != "nearest" & fallback) method <- paste0(method, "_f")
 
-	srcs <- .makeSourceName(names(x), "raster", nlyr(x))
+	srcs <- .makeSourceName("project", "raster", nlyr(x))
 	for (i in seq_len(nlyr(x))) {
 		
 		args <- list(
