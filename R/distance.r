@@ -149,7 +149,7 @@ methods::setMethod(
 	# rasterize
  	gtype <- geomtype(y, grass = TRUE)
 
-	srcRasterized <- .makeSourceName("v_to_rast", "raster")
+	srcRasterized <- .makeSourceName("distance_v_to_rast", "raster")
 	args <- list(
 		cmd = "v.to.rast",
 		input = sources(y),
@@ -163,7 +163,7 @@ methods::setMethod(
 	do.call(rgrass::execGRASS, args = args)
 	
 	# distance
-	src <- .makeSourceName("r_grow_distance", "raster")
+	src <- .makeSourceName("distance_r_grow_distance", "raster")
 	args <- list(
 		cmd = "r.grow.distance",
 		input = srcRasterized,
