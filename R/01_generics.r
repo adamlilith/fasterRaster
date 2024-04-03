@@ -63,6 +63,7 @@ methods::setGeneric(name = "add<-", package = "terra")
 methods::setGeneric(name = "addCats", package = "terra")
 methods::setGeneric(name = "addCats<-", def = function(x, ..., value) standardGeneric("addCats<-"))
 methods::setGeneric(name = "addTable<-", def = function(x, value, ...) standardGeneric("addTable<-"))
+# methods::setGeneric(name = "andAndAnd", def = function(e1, e2) standardGeneric("andAndAnd"))
 methods::setGeneric(name = "app", package = "terra")
 # methods::setGeneric(name = "appFuns", def = function(x, ...) standardGeneric("appFuns"))
 methods::setGeneric(name = "appCheck", def = function(x, fun, ...) standardGeneric("appCheck"))
@@ -202,6 +203,8 @@ methods::setGeneric(name = "not.na", def = function(x, ...) standardGeneric("not
 methods::setGeneric(name = "nrow", def = function(x) standardGeneric("nrow")) # in base
 methods::setGeneric(name = "nsubgeom", def = function(x, ...) standardGeneric("nsubgeom"))
 methods::setGeneric(name = "nunique", def = function(x, ...) standardGeneric("nunique"))
+
+# methods::setGeneric(name = "orOrOr", def = function(e1, e2) standardGeneric("orOrOr"))
 
 methods::setGeneric(name = "pairs", package = "terra")
 methods::setGeneric(name = "pca", def = function(x, ...) standardGeneric("pca"))

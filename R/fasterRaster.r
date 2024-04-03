@@ -41,6 +41,7 @@
 #' ## Functions that operate on or create `GRasters`
 #' [Arithmetic]: Mathematical operations on `GRaster`s: `+`, `-`, `*`, `/`, `^`, `%%` (modulus), `%/%` (integer division)\cr
 #' [Logical comparisons][Compare-methods]: `<`, `<=`, `==`, `!=`, `>=`, and `>`, plus \code{\link[fasterRaster]{%in%}} and \code{\link[fasterRaster]{%notin%}} (for categorical rasters only)\cr
+#' [Logical operators][Logic-methods]: `|`and `&`
 #'
 #' Single-layer functions (applied to each layer of a `GRaster`):
 #' - Working with `NA`s: [is.na()] and [not.na()] \cr
