@@ -93,6 +93,7 @@
 #' [mask()]: Remove values in a `GRaster` based on values in another `GRaster` or vector\cr
 #' [match()], \code{\link[fasterRaster]{%in%}}, and \code{\link[fasterRaster]{%notin%}}: Find which cells of a `GRaster` match or do not match certain values\cr
 #' [merge()]: Combine two or more rasters with different extents and fill in `NA`s\cr
+#' \code{\link[fasterRaster]{names<-}}: Assign names to a `GRaster`\cr
 #' [noise()]: Remove coarse-scale trends from a `GRaster`, leaving just fine-scale "noise"\cr
 #' [pairs()]: Plot correlations between `GRaster` layers\cr
 #' [pca()]: Apply a principal components analysis (PCA) to a `GRaster`\cr
@@ -156,7 +157,6 @@
 #' [is.lonlat()]: Is an object projected (e.g., in WGS84)?\cr
 #' [is.points()], [is.lines()], [is.polygons()]: Does a `GVector` represent points, lines, or polygons?\cr
 #' [names()]: Names of `GVector` fields\cr
-#' \code{\link[fasterRaster]{names<-}}: Assign names to columns of a `GVector`s data table\cr
 #' [ncol()]: Number of fields\cr
 #' [ngeom()]: Number of geometries (points, lines, polygons)\cr
 #' [nrow()]: Number of rows in a vector data table\cr
@@ -197,6 +197,7 @@
 #' [intersect()] or \code{\link[fasterRaster]{*}}: Intersection of two `GVectors`.\cr
 #' [kernel()]: Kernel density estimator of points.\cr
 #' [missing.cases()]: Find rows of a `GVector`'s data table that have at least `NA` in them\cr
+#' \code{\link[fasterRaster]{names<-}}: Assign names to columns of a `GVector`s data table\cr
 #' [project()]: Change coordinate reference system\cr
 #' [rasterize()]: Convert a `GVector` to a `GRaster`\cr
 #' [rbind()]: Combine `GVectors\cr
