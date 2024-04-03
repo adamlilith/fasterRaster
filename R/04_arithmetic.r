@@ -426,12 +426,7 @@ methods::setMethod(
 #' @noRd
 .genericArithRast <- function(name, src, ex) {
 
-	args <- list(
-		cmd = "r.mapcalc",
-		expression = ex,
-		flags = c(.quiet(), "overwrite")
-	)
-	do.call(rgrass::execGRASS, args = args)
+	rgrass::execGRASS(cmd = "r.mapcalc", expression = ex, flags = c(.quiet(), "overwrite"))
 	.makeGRaster(src, name)
 	
 }
