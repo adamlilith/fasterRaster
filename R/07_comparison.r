@@ -42,8 +42,7 @@ methods::setMethod(
 			name <- paste0(names(e1)[i], "_", names(e2)[i])
 			src <- .makeSourceName(name, "raster")
 
-			ex <- paste(src, "= int(if(", sources(e1)[i], " ", oper, " ", sources(e2)[i], "))")
-			
+			ex <- paste0(src, "= int(if(", sources(e1)[i], " ", oper, " ", sources(e2)[i], "))")
 			this <- .genericArithRast(name = name, src = src, ex = ex)
 			
 			if (i == 1L) {
@@ -112,7 +111,7 @@ methods::setMethod(
 		oper <- as.vector(.Generic)[1L]
 		for (i in 1L:nlyr(e1)) {
 
-			name <- names(e2)[i]
+			name <- names(e1)[i]
 			src <- .makeSourceName(name, "rast")
 			
 			ex <- paste(src, "= int(if(", sources(e1)[i], " ", oper, " ", e2, "))")
@@ -345,11 +344,7 @@ methods::setMethod(
 			
 			}
 
-			rgrass::execGRASS(
-				cmd = "r.mapcalc",
-				expression = ex,
-				flags = c(.quiet(), "overwrite")
-			)
+			rgrass::execGRASS(cmd = "r.mapcalc", expression = ex, flags = c(.quiet(), "overwrite"))
 
 		}
 
