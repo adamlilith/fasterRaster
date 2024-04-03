@@ -46,7 +46,7 @@ methods::setMethod(
 	if (!all(sapply(x, inherits, what = 'GRaster'))) stop("`x` must be a `GRaster` with one or more layers, or a `list` of `GRaster`s.")
 	xx <- x
 	x <- list()
-	for (i in seq_along(xx)) x <- c(x, cats(xx[i]))
+	for (i in seq_along(xx)) x <- c(x, cats(xx[[i]]))
 	.combineLevels(x = x)
 	
 	}
@@ -65,7 +65,7 @@ methods::setMethod(
 
 	i <- 1L
 	out <- data.table::data.table(NULL)
-	while (nrow(levels) == 0L) {
+	while (nrow(out) == 0L & i <= length(x)) {
 		out <- x[[i]]
 		i <- i + 1L
 	}
@@ -77,7 +77,7 @@ methods::setMethod(
 			cats2 <- x[[j]]
 			if (nrow(cats2) > 0L) {
 				by.y <- names(cats2)[1L]
-				out <- merge(out, cats2, by.x = by.x, by.y = by.y, ...)
+				out <- merge(out, cats2, by.x = by.x, by.y = by.y)
 			}
 		}
 		
