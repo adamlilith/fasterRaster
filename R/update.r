@@ -14,7 +14,7 @@
 methods::setMethod(
     f = "update",
     signature = c(object = "GRaster"),
-    definition = function(object) .makeGRaster(sources(object))
+    definition = function(object) .makeGRaster(sources(object), levels = cats(object), ac = activeCats(object))
 )
 
 #' @aliases update

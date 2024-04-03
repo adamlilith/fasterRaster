@@ -1,6 +1,6 @@
 #' Create a grid GVector
 #'
-#' @description This function creates a `GVector` of "wall-to-wall" "cells" (like a lattice). The input can be a `GVector` or `GRaster`, which provides the extent of the output.
+#' @description This function creates a `GVector` of "wall-to-wall" cells (like a lattice). The input can be a `GVector` or `GRaster`, which provides the extent of the output.
 #'
 #' @param x A `GRaster` or `GVector`.
 #'

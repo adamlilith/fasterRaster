@@ -39,7 +39,7 @@ methods::setMethod(
 		rescale <- ceiling(nc / (2 * maxcell))
 
 		if (all(datatype(x) %in% c("integer", "factor"))) {
-			fun <- "median"
+			fun <- "mode"
 		} else {
 			fun <- "mean"
 		}
@@ -49,7 +49,7 @@ methods::setMethod(
 	}
 	
 	tf <- tempfile(fileext = ".tif")
-	out <- writeRaster(x, filename = tf, overwrite = TRUE, warn = FALSE, ...)
+	out <- writeRaster(x, filename = tf, format = "GeoTIFF", overwrite = TRUE, warn = FALSE, ...)
 	terra::plot(out, ...)
 	
 	} # EOF
@@ -72,3 +72,20 @@ methods::setMethod(
 	
 	} # EOF
 )
+
+#' Plot using a G-object's [sources()] name
+#'
+#' @param x The [sources()] name of a `GRaster` or `GVector`
+#' @param ... Other arguments to pass to [plot()].
+#'
+#' @noRd
+.plot <- function(x, ...) {
+	files <- .ls()
+	what <- names(files)[files == x]
+	if (what == "raster") {
+		x <- .makeGRaster(x)
+	} else if (what == "vector") {
+		x <- .makeGVector(x)
+	}
+	plot(x, ...)
+}

@@ -14,26 +14,24 @@
   cores = faster("cores")
 )
 
-\S4method{fragmentation}{GRaster}(x, undet = "perforated", restrict = FALSE)
+\S4method{fragmentation}{GRaster}(x, w = 3, undet = "perforated", restrict = FALSE)
 }
 \arguments{
 \item{x}{A \code{SpatRaster} or \code{GRaster}.}
 
-\item{w}{An odd, positive integer: Size of the window across which fragmentation is calculated (in units of "rows" and "columns"). The default is 3, meaning the function uses a 3x3 moving window to calculate fragmentation.}
+\item{w}{An odd, positive integer: Size of the window across which fragmentation is calculated (in units of "rows" and "columns"). The default is 3, meaning the function uses a 3x3 moving window to calculate fragmentation. For large rasters, compute time is ~\emph{O}(\code{N}) + \emph{O}(\code{N * w^2}), where \code{N} is the number of cells in the raster. So, even a small increase in \code{w} can increase compute time by a lot.}
 
 \item{undet}{Character: How to assign the "undetermined" case. Valid values are \code{"perforated"} (default), \code{"edge"}, and \code{"undetermined"}. Partial matching is used. If \code{Pf} is the proportional density raster cell value and \code{Pff} the proportional connectivity raster cell value, the undetermined case occurs when \code{Pf} > 0.6 and \code{Pf == Pff}.}
 
-\item{restrict}{Logical: If \code{TRUE}, then fragmentation will only be assigned to cells that have the focal habitat within them. If \code{FALSE} (default), cells surrounding the focal habitat class can also be assigned a fragmentation class other than 0, even if they do not have the focal habitat in them. Note that the case where \code{restrict = TRUE} is a departure from Riitters et al. (2020), but it allows you to create a series of fragmentation rasters for different habitat classes where cells with classes(other than 0) do not overlap.}
+\item{restrict}{Logical: If \code{TRUE}, then fragmentation will only be assigned to cells that have the focal habitat within them. If \code{FALSE} (default), cells surrounding the focal habitat class can also be assigned a fragmentation class other than 0, even if they do not have the focal habitat in them. Note that the case where \code{restrict = TRUE} is a departure from Riitters et al. (2020).}
 
-\item{cores}{Integer: Number of processor cores to use for when processing a \code{SpatRaster}. This is only used if \code{mask} is \code{TRUE}. If you want to use multiple cores for processing a \code{GRaster}, set the \code{cores} option using \code{faster(cores = N)} (see \code{\link[=faster]{faster()}}).}
+\item{cores}{Integer: Number of processor cores to use for when processing a \code{SpatRaster}.}
 }
 \value{
 A categorical \code{SpatRaster} or \code{GRaster}. The values assigned to each class can be seen with \code{\link[=levels]{levels()}}.
 }
 \description{
-Riitters et al. (2020) propose a classification scheme for forest fragmentation (which can be applied to any habitat type). The scheme relies on calculating density (e.g., number of forested cells in a window around a focal cell) and connectivity (number of cases where neighboring cells are both forested). These values are used to assign classes to each cell: "patch," "transitional," "perforated," "edge," and "interior" (plus an "undetermined" class for an edge case). To this, we also add a "none" class which occurs when the window has no cells with the focal habitat. This function calculates these classes from a \code{GRaster} or \code{SpatRaster} in which the focal habitat type has cell values of 1, and non-focal habitat type has cell values of 0 or \code{NA}.
-
-\emph{Currently, this function only operates on a 3x3 window of cells.}
+Riitters et al. (2020) propose a classification scheme for forest fragmentation (which can be applied to any habitat type). The scheme relies on calculating density (e.g., number of forested cells in a window around a focal cell) and connectivity (number of cases where neighboring cells are both forested). These values are used to assign classes to each cell: "patch," "transitional," "perforated," "edge," and "interior" (plus an optional "undetermined" class for an edge case). To this, we also add a "none" class which occurs when the focal cell's window has no cells with the focal habitat. This function calculates these classes from a \code{GRaster} or \code{SpatRaster} in which the focal habitat type has cell values of 1, and non-focal habitat type has cell values of 0 or \code{NA}.
 }
 \examples{
 if (grassStarted()) {
@@ -53,7 +51,7 @@ fragTerraMasked <- fragmentation(madForest, restrict = TRUE)
 
 # Compare:
 fragTerras <- c(fragTerra, fragTerraMasked)
-names(fragTerras) <- c("unmasked", "masked")
+names(fragTerras) <- c("unrestricted", "restricted")
 
 plot(fragTerras)
 levels(fragTerras)
@@ -70,7 +68,7 @@ fragMasked <- fragmentation(forest, restrict = TRUE)
 
 # Compare:
 frags <- c(frag, fragMasked)
-names(frags) <- c("unmasked", "masked")
+names(frags) <- c("unrestricted", "restricted")
 
 plot(frags)
 levels(frags)

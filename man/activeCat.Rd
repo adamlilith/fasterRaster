@@ -3,6 +3,8 @@
 \name{activeCat,GRaster-method}
 \alias{activeCat,GRaster-method}
 \alias{activeCat}
+\alias{activeCats,GRaster-method}
+\alias{activeCats}
 \alias{activeCat<-,GRaster,numeric-method}
 \alias{activeCat<-}
 \alias{activeCat<-,GRaster,integer-method}
@@ -10,6 +12,8 @@
 \title{Get or set the column with category labels in a categorical raster}
 \usage{
 \S4method{activeCat}{GRaster}(x, layer = 1, names = FALSE)
+
+\S4method{activeCats}{GRaster}(x, names = FALSE)
 
 \S4method{activeCat}{GRaster,numeric}(x, layer = 1) <- value
 
@@ -27,10 +31,10 @@
 \item{value}{Numeric, integer, or character. Following \code{\link[terra:activeCat]{terra::activeCat()}}, the first column in each levels table is ignored. So, if you want the second column to be the category label, use 1. If you want the third column, use 2, and so on. You can also specify the active column by its column name (though this can't be the first column's name).}
 }
 \value{
-\code{activeCat()} returns an integer or character vector of active column indices or names. \verb{activeCat()<-} returns a \code{GRaster}.
+\code{activeCat()} returns an integer or character of the active column index or name. \code{activeCats()} returns a vector of indices or names. \verb{activeCat()<-} returns a \code{GRaster}.
 }
 \description{
-\code{GRaster}s can represent \link[=tutorial_raster_data_types]{categorical data}. Cell values are actually integers, each corresponding to a category, such as "desert" or "wetland." A categorical raster is associated with a table that matches each value to a category name. The table must be \code{NULL} (i.e., no categories--so not a categorical raster), or have at least two columns. The first column must have integers and represent raster values. One or more subsequent columns must have category labels. Which column corresponds to category labels can be seen using \code{activeCat()} and set using \verb{activeCat()<-}.
+For a single layer of a \link[=tutorial_raster_data_types]{categorical} \code{GRaster}, \code{activeCat()} returns the column of the labels to be matched to each value in the raster. \code{activeCats()} does the same, but for all layers of a \code{GRaster}. \verb{activeCat()<-} sets the column to be used as category labels. Note that following \code{\link[terra:activeCat]{terra::activeCat()}}, the first column in the "levels" table is ignored, so an "active category" value of 1 means the second column is used as labels, a value of 2 means the third is used, and so on.
 }
 \examples{
 if (grassStarted()) {
@@ -65,6 +69,8 @@ zonalGeog(cover) # geometric statistics
 # Which column sets the category labels?
 activeCat(cover)
 activeCat(cover, names = TRUE)
+
+activeCats(c(cover, cover))
 
 # Choose a different column for category labels:
 levels(cover)

@@ -5,12 +5,14 @@
 \alias{rast}
 \title{Convert a GRaster to a SpatRaster}
 \usage{
-\S4method{rast}{GRaster}(x, ...)
+\S4method{rast}{GRaster}(x, mm = FALSE, ...)
 }
 \arguments{
 \item{x}{A \code{GRaster}.}
 
-\item{...}{Additional arguments to send to \code{\link[=writeRaster]{writeRaster()}} (typically unneeded, though \code{bigTiff} may be of use if the raster is large).}
+\item{mm}{Logical: If \code{TRUE}, call \code{\link[terra:minmax]{terra::setMinMax()}} on the raster to ensure it has metadata on the minimum and maximum values. For large rasters, this can take a long time, so the default value of \code{mm} is \code{FALSE}.}
+
+\item{...}{Additional arguments to send to \code{\link[=writeRaster]{writeRaster()}}. These are typically unneeded, though \code{bigTiff} may be of use if the raster is large, and supplying \code{datatype} can speed conversion of large rasters. See \code{\link[=writeRaster]{writeRaster()}}.}
 }
 \value{
 A \code{SpatRaster} (\strong{terra} package).

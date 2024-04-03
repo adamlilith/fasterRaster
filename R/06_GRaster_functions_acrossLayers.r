@@ -473,8 +473,8 @@ setMethod(
 #' @noRd
 .genericMultiLayer <- function(fx, fxName, x, na.rm, return = "GRaster") {
 
-    .locationRestore(x)
-    .region(x)
+	.locationRestore(x)
+	.region(x)
 
 	src <- .makeSourceName(fx, "rast")
 	args <- list(
@@ -488,14 +488,20 @@ setMethod(
 	)
 	
 	if (!na.rm) args$flags <- c(args$flags, "n")
-	
 	do.call(rgrass::execGRASS, args = args)
+
 	if (return == "GRaster") {
-		.makeGRaster(src, fxName)
+		if (fxName %in% c("mode", "min", "max")) {
+			level <- combineLevels(x)
+		} else {
+			levels <- NULL
+		}
+		out <- .makeGRaster(src, fxName, levels = levels)
 	} else if (return == "source") {
-		src
+		out <- src
 	} else {
 		stop("Invalid value for ", sQuote("return"), ".")
 	}
-	
+	out
+
 }

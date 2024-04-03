@@ -3,7 +3,7 @@
 # global PUBLIC options
 .grassDirDefault <- function() NA_character_
 .addonsDirDefault <- function() NA_character_
-.workDirDefault <- function() file.path(forwardSlash(tempdir()))
+.workDirDefault <- function() file.path(omnibus::forwardSlash(tempdir()))
 
 .locationDefault <- function() "default"
 # .mapsetDefault <- function() "PERMANENT"

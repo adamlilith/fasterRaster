@@ -118,16 +118,16 @@ faster <- function(
 
   		if (!is.character(opts$workDir) || length(opts$workDir) != 1L) stop(error)
 
-		workDir <- forwardSlash(workDir)
+		workDir <- omnibus::forwardSlash(workDir)
 
 	}
 
 	if (any(names(opts) %in% "nAtATime")) {
-		if (!is.numeric(opts$nAtATime) | (opts$nAtATime <= 0 & opts$nAtATime %% 1 != 0)) stop("Option `nAtATime` must be an integer >= 1. The default is ", .nAtATimeDefault(), ".")
+		if (!is.numeric(opts$nAtATime) | (opts$nAtATime <= 0 & !omnibus::is.wholeNumber(opts$nAtATime))) stop("Option `nAtATime` must be an integer >= 1. The default is ", .nAtATimeDefault(), ".")
 	}
 
 	if (any(names(opts) %in% "cores")) {
-		if (!is.numeric(opts$cores) | (opts$cores <= 0 & opts$cores %% 1 != 0)) stop("Option `cores` must be an integer >= 1. The default is ", .coresDefault(), ".")
+		if (!inherits(opts$cores, c("integer", "numeric")) || opts$cores <= 0 || !omnibus::is.wholeNumber(opts$cores)) stop("Option `cores` must be an integer >= 1. The default is ", .coresDefault(), ".")
 	}
 
 	if (any(names(opts) %in% "verbose")) {

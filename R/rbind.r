@@ -20,8 +20,8 @@ print <- function(...) {
 #' @export
 rbind.GVector <- function(...) {
 
-	.locationRestore(x)
 	dots <- list(...)
+	.locationRestore(dots[[1L]])
 
 	# unlist any lists
 	dots <- omnibus::unlistRecursive(dots)

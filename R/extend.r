@@ -97,7 +97,7 @@ methods::setMethod(
             y <- rep(y, each = 2L)
         }
         
-        if (any(y %% 1 != 0)) stop("Values of ", sQuote("y"), " must be numeric integers.")
+        if (any(!omnibus::is.wholeNumber(y))) stop("Values of ", sQuote("y"), " must be numeric integers.")
         if (any(y < 0L)) y[y < 0L] <- 0L
 
     } else {
@@ -184,6 +184,6 @@ methods::setMethod(
         
     } # next raster
     
-    .makeGRaster(srcs, names = names(x), levels = levels(x))
+    .makeGRaster(srcs, names = names(x), levels = levels(x), ac = activeCats(x))
 
 } # EOF

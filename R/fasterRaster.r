@@ -41,6 +41,7 @@
 #' ## Functions that operate on or create `GRasters`
 #' [Arithmetic]: Mathematical operations on `GRaster`s: `+`, `-`, `*`, `/`, `^`, `%%` (modulus), `%/%` (integer division)\cr
 #' [Logical comparisons][Compare-methods]: `<`, `<=`, `==`, `!=`, `>=`, and `>`, plus \code{\link[fasterRaster]{%in%}} and \code{\link[fasterRaster]{%notin%}} (for categorical rasters only)\cr
+#' [Logical operators][Logic-methods]: `|`and `&`
 #'
 #' Single-layer functions (applied to each layer of a `GRaster`):
 #' - Working with `NA`s: [is.na()] and [not.na()] \cr
@@ -70,6 +71,7 @@
 #' [cellSize()]: Cell area\cr
 #' [clump()]: Group adjacent cells with similar values\cr
 #' [combineCats()]: Combine values from two or more categorical and/or integer rasters\cr
+#' [combineLevels()]: Combine the "levels" tables of two or more categorical `GRaster`s\cr
 #' [cor()]: Correlation matrix between layers of a `GRaster`\cr
 #' [cov()]: Covariance matrix between layers of a `GRaster`\cr
 #' [crop()]: Remove parts of a `GRaster`\cr
@@ -91,6 +93,7 @@
 #' [mask()]: Remove values in a `GRaster` based on values in another `GRaster` or vector\cr
 #' [match()], \code{\link[fasterRaster]{%in%}}, and \code{\link[fasterRaster]{%notin%}}: Find which cells of a `GRaster` match or do not match certain values\cr
 #' [merge()]: Combine two or more rasters with different extents and fill in `NA`s\cr
+#' \code{\link[fasterRaster]{names<-}}: Assign names to a `GRaster`\cr
 #' [noise()]: Remove coarse-scale trends from a `GRaster`, leaving just fine-scale "noise"\cr
 #' [pairs()]: Plot correlations between `GRaster` layers\cr
 #' [pca()]: Apply a principal components analysis (PCA) to a `GRaster`\cr
@@ -101,11 +104,11 @@
 #' [predict()]: Make predictions to a `GRaster` from a linear model or generalized linear model\cr
 #' [resample()]: Change cell size\cr
 #' [rnormRast()]: A random `GRaster` with values drawn from a normal distribution\cr
+#' [rSpatialDepRast()]: Create a random `GRaster` with or without spatial dependence\cr
 #' [runifRast()]: A random `GRaster` with values drawn from a uniform distribution\cr
 #' [scale()]: Subtract means and divide by standard deviations\cr
 #' [selectRange()]: Select values from rasters in a stack based on values in another `GRaster`\cr
 #' [spatSample()]: Randomly points from a `GRaster`\cr
-#' [spDepRast()]: Create a random `GRaster` with or without spatial dependence\cr
 #' [sun()]: Solar radiance and irradiance\cr
 #' [terrain()]: Slope, aspect, curvature, and partial slopes\cr
 #' [thinLines()]: Reduce linear features on a `GRaster` so linear features are 1 cell wide\cr
@@ -116,7 +119,7 @@
 #' [zonalGeog()]: Geographic statistics (area, perimeter, fractal dimension, etc.) for sets of cells with the same values\cr
 #'
 #' ## Functions operating on categorical (factor) rasters
-#' [activeCat()]: Column that defines category labels\cr
+#' [activeCat()] and [activeCats()]: Column(s) that defines category labels\cr
 #' \code{\link[fasterRaster]{activeCat<-}}: Set column that defines category labels\cr
 #' [addCats()]: Add new columns to a "levels" table\cr
 #' \code{\link[fasterRaster]{addCats<-}}: Add new rows (levels) to a "levels" table\cr
@@ -124,6 +127,7 @@
 #' [catNames()]: Names of each "levels" table\cr
 #' [cats()]: "Levels" table of a categorical raster\cr
 #' [combineCats()]: Combine categories from two or more categorical rasters\cr
+#' [combineLevels()]: Combine the "levels" tables of two or more categorical `GRaster`s\cr
 #' [complete.cases()]: Find rows of a categorical `GRaster`'s "levels" table that have no `NA`s in them\cr
 #' [droplevels()]: Remove one or more levels\cr
 #' [freq()]: Frequency of each category across cells of a raster\cr
@@ -153,7 +157,6 @@
 #' [is.lonlat()]: Is an object projected (e.g., in WGS84)?\cr
 #' [is.points()], [is.lines()], [is.polygons()]: Does a `GVector` represent points, lines, or polygons?\cr
 #' [names()]: Names of `GVector` fields\cr
-#' \code{\link[fasterRaster]{names<-}}: Assign names to columns of a `GVector`s data table\cr
 #' [ncol()]: Number of fields\cr
 #' [ngeom()]: Number of geometries (points, lines, polygons)\cr
 #' [nrow()]: Number of rows in a vector data table\cr
@@ -194,6 +197,7 @@
 #' [intersect()] or \code{\link[fasterRaster]{*}}: Intersection of two `GVectors`.\cr
 #' [kernel()]: Kernel density estimator of points.\cr
 #' [missing.cases()]: Find rows of a `GVector`'s data table that have at least `NA` in them\cr
+#' \code{\link[fasterRaster]{names<-}}: Assign names to columns of a `GVector`s data table\cr
 #' [project()]: Change coordinate reference system\cr
 #' [rasterize()]: Convert a `GVector` to a `GRaster`\cr
 #' [rbind()]: Combine `GVectors\cr
@@ -238,10 +242,8 @@
 #'
 #' ## General purpose functions
 #' [appendLists()]: Append values to elements of a list from another list\cr
-#' [compareFloat()]: Compare values accounting for differences due to floating point precision\cr
 #' [compareGeom()]: Determine if geographic metadata is same between `GRaster`s and/or `GVector`s\cr
 #' [dropRows()]: Remove rows from a `data.frame` or `data.table`\cr
-#' [forwardSlash()]: Replace backslash with forward slash\cr
 #' [grassInfo()]: **GRASS** version and citation\cr
 #' [replaceNAs()]: Replace `NA`s in columns of a `data.table` or `data.frame`, or in a vector\cr
 #' [seqToSQL()]: Format a numeric series into an SQL value call\cr
@@ -282,6 +284,7 @@
 #' `.message()`: Display a warning or message if the given warning has not been displayed since **fasterRaster** was attached or if a given number or hours has passed since then\cr
 #' `.minVal()` and `.maxVal()`: Values in the `@minVal` and `@maxVal` slots in a `GRaster`\cr
 #' `.nlevels()`: Number of levels in a `SpatVector`, `data.frame`, `data.table`, empty string, or a list of `data.frame`s, `data.table`s, and/or empty strings.\cr
+#' `.plot()`: Plot using the [sources()] name of a `GRaster` or `GVector`\cr
 #' `.projection()`: Value of the `@projection` slot in a `GRaster` or `GVector`\cr
 #' `.quiet()`: Returns "quiet" if `faster("verbose")` is `TRUE`\cr
 #' `.rastInfo()` and `.vectInfo()`: Metadata for a **GRASS** raster or vector\cr

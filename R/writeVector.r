@@ -57,6 +57,8 @@ setMethod(
 
 	.locationRestore(x)
 
+	filename <- normalizePath(filename, mustWork = FALSE)
+
 	if (attachTable & nrow(x) > 0L) {
 
 		table <- as.data.frame(x)

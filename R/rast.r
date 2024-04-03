@@ -3,7 +3,8 @@
 #' @description The **fasterRaster** version of the `rast()` function converts a `GRaster` to a `SpatRaster` (from the **terra** package).
 #'
 #' @param x A `GRaster`.
-#' @param ... Additional arguments to send to [writeRaster()] (typically unneeded, though `bigTiff` may be of use if the raster is large).
+#' @param mm Logical: If `TRUE`, call [terra::setMinMax()] on the raster to ensure it has metadata on the minimum and maximum values. For large rasters, this can take a long time, so the default value of `mm` is `FALSE`.
+#' @param ... Additional arguments to send to [writeRaster()]. These are typically unneeded, though `bigTiff` may be of use if the raster is large, and supplying `datatype` can speed conversion of large rasters. See [writeRaster()].
 #'
 #' @return A `SpatRaster` (**terra** package).
 #' 
@@ -17,10 +18,11 @@
 setMethod(
 	"rast",
 	signature(x = "GRaster"),
-	function(x, ...) {
+	function(x, mm = FALSE, ...) {
 
-	filename <- tempfile(fileext=".tif")
-	out <- writeRaster(x, filename=filename, ...)
+	filename <- tempfile(fileext = ".tif")
+	out <- writeRaster(x, filename = filename, format = "GeoTIFF", mm = mm, ...)
 	out
+
 	} # EOF
 )

@@ -318,7 +318,7 @@ methods::setMethod(
 
 	if (method != "nearest" & fallback) method <- paste0(method, "_f")
 
-	srcs <- .makeSourceName(names(x), "raster", nlyr(x))
+	srcs <- .makeSourceName("project", "raster", nlyr(x))
 	for (i in seq_len(nlyr(x))) {
 		
 		args <- list(
@@ -335,7 +335,12 @@ methods::setMethod(
 		if (wrap) args$flags <- c(args$flags, "n")
 
 		do.call(rgrass::execGRASS, args=args)
-		thisOut <- .makeGRaster(srcs[i], names(x)[i])
+		if (is.factor(x)[i] & method == "nearest") {
+			levels <- cats(x)[[i]]
+		} else {
+			levels <- NULL
+		}
+		thisOut <- .makeGRaster(srcs[i], names(x)[i], levels = levels, ac = activeCat(x, layer = i))
 		if (i == 1L) {
 			out <- thisOut
 		} else {

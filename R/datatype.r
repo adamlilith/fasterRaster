@@ -45,8 +45,10 @@ methods::setMethod(
 		max <- stats[ , "max"]
 		sum <- stats[ , "sum"]
 
-	    remainder <- stats %% 1L
-		integer <- rowSums(abs(remainder)) == 0L
+		integer <- all(omnibus::is.wholeNumber(stats))
+
+	    # remainder <- stats %% 1L
+		# integer <- rowSums(abs(remainder)) == 0L
 
 		for (i in seq_along(out)) {
 
@@ -97,8 +99,10 @@ methods::setMethod(
 	max <- stats[ , "max"]
 	sum <- stats[ , "sum"]
 
-	remainder <- stats %% 1
-	integer <- rowSums(abs(remainder)) == 0
+	integer <- all(omnibus::is.wholeNumber(stats))
+
+	# remainder <- stats %% 1
+	# integer <- rowSums(abs(remainder)) == 0
 
 	nl <- terra::nlyr(x)
 	

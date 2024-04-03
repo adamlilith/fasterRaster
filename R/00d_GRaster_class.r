@@ -97,8 +97,13 @@ GRaster <- methods::setClass(
 .canMakeRasterCategorical <- function(object) {
 
 	dt <- object@datatypeGRASS
-	numLevels <- sapply(object@levels, nrow)
-	any(numLevels > 0L & dt != "CELL")
+	numLevels <- nlevels(object)
+	if (any(numLevels > 0L)) {
+		out <- any(dt[numLevels > 0L] != "CELL")
+	} else {
+		out <- FALSE
+	}
+	out
 
 }
 
@@ -128,11 +133,11 @@ methods::setValidity("GRaster",
 		} else if (length(object@levels) != object@nLayers) {
 			"The number of tables in @levels must be the same as the number of @nLayers."
 		} else if (.canMakeRasterCategorical(object)) {
-			"Only GRASS datatype of a rasters with levels must be CELL."
+			"Only rasters of datatype `CELL` can be categorical."
 		} else if (.validLevelTable(object)) {
-			"Each table must be a NULL data.table, or if not, the first column must be an integer, and there must be >1 columns."
+			"Each table must be a NULL `data.table`, or if not, the first column must be an integer, and there must be >1 columns."
 		} else if (.validActiveCat(object)) {
-			"@activeCat must be NA_integer, or an integer between 2 and the number of columns in each data.table in @levels."
+			"@activeCat must be `NA_integer_`, or an integer between 2 and the number of columns in each `data.table` in @levels."
 		} else {
 			TRUE
 		}
@@ -146,6 +151,7 @@ methods::setValidity("GRaster",
 #' @param src Character: The name of the raster in **GRASS**.
 #' @param names Character: Name of the raster.
 #' @param levels `NULL` (default), a `data.frame`, `data.table`, an empty string (`""`), or a list of `data.frame`s, `data.table`s, and/or empty strings: These become the raster's [levels()]. If `""`, then no levels are defined.
+#' @param ac vector of numeric or integer values >=1, or `NULL` (default): Active category column (offset by 1, so 1 really means the second column, 2 means the third, etc.). A value of `NULL` uses an automated procedure to figure it out.
 #'
 #' @returns A `GRaster`.
 #'
@@ -154,27 +160,32 @@ methods::setValidity("GRaster",
 #' @example man/examples/ex_GRaster_GVector.r
 #'
 #' @noRd
-.makeGRaster <- function(src, names = "raster", levels = "") {
+.makeGRaster <- function(src, names = "raster", levels = "", ac = NULL) {
 
 	# levels: convert empty strings to NULL data.tables and data.frames to data.tables
 	if (is.null(levels)) levels <- data.table::data.table(NULL)
 	if (!inherits(levels, "list")) levels <- list(levels)
-	if (length(levels) == 1L & length(src) > 1L) {
-		for (i in 2L:length(src)) levels[[i]] <- levels[[1L]]
-	}
+	if (length(levels) == 1L & length(src) > 1L) for (i in 2L:length(src)) levels[[i]] <- levels[[1L]]
 
 	# active category and levels
-	ac <- rep(NA_integer_, length(levels))
-	for (i in seq_along(levels)) {
-		if (is.null(levels[[i]]) || (is.character(levels[[i]]) && levels[[i]] == "")) {
-			ac[i] <- NA_integer_
-			levels[[i]] <- data.table::data.table(NULL)
-		} else if (!inherits(levels[[i]], "data.table")) {
-			ac[i] <- 2L
-   			levels[[i]] <- data.table::data.table(levels[[i]])
-		} else if (inherits(levels[[i]], "data.table")) {
-			ac[i] <- 2L
+	if (is.null(ac)) {
+		
+		ac <- rep(NA_integer_, length(levels))
+		for (i in seq_along(levels)) {
+			if (is.null(levels[[i]]) || (is.character(levels[[i]]) && levels[[i]] == "")) {
+				ac[i] <- NA_integer_
+				levels[[i]] <- data.table::data.table(NULL)
+			} else if (!inherits(levels[[i]], "data.table")) {
+				ac[i] <- 2L
+				levels[[i]] <- data.table::data.table(levels[[i]])
+			} else if (inherits(levels[[i]], "data.table")) {
+				ac[i] <- 2L
+			}
 		}
+	
+	} else {
+		ac <- as.integer(ac)
+		ac <- ac + 1L
 	}
 
 	info <- .rastInfo(src)

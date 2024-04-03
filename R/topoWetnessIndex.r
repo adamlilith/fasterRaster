@@ -2,7 +2,7 @@
 #'
 #' @description This function creates a raster map with values equal to the topographic wetness index (TWI), which is a measure of how much overland water flow tends to accumulate in or flow away from a location.
 #'
-#' @param x A `GRaster` (typically representing elevation). The raster must be projected (i.e., not in WGS84, NAD83 etc.).
+#' @param x A `GRaster` (typically representing elevation). The raster must be projected (i.e., not in WGS84, NAD83, et cetera).
 #'
 #' @returns A `GRaster`.
 #'

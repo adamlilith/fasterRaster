@@ -4,7 +4,7 @@
 \alias{catNames,GRaster-method}
 \alias{catNames}
 \alias{catNames,SpatRaster-method}
-\title{Names of levels tables of a categorical raster}
+\title{Names of columns of the levels table of a categorical raster}
 \usage{
 \S4method{catNames}{GRaster}(x, layer = NULL)
 
@@ -54,6 +54,8 @@ zonalGeog(cover) # geometric statistics
 # Which column sets the category labels?
 activeCat(cover)
 activeCat(cover, names = TRUE)
+
+activeCats(c(cover, cover))
 
 # Choose a different column for category labels:
 levels(cover)

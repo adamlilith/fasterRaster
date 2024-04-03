@@ -51,6 +51,7 @@ A tutorial on \link[=tutorial_raster_data_types]{raster data types}\cr
 
 \link{Arithmetic}: Mathematical operations on \code{GRaster}s: \code{+}, \code{-}, \code{*}, \code{/}, \code{^}, \code{\%\%} (modulus), \code{\%/\%} (integer division)\cr
 \link[=Compare-methods]{Logical comparisons}: \code{<}, \code{<=}, \code{==}, \code{!=}, \code{>=}, and \code{>}, plus \code{\link[fasterRaster]{\%in\%}} and \code{\link[fasterRaster]{\%notin\%}} (for categorical rasters only)\cr
+\link[=Logic-methods]{Logical operators}: \code{|}and \code{&}
 
 Single-layer functions (applied to each layer of a \code{GRaster}):
 \itemize{
@@ -84,6 +85,7 @@ The assign operators, \code{\link[fasterRaster]{$<-}}, \code{\link[fasterRaster]
 \code{\link[=cellSize]{cellSize()}}: Cell area\cr
 \code{\link[=clump]{clump()}}: Group adjacent cells with similar values\cr
 \code{\link[=combineCats]{combineCats()}}: Combine values from two or more categorical and/or integer rasters\cr
+\code{\link[=combineLevels]{combineLevels()}}: Combine the "levels" tables of two or more categorical \code{GRaster}s\cr
 \code{\link[=cor]{cor()}}: Correlation matrix between layers of a \code{GRaster}\cr
 \code{\link[=cov]{cov()}}: Covariance matrix between layers of a \code{GRaster}\cr
 \code{\link[=crop]{crop()}}: Remove parts of a \code{GRaster}\cr
@@ -115,11 +117,11 @@ The assign operators, \code{\link[fasterRaster]{$<-}}, \code{\link[fasterRaster]
 \code{\link[=predict]{predict()}}: Make predictions to a \code{GRaster} from a linear model or generalized linear model\cr
 \code{\link[=resample]{resample()}}: Change cell size\cr
 \code{\link[=rnormRast]{rnormRast()}}: A random \code{GRaster} with values drawn from a normal distribution\cr
+\code{\link[=rSpatialDepRast]{rSpatialDepRast()}}: Create a random \code{GRaster} with or without spatial dependence\cr
 \code{\link[=runifRast]{runifRast()}}: A random \code{GRaster} with values drawn from a uniform distribution\cr
 \code{\link[=scale]{scale()}}: Subtract means and divide by standard deviations\cr
 \code{\link[=selectRange]{selectRange()}}: Select values from rasters in a stack based on values in another \code{GRaster}\cr
 \code{\link[=spatSample]{spatSample()}}: Randomly points from a \code{GRaster}\cr
-\code{\link[=spDepRast]{spDepRast()}}: Create a random \code{GRaster} with or without spatial dependence\cr
 \code{\link[=sun]{sun()}}: Solar radiance and irradiance\cr
 \code{\link[=terrain]{terrain()}}: Slope, aspect, curvature, and partial slopes\cr
 \code{\link[=thinLines]{thinLines()}}: Reduce linear features on a \code{GRaster} so linear features are 1 cell wide\cr
@@ -132,7 +134,7 @@ The assign operators, \code{\link[fasterRaster]{$<-}}, \code{\link[fasterRaster]
 
 \subsection{Functions operating on categorical (factor) rasters}{
 
-\code{\link[=activeCat]{activeCat()}}: Column that defines category labels\cr
+\code{\link[=activeCat]{activeCat()}} and \code{\link[=activeCats]{activeCats()}}: Column(s) that defines category labels\cr
 \code{\link[fasterRaster]{activeCat<-}}: Set column that defines category labels\cr
 \code{\link[=addCats]{addCats()}}: Add new columns to a "levels" table\cr
 \code{\link[fasterRaster]{addCats<-}}: Add new rows (levels) to a "levels" table\cr
@@ -140,6 +142,7 @@ The assign operators, \code{\link[fasterRaster]{$<-}}, \code{\link[fasterRaster]
 \code{\link[=catNames]{catNames()}}: Names of each "levels" table\cr
 \code{\link[=cats]{cats()}}: "Levels" table of a categorical raster\cr
 \code{\link[=combineCats]{combineCats()}}: Combine categories from two or more categorical rasters\cr
+\code{\link[=combineLevels]{combineLevels()}}: Combine the "levels" tables of two or more categorical \code{GRaster}s\cr
 \code{\link[=complete.cases]{complete.cases()}}: Find rows of a categorical \code{GRaster}'s "levels" table that have no \code{NA}s in them\cr
 \code{\link[=droplevels]{droplevels()}}: Remove one or more levels\cr
 \code{\link[=freq]{freq()}}: Frequency of each category across cells of a raster\cr
@@ -258,10 +261,8 @@ The \code{\link[fasterRaster]{$<-}} operator can be used to replace specific col
 \subsection{General purpose functions}{
 
 \code{\link[=appendLists]{appendLists()}}: Append values to elements of a list from another list\cr
-\code{\link[=compareFloat]{compareFloat()}}: Compare values accounting for differences due to floating point precision\cr
 \code{\link[=compareGeom]{compareGeom()}}: Determine if geographic metadata is same between \code{GRaster}s and/or \code{GVector}s\cr
 \code{\link[=dropRows]{dropRows()}}: Remove rows from a \code{data.frame} or \code{data.table}\cr
-\code{\link[=forwardSlash]{forwardSlash()}}: Replace backslash with forward slash\cr
 \code{\link[=grassInfo]{grassInfo()}}: \strong{GRASS} version and citation\cr
 \code{\link[=replaceNAs]{replaceNAs()}}: Replace \code{NA}s in columns of a \code{data.table} or \code{data.frame}, or in a vector\cr
 \code{\link[=seqToSQL]{seqToSQL()}}: Format a numeric series into an SQL value call\cr
@@ -306,6 +307,7 @@ Tutorial on \strong{GRASS} \link[=tutorial_locations_mapsets]{"locations" and ma
 \code{.message()}: Display a warning or message if the given warning has not been displayed since \strong{fasterRaster} was attached or if a given number or hours has passed since then\cr
 \code{.minVal()} and \code{.maxVal()}: Values in the \verb{@minVal} and \verb{@maxVal} slots in a \code{GRaster}\cr
 \code{.nlevels()}: Number of levels in a \code{SpatVector}, \code{data.frame}, \code{data.table}, empty string, or a list of \code{data.frame}s, \code{data.table}s, and/or empty strings.\cr
+\code{.plot()}: Plot using the \code{\link[=sources]{sources()}} name of a \code{GRaster} or \code{GVector}\cr
 \code{.projection()}: Value of the \verb{@projection} slot in a \code{GRaster} or \code{GVector}\cr
 \code{.quiet()}: Returns "quiet" if \code{faster("verbose")} is \code{TRUE}\cr
 \code{.rastInfo()} and \code{.vectInfo()}: Metadata for a \strong{GRASS} raster or vector\cr

@@ -10,9 +10,9 @@
 #' * [madDypsis]: Records of plants of the genus *Dypsis* (points)
 #' * [madRivers]: Major rivers (lines)
 #'
-#' Rasters (objects of class `SpatRaster` from the **terra** package):
+#' Rasters (objects of class `SpatRaster` from the **terra** package, saved as GeoTIFF files):
 #' * [madChelsa]: Bioclimatic variables
-#' * [madCover]: Land cover (also see [madCoverCats])
+#' * [madCover]: Land cover (also see `madCoverCats`)
 #' * [madElev]: Elevation
 #' * [madForest2000]: Forest cover in year 2000
 #' * [madForest2014]: Forest cover in year 2014

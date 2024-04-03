@@ -71,6 +71,8 @@ methods::setMethod(
 	dots <- list(...)
 	dotNames <- names(dots)
 
+	x <- normalizePath(x, mustWork = FALSE)
+
 	### raster or vector?
 	#####################
 	if (is.null(rastOrVect)) {

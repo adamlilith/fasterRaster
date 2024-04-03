@@ -159,6 +159,24 @@ elev + 100 < 2 * elev
 elevs > 10
 10 > elevs
 
+# logic
+elev < 10 | elev > 200
+elev < 10 | cos(elev) > 0.9
+
+elev < 10 | TRUE
+TRUE | elev > 200
+
+elev < 10 | FALSE
+FALSE | elev > 200
+
+elev < 10 & cos(elev) > 0.9
+
+elev < 10 & TRUE
+TRUE & elev > 200
+
+elev < 10 & FALSE
+FALSE & elev > 200
+
 # mathematical functions on two or more rasters
 mean(elevs)
 mmode(elevs)

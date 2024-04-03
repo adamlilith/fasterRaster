@@ -27,13 +27,14 @@ Categorical rasters (also called "factor" rasters) are actually integer rasters,
 
 \subsection{Functions relevant to raster data types}{
 \itemize{
-\item \code{\link[=activeCat]{activeCat()}} and \code{\link[fasterRaster]{activeCat<-}} can be used to see or assign which column in a "levels" table associated with a categorical raster is used as category labels.
+\item \code{\link[=activeCat]{activeCat()}}, \code{\link[=activeCats]{activeCats()}}, and \code{\link[fasterRaster]{activeCat<-}} can be used to see or assign which column in a "levels" table associated with a categorical raster is used as category labels.
 \item \code{\link[=addCats]{addCats()}} adds information to the "levels" table using \code{\link[data.table:merge]{data.table::merge()}} (same as \code{\link[=merge]{merge()}}).
 \item \code{\link[fasterRaster]{addCats<-}} add new levels to a "levels" table.
 \item \code{\link[=as.int]{as.int()}}, \code{\link[=as.float]{as.float()}}, and \code{\link[=as.doub]{as.doub()}} coerce a raster to an integer, float, or double.
 \item \code{\link[=catNames]{catNames()}} reports the column names of the "levels" table of each layer of a raster.
 \item \code{\link[=cats]{cats()}} returns the entire "levels" table of a categorical raster.
 \item \code{\link[=combineCats]{combineCats()}} combines levels of two or more categorical or integer rasters.
+\item \code{\link[=combineLevels]{combineLevels()}}: Combine the "levels" tables of two or more categorical \code{GRaster}s.
 \item \code{\link[=complete.cases]{complete.cases()}} finds rows in the levels table that have no \code{NA}s.
 \item \code{\link[=datatype]{datatype()}} returns the data type of a \code{GRaster}.
 \item \code{\link[=droplevels]{droplevels()}} removes "unused" levels in a "levels" table.
@@ -59,7 +60,7 @@ You can save substantial space on disk if you set the \code{datatype} argument i
    \code{integer} \tab \code{INT4S} \tab \code{CELL} \tab \code{Int32} \tab Integer values from -2,147,483,647 to 2,147,483,647 \cr
    \code{float} \tab \code{FLT4S} \tab \code{FCELL} \tab \code{Float32} \tab Values from -3.4e+38 to 3.4e+38, including decimal values \cr
    \code{double} \tab \code{FLT8S} \tab \code{DCELL} \tab \code{Float64} \tab Values from -1.7e+308 to 1.7e+308, including decimal values \cr
-   \code{factor} \tab \code{INT}* \tab \code{CELL} \tab * \tab Integer values corresponding to categories \cr
+   \code{factor} \tab \code{INT}* \tab \code{CELL} \tab \verb{INT*} \tab Integer values corresponding to categories \cr
 }
 
 

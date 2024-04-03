@@ -25,22 +25,22 @@ methods::setMethod(
 
 	# set region to combined extent
 	rasts <- paste(sapply(x, sources), collapse=",")
-	rgrass::execGRASS("g.region", raster=rasts, flags=c("o", .quiet()), intern=TRUE)
+	rgrass::execGRASS("g.region", raster = rasts, flags=c("o", .quiet()))
 
 	# combine
-	src <- .makeSourceName("merge", "rast")
-	args <- list(
+	src <- .makeSourceName("merge", "raster")
+	rgrass::execGRASS(
 		cmd = "r.patch",
 		input = rasts,
 		output = src,
 		nprocs = faster("cores"),
 		memory = faster("memory"),
-		flags = c(.quiet(), "overwrite"),
-		intern = TRUE
+		flags = c(.quiet(), "overwrite")
 	)
-	
-	do.call(rgrass::execGRASS, args=args)
-	.makeGRaster(src, "merge")
+
+	# combine levels
+	levels <- combineLevels(x)
+	.makeGRaster(src, "layer", levels = levels)
 	
 	} # EOF
 )

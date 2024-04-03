@@ -49,7 +49,7 @@ methods::setMethod(
 		if (inherits(y, "GVector")) {
 			cells <- floor(cells)
 		} else if (inherits(y, "GRaster")) {
-   			if (compareFloat(cells, round(cells), "==")) {
+   			if (omnibus::is.wholeNumber(cells)) {
 				cells <- round(cells)
 			} else {
 				cells <- floor(cells)
@@ -65,7 +65,7 @@ methods::setMethod(
   		if (inherits(y, "GVector")) {
 			cells <- floor(cells)
 		} else if (inherits(y, "GRaster")) {
-   			if (compareFloat(cells, round(cells), "==")) {
+   			if (omnibus::is.wholeNumber(cells)) {
 				cells <- round(cells)
 			} else {
 				cells <- ceiling(cells)
@@ -93,19 +93,16 @@ methods::setMethod(
 	ewres <- as.character(xres(x))
 	nsres <- as.character(yres(x))
 
-	args <- list(
+	rgrass::execGRASS(
 		cmd = "g.region",
 		w = w, e = e, s = s, n = n,
 		ewres = ewres, nsres = nsres,
-		flags = c(.quiet(), "overwrite"),
-		intern = TRUE
+		flags = c(.quiet(), "overwrite")
 	)
-
- 	do.call(rgrass::execGRASS, args = args)
 
 	### crop by creating copy of focal raster
 	srcs <- .copyGSpatial(x, reshapeRegion = FALSE)
-	.makeGRaster(srcs, names(x))
+	.makeGRaster(srcs, names(x), levels = cats(x), ac = activeCats(x))
 
 	} # EOF
 )

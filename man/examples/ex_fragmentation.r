@@ -15,7 +15,7 @@ fragTerraMasked <- fragmentation(madForest, restrict = TRUE)
 
 # Compare:
 fragTerras <- c(fragTerra, fragTerraMasked)
-names(fragTerras) <- c("unmasked", "masked")
+names(fragTerras) <- c("unrestricted", "restricted")
 
 plot(fragTerras)
 levels(fragTerras)
@@ -32,7 +32,7 @@ fragMasked <- fragmentation(forest, restrict = TRUE)
 
 # Compare:
 frags <- c(frag, fragMasked)
-names(frags) <- c("unmasked", "masked")
+names(frags) <- c("unrestricted", "restricted")
 
 plot(frags)
 levels(frags)

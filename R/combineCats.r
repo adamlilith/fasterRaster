@@ -11,6 +11,8 @@
 #'
 #' If the argument `na.rm` is set to `TRUE` (which it is, by default), then whenever at least one cell has an `NA` value, then the output will also have an `NA` (i.e., a new category number is not created). However, if `na.rm` is `FALSE`, then combinations that include an `NA` are assigned a new category number, unless all values are `NA` (in which case the output will be `NA`).
 #'
+#' The difference between this function and [combineLevels()] is that this one creates a "combined" `GRaster` with a combined levels table, whereas `combineLevels()` just merges the levels tables.
+#'
 #' If the inputs are all categorical rasters, then a [levels()] table will also be returned with the new levels.
 #'
 #' @param x A `GRaster` with one or more layers, each of which must be have cells that represent integers or categories (factors).
@@ -23,7 +25,7 @@
 #'
 #' @example man/examples/ex_GRaster_categorical.r
 #'
-#' @seealso `GRaster` [data types][tutorial_raster_data_types]
+#' @seealso [combineLevels()], `GRaster` [data types][tutorial_raster_data_types]
 #'
 #' @aliases combineCats
 #' @rdname combineCats
