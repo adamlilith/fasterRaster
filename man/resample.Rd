@@ -17,15 +17,15 @@
 
 \item{method}{Character or \code{NULL}: Method to use to assign values to cells. Partial matching is used.
 \itemize{
-\item \code{NULL} (default): Automatically choose based on raster properties (\code{near} for categorical data, \code{bilinear} for continuous data).
-\item \code{"near"}: Nearest neighbor. Best for categorical data, and often a poor choice for continuous data.  If \code{\link[=nlevels]{nlevels()}} is >0 for all rasters, this method will be used by default.
+\item \code{NULL} (default): Automatically choose based on raster properties (\code{near} for categorical or integer rasters, \code{bilinear} for continuous data).
+\item \code{"near"}: Nearest neighbor. Best for categorical data, and often a poor choice for continuous data.  If \code{\link[=nlevels]{nlevels()}} is >0, this method will be used regardless of the value of \code{method}. If you still want to use a different method, coerce the raster to a different type using \code{\link[=as.int]{as.int()}}, \code{\link[=as.float]{as.float()}}, or \code{\link[=as.doub]{as.doub()}}.
 \item \code{"bilinear"}: Bilinear interpolation (default for non-categorical data; uses weighted values from 4 cells).
 \item \code{"bicubic"}: Bicubic interpolation (uses weighted values from 16 cells).
 \item \code{"lanczos"}: Lanczos interpolation (uses weighted values from 25 cells).
 Note that methods that use multiple cells will cause the focal cell to become \code{NA} if there is at least one cell with an \code{NA} in the cells it draws from. These \code{NA} cells can be filled using the \code{fallback} option.
 }}
 
-\item{fallback}{Logical: If \code{TRUE} (default), then use "lower" methods to fill in \code{NA} cells when a "higher" method is used. For example, if \code{method = "bicubic"}, \code{NA} cells will be filled in using the \code{bilinear} method, except when that results in \code{NA}s, in which case the \code{near} method will be used. Fallback causes fewer cells to revert to \code{NA} values, so may be better at capturing complex "edges" (e.g., coastlines). Fallback does increase processing time because each "lower" method must be applied, then results merged.}
+\item{fallback}{Logical: If \code{TRUE} (default), then use "lower" methods to fill in \code{NA} cells when a "higher" method is used. For example, if \code{method = "bicubic"}, \code{NA} cells will be filled in using the \code{bilinear} method, except when that results in \code{NA}s, in which case the \code{near} method will be used. Fallback causes fewer cells to revert to \code{NA} values, so can be better at resampling the edges of rasters. However, fallback does increase processing time because each "lower" method must be applied, then results merged.}
 }
 \value{
 A \code{GRaster}.

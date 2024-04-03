@@ -29,6 +29,8 @@ This function takes from 2 to 10 integer or \link[=tutorial_raster_data_types]{c
 
 If the argument \code{na.rm} is set to \code{TRUE} (which it is, by default), then whenever at least one cell has an \code{NA} value, then the output will also have an \code{NA} (i.e., a new category number is not created). However, if \code{na.rm} is \code{FALSE}, then combinations that include an \code{NA} are assigned a new category number, unless all values are \code{NA} (in which case the output will be \code{NA}).
 
+The difference between this function and \code{\link[=combineLevels]{combineLevels()}} is that this one creates a "combined" \code{GRaster} with a combined levels table, whereas \code{combineLevels()} just merges the levels tables.
+
 If the inputs are all categorical rasters, then a \code{\link[=levels]{levels()}} table will also be returned with the new levels.
 }
 \examples{
@@ -155,5 +157,5 @@ levels(combinedNA)
 }
 }
 \seealso{
-\code{GRaster} \link[=tutorial_raster_data_types]{data types}
+\code{\link[=combineLevels]{combineLevels()}}, \code{GRaster} \link[=tutorial_raster_data_types]{data types}
 }

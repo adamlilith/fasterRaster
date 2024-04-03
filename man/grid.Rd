@@ -27,7 +27,7 @@
 A \code{GVector}.
 }
 \description{
-This function creates a \code{GVector} of "wall-to-wall" "cells" (like a lattice). The input can be a \code{GVector} or \code{GRaster}, which provides the extent of the output.
+This function creates a \code{GVector} of "wall-to-wall" cells (like a lattice). The input can be a \code{GVector} or \code{GRaster}, which provides the extent of the output.
 }
 \examples{
 if (grassStarted()) {

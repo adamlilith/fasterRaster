@@ -4,7 +4,7 @@
 \alias{catNames,GRaster-method}
 \alias{catNames}
 \alias{catNames,SpatRaster-method}
-\title{Names of levels tables of a categorical raster}
+\title{Names of columns of the levels table of a categorical raster}
 \usage{
 \S4method{catNames}{GRaster}(x, layer = NULL)
 

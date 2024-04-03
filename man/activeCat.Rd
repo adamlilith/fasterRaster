@@ -31,10 +31,10 @@
 \item{value}{Numeric, integer, or character. Following \code{\link[terra:activeCat]{terra::activeCat()}}, the first column in each levels table is ignored. So, if you want the second column to be the category label, use 1. If you want the third column, use 2, and so on. You can also specify the active column by its column name (though this can't be the first column's name).}
 }
 \value{
-\code{activeCat()} returns an integer or character vector of active column indices or names. \verb{activeCat()<-} returns a \code{GRaster}.
+\code{activeCat()} returns an integer or character of the active column index or name. \code{activeCats()} returns a vector of indices or names. \verb{activeCat()<-} returns a \code{GRaster}.
 }
 \description{
-For a single layer of a \link[=tutorial_raster_data_types]{categorical} \code{GRaster}, \code{activeCat()} returns the column of the labels to be matched to each value in the raster. \code{activeCats()} does the same, but for all layers of a \code{GRaster}. \verb{activeCat()<-} sets the column to be used as category labels. Note that following \code{\link[terra:activeCat]{terra::activeCat()}}, the first column in the "levels:" table is ignored, so an "active category" value of 1 means the second column is used as labels, a value of 2 means the third is used, and so on.
+For a single layer of a \link[=tutorial_raster_data_types]{categorical} \code{GRaster}, \code{activeCat()} returns the column of the labels to be matched to each value in the raster. \code{activeCats()} does the same, but for all layers of a \code{GRaster}. \verb{activeCat()<-} sets the column to be used as category labels. Note that following \code{\link[terra:activeCat]{terra::activeCat()}}, the first column in the "levels" table is ignored, so an "active category" value of 1 means the second column is used as labels, a value of 2 means the third is used, and so on.
 }
 \examples{
 if (grassStarted()) {

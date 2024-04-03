@@ -30,16 +30,14 @@
    \code{integer} \tab \code{INT1U} \tab \code{CELL} \tab \code{Byte} \tab Integer values from 0 to 255 \cr
    \code{integer} \tab \code{INT2U} \tab \code{CELL} \tab \code{UInt16} \tab Integer values from 0 to 65,534 \cr
    \code{integer} \tab \code{INT2S} \tab \code{CELL} \tab \code{Int16} \tab Integer values from -32,767 to -32,767 \cr
-   \code{integer} \tab na \tab \code{CELL} \tab \code{Int32}* \tab Integer values from 0 to 4,294,967,295 \cr
-   \code{integer} \tab \code{INT4S} \tab \code{CELL} \tab \code{Int32}* \tab Integer values from -2,147,483,647 to 2,147,483,647 \cr
+   \code{integer} \tab \code{INT4S} \tab \code{CELL} \tab \code{Int32} \tab Integer values from -2,147,483,647 to 2,147,483,647 \cr
    \code{float} \tab \code{FLT4S} \tab \code{FCELL} \tab \code{Float32} \tab Values from -3.4E+38 to 3.4E+38, including decimal values \cr
    \code{double} \tab \code{FLT8S} \tab \code{DCELL} \tab \code{Float64} \tab Values from -1.79E+308 to 1.79E+308, including decimal values \cr
    \code{factor} \tab \code{INT}* \tab \code{CELL} \tab \verb{INT*} \tab Integer values corresponding to categories \cr
 }
 
 
-\code{*} Note that when the raster is written to disk, the GDAL datatype is used, regardless of whether the \strong{fasterRaster}-, \strong{terra}-, or \strong{GRASS}-style datatype was provided.
-\verb{**} Depends on the integers (signed/unsigned, range of values). Categorical rasters will have a CSV file with category values and labels saved with them. The file name will be the same as the raster's file name, but end in extension ".csv".}
+\code{*} Depends on the integers (signed/unsigned, range of values). Categorical rasters will have a CSV file with category values and labels saved with them. The file name will be the same as the raster's file name, but end in extension ".csv".}
 
 \item{mm}{Logical: If \code{TRUE}, call \code{\link[terra:minmax]{terra::setMinMax()}} on the raster to ensure it has metadata on the minimum and maximum values. For large rasters, this can take a long time, so the default value of \code{mm} is \code{FALSE}. This is only useful if you assign a raster to the output of \code{writeRaster}, as in \code{x <- writeRaster(my_raster, filename = './raster_file.tif', mm = TRUE)}.}
 

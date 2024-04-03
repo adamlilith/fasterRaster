@@ -72,5 +72,5 @@ plot(fractal)
 }
 }
 \seealso{
-\code{\link[=rnormRast]{rnormRast()}}, \code{\link[=spDepRast]{spDepRast()}}, \code{\link[=fractalRast]{fractalRast()}}, and \strong{GRASS} module \code{r.random.surface}
+\code{\link[=rnormRast]{rnormRast()}}, \code{\link[=rSpatDepRast]{rSpatDepRast()}}, \code{\link[=fractalRast]{fractalRast()}}, and \strong{GRASS} module \code{r.random.surface}
 }
