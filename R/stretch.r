@@ -129,7 +129,7 @@ methods::setMethod(
             gnTrunc <- sources(x)[i]
         }
 
-        src <- .makeSourceName(names(x)[i], "rast")
+        src <- .makeSourceName("stretch", "rast")
         scale <- (maxv - minv) / (upperFrom - lowerFrom)
         ex <- paste0(src, " = ", minv, " + (", scale, " * (", gnTrunc, " - ", lowerFrom, "))")
         
