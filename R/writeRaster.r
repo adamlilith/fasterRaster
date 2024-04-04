@@ -24,17 +24,18 @@
 #'
 #' `*` Depends on the integers (signed/unsigned, range of values). Categorical rasters will have a CSV file with category values and labels saved with them. The file name will be the same as the raster's file name, but end in extension ".csv".
 #'
+#' @param compress Character: Type of compression to use for GeoTIFF files:
+#'    * `"LZW"` (default)
+#'    * `"DEFLATE"`
+#'    * `"PACKBITS"`
+#'    * `"LZMA"`
+#'    * `NULL`: No compression is used, but the file can still be reduced in size by using zip, gzip, or other compressions.
+#'
 #' @param mm Logical: If `TRUE`, call [terra::setMinMax()] on the raster to ensure it has metadata on the minimum and maximum values. For large rasters, this can take a long time, so the default value of `mm` is `FALSE`. This is only useful if you assign a raster to the output of `writeRaster`, as in `x <- writeRaster(my_raster, filename = './raster_file.tif', mm = TRUE)`.
 #'
 #' @param warn Logical: If `TRUE` (default), display a warning if the `datatype` argument does not match the value given by `datatype(x, "GDAL")`.
 #'
 #' @param ... Additional arguments. These can include:
-#' * `compressTiff`: Character or `NULL`: Type of compression for GeoTIFF files:
-#'    * `"DEFLATE"` (default)
-#'    * `"LZW"`
-#'    * `"PACKBITS"`
-#'    * `"LZMA"`
-#'    * `NULL`: No compression is used, but the file can still be reduced in size by using zip, gzip, or other compressions.
 #' * `bigTiff`: Logical: If `TRUE`, and the file format is a GeoTIFF and would be larger than 4 GB (regardless of compression), then the file will be saved in BIGTIFF format.
 #' * `format`: Character, indicating file format. This is usually ascertained from the file extension, but in case this fails, it can be stated explicitly. When using other formats, you may have to specify the `createopts` argument, too (see help page for **GRASS** module `r.out.gdal`). Two common formats include:
 #'    * `"GTiff"` (default): GeoTIFF `filename` ends in `.tif`
@@ -61,6 +62,7 @@ setMethod(
 		filename,
 		overwrite = FALSE,
 		datatype = NULL,
+		compress = "LZW",
 		mm = FALSE,
 		warn = TRUE,
 		...
@@ -196,7 +198,10 @@ setMethod(
 
 			# createopt
 			createopt <- c(createopt, "PROFILE=GeoTIFF")
-			if ("compressTiff" %in% names(dots) && dots$compressTiff) createopt <- c(createopt, paste0("COMPRESS=", toupper(dots$compressTiff)))
+			if (!is.null(compress)) {
+				compress <- omnibus::pmatchSafe(compress, c("LZW", "DEFLATE", "PACKBITS", "LZMA"), nmax = 1L)
+				createopt <- c(createopt, paste0("COMPRESS=", toupper(compress)))
+			}
 			# if ("bigTiff" %in% names(dots) && bigTiff) createopt <- c(createopt, "BIGTIFF=YES")
 			createopt <- c(createopt, "BIGTIFF=IF_NEEDED")
 			if (datatype %in% c("Byte", "UInt16", "Int32")) createopt <- c(createopt, "PREDICTOR=2")
