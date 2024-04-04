@@ -1,6 +1,6 @@
-#' Convert a GVector to a SpatVector
+#' Convert a GVector to a SpatVector or sf vector
 #'
-#' @description The **fasterRaster** version of the `vect()` function converts a `GVector` to a `SpatVector` (from the **terra** package). The **fasterRaster** version of the `st_as_sf()` function converts a `GVector` to an `sf` object (**sf**) package).
+#' @description The **fasterRaster** version of the `vect()` function converts a `GVector` to a `SpatVector` (from the **terra** package). The **fasterRaster** version of the `st_as_sf()` function converts a `GVector` to an `sf` object (**sf** package).
 #'
 #' @param x A `GVector`.
 #' @param ... Additional arguments to send to [writeVector()].
@@ -22,6 +22,7 @@ setMethod(
 	filename <- paste0(omnibus::forwardSlash(tempfile()), ".gpkg")
 	out <- writeVector(x, filename = filename, ...)
 	out
+	
 	} # EOF
 )
 
