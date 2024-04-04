@@ -1,4 +1,4 @@
-#' Replace NAs in a data.table column with another value
+#' Replace NAs in a data.table or data.frame column, or in a vector
 #'
 #' @description This function replaces `NA`s in one or more `data.table` columns with a user-defined value.
 #'
