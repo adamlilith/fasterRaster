@@ -32,6 +32,7 @@
 	} else {
 	### a single source
 	##################
+
 		rasters <- .ls(c("rasters", "rasters3d"))
 		type <- names(rasters[rasters == src])
 
@@ -39,7 +40,7 @@
 		if (type == "raster") {
 
 			suppressMessages(
-				niceinfo <- rgrass::execGRASS(
+				niceInfo <- rgrass::execGRASS(
 					"r.info",
 					flags = .quiet(),
 					map = src,
@@ -61,7 +62,7 @@
 			)
 
 			suppressMessages(
-				rangeinfo <- rgrass::execGRASS(
+				rangeInfo <- rgrass::execGRASS(
 					"r.info",
 					flags = c("r", .quiet()),
 					map = src,
@@ -80,7 +81,7 @@
 		} else if (type == "raster3d") {
 
 			suppressMessages(
-				niceinfo <- rgrass::execGRASS(
+				niceInfo <- rgrass::execGRASS(
 					"r3.info",
 					flags = c(.quiet()),
 					map = src,
@@ -102,7 +103,7 @@
 			)
 		
 			suppressMessages(
-				rangeinfo <- rgrass::execGRASS(
+				rangeInfo <- rgrass::execGRASS(
 					"r3.info",
 					flags = c("r", .quiet()),
 					map = src,
@@ -126,8 +127,8 @@
 		}
 
 		# projection
-		index <- grepl(niceinfo, pattern = " \\|        Projection: ")
-		projection <- niceinfo[index]
+		index <- grepl(niceInfo, pattern = " \\|        Projection: ")
+		projection <- niceInfo[index]
 		projection <- sub(projection, pattern = " \\|        Projection: ", replacement = "")
 		projection <- substr(projection, 1L, nchar(projection) - 1L)
 		projection <- trimws(projection)
@@ -182,7 +183,7 @@
 		grassDataType <- gsub(grassDataType, pattern="\"", replacement="")
 
 		# ### Any categories? Note that "r.info" incorrectly reports number of categories, so we will use r.info just to determine if there are any categories.
-		# anyCats <- niceinfo[grepl(niceinfo, pattern = "Number of Categories:")]
+		# anyCats <- niceInfo[grepl(niceInfo, pattern = "Number of Categories:")]
 		# start <- regexpr(anyCats, pattern = "Number of Categories: ")
     	# start <- start[1L] + nchar("Number of Categories: ")
 		# anyCats <- substr(anyCats, 63, nchar(anyCats))
@@ -207,8 +208,8 @@
 		# }
 
 		# mininum/maximum value
-		minVal <- rangeinfo[grepl(rangeinfo, pattern="min=")]
-		maxVal <- rangeinfo[grepl(rangeinfo, pattern="max=")]
+		minVal <- rangeInfo[grepl(rangeInfo, pattern="min=")]
+		maxVal <- rangeInfo[grepl(rangeInfo, pattern="max=")]
 		
 		minVal <- sub(minVal, pattern="min=", replacement="")
 		maxVal <- sub(maxVal, pattern="max=", replacement="")
