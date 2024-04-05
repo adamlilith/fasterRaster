@@ -51,7 +51,7 @@ methods::setMethod(
 
     for (i in 1L:nlyr(x)) {
 
-        src <- .makeSourceName(names(x)[i], "rast")
+        src <- .makeSourceName("as_raster_type", "rast")
         ex <- paste0(src, " = ", fx, "(", sources(x)[i], ")")
         rgrass::execGRASS(cmd = "r.mapcalc", expression = ex, flags = c(.quiet(), "overwrite"))
 

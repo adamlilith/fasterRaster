@@ -167,7 +167,7 @@ methods::setMethod(
         if (is.na(fill)) {
             src <- .copyGSpatial(x = x[[i]], reshapeRegion = FALSE)
         } else {
-            src <- .makeSourceName(names(x), "raster", nLayers)
+            src <- .makeSourceName("extend", "raster", nLayers)
 
             ex <- paste0(src, " = if(col() <= ", y[1L], ", ", fill, ", if(col() > ncols() - ", y[2L], ", ", fill, ", if(row() <= ", y[4L], ", ", fill, ", if(row() > nrows() - ", y[3], ", ", fill, ", ", sources(x)[i], "))))")
 

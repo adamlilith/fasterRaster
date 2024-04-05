@@ -1,4 +1,4 @@
-#' Select parts of polygons not shared by two GVectors
+#' Select parts of polygons not shared between two GVectors
 #'
 #' @description The `xor()` function selects the area that does not overlap between two "polygon" `GVector`s. You can also use the `/` operator, as in `vect 1 / vect2`.
 #'
@@ -22,7 +22,7 @@ methods::setMethod(
 	if (geomtype(x) != "polygons") stop("Only polygon GVectors can be xored.")
 	.locationRestore(x)
 		
-	src <- .makeSourceName("v_overlay", "vector")
+	src <- .makeSourceName("xor_v_overlay", "vector")
 	rgrass::execGRASS(
 		cmd = "v.overlay",
 		ainput = sources(x),
@@ -32,7 +32,6 @@ methods::setMethod(
 		snap = -1,
 		flags = c(.quiet(), "overwrite")
 	)
-
 	.makeGVector(src)
 	
 	} # EOF
