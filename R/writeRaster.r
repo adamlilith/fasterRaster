@@ -24,17 +24,24 @@
 #'
 #' `*` Depends on the integers (signed/unsigned, range of values). Categorical rasters will have a CSV file with category values and labels saved with them. The file name will be the same as the raster's file name, but end in extension ".csv".
 #'
-#' @param mm Logical: If `TRUE`, call [terra::setMinMax()] on the raster to ensure it has metadata on the minimum and maximum values. For large rasters, this can take a long time, so the default value of `mm` is `FALSE`. This is only useful if you assign a raster to the output of `writeRaster`, as in `x <- writeRaster(my_raster, filename = './raster_file.tif', mm = TRUE)`.
+#' @param levelsExt Character, logical, or `NULL` (default): Name of the file extension for the "levels" file that accompanies a [categorical][tutorial_raster_data_types] raster. When saving categorical rasters, the raster file is accompanied with a "levels" file that contain information on the levels of the raster. This file is the same as `filename`, except it has a different extension. Valid values depend on how many raster layers are saved at a time (case is ignored):
+#' * One raster layer: `".csv"`
+#' * Two or more layers, with at least one categorical raster: `".rds"`, `".rda"`, `".rdat"`, `".rdata"`
+#' * Any: `NULL` or `TRUE` automatically selects either `".csv"` (one raster layer) or `".rds` (two or more)
+#' * Any: `FALSE` disables saving of a levels file.
 #'
-#' @param warn Logical: If `TRUE` (default), display a warning if the `datatype` argument does not match the value given by `datatype(x, "GDAL")`.
-#'
-#' @param ... Additional arguments. These can include:
-#' * `compressTiff`: Character or `NULL`: Type of compression for GeoTIFF files:
-#'    * `"DEFLATE"` (default)
-#'    * `"LZW"`
+#' @param compress Character: Type of compression to use for GeoTIFF files:
+#'    * `"LZW"` (default)
+#'    * `"DEFLATE"`
 #'    * `"PACKBITS"`
 #'    * `"LZMA"`
 #'    * `NULL`: No compression is used, but the file can still be reduced in size by using zip, gzip, or other compressions.
+#'
+#' @param mm Logical: If `TRUE`, call [terra::setMinMax()] on the raster to ensure it has metadata on the minimum and maximum values. For large rasters, this can take a long time, so the default value of `mm` is `FALSE`. This is only useful if you assign a raster to the output of `writeRaster`, as in `x <- writeRaster(my_raster, filename = './raster_file.tif', mm = TRUE)`.
+#'
+#' @param warn Logical: If `TRUE` (default), display a warning if the `datatype` argument does not match the value given by `datatype(x, "GDAL")`, or if the `fileExt` argument will not work with the given raster and so has been automatically changed.
+#'
+#' @param ... Additional arguments. These can include:
 #' * `bigTiff`: Logical: If `TRUE`, and the file format is a GeoTIFF and would be larger than 4 GB (regardless of compression), then the file will be saved in BIGTIFF format.
 #' * `format`: Character, indicating file format. This is usually ascertained from the file extension, but in case this fails, it can be stated explicitly. When using other formats, you may have to specify the `createopts` argument, too (see help page for **GRASS** module `r.out.gdal`). Two common formats include:
 #'    * `"GTiff"` (default): GeoTIFF `filename` ends in `.tif`
@@ -61,6 +68,8 @@ setMethod(
 		filename,
 		overwrite = FALSE,
 		datatype = NULL,
+		levelsExt = NULL,
+		compress = "LZW",
 		mm = FALSE,
 		warn = TRUE,
 		...
@@ -180,7 +189,7 @@ setMethod(
 			
 		}
 
-		if (any(datatype(x) %in% c("integer", "factor")) & !(datatype %in% c("Byte", "UInt16", "Int32"))) {
+		if (any(datatype(x) %in% c("float", "double")) & datatype %in% c("Byte", "UInt16", "Int32")) {
 			stop("Trying to save non-integer rasters with an integer datatype. Try changing the datatype of\n  the rasters using, for example, as.int() or round(), or set `datatype` to `FLT4S` or `FLT8S`.")
 		}
 
@@ -196,7 +205,10 @@ setMethod(
 
 			# createopt
 			createopt <- c(createopt, "PROFILE=GeoTIFF")
-			if ("compressTiff" %in% names(dots) && dots$compressTiff) createopt <- c(createopt, paste0("COMPRESS=", toupper(dots$compressTiff)))
+			if (!is.null(compress)) {
+				compress <- omnibus::pmatchSafe(compress, c("LZW", "DEFLATE", "PACKBITS", "LZMA"), nmax = 1L)
+				createopt <- c(createopt, paste0("COMPRESS=", toupper(compress)))
+			}
 			# if ("bigTiff" %in% names(dots) && bigTiff) createopt <- c(createopt, "BIGTIFF=YES")
 			createopt <- c(createopt, "BIGTIFF=IF_NEEDED")
 			if (datatype %in% c("Byte", "UInt16", "Int32")) createopt <- c(createopt, "PREDICTOR=2")
@@ -231,12 +243,54 @@ setMethod(
 	isFact <- is.factor(x)
 	if (any(isFact)) {
 
-		extension <- paste0(".", extension)
-		levelFileName <- substr(filename, 1L, nchar(filename) - nchar(extension))
-		levelFileName <- paste0(levelFileName, ".csv")
-		utils::write.csv(cats(x), levelFileName, row.names = FALSE)
+		if (is.logical(levelsExt)) {
+			if (levelsExt) {
+				levelsExt <- NULL
+				saveLevels <- TRUE
+			} else {
+				saveLevels <- FALSE
+			}
+		} else {
+			saveLevels <- TRUE
+		}
 
-	}
+		if (saveLevels) {
+
+			categs <- cats(x)
+			if (is.null(levelsExt)) {
+				if (length(categs) > 1L) {
+					levelsExt <- ".rds"
+				} else {
+					levelsExt <- ".csv"
+				}
+			}
+			
+			if (substr(levelsExt, 1L, 1L) != ".") levelsExt <- paste0(".", levelsExt)
+			if (length(categs) > 1L & length(grep(levelsExt, ".csv", ignore.case = TRUE)) != 0L) {
+
+				if (warn) warning("You cannot save levels files of multi-layered rasters using a `levelsExt` value of `.csv`.\n  The file extension has been changed to `.rds`, which saves files that can be read using `readRDS()`.")
+
+				levelsExt <- ".rds"
+
+			}
+
+			levelFileName <- substr(filename, 1L, nchar(filename) - nchar(levelsExt))
+			levelFileName <- paste0(levelFileName, levelsExt)
+			
+			# save
+			if (length(grep(".rds", levelsExt, ignore.case = TRUE)) != 0L) {
+				saveRDS(categs, levelFileName)
+			} else if (length(grep(".rda", levelsExt, ignore.case = TRUE)) != 0L | length(grep(".rdat", levelsExt, ignore.case = TRUE)) != 0L | length(grep(".rdata", levelsExt, ignore.case = TRUE)) != 0L) {
+				save(categs, levelFileName)
+			} else if (length(grep(".csv", levelsExt, ignore.case = TRUE)) != 0L) {
+				write.csv(categs, levelFileName, row.names = FALSE)
+			} else {
+				stop("Unrecognized value for `levelsExt`.")
+			}
+
+		} # "yes" to saving levels
+
+	} # save levels
 
 	out <- terra::rast(filename)
 	names(out) <- names(x)
