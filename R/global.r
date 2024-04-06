@@ -45,7 +45,6 @@ methods::setMethod(
 		...
 	) {
 
-	nLayers <- nlyr(x)
 	.global(x = x, fun = fun, prob = prob)
 
 	} # EOF
@@ -57,6 +56,7 @@ methods::setMethod(
 #' @noRd
 .global <- function(x, fun, prob = 0.5) {
 
+	nLayers <- nlyr(x)
 	if (inherits(x, "GRaster")) {
 		.locationRestore(x)
 		.region(x)
