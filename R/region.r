@@ -46,14 +46,10 @@ methods::setMethod(
 	signature = "missing",
 	definition = function(x) {
 	
-	info <- rgrass::execGRASS(
-		cmd = "g.region",
-		flags=c("p", "3", "u"),
-		intern = TRUE
-	)
+	info <- rgrass::execGRASS(cmd = "g.region", flags=c("p", "3", "u"), intern = TRUE)
 	
-	projection <- info[grepl(info, pattern="projection:")]
-	longLatProj <- grepl(projection, pattern="(Latitude-Longitude)")
+	projection <- info[grepl(info, pattern = "projection:")]
+	longLatProj <- grepl(projection, pattern = "(Latitude-Longitude)")
 	
 	# horizontal extent
 	n <- info[grepl(info, pattern="north:")]
