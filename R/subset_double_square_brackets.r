@@ -95,14 +95,14 @@ methods::setMethod(
 	# keep some columns
 	} else {
 
-		..i <- NULL
+		# ..i <- NULL
 		if (reverseSelect) {
 			i <- setdiff(names(x), names(x)[i])
 		} else {
 			i <- names(x)[i]
 		}
 
-		x@table <- x@table[ , ..i]
+		x@table <- x@table[ , ..i, with = FALSE]
 	}
 	x
 	
