@@ -222,7 +222,7 @@ methods::setMethod(
 		
 		if (verbose) {
 			omnibus::say("Combining sub-vectors...")
-			pb <- utils::txtProgressBar(min = 0, max = sets, style = 3, initial = 0 width = 80)
+			pb <- utils::txtProgressBar(min = 0, max = sets, style = 3, initial = 0, width = 80)
 		}
 
 		for (set in seq_len(sets)) {
