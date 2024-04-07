@@ -44,7 +44,7 @@
 			# "character",
 			"character",
 			"logical",
-			"character",
+			"character"
 			# "numeric"
 		)
 	)

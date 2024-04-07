@@ -46,13 +46,13 @@ faster <- function(
 	if (length(opts) == 1L && inherits(opts[[1L]], "list")) opts <- opts[[1L]]
 	# # if (length(opts) == 1L && is.null(names(opts))) names(opts) <- "grassDir"
 	# # if (length(opts) > 1L && any(names(opts) == "")) names(opts)[names(opts) == ""] <- "grassDir"
-	nd <- length(opts)
+	nOpts <- length(opts)
 	
 	if (default & restore) {
 		
 		stop("Cannot request default values and restore to default values at the same time.")
 
-	} else if (nd > 0L & restore) {
+	} else if (nOpts > 0L & restore) {
 	
 		stop("Cannot simultaneously set options and restore options to default values.")
 
@@ -116,7 +116,7 @@ faster <- function(
 
   		if (!is.character(opts$workDir) || length(opts$workDir) != 1L) stop(error)
 
-		workDir <- omnibus::forwardSlash(workDir)
+		workDir <- omnibus::forwardSlash(opts$workDir)
 
 	}
 
