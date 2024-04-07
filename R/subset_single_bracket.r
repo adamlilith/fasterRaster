@@ -2,8 +2,6 @@
 #'
 #' @description The `[` operator returns a subset or remove specific geometries of a `GVector`. You can get the number of geometries using [ngeom()]. Note that you cannot use this function to change the "order" in which geometries or their associated records in a data table appear. For example, `vector[1:3]` and `vector[3:1]` will yield the exact same results, where the first geometry in `vector` will also be the first geometry in either of the outputs.
 #'
-#' The subset operation will sometimes fail if `i` has many values. Internally, this arises when a large number of indices is used. When this fails, the function will try again, but with fewer indices used at a time. You can change the initial number of indices tried using the `nAtATime` option in [faster()]. Smaller values take more time, but are also less prone to failure.
-#'
 #' Note that subsetting can take a very long time if `i` has many values, even for moderately-sized vectors. In these cases, it may help to set `verbose = TRUE` so you have something exciting to watch as it does its work.
 #'
 #' @param x A `GVector`.
@@ -15,6 +13,8 @@
 #' @param verbose Logical: If `TRUE` (or if `faster("verbose")` is `TRUE`), then display progress.
 #'
 #' @param dropTable Logical: If `FALSE` (default), the appropriate subset of the `GVector`s data table will be included in the subset. If `TRUE`, the table will be dropped.
+#'
+#' @param n Integer or numeric (default: 100000): Number of geometries to subset at a time. The subset operation will sometimes fail if `i` has many values. Internally, this arises when a large number of indices is used. When this fails, the function will try again, but with fewer indices used at a time. The starting number is given by `n`. Smaller values take more time, but are also less prone to failure.
 #'
 #' @returns A `GVector`.
 #'
@@ -30,7 +30,7 @@
 methods::setMethod(
 	"[",
 	signature = c(x = "GVector", i = "ANY", j = "ANY"),
-	function(x, i, j, verbose = FALSE, dropTable = FALSE) {
+	function(x, i, j, verbose = FALSE, dropTable = FALSE, n = 100000) {
 
 	.message(msg = "subset_single_bracket", message = "Subsetting can take a long time, even for moderately-sized GVectors.")
 	.locationRestore(x)
@@ -70,7 +70,6 @@ methods::setMethod(
 			gtype <- geomtype(x, grass = TRUE)
 			cats <- .vCats(x, db = FALSE)
 
-			nAtATime <- faster("nAtATime")
 			success <- FALSE
 			src <- sources(x)
 			
@@ -80,7 +79,7 @@ methods::setMethod(
 				table <- x@table
 			}
 
-			while (!success & nAtATime >= 2L) {
+			while (!success & n >= 2L) {
 				out <- tryCatch(
 					.subset_single_bracket(
 						src = src,
@@ -91,7 +90,7 @@ methods::setMethod(
 						reverseRowSelect = reverseRowSelect,
 						dropTable = dropTable,
 						table = table,
-						nAtATime = nAtATime,
+						n = n,
 						verbose = verbose
 					),
 					error = function(cond) FALSE
@@ -100,7 +99,7 @@ methods::setMethod(
 				if (!is.logical(out)) {
 					success <- TRUE
 				} else {
-					nAtATime <- round(nAtATime / 2)
+					n <- ceiling(n / 2)
 				}
 			
 			}
@@ -119,13 +118,13 @@ methods::setMethod(
 #' @param reverseRowSelect Logical.
 #' @param dropTable Logical.
 #' @param table The vector's `data.table`.
-#' @param nAtAtTime Integer: Number of geometries to select at a time.
+#' @param n Integer: Number of geometries to select at a time.
 #' @param verbose Logical.
 #'
 #' @returns A `GVector`.
 #'
 #' @noRd
-.subset_single_bracket <- function(src, i, j, gtype, cats, reverseRowSelect = FALSE, dropTable = FALSE, table = NULL, nAtATime = faster("nAtATime"), verbose = FALSE) {
+.subset_single_bracket <- function(src, i, j, gtype, cats, reverseRowSelect = FALSE, dropTable = FALSE, table = NULL, n = faster("n"), verbose = FALSE) {
 
 	srcIn <- src
 
@@ -138,7 +137,7 @@ methods::setMethod(
 	nSelect <- length(select)
 	
 	# select all at once (OK for small number of selected geometries)
-	if (nSelect < nAtATime) {
+	if (nSelect < n) {
 
 		cats <- cats[select]
 		cats <- seqToSQL(cats)
@@ -160,11 +159,11 @@ methods::setMethod(
 	} else {
 	
 		worked <- FALSE
-		while (!worked & nAtATime >= 1L) {
+		while (!worked & n >= 1L) {
 
-			sets <- ceiling(nSelect / nAtATime)
-			starts <- seq(1L, nSelect, by = nAtATime)
-			stops <- pmin(starts + nAtATime - 1L, nSelect)
+			sets <- ceiling(nSelect / n)
+			starts <- seq(1L, nSelect, by = n)
+			stops <- pmin(starts + n - 1L, nSelect)
 
 			verbose <- verbose | faster("verbose")
 			if (verbose) {
@@ -199,7 +198,7 @@ methods::setMethod(
 
 				info <- .vectInfo(srcs[set])
 				nSelected <- stops[set] - starts[set] + 1L
-				# if (info$nGeometries != nSelected) stop("Subsetting error. Try reducing the value of `nAtATime` using faster().")
+				# if (info$nGeometries != nSelected) stop("Subsetting error. Try reducing the value of `n` using faster().")
 				if (info$nGeometries != nSelected) ok <- FALSE
 				set <- set + 1L
 
@@ -208,8 +207,8 @@ methods::setMethod(
 			if (ok) {
 				worked <- TRUE
 			} else {
-				nAtATime <- round(nAtATime / 2)
-				if (verbose) omnibus::say("Selection failure. Retrying with smaller internal value of `nAtATime`\n  See the `nAtATime` option in function `faster()`.")
+				n <- round(n / 2)
+				if (verbose) omnibus::say("Selection failure. Retrying with smaller internal value of `n`\n  See the `n` option in function `faster()`.")
 			}
 
 		}
