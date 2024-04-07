@@ -138,6 +138,7 @@ methods::setMethod(
 			gisBase = grassDir,
 			addon_base = addonsDir,
 			home = workDir,
+			gisDbase = workDir, # ?
 			SG = emptyRast,
 			location = location,
 			mapset = "PERMANENT",
