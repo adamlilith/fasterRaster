@@ -124,9 +124,7 @@ methods::setMethod(
             if (any(fun == "quantile")) {
                 
                 if (length(prob) > 1L) stop("Argument ", sQuote("prob"), " can only have one value.")
-
                 if (prob > 1 | prob < 0) stop("Argument ", sQuote("prob"), " must be in the range [0, 1].")
-                
                 prob <- round(100 * prob)
             
             }
@@ -173,7 +171,6 @@ methods::setMethod(
                 if (sampleSd | sampleVar | sampleCv) {
                     
                     sampleStats <- .sampleStatsFromRast(i = i, x = x, y = y, fun = fun, extracted = extracted, prefix = prefix)
-                    
                     extracted <- cbind(extracted, sampleStats)
                     
                 }

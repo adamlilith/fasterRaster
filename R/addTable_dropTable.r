@@ -1,8 +1,8 @@
-#' Add or remove a data table from a GVector
+#' Attach or detach GVector's data table
 #'
-#' @description `addTable()` adds an entire table to a `GVector`. There must be one row in the table for each geometry (see [ngeom()]). You can also add a table column-by-column using the \code{\link[fasterRaster]{$<-}} operator.
+#' @description `addTable()` adds an entire table to a `GVector`. It will replace any existing table. There must be one row in the table for each geometry (see [ngeom()]). You can also add a table column-by-column using the \code{\link[fasterRaster]{$<-}} operator.
 #'
-#' `droptable()` removes a data table associated with a `GVector`.
+#' `dropTable()` removes a data table associated with a `GVector`.
 #'
 #' @param x A `GVector.
 #' @param value A `data.frame`, `data.table`, or `matrix`.

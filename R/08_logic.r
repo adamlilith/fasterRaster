@@ -39,7 +39,7 @@ methods::setMethod(
 		for (i in 1L:nlyr(e1)) {
 
 			name <- paste0(names(e1)[i], "_", names(e2)[i])
-			src <- .makeSourceName(name, "raster")
+			src <- .makeSourceName("logic", "raster")
 
 			ex <- paste0(src, "= int(if(", sources(e1)[i], " ", oper, " ", sources(e2)[i], "))")
 			this <- .genericArithRast(name = name, src = src, ex = ex)
@@ -74,7 +74,7 @@ methods::setMethod(
 		for (i in 1L:nlyr(e2)) {
 			
 			name <- names(e2)[i]
-			src <- .makeSourceName(name, "rast")
+			src <- .makeSourceName("logic", "rast")
 
 			ex <- paste(src, "= int(if(", e1, " ", oper, " ", sources(e2)[i], "))")
 			this <- .genericArithRast(name = name, src = src, ex = ex)
@@ -109,7 +109,7 @@ methods::setMethod(
 		for (i in 1L:nlyr(e1)) {
 
 			name <- names(e1)[i]
-			src <- .makeSourceName(name, "rast")
+			src <- .makeSourceName("logic", "rast")
 			
 			ex <- paste(src, "= int(if(", sources(e1)[i], " ", oper, " ", e2, "))")
 			this <- .genericArithRast(name = name, src = src, ex = ex)
@@ -145,7 +145,7 @@ methods::setMethod(
 		for (i in 1L:nlyr(e1)) {
 
 			name <- names(e1)[i]
-			src <- .makeSourceName(name, "rast")
+			src <- .makeSourceName("logic", "rast")
 			
 			ex <- paste(src, "= int(if(", sources(e1)[i], " ", oper, " ", e2, "))")
 			this <- .genericArithRast(name = name, src = src, ex = ex)
@@ -181,7 +181,7 @@ methods::setMethod(
 		for (i in 1L:nlyr(e1)) {
 
 			name <- names(e2)[i]
-			src <- .makeSourceName(name, "rast")
+			src <- .makeSourceName("logic", "rast")
 			
 			ex <- paste(src, "= int(if(", e1, " ", oper, " ", sources(e2)[i], "))")
 			this <- .genericArithRast(name = name, src = src, ex = ex)
@@ -217,7 +217,7 @@ methods::setMethod(
 		for (i in 1L:nlyr(e1)) {
 
 			name <- names(e1)[i]
-			src <- .makeSourceName(name, "rast")
+			src <- .makeSourceName("logic", "rast")
 			
 			ex <- paste(src, "= int(if(", sources(e1)[i], " ", oper, " ", e2, "))")
 			this <- .genericArithRast(name = name, src = src, ex = ex)
@@ -253,7 +253,7 @@ methods::setMethod(
 		for (i in 1L:nlyr(e1)) {
 
 			name <- names(e2)[i]
-			src <- .makeSourceName(name, "rast")
+			src <- .makeSourceName("logic", "rast")
 			
 			ex <- paste(src, "= int(if(", e1, " ", oper, " ", sources(e2)[i], "))")
 			this <- .genericArithRast(name = name, src = src, ex = ex)
@@ -294,7 +294,7 @@ methods::setMethod(
 # 	for (i in 1L:nlyr(e1)) {
 
 # 		name <- paste0(names(e1)[i], "_", names(e2)[i])
-# 		src <- .makeSourceName(name, "raster")
+# 		src <- .makeSourceName("logic", "raster")
 
 # 		ex <- paste0(src, "= int(if(", sources(e1)[i], " ||| ", sources(e2)[i], "))")
 # 		this <- .genericArithRast(name = name, src = src, ex = ex)
@@ -335,7 +335,7 @@ methods::setMethod(
 # 	for (i in 1L:nlyr(e1)) {
 
 # 		name <- paste0(names(e1)[i], "_", names(e2)[i])
-# 		src <- .makeSourceName(name, "raster")
+# 		src <- .makeSourceName("logic", "raster")
 
 # 		ex <- paste0(src, "= int(if(", sources(e1)[i], " &&& ", sources(e2)[i], "))")
 # 		this <- .genericArithRast(name = name, src = src, ex = ex)

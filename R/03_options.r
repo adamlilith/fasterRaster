@@ -15,8 +15,6 @@
 #'
 #' * `memory` (integer/numeric): The amount of memory to allocate to a task, in GB, for **GRASS**. The default is 1024 MB (i.e., 1 GB). Some **GRASS** modules can take advantage of more memory.
 #'
-#' * `nAtATime` (integer/numeric): Number of vector geometries to select/subset at a time. Functions like \code{\link[fasterRaster]{[}} use a SQL statement to select items (e.g., geometries of a vector). The length of this statement has a limit, and in some cases this limit can be surpassed by requesting subsetting of too many geometries at a time. If \code{\link[fasterRaster]{[}} fails, you can reduce the number of geometries selected each attempt by changing this option (which has the side effect of increasing the time a subset operation takes). The default is 5000.
-#'
 #' * `rasterPrecision` (character): The [precision][tutorial_raster_data_types] of values when applying mathematical operations to a `GRaster`. By default, this is `"double"`, which allows for precision to about the 16th decimal place. However, it can be set to `"float"`, which allows for precision to about the 7th decimal place. `float` rasters are smaller in memory and on disk. The default is `"double"`.`
 #'
 #' * `useDataTable` (logical): If `FALSE` (default), use `data.frame`s when going back and forth between data tables of `GVector`s and **R**. This can be slow for very large data tables. If `TRUE`, use `data.table`s from the **data.table** package. This can be much faster, but it might require you to know how to use `data.table`s if you want to manipulate them in **R**. You can always convert them to `data.frame`s using [base::as.data.frame()].
@@ -48,13 +46,13 @@ faster <- function(
 	if (length(opts) == 1L && inherits(opts[[1L]], "list")) opts <- opts[[1L]]
 	# # if (length(opts) == 1L && is.null(names(opts))) names(opts) <- "grassDir"
 	# # if (length(opts) > 1L && any(names(opts) == "")) names(opts)[names(opts) == ""] <- "grassDir"
-	nd <- length(opts)
+	nOpts <- length(opts)
 	
 	if (default & restore) {
 		
 		stop("Cannot request default values and restore to default values at the same time.")
 
-	} else if (nd > 0L & restore) {
+	} else if (nOpts > 0L & restore) {
 	
 		stop("Cannot simultaneously set options and restore options to default values.")
 
@@ -118,13 +116,13 @@ faster <- function(
 
   		if (!is.character(opts$workDir) || length(opts$workDir) != 1L) stop(error)
 
-		workDir <- omnibus::forwardSlash(workDir)
+		workDir <- omnibus::forwardSlash(opts$workDir)
 
 	}
 
-	if (any(names(opts) %in% "nAtATime")) {
-		if (!is.numeric(opts$nAtATime) | (opts$nAtATime <= 0 & !omnibus::is.wholeNumber(opts$nAtATime))) stop("Option `nAtATime` must be an integer >= 1. The default is ", .nAtATimeDefault(), ".")
-	}
+	# if (any(names(opts) %in% "nAtATime")) {
+	# 	if (!is.numeric(opts$nAtATime) | (opts$nAtATime <= 0 & !omnibus::is.wholeNumber(opts$nAtATime))) stop("Option `nAtATime` must be an integer >= 1. The default is ", .nAtATimeDefault(), ".")
+	# }
 
 	if (any(names(opts) %in% "cores")) {
 		if (!inherits(opts$cores, c("integer", "numeric")) || opts$cores <= 0 || !omnibus::is.wholeNumber(opts$cores)) stop("Option `cores` must be an integer >= 1. The default is ", .coresDefault(), ".")

@@ -1,4 +1,4 @@
-# fasterRaster 8.3.0.7004 (2024-XX-XX)
+# fasterRaster 8.3.0.7004 (2024-04-08)
 
 ## Functionality
 o `fragmentation()` works for windows > 3 and for `GRaster`s
@@ -9,6 +9,9 @@ o For functions and cases where it is appropriate, the "levels" table of an inpu
 ## Bug fixes
 o `writeRaster()` correctly assigns levels to categorical rasters with >1 layer
 o Fixed bug in `[[<-` that passed incorrect dimensions (then failed)
+
+## Issues
+o `[` selects geometries from a `GRaster` that overcomes mis-selection by **GRASS**
 
 # fasterRaster 8.3.0.7003 (2024-03-15)
 

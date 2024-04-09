@@ -62,7 +62,7 @@ methods::setMethod(
 
 	nLayers <- nlyr(x)
 
-	srcs <- .makeSourceName("r_mapcalc", "raster", n = nLayers)
+	srcs <- .makeSourceName("scale_r_mapcalc", "raster", n = nLayers)
 	for (i in seq_len(nLayers)) {
 	
 		if (center) mu <- stats[i, "mean"]

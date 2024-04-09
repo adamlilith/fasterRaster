@@ -311,7 +311,7 @@ methods::setMethod(
 			for (i in 1L:nlyr(e1)) {
 
 				name <- "layer"
-				src <- .makeSourceName(name, "rast")
+				src <- .makeSourceName("arithmetic", "rast")
 
 				ex <- if (oper == "%/%") {
 					paste0(src, " = floor(", prec, "(", sources(e1)[i], ") / ", prec, "(", sources(e2)[i], "))")
@@ -337,7 +337,7 @@ methods::setMethod(
 			for (i in 1L:nlyr(e2)) {
 			
 				name <- "layer"
-				src <- .makeSourceName(name, "rast")
+				src <- .makeSourceName("arithmetic", "rast")
 
 				ex <- if (oper == "%/%") {
 					paste0(src, " = floor(", prec, "(", sources(e1), ") / ", prec, "(", sources(e2)[i], "))")
@@ -363,7 +363,7 @@ methods::setMethod(
 			for (i in 1L:nlyr(e1)) {
 			
 				name <- paste0(names(e1)[i], "_", names(e2))
-				src <- .makeSourceName(name, "rast")
+				src <- .makeSourceName("arithmetic", "rast")
 
 				ex <- if (oper == "%/%") {
 					paste0(src, " = floor(", prec, "(", sources(e1)[i], ") / ", prec, "(", sources(e2), "))")

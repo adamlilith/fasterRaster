@@ -6,7 +6,7 @@
 #'
 #' @param y A `GRaster` to serve as a template for interpolation: Only points in `x` that fall inside the extent of the raster will be used for interpolation. You can increase the extent of a `GRaster` using [extend()].
 #'
-#' @param field Character or integer or numeric integer: Name or index of the column in `x` with values to interpolate. If `NULL` and if `x` is a 3-dimensional "points" `GVector`, then the interpolation will act on the z-coordinate of each point.
+#' @param field Character, integer, or numeric integer: Name or index of the column in `x` with values to interpolate. If `NULL` and if `x` is a 3-dimensional "points" `GVector`, then the interpolation will act on the z-coordinate of each point.
 #'
 #' @param nPoints Integer or numeric integer: Number of nearest points to use for interpolation. The default is to use all points (`Inf`).
 #'
@@ -44,16 +44,13 @@ methods::setMethod(
 		if (anyNA(x@table[[field]])) stop("The column ", sQuote(field), " has at least one NA in it. NAs are not permissible.")
 
 		cats <- .vCats(x, db = FALSE)
-
 		db <- data.table::data.table(frid = cats, TEMPTEMP_ = x@table[[field]])
-
 		names(db)[2L] <- field
-
 		.vAttachDatabase(x, table = db, replace = TRUE)
 
 	}
 
-	src <- .makeSourceName("v_surf_idw", "raster")
+	src <- .makeSourceName("interpIDW_v_surf_idw", "raster")
 
 	rgrass::execGRASS(
 		cmd = "v.surf.idw",
@@ -65,7 +62,6 @@ methods::setMethod(
 		flags = c(.quiet(), "overwrite")
 	)
 	.makeGRaster(src, "interpolation")
-
 
 	} # EOF
 )

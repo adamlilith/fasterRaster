@@ -40,7 +40,7 @@ methods::setMethod(
 		for (i in 1L:nlyr(e1)) {
 
 			name <- paste0(names(e1)[i], "_", names(e2)[i])
-			src <- .makeSourceName(name, "raster")
+			src <- .makeSourceName("comparison", "raster")
 
 			ex <- paste0(src, "= int(if(", sources(e1)[i], " ", oper, " ", sources(e2)[i], "))")
 			this <- .genericArithRast(name = name, src = src, ex = ex)
@@ -76,7 +76,7 @@ methods::setMethod(
 		for (i in 1L:nlyr(e2)) {
 			
 			name <- names(e2)[i]
-			src <- .makeSourceName(name, "rast")
+			src <- .makeSourceName("comparison", "rast")
 
 			ex <- paste(src, "= int(if(", e1, " ", oper, " ", sources(e2)[i], "))")
 			this <- .genericArithRast(name = name, src = src, ex = ex)
@@ -112,7 +112,7 @@ methods::setMethod(
 		for (i in 1L:nlyr(e1)) {
 
 			name <- names(e1)[i]
-			src <- .makeSourceName(name, "rast")
+			src <- .makeSourceName("comparison", "rast")
 			
 			ex <- paste(src, "= int(if(", sources(e1)[i], " ", oper, " ", e2, "))")
 			this <- .genericArithRast(name = name, src = src, ex = ex)
@@ -147,7 +147,7 @@ methods::setMethod(
 		for (i in 1L:nlyr(e2)) {
 		
 			name <- names(e2)[i]
-			src <- .makeSourceName(name, "rast")
+			src <- .makeSourceName("comparison", "rast")
 
 			ex <- paste(src, "= int(if(", e1, " ", oper, " ", sources(e2)[i], "))")
 			this <- .genericArithRast(name = name, src = src, ex = ex)
@@ -182,7 +182,7 @@ methods::setMethod(
 		for (i in 1L:nlyr(e1)) {
 		
 			name <- names(e1)[i]
-			src <- .makeSourceName(name, "raster")
+			src <- .makeSourceName("comparison", "raster")
 
 			ex <- paste(src, "= int(if(", sources(e1)[i], " ", oper, " ", e2, "))")
 			this <- .genericArithRast(name = name, src = src, ex = ex)
@@ -217,7 +217,7 @@ methods::setMethod(
 		for (i in 1L:nlyr(e1)) {
 		
 			name <- names(e1)[i]
-			src <- .makeSourceName(name, "rast")
+			src <- .makeSourceName("comparison", "rast")
 
 			ex <- paste(src, "= int(if(", sources(e1)[i], " ", oper, " ", e2, "))")
 			this <- .genericArithRast(name = name, src = src, ex = ex)
@@ -251,7 +251,7 @@ methods::setMethod(
         oper <- as.vector(.Generic)[1L]
         for (i in 1L:nlyr(e2)) {
             name <- names(e2)[i]
-            src <- .makeSourceName(name, "rast")
+            src <- .makeSourceName("comparison", "rast")
 
             ex <- paste(src, "= int(if(", e1, " ", oper, " ", sources(e2)[i], "))")
             this <- .genericArithRast(name = name, src = src, ex = ex)
@@ -285,7 +285,7 @@ methods::setMethod(
 	acs <- activeCat(e1, names = TRUE)
 
 	nLayers <- nlyr(e1)
-	srcs <- .makeSourceName("r_mapcalc", "raster", nLayers)
+	srcs <- .makeSourceName("comparison", "raster", nLayers)
 
 	for (i in seq_len(nLayers)) {
 
@@ -372,7 +372,7 @@ methods::setMethod(
 	acs <- activeCat(e2, names = TRUE)
 
 	nLayers <- nlyr(e2)
-	srcs <- .makeSourceName("r_mapcalc", "raster", nLayers)
+	srcs <- .makeSourceName("comparison", "raster", nLayers)
 
 	for (i in seq_len(nLayers)) {
 

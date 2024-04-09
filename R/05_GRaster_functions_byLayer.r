@@ -199,8 +199,7 @@ setMethod(
 
 		for (i in seq_len(n)) {
 			
-			name <- paste0(names(y)[i], "_", names(x)[i])
-			src <- .makeSourceName(name, "rast")
+			src <- .makeSourceName("arith_by_layer", "rast")
 			ex <- paste0(src, " = atan(", prec, "(", sources(x)[i], ") , double(", sources(y)[i], "))  * (", pi, " / 180)")
 			this <- .genericArithRast(name = name, src = src, ex = ex)
 			if (i == 1L) {
@@ -234,7 +233,7 @@ setMethod(
 		.locationRestore(x)
 		.region(x)
 
-		srcs <- .makeSourceName(names(x), "rast", nlyr(x))
+		srcs <- .makeSourceName("arith_by_layer", "rast", nlyr(x))
 		for (i in seq_len(nlyr(x))) {
 
 			ex <- paste0(srcs[i], " = log(", sources(x)[i], " + 1)")
@@ -386,7 +385,7 @@ setMethod(
 
  	precision <- faster("rasterPrecision")
 
-	srcs <- .makeSourceName(names(x), "rast", nlyr(x))
+	srcs <- .makeSourceName("arith_by_layer", "rast", nlyr(x))
 	for (i in 1L:nlyr(x)) {
 	
 		ex <- paste0(srcs[i], " = ", fx, "(", precision, "(", sources(x)[i], ") * ", pi, " / 180)")
@@ -411,7 +410,7 @@ setMethod(
 	.region(x)
 	
 	nLayers <- nlyr(x)
-	srcs <- .makeSourceName(names(x), "raster", nLayers)
+	srcs <- .makeSourceName("arith_by_layer", "raster", nLayers)
 	
 	prec <- faster("rasterPrecision")
 
@@ -443,7 +442,7 @@ setMethod(
  	prec <- faster("rasterPrecision")
 
 	nLayers <- nlyr(x)
-	srcs <- .makeSourceName(names(x), "raster", nLayers)
+	srcs <- .makeSourceName("arith_by_layer", "raster", nLayers)
 	
 	for (i in seq_len(nLayers)) {
 	

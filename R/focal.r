@@ -230,13 +230,13 @@ methods::setMethod(
 				args$input <- sources(x)[i]
 				do.call(rgrass::execGRASS, args = args)
 
-				src <- .makeSourceName(names(x)[i], "raster")
+				src <- .makeSourceName("focal", "raster")
 				ex <- paste0(src, " = (double(", gnInter, ") - 1) / 100")
 				rgrass::execGRASS("r.mapcalc", expression = ex, flags = c(.quiet(), "overwrite"), intern = TRUE)
 				
         } else {
 
-				src <- .makeSourceName(names(x)[i], "raster")
+				src <- .makeSourceName("focal", "raster")
 				args$output <- src
 				args$input <- sources(x)[i]
 				do.call(rgrass::execGRASS, args = args)
