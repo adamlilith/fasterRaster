@@ -363,7 +363,7 @@ methods::setMethod(
 	signature = c(x = "GVector"),
 	definition = function(
 		x,
-		y = NULL
+		y
 	) {
 
 	xLocation <- .location(x)
@@ -382,19 +382,17 @@ methods::setMethod(
 	}
 
 	.locationRestore(yLocation)
-	src <- .makeSourceName("projected", "vector")
+	src <- .makeSourceName("project_v_proj", "vector")
 	
-	args <- list(
+	rgrass::execGRASS(
 		cmd = "v.proj",
 		location = .location(x),
 		mapset = .mapset(x),
 		input = sources(x),
 		output = src,
-		flags = c(.quiet(), "overwrite"),
-		intern = TRUE
+		flags = c(.quiet(), "overwrite")
 	)
 
-	do.call(rgrass::execGRASS, args = args)
 	out <- .makeGVector(src, table = x@table)
 	out
 
