@@ -1,6 +1,6 @@
-#' Remove rows in a data.table
+#' Remove rows in a data.table, data.frame, or matrix.
 #'
-#' @description As of September of 2023, the **data.table** package does not have a function for removing rows by index. This function does this job and is adapted from an [issue](https://github.com/Rdatatable/data.table/issues/635) to that effect raised on the **data.table** *GitHub* page.
+#' @description As of September of 2023, the **data.table** package does not have a function for removing rows by index. This function does this job.
 #'
 #' @param x A `data.table` or `data.frame`.
 #' @param drops Numeric, integer, or logical vector: Indices or indicators of rows to remove.
@@ -11,27 +11,6 @@
 #'
 #' @example man/examples/ex_data_table.r
 #'
-#' @aliases dropRows
-#' @rdname dropRows
-#' @exportMethod dropRows
-methods::setMethod(
-	f = "dropRows",
-	signature = c(x = "data.frame"),
-	function(x, drops) {
-	
-	if (nrow(x) > 0L) {
-
-  		drops <- .rowIndices(x, select = drops)
-		out <- x[-drops, , drop = FALSE]
-
-	} else {
-		out <- x # has no rows
-	}
-	out
-		
-	} # EOF
-)
-
 #' @aliases dropRows
 #' @rdname dropRows
 #' @exportMethod dropRows
@@ -72,9 +51,48 @@ methods::setMethod(
 	} # EOF
 )
 
+#' @aliases dropRows
+#' @rdname dropRows
+#' @exportMethod dropRows
+methods::setMethod(
+	f = "dropRows",
+	signature = c(x = "data.frame"),
+	function(x, drops) {
+	
+	if (nrow(x) > 0L) {
+
+  		drops <- .rowIndices(x, select = drops)
+		out <- x[-drops, , drop = FALSE]
+
+	} else {
+		out <- x # has no rows
+	}
+	out
+		
+	} # EOF
+)
+
+methods::setMethod(
+	f = "dropRows",
+	signature = c(x = "matrix"),
+	function(x, drops) {
+	
+	if (nrow(x) > 0L) {
+
+  		drops <- .rowIndices(x, select = drops)
+		out <- x[-drops, , drop = FALSE]
+
+	} else {
+		out <- x # has no rows
+	}
+	out
+		
+	} # EOF
+)
+
 #' Get indices of rows to remove
 #'
-#' @param x A `data.frame` or `data.table`.
+#' @param x A `data.frame` or `data.table` or `matrix`.
 #' @param select Numeric, integer, logical, or character.
 #'
 #' @noRd
@@ -85,7 +103,7 @@ methods::setMethod(
          }
          select <- which(select)
      } else if (is.character(select)) {
-         if (inherits(x, "data.table")) stop("Row names can only be used with a data.frame, not with a data.table.")
+         if (inherits(x, "data.table")) stop("Row names can only be used with a data.frame or matrix, not with a data.table.")
 		 rns <- rownames(x)
          select <- match(select, rns)
      }
