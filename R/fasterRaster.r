@@ -192,8 +192,8 @@
 #' [grid()]: Create a grid `GVector`\cr
 #' [head()]: First rows of a `GVector`'s data table\cr
 #' [hexagons()]: Create a hexagonal grid\cr
-#' [interpIDW()]: Interpolate values at points to a `GRaster`\cr
-#' [interpSplines()]: Interpolate values at points to a `GRaster`\cr
+#' [interpIDW()]: Interpolate values at points to a `GRaster` using inverse-distance weighting\cr
+#' [interpSplines()]: Interpolate values at points to a `GRaster` using splines\cr
 #' [intersect()] or \code{\link[fasterRaster]{*}}: Intersection of two `GVectors`.\cr
 #' [kernel()]: Kernel density estimator of points.\cr
 #' [missing.cases()]: Find rows of a `GVector`'s data table that have at least `NA` in them\cr
