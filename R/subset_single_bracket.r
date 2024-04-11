@@ -76,36 +76,27 @@ methods::setMethod(
 			if (dropTable) {
 				table <- data.table::data.table(NULL)
 			} else {
-				table <- x@table
-			}
 
-			while (!success & n >= 2L) {
-				out <- tryCatch(
-					.subset_single_bracket(
-						src = src,
-						i = i,
-						j = j,
-						gtype = gtype,
-						cats = cats,
-						reverseRowSelect = reverseRowSelect,
-						dropTable = dropTable,
-						table = table,
-						n = n,
-						verbose = verbose
-					),
-					error = function(cond) FALSE
+				table <- x@table
+				out <- .subset_single_bracket(
+					src = src,
+					i = i,
+					j = j,
+					gtype = gtype,
+					cats = cats,
+					reverseRowSelect = reverseRowSelect,
+					dropTable = dropTable,
+					table = table,
+					n = n,
+					verbose = verbose
 				)
 
-				if (!is.logical(out)) {
-					success <- TRUE
-				} else {
-					n <- ceiling(n / 2)
-				}
-			
 			}
 
 		}
 	}
+
+	if (is.logical(out)) stop("Selection failure.")
 	out
 
 	} # EOF
@@ -135,11 +126,11 @@ methods::setMethod(
 		select <- which(index %in% i)
 	}
 	nSelect <- length(select)
+	cats <- cats[select]
 	
 	# select all at once (OK for small number of selected geometries)
 	if (nSelect < n) {
 
-		cats <- cats[select]
 		cats <- seqToSQL(cats)
 		cats <- as.character(cats)
 
@@ -175,7 +166,6 @@ methods::setMethod(
 			ok <- TRUE
 
 			srcs <- .makeSourceName("v_extract", "vector", n = sets)
-			# for (set in seq_len(sets)) {
 			set <- 1L
 			while (set <= sets & ok) {
 
@@ -183,32 +173,39 @@ methods::setMethod(
 
 				thisCats <- cats[starts[set]:stops[set]]
 				thisCats <- seqToSQL(thisCats)
-				thisCats <- as.character(thisCats)
 
-				srcs[set] <- .makeSourceName("v_extract", "vector")
-				rgrass::execGRASS(
-					cmd = 'v.extract',
-					input = sources(x),
-					output = srcs[set],
-					cats = thisCats,
-					# new = -1,
-					type = gtype,
-					flags = c(.quiet(), 'overwrite')
-				)
+				if (attr(thisCats, "trim")) {
+					ok <- FALSE
+				} else {
 
-				info <- .vectInfo(srcs[set])
-				nSelected <- stops[set] - starts[set] + 1L
-				# if (info$nGeometries != nSelected) stop("Subsetting error. Try reducing the value of `n` using faster().")
-				if (info$nGeometries != nSelected) ok <- FALSE
-				set <- set + 1L
+					thisCats <- as.character(thisCats) # remove attributes
+
+					srcs[set] <- .makeSourceName("v_extract", "vector")
+					rgrass::execGRASS(
+						cmd = 'v.extract',
+						input = sources(x),
+						output = srcs[set],
+						cats = thisCats,
+						# new = -1,
+						type = gtype,
+						flags = c(.quiet(), 'overwrite')
+					)
+
+					info <- .vectInfo(srcs[set])
+					nSelected <- stops[set] - starts[set] + 1L
+					if (info$nGeometries != nSelected) ok <- FALSE
+					set <- set + 1L
+
+				}
 
 			}
+
 			if (verbose) close(pb)
 			if (ok) {
 				worked <- TRUE
 			} else {
 				n <- round(n / 2)
-				if (verbose) omnibus::say("Selection failure. Retrying with smaller internal value of `n`\n  See the `n` option in function `faster()`.")
+				if (verbose) omnibus::say("Selection failure. Retrying with smaller value for argument `n`.")
 			}
 
 		}
