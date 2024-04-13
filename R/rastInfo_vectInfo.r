@@ -24,7 +24,7 @@
 			out <- if (i == 1L) {
 				this
 			} else {
-    			appendLists(out, this)
+    			omnibus::appendLists(out, this)
 			}
 		
 		}
