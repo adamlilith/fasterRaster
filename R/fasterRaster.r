@@ -241,7 +241,6 @@
 #' [vect()]: Convert a `GVector` to a `SpatVector`\cr
 #'
 #' ## General purpose functions
-#' [appendLists()]: Append values to elements of a list from another list\cr
 #' [compareGeom()]: Determine if geographic metadata is same between `GRaster`s and/or `GVector`s\cr
 #' [dropRows()]: Remove rows from a `data.frame` or `data.table`\cr
 #' [grassInfo()]: **GRASS** version and citation\cr
