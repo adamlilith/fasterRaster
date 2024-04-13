@@ -1,6 +1,6 @@
-#' Convert a raster or lines or polygons vector to a points vector
+#' Convert a GRaster, or lines or polygons GVector to a points vector
 #'
-#' @description `as.points()` converts a `GRaster` or `GVector` to a points `GVector`.
+#' @description `as.points()` converts a `GRaster`, or a lines or polygons `GVector` to a points `GVector`.
 #'
 #' For `GRasters`, the points have the coordinates of cell centers and are assigned the cells' values. Only non-`NA` cells will be converted to points.
 #'
@@ -27,7 +27,7 @@ methods::setMethod(
         .locationRestore(x)
         .region(x)
 
-        src <- .makeSourceName("r_to_vect", "vector")
+        src <- .makeSourceName("as_points_r_to_vect", "vector")
 
         rgrass::execGRASS(
             cmd = "r.to.vect",
@@ -51,7 +51,7 @@ methods::setMethod(
         
             for (i in 2L:nLayers) {
 
-                thisSrc <- .makeSourceName("r_to_vect", "vector")
+                thisSrc <- .makeSourceName("as_points_r_to_vect", "vector")
 
                 rgrass::execGRASS(
                     cmd = "r.to.vect",
@@ -86,22 +86,21 @@ methods::setMethod(
     function(x) {
 
     gtype <- geomtype(x, grass = TRUE)
-    if (geomtype(x) == "point") {
+    if (gtype == "point") {
         warning("Vector object is already a points object.")
         return(x)
     }
 
     .locationRestore(x)
 
-    src <- .makeSourceName("v_to_points", "vector")
+    src <- .makeSourceName("as_points_v_to_points", "vector")
     args <- list(
         cmd = "v.to.points",
         input = sources(x),
         output = src,
         use = "vertex",
         type = gtype,
-        flags = c(.quiet(), "overwrite"),
-        intern = TRUE
+        flags = c(.quiet(), "overwrite")
     )
     do.call(rgrass::execGRASS, args = args)
     .makeGVector(src, table = NULL)
