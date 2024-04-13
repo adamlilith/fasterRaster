@@ -6,11 +6,12 @@
 #'
 #' @param y A `GRaster`: The new raster will have the same extent and resolution as this raster.
 #'
-#' @param background Numeric or `NA` (default): Value to put in cells that are not `NA`.
+#' @param background Numeric or `NA` (default): Value to put in cells that are not covered by the `GVector`.
 #'
 #' @param byGeom,collapse Logical:
-#' * If `byGeom` is `TRUE` and `collapse` is `TRUE`, the output will have just one raster layer, but with values that correspond to each geometry (i.e., each geometry will get a different value). If geometries overlap, then category value of the one on top will be assigned to the relevant cells. 
+#' * If `byGeom` is `TRUE` and `collapse` is `TRUE`, the output will have just one raster layer, but with values that correspond to each geometry (i.e., each geometry will get a different value). If geometries overlap, then category value of the geometry on "top" will be assigned to the relevant cells. 
 #' * If `byGeom` is `TRUE`, and `collapse` is `FALSE`, then create a separate raster layer for each geometry in `x`.
+#' * If `byGeom` is `FALSE`, then create a single raster layer with the same value for all geometries. Argument `collapse` is ignored.
 #'
 #' @returns A `GRaster`.
 #'
