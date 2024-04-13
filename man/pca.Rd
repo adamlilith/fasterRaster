@@ -3,22 +3,22 @@
 \name{pca,GRaster-method}
 \alias{pca,GRaster-method}
 \alias{pca}
-\title{Apply a principal component analysis (PCA) to a GRaster}
+\title{Apply a principal component analysis (PCA) to layers of a GRaster}
 \usage{
 \S4method{pca}{GRaster}(x, scale = TRUE, scores = FALSE)
 }
 \arguments{
 \item{x}{A \code{GRaster} with two or more layers.}
 
-\item{scale}{Logical: If \code{TRUE}, input layers will be rescaled by dividing each layer by its overall population standard deviation. Note that rasters will always be centered (have their mean subtracted from values). Centering and scaling is recommended when rasters values are in different units. The default is \code{FALSE} (do not scale).}
+\item{scale}{Logical: If \code{TRUE} (default), input layers will be rescaled by dividing each layer by its overall population standard deviation. Rasters will always be centered (have their mean subtracted from values). Centering and scaling is recommended when rasters values are in different units.}
 
-\item{scores}{Logical: If \code{TRUE}, the \code{prcomp} object will have the scores attached to it. This can vastly increase the size of the object and take a lot of memory if the input raster has many cells. It will also take more time. If \code{FALSE} (default), then skip returning scores.}
+\item{scores}{Logical: If \code{TRUE}, the \code{prcomp} object will have the scores attached to it. This can greatly increase the size of the object in memory if the input raster has many cells. It will also take more time. If \code{FALSE} (default), then skip returning scores.}
 }
 \value{
 A multi-layer \code{GRaster} with one layer per principal component axis. The \code{\link[=pcs]{pcs()}} function can be used on the output raster to retrieve a \code{prcomp} object from the raster, which includes rotations (loadings) and proportions of variance explained.
 }
 \description{
-\code{pca()} applies a principal component analysis to layers of a \code{GRaster}.
+This function applies a principal component analysis to layers of a \code{GRaster}.
 }
 \examples{
 if (grassStarted()) {

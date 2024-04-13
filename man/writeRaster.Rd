@@ -11,6 +11,8 @@
   filename,
   overwrite = FALSE,
   datatype = NULL,
+  levelsExt = NULL,
+  compress = "LZW",
   mm = FALSE,
   warn = TRUE,
   ...
@@ -39,20 +41,29 @@
 
 \code{*} Depends on the integers (signed/unsigned, range of values). Categorical rasters will have a CSV file with category values and labels saved with them. The file name will be the same as the raster's file name, but end in extension ".csv".}
 
-\item{mm}{Logical: If \code{TRUE}, call \code{\link[terra:minmax]{terra::setMinMax()}} on the raster to ensure it has metadata on the minimum and maximum values. For large rasters, this can take a long time, so the default value of \code{mm} is \code{FALSE}. This is only useful if you assign a raster to the output of \code{writeRaster}, as in \code{x <- writeRaster(my_raster, filename = './raster_file.tif', mm = TRUE)}.}
-
-\item{warn}{Logical: If \code{TRUE} (default), display a warning if the \code{datatype} argument does not match the value given by \code{datatype(x, "GDAL")}.}
-
-\item{...}{Additional arguments. These can include:
+\item{levelsExt}{Character, logical, or \code{NULL} (default): Name of the file extension for the "levels" file that accompanies a \link[=tutorial_raster_data_types]{categorical} raster. When saving categorical rasters, the raster file is accompanied with a "levels" file that contain information on the levels of the raster. This file is the same as \code{filename}, except it has a different extension. Valid values depend on how many raster layers are saved at a time (case is ignored):
 \itemize{
-\item \code{compressTiff}: Character or \code{NULL}: Type of compression for GeoTIFF files:
+\item One raster layer: \code{".csv"}
+\item Two or more layers, with at least one categorical raster: \code{".rds"}, \code{".rda"}, \code{".rdat"}, \code{".rdata"}
+\item Any: \code{NULL} or \code{TRUE} automatically selects either \code{".csv"} (one raster layer) or \verb{".rds} (two or more)
+\item Any: \code{FALSE} disables saving of a levels file.
+}}
+
+\item{compress}{Character: Type of compression to use for GeoTIFF files:
 \itemize{
-\item \code{"DEFLATE"} (default)
-\item \code{"LZW"}
+\item \code{"LZW"} (default)
+\item \code{"DEFLATE"}
 \item \code{"PACKBITS"}
 \item \code{"LZMA"}
 \item \code{NULL}: No compression is used, but the file can still be reduced in size by using zip, gzip, or other compressions.
-}
+}}
+
+\item{mm}{Logical: If \code{TRUE}, call \code{\link[terra:minmax]{terra::setMinMax()}} on the raster to ensure it has metadata on the minimum and maximum values. For large rasters, this can take a long time, so the default value of \code{mm} is \code{FALSE}. This is only useful if you assign a raster to the output of \code{writeRaster}, as in \code{x <- writeRaster(my_raster, filename = './raster_file.tif', mm = TRUE)}.}
+
+\item{warn}{Logical: If \code{TRUE} (default), display a warning if the \code{datatype} argument does not match the value given by \code{datatype(x, "GDAL")}, or if the \code{fileExt} argument will not work with the given raster and so has been automatically changed.}
+
+\item{...}{Additional arguments. These can include:
+\itemize{
 \item \code{bigTiff}: Logical: If \code{TRUE}, and the file format is a GeoTIFF and would be larger than 4 GB (regardless of compression), then the file will be saved in BIGTIFF format.
 \item \code{format}: Character, indicating file format. This is usually ascertained from the file extension, but in case this fails, it can be stated explicitly. When using other formats, you may have to specify the \code{createopts} argument, too (see help page for \strong{GRASS} module \code{r.out.gdal}). Two common formats include:
 \itemize{

@@ -6,7 +6,7 @@
 \alias{[,GVector,ANY,ANY-method}
 \title{Subset geometries of a GVector}
 \usage{
-\S4method{[}{GVector,ANY,ANY}(x, i, j, verbose = FALSE, dropTable = FALSE)
+\S4method{[}{GVector,ANY,ANY}(x, i, j)
 }
 \arguments{
 \item{x}{A \code{GVector}.}
@@ -14,20 +14,14 @@
 \item{i}{Numeric integer, integer, or logical vector: Indicates which geometry(ies) to obtain. Negative numeric or integer values will remove the given geometries from the output. If a logical vector is supplied and it is not the same length as the number of geometries, it will be recycled.}
 
 \item{j}{Numeric integer, integer, logical, or character: Indices or name(s) of the column(s) to obtain. You can see column names using \code{\link[=names]{names()}}. Negative numeric or integer values will remove the given columns from the output. If a logical vector is supplied and it is not the same length as the number of columns, it will be recycled.}
-
-\item{verbose}{Logical: If \code{TRUE} (or if \code{faster("verbose")} is \code{TRUE}), then display progress.}
-
-\item{dropTable}{Logical: If \code{FALSE} (default), the appropriate subset of the \code{GVector}s data table will be included in the subset. If \code{TRUE}, the table will be dropped.}
 }
 \value{
 A \code{GVector}.
 }
 \description{
-The \code{[} operator returns a subset or remove specific geometries of a \code{GVector}. You can get the number of geometries using \code{\link[=ngeom]{ngeom()}}. Note that you cannot use this function to change the "order" in which geometries or their associated records in a data table appear. For example, \code{vector[1:3]} and \code{vector[3:1]} will yield the exact same results, where the first geometry in \code{vector} will also be the first geometry in either of the outputs.
+The \code{[} operator returns a subset or remove specific geometries of a \code{GVector}. You can get the number of geometries using \code{\link[=ngeom]{ngeom()}}. Note that you cannot use this function to change the "order" in which geometries or their associated records in a data table appear. For example, \code{vector[1:3]} and \code{vector[3:1]} will yield the exact same results.
 
-The subset operation will sometimes fail if \code{i} has many values. In these cases, try setting the value of the \code{nAtATime} option lower using \code{\link[=faster]{faster()}}. Smaller values take more time, but are also less prone to failure.
-
-Note that subsetting can take a very long time if \code{i} has many values, even for moderately-sized vectors. In these cases, it may help to set \code{verbose = TRUE} so you have something exciting to watch as it does its work.
+Note that subsetting can take a very long time if \code{i} has many values or the vector is very large.
 }
 \examples{
 if (grassStarted()) {

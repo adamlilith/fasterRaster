@@ -12,12 +12,13 @@
 
 \item{y}{A \code{GRaster}: The new raster will have the same extent and resolution as this raster.}
 
-\item{background}{Numeric or \code{NA} (default): Value to put in cells that are not \code{NA}.}
+\item{background}{Numeric or \code{NA} (default): Value to put in cells that are not covered by the \code{GVector}.}
 
 \item{byGeom, collapse}{Logical:
 \itemize{
-\item If \code{byGeom} is \code{TRUE} and \code{collapse} is \code{TRUE}, the output will have just one raster layer, but with values that correspond to each geometry (i.e., each geometry will get a different value). If geometries overlap, then category value of the one on top will be assigned to the relevant cells.
+\item If \code{byGeom} is \code{TRUE} and \code{collapse} is \code{TRUE}, the output will have just one raster layer, but with values that correspond to each geometry (i.e., each geometry will get a different value). If geometries overlap, then category value of the geometry on "top" will be assigned to the relevant cells.
 \item If \code{byGeom} is \code{TRUE}, and \code{collapse} is \code{FALSE}, then create a separate raster layer for each geometry in \code{x}.
+\item If \code{byGeom} is \code{FALSE}, then create a single raster layer with the same value for all geometries. Argument \code{collapse} is ignored.
 }}
 }
 \value{

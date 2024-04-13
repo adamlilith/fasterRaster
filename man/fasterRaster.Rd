@@ -107,6 +107,7 @@ The assign operators, \code{\link[fasterRaster]{$<-}}, \code{\link[fasterRaster]
 \code{\link[=mask]{mask()}}: Remove values in a \code{GRaster} based on values in another \code{GRaster} or vector\cr
 \code{\link[=match]{match()}}, \code{\link[fasterRaster]{\%in\%}}, and \code{\link[fasterRaster]{\%notin\%}}: Find which cells of a \code{GRaster} match or do not match certain values\cr
 \code{\link[=merge]{merge()}}: Combine two or more rasters with different extents and fill in \code{NA}s\cr
+\code{\link[fasterRaster]{names<-}}: Assign names to a \code{GRaster}\cr
 \code{\link[=noise]{noise()}}: Remove coarse-scale trends from a \code{GRaster}, leaving just fine-scale "noise"\cr
 \code{\link[=pairs]{pairs()}}: Plot correlations between \code{GRaster} layers\cr
 \code{\link[=pca]{pca()}}: Apply a principal components analysis (PCA) to a \code{GRaster}\cr
@@ -176,7 +177,6 @@ The assign operators, \code{\link[fasterRaster]{$<-}}, \code{\link[fasterRaster]
 \code{\link[=is.lonlat]{is.lonlat()}}: Is an object projected (e.g., in WGS84)?\cr
 \code{\link[=is.points]{is.points()}}, \code{\link[=is.lines]{is.lines()}}, \code{\link[=is.polygons]{is.polygons()}}: Does a \code{GVector} represent points, lines, or polygons?\cr
 \code{\link[=names]{names()}}: Names of \code{GVector} fields\cr
-\code{\link[fasterRaster]{names<-}}: Assign names to columns of a \code{GVector}s data table\cr
 \code{\link[=ncol]{ncol()}}: Number of fields\cr
 \code{\link[=ngeom]{ngeom()}}: Number of geometries (points, lines, polygons)\cr
 \code{\link[=nrow]{nrow()}}: Number of rows in a vector data table\cr
@@ -214,11 +214,12 @@ The \code{\link[fasterRaster]{$<-}} operator can be used to replace specific col
 \code{\link[=grid]{grid()}}: Create a grid \code{GVector}\cr
 \code{\link[=head]{head()}}: First rows of a \code{GVector}'s data table\cr
 \code{\link[=hexagons]{hexagons()}}: Create a hexagonal grid\cr
-\code{\link[=interpIDW]{interpIDW()}}: Interpolate values at points to a \code{GRaster}\cr
-\code{\link[=interpSplines]{interpSplines()}}: Interpolate values at points to a \code{GRaster}\cr
+\code{\link[=interpIDW]{interpIDW()}}: Interpolate values at points to a \code{GRaster} using inverse-distance weighting\cr
+\code{\link[=interpSplines]{interpSplines()}}: Interpolate values at points to a \code{GRaster} using splines\cr
 \code{\link[=intersect]{intersect()}} or \code{\link[fasterRaster]{*}}: Intersection of two \code{GVectors}.\cr
 \code{\link[=kernel]{kernel()}}: Kernel density estimator of points.\cr
 \code{\link[=missing.cases]{missing.cases()}}: Find rows of a \code{GVector}'s data table that have at least \code{NA} in them\cr
+\code{\link[fasterRaster]{names<-}}: Assign names to columns of a \code{GVector}s data table\cr
 \code{\link[=project]{project()}}: Change coordinate reference system\cr
 \code{\link[=rasterize]{rasterize()}}: Convert a \code{GVector} to a \code{GRaster}\cr
 \code{\link[=rbind]{rbind()}}: Combine \verb{GVectors\\cr [simplifyGeom()]: Remove vertices\\cr [smoothGeom()]: Remove "angular" aspects of features\\cr [st_as_sf()]: Convert a }GVector\verb{to a}sf\verb{vector\\cr [st_buffer()]: Create a polygon around/inside a}GVector\verb{\\cr [tail()]: Last rows of a }GVector\verb{'s data table\\cr [thinPoints()]: Reduce number of points in same raster cell\\cr [union()] or \code{\link[fasterRaster]{+}}: Combine two }GVector\verb{s\\cr [xor()] or \code{\link[fasterRaster]{/}}: Select parts of polygons not shared by two }GVector`s\cr
@@ -260,7 +261,6 @@ The \code{\link[fasterRaster]{$<-}} operator can be used to replace specific col
 
 \subsection{General purpose functions}{
 
-\code{\link[=appendLists]{appendLists()}}: Append values to elements of a list from another list\cr
 \code{\link[=compareGeom]{compareGeom()}}: Determine if geographic metadata is same between \code{GRaster}s and/or \code{GVector}s\cr
 \code{\link[=dropRows]{dropRows()}}: Remove rows from a \code{data.frame} or \code{data.table}\cr
 \code{\link[=grassInfo]{grassInfo()}}: \strong{GRASS} version and citation\cr

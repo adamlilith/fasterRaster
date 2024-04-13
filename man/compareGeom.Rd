@@ -100,8 +100,8 @@
 \item{geometry}{Logical (vector-vector comparison only): Compare geometry. Default is \code{FALSE}.}
 }
 \value{
-Logical (invisibly), or side effect of throwing an error.
+Logical (invisibly): \code{TRUE} for no mismatches detected, \code{FALSE} for incompatibility), or side effect of throwing an error.
 }
 \description{
-\code{compareGeom()} compares geographic metadata between \code{GRaster}s, \code{GVector}s, or \code{GRaster}s and \code{GVector}s. In many cases, spatial objects must be comparable for them to "interact" (e.g., conducting arithmetic operations, masking, etc.).
+\code{compareGeom()} compares geographic metadata between two or more \code{GRaster}s and/or \code{GVector}s. In many cases, spatial objects must be comparable for them to "interact" (e.g., conducting arithmetic operations, masking, etc.).
 }

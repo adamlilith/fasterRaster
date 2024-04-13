@@ -7,7 +7,7 @@
 \alias{addTable<-,GVector,matrix-method}
 \alias{dropTable,GVector-method}
 \alias{dropTable}
-\title{Add or remove a data table from a GVector}
+\title{Attach or detach GVector's data table}
 \usage{
 \S4method{addTable}{GVector,data.frame}(x) <- value
 
@@ -26,9 +26,9 @@
 A \code{GVector}.
 }
 \description{
-\code{addTable()} adds an entire table to a \code{GVector}. There must be one row in the table for each geometry (see \code{\link[=ngeom]{ngeom()}}). You can also add a table column-by-column using the \code{\link[fasterRaster]{$<-}} operator.
+\code{addTable()} adds an entire table to a \code{GVector}. It will replace any existing table. There must be one row in the table for each geometry (see \code{\link[=ngeom]{ngeom()}}). You can also add a table column-by-column using the \code{\link[fasterRaster]{$<-}} operator.
 
-\code{droptable()} removes a data table associated with a \code{GVector}.
+\code{dropTable()} removes a data table associated with a \code{GVector}.
 }
 \examples{
 if (grassStarted()) {

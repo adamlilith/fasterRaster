@@ -10,12 +10,12 @@ grassInfo(x = "citation")
 \item{x}{Character: What to return. Any of:
 \itemize{
 \item \code{"citation"} (default)
+\item \code{"copyright"}: Copyright information
 \item \code{"version"}: Version number and release year
-\item \code{"version"}: Version number as numeric, major and minor only (e.g., 8.3)
-\item "\code{copyright}"
+\item \code{"versionNumber"}: Version number as numeric, major and minor only (e.g., 8.3)
 }
 
-Partial matching is used.}
+Partial matching is used and case is ignored.}
 }
 \value{
 Character.

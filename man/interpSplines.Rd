@@ -3,7 +3,7 @@
 \name{interpSplines,GVector,GRaster-method}
 \alias{interpSplines,GVector,GRaster-method}
 \alias{interpSplines}
-\title{Use values in a "points" GVector to interpolate to a GRaster}
+\title{Interpolate values at points to a GRaster using splines}
 \usage{
 \S4method{interpSplines}{GVector,GRaster}(
   x,
