@@ -39,7 +39,7 @@ methods::setValidity("GVector",
 		} else if (object@nGeometries == 0L) {
 			"GVector has no geometries."
 		} else if (nrow(object@table) > 0L && nrow(object@table) != object@nGeometries) {
-			"The data.table in @table must be a NULL table (data.table(NULL)), or\n  it must have the same number of rows as @nGeometries.\n  See the *Details* section in `fast()` on how to correct topology."
+			"The data.table in @table must be a NULL table (data.table(NULL)), or\n  it must have the same number of rows as @nGeometries. See the *Details* section in `fast()` on how to correct topology."
 		} else {
 			TRUE
 		}
