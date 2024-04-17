@@ -27,14 +27,14 @@ methods::setMethod(
 	function(x, i, j) {
 
 	.locationRestore(x)
+	nGeoms <- ngeom(x)
 
-	if (missing(i) & missing(j)) {
+	if ((missing(i) || all(i == 1L:nGeoms)) & missing(j)) {
 		out <- x
-	} else if (missing(i) & !missing(j)) {
+	} else if ((missing(i) & !missing(j)) || (all(i == 1L:nGeoms) & !missing(j))) {
 		out <- x[[i = j]]
-	} else if (!missing(i)){
+	} else if (!missing(i) & missing(j)) {
 
-		nGeoms <- ngeom(x)
 		if (is.logical(i)) {
 			if (length(i) < nGeoms) i <- rep(i, length.out = nGeoms)
 			i <- which(i)
@@ -70,38 +70,32 @@ methods::setMethod(
 			src <- .copyGSpatial(x)
 
 			# get cats to delete
-			cats <- .vCats(src) # all cats
-			cats <- sort(cats) # ????? YES!!!!!
-			uniCats <- unique(cats)
-			removes <- uniCats[i] # remove cats to keep
-			cats <- cats[omnibus::notIn(cats, removes)] # cats to delete
+			cats <- seq_len(nGeoms) # copying a vector re-orders cats from 1 to number of geometries
+			cats <- cats[omnibus::notIn(cats, i)] # cats to delete
 
 			# delete geometries in subsets bc removing large numbers of geometries at a time is inefficient
 			done <- FALSE
-			startFrom <- 0L
-			n <- 100000L # maximum number of cats to delete at a time (seqToSQL() usually stops far short)
+			n <- 200000L # maximum number of cats to delete at a time (seqToSQL() usually stops far short)
+			startFrom <- 1L
+			stopAt <- min(length(cats), startFrom + n - 1L)
 			while (!done) {
-			
-				startFrom <- startFrom + 1L
-				stopAt <- min(length(cats), startFrom + n)
+				
 				thisCats <- cats[startFrom:stopAt]
 				thisCats <- seqToSQL(thisCats)
-				startFrom <- startFrom + attr(thisCats, "lastIndex") + 1L # what was the index of the last used cat?
-				thisCatsChar <- as.character(thisCats)
-
+				
 				args <- list(
 					cmd = "v.edit",
 					map = src,
-					# type = gtype,
+					# type = gtype, # breaks
 					tool = "delete",
-					cats = thisCatsChar,
+					cats = thisCats,
 					flags = c(.quiet(), "overwrite")
 				)
-				if (gtype == "point") args$flags <- c(args$flags, "b")
 				do.call(rgrass::execGRASS, args = args)
 
-				truncated <- attr(thisCats, "trim") # did we use all remaining cats?
-				if (!truncated) done <- TRUE
+				if (stopAt == length(cats)) done <- TRUE
+				startFrom <- startFrom + attr(thisCats, "lastIndex") # what was the index of the last used cat?
+				stopAt <- min(length(cats), startFrom + n)
 			
 			} # next removal
 
