@@ -254,8 +254,10 @@
 
 }
 
-#' @noRd
-print.rastInfo <- function(x) {
+#' @aliases print
+#' @rdname show
+#' @export
+print.rastInfo <- function(x, ...) {
 
 	cat("Source(s)     :", x$sources, "\n")
 	cat("Type(s)       :", x$type, "\n")
@@ -499,8 +501,10 @@ summary.rastInfo <- function(x) print.rastInfo(x)
 
 }
 
+#' @aliases print
+#' @rdname show
 #' @export
-print.vectInfo <- function(x) {
+print.vectInfo <- function(x, ...) {
 
 	cats <- x$cats
 	if (length(cats) > 6L) {
