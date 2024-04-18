@@ -64,8 +64,6 @@ methods::setMethod(
 			out <- x
 		} else {
 
-			gtype <- geomtype(x, grass = TRUE)
-
 			# will be deleting geometries from this copy
 			src <- .copyGSpatial(x)
 
@@ -76,13 +74,15 @@ methods::setMethod(
 			# delete geometries in subsets bc removing large numbers of geometries at a time is inefficient
 			done <- FALSE
 			n <- 200000L # maximum number of cats to delete at a time (seqToSQL() usually stops far short)
+			# n <- 10L # maximum number of cats to delete at a time (seqToSQL() usually stops far short)
 			startFrom <- 1L
+			numRemoved <- 0L
 			stopAt <- min(length(cats), startFrom + n - 1L)
 			while (!done) {
 				
 				thisCats <- cats[startFrom:stopAt]
 				thisCats <- seqToSQL(thisCats)
-				
+
 				args <- list(
 					cmd = "v.edit",
 					map = src,
@@ -93,10 +93,16 @@ methods::setMethod(
 				)
 				do.call(rgrass::execGRASS, args = args)
 
-				if (stopAt == length(cats)) done <- TRUE
-				startFrom <- startFrom + attr(thisCats, "lastIndex") # what was the index of the last used cat?
-				stopAt <- min(length(cats), startFrom + n)
-			
+				# rgrass::execGRASS("v.build", map = src, option = "build", flags = c(.quiet(), "overwrite"))
+
+				numRemoved <- numRemoved + attr(thisCats, "n")
+				if (numRemoved == length(cats)) {
+					done <- TRUE
+				} else {
+					startFrom <- startFrom + attr(thisCats, "lastIndex") # what was the index of the last used cat?
+					stopAt <- min(length(cats), startFrom + n)
+				}
+
 			} # next removal
 
 		} # not removing all and not removing nothing
