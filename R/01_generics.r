@@ -211,6 +211,8 @@ methods::setGeneric(name = "pca", def = function(x, ...) standardGeneric("pca"))
 methods::setGeneric(name = "plot", package = "terra")
 methods::setGeneric(name = "plotRGB", package = "terra")
 methods::setGeneric(name = "predict", package = "terra")
+# methods::setGeneric(name = "print", def = function(x, ...) standardGeneric("print")) # base
+methods::setGeneric(name = "print") # base
 methods::setGeneric(name = "project", package = "terra")
 
 methods::setGeneric(name = "quantile", package = "terra")
