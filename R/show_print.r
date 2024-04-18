@@ -29,12 +29,8 @@ methods::setMethod(
 
 #' @aliases print
 #' @rdname show
-#' @exportMethod print
-methods::setMethod(
-	f = "print",
-	signature = "GLocation",
-	definition = function(x) show(x)
-)
+#' @export
+print.GLocation <- function(x, ...) show(x)
 
 #' @aliases summary
 #' @rdname show
@@ -75,12 +71,8 @@ methods::setMethod(
 
 #' @aliases print
 #' @rdname show
-#' @exportMethod print
-methods::setMethod(
-	f = "print",
-	signature = "GSpatial",
- 	definition = function(x) show(x)
-)
+#' @export
+print.GSpatial <- function(x, ...) show(x)
 
 #' @aliases summary
 #' @rdname show
@@ -125,12 +117,8 @@ methods::setMethod(
 
 #' @aliases print
 #' @rdname show
-#' @exportMethod print
-methods::setMethod(
-	f = "print",
-	signature = "GRegion",
- 	definition = function(x) show(x)
-)
+#' @export
+print.GRegion <- function(x, ...) show(x)
 
 #' @aliases summary
 #' @rdname show
@@ -314,12 +302,8 @@ methods::setMethod(
 
 #' @aliases print
 #' @rdname show
-#' @exportMethod print
-methods::setMethod(
-	f = "print",
-	signature = "GRaster",
- 	definition = function(x) show(x)
-)
+#' @export
+print.GRaster <- function(x, ...) show(x)
 
 #' @aliases summary
 #' @rdname show
@@ -480,12 +464,8 @@ methods::setMethod(
 
 #' @aliases print
 #' @rdname show
-#' @exportMethod print
-methods::setMethod(
-	f = "print",
-	signature = "GVector",
- 	definition = function(x) show(x)
-)
+#' @export
+print.GVector <- function(x, ...) show(x)
 
 #' @aliases summary
 #' @rdname show
