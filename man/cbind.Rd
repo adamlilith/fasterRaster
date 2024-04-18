@@ -5,7 +5,7 @@
 \alias{cbind}
 \title{Add columns to the data table of a GVector}
 \usage{
-print(...)
+print(x, ...)
 }
 \arguments{
 \item{...}{The first argument must be a \code{GVector}. Subsequent arguments can be \code{data.frame}s, \code{data.table}s, \code{matrices}, or \code{GVector}s. Only the data tables of subsequent \code{GVector}s are added to the table in \code{x}; the geometries are ignored.}
