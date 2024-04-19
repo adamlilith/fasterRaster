@@ -29,10 +29,14 @@ methods::setMethod(
 	.locationRestore(x)
 	nGeoms <- ngeom(x)
 
-	if ((missing(i) || all(i == 1L:nGeoms)) & missing(j)) {
+	if ((missing(i) & missing(j)) {
 		out <- x
-	} else if ((missing(i) & !missing(j)) || (all(i == 1L:nGeoms) & !missing(j))) {
+	} else if ((missing(i) & !missing(j))) {
 		out <- x[[i = j]]
+	} else if (all(1L:nGeoms %in% i) & !missing(j))) {
+		out <- x[[i = j]]
+	} else if (all(1L:nGeoms %in% i) & missing(j))) {
+		out <- x
 	} else if (!missing(i) & missing(j)) {
 
 		if (is.logical(i)) {
@@ -66,10 +70,14 @@ methods::setMethod(
 
 			# will be deleting geometries from this copy
 			src <- .copyGSpatial(x)
+			cats <- .vCats(src)
+			iNot <- seq_len(nGeoms)
+			iNot <- iNot[omnibus::notIn(iNot, i)]
+			cats <- cats[iNot]
 
-			# get cats to delete
-			cats <- seq_len(nGeoms) # copying a vector re-orders cats from 1 to number of geometries
-			cats <- cats[omnibus::notIn(cats, i)] # cats to delete
+			# # get cats to delete
+			# cats <- seq_len(nGeoms) # copying a vector re-orders cats from 1 to number of geometries
+			# cats <- cats[omnibus::notIn(cats, i)] # cats to delete
 
 			# delete geometries in subsets bc removing large numbers of geometries at a time is inefficient
 			done <- FALSE
