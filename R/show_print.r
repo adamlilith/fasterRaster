@@ -280,8 +280,8 @@ methods::setMethod(
 	}
 	cat("coord ref.  :", format(st_crs(object)), "\n")
 	if (verbose) cat("projection  :", object@projection, "\n")
-	if (verbose) cat("sources     :", sources, "\n")
 	cat("name(s)     :", names, "\n")
+	if (verbose) cat("sources     :", sources, "\n")
 	if (!verbose) {
 		cat("datatype    :", datatypeNiceFR, "\n")
 	} else {
