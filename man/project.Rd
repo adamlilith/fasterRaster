@@ -23,7 +23,7 @@
 
 \item{y}{A character or \code{GLocation} object (i.e., typically a \code{GRaster} or \code{GVector}): Used to set the focal \code{GRaster} or \code{GVector}'s new CRS (and resolution and possibly extent, for \code{GRaster}s).}
 
-\item{align}{Logical: If \code{FALSE} (default), and \code{x} and \code{y} are \code{GRaster}s, then the extent of \code{x} will be cropped to the extent of \code{y}. If \code{TRUE}, no corpping is performed.}
+\item{align}{Logical: If \code{FALSE} (default), and \code{x} and \code{y} are \code{GRaster}s, then the extent of \code{x} will be cropped to the extent of \code{y}. If \code{TRUE}, no cropping is performed.}
 
 \item{method}{Character or \code{NULL} (for \code{GRaster}s only): Method to use to conduct the transformation (rasters only). Partial matching is used.
 \itemize{
