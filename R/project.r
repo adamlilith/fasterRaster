@@ -9,7 +9,7 @@
 #'
 #' @param y A character or `GLocation` object (i.e., typically a `GRaster` or `GVector`): Used to set the focal `GRaster` or `GVector`'s new CRS (and resolution and possibly extent, for `GRaster`s).
 #'
-#' @param align Logical: If `FALSE` (default), and `x` and `y` are `GRaster`s, then the extent of `x` will be cropped to the extent of `y`. If `TRUE`, no corpping is performed.
+#' @param align Logical: If `FALSE` (default), and `x` and `y` are `GRaster`s, then the extent of `x` will be cropped to the extent of `y`. If `TRUE`, no cropping is performed.
 #'
 #' @param method Character or `NULL` (for `GRaster`s only): Method to use to conduct the transformation (rasters only). Partial matching is used.
 #' * `NULL` (default): Automatically choose based on raster properties (`near` for categorical data, `bilinear` for continuous data).
