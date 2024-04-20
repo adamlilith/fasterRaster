@@ -29,13 +29,13 @@ methods::setMethod(
 	.locationRestore(x)
 	nGeoms <- ngeom(x)
 
-	if ((missing(i) & missing(j)) {
+	if (missing(i) & missing(j)) {
 		out <- x
-	} else if ((missing(i) & !missing(j))) {
+	} else if (missing(i) & !missing(j)) {
 		out <- x[[i = j]]
-	} else if (all(1L:nGeoms %in% i) & !missing(j))) {
+	} else if (all(1L:nGeoms %in% i) & !missing(j)) {
 		out <- x[[i = j]]
-	} else if (all(1L:nGeoms %in% i) & missing(j))) {
+	} else if (all(1L:nGeoms %in% i) & missing(j)) {
 		out <- x
 	} else if (!missing(i) & missing(j)) {
 
