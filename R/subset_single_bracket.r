@@ -71,6 +71,7 @@ methods::setMethod(
 			# will be deleting geometries from this copy
 			src <- .copyGSpatial(x)
 			cats <- .vCats(src)
+			cats <- sort(unique(cats))
 			iNot <- seq_len(nGeoms)
 			iNot <- iNot[omnibus::notIn(iNot, i)]
 			cats <- cats[iNot]
