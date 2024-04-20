@@ -245,7 +245,9 @@ methods::setMethod(
 
                 levs <- levels(x[[i]])[[1L]]
                 this <- levs[match(info, levs[[1L]]), 2L]
-                names(this) <- paste0(names(x)[i], "_cat")
+                names(this) <- names(x)[i]
+                # this <- levs[match(info, levs[[1L]]), 2L]
+                # names(this) <- c(names(x)[i], paste0(names(x)[i], "_cat"))
 
             }
 
