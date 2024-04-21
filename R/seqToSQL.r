@@ -8,7 +8,7 @@
 #'
 #' @param sort Logical: If `TRUE` (default), sort `x` before converting to SQL. This can reduce the length of the output.
 #'
-#' @returns A character string. The string has three attributes. The `trim` attribute is `TRUE` or `FALSE`, depending on whether `maxChar` was reached or not (and subsequent numbers dropped from the string). The `lastIndex` attribute is the last index of `x` that was processed (i.e., the index of the last value in the output). The `n` attribute indicates how many items are represented by the string (i.e., how many `x` appear in the final output).
+#' @returns A character string. The string has three attributes. The `trim` attribute is `TRUE` or `FALSE`, depending on whether `maxChar` was reached or not (and subsequent numbers dropped from the string). The `lastIndex` attribute is the last index of `x` that was processed (i.e., the index of the last value in the output), and the number of values represented by the output.
 #'
 #' @examples
 #'
@@ -114,7 +114,6 @@ seqToSQL <- function(x, maxChar = 29900, sort = TRUE) {
 	
 	attr(out, "trim") <- trim
 	attr(out, "lastIndex") <- lastIndex
-	attr(out, "n") <- i - as.integer(trim)
 	out
 
 }
