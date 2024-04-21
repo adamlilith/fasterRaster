@@ -278,7 +278,17 @@ show.rastInfo <- function(x) print.rastInfo(x)
 #' @noRd
 summary.rastInfo <- function(x) print.rastInfo(x)
 
-.vectInfo <- function(x, integer = TRUE) {
+#' Metadata on a vector in GRASS
+#'
+#' @description This function queries **GRASS** to obtain metadata on a vector.
+#'
+#' @param x A `GVector` or the [sources()] name of one.
+#' @param integer Logical. If `TRUE` (default), the "cats" of a vector will be returned as type integer. If `FALSE`, they will be returned as a character vector.
+#' @param cats `NULL` (default) or an integer vector of category numbers, one per geometry.
+#'
+#' @returns A `vectInfo` object (a list).
+#' @noRd
+.vectInfo <- function(x, integer = TRUE, cats = NULL) {
 
 	src <- if (inherits(x, "GVector")) {
 		sources(x)
@@ -383,7 +393,7 @@ summary.rastInfo <- function(x) print.rastInfo(x)
 	}
 	
 	# nGeometries <- as.integer(nGeometries)
-	cats <- .vCats(src, integer = integer)
+	if (is.null(cats)) cats <- .vCats(src, integer = integer)
 	nGeometries <- length(unique(cats))
 	catsValid <- !any(grepl(cats, pattern = "[/]")) & !anyNA(cats)
 
