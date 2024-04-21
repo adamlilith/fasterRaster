@@ -58,6 +58,8 @@ methods::setValidity("GVector",
 #'
 #' @param extensive Logical: If `TRUE`, do extensive topological checks using `v.build`. The default is `FALSE`.
 #'
+#' @param cats `NULL` (default) or an integer vector: Values of the "cats" (categories) of the vector in **GRASS**. This is useful *only* for speeding up the `GVector` creation process when the "cats" have already been ascertained.
+#'
 #' @returns A `GVector`.
 #'
 #' @seealso [.makeGRaster()]
@@ -65,32 +67,17 @@ methods::setValidity("GVector",
 #' @example man/examples/ex_GRaster_GVector.r
 #'
 #' @noRd
-.makeGVector <- function(src, table = NULL, build = TRUE, extensive = FALSE) {
+.makeGVector <- function(src, table = NULL, build = TRUE, extensive = FALSE, cats = NULL) {
 
 	if (inherits(table, "GVector")) table <- src@table
 	if (is.null(table)) table <- data.table::data.table(NULL)
 	if (!inherits(table, "data.table")) table <- data.table::as.data.table(table)
 
-	cats <- .vCats(src, db = FALSE)
-	# if (is.null(cats)) cats <- .vCats(src, db = FALSE)
-	# dt <- data.table::data.table(frid = cats)
-	# .vAttachDatabase(src, table = dt, replace = TRUE)
-	
-	# srcIn <- src
-	# src <- .makeSourceName("v_category", "vector")
-	# rgrass::execGRASS(
-	# 	cmd = "v.category",
-	# 	input = srcIn,
-	# 	output = src,
-	# 	option = "del",
-	# 	flags = c(.quiet(), "overwrite", "t")
-	# 	# flags = c(.quiet(), "overwrite")
-	# )
-
+	if (is.null(cats)) cats <- .vCats(src, db = FALSE)
 	nGeoms <- length(unique(cats))
 	nSubgeoms <- length(cats)
 
-	info <- .vectInfo(src)
+	info <- .vectInfo(src, cats = cats)
 
 	# build topology
 	if (build) {
