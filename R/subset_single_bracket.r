@@ -73,12 +73,8 @@ methods::setMethod(
 			cats <- .vCats(src)
 			cats <- sort(unique(cats))
 			iNot <- seq_len(nGeoms)
-			iNot <- iNot[omnibus::notIn(iNot, i)]
-			cats <- cats[iNot]
-
-			# # get cats to delete
-			# cats <- seq_len(nGeoms) # copying a vector re-orders cats from 1 to number of geometries
-			# cats <- cats[omnibus::notIn(cats, i)] # cats to delete
+			iNot <- iNot[!(iNot %in% i)]
+			cats <- cats[iNot] # will be removed
 
 			# delete geometries in subsets bc removing large numbers of geometries at a time is inefficient
 			done <- FALSE
@@ -92,7 +88,7 @@ methods::setMethod(
 				thisCats <- cats[startFrom:stopAt]
 				thisCats <- seqToSQL(thisCats)
 
-				args <- list(
+				rgrass::execGRASS(
 					cmd = "v.edit",
 					map = src,
 					# type = gtype, # breaks
@@ -100,11 +96,10 @@ methods::setMethod(
 					cats = thisCats,
 					flags = c(.quiet(), "overwrite")
 				)
-				do.call(rgrass::execGRASS, args = args)
 
 				# rgrass::execGRASS("v.build", map = src, option = "build", flags = c(.quiet(), "overwrite"))
 
-				numRemoved <- numRemoved + attr(thisCats, "n")
+				numRemoved <- numRemoved + attr(thisCats, "lastIndex")
 				if (numRemoved == length(cats)) {
 					done <- TRUE
 				} else {
@@ -113,6 +108,28 @@ methods::setMethod(
 				}
 
 			} # next removal
+
+			# check to see if all cats have been removed
+			# a hack... for some reason, seqToSQL may not list all cats
+			newCats <- .vCats(src)
+			badCats <- cats[cats %in% newCats]
+			if (length(badCats) > 0L) {
+			
+				badCats <- cats[cats %in% newCats]
+				thisCats <- seqToSQL(badCats)
+
+				rgrass::execGRASS(
+					cmd = "v.edit",
+					map = src,
+					# type = gtype, # breaks
+					tool = "delete",
+					cats = thisCats,
+					flags = c(.quiet(), "overwrite")
+				)
+
+				newCats <- newCats[!(newCats %in% badCats)]
+			
+			}
 
 		} # not removing all and not removing nothing
 
@@ -178,7 +195,7 @@ methods::setMethod(
 		if (removeAll) {
 			out <- NULL
 		} else {
-			out <- .makeGVector(src, table = table)
+			out <- .makeGVector(src, table = table, cats = newCats)
 		}
 
 	}
