@@ -92,8 +92,8 @@ methods::setMethod(
 			term <- terms$term[j]
 			term <- strsplit(term, split = ":")[[1L]]
 			term <- .matchRasterNamesToFormula(object, term)
-			term <- paste(term, collapse = " * ")
-			term <- paste(terms$value[j], " * ", term)
+			term <- paste(term, collapse = "*")
+			term <- paste(terms$value[j], "*", term)
 			terms$termClean[j] <- term
 		
 		}
