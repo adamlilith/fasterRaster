@@ -2,6 +2,15 @@
 #'
 #' @description Riitters et al. (2020) propose a classification scheme for forest fragmentation (which can be applied to any habitat type). The scheme relies on calculating density (e.g., number of forested cells in a window around a focal cell) and connectivity (number of cases where neighboring cells are both forested). These values are used to assign classes to each cell: "patch," "transitional," "perforated," "edge," and "interior" (plus an optional "undetermined" class for an edge case). To this, we also add a "none" class which occurs when the focal cell's window has no cells with the focal habitat. This function calculates these classes from a `GRaster` or `SpatRaster` in which the focal habitat type has cell values of 1, and non-focal habitat type has cell values of 0 or `NA`.
 #'
+#' The fragmentation classes are:
+#' * 0: None (e.g., no forest)
+#' * 1: Patch
+#' * 2: Transitional
+#' * 3: Perforated
+#' * 4: Undetermined
+#' * 5: Edge
+#' * 6: Interior
+#'
 #' @param x A `SpatRaster` or `GRaster`.
 #'
 #' @param w An odd, positive integer: Size of the window across which fragmentation is calculated (in units of "rows" and "columns"). The default is 3, meaning the function uses a 3x3 moving window to calculate fragmentation. For large rasters, compute time is ~*O*(`N`) + *O*(`N * w^2`), where `N` is the number of cells in the raster. So, even a small increase in `w` can increase compute time by a lot.
@@ -316,7 +325,7 @@ methods::setMethod(
 			flags = c(.quiet(), "overwrite")
 		)
 
-		# calculate difference between pf and pff (used for "perforated", "edge", and "indeterminate" cases)
+		# calculate difference between Pf and Pff (used for "perforated", "edge", and "indeterminate" cases)
 		srcDelta <- .makeSourceName("fragmentation_delta", "raster")
 		ex <- paste0(srcDelta, " = ", srcPf, " - ", srcPff)
 		rgrass::execGRASS("r.mapcalc", expression = ex, flags = c(.quiet(), "overwrite"))
@@ -326,15 +335,15 @@ methods::setMethod(
 		
 		if (undet == "indeterminate") {
 		
-			ex <- paste0(src, " = if (", srcPf, " == 0, 0, if (", srcPf, " == 1 & ", srcPff, " == 1, 6, if (", srcPf, " <= 0.4, 1, if (", srcPf, " <= 0.6, 2, if (", srcDelta, " > 0, 3, if (", srcDelta, " < 0, 4, if (", srcDelta, ", 5, null())))))))")
+			ex <- paste0(src, " = if (", srcPf, " == 0, 0, if (", srcPf, " == 1 & ", srcPff, " == 1, 6, if (", srcPf, " <= 0.4, 1, if (", srcPf, " <= 0.6, 2, if (", srcDelta, " > 0, 3, if (", srcDelta, " == 0, 4, if (", srcDelta, " < 0, 5, null())))))))")
 
 		} else if (undet == "edge") {
 		
-			ex <- paste0(src, " = if (", srcPf, " == 0, 0, if (", srcPf, " == 1 & ", srcPff, " == 1, 6, if (", srcPf, " <= 0.4, 1, if (", srcPf, " <= 0.6, 2, if (", srcDelta, " > 0, 3, if (", srcDelta, " <= 0, 4, null()))))))")
+			ex <- paste0(src, " = if (", srcPf, " == 0, 0, if (", srcPf, " == 1 & ", srcPff, " == 1, 6, if (", srcPf, " <= 0.4, 1, if (", srcPf, " <= 0.6, 2, if (", srcDelta, " > 0, 3, if (", srcDelta, " <= 0, 5, null()))))))")
 
 		} else if (undet == "perforated") {
 		
-			ex <- paste0(src, " = if (", srcPf, " == 0, 0, if (", srcPf, " == 1 & ", srcPff, " == 1, 6, if (", srcPf, " <= 0.4, 1, if (", srcPf, " <= 0.6, 2, if (", srcDelta, " >= 0, 3, if (", srcDelta, " < 0, 4, null()))))))")
+			ex <- paste0(src, " = if (", srcPf, " == 0, 0, if (", srcPf, " == 1 & ", srcPff, " == 1, 6, if (", srcPf, " <= 0.4, 1, if (", srcPf, " <= 0.6, 2, if (", srcDelta, " >= 0, 3, if (", srcDelta, " < 0, 5, null()))))))")
 		
 		}
 
@@ -374,7 +383,7 @@ methods::setMethod(
 			# # src <- .copyGRaster(src, topo = topology(x)[i], reshapeRegion = FALSE)
 			# # .removeMask()
 
-		}# else {
+		} # else {
 		
 		# 	# mask to non-NA cells in input
 		# 	srcIn <- src
@@ -403,7 +412,7 @@ methods::setMethod(
 		levels[[i]] <- levs
 	}
 
-	.makeGRaster(srcs, levels = levels)
+	.makeGRaster(srcs, names = "fragmentation", levels = levels)
 
 	} # EOF
 	
