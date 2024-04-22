@@ -241,11 +241,12 @@ methods::setMethod(
             names(this) <- names(x)[i]
 
             # category label instead of value
-            if (cats && is.factor(x)[i]) {
+            if (cats & is.factor(x)[i]) {
 
                 levs <- levels(x[[i]])[[1L]]
                 this <- levs[match(info, levs[[1L]]), 2L]
                 names(this) <- names(x)[i]
+                this <- this[ , lapply(.SD, as.factor)]
                 # this <- levs[match(info, levs[[1L]]), 2L]
                 # names(this) <- c(names(x)[i], paste0(names(x)[i], "_cat"))
 
