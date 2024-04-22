@@ -23,7 +23,7 @@
 
 \item{undet}{Character: How to assign the "undetermined" case. Valid values are \code{"perforated"} (default), \code{"edge"}, and \code{"undetermined"}. Partial matching is used. If \code{Pf} is the proportional density raster cell value and \code{Pff} the proportional connectivity raster cell value, the undetermined case occurs when \code{Pf} > 0.6 and \code{Pf == Pff}.}
 
-\item{restrict}{Logical: If \code{TRUE}, then fragmentation will only be assigned to cells that have the focal habitat within them. If \code{FALSE} (default), cells surrounding the focal habitat class can also be assigned a fragmentation class other than 0, even if they do not have the focal habitat in them. Note that the case where \code{restrict = TRUE} is a departure from Riitters et al. (2020).}
+\item{restrict}{Logical: If \code{TRUE}, then fragmentation will only be assigned to cells that have the focal habitat within them. If \code{FALSE} (default), cells surrounding the focal habitat class can also be assigned a fragmentation class other than 0, even if they do not have the focal habitat in them. The case where \code{restrict = TRUE} is a departure from Riitters et al. (2020).}
 
 \item{cores}{Integer: Number of processor cores to use for when processing a \code{SpatRaster}.}
 }
@@ -31,7 +31,18 @@
 A categorical \code{SpatRaster} or \code{GRaster}. The values assigned to each class can be seen with \code{\link[=levels]{levels()}}.
 }
 \description{
-Riitters et al. (2020) propose a classification scheme for forest fragmentation (which can be applied to any habitat type). The scheme relies on calculating density (e.g., number of forested cells in a window around a focal cell) and connectivity (number of cases where neighboring cells are both forested). These values are used to assign classes to each cell: "patch," "transitional," "perforated," "edge," and "interior" (plus an optional "undetermined" class for an edge case). To this, we also add a "none" class which occurs when the focal cell's window has no cells with the focal habitat. This function calculates these classes from a \code{GRaster} or \code{SpatRaster} in which the focal habitat type has cell values of 1, and non-focal habitat type has cell values of 0 or \code{NA}.
+Riitters et al. (2020) propose a classification scheme for forest fragmentation (which can be applied to any habitat type). The scheme relies on calculating density (e.g., number of forested cells in a window around a focal cell) and connectivity (number of cases where neighboring cells are both forested). This function calculates these classes from a \code{GRaster} or \code{SpatRaster} in which the focal habitat type has cell values of 1, and non-focal habitat type has cell values of 0 or \code{NA}.
+
+The fragmentation classes are:
+\itemize{
+\item 0: None (e.g., no forest).
+\item 1: Patch
+\item 2: Transitional
+\item 3: Perforated
+\item 4: Undetermined
+\item 5: Edge
+\item 6: Interior
+}
 }
 \examples{
 if (grassStarted()) {
@@ -41,6 +52,19 @@ library(terra)
 
 # Example data:
 madForest <- fastData("madForest2000") # raster
+fragExamples <- fastData("fragExamples") # raster
+
+### Fragmentation class examples
+################################
+
+classes <- fragmentation(fragExamples)
+examples <- c(fragExamples, classes)
+names(examples) <- c("forest", "fragmentation class")
+oldpar <- par(mfrow = c(2, 1))
+plot(fragExamples)
+plot(classes)
+par(oldpar)
+
 
 ### Fragmentation classes from a SpatRaster
 ###########################################
@@ -55,6 +79,7 @@ names(fragTerras) <- c("unrestricted", "restricted")
 
 plot(fragTerras)
 levels(fragTerras)
+freq(fragTerras)
 
 ### Fragmentation classes from a GRaster
 ########################################
@@ -72,12 +97,9 @@ names(frags) <- c("unrestricted", "restricted")
 
 plot(frags)
 levels(frags)
+freq(frags)
 
-frags <- droplevels(frags, level = 1:2)
-levels(frags)
-
-plot(frags)
-
+# Plot:
 }
 }
 \references{

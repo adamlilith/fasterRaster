@@ -14,7 +14,7 @@ seqToSQL(x, maxChar = 29900, sort = TRUE)
 \item{sort}{Logical: If \code{TRUE} (default), sort \code{x} before converting to SQL. This can reduce the length of the output.}
 }
 \value{
-A character string. The string has three attributes. The \code{trim} attribute is \code{TRUE} or \code{FALSE}, depending on whether \code{maxChar} was reached or not (and subsequent numbers dropped from the string). The \code{lastIndex} attribute is the last index of \code{x} that was processed (i.e., the index of the last value in the output). The \code{n} attribute indicates how many items are represented by the string (i.e., how many \code{x} appear in the final output).
+A character string. The string has three attributes. The \code{trim} attribute is \code{TRUE} or \code{FALSE}, depending on whether \code{maxChar} was reached or not (and subsequent numbers dropped from the string). The \code{lastIndex} attribute is the last index of \code{x} that was processed (i.e., the index of the last value in the output), and the number of values represented by the output.
 }
 \description{
 This function takes as its argument a vector of integers or numeric values, and converts sequential runs to a range while keeping non-sequential values as-is. For example, \code{c(1, 5, 6, 7, 8, 9, 15, 16, 20)} becomes \code{"1,5-9,15-16,20"}. This reduces the number of characters necessary to supply to a SQL condition. This function is mainly of use to developers.
