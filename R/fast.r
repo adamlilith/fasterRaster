@@ -66,6 +66,8 @@ methods::setMethod(
 		...
 	) {
 
+	if (is.na(faster("grassDir"))) stop("You must specify the folder in which GRASS is installed using faster().")
+
 	### dots
 	########
 	dots <- list(...)
@@ -434,6 +436,8 @@ methods::setMethod(
 	signature(x = "SpatRaster"),
 	function(x, ...) {
 
+	if (is.na(faster("grassDir"))) stop("You must specify the folder in which GRASS is installed using faster().")
+
 	rastFile <- terra::sources(x)
 	levels <- .getLevels(x)
 
@@ -534,6 +538,8 @@ methods::setMethod(
 	...
 ) {
 
+	if (is.na(faster("grassDir"))) stop("You must specify the folder in which GRASS is installed using faster().")
+
 	dots <- list(...)
 	dotNames <- names(dots)
 	
@@ -600,5 +606,3 @@ methods::setMethod(
 	tableValid & catsValid
 
 }
-
-
