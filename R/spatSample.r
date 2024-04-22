@@ -116,6 +116,7 @@ methods::setMethod(
                 levs <- levels(x[[i]])[[1L]]
                 this <- levs[match(vals, levs[[1L]]), 2L]
                 names(this) <- names(x)[i]
+				this <- this[ , lapply(.SD, as.factor)]
                 # this <- levs[match(vals, levs[[1L]]), 2L]
                 # names(this) <- c(names(x)[i], paste0(names(x)[i], "_cat"))
 
