@@ -5,7 +5,6 @@
 #' @param x A `GRaster`.
 #' 
 #' @param y Any of:
-#'
 #' *  An object from which an extent can be obtained; i.e., a `SpatRaster`, `SpatVector`, `SpatExtent`, `sf` vector, or a `GSpatial` object (any of `GRaster`, `GVector`, or `GRegion`). If the extent of `x` is "outside" the extent of `y` on any side, the side(s) of `x` that are outside will be kept as-is (i.e., the extent of `x` will never be shrunk).
 #' * A single positive integer: Number of rows and columns to add to the top, bottom, and sides of the raster.
 #' * Two integers >= 0: Number of columns (1st value) to add to the sides, and number of rows (2nd value) to add to the top and bottom of the raster.
