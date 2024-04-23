@@ -1,14 +1,16 @@
 #' Landscape fragmentation class following Riitters et al. (2020)
 #'
-#' @description Riitters et al. (2020) propose a classification scheme for forest fragmentation (which can be applied to any habitat type). The scheme relies on calculating density (e.g., number of forested cells in a window around a focal cell) and connectivity (number of cases where neighboring cells are both forested). These values are used to assign classes to each cell: "patch," "transitional," "perforated," "edge," and "interior" (plus an optional "undetermined" class for an edge case). To this, we also add a "none" class which occurs when the focal cell's window has no cells with the focal habitat. This function calculates these classes from a `GRaster` or `SpatRaster` in which the focal habitat type has cell values of 1, and non-focal habitat type has cell values of 0 or `NA`.
+#' @description Riitters et al. (2020) propose a classification scheme for forest fragmentation (which can be applied to any habitat type). The scheme relies on calculating density (e.g., number of forested cells in a window around a focal cell) and connectivity (number of cases where neighboring cells are both forested). This function calculates these classes from a `GRaster` or `SpatRaster` in which the focal habitat type has cell values of 1, and non-focal habitat type has cell values of 0 or `NA`.
+#'
+#' Note that by default, the `SpatRaster` and `GRaster` versions will create different results around the border of the raster. The `SpatRaster` version uses the [terra::focal()] function, which will not return an `NA` value when its window overlaps the raster border if the `na.rm` argument is `TRUE`. However, the `GRaster` version uses the **GRASS** module `r.neighbors`, which does return `NA` values in these cases.
 #'
 #' The fragmentation classes are:
-#' * 0: None (e.g., no forest)
+#' * Value provided by `none`: None (i.e., no forest; default is `NA`).
 #' * 1: Patch
 #' * 2: Transitional
 #' * 3: Perforated
-#' * 4: Undetermined
-#' * 5: Edge
+#' * 4: Edge
+#' * 5: Undetermined (not possible to obtain when `w = 3`)
 #' * 6: Interior
 #'
 #' @param x A `SpatRaster` or `GRaster`.
@@ -17,8 +19,10 @@
 #'
 #' @param undet Character: How to assign the "undetermined" case. Valid values are `"perforated"` (default), `"edge"`, and `"undetermined"`. Partial matching is used. If `Pf` is the proportional density raster cell value and `Pff` the proportional connectivity raster cell value, the undetermined case occurs when `Pf` > 0.6 and `Pf == Pff`.
 #'
-#' @param restrict Logical: If `TRUE`, then fragmentation will only be assigned to cells that have the focal habitat within them. If `FALSE` (default), cells surrounding the focal habitat class can also be assigned a fragmentation class other than 0, even if they do not have the focal habitat in them. Note that the case where `restrict = TRUE` is a departure from Riitters et al. (2020).
+#' @param none Integer or `NA` (default): Value to assign to a cell with no focal habitat. Riitters et al. use `NA`. This will be forced to an integer if it is not an actual integer.
 #'
+#' @param na.rm Logical: If `TRUE` (default) and `x` is a `SpatRaster`, then cells near the edge of the raster where the window overlaps the edge can still be assigned a fragmentation class. If `FALSE`, these cells will be assigned a value of `none`.
+#' 
 #' @param cores Integer: Number of processor cores to use for when processing a `SpatRaster`.
 #'
 #' @returns A categorical `SpatRaster` or `GRaster`. The values assigned to each class can be seen with [levels()].
@@ -33,7 +37,7 @@
 methods::setMethod(
 	f = "fragmentation",
 	signature = c(x = "SpatRaster"),
-	function(x, w = 3, undet = "perforated", restrict = FALSE, cores = faster("cores")) {
+	function(x, w = 3, undet = "undetermined", none = NA, na.rm = TRUE, cores = faster("cores")) {
 
 	# errors?
 	if (!omnibus::is.wholeNumber(w) || w < 1L || w %% 2 == 0) stop("Argument ", sQuote("w"), " must be an odd, positive integer.")
@@ -87,6 +91,8 @@ methods::setMethod(
 	for (i in seq_len(nLayers)) {
 
 		xx <- x[[i]]
+
+		# convert NAs to 0s
 		xx <- terra::app(xx, fun = function(x) ifelse(is.na(x), 0L, x), cores = cores)
 
 		unis <- unique(xx)
@@ -107,25 +113,25 @@ methods::setMethod(
 		}
 
 		# stack pff rasters
-		pff_connected <- do.call(c, connectivities)
+		pffConnected <- do.call(c, connectivities)
 
 		# indicate if at least one cell of pair is forested
-		pff_either_occ <- pff_connected >= 1L
+		pffEither <- pffConnected >= 1L
 
 		# convert to 1 if both cells are forested
-		pff_connected <- pff_connected == 2L
+		pffConnected <- pffConnected == 2L
 
 		# sum forested neighbors across rasters
-		pff_neighs <- sum(pff_connected)
+		pffNeighs <- sum(pffConnected)
 
 		# sum either forested across rasters
-		pff_forests <- sum(pff_either_occ)
+		pffForests <- sum(pffEither)
 
 		# calculate pff
-		pff <- pff_neighs / pff_forests
+		pff <- pffNeighs / pffForests
 
 		# calculate cover
-		pf <- terra::focal(xx, w = w, "mean", na.rm = TRUE)
+		pf <- terra::focal(xx, w = w, "mean", na.rm = na.rm)
 
 		### assign classes
 		thisOut <- xx * 0L
@@ -135,7 +141,7 @@ methods::setMethod(
 		notInteriorMask <- 1L - interiorMask
 
 		# pre-calculate difference
-		diff <- pf - pff
+		delta <- pf - pff
 
 		# patch
 		mask <- pf > 0 & pf <= 0.4
@@ -147,44 +153,34 @@ methods::setMethod(
 
 		# perforated
 		if (undet == 'perforated') {
-			mask <- pf > 0.6 & diff >= 0 & notInteriorMask
+			mask <- pf > 0.6 & delta >= 0
 		} else {
-			mask <- pf > 0.6 & diff > 0 & notInteriorMask
+			mask <- pf > 0.6 & delta > 0
 		}
 		thisOut <- terra::mask(thisOut, mask, maskvalues = 1L, updatevalue = 3L)
 
 		# edge
 		if (undet == 'edge') {
-			mask <- pf > 0.6 & diff <= 0 & notInteriorMask
+			mask <- pf > 0.6 & delta <= 0
 		} else {
-			mask <- pf > 0.6 & diff < 0 & notInteriorMask
+			mask <- pf > 0.6 & delta < 0
 		}
 		thisOut <- terra::mask(thisOut, mask, maskvalues = 1L, updatevalue = 4L)
 
 		# undetermined
 		if (undet == 'undetermined') {
-			mask <- diff == 0 & notInteriorMask
+			mask <- pf > 0.6 & delta == 0
 			thisOut <- terra::mask(thisOut, mask, maskvalues = 1L, updatevalue = 5L)
 		}
 
 		# interior
 		thisOut <- terra::mask(thisOut, interiorMask, maskvalues = 1L, updatevalue = 6L)
 
-		# mask
-		if (restrict) {
-			xxMask <- terra::not.na(xx)
-			thisOut <- thisOut * xxMask
-		}
+		# no focal habitat in focal cell
+		# Riitters et al.: "If the center pixel was not forest, then a null value was assigned to that location."
+		thisOut <- terra::mask(thisOut, xx, maskvalues = 0L, updatevalue = none)
 
-		if (undet %in% c("perforated", "edge")) {
-
-			levs <- data.frame(value = c(0L, 1L, 2L, 3L, 4L, 6L), class = c("none", "patch", "transitional", "perforated", "edge", "interior"))
-
-		} else if (undet == "undetermined") {
-		
-			levs <- data.frame(value = c(0L, 1L, 2L, 3L, 4L, 5L, 6L), class = c("none", "patch", "transitional", "perforated", "edge", "undetermined", "interior"))
-		
-		}
+		levs <- .fragmentationLevels(undet = undet, none = none)
 		levels(thisOut) <- levs
 
 		if (i == 1L) {
@@ -207,13 +203,13 @@ methods::setMethod(
 methods::setMethod(
 	f = "fragmentation",
 	signature = c(x = "GRaster"),
-	function(x, w = 3, undet = "perforated", restrict = FALSE) {
+	function(x, w = 3, undet = "undetermined", none = NA) {
 
 	undet <- omnibus::pmatchSafe(undet, c("perforated", "edge", "undetermined"), nmax = 1L)
 
 	mm <- minmax(x)
 	msg <- "Raster must be binary (only 1 and/or 0, with NAs allowed."
-	if (any(!(mm[1L, ] %in% c(0L, 1L))) | any(mm[2L, ] != 1L)) stop(msg)
+	if (any(!(mm %in% c(0L, 1L)))) stop(msg)
 
 	# force to integer to obviate issues with floating-point precision
 	dtype <- datatype(x)
@@ -266,9 +262,9 @@ methods::setMethod(
 	for (i in seq_len(nLayers)) {
 
 		### remove NAs
-		srcIn <- sources(x)
-		src <- .makeSourceName("fragmentation_x_noNAs", "raster")
-		ex <- paste0(src, " = if(isnull(", srcIn, "), 0, ", srcIn, ")")
+		srcIn <- sources(x)[i]
+		srcXZeros <- .makeSourceName("fragmentation_xSansNAs", "raster")
+		ex <- paste0(srcXZeros, " = if(isnull(", srcIn, "), 0, ", srcIn, ")")
 		rgrass::execGRASS("r.mapcalc", expression = ex, flags = c(.quiet(), "overwrite"))
 
 		### connectivities (for Pff)
@@ -284,7 +280,8 @@ methods::setMethod(
 			y2 <- offsets[[j]][3L]
 			x2 <- offsets[[j]][4L]
 
-			ex <- paste0(srcConnectivities[j], " = ", src, "[", y1, ",", x1, "] + ", src, "[", y2, ",", x2, "]")
+			# sum of pairs of cells
+			ex <- paste0(srcConnectivities[j], " = ", srcXZeros, "[", y1, ",", x1, "] + ", srcXZeros, "[", y2, ",", x2, "]")
 			rgrass::execGRASS("r.mapcalc", expression = ex, flags = c(.quiet(), "overwrite"))
 
 			# does either cell in a pair have habitat?
@@ -316,7 +313,7 @@ methods::setMethod(
 		srcPf <- .makeSourceName("fragmentation_pf", "raster")
 		rgrass::execGRASS(
 			cmd = "r.neighbors",
-			input = src,
+			input = srcXZeros,
 			output = srcPf,
 			size = w,
 			method = "average",
@@ -325,25 +322,32 @@ methods::setMethod(
 			flags = c(.quiet(), "overwrite")
 		)
 
-		# calculate difference between Pf and Pff (used for "perforated", "edge", and "indeterminate" cases)
+		# calculate difference between Pf and Pff (used for "perforated", "edge", and "undetermined" cases)
 		srcDelta <- .makeSourceName("fragmentation_delta", "raster")
 		ex <- paste0(srcDelta, " = ", srcPf, " - ", srcPff)
 		rgrass::execGRASS("r.mapcalc", expression = ex, flags = c(.quiet(), "overwrite"))
 
 		### assign classes
+		# NB: The first condition in each forces cases where focal cell does not have focal habitat to NA as per Riitters et al.: "If the center pixel was not forest, then a null value was assigned to that location."
 		src <- .makeSourceName("fragmentation_class", "raster")
 		
-		if (undet == "indeterminate") {
+		if (is.na(none)) {
+			noneValue <- "null()"
+		} else {
+			noneValue <- as.int(none)
+		}
+
+		if (undet == "undetermined") {
 		
-			ex <- paste0(src, " = if (", srcPf, " == 0, 0, if (", srcPf, " == 1 & ", srcPff, " == 1, 6, if (", srcPf, " <= 0.4, 1, if (", srcPf, " <= 0.6, 2, if (", srcDelta, " > 0, 3, if (", srcDelta, " == 0, 4, if (", srcDelta, " < 0, 5, null())))))))")
+			ex <- paste0(src, " = if (", srcXZeros, " == 0, ", noneValue, ", if (", srcPf, " == 0, 0, if (", srcPf, " == 1 & ", srcPff, " == 1, 6, if (", srcPf, " <= 0.4, 1, if (", srcPf, " <= 0.6, 2, if (", srcDelta, " > 0, 3, if (", srcDelta, " < 0, 4, if (", srcDelta, " == 0, 5, null()))))))))")
 
 		} else if (undet == "edge") {
 		
-			ex <- paste0(src, " = if (", srcPf, " == 0, 0, if (", srcPf, " == 1 & ", srcPff, " == 1, 6, if (", srcPf, " <= 0.4, 1, if (", srcPf, " <= 0.6, 2, if (", srcDelta, " > 0, 3, if (", srcDelta, " <= 0, 5, null()))))))")
+			ex <- paste0(src, " = if (", srcXZeros, " == 0, ", noneValue, ", if (", srcPf, " == 0, 0, if (", srcPf, " == 1 & ", srcPff, " == 1, 6, if (", srcPf, " <= 0.4, 1, if (", srcPf, " <= 0.6, 2, if (", srcDelta, " > 0, 3, if (", srcDelta, " <= 0, 4, null())))))))")
 
 		} else if (undet == "perforated") {
 		
-			ex <- paste0(src, " = if (", srcPf, " == 0, 0, if (", srcPf, " == 1 & ", srcPff, " == 1, 6, if (", srcPf, " <= 0.4, 1, if (", srcPf, " <= 0.6, 2, if (", srcDelta, " >= 0, 3, if (", srcDelta, " < 0, 5, null()))))))")
+			ex <- paste0(src, " = if (", srcXZeros, " == 0, ", noneValue, ", if (", srcPf, " == 0, 0, if (", srcPf, " == 1 & ", srcPff, " == 1, 6, if (", srcPf, " <= 0.4, 1, if (", srcPf, " <= 0.6, 2, if (", srcDelta, " >= 0, 3, if (", srcDelta, " < 0, 4, null())))))))")
 		
 		}
 
@@ -365,25 +369,25 @@ methods::setMethod(
 		# 	)"
 		# )
 
-		# if masking to just focal habitat
-		if (restrict) {
+		# # if masking to just focal habitat
+		# if (restrict) {
 
-			# multiply by focal habitat (1)/non-focal habitat (0 or NA)
-			srcMask <- .makeSourceName("fragmentation_mask", "raster")
-			ex <- paste0(srcMask, " = if (", srcIn, " == 1, 1, null())")
-			rgrass::execGRASS("r.mapcalc", expression = ex, flags = c(.quiet(), "overwrite"))
+		# 	# multiply by focal habitat (1)/non-focal habitat (0 or NA)
+		# 	srcMask <- .makeSourceName("fragmentation_mask", "raster")
+		# 	ex <- paste0(srcMask, " = if (", srcIn, " == 1, 1, null())")
+		# 	rgrass::execGRASS("r.mapcalc", expression = ex, flags = c(.quiet(), "overwrite"))
 
-			srcIn <- src
-			src <- .makeSourceName("fragmentation_class_masked")
-			ex <- paste0(src, " = ", srcIn, " * ", srcMask)
-			rgrass::execGRASS("r.mapcalc", expression = ex, flags = c(.quiet(), "overwrite"))
+		# 	srcIn <- src
+		# 	src <- .makeSourceName("fragmentation_class_masked")
+		# 	ex <- paste0(src, " = ", srcIn, " * ", srcMask)
+		# 	rgrass::execGRASS("r.mapcalc", expression = ex, flags = c(.quiet(), "overwrite"))
 			
-			# make mask, copy with mask in place, remove mask
-			# # rgrass::execGRASS(cmd = "r.mask", raster = srcIn, flags = c(.quiet(), "overwrite"))
-			# # src <- .copyGRaster(src, topo = topology(x)[i], reshapeRegion = FALSE)
-			# # .removeMask()
+		# 	# make mask, copy with mask in place, remove mask
+		# 	# # rgrass::execGRASS(cmd = "r.mask", raster = srcIn, flags = c(.quiet(), "overwrite"))
+		# 	# # src <- .copyGRaster(src, topo = topology(x)[i], reshapeRegion = FALSE)
+		# 	# # .removeMask()
 
-		} # else {
+		# } # else {
 		
 		# 	# mask to non-NA cells in input
 		# 	srcIn <- src
@@ -397,16 +401,7 @@ methods::setMethod(
 
 	} # next layer
 
-	if (undet %in% c("perforated", "edge")) {
-
-		levs <- data.frame(value = c(0L, 1L, 2L, 3L, 4L, 6L), class = c("none", "patch", "transitional", "perforated", "edge", "interior"))
-
-	} else if (undet == "undetermined") {
-	
-		levs <- data.frame(value = c(0L, 1L, 2L, 3L, 4L, 5L, 6L), class = c("none", "patch", "transitional", "perforated", "edge", "undetermined", "interior"))
-	
-	}
-
+	levs <- .fragmentationLevels(undet = undet, none = none)
 	levels <- list()
 	for (i in seq_len(nLayers)) {
 		levels[[i]] <- levs
@@ -417,3 +412,42 @@ methods::setMethod(
 	} # EOF
 	
 )
+
+#' Create levels table for `fragmentation()`.
+#'
+#' @param undet Value of `undet`.
+#' @param none Value of `none`.
+#'
+#' @returns A `data.frame`.
+#'
+#' @noRd
+.fragmentationLevels <- function(undet, none) {
+
+	if (undet %in% c("perforated", "edge")) {
+
+		if (is.na(none)) {
+
+			levs <- data.frame(value = c(1L:4L, 6L), class = c("patch", "transitional", "perforated", "edge", "interior"))
+		
+		} else {
+		
+			levs <- data.frame(value = c(none, 1L:4L, 6L), class = c("none", "patch", "transitional", "perforated", "edge", "interior"))
+
+		}
+
+	} else if (undet == "undetermined") {
+	
+		if (is.na(none)) {
+			
+			levs <- data.frame(value = 1L:6L, class = c("patch", "transitional", "perforated", "edge", "undetermined", "interior"))
+
+		} else {
+		
+			levs <- data.frame(value = c(none, 1L:6L), class = c("none", "patch", "transitional", "perforated", "edge", "undetermined", "interior"))
+
+		}
+	
+	}
+	levs
+
+}
