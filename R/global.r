@@ -5,7 +5,7 @@
 #' @param x A `GRaster` or missing.  If missing, then a vector of all of the accepted function names is returned.
 #'
 #' @param fun Character vector: The name of the function(s):
-#' * `"*"`: All of the statistics below.
+#' * `"*"`: All of the functions below.
 #' * `"countNonNA"`: Total number of non-`NA` cells.
 #' * `"countNA"`: Total number of `NA` cells.
 #' * `"cv"`: Sample coefficient of variation (expressed as a proportion of the mean).
@@ -15,7 +15,7 @@
 #' * `"meanAbs"`: Mean of absolute values.
 #' * `"median"`: Median.
 #' * `"quantile"`: Quantile (see also argument `prob`).
-#' * `"range"`: Range--note that as per [terra::global()], the minimum and maximum are reported, not the actual range.
+#' * `"range"`: Range. Note that following [terra::global()], the minimum and maximum are reported, not the actual range.
 #' * `"sd"`: Sample standard deviation (same as [stats::sd()]).
 #' * `"sdpop"`: Population standard deviation.
 #' * `"sum"`: Sum.
@@ -50,7 +50,7 @@ methods::setMethod(
 	} # EOF
 )
 
-# x 		[sources()] name
+# x 		A `GRaster` or the [sources()] name of one
 # fun 		character
 # prob		numeric in [0, 1]
 #' @noRd
