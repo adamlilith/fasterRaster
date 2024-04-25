@@ -46,7 +46,7 @@ methods::setMethod(
 
 	.locationRestore(x)
 	.region(x)
-
+	
 	if (!xy) values <- TRUE
 
 	src <- .makeSourceName("v_random", "vector")
