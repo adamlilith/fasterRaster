@@ -137,7 +137,7 @@ methods::setValidity("GRaster",
 		} else if (.validLevelTable(object)) {
 			"Each table must be a NULL `data.table`, or if not, the first column must be an integer, and there must be >1 columns."
 		} else if (.validActiveCat(object)) {
-			"@activeCat must be `NA_integer_`, or an integer between 2 and the number of columns in each `data.table` in @levels."
+			"@activeCat must be `NA_integer_`, or an integer between 1 and the number of columns in each `data.table` in @levels, minus 1."
 		} else {
 			TRUE
 		}
