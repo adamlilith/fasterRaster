@@ -49,8 +49,8 @@ GRaster <- methods::setClass(
 	
 			if (object@datatypeGRASS[i] != "CELL") {
 				return(TRUE)
-			} else if (nr == 1L) {
-				return(TRUE)
+			# } else if (nr == 1L) {
+				# return(TRUE)
 			} else if (!inherits(levels[[i]][[1L]], "integer")) {
 				return(TRUE)
 			}
@@ -135,7 +135,7 @@ methods::setValidity("GRaster",
 		} else if (.canMakeRasterCategorical(object)) {
 			"Only rasters of datatype `CELL` can be categorical."
 		} else if (.validLevelTable(object)) {
-			"Each table must be a NULL `data.table`, or if not, the first column must be an integer, and there must be >1 columns."
+			"Each table must be a NULL `data.table`, or if not, the first column\n  must be an integer, and there must be >1 columns."
 		} else if (.validActiveCat(object)) {
 			"@activeCat must be `NA_integer_`, or an integer between 1 and the number of columns in each `data.table` in @levels, minus 1."
 		} else {
@@ -189,7 +189,8 @@ methods::setValidity("GRaster",
 	}
 
 	info <- .rastInfo(src)
-	nLayers <- length(info$sources)
+	# nLayers <- length(info$sources)
+	nLayers <- length(src)
 	if (length(names) < nLayers) names <- rep(names, length.out = nLayers)
 
 	out <- methods::new(
@@ -214,6 +215,7 @@ methods::setValidity("GRaster",
 		levels = levels
 	)
 	out <- .makeUniqueNames(out)
+	# out <- droplevels(out, layer = 1L:nLayers)
 	out
 
 }
