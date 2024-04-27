@@ -92,6 +92,7 @@ methods::setGeneric(name = "catNames", def = function(x, ...) standardGeneric("c
 methods::setGeneric(name = "cats", package = "terra")
 methods::setGeneric(name = "cbind")
 methods::setGeneric(name = "cellSize", package = "terra")
+methods::setGeneric(name = "classify", package = "terra")
 methods::setGeneric(name = "clump", def = function(x, ...) standardGeneric("clump"))
 methods::setGeneric(name = "clusterPoints", def = function(x, ...) standardGeneric("clusterPoints"))
 methods::setGeneric(name = "compareGeom", package = "terra")
