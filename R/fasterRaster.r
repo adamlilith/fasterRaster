@@ -176,6 +176,7 @@
 #' [as.points()]: Extract vertex coordinates from a "lines" or "polygons" `GVector`\cr
 #' [buffer()]: Create a polygon around/inside a `GVector`\cr
 #' [cbind()]: Add columns to the data table of a `GVector`\cr
+#' [classify()]: Classify cell values of a `GRaster`\cr
 #' [clusterPoints()]: Identify clusters of points\cr
 #' [complete.cases()]: Find rows of a `GVector`'s data table that have no `NA`s in them\cr
 #' [connectors()]: Create lines connecting nearest features of two `GVector`s\cr
