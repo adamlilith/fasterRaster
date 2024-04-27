@@ -21,7 +21,7 @@ A \code{GVector}.
 \description{
 The \code{[} operator returns a subset or remove specific geometries of a \code{GVector}. You can get the number of geometries using \code{\link[=ngeom]{ngeom()}}. Note that you cannot use this function to change the "order" in which geometries or their associated records in a data table appear. For example, \code{vector[1:3]} and \code{vector[3:1]} will yield the exact same results.
 
-Note that subsetting can take a very long time if \code{i} has many values or the vector is very large.
+Note that subsetting can take a very long time if you are retaining only a small number of geometries from a vector with many geometries. The routine selects geometries by removing those that are not in \code{i}. So if you can write code to remove fewer geometries (i.e., an "inverse" selection), it may go faster.
 }
 \examples{
 if (grassStarted()) {

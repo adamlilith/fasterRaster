@@ -198,6 +198,7 @@ The \code{\link[fasterRaster]{$<-}} operator can be used to replace specific col
 \code{\link[=as.points]{as.points()}}: Extract vertex coordinates from a "lines" or "polygons" \code{GVector}\cr
 \code{\link[=buffer]{buffer()}}: Create a polygon around/inside a \code{GVector}\cr
 \code{\link[=cbind]{cbind()}}: Add columns to the data table of a \code{GVector}\cr
+\code{\link[=classify]{classify()}}: Classify cell values of a \code{GRaster}\cr
 \code{\link[=clusterPoints]{clusterPoints()}}: Identify clusters of points\cr
 \code{\link[=complete.cases]{complete.cases()}}: Find rows of a \code{GVector}'s data table that have no \code{NA}s in them\cr
 \code{\link[=connectors]{connectors()}}: Create lines connecting nearest features of two \code{GVector}s\cr

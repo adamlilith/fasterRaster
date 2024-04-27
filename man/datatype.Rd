@@ -3,13 +3,10 @@
 \name{datatype,GRaster-method}
 \alias{datatype,GRaster-method}
 \alias{datatype}
-\alias{datatype,SpatRaster-method}
 \alias{datatype,GVector-method}
 \title{Get the datatype of a GRaster or of GVector columns}
 \usage{
 \S4method{datatype}{GRaster}(x, type = "fasterRaster", forceDouble = TRUE)
-
-\S4method{datatype}{SpatRaster}(x, type = "fasterRaster", forceDouble = TRUE)
 
 \S4method{datatype}{GVector}(x)
 }
@@ -27,7 +24,7 @@
 \item{forceDouble}{Logical (\code{GRaster}s and \code{SpatRaster}s only): If \code{TRUE} (default), and the raster appears to represent non-integer values, then the raster will be assumed to represent double-floating point values (\strong{GRASS}: type "DCELL", \strong{terra}: type "FLT8S", \strong{fasterRaster}: type "double", and \strong{GDAL}: type "Float64"). \code{forceDouble} reports the actual datatype if \code{type = "fasterRaster"} (i.e., the type is not forced to "double").}
 }
 \value{
-\code{datatype()} for a \code{GRaster} or \code{SpatRaster} returns a character. \code{datatype()} for a \code{GVector} returns a data frame, with one row per field. If the \code{GVector} has no attribute table, the function returns \code{NULL}.
+\code{datatype()} for a \code{GRaster} returns a character. \code{datatype()} for a \code{GVector} returns a data frame, with one row per field. If the \code{GVector} has no attribute table, the function returns \code{NULL}.
 }
 \description{
 For \code{GRaster}s, \code{datatype()} returns the \link[=tutorial_raster_data_types]{data type}. For \code{GVector}s, \code{datatype()} returns the class of each column of the attribute table.
@@ -208,5 +205,5 @@ dim(rivers2)
 }
 }
 \seealso{
-\code{\link[terra:datatype]{terra::datatype()}}, \link[=tutorial_raster_data_types]{raster data types} in \strong{fasterRaster}
+\code{\link[terra:datatype]{terra::datatype()}}, \code{GRaster} \link[=tutorial_raster_data_types]{data types} in \strong{fasterRaster}
 }

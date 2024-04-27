@@ -18,7 +18,7 @@
 A \code{GRaster}. The "levels" table of the raster is modified.
 }
 \description{
-\code{droplevels()} removes levels (category values) from the "levels" table of a \link[=tutorial_raster_data_types]{categorical raster}.
+\code{droplevels()} removes levels (category values) from the "levels" table of a \link[=tutorial_raster_data_types]{categorical} \code{GRaster}.
 }
 \examples{
 if (grassStarted()) {
