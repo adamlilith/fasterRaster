@@ -24,8 +24,9 @@
 	
 	ver <- read.dcf(file = system.file("DESCRIPTION", package = pkg), fields = "Version")
 	packageStartupMessage(paste(pkg, ver))
-	packageStartupMessage("It is recommended to attach the data.table, terra, and sf packages")
-	packageStartupMessage("before fasterRaster using, for example, ", dQuote("library(terra)"), ".")
-	packageStartupMessage("For guides and table of contents, see ", dQuote("?fasterRaster"), ".")
+	packageStartupMessage("To avoid conflicts between functions, please attach the `terra`, `sf`,")
+	packageStartupMessage("and `data.table` packages before attaching `fasterRaster` using, for")
+	packageStartupMessage("example, `library(terra)`.")
+	packageStartupMessage("For guides and table of contents, see `?fasterRaster``.")
 	
 }
