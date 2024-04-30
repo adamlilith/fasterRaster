@@ -1,6 +1,6 @@
 #' Classify GRaster cell values
 #'
-#' @description This function classifies a raster so that cells that have values within a given range are assigned a new value. Cells that are not re-assigned a value retain their original value.
+#' @description This function classifies a raster so that cells that have values within a given range are assigned a new value. The [subst()] function is a simpler method for replacing specific values or category levels.
 #'
 #' @param x A `GRaster`.
 #' @param rcl Reclassification system:
@@ -18,9 +18,9 @@
 #'
 #' @param others Integer or `NULL` (default), or `NA`: Value to assign to cells that do not fall into the set intervals. Cells with `NA` values are not reclassified. Setting `others` equal to `NULL` or `NA` replaces all other values with `NA`. The value will be coerced to an integer value.
 #' 
-#' @returns A `GRaster`. The raster will be of type "factor" if the original values were continuous (i.e., a single- or double-precision raster), or of type "integer" if the input was an integer.
+#' @returns A `GRaster`. The raster will be a [categorical][tutorial_raster_data_types] raster if the original values were continuous (i.e., a single- or double-precision raster), or of type "integer" if the input was an integer.
 #'
-#' @seealso [terra::classify()]; `if ()` statements in [app()]
+#' @seealso [terra::classify()], [subst()]
 #'
 #' @example man/examples/ex_classify.r
 #'

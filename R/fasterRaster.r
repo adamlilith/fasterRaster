@@ -69,6 +69,7 @@
 #' [app()]: Apply a user-defined function to multiple layers of a `GRaster` (with helper functions [appFuns()] and [appCheck()])\cr
 #' [c()]: "Stack" two or more rasters\cr
 #' [cellSize()]: Cell area\cr
+#' [classify()]: Replace ranges of cell values with a single value\cr
 #' [clump()]: Group adjacent cells with similar values\cr
 #' [combineCats()]: Combine values from two or more categorical and/or integer rasters\cr
 #' [combineLevels()]: Combine the "levels" tables of two or more categorical `GRaster`s\cr
@@ -109,6 +110,7 @@
 #' [scale()]: Subtract means and divide by standard deviations\cr
 #' [selectRange()]: Select values from rasters in a stack based on values in another `GRaster`\cr
 #' [spatSample()]: Randomly points from a `GRaster`\cr
+#' [subst()]: Re-assign cell values\cr
 #' [sun()]: Solar radiance and irradiance\cr
 #' [terrain()]: Slope, aspect, curvature, and partial slopes\cr
 #' [thinLines()]: Reduce linear features on a `GRaster` so linear features are 1 cell wide\cr
@@ -139,6 +141,7 @@
 #' [missing.cases()]: Find rows of a categorical `GRaster`'s "levels" table that have at least one `NA` in them\cr
 #' [missingCats()]: Values that have no category assigned to them\cr
 #' [nlevels()]: Number of levels\cr
+#' [subst()]: Re-assign category levels\cr
 #' [zonalGeog()]: Geographic statistics (area, perimeter, fractal dimension, etc.) for sets of cells with the same values
 #' 
 #' ## Functions for analysis of remote sensing rasters

@@ -28,15 +28,16 @@
 #' * [complete.cases()] finds rows in the levels table that have no `NA`s.
 #' * [datatype()] returns the data type of a `GRaster`.
 #' * [droplevels()] removes "unused" levels in a "levels" table.
-#' * [freq()]: Frequency of each category across cells of a raster\cr
+#' * [freq()]: Frequency of each category across cells of a raster
 #' * [is.factor()] indicates if the raster is a categorical raster.
 #' * [is.int()], [is.float()], and [is.doub()] indicate if values in a a raster are integers, floating-point, or double-floating point precision.
 #' * [levels()] returns the "levels" table of a categorical raster (just the value column and the active column).
 #' * \code{\link[fasterRaster]{levels<-}} and [categories()] can be used to assign categories to an integer raster and make it categorical (i.e., a "factor" raster).
-#' * [match()], \code{\link[fasterRaster]{%in%}}, and \code{\link[fasterRaster]{%notin%}}: Find which cells of a `GRaster` match or do not match certain category labels\cr
+#' * [match()], \code{\link[fasterRaster]{%in%}}, and \code{\link[fasterRaster]{%notin%}}: Find which cells of a `GRaster` match or do not match certain category labels
 #' * [missing.cases()] finds rows in the levels table that have at least one `NA`.
 #' * [missingCats()] finds values in categorical rasters that do not have a category assigned to them.
 #' * [nlevels()] returns the number of levels represented by a categorical raster.
+#' * [subst()]: Re-assign category levels
 #'
 #' ## Saving rasters to disk
 #' You can save substantial space on disk if you set the `datatype` argument in [writeRaster()] when saving a raster. This argument allows for finer "divisions" than just integer/float/double-float, so depending on the range of values in your raster, you can optimize file size by selecting the one that best matches the values in the raster. See the documentation for [writeRaster()] for more information.

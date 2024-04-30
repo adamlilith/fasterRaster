@@ -43,7 +43,7 @@
 #'
 #' @returns A `GRaster`.
 #'
-#' @seealso [terra::app()], [terra::lapp()], and modules [`r.mapcalc`](https://grass.osgeo.org/grass84/manuals/r.mapcalc.html) and `r.mapcalc.simple` in **GRASS**.
+#' @seealso [terra::app()], [terra::lapp()], [subst()], [classify()], and modules [`r.mapcalc`](https://grass.osgeo.org/grass84/manuals/r.mapcalc.html) and `r.mapcalc.simple` in **GRASS**.
 #'
 #' @example man/examples/ex_app.r
 #'

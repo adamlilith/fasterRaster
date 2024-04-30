@@ -260,6 +260,7 @@ methods::setGeneric(name = "st_bbox", package = "sf")
 methods::setGeneric(name = "st_buffer", package = "sf")
 methods::setGeneric(name = "st_crs", package = "sf")
 # methods::setGeneric(name = "st_distance", package = "sf")
+methods::setGeneric(name = "subst", package = "terra")
 methods::setGeneric(name = "summary", def = function(object, ...) standardGeneric("summary"))
 
 methods::setGeneric(name = "tail", package = "utils")

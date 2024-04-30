@@ -1,11 +1,12 @@
-# fasterRaster 8.3.0.7005 (2024-04-08)
+# fasterRaster 8.3.0.7006 (2024-04-30)
 
 ## Functionality
-o `fragmentation()` works for windows > 3 and for `GRaster`s
-o Added function `classify()`
-o Added function `combineLevels()`
-o Added hidden function `.plot()`
-o For functions and cases where it is appropriate, the "levels" table of an input `GRaster` is passed to the output
+o Added function `classify()`.
+o Added function `subst()`.
+o Added function `combineLevels()`.
+o Added hidden function `.plot()`.
+o For functions and cases where it is appropriate, the "levels" table of an input `GRaster` is passed to the output.
+o `fragmentation()` works for windows sizes > 3 and for `GRaster`s.
 
 ## Bug fixes
 o `writeRaster()` correctly assigns levels to categorical rasters with >1 layer
@@ -13,7 +14,7 @@ o Fixed bug in `[[<-` that passed incorrect dimensions (then failed)
 
 ## Issues
 o `[` selects geometries from a `GRaster` that overcomes mis-selection by **GRASS**
-o Removed `datatype()` method for signature `SpatRaster` (because **terra** already had one!)
+o Removed `datatype()` method for signature `SpatRaster`
 
 # fasterRaster 8.3.0.7003 (2024-03-15)
 
