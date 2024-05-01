@@ -5,7 +5,7 @@
 \alias{activeCat}
 \alias{activeCats,GRaster-method}
 \alias{activeCats}
-\alias{activeCat<-,GRaster,numeric-method}
+\alias{activeCat<-,GRaster,ANY-method}
 \alias{activeCat<-}
 \alias{activeCat<-,GRaster,integer-method}
 \alias{activeCat<-,GRaster,character-method}
@@ -15,7 +15,7 @@
 
 \S4method{activeCats}{GRaster}(x, names = FALSE)
 
-\S4method{activeCat}{GRaster,numeric}(x, layer = 1) <- value
+\S4method{activeCat}{GRaster,ANY}(x, layer = 1) <- value
 
 \S4method{activeCat}{GRaster,integer}(x, layer = 1) <- value
 

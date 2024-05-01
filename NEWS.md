@@ -1,4 +1,4 @@
-# fasterRaster 8.3.0.7006 (2024-04-30)
+# fasterRaster 8.3.0.7007 (2024-05-01)
 
 ## Functionality
 o Added function `classify()`.
@@ -11,9 +11,10 @@ o `fragmentation()` works for windows sizes > 3 and for `GRaster`s.
 ## Bug fixes
 o `writeRaster()` correctly assigns levels to categorical rasters with >1 layer
 o Fixed bug in `[[<-` that passed incorrect dimensions (then failed)
+o Fixed installation issue related to `activeCat()<-` (thank you, `kbondo1`!)
 
 ## Issues
-o `[` selects geometries from a `GRaster` that overcomes mis-selection by **GRASS**
+o `[` selects geometries from a `GRaster`, overcoming mis-selection by **GRASS**
 o Removed `datatype()` method for signature `SpatRaster`
 
 # fasterRaster 8.3.0.7003 (2024-03-15)
