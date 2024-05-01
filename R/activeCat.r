@@ -88,7 +88,7 @@ methods::setMethod(
 #' @exportMethod activeCat<-
 methods::setMethod(
 	f = "activeCat<-",
-	signature = c(x = "GRaster", value = "numeric"),
+	signature = c(x = "GRaster"),
 	function(x, value, layer = 1) {
 	
 	.activeCatAssign(x = x, layer = layer, value = value)
