@@ -59,6 +59,9 @@ Partial matching is used and case is ignored.}
 \description{
 Buffers can be constructed for \code{GRaster}s or \code{GVector}s. For rasters, the \code{buffer()} function creates a buffer around non-\code{NA} cells. The output will be a raster. For vectors, the \code{buffer()} and \code{st_buffer()} functions create a vector polygon larger or smaller than the focal vector.
 }
+\details{
+Note that in some cases, topologically incorrect vectors can be created when buffering. This can arise when buffers intersect to create intersections that technically belong to two or more geometries. This issue can be resolved by dissolving borders between buffered geometries using \code{dissolve = TRUE}, but as of now, there is no fix if you do not want to dissolve geometries. A workaround would be to create a different \code{GVector} for each geometry, and then buffer each individually :(.
+}
 \examples{
 if (grassStarted()) {
 
