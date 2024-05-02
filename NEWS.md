@@ -1,7 +1,7 @@
-# fasterRaster 8.3.0.7008 (2024-05-02)
+# fasterRaster 8.3.0.7009 (2024-05-02)
 
 ## Bug fixes
-o Fixed installation issue related to `activeCat()<-` (thank you, `kbondo1`!)
+o Fixed installation issue related to `activeCat()<-` and `addCats()<-` (thank you, `kbondo1`!)
 
 # fasterRaster 8.3.0.7007 (2024-05-01)
 
