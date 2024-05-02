@@ -1,3 +1,8 @@
+# fasterRaster 8.3.0.7008 (2024-05-02)
+
+## Bug fixes
+o Fixed installation issue related to `activeCat()<-` (thank you, `kbondo1`!)
+
 # fasterRaster 8.3.0.7007 (2024-05-01)
 
 ## Functionality
@@ -11,7 +16,6 @@ o `fragmentation()` works for windows sizes > 3 and for `GRaster`s.
 ## Bug fixes
 o `writeRaster()` correctly assigns levels to categorical rasters with >1 layer
 o Fixed bug in `[[<-` that passed incorrect dimensions (then failed)
-o Fixed installation issue related to `activeCat()<-` (thank you, `kbondo1`!)
 
 ## Issues
 o `[` selects geometries from a `GRaster`, overcoming mis-selection by **GRASS**

@@ -5,21 +5,19 @@
 \alias{activeCat}
 \alias{activeCats,GRaster-method}
 \alias{activeCats}
-\alias{activeCat<-,GRaster,ANY-method}
+\alias{activeCat<-,GRaster-method}
 \alias{activeCat<-}
-\alias{activeCat<-,GRaster,integer-method}
-\alias{activeCat<-,GRaster,character-method}
 \title{Get or set the column with category labels in a categorical raster}
 \usage{
 \S4method{activeCat}{GRaster}(x, layer = 1, names = FALSE)
 
 \S4method{activeCats}{GRaster}(x, names = FALSE)
 
-\S4method{activeCat}{GRaster,ANY}(x, layer = 1) <- value
+\S4method{activeCat}{GRaster}(x, layer = 1) <- value
 
-\S4method{activeCat}{GRaster,integer}(x, layer = 1) <- value
+\S4method{activeCat}{GRaster}(x, layer = 1) <- value
 
-\S4method{activeCat}{GRaster,character}(x, layer = 1) <- value
+\S4method{activeCat}{GRaster}(x, layer = 1) <- value
 }
 \arguments{
 \item{x}{A categorical \code{GRaster}.}
@@ -34,7 +32,12 @@
 \code{activeCat()} returns an integer or character of the active column index or name. \code{activeCats()} returns a vector of indices or names. \verb{activeCat()<-} returns a \code{GRaster}.
 }
 \description{
-For a single layer of a \link[=tutorial_raster_data_types]{categorical} \code{GRaster}, \code{activeCat()} returns the column of the labels to be matched to each value in the raster. \code{activeCats()} does the same, but for all layers of a \code{GRaster}. \verb{activeCat()<-} sets the column to be used as category labels. Note that following \code{\link[terra:activeCat]{terra::activeCat()}}, the first column in the "levels" table is ignored, so an "active category" value of 1 means the second column is used as labels, a value of 2 means the third is used, and so on.
+These functions return or set the column of the labels to be matched to each value in the raster of a \link[=tutorial_raster_data_types]{categorical} \code{GRaster}. \emph{Important}: Following \code{\link[terra:activeCat]{terra::activeCat()}}, the first column in the "levels" table is ignored, so an "active category" value of 1 means the second column is used as labels, a value of 2 means the third is used, and so on.
+\itemize{
+\item \code{activeCat()} returns the column of the labels to be matched to each value in the raster for a single raster layer.
+\item \code{activeCats()} does the same, but for all layers of a \code{GRaster}.
+\item \verb{activeCat()<-} sets the column to be used as category labels.
+}
 }
 \examples{
 if (grassStarted()) {
