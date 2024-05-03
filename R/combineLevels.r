@@ -63,6 +63,7 @@ methods::setMethod(
 		if (!inherits(x[[i]], "data.table")) x[[i]] <- data.table::as.data.table(x[[i]])
 	}
 
+	# get first levels table
 	i <- 1L
 	out <- data.table::data.table(NULL)
 	while (nrow(out) == 0L & i <= length(x)) {
@@ -77,11 +78,13 @@ methods::setMethod(
 			cats2 <- x[[j]]
 			if (nrow(cats2) > 0L) {
 				by.y <- names(cats2)[1L]
-				out <- merge(out, cats2, by.x = by.x, by.y = by.y)
+				# out <- merge(out, cats2, by.x = by.x, by.y = by.y)
+				out <- merge(out, cats2, all = TRUE)
 			}
 		}
 		
 	}
+	
 	if (!faster("useDataTable")) out <- as.data.frame(out)
 	out
 	
