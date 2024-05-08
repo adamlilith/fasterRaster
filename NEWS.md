@@ -1,4 +1,4 @@
-# fasterRaster 8.3.0.7009 (2024-05-02)
+# fasterRaster 8.3.0.7010 (2024-05-07)
 
 ## Functionality
 o Added function `flow()`.
