@@ -1,7 +1,12 @@
 # fasterRaster 8.3.0.7009 (2024-05-02)
 
+## Functionality
+o Added function `flow()`.
+O Can save layer-by-layer with `writeRaster()`.
+
 ## Bug fixes
 o Fixed installation issue related to `activeCat()<-` and `addCats()<-` (thank you, `kbondo1`!)
+o Fixed issue in `plot()` arising from changing output of `writeRaster()` to `GRaster`.
 
 # fasterRaster 8.3.0.7007 (2024-05-01)
 
