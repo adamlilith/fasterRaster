@@ -11,6 +11,7 @@
   filename,
   overwrite = FALSE,
   datatype = NULL,
+  byLayer = FALSE,
   levelsExt = NULL,
   compress = "LZW",
   mm = FALSE,
@@ -40,6 +41,8 @@
 
 
 \code{*} Depends on the integers (signed/unsigned, range of values). Categorical rasters will have a CSV file with category values and labels saved with them. The file name will be the same as the raster's file name, but end in extension ".csv".}
+
+\item{byLayer}{Logical: If \code{FALSE} (default), multi-layer rasters will be saved in one file. If \code{TRUE}, the each layer will be saved in a separate file. The filename from \code{filename} will be amended so that it ends with \verb{_<name>} (then the file extension), where \verb{<name>} is give by \code{\link[=names]{names()}}. Note that if any characters in raster names will not work in a file name, then the function will fail (e.g., a backslash or question mark).}
 
 \item{levelsExt}{Character, logical, or \code{NULL} (default): Name of the file extension for the "levels" file that accompanies a \link[=tutorial_raster_data_types]{categorical} raster. When saving categorical rasters, the raster file is accompanied with a "levels" file that contain information on the levels of the raster. This file is the same as \code{filename}, except it has a different extension. Valid values depend on how many raster layers are saved at a time (case is ignored):
 \itemize{
@@ -75,7 +78,7 @@
 }}
 }
 \value{
-A \code{SpatRaster} (invisibly). A raster is also saved to disk.
+A \code{GRaster} (invisibly). A raster is also saved to disk.
 }
 \description{
 This function saves a \code{GRaster} to disk directly from a \strong{GRASS} session. It is faster than using \code{\link[=rast]{rast()}}, then saving the output of that to disk (because \code{rast()} actually save the raster to disk, anyway).
@@ -92,18 +95,36 @@ library(terra)
 
 # Example data
 madElev <- fastData("madElev")
-
-# Convert SpatRaster to GRaster
-elev <- fast(madElev)
+madChelsa <- fastData("madChelsa")
 
 ### Save GRaster to disk (using temporary file)
-filename <- tempfile()
-filename <- paste0(filename, ".tif")
+elev <- fast(madElev)
+filename <- tempfile(fileext = ".tif")
 writeRaster(elev, filename)
 
-### Load raster from disk
+# Load raster from disk
 elev2 <- fast(filename)
 elev2
+
+### Save multi-layer GRaster to disk in one file (using temporary file)
+chelsa <- fast(madChelsa)
+filename <- tempfile(fileext = ".tif")
+writeRaster(chelsa, filename)
+
+# Load raster from disk
+chelsa2 <- fast(filename)
+chelsa2
+
+### Save multi-layer GRaster to disk layer-by-layer (using temporary file)
+chelsa <- fast(madChelsa)
+filename <- tempfile(fileext = ".tif")
+writeRaster(chelsa, filename, byLayer = TRUE)
+
+# Load one of the rasters from disk
+filename2 <- sub(filename, pattern = ".tif", replacement = "_bio1.tif")
+chelsaBio1 <- fast(filename2)
+chelsaBio1
+
 
 }
 }
