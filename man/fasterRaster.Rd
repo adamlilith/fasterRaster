@@ -95,6 +95,7 @@ The assign operators, \code{\link[fasterRaster]{$<-}}, \code{\link[fasterRaster]
 \code{\link[=extend]{extend()}}: Add rows and columns to a \code{GRaster}\cr
 \code{\link[=extract]{extract()}}: Extract values from a \code{GRaster} at locations of a \code{GVector}\cr
 \code{\link[=fillNAs]{fillNAs()}}: Fill \code{NA} cells\cr
+\code{\link[=flow]{flow()}}: Identify watershed basins and direction and accumulation of flow\cr
 \code{\link[=focal]{focal()}}: Calculate cell values based on values of nearby cells\cr
 \code{\link[=fractalRast]{fractalRast()}}: Create a fractal \code{GRaster}\cr
 \code{\link[=fragmentation]{fragmentation()}}: Landscape fragmentation class from Riitters et al. (2020)\cr

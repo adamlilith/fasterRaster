@@ -134,6 +134,7 @@ methods::setGeneric(name = "fillNAs", def = function(x, ...) standardGeneric("fi
 methods::setGeneric(name = "fixBridges", def = function(x, ...) standardGeneric("fixBridges"))
 methods::setGeneric(name = "fixDangles", def = function(x, ...) standardGeneric("fixDangles"))
 methods::setGeneric(name = "fixLines", def = function(x, ...) standardGeneric("fixLines"))
+methods::setGeneric(name = "flow", def = function(x, ...) standardGeneric("flow"))
 methods::setGeneric(name = "focal", package = "terra")
 methods::setGeneric(name = "fractalRast", def = function(x, ...) standardGeneric("fractalRast"))
 methods::setGeneric(name = "freq", package = "terra")

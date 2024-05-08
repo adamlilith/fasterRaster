@@ -81,6 +81,7 @@
 #' [extend()]: Add rows and columns to a `GRaster`\cr
 #' [extract()]: Extract values from a `GRaster` at locations of a `GVector`\cr
 #' [fillNAs()]: Fill `NA` cells\cr
+#' [flow()]: Identify watershed basins and direction and accumulation of flow\cr
 #' [focal()]: Calculate cell values based on values of nearby cells\cr
 #' [fractalRast()]: Create a fractal `GRaster`\cr
 #' [fragmentation()]: Landscape fragmentation class from Riitters et al. (2020)\cr
