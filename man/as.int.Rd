@@ -27,7 +27,7 @@ In \strong{fasterRaster}, rasters can have three \link[=tutorial_raster_data_typ
 \item \code{as.int()}: Coerce values to integers (\strong{GRASS} type \code{CELL}).
 \item \code{as.float()}: Coerce values to floating-point precision.
 \item \code{as.doub()}: Coerce values to double-floating point precision.
-\item Integer rasters can be converted categorical rasters by adding "levels" tables with \link{levels<-} or \code{\link[=categories]{categories()}}.
+\item Integer rasters can be converted categorical rasters by adding "levels" tables with \code{\link[fasterRaster]{levels<-}} or \code{\link[=categories]{categories()}}.
 }
 }
 \examples{
@@ -164,5 +164,5 @@ cov(landsat) # covariance
 }
 }
 \seealso{
-\code{\link[=datatype]{datatype()}}, \code{\link[terra:datatype]{terra::datatype()}}, \code{\link[=is.int]{is.int()}}, \code{\link[=is.float]{is.float()}}, \code{\link[=is.doub]{is.doub()}}, \link{levels<-}, \link[=tutorial_raster_data_types]{raster data types} in \strong{fasterRaster}
+\code{\link[=datatype]{datatype()}}, \code{\link[terra:datatype]{terra::datatype()}}, \code{\link[=is.int]{is.int()}}, \code{\link[=is.float]{is.float()}}, \code{\link[=is.doub]{is.doub()}}, \code{\link[fasterRaster]{levels<-}}, \link[=tutorial_raster_data_types]{raster data types} in \strong{fasterRaster}
 }
