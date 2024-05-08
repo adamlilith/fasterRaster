@@ -71,6 +71,8 @@ methods::setMethod(
 
 	if (!is.null(seed)) args$seed <- seed
 
+	args$flags <- c(args$flags, "b") ### do not create topology... problems?
+
 	do.call(rgrass::execGRASS, args = args)
 
 	# return coordinates
