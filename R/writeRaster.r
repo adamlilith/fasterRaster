@@ -24,6 +24,8 @@
 #'
 #' `*` Depends on the integers (signed/unsigned, range of values). Categorical rasters will have a CSV file with category values and labels saved with them. The file name will be the same as the raster's file name, but end in extension ".csv".
 #'
+#' @param byLayer Logical: If `FALSE` (default), multi-layer rasters will be saved in one file. If `TRUE`, the each layer will be saved in a separate file. The filename from `filename` will be amended so that it ends with `_<name>` (then the file extension), where `<name>` is give by [names()]. Note that if any characters in raster names will not work in a file name, then the function will fail (e.g., a backslash or question mark).
+#'
 #' @param levelsExt Character, logical, or `NULL` (default): Name of the file extension for the "levels" file that accompanies a [categorical][tutorial_raster_data_types] raster. When saving categorical rasters, the raster file is accompanied with a "levels" file that contain information on the levels of the raster. This file is the same as `filename`, except it has a different extension. Valid values depend on how many raster layers are saved at a time (case is ignored):
 #' * One raster layer: `".csv"`
 #' * Two or more layers, with at least one categorical raster: `".rds"`, `".rda"`, `".rdat"`, `".rdata"`
@@ -49,7 +51,7 @@
 #' * Additional arguments to send to **GRASS** modules `r.out.gdal` and `r.out.ascii`.
 #' * `precision`: Numeric: For ASCII files, you may need to state the number of significant digits. 32-bit values have 7 digits and 64-bit values have 16. So in these cases the argument would be `precision=7` or `precision=16`.
 #'
-#' @returns A `SpatRaster` (invisibly). A raster is also saved to disk.
+#' @returns A `GRaster` (invisibly). A raster is also saved to disk.
 #'
 #' @seealso [terra::writeRaster()], module [`r.out.gdal`](https://grass.osgeo.org/grass84/manuals/r.out.gdal.html) in **GRASS**
 #'
@@ -68,6 +70,7 @@ setMethod(
 		filename,
 		overwrite = FALSE,
 		datatype = NULL,
+		byLayer = FALSE,
 		levelsExt = NULL,
 		compress = "LZW",
 		mm = FALSE,
@@ -78,232 +81,266 @@ setMethod(
 	.locationRestore(x)
 	.region(x)
 
-	dots <- list(...)
-	filename <- trimws(filename)
-
-	flags <- c(.quiet())
-	if (overwrite) flags <- c(flags, "overwrite")
-
-	filename <- normalizePath(filename, mustWork = FALSE)
-
-	### going to overwrite anything?
-	if (!overwrite) {
-		if (file.exists(filename)) stop("File already exists and ", sQuote("overwrite"), " is FALSE:\n  ", filename)
-	}
-
-	### format
-	extension <- .fileExt(filename)
-	extension <- tolower(extension)
+	# save each layer separately
+	if (byLayer) {
 	
-	ascii <- if ("format" %in% names(dots)) {
-		if (("format" %in% names(dots) && tolower(dots$format) %in% c("asc", "asci", "ascii")) || extension %in% c("asc", "asci", "ascii")) { TRUE } else { FALSE }
-	} else {
-		FALSE
-	}
-
-	geotiff <- ("format" %in% names(dots) && tolower(dots$format) == "gtiff") | extension == "tif"
-
-	nLayers <- nlyr(x)
-
-	### save
-	if (ascii) {
+		nLayers <- nlyr(x)
+		for (i in seq_len(nLayers)) {
 		
-		if (nlyr(x) > 1L) stop("Cannot save multi-layer GRaster as a single ASCII file. Save each layer individually.")
-		
-		rgrass::execGRASS(
-			dmc = "r.out.ascii",
-			input = x,
-			output = filename,
-			flags = flags,
-			...
-		)
+			xx <- x[[i]]
 
+			extension <- .fileExt(filename)
+			fn <- substr(filename, 1L, nchar(filename) - nchar(extension) - 1L)
+			fn <- paste0(fn, "_", names(xx), ".", extension)
+			writeRaster(xx, filename = fn, byLayer = FALSE, ...)
+		
+		}
+	
+	# save all layers in a single file
 	} else {
 
-		thisFlags <- c(flags, "c")
+		dots <- list(...)
+		filename <- trimws(filename)
 
-		## if multi-layered raster stack, then group first... only guaranteed to work with GeoTIFFs
-		if (nLayers > 1L) {
+		flags <- c(.quiet())
+		if (overwrite) flags <- c(flags, "overwrite")
 
-			srcGroup <- .makeSourceName("i_group", type = "group")
-			input <- sources(x)
+		filename <- normalizePath(filename, mustWork = FALSE)
+
+		### going to overwrite anything?
+		if (!overwrite) {
+			if (file.exists(filename)) stop("File already exists and ", sQuote("overwrite"), " is FALSE:\n  ", filename)
+		}
+
+		### format
+		extension <- .fileExt(filename)
+		extension <- tolower(extension)
+		
+		ascii <- if ("format" %in% names(dots)) {
+			if (("format" %in% names(dots) && tolower(dots$format) %in% c("asc", "asci", "ascii")) || extension %in% c("asc", "asci", "ascii")) { TRUE } else { FALSE }
+		} else {
+			FALSE
+		}
+
+		geotiff <- ("format" %in% names(dots) && tolower(dots$format) == "gtiff") | extension == "tif" | extension == "tiff"
+
+		nLayers <- nlyr(x)
+
+		### save
+		if (ascii) {
+			
+			if (nlyr(x) > 1L) stop("Cannot save multi-layer GRaster as a single ASCII file. Save each layer individually.")
 			
 			rgrass::execGRASS(
-				cmd = "i.group",
-				group = srcGroup,
-				input = input,
-				flags = .quiet()
+				dmc = "r.out.ascii",
+				input = x,
+				output = filename,
+				flags = flags,
+				...
 			)
 
-			src <- srcGroup
-
 		} else {
-			src <- sources(x)
-		}
-		
-		# data type
-		if (is.null(datatype)) datatype <- datatype(x, "GDAL")
 
-		if (any(datatype == "factor")) {
+			thisFlags <- c(flags, "c")
+
+			## if multi-layered raster stack, then group first... only guaranteed to work with GeoTIFFs
+			if (nLayers > 1L) {
+
+				srcGroup <- .makeSourceName("i_group", type = "group")
+				input <- sources(x)
+				
+				rgrass::execGRASS(
+					cmd = "i.group",
+					group = srcGroup,
+					input = input,
+					flags = .quiet()
+				)
+
+				src <- srcGroup
+
+			} else {
+				src <- sources(x)
+			}
+			
+			# data type
+			if (is.null(datatype)) datatype <- datatype(x, "fasterRaster")
 
 			bounds <- minmax(x)
 			mins <- bounds["min", ]
 			maxs <- bounds["max", ]
 
-			if (all(mins >= 0L & maxs <= 255L)) {
-				datatype <- "Byte"
-			} else if (all(mins >= 0L & maxs <= 65534L)) {
-				datatype <- "UInt16"
-			} else if (any(mins < 0L) & all(maxs >= -32767L) & all(maxs <= 32767L)) {
-				datatype <- "Int16"
-			} else if (any(mins < 0L) & all(maxs >= -2147483647L) & all(maxs <= -2147483647)) {
-				datatype <- "Int32"
-			} else if (all(mins >= -3.4E+38) & all(maxs <= 3.4E+38)) {
-				datatype <- "Float32"
-			} else {
-				datatype <- "Float64"
-			}
+			if (any(datatype == "factor") | any(datatype == "integer")) {
 
-		}
-		
-		if (any(datatype == "INT1U")) datatype[datatype == "INT1U"] <- "Byte" # will not write, for some reason
-		# if (any(datatype == "INT1U")) datatype[datatype == "INT1U"] <- "UInt16"
-		if (any(datatype == "INT2U")) datatype[datatype == "INT2U"] <- "UInt16"
-		if (any(datatype == "INT2S")) datatype[datatype == "INT2S"] <- "Int32"
-		if (any(datatype == "FLT4S")) datatype[datatype == "FLT4S"] <- "Float32"
-		if (any(datatype == "FLT8S")) datatype[datatype == "FLT8S"] <- "Float64"
-		
-		if (length(datatype) > 1L) {
-			datatype <- if (any(datatype == "Float64")) {
-				"Float64"
-			} else if (any(datatype == "Float32")) {
-				"Float32"
-			} else if (any(datatype == "Int32")) {
-				"Int32"
-			} else if (any(datatype == "UInt16")) {
-				"UInt16"
-			} else if (any(datatype == "Byte")) {
-				"Byte" # Will not write, for some reason
-				# "UInt16"
-			}
-			
-		}
-
-		if (any(datatype(x) %in% c("float", "double")) & datatype %in% c("Byte", "UInt16", "Int32")) {
-			stop("Trying to save non-integer rasters with an integer datatype. Try changing the datatype of\n  the rasters using, for example, as.int() or round(), or set `datatype` to `FLT4S` or `FLT8S`.")
-		}
-
-		# if (any(!(datatype(x, "GDAL") %in% datatype))) {
-		# 	flags <- c(flags, "f")
-		# 	if (warn) warning("Argument ", sQuote("datatype"), " does not match the data type of the raster. Data may be lost.")
-		# }
-
-		if (!("createopt" %in% names(dots))) createopt <- NULL
-
-		# GeoTIFF options
-		if (geotiff) {
-
-			# createopt
-			createopt <- c(createopt, "PROFILE=GeoTIFF")
-			if (!is.null(compress)) {
-				compress <- omnibus::pmatchSafe(compress, c("LZW", "DEFLATE", "PACKBITS", "LZMA"), nmax = 1L)
-				createopt <- c(createopt, paste0("COMPRESS=", toupper(compress)))
-			}
-			# if ("bigTiff" %in% names(dots) && bigTiff) createopt <- c(createopt, "BIGTIFF=YES")
-			createopt <- c(createopt, "BIGTIFF=IF_NEEDED")
-			if (datatype %in% c("Byte", "UInt16", "Int32")) createopt <- c(createopt, "PREDICTOR=2")
-			if (datatype %in% c("Float32", "Float64")) createopt <- c(createopt, "PREDICTOR=3")
-			
-			createopt <- unique(createopt)
-			createopt <- paste(createopt, collapse=",")
-
-			# mm <- minmax(x)
-			# metaopt <- paste0("TIFFTAG_MINSAMPLEVALUE=", paste(mm[1L, ], collapse=" "))
-			# metaopt <- c(metaopt, paste0("TIFFTAG_MAXSAMPLEVALUE=", paste(mm[2L, ], collapse=" ")))
-			# metaopt <- paste0("STATISTICS_MINIMUM=", paste(mm[1L, ], collapse=" "))
-			# metaopt <- c(metaopt, paste0("STATISTICS_MAXIMUM=", paste(mm[2L, ], collapse=" ")))
-			# metaopt <- unique(metaopt)
-			# metaopt <- paste(metaopt, collapse=",")
-			
-		}
-
-		# save
-		rgrass::execGRASS(
-			cmd = "r.out.gdal",
-			input = src,
-			output = filename,
-			type = datatype,
-			format = "GTiff",
-			createopt = createopt,
-			flags = thisFlags
-		)
-
-	}
-	
-	isFact <- is.factor(x)
-	if (any(isFact)) {
-
-		if (is.logical(levelsExt)) {
-			if (levelsExt) {
-				levelsExt <- NULL
-				saveLevels <- TRUE
-			} else {
-				saveLevels <- FALSE
-			}
-		} else {
-			saveLevels <- TRUE
-		}
-
-		if (saveLevels) {
-
-			categs <- cats(x)
-			if (is.null(levelsExt)) {
-				if (length(categs) > 1L) {
-					levelsExt <- ".rds"
+				if (all(mins >= 0L & maxs <= 255L)) {
+					datatype <- "Byte"
+				} else if (all(mins >= 0L & maxs <= 65534L)) {
+					datatype <- "UInt16"
+				} else if (any(mins < 0L) & all(maxs >= -32767L) & all(maxs <= 32767L)) {
+					datatype <- "Int16"
+				} else if (any(mins < 0L) & all(maxs >= -2147483647L) & all(maxs <= -2147483647)) {
+					datatype <- "Int32"
+				} else if (all(mins >= -3.4E+38) & all(maxs <= 3.4E+38)) {
+					datatype <- "Float32"
 				} else {
-					levelsExt <- ".csv"
+					datatype <- "Float64"
 				}
-			}
-			
-			if (substr(levelsExt, 1L, 1L) != ".") levelsExt <- paste0(".", levelsExt)
-			if (length(categs) > 1L & length(grep(levelsExt, ".csv", ignore.case = TRUE)) != 0L) {
 
-				if (warn) warning("You cannot save levels files of multi-layered rasters using a `levelsExt` value of `.csv`.\n  The file extension has been changed to `.rds`, which saves files that can be read using `readRDS()`.")
-
-				levelsExt <- ".rds"
-
-			}
-
-			levelFileName <- substr(filename, 1L, nchar(filename) - nchar(levelsExt))
-			levelFileName <- paste0(levelFileName, levelsExt)
-			
-			# save
-			if (length(grep(".rds", levelsExt, ignore.case = TRUE)) != 0L) {
-				saveRDS(categs, levelFileName)
-			} else if (length(grep(".rda", levelsExt, ignore.case = TRUE)) != 0L | length(grep(".rdat", levelsExt, ignore.case = TRUE)) != 0L | length(grep(".rdata", levelsExt, ignore.case = TRUE)) != 0L) {
-				save(categs, levelFileName)
-			} else if (length(grep(".csv", levelsExt, ignore.case = TRUE)) != 0L) {
-				write.csv(categs, levelFileName, row.names = FALSE)
 			} else {
-				stop("Unrecognized value for `levelsExt`.")
+			
+				if (all(mins >= -3.4E+38) & all(maxs <= 3.4E+38)) {
+					datatype <- "Float32"
+				} else {
+					datatype <- "Float64"
+				}
+			
+			}
+			
+			if (any(datatype == "INT1U")) datatype[datatype == "INT1U"] <- "Byte" # will not write, for some reason
+			# if (any(datatype == "INT1U")) datatype[datatype == "INT1U"] <- "UInt16"
+			if (any(datatype == "INT2U")) datatype[datatype == "INT2U"] <- "UInt16"
+			if (any(datatype == "INT2S")) datatype[datatype == "INT2S"] <- "Int32"
+			if (any(datatype == "FLT4S")) datatype[datatype == "FLT4S"] <- "Float32"
+			if (any(datatype == "FLT8S")) datatype[datatype == "FLT8S"] <- "Float64"
+			
+			if (length(datatype) > 1L) {
+				datatype <- if (any(datatype == "Float64")) {
+					"Float64"
+				} else if (any(datatype == "Float32")) {
+					"Float32"
+				} else if (any(datatype == "Int32")) {
+					"Int32"
+				} else if (any(datatype == "UInt16")) {
+					"UInt16"
+				} else if (any(datatype == "Byte")) {
+					"Byte" # Will not write, for some reason
+					# "UInt16"
+				}
+				
 			}
 
-		} # "yes" to saving levels
+			if (any(datatype(x, "fasterRaster") %in% c("float", "double")) & datatype %in% c("Byte", "UInt16", "Int32")) {
 
-	} # save levels
+				stop("Trying to save non-integer rasters with an integer datatype. You can:\n  * Change the datatype of the raster to integer using as.int(), trunc(), round(), floor(), or ceiling();\n  * Change the raster to a non-integer type using as.float() or as.doub();\n  * When using writeRaster(), set argument `datatype` to `FLT4S` or `FLT8S`, depending on their minimum and maximum values.")
+				
+			}
 
-	out <- terra::rast(filename)
-	names(out) <- names(x)
-	
-	if (any(isFact)) {
-		for (i in which(isFact)) {
-			cats <- as.data.frame(cats(x)[[i]])
-			out <- terra::categories(out, layer = i, value = cats, active = activeCat(x, layer = i))
+			# if (any(!(datatype(x, "GDAL") %in% datatype))) {
+			# 	flags <- c(flags, "f")
+			# 	if (warn) warning("Argument ", sQuote("datatype"), " does not match the data type of the raster. Data may be lost.")
+			# }
+
+			if (!("createopt" %in% names(dots))) createopt <- NULL
+
+			# GeoTIFF options
+			if (geotiff) {
+
+				createopt <- c(createopt, "PROFILE=GeoTIFF")
+				if (!is.null(compress)) {
+					compress <- omnibus::pmatchSafe(compress, c("LZW", "DEFLATE", "PACKBITS", "LZMA"), nmax = 1L)
+					createopt <- c(createopt, paste0("COMPRESS=", toupper(compress)))
+				}
+				if ("bigTiff" %in% names(dots) && dots$bigTiff) {
+					createopt <- c(createopt, "BIGTIFF=YES")
+				} else {
+					createopt <- c(createopt, "BIGTIFF=IF_NEEDED")
+				}
+				if (datatype %in% c("Byte", "UInt16", "Int32")) createopt <- c(createopt, "PREDICTOR=2")
+				if (datatype %in% c("Float32", "Float64")) createopt <- c(createopt, "PREDICTOR=3")
+				
+				createopt <- unique(createopt)
+				createopt <- paste(createopt, collapse=",")
+
+				# mm <- minmax(x)
+				# metaopt <- paste0("TIFFTAG_MINSAMPLEVALUE=", paste(mm[1L, ], collapse=" "))
+				# metaopt <- c(metaopt, paste0("TIFFTAG_MAXSAMPLEVALUE=", paste(mm[2L, ], collapse=" ")))
+				# metaopt <- paste0("STATISTICS_MINIMUM=", paste(mm[1L, ], collapse=" "))
+				# metaopt <- c(metaopt, paste0("STATISTICS_MAXIMUM=", paste(mm[2L, ], collapse=" ")))
+				# metaopt <- unique(metaopt)
+				# metaopt <- paste(metaopt, collapse=",")
+				
+			}
+
+			# save
+			rgrass::execGRASS(
+				cmd = "r.out.gdal",
+				input = src,
+				output = filename,
+				type = datatype,
+				format = "GTiff",
+				createopt = createopt,
+				flags = thisFlags
+			)
+
 		}
-	}
+		
+		isFact <- is.factor(x)
+		if (any(isFact)) {
+
+			if (is.logical(levelsExt)) {
+				if (levelsExt) {
+					levelsExt <- NULL
+					saveLevels <- TRUE
+				} else {
+					saveLevels <- FALSE
+				}
+			} else {
+				saveLevels <- TRUE
+			}
+
+			if (saveLevels) {
+
+				categs <- cats(x)
+				if (is.null(levelsExt)) {
+					if (length(categs) > 1L) {
+						levelsExt <- ".rds"
+					} else {
+						levelsExt <- ".csv"
+					}
+				}
+				
+				if (substr(levelsExt, 1L, 1L) != ".") levelsExt <- paste0(".", levelsExt)
+				if (length(categs) > 1L & length(grep(levelsExt, ".csv", ignore.case = TRUE)) != 0L) {
+
+					if (warn) warning("You cannot save levels files of multi-layered rasters using a `levelsExt` value of `.csv`.\n  The file extension has been changed to `.rds`, which saves files that can be read using `readRDS()`.")
+
+					levelsExt <- ".rds"
+
+				}
+
+				levelFileName <- substr(filename, 1L, nchar(filename) - nchar(levelsExt))
+				levelFileName <- paste0(levelFileName, levelsExt)
+				
+				# save
+				if (length(grep(".rds", levelsExt, ignore.case = TRUE)) != 0L) {
+					saveRDS(categs, levelFileName)
+				} else if (length(grep(".rda", levelsExt, ignore.case = TRUE)) != 0L | length(grep(".rdat", levelsExt, ignore.case = TRUE)) != 0L | length(grep(".rdata", levelsExt, ignore.case = TRUE)) != 0L) {
+					save(categs, levelFileName)
+				} else if (length(grep(".csv", levelsExt, ignore.case = TRUE)) != 0L) {
+					write.csv(categs, levelFileName, row.names = FALSE)
+				} else {
+					stop("Unrecognized value for `levelsExt`.")
+				}
+
+			} # "yes" to saving levels
+
+		} # save levels
+
+		# out <- terra::rast(filename)
+		# names(out) <- names(x)
+		
+		# if (any(isFact)) {
+		# 	for (i in which(isFact)) {
+		# 		cats <- as.data.frame(cats(x)[[i]])
+		# 		out <- terra::categories(out, layer = i, value = cats, active = activeCat(x, layer = i))
+		# 	}
+		# }
+		
+		# if (mm) out <- terra::setMinMax(out)
+		# invisible(out)
+
+	} # save all layers in a single file
 	
-	if (mm) out <- terra::setMinMax(out)	
-	invisible(out)
+	invisible(x)
 	
 	} # EOF
 	
