@@ -7,9 +7,11 @@ library(terra)
 madElev <- fastData("madElev")
 elev <- fast(madElev)
 
-# Calculate flow accumulation and watershed basins rasters
-water <- flow(elev, return = c("accumulation", "basins", "direction"))
+# Calculate flow accumulation, basins, flow direction, flooded areas, and TCI
+water <- flow(elev, return = "*")
 water
-plot(water)
+
+elevWater <- c(elev, water)
+plot(elevWater)
 
 }
