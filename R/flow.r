@@ -17,12 +17,13 @@
 #'
 #' @param return Character vector: Indicates what rasters to return. Partial matching is used and case is ignored. Options include:
 #' * `"accumulation"` (default): Flow accumulation raster.
-#' * `"direction"`: Flow direction
 #' * `"basins"`: Watershed basins
+#' * `"direction"`: Flow direction
 #' * `"flooded"`: Flooded areas
 #' * `"TCI"`: Topographic convergence index
+#' * `"*"`: All of the above
 #'
-#' @param tempdir Character: Directory in which to store temporary files. The **GRASS** module `r.terraflow` makes a lot of temporary files. The default is given by [tempdir()].
+#' @param scratchDir Character: Directory in which to store temporary files. The **GRASS** module `r.terraflow` makes a lot of temporary files. The default is given by [tempdir()].
 #'
 #' @returns A `GRaster`.
 #'
@@ -39,11 +40,15 @@ methods::setMethod(
 		direction = "multi",
 		return = "accumulation",
 		flowThreshold = Inf,
-		tempdir = tempdir()
+		scratchDir = tempdir()
 	) {
-	
+
+	returns <- c("accumulation", "basins", "direction", "flooded", "TCI")
+	if (any(return == "*")) return <- returns
+	return <- omnibus::pmatchSafe(return, returns)
+	return <- unique(return)
+
 	direction <- omnibus::pmatchSafe(direction, c("single", "multi"), nmax = 1L)
-	return <- omnibus::pmatchSafe(return, c("accumulation", "direction", "basins", "flooded", "TCI"))
 
 	if (nlyr(x) > 1L) stop("This function can only use a single-layered GRaster as input.")
 
@@ -54,13 +59,13 @@ methods::setMethod(
 		cmd = "r.terraflow",
 		elevation = sources(x),
 		memory = faster("memory"),
-		directory = tempdir,
+		directory = scratchDir,
 		flags = c(.quiet(), "overwrite")
 	)
 
 	if (direction == "single") args$flags <- c(args$flags, "s")
 	if (direction == "multi" & !is.infinite(flowThreshold)) args$d8cut <- flowThreshold
-	
+
 	if (any(return == "accumulation")) args$accumulation <- .makeSourceName("r_flow_accumulation", "raster")
 	if (any(return == "direction")) args$direction <- .makeSourceName("r_flow_direction", "raster")
 	if (any(return == "basins")) args$swatershed <- .makeSourceName("r_flow_swatershed", "raster")
