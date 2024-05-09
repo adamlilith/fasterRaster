@@ -39,8 +39,6 @@
 #'    * `"LZMA"`
 #'    * `NULL`: No compression is used, but the file can still be reduced in size by using zip, gzip, or other compressions.
 #'
-#' @param mm Logical: If `TRUE`, call [terra::setMinMax()] on the raster to ensure it has metadata on the minimum and maximum values. For large rasters, this can take a long time, so the default value of `mm` is `FALSE`. This is only useful if you assign a raster to the output of `writeRaster`, as in `x <- writeRaster(my_raster, filename = './raster_file.tif', mm = TRUE)`.
-#'
 #' @param warn Logical: If `TRUE` (default), display a warning if the `datatype` argument does not match the value given by `datatype(x, "GDAL")`, or if the `fileExt` argument will not work with the given raster and so has been automatically changed.
 #'
 #' @param ... Additional arguments. These can include:
@@ -73,7 +71,6 @@ setMethod(
 		byLayer = FALSE,
 		levelsExt = NULL,
 		compress = "LZW",
-		mm = FALSE,
 		warn = TRUE,
 		...
 	) {
@@ -81,10 +78,11 @@ setMethod(
 	.locationRestore(x)
 	.region(x)
 
+	nLayers <- nlyr(x)
+
 	# save each layer separately
 	if (byLayer) {
 	
-		nLayers <- nlyr(x)
 		for (i in seq_len(nLayers)) {
 		
 			xx <- x[[i]]
@@ -123,8 +121,6 @@ setMethod(
 		}
 
 		geotiff <- ("format" %in% names(dots) && tolower(dots$format) == "gtiff") | extension == "tif" | extension == "tiff"
-
-		nLayers <- nlyr(x)
 
 		### save
 		if (ascii) {
@@ -169,7 +165,7 @@ setMethod(
 			mins <- bounds["min", ]
 			maxs <- bounds["max", ]
 
-			if (any(datatype == "factor") | any(datatype == "integer")) {
+			if (any(datatype %in% c("factor", "integer", "logical"))) {
 
 				if (all(mins >= 0L & maxs <= 255L)) {
 					datatype <- "Byte"
@@ -187,11 +183,11 @@ setMethod(
 
 			} else {
 			
-				if (all(mins >= -3.4E+38) & all(maxs <= 3.4E+38)) {
-					datatype <- "Float32"
-				} else {
+				# if (all(mins >= -3.4E+38) & all(maxs <= 3.4E+38)) {
+					# datatype <- "Float32"
+				# } else {
 					datatype <- "Float64"
-				}
+				# }
 			
 			}
 			
