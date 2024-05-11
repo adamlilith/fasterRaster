@@ -9,7 +9,7 @@
 #'
 #' More details about the computations can be found at the help page for the `[r.terraflow](https://grass.osgeo.org/grass84/manuals/r.terraflow.html)` module for **GRASS**.
 #'
-#' @param x A `GRaster` representing elevation.
+#' @param x A `GRaster` with a single layer, typically representing elevation.
 #'
 #' @param direction Character: Either `"single"` or `"multi"`. This indicates whether a single-direction flow or multi-direction flow model is used. The default is `"multi"`. Partial matching is used and case is ignored.
 #'
@@ -22,6 +22,8 @@
 #' * `"flooded"`: Flooded areas
 #' * `"TCI"`: Topographic convergence index
 #' * `"*"`: All of the above
+#'
+#' @seealso [flowPath()], the `[r.terraflow](https://grass.osgeo.org/grass84/manuals/r.terraflow.html)` module for **GRASS**
 #'
 #' @param scratchDir Character: Directory in which to store temporary files. The **GRASS** module `r.terraflow` makes a lot of temporary files. The default is given by [tempdir()].
 #'
