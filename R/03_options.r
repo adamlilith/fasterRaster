@@ -15,8 +15,6 @@
 #'
 #' * `memory` (integer/numeric): The amount of memory to allocate to a task, in GB, for **GRASS**. The default is 1024 MB (i.e., 1 GB). Some **GRASS** modules can take advantage of more memory.
 #'
-#' * `rasterPrecision` (character): The [precision][tutorial_raster_data_types] of values when applying mathematical operations to a `GRaster`. By default, this is `"double"`, which allows for precision to about the 16th decimal place. However, it can be set to `"float"`, which allows for precision to about the 7th decimal place. `float` rasters are smaller in memory and on disk. The default is `"double"`.`
-#'
 #' * `useDataTable` (logical): If `FALSE` (default), use `data.frame`s when going back and forth between data tables of `GVector`s and **R**. This can be slow for very large data tables. If `TRUE`, use `data.table`s from the **data.table** package. This can be much faster, but it might require you to know how to use `data.table`s if you want to manipulate them in **R**. You can always convert them to `data.frame`s using [base::as.data.frame()].
 #' 
 #' * `verbose` (logical): If `TRUE`, show **GRASS** messages and otherwise hidden slots in classes. This is mainly used for debugging, so most users will want to keep this at its default, `FALSE`.
@@ -136,17 +134,17 @@ faster <- function(
 		if (!is.numeric(opts$memory) || opts$memory <= 0) stop("Option `memory` must be a positive number. The default is ", .memoryDefault(), " (GB).")
 	}
 
-	if (any(names(opts) %in% "rasterPrecision")) {
+	# if (any(names(opts) %in% "rasterPrecision")) {
 	
-		if (is.na(opts$rasterPrecision) || !is.character(opts$rasterPrecision)) stop("Option `rasterPrecision` must be `float` or `double`.\n  The default is ", .rasterPrecisionDefault(), ".")
+	# 	if (is.na(opts$rasterPrecision) || !is.character(opts$rasterPrecision)) stop("Option `rasterPrecision` must be `float` or `double`.\n  The default is ", .rasterPrecisionDefault(), ".")
 
-     	opts$rasterPrecision <- omnibus::pmatchSafe(opts$rasterPrecision, c("FCELL", "float", "DCELL", "double"))
-		opts$rasterPrecision <- if (opts$rasterPrecision == "FCELL") {
-   			"float"
-		} else if (opts$rasterPrecision == "DCELL") {
-			"double"
-		}
-	}
+    #  	opts$rasterPrecision <- omnibus::pmatchSafe(opts$rasterPrecision, c("FCELL", "float", "DCELL", "double"))
+	# 	opts$rasterPrecision <- if (opts$rasterPrecision == "FCELL") {
+   	# 		"float"
+	# 	} else if (opts$rasterPrecision == "DCELL") {
+	# 		"double"
+	# 	}
+	# }
 
 	if (any(names(opts) %in% "useDataTable")) {
 
