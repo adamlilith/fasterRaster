@@ -90,8 +90,9 @@ methods::setMethod(
 	if (simplify & nrow(x) > maxGeoms) x <- simplifyGeom(x)
 	
 	tf <- tempfile(fileext = ".gpkg")
-	y <- writeVector(x, filename = tf, format = "GPKG", overwrite = TRUE, attachTable = FALSE)
-	terra::plot(y, ...)
+	writeVector(x, filename = tf, format = "GPKG", overwrite = TRUE, attachTable = FALSE)
+	v <- terra::vect(tf)
+	terra::plot(v, ...)
 	
 	} # EOF
 )
