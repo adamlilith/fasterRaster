@@ -12,7 +12,7 @@
 .verboseDefault <- function() FALSE
 .memoryDefault <- function() 1024 # in MB
 # .nAtATimeDefault <- function() 1000000 # number of indices to select at a time
-.rasterPrecisionDefault <- function() "double" # "FCELL"/"float", or "DCELL"/"double"
+# .rasterPrecisionDefault <- function() "double" # "FCELL"/"float", or "DCELL"/"double"
 .useDataTableDefault <- function() TRUE # logical
 
 #' Names or table of PUBLIC options
@@ -30,8 +30,8 @@
 			"location",
 			# "mapset",
 			"workDir",
-			"useDataTable",
-   			"rasterPrecision"
+			"useDataTable"
+   			# "rasterPrecision"
 			# "nAtATime"
 		),
 		type = c(
@@ -43,8 +43,8 @@
 			"character",
 			# "character",
 			"character",
-			"logical",
-			"character"
+			"logical"
+			# "character"
 			# "numeric"
 		)
 	)
