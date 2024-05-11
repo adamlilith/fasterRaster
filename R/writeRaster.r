@@ -10,7 +10,7 @@
 #' @param x A `GRaster` or missing: If missing, a table of supported file types is reported.
 #' @param filename Character: Path and file name.
 #' @param overwrite Logical: If `FALSE` (default), do not save over existing file(s).
-#' @param datatype `NULL` (default) or character: The datatype of the values stored in non-ASCII rasters. If `NULL`, this will be ascertained from the raster. This can any of:
+#' @param datatype `NULL` (default) or character: The datatype of the values stored in non-ASCII rasters. If `NULL`, this will be ascertained from the raster. Note that in some cases, trying to save a `GRaster` using an inappropriate `datatype` for its values can result in an error or in the faction exiting without an error but also without having written the raster to disk. This can any of:
 #'
 #'    | **`fasterRaster`** | **`terra`** | **`GRASS`** | **`GDAL`** | **Values** |
 #'    | ------------------ | ----------- | ----------- | ---------- | ------ |
@@ -86,7 +86,6 @@ setMethod(
 		for (i in seq_len(nLayers)) {
 		
 			xx <- x[[i]]
-
 			extension <- .fileExt(filename)
 			fn <- substr(filename, 1L, nchar(filename) - nchar(extension) - 1L)
 			fn <- paste0(fn, "_", names(xx), ".", extension)
@@ -175,8 +174,8 @@ setMethod(
 					datatype <- "Int16"
 				} else if (any(mins < 0L) & all(maxs >= -2147483647L) & all(maxs <= -2147483647)) {
 					datatype <- "Int32"
-				} else if (all(mins >= -3.4E+38) & all(maxs <= 3.4E+38)) {
-					datatype <- "Float32"
+				# } else if (all(mins >= -3.4E+38) & all(maxs <= 3.4E+38)) {
+					# datatype <- "Float32" # causes r.out.gdal not to write some DCELL rasters
 				} else {
 					datatype <- "Float64"
 				}
