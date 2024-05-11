@@ -14,7 +14,6 @@
   byLayer = FALSE,
   levelsExt = NULL,
   compress = "LZW",
-  mm = FALSE,
   warn = TRUE,
   ...
 )
@@ -28,7 +27,7 @@
 
 \item{overwrite}{Logical: If \code{FALSE} (default), do not save over existing file(s).}
 
-\item{datatype}{\code{NULL} (default) or character: The datatype of the values stored in non-ASCII rasters. If \code{NULL}, this will be ascertained from the raster. This can any of:\tabular{lllll}{
+\item{datatype}{\code{NULL} (default) or character: The datatype of the values stored in non-ASCII rasters. If \code{NULL}, this will be ascertained from the raster. Note that in some cases, trying to save a \code{GRaster} using an inappropriate \code{datatype} for its values can result in an error or in the faction exiting without an error but also without having written the raster to disk. This can any of:\tabular{lllll}{
    \strong{\code{fasterRaster}} \tab \strong{\code{terra}} \tab \strong{\code{GRASS}} \tab \strong{\code{GDAL}} \tab \strong{Values} \cr
    \code{integer} \tab \code{INT1U} \tab \code{CELL} \tab \code{Byte} \tab Integer values from 0 to 255 \cr
    \code{integer} \tab \code{INT2U} \tab \code{CELL} \tab \code{UInt16} \tab Integer values from 0 to 65,534 \cr
@@ -60,8 +59,6 @@
 \item \code{"LZMA"}
 \item \code{NULL}: No compression is used, but the file can still be reduced in size by using zip, gzip, or other compressions.
 }}
-
-\item{mm}{Logical: If \code{TRUE}, call \code{\link[terra:minmax]{terra::setMinMax()}} on the raster to ensure it has metadata on the minimum and maximum values. For large rasters, this can take a long time, so the default value of \code{mm} is \code{FALSE}. This is only useful if you assign a raster to the output of \code{writeRaster}, as in \code{x <- writeRaster(my_raster, filename = './raster_file.tif', mm = TRUE)}.}
 
 \item{warn}{Logical: If \code{TRUE} (default), display a warning if the \code{datatype} argument does not match the value given by \code{datatype(x, "GDAL")}, or if the \code{fileExt} argument will not work with the given raster and so has been automatically changed.}
 

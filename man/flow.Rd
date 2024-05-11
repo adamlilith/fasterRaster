@@ -10,26 +10,27 @@
   direction = "multi",
   return = "accumulation",
   flowThreshold = Inf,
-  tempdir = tempdir()
+  scratchDir = tempdir()
 )
 }
 \arguments{
-\item{x}{A \code{GRaster} representing elevation.}
+\item{x}{A \code{GRaster} with a single layer, typically representing elevation.}
 
 \item{direction}{Character: Either \code{"single"} or \code{"multi"}. This indicates whether a single-direction flow or multi-direction flow model is used. The default is \code{"multi"}. Partial matching is used and case is ignored.}
 
 \item{return}{Character vector: Indicates what rasters to return. Partial matching is used and case is ignored. Options include:
 \itemize{
 \item \code{"accumulation"} (default): Flow accumulation raster.
-\item \code{"direction"}: Flow direction
 \item \code{"basins"}: Watershed basins
+\item \code{"direction"}: Flow direction
 \item \code{"flooded"}: Flooded areas
 \item \code{"TCI"}: Topographic convergence index
+\item \code{"*"}: All of the above
 }}
 
 \item{flowThreshold}{Numeric (default is \code{Inf}): For the multi-direction flow model, this indicates the amount of accumulated flow above which the single-direction flow rule is used to locate the egress of water from a cell.}
 
-\item{tempdir}{Character: Directory in which to store temporary files. The \strong{GRASS} module \code{r.terraflow} makes a lot of temporary files. The default is given by \code{\link[=tempdir]{tempdir()}}.}
+\item{scratchDir}{Character: Directory in which to store temporary files. The \strong{GRASS} module \code{r.terraflow} makes a lot of temporary files. The default is given by \code{\link[=tempdir]{tempdir()}}.}
 }
 \value{
 A \code{GRaster}.
@@ -56,10 +57,15 @@ library(terra)
 madElev <- fastData("madElev")
 elev <- fast(madElev)
 
-# Calculate flow accumulation and watershed basins rasters
-water <- flow(elev, return = c("accumulation", "basins", "direction"))
+# Calculate flow accumulation, basins, flow direction, flooded areas, and TCI
+water <- flow(elev, return = "*")
 water
-plot(water)
+
+elevWater <- c(elev, water)
+plot(elevWater)
 
 }
+}
+\seealso{
+\code{\link[=flowPath]{flowPath()}}, the \verb{[r.terraflow](https://grass.osgeo.org/grass84/manuals/r.terraflow.html)} module for \strong{GRASS}
 }
