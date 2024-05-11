@@ -1,12 +1,18 @@
-# fasterRaster 8.3.0.7010 (2024-05-07)
+# fasterRaster 8.3.0.7011 (2024-05-11)
 
 ## Functionality
 o Added function `flow()`.
+o Added function `flowPath()`.
 O Can save layer-by-layer with `writeRaster()`.
 
 ## Bug fixes
 o Fixed installation issue related to `activeCat()<-` and `addCats()<-` (thank you, `kbondo1`!)
-o Fixed issue in `plot()` arising from changing output of `writeRaster()` to `GRaster`.
+o Fixed bug in `plot()` arising from changing output of `writeRaster()` to `GRaster`.
+o Fixed bug with `writeRaster()` failing to save if `datatype` was incorrect. Improved auto-assessment of raster `datatype` in `writeRaster()`.
+o Fixed bug in `plot()` due to `writeVector()` now returning a `GVector`.
+
+## Issues
+o Remove `rasterPrecision` option and now use internal function `.getPrec()` to ascertain the proper precision of rasters in `Arithmetic`.
 
 # fasterRaster 8.3.0.7007 (2024-05-01)
 
