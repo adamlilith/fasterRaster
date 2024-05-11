@@ -75,7 +75,7 @@ setMethod(
 		...
 	) {
 	
-	if (!is.null(levelsExt) && !is.logical(levelsExt)) {
+	if (!is.null(levelsExt) & !is.logical(levelsExt)) {
 		levelsExts <- c(".csv", ".rds", ".rda", ".rdata", "csv", "rds", "rda", "rdata", "rdat")
 		levelsExt <- omnibus::pmatchSafe(levelsExt, levelsExts, nmax = 1L)
 		if (substr(levelsExt, 1L, 1L) != ".") levelsExt <- paste0(".", levelsExt)
@@ -299,7 +299,6 @@ setMethod(
 					}
 				}
 				
-				if (substr(levelsExt, 1L, 1L) != ".") levelsExt <- paste0(".", levelsExt)
 				if (length(categs) > 1L & tolower(levelsExt) == ".csv") {
 
 					if (warn) warning("You cannot save levels files of multi-layered rasters using a `levelsExt` value of `.csv`.\n  The file extension has been changed to `.rds`, which saves files that can be read using `readRDS()`.")
@@ -314,9 +313,9 @@ setMethod(
 				# save
 				if (tolower(levelsExt) %in% ".rds") {
 					saveRDS(categs, levelFileName)
-				} else if if (tolower(levelsExt) %in% c(".rds", ".rda", ".rdat", ".rdata")) {
+				} else if (tolower(levelsExt) %in% c(".rds", ".rda", ".rdat", ".rdata")) {
 					save(categs, levelFileName)
-				} else if if (tolower(levelsExt) %in% ".csv") { {
+				} else if (tolower(levelsExt) %in% ".csv") {
 					write.csv(categs, levelFileName, row.names = FALSE)
 				}
 
