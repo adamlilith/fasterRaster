@@ -27,8 +27,8 @@
 
 \item{overwrite}{Logical: If \code{FALSE} (default), do not save over existing file(s).}
 
-\item{datatype}{\code{NULL} (default) or character: The datatype of the values stored in non-ASCII rasters. If \code{NULL}, this will be ascertained from the raster. Note that in some cases, trying to save a \code{GRaster} using an inappropriate \code{datatype} for its values can result in an error or in the faction exiting without an error but also without having written the raster to disk. This can any of:\tabular{lllll}{
-   \strong{\code{fasterRaster}} \tab \strong{\code{terra}} \tab \strong{\code{GRASS}} \tab \strong{\code{GDAL}} \tab \strong{Values} \cr
+\item{datatype}{\code{NULL} (default) or character: The datatype of the values stored in non-ASCII rasters. If \code{NULL}, this will be ascertained from the raster, and the function usually does a good job at it. However, you can force it manually, but note that in some cases, trying to save a \code{GRaster} using an inappropriate \code{datatype} for its values can result in an error or in the function exiting without an error but also without having written the raster to disk. The argument can take any of those shown below under the first four columns, but whatever is used, it will be converted to the \strong{GDAL} version.\tabular{lllll}{
+   \strong{fasterRaster} \tab \strong{terra} \tab \strong{GRASS} \tab \strong{GDAL} \tab \strong{Values} \cr
    \code{integer} \tab \code{INT1U} \tab \code{CELL} \tab \code{Byte} \tab Integer values from 0 to 255 \cr
    \code{integer} \tab \code{INT2U} \tab \code{CELL} \tab \code{UInt16} \tab Integer values from 0 to 65,534 \cr
    \code{integer} \tab \code{INT2S} \tab \code{CELL} \tab \code{Int16} \tab Integer values from -32,767 to -32,767 \cr
@@ -39,13 +39,13 @@
 }
 
 
-\code{*} Depends on the integers (signed/unsigned, range of values). Categorical rasters will have a CSV file with category values and labels saved with them. The file name will be the same as the raster's file name, but end in extension ".csv".}
+\code{*} Depends on the integers (signed/unsigned, range of values). Categorical rasters will have an associated file saved with them that has category values and labels. The file name will be the same as the raster's file name, but end with the extension given by \code{levelsExt} (\code{.csv} by default).}
 
 \item{byLayer}{Logical: If \code{FALSE} (default), multi-layer rasters will be saved in one file. If \code{TRUE}, the each layer will be saved in a separate file. The filename from \code{filename} will be amended so that it ends with \verb{_<name>} (then the file extension), where \verb{<name>} is give by \code{\link[=names]{names()}}. Note that if any characters in raster names will not work in a file name, then the function will fail (e.g., a backslash or question mark).}
 
 \item{levelsExt}{Character, logical, or \code{NULL} (default): Name of the file extension for the "levels" file that accompanies a \link[=tutorial_raster_data_types]{categorical} raster. When saving categorical rasters, the raster file is accompanied with a "levels" file that contain information on the levels of the raster. This file is the same as \code{filename}, except it has a different extension. Valid values depend on how many raster layers are saved at a time (case is ignored):
 \itemize{
-\item One raster layer: \code{".csv"}
+\item DefaultOne raster layer: \code{".csv"}
 \item Two or more layers, with at least one categorical raster: \code{".rds"}, \code{".rda"}, \code{".rdat"}, \code{".rdata"}
 \item Any: \code{NULL} or \code{TRUE} automatically selects either \code{".csv"} (one raster layer) or \verb{".rds} (two or more)
 \item Any: \code{FALSE} disables saving of a levels file.
