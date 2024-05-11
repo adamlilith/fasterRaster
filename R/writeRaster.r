@@ -10,9 +10,9 @@
 #' @param x A `GRaster` or missing: If missing, a table of supported file types is reported.
 #' @param filename Character: Path and file name.
 #' @param overwrite Logical: If `FALSE` (default), do not save over existing file(s).
-#' @param datatype `NULL` (default) or character: The datatype of the values stored in non-ASCII rasters. If `NULL`, this will be ascertained from the raster. Note that in some cases, trying to save a `GRaster` using an inappropriate `datatype` for its values can result in an error or in the faction exiting without an error but also without having written the raster to disk. This can any of:
+#' @param datatype `NULL` (default) or character: The datatype of the values stored in non-ASCII rasters. If `NULL`, this will be ascertained from the raster, and the function usually does a good job at it. However, you can force it manually, but note that in some cases, trying to save a `GRaster` using an inappropriate `datatype` for its values can result in an error or in the function exiting without an error but also without having written the raster to disk. The argument can take any of those shown below under the first four columns, but whatever is used, it will be converted to the **GDAL** version.
 #'
-#'    | **`fasterRaster`** | **`terra`** | **`GRASS`** | **`GDAL`** | **Values** |
+#'    | **fasterRaster**   | **terra**   | **GRASS**   | **GDAL**   | **Values** |
 #'    | ------------------ | ----------- | ----------- | ---------- | ------ |
 #'    | `integer`          | `INT1U`     | `CELL`      | `Byte`     | Integer values from 0 to 255 |
 #'    | `integer`          | `INT2U`     | `CELL`      | `UInt16`   | Integer values from 0 to 65,534 |
@@ -22,12 +22,12 @@
 #'    | `double`           | `FLT8S`     | `DCELL`     | `Float64`  | Values from -1.79E+308 to 1.79E+308, including decimal values |
 #'    | `factor`           | `INT`*      | `CELL`      | `INT*`     | Integer values corresponding to categories
 #'
-#' `*` Depends on the integers (signed/unsigned, range of values). Categorical rasters will have a CSV file with category values and labels saved with them. The file name will be the same as the raster's file name, but end in extension ".csv".
+#' `*` Depends on the integers (signed/unsigned, range of values). Categorical rasters will have an associated file saved with them that has category values and labels. The file name will be the same as the raster's file name, but end with the extension given by `levelsExt` (`.csv` by default).
 #'
 #' @param byLayer Logical: If `FALSE` (default), multi-layer rasters will be saved in one file. If `TRUE`, the each layer will be saved in a separate file. The filename from `filename` will be amended so that it ends with `_<name>` (then the file extension), where `<name>` is give by [names()]. Note that if any characters in raster names will not work in a file name, then the function will fail (e.g., a backslash or question mark).
 #'
 #' @param levelsExt Character, logical, or `NULL` (default): Name of the file extension for the "levels" file that accompanies a [categorical][tutorial_raster_data_types] raster. When saving categorical rasters, the raster file is accompanied with a "levels" file that contain information on the levels of the raster. This file is the same as `filename`, except it has a different extension. Valid values depend on how many raster layers are saved at a time (case is ignored):
-#' * One raster layer: `".csv"`
+#' * DefaultOne raster layer: `".csv"`
 #' * Two or more layers, with at least one categorical raster: `".rds"`, `".rda"`, `".rdat"`, `".rdata"`
 #' * Any: `NULL` or `TRUE` automatically selects either `".csv"` (one raster layer) or `".rds` (two or more)
 #' * Any: `FALSE` disables saving of a levels file.
@@ -75,6 +75,12 @@ setMethod(
 		...
 	) {
 	
+	if (!is.null(levelsExt) && !is.logical(levelsExt)) {
+		levelsExts <- c(".csv", ".rds", ".rda", ".rdata", "csv", "rds", "rda", "rdata", "rdat")
+		levelsExt <- omnibus::pmatchSafe(levelsExt, levelsExts, nmax = 1L)
+		if (substr(levelsExt, 1L, 1L) != ".") levelsExt <- paste0(".", levelsExt)
+	}
+
 	.locationRestore(x)
 	.region(x)
 
@@ -294,7 +300,7 @@ setMethod(
 				}
 				
 				if (substr(levelsExt, 1L, 1L) != ".") levelsExt <- paste0(".", levelsExt)
-				if (length(categs) > 1L & length(grep(levelsExt, ".csv", ignore.case = TRUE)) != 0L) {
+				if (length(categs) > 1L & tolower(levelsExt) == ".csv") {
 
 					if (warn) warning("You cannot save levels files of multi-layered rasters using a `levelsExt` value of `.csv`.\n  The file extension has been changed to `.rds`, which saves files that can be read using `readRDS()`.")
 
@@ -306,14 +312,12 @@ setMethod(
 				levelFileName <- paste0(levelFileName, levelsExt)
 				
 				# save
-				if (length(grep(".rds", levelsExt, ignore.case = TRUE)) != 0L) {
+				if (tolower(levelsExt) %in% ".rds") {
 					saveRDS(categs, levelFileName)
-				} else if (length(grep(".rda", levelsExt, ignore.case = TRUE)) != 0L | length(grep(".rdat", levelsExt, ignore.case = TRUE)) != 0L | length(grep(".rdata", levelsExt, ignore.case = TRUE)) != 0L) {
+				} else if if (tolower(levelsExt) %in% c(".rds", ".rda", ".rdat", ".rdata")) {
 					save(categs, levelFileName)
-				} else if (length(grep(".csv", levelsExt, ignore.case = TRUE)) != 0L) {
+				} else if if (tolower(levelsExt) %in% ".csv") { {
 					write.csv(categs, levelFileName, row.names = FALSE)
-				} else {
-					stop("Unrecognized value for `levelsExt`.")
 				}
 
 			} # "yes" to saving levels
