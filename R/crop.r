@@ -159,7 +159,6 @@ methods::setMethod(
 	}
 
 	do.call(rgrass::execGRASS, args = args)
-print(src)
 	.makeGVector(src, fail = fail)
 
 	} # EOF
