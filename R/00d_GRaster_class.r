@@ -189,6 +189,17 @@ methods::setValidity("GRaster",
 	}
 
 	info <- .rastInfo(src)
+
+	if (diff(c(info$west, info$east)) == 0 | diff(c(info$north, info$south)) == 0) {
+		msg <- "Raster has 0 east-west extent and/or north-south extent."
+		if (fail) {
+			stop(msg)
+		} else {
+			warning(msg)
+			return(NULL)
+		}
+	}
+
 	# nLayers <- length(info$sources)
 	nLayers <- length(src)
 	if (length(names) < nLayers) names <- rep(names, length.out = nLayers)

@@ -60,14 +60,16 @@ methods::setValidity("GVector",
 #'
 #' @param cats `NULL` (default) or an integer vector: Values of the "cats" (categories) of the vector in **GRASS**. This is useful *only* for speeding up the `GVector` creation process when the "cats" have already been ascertained.
 #'
-#' @returns A `GVector`.
+#' @param fail Logical: If `TRUE` (default), and the vector either has a 0 east-west or north-south extent, or the number of rows in the `data.table` does not match the number of geometries, then exit the function with an error. If `fail` is `FALSE`, then display a warning and return `NULL`.
+#'
+#' @returns A `GVector` (or `NULL` if `fail` is `TRUE` and the `GVector` would be invalid).
 #'
 #' @seealso [.makeGRaster()]
 #'
 #' @example man/examples/ex_GRaster_GVector.r
 #'
 #' @noRd
-.makeGVector <- function(src, table = NULL, build = TRUE, extensive = FALSE, cats = NULL) {
+.makeGVector <- function(src, table = NULL, build = TRUE, extensive = FALSE, cats = NULL, fail = TRUE) {
 
 	if (inherits(table, "GVector")) table <- src@table
 	if (is.null(table)) table <- data.table::data.table(NULL)
@@ -78,6 +80,16 @@ methods::setValidity("GVector",
 	nSubgeoms <- length(cats)
 
 	info <- .vectInfo(src, cats = cats)
+
+	if (diff(c(info$west, info$east)) == 0 | diff(c(info$north, info$south)) == 0) {
+		msg <- "Raster has 0 east-west extent and/or north-south extent."
+		if (fail) {
+			stop(msg)
+		} else {
+			warning(msg)
+			return(NULL)
+		}
+	}
 
 	# build topology
 	if (build) {
