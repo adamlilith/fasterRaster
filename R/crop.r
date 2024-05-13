@@ -7,12 +7,13 @@
 #' @param extent Logical:
 #' * If `y` is a "points" `GVector`: Use the convex hull around `y` to crop `x`.
 #' * If `y` is a "lines" or "polygons" `GVector`: If `TRUE`, use the extent of `y` to crop `x`.
-#' 
+#' @param fail Logical: If `TRUE` (default), and the cropped object would have zero extent in at least one dimension, then exit the function with an error. If `FALSE`, then display a warning and return `NULL`.
+#'  
 #' @details Known differences from [terra::crop()]:
 #' * If `x` and `y` are "points" vectors, and `extent` is `TRUE`, **terra** removes points that fall on the extent boundary. **fasterRaster** does not remove points on the extent boundary.
 #' * If `x` is a "points" vector and `y` is a "lines" vectors, and `extent` is `FALSE`, **terra** uses the extent of `y` to crop the points.  **fasterRaster** uses the minimum convex hull of the lines vector.
 #'
-#' @return A `GRaster` or `GVector`.
+#' @return A `GRaster` or `GVector` (or `NULL` if `fail` is `FALSE` and the output would have a zero east-west and/or north-south extent).
 #' 
 #' @seealso [terra::crop()], [sf::st_crop()]
 #' 
@@ -102,7 +103,7 @@ methods::setMethod(
 
 	### crop by creating copy of focal raster
 	srcs <- .copyGSpatial(x, reshapeRegion = FALSE)
-	.makeGRaster(srcs, names(x), levels = cats(x), ac = activeCats(x))
+	.makeGRaster(srcs, names(x), levels = cats(x), ac = activeCats(x), fail = fail)
 
 	} # EOF
 )
@@ -113,7 +114,7 @@ methods::setMethod(
 methods::setMethod(
 	f = "crop",
 	signature = c(x = "GVector"),
-	definition = function(x, y, extent = FALSE) {
+	definition = function(x, y, extent = FALSE, fail = TRUE) {
 
 	compareGeom(x, y)
 	.locationRestore(x)
@@ -158,8 +159,8 @@ methods::setMethod(
 	}
 
 	do.call(rgrass::execGRASS, args = args)
-
-	.makeGVector(src)
+print(src)
+	.makeGVector(src, fail = fail)
 
 	} # EOF
 )
