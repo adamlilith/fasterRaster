@@ -55,7 +55,6 @@ dypsisTable
 addTable(dypsisTable) <- df
 dypsisTable
 
-
 }
 }
 \seealso{

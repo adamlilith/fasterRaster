@@ -16,6 +16,7 @@
   snap = NULL,
   area = NULL,
   steps = 10,
+  extent = NULL,
   dropTable = FALSE,
   verbose = FALSE,
   ...
@@ -29,6 +30,7 @@
   snap = NULL,
   area = NULL,
   steps = 10,
+  extent = NULL,
   dropTable = FALSE,
   verbose = FALSE,
   ...
@@ -40,6 +42,7 @@
   snap = NULL,
   area = NULL,
   steps = 10,
+  extent = NULL,
   dropTable = FALSE,
   verbose = FALSE,
   ...
@@ -63,6 +66,8 @@
 
 \item{steps}{\code{GVector}s only: A positive integer > 1 (default is 10). When using automatic vector correction (i.e., either \code{snap = NULL} and/or \code{area = NULL}), this is the number of values of \code{snap} and/or \code{area} to try to generate a correct topology, including no snapping or polygon removal (i.e, \code{snap = 0} and \code{area = 0}).}
 
+\item{extent}{\code{GVector}s only: Either a \code{NULL} (default), or a \code{GVector}, a \code{SpatVector}, a \code{SpatExtent} object, an \code{sf} vector, an \code{bbox} object, or a numeric vector of 4 values providing a bounding box. If provided, only vector features within this bounding box are imported. If \code{extent} is a numeric vector, the values \emph{must} be in the order west, east, south, north. If \code{NULL}, the entire vector is imported.}
+
 \item{dropTable}{\code{GVector}s only: Logical. If \code{TRUE}, then drop the data table associated with a vector. By default, this is \code{FALSE}. See \emph{Details} for more details!}
 
 \item{verbose}{\code{GVector}s only: Logical. Displays progress when using automatic topology correction.}
@@ -84,6 +89,8 @@ A \code{GRaster} or \code{GVector}.
 \strong{GRASS} supports loading from disk a variety of raster formats (see the \strong{GRASS} manual page for \href{https://grass.osgeo.org/grass84/manuals/r.in.gdal.html}{\code{r.in.gdal}}) and vector formats (see the \strong{GRASS} manual page for \href{https://grass.osgeo.org/grass84/manuals/v.in.ogr.html}{\code{v.in.ogr}}), though not all of them will work with this function.
 
 Note that there are a several methods for fixing issues with vectors. If the vector has already been imported as a \code{GVector}, \link[=breakPolys]{other tools} are also available.
+
+Note also that \strong{GRASS} (and thus, \strong{fasterRaster}) is \emph{not} very fast when loading vectors. So, if the vector is large and you only want a portion of it, consider using the \code{extent} argument to load the spatial subset you need.
 }
 \details{
 \strong{GRASS} uses a \link[=tutorial_vector_topology_and_troubleshooting]{topological} model for vectors. Topological issues generally arise only with polygon vectors, not point or line vectors. Sometimes, polygons created in other software are topologically incorrect--the borders of adjacent polygons may cross one another, or there may be small gaps between them. These errors can be corrected by slightly shifting vertices and/or removing small polygons that result from intersections of larger ones that border one another. A topological system also recognizes that boundaries to adjacent polygons are shared by the areas, so should not be ascribed attributes that belong to both areas (e.g., the shared border between two countries "belongs" to both countries).
@@ -106,170 +113,60 @@ library(sf)
 library(terra)
 
 # Example data
-madElev <- fastData("madElev")
-madForest2000 <- fastData("madForest2000")
-madCoast0 <- fastData("madCoast0")
-madRivers <- fastData("madRivers")
-madDypsis <- fastData("madDypsis")
+madElev <- fastData("madElev") # integer raster
+madCover <- fastData("madCover") # categorical raster
+madCoast4 <- fastData("madCoast4") # polygons vector
+madRivers <- fastData("madRivers") # lines vector
+madDypsis <- fastData("madDypsis") # points vector
 
-### GRaster properties
-######################
+### Create GRasters from SpatRasters
+####################################
 
-# convert SpatRasters to GRasters
+# Create an integer raster
+class(madElev)
 elev <- fast(madElev)
-forest <- fast(madForest2000)
+elev
 
-# plot
-plot(elev)
+# Create a categorical raster
+class(madCover)
+cover <- fast(madCover)
+madCover
+levels(madCover) # category levels
 
-dim(elev) # rows, columns, depths, layers
-nrow(elev) # rows
-ncol(elev) # columns
-ndepth(elev) # depths
-nlyr(elev) # layers
+# Create a GRaster from a file on disk
+rastFile <- system.file("extdata", "madForest2000.tif", package = "fasterRaster")
+forest2000 <- fast(rastFile)
+forest2000
 
-res(elev) # resolution
+### Create GVectors
+###################
 
-ncell(elev) # cells
-ncell3d(elev) # cells (3D rasters only)
+# Create a GVector from an sf vector
+class(madCoast4)
+coast4 <- fast(madCoast4)
+coast4
 
-topology(elev) # number of dimensions
-is.2d(elev) # is it 2D?
-is.3d(elev) # is it 3D?
-
-minmax(elev) # min/max values
-
-# information on the GRASS session in which the GRaster is located
-location(elev) # location
-mapset(elev) # mapset
-
-# "names" of the object
-names(elev)
-
-# coordinate reference system
-crs(elev)
-
-# extent (bounding box)
-ext(elev)
-
-# data type
-datatype(elev)
-
-# assigning
-copy <- elev
-copy[] <- pi # assign all cells to the value of pi
-copy
-
-# concatenating multiple GRasters
-rasts <- c(elev, forest)
-rasts
-
-# adding a raster "in place"
-add(rasts) <- ln(elev)
-rasts
-
-# subsetting
-rasts[[1]]
-rasts[["madForest2000"]]
-
-# assigning
-rasts[[4]] <- elev > 500
-
-# number of layers
-nlyr(rasts)
-
-# names
-names(rasts)
-names(rasts) <- c("elev_meters", "forest", "ln_elev", "high_elevation")
-rasts
-
-### GVector properties
-######################
-
-# convert sf vectors to GVectors
-coast <- fast(madCoast4)
+# Create a GVector from a SpatVector
+madRivers <- vect(madRivers)
+class(madRivers)
 rivers <- fast(madRivers)
+rivers
+
+# Create a GVector from a vector on disk
+vectFile <- system.file("extdata/shapes", "madCoast.shp",
+   package = "fasterRaster")
+coast0 <- fast(vectFile)
+coast0
+
+# Import only Dypsis occurrences in a restricted area
+ant <- coast4[coast4$NAME_4 == "Antanambe"]
+dypsisRestrict <- fast(madDypsis, extent = ant)
 dypsis <- fast(madDypsis)
 
-# extent
-ext(rivers)
-
-W(rivers) # western extent
-E(rivers) # eastern extent
-S(rivers) # southern extent
-N(rivers) # northern extent
-top(rivers) # top extent
-bottom(rivers) # bottom extent
-
-# coordinate reference system
-crs(rivers)
-
-# column names and data types
-names(coast)
-datatype(coast)
-
-# session information
-location(rivers) # GRASS location
-mapset(rivers) # GRASS mapset
-
-# points, lines, or polygons?
-geomtype(dypsis)
-geomtype(rivers)
-geomtype(coast)
-
-is.points(dypsis)
-is.points(coast)
-
-is.lines(rivers)
-is.lines(dypsis)
-
-is.polygons(coast)
-is.polygons(dypsis)
-
-# dimensions
-nrow(rivers) # how many spatial features
-ncol(rivers) # hay many columns in the data frame
-
-# 2- or 3D
-topology(rivers) # dimensionality
-is.2d(elev) # is it 2D?
-is.3d(elev) # is it 3D?
-
-# Update values from GRASS
-# (Reads values from GRASS... will not appear to do anything in this case)
-update(elev)
-
-### operations on GVectors
-##########################
-
-# convert to data frame
-as.data.frame(rivers)
-
-# subsetting
-rivers[c(1:2, 5)] # select 3 rows/geometries
-rivers[-5:-11] # remove rows/geometries 5 through 11
-rivers[ , 1] # column 1
-rivers[ , "NAM"] # select column
-rivers[["NAM"]] # select column
-rivers[1, 2] # row/geometry 1 and column 1
-rivers[c(TRUE, FALSE)] # select every other geometry (T/F vector is recycled)
-rivers[ , c(TRUE, FALSE)] # select every other column (T/F vector is recycled)
-
-# removing data table
-noTable <- dropTable(river)
-noTable
-nrow(rivers)
-nrow(noTable)
-
-# Refresh values from GRASS
-# (Reads values from GRASS... will not appear to do anything in this case
-# since the rivers object is up-to-date):
-rivers <- update(rivers)
-
-# Concatenating multiple vectors
-rivers2 <- c(rivers, rivers)
-dim(rivers)
-dim(rivers2)
+plot(coast4)
+plot(ant, col = "gray80", add = TRUE)
+plot(dypsis, add = TRUE)
+plot(dypsisRestrict, col = "red", add = TRUE)
 
 }
 }

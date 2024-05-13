@@ -67,7 +67,7 @@
 \item \code{bigTiff}: Logical: If \code{TRUE}, and the file format is a GeoTIFF and would be larger than 4 GB (regardless of compression), then the file will be saved in BIGTIFF format.
 \item \code{format}: Character, indicating file format. This is usually ascertained from the file extension, but in case this fails, it can be stated explicitly. When using other formats, you may have to specify the \code{createopts} argument, too (see help page for \strong{GRASS} module \code{r.out.gdal}). Two common formats include:
 \itemize{
-\item \code{"GTiff"} (default): GeoTIFF \code{filename} ends in \code{.tif}
+\item \code{"GTiff"} (default): GeoTIFF \code{filename} ends in \code{.tif}.
 \item \code{"ASC"}: ASCII \code{filename} ends in \code{.asc}
 }
 \item Additional arguments to send to \strong{GRASS} modules \code{r.out.gdal} and \code{r.out.ascii}.

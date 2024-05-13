@@ -19,11 +19,11 @@ plot(madElev, add = TRUE)
 
 ### Buffer a raster by a given number of cells:
 buffByCells <- buffer(elev, width = 20.01, unit = "cells") # 20-cell buffer
-plot(buffByCells)
+plot(buffByCells, legend = FALSE)
 plot(madElev, add = TRUE)
 
 ### Buffer a vector:
-buffRivers <- buffer(rivers, width = 2000) # 2000-m buffer
+buffRivers <- buffer(rivers, width = 2000, dissolve = TRUE) # 2000-m buffer
 plot(buffRivers)
 plot(st_geometry(madRivers), col = "blue", add = TRUE)
 

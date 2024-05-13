@@ -14,15 +14,15 @@ dypsis <- fast(madDypsis)
 ### Connections from each point to nearest river
 consFromDypsis <- connectors(dypsis, rivers)
 
-plot(st_geometry(madDypsis))
-plot(st_geometry(madRivers), col = "blue", add = TRUE)
-plot(consFromDypsis, add = TRUE)
+plot(rivers, col = "blue")
+plot(dypsis, add = TRUE)
+plot(consFromDypsis, col = "red", add = TRUE)
 
 ### Connections from each river to nearest point
 consFromRivers <- connectors(rivers, dypsis)
 
-plot(st_geometry(madDypsis))
-plot(st_geometry(madRivers), col = "blue", add = TRUE)
-plot(consFromRivers, add = TRUE)
+plot(rivers, col = "blue")
+plot(dypsis, add = TRUE)
+plot(consFromRivers, col = "red", add = TRUE)
 
 }
