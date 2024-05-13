@@ -134,18 +134,6 @@ faster <- function(
 		if (!is.numeric(opts$memory) || opts$memory <= 0) stop("Option `memory` must be a positive number. The default is ", .memoryDefault(), " (GB).")
 	}
 
-	# if (any(names(opts) %in% "rasterPrecision")) {
-	
-	# 	if (is.na(opts$rasterPrecision) || !is.character(opts$rasterPrecision)) stop("Option `rasterPrecision` must be `float` or `double`.\n  The default is ", .rasterPrecisionDefault(), ".")
-
-    #  	opts$rasterPrecision <- omnibus::pmatchSafe(opts$rasterPrecision, c("FCELL", "float", "DCELL", "double"))
-	# 	opts$rasterPrecision <- if (opts$rasterPrecision == "FCELL") {
-   	# 		"float"
-	# 	} else if (opts$rasterPrecision == "DCELL") {
-	# 		"double"
-	# 	}
-	# }
-
 	if (any(names(opts) %in% "useDataTable")) {
 
 		if (is.na(opts$useDataTable) || !is.logical(opts$useDataTable)) stop("Option `useDataTable` must be a logical. The default is ", .useDataTableDefault(), ".")
@@ -157,7 +145,7 @@ faster <- function(
 		opts <- as.list(namesOfOpts)
 		names(opts) <- namesOfOpts
 	}
-	
+
 	for (opt in names(opts)) {
 
 		# default
@@ -167,13 +155,14 @@ faster <- function(
 		} else {
 			val <- opts[[opt]]
 		}
-
+		
 		.fasterRaster$options[[opt]] <- val
 
 	}
 
-	if (any(names(opt) %in% "verbose")) {
-		info <- rgrass::set.echoCmdOption(opt$verbose)
+	if (any(names(opts) %in% "verbose")) {
+
+		info <- rgrass::set.echoCmdOption(.fasterRaster$options$verbose)
 	}
 
 	invisible(out)

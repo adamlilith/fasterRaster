@@ -306,7 +306,7 @@ methods::setMethod(
 
 		# calculate Pff
 		srcPff <- .makeSourceName("fragmentation_pff", "raster")
-		ex <- paste0(srcPff, " = ", faster("rasterPrecision"), "(", srcNumBoths, ") / ", faster("rasterPrecision"), "(", srcNumEithers, ")")
+		ex <- paste0(srcPff, " = double(", srcNumBoths, ") / double(", srcNumEithers, ")")
 		rgrass::execGRASS("r.mapcalc", expression = ex, flags = c(.quiet(), "overwrite"))
 
 		# calculate cover (Pf)

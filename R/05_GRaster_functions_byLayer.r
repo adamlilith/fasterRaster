@@ -195,12 +195,12 @@ setMethod(
 		
 		n <- max(ny, nx)
   		
-		prec <- faster("rasterPrecision")
+		prec <- .getPrec(c(x, y), NULL)
 
 		for (i in seq_len(n)) {
 			
 			src <- .makeSourceName("arith_by_layer", "rast")
-			ex <- paste0(src, " = atan(", prec, "(", sources(x)[i], ") , double(", sources(y)[i], "))  * (", pi, " / 180)")
+			ex <- paste0(src, " = atan(", prec, "(", sources(x)[i], ") , ", prec, "(", sources(y)[i], "))  * (", pi, " / 180)")
 			this <- .genericArithRast(name = name, src = src, ex = ex)
 			if (i == 1L) {
 				out <- this
@@ -357,12 +357,12 @@ setMethod(
 	.locationRestore(x)
 	.region(x)
 	
-	precision <- faster("rasterPrecision")
+	prec <- .getPrec(x, NULL)
 
 	srcs <- .makeSourceName("r.mapcalc", "rast", nlyr(x))
 	for (i in 1L:nlyr(x)) {
 	
-  		ex <- paste0(srcs[i], " = ", fx, "(", precision, "(", sources(x)[i], ") * 180 / ", pi, ")")
+  		ex <- paste0(srcs[i], " = ", fx, "(", prec, "(", sources(x)[i], ") * 180 / ", pi, ")")
 		rgrass::execGRASS(
 			"r.mapcalc",
 			expression = ex,
@@ -383,12 +383,12 @@ setMethod(
 	.locationRestore(x)
 	.region(x)
 
- 	precision <- faster("rasterPrecision")
+ 	prec <- .getPrec(x, "/")
 
 	srcs <- .makeSourceName("arith_by_layer", "rast", nlyr(x))
 	for (i in 1L:nlyr(x)) {
 	
-		ex <- paste0(srcs[i], " = ", fx, "(", precision, "(", sources(x)[i], ") * ", pi, " / 180)")
+		ex <- paste0(srcs[i], " = ", fx, "(", prec, "(", sources(x)[i], ") * ", pi, " / 180)")
 		rgrass::execGRASS(
 			"r.mapcalc",
 			expression = ex,
@@ -412,7 +412,7 @@ setMethod(
 	nLayers <- nlyr(x)
 	srcs <- .makeSourceName("arith_by_layer", "raster", nLayers)
 	
-	prec <- faster("rasterPrecision")
+	prec <- .getPrec(x, NULL)
 
 	for (i in seq_len(nLayers)) {
 	
@@ -439,7 +439,7 @@ setMethod(
 	.locationRestore(x)
 	.region(x)
 
- 	prec <- faster("rasterPrecision")
+ 	prec <- .getPrec(x, NULL)
 
 	nLayers <- nlyr(x)
 	srcs <- .makeSourceName("arith_by_layer", "raster", nLayers)

@@ -444,14 +444,14 @@ methods::setMethod(
 
 #' Get function for precision of `GRaster`
 #'
-#' @param ee A `GRaster` layer.
-#' @param oper Operator
+#' @param x A `GRaster`.
+#' @param oper Character or `NULL`: Operator
 #'
 #' @returns Either "" (empty) or "double".
 #' @noRd
-.getPrec <- function(e1, oper) {
+.getPrec <- function(x, oper) {
 
-	if (oper %in% c("/", "%/%")) {
+	if ((is.null(oper) || oper %in% c("/", "%/%")) & any(is.cell(x))) {
 		"double"
 	} else {
 		""

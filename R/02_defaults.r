@@ -31,8 +31,6 @@
 			# "mapset",
 			"workDir",
 			"useDataTable"
-   			# "rasterPrecision"
-			# "nAtATime"
 		),
 		type = c(
 			"character",
@@ -44,8 +42,6 @@
 			# "character",
 			"character",
 			"logical"
-			# "character"
-			# "numeric"
 		)
 	)
 		
