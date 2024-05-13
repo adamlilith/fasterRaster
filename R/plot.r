@@ -2,7 +2,7 @@
 #'
 #' @description `plot()` displays a `GRaster` or `GVector`.
 #'
-#' This function is essentially a hack, as it it not possible to dependably call the appropriate **GRASS** modules and display a raster or vector without potential confusion on the user side. Instead, this function 1) simplifies the focal `GRaster` or `GVector` (if needed); 2) writes it to disk as a `SpatRaster` or `SpatVector`; and 3) plots the object.
+#' This function is essentially a hack, as it it not possible to dependably call the appropriate **GRASS** modules and display a raster or vector without potential confusion on the user side. Instead, this function 1) simplifies the focal `GRaster` or `GVector` (if needed); 2) writes it to disk as a `SpatRaster` or `SpatVector`; and 3) plots the object using [terra::plot()]. Thus, if you are interested in making maps, it will always be faster to make them directly with **terra**.
 #'
 #' @param x A `GRaster` or `GVector`.
 #'
