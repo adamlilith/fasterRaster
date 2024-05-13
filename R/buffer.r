@@ -175,25 +175,25 @@ methods::setMethod(
 
 	do.call(rgrass::execGRASS, args)
 
-	# dissolve by category
-	if (dissolve) {
+	# # # # dissolve by category
+	# # # if (dissolve) {
 
-		# dissolve
-		srcBuff <- src
-		src <- .makeSourceName("v_dissolve", "vector")
-		# catCol <- .vNames(srcBuff)
-		args <- list(
-			cmd = "v.dissolve",
-			input = srcBuff,
-			output = src,
-			# column = "cat",
-			flags = c(.quiet(), "overwrite")
-		)
+	# # # 	# dissolve
+	# # # 	srcBuff <- src
+	# # # 	src <- .makeSourceName("v_dissolve", "vector")
+	# # # 	# catCol <- .vNames(srcBuff)
+	# # # 	args <- list(
+	# # # 		cmd = "v.dissolve",
+	# # # 		input = srcBuff,
+	# # # 		output = src,
+	# # # 		# column = "cat",
+	# # # 		flags = c(.quiet(), "overwrite")
+	# # # 	)
 		
-		if (.vHasDatabase(srcBuff)) args$column <- .vNames(srcBuff)[1L]
-		do.call(rgrass::execGRASS, args = args)
+	# # # 	if (.vHasDatabase(srcBuff)) args$column <- .vNames(srcBuff)[1L]
+	# # # 	do.call(rgrass::execGRASS, args = args)
 
-	}
+	# # # }
 
 	.makeGVector(src)
 	
