@@ -44,7 +44,7 @@
 #' @param ... Additional arguments. These can include:
 #' * `bigTiff`: Logical: If `TRUE`, and the file format is a GeoTIFF and would be larger than 4 GB (regardless of compression), then the file will be saved in BIGTIFF format.
 #' * `format`: Character, indicating file format. This is usually ascertained from the file extension, but in case this fails, it can be stated explicitly. When using other formats, you may have to specify the `createopts` argument, too (see help page for **GRASS** module `r.out.gdal`). Two common formats include:
-#'    * `"GTiff"` (default): GeoTIFF `filename` ends in `.tif`
+#'    * `"GTiff"` (default): GeoTIFF `filename` ends in `.tif`.
 #'    * `"ASC"`: ASCII `filename` ends in `.asc`
 #' * Additional arguments to send to **GRASS** modules `r.out.gdal` and `r.out.ascii`.
 #' * `precision`: Numeric: For ASCII files, you may need to state the number of significant digits. 32-bit values have 7 digits and 64-bit values have 16. So in these cases the argument would be `precision=7` or `precision=16`.
