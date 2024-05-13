@@ -19,7 +19,6 @@
 	.fasterRaster$activeLocation <- NA_character_
 	.fasterRaster$messages <- list()
 	.fasterRaster$options <- list()
-	# .fasterRaster$maxSqlLength <- 29900L # maximum number of characters (with safety margin) of an SQL query GRASS can handle
 	faster(restore = TRUE)
 	
 	ver <- read.dcf(file = system.file("DESCRIPTION", package = pkg), fields = "Version")
