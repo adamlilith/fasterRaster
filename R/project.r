@@ -104,7 +104,16 @@ methods::setMethod(
 #' @noRd
 .projectRaster <- function(x, y, align, method, fallback, res, wrap) {
 
-	.message(msg = "project_raster", message = "This function can produce erroneous results if the raster crosses a pole or the international date line.")
+	# .message(msg = "project_raster", message = "This function can produce erroneous results if the raster crosses a pole or the international date line.")
+	
+	# imperfect catch for cases where `wrap` should be `TRUE` but is not
+	if (.projection(x) %in% c("WGS84", "NAD83", "NAD27") & !wrap) {
+
+		extent <- ext(x, vector = TRUE)
+		if ((extent[1L] == -180 & extent[2L] == 180) | (extent[3L] == -90 & extent[4L] == 90)) warning("This GRaster seems to wrap around the globe to meet at the international\n  date line and/or the poles. Should `wrap` be `TRUE`?")
+
+	}
+
 	
 	xLocation <- .location(x)
 	yLocation <- .locationFind(y, match = "crs", return = "name")
@@ -368,6 +377,21 @@ methods::setMethod(
 		y,
 		wrap = FALSE
 	) {
+
+	# imperfect catch for cases where `wrap` should be `TRUE` but is not
+	if (.projection(x) %in% c("WGS84", "NAD83", "NAD27") & !wrap) {
+	
+		extent <- ext(x, vector = TRUE)
+		if (
+			(extent[1L] == -180 & extent[2L] == 180) |
+			(extent[3L] == -90 & extent[4L] == 90) |
+			(extent[1L] > 0 & extent[2L] < 0) |			
+			(extent[3L] > extent[4L])			
+			(extent[4L] < extent[3L])			
+		) warning("This GVector seems to span the international date line and/or poles. Should `wrap` be `TRUE`?")
+	
+	}
+
 
 	xLocation <- .location(x)
 	yLocation <- .locationFind(y, match = "crs", return = "name")
