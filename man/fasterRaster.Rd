@@ -96,9 +96,11 @@ The assign operators, \code{\link[fasterRaster]{$<-}}, \code{\link[fasterRaster]
 \code{\link[=extract]{extract()}}: Extract values from a \code{GRaster} at locations of a \code{GVector}\cr
 \code{\link[=fillNAs]{fillNAs()}}: Fill \code{NA} cells\cr
 \code{\link[=flow]{flow()}}: Identify watershed basins and direction and accumulation of flow\cr
+\code{\link[=flowPath]{flowPath()}}: Path of water flow across a landscape\cr
 \code{\link[=focal]{focal()}}: Calculate cell values based on values of nearby cells\cr
 \code{\link[=fractalRast]{fractalRast()}}: Create a fractal \code{GRaster}\cr
 \code{\link[=fragmentation]{fragmentation()}}: Landscape fragmentation class from Riitters et al. (2020)\cr
+\code{\link[=geomorphons]{geomorphons()}}: Identify terrain feature types\cr
 \code{\link[=global]{global()}}: Summary statistics across cells of each \code{GRaster} layer\cr
 \code{\link[=shade]{hillshade()}}: Create a hillshade \code{GRaster}\cr
 \code{\link[=hist]{hist()}}: Histogram of \code{GRaster} values\cr
@@ -134,6 +136,18 @@ The assign operators, \code{\link[fasterRaster]{$<-}}, \code{\link[fasterRaster]
 \code{\link[=unscale]{unscale()}}: Multiply raster by standard deviation and add the mean (opposite of \code{\link[=scale]{scale()}})\cr
 \code{\link[=zonal]{zonal()}}: Statistics (mean, sum, etc.) on areas of a \code{GRaster} defined by sets of cells with the same values in another \code{GRaster}, or by geometries in a \code{GVector}\cr
 \code{\link[=zonalGeog]{zonalGeog()}}: Geographic statistics (area, perimeter, fractal dimension, etc.) for sets of cells with the same values\cr
+}
+
+\subsection{Functions for analysis of terrain and flow of water across landscapes}{
+
+\code{\link[=as.contour]{as.contour()}}: Contour lines from a \code{GRaster}\cr
+\code{\link[=flow]{flow()}}: Identify watershed basins and direction and accumulation of flow\cr
+\code{\link[=flowPath]{flowPath()}}: Path of water flow across a landscape\cr
+\code{\link[=geomorphons]{geomorphons()}}: Identify terrain feature types\cr
+\code{\link[=shade]{hillshade()}}: Create a hillshade \code{GRaster}\cr
+\code{\link[=sun]{sun()}}: Solar radiance and irradiance\cr
+\code{\link[=terrain]{terrain()}}: Slope, aspect, curvature, and partial slopes\cr
+\code{\link[=topoWetnessIndex]{topoWetnessIndex()}}: Topographic wetness index\cr
 }
 
 \subsection{Functions operating on categorical (factor) rasters}{

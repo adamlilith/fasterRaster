@@ -8,20 +8,18 @@
 \usage{
 \S4method{plot}{GRaster,missing}(x, y, maxcell = 5e+06, ...)
 
-\S4method{plot}{GVector,missing}(x, y, simplify = FALSE, maxGeoms = 10000, ...)
+\S4method{plot}{GVector,missing}(x, y, maxGeoms = 10000, ...)
 }
 \arguments{
 \item{x}{A \code{GRaster} or \code{GVector}.}
 
 \item{y}{Missing--leave as empty.}
 
-\item{maxcell}{Positive integer (rasters only): Maximum number of cells to display. When simplifying, \code{\link[=aggregate]{aggregate()}} will be applied so that it has approximately this number of cells. The default is 5000000.}
+\item{maxcell}{Positive integer (rasters only): Maximum number of cells a raster can have before it is simplified before saving to disk then plotted. The \code{\link[=aggregate]{aggregate()}} function will be applied so that it has approximately this number of cells. The default is 5000000.}
 
 \item{...}{Other arguments to send to \code{\link[terra:plot]{terra::plot()}}.}
 
-\item{simplify}{Logical (vectors only): If \code{TRUE} (default), then simplify the \code{GVector} before plotting. This can save time for very large vectors. However, details in the vector may appear inaccurate.}
-
-\item{maxGeoms}{Positive integer (vectors only): Maximum number of features before simplification is used (\code{simplify} must also be \code{TRUE}).}
+\item{maxGeoms}{Positive integer (vectors only): Maximum number of features before vector simplification is applied before saving to disk then creating a \code{SpatVector} for plotting. The default is 10000.}
 }
 \value{
 Nothing (displays a raster or vector).
@@ -29,7 +27,7 @@ Nothing (displays a raster or vector).
 \description{
 \code{plot()} displays a \code{GRaster} or \code{GVector}.
 
-This function is essentially a hack, as it it not possible to dependably call the appropriate \strong{GRASS} modules and display a raster or vector without potential confusion on the user side. Instead, this function 1) simplifies the focal \code{GRaster} or \code{GVector} (if needed); 2) writes it to disk as a \code{SpatRaster} or \code{SpatVector}; and 3) plots the object.
+This function is essentially a hack, as it it not possible to dependably call the appropriate \strong{GRASS} modules and display a raster or vector without potential confusion on the user side. Instead, this function 1) simplifies the focal \code{GRaster} or \code{GVector} (if needed); 2) writes it to disk as a \code{SpatRaster} or \code{SpatVector}; and 3) plots the object using \code{\link[terra:plot]{terra::plot()}}. Thus, if you are interested in making maps, it will always be faster to make them directly with \strong{terra}.
 }
 \examples{
 if (grassStarted()) {
