@@ -8,11 +8,9 @@
 #'
 #' @param y Missing--leave as empty.
 #'
-#' @param maxcell Positive integer (rasters only): Maximum number of cells to display. When simplifying, [aggregate()] will be applied so that it has approximately this number of cells. The default is 5000000.
+#' @param maxcell Positive integer (rasters only): Maximum number of cells a raster can have before it is simplified before saving to disk then plotted. The [aggregate()] function will be applied so that it has approximately this number of cells. The default is 5000000.
 #'
-#' @param simplify Logical (vectors only): If `TRUE` (default), then simplify the `GVector` before plotting. This can save time for very large vectors. However, details in the vector may appear inaccurate.
-#'
-#' @param maxGeoms Positive integer (vectors only): Maximum number of features before simplification is used (`simplify` must also be `TRUE`).
+#' @param maxGeoms Positive integer (vectors only): Maximum number of features before vector simplification is applied before saving to disk then creating a `SpatVector` for plotting. The default is 10000.
 #' 
 #' @param ... Other arguments to send to [terra::plot()].
 #'
@@ -73,6 +71,7 @@ methods::setMethod(
 	writeRaster(x, filename = tf, format = "GeoTIFF", overwrite = TRUE, warn = FALSE, datatype = dtype, ...)
 	out <- terra::rast(tf)
 	names(out) <- names(x)
+	if (any(is.factor(x))) levels(out) <- levels(x)
 	terra::plot(out, ...)
 	
 	} # EOF
@@ -84,10 +83,10 @@ methods::setMethod(
 methods::setMethod(
 	f = "plot",
 	signature = c(x = "GVector", y = "missing"),
-	function(x, y, simplify = FALSE, maxGeoms = 10000, ...) {
+	function(x, y, maxGeoms = 10000, ...) {
 	
 	# simplify
-	if (simplify & nrow(x) > maxGeoms) x <- simplifyGeom(x)
+	if (ngeom(x) > maxGeoms) x <- simplifyGeom(x)
 	
 	tf <- tempfile(fileext = ".gpkg")
 	writeVector(x, filename = tf, format = "GPKG", overwrite = TRUE, attachTable = FALSE)
