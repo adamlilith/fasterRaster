@@ -82,9 +82,11 @@
 #' [extract()]: Extract values from a `GRaster` at locations of a `GVector`\cr
 #' [fillNAs()]: Fill `NA` cells\cr
 #' [flow()]: Identify watershed basins and direction and accumulation of flow\cr
+#' [flowPath()]: Path of water flow across a landscape\cr
 #' [focal()]: Calculate cell values based on values of nearby cells\cr
 #' [fractalRast()]: Create a fractal `GRaster`\cr
 #' [fragmentation()]: Landscape fragmentation class from Riitters et al. (2020)\cr
+#' [geomorphons()]: Identify terrain feature types\cr
 #' [global()]: Summary statistics across cells of each `GRaster` layer\cr
 #' [`hillshade()`][shade]: Create a hillshade `GRaster`\cr
 #' [hist()]: Histogram of `GRaster` values\cr
@@ -121,6 +123,16 @@
 #' [zonal()]: Statistics (mean, sum, etc.) on areas of a `GRaster` defined by sets of cells with the same values in another `GRaster`, or by geometries in a `GVector`\cr
 #' [zonalGeog()]: Geographic statistics (area, perimeter, fractal dimension, etc.) for sets of cells with the same values\cr
 #'
+#' ## Functions for analysis of terrain and flow of water across landscapes
+#' [as.contour()]: Contour lines from a `GRaster`\cr
+#' [flow()]: Identify watershed basins and direction and accumulation of flow\cr
+#' [flowPath()]: Path of water flow across a landscape\cr
+#' [geomorphons()]: Identify terrain feature types\cr
+#' [`hillshade()`][shade]: Create a hillshade `GRaster`\cr
+#' [sun()]: Solar radiance and irradiance\cr
+#' [terrain()]: Slope, aspect, curvature, and partial slopes\cr
+#' [topoWetnessIndex()]: Topographic wetness index\cr
+#' 
 #' ## Functions operating on categorical (factor) rasters
 #' [activeCat()] and [activeCats()]: Column(s) that defines category labels\cr
 #' \code{\link[fasterRaster]{activeCat<-}}: Set column that defines category labels\cr
