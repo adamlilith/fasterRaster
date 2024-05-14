@@ -1,6 +1,6 @@
-# fasterRaster 8.3.0.7011 (2024-05-11)
+# fasterRaster 8.3.0.7012 (2024-05-11)
 
-## Functionality
+## Highlights
 o Added function `flow()`.
 o Added function `flowPath()`.
 o Added function `geomorphons()`.
@@ -13,8 +13,9 @@ o Fixed bug with `writeRaster()` failing to save if `datatype` was incorrect. Im
 o Fixed bug in `plot()` due to `writeVector()` now returning a `GVector`.
 
 ## Issues
-o Remove `rasterPrecision` option and now use internal function `.getPrec()` to ascertain the proper precision of rasters in `Arithmetic`.
-o `plot()` displays levels of categorical rasters.
+o Removed `rasterPrecision` option and now use internal function `.getPrec()` to ascertain the proper precision of rasters.
+o Display of levels of categorical rasters when using `plot()`.
+o Option to fail in creation of `GRaster` or `GVector` if it has a zero extent.
 
 # fasterRaster 8.3.0.7007 (2024-05-01)
 
