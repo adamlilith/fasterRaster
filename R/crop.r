@@ -25,7 +25,7 @@
 methods::setMethod(
 	f = "crop",
 	signature = c(x = "GRaster"),
-	definition = function(x, y) {
+	definition = function(x, y, fail = TRUE) {
 	
 	if (inherits(y, "GVector")) {
 		compareGeom(x, y)
