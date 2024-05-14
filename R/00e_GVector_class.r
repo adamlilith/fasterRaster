@@ -60,7 +60,7 @@ methods::setValidity("GVector",
 #'
 #' @param cats `NULL` (default) or an integer vector: Values of the "cats" (categories) of the vector in **GRASS**. This is useful *only* for speeding up the `GVector` creation process when the "cats" have already been ascertained.
 #'
-#' @param fail Logical: If `TRUE` (default), and the vector either has a 0 east-west or north-south extent, or the number of rows in the `data.table` does not match the number of geometries, then exit the function with an error. If `fail` is `FALSE`, then display a warning and return `NULL`.
+#' @param fail Logical: If `TRUE` (default), and the vector either has a 0 east-west or north-south extent, then exit the function with an error. If `fail` is `FALSE`, then display a warning and return `NULL`.
 #'
 #' @returns A `GVector` (or `NULL` if `fail` is `TRUE` and the `GVector` would be invalid).
 #'

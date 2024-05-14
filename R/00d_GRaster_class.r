@@ -152,6 +152,7 @@ methods::setValidity("GRaster",
 #' @param names Character: Name of the raster.
 #' @param levels `NULL` (default), a `data.frame`, `data.table`, an empty string (`""`), or a list of `data.frame`s, `data.table`s, and/or empty strings: These become the raster's [levels()]. If `""`, then no levels are defined.
 #' @param ac vector of numeric or integer values >=1, or `NULL` (default): Active category column (offset by 1, so 1 really means the second column, 2 means the third, etc.). A value of `NULL` uses an automated procedure to figure it out.
+#' @param fail Logical: If `TRUE` (default), and the raster either has a 0 east-west or north-south extent, then exit the function with an error. If `fail` is `FALSE`, then display a warning and return `NULL`.
 #'
 #' @returns A `GRaster`.
 #'
@@ -160,7 +161,7 @@ methods::setValidity("GRaster",
 #' @example man/examples/ex_GRaster_GVector.r
 #'
 #' @noRd
-.makeGRaster <- function(src, names = "raster", levels = "", ac = NULL) {
+.makeGRaster <- function(src, names = "raster", levels = "", ac = NULL, fail = TRUE) {
 
 	# levels: convert empty strings to NULL data.tables and data.frames to data.tables
 	if (is.null(levels)) levels <- data.table::data.table(NULL)
