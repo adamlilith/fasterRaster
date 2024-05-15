@@ -81,8 +81,8 @@ methods::setValidity("GVector",
 
 	info <- .vectInfo(src, cats = cats)
 
-	if (diff(c(info$west, info$east)) == 0 | diff(c(info$north, info$south)) == 0) {
-		msg <- "Raster has 0 east-west extent and/or north-south extent."
+	if ((info$west - info$east) == 0 | (info$north - info$south) == 0) {
+		msg <- "Vector has 0 east-west extent and/or north-south extent."
 		if (fail) {
 			stop(msg)
 		} else {
