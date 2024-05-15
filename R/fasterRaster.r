@@ -95,6 +95,7 @@
 #' [kernel()]: Kernel density estimator of points\cr
 #' [longlat()]: Create longitude/latitude rasters\cr
 #' [mask()]: Remove values in a `GRaster` based on values in another `GRaster` or vector\cr
+#' [maskNA()]: Mask all non-NA cells or all NA cells\cr
 #' [match()], \code{\link[fasterRaster]{%in%}}, and \code{\link[fasterRaster]{%notin%}}: Find which cells of a `GRaster` match or do not match certain values\cr
 #' [merge()]: Combine two or more rasters with different extents and fill in `NA`s\cr
 #' \code{\link[fasterRaster]{names<-}}: Assign names to a `GRaster`\cr
@@ -191,9 +192,9 @@
 #' [as.data.table()]: Convert a `GVector`'s attribute table to a `data.table`\cr
 #' [as.points()]: Extract vertex coordinates from a "lines" or "polygons" `GVector`\cr
 #' [buffer()]: Create a polygon around/inside a `GVector`\cr
-#' [cbind()]: Add columns to the data table of a `GVector`\cr
 #' [classify()]: Classify cell values of a `GRaster`\cr
 #' [clusterPoints()]: Identify clusters of points\cr
+#' [colbind()]: Add columns to the data table of a `GVector`\cr
 #' [complete.cases()]: Find rows of a `GVector`'s data table that have no `NA`s in them\cr
 #' [connectors()]: Create lines connecting nearest features of two `GVector`s\cr
 #' [convHull()]: Minimum convex hull\cr
