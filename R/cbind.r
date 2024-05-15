@@ -1,8 +1,8 @@
 #' Add columns to the data table of a GVector
 #'
-#' @description `cbind()` adds columns to the data table of a `GVector`. To combine two `GVector`s, see [rbind()]. You combine multiple a `GVector`'s data table with `data.frame`s, `data.table`s, `matrices`, or the data table(s) from other `GVector`(s).
+#' @description `colbind()` adds columns to the data table of a `GVector`. You can combine multiple a `GVector`'s data table with `data.frame`s, `data.table`s, `matrices`, or the data table(s) from other `GVector`(s). To combine two `GVector`s, see [rbind()].
 #'
-#' @param ... The first argument must be a `GVector`. Subsequent arguments can be `data.frame`s, `data.table`s, `matrices`, or `GVector`s. Only the data tables of subsequent `GVector`s are added to the table in `x`; the geometries are ignored.
+#' @param x,... The first argument must be a `GVector`. Subsequent arguments can be `data.frame`s, `data.table`s, `matrices`, or `GVector`s. Only the data tables of subsequent `GVector`s are added to the table in `x`; the geometries are ignored.
 #'
 #' @returns A `GVector`.
 #'
@@ -10,17 +10,15 @@
 #'
 #' @example man/examples/ex_cbind_rbind.r
 #'
-#' @aliases cbind
-#' @rdname cbind
-#' @export cbind
-print <- function(...) {
-	UseMethod("cbind")
-}
+#' @aliases colbind
+#' @rdname colbind
+#' @exportMethod colbind
+methods::setMethod(
+	f = "colbind",
+	signature = c(x = "GVector"),
+	function(x, ...) {
 
-#' @export
-cbind.GVector <- function(... ) {
-	
-	dots <- list(...)
+	dots <- list(x, ...)
 	for (i in seq_along(dots)) {
 		if (inherits(dots[[i]], "GVector")) {
 			dots[[i]] <- dots[[i]]@table
@@ -32,4 +30,6 @@ cbind.GVector <- function(... ) {
 	x@table <- table
 	x
 	
-} # EOF
+	} # EOF
+)
+
