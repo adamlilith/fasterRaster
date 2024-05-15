@@ -12,6 +12,7 @@ o Fixed installation issue related to `activeCat()<-` and `addCats()<-` (thank y
 o Fixed bug in `plot()` arising from changing output of `writeRaster()` to `GRaster`.
 o Fixed bug with `writeRaster()` failing to save if `datatype` was incorrect. Improved auto-assessment of raster `datatype` in `writeRaster()`.
 o Fixed bug in `plot()` due to `writeVector()` now returning a `GVector`.
+o Fixed bug in `arithmetic` when determining data type of an input raster.
 
 ## Issues
 o Removed `rasterPrecision` option and now use internal function `.getPrec()` to ascertain the proper precision of rasters.
