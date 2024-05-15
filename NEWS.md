@@ -1,9 +1,10 @@
 # fasterRaster 8.3.0.7012 (2024-05-11)
 
 ## Highlights
-o Added function `flow()`.
-o Added function `flowPath()`.
-o Added function `geomorphons()`.
+o Added function `flow()` for calculating flow of water across a landscape.
+o Added function `flowPath()` for calculating flow of water from specific points on a landscape.
+o Added function `geomorphons()` for identifying geomorphological features.
+o Added function `maskNA()` for converting non-`NA` cells or `NA` cells to a user-defined value.
 o Can save layer-by-layer with `writeRaster()`.
 
 ## Bug fixes
