@@ -73,7 +73,7 @@ methods::setMethod(
 #' @noRd
 .copyGRaster <- function(x, topo = "2D", reshapeRegion = TRUE) {
 
-	# NB This function could use `g.copy`, but in some cases it does not have the desired effect. For example, when a MASK raster is present, it correctly copies cells that are not masked, but when the MASK is removed, the masked cells re-appear. Similarly, it ignores the region when copying.
+	# NB This function could use `g.copy`, but in some cases it does not have the desired effect. For example, when a MASK raster is present, it correctly copies cells that are not masked, but when the MASK is removed, the masked cells re-appear. Similarly, it seems to ignore the region when copying.
 
 	if (inherits(x, "GRaster")) {
 
@@ -112,8 +112,7 @@ methods::setMethod(
 	}
 
 	nLayers <- length(srcs)
-
-	out <- .makeSourceName("copyGSpatial", type = "raster", nLayers)
+	out <- .makeSourceName("copyGSpatial_r_mapcalc", type = "raster", nLayers)
 
 	for (i in seq_len(nLayers)) {
 
