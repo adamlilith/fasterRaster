@@ -345,7 +345,7 @@ methods::setMethod(
 				name <- "layer"
 				src <- .makeSourceName("arithmetic", "rast")
 
-				prec2 <- .getPrec(e2[i], oper)
+				prec2 <- .getPrec(e2[[i]], oper)
 
 				ex <- if (oper == "%/%") {
 					paste0(src, " = floor(", prec1, "(", sources(e1), ") / ", prec2, "(", sources(e2)[i], "))")
