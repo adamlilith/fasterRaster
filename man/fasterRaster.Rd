@@ -109,6 +109,7 @@ The assign operators, \code{\link[fasterRaster]{$<-}}, \code{\link[fasterRaster]
 \code{\link[=kernel]{kernel()}}: Kernel density estimator of points\cr
 \code{\link[=longlat]{longlat()}}: Create longitude/latitude rasters\cr
 \code{\link[=mask]{mask()}}: Remove values in a \code{GRaster} based on values in another \code{GRaster} or vector\cr
+\code{\link[=maskNA]{maskNA()}}: Mask all non-NA cells or all NA cells\cr
 \code{\link[=match]{match()}}, \code{\link[fasterRaster]{\%in\%}}, and \code{\link[fasterRaster]{\%notin\%}}: Find which cells of a \code{GRaster} match or do not match certain values\cr
 \code{\link[=merge]{merge()}}: Combine two or more rasters with different extents and fill in \code{NA}s\cr
 \code{\link[fasterRaster]{names<-}}: Assign names to a \code{GRaster}\cr
@@ -215,9 +216,9 @@ The \code{\link[fasterRaster]{$<-}} operator can be used to replace specific col
 \code{\link[=as.data.table]{as.data.table()}}: Convert a \code{GVector}'s attribute table to a \code{data.table}\cr
 \code{\link[=as.points]{as.points()}}: Extract vertex coordinates from a "lines" or "polygons" \code{GVector}\cr
 \code{\link[=buffer]{buffer()}}: Create a polygon around/inside a \code{GVector}\cr
-\code{\link[=cbind]{cbind()}}: Add columns to the data table of a \code{GVector}\cr
 \code{\link[=classify]{classify()}}: Classify cell values of a \code{GRaster}\cr
 \code{\link[=clusterPoints]{clusterPoints()}}: Identify clusters of points\cr
+\code{\link[=colbind]{colbind()}}: Add columns to the data table of a \code{GVector}\cr
 \code{\link[=complete.cases]{complete.cases()}}: Find rows of a \code{GVector}'s data table that have no \code{NA}s in them\cr
 \code{\link[=connectors]{connectors()}}: Create lines connecting nearest features of two \code{GVector}s\cr
 \code{\link[=convHull]{convHull()}}: Minimum convex hull\cr
