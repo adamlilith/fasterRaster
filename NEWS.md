@@ -17,6 +17,7 @@ o `[` should work consistently for `GVector`s.
 o `extract()` extracts values from `GVector`s for large numbers of points without crashing
 o `vect()` correctly returns a `SpatVector`.
 o `crds()` works when the **GRASS** vector has an attribute table.
+o Hidden function `.makeGVector()` now catches cases with zero extent *only* for polygons.
 
 ## Issues
 o Removed `rasterPrecision` option and now use internal function `.getPrec()` to ascertain the proper precision of rasters.
