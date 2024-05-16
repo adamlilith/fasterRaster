@@ -81,7 +81,9 @@ methods::setValidity("GVector",
 
 	info <- .vectInfo(src, cats = cats)
 
-	if ((info$west - info$east) == 0 | (info$north - info$south) == 0) {
+	# NB test for zero extent... note that lines and points can have zero extent
+	if (info$geometry == "polygons" & ((info$west - info$east) == 0 | (info$north - info$south) == 0)) {
+
 		msg <- "Vector has 0 east-west extent and/or north-south extent."
 		if (fail) {
 			stop(msg)
