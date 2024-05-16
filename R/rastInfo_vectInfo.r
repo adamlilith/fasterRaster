@@ -295,6 +295,8 @@ summary.rastInfo <- function(x) print.rastInfo(x)
 	} else {
 		x
 	}
+	
+	# rgrass::execGRASS("g.region", vector = x, flags=c("o", .quiet()))
 
 	### extent/topology
 	suppressMessages(
