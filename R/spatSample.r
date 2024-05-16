@@ -181,7 +181,7 @@ methods::setMethod(
 
 		# make copy of vector and force all categories to 1
 		gtype <- geomtype(x)
-		srcRestrict <- .aggregate(sources(x), dissolve = TRUE, gtype = gtype)
+		srcRestrict <- .aggregate(sources(x), dissolve = TRUE, gtype = gtype, copy = TRUE)
 
 	}
 	
@@ -218,17 +218,17 @@ methods::setMethod(
 
 	} # if wanting values
 
-	table <- NULL
+	out <- NULL
 	if (xy & values) {
-		table <- cbind(xy, vals)
+		out <- cbind(xy, vals)
 	} else if (!xy & values) {
-		table <- vals
+		out <- vals
 	} else if (xy & !values) {
-		table <- coords
+		out <- coords
 	}
 
 	if (as.points) {
-		out <- .makeGVector(src, table = table)
+		out <- .makeGVector(src, table = out)
 	} else {
 		if (!faster("useDataTable")) out <- as.data.frame(out)
 	}
