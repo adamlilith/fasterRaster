@@ -100,6 +100,7 @@ methods::setMethod(
 	
 	}
 
+	# linear terms
 	i <- which(is.na(terms$termClean))
 	if (length(i) > 0L) {
 	
@@ -163,15 +164,16 @@ methods::setMethod(
 #' @noRd
 .matchRasterNamesToFormula <- function(object, term) {
 
+	# find names of rasters and replace from longest to shortest in length to help obviate duplicate names
 	names <- names(object)
 	srcs <- sources(object)
 	nc <- nchar(names)
-	names <- names[order(nc)]
-	srcs <- srcs[order(nc)]
+	ncOrder <- order(nc)
+	names <- names[ncOrder]
+	srcs <- srcs[ncOrder]
 
-	matched <- rep(FALSE, length(term))
 	for (i in seq_along(names)) {
-		term <- gsub(term, pattern = names[i], replacement = srcs[i])
+		term <- gsub(term, pattern = names[i], replacement = srcs[i], fixed = TRUE)
 	}
 	term
 
