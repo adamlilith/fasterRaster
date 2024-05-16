@@ -115,8 +115,8 @@ st_coordinates <- function(x) {
 		)
 		
 		data <- data[-1L]
-		# cutAt <- which(data == "Reading features...")
-		# data <- data[1L:(cutAt - 1L)]
+		cutAt <- which(data == "Reading features...")
+		if (length(cutAt) > 0L) data <- data[1L:(cutAt - 1L)]
 		
 		data <- strsplit(data, split="\\|")
 		data <- lapply(data, as.numeric)
