@@ -579,6 +579,9 @@ methods::setMethod(
 			nc <- ncol(xVect)
 			xVect[ , seq_len(nc)] <- NULL 
 		}
+		
+		# NB we ***need** a table with the GVector--otherwise, subset_single_bracket does not work as expected
+		xVect$DUMMYDUMMY_ <- 1L:nrow(xVect)
 
 		vectFile <- tempfile(fileext = ".gpkg")
 		terra::writeVector(xVect, filename = vectFile, filetype = "GPKG", overwrite = TRUE)
