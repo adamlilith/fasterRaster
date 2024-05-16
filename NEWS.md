@@ -13,11 +13,18 @@ o Fixed bug in `plot()` arising from changing output of `writeRaster()` to `GRas
 o Fixed bug with `writeRaster()` failing to save if `datatype` was incorrect. Improved auto-assessment of raster `datatype` in `writeRaster()`.
 o Fixed bug in `plot()` due to `writeVector()` now returning a `GVector`.
 o Fixed bug in `arithmetic` when determining data type of an input raster.
+o `[` should work consistently for `GVector`s.
+o `extract()` extracts values from `GVector`s for large numbers of points without crashing
+o `vect()` correctly returns a `SpatVector`.
+o `crds()` works when the **GRASS** vector has an attribute table.
 
 ## Issues
 o Removed `rasterPrecision` option and now use internal function `.getPrec()` to ascertain the proper precision of rasters.
 o Display of levels of categorical rasters when using `plot()`.
 o Option to fail in creation of `GRaster` or `GVector` if it has a zero extent.
+
+## Changes
+o `complete.cases()` and `missing.cases()` return logical vectors for vectors with no data tables (was integer vectors).
 
 # fasterRaster 8.3.0.7007 (2024-05-01)
 
