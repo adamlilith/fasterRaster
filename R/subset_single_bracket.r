@@ -68,68 +68,99 @@ methods::setMethod(
 			out <- x
 		} else {
 
-			# will be deleting geometries from this copy
-			src <- .copyGSpatial(x)
-			cats <- .vCats(src)
-			cats <- sort(unique(cats))
-			iNot <- seq_len(nGeoms)
-			iNot <- iNot[!(iNot %in% i)]
-			cats <- cats[iNot] # will be removed
+			# # will be deleting geometries from this copy
+			# src <- .copyGSpatial(x)
+			# cats <- .vCats(src)
+			# cats <- sort(unique(cats))
+			# iNot <- seq_len(nGeoms)
+			# iNot <- iNot[!(iNot %in% i)]
+			# cats <- cats[iNot] # will be removed
 
-			# delete geometries in subsets bc removing large numbers of geometries at a time is inefficient
-			done <- FALSE
-			n <- 200000L # maximum number of cats to delete at a time (seqToSQL() usually stops far short)
-			# n <- 10L # maximum number of cats to delete at a time (seqToSQL() usually stops far short)
-			startFrom <- 1L
-			numRemoved <- 0L
-			stopAt <- min(length(cats), startFrom + n - 1L)
-			while (!done) {
+			# # delete geometries in subsets bc removing large numbers of geometries at a time is inefficient
+			# done <- FALSE
+			# n <- 200000L # maximum number of cats to delete at a time (seqToSQL() usually stops far short)
+			# # n <- 10L # maximum number of cats to delete at a time (seqToSQL() usually stops far short)
+			# startFrom <- 1L
+			# numRemoved <- 0L
+			# stopAt <- min(length(cats), startFrom + n - 1L)
+			# while (!done) {
 				
-				thisCats <- cats[startFrom:stopAt]
-				thisCats <- seqToSQL(thisCats)
+				# thisCats <- cats[startFrom:stopAt]
+				# thisCats <- seqToSQL(thisCats)
 
-				rgrass::execGRASS(
-					cmd = "v.edit",
-					map = src,
-					# type = gtype, # breaks
-					tool = "delete",
-					cats = thisCats,
-					flags = c(.quiet(), "overwrite")
-				)
+			# # <<< ORIGINAL >>>
+				# rgrass::execGRASS(
+					# cmd = "v.edit",
+					# map = src,
+					# # type = gtype, # breaks
+					# tool = "delete",
+					# cats = thisCats,
+					# flags = c(.quiet(), "overwrite")
+				# )
+			# # <<< end ORIGINAL >>>
 
-				# rgrass::execGRASS("v.build", map = src, option = "build", flags = c(.quiet(), "overwrite"))
+				# # args <- list(
+				# # 	cmd = "v.edit",
+				# # 	map = src,
+				# # 	# type = gtype, # breaks
+				# # 	tool = "delete",
+				# # 	cats = thisCats,
+				# # 	flags = c(.quiet(), "overwrite")
+				# # )
+				# # # if (geomtype(x) == "polygons") args$type <- "area"
+				# # # if (geomtype(x) == "points") args$flags <- c(args$flags, "b")
+				# # do.call(rgrass::execGRASS, args = args)
 
-				numRemoved <- numRemoved + attr(thisCats, "lastIndex")
-				if (numRemoved == length(cats)) {
-					done <- TRUE
-				} else {
-					startFrom <- startFrom + attr(thisCats, "lastIndex") # what was the index of the last used cat?
-					stopAt <- min(length(cats), startFrom + n)
-				}
+				# # rgrass::execGRASS("v.build", map = src, option = "build", flags = c(.quiet(), "overwrite"))
 
-			} # next removal
+				# numRemoved <- numRemoved + attr(thisCats, "lastIndex")
+				# if (numRemoved == length(cats)) {
+					# done <- TRUE
+				# } else {
+					# startFrom <- startFrom + attr(thisCats, "lastIndex") # what was the index of the last used cat?
+					# stopAt <- min(length(cats), startFrom + n)
+				# }
 
-			# check to see if all cats have been removed
-			# a hack... for some reason, seqToSQL may not list all cats
-			newCats <- .vCats(src)
-			badCats <- cats[cats %in% newCats]
-			if (length(badCats) > 0L) {
+			# } # next removal
+
+			# # check to see if all cats have been removed
+			# # a hack... for some reason, seqToSQL may not list all cats
+			# newCats <- .vCats(src)
+			# badCats <- cats[cats %in% newCats]
+			# if (length(badCats) > 0L) {
 			
-				badCats <- cats[cats %in% newCats]
-				thisCats <- seqToSQL(badCats)
+				# badCats <- cats[cats %in% newCats]
+				# thisCats <- seqToSQL(badCats)
 
-				rgrass::execGRASS(
-					cmd = "v.edit",
-					map = src,
-					# type = gtype, # breaks
-					tool = "delete",
-					cats = thisCats,
-					flags = c(.quiet(), "overwrite")
-				)
+				# rgrass::execGRASS(
+					# cmd = "v.edit",
+					# map = src,
+					# # type = gtype, # breaks
+					# tool = "delete",
+					# cats = thisCats,
+					# flags = c(.quiet(), "overwrite")
+				# )
 
-				newCats <- newCats[!(newCats %in% badCats)]
+				# newCats <- newCats[!(newCats %in% badCats)]
 			
-			}
+			# }
+
+			src <- .makeSourceName("subset_single_bracket_v_extract", "vector")
+			cats <- .vCats(sources(x))
+			cats <- unique(cats)
+			cats <- cats[cats %in% i] # selects same as GVector but wrong geometry
+			sqlCats <- seqToSQL(cats)
+			sqlCats <- as.character(sqlCats)
+			gtype <- geomtype(x, grass = TRUE)
+			
+			rgrass::execGRASS(
+				cmd = "v.extract",
+				input = sources(x),
+				output = src,
+				cats = sqlCats,
+				type = gtype,
+				flags = c(.quiet(), "overwrite")
+			)
 
 		} # not removing all and not removing nothing
 
@@ -195,7 +226,8 @@ methods::setMethod(
 		if (removeAll) {
 			out <- NULL
 		} else {
-			out <- .makeGVector(src, table = table, cats = newCats)
+			# out <- .makeGVector(src, table = table, cats = newCats)
+			out <- .makeGVector(src, table = table, cats = cats)
 		}
 
 	}
