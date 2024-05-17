@@ -3,12 +3,14 @@
 ## Functionality
 o Added function `flow()` for calculating flow of water across a landscape.
 o Added function `flowPath()` for calculating flow of water from specific points on a landscape.
+o `freq()` inserts category labels into results for for categorical `GRaster`s
 o Added function `geomorphons()` for identifying geomorphological features.
 o Added function `maskNA()` for converting non-`NA` cells or `NA` cells to a user-defined value.
 o `plot()` displays of levels of categorical rasters.
 o Can save layer-by-layer with `writeRaster()`.
 o Added ability to create `points` `GVector`s from numeric, matrices, or data frames using `fast()`
 o Improved auto-assessment of raster `datatype` in `writeRaster()`.
+o Updated `README` for 8.3.0.7013!
 
 ## Bug fixes
 o `[` works consistently for `GVector`s!!!!!
@@ -17,7 +19,7 @@ o Fixed installation issue related to `activeCat()<-` and `addCats()<-` (thank y
 o Fixed bug in `arithmetic` when determining data type of an input raster.
 o `crds()` works when the **GRASS** vector has an attribute table.
 o `extract()` extracts values from `GVector`s for large numbers of points without crashing
-o `plot()` works! (Previous issue arose fromm changing output of `writeRaster()` to `GRaster`).
+o `plot()` works! (Previous issue arose from changing output of `writeRaster()` to `GRaster`).
 o `rast()` correctly returns a `SpatRaster`.
 o `vect()` correctly returns a `SpatVector`.
 
