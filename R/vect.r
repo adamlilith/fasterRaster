@@ -35,8 +35,10 @@ setMethod(
 	signature(x = "GVector"),
 	function(x) {
 
-	out <- vect(x)
-	sf::st_as_sf(out)
+	filename <- paste0(omnibus::forwardSlash(tempfile()), ".gpkg")
+	writeVector(x, filename = filename, ...)
+	out <- sf::read_sf(filename)
+	out
 
 	} # EOF
 )
