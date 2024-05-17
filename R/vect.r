@@ -36,7 +36,7 @@ setMethod(
 	function(x) {
 
 	filename <- paste0(omnibus::forwardSlash(tempfile()), ".gpkg")
-	writeVector(x, filename = filename, ...)
+	writeVector(x, filename = filename, overwrite = TRUE)
 	out <- sf::read_sf(filename)
 	out
 

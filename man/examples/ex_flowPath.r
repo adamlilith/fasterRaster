@@ -27,10 +27,13 @@ plot(paths)
 plot(starts, pch = 1, add = TRUE)
 
 # Calculate flow paths with cell sequences:
-seqs <- flowPath(elev, starts, return = "seq")
+seqs <- flowPath(elevAnt, starts, return = "seq")
 
 plot(seqs)
 plot(starts, pch = 1, add = TRUE)
 
+# We can convert flow paths to lines:
+seqLines <- as.lines(seqs)
+plot(seqLines)
 
 }

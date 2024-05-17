@@ -31,7 +31,7 @@
 #'
 #' @param capstyle,endCapStyle Character: Vectors -- Style for ending the "cap" of buffers around lines. Valid options include `"rounded"`, `"square"`, and "`flat`".
 #'
-#' @param dissolve Logical (`GVector`s): If `FALSE` (default), construct a buffer for each geometry. If `TRUE`, dissolve all buffers after creation.
+#' @param dissolve Logical (`GVector`s): If `TRUE` (default), dissolve all buffers after creation. If `FALSE`, construct a buffer for each geometry. Note that overlapping buffers can cause this function to fail because it creates a topologically ambiguous polygon. Thus, using `dissolve = TRUE` is recommended.
 #'
 #' @seealso [terra::buffer()], [sf::st_buffer()], and modules `r.buffer`, `r.grow`, and `v.buffer` in **GRASS**
 #'
@@ -145,7 +145,7 @@ methods::setMethod(
 		x,
 		width,
 		capstyle = "round",
-		dissolve = FALSE
+		dissolve = TRUE
 	) {
 
 	# .message(msg = "buffer", message = "As of GRASS 8.4, terra's buffer() function is much faster, even for very large vectors.")

@@ -70,8 +70,17 @@ methods::setMethod(
 	tf <- tempfile(fileext = ".tif")
 	writeRaster(x, filename = tf, format = "GeoTIFF", overwrite = TRUE, warn = FALSE, datatype = dtype, ...)
 	out <- terra::rast(tf)
+	
+	facts <- is.factor(x)
+	if (any(facts)) {
+	
+		for (i in which(facts)) {
+			levels(out[[i]]) <- levels(x)[[i]]
+		}
+	
+	}
+	
 	names(out) <- names(x)
-	if (any(is.factor(x))) levels(out) <- levels(x)
 	terra::plot(out, ...)
 	
 	} # EOF

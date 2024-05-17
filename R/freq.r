@@ -160,6 +160,34 @@ methods::setMethod(
 		names(out)[i] <- names(x)[i]
 
 	} # next layer
+	
+	# add factor labels
+	facts <- is.factor(x)
+	if (any(facts)) {
+	
+		for (i in which(facts)) {
+		
+			xx <- x[[i]]
+			ac <- activeCat(xx)
+			catName <- names(levels(xx)[[1L]])[ac + 1L]
+			
+			labels <- levels(xx)[[1L]][[ac + 1L]]
+			vals <- levels(xx)[[1L]][[1L]]
+			
+			out[[i]] <- cbind(
+				out[[i]][ , 1L],
+				data.table::data.table(
+					DUMMY = labels[match(out[[i]][["value"]], vals)]
+				),
+				out[[i]][ , 2L]
+			)
+			
+			names(out[[i]])[2L] <- catName
+		
+		}
+	
+	}
+	
 	if (length(out) == 1L) out <- out[[1L]]
 	out
 
