@@ -111,12 +111,12 @@ Now, let's add a 1000-m buffer to the rivers using `buffer()`. As much as possib
 Note, though, that the output from `fasterRaster` is not necessarily guaranteed to be the same as output from the respective functions `terra`. This is because there are different methods to do the same thing, and the developers of `GRASS` may have chosen different methods than the developers of other GIS packages.
 ```
 # width in meters because CRS is projected
-river_buffers <- buffer(rivers, width = 1000)
+river_buffers <- buffer(rivers, width = 1000, dissolve = TRUE)
 ```
 
 Now, let's calculate the distances between the buffered areas and all cells on the raster map using `distance()`.
 ```
-dist_to_rivers_meters <- distance(elev, buffs)
+dist_to_rivers_meters <- distance(elev, river_buffers)
 ```
 
 Finally, let's plot the output.
@@ -128,6 +128,85 @@ plot(rivers, col = "blue", add = TRUE)
 
 <img src="dist_to_rivers.png"/>  
 
+Now, let's see if there is a difference between the frequency of different "geomorphons" between areas within 1000 m of a river and the region in general. A geomorphon is one of twelve idealized land forms (e.g., flat, valley, peak, slope, etc.).  We will calculate geomorphons for the entire region, then mask out areas outside the buffers.
+
+```
+geomorphs <- geomorphons(elev)
+geomorphs_rivers <- mask(geomorphs, river_buffers)
+
+geos <- c(geomorphs, geomorphs_rivers)
+names(geos) <- c("Region", "Rivers")
+plot(geos)
+
+```
+
+<img src="geomorphons.png"/>  
+
+Finally, we'll calculate the frequency of each type of geomorphon for the entire region and for the river valleys.
+```
+# Frequency of each geomophon:
+freq_region <- freq(geomorphs)
+freq_rivers <- freq(geomorphs_rivers)
+
+# Number of non-NA cells in each raster:
+n_region <- nonnacell(geomorphs)
+n_rivers <- nonnacell(geomorphs_rivers)
+
+# Express as relative frequency:
+freq_region$freq <- freq_region$count / n_region
+freq_rivers$freq <- freq_rivers$count / n_rivers
+
+# View frequencies:
+print(freq_region, digits = 2)
+
+Key: <value>
+    value geomorphon  count    freq
+    <int>     <char>  <int>   <num>
+ 1:     1       flat  63256 0.13504
+ 2:     2       peak    827 0.00177
+ 3:     3      ridge  17885 0.03818
+ 4:     4   shoulder  18561 0.03962
+ 5:     5       spur  46697 0.09969
+ 6:     6      slope 238065 0.50823
+ 7:     7     hollow  40045 0.08549
+ 8:     8  footslope  23166 0.04946
+ 9:     9     valley  19463 0.04155
+10:    10        pit    453 0.00097
+
+
+print(freq_rivers, digits = 2)
+
+Key: <value>
+    value geomorphon count   freq
+    <int>     <char> <int>  <num>
+ 1:     1       flat 14436 0.1614
+ 2:     2       peak   145 0.0016
+ 3:     3      ridge  2984 0.0334
+ 4:     4   shoulder  2989 0.0334
+ 5:     5       spur  8643 0.0966
+ 6:     6      slope 44432 0.4968
+ 7:     7     hollow  7056 0.0789
+ 8:     8  footslope  4499 0.0503
+ 9:     9     valley  4157 0.0465
+10:    10        pit   104 0.0012
+```
+
+To complete the comparison, we'll graph their relative frequencies using **ggplot2** (not required by **FasterRaster**).
+```
+library(ggplot2)
+
+freq_region$locale <- "region"
+freq_rivers$locale <- "rivers"
+freqs <- rbind(freq_region, freq_rivers)
+
+ggplot(freqs, aes(x = geomorphon, y = freq, fill = locale)) +
+   geom_bar(stat = "identity", position = "dodge") +
+   xlab("Geomorphon") + ylab("Frequency")
+```
+<img src="geomorphon_barplot.png"/>  
+
+We can see that flat areas are a bit more common closer to rivers, whereas slopes are less common.
+
 And that's how it's done!  You can do almost anything in `fasterRaster`  you can do with `terra`. The examples above do not show the advantage of `fasterRaster` because the they do not use in large-in-memory/large-on-disk spatial datasets. For very large datasets, `fasterRaster` can be much faster! For example, for a large raster (many cells), the `distance()` function in `terra` can take many days to run and even crash `R`, whereas in `fasterRaster`, it could take just a few minutes or hours.
 
 ## Exporting `GRaster`s and `GVector`s from a `GRASS` session
@@ -136,22 +215,21 @@ You can convert a `GRaster` to a `SpatRaster` raster using `rast()`:
 
 `terra_elev <- rast(elev)`  
 
-To convert a `GVector` to the `terra` package's `SpatVector` format or to an `sf` vector, use `vect()` or `st_as_sf()`:
+To convert a `GVector` to the `terra` package's `SpatVector`, use `vect()`:
 
 ```
-terra_r_ivers <- vect(rivers)
-sf_rivers <- st_as_sf(rivers)
+terra_rivers <- vect(rivers)
 ```
 
-You can use `writeRaster()` and `writeVector()` to save `fasterRaster` rasters and vectors directly to disk. This will always be faster than using `rast()`, `vect()`, or `st_as_sf()` and then saving.
+You can use `writeRaster()` and `writeVector()` to save `fasterRaster` rasters and vectors directly to disk. This will *always* be faster than using `rast()` or `vect()` and then saving.
 ```
 elev_temp_file <- tempfile(fileext = ".tif") # save as GeoTIFF
 writeRaster(elev, elev_temp_file)
 
 vect_temp_shp <- tempfile(fileext = ".shp") # save as shapefile
 vect_temp_gpkg <- tempfile(fileext = ".gpkg") # save as GeoPackage
-writeRaster(rivers, vect_temp_shp)
-writeRaster(rivers, vect_temp_gpkg)
+writeVector(rivers, vect_temp_shp)
+writeVector(rivers, vect_temp_gpkg)
 ```
 
 # Functions
@@ -161,17 +239,17 @@ To see a detailed list of functions available in `fasterRaster`, attach the pack
 
 1. Loading rasters and vectors directly from disk using `fast()`, rather than converting `terra` or `sf` objects is faster. Why? Because if the object does not have a file to which the `R` object points, `fast()` has to save it to disk first as a GeoTIFF or GeoPackage file, then load it into `GRASS`.
 
-2. Similarly, saving `GRaster`s and `GVector`s directly to disk will always be faster than converting them to `SpatRaster`s, `SpatVector`s, or `sf` vectors using `rast()`, `vect()`, or `st_as_sf()`, then saving them. Why? Because these functions actually save the file to disk then uses the respective function from the respective package to connect to the file.
+2. Similarly, saving `GRaster`s and `GVector`s directly to disk will always be faster than converting them to `SpatRaster`s or `SpatVector` using `rast()` or `vect()`, then saving them. Why? Because these functions actually save the file to disk then uses the respective function from the respective package to connect to the file.
 
-3. When you use `writeRaster()`, set the `datatype` argument appropriately. Otherwise, it will be optimized automatically, and this can take a long time.
+3. Every time you switch between using a `GRaster` or `GVector` with a different coordinate reference system (CRS), `GRASS` has to spend a few second changing to that CRS. So, you can save some time by doing as much work as possible with objects in one CRS, then switching to work on objects in another CRS.
 
-4. Every time you switch between using a `GRaster` or `GVector` with a different coordinate reference system (CRS), `GRASS` has to spend a few second changing to that CRS. So, you can save some time by doing as much work as possible with objects in one CRS, then switching to work on objects in another CRS.
+4. By default, `fasterRaster` use 2 cores and 1024 MB (1 GB) of memory for `GRASS` modules that allow users to specify these values. You can set these to higher values using `faster()` and thus potentially speed up some calculations. Functions in newer versions of `GRASS` have more capacity to use these options, so updating `GRASS` to the latest version can help, too.
 
-5. By default, `fasterRaster` use 2 cores and 1024 MB (1 GB) of memory for `GRASS` modules that allow users to specify these values. You can set these to higher values using `faster()` and thus potentially speed up some calculations. Functions in newer versions of `GRASS` have more capacity to use these options, so updating `GRASS` to the latest version can help, too.
+5. Compared to **terra** and **sf**, **fasterRaster** is *not* faster with vectors, so if you can, do vector processing with those packages first.
 
 # Versioning
 
-`fasterRaster` versions will look something like `8.3.1.2`, or more generally, `M1.M2.S1.S2`. Here, `M1.M2` will mirror the version of `GRASS` for which `fasterRaster` was built and tested. For example, `fasterRaster` version 8.3 will work using `GRASS` 8.3 (and any earlier versions starting from 8.0). The values in `S1.S2` refer to "major" and "minor" versions of `fasterRaster`.  That is, a change in the value of `S1` (e.g., from `8.3.1.0` to `8.3.2.0`) indicates changes that potentially break older code developed with a prior version of `fasterRaster`.  A change in `S2` refers to a bug fix, additional functionaliy in an existing function, or the addition of an entirely new function.
+`fasterRaster` versions will look something like `8.3.1.2`, or more generally, `M1.M2.S1.S2`. Here, `M1.M2` will mirror the version of `GRASS` for which `fasterRaster` was built and tested. For example, `fasterRaster` version 8.3 will work using `GRASS` 8.3 (and any earlier versions starting from 8.0). The values in `S1.S2` refer to "major" and "minor" versions of `fasterRaster`.  That is, a change in the value of `S1` (e.g., from `8.3.1.0` to `8.3.2.0`) indicates changes that potentially break older code developed with a prior version of `fasterRaster`.  A change in `S2` refers to a bug fix, additional functionality in an existing function, or the addition of an entirely new function.
 
 Note that the `M1.M2` and `S1.S2` increment independently. For example, if the version changes from `8.3.1.5` to `8.4.1.5`, then the new version has been tested on `GRASS` 8.4, but code developed with version `8.3.1.X` of `fasterRaster` should still work.
 
@@ -185,7 +263,7 @@ Note that the `M1.M2` and `S1.S2` increment independently. For example, if the v
 * Roger Bivand's [`rgrass`](https://cran.r-project.org/package=rgrass) package allows users to call any `GRASS` function with all of its functionality, which in some cases is far beyond what is allowed by `fasterRaster`.
 
 # Citation
-A publication is in the works(!), but as of February 2024, there is not as of yet a package-specific citation for **fasterRaster**. However, the package was first used in:
+A publication is forthcoming(!), but as of February 2024, there is not as of yet a package-specific citation for **fasterRaster**. However, the package was first used in:
 
 Morelli*, T.L., Smith*, A.B., Mancini, A.N., Balko, E. A., Borgenson, C., Dolch,R., Farris, Z., Federman, S., Golden, C.D., Holmes, S., Irwin, M., Jacobs,R.L., Johnson, S., King, T., Lehman, S., Louis, E.E. Jr., Murphy, A.,Randriahaingo, H.N.T., Lucien,Randriannarimanana, H.L.L.,Ratsimbazafy, J.,Razafindratsima, O.H., and Baden, A.L. 2020. The fate of Madagascar’s rainforest habitat.  *Nature Climate Change* 10:89-96. * Equal contribution DOI: <a href="https://doi.org/10.1038/s41558-019-0647-x">https://doi.org/10.1038/s41558-019-0647-x</a>.
 
