@@ -3,14 +3,17 @@
 \name{replaceNAs,data.frame-method}
 \alias{replaceNAs,data.frame-method}
 \alias{replaceNAs}
+\alias{replaceNAs,matrix-method}
 \alias{replaceNAs,data.table-method}
 \alias{replaceNAs,numeric-method}
 \alias{replaceNAs,integer-method}
 \alias{replaceNAs,logical-method}
 \alias{replaceNAs,character-method}
-\title{Replace NAs in a data.table column with another value}
+\title{Replace NAs in a data.table or data.frame column, or in a vector}
 \usage{
 \S4method{replaceNAs}{data.frame}(x, replace, cols = NULL)
+
+\S4method{replaceNAs}{matrix}(x, replace, cols = NULL)
 
 \S4method{replaceNAs}{data.table}(x, replace, cols = NULL)
 
@@ -23,17 +26,17 @@
 \S4method{replaceNAs}{character}(x, replace)
 }
 \arguments{
-\item{x}{A \code{data.table} or \code{data.frame}, or a vector of numeric, integer, logical, or character values.}
+\item{x}{A \code{data.table} or \code{data.frame} or \code{matrix}, or a vector of numeric, integer, logical, or character values.}
 
 \item{replace}{A value of any atomic class (numeric, integer, character, Date, etc.): Value to to replace \code{NA}s.}
 
 \item{cols}{\code{NULL}, character, numeric, integer, or logical vector: Indicates columns for which to replace \code{NA}s. If \code{NULL}, then all columns will have \code{NA}s replaced. If a character, this is the column name(s). If numeric or integer, this is the columns' indices. If logical, columns with \code{TRUE} have \code{NA}s replaced. If a logical vector has fewer than the total number of columns, it will be recycled.}
 }
 \value{
-A \code{data.table} or \code{data.frame}.
+A \code{data.table}, \code{data.frame}, \code{matrix}, or vector.
 }
 \description{
-This function replaces \code{NA}s in one or more \code{data.table} columns with a user-defined value.
+This function replaces \code{NA}s in one or more \code{data.table}, \code{data.frame}, or \code{matrix} columns, or in vectors, with a user-defined value.
 }
 \examples{
 

@@ -2,8 +2,6 @@
 #'
 #' @description **`GRaster`s**: You can do arithmetic operations on `GRaster`s and using normal operators in **R**: `+`, `-`, `*`, `/`, `^`, `%%` (modulus), and `%/%` (integer division). 
 #'
-#' Note that for `GRaster`s, the precision of the result will be determined by the `rasterPrecision` option, which can be set using [faster()]. The default is `"double"`, which is precise to about the 15th to 17th decimal place. This be reduced to the 6th to 9th decimal place by setting this to `"float"`. This reduces accuracy but also reduces memory requirements.
-#'
 #' **`GVector`s**: You can also do arithmetic operations on `GVector`s:\cr\cr
 #' `+` operator: Same as [union()]\cr
 #' `-` operator: Same as [erase()]\cr
@@ -29,12 +27,13 @@ methods::setMethod(
 
 		e2 <- as.integer(e2)
 		if (is.na(e2)) e2 <- "null()"
-		prec <- faster("rasterPrecision")
 		
 		for (i in 1L:nlyr(e1)) {
 		
 			src <- .makeSourceName("math", "rast")
 			oper <- as.vector(.Generic)[1L]
+			prec <- .getPrec(e1[[i]], oper)
+			
 			ex <- if (oper == "%/%") {
 				paste(src, "= floor(", prec, "(", sources(e1)[i], ") /", e2, ")")
 			} else if (oper == "%%") {
@@ -71,12 +70,13 @@ methods::setMethod(
 
 		e1 <- as.integer(e1)
 		if (is.na(e1)) e1 <- "null()"
-  		prec <- faster("rasterPrecision")
 		
 		for (i in 1L:nlyr(e2)) {
 		
 			src <- .makeSourceName("math", "rast")
 			oper <- as.vector(.Generic)[1L]
+			prec <- .getPrec(e2[[i]], oper)
+
 			ex <- if (oper == "%/%") {
 				paste(src, "= floor(", e1, "/ ", prec, "(", sources(e2)[i], "))")
 			} else if (oper == "%%") {
@@ -112,12 +112,13 @@ methods::setMethod(
 		.region(e1)
 
 		if (is.na(e2)) e2 <- "null()"
-  		prec <- faster("rasterPrecision")
 		
 		for (i in 1L:nlyr(e1)) {
 		
 			src <- .makeSourceName("math", "rast")
 			oper <- as.vector(.Generic)[1L]
+			prec <- .getPrec(e1[[i]], oper)
+
 			ex <- if (oper == "%/%") {
 				paste(src, "= floor(", prec, "(", sources(e1)[i], ") /", e2, ")")
 			} else if (oper == "%%") {
@@ -153,12 +154,13 @@ methods::setMethod(
   		.region(e1)
 
 		if (is.na(e2)) e2 <- "null()"
-  		prec <- faster("rasterPrecision")
 		
 		for (i in 1L:nlyr(e1)) {
 		
 			src <- .makeSourceName("math", "rast")
 			oper <- as.vector(.Generic)[1L]
+			prec <- .getPrec(e1[[i]], oper)
+			
 			ex <- if (oper == "%/%") {
 				paste(src, "= floor(", prec, "(", sources(e1)[i], ") /", e2, ")")
 			} else if (oper == "%%") {
@@ -195,11 +197,11 @@ methods::setMethod(
 
 		if (is.na(e1)) e1 <- "null()"
 		oper <- as.vector(.Generic)[1L]
-  		prec <- faster("rasterPrecision")
 		
 		for (i in 1L:nlyr(e2)) {
 		
 			src <- .makeSourceName("math", "rast")
+			prec <- .getPrec(e2[[i]], oper)
 			ex <- if (oper == "%/%") {
 				paste(src, "= floor(", e1, "/ ", prec, "(", sources(e2)[i], "))")
 			} else if (oper == "%%") {
@@ -235,12 +237,13 @@ methods::setMethod(
 		.region(e2)
 
 		if (is.na(e1)) e1 <- "null()"
-  		prec <- faster("rasterPrecision")
 		
 		for (i in 1L:nlyr(e2)) {
 		
 			src <- .makeSourceName("math", "rast")
 			oper <- as.vector(.Generic)[1L]
+			prec <- .getPrec(e2[[i]], oper)
+
 			ex <- if (oper == "%/%") {
 				paste(src, "= floor(", e1, " / ", prec, "(", sources(e2)[i], "))")
 			} else if (oper == "%%") {
@@ -304,7 +307,6 @@ methods::setMethod(
 		.region(e1)
 
 		oper <- as.vector(.Generic)[1L]
-  		prec <- faster("rasterPrecision")
 		
 		if (nlyr(e1) == nlyr(e2)) {
 
@@ -313,14 +315,17 @@ methods::setMethod(
 				name <- "layer"
 				src <- .makeSourceName("arithmetic", "rast")
 
+				prec1 <- .getPrec(e1[[i]], oper)
+				prec2 <- .getPrec(e2[[i]], oper)
+
 				ex <- if (oper == "%/%") {
-					paste0(src, " = floor(", prec, "(", sources(e1)[i], ") / ", prec, "(", sources(e2)[i], "))")
+					paste0(src, " = floor(", prec1, "(", sources(e1)[i], ") / ", prec2, "(", sources(e2)[i], "))")
 				} else if (oper == "%%") {
-					paste0(src, " = ", prec, "(", sources(e1)[i], ") % ", prec, "(", sources(e2)[i], ")")
+					paste0(src, " = ", prec1, "(", sources(e1)[i], ") % ", prec2, "(", sources(e2)[i], ")")
 				} else if (oper == "^") {
-					paste0(src, " = exp(", prec, "(", sources(e1)[i], "), ", prec, "(", sources(e2)[i], "))")
+					paste0(src, " = exp(", prec1, "(", sources(e1)[i], "), ", prec2, "(", sources(e2)[i], "))")
 				} else {
-					paste0(src, "= ", prec, "(", sources(e1)[i], ")  ", oper, " ", prec, "(", sources(e2)[i], ")")
+					paste0(src, "= ", prec1, "(", sources(e1)[i], ")  ", oper, " ", prec2, "(", sources(e2)[i], ")")
 				}
 				
 				if (i == 1L) {
@@ -334,19 +339,22 @@ methods::setMethod(
 			
 		} else if (nlyr(e1) == 1L & nlyr(e2) > 1L) {
 
+			prec1 <- .getPrec(e1, oper)
 			for (i in 1L:nlyr(e2)) {
 			
 				name <- "layer"
 				src <- .makeSourceName("arithmetic", "rast")
 
+				prec2 <- .getPrec(e2[[i]], oper)
+
 				ex <- if (oper == "%/%") {
-					paste0(src, " = floor(", prec, "(", sources(e1), ") / ", prec, "(", sources(e2)[i], "))")
+					paste0(src, " = floor(", prec1, "(", sources(e1), ") / ", prec2, "(", sources(e2)[i], "))")
 				} else if (oper == "%%") {
-					paste0(src, " = ", prec, "(", sources(e1), ") % ", prec, "(", sources(e2)[i], ")")
+					paste0(src, " = ", prec1, "(", sources(e1), ") % ", prec2, "(", sources(e2)[i], ")")
 				} else if (oper == "^") {
-					paste0(src, " = exp(", prec, "(", sources(e1), "), ", prec, "(", sources(e2)[i], "))")
+					paste0(src, " = exp(", prec1, "(", sources(e1), "), ", prec2, "(", sources(e2)[i], "))")
 				} else {
-					paste0(src, "= ", prec, "(", sources(e1), ")  ", oper, " ", prec, "(", sources(e2)[i], ")")
+					paste0(src, "= ", prec1, "(", sources(e1), ")  ", oper, " ", prec2, "(", sources(e2)[i], ")")
 				}
 				
 				if (i == 1L) {
@@ -360,19 +368,22 @@ methods::setMethod(
 			
 		} else if (nlyr(e1) > 1L & nlyr(e2) == 1L) {
 
+			prec2 <- .getPrec(e2, oper)
 			for (i in 1L:nlyr(e1)) {
 			
 				name <- paste0(names(e1)[i], "_", names(e2))
 				src <- .makeSourceName("arithmetic", "rast")
 
+				prec1 <- .getPrec(e1[[i]], oper)
+
 				ex <- if (oper == "%/%") {
-					paste0(src, " = floor(", prec, "(", sources(e1)[i], ") / ", prec, "(", sources(e2), "))")
+					paste0(src, " = floor(", prec1, "(", sources(e1)[i], ") / ", prec2, "(", sources(e2), "))")
 				} else if (oper == "%%") {
-					paste0(src, " = ", prec, "(", sources(e1)[i], ") % ", prec, "(", sources(e2), ")")
+					paste0(src, " = ", prec1, "(", sources(e1)[i], ") % ", prec2, "(", sources(e2), ")")
 				} else if (oper == "^") {
-					paste0(src, " = exp(", prec, "(", sources(e1)[i], "), ", prec, "(", sources(e2), "))")
+					paste0(src, " = exp(", prec1, "(", sources(e1)[i], "), ", prec2, "(", sources(e2), "))")
 				} else {
-					paste0(src, "= ", prec, "(", sources(e1)[i], ") ", oper, " ", prec, "(", sources(e2), ")")
+					paste0(src, "= ", prec1, "(", sources(e1)[i], ") ", oper, " ", prec2, "(", sources(e2), ")")
 				}
 				
 				if (i == 1L) {
@@ -431,4 +442,19 @@ methods::setMethod(
 	
 }
 
+#' Get function for precision of `GRaster`
+#'
+#' @param x A `GRaster`.
+#' @param oper Character or `NULL`: Operator
+#'
+#' @returns Either "" (empty) or "double".
+#' @noRd
+.getPrec <- function(x, oper) {
 
+	if ((is.null(oper) || oper %in% c("/", "%/%")) & any(is.cell(x))) {
+		"double"
+	} else {
+		""
+	}
+
+}

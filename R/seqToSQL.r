@@ -6,7 +6,9 @@
 #'
 #' @param maxChar Integer or numeric: Maximum number of characters to include in the output. If the output has more than this number of characters, the remainder is dropped, and the `trim` attribute of the output is set to `TRUE`. The default is 29900, which is the maximum length of an SQL statement that **GRASS** seems to be able to handle (minus a safety margin).
 #'
-#' @returns A character string. The string has two attributes. The `trim` attribute is `TRUE` or `FALSE`, depending on whether `maxChar` was reached or not (and subsequent numbers dropped from the string). The `lastIndex` attribute is the last index of `x` that was processed (i.e., the index of the last value in the output).
+#' @param sort Logical: If `TRUE` (default), sort `x` before converting to SQL. This can reduce the length of the output.
+#'
+#' @returns A character string. The string has three attributes. The `trim` attribute is `TRUE` or `FALSE`, depending on whether `maxChar` was reached or not (and subsequent numbers dropped from the string). The `lastIndex` attribute is the last index of `x` that was processed (i.e., the index of the last value in the output), and the number of values represented by the output.
 #'
 #' @examples
 #'
@@ -24,9 +26,13 @@
 #' seqToSQL(x, maxChar = 5)
 #' seqToSQL(y, maxChar = 8)
 #'
+#' seqToSQL(10:1, sort = FALSE)
+#' seqToSQL(10:1, sort = TRUE)
+#'
 #' @export
-seqToSQL <- function(x, maxChar = 29900) {
+seqToSQL <- function(x, maxChar = 29900, sort = TRUE) {
 
+	if (sort) x <- sort(x)
 	x <- as.integer(x)
 	x <- unique(x)
 	n <- length(x)

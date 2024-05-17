@@ -4,15 +4,17 @@
 \alias{seqToSQL}
 \title{Format a numeric series into an SQL value call}
 \usage{
-seqToSQL(x, maxChar = 29900)
+seqToSQL(x, maxChar = 29900, sort = TRUE)
 }
 \arguments{
 \item{x}{A vector of numerical values. The vector should be sorted from  lowers to highest for the most efficient "compression" of sequential ranges. Values will be coerced to class \code{integer}.}
 
 \item{maxChar}{Integer or numeric: Maximum number of characters to include in the output. If the output has more than this number of characters, the remainder is dropped, and the \code{trim} attribute of the output is set to \code{TRUE}. The default is 29900, which is the maximum length of an SQL statement that \strong{GRASS} seems to be able to handle (minus a safety margin).}
+
+\item{sort}{Logical: If \code{TRUE} (default), sort \code{x} before converting to SQL. This can reduce the length of the output.}
 }
 \value{
-A character string. The string has two attributes. The \code{trim} attribute is \code{TRUE} or \code{FALSE}, depending on whether \code{maxChar} was reached or not (and subsequent numbers dropped from the string). The \code{lastIndex} attribute is the last index of \code{x} that was processed (i.e., the index of the last value in the output).
+A character string. The string has three attributes. The \code{trim} attribute is \code{TRUE} or \code{FALSE}, depending on whether \code{maxChar} was reached or not (and subsequent numbers dropped from the string). The \code{lastIndex} attribute is the last index of \code{x} that was processed (i.e., the index of the last value in the output), and the number of values represented by the output.
 }
 \description{
 This function takes as its argument a vector of integers or numeric values, and converts sequential runs to a range while keeping non-sequential values as-is. For example, \code{c(1, 5, 6, 7, 8, 9, 15, 16, 20)} becomes \code{"1,5-9,15-16,20"}. This reduces the number of characters necessary to supply to a SQL condition. This function is mainly of use to developers.
@@ -32,5 +34,8 @@ seqToSQL(y)
 
 seqToSQL(x, maxChar = 5)
 seqToSQL(y, maxChar = 8)
+
+seqToSQL(10:1, sort = FALSE)
+seqToSQL(10:1, sort = TRUE)
 
 }

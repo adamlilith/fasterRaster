@@ -29,7 +29,7 @@
 #'
 #' @param ... Additional arguments to send to **GRASS** module [`v.out.ogr`](https://grass.osgeo.org/grass84/manuals/v.out.ogr.html) in **GRASS**.
 #'
-#' @returns Invisibly returns a `SpatVector`. Also saves the vector to disk.
+#' @returns Invisibly returns a `GRaster` (the input, `x`). Also saves the vector to disk.
 #'
 #' @seealso [terra::writeVector()], [sf::st_write()], module [`v.out.ogr`](https://grass.osgeo.org/grass84/manuals/v.out.ogr.html) in **GRASS**
 #'
@@ -132,11 +132,12 @@ setMethod(
 
 	do.call(rgrass::execGRASS, args)
 	
-	out <- suppressWarnings(terra::vect(filename))
-	if (nrow(x) > 0L && any(names(out) == "cat")) out$cat <- NULL
-	if (nrow(x) > 0L && any(names(out) == "cat_")) out$cat_ <- NULL
+	# out <- suppressWarnings(terra::vect(filename))
+	# if (nrow(x) > 0L && any(names(out) == "cat")) out$cat <- NULL
+	# if (nrow(x) > 0L && any(names(out) == "cat_")) out$cat_ <- NULL
 
-	invisible(out)
+	# invisible(out)
+	invisible(x)
 
 	} # EOF
 )

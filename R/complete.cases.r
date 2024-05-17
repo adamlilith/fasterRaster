@@ -2,7 +2,7 @@
 #'
 #' @description When applied to a [categorical][tutorial_raster_data_types] `GRaster`, `compete.cases()` returns `TRUE` for each row of the "levels" table that has no `NA`s in it. In contrast, `missing.cases()` returns `TRUE` for each row that has at least one `NA` in it. If the raster is not categorical, then `NA` is returned.
 #'
-#' When applied to a `GVector` with a data table, `complete.cases()` returns `TRUE` for each row where there are no `NA`s. if the `GVector` has no data table, then a vector of integers from 1 to the total number of geometries will be returned. In contrast, `missing.cases()` returns `TRUE` for every row that has at least one `NA` in it. If the `GVector` has no data table, then `NA` is returned.
+#' When applied to a `GVector` with a data table, `complete.cases()` returns `TRUE` for each row where there are no `NA`s. if the `GVector` has no data table, then a vector of `TRUE` values the same length as the total number of geometries will be returned. In contrast, `missing.cases()` returns `TRUE` for every row that has at least one `NA` in it. If the `GVector` has no data table, then a vector of `FALSE` values is returned.
 #'
 #' @param ... A `GRaster` or `GVector`.
 #'
@@ -28,7 +28,7 @@ methods::setMethod(
 	function(..., levels = TRUE) {
 	
 	dots <- list(...)
-	if (length(dots) != 1L) stop("Can only assess complete cases for a single\n  GRaster at a time (though it can be multi-layered).")
+	if (length(dots) != 1L) stop("Can only assess complete cases for a single GRaster at a time (though it can be multi-layered).")
 	x <- dots[[1L]]
 	
 	if (levels) {
@@ -68,7 +68,7 @@ methods::setMethod(
 	
 	table <- x@table
 	if (nrow(table) == 0L) {
-		out <- seq_len(ngeom(x))
+		out <- rep(TRUE, ngeom)
 	} else {
 		out <- stats::complete.cases(table)
 	}
@@ -86,7 +86,7 @@ methods::setMethod(
 	function(..., levels = TRUE) {
 
 	dots <- list(...)
-	if (length(dots) != 1L) stop("Can only assess complete cases for a single\n  GRaster at a time (though it can be multi-layered).")
+	if (length(dots) != 1L) stop("Can only assess complete cases for a single GRaster at a time (though it can be multi-layered).")
 	x <- dots[[1L]]
 	
 	if (levels) {
@@ -126,12 +126,11 @@ methods::setMethod(
 	
 	table <- x@table
 	if (nrow(table) == 0L) {
-		out <- NA
+		rep(FALSE, ngeom(x))
 	} else {
 		out <- !stats::complete.cases(table)
 	}
 	out
-	
 	
 	} # EOF
 )

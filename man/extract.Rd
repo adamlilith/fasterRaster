@@ -112,6 +112,7 @@ coast <- fast(madCoast4) # polygons vector
 extract(elev, dypsis, xy = TRUE)
 
 # Extract from categorical raster at points:
+cover <- project(cover, elev)
 extract(cover, dypsis)
 extract(cover, dypsis, cats = TRUE)
 

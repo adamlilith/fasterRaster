@@ -1,6 +1,9 @@
 #' Get or set the column with category labels in a categorical raster
 #'
-#' @description For a single layer of a [categorical][tutorial_raster_data_types] `GRaster`, `activeCat()` returns the column of the labels to be matched to each value in the raster. `activeCats()` does the same, but for all layers of a `GRaster`. `activeCat()<-` sets the column to be used as category labels. Note that following [terra::activeCat()], the first column in the "levels" table is ignored, so an "active category" value of 1 means the second column is used as labels, a value of 2 means the third is used, and so on.
+#' @description These functions return or set the column of the labels to be matched to each value in the raster of a [categorical][tutorial_raster_data_types] `GRaster`. *Important*: Following [terra::activeCat()], the first column in the "levels" table is ignored, so an "active category" value of 1 means the second column is used as labels, a value of 2 means the third is used, and so on.
+#' * `activeCat()` returns the column of the labels to be matched to each value in the raster for a single raster layer.
+#' * `activeCats()` does the same, but for all layers of a `GRaster`.
+#' * `activeCat()<-` sets the column to be used as category labels.
 #'
 #' @param x A categorical `GRaster`.
 #' 
@@ -88,8 +91,8 @@ methods::setMethod(
 #' @exportMethod activeCat<-
 methods::setMethod(
 	f = "activeCat<-",
-	signature = c(x = "GRaster", value = "numeric"),
-	function(x, value, layer = 1) {
+	signature = c(x = "GRaster"),
+	function(x, layer = 1, value) {
 	
 	.activeCatAssign(x = x, layer = layer, value = value)
 	
@@ -101,8 +104,8 @@ methods::setMethod(
 #' @exportMethod activeCat<-
 methods::setMethod(
 	f = "activeCat<-",
-	signature = c(x = "GRaster", value = "integer"),
-	function(x, value, layer = 1) {
+	signature = c(x = "GRaster"),
+	function(x, layer = 1, value) {
 	
 	.activeCatAssign(x = x, layer = layer, value = value)
 	
@@ -114,8 +117,8 @@ methods::setMethod(
 #' @exportMethod activeCat<-
 methods::setMethod(
 	f = "activeCat<-",
-	signature = c(x = "GRaster", value = "character"),
-	function(x, value, layer = 1) {
+	signature = c(x = "GRaster"),
+	function(x, layer = 1, value) {
 	
 	.activeCatAssign(x = x, layer = layer, value = value)
 	

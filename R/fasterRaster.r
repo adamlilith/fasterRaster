@@ -69,6 +69,7 @@
 #' [app()]: Apply a user-defined function to multiple layers of a `GRaster` (with helper functions [appFuns()] and [appCheck()])\cr
 #' [c()]: "Stack" two or more rasters\cr
 #' [cellSize()]: Cell area\cr
+#' [classify()]: Replace ranges of cell values with a single value\cr
 #' [clump()]: Group adjacent cells with similar values\cr
 #' [combineCats()]: Combine values from two or more categorical and/or integer rasters\cr
 #' [combineLevels()]: Combine the "levels" tables of two or more categorical `GRaster`s\cr
@@ -80,9 +81,12 @@
 #' [extend()]: Add rows and columns to a `GRaster`\cr
 #' [extract()]: Extract values from a `GRaster` at locations of a `GVector`\cr
 #' [fillNAs()]: Fill `NA` cells\cr
+#' [flow()]: Identify watershed basins and direction and accumulation of flow\cr
+#' [flowPath()]: Path of water flow across a landscape\cr
 #' [focal()]: Calculate cell values based on values of nearby cells\cr
 #' [fractalRast()]: Create a fractal `GRaster`\cr
 #' [fragmentation()]: Landscape fragmentation class from Riitters et al. (2020)\cr
+#' [geomorphons()]: Identify terrain feature types\cr
 #' [global()]: Summary statistics across cells of each `GRaster` layer\cr
 #' [`hillshade()`][shade]: Create a hillshade `GRaster`\cr
 #' [hist()]: Histogram of `GRaster` values\cr
@@ -91,6 +95,7 @@
 #' [kernel()]: Kernel density estimator of points\cr
 #' [longlat()]: Create longitude/latitude rasters\cr
 #' [mask()]: Remove values in a `GRaster` based on values in another `GRaster` or vector\cr
+#' [maskNA()]: Mask all non-NA cells or all NA cells\cr
 #' [match()], \code{\link[fasterRaster]{%in%}}, and \code{\link[fasterRaster]{%notin%}}: Find which cells of a `GRaster` match or do not match certain values\cr
 #' [merge()]: Combine two or more rasters with different extents and fill in `NA`s\cr
 #' \code{\link[fasterRaster]{names<-}}: Assign names to a `GRaster`\cr
@@ -109,6 +114,7 @@
 #' [scale()]: Subtract means and divide by standard deviations\cr
 #' [selectRange()]: Select values from rasters in a stack based on values in another `GRaster`\cr
 #' [spatSample()]: Randomly points from a `GRaster`\cr
+#' [subst()]: Re-assign cell values\cr
 #' [sun()]: Solar radiance and irradiance\cr
 #' [terrain()]: Slope, aspect, curvature, and partial slopes\cr
 #' [thinLines()]: Reduce linear features on a `GRaster` so linear features are 1 cell wide\cr
@@ -118,6 +124,16 @@
 #' [zonal()]: Statistics (mean, sum, etc.) on areas of a `GRaster` defined by sets of cells with the same values in another `GRaster`, or by geometries in a `GVector`\cr
 #' [zonalGeog()]: Geographic statistics (area, perimeter, fractal dimension, etc.) for sets of cells with the same values\cr
 #'
+#' ## Functions for analysis of terrain and flow of water across landscapes
+#' [as.contour()]: Contour lines from a `GRaster`\cr
+#' [flow()]: Identify watershed basins and direction and accumulation of flow\cr
+#' [flowPath()]: Path of water flow across a landscape\cr
+#' [geomorphons()]: Identify terrain feature types\cr
+#' [`hillshade()`][shade]: Create a hillshade `GRaster`\cr
+#' [sun()]: Solar radiance and irradiance\cr
+#' [terrain()]: Slope, aspect, curvature, and partial slopes\cr
+#' [topoWetnessIndex()]: Topographic wetness index\cr
+#' 
 #' ## Functions operating on categorical (factor) rasters
 #' [activeCat()] and [activeCats()]: Column(s) that defines category labels\cr
 #' \code{\link[fasterRaster]{activeCat<-}}: Set column that defines category labels\cr
@@ -139,6 +155,7 @@
 #' [missing.cases()]: Find rows of a categorical `GRaster`'s "levels" table that have at least one `NA` in them\cr
 #' [missingCats()]: Values that have no category assigned to them\cr
 #' [nlevels()]: Number of levels\cr
+#' [subst()]: Re-assign category levels\cr
 #' [zonalGeog()]: Geographic statistics (area, perimeter, fractal dimension, etc.) for sets of cells with the same values
 #' 
 #' ## Functions for analysis of remote sensing rasters
@@ -175,8 +192,9 @@
 #' [as.data.table()]: Convert a `GVector`'s attribute table to a `data.table`\cr
 #' [as.points()]: Extract vertex coordinates from a "lines" or "polygons" `GVector`\cr
 #' [buffer()]: Create a polygon around/inside a `GVector`\cr
-#' [cbind()]: Add columns to the data table of a `GVector`\cr
+#' [classify()]: Classify cell values of a `GRaster`\cr
 #' [clusterPoints()]: Identify clusters of points\cr
+#' [colbind()]: Add columns to the data table of a `GVector`\cr
 #' [complete.cases()]: Find rows of a `GVector`'s data table that have no `NA`s in them\cr
 #' [connectors()]: Create lines connecting nearest features of two `GVector`s\cr
 #' [convHull()]: Minimum convex hull\cr
@@ -192,8 +210,8 @@
 #' [grid()]: Create a grid `GVector`\cr
 #' [head()]: First rows of a `GVector`'s data table\cr
 #' [hexagons()]: Create a hexagonal grid\cr
-#' [interpIDW()]: Interpolate values at points to a `GRaster`\cr
-#' [interpSplines()]: Interpolate values at points to a `GRaster`\cr
+#' [interpIDW()]: Interpolate values at points to a `GRaster` using inverse-distance weighting\cr
+#' [interpSplines()]: Interpolate values at points to a `GRaster` using splines\cr
 #' [intersect()] or \code{\link[fasterRaster]{*}}: Intersection of two `GVectors`.\cr
 #' [kernel()]: Kernel density estimator of points.\cr
 #' [missing.cases()]: Find rows of a `GVector`'s data table that have at least `NA` in them\cr
@@ -241,7 +259,6 @@
 #' [vect()]: Convert a `GVector` to a `SpatVector`\cr
 #'
 #' ## General purpose functions
-#' [appendLists()]: Append values to elements of a list from another list\cr
 #' [compareGeom()]: Determine if geographic metadata is same between `GRaster`s and/or `GVector`s\cr
 #' [dropRows()]: Remove rows from a `data.frame` or `data.table`\cr
 #' [grassInfo()]: **GRASS** version and citation\cr
@@ -266,44 +283,8 @@
 #' Comparisons between `GRegion`s can be performed using the `==` and `!=` operators.\cr
 #' Tutorial on **GRASS** [regions][tutorial_regions]\cr
 #' Tutorial on **GRASS** ["locations" and mapsets][tutorial_locations_mapsets]\cr
-#' `.copyGSpatial()`: Make a copy of the **GRASS** file pointed to by a `GRaster` or `GVector`\cr
-#' `.fileExt()`: Get file extension\cr
-#' `.exists()`: Does the **GRASS** file of a `GRaster` or `GVector` exist?\cr
-#' `.ext()`: Extent from the [sources()] name of a `GRaster` or `GVector`\cr
-#' `.geomtype()`: Geometry type ("point", "line", or "area") from the [sources()] name of a `GVector`\cr
-#' `.layerIndex()`: Gets the index of `GRaster` layers from a numeric, integer, character, or logical vector\cr
-#' `.locationCreate()` Make a connection to **GRASS** (i.e., start **GRASS** from within **R**) and create a location\cr
-#' `.locationDelete()` Deletes all files associated with a **GRASS** "location" and mapset\cr
-#' `.locationFind()`: Find a specific **GRASS** "location" that already exists\cr
-#' `.locationRestore()` Reconnect **GRASS** to a previously-created **GRASS** "location"\cr
-#' `.locations()`: List of all available "locations"\cr
-#' `.ls()`: Lists the `sources` of all objects in the active **GRASS** "location"\cr
-#' `.makeGRaster()` and `.makeGVector()`: Make `GRaster`s or `GVector`s from a vector of `sources`, which are pointers to files in **GRASS**\cr
-#' `.makeSourceNames()`: Makes one or more statistically unique strings that can be used as file names to represent rasters or vectors in **GRASS**\cr
-#' `.mapset()`: **GRASS** "mapset" of an object or the active session\cr
-#' `.message()`: Display a warning or message if the given warning has not been displayed since **fasterRaster** was attached or if a given number or hours has passed since then\cr
-#' `.minVal()` and `.maxVal()`: Values in the `@minVal` and `@maxVal` slots in a `GRaster`\cr
-#' `.nlevels()`: Number of levels in a `SpatVector`, `data.frame`, `data.table`, empty string, or a list of `data.frame`s, `data.table`s, and/or empty strings.\cr
-#' `.plot()`: Plot using the [sources()] name of a `GRaster` or `GVector`\cr
-#' `.projection()`: Value of the `@projection` slot in a `GRaster` or `GVector`\cr
-#' `.quiet()`: Returns "quiet" if `faster("verbose")` is `TRUE`\cr
-#' `.rastInfo()` and `.vectInfo()`: Metadata for a **GRASS** raster or vector\cr
-#' `.region()`: Change or report the active region's extent and resolution\cr
-#' `.regionDim()]`: Change or report the active region's resolution (also [dim()] and related functions, with no arguments)\cr
-#' `.regionExt()`: Change or report the active region's extent (also [ext()] and related functions, with no arguments)\cr
-#' `.regionRes()`: Change or report the active region's dimensions (also [res()] and related functions, with no arguments)\cr
-#' `.rename()`: Rename a **GRASS** raster or vector\cr
-#' `.rm()`: Delete rasters or vectors in **GRASS**\cr
-#' `.vAsDataTable()`: Convert the attribute table linked to a vector in **GRASS** to a `data.table`. This table is distinct from the attribute table attached to a `GVector`\cr
-#' `.vAttachDatabase()`: Add a database table to the **GRASS** representation of a `GVector`\cr
-#' `.vCats()`: Get a `data.table` with a single column named `cat`, which corresponds to the **GRASS** attribute table's `cat` column\cr
-#' `.vDetachDatabase(): Detach the **GRASS** database from a **GRASS** vector\cr
-#' `.vHasDatabase()`: Tests if **GRASS** vector has a database\cr
-#' `.vIncrementCats()`: Increment category values of a `GVector`\cr
-#' `.vNames()`: "**GRASS**" vector attribute table column names\cr
-#' `.vRecat()`: Change **GRASS** category indices of a **GRASS** vector\cr
-#' `.vValidCats()`: Are category values of a vector valid?\cr
-#' `grassStarted()`: Has a connection **GRASS** been made within the current **R** session?\cr
+#' [Hidden functions][tutorial_hidden_functions] of **fasterRaster**: Useful for power users and developers
+#' [grassStarted()]: Has a connection **GRASS** been made within the current **R** session?\cr
 #'
 #' @docType package
 #' @author Adam B. Smith

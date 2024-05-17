@@ -20,10 +20,11 @@ methods::setMethod(
 	
 	if (grassInfo("versionNumber") < 8.4) {
 	
-		msg <- "This function requires GRASS 8.4 or above. A NULL value has been returned."
 		if (fail) {
+			msg <- "This function requires GRASS 8.4 or above."
 			stop(msg)
 		} else {
+			msg <- "This function requires GRASS 8.4 or above. A NULL value has been returned."
 			warning(msg)
 			out <- NULL
 		}

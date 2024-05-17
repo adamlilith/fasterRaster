@@ -37,8 +37,6 @@ A \code{GRaster}.
 \description{
 \strong{\code{GRaster}s}: You can do arithmetic operations on \code{GRaster}s and using normal operators in \strong{R}: \code{+}, \code{-}, \code{*}, \code{/}, \code{^}, \code{\%\%} (modulus), and \code{\%/\%} (integer division).
 
-Note that for \code{GRaster}s, the precision of the result will be determined by the \code{rasterPrecision} option, which can be set using \code{\link[=faster]{faster()}}. The default is \code{"double"}, which is precise to about the 15th to 17th decimal place. This be reduced to the 6th to 9th decimal place by setting this to \code{"float"}. This reduces accuracy but also reduces memory requirements.
-
 \strong{\code{GVector}s}: You can also do arithmetic operations on \code{GVector}s:\cr\cr
 \code{+} operator: Same as \code{\link[=union]{union()}}\cr
 \code{-} operator: Same as \code{\link[=erase]{erase()}}\cr

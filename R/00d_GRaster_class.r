@@ -49,8 +49,8 @@ GRaster <- methods::setClass(
 	
 			if (object@datatypeGRASS[i] != "CELL") {
 				return(TRUE)
-			} else if (nr == 1L) {
-				return(TRUE)
+			# } else if (nr == 1L) {
+				# return(TRUE)
 			} else if (!inherits(levels[[i]][[1L]], "integer")) {
 				return(TRUE)
 			}
@@ -135,9 +135,9 @@ methods::setValidity("GRaster",
 		} else if (.canMakeRasterCategorical(object)) {
 			"Only rasters of datatype `CELL` can be categorical."
 		} else if (.validLevelTable(object)) {
-			"Each table must be a NULL `data.table`, or if not, the first column must be an integer, and there must be >1 columns."
+			"Each table must be a NULL `data.table`, or if not, the first column\n  must be an integer, and there must be >1 columns."
 		} else if (.validActiveCat(object)) {
-			"@activeCat must be `NA_integer_`, or an integer between 2 and the number of columns in each `data.table` in @levels."
+			"@activeCat must be `NA_integer_`, or an integer between 1 and the number of columns in each `data.table` in @levels, minus 1."
 		} else {
 			TRUE
 		}
@@ -152,6 +152,7 @@ methods::setValidity("GRaster",
 #' @param names Character: Name of the raster.
 #' @param levels `NULL` (default), a `data.frame`, `data.table`, an empty string (`""`), or a list of `data.frame`s, `data.table`s, and/or empty strings: These become the raster's [levels()]. If `""`, then no levels are defined.
 #' @param ac vector of numeric or integer values >=1, or `NULL` (default): Active category column (offset by 1, so 1 really means the second column, 2 means the third, etc.). A value of `NULL` uses an automated procedure to figure it out.
+#' @param fail Logical: If `TRUE` (default), and the raster either has a 0 east-west or north-south extent, then exit the function with an error. If `fail` is `FALSE`, then display a warning and return `NULL`.
 #'
 #' @returns A `GRaster`.
 #'
@@ -160,7 +161,7 @@ methods::setValidity("GRaster",
 #' @example man/examples/ex_GRaster_GVector.r
 #'
 #' @noRd
-.makeGRaster <- function(src, names = "raster", levels = "", ac = NULL) {
+.makeGRaster <- function(src, names = "raster", levels = "", ac = NULL, fail = TRUE) {
 
 	# levels: convert empty strings to NULL data.tables and data.frames to data.tables
 	if (is.null(levels)) levels <- data.table::data.table(NULL)
@@ -189,7 +190,19 @@ methods::setValidity("GRaster",
 	}
 
 	info <- .rastInfo(src)
-	nLayers <- length(info$sources)
+
+	if (any((info$west - info$east) == 0) | any((info$north - info$south) == 0)) {
+		msg <- "Raster has 0 east-west extent and/or north-south extent."
+		if (fail) {
+			stop(msg)
+		} else {
+			warning(msg)
+			return(NULL)
+		}
+	}
+
+	# nLayers <- length(info$sources)
+	nLayers <- length(src)
 	if (length(names) < nLayers) names <- rep(names, length.out = nLayers)
 
 	out <- methods::new(
@@ -214,6 +227,7 @@ methods::setValidity("GRaster",
 		levels = levels
 	)
 	out <- .makeUniqueNames(out)
+	# out <- droplevels(out, layer = 1L:nLayers)
 	out
 
 }

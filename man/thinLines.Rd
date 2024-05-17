@@ -40,7 +40,7 @@ rastToLines <- as.lines(thinned)
 plot(rastToLines)
 
 # We can clean this:
-cleanLines <- cleanGeom(x = rastToLines, method = "removeDangles")
+cleanLines <- fixDangles(x = rastToLines)
 plot(rastToLines, col = "red")
 plot(cleanLines, add = TRUE)
 

@@ -16,14 +16,14 @@
   wrap = FALSE
 )
 
-\S4method{project}{GVector}(x, y = NULL)
+\S4method{project}{GVector}(x, y, wrap = FALSE)
 }
 \arguments{
 \item{x}{A \code{GRaster} or \code{GVector} to be projected.}
 
 \item{y}{A character or \code{GLocation} object (i.e., typically a \code{GRaster} or \code{GVector}): Used to set the focal \code{GRaster} or \code{GVector}'s new CRS (and resolution and possibly extent, for \code{GRaster}s).}
 
-\item{align}{Logical: If \code{FALSE} (default), and \code{x} and \code{y} are \code{GRaster}s, then the extent of \code{x} will be cropped to the extent of \code{y}. If \code{TRUE}, no corpping is performed.}
+\item{align}{Logical: If \code{FALSE} (default), and \code{x} and \code{y} are \code{GRaster}s, then the extent of \code{x} will be cropped to the extent of \code{y}. If \code{TRUE}, no cropping is performed.}
 
 \item{method}{Character or \code{NULL} (for \code{GRaster}s only): Method to use to conduct the transformation (rasters only). Partial matching is used.
 \itemize{
@@ -49,7 +49,11 @@
 \item \code{"fallback"} (default): This applies the \code{terra} method first, but if that fails, then tries \code{template}, then \code{center}. This process can take a long time for large rasters.
 }}
 
-\item{wrap}{Logical (for projecting \code{GRaster}s only): When projecting rasters that "wrap around" (i.e., whole-world rasters or rasters that have edges that actually circle around to meet on the globe), \code{wrap} should be \code{TRUE} to avoid removing rows and columns from the "edge" of the map. The default is \code{FALSE}.}
+\item{wrap}{Logical:
+\itemize{
+\item \code{GRaster}s: When projecting rasters that "wrap around" (i.e., whole-world rasters or rasters that have edges that actually circle around to meet on the globe), \code{wrap} should be \code{TRUE} to avoid removing rows and columns from the "edge" of the map. The default is \code{FALSE}.
+\item \code{GVector}s: When projecting vectors that span the international date line at 180E/W, \code{wrap} should be \code{TRUE} to avoid an issue where the coordinates are incorrectly mapped to the range -180 to 180.
+}}
 }
 \value{
 A \code{GRaster} or \code{GVector}.

@@ -15,7 +15,7 @@
 
 \item{fun}{Character vector: The name of the function(s):
 \itemize{
-\item \code{"*"}: All of the statistics below.
+\item \code{"*"}: All of the functions below.
 \item \code{"countNonNA"}: Total number of non-\code{NA} cells.
 \item \code{"countNA"}: Total number of \code{NA} cells.
 \item \code{"cv"}: Sample coefficient of variation (expressed as a proportion of the mean).
@@ -25,7 +25,7 @@
 \item \code{"meanAbs"}: Mean of absolute values.
 \item \code{"median"}: Median.
 \item \code{"quantile"}: Quantile (see also argument \code{prob}).
-\item \code{"range"}: Range--note that as per \code{\link[terra:global]{terra::global()}}, the minimum and maximum are reported, not the actual range.
+\item \code{"range"}: Range. Note that following \code{\link[terra:global]{terra::global()}}, the minimum and maximum are reported, not the actual range.
 \item \code{"sd"}: Sample standard deviation (same as \code{\link[stats:sd]{stats::sd()}}).
 \item \code{"sdpop"}: Population standard deviation.
 \item \code{"sum"}: Sum.

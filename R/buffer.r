@@ -2,6 +2,8 @@
 #'
 #' Buffers can be constructed for `GRaster`s or `GVector`s. For rasters, the `buffer()` function creates a buffer around non-`NA` cells. The output will be a raster. For vectors, the `buffer()` and `st_buffer()` functions create a vector polygon larger or smaller than the focal vector.
 #'
+#' Note that in some cases, topologically incorrect vectors can be created when buffering. This can arise when buffers intersect to create intersections that technically belong to two or more geometries. This issue can be resolved by dissolving borders between buffered geometries using `dissolve = TRUE`, but as of now, there is no fix if you do not want to dissolve geometries. A workaround would be to create a different `GVector` for each geometry, and then buffer each individually :(.
+#'
 #' @param x A `GRaster` or `GVector`.
 #' 
 #' @param width Numeric: For rasters -- Maximum distance cells must be from focal cells to be within the buffer. For rasters, if the buffering unit is `"cells`", then to get `n` cell widths, use `n + epsilon`, where `epsilon` is a small number (e.g., 0.001). The larger the buffer, this smaller this must be to ensure just `n` cells are included.
@@ -173,25 +175,25 @@ methods::setMethod(
 
 	do.call(rgrass::execGRASS, args)
 
-	# dissolve by category
-	if (dissolve) {
+	# # # # dissolve by category
+	# # # if (dissolve) {
 
-		# dissolve
-		srcBuff <- src
-		src <- .makeSourceName("v_dissolve", "vector")
-		# catCol <- .vNames(srcBuff)
-		args <- list(
-			cmd = "v.dissolve",
-			input = srcBuff,
-			output = src,
-			# column = "cat",
-			flags = c(.quiet(), "overwrite")
-		)
+	# # # 	# dissolve
+	# # # 	srcBuff <- src
+	# # # 	src <- .makeSourceName("v_dissolve", "vector")
+	# # # 	# catCol <- .vNames(srcBuff)
+	# # # 	args <- list(
+	# # # 		cmd = "v.dissolve",
+	# # # 		input = srcBuff,
+	# # # 		output = src,
+	# # # 		# column = "cat",
+	# # # 		flags = c(.quiet(), "overwrite")
+	# # # 	)
 		
-		if (.vHasDatabase(srcBuff)) args$column <- .vNames(srcBuff)[1L]
-		do.call(rgrass::execGRASS, args = args)
+	# # # 	if (.vHasDatabase(srcBuff)) args$column <- .vNames(srcBuff)[1L]
+	# # # 	do.call(rgrass::execGRASS, args = args)
 
-	}
+	# # # }
 
 	.makeGVector(src)
 	

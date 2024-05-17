@@ -1,6 +1,6 @@
 #' Determine if GRasters and/or GVectors are geographically comparable
 #'
-#' `compareGeom()` compares geographic metadata between `GRaster`s, `GVector`s, or `GRaster`s and `GVector`s. In many cases, spatial objects must be comparable for them to "interact" (e.g., conducting arithmetic operations, masking, etc.).
+#' `compareGeom()` compares geographic metadata between two or more `GRaster`s and/or `GVector`s. In many cases, spatial objects must be comparable for them to "interact" (e.g., conducting arithmetic operations, masking, etc.).
 #'
 #' @param x,y,... `GRaster`s or `GVector`s. If `y` is `GRaster`, then the `...` must also be `GRaster`s (or missing). If `y` is `GVector`, then the `...` must also be `GVector`s (or missing).
 #'
@@ -30,7 +30,7 @@
 #'
 #' @param messages Logical: If `TRUE (default), display a warning if a condition is not met. This only comes into effect if `stopOnError` is `FALSE`.
 #'
-#' @return Logical (invisibly), or side effect of throwing an error.
+#' @returns Logical (invisibly): `TRUE` for no mismatches detected, `FALSE` for incompatibility), or side effect of throwing an error.
 #'
 #' @aliases compareGeom
 #' @rdname compareGeom

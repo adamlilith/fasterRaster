@@ -3,7 +3,7 @@
 \name{xor,GVector,GVector-method}
 \alias{xor,GVector,GVector-method}
 \alias{xor}
-\title{Select parts of polygons not shared by two GVectors}
+\title{Select parts of polygons not shared between two GVectors}
 \usage{
 \S4method{xor}{GVector,GVector}(x, y)
 }

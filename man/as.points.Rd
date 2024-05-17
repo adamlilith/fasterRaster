@@ -4,7 +4,7 @@
 \alias{as.points,GRaster-method}
 \alias{as.points}
 \alias{as.points,GVector-method}
-\title{Convert a raster or lines or polygons vector to a points vector}
+\title{Convert a GRaster, or lines or polygons GVector to a points vector}
 \usage{
 \S4method{as.points}{GRaster}(x, values = TRUE)
 
@@ -19,7 +19,7 @@
 A \code{points} \code{GVector}.
 }
 \description{
-\code{as.points()} converts a \code{GRaster} or \code{GVector} to a points \code{GVector}.
+\code{as.points()} converts a \code{GRaster}, or a lines or polygons \code{GVector} to a points \code{GVector}.
 
 For \code{GRasters}, the points have the coordinates of cell centers and are assigned the cells' values. Only non-\code{NA} cells will be converted to points.
 

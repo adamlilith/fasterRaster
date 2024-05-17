@@ -24,7 +24,7 @@
 			out <- if (i == 1L) {
 				this
 			} else {
-    			appendLists(out, this)
+    			omnibus::appendLists(out, this)
 			}
 		
 		}
@@ -254,8 +254,10 @@
 
 }
 
-#' @noRd
-print.rastInfo <- function(x) {
+#' @aliases print
+#' @rdname show
+#' @export
+print.rastInfo <- function(x, ...) {
 
 	cat("Source(s)     :", x$sources, "\n")
 	cat("Type(s)       :", x$type, "\n")
@@ -276,13 +278,25 @@ show.rastInfo <- function(x) print.rastInfo(x)
 #' @noRd
 summary.rastInfo <- function(x) print.rastInfo(x)
 
-.vectInfo <- function(x, integer = TRUE) {
+#' Metadata on a vector in GRASS
+#'
+#' @description This function queries **GRASS** to obtain metadata on a vector.
+#'
+#' @param x A `GVector` or the [sources()] name of one.
+#' @param integer Logical. If `TRUE` (default), the "cats" of a vector will be returned as type integer. If `FALSE`, they will be returned as a character vector.
+#' @param cats `NULL` (default) or an integer vector of category numbers, one per geometry.
+#'
+#' @returns A `vectInfo` object (a list).
+#' @noRd
+.vectInfo <- function(x, integer = TRUE, cats = NULL) {
 
 	src <- if (inherits(x, "GVector")) {
 		sources(x)
 	} else {
 		x
 	}
+	
+	# rgrass::execGRASS("g.region", vector = x, flags=c("o", .quiet()))
 
 	### extent/topology
 	suppressMessages(
@@ -381,7 +395,7 @@ summary.rastInfo <- function(x) print.rastInfo(x)
 	}
 	
 	# nGeometries <- as.integer(nGeometries)
-	cats <- .vCats(src, integer = integer)
+	if (is.null(cats)) cats <- .vCats(src, integer = integer)
 	nGeometries <- length(unique(cats))
 	catsValid <- !any(grepl(cats, pattern = "[/]")) & !anyNA(cats)
 
@@ -499,8 +513,10 @@ summary.rastInfo <- function(x) print.rastInfo(x)
 
 }
 
+#' @aliases print
+#' @rdname show
 #' @export
-print.vectInfo <- function(x) {
+print.vectInfo <- function(x, ...) {
 
 	cats <- x$cats
 	if (length(cats) > 6L) {

@@ -22,5 +22,4 @@ dypsisTable
 addTable(dypsisTable) <- df
 dypsisTable
 
-
 }

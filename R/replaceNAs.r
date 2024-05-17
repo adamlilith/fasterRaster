@@ -1,14 +1,14 @@
 #' Replace NAs in a data.table or data.frame column, or in a vector
 #'
-#' @description This function replaces `NA`s in one or more `data.table` columns with a user-defined value.
+#' @description This function replaces `NA`s in one or more `data.table`, `data.frame`, or `matrix` columns, or in vectors, with a user-defined value.
 #'
-#' @param x A `data.table` or `data.frame`, or a vector of numeric, integer, logical, or character values.
+#' @param x A `data.table` or `data.frame` or `matrix`, or a vector of numeric, integer, logical, or character values.
 #'
 #' @param replace A value of any atomic class (numeric, integer, character, Date, etc.): Value to to replace `NA`s.
 #'
 #' @param cols `NULL`, character, numeric, integer, or logical vector: Indicates columns for which to replace `NA`s. If `NULL`, then all columns will have `NA`s replaced. If a character, this is the column name(s). If numeric or integer, this is the columns' indices. If logical, columns with `TRUE` have `NA`s replaced. If a logical vector has fewer than the total number of columns, it will be recycled.
 #'
-#' @returns A `data.table` or `data.frame`.
+#' @returns A `data.table`, `data.frame`, `matrix`, or vector.
 #'
 #' @example man/examples/ex_data_table.r
 #'
@@ -18,6 +18,35 @@
 methods::setMethod(
 	f = "replaceNAs",
 	signature = c(x = "data.frame"),
+	function(x, replace, cols = NULL) {
+	
+	if (length(replace) != 1L) stop("Argument ", sQuote("replace"), " must be a single value.")
+
+	if (is.null(cols)) cols <- seq_len(ncol(x))
+
+	if (is.logical(cols)) {
+		if (length(cols) < ncol(x)) cols <- rep(cols, length.out = ncol(x))
+		cols <- which(cols)
+	}
+
+	for (j in cols) {
+	
+		if (anyNA(x[ , j, drop = TRUE])) {
+			x[is.na(x[ , j, drop = TRUE]), j] <- replace
+		}
+	
+	}
+	x
+
+	} # EOF
+)
+
+#' @aliases replaceNAs
+#' @rdname replaceNAs
+#' @exportMethod replaceNAs
+methods::setMethod(
+	f = "replaceNAs",
+	signature = c(x = "matrix"),
 	function(x, replace, cols = NULL) {
 	
 	if (length(replace) != 1L) stop("Argument ", sQuote("replace"), " must be a single value.")

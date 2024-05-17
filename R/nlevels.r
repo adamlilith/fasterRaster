@@ -1,10 +1,10 @@
-#' Number of levels in a categorical raster
+#' Number of categories in a categorical raster
 #'
-#' @description This function reports the number of categories (levels) in a [categorical raster][tutorial_raster_data_types].
+#' @description This function reports the number of categories (levels) in a [categorical][tutorial_raster_data_types] `GRaster`.
 #'
 #' @param x A `GRaster`.
 #'
-#' @return A named, numeric vector of integers. The values represent the number of levels (rows) that appear in the raster's levels table.
+#' @return A named, numeric vector of integers. The values represent the number of categories (rows) that appear in the raster's levels table.
 #'
 #' @seealso [levels()], [terra::levels()], [droplevels()], [raster data types][tutorial_raster_data_types]
 #'

@@ -21,7 +21,9 @@ setMethod(
 	function(x, mm = FALSE, ...) {
 
 	filename <- tempfile(fileext = ".tif")
-	out <- writeRaster(x, filename = filename, format = "GeoTIFF", mm = mm, ...)
+	writeRaster(x, filename = filename, format = "GeoTIFF", ...)
+	out <- terra::rast(filename)
+	if (mm) out <- terra::setMinMax(out)
 	out
 
 	} # EOF

@@ -245,10 +245,10 @@ setMethod(
 		)
 
 		# SD
-  		precision <- faster("rasterPrecision")
+  		prec <- .getPrec(x, NULL)
 
 		src <- .makeSourceName("sd", "rast")
-		ex <- paste0(src, " = ", precision, "(sqrt(", srcSS, " / ", srcCountMinus1, "))")
+		ex <- paste0(src, " = ", prec, "(sqrt(", srcSS, " / ", srcCountMinus1, "))")
 		
 		rgrass::execGRASS(
 			cmd = "r.mapcalc",
@@ -293,10 +293,10 @@ setMethod(
 		)
 
 		# variance
-    	precision <- faster("rasterPrecision")
+    	prec <- .getPrec(x, NULL)
 
 		src <- .makeSourceName("var", "rast")
-		ex <- paste0(src, " = ", precision, "(", srcSS, " / ", srcCountMinus1, ")")
+		ex <- paste0(src, " = ", prec, "(", srcSS, " / ", srcCountMinus1, ")")
 		
 		rgrass::execGRASS(
 			cmd = "r.mapcalc",

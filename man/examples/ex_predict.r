@@ -1,21 +1,24 @@
 if (grassStarted()) {
 
 # Setup
+library(sf)
 library(terra)
 
 ### This example creates a simple model of Dypsis distribution using
-# elevation and distance to forest.
+# elevation, distance to forest, and land cover class.
 
-# Elevation raster, forest cover in year 2000, and points where Dypsis plants
-# have been collected
+# Elevation raster, forest cover in year 2000, land cover class, and
+# points where Dypsis plants have been collected
 madElev <- fastData("madElev")
 madForest2000 <- fastData("madForest2000")
+madCover <- fastData("madCover")
 madDypsis <- fastData("madDypsis")
 
 # Convert SpatRasters to GRasters and sf vector to GVector:
 elev <- fast(madElev)
 forest <- fast(madForest2000)
 dypsis <- fast(madDypsis)
+cover <- fast(madCover)
 
 # Distance to forest
 distToForest <- distance(forest, unit = "km")
@@ -26,20 +29,26 @@ names(distToForest) <- "distToForest"
 land <- c(elev, distToForest)
 plot(land)
 
-# Scale predictors to mean of 0 and sd of 1
+# Scale continuous predictors to mean of 0 and sd of 1
 landScaled <- scale(land)
 names(landScaled) <- c("elevation", "distToForest")
 
-### Make model of dypsis locations:
+# Project land cover raster
+coverProj <- project(cover, landScaled)
+
+# Combine continuous/categorical data
+covariateRasters <- c(landScaled, coverProj)
+
+### Make model of Dypsis locations:
 # Extract elevation and forest cover at Dypsis locations
-presEnv <- extract(landScaled, dypsis)
+presEnv <- extract(covariateRasters, dypsis, cats = TRUE)
 presEnv$presBg <- 1
 head(presEnv)
 
-# Extract elevation and forest cover at background 1000 sites:
-bgEnv <- spatSample(landScaled, size = 1500, values = TRUE)
+# Extract elevation and forest cover at background 2000 sites:
+bgEnv <- spatSample(covariateRasters, size = 3000, values = TRUE, cats = TRUE)
 bgEnv <- bgEnv[stats::complete.cases(bgEnv), ]
-bgEnv <- bgEnv[1:1000, ]
+bgEnv <- bgEnv[1:2000, ]
 bgEnv$presBg <- 0
 head(bgEnv)
 
@@ -48,14 +57,14 @@ env <- rbind(presEnv, bgEnv)
 
 # Calibrate model:
 form <- presBg ~ elevation + distToForest +
-I(distToForest^2) + elevation * distToForest
+I(distToForest^2) + elevation * distToForest +
+madCover
 
 model <- stats::glm(form, data = env, family = stats::binomial)
-
 summary(model)
 
 # Make predictions and map:
-prediction <- predict(landScaled, model, type = "response")
+prediction <- predict(covariateRasters, model, type = "response")
 prediction
 
 plot(prediction)

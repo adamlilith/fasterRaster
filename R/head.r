@@ -22,7 +22,8 @@ methods::setMethod(
 	definition = function(x, n = 6L, keepnums = TRUE, ...) {
 
 		nr <- nrow(x)
-		out <- x@table[1L:n]
+		nr <- min(n, nr)
+		out <- x@table[1L:nr]
 		if (!faster("useDataTable")) out <- as.data.frame(out)
 		out
 
@@ -38,7 +39,8 @@ methods::setMethod(
     definition = function(x, n = 6L, keepnums = TRUE, ...) {
 
 	nr <- nrow(x)
-	out <- x@table[(nr - n + 1L):nr]
+	nfrom <- max(1L, nr - n + 1L)
+	out <- x@table[nfrom:nr]
 	if (!faster("useDataTable")) out <- as.data.frame(out)
 	out
 

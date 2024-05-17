@@ -241,11 +241,14 @@ methods::setMethod(
             names(this) <- names(x)[i]
 
             # category label instead of value
-            if (cats && is.factor(x)[i]) {
+            if (cats & is.factor(x)[i]) {
 
                 levs <- levels(x[[i]])[[1L]]
                 this <- levs[match(info, levs[[1L]]), 2L]
-                names(this) <- paste0(names(x)[i], "_cat")
+                names(this) <- names(x)[i]
+                this <- this[ , lapply(.SD, as.factor)]
+                # this <- levs[match(info, levs[[1L]]), 2L]
+                # names(this) <- c(names(x)[i], paste0(names(x)[i], "_cat"))
 
             }
 
@@ -538,9 +541,11 @@ methods::setMethod(
 #' @param x GVector
 #' @param coords 2-column matrix of coordinates
 #' @param xy T/F: Return coordinates
+#' @param nperSet Number of points to extract... too large throws an error. 1000 seems to break, so going with 900.
+#' @param data.table return as `data.table`
 #' 
 #' @noRd
-.extractFromVect <- function(x, y, xy) {
+.extractFromVect <- function(x, y, xy, nPerSet = 900L, data.table = TRUE) {
 
     .locationRestore(x)
 
@@ -548,108 +553,127 @@ methods::setMethod(
 
     colnames(y) <- c("x", "y")
     n <- nrow(y)
-    coords <- rep(NA_real_, 2L * n)
-    coords[seq(1L, 2 * n, by = 2L)] <- y[["x"]]
-    coords[seq(2L, 2 * n, by = 2L)] <- y[["y"]]
 
-    args <- list(
-        cmd = "v.what",
-        map = sources(x),
-        coordinates = coords,
-        type = geomtype(x, TRUE),
-        flags = .quiet(),
-        intern = TRUE
-    )
+	if (n > nPerSet) {
 
-    info <- do.call(rgrass::execGRASS, args = args)
+		sets <- ceiling(n / nPerSet)
+		out <- data.table::data.table()
+		for (set in seq_len(sets)) {
+			
+			omnibus::say(set)
+			
+			yy <- y[(1L + (set - 1L) * nPerSet):min(set * nPerSet, n)]
+			thisOut <- .extractFromVect(x, y = yy, xy = xy, data.table = TRUE)
+			out <- rbind(out, thisOut)
+		
+		}
+		
+	} else {
 
-    nonnas <- which(grepl(info, pattern = "Category: "))
-    nas <- which(grepl(info, pattern = "Nothing found."))
+		coords <- rep(NA_real_, 2L * n)
+		coords[seq(1L, 2 * n, by = 2L)] <- y[["x"]]
+		coords[seq(2L, 2 * n, by = 2L)] <- y[["y"]]
 
-    lenNonnas <- length(nonnas)
-    lenNas <- length(nas)
+		gtype <- geomtype(x, grass = TRUE)
 
-    # get index of non-NAs
-    if (lenNonnas > 0L & lenNas >= 0L) {
-        
-        names(nonnas) <- rep("notna", lenNonnas)
-        names(nas) <- rep("na", lenNas)
-        together <- c(nonnas, nas)
-        together <- sort(together)
+		info <- rgrass::execGRASS(
+			cmd = "v.what",
+			map = sources(x),
+			coordinates = coords,
+			type = gtype,
+			flags = c(.quiet(), "verbose"), # could use "g" to make output easier to parse
+			intern = TRUE
+		)
 
-        nonnasIndex <- which(names(together) == "notna")
+		nonnas <- which(grepl(info, pattern = "Category: "))
+		nas <- which(grepl(info, pattern = "Nothing found."))
 
-    } else if (lenNonnas > 0L & lenNas == 0) {
-        nonnasIndex <- 1L:n
-    }
+		lenNonnas <- length(nonnas)
+		lenNas <- length(nas)
 
-    ### at least one point was on the vector
-    if (lenNonnas > 0L) {
+		# get index of non-NAs
+		if (lenNonnas > 0L & lenNas >= 0L) {
+			
+			names(nonnas) <- rep("notna", lenNonnas)
+			names(nas) <- rep("na", lenNas)
+			together <- c(nonnas, nas)
+			together <- sort(together)
 
-        nons <- info[nonnas]
-        nons <- sub(nons, pattern = "Category: ", replacement = "")
-        nons <- as.integer(nons)
+			nonnasIndex <- which(names(together) == "notna")
 
-    }
+		} else if (lenNonnas > 0L & lenNas == 0) {
+			nonnasIndex <- 1L:n
+		}
 
-    # vector has no data table (return IDs)
-    if (nrow(x) == 0L) {
+		### at least one point was on the vector
+		if (lenNonnas > 0L) {
 
-        id.x <- NULL
+			nons <- info[nonnas]
+			nons <- sub(nons, pattern = "Category: ", replacement = "")
+			nons <- as.integer(nons)
 
-        out <- data.table::data.table(id.y = 1L:n, id.x = NA_integer_)
+		}
 
-        if (lenNonnas > 0L) out[nonnasIndex, id.x := nons]
+		# vector has no data table (return IDs)
+		if (nrow(x) == 0L) {
 
-    # vector has data table
-    } else {
+			id.x <- NULL
 
-        # make template of data table (1 row, all NAs)
-        out <- as.data.table(x)[1L]
+			out <- data.table::data.table(id.y = 1L:n, id.x = NA_integer_)
 
-        classes <- sapply(out, class)
-        cols <- names(x)
-        
-        for (i in seq_along(classes)) {
+			if (lenNonnas > 0L) out[nonnasIndex, id.x := nons]
 
-            if (classes[i] == "integer") {
-                assign <- NA_integer_
-            } else if (classes[i] == "numeric") {
-                assign <- NA_real_
-            } else if (classes[i] == "character") {
-                assign <- NA_character_
-            } else {
-                assign <- NA
-            }
+		# vector has data table
+		} else {
 
-            col <- cols[i]
-            out[1L, (col) := assign]
+			# make template of data table (1 row, all NAs)
+			out <- as.data.table(x)[1L]
 
-        }
+			classes <- sapply(out, class)
+			cols <- names(x)
+			
+			for (i in seq_along(classes)) {
 
-        # create template data table with all NAs
-        out <- out[rep(1L, n)]
-        id.y <- data.table::data.table(id.y = 1L:n)
-        out <- cbind(id.y, out)
+				if (classes[i] == "integer") {
+					assign <- NA_integer_
+				} else if (classes[i] == "numeric") {
+					assign <- NA_real_
+				} else if (classes[i] == "character") {
+					assign <- NA_character_
+				} else {
+					assign <- NA
+				}
 
-        # assign values to rows
-        if (lenNonnas > 0L) {
-        
-            for (i in seq_along(cols)) {
-                
-                col <- cols[i]
-                out[nonnasIndex, (col) := x@table[nons, get(col)]]
-            
-            }
+				col <- cols[i]
+				out[1L, (col) := assign]
 
-        }
+			}
 
-    } # vector has a data.table
+			# create template data table with all NAs
+			out <- out[rep(1L, n)]
+			id.y <- data.table::data.table(id.y = 1L:n)
+			out <- cbind(id.y, out)
 
-    if (xy) out <- cbind(y, out)
-    
-    if (!faster("useDataTable")) out <- as.data.frame(out)
-    out
+			# assign values to rows
+			if (lenNonnas > 0L) {
+			
+				for (i in seq_along(cols)) {
+					
+					col <- cols[i]
+					out[nonnasIndex, (col) := x@table[nons, get(col)]]
+				
+				}
+
+			}
+
+		} # vector has a data.table
+
+		if (xy) out <- cbind(y, out)
+		
+	}
+	
+	if (!data.table & !faster("useDataTable")) out <- as.data.frame(out)
+	out
     
 } # EOF
 

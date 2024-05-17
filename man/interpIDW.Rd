@@ -3,7 +3,7 @@
 \name{interpIDW,GVector,GRaster-method}
 \alias{interpIDW,GVector,GRaster-method}
 \alias{interpIDW}
-\title{Interpolate values at points to a GRaster}
+\title{Interpolate values at points to a GRaster using inverse-distance weighting}
 \usage{
 \S4method{interpIDW}{GVector,GRaster}(x, y, field, nPoints = Inf, power = 2)
 }
@@ -12,7 +12,7 @@
 
 \item{y}{A \code{GRaster} to serve as a template for interpolation: Only points in \code{x} that fall inside the extent of the raster will be used for interpolation. You can increase the extent of a \code{GRaster} using \code{\link[=extend]{extend()}}.}
 
-\item{field}{Character or integer or numeric integer: Name or index of the column in \code{x} with values to interpolate. If \code{NULL} and if \code{x} is a 3-dimensional "points" \code{GVector}, then the interpolation will act on the z-coordinate of each point.}
+\item{field}{Character, integer, or numeric integer: Name or index of the column in \code{x} with values to interpolate. If \code{NULL} and if \code{x} is a 3-dimensional "points" \code{GVector}, then the interpolation will act on the z-coordinate of each point.}
 
 \item{nPoints}{Integer or numeric integer: Number of nearest points to use for interpolation. The default is to use all points (\code{Inf}).}
 

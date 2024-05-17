@@ -2,17 +2,15 @@
 #'
 #' @description `plot()` displays a `GRaster` or `GVector`.
 #'
-#' This function is essentially a hack, as it it not possible to dependably call the appropriate **GRASS** modules and display a raster or vector without potential confusion on the user side. Instead, this function 1) simplifies the focal `GRaster` or `GVector` (if needed); 2) writes it to disk as a `SpatRaster` or `SpatVector`; and 3) plots the object.
+#' This function is essentially a hack, as it it not possible to dependably call the appropriate **GRASS** modules and display a raster or vector without potential confusion on the user side. Instead, this function 1) simplifies the focal `GRaster` or `GVector` (if needed); 2) writes it to disk as a `SpatRaster` or `SpatVector`; and 3) plots the object using [terra::plot()]. Thus, if you are interested in making maps, it will always be faster to make them directly with **terra**.
 #'
 #' @param x A `GRaster` or `GVector`.
 #'
 #' @param y Missing--leave as empty.
 #'
-#' @param maxcell Positive integer (rasters only): Maximum number of cells to display. When simplifying, [aggregate()] will be applied so that it has approximately this number of cells. The default is 5000000.
+#' @param maxcell Positive integer (rasters only): Maximum number of cells a raster can have before it is simplified before saving to disk then plotted. The [aggregate()] function will be applied so that it has approximately this number of cells. The default is 5000000.
 #'
-#' @param simplify Logical (vectors only): If `TRUE` (default), then simplify the `GVector` before plotting. This can save time for very large vectors. However, details in the vector may appear inaccurate.
-#'
-#' @param maxGeoms Positive integer (vectors only): Maximum number of features before simplification is used (`simplify` must also be `TRUE`).
+#' @param maxGeoms Positive integer (vectors only): Maximum number of features before vector simplification is applied before saving to disk then creating a `SpatVector` for plotting. The default is 10000.
 #' 
 #' @param ... Other arguments to send to [terra::plot()].
 #'
@@ -48,8 +46,32 @@ methods::setMethod(
 
 	}
 	
+	dtype <- datatype(x, "GRASS")
+	if (all(dtype %in% "CELL")) {
+	
+		if (all(.minVal(x) >= 0L & .maxVal(x) <= 255L)) {
+			dtype <- "Byte"
+		} else if (all(.minVal(x) >= 0L & .maxVal(x) <= 65534L)) {
+			dtype <- "UInt16"
+		} else if (all(.minVal(x) >= -32767L & .maxVal(x) <= 32767L)) {
+			dtype <- "Int16"
+		} else if (all(.minVal(x) >= -2147483647L & .maxVal(x) <= 2147483647L)) {
+			dtype <- "Int32"
+		} else if (all(.minVal(x) >= -3.4E+38 & .maxVal(x) <= 3.4E+38)) {
+			dtype <- "Float32"
+		} else {
+			dtype <- "Float64"
+		}
+
+	} else {
+		dtype <- "Float64"
+	}
+
 	tf <- tempfile(fileext = ".tif")
-	out <- writeRaster(x, filename = tf, format = "GeoTIFF", overwrite = TRUE, warn = FALSE, ...)
+	writeRaster(x, filename = tf, format = "GeoTIFF", overwrite = TRUE, warn = FALSE, datatype = dtype, ...)
+	out <- terra::rast(tf)
+	names(out) <- names(x)
+	if (any(is.factor(x))) levels(out) <- levels(x)
 	terra::plot(out, ...)
 	
 	} # EOF
@@ -61,14 +83,15 @@ methods::setMethod(
 methods::setMethod(
 	f = "plot",
 	signature = c(x = "GVector", y = "missing"),
-	function(x, y, simplify = FALSE, maxGeoms = 10000, ...) {
+	function(x, y, maxGeoms = 10000, ...) {
 	
 	# simplify
-	if (simplify & nrow(x) > maxGeoms) x <- simplifyGeom(x)
+	if (ngeom(x) > maxGeoms) x <- simplifyGeom(x)
 	
 	tf <- tempfile(fileext = ".gpkg")
-	y <- writeVector(x, filename = tf, format = "GPKG", overwrite = TRUE, attachTable = FALSE)
-	terra::plot(y, ...)
+	writeVector(x, filename = tf, format = "GPKG", overwrite = TRUE, attachTable = FALSE)
+	v <- terra::vect(tf)
+	terra::plot(v, ...)
 	
 	} # EOF
 )

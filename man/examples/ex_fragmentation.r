@@ -19,6 +19,7 @@ names(fragTerras) <- c("unrestricted", "restricted")
 
 plot(fragTerras)
 levels(fragTerras)
+freq(fragTerras)
 
 ### Fragmentation classes from a GRaster
 ########################################
@@ -36,10 +37,6 @@ names(frags) <- c("unrestricted", "restricted")
 
 plot(frags)
 levels(frags)
-
-frags <- droplevels(frags, level = 1:2)
-levels(frags)
-
-plot(frags)
+freq(frags)
 
 }

@@ -2,7 +2,7 @@
 % Please edit documentation in R/app.r
 \name{app,GRaster-method}
 \alias{app,GRaster-method}
-\alias{app}
+\alias{app,lapp}
 \alias{appFuns}
 \alias{appCheck,GRaster,character-method}
 \alias{appCheck}
@@ -46,7 +46,7 @@ The help page for \strong{GRASS} module \href{https://grass.osgeo.org/grass84/ma
 A \code{GRaster}.
 }
 \description{
-\code{app()} applies a function to a set of "stacked" rasters.
+\code{app()} applies a function to a set of "stacked" rasters. It is similar to the \code{\link[terra:app]{terra::app()}} and \code{\link[terra:lapp]{terra::lapp()}} functions.
 
 \code{appFuns()} provides a table of \strong{GRASS} functions that can be used by \code{app()} and their equivalents in \strong{R}.
 
@@ -130,5 +130,5 @@ freq(rand) # cell frequencies
 }
 }
 \seealso{
-\code{\link[terra:app]{terra::app()}}, and modules \href{https://grass.osgeo.org/grass84/manuals/r.mapcalc.html}{\code{r.mapcalc}} and \code{r.mapcalc.simple} in \strong{GRASS}.
+\code{\link[terra:app]{terra::app()}}, \code{\link[terra:lapp]{terra::lapp()}}, \code{\link[=subst]{subst()}}, \code{\link[=classify]{classify()}}, and modules \href{https://grass.osgeo.org/grass84/manuals/r.mapcalc.html}{\code{r.mapcalc}} and \code{r.mapcalc.simple} in \strong{GRASS}.
 }

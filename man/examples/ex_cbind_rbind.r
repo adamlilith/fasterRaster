@@ -18,8 +18,8 @@ riversCombo <- rbind(rivers1, rivers2)
 riversCombo
 
 # Add columns
-newCol <- data.frame(x = 1:11)
-riversCols <- cbind(rivers, newCol)
+newCol <- data.frame(new = 1:11)
+riversCol <- colbind(rivers, newCol)
 riversCol
 
 as.data.frame(riversCol)

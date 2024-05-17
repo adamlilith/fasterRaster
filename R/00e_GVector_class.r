@@ -39,7 +39,7 @@ methods::setValidity("GVector",
 		} else if (object@nGeometries == 0L) {
 			"GVector has no geometries."
 		} else if (nrow(object@table) > 0L && nrow(object@table) != object@nGeometries) {
-			"The data.table in @table must be a NULL table (data.table(NULL)), or\n  it must have the same number of rows as @nGeometries.\n  See the *Details* section in `fast()` on how to correct topology."
+			"The data.table in @table must be a NULL table (data.table(NULL)), or\n  it must have the same number of rows as @nGeometries. See the *Details* section in `fast()` on how to correct topology."
 		} else {
 			TRUE
 		}
@@ -58,39 +58,41 @@ methods::setValidity("GVector",
 #'
 #' @param extensive Logical: If `TRUE`, do extensive topological checks using `v.build`. The default is `FALSE`.
 #'
-#' @returns A `GVector`.
+#' @param cats `NULL` (default) or an integer vector: Values of the "cats" (categories) of the vector in **GRASS**. This is useful *only* for speeding up the `GVector` creation process when the "cats" have already been ascertained.
+#'
+#' @param fail Logical: If `TRUE` (default), and the vector either has a 0 east-west or north-south extent, then exit the function with an error. If `fail` is `FALSE`, then display a warning and return `NULL`.
+#'
+#' @returns A `GVector` (or `NULL` if `fail` is `TRUE` and the `GVector` would be invalid).
 #'
 #' @seealso [.makeGRaster()]
 #'
 #' @example man/examples/ex_GRaster_GVector.r
 #'
 #' @noRd
-.makeGVector <- function(src, table = NULL, build = TRUE, extensive = FALSE) {
+.makeGVector <- function(src, table = NULL, build = TRUE, extensive = FALSE, cats = NULL, fail = TRUE) {
 
 	if (inherits(table, "GVector")) table <- src@table
 	if (is.null(table)) table <- data.table::data.table(NULL)
 	if (!inherits(table, "data.table")) table <- data.table::as.data.table(table)
 
-	cats <- .vCats(src, db = FALSE)
-	# if (is.null(cats)) cats <- .vCats(src, db = FALSE)
-	# dt <- data.table::data.table(frid = cats)
-	# .vAttachDatabase(src, table = dt, replace = TRUE)
-	
-	# srcIn <- src
-	# src <- .makeSourceName("v_category", "vector")
-	# rgrass::execGRASS(
-	# 	cmd = "v.category",
-	# 	input = srcIn,
-	# 	output = src,
-	# 	option = "del",
-	# 	flags = c(.quiet(), "overwrite", "t")
-	# 	# flags = c(.quiet(), "overwrite")
-	# )
-
+	if (is.null(cats)) cats <- .vCats(src, db = FALSE)
 	nGeoms <- length(unique(cats))
 	nSubgeoms <- length(cats)
 
-	info <- .vectInfo(src)
+	info <- .vectInfo(src, cats = cats)
+
+	# NB test for zero extent... note that lines and points can have zero extent
+	if (is.na(info$geometry) || (info$geometry == "polygons" & ((info$west - info$east) == 0 | (info$north - info$south) == 0))) {
+	
+		msg <- "Vector has no geometries."
+		if (fail) {
+			stop(msg)
+		} else {
+			warning(msg)
+			return(NULL)
+		}
+	
+	}
 
 	# build topology
 	if (build) {

@@ -3,7 +3,7 @@
 \name{nlevels,GRaster-method}
 \alias{nlevels,GRaster-method}
 \alias{nlevels}
-\title{Number of levels in a categorical raster}
+\title{Number of categories in a categorical raster}
 \usage{
 \S4method{nlevels}{GRaster}(x)
 }
@@ -11,10 +11,10 @@
 \item{x}{A \code{GRaster}.}
 }
 \value{
-A named, numeric vector of integers. The values represent the number of levels (rows) that appear in the raster's levels table.
+A named, numeric vector of integers. The values represent the number of categories (rows) that appear in the raster's levels table.
 }
 \description{
-This function reports the number of categories (levels) in a \link[=tutorial_raster_data_types]{categorical raster}.
+This function reports the number of categories (levels) in a \link[=tutorial_raster_data_types]{categorical} \code{GRaster}.
 }
 \examples{
 if (grassStarted()) {

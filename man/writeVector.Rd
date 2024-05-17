@@ -40,7 +40,7 @@
 \item{...}{Additional arguments to send to \strong{GRASS} module \href{https://grass.osgeo.org/grass84/manuals/v.out.ogr.html}{\code{v.out.ogr}} in \strong{GRASS}.}
 }
 \value{
-Invisibly returns a \code{SpatVector}. Also saves the vector to disk.
+Invisibly returns a \code{GRaster} (the input, \code{x}). Also saves the vector to disk.
 }
 \description{
 This function saves a \code{GVector} to disk directly from a \strong{GRASS} session.

@@ -87,7 +87,7 @@ methods::setMethod(
         # custom mask values
         if (length(maskvalues) > 1L || !is.na(maskvalues)) {
 
-            maskSrc <- .makeSourceName("r_mapcalc", "raster")
+            maskSrc <- .makeSourceName("mask_r_mapcalc", "raster")
 
             if (anyNA(maskvalues)) {
                 maskValuesHaveNAs <- TRUE
@@ -155,7 +155,7 @@ methods::setMethod(
     if (!is.na(updatevalue)) {
 
 		nLayers <- length(x)
-        srcsUpdate <- .makeSourceName("r_mapcalc", "raster", nLayers)
+        srcsUpdate <- .makeSourceName("mask_r_mapcalc", "raster", nLayers)
 
         for (i in seq_len(nLayers)) {
 

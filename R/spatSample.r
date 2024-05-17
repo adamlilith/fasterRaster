@@ -10,7 +10,7 @@
 #' 
 #' @param values Logical: If `TRUE` (default), values of the `GRaster` at points are returned.
 #' 
-#' @param cat Logical: If `TRUE` and the `GRaster` is [categorical][tutorial_raster_data_types], then return the category label of each cell. If `values` is also `TRUE`, then the cell value will also be returned.
+#' @param cats Logical: If `TRUE` and the `GRaster` is [categorical][tutorial_raster_data_types], then return the category label of each cell. If `values` is also `TRUE`, then the cell value will also be returned.
 #' 
 #' @param xy Logical: If `TRUE`, return the longitude and latitude of each point. Default is `FALSE`.
 #'
@@ -37,7 +37,7 @@ methods::setMethod(
 		size,
 		as.points = FALSE,
 		values = TRUE,
-		cat = FALSE,
+		cats = FALSE,
 		xy = FALSE,
 		strata = NULL,
 		zlim = NULL,
@@ -46,7 +46,7 @@ methods::setMethod(
 
 	.locationRestore(x)
 	.region(x)
-
+	
 	if (!xy) values <- TRUE
 
 	src <- .makeSourceName("v_random", "vector")
@@ -71,6 +71,8 @@ methods::setMethod(
 
 	if (!is.null(seed)) args$seed <- seed
 
+	args$flags <- c(args$flags, "b") ### do not create topology... problems?
+
 	do.call(rgrass::execGRASS, args = args)
 
 	# return coordinates
@@ -79,7 +81,7 @@ methods::setMethod(
 	}
 
 	# extract values from raster
-	if (values | cat) {
+	if (values | cats) {
 
 		nLayers <- nlyr(x)
 		for (i in seq_len(nLayers)) {
@@ -111,15 +113,18 @@ methods::setMethod(
 			names(this) <- names(x)[i]
 
 			# category label instead of value
-			if (cat && is.factor(x)[i]) {
+			if (cats && is.factor(x)[i]) {
 
-				levs <- levels(x[[i]])[[1L]]
-				thisCat <- levs[match(vals, levs[[1L]]), 2L]
-				names(thisCat) <- paste0(names(x)[i], "_cat")
+                levs <- levels(x[[i]])[[1L]]
+                this <- levs[match(vals, levs[[1L]]), 2L]
+                names(this) <- names(x)[i]
+				this <- this[ , lapply(.SD, as.factor)]
+                # this <- levs[match(vals, levs[[1L]]), 2L]
+                # names(this) <- c(names(x)[i], paste0(names(x)[i], "_cat"))
 
-				if (values) {
-					this <- cbind(this, thisCat)
-				}
+				# if (values) {
+				# 	this <- cbind(this, thisCat)
+				# }
 			}
 
 			if (exists("out", inherits = FALSE)) {
@@ -176,7 +181,7 @@ methods::setMethod(
 
 		# make copy of vector and force all categories to 1
 		gtype <- geomtype(x)
-		srcRestrict <- .aggregate(sources(x), dissolve = TRUE, gtype = gtype)
+		srcRestrict <- .aggregate(sources(x), dissolve = TRUE, gtype = gtype, copy = TRUE)
 
 	}
 	
@@ -213,17 +218,17 @@ methods::setMethod(
 
 	} # if wanting values
 
-	table <- NULL
+	out <- NULL
 	if (xy & values) {
-		table <- cbind(xy, vals)
+		out <- cbind(xy, vals)
 	} else if (!xy & values) {
-		table <- vals
+		out <- vals
 	} else if (xy & !values) {
-		table <- coords
+		out <- coords
 	}
 
 	if (as.points) {
-		out <- .makeGVector(src, table = table)
+		out <- .makeGVector(src, table = out)
 	} else {
 		if (!faster("useDataTable")) out <- as.data.frame(out)
 	}

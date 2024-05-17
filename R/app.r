@@ -1,6 +1,6 @@
 #' Apply a function to a set of rasters
 #'
-#' @description `app()` applies a function to a set of "stacked" rasters.
+#' @description `app()` applies a function to a set of "stacked" rasters. It is similar to the [terra::app()] and [terra::lapp()] functions.
 #'
 #' `appFuns()` provides a table of **GRASS** functions that can be used by `app()` and their equivalents in **R**.
 #'
@@ -43,11 +43,11 @@
 #'
 #' @returns A `GRaster`.
 #'
-#' @seealso [terra::app()], and modules [`r.mapcalc`](https://grass.osgeo.org/grass84/manuals/r.mapcalc.html) and `r.mapcalc.simple` in **GRASS**.
+#' @seealso [terra::app()], [terra::lapp()], [subst()], [classify()], and modules [`r.mapcalc`](https://grass.osgeo.org/grass84/manuals/r.mapcalc.html) and `r.mapcalc.simple` in **GRASS**.
 #'
 #' @example man/examples/ex_app.r
 #'
-#' @aliases app
+#' @aliases app,lapp
 #' @rdname app
 #' @exportMethod app
 methods::setMethod(

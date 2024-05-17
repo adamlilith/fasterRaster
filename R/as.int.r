@@ -5,13 +5,13 @@
 #' * `as.int()`: Coerce values to integers (**GRASS** type `CELL`).
 #' * `as.float()`: Coerce values to floating-point precision.
 #' * `as.doub()`: Coerce values to double-floating point precision.
-#' * Integer rasters can be converted categorical rasters by adding "levels" tables with [levels<-] or [categories()].
+#' * Integer rasters can be converted categorical rasters by adding "levels" tables with \code{\link[fasterRaster]{levels<-}} or [categories()].
 #' 
 #' @param x A `GRaster`.
 #' 
 #' @returns A `GRaster`.
 #' 
-#' @seealso [datatype()], [terra::datatype()], [is.int()], [is.float()], [is.doub()], [levels<-], [raster data types][tutorial_raster_data_types] in **fasterRaster**
+#' @seealso [datatype()], [terra::datatype()], [is.int()], [is.float()], [is.doub()], \code{\link[fasterRaster]{levels<-}}, [raster data types][tutorial_raster_data_types] in **fasterRaster**
 #'
 #' @example man/examples/ex_GRaster.r
 #' 

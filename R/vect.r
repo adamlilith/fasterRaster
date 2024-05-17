@@ -20,7 +20,8 @@ setMethod(
 	function(x, ...) {
 
 	filename <- paste0(omnibus::forwardSlash(tempfile()), ".gpkg")
-	out <- writeVector(x, filename = filename, ...)
+	writeVector(x, filename = filename, ...)
+	out <- terra::vect(filename)
 	out
 	
 	} # EOF

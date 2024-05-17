@@ -6,14 +6,25 @@
 #'
 #' Note that there are a several methods for fixing issues with vectors. If the vector has already been imported as a `GVector`, [other tools][breakPolys] are also available.
 #'
+#' Note also that **GRASS** (and thus, **fasterRaster**) is *not* very fast when loading vectors. So, if the vector is large and you only want a portion of it, consider using the `extent` argument to load the spatial subset you need.
+#'
 #' @param x Any one of:
 #' * A `SpatRaster` raster. Rasters can have one or more layers.
-#' * A `SpatVector` or `sf` spatial vector.
+#' * A `SpatVector` or `sf` spatial vector. See especially arguments `correct`, `area`, `snap`, `steps`, and `vebose`.
 #' * A character string or a vector of strings with the path(s) and filename(s) of one or more rasters or one vector to be loaded directly into **GRASS**. The function will attempt to ascertain the type of object from the file extension (raster or vector), but it can help to indicate which it is using the `rastOrVect` argument if it is unclear.
+#' * A vector with an even number of numeric values representing longitude/latitude pairs. See arguments `geom`, `keepgeom`, and `crs`.
+#' * A `data.frame`, `data.table`, or `matrix`: Create a `points` `GVector`. Two of the columns must represent longitude and latitude. See arguments `geom`, `keepgeom`, and `crs`.
+#' * Missing: Creates a generic `GRaster` or `GVector`. You must specify `rastOrVect`; for example, `fast(rastOrVect = "raster")`. Also see argument `crs`.
 #'
 #' @param rastOrVect: Either `NULL` (default), or `"raster"` or `"vector"`: If `x` is a filename, then the function will try to ascertain whether it represents a raster or a vector, but sometimes this will fail. In that case, it can help to specify if the file holds a raster or vector. Partial matching is used.
 #'
 #' @param levels (`GRaster`s only): A `data.frame`, `data.table`, or list of `data.frame`s or `data.table`s with categories for categorical rasters. The first column of a table corresponds to raster values and must be of type `integer`. A subsequent column corresponds to category labels. By default, the second column is assumed to represent labels, but this can be changed with \code{\link[fasterRaster]{activeCat<-}}. Level tables can also be `NULL` (e.g., `data.fame(NULL)`). You can also assign levels after loading a raster using \code{\link[fasterRaster]{levels<-}}.
+#'
+#' @param geom Character or integer vector: If `x` is a `data.frame`, `data.table`, or `matrix`, this specifies which columns of `x` represent longitude and latitude. Columns can be given by name (a character vector) or index (a numeric or integer vector). The default is to use the first two columns of `x`.
+#'
+#' @param crs String: Coordinate reference system (CRS) WKT2 string. This argument is used for creating a `GVector` from a `numeric` vector or a `data.frame` or similar, or from `fast(rastOrVect = "vector")` or `fast(rastOrVect = "raster")`. By default, the function will use the value of [crs()] (no arguments), which is the CRS of the current **GRASS** ["location"][tutorial_locations_mapsets].
+#'
+#' @param keepgeom Logical: If `x` is a set of `numeric` coordinates, or a `data.frame` or similar, then they can be coerced into a `points` `GVector`. If `keepgeom` is `TRUE`, then the coordinates will be included in the data table of the `GVector`. The default is `FALSE`.
 #'
 #' @param correct Logical (`GVector`s only): Correct topological issues. See *Details* for more details! By default, this is `TRUE`.
 #'
@@ -25,6 +36,8 @@
 #'
 #' @param dropTable `GVector`s only: Logical. If `TRUE`, then drop the data table associated with a vector. By default, this is `FALSE`. See *Details* for more details!
 #'
+#' @param extent `GVector`s only: Either a `NULL` (default), or a `GVector`, a `SpatVector`, a `SpatExtent` object, an `sf` vector, an `bbox` object, or a numeric vector of 4 values providing a bounding box. If provided, only vector features within this bounding box are imported. If `extent` is a numeric vector, the values *must* be in the order west, east, south, north. If `NULL`, the entire vector is imported.
+#'
 #' @param verbose `GVector`s only: Logical. Displays progress when using automatic topology correction.
 #'
 #' @param ... Other arguments::
@@ -34,18 +47,18 @@
 #' @details **GRASS** uses a [topological][tutorial_vector_topology_and_troubleshooting] model for vectors. Topological issues generally arise only with polygon vectors, not point or line vectors. Sometimes, polygons created in other software are topologically incorrect--the borders of adjacent polygons may cross one another, or there may be small gaps between them. These errors can be corrected by slightly shifting vertices and/or removing small polygons that result from intersections of larger ones that border one another. A topological system also recognizes that boundaries to adjacent polygons are shared by the areas, so should not be ascribed attributes that belong to both areas (e.g., the shared border between two countries "belongs" to both countries).
 #'
 #' By default, `fast()` will try to correct topological errors in vectors. There are three levels of correction, and they are not necessarily mutually exclusive:
-#' 1. Automatic correction: By default, `fast()` will apply automatic topology correction. You can turn this off using the `correct = FALSE` argument, though in most cases this is not recommended.
-#' 2. Manual correction: In addition to correction from step 1, you can cause vertices of polygons close to one another to be "snapped" to same place and/or polygons that are smaller than some threshold to be removed. Problems with mis-aligned vertices arise when adjacent polygons are meant to share borders, but slight differences in the locations of the vertices cause them to  mis-align. This mis-alignment can also produce small "slivers" of polygons that are the areas where they overlap. You can snap vertices within a given distance of one another using the `snap` argument followed by a numeric value, like `snap = 0.000001`. Units of `snap` are in map units (usually meters) for projected coordinate reference systems and degrees for unprojected systems (e.g., WGS84, NAD83, NAD27). You can also remove polygons that are smaller than a particular area using the `area` argument followed by a numeric value (e.g., `area = 1`). The units of `area` are in m2, regardless of the coordinate reference system. Note that using `snap` and `area` entails some risk, as it is possible for nearby vertices to actually be distinct and for small areas to be legitimate.
-#' 3. Automatic snapping and/or area removal: In addition to the correction from step 1, you can use automatic `snap` and/or `area` correction on polygons vectors by setting `snap` and/or `area` to `NULL` (i.e., their default values). If just `snap` is `NULL`, only automatic snapping will be performed, and if just `area` is `NULL`, then only automatic area removal will be performed. Regardless, you will also need to set an integer value for `steps`, which is the number of steps to take between the smallest value of `snap` and/or `area` and the maximum value attempted. The function will then proceed by first attempting `snap = 0` and/or `area = 0`. If this does not produce a topologically correct vector, **GRASS** will (internally) suggest a range for `snap`. The `fast()` function then creates `steps` values from the lowest to the highest values of this range evenly-spaced along the log values of this range, then proceed to repeat the loading process until either the vector is imported correctly or the maximum value suggested is reached and results in a failed topology. Smaller values of `step` will result in more fine-grained attempts so are less likely to yield overcorrection, but can also take more time. The value of `area` in automatic correction is set to `snap^2`. **NB**: Automated snapping and area removal are only able performed on polygons vectors, even if `snap` or `area` is `NULL`. To snap lines or points, you must set `snap` equal to a numeric value.
-#' 4. Data table-vector mismatching: If your vector has a data table ("attribute table") associated with it, errors can occur if there are more/fewer geometries (or multi-geometries) per row in the table. If you do not really need the data table to do your analysis, you can remove it (and thus obviate this error) using `dropTable = TRUE` when using `fast()`.
-#' 5. Pre-load correction: Before you convert the vector into **fasterRaster**'s `GVector` format, you can also try using the [terra::makeValid()] or [sf::st_make_valid()] tools to fix issues, then use `fast()`.
-#' 6. If you do get a vector loaded into `GVector` format, you can also use [tools][breakPolys] or [fillHoles()] to fix issues.
+#' 1. **Automatic correction**: By default, `fast()` will apply automatic topology correction. You can turn this off using the `correct = FALSE` argument, though in most cases this is not recommended.
+#' 2. ***Manual* snapping and/or area removal**: In addition to correction from step 1, you can cause vertices of polygons close to one another to be "snapped" to same place and/or polygons that are smaller than some threshold to be removed. Problems with mis-aligned vertices arise when adjacent polygons are meant to share borders, but slight differences in the locations of the vertices cause them to  mis-align. This mis-alignment can also produce small "slivers" of polygons that are the areas where they overlap. You can snap vertices within a given distance of one another using the `snap` argument followed by a numeric value, like `snap = 0.000001`. Units of `snap` are in map units (usually meters) for projected coordinate reference systems and degrees for unprojected systems (e.g., WGS84, NAD83, NAD27). You can also remove polygons that are smaller than a particular area using the `area` argument followed by a numeric value (e.g., `area = 1`). The units of `area` are in m2, regardless of the coordinate reference system. Note that using `snap` and `area` entails some risk, as it is possible for nearby vertices to actually be distinct and for small areas to be legitimate.
+#' 3. **Automatic snapping and/or area removal**: In addition to the correction from step 1, you can use automatic `snap` and/or `area` correction on polygons vectors by setting `snap` and/or `area` to `NULL` (i.e., their default values). If just `snap` is `NULL`, only automatic snapping will be performed, and if just `area` is `NULL`, then only automatic area removal will be performed. Regardless, you will also need to set an integer value for `steps`, which is the number of steps to take between the smallest value of `snap` and/or `area` and the maximum value attempted. The function will then proceed by first attempting `snap = 0` and/or `area = 0` (i.e., no snapping or area removal). If this does not produce a topologically correct vector, **GRASS** will (internally) suggest a range for `snap`. The `fast()` function then creates `steps` values from the lowest to the highest values of this range evenly-spaced along the log values of this range, then proceed to repeat the loading process until either the vector is imported correctly or the maximum value suggested is reached and results in a failed topology. Smaller values of `step` will result in more fine-grained attempts so are less likely to yield overcorrection, but can also take more time. The value of `area` in automatic correction is set to `snap^2`. **NB**: Automated snapping and area removal are only able performed on polygons vectors, even if `snap` or `area` is `NULL`. To snap lines or points, you must set `snap` equal to a numeric value.
+#' 4. **Data table-vector mismatching**: If your vector has a data table ("attribute table") associated with it, errors can occur if there are more/fewer geometries (or multi-geometries) per row in the table. If you do not really need the data table to do your analysis, you can remove it (and thus obviate this error) using `dropTable = TRUE` when using `fast()`.
+#' 5. **Correction outside *fasterRaster***: Before you convert the vector into **fasterRaster**'s `GVector` format, you can also try using the [terra::makeValid()] or [sf::st_make_valid()] tools to fix issues, then use `fast()`.
+#' 6. **Post-conversion to a `GVector`**: If you do get a vector loaded into `GVector` format, you can also use a set of [tools][breakPolys] or [fillHoles()] to fix issues.
 #'
 #' @seealso [rgrass::read_RAST()] and [rgrass::read_VECT()], [vector cleaning][breakPolys], [removeHoles()], plus modules [`v.in.ogr`](https://grass.osgeo.org/grass84/manuals/r.in.gdal.html), [`v.in.ogr`](https://grass.osgeo.org/grass84/manuals/v.in.ogr.html), and [`r.import`](https://grass.osgeo.org/grass84/manuals/r.import.html) in **GRASS**.
 #'
 #' @return A `GRaster` or `GVector`.
 #'
-#' @example man/examples/ex_GRaster_GVector.r
+#' @example man/examples/ex_fast.r
 #'
 #' @aliases fast
 #' @rdname fast
@@ -61,10 +74,13 @@ methods::setMethod(
 		snap = NULL,
 		area = NULL,
 		steps = 10,
+		extent = NULL,
 		dropTable = FALSE,
 		verbose = FALSE,
 		...
 	) {
+
+	if (is.na(faster("grassDir"))) stop("You must specify the folder in which GRASS is installed using faster().")
 
 	### dots
 	########
@@ -162,263 +178,261 @@ methods::setMethod(
 	
 	} else if (rastOrVect == "vector") {
 
+		# x is a filename and xVect is missing: we have not come through methods for SpatVectors or sf objects
 		if (!any(dotNames == "xVect")) {
-			xVect <- terra::vect(x, what = "geom")
-		} else {
-			xVect <- dots$xVect
-		}
-		gtype <- terra::geomtype(xVect)
-
-		# table from ...
-		if (dropTable) {
-			table <- NULL
-			if (any(dotNames == "table")) warning("Argument `dropTable` is TRUE, so the data table will be ignored.")
-		} else if (any(dotNames == "table")) {
-			table <- dots$table
-		} else {
-			if (any(dotNames == "table")) {
-				table <- table
-			} else {
-				table <- terra::vect(x, what = "attributes")
-			}
-			table <- data.table::as.data.table(table)
-		}
-
-		# location, location, location...
-		location <- .locationFind(xVect, return = "name", match = "crs")
-		if (is.null(location) | !grassStarted()) {
-
-			.locationCreate(x = xVect)
-			location <- .location()
-
-		}
-		.locationRestore(x = location)
-
-		# correct topology?
-		if (correct) {
-			correctTopoFlag <- NULL
-		} else {
-			correctTopoFlag <- "c" # no correction
-		}
-
-		# no snapping/area removal for particular geometry types
-		if (is.null(snap) & gtype == "points") snap <- -1
-		if (is.null(area) & gtype %in% c("lines", "points")) area <- 0
-
-		### first try (no snapping or area removal)
-		if (is.null(snap) || snap <= 0) {
-			thisSnap <- -1
-			thisSnapNice <- "no"
-		} else {
-			thisSnap <- snap
-			thisSnapNice <- paste0(thisSnap, " map-units")
-		}
-
-		if (is.null(area) || area == 0) {
-			thisArea <- 0
-			thisAreaNice <- "no polygon removal"
-		} else {
-			thisArea <- area
-			thisAreaNice <- paste0("removal of polygons of <", thisArea, " m2")
-		}
-
-		if (verbose & gtype == "polygons") {
-			omnibus::say("Creating GVector with ", thisSnapNice, " snapping and ", thisAreaNice, "...")
-		} else if (verbose) {
-			omnibus::say("Creating GVector with ", thisSnapNice, " snapping of vertices/points...")
-		}
-
-		src <- .makeSourceName("v_in_ogr", "vector")
-		if (is.null(snap) | is.null(area)) {
 			
-			# slower if we need to record messages
-			suppressMessages(
-				run <- rgrass::execGRASS(
+			x <- terra::vect(x)
+			out <- fast(x, correct = correct, snap = snap, area = area, steps = steps, extent = extent, dropTable = dropTable, verbose = verbose, ...)
+
+		# x is a filename and xVect is present: we have come through a method for SpatVectors or sf objects
+		} else {
+
+			xVect <- dots$xVect
+			if (any(dotNames == "table")) {
+				table <- dots$table
+			} else {
+				table <- NULL
+			}
+
+			gtype <- terra::geomtype(xVect)
+
+			# location, location, location...
+			location <- .locationFind(xVect, return = "name", match = "crs")
+			if (is.null(location) | !grassStarted()) {
+
+				.locationCreate(x = xVect)
+				location <- .location()
+
+			}
+			.locationRestore(x = location)
+
+			# correct topology?
+			if (correct) {
+				correctTopoFlag <- NULL
+			} else {
+				correctTopoFlag <- "c" # no correction
+			}
+
+			# no snapping/area removal for particular geometry types
+			if (is.null(snap) & gtype == "points") snap <- -1
+			if (is.null(area) & gtype %in% c("lines", "points")) area <- 0
+
+			### first try (no snapping or area removal)
+			if (is.null(snap) || snap <= 0) {
+				thisSnap <- -1
+				thisSnapNice <- "no"
+			} else {
+				thisSnap <- snap
+				thisSnapNice <- paste0(thisSnap, " map-units")
+			}
+
+			if (is.null(area) || area == 0) {
+				thisArea <- 0
+				thisAreaNice <- "no polygon removal"
+			} else {
+				thisArea <- area
+				thisAreaNice <- paste0("removal of polygons of <", thisArea, " m2")
+			}
+
+			if (verbose & gtype == "polygons") {
+				omnibus::say("Creating GVector with ", thisSnapNice, " snapping and ", thisAreaNice, "...")
+			} else if (verbose) {
+				omnibus::say("Creating GVector with ", thisSnapNice, " snapping of vertices/points...")
+			}
+
+			src <- .makeSourceName("v_in_ogr", "vector")
+			if (is.null(snap) | is.null(area)) {
+				
+				# slower if we need to record messages
+				suppressMessages(
+					run <- rgrass::execGRASS(
+						cmd = "v.in.ogr",
+						input = x,
+						output = src,
+						snap = thisSnap,
+						min_area = thisArea,
+						flags = c(.quiet(), "verbose", "overwrite", "t", correctTopoFlag),
+						ignore.stderr = FALSE,
+						Sys_show.output.on.console = FALSE,
+						echoCmd = FALSE, # displays GRASS command
+						intern = TRUE
+					)
+				)
+
+			} else {
+
+				# faster if we remove fluff
+				rgrass::execGRASS(
 					cmd = "v.in.ogr",
 					input = x,
 					output = src,
-					snap = thisSnap,
-					min_area = thisArea,
-					flags = c(.quiet(), "verbose", "overwrite", "t", correctTopoFlag),
-					ignore.stderr = FALSE,
-					Sys_show.output.on.console = FALSE,
-					echoCmd = FALSE, # displays GRASS command
-					intern = TRUE
+					snap = -1,
+					min_area = 0,
+					flags = c(.quiet(), "overwrite", "t", correctTopoFlag)
 				)
-			)
-
-		} else {
-
-			# faster if we remove fluff
-			rgrass::execGRASS(
-				cmd = "v.in.ogr",
-				input = x,
-				output = src,
-				snap = -1,
-				min_area = 0,
-				flags = c(.quiet(), "overwrite", "t", correctTopoFlag)
-			)
-			
-		}
-		
-		info <- .vectInfo(src)
-		valid <- .validVector(info, table)
-
-		### automated vector topology correction
-		if (!valid & (is.null(snap) | is.null(area))) {
-		
-			stepsMinus1 <- steps - 1L
-			snapRange <- run[grepl(run, pattern = "Estimated range of snapping threshold:")]
-
-			# generic snap range
-			if (length(snapRange) == 0L) {
-
-				snapRange <- c(1E-08, 1)
-
-			# GRASS-suggested snap range
-			} else {
-
-				snapRange <- substr(snapRange, 41L, nchar(snapRange))
-				snapRange <- sub(snapRange, pattern = "\\]", replacement = "")
-				snapRange <- strsplit(snapRange, split = ", ")[[1L]]
-				# snapRange <- c(snapRange[[1L]], snapRange[[2L]])
-				snapRange <- as.numeric(snapRange)
-
+				
 			}
-
-			# create sequence of snap values
-			# evenly-spaced in log space bc suggested min/max values are usually several OOMs apart
-			snapRange <- log(snapRange)
-			snaps <- seq(snapRange[1L], snapRange[2L], length.out = steps - 1L)
-			snaps <- exp(snaps)
-
-			digits <- abs(floor(log10(c(snaps[1L]^2))))
-
-			# snap AUTO and area AUTO
-			if (is.null(snap) & is.null(area)) {
 			
-				step <- 1L
-				while (!valid & step <= stepsMinus1) {
-				
-					thisSnap <- snaps[step]
-					thisArea <- snaps[step]^2
+			info <- .vectInfo(src)
+			valid <- .validVector(info, table)
 
-					if (verbose) {
+			### automated vector topology correction
+			if (!valid & (is.null(snap) | is.null(area))) {
+			
+				stepsMinus1 <- steps - 1L
+				snapRange <- run[grepl(run, pattern = "Estimated range of snapping threshold:")]
+
+				# generic snap range
+				if (length(snapRange) == 0L) {
+
+					snapRange <- c(1E-08, 1)
+
+				# GRASS-suggested snap range
+				} else {
+
+					snapRange <- substr(snapRange, 41L, nchar(snapRange))
+					snapRange <- sub(snapRange, pattern = "\\]", replacement = "")
+					snapRange <- strsplit(snapRange, split = ", ")[[1L]]
+					# snapRange <- c(snapRange[[1L]], snapRange[[2L]])
+					snapRange <- as.numeric(snapRange)
+
+				}
+
+				# create sequence of snap values
+				# evenly-spaced in log space bc suggested min/max values are usually several OOMs apart
+				snapRange <- log(snapRange)
+				snaps <- seq(snapRange[1L], snapRange[2L], length.out = steps - 1L)
+				snaps <- exp(snaps)
+
+				digits <- abs(floor(log10(c(snaps[1L]^2))))
+
+				# snap AUTO and area AUTO
+				if (is.null(snap) & is.null(area)) {
+				
+					step <- 1L
+					while (!valid & step <= stepsMinus1) {
+					
+						thisSnap <- snaps[step]
+						thisArea <- snaps[step]^2
+
+						if (verbose) {
+							
+							thisSnapNice <- round(thisSnap, digits)
+							thisAreaNice <- round(thisArea, digits)
+
+							omnibus::say("Iteration ", step, ": Snapping at ", thisSnapNice, " map-units and removing polygons of <", thisAreaNice, " m2...")
+
+						}
+
+						src <- .makeSourceName("v_in_ogr", "vector")
+						rgrass::execGRASS(
+							cmd = "v.in.ogr",
+							input = x,
+							output = src,
+							snap = thisSnap,
+							min_area = thisArea,
+							flags = c(.quiet(), "overwrite", "t", correctTopoFlag)
+						)
 						
-						thisSnapNice <- round(thisSnap, digits)
-						thisAreaNice <- round(thisArea, digits)
-
-						omnibus::say("Iteration ", step, ": Snapping at ", thisSnapNice, " map-units and removing polygons of <", thisAreaNice, " m2...")
+						info <- .vectInfo(src)
+						valid <- .validVector(info, table)
+						step <- step + 1L
 
 					}
-
-					src <- .makeSourceName("v_in_ogr", "vector")
-					rgrass::execGRASS(
-						cmd = "v.in.ogr",
-						input = x,
-						output = src,
-						snap = thisSnap,
-						min_area = thisArea,
-						flags = c(.quiet(), "overwrite", "t", correctTopoFlag)
-					)
 					
-					info <- .vectInfo(src)
-					valid <- .validVector(info, table)
-					step <- step + 1L
+				# snap AUTO and area NUMERIC
+				} else if (is.null(snap) & is.numeric(area)) {
+					
+					step <- 1L
+					while (!valid & step <= stepsMinus1) {
+					
+						thisSnap <- snaps[step]
+						thisArea <- area
 
-				}
-				
-			# snap AUTO and area NUMERIC
-			} else if (is.null(snap) & is.numeric(area)) {
-				
-				step <- 1L
-				while (!valid & step <= stepsMinus1) {
-				
-					thisSnap <- snaps[step]
-					thisArea <- area
+						if (verbose) {
+							
+							thisSnapNice <- round(thisSnap, digits)
+							omnibus::say("Iteration ", step, ": Snapping at ", thisSnapNice, " map-units...")
 
-					if (verbose) {
+						}
+
+						src <- .makeSourceName("v_in_ogr", "vector")
+						rgrass::execGRASS(
+							cmd = "v.in.ogr",
+							input = x,
+							output = src,
+							snap = thisSnap,
+							min_area = thisArea,
+							flags = c(.quiet(), "overwrite", "t", correctTopoFlag)
+						)
 						
-						thisSnapNice <- round(thisSnap, digits)
-						omnibus::say("Iteration ", step, ": Snapping at ", thisSnapNice, " map-units...")
+						info <- .vectInfo(src)
+						valid <- .validVector(info, table)
+						step <- step + 1L
 
 					}
-
-					src <- .makeSourceName("v_in_ogr", "vector")
-					rgrass::execGRASS(
-						cmd = "v.in.ogr",
-						input = x,
-						output = src,
-						snap = thisSnap,
-						min_area = thisArea,
-						flags = c(.quiet(), "overwrite", "t", correctTopoFlag)
-					)
 					
-					info <- .vectInfo(src)
-					valid <- .validVector(info, table)
-					step <- step + 1L
+				# snap NUMERIC and area AUTO
+				} else if (is.numeric(snap) & is.null(area)) {
+					
+					step <- 1L
+					while (!valid & step <= stepsMinus1) {
+					
+						if (snap <= 0) {
+							thisSnap <- -1
+						} else {
+							thisSnap <- snap
+						}
+						thisArea <- snaps[step]^2
+						
+						if (verbose) {
+						
+							thisAreaNice <- round(thisArea, digits)
+							omnibus::say("Iteration ", step, ": Removing polygons of <", thisAreaNice, " m2...")
 
-				}
-				
-			# snap NUMERIC and area AUTO
-			} else if (is.numeric(snap) & is.null(area)) {
-				
-				step <- 1L
-				while (!valid & step <= stepsMinus1) {
-				
-					if (snap <= 0) {
-						thisSnap <- -1
-					} else {
-						thisSnap <- snap
+						}
+
+						src <- .makeSourceName("v_in_ogr", "vector")
+						rgrass::execGRASS(
+							cmd = "v.in.ogr",
+							input = x,
+							output = src,
+							snap = thisSnap,
+							min_area = thisArea,
+							flags = c(.quiet(), "overwrite", "t", correctTopoFlag)
+						)
+						
+						info <- .vectInfo(src)
+						valid <- .validVector(info, table)
+						step <- step + 1L
+
 					}
-					thisArea <- snaps[step]^2
-					
-					if (verbose) {
-					
-						thisAreaNice <- round(thisArea, digits)
-						omnibus::say("Iteration ", step, ": Removing polygons of <", thisAreaNice, " m2...")
+				
+				} # next type of topology correction while loading
+		
+			} # if not valid and doing automated correction
 
+			if (!valid) {
+
+				if (!is.null(table)) {
+				
+					if (nrow(table) > info$nGeometries) {
+
+						msg <- paste0("Vector has more geometries than rows in its data table. Try:\n  * Setting the `correct` argument to `TRUE`;\n  * Increasing the value(s) of the `snap` and/or `area` arguments;\n  * Using automated `snap` and/or `area` correction;\n  * Dropping the data table associated with the vector using `dropTable = FALSE`; or\n  * Correcting the vector outside of fasterRaster with `terra::makeValid()` or `sf::st_make_valid()` before using fast().")
+						stop(msg)
+
+					} else if (nrow(table) < info$nGeometries) {
+					
+						msg <- paste0("Vector has more rows in its data table than geometries. Try:\n  * Setting the `correct` argument to `TRUE`;\n  * Decreasing the value(s) of the `snap` and/or `area` arguments;\n  * Using automated `snap` and/or `area` correction;\n  * Dropping the data table associated with the vector using `dropTable = FALSE`; or\n  * Correcting the vector outside of fasterRaster with `terra::makeValid()` or `sf::st_make_valid()` before using fast().")
+						stop(msg)
+					
 					}
-
-					src <- .makeSourceName("v_in_ogr", "vector")
-					rgrass::execGRASS(
-						cmd = "v.in.ogr",
-						input = x,
-						output = src,
-						snap = thisSnap,
-						min_area = thisArea,
-						flags = c(.quiet(), "overwrite", "t", correctTopoFlag)
-					)
-					
-					info <- .vectInfo(src)
-					valid <- .validVector(info, table)
-					step <- step + 1L
-
-				}
-			
-			} # next type of topology correction while loading
-	
-		} # if not valid and doing automated correction
-
-		if (!valid) {
-
-			if (!is.null(table)) {
-			
-				if (nrow(table) > info$nGeometries) {
-
-					msg <- paste0("Vector has more geometries than rows in its data table. Try:\n  * Setting the `correct` argument to `TRUE`;\n  * Increasing the value(s) of the `snap` and/or `area` arguments;\n  * Using automated `snap` and/or `area` correction;\n  * Dropping the data table associated with the vector using `dropTable = FALSE`; or\n  * Correcting the vector outside of fasterRaster with `terra::makeValid()` or `sf::st_make_valid()` before using fast().")
-					stop(msg)
-
-				} else if (nrow(table) < info$nGeometries) {
-				
-					msg <- paste0("Vector has more rows in its data table than geometries. Try:\n  * Setting the `correct` argument to `TRUE`;\n  * Decreasing the value(s) of the `snap` and/or `area` arguments;\n  * Using automated `snap` and/or `area` correction;\n  * Dropping the data table associated with the vector using `dropTable = FALSE`; or\n  * Correcting the vector outside of fasterRaster with `terra::makeValid()` or `sf::st_make_valid()` before using fast().")
-					stop(msg)
 				
 				}
-			
-			}
-		} # not valid, so correct
-		out <- .makeGVector(src = src, table = table)
+			} # not valid, so correct
+			out <- .makeGVector(src = src, table = table)
+
+		} # x is a filename and xVect supplied
 
 	}
 	out
@@ -434,12 +448,14 @@ methods::setMethod(
 	signature(x = "SpatRaster"),
 	function(x, ...) {
 
+	if (is.na(faster("grassDir"))) stop("You must specify the folder in which GRASS is installed using faster().")
+
 	rastFile <- terra::sources(x)
 	levels <- .getLevels(x)
 
 	if (any(rastFile == "")) {
 		tempFile <- tempfile(fileext = ".tif")
-		terra::writeRaster(x, filename = tempFile, overwrite = TRUE, datatype = datatype(x, "terra", forceDouble = TRUE))
+		terra::writeRaster(x, filename = tempFile, overwrite = TRUE)
 		rastFile <- tempFile
 	} else {
 		rastFile <- terra::sources(x)
@@ -508,7 +524,7 @@ methods::setMethod(
 methods::setMethod(
 	"fast",
 	signature(x = "SpatVector"),
-	function(x, correct = TRUE, snap = NULL, area = NULL, steps = 10, dropTable = FALSE, verbose = FALSE, ...) .fastVector(x, correct = correct, snap = snap, area = area, steps = steps, dropTable = dropTable, verbose = verbose, ...)
+	function(x, correct = TRUE, snap = NULL, area = NULL, steps = 10, extent = NULL, dropTable = FALSE, verbose = FALSE, ...) .fastVector(x, correct = correct, snap = snap, area = area, steps = steps, extent = extent, dropTable = dropTable, verbose = verbose, ...)
 )
 
 #' @rdname fast
@@ -517,7 +533,7 @@ methods::setMethod(
 methods::setMethod(
 	"fast",
 	signature(x = "sf"),
-	function(x, correct = TRUE, snap = NULL, area = NULL, steps = 10, dropTable = FALSE, verbose = FALSE, ...) .fastVector(x, correct = correct, snap = snap, area = area, steps = steps, dropTable = dropTable, verbose = verbose, ...)
+	function(x, correct = TRUE, snap = NULL, area = NULL, steps = 10, extent = NULL, dropTable = FALSE, verbose = FALSE, ...) .fastVector(x, correct = correct, snap = snap, area = area, steps = steps, extent = extent, dropTable = dropTable, verbose = verbose, ...)
 )
 
 # 1. Write vector to disk (if needed)
@@ -529,22 +545,40 @@ methods::setMethod(
 	snap,
 	area,
 	steps,
+	extent,
 	dropTable,
 	verbose,
 	...
 ) {
 
+	if (is.na(faster("grassDir"))) stop("You must specify the folder in which GRASS is installed using faster().")
+
 	dots <- list(...)
 	dotNames <- names(dots)
 	
 	if (!inherits(x, "SpatVector")) x <- terra::vect(x)
+	
+	# crop
+	if (!is.null(extent)) {
+		
+		extent <- .getExtent(extent)
+		extent <- terra::as.polygons(extent)
+		x <- terra::crop(x, extent)
+
+		if (nrow(x) == 0L) {
+			warning("No geometries occur within the given extent. Returning `NULL`.")
+			return(NULL)
+		}
+		
+	}
+	
 	xVect <- x
 
 	# remove data frame
 	if (dropTable) {
 		table <- NULL
 	} else {
-		table <- data.table::as.data.table(x)
+		table <- data.table::as.data.table(xVect)
 	}
 
 	if (terra::sources(x) == "") {
@@ -554,19 +588,136 @@ methods::setMethod(
 			nc <- ncol(xVect)
 			xVect[ , seq_len(nc)] <- NULL 
 		}
+		
+		# NB we ***need** a table with the GVector--otherwise, subset_single_bracket does not work as expected
+		xVect$DUMMYDUMMY_ <- 1L:nrow(xVect)
 
 		vectFile <- tempfile(fileext = ".gpkg")
 		terra::writeVector(xVect, filename = vectFile, filetype = "GPKG", overwrite = TRUE)
-
+	
 	} else {
 		vectFile <- terra::sources(x)
 	}
 
-	args <- list(x = vectFile, rastOrVect = "vector", correct = correct, snap = snap, area = area, steps = steps, dropTable = dropTable, table = table, xVect = xVect, verbose = verbose)
+	# NB not passing extent bc already cropped if we wanted to do that
+	args <- list(x = vectFile, rastOrVect = "vector", correct = correct, snap = snap, area = area, steps = steps, extent = NULL, dropTable = dropTable, table = table, xVect = xVect, verbose = verbose)
 	args <- c(args, list(...))
 	do.call(fast, args = args)
 	
 }
+
+#' @rdname fast
+#' @aliases fast
+#' @exportMethod fast
+methods::setMethod(
+	"fast",
+	signature(x = "missing"),
+	function(x, rastOrVect, crs = "") {
+	
+	if (crs == "") { 
+	
+		crs <- tryCatch(crs(), error=function(cond) FALSE)
+
+		if (is.logical(crs)) stop("You must provide a coordinate reference system with `crs` or\n  have created or loaded at least one GRaster or GVector.")
+
+	}
+
+	rastOrVect <- omnibus::pmatchSafe(rastOrVect, c("raster", "vector"), nmax = 1L)
+	if (rastOrVect == "raster") {
+
+		x <- terra::rast()
+		x[] <- 1L
+		x <- terra::project(x, crs)
+		out <- fast(x)
+
+	} else {
+
+		x <- c(-180, 180, -90, 90)
+		x <- terra::ext(x)
+		x <- terra::as.polygons(x, crs = "epsg:4326")
+		x <- terra::project(x, crs)
+		out <- .fastVector(x, correct = TRUE, snap = FALSE, area = FALSE, steps = 10, extent = NULL, dropTable = FALSE, verbose = FALSE)
+
+	}
+	out
+
+	} # EOF
+)
+
+#' @rdname fast
+#' @aliases fast
+#' @exportMethod fast
+methods::setMethod(
+	"fast",
+	signature(x = "numeric"),
+	function(x, crs = "", keepgeom = FALSE) {
+	
+	if (length(x) %% 2L != 0L) stop("You must supply an even number of numeric values each representing longitude/latitude pairs.")
+	x <- matrix(x, ncol = 2L, byrow = TRUE)
+	.fastDF(x = x, geom = 1:2, crs = crs, keepgeom = keepgeom)
+
+	} # EOF
+)
+
+#' @rdname fast
+#' @aliases fast
+#' @exportMethod fast
+methods::setMethod(
+	"fast",
+	signature(x = "data.frame"),
+	function(x, geom = 1:2, crs = "", keepgeom = FALSE) .fastDF(x = x, geom = geom, crs = crs, keepgeom = keepgeom)
+)
+
+#' @rdname fast
+#' @aliases fast
+#' @exportMethod fast
+methods::setMethod(
+	"fast",
+	signature(x = "data.table"),
+	function(x, geom = 1:2, crs = "", keepgeom = FALSE) .fastDF(x = x, geom = geom, crs = crs, keepgeom = keepgeom)
+)
+
+#' @rdname fast
+#' @aliases fast
+#' @exportMethod fast
+methods::setMethod(
+	"fast",
+	signature(x = "matrix"),
+	function(x, geom = 1:2, crs = "", keepgeom = FALSE) .fastDF(x = x, geom = geom, crs = crs, keepgeom = keepgeom)
+)
+
+#' Create a points GVector from a data.frame or similar
+#'
+#' @param x Two numeric values, or a `data.frame`, `data.table`, or `matrix`.
+#' @param geom 2-element 
+#' @param crs WKT2 string
+#' @param keepgeom Logical
+#' @noRd
+.fastDF <- function(x, geom, crs, keepgeom) {
+
+	if (crs == "") {
+	
+		crs <- tryCatch(crs(), error=function(cond) FALSE)
+
+		if (is.logical(crs)) stop("You must provide a coordinate reference system with `crs` or\n  have created or loaded at least one GRaster or GVector.")
+
+	}
+
+	if (!is.data.frame(x)) x <- as.data.frame(x)
+
+	if (is.numeric(geom) | is.integer(geom)) {
+		xcol <- names(x)[geom[1L]]
+		ycol <- names(x)[geom[2L]]
+	} else {
+		xcol <- geom[1L]
+		ycol <- geom[2L]
+	}
+
+	xVect <- terra::vect(x, geom = c(xcol, ycol), crs = crs, keepgeom = keepgeom)
+	fast(xVect, correct = TRUE)
+
+}
+
 
 #' Test if a vector is valid
 #'
@@ -601,4 +752,31 @@ methods::setMethod(
 
 }
 
+#' Get extent from a spatial object or numeric vector
+#'
+#' @param extent Either a `NULL` (default), or a `GVector`, a `GRaster`, a `SpatVector`, a `SpatExtent` object, an `sf` vector, an `bbox` object, or a numeric vector of 4 values providing a bounding box. If provided, only vector features within this bounding box are imported. If `extent` is a numeric vector, the values *must* be in the order west, east, south, north.
+#'
+#' @returns Either `NULL` (if `extent` is `NULL`), or a `SpatExtent` object.
+#'
+#' @noRd
+.getExtent <- function(extent) {
 
+	if (is.null(extent)) {
+		out <- NULL
+	} else {
+		if (inherits(extent, "GSpatial")) {
+			out <- ext(extent, vector = TRUE)
+		} else if (inherits(extent, c("SpatVector", "SpatRaster", "SpatExtent"))) {
+			out <- terra::ext(extent)
+			out <- as.vector(extent)
+		} else if (inherits(extent, "sf")) {
+			out <- sf::st_bbox
+			out <- as.vector(out)
+			out <- out[c(1L, 3L, 2L, 4L)]
+		}
+		out <- terra::ext(out)
+	}
+
+	out
+
+}

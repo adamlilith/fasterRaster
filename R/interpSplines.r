@@ -1,4 +1,4 @@
-#' Use values in a "points" GVector to interpolate to a GRaster
+#' Interpolate values at points to a GRaster using splines
 #'
 #' @description This function interpolates values in the data table of a "points" `GVector` to a `GRaster` using splines with Tykhonov regularization to avoid overfitting.
 #'

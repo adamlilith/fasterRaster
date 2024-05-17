@@ -9,7 +9,7 @@
 #'
 #' @param y A character or `GLocation` object (i.e., typically a `GRaster` or `GVector`): Used to set the focal `GRaster` or `GVector`'s new CRS (and resolution and possibly extent, for `GRaster`s).
 #'
-#' @param align Logical: If `FALSE` (default), and `x` and `y` are `GRaster`s, then the extent of `x` will be cropped to the extent of `y`. If `TRUE`, no corpping is performed.
+#' @param align Logical: If `FALSE` (default), and `x` and `y` are `GRaster`s, then the extent of `x` will be cropped to the extent of `y`. If `TRUE`, no cropping is performed.
 #'
 #' @param method Character or `NULL` (for `GRaster`s only): Method to use to conduct the transformation (rasters only). Partial matching is used.
 #' * `NULL` (default): Automatically choose based on raster properties (`near` for categorical data, `bilinear` for continuous data).
@@ -31,7 +31,9 @@
 #' * `"center"`: This method locates the centroid of the raster to be projected (in the same CRS as the original raster). It then creates four points north, south, east, and west of the centroid, each spaced one cell's width from the centroid. This set of points is then projected to the new CRS. The new cell size in the x-dimension will be the average of the distance between the east and west points from the centroid, and in the y-dimension the average from the centroid to the north and south points.
 #' * `"fallback"` (default): This applies the `terra` method first, but if that fails, then tries `template`, then `center`. This process can take a long time for large rasters.
 #' 
-#' @param wrap Logical (for projecting `GRaster`s only): When projecting rasters that "wrap around" (i.e., whole-world rasters or rasters that have edges that actually circle around to meet on the globe), `wrap` should be `TRUE` to avoid removing rows and columns from the "edge" of the map. The default is `FALSE`.
+#' @param wrap Logical:
+#' * `GRaster`s: When projecting rasters that "wrap around" (i.e., whole-world rasters or rasters that have edges that actually circle around to meet on the globe), `wrap` should be `TRUE` to avoid removing rows and columns from the "edge" of the map. The default is `FALSE`.
+#' * `GVector`s: When projecting vectors that span the international date line at 180E/W, `wrap` should be `TRUE` to avoid an issue where the coordinates are incorrectly mapped to the range -180 to 180.
 #'
 #' @details When projecting a raster, the "fallback" methods in **GRASS** module `r.import` are actually used, even though the `method` argument takes the strings specifying non-fallback methods. See the manual page for the `r.import` **GRASS** module.
 #' 
@@ -102,7 +104,16 @@ methods::setMethod(
 #' @noRd
 .projectRaster <- function(x, y, align, method, fallback, res, wrap) {
 
-	.message(msg = "project_raster", message = "This function can produce erroneous results if the raster crosses a pole or the international date line.")
+	# .message(msg = "project_raster", message = "This function can produce erroneous results if the raster crosses a pole or the international date line.")
+	
+	# imperfect catch for cases where `wrap` should be `TRUE` but is not
+	if (.projection(x) %in% c("WGS84", "NAD83", "NAD27") & !wrap) {
+
+		extent <- ext(x, vector = TRUE)
+		if ((extent[1L] == -180 & extent[2L] == 180) | (extent[3L] == -90 & extent[4L] == 90)) warning("This GRaster seems to wrap around the globe to meet at the international\n  date line and/or the poles. Should `wrap` be `TRUE`?")
+
+	}
+
 	
 	xLocation <- .location(x)
 	yLocation <- .locationFind(y, match = "crs", return = "name")
@@ -363,8 +374,24 @@ methods::setMethod(
 	signature = c(x = "GVector"),
 	definition = function(
 		x,
-		y
+		y,
+		wrap = FALSE
 	) {
+
+	# imperfect catch for cases where `wrap` should be `TRUE` but is not
+	if (.projection(x) %in% c("WGS84", "NAD83", "NAD27") & !wrap) {
+	
+		extent <- ext(x, vector = TRUE)
+		if (
+			(extent[1L] == -180 & extent[2L] == 180) |
+			(extent[3L] == -90 & extent[4L] == 90) |
+			(extent[1L] > 0 & extent[2L] < 0) |			
+			(extent[3L] > extent[4L])			
+			(extent[4L] < extent[3L])			
+		) warning("This GVector seems to span the international date line and/or poles. Should `wrap` be `TRUE`?")
+	
+	}
+
 
 	xLocation <- .location(x)
 	yLocation <- .locationFind(y, match = "crs", return = "name")
@@ -384,14 +411,18 @@ methods::setMethod(
 	.locationRestore(yLocation)
 	src <- .makeSourceName("project_v_proj", "vector")
 	
-	rgrass::execGRASS(
+	args <- list(
 		cmd = "v.proj",
 		location = .location(x),
+		dbase = faster("workDir"),
 		mapset = .mapset(x),
 		input = sources(x),
 		output = src,
 		flags = c(.quiet(), "overwrite")
-	)
+	)	
+	if (wrap) args$flags <- c(args$flags, "w") # if crosses international date line
+	if (geomtype(x, grass = TRUE) == "point") args$flags <- c(args$flags, "b") # disable topology build for points
+	do.call(rgrass::execGRASS, args = args)
 
 	out <- .makeGVector(src, table = x@table)
 	out

@@ -6,6 +6,11 @@
 \alias{fast,SpatRaster-method}
 \alias{fast,SpatVector-method}
 \alias{fast,sf-method}
+\alias{fast,missing-method}
+\alias{fast,numeric-method}
+\alias{fast,data.frame-method}
+\alias{fast,data.table-method}
+\alias{fast,matrix-method}
 \title{Create a GRaster or GVector}
 \usage{
 \S4method{fast}{character}(
@@ -16,6 +21,7 @@
   snap = NULL,
   area = NULL,
   steps = 10,
+  extent = NULL,
   dropTable = FALSE,
   verbose = FALSE,
   ...
@@ -29,6 +35,7 @@
   snap = NULL,
   area = NULL,
   steps = 10,
+  extent = NULL,
   dropTable = FALSE,
   verbose = FALSE,
   ...
@@ -40,17 +47,31 @@
   snap = NULL,
   area = NULL,
   steps = 10,
+  extent = NULL,
   dropTable = FALSE,
   verbose = FALSE,
   ...
 )
+
+\S4method{fast}{missing}(x, rastOrVect, crs = "")
+
+\S4method{fast}{numeric}(x, crs = "", keepgeom = FALSE)
+
+\S4method{fast}{data.frame}(x, geom = 1:2, crs = "", keepgeom = FALSE)
+
+\S4method{fast}{data.table}(x, geom = 1:2, crs = "", keepgeom = FALSE)
+
+\S4method{fast}{matrix}(x, geom = 1:2, crs = "", keepgeom = FALSE)
 }
 \arguments{
 \item{x}{Any one of:
 \itemize{
 \item A \code{SpatRaster} raster. Rasters can have one or more layers.
-\item A \code{SpatVector} or \code{sf} spatial vector.
+\item A \code{SpatVector} or \code{sf} spatial vector. See especially arguments \code{correct}, \code{area}, \code{snap}, \code{steps}, and \code{vebose}.
 \item A character string or a vector of strings with the path(s) and filename(s) of one or more rasters or one vector to be loaded directly into \strong{GRASS}. The function will attempt to ascertain the type of object from the file extension (raster or vector), but it can help to indicate which it is using the \code{rastOrVect} argument if it is unclear.
+\item A vector with an even number of numeric values representing longitude/latitude pairs. See arguments \code{geom}, \code{keepgeom}, and \code{crs}.
+\item A \code{data.frame}, \code{data.table}, or \code{matrix}: Create a \code{points} \code{GVector}. Two of the columns must represent longitude and latitude. See arguments \code{geom}, \code{keepgeom}, and \code{crs}.
+\item Missing: Creates a generic \code{GRaster} or \code{GVector}. You must specify \code{rastOrVect}; for example, \code{fast(rastOrVect = "raster")}. Also see argument \code{crs}.
 }}
 
 \item{levels}{(\code{GRaster}s only): A \code{data.frame}, \code{data.table}, or list of \code{data.frame}s or \code{data.table}s with categories for categorical rasters. The first column of a table corresponds to raster values and must be of type \code{integer}. A subsequent column corresponds to category labels. By default, the second column is assumed to represent labels, but this can be changed with \code{\link[fasterRaster]{activeCat<-}}. Level tables can also be \code{NULL} (e.g., \code{data.fame(NULL)}). You can also assign levels after loading a raster using \code{\link[fasterRaster]{levels<-}}.}
@@ -63,6 +84,8 @@
 
 \item{steps}{\code{GVector}s only: A positive integer > 1 (default is 10). When using automatic vector correction (i.e., either \code{snap = NULL} and/or \code{area = NULL}), this is the number of values of \code{snap} and/or \code{area} to try to generate a correct topology, including no snapping or polygon removal (i.e, \code{snap = 0} and \code{area = 0}).}
 
+\item{extent}{\code{GVector}s only: Either a \code{NULL} (default), or a \code{GVector}, a \code{SpatVector}, a \code{SpatExtent} object, an \code{sf} vector, an \code{bbox} object, or a numeric vector of 4 values providing a bounding box. If provided, only vector features within this bounding box are imported. If \code{extent} is a numeric vector, the values \emph{must} be in the order west, east, south, north. If \code{NULL}, the entire vector is imported.}
+
 \item{dropTable}{\code{GVector}s only: Logical. If \code{TRUE}, then drop the data table associated with a vector. By default, this is \code{FALSE}. See \emph{Details} for more details!}
 
 \item{verbose}{\code{GVector}s only: Logical. Displays progress when using automatic topology correction.}
@@ -72,6 +95,12 @@
 \item \code{table} (\code{GVector}s--useful mainly to developers, not most users): A \code{data.frame} or \code{data.table} with one row per geometry in a \code{GVector}. Serves as an attribute table.
 \item \code{xVect} (\code{GVector}s--useful mainly to developers, not most users): The \code{SpatVector} that corresponds to the file named by \code{x}.
 }}
+
+\item{crs}{String: Coordinate reference system (CRS) WKT2 string. This argument is used for creating a \code{GVector} from a \code{numeric} vector or a \code{data.frame} or similar, or from \code{fast(rastOrVect = "vector")} or \code{fast(rastOrVect = "raster")}. By default, the function will use the value of \code{\link[=crs]{crs()}} (no arguments), which is the CRS of the current \strong{GRASS} \link[=tutorial_locations_mapsets]{"location"}.}
+
+\item{keepgeom}{Logical: If \code{x} is a set of \code{numeric} coordinates, or a \code{data.frame} or similar, then they can be coerced into a \code{points} \code{GVector}. If \code{keepgeom} is \code{TRUE}, then the coordinates will be included in the data table of the \code{GVector}. The default is \code{FALSE}.}
+
+\item{geom}{Character or integer vector: If \code{x} is a \code{data.frame}, \code{data.table}, or \code{matrix}, this specifies which columns of \code{x} represent longitude and latitude. Columns can be given by name (a character vector) or index (a numeric or integer vector). The default is to use the first two columns of \code{x}.}
 
 \item{rastOrVect:}{Either \code{NULL} (default), or \code{"raster"} or \code{"vector"}: If \code{x} is a filename, then the function will try to ascertain whether it represents a raster or a vector, but sometimes this will fail. In that case, it can help to specify if the file holds a raster or vector. Partial matching is used.}
 }
@@ -84,18 +113,20 @@ A \code{GRaster} or \code{GVector}.
 \strong{GRASS} supports loading from disk a variety of raster formats (see the \strong{GRASS} manual page for \href{https://grass.osgeo.org/grass84/manuals/r.in.gdal.html}{\code{r.in.gdal}}) and vector formats (see the \strong{GRASS} manual page for \href{https://grass.osgeo.org/grass84/manuals/v.in.ogr.html}{\code{v.in.ogr}}), though not all of them will work with this function.
 
 Note that there are a several methods for fixing issues with vectors. If the vector has already been imported as a \code{GVector}, \link[=breakPolys]{other tools} are also available.
+
+Note also that \strong{GRASS} (and thus, \strong{fasterRaster}) is \emph{not} very fast when loading vectors. So, if the vector is large and you only want a portion of it, consider using the \code{extent} argument to load the spatial subset you need.
 }
 \details{
 \strong{GRASS} uses a \link[=tutorial_vector_topology_and_troubleshooting]{topological} model for vectors. Topological issues generally arise only with polygon vectors, not point or line vectors. Sometimes, polygons created in other software are topologically incorrect--the borders of adjacent polygons may cross one another, or there may be small gaps between them. These errors can be corrected by slightly shifting vertices and/or removing small polygons that result from intersections of larger ones that border one another. A topological system also recognizes that boundaries to adjacent polygons are shared by the areas, so should not be ascribed attributes that belong to both areas (e.g., the shared border between two countries "belongs" to both countries).
 
 By default, \code{fast()} will try to correct topological errors in vectors. There are three levels of correction, and they are not necessarily mutually exclusive:
 \enumerate{
-\item Automatic correction: By default, \code{fast()} will apply automatic topology correction. You can turn this off using the \code{correct = FALSE} argument, though in most cases this is not recommended.
-\item Manual correction: In addition to correction from step 1, you can cause vertices of polygons close to one another to be "snapped" to same place and/or polygons that are smaller than some threshold to be removed. Problems with mis-aligned vertices arise when adjacent polygons are meant to share borders, but slight differences in the locations of the vertices cause them to  mis-align. This mis-alignment can also produce small "slivers" of polygons that are the areas where they overlap. You can snap vertices within a given distance of one another using the \code{snap} argument followed by a numeric value, like \code{snap = 0.000001}. Units of \code{snap} are in map units (usually meters) for projected coordinate reference systems and degrees for unprojected systems (e.g., WGS84, NAD83, NAD27). You can also remove polygons that are smaller than a particular area using the \code{area} argument followed by a numeric value (e.g., \code{area = 1}). The units of \code{area} are in m2, regardless of the coordinate reference system. Note that using \code{snap} and \code{area} entails some risk, as it is possible for nearby vertices to actually be distinct and for small areas to be legitimate.
-\item Automatic snapping and/or area removal: In addition to the correction from step 1, you can use automatic \code{snap} and/or \code{area} correction on polygons vectors by setting \code{snap} and/or \code{area} to \code{NULL} (i.e., their default values). If just \code{snap} is \code{NULL}, only automatic snapping will be performed, and if just \code{area} is \code{NULL}, then only automatic area removal will be performed. Regardless, you will also need to set an integer value for \code{steps}, which is the number of steps to take between the smallest value of \code{snap} and/or \code{area} and the maximum value attempted. The function will then proceed by first attempting \code{snap = 0} and/or \code{area = 0}. If this does not produce a topologically correct vector, \strong{GRASS} will (internally) suggest a range for \code{snap}. The \code{fast()} function then creates \code{steps} values from the lowest to the highest values of this range evenly-spaced along the log values of this range, then proceed to repeat the loading process until either the vector is imported correctly or the maximum value suggested is reached and results in a failed topology. Smaller values of \code{step} will result in more fine-grained attempts so are less likely to yield overcorrection, but can also take more time. The value of \code{area} in automatic correction is set to \code{snap^2}. \strong{NB}: Automated snapping and area removal are only able performed on polygons vectors, even if \code{snap} or \code{area} is \code{NULL}. To snap lines or points, you must set \code{snap} equal to a numeric value.
-\item Data table-vector mismatching: If your vector has a data table ("attribute table") associated with it, errors can occur if there are more/fewer geometries (or multi-geometries) per row in the table. If you do not really need the data table to do your analysis, you can remove it (and thus obviate this error) using \code{dropTable = TRUE} when using \code{fast()}.
-\item Pre-load correction: Before you convert the vector into \strong{fasterRaster}'s \code{GVector} format, you can also try using the \code{\link[terra:is.valid]{terra::makeValid()}} or \code{\link[sf:valid]{sf::st_make_valid()}} tools to fix issues, then use \code{fast()}.
-\item If you do get a vector loaded into \code{GVector} format, you can also use \link[=breakPolys]{tools} or \code{\link[=fillHoles]{fillHoles()}} to fix issues.
+\item \strong{Automatic correction}: By default, \code{fast()} will apply automatic topology correction. You can turn this off using the \code{correct = FALSE} argument, though in most cases this is not recommended.
+\item \strong{\emph{Manual} snapping and/or area removal}: In addition to correction from step 1, you can cause vertices of polygons close to one another to be "snapped" to same place and/or polygons that are smaller than some threshold to be removed. Problems with mis-aligned vertices arise when adjacent polygons are meant to share borders, but slight differences in the locations of the vertices cause them to  mis-align. This mis-alignment can also produce small "slivers" of polygons that are the areas where they overlap. You can snap vertices within a given distance of one another using the \code{snap} argument followed by a numeric value, like \code{snap = 0.000001}. Units of \code{snap} are in map units (usually meters) for projected coordinate reference systems and degrees for unprojected systems (e.g., WGS84, NAD83, NAD27). You can also remove polygons that are smaller than a particular area using the \code{area} argument followed by a numeric value (e.g., \code{area = 1}). The units of \code{area} are in m2, regardless of the coordinate reference system. Note that using \code{snap} and \code{area} entails some risk, as it is possible for nearby vertices to actually be distinct and for small areas to be legitimate.
+\item \strong{Automatic snapping and/or area removal}: In addition to the correction from step 1, you can use automatic \code{snap} and/or \code{area} correction on polygons vectors by setting \code{snap} and/or \code{area} to \code{NULL} (i.e., their default values). If just \code{snap} is \code{NULL}, only automatic snapping will be performed, and if just \code{area} is \code{NULL}, then only automatic area removal will be performed. Regardless, you will also need to set an integer value for \code{steps}, which is the number of steps to take between the smallest value of \code{snap} and/or \code{area} and the maximum value attempted. The function will then proceed by first attempting \code{snap = 0} and/or \code{area = 0} (i.e., no snapping or area removal). If this does not produce a topologically correct vector, \strong{GRASS} will (internally) suggest a range for \code{snap}. The \code{fast()} function then creates \code{steps} values from the lowest to the highest values of this range evenly-spaced along the log values of this range, then proceed to repeat the loading process until either the vector is imported correctly or the maximum value suggested is reached and results in a failed topology. Smaller values of \code{step} will result in more fine-grained attempts so are less likely to yield overcorrection, but can also take more time. The value of \code{area} in automatic correction is set to \code{snap^2}. \strong{NB}: Automated snapping and area removal are only able performed on polygons vectors, even if \code{snap} or \code{area} is \code{NULL}. To snap lines or points, you must set \code{snap} equal to a numeric value.
+\item \strong{Data table-vector mismatching}: If your vector has a data table ("attribute table") associated with it, errors can occur if there are more/fewer geometries (or multi-geometries) per row in the table. If you do not really need the data table to do your analysis, you can remove it (and thus obviate this error) using \code{dropTable = TRUE} when using \code{fast()}.
+\item \strong{Correction outside \emph{fasterRaster}}: Before you convert the vector into \strong{fasterRaster}'s \code{GVector} format, you can also try using the \code{\link[terra:is.valid]{terra::makeValid()}} or \code{\link[sf:valid]{sf::st_make_valid()}} tools to fix issues, then use \code{fast()}.
+\item \strong{Post-conversion to a \code{GVector}}: If you do get a vector loaded into \code{GVector} format, you can also use a set of \link[=breakPolys]{tools} or \code{\link[=fillHoles]{fillHoles()}} to fix issues.
 }
 }
 \examples{
@@ -106,170 +137,76 @@ library(sf)
 library(terra)
 
 # Example data
-madElev <- fastData("madElev")
-madForest2000 <- fastData("madForest2000")
-madCoast0 <- fastData("madCoast0")
-madRivers <- fastData("madRivers")
-madDypsis <- fastData("madDypsis")
+madElev <- fastData("madElev") # integer raster
+madCover <- fastData("madCover") # categorical raster
+madCoast4 <- fastData("madCoast4") # polygons vector
+madRivers <- fastData("madRivers") # lines vector
+madDypsis <- fastData("madDypsis") # points vector
 
-### GRaster properties
-######################
+### Create GRasters from SpatRasters
+####################################
 
-# convert SpatRasters to GRasters
+# Create an integer raster
+class(madElev)
 elev <- fast(madElev)
-forest <- fast(madForest2000)
+elev
 
-# plot
-plot(elev)
+# Create a categorical raster
+class(madCover)
+cover <- fast(madCover)
+madCover
+levels(madCover) # category levels
 
-dim(elev) # rows, columns, depths, layers
-nrow(elev) # rows
-ncol(elev) # columns
-ndepth(elev) # depths
-nlyr(elev) # layers
+# Create a GRaster from a file on disk
+rastFile <- system.file("extdata", "madForest2000.tif", package = "fasterRaster")
+forest2000 <- fast(rastFile)
+forest2000
 
-res(elev) # resolution
+# Create a 1's raster that spans the world
+ones <- fast(rastOrVect = "raster", crs = "epsg:4326")
+ones
 
-ncell(elev) # cells
-ncell3d(elev) # cells (3D rasters only)
+### Create GVectors
+###################
 
-topology(elev) # number of dimensions
-is.2d(elev) # is it 2D?
-is.3d(elev) # is it 3D?
+# Create a GVector from an sf vector
+class(madCoast4)
+coast4 <- fast(madCoast4)
+coast4
 
-minmax(elev) # min/max values
-
-# information on the GRASS session in which the GRaster is located
-location(elev) # location
-mapset(elev) # mapset
-
-# "names" of the object
-names(elev)
-
-# coordinate reference system
-crs(elev)
-
-# extent (bounding box)
-ext(elev)
-
-# data type
-datatype(elev)
-
-# assigning
-copy <- elev
-copy[] <- pi # assign all cells to the value of pi
-copy
-
-# concatenating multiple GRasters
-rasts <- c(elev, forest)
-rasts
-
-# adding a raster "in place"
-add(rasts) <- ln(elev)
-rasts
-
-# subsetting
-rasts[[1]]
-rasts[["madForest2000"]]
-
-# assigning
-rasts[[4]] <- elev > 500
-
-# number of layers
-nlyr(rasts)
-
-# names
-names(rasts)
-names(rasts) <- c("elev_meters", "forest", "ln_elev", "high_elevation")
-rasts
-
-### GVector properties
-######################
-
-# convert sf vectors to GVectors
-coast <- fast(madCoast4)
+# Create a GVector from a SpatVector
+madRivers <- vect(madRivers)
+class(madRivers)
 rivers <- fast(madRivers)
+rivers
+
+# Create a GVector from a vector on disk
+vectFile <- system.file("extdata/shapes", "madCoast.shp",
+   package = "fasterRaster")
+coast0 <- fast(vectFile)
+coast0
+
+# Import only Dypsis occurrences in a restricted area
+ant <- coast4[coast4$NAME_4 == "Antanambe"]
+dypsisRestrict <- fast(madDypsis, extent = ant)
 dypsis <- fast(madDypsis)
 
-# extent
-ext(rivers)
+plot(coast4)
+plot(ant, col = "gray80", add = TRUE)
+plot(dypsis, add = TRUE)
+plot(dypsisRestrict, col = "red", add = TRUE)
 
-W(rivers) # western extent
-E(rivers) # eastern extent
-S(rivers) # southern extent
-N(rivers) # northern extent
-top(rivers) # top extent
-bottom(rivers) # bottom extent
+# Create a generic GVector that spans the world
+wallToWall <- fast(rastOrVect = "vector", crs = "epsg:4326") # WGS84
+wallToWall
 
-# coordinate reference system
-crs(rivers)
+# Create a GVector from a numeric vector
+pts <- c(-90.2, 38.6, -122.3, 37.9)
+pts <- fast(pts, crs = "epsg:4326") # WGS84
 
-# column names and data types
-names(coast)
-datatype(coast)
-
-# session information
-location(rivers) # GRASS location
-mapset(rivers) # GRASS mapset
-
-# points, lines, or polygons?
-geomtype(dypsis)
-geomtype(rivers)
-geomtype(coast)
-
-is.points(dypsis)
-is.points(coast)
-
-is.lines(rivers)
-is.lines(dypsis)
-
-is.polygons(coast)
-is.polygons(dypsis)
-
-# dimensions
-nrow(rivers) # how many spatial features
-ncol(rivers) # hay many columns in the data frame
-
-# 2- or 3D
-topology(rivers) # dimensionality
-is.2d(elev) # is it 2D?
-is.3d(elev) # is it 3D?
-
-# Update values from GRASS
-# (Reads values from GRASS... will not appear to do anything in this case)
-update(elev)
-
-### operations on GVectors
-##########################
-
-# convert to data frame
-as.data.frame(rivers)
-
-# subsetting
-rivers[c(1:2, 5)] # select 3 rows/geometries
-rivers[-5:-11] # remove rows/geometries 5 through 11
-rivers[ , 1] # column 1
-rivers[ , "NAM"] # select column
-rivers[["NAM"]] # select column
-rivers[1, 2] # row/geometry 1 and column 1
-rivers[c(TRUE, FALSE)] # select every other geometry (T/F vector is recycled)
-rivers[ , c(TRUE, FALSE)] # select every other column (T/F vector is recycled)
-
-# removing data table
-noTable <- dropTable(river)
-noTable
-nrow(rivers)
-nrow(noTable)
-
-# Refresh values from GRASS
-# (Reads values from GRASS... will not appear to do anything in this case
-# since the rivers object is up-to-date):
-rivers <- update(rivers)
-
-# Concatenating multiple vectors
-rivers2 <- c(rivers, rivers)
-dim(rivers)
-dim(rivers2)
+# Create a GVector from a matrix (can also use data.frame or data.table)
+mat <- matrix(c(-90.2, 38.6, -122.3, 37.9), ncol = 2, byrow = TRUE)
+mat <- fast(mat, crs = "epsg:4326", keepgeom = TRUE) # WGS84
 
 }
 }

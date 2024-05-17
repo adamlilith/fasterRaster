@@ -1,6 +1,6 @@
 #' Combine one or more GVectors
 #'
-#' @description `rbind()` combines two or more `GVector`s of the same type (points, lines, or polygons) and same coordinate reference system. You can speed operations by putting vector that is largest in memory first in `rbind(...)`. If the `GVector`s have data tables, these will also be combined using `rbind()` if their columns and types possible.
+#' @description `rbind()` combines two or more `GVector`s of the same type (points, lines, or polygons) and same coordinate reference system. You can speed operations by putting the vector that is largest in memory first in `rbind(...)`. If the `GVector`s have data tables, these will also be combined using `rbind()` if their column names and data types match.
 #'
 #' @param ... One or more `GVector`s.
 #'
@@ -8,13 +8,16 @@
 #'
 #' @example man/examples/ex_cbind_rbind.r
 #'
-#' @seealso [rbind()], [cbind()], [c()]
+#' @seealso [colbind()], [c()]
 #'
 #' @aliases rbind
 #' @rdname rbind
-#' @export rbind
-rbind.GVector <- function(...) {
-
+#' @exportMethod rbind
+methods::setMethod(
+	f = "rbind",
+	signature = "GVector",
+	function(...) {
+	
 	dots <- list(...)
 	.locationRestore(dots[[1L]])
 
@@ -88,6 +91,7 @@ rbind.GVector <- function(...) {
 
 	.makeGVector(src, table = table)
 	
-} # EOF
+	} # EOF
+)
 
-rbind <- function(...) UseMethod("rbind")
+# rbind <- function(...) UseMethod("rbind")

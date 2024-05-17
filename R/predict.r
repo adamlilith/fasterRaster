@@ -2,7 +2,9 @@
 #'
 #' @description This version of the `predict()` function make predictions to a set of `GRaster`s from a model object.
 #'
-#' The model must be either a linear model, which is of class `lm` and typically created using the [stats::lm()] function or a generalized linear model (GLM), which is class `glm` and typically created using [stats::glm()]. Other packages can also create `lm` or `glm` objects, but they may not work in this function. For example, generalized additive models, which can be created using the `gam()` function in the **mgcv** package, inherit the `glm` class, but cannot be used in this function.
+#' The model must be either a linear model, which is of class `lm` and typically created using the [stats::lm()] function or a generalized linear model (GLM), which is class `glm` and typically created using [stats::glm()]. Other packages can also create `lm` or `glm` objects, but they may not work in this function. For example, generalized additive models, which can be created using the `gam()` function in the **mgcv** package, inherit the `glm` class, but cannot be used in this function, but ones created with the **speedglm** package can.
+#'
+#' This `predict()` function can handle categorical predictors (i.e., [categorical][tutorial_raster_data_types] rasters), but only if the factor levels are used as offsets/intercepts (i.e., not in an interaction term). 
 #'
 #' @param object A `GRaster` with one or more layers.
 #'
@@ -30,6 +32,8 @@ methods::setMethod(
 	.region(object)
 
 	### parse model to GRASS r.mapcalc format
+	#########################################
+
 	coeffs <- stats::coef(model)
 
 	terms <- data.frame(
@@ -42,8 +46,38 @@ methods::setMethod(
 	terms$term <- gsub(terms$term, pattern = "I\\(", replacement = "")
 	terms$term <- gsub(terms$term, pattern = "\\(", replacement = "")
 	terms$term <- gsub(terms$term, pattern = "\\)", replacement = "")
-		
 
+	# factors... assuming we just use levels of factors as intercepts, not in interaction terms
+	if (any(is.factor(object))) {
+
+		facts <- which(is.factor(object))
+
+		# use if() statement to obtain offsets due to each level of each factor
+		for (fact in facts)	{
+		
+			levs <- levels(object)[[fact]]
+			levs$TEMPTEMP__ <- paste0(names(object)[fact], levs[[2L]])
+			levs <- levs[levs[[3L]] %in% names(coeffs), ]
+			nLevs <- nrow(levs)
+
+			if (nLevs > 0L) {
+
+				for (j in seq_len(nLevs)) {
+
+					thisTerm <- which(terms$term == levs$TEMPTEMP__[j])
+					coeff <- coeffs[names(coeffs) == levs$TEMPTEMP__[j]]
+
+					terms$termClean[thisTerm] <- paste0("if(", sources(object)[fact], "==", levs[[1L]][j], ",", coeff, ",0)")
+
+				}
+
+			}
+		
+		}
+	
+	}
+
+	# intercept
 	i <- which(terms$term == "Intercept")
 	if (length(i) > 0L) {
 		terms$termClean[i] <- as.character(terms$value[i])
@@ -58,23 +92,22 @@ methods::setMethod(
 			term <- terms$term[j]
 			term <- strsplit(term, split = ":")[[1L]]
 			term <- .matchRasterNamesToFormula(object, term)
-			term <- paste(term, collapse = " * ")
-			term <- paste(terms$value[j], ' * ', term)
+			term <- paste(term, collapse = "*")
+			term <- paste(terms$value[j], "*", term)
 			terms$termClean[j] <- term
 		
 		}
 	
 	}
 
+	# linear terms
 	i <- which(is.na(terms$termClean))
 	if (length(i) > 0L) {
 	
 		for (j in i) {
 		
 			term <- .matchRasterNamesToFormula(object, terms$term[j])
-
-			term <- paste(terms$value[j], ' * ', term)
-
+			term <- paste(terms$value[j], "*", term)
 			terms$termClean[j] <- term
 
 		}
@@ -82,7 +115,7 @@ methods::setMethod(
 	}
 	
 	ex <- paste(terms$termClean, collapse = " + ")
-	src <- .makeSourceName("r_mapcalc", "raster")
+	src <- .makeSourceName("predict_r_mapcalc", "raster")
 	ex <- paste0(src, " = ", ex)
 
 	rgrass::execGRASS(
@@ -98,7 +131,7 @@ methods::setMethod(
 	if (type == "response" & link != "identity") {
 	
 		srcIn <- src
-		src <- .makeSourceName("r_mapcalc", "raster")
+		src <- .makeSourceName("predict_r_mapcalc", "raster")
 
 		if (link == "log") {
 			ex <- paste0(src, " = exp(", srcIn, ")")
@@ -118,7 +151,7 @@ methods::setMethod(
 
 	}
 
-	.makeGRaster(src, "prediction")
+	.makeGRaster(src, names = "prediction")
 
 	} # EOF
 )
@@ -126,20 +159,21 @@ methods::setMethod(
 #' @param object `GRaster` stack.
 #' @param term Character vector to which to match names.
 #'
-#' @returns A character vector same length as `x` with [sources()] names.
+#' @returns A character vector same length as `object` with [sources()] names.
 #'
 #' @noRd
 .matchRasterNamesToFormula <- function(object, term) {
 
+	# find names of rasters and replace from longest to shortest in length to help obviate duplicate names
 	names <- names(object)
 	srcs <- sources(object)
 	nc <- nchar(names)
-	names <- names[order(nc)]
-	srcs <- srcs[order(nc)]
+	ncOrder <- order(nc)
+	names <- names[ncOrder]
+	srcs <- srcs[ncOrder]
 
-	matched <- rep(FALSE, length(term))
 	for (i in seq_along(names)) {
-		term <- gsub(term, pattern = names[i], replacement = srcs[i])
+		term <- gsub(term, pattern = names[i], replacement = srcs[i], fixed = TRUE)
 	}
 	term
 

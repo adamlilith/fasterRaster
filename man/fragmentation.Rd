@@ -9,12 +9,13 @@
 \S4method{fragmentation}{SpatRaster}(
   x,
   w = 3,
-  undet = "perforated",
-  restrict = FALSE,
+  undet = "undetermined",
+  none = NA,
+  na.rm = TRUE,
   cores = faster("cores")
 )
 
-\S4method{fragmentation}{GRaster}(x, w = 3, undet = "perforated", restrict = FALSE)
+\S4method{fragmentation}{GRaster}(x, w = 3, undet = "undetermined", none = NA)
 }
 \arguments{
 \item{x}{A \code{SpatRaster} or \code{GRaster}.}
@@ -23,7 +24,9 @@
 
 \item{undet}{Character: How to assign the "undetermined" case. Valid values are \code{"perforated"} (default), \code{"edge"}, and \code{"undetermined"}. Partial matching is used. If \code{Pf} is the proportional density raster cell value and \code{Pff} the proportional connectivity raster cell value, the undetermined case occurs when \code{Pf} > 0.6 and \code{Pf == Pff}.}
 
-\item{restrict}{Logical: If \code{TRUE}, then fragmentation will only be assigned to cells that have the focal habitat within them. If \code{FALSE} (default), cells surrounding the focal habitat class can also be assigned a fragmentation class other than 0, even if they do not have the focal habitat in them. Note that the case where \code{restrict = TRUE} is a departure from Riitters et al. (2020).}
+\item{none}{Integer or \code{NA} (default): Value to assign to a cell with no focal habitat. Riitters et al. use \code{NA}. This will be forced to an integer if it is not an actual integer.}
+
+\item{na.rm}{Logical: If \code{TRUE} (default) and \code{x} is a \code{SpatRaster}, then cells near the edge of the raster where the window overlaps the edge can still be assigned a fragmentation class. If \code{FALSE}, these cells will be assigned a value of \code{none}.}
 
 \item{cores}{Integer: Number of processor cores to use for when processing a \code{SpatRaster}.}
 }
@@ -31,7 +34,20 @@
 A categorical \code{SpatRaster} or \code{GRaster}. The values assigned to each class can be seen with \code{\link[=levels]{levels()}}.
 }
 \description{
-Riitters et al. (2020) propose a classification scheme for forest fragmentation (which can be applied to any habitat type). The scheme relies on calculating density (e.g., number of forested cells in a window around a focal cell) and connectivity (number of cases where neighboring cells are both forested). These values are used to assign classes to each cell: "patch," "transitional," "perforated," "edge," and "interior" (plus an optional "undetermined" class for an edge case). To this, we also add a "none" class which occurs when the focal cell's window has no cells with the focal habitat. This function calculates these classes from a \code{GRaster} or \code{SpatRaster} in which the focal habitat type has cell values of 1, and non-focal habitat type has cell values of 0 or \code{NA}.
+Riitters et al. (2020) propose a classification scheme for forest fragmentation (which can be applied to any habitat type). The scheme relies on calculating density (e.g., number of forested cells in a window around a focal cell) and connectivity (number of cases where neighboring cells are both forested). This function calculates these classes from a \code{GRaster} or \code{SpatRaster} in which the focal habitat type has cell values of 1, and non-focal habitat type has cell values of 0 or \code{NA}.
+
+Note that by default, the \code{SpatRaster} and \code{GRaster} versions will create different results around the border of the raster. The \code{SpatRaster} version uses the \code{\link[terra:focal]{terra::focal()}} function, which will not return an \code{NA} value when its window overlaps the raster border if the \code{na.rm} argument is \code{TRUE}. However, the \code{GRaster} version uses the \strong{GRASS} module \code{r.neighbors}, which does return \code{NA} values in these cases.
+
+The fragmentation classes are:
+\itemize{
+\item Value provided by \code{none}: None (i.e., no forest; default is \code{NA}).
+\item 1: Patch
+\item 2: Transitional
+\item 3: Perforated
+\item 4: Edge
+\item 5: Undetermined (not possible to obtain when \code{w = 3})
+\item 6: Interior
+}
 }
 \examples{
 if (grassStarted()) {
@@ -55,6 +71,7 @@ names(fragTerras) <- c("unrestricted", "restricted")
 
 plot(fragTerras)
 levels(fragTerras)
+freq(fragTerras)
 
 ### Fragmentation classes from a GRaster
 ########################################
@@ -72,11 +89,7 @@ names(frags) <- c("unrestricted", "restricted")
 
 plot(frags)
 levels(frags)
-
-frags <- droplevels(frags, level = 1:2)
-levels(frags)
-
-plot(frags)
+freq(frags)
 
 }
 }

@@ -6,14 +6,16 @@
 \alias{crop,GVector-method}
 \title{Remove parts of a GRaster or GVector}
 \usage{
-\S4method{crop}{GRaster}(x, y)
+\S4method{crop}{GRaster}(x, y, fail = TRUE)
 
-\S4method{crop}{GVector}(x, y, extent = FALSE)
+\S4method{crop}{GVector}(x, y, extent = FALSE, fail = TRUE)
 }
 \arguments{
 \item{x}{A \code{GRaster} or \code{GVector} to be cropped.}
 
 \item{y}{A \code{GRaster} or \code{GVector} to serve as a template for cropping.}
+
+\item{fail}{Logical: If \code{TRUE} (default), and the cropped object would have zero extent in at least one dimension, then exit the function with an error. If \code{FALSE}, then display a warning and return \code{NULL}.}
 
 \item{extent}{Logical:
 \itemize{
@@ -22,7 +24,7 @@
 }}
 }
 \value{
-A \code{GRaster} or \code{GVector}.
+A \code{GRaster} or \code{GVector} (or \code{NULL} if \code{fail} is \code{FALSE} and the output would have a zero east-west and/or north-south extent).
 }
 \description{
 \code{crop()} removes parts of a \code{GRaster} or \code{GVector} that fall "outside" another raster or vector. You cannot make the \code{GRaster} or \code{GVector} larger than it already is (see \code{\link[=extend]{extend()}}). Rasters may not be cropped to the exact extent, as the extent will be enlarged to encompass an integer number of cells. If you wish to remove certain cells of a raster, see \code{\link[=mask]{mask()}}.

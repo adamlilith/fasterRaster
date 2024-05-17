@@ -1,4 +1,4 @@
-#' Interpolate values at points to a GRaster
+#' Interpolate values at points to a GRaster using inverse-distance weighting
 #'
 #' @description This function interpolates values from a set of points to a raster using inverse distance weighting (IDW).
 #'

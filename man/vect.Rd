@@ -5,7 +5,7 @@
 \alias{vect}
 \alias{st_as_sf,GVector-method}
 \alias{st_as_sf}
-\title{Convert a GVector to a SpatVector}
+\title{Convert a GVector to a SpatVector or sf vector}
 \usage{
 \S4method{vect}{GVector}(x, ...)
 
@@ -20,7 +20,7 @@
 \code{vect()} returns a \code{SpatVector} (\strong{terra} package), and \code{st_as_sf()} returns an \code{sf} vector (\strong{sf} package).
 }
 \description{
-The \strong{fasterRaster} version of the \code{vect()} function converts a \code{GVector} to a \code{SpatVector} (from the \strong{terra} package). The \strong{fasterRaster} version of the \code{st_as_sf()} function converts a \code{GVector} to an \code{sf} object (\strong{sf}) package).
+The \strong{fasterRaster} version of the \code{vect()} function converts a \code{GVector} to a \code{SpatVector} (from the \strong{terra} package). The \strong{fasterRaster} version of the \code{st_as_sf()} function converts a \code{GVector} to an \code{sf} object (\strong{sf} package).
 }
 \examples{
 if (grassStarted()) {

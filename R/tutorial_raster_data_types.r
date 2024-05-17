@@ -7,13 +7,10 @@
 #' ## Integers
 #' Rasters that represent integers are called "integer" rasters in **fasterRaster** and `CELL` rasters in **GRASS**. You can force a raster to be an integer using [as.int()]. Some of the functions in [app()] function will also return integer-type rasters. Integer rasters typically take the least memory.
 #'
-#' ## Floating-point values
-#' Floating-point values are accurate to about the 6th to 9th decimal place. These are called "float" rasters in **fasterRaster** and `FCELL` rasters in **GRASS**. By default, operations conducted using raster math (e.g., `raster1 * raster2`) return double floating-point valued rasters, but this can be changed to floating point precision using [faster()] (e.g., `faster(rasterPrecision = "float")`). Floating-point rasters typically take more memory than integer rasters, but less than double-floating point rasters.
-#'
 #' ## Double-floating point values
 #' Double-floating point values are accurate to about the 15th to 17th decimal place. These are called "double" rasters in **fasterRaster** and `DCELL` rasters in **GRASS**. These rasters typically take the most memory. All "`numeric`" values in **R** are double-floating point values.
 #' 
-#' ## Categorical rasters
+#' ## Categories
 #' Categorical rasters (also called "factor" rasters) are actually integer rasters, but have an associated attribute table that maps each integer value to a category label, such as "wetland" or "forest". The table has at least two columns. The first is integer values, and (by default) the second is category names. This second column is the "active" category column, but can be changed using \code{\link[fasterRaster]{activeCat<-}}.
 #'
 #' ## Functions relevant to raster data types
@@ -28,15 +25,16 @@
 #' * [complete.cases()] finds rows in the levels table that have no `NA`s.
 #' * [datatype()] returns the data type of a `GRaster`.
 #' * [droplevels()] removes "unused" levels in a "levels" table.
-#' * [freq()]: Frequency of each category across cells of a raster\cr
+#' * [freq()]: Frequency of each category across cells of a raster
 #' * [is.factor()] indicates if the raster is a categorical raster.
 #' * [is.int()], [is.float()], and [is.doub()] indicate if values in a a raster are integers, floating-point, or double-floating point precision.
 #' * [levels()] returns the "levels" table of a categorical raster (just the value column and the active column).
 #' * \code{\link[fasterRaster]{levels<-}} and [categories()] can be used to assign categories to an integer raster and make it categorical (i.e., a "factor" raster).
-#' * [match()], \code{\link[fasterRaster]{%in%}}, and \code{\link[fasterRaster]{%notin%}}: Find which cells of a `GRaster` match or do not match certain category labels\cr
+#' * [match()], \code{\link[fasterRaster]{%in%}}, and \code{\link[fasterRaster]{%notin%}}: Find which cells of a `GRaster` match or do not match certain category labels
 #' * [missing.cases()] finds rows in the levels table that have at least one `NA`.
 #' * [missingCats()] finds values in categorical rasters that do not have a category assigned to them.
 #' * [nlevels()] returns the number of levels represented by a categorical raster.
+#' * [subst()]: Re-assign category levels
 #'
 #' ## Saving rasters to disk
 #' You can save substantial space on disk if you set the `datatype` argument in [writeRaster()] when saving a raster. This argument allows for finer "divisions" than just integer/float/double-float, so depending on the range of values in your raster, you can optimize file size by selecting the one that best matches the values in the raster. See the documentation for [writeRaster()] for more information.

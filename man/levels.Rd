@@ -11,6 +11,7 @@
 \alias{levels<-}
 \alias{levels<-,GRaster,data.table-method}
 \alias{levels<-,GRaster,SpatRaster-method}
+\alias{levels<-,GRaster,GRaster-method}
 \alias{levels<-,GRaster,list-method}
 \title{Set and get categories for categorical rasters}
 \usage{
@@ -26,12 +27,14 @@
 
 \S4method{levels}{GRaster,SpatRaster}(x) <- value
 
+\S4method{levels}{GRaster,GRaster}(x) <- value
+
 \S4method{levels}{GRaster,list}(x) <- value
 }
 \arguments{
 \item{x}{A \code{GRaster}.}
 
-\item{layer}{Numeric integers, logical vector, or character: Layer(s) for which to obtain levels.}
+\item{layer}{Numeric integers, logical vector, or character: For \code{cats()} and \code{categories()}, this specifies the layer(s)for which to obtain level(s).}
 
 \item{value}{A \code{data.frame}, \code{data.table}, a list of \code{data.frames} or \code{data.tables} with one per raster layer, or a categorical \code{SpatRaster}. The table's first column is the "value" column and must contain numeric values (of class \code{numeric} or \code{character}). If a \code{SpatRaster} is supplied, then its categories will be transferred to the \code{GRaster}.}
 
@@ -47,10 +50,10 @@ Values returned are:
 \description{
 \code{GRaster}s can represent \link[=tutorial_raster_data_types]{categorical data}. Cell values are actually integers, each corresponding to a category, such as "desert" or "wetland." A categorical raster is associated with a table that matches each value to a category name. The table must be \code{NULL} (i.e., no categories--so not a categorical raster), or have at least two columns. The first column must have integers and represent raster values. One or more subsequent columns must have category labels. The column with these labels is the "active category".
 \itemize{
-\item \code{levels()} displays the "levels" table of a raster (just the value and active category columns)
-\item \code{cats()} displays the entire "levels" table of a raster
-\item \verb{levels()<-} (re)assigns the "levels" table to each layer of a raster. Assigning a "levels" table to an integer raster makes it a categorical raster.
-\item \code{categories()} (re)assigns the "levels" table to specific layer(s) of a raster.
+\item \code{levels()}: Displays the "levels" table of a raster (just the value and active category columns).
+\item \code{cats()}: Displays the entire "levels" table of a raster.
+\item \verb{levels()<-}: (Re)assigns the "levels" table to each layer of a raster. Assigning a "levels" table to an integer raster makes it a categorical raster.
+\item \code{categories()}: (Re)assigns the "levels" table to specific layer(s) of a raster.
 \item For a complete list of functions relevant to categorical rasters, see \link[=tutorial_raster_data_types]{raster data types}.
 }
 }
