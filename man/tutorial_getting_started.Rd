@@ -106,7 +106,6 @@ You can convert a \code{GRaster} to a \code{SpatRaster} raster using \code{\link
 To convert a \code{GVector} to the \strong{terra} package's \code{SpatVector} format or to an \code{sf} vector, use \code{\link[=vect]{vect()}} or \code{\link[=st_as_sf]{st_as_sf()}}:
 
 \if{html}{\out{<div class="sourceCode">}}\preformatted{terraRivers <- vect(rivers)
-sfRivers <- st_as_sf(rivers)
 }\if{html}{\out{</div>}}
 
 Finally, you can use \code{\link[=writeRaster]{writeRaster()}} and \code{\link[=writeVector]{writeVector()}} to save \strong{fasterRaster} rasters and vectors directly to disk. This will always be faster than using \code{\link[=rast]{rast()}}, \code{\link[=vect]{vect()}}, or \code{\link[=st_as_sf]{st_as_sf()}} then saving.
@@ -115,17 +114,17 @@ Finally, you can use \code{\link[=writeRaster]{writeRaster()}} and \code{\link[=
 writeRaster(elev, elevTempFile)
 
 vectTempFile <- tempfile(fileext = ".shp") # save as shapefile
-writeRaster(rivers, vectTempFile)
+writeVector(rivers, vectTempFile)
 }\if{html}{\out{</div>}}
 }
 
 \subsection{Tips for masking \strong{fasterRaster} faster}{
 \enumerate{
 \item Loading rasters and vectors directly from disk using \code{\link[=fast]{fast()}}, rather than converting \strong{terra} or \strong{sf} objects is faster. Why? Because if the object does not have a file to which the \strong{R} object points, \code{fast()} has to save it to disk first as a GeoTIFF or GeoPackage file, then load it into \strong{GRASS}.
-\item Similarly, saving \code{GRaster}s and \code{GVector}s directly to disk will always be faster than converting them to \code{SpatRaster}s, \code{SpatVector}s, or \code{sf} vectors using \code{\link[=rast]{rast()}}, \code{\link[=vect]{vect()}}, or \code{\link[=st_as_sf]{st_as_sf()}}, then saving them. Why? Because these functions actually save the file to disk then uses the respective function from the respective package to connect to the file.
+\item Similarly, saving \code{GRaster}s and \code{GVector}s directly to disk will always be faster than converting them to \code{SpatRaster}s or \code{SpatVector}susing \code{\link[=rast]{rast()}} or \code{\link[=vect]{vect()}}, then saving them. Why? Because these functions actually save the file to disk then uses the respective function from the respective package to connect to the file.
 \item Every time you switch between using a \code{GRaster} or \code{GVector} with a different coordinate reference system (CRS), \strong{GRASS} has to spend a few second changing to that CRS. So, you can save some time by doing as much work as possible with objects in one CRS, then switching to work on objects in another CRS.
 \item By default, \strong{GRASS}/\strong{fasterRaster} use 2 cores and 1024 MB (1 GB) of memory for functions that allow users to specify these values. You can set these to higher values using \code{\link[=faster]{faster()}} and thus potentially speed up some calculations. Functions in newer versions of \strong{GRASS} have more capacity to use these options, so updating \strong{GRASS} to the latest version can help, too.
-\item Unfortunately, \strong{fasterRaster} is fast with rasters, but not so much vectors. The \code{\link[fasterRaster]{[[}} is especially slow for even moderately-sized vectors. If you have plan on making subsets of subsets, it is advisable to do your subsetting on the index that will be used to subset the vector first, then do just a single subset.
+\item Unfortunately, \strong{fasterRaster} is fast with rasters, but not so much vectors. If you have a lot of vector operations, it is advisable to do as much as possible in \strong{terra} or \strong{sf} and transfer to \strong{fasterRaster} when needed.
 }
 }
 
