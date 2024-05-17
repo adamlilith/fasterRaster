@@ -10,12 +10,21 @@
 #'
 #' @param x Any one of:
 #' * A `SpatRaster` raster. Rasters can have one or more layers.
-#' * A `SpatVector` or `sf` spatial vector.
+#' * A `SpatVector` or `sf` spatial vector. See especially arguments `correct`, `area`, `snap`, `steps`, and `vebose`.
 #' * A character string or a vector of strings with the path(s) and filename(s) of one or more rasters or one vector to be loaded directly into **GRASS**. The function will attempt to ascertain the type of object from the file extension (raster or vector), but it can help to indicate which it is using the `rastOrVect` argument if it is unclear.
+#' * A vector with an even number of numeric values representing longitude/latitude pairs. See arguments `geom`, `keepgeom`, and `crs`.
+#' * A `data.frame`, `data.table`, or `matrix`: Create a `points` `GVector`. Two of the columns must represent longitude and latitude. See arguments `geom`, `keepgeom`, and `crs`.
+#' * Missing: Creates a generic `GRaster` or `GVector`. You must specify `rastOrVect`; for example, `fast(rastOrVect = "raster")`. Also see argument `crs`.
 #'
 #' @param rastOrVect: Either `NULL` (default), or `"raster"` or `"vector"`: If `x` is a filename, then the function will try to ascertain whether it represents a raster or a vector, but sometimes this will fail. In that case, it can help to specify if the file holds a raster or vector. Partial matching is used.
 #'
 #' @param levels (`GRaster`s only): A `data.frame`, `data.table`, or list of `data.frame`s or `data.table`s with categories for categorical rasters. The first column of a table corresponds to raster values and must be of type `integer`. A subsequent column corresponds to category labels. By default, the second column is assumed to represent labels, but this can be changed with \code{\link[fasterRaster]{activeCat<-}}. Level tables can also be `NULL` (e.g., `data.fame(NULL)`). You can also assign levels after loading a raster using \code{\link[fasterRaster]{levels<-}}.
+#'
+#' @param geom Character or integer vector: If `x` is a `data.frame`, `data.table`, or `matrix`, this specifies which columns of `x` represent longitude and latitude. Columns can be given by name (a character vector) or index (a numeric or integer vector). The default is to use the first two columns of `x`.
+#'
+#' @param crs String: Coordinate reference system (CRS) WKT2 string. This argument is used for creating a `GVector` from a `numeric` vector or a `data.frame` or similar, or from `fast(rastOrVect = "vector")` or `fast(rastOrVect = "raster")`. By default, the function will use the value of [crs()] (no arguments), which is the CRS of the current **GRASS** ["location"][tutorial_locations_mapsets].
+#'
+#' @param keepgeom Logical: If `x` is a set of `numeric` coordinates, or a `data.frame` or similar, then they can be coerced into a `points` `GVector`. If `keepgeom` is `TRUE`, then the coordinates will be included in the data table of the `GVector`. The default is `FALSE`.
 #'
 #' @param correct Logical (`GVector`s only): Correct topological issues. See *Details* for more details! By default, this is `TRUE`.
 #'
@@ -446,7 +455,7 @@ methods::setMethod(
 
 	if (any(rastFile == "")) {
 		tempFile <- tempfile(fileext = ".tif")
-		terra::writeRaster(x, filename = tempFile, overwrite = TRUE, datatype = datatype(x, "terra", forceDouble = TRUE))
+		terra::writeRaster(x, filename = tempFile, overwrite = TRUE)
 		rastFile <- tempFile
 	} else {
 		rastFile <- terra::sources(x)
@@ -596,6 +605,119 @@ methods::setMethod(
 	do.call(fast, args = args)
 	
 }
+
+#' @rdname fast
+#' @aliases fast
+#' @exportMethod fast
+methods::setMethod(
+	"fast",
+	signature(x = "missing"),
+	function(x, rastOrVect, crs = "") {
+	
+	if (crs == "") { 
+	
+		crs <- tryCatch(crs(), error=function(cond) FALSE)
+
+		if (is.logical(crs)) stop("You must provide a coordinate reference system with `crs` or\n  have created or loaded at least one GRaster or GVector.")
+
+	}
+
+	rastOrVect <- omnibus::pmatchSafe(rastOrVect, c("raster", "vector"), nmax = 1L)
+	if (rastOrVect == "raster") {
+
+		x <- terra::rast()
+		x[] <- 1L
+		x <- terra::project(x, crs)
+		out <- fast(x)
+
+	} else {
+
+		x <- c(-180, 180, -90, 90)
+		x <- terra::ext(x)
+		x <- terra::as.polygons(x, crs = "epsg:4326")
+		x <- terra::project(x, crs)
+		out <- .fastVector(x, correct = TRUE, snap = FALSE, area = FALSE, steps = 10, extent = NULL, dropTable = FALSE, verbose = FALSE)
+
+	}
+	out
+
+	} # EOF
+)
+
+#' @rdname fast
+#' @aliases fast
+#' @exportMethod fast
+methods::setMethod(
+	"fast",
+	signature(x = "numeric"),
+	function(x, crs = "", keepgeom = FALSE) {
+	
+	if (length(x) %% 2L != 0L) stop("You must supply an even number of numeric values each representing longitude/latitude pairs.")
+	x <- matrix(x, ncol = 2L, byrow = TRUE)
+	.fastDF(x = x, geom = 1:2, crs = crs, keepgeom = keepgeom)
+
+	} # EOF
+)
+
+#' @rdname fast
+#' @aliases fast
+#' @exportMethod fast
+methods::setMethod(
+	"fast",
+	signature(x = "data.frame"),
+	function(x, geom = 1:2, crs = "", keepgeom = FALSE) .fastDF(x = x, geom = geom, crs = crs, keepgeom = keepgeom)
+)
+
+#' @rdname fast
+#' @aliases fast
+#' @exportMethod fast
+methods::setMethod(
+	"fast",
+	signature(x = "data.table"),
+	function(x, geom = 1:2, crs = "", keepgeom = FALSE) .fastDF(x = x, geom = geom, crs = crs, keepgeom = keepgeom)
+)
+
+#' @rdname fast
+#' @aliases fast
+#' @exportMethod fast
+methods::setMethod(
+	"fast",
+	signature(x = "matrix"),
+	function(x, geom = 1:2, crs = "", keepgeom = FALSE) .fastDF(x = x, geom = geom, crs = crs, keepgeom = keepgeom)
+)
+
+#' Create a points GVector from a data.frame or similar
+#'
+#' @param x Two numeric values, or a `data.frame`, `data.table`, or `matrix`.
+#' @param geom 2-element 
+#' @param crs WKT2 string
+#' @param keepgeom Logical
+#' @noRd
+.fastDF <- function(x, geom, crs, keepgeom) {
+
+	if (crs == "") {
+	
+		crs <- tryCatch(crs(), error=function(cond) FALSE)
+
+		if (is.logical(crs)) stop("You must provide a coordinate reference system with `crs` or\n  have created or loaded at least one GRaster or GVector.")
+
+	}
+
+	if (!is.data.frame(x)) x <- as.data.frame(x)
+
+	if (is.numeric(geom) | is.integer(geom)) {
+		xcol <- names(x)[geom[1L]]
+		ycol <- names(x)[geom[2L]]
+	} else {
+		xcol <- geom[1L]
+		ycol <- geom[2L]
+	}
+
+	xVect <- terra::vect(x, geom = c(xcol, ycol), crs = crs, keepgeom = keepgeom)
+	fast(xVect, correct = TRUE)
+
+}
+
 
 #' Test if a vector is valid
 #'

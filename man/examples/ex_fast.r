@@ -30,6 +30,10 @@ rastFile <- system.file("extdata", "madForest2000.tif", package = "fasterRaster"
 forest2000 <- fast(rastFile)
 forest2000
 
+# Create a 1's raster that spans the world
+ones <- fast(rastOrVect = "raster", crs = "epsg:4326")
+ones
+
 ### Create GVectors
 ###################
 
@@ -59,5 +63,17 @@ plot(coast4)
 plot(ant, col = "gray80", add = TRUE)
 plot(dypsis, add = TRUE)
 plot(dypsisRestrict, col = "red", add = TRUE)
+
+# Create a generic GVector that spans the world
+wallToWall <- fast(rastOrVect = "vector", crs = "epsg:4326") # WGS84
+wallToWall
+
+# Create a GVector from a numeric vector
+pts <- c(-90.2, 38.6, -122.3, 37.9)
+pts <- fast(pts, crs = "epsg:4326") # WGS84
+
+# Create a GVector from a matrix (can also use data.frame or data.table)
+mat <- matrix(c(-90.2, 38.6, -122.3, 37.9), ncol = 2, byrow = TRUE)
+mat <- fast(mat, crs = "epsg:4326", keepgeom = TRUE) # WGS84
 
 }

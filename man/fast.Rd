@@ -6,6 +6,11 @@
 \alias{fast,SpatRaster-method}
 \alias{fast,SpatVector-method}
 \alias{fast,sf-method}
+\alias{fast,missing-method}
+\alias{fast,numeric-method}
+\alias{fast,data.frame-method}
+\alias{fast,data.table-method}
+\alias{fast,matrix-method}
 \title{Create a GRaster or GVector}
 \usage{
 \S4method{fast}{character}(
@@ -47,13 +52,26 @@
   verbose = FALSE,
   ...
 )
+
+\S4method{fast}{missing}(x, rastOrVect, crs = "")
+
+\S4method{fast}{numeric}(x, crs = "", keepgeom = FALSE)
+
+\S4method{fast}{data.frame}(x, geom = 1:2, crs = "", keepgeom = FALSE)
+
+\S4method{fast}{data.table}(x, geom = 1:2, crs = "", keepgeom = FALSE)
+
+\S4method{fast}{matrix}(x, geom = 1:2, crs = "", keepgeom = FALSE)
 }
 \arguments{
 \item{x}{Any one of:
 \itemize{
 \item A \code{SpatRaster} raster. Rasters can have one or more layers.
-\item A \code{SpatVector} or \code{sf} spatial vector.
+\item A \code{SpatVector} or \code{sf} spatial vector. See especially arguments \code{correct}, \code{area}, \code{snap}, \code{steps}, and \code{vebose}.
 \item A character string or a vector of strings with the path(s) and filename(s) of one or more rasters or one vector to be loaded directly into \strong{GRASS}. The function will attempt to ascertain the type of object from the file extension (raster or vector), but it can help to indicate which it is using the \code{rastOrVect} argument if it is unclear.
+\item A vector with an even number of numeric values representing longitude/latitude pairs. See arguments \code{geom}, \code{keepgeom}, and \code{crs}.
+\item A \code{data.frame}, \code{data.table}, or \code{matrix}: Create a \code{points} \code{GVector}. Two of the columns must represent longitude and latitude. See arguments \code{geom}, \code{keepgeom}, and \code{crs}.
+\item Missing: Creates a generic \code{GRaster} or \code{GVector}. You must specify \code{rastOrVect}; for example, \code{fast(rastOrVect = "raster")}. Also see argument \code{crs}.
 }}
 
 \item{levels}{(\code{GRaster}s only): A \code{data.frame}, \code{data.table}, or list of \code{data.frame}s or \code{data.table}s with categories for categorical rasters. The first column of a table corresponds to raster values and must be of type \code{integer}. A subsequent column corresponds to category labels. By default, the second column is assumed to represent labels, but this can be changed with \code{\link[fasterRaster]{activeCat<-}}. Level tables can also be \code{NULL} (e.g., \code{data.fame(NULL)}). You can also assign levels after loading a raster using \code{\link[fasterRaster]{levels<-}}.}
@@ -77,6 +95,12 @@
 \item \code{table} (\code{GVector}s--useful mainly to developers, not most users): A \code{data.frame} or \code{data.table} with one row per geometry in a \code{GVector}. Serves as an attribute table.
 \item \code{xVect} (\code{GVector}s--useful mainly to developers, not most users): The \code{SpatVector} that corresponds to the file named by \code{x}.
 }}
+
+\item{crs}{String: Coordinate reference system (CRS) WKT2 string. This argument is used for creating a \code{GVector} from a \code{numeric} vector or a \code{data.frame} or similar, or from \code{fast(rastOrVect = "vector")} or \code{fast(rastOrVect = "raster")}. By default, the function will use the value of \code{\link[=crs]{crs()}} (no arguments), which is the CRS of the current \strong{GRASS} \link[=tutorial_locations_mapsets]{"location"}.}
+
+\item{keepgeom}{Logical: If \code{x} is a set of \code{numeric} coordinates, or a \code{data.frame} or similar, then they can be coerced into a \code{points} \code{GVector}. If \code{keepgeom} is \code{TRUE}, then the coordinates will be included in the data table of the \code{GVector}. The default is \code{FALSE}.}
+
+\item{geom}{Character or integer vector: If \code{x} is a \code{data.frame}, \code{data.table}, or \code{matrix}, this specifies which columns of \code{x} represent longitude and latitude. Columns can be given by name (a character vector) or index (a numeric or integer vector). The default is to use the first two columns of \code{x}.}
 
 \item{rastOrVect:}{Either \code{NULL} (default), or \code{"raster"} or \code{"vector"}: If \code{x} is a filename, then the function will try to ascertain whether it represents a raster or a vector, but sometimes this will fail. In that case, it can help to specify if the file holds a raster or vector. Partial matching is used.}
 }
@@ -138,6 +162,10 @@ rastFile <- system.file("extdata", "madForest2000.tif", package = "fasterRaster"
 forest2000 <- fast(rastFile)
 forest2000
 
+# Create a 1's raster that spans the world
+ones <- fast(rastOrVect = "raster", crs = "epsg:4326")
+ones
+
 ### Create GVectors
 ###################
 
@@ -167,6 +195,18 @@ plot(coast4)
 plot(ant, col = "gray80", add = TRUE)
 plot(dypsis, add = TRUE)
 plot(dypsisRestrict, col = "red", add = TRUE)
+
+# Create a generic GVector that spans the world
+wallToWall <- fast(rastOrVect = "vector", crs = "epsg:4326") # WGS84
+wallToWall
+
+# Create a GVector from a numeric vector
+pts <- c(-90.2, 38.6, -122.3, 37.9)
+pts <- fast(pts, crs = "epsg:4326") # WGS84
+
+# Create a GVector from a matrix (can also use data.frame or data.table)
+mat <- matrix(c(-90.2, 38.6, -122.3, 37.9), ncol = 2, byrow = TRUE)
+mat <- fast(mat, crs = "epsg:4326", keepgeom = TRUE) # WGS84
 
 }
 }
