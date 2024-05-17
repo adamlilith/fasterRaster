@@ -24,6 +24,7 @@ setMethod(
 	writeRaster(x, filename = filename, format = "GeoTIFF", ...)
 	out <- terra::rast(filename)
 	if (mm) out <- terra::setMinMax(out)
+	names(out) <- names(x)
 	out
 
 	} # EOF
