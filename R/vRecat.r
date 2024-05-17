@@ -22,29 +22,43 @@
 		src <- x
 	}
 
+	cats <- .vCats(src)
+
+	# srcIn <- src
+	# src <- .makeSourceName("v_category", "vector")
+
+	# rgrass::execGRASS(
+	# 	cmd = "v.category",
+	# 	input = srcIn,
+	# 	output = src,
+	# 	option = "del",
+	# 	cat = -1,
+	# 	type = gtype,
+	# 	flags = c(.quiet(), "overwrite", "t")
+	# )
+
+	# rgrass::execGRASS(
+	# 	cmd = "v.category",
+	# 	input = srcIn,
+	# 	output = src,
+	# 	option = "add",
+	# 	type = gtype,
+	# 	flags = c(.quiet(), "overwrite", "t")
+	# )
+
 	srcIn <- src
 	src <- .makeSourceName("v_category", "vector")
 
-	rgrass::execGRASS(
-		cmd = "v.category",
-		input = srcIn,
-		output = src,
-		option = "del",
-		cat = -1,
-		type = gtype,
-		flags = c(.quiet(), "overwrite", "t")
-	)
-
-	srcIn <- src
-	src <- .makeSourceName("v_category", "vector")
+	reCats <- as.character(cats)
+	.vAttachDatabase(srcIn, table = data.frame(reCat = reCats))
 
 	rgrass::execGRASS(
-		cmd = "v.category",
+		cmd = "v.reclass",
 		input = srcIn,
 		output = src,
-		option = "add",
-		type = gtype,
-		flags = c(.quiet(), "overwrite", "t")
+		column = "reCat",
+		# type = gtype,
+		flags = c(.quiet(), "overwrite")
 	)
 
 	# # # if (is.null(cats) & is.null(start)) {
