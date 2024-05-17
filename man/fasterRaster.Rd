@@ -53,9 +53,9 @@ A tutorial on \link[=tutorial_raster_data_types]{raster data types}\cr
 \link[=Compare-methods]{Logical comparisons}: \code{<}, \code{<=}, \code{==}, \code{!=}, \code{>=}, and \code{>}, plus \code{\link[fasterRaster]{\%in\%}} and \code{\link[fasterRaster]{\%notin\%}} (for categorical rasters only)\cr
 \link[=Logic-methods]{Logical operators}: \code{|}and \code{&}
 
-Single-layer functions (applied to each layer of a \code{GRaster}):
+Single-layer mathematical functions (applied to each layer of a \code{GRaster}):
 \itemize{
-\item Working with \code{NA}s: \code{\link[=is.na]{is.na()}} and \code{\link[=not.na]{not.na()}} \cr
+\item Working with \code{NA}s: \code{\link[=is.na]{is.na()}}, \code{\link[=not.na]{not.na()}}, and \code{\link[=maskNA]{maskNA()}} \cr
 \item Trigonometry: \code{\link[=sin]{sin()}}, \code{\link[=cos]{cos()}}, \code{\link[=tan]{tan()}}, \code{\link[=asin]{asin()}}, \code{\link[=acos]{acos()}}, \code{\link[=atan]{atan()}}, \code{\link[=atan2]{atan2()}} \cr
 \item Logarithms and powers: \code{\link[=exp]{exp()}}, \code{\link[=log]{log()}}, \code{\link[=ln]{ln()}}, \code{\link[=log1p]{log1p()}}, \code{\link[=log2]{log2()}}, \code{\link[=log10]{log10()}}, \code{\link[=sqrt]{sqrt()}} \cr
 \item Rounding: \code{\link[=round]{round()}}, \code{\link[=floor]{floor()}}, \code{\link[=ceiling]{ceiling()}}, \code{\link[=trunc]{trunc()}} \cr
@@ -74,7 +74,6 @@ The operators \link{$} and \code{\link[fasterRaster]{[[}} can be used to subset 
 The \code{\link[fasterRaster]{[<-}} operator can be used to replace values of cells of a \code{GRaster}.\cr
 The assign operators, \code{\link[fasterRaster]{$<-}}, \code{\link[fasterRaster]{[[<-}}, and \code{\link[fasterRaster]{add<-}} can be used to replace specific layers of a \code{GRaster}.\cr
 \code{\link[=as.int]{as.int()}}, \code{\link[=as.float]{as.float()}}, \code{\link[=as.doub]{as.doub()}}: Change data type (integer/float/double)\cr
-\code{\link[=as.contour]{as.contour()}}: Contour lines from a \code{GRaster}\cr
 \code{\link[=as.lines]{as.lines()}}: Convert a \code{GRaster} to a "lines" vector\cr
 \code{\link[=as.points]{as.points()}}: Convert a \code{GRaster} to a "points" vector\cr
 \code{\link[=as.polygons]{as.polygons()}}: Convert a \code{GRaster} to a "polygons" vector\cr
@@ -95,14 +94,10 @@ The assign operators, \code{\link[fasterRaster]{$<-}}, \code{\link[fasterRaster]
 \code{\link[=extend]{extend()}}: Add rows and columns to a \code{GRaster}\cr
 \code{\link[=extract]{extract()}}: Extract values from a \code{GRaster} at locations of a \code{GVector}\cr
 \code{\link[=fillNAs]{fillNAs()}}: Fill \code{NA} cells\cr
-\code{\link[=flow]{flow()}}: Identify watershed basins and direction and accumulation of flow\cr
-\code{\link[=flowPath]{flowPath()}}: Path of water flow across a landscape\cr
 \code{\link[=focal]{focal()}}: Calculate cell values based on values of nearby cells\cr
 \code{\link[=fractalRast]{fractalRast()}}: Create a fractal \code{GRaster}\cr
 \code{\link[=fragmentation]{fragmentation()}}: Landscape fragmentation class from Riitters et al. (2020)\cr
-\code{\link[=geomorphons]{geomorphons()}}: Identify terrain feature types\cr
 \code{\link[=global]{global()}}: Summary statistics across cells of each \code{GRaster} layer\cr
-\code{\link[=shade]{hillshade()}}: Create a hillshade \code{GRaster}\cr
 \code{\link[=hist]{hist()}}: Histogram of \code{GRaster} values\cr
 \code{\link[=horizonHeight]{horizonHeight()}}: Horizon height\cr
 \code{\link[=interpIDW]{interpIDW()}}: Interpolate values at points to a \code{GRaster}\cr
@@ -125,16 +120,12 @@ The assign operators, \code{\link[fasterRaster]{$<-}}, \code{\link[fasterRaster]
 \code{\link[=rnormRast]{rnormRast()}}: A random \code{GRaster} with values drawn from a normal distribution\cr
 \code{\link[=rSpatialDepRast]{rSpatialDepRast()}}: Create a random \code{GRaster} with or without spatial dependence\cr
 \code{\link[=runifRast]{runifRast()}}: A random \code{GRaster} with values drawn from a uniform distribution\cr
-\code{\link[=scale]{scale()}}: Subtract means and divide by standard deviations\cr
+\code{\link[=scale]{scale()}} and \code{\link[=unscale]{unscale()}}: Subtract means and divide by standard deviations, or inverse of that\cr
 \code{\link[=selectRange]{selectRange()}}: Select values from rasters in a stack based on values in another \code{GRaster}\cr
 \code{\link[=spatSample]{spatSample()}}: Randomly points from a \code{GRaster}\cr
 \code{\link[=subst]{subst()}}: Re-assign cell values\cr
-\code{\link[=sun]{sun()}}: Solar radiance and irradiance\cr
-\code{\link[=terrain]{terrain()}}: Slope, aspect, curvature, and partial slopes\cr
 \code{\link[=thinLines]{thinLines()}}: Reduce linear features on a \code{GRaster} so linear features are 1 cell wide\cr
-\code{\link[=topoWetnessIndex]{topoWetnessIndex()}}: Topographic wetness index\cr
 \code{\link[=trim]{trim()}}: Remove rows and columns from a \code{GRaster} that are all \code{NA}\cr
-\code{\link[=unscale]{unscale()}}: Multiply raster by standard deviation and add the mean (opposite of \code{\link[=scale]{scale()}})\cr
 \code{\link[=zonal]{zonal()}}: Statistics (mean, sum, etc.) on areas of a \code{GRaster} defined by sets of cells with the same values in another \code{GRaster}, or by geometries in a \code{GVector}\cr
 \code{\link[=zonalGeog]{zonalGeog()}}: Geographic statistics (area, perimeter, fractal dimension, etc.) for sets of cells with the same values\cr
 }
@@ -153,12 +144,13 @@ The assign operators, \code{\link[fasterRaster]{$<-}}, \code{\link[fasterRaster]
 
 \subsection{Functions operating on categorical (factor) rasters}{
 
+\code{\link[fasterRaster]{\%in\%}}, and \code{\link[fasterRaster]{\%notin\%}}: Mask cells that match or do not match a given category\cr
 \code{\link[=activeCat]{activeCat()}} and \code{\link[=activeCats]{activeCats()}}: Column(s) that defines category labels\cr
 \code{\link[fasterRaster]{activeCat<-}}: Set column that defines category labels\cr
 \code{\link[=addCats]{addCats()}}: Add new columns to a "levels" table\cr
 \code{\link[fasterRaster]{addCats<-}}: Add new rows (levels) to a "levels" table\cr
 \code{\link[=categories]{categories()}}: Set "levels" table for specific layers of a categorical raster\cr
-\code{\link[=catNames]{catNames()}}: Names of each "levels" table\cr
+\code{\link[=catNames]{catNames()}}: Column names of each "levels" table\cr
 \code{\link[=cats]{cats()}}: "Levels" table of a categorical raster\cr
 \code{\link[=combineCats]{combineCats()}}: Combine categories from two or more categorical rasters\cr
 \code{\link[=combineLevels]{combineLevels()}}: Combine the "levels" tables of two or more categorical \code{GRaster}s\cr
@@ -209,7 +201,7 @@ The assign operators, \code{\link[fasterRaster]{$<-}}, \code{\link[fasterRaster]
 
 The \code{\link[fasterRaster]{[}} operator can be used to subset geometries of a \code{GVector}.\cr
 The \link{$} and \code{\link[fasterRaster]{[[}} operators can be used to get columns of a \code{GVector}'s data table.\cr
-The \code{\link[fasterRaster]{$<-}} operator can be used to replace specific columns of a \code{GVector}'s data table.\cr
+The \code{\link[fasterRaster]{$<-}} operator can be used to replace specific columns of a \code{GVector}'s data table or to add columns.\cr
 \link{addTable<-}: Add a data table to a \code{GVector}\cr
 \code{\link[=aggregate]{aggregate()}}: Combine \code{GVector} geometries\cr
 \code{\link[=as.data.frame]{as.data.frame()}}: Convert a \code{GVector}'s attribute table to a \code{data.frame}\cr
@@ -242,11 +234,20 @@ The \code{\link[fasterRaster]{$<-}} operator can be used to replace specific col
 \code{\link[fasterRaster]{names<-}}: Assign names to columns of a \code{GVector}s data table\cr
 \code{\link[=project]{project()}}: Change coordinate reference system\cr
 \code{\link[=rasterize]{rasterize()}}: Convert a \code{GVector} to a \code{GRaster}\cr
-\code{\link[=rbind]{rbind()}}: Combine \verb{GVectors\\cr [simplifyGeom()]: Remove vertices\\cr [smoothGeom()]: Remove "angular" aspects of features\\cr [st_as_sf()]: Convert a }GVector\verb{to a}sf\verb{vector\\cr [st_buffer()]: Create a polygon around/inside a}GVector\verb{\\cr [tail()]: Last rows of a }GVector\verb{'s data table\\cr [thinPoints()]: Reduce number of points in same raster cell\\cr [union()] or \code{\link[fasterRaster]{+}}: Combine two }GVector\verb{s\\cr [xor()] or \code{\link[fasterRaster]{/}}: Select parts of polygons not shared by two }GVector`s\cr
+\code{\link[=rbind]{rbind()}}: Combine \code{GVectors}\cr
+\code{\link[=simplifyGeom]{simplifyGeom()}}: Remove vertices\cr
+\code{\link[=smoothGeom]{smoothGeom()}}: Remove "angular" aspects of features\cr
+\code{\link[=st_as_sf]{st_as_sf()}}: Convert a \code{GVector} to a \code{sf} vector\cr
+\code{\link[=st_buffer]{st_buffer()}}: Create a polygon around/inside a \code{GVector}\cr
+\code{\link[=tail]{tail()}}: Last rows of a \code{GVector}'s data table\cr
+\code{\link[=thinPoints]{thinPoints()}}: Reduce number of points in same raster cell\cr
+\code{\link[=union]{union()}} or \code{\link[fasterRaster]{+}}: Combine two \code{GVector}s\cr
+\code{\link[=xor]{xor()}} or \code{\link[fasterRaster]{/}}: Select parts of polygons not shared by two \code{GVector}s\cr
 }
 
 \subsection{Functions for fixing issues with \code{GVector}s}{
 
+(See also tools that can be used during \code{GVector} creation/loading in \code{\link[=fast]{fast()}}.)
 \code{\link[=breakPolys]{breakPolys()}}: Break topologically clean areas\cr
 \code{\link[=fillHoles]{fillHoles()}}: Fill "holes" of a \code{GVector}\cr
 \code{\link[=fixBridges]{fixBridges()}}: Change "bridges" to "islands"\cr
@@ -271,7 +272,7 @@ The \code{\link[fasterRaster]{$<-}} operator can be used to replace specific col
 \code{\link[=as.float]{as.float()}}: Convert a \code{GRaster} to a floating-point raster (\strong{GRASS} data type \code{FCELL})\cr
 \code{\link[=as.int]{as.int()}}: Convert a \code{GRaster} to an integer raster (\strong{GRASS} data type \code{CELL})\cr
 \code{\link[=as.points]{as.points()}}, \code{\link[=as.lines]{as.lines()}}, and \code{\link[=as.polygons]{as.polygons()}}: Convert a \code{GRaster} to a \code{GVector}\cr
-\code{\link[=fast]{fast()}}: Convert a \code{SpatRaster}, \code{SpatVector}, or \code{sf} vector to a \code{GRaster} or \code{GVector}, or load one from a file\cr
+\code{\link[=fast]{fast()}}: Convert a \code{SpatRaster} to a \code{GRaster}; a \code{SpatVector}, \code{sf} vector, numeric vector, \code{matrix}, \code{data.frame}, or \code{data.table} to a \code{GVector}; or load a vector or raster from a file\cr
 \code{\link[=categories]{categories()}} and \link{levels<-}: Convert an integer raster to a categorical ("factor") raster.
 \code{\link[=rast]{rast()}}: Convert a \code{GRaster} to a \code{SpatRaster}\cr
 \code{\link[=rasterize]{rasterize()}}: Convert a \code{GVector} to a \code{GRaster}\cr
@@ -304,12 +305,12 @@ The \code{\link[fasterRaster]{$<-}} operator can be used to replace specific col
 \link{vegIndices}: Vegetation indices that can be calculated using \code{\link[=vegIndex]{vegIndex()}}.
 }
 
-\subsection{Esoteric, exported yet often (publicly) undocumented functions for developers, plus esoteric tutorials}{
+\subsection{Esoteric tutorials and arcane notes}{
 
 Comparisons between \code{GRegion}s can be performed using the \code{==} and \code{!=} operators.\cr
 Tutorial on \strong{GRASS} \link[=tutorial_regions]{regions}\cr
 Tutorial on \strong{GRASS} \link[=tutorial_locations_mapsets]{"locations" and mapsets}\cr
-\link[=tutorial_hidden_functions]{Hidden functions} of \strong{fasterRaster}: Useful for power users and developers
+\link[=tutorial_hidden_functions]{Hidden functions} of \strong{fasterRaster}: Useful for power users and developers\cr
 \code{\link[=grassStarted]{grassStarted()}}: Has a connection \strong{GRASS} been made within the current \strong{R} session?\cr
 }
 }
