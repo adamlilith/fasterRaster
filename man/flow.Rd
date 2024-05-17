@@ -57,8 +57,8 @@ library(terra)
 madElev <- fastData("madElev")
 elev <- fast(madElev)
 
-# Calculate flow accumulation, basins, flow direction, flooded areas, and TCI
-water <- flow(elev, return = "*")
+# Calculate flow accumulation and watershed basins
+water <- flow(elev, return = c("accum", "basins"))
 water
 
 elevWater <- c(elev, water)
