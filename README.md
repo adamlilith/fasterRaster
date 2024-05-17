@@ -25,7 +25,7 @@ As of 2024/05/17, a new version of this package, `fasterRaster 8.3`, is in alpha
 
 # Getting started
 
-To install **fasterRaster**, please use:
+To install `fasterRaster`, please use:
 
 `remotes::install_github('adamlilith/fasterRaster', dependencies = TRUE)`  
 
@@ -191,7 +191,7 @@ Key: <value>
 10:    10        pit   104 0.0012
 ```
 
-To complete the comparison, we'll graph their relative frequencies using **ggplot2** (not required by **fasterRaster**).
+To complete the comparison, we'll graph their relative frequencies using `ggplot2` (not required by `fasterRaster`).
 ```
 library(ggplot2)
 
@@ -245,7 +245,7 @@ To see a detailed list of functions available in `fasterRaster`, attach the pack
 
 4. By default, `fasterRaster` use 2 cores and 1024 MB (1 GB) of memory for `GRASS` modules that allow users to specify these values. You can set these to higher values using `faster()` and thus potentially speed up some calculations. Functions in newer versions of `GRASS` have more capacity to use these options, so updating `GRASS` to the latest version can help, too.
 
-5. Compared to **terra** and **sf**, **fasterRaster** is *not* faster with vectors, so if you can, do vector processing with those packages first.
+5. Compared to `terra` and `sf`, `fasterRaster` is *not* faster with vectors, so if you can, do vector processing with those packages first.
 
 # Versioning
 
