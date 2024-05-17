@@ -26,6 +26,6 @@
 	packageStartupMessage("To avoid conflicts between functions, please attach the `terra`, `sf`,")
 	packageStartupMessage("and `data.table` packages before attaching `fasterRaster` using, for")
 	packageStartupMessage("example, `library(terra)`.")
-	packageStartupMessage("For guides and table of contents, see `?fasterRaster``.")
+	packageStartupMessage("For guides and table of contents, see `?fasterRaster`.")
 	
 }
