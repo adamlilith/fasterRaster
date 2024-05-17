@@ -17,7 +17,7 @@
   lowMemory = FALSE
 )
 
-\S4method{buffer}{GVector}(x, width, capstyle = "round", dissolve = FALSE)
+\S4method{buffer}{GVector}(x, width, capstyle = "round", dissolve = TRUE)
 
 \S4method{st_buffer}{GVector}(x, dist, endCapStyle = "round", dissolve = FALSE)
 }
@@ -52,7 +52,7 @@ Partial matching is used and case is ignored.}
 
 \item{capstyle, endCapStyle}{Character: Vectors -- Style for ending the "cap" of buffers around lines. Valid options include \code{"rounded"}, \code{"square"}, and "\code{flat}".}
 
-\item{dissolve}{Logical (\code{GVector}s): If \code{FALSE} (default), construct a buffer for each geometry. If \code{TRUE}, dissolve all buffers after creation.}
+\item{dissolve}{Logical (\code{GVector}s): If \code{TRUE} (default), dissolve all buffers after creation. If \code{FALSE}, construct a buffer for each geometry. Note that overlapping buffers can cause this function to fail because it creates a topologically ambiguous polygon. Thus, using \code{dissolve = TRUE} is recommended.}
 
 \item{dist}{Vectors -- Same as \code{width}.}
 }

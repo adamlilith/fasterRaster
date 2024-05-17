@@ -1,4 +1,4 @@
-# fasterRaster 8.3.0.7013 (2024-05-16)
+# fasterRaster 8.3.0.7014 (2024-05-17)
 
 ## Functionality
 o Added function `flow()` for calculating flow of water across a landscape.

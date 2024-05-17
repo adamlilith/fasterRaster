@@ -21,7 +21,7 @@ Faster raster processing in `R` using `GRASS GIS`
 `fasterRaster` makes heavy use of the <a href="https://cran.r-project.org/package=rgrass">`rgrass`</a> package by Roger Bivand and others, the <a href="https://cran.r-project.org/package=rgrass">`terra`</a> package by Robert Hijmans, the <a href="https://cran.r-project.org/package=sf">`sf`</a> package by Edzer Pebesma Roger Bivand, and of course <a href="https://grass.osgeo.org/">`GRASS GIS`</a>, so is greatly indebted to all of these creators!
 
 # Where we are
-As of 2024/02/26, a new version of this package, `fasterRaster 8.3`, is in alpha release (i.e., near final release). There are known issues and unknown issues. If you encounter one of the latter, please file an <a href="https://github.com/adamlilith/fasterRaster/issues">issue</a> report.
+As of 2024/05/17, a new version of this package, `fasterRaster 8.3`, is in alpha release (i.e., near final release). There are known issues and unknown issues. If you encounter one of the latter, please file an <a href="https://github.com/adamlilith/fasterRaster/issues">issue</a> report.
 
 # Getting started
 
@@ -128,7 +128,7 @@ plot(rivers, col = "blue", add = TRUE)
 
 <img src="dist_to_rivers.png"/>  
 
-Now, let's see if there is a difference between the frequency of different "geomorphons" between areas within 1000 m of a river and the region in general. A geomorphon is one of twelve idealized land forms (e.g., flat, valley, peak, slope, etc.).  We will calculate geomorphons for the entire region, then mask out areas outside the buffers.
+Now, let's see if there is a difference between the frequency of different "geomorphons" between areas within 1000 m of a river and the region in general. A geomorphon is one of ten idealized land forms (e.g., flat, valley, peak, slope, etc.).  We will calculate geomorphons for the entire region, then mask out areas outside the buffers.
 
 ```
 geomorphs <- geomorphons(elev)
@@ -191,7 +191,7 @@ Key: <value>
 10:    10        pit   104 0.0012
 ```
 
-To complete the comparison, we'll graph their relative frequencies using **ggplot2** (not required by **FasterRaster**).
+To complete the comparison, we'll graph their relative frequencies using **ggplot2** (not required by **fasterRaster**).
 ```
 library(ggplot2)
 
@@ -205,7 +205,7 @@ ggplot(freqs, aes(x = geomorphon, y = freq, fill = locale)) +
 ```
 <img src="geomorphon_barplot.png"/>  
 
-We can see that flat areas are a bit more common closer to rivers, whereas slopes are less common.
+We can see that flat areas are a bit more common closer to rivers, whereas slopes are less common, although this is probably driven mostly by the rivers in the southern, flatter part of the region.
 
 And that's how it's done!  You can do almost anything in `fasterRaster`  you can do with `terra`. The examples above do not show the advantage of `fasterRaster` because the they do not use in large-in-memory/large-on-disk spatial datasets. For very large datasets, `fasterRaster` can be much faster! For example, for a large raster (many cells), the `distance()` function in `terra` can take many days to run and even crash `R`, whereas in `fasterRaster`, it could take just a few minutes or hours.
 
