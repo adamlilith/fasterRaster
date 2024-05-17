@@ -43,8 +43,8 @@
 #' [Logical comparisons][Compare-methods]: `<`, `<=`, `==`, `!=`, `>=`, and `>`, plus \code{\link[fasterRaster]{%in%}} and \code{\link[fasterRaster]{%notin%}} (for categorical rasters only)\cr
 #' [Logical operators][Logic-methods]: `|`and `&`
 #'
-#' Single-layer functions (applied to each layer of a `GRaster`):
-#' - Working with `NA`s: [is.na()] and [not.na()] \cr
+#' Single-layer mathematical functions (applied to each layer of a `GRaster`):
+#' - Working with `NA`s: [is.na()], [not.na()], and [maskNA()] \cr
 #' - Trigonometry: [sin()], [cos()], [tan()], [asin()], [acos()], [atan()], [atan2()] \cr
 #' - Logarithms and powers: [exp()], [log()], [ln()], [log1p()], [log2()], [log10()], [sqrt()] \cr
 #' - Rounding: [round()], [floor()], [ceiling()], [trunc()] \cr
@@ -60,7 +60,6 @@
 #' The \code{\link[fasterRaster]{[<-}} operator can be used to replace values of cells of a `GRaster`.\cr
 #' The assign operators, \code{\link[fasterRaster]{$<-}}, \code{\link[fasterRaster]{[[<-}}, and \code{\link[fasterRaster]{add<-}} can be used to replace specific layers of a `GRaster`.\cr
 #' [as.int()], [as.float()], [as.doub()]: Change data type (integer/float/double)\cr
-#' [as.contour()]: Contour lines from a `GRaster`\cr
 #' [as.lines()]: Convert a `GRaster` to a "lines" vector\cr
 #' [as.points()]: Convert a `GRaster` to a "points" vector\cr
 #' [as.polygons()]: Convert a `GRaster` to a "polygons" vector\cr
@@ -81,14 +80,10 @@
 #' [extend()]: Add rows and columns to a `GRaster`\cr
 #' [extract()]: Extract values from a `GRaster` at locations of a `GVector`\cr
 #' [fillNAs()]: Fill `NA` cells\cr
-#' [flow()]: Identify watershed basins and direction and accumulation of flow\cr
-#' [flowPath()]: Path of water flow across a landscape\cr
 #' [focal()]: Calculate cell values based on values of nearby cells\cr
 #' [fractalRast()]: Create a fractal `GRaster`\cr
 #' [fragmentation()]: Landscape fragmentation class from Riitters et al. (2020)\cr
-#' [geomorphons()]: Identify terrain feature types\cr
 #' [global()]: Summary statistics across cells of each `GRaster` layer\cr
-#' [`hillshade()`][shade]: Create a hillshade `GRaster`\cr
 #' [hist()]: Histogram of `GRaster` values\cr
 #' [horizonHeight()]: Horizon height\cr
 #' [interpIDW()]: Interpolate values at points to a `GRaster`\cr
@@ -111,16 +106,12 @@
 #' [rnormRast()]: A random `GRaster` with values drawn from a normal distribution\cr
 #' [rSpatialDepRast()]: Create a random `GRaster` with or without spatial dependence\cr
 #' [runifRast()]: A random `GRaster` with values drawn from a uniform distribution\cr
-#' [scale()]: Subtract means and divide by standard deviations\cr
+#' [scale()] and [unscale()]: Subtract means and divide by standard deviations, or inverse of that\cr
 #' [selectRange()]: Select values from rasters in a stack based on values in another `GRaster`\cr
 #' [spatSample()]: Randomly points from a `GRaster`\cr
 #' [subst()]: Re-assign cell values\cr
-#' [sun()]: Solar radiance and irradiance\cr
-#' [terrain()]: Slope, aspect, curvature, and partial slopes\cr
 #' [thinLines()]: Reduce linear features on a `GRaster` so linear features are 1 cell wide\cr
-#' [topoWetnessIndex()]: Topographic wetness index\cr
 #' [trim()]: Remove rows and columns from a `GRaster` that are all `NA`\cr
-#' [unscale()]: Multiply raster by standard deviation and add the mean (opposite of [scale()])\cr
 #' [zonal()]: Statistics (mean, sum, etc.) on areas of a `GRaster` defined by sets of cells with the same values in another `GRaster`, or by geometries in a `GVector`\cr
 #' [zonalGeog()]: Geographic statistics (area, perimeter, fractal dimension, etc.) for sets of cells with the same values\cr
 #'
@@ -135,12 +126,13 @@
 #' [topoWetnessIndex()]: Topographic wetness index\cr
 #' 
 #' ## Functions operating on categorical (factor) rasters
+#' \code{\link[fasterRaster]{%in%}}, and \code{\link[fasterRaster]{%notin%}}: Mask cells that match or do not match a given category\cr
 #' [activeCat()] and [activeCats()]: Column(s) that defines category labels\cr
 #' \code{\link[fasterRaster]{activeCat<-}}: Set column that defines category labels\cr
 #' [addCats()]: Add new columns to a "levels" table\cr
 #' \code{\link[fasterRaster]{addCats<-}}: Add new rows (levels) to a "levels" table\cr
 #' [categories()]: Set "levels" table for specific layers of a categorical raster\cr
-#' [catNames()]: Names of each "levels" table\cr
+#' [catNames()]: Column names of each "levels" table\cr
 #' [cats()]: "Levels" table of a categorical raster\cr
 #' [combineCats()]: Combine categories from two or more categorical rasters\cr
 #' [combineLevels()]: Combine the "levels" tables of two or more categorical `GRaster`s\cr
@@ -185,7 +177,7 @@
 #' ## Functions that operate on or create `GVector`s
 #' The \code{\link[fasterRaster]{[}} operator can be used to subset geometries of a `GVector`.\cr
 #' The [$] and \code{\link[fasterRaster]{[[}} operators can be used to get columns of a `GVector`'s data table.\cr
-#' The \code{\link[fasterRaster]{$<-}} operator can be used to replace specific columns of a `GVector`'s data table.\cr
+#' The \code{\link[fasterRaster]{$<-}} operator can be used to replace specific columns of a `GVector`'s data table or to add columns.\cr
 #' [addTable<-]: Add a data table to a `GVector`\cr
 #' [aggregate()]: Combine `GVector` geometries\cr
 #' [as.data.frame()]: Convert a `GVector`'s attribute table to a `data.frame`\cr
@@ -218,7 +210,7 @@
 #' \code{\link[fasterRaster]{names<-}}: Assign names to columns of a `GVector`s data table\cr
 #' [project()]: Change coordinate reference system\cr
 #' [rasterize()]: Convert a `GVector` to a `GRaster`\cr
-#' [rbind()]: Combine `GVectors\cr
+#' [rbind()]: Combine `GVectors`\cr
 #' [simplifyGeom()]: Remove vertices\cr
 #' [smoothGeom()]: Remove "angular" aspects of features\cr
 #' [st_as_sf()]: Convert a `GVector` to a `sf` vector\cr
@@ -229,6 +221,7 @@
 #' [xor()] or \code{\link[fasterRaster]{/}}: Select parts of polygons not shared by two `GVector`s\cr
 #'
 #' ## Functions for fixing issues with `GVector`s
+#' (See also tools that can be used during `GVector` creation/loading in [fast()].)
 #' [breakPolys()]: Break topologically clean areas\cr
 #' [fillHoles()]: Fill "holes" of a `GVector`\cr
 #' [fixBridges()]: Change "bridges" to "islands"\cr
@@ -251,7 +244,7 @@
 #' [as.float()]: Convert a `GRaster` to a floating-point raster (**GRASS** data type `FCELL`)\cr
 #' [as.int()]: Convert a `GRaster` to an integer raster (**GRASS** data type `CELL`)\cr
 #' [as.points()], [as.lines()], and [as.polygons()]: Convert a `GRaster` to a `GVector`\cr
-#' [fast()]: Convert a `SpatRaster`, `SpatVector`, or `sf` vector to a `GRaster` or `GVector`, or load one from a file\cr
+#' [fast()]: Convert a `SpatRaster` to a `GRaster`; a `SpatVector`, `sf` vector, numeric vector, `matrix`, `data.frame`, or `data.table` to a `GVector`; or load a vector or raster from a file\cr
 #' [categories()] and [levels<-]: Convert an integer raster to a categorical ("factor") raster.
 #' [rast()]: Convert a `GRaster` to a `SpatRaster`\cr
 #' [rasterize()]: Convert a `GVector` to a `GRaster`\cr
@@ -279,11 +272,11 @@
 #' [madRivers][madRivers]: Rivers vector\cr
 #' [vegIndices][vegIndices]: Vegetation indices that can be calculated using [vegIndex()].
 #' 
-#' ## Esoteric, exported yet often (publicly) undocumented functions for developers, plus esoteric tutorials
+#' ## Esoteric tutorials and arcane notes
 #' Comparisons between `GRegion`s can be performed using the `==` and `!=` operators.\cr
 #' Tutorial on **GRASS** [regions][tutorial_regions]\cr
 #' Tutorial on **GRASS** ["locations" and mapsets][tutorial_locations_mapsets]\cr
-#' [Hidden functions][tutorial_hidden_functions] of **fasterRaster**: Useful for power users and developers
+#' [Hidden functions][tutorial_hidden_functions] of **fasterRaster**: Useful for power users and developers\cr
 #' [grassStarted()]: Has a connection **GRASS** been made within the current **R** session?\cr
 #'
 #' @docType package
