@@ -1,28 +1,29 @@
-# fasterRaster 8.3.0.7012 (2024-05-11)
+# fasterRaster 8.3.0.7013 (2024-05-16)
 
-## Highlights
+## Functionality
 o Added function `flow()` for calculating flow of water across a landscape.
 o Added function `flowPath()` for calculating flow of water from specific points on a landscape.
 o Added function `geomorphons()` for identifying geomorphological features.
 o Added function `maskNA()` for converting non-`NA` cells or `NA` cells to a user-defined value.
+o `plot()` displays of levels of categorical rasters.
 o Can save layer-by-layer with `writeRaster()`.
+o Added ability to create `points` `GVector`s from numeric, matrices, or data frames using `fast()`
+o Improved auto-assessment of raster `datatype` in `writeRaster()`.
 
 ## Bug fixes
-o Fixed installation issue related to `activeCat()<-` and `addCats()<-` (thank you, `kbondo1`!)
-o Fixed bug in `plot()` arising from changing output of `writeRaster()` to `GRaster`.
-o Fixed bug with `writeRaster()` failing to save if `datatype` was incorrect. Improved auto-assessment of raster `datatype` in `writeRaster()`.
-o Fixed bug in `plot()` due to `writeVector()` now returning a `GVector`.
+o `[` works consistently for `GVector`s!!!!!
+o Hidden function `.makeGVector()` now catches cases with zero extent for polygons.
+o Fixed installation issue related to `activeCat()<-` and `addCats()<-` (thank you, `@kbondo1`!)
 o Fixed bug in `arithmetic` when determining data type of an input raster.
-o `[` should work consistently for `GVector`s.
-o `extract()` extracts values from `GVector`s for large numbers of points without crashing
-o `vect()` correctly returns a `SpatVector`.
 o `crds()` works when the **GRASS** vector has an attribute table.
-o Hidden function `.makeGVector()` now catches cases with zero extent *only* for polygons.
+o `extract()` extracts values from `GVector`s for large numbers of points without crashing
+o `plot()` works! (Previous issue arose fromm changing output of `writeRaster()` to `GRaster`).
+o `rast()` correctly returns a `SpatRaster`.
+o `vect()` correctly returns a `SpatVector`.
 
 ## Issues
 o Removed `rasterPrecision` option and now use internal function `.getPrec()` to ascertain the proper precision of rasters.
-o Display of levels of categorical rasters when using `plot()`.
-o Option to fail in creation of `GRaster` or `GVector` if it has a zero extent.
+o Option to fail in creation of `GRaster` or a `polygons` `GVector` if it would have a zero extent.
 
 ## Changes
 o `complete.cases()` and `missing.cases()` return logical vectors for vectors with no data tables (was integer vectors).
