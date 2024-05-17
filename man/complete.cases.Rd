@@ -35,7 +35,7 @@ Both \code{complete.cases()} and \code{missing.cases()} return the same type of 
 \description{
 When applied to a \link[=tutorial_raster_data_types]{categorical} \code{GRaster}, \code{compete.cases()} returns \code{TRUE} for each row of the "levels" table that has no \code{NA}s in it. In contrast, \code{missing.cases()} returns \code{TRUE} for each row that has at least one \code{NA} in it. If the raster is not categorical, then \code{NA} is returned.
 
-When applied to a \code{GVector} with a data table, \code{complete.cases()} returns \code{TRUE} for each row where there are no \code{NA}s. if the \code{GVector} has no data table, then a vector of integers from 1 to the total number of geometries will be returned. In contrast, \code{missing.cases()} returns \code{TRUE} for every row that has at least one \code{NA} in it. If the \code{GVector} has no data table, then \code{NA} is returned.
+When applied to a \code{GVector} with a data table, \code{complete.cases()} returns \code{TRUE} for each row where there are no \code{NA}s. if the \code{GVector} has no data table, then a vector of \code{TRUE} values the same length as the total number of geometries will be returned. In contrast, \code{missing.cases()} returns \code{TRUE} for every row that has at least one \code{NA} in it. If the \code{GVector} has no data table, then a vector of \code{FALSE} values is returned.
 }
 \examples{
 if (grassStarted()) {
