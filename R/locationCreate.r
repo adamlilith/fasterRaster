@@ -84,13 +84,19 @@ methods::setMethod(
 
 	if (is.null(location)) {
 	
-		niceCRS <- sf::st_crs(x)$input
-		niceCRS <- gsub(niceCRS, pattern = "\\/", replacement = "")
+		string <- sf::st_crs(x)$input
+		niceCRS <- gsub(string, pattern = "\\/", replacement = "")
 		niceCRS <- gsub(niceCRS, pattern = "\\(", replacement = "")
 		niceCRS <- gsub(niceCRS, pattern = "\\)", replacement = "")
 		niceCRS <- gsub(niceCRS, pattern = " ", replacement = "_")
 		niceCRS <- gsub(niceCRS, pattern = "__", replacement = "_")
 		
+		# sf::st_crs(x)$input sometimes returns entire thing
+		if (nchar(niceCRS) > 50) {
+			between <- gregexpr(string, pattern = "\"")[[1L]]
+			niceCRS <- substr(string, between[1L] + 1L, between[2L] - 1L)
+		}
+
 		rand <- omnibus::rstring(1L)
 		location <- paste0(niceCRS, "_", rand)
 
