@@ -6,7 +6,7 @@
 \alias{[,GVector,ANY,ANY-method}
 \title{Subset geometries of a GVector}
 \usage{
-\S4method{[}{GVector,ANY,ANY}(x, i, j)
+\S4method{[}{GVector,ANY,ANY,ANY}(x, i, j)
 }
 \arguments{
 \item{x}{A \code{GVector}.}
