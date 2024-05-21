@@ -22,7 +22,7 @@ methods::setMethod(
 
 	srcIn <- .copyGSpatial(x)
 
-	srcDel <- .makeSourceName("v_category_del", "vector")
+	srcDel <- .makeSourceName("disagg_v_category_del", "vector")
 	rgrass::execGRASS(
 		cmd = "v.category",
 		input = srcIn,
@@ -32,7 +32,7 @@ methods::setMethod(
 		flags = c(.quiet(), "overwrite")
 	)
 
-	src <- .makeSourceName("v_category_add", "vector")
+	src <- .makeSourceName("disagg_v_category_add", "vector")
 	rgrass::execGRASS(
 		cmd = "v.category",
 		input = srcDel,
@@ -46,7 +46,7 @@ methods::setMethod(
 		table <- NULL
 	} else {
 		
-		cats <- .vCats(x, db = FALSE, integer = TRUE)
+		cats <- .vCats(x)
 		if (anyNA(cats)) {
 			warning("At least one geometry has a combined category. Data table cannot be copied.")
 			table <- NULL
