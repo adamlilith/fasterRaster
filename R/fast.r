@@ -10,16 +10,19 @@
 #'
 #' @param x Any one of:
 #' * A `SpatRaster` raster. Rasters can have one or more layers.
-#' * A `SpatVector` or `sf` spatial vector. See especially arguments `correct`, `area`, `snap`, `steps`, and `vebose`.
-#' * A character string or a vector of strings with the path(s) and filename(s) of one or more rasters or one vector to be loaded directly into **GRASS**. The function will attempt to ascertain the type of object from the file extension (raster or vector), but it can help to indicate which it is using the `rastOrVect` argument if it is unclear.
+#' * A `SpatVector` or `sf` spatial vector. See especially arguments `correct`, `area`, `snap`, `steps`, and `verbose`.
+#' * A character string or a vector of strings with the path(s) and filename(s) of one or more rasters or one vector to be loaded directly into **GRASS**. The function will attempt to ascertain the type of object from the file extension (raster or vector), but it can help to indicate which it is using the `rastOrVect` argument if it is unclear. For rasters, see especially argument `levels`. For vectors, see especially arguments `correct`, `area`, `snap`, `steps`, and `verbose`.
 #' * A vector with an even number of numeric values representing longitude/latitude pairs. See arguments `geom`, `keepgeom`, and `crs`.
 #' * A `data.frame`, `data.table`, or `matrix`: Create a `points` `GVector`. Two of the columns must represent longitude and latitude. See arguments `geom`, `keepgeom`, and `crs`.
 #' * Missing: Creates a generic `GRaster` or `GVector`. You must specify `rastOrVect`; for example, `fast(rastOrVect = "raster")`. Also see argument `crs`.
 #'
 #' @param rastOrVect: Either `NULL` (default), or `"raster"` or `"vector"`: If `x` is a filename, then the function will try to ascertain whether it represents a raster or a vector, but sometimes this will fail. In that case, it can help to specify if the file holds a raster or vector. Partial matching is used.
 #'
-#' @param levels (`GRaster`s only): A `data.frame`, `data.table`, or list of `data.frame`s or `data.table`s with categories for categorical rasters. The first column of a table corresponds to raster values and must be of type `integer`. A subsequent column corresponds to category labels. By default, the second column is assumed to represent labels, but this can be changed with \code{\link[fasterRaster]{activeCat<-}}. Level tables can also be `NULL` (e.g., `data.fame(NULL)`). You can also assign levels after loading a raster using \code{\link[fasterRaster]{levels<-}}.
-#'
+#' @param levels (`GRaster`s only): Any of:
+#' * Logical: If `TRUE` (default) and at least one layer of a raster is of type `integer`, search for a "levels" file, load it, and attach levels. A levels file will have the same name as the raster file, but end with any of "rdata", "rdat", "rda", "rds", "csv", or "tab" (case will generally not matter). If such a file is not found, no levels will be assigned. The levels file must contain either a `data.frame`, `data.table`, or `list` of `data.frame`s or `data.table`s, or `NULL`.
+#' * A `data.frame`, `data.table`, or list of `data.frame`s or `data.table`s with categories for categorical rasters. The first column of a table corresponds to raster values and must be of type `integer`. A subsequent column corresponds to category labels. By default, the second column is assumed to represent labels, but this can be changed with \code{\link[fasterRaster]{activeCat<-}}. Level tables can also be `NULL` (e.g., `data.fame(NULL)`). You can also assign levels after loading a raster using \code{\link[fasterRaster]{levels<-}}.
+#' * `NULL`: Do not attach a levels table.
+#'#'
 #' @param geom Character or integer vector: If `x` is a `data.frame`, `data.table`, or `matrix`, this specifies which columns of `x` represent longitude and latitude. Columns can be given by name (a character vector) or index (a numeric or integer vector). The default is to use the first two columns of `x`.
 #'
 #' @param crs String: Coordinate reference system (CRS) WKT2 string. This argument is used for creating a `GVector` from a `numeric` vector or a `data.frame` or similar, or from `fast(rastOrVect = "vector")` or `fast(rastOrVect = "raster")`. By default, the function will use the value of [crs()] (no arguments), which is the CRS of the current **GRASS** ["location"][tutorial_locations_mapsets].
@@ -28,7 +31,7 @@
 #'
 #' @param correct Logical (`GVector`s only): Correct topological issues. See *Details* for more details! By default, this is `TRUE`.
 #'
-#' @param snap `GVector`s only`: Numeric or `NULL` (default). The value of `snap` indicates how close vertices need to be for them to be shifted to to the same location. Units of `snap` are map units (usually meters), or degrees for unprojected CRSs. For lines and polygons vectors, a value of `NULL` will invoke an iterative procedure to find an optimal, smallest value of `snap`. To turn snapping off, set `snap = 0`. See *Details* for more details!
+#' @param snap `GVector`s only: Numeric or `NULL` (default). The value of `snap` indicates how close vertices need to be for them to be shifted to to the same location. Units of `snap` are map units (usually meters), or degrees for unprojected CRSs. For lines and polygons vectors, a value of `NULL` will invoke an iterative procedure to find an optimal, smallest value of `snap`. To turn snapping off, set `snap = 0`. See *Details* for more details!
 #'
 #' @param area Polygon `GVector`s only: Either a positive numeric value or `NULL` (default). Remove polygons with an area smaller than this value. Units of `area` are in square meters (regardless of the CRS). If `NULL`, then an iterative procedure is used to identify a value of `area` that results in a topologically correct polygon vector. For point and lines vectors, this argument is ignored. To turn area removal off, set `area = 0`. See *Details* for more details! 
 #'
@@ -36,7 +39,7 @@
 #'
 #' @param dropTable `GVector`s only: Logical. If `TRUE`, then drop the data table associated with a vector. By default, this is `FALSE`. See *Details* for more details!
 #'
-#' @param extent `GVector`s only: Either a `NULL` (default), or a `GVector`, a `SpatVector`, a `SpatExtent` object, an `sf` vector, an `bbox` object, or a numeric vector of 4 values providing a bounding box. If provided, only vector features within this bounding box are imported. If `extent` is a numeric vector, the values *must* be in the order west, east, south, north. If `NULL`, the entire vector is imported.
+#' @param extent `GVector`s only: Either a `NULL` (default), or a `GVector`, a `SpatVector`, a `SpatExtent` object, an `sf` vector, a `bbox` object, or a numeric vector of 4 values providing a bounding box. If provided, only vector features within this bounding box are imported. If `extent` is a numeric vector, the values *must* be in the order west, east, south, north. If `NULL`, the entire vector is imported.
 #'
 #' @param verbose `GVector`s only: Logical. Displays progress when using automatic topology correction.
 #'
@@ -69,7 +72,7 @@ methods::setMethod(
 	function(
 		x,
 		rastOrVect = NULL,
-		levels = NULL,
+		levels = TRUE,
 		correct = TRUE,
 		snap = NULL,
 		area = NULL,
@@ -165,11 +168,58 @@ methods::setMethod(
 			if (!.exists(src)) stop("Raster not loaded. You may need to use an absolute (not relative) file path.")
 			if (nLayers > 1L) src <- paste0(src, ".", seq_len(nLayers))
 
-			# raster levels
-			if (is.list(levels)) {
-				if (length(levels) == 1L & length(xNames) > 1L & is.null(levels[[1L]])) levels <- NULL
+			### raster levels
+			# if (is.list(levels)) {
+			# 	if (length(levels) == 1L & length(xNames) > 1L & is.null(levels[[1L]])) levels <- NULL
+			# } else if (inherits(levels, c("data.frame", "data.table"))) {
+				# levels <- list(levels)
+			if (is.logical(levels) && levels) {
+				
+				info <- .rastInfo(src)
+				
+				# search for and add levels
+				if (any(info$grassDataType == "CELL")) {
+
+					levelsFileName <- x
+					levelsFileExt <- .fileExt(x)
+					levelsFileName <- substr(levelsFileName, 1L, nchar(x) - nchar(levelsFileExt))
+
+					extensions <- c("rds", "RDS", "rdata", "RData", "rda", "RDa", "Rda", "Rdat", "rdat", "RDat", "csv", "CSV", "tab", "TAB")
+					levelsFileNames <- paste0(levelsFileName, extensions)
+
+					fileExists <- file.exists(levelsFileNames)
+					if (any(fileExists)) {
+					
+						if (sum(fileExists) > 1L) warning("More than one `levels` file found. Only the first will be used.")
+						levelsFileName <- levelsFileNames[fileExists[1L]]
+						extension <- .fileExt(x)
+
+						if (tolower(extension) == "rds") {
+							levels <- readRDS(thisLevelsFileName)
+						} else if (tolower(extension) %in% c("rdata", "rda", "rdat")) {
+							load(thisLevelsFileName)
+						} else if (tolower(extension) == "tab") {
+							levels <- utils::read.delim(thisLevelsFileName)
+						} else if (tolower(extension) == "csv") {
+							levels <- utils::read.csv(thisLevelsFileName)
+						}
+
+					} else {
+						levels <- NULL
+					}
+
+				} else {
+					levels <- NULL
+				}
+			
 			}
-			out <- .makeGRaster(src, names = xNames, levels = levels)
+
+			if (exists("info", inherits = FALSE)) {
+				out <- .makeGRaster(info, names = xNames, levels = levels)
+			} else {
+				out <- .makeGRaster(src, names = xNames, levels = levels)
+			}
+			
 
 		}
 
@@ -241,7 +291,7 @@ methods::setMethod(
 			}
 
 			src <- .makeSourceName("v_in_ogr", "vector")
-			if (is.null(snap) | is.null(area)) {
+			if (is.null(snap) & is.null(area)) {
 				
 				# slower if we need to record messages
 				suppressMessages(
@@ -259,6 +309,8 @@ methods::setMethod(
 					)
 				)
 
+				valid <- !any(grepl(run, pattern = "WARNING: The output contains topological errors"))
+
 			} else {
 
 				# faster if we remove fluff
@@ -266,16 +318,17 @@ methods::setMethod(
 					cmd = "v.in.ogr",
 					input = x,
 					output = src,
-					snap = -1,
-					min_area = 0,
+					snap = thisSnap,
+					min_area = thisArea,
 					flags = c(.quiet(), "overwrite", "t", correctTopoFlag)
 				)
-				
+
+				# if (!exists("table", inherits = TRUE, mode = "numeric")) table <- .vAsDataTable(src)
+				info <- .vectInfo(src)
+				valid <- .validVector(info, table)
+
 			}
 			
-			info <- .vectInfo(src)
-			valid <- .validVector(info, table)
-
 			### automated vector topology correction
 			if (!valid & (is.null(snap) | is.null(area))) {
 			
@@ -334,6 +387,7 @@ methods::setMethod(
 							flags = c(.quiet(), "overwrite", "t", correctTopoFlag)
 						)
 						
+						if (!exists("table", inherits = TRUE)) table <- .vAsDataTable(src)
 						info <- .vectInfo(src)
 						valid <- .validVector(info, table)
 						step <- step + 1L
@@ -366,6 +420,7 @@ methods::setMethod(
 							flags = c(.quiet(), "overwrite", "t", correctTopoFlag)
 						)
 						
+						if (!exists("table", inherits = TRUE)) table <- .vAsDataTable(src)
 						info <- .vectInfo(src)
 						valid <- .validVector(info, table)
 						step <- step + 1L
@@ -402,6 +457,7 @@ methods::setMethod(
 							flags = c(.quiet(), "overwrite", "t", correctTopoFlag)
 						)
 						
+						if (!exists("table", inherits = TRUE)) table <- .vAsDataTable(src)
 						info <- .vectInfo(src)
 						valid <- .validVector(info, table)
 						step <- step + 1L
@@ -446,7 +502,7 @@ methods::setMethod(
 methods::setMethod(
 	"fast",
 	signature(x = "SpatRaster"),
-	function(x, ...) {
+	function(x) {
 
 	if (is.na(faster("grassDir"))) stop("You must specify the folder in which GRASS is installed using faster().")
 
@@ -524,7 +580,7 @@ methods::setMethod(
 methods::setMethod(
 	"fast",
 	signature(x = "SpatVector"),
-	function(x, correct = TRUE, snap = NULL, area = NULL, steps = 10, extent = NULL, dropTable = FALSE, verbose = FALSE, ...) .fastVector(x, correct = correct, snap = snap, area = area, steps = steps, extent = extent, dropTable = dropTable, verbose = verbose, ...)
+	function(x, correct = TRUE, snap = NULL, area = NULL, steps = 10, extent = NULL, dropTable = FALSE, verbose = FALSE) .fastVector(x, correct = correct, snap = snap, area = area, steps = steps, extent = extent, dropTable = dropTable, verbose = verbose)
 )
 
 #' @rdname fast
@@ -533,14 +589,14 @@ methods::setMethod(
 methods::setMethod(
 	"fast",
 	signature(x = "sf"),
-	function(x, correct = TRUE, snap = NULL, area = NULL, steps = 10, extent = NULL, dropTable = FALSE, verbose = FALSE, ...) .fastVector(x, correct = correct, snap = snap, area = area, steps = steps, extent = extent, dropTable = dropTable, verbose = verbose, ...)
+	function(x, correct = TRUE, snap = NULL, area = NULL, steps = 10, extent = NULL, dropTable = FALSE, verbose = FALSE) .fastVector(x, correct = correct, snap = snap, area = area, steps = steps, extent = extent, dropTable = dropTable, verbose = verbose)
 )
 
 # 1. Write vector to disk (if needed)
 # 2. Send to fast(signature = "character")
 #' @noRd
 .fastVector <- function(
-	x,		# SpatVector or sf
+	x,
 	correct,
 	snap,
 	area,
@@ -561,8 +617,22 @@ methods::setMethod(
 	# crop
 	if (!is.null(extent)) {
 		
-		extent <- .getExtent(extent)
-		extent <- terra::as.polygons(extent)
+		if (inherits(extent, "GSpatial")) {
+			extent <- ext(extent)
+		} else if (inherits(extent, c("SpatVector", "SpatRaster", "SpatExtent"))) {
+			extent <- terra::ext(extent)
+		} else if (inherits(extent, "sf")) {
+			extent <- sf::st_bbox
+			extent <- as.vector(extent)
+			extent <- extent[c(1L, 3L, 2L, 4L)]
+			extent <- terra::ext(extent)
+		} else if (is.numeric(extent)) {
+			if (length(extent) != 4L) stop("The `extent` argument must be a spatial object or a vector of four numeric values.")
+			extent <- terra::ext(extent)
+		} else {
+			stop("The `extent` argument must be a spatial object or a vector of four numeric values.")
+		}
+
 		x <- terra::crop(x, extent)
 
 		if (nrow(x) == 0L) {
@@ -583,14 +653,15 @@ methods::setMethod(
 
 	if (terra::sources(x) == "") {
 
-		# remove table
-		if (!is.null(table) && ncol(table) > 0L) {
-			nc <- ncol(xVect)
-			xVect[ , seq_len(nc)] <- NULL 
+		# remove all but one column of data table
+		# NB we ***need** a table with the GVector--otherwise, subset_single_bracket does not work as expected
+		if (!is.null(table) && ncol(table) > 1L) {
+			nc <- 2L:ncol(xVect)
+			xVect[ , nc] <- NULL 
 		}
 		
 		# NB we ***need** a table with the GVector--otherwise, subset_single_bracket does not work as expected
-		xVect$DUMMYDUMMY_ <- 1L:nrow(xVect)
+		if (is.null(table)) xVect$DUMMYDUMMY_ <- 1L:nrow(xVect)
 
 		vectFile <- tempfile(fileext = ".gpkg")
 		terra::writeVector(xVect, filename = vectFile, filetype = "GPKG", overwrite = TRUE)
@@ -598,7 +669,7 @@ methods::setMethod(
 	} else {
 		vectFile <- terra::sources(x)
 	}
-
+	
 	# NB not passing extent bc already cropped if we wanted to do that
 	args <- list(x = vectFile, rastOrVect = "vector", correct = correct, snap = snap, area = area, steps = steps, extent = NULL, dropTable = dropTable, table = table, xVect = xVect, verbose = verbose)
 	args <- c(args, list(...))
@@ -616,7 +687,7 @@ methods::setMethod(
 	
 	if (crs == "") { 
 	
-		crs <- tryCatch(crs(), error=function(cond) FALSE)
+		crs <- tryCatch(crs(), error = function(cond) FALSE)
 
 		if (is.logical(crs)) stop("You must provide a coordinate reference system with `crs` or\n  have created or loaded at least one GRaster or GVector.")
 
@@ -626,9 +697,11 @@ methods::setMethod(
 	if (rastOrVect == "raster") {
 
 		x <- terra::rast()
-		x[] <- 1L
 		x <- terra::project(x, crs)
-		out <- fast(x)
+		x[] <- 1L
+		tf <- tempfile(fileext = ".tif")
+		terra::writeRaster(x, tf, overwrite = TRUE)
+		out <- fast(tf)
 
 	} else {
 
@@ -749,34 +822,5 @@ methods::setMethod(
 	}
 
 	tableValid & catsValid
-
-}
-
-#' Get extent from a spatial object or numeric vector
-#'
-#' @param extent Either a `NULL` (default), or a `GVector`, a `GRaster`, a `SpatVector`, a `SpatExtent` object, an `sf` vector, an `bbox` object, or a numeric vector of 4 values providing a bounding box. If provided, only vector features within this bounding box are imported. If `extent` is a numeric vector, the values *must* be in the order west, east, south, north.
-#'
-#' @returns Either `NULL` (if `extent` is `NULL`), or a `SpatExtent` object.
-#'
-#' @noRd
-.getExtent <- function(extent) {
-
-	if (is.null(extent)) {
-		out <- NULL
-	} else {
-		if (inherits(extent, "GSpatial")) {
-			out <- ext(extent, vector = TRUE)
-		} else if (inherits(extent, c("SpatVector", "SpatRaster", "SpatExtent"))) {
-			out <- terra::ext(extent)
-			out <- as.vector(extent)
-		} else if (inherits(extent, "sf")) {
-			out <- sf::st_bbox
-			out <- as.vector(out)
-			out <- out[c(1L, 3L, 2L, 4L)]
-		}
-		out <- terra::ext(out)
-	}
-
-	out
 
 }
