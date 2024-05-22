@@ -1,3 +1,9 @@
+# fasterRaster 8.3.0.7015 (2024-05-21)
+
+## Bug fixes
+o `[` now works for large `GVector`s (i.e., >1M geometries).
+o Fixed behind-scenes issue arising when a CRS string couldn't be parsed to a shorter version (`.locationCreate()` and related).
+
 # fasterRaster 8.3.0.7014 (2024-05-17)
 
 ## Functionality
