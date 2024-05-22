@@ -1,8 +1,8 @@
 Package: fasterRaster
 Type: Package
 Title: Faster Raster and Spatial Vector Processing Using 'GRASS GIS'
-Version: 8.3.0.7014
-Date: 2024-05-17
+Version: 8.3.0.7015
+Date: 2024-05-21
 Authors@R: 
 	c(
 		person(
