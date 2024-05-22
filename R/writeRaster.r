@@ -76,9 +76,11 @@ setMethod(
 	) {
 	
 	if (!is.null(levelsExt) & !is.logical(levelsExt)) {
+
 		levelsExts <- c(".csv", ".rds", ".rda", ".rdata", "csv", "rds", "rda", "rdata", "rdat")
 		levelsExt <- omnibus::pmatchSafe(levelsExt, levelsExts, nmax = 1L)
 		if (substr(levelsExt, 1L, 1L) != ".") levelsExt <- paste0(".", levelsExt)
+		
 	}
 
 	.locationRestore(x)
@@ -164,13 +166,20 @@ setMethod(
 			}
 			
 			# data type
-			if (is.null(datatype)) datatype <- datatype(x, "fasterRaster")
+			if (is.null(datatype)) datatype <- datatype(x, "GRASS")
 
 			bounds <- minmax(x)
 			mins <- bounds["min", ]
 			maxs <- bounds["max", ]
 
-			if (any(datatype %in% c("factor", "integer", "logical"))) {
+			if (any(datatype %in% c("double", "FLT8S", "DCELL"))) {
+
+				datatype <- "Float64"
+			} else if (any(datatype %in% c("float", "FLT4S", "FCELL"))) {
+
+				datatype <- "Float32"
+
+			} else if (any(datatype %in% c("factor", "integer", "logical"))) {
 
 				if (all(mins >= 0L & maxs <= 255L)) {
 					datatype <- "Byte"
@@ -252,10 +261,10 @@ setMethod(
 				createopt <- paste(createopt, collapse=",")
 
 				# mm <- minmax(x)
-				# metaopt <- paste0("TIFFTAG_MINSAMPLEVALUE=", paste(mm[1L, ], collapse=" "))
-				# metaopt <- c(metaopt, paste0("TIFFTAG_MAXSAMPLEVALUE=", paste(mm[2L, ], collapse=" ")))
-				# metaopt <- paste0("STATISTICS_MINIMUM=", paste(mm[1L, ], collapse=" "))
-				# metaopt <- c(metaopt, paste0("STATISTICS_MAXIMUM=", paste(mm[2L, ], collapse=" ")))
+				# metaopt <- paste0("TIFFTAG_MINSAMPLEVALUE=", paste(mm[1L, ], collapse=","))
+				# metaopt <- c(metaopt, paste0("TIFFTAG_MAXSAMPLEVALUE=", paste(mm[2L, ], collapse=",")))
+				# metaopt <- paste0("STATISTICS_MINIMUM=", paste(mm[1L, ], collapse=","))
+				# metaopt <- c(metaopt, paste0("STATISTICS_MAXIMUM=", paste(mm[2L, ], collapse=",")))
 				# metaopt <- unique(metaopt)
 				# metaopt <- paste(metaopt, collapse=",")
 				
