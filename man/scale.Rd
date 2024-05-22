@@ -17,13 +17,13 @@
 \item{center}{Value depends on the function:
 \itemize{
 \item \code{scale()}: Logical: If \code{TRUE} (default), subtract from each raster layer its mean.
-\item \code{unscale()}: Numeric vector or \code{NULL} (default): This can be a single value, which will be recycled if there is more than one layer in the raster, or one value per raster layer. If \code{NULL}, then no un-centering is done.
+\item \code{unscale()}: Numeric vector or \code{NULL} (default): This can be a single value, which will be recycled if there is more than one layer in the raster, or one value per raster layer. If a value is \code{NA}, then no un-centerinng will be performed on the relevant raster layer. If \code{NULL}, then no un-centering is done.
 }}
 
 \item{scale}{Value depends on the function:
 \itemize{
 \item \code{scale()}: Logical: If \code{TRUE} (default), divide each layer by its standard deviation.
-\item \code{unscale()}: Numeric vector or \code{NULL} (default): This can be a single value, which will be recycled if there is more than one layer in the raster, or one value per raster layer. If \code{NULL}, then no un-scaling is done.
+\item \code{unscale()}: Numeric vector or \code{NULL} (default): This can be a single value, which will be recycled if there is more than one layer in the raster, or one value per raster layer. If a value is \code{NA}, then no unscaling will be done on the relevant raster layer. If \code{NULL}, then no un-scaling is done.
 }}
 }
 \value{
