@@ -8,11 +8,11 @@
 #'
 #' @param center Value depends on the function:
 #' * `scale()`: Logical: If `TRUE` (default), subtract from each raster layer its mean.
-#' * `unscale()`: Numeric vector or `NULL` (default): This can be a single value, which will be recycled if there is more than one layer in the raster, or one value per raster layer. If `NULL`, then no un-centering is done.
+#' * `unscale()`: Numeric vector or `NULL` (default): This can be a single value, which will be recycled if there is more than one layer in the raster, or one value per raster layer. If a value is `NA`, then no un-centerinng will be performed on the relevant raster layer. If `NULL`, then no un-centering is done.
 #'
 #' @param scale Value depends on the function:
 #' * `scale()`: Logical: If `TRUE` (default), divide each layer by its standard deviation.
-#' * `unscale()`: Numeric vector or `NULL` (default): This can be a single value, which will be recycled if there is more than one layer in the raster, or one value per raster layer. If `NULL`, then no un-scaling is done.
+#' * `unscale()`: Numeric vector or `NULL` (default): This can be a single value, which will be recycled if there is more than one layer in the raster, or one value per raster layer. If a value is `NA`, then no unscaling will be done on the relevant raster layer. If `NULL`, then no un-scaling is done.
 #'
 #' @returns Value depends on the function:
 #' * `scale()`: The `GRaster` will have two attributes, "center" and "scale", which have the means and standard deviations of the original rasters (if `center` and `scale` are `TRUE`, otherwise, they will be `NA`). These can be obtained using `attributes(output_raster)$center` and `attributes(output_raster)$scale`.
@@ -111,9 +111,7 @@ methods::setMethod(
 	function(x, center = NULL, scale = NULL) {
 
 	if (is.null(center) & is.null(scale)) {
-	
-		warning("No unscaling performed because both ", sQuote("center"), " nor ", sQuote("scale"), " are NULL.")
-
+		warning("No unscaling performed because neither `center` `scale` are NULL.")
 		return(x)
 
 	}
@@ -126,16 +124,14 @@ methods::setMethod(
 	if (!is.null(center)) {
 
 		if (length(center) == 1L) center <- rep(center, nLayers)
-
-		if (length(center) != nLayers) stop("The ", sQuote("center"), " argument must be a single value, one value per layer in the GRaster, or NULL.")
+		if (length(center) != nLayers) stop("The `center` argument must be a single value, one value per layer in the GRaster, or NULL.")
 
 	}
 
 	if (!is.null(scale)) {
 
 		if (length(scale) == 1L) scale <- rep(scale, nLayers)
-
-		if (length(scale) != nLayers) stop("The ", sQuote("scale"), " argument must be a single value, one value per layer in the GRaster, or NULL.")
+		if (length(scale) != nLayers) stop("The `scale` argument must be a single value, one value per layer in the GRaster, or NULL.")
 
 	}
 
@@ -146,18 +142,46 @@ methods::setMethod(
 		if (!is.null(scale)) sigma <- scale[i]
 
 		if (!is.null(center) & !is.null(scale)) {
-			ex <- paste0(srcs[i], " = (", sources(x)[i], " * ", sigma, ") + ", mu)
-		} else if (!is.null(center) & is.null(scale)) {
-			ex <- paste0(srcs[i], " = ", sources(x)[i], " + ", mu)
+
+			if (!is.na(mu) & !is.na(sigma)) {
+				ex <- paste0(srcs[i], " = (", sources(x)[i], " * ", sigma, ") + ", mu)
+			} else if (is.na(mu) & !is.na(sigma)) {
+				ex <- paste0(srcs[i], " = ", sources(x)[i], " * ", sigma)
+			} else if (!is.na(mu) & is.na(sigma)) {
+				ex <- paste0(srcs[i], " = ", sources(x)[i], " + ", mu)
+			} else if (is.na(mu) & is.na(sigma)) {
+				ex <- NULL
+			}
+
 		} else if (is.null(center) & !is.null(scale)) {
-			ex <- paste0(srcs[i], " = ", sources(x)[i], " * ", sigma)
+		
+			if (!is.na(sigma)) {
+				ex <- paste0(srcs[i], " = ", sources(x)[i], " * ", sigma)
+			} else {
+				ex <- NULL
+			}
+
+		} else if (!is.null(center) & is.null(scale)) {
+
+			if (!is.na(mu)) {
+				ex <- paste0(srcs[i], " = ", sources(x)[i], " + ", mu)
+			} else {
+				ex <- NULL
+			}
+
 		}
 
-		rgrass::execGRASS(
-			cmd = "r.mapcalc",
-			expression = ex,
-			flags = c(.quiet(), "overwrite")
-		)
+		if (!is.null(ex)) {
+
+			rgrass::execGRASS(
+				cmd = "r.mapcalc",
+				expression = ex,
+				flags = c(.quiet(), "overwrite")
+			)
+
+		} else {
+			srcs[i] <- sources(x)[i]
+		}
 	
 	} # next layer
 	.makeGRaster(srcs, names(x))
