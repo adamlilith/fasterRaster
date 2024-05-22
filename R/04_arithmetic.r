@@ -111,7 +111,11 @@ methods::setMethod(
 		.locationRestore(e1)
 		.region(e1)
 
-		if (is.na(e2)) e2 <- "null()"
+		if (is.na(e2)) {
+			e2 <- "null()"
+		} else {
+			e2 <- formatC(e2, format = "f", drop0trailing = TRUE)
+		}
 		
 		for (i in 1L:nlyr(e1)) {
 		
@@ -153,7 +157,11 @@ methods::setMethod(
 		.locationRestore(e1)
   		.region(e1)
 
-		if (is.na(e2)) e2 <- "null()"
+		if (is.na(e2)) {
+			e2 <- "null()"
+		} else {
+			e2 <- formatC(e2, format = "f", drop0trailing = TRUE)
+		}
 		
 		for (i in 1L:nlyr(e1)) {
 		
@@ -195,7 +203,11 @@ methods::setMethod(
 		.locationRestore(e2)
   		.region(e2)
 
-		if (is.na(e1)) e1 <- "null()"
+		if (is.na(e1)) {
+			e1 <- "null()"
+		} else {
+			e1 <- formatC(e1, format = "f", drop0trailing = TRUE)
+		}
 		oper <- as.vector(.Generic)[1L]
 		
 		for (i in 1L:nlyr(e2)) {
@@ -236,7 +248,11 @@ methods::setMethod(
 		.locationRestore(e2)
 		.region(e2)
 
-		if (is.na(e1)) e1 <- "null()"
+		if (is.na(e1)) {
+			e1 <- "null()"
+		} else {
+			e1 <- formatC(e1, format = "f", drop0trailing = TRUE)
+		}
 		
 		for (i in 1L:nlyr(e2)) {
 		
