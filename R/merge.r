@@ -40,7 +40,7 @@ methods::setMethod(
 
 	# combine levels
 	levels <- combineLevels(x)
-	.makeGRaster(src, "layer", levels = levels)
+	.makeGRaster(src, levels = levels)
 	
 	} # EOF
 )

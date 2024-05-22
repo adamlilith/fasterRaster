@@ -155,28 +155,87 @@ methods::setMethod(
 			# gtype <- geomtype(x, grass = TRUE)
 			# ### ^^^ WORKS!!!!! Keeping copy.
 			
+			gtype <- geomtype(x, grass = TRUE)
+
 			src <- .makeSourceName("subset_single_bracket_v_extract", "vector")
 			cats <- .vCats(sources(x))
 			cats <- unique(cats)
 			keepCats <- cats[cats %in% i] # selects same as GVector but wrong geometry
-			newCats <- omnibus::renumSeq(keepCats)
 
-			keepCats <- seqToSQL(keepCats)
-			keepCats <- as.character(keepCats)
+			# selecting geometries using database method
+			qid <- rep(0L, nGeoms)
+			qid[keepCats] <- 1L
 
-			gtype <- geomtype(x, grass = TRUE)
+			db <- data.table::data.table(cat = cats, qid = qid)
+			.vAttachDatabase(x, db)
 
 			rgrass::execGRASS(
 				cmd = "v.extract",
 				input = sources(x),
 				output = src,
-				cats = keepCats,
+				where = 'qid = 1', # will not work with inequalities
 				type = gtype,
 				flags = c(.quiet(), "overwrite")
 			)
 
+			src <- .vRecat(src, gtype = gtype, cats = keepCats)
+
+
+			# thisKeepCats <- seqToSQL(keepCats)
+			# stoppedAt <- attr(thisKeepCats, "lastIndex")
+
+			# # number of selections is small enough to select all at once
+			# if (stoppedAt <= negom) {
+
+			# 	thisKeepCats <- as.character(thisKeepCats)
+
+			# 	rgrass::execGRASS(
+			# 		cmd = "v.extract",
+			# 		input = sources(x),
+			# 		output = src,
+			# 		cats = thisKeepCats,
+			# 		type = gtype,
+			# 		flags = c(.quiet(), "overwrite")
+			# 	)
+
+			# 	src <- .vRecat(src, gtype = gtype)
+
+			# } else {
+			# # selecting in subsets because select vector is too large to select all at once
+
+
+# 				srcs <- character()
+# 				trim <- TRUE
+# 				j <- 1L
+# 				while (trim) {
+				
+# 					if (j > 1L) {
+# 						thisKeepCats <- seqToSQL(keepCats[(stoppedAt + 1):length(i)])
+# 						stoppedAt <- attr(thisKeepCats, "lastIndex")
+# 						trim <- attr(thisKeepCats, "trim")
+# 					}
+
+# 					thisKeepCats <- as.character(thisKeepCats)
+
+# 					srcs[j] <- .makeSourceName("single_bracket_select_v_extract", "vector")
+# 					rgrass::execGRASS(
+# 						cmd = "v.extract",
+# 						input = sources(x),
+# 						output = srcs[j],
+# 						cats = thisKeepCats,
+# 						type = gtype,
+# 						flags = c(.quiet(), "overwrite")
+# 					)
+
+# 					j <- j + 1L
+				
+# 				}
+			
+			
+			# }
+
 			# renumber cats so they start from 1 and are sequential
-			src <- .vRecat(src, gtype = gtype)
+			
 		
 		} # not removing all and not removing nothing
 

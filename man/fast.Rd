@@ -16,7 +16,7 @@
 \S4method{fast}{character}(
   x,
   rastOrVect = NULL,
-  levels = NULL,
+  levels = TRUE,
   correct = TRUE,
   snap = NULL,
   area = NULL,
@@ -27,7 +27,7 @@
   ...
 )
 
-\S4method{fast}{SpatRaster}(x, ...)
+\S4method{fast}{SpatRaster}(x)
 
 \S4method{fast}{SpatVector}(
   x,
@@ -37,8 +37,7 @@
   steps = 10,
   extent = NULL,
   dropTable = FALSE,
-  verbose = FALSE,
-  ...
+  verbose = FALSE
 )
 
 \S4method{fast}{sf}(
@@ -49,8 +48,7 @@
   steps = 10,
   extent = NULL,
   dropTable = FALSE,
-  verbose = FALSE,
-  ...
+  verbose = FALSE
 )
 
 \S4method{fast}{missing}(x, rastOrVect, crs = "")
@@ -67,24 +65,30 @@
 \item{x}{Any one of:
 \itemize{
 \item A \code{SpatRaster} raster. Rasters can have one or more layers.
-\item A \code{SpatVector} or \code{sf} spatial vector. See especially arguments \code{correct}, \code{area}, \code{snap}, \code{steps}, and \code{vebose}.
-\item A character string or a vector of strings with the path(s) and filename(s) of one or more rasters or one vector to be loaded directly into \strong{GRASS}. The function will attempt to ascertain the type of object from the file extension (raster or vector), but it can help to indicate which it is using the \code{rastOrVect} argument if it is unclear.
+\item A \code{SpatVector} or \code{sf} spatial vector. See especially arguments \code{correct}, \code{area}, \code{snap}, \code{steps}, and \code{verbose}.
+\item A character string or a vector of strings with the path(s) and filename(s) of one or more rasters or one vector to be loaded directly into \strong{GRASS}. The function will attempt to ascertain the type of object from the file extension (raster or vector), but it can help to indicate which it is using the \code{rastOrVect} argument if it is unclear. For rasters, see especially argument \code{levels}. For vectors, see especially arguments \code{correct}, \code{area}, \code{snap}, \code{steps}, and \code{verbose}.
 \item A vector with an even number of numeric values representing longitude/latitude pairs. See arguments \code{geom}, \code{keepgeom}, and \code{crs}.
 \item A \code{data.frame}, \code{data.table}, or \code{matrix}: Create a \code{points} \code{GVector}. Two of the columns must represent longitude and latitude. See arguments \code{geom}, \code{keepgeom}, and \code{crs}.
 \item Missing: Creates a generic \code{GRaster} or \code{GVector}. You must specify \code{rastOrVect}; for example, \code{fast(rastOrVect = "raster")}. Also see argument \code{crs}.
 }}
 
-\item{levels}{(\code{GRaster}s only): A \code{data.frame}, \code{data.table}, or list of \code{data.frame}s or \code{data.table}s with categories for categorical rasters. The first column of a table corresponds to raster values and must be of type \code{integer}. A subsequent column corresponds to category labels. By default, the second column is assumed to represent labels, but this can be changed with \code{\link[fasterRaster]{activeCat<-}}. Level tables can also be \code{NULL} (e.g., \code{data.fame(NULL)}). You can also assign levels after loading a raster using \code{\link[fasterRaster]{levels<-}}.}
+\item{levels}{(\code{GRaster}s only): Any of:
+\itemize{
+\item Logical: If \code{TRUE} (default) and at least one layer of a raster is of type \code{integer}, search for a "levels" file, load it, and attach levels. A levels file will have the same name as the raster file, but end with any of "rdata", "rdat", "rda", "rds", "csv", or "tab" (case will generally not matter). If such a file is not found, no levels will be assigned. The levels file must contain either a \code{data.frame}, \code{data.table}, or \code{list} of \code{data.frame}s or \code{data.table}s, or \code{NULL}.
+\item A \code{data.frame}, \code{data.table}, or list of \code{data.frame}s or \code{data.table}s with categories for categorical rasters. The first column of a table corresponds to raster values and must be of type \code{integer}. A subsequent column corresponds to category labels. By default, the second column is assumed to represent labels, but this can be changed with \code{\link[fasterRaster]{activeCat<-}}. Level tables can also be \code{NULL} (e.g., \code{data.fame(NULL)}). You can also assign levels after loading a raster using \code{\link[fasterRaster]{levels<-}}.
+\item \code{NULL}: Do not attach a levels table.
+#'
+}}
 
 \item{correct}{Logical (\code{GVector}s only): Correct topological issues. See \emph{Details} for more details! By default, this is \code{TRUE}.}
 
-\item{snap}{\code{GVector}s only\verb{: Numeric or }NULL\verb{(default). The value of}snap\verb{indicates how close vertices need to be for them to be shifted to to the same location. Units of}snap\verb{are map units (usually meters), or degrees for unprojected CRSs. For lines and polygons vectors, a value of}NULL\verb{will invoke an iterative procedure to find an optimal, smallest value of}snap\verb{. To turn snapping off, set }snap = 0`. See \emph{Details} for more details!}
+\item{snap}{\code{GVector}s only: Numeric or \code{NULL} (default). The value of \code{snap} indicates how close vertices need to be for them to be shifted to to the same location. Units of \code{snap} are map units (usually meters), or degrees for unprojected CRSs. For lines and polygons vectors, a value of \code{NULL} will invoke an iterative procedure to find an optimal, smallest value of \code{snap}. To turn snapping off, set \code{snap = 0}. See \emph{Details} for more details!}
 
 \item{area}{Polygon \code{GVector}s only: Either a positive numeric value or \code{NULL} (default). Remove polygons with an area smaller than this value. Units of \code{area} are in square meters (regardless of the CRS). If \code{NULL}, then an iterative procedure is used to identify a value of \code{area} that results in a topologically correct polygon vector. For point and lines vectors, this argument is ignored. To turn area removal off, set \code{area = 0}. See \emph{Details} for more details!}
 
 \item{steps}{\code{GVector}s only: A positive integer > 1 (default is 10). When using automatic vector correction (i.e., either \code{snap = NULL} and/or \code{area = NULL}), this is the number of values of \code{snap} and/or \code{area} to try to generate a correct topology, including no snapping or polygon removal (i.e, \code{snap = 0} and \code{area = 0}).}
 
-\item{extent}{\code{GVector}s only: Either a \code{NULL} (default), or a \code{GVector}, a \code{SpatVector}, a \code{SpatExtent} object, an \code{sf} vector, an \code{bbox} object, or a numeric vector of 4 values providing a bounding box. If provided, only vector features within this bounding box are imported. If \code{extent} is a numeric vector, the values \emph{must} be in the order west, east, south, north. If \code{NULL}, the entire vector is imported.}
+\item{extent}{\code{GVector}s only: Either a \code{NULL} (default), or a \code{GVector}, a \code{SpatVector}, a \code{SpatExtent} object, an \code{sf} vector, a \code{bbox} object, or a numeric vector of 4 values providing a bounding box. If provided, only vector features within this bounding box are imported. If \code{extent} is a numeric vector, the values \emph{must} be in the order west, east, south, north. If \code{NULL}, the entire vector is imported.}
 
 \item{dropTable}{\code{GVector}s only: Logical. If \code{TRUE}, then drop the data table associated with a vector. By default, this is \code{FALSE}. See \emph{Details} for more details!}
 

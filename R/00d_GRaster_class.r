@@ -148,7 +148,7 @@ methods::setValidity("GRaster",
 #'
 #' @description Create a `GRaster` from a raster existing in the current **GRASS** session.
 #'
-#' @param src Character: The name of the raster in **GRASS**.
+#' @param src Character (name of the raster in **GRASS) or a `rastInfo` object.
 #' @param names Character: Name of the raster.
 #' @param levels `NULL` (default), a `data.frame`, `data.table`, an empty string (`""`), or a list of `data.frame`s, `data.table`s, and/or empty strings: These become the raster's [levels()]. If `""`, then no levels are defined.
 #' @param ac vector of numeric or integer values >=1, or `NULL` (default): Active category column (offset by 1, so 1 really means the second column, 2 means the third, etc.). A value of `NULL` uses an automated procedure to figure it out.
@@ -162,6 +162,24 @@ methods::setValidity("GRaster",
 #'
 #' @noRd
 .makeGRaster <- function(src, names = "raster", levels = "", ac = NULL, fail = TRUE) {
+
+	if (inherits(src, "rastInfo")) {
+		info <- src
+		src <- info$sources
+	} else {
+		info <- .rastInfo(src)
+	}
+
+	# test for zero extent
+	if (any((info$west - info$east) == 0) | any((info$north - info$south) == 0)) {
+		msg <- "Raster has 0 east-west extent and/or north-south extent."
+		if (fail) {
+			stop(msg)
+		} else {
+			warning(msg)
+			return(NULL)
+		}
+	}
 
 	# levels: convert empty strings to NULL data.tables and data.frames to data.tables
 	if (is.null(levels)) levels <- data.table::data.table(NULL)
@@ -187,18 +205,6 @@ methods::setValidity("GRaster",
 	} else {
 		ac <- as.integer(ac)
 		ac <- ac + 1L
-	}
-
-	info <- .rastInfo(src)
-
-	if (any((info$west - info$east) == 0) | any((info$north - info$south) == 0)) {
-		msg <- "Raster has 0 east-west extent and/or north-south extent."
-		if (fail) {
-			stop(msg)
-		} else {
-			warning(msg)
-			return(NULL)
-		}
 	}
 
 	# nLayers <- length(info$sources)

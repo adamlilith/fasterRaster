@@ -6,6 +6,8 @@
 #' 
 #' @param gtype Character: Type of vector features in **GRASS** format (i.e., either `point`, `line`, or `area`). See [geomtype()].
 #'
+#' @param cats `NULL` (default) or `integer` or `character` vector: Category values of the **GRASS** vector. Supplying these can speed the re-assignment of categories. The values of `cats` is *not* used as the new category values. Rather, they will be used to indicate which geometries belong to the same multi-part feature.
+#'
 #' @returns The [sources()] name of a vector.
 #'
 #' @seealso [.vIncrementCat()], [.vCats()]
@@ -13,7 +15,7 @@
 #' @aliases .vRecat
 #' @rdname vRecat
 #' @noRd
-.vRecat <- function(x, gtype) {
+.vRecat <- function(x, gtype, cats = NULL) {
 
 	if (inherits(x, "GVector")) {
 		.locationRestore(x)
@@ -22,7 +24,7 @@
 		src <- x
 	}
 
-	cats <- .vCats(src)
+	if (is.null(cats)) cats <- .vCats(src)
 
 	# srcIn <- src
 	# src <- .makeSourceName("v_category", "vector")
@@ -47,7 +49,7 @@
 	# )
 
 	srcIn <- src
-	src <- .makeSourceName("v_category", "vector")
+	src <- .makeSourceName("vRecat_v_reclass", "vector")
 
 	reCats <- as.character(cats)
 	.vAttachDatabase(srcIn, table = data.frame(reCat = reCats))
