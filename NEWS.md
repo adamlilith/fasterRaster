@@ -1,3 +1,15 @@
+# fasterRaster 8.3.0.7016 (2024-XX-XX)
+
+## Functionality
+o `unscale()` can skip unscaling of rasters by supplying `NA` in the `center` and/or `scale` vectors.
+o `writeRaster()` will now automatically choose the "least-lossy" `datatype` for a stack of rasters.
+
+## Bug fixes
+o `GRaster`s can now be multiplied by, divide by, added to, or subtracted from `numeric`s in scientific notation format.
+o `hist()` now works with `factor` `GRaster`s.
+o `extend()` works when the "extension" factor is a integer.
+o `writeRaster()` saves all-`NA` rows and columns.
+
 # fasterRaster 8.3.0.7015 (2024-05-21)
 
 ## Bug fixes
