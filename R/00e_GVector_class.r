@@ -29,7 +29,7 @@ methods::setValidity("GVector",
 		info <- .vectInfo(object)
 
 		if (!info$catsValid) {
-			"Invalid vector topology. See the *Details* section in `fast()` on how to correct topology."
+			"Vector has invalid topology. See the *Details* section in `fast()` on how to correct topology."
 		} else if (!all(object@geometry %in% c(NA_character_, "points", "lines", "polygons"))) {
 			paste0("@geometry can only be NA, ", sQuote("points"), ", ", sQuote("lines"), ", or ", sQuote("polygons"), ".")
 		# } else if (length(unique(.vCats(object)) != object@nGeometries)) {
