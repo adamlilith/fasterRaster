@@ -164,7 +164,7 @@ methods::setMethod(
 
 			.locationRestore(x = location)
 
-			src <- .makeSourceName("r_external", type = "raster", n = 1L)
+			src <- .makeSourceName("fast_r_external", type = "raster", n = 1L)
 			rgrass::execGRASS(
 				cmd = "r.external",
 				input = x,
@@ -334,7 +334,7 @@ methods::setMethod(
 					if (!valid & !is.na(resolve)) {
 
 						table <- NULL
-						src <- .aggDisaggVect(src, resolve = resolve)
+						src <- .aggDisaggVect(src, resolve = resolve, verbose = verbose)
 
 						# info <- .vectInfo(src)
 						# valid <- .validVector(info, table)
@@ -369,7 +369,7 @@ methods::setMethod(
 				if (!valid & !is.na(resolve)) {
 
 					table <- NULL
-					src <- .aggDisaggVect(src, resolve = resolve)
+					src <- .aggDisaggVect(src, resolve = resolve, verbose = verbose)
 
 					# info <- .vectInfo(src)
 					# valid <- .validVector(info, table)
@@ -433,7 +433,7 @@ methods::setMethod(
 
 						}
 
-						src <- .makeSourceName("v_in_ogr", "vector")
+						src <- .makeSourceName("fast_v_in_ogr", "vector")
 						rgrass::execGRASS(
 							cmd = "v.in.ogr",
 							input = x,
@@ -449,7 +449,7 @@ methods::setMethod(
 						if (!valid & !is.na(resolve)) {
 
 							table <- NULL
-							src <- .aggDisaggVect(src, resolve = resolve)
+							src <- .aggDisaggVect(src, resolve = resolve, verbose = verbose)
 
 							# info <- .vectInfo(src)
 							# valid <- .validVector(info, table)
@@ -483,7 +483,7 @@ methods::setMethod(
 
 						}
 
-						src <- .makeSourceName("v_in_ogr", "vector")
+						src <- .makeSourceName("fast_v_in_ogr", "vector")
 						rgrass::execGRASS(
 							cmd = "v.in.ogr",
 							input = x,
@@ -499,7 +499,7 @@ methods::setMethod(
 						if (!valid & !is.na(resolve)) {
 
 							table <- NULL
-							src <- .aggDisaggVect(src, resolve = resolve)
+							src <- .aggDisaggVect(src, resolve = resolve, verbose = verbose)
 
 							# info <- .vectInfo(src)
 							# valid <- .validVector(info, table)
@@ -536,7 +536,7 @@ methods::setMethod(
 
 						}
 
-						src <- .makeSourceName("v_in_ogr", "vector")
+						src <- .makeSourceName("fast_v_in_ogr", "vector")
 						rgrass::execGRASS(
 							cmd = "v.in.ogr",
 							input = x,
@@ -554,7 +554,7 @@ methods::setMethod(
 						if (!valid & !is.na(resolve)) {
 
 							table <- NULL
-							src <- .aggDisaggVect(src, resolve = resolve)
+							src <- .aggDisaggVect(src, resolve = resolve, verbose = verbose)
 
 							# info <- .vectInfo(src)
 							# valid <- .validVector(info, table)
@@ -577,12 +577,13 @@ methods::setMethod(
 
 			if (!valid) {
 
-				msg <- paste0("Vector has an invalid topology. Try:\n  * Setting the `correct` argument to `TRUE`;\n  * Increasing the value(s) of the `snap` and/or `area` arguments;\n  * Using automated `snap` and/or `area` correction (set `snap` and/or `area` to NULL);\n  * Dropping the data table associated with the vector using `dropTable = TRUE`;\n  * Aggregatig or disaggregating polygons with the `resolve` argument; or\n  * Attempting correction of the vector outside of fasterRaster with `terra::makeValid()` or `sf::st_make_valid()` before using fast().")
+				msg <- paste0("Vector has an invalid topology. Try:\n  * Setting the `correct` argument to `TRUE`;\n  * Increasing the value(s) of the `snap` and/or `area` arguments;\n  * Using automated `snap` and/or `area` correction (set `snap` and/or `area` to NULL);\n  * Dropping the data table associated with the vector using `dropTable = TRUE`;\n  * Aggregating or disaggregating polygons with the `resolve` argument; or\n  * Attempting correction of the vector outside of fasterRaster with `terra::makeValid()` or `sf::st_make_valid()` before using fast().")
 
 				stop(msg)
 
-			} # not valid, so correct
+			}
 			out <- .makeGVector(src = src, table = table)
+			if (verbose) omnibus::say("Topologiclaly valid vector created.")
 
 		} # x is a filename and xVect supplied
 
@@ -937,16 +938,19 @@ methods::setMethod(
 
 #' @param src [sources()] name.
 #' @param resolve "aggregate" or "disaggregate"
+#' @param verbose T/F
 #'
 #' @returns [sources()] name.
 #' @noRd
-.aggDisaggVect <- function(src, resolve) {
+.aggDisaggVect <- function(src, resolve, verbose) {
 
 	if (resolve == "disaggregate") {
 
+		if (verbose) omnibus::say("Fixing invalic vector by disaggregating polygons. This will remove any data table.")
+
 		# delete categories
 		srcIn <- src
-		src <- .makeSourceName("fast_v_category")
+		src <- .makeSourceName("fast_v_category_del")
 		rgrass::execGRASS(
 			cmd = "v.category",
 			input = srcIn,
@@ -958,7 +962,7 @@ methods::setMethod(
 
 		# assign each subgeometry its own category
 		srcIn <- src
-		src <- .makeSourceName("fast_v_category")
+		src <- .makeSourceName("fast_v_category_add")
 		rgrass::execGRASS(
 			cmd = "v.category",
 			input = srcIn,
@@ -968,6 +972,8 @@ methods::setMethod(
 		)
 
 	} else if (resolve == "aggregate") {
+
+		if (verbose) omnibus::say("Fixing invalic vector by aggregating polygons. This will remove any data table.")
 
 		srcIn <- src
 		src <- .makeSourceName("fast_v_extract")
