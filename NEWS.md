@@ -3,6 +3,7 @@
 ## Functionality
 o `unscale()` can skip unscaling of rasters by supplying `NA` in the `center` and/or `scale` vectors.
 o `writeRaster()` will now automatically choose the "least-lossy" `datatype` for a stack of rasters.
+o More robust checking of whether a vector is topologically valid or not when using `fast()`, and added option to aggregate or disaggregate polygons to overcome the issue.
 
 ## Bug fixes
 o `GRaster`s can now be multiplied by, divide by, added to, or subtracted from `numeric`s in scientific notation format.
