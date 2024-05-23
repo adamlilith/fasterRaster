@@ -278,6 +278,7 @@ setMethod(
 				type = datatype,
 				format = "GTiff",
 				createopt = createopt,
+				# metaopt = metaopt,
 				flags = thisFlags
 			)
 
