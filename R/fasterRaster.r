@@ -121,7 +121,9 @@
 #' [flowPath()]: Path of water flow across a landscape\cr
 #' [geomorphons()]: Identify terrain feature types\cr
 #' [`hillshade()`][shade]: Create a hillshade `GRaster`\cr
+#' [horizonHeight()]: Horizon height\cr
 #' [sun()]: Solar radiance and irradiance\cr
+#' [streams()]: Create stream network\cr
 #' [terrain()]: Slope, aspect, curvature, and partial slopes\cr
 #' [topoWetnessIndex()]: Topographic wetness index\cr
 #' 

@@ -13,7 +13,7 @@
 #'
 #' @param direction Character: Either `"single"` or `"multi"`. This indicates whether a single-direction flow or multi-direction flow model is used. The default is `"multi"`. Partial matching is used and case is ignored.
 #'
-#' @param flowThreshold Numeric (default is `Inf`): For the multi-direction flow model, this indicates the amount of accumulated flow above which the single-direction flow rule is used to locate the egress of water from a cell.
+#' @param dirThreshold Numeric (default is `Inf`): For the multi-direction flow model, this indicates the amount of accumulated flow above which the single-direction flow rule is used to locate the egress of water from a cell. This is the `d8cut` parameter in `r.stream.extract`.
 #'
 #' @param return Character vector: Indicates what rasters to return. Partial matching is used and case is ignored. Options include:
 #' * `"accumulation"` (default): Flow accumulation raster.
@@ -23,7 +23,7 @@
 #' * `"TCI"`: Topographic convergence index
 #' * `"*"`: All of the above
 #'
-#' @seealso [flowPath()], the `[r.terraflow](https://grass.osgeo.org/grass84/manuals/r.terraflow.html)` module for **GRASS**
+#' @seealso [flowPath()], [streams()], the `[r.terraflow](https://grass.osgeo.org/grass84/manuals/r.terraflow.html)` module for **GRASS**
 #'
 #' @param scratchDir Character: Directory in which to store temporary files. The **GRASS** module `r.terraflow` makes a lot of temporary files. The default is given by [tempdir()].
 #'
@@ -41,7 +41,7 @@ methods::setMethod(
 		x,
 		direction = "multi",
 		return = "accumulation",
-		flowThreshold = Inf,
+		dirThreshold = Inf,
 		scratchDir = tempdir()
 	) {
 
@@ -66,7 +66,7 @@ methods::setMethod(
 	)
 
 	if (direction == "single") args$flags <- c(args$flags, "s")
-	if (direction == "multi" & !is.infinite(flowThreshold)) args$d8cut <- flowThreshold
+	if (direction == "multi" & !is.infinite(dirThreshold)) args$d8cut <- dirThreshold
 
 	if (any(return == "accumulation")) args$accumulation <- .makeSourceName("r_flow_accumulation", "raster")
 	if (any(return == "direction")) args$direction <- .makeSourceName("r_flow_direction", "raster")
