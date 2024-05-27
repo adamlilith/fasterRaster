@@ -38,106 +38,8 @@ methods::setMethod(
 	.region(y)
 
 	gtype <- geomtype(x, grass = TRUE)
-
-	### create different raster layer for each geometry
-	if (byGeom) {
-
-		# if by geometry but burned to the same raster
-		if (collapse) {
-
-			src <- .makeSourceName("v_to_rast", "raster")
-			args <- list(
-				cmd = "v.to.rast",
-				input = sources(x),
-				output = src,
-				use = "cat",
-				type = gtype,
-				memory = faster("memory"),
-				flags = c(.quiet(), "overwrite")
-			)
-
-			if (gtype == "line") args$flags <- c(args$flags, "d")
-
-			do.call(rgrass::execGRASS, args = args)
-
-			# add levels table
-			levels <- as.data.table(x)
-			if (nrow(levels) > 0L) {
-				
-				if (any(names(levels) == "value")) names(x)[names(x) == "value"] <- "value_1"
-				names(levels) <- make.unique(names(levels))
-				value <- data.table::data.table(value = 1L:nrow(x))
-				levels <- cbind(value, levels)
-
-			} else {
-				levels <- NULL
-			}
-
-			out <- .makeGRaster(src, "layer", levels = levels)
-
-		# each geometry burned to a different raster
-		} else {
-			
-			ng <- ngeom(x)
-			for (i in seq_len(ng)) {
-			
-				xSubset <- x[i]
-
-				thisOut <- rasterize(
-					x = xSubset,
-					y = y,
-					background = background,
-					byGeom = FALSE
-				)
-
-				if (i == 1L) {
-					out <- thisOut
-				} else {
-					out <- c(out, thisOut)
-				}
-
-			} # next geometry
-
-		} # if one raster per geometry, not collapsed
-
-	### all geometries at once
-	} else {
-
-		src <- .makeSourceName("v_to_rast", "raster")
-		args <- list(
-			cmd = "v.to.rast",
-			input = sources(x),
-			output = src,
-			use = "val",
-			value = 1,
-			type = gtype,
-			memory = faster("memory"),
-			flags = c(.quiet(), "overwrite")
-		)
-
-		if (gtype == "line") args$flags <- c(args$flags, "d")
-
-		do.call(rgrass::execGRASS, args = args)
-
-		if (!is.na(background)) {
-
-			srcIn <- src
-			src <- .makeSourceName("r_mapcalc", "vector")
-			ex <- paste0(src, " = if(isnull(", srcIn, "), ", background, ", ", srcIn, ")")
-
-			rgrass::execGRASS(
-				cmd = "r.mapcalc",
-				expression  = ex,
-				flags = c(.quiet(), "overwrite")
-			)
-
-		}
-
-		out <- .makeGRaster(src, "layer")
-
-	}
-
-	out
+	src <- .rasterize(x = x, y = y, background = background, byGeom = byGeom, collapse = collapse)
+	.makeGRaster(src)
 
 	} # EOF
 )
@@ -158,7 +60,7 @@ methods::setMethod(
 		if (collapse) {
 
 			gtype <- geomtype(x, grass = TRUE)
-			src <- .makeSourceName("v_to_rast", "raster")
+			src <- .makeSourceName("rasterize_v_to_rast", "raster")
 			args <- list(
 				cmd = "v.to.rast",
 				input = sources(x),
@@ -202,7 +104,7 @@ methods::setMethod(
 	} else {
 
 		gtype <- geomtype(x, grass = TRUE)
-		src <- .makeSourceName("v_to_rast", "raster")
+		src <- .makeSourceName("rasterize_v_to_rast", "raster")
 		args <- list(
 			cmd = "v.to.rast",
 			input = sources(x),
@@ -221,7 +123,7 @@ methods::setMethod(
 		if (!is.na(background)) {
 
 			srcIn <- src
-			src <- .makeSourceName("r_mapcalc", "vector")
+			src <- .makeSourceName("rasterize_r_mapcalc", "vector")
 			ex <- paste0(src, " = if(isnull(", srcIn, "), ", background, ", ", srcIn, ")")
 
 			rgrass::execGRASS(
