@@ -7,6 +7,7 @@ o `writeRaster()` will now automatically choose the "least-lossy" `datatype` for
 o More robust checking of whether a vector is topologically valid or not when using `fast()`, and added option to aggregate or disaggregate polygons to overcome the issue.
 
 ## Bug fixes
+o `crop()` correctly sets westernmost coordinate (was inappropriately too far west, in some cases).
 o `extend()` works when the "extension" factor is a integer.
 o `GRaster`s can now be multiplied by, divide by, added to, or subtracted from `numeric`s in scientific notation format.
 o `hist()` now works with `factor` `GRaster`s.
