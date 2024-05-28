@@ -1,6 +1,6 @@
 #' Create stream network
 #'
-#' @description This function estimates the course of streams and rivers from an elevation raster. It is based on the **GRASS** module `[r.stream.extract](https://grass.osgeo.org/grass84/manuals/r.stream.extract.html)`, where more details can be found.
+#' @description This function estimates the course of streams and rivers from an elevation raster. It is based on the **GRASS** module `\href{https://grass.osgeo.org/grass84/manuals/r.stream.extract.html}{r.stream.extract}`, where more details can be found.
 #'
 #' @param x A `GRaster` representing elevation.
 #'
@@ -20,7 +20,7 @@
 #'
 #' @example man/examples/ex_streams.r
 #'
-#' @seealso [flow()], [flowPath()], the `[r.stream.extract](https://grass.osgeo.org/grass84/manuals/r.stream.extract.html)` module in **GRASS**
+#' @seealso [flow()], [flowPath()], the `\href{https://grass.osgeo.org/grass84/manuals/r.stream.extract.html}{r.stream.extract}` module in **GRASS**
 #'
 #' @aliases streams
 #' @rdname streams

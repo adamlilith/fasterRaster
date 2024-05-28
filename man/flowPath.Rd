@@ -69,5 +69,5 @@ plot(seqLines)
 }
 }
 \seealso{
-\code{\link[=flow]{flow()}}, \code{\link[=streams]{streams()}}, the \verb{[r.drain](https://grass.osgeo.org/grass84/manuals/r.drain.html)} module for \strong{GRASS}
+\code{\link[=flow]{flow()}}, \code{\link[=streams]{streams()}}, the \href{https://grass.osgeo.org/grass84/manuals/r.drain.html}{\code{r.drain}} module for \strong{GRASS}
 }

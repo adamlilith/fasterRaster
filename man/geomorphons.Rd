@@ -28,7 +28,7 @@
 
 \item{mode}{Character: Method for implementing the zenith/line-of-site search. Partial matching is used:
 \itemize{
-\item \code{"1"} (default): The "original" geomorphon mode (in \strong{GRASS} module \code{r.geomorphon}, the "anglev1" method)
+\item \code{"1"} (default): The "original" geomorphon mode (in \strong{GRASS} module \href{https://grass.osgeo.org/grass84/manuals/r.geomorphon.html}{\code{r.geomorphon}}, the "anglev1" method)
 \item \code{"2"}: Better handling of cases with equal zenith/nadir angles (the "anglev2" method)
 \item \code{"2d"}: As \code{"2"}, but takes into account zenith/nadir distance ("anglev2_distance" method)
 }}
@@ -38,18 +38,18 @@ A \link[=tutorial_raster_data_types]{categorical} \code{GRaster} where each geom
 }
 \description{
 Geomorphons are idealized terrain types calculated from an elevator raster based on a moving window of a given size. The window is a torus (which can have an inner radius of 0, so can also be a circle), which allows it to identify geomorphons of a given size while ignoring ones larger or smaller. There are 10 basic geomorphons. Consult the The \strong{GRASS} module \href{https://grass.osgeo.org/grass84/manuals/r.geomorphon.html}{\code{r.geomorphon}} for more details and diagrams of each type of geomorphon. They include:
-1 Flat areas: Focal area has approximately the same elevation as surrounding areas
-2 Pits: An area is lower than all other surrounding areas
-3 Valley: Focal area has elevation similar to two opposing side of the window but lower than the other two opposing sides
-4 Footslope: Focal region is at the "bottom" of a slope
-5 Hollow: A small valley/indention in the crest of a hill
-6 Slope: Cells in the window form an approximately uniform slope
-7 Spur: An extrusion at the foot of a hill (i.e.,, a small hill extending out from the foot of a slope)
-8 Shoulder: The crest of a slope
-9 Ridge: Opposite of a valley; focal area is higher than two opposing sides but approximately the same elevation as the other two opposing sides
-*10 Peak: Focal area is higher than any other in the window
-
-This function uses the "anglev2_distance" implementation of the \code{r.geomorphon} module.
+\enumerate{
+\item Flat areas: Focal area has approximately the same elevation as surrounding areas
+\item Pits: An area is lower than all other surrounding areas
+\item Valley: Focal area has elevation similar to two opposing side of the window but lower than the other two opposing sides
+\item Footslope: Focal region is at the "bottom" of a slope
+\item Hollow: A small valley/indention in the crest of a hill
+\item Slope: Cells in the window form an approximately uniform slope
+\item Spur: An extrusion at the foot of a hill (i.e.,, a small hill extending out from the foot of a slope)
+\item Shoulder: The crest of a slope
+\item Ridge: Opposite of a valley; focal area is higher than two opposing sides but approximately the same elevation as the other two opposing sides
+\item Peak: Focal area is higher than any other in the window
+}
 }
 \examples{
 if (grassStarted()) {
