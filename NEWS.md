@@ -2,6 +2,7 @@
 
 ## Functionality
 o Added `streams()` for calculating location of stream channels from a DEM.
+o Added `terrainRuggednessIndex()` for calculating the terrain ruggedness index.
 o `unscale()` can skip unscaling of rasters by supplying `NA` in the `center` and/or `scale` vectors.
 o `writeRaster()` will now automatically choose the "least-lossy" `datatype` for a stack of rasters.
 o More robust checking of whether a vector is topologically valid or not when using `fast()`, and added option to aggregate or disaggregate polygons to overcome the issue.

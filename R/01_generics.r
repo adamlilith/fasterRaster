@@ -278,6 +278,7 @@ methods::setGeneric(name = "summary", def = function(object, ...) standardGeneri
 
 methods::setGeneric(name = "tail", package = "utils")
 methods::setGeneric(name = "terrain", package = "terra")
+methods::setGeneric(name = "terrainRuggednessIndex", def = function(x, ...) standardGeneric("terrainRuggednessIndex"))
 methods::setGeneric(name = "thinLines", def = function(x, ...) standardGeneric("thinLines"))
 methods::setGeneric(name = "thinPoints", def = function(x, y, ...) standardGeneric("thinPoints"))
 methods::setGeneric(name = "top", def = function(x, ...) standardGeneric("top"))
