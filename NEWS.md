@@ -1,4 +1,4 @@
-# fasterRaster 8.3.0.7016 (2024-XX-XX)
+# fasterRaster 8.3.0.7016 (2024-05-27)
 
 ## Functionality
 o Added `streams()` for calculating location of stream channels from a DEM.
