@@ -37,7 +37,7 @@
 
 The center cell value is always included in the calculations, and all calculations ignore \code{NA} cells (i.e., they do not count as cells in the focal neighborhood).}
 
-\item{circle}{Logical: If \code{FALSE} (default), use a "square" neighborhood. If \code{TRUE}, use a "circular" neighborhood. When this is \code{TRUE}, argument \code{w} cannot be a matrix.}
+\item{circle}{Logical: If \code{FALSE} (default), use a square neighborhood. If \code{TRUE}, use a circular neighborhood. When this is \code{TRUE}, argument \code{w} cannot be a matrix.}
 
 \item{quantile}{Numeric between 0 and 1, inclusive: Quantile to calculate when \code{fun = "quantile"}. The default value is 0.5 (median), and valid values must be in the range between 0 and 1, inclusive.}
 }

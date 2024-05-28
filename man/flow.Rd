@@ -9,7 +9,7 @@
   x,
   direction = "multi",
   return = "accumulation",
-  flowThreshold = Inf,
+  dirThreshold = Inf,
   scratchDir = tempdir()
 )
 }
@@ -28,7 +28,7 @@
 \item \code{"*"}: All of the above
 }}
 
-\item{flowThreshold}{Numeric (default is \code{Inf}): For the multi-direction flow model, this indicates the amount of accumulated flow above which the single-direction flow rule is used to locate the egress of water from a cell.}
+\item{dirThreshold}{Numeric (default is \code{Inf}): For the multi-direction flow model, this indicates the amount of accumulated flow above which the single-direction flow rule is used to locate the egress of water from a cell. This is the \code{d8cut} parameter in \code{r.stream.extract}.}
 
 \item{scratchDir}{Character: Directory in which to store temporary files. The \strong{GRASS} module \code{r.terraflow} makes a lot of temporary files. The default is given by \code{\link[=tempdir]{tempdir()}}.}
 }
@@ -45,7 +45,7 @@ The \code{flow()} function uses a raster representing elevation to compute raste
 \item Topographic convergence (log of flow accumulation divided by local slope).
 }
 
-More details about the computations can be found at the help page for the \verb{[r.terraflow](https://grass.osgeo.org/grass84/manuals/r.terraflow.html)} module for \strong{GRASS}.
+More details about the computations can be found at the help page for the \href{https://grass.osgeo.org/grass84/manuals/r.terraflow.html}{\code{r.terraflow}} module for \strong{GRASS}.
 }
 \examples{
 if (grassStarted()) {
@@ -67,5 +67,5 @@ plot(elevWater)
 }
 }
 \seealso{
-\code{\link[=flowPath]{flowPath()}}, the \verb{[r.terraflow](https://grass.osgeo.org/grass84/manuals/r.terraflow.html)} module for \strong{GRASS}
+\code{\link[=flowPath]{flowPath()}}, \code{\link[=streams]{streams()}}, the \href{https://grass.osgeo.org/grass84/manuals/r.terraflow.html}{\code{r.terraflow}} module for \strong{GRASS}
 }

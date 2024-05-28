@@ -39,7 +39,11 @@ methods::setMethod(
 		w <- W(y)
 	} else {
   		cells <- (W(y) - W(x)) / xres(x)
-  		cells <- ceiling(cells)
+  		if (!omnibus::is.wholeNumber(cells)) {
+			cells <- ceiling(cells)
+		} else {
+			cells <- round(cells)
+		}
   		w <- W(x) + cells * xres(x)
 	}
 
@@ -82,7 +86,11 @@ methods::setMethod(
 		if (inherits(y, "GVector")) {
 			cells <- floor(cells)
 		} else if (inherits(y, "GRaster")) {
-			cells <- ceiling(cells)
+   			if (omnibus::is.wholeNumber(cells)) {
+				cells <- round(cells)
+			} else {
+				cells <- ceiling(cells)
+			}
 		}
   		n <- N(x) - cells * yres(x)
 	}

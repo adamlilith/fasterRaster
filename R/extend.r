@@ -79,6 +79,7 @@ methods::setMethod(
     function(x, y, snap = "near", fill = NA) .extend(x = x, y = y, snap = snap, fill = fill)
 )
 
+#' @noRd
 .extend <- function(x, y, snap, fill) {
 
     # resolution of x
@@ -145,14 +146,12 @@ methods::setMethod(
     nsres <- as.character(nsres)
 
     # reset region
-    args <- list(
+    rgrass::execGRASS(
         cmd = "g.region",
         w = w, e = e, s = s, n = n,
         ewres = ewres, nsres = nsres,
-        flags = c(.quiet(), "overwrite"),
-        intern = TRUE
+        flags = c(.quiet(), "overwrite")
     )
-    do.call(rgrass::execGRASS, args = args)
 
     reg <- .region()
     nc <- ncol(reg)

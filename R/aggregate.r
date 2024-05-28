@@ -271,7 +271,7 @@ methods::setMethod(
 		# )
 
 		srcIn <- src
-		src <- .makeSourceName("v_reclass", "vector")
+		src <- .makeSourceName("aggregate_v_reclass", "vector")
 		
 		rgrass::execGRASS(
 			"v.reclass",

@@ -46,29 +46,29 @@ methods::setMethod(
 
 	}
 	
-	dtype <- datatype(x, "GRASS")
-	if (all(dtype %in% "CELL")) {
+	# # dtype <- datatype(x, "GRASS")
+	# # if (all(dtype %in% "CELL")) {
 	
-		if (all(.minVal(x) >= 0L & .maxVal(x) <= 255L)) {
-			dtype <- "Byte"
-		} else if (all(.minVal(x) >= 0L & .maxVal(x) <= 65534L)) {
-			dtype <- "UInt16"
-		} else if (all(.minVal(x) >= -32767L & .maxVal(x) <= 32767L)) {
-			dtype <- "Int16"
-		} else if (all(.minVal(x) >= -2147483647L & .maxVal(x) <= 2147483647L)) {
-			dtype <- "Int32"
-		} else if (all(.minVal(x) >= -3.4E+38 & .maxVal(x) <= 3.4E+38)) {
-			dtype <- "Float32"
-		} else {
-			dtype <- "Float64"
-		}
+	# # 	if (all(.minVal(x) >= 0L & .maxVal(x) <= 255L)) {
+	# # 		dtype <- "Byte"
+	# # 	} else if (all(.minVal(x) >= 0L & .maxVal(x) <= 65534L)) {
+	# # 		dtype <- "UInt16"
+	# # 	} else if (all(.minVal(x) >= -32767L & .maxVal(x) <= 32767L)) {
+	# # 		dtype <- "Int16"
+	# # 	} else if (all(.minVal(x) >= -2147483647L & .maxVal(x) <= 2147483647L)) {
+	# # 		dtype <- "Int32"
+	# # 	} else if (all(.minVal(x) >= -3.4E+38 & .maxVal(x) <= 3.4E+38)) {
+	# # 		dtype <- "Float32"
+	# # 	} else {
+	# # 		dtype <- "Float64"
+	# # 	}
 
-	} else {
-		dtype <- "Float64"
-	}
+	# # } else {
+	# # 	dtype <- "Float64"
+	# # }
 
 	tf <- tempfile(fileext = ".tif")
-	writeRaster(x, filename = tf, format = "GeoTIFF", overwrite = TRUE, warn = FALSE, datatype = dtype, ...)
+	writeRaster(x, filename = tf, format = "GeoTIFF", overwrite = TRUE, warn = FALSE, ...)
 	out <- terra::rast(tf)
 	
 	facts <- is.factor(x)

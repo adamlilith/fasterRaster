@@ -2,14 +2,14 @@
 #'
 #' @title Raster data types
 #'
-#' @description **fasterRaster** `GRaster`s can represent three numeric data types and one categorical type.
-#'
-#' ## Integers
-#' Rasters that represent integers are called "integer" rasters in **fasterRaster** and `CELL` rasters in **GRASS**. You can force a raster to be an integer using [as.int()]. Some of the functions in [app()] function will also return integer-type rasters. Integer rasters typically take the least memory.
+#' @description **fasterRaster** `GRaster`s can represent double-floating point numeric values, integers, or categorical data.
 #'
 #' ## Double-floating point values
 #' Double-floating point values are accurate to about the 15th to 17th decimal place. These are called "double" rasters in **fasterRaster** and `DCELL` rasters in **GRASS**. These rasters typically take the most memory. All "`numeric`" values in **R** are double-floating point values.
 #' 
+#' ## Integers
+#' Rasters that represent integers are called "integer" rasters in **fasterRaster** and `CELL` rasters in **GRASS**. You can force a raster to be an integer using [as.int()]. Some of the functions in [app()] function will also return integer-type rasters. Integer rasters typically take the least memory.
+#'
 #' ## Categories
 #' Categorical rasters (also called "factor" rasters) are actually integer rasters, but have an associated attribute table that maps each integer value to a category label, such as "wetland" or "forest". The table has at least two columns. The first is integer values, and (by default) the second is category names. This second column is the "active" category column, but can be changed using \code{\link[fasterRaster]{activeCat<-}}.
 #'

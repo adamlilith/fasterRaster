@@ -22,7 +22,7 @@
 #'
 #' @returns A `GRaster` with one or more layers.
 #' 
-#' @seealso [terra::terrain()], module `r.slope.aspect` in **GRASS**
+#' @seealso [terra::terrain()], [terrainRuggednessIndex()], [topoWetnessIndex()], [geomorphons()], module `r.slope.aspect` in **GRASS**
 #'
 #' @example man/examples/ex_terrain.r
 #'

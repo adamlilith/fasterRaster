@@ -51,8 +51,8 @@ methods::setMethod(
 	
 		if (!inherits(freqs[[i]], "data.table")) freqs[[i]] <- as.data.table(freqs[[i]])
 
-		if (is.factor(x[[i]])) {
-			xs <- levels(x[[i]])[[2L]]
+		if (is.factor(x)[i]) {
+			xs <- levels(x)[[i]][[2L]]
 			las <- 3
 			xlab <- ""
 		} else if (is.cell(x[[i]])) {

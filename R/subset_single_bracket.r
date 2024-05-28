@@ -162,47 +162,35 @@ methods::setMethod(
 			cats <- unique(cats)
 			keepCats <- cats[cats %in% i] # selects same as GVector but wrong geometry
 
-			# selecting geometries using database method
-			qid <- rep(0L, nGeoms)
-			qid[keepCats] <- 1L
-
-			db <- data.table::data.table(cat = cats, qid = qid)
-			.vAttachDatabase(x, db)
-
-			rgrass::execGRASS(
+			args <- list(
 				cmd = "v.extract",
 				input = sources(x),
 				output = src,
-				where = 'qid = 1', # will not work with inequalities
 				type = gtype,
 				flags = c(.quiet(), "overwrite")
 			)
 
+			if (gtype == "point") {
+
+				# selecting geometries using database method
+				qid <- rep(0L, nGeoms)
+				qid[keepCats] <- 1L
+
+				db <- data.table::data.table(cat = cats, qid = qid)
+				.vAttachDatabase(x, db)
+
+				args$where <- "qid = 1" # will not work with inequalities
+
+			} else if (gtype %in% c("area", "line")) {
+			
+				sqlCats <- seqToSQL(keepCats)
+				sqlCats <- as.character(sqlCats)
+				args$cats <- sqlCats
+			
+			}
+
+			do.call(rgrass::execGRASS, args = args)
 			src <- .vRecat(src, gtype = gtype, cats = keepCats)
-
-
-			# thisKeepCats <- seqToSQL(keepCats)
-			# stoppedAt <- attr(thisKeepCats, "lastIndex")
-
-			# # number of selections is small enough to select all at once
-			# if (stoppedAt <= negom) {
-
-			# 	thisKeepCats <- as.character(thisKeepCats)
-
-			# 	rgrass::execGRASS(
-			# 		cmd = "v.extract",
-			# 		input = sources(x),
-			# 		output = src,
-			# 		cats = thisKeepCats,
-			# 		type = gtype,
-			# 		flags = c(.quiet(), "overwrite")
-			# 	)
-
-			# 	src <- .vRecat(src, gtype = gtype)
-
-			# } else {
-			# # selecting in subsets because select vector is too large to select all at once
-
 
 # 				srcs <- character()
 # 				trim <- TRUE

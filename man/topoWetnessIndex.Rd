@@ -28,13 +28,16 @@ madElev <- fastData("madElev")
 # Convert to GRaster:
 elev <- fast(madElev)
 
-# Topographic wetness index:
-tpi <- topoWetnessIndex(elev)
+# Terrain ruggedness index:
+tri <- terrainRuggednessIndex(elev)
+plot(c(elev, tri))
 
-plot(c(elev, tpi))
+# Topographic wetness index:
+twi <- topoWetnessIndex(elev)
+plot(c(elev, twi))
 
 }
 }
 \seealso{
-\code{\link[=terrain]{terrain()}}, module \href{https://grass.osgeo.org/grass84/manuals/r.topidx.html}{\code{r.topidx}} in \strong{GRASS}
+\code{\link[=terrain]{terrain()}}, \code{\link[=terrainRuggednessIndex]{terrainRuggednessIndex()}}, \code{\link[=geomorphons]{geomorphons()}}, module \href{https://grass.osgeo.org/grass84/manuals/r.topidx.html}{\code{r.topidx}} in \strong{GRASS}
 }

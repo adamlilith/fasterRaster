@@ -4,15 +4,15 @@
 \alias{tutorial_raster_data_types}
 \title{Raster data types}
 \description{
-\strong{fasterRaster} \code{GRaster}s can represent three numeric data types and one categorical type.
-\subsection{Integers}{
-
-Rasters that represent integers are called "integer" rasters in \strong{fasterRaster} and \code{CELL} rasters in \strong{GRASS}. You can force a raster to be an integer using \code{\link[=as.int]{as.int()}}. Some of the functions in \code{\link[=app]{app()}} function will also return integer-type rasters. Integer rasters typically take the least memory.
-}
-
+\strong{fasterRaster} \code{GRaster}s can represent double-floating point numeric values, integers, or categorical data.
 \subsection{Double-floating point values}{
 
 Double-floating point values are accurate to about the 15th to 17th decimal place. These are called "double" rasters in \strong{fasterRaster} and \code{DCELL} rasters in \strong{GRASS}. These rasters typically take the most memory. All "\code{numeric}" values in \strong{R} are double-floating point values.
+}
+
+\subsection{Integers}{
+
+Rasters that represent integers are called "integer" rasters in \strong{fasterRaster} and \code{CELL} rasters in \strong{GRASS}. You can force a raster to be an integer using \code{\link[=as.int]{as.int()}}. Some of the functions in \code{\link[=app]{app()}} function will also return integer-type rasters. Integer rasters typically take the least memory.
 }
 
 \subsection{Categories}{

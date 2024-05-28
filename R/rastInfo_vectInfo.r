@@ -532,6 +532,7 @@ print.vectInfo <- function(x, ...) {
 	cat("Extent (WESN) :", paste(x$west, x$east, x$south, x$north, collapse = ", "), "\n")
 	cat("Z extent (BT) :", paste(x$zbottom, x$ztop, collapse = ", "), "\n")
 	cat("Geometries    :", x$nGeometries, "\n")
+	cat("Subgeometries :", length(x$cats), "\n")
 	cat("Cats          :", cats)
 	cat("Cats valid    :", x$catsValid, "\n")
 

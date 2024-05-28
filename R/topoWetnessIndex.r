@@ -6,9 +6,9 @@
 #'
 #' @returns A `GRaster`.
 #'
-#' @seealso [terrain()], module [`r.topidx`](https://grass.osgeo.org/grass84/manuals/r.topidx.html) in **GRASS**
+#' @seealso [terrain()], [terrainRuggednessIndex()], [geomorphons()], module [`r.topidx`](https://grass.osgeo.org/grass84/manuals/r.topidx.html) in **GRASS**
 #'
-#' @example man/examples/ex_topoWetnessIndex.r
+#' @example man/examples/ex_terrainRuggednessIndex_topoWetnessIndex.r
 #'
 #' @aliases topoWetnessIndex
 #' @rdname topoWetnessIndex
@@ -36,7 +36,7 @@ methods::setMethod(
 		)
 	
 	}
-	.makeGRaster(srcs, paste0(names(x), "_twi"))
+	.makeGRaster(srcs, paste0(names(x), "_TWI"))
 
 	} # EOF
 )
