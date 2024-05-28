@@ -17,13 +17,14 @@
   x,
   rastOrVect = NULL,
   levels = TRUE,
+  extent = NULL,
   correct = TRUE,
   snap = NULL,
   area = NULL,
   steps = 10,
-  extent = NULL,
   dropTable = FALSE,
-  verbose = FALSE,
+  resolve = NA,
+  verbose = TRUE,
   ...
 )
 
@@ -31,24 +32,26 @@
 
 \S4method{fast}{SpatVector}(
   x,
+  extent = NULL,
   correct = TRUE,
   snap = NULL,
   area = NULL,
   steps = 10,
-  extent = NULL,
   dropTable = FALSE,
-  verbose = FALSE
+  resolve = NA,
+  verbose = TRUE
 )
 
 \S4method{fast}{sf}(
   x,
+  extent = NULL,
   correct = TRUE,
   snap = NULL,
   area = NULL,
   steps = 10,
-  extent = NULL,
   dropTable = FALSE,
-  verbose = FALSE
+  resolve = NA,
+  verbose = TRUE
 )
 
 \S4method{fast}{missing}(x, rastOrVect, crs = "")
@@ -80,6 +83,8 @@
 #'
 }}
 
+\item{extent}{\code{GVector}s only: Either a \code{NULL} (default), or a \code{GVector}, a \code{SpatVector}, a \code{SpatExtent} object, an \code{sf} vector, a \code{bbox} object, or a numeric vector of 4 values providing a bounding box. If provided, only vector features within this bounding box are imported. If \code{extent} is a numeric vector, the values \emph{must} be in the order west, east, south, north. If \code{NULL}, the entire vector is imported.}
+
 \item{correct}{Logical (\code{GVector}s only): Correct topological issues. See \emph{Details} for more details! By default, this is \code{TRUE}.}
 
 \item{snap}{\code{GVector}s only: Numeric or \code{NULL} (default). The value of \code{snap} indicates how close vertices need to be for them to be shifted to to the same location. Units of \code{snap} are map units (usually meters), or degrees for unprojected CRSs. For lines and polygons vectors, a value of \code{NULL} will invoke an iterative procedure to find an optimal, smallest value of \code{snap}. To turn snapping off, set \code{snap = 0}. See \emph{Details} for more details!}
@@ -88,9 +93,14 @@
 
 \item{steps}{\code{GVector}s only: A positive integer > 1 (default is 10). When using automatic vector correction (i.e., either \code{snap = NULL} and/or \code{area = NULL}), this is the number of values of \code{snap} and/or \code{area} to try to generate a correct topology, including no snapping or polygon removal (i.e, \code{snap = 0} and \code{area = 0}).}
 
-\item{extent}{\code{GVector}s only: Either a \code{NULL} (default), or a \code{GVector}, a \code{SpatVector}, a \code{SpatExtent} object, an \code{sf} vector, a \code{bbox} object, or a numeric vector of 4 values providing a bounding box. If provided, only vector features within this bounding box are imported. If \code{extent} is a numeric vector, the values \emph{must} be in the order west, east, south, north. If \code{NULL}, the entire vector is imported.}
-
 \item{dropTable}{\code{GVector}s only: Logical. If \code{TRUE}, then drop the data table associated with a vector. By default, this is \code{FALSE}. See \emph{Details} for more details!}
+
+\item{resolve}{\code{GVector}s only: Character. If a \code{GVector} would be topologically invalid after a first attempt at creating it, then this method will be used to resolve the issue and create a valid \code{GVector}. Partial matching is used.
+\itemize{
+\item \code{"disaggregate"}: Coerce each area of overlap between polygons into its own geometry. The output will not have a data table associated with it.
+\item \code{"aggregate"}: Coerce all geometries into a "multipart" geometry so it acts like a single geometry. The output will not have a data table associated with it.
+\item \code{NA} (default): Do neither of the above and if either \code{snap} or \code{area} is \code{NULL}, keep trying to create the \code{GVector}. Upon success, the \code{GVector} will retain any data table associated with it unless \code{dropTable} is \code{FALSE}.
+}}
 
 \item{verbose}{\code{GVector}s only: Logical. Displays progress when using automatic topology correction.}
 
@@ -129,6 +139,7 @@ By default, \code{fast()} will try to correct topological errors in vectors. The
 \item \strong{\emph{Manual} snapping and/or area removal}: In addition to correction from step 1, you can cause vertices of polygons close to one another to be "snapped" to same place and/or polygons that are smaller than some threshold to be removed. Problems with mis-aligned vertices arise when adjacent polygons are meant to share borders, but slight differences in the locations of the vertices cause them to  mis-align. This mis-alignment can also produce small "slivers" of polygons that are the areas where they overlap. You can snap vertices within a given distance of one another using the \code{snap} argument followed by a numeric value, like \code{snap = 0.000001}. Units of \code{snap} are in map units (usually meters) for projected coordinate reference systems and degrees for unprojected systems (e.g., WGS84, NAD83, NAD27). You can also remove polygons that are smaller than a particular area using the \code{area} argument followed by a numeric value (e.g., \code{area = 1}). The units of \code{area} are in meters-squared, regardless of the coordinate reference system. Note that using \code{snap} and \code{area} entails some risk, as it is possible for nearby vertices to actually be distinct and for small areas to be legitimate.
 \item \strong{Automatic snapping and/or area removal}: In addition to the correction from step 1, you can use automatic \code{snap} and/or \code{area} correction on polygons vectors by setting \code{snap} and/or \code{area} to \code{NULL} (i.e., their default values). If just \code{snap} is \code{NULL}, only automatic snapping will be performed, and if just \code{area} is \code{NULL}, then only automatic area removal will be performed. Regardless, you will also need to set an integer value for \code{steps}, which is the number of steps to take between the smallest value of \code{snap} and/or \code{area} and the maximum value attempted. The function will then proceed by first attempting \code{snap = 0} and/or \code{area = 0} (i.e., no snapping or area removal). If this does not produce a topologically correct vector, \strong{GRASS} will (internally) suggest a range for \code{snap}. The \code{fast()} function then creates \code{steps} values from the lowest to the highest values of this range evenly-spaced along the log values of this range, then proceed to repeat the loading process until either the vector is imported correctly or the maximum value suggested is reached and results in a failed topology. Smaller values of \code{step} will result in more fine-grained attempts so are less likely to yield overcorrection, but can also take more time. The value of \code{area} in automatic correction is set to \code{snap^2}. \strong{NB}: Automated snapping and area removal are only able performed on polygons vectors, even if \code{snap} or \code{area} is \code{NULL}. To snap lines or points, you must set \code{snap} equal to a numeric value.
 \item \strong{Data table-vector mismatching}: If your vector has a data table ("attribute table") associated with it, errors can occur if there are more/fewer geometries (or multi-geometries) per row in the table. If you do not really need the data table to do your analysis, you can remove it (and thus obviate this error) using \code{dropTable = TRUE}.
+\item \strong{Dissolving or aggregating "invalid" geometries}: Using the \code{resolve} argument, you can create a topologically valid vector by either coercing all overlapping portions of polygons into their own geometries, or by coercing them into a single, combined geometry. Aggregation/disaggregation will be implemented after loading the vector into \strong{GRASS} using the settings given by \code{snap} and \code{area}. Aggregation/disaggregation will cause any associated data table to be dropped (same as \code{dropTable = TRUE}).
 \item \strong{Correction outside \emph{fasterRaster}}: Before you convert the vector into \strong{fasterRaster}'s \code{GVector} format, you can also try using the \code{\link[terra:is.valid]{terra::makeValid()}} or \code{\link[sf:valid]{sf::st_make_valid()}} tools to fix issues, then use \code{fast()}.
 \item \strong{Post-conversion to a \code{GVector}}: If you do get a vector loaded into \code{GVector} format, you can also use a set of \link[=breakPolys]{tools} or \code{\link[=fillHoles]{fillHoles()}} to fix issues.
 }
