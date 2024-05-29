@@ -96,6 +96,11 @@ methods::setMethod(
 		e <- as.numeric(e)
 		w <- as.numeric(w)
 	
+		if (length(n) == 2L) n <- n[1L] + n[2L] / 60
+		if (length(s) == 2L) s <- s[1L] + s[2L] / 60
+		if (length(e) == 2L) e <- e[1L] + e[2L] / 60
+		if (length(w) == 2L) w <- w[1L] + w[2L] / 60
+		
 		if (length(n) == 3L) n <- n[1L] + n[2L] / 60 + n[3L] / 3600
 		if (length(s) == 3L) s <- s[1L] + s[2L] / 60 + s[3L] / 3600
 		if (length(e) == 3L) e <- e[1L] + e[2L] / 60 + e[3L] / 3600
