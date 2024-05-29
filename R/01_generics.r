@@ -203,11 +203,11 @@ methods::setGeneric(name = "ncol", def = function(x) standardGeneric("ncol")) # 
 methods::setGeneric(name = "ndepth", def = function(x) standardGeneric("ndepth"))
 methods::setGeneric(name = "new", package = "methods") 
 methods::setGeneric(name = "nlyr", package = "terra")
-methods::setGeneric(name = "nacell", def = function(x) standardGeneric("nacell"))
+methods::setGeneric(name = "nacell", def = function(x, ...) standardGeneric("nacell"))
 methods::setGeneric(name = "ngeom", def = function(x, ...) standardGeneric("ngeom"))
 methods::setGeneric(name = "nlevels", package = "terra")
 methods::setGeneric(name = "noise", def = function(x, ...) standardGeneric("noise"))
-methods::setGeneric(name = "nonnacell", def = function(x) standardGeneric("nonnacell"))
+methods::setGeneric(name = "nonnacell", def = function(x, ...) standardGeneric("nonnacell"))
 methods::setGeneric(name = "not.na", def = function(x, ...) standardGeneric("not.na")) # in base
 methods::setGeneric(name = "nrow", def = function(x) standardGeneric("nrow")) # in base
 methods::setGeneric(name = "nsubgeom", def = function(x, ...) standardGeneric("nsubgeom"))
