@@ -57,5 +57,5 @@ riversCopy
 }
 }
 \seealso{
-\code{\link[=rbind]{rbind()}}, \code{\link[=c]{c()}}, \code{\link[fasterRaster]{table<-}}
+\code{\link[=rbind]{rbind()}}, \code{\link[fasterRaster]{addTable<-}}, \code{\link[=dropTable]{dropTable()}}
 }
