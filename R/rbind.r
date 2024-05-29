@@ -8,7 +8,7 @@
 #'
 #' @example man/examples/ex_cbind_rbind_table.r
 #'
-#' @seealso [colbind()], \code{\link[fasterRaster]{table<-}}
+#' @seealso [colbind()], \code{\link[fasterRaster]{addTable<-}}, [dropTable()]
 #'
 #' @aliases rbind
 #' @rdname rbind
