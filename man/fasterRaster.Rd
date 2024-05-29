@@ -242,7 +242,6 @@ The \code{\link[fasterRaster]{$<-}} operator can be used to replace specific col
 \code{\link[=smoothGeom]{smoothGeom()}}: Remove "angular" aspects of features\cr
 \code{\link[=st_as_sf]{st_as_sf()}}: Convert a \code{GVector} to a \code{sf} vector\cr
 \code{\link[=st_buffer]{st_buffer()}}: Create a polygon around/inside a \code{GVector}\cr
-\code{\link[fasterRaster]{table<-}}: Add, replace, or remove a \code{GVector}'s data table\cr
 \code{\link[=tail]{tail()}}: Last rows of a \code{GVector}'s data table\cr
 \code{\link[=thinPoints]{thinPoints()}}: Reduce number of points in same raster cell\cr
 \code{\link[=union]{union()}} or \code{\link[fasterRaster]{+}}: Combine two \code{GVector}s\cr
