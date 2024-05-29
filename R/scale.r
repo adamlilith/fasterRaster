@@ -1,22 +1,20 @@
 #' Center and scale a GRaster, or the opposite
 #'
-#' @description The `scale()` function centers and scales layers in a `GRaster` by subtracting from each raster its mean value (centering), then dividing by its standard deviation (scaling). This is useful for using the raster in a linear model, for example, because unscaled predictors can lead to numerical instability.
+#' @description `scale()` and `scalepop()` center and scale layers in a `GRaster` by subtracting from each raster its mean value (centering), then dividing by its standard deviation (scaling). This is useful for using the raster in a linear model, for example, because unscaled predictors can lead to numerical instability. The `scale()` function uses the sample standard deviation, and the `scalepop()` function uses the population standard deviation. For even moderately-sized rasters, the difference between these two is negligible, but the `scalepop()` function can be much faster than the `scale()` function.
 #'
-#' The `unscale()` function does the opposite of `scale()`: it multiples each layer by a value (presumably, its standard deviation), and adds another value (presumably, its mean).
+#' The `unscale()` function does the opposite of `scale()` and `scalepop()`: it multiples each layer by a value (presumably, its standard deviation), and adds another value (presumably, its mean).
 #'
 #' @param x A `GRaster`.
 #'
 #' @param center Value depends on the function:
 #' * `scale()`: Logical: If `TRUE` (default), subtract from each raster layer its mean.
-#' * `unscale()`: Numeric vector or `NULL` (default): This can be a single value, which will be recycled if there is more than one layer in the raster, or one value per raster layer. If a value is `NA`, then no un-centerinng will be performed on the relevant raster layer. If `NULL`, then no un-centering is done.
+#' * `unscale()`: Numeric vector or `NULL` (default): This can be a single value, which will be recycled if there is more than one layer in the raster, or one value per raster layer. If a value is `NA`, then no un-centering will be performed on the relevant raster layer. If `NULL`, then no un-centering is done.
 #'
 #' @param scale Value depends on the function:
 #' * `scale()`: Logical: If `TRUE` (default), divide each layer by its standard deviation.
 #' * `unscale()`: Numeric vector or `NULL` (default): This can be a single value, which will be recycled if there is more than one layer in the raster, or one value per raster layer. If a value is `NA`, then no unscaling will be done on the relevant raster layer. If `NULL`, then no un-scaling is done.
 #'
-#' @returns Value depends on the function:
-#' * `scale()`: The `GRaster` will have two attributes, "center" and "scale", which have the means and standard deviations of the original rasters (if `center` and `scale` are `TRUE`, otherwise, they will be `NA`). These can be obtained using `attributes(output_raster)$center` and `attributes(output_raster)$scale`.
-#' * `unscale()`: A `GRaster`.
+#' @returns All functions return a `GRaster`. The output of `scale()` and `scalepop()` will have two attributes, "center" and "scale", which have the means and standard deviations of the original rasters (if `center` and `scale` are `TRUE`, otherwise, they will be `NA`). These can be obtained using `attributes(output_raster)$center` and `attributes(output_raster)$scale`.
 #'
 #' @example man/examples/ex_scale_unscale.r
 #'
@@ -29,6 +27,31 @@ methods::setMethod(
 	function(x, center = TRUE, scale = TRUE) {
 
 	sample <- TRUE
+	.scale(x, center = center, scale = scale, sample = sample)
+
+	} # EOF
+)
+
+#' @aliases scalepop
+#' @rdname scale
+#' @exportMethod scalepop
+methods::setMethod(
+	f = "scalepop",
+	signature = c(x = "GRaster"),
+	function(x, center = TRUE, scale = TRUE) {
+
+	sample <- FALSE
+	.scale(x, center = center, scale = scale, sample = sample)
+
+	} # EOF
+)
+
+#' @param x `GRaster`
+#' @param center,scale Logical or numeric
+#' @param sample Logical
+#'
+#' @noRd
+.scale <- function(x, center, scale, sample) {
 
 	if (!center & !scale) {
 	
@@ -97,8 +120,7 @@ methods::setMethod(
 
 	out
 
-	} # EOF
-)
+} # EOF
 
 #' @aliases unscale
 #' @rdname scale

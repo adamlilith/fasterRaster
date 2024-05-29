@@ -106,7 +106,7 @@
 #' [rnormRast()]: A random `GRaster` with values drawn from a normal distribution\cr
 #' [rSpatialDepRast()]: Create a random `GRaster` with or without spatial dependence\cr
 #' [runifRast()]: A random `GRaster` with values drawn from a uniform distribution\cr
-#' [scale()] and [unscale()]: Subtract means and divide by standard deviations, or inverse of that\cr
+#' [scale()], [scalepop()], and [unscale()]: Subtract means and divide by standard deviations, or inverse of that\cr
 #' [selectRange()]: Select values from rasters in a stack based on values in another `GRaster`\cr
 #' [spatSample()]: Randomly points from a `GRaster`\cr
 #' [subst()]: Re-assign cell values\cr

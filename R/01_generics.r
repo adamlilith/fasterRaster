@@ -254,7 +254,7 @@ methods::setGeneric(name = "rvoronoi", def = function(x, ...) standardGeneric("r
 methods::setGeneric(name = "S", def = function(x, ...) standardGeneric("S"))
 methods::setGeneric(name = "sampleRast", def = function(x, ...) standardGeneric("sampleRast"))
 methods::setGeneric(name = "scale", package = "terra")
-#  if (!isGeneric("scale")) { setGeneric("scale", function(x, center=TRUE, scale=TRUE) standardGeneric("scale")) }
+methods::setGeneric(name = "scalepop", def = function(x, ...) standardGeneric("scalepop"))
 methods::setGeneric(name = "sdpop", def = function(x, ...) standardGeneric("sdpop"))
 methods::setGeneric(name = "selectRange", def = function(x, ...) standardGeneric("selectRange"))
 methods::setGeneric(name = "show", package = "methods")
