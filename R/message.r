@@ -24,6 +24,7 @@
 
 		if (now - .fasterRaster$messages[[msg]] > lag_sec) {
 			warning(message, immediate. = TRUE)
+			utils::flush.console()
 		    .fasterRaster$messages[[msg]] <- now
 		}
 
@@ -31,6 +32,7 @@
 
 		.fasterRaster$messages[[msg]] <- now
 		warning(message, immediate. = TRUE)
+		utils::flush.console()
 
 	}
 
