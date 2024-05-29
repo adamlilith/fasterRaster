@@ -1,7 +1,10 @@
 # fasterRaster 8.3.0.7017 (2024-XX-XX)
 
 ## Functionality
-o Added `table<-` for attaching or replacing a data table of a `GVector`, or for removing one.
+o Added `table<-` for attaching, replacing, or removing a data table of a `GVector`.
+
+## Issues
+o Correctly assign `datatype` to `CELL` rasters in `writeRaster()`.
 
 # fasterRaster 8.3.0.7016 (2024-05-27)
 
