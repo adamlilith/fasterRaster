@@ -175,11 +175,12 @@ setMethod(
 			if (any(datatype %in% c("double", "FLT8S", "DCELL"))) {
 
 				datatype <- "Float64"
+
 			} else if (any(datatype %in% c("float", "FLT4S", "FCELL"))) {
 
 				datatype <- "Float32"
 
-			} else if (any(datatype %in% c("factor", "integer", "logical"))) {
+			} else if (any(datatype %in% c("factor", "integer", "logical", "CELL"))) {
 
 				if (all(mins >= 0L & maxs <= 255L)) {
 					datatype <- "Byte"
@@ -278,7 +279,7 @@ setMethod(
 				type = datatype,
 				format = "GTiff",
 				createopt = createopt,
-				# metaopt = metaopt,
+				# metaopt = 'TIFFTAG_IMAGEDESCRIPTION="TEST',
 				flags = thisFlags
 			)
 
