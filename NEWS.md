@@ -1,8 +1,9 @@
 # fasterRaster 8.3.0.7017 (2024-XX-XX)
 
 ## New functions and functionality
+o `rast()`: Attaches the `GRaster`'s levels table to the `SpatRaster` output.
+o `rasterize()`: Rewritten to perform (nearly) the same as `terra::rasterize()`.
 o `scalepop()`: Scales `GRaster`s by population standard deviation.
-o `table()<-`: Attaches, replaces, or removes a data table of a `GVector`.
 
 ## Issues
 o `writeRaster()`: Correctly assign `datatype` to `CELL` rasters.
@@ -10,6 +11,7 @@ o `writeRaster()`: Correctly assign `datatype` to `CELL` rasters.
 ## Bug fixes
 o `fast()`: Fixed bug arising when reading vector saved by `writeRaster()`.
 o `nacell()` and `nonnacell()`: Correct (but slow~~~) reporting of `NA` and non-`NA` cells (workaround of error in **GRASS**'s `r.report` module).
+o `activeCat()`: Correct output when `names = TRUE`.
 
 # fasterRaster 8.3.0.7016 (2024-05-27)
 

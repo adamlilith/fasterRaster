@@ -5,21 +5,20 @@
 \alias{rasterize}
 \title{Convert a GVector to a GRaster}
 \usage{
-\S4method{rasterize}{GVector,GRaster}(x, y, background = NA, byGeom = FALSE, collapse = TRUE)
+\S4method{rasterize}{GVector,GRaster}(x, y, field = "", background = NA, by = NULL, verbose = TRUE)
 }
 \arguments{
 \item{x}{A \code{GVector}.}
 
 \item{y}{A \code{GRaster}: The new raster will have the same extent and resolution as this raster.}
 
-\item{background}{Numeric or \code{NA} (default): Value to put in cells that are not covered by the \code{GVector}.}
+\item{field}{Character: Name of a column in the data table of \code{y} to "burn" into the raster. If not \code{""} (default), then the output will be a \link[=tutorial_raster_data_types]{categorical} raster. If \code{field} is \code{""}, then all geometries will be "burned" to the raster and have the same value.}
 
-\item{byGeom, collapse}{Logical:
-\itemize{
-\item If \code{byGeom} is \code{TRUE} and \code{collapse} is \code{TRUE}, the output will have just one raster layer, but with values that correspond to each geometry (i.e., each geometry will get a different value). If geometries overlap, then category value of the geometry on "top" will be assigned to the relevant cells.
-\item If \code{byGeom} is \code{TRUE}, and \code{collapse} is \code{FALSE}, then create a separate raster layer for each geometry in \code{x}.
-\item If \code{byGeom} is \code{FALSE}, then create a single raster layer with the same value for all geometries. Argument \code{collapse} is ignored.
-}}
+\item{background}{Numeric or \code{NA} (default): Value to put in cells that are not covered by the \code{GVector}. Note that if this is not \code{NA} and not an integer, then the output cannot be a categorical raster (i.e., there will be no "levels" table associated with it).}
+
+\item{by}{Either \code{NULL} (default) or character: If this is not \code{NULL}, then the \code{GVector} will be subset by the values in the field named by \code{by}. The output will be a multi-layer raster, with one layer per unique value in \code{by}.}
+
+\item{verbose}{Logical: If \code{by} is not \code{NULL}, display progress.}
 }
 \value{
 A \code{GRaster}.
@@ -43,17 +42,23 @@ madCoast4 <- fastData("madCoast4") # polygons vector
 # Convert to GRaster and GVectors:
 elev <- fast(madElev)
 dypsis <- fast(madDypsis)
-coast <- fast(madCoast4)
+coast4 <- fast(madCoast4)
 rivers <- fast(madRivers)
 
 # Convert points, line, and polygons vectors to rasters:
 points <- rasterize(dypsis, elev)
 lines <- rasterize(rivers, elev)
 polys <- rasterize(coast4, elev)
+communes <- rasterize(coast4, elev, field = "NAME_4")
 
 plot(points)
 plot(lines)
 plot(polys)
+plot(communes)
+
+# Make one layer per river:
+byRiver <- rasterize(rivers, elev, field = "NAM", by = "NAM")
+plot(byRiver)
 
 # Change background value:
 polys <- rasterize(coast4, elev, background = -1)
