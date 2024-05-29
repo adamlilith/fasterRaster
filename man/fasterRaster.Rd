@@ -120,7 +120,7 @@ The assign operators, \code{\link[fasterRaster]{$<-}}, \code{\link[fasterRaster]
 \code{\link[=rnormRast]{rnormRast()}}: A random \code{GRaster} with values drawn from a normal distribution\cr
 \code{\link[=rSpatialDepRast]{rSpatialDepRast()}}: Create a random \code{GRaster} with or without spatial dependence\cr
 \code{\link[=runifRast]{runifRast()}}: A random \code{GRaster} with values drawn from a uniform distribution\cr
-\code{\link[=scale]{scale()}} and \code{\link[=unscale]{unscale()}}: Subtract means and divide by standard deviations, or inverse of that\cr
+\code{\link[=scale]{scale()}}, \code{\link[=scalepop]{scalepop()}}, and \code{\link[=unscale]{unscale()}}: Subtract means and divide by standard deviations, or inverse of that\cr
 \code{\link[=selectRange]{selectRange()}}: Select values from rasters in a stack based on values in another \code{GRaster}\cr
 \code{\link[=spatSample]{spatSample()}}: Randomly points from a \code{GRaster}\cr
 \code{\link[=subst]{subst()}}: Re-assign cell values\cr
