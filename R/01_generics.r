@@ -276,7 +276,7 @@ methods::setGeneric(name = "st_crs", package = "sf")
 methods::setGeneric(name = "subst", package = "terra")
 methods::setGeneric(name = "summary", def = function(object, ...) standardGeneric("summary"))
 
-methods::setGeneric(name = "tail", package = "utils")
+methods::setGeneric(name = "table<-", def = function(x, value) standardGeneric("table<-"))
 methods::setGeneric(name = "terrain", package = "terra")
 methods::setGeneric(name = "terrainRuggednessIndex", def = function(x, ...) standardGeneric("terrainRuggednessIndex"))
 methods::setGeneric(name = "thinLines", def = function(x, ...) standardGeneric("thinLines"))

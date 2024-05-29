@@ -1,3 +1,8 @@
+# fasterRaster 8.3.0.7017 (2024-XX-XX)
+
+## Functionality
+o Added `table<-` for attaching or replacing a data table of a `GVector`, or for removing one.
+
 # fasterRaster 8.3.0.7016 (2024-05-27)
 
 ## Functionality

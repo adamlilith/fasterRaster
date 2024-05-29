@@ -218,6 +218,7 @@
 #' [smoothGeom()]: Remove "angular" aspects of features\cr
 #' [st_as_sf()]: Convert a `GVector` to a `sf` vector\cr
 #' [st_buffer()]: Create a polygon around/inside a `GVector`\cr
+#' \code{\link[fasterRaster]{table<-}}: Add, replace, or remove a `GVector`'s data table\cr
 #' [tail()]: Last rows of a `GVector`'s data table\cr
 #' [thinPoints()]: Reduce number of points in same raster cell\cr
 #' [union()] or \code{\link[fasterRaster]{+}}: Combine two `GVector`s\cr

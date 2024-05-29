@@ -24,4 +24,15 @@ riversCol
 
 as.data.frame(riversCol)
 
+# Remove table
+riversCopy <- rivers
+riversCopy # 11 rows in data table
+table(riversCopy) <- NULL
+riversCopy # no data table
+
+# Add a new table
+newTable <- data.frame(num = 1:11, letters = letters[1:11])
+table(riversCopy) <- newTable
+riversCopy
+
 }
