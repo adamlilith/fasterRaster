@@ -127,7 +127,8 @@ methods::setMethod(
 		thisOut <- data.frame(
 			matrix(NA_real_,
 				ncol = length(fun),
-				nrow = 1L),
+				nrow = 1L
+			),
 			row.names = src[i]
 		)
 		
@@ -305,7 +306,7 @@ methods::setMethod(
 						intern = TRUE
 					)
 
-					if (versionNumber >= 8.3) args$nprocs <- faster("cores")
+					if (grassInfo("versionNumber") >= 8.3) args$nprocs <- faster("cores")
 
 					thisInfo <- do.call(rgrass::execGRASS, args = args)
 
@@ -314,17 +315,9 @@ methods::setMethod(
 					ss <- sub(ss, pattern=pattern, replacement="")
 					ss <- as.numeric(ss)
 
-					pattern <- "total null and non-null cells: "
-					n1 <- thisInfo[grepl(thisInfo, pattern=pattern)]
-					n1 <- sub(n1, pattern=pattern, replacement="")
-					n1 <- as.numeric(n1)
-					
-					pattern <- "total null cells: "
-					n2 <- thisInfo[grepl(thisInfo, pattern=pattern)]
-					n2 <- sub(n2, pattern=pattern, replacement="")
-					n2 <- as.numeric(n2)
-					
-					n <- n1 - n2
+					# NB need to convert to numeric to obviate overflow
+					n <- nonnacell(x[[i]])
+
 					this <- ss / (n - 1)
 					if (thisFun == "sd") this <- sqrt(this)
 
