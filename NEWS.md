@@ -1,13 +1,15 @@
 # fasterRaster 8.3.0.7017 (2024-XX-XX)
 
-## Functionality
-o Added `table<-` for attaching, replacing, or removing a data table of a `GVector`.
+## New functions and functionality
+o `scalepop()`: Scales `GRaster`s by population standard deviation.
+o `table()<-`: Attaches, replaces, or removes a data table of a `GVector`.
 
 ## Issues
-o Correctly assign `datatype` to `CELL` rasters in `writeRaster()`.
+o `writeRaster()`: Correctly assign `datatype` to `CELL` rasters.
 
 ## Bug fixes
-o Fixed bug reading vector saved by `writeRaster()`.
+o `fast()`: Fixed bug arising when reading vector saved by `writeRaster()`.
+o `nacell()` and `nonnacell()`: Correct (but slow~~~) reporting of `NA` and non-`NA` cells (workaround of error in **GRASS**'s `r.report` module).
 
 # fasterRaster 8.3.0.7016 (2024-05-27)
 
