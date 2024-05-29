@@ -32,8 +32,7 @@ methods::setMethod(
 
 	if (!center & !scale) {
 	
-		warning("No scaling performed because neither ", sQuote("center"), " nor ", sQuote("scale"), " are TRUE.")
-
+		warning("No scaling performed because neither `center` nor `scale` are TRUE.")
 		return(x)
 
 	}
@@ -61,7 +60,6 @@ methods::setMethod(
 	stats <- global(x, fx)
 
 	nLayers <- nlyr(x)
-
 	srcs <- .makeSourceName("scale_r_mapcalc", "raster", n = nLayers)
 	for (i in seq_len(nLayers)) {
 	
