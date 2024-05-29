@@ -35,13 +35,13 @@ methods::setMethod(
 		for (i in layer) {
 		
 			if (numLevels[i] > 0L) {
-				out[i] <- names(x@levels[[i]])[ac[i]]
+				out[i] <- names(x@levels[[i]])[ac[i] + 1L]
 			}
 
 		}
 	
 	} else {
-		out <- x@activeCat[layer] - 1L
+		out <- x@activeCat[layer]
 	}
 	names(out) <- names(x)[layer]
 	out
@@ -58,30 +58,9 @@ methods::setMethod(
 	function(x, names = FALSE) {
 	
 	n <- nlyr(x)
-	out <- rep(NA, n)
+	out <- rep(NA_integer_, n)
 	for (i in seq_len(n)) out[i] <- activeCat(x, layer = i, names = names)
 	out
-
-
-	# out <- x@activeCat - 1L
-	# if (names) {
-
-	# 	ac <- out + 1L
-	# 	out <- rep(NA_character_, length(layer))
-	# 	numLevels <- nlevels(x)
-	# 	for (i in layer) {
-		
-	# 		if (numLevels[i] > 0L) {
-	# 			out[i] <- names(x@levels[[i]])[ac[i]]
-	# 		}
-
-	# 	}
-	
-	# } else {
-	# 	out <- out - 1L
-	# }
-	# names(out) <- names(x)[layer]
-	# out
 
 	} # EOF
 )
