@@ -6,6 +6,9 @@ o Added `table<-` for attaching, replacing, or removing a data table of a `GVect
 ## Issues
 o Correctly assign `datatype` to `CELL` rasters in `writeRaster()`.
 
+## Bug fixes
+o Fixed bug reading vector saved by `writeRaster()`.
+
 # fasterRaster 8.3.0.7016 (2024-05-27)
 
 ## Functionality

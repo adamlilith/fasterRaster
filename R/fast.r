@@ -308,7 +308,8 @@ methods::setMethod(
 
 			src <- .makeSourceName("fast_v_in_ogr", "vector")
 			if (is.null(snap) & is.null(area)) {
-				
+
+
 				# slower if we need to record messages
 				suppressMessages(
 					run <- rgrass::execGRASS(
@@ -767,7 +768,15 @@ methods::setMethod(
 	} else {
 		vectFile <- terra::sources(x)
 	}
-	
+
+	# sometimes, terra::sources() adds the layer name after "::" to the filename if the vector was saved by v.out.ogr
+	if (grepl(vectFile, pattern = "::")) {
+
+		colons <- regexpr(vectFile, pattern = "::", fixed = TRUE)
+		vectFile <- substr(vectFile, 1L, colons - 1L)
+
+	}
+
 	# NB not passing extent bc already cropped if we wanted to do that
 	args <- list(
 		x = vectFile,
