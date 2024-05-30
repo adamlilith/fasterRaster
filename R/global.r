@@ -6,11 +6,9 @@
 #'
 #' @param fun Character vector: The name of the function(s):
 #' * `"*"`: All of the functions below.
-#' * `"countNonNA"`: Total number of non-`NA` cells.
-#' * `"countNA"`: Total number of `NA` cells.
 #' * `"cv"`: Sample coefficient of variation (expressed as a proportion of the mean).
 #' * `"cvpop"`: Population coefficient of variation (expressed as a proportion of the mean).
-#' * `"max"` and `"min"`: Highest and lowest values across non-`NA` cells.
+#' * `"max"` and `"min"`: Highest and lowest values across non-`NA` cells. NB: [minmax()] is faster.
 #' * `"mean"` (default): Average.
 #' * `"meanAbs"`: Mean of absolute values.
 #' * `"median"`: Median.
@@ -65,7 +63,8 @@ methods::setMethod(
 		src <- x
 	}
 
-	funs <- c("sum", "mean", "median", "min", "max", "meanAbs", "countNA", "countNonNA", "range", "sd", "sdpop", "var", "varpop", "cv", "cvpop", "quantile")
+	# funs <- c("sum", "mean", "median", "min", "max", "meanAbs", "countNA", "countNonNA", "range", "sd", "sdpop", "var", "varpop", "cv", "cvpop", "quantile")
+	funs <- c("sum", "mean", "median", "min", "max", "meanAbs", "range", "sd", "sdpop", "var", "varpop", "cv", "cvpop", "quantile")
 	
 	if (any(fun == "*")) fun <- funs
 
@@ -145,8 +144,8 @@ methods::setMethod(
 				"mean: "
 			} else if (thisFun == "min") {
 				"minimum: "
-			} else if (thisFun == "countNA") {
-				"total null cells: "
+			# } else if (thisFun == "countNA") {
+				# "total null cells: "
 			} else if (thisFun == "range") {
 				"range: "
 			} else if (thisFun == "sdpop") {
@@ -206,19 +205,19 @@ methods::setMethod(
 					this <- sub(this, pattern = pattern, replacement = "")
 					this <- as.numeric(this)
 
-				} else if (thisFun == "countNonNA") {
+				# } else if (thisFun == "countNonNA") {
 				
-					pattern <- "total null and non-null cells: "
-					this1 <- info[grepl(info, pattern=pattern)]
-					this1 <- sub(this1, pattern=pattern, replacement="")
-					this1 <- as.numeric(this1)
+				# 	pattern <- "total null and non-null cells: "
+				# 	this1 <- info[grepl(info, pattern=pattern)]
+				# 	this1 <- sub(this1, pattern=pattern, replacement="")
+				# 	this1 <- as.numeric(this1)
 					
-					pattern <- "total null cells: "
-					this2 <- info[grepl(info, pattern=pattern)]
-					this2 <- sub(this2, pattern=pattern, replacement="")
-					this2 <- as.numeric(this2)
+				# 	pattern <- "total null cells: "
+				# 	this2 <- info[grepl(info, pattern=pattern)]
+				# 	this2 <- sub(this2, pattern=pattern, replacement="")
+				# 	this2 <- as.numeric(this2)
 					
-					this <- this1 - this2
+				# 	this <- this1 - this2
 					
 				} else if (thisFun == "cvpop") {
 				
@@ -347,8 +346,8 @@ methods::setMethod(
 	definition = function(x, ...) {
 	
 	c(
-		"countNA",
-		"countNonNA",
+		# "countNA",
+		# "countNonNA",
 		"cv",
 		"cvpop",
 		"mean",
