@@ -9,7 +9,10 @@ o `scalepop()`: Scales `GRaster`s by population standard deviation.
 o `writeRaster()`: Correctly assign `datatype` to `CELL` rasters.
 
 ## Bug fixes
+o `activeCat()` and `activeCats()`: Fixed bug introduced by previous fix.
+o `expanse()`: Expanded list of units; correct assignation of units to **GRASS** unit format.
 o `fast()`: Fixed bug arising when reading vector saved by `writeRaster()`.
+o `global()`: Removed functions `"countNA"` and `"countNonNA"` from `global()` since **GRASS** module `r.report` can be mistaken.
 o `nacell()` and `nonnacell()`: Correct (but slow~~~) reporting of `NA` and non-`NA` cells (workaround of error in **GRASS**'s `r.report` module).
 o `activeCat()`: Correct output when `names = TRUE`.
 
