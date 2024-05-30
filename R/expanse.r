@@ -9,6 +9,7 @@
 #' * `"km"` or `"kilometers"`
 #' * `"ha"` or `"hectares"`
 #' * `"ft"` or `"feet"`
+#' * `"ac"` or `"acres"`
 #' * `"percent"`
 #'
 #' Partial matching is used and case is ignored.
@@ -30,9 +31,18 @@ methods::setMethod(
 
 	.locationRestore(x)
 	
-	units <- c("m", "meters", "metres", "km", "kilometers", "ha", "hectares", "ft", "feet", "mi", "miles", "%", "percent")
+	units <- c("m", "m2", "meters2", "metres2", "km2", "kilometers2", "acres", "ha", "hectares", "ft2", "feet2", "mi2", "miles2", "%", "percent")
 	unit <- omnibus::pmatchSafe(unit, units, useFirst = TRUE, nmax = 1L)
-	if (unit == "metres") unit <- "meters"
+	if (unit == "m2") unit <- "meters"
+	if (unit == "meters2") unit <- "meters"
+	if (unit == "metres2") unit <- "meters"
+	if (unit == "km2") unit <- "kilometers"
+	if (unit == "kilometers2") unit <- "kilometers"
+	if (unit == "mi2") unit <- "miles"
+	if (unit == "miles2") unit <- "miles"
+	if (unit == "ft2") unit <- "feet"
+	if (unit == "feet2") unit <- "feet"
+	if (unit == "ha") unit <- "hectares"
 	if (unit == "%") unit <- "percent"
 	unit <- omnibus::expandUnits(unit)
 
