@@ -31,19 +31,14 @@ methods::setMethod(
 
 		ac <- x@activeCat
 		out <- rep(NA_character_, length(layer))
-		numLevels <- nlevels(x)
-		for (i in layer) {
 		
-			if (numLevels[i] > 0L) {
-				out[i] <- names(x@levels[[i]])[ac[i] + 1L]
-			}
-
+		for (i in seq_along(layer)) {
+			if (is.factor(x)[layer[i]]) out[i] <- names(cats(x)[[layer[i]]])[ac[layer[i]]]
 		}
 	
 	} else {
-		out <- x@activeCat[layer]
+		out <- x@activeCat[layer] - 1L
 	}
-	names(out) <- names(x)[layer]
 	out
 
 	} # EOF
@@ -57,9 +52,18 @@ methods::setMethod(
 	signature = c(x = "GRaster"),
 	function(x, names = FALSE) {
 	
-	n <- nlyr(x)
-	out <- rep(NA_integer_, n)
-	for (i in seq_len(n)) out[i] <- activeCat(x, layer = i, names = names)
+	if (!names) {
+		out <- x@activeCat - 1L
+	} else if (names) {
+		
+		out <- rep(NA_character_, nlyr(x))
+		facts <- is.factor(x)
+		if (any(facts)) {
+			for (i in which(facts)) {
+				out[i] <- names(cats(x)[[i]])[activeCat(x, layer = i)]
+			}
+		}
+	}
 	out
 
 	} # EOF
