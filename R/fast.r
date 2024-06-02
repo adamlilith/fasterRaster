@@ -302,9 +302,9 @@ methods::setMethod(
 
 			if (verbose & gtype == "area") {
 				omnibus::say("Creating GVector with ", thisSnapNice, " snapping and ", thisAreaNice, "...")
-			} else if (verbose) {
-				omnibus::say("Creating GVector with ", thisSnapNice, " snapping of vertices/points...")
-			}
+			}# else if (verbose) {
+			#	omnibus::say("Creating GVector with ", thisSnapNice, " snapping of vertices/points...")
+			#}
 
 			src <- .makeSourceName("fast_v_in_ogr", "vector")
 			if (is.null(snap) & is.null(area)) {
@@ -425,7 +425,7 @@ methods::setMethod(
 						thisSnap <- snaps[step]
 						thisArea <- snaps[step]^2
 
-						if (verbose) {
+						if (verbose & gtype == "area") {
 							
 							thisSnapNice <- round(thisSnap, digits)
 							thisAreaNice <- round(thisArea, digits)
@@ -477,7 +477,7 @@ methods::setMethod(
 						thisSnap <- snaps[step]
 						thisArea <- area
 
-						if (verbose) {
+						if (verbose & gtype == "area") {
 							
 							thisSnapNice <- round(thisSnap, digits)
 							omnibus::say("Iteration ", step, ": Snapping at ", thisSnapNice, " map-units...")
@@ -530,7 +530,7 @@ methods::setMethod(
 						}
 						thisArea <- snaps[step]^2
 						
-						if (verbose) {
+						if (verbose & gtype == "area") {
 						
 							thisAreaNice <- round(thisArea, digits)
 							omnibus::say("Iteration ", step, ": Removing polygons of <", thisAreaNice, " m2...")
@@ -955,7 +955,7 @@ methods::setMethod(
 
 	if (resolve == "disaggregate") {
 
-		if (verbose) omnibus::say("Fixing invalic vector by disaggregating polygons. This will remove any data table.")
+		if (verbose) omnibus::say("Fixing invalid vector by disaggregating polygons. This will remove any data table.")
 
 		# delete categories
 		srcIn <- src
@@ -982,7 +982,7 @@ methods::setMethod(
 
 	} else if (resolve == "aggregate") {
 
-		if (verbose) omnibus::say("Fixing invalic vector by aggregating polygons. This will remove any data table.")
+		if (verbose) omnibus::say("Fixing invalid vector by aggregating polygons. This will remove any data table.")
 
 		srcIn <- src
 		src <- .makeSourceName("fast_v_extract")
