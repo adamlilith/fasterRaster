@@ -103,7 +103,7 @@ madCoast4 <- fastData("madCoast4") # polygons vector
 
 # Convert to fasterRaster formats:
 elev <- fast(madElev) # raster
-cover <- fast(madCover, method = "near", warn = FALSE) # categorical raster
+cover <- fast(madCover) # categorical raster
 dypsis <- fast(madDypsis) # points vector
 rivers <- fast(madRivers) # lines vector
 coast <- fast(madCoast4) # polygons vector
@@ -112,9 +112,9 @@ coast <- fast(madCoast4) # polygons vector
 extract(elev, dypsis, xy = TRUE)
 
 # Extract from categorical raster at points:
-cover <- project(cover, elev)
-extract(cover, dypsis)
-extract(cover, dypsis, cats = TRUE)
+dypsisWGS84 <- project(dypsis, cover)
+extract(cover, dypsisWGS84)
+extract(cover, dypsisWGS84, cats = TRUE)
 
 # Extract and summarize values on a raster across polygons:
 extract(elev, coast, fun = c("sum", "mean", "countNonNA"), overlap = FALSE)
