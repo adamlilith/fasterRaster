@@ -105,8 +105,6 @@ methods::setGeneric(name = "compositeRGB", def = function(r, ...) standardGeneri
 methods::setGeneric(name = "combineCats", def = function(x, ...) standardGeneric("combineCats"))
 methods::setGeneric(name = "combineLevels", def = function(x, ...) standardGeneric("combineLevels"))
 methods::setGeneric(name = "connectors", def = function(x, y, ...) standardGeneric("connectors"))
-methods::setGeneric("cor", function(x, y, ...) standardGeneric("cor"), package = "stats")
-methods::setGeneric("cov", function(x, ...) standardGeneric("cov"), package = "stats")
 methods::setGeneric(name = "convHull", package = "terra")
 methods::setGeneric(name = "count", def = function(x, ...) standardGeneric("count"))
 methods::setGeneric(name = "crds", package = "terra")
@@ -181,6 +179,7 @@ methods::setGeneric(name = "kurtosis", def = function(x, ...) standardGeneric("k
 
 # levels (in base) is generic
 # levels<- (in base) is primitive
+methods::setGeneric(name = "layerCor", package = "terra")
 methods::setGeneric(name = "ln", def = function(x, ...) standardGeneric("ln"))
 methods::setGeneric(name = "longlat", def = function(x) standardGeneric("longlat"))
 

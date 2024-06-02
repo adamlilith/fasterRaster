@@ -82,12 +82,10 @@ The assign operators, \code{\link[fasterRaster]{$<-}}, \code{\link[fasterRaster]
 \code{\link[=app]{app()}}: Apply a user-defined function to multiple layers of a \code{GRaster} (with helper functions \code{\link[=appFuns]{appFuns()}} and \code{\link[=appCheck]{appCheck()}})\cr
 \code{\link[=c]{c()}}: "Stack" two or more rasters\cr
 \code{\link[=cellSize]{cellSize()}}: Cell area\cr
-\code{\link[=classify]{classify()}}: Replace ranges of cell values with a single value\cr
+\code{\link[=classify]{classify()}}: Partition cell values into strata\cr
 \code{\link[=clump]{clump()}}: Group adjacent cells with similar values\cr
 \code{\link[=combineCats]{combineCats()}}: Combine values from two or more categorical and/or integer rasters\cr
 \code{\link[=combineLevels]{combineLevels()}}: Combine the "levels" tables of two or more categorical \code{GRaster}s\cr
-\code{\link[=cor]{cor()}}: Correlation matrix between layers of a \code{GRaster}\cr
-\code{\link[=cov]{cov()}}: Covariance matrix between layers of a \code{GRaster}\cr
 \code{\link[=crop]{crop()}}: Remove parts of a \code{GRaster}\cr
 \code{\link[=denoise]{denoise()}}: Remove "noise" from a \code{GRaster} using a principal components analysis (PCA)\cr
 \code{\link[=distance]{distance()}}: Distance to non-\code{NA} cells, or vice versa\cr
@@ -102,6 +100,7 @@ The assign operators, \code{\link[fasterRaster]{$<-}}, \code{\link[fasterRaster]
 \code{\link[=horizonHeight]{horizonHeight()}}: Horizon height\cr
 \code{\link[=interpIDW]{interpIDW()}}: Interpolate values at points to a \code{GRaster}\cr
 \code{\link[=kernel]{kernel()}}: Kernel density estimator of points\cr
+\code{\link[=layerCor]{layerCor()}}: Correlation or covariance between two or more \code{GRaster} layers\cr
 \code{\link[=longlat]{longlat()}}: Create longitude/latitude rasters\cr
 \code{\link[=mask]{mask()}}: Remove values in a \code{GRaster} based on values in another \code{GRaster} or vector\cr
 \code{\link[=maskNA]{maskNA()}}: Mask all non-NA cells or all NA cells\cr
@@ -211,7 +210,6 @@ The \code{\link[fasterRaster]{$<-}} operator can be used to replace specific col
 \code{\link[=as.data.table]{as.data.table()}}: Convert a \code{GVector}'s attribute table to a \code{data.table}\cr
 \code{\link[=as.points]{as.points()}}: Extract vertex coordinates from a "lines" or "polygons" \code{GVector}\cr
 \code{\link[=buffer]{buffer()}}: Create a polygon around/inside a \code{GVector}\cr
-\code{\link[=classify]{classify()}}: Classify cell values of a \code{GRaster}\cr
 \code{\link[=clusterPoints]{clusterPoints()}}: Identify clusters of points\cr
 \code{\link[=colbind]{colbind()}}: Add columns to the data table of a \code{GVector}\cr
 \code{\link[=complete.cases]{complete.cases()}}: Find rows of a \code{GVector}'s data table that have no \code{NA}s in them\cr
