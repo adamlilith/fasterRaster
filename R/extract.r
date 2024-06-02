@@ -149,6 +149,8 @@ methods::setMethod(
 
                 if (length(method) > 0L) {
                     
+                    if (!.vHasDatabase(y)) .vAttachDatabase(y)
+
                     args <- list(
                         cmd = "v.rast.stats",
                         raster = sources(x)[i],
@@ -161,7 +163,7 @@ methods::setMethod(
                     if (any(method == "percentile")) args$percentile <- prob
                     do.call(rgrass::execGRASS, args = args)
 
-                    extracted <- .vAsDataTable(sources(y))
+                    extracted <- .vAsDataTable(y)
 
                 } else {
                     extracted <- data.table::data.table(NULL)
@@ -175,7 +177,10 @@ methods::setMethod(
                     
                 }
 
+                extracted <- extracted[!duplicated(extracted)]
+
                 if (any(names(extracted) == "cat")) extracted$cat <- NULL
+                if (any(names(extracted) == "cat_")) extracted$cat_ <- NULL
                 nms <- names(extracted)
                 nms <- gsub(nms, pattern = paste0(prefix, "_"), replacement = "")
 
