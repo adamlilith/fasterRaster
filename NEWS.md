@@ -7,6 +7,7 @@ o `rast()`: Attaches the `GRaster`'s levels table to the `SpatRaster` output.
 o **+** `rasterize()`: Rewritten to perform (nearly) the same as `terra::rasterize()`.
 o `predict()`: Can accommodate models with two-way interactions between categorical rasters.
 o `scalepop()`: Scales `GRaster`s by population standard deviation.
+o Stops with a somewhat informative error when a `GRaster` fails to be created (in hidden function `.makeGRaster()`)
 
 ## Issues
 o `writeRaster()`: Correctly assign `datatype` to `CELL` rasters.
