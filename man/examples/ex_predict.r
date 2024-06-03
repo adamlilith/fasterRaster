@@ -47,7 +47,7 @@ levels(nearRiver) <- data.frame(value = 0:1, label = c("far", "near"))
 covariateRasters <- c(continuousScaled, coverProj, nearRiver)
 plot(covariateRasters)
 
-# Extract elevation and forest cover at Dypsis locations:
+# Extract environmental values at Dypsis locations:
 presEnv <- extract(covariateRasters, dypsis, cats = TRUE)
 presEnv$presBg <- 1
 head(presEnv)
@@ -65,7 +65,7 @@ env <- rbind(presEnv, bgEnv)
 # Calibrate model:
 form <- presBg ~ elevation + distToForest +
 I(distToForest^2) + elevation * distToForest +
-madCover + nearRiver + nearRiver:madCover
+madCover + nearRiver
 
 model <- stats::glm(form, data = env, family = stats::binomial)
 summary(model)
