@@ -16,6 +16,7 @@
 \item \code{"km"} or \code{"kilometers"}
 \item \code{"ha"} or \code{"hectares"}
 \item \code{"ft"} or \code{"feet"}
+\item \code{"ac"} or \code{"acres"}
 \item \code{"percent"}
 }
 

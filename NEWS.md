@@ -1,3 +1,27 @@
+# fasterRaster 8.3.0.7017 (2024-06-02)
+
+**+**: Denotes potentially code-breaking changes
+
+## New functions and functionality
+o `rast()`: Attaches the `GRaster`'s levels table to the `SpatRaster` output.
+o **+** `rasterize()`: Rewritten to perform (nearly) the same as `terra::rasterize()`.
+o `predict()`: Can accommodate models with two-way interactions between categorical rasters and between a categorical predictor and a scalar.
+o `scalepop()`: Scales `GRaster`s by population standard deviation.
+o Stops with a somewhat informative error when a `GRaster` fails to be created (in hidden function `.makeGRaster()`)
+
+## Issues
+o `writeRaster()`: Correctly assign `datatype` to `CELL` rasters.
+O **+** `cor()` and `cov()` removed and incorporated into `layerCor()`
+
+## Bug fixes
+o `activeCat()` and `activeCats()`: Fixed bug introduced by previous fix.
+o `activeCat()`: Correct output when `names = TRUE`.
+o `expanse()`: Expanded list of units; correct assignation of units to **GRASS** unit format.
+o `extract()`: Extracting from a `GRaster` to a `lines` or `polygons` `GVector` works.
+o `fast()`: Fixed bug arising when reading vector saved by `writeRaster()`.
+o + `global()`: Removed functions `"countNA"` and `"countNonNA"` from `global()` since **GRASS** module `r.report` can be mistaken.
+o `nacell()` and `nonnacell()`: Correct (but slow~~~) reporting of `NA` and non-`NA` cells (workaround of error in **GRASS**'s `r.report` module).
+
 # fasterRaster 8.3.0.7016 (2024-05-27)
 
 ## Functionality

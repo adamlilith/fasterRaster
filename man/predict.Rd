@@ -22,7 +22,15 @@ This version of the \code{predict()} function make predictions to a set of \code
 
 The model must be either a linear model, which is of class \code{lm} and typically created using the \code{\link[stats:lm]{stats::lm()}} function or a generalized linear model (GLM), which is class \code{glm} and typically created using \code{\link[stats:glm]{stats::glm()}}. Other packages can also create \code{lm} or \code{glm} objects, but they may not work in this function. For example, generalized additive models, which can be created using the \code{gam()} function in the \strong{mgcv} package, inherit the \code{glm} class, but cannot be used in this function, but ones created with the \strong{speedglm} package can.
 
-This \code{predict()} function can handle categorical predictors (i.e., \link[=tutorial_raster_data_types]{categorical} rasters), but only if the factor levels are used as offsets/intercepts (i.e., not in an interaction term).
+This \code{predict()} function can handle:
+\itemize{
+\item Linear predictors and intercepts like \code{y ~ 1 + x};
+\item Quadratic terms like \code{y ~ x^2} (or, in \strong{R} formular notation, \code{y ~ I(x^2)});
+\item Two-way interaction terms between scalars like \code{y ~ x1:x2} and \code{y ~ x1 * x2};
+\item Categorical predictors (i.e., \link[=tutorial_raster_data_types]{categorical} rasters);
+\item Two-way interactions between a categorical predictor and a scalar predictor; and
+\item Two-way interactions between categorical predictors.
+}
 }
 \examples{
 if (grassStarted()) {
@@ -32,42 +40,49 @@ library(sf)
 library(terra)
 
 ### This example creates a simple model of Dypsis distribution using
-# elevation, distance to forest, and land cover class.
+# elevation, distance to forest, land cover class, and nearness to rivers.
 
 # Elevation raster, forest cover in year 2000, land cover class, and
 # points where Dypsis plants have been collected
 madElev <- fastData("madElev")
 madForest2000 <- fastData("madForest2000")
 madCover <- fastData("madCover")
+madRivers <- fastData("madRivers")
 madDypsis <- fastData("madDypsis")
 
 # Convert SpatRasters to GRasters and sf vector to GVector:
 elev <- fast(madElev)
 forest <- fast(madForest2000)
-dypsis <- fast(madDypsis)
 cover <- fast(madCover)
+rivers <- fast(madRivers)
+dypsis <- fast(madDypsis)
 
 # Distance to forest
-distToForest <- distance(forest, unit = "km")
+distToForest <- distance(forest, unit = "m")
 distToForest <- log1p(distToForest) # log(x + 1) of distance
 names(distToForest) <- "distToForest"
 
 # "Stack" elevation and forest cover
-land <- c(elev, distToForest)
-plot(land)
+continuous <- c(elev, distToForest)
 
 # Scale continuous predictors to mean of 0 and sd of 1
-landScaled <- scale(land)
-names(landScaled) <- c("elevation", "distToForest")
+continuousScaled <- scale(continuous)
+names(continuousScaled) <- c("elevation", "distToForest")
 
 # Project land cover raster
-coverProj <- project(cover, landScaled)
+coverProj <- project(cover, continuousScaled)
+
+# Near a river?
+riverBuffer <- buffer(rivers, 5000)
+nearRiver <- rasterize(riverBuffer, elev, background = 0)
+names(nearRiver) <- "nearRiver"
+levels(nearRiver) <- data.frame(value = 0:1, label = c("far", "near"))
 
 # Combine continuous/categorical data
-covariateRasters <- c(landScaled, coverProj)
+covariateRasters <- c(continuousScaled, coverProj, nearRiver)
+plot(covariateRasters)
 
-### Make model of Dypsis locations:
-# Extract elevation and forest cover at Dypsis locations
+# Extract environmental values at Dypsis locations:
 presEnv <- extract(covariateRasters, dypsis, cats = TRUE)
 presEnv$presBg <- 1
 head(presEnv)
@@ -85,7 +100,7 @@ env <- rbind(presEnv, bgEnv)
 # Calibrate model:
 form <- presBg ~ elevation + distToForest +
 I(distToForest^2) + elevation * distToForest +
-madCover
+madCover + nearRiver
 
 model <- stats::glm(form, data = env, family = stats::binomial)
 summary(model)
@@ -94,10 +109,9 @@ summary(model)
 prediction <- predict(covariateRasters, model, type = "response")
 prediction
 
+# Not a great model!
 plot(prediction)
 plot(dypsis, pch = 1, add = TRUE)
-
-# Not a great model!
 
 }
 }

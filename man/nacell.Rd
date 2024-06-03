@@ -7,12 +7,14 @@
 \alias{nonnacell}
 \title{Number of NA or non-NA cells in a raster}
 \usage{
-\S4method{nacell}{GRaster}(x)
+\S4method{nacell}{GRaster}(x, warn = TRUE)
 
-\S4method{nonnacell}{GRaster}(x)
+\S4method{nonnacell}{GRaster}(x, warn = TRUE)
 }
 \arguments{
 \item{x}{A \code{GRaster}.}
+
+\item{warn}{Logical: If \code{TRUE} (default), display a warning about how much time the computation could take.}
 }
 \value{
 A numeric value, one per raster layer in the input.

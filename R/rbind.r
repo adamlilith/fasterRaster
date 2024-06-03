@@ -6,9 +6,9 @@
 #'
 #' @returns A `GVector`.
 #'
-#' @example man/examples/ex_cbind_rbind.r
+#' @example man/examples/ex_cbind_rbind_table.r
 #'
-#' @seealso [colbind()], [c()]
+#' @seealso [colbind()], \code{\link[fasterRaster]{addTable<-}}, [dropTable()]
 #'
 #' @aliases rbind
 #' @rdname rbind

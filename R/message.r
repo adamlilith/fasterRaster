@@ -2,7 +2,7 @@
 #'
 #' @description Display a warning or message if the given warning has not been displayed since **fasterRaster** was attached or if a given number or hours has passed since then.
 #'
-#' @param msg Character: Name for the message (used internally). Should be able to be assiged to a list (i.e., no spaces, punctuation, etc.).
+#' @param msg Character: Name for the message (used internally). Should be able to be assigned to a list (i.e., no spaces, punctuation, etc.).
 #' 
 #' @param message Text for the message.
 #' 
@@ -24,6 +24,7 @@
 
 		if (now - .fasterRaster$messages[[msg]] > lag_sec) {
 			warning(message, immediate. = TRUE)
+			utils::flush.console()
 		    .fasterRaster$messages[[msg]] <- now
 		}
 
@@ -31,6 +32,7 @@
 
 		.fasterRaster$messages[[msg]] <- now
 		warning(message, immediate. = TRUE)
+		utils::flush.console()
 
 	}
 

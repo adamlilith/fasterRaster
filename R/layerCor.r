@@ -1,40 +1,26 @@
 #' Correlation between GRasters
 #'
-#' @description `cor()` returns a correlation matrix between two or more `GRaster` layers, and `cov()` returns a covariance matrix between two or more `GRaster` layers.
+#' @description This function returns a correlation or covariance matrix between two or more `GRaster` layers. This function returns the sample correlation and covariance (i.e., the denominator is n - 1).
 #' 
 #' @param x A `GRaster` with two or more layers.
+#' @param fun Character: Name of the statistic to calculate; either `"cor"` or `"cov"`. 
 #' 
 #' @returns A numeric `matrix`.
 #' 
-#' @example man/examples/ex_GRaster.r
+#' @example man/examples/ex_layerCor.r
 #'
-#' @seealso [stats::cor()], [stats::cov()]
+#' @seealso [terra::layerCor()], [stats::cor()], [stats::cov()]
 #' 
-#' @aliases cor
-#' @rdname cor
-#' @exportMethod cor
+#' @aliases layerCor
+#' @rdname layerCor
+#' @exportMethod layerCor
 methods::setMethod(
-	f = "cor",
+	f = "layerCor",
 	signature = c(x = "GRaster"),
-	function(x) .corCovar(x, "cor")
-)
-
-#' @aliases cov
-#' @rdname cor
-#' @exportMethod cov
-methods::setMethod(
-	f = "cov",
-	signature = c(x = "GRaster"),
-	function(x) .corCovar(x, "cov")
-)
-
-# x A GRaster
-# stat "cov" or "cor"
-.corCovar <- function(x, stat) {
-
-	stat <- omnibus::pmatchSafe(stat, c("cor", "cov"))
-
+	function(x, fun) {
+	
 	if (nlyr(x) == 1L) stop("The raster must have >= 2 layers.")
+	fun <- omnibus::pmatchSafe(fun, c("cor", "cov"))
 	
 	.locationRestore(x)
 	.region(x)
@@ -46,7 +32,7 @@ methods::setMethod(
 		intern = TRUE
 	)
 
-	if (stat == "cor") args$flags <- c(args$flags, "r")
+	if (fun == "cor") args$flags <- c(args$flags, "r")
 	info <- do.call(rgrass::execGRASS, args = args)
 
 	n <- substr(info[1L], 5L, nchar(info[1L]))
@@ -64,6 +50,7 @@ methods::setMethod(
 
 	}
 	attr(out, "n") <- n
-	out
-
-}
+	out	
+	
+	}
+)

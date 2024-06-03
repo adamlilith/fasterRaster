@@ -3,11 +3,15 @@
 \name{scale,GRaster-method}
 \alias{scale,GRaster-method}
 \alias{scale}
+\alias{scalepop,GRaster-method}
+\alias{scalepop}
 \alias{unscale,GRaster-method}
 \alias{unscale}
 \title{Center and scale a GRaster, or the opposite}
 \usage{
 \S4method{scale}{GRaster}(x, center = TRUE, scale = TRUE)
+
+\S4method{scalepop}{GRaster}(x, center = TRUE, scale = TRUE)
 
 \S4method{unscale}{GRaster}(x, center = NULL, scale = NULL)
 }
@@ -17,7 +21,7 @@
 \item{center}{Value depends on the function:
 \itemize{
 \item \code{scale()}: Logical: If \code{TRUE} (default), subtract from each raster layer its mean.
-\item \code{unscale()}: Numeric vector or \code{NULL} (default): This can be a single value, which will be recycled if there is more than one layer in the raster, or one value per raster layer. If a value is \code{NA}, then no un-centerinng will be performed on the relevant raster layer. If \code{NULL}, then no un-centering is done.
+\item \code{unscale()}: Numeric vector or \code{NULL} (default): This can be a single value, which will be recycled if there is more than one layer in the raster, or one value per raster layer. If a value is \code{NA}, then no un-centering will be performed on the relevant raster layer. If \code{NULL}, then no un-centering is done.
 }}
 
 \item{scale}{Value depends on the function:
@@ -27,16 +31,12 @@
 }}
 }
 \value{
-Value depends on the function:
-\itemize{
-\item \code{scale()}: The \code{GRaster} will have two attributes, "center" and "scale", which have the means and standard deviations of the original rasters (if \code{center} and \code{scale} are \code{TRUE}, otherwise, they will be \code{NA}). These can be obtained using \code{attributes(output_raster)$center} and \code{attributes(output_raster)$scale}.
-\item \code{unscale()}: A \code{GRaster}.
-}
+All functions return a \code{GRaster}. The output of \code{scale()} and \code{scalepop()} will have two attributes, "center" and "scale", which have the means and standard deviations of the original rasters (if \code{center} and \code{scale} are \code{TRUE}, otherwise, they will be \code{NA}). These can be obtained using \code{attributes(output_raster)$center} and \code{attributes(output_raster)$scale}.
 }
 \description{
-The \code{scale()} function centers and scales layers in a \code{GRaster} by subtracting from each raster its mean value (centering), then dividing by its standard deviation (scaling). This is useful for using the raster in a linear model, for example, because unscaled predictors can lead to numerical instability.
+\code{scale()} and \code{scalepop()} center and scale layers in a \code{GRaster} by subtracting from each raster its mean value (centering), then dividing by its standard deviation (scaling). This is useful for using the raster in a linear model, for example, because unscaled predictors can lead to numerical instability. The \code{scale()} function uses the sample standard deviation, and the \code{scalepop()} function uses the population standard deviation. For even moderately-sized rasters, the difference between these two is negligible, but the \code{scalepop()} function can be much faster than the \code{scale()} function.
 
-The \code{unscale()} function does the opposite of \code{scale()}: it multiples each layer by a value (presumably, its standard deviation), and adds another value (presumably, its mean).
+The \code{unscale()} function does the opposite of \code{scale()} and \code{scalepop()}: it multiples each layer by a value (presumably, its standard deviation), and adds another value (presumably, its mean).
 }
 \examples{
 if (grassStarted()) {
@@ -50,12 +50,18 @@ madChelsa <- fastData("madChelsa")
 # Convert to GRasters:
 chelsa <- fast(madChelsa)
 
-### Scale rasters:
+### Center and scale rasters
+# Scale with using sample SD:
 chScaled <- scale(chelsa)
 chScaled
 
+# Scale with using sample SD:
+chScaledPop <- scalepop(chelsa)
+chScaledPop
+
 # Means are very close to 0 and SDs to 1:
-global(chScaled, c("mean", "sd"))
+global(chScaled, c("mean", "sd", "min", "max"))
+global(chScaledPop, c("mean", "sd", "min", "max"))
 
 # Get original means and sd's:
 centers <- attributes(chScaled)$center
@@ -67,7 +73,8 @@ scales
 chUnscaled <- unscale(chScaled, center = centers, scale = scales)
 
 # Means and SD are returned to original values:
-global(chUnscaled, c("mean", "sd"))
+global(chUnscaled, c("mean", "sd", "min", "max")) # unscaled
+global(chelsa, c("mean", "sd", "min", "max")) # original
 
 }
 }

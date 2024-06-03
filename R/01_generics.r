@@ -105,8 +105,6 @@ methods::setGeneric(name = "compositeRGB", def = function(r, ...) standardGeneri
 methods::setGeneric(name = "combineCats", def = function(x, ...) standardGeneric("combineCats"))
 methods::setGeneric(name = "combineLevels", def = function(x, ...) standardGeneric("combineLevels"))
 methods::setGeneric(name = "connectors", def = function(x, y, ...) standardGeneric("connectors"))
-methods::setGeneric("cor", function(x, y, ...) standardGeneric("cor"), package = "stats")
-methods::setGeneric("cov", function(x, ...) standardGeneric("cov"), package = "stats")
 methods::setGeneric(name = "convHull", package = "terra")
 methods::setGeneric(name = "count", def = function(x, ...) standardGeneric("count"))
 methods::setGeneric(name = "crds", package = "terra")
@@ -181,6 +179,7 @@ methods::setGeneric(name = "kurtosis", def = function(x, ...) standardGeneric("k
 
 # levels (in base) is generic
 # levels<- (in base) is primitive
+methods::setGeneric(name = "layerCor", package = "terra")
 methods::setGeneric(name = "ln", def = function(x, ...) standardGeneric("ln"))
 methods::setGeneric(name = "longlat", def = function(x) standardGeneric("longlat"))
 
@@ -203,11 +202,11 @@ methods::setGeneric(name = "ncol", def = function(x) standardGeneric("ncol")) # 
 methods::setGeneric(name = "ndepth", def = function(x) standardGeneric("ndepth"))
 methods::setGeneric(name = "new", package = "methods") 
 methods::setGeneric(name = "nlyr", package = "terra")
-methods::setGeneric(name = "nacell", def = function(x) standardGeneric("nacell"))
+methods::setGeneric(name = "nacell", def = function(x, ...) standardGeneric("nacell"))
 methods::setGeneric(name = "ngeom", def = function(x, ...) standardGeneric("ngeom"))
 methods::setGeneric(name = "nlevels", package = "terra")
 methods::setGeneric(name = "noise", def = function(x, ...) standardGeneric("noise"))
-methods::setGeneric(name = "nonnacell", def = function(x) standardGeneric("nonnacell"))
+methods::setGeneric(name = "nonnacell", def = function(x, ...) standardGeneric("nonnacell"))
 methods::setGeneric(name = "not.na", def = function(x, ...) standardGeneric("not.na")) # in base
 methods::setGeneric(name = "nrow", def = function(x) standardGeneric("nrow")) # in base
 methods::setGeneric(name = "nsubgeom", def = function(x, ...) standardGeneric("nsubgeom"))
@@ -254,7 +253,7 @@ methods::setGeneric(name = "rvoronoi", def = function(x, ...) standardGeneric("r
 methods::setGeneric(name = "S", def = function(x, ...) standardGeneric("S"))
 methods::setGeneric(name = "sampleRast", def = function(x, ...) standardGeneric("sampleRast"))
 methods::setGeneric(name = "scale", package = "terra")
-#  if (!isGeneric("scale")) { setGeneric("scale", function(x, center=TRUE, scale=TRUE) standardGeneric("scale")) }
+methods::setGeneric(name = "scalepop", def = function(x, ...) standardGeneric("scalepop"))
 methods::setGeneric(name = "sdpop", def = function(x, ...) standardGeneric("sdpop"))
 methods::setGeneric(name = "selectRange", def = function(x, ...) standardGeneric("selectRange"))
 methods::setGeneric(name = "show", package = "methods")
@@ -276,7 +275,6 @@ methods::setGeneric(name = "st_crs", package = "sf")
 methods::setGeneric(name = "subst", package = "terra")
 methods::setGeneric(name = "summary", def = function(object, ...) standardGeneric("summary"))
 
-methods::setGeneric(name = "tail", package = "utils")
 methods::setGeneric(name = "terrain", package = "terra")
 methods::setGeneric(name = "terrainRuggednessIndex", def = function(x, ...) standardGeneric("terrainRuggednessIndex"))
 methods::setGeneric(name = "thinLines", def = function(x, ...) standardGeneric("thinLines"))

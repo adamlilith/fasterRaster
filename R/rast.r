@@ -25,6 +25,15 @@ setMethod(
 	out <- terra::rast(filename)
 	if (mm) out <- terra::setMinMax(out)
 	names(out) <- names(x)
+	
+	if (any(is.factor(x))) {
+		facts <- which(is.factor(x))
+		for (fact in facts) {
+			levels(out[[fact]]) <- cats(x)[[i]]
+			activeCat(out[[fact]]) <- activeCat(x)[i]
+		}
+	}
+
 	out
 
 	} # EOF

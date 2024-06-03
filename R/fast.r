@@ -302,13 +302,14 @@ methods::setMethod(
 
 			if (verbose & gtype == "area") {
 				omnibus::say("Creating GVector with ", thisSnapNice, " snapping and ", thisAreaNice, "...")
-			} else if (verbose) {
-				omnibus::say("Creating GVector with ", thisSnapNice, " snapping of vertices/points...")
-			}
+			}# else if (verbose) {
+			#	omnibus::say("Creating GVector with ", thisSnapNice, " snapping of vertices/points...")
+			#}
 
 			src <- .makeSourceName("fast_v_in_ogr", "vector")
 			if (is.null(snap) & is.null(area)) {
-				
+
+
 				# slower if we need to record messages
 				suppressMessages(
 					run <- rgrass::execGRASS(
@@ -424,7 +425,7 @@ methods::setMethod(
 						thisSnap <- snaps[step]
 						thisArea <- snaps[step]^2
 
-						if (verbose) {
+						if (verbose & gtype == "area") {
 							
 							thisSnapNice <- round(thisSnap, digits)
 							thisAreaNice <- round(thisArea, digits)
@@ -476,7 +477,7 @@ methods::setMethod(
 						thisSnap <- snaps[step]
 						thisArea <- area
 
-						if (verbose) {
+						if (verbose & gtype == "area") {
 							
 							thisSnapNice <- round(thisSnap, digits)
 							omnibus::say("Iteration ", step, ": Snapping at ", thisSnapNice, " map-units...")
@@ -529,7 +530,7 @@ methods::setMethod(
 						}
 						thisArea <- snaps[step]^2
 						
-						if (verbose) {
+						if (verbose & gtype == "area") {
 						
 							thisAreaNice <- round(thisArea, digits)
 							omnibus::say("Iteration ", step, ": Removing polygons of <", thisAreaNice, " m2...")
@@ -583,7 +584,7 @@ methods::setMethod(
 
 			}
 			out <- .makeGVector(src = src, table = table)
-			if (verbose) omnibus::say("Topologiclaly valid vector created.")
+			if (verbose) omnibus::say("Topologically valid vector created.")
 
 		} # x is a filename and xVect supplied
 
@@ -767,7 +768,15 @@ methods::setMethod(
 	} else {
 		vectFile <- terra::sources(x)
 	}
-	
+
+	# sometimes, terra::sources() adds the layer name after "::" to the filename if the vector was saved by v.out.ogr
+	if (grepl(vectFile, pattern = "::")) {
+
+		colons <- regexpr(vectFile, pattern = "::", fixed = TRUE)
+		vectFile <- substr(vectFile, 1L, colons - 1L)
+
+	}
+
 	# NB not passing extent bc already cropped if we wanted to do that
 	args <- list(
 		x = vectFile,
@@ -946,7 +955,7 @@ methods::setMethod(
 
 	if (resolve == "disaggregate") {
 
-		if (verbose) omnibus::say("Fixing invalic vector by disaggregating polygons. This will remove any data table.")
+		if (verbose) omnibus::say("Fixing invalid vector by disaggregating polygons. This will remove any data table.")
 
 		# delete categories
 		srcIn <- src
@@ -973,7 +982,7 @@ methods::setMethod(
 
 	} else if (resolve == "aggregate") {
 
-		if (verbose) omnibus::say("Fixing invalic vector by aggregating polygons. This will remove any data table.")
+		if (verbose) omnibus::say("Fixing invalid vector by aggregating polygons. This will remove any data table.")
 
 		srcIn <- src
 		src <- .makeSourceName("fast_v_extract")

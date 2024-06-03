@@ -170,6 +170,8 @@ methods::setValidity("GRaster",
 		info <- .rastInfo(src)
 	}
 
+	if (!all(.exists(src))) stop("No raster was created in GRASS. The error is likely in the calling function.")
+
 	# test for zero extent
 	if (any((info$west - info$east) == 0) | any((info$north - info$south) == 0)) {
 		msg <- "Raster has 0 east-west extent and/or north-south extent."

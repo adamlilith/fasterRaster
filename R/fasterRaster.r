@@ -68,12 +68,10 @@
 #' [app()]: Apply a user-defined function to multiple layers of a `GRaster` (with helper functions [appFuns()] and [appCheck()])\cr
 #' [c()]: "Stack" two or more rasters\cr
 #' [cellSize()]: Cell area\cr
-#' [classify()]: Replace ranges of cell values with a single value\cr
+#' [classify()]: Partition cell values into strata\cr
 #' [clump()]: Group adjacent cells with similar values\cr
 #' [combineCats()]: Combine values from two or more categorical and/or integer rasters\cr
 #' [combineLevels()]: Combine the "levels" tables of two or more categorical `GRaster`s\cr
-#' [cor()]: Correlation matrix between layers of a `GRaster`\cr
-#' [cov()]: Covariance matrix between layers of a `GRaster`\cr
 #' [crop()]: Remove parts of a `GRaster`\cr
 #' [denoise()]: Remove "noise" from a `GRaster` using a principal components analysis (PCA)\cr
 #' [distance()]: Distance to non-`NA` cells, or vice versa\cr
@@ -88,6 +86,7 @@
 #' [horizonHeight()]: Horizon height\cr
 #' [interpIDW()]: Interpolate values at points to a `GRaster`\cr
 #' [kernel()]: Kernel density estimator of points\cr
+#' [layerCor()]: Correlation or covariance between two or more `GRaster` layers\cr
 #' [longlat()]: Create longitude/latitude rasters\cr
 #' [mask()]: Remove values in a `GRaster` based on values in another `GRaster` or vector\cr
 #' [maskNA()]: Mask all non-NA cells or all NA cells\cr
@@ -106,7 +105,7 @@
 #' [rnormRast()]: A random `GRaster` with values drawn from a normal distribution\cr
 #' [rSpatialDepRast()]: Create a random `GRaster` with or without spatial dependence\cr
 #' [runifRast()]: A random `GRaster` with values drawn from a uniform distribution\cr
-#' [scale()] and [unscale()]: Subtract means and divide by standard deviations, or inverse of that\cr
+#' [scale()], [scalepop()], and [unscale()]: Subtract means and divide by standard deviations, or inverse of that\cr
 #' [selectRange()]: Select values from rasters in a stack based on values in another `GRaster`\cr
 #' [spatSample()]: Randomly points from a `GRaster`\cr
 #' [subst()]: Re-assign cell values\cr
@@ -187,7 +186,6 @@
 #' [as.data.table()]: Convert a `GVector`'s attribute table to a `data.table`\cr
 #' [as.points()]: Extract vertex coordinates from a "lines" or "polygons" `GVector`\cr
 #' [buffer()]: Create a polygon around/inside a `GVector`\cr
-#' [classify()]: Classify cell values of a `GRaster`\cr
 #' [clusterPoints()]: Identify clusters of points\cr
 #' [colbind()]: Add columns to the data table of a `GVector`\cr
 #' [complete.cases()]: Find rows of a `GVector`'s data table that have no `NA`s in them\cr
