@@ -26,8 +26,9 @@ This \code{predict()} function can handle:
 \itemize{
 \item Linear predictors and intercepts like \code{y ~ 1 + x};
 \item Quadratic terms like \code{y ~ x^2} (or, in \strong{R} formular notation, \code{y ~ I(x^2)});
-\item Two-way interaction terms like \code{y ~ x1:x2} and \code{y ~ x1 * x2};
-\item Categorical predictors (i.e., \link[=tutorial_raster_data_types]{categorical} rasters); and
+\item Two-way interaction terms between scalars like \code{y ~ x1:x2} and \code{y ~ x1 * x2};
+\item Categorical predictors (i.e., \link[=tutorial_raster_data_types]{categorical} rasters);
+\item Two-way interactions between a categorical predictor and a scalar predictor; and
 \item Two-way interactions between categorical predictors.
 }
 }
@@ -81,7 +82,7 @@ levels(nearRiver) <- data.frame(value = 0:1, label = c("far", "near"))
 covariateRasters <- c(continuousScaled, coverProj, nearRiver)
 plot(covariateRasters)
 
-# Extract elevation and forest cover at Dypsis locations:
+# Extract environmental values at Dypsis locations:
 presEnv <- extract(covariateRasters, dypsis, cats = TRUE)
 presEnv$presBg <- 1
 head(presEnv)
@@ -99,7 +100,7 @@ env <- rbind(presEnv, bgEnv)
 # Calibrate model:
 form <- presBg ~ elevation + distToForest +
 I(distToForest^2) + elevation * distToForest +
-madCover + nearRiver + nearRiver:madCover
+madCover + nearRiver
 
 model <- stats::glm(form, data = env, family = stats::binomial)
 summary(model)
