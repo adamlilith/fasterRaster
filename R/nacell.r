@@ -20,8 +20,10 @@ methods::setMethod(
     signature = c(x = "GRaster"),
     function(x, warn = TRUE) {
 
+    if (warn) .message("nacell_nonnacell", "This function can take a while to calculate for large rasters.")
+
     .locationRestore(x)
-    .message("nacell_nonnacell", "This function can take a while to calculate for large rasters.")
+    .region(x)
 
     # # NB `r.univar` can report incorrect numbers of cells sometimes (e.g., # NA cells > total number of cells)
     # args <- list(
