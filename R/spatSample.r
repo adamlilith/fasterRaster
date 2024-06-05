@@ -14,11 +14,11 @@
 #' 
 #' @param xy Logical: If `TRUE`, return the longitude and latitude of each point. Default is `FALSE`.
 #'
-#' @param strata Either `NULL` (default), or a `GVector` defining strata. If supplied, the `size` argument will be interpreted as number of points to place per geometry in `strata`.
-#' 
-#' @param zlim Either `NULL` (default), or a vector of two numbers defining the lower and upper altitudinal bounds of coordinates.
-#' 
-#' @param seed Either `NULL` (default) or an integer: Used as the random seed. If `NULL`, then **GRASS** will generate its own seed.
+#' @param strata Either `NULL` (default), or a `GVector` defining strata. If supplied, the `size` argument will be interpreted as number of points to place per geometry in `strata`. If `strata = TRUE`, you cannot also use `fast = TRUE`.
+#'
+#' @param zlim Either `NULL` (default), or a vector of two numbers defining the lower and upper altitudinal bounds of coordinates. This cannot be combined with `values = TRUE` or `cats = TRUE`.
+#'
+#' @param fast Logical: If `TRUE` (default), use **R** to randomly locate points. For large numbers of points, this is usually much faster than using **GRASS**'s `v.random` module. However, the `strata` argument must be `NULL`. If it is not, then `fast` will be forced to `FALSE` with a warning.
 #'
 #' @returns A `data.frame`, `data.table`, or `GVector`.
 #' 
@@ -41,8 +41,14 @@ methods::setMethod(
 		xy = FALSE,
 		strata = NULL,
 		zlim = NULL,
-		seed = NULL
+		fast = TRUE
 	) {
+
+	if (!is.null(zlim) & (values | cats)) stop("You cannot at present extract values or categories using 3D points.")
+	if (!is.null(strata) & fast) {
+		warning("`Argument `strata` is not NULL, so forcing `fast` to FALSE. This may take some time.")
+		fast <- FALSE
+	}
 
 	.locationRestore(x)
 	.region(x)
@@ -51,33 +57,93 @@ methods::setMethod(
 
 	src <- .makeSourceName("v_random", "vector")
 
-	args <- list(
-		cmd = "v.random",
-		output = src,
-		npoints = size,
-		flags = c(.quiet(), "overwrite")
-	)
+	# fast point location... use R
+	if (fast) {
 
-	if (!is.null(strata)) {
-		args$restrict <- sources(strata)
-		args$flags <- c(args$flags, "a")
-	}
+		# for unprojected, we want to adjust for smaller cells near poles, so we oversample, then subsample
+		if (is.lonlat(x)) {
+			sizeInflated <- round(2 * size)
+		} else {
+			sizeInflated <- size
+		}
 
-	if (!is.null(zlim)) {
-		args$zmin <- zlim[1L]
-		args$zmax <- zlim[2L]
-		args$flags <- c(args$flags, "z")
-	}
+		extent <- ext(vector = TRUE)
+		xs <- runif(sizeInflated, extent[1L], extent[2L])
+		ys <- runif(sizeInflated, extent[3L], extent[4L])
+		if (!is.null(zlim)) zs <- runif(sizeInflated, zlim[1L], zlim[2L])
 
-	if (!is.null(seed)) args$seed <- seed
+		if (is.lonlat(x)) {
+		
+			w <- cos(pi * ys / 180)
+			keeps <- sample(sizeInflated, size, prob = w)
+			xs <- xs[keeps]
+			ys <- ys[keeps]
+			if (!is.null(zlim)) zs <- zs[keeps]
+		
+		}
 
-	args$flags <- c(args$flags, "b") ### do not create topology... problems?
+		if (xy) {
+			if (is.null(zlim)) {
+				out <- data.table::data.table(x = xs, y = ys)
+			} else {
+				out <- data.table::data.table(x = xs, y = ys, z = zs)
+			}
+		}
 
-	do.call(rgrass::execGRASS, args = args)
+		# coerce points to GRASS vector		
+		coords <- rep(NA_character_, size)
+		if (is.null(zlim)) {
+			for (i in seq_len(size)) coords[i] <- paste(c(xs[i], "|", ys[i]), collapse = "")
+		} else {
+			for (i in seq_len(size)) coords[i] <- paste(c(xs[i], "|", ys[i], "|", zs[i]), collapse = "")
+		}
 
-	# return coordinates
-	if (xy) {
-		out <- .crdsVect(src, z = is.3d(x), gtype = "points")
+		tf <- tempfile(fileext = ".txt")
+		write(coords, tf, ncolumns = 1L)
+
+		src <- .makeSourceName("spatSampleLarge", "vector")
+		args <- list(
+			"v.in.ascii",
+			input = tf,
+			output = src,
+			format = "point",
+			separator = "pipe",
+			flags = c(.quiet(), "verbose", "overwrite", "t")
+		)
+		if (!is.null(zlim)) args$flags <- c(args$flags, "z")	
+		do.call(rgrass::execGRASS, args = args)
+
+	# slow point location... use GRASS
+	} else {
+		
+		args <- list(
+			cmd = "v.random",
+			output = src,
+			npoints = size,
+			flags = c(.quiet(), "overwrite")
+		)
+
+		if (!is.null(strata)) {
+			args$restrict <- sources(strata)
+			args$flags <- c(args$flags, "a")
+		}
+
+		if (!is.null(zlim)) {
+			args$zmin <- zlim[1L]
+			args$zmax <- zlim[2L]
+			args$flags <- c(args$flags, "z")
+		}
+
+		if (!is.null(seed)) args$seed <- seed
+
+		# args$flags <- c(args$flags, "b") ### do not create topology... problems? YES!
+		do.call(rgrass::execGRASS, args = args)
+
+		# return coordinates
+		if (xy) {
+			out <- .crdsVect(src, z = is.3d(x), gtype = "points")
+		}
+
 	}
 
 	# extract values from raster
@@ -115,12 +181,12 @@ methods::setMethod(
 			# category label instead of value
 			if (cats && is.factor(x)[i]) {
 
-                levs <- levels(x[[i]])[[1L]]
-                this <- levs[match(vals, levs[[1L]]), 2L]
-                names(this) <- names(x)[i]
+				levs <- levels(x[[i]])[[1L]]
+				this <- levs[match(vals, levs[[1L]]), 2L]
+				names(this) <- names(x)[i]
 				this <- this[ , lapply(.SD, as.factor)]
-                # this <- levs[match(vals, levs[[1L]]), 2L]
-                # names(this) <- c(names(x)[i], paste0(names(x)[i], "_cat"))
+				# this <- levs[match(vals, levs[[1L]]), 2L]
+				# names(this) <- c(names(x)[i], paste0(names(x)[i], "_cat"))
 
 				# if (values) {
 				# 	this <- cbind(this, thisCat)
@@ -171,7 +237,7 @@ methods::setMethod(
 
 	if (geomtype(x) != "polygons") x <- convHull(x)
 
-	# if sampling by strata, keey polygons as-is
+	# if sampling by strata, keep polygons as-is
 	if (!is.null(strata)) {
 
 		srcRestrict <- sources(x)
