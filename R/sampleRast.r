@@ -12,7 +12,7 @@
 #'
 #' @param updatevalue Numeric or `NULL` (default): Value to assign to masked cells. If `NULL`, then the values in the input raster are retained.
 #' 
-#' @param fail Logical: If `TRUE` (default), and `size` is greater than the number of non-`NA` cells in `x`, then fail.
+#' @param test Logical: If `TRUE`, and `size` is greater than the number of non-`NA` cells in `x`, then fail. Testing this can take a long time for large rasters. The default is `FALSE`.
 #'
 #' @param seed `NULL` (default) or numeric: If `NULL`, then a random seed will be generated for the random number generator. Otherwise a seed can be provided.
 #' 
@@ -34,22 +34,24 @@ methods::setMethod(
         prop = FALSE,
         maskvalues = NA,
         updatevalue = NULL,
-        fail = TRUE,
+        test = FALSE,
         seed = NULL
     ) {
 
     if (size <= 0) stop("Cannot select this number of cells.")
     if (prop && size > 1) stop("Cannot select more than 100% of cells.")
-    if (any(size > nacell(x))) {
-        msg <- "At least one raster has too few non-NA cells."
-        if (fail) { stop(msg) } else { warning(msg) }
+    if (!prop && size > ncell(x)) stop("Cannot select more than the total number of cells.")
+    if (test) {
+        if (any(size > nacell(x))) stop("At least one raster has too few non-NA cells.")
     }
 
     .locationRestore(x)
     .region(x)
 
     if (!prop) {
-        npoints <- as.character(size)
+        # npoints <- as.character(size)
+        npoints <- formatC(size, format = "f", drop0trailing = TRUE) # overcome scientific notation
+
     } else {
         npoints <- paste0(100 * npoints, "%")
     }
