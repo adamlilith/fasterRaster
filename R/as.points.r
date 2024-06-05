@@ -24,6 +24,8 @@ methods::setMethod(
     signature = c(x = "GRaster"),
     function(x, values = TRUE) {
         
+        if (nlyr(x) > 1L) warning("Only the first layer of `x` will be converted to points.")
+
         .locationRestore(x)
         .region(x)
 
@@ -41,36 +43,37 @@ methods::setMethod(
         if (values) {
             table <- .vAsDataTable(src)
             table$cat <- NULL
+            table$label <- NULL
         } else {
             table <- NULL
         }
 
-        nLayers <- nlyr(x)
+        # nLayers <- nlyr(x)
 
-        if (nLayers > 1L & values) {
+        # if (nLayers > 1L & values) {
         
-            for (i in 2L:nLayers) {
+        #     for (i in 2L:nLayers) {
 
-                thisSrc <- .makeSourceName("as_points_r_to_vect", "vector")
+        #         thisSrc <- .makeSourceName("as_points_r_to_vect", "vector")
 
-                rgrass::execGRASS(
-                    cmd = "r.to.vect",
-                    input = sources(x)[i],
-                    output = thisSrc,
-                    type = "point",
-                    column = names(x)[i],
-                    flags = c(.quiet(), "overwrite")
-                )
+        #         rgrass::execGRASS(
+        #             cmd = "r.to.vect",
+        #             input = sources(x)[i],
+        #             output = thisSrc,
+        #             type = "point",
+        #             column = names(x)[i],
+        #             flags = c(.quiet(), "overwrite")
+        #         )
 
-                thisTable <- .vAsDataTable(thisSrc)
-                cols <- names(x)[i]
-                thisTable <- thisTable[ , ..cols]
+        #         thisTable <- .vAsDataTable(thisSrc)
+        #         cols <- names(x)[i]
+        #         thisTable <- thisTable[ , ..cols]
 
-                table <- cbind(table, thisTable)
+        #         table <- cbind(table, thisTable)
 
-            }
+        #     }
         
-        } # next layer
+        # } # next layer
 
         .makeGVector(src, table = table)
 
