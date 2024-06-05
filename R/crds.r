@@ -18,36 +18,37 @@
 methods::setMethod(
     f = "crds",
     signature = c(x = "GRaster"),
-    function(x, z = TRUE, na.rm = TRUE) {
+    function(x, z = is.3d(x), na.rm = TRUE) {
 
-        ..char <- NULL
+	..char <- NULL
 
-        .locationRestore(x)
-        .region(x)
+	.locationRestore(x)
+	.region(x)
 
-        flags <- c(.quiet(), "overwrite")
-        if (!na.rm) flags <- c(flags, "i")
+	flags <- c(.quiet(), "overwrite")
+	if (!na.rm) flags <- c(flags, "i")
 
-        temp <- paste0(tempfile(), ".csv")
-        rgrass::execGRASS("r.out.xyz", input = sources(x), output = temp, separator = "comma", flags = flags, intern = TRUE)
-        # see https://grass.osgeo.org/grass82/manuals/r.out.xyz.html
-        out <- data.table::fread(temp)
+	temp <- paste0(tempfile(), ".csv")
+	rgrass::execGRASS("r.out.xyz", input = sources(x), output = temp, separator = "comma", flags = flags, intern = TRUE)
+	# see https://grass.osgeo.org/grass82/manuals/r.out.xyz.html
+	out <- data.table::fread(temp)
 
-        if (is.3d(x)) {
-            names(out) <- c("x", "y", "z", names(x))
-        } else {
-            names(out) <- c("x", "y", names(x))
-        }
+	if (is.3d(x)) {
+		names(out) <- c("x", "y", "z", names(x))
+	} else {
+		names(out) <- c("x", "y", names(x))
+	}
 
-        # convert to numerics
-        classes <- sapply(out, class)
-        if (any(classes %in% "character")) {
-            chars <- which(classes == "character")
-            for (char in chars) out[, ..char] <- as.numeric(out[, ..char])
-        }
+	# convert to numerics
+	classes <- sapply(out, class)
+	if (any(classes %in% "character")) {
+		chars <- which(classes == "character")
+		for (char in chars) out[ , ..char] <- as.numeric(out[ , ..char])
+	}
 
-        if (!faster("useDataTable")) out <- as.data.frame(out)
-        out
+	if (!faster("useDataTable")) out <- as.data.frame(out)
+	out
+	
     } # EOF
 )
 
@@ -57,7 +58,7 @@ methods::setMethod(
 methods::setMethod(
 	f = "crds",
 	signature = c(x = "GVector"),
-	function(x, z = TRUE) .crdsVect(x, z = z)
+	function(x, z = is.3d(x)) .crdsVect(x, z = z)
 )
 
 #' @rdname crds
