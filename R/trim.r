@@ -33,15 +33,12 @@ methods::setMethod(
 	n <- s <- e <- w <- rep(NA_real_, nLayers)
 	for (i in seq_len(nLayers)) {
 	
-		args <- list(
+		rgrass::execGRASS(
 			cmd = "g.region",
 			raster = sources(x)[i],
 			zoom = sources(x)[i],
-			flags = c(.quiet(), "overwrite"),
-			intern = TRUE
+			flags = c(.quiet(), "overwrite")
 		)
-
-		do.call(rgrass::execGRASS, args = args)
 
 		reg <- .region()
 		w[i] <- W(reg)
