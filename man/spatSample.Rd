@@ -15,7 +15,7 @@
   xy = FALSE,
   strata = NULL,
   zlim = NULL,
-  seed = NULL
+  fast = TRUE
 )
 
 \S4method{spatSample}{GVector}(
@@ -42,11 +42,11 @@
 
 \item{xy}{Logical: If \code{TRUE}, return the longitude and latitude of each point. Default is \code{FALSE}.}
 
-\item{strata}{Either \code{NULL} (default), or a \code{GVector} defining strata. If supplied, the \code{size} argument will be interpreted as number of points to place per geometry in \code{strata}.}
+\item{strata}{Either \code{NULL} (default), or a \code{GVector} defining strata. If supplied, the \code{size} argument will be interpreted as number of points to place per geometry in \code{strata}. If \code{strata = TRUE}, you cannot also use \code{fast = TRUE}.}
 
-\item{zlim}{Either \code{NULL} (default), or a vector of two numbers defining the lower and upper altitudinal bounds of coordinates.}
+\item{zlim}{Either \code{NULL} (default), or a vector of two numbers defining the lower and upper altitudinal bounds of coordinates. This cannot be combined with \code{values = TRUE} or \code{cats = TRUE}.}
 
-\item{seed}{Either \code{NULL} (default) or an integer: Used as the random seed. If \code{NULL}, then \strong{GRASS} will generate its own seed.}
+\item{fast}{Logical: If \code{TRUE} (default), use \strong{R} to randomly locate points. For large numbers of points, this is usually much faster than using \strong{GRASS}'s \code{v.random} module. However, the \code{strata} argument must be \code{NULL}. If it is not, then \code{fast} will be forced to \code{FALSE} with a warning.}
 }
 \value{
 A \code{data.frame}, \code{data.table}, or \code{GVector}.
