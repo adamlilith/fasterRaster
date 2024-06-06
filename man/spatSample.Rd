@@ -14,8 +14,7 @@
   cats = FALSE,
   xy = FALSE,
   strata = NULL,
-  zlim = NULL,
-  fast = TRUE
+  zlim = NULL
 )
 
 \S4method{spatSample}{GVector}(
@@ -42,11 +41,9 @@
 
 \item{xy}{Logical: If \code{TRUE}, return the longitude and latitude of each point. Default is \code{FALSE}.}
 
-\item{strata}{Either \code{NULL} (default), or a \code{GVector} defining strata. If supplied, the \code{size} argument will be interpreted as number of points to place per geometry in \code{strata}. If \code{strata = TRUE}, you cannot also use \code{fast = TRUE}.}
+\item{strata}{Either \code{NULL} (default), or a \code{GVector} defining strata. If supplied, the \code{size} argument will be interpreted as number of points to place per geometry in \code{strata}. Note that using strata can dramatically slow the process.}
 
 \item{zlim}{Either \code{NULL} (default), or a vector of two numbers defining the lower and upper altitudinal bounds of coordinates. This cannot be combined with \code{values = TRUE} or \code{cats = TRUE}.}
-
-\item{fast}{Logical: If \code{TRUE} (default), use \strong{R} to randomly locate points. For large numbers of points, this is usually much faster than using \strong{GRASS}'s \code{v.random} module. However, the \code{strata} argument must be \code{NULL}. If it is not, then \code{fast} will be forced to \code{FALSE} with a warning.}
 }
 \value{
 A \code{data.frame}, \code{data.table}, or \code{GVector}.
@@ -63,15 +60,52 @@ library(terra)
 
 # Example data
 madElev <- fastData("madElev") # raster
-madForest <- fastData("madForest2000") # raster
-madCoast <- fastData("madCoast4") # vector
+madCover <- fastData("madCover") # raster
 
 # Convert to GRasters and GVectors
 elev <- fast(madElev)
-forest <- fast(madForest)
-coast <- fast(madCoast)
+cover <- fast(madCover)
 
+### spatSample()
+################
+
+# Random points as data.frame or data.table:
+randVals <- spatSample(elev, size = 20, values = TRUE)
+randVals
+
+# Random points as a points GVector:
+randPoints <- spatSample(elev, size = 20, as.points = TRUE)
+randPoints
+plot(elev)
+plot(randPoints, add = TRUE)
+
+# Random points in a select area:
+madCoast <- fastData("madCoast4") # vector
+coast <- fast(madCoast)
 ant <- coast[coast$NAME_4 == "Antanambe"] # subset
+
+restrictedPoints <- spatSample(elev, size = 20, as.points = TRUE,
+   strata = ant)
+
+plot(elev)
+plot(ant, add = TRUE)
+plot(restrictedPoints, add = TRUE) # note 20 points for entire geometry
+
+# Random points, one set per subgeometry:
+stratifiedPoints <- spatSample(elev, size = 20, as.points = TRUE,
+   strata = ant, byStratum = TRUE)
+
+plot(elev)
+plot(ant, add = TRUE)
+plot(stratifiedPoints, pch = 21, bg = "red", add = TRUE) # note 20 points per subgeometry
+
+# Random categories:
+randCover <- spatSample(cover, size = 20, values = TRUE,
+     cat = TRUE, xy = TRUE)
+randCover
+
+### sampleRast()
+################
 
 # Random cells in non-NA cells:
 rand <- sampleRast(elev, 10000)

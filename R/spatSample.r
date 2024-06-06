@@ -14,13 +14,9 @@
 #' 
 #' @param xy Logical: If `TRUE`, return the longitude and latitude of each point. Default is `FALSE`.
 #'
-#' @param strata Either `NULL` (default), or a `GVector` defining strata. If supplied, the `size` argument will be interpreted as number of points to place within the `GVector`.
-#'
-#' @param byStratum Logical: If `TRUE`, the `size` points will be placed within each subgeometry of the `GVector` in `strata`. Ignored if `strata` is `NULL`. The default is `FALSE`.
+#' @param strata Either `NULL` (default), or a `GVector` defining strata. If supplied, the `size` argument will be interpreted as number of points to place per geometry in `strata`. Note that using strata can dramatically slow the process.
 #'
 #' @param zlim Either `NULL` (default), or a vector of two numbers defining the lower and upper altitudinal bounds of coordinates. This cannot be combined with `values = TRUE` or `cats = TRUE`.
-#'
-#' @param fast Logical: If `TRUE` (default), use **R** to randomly locate points. For large numbers of points, this is usually much faster than using **GRASS**'s `v.random` module. However, the `strata` argument must be `NULL`. If it is not, then `fast` will be forced to `FALSE` with a warning.
 #'
 #' @returns A `data.frame`, `data.table`, or `GVector`.
 #' 
@@ -42,7 +38,6 @@ methods::setMethod(
 		cats = FALSE,
 		xy = FALSE,
 		strata = NULL,
-		byStratum = FALSE,
 		zlim = NULL
 	) {
 
@@ -72,8 +67,11 @@ methods::setMethod(
 
 		if (is.lonlat(x)) {
 		
-			w <- cos(pi * ys / 180)
-			keeps <- sample(sizeInflated, size, prob = w)
+			w <- abs(cos(pi * ys / 180))
+			w <- size / sum(w) * w
+			keeps <- sampling::UPrandomsystematic(w)
+			keeps <- which(keeps == 1)
+			if (length(keeps) != size) stop("Did not select desired number.")
 			xs <- xs[keeps]
 			ys <- ys[keeps]
 			if (!is.null(zlim)) zs <- zs[keeps]
@@ -123,7 +121,7 @@ methods::setMethod(
 
 		if (!is.null(strata)) {
 			args$restrict <- sources(strata)
-			if (byStratum) args$flags <- c(args$flags, "a")
+			args$flags <- c(args$flags, "a")
 		}
 
 		if (!is.null(zlim)) {
@@ -132,7 +130,7 @@ methods::setMethod(
 			args$flags <- c(args$flags, "z")
 		}
 
-		# if (!is.null(seed)) args$seed <- seed
+		if (!is.null(seed)) args$seed <- seed
 
 		# args$flags <- c(args$flags, "b") ### do not create topology... problems? YES!
 		do.call(rgrass::execGRASS, args = args)
@@ -150,7 +148,7 @@ methods::setMethod(
 		nLayers <- nlyr(x)
 		for (i in seq_len(nLayers)) {
 
-			args <- list(
+			vals <- rgrass::execGRASS(
 				cmd = "r.what",
 				map = sources(x)[i],
 				points = src,
@@ -158,8 +156,6 @@ methods::setMethod(
 				flags = c(.quiet(), "overwrite"),
 				intern = TRUE
 			)
-
-			vals <- do.call(rgrass::execGRASS, args = args)
 
 			pillars <- gregexpr(vals, pattern = "\\|\\|")
 			pillars <- unlist(pillars)
@@ -203,7 +199,11 @@ methods::setMethod(
 
 	if (as.points) {
 		.vAttachDatabase(src)
-		out <- .makeGVector(src, table = out)
+		if (exists("out", inherits = FALSE)) {
+			out <- .makeGVector(src, table = out)
+		} else {
+			out <- .makeGVector(src)
+		}
 	} else {
 		if (!faster("useDataTable")) out <- as.data.frame(out)
 	}
@@ -226,7 +226,6 @@ methods::setMethod(
 		values = TRUE,
 		xy = FALSE,
 		strata = NULL,
-		byStratum = FALSE,
 		zlim = NULL,
 		seed = NULL
 	) {
@@ -259,7 +258,7 @@ methods::setMethod(
 		flags = c(.quiet(), "overwrite")
 	)
 
-	if (!is.null(strata) & byStratum) args$flags <- c(args$flags, "a")
+	if (!is.null(strata)) args$flags <- c(args$flags, "a")
 
 	if (!is.null(zlim)) {
 		args$zmin <- zlim[1L]
@@ -267,7 +266,7 @@ methods::setMethod(
 		args$flags <- c(args$flags, "z")
 	}
 
-	# if (!is.null(seed)) args$seed <- seed
+	if (!is.null(seed)) args$seed <- seedz
 
 	do.call(rgrass::execGRASS, args = args)
 
