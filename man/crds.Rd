@@ -7,9 +7,9 @@
 \alias{st_coordinates}
 \title{Coordinates of a vector"s features or a raster"s cell centers}
 \usage{
-\S4method{crds}{GRaster}(x, z = TRUE, na.rm = TRUE)
+\S4method{crds}{GRaster}(x, z = is.3d(x), na.rm = TRUE)
 
-\S4method{crds}{GVector}(x, z = TRUE)
+\S4method{crds}{GVector}(x, z = is.3d(x))
 
 st_coordinates(x)
 }

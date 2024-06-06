@@ -5,6 +5,9 @@
 ## New functions and functionality
 o **+** `spatSample()`: *Much* faster now for large samples taken from `GRaster`s. Removed arguments `strata` and `seed`.
 
+## Other
+o Added dependency **sampling**.
+
 # fasterRaster 8.3.0.7017 (2024-06-02)
 
 **+**: Denotes potentially code-breaking changes
