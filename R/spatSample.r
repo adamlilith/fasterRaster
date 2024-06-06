@@ -18,6 +18,8 @@
 #'
 #' @param zlim Either `NULL` (default), or a vector of two numbers defining the lower and upper altitudinal bounds of coordinates. This cannot be combined with `values = TRUE` or `cats = TRUE`.
 #'
+#' @param seed Either `NULL` (default), or an integer. Used as the random seed.
+#'
 #' @returns A `data.frame`, `data.table`, or `GVector`.
 #' 
 #' @seealso [sampleRast()], [terra::spatSample()], module `v.random` in **GRASS**
