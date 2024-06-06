@@ -5,6 +5,9 @@
 ## New functions and functionality
 o **+** `spatSample()`: *Much* faster now for large samples taken from `GRaster`s. Removed argument `seed` for `GRaster` signature.
 
+## Bug fixes
+o `global()`: Fixed bug arising when called by other functions and main argument was a `sources()` name.
+
 # fasterRaster 8.3.0.7017 (2024-06-02)
 
 **+**: Denotes potentially code-breaking changes
