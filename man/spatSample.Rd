@@ -14,6 +14,7 @@
   cats = FALSE,
   xy = FALSE,
   strata = NULL,
+  byStratum = FALSE,
   zlim = NULL
 )
 
@@ -23,7 +24,7 @@
   as.points = FALSE,
   values = TRUE,
   xy = FALSE,
-  strata = NULL,
+  byStratum = FALSE,
   zlim = NULL,
   seed = NULL
 )
@@ -42,6 +43,8 @@
 \item{xy}{Logical: If \code{TRUE}, return the longitude and latitude of each point. Default is \code{FALSE}.}
 
 \item{strata}{Either \code{NULL} (default), or a \code{GVector} defining strata. If supplied, the \code{size} argument will be interpreted as number of points to place per geometry in \code{strata}. Note that using strata can dramatically slow the process.}
+
+\item{byStratum}{Logical: If \code{FALSE} (default), then \code{size} number of points will be placed within the entire area delineated by \code{strata}. If \code{TRUE}, then \code{size} points will be placed within each subgeometry of \code{strata}.}
 
 \item{zlim}{Either \code{NULL} (default), or a vector of two numbers defining the lower and upper altitudinal bounds of coordinates. This cannot be combined with \code{values = TRUE} or \code{cats = TRUE}.}
 
