@@ -3,7 +3,7 @@
 **+**: Denotes potentially code-breaking changes
 
 ## New functions and functionality
-o **+** `spatSample()`: *Much* faster now for large samples taken from `GRaster`s. Removed arguments `strata` and `seed`.
+o **+** `spatSample()`: *Much* faster now for large samples taken from `GRaster`s. Removed argument `seed` for `GRaster` signature.
 
 ## Other
 o Added dependency **sampling**.
