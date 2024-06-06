@@ -12,8 +12,8 @@ elev <- fast(madElev)
 ### Calculate zonal statistics using a GRaster as zones
 #######################################################
 
-# Generate a "zones" GRaster by dividing raster into areas based on similarity
-# of values
+# Generate a "zones" GRaster by dividing raster into areas based on
+# high/low elevation.
 names(elev) # Use this name in app() formula.
 fun <- " = if (madElev <200, 0, if (madElev <400, 1, 2))"
 zones <- app(elev, fun = fun)
