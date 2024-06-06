@@ -30,6 +30,7 @@ Imports:
 	methods,
 	omnibus (>= 1.2.11),
 	rgrass (>= 0.3-9),
+	sampling,
 	sf,
 	shiny,
 	terra (>= 1.7),
