@@ -57,7 +57,7 @@ methods::setMethod(
     }
 
     nLayers <- nlyr(x)
-    srcs <- .makeSourceName("random", "raster", nLayers)
+    srcs <- .makeSourceName("sampleRast_r_random", "raster", nLayers)
     for (i in seq_len(nLayers)) {
     
         args <- list(
@@ -66,8 +66,7 @@ methods::setMethod(
             cover = sources(x)[i],
             npoints = npoints,
             raster = srcs[i],
-            flags = c(.quiet(), "overwrite"),
-            intern = TRUE
+            flags = c(.quiet(), "overwrite")
         )
 
         if (is.null(seed)) {
@@ -80,7 +79,7 @@ methods::setMethod(
         # custom mask values
         if (length(maskvalues) > 1L || !is.na(maskvalues)) {
 
-            maskGn <- .makeSourceName("mask", "raster")
+            maskSrc <- .makeSourceName("mask", "raster")
 
             if (anyNA(maskvalues)) {
                 maskValuesHaveNAs <- TRUE
@@ -95,13 +94,13 @@ methods::setMethod(
 
             maskvalues <- paste(maskvalues, collapse = " | ")
 
-            ex <- paste0(maskGn, " = if(", maskvalues, ", 1, null())")
+            ex <- paste0(maskSrc, " = if(", maskvalues, ", 1, null())")
             rgrass::execGRASS("r.mapcalc", expression = ex, flags = c(.quiet(), "overwrite"), intern = TRUE)
 
         } else {
-            maskGn <- sources(x)[i]
+            maskSrc <- sources(x)[i]
         }
-        args$input <- maskGn
+        args$input <- maskSrc
 
         do.call(rgrass::execGRASS, args = args)
 
