@@ -21,7 +21,10 @@ Faster raster processing in `R` using `GRASS GIS`
 `fasterRaster` makes heavy use of the <a href="https://cran.r-project.org/package=rgrass">`rgrass`</a> package by Roger Bivand and others, the <a href="https://cran.r-project.org/package=rgrass">`terra`</a> package by Robert Hijmans, the <a href="https://cran.r-project.org/package=sf">`sf`</a> package by Edzer Pebesma Roger Bivand, and of course <a href="https://grass.osgeo.org/">`GRASS GIS`</a>, so is greatly indebted to all of these creators!
 
 # Where we are
-As of 2024/05/17, a new version of this package, `fasterRaster 8.3`, is in alpha release (i.e., near final release). There are known issues and unknown issues. If you encounter one of the latter, please file an <a href="https://github.com/adamlilith/fasterRaster/issues">issue</a> report.
+As of 2024/06/06, a new version of this package, `fasterRaster 8.3`, is in alpha release (i.e., near final release). There are known issues and unknown issues. If you encounter one of the latter, please file an <a href="https://github.com/adamlilith/fasterRaster/issues">issue</a> report.
+
+# Functions
+To see a detailed list of functions available in `fasterRaster`, attach the package and use `?fasterRaster`. Note the additional tutorials linked from there!
 
 # Getting started
 
@@ -37,7 +40,12 @@ To use `fasterRaster` you must install [GRASS version 8+](https://grass.osgeo.or
 
 ## An example
 
-We'll do a simple operation in which we add a buffer to lines representing rivers, then calculate the distance to the buffers and burn the distance values into a raster. To do this, we'll be using maps representing the middle of the eastern coast of Madagascar. We will also use the `terra` and `sf` packages.
+We'll do a simple operation in which we:
+1. Add a buffer to lines representing rivers, then
+2. Calculate the distance to from each cell to the closest buffer and burn the distance values into a raster; then
+3. Compare the frequency of "geomorphons" (idealized topographical features, like "valley", "slope", "peak", etc.) across the entire region to areas close to rivers.
+
+To do this, we'll be using maps representing the middle of the eastern coast of Madagascar. We will also use the `terra` and `sf` packages.
 
 ```
 library(terra)
@@ -128,7 +136,7 @@ plot(rivers, col = "blue", add = TRUE)
 
 <img src="dist_to_rivers.png"/>  
 
-Now, let's see if there is a difference between the frequency of different "geomorphons" between areas within 1000 m of a river and the region in general. A geomorphon is one of ten idealized land forms (e.g., flat, valley, peak, slope, etc.).  We will calculate geomorphons for the entire region, then mask out areas outside the buffers.
+Now, let's see if there is a difference between the frequency of different geomorphons between areas within 1000 m of a river and the region in general across the region. There are ten types of geomorphons (e.g., flat, valley, peak, slope, etc.).  We will calculate geomorphons for the entire region, then mask out areas outside the buffers.
 
 ```
 geomorphs <- geomorphons(elev)
@@ -232,10 +240,7 @@ writeVector(rivers, vect_temp_shp)
 writeVector(rivers, vect_temp_gpkg)
 ```
 
-# Functions
-To see a detailed list of functions available in `fasterRaster`, attach the package and use `?fasterRaster`. Note the additional tutorials linked from there!
-
-# Tips for masking `fasterRaster` faster
+# Tips for making `fasterRaster` faster
 
 1. Loading rasters and vectors directly from disk using `fast()`, rather than converting `terra` or `sf` objects is faster. Why? Because if the object does not have a file to which the `R` object points, `fast()` has to save it to disk first as a GeoTIFF or GeoPackage file, then load it into `GRASS`.
 
@@ -245,7 +250,7 @@ To see a detailed list of functions available in `fasterRaster`, attach the pack
 
 4. By default, `fasterRaster` use 2 cores and 1024 MB (1 GB) of memory for `GRASS` modules that allow users to specify these values. You can set these to higher values using `faster()` and thus potentially speed up some calculations. Functions in newer versions of `GRASS` have more capacity to use these options, so updating `GRASS` to the latest version can help, too.
 
-5. Compared to `terra` and `sf`, `fasterRaster` is *not* faster with vectors, so if you can, do vector processing with those packages first.
+5. Compared to `terra` and `sf`, `fasterRaster` is *not* faster with large vector operations, so if have large vectors, do vector processing with those packages first if you can.
 
 # Versioning
 
