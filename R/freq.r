@@ -14,7 +14,7 @@
 #'
 #' @seealso [terra::freq()], module `r.stats` in **GRASS**
 #'
-#' @example man/examples/ex_GRaster.r
+#' @example man/examples/ex_freq.r
 #'
 #' @aliases freq
 #' @rdname freq
