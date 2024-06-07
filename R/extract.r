@@ -36,6 +36,8 @@
 #'
 #' @param cats Logical (extracting from a raster): If `TRUE` and `x` is a [categorical raster][tutorial_raster_data_types], then return the category labels instead of the values. Default is `FALSE.
 #'
+#' @param verbose Logical: If `TRUE`, display progress (will only function when extracting from points on a `GRaster` when the number of `GRaster`s is large).
+#'
 #' @returns A `data.frame` or `data.table`.
 #'
 #' @example man/examples/ex_extract.r
@@ -55,7 +57,8 @@ methods::setMethod(
         prob = 0.5,
         overlap = TRUE,
         xy = FALSE,
-        cats = FALSE
+        cats = FALSE,
+        verbose = FALSE
     ) {
 
     .locationRestore(x)
@@ -217,54 +220,6 @@ methods::setMethod(
     ### if GVector is points
     } else {
 
-        for (i in seq_len(nLayers)) {
-
-            args <- list(
-                cmd = "r.what",
-                map = sources(x)[i],
-                points = sources(y),
-                null_value = "NA",
-                flags = c(.quiet(), "overwrite"),
-                cache = faster("memory"),
-                intern = TRUE
-            )
-
-            info <- do.call(rgrass::execGRASS, args = args)
-
-            pillars <- gregexpr(info, pattern = "\\|\\|")
-            pillars <- unlist(pillars)
-            ncs <- nchar(info)
-            info <- substr(info, pillars + 2L, ncs)
-
-            if (is.cell(x)[i]) {
-                info <- as.integer(info)
-            } else {
-                info <- as.numeric(info)
-            }
-
-            this <- data.table::data.table(TEMPTEMP__ = info)
-            names(this) <- names(x)[i]
-
-            # category label instead of value
-            if (cats & is.factor(x)[i]) {
-
-                levs <- levels(x[[i]])[[1L]]
-                this <- levs[match(info, levs[[1L]]), 2L]
-                names(this) <- names(x)[i]
-                this <- this[ , lapply(.SD, as.factor)]
-                # this <- levs[match(info, levs[[1L]]), 2L]
-                # names(this) <- c(names(x)[i], paste0(names(x)[i], "_cat"))
-
-            }
-
-            if (i == 1L) {
-                out <- this
-            } else {
-                out <- cbind(out, this)
-            }
-
-        } # next raster layer
-
         if (xy) {
 
             coords <- crds(y, z = is.3d(y))
@@ -273,8 +228,16 @@ methods::setMethod(
 
         }
 
+        vals <- .extractFromRasterAtPoints(x = x, y = y, cats = cats, verbose = verbose)
+
+        if (exists("out", inherits = FALSE)) {
+            out <- cbind(out, vals)
+        } else {
+            out <- vals
+        }
+        
+
     } # if lines/polygons or points
-    
     if (!faster("useDataTable")) out <- as.data.frame(out)
     out
 
@@ -681,4 +644,125 @@ methods::setMethod(
 	out
     
 } # EOF
+
+#' Extract values from a set of rasters at points
+#'
+#' @param x `GRaster` or [sources()] name of one or more `GRaster`s
+#' @param y A points `GVector` or [sources()] name of one
+#' @param dtype **GRASS** format `datatype` of each raster in `x`. Will be obtained from `x` if `x` is a `GRaster`.
+#' @param xNames [names()] of `x`.  Will be obtained from `x` if `x` is a `GRaster`.
+#' @param levels [levels()] of a `GRaster`. Will be taken from `x` if `NULL` and `x` is a `GRaster`.
+#' @param cats Logical: Extract category labels instead of values
+#' @param verbose Logical.
+#'
+#' @returns A `data.table`.
+#'
+#' @noRd
+.extractFromRasterAtPoints <- function(
+    x,
+    y,
+    xNames = NULL,
+    dtype = NULL,
+    levels = NULL,
+    cats = FALSE,
+    verbose = TRUE
+) {
+
+    if (inherits(x, "GRaster")) {
+        
+        nLayers <- nlyr(x)
+        dtype <- datatype(x, "GRASS")
+        xNames <- names(x)
+        xSrc <- sources(x)
+        levels <- levels(x)
+
+    } else {
+
+        if (is.null(xNames)) stop("If `x` is the sources() name of a GRaster, `xNames` must be supplied (i.e., not NULL).")
+        if (is.null(levels)) stop("If `x` is the sources() name of a GRaster, `levels` must be supplied (i.e., not NULL).")
+        if (is.null(dtype)) stop("If `x` is the sources() name of a GRaster, `dtype` must be supplied (i.e., not NULL).")
+        nLayers <- length(x)
+        xSrc <- x
+    }
+
+    if (inherits(y, "GVector")) {
+        ySrc <- sources(y)
+    } else {
+        ySrc <- y
+    }
+
+    ### extracting sets of rasters at a time to obviate issues with too-long of a GRASS command string if there are too many rasters
+    layersAtATime <- 30L
+    sets <- ceiling(nLayers / layersAtATime)
+    if (verbose | faster("verbose")) {
+        omnibus::say("Extracting values...")
+        if (sets > 1) pb <- utils::txtProgressBar(min = 0, max = sets, initial = 0, style = 3, width = 30)
+    }
+
+    for (set in seq_len(sets)) {
+
+        if ((verbose | faster("verbose")) & sets > 1)  utils::setTxtProgressBar(pb, set)
+
+        index <- (layersAtATime * (set - 1) + 1):min(layersAtATime * set, nLayers)
+        xxSrc <- xSrc[index]
+
+        vals <- rgrass::execGRASS(
+            cmd = "r.what",
+            map = xxSrc,
+            points = ySrc,
+            null_value = "NA",
+            separator = "pipe",
+            flags = c(.quiet(), "overwrite"),
+            intern = TRUE
+        )
+
+        vals <- strsplit(vals, split = "\\|")
+        vals <- do.call(rbind, vals)
+        vals <- vals[ , 4:ncol(vals)]
+        vals <- data.table::as.data.table(vals)
+        names(vals) <- xNames[index]
+
+        suppressWarnings(
+            for (i in 1:ncol(vals)) {
+                dt <- dtype
+                col <- names(vals)[i]
+                if (dt == "CELL") {
+                    vals[ , (col) := as.integer(get(col)), by = .SD]
+                } else {
+                    vals[ , (col) := as.numeric(get(col)), by = .SD]
+                }
+            }
+        )
+
+        if (exists("out", inherits = FALSE)) {
+            out <- cbind(out, vals)
+        } else {
+            out <- vals
+        }
+
+    } # next set of rasters
+    if ((verbose | faster("verbose")) & sets > 1) close(pb)
+
+    # category label instead of value
+    levelRows <- sapply(levels, nrow)
+    if (cats & any(levelRows > 0)) {
+
+        facts <- which(levelRows > 0)
+        for (fact in facts) {
+
+            factName <- xNames[fact]
+
+            levs <- levels[[fact]]
+            this <- levs[match(out[[fact]], levs[[1L]]), 2L]
+            # names(this) <- names(xx)[fact]
+            # this <- this[ , lapply(.SD, as.factor)] # convert to factor... do we want this?
+            out[ , (factName) := this[[1L]]]
+
+        }
+
+    } # extracting category labels
+
+    out
+
+}
 
