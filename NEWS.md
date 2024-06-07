@@ -1,4 +1,4 @@
-# fasterRaster 8.3.0.7018 (2024-06-XX)
+# fasterRaster 8.3.0.7018 (2024-06-07)
 
 **+**: Denotes potentially code-breaking changes
 
