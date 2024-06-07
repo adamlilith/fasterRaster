@@ -584,7 +584,7 @@ methods::setMethod(
 
 			}
 			out <- .makeGVector(src = src, table = table)
-			if (verbose) omnibus::say("Topologically valid vector created.")
+			if (verbose & geomtype(out) == "polygons") omnibus::say("Topologically valid vector created.")
 
 		} # x is a filename and xVect supplied
 

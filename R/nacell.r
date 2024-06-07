@@ -21,31 +21,48 @@ methods::setMethod(
     function(x, warn = TRUE) {
 
     .locationRestore(x)
-    .message("nacell_nonnacell", "This function can take a while to calculate for large rasters.")
+    .region(x)
+    ncell(x) - .nonnacell(x, warn = warn)
 
-    # # NB `r.univar` can report incorrect numbers of cells sometimes (e.g., # NA cells > total number of cells)
-    # args <- list(
-    #     cmd = "r.univar",
-    #     map = paste(sources(x), collapse=","),
-    #     flags = c("r", .quiet(), "overwrite"),
-    #     intern = TRUE
-    # )
+    } # EOF
+)
 
-    # if (grassInfo("versionNumber") >= 8.3) args$nprocs <- faster("cores")
+#' @aliases nonnacell
+#' @rdname nacell
+#' @exportMethod nonnacell
+methods::setMethod(
+    f = "nonnacell",
+    signature = c(x = "GRaster"),
+    function(x, warn = TRUE) .nonnacell(x, warn = warn)
+)
 
-    # stats <- do.call(rgrass::execGRASS, args = args)
-    # pattern <- "total null cells: "
-    # nulls <- stats[grepl(stats, pattern = pattern)]
-    # nulls <- substr(nulls, nchar(pattern) + 1L, nchar(nulls))
-    # as.numeric(nulls)
+#' Number of non-NA cells in a GRaster
+#'
+#' @param x The [sources()] name of a `GRaster` or a `GRaster`. Location are region will be assumed to be appropriate to the raster.
+#' @param warn Logical.
+#' @param nLayers `NULL` or number of layers in `x`.
+#'
+#' @noRd
+.nonnacell <- function(x, warn, nLayers = NULL) {
 
-    nLayers <- nlyr(x)
+    if (warn) .message("nacell_nonnacell", "Calculating the number of NA or non-NA cells can take a while for large rasters.")
+
+    # # NB `r.univar` can report incorrect numbers of cells sometimes (e.g., # NA cells > total number of cells), so we use `r.mapcalc` to create a 1s raster and sum the cell values.
+
+    if (inherits(x, "GRaster")) {
+        srcIn <- sources(x)
+        nLayers <- nlyr(x)
+    } else {
+        srcIn <- x
+        if (is.null(nLayers)) stop("Must specifify `nLayers` when supplying a sources() name to this function.")
+    }
+
     out <- rep(NA_real_, nLayers)
 
     srcs <- .makeSourceName("nacell_r_mapcalc", n = nLayers)
     for (i in seq_len(nLayers)) {
     
-        ex <- paste0(srcs[i], " = ", sources(x)[i], " * 0 + 1")
+        ex <- paste0(srcs[i], " = ", srcIn[i], " * 0 + 1")
         rgrass::execGRASS("r.mapcalc", expression = ex, flags = c(.quiet(), "overwrite"))
 
         args <- list(
@@ -65,19 +82,9 @@ methods::setMethod(
         pattern <- "sum: "
         n <- info[grepl(info, pattern = pattern)]
         n <- sub(n, pattern = pattern, replacement = "")
-        out[i] <- as.numeric(nrow(x[[i]])) * as.numeric(ncol(x[[i]])) - as.numeric(n)
+        out[i] <- as.numeric(n)
 
     } # next layer
     out
 
-    } # EOF
-)
-
-#' @aliases nonnacell
-#' @rdname nacell
-#' @exportMethod nonnacell
-methods::setMethod(
-    f = "nonnacell",
-    signature = c(x = "GRaster"),
-    function(x, warn = TRUE) ncell(x) - nacell(x)
-)
+}

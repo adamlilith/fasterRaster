@@ -329,7 +329,7 @@ methods::setMethod(f = "compareGeom",
 .locationCompare <- function(out, x, y, stopOnError, messages) {
 
 	if (.location(x) != .location(y)) {
-		msg <- paste0("The objects have different coordinate reference systems. You can\n  use project() to warp one of them to the reference system of the other.")
+		msg <- paste0("The objects have different coordinate reference systems. You can use\n  project() to warp one of them to the reference system of the other.")
 		if (stopOnError) stop(msg)
 		if (messages & !stopOnError) warning(msg)
 		out <- FALSE

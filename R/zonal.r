@@ -58,8 +58,7 @@ methods::setMethod(
 
 	if (nlyr(z) > 1L) {
 	
-		warning("The zone raster, ", sQuote("z"), ", has more than one layer. Only the first will be used.")
-	
+		warning("The zone raster in `z` has more than one layer. Only the first will be used.")
 		z <- z[[1L]]
 	
 	}

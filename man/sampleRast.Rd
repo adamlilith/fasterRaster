@@ -11,7 +11,7 @@
   prop = FALSE,
   maskvalues = NA,
   updatevalue = NULL,
-  fail = TRUE,
+  test = FALSE,
   seed = NULL
 )
 }
@@ -26,7 +26,7 @@
 
 \item{updatevalue}{Numeric or \code{NULL} (default): Value to assign to masked cells. If \code{NULL}, then the values in the input raster are retained.}
 
-\item{fail}{Logical: If \code{TRUE} (default), and \code{size} is greater than the number of non-\code{NA} cells in \code{x}, then fail.}
+\item{test}{Logical: If \code{TRUE}, and \code{size} is greater than the number of non-\code{NA} cells in \code{x}, then fail. Testing this can take a long time for large rasters. The default is \code{FALSE}.}
 
 \item{seed}{\code{NULL} (default) or numeric: If \code{NULL}, then a random seed will be generated for the random number generator. Otherwise a seed can be provided.}
 }
@@ -45,15 +45,52 @@ library(terra)
 
 # Example data
 madElev <- fastData("madElev") # raster
-madForest <- fastData("madForest2000") # raster
-madCoast <- fastData("madCoast4") # vector
+madCover <- fastData("madCover") # raster
 
 # Convert to GRasters and GVectors
 elev <- fast(madElev)
-forest <- fast(madForest)
-coast <- fast(madCoast)
+cover <- fast(madCover)
 
+### spatSample()
+################
+
+# Random points as data.frame or data.table:
+randVals <- spatSample(elev, size = 20, values = TRUE)
+randVals
+
+# Random points as a points GVector:
+randPoints <- spatSample(elev, size = 20, as.points = TRUE)
+randPoints
+plot(elev)
+plot(randPoints, add = TRUE)
+
+# Random points in a select area:
+madCoast <- fastData("madCoast4") # vector
+coast <- fast(madCoast)
 ant <- coast[coast$NAME_4 == "Antanambe"] # subset
+
+restrictedPoints <- spatSample(elev, size = 20, as.points = TRUE,
+   strata = ant)
+
+plot(elev)
+plot(ant, add = TRUE)
+plot(restrictedPoints, add = TRUE) # note 20 points for entire geometry
+
+# Random points, one set per subgeometry:
+stratifiedPoints <- spatSample(elev, size = 20, as.points = TRUE,
+   strata = ant, byStratum = TRUE)
+
+plot(elev)
+plot(ant, add = TRUE)
+plot(stratifiedPoints, pch = 21, bg = "red", add = TRUE) # note 20 points per subgeometry
+
+# Random categories:
+randCover <- spatSample(cover, size = 20, values = TRUE,
+     cat = TRUE, xy = TRUE)
+randCover
+
+### sampleRast()
+################
 
 # Random cells in non-NA cells:
 rand <- sampleRast(elev, 10000)

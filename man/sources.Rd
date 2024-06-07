@@ -139,12 +139,6 @@ rasts
 # number of layers
 nlyr(rasts)
 
-# cell frequencies
-freq(elev)
-freq(2 * elev)
-freq(rasts)
-freq(rasts, value = 1)
-
 # projecting a raster from disk to location's CRS
 madLANDSAT <- fastData("madLANDSAT")
 landsat <- fast(madLANDSAT) # projects matrix

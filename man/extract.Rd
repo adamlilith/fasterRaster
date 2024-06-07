@@ -21,7 +21,8 @@
   prob = 0.5,
   overlap = TRUE,
   xy = FALSE,
-  cats = FALSE
+  cats = FALSE,
+  verbose = FALSE
 )
 
 \S4method{extract}{GRaster,data.frame}(x, y, xy = FALSE, cats = FALSE)
@@ -73,6 +74,8 @@
 \item{xy}{Logical: If \code{TRUE} and \code{y} represents points, also return the coordinates of each point. Default is \code{FALSE.}}
 
 \item{cats}{Logical (extracting from a raster): If \code{TRUE} and \code{x} is a \link[=tutorial_raster_data_types]{categorical raster}, then return the category labels instead of the values. Default is `FALSE.}
+
+\item{verbose}{Logical: If \code{TRUE}, display progress (will only function when extracting from points on a \code{GRaster} when the number of \code{GRaster}s is large).}
 }
 \value{
 A \code{data.frame} or \code{data.table}.
