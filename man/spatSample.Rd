@@ -15,7 +15,8 @@
   xy = FALSE,
   strata = NULL,
   byStratum = FALSE,
-  zlim = NULL
+  zlim = NULL,
+  verbose = FALSE
 )
 
 \S4method{spatSample}{GVector}(
@@ -32,7 +33,7 @@
 \arguments{
 \item{x}{A \code{GRaster} or \code{GVector}.}
 
-\item{size}{Numeric integer or integer > 0: Number of points to create.}
+\item{size}{Numeric value > 0: Number of points to create.}
 
 \item{as.points}{Logical: If \code{FALSE} (default), the output is a \code{data.frame} or \code{data.table}. If \code{TRUE}, the output is a "points" \code{GVector}.}
 
@@ -47,6 +48,8 @@
 \item{byStratum}{Logical: If \code{FALSE} (default), then \code{size} number of points will be placed within the entire area delineated by \code{strata}. If \code{TRUE}, then \code{size} points will be placed within each subgeometry of \code{strata}.}
 
 \item{zlim}{Either \code{NULL} (default), or a vector of two numbers defining the lower and upper altitudinal bounds of coordinates. This cannot be combined with \code{values = TRUE} or \code{cats = TRUE}.}
+
+\item{verbose}{Logical: If \code{TRUE}, display progress. Default is \code{FALSE}.}
 
 \item{seed}{Either \code{NULL} (default), or an integer. Used as the random seed.}
 }
