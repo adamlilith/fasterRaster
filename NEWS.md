@@ -3,7 +3,9 @@
 **+**: Denotes potentially code-breaking changes
 
 ## New functions and functionality
-o **+** `spatSample()`: *Much* faster now for large samples taken from `GRaster`s. Removed argument `seed` for `GRaster` signature.
+o `freq()`: Added `function-specific example.
+o **+** `spatSample()`: *Much* faster (though not actually fast...) for large samples taken from `GRaster`s. Removed argument `seed` for `GRaster` signature, and added argument `verbose` to give you something to watch.
+
 
 ## Bug fixes
 o `global()`: Fixed bug arising when called by other functions and main argument was a `sources()` name.
