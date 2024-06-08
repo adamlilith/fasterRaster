@@ -1,6 +1,6 @@
 #' @title Mathematical operations on each layer of a GRasters
 #'
-#' @description You can apply mathematical functions to each layer of a `GRaster`. These include:\cr
+#' @description You can apply mathematical functions to each layer of a `GRaster`. The output is a `GRaster` with the same number or layers as the input. Available functions include:\cr
 #'
 #' * `NA`s:
 #'      * `is.na()`
