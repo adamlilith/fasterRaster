@@ -1,17 +1,18 @@
-# fasterRaster 8.3.0.7018 (2024-06-07)
+# fasterRaster 8.3.0.7019 (2024-06-XX)
+**+**: Denotes potentially code-breaking changes
 
+
+# fasterRaster 8.3.0.7018 (2024-06-07)
 **+**: Denotes potentially code-breaking changes
 
 ## New functions and functionality
-o `freq()`: Added `function-specific example.
 o **+** `spatSample()`: *Much* faster (though not actually fast...) for large samples taken from `GRaster`s. Removed argument `seed` for `GRaster` signature, and added argument `verbose` to give you something to watch.
-
+o `freq()`: Added `function-specific example.
 
 ## Bug fixes
 o `global()`: Fixed bug arising when called by other functions and main argument was a `sources()` name.
 
 # fasterRaster 8.3.0.7017 (2024-06-02)
-
 **+**: Denotes potentially code-breaking changes
 
 ## New functions and functionality
