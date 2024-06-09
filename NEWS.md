@@ -1,9 +1,7 @@
 # fasterRaster 8.3.0.7019 (2024-06-08)
-**+**: Denotes potentially code-breaking changes
 
 ## Bug fixes
 o `not.na()`: Fixed bug causing incorrect answer.
-
 
 # fasterRaster 8.3.0.7018 (2024-06-07)
 **+**: Denotes potentially code-breaking changes
