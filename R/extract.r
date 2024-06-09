@@ -34,7 +34,7 @@
 #'
 #' @param xy Logical: If `TRUE` and `y` represents points, also return the coordinates of each point. Default is `FALSE.`
 #'
-#' @param cats Logical (extracting from a raster): If `TRUE` and `x` is a [categorical raster][tutorial_raster_data_types], then return the category labels instead of the values. Default is `FALSE.
+#' @param cats Logical (extracting from a raster): If `TRUE` (default) and `x` is a [categorical raster][tutorial_raster_data_types], then return the category labels instead of the values.
 #'
 #' @param verbose Logical: If `TRUE`, display progress (will only function when extracting from points on a `GRaster` when the number of `GRaster`s is large).
 #'
@@ -57,7 +57,7 @@ methods::setMethod(
         prob = 0.5,
         overlap = TRUE,
         xy = FALSE,
-        cats = FALSE,
+        cats = TRUE,
         verbose = FALSE
     ) {
 
@@ -353,7 +353,7 @@ methods::setMethod(
         x,
         y,
         xy = FALSE,
-        cats = FALSE
+        cats = TRUE
     ) {
 
     if (ncol(y) < 2L) stop("Argument ", sQuote("y"), " must have at least two columns. The first must represent longitude and the second latitude.")
@@ -376,7 +376,7 @@ methods::setMethod(
         x,
         y,
         xy = FALSE,
-        cats = FALSE
+        cats = TRUE
     ) {
 
     y <- as.data.frame(y)
@@ -395,7 +395,7 @@ methods::setMethod(
         x,
         y,
         xy = FALSE,
-        cats = FALSE
+        cats = TRUE
     ) {
 
     y <- as.data.frame(y)
@@ -414,7 +414,7 @@ methods::setMethod(
         x,
         y,
         xy = FALSE,
-        cats = FALSE
+        cats = TRUE
     ) {
 
     if (length(y) != 2L) stop("Argument ", sQuote("y"), " must have two values, longitude and latitude.")
@@ -664,7 +664,7 @@ methods::setMethod(
     xNames = NULL,
     dtype = NULL,
     levels = NULL,
-    cats = FALSE,
+    cats = TRUE,
     verbose = TRUE
 ) {
 
