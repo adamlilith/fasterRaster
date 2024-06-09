@@ -1,0 +1,7 @@
+@software{fasterRaster,
+  author = {{AB Smith}},
+  title = {fasterRaster: Faster Raster and Spatial Vector Processing Using 'GRASS GIS'},
+  url = {https://github.com/adamlilith/fasterRaster},
+  version = {8.3.0.7019},
+  date = {2024-06-09},
+}
