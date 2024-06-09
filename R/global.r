@@ -100,8 +100,8 @@ methods::setMethod(
 
 		args <- list(
 			cmd = "r.univar",
-			flags = c(.quiet(), "r"),
 			map = src[i],
+			flags = c(.quiet(), "r"),
 			Sys_show.output.on.console = FALSE,
 			echoCmd = FALSE,
 			intern = TRUE
