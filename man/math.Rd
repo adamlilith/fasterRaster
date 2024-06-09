@@ -100,7 +100,7 @@
 A \code{GRaster}.
 }
 \description{
-You can apply mathematical functions to each layer of a \code{GRaster}. These include:\cr
+You can apply mathematical functions to each layer of a \code{GRaster}. The output is a \code{GRaster} with the same number or layers as the input. Available functions include:\cr
 \itemize{
 \item \code{NA}s:
 \itemize{

@@ -1,6 +1,6 @@
 #' @title Mathematical operations on each layer of a GRasters
 #'
-#' @description You can apply mathematical functions to each layer of a `GRaster`. These include:\cr
+#' @description You can apply mathematical functions to each layer of a `GRaster`. The output is a `GRaster` with the same number or layers as the input. Available functions include:\cr
 #'
 #' * `NA`s:
 #'      * `is.na()`
@@ -80,14 +80,19 @@ methods::setMethod(
 	.locationRestore(x)
 	.region(x)
 
-	srcs <- .makeSourceName("notNA", "raster", nlyr(x))
+	srcs <- .makeSourceName("not_na_r_mapcalc", "raster", nlyr(x))
 	for (i in seq_len(nlyr(x))) {
 	
 		ex <- if (falseNA) {
-			paste0(srcs[i], " = int(if(isnull(", sources(x)[i], "), 1, null()))")
+			paste0(srcs[i], " = int(if(isnull(", sources(x)[i], "), 1, 0))")
 		} else {
-   			paste0(srcs[i], " = int(if(isnull(", sources(x)[i], "), 1, 0))")
+   			paste0(srcs[i], " = int(if(isnull(", sources(x)[i], "), 0, 1))")
 		}
+		# ex <- if (falseNA) {
+		# 	paste0(srcs[i], " = int(if(isnull(", sources(x)[i], "), 1, null()))")
+		# } else {
+   		# 	paste0(srcs[i], " = int(if(isnull(", sources(x)[i], "), 1, 0))")
+		# }
 		rgrass::execGRASS(
 			cmd = "r.mapcalc",
 			expression = ex,

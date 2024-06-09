@@ -726,7 +726,7 @@ methods::setMethod(
             for (i in 1:ncol(vals)) {
                 dt <- dtype
                 col <- names(vals)[i]
-                if (dt == "CELL") {
+                if (dt[i] == "CELL") {
                     vals[ , (col) := as.integer(get(col)), by = .SD]
                 } else {
                     vals[ , (col) := as.numeric(get(col)), by = .SD]
