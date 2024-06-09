@@ -1,3 +1,9 @@
+# fasterRaster 8.3.0.7020 (2024-06-XX)
+**+**: Denotes potentially code-breaking changes
+
+## Changes in functionality
+o **+** `extract()` and **+** `spatSample()`: Changed default value of `cats` argument to `TRUE`.
+
 # fasterRaster 8.3.0.7019 (2024-06-08)
 
 ## Bug fixes
