@@ -3,7 +3,8 @@
 \name{dim,GRegion-method}
 \alias{dim,GRegion-method}
 \alias{dim}
-\alias{dim,GRaster-method}
+\alias{dim3d,GRegion-method}
+\alias{dim3d}
 \alias{nrow,missing-method}
 \alias{nrow}
 \alias{nrow,GRegion-method}
@@ -29,7 +30,7 @@
 \usage{
 \S4method{dim}{GRegion}(x)
 
-\S4method{dim}{GRaster}(x)
+\S4method{dim3d}{GRegion}(x)
 
 \S4method{nrow}{missing}(x)
 
@@ -70,7 +71,8 @@ A numeric value or vector.
 \description{
 For \code{GRegion}s: Number of rows, columns, depths, and cells:
 \itemize{
-\item \code{dim()}: Rows, columns, depths, and layers
+\item \code{dim()}: Rows and columns
+\item \code{dim3d()}: Rows, columns, and depths
 \item \code{nrow()}: Rows
 \item \code{ncol()}: Columns
 \item \code{ndepth()}: Depths (for 3-dimensional rasters only)

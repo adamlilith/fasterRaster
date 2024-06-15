@@ -13,11 +13,11 @@
 #' ## Properties of `GRasters`
 #' [crs()]: Coordinate reference system\cr
 #' [datatype()]: Data type\cr
-#' [dim()]: Number of rows and columns\cr
+#' [dim()] and [dim3()]: Number of rows, columns, and depths\cr
 #' [ext()], [N()], [S()], [E()], [W()], [top()], and [bottom()]: Spatial extent\cr
 #' [freq()]: Frequencies of cell values in a raster\cr
 #' [is.2d()] and [is.3d()]: Is an object 2- or 3-dimensional?\cr
-#' [is.int()] / [is.cell()], [is.float()], [is.doub()]: `GRaster` data type (integer/float/double)\cr
+#' [is.int()], [is.cell()], [is.float()], [is.doub()]: `GRaster` data type (integer/float/double)\cr
 #' [is.factor()]: Does a raster represent categorical data?\cr
 #' [is.lonlat()]: Is an object projected (e.g., in WGS84)?\cr
 #' [levels()]: Names of levels in a categorical `GRaster`\cr

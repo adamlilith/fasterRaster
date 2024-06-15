@@ -21,11 +21,11 @@ A tutorial on \link[=tutorial_raster_data_types]{raster data types}\cr
 
 \code{\link[=crs]{crs()}}: Coordinate reference system\cr
 \code{\link[=datatype]{datatype()}}: Data type\cr
-\code{\link[=dim]{dim()}}: Number of rows and columns\cr
+\code{\link[=dim]{dim()}} and \code{\link[=dim3]{dim3()}}: Number of rows, columns, and depths\cr
 \code{\link[=ext]{ext()}}, \code{\link[=N]{N()}}, \code{\link[=S]{S()}}, \code{\link[=E]{E()}}, \code{\link[=W]{W()}}, \code{\link[=top]{top()}}, and \code{\link[=bottom]{bottom()}}: Spatial extent\cr
 \code{\link[=freq]{freq()}}: Frequencies of cell values in a raster\cr
 \code{\link[=is.2d]{is.2d()}} and \code{\link[=is.3d]{is.3d()}}: Is an object 2- or 3-dimensional?\cr
-\code{\link[=is.int]{is.int()}} / \code{\link[=is.cell]{is.cell()}}, \code{\link[=is.float]{is.float()}}, \code{\link[=is.doub]{is.doub()}}: \code{GRaster} data type (integer/float/double)\cr
+\code{\link[=is.int]{is.int()}}, \code{\link[=is.cell]{is.cell()}}, \code{\link[=is.float]{is.float()}}, \code{\link[=is.doub]{is.doub()}}: \code{GRaster} data type (integer/float/double)\cr
 \code{\link[=is.factor]{is.factor()}}: Does a raster represent categorical data?\cr
 \code{\link[=is.lonlat]{is.lonlat()}}: Is an object projected (e.g., in WGS84)?\cr
 \code{\link[=levels]{levels()}}: Names of levels in a categorical \code{GRaster}\cr
