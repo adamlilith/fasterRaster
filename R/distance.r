@@ -23,12 +23,12 @@
 #' * Case 3, when `x` is a `GVector` and `y` is a `GVector`: This argument is not used in this case.
 #'
 #' @param unit Character: Units of the output. Any of:
-#' * `"meters"`, `"metres"`, or `"m"`
+#' * `"meters"`, `"metres"`, or `"m"` (default)
 #' * `"kilometers"` or `"km"`
 #' * `"miles"` or `"mi"`
 #' * `"nautical miles"` or `"nmi"`
 #' * `"yards"` or `"yd"`
-#' * `"feet"` or `"ft"` -- international, 1 foot exactly equal to 0.3048 meters
+#' * `"feet"` or `"ft"` -- international, 1 foot exactly equals 0.3048 meters
 #'
 #' Partial matching is used and case is ignored.
 #'
@@ -181,85 +181,115 @@ methods::setMethod(
 	} # EOF
 )
 
-# #' @aliases distance
-# #' @rdname distance
-# #' @exportMethod distance
-# methods::setMethod(
-# 	"distance",
-# 	signature(x = "GVector", y = "GVector"),
-# 	function(
-# 		x,
-# 		y,
-# 		unit = "meters",
-# 		minDist = NULL,
-# 		maxDist = NULL
-# 	) {
+#' @aliases distance
+#' @rdname distance
+#' @exportMethod distance
+methods::setMethod(
+	"distance",
+	signature(x = "GVector", y = "GVector"),
+	function(
+		x,
+		y,
+		unit = "meters",
+		minDist = NULL,
+		maxDist = NULL
+	) {
 	
-# 	if (!is.null(minDist) && minDist < 0) stop("Argument ", sQuote("minDist"), " must be positive or NULL.")
-# 	if (!is.null(maxDist) && maxDist < 0) stop("Argument ", sQuote("maxDist"), " must be positive or NULL.")
-# 	if ((!is.null(maxDist) & !is.null(maxDist)) && (minDist > maxDist)) stop("Argument ", sQuote("minDist"), " is greater than ", sQuote("maxDist"), ".")
+	if (!is.null(minDist) && minDist < 0) stop("Argument ", sQuote("minDist"), " must be positive or NULL.")
+	if (!is.null(maxDist) && maxDist < 0) stop("Argument ", sQuote("maxDist"), " must be positive or NULL.")
+	if ((!is.null(maxDist) & !is.null(maxDist)) && (minDist > maxDist)) stop("Argument `minDist` is greater than `maxDist`.")
 
-# 	compareGeom(x, y)
-# 	.locationRestore(x)
+	compareGeom(x, y)
+	.locationRestore(x)
 
-# 	if (is.null(minDist)) minDist <- -1
-# 	if (is.null(maxDist)) maxDist <- -1
+	if (is.null(minDist)) minDist <- -1
+	if (is.null(maxDist) || is.infinite(maxDist)) maxDist <- -1
 
-# 	# out <- matrix(NA_real_, nrow = nrow(x), ncol = ncol(y))
+	info <- rgrass::execGRASS(
+		cmd = "v.distance",
+		from = sources(x),
+		to = sources(y),
+		upload = "dist",
+		dmin = minDist,
+		dmax = maxDist,
+		flags = c(.quiet(), "overwrite", "p", "a"),
+		intern = TRUE
+	)
 
-# 	for (i in 1L:nrow(x)) {
+	info <- info[-1L]
+	info <- strsplit(info, split="\\|")
+	info <- lapply(info, as.numeric)
+	info <- do.call(rbind, info)
 
-# 		xx <- x[-i]
+	nrows <- max(info[ , 1L])
+	ncols <- max(info[ , 2L])
 
-# 		out <- rgrass::execGRASS(
-# 			cmd = "v.distance",
-# 			from = sources(xx),
-# 			to = sources(y),
-# 			upload = "dist",
-# 			dmin = minDist,
-# 			dmax = maxDist,
-# 			flags = c(.quiet(), "overwrite", "p"),
-# 			intern = TRUE
-# 		)
-		
-# 		out <- out[-1L]
-# 		out <- strsplit(out, split="\\|")
-# 		out <- lapply(out, as.numeric)
-# 		out <- do.call(rbind, out)
-# 		out <- out[ , 2L, drop = TRUE]
-		
-# 	}
-		
-# 	# convert units
-# 	units <- c("m", "meters", "metres", "kilometers", "km", "miles", "nautical miles", "nmi", "yards", "yd", "feet", "ft")
-#     unit <- omnibus::pmatchSafe(unit, units, useFirst = TRUE)
-# 	unit <- omnibus::expandUnits(unit)
-# 	if (unit == "metres") unit <- "meters"
-# 	omnibus::convertUnits(from = "meters", to = unit, x = out)
-# 	out
+	out <- matrix(NA_real_, nrow = nrows, ncol = ncols)
+	out[cbind(info[ , 1L], info[ , 2L])] <- info[ , 3L]
+
+	# convert units
+	units <- c("m", "meters", "metres", "kilometers", "km", "miles", "nautical miles", "nmi", "yards", "yd", "feet", "ft")
+    unit <- omnibus::pmatchSafe(unit, units, useFirst = TRUE)
+	unit <- omnibus::expandUnits(unit)
+	if (unit == "metres") unit <- "meters"
+	out <- omnibus::convertUnits(from = "meters", to = unit, x = out)
+	out
 	
-# 	} # EOF
-# )
+	} # EOF
+)
 
-# #' @aliases distance
-# #' @rdname distance
-# #' @exportMethod distance
-# methods::setMethod(
-# 	"distance",
-# 	signature(x = "GVector", y = "missing"),
-# 	function(
-# 		x,
-# 		y,
-# 		unit = "meters",
-# 		minDist = NULL,
-# 		maxDist = NULL
-# 	) {
+#' @aliases distance
+#' @rdname distance
+#' @exportMethod distance
+methods::setMethod(
+	"distance",
+	signature(x = "GVector", y = "missing"),
+	function(
+		x,
+		y,
+		unit = "meters",
+		minDist = NULL,
+		maxDist = NULL
+	) {
 
-# 	y <- x
-# 	distance(x = x, y = y, unit = unit, minDist = minDist, maxDist = maxDist)
-	
-# 	} # EOF
-# )
+	if (!is.null(minDist) && minDist < 0) stop("Argument ", sQuote("minDist"), " must be positive or NULL.")
+	if (!is.null(maxDist) && maxDist < 0) stop("Argument ", sQuote("maxDist"), " must be positive or NULL.")
+	if ((!is.null(maxDist) & !is.null(maxDist)) && (minDist > maxDist)) stop("Argument `minDist` is greater than `maxDist`.")
+
+	.locationRestore(x)
+
+	if (is.null(minDist)) minDist <- -1
+	if (is.null(maxDist)) maxDist <- -1
+
+	out <- rgrass::execGRASS(
+		cmd = "v.distance",
+		from = sources(x),
+		to = sources(x),
+		upload = "dist",
+		dmin = minDist,
+		dmax = maxDist,
+		flags = c(.quiet(), "overwrite", "p", "a", "s"),
+		intern = TRUE
+	)
+
+	out <- out[-1L]
+	out <- strsplit(out, split = "\\|")
+	out <- do.call(rbind, out)
+	n <- nrow(out)
+	out <- out[2:n, 2:n]
+	out <- as.numeric(out)
+	out <- matrix(out, ncol = n - 1, nrow = n - 1, byrow = TRUE)
+
+	# convert units
+	units <- c("m", "meters", "metres", "kilometers", "km", "miles", "nautical miles", "nmi", "yards", "yd", "feet", "ft")
+    unit <- omnibus::pmatchSafe(unit, units, useFirst = TRUE)
+	unit <- omnibus::expandUnits(unit)
+	if (unit == "metres") unit <- "meters"
+	out <- omnibus::convertUnits(from = "meters", to = unit, x = out)
+	out
+
+	} # EOF
+)
 
 # #' @aliases st_distance
 # #' @rdname distance

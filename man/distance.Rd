@@ -4,6 +4,8 @@
 \alias{distance,GRaster,missing-method}
 \alias{distance}
 \alias{distance,GRaster,GVector-method}
+\alias{distance,GVector,GVector-method}
+\alias{distance,GVector,missing-method}
 \title{Geographic distance}
 \usage{
 \S4method{distance}{GRaster,missing}(
@@ -27,6 +29,10 @@
   minDist = NULL,
   maxDist = NULL
 )
+
+\S4method{distance}{GVector,GVector}(x, y, unit = "meters", minDist = NULL, maxDist = NULL)
+
+\S4method{distance}{GVector,missing}(x, y, unit = "meters", minDist = NULL, maxDist = NULL)
 }
 \arguments{
 \item{x}{A \code{GRaster} or \code{GVector}.}
@@ -44,12 +50,12 @@
 
 \item{unit}{Character: Units of the output. Any of:
 \itemize{
-\item \code{"meters"}, \code{"metres"}, or \code{"m"}
+\item \code{"meters"}, \code{"metres"}, or \code{"m"} (default)
 \item \code{"kilometers"} or \code{"km"}
 \item \code{"miles"} or \code{"mi"}
 \item \code{"nautical miles"} or \code{"nmi"}
 \item \code{"yards"} or \code{"yd"}
-\item \code{"feet"} or \code{"ft"} -- international, 1 foot exactly equal to 0.3048 meters
+\item \code{"feet"} or \code{"ft"} -- international, 1 foot exactly equals 0.3048 meters
 }
 
 Partial matching is used and case is ignored.}
