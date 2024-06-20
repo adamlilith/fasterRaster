@@ -6,7 +6,7 @@
 \alias{plot,GVector,missing-method}
 \title{Display a raster or vector}
 \usage{
-\S4method{plot}{GRaster,missing}(x, y, maxcell = 5e+06, ...)
+\S4method{plot}{GRaster,missing}(x, y, simplify = TRUE, ...)
 
 \S4method{plot}{GVector,missing}(x, y, maxGeoms = 10000, ...)
 }
@@ -15,7 +15,7 @@
 
 \item{y}{Missing--leave as empty.}
 
-\item{maxcell}{Positive integer (rasters only): Maximum number of cells a raster can have before it is simplified before saving to disk then plotted. The \code{\link[=aggregate]{aggregate()}} function will be applied so that it has approximately this number of cells. The default is 5000000.}
+\item{simplify}{Logical: If \code{TRUE} (default) and the raster has an x- and/or y-resolution that is greater than the screen resolution, then \code{\link[=aggregate]{aggregate()}} will be applied to the raster before it is saved to reduce the time it takes to save the raster.}
 
 \item{...}{Other arguments to send to \code{\link[terra:plot]{terra::plot()}}.}
 

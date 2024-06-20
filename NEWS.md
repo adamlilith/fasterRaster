@@ -4,6 +4,7 @@
 ## Changes in functionality
 o `distance()` now works for calculation of distances between two `GVector`s or a `GVector` and itself.
 o **+** `extract()` and **+** `spatSample()`: Changed default value of `cats` argument to `TRUE`.
+o **+** `plot()` is faster for very large rasters. Replaced argument `maxcell` with `simplify`.
 
 # fasterRaster 8.3.0.7019 (2024-06-08)
 
