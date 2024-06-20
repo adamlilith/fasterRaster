@@ -115,7 +115,7 @@ methods::setMethod(
 	### do we need a new GRASS session or to switch the location/working directory?
 	if (!overwrite & locationExists) {
 
-		stop("Location with same name already exists. If you want to overwrite it, use ", sQuote("overwrite = TRUE"), ".")
+		stop("Location with same name already exists. If you want to overwrite it, use `overwrite = TRUE`.")
 
 	} else if (overwrite & locationExists) {
 	
@@ -156,6 +156,7 @@ methods::setMethod(
 
 	rgrass::set.ignore.stderrOption(!faster("verbose"))
 	.fasterRaster$grassStarted <- TRUE
+	.fasterRaster$grassVersion <- grassInfo("versionNumber")
 	
 	n <- length(.fasterRaster$locations)
 	.fasterRaster$locations[[n + 1L]] <- coordRef

@@ -2,6 +2,7 @@
 
 	.fasterRaster <<- new.env(parent = emptyenv())
 	.fasterRaster$grassStarted <- FALSE
+	.fasterRaster$grassVersion <- NA_real_
 	.fasterRaster$locations <- list()
 	.fasterRaster$activeLocation <- NA_character_
 	.fasterRaster$messages <- list()
@@ -15,6 +16,7 @@
 
 	.fasterRaster <<- new.env(parent = emptyenv())
 	.fasterRaster$grassStarted <- FALSE
+	.fasterRaster$grassVersion <- NA_real_
 	.fasterRaster$locations <- list()
 	.fasterRaster$activeLocation <- NA_character_
 	.fasterRaster$messages <- list()

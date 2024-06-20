@@ -161,7 +161,6 @@ faster <- function(
 	}
 
 	if (any(names(opts) %in% "verbose")) {
-
 		info <- rgrass::set.echoCmdOption(.fasterRaster$options$verbose)
 	}
 
