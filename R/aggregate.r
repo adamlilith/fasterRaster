@@ -82,17 +82,17 @@ methods::setMethod(
 	if (is.2d(x)) {
 		
 		if (length(fact) == 1L) fact <- rep(fact, 2L)
-		if (length(fact) == 3L) stop("This is a 2D raster. Only 1 or 2 values are allowed for ", sQuote("resol"), ".")
+		if (length(fact) == 3L) stop("This is a 2D raster. Only 1 or 2 values are allowed for `resol`.")
 	
 		resol <- res(x)
 		resol <- resol * fact
-		.regionRes(resol, respect="extent")
+		.regionRes(resol, respect = "extent")
 	
 	} else if (is.3d(x)) {
 	
 		if (length(fact) == 1L) fact <- rep(fact, 3L)
 		if (length(fact) == 2L) {
-			warning("This is a 3D raster, but ", sQuote("resol"), " has only 2 values.\n  Assuming third dimension will not be aggregated.")
+			warning("This is a 3D raster, but `resol` has only 2 values.\n  Assuming third dimension will not be aggregated.")
 			fact[3L] <- 1
 		}
 	
@@ -107,8 +107,7 @@ methods::setMethod(
 		input = NA_character_,
 		output = NA_character_,
 		method = fun,
-		flags = c(.quiet(), "overwrite"),
-		intern = TRUE
+		flags = c(.quiet(), "overwrite")
 	)
 	
 	if (weight) args$flags <- c(args$flags, "w")
