@@ -1,10 +1,10 @@
 #' Identify watershed basins and direction and accumulation of flow
 #'
-#' @description The `flow()` function uses a raster representing elevation to compute rasters representing:
-#' * Flow accumulation raster;
+#' @description The `flow()` function uses a raster representing elevation to compute other rasters representing:
+#' * Flow accumulation;
 #' * Direction of flow;
 #' * Watershed basins;
-#' * Flooded areas;
+#' * Flooded areas; and/or
 #' * Topographic convergence (log of flow accumulation divided by local slope).
 #'
 #' More details about the computations can be found at the help page for the [`r.terraflow`](https://grass.osgeo.org/grass84/manuals/r.terraflow.html) module for **GRASS**.
