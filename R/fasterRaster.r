@@ -79,7 +79,6 @@
 #' [extract()]: Extract values from a `GRaster` at locations of a `GVector`\cr
 #' [fillNAs()]: Fill `NA` cells\cr
 #' [focal()]: Calculate cell values based on values of nearby cells\cr
-#' [fractalRast()]: Create a fractal `GRaster`\cr
 #' [fragmentation()]: Landscape fragmentation class from Riitters et al. (2020)\cr
 #' [global()]: Summary statistics across cells of each `GRaster` layer\cr
 #' [hist()]: Histogram of `GRaster` values\cr
@@ -102,9 +101,6 @@
 #' [project()]: Change coordinate reference system and cell size\cr
 #' [predict()]: Make predictions to a `GRaster` from a linear model or generalized linear model\cr
 #' [resample()]: Change cell size\cr
-#' [rnormRast()]: A random `GRaster` with values drawn from a normal distribution\cr
-#' [rSpatialDepRast()]: Create a random `GRaster` with or without spatial dependence\cr
-#' [runifRast()]: A random `GRaster` with values drawn from a uniform distribution\cr
 #' [scale()], [scalepop()], and [unscale()]: Subtract means and divide by standard deviations, or inverse of that\cr
 #' [selectRange()]: Select values from rasters in a stack based on values in another `GRaster`\cr
 #' [spatSample()]: Randomly points from a `GRaster`\cr
@@ -114,6 +110,13 @@
 #' [zonal()]: Statistics (mean, sum, etc.) on areas of a `GRaster` defined by sets of cells with the same values in another `GRaster`, or by geometries in a `GVector`\cr
 #' [zonalGeog()]: Geographic statistics (area, perimeter, fractal dimension, etc.) for sets of cells with the same values\cr
 #'
+#' ## Functions for creating `GRaster`s *de novo*
+#' [fractalRast()]: Create a fractal `GRaster`\cr
+#' [rnormRast()]: A random `GRaster` with values drawn from a normal distribution\cr
+#' [rSpatialDepRast()]: Create a random `GRaster` with or without spatial dependence\cr
+#' [runifRast()]: A random `GRaster` with values drawn from a uniform distribution\cr
+#' [sineRast()]: Sine wave rasters\cr
+#' 
 #' ## Functions for analysis of terrain and flow of water across landscapes
 #' [as.contour()]: Contour lines from a `GRaster`\cr
 #' [flow()]: Identify watershed basins and direction and accumulation of flow\cr
