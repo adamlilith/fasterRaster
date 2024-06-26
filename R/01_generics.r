@@ -259,6 +259,7 @@ methods::setGeneric(name = "sdpop", def = function(x, ...) standardGeneric("sdpo
 methods::setGeneric(name = "selectRange", def = function(x, ...) standardGeneric("selectRange"))
 methods::setGeneric(name = "show", package = "methods")
 methods::setGeneric(name = "simplifyGeom", package = "terra")
+methods::setGeneric(name = "sineRast", def = function(x, ...) standardGeneric("sineRast"))
 methods::setGeneric(name = "smoothGeom", def = function(x, ...) standardGeneric("smoothGeom"))
 methods::setGeneric(name = "skewness", def = function(x, ...) standardGeneric("skewness"))
 methods::setGeneric(name = "slope", def = function(x, ...) standardGeneric("slope"))
