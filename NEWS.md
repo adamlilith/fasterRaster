@@ -1,3 +1,10 @@
+# fasterRaster 8.3.0.7021 (2024-XX-XX)
+**+**: Denotes potentially code-breaking changes
+
+## New functions and functionality
+o `[` (`subset_single_bracket`) allows expressions inside `[]` to specify what cells in a `GRaster` to subset.
+o `[<-` (`replace_single_square_bracket`) allows expressions inside `[]` to specify what cells in a `GRaster` are re-assigned.
+
 # fasterRaster 8.3.0.7020 (2024-07-05)
 **+**: Denotes potentially code-breaking changes
 
