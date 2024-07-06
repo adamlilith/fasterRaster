@@ -37,7 +37,7 @@
 methods::setMethod(
 	f = "fragmentation",
 	signature = c(x = "SpatRaster"),
-	function(x, w = 3, undet = "undetermined", none = NA, na.rm = TRUE, cores = faster("cores")) {
+	function(x, w = 3, undet = "undetermined", none = NA, na.rm = TRUE, cores = faster("cores"), verbose = TRUE) {
 
 	# errors?
 	if (!omnibus::is.wholeNumber(w) || w < 1L || w %% 2 == 0) stop("Argument ", sQuote("w"), " must be an odd, positive integer.")
@@ -88,12 +88,20 @@ methods::setMethod(
 	}
 
 	# for each layer
+	nSteps <- 1 + length(cells) + 17
 	for (i in seq_len(nLayers)) {
+
+		if (verbose | faster("verbose")) {
+			if (nLayers > 1) omnibus::say("Fragmentation for layer ", i, " of ", nLayers, "...")
+			pb <- utils::txtProgressBar(min = 0, max = nSteps, initial = 0, style = 3, width = 30)
+		}
 
 		xx <- x[[i]]
 
 		# convert NAs to 0s
-		xx <- terra::app(xx, fun = function(x) ifelse(is.na(x), 0L, x), cores = cores)
+		if (verbose | faster("verbose")) utils::setTxtProgressBar(pb, 1)
+		# xx <- terra::app(xx, fun = function(x) ifelse(is.na(x), 0L, x), cores = cores) # VERY slow!!!
+		xx[is.na(x)] <- 0L
 
 		unis <- unique(xx)
 		unis <- unis[ , 1L]
@@ -103,55 +111,70 @@ methods::setMethod(
 
 		connectivities <- list()
 		for (j in seq_along(cells)) {
+
+			if (verbose | faster("verbose")) utils::setTxtProgressBar(pb, 1 + j)
 		
 			pair <- cells[[j]]
 			www <- ww
 			www[pair] <- 1L
 
-			connectivities[[j]] <- focal(xx, w = www, fun = 'sum', na.rm = TRUE)
+			connectivities[[j]] <- focal(xx, w = www, fun = "sum", na.rm = TRUE)
 
 		}
 
 		# stack pff rasters
+		if (verbose | faster("verbose")) utils::setTxtProgressBar(pb, 1 + j + 1)
 		pffConnected <- do.call(c, connectivities)
 
 		# indicate if at least one cell of pair is forested
+		if (verbose | faster("verbose")) utils::setTxtProgressBar(pb, 1 + j + 2)
 		pffEither <- pffConnected >= 1L
 
 		# convert to 1 if both cells are forested
+		if (verbose | faster("verbose")) utils::setTxtProgressBar(pb, 1 + j + 3)
 		pffConnected <- pffConnected == 2L
 
 		# sum forested neighbors across rasters
+		if (verbose | faster("verbose")) utils::setTxtProgressBar(pb, 1 + j + 4)
 		pffNeighs <- sum(pffConnected)
 
 		# sum either forested across rasters
+		if (verbose | faster("verbose")) utils::setTxtProgressBar(pb, 1 + j + 5)
 		pffForests <- sum(pffEither)
 
 		# calculate pff
+		if (verbose | faster("verbose")) utils::setTxtProgressBar(pb, 1 + j + 6)
 		pff <- pffNeighs / pffForests
 
 		# calculate cover
+		if (verbose | faster("verbose")) utils::setTxtProgressBar(pb, 1 + j + 7)
 		pf <- terra::focal(xx, w = w, "mean", na.rm = na.rm)
 
 		### assign classes
+		if (verbose | faster("verbose")) utils::setTxtProgressBar(pb, 1 + j + 8)
 		thisOut <- xx * 0L
 
 		# pre-calculate interior mask
+		if (verbose | faster("verbose")) utils::setTxtProgressBar(pb, 1 + j + 9)
 		interiorMask <- pf == 1 & pff == 1
 		notInteriorMask <- 1L - interiorMask
 
 		# pre-calculate difference
+		if (verbose | faster("verbose")) utils::setTxtProgressBar(pb, 1 + j + 10)
 		delta <- pf - pff
 
 		# patch
+		if (verbose | faster("verbose")) utils::setTxtProgressBar(pb, 1 + j + 11)
 		mask <- pf > 0 & pf <= 0.4
 		thisOut <- terra::mask(thisOut, mask, maskvalues = 1L, updatevalue = 1L)
 
 		# transitional
+		if (verbose | faster("verbose")) utils::setTxtProgressBar(pb, 1 + j + 12)
 		mask <- pf > 0.4 & pf <= 0.6
 		thisOut <- terra::mask(thisOut, mask, maskvalues = 1L, updatevalue = 2L)
 
 		# perforated
+		if (verbose | faster("verbose")) utils::setTxtProgressBar(pb, 1 + j + 13)
 		if (undet == 'perforated') {
 			mask <- pf > 0.6 & delta >= 0
 		} else {
@@ -160,6 +183,7 @@ methods::setMethod(
 		thisOut <- terra::mask(thisOut, mask, maskvalues = 1L, updatevalue = 3L)
 
 		# edge
+		if (verbose | faster("verbose")) utils::setTxtProgressBar(pb, 1 + j + 14)
 		if (undet == 'edge') {
 			mask <- pf > 0.6 & delta <= 0
 		} else {
@@ -168,16 +192,19 @@ methods::setMethod(
 		thisOut <- terra::mask(thisOut, mask, maskvalues = 1L, updatevalue = 4L)
 
 		# undetermined
+		if (verbose | faster("verbose")) utils::setTxtProgressBar(pb, 1 + j + 15)
 		if (undet == 'undetermined') {
 			mask <- pf > 0.6 & delta == 0
 			thisOut <- terra::mask(thisOut, mask, maskvalues = 1L, updatevalue = 5L)
 		}
 
 		# interior
+		if (verbose | faster("verbose")) utils::setTxtProgressBar(pb, 1 + j + 16)
 		thisOut <- terra::mask(thisOut, interiorMask, maskvalues = 1L, updatevalue = 6L)
 
 		# no focal habitat in focal cell
 		# Riitters et al.: "If the center pixel was not forest, then a null value was assigned to that location."
+		if (verbose | faster("verbose")) utils::setTxtProgressBar(pb, 1 + j + 17)
 		thisOut <- terra::mask(thisOut, xx, maskvalues = 0L, updatevalue = none)
 
 		levs <- .fragmentationLevels(undet = undet, none = none)
@@ -188,6 +215,8 @@ methods::setMethod(
 		} else {
 			out <- c(out, thisOut)
 		}
+
+		if (verbose | faster("verbose")) close(pb)
 
 	} # next layer
 
@@ -203,7 +232,7 @@ methods::setMethod(
 methods::setMethod(
 	f = "fragmentation",
 	signature = c(x = "GRaster"),
-	function(x, w = 3, undet = "undetermined", none = NA) {
+	function(x, w = 3, undet = "undetermined", none = NA, verbose = TRUE) {
 
 	undet <- omnibus::pmatchSafe(undet, c("perforated", "edge", "undetermined"), nmax = 1L)
 
@@ -259,9 +288,16 @@ methods::setMethod(
 
 	# for each layer
 	srcs <- rep(NA_character_, nLayers)
+	nSteps <- 1 + length(offsets) + 6
 	for (i in seq_len(nLayers)) {
 
+		if (verbose | faster("verbose")) {
+			if (nLayers > 1) omnibus::say("Fragmentation for layer ", i, " of ", nLayers, "...")
+			pb <- utils::txtProgressBar(min = 0, max = nSteps, initial = 0, style = 3, width = 30)
+		}
+
 		### remove NAs
+		if (verbose | faster("verbose")) utils::setTxtProgressBar(pb, 1)
 		srcIn <- sources(x)[i]
 		srcXZeros <- .makeSourceName("fragmentation_xSansNAs", "raster")
 		ex <- paste0(srcXZeros, " = if(isnull(", srcIn, "), 0, ", srcIn, ")")
@@ -272,6 +308,8 @@ methods::setMethod(
 		srcEither <- .makeSourceName("fragmentation_either", "raster", n = length(offsets))
 		srcBoth <- .makeSourceName("fragmentation_both", n = length(offsets))
 		for (j in seq_along(offsets)) {
+
+			if (verbose | faster("verbose")) utils::setTxtProgressBar(pb, 1 + j)
 
 			# tally occurrences of habitat in each pair of cells		
 			y1 <- offsets[[j]][1L]
@@ -295,21 +333,25 @@ methods::setMethod(
 		}
 
 		# number of neighbor cell pairs with at least one with habitat
+		if (verbose | faster("verbose")) utils::setTxtProgressBar(pb, 1 + j + 1)
 		srcNumEithers <- .makeSourceName("fragmentation_sum_eithers", "raster")
 		ex <- paste0(srcNumEithers, " = ", paste(srcEither, collapse = " + "))
 		rgrass::execGRASS("r.mapcalc", expression = ex, flags = c(.quiet(), "overwrite"))
 
 		# number of neighbor cell pairs both with habitat
+		if (verbose | faster("verbose")) utils::setTxtProgressBar(pb, 1 + j + 2)
 		srcNumBoths <- .makeSourceName("fragmentation_sum_both", "raster")
 		ex <- paste0(srcNumBoths, " = ", paste(srcBoth, collapse = " + "))
 		rgrass::execGRASS("r.mapcalc", expression = ex, flags = c(.quiet(), "overwrite"))
 
 		# calculate Pff
+		if (verbose | faster("verbose")) utils::setTxtProgressBar(pb, 1 + j + 3)
 		srcPff <- .makeSourceName("fragmentation_pff", "raster")
 		ex <- paste0(srcPff, " = double(", srcNumBoths, ") / double(", srcNumEithers, ")")
 		rgrass::execGRASS("r.mapcalc", expression = ex, flags = c(.quiet(), "overwrite"))
 
 		# calculate cover (Pf)
+		if (verbose | faster("verbose")) utils::setTxtProgressBar(pb, 1 + j + 4)
 		srcPf <- .makeSourceName("fragmentation_pf", "raster")
 		rgrass::execGRASS(
 			cmd = "r.neighbors",
@@ -323,6 +365,7 @@ methods::setMethod(
 		)
 
 		# calculate difference between Pf and Pff (used for "perforated", "edge", and "undetermined" cases)
+		if (verbose | faster("verbose")) utils::setTxtProgressBar(pb, 1 + j + 5)
 		srcDelta <- .makeSourceName("fragmentation_delta", "raster")
 		ex <- paste0(srcDelta, " = ", srcPf, " - ", srcPff)
 		rgrass::execGRASS("r.mapcalc", expression = ex, flags = c(.quiet(), "overwrite"))
@@ -350,7 +393,8 @@ methods::setMethod(
 			ex <- paste0(src, " = if (", srcXZeros, " == 0, ", noneValue, ", if (", srcPf, " == 0, 0, if (", srcPf, " == 1 & ", srcPff, " == 1, 6, if (", srcPf, " <= 0.4, 1, if (", srcPf, " <= 0.6, 2, if (", srcDelta, " >= 0, 3, if (", srcDelta, " < 0, 4, null())))))))")
 		
 		}
-
+		
+		if (verbose | faster("verbose")) utils::setTxtProgressBar(pb, 1 + j + 6)
 		rgrass::execGRASS("r.mapcalc", expression = ex, flags = c(.quiet(), "overwrite"))
 
 		# ex <- paste0(src, " = ",
@@ -398,6 +442,7 @@ methods::setMethod(
 		# }
 
 		srcs[i] <- src
+		if (verbose | faster("verbose")) close(pb)
 
 	} # next layer
 
