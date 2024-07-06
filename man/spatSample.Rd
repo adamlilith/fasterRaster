@@ -11,7 +11,7 @@
   size,
   as.points = FALSE,
   values = TRUE,
-  cats = FALSE,
+  cats = TRUE,
   xy = FALSE,
   strata = NULL,
   byStratum = FALSE,
@@ -39,7 +39,7 @@
 
 \item{values}{Logical: If \code{TRUE} (default), values of the \code{GRaster} at points are returned.}
 
-\item{cats}{Logical: If \code{TRUE} and the \code{GRaster} is \link[=tutorial_raster_data_types]{categorical}, then return the category label of each cell. If \code{values} is also \code{TRUE}, then the cell value will also be returned.}
+\item{cats}{Logical: If \code{TRUE} (default) and the \code{GRaster} is \link[=tutorial_raster_data_types]{categorical}, then return the category label of each cell. If \code{values} is also \code{TRUE}, then the cell value will also be returned.}
 
 \item{xy}{Logical: If \code{TRUE}, return the longitude and latitude of each point. Default is \code{FALSE}.}
 

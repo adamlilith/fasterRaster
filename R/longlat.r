@@ -18,29 +18,35 @@ methods::setMethod(
 
     .locationRestore(x)
     .region(x)
-    
-    srcs <- .makeSourceName(c("long", "lat"), "raster")
-    args <- list(
-        cmd = "r.latlong",
-        input = sources(x)[1L],
-        output = srcs[1L],
-        flags = c("l", .quiet(), "overwrite"),
-        intern = TRUE
-    )
-
-    do.call(rgrass::execGRASS, args=args)
-
-    gnLat <- .makeSourceName("lat", "raster")
-    args <- list(
-        cmd = "r.latlong",
-        input = sources(x)[1L],
-        output = srcs[2L],
-        flags = c(.quiet(), "overwrite"),
-        intern = TRUE
-    )
-    do.call(rgrass::execGRASS, args=args)
-
-    .makeGRaster(srcs, c("longitude", "latitude"))
+    srcs <- .longlat(x)
+   .makeGRaster(srcs, c("longitude", "latitude"))
 
     } # EOF
 )
+
+#' @noRd
+.longlat <- function(x) {
+
+    if (inherits(x, "GRaster")) {
+        src <- sources(x)
+    } else {
+        src <- x
+    }
+
+    srcs <- .makeSourceName(c("longlat_long", "longlat_lat"), "raster")
+    rgrass::execGRASS(
+        cmd = "r.latlong",
+        input = src,
+        output = srcs[1L],
+        flags = c("l", .quiet(), "overwrite")
+    )
+
+    rgrass::execGRASS(
+        cmd = "r.latlong",
+        input = src,
+        output = srcs[2L],
+        flags = c(.quiet(), "overwrite")
+    )
+    srcs
+
+}

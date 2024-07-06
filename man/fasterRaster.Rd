@@ -21,11 +21,11 @@ A tutorial on \link[=tutorial_raster_data_types]{raster data types}\cr
 
 \code{\link[=crs]{crs()}}: Coordinate reference system\cr
 \code{\link[=datatype]{datatype()}}: Data type\cr
-\code{\link[=dim]{dim()}}: Number of rows and columns\cr
+\code{\link[=dim]{dim()}} and \code{\link[=dim3]{dim3()}}: Number of rows, columns, and depths\cr
 \code{\link[=ext]{ext()}}, \code{\link[=N]{N()}}, \code{\link[=S]{S()}}, \code{\link[=E]{E()}}, \code{\link[=W]{W()}}, \code{\link[=top]{top()}}, and \code{\link[=bottom]{bottom()}}: Spatial extent\cr
 \code{\link[=freq]{freq()}}: Frequencies of cell values in a raster\cr
 \code{\link[=is.2d]{is.2d()}} and \code{\link[=is.3d]{is.3d()}}: Is an object 2- or 3-dimensional?\cr
-\code{\link[=is.int]{is.int()}} / \code{\link[=is.cell]{is.cell()}}, \code{\link[=is.float]{is.float()}}, \code{\link[=is.doub]{is.doub()}}: \code{GRaster} data type (integer/float/double)\cr
+\code{\link[=is.int]{is.int()}}, \code{\link[=is.cell]{is.cell()}}, \code{\link[=is.float]{is.float()}}, \code{\link[=is.doub]{is.doub()}}: \code{GRaster} data type (integer/float/double)\cr
 \code{\link[=is.factor]{is.factor()}}: Does a raster represent categorical data?\cr
 \code{\link[=is.lonlat]{is.lonlat()}}: Is an object projected (e.g., in WGS84)?\cr
 \code{\link[=levels]{levels()}}: Names of levels in a categorical \code{GRaster}\cr
@@ -93,7 +93,6 @@ The assign operators, \code{\link[fasterRaster]{$<-}}, \code{\link[fasterRaster]
 \code{\link[=extract]{extract()}}: Extract values from a \code{GRaster} at locations of a \code{GVector}\cr
 \code{\link[=fillNAs]{fillNAs()}}: Fill \code{NA} cells\cr
 \code{\link[=focal]{focal()}}: Calculate cell values based on values of nearby cells\cr
-\code{\link[=fractalRast]{fractalRast()}}: Create a fractal \code{GRaster}\cr
 \code{\link[=fragmentation]{fragmentation()}}: Landscape fragmentation class from Riitters et al. (2020)\cr
 \code{\link[=global]{global()}}: Summary statistics across cells of each \code{GRaster} layer\cr
 \code{\link[=hist]{hist()}}: Histogram of \code{GRaster} values\cr
@@ -116,9 +115,6 @@ The assign operators, \code{\link[fasterRaster]{$<-}}, \code{\link[fasterRaster]
 \code{\link[=project]{project()}}: Change coordinate reference system and cell size\cr
 \code{\link[=predict]{predict()}}: Make predictions to a \code{GRaster} from a linear model or generalized linear model\cr
 \code{\link[=resample]{resample()}}: Change cell size\cr
-\code{\link[=rnormRast]{rnormRast()}}: A random \code{GRaster} with values drawn from a normal distribution\cr
-\code{\link[=rSpatialDepRast]{rSpatialDepRast()}}: Create a random \code{GRaster} with or without spatial dependence\cr
-\code{\link[=runifRast]{runifRast()}}: A random \code{GRaster} with values drawn from a uniform distribution\cr
 \code{\link[=scale]{scale()}}, \code{\link[=scalepop]{scalepop()}}, and \code{\link[=unscale]{unscale()}}: Subtract means and divide by standard deviations, or inverse of that\cr
 \code{\link[=selectRange]{selectRange()}}: Select values from rasters in a stack based on values in another \code{GRaster}\cr
 \code{\link[=spatSample]{spatSample()}}: Randomly points from a \code{GRaster}\cr
@@ -127,6 +123,15 @@ The assign operators, \code{\link[fasterRaster]{$<-}}, \code{\link[fasterRaster]
 \code{\link[=trim]{trim()}}: Remove rows and columns from a \code{GRaster} that are all \code{NA}\cr
 \code{\link[=zonal]{zonal()}}: Statistics (mean, sum, etc.) on areas of a \code{GRaster} defined by sets of cells with the same values in another \code{GRaster}, or by geometries in a \code{GVector}\cr
 \code{\link[=zonalGeog]{zonalGeog()}}: Geographic statistics (area, perimeter, fractal dimension, etc.) for sets of cells with the same values\cr
+}
+
+\subsection{Functions for creating \code{GRaster}s \emph{de novo}}{
+
+\code{\link[=fractalRast]{fractalRast()}}: Create a fractal \code{GRaster}\cr
+\code{\link[=rnormRast]{rnormRast()}}: A random \code{GRaster} with values drawn from a normal distribution\cr
+\code{\link[=rSpatialDepRast]{rSpatialDepRast()}}: Create a random \code{GRaster} with or without spatial dependence\cr
+\code{\link[=runifRast]{runifRast()}}: A random \code{GRaster} with values drawn from a uniform distribution\cr
+\code{\link[=sineRast]{sineRast()}}: Sine wave rasters\cr
 }
 
 \subsection{Functions for analysis of terrain and flow of water across landscapes}{

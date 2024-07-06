@@ -23,8 +23,10 @@ extract(elev, dypsis, xy = TRUE)
 
 # Extract from categorical raster at points:
 dypsisWGS84 <- project(dypsis, cover)
-extract(cover, dypsisWGS84)
-extract(cover, dypsisWGS84, cats = TRUE)
+categories <- extract(cover, dypsisWGS84)
+categoryValues <- extract(cover, dypsisWGS84, cats = FALSE)
+categories
+categoryValues
 
 # Extract and summarize values on a raster across polygons:
 extract(elev, coast, fun = c("sum", "mean", "countNonNA"), overlap = FALSE)

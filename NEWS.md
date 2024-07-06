@@ -1,3 +1,16 @@
+# fasterRaster 8.3.0.7020 (2024-07-05)
+**+**: Denotes potentially code-breaking changes
+
+## New functions and functionality
+o `sineRast()`: Creates sine wave rasters.
+
+## Changes in functionality
+o `distance()` now works for calculation of distances between two `GVector`s or a `GVector` and itself.
+o **+** `extract()` and **+** `spatSample()`: Changed default value of `cats` argument to `TRUE`.
+o `fragmentation()` is *much* faster for `SpatRaster`s and for both `SpatRaster`s and `GRaster`s, can display progress.
+o **+** `plot()` is faster for very large rasters. Replaced argument `maxcell` with `simplify`.
+o `show()` displays long raster names properly.
+
 # fasterRaster 8.3.0.7019 (2024-06-08)
 
 ## Bug fixes

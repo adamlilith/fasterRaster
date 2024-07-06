@@ -13,11 +13,11 @@
 #' ## Properties of `GRasters`
 #' [crs()]: Coordinate reference system\cr
 #' [datatype()]: Data type\cr
-#' [dim()]: Number of rows and columns\cr
+#' [dim()] and [dim3()]: Number of rows, columns, and depths\cr
 #' [ext()], [N()], [S()], [E()], [W()], [top()], and [bottom()]: Spatial extent\cr
 #' [freq()]: Frequencies of cell values in a raster\cr
 #' [is.2d()] and [is.3d()]: Is an object 2- or 3-dimensional?\cr
-#' [is.int()] / [is.cell()], [is.float()], [is.doub()]: `GRaster` data type (integer/float/double)\cr
+#' [is.int()], [is.cell()], [is.float()], [is.doub()]: `GRaster` data type (integer/float/double)\cr
 #' [is.factor()]: Does a raster represent categorical data?\cr
 #' [is.lonlat()]: Is an object projected (e.g., in WGS84)?\cr
 #' [levels()]: Names of levels in a categorical `GRaster`\cr
@@ -79,7 +79,6 @@
 #' [extract()]: Extract values from a `GRaster` at locations of a `GVector`\cr
 #' [fillNAs()]: Fill `NA` cells\cr
 #' [focal()]: Calculate cell values based on values of nearby cells\cr
-#' [fractalRast()]: Create a fractal `GRaster`\cr
 #' [fragmentation()]: Landscape fragmentation class from Riitters et al. (2020)\cr
 #' [global()]: Summary statistics across cells of each `GRaster` layer\cr
 #' [hist()]: Histogram of `GRaster` values\cr
@@ -102,9 +101,6 @@
 #' [project()]: Change coordinate reference system and cell size\cr
 #' [predict()]: Make predictions to a `GRaster` from a linear model or generalized linear model\cr
 #' [resample()]: Change cell size\cr
-#' [rnormRast()]: A random `GRaster` with values drawn from a normal distribution\cr
-#' [rSpatialDepRast()]: Create a random `GRaster` with or without spatial dependence\cr
-#' [runifRast()]: A random `GRaster` with values drawn from a uniform distribution\cr
 #' [scale()], [scalepop()], and [unscale()]: Subtract means and divide by standard deviations, or inverse of that\cr
 #' [selectRange()]: Select values from rasters in a stack based on values in another `GRaster`\cr
 #' [spatSample()]: Randomly points from a `GRaster`\cr
@@ -114,6 +110,13 @@
 #' [zonal()]: Statistics (mean, sum, etc.) on areas of a `GRaster` defined by sets of cells with the same values in another `GRaster`, or by geometries in a `GVector`\cr
 #' [zonalGeog()]: Geographic statistics (area, perimeter, fractal dimension, etc.) for sets of cells with the same values\cr
 #'
+#' ## Functions for creating `GRaster`s *de novo*
+#' [fractalRast()]: Create a fractal `GRaster`\cr
+#' [rnormRast()]: A random `GRaster` with values drawn from a normal distribution\cr
+#' [rSpatialDepRast()]: Create a random `GRaster` with or without spatial dependence\cr
+#' [runifRast()]: A random `GRaster` with values drawn from a uniform distribution\cr
+#' [sineRast()]: Sine wave rasters\cr
+#' 
 #' ## Functions for analysis of terrain and flow of water across landscapes
 #' [as.contour()]: Contour lines from a `GRaster`\cr
 #' [flow()]: Identify watershed basins and direction and accumulation of flow\cr
@@ -280,7 +283,6 @@
 #' [Hidden functions][tutorial_hidden_functions] of **fasterRaster**: Useful for power users and developers\cr
 #' [grassStarted()]: Has a connection **GRASS** been made within the current **R** session?\cr
 #'
-#' @docType package
 #' @author Adam B. Smith
 #' @name fasterRaster
 #' @keywords internal

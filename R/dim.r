@@ -2,7 +2,8 @@
 #'
 #' @description
 #' For `GRegion`s: Number of rows, columns, depths, and cells:
-#' * `dim()`: Rows, columns, depths, and layers
+#' * `dim()`: Rows and columns
+#' * `dim3d()`: Rows, columns, and depths
 #' * `nrow()`: Rows
 #' * `ncol()`: Columns
 #' * `ndepth()`: Depths (for 3-dimensional rasters only)
@@ -32,6 +33,17 @@ methods::setMethod(
 	f = "dim",
 	signature = "GRegion",
 	definition = function(x) {
+	c(rows = unname(x@dimensions[1L]), cols = unname(x@dimensions[2L]))
+	} # EOF
+)
+
+#' @aliases dim3d
+#' @rdname dim
+#' @exportMethod dim3d
+methods::setMethod(
+	f = "dim3d",
+	signature = "GRegion",
+	definition = function(x) {
 	
 	c(
 		rows = unname(x@dimensions[1L]),
@@ -39,24 +51,6 @@ methods::setMethod(
 		depths = unname(x@dimensions[3L])
 	)
 	
-	} # EOF
-)
-
-#' @aliases dim
-#' @rdname dim
-#' @exportMethod dim
-methods::setMethod(
-	f = "dim",
-	signature = "GRaster",
-	definition = function(x) {
-	
-	c(
-		rows = unname(x@dimensions[1L]),
-		cols = unname(x@dimensions[2L]),
-		depths = unname(x@dimensions[3L]),
-		nlyr = unname(x@nLayers)
-	)
-
 	} # EOF
 )
 

@@ -8,7 +8,7 @@
 #'
 #' @param y Missing--leave as empty.
 #'
-#' @param maxcell Positive integer (rasters only): Maximum number of cells a raster can have before it is simplified before saving to disk then plotted. The [aggregate()] function will be applied so that it has approximately this number of cells. The default is 5000000.
+#' @param simplify Logical: If `TRUE` (default) and the raster has an x- and/or y-resolution that is greater than the screen resolution, then [aggregate()] will be applied to the raster before it is saved to reduce the time it takes to save the raster.
 #'
 #' @param maxGeoms Positive integer (vectors only): Maximum number of features before vector simplification is applied before saving to disk then creating a `SpatVector` for plotting. The default is 10000.
 #' 
@@ -26,25 +26,56 @@
 methods::setMethod(
 	f = "plot",
 	signature = c(x = "GRaster", y = "missing"),
-	function(x, y, maxcell = 5000000, ...) {
+	function(x, y, simplify = TRUE, ...) {
 
 	# simplify
-	nc <- ncell(x)
-	if (nc > maxcell) {
+	if (simplify & !is.3d(x)) {
+		
+		screenRes <- rpanel::rp.screenresolution()
+		screenWidth <- screenRes$width
+		screenHeight <- screenRes$height
 
 		rows <- nrow(x)
 		cols <- ncol(x)
-		rescale <- ceiling(nc / (2 * maxcell))
+		# pow <- 5 # power by which to reduce dimensions, set at 5 semi-empirically
+		if (screenWidth < cols | screenHeight < rows) {
+		
+			ewScale <- max(1, floor(0.5 * cols / screenWidth))
+			nsScale <- max(1, floor(0.5 * rows / screenHeight))
 
-		if (all(datatype(x) %in% c("integer", "factor"))) {
-			fun <- "mode"
-		} else {
-			fun <- "mean"
+			if (ewScale >= 2 | nsScale >= 2) {
+
+				if (any(datatype(x) %in% c("integer", "factor"))) {
+					fun <- "mode"
+				} else {
+					fun <- "mean"
+				}
+
+				fact <- c(ewScale, nsScale)
+				x <- aggregate(x, fact = fact, fun = fun)
+
+			}
+			
 		}
 
-		if (rescale != 1L) x <- aggregate(x, fact = rescale, fun = fun)
-
 	}
+
+	# nc <- ncell(x)
+	# if (nc > maxcell) {
+
+	# 	rows <- nrow(x)
+	# 	cols <- ncol(x)
+	# 	rescale <- ceiling(nc / (2 * maxcell))
+
+	# 	if (all(datatype(x) %in% c("integer", "factor"))) {
+	# 		fun <- "mode"
+	# 	} else {
+	# 		fun <- "mean"
+	# 	}
+
+	# 	if (rescale != 1L) x <- aggregate(x, fact = rescale, fun = fun)
+
+	# }
 	
 	# # dtype <- datatype(x, "GRASS")
 	# # if (all(dtype %in% "CELL")) {
@@ -68,7 +99,7 @@ methods::setMethod(
 	# # }
 
 	tf <- tempfile(fileext = ".tif")
-	writeRaster(x, filename = tf, format = "GeoTIFF", overwrite = TRUE, warn = FALSE, ...)
+	writeRaster(x, filename = tf, format = "GeoTIFF", bigTiff = TRUE, overwrite = TRUE, warn = FALSE, ...)
 	out <- terra::rast(tf)
 	
 	facts <- is.factor(x)

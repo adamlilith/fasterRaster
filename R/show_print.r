@@ -143,7 +143,7 @@ methods::setMethod(
 	} else {
   		minColWidth <- 4L
 	}
-	maxColWidth <- 30L
+	maxColWidth <- 17L
 	verbose <- faster("verbose")
 
 	digs <- min(5, getOption("digits"))
@@ -241,7 +241,8 @@ methods::setMethod(
     		activeCat[i] <- sprintf(fmt, activeCat[i])
    			datatypeNiceGRASS[i] <- sprintf(fmt, datatypeGRASS[i])
 		}
-		names[i] <- sprintf(fmt, object@names[i])
+		# names[i] <- sprintf(fmt, object@names[i])
+		names[i] <- sprintf(fmt, namesNice[i])
 		datatypeNiceFR[i] <- sprintf(fmt, datatypeFR[i])
 		nCatsNice[i] <- sprintf(fmt, nCats[i])
 		minCatNice[i] <- sprintf(fmt, minCat[i])

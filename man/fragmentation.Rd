@@ -12,10 +12,11 @@
   undet = "undetermined",
   none = NA,
   na.rm = TRUE,
-  cores = faster("cores")
+  cores = faster("cores"),
+  verbose = TRUE
 )
 
-\S4method{fragmentation}{GRaster}(x, w = 3, undet = "undetermined", none = NA)
+\S4method{fragmentation}{GRaster}(x, w = 3, undet = "undetermined", none = NA, verbose = TRUE)
 }
 \arguments{
 \item{x}{A \code{SpatRaster} or \code{GRaster}.}
@@ -61,7 +62,7 @@ madForest <- fastData("madForest2000") # raster
 ### Fragmentation classes from a SpatRaster
 ###########################################
 
-# Fragmentation class:
+# Fragmentation class (takes a long time for SpatRasters):
 fragTerra <- fragmentation(madForest)
 fragTerraMasked <- fragmentation(madForest, restrict = TRUE)
 

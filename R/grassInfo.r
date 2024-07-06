@@ -28,11 +28,17 @@ grassInfo <- function(x = "citation") {
 	} else if (match == "version") {
 		out <- rgrass::execGRASS("g.version", intern = TRUE)
 	} else if (match == "versionNumber") {
-		out <- rgrass::execGRASS("g.version", intern = TRUE)
-		out <- strsplit(out, split = " ")[[1L]]
-		out <- out[2L]
-		out <- substr(out, 1L, 3L)
-		out <- as.numeric(out)
+
+		out <- .fasterRaster$grassVersion
+		if (is.na(out)) {
+
+			out <- rgrass::execGRASS("g.version", intern = TRUE)
+			out <- strsplit(out, split = " ")[[1L]]
+			out <- out[2L]
+			out <- substr(out, 1L, 3L)
+			out <- as.numeric(out)
+
+		}
 	}
 	out
 }

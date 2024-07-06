@@ -21,17 +21,17 @@
   prob = 0.5,
   overlap = TRUE,
   xy = FALSE,
-  cats = FALSE,
+  cats = TRUE,
   verbose = FALSE
 )
 
-\S4method{extract}{GRaster,data.frame}(x, y, xy = FALSE, cats = FALSE)
+\S4method{extract}{GRaster,data.frame}(x, y, xy = FALSE, cats = TRUE)
 
-\S4method{extract}{GRaster,data.table}(x, y, xy = FALSE, cats = FALSE)
+\S4method{extract}{GRaster,data.table}(x, y, xy = FALSE, cats = TRUE)
 
-\S4method{extract}{GRaster,matrix}(x, y, xy = FALSE, cats = FALSE)
+\S4method{extract}{GRaster,matrix}(x, y, xy = FALSE, cats = TRUE)
 
-\S4method{extract}{GRaster,numeric}(x, y, xy = FALSE, cats = FALSE)
+\S4method{extract}{GRaster,numeric}(x, y, xy = FALSE, cats = TRUE)
 
 \S4method{extract}{GVector,GVector}(x, y, xy = FALSE)
 
@@ -73,7 +73,7 @@
 
 \item{xy}{Logical: If \code{TRUE} and \code{y} represents points, also return the coordinates of each point. Default is \code{FALSE.}}
 
-\item{cats}{Logical (extracting from a raster): If \code{TRUE} and \code{x} is a \link[=tutorial_raster_data_types]{categorical raster}, then return the category labels instead of the values. Default is `FALSE.}
+\item{cats}{Logical (extracting from a raster): If \code{TRUE} (default) and \code{x} is a \link[=tutorial_raster_data_types]{categorical raster}, then return the category labels instead of the values.}
 
 \item{verbose}{Logical: If \code{TRUE}, display progress (will only function when extracting from points on a \code{GRaster} when the number of \code{GRaster}s is large).}
 }
@@ -116,8 +116,10 @@ extract(elev, dypsis, xy = TRUE)
 
 # Extract from categorical raster at points:
 dypsisWGS84 <- project(dypsis, cover)
-extract(cover, dypsisWGS84)
-extract(cover, dypsisWGS84, cats = TRUE)
+categories <- extract(cover, dypsisWGS84)
+categoryValues <- extract(cover, dypsisWGS84, cats = FALSE)
+categories
+categoryValues
 
 # Extract and summarize values on a raster across polygons:
 extract(elev, coast, fun = c("sum", "mean", "countNonNA"), overlap = FALSE)

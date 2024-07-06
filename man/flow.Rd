@@ -36,12 +36,12 @@
 A \code{GRaster}.
 }
 \description{
-The \code{flow()} function uses a raster representing elevation to compute rasters representing:
+The \code{flow()} function uses a raster representing elevation to compute other rasters representing:
 \itemize{
-\item Flow accumulation raster;
+\item Flow accumulation;
 \item Direction of flow;
 \item Watershed basins;
-\item Flooded areas;
+\item Flooded areas; and/or
 \item Topographic convergence (log of flow accumulation divided by local slope).
 }
 
