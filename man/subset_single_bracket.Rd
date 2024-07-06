@@ -4,9 +4,12 @@
 \name{[}
 \alias{[}
 \alias{[,GVector,ANY,ANY-method}
-\title{Subset geometries of a GVector or cells}
+\alias{[,GRaster,ANY,ANY-method}
+\title{Subset geometries of a GVector}
 \usage{
 \S4method{[}{GVector,ANY,ANY}(x, i, j)
+
+\S4method{[}{GRaster,GRaster,ANY}(x, i, j)
 }
 \arguments{
 \item{x}{A \code{GVector}.}
@@ -55,8 +58,11 @@ replace <- elev
 replace[replace == 1] <- -20
 replace
 
-### Adding and re-assigning layers of a GRaster
+### Subsetting specific values of a raster based on another raster
+elevInForest <- elev[forest2000 == 1]
+plot(c(elev, forest2000, elevInForest))
 
+### Adding and re-assigning layers of a GRaster
 rasts <- c(elev, constant, forest2000)
 
 # Combine with another layer:
