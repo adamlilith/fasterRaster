@@ -5,22 +5,39 @@
 \alias{sineRast}
 \title{Sine wave rasters}
 \usage{
-\S4method{sineRast}{GRaster}(x, ns = 1, ew = 1, nsOffset = 0, ewOffset = 0, mask = NULL)
+\S4method{sineRast}{GRaster}(
+  x,
+  ns = 1,
+  ew = 1,
+  nsOffset = 0,
+  ewOffset = 0,
+  nsAmp = 1,
+  ewAmp = 1,
+  combos = FALSE,
+  mask = NULL,
+  verbose = FALSE
+)
 }
 \arguments{
 \item{x}{A \code{GRaster}.}
 
-\item{ns, ew}{Numeric: Number of sine waves (i.e., wavelengths) in the north-south and east-west directions. A wavelength of 1 creates a "full" sine wave (e.g., starting at 0 at one end and ending at 0 at the other). A wavelength of 2 would create two such waves, and so on. A value of 0 creates no waves in the given direction (i.e., each row or column has constant values). The default value is 1.}
+\item{ns, ew}{Numeric: Number of complete sine waves (i.e., wavelengths) in the north-south and east-west directions. A wavelength of 1 creates a "full" sine wave (e.g., starting at 0 at one end and ending at 0 at the other). A wavelength of 2 would create two such waves, and so on. A value of 0 creates no waves in the given direction (i.e., each row or column has constant values). The default value is 1.}
 
-\item{nsOffset, ewOffset}{Numeric: Offset of the sine waves from the edges of the raster, expressed as a proportion of the length of the raster. The default is 0, so the values of the outermost cells will be 0 (or nearly so, depending on machine precision) since the waves "begin" and "end" at the edges. If an offset value is 0.2, for example, then it will be pushed "inward" toward the middle of the raster by 20\% of the raster's extent.}
+\item{nsOffset, ewOffset}{Numeric: Offset of the sine waves from the edges of the raster, expressed as a proportion of the length of the raster. The default is 0, so the values of the outermost cells will be close to 0 (but not exactly 0 because centers of cells at the raster edges are not on the actual edge). If an offset value is 0.2, for example, then it will be pushed "inward" toward the middle of the raster by 20\% of the raster's extent.}
 
-\item{mask}{Either \code{NULL} (default), or a \code{GRaster} or \code{GVector}: Used as a mask for the output. If this is a \code{GVector}, then only cells that are not \code{NA} in the mask have values. If this is a \code{GVector}, then only cells that overlap the vector have SEV values. All other values will be \code{NA}.}
+\item{nsAmp, ewAmp}{Numeric: Amplitude (minimum and maximum of the sine wave) in the north-south and east-west directions. The default is 1. Note that when north-south and east-west waves are created (i.e., \code{ns} and \code{ew} are both > 0), the efective amplitude is halved so that the sum is equal to \code{nsAmp + ewAmp}.}
+
+\item{combos}{Logical: If \code{TRUE} (default), create sine rasters using all possible combinations of values of \code{ns}, \code{ew}, \code{nsOffset}, \code{ewOffset}, and \code{amp}. If \code{FALSE}, you can only supply either one value per parameter, or the same number of values per parameter. In this latter case, one raster will be created per pairwise set of the unique parameters. For example, you could specify 3 values for \code{ns} and either one or three values for any of the other parameters, and three rasters would be created.}
+
+\item{mask}{Either \code{NULL} (default), or a \code{GRaster} or \code{GVector}: Used as a mask for the output. If this is a \code{GVector}, then only cells that are not \code{NA} in the mask have values. If this is a \code{GVector}, then only cells that overlap the vector have values assigned. All other values will be \code{NA}.}
+
+\item{verbose}{Logical: If \code{TRUE}, display progress.}
 }
 \value{
 A \code{GRaster}.
 }
 \description{
-This function creates one or more rasters sine waves in the north-south and east-west directions.
+This function creates one or more rasters with sine waves in the north-south and east-west directions.
 }
 \examples{
 if (grassStarted()) {
@@ -35,23 +52,33 @@ madElev <- fastData("madElev")
 # Convert to GRaster:
 elev <- fast(madElev)
 
-# Sine waves:
+### Simple sine waves:
 waves <- sineRast(elev, ns = 2, ew = 1)
 plot(waves)
 
-# Sine waves with and without north-south offset:
+### Sine waves with different amplitudes:
+amps <- sineRast(elev, nsAmp = c(1, 5), ewAmp = c(1, 5))
+amps
+
+### Sine waves with and without north-south offset:
 noOffsets <- sineRast(elev, ns = 1, ew = 1)
 offsets <- sineRast(elev, ns = 1, ew = 1, nsOffset = 0.25)
 offs <- c(noOffsets, offsets)
 names(offs) <- c("no offset", "offset")
 plot(offs)
 
-# Masking:
+### Masking:
 madCoast4 <- fastData("madCoast4")
 coast4 <- fast(madCoast4, verbose = FALSE)
 
 masked <- sineRast(elev, mask = coast4)
 plot(masked)
+
+### Multiple sine waves (multiple rasters):
+mults <- sineRast(elev, ns = 1:2, ew = 1:2)
+combos <- sineRast(elev, ns = 1:2, ew = 1:2, combos = TRUE)
+plot(mults)
+plot(combos)
 
 }
 }

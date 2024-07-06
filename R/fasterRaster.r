@@ -283,7 +283,6 @@
 #' [Hidden functions][tutorial_hidden_functions] of **fasterRaster**: Useful for power users and developers\cr
 #' [grassStarted()]: Has a connection **GRASS** been made within the current **R** session?\cr
 #'
-#' @docType package
 #' @author Adam B. Smith
 #' @name fasterRaster
 #' @keywords internal
