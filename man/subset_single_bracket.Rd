@@ -4,7 +4,7 @@
 \name{[}
 \alias{[}
 \alias{[,GVector,ANY,ANY-method}
-\title{Subset geometries of a GVector}
+\title{Subset geometries of a GVector or cells}
 \usage{
 \S4method{[}{GVector,ANY,ANY}(x, i, j)
 }
@@ -49,6 +49,11 @@ constant[] <- 14
 constant
 
 names(constant) <- "constant"
+
+### Re-assigning specific values of a raster
+replace <- elev
+replace[replace == 1] <- -20
+replace
 
 ### Adding and re-assigning layers of a GRaster
 

@@ -45,6 +45,11 @@ constant
 
 names(constant) <- "constant"
 
+### Re-assigning specific values of a raster
+replace <- elev
+replace[replace == 1] <- -20
+replace
+
 ### Adding and re-assigning layers of a GRaster
 
 rasts <- c(elev, constant, forest2000)

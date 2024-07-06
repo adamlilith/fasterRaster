@@ -11,7 +11,9 @@
 \arguments{
 \item{x}{A \code{GRaster}.}
 
-\item{i, j}{Not used.}
+\item{i}{Either missing or a conditional statement.}
+
+\item{j}{Not used}
 
 \item{value}{A numeric, integer, or logical value, or \code{NA}. Only a single value can be used.}
 }
@@ -19,7 +21,7 @@
 A \code{GRaster}.
 }
 \description{
-The \verb{[<-} operator can be used to replace the values of a \code{GRaster}.
+The \verb{[<-} operator can be used to replace all of the values of a \code{GRaster}, or specific values depending on the expression in \code{i}. For example, you could use \code{rast[] <- 10} to assign 10 to all cells, or \code{rast[rast > 0] <- 10} to assign all cells with values >0 to 10.
 }
 \examples{
 if (grassStarted()) {
@@ -47,6 +49,11 @@ constant[] <- 14
 constant
 
 names(constant) <- "constant"
+
+### Re-assigning specific values of a raster
+replace <- elev
+replace[replace == 1] <- -20
+replace
 
 ### Adding and re-assigning layers of a GRaster
 
