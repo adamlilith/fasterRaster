@@ -298,3 +298,31 @@ methods::setMethod(
 
 	} # EOF
 )
+
+#' @name [
+#' @aliases [,GRaster,ANY,ANY-method
+#' @docType methods
+#' @rdname subset_single_bracket
+#' @exportMethod [
+methods::setMethod(
+	"[",
+	signature = c(x = "GRaster", i = "GRaster", j = "ANY"),
+	function(x, i, j) {
+
+	.locationRestore(x)
+	.region(x)
+
+	nLayers <- nlyr(x)
+	srcs <- .makeSourceName("subset_single_bracket", "raster", nLayers)
+	for (count in seq_len(nLayers)) {
+			
+		if (!(.minVal(i)[count] %in% c(NA, 0, 1)) & !(.maxVal(i)[count] %in% c(NA, 0, 1))) stop("The GRaster in `i` must 0, 1, or NA values.")
+
+		ex <- paste0(srcs[count], " = if(", sources(i)[count], " == 1, ", sources(x)[count], ", 0)")
+		rgrass::execGRASS("r.mapcalc", expression = ex, flags = c(.quiet(), "overwrite"))
+	
+	}
+	.makeGRaster(srcs, names(x))
+
+	} # EOF
+)
