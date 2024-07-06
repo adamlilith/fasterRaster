@@ -1,9 +1,10 @@
 #' Replace values of a GRaster
 #'
-#' @description The `[<-` operator can be used to replace the values of a `GRaster`.
+#' @description The `[<-` operator can be used to replace all of the values of a `GRaster`, or specific values depending on the expression in `i`. For example, you could use `rast[] <- 10` to assign 10 to all cells, or `rast[rast > 0] <- 10` to assign all cells with values >0 to 10.
 #'
 #' @param x A `GRaster`.
-#' @param i,j Not used.
+#' @param i Either missing or a conditional statement.
+#' @param j Not used
 #' @param value A numeric, integer, or logical value, or `NA`. Only a single value can be used.
 #'
 #' @returns A `GRaster`.
@@ -20,11 +21,7 @@ setMethod(
 	signature = c(x = "GRaster", i = "ANY", j = "ANY"),
 	definition = function(x, i, j, value) {
 	
-	if (missing(i)) {
-		i <- NULL
-	} else {
-		warning("Argument i will be ignored.")
-	}
+	if (missing(i)) i <- NULL
 	if (missing(j)) {
 		j <- NULL
 	} else {
@@ -45,19 +42,25 @@ setMethod(
 	
 	nLayers <- nlyr(x)
 	srcs <- .makeSourceName(x, "raster", nLayers)
-	for (i in seq_len(nLayers)) {
-	
-		ex <- paste0(srcs[i], " = ", value)
-		args <- list(
+	for (count in seq_len(nLayers)) {
+
+		if (inherits(i, "GRaster")) {
+			if (!(.minVal(i)[count] %in% c(NA, 0, 1)) & !(.maxVal(i)[count] %in% c(NA, 0, 1))) stop("The GRaster in `i` must 0, 1, or NA values.")
+			ex <- paste0(srcs[count], " = if(", sources(i)[count], " == 1, ", value, ", ", sources(x)[count], ")")
+		} else {
+			ex <- paste0(srcs[count], " = ", value)
+		}
+
+		rgrass::execGRASS(
 			cmd = "r.mapcalc",
 			expression = ex,
-			flags = c(.quiet(), "overwrite"),
-			intern = TRUE
+			flags = c(.quiet(), "overwrite")
 		)
-		do.call(rgrass::execGRASS, args = args)
-	
+
 	} # next raster
-	.makeGRaster(srcs, 'layer')
+	.makeGRaster(srcs, names(x))
 	
 	} # EOF
 )
+
+
