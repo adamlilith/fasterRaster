@@ -6,12 +6,14 @@
 \alias{[<-,GRaster,ANY,ANY-method}
 \title{Replace values of a GRaster}
 \usage{
-\S4method{[}{GRaster,ANY,ANY}(x, i, j) <- value
+\S4method{[}{GRaster,missing,ANY}(x, i, j) <- value
+
+\S4method{[}{GRaster,GRaster,ANY}(x, i, j) <- value
 }
 \arguments{
 \item{x}{A \code{GRaster}.}
 
-\item{i}{Either missing or a conditional statement.}
+\item{i}{Either missing or a conditional statement that resolves to a \code{GRaster}.}
 
 \item{j}{Not used}
 

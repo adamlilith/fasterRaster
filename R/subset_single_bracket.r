@@ -312,7 +312,20 @@ methods::setMethod(
 	.locationRestore(x)
 	.region(x)
 
+	if (missing(j)) j <- NULL
+
 	nLayers <- nlyr(x)
+	nLayersI <- nlyr(i)
+
+	if (nLayersI != nLayers) {
+
+		if (nlyr(i) != 1L) warning("The number of layers in the subset raster (inside the `[]`) does not have\n  the same number of layers as the raster to be subset. The layers inside\n  the square brackets will be recycled.")
+
+		iIndex <- rep(seq_len(nLayersI), length.out = nLayers)
+		i <- i[[iIndex]]
+
+	}
+
 	srcs <- .makeSourceName("subset_single_bracket", "raster", nLayers)
 	for (count in seq_len(nLayers)) {
 			
