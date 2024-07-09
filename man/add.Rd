@@ -39,10 +39,10 @@ forest2014 <- fast(madForest2014)
 ### Re-assigning values of a GRaster
 
 constant <- elev
-constant[] <- 14
+constant[] <- pi
 constant
 
-names(constant) <- "constant"
+names(constant) <- "pi_raster"
 
 ### Re-assigning specific values of a raster
 replace <- elev
@@ -51,7 +51,7 @@ replace
 
 ### Subsetting specific values of a raster based on another raster
 elevInForest <- elev[forest2000 == 1]
-plot(c(elev, forest2000, elevInForest))
+plot(c(elev, forest2000, elevInForest), nr = 1)
 
 ### Adding and re-assigning layers of a GRaster
 rasts <- c(elev, constant, forest2000)
