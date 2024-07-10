@@ -5,6 +5,7 @@
 o `[` (`subset_single_bracket`) can use a `GRaster` inside the `[]` to specify what cells in a `GRaster` to subset.
 o `[<-` (`replace_single_square_bracket`) can use a `GRaster` inside the `[]` to specify what cells in a `GRaster` are re-assigned.
 o `sineRast()` now accepts arguments for amplitude.
+o `tiles()` creates spatially exclusive subsets from `GRaster`s.
 
 # fasterRaster 8.3.0.7020 (2024-07-05)
 **+**: Denotes potentially code-breaking changes

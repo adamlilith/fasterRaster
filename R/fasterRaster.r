@@ -82,7 +82,6 @@
 #' [fragmentation()]: Landscape fragmentation class from Riitters et al. (2020)\cr
 #' [global()]: Summary statistics across cells of each `GRaster` layer\cr
 #' [hist()]: Histogram of `GRaster` values\cr
-#' [horizonHeight()]: Horizon height\cr
 #' [interpIDW()]: Interpolate values at points to a `GRaster`\cr
 #' [kernel()]: Kernel density estimator of points\cr
 #' [layerCor()]: Correlation or covariance between two or more `GRaster` layers\cr
@@ -106,6 +105,7 @@
 #' [spatSample()]: Randomly points from a `GRaster`\cr
 #' [subst()]: Re-assign cell values\cr
 #' [thinLines()]: Reduce linear features on a `GRaster` so linear features are 1 cell wide\cr
+#' [tiles()]: Divide a `GRaster` into spatially exclusive subsets (though with possible overlap)\cr
 #' [trim()]: Remove rows and columns from a `GRaster` that are all `NA`\cr
 #' [zonal()]: Statistics (mean, sum, etc.) on areas of a `GRaster` defined by sets of cells with the same values in another `GRaster`, or by geometries in a `GVector`\cr
 #' [zonalGeog()]: Geographic statistics (area, perimeter, fractal dimension, etc.) for sets of cells with the same values\cr

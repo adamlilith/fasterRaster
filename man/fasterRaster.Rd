@@ -96,7 +96,6 @@ The assign operators, \code{\link[fasterRaster]{$<-}}, \code{\link[fasterRaster]
 \code{\link[=fragmentation]{fragmentation()}}: Landscape fragmentation class from Riitters et al. (2020)\cr
 \code{\link[=global]{global()}}: Summary statistics across cells of each \code{GRaster} layer\cr
 \code{\link[=hist]{hist()}}: Histogram of \code{GRaster} values\cr
-\code{\link[=horizonHeight]{horizonHeight()}}: Horizon height\cr
 \code{\link[=interpIDW]{interpIDW()}}: Interpolate values at points to a \code{GRaster}\cr
 \code{\link[=kernel]{kernel()}}: Kernel density estimator of points\cr
 \code{\link[=layerCor]{layerCor()}}: Correlation or covariance between two or more \code{GRaster} layers\cr
@@ -120,6 +119,7 @@ The assign operators, \code{\link[fasterRaster]{$<-}}, \code{\link[fasterRaster]
 \code{\link[=spatSample]{spatSample()}}: Randomly points from a \code{GRaster}\cr
 \code{\link[=subst]{subst()}}: Re-assign cell values\cr
 \code{\link[=thinLines]{thinLines()}}: Reduce linear features on a \code{GRaster} so linear features are 1 cell wide\cr
+\code{\link[=tiles]{tiles()}}: Divide a \code{GRaster} into spatially exclusive subsets (though with possible overlap)\cr
 \code{\link[=trim]{trim()}}: Remove rows and columns from a \code{GRaster} that are all \code{NA}\cr
 \code{\link[=zonal]{zonal()}}: Statistics (mean, sum, etc.) on areas of a \code{GRaster} defined by sets of cells with the same values in another \code{GRaster}, or by geometries in a \code{GVector}\cr
 \code{\link[=zonalGeog]{zonalGeog()}}: Geographic statistics (area, perimeter, fractal dimension, etc.) for sets of cells with the same values\cr
