@@ -10,7 +10,7 @@
 #' 
 #' @param reshapeRegion Logical: If `TRUE`, reshape the region to match `x` (`GRaster`s only).
 #'
-#' @returns Character vector representing the new `sources` of each object, plus makes a copy of the given object(s) in **GRASS**.
+#' @returns Character vector representing the [sources()] names of the copied object(s), plus makes a copy of the given object(s) in **GRASS**.
 #'
 #' @aliases .copyGSpatial
 #' @noRd
