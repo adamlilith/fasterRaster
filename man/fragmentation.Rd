@@ -62,7 +62,7 @@ madForest <- fastData("madForest2000") # raster
 ### Fragmentation classes from a SpatRaster
 ###########################################
 
-# Fragmentation class (takes a long time for SpatRasters):
+# Fragmentation class:
 fragTerra <- fragmentation(madForest)
 fragTerraMasked <- fragmentation(madForest, restrict = TRUE)
 

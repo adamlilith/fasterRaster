@@ -25,7 +25,7 @@
 
 \item{nsOffset, ewOffset}{Numeric: Offset of the sine waves from the edges of the raster, expressed as a proportion of the length of the raster. The default is 0, so the values of the outermost cells will be close to 0 (but not exactly 0 because centers of cells at the raster edges are not on the actual edge). If an offset value is 0.2, for example, then it will be pushed "inward" toward the middle of the raster by 20\% of the raster's extent.}
 
-\item{nsAmp, ewAmp}{Numeric: Amplitude (minimum and maximum of the sine wave) in the north-south and east-west directions. The default is 1. Note that when north-south and east-west waves are created (i.e., \code{ns} and \code{ew} are both > 0), the efective amplitude is halved so that the sum is equal to \code{nsAmp + ewAmp}.}
+\item{nsAmp, ewAmp}{Numeric: Amplitude (minimum and maximum of the sine wave) in the north-south and east-west directions. The default is 1. Note that when north-south and east-west waves are created (i.e., \code{ns} and \code{ew} are both > 0), the effective amplitude is halved so that the sum is equal to \code{nsAmp + ewAmp}.}
 
 \item{combos}{Logical: If \code{TRUE} (default), create sine rasters using all possible combinations of values of \code{ns}, \code{ew}, \code{nsOffset}, \code{ewOffset}, and \code{amp}. If \code{FALSE}, you can only supply either one value per parameter, or the same number of values per parameter. In this latter case, one raster will be created per pairwise set of the unique parameters. For example, you could specify 3 values for \code{ns} and either one or three values for any of the other parameters, and three rasters would be created.}
 
