@@ -108,7 +108,7 @@ methods::setMethod(
 		rastExtensions <- c("asc", "asci", "ascii", "grd", "hgt", "img", "mem", "tif", "tifg", "saga")
 		vectExtensions <- c("shp", "gpkg", "kml")
 
-		ext <- .fileExt(x)
+		ext <- .fileExt(x[1L])
 		ext <- tolower(ext)
 
 		if (any(ext %in% rastExtensions)) {
