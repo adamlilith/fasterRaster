@@ -160,6 +160,9 @@
 #' [plotRGB()]: Display a multispectral `GRaster` using red, blue, green, and alpha channels\cr
 #' [vegIndex()]: Vegetation indices from surface reflectance\cr
 #'
+#' ### Functions that operate on **terra** `SpatRaster`s
+#' [fragmentation()]: Landscape fragmentation class from Riitters et al. (2020)\cr
+#'
 #' ## Properties of `GVector`s
 #' [crs()]: Coordinate reference system\cr
 #' [datatype()]: Data type of fields\cr
