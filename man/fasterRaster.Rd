@@ -181,6 +181,11 @@ The assign operators, \code{\link[fasterRaster]{$<-}}, \code{\link[fasterRaster]
 \code{\link[=compositeRGB]{compositeRGB()}}: Combine red, green, and blue color bands to make a composite \code{GRaster}\cr
 \code{\link[=plotRGB]{plotRGB()}}: Display a multispectral \code{GRaster} using red, blue, green, and alpha channels\cr
 \code{\link[=vegIndex]{vegIndex()}}: Vegetation indices from surface reflectance\cr
+\subsection{Functions that operate on \strong{terra} \code{SpatRaster}s}{
+
+\code{\link[=fragmentation]{fragmentation()}}: Landscape fragmentation class from Riitters et al. (2020)\cr
+}
+
 }
 
 \subsection{Properties of \code{GVector}s}{
