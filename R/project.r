@@ -35,6 +35,8 @@
 #' * `GRaster`s: When projecting rasters that "wrap around" (i.e., whole-world rasters or rasters that have edges that actually circle around to meet on the globe), `wrap` should be `TRUE` to avoid removing rows and columns from the "edge" of the map. The default is `FALSE`.
 #' * `GVector`s: When projecting vectors that span the international date line at 180E/W, `wrap` should be `TRUE` to avoid an issue where the coordinates are incorrectly mapped to the range -180 to 180.
 #'
+#' @param verbose Logical (for projecting `GRaster`s only): If `TRUE`, display progress. Default is `FALSE`.
+#'
 #' @details When projecting a raster, the "fallback" methods in **GRASS** module `r.import` are actually used, even though the `method` argument takes the strings specifying non-fallback methods. See the manual page for the `r.import` **GRASS** module.
 #' 
 #' @returns A `GRaster` or `GVector`.
@@ -56,7 +58,8 @@ methods::setMethod(
 		method = NULL,
 		fallback = TRUE,
 		res = "fallback",
-		wrap = FALSE
+		wrap = FALSE,
+		verbose = FALSE
 	) {
 
 	if (inherits(res, "character")) {
@@ -89,7 +92,7 @@ methods::setMethod(
 			thisRes <- try[j]
 
 			out <- tryCatch(
-				.projectRaster(x = x, y = y, align = align, method = method, fallback = fallback, res = thisRes, wrap = wrap),
+				.projectRaster(x = x, y = y, align = align, method = method, fallback = fallback, res = thisRes, wrap = wrap, verbose = verbose),
 				error = function(cond) FALSE
 			)
 		
@@ -101,8 +104,18 @@ methods::setMethod(
 	} # EOF
 )
 
+#' @param x A `GRaster`.
+#' @param y A `GRaster` or `GVector`.
+#' @param align T/F
+#' @param method Character
+#' @param fallback T/F
+#' @param res Character.
+#' @param wrap T/F
+#' @param verbose T/F
 #' @noRd
-.projectRaster <- function(x, y, align, method, fallback, res, wrap) {
+.projectRaster <- function(x, y, align, method, fallback, res, wrap, verbose) {
+
+	nLayers <- nlyr(x)
 
 	# .message(msg = "project_raster", message = "This function can produce erroneous results if the raster crosses a pole or the international date line.")
 	
@@ -113,7 +126,6 @@ methods::setMethod(
 		if ((extent[1L] == -180 & extent[2L] == 180) | (extent[3L] == -90 & extent[4L] == 90)) warning("This GRaster seems to wrap around the globe to meet at the international\n  date line and/or the poles. Should `wrap` be `TRUE`?")
 
 	}
-
 	
 	xLocation <- .location(x)
 	yLocation <- .locationFind(y, match = "crs", return = "name")
@@ -146,6 +158,12 @@ methods::setMethod(
 
 	}
 
+	nSteps <- nLayers + res == "terra"
+	if (verbose | faster("verbose")) {
+		pb <- utils::txtProgressBar(min = 0, max = nSteps, initial = 0, style = 3, width = 30)
+		steps <- 0
+	}
+
 	### If y is a GRaster, reshape region in target location using y's extent/resolution.
 	if (inherits(y, "GRaster")) {
 
@@ -156,6 +174,11 @@ methods::setMethod(
 			
 		# resample as per terra::project()
 		} else if (res == "terra") {
+
+			if (verbose | faster("verbose")) {
+				utils::setTxtProgressBar(pb, steps)
+				steps <- steps + 1
+			}
 
 			# Use a SpatRaster as template for resampling region. We do this so we can set the "region" resolution and extent correctly.
 			extent <- ext(x, vector = TRUE)
@@ -332,6 +355,11 @@ methods::setMethod(
 	srcs <- .makeSourceName("project", "raster", nlyr(x))
 	for (i in seq_len(nlyr(x))) {
 		
+		if (verbose | faster("verbose")) {
+			utils::setTxtProgressBar(pb, steps)
+			steps <- steps + 1
+		}
+
 		args <- list(
 			cmd = "r.proj",
 			location = .location(x),
@@ -359,6 +387,8 @@ methods::setMethod(
 		}
 
 	} # project next raster
+	
+	if (verbose | faster("verbose")) close(pb)
 
 	# if using y as extent to which to crop
 	if (!align & inherits(y, "GRaster")) out <- crop(out, y)
