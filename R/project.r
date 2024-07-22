@@ -113,7 +113,7 @@ methods::setMethod(
 #' @param wrap T/F
 #' @param verbose T/F
 #' @noRd
-.projectRaster <- function(x, y, align, method, fallback, res, wrap, verbose) {
+.projectRaster <- function(x, y, align, method, fallback, res, wrap, verbose = FALSE) {
 
 	nLayers <- nlyr(x)
 
