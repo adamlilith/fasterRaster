@@ -7,6 +7,12 @@ o `[<-` (`replace_single_square_bracket`) can use a `GRaster` inside the `[]` to
 o `sineRast()` now accepts arguments for amplitude.
 o `tiles()` creates spatially exclusive subsets from `GRaster`s.
 
+## Issues and bug fixes
+o `spatSample()` now works when `values = TRUE`.
+
+## Minor
+o `project()` now has a `verbose` argument for displaying progress.
+
 # fasterRaster 8.3.0.7020 (2024-07-05)
 **+**: Denotes potentially code-breaking changes
 
