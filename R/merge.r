@@ -28,7 +28,7 @@ methods::setMethod(
 	rgrass::execGRASS("g.region", raster = rasts, flags=c("o", .quiet()))
 
 	# combine
-	src <- .makeSourceName("merge", "raster")
+	src <- .makeSourceName("merge_r_patch", "raster")
 	rgrass::execGRASS(
 		cmd = "r.patch",
 		input = rasts,
