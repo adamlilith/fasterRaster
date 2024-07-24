@@ -14,7 +14,7 @@
 #' * `"meters2"` (default), `"metres2"`, or `"m2"`
 #' * `"km2"` or `"kilometers2"`
 #' * `"ha"` or `"hectares"`
-#' * `"acres"`
+#' * `"ac"` or `"acres"`
 #' * `"mi2"` or `"miles2"`
 #' * `"ft2"` or `"feet2"`
 #'
