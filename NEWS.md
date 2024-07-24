@@ -1,12 +1,13 @@
 # fasterRaster 8.3.0.7021 (2024-XX-XX)
 
-## Potentially co-breaking stuff
+## Potentially co-breaking changes
 o Renamed `terrainRuggednessIndex()` to `ruggedness()`
 o Renamed `topoWetnessIndex()` to `wetness()`
 
 ## New functions and functionality
 o `[` (`subset_single_bracket`) can use a `GRaster` inside the `[]` to specify what cells in a `GRaster` to subset.
 o `[<-` (`replace_single_square_bracket`) can use a `GRaster` inside the `[]` to specify what cells in a `GRaster` are re-assigned.
+o `faster()` now has option `clean`, which enables automatic deletion of temporary files.
 o `sineRast()` now accepts arguments for amplitude.
 o `tiles()` creates spatially exclusive subsets from `GRaster`s.
 

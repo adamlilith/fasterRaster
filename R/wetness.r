@@ -10,9 +10,9 @@
 #'
 #' @example man/examples/ex_ruggedness_wetness.r
 #'
-#' @aliases topoWetness
-#' @rdname topoWetness
-#' @exportMethod topoWetness
+#' @aliases wetness
+#' @rdname wetness
+#' @exportMethod wetness
 methods::setMethod(
 	f = "wetness",
 	signature = c(x = "GRaster"),
@@ -36,7 +36,7 @@ methods::setMethod(
 		)
 	
 	}
-	.makeGRaster(srcs, paste0(names(x), "_TWI"))
+	.makeGRaster(srcs, paste0(names(x), "_twi"))
 
 	} # EOF
 )

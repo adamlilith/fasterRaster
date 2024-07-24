@@ -2,7 +2,7 @@
 % Please edit documentation in R/wetness.r
 \name{wetness,GRaster-method}
 \alias{wetness,GRaster-method}
-\alias{topoWetness}
+\alias{wetness}
 \title{Topographic wetness index}
 \usage{
 \S4method{wetness}{GRaster}(x)
