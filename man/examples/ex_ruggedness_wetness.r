@@ -10,11 +10,11 @@ madElev <- fastData("madElev")
 elev <- fast(madElev)
 
 # Terrain ruggedness index:
-tri <- terrainRuggednessIndex(elev)
+tri <- ruggedness(elev)
 plot(c(elev, tri))
 
 # Topographic wetness index:
-twi <- topoWetnessIndex(elev)
+twi <- wetness(elev)
 plot(c(elev, twi))
 
 }

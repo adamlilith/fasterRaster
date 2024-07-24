@@ -1,5 +1,8 @@
 # fasterRaster 8.3.0.7021 (2024-XX-XX)
-**+**: Denotes potentially code-breaking changes
+
+## Potentially co-breaking stuff
+o Renamed `terrainRuggednessIndex()` to `ruggedness()`
+o Renamed `topoWetnessIndex()` to `wetness()`
 
 ## New functions and functionality
 o `[` (`subset_single_bracket`) can use a `GRaster` inside the `[]` to specify what cells in a `GRaster` to subset.

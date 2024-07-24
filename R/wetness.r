@@ -6,15 +6,15 @@
 #'
 #' @returns A `GRaster`.
 #'
-#' @seealso [terrain()], [terrainRuggednessIndex()], [geomorphons()], module [`r.topidx`](https://grass.osgeo.org/grass84/manuals/r.topidx.html) in **GRASS**
+#' @seealso [terrain()], [ruggedness()], [geomorphons()], module [`r.topidx`](https://grass.osgeo.org/grass84/manuals/r.topidx.html) in **GRASS**
 #'
-#' @example man/examples/ex_terrainRuggednessIndex_topoWetnessIndex.r
+#' @example man/examples/ex_ruggedness_wetness.r
 #'
-#' @aliases topoWetnessIndex
-#' @rdname topoWetnessIndex
-#' @exportMethod topoWetnessIndex
+#' @aliases topoWetness
+#' @rdname topoWetness
+#' @exportMethod topoWetness
 methods::setMethod(
-	f = "topoWetnessIndex",
+	f = "wetness",
 	signature = c(x = "GRaster"),
 	function(x) {
 	
