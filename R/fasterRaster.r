@@ -125,10 +125,10 @@
 #' [`hillshade()`][shade]: Create a hillshade `GRaster`\cr
 #' [horizonHeight()]: Horizon height\cr
 #' [sun()]: Solar radiance and irradiance\cr
+#' [ruggedness()]: Terrain Ruggedness Index\cr
 #' [streams()]: Create stream network\cr
 #' [terrain()]: Slope, aspect, curvature, and partial slopes\cr
-#' [terrainRuggednessIndex()]: Terrain Ruggedness Index\cr
-#' [topoWetnessIndex()]: Topographic wetness index\cr
+#' [topoWetness()]: Topographic wetness index\cr
 #' 
 #' ## Functions operating on categorical (factor) rasters
 #' \code{\link[fasterRaster]{%in%}}, and \code{\link[fasterRaster]{%notin%}}: Mask cells that match or do not match a given category\cr
