@@ -311,6 +311,9 @@ methods::setMethod(
 	}
 	steps <- 0
 
+	# to keep `sources` of temporary files for deletion
+	created <- character()
+
 	srcs <- rep(NA_character_, nLayers)
 	for (i in seq_len(nLayers)) {
 
@@ -321,6 +324,8 @@ methods::setMethod(
 		srcXZeros <- .makeSourceName("fragmentation_xSansNAs", "raster")
 		ex <- paste0(srcXZeros, " = if(isnull(", srcIn, "), 0, ", srcIn, ")")
 		rgrass::execGRASS("r.mapcalc", expression = ex, flags = c(.quiet(), "overwrite"))
+
+		created <- c(created, srcXZeros)
 
 		### connectivities (for Pff)
 		srcConnectivities <- .makeSourceName("fragmentation_connectivities", "raster", n = length(offsets))
@@ -351,6 +356,8 @@ methods::setMethod(
 			rgrass::execGRASS("r.mapcalc", expression = ex, flags = c(.quiet(), "overwrite"))
 
 		}
+		created <- c(created, srcConnectivities, srcEither, srcBoth)
+
 
 		# number of neighbor cell pairs with at least one with habitat
 		steps <- steps + 1
@@ -359,6 +366,8 @@ methods::setMethod(
 		ex <- paste0(srcNumEithers, " = ", paste(srcEither, collapse = " + "))
 		rgrass::execGRASS("r.mapcalc", expression = ex, flags = c(.quiet(), "overwrite"))
 
+		created <- c(created, srcNumEithers)
+
 		# number of neighbor cell pairs both with habitat
 		steps <- steps + 1
 		if (verbose | faster("verbose")) utils::setTxtProgressBar(pb, steps)
@@ -366,12 +375,16 @@ methods::setMethod(
 		ex <- paste0(srcNumBoths, " = ", paste(srcBoth, collapse = " + "))
 		rgrass::execGRASS("r.mapcalc", expression = ex, flags = c(.quiet(), "overwrite"))
 
+		created <- c(created, srcNumBoths)
+
 		# calculate Pff
 		steps <- steps + 1
 		if (verbose | faster("verbose")) utils::setTxtProgressBar(pb, steps)
 		srcPff <- .makeSourceName("fragmentation_pff", "raster")
 		ex <- paste0(srcPff, " = double(", srcNumBoths, ") / double(", srcNumEithers, ")")
 		rgrass::execGRASS("r.mapcalc", expression = ex, flags = c(.quiet(), "overwrite"))
+
+		created <- c(created, srcPff)
 
 		# calculate cover (Pf)
 		steps <- steps + 1
@@ -388,12 +401,16 @@ methods::setMethod(
 			flags = c(.quiet(), "overwrite")
 		)
 
+		created <- c(created, srcPf)
+
 		# calculate difference between Pf and Pff (used for "perforated", "edge", and "undetermined" cases)
 		steps <- steps + 1
 		if (verbose | faster("verbose")) utils::setTxtProgressBar(pb, steps)
 		srcDelta <- .makeSourceName("fragmentation_delta", "raster")
 		ex <- paste0(srcDelta, " = ", srcPf, " - ", srcPff)
 		rgrass::execGRASS("r.mapcalc", expression = ex, flags = c(.quiet(), "overwrite"))
+
+		created <- c(created, srcDelta)
 
 		### assign classes
 		# NB: The first condition in each forces cases where focal cell does not have focal habitat to NA as per Riitters et al.: "If the center pixel was not forest, then a null value was assigned to that location."
@@ -468,6 +485,9 @@ methods::setMethod(
 		# }
 
 		srcs[i] <- src
+
+		.rm(created, type = "raster", warn = FALSE)
+		created <- character()
 
 	} # next layer
 

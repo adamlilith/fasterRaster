@@ -59,7 +59,7 @@ methods::setMethod(
 	)
 	
 	do.call(rgrass::execGRASS, args = args)
-	.makeGRaster(args$stream_raster, names = "streams")
+	.makeGRaster(src, names = "streams")
 	
 	} # EOF
 )

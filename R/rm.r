@@ -11,7 +11,7 @@
 #'
 #' @param type The type of spatial objects to delete. This can include `"rasters"` (all rasters), `"vectors"` (all spatial vectors), `"rasters3d"` (3D-rasters), and/or `"groups"` (groups). Partial matching is supported. If missing, all objects are candidates for deletion if they match `x`.
 #'
-#' @param warn Logical: If `TRUE` (default), display warning if no matches or if everything is to be deleted.
+#' @param warn Logical: If `TRUE` (default), display warning if no matches or if everything in **GRASS** is to be deleted.
 #'
 #' @return `TRUE` (invisibly).
 #'

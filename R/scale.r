@@ -97,11 +97,7 @@ methods::setMethod(
 			ex <- paste0(srcs[i], " = ", sources(x)[i], " / ", sigma)
 		}
 
-		rgrass::execGRASS(
-			cmd = "r.mapcalc",
-			expression = ex,
-			flags = c(.quiet(), "overwrite")
-		)
+		rgrass::execGRASS("r.mapcalc", expression = ex, flags = c(.quiet(), "overwrite"))
 	
 	} # next layer
 	out <- .makeGRaster(srcs, names(x))

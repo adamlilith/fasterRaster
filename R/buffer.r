@@ -115,11 +115,8 @@ methods::setMethod(
 		} else {
 			paste0(src, " = if(", srcBuffer, " == 2, 1, 1)")
 		}
-		rgrass::execGRASS(
-			"r.mapcalc",
-			expression = ex,
-			flags=c(.quiet(), "overwrite")
-		)
+		rgrass::execGRASS("r.mapcalc", expression = ex, flags=c(.quiet(), "overwrite"))
+		if (faster("clean")) on.exit(.rm(srcBuffer, type = "raster", warn = FALSE), add = TRUE)
 		
 		if (nlyr(x) > 1L) {
 			group[[i]] <- .makeGRaster(src, names(x[[i]]))

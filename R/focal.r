@@ -118,25 +118,82 @@ methods::setMethod(
         # must convert to double in some cases
         if (fun == "average") {
 
-				# convert to double to obviate issues with imprecision
-				gnDouble <- .makeSourceName("double", "raster")
-				ex <- paste0(gnDouble, " = double(", sources(x)[i], ")")
-				rgrass::execGRASS("r.mapcalc", expression = ex, flags = c(.quiet(), "overwrite"), intern = TRUE)
+			# convert to double to obviate issues with imprecision
+			gnDouble <- .makeSourceName("double", "raster")
+			ex <- paste0(gnDouble, " = double(", sources(x)[i], ")")
+			rgrass::execGRASS("r.mapcalc", expression = ex, flags = c(.quiet(), "overwrite"), intern = TRUE)
 
-				# focal sums (numerator)
-				gnSum <- .makeSourceName("sum", "raster")
+			# focal sums (numerator)
+			gnSum <- .makeSourceName("sum", "raster")
+			thisArgs <- args
+			thisArgs$method <- "sum"
+			thisArgs$input <- gnDouble
+			thisArgs$output <- gnSum
+			do.call(rgrass::execGRASS, args = thisArgs)
+
+			# ones mask (for denominator)
+			gnOnes <- .makeSourceName("ones", "raster")
+			ex <- paste0(gnOnes, " = if(isnull(", gnDouble, "), null(), double(1))")
+			rgrass::execGRASS("r.mapcalc", expression = ex, flags = c(.quiet(), "overwrite"), intern = TRUE)
+
+			# count raster (sum of ones--denominator)
+			gnCount <- .makeSourceName("count", "raster")
+			thisArgs <- args
+			thisArgs$method <- "sum"
+			thisArgs$input <- gnOnes
+			thisArgs$output <- gnCount
+			do.call(rgrass::execGRASS, args = thisArgs)
+
+			# calculate mean
+			src <- .makeSourceName(fun, "raster")
+			ex <- paste0(src, " = ", gnSum, " / ", gnCount)
+			rgrass::execGRASS("r.mapcalc", expression = ex, flags=c(.quiet(), "overwrite"), intern = TRUE)
+
+        } else if (fun %in% c("sdpop", "sd", "var", "varpop")) {
+	
+			# convert to double to obviate issues with imprecision
+			gnDouble <- .makeSourceName("double", "raster")
+			ex <- paste0(gnDouble, " = double(", sources(x)[i], ")")
+			rgrass::execGRASS("r.mapcalc", expression = ex, flags = c(.quiet(), "overwrite"), intern = TRUE)
+		
+			### numerator LHS
+			
+				# square values
+				gnSquared <- .makeSourceName("squared", "raster")
+				ex <- paste0(gnSquared, " = ", gnDouble, "^2")
+				rgrass::execGRASS("r.mapcalc", expression = ex, flags = c(.quiet(), "overwrite"), intern = TRUE)
+				
+				# focal sums of squares
+				gnSoS <- .makeSourceName("sumOfSquares", "raster")
+				thisArgs <- args
+				thisArgs$method <- "sum"
+				thisArgs$input <- gnSquared
+				thisArgs$output <- gnSoS
+				do.call(rgrass::execGRASS, args = thisArgs)
+
+			### numerator RHS
+				
+				# focal sums
+				gnSums <- .makeSourceName("sum", "raster")
 				thisArgs <- args
 				thisArgs$method <- "sum"
 				thisArgs$input <- gnDouble
-				thisArgs$output <- gnSum
+				thisArgs$output <- gnSums
 				do.call(rgrass::execGRASS, args = thisArgs)
+				
+				# squared sums raster
+				gnSquaredSums <- .makeSourceName("squaredSums", "raster")
+				ex <- paste0(gnSquaredSums, " = ", gnSums, "^2")
+				rgrass::execGRASS("r.mapcalc", expression = ex, flags = c(.quiet(), "overwrite"), intern = TRUE)
 
-				# ones mask (for denominator)
+			### counts
+				
+				# ones mask... used to obviate problems where NULL cells are counted as 0
 				gnOnes <- .makeSourceName("ones", "raster")
 				ex <- paste0(gnOnes, " = if(isnull(", gnDouble, "), null(), double(1))")
 				rgrass::execGRASS("r.mapcalc", expression = ex, flags = c(.quiet(), "overwrite"), intern = TRUE)
-
-				# count raster (sum of ones--denominator)
+				
+				# count raster (sum of ones)
 				gnCount <- .makeSourceName("count", "raster")
 				thisArgs <- args
 				thisArgs$method <- "sum"
@@ -144,110 +201,53 @@ methods::setMethod(
 				thisArgs$output <- gnCount
 				do.call(rgrass::execGRASS, args = thisArgs)
 
-				# calculate mean
-				src <- .makeSourceName(fun, "raster")
-				ex <- paste0(src, " = ", gnSum, " / ", gnCount)
-				rgrass::execGRASS("r.mapcalc", expression = ex, flags=c(.quiet(), "overwrite"), intern = TRUE)
-
-        } else if (fun %in% c("sdpop", "sd", "var", "varpop")) {
-        
-				# convert to double to obviate issues with imprecision
-				gnDouble <- .makeSourceName("double", "raster")
-				ex <- paste0(gnDouble, " = double(", sources(x)[i], ")")
-				rgrass::execGRASS("r.mapcalc", expression = ex, flags = c(.quiet(), "overwrite"), intern = TRUE)
-            
-				### numerator LHS
-                
-					# square values
-					gnSquared <- .makeSourceName("squared", "raster")
-					ex <- paste0(gnSquared, " = ", gnDouble, "^2")
-					rgrass::execGRASS("r.mapcalc", expression = ex, flags = c(.quiet(), "overwrite"), intern = TRUE)
-					
-					# focal sums of squares
-					gnSoS <- .makeSourceName("sumOfSquares", "raster")
-					thisArgs <- args
-					thisArgs$method <- "sum"
-					thisArgs$input <- gnSquared
-					thisArgs$output <- gnSoS
-					do.call(rgrass::execGRASS, args = thisArgs)
-
-				### numerator RHS
-                    
-					# focal sums
-					gnSums <- .makeSourceName("sum", "raster")
-					thisArgs <- args
-					thisArgs$method <- "sum"
-					thisArgs$input <- gnDouble
-					thisArgs$output <- gnSums
-					do.call(rgrass::execGRASS, args = thisArgs)
-					
-					# squared sums raster
-					gnSquaredSums <- .makeSourceName("squaredSums", "raster")
-					ex <- paste0(gnSquaredSums, " = ", gnSums, "^2")
-					rgrass::execGRASS("r.mapcalc", expression = ex, flags = c(.quiet(), "overwrite"), intern = TRUE)
-
-				### counts
-                    
-					# ones mask... used to obviate problems where NULL cells are counted as 0
-					gnOnes <- .makeSourceName("ones", "raster")
-					ex <- paste0(gnOnes, " = if(isnull(", gnDouble, "), null(), double(1))")
-					rgrass::execGRASS("r.mapcalc", expression = ex, flags = c(.quiet(), "overwrite"), intern = TRUE)
-					
-					# count raster (sum of ones)
-					gnCount <- .makeSourceName("count", "raster")
-					thisArgs <- args
-					thisArgs$method <- "sum"
-					thisArgs$input <- gnOnes
-					thisArgs$output <- gnCount
-					do.call(rgrass::execGRASS, args = thisArgs)
-
-				### final
-                    
-					# numerator
-					gnNumer <- .makeSourceName("numerator", "raster")
-					ex <- paste0(gnNumer, " = ", gnSoS, " - (", gnSquaredSums, " / ", gnCount, ")")
-					rgrass::execGRASS("r.mapcalc", expression = ex, flags = c(.quiet(), "overwrite"), intern = TRUE)
-					
-					# sd or variance
-					src <- .makeSourceName(fun, "raster")
-					ex <- if (fun == "sd") {
-						paste0(src, " = sqrt(", gnNumer, " / (", gnCount, " - 1))")
-					} else if (fun == "sdpop") {
-						paste0(src, " = sqrt(", gnNumer, " / ", gnCount, ")")
-					} else if (tolower(fun) == "var") {
-						paste0(src, " = ", gnNumer, " / (", gnCount, " - 1)")
-					} else if (tolower(fun) == "varpop") {
-						paste0(src, " = ", gnNumer, " / (", gnCount, ")")
-					}
-
-					rgrass::execGRASS("r.mapcalc", expression = ex, flags = c(.quiet(), "overwrite"), intern = TRUE)
-
-        } else if (fun == "interspersion") {
-            
-				gnInter <- .makeSourceName("interspersion", "raster")
-				args$output <- gnInter
-				args$input <- sources(x)[i]
-				do.call(rgrass::execGRASS, args = args)
-
-				src <- .makeSourceName("focal", "raster")
-				ex <- paste0(src, " = (double(", gnInter, ") - 1) / 100")
+			### final
+				
+				# numerator
+				gnNumer <- .makeSourceName("numerator", "raster")
+				ex <- paste0(gnNumer, " = ", gnSoS, " - (", gnSquaredSums, " / ", gnCount, ")")
 				rgrass::execGRASS("r.mapcalc", expression = ex, flags = c(.quiet(), "overwrite"), intern = TRUE)
 				
+				# sd or variance
+				src <- .makeSourceName(fun, "raster")
+				ex <- if (fun == "sd") {
+					paste0(src, " = sqrt(", gnNumer, " / (", gnCount, " - 1))")
+				} else if (fun == "sdpop") {
+					paste0(src, " = sqrt(", gnNumer, " / ", gnCount, ")")
+				} else if (tolower(fun) == "var") {
+					paste0(src, " = ", gnNumer, " / (", gnCount, " - 1)")
+				} else if (tolower(fun) == "varpop") {
+					paste0(src, " = ", gnNumer, " / (", gnCount, ")")
+				}
+
+				rgrass::execGRASS("r.mapcalc", expression = ex, flags = c(.quiet(), "overwrite"), intern = TRUE)
+
+        } else if (fun == "interspersion") {
+		
+			gnInter <- .makeSourceName("interspersion", "raster")
+			args$output <- gnInter
+			args$input <- sources(x)[i]
+			do.call(rgrass::execGRASS, args = args)
+
+			src <- .makeSourceName("focal", "raster")
+			ex <- paste0(src, " = (double(", gnInter, ") - 1) / 100")
+			rgrass::execGRASS("r.mapcalc", expression = ex, flags = c(.quiet(), "overwrite"), intern = TRUE)
+			
         } else {
 
-				src <- .makeSourceName("focal", "raster")
-				args$output <- src
-				args$input <- sources(x)[i]
-				do.call(rgrass::execGRASS, args = args)
+			src <- .makeSourceName("focal", "raster")
+			args$output <- src
+			args$input <- sources(x)[i]
+			do.call(rgrass::execGRASS, args = args)
 
         }
-        
-			if (is.factor(x)[i] & fun %in% c("mode", "min", "max")) {
-				levels <- cats(x)[[i]]
-			} else {
-				levels <- NULL
-			}
-		
+	
+		if (is.factor(x)[i] & fun %in% c("mode", "min", "max")) {
+			levels <- cats(x)[[i]]
+		} else {
+			levels <- NULL
+		}
+	
         this <- .makeGRaster(src, names(x)[i], levels = levels)
         if (i == 1L) {
             out <- this
