@@ -13,7 +13,8 @@
   method = NULL,
   fallback = TRUE,
   res = "fallback",
-  wrap = FALSE
+  wrap = FALSE,
+  verbose = FALSE
 )
 
 \S4method{project}{GVector}(x, y, wrap = FALSE)
@@ -54,6 +55,8 @@
 \item \code{GRaster}s: When projecting rasters that "wrap around" (i.e., whole-world rasters or rasters that have edges that actually circle around to meet on the globe), \code{wrap} should be \code{TRUE} to avoid removing rows and columns from the "edge" of the map. The default is \code{FALSE}.
 \item \code{GVector}s: When projecting vectors that span the international date line at 180E/W, \code{wrap} should be \code{TRUE} to avoid an issue where the coordinates are incorrectly mapped to the range -180 to 180.
 }}
+
+\item{verbose}{Logical (for projecting \code{GRaster}s only): If \code{TRUE}, display progress. Default is \code{FALSE}.}
 }
 \value{
 A \code{GRaster} or \code{GVector}.

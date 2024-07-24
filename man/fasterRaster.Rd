@@ -143,10 +143,10 @@ The assign operators, \code{\link[fasterRaster]{$<-}}, \code{\link[fasterRaster]
 \code{\link[=shade]{hillshade()}}: Create a hillshade \code{GRaster}\cr
 \code{\link[=horizonHeight]{horizonHeight()}}: Horizon height\cr
 \code{\link[=sun]{sun()}}: Solar radiance and irradiance\cr
+\code{\link[=ruggedness]{ruggedness()}}: Terrain Ruggedness Index\cr
 \code{\link[=streams]{streams()}}: Create stream network\cr
 \code{\link[=terrain]{terrain()}}: Slope, aspect, curvature, and partial slopes\cr
-\code{\link[=terrainRuggednessIndex]{terrainRuggednessIndex()}}: Terrain Ruggedness Index\cr
-\code{\link[=topoWetnessIndex]{topoWetnessIndex()}}: Topographic wetness index\cr
+\code{\link[=topoWetness]{topoWetness()}}: Topographic wetness index\cr
 }
 
 \subsection{Functions operating on categorical (factor) rasters}{

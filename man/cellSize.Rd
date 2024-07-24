@@ -23,7 +23,7 @@
 \item \code{"meters2"} (default), \code{"metres2"}, or \code{"m2"}
 \item \code{"km2"} or \code{"kilometers2"}
 \item \code{"ha"} or \code{"hectares"}
-\item \code{"acres"}
+\item \code{"ac"} or \code{"acres"}
 \item \code{"mi2"} or \code{"miles2"}
 \item \code{"ft2"} or \code{"feet2"}
 }}

@@ -56,5 +56,5 @@ hs <- hillshade(elev)
 }
 }
 \seealso{
-\code{\link[terra:terrain]{terra::terrain()}}, \code{\link[=terrainRuggednessIndex]{terrainRuggednessIndex()}}, \code{\link[=topoWetnessIndex]{topoWetnessIndex()}}, \code{\link[=geomorphons]{geomorphons()}}, module \code{r.slope.aspect} in \strong{GRASS}
+\code{\link[terra:terrain]{terra::terrain()}}, \code{\link[=ruggedness]{ruggedness()}}, \code{\link[=wetness]{wetness()}}, \code{\link[=geomorphons]{geomorphons()}}, module \code{r.slope.aspect} in \strong{GRASS}
 }
