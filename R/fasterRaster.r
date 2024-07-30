@@ -1,6 +1,6 @@
 #' "fasterRaster": Faster raster and spatial vector processing using "GRASS GIS"
 #'
-#' @description Processing of large-in-memory/-on disk rasters and spatial vectors in using **GRASS GIS**. Most functions in the **terra** and **sf** packages are recreated. Processing of medium-sized and smaller spatial objects will nearly always be faster using **terra** or **sf**. To use most of the functions you must have the stand-alone version of **GRASS** version 8.0 or higher (not the **OSGeoW4** installer version). Note that due to developer choices, results will not always be strictly comparable between **terra**, **sf**, and **fasterRaster**.
+#' @description **fasterRaster**: Processing of large-in-memory/-on disk rasters and spatial vectors in using **GRASS GIS**. Most functions in the **terra** and **sf** packages are recreated. Processing of medium-sized and smaller spatial objects will nearly always be faster using **terra** or **sf**. To use most of the functions you must have the stand-alone version of **GRASS GIS** version 8.3 or higher (not the **OSGeoW4** installer version). Note that due to differences in how **GRASS**, **terra**, and **sf** were implemented,results will not always be strictly comparable between functions for the same kind of task.
 #'
 #' ## Most useful tutorials and functions:
 #' A [quick-start][tutorial_getting_started] tutorial\cr
@@ -282,7 +282,7 @@
 #' ## Esoteric tutorials and arcane notes
 #' Comparisons between `GRegion`s can be performed using the `==` and `!=` operators.\cr
 #' Tutorial on **GRASS** [regions][tutorial_regions]\cr
-#' Tutorial on **GRASS** ["locations" and mapsets][tutorial_locations_mapsets]\cr
+#' Tutorial on **GRASS** [projects/locations and mapsets][tutorial_locations_mapsets]\cr
 #' [Hidden functions][tutorial_hidden_functions] of **fasterRaster**: Useful for power users and developers\cr
 #' [grassStarted()]: Has a connection **GRASS** been made within the current **R** session?\cr
 #'
