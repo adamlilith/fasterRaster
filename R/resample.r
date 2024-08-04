@@ -166,7 +166,6 @@ methods::setMethod(
 				flags = c(.quiet(), "overwrite")
 			)
 			if (versionNumber >= 8.3) args$nprocs <- faster("cores")
-
 			do.call(rgrass::execGRASS, args = args)
 
 		}
@@ -183,7 +182,6 @@ methods::setMethod(
 				flags = c(.quiet(), "overwrite")
 			)
 			if (versionNumber >= 8.3) args$nprocs <- faster("cores")
-			
 			do.call(rgrass::execGRASS, args = args)
 
 		}
@@ -200,7 +198,6 @@ methods::setMethod(
 				flags = c(.quiet(), "overwrite")
 			)
 			if (versionNumber > 8.3) args$nprocs <- faster("cores")
-			
 			do.call(rgrass::execGRASS, args = args)
 
 		}
@@ -227,16 +224,19 @@ methods::setMethod(
 
 				# merge bilinear and nearest
 				ex <- paste0(src, " = if(!isnull(", srcBilinear, "), ", srcBilinear, ", ", srcNearest, ")")
+				on.exit(.rm(c(srcBilinear, srcNearest), type = "raster"), add = TRUE)
 
 			} else if (thisMethod == "bicubic") {
 			
 				# merge bicubic, bilinear, and nearest
 				ex <- paste0(src, " = if(!isnull(", srcBicubic, "), ", srcBicubic, ", if(!isnull(", srcBilinear, "), ", srcBilinear, ", ", srcNearest, "))")
+				on.exit(.rm(c(srcBicubic, srcBilinear, srcNearest), type = "raster"), add = TRUE)
 				
 			} else if (thisMethod == "lanczos") {
 
 				# merge bicubic, bilinear, and nearest
 				ex = paste0(src, " = if(!isnull(", srcLanczos, "), ", srcLanczos, ", if(!isnull(", srcBicubic, "), ", srcBicubic, ", if(!isnull(", srcBilinear, "), ", srcBilinear, ", ", srcNearest, ")))")
+				on.exit(.rm(c(srcLanczos, srcBicubic, srcBilinear, srcNearest), type = "raster"), add = TRUE)
 
 			}
 
