@@ -13,13 +13,15 @@
 #'
 #' @param warn Logical: If `TRUE` (default), display warning if no matches or if everything in **GRASS** is to be deleted.
 #'
+#' @param verify Logical: If `TRUE` (default), the function will search for the item(s) to be deleted first to verify they exist. If this is `FALSE`, then `x` and MUST be specified and `type` must be '`raster`' or `'vector'` (one value per value in `x`). This has no effect if `x` is a `GSpatial` object. It's main use is to save a bit of time.
+#'
 #' @return `TRUE` (invisibly).
 #'
 #' @seealso [rm()]
 #'
 #' @aliases .rm
 #' @noRd
-.rm <- function(x, type = NULL, warn = TRUE) {
+.rm <- function(x, type = NULL, warn = TRUE, verify = TRUE) {
 
 	if (missing(x)) {
 		if (warn) {
@@ -39,13 +41,21 @@
 			"vector"
 		}
 	} else if (inherits(x, "character")) {
-		dels <- .ls()
-		dels <- dels[dels %in% x]
-		if (length(dels) == 0L) {
-			warning("Object(s) are not in GRASS. Nothing deleted.")
-			return(invisible(FALSE))
+		
+		if (verify) {
+			
+			dels <- .ls()
+			dels <- dels[dels %in% x]
+			if (length(dels) == 0L) {
+				warning("Object(s) are not in GRASS. Nothing deleted.")
+				return(invisible(FALSE))
+			}
+			type <- names(dels)
+		
+		} else {
+			dels <- x
+			type <- rep(type, length(dels))
 		}
-		type <- names(dels)
 	}
 
 	for (i in seq_along(dels)) {
