@@ -296,11 +296,7 @@ methods::setMethod(
 			stop("The ", link, " link function is not supported.")
 		}
 	
-		rgrass::execGRASS(
-			cmd = "r.mapcalc",
-			expression = ex,
-			flags = c(.quiet(), "overwrite")
-		)
+		rgrass::execGRASS(cmd = "r.mapcalc", expression = ex, flags = c(.quiet(), "overwrite"))
 
 	}
 

@@ -195,6 +195,7 @@ methods::setMethod(
 			
 		}
 
+		if (faster("clean")) .rm(srcs, type = "vector", warn = FALSE)
 		if ((verbose | faster("verbose")) & sets > 1)  close(pb)
 
 	# if strata is not NULL
@@ -238,7 +239,7 @@ methods::setMethod(
 	# extract values from raster
 	if (values | cats) {
 
-		vals <- .extractFromRasterAtPoints(x = x, y = src, values = values, cats = cats, verbose = verbose)
+		vals <- .extractFromRasterAtPoints(x = x, y = src, cats = cats, verbose = verbose)
 
 		if (exists("out", inherits = FALSE)) {
 			out <- cbind(out, vals)

@@ -1,14 +1,16 @@
 #' @name tutorial_locations_mapsets
 #'
-#' @title Locations and mapsets
+#' @title Locations/projects and mapsets
 #'
-#' @description **GRASS GIS** uses "locations" and "mapsets" to store files (rasters, vectors, etc.). **fasterRaster** uses them, to, but invisibly to most users. Thus, this tutorial is mostly of interest to developers and other curious people.
+#' @description **GRASS GIS** uses "projects" (previously called "locations") and "mapsets" to store files (rasters, vectors, etc.). **fasterRaster** uses them, to, but invisibly to most users. Thus, this tutorial is mostly of interest to developers and other curious people.
 #'
-#' ## **GRASS** locations
+#' ## **GRASS** locations/projects
+#'
+#' Starting with **GRASS** 
 #'
 #' Upon starting, **GRASS** creates (or loads) a location, which corresponds to a folder on the user's system. Importantly, all rasters and vectors in a location must have the same coordinate reference system (CRS). Confusingly, rasters and vectors in the same **GRASS** location do not necessarily have to represent the same place on Earth. In general, rasters and vectors can only interact with one another if they are in the same location and mapset.  **GRASS** can only have a connection to a single location at a time.
 #'
-#' **fasterRaster** handles locations and mapsets automatically, so users typically do not need to manage them. Locations are created on an as-needed basis. Within a given **R** session, if no locations have been made, calling [fast()] to create a `GRaster` or `GVector` will 1) make a connection to **GRASS** and 2) create a location with a CRS the same as the raster or vector. The raster or vector is then stored in this location. [fast()] starts the connection and creates the location using the exported by publicly undocumented function `.locationCreate()`.
+#' **fasterRaster** handles projects and mapsets automatically, so users typically do not need to manage them. Projects are created on an as-needed basis. Within a given **R** session, if no projects have been made, calling [fast()] to create a `GRaster` or `GVector` will 1) make a connection to **GRASS** and 2) create a location with a CRS the same as the raster or vector. The raster or vector is then stored in this location. [fast()] starts the connection and creates the location using the exported by publicly undocumented function `.locationCreate()`.
 #'
 #' If [fast()] is called and a location already exists that has the same CRS as the raster or vector, one of two things will happen. First, if **GRASS** is already connected to that location, the raster or vector is simply imported. Second, if **GRASS** is not connected to the location that has the appropriate CRS, it will use `.locationRestore()` to connect to the proper one, then import the raster or vector.
 #'

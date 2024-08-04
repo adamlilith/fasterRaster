@@ -109,18 +109,18 @@ methods::setMethod(
     ### change masked values
     if (!is.null(updatevalue)) {
 
-        gnsUpdate <- .makeSourceName("random", "raster", nLayers)
+        srcsUpdate <- .makeSourceName("random", "raster", nLayers)
         for (i in seq_len(nLayers)) {
 
-            ex <- paste0(gnsUpdate[i], " = if(!isnull(", srcs[i], "), ", updatevalue, ", null())")
+            ex <- paste0(srcsUpdate[i], " = if(!isnull(", srcs[i], "), ", updatevalue, ", null())")
             rgrass::execGRASS("r.mapcalc", expression = ex, flags = c(.quiet(), "overwrite"), intern = TRUE)
 
         } # next raster
-        out <- .makeGRaster(gnsUpdate, names(x))
+        out <- .makeGRaster(srcsUpdate, names(x))
 
     } else {
-			levels <- cats(x)
-			ac <- activeCats(x)
+        levels <- cats(x)
+        ac <- activeCats(x)
         out <- .makeGRaster(srcs, names(x), levels = levels, ac = ac)
     }
     out

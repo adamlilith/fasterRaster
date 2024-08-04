@@ -37,19 +37,17 @@ methods::setMethod(
     .locationRestore(x)
     .region(x)
 
-    gnFracts <- .makeSourceName("fractal", "raster", n)
-    srcs <- .makeSourceName("fractalScaled", "raster", n)
+    gnFracts <- .makeSourceName("fractal", "raster", n) # base fractal rasters
+    srcs <- .makeSourceName("fractalScaled", "raster", n) # rescaled fractal rasters
 
     for (i in seq_len(n)) {
 
-        args <- list(
+        rgrass::execGRASS(
             cmd = "r.surf.fractal",
             output = gnFracts[i],
             dimension = dimension[i],
-            flags = c(.quiet(), "overwrite"),
-            intern = TRUE
+            flags = c(.quiet(), "overwrite")
         )
-        do.call(rgrass::execGRASS, args = args)
 
         y <- .makeGRaster(gnFracts[i], "random")
 
@@ -58,15 +56,11 @@ methods::setMethod(
 
         ex <- paste0(srcs[i], " = ", mu[i], " + ", sigma[i], " * (", gnFracts[i], " - ", xmu, ") / ", xsigma)
 
-        args <- list(
-            cmd = "r.mapcalc",
-            expression = ex,
-            flags = c(.quiet(), "overwrite"),
-            intern = TRUE
-        )
+        args <- list("r.mapcalc", expression = ex, flags = c(.quiet(), "overwrite"))
         do.call(rgrass::execGRASS, args = args)
 
     } # next raster
+    if (faster("clean")) on.exit(.rm(gnFracts, type = "raster", warn = FALSE), add = TRUE)
     .makeGRaster(srcs, "fractal")
 
     } # EOF

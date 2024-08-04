@@ -33,31 +33,24 @@ methods::setMethod(
     # convert from east to north orientation
     direction <- ((360 - direction) %% 360 + 90) %% 360
 
-    for (i in 1L:nlyr(x)) {
+    nLayers <- nlyr(x)
+    srcs <- .makeSourceName("shade", "raster", n = nLayers)
+    for (i in seq_len(nLayers)) {
 
-        src <- .makeSourceName("shade", "rast")
         args <- list(
             cmd = "r.relief",
             input = sources(x)[i],
-            output = src,
+            output = srcs[i],
             altitude = angle,
             azimuth = direction,
             zscale = zscale,
-            flags = c(.quiet(), "overwrite"),
-            intern = TRUE
+            flags = c(.quiet(), "overwrite")
         )
 
-        do.call(rgrass::execGRASS, args=args)
-
-        this <- .makeGRaster(src, paste0(names(x)[i], "_shade"))
-        if (i == 1L) {
-            out <- this
-        } else {
-            out <- c(out, this)
-        }
+        do.call(rgrass::execGRASS, args = args)
 
     }
-    out
+    .makeGRaster(srcs, paste0(names(x), "_shade"))
 
     } # EOF
 )

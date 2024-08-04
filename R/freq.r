@@ -66,11 +66,7 @@ methods::setMethod(
 
 			thisSrc <- .makeSourceName("r_mapcalc", "raster")
 			ex <- paste0(thisSrc, " = if(", src[i], " == ", value, ", ", value, ", null())")
-			rgrass::execGRASS(
-				cmd = "r.mapcalc",
-				expression = ex,
-				flags = c(.quiet(), "overwrite")
-			)
+			rgrass::execGRASS(cmd = "r.mapcalc", expression = ex, flags = c(.quiet(), "overwrite"))
 		
 		}
 

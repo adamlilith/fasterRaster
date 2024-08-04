@@ -230,19 +230,14 @@ methods::setMethod(
 				} else if (thisFun == "cv") {
 				
 					pattern <- "mean: "
-					mean. <- info[grepl(info, pattern=pattern)]
-					mean. <- sub(mean., pattern=pattern, replacement="")
+					mean. <- info[grepl(info, pattern = pattern)]
+					mean. <- sub(mean., pattern = pattern, replacement="")
 					mean. <- as.numeric(mean.)
 
 					srcSS <- .makeSourceName("r_mapcalc", "rast")
 					ex <- paste0(srcSS, " = (", sources(x)[i], " - ", mean., ")^2")
 					
-					rgrass::execGRASS(
-						"r.mapcalc",
-						expression = ex,
-						flags = c(.quiet(), "overwrite"),
-						intern = TRUE
-					)
+					rgrass::execGRASS("r.mapcalc", expression = ex, flags = c(.quiet(), "overwrite"))
 				
 					args <- list(
 						cmd = "r.univar",
@@ -257,6 +252,7 @@ methods::setMethod(
 					if (versionNumber >= 8.3) args$nprocs <- faster("cores")
 
 					thisInfo <- do.call(rgrass::execGRASS, args = args)
+					if (faster("clean")) on.exit(.rm(srcSS, type = "raster", warn = FALSE), add = TRUE)
 
 					pattern <- "sum: "
 					ss <- thisInfo[grepl(info, pattern=pattern)]
@@ -280,8 +276,8 @@ methods::setMethod(
 				} else if (thisFun %in% c("var", "sd")) {
 	
 					pattern <- "mean: "
-					mean. <- info[grepl(info, pattern=pattern)]
-					mean. <- sub(mean., pattern=pattern, replacement="")
+					mean. <- info[grepl(info, pattern = pattern)]
+					mean. <- sub(mean., pattern = pattern, replacement="")
 					mean. <- as.numeric(mean.)
 
 					srcSS <- .makeSourceName("r_mapcalc", "raster")
@@ -307,6 +303,7 @@ methods::setMethod(
 					if (grassInfo("versionNumber") >= 8.3) args$nprocs <- faster("cores")
 
 					thisInfo <- do.call(rgrass::execGRASS, args = args)
+					if (faster("clean")) on.exit(.rm(srcSS, type = "raster", warn = FALSE), add = TRUE)
 
 					pattern <- "sum: "
 					ss <- thisInfo[grepl(info, pattern=pattern)]

@@ -25,6 +25,7 @@ Rasters (objects of class \code{SpatRaster} from the \strong{terra} package, sav
 \item \link{madForest2000}: Forest cover in year 2000
 \item \link{madForest2014}: Forest cover in year 2014
 \item \link{madLANDSAT}: Surface reflectance in 2023
+\item \link{madPpt}, \link{madTmin}, \link{madTmax}: Rasters of mean monthly precipitation, and minimum and maximum temperature.
 }
 
 Data frames
@@ -86,10 +87,18 @@ madForest2014 <- fastData("madForest2014")
 madForest2014
 plot(madForest2014)
 
-# multi-layer raster
+# multi-layer rasters
 madChelsa <- fastData("madChelsa")
 madChelsa
 plot(madChelsa)
+
+madPpt <- fastData("madPpt")
+madTmin <- fastData("madTmin")
+madTmax <- fastData("madTmax")
+madPpt
+madTmin
+madTmax
+
 
 # RGB raster
 madLANDSAT <- fastData("madLANDSAT")

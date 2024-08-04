@@ -97,7 +97,7 @@ setMethod(
 			extension <- .fileExt(filename)
 			fn <- substr(filename, 1L, nchar(filename) - nchar(extension) - 1L)
 			fn <- paste0(fn, "_", names(xx), ".", extension)
-			writeRaster(xx, filename = fn, byLayer = FALSE, ...)
+			writeRaster(xx, filename = fn, overwrite = overwrite, datatype = datatype, byLayer = FALSE, levelsExt = levelsExt, compress = compress, warn = warn, ...)
 		
 		}
 	

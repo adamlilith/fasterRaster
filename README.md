@@ -21,7 +21,9 @@ Faster raster processing in `R` using `GRASS GIS`
 `fasterRaster` makes heavy use of the <a href="https://cran.r-project.org/package=rgrass">`rgrass`</a> package by Roger Bivand and others, the <a href="https://cran.r-project.org/package=rgrass">`terra`</a> package by Robert Hijmans, the <a href="https://cran.r-project.org/package=sf">`sf`</a> package by Edzer Pebesma Roger Bivand, and of course <a href="https://grass.osgeo.org/">`GRASS GIS`</a>, so is greatly indebted to all of these creators!
 
 # Where we are
-As of 2024/06/06, a new version of this package, `fasterRaster 8.3`, is in alpha release (i.e., near final release). There are known issues and unknown issues. If you encounter one of the latter, please file an <a href="https://github.com/adamlilith/fasterRaster/issues">issue</a> report.
+As of 2024/08/01, a new version of this package, `fasterRaster 8.3`, is in alpha release (i.e., near final release). There are known issues and unknown issues. If you encounter one of the latter, please file an <a href="https://github.com/adamlilith/fasterRaster/issues">issue</a> report.
+
+**Special announcement**: The new `bioclims()` function creates the "classic" set of BIOCLIM variables, plus an optional "extended" set. The function works on **fasterRaster** `GRaster`s and on **terra** `SpatRaster`s!
 
 # Functions
 To see a detailed list of functions available in `fasterRaster`, attach the package and use `?fasterRaster`. Note the additional tutorials linked from there!
@@ -136,85 +138,6 @@ plot(rivers, col = "blue", add = TRUE)
 
 <img src="dist_to_rivers.png"/>  
 
-Now, let's see if there is a difference between the frequency of different geomorphons between areas within 1000 m of a river and the region in general across the region. There are ten types of geomorphons (e.g., flat, valley, peak, slope, etc.).  We will calculate geomorphons for the entire region, then mask out areas outside the buffers.
-
-```
-geomorphs <- geomorphons(elev)
-geomorphs_rivers <- mask(geomorphs, river_buffers)
-
-geos <- c(geomorphs, geomorphs_rivers)
-names(geos) <- c("Region", "Rivers")
-plot(geos)
-
-```
-
-<img src="geomorphons.png"/>  
-
-Finally, we'll calculate the frequency of each type of geomorphon for the entire region and for the river valleys.
-```
-# Frequency of each geomophon:
-freq_region <- freq(geomorphs)
-freq_rivers <- freq(geomorphs_rivers)
-
-# Number of non-NA cells in each raster:
-n_region <- nonnacell(geomorphs)
-n_rivers <- nonnacell(geomorphs_rivers)
-
-# Express as relative frequency:
-freq_region$freq <- freq_region$count / n_region
-freq_rivers$freq <- freq_rivers$count / n_rivers
-
-# View frequencies:
-print(freq_region, digits = 2)
-
-Key: <value>
-    value geomorphon  count    freq
-    <int>     <char>  <int>   <num>
- 1:     1       flat  63256 0.13504
- 2:     2       peak    827 0.00177
- 3:     3      ridge  17885 0.03818
- 4:     4   shoulder  18561 0.03962
- 5:     5       spur  46697 0.09969
- 6:     6      slope 238065 0.50823
- 7:     7     hollow  40045 0.08549
- 8:     8  footslope  23166 0.04946
- 9:     9     valley  19463 0.04155
-10:    10        pit    453 0.00097
-
-
-print(freq_rivers, digits = 2)
-
-Key: <value>
-    value geomorphon count   freq
-    <int>     <char> <int>  <num>
- 1:     1       flat 14436 0.1614
- 2:     2       peak   145 0.0016
- 3:     3      ridge  2984 0.0334
- 4:     4   shoulder  2989 0.0334
- 5:     5       spur  8643 0.0966
- 6:     6      slope 44432 0.4968
- 7:     7     hollow  7056 0.0789
- 8:     8  footslope  4499 0.0503
- 9:     9     valley  4157 0.0465
-10:    10        pit   104 0.0012
-```
-
-To complete the comparison, we'll graph their relative frequencies using `ggplot2` (not required by `fasterRaster`).
-```
-library(ggplot2)
-
-freq_region$locale <- "region"
-freq_rivers$locale <- "rivers"
-freqs <- rbind(freq_region, freq_rivers)
-
-ggplot(freqs, aes(x = geomorphon, y = freq, fill = locale)) +
-   geom_bar(stat = "identity", position = "dodge") +
-   xlab("Geomorphon") + ylab("Frequency")
-```
-<img src="geomorphon_barplot.png"/>  
-
-We can see that flat areas are a bit more common closer to rivers, whereas slopes are less common, although this is probably driven mostly by the rivers in the southern, flatter part of the region.
-
 And that's how it's done!  You can do almost anything in `fasterRaster`  you can do with `terra`. The examples above do not show the advantage of `fasterRaster` because the they do not use in large-in-memory/large-on-disk spatial datasets. For very large datasets, `fasterRaster` can be much faster! For example, for a large raster (many cells), the `distance()` function in `terra` can take many days to run and even crash `R`, whereas in `fasterRaster`, it could take just a few minutes or hours.
 
 ## Exporting `GRaster`s and `GVector`s from a `GRASS` session
@@ -251,6 +174,8 @@ writeVector(rivers, vect_temp_gpkg)
 4. By default, `fasterRaster` use 2 cores and 1024 MB (1 GB) of memory for `GRASS` modules that allow users to specify these values. You can set these to higher values using `faster()` and thus potentially speed up some calculations. Functions in newer versions of `GRASS` have more capacity to use these options, so updating `GRASS` to the latest version can help, too.
 
 5. Compared to `terra` and `sf`, `fasterRaster` is *not* faster with large vector operations, so if have large vectors, do vector processing with those packages first if you can.
+
+6. To obviate problems with disk space filling up, by default most **fasterRaster** functions delete intermediate files. However, if you are not creating a lot of very big `GRaster`s or `GVector`s, you can skip this time-taking step by setting the `clean` option to `FALSE` using `faster(clean = FALSE)`.
 
 # Versioning
 

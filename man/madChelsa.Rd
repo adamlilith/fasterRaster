@@ -63,10 +63,18 @@ madForest2014 <- fastData("madForest2014")
 madForest2014
 plot(madForest2014)
 
-# multi-layer raster
+# multi-layer rasters
 madChelsa <- fastData("madChelsa")
 madChelsa
 plot(madChelsa)
+
+madPpt <- fastData("madPpt")
+madTmin <- fastData("madTmin")
+madTmax <- fastData("madTmax")
+madPpt
+madTmin
+madTmax
+
 
 # RGB raster
 madLANDSAT <- fastData("madLANDSAT")
@@ -84,7 +92,7 @@ catNames(madCover) # names of categories table
 plot(madCover)
 }
 \references{
-Karger, D.N., Conrad, O., Böhner, J., Kawohl, T., Kreft, H., Soria-Auza, R.W., Zimmermann, N.E., Linder, H.P., and Kessler, M.  2017.  Climatologies at high resolution for the earth's land surface areas. \emph{Scientific Data} 4:170122. \doi{https://doi.org/10.1038/sdata.2017.122}
+Karger, D.N., Conrad, O., Böhner, J., Kawohl, T., Kreft, H., Soria-Auza, R.W., Zimmermann, N.E., Linder, H.P., and Kessler, M.  2017.  Climatologies at high resolution for the earth's land surface areas. \emph{Scientific Data} 4:170122. \doi{10.1038/sdata.2017.122}
 }
 \keyword{Madagascar}
 \keyword{climate}

@@ -1,6 +1,6 @@
 #' "fasterRaster": Faster raster and spatial vector processing using "GRASS GIS"
 #'
-#' @description Processing of large-in-memory/-on disk rasters and spatial vectors in using **GRASS GIS**. Most functions in the **terra** and **sf** packages are recreated. Processing of medium-sized and smaller spatial objects will nearly always be faster using **terra** or **sf**. To use most of the functions you must have the stand-alone version of **GRASS** version 8.0 or higher (not the **OSGeoW4** installer version). Note that due to developer choices, results will not always be strictly comparable between **terra**, **sf**, and **fasterRaster**.
+#' @description **fasterRaster**: Processing of large-in-memory/-on disk rasters and spatial vectors in using **GRASS GIS**. Most functions in the **terra** and **sf** packages are recreated. Processing of medium-sized and smaller spatial objects will nearly always be faster using **terra** or **sf**. To use most of the functions you must have the stand-alone version of **GRASS GIS** version 8.3 or higher (not the **OSGeoW4** installer version). Note that due to differences in how **GRASS**, **terra**, and **sf** were implemented,results will not always be strictly comparable between functions for the same kind of task.
 #'
 #' ## Most useful tutorials and functions:
 #' A [quick-start][tutorial_getting_started] tutorial\cr
@@ -64,6 +64,7 @@
 #' [as.points()]: Convert a `GRaster` to a "points" vector\cr
 #' [as.polygons()]: Convert a `GRaster` to a "polygons" vector\cr
 #' [aggregate()]: Aggregate values of `GRaster` cells into larger cells\cr
+#' [bioclims()]: BIOCLIM rasters (classic set and extended set)\cr
 #' [buffer()]: Create a buffer around non-`NA` cells\cr
 #' [app()]: Apply a user-defined function to multiple layers of a `GRaster` (with helper functions [appFuns()] and [appCheck()])\cr
 #' [c()]: "Stack" two or more rasters\cr
@@ -82,7 +83,6 @@
 #' [fragmentation()]: Landscape fragmentation class from Riitters et al. (2020)\cr
 #' [global()]: Summary statistics across cells of each `GRaster` layer\cr
 #' [hist()]: Histogram of `GRaster` values\cr
-#' [horizonHeight()]: Horizon height\cr
 #' [interpIDW()]: Interpolate values at points to a `GRaster`\cr
 #' [kernel()]: Kernel density estimator of points\cr
 #' [layerCor()]: Correlation or covariance between two or more `GRaster` layers\cr
@@ -106,6 +106,7 @@
 #' [spatSample()]: Randomly points from a `GRaster`\cr
 #' [subst()]: Re-assign cell values\cr
 #' [thinLines()]: Reduce linear features on a `GRaster` so linear features are 1 cell wide\cr
+#' [tiles()]: Divide a `GRaster` into spatially exclusive subsets (though with possible overlap)\cr
 #' [trim()]: Remove rows and columns from a `GRaster` that are all `NA`\cr
 #' [zonal()]: Statistics (mean, sum, etc.) on areas of a `GRaster` defined by sets of cells with the same values in another `GRaster`, or by geometries in a `GVector`\cr
 #' [zonalGeog()]: Geographic statistics (area, perimeter, fractal dimension, etc.) for sets of cells with the same values\cr
@@ -125,10 +126,10 @@
 #' [`hillshade()`][shade]: Create a hillshade `GRaster`\cr
 #' [horizonHeight()]: Horizon height\cr
 #' [sun()]: Solar radiance and irradiance\cr
+#' [ruggedness()]: Terrain Ruggedness Index\cr
 #' [streams()]: Create stream network\cr
 #' [terrain()]: Slope, aspect, curvature, and partial slopes\cr
-#' [terrainRuggednessIndex()]: Terrain Ruggedness Index\cr
-#' [topoWetnessIndex()]: Topographic wetness index\cr
+#' [topoWetness()]: Topographic wetness index\cr
 #' 
 #' ## Functions operating on categorical (factor) rasters
 #' \code{\link[fasterRaster]{%in%}}, and \code{\link[fasterRaster]{%notin%}}: Mask cells that match or do not match a given category\cr
@@ -159,6 +160,10 @@
 #' [compositeRGB()]: Combine red, green, and blue color bands to make a composite `GRaster`\cr
 #' [plotRGB()]: Display a multispectral `GRaster` using red, blue, green, and alpha channels\cr
 #' [vegIndex()]: Vegetation indices from surface reflectance\cr
+#'
+#' ### Functions that operate on **terra** `SpatRaster`s
+#' [bioclims()]: BIOCLIM rasters (classic set and extended set)\cr
+#' [fragmentation()]: Landscape fragmentation class from Riitters et al. (2020)\cr
 #'
 #' ## Properties of `GVector`s
 #' [crs()]: Coordinate reference system\cr
@@ -259,6 +264,7 @@
 #' [compareGeom()]: Determine if geographic metadata is same between `GRaster`s and/or `GVector`s\cr
 #' [dropRows()]: Remove rows from a `data.frame` or `data.table`\cr
 #' [grassInfo()]: **GRASS** version and citation\cr
+#' [mow()]: Remove unused rasters and vectors from the **GRASS** cache\cr
 #' [replaceNAs()]: Replace `NA`s in columns of a `data.table` or `data.frame`, or in a vector\cr
 #' [seqToSQL()]: Format a numeric series into an SQL value call\cr
 #' [update()]: Refresh metadata in a `GRaster` or `GVector` object\cr
@@ -273,13 +279,14 @@
 #' [madElev][madElev]: Elevation raster\cr
 #' [madForest2000][madForest2000] and [madForest2014][madForest2014]: Forest cover in 2000 and 2014\cr
 #' [madLANDSAT][madLANDSAT]: Surface reflectance in 2023\cr
+#' [madPpt][madPpt], [madTmin][madTmin], [madTmax][madTmax]: Rasters of mean monthly precipitation, and minimum and maximum temperature\cr
 #' [madRivers][madRivers]: Rivers vector\cr
 #' [vegIndices][vegIndices]: Vegetation indices that can be calculated using [vegIndex()].
 #' 
 #' ## Esoteric tutorials and arcane notes
 #' Comparisons between `GRegion`s can be performed using the `==` and `!=` operators.\cr
 #' Tutorial on **GRASS** [regions][tutorial_regions]\cr
-#' Tutorial on **GRASS** ["locations" and mapsets][tutorial_locations_mapsets]\cr
+#' Tutorial on **GRASS** [projects/locations and mapsets][tutorial_locations_mapsets]\cr
 #' [Hidden functions][tutorial_hidden_functions] of **fasterRaster**: Useful for power users and developers\cr
 #' [grassStarted()]: Has a connection **GRASS** been made within the current **R** session?\cr
 #'

@@ -6,17 +6,17 @@
 #'
 #' @returns A `GRaster`.
 #'
-#' @seealso [terrain()], [topoWetnessIndex()], [geomorphons()]
+#' @seealso [terrain()], [wetness()], [geomorphons()]
 #'
 #' @references Riley, S.J., DeGloria, S.D., and Elliot, R. 1999. A terrain ruggedness index that quantifies topographic heterogeneity. *Intermountain Journal of Sciences* 5:23-27.
 #'
-#' @example man/examples/ex_terrainRuggednessIndex_topoWetnessIndex.r
+#' @example man/examples/ex_ruggedness_wetness.r
 #'
-#' @aliases terrainRuggednessIndex
-#' @rdname terrainRuggednessIndex
-#' @exportMethod terrainRuggednessIndex
+#' @aliases ruggedness
+#' @rdname ruggedness
+#' @exportMethod ruggedness
 methods::setMethod(
-	f = "terrainRuggednessIndex",
+	f = "ruggedness",
 	signature = c(x = "GRaster"),
 	function(x) {
 

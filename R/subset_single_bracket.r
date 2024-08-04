@@ -298,3 +298,44 @@ methods::setMethod(
 
 	} # EOF
 )
+
+#' @name [
+#' @aliases [,GRaster,ANY,ANY-method
+#' @docType methods
+#' @rdname subset_single_bracket
+#' @exportMethod [
+methods::setMethod(
+	"[",
+	signature = c(x = "GRaster", i = "GRaster", j = "ANY"),
+	function(x, i, j) {
+
+	.locationRestore(x)
+	.region(x)
+
+	if (missing(j)) j <- NULL
+
+	nLayers <- nlyr(x)
+	nLayersI <- nlyr(i)
+
+	if (nLayersI != nLayers) {
+
+		if (nlyr(i) != 1L) warning("The number of layers in the subset raster (inside the `[]`) does not have\n  the same number of layers as the raster to be subset. The layers inside\n  the square brackets will be recycled.")
+
+		iIndex <- rep(seq_len(nLayersI), length.out = nLayers)
+		i <- i[[iIndex]]
+
+	}
+
+	srcs <- .makeSourceName("subset_single_bracket", "raster", nLayers)
+	for (count in seq_len(nLayers)) {
+			
+		if (!(.minVal(i)[count] %in% c(NA, 0, 1)) & !(.maxVal(i)[count] %in% c(NA, 0, 1))) stop("The GRaster in `i` must 0, 1, or NA values.")
+
+		ex <- paste0(srcs[count], " = if(", sources(i)[count], " == 1, ", sources(x)[count], ", 0)")
+		rgrass::execGRASS("r.mapcalc", expression = ex, flags = c(.quiet(), "overwrite"))
+	
+	}
+	.makeGRaster(srcs, names(x))
+
+	} # EOF
+)

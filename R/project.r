@@ -26,7 +26,7 @@
 #'
 #' @param res Character (for projecting `GRaster`s only): Method used to set the resolution of a `GRaster` in the new CRS. This can be one of three options.  Partial matching is used and case ignored:
 #' * `"terra"`: This method creates an output raster that is as close as possible in values and resolution to the one that [terra::project()] would create. However, for large rasters (i.e., many cells), this can fail because `terra::project()` encounters memory limits (it is used internally to create a template). This method resamples the focal raster in its starting CRS, then projects it to the destination CRS.
-#' * `"template"`: This method can only be used of `y` is a `GRaster`. The output will have the same resolution as `y` and possibly the same extent (depending on the value of `align`). However, unlike the `"terra"` method, cell values will not necessarily be as close as possible to what [terra::project()] would generate (unless `method = "near"`). Unlike the `"terra"` method, this method does not resample the focal raster in its starting CRS before projecting. For large rasters it will be faster than the `"terra"` method (especially if `"method = "neear"`), and it should be less likely to fail because of memory limits.
+#' * `"template"`: This method can only be used if `y` is a `GRaster`. The output will have the same resolution as `y` and possibly the same extent (depending on the value of `align`). However, unlike the `"terra"` method, cell values will not necessarily be as close as possible to what [terra::project()] would generate (unless `method = "near"`). Unlike the `"terra"` method, this method does not resample the focal raster in its starting CRS before projecting. For large rasters it will be faster than the `"terra"` method (especially if `"method = "near"`), and it should be less likely to fail because of memory limits.
 #' * Two numeric values: Values for the new resolution (x- and y-dimensions).
 #' * `"center"`: This method locates the centroid of the raster to be projected (in the same CRS as the original raster). It then creates four points north, south, east, and west of the centroid, each spaced one cell's width from the centroid. This set of points is then projected to the new CRS. The new cell size in the x-dimension will be the average of the distance between the east and west points from the centroid, and in the y-dimension the average from the centroid to the north and south points.
 #' * `"fallback"` (default): This applies the `terra` method first, but if that fails, then tries `template`, then `center`. This process can take a long time for large rasters.
@@ -34,6 +34,8 @@
 #' @param wrap Logical:
 #' * `GRaster`s: When projecting rasters that "wrap around" (i.e., whole-world rasters or rasters that have edges that actually circle around to meet on the globe), `wrap` should be `TRUE` to avoid removing rows and columns from the "edge" of the map. The default is `FALSE`.
 #' * `GVector`s: When projecting vectors that span the international date line at 180E/W, `wrap` should be `TRUE` to avoid an issue where the coordinates are incorrectly mapped to the range -180 to 180.
+#'
+#' @param verbose Logical (for projecting `GRaster`s only): If `TRUE`, display progress. Default is `FALSE`.
 #'
 #' @details When projecting a raster, the "fallback" methods in **GRASS** module `r.import` are actually used, even though the `method` argument takes the strings specifying non-fallback methods. See the manual page for the `r.import` **GRASS** module.
 #' 
@@ -56,7 +58,8 @@ methods::setMethod(
 		method = NULL,
 		fallback = TRUE,
 		res = "fallback",
-		wrap = FALSE
+		wrap = FALSE,
+		verbose = FALSE
 	) {
 
 	if (inherits(res, "character")) {
@@ -89,7 +92,7 @@ methods::setMethod(
 			thisRes <- try[j]
 
 			out <- tryCatch(
-				.projectRaster(x = x, y = y, align = align, method = method, fallback = fallback, res = thisRes, wrap = wrap),
+				.projectRaster(x = x, y = y, align = align, method = method, fallback = fallback, res = thisRes, wrap = wrap, verbose = verbose),
 				error = function(cond) FALSE
 			)
 		
@@ -101,8 +104,18 @@ methods::setMethod(
 	} # EOF
 )
 
+#' @param x A `GRaster`.
+#' @param y A `GRaster` or `GVector`.
+#' @param align T/F
+#' @param method Character
+#' @param fallback T/F
+#' @param res Character.
+#' @param wrap T/F
+#' @param verbose T/F
 #' @noRd
-.projectRaster <- function(x, y, align, method, fallback, res, wrap) {
+.projectRaster <- function(x, y, align, method, fallback, res, wrap, verbose = FALSE) {
+
+	nLayers <- nlyr(x)
 
 	# .message(msg = "project_raster", message = "This function can produce erroneous results if the raster crosses a pole or the international date line.")
 	
@@ -113,7 +126,6 @@ methods::setMethod(
 		if ((extent[1L] == -180 & extent[2L] == 180) | (extent[3L] == -90 & extent[4L] == 90)) warning("This GRaster seems to wrap around the globe to meet at the international\n  date line and/or the poles. Should `wrap` be `TRUE`?")
 
 	}
-
 	
 	xLocation <- .location(x)
 	yLocation <- .locationFind(y, match = "crs", return = "name")
@@ -146,6 +158,12 @@ methods::setMethod(
 
 	}
 
+	nSteps <- nLayers + res == "terra"
+	if (verbose | faster("verbose")) {
+		pb <- utils::txtProgressBar(min = 0, max = nSteps, initial = 0, style = 3, width = 30)
+		steps <- 0
+	}
+
 	### If y is a GRaster, reshape region in target location using y's extent/resolution.
 	if (inherits(y, "GRaster")) {
 
@@ -156,6 +174,11 @@ methods::setMethod(
 			
 		# resample as per terra::project()
 		} else if (res == "terra") {
+
+			if (verbose | faster("verbose")) {
+				utils::setTxtProgressBar(pb, steps)
+				steps <- steps + 1
+			}
 
 			# Use a SpatRaster as template for resampling region. We do this so we can set the "region" resolution and extent correctly.
 			extent <- ext(x, vector = TRUE)
@@ -332,6 +355,11 @@ methods::setMethod(
 	srcs <- .makeSourceName("project", "raster", nlyr(x))
 	for (i in seq_len(nlyr(x))) {
 		
+		if (verbose | faster("verbose")) {
+			utils::setTxtProgressBar(pb, steps)
+			steps <- steps + 1
+		}
+
 		args <- list(
 			cmd = "r.proj",
 			location = .location(x),
@@ -359,6 +387,8 @@ methods::setMethod(
 		}
 
 	} # project next raster
+	
+	if (verbose | faster("verbose")) close(pb)
 
 	# if using y as extent to which to crop
 	if (!align & inherits(y, "GRaster")) out <- crop(out, y)

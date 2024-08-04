@@ -252,8 +252,8 @@ methods::setMethod(
 		maxDist = NULL
 	) {
 
-	if (!is.null(minDist) && minDist < 0) stop("Argument ", sQuote("minDist"), " must be positive or NULL.")
-	if (!is.null(maxDist) && maxDist < 0) stop("Argument ", sQuote("maxDist"), " must be positive or NULL.")
+	if (!is.null(minDist) && minDist < 0) stop("Argument `minDist` must be positive or NULL.")
+	if (!is.null(maxDist) && maxDist < 0) stop("Argument `maxDist` must be positive or NULL.")
 	if ((!is.null(maxDist) & !is.null(maxDist)) && (minDist > maxDist)) stop("Argument `minDist` is greater than `maxDist`.")
 
 	.locationRestore(x)

@@ -112,6 +112,8 @@ methods::setMethod(
 				expression = ex,
 				flags = c(.quiet(), "overwrite")
 			)
+
+			if (faster("clean")) .rm(srcIn, type = "raster", warn = FALSE)
 		
 		}
 

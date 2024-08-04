@@ -1,6 +1,8 @@
 #' Coerce as multipart GVector to a singlepart GVector
 #'
 #' @description `GVectors` can contain a mix of "singlepart" and "multipart" features. A singlepart feature is a single point, set of connected line segments, or a polygon. A multipart feature is a set of lines, sets of connected line segments, or set of polygons that are treated as a single feature. This function converts all multipart features to singlepart features. If the `GVector` has an attribute table, rows will be duplicated so that each of the new `GVector`'s geometries have the rows that correspond to their "parent" geometries.
+#'
+#' If you want to "split" cells of a `GRaster` into smaller cells, use [aggregate()].
 #' 
 #' @param x A `GVector`.
 #' 

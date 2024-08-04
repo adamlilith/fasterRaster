@@ -142,9 +142,7 @@ methods::setMethod(
 		if (anyNA(x@table[[field]])) stop("The column ", sQuote(field), " has at least one NA in it. NAs are not permissible.")
 
 		cats <- .vCats(x, db = FALSE)
-
 		db <- data.table::data.table(frid = cats, TEMPTEMP_ = x@table[[field]])
-
 		names(db)[2L] <- field
 
 		.vAttachDatabase(x, table = db, replace = TRUE)
@@ -171,8 +169,7 @@ methods::setMethod(
 		solver = solver,
 		lambda_i = lambda_i,
 		memory = faster("memory"),
-		flags = c(.quiet(), "overwrite"),
-		intern = TRUE
+		flags = c(.quiet(), "overwrite")
 	)
 
 	if (inherits(y, "GVector")) {
