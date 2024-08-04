@@ -17,6 +17,7 @@
 #' * [madForest2000]: Forest cover in year 2000
 #' * [madForest2014]: Forest cover in year 2014
 #' * [madLANDSAT]: Surface reflectance in 2023
+#' * [madPpt], [madTmin], [madTmax]: Rasters of mean monthly precipitation, and minimum and maximum temperature.
 #'
 #' Data frames
 #' * [appFunsTable]: Table of functions usable by [app()].
@@ -32,7 +33,7 @@ fastData <- function(x) {
 
 	vectors <- c("madCoast0", "madCoast4", "madDypsis", "madRivers")
 	tables <- c("appFunsTable", "madCoverCats", "vegIndices")
-	rasters <- c("madChelsa", "madCover", "madElev", "madLANDSAT", "madForest2000", "madForest2014")
+	rasters <- c("madChelsa", "madCover", "madElev", "madLANDSAT", "madForest2000", "madForest2014", "madPpt", "madTmin", "madTmax")
 
 	if (!inherits(x, "character")) {
 		stop("Please supply the name of an example raster or spatial vector in fasterRaster.")
@@ -43,20 +44,19 @@ fastData <- function(x) {
 			madCoverCats <- NULL
 
 			out <- do.call(utils::data, list(x, envir = environment(), package = "fasterRaster"))
-			
 			out <- get(out)
 
 		} else if (x %in% rasters) {
+		
 			rastFile <- system.file("extdata", paste0(x, ".tif"), package = "fasterRaster")
 			out <- terra::rast(rastFile)
 
 			if (x == "madCover") {
 
 			    levs <- system.file("extdata", paste0("madCover.csv"), package = "fasterRaster")
-
 				levs <- utils::read.csv(levs)
-
 				levels(out) <- levs
+
 			}
 
 		} else {

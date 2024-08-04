@@ -6,7 +6,7 @@
 \alias{fasterRaster}
 \title{"fasterRaster": Faster raster and spatial vector processing using "GRASS GIS"}
 \description{
-Processing of large-in-memory/-on disk rasters and spatial vectors in using \strong{GRASS GIS}. Most functions in the \strong{terra} and \strong{sf} packages are recreated. Processing of medium-sized and smaller spatial objects will nearly always be faster using \strong{terra} or \strong{sf}. To use most of the functions you must have the stand-alone version of \strong{GRASS} version 8.0 or higher (not the \strong{OSGeoW4} installer version). Note that due to developer choices, results will not always be strictly comparable between \strong{terra}, \strong{sf}, and \strong{fasterRaster}.
+\strong{fasterRaster}: Processing of large-in-memory/-on disk rasters and spatial vectors in using \strong{GRASS GIS}. Most functions in the \strong{terra} and \strong{sf} packages are recreated. Processing of medium-sized and smaller spatial objects will nearly always be faster using \strong{terra} or \strong{sf}. To use most of the functions you must have the stand-alone version of \strong{GRASS GIS} version 8.3 or higher (not the \strong{OSGeoW4} installer version). Note that due to differences in how \strong{GRASS}, \strong{terra}, and \strong{sf} were implemented,results will not always be strictly comparable between functions for the same kind of task.
 \subsection{Most useful tutorials and functions:}{
 
 A \link[=tutorial_getting_started]{quick-start} tutorial\cr
@@ -78,6 +78,7 @@ The assign operators, \code{\link[fasterRaster]{$<-}}, \code{\link[fasterRaster]
 \code{\link[=as.points]{as.points()}}: Convert a \code{GRaster} to a "points" vector\cr
 \code{\link[=as.polygons]{as.polygons()}}: Convert a \code{GRaster} to a "polygons" vector\cr
 \code{\link[=aggregate]{aggregate()}}: Aggregate values of \code{GRaster} cells into larger cells\cr
+\code{\link[=bioclims]{bioclims()}}: BIOCLIM rasters (classic set and extended set)\cr
 \code{\link[=buffer]{buffer()}}: Create a buffer around non-\code{NA} cells\cr
 \code{\link[=app]{app()}}: Apply a user-defined function to multiple layers of a \code{GRaster} (with helper functions \code{\link[=appFuns]{appFuns()}} and \code{\link[=appCheck]{appCheck()}})\cr
 \code{\link[=c]{c()}}: "Stack" two or more rasters\cr
@@ -183,6 +184,7 @@ The assign operators, \code{\link[fasterRaster]{$<-}}, \code{\link[fasterRaster]
 \code{\link[=vegIndex]{vegIndex()}}: Vegetation indices from surface reflectance\cr
 \subsection{Functions that operate on \strong{terra} \code{SpatRaster}s}{
 
+\code{\link[=bioclims]{bioclims()}}: BIOCLIM rasters (classic set and extended set)\cr
 \code{\link[=fragmentation]{fragmentation()}}: Landscape fragmentation class from Riitters et al. (2020)\cr
 }
 
@@ -296,6 +298,7 @@ The \code{\link[fasterRaster]{$<-}} operator can be used to replace specific col
 \code{\link[=compareGeom]{compareGeom()}}: Determine if geographic metadata is same between \code{GRaster}s and/or \code{GVector}s\cr
 \code{\link[=dropRows]{dropRows()}}: Remove rows from a \code{data.frame} or \code{data.table}\cr
 \code{\link[=grassInfo]{grassInfo()}}: \strong{GRASS} version and citation\cr
+\code{\link[=mow]{mow()}}: Remove unused rasters and vectors from the \strong{GRASS} cache\cr
 \code{\link[=replaceNAs]{replaceNAs()}}: Replace \code{NA}s in columns of a \code{data.table} or \code{data.frame}, or in a vector\cr
 \code{\link[=seqToSQL]{seqToSQL()}}: Format a numeric series into an SQL value call\cr
 \code{\link[=update]{update()}}: Refresh metadata in a \code{GRaster} or \code{GVector} object\cr
@@ -312,6 +315,7 @@ The \code{\link[fasterRaster]{$<-}} operator can be used to replace specific col
 \link{madElev}: Elevation raster\cr
 \link{madForest2000} and \link{madForest2014}: Forest cover in 2000 and 2014\cr
 \link{madLANDSAT}: Surface reflectance in 2023\cr
+\link{madPpt}, \link{madTmin}, \link{madTmax}: Rasters of mean monthly precipitation, and minimum and maximum temperature\cr
 \link{madRivers}: Rivers vector\cr
 \link{vegIndices}: Vegetation indices that can be calculated using \code{\link[=vegIndex]{vegIndex()}}.
 }
@@ -320,7 +324,7 @@ The \code{\link[fasterRaster]{$<-}} operator can be used to replace specific col
 
 Comparisons between \code{GRegion}s can be performed using the \code{==} and \code{!=} operators.\cr
 Tutorial on \strong{GRASS} \link[=tutorial_regions]{regions}\cr
-Tutorial on \strong{GRASS} \link[=tutorial_locations_mapsets]{"locations" and mapsets}\cr
+Tutorial on \strong{GRASS} \link[=tutorial_locations_mapsets]{projects/locations and mapsets}\cr
 \link[=tutorial_hidden_functions]{Hidden functions} of \strong{fasterRaster}: Useful for power users and developers\cr
 \code{\link[=grassStarted]{grassStarted()}}: Has a connection \strong{GRASS} been made within the current \strong{R} session?\cr
 }

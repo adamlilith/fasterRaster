@@ -64,6 +64,7 @@
 #' [as.points()]: Convert a `GRaster` to a "points" vector\cr
 #' [as.polygons()]: Convert a `GRaster` to a "polygons" vector\cr
 #' [aggregate()]: Aggregate values of `GRaster` cells into larger cells\cr
+#' [bioclims()]: BIOCLIM rasters (classic set and extended set)\cr
 #' [buffer()]: Create a buffer around non-`NA` cells\cr
 #' [app()]: Apply a user-defined function to multiple layers of a `GRaster` (with helper functions [appFuns()] and [appCheck()])\cr
 #' [c()]: "Stack" two or more rasters\cr
@@ -161,6 +162,7 @@
 #' [vegIndex()]: Vegetation indices from surface reflectance\cr
 #'
 #' ### Functions that operate on **terra** `SpatRaster`s
+#' [bioclims()]: BIOCLIM rasters (classic set and extended set)\cr
 #' [fragmentation()]: Landscape fragmentation class from Riitters et al. (2020)\cr
 #'
 #' ## Properties of `GVector`s
@@ -262,6 +264,7 @@
 #' [compareGeom()]: Determine if geographic metadata is same between `GRaster`s and/or `GVector`s\cr
 #' [dropRows()]: Remove rows from a `data.frame` or `data.table`\cr
 #' [grassInfo()]: **GRASS** version and citation\cr
+#' [mow()]: Remove unused rasters and vectors from the **GRASS** cache\cr
 #' [replaceNAs()]: Replace `NA`s in columns of a `data.table` or `data.frame`, or in a vector\cr
 #' [seqToSQL()]: Format a numeric series into an SQL value call\cr
 #' [update()]: Refresh metadata in a `GRaster` or `GVector` object\cr
@@ -276,6 +279,7 @@
 #' [madElev][madElev]: Elevation raster\cr
 #' [madForest2000][madForest2000] and [madForest2014][madForest2014]: Forest cover in 2000 and 2014\cr
 #' [madLANDSAT][madLANDSAT]: Surface reflectance in 2023\cr
+#' [madPpt][madPpt], [madTmin][madTmin], [madTmax][madTmax]: Rasters of mean monthly precipitation, and minimum and maximum temperature\cr
 #' [madRivers][madRivers]: Rivers vector\cr
 #' [vegIndices][vegIndices]: Vegetation indices that can be calculated using [vegIndex()].
 #' 
