@@ -120,6 +120,8 @@
 #'
 #' 5. Unfortunately, **fasterRaster** is fast with rasters, but not so much vectors. If you have a lot of vector operations, it is advisable to do as much as possible in **terra** or **sf** and transfer to **fasterRaster** when needed.
 #'
+#' 6. To obviate problems with disk space filling up, by default most **fasterRaster** functions delete intermediate files. However, if you are not creating a lot of very big `GRaster`s or `GVector`s, you can skip this time-taking step by setting the `clean` option to `FALSE` using `faster(clean = FALSE)`.
+#'
 #' ## Further reading
 #' 
 #' * Robert Hijman's [**terra**](https://cran.r-project.org/package=terra) package and Edzer Pebesma's [**sf**](https://cran.r-project.org/package=sf) package are good places to start if you are not familiar with doing GIS in **R**.
