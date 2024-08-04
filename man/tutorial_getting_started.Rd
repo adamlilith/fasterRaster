@@ -125,6 +125,7 @@ writeVector(rivers, vectTempFile)
 \item Every time you switch between using a \code{GRaster} or \code{GVector} with a different coordinate reference system (CRS), \strong{GRASS} has to spend a few second changing to that CRS. So, you can save some time by doing as much work as possible with objects in one CRS, then switching to work on objects in another CRS.
 \item By default, \strong{GRASS}/\strong{fasterRaster} use 2 cores and 1024 MB (1 GB) of memory for functions that allow users to specify these values. You can set these to higher values using \code{\link[=faster]{faster()}} and thus potentially speed up some calculations. Functions in newer versions of \strong{GRASS} have more capacity to use these options, so updating \strong{GRASS} to the latest version can help, too.
 \item Unfortunately, \strong{fasterRaster} is fast with rasters, but not so much vectors. If you have a lot of vector operations, it is advisable to do as much as possible in \strong{terra} or \strong{sf} and transfer to \strong{fasterRaster} when needed.
+\item To obviate problems with disk space filling up, by default most \strong{fasterRaster} functions delete intermediate files. However, if you are not creating a lot of very big \code{GRaster}s or \code{GVector}s, you can skip this time-taking step by setting the \code{clean} option to \code{FALSE} using \code{faster(clean = FALSE)}.
 }
 }
 

@@ -59,10 +59,18 @@ madForest2014 <- fastData("madForest2014")
 madForest2014
 plot(madForest2014)
 
-# multi-layer raster
+# multi-layer rasters
 madChelsa <- fastData("madChelsa")
 madChelsa
 plot(madChelsa)
+
+madPpt <- fastData("madPpt")
+madTmin <- fastData("madTmin")
+madTmax <- fastData("madTmax")
+madPpt
+madTmin
+madTmax
+
 
 # RGB raster
 madLANDSAT <- fastData("madLANDSAT")
