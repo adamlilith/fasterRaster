@@ -3,6 +3,9 @@
 ## New functions and functionality
 o `global()` calculates quantiles much faster (minutes vs. weeks) for very large rasters.  
 
+## Potentially co-breaking changes
+o `global()` argument `prob` changed to `probs` because it can accommodate more than one value.  
+
 # fasterRaster 8.3.0.7021 (2024-08-03)
 
 ## Potentially co-breaking changes
