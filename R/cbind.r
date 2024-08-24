@@ -8,9 +8,9 @@
 #'
 #' @seealso [rbind()], \code{\link[fasterRaster]{addTable<-}}, [dropTable()]
 #'
-#' @example man/examples/ex_cbind_rbind_table.r
+#' @example man/examples/ex_cbind_rbind_addTable_dropTable.r
 #'
-#' @aliases colbind
+#' @aliases colbind,cbind
 #' @rdname colbind
 #' @exportMethod colbind
 methods::setMethod(

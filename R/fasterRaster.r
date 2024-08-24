@@ -1,6 +1,6 @@
 #' "fasterRaster": Faster raster and spatial vector processing using "GRASS GIS"
 #'
-#' @description **fasterRaster**: Processing of large-in-memory/-on disk rasters and spatial vectors in using **GRASS GIS**. Most functions in the **terra** and **sf** packages are recreated. Processing of medium-sized and smaller spatial objects will nearly always be faster using **terra** or **sf**. To use most of the functions you must have the stand-alone version of **GRASS GIS** version 8.3 or higher (not the **OSGeoW4** installer version). Note that due to differences in how **GRASS**, **terra**, and **sf** were implemented,results will not always be strictly comparable between functions for the same kind of task.
+#' @description **fasterRaster**: Processing of large-in-memory/-on disk rasters and spatial vectors in using **GRASS GIS**. Most functions in the **terra** and **sf** packages are recreated. Processing of medium-sized and smaller spatial objects will nearly always be faster using **terra** or **sf**. To use most of the functions you must have the stand-alone version of **GRASS GIS** version 8.3 or higher (not the **OSGeoW4** installer version). Note that due to differences in how **GRASS**, **terra**, and **sf** were implemented, results will not always be strictly comparable between functions for the same operation.
 #'
 #' ## Most useful tutorials and functions:
 #' A [quick-start][tutorial_getting_started] tutorial\cr
