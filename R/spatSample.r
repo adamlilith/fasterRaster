@@ -313,11 +313,12 @@ methods::setMethod(
 		cmd = "v.random",
 		output = src,
 		npoints = size,
-		restrict = src,
+		restrict = sources(x),
 		flags = c(.quiet(), "overwrite")
 	)
 
-	if (!is.null(strata) & byStratum) args$flags <- c(args$flags, "a")
+	# if (!is.null(strata) & byStratum) args$flags <- c(args$flags, "a")
+	if (byStratum) args$flags <- c(args$flags, "a")
 
 	if (!is.null(zlim)) {
 		args$zmin <- zlim[1L]
@@ -325,7 +326,7 @@ methods::setMethod(
 		args$flags <- c(args$flags, "z")
 	}
 
-	if (!is.null(seed)) args$seed <- seedz
+	if (!is.null(seed)) args$seed <- seed
 
 	do.call(rgrass::execGRASS, args = args)
 
