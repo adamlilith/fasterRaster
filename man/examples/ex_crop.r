@@ -21,7 +21,7 @@ ant <- fast(madAnt)
 
 ### Crop raster by vector:
 rastByVect <- crop(elev, ant)
-plot(elev, col = "gray", legend = FALSe)
+plot(elev, col = "gray", legend = FALSE)
 plot(rastByVect, add = TRUE)
 plot(ant, add = TRUE)
 
