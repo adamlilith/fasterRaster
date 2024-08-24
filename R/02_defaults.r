@@ -11,7 +11,7 @@
 .coresDefault <- function() 2
 .verboseDefault <- function() FALSE
 .cleanDefault <- function() TRUE
-.memoryDefault <- function() 1024 # in MB
+.memoryDefault <- function() 2048 # in MB
 # .nAtATimeDefault <- function() 1000000 # number of indices to select at a time
 # .rasterPrecisionDefault <- function() "double" # "FCELL"/"float", or "DCELL"/"double"
 .useDataTableDefault <- function() TRUE # logical
