@@ -1,13 +1,13 @@
 if (grassStarted()) {
 
 # See current values for options:
+faster("grassDir")
+faster("addonsDir")
+faster("clean")
 faster("cores")
 faster("memory")
 faster("useDataTable")
-faster("rasterPrecision")
 faster("verbose")
-faster("grassDir")
-faster("addonsDir")
 faster("workDir")
 faster() # all options
 
@@ -21,11 +21,11 @@ if (FALSE) {
 opts. <- faster() # remember starting values of options
 
 faster(grassDir = "C:/Program Files/GRASS GIS 8.4")
-faster(verbose = TRUE, memory = 600, cores = 4)
+faster(verbose = TRUE, memory = 1024, cores = 1)
 
 faster(c("grassDir", "verbose", "memory", "cores"))
 
-faster(opts) # reset options to starting values
+faster(opts.) # reset options to starting values
 
 }
 
