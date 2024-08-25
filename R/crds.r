@@ -115,7 +115,7 @@ st_coordinates <- function(x) {
 			intern = TRUE
 		)
 		
-		data <- data[-1L]
+		# data <- data[-1L]
 		cutAt <- which(data == "Reading features...")
 		if (length(cutAt) > 0L) data <- data[1L:(cutAt - 1L)]
 		
