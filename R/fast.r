@@ -829,7 +829,7 @@ methods::setMethod(
 		x <- terra::ext(x)
 		x <- terra::as.polygons(x, crs = "epsg:4326")
 		x <- terra::project(x, crs)
-		out <- .fastVector(x, correct = TRUE, snap = FALSE, area = FALSE, steps = 10, extent = NULL, dropTable = FALSE, verbose = FALSE)
+		out <- .fastVector(x, correct = TRUE, snap = FALSE, area = FALSE, steps = 10, extent = NULL, dropTable = FALSE, resolve = NA, verbose = FALSE)
 
 	}
 	out
