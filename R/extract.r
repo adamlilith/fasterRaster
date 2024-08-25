@@ -223,8 +223,7 @@ methods::setMethod(
         if (xy) {
 
             coords <- crds(y, z = is.3d(y))
-            coords <- data.table::as.data.table(coords)
-            out <- cbind(coords, out)
+            out <- data.table::as.data.table(coords)
 
         }
 
