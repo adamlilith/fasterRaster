@@ -43,7 +43,7 @@ elev %% TRUE # modulus
 elevs + TRUE
 TRUE + elevs
 
-# raster interacting with raster
+# Raster interacting with raster(s):
 elev + elev
 elev - elev
 elev * elev
@@ -58,6 +58,8 @@ elev * elevs
 # sign
 abs(-1 * elev)
 abs(elevs)
+
+# powers
 sqrt(elevs)
 
 # trigonometry
@@ -82,6 +84,7 @@ ln(elev)
 log2(elev)
 log1p(elev)
 log10(elev)
+log10p(elev)
 log(elev, 3)
 
 log(elevs)
@@ -123,7 +126,7 @@ TRUE & elev > 200
 elev < 10 & FALSE
 FALSE & elev > 200
 
-# mathematical functions on two or more rasters
+# Mathematical functions on GRasters with >= 2 layers:
 mean(elevs)
 mmode(elevs)
 median(elevs)
@@ -145,10 +148,13 @@ intercept(elevs)
 r2(elevs)
 tvalue(elevs)
 
-sd(elevs)
-sdpop(elevs)
+stdev(elevs)
+stdev(elevs, pop = FALSE)
 var(elevs)
 varpop(elevs)
+
+# Note: To get quantiles for each layer, use
+# global(x, "quantile", probs = 0.2).
 quantile(elevs, 0.1)
 
 }

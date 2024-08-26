@@ -25,6 +25,8 @@
 \alias{exp}
 \alias{log1p,GRaster-method}
 \alias{log1p}
+\alias{log10p,GRaster-method}
+\alias{log10p}
 \alias{log,GRaster-method}
 \alias{log}
 \alias{ln,GRaster-method}
@@ -68,6 +70,8 @@
 \S4method{exp}{GRaster}(x)
 
 \S4method{log1p}{GRaster}(x)
+
+\S4method{log10p}{GRaster}(x)
 
 \S4method{log}{GRaster}(x, base = exp(1))
 
@@ -123,9 +127,10 @@ You can apply mathematical functions to each layer of a \code{GRaster}. The outp
 \item \code{exp()}
 \item \code{log()} (natural log)
 \item \code{ln()} (also natural log)
-\item \code{log1p()} (same as \code{log(x + 1)})
 \item \code{log2()} (log, base 2)
 \item \code{log10()} (log, base 10)
+\item \code{log1p()} (same as \code{log(x + 1)})
+\item \code{log10p()} (same as \code{log(x + 1, base = 10)})
 }
 \item Power functions:
 \itemize{
@@ -187,7 +192,7 @@ elev \%\% TRUE # modulus
 elevs + TRUE
 TRUE + elevs
 
-# raster interacting with raster
+# Raster interacting with raster(s):
 elev + elev
 elev - elev
 elev * elev
@@ -202,6 +207,8 @@ elev * elevs
 # sign
 abs(-1 * elev)
 abs(elevs)
+
+# powers
 sqrt(elevs)
 
 # trigonometry
@@ -226,6 +233,7 @@ ln(elev)
 log2(elev)
 log1p(elev)
 log10(elev)
+log10p(elev)
 log(elev, 3)
 
 log(elevs)
@@ -267,7 +275,7 @@ TRUE & elev > 200
 elev < 10 & FALSE
 FALSE & elev > 200
 
-# mathematical functions on two or more rasters
+# Mathematical functions on GRasters with >= 2 layers:
 mean(elevs)
 mmode(elevs)
 median(elevs)
@@ -289,10 +297,13 @@ intercept(elevs)
 r2(elevs)
 tvalue(elevs)
 
-sd(elevs)
-sdpop(elevs)
+stdev(elevs)
+stdev(elevs, pop = FALSE)
 var(elevs)
 varpop(elevs)
+
+# Note: To get quantiles for each layer, use
+# global(x, "quantile", probs = 0.2).
 quantile(elevs, 0.1)
 
 }

@@ -17,7 +17,7 @@ faster(..., default = FALSE, restore = FALSE)
 }
 \item \code{addonsDir} (character): Folder in which \strong{GRASS} addons are stored. If \code{NA} and \code{grassDir} is not \code{NA}, this will be assumed to be \code{file.path(grassDir, "addons")}. The default values is \code{NA}.
 \item \code{cores} (integer/numeric integer): Number of processor cores to use on a task. The default is 2. Some \strong{GRASS} modules are parallelized.
-\item \code{memory} (integer/numeric): The amount of memory to allocate to a task, in GB, for \strong{GRASS}. The default is 1024 MB (i.e., 1 GB). Some \strong{GRASS} modules can take advantage of more memory.
+\item \code{memory} (integer/numeric): The amount of memory to allocate to a task, in GB, for \strong{GRASS}. The default is 2048 MB (i.e., 2 GB). Some \strong{GRASS} modules can take advantage of more memory.
 \item \code{clean} (logical): If \code{TRUE} (default), remove temporary files created internally by functions. If not deleted, they can eventually fill up hard drive space, but deleting them takes a little bit of time (usually <1 second for each function).
 \item \code{useDataTable} (logical): If \code{FALSE} (default), use \code{data.frame}s when going back and forth between data tables of \code{GVector}s and \strong{R}. This can be slow for very large data tables. If \code{TRUE}, use \code{data.table}s from the \strong{data.table} package. This can be much faster, but it might require you to know how to use \code{data.table}s if you want to manipulate them in \strong{R}. You can always convert them to \code{data.frame}s using \code{\link[base:as.data.frame]{base::as.data.frame()}}.
 \item \code{verbose} (logical): If \code{TRUE}, show \strong{GRASS} messages and otherwise hidden slots in classes. This is mainly used for debugging, so most users will want to keep this at its default, \code{FALSE}.
@@ -29,31 +29,54 @@ faster(..., default = FALSE, restore = FALSE)
 \item{restore}{Logical: If \code{TRUE}, the all options will be reset to their default values. The default is \code{FALSE}.}
 }
 \value{
-If values of options changed, then a named list of option values \emph{before} they were changed is returned invisibly.
+If options are changed, then a named list of option values \emph{before} they were changed is returned invisibly.
 
 If option values are requested, a named list with option values is returned (not invisibly).
 }
 \description{
-\code{faster()} either sets or gets options used across \strong{fasterRaster} functions. If the \code{default} argument is \code{TRUE}, then the default value(s) of options is returned (but value(s) are kept unchanged). If the \code{restore} argument is \code{TRUE}, then all options will be set to their default values. You cannot simultaneously set options and restore their default values.
+\code{faster()} either sets or gets options used across \strong{fasterRaster} functions. Its use can vary:
+\itemize{
+\item Get current values of a particular option: Use \code{faster("option_name")}. Values will remain unchanged.
+\item Get current values of all options: Use \code{faster()} (no arguments). Values will remain unchanged.
+\item Get default values of a particular option: Use \code{faster("option_name", default = TRUE)}. Values will remain unchanged.
+\item Get default values of all options: Use \code{faster(default = TRUE)}. Values will remain unchanged.
+\item Set values of particular options: Use the form \verb{faster(option 1 = value1, option2 = value2)}.
+\item Set all options to their defaults: Use \code{faster(restore = TRUE)}.
+}
+
+You cannot simultaneously set options and restore their default values.
 }
 \examples{
 if (grassStarted()) {
 
-# Setup
-library(sf)
-library(terra)
+# See current values for options:
+faster("grassDir")
+faster("addonsDir")
+faster("clean")
+faster("cores")
+faster("memory")
+faster("useDataTable")
+faster("verbose")
+faster("workDir")
+faster() # all options
 
-# Example data
-madElev <- fastData("madElev")
-madRivers <- fastData("madRivers")
+# See default values for options:
+faster("cores", default = TRUE)
+faster(default = TRUE) # all options
 
-# Convert a SpatRaster to a GRaster
-elev <- fast(madElev)
-elev
+# Set options (change accordingly for your system!!!)
+if (FALSE) {
 
-# Convert an sf vector to a GVector
-rivers <- fast(madRivers)
-rivers
+opts. <- faster() # remember starting values of options
+
+faster(grassDir = "C:/Program Files/GRASS GIS 8.4")
+faster(verbose = TRUE, memory = 1024, cores = 1)
+
+faster(c("grassDir", "verbose", "memory", "cores"))
+
+faster(opts.) # reset options to starting values
+
+}
 
 }
 }

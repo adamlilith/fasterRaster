@@ -47,7 +47,7 @@ To tell \strong{fasterRaster} where \strong{GRASS} is installed, use the \code{\
 \if{html}{\out{<div class="sourceCode">}}\preformatted{faster(grassDir = grassDir)
 }\if{html}{\out{</div>}}
 
-You can also use the \code{\link[=faster]{faster()}} function to set options that affect how \strong{fasterRaster} functions run.
+You can also use the \code{\link[=faster]{faster()}} function to set options that affect how \strong{fasterRaster} functions run. This includes setting the amount of maximum memory and number of computer cores allocated to operations.
 
 In \strong{fasterRaster}, rasters are called \code{GRaster}s and vectors are called \code{GVector}s. The easiest (but not always fastest) way to start using a \code{GRaster} or \code{GVector} is to convert it from one already in \strong{R}. In the example below, we use a raster that comes with the \strong{fasterRaster} package. The raster represents elevation of a portion of eastern Madagascar. We first load the \code{SpatRaster} using \code{\link[=fastData]{fastData()}}, a helper function for loading example data objects that come with the \strong{fasterRaster} package.
 
@@ -61,7 +61,11 @@ Now, we do the conversion to a \code{GRaster} and a \code{GVector} using \code{\
 elev
 }\if{html}{\out{</div>}}
 
-Converting rasters and vectors that are already in \strong{R} to \code{GRaster}s and \code{GVector}s takes some time. Instead, you can load a raster or vector directly from disk to a \strong{fasterRaster} session using \code{fast()}. To do this, you just replace the argument in \code{\link[=fast]{fast()}} with a string representing the folder path and file name of the raster you want to load into the session.
+Converting rasters and vectors that are already in \strong{R} to \code{GRaster}s and \code{GVector}s takes some time. Instead, you can load a raster or vector directly from disk to a \strong{fasterRaster} session using \code{fast()}. To do this, you just replace the first argument in \code{\link[=fast]{fast()}} with a string representing the folder path and file name of the raster you want to load into the session. For example, you can do:
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{rastFile <- system.file("extdata", "madElev.tif"), package = "fasterRaster")
+elev2 <- fast(rastFile)
+}\if{html}{\out{</div>}}
 
 Now, let's create a \code{GVector}. The \code{\link[=fast]{fast()}} function can take a \code{SpatVector} from the \strong{terra} package, an \code{sf} object from the \strong{sf} package, or a string representing the file path and file name of a vector file (e.g., a GeoPackage file or a shapefile).
 
@@ -84,19 +88,25 @@ log10Elev <- log10(elev)
 log10Elev
 }\if{html}{\out{</div>}}
 
-You can also use the many \strong{fasterRaster} functions. In general, these functions have the same names as their \strong{terra} counterparts and often the same arguments. Note that even many \strong{terra} and \strong{fasterRaster} functions have the same name, they do not necessarily produce the exact same output. Much care has been taken to ensure they do, but sometimes there are multiple ways to do the same task, so choices made by the authors of \strong{terra} and \strong{GRASS} may can lead to differences.
+You can also use the many \strong{fasterRaster} functions. In general, these functions have the same names as their \strong{terra} counterparts and often the same arguments. Note that even many \strong{terra} and \strong{fasterRaster} functions have the same name, they do not necessarily produce the exact same output. Much care has been taken to ensure they do, but sometimes there are multiple ways to do the same task, so choices made by the authors of \strong{terra} and \strong{GRASS} can lead to differences.
 
-The following code creates a raster where cell values reflect the distance between them and the nearest river, then plots the output:
+The following code creates a a) raster where cell values reflect the distance between them and the nearest river; b) creates a buffer around the rivers; then c) plots the output:
 
 \if{html}{\out{<div class="sourceCode">}}\preformatted{dist <- distance(elev, rivers)
 dist
+
+riverBuff <- buffer(rivers, 10000)
+riversBuff
+
 plot(dist)
+plot(rivers, col = 'blue', add = TRUE)
+plot(riversBuff, add = TRUE)
 }\if{html}{\out{</div>}}
 
 And that's how you get started! Now that you have a raster and a vector in your \strong{fasterRaster} "location", you can start doing manipulations and analyses using any of the \strong{fasterRaster} functions!  To see an annotated list of these functions, use \code{?fasterRaster}.
 }
 
-\subsection{Exporting \code{GRaster}s and \code{GVector}s from a \strong{GRASS} session}{
+\subsection{Converting and saving \code{GRaster}s and \code{GVector}s}{
 
 You can convert a \code{GRaster} to a \code{SpatRaster} raster using \code{\link[=rast]{rast()}}:
 
@@ -106,9 +116,10 @@ You can convert a \code{GRaster} to a \code{SpatRaster} raster using \code{\link
 To convert a \code{GVector} to the \strong{terra} package's \code{SpatVector} format or to an \code{sf} vector, use \code{\link[=vect]{vect()}} or \code{\link[=st_as_sf]{st_as_sf()}}:
 
 \if{html}{\out{<div class="sourceCode">}}\preformatted{terraRivers <- vect(rivers)
+sfRivers <- st_as_sf(rivers)
 }\if{html}{\out{</div>}}
 
-Finally, you can use \code{\link[=writeRaster]{writeRaster()}} and \code{\link[=writeVector]{writeVector()}} to save \strong{fasterRaster} rasters and vectors directly to disk. This will always be faster than using \code{\link[=rast]{rast()}}, \code{\link[=vect]{vect()}}, or \code{\link[=st_as_sf]{st_as_sf()}} then saving.
+Finally, you can use \code{\link[=writeRaster]{writeRaster()}} and \code{\link[=writeVector]{writeVector()}} to save \code{GRaster}s and \code{GVector}s directly to disk. This will always be faster than using \code{\link[=rast]{rast()}}, \code{\link[=vect]{vect()}}, or \code{\link[=st_as_sf]{st_as_sf()}} then saving the result from those functions.
 
 \if{html}{\out{<div class="sourceCode">}}\preformatted{elevTempFile <- tempfile(fileext = ".tif") # save as GeoTIFF
 writeRaster(elev, elevTempFile)
@@ -121,11 +132,11 @@ writeVector(rivers, vectTempFile)
 \subsection{Tips for masking \strong{fasterRaster} faster}{
 \enumerate{
 \item Loading rasters and vectors directly from disk using \code{\link[=fast]{fast()}}, rather than converting \strong{terra} or \strong{sf} objects is faster. Why? Because if the object does not have a file to which the \strong{R} object points, \code{fast()} has to save it to disk first as a GeoTIFF or GeoPackage file, then load it into \strong{GRASS}.
-\item Similarly, saving \code{GRaster}s and \code{GVector}s directly to disk will always be faster than converting them to \code{SpatRaster}s or \code{SpatVector}susing \code{\link[=rast]{rast()}} or \code{\link[=vect]{vect()}}, then saving them. Why? Because these functions actually save the file to disk then uses the respective function from the respective package to connect to the file.
+\item Similarly, saving \code{GRaster}s and \code{GVector}s directly to disk will always be faster than converting them to \code{SpatRaster}s or \code{SpatVector}s using \code{\link[=rast]{rast()}} or \code{\link[=vect]{vect()}}, then saving them. Why? Because \code{rast()} and \verb{vect() actually save the object to a temporary file then uses the respective function from the respective package to create the }SpatRaster\code{/}SpatVector\code{/}sf` vector, which you would then proceed to save to disk again.
 \item Every time you switch between using a \code{GRaster} or \code{GVector} with a different coordinate reference system (CRS), \strong{GRASS} has to spend a few second changing to that CRS. So, you can save some time by doing as much work as possible with objects in one CRS, then switching to work on objects in another CRS.
-\item By default, \strong{GRASS}/\strong{fasterRaster} use 2 cores and 1024 MB (1 GB) of memory for functions that allow users to specify these values. You can set these to higher values using \code{\link[=faster]{faster()}} and thus potentially speed up some calculations. Functions in newer versions of \strong{GRASS} have more capacity to use these options, so updating \strong{GRASS} to the latest version can help, too.
-\item Unfortunately, \strong{fasterRaster} is fast with rasters, but not so much vectors. If you have a lot of vector operations, it is advisable to do as much as possible in \strong{terra} or \strong{sf} and transfer to \strong{fasterRaster} when needed.
-\item To obviate problems with disk space filling up, by default most \strong{fasterRaster} functions delete intermediate files. However, if you are not creating a lot of very big \code{GRaster}s or \code{GVector}s, you can skip this time-taking step by setting the \code{clean} option to \code{FALSE} using \code{faster(clean = FALSE)}.
+\item By default, \strong{GRASS}/\strong{fasterRaster} use 2 cores and 2048 MB (2 GB) of memory for functions that allow users to specify these values. You can set these to higher values using \code{\link[=faster]{faster()}} and thus potentially speed up some calculations. Functions in newer versions of \strong{GRASS} have more capacity to use these options, so updating \strong{GRASS} to the latest version can help, too.
+\item To obviate problems with disk space filling up, by default most \strong{fasterRaster} functions delete intermediate files. However, if you are not creating a lot of very big \code{GRaster}s or \code{GVector}s, you can skip this time-taking step by setting the \code{clean} option to \code{FALSE} using \code{faster(clean = FALSE)}. You can also use the \code{\link[=mow]{mow()}} function to remove from the disk cache any \strong{GRASS} files that are not associated with a \code{GRaster} or \code{GVector} in memory. This can be helpful, say, if you create a series of objects, then re-assign them using, say \code{old_name <- new_object} or remove them using \code{rm(old_name)}. You removed them from \strong{R}, but the files they pointed to are still in the \strong{GRASS} cache.
+\item Its name notwithstanding, \strong{fasterRaster} is just not going to be as fast as \strong{terra} or \strong{sf} for all operations, even when the objects are big in memory or on disk. If you are struggling to analyze an object, you can try respective functions in the other packages.
 }
 }
 

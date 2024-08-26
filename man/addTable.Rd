@@ -36,27 +36,42 @@ if (grassStarted()) {
 # Setup
 library(sf)
 
-# Points vector of specimens of species in the plant genus Dypsis
-madDypsis <- fastData("madDypsis")
+# Rivers vector
+madRivers <- fastData("madRivers")
 
-# Convert sf to a GVector:
-dypsis <- fast(madDypsis)
+# Convert sf to a GVector
+rivers <- fast(madRivers)
 
-# Get just the data table:
-df <- as.data.frame(dypsis)
-head(df)
+# Convert GVector to data.frame or data.table
+as.data.frame(rivers)
+as.data.table(rivers)
 
-# Remove the table
-dypsisTable <- dropTable(dypsis)
-dypsis
-dypsisTable
+# Subset rivers vector
+rivers1 <- rivers[1:2]
+rivers2 <- rivers[10:11]
 
-# Add table:
-addTable(dypsisTable) <- df
-dypsisTable
+# Concatenate rivers
+riversCombo <- rbind(rivers1, rivers2)
+riversCombo
+
+# Add columns
+newCol <- data.frame(new = 1:11)
+riversCol <- colbind(rivers, newCol)
+riversCol
+
+# Remove table
+riversCopy <- rivers
+riversCopy # has data table
+riversCopy <- dropTable(riversCopy)
+riversCopy # no data table
+
+# Add a new table
+newTable <- data.frame(num = 1:11, letters = letters[1:11])
+addTable(riversCopy) <- newTable
+riversCopy
 
 }
 }
 \seealso{
-\code{\link[fasterRaster]{$<-}}, \code{\link[=as.data.frame]{as.data.frame()}}, \code{\link[=as.data.table]{as.data.table()}}
+\code{\link[fasterRaster]{$<-}}, \code{\link[=colbind]{colbind()}}, \code{\link[=rbind]{rbind()}}, \code{\link[=as.data.frame]{as.data.frame()}}, \code{\link[=as.data.table]{as.data.table()}}
 }

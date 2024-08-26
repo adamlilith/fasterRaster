@@ -16,6 +16,7 @@
   strata = NULL,
   byStratum = FALSE,
   zlim = NULL,
+  seed = NULL,
   verbose = FALSE
 )
 
@@ -49,9 +50,9 @@
 
 \item{zlim}{Either \code{NULL} (default), or a vector of two numbers defining the lower and upper altitudinal bounds of coordinates. This cannot be combined with \code{values = TRUE} or \code{cats = TRUE}.}
 
-\item{verbose}{Logical: If \code{TRUE}, display progress. Default is \code{FALSE}.}
+\item{seed}{Either \code{NULL} (default) or an integer: Random number seed. If this is \code{NULL}, the a seed will be set randomly. Values will be rounded to the nearest integer.}
 
-\item{seed}{Either \code{NULL} (default), or an integer. Used as the random seed.}
+\item{verbose}{Logical: If \code{TRUE}, display progress. Default is \code{FALSE}.}
 }
 \value{
 A \code{data.frame}, \code{data.table}, or \code{GVector}.

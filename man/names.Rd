@@ -63,7 +63,7 @@ res3d(elev) # resolution (3D)
 zres(elev) # vertical resolution
 xres(elev) # vertical resolution
 yres(elev) # vertical resolution
-zres(elev) # vertical resolution
+zres(elev) # vertical resolution (NA because this is a 2D GRaster)
 
 # cell counts
 ncell(elev) # cells
@@ -80,10 +80,6 @@ is.3d(elev) # is it 3-dimensional?
 
 minmax(elev) # min/max values
 
-# information on the GRASS session in which the GRaster is located
-location(elev) # location
-mapset(elev) # mapset
-
 # "names" of the object
 names(elev)
 
@@ -93,7 +89,6 @@ st_crs(elev)
 
 # extent (bounding box)
 ext(elev)
-st_bbox(elev)
 
 # vertical extent (not defined for this raster)
 zext(elev)
@@ -135,6 +130,7 @@ rasts
 rasts[[3]] <- elev > 500 # add a layer
 rasts <- c(rasts, sqrt(elev)) # add another
 add(rasts) <- ln(elev)
+rasts
 
 # names
 names(rasts)
@@ -148,13 +144,11 @@ rasts
 # number of layers
 nlyr(rasts)
 
-# projecting a raster from disk to location's CRS
+# correlation and covariance matrices
 madLANDSAT <- fastData("madLANDSAT")
 landsat <- fast(madLANDSAT) # projects matrix
-
-# correlation and covariance matrices
-cor(landsat) # correlation
-cov(landsat) # covariance
+layerCor(landsat) # correlation
+layerCor(landsat, fun = 'cov') # covariance
 
 }
 }
