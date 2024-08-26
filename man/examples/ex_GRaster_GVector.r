@@ -96,11 +96,12 @@ W(rivers) # western extent
 E(rivers) # eastern extent
 S(rivers) # southern extent
 N(rivers) # northern extent
-top(rivers) # top extent
-bottom(rivers) # bottom extent
+top(rivers) # top extent (NA for 2D rasters like this one)
+bottom(rivers) # bottom extent (NA for 2D rasters like this one)
 
 # coordinate reference system
 crs(rivers)
+st_crs(rivers)
 
 # column names and data types
 names(coast)
@@ -127,6 +128,10 @@ is.polygons(dypsis)
 nrow(rivers) # how many spatial features
 ncol(rivers) # hay many columns in the data frame
 
+# number of geometries and sub-geometries
+ngeom(coast)
+nsubgeom(coast)
+
 # 2- or 3D
 topology(rivers) # dimensionality
 is.2d(elev) # is it 2D?
@@ -141,6 +146,7 @@ update(elev)
 
 # convert to data frame
 as.data.frame(rivers)
+as.data.table(rivers)
 
 # subsetting
 rivers[c(1:2, 5)] # select 3 rows/geometries
@@ -153,7 +159,7 @@ rivers[c(TRUE, FALSE)] # select every other geometry (T/F vector is recycled)
 rivers[ , c(TRUE, FALSE)] # select every other column (T/F vector is recycled)
 
 # removing data table
-noTable <- dropTable(river)
+noTable <- dropTable(rivers)
 noTable
 nrow(rivers)
 nrow(noTable)
@@ -164,7 +170,7 @@ nrow(noTable)
 rivers <- update(rivers)
 
 # Concatenating multiple vectors
-rivers2 <- c(rivers, rivers)
+rivers2 <- rbind(rivers, rivers)
 dim(rivers)
 dim(rivers2)
 
