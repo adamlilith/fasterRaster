@@ -64,12 +64,12 @@ methods::setMethod(
 
 	if (inherits(res, "character")) {
 		res <- omnibus::pmatchSafe(res, c("fallback", "terra", "template", "center"), nmax = 1L)
-		if (!inherits(y, "GRaster") && res == "template") stop("The ", sQuote("template"), " method for setting resolution can only be used if the argument ", sQuote("y"), " is a GRaster.")
+		if (!inherits(y, "GRaster") && res == "template") stop("The `template` method for setting resolution can only be used if the argument `y` is a GRaster.")
 	} else if (inherits(res, "numeric")) {
 		if (length(res) == 1L) res <- c(res, res)
-		if (length(res) != 2L) stop("Argument ", sQuote("res"), " must have one or two numeric values, or be a string.")
+		if (length(res) != 2L) stop("Argument `res` must have one or two numeric values, or be a string.")
 	} else {
-		stop("Argument ", sQuote("res"), " must be a numeric vector or a string.")
+		stop("Argument `res` must be a numeric vector or a string.")
 	}
 	
 	if (inherits(res, "numeric")) {
@@ -158,7 +158,7 @@ methods::setMethod(
 
 	}
 
-	nSteps <- nLayers + res == "terra"
+	nSteps <- nLayers + (res == "terra")
 	if (verbose | faster("verbose")) {
 		pb <- utils::txtProgressBar(min = 0, max = nSteps, initial = 0, style = 3, width = 30)
 		steps <- 0
@@ -430,7 +430,7 @@ methods::setMethod(
 	
 		if (yLocation == xLocation) {
 			warning("Object is already in the desired coordinate reference system.")
-			return()
+			return(x)
 		}
 	
 	} else if (is.null(yLocation)) {
