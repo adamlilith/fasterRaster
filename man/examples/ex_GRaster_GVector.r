@@ -106,9 +106,8 @@ crs(rivers)
 names(coast)
 datatype(coast)
 
-# session information
-location(rivers) # GRASS location
-mapset(rivers) # GRASS mapset
+# name of object in GRASS
+sources(rivers)
 
 # points, lines, or polygons?
 geomtype(dypsis)
