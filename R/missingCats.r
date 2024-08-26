@@ -21,35 +21,32 @@ methods::setMethod(
     f = "missingCats",
     signature = c(x = "GRaster"),
     function(x, layer = 1:nlyr(x)) {
-        
-        layer <- .layerIndex(layer, x, recycle = TRUE)
+    
+    layer <- .layerIndex(layer, x, recycle = TRUE)
 
-        levs <- levels(x)
-        isFact <- is.factor(x)
+    levs <- levels(x)
 
-        out <- list()
-        for (i in layer) {
-            if (!isFact[i]) {
-                out[[i]] <- numeric()
-            } else {
-              
-                freqs <- freq(x[[i]])
+    out <- list()
+    for (i in layer) {
 
-                ac <- activeCat(x, names = TRUE)[i]
-                val <- names(freqs)[1L]
-
-                this <- freqs[(is.na(ac))]
-                this <- this[[(val)]]
-                out[[i]] <- this
-
-            } # if this layer has levels
-        } # next raster
-        if (length(out) == 1L) {
-            out <- out[[1L]]
+        if (!is.factor(x)[i]) {
+            out[[i]] <- numeric()
         } else {
-            names(out) <- names(x)[layer]
-        }
-        out
+            
+            this <- .freq(x[[i]], dtype = "CELL")
+            this <- this[count == 0]
+            this <- this[[3L]]
+            out[[i]] <- this
+
+        } # if this layer has levels
+
+    } # next raster
+    if (length(out) == 1L) {
+        out <- out[[1L]]
+    } else {
+        names(out) <- names(x)[layer]
+    }
+    out
 
     } # EOF
 )
