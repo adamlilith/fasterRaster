@@ -38,9 +38,8 @@ is.3d(elev) # is it 3D?
 
 minmax(elev) # min/max values
 
-# information on the GRASS session in which the GRaster is located
-location(elev) # location
-mapset(elev) # mapset
+# name of object in GRASS
+sources(elev)
 
 # "names" of the object
 names(elev)
