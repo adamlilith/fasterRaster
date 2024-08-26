@@ -4,12 +4,14 @@
 #' * Numeration: `count()` (number of non-`NA` cells), `sum()`.
 #' * Central tendency: `mean()`, `mmode()` (mode), `median()`.
 #' * Extremes: `min()`, `max()`, `which.min()` (index of raster with the minimum value), `which.max()` (index of the raster with the maximum value)
-#' * Dispersion: `range()`, `sd()` (sample standard deviation), `var()` (sample variance), `sdpop()` (population standard deviation), `varpop()` (population variance), `nunique()` (number of unique values), `quantile()` (use argument `probs`), `skewness()`, and `kurtosis()`.
+#' * Dispersion: `range()`, `stdev()` (standard deviation), `var()` (sample variance), `varpop()` (population variance), `nunique()` (number of unique values), `quantile()` (use argument `probs`), `skewness()`, and `kurtosis()`.
 #' * Regression: Assuming we calculate a linear regression for each set of cells through all values of the cells, we can calculate its `slope()`, `intercept()`, `r2()`, and `tvalue()`.
 #'
 #' @param x A `GRaster`. Typically, this raster will have two or more layers. Values will be calculated within cells across rasters.
 #'
 #' @param prob Numeric: Quantile to calculate. Used for `quantile()`.
+#'
+#' @param pop Logical (for `stdev()`): If `TRUE` (default), calculate the population standard deviation across layers. If `FALSE`, calculate the sample standard deviation.
 #'
 #' @param na.rm Logical: If `FALSE` (default), of one cell value has an `NA`, the result will be `NA`. If `TRUE`, `NA`s are ignored.
 #'
@@ -40,10 +42,10 @@ setMethod(
 	signature(x = "GRaster"),
 	function(x, na.rm = FALSE) {
 
-		fx <- "mode"
-		fxName <- "mode"
-		.genericMultiLayer(fx = fx, fxName = fxName, x = x, na.rm = na.rm)
-		
+	fx <- "mode"
+	fxName <- "mode"
+	.genericMultiLayer(fx = fx, fxName = fxName, x = x, na.rm = na.rm)
+	
 	} # EOF
 )
 
@@ -161,21 +163,6 @@ setMethod(
 #' @exportMethod sdpop
 setMethod(
 	"sdpop",
-	signature(x = "GRaster"),
-	function(x, na.rm = FALSE) {
-
-		fx <- "stddev"
-		fxName <- "sdpop"
-		.genericMultiLayer(fx = fx, fxName = fxName, x = x, na.rm = na.rm)
-		
-	} # EOF
-)
-
-#' @aliases sdpop
-#' @rdname functions
-#' @exportMethod sdpop
-setMethod(
-	"sdpop",
 	signature(x = "numeric"),
 	function(x, na.rm = FALSE) {
 	sqrt(varpop(x, na.rm = na.rm))
@@ -213,16 +200,19 @@ setMethod(
 	} # EOF
 )
 
-#' @aliases sd
+#' @aliases stdev
 #' @rdname functions
-#' @exportMethod sd
+#' @exportMethod stdev
 setMethod(
-	"sd",
+	"stdev",
 	signature(x = "GRaster"),
-	function(x, na.rm = FALSE) {
+	function(x, pop = TRUE, na.rm = FALSE) {
 
-  		.locationRestore(x)
-  		.region(x)
+	.locationRestore(x)
+	.region(x)
+
+	# sample standard deviation
+	if (!pop) {
 
 		# sum of squares
 		srcSS <- .makeSourceName("ss", "raster")
@@ -245,7 +235,7 @@ setMethod(
 		)
 
 		# SD
-  		prec <- .getPrec(x, NULL)
+		prec <- .getPrec(x, NULL)
 
 		src <- .makeSourceName("sd", "rast")
 		ex <- paste0(src, " = ", prec, "(sqrt(", srcSS, " / ", srcCountMinus1, "))")
@@ -255,9 +245,21 @@ setMethod(
 			expression = ex,
 			flags = c(.quiet(), "overwrite")
 		)
+
+		if (faster("clean")) .rm(c(srcSS, srcCount), type = "raster", warn = FALSE)
+
+		out <- .makeGRaster(src, "sd")
+
+	# population standard deviation
+	} else {
+	
+		fx <- "stddev"
+		fxName <- "sdpop"
+		out <- .genericMultiLayer(fx = fx, fxName = fxName, x = x, na.rm = na.rm)
 		
-		.makeGRaster(src, "sd")
-		
+	}
+	out
+	
 	} # EOF
 )
 
@@ -269,42 +271,43 @@ setMethod(
 	signature(x = "GRaster"),
 	function(x, na.rm = FALSE) {
 
-		.locationRestore(x)
-		.region(x)
+	.locationRestore(x)
+	.region(x)
+
+	# sum of squares
+	srcSS <- .makeSourceName("ss", "rast")
+	srcMean <- .genericMultiLayer(fx = "average", fxName = "mean", x = x, na.rm = na.rm, return = "source")
+	ex <- paste0(srcSS, " = ", paste0("(", sources(x), " - ", srcMean, ")^2", collapse=" + "))
+	rgrass::execGRASS(
+		cmd = "r.mapcalc",
+		expression = ex,
+		flags = c(.quiet(), "overwrite")
+	)
+
+	# N
+	srcCount <- .genericMultiLayer(fx = "count", fxName = "count", x = x, na.rm = na.rm, return = "source")
+	srcCountMinus1 <- .makeSourceName("nMinus1", "rast")
+	ex <- paste0(srcCountMinus1, " = ", srcCount, " - 1")
+	rgrass::execGRASS(
+		cmd = "r.mapcalc",
+		expression = ex,
+		flags = c(.quiet(), "overwrite")
+	)
+
+	# variance
+	prec <- .getPrec(x, NULL)
+
+	src <- .makeSourceName("var", "rast")
+	ex <- paste0(src, " = ", prec, "(", srcSS, " / ", srcCountMinus1, ")")
 	
-		# sum of squares
-		srcSS <- .makeSourceName("ss", "rast")
-		srcMean <- .genericMultiLayer(fx = "average", fxName = "mean", x = x, na.rm = na.rm, return = "source")
-		ex <- paste0(srcSS, " = ", paste0("(", sources(x), " - ", srcMean, ")^2", collapse=" + "))
-		rgrass::execGRASS(
-			cmd = "r.mapcalc",
-			expression = ex,
-			flags = c(.quiet(), "overwrite")
-		)
-
-		# N
-		srcCount <- .genericMultiLayer(fx = "count", fxName = "count", x = x, na.rm = na.rm, return = "source")
-		srcCountMinus1 <- .makeSourceName("nMinus1", "rast")
-		ex <- paste0(srcCountMinus1, " = ", srcCount, " - 1")
-		rgrass::execGRASS(
-			cmd = "r.mapcalc",
-			expression = ex,
-			flags = c(.quiet(), "overwrite")
-		)
-
-		# variance
-    	prec <- .getPrec(x, NULL)
-
-		src <- .makeSourceName("var", "rast")
-		ex <- paste0(src, " = ", prec, "(", srcSS, " / ", srcCountMinus1, ")")
-		
-		rgrass::execGRASS(
-			cmd = "r.mapcalc",
-			expression = ex,
-			flags = c(.quiet(), "overwrite")
-		)
-		
-		.makeGRaster(src, "var")
+	rgrass::execGRASS(
+		cmd = "r.mapcalc",
+		expression = ex,
+		flags = c(.quiet(), "overwrite")
+	)
+	
+	if (faster("clean")) .rm(c(srcSS, srcCount), type = "raster", warn = FALSE)
+	.makeGRaster(src, "var")
 		
 	} # EOF
 )
@@ -492,7 +495,7 @@ setMethod(
 
 	if (return == "GRaster") {
 		if (fxName %in% c("mode", "min", "max")) {
-			level <- combineLevels(x)
+			levels <- combineLevels(x)
 		} else {
 			levels <- NULL
 		}
