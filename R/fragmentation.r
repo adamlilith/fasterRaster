@@ -486,7 +486,7 @@ methods::setMethod(
 
 		srcs[i] <- src
 
-		.rm(created, type = "raster", warn = FALSE)
+		if (faster("clean")) .rm(created, type = "raster", warn = FALSE)
 		created <- character()
 
 	} # next layer
