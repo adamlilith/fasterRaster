@@ -238,11 +238,12 @@ methods::setMethod(
 			if (missing(j)) {
 				removeAllCols <- FALSE
 			} else {
-
+				
 				nc <- ncol(table)
 				if (is.character(j)) {
 					j <- match(j, names(table))
 				} else if (is.logical(j)) {
+
 					if (length(j) < nc) j <- rep(j, length.out = nc)
 					j <- which(j)
 				}
