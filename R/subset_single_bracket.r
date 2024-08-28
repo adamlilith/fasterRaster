@@ -37,7 +37,7 @@ methods::setMethod(
 		out <- x[[i = j]]
 	} else if (all(1L:nGeoms %in% i) & missing(j)) {
 		out <- x
-	} else if (!missing(i) & missing(j)) {
+	} else if (!missing(i)) {
 
 		if (is.logical(i)) {
 			if (length(i) < nGeoms) i <- rep(i, length.out = nGeoms)
