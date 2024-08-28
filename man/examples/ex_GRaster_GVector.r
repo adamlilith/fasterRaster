@@ -139,7 +139,7 @@ is.3d(elev) # is it 3D?
 
 # Update values from GRASS
 # (Reads values from GRASS... will not appear to do anything in this case)
-update(elev)
+coast <- update(coast)
 
 ### operations on GVectors
 ##########################
@@ -154,7 +154,7 @@ rivers[-5:-11] # remove rows/geometries 5 through 11
 rivers[ , 1] # column 1
 rivers[ , "NAM"] # select column
 rivers[["NAM"]] # select column
-rivers[1, 2] # row/geometry 1 and column 1
+rivers[1, 2:3] # row/geometry 1 and column 2 and 3
 rivers[c(TRUE, FALSE)] # select every other geometry (T/F vector is recycled)
 rivers[ , c(TRUE, FALSE)] # select every other column (T/F vector is recycled)
 
