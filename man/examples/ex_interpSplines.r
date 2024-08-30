@@ -12,7 +12,8 @@ madDypsis <- fastData("madDypsis")
 elev <- fast(madElev)
 dypsis <- fast(madDypsis)
 
-# We will interpolate the value of collection year in the "year" field of dypsis. But first, we need to remove the NA value.
+# We will interpolate the value of collection year in the "year" field of
+# Dypsis. But first, we need to remove the NA value.
 dypsisNoNA <- dypsis[!is.na(dypsis$year)]
 
 # For this example, we also need to increase the size of spline steps in the
