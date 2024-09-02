@@ -12,25 +12,36 @@ madDypsis <- fastData("madDypsis")
 elev <- fast(madElev)
 dypsis <- fast(madDypsis)
 
-# We will interpolate the value of collection year in the "year" field of
-# Dypsis. But first, we need to remove the NA value.
-dypsisNoNA <- dypsis[!is.na(dypsis$year)]
+# We have an elevation raster but will pretend we don't and interpolate
+# the value of elevation associated with each point.
 
-# For this example, we also need to increase the size of spline steps in the
+# Extract elevation values from elevation raster:
+dypsisElev <- extract(elev, dypsis)
+
+# Add column to dypsis:
+dypsis <- colbind(dypsis, dypsisElev)
+
+# For expediency, we will also increase the size of spline steps in the
 # x- and y-dimensions:
 xlength <- 10 * xres(elev)
 ylength <- 10 * yres(elev)
 
 # Interpolate to a raster (need to increase size of spline length first):
-interpRast <- interpSplines(dypsisNoNA, y = elev, field = "year",
+interpElev <- interpSplines(dypsis, y = elev, field = "madElev",
 lambda = 0.01, xlength = xlength, ylength = ylength)
 
-plot(interpRast)
-plot(dypsisNoNA, add = TRUE)
-dypsisNoNA$year
+# Plot:
+oldpar <- par(mfrow = c(1, 2))
+plot(elev, main = "Observed")
+plot(dypsis, pch = 1, add = TRUE)
 
-# Find optimal lambda using cross-validation (takes a while):
-lambdas <- interpSplines(dypsisNoNA, y = elev, field = "year",
+plot(interpElev, main = "Interpolated")
+plot(dypsis, pch = 1, add = TRUE)
+
+par(oldpar)
+
+### Find optimal lambda using cross-validation (takes a while):
+lambdas <- interpSplines(dypsis, y = elev, field = "madElev",
 xlength = xlength, ylength = ylength, interpolate = FALSE)
 
 lambdas
