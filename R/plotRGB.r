@@ -10,8 +10,6 @@
 #'
 #' @param simplify Logical: If `TRUE` (default), then downsample the `GRaster` before plotting. This can save time for very dense rasters.
 #'
-#' @param maxcell Positive numeric integer: Maximum number of cells to display. When simplifying, [aggregate()] will be applied so that it has approximately this number of cells. The default is 500000.
-#'
 #' @param ... Arguments to pass to [terra::plotRGB()].
 #'
 #' @returns Nothing (makes a plot).
@@ -26,26 +24,52 @@
 methods::setMethod(
 	f = "plotRGB",
 	signature = c(x = "GRaster"),
-	function(x, r = 1, g = 2, b = 3, a = NULL, simplify = TRUE, maxcell = 500000, ...) {
+	function(x, r = 1, g = 2, b = 3, a = NULL, simplify = TRUE, ...) {
 	
 	.locationRestore(x)
 	.region(x)
 	
 	# simplify
-	nc <- ncell(x)
-	if (simplify & nc > maxcell) {
+	# simplify
+	if (simplify & !is.3d(x)) {
+		
+		screenRes <- rpanel::rp.screenresolution()
+		screenWidth <- screenRes$width
+		screenHeight <- screenRes$height
 
 		rows <- nrow(x)
 		cols <- ncol(x)
-		rescale <- ceiling(nc / (2 * maxcell))
-		if (rescale != 1L) x <- aggregate(x, fact = rescale)
+		# pow <- 5 # power by which to reduce dimensions, set at 5 semi-empirically
+		if (screenWidth < cols | screenHeight < rows) {
+		
+			ewScale <- max(1, floor(0.5 * cols / screenWidth))
+			nsScale <- max(1, floor(0.5 * rows / screenHeight))
+
+			if (ewScale >= 2 | nsScale >= 2) {
+
+				if (any(datatype(x) %in% c("integer", "factor"))) {
+					fun <- "mode"
+				} else {
+					fun <- "mean"
+				}
+
+				fact <- c(ewScale, nsScale)
+				rgb <- c(r, g, b)
+				if (!is.null(a)) rgb <- c(rgb, a)
+				xx <- xx[[rgb]]
+				x <- aggregate(xx, fact = fact, fun = fun)
+
+			}
+			
+		}
 
 	}
 	
 	tf <- tempfile(fileext = ".tif")
-	x <- writeRaster(x, tf, overwrite = TRUE)
+	writeRaster(x, tf, overwrite = TRUE)
+	xx <- terra::rast(tf)
 	
-	terra::plotRGB(x, r = r, g = g, b = b, a = a, ...)
+	terra::plotRGB(xx, r = r, g = g, b = b, a = a, ...)
 	
 	} # EOF
 )
