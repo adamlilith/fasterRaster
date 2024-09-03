@@ -28,19 +28,21 @@
 methods::setMethod(
     f = "rSpatialDepRast",
     signature = c(x = "GRaster"),
-    function(x,
+    function(
+        x,
         n = 1,
         mu = 0,
         sigma = 1,
         dist = 0,
         exponent = 1,
         delay = 0,
-        seed = NULL) {
+        seed = NULL
+    ) {
 
-    if (any(dist < 0)) stop("Argument ", sQuote("dist"), " must be >= 0.")
-    if (any(exponent <= 0)) stop("Argument ", sQuote("exponent"), " must be > 0.")
-    if (any(delay < 0)) stop("Argument ", sQuote("delay"), " must be >= 0.")
-    if (!is.null(seed)) if (length(seed) != n) stop("You must provide one value of ", sQuote("seed"), " per raster, or set it to NULL.")
+    if (any(dist < 0)) stop("Argument `dist` must be >= 0.")
+    if (any(exponent <= 0)) stop("Argument `exponent` must be > 0.")
+    if (any(delay < 0)) stop("Argument `delay` must be >= 0.")
+    if (!is.null(seed)) if (length(seed) != n) stop("You must provide one value of `seed` per raster, or set it to NULL.")
 
     mu <- rep(mu, length.out = n)
     sigma <- rep(sigma, length.out = n)
@@ -51,38 +53,33 @@ methods::setMethod(
     .locationRestore(x)
     .region(x)
 
-    gnRands <- .makeSourceName("rand", "raster", n)
+    srcRands <- .makeSourceName("rand", "raster", n)
     srcs <- .makeSourceName("randScaled", "raster", n)
 
     for (i in seq_len(n)) {
 
         args <- list(
             cmd = "r.random.surface",
-            output = gnRands[i],
+            output = srcRands[i],
             distance = dist[i],
             exponent = exponent[i],
             flat = delay[i],
-            flags = c(.quiet(), "overwrite"),
-            intern = TRUE
+            flags = c(.quiet(), "overwrite")
         )
         if (!is.null(seed)) args$seed <- seed[i]
         do.call(rgrass::execGRASS, args = args)
 
-        y <- .makeGRaster(gnRands[i], "random")
+        xmu <- .global(srcRands[i], fun = "mean")
+        xsigma <- .global(srcRands[i], fun = "sdpop")
 
-        xmu <- global(y, "mean")
-        xsigma <- global(y, "sd")
+        ex <- paste0(srcs[i], " = ", mu[i], " + ", sigma[i], " * (", srcRands[i], " - ", xmu, ") / ", xsigma)
 
-        ex <- paste0(srcs[i], " = ", mu[i], " + ", sigma[i], " * (", gnRands[i], " - ", xmu, ") / ", xsigma)
-
-        args <- list(
+        rgrass::execGRASS(
             cmd = "r.mapcalc",
             expression = ex,
-            flags = c(.quiet(), "overwrite"),
-            intern = TRUE
+            flags = c(.quiet(), "overwrite")
         )
-        do.call(rgrass::execGRASS, args = args)
-
+        
     } # next raster
     .makeGRaster(srcs, "rnorm")
 
