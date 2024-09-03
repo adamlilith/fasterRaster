@@ -64,7 +64,7 @@ methods::setMethod(
 		nBys <- length(bys)
 		src <- rep(NA_character_, nBys)
 		levels <- list()
-		if (verbose & nBys > 1L) pb <- utils::txtProgressBar(min = 0, max = nBys, initial = 0, style = 2)
+		if (verbose & nBys > 1L) pb <- utils::txtProgressBar(min = 0, max = nBys, initial = 0, style = 3)
 
 		for (i in seq_len(nBys)) {
 
