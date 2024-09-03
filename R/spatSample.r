@@ -256,10 +256,13 @@ methods::setMethod(
 	}
 
 	if (as.points) {
-		if (verbose | faster("verbose")) omnibus::say("Creating GVector...")
 		.vAttachDatabase(src)
 		if (exists("out", inherits = FALSE)) {
-			out <- .makeGVector(src, table = out, cats = 1:size)
+			# info <- .vectInfo(src)
+			# nGeometries <- info$nGeometries
+			# n <- nGeometries / size
+			# out <- .makeGVector(src, table = out, cats = rep(1:size, each = n))
+			out <- .makeGVector(src, table = out)
 		} else {
 			out <- .makeGVector(src, cats = 1:size)
 		}
