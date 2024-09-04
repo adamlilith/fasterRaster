@@ -12,8 +12,10 @@ elev <- fast(madElev)
 ### Calculate input rasters
 ###########################
 
-coeff_bh <- elev * 0 + 0.4 # just a guess
-coeff_dh <- elev * 0 + 0.6 # just a guess
+# Values below are just a guess
+coeff_bh <- coeff_dh <- elev
+coeff_bh[] <- 0.4
+coeff_dh[] <- 0.6
 
 slope <- terrain(elev, "slope")
 aspect <- terrain(elev, "aspect", northIs0 = FALSE)
