@@ -12,17 +12,19 @@ madRivers <- fastData("madRivers")
 ####################################
 
 rivers <- fast(madRivers)
+rivers <- rivers[3]
+
 
 vr <- simplifyGeom(rivers, tolerance = 2000)
 dp <- simplifyGeom(rivers, tolerance = 2000, method = "dp")
-dpr <- simplifyGeom(rivers, tolerance = 2000, method = "dpr", prop=0.5)
+dpr <- simplifyGeom(rivers, tolerance = 2000, method = "dpr", prop = 0.5)
 rw <- simplifyGeom(rivers, tolerance = 2000, method = "rw")
 
-plot(st_geometry(madRivers), col="gray", lwd=3)
-plot(vr, col="blue", add=TRUE)
-plot(dp, col="red", add=TRUE)
-plot(dpr, col="chartreuse", add=TRUE)
-plot(rw, col="orange", add=TRUE)
+plot(st_geometry(madRivers), col = "gray", lwd = 3)
+plot(vr, col = "blue", add = TRUE)
+plot(dp, col = "red", add = TRUE)
+plot(dpr, col = "chartreuse", add = TRUE)
+plot(rw, col = "orange", add = TRUE)
 
 legend("topright",
    legend = c(
@@ -42,9 +44,9 @@ legend("topright",
 hermite <- smoothGeom(rivers, dist = 2000, angle = 3)
 chaiken <- smoothGeom(rivers, method = "Chaiken", dist = 2000)
 
-plot(st_geometry(madRivers), col="gray", lwd=2)
-plot(hermite, col="blue", add=TRUE)
-plot(chaiken, col="red", add=TRUE)
+plot(st_geometry(madRivers), col = "gray", lwd = 2)
+plot(hermite, col = "blue", add = TRUE)
+plot(chaiken, col = "red", add = TRUE)
 
 legend("topright",
    legend = c(
@@ -61,8 +63,8 @@ legend("topright",
 
 noDangs <- removeDangles(rivers, tolerance = 2000)
 
-plot(st_geometry(madRivers), col="blue")
-plot(noDangs, col="red", add=TRUE)
+plot(st_geometry(madRivers), col = "blue")
+plot(noDangs, col = "red", add = TRUE)
 
 legend("topright",
    legend = c(
