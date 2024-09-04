@@ -44,7 +44,7 @@ methods::setMethod(
 	.locationRestore(x)
 	
 	method <- tolower(method)
-	method <- omnibus::pmatchSafe(method, c("vr", "dp", "dpr", "rw"))
+	method <- omnibus::pmatchSafe(method, c("vr", "dp", "dpr", "rw"), useFirst = TRUE)
 	method <- if (method == "vr") {
 		"reduction"
 	} else if (method == "dp") {
