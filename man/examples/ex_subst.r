@@ -21,7 +21,7 @@ plot(substituteds)
 
 # Simple substitution of three values, keeping all other values
 substituted <- subst(elev, from = c(299, 300, 301), to = c(-699, -600, -601))
-substituteds <- c(elev, substituteds)
+substituteds <- c(elev, substituted)
 names(substituteds) <- c("original", "substituted")
 plot(substituteds)
 
