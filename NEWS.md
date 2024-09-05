@@ -1,12 +1,37 @@
 # fasterRaster 8.3.0.7022 (2024-08-XX)
 
+## Main task of this release
+o Examples in all help files have been checked and, if needed, either they or the calling function(s) have been fixed. See "Bug fixes and speed-ups" below.
+
 ## New functions and functionality
+o `dim3d()` returns the "region's" dimensions when called with no arguments.  
 o `global()` calculates quantiles much faster (minutes vs. weeks) for very large rasters.  
-o `reorient()` converts facing angles between north and east orientations.
+o `layerCor()` by default calculates inter-`GRaster` correlation.  
+o `reorient()` converts facing angles between north and east orientations.  
+o Default value of `memory` in `faster()` is now 2 GB.
 
 ## Potentially co-breaking changes
 o `global()` argument `prob` changed to `probs` because it can accommodate more than one value.  
 o `horizonHeight()` function now uses argument `step` instead of `directions`.
+o Removed `sd()` and `sdpop()` and replaced with `stdev()`.  
+
+## Bug fixes and speed-ups
+o `atan2()` works!  
+o `fractalRast()` is faster.  
+o `freq()` work when the input is a categorical `GRaster`.  
+p `interpSplines()` bug causing lambda values to not be returned fixed.  
+o `horizonHeight()` returns `GRaster`s that can be used directly in `sun()`.  
+o `plotRGB()` is no longer stuck in an infinite loop.  
+o `rSpatialDepRast()` is faster.  
+o `replace_double_square_brackets` works!  
+o `simplifyGeom()` works when using the "dp" or "dpr" methods.  
+o `spatSample()` works when `byStratum = TRUE`.  
+o `subset_dollar` bug fixed related to rationalization of `dim()` and `res()`.  
+o `subset_double_square_brackets` works for `i = missing` and `j = ` not missing.  
+o `subset_single_bracket` works for `x[i, j]` when neither `i` nor `j` are missing.  
+o `sun()` works with `GRaster`s from `horizonHeight()`.  
+o `update()` retains a `GVector`'s data table.  
+
 
 # fasterRaster 8.3.0.7021 (2024-08-03)
 
