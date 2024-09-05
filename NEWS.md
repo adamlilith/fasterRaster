@@ -2,15 +2,17 @@
 
 ## New functions and functionality
 o `global()` calculates quantiles much faster (minutes vs. weeks) for very large rasters.  
+o `reorient()` converts facing angles between north and east orientations.
 
 ## Potentially co-breaking changes
 o `global()` argument `prob` changed to `probs` because it can accommodate more than one value.  
+o `horizonHeight()` function now uses argument `step` instead of `directions`.
 
 # fasterRaster 8.3.0.7021 (2024-08-03)
 
 ## Potentially co-breaking changes
-o Renamed `terrainRuggednessIndex()` to `ruggedness()`  
-o Renamed `topoWetnessIndex()` to `wetness()`
+o Renamed `terrainRuggednessIndex()` to `ruggedness()`.  
+o Renamed `topoWetnessIndex()` to `wetness()`.
 
 ## New functions and functionality
 o `[` (`subset_single_bracket`) can use a `GRaster` inside the `[]` to specify what cells in a `GRaster` to subset.  
