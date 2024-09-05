@@ -109,8 +109,7 @@ slope <- terrain(elev, "slope")
 aspect <- terrain(elev, "aspect", northIs0 = FALSE)
 
 horizon_step <- 90
-directions <- seq(0, 359, horizon_step)
-hh <- horizonHeight(elev, directions = directions, northIs0 = FALSE)
+hh <- horizonHeight(elev, step = horizon_step, northIs0 = FALSE)
 
 ### calculate solar ir/radiance
 ###############################
@@ -124,7 +123,7 @@ solar <- sun(
 	hh = hh,
 	horizon_step = horizon_step,
 	albedo = 0.2,
-	linke = 3,
+	linke = 1.5,
 	day = 1,
 	step = 0.5,
 	declination = NULL,
@@ -137,7 +136,9 @@ solar <- sun(
 	diff_rad = TRUE,
 	refl_rad = TRUE,
 	glob_rad = TRUE,
-	insol_time = TRUE
+	insol_time = TRUE,
+
+	lowMemory = FALSE
 )
 
 solar

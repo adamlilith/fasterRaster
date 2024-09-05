@@ -115,6 +115,7 @@ The assign operators, \code{\link[fasterRaster]{$<-}}, \code{\link[fasterRaster]
 \code{\link[=project]{project()}}: Change coordinate reference system and cell size\cr
 \code{\link[=predict]{predict()}}: Make predictions to a \code{GRaster} from a linear model or generalized linear model\cr
 \code{\link[=resample]{resample()}}: Change cell size\cr
+\code{\link[=reorient]{reorient()}}: Convert degrees between 'north-orientation' and 'east orientation'\cr
 \code{\link[=scale]{scale()}}, \code{\link[=scalepop]{scalepop()}}, and \code{\link[=unscale]{unscale()}}: Subtract means and divide by standard deviations, or inverse of that\cr
 \code{\link[=selectRange]{selectRange()}}: Select values from rasters in a stack based on values in another \code{GRaster}\cr
 \code{\link[=spatSample]{spatSample()}}: Randomly points from a \code{GRaster}\cr
@@ -299,6 +300,7 @@ The \code{\link[fasterRaster]{$<-}} operator can be used to replace specific col
 \code{\link[=dropRows]{dropRows()}}: Remove rows from a \code{data.frame} or \code{data.table}\cr
 \code{\link[=grassInfo]{grassInfo()}}: \strong{GRASS} version and citation\cr
 \code{\link[=mow]{mow()}}: Remove unused rasters and vectors from the \strong{GRASS} cache\cr
+\code{\link[=reorient]{reorient()}}: Convert degrees between 'north-orientation' and 'east orientation'\cr
 \code{\link[=replaceNAs]{replaceNAs()}}: Replace \code{NA}s in columns of a \code{data.table} or \code{data.frame}, or in a vector\cr
 \code{\link[=seqToSQL]{seqToSQL()}}: Format a numeric series into an SQL value call\cr
 \code{\link[=update]{update()}}: Refresh metadata in a \code{GRaster} or \code{GVector} object\cr

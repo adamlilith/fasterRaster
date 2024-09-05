@@ -8,7 +8,7 @@
 \S4method{horizonHeight}{GRaster}(
   x,
   units = "radians",
-  directions = c(0, 90, 180, 270),
+  step = 90,
   northIs0 = TRUE,
   bufferZone = 0,
   distance = 1,
@@ -20,9 +20,9 @@
 
 \item{units}{Character: Units of the height. Either \code{radians} (default) or \code{degrees}. Partial matching is used.}
 
-\item{directions}{Numeric vector with positive integers between 0 and 359, inclusive: Direction(s) in which to calculate horizon height for each cell. By default, these are given in degrees clockwise from 0, so 0 is north, 90 east, 180 south, and 270 west. However, if you set \code{northIs0 = FALSE}, then the directions are given degrees counterclockwise from east, so east is 0, north 90, west 180, and south 270. Regardless, the default is to calculate horizon angle in all four directions. One raster is created per direction. Note that the output will be labeled according to the angle of the directions (e.g., \code{horizonHeight_090} will be horizon height facing east if \code{northIs0 = TRUE} (default), but horizon height facing north if \code{northIs0 = FALSE}. Note that \strong{GRASS} automatically rounds these values down to the nearest integer, so this function does the same but also produces a warning.}
+\item{step}{Numeric integer between 0 and 360, inclusive: Angle step size (in degrees) for calculating horizon height. The direction in which horizon height is calculated is incremented from 0 to 360, with the last value excluded.}
 
-\item{northIs0}{Logical: If \code{TRUE} (default), argument \code{directions} specifies horizon height in "north orientation," or clockwise from 0, so 0 is north, 90 east, 180 south, and 270 west. If \code{FALSE}, angles are in "east orientation", or counterclockwise from east, so east is 0, north 90, west 180, and south 270. North orientation is the default for this function in \strong{R}, but east orientation is the default in the \strong{GRASS} module \code{r.horizon}. \strong{Note:} The \code{\link[=sun]{sun()}} function requires aspect to be in east orientation.}
+\item{northIs0}{Logical: If \code{TRUE} (default), horizon height calculated in the 0-degree direction will be facing north,  and proceed clockwise So, under "north orientation", 0 is north, 90 east, 180 south, and 270 west. If \code{FALSE}, angles are in "east orientation", and proceed counterclockwise from east. So, east is 0, north 90, west 180, and south 270. North orientation is the default for this function in \strong{R}, but east orientation is the default in the \strong{GRASS} module \code{r.horizon}. \strong{Note:} The \code{\link[=sun]{sun()}} function requires aspect to be in east orientation.}
 
 \item{bufferZone}{Numeric >= 0 (default is 0): A buffer of the specified width will be generated around the raster before calculation of horizon angle. If the coordinate system is in longitude/latitude (e.g., WGS84 or NAD83), then this is specified in degrees. Otherwise units are map units (usually meters).}
 
@@ -49,10 +49,14 @@ madElev <- fastData("madElev")
 elev <- fast(madElev)
 
 # calculate horizon height in north and east directions
-hhNorthEast <- horizonHeight(elev, directions = c(0, 90))
+hhNorth <- horizonHeight(elev)
+hhNorth
+plot(hhNorth)
 
 # calculate horizon height in east and north directions
-hhEastNorth <- horizonHeight(elev, directions = c(0, 90), northIs0 = FALSE)
+hhEast <- horizonHeight(elev, northIs0 = FALSE)
+hhEast
+plot(hhEast)
 
 }
 }
