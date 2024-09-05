@@ -101,6 +101,7 @@
 #' [project()]: Change coordinate reference system and cell size\cr
 #' [predict()]: Make predictions to a `GRaster` from a linear model or generalized linear model\cr
 #' [resample()]: Change cell size\cr
+#' [reorient()]: Convert degrees between 'north-orientation' and 'east orientation'\cr
 #' [scale()], [scalepop()], and [unscale()]: Subtract means and divide by standard deviations, or inverse of that\cr
 #' [selectRange()]: Select values from rasters in a stack based on values in another `GRaster`\cr
 #' [spatSample()]: Randomly points from a `GRaster`\cr
@@ -265,6 +266,7 @@
 #' [dropRows()]: Remove rows from a `data.frame` or `data.table`\cr
 #' [grassInfo()]: **GRASS** version and citation\cr
 #' [mow()]: Remove unused rasters and vectors from the **GRASS** cache\cr
+#' [reorient()]: Convert degrees between 'north-orientation' and 'east orientation'\cr
 #' [replaceNAs()]: Replace `NA`s in columns of a `data.table` or `data.frame`, or in a vector\cr
 #' [seqToSQL()]: Format a numeric series into an SQL value call\cr
 #' [update()]: Refresh metadata in a `GRaster` or `GVector` object\cr
