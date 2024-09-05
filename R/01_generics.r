@@ -215,6 +215,7 @@ methods::setGeneric(name = "nsubgeom", def = function(x, ...) standardGeneric("n
 methods::setGeneric(name = "nunique", def = function(x, ...) standardGeneric("nunique"))
 
 # methods::setGeneric(name = "orOrOr", def = function(e1, e2) standardGeneric("orOrOr"))
+methods::setGeneric(name = "reorient", def = function(x, ...) standardGeneric("reorient"))
 
 methods::setGeneric(name = "pairs", package = "terra")
 methods::setGeneric(name = "pca", def = function(x, ...) standardGeneric("pca"))
