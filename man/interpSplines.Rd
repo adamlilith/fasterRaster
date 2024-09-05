@@ -14,7 +14,8 @@
   solver = "Cholesky",
   xlength = NULL,
   ylength = NULL,
-  interpolate = TRUE
+  interpolate = TRUE,
+  verbose = is.null(lambda)
 )
 }
 \arguments{
@@ -33,6 +34,8 @@
 \item{xlength, ylength}{Either \code{NULL} (default), or numeric > 0: Length of the spline step in the x- and y-directions. If \code{NULL}, these will be set to 4 times the length of the extent in the respective direction.}
 
 \item{interpolate}{Logical: If \code{TRUE} (default), then create a \code{GRaster} with interpolated values. If \code{FALSE}, return a table with \code{lambda} values from cross-validation. This argument is ignored if \code{lambda} is a numeric value.}
+
+\item{verbose}{Logical: if \code{TRUE}, display progress.}
 }
 \value{
 Output depends on values of \code{lambda} and \code{interpolate}:

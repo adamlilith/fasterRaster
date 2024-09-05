@@ -54,10 +54,6 @@ crs(rivers) # coordinate reference system
 names(coast)
 datatype(coast)
 
-# Session information:
-location(rivers) # GRASS location
-mapset(rivers) # GRASS mapset
-
 # Points, lines, or polygons?
 geomtype(dypsis)
 geomtype(rivers)

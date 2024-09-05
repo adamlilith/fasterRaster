@@ -69,11 +69,9 @@ library(terra)
 
 # Example data
 madElev <- fastData("madElev") # raster
-madCover <- fastData("madCover") # raster
 
 # Convert to GRasters and GVectors
 elev <- fast(madElev)
-cover <- fast(madCover)
 
 ### spatSample()
 ################
@@ -109,6 +107,9 @@ plot(ant, add = TRUE)
 plot(stratifiedPoints, pch = 21, bg = "red", add = TRUE) # note 20 points per subgeometry
 
 # Random categories:
+madCover <- fastData("madCover") # raster
+cover <- fast(madCover)
+
 randCover <- spatSample(cover, size = 20, values = TRUE,
      cat = TRUE, xy = TRUE)
 randCover

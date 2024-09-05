@@ -10,9 +10,13 @@ madElev <- fastData("madElev")
 elev <- fast(madElev)
 
 # calculate horizon height in north and east directions
-hhNorthEast <- horizonHeight(elev, directions = c(0, 90))
+hhNorth <- horizonHeight(elev)
+hhNorth
+plot(hhNorth)
 
 # calculate horizon height in east and north directions
-hhEastNorth <- horizonHeight(elev, directions = c(0, 90), northIs0 = FALSE)
+hhEast <- horizonHeight(elev, northIs0 = FALSE)
+hhEast
+plot(hhEast)
 
 }
