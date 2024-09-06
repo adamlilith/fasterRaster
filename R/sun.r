@@ -42,6 +42,8 @@
 #'
 #' @param insol_time Logical: If `TRUE` (default), generate a raster with total insolation time in hours ("mode 2" of the `r.sun` **GRASS** module).
 #'
+#' @param lowMemory Logical: If `TRUE`, use the low-memory version of the `r.sun` **GRASS** module. The default is `FALSE`.
+#'
 #' @returns A raster or raster stack stack with the same extent, resolution, and coordinate reference system as `elevation`. Assuming all possible rasters are generated they represent:
 #' * `beam_rad`: Beam radiation (Watt-hours/m2/day)
 #' * `diff_rad`: Diffuse radiation (Watt-hours/m2/day)
@@ -80,7 +82,9 @@ sun <- function(
 		diff_rad = TRUE,
 		refl_rad = TRUE,
 		glob_rad = TRUE,
-		insol_time = TRUE
+		insol_time = TRUE,
+
+		lowMemory = FALSE
 		
 	) {
 
@@ -91,9 +95,9 @@ sun <- function(
 	.locationRestore(elevation)
 	.region(elevation)
 
-	hhGn <- sources(hh)[1L]
-	directions <- seq(0, 359.9999999, by=horizon_step)
-	hhGn <- gsub(hhGn, pattern=paste0("_", sprintf("%03.0f", directions[1L])), replacement="")
+	hhSrc <- sources(hh)[1L]
+	directions <- seq(0, 359.9999999, by = horizon_step)
+	hhSrc <- gsub(hhSrc, pattern = paste0("_", sprintf("%03.0f", directions[1L])), replacement = "")
 		
 	args <- list(
 		cmd = "r.sun",
@@ -108,36 +112,37 @@ sun <- function(
 		coeff_dh = sources(coeff_dh),
 		slope = sources(slope),
 		aspect = sources(aspect),
-		horizon_basename = hhGn,
-		horizon_step = horizon_step
+		horizon_basename = hhSrc,
+		horizon_step = horizon_step,
+		solar_constant = solar_constant
 	)
 
+	if (lowMemory) args$flags <- c(args$flags, "m")
 	if (!is.null(declination)) args <- c(args, declination = declination)
 
 	# albedo
 	if (inherits(albedo, "GRaster")) { # raster
 		compareGeom(elevation, albedo)
-		args <- c(args, albedo=sources(albedo))
+		args <- c(args, albedo = sources(albedo))
 	} else {
-		args <- c(args, albedo_value=albedo)
+		args <- c(args, albedo_value = albedo)
 	}
 	
 	# linke
 	if (inherits(linke, "GRaster")) { # raster
 		compareGeom(elevation, linke)
-		args <- c(args, linke=sources(linke))
+		args <- c(args, linke = sources(linke))
 	} else {
-		args <- c(args, linke_value=linke)
+		args <- c(args, linke_value = linke)
 	}
 
 	# output names
-	if (beam_rad) args <- c(args, beam_rad = .makeSourceName("beam_rad", "rast"))
-	if (diff_rad) args <- c(args, diff_rad = .makeSourceName("diff_rad", "rast"))
-	if (refl_rad) args <- c(args, refl_rad = .makeSourceName("refl_rad", "rast"))
-	if (glob_rad) args <- c(args, glob_rad = .makeSourceName("glob_rad", "rast"))
-	if (insol_time) args <- c(args, insol_time = .makeSourceName("insol_time", "rast"))
+	if (beam_rad) args <- c(args, beam_rad = .makeSourceName("sun_beam_rad", "raster"))
+	if (diff_rad) args <- c(args, diff_rad = .makeSourceName("sun_diff_rad", "raster"))
+	if (refl_rad) args <- c(args, refl_rad = .makeSourceName("sun_refl_rad", "raster"))
+	if (glob_rad) args <- c(args, glob_rad = .makeSourceName("sun_glob_rad", "raster"))
+	if (insol_time) args <- c(args, insol_time = .makeSourceName("sun_insol_time", "raster"))
 
-	# execute!
 	do.call(rgrass::execGRASS, args=args)
 
 	out <- elevation
