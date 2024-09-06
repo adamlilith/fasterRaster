@@ -25,7 +25,7 @@
 
 	if (missing(x)) {
 		if (warn) {
-			ans <- readline(prompt="Delete everything in the current GRASS session (Y/n)? ")
+			ans <- readline(prompt = "Delete everything in the current GRASS session (Y/n)? ")
 			if (ans != "Y") {
 				message("Nothing deleted.")
 				return(invisible(FALSE))
@@ -47,7 +47,7 @@
 			dels <- .ls()
 			dels <- dels[dels %in% x]
 			if (length(dels) == 0L) {
-				warning("Object(s) are not in GRASS. Nothing deleted.")
+				if (warn) warning("Object(s) are not in GRASS. Nothing deleted.")
 				return(invisible(FALSE))
 			}
 			type <- names(dels)
