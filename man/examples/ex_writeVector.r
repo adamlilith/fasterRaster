@@ -15,7 +15,7 @@ rivers
 
 # Save GVector to disk as GeoPackage
 filename <- tempfile(fileext = ".gpkg")
-writeVector(rivers, fn)
+writeVector(rivers, filename)
 
 # Save GVector to disk as ESRI Shapefile
 filename <- tempfile(fileext = ".shp")
