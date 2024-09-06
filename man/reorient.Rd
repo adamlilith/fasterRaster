@@ -21,3 +21,34 @@ This function converts facing between "north orientation" and "east orientation"
 
 In "north orientation" systems, a 0-degree facing is north, and the angle of facing proceeds clockwise. For example, a 90 degree facing faces east, 180 south, and 270 west. In "east orientation", a 0-degree facing is east, and the facing angle proceeds counter-clockwise. For example, 90 is north, 180 is west, and 270 south.
 }
+\examples{
+### Re-orient numeric values:
+facings <- c(0, 90, 180, 270, 360)
+reorient(facings)
+
+if (grassStarted()) {
+
+### Re-orient a GRaster:
+
+# Setup
+library(terra)
+madElev <- fastData("madElev")
+elev <- fast(madElev)
+
+# Calculate aspect in degrees, using north orientation:
+aspect <- terrain(elev, "aspect", undefinedAspect = NA)
+
+# Remove aspects < 0 (used as a flag to to denote aspect of flat areas):
+aspect[aspect < 0] <- NA
+
+# Re-orient:
+aspectEast <- reorient(aspect)
+
+# Plot:
+aspects <- c(aspect, aspectEast)
+names(aspects) <- c("north_orientation", "east_orientation")
+plot(aspects)
+
+
+}
+}

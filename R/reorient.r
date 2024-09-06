@@ -8,7 +8,7 @@
 #'
 #' @returns A `GRaster` or numeric vector. Values will be in the range between 0 and 360 and represents facing in the system "opposing" the input's system. For example, if the input is north orientation, the output will be east orientation. If the input is in east orientation, the output will be in north orientation.
 #'
-#' @example man/examples/ex_orient.r
+#' @example man/examples/ex_reorient.r
 #'
 #' @aliases reorient
 #' @rdname reorient
