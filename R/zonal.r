@@ -10,8 +10,6 @@
 #'
 #' @param fun Character vector: Name of the function(s) to summarize `x` with. These can include:
 #' * `"*"`: All of the functions below.
-#' * `"countNonNA"`: Total number of non-`NA` cells.
-#' * `"countNA"`: Total number of `NA` cells.
 #' * `"cv"`: Sample coefficient of variation (expressed as a proportion of the mean).
 #' * `"cvpop"`: Population coefficient of variation (expressed as a proportion of the mean).
 #' * `"max"` and `"min"`: Highest and lowest values across non-`NA` cells.
@@ -54,7 +52,7 @@ methods::setMethod(
 #' @noRd
 .zonalByRaster <- function(x, z, fun, prob) {
 
-	if (!is.int(z)[1L] & !is.factor(z)[1L]) stop("GRaster ", sQuote("z"), " must be an integer or factor raster, or a GVector.")
+	if (!is.cell(z)[1L] & !is.factor(z)[1L]) stop("GRaster `z` must be an integer or factor raster, or a GVector.")
 
 	if (nlyr(z) > 1L) {
 	
@@ -124,7 +122,7 @@ methods::setMethod(
 	out <- data.table()
 	for (i in seq_len(nLayers)) {
 	
-		srcs <- .makeSourceName("r_mapcalc", "raster", numZones)
+		srcs <- .makeSourceName("zonal_r_mapcalc", "raster", numZones)
 	
 		for (j in seq_along(zones)) {
 		
