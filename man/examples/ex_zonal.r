@@ -3,7 +3,7 @@ if (grassStarted()) {
 # Setup
 library(terra)
 
-# Elevation raster
+# Elevation SpatRaster:
 madElev <- fastData("madElev")
 
 # Convert a SpatRaster to a GRaster:
@@ -29,7 +29,7 @@ zonal(elev2, zones, fun = c("mean", "sum", "sdpop"))
 ### Calculate zonal statistics using a GVector as zones
 #######################################################
 
-madCoas4 <- fastData("madCoast4")
+madCoast4 <- fastData("madCoast4")
 coast <- fast(madCoast4)
 
 zonal(elev, z = coast, fun = "mean")

@@ -23,6 +23,37 @@ A character string.
 \description{
 \strong{GRASS} "locations" are sets of one or more rasters and/or vectors with the same coordinate reference systems, and may or may not represent the same actual location on Earth. \strong{GRASS} "mapsets" are like subfolders of locations, and are collections of rasters and/or vectors typically related to the same general project. This function returns the mapset of an object or the current mapset. This said, \strong{fasterRaster} always uses the "PERMANENT" mapset, so there is very little reason to use this function as-is.
 }
+\examples{
+if (grassStarted()) {
+
+# Setup
+library(terra)
+
+# Example data
+madElev <- fastData("madElev")
+madChelsa <- fastData("madChelsa")
+madChelsa1 <- madChelsa[[1]]
+
+# Convert SpatRasters to GRasters.
+# Each raster has a different CRS so will be put into a different location.
+elev <- fast(madElev)
+chelsa1 <- fast(madChelsa1)
+
+# Name of the currently active location
+.location()
+.location(elev)
+.location(chelsa1)
+
+# Mapsets are always "PERMANENT" in fasterRaster
+.mapset()
+.mapset(elev)
+.mapset(chelsa1)
+
+# Meta-data on all available GRASS Locations
+.locations()
+
+}
+}
 \seealso{
 \strong{GRASS} \href{https://grass.osgeo.org/grass82/manuals/grass_database.html}{locations and mapsets}
 }

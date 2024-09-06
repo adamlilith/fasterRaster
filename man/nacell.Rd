@@ -20,7 +20,7 @@
 A numeric value, one per raster layer in the input.
 }
 \description{
-Number of \code{NA} cells or number of non-\code{NA} cells in a raster. If the raster is 3D, then all cells in all layers are counted.
+The \code{nacell()} function counts the number of \code{NA} cells in a \code{GRaster}, and the \code{nonnacell()} reports the number of non-\code{NA} cells. If the raster is 3D, then all cells in all layers are counted.
 }
 \examples{
 if (grassStarted()) {
