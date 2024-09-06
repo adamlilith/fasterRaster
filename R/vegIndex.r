@@ -87,7 +87,10 @@ methods::setMethod(
 	}
 
 	# index <- sort(index)
-	index <- omnibus::pmatchSafe(index, vegIndices$index)
+	indexOrder <- order(index)
+	index <- sort(index)
+	index <- omnibus::pmatchSafe(index, vegIndices$index, useFirst = TRUE)
+	index <- index[indexOrder]
 
 	index <- tolower(index)
 
