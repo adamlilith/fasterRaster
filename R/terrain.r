@@ -118,9 +118,9 @@ methods::setMethod(
 		oldAspectSrc1 <- args$aspect
 		aspectSrc <- .makeSourceName("terrain_r_mapcalc_undefined", "raster")
 		if (is.na(undefinedAspect)) {
-			ex <- paste0(aspectSrc, " = if(", oldAspectSrc, " < 0, null(), ", oldAspectSrc, ")")
+			ex <- paste0(aspectSrc, " = if(", oldAspectSrc1, " < 0, null(), ", oldAspectSrc1, ")")
 		} else {
-			ex <- paste0(aspectSrc, " = if(", oldAspectSrc, " < 0, ", undefinedAspect, ", ", oldAspectSrc, ")")
+			ex <- paste0(aspectSrc, " = if(", oldAspectSrc1, " < 0, ", undefinedAspect, ", ", oldAspectSrc1, ")")
 		}
 		rgrass::execGRASS("r.mapcalc", expression = ex, flags = c(.quiet(), "overwrite"))
 		if (faster("clean")) on.exit(.rm(oldAspectSrc1, type = "raster", warn = FALSE), add = TRUE)
