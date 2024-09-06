@@ -39,7 +39,8 @@ methods::setMethod(
 	.locationRestore(x)
 	.region(y)
 
-	out <- .rasterize(x = x, y = y, field = field, background = background, by = by, verbose = verbose)
+	gtype <- geomtype(x, grass = TRUE)
+	out <- .rasterize(x = x, y = y, field = field, background = background, by = by, gtype = gtype, verbose = verbose)
 	.makeGRaster(out$src, levels = out$levels)
 
 	} # EOF
