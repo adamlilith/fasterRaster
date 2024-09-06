@@ -1,6 +1,6 @@
 #' Number of NA or non-NA cells in a raster
 #'
-#' @description Number of `NA` cells or number of non-`NA` cells in a raster. If the raster is 3D, then all cells in all layers are counted.
+#' @description The `nacell()` function counts the number of `NA` cells in a `GRaster`, and the `nonnacell()` reports the number of non-`NA` cells. If the raster is 3D, then all cells in all layers are counted.
 #'
 #' @param x A `GRaster`.
 #'
