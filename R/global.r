@@ -342,7 +342,7 @@ methods::setMethod(
 					ss <- as.numeric(ss)
 
 					# NB need to convert to numeric to obviate overflow
-					n <- nonnacell(x[[i]])
+					n <- .nonnacell(x[[i]], warn = FALSE, nLayers = 1)
 
 					this <- ss / (n - 1)
 					if (thisFun == "sd") this <- sqrt(this)
