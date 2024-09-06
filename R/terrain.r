@@ -6,7 +6,7 @@
 #' @param v Name of the topographic metric(s) to calculate. Valid values include one or more of:
 #'
 #' * `"slope"`: Slope. Units are given by argument `units`.
-#' * `"aspect"`: Aspect. When argument `northIs0` is `TRUE` (default), then aspect is given in degrees from north going clockwise (0 = north, 90 = east, 180 = south, 270 = west).
+#' * `"aspect"`: Aspect. When argument `northIs0` is `TRUE` (default), then aspect is given in degrees from north going clockwise (0 = north, 90 = east, 180 = south, 270 = west).  Units are given by argument `units`.
 #' * `"profileCurve"`: Profile curvature.
 #' * `"tanCurve"`: Tangential curvature.
 #' * `"dx"`: Slope in east-west direction.
@@ -16,7 +16,9 @@
 #' * `"dxy"`: Second partial derivative along east-west and north-south direction.
 #' * `"*"`: All of the above.
 #'
-#' @param units Character: "Units" in which to calculate slope: either `"degrees"` for degrees (default) or `"percent"`.
+#' @param units Character: "Units" in which to calculate slope: either `"degrees"` for degrees (default), `"radians"`, or `"percent"`.
+#'
+#' @param undefinedAspect Numeric or `NA` (default): Value to assign to flat areas for which aspect cannot be calculated.
 #'
 #' @param northIs0 Logical: If `TRUE` (default), aspect will be reported in "north orientation," such that 0 is north, and degrees run clockwise (90 is east, 180 south, 270 west). If `FALSE`, then aspect will be reported in "east orientation," such that 0 is east, and degrees run counterclockwise (90 is north, 180 west, 270 south). The latter is the default in **GRASS**, but the former is the default in [terra::terrain()] function, so is used here as the default. **Note:** The [sun()] function requires aspect to be in east orientation.
 #'
@@ -36,6 +38,7 @@ methods::setMethod(
 		x,
 		v = "slope",
 		units = "degrees",
+		undefinedAspect = NA,
 		northIs0 = TRUE
 	) {
 
@@ -44,6 +47,19 @@ methods::setMethod(
 	v <- sort(v)
 	v <- omnibus::pmatchSafe(v, metrics, useFirst = TRUE)
 	
+	units <- omnibus::pmatchSafe(units, c("degrees", "percent", "radians"), n = 1L)
+	if (units == "radians") {
+		unitRadians <- TRUE
+		units <- "degrees"
+	} else {
+		unitRadians <- FALSE
+	}
+
+	if (nlyr(x) > 1) {
+		warning("The input raster has > 1 layer. Only the first will be used.")
+		x <- x[[1L]]
+	}
+
 	.locationRestore(x)
 	.region(x)
 	
@@ -79,12 +95,49 @@ methods::setMethod(
 	do.call(rgrass::execGRASS, args)
 	
 	if ("slope" %in% v) {
-		out <- .makeGRaster(args$slope, "slope")
+
+		# convert to radians
+		if (unitRadians) {
+
+			oldSlopeSrc <- args$slope
+			slopeSrc <- .makeSourceName("terrain_r_mapcalc_slope", "raster")
+			ex <- paste0(slopeSrc, " = ", pi, " * ", oldSlopeSrc, " / 180")
+			rgrass::execGRASS("r.mapcalc", expression = ex, flags = c(.quiet(), "overwrite"))
+			if (faster("clean")) on.exit(.rm(oldSlopeSrc, type = "raster", warn = FALSE), add = TRUE)
+		
+		} else {
+			slopeSrc <- args$slope
+		}
+
+		out <- .makeGRaster(slopeSrc, "slope")
 	}
 	
 	if ("aspect" %in% v) {
-		this <- .makeGRaster(args$aspect, "aspect")
-		if (exists("out", inherits=FALSE)) {
+
+		# force undefined aspect to a new value (r.terrain assigns undefined aspect to -9999)
+		oldAspectSrc1 <- args$aspect
+		aspectSrc <- .makeSourceName("terrain_r_mapcalc_undefined", "raster")
+		if (is.na(undefinedAspect)) {
+			ex <- paste0(aspectSrc, " = if(", oldAspectSrc, " < 0, null(), ", oldAspectSrc, ")")
+		} else {
+			ex <- paste0(aspectSrc, " = if(", oldAspectSrc, " < 0, ", undefinedAspect, ", ", oldAspectSrc, ")")
+		}
+		rgrass::execGRASS("r.mapcalc", expression = ex, flags = c(.quiet(), "overwrite"))
+		if (faster("clean")) on.exit(.rm(oldAspectSrc1, type = "raster", warn = FALSE), add = TRUE)
+	
+		# convert to radians
+		if (unitRadians) {
+
+			oldAspectSrc2 <- aspectSrc
+			aspectSrc <- .makeSourceName("terrain_r_mapcalc_radians", "raster")
+			ex <- paste0(aspectSrc, " = ", pi, " * ", oldAspectSrc2, " / 180")
+			rgrass::execGRASS("r.mapcalc", expression = ex, flags = c(.quiet(), "overwrite"))
+			if (faster("clean")) on.exit(.rm(oldAspectSrc2, type = "raster", warn = FALSE), add = TRUE)
+		
+		}
+
+		this <- .makeGRaster(aspectSrc, "aspect")
+		if (exists("out", inherits = FALSE)) {
 			out <- c(out, this)
 		} else {
 			out <- this
@@ -93,7 +146,7 @@ methods::setMethod(
 
 	if ("profileCurve" %in% v) {
 		this <- .makeGRaster(args$pcurvature, "profileCurve")
-		if (exists("out", inherits=FALSE)) {
+		if (exists("out", inherits = FALSE)) {
 			out <- c(out, this)
 		} else {
 			out <- this
@@ -102,7 +155,7 @@ methods::setMethod(
 
 	if ("tanCurve" %in% v) {
 		this <- .makeGRaster(args$tcurvature, "tanCurve")
-		if (exists("out", inherits=FALSE)) {
+		if (exists("out", inherits = FALSE)) {
 			out <- c(out, this)
 		} else {
 			out <- this
@@ -111,7 +164,7 @@ methods::setMethod(
 
 	if ("dx" %in% v) {
 		this <- .makeGRaster(args$dx, "dx")
-		if (exists("out", inherits=FALSE)) {
+		if (exists("out", inherits = FALSE)) {
 			out <- c(out, this)
 		} else {
 			out <- this
@@ -120,7 +173,7 @@ methods::setMethod(
 
 	if ("dy" %in% v) {
 		this <- .makeGRaster(args$dy, "dy")
-		if (exists("out", inherits=FALSE)) {
+		if (exists("out", inherits = FALSE)) {
 			out <- c(out, this)
 		} else {
 			out <- this
@@ -129,7 +182,7 @@ methods::setMethod(
 
 	if ("dxx" %in% v) {
 		this <- .makeGRaster(args$dxx, "dxx")
-		if (exists("out", inherits=FALSE)) {
+		if (exists("out", inherits = FALSE)) {
 			out <- c(out, this)
 		} else {
 			out <- this
@@ -138,7 +191,7 @@ methods::setMethod(
 
 	if ("dyy" %in% v) {
 		this <- .makeGRaster(args$dyy, "dyy")
-		if (exists("out", inherits=FALSE)) {
+		if (exists("out", inherits = FALSE)) {
 			out <- c(out, this)
 		} else {
 			out <- this
@@ -147,7 +200,7 @@ methods::setMethod(
 
 	if ("dxy" %in% v) {
 		this <- .makeGRaster(args$dxy, "dxy")
-		if (exists("out", inherits=FALSE)) {
+		if (exists("out", inherits = FALSE)) {
 			out <- c(out, this)
 		} else {
 			out <- this
@@ -158,5 +211,3 @@ methods::setMethod(
 
 	} # EOF
 )
-
-
