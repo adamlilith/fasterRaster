@@ -40,8 +40,9 @@ methods::setMethod(
 	) {
 
 	metrics <- c("slope", "aspect", "profileCurve", "tanCurve", "dx", "dy", "dxx", "dyy", "dxy")
-	if (length(v) == 1L && v == "*") v <- metrics
-	v <- omnibus::pmatchSafe(v, metrics)
+	if (any(v == "*")) v <- metrics
+	v <- sort(v)
+	v <- omnibus::pmatchSafe(v, metrics, useFirst = TRUE)
 	
 	.locationRestore(x)
 	.region(x)
