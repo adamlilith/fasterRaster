@@ -13,7 +13,7 @@ elev <- fast(madElev)
 topos <- terrain(elev, v = "*")
 topos
 
-plot(topos)
+plot(topos) # NB Aspect has values of -9999 when it cannot be defined
 
 # Calculate a hillshade raster
 hs <- hillshade(elev)
