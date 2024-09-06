@@ -227,7 +227,6 @@ methods::setMethod(
 				out <- .makeGRaster(src, names = xNames, levels = levels)
 			}
 			
-
 		}
 
 	### vector from disk
@@ -602,17 +601,30 @@ methods::setMethod(
 	signature(x = "SpatRaster"),
 	function(x) {
 
-	if (is.na(faster("grassDir"))) stop("You must specify the folder in which GRASS is installed using faster().")
+	if (is.na(faster("grassDir"))) stop("Before using fasterRaster functions, you must specify the folder in which GRASS is installed using faster().")
 
 	rastFile <- terra::sources(x)
 	levels <- .getLevels(x)
 
 	if (any(rastFile == "")) {
+
 		tempFile <- tempfile(fileext = ".tif")
 		terra::writeRaster(x, filename = tempFile, overwrite = TRUE)
 		rastFile <- tempFile
-	} else {
-		rastFile <- terra::sources(x)
+
+	}
+
+	# if this SpatRaster is a subset of rasters in a file, save the subset to disk... otherwise, fast(signature = 'character') will load the entire set of layers and fail to match the levels() from the subset
+	thisRast <- terra::rast(rastFile)
+	nlay <- terra::nlyr(thisRast)
+	nlev <- length(levels)
+
+	if (nlay != nlev) {
+
+		tempFile <- tempfile(fileext = ".tif")
+		terra::writeRaster(x, filename = tempFile, overwrite = TRUE)
+		rastFile <- tempFile
+
 	}
 
 	fast(x = rastFile, rastOrVect = "raster", levels = levels)
