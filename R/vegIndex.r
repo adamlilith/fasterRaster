@@ -81,8 +81,12 @@ methods::setMethod(
 			index,
 			vegIndices[vegIndices$R & !vegIndices$G & !vegIndices$B & vegIndices$NIR & !vegIndices$channel5 & !vegIndices$channel7 & !vegIndices$soilSlope & !vegIndices$soilIntercept, "index", drop = TRUE]
 		)
+		index <- index[index != "RNIR"]
+		index <- index[index != "rnir"]
+
 	}
-	
+
+	# index <- sort(index)
 	index <- omnibus::pmatchSafe(index, vegIndices$index)
 
 	index <- tolower(index)
