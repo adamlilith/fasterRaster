@@ -51,11 +51,12 @@ methods::setMethod(
 #' @param background Numeric or `NA`.
 #' @param by `NULL` or name of a field in the data table of `x`.
 #' @param verbose Logical.
+#' @param gtype `geomtype(..., grass = TRUE)` of `x` ("area", "line", "point")
 #'
 #' @returns A `list` with the [sources()] name of the output raster, plus a `levels` table (can be `NULL`).
 #'
 #' @noRd
-.rasterize <- function(x, y, field, background, by, verbose) {
+.rasterize <- function(x, y, field, background, by, gtype, verbose) {
 
 	### create different raster layer for each geometry
 	if (!is.null(by)) {
@@ -85,7 +86,6 @@ methods::setMethod(
 
 	} else {
 
-		gtype <- geomtype(x, grass = TRUE)
 		src <- .makeSourceName("rasterize_v_to_rast", "raster")
 
 		# if by geometry but burned to the same raster
