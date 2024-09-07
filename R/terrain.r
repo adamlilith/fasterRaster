@@ -16,7 +16,7 @@
 #' * `"dxy"`: Second partial derivative along east-west and north-south direction.
 #' * `"*"`: All of the above.
 #'
-#' @param units Character: "Units" in which to calculate slope: either `"degrees"` for degrees (default), `"radians"`, or `"percent"`.
+#' @param units Character: "Units" in which to calculate slope and aspect: either `"degrees"` for degrees (default), `"radians"`, or `"percent"`. Partial matching is used.
 #'
 #' @param undefinedAspect Numeric or `NA` (default): Value to assign to flat areas for which aspect cannot be calculated.
 #'
