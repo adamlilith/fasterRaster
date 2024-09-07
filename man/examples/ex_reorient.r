@@ -1,6 +1,10 @@
+
 ### Re-orient numeric values:
 facings <- c(0, 90, 180, 270, 360)
 reorient(facings)
+
+# Re-reorienting returns the same values:
+reorient(reorient(facings))
 
 if (grassStarted()) {
 
@@ -12,16 +16,16 @@ madElev <- fastData("madElev")
 elev <- fast(madElev)
 
 # Calculate aspect in degrees, using north orientation:
-aspect <- terrain(elev, "aspect")
+aspectNorth <- terrain(elev, "aspect")
 
-# Remove aspects < 0 (used to denote aspect of flat areas):
-aspect[aspect < 0] <- NA
+# Re-orient to east-facing:
+aspectEast <- reorient(aspectNorth)
 
-# Re-orient:
-aspectEast <- reorient(aspect)
+# Re-reorienting is the same, to within rounding error:
+aspectNorth - reorient(reorient(aspectNorth))
 
 # Plot:
-aspects <- c(aspect, aspectEast)
+aspects <- c(aspectNorth, aspectEast)
 names(aspects) <- c("north_orientation", "east_orientation")
 plot(aspects)
 
