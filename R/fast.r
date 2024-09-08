@@ -202,13 +202,13 @@ methods::setMethod(
 						extension <- .fileExt(x)
 
 						if (tolower(extension) == "rds") {
-							levels <- readRDS(thisLevelsFileName)
+							levels <- readRDS(levelsFileName)
 						} else if (tolower(extension) %in% c("rdata", "rda", "rdat")) {
-							load(thisLevelsFileName)
+							load(levelsFileName)
 						} else if (tolower(extension) == "tab") {
-							levels <- utils::read.delim(thisLevelsFileName)
+							levels <- utils::read.delim(levelsFileName)
 						} else if (tolower(extension) == "csv") {
-							levels <- utils::read.csv(thisLevelsFileName)
+							levels <- utils::read.csv(levelsFileName)
 						}
 
 					} else {
