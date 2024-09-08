@@ -699,7 +699,7 @@ methods::setMethod(
     }
 
     # # don't know why, but having this here obviates extraction of all NAs on first extract attempt
-    # if (inherits(x, "GRaster")) plot(x); dev.off()
+    if (inherits(x, "GRaster")) x <- x + 0
 
     for (set in seq_len(sets)) {
 
