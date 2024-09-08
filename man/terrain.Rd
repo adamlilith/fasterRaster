@@ -30,7 +30,7 @@
 \item \code{"*"}: All of the above.
 }}
 
-\item{units}{Character: "Units" in which to calculate slope: either \code{"degrees"} for degrees (default), \code{"radians"}, or \code{"percent"}.}
+\item{units}{Character: "Units" in which to calculate slope and aspect: either \code{"degrees"} for degrees (default), \code{"radians"}, or \code{"percent"}. Partial matching is used.}
 
 \item{undefinedAspect}{Numeric or \code{NA} (default): Value to assign to flat areas for which aspect cannot be calculated.}
 
