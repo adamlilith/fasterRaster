@@ -236,7 +236,7 @@ methods::setMethod(
 
 		} else {
 			out <- lambdas
-			if (!faster("useDataTable")) out <- as.data.fraem(out)
+			if (!faster("useDataTable")) out <- as.data.frame(out)
 		}
 
 	} else if (inherits(y, "GVector")) {
