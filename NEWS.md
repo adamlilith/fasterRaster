@@ -18,6 +18,7 @@ o Removed `sd()` and `sdpop()` and replaced with `stdev()`.
 
 ## Bug fixes and speed-ups
 o `atan2()` works!  
+o `extract()` extracts!    
 o `fast()` can convert a `SpatRaster` with one or more layers that are a subset of a larger `SpatRaster` into a `GRaster` without error.  
 o `fractalRast()` is faster.  
 o `freq()` work when the input is a categorical `GRaster`.  
