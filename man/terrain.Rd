@@ -5,7 +5,13 @@
 \alias{terrain}
 \title{Slope, aspect, curvature, and partial slopes}
 \usage{
-\S4method{terrain}{GRaster}(x, v = "slope", units = "degrees", northIs0 = TRUE)
+\S4method{terrain}{GRaster}(
+  x,
+  v = "slope",
+  units = "degrees",
+  undefinedAspect = NA,
+  northIs0 = TRUE
+)
 }
 \arguments{
 \item{x}{A \code{GRaster} (typically representing elevation).}
@@ -13,7 +19,7 @@
 \item{v}{Name of the topographic metric(s) to calculate. Valid values include one or more of:
 \itemize{
 \item \code{"slope"}: Slope. Units are given by argument \code{units}.
-\item \code{"aspect"}: Aspect. When argument \code{northIs0} is \code{TRUE} (default), then aspect is given in degrees from north going clockwise (0 = north, 90 = east, 180 = south, 270 = west).
+\item \code{"aspect"}: Aspect. When argument \code{northIs0} is \code{TRUE} (default), then aspect is given in degrees from north going clockwise (0 = north, 90 = east, 180 = south, 270 = west).  Units are given by argument \code{units}.
 \item \code{"profileCurve"}: Profile curvature.
 \item \code{"tanCurve"}: Tangential curvature.
 \item \code{"dx"}: Slope in east-west direction.
@@ -24,7 +30,9 @@
 \item \code{"*"}: All of the above.
 }}
 
-\item{units}{Character: "Units" in which to calculate slope: either \code{"degrees"} for degrees (default) or \code{"percent"}.}
+\item{units}{Character: "Units" in which to calculate slope and aspect: either \code{"degrees"} for degrees (default), \code{"radians"}, or \code{"percent"}. Partial matching is used.}
+
+\item{undefinedAspect}{Numeric or \code{NA} (default): Value to assign to flat areas for which aspect cannot be calculated.}
 
 \item{northIs0}{Logical: If \code{TRUE} (default), aspect will be reported in "north orientation," such that 0 is north, and degrees run clockwise (90 is east, 180 south, 270 west). If \code{FALSE}, then aspect will be reported in "east orientation," such that 0 is east, and degrees run counterclockwise (90 is north, 180 west, 270 south). The latter is the default in \strong{GRASS}, but the former is the default in \code{\link[terra:terrain]{terra::terrain()}} function, so is used here as the default. \strong{Note:} The \code{\link[=sun]{sun()}} function requires aspect to be in east orientation.}
 }
@@ -47,11 +55,14 @@ madElev <- fastData("madElev")
 elev <- fast(madElev)
 
 # Calculate all topographic metrics
-topos <- terrain(elev, v="*")
+topos <- terrain(elev, v = "*")
 topos
+
+plot(topos) # NB Aspect has values of NA when it cannot be defined
 
 # Calculate a hillshade raster
 hs <- hillshade(elev)
+plot(hs)
 
 }
 }

@@ -10,6 +10,11 @@
 Double-floating point values are accurate to about the 15th to 17th decimal place. These are called "double" rasters in \strong{fasterRaster} and \code{DCELL} rasters in \strong{GRASS}. These rasters typically take the most memory. All "\code{numeric}" values in \strong{R} are double-floating point values.
 }
 
+\subsection{Floating point values}{
+
+Less common that double-floating point rasters, floating point rasters are accurate to about the 7th decimal place. These are called "float" rasters in \strong{fasterRaster} and \code{FCELL} rasters in \strong{GRASS}. These rasters typically take less memory than double-floating point rasters.
+}
+
 \subsection{Integers}{
 
 Rasters that represent integers are called "integer" rasters in \strong{fasterRaster} and \code{CELL} rasters in \strong{GRASS}. You can force a raster to be an integer using \code{\link[=as.int]{as.int()}}. Some of the functions in \code{\link[=app]{app()}} function will also return integer-type rasters. Integer rasters typically take the least memory.
@@ -17,7 +22,7 @@ Rasters that represent integers are called "integer" rasters in \strong{fasterRa
 
 \subsection{Categories}{
 
-Categorical rasters (also called "factor" rasters) are actually integer rasters, but have an associated attribute table that maps each integer value to a category label, such as "wetland" or "forest". The table has at least two columns. The first is integer values, and (by default) the second is category names. This second column is the "active" category column, but can be changed using \code{\link[fasterRaster]{activeCat<-}}.
+Categorical rasters (also called "factor" rasters) are actually integer rasters, but have an associated attribute table that maps each integer value to a category label, such as "wetland" or "forest". The table has at least two columns. The first is integer values, and (by default) the second is category names. This second column is the "active" category column that is used for plotting and in some functions. The active column can be changed using \code{\link[fasterRaster]{activeCat<-}}.
 }
 
 \subsection{Functions relevant to raster data types}{
@@ -48,19 +53,7 @@ Categorical rasters (also called "factor" rasters) are actually integer rasters,
 
 \subsection{Saving rasters to disk}{
 
-You can save substantial space on disk if you set the \code{datatype} argument in \code{\link[=writeRaster]{writeRaster()}} when saving a raster. This argument allows for finer "divisions" than just integer/float/double-float, so depending on the range of values in your raster, you can optimize file size by selecting the one that best matches the values in the raster. See the documentation for \code{\link[=writeRaster]{writeRaster()}} for more information.\tabular{lllll}{
-   \strong{\code{fasterRaster}} \tab \strong{\code{terra}} \tab \strong{\code{GRASS}} \tab \strong{\code{GDAL}} \tab \strong{Values} \cr
-   \code{integer} \tab \code{INT1U} \tab \code{CELL} \tab \code{Byte} \tab Integer values from 0 to 255 \cr
-   \code{integer} \tab \code{INT2U} \tab \code{CELL} \tab \code{UInt16} \tab Integer values from 0 to 65,534 \cr
-   \code{integer} \tab \code{INT2S} \tab \code{CELL} \tab \code{Int16} \tab Integer values from -32,767 to -32,767 \cr
-   \code{integer} \tab \code{INT4S} \tab \code{CELL} \tab \code{Int32} \tab Integer values from -2,147,483,647 to 2,147,483,647 \cr
-   \code{float} \tab \code{FLT4S} \tab \code{FCELL} \tab \code{Float32} \tab Values from -3.4e+38 to 3.4e+38, including decimal values \cr
-   \code{double} \tab \code{FLT8S} \tab \code{DCELL} \tab \code{Float64} \tab Values from -1.7e+308 to 1.7e+308, including decimal values \cr
-   \code{factor} \tab \code{INT}* \tab \code{CELL} \tab \verb{INT*} \tab Integer values corresponding to categories \cr
-}
-
-
-\code{*} Depends on the integers (signed/unsigned, range of values)
+You can potentially save substantial space on disk by setting the \code{datatype} argument in \code{\link[=writeRaster]{writeRaster()}} to an appropriate value when saving a raster. This argument allows for finer "divisions" than just integer/float/double-float, so depending on the range of values in your raster, you can optimize file size by selecting the one that best matches the values in the raster. See the documentation for \code{\link[=writeRaster]{writeRaster()}} for more information.
 }
 }
 \examples{
@@ -104,9 +97,8 @@ is.3d(elev) # is it 3D?
 
 minmax(elev) # min/max values
 
-# information on the GRASS session in which the GRaster is located
-location(elev) # location
-mapset(elev) # mapset
+# name of object in GRASS
+sources(elev)
 
 # "names" of the object
 names(elev)
@@ -163,19 +155,19 @@ W(rivers) # western extent
 E(rivers) # eastern extent
 S(rivers) # southern extent
 N(rivers) # northern extent
-top(rivers) # top extent
-bottom(rivers) # bottom extent
+top(rivers) # top extent (NA for 2D rasters like this one)
+bottom(rivers) # bottom extent (NA for 2D rasters like this one)
 
 # coordinate reference system
 crs(rivers)
+st_crs(rivers)
 
 # column names and data types
 names(coast)
 datatype(coast)
 
-# session information
-location(rivers) # GRASS location
-mapset(rivers) # GRASS mapset
+# name of object in GRASS
+sources(rivers)
 
 # points, lines, or polygons?
 geomtype(dypsis)
@@ -195,6 +187,10 @@ is.polygons(dypsis)
 nrow(rivers) # how many spatial features
 ncol(rivers) # hay many columns in the data frame
 
+# number of geometries and sub-geometries
+ngeom(coast)
+nsubgeom(coast)
+
 # 2- or 3D
 topology(rivers) # dimensionality
 is.2d(elev) # is it 2D?
@@ -202,13 +198,14 @@ is.3d(elev) # is it 3D?
 
 # Update values from GRASS
 # (Reads values from GRASS... will not appear to do anything in this case)
-update(elev)
+coast <- update(coast)
 
 ### operations on GVectors
 ##########################
 
 # convert to data frame
 as.data.frame(rivers)
+as.data.table(rivers)
 
 # subsetting
 rivers[c(1:2, 5)] # select 3 rows/geometries
@@ -216,12 +213,12 @@ rivers[-5:-11] # remove rows/geometries 5 through 11
 rivers[ , 1] # column 1
 rivers[ , "NAM"] # select column
 rivers[["NAM"]] # select column
-rivers[1, 2] # row/geometry 1 and column 1
+rivers[1, 2:3] # row/geometry 1 and column 2 and 3
 rivers[c(TRUE, FALSE)] # select every other geometry (T/F vector is recycled)
 rivers[ , c(TRUE, FALSE)] # select every other column (T/F vector is recycled)
 
 # removing data table
-noTable <- dropTable(river)
+noTable <- dropTable(rivers)
 noTable
 nrow(rivers)
 nrow(noTable)
@@ -232,7 +229,7 @@ nrow(noTable)
 rivers <- update(rivers)
 
 # Concatenating multiple vectors
-rivers2 <- c(rivers, rivers)
+rivers2 <- rbind(rivers, rivers)
 dim(rivers)
 dim(rivers2)
 

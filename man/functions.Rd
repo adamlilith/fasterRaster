@@ -19,14 +19,13 @@
 \alias{which.min}
 \alias{which.max,GRaster-method}
 \alias{which.max}
-\alias{sdpop,GRaster-method}
-\alias{sdpop}
 \alias{sdpop,numeric-method}
+\alias{sdpop}
 \alias{varpop,GRaster-method}
 \alias{varpop}
 \alias{varpop,numeric-method}
-\alias{sd,GRaster-method}
-\alias{sd}
+\alias{stdev,GRaster-method}
+\alias{stdev}
 \alias{var,GRaster-method}
 \alias{var}
 \alias{nunique,GRaster-method}
@@ -67,15 +66,13 @@
 
 \S4method{which.max}{GRaster}(x)
 
-\S4method{sdpop}{GRaster}(x, na.rm = FALSE)
-
 \S4method{sdpop}{numeric}(x, na.rm = FALSE)
 
 \S4method{varpop}{GRaster}(x, na.rm = FALSE)
 
 \S4method{varpop}{numeric}(x, na.rm = FALSE)
 
-\S4method{sd}{GRaster}(x, na.rm = FALSE)
+\S4method{stdev}{GRaster}(x, pop = TRUE, na.rm = FALSE)
 
 \S4method{var}{GRaster}(x, na.rm = FALSE)
 
@@ -102,6 +99,8 @@
 
 \item{na.rm}{Logical: If \code{FALSE} (default), of one cell value has an \code{NA}, the result will be \code{NA}. If \code{TRUE}, \code{NA}s are ignored.}
 
+\item{pop}{Logical (for \code{stdev()}): If \code{TRUE} (default), calculate the population standard deviation across layers. If \code{FALSE}, calculate the sample standard deviation.}
+
 \item{prob}{Numeric: Quantile to calculate. Used for \code{quantile()}.}
 }
 \value{
@@ -113,7 +112,7 @@ These functions can be applied to a "stack" of \code{GRaster}s with two or more 
 \item Numeration: \code{count()} (number of non-\code{NA} cells), \code{sum()}.
 \item Central tendency: \code{mean()}, \code{mmode()} (mode), \code{median()}.
 \item Extremes: \code{min()}, \code{max()}, \code{which.min()} (index of raster with the minimum value), \code{which.max()} (index of the raster with the maximum value)
-\item Dispersion: \code{range()}, \code{sd()} (sample standard deviation), \code{var()} (sample variance), \code{sdpop()} (population standard deviation), \code{varpop()} (population variance), \code{nunique()} (number of unique values), \code{quantile()} (use argument \code{probs}), \code{skewness()}, and \code{kurtosis()}.
+\item Dispersion: \code{range()}, \code{stdev()} (standard deviation), \code{var()} (sample variance), \code{varpop()} (population variance), \code{nunique()} (number of unique values), \code{quantile()} (use argument \code{probs}), \code{skewness()}, and \code{kurtosis()}.
 \item Regression: Assuming we calculate a linear regression for each set of cells through all values of the cells, we can calculate its \code{slope()}, \code{intercept()}, \code{r2()}, and \code{tvalue()}.
 }
 }
@@ -163,7 +162,7 @@ elev \%\% TRUE # modulus
 elevs + TRUE
 TRUE + elevs
 
-# raster interacting with raster
+# Raster interacting with raster(s):
 elev + elev
 elev - elev
 elev * elev
@@ -178,6 +177,8 @@ elev * elevs
 # sign
 abs(-1 * elev)
 abs(elevs)
+
+# powers
 sqrt(elevs)
 
 # trigonometry
@@ -202,6 +203,7 @@ ln(elev)
 log2(elev)
 log1p(elev)
 log10(elev)
+log10p(elev)
 log(elev, 3)
 
 log(elevs)
@@ -243,7 +245,7 @@ TRUE & elev > 200
 elev < 10 & FALSE
 FALSE & elev > 200
 
-# mathematical functions on two or more rasters
+# Mathematical functions on GRasters with >= 2 layers:
 mean(elevs)
 mmode(elevs)
 median(elevs)
@@ -265,10 +267,13 @@ intercept(elevs)
 r2(elevs)
 tvalue(elevs)
 
-sd(elevs)
-sdpop(elevs)
+stdev(elevs)
+stdev(elevs, pop = FALSE)
 var(elevs)
 varpop(elevs)
+
+# Note: To get quantiles for each layer, use
+# global(x, "quantile", probs = 0.2).
 quantile(elevs, 0.1)
 
 }

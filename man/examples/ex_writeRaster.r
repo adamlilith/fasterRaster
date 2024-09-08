@@ -7,6 +7,9 @@ library(terra)
 madElev <- fastData("madElev")
 madChelsa <- fastData("madChelsa")
 
+### What raster formats can we attempt to write?
+writeRaster()
+
 ### Save GRaster to disk (using temporary file)
 elev <- fast(madElev)
 filename <- tempfile(fileext = ".tif")
@@ -34,6 +37,5 @@ writeRaster(chelsa, filename, byLayer = TRUE)
 filename2 <- sub(filename, pattern = ".tif", replacement = "_bio1.tif")
 chelsaBio1 <- fast(filename2)
 chelsaBio1
-
 
 }

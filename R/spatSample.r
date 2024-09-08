@@ -20,9 +20,9 @@
 #'
 #' @param zlim Either `NULL` (default), or a vector of two numbers defining the lower and upper altitudinal bounds of coordinates. This cannot be combined with `values = TRUE` or `cats = TRUE`.
 #'
-#' @param verbose Logical: If `TRUE`, display progress. Default is `FALSE`.
+#' @param seed Either `NULL` (default) or an integer: Random number seed. If this is `NULL`, the a seed will be set randomly. Values will be rounded to the nearest integer.
 #'
-#' @param seed Either `NULL` (default), or an integer. Used as the random seed.
+#' @param verbose Logical: If `TRUE`, display progress. Default is `FALSE`.
 #'
 #' @returns A `data.frame`, `data.table`, or `GVector`.
 #' 
@@ -46,6 +46,7 @@ methods::setMethod(
 		strata = NULL,
 		byStratum = FALSE,
 		zlim = NULL,
+		seed = NULL,
 		verbose = FALSE
 	) {
 
@@ -212,6 +213,11 @@ methods::setMethod(
 			flags = c(.quiet(), "overwrite")
 		)
 
+		if (!is.null(seed)) {
+			seed <- round(seed)
+			args$seed <- seed
+		}
+
 		if (!is.null(strata)) {
 			args$restrict <- sources(strata)
 			if (byStratum) args$flags <- c(args$flags, "a")
@@ -250,10 +256,13 @@ methods::setMethod(
 	}
 
 	if (as.points) {
-		if (verbose | faster("verbose")) omnibus::say("Creating GVector...")
 		.vAttachDatabase(src)
 		if (exists("out", inherits = FALSE)) {
-			out <- .makeGVector(src, table = out, cats = 1:size)
+			# info <- .vectInfo(src)
+			# nGeometries <- info$nGeometries
+			# n <- nGeometries / size
+			# out <- .makeGVector(src, table = out, cats = rep(1:size, each = n))
+			out <- .makeGVector(src, table = out)
 		} else {
 			out <- .makeGVector(src, cats = 1:size)
 		}
@@ -313,19 +322,23 @@ methods::setMethod(
 		cmd = "v.random",
 		output = src,
 		npoints = size,
-		restrict = src,
+		restrict = sources(x),
 		flags = c(.quiet(), "overwrite")
 	)
 
-	if (!is.null(strata) & byStratum) args$flags <- c(args$flags, "a")
+	if (!is.null(seed)) {
+		seed <- round(seed)
+		args$seed <- seed
+	}
+
+	# if (!is.null(strata) & byStratum) args$flags <- c(args$flags, "a")
+	if (byStratum) args$flags <- c(args$flags, "a")
 
 	if (!is.null(zlim)) {
 		args$zmin <- zlim[1L]
 		args$zmax <- zlim[2L]
 		args$flags <- c(args$flags, "z")
 	}
-
-	if (!is.null(seed)) args$seed <- seedz
 
 	do.call(rgrass::execGRASS, args = args)
 

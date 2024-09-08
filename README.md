@@ -44,8 +44,7 @@ To use `fasterRaster` you must install [GRASS version 8+](https://grass.osgeo.or
 
 We'll do a simple operation in which we:
 1. Add a buffer to lines representing rivers, then
-2. Calculate the distance to from each cell to the closest buffer and burn the distance values into a raster; then
-3. Compare the frequency of "geomorphons" (idealized topographical features, like "valley", "slope", "peak", etc.) across the entire region to areas close to rivers.
+2. Calculate the distance to from each cell to the closest buffer and burn the distance values into a raster.
 
 To do this, we'll be using maps representing the middle of the eastern coast of Madagascar. We will also use the `terra` and `sf` packages.
 

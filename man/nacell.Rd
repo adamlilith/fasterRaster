@@ -20,7 +20,7 @@
 A numeric value, one per raster layer in the input.
 }
 \description{
-Number of \code{NA} cells or number of non-\code{NA} cells in a raster. If the raster is 3D, then all cells in all layers are counted.
+The \code{nacell()} function counts the number of \code{NA} cells in a \code{GRaster}, and the \code{nonnacell()} reports the number of non-\code{NA} cells. If the raster is 3D, then all cells in all layers are counted.
 }
 \examples{
 if (grassStarted()) {
@@ -54,7 +54,7 @@ res3d(elev) # resolution (3D)
 zres(elev) # vertical resolution
 xres(elev) # vertical resolution
 yres(elev) # vertical resolution
-zres(elev) # vertical resolution
+zres(elev) # vertical resolution (NA because this is a 2D GRaster)
 
 # cell counts
 ncell(elev) # cells
@@ -71,10 +71,6 @@ is.3d(elev) # is it 3-dimensional?
 
 minmax(elev) # min/max values
 
-# information on the GRASS session in which the GRaster is located
-location(elev) # location
-mapset(elev) # mapset
-
 # "names" of the object
 names(elev)
 
@@ -84,7 +80,6 @@ st_crs(elev)
 
 # extent (bounding box)
 ext(elev)
-st_bbox(elev)
 
 # vertical extent (not defined for this raster)
 zext(elev)
@@ -126,6 +121,7 @@ rasts
 rasts[[3]] <- elev > 500 # add a layer
 rasts <- c(rasts, sqrt(elev)) # add another
 add(rasts) <- ln(elev)
+rasts
 
 # names
 names(rasts)
@@ -139,13 +135,11 @@ rasts
 # number of layers
 nlyr(rasts)
 
-# projecting a raster from disk to location's CRS
+# correlation and covariance matrices
 madLANDSAT <- fastData("madLANDSAT")
 landsat <- fast(madLANDSAT) # projects matrix
-
-# correlation and covariance matrices
-cor(landsat) # correlation
-cov(landsat) # covariance
+layerCor(landsat) # correlation
+layerCor(landsat, fun = 'cov') # covariance
 
 }
 }

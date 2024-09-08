@@ -39,7 +39,8 @@ methods::setMethod(
 	.locationRestore(x)
 	.region(y)
 
-	out <- .rasterize(x = x, y = y, field = field, background = background, by = by, verbose = verbose)
+	gtype <- geomtype(x, grass = TRUE)
+	out <- .rasterize(x = x, y = y, field = field, background = background, by = by, gtype = gtype, verbose = verbose)
 	.makeGRaster(out$src, levels = out$levels)
 
 	} # EOF
@@ -51,11 +52,12 @@ methods::setMethod(
 #' @param background Numeric or `NA`.
 #' @param by `NULL` or name of a field in the data table of `x`.
 #' @param verbose Logical.
+#' @param gtype `geomtype(..., grass = TRUE)` of `x` ("area", "line", "point")
 #'
 #' @returns A `list` with the [sources()] name of the output raster, plus a `levels` table (can be `NULL`).
 #'
 #' @noRd
-.rasterize <- function(x, y, field, background, by, verbose) {
+.rasterize <- function(x, y, field, background, by, gtype, verbose) {
 
 	### create different raster layer for each geometry
 	if (!is.null(by)) {
@@ -64,7 +66,7 @@ methods::setMethod(
 		nBys <- length(bys)
 		src <- rep(NA_character_, nBys)
 		levels <- list()
-		if (verbose & nBys > 1L) pb <- utils::txtProgressBar(min = 0, max = nBys, initial = 0, style = 2)
+		if (verbose & nBys > 1L) pb <- utils::txtProgressBar(min = 0, max = nBys, initial = 0, style = 3)
 
 		for (i in seq_len(nBys)) {
 
@@ -85,7 +87,6 @@ methods::setMethod(
 
 	} else {
 
-		gtype <- geomtype(x, grass = TRUE)
 		src <- .makeSourceName("rasterize_v_to_rast", "raster")
 
 		# if by geometry but burned to the same raster

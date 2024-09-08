@@ -37,13 +37,13 @@ xr <- xor(coast4, hull)
 plot(coast4)
 plot(xr, border = "blue", add = TRUE)
 
-### not
-#######
+### erase
+#########
 
-no <- not(coast4, hull)
+erased <- erase(coast4, hull)
 plot(coast4)
-plot(no, border = "blue", add = TRUE)
+plot(erased, border = "blue", add = TRUE)
 
-minus <- coast4 - hull # same as not()
+minus <- coast4 - hull # same as erase()
 
 }

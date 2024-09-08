@@ -18,9 +18,10 @@
 #'      * `exp()`
 #'      * `log()` (natural log)
 #'      * `ln()` (also natural log)
-#'      * `log1p()` (same as `log(x + 1)`)
 #'      * `log2()` (log, base 2)
 #'      * `log10()` (log, base 10)
+#'      * `log1p()` (same as `log(x + 1)`)
+#'      * `log10p()` (same as `log(x + 1, base = 10)`)
 #' * Power functions:
 #'      * `sqrt()`
 #'      * `x^y`
@@ -182,38 +183,39 @@ setMethod(
 	"atan2",
 	signature(y = "GRaster", x = "GRaster"),
 	function(y, x) {
-	
-		compareGeom(y, x)
-		.locationRestore(x)
-  		.region(x)
-		
-		ny <- nlyr(y)
-		nx <- nlyr(x)
-		
-		if (ny == 1L & nx > 1L) {
-			y <- y[[rep(1L, nx)]]
-		} else if (ny > 1L & nx == 1L) {
-			x <- x[[rep(1L, ny)]]
-		} else if (ny != nx) {
-			stop("Rasters must have the same number of layers, or at least one raster must have one layer.")
-		}
-		
-		n <- max(ny, nx)
-  		
-		prec <- .getPrec(c(x, y), NULL)
 
-		for (i in seq_len(n)) {
-			
-			src <- .makeSourceName("arith_by_layer", "rast")
-			ex <- paste0(src, " = atan(", prec, "(", sources(x)[i], ") , ", prec, "(", sources(y)[i], "))  * (", pi, " / 180)")
-			this <- .genericArithRast(name = name, src = src, ex = ex)
-			if (i == 1L) {
-				out <- this
-			} else {
-				out <- c(out, this)
-			}
+	compareGeom(y, x)
+	.locationRestore(x)
+	.region(x)
+	
+	ny <- nlyr(y)
+	nx <- nlyr(x)
+	
+	if (ny == 1L & nx > 1L) {
+		y <- y[[rep(1L, nx)]]
+	} else if (ny > 1L & nx == 1L) {
+		x <- x[[rep(1L, ny)]]
+	} else if (ny != nx) {
+		stop("Rasters must have the same number of layers, or at least one raster must have one layer.")
+	}
+	
+	n <- max(ny, nx)
+	
+	prec <- .getPrec(c(x, y), NULL)
+
+	for (i in seq_len(n)) {
+		
+		src <- .makeSourceName("arith_by_layer", "rast")
+		ex <- paste0(src, " = atan(", prec, "(", sources(x)[i], ") , ", prec, "(", sources(y)[i], "))  * (", pi, " / 180)")
+		this <- .genericArithRast(name = "atan2", src = src, ex = ex)
+		if (i == 1L) {
+			out <- this
+		} else {
+			out <- c(out, this)
 		}
-		out
+
+	}
+	out
 		
 	} # EOF
 )
@@ -235,21 +237,48 @@ setMethod(
 	signature = "GRaster",
 	function(x) {
 
-		.locationRestore(x)
-		.region(x)
+	.locationRestore(x)
+	.region(x)
 
-		srcs <- .makeSourceName("arith_by_layer", "rast", nlyr(x))
-		for (i in seq_len(nlyr(x))) {
+	srcs <- .makeSourceName("arith_by_layer", "rast", nlyr(x))
+	for (i in seq_len(nlyr(x))) {
 
-			ex <- paste0(srcs[i], " = log(", sources(x)[i], " + 1)")
-			rgrass::execGRASS(
-				cmd = "r.mapcalc",
-				expression = ex,
-				flags = c(.quiet(), "overwrite")
-			)
+		ex <- paste0(srcs[i], " = log(", sources(x)[i], " + 1)")
+		rgrass::execGRASS(
+			cmd = "r.mapcalc",
+			expression = ex,
+			flags = c(.quiet(), "overwrite")
+		)
 
-		}
-		.makeGRaster(srcs, names(x))
+	}
+	.makeGRaster(srcs, names(x))
+		
+	} # EOF
+)
+
+#' @aliases log10p
+#' @rdname math
+#' @exportMethod log10p
+setMethod(
+	"log10p",
+	signature = "GRaster",
+	function(x) {
+
+	.locationRestore(x)
+	.region(x)
+
+	srcs <- .makeSourceName("arith_by_layer", "rast", nlyr(x))
+	for (i in seq_len(nlyr(x))) {
+
+		ex <- paste0(srcs[i], " = log(", sources(x)[i], " + 1, 10)")
+		rgrass::execGRASS(
+			cmd = "r.mapcalc",
+			expression = ex,
+			flags = c(.quiet(), "overwrite")
+		)
+
+	}
+	.makeGRaster(srcs, names(x))
 		
 	} # EOF
 )

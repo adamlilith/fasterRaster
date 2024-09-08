@@ -34,6 +34,8 @@ methods::setMethod(
 
 	nLayers <- nlyr(x)
 	out <- x
+
+	# "value" is NULL
 	if (is.null(value)) {
 
 		notNulls <- setdiff(seq_len(nLayers), i)
@@ -50,14 +52,14 @@ methods::setMethod(
 				crs = crs(out),
 				projection = .projection(out),
 				nLayers = length(notNulls),
-				dimensions = dim(out),
+				dimensions = dim3d(out),
 				topology = topology(out),
 				extent = as.vector(ext(out)),
 				zextent = zext(out),
 				sources = sources(out)[notNulls],
 				names = names(out)[notNulls],
 				datatypeGRASS = datatype(out, "GRASS")[notNulls],
-				resolution = res(out),
+				resolution = res3d(out),
 				minVal = .minVal(out)[notNulls],
 				maxVal = .maxVal(out)[notNulls],
 				activeCat = activeCat(out)[notNulls],

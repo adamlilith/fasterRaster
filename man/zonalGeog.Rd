@@ -42,120 +42,24 @@ if (grassStarted()) {
 # Setup
 library(terra)
 
-# Example data: Land cover raster
+# Example data: Elevation and land cover
+madElev <- fastData("madElev")
+madForest2000 <- fastData("madForest2000")
 madCover <- fastData("madCover")
 
-# Convert categorical SpatRaster to categorical GRaster:
+# Convert to GRasters:
+elev <- fast(madElev)
+forest2000 <- fast(madForest2000)
 cover <- fast(madCover)
 
-### Properties of categorical rasters
-#####################################
+# Geometric statistics for an integer raster zoned by elevation:
+fun <- "= if (madElev < 400 & madForest2000 == 1, 0, if (madElev >= 400 & madForest2000 == 1, 1, null()))"
+forestByElev <- app(c(elev, forest2000), fun = fun)
+plot(forestByElev, main = "forest < 400 m & >= 400 m")
+zonalGeog(forestByElev)
 
-cover # note categories
-is.factor(cover) # Is the raster categorical?
-nlevels(cover) # number of levels
-levels(cover) # just the value and active column
-cats(cover) # all columns
-minmax(cover) # min/max values
-minmax(cover, levels = TRUE) # min/max categories
-catNames(cover) # column names of the levels table
-missingCats(cover) # categories in table with no values in raster
-freq(cover) # frequency of each category (number of cells)
-zonalGeog(cover) # geometric statistics
-
-### Active column
-#################
-
-# Which column sets the category labels?
-activeCat(cover)
-activeCat(cover, names = TRUE)
-
-activeCats(c(cover, cover))
-
-# Choose a different column for category labels:
-levels(cover)
-activeCat(cover) <- 2
-levels(cover)
-
-### Managing levels tables
-##########################
-
-# Remove unused levels:
-nlevels(cover)
-cover <- droplevels(cover)
-nlevels(cover)
-
-# Re-assign levels:
-value <- c(20, 30, 40, 50, 120, 130, 140, 170)
-label <- c("Cropland", "Cropland", "Forest", "Forest",
- "Grassland", "Shrubland", "Herbaceous", "Flooded")
-
-newCats <- data.frame(value = value, label = label)
-
-cover <- categories(cover, layer = 1, value = newCats)
-cats(cover)
-
-# This is the same as:
-levels(cover) <- newCats
-cats(cover)
-
-# Are there any values not assigned a category?
-missingCats(cover)
-
-# Let's assign a category for value 210 (water):
-water <- data.frame(value = 210, label = "Water")
-addCats(cover) <- water
-
-# Add more information to the levels table using merge():
-landType <- data.frame(
-     Value = c(20, 30, 40, 50, 120),
-     Type = c("Irrigated", "Rainfed", "Broadleaf evergreen",
-     "Broadleaf deciduous", "Mosaic with forest")
-)
-cats(cover)
-cover <- addCats(cover, landType, merge = TRUE)
-cats(cover)
-
-### Logical operations on categorical rasters
-#############################################
-
-cover < "Forest" # 1 for cells with a value < 40, 0 otherwise
-cover <= "Forest" # 1 for cells with a value < 120, 0 otherwise
-cover == "Forest" # 1 for cells with value of 40-120, 0 otherwise
-cover != "Forest" # 1 for cells with value that is not 40-120, 0 otherwise
-cover > "Forest" # 1 for cells with a value > 120, 0 otherwise
-cover >= "Forest" # 1 for cells with a value >= 120, 0 otherwise
-
-cover \%in\% c("Cropland", "Forest") # 1 for cropland/forest cells, 0 otherwise
-
-### Combine a categories from different rasters
-###############################################
-
-# NB Only have one categorical raster ships with fasterRaster, so we will
-# create a second one from the elevation raster.
-
-# Divide elevation raster into "low/medium/high" levels:
-madElev <- fastData("madElev")
-elev <- fast(madElev)
-fun <- "= if(madElev < 100, 0, if(madElev < 400, 1, 2))"
-elevCat <- app(elev, fun)
-elevCat <- resample(elevCat, cover, method = "near")
-
-levs <- data.frame(
-     value = c(0, 1, 2),
-     elevation = c("low", "medium", "high")
-)
-levels(elevCat) <- list(levs)
-
-# Combine levels:
-combined <- combineCats(cover, elevCat)
-combined
-levels(combined)
-
-# Combine levels, treating value/NA combinations as new categories:
-combinedNA <- combineCats(cover, elevCat, na.rm = FALSE)
-combinedNA
-levels(combinedNA)
+# Geometric statistics for a categorical raster:
+zonalGeog(cover)
 
 }
 }

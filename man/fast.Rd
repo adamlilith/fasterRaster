@@ -161,35 +161,32 @@ madDypsis <- fastData("madDypsis") # points vector
 ### Create GRasters from SpatRasters
 ####################################
 
-# Create an integer raster
-class(madElev)
+# Create an integer raster:
 elev <- fast(madElev)
 elev
 
-# Create a categorical raster
-class(madCover)
+# Create a categorical raster:
 cover <- fast(madCover)
 madCover
 levels(madCover) # category levels
 
-# Create a GRaster from a file on disk
+# Create a GRaster from a file on disk:
 rastFile <- system.file("extdata", "madForest2000.tif", package = "fasterRaster")
 forest2000 <- fast(rastFile)
 forest2000
 
-# Create a 1's raster that spans the world
+# Create a 1's raster that spans the world:
 ones <- fast(rastOrVect = "raster", crs = "epsg:4326")
 ones
 
 ### Create GVectors
 ###################
 
-# Create a GVector from an sf vector
-class(madCoast4)
+# Create a GVector from an sf vector:
 coast4 <- fast(madCoast4)
 coast4
 
-# Create a GVector from a SpatVector
+# Create a GVector from a SpatVector:
 madRivers <- vect(madRivers)
 class(madRivers)
 rivers <- fast(madRivers)

@@ -22,7 +22,7 @@ coast <- fast(madCoast4) # polygons vector
 extract(elev, dypsis, xy = TRUE)
 
 # Extract from categorical raster at points:
-dypsisWGS84 <- project(dypsis, cover)
+dypsisWGS84 <- project(dypsis, cover) # Convert to same CRS
 categories <- extract(cover, dypsisWGS84)
 categoryValues <- extract(cover, dypsisWGS84, cats = FALSE)
 categories

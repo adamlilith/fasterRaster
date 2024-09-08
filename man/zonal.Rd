@@ -19,8 +19,6 @@
 \item{fun}{Character vector: Name of the function(s) to summarize \code{x} with. These can include:
 \itemize{
 \item \code{"*"}: All of the functions below.
-\item \code{"countNonNA"}: Total number of non-\code{NA} cells.
-\item \code{"countNA"}: Total number of \code{NA} cells.
 \item \code{"cv"}: Sample coefficient of variation (expressed as a proportion of the mean).
 \item \code{"cvpop"}: Population coefficient of variation (expressed as a proportion of the mean).
 \item \code{"max"} and \code{"min"}: Highest and lowest values across non-\code{NA} cells.
@@ -50,7 +48,7 @@ if (grassStarted()) {
 # Setup
 library(terra)
 
-# Elevation raster
+# Elevation SpatRaster:
 madElev <- fastData("madElev")
 
 # Convert a SpatRaster to a GRaster:
@@ -62,7 +60,7 @@ elev <- fast(madElev)
 # Generate a "zones" GRaster by dividing raster into areas based on
 # high/low elevation.
 names(elev) # Use this name in app() formula.
-fun <- " = if (madElev <200, 0, if (madElev <400, 1, 2))"
+fun <- "= if (madElev <200, 0, if (madElev <400, 1, 2))"
 zones <- app(elev, fun = fun)
 
 # Calculate zonal statistics using a raster as zones
@@ -76,7 +74,7 @@ zonal(elev2, zones, fun = c("mean", "sum", "sdpop"))
 ### Calculate zonal statistics using a GVector as zones
 #######################################################
 
-madCoas4 <- fastData("madCoast4")
+madCoast4 <- fastData("madCoast4")
 coast <- fast(madCoast4)
 
 zonal(elev, z = coast, fun = "mean")

@@ -223,8 +223,7 @@ methods::setMethod(
         if (xy) {
 
             coords <- crds(y, z = is.3d(y))
-            coords <- data.table::as.data.table(coords)
-            out <- cbind(coords, out)
+            out <- data.table::as.data.table(coords)
 
         }
 
@@ -647,7 +646,7 @@ methods::setMethod(
 
 #' Extract values from a set of rasters at points
 #'
-#' @param x `GRaster` or [sources()] name of one or more `GRaster`s
+#' @param x `GRaster` or [sources()] name of one or more `GRaster`s.
 #' @param y A points `GVector` or [sources()] name of one
 #' @param dtype **GRASS** format `datatype` of each raster in `x`. Will be obtained from `x` if `x` is a `GRaster`.
 #' @param xNames [names()] of `x`.  Will be obtained from `x` if `x` is a `GRaster`.
@@ -698,6 +697,9 @@ methods::setMethod(
         omnibus::say("Extracting values...")
         if (sets > 1) pb <- utils::txtProgressBar(min = 0, max = sets, initial = 0, style = 3, width = 30)
     }
+
+    # # don't know why, but having this here obviates extraction of all NAs on first extract attempt
+    # if (inherits(x, "GRaster")) plot(x); dev.off()
 
     for (set in seq_len(sets)) {
 

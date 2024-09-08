@@ -37,12 +37,13 @@ methods::setMethod(
 
 #' @param x `GRaster` or [sources()] name(s)
 #' @param dtype [datatype()] using `GRASS`-style output
+#' @param levels The [levels()] table from a `GRaster`. Used if `x` is the [sources()] name of a `GRaster` and the raster is categorical. Note this is *not* a list of `levels` tables, but rather the actual table.
 #' @param digits Integer
 #' @param bins Integer > 0
 #' @param value NULL or numeric
 #'
 #' @noRd
-.freq <- function(x, dtype, digits = 3, bins = 100, value = NULL) {
+.freq <- function(x, dtype, levels = NULL, digits = 3, bins = 100, value = NULL) {
 
 	if (inherits(x, "GRaster")) {
 		.locationRestore(x)
@@ -99,9 +100,13 @@ methods::setMethod(
 			data.table::setkeyv(freqs, "value")
 
 			# add level labels
-			if (is.factor(x)[i]) {
+			if ((inherits(x, "GRaster") & is.factor(x)[i]) | !is.null(levels)) {
 
-          		levs <- levels(x)[[i]]
+				if (inherits(x, "GRaster")) {
+          			levs <- levels(x)[[i]]
+				} else {
+					levs <- levels
+				}
 				xValCol <- names(freqs)[1L]
 				yValCol <- names(levs)[1L]
 				freqs <- merge(freqs, levs, by.x = xValCol, by.y = yValCol, all.y = TRUE)
@@ -157,32 +162,32 @@ methods::setMethod(
 
 	} # next layer
 	
-	# add factor labels
-	facts <- is.factor(x)
-	if (any(facts)) {
+	# # add factor labels
+	# facts <- is.factor(x)
+	# if (any(facts)) {
 	
-		for (i in which(facts)) {
+	# 	for (i in which(facts)) {
 		
-			xx <- x[[i]]
-			ac <- activeCat(xx)
-			catName <- names(levels(xx)[[1L]])[ac + 1L]
+	# 		xx <- x[[i]]
+	# 		ac <- activeCat(xx)
+	# 		catName <- names(levels(xx)[[1L]])[ac + 1L]
 			
-			labels <- levels(xx)[[1L]][[ac + 1L]]
-			vals <- levels(xx)[[1L]][[1L]]
+	# 		labels <- levels(xx)[[1L]][[ac + 1L]]
+	# 		vals <- levels(xx)[[1L]][[1L]]
 			
-			out[[i]] <- cbind(
-				out[[i]][ , 1L],
-				data.table::data.table(
-					DUMMY = labels[match(out[[i]][["value"]], vals)]
-				),
-				out[[i]][ , 2L]
-			)
+	# 		out[[i]] <- cbind(
+	# 			out[[i]][ , 1L],
+	# 			data.table::data.table(
+	# 				DUMMY = labels[match(out[[i]][["value"]], vals)]
+	# 			),
+	# 			out[[i]][ , 2L]
+	# 		)
 			
-			names(out[[i]])[2L] <- catName
+	# 		names(out[[i]])[2L] <- catName
 		
-		}
+	# 	}
 	
-	}
+	# }
 	
 	if (length(out) == 1L) out <- out[[1L]]
 	out

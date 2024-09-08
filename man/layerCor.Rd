@@ -5,12 +5,12 @@
 \alias{layerCor}
 \title{Correlation between GRasters}
 \usage{
-\S4method{layerCor}{GRaster}(x, fun)
+\S4method{layerCor}{GRaster}(x, fun = "cor")
 }
 \arguments{
 \item{x}{A \code{GRaster} with two or more layers.}
 
-\item{fun}{Character: Name of the statistic to calculate; either \code{"cor"} or \code{"cov"}.}
+\item{fun}{Character: Name of the statistic to calculate; either \code{"cor"} (default) or \code{"cov"}.}
 }
 \value{
 A numeric \code{matrix}.

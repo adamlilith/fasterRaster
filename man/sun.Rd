@@ -24,7 +24,8 @@ sun(
   diff_rad = TRUE,
   refl_rad = TRUE,
   glob_rad = TRUE,
-  insol_time = TRUE
+  insol_time = TRUE,
+  lowMemory = FALSE
 )
 }
 \arguments{
@@ -68,6 +69,8 @@ sun(
 \item{glob_rad}{Logical:. If \code{TRUE} (default), generate a raster with total irradiance/irradiation with units of Wh / m^2 / day ("mode 2" of the \code{r.sun} \strong{GRASS} module).}
 
 \item{insol_time}{Logical: If \code{TRUE} (default), generate a raster with total insolation time in hours ("mode 2" of the \code{r.sun} \strong{GRASS} module).}
+
+\item{lowMemory}{Logical: If \code{TRUE}, use the low-memory version of the \code{r.sun} \strong{GRASS} module. The default is \code{FALSE}.}
 }
 \value{
 A raster or raster stack stack with the same extent, resolution, and coordinate reference system as \code{elevation}. Assuming all possible rasters are generated they represent:
@@ -97,15 +100,16 @@ elev <- fast(madElev)
 ### Calculate input rasters
 ###########################
 
-coeff_bh <- elev * 0 + 0.4 # just a guess
-coeff_dh <- elev * 0 + 0.6 # just a guess
+# Values below are just a guess
+coeff_bh <- coeff_dh <- elev
+coeff_bh[] <- 0.4
+coeff_dh[] <- 0.6
 
 slope <- terrain(elev, "slope")
 aspect <- terrain(elev, "aspect", northIs0 = FALSE)
 
 horizon_step <- 90
-directions <- seq(0, 359, horizon_step)
-hh <- horizonHeight(elev, directions = directions, northIs0 = FALSE)
+hh <- horizonHeight(elev, step = horizon_step, northIs0 = FALSE)
 
 ### calculate solar ir/radiance
 ###############################
@@ -119,7 +123,7 @@ solar <- sun(
 	hh = hh,
 	horizon_step = horizon_step,
 	albedo = 0.2,
-	linke = 3,
+	linke = 1.5,
 	day = 1,
 	step = 0.5,
 	declination = NULL,
@@ -132,7 +136,9 @@ solar <- sun(
 	diff_rad = TRUE,
 	refl_rad = TRUE,
 	glob_rad = TRUE,
-	insol_time = TRUE
+	insol_time = TRUE,
+
+	lowMemory = FALSE
 )
 
 solar

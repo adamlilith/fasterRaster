@@ -47,30 +47,24 @@ rivers <- fast(madRivers)
 
 # Convert points, line, and polygons vectors to rasters:
 points <- rasterize(dypsis, elev)
-lines <- rasterize(rivers, elev)
-polys <- rasterize(coast4, elev)
-communes <- rasterize(coast4, elev, field = "NAME_4")
-
 plot(points)
+
+lines <- rasterize(rivers, elev)
 plot(lines)
+
+polys <- rasterize(coast4, elev)
 plot(polys)
+
+communes <- rasterize(coast4, elev, field = "NAME_4")
 plot(communes)
+
+# Change background value:
+polysNeg1 <- rasterize(coast4, elev, background = -1)
+plot(polysNeg1)
 
 # Make one layer per river:
 byRiver <- rasterize(rivers, elev, field = "NAM", by = "NAM")
 plot(byRiver)
-
-# Change background value:
-polys <- rasterize(coast4, elev, background = -1)
-plot(polys)
-
-# By geometry onto one rasters:
-polys <- rasterize(coast4, elev, byGeom = TRUE, collapse = TRUE)
-plot(polys)
-
-# By geometry, separate rasters:
-polys <- rasterize(coast4, elev, byGeom = TRUE, collapse = FALSE)
-plot(polys)
 
 }
 }

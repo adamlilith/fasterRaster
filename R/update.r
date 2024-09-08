@@ -23,5 +23,5 @@ methods::setMethod(
 methods::setMethod(
     f = "update",
     signature = c(object = "GVector"),
-    definition = function(object) .makeGVector(sources(object))
+    definition = function(object) .makeGVector(sources(object), table = as.data.table(object))
 )

@@ -70,7 +70,7 @@ methods::setMethod(
 
 	# turn i into integer
 	if (is.logical(i)) {
-		if (length(i) <- nc) i <- rep(i, length.out = nc)
+		if (length(i) < nc) i <- rep(i, length.out = nc)
 		i <- which(i)
 	} else if (is.character(i)) {
 		i <- match(i, names(x))

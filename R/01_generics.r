@@ -183,6 +183,7 @@ methods::setGeneric(name = "kurtosis", def = function(x, ...) standardGeneric("k
 methods::setGeneric(name = "layerCor", package = "terra")
 methods::setGeneric(name = "ln", def = function(x, ...) standardGeneric("ln"))
 methods::setGeneric(name = "longlat", def = function(x) standardGeneric("longlat"))
+methods::setGeneric(name = "log10p", def = function(x) standardGeneric("log10p"))
 
 methods::setGeneric(name = "mask", package = "terra")
 methods::setGeneric(name = "maskNA", def = function(x, ...) standardGeneric("maskNA"))
@@ -214,6 +215,7 @@ methods::setGeneric(name = "nsubgeom", def = function(x, ...) standardGeneric("n
 methods::setGeneric(name = "nunique", def = function(x, ...) standardGeneric("nunique"))
 
 # methods::setGeneric(name = "orOrOr", def = function(e1, e2) standardGeneric("orOrOr"))
+methods::setGeneric(name = "reorient", def = function(x, ...) standardGeneric("reorient"))
 
 methods::setGeneric(name = "pairs", package = "terra")
 methods::setGeneric(name = "pca", def = function(x, ...) standardGeneric("pca"))
@@ -267,13 +269,15 @@ methods::setGeneric(name = "snap", package = "terra")
 methods::setGeneric(name = "sources", package = "terra")
 methods::setGeneric(name = "spatSample", package = "terra")
 methods::setGeneric(name = "rSpatialDepRast", def = function(x, ...) standardGeneric("rSpatialDepRast"))
+
 methods::setGeneric(name = "streams", def = function(x, ...) standardGeneric("streams"))
 methods::setGeneric(name = "stretch", package = "terra")
 methods::setGeneric(name = "st_as_sf", package = "sf")
-methods::setGeneric(name = "st_bbox", package = "sf")
+# methods::setGeneric(name = "st_bbox", package = "sf")
 methods::setGeneric(name = "st_buffer", package = "sf")
 methods::setGeneric(name = "st_crs", package = "sf")
 # methods::setGeneric(name = "st_distance", package = "sf")
+methods::setGeneric(name = "stdev", package = "terra")
 methods::setGeneric(name = "subst", package = "terra")
 methods::setGeneric(name = "summary", def = function(object, ...) standardGeneric("summary"))
 

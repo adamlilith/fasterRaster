@@ -10,6 +10,11 @@ madElev <- fastData("madElev")
 elev <- fast(madElev)
 
 # Calculate global statistics:
-global(elev, fun = c("mean", "countNonNA", "countNA", "var", "varpop"))
+global(elev, fun = c("mean", "var", "varpop"))
+global(elev, "quantile", probs = c(0.25, 0.5, 0.75))
+
+global(elev, "*") # calculate all available functions
+
+global() # vector of all functions
 
 }

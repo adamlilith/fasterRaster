@@ -10,8 +10,6 @@
 #'
 #' @param fun Character vector: Name of the function(s) to summarize `x` with. These can include:
 #' * `"*"`: All of the functions below.
-#' * `"countNonNA"`: Total number of non-`NA` cells.
-#' * `"countNA"`: Total number of `NA` cells.
 #' * `"cv"`: Sample coefficient of variation (expressed as a proportion of the mean).
 #' * `"cvpop"`: Population coefficient of variation (expressed as a proportion of the mean).
 #' * `"max"` and `"min"`: Highest and lowest values across non-`NA` cells.
@@ -43,9 +41,10 @@ methods::setMethod(
 	if (inherits(z, "GRaster")) {
 		.zonalByRaster(x = x, z = z, fun = fun, prob = prob)
 	} else if (inherits(z, "GVector")) {
-		.zonalByVector(x = x, z = z, fun = fun, prob = prob)
+		gtype <- geomtype(z, grass = TRUE)
+		.zonalByVector(x = x, z = z, fun = fun, prob = prob, gtype = gtype)
 	} else {
-		stop("Argument ", sQuote("z"), " must be a GRaster or GVector.")
+		stop("Argument `z` must be a GRaster or GVector.")
 	}
 
 	} # EOF
@@ -54,7 +53,7 @@ methods::setMethod(
 #' @noRd
 .zonalByRaster <- function(x, z, fun, prob) {
 
-	if (!is.int(z)[1L] & !is.factor(z)[1L]) stop("GRaster ", sQuote("z"), " must be an integer or factor raster, or a GVector.")
+	if (!is.cell(z)[1L] & !is.factor(z)[1L]) stop("GRaster `z` must be an integer or factor raster, or a GVector.")
 
 	if (nlyr(z) > 1L) {
 	
@@ -84,20 +83,45 @@ methods::setMethod(
 }
 
 #' @noRd
-.zonalByVector <- function(x, z, fun, prob) {
+.zonalByVector <- function(x, z, fun, prob, gtype) {
+
+	#' x	GRaster [sources()] name.
+	#' z	GVector [sources()] name.
+	#' fun	Character
+	#' gtype `geomtype(z, grass = TRUE)` ("area", "line", or "point")
 
 	compareGeom(x, z)
 	.locationRestore(x)
 	.region(x)
 
-	z <- rasterize(z, y = x, background = NA, byGeom = TRUE, collapse = TRUE)
+	# rasterize by field in data table
+	cats <- .vCats(z)
+	uniCats <- unique(cats)
+	db <- data.table::data.table(cat = uniCats, recats = uniCats)
+	.vAttachDatabase(z, db)
+
+	zonalSrc <- .makeSourceName("zonal_v_to_rast", "raster")
+	args <- list(
+		cmd = "v.to.rast",
+		input = sources(z),
+		output = zonalSrc,
+		use = "attr",
+		attribute_column = "recats",
+		type = gtype,
+		memory = faster("memory"),
+		flags = c(.quiet(), "overwrite")
+	)
+
+	if (gtype == "line") args$flags <- c(args$flags, "d")
+	do.call(rgrass::execGRASS, args = args)
+	if (faster("clean")) on.exit(.rm(zonalSrc, type = "raster", warn = FALSE), add = TRUE)
 	
-	zones <- freq(z)
+	zones <- .freq(zonalSrc, dtype = "CELL")
 	zones <- zones[["value"]]
 
 	.zonal(
 		x = sources(x),
-		z = sources(z),
+		z = zonalSrc,
 		fun = fun,
 		prob = prob,
 		zones = zones,
@@ -124,7 +148,7 @@ methods::setMethod(
 	out <- data.table()
 	for (i in seq_len(nLayers)) {
 	
-		srcs <- .makeSourceName("r_mapcalc", "raster", numZones)
+		srcs <- .makeSourceName("zonal_r_mapcalc", "raster", numZones)
 	
 		for (j in seq_along(zones)) {
 		
@@ -155,4 +179,3 @@ methods::setMethod(
 	out
 
 }
-

@@ -16,6 +16,7 @@
   strata = NULL,
   byStratum = FALSE,
   zlim = NULL,
+  seed = NULL,
   verbose = FALSE
 )
 
@@ -49,9 +50,9 @@
 
 \item{zlim}{Either \code{NULL} (default), or a vector of two numbers defining the lower and upper altitudinal bounds of coordinates. This cannot be combined with \code{values = TRUE} or \code{cats = TRUE}.}
 
-\item{verbose}{Logical: If \code{TRUE}, display progress. Default is \code{FALSE}.}
+\item{seed}{Either \code{NULL} (default) or an integer: Random number seed. If this is \code{NULL}, the a seed will be set randomly. Values will be rounded to the nearest integer.}
 
-\item{seed}{Either \code{NULL} (default), or an integer. Used as the random seed.}
+\item{verbose}{Logical: If \code{TRUE}, display progress. Default is \code{FALSE}.}
 }
 \value{
 A \code{data.frame}, \code{data.table}, or \code{GVector}.
@@ -68,11 +69,9 @@ library(terra)
 
 # Example data
 madElev <- fastData("madElev") # raster
-madCover <- fastData("madCover") # raster
 
 # Convert to GRasters and GVectors
 elev <- fast(madElev)
-cover <- fast(madCover)
 
 ### spatSample()
 ################
@@ -108,6 +107,9 @@ plot(ant, add = TRUE)
 plot(stratifiedPoints, pch = 21, bg = "red", add = TRUE) # note 20 points per subgeometry
 
 # Random categories:
+madCover <- fastData("madCover") # raster
+cover <- fast(madCover)
+
 randCover <- spatSample(cover, size = 20, values = TRUE,
      cat = TRUE, xy = TRUE)
 randCover

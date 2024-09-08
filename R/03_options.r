@@ -1,6 +1,14 @@
 #' Set or get options shared across "fasterRaster" functions
 #'
-#' @description `faster()` either sets or gets options used across **fasterRaster** functions. If the `default` argument is `TRUE`, then the default value(s) of options is returned (but value(s) are kept unchanged). If the `restore` argument is `TRUE`, then all options will be set to their default values. You cannot simultaneously set options and restore their default values.
+#' @description `faster()` either sets or gets options used across **fasterRaster** functions. Its use can vary:
+#' * Get current values of a particular option: Use `faster("option_name")`. Values will remain unchanged.
+#' * Get current values of all options: Use `faster()` (no arguments). Values will remain unchanged.
+#' * Get default values of a particular option: Use `faster("option_name", default = TRUE)`. Values will remain unchanged.
+#' * Get default values of all options: Use `faster(default = TRUE)`. Values will remain unchanged.
+#' * Set values of particular options: Use the form `faster(option 1 = value1, option2 = value2)`.
+#' * Set all options to their defaults: Use `faster(restore = TRUE)`.
+#'
+#' You cannot simultaneously set options and restore their default values.
 #'
 #' @param ... Either a character (the name of an option), or an option and the value of the option using an `option = value` pattern. These include:
 #'
@@ -13,7 +21,7 @@
 #'
 #' * `cores` (integer/numeric integer): Number of processor cores to use on a task. The default is 2. Some **GRASS** modules are parallelized.
 #'
-#' * `memory` (integer/numeric): The amount of memory to allocate to a task, in GB, for **GRASS**. The default is 1024 MB (i.e., 1 GB). Some **GRASS** modules can take advantage of more memory.
+#' * `memory` (integer/numeric): The amount of memory to allocate to a task, in GB, for **GRASS**. The default is 2048 MB (i.e., 2 GB). Some **GRASS** modules can take advantage of more memory.
 #'
 #' * `clean` (logical): If `TRUE` (default), remove temporary files created internally by functions. If not deleted, they can eventually fill up hard drive space, but deleting them takes a little bit of time (usually <1 second for each function).
 #'
@@ -27,11 +35,11 @@
 #'
 #' @param default Logical: Return the default value(s) of the option(s). The default value of `default` is `FALSE`.
 #'
-#' @return If values of options changed, then a named list of option values *before* they were changed is returned invisibly.
+#' @return If options are changed, then a named list of option values *before* they were changed is returned invisibly.
 #'
 #' If option values are requested, a named list with option values is returned (not invisibly).
 #'
-#' @example man/examples/ex_faster.r
+#' @example man/examples/ex_options.r
 #'
 #' @aliases faster
 #' @rdname faster

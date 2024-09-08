@@ -9,9 +9,9 @@
 #'
 #' @returns A `GVector`.
 #'
-#' @seealso \code{\link[fasterRaster]{$<-}}, [as.data.frame()], [as.data.table()]
+#' @seealso \code{\link[fasterRaster]{$<-}}, [colbind()], [rbind()], [as.data.frame()], [as.data.table()]
 #'
-#' @example man/examples/ex_addTable_dropTable.r
+#' @example man/examples/ex_cbind_rbind_addTable_dropTable.r
 #'
 #' @aliases addTable<-
 #' @rdname addTable

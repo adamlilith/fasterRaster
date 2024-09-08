@@ -18,6 +18,8 @@
 #'
 #' @param interpolate Logical: If `TRUE` (default), then create a `GRaster` with interpolated values. If `FALSE`, return a table with `lambda` values from cross-validation. This argument is ignored if `lambda` is a numeric value.
 #'
+#' @param verbose Logical: if `TRUE`, display progress.
+#'
 #' @details If you receive the error, "No data within this subregion. Consider increasing spline step values, try increasing the values of `xlength` and `ylength`.
 #'
 #' If cross-validation takes too long, or other warnings/errors persist, you can randomly subsample `x` to ~100 points to get an optimum value of `lambda` (using `interpolate = FALSE`), then use this value in the same function again without cross-validation (setting `lambda` equal to this value and `interpolate = TRUE`).
@@ -44,7 +46,8 @@ methods::setMethod(
 		solver = "Cholesky",
 		xlength = NULL,
 		ylength = NULL,
-		interpolate = TRUE
+		interpolate = TRUE,
+		verbose = is.null(lambda)
 	) {
 
 	.interpSplines(
@@ -56,7 +59,8 @@ methods::setMethod(
 		solver = solver,
 		xlength = xlength,
 		ylength = ylength,
-		interpolate = interpolate
+		interpolate = interpolate,
+		verbose = verbose
 	)
 
 	} # EOF
@@ -77,7 +81,8 @@ methods::setMethod(
 # 		solver = "Cholesky",
 # 		xlength = NULL,
 # 		ylength = NULL,
-#		interpolate = interpolate
+#		interpolate = interpolate,
+#		verbose = is.null(lambda)
 # 	) {
 
 # 	.interpSplines(
@@ -89,13 +94,14 @@ methods::setMethod(
 # 		solver = solver,
 # 		xlength = xlength,
 # 		ylength = ylength
-#		interpolate = interpolate
+#		interpolate = interpolate,
+#		verbose = verbose
 # 	)
 
 # 	} # EOF
 # )
 
-#' NB This function seemingly handles GVectors, but
+
 #' @noRd
 .interpSplines <- function(
 		x,
@@ -106,7 +112,8 @@ methods::setMethod(
 		solver,
 		xlength,
 		ylength,
-		interpolate
+		interpolate,
+		verbose
 ) {
 
 	if (!is.null(lambda)) {
@@ -169,6 +176,7 @@ methods::setMethod(
 		solver = solver,
 		lambda_i = lambda_i,
 		memory = faster("memory"),
+		intern = TRUE,
 		flags = c(.quiet(), "overwrite")
 	)
 
@@ -184,11 +192,11 @@ methods::setMethod(
 
 	if (is.null(lambda)) args$flags <- c(args$flags, "c")
 
-	if (faster("verbose")) {
+	if (faster("verbose") | verbose) {
 		if (is.null(lambda)) {
 			omnibus::say("Optimizing lambda...")
 		} else {
-			if (faster("verbose")) omnibus::say("Interpolating...")
+			omnibus::say("Interpolating...")
 		}
 	}
 
@@ -202,9 +210,10 @@ methods::setMethod(
 		info <- lapply(info, trimws)
 		info <- lapply(info, as.numeric)
 		lambdas <- do.call(rbind, info)
-		lambdas <- as.data.frame(lambdas)
+		lambdas <- data.table::as.data.table(lambdas)
 		names(lambdas) <- c("lambda", "mean", "rms")
-		lambdas$optimum <- ""
+		lambdas$optimum <- FALSE
+		lambdas$optimum[which.min(lambdas$rms)] <- TRUE
 
 		index <- which.min(lambdas$rms)
 		lambda <- lambdas$lambda[index]
@@ -219,13 +228,15 @@ methods::setMethod(
 				lambda = lambda,
 				solver = solver,
 				xlength = xlength,
-				ylength = ylength
+				ylength = ylength,
+				verbose = verbose
 			)
 
 			attr(out, "lambdas") <- lambdas
 
 		} else {
 			out <- lambdas
+			if (!faster("useDataTable")) out <- as.data.fraem(out)
 		}
 
 	} else if (inherits(y, "GVector")) {

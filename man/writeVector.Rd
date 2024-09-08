@@ -63,40 +63,36 @@ library(terra)
 # Example data
 madRivers <- fastData("madRivers")
 
-# Convert SpatRasters to GRasters
+# What file formats can we attempt to write?
+writeVector()
+
+# Convert SpatVector to GVector
 rivers <- fast(madRivers)
 rivers
 
-# Save using a temporary file name
-filename <- tempfile()
-
-### Save GVector to disk as GeoPackage
-fn <- paste0(filename, ".gpkg")
-writeVector(rivers, fn)
-
-### Save GVector to disk as ESRI Shapefile
-fn <- paste0(filename, ".shp")
+# Save GVector to disk as GeoPackage
+filename <- tempfile(fileext = ".gpkg")
 writeVector(rivers, filename)
 
-### Save GVector to disk as Google Earth KML
-fn <- paste0(filename, ".kml")
+# Save GVector to disk as ESRI Shapefile
+filename <- tempfile(fileext = ".shp")
 writeVector(rivers, filename)
 
-### Save GVector data table to disk as comma-separated file
-fn <- paste0(filename, ".csv")
+# Save GVector to disk as Google Earth KML
+filename <- tempfile(fileext = ".klm")
 writeVector(rivers, filename)
 
-### Save GVector data table to disk as NetCDF
-fn <- paste0(filename, ".ncdf")
+# Save GVector data table to disk as comma-separated file
+filename <- tempfile(fileext = ".csv")
 writeVector(rivers, filename)
 
-### Save GVector data table to disk as Excel file
-fn <- paste0(filename, ".xlsx")
+# Save GVector data table to disk as NetCDF
+filename <- tempfile(fileext = ".ncdf")
 writeVector(rivers, filename)
 
-### load raster from disk
-rivers2 <- fast(paste0(filename, ".gpkg"))
-rivers2
+# Save GVector data table to disk as Excel file
+filename <- tempfile(fileext = ".xlsx")
+writeVector(rivers, filename)
 
 }
 }

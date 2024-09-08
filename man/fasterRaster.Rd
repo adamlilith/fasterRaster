@@ -6,7 +6,7 @@
 \alias{fasterRaster}
 \title{"fasterRaster": Faster raster and spatial vector processing using "GRASS GIS"}
 \description{
-\strong{fasterRaster}: Processing of large-in-memory/-on disk rasters and spatial vectors in using \strong{GRASS GIS}. Most functions in the \strong{terra} and \strong{sf} packages are recreated. Processing of medium-sized and smaller spatial objects will nearly always be faster using \strong{terra} or \strong{sf}. To use most of the functions you must have the stand-alone version of \strong{GRASS GIS} version 8.3 or higher (not the \strong{OSGeoW4} installer version). Note that due to differences in how \strong{GRASS}, \strong{terra}, and \strong{sf} were implemented,results will not always be strictly comparable between functions for the same kind of task.
+\strong{fasterRaster}: Processing of large-in-memory/-on disk rasters and spatial vectors in using \strong{GRASS GIS}. Most functions in the \strong{terra} and \strong{sf} packages are recreated. Processing of medium-sized and smaller spatial objects will nearly always be faster using \strong{terra} or \strong{sf}. To use most of the functions you must have the stand-alone version of \strong{GRASS GIS} version 8.3 or higher (not the \strong{OSGeoW4} installer version). Note that due to differences in how \strong{GRASS}, \strong{terra}, and \strong{sf} were implemented, results will not always be strictly comparable between functions for the same operation.
 \subsection{Most useful tutorials and functions:}{
 
 A \link[=tutorial_getting_started]{quick-start} tutorial\cr
@@ -66,7 +66,7 @@ Multi-layer functions (applied across layers of a "stack" of \code{GRaster}s):
 \itemize{
 \item Numeration: \code{\link[=sum]{sum()}}, \code{\link[=count]{count()}} \cr
 \item Central tendency: \code{\link[=mean]{mean()}}, \code{\link[=mmode]{mmode()}}, \code{\link[=median]{median()}} \cr
-\item Dispersion: \code{\link[=sd]{sd()}}, \code{\link[=var]{var()}}, \code{\link[=sdpop]{sdpop()}}, \code{\link[=varpop]{varpop()}}, \code{\link[=nunique]{nunique()}}, \code{\link[=range]{range()}}, \code{\link[=quantile]{quantile()}}, \code{\link[=skewness]{skewness()}}, \code{\link[=kurtosis]{kurtosis()}}
+\item Dispersion: \code{\link[=stdev]{stdev()}}, \code{\link[=var]{var()}}, \code{\link[=varpop]{varpop()}}, \code{\link[=nunique]{nunique()}}, \code{\link[=range]{range()}}, \code{\link[=quantile]{quantile()}}, \code{\link[=skewness]{skewness()}}, \code{\link[=kurtosis]{kurtosis()}}
 \item Extremes: \code{\link[=min]{min()}}, \code{\link[=max]{max()}}, \code{\link[=which.min]{which.min()}}, \code{\link[=which.max]{which.max()}} \cr
 }
 
@@ -115,6 +115,7 @@ The assign operators, \code{\link[fasterRaster]{$<-}}, \code{\link[fasterRaster]
 \code{\link[=project]{project()}}: Change coordinate reference system and cell size\cr
 \code{\link[=predict]{predict()}}: Make predictions to a \code{GRaster} from a linear model or generalized linear model\cr
 \code{\link[=resample]{resample()}}: Change cell size\cr
+\code{\link[=reorient]{reorient()}}: Convert degrees between 'north-orientation' and 'east orientation'\cr
 \code{\link[=scale]{scale()}}, \code{\link[=scalepop]{scalepop()}}, and \code{\link[=unscale]{unscale()}}: Subtract means and divide by standard deviations, or inverse of that\cr
 \code{\link[=selectRange]{selectRange()}}: Select values from rasters in a stack based on values in another \code{GRaster}\cr
 \code{\link[=spatSample]{spatSample()}}: Randomly points from a \code{GRaster}\cr
@@ -299,6 +300,7 @@ The \code{\link[fasterRaster]{$<-}} operator can be used to replace specific col
 \code{\link[=dropRows]{dropRows()}}: Remove rows from a \code{data.frame} or \code{data.table}\cr
 \code{\link[=grassInfo]{grassInfo()}}: \strong{GRASS} version and citation\cr
 \code{\link[=mow]{mow()}}: Remove unused rasters and vectors from the \strong{GRASS} cache\cr
+\code{\link[=reorient]{reorient()}}: Convert degrees between 'north-orientation' and 'east orientation'\cr
 \code{\link[=replaceNAs]{replaceNAs()}}: Replace \code{NA}s in columns of a \code{data.table} or \code{data.frame}, or in a vector\cr
 \code{\link[=seqToSQL]{seqToSQL()}}: Format a numeric series into an SQL value call\cr
 \code{\link[=update]{update()}}: Refresh metadata in a \code{GRaster} or \code{GVector} object\cr

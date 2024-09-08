@@ -14,7 +14,7 @@ ant <- coast4[coast4$NAME_4 == "Antanambe"]
 elevAnt <- crop(elev, ant)
 
 # Create a set of random points to serve as starting points:
-starts <- spatSample(elevAnt, 20, as.points = TRUE, seed = 1)
+starts <- spatSample(elevAnt, 10, as.points = TRUE, seed = 1)
 
 # Remove points in water:
 starts <- starts[complete.cases(starts)]
@@ -26,7 +26,8 @@ paths
 plot(paths)
 plot(starts, pch = 1, add = TRUE)
 
-# Calculate flow paths with cell sequences:
+# Calculate flow paths with cell values indicating the number
+# of cells from each start:
 seqs <- flowPath(elevAnt, starts, return = "seq")
 
 plot(seqs)
@@ -35,5 +36,6 @@ plot(starts, pch = 1, add = TRUE)
 # We can convert flow paths to lines:
 seqLines <- as.lines(seqs)
 plot(seqLines)
+seqLines
 
 }

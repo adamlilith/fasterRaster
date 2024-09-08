@@ -55,8 +55,6 @@
 #'
 #' @example man/examples/ex_writeRaster.r
 #'
-#' @importFrom tools file_ext
-#'
 #' @aliases writeRaster
 #' @rdname writeRaster
 #' @exportMethod writeRaster

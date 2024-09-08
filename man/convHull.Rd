@@ -34,14 +34,16 @@ dypsis <- fast(madDypsis)
 ch <- convHull(dypsis)
 
 ### Convex hull for each species:
-head(dypsis) # See the "species" column?
-chSpecies <- convHull(dypsis, by = "species")
+head(dypsis) # See the "rightsHolder" column?
+chHolder <- convHull(dypsis, by = "rightsHolder")
 
 ### Plot:
-plot(st_geometry(madDypsis))
+plot(dypsis)
 plot(ch, add = TRUE)
-n <- nrow(chSpecies)
-plot(chSpecies, col = 1:n, add = TRUE)
+n <- length(chHolder)
+for (i in 1:n) {
+   plot(chHolder[[i]], border = i, add = TRUE)
+}
 
 }
 }

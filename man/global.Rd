@@ -6,7 +6,7 @@
 \alias{global,missing-method}
 \title{Summary statistics for GRasters}
 \usage{
-\S4method{global}{GRaster}(x, fun = "mean", prob = 0.5, ...)
+\S4method{global}{GRaster}(x, fun = "mean", probs = seq(0, 1, 0.25), ...)
 
 \S4method{global}{missing}(x, ...)
 }
@@ -22,7 +22,7 @@
 \item \code{"mean"} (default): Average.
 \item \code{"meanAbs"}: Mean of absolute values.
 \item \code{"median"}: Median.
-\item \code{"quantile"}: Quantile (see also argument \code{prob}).
+\item \code{"quantile"}: Quantile (see also argument \code{probs}).
 \item \code{"range"}: Range. Note that following \code{\link[terra:global]{terra::global()}}, the minimum and maximum are reported, not the actual range.
 \item \code{"sd"}: Sample standard deviation (same as \code{\link[stats:sd]{stats::sd()}}).
 \item \code{"sdpop"}: Population standard deviation.
@@ -31,7 +31,7 @@
 \item \code{"varpop"}: Population variance.
 }}
 
-\item{prob}{Numeric: Quantile at which to calculate \code{quantile}. Only a single value between 0 and 1 is allowed.}
+\item{probs}{Numeric within the range from 0 to 1: Quantile(s) at which to calculate \code{quantile}.}
 
 \item{...}{Other arguments (unused).}
 }
@@ -54,7 +54,12 @@ madElev <- fastData("madElev")
 elev <- fast(madElev)
 
 # Calculate global statistics:
-global(elev, fun = c("mean", "countNonNA", "countNA", "var", "varpop"))
+global(elev, fun = c("mean", "var", "varpop"))
+global(elev, "quantile", probs = c(0.25, 0.5, 0.75))
+
+global(elev, "*") # calculate all available functions
+
+global() # vector of all functions
 
 }
 }

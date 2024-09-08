@@ -42,7 +42,7 @@
 #' ```
 #' faster(grassDir = grassDir)
 #' ```
-#' You can also use the [faster()] function to set options that affect how **fasterRaster** functions run.
+#' You can also use the [faster()] function to set options that affect how **fasterRaster** functions run. This includes setting the amount of maximum memory and number of computer cores allocated to operations.
 #'
 #' In **fasterRaster**, rasters are called `GRaster`s and vectors are called `GVector`s. The easiest (but not always fastest) way to start using a `GRaster` or `GVector` is to convert it from one already in **R**. In the example below, we use a raster that comes with the **fasterRaster** package. The raster represents elevation of a portion of eastern Madagascar. We first load the `SpatRaster` using [fastData()], a helper function for loading example data objects that come with the **fasterRaster** package.
 #' ```
@@ -55,7 +55,12 @@
 #' elev <- fast(madElev)
 #' elev
 #' ```
-#' Converting rasters and vectors that are already in **R** to `GRaster`s and `GVector`s takes some time. Instead, you can load a raster or vector directly from disk to a **fasterRaster** session using `fast()`. To do this, you just replace the argument in [fast()] with a string representing the folder path and file name of the raster you want to load into the session.
+#' Converting rasters and vectors that are already in **R** to `GRaster`s and `GVector`s takes some time. Instead, you can load a raster or vector directly from disk to a **fasterRaster** session using `fast()`. To do this, you just replace the first argument in [fast()] with a string representing the folder path and file name of the raster you want to load into the session. For example, you can do:
+#'
+#' ```
+#' rastFile <- system.file("extdata", "madElev.tif"), package = "fasterRaster")
+#' elev2 <- fast(rastFile)
+#' ```
 #' 
 #' Now, let's create a `GVector`. The [fast()] function can take a `SpatVector` from the **terra** package, an `sf` object from the **sf** package, or a string representing the file path and file name of a vector file (e.g., a GeoPackage file or a shapefile).
 #' ```
@@ -77,18 +82,24 @@
 #' log10Elev
 #' ```
 #'
-#' You can also use the many **fasterRaster** functions. In general, these functions have the same names as their **terra** counterparts and often the same arguments. Note that even many **terra** and **fasterRaster** functions have the same name, they do not necessarily produce the exact same output. Much care has been taken to ensure they do, but sometimes there are multiple ways to do the same task, so choices made by the authors of **terra** and **GRASS** may can lead to differences.
+#' You can also use the many **fasterRaster** functions. In general, these functions have the same names as their **terra** counterparts and often the same arguments. Note that even many **terra** and **fasterRaster** functions have the same name, they do not necessarily produce the exact same output. Much care has been taken to ensure they do, but sometimes there are multiple ways to do the same task, so choices made by the authors of **terra** and **GRASS** can lead to differences.
 #'
-#' The following code creates a raster where cell values reflect the distance between them and the nearest river, then plots the output:
+#' The following code creates a a) raster where cell values reflect the distance between them and the nearest river; b) creates a buffer around the rivers; then c) plots the output:
 #' ```
 #' dist <- distance(elev, rivers)
 #' dist
+#'
+#' riverBuff <- buffer(rivers, 10000)
+#' riversBuff
+#'
 #' plot(dist)
+#' plot(rivers, col = 'blue', add = TRUE)
+#' plot(riversBuff, add = TRUE)
 #' ```
 #'
 #' And that's how you get started! Now that you have a raster and a vector in your **fasterRaster** "location", you can start doing manipulations and analyses using any of the **fasterRaster** functions!  To see an annotated list of these functions, use `?fasterRaster`.
 #'
-#' ## Exporting `GRaster`s and `GVector`s from a **GRASS** session
+#' ## Converting and saving `GRaster`s and `GVector`s
 #'
 #' You can convert a `GRaster` to a `SpatRaster` raster using [rast()]:
 #' ```
@@ -97,9 +108,10 @@
 #' To convert a `GVector` to the **terra** package's `SpatVector` format or to an `sf` vector, use [vect()] or [st_as_sf()]:
 #' ```
 #' terraRivers <- vect(rivers)
+#' sfRivers <- st_as_sf(rivers)
 #' ```
 #'
-#' Finally, you can use [writeRaster()] and [writeVector()] to save **fasterRaster** rasters and vectors directly to disk. This will always be faster than using [rast()], [vect()], or [st_as_sf()] then saving.
+#' Finally, you can use [writeRaster()] and [writeVector()] to save `GRaster`s and `GVector`s directly to disk. This will always be faster than using [rast()], [vect()], or [st_as_sf()] then saving the result from those functions.
 #' ```
 #' elevTempFile <- tempfile(fileext = ".tif") # save as GeoTIFF
 #' writeRaster(elev, elevTempFile)
@@ -112,15 +124,15 @@
 #'
 #' 1. Loading rasters and vectors directly from disk using [fast()], rather than converting **terra** or **sf** objects is faster. Why? Because if the object does not have a file to which the **R** object points, `fast()` has to save it to disk first as a GeoTIFF or GeoPackage file, then load it into **GRASS**.
 #'
-#' 2. Similarly, saving `GRaster`s and `GVector`s directly to disk will always be faster than converting them to `SpatRaster`s or `SpatVector`susing [rast()] or [vect()], then saving them. Why? Because these functions actually save the file to disk then uses the respective function from the respective package to connect to the file.
+#' 2. Similarly, saving `GRaster`s and `GVector`s directly to disk will always be faster than converting them to `SpatRaster`s or `SpatVector`s using [rast()] or [vect()], then saving them. Why? Because `rast()` and `vect() actually save the object to a temporary file then uses the respective function from the respective package to create the `SpatRaster`/`SpatVector`/`sf` vector, which you would then proceed to save to disk again.
 #'
 #' 3. Every time you switch between using a `GRaster` or `GVector` with a different coordinate reference system (CRS), **GRASS** has to spend a few second changing to that CRS. So, you can save some time by doing as much work as possible with objects in one CRS, then switching to work on objects in another CRS.
 #'
-#' 4. By default, **GRASS**/**fasterRaster** use 2 cores and 1024 MB (1 GB) of memory for functions that allow users to specify these values. You can set these to higher values using [faster()] and thus potentially speed up some calculations. Functions in newer versions of **GRASS** have more capacity to use these options, so updating **GRASS** to the latest version can help, too.
+#' 4. By default, **GRASS**/**fasterRaster** use 2 cores and 2048 MB (2 GB) of memory for functions that allow users to specify these values. You can set these to higher values using [faster()] and thus potentially speed up some calculations. Functions in newer versions of **GRASS** have more capacity to use these options, so updating **GRASS** to the latest version can help, too.
 #'
-#' 5. Unfortunately, **fasterRaster** is fast with rasters, but not so much vectors. If you have a lot of vector operations, it is advisable to do as much as possible in **terra** or **sf** and transfer to **fasterRaster** when needed.
+#' 6. To obviate problems with disk space filling up, by default most **fasterRaster** functions delete intermediate files. However, if you are not creating a lot of very big `GRaster`s or `GVector`s, you can skip this time-taking step by setting the `clean` option to `FALSE` using `faster(clean = FALSE)`. You can also use the [mow()] function to remove from the disk cache any **GRASS** files that are not associated with a `GRaster` or `GVector` in memory. This can be helpful, say, if you create a series of objects, then re-assign them using, say `old_name <- new_object` or remove them using `rm(old_name)`. You removed them from **R**, but the files they pointed to are still in the **GRASS** cache.
 #'
-#' 6. To obviate problems with disk space filling up, by default most **fasterRaster** functions delete intermediate files. However, if you are not creating a lot of very big `GRaster`s or `GVector`s, you can skip this time-taking step by setting the `clean` option to `FALSE` using `faster(clean = FALSE)`.
+#' 5. Its name notwithstanding, **fasterRaster** is just not going to be as fast as **terra** or **sf** for all operations, even when the objects are big in memory or on disk. If you are struggling to analyze an object, you can try respective functions in the other packages.
 #'
 #' ## Further reading
 #' 

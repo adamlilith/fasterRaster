@@ -37,7 +37,7 @@ library(terra)
 # Example data
 madElev <- fastData("madElev") # elevation raster
 madForest2000 <- fastData("madForest2000") # forest raster
-madForest2014 <- fastData("madForest2000") # forest raster
+madForest2014 <- fastData("madForest2014") # forest raster
 
 # Convert SpatRasters to GRasters
 elev <- fast(madElev)
@@ -45,12 +45,10 @@ forest2000 <- fast(madForest2000)
 forest2014 <- fast(madForest2014)
 
 ### Re-assigning values of a GRaster
-
 constant <- elev
 constant[] <- pi
-constant
-
 names(constant) <- "pi_raster"
+constant
 
 ### Re-assigning specific values of a raster
 replace <- elev
@@ -61,26 +59,20 @@ replace
 elevInForest <- elev[forest2000 == 1]
 plot(c(elev, forest2000, elevInForest), nr = 1)
 
-### Adding and re-assigning layers of a GRaster
+### Adding and replacing layers of a GRaster
 rasts <- c(elev, constant, forest2000)
 
 # Combine with another layer:
-add(rasts) <- forest2014
-
-# Combine two layers:
-elevs <- c(2 * elev, elev / 10)
-names(elevs) <- c("elev_x2", "elev_div10")
-elevs
-
-# Combine with previous layers:
-rasts <- c(rasts, elevs)
+add(rasts) <- forest2014 # one way
 rasts
+
+rasts <- c(rasts, forest2014) # another way
 
 ### Subsetting GRaster layers
 
 # Subset:
 rasts[[2:3]]
-rasts[[c("madForest2000", "elev_x2")]]
+rasts[[c("madForest2000", "madElev")]]
 rasts$madForest2000
 
 # Get every other layer:
@@ -91,7 +83,7 @@ rasts[[c(FALSE, TRUE)]]
 # Replace a layer
 logElev <- log(elev)
 names(logElev) <- "logElev"
-rasts$madForest2000 <- logElev
+rasts$madForest2014 <- logElev
 rasts
 
 # Replace a layer:

@@ -42,6 +42,15 @@ methods::setMethod(
 #' @exportMethod dim3d
 methods::setMethod(
 	f = "dim3d",
+	signature = "missing",
+	definition = function(x) .region()@dimensions
+)
+
+#' @aliases dim3d
+#' @rdname dim
+#' @exportMethod dim3d
+methods::setMethod(
+	f = "dim3d",
 	signature = "GRegion",
 	definition = function(x) {
 	

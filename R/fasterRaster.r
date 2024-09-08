@@ -1,6 +1,6 @@
 #' "fasterRaster": Faster raster and spatial vector processing using "GRASS GIS"
 #'
-#' @description **fasterRaster**: Processing of large-in-memory/-on disk rasters and spatial vectors in using **GRASS GIS**. Most functions in the **terra** and **sf** packages are recreated. Processing of medium-sized and smaller spatial objects will nearly always be faster using **terra** or **sf**. To use most of the functions you must have the stand-alone version of **GRASS GIS** version 8.3 or higher (not the **OSGeoW4** installer version). Note that due to differences in how **GRASS**, **terra**, and **sf** were implemented,results will not always be strictly comparable between functions for the same kind of task.
+#' @description **fasterRaster**: Processing of large-in-memory/-on disk rasters and spatial vectors in using **GRASS GIS**. Most functions in the **terra** and **sf** packages are recreated. Processing of medium-sized and smaller spatial objects will nearly always be faster using **terra** or **sf**. To use most of the functions you must have the stand-alone version of **GRASS GIS** version 8.3 or higher (not the **OSGeoW4** installer version). Note that due to differences in how **GRASS**, **terra**, and **sf** were implemented, results will not always be strictly comparable between functions for the same operation.
 #'
 #' ## Most useful tutorials and functions:
 #' A [quick-start][tutorial_getting_started] tutorial\cr
@@ -53,7 +53,7 @@
 #' Multi-layer functions (applied across layers of a "stack" of `GRaster`s):
 #' - Numeration: [sum()], [count()] \cr
 #' - Central tendency: [mean()], [mmode()], [median()] \cr
-#' - Dispersion: [sd()], [var()], [sdpop()], [varpop()], [nunique()], [range()], [quantile()], [skewness()], [kurtosis()]
+#' - Dispersion: [stdev()], [var()], [varpop()], [nunique()], [range()], [quantile()], [skewness()], [kurtosis()]
 #' - Extremes: [min()], [max()], [which.min()], [which.max()] \cr
 #' 
 #' The operators [$] and \code{\link[fasterRaster]{[[}} can be used to subset or remove specific layers of a `GRaster`.\cr
@@ -101,6 +101,7 @@
 #' [project()]: Change coordinate reference system and cell size\cr
 #' [predict()]: Make predictions to a `GRaster` from a linear model or generalized linear model\cr
 #' [resample()]: Change cell size\cr
+#' [reorient()]: Convert degrees between 'north-orientation' and 'east orientation'\cr
 #' [scale()], [scalepop()], and [unscale()]: Subtract means and divide by standard deviations, or inverse of that\cr
 #' [selectRange()]: Select values from rasters in a stack based on values in another `GRaster`\cr
 #' [spatSample()]: Randomly points from a `GRaster`\cr
@@ -265,6 +266,7 @@
 #' [dropRows()]: Remove rows from a `data.frame` or `data.table`\cr
 #' [grassInfo()]: **GRASS** version and citation\cr
 #' [mow()]: Remove unused rasters and vectors from the **GRASS** cache\cr
+#' [reorient()]: Convert degrees between 'north-orientation' and 'east orientation'\cr
 #' [replaceNAs()]: Replace `NA`s in columns of a `data.table` or `data.frame`, or in a vector\cr
 #' [seqToSQL()]: Format a numeric series into an SQL value call\cr
 #' [update()]: Refresh metadata in a `GRaster` or `GVector` object\cr

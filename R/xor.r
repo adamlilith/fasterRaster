@@ -8,7 +8,7 @@
 #'
 #' @seealso [c()], [aggregate()], [crop()], [intersect()], [union()], [erase()]
 #' 
-#' @example man/examples/ex_union_intersect_xor_not.r
+#' @example man/examples/ex_union_intersect_xor_erase.r
 #'
 #' @aliases xor
 #' @rdname xor

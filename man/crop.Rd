@@ -60,23 +60,23 @@ ant <- fast(madAnt)
 
 ### Crop raster by vector:
 rastByVect <- crop(elev, ant)
-plot(elev, col = "gray")
+plot(elev, col = "gray", legend = FALSE)
 plot(rastByVect, add = TRUE)
 plot(ant, add = TRUE)
 
 ### Crop raster by raster:
-# We'll cheat by making the raster smaller in R, then crop the
+# To illustrate, we'll make the SpatRaster smaller in R, then crop the
 # raster by this.
 templateRast <- crop(madElev, madAnt)
 
 template <- fast(templateRast)
 rastByRast <- crop(elev, template)
 
-plot(elev, col = "gray")
+plot(elev, col = "gray", legend = FALSE)
 plot(rastByRast, add = TRUE)
 
 ### Crop vector by raster:
-# We'll cheat by making the raster smaller in R, then crop the
+# To illustrate, we'll make the SpatRaster smaller in R, then crop the
 # raster by this.
 templateRast <- crop(madElev, madAnt)
 
@@ -84,7 +84,7 @@ template <- fast(templateRast)
 ptsByRast <- crop(dypsis, template)
 
 plot(elev, col = "gray", legend = FALSE)
-plot(template, add = TRUE)
+plot(templateRast, add = TRUE)
 plot(dypsis, add = TRUE)
 plot(ptsByRast, pch = 21, bg = "red", add = TRUE)
 
@@ -94,7 +94,7 @@ ptsSubset <- dypsis[1:10] # use first 10 points as cropping template
 # Crop points vector by convex hull around points:
 ptsByPts <- crop(dypsis, ptsSubset)
 plot(dypsis)
-plot(convHull(ptsSubset), lty = "dotted", col = "blue", add = TRUE)
+plot(convHull(ptsSubset), lty = "dotted", border = "blue", add = TRUE)
 plot(ptsByPts, col = "red", add = TRUE)
 plot(ptsSubset, col = "blue", pch = 3, cex = 1.6, add = TRUE)
 legend("topleft",

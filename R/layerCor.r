@@ -3,7 +3,7 @@
 #' @description This function returns a correlation or covariance matrix between two or more `GRaster` layers. This function returns the sample correlation and covariance (i.e., the denominator is n - 1).
 #' 
 #' @param x A `GRaster` with two or more layers.
-#' @param fun Character: Name of the statistic to calculate; either `"cor"` or `"cov"`. 
+#' @param fun Character: Name of the statistic to calculate; either `"cor"` (default) or `"cov"`. 
 #' 
 #' @returns A numeric `matrix`.
 #' 
@@ -17,7 +17,7 @@
 methods::setMethod(
 	f = "layerCor",
 	signature = c(x = "GRaster"),
-	function(x, fun) {
+	function(x, fun = "cor") {
 	
 	if (nlyr(x) == 1L) stop("The raster must have >= 2 layers.")
 	fun <- omnibus::pmatchSafe(fun, c("cor", "cov"))

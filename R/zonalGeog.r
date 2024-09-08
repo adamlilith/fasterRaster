@@ -22,7 +22,7 @@
 #'
 #' @returns A list of `data.frame`s or a `data.table`s, one per layer in `x`. Only layers that are integers or factors have their geographies calculated. Other layers have `NULL` tables returned.
 #'
-#' @example man/examples/ex_GRaster_categorical.r
+#' @example man/examples/ex_zonalGeog.r
 #'
 #' @aliases zonalGeog
 #' @rdname zonalGeog
