@@ -64,12 +64,12 @@ setMethod(
 )
 
 
-#' Get minimum value from raster metadata
+#' Get minimum value from GRaster metadata
 #' @param x A `GRaster`.
-#' @noRd
+#' @keywords internal
 .minVal <- function(x) x@minVal
 
-#' Get maximum value from raster metadata
+#' Get maximum value from GRaster metadata
 #' @param x A `GRaster`.
-#' @noRd
+#' @keywords internal
 .maxVal <- function(x) x@maxVal

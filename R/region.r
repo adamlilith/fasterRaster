@@ -40,7 +40,7 @@
 #'
 #' @aliases .region
 #' @rdname region
-#' @noRd
+#' @keywords internal
 methods::setMethod(
 	f = ".region",
 	signature = "missing",
@@ -220,7 +220,7 @@ methods::setMethod(
 
 #' @rdname region
 #' @aliases .region
-#' @noRd
+#' @keywords internal
 methods::setMethod(
 	f = ".region",
 	signature = "SpatRaster",
@@ -256,7 +256,7 @@ methods::setMethod(
 
 #' @rdname region
 #' @aliases .region
-#' @noRd
+#' @keywords internal
 methods::setMethod(
 	f = ".region",
 	signature = c(x = "GRegion"),
@@ -297,7 +297,7 @@ methods::setMethod(
 
 #' @rdname region
 #' @aliases .region
-#' @noRd
+#' @keywords internal
 methods::setMethod(
 	f = ".region",
 	signature = c(x = "GRaster"),
@@ -342,7 +342,7 @@ methods::setMethod(
 
 #' @rdname region
 #' @aliases .region
-#' @noRd
+#' @keywords internal
 methods::setMethod(
 	f = ".region",
 	signature = c(x = "GVector"),
@@ -367,7 +367,7 @@ methods::setMethod(
 
 #' @rdname region
 #' @aliases .regionExt
-#' @noRd
+#' @keywords internal
 methods::setMethod(
 	f = ".regionExt",
 	signature = "missing",
@@ -376,7 +376,7 @@ methods::setMethod(
 
 #' @rdname region
 #' @aliases .regionExt
-#' @noRd
+#' @keywords internal
 methods::setMethod(
 	f = ".regionExt",
 	signature = "numeric",
@@ -385,7 +385,7 @@ methods::setMethod(
 
 #' @rdname region
 #' @aliases .regionExt
-#' @noRd
+#' @keywords internal
 methods::setMethod(
 	f = ".regionExt",
 	signature = "GSpatial",
@@ -456,7 +456,7 @@ methods::setMethod(
 
 #' @rdname region
 #' @aliases .regionDim
-#' @noRd
+#' @keywords internal
 methods::setMethod(f = ".regionDim",
 	signature = c(x = "missing"),
 	definition = function(x) .region()@dimensions
@@ -464,7 +464,7 @@ methods::setMethod(f = ".regionDim",
 
 #' @rdname region
 #' @aliases .regionDim
-#' @noRd
+#' @keywords internal
 methods::setMethod(
 	f = ".regionDim",
 	signature = "numeric",
@@ -473,7 +473,7 @@ methods::setMethod(
 
 #' @rdname region
 #' @aliases .regionDim
-#' @noRd
+#' @keywords internal
 methods::setMethod(
 	f = ".regionDim",
 	signature = "GRegion",
@@ -548,7 +548,7 @@ methods::setMethod(
 
 #' @rdname region
 #' @aliases .regionRes
-#' @noRd
+#' @keywords internal
 methods::setMethod(f = ".regionRes",
 	signature = c(x = "missing"),
 	definition = function(x) .region()@resolution[1L:2L]
@@ -556,7 +556,7 @@ methods::setMethod(f = ".regionRes",
 
 #' @rdname region
 #' @aliases .regionRes
-#' @noRd
+#' @keywords internal
 methods::setMethod(
 	f = ".regionRes",
 	signature = "numeric",
@@ -565,7 +565,7 @@ methods::setMethod(
 
 #' @rdname region
 #' @aliases .regionRes
-#' @noRd
+#' @keywords internal
 methods::setMethod(
 	f = ".regionRes",
 	signature = "GRegion",

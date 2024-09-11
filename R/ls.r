@@ -10,8 +10,7 @@
 #'
 #' @aliases .ls
 #' @rdname ls
-#' @export
-#' @noRd
+#' @keywords internal
 .ls <- function(type = c("rasters", "vectors", "rasters3d", "groups")) {
 
 	rov <- c("rasters", "vectors", "rasters3d", "groups")

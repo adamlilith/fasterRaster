@@ -14,7 +14,7 @@
 #'
 #' @aliases .mapset
 #' @rdname mapset
-#' @exportMethod .mapset
+#' @keywords internal
 methods::setMethod(
 	f = ".mapset",
 	signature = "GLocation",
@@ -23,7 +23,7 @@ methods::setMethod(
 
 #' @aliases .mapset
 #' @rdname mapset
-#' @exportMethod .mapset
+#' @keywords internal
 methods::setMethod(
 	f = ".mapset",
 	signature = "missing",

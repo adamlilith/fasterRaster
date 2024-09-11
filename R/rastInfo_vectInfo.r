@@ -5,7 +5,7 @@
 #'
 #' @returns Extent, dimensions, resolution, bottom/top, etc.
 #'
-#' @noRd
+#' @keywords internal
 .rastInfo <- function(x) {
 
 	src <- if (!inherits(x, "character")) {
@@ -254,9 +254,10 @@
 
 }
 
+#' @method print rastInfo
 #' @aliases print
 #' @rdname show
-#' @export
+#' @export print
 print.rastInfo <- function(x, ...) {
 
 	cat("Source(s)     :", x$sources, "\n")
@@ -287,7 +288,7 @@ summary.rastInfo <- function(x) print.rastInfo(x)
 #' @param cats `NULL` (default) or an integer vector of category numbers, one per geometry.
 #'
 #' @returns A `vectInfo` object (a list).
-#' @noRd
+#' @keywords internal
 .vectInfo <- function(x, integer = TRUE, cats = NULL) {
 
 	src <- if (inherits(x, "GVector")) {
@@ -513,9 +514,10 @@ summary.rastInfo <- function(x) print.rastInfo(x)
 
 }
 
+#' @method print vectInfo
 #' @aliases print
 #' @rdname show
-#' @export
+#' @export print
 print.vectInfo <- function(x, ...) {
 
 	cats <- x$cats

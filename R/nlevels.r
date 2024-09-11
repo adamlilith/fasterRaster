@@ -31,7 +31,7 @@ setMethod(
 #'
 #' @param x A `GRaster`, `SpatRaster`, *or* a `data.frame`, `data.table`, an empty string, or a list thereof.
 #'
-#' @noRd
+#' @keywords internal
 .nlevels <- function(x) {
 
 	if (inherits(x, c("SpatRaster", "GRaster"))) x <- levels(x)

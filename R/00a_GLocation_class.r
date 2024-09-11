@@ -12,9 +12,9 @@
 #'
 #' * The `GVector` class contains the `GSpatial` class and represents spatial vectors. It may or may not have an associated `data.table` (i.e., a `data.frame`), which contains metadata about each geometry in the vector.
 #'
-#' @slot location	Character (all classes): The **GRASS** ["location"][tutorial_locations_mapsets] of the object. The default value is `default`. Can be obtained using [.location()].
+#' @slot location	Character (all classes): The **GRASS** ["location"][tutorial_locations_mapsets] of the object. The default value is `default`. Can be obtained using the hidden function `.location()`.
 #'
-#' @slot mapset		Character (all classes): The **GRASS** ["mapset"][tutorial_locations_mapsets]. Default value is `PERMANENT`. Typically hidden to users. Can be obtained using [.mapset()].
+#' @slot mapset		Character (all classes): The **GRASS** ["mapset"][tutorial_locations_mapsets]. Default value is `PERMANENT`. Typically hidden to users. Can be obtained using the hidden function `.mapset()`.
 #'
 #' @slot workDir	Character (all classes): Directory in which **GRASS** stores files.
 #'

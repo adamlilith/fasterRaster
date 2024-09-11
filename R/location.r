@@ -14,7 +14,7 @@
 #'
 #' @aliases .location
 #' @rdname location
-#' @exportMethod .location
+#' @keywords internal
 methods::setMethod(
 	f = ".location",
 	signature = "GLocation",
@@ -23,7 +23,7 @@ methods::setMethod(
 
 #' @aliases .location
 #' @rdname location
-#' @exportMethod .location
+#' @keywords internal
 methods::setMethod(
 	f = ".location",
 	signature = "missing",

@@ -6,7 +6,7 @@
 #'
 #' @returns Logical.
 #'
-#' @noRd
+#' @keywords internal
 .vValidCats <- function(x) {
 
 	if (inherits(x, "GVector")) x <- sources(x)

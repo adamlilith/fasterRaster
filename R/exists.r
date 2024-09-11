@@ -10,7 +10,7 @@
 #'
 #' @aliases .exists
 #' @rdname exists
-#' @noRd
+#' @keywords internal
 methods::setMethod(
 	f = ".exists",
 	signature = c(x = "GRaster"),
@@ -25,7 +25,7 @@ methods::setMethod(
 
 #' @aliases .exists
 #' @rdname exists
-#' @noRd
+#' @keywords internal
 methods::setMethod(
 	f = ".exists",
 	signature = c(x = "GVector"),
@@ -40,7 +40,7 @@ methods::setMethod(
 
 #' @aliases .exists
 #' @rdname exists
-#' @noRd
+#' @keywords internal
 methods::setMethod(
 	f = ".exists",
 	signature = c(x = "character"),

@@ -77,7 +77,7 @@ methods::setMethod(
 #'
 #' @returns Character ("point", "line", or "area"; i.e., in **GRASS** nomenclature).
 #'
-#' @noRd
+#' @keywords internal
 .geomtype <- function(x) {
 
 	if (inherits(x, "GVector")) x <- sources(x)

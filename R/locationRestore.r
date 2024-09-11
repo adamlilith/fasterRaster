@@ -10,7 +10,7 @@
 #' @return An object of class `GLocation` (invisibly) if successful. An error will likely result if not.
 #'
 #' @aliases .locationRestore
-#' @noRd
+#' @keywords internal
 methods::setMethod(
 	f = ".locationRestore",
 	signature = c(x = "character"),
@@ -18,7 +18,7 @@ methods::setMethod(
 )
 
 #' @aliases .locationRestore
-#' @noRd
+#' @keywords internal
 methods::setMethod(
 	f = ".locationRestore",
 	signature = c(x = "integer"),
@@ -26,7 +26,7 @@ methods::setMethod(
 )
 
 #' @aliases .locationRestore
-#' @noRd
+#' @keywords internal
 methods::setMethod(
 	f = ".locationRestore",
 	signature = c(x = "numeric"),
@@ -34,14 +34,14 @@ methods::setMethod(
 )
 
 #' @aliases .locationRestore
-#' @noRd
+#' @keywords internal
 methods::setMethod(
 	f = ".locationRestore",
 	signature = c(x = "GSpatial"),
 	function(x) ..locationRestore(x)
 )
 
-#' @noRd
+#' @keywords internal
 ..locationRestore <- function(x) {
 
 	if (inherits(x, "character")) {

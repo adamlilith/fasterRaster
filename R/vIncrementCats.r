@@ -12,7 +12,7 @@
 #'
 #' @aliases .vIncrementCats
 #' @rdname vIncrementCats
-#' @noRd
+#' @keywords internal
 .vIncrementCats <- function(x, add) {
 
 	if (inherits(x, "GVector")) {

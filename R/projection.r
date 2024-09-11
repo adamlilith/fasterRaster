@@ -6,5 +6,5 @@
 #'
 #' @returns Character.
 #'
-#' @noRd
+#' @keywords internal
 .projection <- function(x) x@projection

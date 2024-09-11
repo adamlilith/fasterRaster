@@ -20,7 +20,8 @@
 #' @seealso [rm()]
 #'
 #' @aliases .rm
-#' @noRd
+#' @rdname rm
+#' @keywords internal
 .rm <- function(x, type = NULL, warn = TRUE, verify = TRUE) {
 
 	if (missing(x)) {

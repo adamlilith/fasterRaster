@@ -9,8 +9,8 @@
 #' @returns `TRUE` (invisibly).
 #' 
 #' @aliases .message
-#' @rdname .message
-#' @noRd
+#' @rdname message
+#' @keywords internal
 .message <- function(msg, message) {
 
 	# How long do we wait in hours to re-display same message?

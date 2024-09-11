@@ -13,7 +13,7 @@
 #' @returns Character vector representing the [sources()] names of the copied object(s), plus makes a copy of the given object(s) in **GRASS**.
 #'
 #' @aliases .copyGSpatial
-#' @noRd
+#' @keywords internal
 methods::setMethod(
 	f = ".copyGSpatial",
 	signature = c(x = "GRaster"),
@@ -21,7 +21,7 @@ methods::setMethod(
 )
 
 #' @aliases .copyGSpatial
-#' @noRd
+#' @keywords internal
 methods::setMethod(
 	f = ".copyGSpatial",
 	signature = c(x = "GVector"),
@@ -29,7 +29,7 @@ methods::setMethod(
 )
 
 #' @aliases .copyGSpatial
-#' @noRd
+#' @keywords internal
 methods::setMethod(
 	f = ".copyGSpatial",
 	signature = c(x = "character"),
@@ -70,7 +70,7 @@ methods::setMethod(
 #'
 #' @returns [sources()] names of copied rasters.
 #'
-#' @noRd
+#' @keywords internal
 .copyGRaster <- function(x, topo = "2D", reshapeRegion = TRUE) {
 
 	# NB This function could use `g.copy`, but in some cases it does not have the desired effect. For example, when a MASK raster is present, it correctly copies cells that are not masked, but when the MASK is removed, the masked cells re-appear. Similarly, it seems to ignore the region when copying.
@@ -131,7 +131,7 @@ methods::setMethod(
 }
 
 #' @param x A `GVector` or the [sources()] name of one.
-#' @noRd
+#' @keywords internal
 .copyGVector <- function(x) {
 
 	if (inherits(x, "GVector")) {

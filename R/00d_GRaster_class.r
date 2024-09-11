@@ -160,7 +160,7 @@ methods::setValidity("GRaster",
 #'
 #' @example man/examples/ex_GRaster_GVector.r
 #'
-#' @noRd
+#' @keywords internal
 .makeGRaster <- function(src, names = "raster", levels = "", ac = NULL, fail = TRUE) {
 
 	if (inherits(src, "rastInfo")) {

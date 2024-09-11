@@ -221,7 +221,7 @@ methods::setMethod(
 #'
 #' @returns A numeric vector.
 #'
-#' @noRd
+#' @keywords internal
 .ext <- function(x, rastOrVect = NULL) {
 
 	if (inherits(x, "GRaster")) {

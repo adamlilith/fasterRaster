@@ -13,8 +13,8 @@
 #' @example man/examples/ex_vFunctions.r
 #'
 #' @aliases .vAsDataTable
-#' @rdname dbToDataTable
-#' @noRd
+#' @rdname vAsDataTable
+#' @keywords internal
 .vAsDataTable <- function(x) {
 
 	if (inherits(x, "GVector")) {
@@ -39,8 +39,7 @@
 			flags = "overwrite",
 			intern = TRUE
 		)
-		out <- read.csv(tf)
-		out <- data.table::as.data.table(out)
+		out <- data.table::fread(tf)
 	
 	}
 

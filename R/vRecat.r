@@ -14,7 +14,7 @@
 #' 
 #' @aliases .vRecat
 #' @rdname vRecat
-#' @noRd
+#' @keywords internal
 .vRecat <- function(x, gtype, cats = NULL) {
 
 	if (inherits(x, "GVector")) {

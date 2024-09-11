@@ -11,8 +11,7 @@
 #'
 #' @aliases .quiet
 #' @rdname quiet
-#' @export
-#' @noRd
+#' @keywords internal
 .quiet <- function() {
 
 	if (faster("verbose")) {

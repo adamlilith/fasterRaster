@@ -18,6 +18,8 @@
 #'
 #' @seealso [terra::plot()]
 #'
+#' @importFrom rpanel rp.screenresolution
+#'
 #' @example man/examples/ex_plot.r
 #'
 #' @aliases plot
@@ -141,7 +143,7 @@ methods::setMethod(
 #' @param x The [sources()] name of a `GRaster` or `GVector`
 #' @param ... Other arguments to pass to [plot()].
 #'
-#' @noRd
+#' @keywords internal
 .plot <- function(x, ...) {
 	files <- .ls()
 	what <- names(files)[files == x]

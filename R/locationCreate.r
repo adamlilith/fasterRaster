@@ -18,7 +18,7 @@
 #' @example man/examples/ex_fasterRaster.r
 #'
 #' @aliases .locationCreate
-#' @noRd
+#' @keywords internal
 methods::setMethod(
 	f = ".locationCreate",
 	signature = c(x = "character"),
@@ -26,7 +26,7 @@ methods::setMethod(
 )
 
 #' @aliases .locationCreate
-#' @noRd
+#' @keywords internal
 methods::setMethod(
 	f = ".locationCreate",
 	signature = c(x = "SpatRaster"),
@@ -34,7 +34,7 @@ methods::setMethod(
 )
 
 #' @aliases .locationCreate
-#' @noRd
+#' @keywords internal
 methods::setMethod(
 	f = ".locationCreate",
 	signature = c(x = "SpatVector"),
@@ -42,7 +42,7 @@ methods::setMethod(
 )
 
 #' @aliases .locationCreate
-#' @noRd
+#' @keywords internal
 methods::setMethod(
 	f = ".locationCreate",
 	signature = c(x = "sf"),
