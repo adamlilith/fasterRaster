@@ -325,7 +325,7 @@ setMethod(
 				} else if (tolower(levelsExt) %in% c(".rds", ".rda", ".rdat", ".rdata")) {
 					save(categs, levelFileName)
 				} else if (tolower(levelsExt) %in% ".csv") {
-					write.csv(categs, levelFileName, row.names = FALSE)
+					utils::write.csv(categs, levelFileName, row.names = FALSE)
 				}
 
 			} # "yes" to saving levels
