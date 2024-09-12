@@ -17,14 +17,7 @@
 #'
 #' @returns Character, integer, or `NULL` (if no match is found).
 #'
-#' @examples
-#'
-#' if (grassStarted) {
-#'
-#' .locationFind()
-#' .locationFind("xyz")
-#'
-#' }
+#' @example man/examples/ex_location_mapset.r
 #'
 #' @aliases .locationFind,missing-method
 #' @rdname locationFind

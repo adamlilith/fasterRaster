@@ -86,7 +86,7 @@ methods::setMethod(
 		}
 
 		xs <- stats::runif(size, extent[1L], extent[2L])
-		if (!is.null(zlim)) zs <- stats::runif(siz3, zlim[1L], zlim[2L])
+		if (!is.null(zlim)) zs <- stats::runif(size, zlim[1L], zlim[2L])
 
 		if (xy) {
 			if (is.null(zlim)) {

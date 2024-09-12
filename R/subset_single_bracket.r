@@ -301,7 +301,7 @@ methods::setMethod(
 )
 
 #' @name [
-#' @aliases [,GRaster,ANY,ANY-method
+#' @aliases [,GRaster,GRaster,ANY-method
 #' @docType methods
 #' @rdname subset_single_bracket
 #' @exportMethod [

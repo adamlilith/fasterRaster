@@ -132,5 +132,5 @@ par(oldpar)
 }
 }
 \seealso{
-\code{\link[stats:aggregate]{stats::aggregate()}}, \code{\link[terra:aggregate]{terra::aggregate()}}, \code{\link[=diagg]{diagg()}}, \code{\link[terra:disaggregate]{terra::disagg()}}
+\code{\link[stats:aggregate]{stats::aggregate()}}, \code{\link[terra:aggregate]{terra::aggregate()}}, \code{\link[=disagg]{disagg()}}, \code{\link[terra:disaggregate]{terra::disagg()}}
 }

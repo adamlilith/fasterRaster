@@ -13,7 +13,7 @@
 #' ## Properties of `GRasters`
 #' [crs()]: Coordinate reference system\cr
 #' [datatype()]: Data type\cr
-#' [dim()] and [dim3()]: Number of rows, columns, and depths\cr
+#' [dim()] and [dim3d()]: Number of rows, columns, and depths\cr
 #' [ext()], [N()], [S()], [E()], [W()], [top()], and [bottom()]: Spatial extent\cr
 #' [freq()]: Frequencies of cell values in a raster\cr
 #' [is.2d()] and [is.3d()]: Is an object 2- or 3-dimensional?\cr
@@ -130,7 +130,7 @@
 #' [ruggedness()]: Terrain Ruggedness Index\cr
 #' [streams()]: Create stream network\cr
 #' [terrain()]: Slope, aspect, curvature, and partial slopes\cr
-#' [topoWetness()]: Topographic wetness index\cr
+#' [wetness()]: Topographic wetness index\cr
 #' 
 #' ## Functions operating on categorical (factor) rasters
 #' \code{\link[fasterRaster]{%in%}}, and \code{\link[fasterRaster]{%notin%}}: Mask cells that match or do not match a given category\cr
@@ -189,7 +189,7 @@
 #' The \code{\link[fasterRaster]{[}} operator can be used to subset geometries of a `GVector`.\cr
 #' The [$] and \code{\link[fasterRaster]{[[}} operators can be used to get columns of a `GVector`'s data table.\cr
 #' The \code{\link[fasterRaster]{$<-}} operator can be used to replace specific columns of a `GVector`'s data table or to add columns.\cr
-#' [addTable<-]: Add a data table to a `GVector`\cr
+#' \code{\link[fasterRaster]{addTable<-}}: Add a data table to a `GVector`\cr
 #' [aggregate()]: Combine `GVector` geometries\cr
 #' [as.data.frame()]: Convert a `GVector`'s attribute table to a `data.frame`\cr
 #' [as.data.table()]: Convert a `GVector`'s attribute table to a `data.table`\cr
@@ -206,7 +206,7 @@
 #' [disagg()]: Separate multipart geometries into singlepart geometries\cr
 #' [distance()]: Distance between geometries in two `GVector`, or from a `GVector` to cells of a `GRaster`\cr
 #' [dropTable()]: Remove the data table from a `GVector`\cr
-#' [erase()] or \code{\link[fasterRaster]{-}}: Remove part of a `GVector` that overlaps with another\cr
+#' [erase()] or `-`: Remove part of a `GVector` that overlaps with another\cr
 #' [expanse()]: Area of polygons or length of lines\cr
 #' [extract()]: Extract values from a `GVector` at specific points\cr
 #' [grid()]: Create a grid `GVector`\cr
@@ -214,7 +214,7 @@
 #' [hexagons()]: Create a hexagonal grid\cr
 #' [interpIDW()]: Interpolate values at points to a `GRaster` using inverse-distance weighting\cr
 #' [interpSplines()]: Interpolate values at points to a `GRaster` using splines\cr
-#' [intersect()] or \code{\link[fasterRaster]{*}}: Intersection of two `GVectors`.\cr
+#' [intersect()] or `*`: Intersection of two `GVectors`.\cr
 #' [kernel()]: Kernel density estimator of points.\cr
 #' [missing.cases()]: Find rows of a `GVector`'s data table that have at least `NA` in them\cr
 #' \code{\link[fasterRaster]{names<-}}: Assign names to columns of a `GVector`s data table\cr
@@ -227,8 +227,8 @@
 #' [st_buffer()]: Create a polygon around/inside a `GVector`\cr
 #' [tail()]: Last rows of a `GVector`'s data table\cr
 #' [thinPoints()]: Reduce number of points in same raster cell\cr
-#' [union()] or \code{\link[fasterRaster]{+}}: Combine two `GVector`s\cr
-#' [xor()] or \code{\link[fasterRaster]{/}}: Select parts of polygons not shared by two `GVector`s\cr
+#' [union()] or `+`: Combine two `GVector`s\cr
+#' [xor()] or `/``: Select parts of polygons not shared by two `GVector`s\cr
 #'
 #' ## Functions for fixing issues with `GVector`s
 #' (See also tools that can be used during `GVector` creation/loading in [fast()].)

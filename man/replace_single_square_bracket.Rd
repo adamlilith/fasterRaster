@@ -3,7 +3,8 @@
 \docType{methods}
 \name{[<-}
 \alias{[<-}
-\alias{[<-,GRaster,ANY,ANY-method}
+\alias{[<-,GRaster,missing,ANY-method}
+\alias{[<-,GRaster,GRaster,ANY-method}
 \title{Replace values of a GRaster}
 \usage{
 \S4method{[}{GRaster,missing,ANY}(x, i, j) <- value

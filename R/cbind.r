@@ -10,7 +10,7 @@
 #'
 #' @example man/examples/ex_cbind_rbind_addTable_dropTable.r
 #'
-#' @aliases colbind,cbind
+#' @aliases colbind
 #' @rdname colbind
 #' @exportMethod colbind
 methods::setMethod(

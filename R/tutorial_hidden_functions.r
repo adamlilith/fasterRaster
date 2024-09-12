@@ -2,7 +2,7 @@
 #'
 #' @title Hidden functions in "fasterRester"
 #'
-#' @description **fasterRaster** contains a set of non-exported functions that users can access using `fasterRaster:::functionName`. These functions are useful for power users and developers. Not all hidden functions are listed here. Often, a method will have a hidden function of the same name that starts with a period. This "period" function is intended to be supplied the [sources()] name of a `GRaster` or `GVector` from other functions so that the calling function does not need to spend the time creating the `GRaster` or `GVector` pointer before calling the function. "Period" functions will, though, often work on `GRaster`s or `GVector`s, though some error-checking and region definitions are not conducted.
+#' @description **fasterRaster** contains a set of "private" functions that users can access using `fasterRaster:::functionName`. These functions are useful for power users and developers. Not all hidden functions are listed here. Often, a method will have a hidden function of the same name that starts with a period. This "period" function is intended to be supplied the [sources()] name of a `GRaster` or `GVector` from other functions so that the calling function does not need to spend the time creating the `GRaster` or `GVector` pointer before calling the function. "Period" functions will, though, often work on `GRaster`s or `GVector`s, though some error-checking and region definitions are not conducted.
 #'
 #' `.copyGSpatial()`: Make a copy of the **GRASS** file pointed to by a `GRaster` or `GVector`\cr
 #' `.fileExt()`: Get file extension\cr

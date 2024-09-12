@@ -1,6 +1,6 @@
-#' Make a copy of an object in GRASS
+#' @title Make a copy of an object in GRASS
 #'
-#' Create a copy of a `GRaster` or `GVector` in **GRASS**.  This function is used internally and is of little use to most users.  This only creates a copy of the object in the **GRASS** session--to make a `GRaster` or `GVector`, [.makeGRaster()] or [.makeGVector()] need to be called after making the copy. Note that if the object is multi-layered, then a copy is made of each layer.
+#' @description Create a copy of a `GRaster` or `GVector` in **GRASS**.  This function is used internally and is of little use to most users.  This only creates a copy of the object in the **GRASS** session--to make a `GRaster` or `GVector`, [.makeGRaster()] or [.makeGVector()] need to be called after making the copy. Note that if the object is multi-layered, then a copy is made of each layer.
 #'
 #' @param x `GRaster`, `GVector`, or character: The object or the [sources()] name(s) of the object(s) to be copied. Can take multi-layered objects or multiple `sources`.
 #'
@@ -13,6 +13,7 @@
 #' @returns Character vector representing the [sources()] names of the copied object(s), plus makes a copy of the given object(s) in **GRASS**.
 #'
 #' @aliases .copyGSpatial
+#' @rdname copyGSpatial
 #' @keywords internal
 methods::setMethod(
 	f = ".copyGSpatial",
@@ -21,6 +22,7 @@ methods::setMethod(
 )
 
 #' @aliases .copyGSpatial
+#' @rdname copyGSpatial
 #' @keywords internal
 methods::setMethod(
 	f = ".copyGSpatial",
@@ -29,6 +31,7 @@ methods::setMethod(
 )
 
 #' @aliases .copyGSpatial
+#' @rdname copyGSpatial
 #' @keywords internal
 methods::setMethod(
 	f = ".copyGSpatial",
@@ -66,10 +69,12 @@ methods::setMethod(
 
 #' @param x A `GRaster` or [sources()] name of one.
 #' @param topo "2D" or "3D"
-#' @param reshapeRegion Logical.
+#' @param reshapeRegion Logical. If `TRUE`, `x` must be a `GRaster`.
 #'
 #' @returns [sources()] names of copied rasters.
 #'
+#' @aliases .copyGRaster
+#' @rdname copyGSpatial
 #' @keywords internal
 .copyGRaster <- function(x, topo = "2D", reshapeRegion = TRUE) {
 
@@ -131,6 +136,9 @@ methods::setMethod(
 }
 
 #' @param x A `GVector` or the [sources()] name of one.
+#'
+#' @aliases .copyGRaster
+#' @rdname copyGSpatial
 #' @keywords internal
 .copyGVector <- function(x) {
 

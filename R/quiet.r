@@ -6,8 +6,12 @@
 #'
 #' @examples
 #'
+#' if (grassStarted()) {
+#'
 #' faster("verbose")
 #' .quiet()
+#'
+#' }
 #'
 #' @aliases .quiet
 #' @rdname quiet

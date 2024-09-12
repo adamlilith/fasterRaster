@@ -137,7 +137,7 @@ methods::setMethod(
 #' @param x [sources()] name of `GRaster`.
 #' @param z [sources()] name of "zones" `GRaster`.
 #' @param fun Character: Name of function(s).
-#' @param probs Numeric in [0, 1].
+#' @param probs Numeric in the range 0 to 1, inclusive.
 #' @param zones Vector of zone values (integers).
 #' @param xnames Character: Names of `x`.
 #' @keywords internal

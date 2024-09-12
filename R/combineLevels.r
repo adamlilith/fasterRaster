@@ -19,7 +19,7 @@
 methods::setMethod(
 	f = "combineLevels",
 	signature = c(x = "GRaster"),
-	function(x) {
+	function(x, ...) {
 
 	if (!any(is.factor(x))) {
 	
@@ -28,7 +28,7 @@ methods::setMethod(
 	
 	} else {
 		x <- cats(x)
-		out <- .combineLevels(x = x)
+		out <- .combineLevels(x = x, ...)
 	}
 	out
 	
@@ -41,13 +41,13 @@ methods::setMethod(
 methods::setMethod(
 	f = "combineLevels",
 	signature = c(x = "list"),
-	function(x) {
+	function(x, ...) {
 	
 	if (!all(sapply(x, inherits, what = 'GRaster'))) stop("`x` must be a `GRaster` with one or more layers, or a `list` of `GRaster`s.")
 	xx <- x
 	x <- list()
 	for (i in seq_along(xx)) x <- c(x, cats(xx[[i]]))
-	.combineLevels(x = x)
+	.combineLevels(x = x, ...)
 	
 	}
 )
@@ -57,7 +57,8 @@ methods::setMethod(
 #' @param x A list of `data.frame`s or `data.table`s.
 #'
 #' @noRd
-.combineLevels <- function(x) {
+.combineLevels <- function(x, ...) {
+
 
 	for (i in seq_along(x)) {
 		if (!inherits(x[[i]], "data.table")) x[[i]] <- data.table::as.data.table(x[[i]])
@@ -79,7 +80,7 @@ methods::setMethod(
 			if (nrow(cats2) > 0L) {
 				by.y <- names(cats2)[1L]
 				# out <- merge(out, cats2, by.x = by.x, by.y = by.y)
-				out <- merge(out, cats2, all = TRUE)
+				out <- merge(out, cats2, all = TRUE, ...)
 			}
 		}
 		

@@ -30,6 +30,8 @@
 \item{na.rm}{Logical: If \code{TRUE} (default) and \code{x} is a \code{SpatRaster}, then cells near the edge of the raster where the window overlaps the edge can still be assigned a fragmentation class. If \code{FALSE}, these cells will be assigned a value of \code{none}.}
 
 \item{cores}{Integer: Number of processor cores to use for when processing a \code{SpatRaster}.}
+
+\item{verbose}{Logical: If \code{TRUE} (default), display progress.}
 }
 \value{
 A categorical \code{SpatRaster} or \code{GRaster}. The values assigned to each class can be seen with \code{\link[=levels]{levels()}}.

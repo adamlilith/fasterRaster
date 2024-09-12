@@ -30,9 +30,9 @@ The \code{G} suite of S4 classes contain pointers to \strong{GRASS} objects or m
 \section{Slots}{
 
 \describe{
-\item{\code{location}}{Character (all classes): The \strong{GRASS} \link[=tutorial_locations_mapsets]{"location"} of the object. The default value is \code{default}. Can be obtained using \code{\link[=.location]{.location()}}.}
+\item{\code{location}}{Character (all classes): The \strong{GRASS} \link[=tutorial_locations_mapsets]{"location"} of the object. The default value is \code{default}. Can be obtained using the hidden function \code{.location()}.}
 
-\item{\code{mapset}}{Character (all classes): The \strong{GRASS} \link[=tutorial_locations_mapsets]{"mapset"}. Default value is \code{PERMANENT}. Typically hidden to users. Can be obtained using \code{\link[=.mapset]{.mapset()}}.}
+\item{\code{mapset}}{Character (all classes): The \strong{GRASS} \link[=tutorial_locations_mapsets]{"mapset"}. Default value is \code{PERMANENT}. Typically hidden to users. Can be obtained using the hidden function \code{.mapset()}.}
 
 \item{\code{workDir}}{Character (all classes): Directory in which \strong{GRASS} stores files.}
 

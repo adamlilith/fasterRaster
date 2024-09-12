@@ -2,23 +2,27 @@
 % Please edit documentation in R/addTable_dropTable.r
 \name{addTable<-,GVector,data.frame-method}
 \alias{addTable<-,GVector,data.frame-method}
-\alias{addTable<-}
+\alias{addTable<-,GRaster,data.frame-method}
 \alias{addTable<-,GVector,data.table-method}
+\alias{addTable<-,GRaster,data.table-method}
 \alias{addTable<-,GVector,matrix-method}
+\alias{addTable<-,GRaster,matrix-method}
 \alias{dropTable,GVector-method}
 \alias{dropTable}
 \title{Attach or detach GVector's data table}
 \usage{
-\S4method{addTable}{GVector,data.frame}(x) <- value
+\S4method{addTable}{GVector,data.frame}(x, ...) <- value
 
-\S4method{addTable}{GVector,data.table}(x) <- value
+\S4method{addTable}{GVector,data.table}(x, ...) <- value
 
-\S4method{addTable}{GVector,matrix}(x) <- value
+\S4method{addTable}{GVector,matrix}(x, ...) <- value
 
 \S4method{dropTable}{GVector}(x)
 }
 \arguments{
-\item{x}{A `GVector.}
+\item{x}{A \code{GVector}.}
+
+\item{...}{Other arguments (ignored).}
 
 \item{value}{A \code{data.frame}, \code{data.table}, or \code{matrix}.}
 }

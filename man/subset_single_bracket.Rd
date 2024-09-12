@@ -4,7 +4,7 @@
 \name{[}
 \alias{[}
 \alias{[,GVector,ANY,ANY-method}
-\alias{[,GRaster,ANY,ANY-method}
+\alias{[,GRaster,GRaster,ANY-method}
 \title{Subset geometries of a GVector}
 \usage{
 \S4method{[}{GVector,ANY,ANY}(x, i, j)

@@ -14,7 +14,7 @@
 #'
 #' @returns A `GRaster`.
 #'
-#' @seealso [terra::interpIDW()], [interpSplines()], [fillNAs()], module (`v.surf.idw`)[https://grass.osgeo.org/grass84/manuals/v.surf.idw.html] in **GRASS**
+#' @seealso [terra::interpIDW()], [interpSplines()], [fillNAs()], module [`v.surf.idw`](https://grass.osgeo.org/grass84/manuals/v.surf.idw.html) in **GRASS**
 #'
 #' @aliases interpIDW
 #' @rdname interpIDW

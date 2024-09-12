@@ -543,5 +543,8 @@ print.vectInfo <- function(x, ...) {
 #' @export
 summary.vectInfo <- function(x) print(x)
 
-#' @export
+#' @method show vectInfo
+#' @aliases show
+#' @rdname show
+#' @export show
 show.vectInfo <- function(x) print(x)

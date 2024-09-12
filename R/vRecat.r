@@ -10,7 +10,7 @@
 #'
 #' @returns The [sources()] name of a vector.
 #'
-#' @seealso [.vIncrementCat()], [.vCats()]
+#' @seealso [.vIncrementCats()], [.vCats()]
 #' 
 #' @aliases .vRecat
 #' @rdname vRecat

@@ -10,13 +10,13 @@
 \arguments{
 \item{x}{A \code{GVector}.}
 
-\item{fail}{Logical: If \code{TRUE} (default), and \strong{GRASS 8.4} or higher is not installed, cause an error. If \code{FALSE}, a warning will be displayed and a \code{NULL} value will be returned.}
+\item{fail}{Logical: If \code{TRUE} (default), and \strong{GRASS 8.4} or higher is not installed, cause an error. If \code{FALSE}, a warning will be displayed and a \code{NULL} value will be returned. This function requires \strong{GRASS 8.4} or higher to be installed.}
 }
 \value{
 A \code{GVector}.
 }
 \description{
-\code{fillHoles()} fills holes in a \code{GVector}.
+\code{fillHoles()} removes holes in a \code{GVector}.
 }
 \examples{
 if (grassStarted()) {

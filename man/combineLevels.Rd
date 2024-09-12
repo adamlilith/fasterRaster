@@ -6,9 +6,9 @@
 \alias{combineLevels,list-method}
 \title{Combine levels table from multiple categorical GRasters}
 \usage{
-\S4method{combineLevels}{GRaster}(x)
+\S4method{combineLevels}{GRaster}(x, ...)
 
-\S4method{combineLevels}{list}(x)
+\S4method{combineLevels}{list}(x, ...)
 }
 \arguments{
 \item{x}{A \code{GRaster} or a \code{list} of \code{GRaster}s.}
