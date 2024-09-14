@@ -14,7 +14,7 @@
 #'
 #' @example man/examples/ex_cbind_rbind_addTable_dropTable.r
 #'
-#' @aliases addTable<-,GRaster,data.frame-method
+#' @aliases addTable<-
 #' @rdname addTable
 #' @exportMethod addTable<-
 methods::setMethod(
@@ -23,7 +23,7 @@ methods::setMethod(
 	function(x, ..., value) .addTable(x = x, table = value)
 )
 
-#' @aliases addTable<-,GRaster,data.table-method
+#' @aliases addTable<-
 #' @rdname addTable
 #' @exportMethod addTable<-
 methods::setMethod(
@@ -32,7 +32,7 @@ methods::setMethod(
 	function(x, ..., value) .addTable(x = x, table = value)
 )
 
-#' @aliases addTable<-,GRaster,matrix-method
+#' @aliases addTable<-
 #' @rdname addTable
 #' @exportMethod addTable<-
 methods::setMethod(
