@@ -7,7 +7,7 @@
 #' * An integer: Index of the "location" in `.fasterRaster$locations`.
 #' * A `GSpatial` object (usually a `GRaster` or `GVector`).
 #'
-#' Any of these can be found using [.locationFind()].
+#' Any of these can be found using `.locationFind()`.
 #'
 #' @return An object of class `GLocation` (invisibly) if successful. An error will likely result if not.
 #'
