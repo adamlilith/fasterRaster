@@ -3,7 +3,10 @@
 \name{print.rastInfo}
 \alias{print.rastInfo}
 \alias{print}
+\alias{show.rastInfo}
+\alias{summary.rastInfo}
 \alias{print.vectInfo}
+\alias{summary.vectInfo}
 \alias{show.vectInfo}
 \alias{show}
 \alias{show,GLocation-method}
@@ -26,7 +29,13 @@
 \usage{
 \method{print}{rastInfo}(x, ...)
 
+show.rastInfo(x)
+
+summary.rastInfo(x)
+
 \method{print}{vectInfo}(x, ...)
+
+summary.vectInfo(x)
 
 \method{show}{vectInfo}(x)
 
@@ -250,3 +259,4 @@ dim(rivers2)
 
 }
 }
+\keyword{internal}

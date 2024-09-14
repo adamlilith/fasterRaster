@@ -2,7 +2,7 @@
 % Please edit documentation in R/rastInfo_vectInfo.r
 \name{.rastInfo}
 \alias{.rastInfo}
-\title{Information on rasters and vectors in "GRASS"}
+\title{Metadata on rasters and vectors in GRASS}
 \usage{
 .rastInfo(x)
 }
@@ -10,9 +10,9 @@
 \item{x}{A \code{GRaster}, \code{GVector}, or \code{sources}.}
 }
 \value{
-Extent, dimensions, resolution, bottom/top, etc.
+Metadata on the extent, dimensions, resolution, bottom/top, etc. of rasters and vectors in \strong{GRASS}.
 }
 \description{
-Information on rasters and vectors in "GRASS"
+\code{.rastInfo()} and \code{.vectInfo()} fetch metadata on rasters and vectors in \strong{GRASS}. The \code{print()}, \code{show()}, and \code{summary()} functions can be used to display this metadata.
 }
 \keyword{internal}

@@ -9,6 +9,8 @@
 }
 \arguments{
 \item{...}{One or more \code{GVector}s.}
+
+\item{deparse.level}{See \code{\link[=rbind]{rbind()}}.}
 }
 \value{
 A \code{GVector}.

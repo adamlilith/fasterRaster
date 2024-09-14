@@ -24,7 +24,7 @@
 \item A \code{GSpatial} object (usually a \code{GRaster} or \code{GVector}).
 }
 
-Any of these can be found using \code{\link[=.locationFind]{.locationFind()}}.}
+Any of these can be found using \code{.locationFind()}.}
 }
 \value{
 An object of class \code{GLocation} (invisibly) if successful. An error will likely result if not.
