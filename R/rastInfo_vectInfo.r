@@ -1,9 +1,11 @@
 
-#' Information on rasters and vectors in "GRASS"
+#' Metadata on rasters and vectors in GRASS
+#'
+#' @description `.rastInfo()` and `.vectInfo()` fetch metadata on rasters and vectors in **GRASS**. The `print()`, `show()`, and `summary()` functions can be used to display this metadata.
 #'
 #' @param x A `GRaster`, `GVector`, or `sources`.
 #'
-#' @returns Extent, dimensions, resolution, bottom/top, etc.
+#' @returns Metadata on the extent, dimensions, resolution, bottom/top, etc. of rasters and vectors in **GRASS**.
 #'
 #' @keywords internal
 .rastInfo <- function(x) {
@@ -257,7 +259,6 @@
 #' @method print rastInfo
 #' @aliases print
 #' @rdname show
-#' @export print
 print.rastInfo <- function(x, ...) {
 
 	cat("Source(s)     :", x$sources, "\n")
@@ -273,10 +274,12 @@ print.rastInfo <- function(x, ...) {
 
 }
 
-#' @noRd
+#' @rdname show
+#' @keywords internal
 show.rastInfo <- function(x) print.rastInfo(x)
 
-#' @noRd
+#' @rdname show
+#' @keywords internal
 summary.rastInfo <- function(x) print.rastInfo(x)
 
 #' Metadata on a vector in GRASS
@@ -517,7 +520,7 @@ summary.rastInfo <- function(x) print.rastInfo(x)
 #' @method print vectInfo
 #' @aliases print
 #' @rdname show
-#' @export print
+#' @keywords internal
 print.vectInfo <- function(x, ...) {
 
 	cats <- x$cats
@@ -540,11 +543,12 @@ print.vectInfo <- function(x, ...) {
 
 }
 
-#' @export
+#' @rdname show
+#' @keywords internal
 summary.vectInfo <- function(x) print(x)
 
 #' @method show vectInfo
 #' @aliases show
 #' @rdname show
-#' @export show
+#' @keywords internal
 show.vectInfo <- function(x) print(x)
