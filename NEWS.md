@@ -1,4 +1,4 @@
-# fasterRaster 8.3.0.7023 (2024-09-XX)
+# fasterRaster 8.3.0.7023 (2024-09-15)
 
 ## Main task of this pre-release
 o Fix all issues arising from `check()`.  

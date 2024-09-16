@@ -278,9 +278,9 @@ print.rastInfo <- function(x, ...) {
 #' @keywords internal
 show.rastInfo <- function(x) print.rastInfo(x)
 
-#' @rdname show
-#' @keywords internal
-summary.rastInfo <- function(x) print.rastInfo(x)
+# #' @rdname show
+# #' @keywords internal
+# summary.rastInfo <- function(x) print.rastInfo(x)
 
 #' Metadata on a vector in GRASS
 #'
@@ -543,9 +543,9 @@ print.vectInfo <- function(x, ...) {
 
 }
 
-#' @rdname show
-#' @keywords internal
-summary.vectInfo <- function(x) print(x)
+# #' @rdname show
+# #' @keywords internal
+# summary.vectInfo <- function(x) print(x)
 
 #' @method show vectInfo
 #' @aliases show

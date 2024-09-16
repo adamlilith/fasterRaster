@@ -4,9 +4,7 @@
 \alias{print.rastInfo}
 \alias{print}
 \alias{show.rastInfo}
-\alias{summary.rastInfo}
 \alias{print.vectInfo}
-\alias{summary.vectInfo}
 \alias{show.vectInfo}
 \alias{show}
 \alias{show,GLocation-method}
@@ -31,11 +29,7 @@
 
 show.rastInfo(x)
 
-summary.rastInfo(x)
-
 \method{print}{vectInfo}(x, ...)
-
-summary.vectInfo(x)
 
 \method{show}{vectInfo}(x)
 
