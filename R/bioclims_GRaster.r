@@ -51,7 +51,7 @@
 #' * BIO59: The greatest decrease in precipitation from one month to the next (mm; always >= 0)
 #' * BIO60: The greatest increase in precipitation from one month to the next (mm; always >= 0)
 #' 
-#' By default, "quarter" refers to any consecutive run of three months, not a financial quarter. A quarter can thus include November-December-January, or December-January-February, for example. However, the length of a quarter can be changed using teh argument `quarter`.
+#' By default, "quarter" refers to any consecutive run of three months, not a financial quarter. A quarter can thus include November-December-January, or December-January-February, for example. However, the length of a quarter can be changed using the argument `quarter`.
 #'
 #' The variables are defined assuming that the input rasters represent monthly values (12 rasters for min/max temperature and precipitation), but you can also use sets of 52 rasters, representing one per week, in which case "quarter" would be a successive run of 3 weeks. You could also attempt 365 rasters, in which case a "quarter" would be a run of 3 successive days.
 #'
