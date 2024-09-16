@@ -21,7 +21,7 @@ A tutorial on \link[=tutorial_raster_data_types]{raster data types}\cr
 
 \code{\link[=crs]{crs()}}: Coordinate reference system\cr
 \code{\link[=datatype]{datatype()}}: Data type\cr
-\code{\link[=dim]{dim()}} and \code{\link[=dim3]{dim3()}}: Number of rows, columns, and depths\cr
+\code{\link[=dim]{dim()}} and \code{\link[=dim3d]{dim3d()}}: Number of rows, columns, and depths\cr
 \code{\link[=ext]{ext()}}, \code{\link[=N]{N()}}, \code{\link[=S]{S()}}, \code{\link[=E]{E()}}, \code{\link[=W]{W()}}, \code{\link[=top]{top()}}, and \code{\link[=bottom]{bottom()}}: Spatial extent\cr
 \code{\link[=freq]{freq()}}: Frequencies of cell values in a raster\cr
 \code{\link[=is.2d]{is.2d()}} and \code{\link[=is.3d]{is.3d()}}: Is an object 2- or 3-dimensional?\cr
@@ -148,7 +148,7 @@ The assign operators, \code{\link[fasterRaster]{$<-}}, \code{\link[fasterRaster]
 \code{\link[=ruggedness]{ruggedness()}}: Terrain Ruggedness Index\cr
 \code{\link[=streams]{streams()}}: Create stream network\cr
 \code{\link[=terrain]{terrain()}}: Slope, aspect, curvature, and partial slopes\cr
-\code{\link[=topoWetness]{topoWetness()}}: Topographic wetness index\cr
+\code{\link[=wetness]{wetness()}}: Topographic wetness index\cr
 }
 
 \subsection{Functions operating on categorical (factor) rasters}{
@@ -217,7 +217,7 @@ The assign operators, \code{\link[fasterRaster]{$<-}}, \code{\link[fasterRaster]
 The \code{\link[fasterRaster]{[}} operator can be used to subset geometries of a \code{GVector}.\cr
 The \link{$} and \code{\link[fasterRaster]{[[}} operators can be used to get columns of a \code{GVector}'s data table.\cr
 The \code{\link[fasterRaster]{$<-}} operator can be used to replace specific columns of a \code{GVector}'s data table or to add columns.\cr
-\link{addTable<-}: Add a data table to a \code{GVector}\cr
+\code{\link[fasterRaster]{addTable<-}}: Add a data table to a \code{GVector}\cr
 \code{\link[=aggregate]{aggregate()}}: Combine \code{GVector} geometries\cr
 \code{\link[=as.data.frame]{as.data.frame()}}: Convert a \code{GVector}'s attribute table to a \code{data.frame}\cr
 \code{\link[=as.data.table]{as.data.table()}}: Convert a \code{GVector}'s attribute table to a \code{data.table}\cr
@@ -234,7 +234,7 @@ The \code{\link[fasterRaster]{$<-}} operator can be used to replace specific col
 \code{\link[=disagg]{disagg()}}: Separate multipart geometries into singlepart geometries\cr
 \code{\link[=distance]{distance()}}: Distance between geometries in two \code{GVector}, or from a \code{GVector} to cells of a \code{GRaster}\cr
 \code{\link[=dropTable]{dropTable()}}: Remove the data table from a \code{GVector}\cr
-\code{\link[=erase]{erase()}} or \code{\link[fasterRaster]{-}}: Remove part of a \code{GVector} that overlaps with another\cr
+\code{\link[=erase]{erase()}} or \code{-}: Remove part of a \code{GVector} that overlaps with another\cr
 \code{\link[=expanse]{expanse()}}: Area of polygons or length of lines\cr
 \code{\link[=extract]{extract()}}: Extract values from a \code{GVector} at specific points\cr
 \code{\link[=grid]{grid()}}: Create a grid \code{GVector}\cr
@@ -242,7 +242,7 @@ The \code{\link[fasterRaster]{$<-}} operator can be used to replace specific col
 \code{\link[=hexagons]{hexagons()}}: Create a hexagonal grid\cr
 \code{\link[=interpIDW]{interpIDW()}}: Interpolate values at points to a \code{GRaster} using inverse-distance weighting\cr
 \code{\link[=interpSplines]{interpSplines()}}: Interpolate values at points to a \code{GRaster} using splines\cr
-\code{\link[=intersect]{intersect()}} or \code{\link[fasterRaster]{*}}: Intersection of two \code{GVectors}.\cr
+\code{\link[=intersect]{intersect()}} or \code{*}: Intersection of two \code{GVectors}.\cr
 \code{\link[=kernel]{kernel()}}: Kernel density estimator of points.\cr
 \code{\link[=missing.cases]{missing.cases()}}: Find rows of a \code{GVector}'s data table that have at least \code{NA} in them\cr
 \code{\link[fasterRaster]{names<-}}: Assign names to columns of a \code{GVector}s data table\cr
@@ -255,8 +255,8 @@ The \code{\link[fasterRaster]{$<-}} operator can be used to replace specific col
 \code{\link[=st_buffer]{st_buffer()}}: Create a polygon around/inside a \code{GVector}\cr
 \code{\link[=tail]{tail()}}: Last rows of a \code{GVector}'s data table\cr
 \code{\link[=thinPoints]{thinPoints()}}: Reduce number of points in same raster cell\cr
-\code{\link[=union]{union()}} or \code{\link[fasterRaster]{+}}: Combine two \code{GVector}s\cr
-\code{\link[=xor]{xor()}} or \code{\link[fasterRaster]{/}}: Select parts of polygons not shared by two \code{GVector}s\cr
+\code{\link[=union]{union()}} or \code{+}: Combine two \code{GVector}s\cr
+\code{\link[=xor]{xor()}} or \verb{/``: Select parts of polygons not shared by two }GVector`s\cr
 }
 
 \subsection{Functions for fixing issues with \code{GVector}s}{

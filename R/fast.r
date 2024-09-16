@@ -1,22 +1,22 @@
-#' Create a GRaster or GVector
+#' @title Create a GRaster or GVector
 #'
 #' @description `fast()` creates a `GRaster` or `GVector` from 1) a file; 2) from a `SpatRaster`, `SpatVector`, or `sf` vector; or 3) from a numeric vector, `matrix`, `data.frame`, or `data.table`. Behind the scenes, this function will also create a connection to **GRASS** if none has yet been made yet.
 #'
 #' **GRASS** supports loading from disk a variety of raster formats (see the **GRASS** manual page for [`r.in.gdal`](https://grass.osgeo.org/grass84/manuals/r.in.gdal.html)) and vector formats ([`v.in.ogr`](https://grass.osgeo.org/grass84/manuals/v.in.ogr.html)), though not all of them will work with this function.
 #'
-#' Note that vectors may fail to load if they contain issues that do not coincide with the topological data model used by **GRASS**. The most common of these is overlapping polygons. See *Details* on how to fix these kinds of issues.
+#' Note that `GVectors` may fail to be created if they contain issues that do not coincide with the topological data model used by **GRASS**. The most common of these is overlapping polygons. See *Details* on how to fix these kinds of issues.
 #'
 #' Note also that **GRASS** (and thus, **fasterRaster**) is *not* very fast when loading vectors. So, if the vector is large and you only want a portion of it, consider using the `extent` argument to load the spatial subset you need.
 #'
 #' @param x Any one of:
 #' * A `SpatRaster` raster. Rasters can have one or more layers.
 #' * A `SpatVector` or `sf` spatial vector. See especially arguments `correct`, `area`, `snap`, `steps`, and `verbose`.
-#' * A character string or a vector of strings with the path(s) and filename(s) of one or more rasters or one vector to be loaded directly into **GRASS**. The function will attempt to ascertain the type of object from the file extension (raster or vector), but it can help to indicate which it is using the `rastOrVect` argument if it is unclear. For rasters, see especially argument `levels`. For vectors, see especially arguments `correct`, `area`, `snap`, `steps`, and `verbose`.
+#' * A character string or a vector of strings with the path(s) and filename(s) of one or more rasters or one vector to be loaded directly into **GRASS**. The function will attempt to ascertain the type of object from the file extension (raster or vector), but it can help to indicate which it is using the `rastOrVect` argument if it is unclear. For rasters, see especially argument `levels`. For vectors, see especially arguments `correct`, `resolve`, `area`, `snap`, `steps`, and `verbose`.
 #' * A vector with an even number of numeric values representing longitude/latitude pairs. See arguments `geom`, `keepgeom`, and `crs`.
 #' * A `data.frame`, `data.table`, or `matrix`: Create a `points` `GVector`. Two of the columns must represent longitude and latitude. See arguments `geom`, `keepgeom`, and `crs`.
 #' * Missing: Creates a generic `GRaster` or `GVector`. You must specify `rastOrVect`; for example, `fast(rastOrVect = "raster")`. Also see argument `crs`.
 #'
-#' @param rastOrVect: Either `NULL` (default), or `"raster"` or `"vector"`: If `x` is a filename, then the function will try to ascertain whether it represents a raster or a vector, but sometimes this will fail. In that case, it can help to specify if the file holds a raster or vector. Partial matching is used.
+#' @param rastOrVect Either `NULL` (default), or `"raster"` or `"vector"`: If `x` is a filename, then the function will try to ascertain whether it represents a raster or a vector, but sometimes this will fail. In that case, it can help to specify if the file holds a raster or vector. Partial matching is used.
 #'
 #' @param levels (`GRaster`s only): Any of:
 #' * Logical: If `TRUE` (default) and at least one layer of a raster is of type `integer`, search for a "levels" file, load it, and attach levels. A levels file will have the same name as the raster file, but end with any of "rdata", "rdat", "rda", "rds", "csv", or "tab" (case will generally not matter). If such a file is not found, no levels will be assigned. The levels file must contain either a `data.frame`, `data.table`, or `list` of `data.frame`s or `data.table`s, or `NULL`.
@@ -29,7 +29,7 @@
 #'
 #' @param keepgeom Logical: If `x` is a set of `numeric` coordinates, or a `data.frame` or similar, then they can be coerced into a `points` `GVector`. If `keepgeom` is `TRUE`, then the coordinates will be included in the data table of the `GVector`. The default is `FALSE`.
 #'
-#' @param extent `GVector`s only: Either a `NULL` (default), or a `GVector`, a `SpatVector`, a `SpatExtent` object, an `sf` vector, a `bbox` object, or a numeric vector of 4 values providing a bounding box. If provided, only vector features within this bounding box are imported. If `extent` is a numeric vector, the values *must* be in the order west, east, south, north. If `NULL`, the entire vector is imported.
+#' @param extent (`GVector`s only): Either a `NULL` (default), or a `GVector`, a `SpatVector`, a `SpatExtent` object, an `sf` vector, a `bbox` object, or a numeric vector of 4 values providing a bounding box. If provided, only vector features within this bounding box are imported. If `extent` is a numeric vector, the values *must* be in the order west, east, south, north. If `NULL`, the entire vector is imported.
 #'
 #' @param correct Logical (`GVector`s only): Correct topological issues. See *Details* for more details! By default, this is `TRUE`.
 #'
@@ -52,25 +52,32 @@
 #' * `table` (`GVector`s--useful mainly to developers, not most users): A `data.frame` or `data.table` with one row per geometry in a `GVector`. Serves as an attribute table.
 #' * `xVect` (`GVector`s--useful mainly to developers, not most users): The `SpatVector` that corresponds to the file named by `x`.
 #'
-#' @details **GRASS** uses a [topological][tutorial_vector_topology_and_troubleshooting] model for vectors. Topological issues generally arise only with polygon vectors, not point or line vectors. Sometimes, polygons created in other software are topologically incorrect--the borders of adjacent polygons may cross one another, or there may be small gaps between them. These errors can be corrected by slightly shifting vertices and/or removing small polygons that result from intersections of larger ones that border one another. A topological system also recognizes that boundaries to adjacent polygons are shared by the areas, so should not be ascribed attributes that belong to both areas (e.g., the shared border between two countries "belongs" to both countries).
+#' @details **GRASS** uses a "topological" model for vectors. Topological issues generally arise only with polygon vectors, not point or line vectors. Sometimes, polygons created in other software are topologically incorrect--the borders of adjacent polygons may cross one another, or there may be small gaps between them. These errors can be corrected by slightly shifting vertices and/or removing small polygons that result from intersections of larger ones that border one another. A topological system also recognizes that boundaries to adjacent polygons are shared by the areas, so should not be ascribed attributes that belong to both areas (e.g., the shared border between two countries "belongs" to both countries).
 #'
 #' By default, `fast()` will try to correct topological errors in vectors. There are three levels of correction, and they are not necessarily mutually exclusive:
 #' 1. **Automatic correction**: By default, `fast()` will apply automatic topology correction. You can turn this off using the `correct = FALSE` argument, though in most cases this is not recommended.
 #' 2. ***Manual* snapping and/or area removal**: In addition to correction from step 1, you can cause vertices of polygons close to one another to be "snapped" to same place and/or polygons that are smaller than some threshold to be removed. Problems with mis-aligned vertices arise when adjacent polygons are meant to share borders, but slight differences in the locations of the vertices cause them to  mis-align. This mis-alignment can also produce small "slivers" of polygons that are the areas where they overlap. You can snap vertices within a given distance of one another using the `snap` argument followed by a numeric value, like `snap = 0.000001`. Units of `snap` are in map units (usually meters) for projected coordinate reference systems and degrees for unprojected systems (e.g., WGS84, NAD83, NAD27). You can also remove polygons that are smaller than a particular area using the `area` argument followed by a numeric value (e.g., `area = 1`). The units of `area` are in meters-squared, regardless of the coordinate reference system. Note that using `snap` and `area` entails some risk, as it is possible for nearby vertices to actually be distinct and for small areas to be legitimate.
-#' 3. **Automatic snapping and/or area removal**: In addition to the correction from step 1, you can use automatic `snap` and/or `area` correction on polygons vectors by setting `snap` and/or `area` to `NULL` (i.e., their default values). If just `snap` is `NULL`, only automatic snapping will be performed, and if just `area` is `NULL`, then only automatic area removal will be performed. Regardless, you will also need to set an integer value for `steps`, which is the number of steps to take between the smallest value of `snap` and/or `area` and the maximum value attempted. The function will then proceed by first attempting `snap = 0` and/or `area = 0` (i.e., no snapping or area removal). If this does not produce a topologically correct vector, **GRASS** will (internally) suggest a range for `snap`. The `fast()` function then creates `steps` values from the lowest to the highest values of this range evenly-spaced along the log values of this range, then proceed to repeat the loading process until either the vector is imported correctly or the maximum value suggested is reached and results in a failed topology. Smaller values of `step` will result in more fine-grained attempts so are less likely to yield overcorrection, but can also take more time. The value of `area` in automatic correction is set to `snap^2`. **NB**: Automated snapping and area removal are only able performed on polygons vectors, even if `snap` or `area` is `NULL`. To snap lines or points, you must set `snap` equal to a numeric value.
-#' 4. **Data table-vector mismatching**: If your vector has a data table ("attribute table") associated with it, errors can occur if there are more/fewer geometries (or multi-geometries) per row in the table. If you do not really need the data table to do your analysis, you can remove it (and thus obviate this error) using `dropTable = TRUE`.
-#' 5. **Dissolving or aggregating "invalid" geometries**: Using the `resolve` argument, you can create a topologically valid vector by either coercing all overlapping portions of polygons into their own geometries, or by coercing them into a single, combined geometry. Aggregation/disaggregation will be implemented after loading the vector into **GRASS** using the settings given by `snap` and `area`. Aggregation/disaggregation will cause any associated data table to be dropped (same as `dropTable = TRUE`).
-#' 6. **Correction outside *fasterRaster***: Before you convert the vector into **fasterRaster**'s `GVector` format, you can also try using the [terra::makeValid()] or [sf::st_make_valid()] tools to fix issues, then use `fast()`.
-#' 7. **Post-conversion to a `GVector`**: If you do get a vector loaded into `GVector` format, you can also use a set of [tools][breakPolys] or [fillHoles()] to fix issues.
+#' 3. **Automatic snapping and/or area removal**: In addition to the correction from step 1, you can use automatic `snap` and/or `area` correction on polygons vectors by setting `snap` and/or `area` to `NULL` (i.e., their default values). If just `snap` is `NULL`, only automatic snapping will be performed, and if just `area` is `NULL`, then only automatic area removal will be performed. Regardless, you will also need to set an integer value for `steps`, which is the number of steps to take between the smallest value of `snap` and/or `area` and the maximum value attempted. The function will then proceed by first attempting `snap = 0` and/or `area = 0` (i.e., no snapping or area removal). If this does not produce a topologically correct vector, **GRASS** will (internally) suggest a range for `snap`. The `fast()` function then creates `steps` values from the lowest to the highest values of this range evenly-spaced along the log values of this range, then proceed to repeat the importing process until either the vector is imported correctly or the maximum value of `snap` is reached and results in a failed topology. Smaller values of `step` will result in more fine-grained attempts so are less likely to yield overcorrection, but can also take more time. The value of `area` in automatic correction is set to `snap^2`. **NB**: Automated snapping and area removal are only performed on polygons vectors, even if `snap` or `area` is `NULL`. To snap lines or points, you must set `snap` equal to a numeric value. The `area` correction is ignored for points and lines.
 #'
-#' @seealso [rgrass::read_RAST()] and [rgrass::read_VECT()], [vector cleaning][breakPolys], [removeHoles()], plus modules [`v.in.ogr`](https://grass.osgeo.org/grass84/manuals/v.in.ogr.html) and [`r.import`](https://grass.osgeo.org/grass84/manuals/r.import.html) in **GRASS**.
+#' Issues can also arise due to:
 #'
-#' @return A `GRaster` or `GVector`.
+#' * **Data table-vector mismatching**: If your vector has a data table ("attribute table") associated with it, errors can occur if there are more/fewer geometries (or multi-geometries) per row in the table. If you do not really need the data table to do your analysis, you can remove it (and thus obviate this error) using `dropTable = TRUE`.
+#' * **Dissolving or aggregating "invalid" geometries**: Using the `resolve` argument, you can create a topologically valid vector by either coercing all overlapping portions of polygons into their own geometries (`resolve = "disaggregate"`), or by coercing them into a single, combined geometry (`resolve = "aggregate"`). Aggregation/disaggregation will be implemented after loading the vector into **GRASS** using the settings given by `snap` and `area`. Aggregation/disaggregation will cause any associated data table to be dropped (it forces `dropTable` to be `TRUE`). The default action is to do neither aggregation nor disaggregation (`resolve = NA`).
+#'
+#' If none of these fixes work, you can try:
+#'
+#' * **Correction outside of *fasterRaster***: Before you convert the vector into **fasterRaster**'s `GVector` format, you can also try using the [terra::makeValid()] or [sf::st_make_valid()] tools to fix issues, then use `fast()`.
+#' * **Post-conversion to a `GVector`**: If you do get a vector loaded into `GVector` format, you can also use a set of **fasterRaster** vector-manipulation [tools][breakPolys] or [fillHoles()] to fix issues.
+#'
+#' @seealso [rgrass::read_RAST()] and [rgrass::read_VECT()], [vector cleaning][breakPolys], [fillHoles()], plus modules [`v.in.ogr`](https://grass.osgeo.org/grass84/manuals/v.in.ogr.html) and [`r.import`](https://grass.osgeo.org/grass84/manuals/r.import.html) in **GRASS**.
+#'
+#' @returns A `GRaster` or `GVector`.
 #'
 #' @example man/examples/ex_fast.r
 #'
-#' @aliases fast
+#' @aliases fast,character-method
 #' @rdname fast
+#' @name fast
 #' @exportMethod fast
 methods::setMethod(
 	"fast",
@@ -202,13 +209,13 @@ methods::setMethod(
 						extension <- .fileExt(x)
 
 						if (tolower(extension) == "rds") {
-							levels <- readRDS(thisLevelsFileName)
+							levels <- readRDS(levelsFileName)
 						} else if (tolower(extension) %in% c("rdata", "rda", "rdat")) {
-							load(thisLevelsFileName)
+							load(levelsFileName)
 						} else if (tolower(extension) == "tab") {
-							levels <- utils::read.delim(thisLevelsFileName)
+							levels <- utils::read.delim(levelsFileName)
 						} else if (tolower(extension) == "csv") {
-							levels <- utils::read.csv(thisLevelsFileName)
+							levels <- utils::read.csv(levelsFileName)
 						}
 
 					} else {
@@ -593,13 +600,13 @@ methods::setMethod(
 	} # EOF
 )
 
+#' @aliases fast,SpatRaster-method
 #' @rdname fast
-#' @aliases fast
 #' @exportMethod fast
 methods::setMethod(
 	"fast",
 	signature(x = "SpatRaster"),
-	function(x) {
+	function(x, ...) {
 
 	if (is.na(faster("grassDir"))) stop("Before using fasterRaster functions, you must specify the folder in which GRASS is installed using faster().")
 
@@ -632,60 +639,8 @@ methods::setMethod(
 	} # EOF
 )
 
-#' Get levels from a SpatRaster or a file
-#'
-#' @param x A `SpatRaster`, `data.frame`, `data.table`, empty string, `NULL`, or a file name. CSV, TAB, RDS, and RDA are allowed file types.
-#'
-#' @noRd
-.getLevels <- function(x) {
-
-	if (is.null(x)) {
-		levels <- NULL
-	} else if (inherits(x, "SpatRaster")) {
-		levels <- terra::cats(x)
-	} else if (is.character(x)) {
-		if (x == "") {
-			levels <- list(x)
-		} else {
-		
-			# load from file
-		    nc <- nchar(x)
-			suffix <- substr(x, nc - 3L, nc)
-			
-			suffix <- tolower(suffix)
-			
-			if (suffix %in% c(".csv", ".tab")) {
-				levels <- data.table::fread(x, nThread = faster("cores"), na.strings = "<not defined>", showProgress = FALSE)
-			} else if (suffix == ".rds") {
-				levels <- readRDS(x)
-			} else if (suffix == ".rda") {
-				levelsObj <- load(x)
-				levels <- get(levelsObj)
-			} else {
-
-				suffix <- substr(x, nc - 5L, nc)
-
-				suffix <- tolower(suffix)
-
-				if (suffix == ".rdata") {
-					levelsObj <- load(levels)
-					levels <- get(levelsObj)
-				} else {
-					stop("Cannot open a file with level data of this type.\n  Supported types include .csv, .tab, .rds, .rda/.rdata (case is ignored).")
-				}
-
-			}
-		}
-	
-	} else if (!inherits(x, c("list", "data.frame", "data.table"))) {
-		stop("Argument `levels` must be a data.frame, data.table, an empty string, a list of these, OR NULL or a file name.")
-	}
-	levels
-
-}
-
+#' @aliases fast,SpatVector-method
 #' @rdname fast
-#' @aliases fast
 #' @exportMethod fast
 methods::setMethod(
 	"fast",
@@ -693,14 +648,162 @@ methods::setMethod(
 	function(x, extent = NULL, correct = TRUE, snap = NULL, area = NULL, steps = 10, dropTable = FALSE, resolve = NA, verbose = TRUE) .fastVector(x, extent = extent, correct = correct, snap = snap, area = area, steps = steps, dropTable = dropTable, resolve = resolve, verbose = verbose)
 )
 
+#' @aliases fast,sf-method
 #' @rdname fast
-#' @aliases fast
 #' @exportMethod fast
 methods::setMethod(
 	"fast",
 	signature(x = "sf"),
 	function(x, extent = NULL, correct = TRUE, snap = NULL, area = NULL, steps = 10, dropTable = FALSE, resolve = NA, verbose = TRUE) .fastVector(x, correct = correct, snap = snap, area = area, steps = steps, extent = extent, dropTable = dropTable, resolve = resolve, verbose = verbose)
 )
+
+#' @rdname fast
+#' @aliases fast,missing-method
+#' @exportMethod fast
+methods::setMethod(
+	"fast",
+	signature(x = "missing"),
+	function(x, rastOrVect, crs = "") {
+	
+	if (crs == "") { 
+	
+		crs <- tryCatch(crs(), error = function(cond) FALSE)
+
+		if (is.logical(crs)) stop("You must provide a coordinate reference system with `crs` or\n  have created or loaded at least one GRaster or GVector.")
+
+	}
+
+	rastOrVect <- omnibus::pmatchSafe(rastOrVect, c("raster", "vector"), nmax = 1L)
+	if (rastOrVect == "raster") {
+
+		x <- terra::rast()
+		x <- terra::project(x, crs)
+		x[] <- 1L
+		tf <- tempfile(fileext = ".tif")
+		terra::writeRaster(x, tf, overwrite = TRUE)
+		out <- fast(tf)
+
+	} else {
+
+		x <- c(-180, 180, -90, 90)
+		x <- terra::ext(x)
+		x <- terra::as.polygons(x, crs = "epsg:4326")
+		x <- terra::project(x, crs)
+		out <- .fastVector(x, correct = TRUE, snap = FALSE, area = FALSE, steps = 10, extent = NULL, dropTable = FALSE, resolve = NA, verbose = FALSE)
+
+	}
+	out
+
+	} # EOF
+)
+
+#' @rdname fast
+#' @aliases fast,numeric-method
+#' @exportMethod fast
+methods::setMethod(
+	"fast",
+	signature(x = "numeric"),
+	function(x, crs = "", keepgeom = FALSE) {
+	
+	if (length(x) %% 2L != 0L) stop("You must supply an even number of numeric values, each representing longitude/latitude pairs.")
+	x <- matrix(x, ncol = 2L, byrow = TRUE)
+	.fastDF(x = x, geom = 1:2, crs = crs, keepgeom = keepgeom)
+
+	} # EOF
+)
+
+#' @rdname fast
+#' @aliases fast,data.frame-method
+#' @exportMethod fast
+methods::setMethod(
+	"fast",
+	signature(x = "data.frame"),
+	function(x, geom = 1:2, crs = "", keepgeom = FALSE) .fastDF(x = x, geom = geom, crs = crs, keepgeom = keepgeom)
+)
+
+#' @rdname fast
+#' @aliases fast,data.table-method
+#' @exportMethod fast
+methods::setMethod(
+	"fast",
+	signature(x = "data.table"),
+	function(x, geom = 1:2, crs = "", keepgeom = FALSE) .fastDF(x = x, geom = geom, crs = crs, keepgeom = keepgeom)
+)
+
+#' @rdname fast
+#' @aliases fast,matrix-method
+#' @exportMethod fast
+methods::setMethod(
+	"fast",
+	signature(x = "matrix"),
+	function(x, geom = 1:2, crs = "", keepgeom = FALSE) .fastDF(x = x, geom = geom, crs = crs, keepgeom = keepgeom)
+)
+
+#' Create a points GVector from a data.frame or similar
+#'
+#' @param x Two numeric values, or a `data.frame`, `data.table`, or `matrix`.
+#' @param geom 2-element 
+#' @param crs WKT2 string
+#' @param keepgeom Logical
+#' @noRd
+.fastDF <- function(x, geom, crs, keepgeom) {
+
+	if (crs == "") {
+	
+		crs <- tryCatch(crs(), error=function(cond) FALSE)
+
+		if (is.logical(crs)) stop("You must provide a coordinate reference system with `crs` or\n  have created or loaded at least one GRaster or GVector.")
+
+	}
+
+	if (!is.data.frame(x)) x <- as.data.frame(x)
+
+	if (is.numeric(geom) | is.integer(geom)) {
+		xcol <- names(x)[geom[1L]]
+		ycol <- names(x)[geom[2L]]
+	} else {
+		xcol <- geom[1L]
+		ycol <- geom[2L]
+	}
+
+	xVect <- terra::vect(x, geom = c(xcol, ycol), crs = crs, keepgeom = keepgeom)
+	fast(xVect, correct = TRUE)
+
+}
+
+
+#' Test if a vector is valid
+#'
+#' @param x Either the [sources()] name of a **GRASS** vector or a `vectInfo` object created by [.vectInfo()].
+#' @param table Either `NULL` (no table) or a `data.frame`, `data.table`, or `matrix`
+#'
+#' @returns Logical.
+#'
+#' @noRd
+.validVector <- function(x, table) {
+
+	# does table have same number of rows as vector geometries?
+	if (!is.null(table) && nrow(table) > 0L) {
+
+		if (!inherits(x, "vectInfo")) x <- .vectInfo(x)
+		nGeoms <- x$nGeometries
+		tableValid <- nGeoms == nrow(table)
+
+	} else {
+		tableValid <- TRUE
+	}
+
+	# if the table is valid, are its category numbers valid?
+	if (tableValid) {
+		if (!inherits(x, "vectInfo")) x <- .vectInfo(x)
+		catsValid <- x$catsValid
+	} else {
+		catsValid <- FALSE
+	}
+
+	tableValid & catsValid
+
+}
 
 # 1. Write vector to disk (if needed)
 # 2. Send to fast(signature = "character")
@@ -809,154 +912,8 @@ methods::setMethod(
 	
 }
 
-#' @rdname fast
-#' @aliases fast
-#' @exportMethod fast
-methods::setMethod(
-	"fast",
-	signature(x = "missing"),
-	function(x, rastOrVect, crs = "") {
-	
-	if (crs == "") { 
-	
-		crs <- tryCatch(crs(), error = function(cond) FALSE)
-
-		if (is.logical(crs)) stop("You must provide a coordinate reference system with `crs` or\n  have created or loaded at least one GRaster or GVector.")
-
-	}
-
-	rastOrVect <- omnibus::pmatchSafe(rastOrVect, c("raster", "vector"), nmax = 1L)
-	if (rastOrVect == "raster") {
-
-		x <- terra::rast()
-		x <- terra::project(x, crs)
-		x[] <- 1L
-		tf <- tempfile(fileext = ".tif")
-		terra::writeRaster(x, tf, overwrite = TRUE)
-		out <- fast(tf)
-
-	} else {
-
-		x <- c(-180, 180, -90, 90)
-		x <- terra::ext(x)
-		x <- terra::as.polygons(x, crs = "epsg:4326")
-		x <- terra::project(x, crs)
-		out <- .fastVector(x, correct = TRUE, snap = FALSE, area = FALSE, steps = 10, extent = NULL, dropTable = FALSE, resolve = NA, verbose = FALSE)
-
-	}
-	out
-
-	} # EOF
-)
-
-#' @rdname fast
-#' @aliases fast
-#' @exportMethod fast
-methods::setMethod(
-	"fast",
-	signature(x = "numeric"),
-	function(x, crs = "", keepgeom = FALSE) {
-	
-	if (length(x) %% 2L != 0L) stop("You must supply an even number of numeric values each representing longitude/latitude pairs.")
-	x <- matrix(x, ncol = 2L, byrow = TRUE)
-	.fastDF(x = x, geom = 1:2, crs = crs, keepgeom = keepgeom)
-
-	} # EOF
-)
-
-#' @rdname fast
-#' @aliases fast
-#' @exportMethod fast
-methods::setMethod(
-	"fast",
-	signature(x = "data.frame"),
-	function(x, geom = 1:2, crs = "", keepgeom = FALSE) .fastDF(x = x, geom = geom, crs = crs, keepgeom = keepgeom)
-)
-
-#' @rdname fast
-#' @aliases fast
-#' @exportMethod fast
-methods::setMethod(
-	"fast",
-	signature(x = "data.table"),
-	function(x, geom = 1:2, crs = "", keepgeom = FALSE) .fastDF(x = x, geom = geom, crs = crs, keepgeom = keepgeom)
-)
-
-#' @rdname fast
-#' @aliases fast
-#' @exportMethod fast
-methods::setMethod(
-	"fast",
-	signature(x = "matrix"),
-	function(x, geom = 1:2, crs = "", keepgeom = FALSE) .fastDF(x = x, geom = geom, crs = crs, keepgeom = keepgeom)
-)
-
-#' Create a points GVector from a data.frame or similar
+#' Aggregates or disaggregates a vector in GRASS
 #'
-#' @param x Two numeric values, or a `data.frame`, `data.table`, or `matrix`.
-#' @param geom 2-element 
-#' @param crs WKT2 string
-#' @param keepgeom Logical
-#' @noRd
-.fastDF <- function(x, geom, crs, keepgeom) {
-
-	if (crs == "") {
-	
-		crs <- tryCatch(crs(), error=function(cond) FALSE)
-
-		if (is.logical(crs)) stop("You must provide a coordinate reference system with `crs` or\n  have created or loaded at least one GRaster or GVector.")
-
-	}
-
-	if (!is.data.frame(x)) x <- as.data.frame(x)
-
-	if (is.numeric(geom) | is.integer(geom)) {
-		xcol <- names(x)[geom[1L]]
-		ycol <- names(x)[geom[2L]]
-	} else {
-		xcol <- geom[1L]
-		ycol <- geom[2L]
-	}
-
-	xVect <- terra::vect(x, geom = c(xcol, ycol), crs = crs, keepgeom = keepgeom)
-	fast(xVect, correct = TRUE)
-
-}
-
-
-#' Test if a vector is valid
-#'
-#' @param x Either the [sources()] name of a **GRASS** vector or a `vectInfo` object created by [.vectInfo()].
-#' @param table Either `NULL` (no table) or a `data.frame`, `data.table`, or `matrix`
-#'
-#' @returns Logical.
-#'
-#' @noRd
-.validVector <- function(x, table) {
-
-	# does table have same number of rows as vector geometries?
-	if (!is.null(table) && nrow(table) > 0L) {
-
-		if (!inherits(x, "vectInfo")) x <- .vectInfo(x)
-		nGeoms <- x$nGeometries
-		tableValid <- nGeoms == nrow(table)
-
-	} else {
-		tableValid <- TRUE
-	}
-
-	# if the table is valid, are its category numbers valid?
-	if (tableValid) {
-		if (!inherits(x, "vectInfo")) x <- .vectInfo(x)
-		catsValid <- x$catsValid
-	} else {
-		catsValid <- FALSE
-	}
-
-	tableValid & catsValid
-
-}
-
 #' @param src [sources()] name.
 #' @param resolve "aggregate" or "disaggregate"
 #' @param verbose T/F

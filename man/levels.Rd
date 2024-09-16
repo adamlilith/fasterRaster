@@ -10,7 +10,6 @@
 \alias{levels<-,GRaster,data.frame-method}
 \alias{levels<-}
 \alias{levels<-,GRaster,data.table-method}
-\alias{levels<-,GRaster,SpatRaster-method}
 \alias{levels<-,GRaster,GRaster-method}
 \alias{levels<-,GRaster,list-method}
 \title{Set and get categories for categorical rasters}
@@ -24,8 +23,6 @@
 \S4method{levels}{GRaster,data.frame}(x) <- value
 
 \S4method{levels}{GRaster,data.table}(x) <- value
-
-\S4method{levels}{GRaster,SpatRaster}(x) <- value
 
 \S4method{levels}{GRaster,GRaster}(x) <- value
 

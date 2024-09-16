@@ -3,9 +3,11 @@
 \name{print.rastInfo}
 \alias{print.rastInfo}
 \alias{print}
+\alias{show.rastInfo}
 \alias{print.vectInfo}
-\alias{show,GLocation-method}
+\alias{show.vectInfo}
 \alias{show}
+\alias{show,GLocation-method}
 \alias{print.GLocation}
 \alias{summary,GLocation-method}
 \alias{summary}
@@ -23,41 +25,47 @@
 \alias{summary,GVector-method}
 \title{Display a fasterRaster object}
 \usage{
-print.rastInfo(x, ...)
+\method{print}{rastInfo}(x, ...)
 
-print.vectInfo(x, ...)
+show.rastInfo(x)
+
+\method{print}{vectInfo}(x, ...)
+
+\method{show}{vectInfo}(x)
 
 \S4method{show}{GLocation}(object)
 
-print.GLocation(x, ...)
+\method{print}{GLocation}(x, ...)
 
 \S4method{summary}{GLocation}(object)
 
 \S4method{show}{GSpatial}(object)
 
-print.GSpatial(x, ...)
+\method{print}{GSpatial}(x, ...)
 
 \S4method{summary}{GSpatial}(object)
 
 \S4method{show}{GRegion}(object)
 
-print.GRegion(x, ...)
+\method{print}{GRegion}(x, ...)
 
 \S4method{summary}{GRegion}(object)
 
 \S4method{show}{GRaster}(object)
 
-print.GRaster(x, ...)
+\method{print}{GRaster}(x, ...)
 
 \S4method{summary}{GRaster}(object)
 
 \S4method{show}{GVector}(object)
 
-print.GVector(x, ...)
+\method{print}{GVector}(x, ...)
 
 \S4method{summary}{GVector}(object)
 }
 \arguments{
+\item{...}{Other arguments.}
+
 \item{object, x}{An object of class \code{GLocation}, \code{GSpatial}, \code{GRegion}, \code{GRaster}, or \code{GVector}.}
 }
 \value{
@@ -245,3 +253,4 @@ dim(rivers2)
 
 }
 }
+\keyword{internal}

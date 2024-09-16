@@ -4,6 +4,8 @@
 #'
 #' @param object,x An object of class `GLocation`, `GSpatial`, `GRegion`, `GRaster`, or `GVector`.
 #'
+#' @param ... Other arguments.
+#'
 #' @returns Nothing (side effect is to display metadata on the given object).
 #'
 #' @example man/examples/ex_GRaster_GVector.r
@@ -27,9 +29,10 @@ methods::setMethod(
 	}
 )
 
+#' @method print GLocation
 #' @aliases print
 #' @rdname show
-#' @export
+#' @export print
 print.GLocation <- function(x, ...) show(x)
 
 #' @aliases summary
@@ -69,9 +72,10 @@ methods::setMethod(
 	}
 )
 
+#' @method print GSpatial
 #' @aliases print
 #' @rdname show
-#' @export
+#' @export print
 print.GSpatial <- function(x, ...) show(x)
 
 #' @aliases summary
@@ -115,9 +119,10 @@ methods::setMethod(
 	}
 )
 
+#' @method print GRegion
 #' @aliases print
 #' @rdname show
-#' @export
+#' @export print
 print.GRegion <- function(x, ...) show(x)
 
 #' @aliases summary
@@ -301,9 +306,10 @@ methods::setMethod(
 	} # EOF
 )
 
+#' @method print GRaster
 #' @aliases print
 #' @rdname show
-#' @export
+#' @export print
 print.GRaster <- function(x, ...) show(x)
 
 #' @aliases summary
@@ -463,9 +469,10 @@ methods::setMethod(
 
 )
 
+#' @method print GVector
 #' @aliases print
 #' @rdname show
-#' @export
+#' @export print
 print.GVector <- function(x, ...) show(x)
 
 #' @aliases summary

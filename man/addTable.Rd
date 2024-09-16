@@ -9,16 +9,18 @@
 \alias{dropTable}
 \title{Attach or detach GVector's data table}
 \usage{
-\S4method{addTable}{GVector,data.frame}(x) <- value
+\S4method{addTable}{GVector,data.frame}(x, ...) <- value
 
-\S4method{addTable}{GVector,data.table}(x) <- value
+\S4method{addTable}{GVector,data.table}(x, ...) <- value
 
-\S4method{addTable}{GVector,matrix}(x) <- value
+\S4method{addTable}{GVector,matrix}(x, ...) <- value
 
 \S4method{dropTable}{GVector}(x)
 }
 \arguments{
-\item{x}{A `GVector.}
+\item{x}{A \code{GVector}.}
+
+\item{...}{Other arguments (ignored).}
 
 \item{value}{A \code{data.frame}, \code{data.table}, or \code{matrix}.}
 }

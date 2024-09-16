@@ -114,7 +114,7 @@ methods::setMethod(
 			renums <- omnibus::renumSeq(fieldVals)
 			levels <- data.table::data.table(value = unique(renums), DUMMYDUMMY_ = unique(fieldVals))
 			names(levels)[2L] <- field
-			levels <- levels[order(value)]
+			levels <- levels[order(levels$value)]
 			db <- data.table::data.table(cat = uniCats, DUMMYDUMMY_ = renums)
 			.vAttachDatabase(x, db)
 
@@ -153,7 +153,7 @@ methods::setMethod(
 					names(levAdd) <- names(levels)
 					levels <- rbind(levels, levAdd)
 					levels <- levels[!duplicated(levels)]
-					levels <- levels[order(value)]
+					levels <- levels[order(levels$value)]
 
 				} else {
 					levels <- data.table::data.table(NULL)

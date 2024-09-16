@@ -25,6 +25,8 @@
 #' 
 #' @param cores Integer: Number of processor cores to use for when processing a `SpatRaster`.
 #'
+#' @param verbose Logical: If `TRUE` (default), display progress.
+#'
 #' @returns A categorical `SpatRaster` or `GRaster`. The values assigned to each class can be seen with [levels()].
 #'
 #' @references Riitters, K., J. Wickham, R. O'Neill, B. Jones, and E. Smith. 2000. Global-scale patterns of forest fragmentation. *Conservation Ecology* 4:3. URL: [http://www.consecol.org/vol4/iss2/art3/](http://www.consecol.org/vol4/iss2/art3/). Also note the [errata](https://www.ecologyandsociety.org/vol4/iss2/art3/errata/january26.2001.html).

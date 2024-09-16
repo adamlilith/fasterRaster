@@ -78,15 +78,15 @@ methods::setMethod(
 			yMarks <- seq(yLower, yUpper, length.out = nMarks)
 			w <- abs(cos(pi * yMarks / 180))
 			ys <- sample(yMarks, size, prob = w, replace = TRUE)
-			ys <- ys + runif(size, -halfDelta, halfDelta)
+			ys <- ys + stats::runif(size, -halfDelta, halfDelta)
 		
 		} else {
 			# if not long/lat, just sample uniformly
-			ys <- runif(size, extent[3L], extent[4L])
+			ys <- stats::runif(size, extent[3L], extent[4L])
 		}
 
-		xs <- runif(size, extent[1L], extent[2L])
-		if (!is.null(zlim)) zs <- runif(siz3, zlim[1L], zlim[2L])
+		xs <- stats::runif(size, extent[1L], extent[2L])
+		if (!is.null(zlim)) zs <- stats::runif(size, zlim[1L], zlim[2L])
 
 		if (xy) {
 			if (is.null(zlim)) {
@@ -230,7 +230,7 @@ methods::setMethod(
 		}
 
 		# if (!is.null(seed)) args$seed <- seed
-		args$seed <- round(1E9 * runif(1))
+		args$seed <- round(1E9 * stats::runif(1))
 
 		# args$flags <- c(args$flags, "b") ### do not create topology... problems? YES!
 		do.call(rgrass::execGRASS, args = args)

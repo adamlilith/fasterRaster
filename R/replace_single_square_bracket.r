@@ -12,7 +12,7 @@
 #' @example man/examples/ex_GRaster_GVector_subset_assign.r
 #'
 #' @name [<-
-#' @aliases [<-,GRaster,ANY,ANY-method
+#' @aliases [<-,GRaster,missing,ANY-method
 #' @docType methods
 #' @rdname replace_single_square_bracket
 #' @exportMethod [<-
@@ -59,7 +59,7 @@ setMethod(
 )
 
 #' @name [<-
-#' @aliases [<-,GRaster,ANY,ANY-method
+#' @aliases [<-,GRaster,GRaster,ANY-method
 #' @docType methods
 #' @rdname replace_single_square_bracket
 #' @exportMethod [<-

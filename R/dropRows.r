@@ -72,6 +72,9 @@ methods::setMethod(
 	} # EOF
 )
 
+#' @aliases dropRows
+#' @rdname dropRows
+#' @exportMethod dropRows
 methods::setMethod(
 	f = "dropRows",
 	signature = c(x = "matrix"),

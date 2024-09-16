@@ -4,7 +4,7 @@
 \alias{tutorial_hidden_functions}
 \title{Hidden functions in "fasterRester"}
 \description{
-\strong{fasterRaster} contains a set of non-exported functions that users can access using \code{fasterRaster:::functionName}. These functions are useful for power users and developers. Not all hidden functions are listed here. Often, a method will have a hidden function of the same name that starts with a period. This "period" function is intended to be supplied the \code{\link[=sources]{sources()}} name of a \code{GRaster} or \code{GVector} from other functions so that the calling function does not need to spend the time creating the \code{GRaster} or \code{GVector} pointer before calling the function. "Period" functions will, though, often work on \code{GRaster}s or \code{GVector}s, though some error-checking and region definitions are not conducted.
+\strong{fasterRaster} contains a set of "private" functions that users can access using \code{fasterRaster:::functionName}. These functions are useful for power users and developers. Not all hidden functions are listed here. Often, a method will have a hidden function of the same name that starts with a period. This "period" function is intended to be supplied the \code{\link[=sources]{sources()}} name of a \code{GRaster} or \code{GVector} from other functions so that the calling function does not need to spend the time creating the \code{GRaster} or \code{GVector} pointer before calling the function. "Period" functions will, though, often work on \code{GRaster}s or \code{GVector}s, though some error-checking and region definitions are not conducted.
 
 \code{.copyGSpatial()}: Make a copy of the \strong{GRASS} file pointed to by a \code{GRaster} or \code{GVector}\cr
 \code{.fileExt()}: Get file extension\cr

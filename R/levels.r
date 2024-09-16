@@ -112,6 +112,7 @@ methods::setMethod(
 	signature = c(x = "GRaster"),
 	function(x, layer = 1, value, active = 1) {
 
+	layer <- NULL # obviates check(): "no visible binding for global variable `layer`"
 	layer <- .layerIndex(layer, x, recycle = TRUE)
 
 	if (!inherits(value, "list")) value <- list(value)
@@ -187,21 +188,21 @@ methods::setMethod(
 	} # EOF
 )
 
-#' @aliases levels<-
-#' @rdname levels
-#' @exportMethod levels<-
-methods::setMethod(
-	f = "levels<-",
-	signature = c(x = "GRaster", value = "SpatRaster"),
-	function(x, value) {
+# #' @aliases levels<-
+# #' @rdname levels
+# #' @exportMethod levels<-
+# methods::setMethod(
+# 	f = "levels<-",
+# 	signature = c(x = "GRaster", value = "SpatRaster"),
+# 	function(x, value) {
 
-	value <- cats(value)
-	levels(x) <- value
-	x@activeCat <- terra::activeCat(value, layer = layer)
-	x
+# 	value <- cats(value)
+# 	levels(x) <- value
+# 	x@activeCat <- terra::activeCat(value, layer = 1L)
+# 	x
 
-	} # EOF
-)
+# 	} # EOF
+# )
 
 #' @aliases levels<-
 #' @rdname levels
@@ -213,7 +214,7 @@ methods::setMethod(
 
 	value <- cats(value)
 	levels(x) <- value
-	x@activeCat <- activeCat(value, layer = layer)
+	x@activeCat <- activeCats(value)
 	x
 
 	} # EOF

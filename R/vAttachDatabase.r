@@ -19,7 +19,7 @@
 #' 
 #' @aliases .vAttachDatabase
 #' @rdname vAttachDatabase
-#' @export
+#' @keywords internal
 .vAttachDatabase <- function(x, table = NULL, replace = TRUE, cats = NULL) {
 
 	if (inherits(x, "GVector")) {

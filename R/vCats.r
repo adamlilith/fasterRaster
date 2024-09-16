@@ -16,7 +16,7 @@
 #'
 #' @aliases .vCats
 #' @rdname vCats
-#' @noRd
+#' @keywords internal
 .vCats <- function(x, layer = 1, db = FALSE, integer = TRUE) {
 
 	if (inherits(x, "GVector")) {

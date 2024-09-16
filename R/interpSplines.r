@@ -29,7 +29,7 @@
 #' * `lambda` is `NULL` and `interpolate` is `FALSE`: A `data.frame` with values of `lambdas` that were assessed, plus `mean` (mean residual value) and `rms` (root mean square error). You can see the table using `attr(output_raster, "lambdas", exact = TRUE)`.
 #' * `lambda` is a number (`interpolate` is ignored): A `GRaster`.
 #'
-#' @seealso [interpIDW()], [fillNAs()], module (`v.surf.bspline`)[https://grass.osgeo.org/grass84/manuals/v.surf.bspline.html] in **GRASS**
+#' @seealso [interpIDW()], [fillNAs()], module [`v.surf.bspline`](https://grass.osgeo.org/grass84/manuals/v.surf.bspline.html) in **GRASS**
 #'
 #' @aliases interpSplines
 #' @rdname interpSplines
@@ -236,7 +236,7 @@ methods::setMethod(
 
 		} else {
 			out <- lambdas
-			if (!faster("useDataTable")) out <- as.data.fraem(out)
+			if (!faster("useDataTable")) out <- as.data.frame(out)
 		}
 
 	} else if (inherits(y, "GVector")) {

@@ -15,3 +15,4 @@ Invisibly returns the \code{\link[=sources]{sources()}} name of a vector in \str
 \description{
 \code{.vDetachDatabase()} detaches the database from a \strong{GRASS} vector and deletes it. This table is meant to be "invisible" to most users--they should use interact with attribute tables using the \code{GVector} slot `@table``. Some functions do require tables (e.g., \code{\link[=extract]{extract()}} and \code{\link[=spatSample]{spatSample()}}). \strong{This function is mostly of use to developers.}
 }
+\keyword{internal}

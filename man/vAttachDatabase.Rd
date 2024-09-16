@@ -28,3 +28,4 @@ Invisibly returns the \code{\link[=sources]{sources()}} name of a vector in \str
 \description{
 \code{.vAttachDatabase()} adds a table to a \strong{GRASS} vector. This table is meant to be "invisible" to most users--they should use interact with attribute tables using the \code{GVector} slot `@table``. Some functions require tables (e.g., \code{\link[=extract]{extract()}} and \code{\link[=spatSample]{spatSample()}}). \strong{This function is mostly of use to developers.}
 }
+\keyword{internal}

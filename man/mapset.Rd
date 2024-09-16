@@ -44,16 +44,33 @@ chelsa1 <- fast(madChelsa1)
 .location(elev)
 .location(chelsa1)
 
+# All available GRASS locations
+.locations()
+
+# Find location of an object among all active locations
+.locationFind(elev)
+.locationFind(chelsa1)
+.locationFind(chelsa1, return = "index")
+.locationFind(chelsa1, return = "crs")
+
+# Switch between locations
+.locationRestore(elev)
+.locationRestore(chelsa1)
+
+loc <- .location(elev)
+.locationRestore(loc)
+
+# We could use .locationDelete(elev) to delete
+# the location where "elev" is stored.
+
 # Mapsets are always "PERMANENT" in fasterRaster
 .mapset()
 .mapset(elev)
 .mapset(chelsa1)
-
-# Meta-data on all available GRASS Locations
-.locations()
 
 }
 }
 \seealso{
 \strong{GRASS} \href{https://grass.osgeo.org/grass82/manuals/grass_database.html}{locations and mapsets}
 }
+\keyword{internal}

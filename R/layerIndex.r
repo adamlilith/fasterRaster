@@ -8,7 +8,7 @@
 #'
 #' @returns An integer vector.
 #'
-#' @noRd
+#' @keywords internal
 .layerIndex <- function(layer, x, recycle = TRUE) {
 
 	nx <- nlyr(x)

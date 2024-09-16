@@ -16,7 +16,7 @@
 #' * `"mean"` (default): Average.
 #' * `"meanAbs"`: Mean of absolute values.
 #' * `"median"`: Median.
-#' * `"quantile"`: Quantile (see also argument `prob`).
+#' * `"quantile"`: Quantile (see also argument `probs`).
 #' * `"range"`: Range.
 #' * `"sd"`: Sample standard deviation.
 #' * `"sdpop"`: Population standard deviation.
@@ -24,7 +24,7 @@
 #' * `"var"`: Sample variance.
 #' * `"varpop"`: Population variance.
 #'
-#' @param prob Numeric: Quantile at which to calculate `quantile`. Only a single value between 0 and 1 is allowed.
+#' @param probs Numeric: Quantile at which to calculate `quantile`. Only a single value between 0 and 1 is allowed.
 #'
 #' @returns A `data.frame` or `data.table`.
 #'
@@ -36,13 +36,13 @@
 methods::setMethod(
 	f = "zonal",
 	signature = c(x = "GRaster"),
-	function(x, z, fun = "mean", prob = 0.5) {
+	function(x, z, fun = "mean", probs = 0.5) {
 	
 	if (inherits(z, "GRaster")) {
-		.zonalByRaster(x = x, z = z, fun = fun, prob = prob)
+		.zonalByRaster(x = x, z = z, fun = fun, probs = probs)
 	} else if (inherits(z, "GVector")) {
 		gtype <- geomtype(z, grass = TRUE)
-		.zonalByVector(x = x, z = z, fun = fun, prob = prob, gtype = gtype)
+		.zonalByVector(x = x, z = z, fun = fun, probs = probs, gtype = gtype)
 	} else {
 		stop("Argument `z` must be a GRaster or GVector.")
 	}
@@ -51,7 +51,7 @@ methods::setMethod(
 )
 
 #' @noRd
-.zonalByRaster <- function(x, z, fun, prob) {
+.zonalByRaster <- function(x, z, fun, probs) {
 
 	if (!is.cell(z)[1L] & !is.factor(z)[1L]) stop("GRaster `z` must be an integer or factor raster, or a GVector.")
 
@@ -75,20 +75,22 @@ methods::setMethod(
 		x = sources(x),
 		z = sources(z),
 		fun = fun,
-		prob = prob,
+		probs = probs,
 		zones = zones,
 		xnames = names(x)
 	)
 
 }
 
-#' @noRd
-.zonalByVector <- function(x, z, fun, prob, gtype) {
-
-	#' x	GRaster [sources()] name.
-	#' z	GVector [sources()] name.
-	#' fun	Character
-	#' gtype `geomtype(z, grass = TRUE)` ("area", "line", or "point")
+#' Internal function for zonal() when y is a GVector
+#'
+#' @param x	GRaster [sources()] name.
+#' @param z	GVector [sources()] name.
+#' @param fun	Character
+#' @param gtype `geomtype(z, grass = TRUE)` ("area", "line", or "point")
+#'
+#' @keywords internal
+.zonalByVector <- function(x, z, fun, probs, gtype) {
 
 	compareGeom(x, z)
 	.locationRestore(x)
@@ -123,22 +125,23 @@ methods::setMethod(
 		x = sources(x),
 		z = zonalSrc,
 		fun = fun,
-		prob = prob,
+		probs = probs,
 		zones = zones,
 		xnames = names(x)
 	)
 
 }
 
+#' Internal function for zonal()
+#' 
 #' @param x [sources()] name of `GRaster`.
 #' @param z [sources()] name of "zones" `GRaster`.
 #' @param fun Character: Name of function(s).
-#' @param prob Numeric in [0, 1].
+#' @param probs Numeric in the range 0 to 1, inclusive.
 #' @param zones Vector of zone values (integers).
 #' @param xnames Character: Names of `x`.
-#'
-#' @noRd
-.zonal <- function(x, z, fun, prob, zones, xnames) {
+#' @keywords internal
+.zonal <- function(x, z, fun, probs, zones, xnames) {
 
 	### get zone labels
 	numZones <- length(zones)
@@ -160,7 +163,7 @@ methods::setMethod(
 				flags = c(.quiet(), "overwrite")
 			)
 
-			thisOut <- .global(x = srcs[j], fun = fun, prob = prob)
+			thisOut <- .global(x = srcs[j], fun = fun, probs = probs)
 
 			prepend <- data.table::data.table(layer = i, name = xnames[i], zone = zones[j])
 

@@ -8,7 +8,7 @@
 #' 
 #' @aliases .vDetachDatabase
 #' @rdname vDetachDatabase
-#' @export
+#' @keywords internal
 .vDetachDatabase <- function(x) {
 
 	if (inherits(x, "GVector")) {

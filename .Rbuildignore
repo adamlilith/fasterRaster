@@ -12,3 +12,9 @@ CODE_OF_CONDUCT.md
 ^README\.Rmd$
 ^.lintr$
 ^fasterRaster.code-workspace
+dist_to_rivers.png
+elev_rivers.png
+fasterRaster.png
+geomorphon_barplot.png
+geomorphons.png
+junk

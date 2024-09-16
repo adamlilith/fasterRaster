@@ -14,7 +14,7 @@
 #'
 #' @example man/examples/ex_randRast.r
 #' 
-#' @seealso [spDepRast()], [rnormRast()], [runifRast()], and module `r.surf.fractal` in **GRASS**
+#' @seealso [rSpatialDepRast()], [rnormRast()], [runifRast()], and module `r.surf.fractal` in **GRASS**
 #'
 #' @aliases fractalRast
 #' @rdname fractalRast

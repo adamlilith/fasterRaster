@@ -2,7 +2,7 @@
 % Please edit documentation in R/cbind.r
 \name{colbind,GVector-method}
 \alias{colbind,GVector-method}
-\alias{colbind,cbind}
+\alias{colbind}
 \title{Add columns to the data table of a GVector}
 \usage{
 \S4method{colbind}{GVector}(x, ...)

@@ -1,6 +1,11 @@
+# fasterRaster 8.3.0.7023 (2024-09-15)
+
+## Main task of this pre-release
+o Fix all issues arising from `check()`.  
+
 # fasterRaster 8.3.0.7022 (2024-09-07)
 
-## Main task of this re-release
+## Main task of this pre-release
 o Examples in all help files have been checked and, if needed, either they or the calling function(s) have been fixed. See "Bug fixes and speed-ups" below.
 
 ## New functions and functionality

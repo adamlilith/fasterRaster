@@ -3,6 +3,7 @@
 #' @description `rbind()` combines two or more `GVector`s of the same type (points, lines, or polygons) and same coordinate reference system. You can speed operations by putting the vector that is largest in memory first in `rbind(...)`. If the `GVector`s have data tables, these will also be combined using `rbind()` if their column names and data types match.
 #'
 #' @param ... One or more `GVector`s.
+#' @param deparse.level See [rbind()].
 #'
 #' @returns A `GVector`.
 #'

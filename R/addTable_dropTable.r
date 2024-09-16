@@ -4,7 +4,8 @@
 #'
 #' `dropTable()` removes a data table associated with a `GVector`.
 #'
-#' @param x A `GVector.
+#' @param x A `GVector`.
+#' @param ... Other arguments (ignored).
 #' @param value A `data.frame`, `data.table`, or `matrix`.
 #'
 #' @returns A `GVector`.
@@ -19,7 +20,7 @@
 methods::setMethod(
 	f = "addTable<-",
 	signature = c(x = "GVector", value = "data.frame"),
-	function(x, value) .addTable(x = x, table = value)
+	function(x, ..., value) .addTable(x = x, table = value)
 )
 
 #' @aliases addTable<-
@@ -28,7 +29,7 @@ methods::setMethod(
 methods::setMethod(
 	f = "addTable<-",
 	signature = c(x = "GVector", value = "data.table"),
-	function(x, value) .addTable(x = x, table = value)
+	function(x, ..., value) .addTable(x = x, table = value)
 )
 
 #' @aliases addTable<-
@@ -37,7 +38,7 @@ methods::setMethod(
 methods::setMethod(
 	f = "addTable<-",
 	signature = c(x = "GVector", value = "matrix"),
-	function(x, value) .addTable(x = x, table = value)
+	function(x, ..., value) .addTable(x = x, table = value)
 )
 
 #' Add a data table to a `GVector`
@@ -70,4 +71,3 @@ methods::setMethod(
 
 	} # EOF
 )
-

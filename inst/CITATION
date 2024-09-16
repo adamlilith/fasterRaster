@@ -1,7 +1,19 @@
-@software{fasterRaster,
-  author = {{Adam B. Smith}},
-  title = {fasterRaster: Faster Raster and Spatial Vector Processing Using 'GRASS GIS'},
-  url = {https://github.com/adamlilith/fasterRaster},
-  version = {8.3.0.7022},
-  date = {2024-09-07},
-}
+key <- paste0("R-", meta$Package)
+year <- sub("-.*", "", meta$Date)
+note <- sprintf("R package version %s", meta$Version)
+doi <- "NA"
+title <- paste0(meta$Package, ": ", meta$Title)
+
+
+citHeader("To cite fasterRaster in publications use:")
+bibentry(bibtype = "Manual",
+	key = key,
+	title = title,
+	author = person(given = "Adam B.",
+				 family = "Smith",
+				 comment = c(ORCID = "0000-0002-8215-2053")),
+	year = year,
+	note = note,
+	doi  = doi
+)
+		 

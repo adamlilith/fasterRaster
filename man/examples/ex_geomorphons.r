@@ -15,7 +15,8 @@ geos
 levels(geos) # levels
 freq(geos) # frequencies
 
-col <- c("gray90", "red", "orange", "blue", "green", "pink", "firebrick", "purple", "gray50", "black")
+col <- c("gray90", "red", "orange", "blue", "green", "pink", "firebrick",
+  "purple", "gray50", "black")
 plot(geos, col = col)
 
 }

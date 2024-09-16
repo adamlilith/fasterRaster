@@ -52,7 +52,7 @@ methods::setValidity("GVector",
 #'
 #' @param src Character: The name of the vector in **GRASS**.
 #'
-#' @param table A `data.table`, `data.frame`, or character. This can be `data.table(NULL)` or `data.frame(NULL)` if there is no table associated with the vector. If a character, this is interpreted as the name of the table in **GRASS**.
+#' @param table A `data.table`, `data.frame`, `GVector` with a table, or character. This can be `data.table(NULL)` or `data.frame(NULL)` if there is no table associated with the vector. If a character, this is interpreted as the name of the table in **GRASS**.
 #'
 #' @param build Logical: If `TRUE` (default), build topology using **GRASS** module `v.build`.
 #'
@@ -68,10 +68,10 @@ methods::setValidity("GVector",
 #'
 #' @example man/examples/ex_GRaster_GVector.r
 #'
-#' @noRd
+#' @keywords internal
 .makeGVector <- function(src, table = NULL, build = TRUE, extensive = FALSE, cats = NULL, fail = TRUE) {
 
-	if (inherits(table, "GVector")) table <- src@table
+	if (inherits(table, "GVector")) table <- table@table
 	if (is.null(table)) table <- data.table::data.table(NULL)
 	if (!inherits(table, "data.table")) table <- data.table::as.data.table(table)
 

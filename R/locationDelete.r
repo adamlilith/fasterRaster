@@ -8,9 +8,10 @@
 #'
 #' @returns If successful, `TRUE` (invisibly). If not, then `FALSE` (also invisibly), plus a warning.
 #'
-#' @example man/examples/ex_location.r
-#' @noRd
-#' @export
+#' @example man/examples/ex_location_mapset.r
+#'
+#' @rdname location
+#' @keywords internal
 .locationDelete <- function(
 	location,
 	mapset = NULL,

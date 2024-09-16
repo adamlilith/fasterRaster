@@ -11,8 +11,8 @@
 #' @example man/examples/ex_location_mapset.r
 #'
 #' @aliases .locations
-#' @export
 #' @rdname locations
+#' @keywords internal
 .locations <- function(warn = TRUE) {
 
 	if (!grassStarted()) {

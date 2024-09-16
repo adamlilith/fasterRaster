@@ -4,11 +4,14 @@
 \alias{dropRows,data.table-method}
 \alias{dropRows}
 \alias{dropRows,data.frame-method}
+\alias{dropRows,matrix-method}
 \title{Remove rows in a data.table, data.frame, or matrix.}
 \usage{
 \S4method{dropRows}{data.table}(x, drops)
 
 \S4method{dropRows}{data.frame}(x, drops)
+
+\S4method{dropRows}{matrix}(x, drops)
 }
 \arguments{
 \item{x}{A \code{data.table} or \code{data.frame}.}

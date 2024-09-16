@@ -17,14 +17,11 @@
 #'
 #' @returns Character, integer, or `NULL` (if no match is found).
 #'
-#' @examples
+#' @example man/examples/ex_location_mapset.r
 #'
-#' .locationFind()
-#' .locationFind("xyz")
-#'
-#' @aliases .locationFind
+#' @aliases .locationFind,missing-method
 #' @rdname locationFind
-#' @exportMethod .locationFind
+#' @keywords internal
 methods::setMethod(
 	f = ".locationFind",
 	signature = c(x = "missing"),
@@ -49,45 +46,45 @@ methods::setMethod(
 	} # EOF
 )
 
-#' @aliases .locationFind
+#' @aliases .locationFind,GLocation-method
 #' @rdname locationFind
-#' @exportMethod .locationFind
+#' @keywords internal
 methods::setMethod(
 	f = ".locationFind",
 	signature = c(x = "GLocation"),
 	function(x, return = "name", match = "name") ..locationFind(x = x, return = return, match = match)
 )
 
-#' @aliases .locationFind
+#' @aliases .locationFind,SpatRaster-method
 #' @rdname locationFind
-#' @exportMethod .locationFind
+#' @keywords internal
 methods::setMethod(
 	f = ".locationFind",
 	signature = c(x = "SpatRaster"),
 	function(x, return = "name", match = "name") ..locationFind(x = x, return = return, match = match)
 )
 
-#' @aliases .locationFind
+#' @aliases .locationFind,SpatVector-method
 #' @rdname locationFind
-#' @exportMethod .locationFind
+#' @keywords internal
 methods::setMethod(
 	f = ".locationFind",
 	signature = c(x = "SpatVector"),
 	function(x, return = "name", match = "name") ..locationFind(x = x, return = return, match = match)
 )
 
-#' @aliases .locationFind
+#' @aliases .locationFind,sf-method
 #' @rdname locationFind
-#' @exportMethod .locationFind
+#' @keywords internal
 methods::setMethod(
 	f = ".locationFind",
 	signature = c(x = "sf"),
 	function(x, return = "name", match = "name") ..locationFind(x = x, return = return, match = match)
 )
 
-#' @aliases .locationFind
+#' @aliases .locationFind,character-method
 #' @rdname locationFind
-#' @exportMethod .locationFind
+#' @keywords internal
 methods::setMethod(
 	f = ".locationFind",
 	signature = c(x = "character"),
@@ -102,7 +99,6 @@ methods::setMethod(
 	} else {
 
 		return <- omnibus::pmatchSafe(return, c("name", "index", "crs"), nmax = 1L)
-
 		match <- omnibus::pmatchSafe(match, c("name", "crs"), nmax = 1L)
 
 		if (inherits(x, "character") & match == "name") {

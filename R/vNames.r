@@ -10,7 +10,7 @@
 #' 
 #' @aliases .vNames
 #' @rdname vNames
-#' @noRd
+#' @keywords internal
 .vNames <- function(x) {
 
 	if (inherits(x, "GVector")) {

@@ -34,7 +34,7 @@
 #' 
 #' @returns A `GRaster` or `GVector`.
 #' 
-#' @seealso [stats::aggregate()], [terra::aggregate()], [diagg()], [terra::disagg()]
+#' @seealso [stats::aggregate()], [terra::aggregate()], [disagg()], [terra::disagg()]
 #'
 #' @example man/examples/ex_aggregate_disagg.r
 #'

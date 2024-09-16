@@ -7,10 +7,15 @@
 #' * An integer: Index of the "location" in `.fasterRaster$locations`.
 #' * A `GSpatial` object (usually a `GRaster` or `GVector`).
 #'
+#' Any of these can be found using `.locationFind()`.
+#'
 #' @return An object of class `GLocation` (invisibly) if successful. An error will likely result if not.
 #'
+#' @example man/examples/ex_location_mapset.r
+#'
 #' @aliases .locationRestore
-#' @noRd
+#' @rdname locationRestore
+#' @keywords internal
 methods::setMethod(
 	f = ".locationRestore",
 	signature = c(x = "character"),
@@ -18,7 +23,8 @@ methods::setMethod(
 )
 
 #' @aliases .locationRestore
-#' @noRd
+#' @rdname locationRestore
+#' @keywords internal
 methods::setMethod(
 	f = ".locationRestore",
 	signature = c(x = "integer"),
@@ -26,7 +32,8 @@ methods::setMethod(
 )
 
 #' @aliases .locationRestore
-#' @noRd
+#' @rdname locationRestore
+#' @keywords internal
 methods::setMethod(
 	f = ".locationRestore",
 	signature = c(x = "numeric"),
@@ -34,14 +41,15 @@ methods::setMethod(
 )
 
 #' @aliases .locationRestore
-#' @noRd
+#' @rdname locationRestore
+#' @keywords internal
 methods::setMethod(
 	f = ".locationRestore",
 	signature = c(x = "GSpatial"),
 	function(x) ..locationRestore(x)
 )
 
-#' @noRd
+#' @keywords internal
 ..locationRestore <- function(x) {
 
 	if (inherits(x, "character")) {

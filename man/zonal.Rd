@@ -5,7 +5,7 @@
 \alias{zonal}
 \title{Statistics on cells of a GRaster stratified by cells of another raster}
 \usage{
-\S4method{zonal}{GRaster,ANY}(x, z, fun = "mean", prob = 0.5)
+\S4method{zonal}{GRaster,ANY}(x, z, fun = "mean", probs = 0.5)
 }
 \arguments{
 \item{x}{A \code{GRaster} for which to calculate summary statistics.}
@@ -25,7 +25,7 @@
 \item \code{"mean"} (default): Average.
 \item \code{"meanAbs"}: Mean of absolute values.
 \item \code{"median"}: Median.
-\item \code{"quantile"}: Quantile (see also argument \code{prob}).
+\item \code{"quantile"}: Quantile (see also argument \code{probs}).
 \item \code{"range"}: Range.
 \item \code{"sd"}: Sample standard deviation.
 \item \code{"sdpop"}: Population standard deviation.
@@ -34,7 +34,7 @@
 \item \code{"varpop"}: Population variance.
 }}
 
-\item{prob}{Numeric: Quantile at which to calculate \code{quantile}. Only a single value between 0 and 1 is allowed.}
+\item{probs}{Numeric: Quantile at which to calculate \code{quantile}. Only a single value between 0 and 1 is allowed.}
 }
 \value{
 A \code{data.frame} or \code{data.table}.

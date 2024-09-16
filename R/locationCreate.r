@@ -1,6 +1,6 @@
 #' Connect to "GRASS"
 #'
-#' @description This function initializes a **GRASS** ["location"][tutorial_locations_mapsets]. You need to run this function (often just once) before you use most functions in **fasterRaster**.
+#' @description This function initializes a **GRASS** ["location"][tutorial_locations_mapsets]. You need to run this function (often just once) before you use most functions in **fasterRaster**. This function is of use to developers, not most users.
 #'
 #' @param x Any object from which a coordinate reference system (CRS) can be acquired. Ergo, any of:
 #' * A `SpatRaster`, `SpatVector`, `SpatExtent`, `stars`, or `sf` object
@@ -9,16 +9,17 @@
 #'
 #' @param location Character or `NULL` (default): Name of the location.
 #'
-#' @param overwrite Logical: If `FALSE` (default), and a **GRASS** "coordinate reference frame" with the given name has already been created, then the function will fail. If `TRUE`, then the existing **GRASS** "coordinate reference frame" of the same name will be overwritten. *NOTE*: This will **not** remove any **R** objects associated with rasters or vectors in the session, but they will no longer work because the objects they point to will be overwritten.
+#' @param overwrite Logical: If `FALSE` (default), and a **GRASS** "coordinate reference frame" with the given name has already been created, then the function will fail. If `TRUE`, then the existing **GRASS** "coordinate reference frame" of the same name will be overwritten. *NOTE*: This will **not** remove any **R** objects associated with rasters or vectors in the "location", but they will no longer work because the objects they point to will be overwritten.
 #
 #' @param warn Logical: If `TRUE` (default) and `overwrite` is `TRUE`, then display a warning.
 #'
 #' @return A [GLocation] object (invisibly).
 #'
-#' @example man/examples/ex_fasterRaster.r
+#' @example man/examples/ex_location_mapset.r
 #'
 #' @aliases .locationCreate
-#' @noRd
+#' @rdname locationCreate
+#' @keywords internal
 methods::setMethod(
 	f = ".locationCreate",
 	signature = c(x = "character"),
@@ -26,7 +27,8 @@ methods::setMethod(
 )
 
 #' @aliases .locationCreate
-#' @noRd
+#' @rdname locationCreate
+#' @keywords internal
 methods::setMethod(
 	f = ".locationCreate",
 	signature = c(x = "SpatRaster"),
@@ -34,7 +36,8 @@ methods::setMethod(
 )
 
 #' @aliases .locationCreate
-#' @noRd
+#' @rdname locationCreate
+#' @keywords internal
 methods::setMethod(
 	f = ".locationCreate",
 	signature = c(x = "SpatVector"),
@@ -42,7 +45,8 @@ methods::setMethod(
 )
 
 #' @aliases .locationCreate
-#' @noRd
+#' @rdname locationCreate
+#' @keywords internal
 methods::setMethod(
 	f = ".locationCreate",
 	signature = c(x = "sf"),
