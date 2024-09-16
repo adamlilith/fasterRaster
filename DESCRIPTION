@@ -40,7 +40,7 @@ Suggests:
 Roxygen: list(markdown = TRUE)
 License: GPL (>=3) + file LICENSE
 SystemRequirements: GRASS (>= 8)
-URL: http://www.earthSkySea.org
+URL: http://www.earthSkySea.org, https://adamlilith.github.io/fasterRaster/
 BugReports: https://github.com/adamlilith/fasterRaster/issues
 VignetteBuilder: knitr
 Encoding: UTF-8

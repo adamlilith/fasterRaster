@@ -18,3 +18,7 @@ fasterRaster.png
 geomorphon_barplot.png
 geomorphons.png
 junk
+^_pkgdown\.yml$
+^docs$
+^pkgdown$
+^\.github$
