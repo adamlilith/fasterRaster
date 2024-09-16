@@ -7,7 +7,7 @@
 
 Faster raster processing in `R` using `GRASS GIS`
  
-<a href="https://adamlilith.github.io/fasterRaster/"><img src="man/figures/logo.png" align="right" height="132" alt="fasterRaster website" /></a>
+<a href="https://adamlilith.github.io/fasterRaster/"><img src="man/figures/logo.png" align="right" height="232" alt="fasterRaster website" /></a>
 
 `fasterRaster` is a package designed specifically to handle large-in-memory/large-on-disk spatial rasters and vectors. `fasterRaster` does this using the stand-alone installer of Open Source Geospatial's <a href="https://grass.osgeo.org/rgrass/">`GRASS GIS`</a>
 
