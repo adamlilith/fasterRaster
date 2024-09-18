@@ -1,4 +1,5 @@
 # fasterRaster 8.3.0.7024 (2024-09-17)
+
 o Added `pkgdown` site!!! (Experimental...)
 
 ## Big fixes
