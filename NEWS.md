@@ -2,7 +2,7 @@
 
 o Added `pkgdown` site!!! (Experimental...)
 
-## Big fixes
+## Bug fixes
 o `bioclims()` calculates BIO07 even when BIO05 and BIO06 were not explicitly called.  
 o `faster()` accepts a names list as an argument.  
 
