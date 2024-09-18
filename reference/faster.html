@@ -8,7 +8,7 @@ Set values of particular options: Use the form faster(option 1 = value1, option2
 Set all options to their defaults: Use faster(restore = TRUE).
 
 
-You cannot simultaneously set options and restore their default values.'><meta property="og:description" content='faster() either sets or gets options used across fasterRaster functions. Its use can vary:
+You cannot simultaneously get and set options.'><meta property="og:description" content='faster() either sets or gets options used across fasterRaster functions. Its use can vary:
 Get current values of a particular option: Use faster("option_name"). Values will remain unchanged.
 Get current values of all options: Use faster() (no arguments). Values will remain unchanged.
 Get default values of a particular option: Use faster("option_name", default = TRUE). Values will remain unchanged.
@@ -17,7 +17,7 @@ Set values of particular options: Use the form faster(option 1 = value1, option2
 Set all options to their defaults: Use faster(restore = TRUE).
 
 
-You cannot simultaneously set options and restore their default values.'><meta property="og:image" content="https://adamlilith.github.io/fasterRaster/logo.png"></head><body>
+You cannot simultaneously get and set options.'><meta property="og:image" content="https://adamlilith.github.io/fasterRaster/logo.png"></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
@@ -25,7 +25,7 @@ You cannot simultaneously set options and restore their default values.'><meta p
 
     <a class="navbar-brand me-2" href="../index.html">fasterRaster</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">8.3.0.7023</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">8.3.0.7024</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -57,7 +57,7 @@ You cannot simultaneously set options and restore their default values.'><meta p
 <li><p>Get default values of all options: Use <code>faster(default = TRUE)</code>. Values will remain unchanged.</p></li>
 <li><p>Set values of particular options: Use the form <code>faster(option 1 = value1, option2 = value2)</code>.</p></li>
 <li><p>Set all options to their defaults: Use <code>faster(restore = TRUE)</code>.</p></li>
-</ul><p>You cannot simultaneously set options and restore their default values.</p>
+</ul><p>You cannot simultaneously get and set options.</p>
     </div>
 
     <div class="section level2">
@@ -78,7 +78,7 @@ You cannot simultaneously set options and restore their default values.'><meta p
 <li><p><code>cores</code> (integer/numeric integer): Number of processor cores to use on a task. The default is 2. Some <strong>GRASS</strong> modules are parallelized.</p></li>
 <li><p><code>memory</code> (integer/numeric): The amount of memory to allocate to a task, in GB, for <strong>GRASS</strong>. The default is 2048 MB (i.e., 2 GB). Some <strong>GRASS</strong> modules can take advantage of more memory.</p></li>
 <li><p><code>clean</code> (logical): If <code>TRUE</code> (default), remove temporary files created internally by functions. If not deleted, they can eventually fill up hard drive space, but deleting them takes a little bit of time (usually &lt;1 second for each function).</p></li>
-<li><p><code>useDataTable</code> (logical): If <code>FALSE</code> (default), use <code>data.frame</code>s when going back and forth between data tables of <code>GVector</code>s and <strong>R</strong>. This can be slow for very large data tables. If <code>TRUE</code>, use <code>data.table</code>s from the <strong>data.table</strong> package. This can be much faster, but it might require you to know how to use <code>data.table</code>s if you want to manipulate them in <strong>R</strong>. You can always convert them to <code>data.frame</code>s using <code><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">base::as.data.frame()</a></code>.</p></li>
+<li><p><code>useDataTable</code> (logical): If <code>FALSE</code> (default), functions that return tabular output produce <code>data.frame</code>s. If <code>TRUE</code>, output will be <code>data.table</code>s from the <strong>data.table</strong> package. This can be much faster, but it might require you to know how to use <code>data.table</code>s if you want to manipulate them in <strong>R</strong>. You can always convert them to <code>data.frame</code>s using <code><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">base::as.data.frame()</a></code>.</p></li>
 <li><p><code>verbose</code> (logical): If <code>TRUE</code>, show <strong>GRASS</strong> messages and otherwise hidden slots in classes. This is mainly used for debugging, so most users will want to keep this at its default, <code>FALSE</code>.</p></li>
 <li><p><code>workDir</code> (character): The folder in which <strong>GRASS</strong> rasters, vectors, and other objects are created and manipulated. By default, this is given by <code><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir()</a></code>.</p></li>
 </ul></dd>

@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">fasterRaster</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">8.3.0.7023</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">8.3.0.7024</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -31,6 +31,15 @@
       <small>Source: <a href="https://github.com/adamlilith/fasterRaster/blob/master/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="8.3.0.7024" id="fasterraster-8307024-2024-09-17">fasterRaster 8.3.0.7024 (2024-09-17)<a class="anchor" aria-label="anchor" href="#fasterraster-8307024-2024-09-17"></a></h2>
+<p>o Added <code>pkgdown</code> site!!! (Experimental…)</p>
+<div class="section level3">
+<h3 id="big-fixes-8-3-0-7024">Big fixes<a class="anchor" aria-label="anchor" href="#big-fixes-8-3-0-7024"></a></h3>
+<p>o <code><a href="../reference/bioclims.html">bioclims()</a></code> calculates BIO07 even when BIO05 and BIO06 were not explicitly called.<br>
+o <code><a href="../reference/faster.html">faster()</a></code> accepts a names list as an argument.</p>
+</div>
+</div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="8.3.0.7023" id="fasterraster-8307023-2024-09-15">fasterRaster 8.3.0.7023 (2024-09-15)<a class="anchor" aria-label="anchor" href="#fasterraster-8307023-2024-09-15"></a></h2>
 <div class="section level3">
@@ -75,7 +84,8 @@ o <code><a href="../reference/spatSample.html">spatSample()</a></code> works whe
 o <code>subset_dollar</code> bug fixed related to rationalization of <code><a href="../reference/dim.html">dim()</a></code> and <code><a href="../reference/res.html">res()</a></code>.<br>
 o <code>subset_double_square_brackets</code> works for <code>i = missing</code> and <code>j =</code> not missing.<br>
 o <code>subset_single_bracket</code> works for <code>x[i, j]</code> when neither <code>i</code> nor <code>j</code> are missing.<br>
-o <code><a href="../reference/sun.html">sun()</a></code> works with <code>GRaster</code>s from <code><a href="../reference/horizonHeight.html">horizonHeight()</a></code>. o <code><a href="../reference/terrain.html">terrain()</a></code> works when all methods (<code>v = '*'</code>) are called.<br>
+o <code><a href="../reference/sun.html">sun()</a></code> works with <code>GRaster</code>s from <code><a href="../reference/horizonHeight.html">horizonHeight()</a></code>.<br>
+o <code><a href="../reference/terrain.html">terrain()</a></code> works when all methods (<code>v = '*'</code>) are called.<br>
 o <code><a href="../reference/update.html">update()</a></code> retains a <code>GVector</code>’s data table.<br>
 o <code><a href="../reference/vegIndex.html">vegIndex()</a></code> fixed bug parsing <code>index</code>.<br>
 o <code><a href="../reference/zonal.html">zonal()</a></code> works when zones are set by a <code>GVector</code>.</p>

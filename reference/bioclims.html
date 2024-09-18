@@ -45,7 +45,7 @@ BIO59: The greatest decrease in precipitation from one month to the next (mm; al
 BIO60: The greatest increase in precipitation from one month to the next (mm; always &amp;gt;= 0)
 
 
-By default, &quot;quarter&quot; refers to any consecutive run of three months, not a financial quarter. A quarter can thus include November-December-January, or December-January-February, for example. However, the length of a quarter can be changed using teh argument quarter.
+By default, &quot;quarter&quot; refers to any consecutive run of three months, not a financial quarter. A quarter can thus include November-December-January, or December-January-February, for example. However, the length of a quarter can be changed using the argument quarter.
 The variables are defined assuming that the input rasters represent monthly values (12 rasters for min/max temperature and precipitation), but you can also use sets of 52 rasters, representing one per week, in which case &quot;quarter&quot; would be a successive run of 3 weeks. You could also attempt 365 rasters, in which case a &quot;quarter&quot; would be a run of 3 successive days.
 BIOCLIMs 41 through 44 are added here to capture the &quot;shoulder&quot; seasons (spring and autumn) important in temperature regions. BIOCLIMs 45 through 48 are also included for consistency.
 BIOCLIMs 49 through 60 are not bioclimatic variables per se, but useful for assessing the properties of the variables that are defined based on the &quot;-est&quot; month or quarter.
@@ -95,7 +95,7 @@ BIO59: The greatest decrease in precipitation from one month to the next (mm; al
 BIO60: The greatest increase in precipitation from one month to the next (mm; always &amp;gt;= 0)
 
 
-By default, &quot;quarter&quot; refers to any consecutive run of three months, not a financial quarter. A quarter can thus include November-December-January, or December-January-February, for example. However, the length of a quarter can be changed using teh argument quarter.
+By default, &quot;quarter&quot; refers to any consecutive run of three months, not a financial quarter. A quarter can thus include November-December-January, or December-January-February, for example. However, the length of a quarter can be changed using the argument quarter.
 The variables are defined assuming that the input rasters represent monthly values (12 rasters for min/max temperature and precipitation), but you can also use sets of 52 rasters, representing one per week, in which case &quot;quarter&quot; would be a successive run of 3 weeks. You could also attempt 365 rasters, in which case a &quot;quarter&quot; would be a run of 3 successive days.
 BIOCLIMs 41 through 44 are added here to capture the &quot;shoulder&quot; seasons (spring and autumn) important in temperature regions. BIOCLIMs 45 through 48 are also included for consistency.
 BIOCLIMs 49 through 60 are not bioclimatic variables per se, but useful for assessing the properties of the variables that are defined based on the &quot;-est&quot; month or quarter.
@@ -107,7 +107,7 @@ The numbering of the new BIOCLIMs was begun at 41 because BIOCLIMs 20 through 40
 
     <a class="navbar-brand me-2" href="../index.html">fasterRaster</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">8.3.0.7023</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">8.3.0.7024</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -173,7 +173,7 @@ The numbering of the new BIOCLIMs was begun at 41 because BIOCLIMs 20 through 40
 <li><p>BIO58: The greatest increase in temperature from one month to the next (deg C; always &gt;= 0)</p></li>
 <li><p>BIO59: The greatest decrease in precipitation from one month to the next (mm; always &gt;= 0)</p></li>
 <li><p>BIO60: The greatest increase in precipitation from one month to the next (mm; always &gt;= 0)</p></li>
-</ul><p>By default, "quarter" refers to any consecutive run of three months, not a financial quarter. A quarter can thus include November-December-January, or December-January-February, for example. However, the length of a quarter can be changed using teh argument <code>quarter</code>.</p>
+</ul><p>By default, "quarter" refers to any consecutive run of three months, not a financial quarter. A quarter can thus include November-December-January, or December-January-February, for example. However, the length of a quarter can be changed using the argument <code>quarter</code>.</p>
 <p>The variables are defined assuming that the input rasters represent monthly values (12 rasters for min/max temperature and precipitation), but you can also use sets of 52 rasters, representing one per week, in which case "quarter" would be a successive run of 3 weeks. You could also attempt 365 rasters, in which case a "quarter" would be a run of 3 successive days.</p>
 <p>BIOCLIMs 41 through 44 are added here to capture the "shoulder" seasons (spring and autumn) important in temperature regions. BIOCLIMs 45 through 48 are also included for consistency.</p>
 <p>BIOCLIMs 49 through 60 are not bioclimatic variables per se, but useful for assessing the properties of the variables that are defined based on the "-est" month or quarter.</p>
@@ -191,7 +191,8 @@ The numbering of the new BIOCLIMs was begun at 41 because BIOCLIMs 20 through 40
 <span>  bios <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  sample <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  quarter <span class="op">=</span> <span class="fl">3</span>,</span>
-<span>  pptDelta <span class="op">=</span> <span class="fl">1</span></span>
+<span>  pptDelta <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  verbose <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S4 method for class 'SpatRaster'</span></span>
@@ -242,6 +243,10 @@ The numbering of the new BIOCLIMs was begun at 41 because BIOCLIMs 20 through 40
 
 <dt id="arg-pptdelta">pptDelta<a class="anchor" aria-label="anchor" href="#arg-pptdelta"></a></dt>
 <dd><p>Numeric: Value to add to precipitation for calculation of BIO15 (coefficient of variation of precipitation, times 100). Adding a small value avoids division by 0. The default is 1.</p></dd>
+
+
+<dt id="arg-verbose">verbose<a class="anchor" aria-label="anchor" href="#arg-verbose"></a></dt>
+<dd><p>Logical: If <code>TRUE</code> (default), display progress.</p></dd>
 
 </dl></div>
     <div class="section level2">
