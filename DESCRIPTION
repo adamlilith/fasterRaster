@@ -36,7 +36,8 @@ Imports:
 	terra (>= 1.7),
 	utils
 Suggests:
-	knitr
+    knitr,
+    rmarkdown
 Roxygen: list(markdown = TRUE)
 License: GPL (>=3) + file LICENSE
 SystemRequirements: GRASS (>= 8)

@@ -84,7 +84,7 @@ The `fast()` function is the key function for loading a raster or vector into `f
 elev <- fast(madElev)
 elev
 ```
-You should see some metadata on the `GRaster`:
+You will see the `GRaster`s metadata:
 ```
 class       : GRaster
 topology    : 2D 
@@ -123,7 +123,7 @@ Now, let's add a 1000-m buffer to the rivers using `buffer()`. As much as possib
 Note, though, that the output from `fasterRaster` is not necessarily guaranteed to be the same as output from the respective functions `terra`. This is because there are different methods to do the same thing, and the developers of `GRASS` may have chosen different methods than the developers of other GIS packages.
 ```
 # width in meters because CRS is projected
-river_buffers <- buffer(rivers, width = 1000, dissolve = TRUE)
+river_buffers <- buffer(rivers, width = 1000)
 ```
 
 Now, let's calculate the distances between the buffered areas and all cells on the raster map using `distance()`.
