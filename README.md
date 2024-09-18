@@ -84,7 +84,7 @@ The `fast()` function is the key function for loading a raster or vector into `f
 elev <- fast(madElev)
 elev
 ```
-You should see some metadata on the `GRaster`:
+You will see the `GRaster`s metadata:
 ```
 class       : GRaster
 topology    : 2D 
