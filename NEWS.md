@@ -1,3 +1,10 @@
+# fasterRaster 8.3.0.7024 (2024-09-17)
+o Added `pkgdown` site!!! (Experimental...)
+
+## Big fixes
+o `bioclims()` calculates BIO07 even when BIO05 and BIO06 were not explicitly called.  
+o `faster()` accepts a names list as an argument.  
+
 # fasterRaster 8.3.0.7023 (2024-09-15)
 
 ## Main task of this pre-release
