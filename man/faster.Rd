@@ -7,7 +7,14 @@
 faster(..., default = FALSE, restore = FALSE)
 }
 \arguments{
-\item{...}{Either a character (the name of an option), or an option and the value of the option using an \code{option = value} pattern. These include:
+\item{...}{Either:
+\itemize{
+\item A character vector: Name(s) of option(s) to get values of;
+\item An option and the value of the option using an \code{option = value} pattern; or
+\item A names \code{list} with names that match the options you wish to change, and with values to assign to each option.
+}
+
+Options include:
 \itemize{
 \item \code{grassDir} (character): The folder in which \strong{GRASS} is installed on your computer. Typically, this option is set when you run \code{\link[=faster]{faster()}}. Depending on your operating system, your install directory will look something like this:
 \itemize{
