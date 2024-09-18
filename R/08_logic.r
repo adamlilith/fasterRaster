@@ -2,7 +2,7 @@
 #'
 #' @description You can do logical operations on `GRaster`s. Here, a value of 1 is interpreted as `TRUE`, and a value of 0 is interpreted as `FALSE`. You can compare:
 #' * A `GRaster` to another `GRaster`
-#' * A `GRaster` to a logical value (`TRUE` or `FALSE`, but not `NA`)
+#' * A `GRaster` to a logical value (`TRUE` or `FALSE`, but not `NA`--see [not.na()])
 #' * A `GRaster` to a numeric or integer value that is 0 or 1
 #' 
 #' Operators include:
