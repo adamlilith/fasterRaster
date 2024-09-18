@@ -51,7 +51,7 @@
 #' * BIO59: The greatest decrease in precipitation from one month to the next (mm; always >= 0)
 #' * BIO60: The greatest increase in precipitation from one month to the next (mm; always >= 0)
 #' 
-#' By default, "quarter" refers to any consecutive run of three months, not a financial quarter. A quarter can thus include November-December-January, or December-January-February, for example. However, the length of a quarter can be changed using teh argument `quarter`.
+#' By default, "quarter" refers to any consecutive run of three months, not a financial quarter. A quarter can thus include November-December-January, or December-January-February, for example. However, the length of a quarter can be changed using the argument `quarter`.
 #'
 #' The variables are defined assuming that the input rasters represent monthly values (12 rasters for min/max temperature and precipitation), but you can also use sets of 52 rasters, representing one per week, in which case "quarter" would be a successive run of 3 weeks. You could also attempt 365 rasters, in which case a "quarter" would be a run of 3 successive days.
 #'
@@ -80,6 +80,8 @@
 #'
 #' @param pptDelta Numeric: Value to add to precipitation for calculation of BIO15 (coefficient of variation of precipitation, times 100). Adding a small value avoids division by 0. The default is 1.
 #'
+#' @param verbose Logical: If `TRUE` (default), display progress.
+#'
 #' @returns A `GRaster` with one or more layers.
 #'
 #' @references Booth, T.H., Nix, H.A., Busby, J.R., and Hutchinson, M.F.  2014.  BIOCLIM: The first species distribution modeling package, its early applications and relevance to most current MaxEnt studies. *Diversity and Distributions* 20:1-9 \doi{10.1111/ddi.12144}.
@@ -102,7 +104,8 @@ methods::setMethod(
 		bios = NULL,
 		sample = TRUE,
 		quarter = 3,
-		pptDelta = 1
+		pptDelta = 1,
+		verbose = TRUE
 	) {
 
 	# BIOCLIM numbers
@@ -118,6 +121,25 @@ methods::setMethod(
 	warmestQuarterBios <- c(10, 18, 42, 44, 53)
 	coldestQuarterBios <- c(11, 19, 41, 43, 54)
 	
+	### number of tasks (used for progress bar
+	nTasks <- 1 + length(bios) +
+		(any(meanTempBios %in% bios) & !is.null(tmean)) +
+		any(quarterTempBios %in% bios) +
+		any(quarterPrecipBios %in% bios) +
+		any(wettestQuarterBios %in% bios) +
+		any(driestQuarterBios %in% bios) +
+		any(warmestQuarterBios %in% bios) +
+		any(coldestQuarterBios %in% bios) +
+		any(c(57, 58) %in% bios) +
+		any(c(59, 60) %in% bios) +
+		(sample & 4 %in% bios) +
+		(sample & 15 %in% bios)
+
+	if (verbose | faster("verbose")) {
+		pb <- utils::txtProgressBar(min = 0, max = nTasks, initial = 0, style = 3, width = 30)
+	}
+	tasks <- 0
+
 	if (is.null(bios)) {
 		bios <- classicBios
 	} else if (any(bios == "*")) {
@@ -156,6 +178,9 @@ methods::setMethod(
 	### calculate tmean if needed
 	if (is.null(tmean) & any(bios %in% meanTempBios)) {
 
+		tasks <- tasks + 1
+		if (verbose | faster("verbose")) utils::setTxtProgressBar(pb, tasks)
+
 		tmean <- .makeSourceName("r_mapcalc", "raster", nLayers)
 		for (i in seq_len(nLayers)) {
 
@@ -169,12 +194,20 @@ methods::setMethod(
 
 	### quarter temperature rasters
 	if (any(bios %in% quarterTempBios)) {
+
+		tasks <- tasks + 1
+		if (verbose | faster("verbose")) utils::setTxtProgressBar(pb, tasks)
+
 		tmeanByQuarter <- .calcQuarterGR(tmean, fun = "mean", quarter = quarter)
 		if (faster("clean")) on.exit(.rm(tmeanByQuarter, type = "raster", warn = FALSE, verify = FALSE), add = TRUE)
 	}
 
 	### quarter precipitation rasters
 	if (any(bios %in% quarterPrecipBios)) {
+
+		tasks <- tasks + 1
+		if (verbose | faster("verbose")) utils::setTxtProgressBar(pb, tasks)
+
 		pptByQuarter <- .calcQuarterGR(ppt, fun = "sum", quarter = quarter)
 		if (faster("clean")) on.exit(.rm(pptByQuarter, type = "raster", warn = FALSE, verify = FALSE), add = TRUE)
 	}
@@ -186,6 +219,9 @@ methods::setMethod(
 
 	### BIO53 (warmest quarter)
 	if (any(bios %in% warmestQuarterBios)) {
+
+		tasks <- tasks + 1
+		if (verbose | faster("verbose")) utils::setTxtProgressBar(pb, tasks)
 
 		bio53Minus1 <- .makeSourceName("r_mapcalc", "raster")
 		bio53 <- .makeSourceName("r_mapcalc", "raster", name = "bio53")
@@ -219,6 +255,9 @@ methods::setMethod(
 	### BIOCLIM 54 (coldest quarter)
 	if (any(bios %in% coldestQuarterBios)) {
 
+		tasks <- tasks + 1
+		if (verbose | faster("verbose")) utils::setTxtProgressBar(pb, tasks)
+
 		bio54Plus1 <- .makeSourceName("r_mapcalc", "raster")
 		bio54 <- .makeSourceName("r_mapcalc", "raster", name = "bio54")
 		
@@ -251,6 +290,9 @@ methods::setMethod(
 	### BIOCLIM 55 (wettest quarter)
 	if (any(bios %in% wettestQuarterBios)) {
 		
+		tasks <- tasks + 1
+		if (verbose | faster("verbose")) utils::setTxtProgressBar(pb, tasks)
+
 		bio55Plus1 <- .makeSourceName("r_mapcalc", "raster")
 		bio55 <- .makeSourceName("r_mapcalc", "raster", name = "bio55")
 
@@ -284,6 +326,9 @@ methods::setMethod(
 	### BIOCLIM 56 (driest quarter)
 	if (any(bios %in% driestQuarterBios)) {
 
+		tasks <- tasks + 1
+		if (verbose | faster("verbose")) utils::setTxtProgressBar(pb, tasks)
+
 		bio56Plus1 <- .makeSourceName("r_mapcalc", "raster")
 		bio56 <- .makeSourceName("r_mapcalc", "raster", name = "bio56")
 		
@@ -315,6 +360,9 @@ methods::setMethod(
 
 	### BIOCLIM 1
 	if (1 %in% bios) {
+
+		tasks <- tasks + 1
+		if (verbose | faster("verbose")) utils::setTxtProgressBar(pb, tasks)
 		
 		bio1 <- .makeSourceName("r_series", "raster", n = 1L, name = "bio1")
 		rgrass::execGRASS(
@@ -335,6 +383,9 @@ methods::setMethod(
 	### BIOCLIM 2
 	if (any(c(2, 3) %in% bios)) {
 		
+		tasks <- tasks + 1
+		if (verbose | faster("verbose")) utils::setTxtProgressBar(pb, tasks)
+
 		meanMaxSrc <- .makeSourceName("r_series", "raster", n = 1L)
 		meanMinSrc <- .makeSourceName("r_series", "raster", n = 1L)
 		bio2 <- .makeSourceName("r_series", "raster", n = 1L, name = "bio2")
@@ -378,6 +429,9 @@ methods::setMethod(
 	### BIOCLIM 5
 	if (any(c(3, 5, 7) %in% bios)) {
 		
+		tasks <- tasks + 1
+		if (verbose | faster("verbose")) utils::setTxtProgressBar(pb, tasks)
+
 		bio5 <- .makeSourceName("r_series", "raster", n = 1L, name = "bio5")
 
 		rgrass::execGRASS(
@@ -400,6 +454,9 @@ methods::setMethod(
 	### BIOCLIM 6
 	if (any(c(3, 6, 7) %in% bios)) {
 		
+		tasks <- tasks + 1
+		if (verbose | faster("verbose")) utils::setTxtProgressBar(pb, tasks)
+
 		bio6 <- .makeSourceName("r_series", "raster", n = 1L, name = "bio6")
 
 		rgrass::execGRASS(
@@ -422,11 +479,10 @@ methods::setMethod(
 	### BIOCLIM 7 (annual temp range)
 	if (any(c(3, 7) %in% bios)) {
 		
-		bio7 <- .makeSourceName("r_mapcalc", "raster", n = 1L, name = "bio7")
+		tasks <- tasks + 1
+		if (verbose | faster("verbose")) utils::setTxtProgressBar(pb, tasks)
 
-		bio5 <- out[names(out) == "bio5"]
-		bio6 <- out[names(out) == "bio6"]
-		
+		bio7 <- .makeSourceName("r_mapcalc", "raster", n = 1L, name = "bio7")
 		ex <- paste0(bio7, " = ", bio5, " - ", bio6)
 		
 		rgrass::execGRASS("r.mapcalc", expression = ex, flags = c(.quiet(), "overwrite"))
@@ -441,6 +497,9 @@ methods::setMethod(
 	### BIOCLIM 3 (100 * bio2 / bio7)
 	if (3 %in% bios) {
 		
+		tasks <- tasks + 1
+		if (verbose | faster("verbose")) utils::setTxtProgressBar(pb, tasks)
+
 		bio3 <- .makeSourceName("r_mapcalc", "raster", n = 1L, name = "bio3")
 
 		bio2 <- out[names(out) == "bio2"]
@@ -458,6 +517,9 @@ methods::setMethod(
 	### BIOCLIM 4 (100 * sd of temp)
 	if (4 %in% bios) {
 		
+		tasks <- tasks + 1
+		if (verbose | faster("verbose")) utils::setTxtProgressBar(pb, tasks)
+
 		bio4 <- .makeSourceName("r_mapcalc", "raster", n = 1L, name = "bio4")
 
 		rgrass::execGRASS(
@@ -473,6 +535,9 @@ methods::setMethod(
 		# convert to sample SD as per R
 		if (sample) {
 		
+			tasks <- tasks + 1
+			if (verbose | faster("verbose")) utils::setTxtProgressBar(pb, tasks)
+
 			srcIn <- bio4
 			bio4 <- .makeSourceName("r_mapcalc", "raster", n = 1L, name = "bio4")
 
@@ -491,6 +556,9 @@ methods::setMethod(
 	# BIOCLIM 8 (mean temp of wettest quarter)
 	if (8 %in% bios) {
 		
+		tasks <- tasks + 1
+		if (verbose | faster("verbose")) utils::setTxtProgressBar(pb, tasks)
+
 		# burn temperature of wettest quarter to cells
 		bio8 <- .makeSourceName("r_mapcalc", "raster", n = 1L, name = "bio8")
 
@@ -509,6 +577,9 @@ methods::setMethod(
 
 	# BIOCLIM 9 (mean temp of driest quarter)
 	if (9 %in% bios) {
+
+		tasks <- tasks + 1
+		if (verbose | faster("verbose")) utils::setTxtProgressBar(pb, tasks)
 
 		# burn temperature of driest quarter to cells
 		bio9 <- .makeSourceName("r_mapcalc", "raster", n = 1L, name = "bio9")
@@ -529,6 +600,9 @@ methods::setMethod(
 	# BIOCLIM 10 (mean temp of warmest quarter)
 	if (10 %in% bios) {
 
+		tasks <- tasks + 1
+		if (verbose | faster("verbose")) utils::setTxtProgressBar(pb, tasks)
+
 		# burn temperature of warmest quarter to cells
 		bio10 <- .makeSourceName("r_mapcalc", "raster", n = 1L, name = "bio10")
 
@@ -548,6 +622,9 @@ methods::setMethod(
 	# BIOCLIM 11 (mean temp of coldest quarter)
 	if (11 %in% bios) {
 
+		tasks <- tasks + 1
+		if (verbose | faster("verbose")) utils::setTxtProgressBar(pb, tasks)
+
 		# burn temperature of coldest quarter to cells
 		bio11 <- .makeSourceName("r_mapcalc", "raster", n = 1L, name = "bio11")
 
@@ -566,6 +643,9 @@ methods::setMethod(
 
 	# BIOCLIM 12 (total precipitation)
 	if (12 %in% bios) {
+
+		tasks <- tasks + 1
+		if (verbose | faster("verbose")) utils::setTxtProgressBar(pb, tasks)
 
 		bio12 <- .makeSourceName("r_mapcalc", "raster", n = 1L, name = "bio12")
 
@@ -589,6 +669,9 @@ methods::setMethod(
 	# BIOCLIM 13 (wettest month precipitation)
 	if (13 %in% bios) {
 
+		tasks <- tasks + 1
+		if (verbose | faster("verbose")) utils::setTxtProgressBar(pb, tasks)
+
 		bio13 <- .makeSourceName("r_mapcalc", "raster", n = 1L, name = "bio13")
 
 		input <- paste0(ppt, collapse = ",")
@@ -610,6 +693,9 @@ methods::setMethod(
 
 	# BIOCLIM 14 (driest month precipitation)
 	if (14 %in% bios) {
+
+		tasks <- tasks + 1
+		if (verbose | faster("verbose")) utils::setTxtProgressBar(pb, tasks)
 
 		bio14 <- .makeSourceName("r_mapcalc", "raster", n = 1L, name = "bio14")
 
@@ -635,14 +721,22 @@ methods::setMethod(
 		
 		# as per dismo::biovars and WorldClim, add 1 to precipitation to avoid division by 0
 		if (pptDelta != 0) {
+
+			tasks <- tasks + 1
+			if (verbose | faster("verbose")) utils::setTxtProgressBar(pb, tasks)
+
 			pptDeltaSrc <- .makeSourceName("bioclims", "raster", nLayers)
 			for (i in seq_along(ppt)) {
 				ex <- paste0(pptDeltaSrc[i], " = ", ppt[i], " + ", pptDelta)
 				rgrass::execGRASS("r.mapcalc", expression = ex, flags = c(.quiet(), "overwrite"))
 			}
+
 		} else {
 			pptDeltaSrc <- ppt
 		}
+
+		tasks <- tasks + 1
+		if (verbose | faster("verbose")) utils::setTxtProgressBar(pb, tasks)
 
 		sdSrc <- .makeSourceName("r_mapcalc", "raster", n = 1L, name = "bio15")
 
@@ -659,6 +753,9 @@ methods::setMethod(
 		# convert to sample SD as per R
 		if (sample) {
 		
+			tasks <- tasks + 1
+			if (verbose | faster("verbose")) utils::setTxtProgressBar(pb, tasks)
+
 			sdSrcIn <- sdSrc
 			sdSrc <- .makeSourceName("r_mapcalc", "raster", n = 1L)
 
@@ -668,6 +765,9 @@ methods::setMethod(
 			if (faster("clean")) on.exit(.rm(c(sdSrcIn), type = "raster", warn = FALSE, verify = FALSE), add = TRUE)
 
 		}
+
+		tasks <- tasks + 1
+		if (verbose | faster("verbose")) utils::setTxtProgressBar(pb, tasks)
 
 		meanSrc <- .makeSourceName("bioclims_r_series", "ppt_mean")
 		rgrass::execGRASS(
@@ -693,6 +793,9 @@ methods::setMethod(
 	# BIOCLIM 16 (precipitation of the wettest quarter)
 	if (16 %in% bios) {
 
+		tasks <- tasks + 1
+		if (verbose | faster("verbose")) utils::setTxtProgressBar(pb, tasks)
+
 		# burn precipitation of wettest quarter to cells
 		bio16 <- .makeSourceName("r_mapcalc", "raster", n = 1L, name = "bio16")
 
@@ -711,6 +814,9 @@ methods::setMethod(
 
 	# BIO17: Precipitation of the driest quarter
 	if (17 %in% bios) {
+
+		tasks <- tasks + 1
+		if (verbose | faster("verbose")) utils::setTxtProgressBar(pb, tasks)
 
 		# burn precipitation of driest quarter to cells
 		bio17 <- .makeSourceName("r_mapcalc", "raster", n = 1L, name = "bio17")
@@ -731,6 +837,9 @@ methods::setMethod(
 	# BIO18: Precipitation of the warmest quarter (based on mean temperature)
 	if (18 %in% bios) {
 
+		tasks <- tasks + 1
+		if (verbose | faster("verbose")) utils::setTxtProgressBar(pb, tasks)
+
 		# burn precipitation of warmest quarter to cells
 		bio18 <- .makeSourceName("r_mapcalc", "raster", n = 1L, name = "bio18")
 
@@ -750,6 +859,9 @@ methods::setMethod(
 	# BIO19: Precipitation of the coldest quarter (based on mean temperature)
 	if (19 %in% bios) {
 
+		tasks <- tasks + 1
+		if (verbose | faster("verbose")) utils::setTxtProgressBar(pb, tasks)
+
 		# burn precipitation of warmest quarter to cells
 		bio19 <- .makeSourceName("r_mapcalc", "raster", n = 1L, name = "bio19")
 
@@ -768,6 +880,9 @@ methods::setMethod(
 
 	# BIO41: Temperature of the quarter following the coldest quarter (based on mean temperature)
 	if (41 %in% bios) {
+
+		tasks <- tasks + 1
+		if (verbose | faster("verbose")) utils::setTxtProgressBar(pb, tasks)
 
 		# burn precipitation of warmest quarter to cells
 		bio41 <- .makeSourceName("r_mapcalc", "raster", n = 1L, name = "bio41")
@@ -796,6 +911,9 @@ methods::setMethod(
 	# BIO42: Temperature of the quarter following the warmest quarter (based on mean temperature; deg C)
 	if (42 %in% bios) {
 
+		tasks <- tasks + 1
+		if (verbose | faster("verbose")) utils::setTxtProgressBar(pb, tasks)
+
 		# burn precipitation of warmest quarter to cells
 		bio42 <- .makeSourceName("bioclims_bio42", "raster")
 
@@ -821,6 +939,9 @@ methods::setMethod(
 
 	# BIO43: Precipitation of the quarter following the coldest quarter (based on mean temperature; mm)
 	if (43 %in% bios) {
+
+		tasks <- tasks + 1
+		if (verbose | faster("verbose")) utils::setTxtProgressBar(pb, tasks)
 
 		# burn precipitation of warmest quarter to cells
 		bio43 <- .makeSourceName("bioclims_bio43", "raster")
@@ -848,6 +969,9 @@ methods::setMethod(
 	# BIO44: Precipitation of the quarter following the warmest quarter (based on mean temperature; mm)
 	if (44 %in% bios) {
 
+		tasks <- tasks + 1
+		if (verbose | faster("verbose")) utils::setTxtProgressBar(pb, tasks)
+
 		bio44 <- .makeSourceName("bioclims_bio44", "raster")
 
 		ex <- paste0(bio44, " = ")
@@ -872,6 +996,9 @@ methods::setMethod(
 
 	# BIO45: Temperature of the quarter following the driest quarter (based on mean temperature; deg C)
 	if (45 %in% bios) {
+
+		tasks <- tasks + 1
+		if (verbose | faster("verbose")) utils::setTxtProgressBar(pb, tasks)
 
 		bio45 <- .makeSourceName("bioclims_bio45", "raster")
 
@@ -898,6 +1025,9 @@ methods::setMethod(
 	# BIO46: Temperature of the quarter following the wettest quarter (based on mean temperature; deg C)
 	if (46 %in% bios) {
 
+		tasks <- tasks + 1
+		if (verbose | faster("verbose")) utils::setTxtProgressBar(pb, tasks)
+
 		bio46 <- .makeSourceName("bioclims_bio46", "raster")
 
 		ex <- paste0(bio46, " = ")
@@ -922,6 +1052,9 @@ methods::setMethod(
 
 	# BIO47: Precipitation of the quarter following the driest quarter (based on mean temperature; mm)
 	if (47 %in% bios) {
+
+		tasks <- tasks + 1
+		if (verbose | faster("verbose")) utils::setTxtProgressBar(pb, tasks)
 
 		bio47 <- .makeSourceName("bioclims_bio47", "raster")
 
@@ -948,6 +1081,9 @@ methods::setMethod(
 	# BIO48: Precipitation of the quarter following the wettest quarter (based on mean temperature; mm)
 	if (48 %in% bios) {
 
+		tasks <- tasks + 1
+		if (verbose | faster("verbose")) utils::setTxtProgressBar(pb, tasks)
+
 		bio48 <- .makeSourceName("bioclims_bio48", "raster")
 
 		ex <- paste0(bio48, " = ")
@@ -972,6 +1108,9 @@ methods::setMethod(
 
 	# BIO49: Hottest month (based on maximum temperature)
 	if (49 %in% bios) {
+
+		tasks <- tasks + 1
+		if (verbose | faster("verbose")) utils::setTxtProgressBar(pb, tasks)
 
 		bio49 <- .makeSourceName("bioclims_bio49", "raster")
 		bio49Minus1 <- .makeSourceName("bioclims_bio49Minus1", "raster")
@@ -1000,6 +1139,9 @@ methods::setMethod(
 	# BIO50: Coldest month (based on minimum temperature)
 	if (50 %in% bios) {
 
+		tasks <- tasks + 1
+		if (verbose | faster("verbose")) utils::setTxtProgressBar(pb, tasks)
+
 		bio50 <- .makeSourceName("bioclims_bio50", "raster")
 		bio50Minus1 <- .makeSourceName("bioclims_bio50Minus1", "raster")
 		rgrass::execGRASS("r.mapcalc", expression = ex, flags = c(.quiet(), "overwrite"))
@@ -1026,6 +1168,9 @@ methods::setMethod(
 
 	# BIO51: Wettest month.
 	if (51 %in% bios) {
+
+		tasks <- tasks + 1
+		if (verbose | faster("verbose")) utils::setTxtProgressBar(pb, tasks)
 
 		bio51 <- .makeSourceName("bioclims_bio51", "raster")
 		bio51Minus1 <- .makeSourceName("bioclims_bio51Minus1", "raster")
@@ -1054,6 +1199,9 @@ methods::setMethod(
 	# BIO52: Driest month.
 	if (52 %in% bios) {
 
+		tasks <- tasks + 1
+		if (verbose | faster("verbose")) utils::setTxtProgressBar(pb, tasks)
+
 		bio52 <- .makeSourceName("bioclims_bio52", "raster")
 		bio52Minus1 <- .makeSourceName("bioclims_bio52Minus1", "raster")
 		rgrass::execGRASS("r.mapcalc", expression = ex, flags = c(.quiet(), "overwrite"))
@@ -1081,6 +1229,9 @@ methods::setMethod(
 	# BIO57 and BIO58
 	if (any(c(57, 58) %in% bios)) {
 
+		tasks <- tasks + 1
+		if (verbose | faster("verbose")) utils::setTxtProgressBar(pb, tasks)
+
 		# difference between temperature of each month and the next
 		deltaTmeanSrcs <- .makeSourceName("bioclims_delta_temp", "raster", nLayers)
 		for (i in seq_len(nLayers)) {
@@ -1095,6 +1246,9 @@ methods::setMethod(
 		# BIO57: The largest *decrease* in temperature from one month to the next
 		if (57 %in% bios) {
 			
+			tasks <- tasks + 1
+			if (verbose | faster("verbose")) utils::setTxtProgressBar(pb, tasks)
+
 			bio57 <- .makeSourceName("bioclims_bio57", "raster")
 			rgrass::execGRASS(
 				"r.series",
@@ -1114,6 +1268,9 @@ methods::setMethod(
 		# BIO58: The largest *increase* in temperature from one month to the next
 		if (58 %in% bios) {
 			
+			tasks <- tasks + 1
+			if (verbose | faster("verbose")) utils::setTxtProgressBar(pb, tasks)
+
 			src <- .makeSourceName("bioclims_bio58_delta", "raster")
 			rgrass::execGRASS(
 				"r.series",
@@ -1139,6 +1296,9 @@ methods::setMethod(
 	# BIO59 and BIO60: The largest decrease/increase in precipitation from one month to the next
 	if (any(c(59, 60) %in% bios)) {
 
+		tasks <- tasks + 1
+		if (verbose | faster("verbose")) utils::setTxtProgressBar(pb, tasks)
+
 		# difference between precip of each month and the next
 		deltaPptSrcs <- .makeSourceName("bioclims_delta_ppt", "raster", nLayers)
 		for (i in seq_len(nLayers)) {
@@ -1152,6 +1312,9 @@ methods::setMethod(
 		# BIO59: The largest decrease in precipitation from one month to the next
 		if (59 %in% bios) {
 			
+			tasks <- tasks + 1
+			if (verbose | faster("verbose")) utils::setTxtProgressBar(pb, tasks)
+
 			bio59 <- .makeSourceName("bioclims_bio59", "raster")
 			rgrass::execGRASS(
 				"r.series",
@@ -1171,6 +1334,9 @@ methods::setMethod(
 		# BIO60: The largest increase in precipitation from one month to the next
 		if (60 %in% bios) {
 			
+			tasks <- tasks + 1
+			if (verbose | faster("verbose")) utils::setTxtProgressBar(pb, tasks)
+
 			src <- .makeSourceName("bioclims_bio60_delta", "raster")
 			rgrass::execGRASS(
 				"r.series",
@@ -1193,6 +1359,7 @@ methods::setMethod(
 
 	}
 
+	# sort BIOCLIMs
 	outNames <- names(out)
 	nc <- nchar(outNames)
 	shorts <- out[nc == 4L]
@@ -1202,9 +1369,13 @@ methods::setMethod(
 	longs <- longs[order(names(longs))]
 
 	out <- c(shorts, longs)
-
+	
+	# return
 	names <- names(out)
-	.makeGRaster(out, names = names)
+	out <- .makeGRaster(out, names = names)
+	if (verbose | faster("verbose")) close(pb)
+	out
+
 
 	} # EOF
 )

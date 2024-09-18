@@ -335,6 +335,7 @@ Tutorial on \strong{GRASS} \link[=tutorial_locations_mapsets]{projects/locations
 Useful links:
 \itemize{
   \item \url{http://www.earthSkySea.org}
+  \item \url{https://adamlilith.github.io/fasterRaster/}
   \item Report bugs at \url{https://github.com/adamlilith/fasterRaster/issues}
 }
 

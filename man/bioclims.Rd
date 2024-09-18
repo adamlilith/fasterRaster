@@ -14,7 +14,8 @@
   bios = NULL,
   sample = TRUE,
   quarter = 3,
-  pptDelta = 1
+  pptDelta = 1,
+  verbose = TRUE
 )
 
 \S4method{bioclims}{SpatRaster}(
@@ -49,6 +50,8 @@
 \item{quarter}{Numeric: Length of a "quarter". BIOCLIM variables are typically calculated using monthly-averaged rasters (e.g., precipitation and temperature of January, February, etc.), in which case a "quarter" is 3 months (so the default for \code{quarter} is 3). However, this function can accommodate any set of rasters representing a time series (e.g., 365 for daily rasters), in which case the user can decide what constitutes a "quarter" for calculation of the any BIOCLIMs that use "quarters" in their definitions.}
 
 \item{pptDelta}{Numeric: Value to add to precipitation for calculation of BIO15 (coefficient of variation of precipitation, times 100). Adding a small value avoids division by 0. The default is 1.}
+
+\item{verbose}{Logical: If \code{TRUE} (default), display progress.}
 }
 \value{
 A \code{GRaster} with one or more layers.
@@ -103,7 +106,7 @@ The units reported below assume that input rasters are in mm (precipitation) and
 \item BIO60: The greatest increase in precipitation from one month to the next (mm; always >= 0)
 }
 
-By default, "quarter" refers to any consecutive run of three months, not a financial quarter. A quarter can thus include November-December-January, or December-January-February, for example. However, the length of a quarter can be changed using teh argument \code{quarter}.
+By default, "quarter" refers to any consecutive run of three months, not a financial quarter. A quarter can thus include November-December-January, or December-January-February, for example. However, the length of a quarter can be changed using the argument \code{quarter}.
 
 The variables are defined assuming that the input rasters represent monthly values (12 rasters for min/max temperature and precipitation), but you can also use sets of 52 rasters, representing one per week, in which case "quarter" would be a successive run of 3 weeks. You could also attempt 365 rasters, in which case a "quarter" would be a run of 3 successive days.
 
