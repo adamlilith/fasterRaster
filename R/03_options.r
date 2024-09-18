@@ -8,9 +8,14 @@
 #' * Set values of particular options: Use the form `faster(option 1 = value1, option2 = value2)`.
 #' * Set all options to their defaults: Use `faster(restore = TRUE)`.
 #'
-#' You cannot simultaneously set options and restore their default values.
+#' You cannot simultaneously get and set options.
 #'
-#' @param ... Either a character (the name of an option), or an option and the value of the option using an `option = value` pattern. These include:
+#' @param ... Either:
+#' * A character vector: Name(s) of option(s) to get values of;
+#' * An option and the value of the option using an `option = value` pattern; or
+#' * A names `list` with names that match the options you wish to change, and with values to assign to each option.
+#'
+#' Options include:
 #'
 #' * `grassDir` (character): The folder in which **GRASS** is installed on your computer. Typically, this option is set when you run [faster()]. Depending on your operating system, your install directory will look something like this:
 #'     * Windows: `"C:/Program Files/GRASS GIS 8.3"`
@@ -25,7 +30,7 @@
 #'
 #' * `clean` (logical): If `TRUE` (default), remove temporary files created internally by functions. If not deleted, they can eventually fill up hard drive space, but deleting them takes a little bit of time (usually <1 second for each function).
 #'
-#' * `useDataTable` (logical): If `FALSE` (default), use `data.frame`s when going back and forth between data tables of `GVector`s and **R**. This can be slow for very large data tables. If `TRUE`, use `data.table`s from the **data.table** package. This can be much faster, but it might require you to know how to use `data.table`s if you want to manipulate them in **R**. You can always convert them to `data.frame`s using [base::as.data.frame()].
+#' * `useDataTable` (logical): If `FALSE` (default), functions that return tabular output produce `data.frame`s. If `TRUE`, output will be `data.table`s from the **data.table** package. This can be much faster, but it might require you to know how to use `data.table`s if you want to manipulate them in **R**. You can always convert them to `data.frame`s using [base::as.data.frame()].
 #' 
 #' * `verbose` (logical): If `TRUE`, show **GRASS** messages and otherwise hidden slots in classes. This is mainly used for debugging, so most users will want to keep this at its default, `FALSE`.
 #'
@@ -51,19 +56,16 @@ faster <- function(
 ) {
 
 	opts <- list(...)
-	if (length(opts) == 1L && inherits(opts[[1L]], "list")) opts <- opts[[1L]]
+	if (length(opts) == 1L && is.list(opts[[1L]])) opts <- opts[[1L]]
+	# if (length(opts) == 1L && inherits(opts[[1L]], "list")) opts <- opts[[1L]]
 	# # if (length(opts) == 1L && is.null(names(opts))) names(opts) <- "grassDir"
 	# # if (length(opts) > 1L && any(names(opts) == "")) names(opts)[names(opts) == ""] <- "grassDir"
 	nOpts <- length(opts)
 	
 	if (default & restore) {
-		
 		stop("Cannot request default values and restore to default values at the same time.")
-
 	} else if (nOpts > 0L & restore) {
-	
 		stop("Cannot simultaneously set options and restore options to default values.")
-
 	}
 
 	# getting options if ... has no names
@@ -74,7 +76,8 @@ faster <- function(
 		out <- .getFastOptions(..., default = default)
 		out
 	} else {
-		out <- .setFastOptions(..., restore = restore)
+		# out <- .setFastOptions(..., restore = restore)
+		out <- .setFastOptions(opts, restore = restore)
 		invisible(out)
 	}
 
@@ -83,11 +86,11 @@ faster <- function(
 #' Set arguments shared across functions
 #' @noRd
 .setFastOptions <- function(
-	...,
+	opts,
 	restore = FALSE
 ) {
 
-	opts <- list(...)
+	# opts <- list(...)
 
 	namesOfOpts <- .namesOfOptions()
 	if (!is.null(opts) && any(!(names(opts) %in% namesOfOpts))) stop("Invalid option(s): ", paste(names(opts[!(opts %in% namesOfOpts)]), collapse=", "))
