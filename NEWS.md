@@ -37,7 +37,7 @@ o `spatSample()` works when `byStratum = TRUE`.
 o `subset_dollar` bug fixed related to rationalization of `dim()` and `res()`.  
 o `subset_double_square_brackets` works for `i = missing` and `j = ` not missing.  
 o `subset_single_bracket` works for `x[i, j]` when neither `i` nor `j` are missing.  
-o `sun()` works with `GRaster`s from `horizonHeight()`. 
+o `sun()` works with `GRaster`s from `horizonHeight()`.  
 o `terrain()` works when all methods (`v = '*'`) are called.  
 o `update()` retains a `GVector`'s data table.  
 o `vegIndex()` fixed bug parsing `index`.  
