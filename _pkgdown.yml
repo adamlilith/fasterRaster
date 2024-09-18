@@ -1,4 +1,5 @@
-url: https://adamlilith.github.io/fasterRaster/
+url: ~
 template:
   bootstrap: 5
-
+  light-switch: true
+  bootswatch: minty
