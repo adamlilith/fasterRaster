@@ -76,7 +76,10 @@ You cannot simultaneously get and set options.'><meta property="og:image" conten
 
 
 <dl><dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
-<dd><p>Either a character (the name of an option), or an option and the value of the option using an <code>option = value</code> pattern. These include:</p><ul><li><p><code>grassDir</code> (character): The folder in which <strong>GRASS</strong> is installed on your computer. Typically, this option is set when you run <code>faster()</code>. Depending on your operating system, your install directory will look something like this:</p><ul><li><p>Windows: <code>"C:/Program Files/GRASS GIS 8.3"</code></p></li>
+<dd><p>Either:</p><ul><li><p>A character vector: Name(s) of option(s) to get values of;</p></li>
+<li><p>An option and the value of the option using an <code>option = value</code> pattern; or</p></li>
+<li><p>A names <code>list</code> with names that match the options you wish to change, and with values to assign to each option.</p></li>
+</ul><p>Options include:</p><ul><li><p><code>grassDir</code> (character): The folder in which <strong>GRASS</strong> is installed on your computer. Typically, this option is set when you run <code>faster()</code>. Depending on your operating system, your install directory will look something like this:</p><ul><li><p>Windows: <code>"C:/Program Files/GRASS GIS 8.3"</code></p></li>
 <li><p>Mac OS: <code>"/Applications/GRASS-8.3.app/Contents/Resources"</code></p></li>
 <li><p>Linux: <code>"/usr/local/grass"</code></p></li>
 </ul></li>
@@ -149,7 +152,7 @@ You cannot simultaneously get and set options.'><meta property="og:image" conten
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.</p>
 </div>
 
     </footer></div>
