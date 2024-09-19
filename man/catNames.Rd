@@ -19,7 +19,7 @@
 A list of character vectors.
 }
 \description{
-This function returns the column names of each "levels" table of a \link[=tutorial_raster_data_types]{categorical raster}.
+This function returns the column names of each "levels" table of a categorical raster (see \code{vignette("01_types_of_GRasters", package = "fasterRaster")}).
 }
 \examples{
 if (grassStarted()) {
@@ -146,5 +146,5 @@ levels(combinedNA)
 }
 }
 \seealso{
-\code{\link[=cats]{cats()}}, \link[=tutorial_raster_data_types]{raster data types}
+\code{\link[=cats]{cats()}}, \code{vignette("01_types_of_GRasters", package = "fasterRaster")}
 }

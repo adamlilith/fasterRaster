@@ -1,6 +1,6 @@
 #' Get or set the column with category labels in a categorical raster
 #'
-#' @description These functions return or set the column of the labels to be matched to each value in the raster of a [categorical][tutorial_raster_data_types] `GRaster`. *Important*: Following [terra::activeCat()], the first column in the "levels" table is ignored, so an "active category" value of 1 means the second column is used as labels, a value of 2 means the third is used, and so on.
+#' @description These functions return or set the column of the labels to be matched to each value in the raster of a categorical `GRaster` (see `vignette("01_types_of_GRasters", package = "fasterRaster")`). *Important*: Following [terra::activeCat()], the first column in the "levels" table is ignored, so an "active category" value of 1 means the second column is used as labels, a value of 2 means the third is used, and so on.
 #' * `activeCat()` returns the column of the labels to be matched to each value in the raster for a single raster layer.
 #' * `activeCats()` does the same, but for all layers of a `GRaster`.
 #' * `activeCat()<-` sets the column to be used as category labels.

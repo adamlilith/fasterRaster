@@ -1,6 +1,6 @@
 #' Rows of a GRaster or GVector's table that have no NAs or that have NAs
 #'
-#' @description When applied to a [categorical][tutorial_raster_data_types] `GRaster`, `compete.cases()` returns `TRUE` for each row of the "levels" table that has no `NA`s in it. In contrast, `missing.cases()` returns `TRUE` for each row that has at least one `NA` in it. If the raster is not categorical, then `NA` is returned.
+#' @description When applied to a categorical `GRaster`, `compete.cases()` returns `TRUE` for each row of the "levels" table that has no `NA`s in it. In contrast, `missing.cases()` returns `TRUE` for each row that has at least one `NA` in it. If the raster is not categorical, then `NA` is returned.
 #'
 #' When applied to a `GVector` with a data table, `complete.cases()` returns `TRUE` for each row where there are no `NA`s. if the `GVector` has no data table, then a vector of `TRUE` values the same length as the total number of geometries will be returned. In contrast, `missing.cases()` returns `TRUE` for every row that has at least one `NA` in it. If the `GVector` has no data table, then a vector of `FALSE` values is returned.
 #'

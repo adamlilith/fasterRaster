@@ -1,6 +1,6 @@
 #' Names of columns of the levels table of a categorical raster
 #'
-#' @description This function returns the column names of each "levels" table of a [categorical raster][tutorial_raster_data_types].
+#' @description This function returns the column names of each "levels" table of a categorical raster (see `vignette("01_types_of_GRasters", package = "fasterRaster")`).
 #'
 #' @param x A `GRaster`.
 #'
@@ -10,7 +10,7 @@
 #'
 #' @example man/examples/ex_GRaster_categorical.r
 #'
-#' @seealso [cats()], [raster data types][tutorial_raster_data_types]
+#' @seealso [cats()], `vignette("01_types_of_GRasters", package = "fasterRaster")`
 #'
 #' @aliases catNames
 #' @rdname catNames

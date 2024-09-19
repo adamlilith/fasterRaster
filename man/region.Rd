@@ -86,7 +86,7 @@ The value returned depends on how the function is used:
 }
 }
 \description{
-These functions either change the extent, dimensions, and/or resolution of a \strong{GRASS} \link[=tutorial_regions]{".region"} or report the current region"s extent, dimensions, and/or resolution. These functions are mostly used internally and rarely of interest to most users.
+These functions either change the extent, dimensions, and/or resolution of a \strong{GRASS} "region" or report the current region's extent, dimensions, and/or resolution (see \code{vignette("11_regions", package = "fasterRaster")}). These functions are mostly used internally and rarely of interest to most users.
 \itemize{
 \item \code{.region()}: All 2D and 3D aspects of a region.
 \item \code{.regionDim()}: x- and y-dimensions.

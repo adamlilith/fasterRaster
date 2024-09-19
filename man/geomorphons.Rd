@@ -34,7 +34,7 @@
 }}
 }
 \value{
-A \link[=tutorial_raster_data_types]{categorical} \code{GRaster} where each geomorphon is a category.
+A categorical \code{GRaster} where each geomorphon is a category (see \code{vignette("01_types_of_GRasters", package = "fasterRaster")}).
 }
 \description{
 Geomorphons are idealized terrain types calculated from an elevator raster based on a moving window of a given size. The window is a torus (which can have an inner radius of 0, so can also be a circle), which allows it to identify geomorphons of a given size while ignoring ones larger or smaller. There are 10 basic geomorphons. Consult the The \strong{GRASS} module \href{https://grass.osgeo.org/grass84/manuals/r.geomorphon.html}{\code{r.geomorphon}} for more details and diagrams of each type of geomorphon. They include:

@@ -1,6 +1,6 @@
 #' Combine levels table from multiple categorical GRasters
 #'
-#' @description This function creates a single "levels" table from the levels tables of one or more [categorical][tutorial_raster_data_types] `GRaster`s.
+#' @description This function creates a single "levels" table from the levels tables of one or more categorical `GRaster`s.
 #'
 #' The difference between this function and [combineCats()] is that `combineCats()` creates a "combined" `GRaster` with a combined levels table, whereas this one just merges the levels tables.
 #'
@@ -11,7 +11,7 @@
 #'
 #' @example man/examples/ex_GRaster_categorical.r
 #'
-#' @seealso [combineCats()], `GRaster` [data types][tutorial_raster_data_types]
+#' @seealso [combineCats()], `vignette("01_types_of_GRasters", package = "fasterRaster")`
 #'
 #' @aliases combineLevels
 #' @rdname combineLevels

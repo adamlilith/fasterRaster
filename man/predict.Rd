@@ -27,7 +27,7 @@ This \code{predict()} function can handle:
 \item Linear predictors and intercepts like \code{y ~ 1 + x};
 \item Quadratic terms like \code{y ~ x^2} (or, in \strong{R} formular notation, \code{y ~ I(x^2)});
 \item Two-way interaction terms between scalars like \code{y ~ x1:x2} and \code{y ~ x1 * x2};
-\item Categorical predictors (i.e., \link[=tutorial_raster_data_types]{categorical} rasters);
+\item Categorical predictors (i.e., categorical \code{GRaster}s; see \code{vignette("01_types_of_GRasters", package = "fasterRaster")}));
 \item Two-way interactions between a categorical predictor and a scalar predictor; and
 \item Two-way interactions between categorical predictors.
 }

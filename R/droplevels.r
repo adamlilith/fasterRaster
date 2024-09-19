@@ -1,6 +1,6 @@
 #' Remove rows from the "levels" table of a categorical raster
 #'
-#' @description `droplevels()` removes levels (category values) from the "levels" table of a [categorical][tutorial_raster_data_types] `GRaster`.
+#' @description `droplevels()` removes levels (category values) from the "levels" table of a categorical `GRaster`.
 #'
 #' @param x A `GRaster`.
 #'
@@ -10,7 +10,7 @@
 #'
 #' @returns A `GRaster`. The "levels" table of the raster is modified.
 #'
-#' @seealso [missingCats()], [missing.cases()], [terra::droplevels()], [categorical rasters][tutorial_raster_data_types] in **fasterRaster**
+#' @seealso [missingCats()], [missing.cases()], [terra::droplevels()], `vignette("01_types_of_GRasters", package = "fasterRaster")`
 #'
 #' @example man/examples/ex_GRaster_categorical.r
 #'

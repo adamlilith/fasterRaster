@@ -20,19 +20,19 @@ An object of class \code{GLocation}, \code{GSpatial}, \code{GRegion}, \code{GRas
 \description{
 The \code{G} suite of S4 classes contain pointers to \strong{GRASS} objects or metadata about the current \strong{GRASS} session. Most users will manipulate objects using these classes, but do not need to know the details.
 \itemize{
-\item The \code{GLocation} class stores information about the \strong{GRASS} "session" (\link[=tutorial_locations_mapsets]{"location" and mapsets}"), and coordinate reference system. Contained by all the rest.
+\item The \code{GLocation} class stores information about the \strong{GRASS} "project"/"location"(see \code{vignette("10_projects_locations_mapsets", package = "fasterRaster")}), and coordinate reference system. Contained by all the rest.
 \item The \code{GSpatial} class contains the \code{GLocation} class and stores information about spatial objects (extent, topology) plus the name of the file representing it in \strong{GRASS} (its \code{source}). Contained by \code{GRegion}, \code{GRaster}, and \code{GVector}.
-\item The \code{GRegion} class contains the \code{GSpatial} class and stores information about grids (dimensions and resolution). They do have \code{sources}, but these are not used (they're always \code{NA}). Contained by \code{GRaster}. The \code{GRegion} corresponds to \strong{GRASS} "\link[=tutorial_regions]{regions}", though \code{GRegion} objects are not actually pointers to \strong{GRASS} "region" files.
-\item The \code{GRaster} class contains the \code{GRegion} class and represents rasters. It stores information on number of layers, categories, min/max values, and user-friendly names. \link[=tutorial_raster_data_types]{Categorical rasters} can also be associated with a "levels" table for representing categorical data (e.g., wetlands, forest, etc.).
+\item The \code{GRegion} class contains the \code{GSpatial} class and stores information about grids (dimensions and resolution). They do have \code{sources}, but these are not used (they're always \code{NA}). Contained by \code{GRaster}. The \code{GRegion} corresponds to \strong{GRASS} "regions", though \code{GRegion} objects are not actually pointers to \strong{GRASS} "region" files (see \code{vignette("11_regions", package = "fasterRaster")}).
+\item The \code{GRaster} class contains the \code{GRegion} class and represents rasters. It stores information on number of layers, categories, min/max values, and user-friendly names. Categorical \code{GRaster}s are associated with a "levels" table for representing categorical data (e.g., wetlands, forest, etc.).
 \item The \code{GVector} class contains the \code{GSpatial} class and represents spatial vectors. It may or may not have an associated \code{data.table} (i.e., a \code{data.frame}), which contains metadata about each geometry in the vector.
 }
 }
 \section{Slots}{
 
 \describe{
-\item{\code{location}}{Character (all classes): The \strong{GRASS} \link[=tutorial_locations_mapsets]{"location"} of the object. The default value is \code{default}. Can be obtained using the hidden function \code{.location()}.}
+\item{\code{location}}{Character (all classes): The \strong{GRASS} "project"/"location" of the object. The default value is \code{default}. Can be obtained using the hidden function \code{.location()}. See \code{vignette("10_projects_locations_mapsets", package = "fasterRaster")}.}
 
-\item{\code{mapset}}{Character (all classes): The \strong{GRASS} \link[=tutorial_locations_mapsets]{"mapset"}. Default value is \code{PERMANENT}. Typically hidden to users. Can be obtained using the hidden function \code{.mapset()}.}
+\item{\code{mapset}}{Character (all classes): The \strong{GRASS} "mapset". Default value is \code{PERMANENT}. Typically hidden to users. Can be obtained using the hidden function \code{.mapset()}. See \code{vignette("10_projects_locations_mapsets", package = "fasterRaster")}.}
 
 \item{\code{workDir}}{Character (all classes): Directory in which \strong{GRASS} stores files.}
 

@@ -1,6 +1,6 @@
 #' Connect to "GRASS"
 #'
-#' @description This function initializes a **GRASS** ["location"][tutorial_locations_mapsets]. You need to run this function (often just once) before you use most functions in **fasterRaster**. This function is of use to developers, not most users.
+#' @description This function initializes a **GRASS** "project" (previously known in **GRASS** as a "location"; see `vignette("10_projects_locations_mapsets", package = "fasterRaster")`). You need to run this function (often just once) before you use most functions in **fasterRaster**. This function is of use to developers, not most users.
 #'
 #' @param x Any object from which a coordinate reference system (CRS) can be acquired. Ergo, any of:
 #' * A `SpatRaster`, `SpatVector`, `SpatExtent`, `stars`, or `sf` object

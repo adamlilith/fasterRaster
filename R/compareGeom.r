@@ -4,7 +4,7 @@
 #'
 #' @param x,y,... `GRaster`s or `GVector`s. If `y` is `GRaster`, then the `...` must also be `GRaster`s (or missing). If `y` is `GVector`, then the `...` must also be `GVector`s (or missing).
 #'
-#' @param location,mapset Logical: Compare **GRASS** ["locations" and "mapsets"][tutorial_locations_mapsets]. Default is `TRUE`.
+#' @param location,mapset Logical: Compare **GRASS** "project/location" and "mapsets" (see `vignette("10_projects_locations_mapsets", package = "fasterRaster")`). Default is `TRUE`.
 #' 
 #' @param crs Logical: Compare coordinate reference systems. Default is `TRUE`.
 #' 

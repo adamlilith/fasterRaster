@@ -1,12 +1,12 @@
 #' Compare-methods operations on GRasters and GRegions
 #'
-#' @description You can do comparative operations on `GRaster`s using normal operators in **R**: `<`, `<=`, `==`, `!=`, `>=`, and `>`. You can also use \code{\link[fasterRaster]{%in%}} for [categorical][tutorial_raster_data_types] `GRasters`.
+#' @description You can do comparative operations on `GRaster`s using normal operators in **R**: `<`, `<=`, `==`, `!=`, `>=`, and `>`. You can also use \code{\link[fasterRaster]{%in%}} for categorical `GRasters` (see `vignette("01_types_of_GRasters", package = "fasterRaster")`).
 #'
-#' You can also compare two `GRegion`s using the `==` and `!=` operators. Most users of **fasterRaster** will not have to work much with [regions][tutorial_regions], so can ignore this functionality. `GRegion`s are the same if they have the same coordinate reference system, [location and mapset][tutorial_locations_mapsets], topology (2D or 3D), extent, and resolution. If both are 3D, then they must also have the same vertical extent and number of depths.
+#' You can also compare two `GRegion`s using the `==` and `!=` operators. Most users of **fasterRaster** will not have to work much with "regions" (see `vignette("11_regions", package = "fasterRaster")`), so can ignore this functionality. `GRegion`s are the same if they have the same coordinate reference system, location/project and mapset (see `vignette("10_projects_locations_mapsets", package = "fasterRaster")`), topology (2D or 3D), extent, and resolution. If both are 3D, then they must also have the same vertical extent and number of depths.
 #' 
 #' @param e1,e2 Values depend on the type of comparison:
 #'
-#' * Comparing `GRaster`s to logical, numeric, character values: `e1` and `e2` can be any one of these. Comparison to a character string can be useful when using a [categorical raster][tutorial_raster_data_types], in which case you can use something like `raster1 == "Wetlands"` to coerce all "wetland" cells to be 1 (TRUE) and all others 0 (FALSE) or `NA` (if it was originally `NA`).
+#' * Comparing `GRaster`s to logical, numeric, character values: `e1` and `e2` can be any one of these. Comparison to a character string can be useful when using a categorical raster, in which case you can use something like `raster1 == "Wetlands"` to coerce all "wetland" cells to be 1 (TRUE) and all others 0 (FALSE) or `NA` (if it was originally `NA`).
 #' * Comparing a `GRegion` to another `GRegion`: `e1` and `e2` must be `GRegion`s!
 #'
 #' @returns Comparing `GRaster`s: An "integer" `GRaster` with values of 0 (FALSE), 1 (TRUE), or `NA` (neither).

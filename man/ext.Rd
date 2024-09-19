@@ -59,7 +59,7 @@
 \S4method{bottom}{GSpatial}(x, char = FALSE)
 }
 \arguments{
-\item{x}{An object that inherits from \code{GSpatial} (i.e., a \code{GRaster} or \code{GVector}) or missing. If missing, then the horizontal or vertical extent of the currently active \link[=tutorial_regions]{region} is returned.}
+\item{x}{An object that inherits from \code{GSpatial} (i.e., a \code{GRaster} or \code{GVector}) or missing. If missing, then the horizontal or vertical extent of the currently active "region" is returned (see \code{vignette("11_regions", package = "fasterRaster")}).}
 
 \item{vector}{Logical: If \code{FALSE} (default), return a \code{SpatExtent} object. If \code{TRUE}, return the extent as a named vector.}
 

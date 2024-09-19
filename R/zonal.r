@@ -5,7 +5,7 @@
 #' @param x A `GRaster` for which to calculate summary statistics.
 #'
 #' @param z A `GRaster` or `GVector` used to define zones:
-#' * If `z` is a `GRaster`, then it must be of type [integer or factor][tutorial_raster_data_types]. Zones will be established based on cells that have the same value in this raster.
+#' * If `z` is a `GRaster`, then it must be of type `integer` or `factor` (see `vignette("01_types_of_GRasters", package = "fasterRaster")`). Zones will be established based on cells that have the same value in this raster.
 #' * If `z` is a `GVector`, zones will be created for each geometry. If geometries overlap, then the zonal statistics will be calculated for the ones on top. Thus statistics for the zones defined by geometries below these may not represent all the cells covered by that geometry.
 #'
 #' @param fun Character vector: Name of the function(s) to summarize `x` with. These can include:

@@ -1,6 +1,6 @@
 #' Coerce raster to integer, float, or double precision
 #'
-#' @description In **fasterRaster**, rasters can have three [data types][tutorial_raster_data_types]: "factor" (categorical rasters), "integer" (integers), "float" (floating point values, accurate to 6th to 9th decimal places), and "double" (double-precision values, accurate to the 15th to 17th decimal places). The type of raster can be checked with:
+#' @description In **fasterRaster**, rasters can have three data types: "factor" (categorical rasters), "integer" (integers), "float" (floating point values, accurate to 6th to 9th decimal places), and "double" (double-precision values, accurate to the 15th to 17th decimal places). The type of raster can be checked with:
 #'
 #' * `as.int()`: Coerce values to integers (**GRASS** type `CELL`).
 #' * `as.float()`: Coerce values to floating-point precision.
@@ -11,7 +11,7 @@
 #' 
 #' @returns A `GRaster`.
 #' 
-#' @seealso [datatype()], [terra::datatype()], [is.int()], [is.float()], [is.doub()], \code{\link[fasterRaster]{levels<-}}, [raster data types][tutorial_raster_data_types] in **fasterRaster**
+#' @seealso [datatype()], [terra::datatype()], [is.int()], [is.float()], [is.doub()], \code{\link[fasterRaster]{levels<-}}, `vignette("01_types_of_GRasters", package = "fasterRaster")`
 #'
 #' @example man/examples/ex_GRaster.r
 #' 

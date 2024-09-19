@@ -26,7 +26,7 @@
 #'
 #' @param byLayer Logical: If `FALSE` (default), multi-layer rasters will be saved in one file. If `TRUE`, the each layer will be saved in a separate file. The filename from `filename` will be amended so that it ends with `_<name>` (then the file extension), where `<name>` is give by [names()]. Note that if any characters in raster names will not work in a file name, then the function will fail (e.g., a backslash or question mark).
 #'
-#' @param levelsExt Character, logical, or `NULL` (default): Name of the file extension for the "levels" file that accompanies a [categorical][tutorial_raster_data_types] raster. When saving categorical rasters, the raster file is accompanied with a "levels" file that contain information on the levels of the raster. This file is the same as `filename`, except it has a different extension. Valid values depend on how many raster layers are saved at a time (case is ignored):
+#' @param levelsExt Character, logical, or `NULL` (default): Name of the file extension for the "levels" file that accompanies a categorical `GRaster`. When saving categorical rasters, the raster file is accompanied with a "levels" file that contain information on the levels of the raster. This file is the same as `filename`, except it has a different extension. Valid values depend on how many raster layers are saved at a time (case is ignored):
 #' * DefaultOne raster layer: `".csv"`
 #' * Two or more layers, with at least one categorical raster: `".rds"`, `".rda"`, `".rdat"`, `".rdata"`
 #' * Any: `NULL` or `TRUE` automatically selects either `".csv"` (one raster layer) or `".rds` (two or more)

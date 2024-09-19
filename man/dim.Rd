@@ -66,7 +66,7 @@
 \S4method{nlyr}{GRaster}(x)
 }
 \arguments{
-\item{x}{A \code{GRegion}, \code{GRaster}, \code{GVector}, or missing. If missing, then the dimensions of the currently active \link[=tutorial_regions]{region} are returned.}
+\item{x}{A \code{GRegion}, \code{GRaster}, \code{GVector}, or missing. If missing, then the dimensions of the currently active "region" are returned (see \code{vignette("11_regions", package = "fasterRaster")}).}
 }
 \value{
 A numeric value or vector.

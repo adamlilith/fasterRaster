@@ -1,6 +1,6 @@
 #' Combine values/categories of multiple GRasters into a single GRaster
 #'
-#' @description This function takes from 2 to 10 integer or [categorical][tutorial_raster_data_types] (factor) `GRaster`s and creates a single `GRaster` that has one value per combination of values in the inputs. For example, say that there were two input rasters, with values 1 and 2 in the one raster, and 3 and 4 in the other. If the following combinations of values occurred between the two rasters, then the output raster would be re-coded with the new values:
+#' @description This function takes from 2 to 10 integer or categorical (factor) `GRaster`s and creates a single `GRaster` that has one value per combination of values in the inputs. For example, say that there were two input rasters, with values 1 and 2 in the one raster, and 3 and 4 in the other. If the following combinations of values occurred between the two rasters, then the output raster would be re-coded with the new values:
 #'
 #' | `input_raster1` | `input_raster2` | `output_raster` |
 #' | --------------- | --------------- | --------------- |
@@ -25,7 +25,7 @@
 #'
 #' @example man/examples/ex_GRaster_categorical.r
 #'
-#' @seealso [combineLevels()], `GRaster` [data types][tutorial_raster_data_types]
+#' @seealso [combineLevels()], `vignette("01_types_of_GRasters", package = "fasterRaster")`
 #'
 #' @aliases combineCats
 #' @rdname combineCats

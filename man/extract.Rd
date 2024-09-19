@@ -73,7 +73,7 @@
 
 \item{xy}{Logical: If \code{TRUE} and \code{y} represents points, also return the coordinates of each point. Default is \code{FALSE.}}
 
-\item{cats}{Logical (extracting from a raster): If \code{TRUE} (default) and \code{x} is a \link[=tutorial_raster_data_types]{categorical raster}, then return the category labels instead of the values.}
+\item{cats}{Logical (extracting from a raster): If \code{TRUE} (default) and \code{x} is a categorical \code{GRaster}, then return the category labels instead of the values.}
 
 \item{verbose}{Logical: If \code{TRUE}, display progress (will only function when extracting from points on a \code{GRaster} when the number of \code{GRaster}s is large).}
 }
@@ -84,7 +84,7 @@ A \code{data.frame} or \code{data.table}.
 \code{extract()} obtains the values of a \code{GRaster} or \code{GVector} associated with the locations of a set of points. The output depends on the input:
 \itemize{
 \item \strong{Case #1: \code{x} is a numeric or integer \code{GRaster} and \code{y} is a points \code{GVector}}: Returns values of cells that have points. If \code{xy} is \code{TRUE}, also returns the coordinates of the points.
-\item \strong{Case #2: \code{x} is a \link[=tutorial_raster_data_types]{categorical} (factor) \code{GRaster} and \code{y} is a points \code{GVector}}: Same as case #1, but if \code{cats} is \code{TRUE}, returns category labels of cells that have points. If \code{xy} is \code{TRUE}, also returns the coordinates of the points.
+\item \strong{Case #2: \code{x} is a categorical (factor) \code{GRaster} and \code{y} is a points \code{GVector}}: Same as case #1, but if \code{cats} is \code{TRUE}, returns category labels of cells that have points. If \code{xy} is \code{TRUE}, also returns the coordinates of the points.
 \item \strong{Case #3: \code{x} is a categorical \code{GRaster} and \code{y} is a lines or polygons \code{GVector}}: Returns a summary (e.g., mean, standard deviation, etc.) of all cells that overlap the line(s) or polygon(s).
 \item \strong{Case #4: \code{x} is a \code{GVector} and \code{y} is a points \code{GVector}}: Returns the data table row associated each point. If \code{xy} is \code{TRUE}, also returns the coordinates of the points.
 Note that whenever a points \code{GVector} is allowed for \code{y}, a \code{data.frame}, \code{data.table}, \code{matrix}, or \code{numeric} values representing points can be used instead.

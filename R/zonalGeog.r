@@ -1,6 +1,6 @@
 #' Geographic statistics for sets of cells with the same values
 #'
-#' @description This function calculates geographic statistics for each set of cells in an [integer or factor raster][tutorial_raster_data_types]. Statistics include:
+#' @description This function calculates geographic statistics for each set of cells in an `integer` or `factor` `GRaster`. Statistics include:
 #' * Area
 #' * Perimeter length
 #' * "Compact square" statistic: \eqn{4 \sqrt(area) / perimeter)}

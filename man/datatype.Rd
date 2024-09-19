@@ -16,9 +16,9 @@
 \item{type}{(\code{GRaster}s only) \code{NULL} or character: Type of datatype to report (\code{GRaster} only):
 \itemize{
 \item \code{"fasterRaster"} (default): Reports the \strong{fasterRaster} type (factor, integer, float, or double)
-\item \code{"terra"}: Report the (inferred) \strong{terra} data type (e.g., INT2U, FLT4S). Please see the table in the \link[=tutorial_raster_data_types]{tutorial on raster data types} for more information.
+\item \code{"terra"}: Report the (inferred) \strong{terra} data type (e.g., INT2U, FLT4S). Please see the table in the documentation for [writeRaster()` for an explanation of these codes.
 \item \code{"GRASS"}: Will return "CELL" (integer), "FCELL" (floating-point value), or "DCELL" (double-floating point value)
-\item \code{"GDAL"}: See \href{https://gdal.org/user/raster_data_model.html#raster-band}{GDAL: Raster Band}. Please also see the table in the \link[=tutorial_raster_data_types]{tutorial on raster data types}.
+\item \code{"GDAL"}: See \href{https://gdal.org/user/raster_data_model.html#raster-band}{GDAL: Raster Band}. Please also see the table in the \code{\link[=writeRaster]{writeRaster()}} help file.
 }}
 
 \item{forceDouble}{Logical (\code{GRaster}s and \code{SpatRaster}s only): If \code{TRUE} (default), and the raster appears to represent non-integer values, then the raster will be assumed to represent double-floating point values (\strong{GRASS}: type "DCELL", \strong{terra}: type "FLT8S", \strong{fasterRaster}: type "double", and \strong{GDAL}: type "Float64"). \code{forceDouble} reports the actual datatype if \code{type = "fasterRaster"} (i.e., the type is not forced to "double").}
@@ -27,7 +27,7 @@
 \code{datatype()} for a \code{GRaster} returns a character. \code{datatype()} for a \code{GVector} returns a data frame, with one row per field. If the \code{GVector} has no attribute table, the function returns \code{NULL}.
 }
 \description{
-For \code{GRaster}s, \code{datatype()} returns the \link[=tutorial_raster_data_types]{data type}. For \code{GVector}s, \code{datatype()} returns the class of each column of the attribute table.
+For \code{GRaster}s, \code{datatype()} returns the data type (see \code{vignette("01_types_of_GRasters", package = "fasterRaster")}). For \code{GVector}s, \code{datatype()} returns the class of each column of the attribute table.
 }
 \examples{
 if (grassStarted()) {
@@ -209,5 +209,5 @@ dim(rivers2)
 }
 }
 \seealso{
-\code{\link[terra:datatype]{terra::datatype()}}, \code{GRaster} \link[=tutorial_raster_data_types]{data types} in \strong{fasterRaster}
+\code{\link[terra:datatype]{terra::datatype()}}, \code{vignette("01_types_of_GRasters", package = "fasterRaster")}
 }

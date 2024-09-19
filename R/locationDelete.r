@@ -1,6 +1,6 @@
 #' Delete a "GRASS" "location"
 #'
-#' @description This function deletes a **GRASS** ["location" and all mapsets][tutorial_locations_mapsets], rasters, and vectors therein. This function should be used cautiously and is mainly of use to developers.
+#' @description This function deletes a **GRASS** "project"/"location", rasters, and vectors therein. This function should be used cautiously and is mainly of use to developers. See `vignette("10_projects_locations_mapsets", package = "fasterRaster")`.
 #'
 #' @param location Character: Name of the **GRASS** "location".
 #' @param mapset Character or `NULL` (default): Name of the mapset to delete. If `NULL`, then all mapsets in the given "location" will be deleted.

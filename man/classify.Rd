@@ -14,7 +14,7 @@
 \itemize{
 \item A single integer: Number of "bins" into which to divide values. Arguments \code{include.lowest} and \code{right} apply.
 \item A vector of numeric values: Breakpoints of bins into which to divide values. These will be sorted from lowest to highest before classification. Arguments \code{include.lowest} and \code{right} apply.
-\item A 2-column \code{matrix}, \code{data.frame}, or \code{data.table}: The first column provides specific values in \code{x} to be replaced, and the second provides the values they are replaced with. This method is only useful for classifying \link[=tutorial_raster_data_types]{integer} \code{GRaster}s. Arguments \code{include.lowest} and \code{right} are ignored. Cells will be classified in the order in which values are listed in the first column.
+\item A 2-column \code{matrix}, \code{data.frame}, or \code{data.table}: The first column provides specific values in \code{x} to be replaced, and the second provides the values they are replaced with. This method is only useful for classifying \code{integer} \code{GRaster}s. Arguments \code{include.lowest} and \code{right} are ignored. Cells will be classified in the order in which values are listed in the first column.
 \item A 3-column \code{matrix}, \code{data.frame}, or \code{data.table}: The first column provides the lower value of a bin, the second the upper value, and the third the value to assign to the cells in the bin. Arguments \code{include.lowest} and \code{right} apply. Cells will be classified in the order of how intervals are listed (intervals will not be sorted).
 }}
 
@@ -23,13 +23,13 @@
 \item \code{include.lowest = TRUE} and \code{right = TRUE}: All intervals will be "left-open, right-closed" except for the lowest interval, which will be "left-closed/right-closed".
 \item \code{include.lowest = FALSE} and \code{right = FALSE}: Intervals will be "left-closed/right-open". Cells with values equal to the highest higher boundary will not be reclassified.
 \item \code{include.lowest = TRUE} and \code{right = FALSE}: All intervals will be "left-closed/right-open", except for the highest interval, which will be "right-closed/left-closed".
-\item \code{right = NA}: Only useful for classifying \link[=tutorial_raster_data_types]{integer} \code{GRaster}s. All intervals are "left-closed/right-closed". This is easier than accounting for "open" intervals when dealing with integers. Argument \code{include.lowest} is ignored.
+\item \code{right = NA}: Only useful for classifying \code{integer} \code{GRaster}s. All intervals are "left-closed/right-closed". This is easier than accounting for "open" intervals when dealing with integers. Argument \code{include.lowest} is ignored.
 }}
 
 \item{others}{Integer or \code{NULL} (default), or \code{NA}: Value to assign to cells that do not fall into the set intervals. Cells with \code{NA} values are not reclassified. Setting \code{others} equal to \code{NULL} or \code{NA} replaces all other values with \code{NA}. The value will be coerced to an integer value.}
 }
 \value{
-A \code{GRaster}. The raster will be a \link[=tutorial_raster_data_types]{categorical} raster if the original values were continuous (i.e., a single- or double-precision raster), or of type "integer" if the input was an integer.
+A \code{GRaster}. The raster will be a categorical \code{GRaster} if the original values were continuous (i.e., a single- or double-precision raster), or of type "integer" if the input was an integer. See \code{vignette("01_types_of_GRasters", package = "fasterRaster")}.
 }
 \description{
 This function classifies a raster so that cells that have values within a given range are assigned a new value. The \code{\link[=subst]{subst()}} function is a simpler method for replacing specific values or category levels.

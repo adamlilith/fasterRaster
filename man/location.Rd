@@ -16,7 +16,7 @@
 \arguments{
 \item{x}{Either:
 \itemize{
-\item Missing: Reports location of currently active \link[=tutorial_locations_mapsets]{session}.
+\item Missing: Reports location of currently active project/location.
 \item A \code{GLocation} object or an object that contains the \code{GLocation} class (i.e., a \code{GSpatial} object: a \code{GRaster} or \code{GVector}).
 }}
 
@@ -32,9 +32,9 @@ A character string.
 If successful, \code{TRUE} (invisibly). If not, then \code{FALSE} (also invisibly), plus a warning.
 }
 \description{
-\strong{GRASS} \link[=tutorial_locations_mapsets]{"locations"} are sets of one or more rasters and/or vectors with the same coordinate reference systems, and may or may not represent the same actual location on Earth. \strong{GRASS} "mapsets" are like sub-folders of locations, and are collections of rasters and/or vectors typically related to the same general project. Typical users will not need to make changes to the default location (called "location") or mapset (called "PERMANENT").
+\strong{GRASS} "projects" or "locations" are sets of one or more rasters and/or vectors with the same coordinate reference systems, and may or may not represent the same actual location on Earth. \strong{GRASS} "mapsets" are like sub-folders of locations, and are collections of rasters and/or vectors typically related to the same general project. Typical users will not need to make changes to the default location (called "location") or mapset (called "PERMANENT"). See \code{vignette("10_projects_locations_mapsets", package = "fasterRaster")}.
 
-This function deletes a \strong{GRASS} \link[=tutorial_locations_mapsets]{"location" and all mapsets}, rasters, and vectors therein. This function should be used cautiously and is mainly of use to developers.
+This function deletes a \strong{GRASS} "project"/"location", rasters, and vectors therein. This function should be used cautiously and is mainly of use to developers. See \code{vignette("10_projects_locations_mapsets", package = "fasterRaster")}.
 }
 \examples{
 if (grassStarted()) {

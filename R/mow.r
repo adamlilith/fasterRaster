@@ -4,7 +4,7 @@
 #'
 #' Note that calling this function inside another function's environment can be very dangerous, as it will only be able to see objects in that environment, and thus delete any rasters/vectors outside that environment.
 #'
-#' Note also that this function will only clean the current **GRASS** [project/location][tutorial_locations_mapsets].
+#' Note also that this function will only clean the current **GRASS** "project"/"location" (see `vignette("10_projects_locations_mapsets", package = "fasterRaster")`).
 #'
 #' @param x Either missing (default) or an environment.
 #'

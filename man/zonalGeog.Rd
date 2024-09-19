@@ -26,7 +26,7 @@ Partial matching is used and case is ignored.}
 A list of \code{data.frame}s or a \code{data.table}s, one per layer in \code{x}. Only layers that are integers or factors have their geographies calculated. Other layers have \code{NULL} tables returned.
 }
 \description{
-This function calculates geographic statistics for each set of cells in an \link[=tutorial_raster_data_types]{integer or factor raster}. Statistics include:
+This function calculates geographic statistics for each set of cells in an \code{integer} or \code{factor} \code{GRaster}. Statistics include:
 \itemize{
 \item Area
 \item Perimeter length

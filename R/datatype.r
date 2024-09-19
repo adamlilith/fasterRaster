@@ -1,19 +1,19 @@
 #' Get the datatype of a GRaster or of GVector columns
 #'
-#' @description For `GRaster`s, `datatype()` returns the [data type][tutorial_raster_data_types]. For `GVector`s, `datatype()` returns the class of each column of the attribute table.
+#' @description For `GRaster`s, `datatype()` returns the data type (see `vignette("01_types_of_GRasters", package = "fasterRaster")`). For `GVector`s, `datatype()` returns the class of each column of the attribute table.
 #'
 #' @param x A `GRaster` or `GVector`.
 #' @param type (`GRaster`s only) `NULL` or character: Type of datatype to report (`GRaster` only):
 #' * `"fasterRaster"` (default): Reports the **fasterRaster** type (factor, integer, float, or double)
-#' * `"terra"`: Report the (inferred) **terra** data type (e.g., INT2U, FLT4S). Please see the table in the [tutorial on raster data types][tutorial_raster_data_types] for more information.
+#' * `"terra"`: Report the (inferred) **terra** data type (e.g., INT2U, FLT4S). Please see the table in the documentation for [writeRaster()` for an explanation of these codes.
 #' * `"GRASS"`: Will return "CELL" (integer), "FCELL" (floating-point value), or "DCELL" (double-floating point value)
-#' * `"GDAL"`: See [GDAL: Raster Band](https://gdal.org/user/raster_data_model.html#raster-band). Please also see the table in the [tutorial on raster data types][tutorial_raster_data_types].
+#' * `"GDAL"`: See [GDAL: Raster Band](https://gdal.org/user/raster_data_model.html#raster-band). Please also see the table in the [writeRaster()] help file.
 #'
 #' @param forceDouble Logical (`GRaster`s and `SpatRaster`s only): If `TRUE` (default), and the raster appears to represent non-integer values, then the raster will be assumed to represent double-floating point values (**GRASS**: type "DCELL", **terra**: type "FLT8S", **fasterRaster**: type "double", and **GDAL**: type "Float64"). `forceDouble` reports the actual datatype if `type = "fasterRaster"` (i.e., the type is not forced to "double").
 #'
 #' @returns `datatype()` for a `GRaster` returns a character. `datatype()` for a `GVector` returns a data frame, with one row per field. If the `GVector` has no attribute table, the function returns `NULL`.
 #'
-#' @seealso [terra::datatype()], `GRaster` [data types][tutorial_raster_data_types] in **fasterRaster**
+#' @seealso [terra::datatype()], `vignette("01_types_of_GRasters", package = "fasterRaster")`
 #'
 #' @example man/examples/ex_GRaster_GVector.r
 #'

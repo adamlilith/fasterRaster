@@ -57,7 +57,9 @@ To tell **fasterRaster** where **GRASS** is installed, use the `faster()` functi
 ```{r faster_grassDir}
 faster(grassDir = grassDir)
 ```
-You can also use the [faster()] function to set options that affect how **fasterRaster** functions run. This includes setting the amount of maximum memory and number of computer cores allocated to operations.
+You can also use the `faster()` function to set options that affect how **fasterRaster** functions run. This includes setting the amount of maximum memory and number of computer cores allocated to operations.
+
+## Importing spatial objects into **fasterRaster** `GRaster`s and `GVector`s
 
 In **fasterRaster**, rasters are called `GRaster`s and vectors are called `GVector`s. The easiest (but not always fastest) way to start using a `GRaster` or `GVector` is to convert it from one already in **R**. In the example below, we use a raster that comes with the **fasterRaster** package. The raster represents elevation of a portion of eastern Madagascar. We first load the `SpatRaster` using `fastData()`, a helper function for loading example data objects that come with the **fasterRaster** package.
 ```{r madElev}
@@ -89,7 +91,7 @@ rivers
 
 ## Operations on `GRaster`s and `GVector`s
 
-You can do operations on these `GRaster`s and `GVector`s as if they were `SpatRaster`s, `SpatVector`s, and `sf` objects. For example, you can use mathematical operators and functions:
+You can do operations on `GRaster`s and `GVector`s as if they were `SpatRaster`s, `SpatVector`s, and `sf` objects. For example, you can use mathematical operators and functions:
 
 ```{r math}
 elev_feet <- elev * 3.28084

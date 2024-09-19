@@ -2,19 +2,19 @@
 #'
 #' @description The `G` suite of S4 classes contain pointers to **GRASS** objects or metadata about the current **GRASS** session. Most users will manipulate objects using these classes, but do not need to know the details.
 #'
-#' * The `GLocation` class stores information about the **GRASS** "session" (["location" and mapsets][tutorial_locations_mapsets]"), and coordinate reference system. Contained by all the rest.
+#' * The `GLocation` class stores information about the **GRASS** "project"/"location"(see `vignette("10_projects_locations_mapsets", package = "fasterRaster")`), and coordinate reference system. Contained by all the rest.
 #'
 #' * The `GSpatial` class contains the `GLocation` class and stores information about spatial objects (extent, topology) plus the name of the file representing it in **GRASS** (its `source`). Contained by `GRegion`, `GRaster`, and `GVector`.
 #'
-#' * The `GRegion` class contains the `GSpatial` class and stores information about grids (dimensions and resolution). They do have `sources`, but these are not used (they're always `NA`). Contained by `GRaster`. The `GRegion` corresponds to **GRASS** "[regions][tutorial_regions]", though `GRegion` objects are not actually pointers to **GRASS** "region" files.
+#' * The `GRegion` class contains the `GSpatial` class and stores information about grids (dimensions and resolution). They do have `sources`, but these are not used (they're always `NA`). Contained by `GRaster`. The `GRegion` corresponds to **GRASS** "regions", though `GRegion` objects are not actually pointers to **GRASS** "region" files (see `vignette("11_regions", package = "fasterRaster")`).
 #'
-#' * The `GRaster` class contains the `GRegion` class and represents rasters. It stores information on number of layers, categories, min/max values, and user-friendly names. [Categorical rasters][tutorial_raster_data_types] can also be associated with a "levels" table for representing categorical data (e.g., wetlands, forest, etc.).
+#' * The `GRaster` class contains the `GRegion` class and represents rasters. It stores information on number of layers, categories, min/max values, and user-friendly names. Categorical `GRaster`s are associated with a "levels" table for representing categorical data (e.g., wetlands, forest, etc.).
 #'
 #' * The `GVector` class contains the `GSpatial` class and represents spatial vectors. It may or may not have an associated `data.table` (i.e., a `data.frame`), which contains metadata about each geometry in the vector.
 #'
-#' @slot location	Character (all classes): The **GRASS** ["location"][tutorial_locations_mapsets] of the object. The default value is `default`. Can be obtained using the hidden function `.location()`.
+#' @slot location	Character (all classes): The **GRASS** "project"/"location" of the object. The default value is `default`. Can be obtained using the hidden function `.location()`. See `vignette("10_projects_locations_mapsets", package = "fasterRaster")`.
 #'
-#' @slot mapset		Character (all classes): The **GRASS** ["mapset"][tutorial_locations_mapsets]. Default value is `PERMANENT`. Typically hidden to users. Can be obtained using the hidden function `.mapset()`.
+#' @slot mapset		Character (all classes): The **GRASS** "mapset". Default value is `PERMANENT`. Typically hidden to users. Can be obtained using the hidden function `.mapset()`. See `vignette("10_projects_locations_mapsets", package = "fasterRaster")`.
 #'
 #' @slot workDir	Character (all classes): Directory in which **GRASS** stores files.
 #'
