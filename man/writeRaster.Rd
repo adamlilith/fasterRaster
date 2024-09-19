@@ -43,7 +43,7 @@
 
 \item{byLayer}{Logical: If \code{FALSE} (default), multi-layer rasters will be saved in one file. If \code{TRUE}, the each layer will be saved in a separate file. The filename from \code{filename} will be amended so that it ends with \verb{_<name>} (then the file extension), where \verb{<name>} is give by \code{\link[=names]{names()}}. Note that if any characters in raster names will not work in a file name, then the function will fail (e.g., a backslash or question mark).}
 
-\item{levelsExt}{Character, logical, or \code{NULL} (default): Name of the file extension for the "levels" file that accompanies a \link[=tutorial_raster_data_types]{categorical} raster. When saving categorical rasters, the raster file is accompanied with a "levels" file that contain information on the levels of the raster. This file is the same as \code{filename}, except it has a different extension. Valid values depend on how many raster layers are saved at a time (case is ignored):
+\item{levelsExt}{Character, logical, or \code{NULL} (default): Name of the file extension for the "levels" file that accompanies a categorical \code{GRaster}. When saving categorical rasters, the raster file is accompanied with a "levels" file that contain information on the levels of the raster. This file is the same as \code{filename}, except it has a different extension. Valid values depend on how many raster layers are saved at a time (case is ignored):
 \itemize{
 \item DefaultOne raster layer: \code{".csv"}
 \item Two or more layers, with at least one categorical raster: \code{".rds"}, \code{".rda"}, \code{".rdat"}, \code{".rdata"}

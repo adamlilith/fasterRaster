@@ -1,0 +1,65 @@
+---
+title: "Types of GRasters"
+output: rmarkdown::html_vignette
+author: "Adam B. Smith"
+date: "`r Sys.Date()`"
+vignette: >
+  %\VignetteIndexEntry{Types of GRasters}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+**fasterRaster** `GRaster`s can represent double-floating point numeric values, integers, or categorical data.
+
+## Double-floating point values
+Double-floating point values are accurate to about the 15th to 17th decimal place. These are called "double" rasters in **fasterRaster** and `DCELL` rasters in **GRASS**. These rasters typically take the most memory. All `numeric` values in **R** are double-floating point values.
+
+## Floating point values
+Less common that double-floating point rasters, floating point rasters are accurate to about the 7th decimal place. These are called "float" rasters in **fasterRaster** and `FCELL` rasters in **GRASS**. These rasters typically take less memory than double-floating point rasters.
+
+## Integers
+Rasters that represent integers are called "integer" rasters in **fasterRaster** and `CELL` rasters in **GRASS**. You can force a raster to be an integer using [`as.int()`](https://adamlilith.github.io/fasterRaster/reference/as.int.html). Some of the functions in [`app()`](https://adamlilith.github.io/fasterRaster/reference/app.html) function will also return integer-type rasters. Integer rasters typically take the least memory.
+
+## Categories
+Categorical rasters (also called "factor" rasters) are actually integer rasters, but have an associated attribute table that maps each integer value to a category label, such as "wetland" or "forest". The table has at least two columns. The first is integer values, and (by default) the second is category names. This second column is the "active" category column that is used for plotting and in some functions. The active column can be changed using [`activeCat<-`](https://adamlilith.github.io/fasterRaster/reference/activeCat.html).
+
+## Functions relevant to raster data types
+
+### Any type of `GRaster`
+* [`as.int()`](https://adamlilith.github.io/fasterRaster/reference/as.int.html), [`as.float()`](https://adamlilith.github.io/fasterRaster/reference/as.int.html), and [`as.doub()`](https://adamlilith.github.io/fasterRaster/reference/as.int.html) coerce a raster to an integer, float, or double.
+* [`datatype()`](https://adamlilith.github.io/fasterRaster/reference/datatype.html) returns the data type of a `GRaster`.
+* [`freq()`](https://adamlilith.github.io/fasterRaster/reference/freq.html): Frequency of each category across cells of a raster
+* [`is.factor()`](https://adamlilith.github.io/fasterRaster/reference/is.factor.html) indicates if the raster is a categorical raster.
+* [`is.int()`](https://adamlilith.github.io/fasterRaster/reference/is.int.html), [`is.float()`](https://adamlilith.github.io/fasterRaster/reference/is.int.html), and [`is.doub()`](https://adamlilith.github.io/fasterRaster/reference/is.int.html) indicate if values in a a raster are integers, floating-point, or double-floating point precision.
+
+### Categorical `GRaster`s
+
+* [`activeCat()`](https://adamlilith.github.io/fasterRaster/reference/activeCat.html), [`activeCats()`](https://adamlilith.github.io/fasterRaster/reference/activeCat.html), and [`activeCat<-`](https://adamlilith.github.io/fasterRaster/reference/activeCat.html) can be used to see or assign which column in a "levels" table associated with a categorical raster is used as category labels.
+* [`addCats()`](https://adamlilith.github.io/fasterRaster/reference/addCats.html) adds information to the "levels" table using `data.table::merge()` (same as `merge()`).
+* [`addCats<-`](https://adamlilith.github.io/fasterRaster/reference/addCats.html) add new levels to a "levels" table.
+* [`catNames()`](https://adamlilith.github.io/fasterRaster/reference/catNames.html) reports the column names of the "levels" table of each layer of a raster.
+* [`cats()`](https://adamlilith.github.io/fasterRaster/reference/cats.html) returns the entire "levels" table of a categorical raster.
+* [`combineCats()`](https://adamlilith.github.io/fasterRaster/reference/combineCats.html) combines levels of two or more categorical or integer rasters.
+* [`combineLevels()`](https://adamlilith.github.io/fasterRaster/reference/combineLevels.html): Combine the "levels" tables of two or more categorical `GRaster`s.
+* [`complete.cases()`](https://adamlilith.github.io/fasterRaster/reference/complete.cases.html) finds rows in the levels table that have no `NA`s.
+* [`droplevels()`](https://adamlilith.github.io/fasterRaster/reference/dropevels.html) removes "unused" levels in a "levels" table.
+* [`levels()`](https://adamlilith.github.io/fasterRaster/reference/levels.html) returns the "levels" table of a categorical raster (just the value column and the active column).
+* [`levels<-`](https://adamlilith.github.io/fasterRaster/reference/levels.html) and [`categories()`](https://adamlilith.github.io/fasterRaster/reference/categories.html) can be used to assign categories to an integer raster and make it categorical (i.e., a "factor" raster).
+* [`match()`](https://adamlilith.github.io/fasterRaster/reference/match.html), [`%in%`](https://adamlilith.github.io/fasterRaster/reference/match.html), and [`$%notin%$`](https://adamlilith.github.io/fasterRaster/reference/match.html): Find which cells of a `GRaster` match or do not match certain category labels
+* [`missing.cases()`](https://adamlilith.github.io/fasterRaster/reference/missing.cases.html) finds rows in the levels table that have at least one `NA`.
+* [`missingCats()`](https://adamlilith.github.io/fasterRaster/reference/missingCats.html) finds values in categorical rasters that do not have a category assigned to them.
+* [`nlevels()`](https://adamlilith.github.io/fasterRaster/reference/nlevels.html) returns the number of levels represented by a categorical raster.
+* [`subst()`](https://adamlilith.github.io/fasterRaster/reference/subst.html): Re-assign category levels
+
+## Saving rasters to disk
+You can potentially save substantial space on disk by setting the `datatype` argument in [`writeRaster()`](https://adamlilith.github.io/fasterRaster/reference/writeRaster.html) to an appropriate value when saving a raster. This argument allows for finer "divisions" than just integer/float/double-float, so depending on the range of values in your raster, you can optimize file size by selecting the one that best matches the values in the raster. See the documentation for [`writeRaster()`](https://adamlilith.github.io/fasterRaster/reference/writeRaster.html) for more information.
+
+
+~ FINIS ~

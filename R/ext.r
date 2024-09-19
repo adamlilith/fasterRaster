@@ -7,7 +7,7 @@
 #' * `W()`, `E()`, `N()`, `S()`: Coordinates of one side of horizontal extent.\cr
 #' * `top()` and `bottom()`: Coordinates of top and bottom of vertical extent.\cr
 #' 
-#' @param x An object that inherits from `GSpatial` (i.e., a `GRaster` or `GVector`) or missing. If missing, then the horizontal or vertical extent of the currently active [region][tutorial_regions] is returned.
+#' @param x An object that inherits from `GSpatial` (i.e., a `GRaster` or `GVector`) or missing. If missing, then the horizontal or vertical extent of the currently active "region" is returned (see `vignette("regions", package = "fasterRaster")`).
 #' 
 #' @param vector Logical: If `FALSE` (default), return a `SpatExtent` object. If `TRUE`, return the extent as a named vector.
 #' 

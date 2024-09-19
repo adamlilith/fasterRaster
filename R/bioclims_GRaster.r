@@ -113,7 +113,7 @@ methods::setMethod(
 	extendedBios <- 41L:60L
 	allBios <- c(classicBios, extendedBios)
 
-	meanTempBios <- c(1, 4, 8:11, 18:19, 41:46, 53:54) # BIOCLIMs that require mean temp
+	meanTempBios <- c(1, 4, 8:11, 18:19, 41:46, 53:54, 57:60) # BIOCLIMs that require mean temp
 	quarterTempBios <- c(10, 11, 18, 19, 41:46, 53:54) # BIOCLIMs that require quarter temperatures
 	quarterPrecipBios <- c(8, 9, 16, 17, 16:19, 45:48, 55:56)
 	wettestQuarterBios <- c(8, 16, 46, 48, 55)

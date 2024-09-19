@@ -1,0 +1,62 @@
+---
+title: "For developers: Hidden fasterRaster functions"
+output: rmarkdown::html_vignette
+author: "Adam B. Smith"
+date: "`r Sys.Date()`"
+vignette: >
+  %\VignetteIndexEntry{For developers: Hidden fasterRaster functions}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+**fasterRaster** contains a set of "private" functions that users can access using `fasterRaster:::functionName`. These functions are useful for power users and developers. Not all hidden functions are listed here. Often, a method will have a hidden function of the same name that starts with a period (e.g., `.plot()`). This "period" function is intended to be supplied the [`sources()`](https://adamlilith.github.io/fasterRaster/reference/sources.html) name of a `GRaster` or `GVector` from other functions so that the calling function does not need to spend the time creating the `GRaster` or `GVector` pointer before calling the function. "Period" functions will, though, often work on `GRaster`s or `GVector`s, though some error-checking and region re-definition is not conducted.
+
+* `.aggDisaggVect()`: Aggregate or disaggregate a vector using its [`sources()`](https://adamlilith.github.io/fasterRaster/reference/sources.html) name.
+* `.copyGSpatial()`: Make a copy of the **GRASS** file pointed to by a `GRaster` or `GVector`
+* `.fileExt()`: Get file extension
+* `.exists()`: Does the **GRASS** file of a `GRaster` or `GVector` exist?
+* `.ext()`: Extent from the [`sources()`](https://adamlilith.github.io/fasterRaster/reference/sources.html) name of a `GRaster` or `GVector`
+* `.geomtype()`: Geometry type ("point", "line", or "area") from the [`sources()`](https://adamlilith.github.io/fasterRaster/reference/sources.html) name of a `GVector`
+* `.layerIndex()`: Gets the index of `GRaster` layers from a numeric, integer, character, or logical vector
+* `.locationCreate()` Make a connection to **GRASS** (i.e., start **GRASS** from within **R**) and create a location
+* `.locationDelete()` Deletes all files associated with a **GRASS** "location" and mapset
+* `.locationFind()`: Find a specific **GRASS** "location" that already exists
+* `.locationRestore()` Reconnect **GRASS** to a previously-created **GRASS** "location"
+* `.locations()`: List of all available "locations"
+* `.ls()`: Lists the `sources` of all objects in the active **GRASS** "location"
+* `.makeGRaster()` and `.makeGVector()`: Make `GRaster`s or `GVector`s from a vector of `sources`, which are pointers to files in **GRASS**
+* `.makeSourceNames()`: Makes one or more statistically unique strings that can be used as file names to represent rasters or vectors in **GRASS**
+* `.mapset()`: **GRASS** "mapset" of an object or the active session
+* `.message()`: Display a warning or message if the given warning has not been displayed since **fasterRaster** was attached or if a given number or hours has passed since then
+* `.minVal()` and `.maxVal()`: Values in the `@minVal` and `@maxVal` slots in a `GRaster`
+* `.nlevels()`: Number of levels in a `SpatVector`, `data.frame`, `data.table`, empty string, or a list of `data.frame`s, `data.table`s, and/or empty strings.
+* `.plot()`: Plot using the [`sources()`](https://adamlilith.github.io/fasterRaster/reference/sources.html) name of a `GRaster` or `GVector`
+* `.projection()`: Value of the `@projection` slot in a `GRaster` or `GVector`
+* `.quiet()`: Returns "quiet" if `faster("verbose")` is `TRUE`
+* `.rastInfo()` and `.vectInfo()`: Metadata for a **GRASS** raster or vector
+* `.region()`: Change or report the active region's extent and resolution
+* `.regionDim()]`: Change or report the active region's resolution (also [`dim()`](https://adamlilith.github.io/fasterRaster/reference/dim.html) and related functions, with no arguments)
+* `.regionExt()`: Change or report the active region's extent (also [`ext()`](https://adamlilith.github.io/fasterRaster/reference/ext.html) and related functions, with no arguments)
+* `.regionRes()`: Change or report the active region's dimensions (also [`res()`](https://adamlilith.github.io/fasterRaster/reference/res.html) and related functions, with no arguments)
+* `.rename()`: Rename a **GRASS** raster or vector
+* `.rm()`: Delete rasters or vectors in **GRASS**
+* `.validVector()`: Test if a `GVector` is valid.
+* `.vAsDataTable()`: Convert the attribute table linked to a vector in **GRASS** to a `data.table`. This table is distinct from the attribute table attached to a `GVector`
+* `.vAttachDatabase()`: Add a database table to the **GRASS** representation of a `GVector`
+* `.vCats()`: Get a `data.table` with a single column named `cat`, which corresponds to the **GRASS** attribute table's `cat` column
+* `.vDetachDatabase()`: Detach the **GRASS** database from a **GRASS** vector
+* `.vHasDatabase()`: Tests if **GRASS** vector has a database
+* `.vIncrementCats()`: Increment category values of a `GVector`
+* `.vNames()`: "**GRASS**" vector attribute table column names
+* `.vRecat()`: Change **GRASS** category indices of a **GRASS** vector
+* `.vValidCats()`: Are category values of a vector valid?
+
+~ FINIS ~
+

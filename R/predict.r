@@ -8,7 +8,7 @@
 #' * Linear predictors and intercepts like `y ~ 1 + x`;
 #' * Quadratic terms like `y ~ x^2` (or, in **R** formular notation, `y ~ I(x^2)`);
 #' * Two-way interaction terms between scalars like `y ~ x1:x2` and `y ~ x1 * x2`;
-#' * Categorical predictors (i.e., [categorical][tutorial_raster_data_types] rasters);
+#' * Categorical predictors (i.e., categorical `GRaster`s; see `vignette("GRasters", package = "fasterRaster")`));
 #' * Two-way interactions between a categorical predictor and a scalar predictor; and
 #' * Two-way interactions between categorical predictors.
 #'

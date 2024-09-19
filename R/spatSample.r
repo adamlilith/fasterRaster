@@ -10,7 +10,7 @@
 #' 
 #' @param values Logical: If `TRUE` (default), values of the `GRaster` at points are returned.
 #' 
-#' @param cats Logical: If `TRUE` (default) and the `GRaster` is [categorical][tutorial_raster_data_types], then return the category label of each cell. If `values` is also `TRUE`, then the cell value will also be returned.
+#' @param cats Logical: If `TRUE` (default) and the `GRaster` is categorical, then return the category label of each cell. If `values` is also `TRUE`, then the cell value will also be returned.
 #' 
 #' @param xy Logical: If `TRUE`, return the longitude and latitude of each point. Default is `FALSE`.
 #'

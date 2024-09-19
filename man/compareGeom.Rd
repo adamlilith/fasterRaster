@@ -73,7 +73,7 @@
 \arguments{
 \item{x, y, ...}{\code{GRaster}s or \code{GVector}s. If \code{y} is \code{GRaster}, then the \code{...} must also be \code{GRaster}s (or missing). If \code{y} is \code{GVector}, then the \code{...} must also be \code{GVector}s (or missing).}
 
-\item{location, mapset}{Logical: Compare \strong{GRASS} \link[=tutorial_locations_mapsets]{"locations" and "mapsets"}. Default is \code{TRUE}.}
+\item{location, mapset}{Logical: Compare \strong{GRASS} "project/location" and "mapsets" (see \code{vignette("projects_mapsets", package = "fasterRaster")}). Default is \code{TRUE}.}
 
 \item{topo}{Logical: Test for same topology (2D or 3D). By default, this is \code{TRUE} for raster-raster comparisons, and \code{FALSE} for all others.}
 

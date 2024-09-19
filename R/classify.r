@@ -6,7 +6,7 @@
 #' @param rcl Reclassification system:
 #' * A single integer: Number of "bins" into which to divide values. Arguments `include.lowest` and `right` apply.
 #' * A vector of numeric values: Breakpoints of bins into which to divide values. These will be sorted from lowest to highest before classification. Arguments `include.lowest` and `right` apply.
-#' * A 2-column `matrix`, `data.frame`, or `data.table`: The first column provides specific values in `x` to be replaced, and the second provides the values they are replaced with. This method is only useful for classifying [integer][tutorial_raster_data_types] `GRaster`s. Arguments `include.lowest` and `right` are ignored. Cells will be classified in the order in which values are listed in the first column.
+#' * A 2-column `matrix`, `data.frame`, or `data.table`: The first column provides specific values in `x` to be replaced, and the second provides the values they are replaced with. This method is only useful for classifying `integer` `GRaster`s. Arguments `include.lowest` and `right` are ignored. Cells will be classified in the order in which values are listed in the first column.
 #' * A 3-column `matrix`, `data.frame`, or `data.table`: The first column provides the lower value of a bin, the second the upper value, and the third the value to assign to the cells in the bin. Arguments `include.lowest` and `right` apply. Cells will be classified in the order of how intervals are listed (intervals will not be sorted).
 #'
 #' @param include.lowest,right Logical: These arguments determine how cells that have values exactly equal to the lower or upper ends of an interval are classified.
@@ -14,11 +14,11 @@
 #' * `include.lowest = TRUE` and `right = TRUE`: All intervals will be "left-open, right-closed" except for the lowest interval, which will be "left-closed/right-closed".
 #' * `include.lowest = FALSE` and `right = FALSE`: Intervals will be "left-closed/right-open". Cells with values equal to the highest higher boundary will not be reclassified.
 #' * `include.lowest = TRUE` and `right = FALSE`: All intervals will be "left-closed/right-open", except for the highest interval, which will be "right-closed/left-closed".
-#' * `right = NA`: Only useful for classifying [integer][tutorial_raster_data_types] `GRaster`s. All intervals are "left-closed/right-closed". This is easier than accounting for "open" intervals when dealing with integers. Argument `include.lowest` is ignored.
+#' * `right = NA`: Only useful for classifying `integer` `GRaster`s. All intervals are "left-closed/right-closed". This is easier than accounting for "open" intervals when dealing with integers. Argument `include.lowest` is ignored.
 #'
 #' @param others Integer or `NULL` (default), or `NA`: Value to assign to cells that do not fall into the set intervals. Cells with `NA` values are not reclassified. Setting `others` equal to `NULL` or `NA` replaces all other values with `NA`. The value will be coerced to an integer value.
 #' 
-#' @returns A `GRaster`. The raster will be a [categorical][tutorial_raster_data_types] raster if the original values were continuous (i.e., a single- or double-precision raster), or of type "integer" if the input was an integer.
+#' @returns A `GRaster`. The raster will be a categorical `GRaster` if the original values were continuous (i.e., a single- or double-precision raster), or of type "integer" if the input was an integer. See `vignette("GRasters", package = "fasterRaster")`.
 #'
 #' @seealso [terra::classify()], [subst()]
 #'

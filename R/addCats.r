@@ -4,7 +4,7 @@
 #' * addCats()` uses [data.table::merge()] or [cbind()] to do this--it does not add new rows, but rather new columns.
 #' * `addCats()<-` uses [rbind()] to add new categories (rows) to the "levels" table.
 #'
-#' GRaster`s can represent [categorical data][tutorial_raster_data_types]. Cell values are actually integers, each corresponding to a category, such as "desert" or "wetland." A categorical raster is associated with a "levels" table that matches each value to a category name. The table must be `NULL` (i.e., no categories--so not a categorical raster), or have at least two columns. The first column must have integers and represent raster values. One or more subsequent columns must have category labels. The column with these labels is the "active category".
+#' GRaster`s can represent categorical data (see `vignette("GRasters", package = "fasterRaster")`). Cell values are actually integers, each corresponding to a category, such as "desert" or "wetland." A categorical raster is associated with a "levels" table that matches each value to a category name. The table must be `NULL` (i.e., no categories--so not a categorical raster), or have at least two columns. The first column must have integers and represent raster values. One or more subsequent columns must have category labels. The column with these labels is the "active category".
 #'
 #' @param x A `GRaster`.
 #'
@@ -16,7 +16,7 @@
 #'
 #' @returns A `GRaster`. The "levels" table of the raster is modified.
 #'
-#' @seealso [terra::addCats()], [combineCats()], [combineLevels()], [droplevels()], [categorical rasters][tutorial_raster_data_types] in **fasterRaster**
+#' @seealso [terra::addCats()], [combineCats()], [combineLevels()], [droplevels()], `vignette("GRasters", package = "fasterRaster"`
 #'
 #' @example man/examples/ex_GRaster_categorical.r
 #'

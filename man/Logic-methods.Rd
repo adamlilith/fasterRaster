@@ -35,7 +35,7 @@ A binary \code{GRaster} (1 ==> \code{TRUE}, 0 ==> \code{FALSE}, plus \code{NA} w
 You can do logical operations on \code{GRaster}s. Here, a value of 1 is interpreted as \code{TRUE}, and a value of 0 is interpreted as \code{FALSE}. You can compare:
 \itemize{
 \item A \code{GRaster} to another \code{GRaster}
-\item A \code{GRaster} to a logical value (\code{TRUE} or \code{FALSE}, but not \code{NA})
+\item A \code{GRaster} to a logical value (\code{TRUE} or \code{FALSE}, but not \code{NA}--see \code{\link[=not.na]{not.na()}})
 \item A \code{GRaster} to a numeric or integer value that is 0 or 1
 }
 

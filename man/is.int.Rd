@@ -30,7 +30,7 @@
 Logical.
 }
 \description{
-In \strong{fasterRaster}, rasters can have three \link[=tutorial_raster_data_types]{data types}: "factor" (categorical rasters), "integer" (integers), "float" (floating point values, accurate to the 6th to 9th decimal places), and "double" (double-precision values, accurate to the 15th to 17th decimal places). The type of raster can be checked with:
+In \strong{fasterRaster}, rasters can have three data types: "factor" (categorical rasters), "integer" (integers), "float" (floating point values, accurate to the 6th to 9th decimal places), and "double" (double-precision values, accurate to the 15th to 17th decimal places). The type of raster can be checked with:
 \itemize{
 \item \code{is.factor()}: The raster will have integer values and categories matched to the integers (see levels()).
 \item \code{is.int()}: Are values integers? Note that \code{is.int()} will return \code{FALSE} for categorical rasters, even though cell values are technically integers.
@@ -161,5 +161,5 @@ layerCor(landsat, fun = 'cov') # covariance
 }
 }
 \seealso{
-\code{\link[=datatype]{datatype()}}, \code{\link[terra:datatype]{terra::datatype()}}, \code{\link[=as.int]{as.int()}}, \code{\link[=as.float]{as.float()}}, \code{\link[=as.doub]{as.doub()}}, \code{\link[=is.factor]{is.factor()}}, \link[=tutorial_raster_data_types]{raster data types} in \strong{fasterRaster}
+\code{\link[=datatype]{datatype()}}, \code{\link[terra:datatype]{terra::datatype()}}, \code{\link[=as.int]{as.int()}}, \code{\link[=as.float]{as.float()}}, \code{\link[=as.doub]{as.doub()}}, \code{\link[=is.factor]{is.factor()}}, \code{vignette("GRasters", package = "fasterRaster")}
 }

@@ -23,7 +23,7 @@ Invisibly returns a list with the number of rasters and vectors deleted.
 
 Note that calling this function inside another function's environment can be very dangerous, as it will only be able to see objects in that environment, and thus delete any rasters/vectors outside that environment.
 
-Note also that this function will only clean the current \strong{GRASS} \link[=tutorial_locations_mapsets]{project/location}.
+Note also that this function will only clean the current \strong{GRASS} "project"/"location" (see \code{vignette("projects_mapsets", package = "fasterRaster")}).
 }
 \examples{
 if (grassStarted()) {

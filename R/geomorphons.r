@@ -27,7 +27,7 @@
 #' * `"2"`: Better handling of cases with equal zenith/nadir angles (the "anglev2" method)
 #' * `"2d"`: As `"2"`, but takes into account zenith/nadir distance ("anglev2_distance" method)
 #'
-#' @returns A [categorical][tutorial_raster_data_types] `GRaster` where each geomorphon is a category.
+#' @returns A categorical `GRaster` where each geomorphon is a category (see `vignette("GRasters", package = "fasterRaster")`).
 #'
 #' @seealso Module [`r.geomorphon`](https://grass.osgeo.org/grass84/manuals/r.geomorphon.html) in **GRASS**
 #'

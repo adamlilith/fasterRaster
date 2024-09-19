@@ -1,8 +1,8 @@
 #' Coordinate reference system of a GRaster or GVector
 #' 
-#' @description Get the coordinate reference system (CRS) of a `GLocation` object, or any that contain it (especially `GRaster`s and `GVector`s), or from the currently active **GRASS** [location][tutorial_locations_mapsets].
+#' @description Get the coordinate reference system (CRS) of a `GLocation` object, or any that contain it (especially `GRaster`s and `GVector`s), or from the currently active **GRASS** "project/location" (see `vignette("projects_mapsets", package = "fasterRaster")`).
 #'
-#' @param x An object that inherits from a `GLocation` (i.e., a `GRaster` or `GVector`) or missing. If missing, the coordinate reference system of the currently active **GRASS** [location][tutorial_locations_mapsets] is reported.
+#' @param x An object that inherits from a `GLocation` (i.e., a `GRaster` or `GVector`) or missing. If missing, the coordinate reference system of the currently active **GRASS** "project/location" is reported.
 #' 
 #' @param ... Other arguments (generally unused).
 #'

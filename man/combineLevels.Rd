@@ -19,7 +19,7 @@
 A \code{list} with a "levels" table (a \code{data.frame} or \code{data.table}), and the active category number for the new table. Following \code{\link[terra:activeCat]{terra::activeCat()}}, the number is offset by 1, so a value of 1 indicates that the second column in the table should be used for the category labels, a value of 2 indicates the third column should be used, and so on.
 }
 \description{
-This function creates a single "levels" table from the levels tables of one or more \link[=tutorial_raster_data_types]{categorical} \code{GRaster}s.
+This function creates a single "levels" table from the levels tables of one or more categorical \code{GRaster}s.
 
 The difference between this function and \code{\link[=combineCats]{combineCats()}} is that \code{combineCats()} creates a "combined" \code{GRaster} with a combined levels table, whereas this one just merges the levels tables.
 }
@@ -148,5 +148,5 @@ levels(combinedNA)
 }
 }
 \seealso{
-\code{\link[=combineCats]{combineCats()}}, \code{GRaster} \link[=tutorial_raster_data_types]{data types}
+\code{\link[=combineCats]{combineCats()}}, \code{vignette("GRasters", package = "fasterRaster")}
 }

@@ -1,6 +1,6 @@
 #' Report or change the extent, dimensions, and/or resolution of a region GRASS
 #'
-#' @description These functions either change the extent, dimensions, and/or resolution of a **GRASS** [".region"][tutorial_regions] or report the current region"s extent, dimensions, and/or resolution. These functions are mostly used internally and rarely of interest to most users.
+#' @description These functions either change the extent, dimensions, and/or resolution of a **GRASS** "region" or report the current region's extent, dimensions, and/or resolution (see `vignette("regions", package = "fasterRaster")`). These functions are mostly used internally and rarely of interest to most users.
 #' * `.region()`: All 2D and 3D aspects of a region.
 #' * `.regionDim()`: x- and y-dimensions.
 #' * `.regionExt()`: x- and y-extent.

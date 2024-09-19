@@ -18,7 +18,7 @@
 #' * `nrow()`: Number of geometries
 #' * `ncol()`: Number of columns in data table
 #'
-#' @param x A `GRegion`, `GRaster`, `GVector`, or missing. If missing, then the dimensions of the currently active [region][tutorial_regions] are returned.
+#' @param x A `GRegion`, `GRaster`, `GVector`, or missing. If missing, then the dimensions of the currently active "region" are returned (see `vignette("regions", package = "fasterRaster")`).
 #'
 #' @return A numeric value or vector.
 #' 

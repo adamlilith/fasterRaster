@@ -32,7 +32,7 @@
 \code{activeCat()} returns an integer or character of the active column index or name. \code{activeCats()} returns a vector of indices or names. \verb{activeCat()<-} returns a \code{GRaster}.
 }
 \description{
-These functions return or set the column of the labels to be matched to each value in the raster of a \link[=tutorial_raster_data_types]{categorical} \code{GRaster}. \emph{Important}: Following \code{\link[terra:activeCat]{terra::activeCat()}}, the first column in the "levels" table is ignored, so an "active category" value of 1 means the second column is used as labels, a value of 2 means the third is used, and so on.
+These functions return or set the column of the labels to be matched to each value in the raster of a categorical \code{GRaster} (see \code{vignette("GRasters", package = "fasterRaster")}). \emph{Important}: Following \code{\link[terra:activeCat]{terra::activeCat()}}, the first column in the "levels" table is ignored, so an "active category" value of 1 means the second column is used as labels, a value of 2 means the third is used, and so on.
 \itemize{
 \item \code{activeCat()} returns the column of the labels to be matched to each value in the raster for a single raster layer.
 \item \code{activeCats()} does the same, but for all layers of a \code{GRaster}.

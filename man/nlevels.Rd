@@ -14,7 +14,7 @@
 A named, numeric vector of integers. The values represent the number of categories (rows) that appear in the raster's levels table.
 }
 \description{
-This function reports the number of categories (levels) in a \link[=tutorial_raster_data_types]{categorical} \code{GRaster}.
+This function reports the number of categories (levels) in a categorical \code{GRaster}.
 }
 \examples{
 if (grassStarted()) {
@@ -141,5 +141,5 @@ levels(combinedNA)
 }
 }
 \seealso{
-\code{\link[=levels]{levels()}}, \code{\link[terra:factors]{terra::levels()}}, \code{\link[=droplevels]{droplevels()}}, \link[=tutorial_raster_data_types]{raster data types}
+\code{\link[=levels]{levels()}}, \code{\link[terra:factors]{terra::levels()}}, \code{\link[=droplevels]{droplevels()}}, \code{vignette("GRasters", package = "fasterRaster")}
 }

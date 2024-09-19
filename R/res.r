@@ -5,7 +5,7 @@
 #' * `res3d()`: 3-dimensinal resolution (z, y, and z).\cr\cr
 #' * `xres()`, `yres()`, and `zres()`: East-west resolution, north-south resolution, and top-bottom resolution.
 #'
-#' @param x A `GRaster`, `GRegion`, or missing. If missing, the resolution of the currently active [region][tutorial_regions] is returned.
+#' @param x A `GRaster`, `GRegion`, or missing. If missing, the resolution of the currently active "region" is returned (see `vignette("regions", package = "fasterRaster")`).
 #'
 #' @return A numeric vector. For both `res()` and `res3d()`, the first value is the length of cells in the x-direction and the second the length of cells in the y-direction. For `res3d()` the third value is height of a voxel (the z-direction). `xres()`, `yres()`, and `zres()` each return a single value.
 #'

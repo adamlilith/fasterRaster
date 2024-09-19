@@ -12,7 +12,8 @@ methods::setMethod(
 		bios = NULL,
 		sample = TRUE,
 		quarter = 3,
-		pptDelta = 1
+		pptDelta = 1,
+		verbose = TRUE
 	) {
 
 	# BIOCLIM numbers
@@ -20,7 +21,7 @@ methods::setMethod(
 	extendedBios <- 41L:60L
 	allBios <- c(classicBios, extendedBios)
 
-	meanTempBios <- c(1, 4, 8:11, 18:19, 41:46, 53:54) # BIOCLIMs that require mean temp
+	meanTempBios <- c(1, 4, 8:11, 18:19, 41:46, 53:54, 57:60) # BIOCLIMs that require mean temp
 	quarterTempBios <- c(10, 11, 18, 19, 41:46, 53:54) # BIOCLIMs that require quarter temperatures
 	quarterPrecipBios <- c(8, 9, 16, 17, 16:19, 45:48, 55:56)
 	wettestQuarterBios <- c(8, 16, 46, 48, 55)
@@ -51,19 +52,49 @@ methods::setMethod(
 
 	if (quarter > nLayers) stop("Argument `quarter` cannot be more than the number of raster layers in any input data.")
 
+	### number of tasks (used for progress bar
+	nTasks <- length(bios) +
+		(any(meanTempBios %in% bios) & !is.null(tmean)) +
+		any(bios %in% quarterTempBios) +
+		any(bios %in% quarterPrecipBios) +
+		(any(bios %in% warmestQuarterBios) & !(53 %in% warmestQuarterBios)) +
+		(any(bios %in% coldestQuarterBios) & !(54 %in% coldestQuarterBios)) +
+		(any(bios %in% wettestQuarterBios) & !(55 %in% wettestQuarterBios)) +
+		(any(bios %in% driestQuarterBios) & !(55 %in% driestQuarterBios))
+		
+	if (verbose | faster("verbose")) {
+		pb <- utils::txtProgressBar(min = 0, max = nTasks, initial = 0, style = 3, width = 30)
+	}
+	tasks <- 0
+
 	### calculate tmean if needed
 	if (is.null(tmean) & any(bios %in% meanTempBios)) {
+		
 		tmean <- (tmin + tmax) / 2
+
+		tasks <- tasks + 1
+		if (verbose | faster("verbose")) utils::setTxtProgressBar(pb, tasks)
+	
 	}
 
 	### quarter temperature rasters
 	if (any(bios %in% quarterTempBios)) {
+
 		tmeanByQuarter <- .calcQuarterSR(tmean, fun = "mean", quarter = quarter)
+
+		tasks <- tasks + 1
+		if (verbose | faster("verbose")) utils::setTxtProgressBar(pb, tasks)
+	
 	}
 
 	### quarter precipitation rasters
 	if (any(bios %in% quarterPrecipBios)) {
+
 		pptByQuarter <- .calcQuarterSR(ppt, fun = "sum", quarter = quarter)
+
+		tasks <- tasks + 1
+		if (verbose | faster("verbose")) utils::setTxtProgressBar(pb, tasks)
+	
 	}
 
 	### MAIN
@@ -79,6 +110,9 @@ methods::setMethod(
 		names(bio53) <- "bio53"
 		if (53 %in% bios) out <- c(out, bio53)
 
+		tasks <- tasks + 1
+		if (verbose | faster("verbose")) utils::setTxtProgressBar(pb, tasks)
+		
 	}
 
 	### BIOCLIM 54 (coldest quarter)
@@ -88,6 +122,9 @@ methods::setMethod(
 		coldestQuarters <- terra::freq(bio54)$value
 		names(bio54) <- "bio54"
 		if (54 %in% bios) out <- c(out, bio54)
+
+		tasks <- tasks + 1
+		if (verbose | faster("verbose")) utils::setTxtProgressBar(pb, tasks)
 
 	}
 
@@ -99,6 +136,9 @@ methods::setMethod(
 		names(bio55) <- "bio55"
 		if (55 %in% bios) out <- c(out, bio55)
 
+		tasks <- tasks + 1
+		if (verbose | faster("verbose")) utils::setTxtProgressBar(pb, tasks)
+		
 	}
 
 	### BIOCLIM 56 (driest quarter)
@@ -109,6 +149,9 @@ methods::setMethod(
 		names(bio56) <- "bio56"
 		if (56 %in% bios) out <- c(out, bio56)
 
+		tasks <- tasks + 1
+		if (verbose | faster("verbose")) utils::setTxtProgressBar(pb, tasks)
+		
 	}
 
 	### BIOCLIM 1
@@ -117,6 +160,9 @@ methods::setMethod(
 		bio1 <- mean(tmean)
 		names(bio1) <- "bio1"
 		out <- c(out, bio1)
+
+		tasks <- tasks + 1
+		if (verbose | faster("verbose")) utils::setTxtProgressBar(pb, tasks)
 	
 	}
 
@@ -127,6 +173,9 @@ methods::setMethod(
 		bio2 <- mean(delta)
 		names(bio2) <- "bio2"
 		if (2 %in% bios) out <- c(out, bio2)
+
+		tasks <- tasks + 1
+		if (verbose | faster("verbose")) utils::setTxtProgressBar(pb, tasks)
 	
 	}
 
@@ -136,6 +185,9 @@ methods::setMethod(
 		bio5 <- max(tmax)
 		names(bio5) <- "bio5"
 		if (5 %in% bios) out <- c(out, bio5)
+
+		tasks <- tasks + 1
+		if (verbose | faster("verbose")) utils::setTxtProgressBar(pb, tasks)
 	
 	}
 
@@ -146,6 +198,9 @@ methods::setMethod(
 		names(bio6) <- "bio6"
 		if (6 %in% bios) out <- c(out, bio6)
 
+		tasks <- tasks + 1
+		if (verbose | faster("verbose")) utils::setTxtProgressBar(pb, tasks)
+
 	}
 
 	### BIOCLIM 7 (annual temp range)
@@ -154,6 +209,9 @@ methods::setMethod(
 		bio7 <- bio5 - bio6
 		names(bio7) <- "bio7"
 		if (7 %in% bios) out <- c(out, bio7)
+
+		tasks <- tasks + 1
+		if (verbose | faster("verbose")) utils::setTxtProgressBar(pb, tasks)
 	
 	}
 
@@ -163,6 +221,9 @@ methods::setMethod(
 		bio3 <- 100 * bio2 / bio7
 		names(bio3) <- "bio3"
 		out <- c(out, bio3)
+
+		tasks <- tasks + 1
+		if (verbose | faster("verbose")) utils::setTxtProgressBar(pb, tasks)
 	
 	}
 
@@ -172,6 +233,9 @@ methods::setMethod(
 		bio4 <- 100 * terra::stdev(tmean, pop = !sample)
 		names(bio4) <- "bio4"
 		out <- c(out, bio4)
+
+		tasks <- tasks + 1
+		if (verbose | faster("verbose")) utils::setTxtProgressBar(pb, tasks)
 	
 	}
 
@@ -188,6 +252,9 @@ methods::setMethod(
 		names(bio8) <- "bio8"
 		out <- c(out, bio8)
 
+		tasks <- tasks + 1
+		if (verbose | faster("verbose")) utils::setTxtProgressBar(pb, tasks)
+
 	}
 
 	# BIOCLIM 9 (mean temp of driest quarter)
@@ -203,6 +270,9 @@ methods::setMethod(
 		names(bio9) <- "bio9"
 		out <- c(out, bio9)
 
+		tasks <- tasks + 1
+		if (verbose | faster("verbose")) utils::setTxtProgressBar(pb, tasks)
+
 	}
 
 	# BIOCLIM 10 (mean temp of warmest quarter)
@@ -217,6 +287,9 @@ methods::setMethod(
 
 		names(bio10) <- "bio10"
 		out <- c(out, bio10)
+
+		tasks <- tasks + 1
+		if (verbose | faster("verbose")) utils::setTxtProgressBar(pb, tasks)
 
 	}
 
@@ -234,6 +307,9 @@ methods::setMethod(
 		names(bio11) <- "bio11"
 		out <- c(out, bio11)
 
+		tasks <- tasks + 1
+		if (verbose | faster("verbose")) utils::setTxtProgressBar(pb, tasks)
+
 	}
 
 	# BIOCLIM 12 (total precipitation)
@@ -242,6 +318,9 @@ methods::setMethod(
 		bio12 <- sum(ppt)
 		names(bio12) <- "bio12"
 		if (12 %in% bios) out <- c(out, bio12)
+
+		tasks <- tasks + 1
+		if (verbose | faster("verbose")) utils::setTxtProgressBar(pb, tasks)
 
 	}
 
@@ -252,6 +331,9 @@ methods::setMethod(
 		names(bio13) <- "bio13"
 		out <- c(out, bio13)
 
+		tasks <- tasks + 1
+		if (verbose | faster("verbose")) utils::setTxtProgressBar(pb, tasks)
+
 	}
 
 	# BIOCLIM 14 (driest month precipitation)
@@ -260,6 +342,9 @@ methods::setMethod(
 		bio14 <- min(ppt)
 		names(bio14) <- "bio14"
 		out <- c(out, bio14)
+
+		tasks <- tasks + 1
+		if (verbose | faster("verbose")) utils::setTxtProgressBar(pb, tasks)
 
 	}
 
@@ -270,6 +355,9 @@ methods::setMethod(
 		bio15 <- 100 * sd / mean(ppt + pptDelta)
 		names(bio15) <- "bio15"
 		out <- c(out, bio15)
+
+		tasks <- tasks + 1
+		if (verbose | faster("verbose")) utils::setTxtProgressBar(pb, tasks)
 	
 	}
 
@@ -285,6 +373,9 @@ methods::setMethod(
 		names(bio16) <- "bio16"
 		out <- c(out, bio16)
 
+		tasks <- tasks + 1
+		if (verbose | faster("verbose")) utils::setTxtProgressBar(pb, tasks)
+
 	}
 
 	# BIO17: Precipitation of the driest quarter
@@ -298,6 +389,9 @@ methods::setMethod(
 		bio17 <- sum(bio17)
 		names(bio17) <- "bio17"
 		out <- c(out, bio17)
+
+		tasks <- tasks + 1
+		if (verbose | faster("verbose")) utils::setTxtProgressBar(pb, tasks)
 
 	}
 
@@ -313,6 +407,9 @@ methods::setMethod(
 		names(bio18) <- "bio18"
 		out <- c(out, bio18)
 
+		tasks <- tasks + 1
+		if (verbose | faster("verbose")) utils::setTxtProgressBar(pb, tasks)
+
 	}
 
 	# BIO19: Precipitation of the coldest quarter (based on mean temperature)
@@ -326,6 +423,9 @@ methods::setMethod(
 		bio19 <- sum(bio19)
 		names(bio19) <- "bio19"
 		out <- c(out, bio19)
+
+		tasks <- tasks + 1
+		if (verbose | faster("verbose")) utils::setTxtProgressBar(pb, tasks)
 
 	}
 
@@ -347,6 +447,9 @@ methods::setMethod(
 		names(bio41) <- "bio41"
 		out <- c(out, bio41)
 
+		tasks <- tasks + 1
+		if (verbose | faster("verbose")) utils::setTxtProgressBar(pb, tasks)
+
 	}
 
 	# BIO42: Temperature of the quarter following the warmest quarter (based on mean temperature)
@@ -367,6 +470,9 @@ methods::setMethod(
 		names(bio42) <- "bio42"
 		out <- c(out, bio42)
 
+		tasks <- tasks + 1
+		if (verbose | faster("verbose")) utils::setTxtProgressBar(pb, tasks)
+
 	}
 
 	# BIO43: Precipitation of the quarter following the coldest quarter (based on mean temperature; mm)
@@ -385,6 +491,9 @@ methods::setMethod(
 		names(bio43) <- "bio43"
 		out <- c(out, bio43)
 
+		tasks <- tasks + 1
+		if (verbose | faster("verbose")) utils::setTxtProgressBar(pb, tasks)
+
 	}
 
 	# BIO44: Precipitation of the quarter following the warmest quarter (based on mean temperature; mm)
@@ -402,6 +511,9 @@ methods::setMethod(
 
 		names(bio44) <- "bio44"
 		out <- c(out, bio44)
+
+		tasks <- tasks + 1
+		if (verbose | faster("verbose")) utils::setTxtProgressBar(pb, tasks)
 
 	}
 
@@ -423,6 +535,9 @@ methods::setMethod(
 		names(bio45) <- "bio45"
 		out <- c(out, bio45)
 
+		tasks <- tasks + 1
+		if (verbose | faster("verbose")) utils::setTxtProgressBar(pb, tasks)
+
 	}
 
 	# BIO46: Temperature of the quarter following the wettest quarter (based on mean temperature; deg C)
@@ -443,6 +558,9 @@ methods::setMethod(
 		names(bio46) <- "bio46"
 		out <- c(out, bio46)
 
+		tasks <- tasks + 1
+		if (verbose | faster("verbose")) utils::setTxtProgressBar(pb, tasks)
+
 	}
 
 	# BIO47: Precipitation of the quarter following the driest quarter (based on mean temperature; mm)
@@ -460,6 +578,9 @@ methods::setMethod(
 
 		names(bio47) <- "bio47"
 		out <- c(out, bio47)
+
+		tasks <- tasks + 1
+		if (verbose | faster("verbose")) utils::setTxtProgressBar(pb, tasks)
 
 	}
 
@@ -479,6 +600,9 @@ methods::setMethod(
 		names(bio48) <- "bio48"
 		out <- c(out, bio48)
 
+		tasks <- tasks + 1
+		if (verbose | faster("verbose")) utils::setTxtProgressBar(pb, tasks)
+
 	}
 
 	# BIO49: Hottest month
@@ -487,6 +611,9 @@ methods::setMethod(
 		bio49 <- terra::app(tmax, which.max)
 		names(bio49) <- "bio49"
 		out <- c(out, bio49)
+
+		tasks <- tasks + 1
+		if (verbose | faster("verbose")) utils::setTxtProgressBar(pb, tasks)
 
 	}
 
@@ -497,6 +624,9 @@ methods::setMethod(
 		names(bio50) <- "bio50"
 		out <- c(out, bio50)
 
+		tasks <- tasks + 1
+		if (verbose | faster("verbose")) utils::setTxtProgressBar(pb, tasks)
+
 	}
 	
 	# BIO51: Wettest month
@@ -506,6 +636,9 @@ methods::setMethod(
 		names(bio51) <- "bio51"
 		out <- c(out, bio51)
 
+		tasks <- tasks + 1
+		if (verbose | faster("verbose")) utils::setTxtProgressBar(pb, tasks)
+
 	}
 
 	# BIO52: Driest month
@@ -514,6 +647,9 @@ methods::setMethod(
 		bio52 <- terra::app(ppt, which.min)
 		names(bio52) <- "bio52"
 		out <- c(out, bio52)
+
+		tasks <- tasks + 1
+		if (verbose | faster("verbose")) utils::setTxtProgressBar(pb, tasks)
 
 	}
 
@@ -533,12 +669,18 @@ methods::setMethod(
 			deltas[[i]] <- tmean[[i]] - tmean[[target]]
 
 		}
+
+		tasks <- tasks + 1
+		if (verbose | faster("verbose")) utils::setTxtProgressBar(pb, tasks)
 		
 		if (57 %in% bios) {
 
 			bio57 <- max(deltas)
 			names(bio57) <- "bio57"
 			out <- c(out, bio57)
+
+			tasks <- tasks + 1
+			if (verbose | faster("verbose")) utils::setTxtProgressBar(pb, tasks)
 
 		}
 
@@ -547,6 +689,9 @@ methods::setMethod(
 			bio58 <- abs(min(deltas))
 			names(bio58) <- "bio58"
 			out <- c(out, bio58)
+
+			tasks <- tasks + 1
+			if (verbose | faster("verbose")) utils::setTxtProgressBar(pb, tasks)
 
 		}
 
@@ -568,12 +713,18 @@ methods::setMethod(
 			deltas[[i]] <- ppt[[i]] - ppt[[target]]
 
 		}
+
+		tasks <- tasks + 1
+		if (verbose | faster("verbose")) utils::setTxtProgressBar(pb, tasks)
 		
 		if (59 %in% bios) {
 
 			bio59 <- max(deltas)
 			names(bio59) <- "bio59"
 			out <- c(out, bio59)
+
+			tasks <- tasks + 1
+			if (verbose | faster("verbose")) utils::setTxtProgressBar(pb, tasks)
 
 		}
 
@@ -582,6 +733,9 @@ methods::setMethod(
 			bio60 <- abs(min(deltas))
 			names(bio60) <- "bio60"
 			out <- c(out, bio60)
+
+			tasks <- tasks + 1
+			if (verbose | faster("verbose")) utils::setTxtProgressBar(pb, tasks)
 
 		}
 
@@ -608,6 +762,8 @@ methods::setMethod(
 	} else {
 		out <- c(shorts, longs)
 	}
+
+	if (verbose | faster("verbose")) close(pb)
 	out
 
 	} # EOF

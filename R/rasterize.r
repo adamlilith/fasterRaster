@@ -6,7 +6,7 @@
 #'
 #' @param y A `GRaster`: The new raster will have the same extent and resolution as this raster.
 #'
-#' @param field Character: Name of a column in the data table of `y` to "burn" into the raster. If not `""` (default), then the output will be a [categorical][tutorial_raster_data_types] raster. If `field` is `""`, then all geometries will be "burned" to the raster and have the same value.
+#' @param field Character: Name of a column in the data table of `y` to "burn" into the raster. If not `""` (default), then the output will be a categorical `GRraster`. If `field` is `""`, then all geometries will be "burned" to the raster and have the same value.
 #'
 #' @param background Numeric or `NA` (default): Value to put in cells that are not covered by the `GVector`. Note that if this is not `NA` and not an integer, then the output cannot be a categorical raster (i.e., there will be no "levels" table associated with it).
 #'

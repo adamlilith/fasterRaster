@@ -2,7 +2,7 @@
 #'
 #' @description `extract()` obtains the values of a `GRaster` or `GVector` associated with the locations of a set of points. The output depends on the input:
 #' * **Case #1: `x` is a numeric or integer `GRaster` and `y` is a points `GVector`**: Returns values of cells that have points. If `xy` is `TRUE`, also returns the coordinates of the points.
-#' * **Case #2: `x` is a [categorical][tutorial_raster_data_types] (factor) `GRaster` and `y` is a points `GVector`**: Same as case #1, but if `cats` is `TRUE`, returns category labels of cells that have points. If `xy` is `TRUE`, also returns the coordinates of the points.
+#' * **Case #2: `x` is a categorical (factor) `GRaster` and `y` is a points `GVector`**: Same as case #1, but if `cats` is `TRUE`, returns category labels of cells that have points. If `xy` is `TRUE`, also returns the coordinates of the points.
 #' * **Case #3: `x` is a categorical `GRaster` and `y` is a lines or polygons `GVector`**: Returns a summary (e.g., mean, standard deviation, etc.) of all cells that overlap the line(s) or polygon(s).
 #' * **Case #4: `x` is a `GVector` and `y` is a points `GVector`**: Returns the data table row associated each point. If `xy` is `TRUE`, also returns the coordinates of the points.
 #' Note that whenever a points `GVector` is allowed for `y`, a `data.frame`, `data.table`, `matrix`, or `numeric` values representing points can be used instead.
@@ -34,7 +34,7 @@
 #'
 #' @param xy Logical: If `TRUE` and `y` represents points, also return the coordinates of each point. Default is `FALSE.`
 #'
-#' @param cats Logical (extracting from a raster): If `TRUE` (default) and `x` is a [categorical raster][tutorial_raster_data_types], then return the category labels instead of the values.
+#' @param cats Logical (extracting from a raster): If `TRUE` (default) and `x` is a categorical `GRaster`, then return the category labels instead of the values.
 #'
 #' @param verbose Logical: If `TRUE`, display progress (will only function when extracting from points on a `GRaster` when the number of `GRaster`s is large).
 #'

@@ -12,7 +12,7 @@
 
 \item{y}{A \code{GRaster}: The new raster will have the same extent and resolution as this raster.}
 
-\item{field}{Character: Name of a column in the data table of \code{y} to "burn" into the raster. If not \code{""} (default), then the output will be a \link[=tutorial_raster_data_types]{categorical} raster. If \code{field} is \code{""}, then all geometries will be "burned" to the raster and have the same value.}
+\item{field}{Character: Name of a column in the data table of \code{y} to "burn" into the raster. If not \code{""} (default), then the output will be a categorical \code{GRraster}. If \code{field} is \code{""}, then all geometries will be "burned" to the raster and have the same value.}
 
 \item{background}{Numeric or \code{NA} (default): Value to put in cells that are not covered by the \code{GVector}. Note that if this is not \code{NA} and not an integer, then the output cannot be a categorical raster (i.e., there will be no "levels" table associated with it).}
 

@@ -18,7 +18,7 @@
 A \code{GRaster}. The "levels" table of the raster is modified.
 }
 \description{
-\code{droplevels()} removes levels (category values) from the "levels" table of a \link[=tutorial_raster_data_types]{categorical} \code{GRaster}.
+\code{droplevels()} removes levels (category values) from the "levels" table of a categorical \code{GRaster}.
 }
 \examples{
 if (grassStarted()) {
@@ -145,5 +145,5 @@ levels(combinedNA)
 }
 }
 \seealso{
-\code{\link[=missingCats]{missingCats()}}, \code{\link[=missing.cases]{missing.cases()}}, \code{\link[terra:factors]{terra::droplevels()}}, \link[=tutorial_raster_data_types]{categorical rasters} in \strong{fasterRaster}
+\code{\link[=missingCats]{missingCats()}}, \code{\link[=missing.cases]{missing.cases()}}, \code{\link[terra:factors]{terra::droplevels()}}, \code{vignette("GRasters", package = "fasterRaster")}
 }

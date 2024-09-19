@@ -20,7 +20,7 @@
 st_crs(x, ...)
 }
 \arguments{
-\item{x}{An object that inherits from a \code{GLocation} (i.e., a \code{GRaster} or \code{GVector}) or missing. If missing, the coordinate reference system of the currently active \strong{GRASS} \link[=tutorial_locations_mapsets]{location} is reported.}
+\item{x}{An object that inherits from a \code{GLocation} (i.e., a \code{GRaster} or \code{GVector}) or missing. If missing, the coordinate reference system of the currently active \strong{GRASS} "project/location" is reported.}
 
 \item{...}{Other arguments (generally unused).}
 }
@@ -28,7 +28,7 @@ st_crs(x, ...)
 Character.
 }
 \description{
-Get the coordinate reference system (CRS) of a \code{GLocation} object, or any that contain it (especially \code{GRaster}s and \code{GVector}s), or from the currently active \strong{GRASS} \link[=tutorial_locations_mapsets]{location}.
+Get the coordinate reference system (CRS) of a \code{GLocation} object, or any that contain it (especially \code{GRaster}s and \code{GVector}s), or from the currently active \strong{GRASS} "project/location" (see \code{vignette("projects_mapsets", package = "fasterRaster")}).
 }
 \examples{
 if (grassStarted()) {

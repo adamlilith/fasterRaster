@@ -37,7 +37,7 @@
 \arguments{
 \item{e1, e2}{Values depend on the type of comparison:
 \itemize{
-\item Comparing \code{GRaster}s to logical, numeric, character values: \code{e1} and \code{e2} can be any one of these. Comparison to a character string can be useful when using a \link[=tutorial_raster_data_types]{categorical raster}, in which case you can use something like \code{raster1 == "Wetlands"} to coerce all "wetland" cells to be 1 (TRUE) and all others 0 (FALSE) or \code{NA} (if it was originally \code{NA}).
+\item Comparing \code{GRaster}s to logical, numeric, character values: \code{e1} and \code{e2} can be any one of these. Comparison to a character string can be useful when using a categorical raster, in which case you can use something like \code{raster1 == "Wetlands"} to coerce all "wetland" cells to be 1 (TRUE) and all others 0 (FALSE) or \code{NA} (if it was originally \code{NA}).
 \item Comparing a \code{GRegion} to another \code{GRegion}: \code{e1} and \code{e2} must be \code{GRegion}s!
 }}
 }
@@ -47,9 +47,9 @@ Comparing \code{GRaster}s: An "integer" \code{GRaster} with values of 0 (FALSE),
 Comparing \code{GRegion}s: Output is logical.
 }
 \description{
-You can do comparative operations on \code{GRaster}s using normal operators in \strong{R}: \code{<}, \code{<=}, \code{==}, \code{!=}, \code{>=}, and \code{>}. You can also use \code{\link[fasterRaster]{\%in\%}} for \link[=tutorial_raster_data_types]{categorical} \code{GRasters}.
+You can do comparative operations on \code{GRaster}s using normal operators in \strong{R}: \code{<}, \code{<=}, \code{==}, \code{!=}, \code{>=}, and \code{>}. You can also use \code{\link[fasterRaster]{\%in\%}} for categorical \code{GRasters} (see \code{vignette("GRasters", package = "fasterRaster")}).
 
-You can also compare two \code{GRegion}s using the \code{==} and \code{!=} operators. Most users of \strong{fasterRaster} will not have to work much with \link[=tutorial_regions]{regions}, so can ignore this functionality. \code{GRegion}s are the same if they have the same coordinate reference system, \link[=tutorial_locations_mapsets]{location and mapset}, topology (2D or 3D), extent, and resolution. If both are 3D, then they must also have the same vertical extent and number of depths.
+You can also compare two \code{GRegion}s using the \code{==} and \code{!=} operators. Most users of \strong{fasterRaster} will not have to work much with "regions" (see \code{vignette("regions", package = "fasterRaster")}), so can ignore this functionality. \code{GRegion}s are the same if they have the same coordinate reference system, location/project and mapset (see \code{vignette("projects_mapsets", package = "fasterRaster")}), topology (2D or 3D), extent, and resolution. If both are 3D, then they must also have the same vertical extent and number of depths.
 }
 \examples{
 if (grassStarted()) {
