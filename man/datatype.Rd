@@ -27,7 +27,7 @@
 \code{datatype()} for a \code{GRaster} returns a character. \code{datatype()} for a \code{GVector} returns a data frame, with one row per field. If the \code{GVector} has no attribute table, the function returns \code{NULL}.
 }
 \description{
-For \code{GRaster}s, \code{datatype()} returns the data type (see \code{vignette("01_types_of_GRasters", package = "fasterRaster")}). For \code{GVector}s, \code{datatype()} returns the class of each column of the attribute table.
+For \code{GRaster}s, \code{datatype()} returns the data type (see \code{vignette("GRasters", package = "fasterRaster")}). For \code{GVector}s, \code{datatype()} returns the class of each column of the attribute table.
 }
 \examples{
 if (grassStarted()) {
@@ -209,5 +209,5 @@ dim(rivers2)
 }
 }
 \seealso{
-\code{\link[terra:datatype]{terra::datatype()}}, \code{vignette("01_types_of_GRasters", package = "fasterRaster")}
+\code{\link[terra:datatype]{terra::datatype()}}, \code{vignette("GRasters", package = "fasterRaster")}
 }

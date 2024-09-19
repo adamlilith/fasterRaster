@@ -11,7 +11,7 @@
 #' 
 #' @returns A `GRaster`.
 #' 
-#' @seealso [datatype()], [terra::datatype()], [is.int()], [is.float()], [is.doub()], \code{\link[fasterRaster]{levels<-}}, `vignette("01_types_of_GRasters", package = "fasterRaster")`
+#' @seealso [datatype()], [terra::datatype()], [is.int()], [is.float()], [is.doub()], \code{\link[fasterRaster]{levels<-}}, `vignette("GRasters", package = "fasterRaster")`
 #'
 #' @example man/examples/ex_GRaster.r
 #' 

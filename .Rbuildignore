@@ -18,3 +18,4 @@ CODE_OF_CONDUCT.md
 ^\.github$
 ^\vignettes\^junk
 junk
+fasterRaster_workspace.code-workspace

@@ -6,7 +6,7 @@
 #' * `cats()`: Displays the entire "levels" table of a raster.
 #' * `levels()<-`: (Re)assigns the "levels" table to each layer of a raster. Assigning a "levels" table to an integer raster makes it a categorical raster.
 #' * `categories()`: (Re)assigns the "levels" table to specific layer(s) of a raster.
-#' * For a complete list of functions relevant to categorical rasters, see `vignette("01_types_of_GRasters", package = "fasterRaster")).
+#' * For a complete list of functions relevant to categorical rasters, see `vignette("GRasters", package = "fasterRaster")).
 #'
 #' @param x A `GRaster`.
 #'
@@ -20,7 +20,7 @@
 #' * `levels()` and `cats()`: A list of `data.frame`s or `data.table`s, one per raster layer.
 #' * `levels()<-` and `categories()`: A `GRaster`.
 #'
-#' @seealso [terra::levels()], \code{\link[fasterRaster]{levels<-}}, [terra::cats()], [terra::categories()], see `vignette("01_types_of_GRasters", package = "fasterRaster")`
+#' @seealso [terra::levels()], \code{\link[fasterRaster]{levels<-}}, [terra::cats()], [terra::categories()], see `vignette("GRasters", package = "fasterRaster")`
 #'
 #' @example man/examples/ex_GRaster_categorical.r
 #'

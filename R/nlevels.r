@@ -6,7 +6,7 @@
 #'
 #' @return A named, numeric vector of integers. The values represent the number of categories (rows) that appear in the raster's levels table.
 #'
-#' @seealso [levels()], [terra::levels()], [droplevels()], `vignette("01_types_of_GRasters", package = "fasterRaster")`
+#' @seealso [levels()], [terra::levels()], [droplevels()], `vignette("GRasters", package = "fasterRaster")`
 #'
 #' @example man/examples/ex_GRaster_categorical.r
 #'

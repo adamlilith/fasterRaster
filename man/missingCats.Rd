@@ -145,5 +145,5 @@ levels(combinedNA)
 }
 }
 \seealso{
-\code{\link[=missingCats]{missingCats()}}, \code{\link[=missing.cases]{missing.cases()}}, \code{\link[=droplevels]{droplevels()}}, \code{vignette("01_types_of_GRasters", package = "fasterRaster")}
+\code{\link[=missingCats]{missingCats()}}, \code{\link[=missing.cases]{missing.cases()}}, \code{\link[=droplevels]{droplevels()}}, \code{vignette("GRasters", package = "fasterRaster")}
 }

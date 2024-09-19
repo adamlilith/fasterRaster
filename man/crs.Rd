@@ -28,7 +28,7 @@ st_crs(x, ...)
 Character.
 }
 \description{
-Get the coordinate reference system (CRS) of a \code{GLocation} object, or any that contain it (especially \code{GRaster}s and \code{GVector}s), or from the currently active \strong{GRASS} "project/location" (see \code{vignette("10_projects_locations_mapsets", package = "fasterRaster")}).
+Get the coordinate reference system (CRS) of a \code{GLocation} object, or any that contain it (especially \code{GRaster}s and \code{GVector}s), or from the currently active \strong{GRASS} "project/location" (see \code{vignette("projects_mapsets", package = "fasterRaster")}).
 }
 \examples{
 if (grassStarted()) {

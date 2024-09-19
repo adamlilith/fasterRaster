@@ -10,7 +10,7 @@
 #'
 #' @returns A `GRaster`. The "levels" table of the raster is modified.
 #'
-#' @seealso [missingCats()], [missing.cases()], [terra::droplevels()], `vignette("01_types_of_GRasters", package = "fasterRaster")`
+#' @seealso [missingCats()], [missing.cases()], [terra::droplevels()], `vignette("GRasters", package = "fasterRaster")`
 #'
 #' @example man/examples/ex_GRaster_categorical.r
 #'

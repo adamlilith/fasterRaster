@@ -29,7 +29,7 @@
 \item{others}{Integer or \code{NULL} (default), or \code{NA}: Value to assign to cells that do not fall into the set intervals. Cells with \code{NA} values are not reclassified. Setting \code{others} equal to \code{NULL} or \code{NA} replaces all other values with \code{NA}. The value will be coerced to an integer value.}
 }
 \value{
-A \code{GRaster}. The raster will be a categorical \code{GRaster} if the original values were continuous (i.e., a single- or double-precision raster), or of type "integer" if the input was an integer. See \code{vignette("01_types_of_GRasters", package = "fasterRaster")}.
+A \code{GRaster}. The raster will be a categorical \code{GRaster} if the original values were continuous (i.e., a single- or double-precision raster), or of type "integer" if the input was an integer. See \code{vignette("GRasters", package = "fasterRaster")}.
 }
 \description{
 This function classifies a raster so that cells that have values within a given range are assigned a new value. The \code{\link[=subst]{subst()}} function is a simpler method for replacing specific values or category levels.

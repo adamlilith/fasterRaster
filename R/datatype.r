@@ -1,6 +1,6 @@
 #' Get the datatype of a GRaster or of GVector columns
 #'
-#' @description For `GRaster`s, `datatype()` returns the data type (see `vignette("01_types_of_GRasters", package = "fasterRaster")`). For `GVector`s, `datatype()` returns the class of each column of the attribute table.
+#' @description For `GRaster`s, `datatype()` returns the data type (see `vignette("GRasters", package = "fasterRaster")`). For `GVector`s, `datatype()` returns the class of each column of the attribute table.
 #'
 #' @param x A `GRaster` or `GVector`.
 #' @param type (`GRaster`s only) `NULL` or character: Type of datatype to report (`GRaster` only):
@@ -13,7 +13,7 @@
 #'
 #' @returns `datatype()` for a `GRaster` returns a character. `datatype()` for a `GVector` returns a data frame, with one row per field. If the `GVector` has no attribute table, the function returns `NULL`.
 #'
-#' @seealso [terra::datatype()], `vignette("01_types_of_GRasters", package = "fasterRaster")`
+#' @seealso [terra::datatype()], `vignette("GRasters", package = "fasterRaster")`
 #'
 #' @example man/examples/ex_GRaster_GVector.r
 #'

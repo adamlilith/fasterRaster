@@ -1,8 +1,8 @@
 #' Compare-methods operations on GRasters and GRegions
 #'
-#' @description You can do comparative operations on `GRaster`s using normal operators in **R**: `<`, `<=`, `==`, `!=`, `>=`, and `>`. You can also use \code{\link[fasterRaster]{%in%}} for categorical `GRasters` (see `vignette("01_types_of_GRasters", package = "fasterRaster")`).
+#' @description You can do comparative operations on `GRaster`s using normal operators in **R**: `<`, `<=`, `==`, `!=`, `>=`, and `>`. You can also use \code{\link[fasterRaster]{%in%}} for categorical `GRasters` (see `vignette("GRasters", package = "fasterRaster")`).
 #'
-#' You can also compare two `GRegion`s using the `==` and `!=` operators. Most users of **fasterRaster** will not have to work much with "regions" (see `vignette("11_regions", package = "fasterRaster")`), so can ignore this functionality. `GRegion`s are the same if they have the same coordinate reference system, location/project and mapset (see `vignette("10_projects_locations_mapsets", package = "fasterRaster")`), topology (2D or 3D), extent, and resolution. If both are 3D, then they must also have the same vertical extent and number of depths.
+#' You can also compare two `GRegion`s using the `==` and `!=` operators. Most users of **fasterRaster** will not have to work much with "regions" (see `vignette("regions", package = "fasterRaster")`), so can ignore this functionality. `GRegion`s are the same if they have the same coordinate reference system, location/project and mapset (see `vignette("projects_mapsets", package = "fasterRaster")`), topology (2D or 3D), extent, and resolution. If both are 3D, then they must also have the same vertical extent and number of depths.
 #' 
 #' @param e1,e2 Values depend on the type of comparison:
 #'

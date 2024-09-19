@@ -11,7 +11,7 @@
 #'
 #' @example man/examples/ex_GRaster_categorical.r
 #'
-#' @seealso [combineCats()], `vignette("01_types_of_GRasters", package = "fasterRaster")`
+#' @seealso [combineCats()], `vignette("GRasters", package = "fasterRaster")`
 #'
 #' @aliases combineLevels
 #' @rdname combineLevels

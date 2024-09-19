@@ -21,7 +21,7 @@
 A character string.
 }
 \description{
-\strong{GRASS} "locations" are sets of one or more rasters and/or vectors with the same coordinate reference systems, and may or may not represent the same actual location on Earth. \strong{GRASS} "mapsets" are like subfolders of locations, and are collections of rasters and/or vectors typically related to the same general project. This function returns the mapset of an object or the current mapset. This said, \strong{fasterRaster} always uses the "PERMANENT" mapset, so there is very little reason to use this function as-is. See \code{vignette("10_projects_locations_mapsets", package = "fasterRaster")}.
+\strong{GRASS} "locations" are sets of one or more rasters and/or vectors with the same coordinate reference systems, and may or may not represent the same actual location on Earth. \strong{GRASS} "mapsets" are like subfolders of locations, and are collections of rasters and/or vectors typically related to the same general project. This function returns the mapset of an object or the current mapset. This said, \strong{fasterRaster} always uses the "PERMANENT" mapset, so there is very little reason to use this function as-is. See \code{vignette("projects_mapsets", package = "fasterRaster")}.
 }
 \examples{
 if (grassStarted()) {

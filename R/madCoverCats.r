@@ -10,7 +10,7 @@
 #'
 #' @keywords Madagascar
 #'
-#' @seealso [madCover], `vignette("01_types_of_GRasters", package = "fasterRaster")`
+#' @seealso [madCover], `vignette("GRasters", package = "fasterRaster")`
 #'
 #' @references  Arino O., P. Bicheron, F. Achard, J. Latham, R. Witt and J.-L. Weber. 2008. GlobCover: The most detailed portrait of Earth. European Space Agency Bulletin 136:25-31. [http://due.esrin.esa.int](http://due.esrin.esa.int).
 #'

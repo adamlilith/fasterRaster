@@ -148,5 +148,5 @@ levels(combinedNA)
 }
 }
 \seealso{
-\code{\link[=combineCats]{combineCats()}}, \code{vignette("01_types_of_GRasters", package = "fasterRaster")}
+\code{\link[=combineCats]{combineCats()}}, \code{vignette("GRasters", package = "fasterRaster")}
 }

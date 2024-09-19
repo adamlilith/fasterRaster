@@ -112,7 +112,7 @@
 \item \code{xVect} (\code{GVector}s--useful mainly to developers, not most users): The \code{SpatVector} that corresponds to the file named by \code{x}.
 }}
 
-\item{crs}{String: Coordinate reference system (CRS) WKT2 string. This argument is used for creating a \code{GVector} from a \code{numeric} vector or a \code{data.frame} or similar, or from \code{fast(rastOrVect = "vector")} or \code{fast(rastOrVect = "raster")}. By default, the function will use the value of \code{\link[=crs]{crs()}} (no arguments), which is the CRS of the current \strong{GRASS} "project/location" (see \code{vignette("10_projects_locations_mapsets", package = "fasterRaster")}).}
+\item{crs}{String: Coordinate reference system (CRS) WKT2 string. This argument is used for creating a \code{GVector} from a \code{numeric} vector or a \code{data.frame} or similar, or from \code{fast(rastOrVect = "vector")} or \code{fast(rastOrVect = "raster")}. By default, the function will use the value of \code{\link[=crs]{crs()}} (no arguments), which is the CRS of the current \strong{GRASS} "project/location" (see \code{vignette("projects_mapsets", package = "fasterRaster")}).}
 
 \item{keepgeom}{Logical: If \code{x} is a set of \code{numeric} coordinates, or a \code{data.frame} or similar, then they can be coerced into a \code{points} \code{GVector}. If \code{keepgeom} is \code{TRUE}, then the coordinates will be included in the data table of the \code{GVector}. The default is \code{FALSE}.}
 

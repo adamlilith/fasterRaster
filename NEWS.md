@@ -1,9 +1,12 @@
-# fasterRaster 8.3.0.7025 (2024-09-XX)
+# fasterRaster 8.3.0.7025 (2024-09-19)
 
 o Main task: Port tutorials to vignettes
 
+### Bug fixes
+o `bioclims()` calculates BIO55-60.  
+
 ### Other changes:
-o `bioclims()` displays progress more satisfyingly  
+o `bioclims()` displays progress more satisfyingly.  
 
 # fasterRaster 8.3.0.7024 (2024-09-17)
 

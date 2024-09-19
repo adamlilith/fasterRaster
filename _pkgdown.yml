@@ -1,5 +1,28 @@
-url: ~
+home:
+  title: Faster Raster and Spatial Vector Processing Using 'GRASS GIS'
+  description: Processing of large-in-memory/large-on disk rasters.
+
+url: https://github.com/adamlilith/fasterRaster
+
 template:
   bootstrap: 5
   light-switch: true
   bootswatch: minty
+
+deploy:
+  install_metadata: true
+
+articles:
+- title: Tutorials
+  navbar: ~
+  contents:
+  - getting_started
+  - GRasters
+  - faster_fasterRaster
+
+- title: Developer
+  desc: Vignettes for package developers
+  contents:
+  - projects_mapsets
+  - regions
+  - hidden_functions

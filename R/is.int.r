@@ -12,7 +12,7 @@
 #' 
 #' @returns Logical.
 #' 
-#' @seealso [datatype()], [terra::datatype()], [as.int()], [as.float()], [as.doub()], [is.factor()], `vignette("01_types_of_GRasters", package = "fasterRaster")`
+#' @seealso [datatype()], [terra::datatype()], [as.int()], [as.float()], [as.doub()], [is.factor()], `vignette("GRasters", package = "fasterRaster")`
 #'
 #' @example man/examples/ex_GRaster.r
 #' 

@@ -26,7 +26,8 @@
   bios = NULL,
   sample = TRUE,
   quarter = 3,
-  pptDelta = 1
+  pptDelta = 1,
+  verbose = TRUE
 )
 }
 \arguments{
@@ -138,7 +139,7 @@ tmax <- fast(madTmax)
 
 # Takes longer to run compared to SpatRaster version for small rasters, so
 # just calculate select BIOCLIMs:
-bc <- bioclims(ppt, tmin, tmax, bios = c(1, 5, 6, 12, 15))
+bc <- bioclims(ppt, tmin, tmax, bios = c(1, 5, 6, 12, 15), verbose = TRUE)
 bc
 plot(bc)
 

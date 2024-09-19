@@ -152,5 +152,5 @@ layerCor(landsat, fun = 'cov') # covariance
 }
 }
 \seealso{
-\code{\link[=datatype]{datatype()}}, \code{\link[terra:datatype]{terra::datatype()}}, \code{\link[=is.int]{is.int()}}, \code{\link[=is.float]{is.float()}}, \code{\link[=is.doub]{is.doub()}}, \code{\link[fasterRaster]{levels<-}}, \code{vignette("01_types_of_GRasters", package = "fasterRaster")}
+\code{\link[=datatype]{datatype()}}, \code{\link[terra:datatype]{terra::datatype()}}, \code{\link[=is.int]{is.int()}}, \code{\link[=is.float]{is.float()}}, \code{\link[=is.doub]{is.doub()}}, \code{\link[fasterRaster]{levels<-}}, \code{vignette("GRasters", package = "fasterRaster")}
 }

@@ -39,7 +39,7 @@
 \S4method{res3d}{GRegion}(x)
 }
 \arguments{
-\item{x}{A \code{GRaster}, \code{GRegion}, or missing. If missing, the resolution of the currently active "region" is returned (see \code{vignette("11_regions", package = "fasterRaster")}).}
+\item{x}{A \code{GRaster}, \code{GRegion}, or missing. If missing, the resolution of the currently active "region" is returned (see \code{vignette("regions", package = "fasterRaster")}).}
 }
 \value{
 A numeric vector. For both \code{res()} and \code{res3d()}, the first value is the length of cells in the x-direction and the second the length of cells in the y-direction. For \code{res3d()} the third value is height of a voxel (the z-direction). \code{xres()}, \code{yres()}, and \code{zres()} each return a single value.

@@ -10,7 +10,7 @@
 #' 
 #' @returns A numeric vector (if `x`is just one layer), or a named list of numeric vectors, one per layer in `x`.
 #'
-#' @seealso [missingCats()], [missing.cases()], [droplevels()], `vignette("01_types_of_GRasters", package = "fasterRaster")`
+#' @seealso [missingCats()], [missing.cases()], [droplevels()], `vignette("GRasters", package = "fasterRaster")`
 #'
 #' @example man/examples/ex_GRaster_categorical.r
 #'

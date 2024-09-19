@@ -34,7 +34,7 @@
 A \link{GLocation} object (invisibly).
 }
 \description{
-This function initializes a \strong{GRASS} "project" (previously known in \strong{GRASS} as a "location"; see \code{vignette("10_projects_locations_mapsets", package = "fasterRaster")}). You need to run this function (often just once) before you use most functions in \strong{fasterRaster}. This function is of use to developers, not most users.
+This function initializes a \strong{GRASS} "project" (previously known in \strong{GRASS} as a "location"; see \code{vignette("projects_mapsets", package = "fasterRaster")}). You need to run this function (often just once) before you use most functions in \strong{fasterRaster}. This function is of use to developers, not most users.
 }
 \examples{
 if (grassStarted()) {

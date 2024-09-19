@@ -30,7 +30,7 @@ A \code{GRaster}. The "levels" table of the raster is modified.
 \item \verb{addCats()<-} uses \code{\link[=rbind]{rbind()}} to add new categories (rows) to the "levels" table.
 }
 
-GRaster\verb{s can represent categorical data (see }vignette("01_types_of_GRasters", package = "fasterRaster")\verb{). Cell values are actually integers, each corresponding to a category, such as "desert" or "wetland." A categorical raster is associated with a "levels" table that matches each value to a category name. The table must be }NULL` (i.e., no categories--so not a categorical raster), or have at least two columns. The first column must have integers and represent raster values. One or more subsequent columns must have category labels. The column with these labels is the "active category".
+GRaster\verb{s can represent categorical data (see }vignette("GRasters", package = "fasterRaster")\verb{). Cell values are actually integers, each corresponding to a category, such as "desert" or "wetland." A categorical raster is associated with a "levels" table that matches each value to a category name. The table must be }NULL` (i.e., no categories--so not a categorical raster), or have at least two columns. The first column must have integers and represent raster values. One or more subsequent columns must have category labels. The column with these labels is the "active category".
 }
 \examples{
 if (grassStarted()) {
@@ -157,5 +157,5 @@ levels(combinedNA)
 }
 }
 \seealso{
-\code{\link[terra:factors]{terra::addCats()}}, \code{\link[=combineCats]{combineCats()}}, \code{\link[=combineLevels]{combineLevels()}}, \code{\link[=droplevels]{droplevels()}}, \verb{vignette("01_types_of_GRasters", package = "fasterRaster"}
+\code{\link[terra:factors]{terra::addCats()}}, \code{\link[=combineCats]{combineCats()}}, \code{\link[=combineLevels]{combineLevels()}}, \code{\link[=droplevels]{droplevels()}}, \verb{vignette("GRasters", package = "fasterRaster"}
 }

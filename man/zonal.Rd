@@ -12,7 +12,7 @@
 
 \item{z}{A \code{GRaster} or \code{GVector} used to define zones:
 \itemize{
-\item If \code{z} is a \code{GRaster}, then it must be of type \code{integer} or \code{factor} (see \code{vignette("01_types_of_GRasters", package = "fasterRaster")}). Zones will be established based on cells that have the same value in this raster.
+\item If \code{z} is a \code{GRaster}, then it must be of type \code{integer} or \code{factor} (see \code{vignette("GRasters", package = "fasterRaster")}). Zones will be established based on cells that have the same value in this raster.
 \item If \code{z} is a \code{GVector}, zones will be created for each geometry. If geometries overlap, then the zonal statistics will be calculated for the ones on top. Thus statistics for the zones defined by geometries below these may not represent all the cells covered by that geometry.
 }}
 

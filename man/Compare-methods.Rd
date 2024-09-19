@@ -47,9 +47,9 @@ Comparing \code{GRaster}s: An "integer" \code{GRaster} with values of 0 (FALSE),
 Comparing \code{GRegion}s: Output is logical.
 }
 \description{
-You can do comparative operations on \code{GRaster}s using normal operators in \strong{R}: \code{<}, \code{<=}, \code{==}, \code{!=}, \code{>=}, and \code{>}. You can also use \code{\link[fasterRaster]{\%in\%}} for categorical \code{GRasters} (see \code{vignette("01_types_of_GRasters", package = "fasterRaster")}).
+You can do comparative operations on \code{GRaster}s using normal operators in \strong{R}: \code{<}, \code{<=}, \code{==}, \code{!=}, \code{>=}, and \code{>}. You can also use \code{\link[fasterRaster]{\%in\%}} for categorical \code{GRasters} (see \code{vignette("GRasters", package = "fasterRaster")}).
 
-You can also compare two \code{GRegion}s using the \code{==} and \code{!=} operators. Most users of \strong{fasterRaster} will not have to work much with "regions" (see \code{vignette("11_regions", package = "fasterRaster")}), so can ignore this functionality. \code{GRegion}s are the same if they have the same coordinate reference system, location/project and mapset (see \code{vignette("10_projects_locations_mapsets", package = "fasterRaster")}), topology (2D or 3D), extent, and resolution. If both are 3D, then they must also have the same vertical extent and number of depths.
+You can also compare two \code{GRegion}s using the \code{==} and \code{!=} operators. Most users of \strong{fasterRaster} will not have to work much with "regions" (see \code{vignette("regions", package = "fasterRaster")}), so can ignore this functionality. \code{GRegion}s are the same if they have the same coordinate reference system, location/project and mapset (see \code{vignette("projects_mapsets", package = "fasterRaster")}), topology (2D or 3D), extent, and resolution. If both are 3D, then they must also have the same vertical extent and number of depths.
 }
 \examples{
 if (grassStarted()) {

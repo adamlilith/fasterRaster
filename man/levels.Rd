@@ -51,7 +51,7 @@ Values returned are:
 \item \code{cats()}: Displays the entire "levels" table of a raster.
 \item \verb{levels()<-}: (Re)assigns the "levels" table to each layer of a raster. Assigning a "levels" table to an integer raster makes it a categorical raster.
 \item \code{categories()}: (Re)assigns the "levels" table to specific layer(s) of a raster.
-\item For a complete list of functions relevant to categorical rasters, see `vignette("01_types_of_GRasters", package = "fasterRaster")).
+\item For a complete list of functions relevant to categorical rasters, see `vignette("GRasters", package = "fasterRaster")).
 }
 }
 \examples{
@@ -179,5 +179,5 @@ levels(combinedNA)
 }
 }
 \seealso{
-\code{\link[terra:factors]{terra::levels()}}, \code{\link[fasterRaster]{levels<-}}, \code{\link[terra:factors]{terra::cats()}}, \code{\link[terra:factors]{terra::categories()}}, see \code{vignette("01_types_of_GRasters", package = "fasterRaster")}
+\code{\link[terra:factors]{terra::levels()}}, \code{\link[fasterRaster]{levels<-}}, \code{\link[terra:factors]{terra::cats()}}, \code{\link[terra:factors]{terra::categories()}}, see \code{vignette("GRasters", package = "fasterRaster")}
 }

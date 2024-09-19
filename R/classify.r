@@ -18,7 +18,7 @@
 #'
 #' @param others Integer or `NULL` (default), or `NA`: Value to assign to cells that do not fall into the set intervals. Cells with `NA` values are not reclassified. Setting `others` equal to `NULL` or `NA` replaces all other values with `NA`. The value will be coerced to an integer value.
 #' 
-#' @returns A `GRaster`. The raster will be a categorical `GRaster` if the original values were continuous (i.e., a single- or double-precision raster), or of type "integer" if the input was an integer. See `vignette("01_types_of_GRasters", package = "fasterRaster")`.
+#' @returns A `GRaster`. The raster will be a categorical `GRaster` if the original values were continuous (i.e., a single- or double-precision raster), or of type "integer" if the input was an integer. See `vignette("GRasters", package = "fasterRaster")`.
 #'
 #' @seealso [terra::classify()], [subst()]
 #'
