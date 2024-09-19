@@ -1,22 +1,29 @@
+# fasterRaster 8.3.0.7025 (2024-09-XX)
+
+o Main task: Port tutorials to vignettes
+
+### Other changes:
+o `bioclims()` displays progress more satisfyingly  
+
 # fasterRaster 8.3.0.7024 (2024-09-17)
 
 o Added `pkgdown` site!!! (Experimental...)
 
-## Bug fixes
+### Bug fixes
 o `bioclims()` calculates BIO07 even when BIO05 and BIO06 were not explicitly called.  
 o `faster()` accepts a names list as an argument.  
 
 # fasterRaster 8.3.0.7023 (2024-09-15)
 
-## Main task of this pre-release
+### Main task of this pre-release
 o Fix all issues arising from `check()`.  
 
 # fasterRaster 8.3.0.7022 (2024-09-07)
 
-## Main task of this pre-release
+### Main task of this pre-release
 o Examples in all help files have been checked and, if needed, either they or the calling function(s) have been fixed. See "Bug fixes and speed-ups" below.
 
-## New functions and functionality
+### New functions and functionality
 o `dim3d()` returns the "region's" dimensions when called with no arguments.  
 o `global()` calculates quantiles much faster (minutes vs. weeks) for very large rasters.  
 o `layerCor()` by default calculates inter-`GRaster` correlation.  
@@ -24,12 +31,12 @@ o `reorient()` converts facing angles between north and east orientations.
 o `terrain()` can return slope and aspect in radians, and allows a custom value to be set for undefined aspects.  
 o Default value of `memory` in `faster()` is now 2 GB.
 
-## Potentially co-breaking changes
+### Potentially co-breaking changes
 o `global()` argument `prob` changed to `probs` because it can accommodate more than one value.  
 o `horizonHeight()` function now uses argument `step` instead of `directions`.
 o Removed `sd()` and `sdpop()` and replaced with `stdev()`.  
 
-## Bug fixes and speed-ups
+### Bug fixes and speed-ups
 o `atan2()` works!  
 o `extract()` extracts!    
 o `fast()` can convert a `SpatRaster` with one or more layers that are a subset of a larger `SpatRaster` into a `GRaster` without error.  
@@ -53,11 +60,11 @@ o `zonal()` works when zones are set by a `GVector`.
 
 # fasterRaster 8.3.0.7021 (2024-08-03)
 
-## Potentially co-breaking changes
+### Potentially co-breaking changes
 o Renamed `terrainRuggednessIndex()` to `ruggedness()`.  
 o Renamed `topoWetnessIndex()` to `wetness()`.
 
-## New functions and functionality
+### New functions and functionality
 o `[` (`subset_single_bracket`) can use a `GRaster` inside the `[]` to specify what cells in a `GRaster` to subset.  
 o `[<-` (`replace_single_square_bracket`) can use a `GRaster` inside the `[]` to specify what cells in a `GRaster` are re-assigned.  
 o `bioclims()` is a new function that calculates the "classic" and "extended" set of BIOCLIM rasters. It works on `GRaster`s and `SpatRaster`s!  
@@ -67,16 +74,16 @@ o `project()` now has a `verbose` argument for displaying progress.
 o `sineRast()` now accepts arguments for amplitude.  
 o `tiles()` is a new function that creates spatially exclusive subsets from `GRaster`s.  
 
-## Issues and bug fixes
+### Issues and bug fixes
 o `spatSample()` now works when `values = TRUE`.
 
 # fasterRaster 8.3.0.7020 (2024-07-05)
 **+**: Denotes potentially code-breaking changes
 
-## New functions and functionality
+### New functions and functionality
 o `sineRast()`: Creates sine wave rasters.
 
-## Changes in functionality
+### Changes in functionality
 o `distance()` now works for calculation of distances between two `GVector`s or a `GVector` and itself.  
 o **+** `extract()` and **+** `spatSample()`: Changed default value of `cats` argument to `TRUE`.  
 o `fragmentation()` is *much* faster for `SpatRaster`s and for both `SpatRaster`s and `GRaster`s, can display progress.  
@@ -85,34 +92,34 @@ o `show()` displays long raster names properly.
 
 # fasterRaster 8.3.0.7019 (2024-06-08)
 
-## Bug fixes
+### Bug fixes
 o `not.na()`: Fixed bug causing incorrect answer.
 
 # fasterRaster 8.3.0.7018 (2024-06-07)
 **+**: Denotes potentially code-breaking changes
 
-## New functions and functionality
+### New functions and functionality
 o **+** `spatSample()`: *Much* faster (though not actually fast...) for large samples taken from `GRaster`s. Removed argument `seed` for `GRaster` signature, and added argument `verbose` to give you something to watch.  
 o `freq()`: Added `function-specific example.
 
-## Bug fixes
+### Bug fixes
 o `global()`: Fixed bug arising when called by other functions and main argument was a `sources()` name.
 
 # fasterRaster 8.3.0.7017 (2024-06-02)
 **+**: Denotes potentially code-breaking changes
 
-## New functions and functionality
+### New functions and functionality
 o `rast()`: Attaches the `GRaster`'s levels table to the `SpatRaster` output.  
 o **+** `rasterize()`: Rewritten to perform (nearly) the same as `terra::rasterize()`.  
 o `predict()`: Can accommodate models with two-way interactions between categorical rasters and between a categorical predictor and a scalar.  
 o `scalepop()`: Scales `GRaster`s by population standard deviation.  
 o Stops with a somewhat informative error when a `GRaster` fails to be created (in hidden function `.makeGRaster()`)
 
-## Issues
+### Issues
 o `writeRaster()`: Correctly assign `datatype` to `CELL` rasters.  
 O **+** `cor()` and `cov()` removed and incorporated into `layerCor()`
 
-## Bug fixes
+### Bug fixes
 o `activeCat()` and `activeCats()`: Fixed bug introduced by previous fix.  
 o `activeCat()`: Correct output when `names = TRUE`.  
 o `expanse()`: Expanded list of units; correct assignation of units to **GRASS** unit format.  
@@ -123,14 +130,14 @@ o `nacell()` and `nonnacell()`: Correct (but slow~~~) reporting of `NA` and non-
 
 # fasterRaster 8.3.0.7016 (2024-05-27)
 
-## Functionality
+### Functionality
 o Added `streams()` for calculating location of stream channels from a DEM.  
 o Added `terrainRuggednessIndex()` for calculating the terrain ruggedness index.  
 o `unscale()` can skip unscaling of rasters by supplying `NA` in the `center` and/or `scale` vectors.  
 o `writeRaster()` will now automatically choose the "least-lossy" `datatype` for a stack of rasters.  
 o More robust checking of whether a vector is topologically valid or not when using `fast()`, and added option to aggregate or disaggregate polygons to overcome the issue.
 
-## Bug fixes
+### Bug fixes
 o `crop()` correctly sets westernmost coordinate (was inappropriately too far west, in some cases).  
 o `extend()` works when the "extension" factor is a integer.  
 o `GRaster`s can now be multiplied by, divide by, added to, or subtracted from `numeric`s in scientific notation format.  
@@ -140,13 +147,13 @@ o `writeRaster()` saves all-`NA` rows and columns.
 
 # fasterRaster 8.3.0.7015 (2024-05-21)
 
-## Bug fixes
+### Bug fixes
 o `[` now works for large `GVector`s (i.e., >1M geometries).  
 o Fixed behind-scenes issue arising when a CRS string couldn't be parsed to a shorter version (`.locationCreate()` and related).
 
 # fasterRaster 8.3.0.7014 (2024-05-17)
 
-## Functionality
+### Functionality
 o Added function `flow()` for calculating flow of water across a landscape.  
 o Added function `flowPath()` for calculating flow of water from specific points on a landscape.  
 o `freq()` inserts category labels into results for for categorical `GRaster`s.  
@@ -158,7 +165,7 @@ o Added ability to create `points` `GVector`s from numeric, matrices, or data fr
 o Improved auto-assessment of raster `datatype` in `writeRaster()`.  
 o Updated `README` for 8.3.0.7013!
 
-## Bug fixes
+### Bug fixes
 o `[` works consistently for `GVector`s!!!!!  
 o Hidden function `.makeGVector()` now catches cases with zero extent for polygons.  
 o Fixed installation issue related to `activeCat()<-` and `addCats()<-` (thank you, `@kbondo1`!)  
@@ -169,16 +176,16 @@ o `plot()` works! (Previous issue arose from changing output of `writeRaster()` 
 o `rast()` correctly returns a `SpatRaster`.  
 o `vect()` correctly returns a `SpatVector`.
 
-## Issues
+### Issues
 o Removed `rasterPrecision` option and now use internal function `.getPrec()` to ascertain the proper precision of rasters.  
 o Option to fail in creation of `GRaster` or a `polygons` `GVector` if it would have a zero extent.
 
-## Changes
+### Changes
 o `complete.cases()` and `missing.cases()` return logical vectors for vectors with no data tables (was integer vectors).
 
 # fasterRaster 8.3.0.7007 (2024-05-01)
 
-## Functionality
+### Functionality
 o Added function `classify()`.  
 o Added function `subst()`.  
 o Added function `combineLevels()`.  
@@ -186,29 +193,29 @@ o Added hidden function `.plot()`.
 o For functions and cases where it is appropriate, the "levels" table of an input `GRaster` is passed to the output.  
 o `fragmentation()` works for windows sizes > 3 and for `GRaster`s.
 
-## Bug fixes
+### Bug fixes
 o `writeRaster()` correctly assigns levels to categorical rasters with >1 layer.  
 o Fixed bug in `[[<-` that passed incorrect dimensions (then failed).
 
-## Issues
+### Issues
 o `[` selects geometries from a `GRaster`, overcoming mis-selection by **GRASS**  
 o Removed `datatype()` method for signature `SpatRaster`
 
 # fasterRaster 8.3.0.7003 (2024-03-15)
 
-## Functionality
+### Functionality
 `rbind()` and `cbind()` work for `GVector`s.
 
-## Bug fixes
+### Bug fixes
 o Fix bug setting extent for new raster in `crop()`
 
 # fasterRaster 8.3.0.7001 (2024-03-15)
 Alpha release of new, intuitive **fasterRaster** emulating and interoperable with **terra**!!!
 
-## Breaking changes
+### Breaking changes
 Nearly nothing is the same in the new version of **fasterRaster** compared to version 0.7 and lower. All of the functions in previous versions have been removed.
 
-## New features
+### New features
 **fasterRaster** is now compatible with **terra** and **sf** and shares functions with the same names that do (almost always) the same things (esp. with **terra**, less so with **sf**).
 
 # fasterRaster 0.7.1 (2022-08-05a)
