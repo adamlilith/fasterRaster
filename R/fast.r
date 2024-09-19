@@ -25,7 +25,7 @@
 #'#'
 #' @param geom Character or integer vector: If `x` is a `data.frame`, `data.table`, or `matrix`, this specifies which columns of `x` represent longitude and latitude. Columns can be given by name (a character vector) or index (a numeric or integer vector). The default is to use the first two columns of `x`.
 #'
-#' @param crs String: Coordinate reference system (CRS) WKT2 string. This argument is used for creating a `GVector` from a `numeric` vector or a `data.frame` or similar, or from `fast(rastOrVect = "vector")` or `fast(rastOrVect = "raster")`. By default, the function will use the value of [crs()] (no arguments), which is the CRS of the current **GRASS** ["location"][tutorial_locations_mapsets].
+#' @param crs String: Coordinate reference system (CRS) WKT2 string. This argument is used for creating a `GVector` from a `numeric` vector or a `data.frame` or similar, or from `fast(rastOrVect = "vector")` or `fast(rastOrVect = "raster")`. By default, the function will use the value of [crs()] (no arguments), which is the CRS of the current **GRASS** "project/location" (see `vignette("10_projects_locations_mapsets", package = "fasterRaster")`).
 #'
 #' @param keepgeom Logical: If `x` is a set of `numeric` coordinates, or a `data.frame` or similar, then they can be coerced into a `points` `GVector`. If `keepgeom` is `TRUE`, then the coordinates will be included in the data table of the `GVector`. The default is `FALSE`.
 #'
@@ -912,59 +912,3 @@ methods::setMethod(
 	
 }
 
-#' Aggregates or disaggregates a vector in GRASS
-#'
-#' @param src [sources()] name.
-#' @param resolve "aggregate" or "disaggregate"
-#' @param verbose T/F
-#'
-#' @returns [sources()] name.
-#' @noRd
-.aggDisaggVect <- function(src, resolve, verbose) {
-
-	if (resolve == "disaggregate") {
-
-		if (verbose) omnibus::say("Fixing invalid vector by disaggregating polygons. This will remove any data table.")
-
-		# delete categories
-		srcIn <- src
-		src <- .makeSourceName("fast_v_category_del")
-		rgrass::execGRASS(
-			cmd = "v.category",
-			input = srcIn,
-			output = src,
-			option = "del",
-			cat = -1,
-			flags = c(.quiet(), "overwrite")
-		)
-
-		# assign each subgeometry its own category
-		srcIn <- src
-		src <- .makeSourceName("fast_v_category_add")
-		rgrass::execGRASS(
-			cmd = "v.category",
-			input = srcIn,
-			output = src,
-			option = "add",
-			flags = c(.quiet(), "overwrite")
-		)
-
-	} else if (resolve == "aggregate") {
-
-		if (verbose) omnibus::say("Fixing invalid vector by aggregating polygons. This will remove any data table.")
-
-		srcIn <- src
-		src <- .makeSourceName("fast_v_extract")
-		rgrass::execGRASS(
-			cmd = "v.extract",
-			input = srcIn,
-			output = src,
-			new = 1L,
-			flags = c(.quiet(), "overwrite", "d")
-		)
-	
-	}
-
-	src
-
-}
