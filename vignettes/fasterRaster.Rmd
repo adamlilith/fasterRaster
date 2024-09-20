@@ -60,11 +60,11 @@ To tell **fasterRaster** where **GRASS** is installed, use the `faster()` functi
 ```{r faster_grassDir, eval = FALSE}
 faster(grassDir = grassDir)
 ```
-You can also use the `faster()` function to set options that affect how **fasterRaster** functions run. This includes setting the amount of maximum memory and number of computer cores allocated to operations.
+You can also use the [`faster()`](https://adamlilith.github.io/fasterRaster/reference/faster.html) function to set options that affect how **fasterRaster** functions run. This includes setting the amount of maximum memory and number of computer cores allocated to operations.
 
 ## Importing spatial objects into **fasterRaster** `GRaster`s and `GVector`s
 
-In **fasterRaster**, rasters are called `GRaster`s and vectors are called `GVector`s. The easiest (but not always fastest) way to start using a `GRaster` or `GVector` is to convert it from one already in **R**. In the example below, we use a raster that comes with the **fasterRaster** package. The raster represents elevation of a portion of eastern Madagascar. We first load the `SpatRaster` using `fastData()`, a helper function for loading example data objects that come with the **fasterRaster** package.
+In **fasterRaster**, rasters are called `GRaster`s and vectors are called `GVector`s. The easiest (but not always fastest) way to start using a `GRaster` or `GVector` is to convert it from one already in **R**. In the example below, we use a raster that comes with the **fasterRaster** package. The raster represents elevation of a portion of eastern Madagascar. We first load the `SpatRaster` using [`fastData()`](https://adamlilith.github.io/fasterRaster/reference/fastData.html), a helper function for loading example data objects that come with the **fasterRaster** package.
 ```{r madElev, eval = FALSE}
 madElev <- fastData("madElev") # example SpatRaster
 madElev
@@ -80,7 +80,7 @@ min value   :       1
 max value   :     570
 ```
 
-Now, we do the conversion to a `GRaster` and a `GVector` using [fast()]. This function can create a `GRaster` or `GVector` from a `SpatRaster` or a file representing a raster.
+Now, we do the conversion to a `GRaster` and a `GVector` using [`fast()`](https://adamlilith.github.io/fasterRaster/reference/fast.html). This function can create a `GRaster` or `GVector` from a `SpatRaster` or a file representing a raster.
 ```{r elev, eval = FALSE}
 elev <- fast(madElev)
 elev
@@ -229,19 +229,19 @@ And that's how you get started! Now that you have a raster and a vector in your 
 
 ## Converting and saving `GRaster`s and `GVector`s
 
-You can convert a `GRaster` to a `SpatRaster` raster using `rast()`:
+You can convert a `GRaster` to a `SpatRaster` raster using [`rast()`](https://adamlilith.github.io/fasterRaster/reference/rast.html):
 ```{r rast, eval = FALSE}
 terra_elev <- rast(elev)
 ```
 
-To convert a `GVector` to the **terra** package's `SpatVector` format or to an `sf` vector, use `vect()` or `st_as_sf()`:
+To convert a `GVector` to the **terra** package's `SpatVector` format or to an `sf` vector, use [`vect()`](https://adamlilith.github.io/fasterRaster/reference/vect.html) or [`st_as_sf()`](https://adamlilith.github.io/fasterRaster/reference/st_as_sf.html):
 ```{r vect, eval = FALSE}
 terra_rivers <- vect(rivers)
 sf_rivers <- st_as_sf(rivers)
 ```
 
 
-Finally, you can use `writeRaster()` and `writeVector()` to save `GRaster`s and `GVector`s directly to disk. This will always be faster than using `rast()`, `vect()`, or `st_as_sf()` then saving the result from those functions.
+Finally, you can use [`writeRaster()`](https://adamlilith.github.io/fasterRaster/reference/writeRaster.html) and [`writeVector()`](https://adamlilith.github.io/fasterRaster/reference/writeVector.html) to save `GRaster`s and `GVector`s directly to disk. This will always be faster than using `rast()`, `vect()`, or `st_as_sf()` then saving the result from those functions.
 ```{r write, eval = FALSE}
 elev_temp_file <- tempfile(fileext = ".tif") # save as GeoTIFF
 writeRaster(elev, elev_temp_file)
