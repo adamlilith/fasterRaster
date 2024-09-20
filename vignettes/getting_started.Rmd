@@ -76,7 +76,7 @@ elev
 Converting rasters and vectors that are already in **R** to `GRaster`s usually takes more time than loading them directly from disk. To load from disk, simply replace the first argument in `fast()` with a string representing the folder path and file name of the raster you want to load into the session. For example, you can do:
 
 ```{r elev_from_file, eval = FALSE}
-rastFile <- system.file("extdata", "madElev.tif"), package = "fasterRaster")
+rastFile <- system.file("extdata", "madElev.tif", package = "fasterRaster")
 elev2 <- fast(rastFile)
 ```
 
