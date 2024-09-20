@@ -1,4 +1,4 @@
-#' Set or get options shared across "fasterRaster" functions
+#' Set or get options shared across fasterRaster functions
 #'
 #' @description `faster()` either sets or gets options used across **fasterRaster** functions. Its use can vary:
 #' * Get current values of a particular option: Use `faster("option_name")`. Values will remain unchanged.
