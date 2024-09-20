@@ -7,6 +7,9 @@ vignette: >
   %\VignetteIndexEntry{Getting started with fasterRaster}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
+resource_files:
+  - man/figures/elev_rivers.png
+  - man/figures/dist_to_rivers.png
 ---
 
 ```{r, include = FALSE}
@@ -54,7 +57,7 @@ grassDir <- "C:/Program Files/GRASS GIS 8.3" # Windows
 ```
 To tell **fasterRaster** where **GRASS** is installed, use the `faster()` function:
 
-```{r faster_grassDir}
+```{r faster_grassDir, eval = FALSE}
 faster(grassDir = grassDir)
 ```
 You can also use the `faster()` function to set options that affect how **fasterRaster** functions run. This includes setting the amount of maximum memory and number of computer cores allocated to operations.
@@ -62,15 +65,36 @@ You can also use the `faster()` function to set options that affect how **faster
 ## Importing spatial objects into **fasterRaster** `GRaster`s and `GVector`s
 
 In **fasterRaster**, rasters are called `GRaster`s and vectors are called `GVector`s. The easiest (but not always fastest) way to start using a `GRaster` or `GVector` is to convert it from one already in **R**. In the example below, we use a raster that comes with the **fasterRaster** package. The raster represents elevation of a portion of eastern Madagascar. We first load the `SpatRaster` using `fastData()`, a helper function for loading example data objects that come with the **fasterRaster** package.
-```{r madElev}
+```{r madElev, eval = FALSE}
 madElev <- fastData("madElev") # example SpatRaster
 madElev
+
+class       : SpatRaster 
+dimensions  : 1024, 626, 1  (nrow, ncol, nlyr)
+resolution  : 59.85157, 59.85157  (x, y)
+extent      : 731581.6, 769048.6, 1024437, 1085725  (xmin, xmax, ymin, ymax)
+coord. ref. : Tananarive (Paris) / Laborde Grid 
+source      : madElev.tif 
+name        : madElev 
+min value   :       1 
+max value   :     570
 ```
 
 Now, we do the conversion to a `GRaster` and a `GVector` using [fast()]. This function can create a `GRaster` or `GVector` from a `SpatRaster` or a file representing a raster.
-```{r elev}
+```{r elev, eval = FALSE}
 elev <- fast(madElev)
 elev
+
+class       : GRaster
+topology    : 2D 
+dimensions  : 1024, 626, NA, 1 (nrow, ncol, ndepth, nlyr)
+resolution  : 59.85157, 59.85157, NA (x, y, z)
+extent      : 731581.552, 769048.635, 1024437.272, 1085725.279 (xmin, xmax, ymin, ymax)
+coord ref.  : Tananarive (Paris) / Laborde Grid 
+name(s)     : madElev 
+datatype    : integer 
+min. value  :       1 
+max. value  :     570
 ```
 
 Converting rasters and vectors that are already in **R** to `GRaster`s usually takes more time than loading them directly from disk. To load from disk, simply replace the first argument in `fast()` with a string representing the folder path and file name of the raster you want to load into the session. For example, you can do:
@@ -81,58 +105,141 @@ elev2 <- fast(rastFile)
 ```
 
 Now, let's create a `GVector`. The `fast()` function can take a `SpatVector` from the **terra** package, an `sf` object from the **sf** package, or a string representing the file path and file name of a vector file (e.g., a GeoPackage file or a shapefile).
-```{r madRivers}
+```{r madRivers, eval = FALSE}
 madRivers <- fastData("madRivers") # sf vector
 madRivers
 
+Simple feature collection with 11 features and 5 fields
+Geometry type: LINESTRING
+Dimension:     XY
+Bounding box:  xmin: 731627.1 ymin: 1024541 xmax: 762990.1 ymax: 1085580
+Projected CRS: Tananarive (Paris) / Laborde Grid
+First 10 features:
+       F_CODE_DES          HYC_DESCRI      NAM ISO     NAME_0                       geometry
+1180 River/Stream Perennial/Permanent MANANARA MDG Madagascar LINESTRING (739818.2 108005...
+1185 River/Stream Perennial/Permanent MANANARA MDG Madagascar LINESTRING (739818.2 108005...
+1197 River/Stream Perennial/Permanent      UNK MDG Madagascar LINESTRING (747857.8 108558...
+1216 River/Stream Perennial/Permanent      UNK MDG Madagascar LINESTRING (739818.2 108005...
+1248 River/Stream Perennial/Permanent      UNK MDG Madagascar LINESTRING (762990.1 105737...
+1256 River/Stream Perennial/Permanent      UNK MDG Madagascar LINESTRING (742334.2 106858...
+1257 River/Stream Perennial/Permanent      UNK MDG Madagascar LINESTRING (731803.7 105391...
+1264 River/Stream Perennial/Permanent      UNK MDG Madagascar LINESTRING (755911.6 104957...
+1300 River/Stream Perennial/Permanent      UNK MDG Madagascar LINESTRING (731871 1044531,...
+1312 River/Stream Perennial/Permanent      UNK MDG Madagascar LINESTRING (750186.1 103441...
+```
+
+```{r rivers, eval = FALSE}
 rivers <- fast(madRivers)
 rivers
+
+class       : GVector
+geometry    : 2D lines 
+dimensions  : 11, 11, 5 (geometries, sub-geometries, columns)
+extent      : 731627.0998, 762990.1321, 1024541.23477, 1085580.45359 (xmin, xmax, ymin, ymax)
+coord ref.  : Tananarive (Paris) / Laborde Grid 
+names       :   F_CODE_DES      HYC_DESCRI      NAM   ISO     NAME_0 
+type        :        <chr>           <chr>    <chr> <chr>      <chr> 
+values      : River/Stream Perennial/Perm~ MANANARA   MDG Madagascar 
+              River/Stream Perennial/Perm~ MANANARA   MDG Madagascar 
+              River/Stream Perennial/Perm~      UNK   MDG Madagascar 
+              (and 8 more rows)
 ```
 
 ## Operations on `GRaster`s and `GVector`s
 
-You can do operations on `GRaster`s and `GVector`s as if they were `SpatRaster`s, `SpatVector`s, and `sf` objects. For example, you can use mathematical operators and functions:
+You can do operations on `GRaster`s and `GVector`s as if they were `SpatRaster`s, `SpatVector`s, and `sf` objects. For example, you plot them as if the were any other spatial object:
+```{r how_to_plot, eval = FALSE}
+plot(elev)
+plot(rivers, col = 'lightblue', add = TRUE)
+```
+![](man/figures/elev_rivers.png)
 
-```{r math}
+You can use mathematical operators and functions:
+
+```{r multiplication, eval = FALSE}
 elev_feet <- elev * 3.28084
 elev_feet
 
+class       : GRaster
+topology    : 2D 
+dimensions  : 1024, 626, NA, 1 (nrow, ncol, ndepth, nlyr)
+resolution  : 59.85157, 59.85157, NA (x, y, z)
+extent      : 731581.552, 769048.635, 1024437.272, 1085725.279 (xmin, xmax, ymin, ymax)
+coord ref.  : Tananarive (Paris) / Laborde Grid 
+name(s)     :    layer 
+datatype    :   double 
+min. value  :   3.2808 
+max. value  : 1870.056
+```
+
+```{r log, eval = FALSE}
 log10_elev <- log10(elev)
 log10_elev
+
+class       : GRaster
+topology    : 2D 
+dimensions  : 1024, 626, NA, 1 (nrow, ncol, ndepth, nlyr)
+resolution  : 59.85157, 59.85157, NA (x, y, z)
+extent      : 731581.552, 769048.635, 1024437.272, 1085725.279 (xmin, xmax, ymin, ymax)
+coord ref.  : Tananarive (Paris) / Laborde Grid 
+name(s)     :              log 
+datatype    :           double 
+min. value  :                0 
+max. value  : 2.75587485567249
 ```
 
 You can also use the many **fasterRaster** functions. In general, these functions have the same names as their **terra** counterparts and often the same arguments. Note that even many **terra** and **fasterRaster** functions have the same name, they do not necessarily produce the exact same output. Much care has been taken to ensure they do, but sometimes there are multiple ways to do the same task, so choices made by the authors of **terra** and **GRASS** can lead to differences.
 
 The following code creates a a) raster where cell values reflect the distance between them and the nearest river; b) creates a buffer around the rivers; then c) plots the output:
-```{r distance_buffers}
+```{r distance_buffers, eval = FALSE}
 dist <- distance(elev, rivers)
 dist
+
+class       : GRaster
+topology    : 2D 
+dimensions  : 1024, 626, NA, 1 (nrow, ncol, ndepth, nlyr)
+resolution  : 59.85157, 59.85157, NA (x, y, z)
+extent      : 731581.552, 769048.635, 1024437.272, 1085725.279 (xmin, xmax, ymin, ymax)
+coord ref.  : Tananarive (Paris) / Laborde Grid 
+name(s)     :         distance 
+datatype    :           double 
+min. value  :                0 
+max. value  : 21310.9411762729 
+```
+```{r buffer, eval = FALSE}
 
 river_buff <- buffer(rivers, 2000)
 river_buff
 
+class       : GVector
+geometry    : 2D polygons 
+dimensions  : 1, 5, 0 (geometries, sub-geometries, columns)
+extent      : 729629.19151, 764989.97343, 1022544.92079, 1087580.24979 (xmin, xmax, ymin, ymax)
+coord ref.  : Tananarive (Paris) / Laborde Grid 
+
+```
+```{r plot_rivers_buffer, eval = FALSE}
 plot(dist)
 plot(rivers, col = 'lightblue', add = TRUE)
 plot(river_buff, border = 'white', add = TRUE)
 ```
+![](man/figures/dist_to_rivers.png)
 
 And that's how you get started! Now that you have a raster and a vector in your **fasterRaster** "location", you can start doing manipulations and analyses using any of the **fasterRaster** functions!  To see an annotated list of these functions, use `?fasterRaster`.
 
 ## Converting and saving `GRaster`s and `GVector`s
 
 You can convert a `GRaster` to a `SpatRaster` raster using `rast()`:
-```{r rast}
+```{r rast, eval = FALSE}
 terra_elev <- rast(elev)
-terra_elev
 ```
-To convert a `GVector` to the **terra** package's `SpatVector` format or to an `sf` vector, use `vect()` or `st_as_sf()`:
-```{r vect}
-terra_rivers <- vect(rivers)
-terra_rivers
 
+To convert a `GVector` to the **terra** package's `SpatVector` format or to an `sf` vector, use `vect()` or `st_as_sf()`:
+```{r vect, eval = FALSE}
+terra_rivers <- vect(rivers)
 sf_rivers <- st_as_sf(rivers)
-sf_rivers
 ```
+
 
 Finally, you can use `writeRaster()` and `writeVector()` to save `GRaster`s and `GVector`s directly to disk. This will always be faster than using `rast()`, `vect()`, or `st_as_sf()` then saving the result from those functions.
 ```{r write, eval = FALSE}
