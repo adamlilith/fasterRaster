@@ -142,7 +142,7 @@ type        :        <chr>           <chr>    <chr> <chr>      <chr>
 values      : River/Stream Perennial/Perm~ MANANARA   MDG Madagascar 
               River/Stream Perennial/Perm~ MANANARA   MDG Madagascar 
               River/Stream Perennial/Perm~      UNK   MDG Madagascar 
-              (and 8 more rows)
+              (and 8 more rows) 
 ```
 
 ## Operations on `GRaster`s and `GVector`s
