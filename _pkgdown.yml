@@ -14,14 +14,14 @@ deploy:
 
 articles:
 - title: Tutorials
-  desc: Tutorials for typical users
+  desc: Vignettes for users
   navbar: ~
   contents:
   - GRasters
   - faster_fasterRaster
 
 - title: For Developers
-  desc: Vignettes for package developers
+  desc: Vignettes for developers
   contents:
   - projects_mapsets
   - regions
