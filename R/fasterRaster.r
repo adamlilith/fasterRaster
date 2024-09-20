@@ -3,7 +3,7 @@
 #' @description **fasterRaster**: Processing of large-in-memory/-on disk rasters and spatial vectors in using **GRASS GIS**. Most functions in the **terra** and **sf** packages are recreated. Processing of medium-sized and smaller spatial objects will nearly always be faster using **terra** or **sf**. To use most of the functions you must have the stand-alone version of **GRASS GIS** version 8.3 or higher (not the **OSGeoW4** installer version). Note that due to differences in how **GRASS**, **terra**, and **sf** were implemented, results will not always be strictly comparable between functions for the same operation.
 #'
 #' ## Most useful tutorials and functions:
-#' * The quick-start guide to getting started with **fasterRaster** , accessible using `vignette("getting_started", package = "fasterRaster")`
+#' * The quick-start guide to getting started with **fasterRaster** , accessible using `vignette("fasterRaster", package = "fasterRaster")`
 #' * The vignette on types of `GRaster`s, accessible using `vignette("GRasters", package = "fasterRaster")`
 #' * The vignette on how to speed up **fasterRaster**, accessible using `vignette("faster_fasterRaster", package = "fasterRaster")`
 #' * [faster()]: Set the directory where **GRASS** is installed on your system, and set or get other package-wide options. This function must be run once before using most **fasterRaster** functions.
