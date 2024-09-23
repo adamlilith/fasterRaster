@@ -1,3 +1,7 @@
+# fasterRaster 8.3.0.7026 (2024-09-22)
+
+o Recompile `pkgdown`  
+
 # fasterRaster 8.3.0.7025 (2024-09-19)
 
 o Main task: Port tutorials to vignettes

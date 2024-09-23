@@ -2,13 +2,13 @@ pandoc: 3.1.11
 pkgdown: 2.0.9
 pkgdown_sha: ~
 articles:
-  00_getting_started_with_fasterRaster: 00_getting_started_with_fasterRaster.html
-  01_types_of_GRasters: 01_types_of_GRasters.html
-  02_making_fasterRaster_faster: 02_making_fasterRaster_faster.html
-  10_projects_locations_mapsets: 10_projects_locations_mapsets.html
-  11_regions: 11_regions.html
-  12_hidden_functions: 12_hidden_functions.html
-last_built: 2024-09-19T18:55Z
+  faster_fasterRaster: faster_fasterRaster.html
+  fasterRaster: fasterRaster.html
+  GRasters: GRasters.html
+  hidden_functions: hidden_functions.html
+  projects_mapsets: projects_mapsets.html
+  regions: regions.html
+last_built: 2024-09-20T03:06Z
 urls:
   reference: https://github.com/adamlilith/fasterRaster/reference
   article: https://github.com/adamlilith/fasterRaster/articles
