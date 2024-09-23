@@ -24,7 +24,9 @@ Faster raster processing in `R` using `GRASS GIS`
 # Where we are
 As of 2024/09/15, a new version of this package, `fasterRaster 8.3`, is in alpha release (i.e., near final release). There are known issues and unknown issues. If you encounter one of the latter, please file an <a href="https://github.com/adamlilith/fasterRaster/issues">issue</a> report.
 
-**Special announcement**: The new `bioclims()` function creates the "classic" set of BIOCLIM variables, plus an optional "extended" set. The function works on **fasterRaster** `GRaster`s and on **terra** `SpatRaster`s!
+**Special announcement #1**: We now have a **pkgdown** <a href="https://adamlilith.github.io/fasterRaster/">site</a> with all the package documentation--plus vignettes!
+
+**Special announcement #2**: The new `bioclims()` function creates the "classic" set of BIOCLIM variables, plus an optional "extended" set. The function works on **fasterRaster** `GRaster`s and on **terra** `SpatRaster`s!
 
 # Functions
 To see a detailed list of functions available in `fasterRaster`, attach the package and use `?fasterRaster`. Note the additional tutorials linked from there!
