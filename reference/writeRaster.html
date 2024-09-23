@@ -3,7 +3,7 @@
 The function will attempt to ascertain the file type to be ascertained from the file extension, but you can specify the format using the format argument (see entry for ...). You can see a list of supported formats by simply using this function with no arguments, as in writeRaster(), or by consulting the online help page for the GRASS module r.out.gdal. Only the GeoTIFF file format is guaranteed to work for multi-layered rasters.
 The function will attempt to optimize the datatype argument, but this can take a long time. You can speed this up by setting datatype manually. Note that if you are saving a "stack" of GRasters with different datatypes, the one with the highest information density will be used (e.g., low-bit integer &amp;lt; high-bit integer &amp;lt; floating-point &amp;lt; double-floating point). This can make rasters with lower datatypes much larger on disk. In these cases, it make be best to save rasters with similar datatypes together.'><meta property="og:description" content='This function saves a GRaster to disk directly from a GRASS session. It is faster than using rast(), then saving the output of that to disk (because rast() actually save the raster to disk, anyway).
 The function will attempt to ascertain the file type to be ascertained from the file extension, but you can specify the format using the format argument (see entry for ...). You can see a list of supported formats by simply using this function with no arguments, as in writeRaster(), or by consulting the online help page for the GRASS module r.out.gdal. Only the GeoTIFF file format is guaranteed to work for multi-layered rasters.
-The function will attempt to optimize the datatype argument, but this can take a long time. You can speed this up by setting datatype manually. Note that if you are saving a "stack" of GRasters with different datatypes, the one with the highest information density will be used (e.g., low-bit integer &amp;lt; high-bit integer &amp;lt; floating-point &amp;lt; double-floating point). This can make rasters with lower datatypes much larger on disk. In these cases, it make be best to save rasters with similar datatypes together.'><meta property="og:image" content="/logo.png"></head><body>
+The function will attempt to optimize the datatype argument, but this can take a long time. You can speed this up by setting datatype manually. Note that if you are saving a "stack" of GRasters with different datatypes, the one with the highest information density will be used (e.g., low-bit integer &amp;lt; high-bit integer &amp;lt; floating-point &amp;lt; double-floating point). This can make rasters with lower datatypes much larger on disk. In these cases, it make be best to save rasters with similar datatypes together.'><meta property="og:image" content="https://github.com/adamlilith/fasterRaster/logo.png"></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
@@ -11,7 +11,7 @@ The function will attempt to optimize the datatype argument, but this can take a
 
     <a class="navbar-brand me-2" href="../index.html">fasterRaster</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">8.3.0.7024</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">8.3.0.7026</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -19,11 +19,19 @@ The function will attempt to optimize the datatype argument, but this can take a
     </button>
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
-      <ul class="navbar-nav me-auto"><li class="active nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
+      <ul class="navbar-nav me-auto"><li class="nav-item"><a class="nav-link" href="../articles/fasterRaster.html">Get started</a></li>
+<li class="active nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
+<li class="nav-item dropdown">
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/GRasters.html">Types of GRasters</a></li>
+    <li><a class="dropdown-item" href="../articles/faster_fasterRaster.html">Making fasterRaster faster</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><a class="dropdown-item" href="../articles/index.html">More articles...</a></li>
+  </ul></li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json"></form></li>
-<li class="nav-item"><a class="external-link nav-link" href="https://github.com/adamlilith/fasterRaster/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
+<li class="nav-item"><a class="nav-link" href="https://github.com/adamlilith/fasterRaster/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-lightswitch" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true" aria-label="Light switch"><span class="fa fa-sun"></span></button>
   <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdown-lightswitch"><li><button class="dropdown-item" data-bs-theme-value="light"><span class="fa fa-sun"></span> Light</button></li>
@@ -38,7 +46,7 @@ The function will attempt to optimize the datatype argument, but this can take a
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Save a GRaster to disk</h1>
-      <small class="dont-index">Source: <a href="https://github.com/adamlilith/fasterRaster/blob/master/R/writeRaster.r" class="external-link"><code>R/writeRaster.r</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/adamlilith/fasterRaster/blob/master/R/writeRaster.r"><code>R/writeRaster.r</code></a></small>
       <div class="d-none name"><code>writeRaster.Rd</code></div>
     </div>
 
@@ -92,7 +100,7 @@ The function will attempt to optimize the datatype argument, but this can take a
 
 
 <dt id="arg-levelsext">levelsExt<a class="anchor" aria-label="anchor" href="#arg-levelsext"></a></dt>
-<dd><p>Character, logical, or <code>NULL</code> (default): Name of the file extension for the "levels" file that accompanies a <a href="tutorial_raster_data_types.html">categorical</a> raster. When saving categorical rasters, the raster file is accompanied with a "levels" file that contain information on the levels of the raster. This file is the same as <code>filename</code>, except it has a different extension. Valid values depend on how many raster layers are saved at a time (case is ignored):</p><ul><li><p>DefaultOne raster layer: <code>".csv"</code></p></li>
+<dd><p>Character, logical, or <code>NULL</code> (default): Name of the file extension for the "levels" file that accompanies a categorical <code>GRaster</code>. When saving categorical rasters, the raster file is accompanied with a "levels" file that contain information on the levels of the raster. This file is the same as <code>filename</code>, except it has a different extension. Valid values depend on how many raster layers are saved at a time (case is ignored):</p><ul><li><p>DefaultOne raster layer: <code>".csv"</code></p></li>
 <li><p>Two or more layers, with at least one categorical raster: <code>".rds"</code>, <code>".rda"</code>, <code>".rdat"</code>, <code>".rdata"</code></p></li>
 <li><p>Any: <code>NULL</code> or <code>TRUE</code> automatically selects either <code>".csv"</code> (one raster layer) or <code>".rds</code> (two or more)</p></li>
 <li><p>Any: <code>FALSE</code> disables saving of a levels file.</p></li>

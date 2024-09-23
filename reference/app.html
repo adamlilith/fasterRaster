@@ -8,7 +8,7 @@ Tips:
 Make sure your GRasters have names(). The function matches on these, not the name of the variable you use in R for the GRaster.
 In GRASS, use null() instead of NA, and use isnull() instead of is.na().
 If you want to calculate values using while ignoring NA (or null) values, see the functions that begin with n (like nmean).
-Be mindful of the data type that a function returns. In GRASS, these are CELL (integer), FCELL (floating point values–precise to about the 7th decimal place), and DCELL (double-floating point values–precise to about the 15th decimal place). In cases where you want to datatype a raster to be treated like a float or double data type raster, wrap the raster in the float() or double() functions to datatype it is treated as such. This is especially useful if the raster might be assumed to be the CELL type because it only contains integer values. You can get the data type of a raster using datatype() with the type argument set to GRASS. You can change the data type of a GRaster using as.int(), as.float(), and as.doub(). Note that categorical rasters are really CELL (integer) rasters with an associated "levels" table. You can also change a CELL raster to a FCELL raster by adding then subtracting a decimal value, as in x - 0.1 + 0.1.
+Be mindful of the data type that a function returns. In GRASS, these are CELL (integer), FCELL (floating point values–precise to about the 7th decimal place), and DCELL (double-floating point values–precise to about the 15th decimal place). In cases where you want to datatype a raster to be treated like a float or double data type raster, wrap the raster in the float() or double() functions to datatype it is treated as such. This is especially useful if the raster might be assumed to be the CELL type because it only contains integer values. You can get the data type of a raster using datatype() with the type argument set to GRASS. You can change the data type of a GRaster using as.int(), as.float(), and as.doub(). Note that categorical rasters are really CELL (integer) rasters with an associated "levels" table. You can also change a CELL raster to a FCELL raster by adding then subtracting a decimal value, as in x - 0.1 + 0.1. See vignette("GRasters", package = "fasterRaster").
 The rand() function returns integer values by default. If you want non-integer values, use the tricks mentioned above to datatype non-integer values. For example, if you want uniform random values in the range between 0 and 1, use something like = float(rand(0 + 0.1, 1 + 0.1) - 0.1).
 
 '><meta property="og:description" content='app() applies a function to a set of "stacked" rasters. It is similar to the terra::app() and terra::lapp() functions.
@@ -20,10 +20,10 @@ Tips:
 Make sure your GRasters have names(). The function matches on these, not the name of the variable you use in R for the GRaster.
 In GRASS, use null() instead of NA, and use isnull() instead of is.na().
 If you want to calculate values using while ignoring NA (or null) values, see the functions that begin with n (like nmean).
-Be mindful of the data type that a function returns. In GRASS, these are CELL (integer), FCELL (floating point values–precise to about the 7th decimal place), and DCELL (double-floating point values–precise to about the 15th decimal place). In cases where you want to datatype a raster to be treated like a float or double data type raster, wrap the raster in the float() or double() functions to datatype it is treated as such. This is especially useful if the raster might be assumed to be the CELL type because it only contains integer values. You can get the data type of a raster using datatype() with the type argument set to GRASS. You can change the data type of a GRaster using as.int(), as.float(), and as.doub(). Note that categorical rasters are really CELL (integer) rasters with an associated "levels" table. You can also change a CELL raster to a FCELL raster by adding then subtracting a decimal value, as in x - 0.1 + 0.1.
+Be mindful of the data type that a function returns. In GRASS, these are CELL (integer), FCELL (floating point values–precise to about the 7th decimal place), and DCELL (double-floating point values–precise to about the 15th decimal place). In cases where you want to datatype a raster to be treated like a float or double data type raster, wrap the raster in the float() or double() functions to datatype it is treated as such. This is especially useful if the raster might be assumed to be the CELL type because it only contains integer values. You can get the data type of a raster using datatype() with the type argument set to GRASS. You can change the data type of a GRaster using as.int(), as.float(), and as.doub(). Note that categorical rasters are really CELL (integer) rasters with an associated "levels" table. You can also change a CELL raster to a FCELL raster by adding then subtracting a decimal value, as in x - 0.1 + 0.1. See vignette("GRasters", package = "fasterRaster").
 The rand() function returns integer values by default. If you want non-integer values, use the tricks mentioned above to datatype non-integer values. For example, if you want uniform random values in the range between 0 and 1, use something like = float(rand(0 + 0.1, 1 + 0.1) - 0.1).
 
-'><meta property="og:image" content="/logo.png"></head><body>
+'><meta property="og:image" content="https://github.com/adamlilith/fasterRaster/logo.png"></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
@@ -31,7 +31,7 @@ The rand() function returns integer values by default. If you want non-integer v
 
     <a class="navbar-brand me-2" href="../index.html">fasterRaster</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">8.3.0.7024</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">8.3.0.7026</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -39,11 +39,19 @@ The rand() function returns integer values by default. If you want non-integer v
     </button>
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
-      <ul class="navbar-nav me-auto"><li class="active nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
+      <ul class="navbar-nav me-auto"><li class="nav-item"><a class="nav-link" href="../articles/fasterRaster.html">Get started</a></li>
+<li class="active nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
+<li class="nav-item dropdown">
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/GRasters.html">Types of GRasters</a></li>
+    <li><a class="dropdown-item" href="../articles/faster_fasterRaster.html">Making fasterRaster faster</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><a class="dropdown-item" href="../articles/index.html">More articles...</a></li>
+  </ul></li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json"></form></li>
-<li class="nav-item"><a class="external-link nav-link" href="https://github.com/adamlilith/fasterRaster/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
+<li class="nav-item"><a class="nav-link" href="https://github.com/adamlilith/fasterRaster/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-lightswitch" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true" aria-label="Light switch"><span class="fa fa-sun"></span></button>
   <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdown-lightswitch"><li><button class="dropdown-item" data-bs-theme-value="light"><span class="fa fa-sun"></span> Light</button></li>
@@ -58,7 +66,7 @@ The rand() function returns integer values by default. If you want non-integer v
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Apply a function to a set of rasters</h1>
-      <small class="dont-index">Source: <a href="https://github.com/adamlilith/fasterRaster/blob/master/R/app.r" class="external-link"><code>R/app.r</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/adamlilith/fasterRaster/blob/master/R/app.r"><code>R/app.r</code></a></small>
       <div class="d-none name"><code>app.Rd</code></div>
     </div>
 
@@ -71,7 +79,7 @@ The rand() function returns integer values by default. If you want non-integer v
 <p>Tips:</p><ul><li><p>Make sure your <code>GRaster</code>s have <code><a href="names.html">names()</a></code>. The function matches on these, not the name of the variable you use in <strong>R</strong> for the <code>GRaster</code>.</p></li>
 <li><p>In <strong>GRASS</strong>, use <code>null()</code> instead of <code>NA</code>, and use <code>isnull()</code> instead of <code><a href="math.html">is.na()</a></code>.</p></li>
 <li><p>If you want to calculate values using while ignoring <code>NA</code> (or <code>null</code>) values, see the functions that begin with <code>n</code> (like <code>nmean</code>).</p></li>
-<li><p>Be mindful of the <a href="tutorial_raster_data_types.html">data type</a> that a function returns. In <strong>GRASS</strong>, these are <code>CELL</code> (integer), <code>FCELL</code> (floating point values–precise to about the 7th decimal place), and <code>DCELL</code> (double-floating point values–precise to about the 15th decimal place). In cases where you want to datatype a raster to be treated like a float or double data type raster, wrap the raster in the <code>float()</code> or <code><a href="https://rdrr.io/r/base/double.html" class="external-link">double()</a></code> functions to datatype it is treated as such. This is especially useful if the raster might be assumed to be the <code>CELL</code> type because it only contains integer values. You can get the data type of a raster using <code><a href="datatype.html">datatype()</a></code> with the <code>type</code> argument set to <code>GRASS</code>. You can change the data type of a <code>GRaster</code> using <code><a href="as.int.html">as.int()</a></code>, <code><a href="as.int.html">as.float()</a></code>, and <code><a href="as.int.html">as.doub()</a></code>. Note that <a href="tutorial_raster_data_types.html">categorical</a> rasters are really <code>CELL</code> (integer) rasters with an associated "levels" table. You can also change a <code>CELL</code> raster to a <code>FCELL</code> raster by adding then subtracting a decimal value, as in <code>x - 0.1 + 0.1</code>.</p></li>
+<li><p>Be mindful of the data type that a function returns. In <strong>GRASS</strong>, these are <code>CELL</code> (integer), <code>FCELL</code> (floating point values–precise to about the 7th decimal place), and <code>DCELL</code> (double-floating point values–precise to about the 15th decimal place). In cases where you want to datatype a raster to be treated like a float or double data type raster, wrap the raster in the <code>float()</code> or <code><a href="https://rdrr.io/r/base/double.html" class="external-link">double()</a></code> functions to datatype it is treated as such. This is especially useful if the raster might be assumed to be the <code>CELL</code> type because it only contains integer values. You can get the data type of a raster using <code><a href="datatype.html">datatype()</a></code> with the <code>type</code> argument set to <code>GRASS</code>. You can change the data type of a <code>GRaster</code> using <code><a href="as.int.html">as.int()</a></code>, <code><a href="as.int.html">as.float()</a></code>, and <code><a href="as.int.html">as.doub()</a></code>. Note that categorical rasters are really <code>CELL</code> (integer) rasters with an associated "levels" table. You can also change a <code>CELL</code> raster to a <code>FCELL</code> raster by adding then subtracting a decimal value, as in <code>x - 0.1 + 0.1</code>. See <code><a href="../articles/GRasters.html">vignette("GRasters", package = "fasterRaster")</a></code>.</p></li>
 <li><p>The <code>rand()</code> function returns integer values by default. If you want non-integer values, use the tricks mentioned above to datatype non-integer values. For example, if you want uniform random values in the range between 0 and 1, use something like <code>= float(rand(0 + 0.1, 1 + 0.1) - 0.1)</code>.</p></li>
 </ul></div>
 

@@ -4,16 +4,16 @@ levels(): Displays the "levels" table of a raster (just the value and active cat
 cats(): Displays the entire "levels" table of a raster.
 levels()&amp;lt;-: (Re)assigns the "levels" table to each layer of a raster. Assigning a "levels" table to an integer raster makes it a categorical raster.
 categories(): (Re)assigns the "levels" table to specific layer(s) of a raster.
-For a complete list of functions relevant to categorical rasters, see raster data types.
+For a complete list of functions relevant to categorical rasters, see `vignette("GRasters", package = "fasterRaster")).
 
 '><meta property="og:description" content='GRasters can represent categorical data. Cell values are actually integers, each corresponding to a category, such as "desert" or "wetland." A categorical raster is associated with a table that matches each value to a category name. The table must be NULL (i.e., no categories–so not a categorical raster), or have at least two columns. The first column must have integers and represent raster values. One or more subsequent columns must have category labels. The column with these labels is the "active category".
 levels(): Displays the "levels" table of a raster (just the value and active category columns).
 cats(): Displays the entire "levels" table of a raster.
 levels()&amp;lt;-: (Re)assigns the "levels" table to each layer of a raster. Assigning a "levels" table to an integer raster makes it a categorical raster.
 categories(): (Re)assigns the "levels" table to specific layer(s) of a raster.
-For a complete list of functions relevant to categorical rasters, see raster data types.
+For a complete list of functions relevant to categorical rasters, see `vignette("GRasters", package = "fasterRaster")).
 
-'><meta property="og:image" content="/logo.png"></head><body>
+'><meta property="og:image" content="https://github.com/adamlilith/fasterRaster/logo.png"></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
@@ -21,7 +21,7 @@ For a complete list of functions relevant to categorical rasters, see raster dat
 
     <a class="navbar-brand me-2" href="../index.html">fasterRaster</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">8.3.0.7024</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">8.3.0.7026</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -29,11 +29,19 @@ For a complete list of functions relevant to categorical rasters, see raster dat
     </button>
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
-      <ul class="navbar-nav me-auto"><li class="active nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
+      <ul class="navbar-nav me-auto"><li class="nav-item"><a class="nav-link" href="../articles/fasterRaster.html">Get started</a></li>
+<li class="active nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
+<li class="nav-item dropdown">
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/GRasters.html">Types of GRasters</a></li>
+    <li><a class="dropdown-item" href="../articles/faster_fasterRaster.html">Making fasterRaster faster</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><a class="dropdown-item" href="../articles/index.html">More articles...</a></li>
+  </ul></li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json"></form></li>
-<li class="nav-item"><a class="external-link nav-link" href="https://github.com/adamlilith/fasterRaster/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
+<li class="nav-item"><a class="nav-link" href="https://github.com/adamlilith/fasterRaster/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-lightswitch" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true" aria-label="Light switch"><span class="fa fa-sun"></span></button>
   <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdown-lightswitch"><li><button class="dropdown-item" data-bs-theme-value="light"><span class="fa fa-sun"></span> Light</button></li>
@@ -48,16 +56,16 @@ For a complete list of functions relevant to categorical rasters, see raster dat
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Set and get categories for categorical rasters</h1>
-      <small class="dont-index">Source: <a href="https://github.com/adamlilith/fasterRaster/blob/master/R/levels.r" class="external-link"><code>R/levels.r</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/adamlilith/fasterRaster/blob/master/R/levels.r"><code>R/levels.r</code></a></small>
       <div class="d-none name"><code>levels.Rd</code></div>
     </div>
 
     <div class="ref-description section level2">
-    <p><code>GRaster</code>s can represent <a href="tutorial_raster_data_types.html">categorical data</a>. Cell values are actually integers, each corresponding to a category, such as "desert" or "wetland." A categorical raster is associated with a table that matches each value to a category name. The table must be <code>NULL</code> (i.e., no categories–so not a categorical raster), or have at least two columns. The first column must have integers and represent raster values. One or more subsequent columns must have category labels. The column with these labels is the "active category".</p><ul><li><p><code>levels()</code>: Displays the "levels" table of a raster (just the value and active category columns).</p></li>
+    <p><code>GRaster</code>s can represent categorical data. Cell values are actually integers, each corresponding to a category, such as "desert" or "wetland." A categorical raster is associated with a table that matches each value to a category name. The table must be <code>NULL</code> (i.e., no categories–so not a categorical raster), or have at least two columns. The first column must have integers and represent raster values. One or more subsequent columns must have category labels. The column with these labels is the "active category".</p><ul><li><p><code>levels()</code>: Displays the "levels" table of a raster (just the value and active category columns).</p></li>
 <li><p><code>cats()</code>: Displays the entire "levels" table of a raster.</p></li>
 <li><p><code>levels()&lt;-</code>: (Re)assigns the "levels" table to each layer of a raster. Assigning a "levels" table to an integer raster makes it a categorical raster.</p></li>
 <li><p><code>categories()</code>: (Re)assigns the "levels" table to specific layer(s) of a raster.</p></li>
-<li><p>For a complete list of functions relevant to categorical rasters, see <a href="tutorial_raster_data_types.html">raster data types</a>.</p></li>
+<li><p>For a complete list of functions relevant to categorical rasters, see `vignette("GRasters", package = "fasterRaster")).</p></li>
 </ul></div>
 
     <div class="section level2">
@@ -111,7 +119,7 @@ For a complete list of functions relevant to categorical rasters, see raster dat
 </ul></div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p><code><a href="https://rspatial.github.io/terra/reference/factors.html" class="external-link">terra::levels()</a></code>, <code>levels&lt;-</code>, <code><a href="https://rspatial.github.io/terra/reference/factors.html" class="external-link">terra::cats()</a></code>, <code><a href="https://rspatial.github.io/terra/reference/factors.html" class="external-link">terra::categories()</a></code>, <a href="tutorial_raster_data_types.html">categorical rasters</a> in <strong>fasterRaster</strong></p></div>
+    <div class="dont-index"><p><code><a href="https://rspatial.github.io/terra/reference/factors.html" class="external-link">terra::levels()</a></code>, <code>levels&lt;-</code>, <code><a href="https://rspatial.github.io/terra/reference/factors.html" class="external-link">terra::cats()</a></code>, <code><a href="https://rspatial.github.io/terra/reference/factors.html" class="external-link">terra::categories()</a></code>, see <code><a href="../articles/GRasters.html">vignette("GRasters", package = "fasterRaster")</a></code></p></div>
     </div>
 
     <div class="section level2">

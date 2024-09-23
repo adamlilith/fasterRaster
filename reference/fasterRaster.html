@@ -3,12 +3,15 @@
 Most useful tutorials and functions:
 
 
-A quick-start tutorial
-A tutorial on raster data types
-faster(): Set the directory where GRASS is installed on your system, and set or get other package-wide options
+The quick-start guide to getting started with fasterRaster , accessible using vignette(&quot;fasterRaster&quot;, package = &quot;fasterRaster&quot;)
+The vignette on types of GRasters, accessible using vignette(&quot;GRasters&quot;, package = &quot;fasterRaster&quot;)
+The vignette on how to speed up fasterRaster, accessible using vignette(&quot;faster_fasterRaster&quot;, package = &quot;fasterRaster&quot;)
+faster(): Set the directory where GRASS is installed on your system, and set or get other package-wide options. This function must be run once before using most fasterRaster functions.
 fast(): Convert a SpatRaster, SpatVector, or sf vector to fasterRaster's raster format (GRasters) or vector format (GVectors), or load one from a file
 rast(), vect(), and st_as_sf(): Convert GRasters and GVectors to SpatRasters, SpatVectors, or sf vectors
 writeRaster() and writeVector(): Save GRasters or GVectors to disk
+
+
 
 
 
@@ -38,9 +41,11 @@ nrow(): Number of rows
 nlevels(): Number of categories
 res(), xres(), yres(), and zres(): Spatial resolution
 sources(): Name of the GRaster in GRASS
-topology(): Dimensionality (2D or 3D)
+
 zext(): Vertical extent
 zres(): Vertical resolution
+
+
 
 
 
@@ -50,6 +55,8 @@ Functions that operate on or create GRasters
 Arithmetic: Mathematical operations on GRasters: +, -, *, /, ^, %% (modulus), %/% (integer division)
 Logical comparisons: &amp;lt;, &amp;lt;=, ==, !=, &amp;gt;=, and &amp;gt;, plus %in% and %notin% (for categorical rasters only)
 Logical operators: |and &amp;amp;
+
+
 Single-layer mathematical functions (applied to each layer of a GRaster):
 Working with NAs: is.na(), not.na(), and maskNA()
 Trigonometry: sin(), cos(), tan(), asin(), acos(), atan(), atan2()
@@ -67,7 +74,7 @@ Extremes: min(), max(), which.min(), which.max()
 
 The operators $ and [[ can be used to subset or remove specific layers of a GRaster.
 The [&amp;lt;- operator can be used to replace values of cells of a GRaster.
-The assign operators, $&amp;lt;-, [[&amp;lt;-, and add&amp;lt;- can be used to replace specific layers of a GRaster.
+The assign operators, $&amp;lt;-, [[&amp;lt;-, and add&amp;lt;-, can be used to replace specific layers of a GRaster.
 as.int(), as.float(), as.doub(): Change data type (integer/float/double)
 as.lines(): Convert a GRaster to a &quot;lines&quot; vector
 as.points(): Convert a GRaster to a &quot;points&quot; vector
@@ -123,6 +130,8 @@ zonalGeog(): Geographic statistics (area, perimeter, fractal dimension, etc.) fo
 
 
 
+
+
 Functions for creating GRasters de novo
 
 
@@ -131,6 +140,8 @@ rnormRast(): A random GRaster with values drawn from a normal distribution
 rSpatialDepRast(): Create a random GRaster with or without spatial dependence
 runifRast(): A random GRaster with values drawn from a uniform distribution
 sineRast(): Sine wave rasters
+
+
 
 
 
@@ -148,6 +159,8 @@ ruggedness(): Terrain Ruggedness Index
 streams(): Create stream network
 terrain(): Slope, aspect, curvature, and partial slopes
 wetness(): Topographic wetness index
+
+
 
 
 
@@ -180,17 +193,23 @@ zonalGeog(): Geographic statistics (area, perimeter, fractal dimension, etc.) fo
 
 
 
+
+
 Functions for analysis of remote sensing rasters
 
 
 compositeRGB(): Combine red, green, and blue color bands to make a composite GRaster
 plotRGB(): Display a multispectral GRaster using red, blue, green, and alpha channels
 vegIndex(): Vegetation indices from surface reflectance
+
+
 Functions that operate on terra SpatRasters
 
 
 bioclims(): BIOCLIM rasters (classic set and extended set)
 fragmentation(): Landscape fragmentation class from Riitters et al. (2020)
+
+
 
 
 
@@ -215,8 +234,10 @@ ngeom(): Number of geometries (points, lines, polygons)
 nrow(): Number of rows in a vector data table
 nsubgeom(): Number of subgeometries (points, lines, polygons that make up single- and multipart geometries)
 sources(): Name of the vector in GRASS
-topology(): Dimensionality (2D or 3D)
+
 zext(): Vertical extent
+
+
 
 
 
@@ -269,6 +290,8 @@ xor() or /``: Select parts of polygons not shared by two GVector`s
 
 
 
+
+
 Functions for fixing issues with GVectors
 
 
@@ -286,6 +309,8 @@ removeDupCentroids(): Remove duplicated area centroids
 removeDups(): Remove duplicated features and area centroids
 removeSmallPolys(): Remove small polygons
 snap(): Snap lines/boundaries to each other
+
+
 
 
 
@@ -308,6 +333,8 @@ vect(): Convert a GVector to a SpatVector
 
 
 
+
+
 General purpose functions
 
 
@@ -319,6 +346,8 @@ reorient(): Convert degrees between 'north-orientation' and 'east orientation'
 replaceNAs(): Replace NAs in columns of a data.table or data.frame, or in a vector
 seqToSQL(): Format a numeric series into an SQL value call
 update(): Refresh metadata in a GRaster or GVector object
+
+
 
 
 
@@ -340,25 +369,32 @@ vegIndices: Vegetation indices that can be calculated using vegIndex().
 
 
 
+
+
 Esoteric tutorials and arcane notes
 
 
 Comparisons between GRegions can be performed using the == and != operators.
-Tutorial on GRASS regions
-Tutorial on GRASS projects/locations and mapsets
-Hidden functions of fasterRaster: Useful for power users and developers
+Vignette on GRASS &quot;projects/locations&quot; and &quot;mapsets&quot;: vignette(&quot;projects_mapsets&quot;, package = &quot;fasterRaster&quot;)
+Vignette on GRASS &quot;regions&quot;: vignette(&quot;regions&quot;, package = &quot;fasterRaster&quot;)
+Vignette on fasteRaster hidden functions: vignette(&quot;hidden_functions&quot;, package = &quot;fasterRaster&quot;)
 grassStarted(): Has a connection GRASS been made within the current R session?
+
+
 
 "><meta property="og:description" content="fasterRaster: Processing of large-in-memory/-on disk rasters and spatial vectors in using GRASS GIS. Most functions in the terra and sf packages are recreated. Processing of medium-sized and smaller spatial objects will nearly always be faster using terra or sf. To use most of the functions you must have the stand-alone version of GRASS GIS version 8.3 or higher (not the OSGeoW4 installer version). Note that due to differences in how GRASS, terra, and sf were implemented, results will not always be strictly comparable between functions for the same operation.
 Most useful tutorials and functions:
 
 
-A quick-start tutorial
-A tutorial on raster data types
-faster(): Set the directory where GRASS is installed on your system, and set or get other package-wide options
+The quick-start guide to getting started with fasterRaster , accessible using vignette(&quot;fasterRaster&quot;, package = &quot;fasterRaster&quot;)
+The vignette on types of GRasters, accessible using vignette(&quot;GRasters&quot;, package = &quot;fasterRaster&quot;)
+The vignette on how to speed up fasterRaster, accessible using vignette(&quot;faster_fasterRaster&quot;, package = &quot;fasterRaster&quot;)
+faster(): Set the directory where GRASS is installed on your system, and set or get other package-wide options. This function must be run once before using most fasterRaster functions.
 fast(): Convert a SpatRaster, SpatVector, or sf vector to fasterRaster's raster format (GRasters) or vector format (GVectors), or load one from a file
 rast(), vect(), and st_as_sf(): Convert GRasters and GVectors to SpatRasters, SpatVectors, or sf vectors
 writeRaster() and writeVector(): Save GRasters or GVectors to disk
+
+
 
 
 
@@ -388,9 +424,11 @@ nrow(): Number of rows
 nlevels(): Number of categories
 res(), xres(), yres(), and zres(): Spatial resolution
 sources(): Name of the GRaster in GRASS
-topology(): Dimensionality (2D or 3D)
+
 zext(): Vertical extent
 zres(): Vertical resolution
+
+
 
 
 
@@ -400,6 +438,8 @@ Functions that operate on or create GRasters
 Arithmetic: Mathematical operations on GRasters: +, -, *, /, ^, %% (modulus), %/% (integer division)
 Logical comparisons: &amp;lt;, &amp;lt;=, ==, !=, &amp;gt;=, and &amp;gt;, plus %in% and %notin% (for categorical rasters only)
 Logical operators: |and &amp;amp;
+
+
 Single-layer mathematical functions (applied to each layer of a GRaster):
 Working with NAs: is.na(), not.na(), and maskNA()
 Trigonometry: sin(), cos(), tan(), asin(), acos(), atan(), atan2()
@@ -417,7 +457,7 @@ Extremes: min(), max(), which.min(), which.max()
 
 The operators $ and [[ can be used to subset or remove specific layers of a GRaster.
 The [&amp;lt;- operator can be used to replace values of cells of a GRaster.
-The assign operators, $&amp;lt;-, [[&amp;lt;-, and add&amp;lt;- can be used to replace specific layers of a GRaster.
+The assign operators, $&amp;lt;-, [[&amp;lt;-, and add&amp;lt;-, can be used to replace specific layers of a GRaster.
 as.int(), as.float(), as.doub(): Change data type (integer/float/double)
 as.lines(): Convert a GRaster to a &quot;lines&quot; vector
 as.points(): Convert a GRaster to a &quot;points&quot; vector
@@ -473,6 +513,8 @@ zonalGeog(): Geographic statistics (area, perimeter, fractal dimension, etc.) fo
 
 
 
+
+
 Functions for creating GRasters de novo
 
 
@@ -481,6 +523,8 @@ rnormRast(): A random GRaster with values drawn from a normal distribution
 rSpatialDepRast(): Create a random GRaster with or without spatial dependence
 runifRast(): A random GRaster with values drawn from a uniform distribution
 sineRast(): Sine wave rasters
+
+
 
 
 
@@ -498,6 +542,8 @@ ruggedness(): Terrain Ruggedness Index
 streams(): Create stream network
 terrain(): Slope, aspect, curvature, and partial slopes
 wetness(): Topographic wetness index
+
+
 
 
 
@@ -530,17 +576,23 @@ zonalGeog(): Geographic statistics (area, perimeter, fractal dimension, etc.) fo
 
 
 
+
+
 Functions for analysis of remote sensing rasters
 
 
 compositeRGB(): Combine red, green, and blue color bands to make a composite GRaster
 plotRGB(): Display a multispectral GRaster using red, blue, green, and alpha channels
 vegIndex(): Vegetation indices from surface reflectance
+
+
 Functions that operate on terra SpatRasters
 
 
 bioclims(): BIOCLIM rasters (classic set and extended set)
 fragmentation(): Landscape fragmentation class from Riitters et al. (2020)
+
+
 
 
 
@@ -565,8 +617,10 @@ ngeom(): Number of geometries (points, lines, polygons)
 nrow(): Number of rows in a vector data table
 nsubgeom(): Number of subgeometries (points, lines, polygons that make up single- and multipart geometries)
 sources(): Name of the vector in GRASS
-topology(): Dimensionality (2D or 3D)
+
 zext(): Vertical extent
+
+
 
 
 
@@ -619,6 +673,8 @@ xor() or /``: Select parts of polygons not shared by two GVector`s
 
 
 
+
+
 Functions for fixing issues with GVectors
 
 
@@ -636,6 +692,8 @@ removeDupCentroids(): Remove duplicated area centroids
 removeDups(): Remove duplicated features and area centroids
 removeSmallPolys(): Remove small polygons
 snap(): Snap lines/boundaries to each other
+
+
 
 
 
@@ -658,6 +716,8 @@ vect(): Convert a GVector to a SpatVector
 
 
 
+
+
 General purpose functions
 
 
@@ -669,6 +729,8 @@ reorient(): Convert degrees between 'north-orientation' and 'east orientation'
 replaceNAs(): Replace NAs in columns of a data.table or data.frame, or in a vector
 seqToSQL(): Format a numeric series into an SQL value call
 update(): Refresh metadata in a GRaster or GVector object
+
+
 
 
 
@@ -690,16 +752,20 @@ vegIndices: Vegetation indices that can be calculated using vegIndex().
 
 
 
+
+
 Esoteric tutorials and arcane notes
 
 
 Comparisons between GRegions can be performed using the == and != operators.
-Tutorial on GRASS regions
-Tutorial on GRASS projects/locations and mapsets
-Hidden functions of fasterRaster: Useful for power users and developers
+Vignette on GRASS &quot;projects/locations&quot; and &quot;mapsets&quot;: vignette(&quot;projects_mapsets&quot;, package = &quot;fasterRaster&quot;)
+Vignette on GRASS &quot;regions&quot;: vignette(&quot;regions&quot;, package = &quot;fasterRaster&quot;)
+Vignette on fasteRaster hidden functions: vignette(&quot;hidden_functions&quot;, package = &quot;fasterRaster&quot;)
 grassStarted(): Has a connection GRASS been made within the current R session?
 
-"><meta property="og:image" content="/logo.png"></head><body>
+
+
+"><meta property="og:image" content="https://github.com/adamlilith/fasterRaster/logo.png"></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
@@ -707,7 +773,7 @@ grassStarted(): Has a connection GRASS been made within the current R session?
 
     <a class="navbar-brand me-2" href="../index.html">fasterRaster</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">8.3.0.7024</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">8.3.0.7026</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -715,11 +781,19 @@ grassStarted(): Has a connection GRASS been made within the current R session?
     </button>
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
-      <ul class="navbar-nav me-auto"><li class="active nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
+      <ul class="navbar-nav me-auto"><li class="nav-item"><a class="nav-link" href="../articles/fasterRaster.html">Get started</a></li>
+<li class="active nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
+<li class="nav-item dropdown">
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/GRasters.html">Types of GRasters</a></li>
+    <li><a class="dropdown-item" href="../articles/faster_fasterRaster.html">Making fasterRaster faster</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><a class="dropdown-item" href="../articles/index.html">More articles...</a></li>
+  </ul></li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json"></form></li>
-<li class="nav-item"><a class="external-link nav-link" href="https://github.com/adamlilith/fasterRaster/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
+<li class="nav-item"><a class="nav-link" href="https://github.com/adamlilith/fasterRaster/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-lightswitch" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true" aria-label="Light switch"><span class="fa fa-sun"></span></button>
   <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdown-lightswitch"><li><button class="dropdown-item" data-bs-theme-value="light"><span class="fa fa-sun"></span> Light</button></li>
@@ -734,7 +808,7 @@ grassStarted(): Has a connection GRASS been made within the current R session?
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>"fasterRaster": Faster raster and spatial vector processing using "GRASS GIS"</h1>
-      <small class="dont-index">Source: <a href="https://github.com/adamlilith/fasterRaster/blob/master/R/fasterRaster.r" class="external-link"><code>R/fasterRaster.r</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/adamlilith/fasterRaster/blob/master/R/fasterRaster.r"><code>R/fasterRaster.r</code></a></small>
       <div class="d-none name"><code>fasterRaster.Rd</code></div>
     </div>
 
@@ -742,68 +816,183 @@ grassStarted(): Has a connection GRASS been made within the current R session?
     <p><strong>fasterRaster</strong>: Processing of large-in-memory/-on disk rasters and spatial vectors in using <strong>GRASS GIS</strong>. Most functions in the <strong>terra</strong> and <strong>sf</strong> packages are recreated. Processing of medium-sized and smaller spatial objects will nearly always be faster using <strong>terra</strong> or <strong>sf</strong>. To use most of the functions you must have the stand-alone version of <strong>GRASS GIS</strong> version 8.3 or higher (not the <strong>OSGeoW4</strong> installer version). Note that due to differences in how <strong>GRASS</strong>, <strong>terra</strong>, and <strong>sf</strong> were implemented, results will not always be strictly comparable between functions for the same operation.</p><div class="section">
 <h3 id="most-useful-tutorials-and-functions-">Most useful tutorials and functions:<a class="anchor" aria-label="anchor" href="#most-useful-tutorials-and-functions-"></a></h3>
 
-
-<p>A <a href="tutorial_getting_started.html">quick-start</a> tutorial<br>
-A tutorial on <a href="tutorial_raster_data_types.html">raster data types</a><br><code><a href="faster.html">faster()</a></code>: Set the directory where <strong>GRASS</strong> is installed on your system, and set or get other package-wide options<br><code><a href="fast.html">fast()</a></code>: Convert a <code>SpatRaster</code>, <code>SpatVector</code>, or <code>sf</code> vector to <strong>fasterRaster</strong>'s raster format (<code>GRaster</code>s) or vector format (<code>GVector</code>s), or load one from a file<br><code><a href="rast.html">rast()</a></code>, <code><a href="vect.html">vect()</a></code>, and <code><a href="vect.html">st_as_sf()</a></code>: Convert <code>GRaster</code>s and <code>GVector</code>s to <code>SpatRaster</code>s, <code>SpatVector</code>s, or <code>sf</code> vectors<br><code><a href="writeRaster.html">writeRaster()</a></code> and <code><a href="writeVector.html">writeVector()</a></code>: Save <code>GRaster</code>s or <code>GVector</code>s to disk<br></p>
-</div>
+<ul><li><p>The quick-start guide to getting started with <strong>fasterRaster</strong> , accessible using <code><a href="../articles/fasterRaster.html">vignette("fasterRaster", package = "fasterRaster")</a></code></p></li>
+<li><p>The vignette on types of <code>GRaster</code>s, accessible using <code><a href="../articles/GRasters.html">vignette("GRasters", package = "fasterRaster")</a></code></p></li>
+<li><p>The vignette on how to speed up <strong>fasterRaster</strong>, accessible using <code><a href="../articles/faster_fasterRaster.html">vignette("faster_fasterRaster", package = "fasterRaster")</a></code></p></li>
+<li><p><code><a href="faster.html">faster()</a></code>: Set the directory where <strong>GRASS</strong> is installed on your system, and set or get other package-wide options. This function must be run once before using most <strong>fasterRaster</strong> functions.</p></li>
+<li><p><code><a href="fast.html">fast()</a></code>: Convert a <code>SpatRaster</code>, <code>SpatVector</code>, or <code>sf</code> vector to <strong>fasterRaster</strong>'s raster format (<code>GRaster</code>s) or vector format (<code>GVector</code>s), or load one from a file</p></li>
+<li><p><code><a href="rast.html">rast()</a></code>, <code><a href="vect.html">vect()</a></code>, and <code><a href="vect.html">st_as_sf()</a></code>: Convert <code>GRaster</code>s and <code>GVector</code>s to <code>SpatRaster</code>s, <code>SpatVector</code>s, or <code>sf</code> vectors</p></li>
+<li><p><code><a href="writeRaster.html">writeRaster()</a></code> and <code><a href="writeVector.html">writeVector()</a></code>: Save <code>GRaster</code>s or <code>GVector</code>s to disk</p></li>
+</ul></div>
 
 <div class="section">
 <h3 id="properties-of-grasters">Properties of <code>GRasters</code><a class="anchor" aria-label="anchor" href="#properties-of-grasters"></a></h3>
 
-
-<p><code><a href="crs.html">crs()</a></code>: Coordinate reference system<br><code><a href="datatype.html">datatype()</a></code>: Data type<br><code><a href="dim.html">dim()</a></code> and <code><a href="dim.html">dim3d()</a></code>: Number of rows, columns, and depths<br><code><a href="ext.html">ext()</a></code>, <code><a href="ext.html">N()</a></code>, <code><a href="ext.html">S()</a></code>, <code><a href="ext.html">E()</a></code>, <code><a href="ext.html">W()</a></code>, <code><a href="ext.html">top()</a></code>, and <code><a href="ext.html">bottom()</a></code>: Spatial extent<br><code><a href="freq.html">freq()</a></code>: Frequencies of cell values in a raster<br><code><a href="is.2d.html">is.2d()</a></code> and <code><a href="is.2d.html">is.3d()</a></code>: Is an object 2- or 3-dimensional?<br><code><a href="is.int.html">is.int()</a></code>, <code><a href="is.int.html">is.cell()</a></code>, <code><a href="is.int.html">is.float()</a></code>, <code><a href="is.int.html">is.doub()</a></code>: <code>GRaster</code> data type (integer/float/double)<br><code><a href="is.int.html">is.factor()</a></code>: Does a raster represent categorical data?<br><code><a href="is.lonlat.html">is.lonlat()</a></code>: Is an object projected (e.g., in WGS84)?<br><code><a href="levels.html">levels()</a></code>: Names of levels in a categorical <code>GRaster</code><br><code><a href="minmax.html">minmax()</a></code>: Minimum and maximum values across all non-<code>NA</code> cells<br><code><a href="names.html">names()</a></code>: <code>GRaster</code> names<br><code><a href="dim.html">ncol()</a></code>: Number of columns<br><code><a href="nacell.html">nacell()</a></code>: Number of <code>NA</code> cells<br><code><a href="dim.html">ncell()</a></code>: Number of cells<br><code><a href="dim.html">ncell3d()</a></code>: Number of cells of a 3D <code>GRaster</code><br><code><a href="dim.html">ndepth()</a></code>: Number of depths of a 3D <code>GRaster</code><br><code><a href="dim.html">nlyr()</a></code>: Number of layers<br><code><a href="nacell.html">nonnacell()</a></code>: Number of non-<code>NA</code> cells<br><code><a href="dim.html">nrow()</a></code>: Number of rows<br><code><a href="nlevels.html">nlevels()</a></code>: Number of categories<br><code><a href="res.html">res()</a></code>, <code><a href="res.html">xres()</a></code>, <code><a href="res.html">yres()</a></code>, and <code><a href="res.html">zres()</a></code>: Spatial resolution<br><code><a href="sources.html">sources()</a></code>: Name of the <code>GRaster</code> in <strong>GRASS</strong><br><code><a href="topology-GSpatial-method.html">topology()</a></code>: Dimensionality (2D or 3D)<br><code><a href="ext.html">zext()</a></code>: Vertical extent<br><code><a href="res.html">zres()</a></code>: Vertical resolution<br></p>
-</div>
+<ul><li><p><code><a href="crs.html">crs()</a></code>: Coordinate reference system</p></li>
+<li><p><code><a href="datatype.html">datatype()</a></code>: Data type</p></li>
+<li><p><code><a href="dim.html">dim()</a></code> and <code><a href="dim.html">dim3d()</a></code>: Number of rows, columns, and depths</p></li>
+<li><p><code><a href="ext.html">ext()</a></code>, <code><a href="ext.html">N()</a></code>, <code><a href="ext.html">S()</a></code>, <code><a href="ext.html">E()</a></code>, <code><a href="ext.html">W()</a></code>, <code><a href="ext.html">top()</a></code>, and <code><a href="ext.html">bottom()</a></code>: Spatial extent</p></li>
+<li><p><code><a href="freq.html">freq()</a></code>: Frequencies of cell values in a raster</p></li>
+<li><p><code><a href="is.2d.html">is.2d()</a></code> and <code><a href="is.2d.html">is.3d()</a></code>: Is an object 2- or 3-dimensional?</p></li>
+<li><p><code><a href="is.int.html">is.int()</a></code>, <code><a href="is.int.html">is.cell()</a></code>, <code><a href="is.int.html">is.float()</a></code>, <code><a href="is.int.html">is.doub()</a></code>: <code>GRaster</code> data type (integer/float/double)</p></li>
+<li><p><code><a href="is.int.html">is.factor()</a></code>: Does a raster represent categorical data?</p></li>
+<li><p><code><a href="is.lonlat.html">is.lonlat()</a></code>: Is an object projected (e.g., in WGS84)?</p></li>
+<li><p><code><a href="levels.html">levels()</a></code>: Names of levels in a categorical <code>GRaster</code></p></li>
+<li><p><code><a href="minmax.html">minmax()</a></code>: Minimum and maximum values across all non-<code>NA</code> cells</p></li>
+<li><p><code><a href="names.html">names()</a></code>: <code>GRaster</code> names</p></li>
+<li><p><code><a href="dim.html">ncol()</a></code>: Number of columns</p></li>
+<li><p><code><a href="nacell.html">nacell()</a></code>: Number of <code>NA</code> cells</p></li>
+<li><p><code><a href="dim.html">ncell()</a></code>: Number of cells</p></li>
+<li><p><code><a href="dim.html">ncell3d()</a></code>: Number of cells of a 3D <code>GRaster</code></p></li>
+<li><p><code><a href="dim.html">ndepth()</a></code>: Number of depths of a 3D <code>GRaster</code></p></li>
+<li><p><code><a href="dim.html">nlyr()</a></code>: Number of layers</p></li>
+<li><p><code><a href="nacell.html">nonnacell()</a></code>: Number of non-<code>NA</code> cells</p></li>
+<li><p><code><a href="dim.html">nrow()</a></code>: Number of rows</p></li>
+<li><p><code><a href="nlevels.html">nlevels()</a></code>: Number of categories</p></li>
+<li><p><code><a href="res.html">res()</a></code>, <code><a href="res.html">xres()</a></code>, <code><a href="res.html">yres()</a></code>, and <code><a href="res.html">zres()</a></code>: Spatial resolution</p></li>
+<li><p><code><a href="sources.html">sources()</a></code>: Name of the <code>GRaster</code> in <strong>GRASS</strong></p></li>
+<li><p></p></li>
+<li><p><code><a href="ext.html">zext()</a></code>: Vertical extent</p></li>
+<li><p><code><a href="res.html">zres()</a></code>: Vertical resolution</p></li>
+</ul></div>
 
 <div class="section">
 <h3 id="functions-that-operate-on-or-create-grasters">Functions that operate on or create <code>GRasters</code><a class="anchor" aria-label="anchor" href="#functions-that-operate-on-or-create-grasters"></a></h3>
 
-
-<p><a href="https://rdrr.io/r/base/Arithmetic.html" class="external-link">Arithmetic</a>: Mathematical operations on <code>GRaster</code>s: <code>+</code>, <code>-</code>, <code>*</code>, <code>/</code>, <code>^</code>, <code>%%</code> (modulus), <code>%/%</code> (integer division)<br><a href="Compare-methods.html">Logical comparisons</a>: <code>&lt;</code>, <code>&lt;=</code>, <code>==</code>, <code>!=</code>, <code>&gt;=</code>, and <code>&gt;</code>, plus <code><a href="match.html">%in%</a></code> and <code><a href="match.html">%notin%</a></code> (for categorical rasters only)<br><a href="Logic-methods.html">Logical operators</a>: <code>|</code>and <code>&amp;</code></p>
-<p>Single-layer mathematical functions (applied to each layer of a <code>GRaster</code>):</p><ul><li><p>Working with <code>NA</code>s: <code><a href="math.html">is.na()</a></code>, <code><a href="math.html">not.na()</a></code>, and <code><a href="maskNA.html">maskNA()</a></code> <br></p></li>
-<li><p>Trigonometry: <code><a href="math.html">sin()</a></code>, <code><a href="math.html">cos()</a></code>, <code><a href="math.html">tan()</a></code>, <code><a href="math.html">asin()</a></code>, <code><a href="math.html">acos()</a></code>, <code><a href="math.html">atan()</a></code>, <code><a href="math.html">atan2()</a></code> <br></p></li>
-<li><p>Logarithms and powers: <code><a href="math.html">exp()</a></code>, <code><a href="math.html">log()</a></code>, <code><a href="math.html">ln()</a></code>, <code><a href="math.html">log1p()</a></code>, <code><a href="math.html">log2()</a></code>, <code><a href="math.html">log10()</a></code>, <code><a href="math.html">sqrt()</a></code> <br></p></li>
-<li><p>Rounding: <code><a href="math.html">round()</a></code>, <code><a href="math.html">floor()</a></code>, <code><a href="math.html">ceiling()</a></code>, <code><a href="math.html">trunc()</a></code> <br></p></li>
-<li><p>Signs: <code><a href="math.html">abs()</a></code> <br></p></li>
-</ul><p>Multi-layer functions (applied across layers of a "stack" of <code>GRaster</code>s):</p><ul><li><p>Numeration: <code><a href="functions.html">sum()</a></code>, <code><a href="functions.html">count()</a></code> <br></p></li>
-<li><p>Central tendency: <code><a href="functions.html">mean()</a></code>, <code><a href="functions.html">mmode()</a></code>, <code><a href="functions.html">median()</a></code> <br></p></li>
+<ul><li><p><a href="https://rdrr.io/r/base/Arithmetic.html" class="external-link">Arithmetic</a>: Mathematical operations on <code>GRaster</code>s: <code>+</code>, <code>-</code>, <code>*</code>, <code>/</code>, <code>^</code>, <code>%%</code> (modulus), <code>%/%</code> (integer division)</p></li>
+<li><p><a href="Compare-methods.html">Logical comparisons</a>: <code>&lt;</code>, <code>&lt;=</code>, <code>==</code>, <code>!=</code>, <code>&gt;=</code>, and <code>&gt;</code>, plus <code><a href="match.html">%in%</a></code> and <code><a href="match.html">%notin%</a></code> (for categorical rasters only)</p></li>
+<li><p><a href="Logic-methods.html">Logical operators</a>: <code>|</code>and <code>&amp;</code></p></li>
+</ul><p>Single-layer mathematical functions (applied to each layer of a <code>GRaster</code>):</p><ul><li><p>Working with <code>NA</code>s: <code><a href="math.html">is.na()</a></code>, <code><a href="math.html">not.na()</a></code>, and <code><a href="maskNA.html">maskNA()</a></code></p></li>
+<li><p>Trigonometry: <code><a href="math.html">sin()</a></code>, <code><a href="math.html">cos()</a></code>, <code><a href="math.html">tan()</a></code>, <code><a href="math.html">asin()</a></code>, <code><a href="math.html">acos()</a></code>, <code><a href="math.html">atan()</a></code>, <code><a href="math.html">atan2()</a></code></p></li>
+<li><p>Logarithms and powers: <code><a href="math.html">exp()</a></code>, <code><a href="math.html">log()</a></code>, <code><a href="math.html">ln()</a></code>, <code><a href="math.html">log1p()</a></code>, <code><a href="math.html">log2()</a></code>, <code><a href="math.html">log10()</a></code>, <code><a href="math.html">sqrt()</a></code></p></li>
+<li><p>Rounding: <code><a href="math.html">round()</a></code>, <code><a href="math.html">floor()</a></code>, <code><a href="math.html">ceiling()</a></code>, <code><a href="math.html">trunc()</a></code></p></li>
+<li><p>Signs: <code><a href="math.html">abs()</a></code></p></li>
+</ul><p>Multi-layer functions (applied across layers of a "stack" of <code>GRaster</code>s):</p><ul><li><p>Numeration: <code><a href="functions.html">sum()</a></code>, <code><a href="functions.html">count()</a></code></p></li>
+<li><p>Central tendency: <code><a href="functions.html">mean()</a></code>, <code><a href="functions.html">mmode()</a></code>, <code><a href="functions.html">median()</a></code></p></li>
 <li><p>Dispersion: <code><a href="functions.html">stdev()</a></code>, <code><a href="functions.html">var()</a></code>, <code><a href="functions.html">varpop()</a></code>, <code><a href="functions.html">nunique()</a></code>, <code><a href="functions.html">range()</a></code>, <code><a href="functions.html">quantile()</a></code>, <code><a href="functions.html">skewness()</a></code>, <code><a href="functions.html">kurtosis()</a></code></p></li>
-<li><p>Extremes: <code><a href="functions.html">min()</a></code>, <code><a href="functions.html">max()</a></code>, <code><a href="functions.html">which.min()</a></code>, <code><a href="functions.html">which.max()</a></code> <br></p></li>
-</ul><p>The operators <a href="subset_dollar.html">$</a> and <code><a href="subset_double_square_brackets.html">[[</a></code> can be used to subset or remove specific layers of a <code>GRaster</code>.<br>
-The <code>[&lt;-</code> operator can be used to replace values of cells of a <code>GRaster</code>.<br>
-The assign operators, <code>$&lt;-</code>, <code>[[&lt;-</code>, and <code>add&lt;-</code> can be used to replace specific layers of a <code>GRaster</code>.<br><code><a href="as.int.html">as.int()</a></code>, <code><a href="as.int.html">as.float()</a></code>, <code><a href="as.int.html">as.doub()</a></code>: Change data type (integer/float/double)<br><code><a href="as.lines.html">as.lines()</a></code>: Convert a <code>GRaster</code> to a "lines" vector<br><code><a href="as.points.html">as.points()</a></code>: Convert a <code>GRaster</code> to a "points" vector<br><code><a href="as.polygons.html">as.polygons()</a></code>: Convert a <code>GRaster</code> to a "polygons" vector<br><code><a href="aggregate.html">aggregate()</a></code>: Aggregate values of <code>GRaster</code> cells into larger cells<br><code><a href="bioclims.html">bioclims()</a></code>: BIOCLIM rasters (classic set and extended set)<br><code><a href="buffer.html">buffer()</a></code>: Create a buffer around non-<code>NA</code> cells<br><code><a href="https://rspatial.github.io/terra/reference/app.html" class="external-link">app()</a></code>: Apply a user-defined function to multiple layers of a <code>GRaster</code> (with helper functions <code><a href="app.html">appFuns()</a></code> and <code><a href="app.html">appCheck()</a></code>)<br><code><a href="c.html">c()</a></code>: "Stack" two or more rasters<br><code><a href="cellSize.html">cellSize()</a></code>: Cell area<br><code><a href="classify.html">classify()</a></code>: Partition cell values into strata<br><code><a href="clump.html">clump()</a></code>: Group adjacent cells with similar values<br><code><a href="combineCats.html">combineCats()</a></code>: Combine values from two or more categorical and/or integer rasters<br><code><a href="combineLevels.html">combineLevels()</a></code>: Combine the "levels" tables of two or more categorical <code>GRaster</code>s<br><code><a href="crop.html">crop()</a></code>: Remove parts of a <code>GRaster</code><br><code><a href="denoise.html">denoise()</a></code>: Remove "noise" from a <code>GRaster</code> using a principal components analysis (PCA)<br><code><a href="distance.html">distance()</a></code>: Distance to non-<code>NA</code> cells, or vice versa<br><code><a href="extend.html">extend()</a></code>: Add rows and columns to a <code>GRaster</code><br><code><a href="extract.html">extract()</a></code>: Extract values from a <code>GRaster</code> at locations of a <code>GVector</code><br><code><a href="fillNAs.html">fillNAs()</a></code>: Fill <code>NA</code> cells<br><code><a href="focal.html">focal()</a></code>: Calculate cell values based on values of nearby cells<br><code><a href="fragmentation.html">fragmentation()</a></code>: Landscape fragmentation class from Riitters et al. (2020)<br><code><a href="global.html">global()</a></code>: Summary statistics across cells of each <code>GRaster</code> layer<br><code><a href="hist.html">hist()</a></code>: Histogram of <code>GRaster</code> values<br><code><a href="interpIDW.html">interpIDW()</a></code>: Interpolate values at points to a <code>GRaster</code><br><code><a href="kernel.html">kernel()</a></code>: Kernel density estimator of points<br><code><a href="layerCor.html">layerCor()</a></code>: Correlation or covariance between two or more <code>GRaster</code> layers<br><code><a href="longlat.html">longlat()</a></code>: Create longitude/latitude rasters<br><code><a href="mask.html">mask()</a></code>: Remove values in a <code>GRaster</code> based on values in another <code>GRaster</code> or vector<br><code><a href="maskNA.html">maskNA()</a></code>: Mask all non-NA cells or all NA cells<br><code><a href="match.html">match()</a></code>, <code><a href="match.html">%in%</a></code>, and <code><a href="match.html">%notin%</a></code>: Find which cells of a <code>GRaster</code> match or do not match certain values<br><code><a href="merge.html">merge()</a></code>: Combine two or more rasters with different extents and fill in <code>NA</code>s<br><code>names&lt;-</code>: Assign names to a <code>GRaster</code><br><code><a href="denoise.html">noise()</a></code>: Remove coarse-scale trends from a <code>GRaster</code>, leaving just fine-scale "noise"<br><code><a href="pairs.html">pairs()</a></code>: Plot correlations between <code>GRaster</code> layers<br><code><a href="pca.html">pca()</a></code>: Apply a principal components analysis (PCA) to a <code>GRaster</code><br><code><a href="pcs.html">pcs()</a></code>: Retrieve a principal components model from a PCA <code>GRaster</code> generated using <code><a href="pca.html">pca()</a></code><br><code><a href="plot.html">plot()</a></code>: Display a <code>GRaster</code><br><code><a href="plotRGB.html">plotRGB()</a></code>: Display a multispectral <code>GRaster</code> using red, blue, green, and alpha channels<br><code><a href="project.html">project()</a></code>: Change coordinate reference system and cell size<br><code><a href="predict.html">predict()</a></code>: Make predictions to a <code>GRaster</code> from a linear model or generalized linear model<br><code><a href="resample.html">resample()</a></code>: Change cell size<br><code><a href="reorient.html">reorient()</a></code>: Convert degrees between 'north-orientation' and 'east orientation'<br><code><a href="scale.html">scale()</a></code>, <code><a href="scale.html">scalepop()</a></code>, and <code><a href="scale.html">unscale()</a></code>: Subtract means and divide by standard deviations, or inverse of that<br><code><a href="selectRange.html">selectRange()</a></code>: Select values from rasters in a stack based on values in another <code>GRaster</code><br><code><a href="spatSample.html">spatSample()</a></code>: Randomly points from a <code>GRaster</code><br><code><a href="subst.html">subst()</a></code>: Re-assign cell values<br><code><a href="thinLines.html">thinLines()</a></code>: Reduce linear features on a <code>GRaster</code> so linear features are 1 cell wide<br><code><a href="tiles.html">tiles()</a></code>: Divide a <code>GRaster</code> into spatially exclusive subsets (though with possible overlap)<br><code><a href="trim.html">trim()</a></code>: Remove rows and columns from a <code>GRaster</code> that are all <code>NA</code><br><code><a href="zonal.html">zonal()</a></code>: Statistics (mean, sum, etc.) on areas of a <code>GRaster</code> defined by sets of cells with the same values in another <code>GRaster</code>, or by geometries in a <code>GVector</code><br><code><a href="zonalGeog.html">zonalGeog()</a></code>: Geographic statistics (area, perimeter, fractal dimension, etc.) for sets of cells with the same values<br></p>
-</div>
+<li><p>Extremes: <code><a href="functions.html">min()</a></code>, <code><a href="functions.html">max()</a></code>, <code><a href="functions.html">which.min()</a></code>, <code><a href="functions.html">which.max()</a></code></p></li>
+</ul><p>The operators <a href="subset_dollar.html">$</a> and <code><a href="subset_double_square_brackets.html">[[</a></code> can be used to subset or remove specific layers of a <code>GRaster</code>.
+The <code>[&lt;-</code> operator can be used to replace values of cells of a <code>GRaster</code>.
+The assign operators, <code>$&lt;-</code>, <code>[[&lt;-</code>, and <code>add&lt;-</code>, can be used to replace specific layers of a <code>GRaster</code>.</p><ul><li><p><code><a href="as.int.html">as.int()</a></code>, <code><a href="as.int.html">as.float()</a></code>, <code><a href="as.int.html">as.doub()</a></code>: Change data type (integer/float/double)</p></li>
+<li><p><code><a href="as.lines.html">as.lines()</a></code>: Convert a <code>GRaster</code> to a "lines" vector</p></li>
+<li><p><code><a href="as.points.html">as.points()</a></code>: Convert a <code>GRaster</code> to a "points" vector</p></li>
+<li><p><code><a href="as.polygons.html">as.polygons()</a></code>: Convert a <code>GRaster</code> to a "polygons" vector</p></li>
+<li><p><code><a href="aggregate.html">aggregate()</a></code>: Aggregate values of <code>GRaster</code> cells into larger cells</p></li>
+<li><p><code><a href="bioclims.html">bioclims()</a></code>: BIOCLIM rasters (classic set and extended set)</p></li>
+<li><p><code><a href="buffer.html">buffer()</a></code>: Create a buffer around non-<code>NA</code> cells</p></li>
+<li><p><code><a href="https://rspatial.github.io/terra/reference/app.html" class="external-link">app()</a></code>: Apply a user-defined function to multiple layers of a <code>GRaster</code> (with helper functions <code><a href="app.html">appFuns()</a></code> and <code><a href="app.html">appCheck()</a></code>)</p></li>
+<li><p><code><a href="c.html">c()</a></code>: "Stack" two or more rasters</p></li>
+<li><p><code><a href="cellSize.html">cellSize()</a></code>: Cell area</p></li>
+<li><p><code><a href="classify.html">classify()</a></code>: Partition cell values into strata</p></li>
+<li><p><code><a href="clump.html">clump()</a></code>: Group adjacent cells with similar values</p></li>
+<li><p><code><a href="combineCats.html">combineCats()</a></code>: Combine values from two or more categorical and/or integer rasters</p></li>
+<li><p><code><a href="combineLevels.html">combineLevels()</a></code>: Combine the "levels" tables of two or more categorical <code>GRaster</code>s</p></li>
+<li><p><code><a href="crop.html">crop()</a></code>: Remove parts of a <code>GRaster</code></p></li>
+<li><p><code><a href="denoise.html">denoise()</a></code>: Remove "noise" from a <code>GRaster</code> using a principal components analysis (PCA)</p></li>
+<li><p><code><a href="distance.html">distance()</a></code>: Distance to non-<code>NA</code> cells, or vice versa</p></li>
+<li><p><code><a href="extend.html">extend()</a></code>: Add rows and columns to a <code>GRaster</code></p></li>
+<li><p><code><a href="extract.html">extract()</a></code>: Extract values from a <code>GRaster</code> at locations of a <code>GVector</code></p></li>
+<li><p><code><a href="fillNAs.html">fillNAs()</a></code>: Fill <code>NA</code> cells</p></li>
+<li><p><code><a href="focal.html">focal()</a></code>: Calculate cell values based on values of nearby cells</p></li>
+<li><p><code><a href="fragmentation.html">fragmentation()</a></code>: Landscape fragmentation class from Riitters et al. (2020)</p></li>
+<li><p><code><a href="global.html">global()</a></code>: Summary statistics across cells of each <code>GRaster</code> layer</p></li>
+<li><p><code><a href="hist.html">hist()</a></code>: Histogram of <code>GRaster</code> values</p></li>
+<li><p><code><a href="interpIDW.html">interpIDW()</a></code>: Interpolate values at points to a <code>GRaster</code></p></li>
+<li><p><code><a href="kernel.html">kernel()</a></code>: Kernel density estimator of points</p></li>
+<li><p><code><a href="layerCor.html">layerCor()</a></code>: Correlation or covariance between two or more <code>GRaster</code> layers</p></li>
+<li><p><code><a href="longlat.html">longlat()</a></code>: Create longitude/latitude rasters</p></li>
+<li><p><code><a href="mask.html">mask()</a></code>: Remove values in a <code>GRaster</code> based on values in another <code>GRaster</code> or vector</p></li>
+<li><p><code><a href="maskNA.html">maskNA()</a></code>: Mask all non-NA cells or all NA cells</p></li>
+<li><p><code><a href="match.html">match()</a></code>, <code><a href="match.html">%in%</a></code>, and <code><a href="match.html">%notin%</a></code>: Find which cells of a <code>GRaster</code> match or do not match certain values</p></li>
+<li><p><code><a href="merge.html">merge()</a></code>: Combine two or more rasters with different extents and fill in <code>NA</code>s
+<code>names&lt;-</code>: Assign names to a <code>GRaster</code></p></li>
+<li><p><code><a href="denoise.html">noise()</a></code>: Remove coarse-scale trends from a <code>GRaster</code>, leaving just fine-scale "noise"</p></li>
+<li><p><code><a href="pairs.html">pairs()</a></code>: Plot correlations between <code>GRaster</code> layers</p></li>
+<li><p><code><a href="pca.html">pca()</a></code>: Apply a principal components analysis (PCA) to a <code>GRaster</code></p></li>
+<li><p><code><a href="pcs.html">pcs()</a></code>: Retrieve a principal components model from a PCA <code>GRaster</code> generated using <code><a href="pca.html">pca()</a></code></p></li>
+<li><p><code><a href="plot.html">plot()</a></code>: Display a <code>GRaster</code></p></li>
+<li><p><code><a href="plotRGB.html">plotRGB()</a></code>: Display a multispectral <code>GRaster</code> using red, blue, green, and alpha channels</p></li>
+<li><p><code><a href="project.html">project()</a></code>: Change coordinate reference system and cell size</p></li>
+<li><p><code><a href="predict.html">predict()</a></code>: Make predictions to a <code>GRaster</code> from a linear model or generalized linear model</p></li>
+<li><p><code><a href="resample.html">resample()</a></code>: Change cell size</p></li>
+<li><p><code><a href="reorient.html">reorient()</a></code>: Convert degrees between 'north-orientation' and 'east orientation'</p></li>
+<li><p><code><a href="scale.html">scale()</a></code>, <code><a href="scale.html">scalepop()</a></code>, and <code><a href="scale.html">unscale()</a></code>: Subtract means and divide by standard deviations, or inverse of that</p></li>
+<li><p><code><a href="selectRange.html">selectRange()</a></code>: Select values from rasters in a stack based on values in another <code>GRaster</code></p></li>
+<li><p><code><a href="spatSample.html">spatSample()</a></code>: Randomly points from a <code>GRaster</code></p></li>
+<li><p><code><a href="subst.html">subst()</a></code>: Re-assign cell values</p></li>
+<li><p><code><a href="thinLines.html">thinLines()</a></code>: Reduce linear features on a <code>GRaster</code> so linear features are 1 cell wide</p></li>
+<li><p><code><a href="tiles.html">tiles()</a></code>: Divide a <code>GRaster</code> into spatially exclusive subsets (though with possible overlap)</p></li>
+<li><p><code><a href="trim.html">trim()</a></code>: Remove rows and columns from a <code>GRaster</code> that are all <code>NA</code></p></li>
+<li><p><code><a href="zonal.html">zonal()</a></code>: Statistics (mean, sum, etc.) on areas of a <code>GRaster</code> defined by sets of cells with the same values in another <code>GRaster</code>, or by geometries in a <code>GVector</code></p></li>
+<li><p><code><a href="zonalGeog.html">zonalGeog()</a></code>: Geographic statistics (area, perimeter, fractal dimension, etc.) for sets of cells with the same values</p></li>
+</ul></div>
 
 <div class="section">
 <h3 id="functions-for-creating-grasters-de-novo">Functions for creating <code>GRaster</code>s <em>de novo</em><a class="anchor" aria-label="anchor" href="#functions-for-creating-grasters-de-novo"></a></h3>
 
-
-<p><code><a href="fractalRast.html">fractalRast()</a></code>: Create a fractal <code>GRaster</code><br><code><a href="rnormRast.html">rnormRast()</a></code>: A random <code>GRaster</code> with values drawn from a normal distribution<br><code><a href="rSpatialDepRast.html">rSpatialDepRast()</a></code>: Create a random <code>GRaster</code> with or without spatial dependence<br><code><a href="runifRast.html">runifRast()</a></code>: A random <code>GRaster</code> with values drawn from a uniform distribution<br><code><a href="sineRast.html">sineRast()</a></code>: Sine wave rasters<br></p>
-</div>
+<ul><li><p><code><a href="fractalRast.html">fractalRast()</a></code>: Create a fractal <code>GRaster</code></p></li>
+<li><p><code><a href="rnormRast.html">rnormRast()</a></code>: A random <code>GRaster</code> with values drawn from a normal distribution</p></li>
+<li><p><code><a href="rSpatialDepRast.html">rSpatialDepRast()</a></code>: Create a random <code>GRaster</code> with or without spatial dependence</p></li>
+<li><p><code><a href="runifRast.html">runifRast()</a></code>: A random <code>GRaster</code> with values drawn from a uniform distribution</p></li>
+<li><p><code><a href="sineRast.html">sineRast()</a></code>: Sine wave rasters</p></li>
+</ul></div>
 
 <div class="section">
 <h3 id="functions-for-analysis-of-terrain-and-flow-of-water-across-landscapes">Functions for analysis of terrain and flow of water across landscapes<a class="anchor" aria-label="anchor" href="#functions-for-analysis-of-terrain-and-flow-of-water-across-landscapes"></a></h3>
 
-
-<p><code><a href="as.contour.html">as.contour()</a></code>: Contour lines from a <code>GRaster</code><br><code><a href="flow.html">flow()</a></code>: Identify watershed basins and direction and accumulation of flow<br><code><a href="flowPath.html">flowPath()</a></code>: Path of water flow across a landscape<br><code><a href="geomorphons.html">geomorphons()</a></code>: Identify terrain feature types<br><code><a href="https://rspatial.github.io/terra/reference/shade.html" class="external-link">hillshade()</a></code>: Create a hillshade <code>GRaster</code><br><code><a href="horizonHeight.html">horizonHeight()</a></code>: Horizon height<br><code><a href="sun.html">sun()</a></code>: Solar radiance and irradiance<br><code><a href="ruggedness.html">ruggedness()</a></code>: Terrain Ruggedness Index<br><code><a href="streams.html">streams()</a></code>: Create stream network<br><code><a href="terrain.html">terrain()</a></code>: Slope, aspect, curvature, and partial slopes<br><code><a href="wetness.html">wetness()</a></code>: Topographic wetness index<br></p>
-</div>
+<ul><li><p><code><a href="as.contour.html">as.contour()</a></code>: Contour lines from a <code>GRaster</code></p></li>
+<li><p><code><a href="flow.html">flow()</a></code>: Identify watershed basins and direction and accumulation of flow</p></li>
+<li><p><code><a href="flowPath.html">flowPath()</a></code>: Path of water flow across a landscape</p></li>
+<li><p><code><a href="geomorphons.html">geomorphons()</a></code>: Identify terrain feature types</p></li>
+<li><p><code><a href="https://rspatial.github.io/terra/reference/shade.html" class="external-link">hillshade()</a></code>: Create a hillshade <code>GRaster</code></p></li>
+<li><p><code><a href="horizonHeight.html">horizonHeight()</a></code>: Horizon height</p></li>
+<li><p><code><a href="sun.html">sun()</a></code>: Solar radiance and irradiance</p></li>
+<li><p><code><a href="ruggedness.html">ruggedness()</a></code>: Terrain Ruggedness Index</p></li>
+<li><p><code><a href="streams.html">streams()</a></code>: Create stream network</p></li>
+<li><p><code><a href="terrain.html">terrain()</a></code>: Slope, aspect, curvature, and partial slopes</p></li>
+<li><p><code><a href="wetness.html">wetness()</a></code>: Topographic wetness index</p></li>
+</ul></div>
 
 <div class="section">
 <h3 id="functions-operating-on-categorical-factor-rasters">Functions operating on categorical (factor) rasters<a class="anchor" aria-label="anchor" href="#functions-operating-on-categorical-factor-rasters"></a></h3>
 
 
-<p><code><a href="match.html">%in%</a></code>, and <code><a href="match.html">%notin%</a></code>: Mask cells that match or do not match a given category<br><code><a href="activeCat.html">activeCat()</a></code> and <code><a href="activeCat.html">activeCats()</a></code>: Column(s) that defines category labels<br><code>activeCat&lt;-</code>: Set column that defines category labels<br><code><a href="addCats.html">addCats()</a></code>: Add new columns to a "levels" table<br><code>addCats&lt;-</code>: Add new rows (levels) to a "levels" table<br><code><a href="levels.html">categories()</a></code>: Set "levels" table for specific layers of a categorical raster<br><code><a href="catNames.html">catNames()</a></code>: Column names of each "levels" table<br><code><a href="levels.html">cats()</a></code>: "Levels" table of a categorical raster<br><code><a href="combineCats.html">combineCats()</a></code>: Combine categories from two or more categorical rasters<br><code><a href="combineLevels.html">combineLevels()</a></code>: Combine the "levels" tables of two or more categorical <code>GRaster</code>s<br><code><a href="complete.cases.html">complete.cases()</a></code>: Find rows of a categorical <code>GRaster</code>'s "levels" table that have no <code>NA</code>s in them<br><code><a href="droplevels.html">droplevels()</a></code>: Remove one or more levels<br><code><a href="freq.html">freq()</a></code>: Frequency of each category across cells of a raster<br><code><a href="is.int.html">is.factor()</a></code>: Is a raster categorical?<br><code><a href="levels.html">levels()</a></code>: "Levels" table of a categorical raster<br><code>levels&lt;-</code>: Set "levels" table of a categorical raster<br><code><a href="match.html">match()</a></code>, <code><a href="match.html">%in%</a></code>, and <code><a href="match.html">%notin%</a></code>: Find which cells of a <code>GRaster</code> match or do not match certain category labels<br><code><a href="minmax.html">minmax()</a></code>: "Lowest" and "highest" category values of categorical rasters (when argument <code>levels = TRUE</code>)<br><code><a href="complete.cases.html">missing.cases()</a></code>: Find rows of a categorical <code>GRaster</code>'s "levels" table that have at least one <code>NA</code> in them<br><code><a href="missingCats.html">missingCats()</a></code>: Values that have no category assigned to them<br><code><a href="nlevels.html">nlevels()</a></code>: Number of levels<br><code><a href="subst.html">subst()</a></code>: Re-assign category levels<br><code><a href="zonalGeog.html">zonalGeog()</a></code>: Geographic statistics (area, perimeter, fractal dimension, etc.) for sets of cells with the same values</p>
-</div>
+<p><code><a href="match.html">%in%</a></code>, and <code><a href="match.html">%notin%</a></code>: Mask cells that match or do not match a given category</p><ul><li><p><code><a href="activeCat.html">activeCat()</a></code> and <code><a href="activeCat.html">activeCats()</a></code>: Column(s) that defines category labels
+<code>activeCat&lt;-</code>: Set column that defines category labels</p></li>
+<li><p><code><a href="addCats.html">addCats()</a></code>: Add new columns to a "levels" table
+<code>addCats&lt;-</code>: Add new rows (levels) to a "levels" table</p></li>
+<li><p><code><a href="levels.html">categories()</a></code>: Set "levels" table for specific layers of a categorical raster</p></li>
+<li><p><code><a href="catNames.html">catNames()</a></code>: Column names of each "levels" table</p></li>
+<li><p><code><a href="levels.html">cats()</a></code>: "Levels" table of a categorical raster</p></li>
+<li><p><code><a href="combineCats.html">combineCats()</a></code>: Combine categories from two or more categorical rasters</p></li>
+<li><p><code><a href="combineLevels.html">combineLevels()</a></code>: Combine the "levels" tables of two or more categorical <code>GRaster</code>s</p></li>
+<li><p><code><a href="complete.cases.html">complete.cases()</a></code>: Find rows of a categorical <code>GRaster</code>'s "levels" table that have no <code>NA</code>s in them</p></li>
+<li><p><code><a href="droplevels.html">droplevels()</a></code>: Remove one or more levels</p></li>
+<li><p><code><a href="freq.html">freq()</a></code>: Frequency of each category across cells of a raster</p></li>
+<li><p><code><a href="is.int.html">is.factor()</a></code>: Is a raster categorical?</p></li>
+<li><p><code><a href="levels.html">levels()</a></code>: "Levels" table of a categorical raster
+<code>levels&lt;-</code>: Set "levels" table of a categorical raster</p></li>
+<li><p><code><a href="match.html">match()</a></code>, <code><a href="match.html">%in%</a></code>, and <code><a href="match.html">%notin%</a></code>: Find which cells of a <code>GRaster</code> match or do not match certain category labels</p></li>
+<li><p><code><a href="minmax.html">minmax()</a></code>: "Lowest" and "highest" category values of categorical rasters (when argument <code>levels = TRUE</code>)</p></li>
+<li><p><code><a href="complete.cases.html">missing.cases()</a></code>: Find rows of a categorical <code>GRaster</code>'s "levels" table that have at least one <code>NA</code> in them</p></li>
+<li><p><code><a href="missingCats.html">missingCats()</a></code>: Values that have no category assigned to them</p></li>
+<li><p><code><a href="nlevels.html">nlevels()</a></code>: Number of levels</p></li>
+<li><p><code><a href="subst.html">subst()</a></code>: Re-assign category levels</p></li>
+<li><p><code><a href="zonalGeog.html">zonalGeog()</a></code>: Geographic statistics (area, perimeter, fractal dimension, etc.) for sets of cells with the same values</p></li>
+</ul></div>
 
 <div class="section">
 <h3 id="functions-for-analysis-of-remote-sensing-rasters">Functions for analysis of remote sensing rasters<a class="anchor" aria-label="anchor" href="#functions-for-analysis-of-remote-sensing-rasters"></a></h3>
 
-
-<p><code><a href="compositeRGB.html">compositeRGB()</a></code>: Combine red, green, and blue color bands to make a composite <code>GRaster</code><br><code><a href="plotRGB.html">plotRGB()</a></code>: Display a multispectral <code>GRaster</code> using red, blue, green, and alpha channels<br><code><a href="vegIndex.html">vegIndex()</a></code>: Vegetation indices from surface reflectance<br></p><div class="section">
+<ul><li><p><code><a href="compositeRGB.html">compositeRGB()</a></code>: Combine red, green, and blue color bands to make a composite <code>GRaster</code></p></li>
+<li><p><code><a href="plotRGB.html">plotRGB()</a></code>: Display a multispectral <code>GRaster</code> using red, blue, green, and alpha channels</p></li>
+<li><p><code><a href="vegIndex.html">vegIndex()</a></code>: Vegetation indices from surface reflectance</p></li>
+</ul><div class="section">
 <h4 id="functions-that-operate-on-terra-spatrasters">Functions that operate on <strong>terra</strong> <code>SpatRaster</code>s<a class="anchor" aria-label="anchor" href="#functions-that-operate-on-terra-spatrasters"></a></h4>
 
-
-<p><code><a href="bioclims.html">bioclims()</a></code>: BIOCLIM rasters (classic set and extended set)<br><code><a href="fragmentation.html">fragmentation()</a></code>: Landscape fragmentation class from Riitters et al. (2020)<br></p>
-</div>
+<ul><li><p><code><a href="bioclims.html">bioclims()</a></code>: BIOCLIM rasters (classic set and extended set)</p></li>
+<li><p><code><a href="fragmentation.html">fragmentation()</a></code>: Landscape fragmentation class from Riitters et al. (2020)</p></li>
+</ul></div>
 
 
 </div>
@@ -811,57 +1000,149 @@ The assign operators, <code>$&lt;-</code>, <code>[[&lt;-</code>, and <code>add&l
 <div class="section">
 <h3 id="properties-of-gvectors">Properties of <code>GVector</code>s<a class="anchor" aria-label="anchor" href="#properties-of-gvectors"></a></h3>
 
-
-<p><code><a href="crs.html">crs()</a></code>: Coordinate reference system<br><code><a href="datatype.html">datatype()</a></code>: Data type of fields<br><code><a href="dim.html">dim()</a></code>: Number of geometries and columns<br><code><a href="expanse.html">expanse()</a></code>: Area of polygons or length of lines<br><code><a href="ext.html">ext()</a></code>, <code><a href="ext.html">N()</a></code>, <code><a href="ext.html">S()</a></code>, <code><a href="ext.html">E()</a></code>, <code><a href="ext.html">W()</a></code>, <code><a href="ext.html">top()</a></code>, and <code><a href="ext.html">bottom()</a></code>: Spatial extent<br><code><a href="geomtype.html">geomtype()</a></code>: Type of vector (points, lines, polygons)<br><code><a href="is.2d.html">is.2d()</a></code> and <code><a href="is.2d.html">is.3d()</a></code>: Is an object 2- or 3-dimensional?<br><code><a href="is.lonlat.html">is.lonlat()</a></code>: Is an object projected (e.g., in WGS84)?<br><code><a href="geomtype.html">is.points()</a></code>, <code><a href="geomtype.html">is.lines()</a></code>, <code><a href="geomtype.html">is.polygons()</a></code>: Does a <code>GVector</code> represent points, lines, or polygons?<br><code><a href="names.html">names()</a></code>: Names of <code>GVector</code> fields<br><code><a href="dim.html">ncol()</a></code>: Number of fields<br><code><a href="ngeom.html">ngeom()</a></code>: Number of geometries (points, lines, polygons)<br><code><a href="dim.html">nrow()</a></code>: Number of rows in a vector data table<br><code><a href="ngeom.html">nsubgeom()</a></code>: Number of subgeometries (points, lines, polygons that make up single- and multipart geometries)<br><code><a href="sources.html">sources()</a></code>: Name of the vector in <strong>GRASS</strong><br><code><a href="topology-GSpatial-method.html">topology()</a></code>: Dimensionality (2D or 3D)<br><code><a href="ext.html">zext()</a></code>: Vertical extent<br></p>
-</div>
+<ul><li><p><code><a href="crs.html">crs()</a></code>: Coordinate reference system</p></li>
+<li><p><code><a href="datatype.html">datatype()</a></code>: Data type of fields</p></li>
+<li><p><code><a href="dim.html">dim()</a></code>: Number of geometries and columns</p></li>
+<li><p><code><a href="expanse.html">expanse()</a></code>: Area of polygons or length of lines</p></li>
+<li><p><code><a href="ext.html">ext()</a></code>, <code><a href="ext.html">N()</a></code>, <code><a href="ext.html">S()</a></code>, <code><a href="ext.html">E()</a></code>, <code><a href="ext.html">W()</a></code>, <code><a href="ext.html">top()</a></code>, and <code><a href="ext.html">bottom()</a></code>: Spatial extent</p></li>
+<li><p><code><a href="geomtype.html">geomtype()</a></code>: Type of vector (points, lines, polygons)</p></li>
+<li><p><code><a href="is.2d.html">is.2d()</a></code> and <code><a href="is.2d.html">is.3d()</a></code>: Is an object 2- or 3-dimensional?</p></li>
+<li><p><code><a href="is.lonlat.html">is.lonlat()</a></code>: Is an object projected (e.g., in WGS84)?</p></li>
+<li><p><code><a href="geomtype.html">is.points()</a></code>, <code><a href="geomtype.html">is.lines()</a></code>, <code><a href="geomtype.html">is.polygons()</a></code>: Does a <code>GVector</code> represent points, lines, or polygons?</p></li>
+<li><p><code><a href="names.html">names()</a></code>: Names of <code>GVector</code> fields</p></li>
+<li><p><code><a href="dim.html">ncol()</a></code>: Number of fields</p></li>
+<li><p><code><a href="ngeom.html">ngeom()</a></code>: Number of geometries (points, lines, polygons)</p></li>
+<li><p><code><a href="dim.html">nrow()</a></code>: Number of rows in a vector data table</p></li>
+<li><p><code><a href="ngeom.html">nsubgeom()</a></code>: Number of subgeometries (points, lines, polygons that make up single- and multipart geometries)</p></li>
+<li><p><code><a href="sources.html">sources()</a></code>: Name of the vector in <strong>GRASS</strong></p></li>
+<li><p></p></li>
+<li><p><code><a href="ext.html">zext()</a></code>: Vertical extent</p></li>
+</ul></div>
 
 <div class="section">
 <h3 id="functions-that-operate-on-or-create-gvectors">Functions that operate on or create <code>GVector</code>s<a class="anchor" aria-label="anchor" href="#functions-that-operate-on-or-create-gvectors"></a></h3>
 
 
-<p>The <code><a href="subset_single_bracket.html">[</a></code> operator can be used to subset geometries of a <code>GVector</code>.<br>
-The <a href="subset_dollar.html">$</a> and <code><a href="subset_double_square_brackets.html">[[</a></code> operators can be used to get columns of a <code>GVector</code>'s data table.<br>
-The <code>$&lt;-</code> operator can be used to replace specific columns of a <code>GVector</code>'s data table or to add columns.<br><code>addTable&lt;-</code>: Add a data table to a <code>GVector</code><br><code><a href="aggregate.html">aggregate()</a></code>: Combine <code>GVector</code> geometries<br><code><a href="as.data.frame.html">as.data.frame()</a></code>: Convert a <code>GVector</code>'s attribute table to a <code>data.frame</code><br><code><a href="as.data.frame.html">as.data.table()</a></code>: Convert a <code>GVector</code>'s attribute table to a <code>data.table</code><br><code><a href="as.points.html">as.points()</a></code>: Extract vertex coordinates from a "lines" or "polygons" <code>GVector</code><br><code><a href="buffer.html">buffer()</a></code>: Create a polygon around/inside a <code>GVector</code><br><code><a href="clusterPoints.html">clusterPoints()</a></code>: Identify clusters of points<br><code><a href="colbind.html">colbind()</a></code>: Add columns to the data table of a <code>GVector</code><br><code><a href="complete.cases.html">complete.cases()</a></code>: Find rows of a <code>GVector</code>'s data table that have no <code>NA</code>s in them<br><code><a href="connectors.html">connectors()</a></code>: Create lines connecting nearest features of two <code>GVector</code>s<br><code><a href="convHull.html">convHull()</a></code>: Minimum convex hull<br><code><a href="crds.html">crds()</a></code>: Extract coordinates of a <code>GVector</code><br><code><a href="crop.html">crop()</a></code>: Remove parts of a <code>GVector</code><br><code><a href="delaunay.html">delaunay()</a></code>: Delaunay triangulation<br><code><a href="disagg.html">disagg()</a></code>: Separate multipart geometries into singlepart geometries<br><code><a href="distance.html">distance()</a></code>: Distance between geometries in two <code>GVector</code>, or from a <code>GVector</code> to cells of a <code>GRaster</code><br><code><a href="addTable.html">dropTable()</a></code>: Remove the data table from a <code>GVector</code><br><code><a href="erase.html">erase()</a></code> or <code>-</code>: Remove part of a <code>GVector</code> that overlaps with another<br><code><a href="expanse.html">expanse()</a></code>: Area of polygons or length of lines<br><code><a href="extract.html">extract()</a></code>: Extract values from a <code>GVector</code> at specific points<br><code><a href="grid.html">grid()</a></code>: Create a grid <code>GVector</code><br><code><a href="head.html">head()</a></code>: First rows of a <code>GVector</code>'s data table<br><code><a href="hexagons.html">hexagons()</a></code>: Create a hexagonal grid<br><code><a href="interpIDW.html">interpIDW()</a></code>: Interpolate values at points to a <code>GRaster</code> using inverse-distance weighting<br><code><a href="interpSplines.html">interpSplines()</a></code>: Interpolate values at points to a <code>GRaster</code> using splines<br><code><a href="intersect.html">intersect()</a></code> or <code>*</code>: Intersection of two <code>GVectors</code>.<br><code><a href="kernel.html">kernel()</a></code>: Kernel density estimator of points.<br><code><a href="complete.cases.html">missing.cases()</a></code>: Find rows of a <code>GVector</code>'s data table that have at least <code>NA</code> in them<br><code>names&lt;-</code>: Assign names to columns of a <code>GVector</code>s data table<br><code><a href="project.html">project()</a></code>: Change coordinate reference system<br><code><a href="rasterize.html">rasterize()</a></code>: Convert a <code>GVector</code> to a <code>GRaster</code><br><code><a href="rbind.html">rbind()</a></code>: Combine <code>GVectors</code><br><code><a href="simplifyGeom.html">simplifyGeom()</a></code>: Remove vertices<br><code><a href="smoothGeom.html">smoothGeom()</a></code>: Remove "angular" aspects of features<br><code><a href="vect.html">st_as_sf()</a></code>: Convert a <code>GVector</code> to a <code>sf</code> vector<br><code><a href="buffer.html">st_buffer()</a></code>: Create a polygon around/inside a <code>GVector</code><br><code><a href="head.html">tail()</a></code>: Last rows of a <code>GVector</code>'s data table<br><code><a href="thinPoints.html">thinPoints()</a></code>: Reduce number of points in same raster cell<br><code><a href="union.html">union()</a></code> or <code>+</code>: Combine two <code>GVector</code>s<br><code><a href="xor.html">xor()</a></code> or <code>/``: Select parts of polygons not shared by two </code>GVector`s<br></p>
-</div>
+<p>The <code><a href="subset_single_bracket.html">[</a></code> operator can be used to subset geometries of a <code>GVector</code>.
+The <a href="subset_dollar.html">$</a> and <code><a href="subset_double_square_brackets.html">[[</a></code> operators can be used to get columns of a <code>GVector</code>'s data table.
+The <code>$&lt;-</code> operator can be used to replace specific columns of a <code>GVector</code>'s data table or to add columns.
+<code>addTable&lt;-</code>: Add a data table to a <code>GVector</code></p><ul><li><p><code><a href="aggregate.html">aggregate()</a></code>: Combine <code>GVector</code> geometries</p></li>
+<li><p><code><a href="as.data.frame.html">as.data.frame()</a></code>: Convert a <code>GVector</code>'s attribute table to a <code>data.frame</code></p></li>
+<li><p><code><a href="as.data.frame.html">as.data.table()</a></code>: Convert a <code>GVector</code>'s attribute table to a <code>data.table</code></p></li>
+<li><p><code><a href="as.points.html">as.points()</a></code>: Extract vertex coordinates from a "lines" or "polygons" <code>GVector</code></p></li>
+<li><p><code><a href="buffer.html">buffer()</a></code>: Create a polygon around/inside a <code>GVector</code></p></li>
+<li><p><code><a href="clusterPoints.html">clusterPoints()</a></code>: Identify clusters of points</p></li>
+<li><p><code><a href="colbind.html">colbind()</a></code>: Add columns to the data table of a <code>GVector</code></p></li>
+<li><p><code><a href="complete.cases.html">complete.cases()</a></code>: Find rows of a <code>GVector</code>'s data table that have no <code>NA</code>s in them</p></li>
+<li><p><code><a href="connectors.html">connectors()</a></code>: Create lines connecting nearest features of two <code>GVector</code>s</p></li>
+<li><p><code><a href="convHull.html">convHull()</a></code>: Minimum convex hull</p></li>
+<li><p><code><a href="crds.html">crds()</a></code>: Extract coordinates of a <code>GVector</code></p></li>
+<li><p><code><a href="crop.html">crop()</a></code>: Remove parts of a <code>GVector</code></p></li>
+<li><p><code><a href="delaunay.html">delaunay()</a></code>: Delaunay triangulation</p></li>
+<li><p><code><a href="disagg.html">disagg()</a></code>: Separate multipart geometries into singlepart geometries</p></li>
+<li><p><code><a href="distance.html">distance()</a></code>: Distance between geometries in two <code>GVector</code>, or from a <code>GVector</code> to cells of a <code>GRaster</code></p></li>
+<li><p><code><a href="addTable.html">dropTable()</a></code>: Remove the data table from a <code>GVector</code></p></li>
+<li><p><code><a href="erase.html">erase()</a></code> or <code>-</code>: Remove part of a <code>GVector</code> that overlaps with another</p></li>
+<li><p><code><a href="expanse.html">expanse()</a></code>: Area of polygons or length of lines</p></li>
+<li><p><code><a href="extract.html">extract()</a></code>: Extract values from a <code>GVector</code> at specific points</p></li>
+<li><p><code><a href="grid.html">grid()</a></code>: Create a grid <code>GVector</code></p></li>
+<li><p><code><a href="head.html">head()</a></code>: First rows of a <code>GVector</code>'s data table</p></li>
+<li><p><code><a href="hexagons.html">hexagons()</a></code>: Create a hexagonal grid</p></li>
+<li><p><code><a href="interpIDW.html">interpIDW()</a></code>: Interpolate values at points to a <code>GRaster</code> using inverse-distance weighting</p></li>
+<li><p><code><a href="interpSplines.html">interpSplines()</a></code>: Interpolate values at points to a <code>GRaster</code> using splines</p></li>
+<li><p><code><a href="intersect.html">intersect()</a></code> or <code>*</code>: Intersection of two <code>GVectors</code>.</p></li>
+<li><p><code><a href="kernel.html">kernel()</a></code>: Kernel density estimator of points.</p></li>
+<li><p><code><a href="complete.cases.html">missing.cases()</a></code>: Find rows of a <code>GVector</code>'s data table that have at least <code>NA</code> in them
+<code>names&lt;-</code>: Assign names to columns of a <code>GVector</code>s data table</p></li>
+<li><p><code><a href="project.html">project()</a></code>: Change coordinate reference system</p></li>
+<li><p><code><a href="rasterize.html">rasterize()</a></code>: Convert a <code>GVector</code> to a <code>GRaster</code></p></li>
+<li><p><code><a href="rbind.html">rbind()</a></code>: Combine <code>GVectors</code></p></li>
+<li><p><code><a href="simplifyGeom.html">simplifyGeom()</a></code>: Remove vertices</p></li>
+<li><p><code><a href="smoothGeom.html">smoothGeom()</a></code>: Remove "angular" aspects of features</p></li>
+<li><p><code><a href="vect.html">st_as_sf()</a></code>: Convert a <code>GVector</code> to a <code>sf</code> vector</p></li>
+<li><p><code><a href="buffer.html">st_buffer()</a></code>: Create a polygon around/inside a <code>GVector</code></p></li>
+<li><p><code><a href="head.html">tail()</a></code>: Last rows of a <code>GVector</code>'s data table</p></li>
+<li><p><code><a href="thinPoints.html">thinPoints()</a></code>: Reduce number of points in same raster cell</p></li>
+<li><p><code><a href="union.html">union()</a></code> or <code>+</code>: Combine two <code>GVector</code>s</p></li>
+<li><p><code><a href="xor.html">xor()</a></code> or <code>/``: Select parts of polygons not shared by two </code>GVector`s</p></li>
+</ul></div>
 
 <div class="section">
 <h3 id="functions-for-fixing-issues-with-gvectors">Functions for fixing issues with <code>GVector</code>s<a class="anchor" aria-label="anchor" href="#functions-for-fixing-issues-with-gvectors"></a></h3>
 
 
-<p>(See also tools that can be used during <code>GVector</code> creation/loading in <code><a href="fast.html">fast()</a></code>.)
-<code><a href="breakPolys.html">breakPolys()</a></code>: Break topologically clean areas<br><code><a href="fillHoles.html">fillHoles()</a></code>: Fill "holes" of a <code>GVector</code><br><code><a href="breakPolys.html">fixBridges()</a></code>: Change "bridges" to "islands"<br><code><a href="breakPolys.html">fixDangles()</a></code>: Change "dangles" hanging off boundaries to lines<br><code><a href="breakPolys.html">fixLines()</a></code>: Break lines at intersections and lines that form closed loops<br><code><a href="breakPolys.html">remove0()</a></code>: Remove all boundaries and lines with a length of 0<br><code><a href="breakPolys.html">removeAngles()</a></code>: Collapse lines that diverge at an angle that is computationally equivalent to 0<br><code><a href="breakPolys.html">removeBridges()</a></code>: Remove "bridges" to "islands"<br><code><a href="breakPolys.html">removeDangles()</a></code>: Remove "dangling" lines<br><code><a href="breakPolys.html">removeDupCentroids()</a></code>: Remove duplicated area centroids<br><code><a href="breakPolys.html">removeDups()</a></code>: Remove duplicated features and area centroids<br><code><a href="breakPolys.html">removeSmallPolys()</a></code>: Remove small polygons<br><code><a href="breakPolys.html">snap()</a></code>: Snap lines/boundaries to each other<br></p>
-</div>
+<p>(See also tools that can be used during <code>GVector</code> creation/loading in <code><a href="fast.html">fast()</a></code>.)</p><ul><li><p><code><a href="breakPolys.html">breakPolys()</a></code>: Break topologically clean areas</p></li>
+<li><p><code><a href="fillHoles.html">fillHoles()</a></code>: Fill "holes" of a <code>GVector</code></p></li>
+<li><p><code><a href="breakPolys.html">fixBridges()</a></code>: Change "bridges" to "islands"</p></li>
+<li><p><code><a href="breakPolys.html">fixDangles()</a></code>: Change "dangles" hanging off boundaries to lines</p></li>
+<li><p><code><a href="breakPolys.html">fixLines()</a></code>: Break lines at intersections and lines that form closed loops</p></li>
+<li><p><code><a href="breakPolys.html">remove0()</a></code>: Remove all boundaries and lines with a length of 0</p></li>
+<li><p><code><a href="breakPolys.html">removeAngles()</a></code>: Collapse lines that diverge at an angle that is computationally equivalent to 0</p></li>
+<li><p><code><a href="breakPolys.html">removeBridges()</a></code>: Remove "bridges" to "islands"</p></li>
+<li><p><code><a href="breakPolys.html">removeDangles()</a></code>: Remove "dangling" lines</p></li>
+<li><p><code><a href="breakPolys.html">removeDupCentroids()</a></code>: Remove duplicated area centroids</p></li>
+<li><p><code><a href="breakPolys.html">removeDups()</a></code>: Remove duplicated features and area centroids</p></li>
+<li><p><code><a href="breakPolys.html">removeSmallPolys()</a></code>: Remove small polygons</p></li>
+<li><p><code><a href="breakPolys.html">snap()</a></code>: Snap lines/boundaries to each other</p></li>
+</ul></div>
 
 <div class="section">
 <h3 id="converting-between-data-types">Converting between data types<a class="anchor" aria-label="anchor" href="#converting-between-data-types"></a></h3>
 
-
-<p><code><a href="as.contour.html">as.contour()</a></code>: Convert a <code>GRaster</code> to a <code>GVector</code> representing contour lines<br><code><a href="as.int.html">as.doub()</a></code>: Convert a <code>GRaster</code> to a double-floating point raster (<strong>GRASS</strong> data type <code>DCELL</code>)<br><code><a href="as.data.frame.html">as.data.frame()</a></code>: Convert <code>GVector</code> to a <code>data.frame</code><br><code><a href="as.data.frame.html">as.data.table()</a></code>: Convert <code>GVector</code> to a <code>data.table</code><br><code><a href="as.int.html">as.float()</a></code>: Convert a <code>GRaster</code> to a floating-point raster (<strong>GRASS</strong> data type <code>FCELL</code>)<br><code><a href="as.int.html">as.int()</a></code>: Convert a <code>GRaster</code> to an integer raster (<strong>GRASS</strong> data type <code>CELL</code>)<br><code><a href="as.points.html">as.points()</a></code>, <code><a href="as.lines.html">as.lines()</a></code>, and <code><a href="as.polygons.html">as.polygons()</a></code>: Convert a <code>GRaster</code> to a <code>GVector</code><br><code><a href="fast.html">fast()</a></code>: Convert a <code>SpatRaster</code> to a <code>GRaster</code>; a <code>SpatVector</code>, <code>sf</code> vector, numeric vector, <code>matrix</code>, <code>data.frame</code>, or <code>data.table</code> to a <code>GVector</code>; or load a vector or raster from a file<br><code><a href="levels.html">categories()</a></code> and levels&lt;-: Convert an integer raster to a categorical ("factor") raster.
-<code><a href="rast.html">rast()</a></code>: Convert a <code>GRaster</code> to a <code>SpatRaster</code><br><code><a href="rasterize.html">rasterize()</a></code>: Convert a <code>GVector</code> to a <code>GRaster</code><br><code><a href="vect.html">st_as_sf()</a></code>: Convert a <code>GVector</code> to a <code>sf</code> vector<br><code><a href="vect.html">vect()</a></code>: Convert a <code>GVector</code> to a <code>SpatVector</code><br></p>
-</div>
+<ul><li><p><code><a href="as.contour.html">as.contour()</a></code>: Convert a <code>GRaster</code> to a <code>GVector</code> representing contour lines</p></li>
+<li><p><code><a href="as.int.html">as.doub()</a></code>: Convert a <code>GRaster</code> to a double-floating point raster (<strong>GRASS</strong> data type <code>DCELL</code>)</p></li>
+<li><p><code><a href="as.data.frame.html">as.data.frame()</a></code>: Convert <code>GVector</code> to a <code>data.frame</code></p></li>
+<li><p><code><a href="as.data.frame.html">as.data.table()</a></code>: Convert <code>GVector</code> to a <code>data.table</code></p></li>
+<li><p><code><a href="as.int.html">as.float()</a></code>: Convert a <code>GRaster</code> to a floating-point raster (<strong>GRASS</strong> data type <code>FCELL</code>)</p></li>
+<li><p><code><a href="as.int.html">as.int()</a></code>: Convert a <code>GRaster</code> to an integer raster (<strong>GRASS</strong> data type <code>CELL</code>)</p></li>
+<li><p><code><a href="as.points.html">as.points()</a></code>, <code><a href="as.lines.html">as.lines()</a></code>, and <code><a href="as.polygons.html">as.polygons()</a></code>: Convert a <code>GRaster</code> to a <code>GVector</code></p></li>
+<li><p><code><a href="fast.html">fast()</a></code>: Convert a <code>SpatRaster</code> to a <code>GRaster</code>; a <code>SpatVector</code>, <code>sf</code> vector, numeric vector, <code>matrix</code>, <code>data.frame</code>, or <code>data.table</code> to a <code>GVector</code>; or load a vector or raster from a file</p></li>
+<li><p><code><a href="levels.html">categories()</a></code> and levels&lt;-: Convert an integer raster to a categorical ("factor") raster.</p></li>
+<li><p><code><a href="rast.html">rast()</a></code>: Convert a <code>GRaster</code> to a <code>SpatRaster</code></p></li>
+<li><p><code><a href="rasterize.html">rasterize()</a></code>: Convert a <code>GVector</code> to a <code>GRaster</code></p></li>
+<li><p><code><a href="vect.html">st_as_sf()</a></code>: Convert a <code>GVector</code> to a <code>sf</code> vector</p></li>
+<li><p><code><a href="vect.html">vect()</a></code>: Convert a <code>GVector</code> to a <code>SpatVector</code></p></li>
+</ul></div>
 
 <div class="section">
 <h3 id="general-purpose-functions">General purpose functions<a class="anchor" aria-label="anchor" href="#general-purpose-functions"></a></h3>
 
-
-<p><code><a href="compareGeom.html">compareGeom()</a></code>: Determine if geographic metadata is same between <code>GRaster</code>s and/or <code>GVector</code>s<br><code><a href="dropRows.html">dropRows()</a></code>: Remove rows from a <code>data.frame</code> or <code>data.table</code><br><code><a href="grassInfo.html">grassInfo()</a></code>: <strong>GRASS</strong> version and citation<br><code><a href="mow.html">mow()</a></code>: Remove unused rasters and vectors from the <strong>GRASS</strong> cache<br><code><a href="reorient.html">reorient()</a></code>: Convert degrees between 'north-orientation' and 'east orientation'<br><code><a href="replaceNAs.html">replaceNAs()</a></code>: Replace <code>NA</code>s in columns of a <code>data.table</code> or <code>data.frame</code>, or in a vector<br><code><a href="seqToSQL.html">seqToSQL()</a></code>: Format a numeric series into an SQL value call<br><code><a href="update.html">update()</a></code>: Refresh metadata in a <code>GRaster</code> or <code>GVector</code> object<br></p>
-</div>
+<ul><li><p><code><a href="compareGeom.html">compareGeom()</a></code>: Determine if geographic metadata is same between <code>GRaster</code>s and/or <code>GVector</code>s</p></li>
+<li><p><code><a href="dropRows.html">dropRows()</a></code>: Remove rows from a <code>data.frame</code> or <code>data.table</code></p></li>
+<li><p><code><a href="grassInfo.html">grassInfo()</a></code>: <strong>GRASS</strong> version and citation</p></li>
+<li><p><code><a href="mow.html">mow()</a></code>: Remove unused rasters and vectors from the <strong>GRASS</strong> cache</p></li>
+<li><p><code><a href="reorient.html">reorient()</a></code>: Convert degrees between 'north-orientation' and 'east orientation'</p></li>
+<li><p><code><a href="replaceNAs.html">replaceNAs()</a></code>: Replace <code>NA</code>s in columns of a <code>data.table</code> or <code>data.frame</code>, or in a vector</p></li>
+<li><p><code><a href="seqToSQL.html">seqToSQL()</a></code>: Format a numeric series into an SQL value call</p></li>
+<li><p><code><a href="update.html">update()</a></code>: Refresh metadata in a <code>GRaster</code> or <code>GVector</code> object</p></li>
+</ul></div>
 
 <div class="section">
 <h3 id="data-objects">Data objects<a class="anchor" aria-label="anchor" href="#data-objects"></a></h3>
 
-
-<p><a href="appFunsTable.html">appFunsTable</a> (see also <code><a href="app.html">appFuns()</a></code>): Functions usable by the <code><a href="https://rspatial.github.io/terra/reference/app.html" class="external-link">app()</a></code> function<br><a href="madChelsa.html">madChelsa</a>: Climate rasters for of a portion of eastern Madagascar<br><a href="madCoast0.html">madCoast0</a>, <a href="madCoast4.html">madCoast4</a>, and <a href="madCoast.html">madCoast</a>: Borders of an eastern portion of Madagascar<br><a href="madCover.html">madCover</a>: Land cover raster<br><a href="madCoverCats.html">madCoverCats</a>: Table of land cover classes<br><a href="madDypsis.html">madDypsis</a>: Specimens records of species in the genus <em>Dypsis</em><br><a href="madElev.html">madElev</a>: Elevation raster<br><a href="madForest2000.html">madForest2000</a> and <a href="madForest2014.html">madForest2014</a>: Forest cover in 2000 and 2014<br><a href="madLANDSAT.html">madLANDSAT</a>: Surface reflectance in 2023<br><a href="madPpt.html">madPpt</a>, <a href="madTmin.html">madTmin</a>, <a href="madTmax.html">madTmax</a>: Rasters of mean monthly precipitation, and minimum and maximum temperature<br><a href="madRivers.html">madRivers</a>: Rivers vector<br><a href="vegIndices.html">vegIndices</a>: Vegetation indices that can be calculated using <code><a href="vegIndex.html">vegIndex()</a></code>.</p>
-</div>
+<ul><li><p><a href="appFunsTable.html">appFunsTable</a> (see also <code><a href="app.html">appFuns()</a></code>): Functions usable by the <code><a href="https://rspatial.github.io/terra/reference/app.html" class="external-link">app()</a></code> function</p></li>
+<li><p><a href="madChelsa.html">madChelsa</a>: Climate rasters for of a portion of eastern Madagascar</p></li>
+<li><p><a href="madCoast0.html">madCoast0</a>, <a href="madCoast4.html">madCoast4</a>, and <a href="madCoast.html">madCoast</a>: Borders of an eastern portion of Madagascar</p></li>
+<li><p><a href="madCover.html">madCover</a>: Land cover raster</p></li>
+<li><p><a href="madCoverCats.html">madCoverCats</a>: Table of land cover classes</p></li>
+<li><p><a href="madDypsis.html">madDypsis</a>: Specimens records of species in the genus <em>Dypsis</em></p></li>
+<li><p><a href="madElev.html">madElev</a>: Elevation raster</p></li>
+<li><p><a href="madForest2000.html">madForest2000</a> and <a href="madForest2014.html">madForest2014</a>: Forest cover in 2000 and 2014</p></li>
+<li><p><a href="madLANDSAT.html">madLANDSAT</a>: Surface reflectance in 2023</p></li>
+<li><p><a href="madPpt.html">madPpt</a>, <a href="madTmin.html">madTmin</a>, <a href="madTmax.html">madTmax</a>: Rasters of mean monthly precipitation, and minimum and maximum temperature</p></li>
+<li><p><a href="madRivers.html">madRivers</a>: Rivers vector</p></li>
+<li><p><a href="vegIndices.html">vegIndices</a>: Vegetation indices that can be calculated using <code><a href="vegIndex.html">vegIndex()</a></code>.</p></li>
+</ul></div>
 
 <div class="section">
 <h3 id="esoteric-tutorials-and-arcane-notes">Esoteric tutorials and arcane notes<a class="anchor" aria-label="anchor" href="#esoteric-tutorials-and-arcane-notes"></a></h3>
 
 
-<p>Comparisons between <code>GRegion</code>s can be performed using the <code>==</code> and <code>!=</code> operators.<br>
-Tutorial on <strong>GRASS</strong> <a href="tutorial_regions.html">regions</a><br>
-Tutorial on <strong>GRASS</strong> <a href="tutorial_locations_mapsets.html">projects/locations and mapsets</a><br><a href="tutorial_hidden_functions.html">Hidden functions</a> of <strong>fasterRaster</strong>: Useful for power users and developers<br><code><a href="grassStarted.html">grassStarted()</a></code>: Has a connection <strong>GRASS</strong> been made within the current <strong>R</strong> session?<br></p>
-</div>
+<p>Comparisons between <code>GRegion</code>s can be performed using the <code>==</code> and <code>!=</code> operators.
+Vignette on <strong>GRASS</strong> "projects/locations" and "mapsets": <code>vignette("projects_mapsets", package = "fasterRaster"</code>)
+Vignette on <strong>GRASS</strong> "regions": <code><a href="../articles/regions.html">vignette("regions", package = "fasterRaster")</a></code>
+Vignette on <strong>fasteRaster</strong> hidden functions: <code><a href="../articles/hidden_functions.html">vignette("hidden_functions", package = "fasterRaster")</a></code></p><ul><li><p><code><a href="grassStarted.html">grassStarted()</a></code>: Has a connection <strong>GRASS</strong> been made within the current <strong>R</strong> session?</p></li>
+</ul></div>
 
     </div>
 
@@ -870,7 +1151,7 @@ Tutorial on <strong>GRASS</strong> <a href="tutorial_locations_mapsets.html">pro
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
     <div class="dont-index"><p>Useful links:</p><ul><li><p><a href="http://www.earthSkySea.org" class="external-link">http://www.earthSkySea.org</a></p></li>
 <li><p><a href="https://adamlilith.github.io/fasterRaster/" class="external-link">https://adamlilith.github.io/fasterRaster/</a></p></li>
-<li><p>Report bugs at <a href="https://github.com/adamlilith/fasterRaster/issues" class="external-link">https://github.com/adamlilith/fasterRaster/issues</a></p></li>
+<li><p>Report bugs at <a href="https://github.com/adamlilith/fasterRaster/issues">https://github.com/adamlilith/fasterRaster/issues</a></p></li>
 </ul></div>
     </div>
     <div class="section level2">

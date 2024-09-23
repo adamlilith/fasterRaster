@@ -11,7 +11,7 @@ as.float(): Coerce values to floating-point precision.
 as.doub(): Coerce values to double-floating point precision.
 Integer rasters can be converted categorical rasters by adding "levels" tables with levels&amp;lt;- or categories().
 
-'><meta property="og:image" content="/logo.png"></head><body>
+'><meta property="og:image" content="https://github.com/adamlilith/fasterRaster/logo.png"></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
@@ -19,7 +19,7 @@ Integer rasters can be converted categorical rasters by adding "levels" tables w
 
     <a class="navbar-brand me-2" href="../index.html">fasterRaster</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">8.3.0.7024</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">8.3.0.7026</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -27,11 +27,19 @@ Integer rasters can be converted categorical rasters by adding "levels" tables w
     </button>
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
-      <ul class="navbar-nav me-auto"><li class="active nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
+      <ul class="navbar-nav me-auto"><li class="nav-item"><a class="nav-link" href="../articles/fasterRaster.html">Get started</a></li>
+<li class="active nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
+<li class="nav-item dropdown">
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/GRasters.html">Types of GRasters</a></li>
+    <li><a class="dropdown-item" href="../articles/faster_fasterRaster.html">Making fasterRaster faster</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><a class="dropdown-item" href="../articles/index.html">More articles...</a></li>
+  </ul></li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json"></form></li>
-<li class="nav-item"><a class="external-link nav-link" href="https://github.com/adamlilith/fasterRaster/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
+<li class="nav-item"><a class="nav-link" href="https://github.com/adamlilith/fasterRaster/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-lightswitch" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true" aria-label="Light switch"><span class="fa fa-sun"></span></button>
   <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdown-lightswitch"><li><button class="dropdown-item" data-bs-theme-value="light"><span class="fa fa-sun"></span> Light</button></li>
@@ -46,12 +54,12 @@ Integer rasters can be converted categorical rasters by adding "levels" tables w
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Coerce raster to integer, float, or double precision</h1>
-      <small class="dont-index">Source: <a href="https://github.com/adamlilith/fasterRaster/blob/master/R/as.int.r" class="external-link"><code>R/as.int.r</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/adamlilith/fasterRaster/blob/master/R/as.int.r"><code>R/as.int.r</code></a></small>
       <div class="d-none name"><code>as.int.Rd</code></div>
     </div>
 
     <div class="ref-description section level2">
-    <p>In <strong>fasterRaster</strong>, rasters can have three <a href="tutorial_raster_data_types.html">data types</a>: "factor" (categorical rasters), "integer" (integers), "float" (floating point values, accurate to 6th to 9th decimal places), and "double" (double-precision values, accurate to the 15th to 17th decimal places). The type of raster can be checked with:</p><ul><li><p><code>as.int()</code>: Coerce values to integers (<strong>GRASS</strong> type <code>CELL</code>).</p></li>
+    <p>In <strong>fasterRaster</strong>, rasters can have three data types: "factor" (categorical rasters), "integer" (integers), "float" (floating point values, accurate to 6th to 9th decimal places), and "double" (double-precision values, accurate to the 15th to 17th decimal places). The type of raster can be checked with:</p><ul><li><p><code>as.int()</code>: Coerce values to integers (<strong>GRASS</strong> type <code>CELL</code>).</p></li>
 <li><p><code>as.float()</code>: Coerce values to floating-point precision.</p></li>
 <li><p><code>as.doub()</code>: Coerce values to double-floating point precision.</p></li>
 <li><p>Integer rasters can be converted categorical rasters by adding "levels" tables with <code>levels&lt;-</code> or <code><a href="levels.html">categories()</a></code>.</p></li>
@@ -83,7 +91,7 @@ Integer rasters can be converted categorical rasters by adding "levels" tables w
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p><code><a href="datatype.html">datatype()</a></code>, <code><a href="https://rspatial.github.io/terra/reference/datatype.html" class="external-link">terra::datatype()</a></code>, <code><a href="is.int.html">is.int()</a></code>, <code><a href="is.int.html">is.float()</a></code>, <code><a href="is.int.html">is.doub()</a></code>, <code>levels&lt;-</code>, <a href="tutorial_raster_data_types.html">raster data types</a> in <strong>fasterRaster</strong></p></div>
+    <div class="dont-index"><p><code><a href="datatype.html">datatype()</a></code>, <code><a href="https://rspatial.github.io/terra/reference/datatype.html" class="external-link">terra::datatype()</a></code>, <code><a href="is.int.html">is.int()</a></code>, <code><a href="is.int.html">is.float()</a></code>, <code><a href="is.int.html">is.doub()</a></code>, <code>levels&lt;-</code>, <code><a href="../articles/GRasters.html">vignette("GRasters", package = "fasterRaster")</a></code></p></div>
     </div>
 
     <div class="section level2">

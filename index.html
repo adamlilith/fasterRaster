@@ -5,15 +5,15 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>Faster Raster and Spatial Vector Processing Using GRASS GIS • fasterRaster</title>
+<title>Faster Raster and Spatial Vector Processing Using 'GRASS GIS' • fasterRaster</title>
 <script src="lightswitch.js"></script><script src="deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
 <script src="deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="deps/font-awesome-6.4.2/css/all.min.css" rel="stylesheet">
 <link href="deps/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet">
-<script src="deps/headroom-0.11.0/headroom.min.js"></script><script src="deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="deps/search-1.0.0/fuse.min.js"></script><script src="deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="Faster Raster and Spatial Vector Processing Using GRASS GIS">
-<meta name="description" content="Processing of large-in-memory/large-on disk rasters and spatial vectors using GRASS GIS. Most functions in the terra package are recreated. Processing of medium-sized and smaller spatial objects will nearly always be faster using terra or sf, but for large-in-memory/ large-on-disk objects, fasterRaster may be faster. To use most of the functions, you must have the stand-alone version (not the OSGeoW4 installer version) of GRASS GIS 8.0 or higher.">
-<meta property="og:description" content="Processing of large-in-memory/large-on disk rasters and spatial vectors using GRASS GIS. Most functions in the terra package are recreated. Processing of medium-sized and smaller spatial objects will nearly always be faster using terra or sf, but for large-in-memory/ large-on-disk objects, fasterRaster may be faster. To use most of the functions, you must have the stand-alone version (not the OSGeoW4 installer version) of GRASS GIS 8.0 or higher.">
-<meta property="og:image" content="/logo.png">
+<script src="deps/headroom-0.11.0/headroom.min.js"></script><script src="deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="deps/search-1.0.0/fuse.min.js"></script><script src="deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="Faster Raster and Spatial Vector Processing Using 'GRASS GIS'">
+<meta name="description" content="Processing of large-in-memory/large-on disk rasters.">
+<meta property="og:description" content="Processing of large-in-memory/large-on disk rasters.">
+<meta property="og:image" content="https://github.com/adamlilith/fasterRaster/logo.png">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -23,7 +23,7 @@
 
     <a class="navbar-brand me-2" href="index.html">fasterRaster</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">8.3.0.7024</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">8.3.0.7026</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -32,14 +32,24 @@
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto">
+<li class="nav-item"><a class="nav-link" href="articles/fasterRaster.html">Get started</a></li>
 <li class="nav-item"><a class="nav-link" href="reference/index.html">Reference</a></li>
+<li class="nav-item dropdown">
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
+<li><a class="dropdown-item" href="articles/GRasters.html">Types of GRasters</a></li>
+    <li><a class="dropdown-item" href="articles/faster_fasterRaster.html">Making fasterRaster faster</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><a class="dropdown-item" href="articles/index.html">More articles...</a></li>
+  </ul>
+</li>
 <li class="nav-item"><a class="nav-link" href="news/index.html">Changelog</a></li>
       </ul>
 <ul class="navbar-nav">
 <li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="search.json">
 </form></li>
-<li class="nav-item"><a class="external-link nav-link" href="https://github.com/adamlilith/fasterRaster/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
+<li class="nav-item"><a class="nav-link" href="https://github.com/adamlilith/fasterRaster/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-lightswitch" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true" aria-label="Light switch"><span class="fa fa-sun"></span></button>
   <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdown-lightswitch">
@@ -88,7 +98,7 @@
 <div class="section level1">
 <h1 id="where-we-are">Where we are<a class="anchor" aria-label="anchor" href="#where-we-are"></a>
 </h1>
-<p>As of 2024/09/15, a new version of this package, <code>fasterRaster 8.3</code>, is in alpha release (i.e., near final release). There are known issues and unknown issues. If you encounter one of the latter, please file an <a href="https://github.com/adamlilith/fasterRaster/issues" class="external-link">issue</a> report.</p>
+<p>As of 2024/09/15, a new version of this package, <code>fasterRaster 8.3</code>, is in alpha release (i.e., near final release). There are known issues and unknown issues. If you encounter one of the latter, please file an <a href="https://github.com/adamlilith/fasterRaster/issues">issue</a> report.</p>
 <p><strong>Special announcement</strong>: The new <code><a href="reference/bioclims.html">bioclims()</a></code> function creates the “classic” set of BIOCLIM variables, plus an optional “extended” set. The function works on <strong>fasterRaster</strong> <code>GRaster</code>s and on <strong>terra</strong> <code>SpatRaster</code>s!</p>
 </div>
 <div class="section level1">
@@ -134,7 +144,7 @@
 <p>The <code><a href="reference/fast.html">fast()</a></code> function is the key function for loading a raster or vector into <code>fasterRaster</code> format. Rasters in this package are called <code>GRaster</code>s and vectors <code>GVector</code>s (the “G” stands for <code>GRASS</code>). We will now convert the <code>madElev</code> raster, which is a <code>SpatRaster</code> from the <code>terra</code> package, into a <code>GRaster</code>.</p>
 <pre><code><span><span class="va">elev</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/fast.html">fast</a></span><span class="op">(</span><span class="va">madElev</span><span class="op">)</span></span>
 <span><span class="va">elev</span></span></code></pre>
-<p>You should see some metadata on the <code>GRaster</code>:</p>
+<p>You will see the <code>GRaster</code>s metadata:</p>
 <pre><code>class       : GRaster
 topology    : 2D
 dimensions  : 1024, 626, NA, 1 (nrow, ncol, ndepth, nlyr)
@@ -163,7 +173,7 @@ values      : River/Stream Perennial/Permanent MANANARA   MDG Madagascar
 <p>Now, let’s add a 1000-m buffer to the rivers using <code><a href="reference/buffer.html">buffer()</a></code>. As much as possible, <code>fasterRaster</code> functions have the same names and same arguments as their counterparts in the <code>terra</code> package to help users who are familiar with that package.</p>
 <p>Note, though, that the output from <code>fasterRaster</code> is not necessarily guaranteed to be the same as output from the respective functions <code>terra</code>. This is because there are different methods to do the same thing, and the developers of <code>GRASS</code> may have chosen different methods than the developers of other GIS packages.</p>
 <pre><code><span><span class="co"># width in meters because CRS is projected</span></span>
-<span><span class="va">river_buffers</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/buffer.html">buffer</a></span><span class="op">(</span><span class="va">rivers</span>, width <span class="op">=</span> <span class="fl">1000</span>, dissolve <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre>
+<span><span class="va">river_buffers</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/buffer.html">buffer</a></span><span class="op">(</span><span class="va">rivers</span>, width <span class="op">=</span> <span class="fl">1000</span><span class="op">)</span></span></code></pre>
 <p>Now, let’s calculate the distances between the buffered areas and all cells on the raster map using <code><a href="reference/distance.html">distance()</a></code>.</p>
 <pre><code><span><span class="va">dist_to_rivers_meters</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/distance.html">distance</a></span><span class="op">(</span><span class="va">elev</span>, <span class="va">river_buffers</span><span class="op">)</span></span></code></pre>
 <p>Finally, let’s plot the output.</p>
@@ -234,8 +244,8 @@ values      : River/Stream Perennial/Permanent MANANARA   MDG Madagascar
   </main><aside class="col-md-3"><div class="links">
 <h2 data-toc-skip>Links</h2>
 <ul class="list-unstyled">
-<li><a href="https://github.com/adamlilith/fasterRaster/" class="external-link">Browse source code</a></li>
-<li><a href="https://github.com/adamlilith/fasterRaster/issues" class="external-link">Report a bug</a></li>
+<li><a href="https://github.com/adamlilith/fasterRaster/">Browse source code</a></li>
+<li><a href="https://github.com/adamlilith/fasterRaster/issues">Report a bug</a></li>
 </ul>
 </div>
 

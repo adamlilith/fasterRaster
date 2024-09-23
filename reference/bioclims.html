@@ -99,7 +99,7 @@ By default, &quot;quarter&quot; refers to any consecutive run of three months, n
 The variables are defined assuming that the input rasters represent monthly values (12 rasters for min/max temperature and precipitation), but you can also use sets of 52 rasters, representing one per week, in which case &quot;quarter&quot; would be a successive run of 3 weeks. You could also attempt 365 rasters, in which case a &quot;quarter&quot; would be a run of 3 successive days.
 BIOCLIMs 41 through 44 are added here to capture the &quot;shoulder&quot; seasons (spring and autumn) important in temperature regions. BIOCLIMs 45 through 48 are also included for consistency.
 BIOCLIMs 49 through 60 are not bioclimatic variables per se, but useful for assessing the properties of the variables that are defined based on the &quot;-est&quot; month or quarter.
-The numbering of the new BIOCLIMs was begun at 41 because BIOCLIMs 20 through 40 are taken (Kriticos et al. 2014)."><meta property="og:image" content="/logo.png"></head><body>
+The numbering of the new BIOCLIMs was begun at 41 because BIOCLIMs 20 through 40 are taken (Kriticos et al. 2014)."><meta property="og:image" content="https://github.com/adamlilith/fasterRaster/logo.png"></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
@@ -107,7 +107,7 @@ The numbering of the new BIOCLIMs was begun at 41 because BIOCLIMs 20 through 40
 
     <a class="navbar-brand me-2" href="../index.html">fasterRaster</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">8.3.0.7024</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">8.3.0.7026</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -115,11 +115,19 @@ The numbering of the new BIOCLIMs was begun at 41 because BIOCLIMs 20 through 40
     </button>
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
-      <ul class="navbar-nav me-auto"><li class="active nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
+      <ul class="navbar-nav me-auto"><li class="nav-item"><a class="nav-link" href="../articles/fasterRaster.html">Get started</a></li>
+<li class="active nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
+<li class="nav-item dropdown">
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/GRasters.html">Types of GRasters</a></li>
+    <li><a class="dropdown-item" href="../articles/faster_fasterRaster.html">Making fasterRaster faster</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><a class="dropdown-item" href="../articles/index.html">More articles...</a></li>
+  </ul></li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json"></form></li>
-<li class="nav-item"><a class="external-link nav-link" href="https://github.com/adamlilith/fasterRaster/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
+<li class="nav-item"><a class="nav-link" href="https://github.com/adamlilith/fasterRaster/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-lightswitch" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true" aria-label="Light switch"><span class="fa fa-sun"></span></button>
   <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdown-lightswitch"><li><button class="dropdown-item" data-bs-theme-value="light"><span class="fa fa-sun"></span> Light</button></li>
@@ -134,7 +142,7 @@ The numbering of the new BIOCLIMs was begun at 41 because BIOCLIMs 20 through 40
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>BIOCLIM rasters</h1>
-      <small class="dont-index">Source: <a href="https://github.com/adamlilith/fasterRaster/blob/master/R/bioclims_GRaster.r" class="external-link"><code>R/bioclims_GRaster.r</code></a>, <a href="https://github.com/adamlilith/fasterRaster/blob/master/R/bioclims_SpatRaster.r" class="external-link"><code>R/bioclims_SpatRaster.r</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/adamlilith/fasterRaster/blob/master/R/bioclims_GRaster.r"><code>R/bioclims_GRaster.r</code></a>, <a href="https://github.com/adamlilith/fasterRaster/blob/master/R/bioclims_SpatRaster.r"><code>R/bioclims_SpatRaster.r</code></a></small>
       <div class="d-none name"><code>bioclims.Rd</code></div>
     </div>
 
@@ -210,7 +218,8 @@ The numbering of the new BIOCLIMs was begun at 41 because BIOCLIMs 20 through 40
 <span>  bios <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  sample <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  quarter <span class="op">=</span> <span class="fl">3</span>,</span>
-<span>  pptDelta <span class="op">=</span> <span class="fl">1</span></span>
+<span>  pptDelta <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  verbose <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -290,7 +299,7 @@ The numbering of the new BIOCLIMs was begun at 41 because BIOCLIMs 20 through 40
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Takes longer to run compared to SpatRaster version for small rasters, so</span></span></span>
 <span class="r-in"><span><span class="co"># just calculate select BIOCLIMs:</span></span></span>
-<span class="r-in"><span><span class="va">bc</span> <span class="op">&lt;-</span> <span class="fu">bioclims</span><span class="op">(</span><span class="va">ppt</span>, <span class="va">tmin</span>, <span class="va">tmax</span>, bios <span class="op">=</span> <span class="fu"><a href="c.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">5</span>, <span class="fl">6</span>, <span class="fl">12</span>, <span class="fl">15</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">bc</span> <span class="op">&lt;-</span> <span class="fu">bioclims</span><span class="op">(</span><span class="va">ppt</span>, <span class="va">tmin</span>, <span class="va">tmax</span>, bios <span class="op">=</span> <span class="fu"><a href="c.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">5</span>, <span class="fl">6</span>, <span class="fl">12</span>, <span class="fl">15</span><span class="op">)</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">bc</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="plot.html">plot</a></span><span class="op">(</span><span class="va">bc</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
