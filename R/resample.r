@@ -165,7 +165,7 @@ methods::setMethod(
 				memory = faster("memory"),
 				flags = c(.quiet(), "overwrite")
 			)
-			if (versionNumber >= 8.3) args$nprocs <- faster("cores")
+			if (versionNumber >= 8.4) args$nprocs <- faster("cores")
 			do.call(rgrass::execGRASS, args = args)
 
 		}
@@ -181,6 +181,7 @@ methods::setMethod(
 				memory = faster("memory"),
 				flags = c(.quiet(), "overwrite")
 			)
+			# nprocs became available with GRASS eight point three
 			if (versionNumber >= 8.3) args$nprocs <- faster("cores")
 			do.call(rgrass::execGRASS, args = args)
 
@@ -197,6 +198,7 @@ methods::setMethod(
 				memory = faster("memory"),
 				flags = c(.quiet(), "overwrite")
 			)
+			# nprocs became available with GRASS eight point three
 			if (versionNumber > 8.3) args$nprocs <- faster("cores")
 			do.call(rgrass::execGRASS, args = args)
 
