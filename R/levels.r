@@ -112,8 +112,8 @@ methods::setMethod(
 	signature = c(x = "GRaster"),
 	function(x, layer = 1, value, active = 1) {
 
-	layer <- NULL # obviates check(): "no visible binding for global variable `layer`"
-	layer <- .layerIndex(layer, x, recycle = TRUE)
+	# layer <- NULL # obviates check(): "no visible binding for global variable `layer`"
+	layer <- .layerIndex(layer = layer, x, recycle = TRUE)
 
 	if (!inherits(value, "list")) value <- list(value)
 
@@ -150,7 +150,7 @@ methods::setMethod(
 
 	for (i in layer) {
 		x@levels[[i]] <- value[[i]]
-		x@activeCat[i] <- as.integer(active)
+		x@activeCat[i] <- as.integer(active + 1L)
 	}
 	methods::validObject(x)
 	x
