@@ -122,7 +122,7 @@ methods::setMethod(
 				intern = TRUE
 			)
 
-			if (versionNumber >= 8.3) args$nprocs <- faster("cores")
+			if (versionNumber >= 8.4) args$nprocs <- faster("cores")
 			if (any(fun == "median")) args$flags <- c(args$flags, "e")
 
 			info <- do.call(rgrass::execGRASS, args)
@@ -280,7 +280,7 @@ methods::setMethod(
 						intern = TRUE
 					)
 
-					if (versionNumber >= 8.3) args$nprocs <- faster("cores")
+					if (versionNumber >= 8.4) args$nprocs <- faster("cores")
 
 					thisInfo <- do.call(rgrass::execGRASS, args = args)
 					if (faster("clean")) on.exit(.rm(srcSS, type = "raster", warn = FALSE), add = TRUE)
@@ -331,7 +331,7 @@ methods::setMethod(
 						intern = TRUE
 					)
 
-					if (grassInfo("versionNumber") >= 8.3) args$nprocs <- faster("cores")
+					if (grassInfo("versionNumber") >= 8.4) args$nprocs <- faster("cores")
 
 					thisInfo <- do.call(rgrass::execGRASS, args = args)
 					if (faster("clean")) on.exit(.rm(srcSS, type = "raster", warn = FALSE), add = TRUE)
