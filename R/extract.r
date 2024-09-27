@@ -38,6 +38,8 @@
 #'
 #' @param verbose Logical: If `TRUE`, display progress (will only function when extracting from points on a `GRaster` when the number of `GRaster`s is large).
 #'
+#' @param ... Arguments to pass to [project()]. This is used only if extracting from a `GRaster` at locations specified by a `GVector`, and they have a different coordinate reference system. In this case, users should specify the `wrap` argument to [project()].
+#'
 #' @returns A `data.frame` or `data.table`.
 #'
 #' @example man/examples/ex_extract.r
@@ -58,10 +60,27 @@ methods::setMethod(
         overlap = TRUE,
         xy = FALSE,
         cats = TRUE,
-        verbose = FALSE
+        verbose = FALSE,
+        ...
     ) {
 
     .locationRestore(x)
+
+    sameCRS <- compareGeom(x, y, stopOnError = FALSE, messages = FALSE)
+    if (!sameCRS) {
+    
+        warning("The GVector has a different coordinate reference system than the GRaster.\n  The GVector was projected to the CRS of the GRaster. If the GVector spans\n  the international date line, you may need to specify `wrap = TRUE` when\n  using this function.", immediate. = TRUE)
+
+        dots <- list(...)
+        if (any(names(dots) == "wrap")) {
+            wrap <- dots$wrap
+        } else {
+            wrap = FALSE
+        }
+        y <- project(y, x, wrap = wrap)
+
+    }
+
     compareGeom(x, y)
 
     nLayers <- nlyr(x)
