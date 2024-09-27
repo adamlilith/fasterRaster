@@ -13,6 +13,7 @@ o `.vAttachDatabase()` no longer has the `"o"` flag when calling `v.db.connect` 
 
 ### Enhanced functionality and new functions
 o `extract()` now automatically projects a `GVector` to match the CRS of a `GRaster` from which extraction is being made.  
+o `grass()` allows users to start the **GRASS** GUI.  
 
 ### Bug fixes
 o `categories()` correctly assigns active category column.  
