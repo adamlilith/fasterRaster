@@ -17,6 +17,7 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
+fig.path = 'man/figures/'
 ```
 **fasterRaster** interfaces with **GRASS GIS** to process rasters and spatial vector data. It is intended as an add-on to the **terra** and **sf** packages, and relies heavily upon them. For most rasters and vectors that are small or medium-sized in memory/disk, those packages will almost always be faster. They may also be faster for very large objects.  But when they aren't, **fasterRaster** can step in.
 
