@@ -266,6 +266,7 @@
 #' * [compareGeom()]: Determine if geographic metadata is same between `GRaster`s and/or `GVector`s
 #' * [dropRows()]: Remove rows from a `data.frame` or `data.table`
 #' * [grassInfo()]: **GRASS** version and citation
+#' * [grass()]: Start the **GRASS** GUI (not recommended for most users!!!)
 #' * [mow()]: Remove unused rasters and vectors from the **GRASS** cache
 #' * [reorient()]: Convert degrees between 'north-orientation' and 'east orientation'
 #' * [replaceNAs()]: Replace `NA`s in columns of a `data.table` or `data.frame`, or in a vector
