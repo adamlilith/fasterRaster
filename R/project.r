@@ -120,7 +120,9 @@ methods::setMethod(
 	# .message(msg = "project_raster", message = "This function can produce erroneous results if the raster crosses a pole or the international date line.")
 	
 	# imperfect catch for cases where `wrap` should be `TRUE` but is not
-	if (.projection(x) %in% c("WGS84", "NAD83", "NAD27") & !wrap) {
+	unproj <- .projection(x) %in%
+		c("Latitude-Longitude", "WGS84", "WGS 84", "NAD83", "NAD 83", "NAD27", "NAD 27")
+	if (unproj & !wrap) {
 
 		extent <- ext(x, vector = TRUE)
 		if ((extent[1L] == -180 & extent[2L] == 180) | (extent[3L] == -90 & extent[4L] == 90)) warning("This GRaster seems to wrap around the globe to meet at the international\n  date line and/or the poles. Should `wrap` be `TRUE`?")
@@ -339,10 +341,8 @@ methods::setMethod(
 			# .regionRespectsDims(x = x, y = y, align = align)
 
 		# "center" method of determining cell resolution
-		} else if (res == "center") {
-		
+		} else if (res == "center") {		
 			.regionResCenterMethod(x = x, y = y, align = align)
-		
 		}
 
 	}
@@ -362,7 +362,6 @@ methods::setMethod(
 
 		args <- list(
 			cmd = "r.proj",
-			location = .location(x),
 			mapset = .mapset(x),
 			input = sources(x)[i],
 			output = srcs[i],
@@ -370,6 +369,7 @@ methods::setMethod(
 			memory = faster("memory"),
 			flags = c(.quiet(), "overwrite")
 		)
+		args <- .addLocationProject(args, .location(x))
 
 		if (wrap) args$flags <- c(args$flags, "n")
 
@@ -409,14 +409,16 @@ methods::setMethod(
 	) {
 
 	# imperfect catch for cases where `wrap` should be `TRUE` but is not
-	if (.projection(x) %in% c("WGS84", "NAD83", "NAD27") & !wrap) {
+	unproj <- .projection(x) %in%
+		c("Latitude-Longitude", "WGS84", "WGS 84", "NAD83", "NAD 83", "NAD27", "NAD 27")
+	if (unproj & !wrap) {
 	
 		extent <- ext(x, vector = TRUE)
 		if (
 			(extent[1L] == -180 & extent[2L] == 180) |
 			(extent[3L] == -90 & extent[4L] == 90) |
 			(extent[1L] > 0 & extent[2L] < 0) |			
-			(extent[3L] > extent[4L])			
+			(extent[3L] > extent[4L]) |
 			(extent[4L] < extent[3L])			
 		) warning("This GVector seems to span the international date line and/or poles. Should `wrap` be `TRUE`?")
 	
@@ -443,15 +445,16 @@ methods::setMethod(
 	
 	args <- list(
 		cmd = "v.proj",
-		location = .location(x),
 		dbase = faster("workDir"),
 		mapset = .mapset(x),
 		input = sources(x),
 		output = src,
 		flags = c(.quiet(), "overwrite")
-	)	
+	)
+	args <- .addLocationProject(args, .location(x))
+ 
 	if (wrap) args$flags <- c(args$flags, "w") # if crosses international date line
-	if (geomtype(x, grass = TRUE) == "point") args$flags <- c(args$flags, "b") # disable topology build for points
+	# if (geomtype(x, grass = TRUE) == "point") args$flags <- c(args$flags, "b") # disable topology build for points
 	do.call(rgrass::execGRASS, args = args)
 
 	out <- .makeGVector(src, table = x@table)
