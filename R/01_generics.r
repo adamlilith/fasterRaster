@@ -147,6 +147,7 @@ methods::setGeneric(name = "fragmentation", def = function(x, ...) standardGener
 methods::setGeneric(name = "geomtype", package = "terra")
 methods::setGeneric(name = "geomorphons", def = function(x, ...) standardGeneric("geomorphons"))
 methods::setGeneric(name = "global", package = "terra")
+methods::setGeneric(name = "grass", def = function(x, ...) standardGeneric("grass"))
 methods::setGeneric(name = "grid", def = function(x, ...) standardGeneric("grid"))
 
 methods::setGeneric(name = "head", package = "utils")
