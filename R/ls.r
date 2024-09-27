@@ -14,6 +14,7 @@
 .ls <- function(type = c("rasters", "vectors", "rasters3d", "groups")) {
 
 	rov <- c("rasters", "vectors", "rasters3d", "groups")
+	type <- omnibus::pmatchSafe(type, rov, useFirst = TRUE, n = length(rov))
 	if (is.null(type)) type <- rov
 
 	# find rasters and vector
@@ -23,7 +24,7 @@
 	# failure to match
 	if (anyNA(match)) {
 
-		warning("No matches.", immediate.=TRUE)
+		warning("No matches.", immediate. = TRUE)
 		out <- NULL
 		
 	# specific match
@@ -31,7 +32,7 @@
 		
 		# rasters
 		if (any(match == 1L)) {
-			rasts <- rgrass::execGRASS("g.list", flags=.quiet(), type="raster", intern=TRUE, echoCmd=FALSE)
+			rasts <- rgrass::execGRASS("g.list", flags = .quiet(), type = "raster", intern = TRUE, echoCmd = FALSE)
 			if (length(rasts) > 0L) names(rasts) <- rep("raster", length(rasts))
 			rasts <- sort(rasts)
 		}
