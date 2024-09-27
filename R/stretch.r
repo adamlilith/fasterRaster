@@ -67,6 +67,7 @@ methods::setMethod(
                     percentile = minq * 100
                 )
 
+                # nprocs became available with GRASS eight point three
                 if (versionNumber >= 8.3) args$nprocs <- faster("cores")
 
                 info <- do.call(rgrass::execGRASS, args)
@@ -98,6 +99,7 @@ methods::setMethod(
                     percentile = maxq * 100
                 )
 
+                # nprocs became available with GRASS eight point three
                 if (versionNumber >= 8.3) args$nprocs <- faster("cores")
 
                 info <- do.call(rgrass::execGRASS, args)
