@@ -2,6 +2,7 @@
 #'
 #' @description The BIOCLIM set of bioclimatic variables were created for modeling species' geographic distributions (Booth et al. 2014). This function can create the "standard" 19 set of variables, plus several more from an "extended" set.
 #'
+#' "Classic" set of BIOCLIM variables (Booth et al. 2014):
 #' The units reported below assume that input rasters are in mm (precipitation) and deg C (temperature), and that each raster represents a month (but other time units are allowed, with corresponding changes to the temporal units assumed below).
 #'
 #' * BIO1: Mean annual temperature, calculated using monthly means (deg C)
@@ -29,22 +30,22 @@
 #' * BIO41: Temperature of the quarter following the coldest quarter (based on mean temperature; deg C)
 #' * BIO42: Temperature of the quarter following the warmest quarter (based on mean temperature; deg C)
 #' * BIO43: Precipitation of the quarter following the coldest quarter (based on mean temperature; mm)
-#' * BIO44: Precipitation of the quarter following the warmest quarter (based on mean temperature; mm)
+#' * BIO44: Precipitation of the quarter following the warmest quarter (based on mean temperature; mm)  
 #'
 #' * BIO45: Temperature of the quarter following the driest quarter (based on mean temperature; deg C)
 #' * BIO46: Temperature of the quarter following the wettest quarter (based on mean temperature; deg C)
 #' * BIO47: Precipitation of the quarter following the driest quarter (based on mean temperature; mm)
-#' * BIO48: Precipitation of the quarter following the wettest quarter (based on mean temperature; mm)
+#' * BIO48: Precipitation of the quarter following the wettest quarter (based on mean temperature; mm)  
 #'
 #' * BIO49: Hottest month (based on maximum temperature)
 #' * BIO50: Coldest month (based on minimum temperature)
 #' * BIO51: Wettest month
-#' * BIO52: Driest month
+#' * BIO52: Driest month  
 #'
 #' * BIO53: First month of the warmest quarter (based on mean temperature)
 #' * BIO54: First month of the coldest quarter (based on mean temperature)
 #' * BIO55: First month of the wettest quarter
-#' * BIO56: First month of the driest quarter
+#' * BIO56: First month of the driest quarter  
 #'
 #' * BIO57: The greatest decrease in temperature from one month to the next (deg C; always >= 0)
 #' * BIO58: The greatest increase in temperature from one month to the next (deg C; always >= 0)
@@ -59,8 +60,6 @@
 #'
 #' BIOCLIMs 49 through 60 are not bioclimatic variables per se, but useful for assessing the properties of the variables that are defined based on the "-est" month or quarter.
 #'
-#' The numbering of the new BIOCLIMs was begun at 41 because BIOCLIMs 20 through 40 are taken (Kriticos et al. 2014).
-#'
 #' @param ppt A multi-layered `GRaster` or `SpatRaster`, representing monthly/weekly/daily precipitation.
 #'
 #' @param tmin,tmax A multi-layered `GRaster` or `SpatRaster`, representing monthly/weekly/daily minimum and maximum temperature.
@@ -72,7 +71,7 @@
 #' * `NULL` (default): Calculate BIOCLIMs 1 through 19
 #' * `"*"`: Calculate all BIOCLIMs this function can calculate.
 #' * `"+"`: Calculate BIOCLIMs 41 onward.
-#' * Any combination of the above (e.g., `c(1, 12, "+")`).
+#' * Any combination of the above except `NULL` (e.g., `c(1, 12, "+")`).
 #'
 #' @param sample Logical: If `TRUE` (default), BIO4 and 15 are calculated with the sample standard deviation. If `FALSE`, then the population standard deviation is used.
 #'

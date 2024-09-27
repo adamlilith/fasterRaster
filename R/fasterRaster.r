@@ -134,7 +134,7 @@
 #' * [wetness()]: Topographic wetness index
 #' 
 #' ## Functions operating on categorical (factor) rasters
-#' \code{\link[fasterRaster]{%in%}}, and \code{\link[fasterRaster]{%notin%}}: Mask cells that match or do not match a given category
+#' * \code{\link[fasterRaster]{%in%}}, and \code{\link[fasterRaster]{%notin%}}: Mask cells that match or do not match a given category
 #' * [activeCat()] and [activeCats()]: Column(s) that defines category labels
 #' \code{\link[fasterRaster]{activeCat<-}}: Set column that defines category labels
 #' * [addCats()]: Add new columns to a "levels" table
@@ -148,8 +148,8 @@
 #' * [droplevels()]: Remove one or more levels
 #' * [freq()]: Frequency of each category across cells of a raster
 #' * [is.factor()]: Is a raster categorical?
-#' * [levels()]: "Levels" table of a categorical raster
-#' \code{\link[fasterRaster]{levels<-}}: Set "levels" table of a categorical raster
+#' * [levels()]: "Levels" table of a categorical raster  
+#' * \code{\link[fasterRaster]{levels<-}}: Set "levels" table of a categorical raster
 #' * [match()], \code{\link[fasterRaster]{%in%}}, and \code{\link[fasterRaster]{%notin%}}: Find which cells of a `GRaster` match or do not match certain category labels
 #' * [minmax()]: "Lowest" and "highest" category values of categorical rasters (when argument `levels = TRUE`)
 #' * [missing.cases()]: Find rows of a categorical `GRaster`'s "levels" table that have at least one `NA` in them
@@ -163,7 +163,7 @@
 #' * [plotRGB()]: Display a multispectral `GRaster` using red, blue, green, and alpha channels
 #' * [vegIndex()]: Vegetation indices from surface reflectance
 #'
-#' ### Functions that operate on **terra** `SpatRaster`s
+#' ## Functions that operate on **terra** `SpatRaster`s
 #' * [bioclims()]: BIOCLIM rasters (classic set and extended set)
 #' * [fragmentation()]: Landscape fragmentation class from Riitters et al. (2020)
 #'
@@ -187,10 +187,10 @@
 #' * [zext()]: Vertical extent
 #'
 #' ## Functions that operate on or create `GVector`s
-#' The \code{\link[fasterRaster]{[}} operator can be used to subset geometries of a `GVector`.
-#' The [$] and \code{\link[fasterRaster]{[[}} operators can be used to get columns of a `GVector`'s data table.
-#' The \code{\link[fasterRaster]{$<-}} operator can be used to replace specific columns of a `GVector`'s data table or to add columns.
-#' \code{\link[fasterRaster]{addTable<-}}: Add a data table to a `GVector`
+#' * The \code{\link[fasterRaster]{[}} operator can be used to subset geometries of a `GVector`.
+#' * The [$] and \code{\link[fasterRaster]{[[}} operators can be used to get columns of a `GVector`'s data table.
+#' * The \code{\link[fasterRaster]{$<-}} operator can be used to replace specific columns of a `GVector`'s data table or to add columns.
+#' * \code{\link[fasterRaster]{addTable<-}}: Add a data table to a `GVector`
 #' * [aggregate()]: Combine `GVector` geometries
 #' * [as.data.frame()]: Convert a `GVector`'s attribute table to a `data.frame`
 #' * [as.data.table()]: Convert a `GVector`'s attribute table to a `data.table`
@@ -229,10 +229,10 @@
 #' * [tail()]: Last rows of a `GVector`'s data table
 #' * [thinPoints()]: Reduce number of points in same raster cell
 #' * [union()] or `+`: Combine two `GVector`s
-#' * [xor()] or `/``: Select parts of polygons not shared by two `GVector`s
+#' * [xor()] or `/`: Select parts of polygons not shared by two `GVector`s
 #'
 #' ## Functions for fixing issues with `GVector`s
-#' (See also tools that can be used during `GVector` creation/loading in [fast()].)
+#' (See also *Details* [fast()].)
 #' * [breakPolys()]: Break topologically clean areas
 #' * [fillHoles()]: Fill "holes" of a `GVector`
 #' * [fixBridges()]: Change "bridges" to "islands"
@@ -256,7 +256,7 @@
 #' * [as.int()]: Convert a `GRaster` to an integer raster (**GRASS** data type `CELL`)
 #' * [as.points()], [as.lines()], and [as.polygons()]: Convert a `GRaster` to a `GVector`
 #' * [fast()]: Convert a `SpatRaster` to a `GRaster`; a `SpatVector`, `sf` vector, numeric vector, `matrix`, `data.frame`, or `data.table` to a `GVector`; or load a vector or raster from a file
-#' * [categories()] and [levels<-]: Convert an integer raster to a categorical ("factor") raster.
+#' * [categories()] and \code{\link[fasterRaster]{levels<-}}: Convert an integer raster to a categorical ("factor") raster.
 #' * [rast()]: Convert a `GRaster` to a `SpatRaster`
 #' * [rasterize()]: Convert a `GVector` to a `GRaster`
 #' * [st_as_sf()]: Convert a `GVector` to a `sf` vector
@@ -287,10 +287,10 @@
 #' * [vegIndices][vegIndices]: Vegetation indices that can be calculated using [vegIndex()].
 #' 
 #' ## Esoteric tutorials and arcane notes
-#' Comparisons between `GRegion`s can be performed using the `==` and `!=` operators.
-#' Vignette on **GRASS** "projects/locations" and "mapsets": `vignette("projects_mapsets", package = "fasterRaster"`)
-#' Vignette on **GRASS** "regions": `vignette("regions", package = "fasterRaster")`
-#' Vignette on **fasteRaster** hidden functions: `vignette("hidden_functions", package = "fasterRaster")`
+#' * Comparisons between `GRegion`s can be performed using the `==` and `!=` operators.
+#' * Vignette on **GRASS** "projects/locations" and "mapsets": `vignette("projects_mapsets", package = "fasterRaster")`
+#' * Vignette on **GRASS** "regions": `vignette("regions", package = "fasterRaster")`
+#' * Vignette on **fasteRaster** hidden functions: `vignette("hidden_functions", package = "fasterRaster")`
 #' * [grassStarted()]: Has a connection **GRASS** been made within the current **R** session?
 #'
 #' @author Adam B. Smith

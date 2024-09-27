@@ -43,7 +43,7 @@
 \item \code{NULL} (default): Calculate BIOCLIMs 1 through 19
 \item \code{"*"}: Calculate all BIOCLIMs this function can calculate.
 \item \code{"+"}: Calculate BIOCLIMs 41 onward.
-\item Any combination of the above (e.g., \code{c(1, 12, "+")}).
+\item Any combination of the above except \code{NULL} (e.g., \code{c(1, 12, "+")}).
 }}
 
 \item{sample}{Logical: If \code{TRUE} (default), BIO4 and 15 are calculated with the sample standard deviation. If \code{FALSE}, then the population standard deviation is used.}
@@ -60,6 +60,7 @@ A \code{GRaster} with one or more layers.
 \description{
 The BIOCLIM set of bioclimatic variables were created for modeling species' geographic distributions (Booth et al. 2014). This function can create the "standard" 19 set of variables, plus several more from an "extended" set.
 
+"Classic" set of BIOCLIM variables (Booth et al. 2014):
 The units reported below assume that input rasters are in mm (precipitation) and deg C (temperature), and that each raster represents a month (but other time units are allowed, with corresponding changes to the temporal units assumed below).
 \itemize{
 \item BIO1: Mean annual temperature, calculated using monthly means (deg C)
@@ -114,8 +115,6 @@ The variables are defined assuming that the input rasters represent monthly valu
 BIOCLIMs 41 through 44 are added here to capture the "shoulder" seasons (spring and autumn) important in temperature regions. BIOCLIMs 45 through 48 are also included for consistency.
 
 BIOCLIMs 49 through 60 are not bioclimatic variables per se, but useful for assessing the properties of the variables that are defined based on the "-est" month or quarter.
-
-The numbering of the new BIOCLIMs was begun at 41 because BIOCLIMs 20 through 40 are taken (Kriticos et al. 2014).
 }
 \examples{
 if (grassStarted()) {

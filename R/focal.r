@@ -13,7 +13,7 @@
 #' * "`mean`" (default)
 #' * "`median`"
 #' * "`mode`"
-#' * "`min`" or "`max`": Minumum or maximum. Should not use a weights matrix.
+#' * "`min`" or "`max`": Minimum or maximum. Should not use a weights matrix.
 #' * "`range`": Difference between the maximum and minimum.  Should not use a weights matrix.
 #' * "`sd`": Sample standard deviation.  NB: This is the same as the [stats::sd()] function.
 #' * "`sdpop`": Population standard deviation. NB: This is the same as the function "stddev" in the **GRASS** module `r.neighbors`.

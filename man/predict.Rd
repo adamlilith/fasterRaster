@@ -25,7 +25,7 @@ The model must be either a linear model, which is of class \code{lm} and typical
 This \code{predict()} function can handle:
 \itemize{
 \item Linear predictors and intercepts like \code{y ~ 1 + x};
-\item Quadratic terms like \code{y ~ x^2} (or, in \strong{R} formular notation, \code{y ~ I(x^2)});
+\item Quadratic terms like \code{y ~ x^2} (or, in \strong{R} formula notation, \code{y ~ I(x^2)});
 \item Two-way interaction terms between scalars like \code{y ~ x1:x2} and \code{y ~ x1 * x2};
 \item Categorical predictors (i.e., categorical \code{GRaster}s; see \code{vignette("GRasters", package = "fasterRaster")}));
 \item Two-way interactions between a categorical predictor and a scalar predictor; and

@@ -1,3 +1,25 @@
+# fasterRaster 8.4.0.7027 (2024-09-XX)
+
+### Main task for this version
+o Run all examples with **GRASS 8.4**!
+
+### Potentially code-breaking changes
+o `aggregate()` no longer has the `dissolve` argument for `GVector`s (polygons will always be dissolved).  
+
+### Updates for **GRASS 8.4**
+o `addLocationProject()` adds either a `project` or `location` argument to a `list` to be passed to `rgrass::execGRASS()`.  
+o `project()` work with **GRASS** 8.4.  
+o `.vAttachDatabase()` no longer has the `"o"` flag when calling `v.db.connect` when running **GRASS >=8.4**.  
+
+### Enhanced functionality and new functions
+o `extract()` now automatically projects a `GVector` to match the CRS of a `GRaster` from which extraction is being made.  
+
+### Bug fixes
+o `categories()` correctly assigns active category column.  
+o `simplifyGeom()` works for 2-dimensional `GVector`s.  
+o `rasterize()` works when `by` is not `NULL`.  
+o `.layerIndex()` (called by `catergories()` and other functions related to catrgorical `GRaster`s) does not fail.  
+
 # fasterRaster 8.3.0.7026 (2024-09-22)
 
 o Recompile `pkgdown`  

@@ -22,7 +22,8 @@
   overlap = TRUE,
   xy = FALSE,
   cats = TRUE,
-  verbose = FALSE
+  verbose = FALSE,
+  ...
 )
 
 \S4method{extract}{GRaster,data.frame}(x, y, xy = FALSE, cats = TRUE)
@@ -76,6 +77,8 @@
 \item{cats}{Logical (extracting from a raster): If \code{TRUE} (default) and \code{x} is a categorical \code{GRaster}, then return the category labels instead of the values.}
 
 \item{verbose}{Logical: If \code{TRUE}, display progress (will only function when extracting from points on a \code{GRaster} when the number of \code{GRaster}s is large).}
+
+\item{...}{Arguments to pass to \code{\link[=project]{project()}}. This is used only if extracting from a \code{GRaster} at locations specified by a \code{GVector}, and they have a different coordinate reference system. In this case, users should specify the \code{wrap} argument to \code{\link[=project]{project()}}.}
 }
 \value{
 A \code{data.frame} or \code{data.table}.
@@ -115,9 +118,8 @@ coast <- fast(madCoast4) # polygons vector
 extract(elev, dypsis, xy = TRUE)
 
 # Extract from categorical raster at points:
-dypsisWGS84 <- project(dypsis, cover) # Convert to same CRS
-categories <- extract(cover, dypsisWGS84)
-categoryValues <- extract(cover, dypsisWGS84, cats = FALSE)
+categories <- extract(cover, dypsis)
+categoryValues <- extract(cover, dypsis, cats = FALSE)
 categories
 categoryValues
 
@@ -128,8 +130,8 @@ extract(elev, coast, fun = c("sum", "mean", "countNonNA"), overlap = FALSE)
 extract(elev, rivers, fun = c("sum", "mean", "countNonNA"), overlap = FALSE)
 
 # Extract from a polygons vector at a points vector:
-table <- extract(coast, dypsis, xy = TRUE)
-head(table) # first 3 are outside polygons vector, next 3 are inside
+polysFromPoints <- extract(coast, dypsis, xy = TRUE)
+head(polysFromPoints) # first 3 are outside polygons vector, next 3 are inside
 
 }
 }

@@ -1,6 +1,6 @@
 #' Select parts of polygons not shared between two GVectors
 #'
-#' @description The `xor()` function selects the area that does not overlap between two "polygon" `GVector`s. You can also use the `/` operator, as in `vect 1 / vect2`.
+#' @description The `xor()` function selects the area that does not overlap between two "polygon" `GVector`s. You can also use the `/` operator, as in `vect1 / vect2`.
 #'
 #' @param x,y `GVector`s.
 #'

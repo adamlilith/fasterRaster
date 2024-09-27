@@ -39,15 +39,13 @@ elev <- fast(madElev)
 agg2 <- aggregate(elev, 2, "mean")
 agg2
 
-# terra
-agg2terra <- aggregate(madElev, 2, "mean")
-agg2terra
-
 # Compare rasters aggregated by fasterRaster and terra.
 # These should be the same.
+agg2terra <- aggregate(madElev, 2)
+
 agg2 <- rast(agg2)
 agg2 <- extend(agg2, agg2terra)
-agg2 - agg2terra
+agg2 - agg2terra # value is ~0
 
 ### Aggregate GRaster by a non-integer factor in 2 dimensions
 # fasterRaster

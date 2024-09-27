@@ -14,7 +14,7 @@
 A \code{GVector}.
 }
 \description{
-The \code{xor()} function selects the area that does not overlap between two "polygon" \code{GVector}s. You can also use the \code{/} operator, as in \verb{vect 1 / vect2}.
+The \code{xor()} function selects the area that does not overlap between two "polygon" \code{GVector}s. You can also use the \code{/} operator, as in \code{vect1 / vect2}.
 }
 \examples{
 if (grassStarted()) {

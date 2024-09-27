@@ -11,9 +11,9 @@
 
 \item{table}{Either \code{NULL} (default), or a \code{data.frame} or \code{data.table}, or a numeric or integer vector:
 \itemize{
-\item If \code{NULL}, then a bare minimal table will be created with a column named \code{frid}, holding sequential integer values.
-\item If a \code{data.frame} or \code{data.table} and no column is named \code{frid}, one will be created with sequential integer values. If the table does have a column named \code{frid}, then it should have integer (not just numeric) values.
-\item If a \code{vector}, then these are coerced to type \code{integer} and used to define the \code{frid} column.
+\item If \code{NULL}, then a bare minimal table will be created with a column named \code{cat}, holding sequential integer values.
+\item If a \code{data.frame} or \code{data.table} and no column is named \code{cat}, one will be created with sequential integer values. If the table does have a column named \code{cat}, then it should have integer (not just numeric) values.
+\item If a \code{vector}, then these are coerced to type \code{integer} and used to define the \code{cat} column.
 }
 
 There should be one row/value per geometry in \code{x}.}
@@ -26,6 +26,6 @@ There should be one row/value per geometry in \code{x}.}
 Invisibly returns the \code{\link[=sources]{sources()}} name of a vector in \strong{GRASS}.
 }
 \description{
-\code{.vAttachDatabase()} adds a table to a \strong{GRASS} vector. This table is meant to be "invisible" to most users--they should use interact with attribute tables using the \code{GVector} slot `@table``. Some functions require tables (e.g., \code{\link[=extract]{extract()}} and \code{\link[=spatSample]{spatSample()}}). \strong{This function is mostly of use to developers.}
+\code{.vAttachDatabase()} adds a table to a \strong{GRASS} vector. This table is meant to be "invisible" to most users--they should use interact with attribute tables using the \code{GVector} slot \verb{@table}. Some functions require tables (e.g., \code{\link[=extract]{extract()}} and \code{\link[=spatSample]{spatSample()}}). \strong{This function is mostly of use to developers.}
 }
 \keyword{internal}

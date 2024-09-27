@@ -160,9 +160,8 @@ The assign operators, \code{\link[fasterRaster]{$<-}}, \code{\link[fasterRaster]
 }
 
 \subsection{Functions operating on categorical (factor) rasters}{
-
-\code{\link[fasterRaster]{\%in\%}}, and \code{\link[fasterRaster]{\%notin\%}}: Mask cells that match or do not match a given category
 \itemize{
+\item \code{\link[fasterRaster]{\%in\%}}, and \code{\link[fasterRaster]{\%notin\%}}: Mask cells that match or do not match a given category
 \item \code{\link[=activeCat]{activeCat()}} and \code{\link[=activeCats]{activeCats()}}: Column(s) that defines category labels
 \code{\link[fasterRaster]{activeCat<-}}: Set column that defines category labels
 \item \code{\link[=addCats]{addCats()}}: Add new columns to a "levels" table
@@ -177,7 +176,7 @@ The assign operators, \code{\link[fasterRaster]{$<-}}, \code{\link[fasterRaster]
 \item \code{\link[=freq]{freq()}}: Frequency of each category across cells of a raster
 \item \code{\link[=is.factor]{is.factor()}}: Is a raster categorical?
 \item \code{\link[=levels]{levels()}}: "Levels" table of a categorical raster
-\code{\link[fasterRaster]{levels<-}}: Set "levels" table of a categorical raster
+\item \code{\link[fasterRaster]{levels<-}}: Set "levels" table of a categorical raster
 \item \code{\link[=match]{match()}}, \code{\link[fasterRaster]{\%in\%}}, and \code{\link[fasterRaster]{\%notin\%}}: Find which cells of a \code{GRaster} match or do not match certain category labels
 \item \code{\link[=minmax]{minmax()}}: "Lowest" and "highest" category values of categorical rasters (when argument \code{levels = TRUE})
 \item \code{\link[=missing.cases]{missing.cases()}}: Find rows of a categorical \code{GRaster}'s "levels" table that have at least one \code{NA} in them
@@ -194,13 +193,13 @@ The assign operators, \code{\link[fasterRaster]{$<-}}, \code{\link[fasterRaster]
 \item \code{\link[=plotRGB]{plotRGB()}}: Display a multispectral \code{GRaster} using red, blue, green, and alpha channels
 \item \code{\link[=vegIndex]{vegIndex()}}: Vegetation indices from surface reflectance
 }
+}
+
 \subsection{Functions that operate on \strong{terra} \code{SpatRaster}s}{
 \itemize{
 \item \code{\link[=bioclims]{bioclims()}}: BIOCLIM rasters (classic set and extended set)
 \item \code{\link[=fragmentation]{fragmentation()}}: Landscape fragmentation class from Riitters et al. (2020)
 }
-}
-
 }
 
 \subsection{Properties of \code{GVector}s}{
@@ -226,12 +225,11 @@ The assign operators, \code{\link[fasterRaster]{$<-}}, \code{\link[fasterRaster]
 }
 
 \subsection{Functions that operate on or create \code{GVector}s}{
-
-The \code{\link[fasterRaster]{[}} operator can be used to subset geometries of a \code{GVector}.
-The \link{$} and \code{\link[fasterRaster]{[[}} operators can be used to get columns of a \code{GVector}'s data table.
-The \code{\link[fasterRaster]{$<-}} operator can be used to replace specific columns of a \code{GVector}'s data table or to add columns.
-\code{\link[fasterRaster]{addTable<-}}: Add a data table to a \code{GVector}
 \itemize{
+\item The \code{\link[fasterRaster]{[}} operator can be used to subset geometries of a \code{GVector}.
+\item The \link{$} and \code{\link[fasterRaster]{[[}} operators can be used to get columns of a \code{GVector}'s data table.
+\item The \code{\link[fasterRaster]{$<-}} operator can be used to replace specific columns of a \code{GVector}'s data table or to add columns.
+\item \code{\link[fasterRaster]{addTable<-}}: Add a data table to a \code{GVector}
 \item \code{\link[=aggregate]{aggregate()}}: Combine \code{GVector} geometries
 \item \code{\link[=as.data.frame]{as.data.frame()}}: Convert a \code{GVector}'s attribute table to a \code{data.frame}
 \item \code{\link[=as.data.table]{as.data.table()}}: Convert a \code{GVector}'s attribute table to a \code{data.table}
@@ -270,13 +268,13 @@ The \code{\link[fasterRaster]{$<-}} operator can be used to replace specific col
 \item \code{\link[=tail]{tail()}}: Last rows of a \code{GVector}'s data table
 \item \code{\link[=thinPoints]{thinPoints()}}: Reduce number of points in same raster cell
 \item \code{\link[=union]{union()}} or \code{+}: Combine two \code{GVector}s
-\item \code{\link[=xor]{xor()}} or \verb{/``: Select parts of polygons not shared by two }GVector`s
+\item \code{\link[=xor]{xor()}} or \code{/}: Select parts of polygons not shared by two \code{GVector}s
 }
 }
 
 \subsection{Functions for fixing issues with \code{GVector}s}{
 
-(See also tools that can be used during \code{GVector} creation/loading in \code{\link[=fast]{fast()}}.)
+(See also \emph{Details} \code{\link[=fast]{fast()}}.)
 \itemize{
 \item \code{\link[=breakPolys]{breakPolys()}}: Break topologically clean areas
 \item \code{\link[=fillHoles]{fillHoles()}}: Fill "holes" of a \code{GVector}
@@ -304,7 +302,7 @@ The \code{\link[fasterRaster]{$<-}} operator can be used to replace specific col
 \item \code{\link[=as.int]{as.int()}}: Convert a \code{GRaster} to an integer raster (\strong{GRASS} data type \code{CELL})
 \item \code{\link[=as.points]{as.points()}}, \code{\link[=as.lines]{as.lines()}}, and \code{\link[=as.polygons]{as.polygons()}}: Convert a \code{GRaster} to a \code{GVector}
 \item \code{\link[=fast]{fast()}}: Convert a \code{SpatRaster} to a \code{GRaster}; a \code{SpatVector}, \code{sf} vector, numeric vector, \code{matrix}, \code{data.frame}, or \code{data.table} to a \code{GVector}; or load a vector or raster from a file
-\item \code{\link[=categories]{categories()}} and \link{levels<-}: Convert an integer raster to a categorical ("factor") raster.
+\item \code{\link[=categories]{categories()}} and \code{\link[fasterRaster]{levels<-}}: Convert an integer raster to a categorical ("factor") raster.
 \item \code{\link[=rast]{rast()}}: Convert a \code{GRaster} to a \code{SpatRaster}
 \item \code{\link[=rasterize]{rasterize()}}: Convert a \code{GVector} to a \code{GRaster}
 \item \code{\link[=st_as_sf]{st_as_sf()}}: Convert a \code{GVector} to a \code{sf} vector
@@ -343,12 +341,11 @@ The \code{\link[fasterRaster]{$<-}} operator can be used to replace specific col
 }
 
 \subsection{Esoteric tutorials and arcane notes}{
-
-Comparisons between \code{GRegion}s can be performed using the \code{==} and \code{!=} operators.
-Vignette on \strong{GRASS} "projects/locations" and "mapsets": \verb{vignette("projects_mapsets", package = "fasterRaster"})
-Vignette on \strong{GRASS} "regions": \code{vignette("regions", package = "fasterRaster")}
-Vignette on \strong{fasteRaster} hidden functions: \code{vignette("hidden_functions", package = "fasterRaster")}
 \itemize{
+\item Comparisons between \code{GRegion}s can be performed using the \code{==} and \code{!=} operators.
+\item Vignette on \strong{GRASS} "projects/locations" and "mapsets": \code{vignette("projects_mapsets", package = "fasterRaster")}
+\item Vignette on \strong{GRASS} "regions": \code{vignette("regions", package = "fasterRaster")}
+\item Vignette on \strong{fasteRaster} hidden functions: \code{vignette("hidden_functions", package = "fasterRaster")}
 \item \code{\link[=grassStarted]{grassStarted()}}: Has a connection \strong{GRASS} been made within the current \strong{R} session?
 }
 }

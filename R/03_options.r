@@ -18,8 +18,8 @@
 #' Options include:
 #'
 #' * `grassDir` (character): The folder in which **GRASS** is installed on your computer. Typically, this option is set when you run [faster()]. Depending on your operating system, your install directory will look something like this:
-#'     * Windows: `"C:/Program Files/GRASS GIS 8.3"`
-#'     * Mac OS: `"/Applications/GRASS-8.3.app/Contents/Resources"`
+#'     * Windows: `"C:/Program Files/GRASS GIS 8.4"`
+#'     * Mac OS: `"/Applications/GRASS-8.4.app/Contents/Resources"`
 #'     * Linux: `"/usr/local/grass"`
 #'
 #' *  `addonsDir` (character): Folder in which **GRASS** addons are stored. If `NA` and `grassDir` is not `NA`, this will be assumed to be `file.path(grassDir, "addons")`. The default values is `NA`.
@@ -28,7 +28,7 @@
 #'
 #' * `memory` (integer/numeric): The amount of memory to allocate to a task, in GB, for **GRASS**. The default is 2048 MB (i.e., 2 GB). Some **GRASS** modules can take advantage of more memory.
 #'
-#' * `clean` (logical): If `TRUE` (default), remove temporary files created internally by functions. If not deleted, they can eventually fill up hard drive space, but deleting them takes a little bit of time (usually <1 second for each function).
+#' * `clean` (logical): If `TRUE` (default), remove temporary files created internally by functions. If not deleted, they can eventually fill up hard drive space, but deleting them takes a little bit of time (usually <1 second for each function). See also [mow()].
 #'
 #' * `useDataTable` (logical): If `FALSE` (default), functions that return tabular output produce `data.frame`s. If `TRUE`, output will be `data.table`s from the **data.table** package. This can be much faster, but it might require you to know how to use `data.table`s if you want to manipulate them in **R**. You can always convert them to `data.frame`s using [base::as.data.frame()].
 #' 
