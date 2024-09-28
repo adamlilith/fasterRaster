@@ -46,6 +46,7 @@
 #'
 #' @example man/examples/ex_app.r
 #'
+#' @name app
 #' @aliases app,lapp
 #' @rdname app
 #' @exportMethod app
