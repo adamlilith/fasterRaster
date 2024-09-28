@@ -1,4 +1,4 @@
-#' Rescale values in a raster
+#' Rescale values in a GRaster
 #' 
 #' @description `stretch()` rescales the values in a `GRaster`. All values can be rescaled, or just values in a user-defined range. This range can be given by specifying either the lower and upper bounds of the range using `smin` and `smax`, and/or by the quantiles (across all cells of the raster) using `minq` and `maxq`.
 #' 
