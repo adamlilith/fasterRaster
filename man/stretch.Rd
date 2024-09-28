@@ -3,7 +3,7 @@
 \name{stretch,GRaster-method}
 \alias{stretch,GRaster-method}
 \alias{stretch}
-\title{Rescale values in a raster}
+\title{Rescale values in a GRaster}
 \usage{
 \S4method{stretch}{GRaster}(x, minv = 0, maxv = 255, minq = 0, maxq = 1, smin = NA, smax = NA)
 }

@@ -17,4 +17,4 @@ A \code{list}.
 \description{
 Unhelpfully, starting with \strong{GRASS} 8.4, what were previously called "locations" and now called "projects."  These were supposed to be back-compatible, but are not. This function takes a list of arguments that will be passed to \code{\link[rgrass:execGRASS]{rgrass::execGRASS()}} and adds either a "location" or "project" argument, depending on the version of \strong{GRASS} being used.
 }
-\keyword{external}
+\keyword{internal}

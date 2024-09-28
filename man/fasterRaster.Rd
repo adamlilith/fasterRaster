@@ -42,7 +42,7 @@
 \item \code{\link[=nonnacell]{nonnacell()}}: Number of non-\code{NA} cells
 \item \code{\link[=nrow]{nrow()}}: Number of rows
 \item \code{\link[=nlevels]{nlevels()}}: Number of categories
-\item \code{\link[=res]{res()}}, \code{\link[=xres]{xres()}}, \code{\link[=yres]{yres()}}, and \code{\link[=zres]{zres()}}: Spatial resolution
+\item \code{\link[=res]{res()}}, \code{\link[=res3d]{res3d()}}, \code{\link[=xres]{xres()}}, \code{\link[=yres]{yres()}}, and \code{\link[=zres]{zres()}}: Spatial resolution
 \item \code{\link[=sources]{sources()}}: Name of the \code{GRaster} in \strong{GRASS}
 \item 
 \item \code{\link[=zext]{zext()}}: Vertical extent
@@ -57,7 +57,7 @@
 \item \link[=Logic-methods]{Logical operators}: \code{|}and \code{&}
 }
 
-Single-layer mathematical functions (applied to each layer of a \code{GRaster}):
+Mathematical functions that are applied to each layer of a \code{GRaster}:
 \itemize{
 \item Working with \code{NA}s: \code{\link[=is.na]{is.na()}}, \code{\link[=not.na]{not.na()}}, and \code{\link[=maskNA]{maskNA()}}
 \item Trigonometry: \code{\link[=sin]{sin()}}, \code{\link[=cos]{cos()}}, \code{\link[=tan]{tan()}}, \code{\link[=asin]{asin()}}, \code{\link[=acos]{acos()}}, \code{\link[=atan]{atan()}}, \code{\link[=atan2]{atan2()}}
@@ -66,7 +66,7 @@ Single-layer mathematical functions (applied to each layer of a \code{GRaster}):
 \item Signs: \code{\link[=abs]{abs()}}
 }
 
-Multi-layer functions (applied across layers of a "stack" of \code{GRaster}s):
+Mathematical functions that are applied across layers of a "stack" of \code{GRaster}s:
 \itemize{
 \item Numeration: \code{\link[=sum]{sum()}}, \code{\link[=count]{count()}}
 \item Central tendency: \code{\link[=mean]{mean()}}, \code{\link[=mmode]{mmode()}}, \code{\link[=median]{median()}}
@@ -110,7 +110,7 @@ The assign operators, \code{\link[fasterRaster]{$<-}}, \code{\link[fasterRaster]
 \item \code{\link[=maskNA]{maskNA()}}: Mask all non-NA cells or all NA cells
 \item \code{\link[=match]{match()}}, \code{\link[fasterRaster]{\%in\%}}, and \code{\link[fasterRaster]{\%notin\%}}: Find which cells of a \code{GRaster} match or do not match certain values
 \item \code{\link[=merge]{merge()}}: Combine two or more rasters with different extents and fill in \code{NA}s
-\code{\link[fasterRaster]{names<-}}: Assign names to a \code{GRaster}
+\item \code{\link[fasterRaster]{names<-}}: Assign names to a \code{GRaster}
 \item \code{\link[=noise]{noise()}}: Remove coarse-scale trends from a \code{GRaster}, leaving just fine-scale "noise"
 \item \code{\link[=pairs]{pairs()}}: Plot correlations between \code{GRaster} layers
 \item \code{\link[=pca]{pca()}}: Apply a principal components analysis (PCA) to a \code{GRaster}
@@ -121,9 +121,11 @@ The assign operators, \code{\link[fasterRaster]{$<-}}, \code{\link[fasterRaster]
 \item \code{\link[=predict]{predict()}}: Make predictions to a \code{GRaster} from a linear model or generalized linear model
 \item \code{\link[=resample]{resample()}}: Change cell size
 \item \code{\link[=reorient]{reorient()}}: Convert degrees between 'north-orientation' and 'east orientation'
+\item \code{\link[=sampleRast]{sampleRast()}}: Randomly sample cells from a \code{GRaster}
 \item \code{\link[=scale]{scale()}}, \code{\link[=scalepop]{scalepop()}}, and \code{\link[=unscale]{unscale()}}: Subtract means and divide by standard deviations, or inverse of that
 \item \code{\link[=selectRange]{selectRange()}}: Select values from rasters in a stack based on values in another \code{GRaster}
 \item \code{\link[=spatSample]{spatSample()}}: Randomly points from a \code{GRaster}
+\item \code{\link[=stretch]{stretch()}}: Rescale values in a GRaster
 \item \code{\link[=subst]{subst()}}: Re-assign cell values
 \item \code{\link[=thinLines]{thinLines()}}: Reduce linear features on a \code{GRaster} so linear features are 1 cell wide
 \item \code{\link[=tiles]{tiles()}}: Divide a \code{GRaster} into spatially exclusive subsets (though with possible overlap)
@@ -159,7 +161,7 @@ The assign operators, \code{\link[fasterRaster]{$<-}}, \code{\link[fasterRaster]
 }
 }
 
-\subsection{Functions operating on categorical (factor) rasters}{
+\subsection{Functions operating on categorical (factor) \code{GRaster}s}{
 \itemize{
 \item \code{\link[fasterRaster]{\%in\%}}, and \code{\link[fasterRaster]{\%notin\%}}: Mask cells that match or do not match a given category
 \item \code{\link[=activeCat]{activeCat()}} and \code{\link[=activeCats]{activeCats()}}: Column(s) that defines category labels
@@ -268,7 +270,14 @@ The assign operators, \code{\link[fasterRaster]{$<-}}, \code{\link[fasterRaster]
 \item \code{\link[=tail]{tail()}}: Last rows of a \code{GVector}'s data table
 \item \code{\link[=thinPoints]{thinPoints()}}: Reduce number of points in same raster cell
 \item \code{\link[=union]{union()}} or \code{+}: Combine two \code{GVector}s
+\item \code{\link[=voronoi]{voronoi()}}: Voronoi tessellation
 \item \code{\link[=xor]{xor()}} or \code{/}: Select parts of polygons not shared by two \code{GVector}s
+}
+}
+
+\subsection{Functions for creating \code{GVector}s \emph{de novo}}{
+\itemize{
+\item \code{\link[=rvoronoi]{rvoronoi()}}: Random Voronoi tesselation
 }
 }
 
@@ -301,8 +310,8 @@ The assign operators, \code{\link[fasterRaster]{$<-}}, \code{\link[fasterRaster]
 \item \code{\link[=as.float]{as.float()}}: Convert a \code{GRaster} to a floating-point raster (\strong{GRASS} data type \code{FCELL})
 \item \code{\link[=as.int]{as.int()}}: Convert a \code{GRaster} to an integer raster (\strong{GRASS} data type \code{CELL})
 \item \code{\link[=as.points]{as.points()}}, \code{\link[=as.lines]{as.lines()}}, and \code{\link[=as.polygons]{as.polygons()}}: Convert a \code{GRaster} to a \code{GVector}
-\item \code{\link[=fast]{fast()}}: Convert a \code{SpatRaster} to a \code{GRaster}; a \code{SpatVector}, \code{sf} vector, numeric vector, \code{matrix}, \code{data.frame}, or \code{data.table} to a \code{GVector}; or load a vector or raster from a file
 \item \code{\link[=categories]{categories()}} and \code{\link[fasterRaster]{levels<-}}: Convert an integer raster to a categorical ("factor") raster.
+\item \code{\link[=fast]{fast()}}: Convert a \code{SpatRaster} to a \code{GRaster}; a \code{SpatVector}, \code{sf} vector, numeric vector, \code{matrix}, \code{data.frame}, or \code{data.table} to a \code{GVector}; or load a vector or raster from a file
 \item \code{\link[=rast]{rast()}}: Convert a \code{GRaster} to a \code{SpatRaster}
 \item \code{\link[=rasterize]{rasterize()}}: Convert a \code{GVector} to a \code{GRaster}
 \item \code{\link[=st_as_sf]{st_as_sf()}}: Convert a \code{GVector} to a \code{sf} vector
@@ -314,18 +323,21 @@ The assign operators, \code{\link[fasterRaster]{$<-}}, \code{\link[fasterRaster]
 \itemize{
 \item \code{\link[=compareGeom]{compareGeom()}}: Determine if geographic metadata is same between \code{GRaster}s and/or \code{GVector}s
 \item \code{\link[=dropRows]{dropRows()}}: Remove rows from a \code{data.frame} or \code{data.table}
-\item \code{\link[=grassInfo]{grassInfo()}}: \strong{GRASS} version and citation
 \item \code{\link[=grass]{grass()}}: Start the \strong{GRASS} GUI (not recommended for most users!!!)
+\item \code{\link[=grassInfo]{grassInfo()}}: \strong{GRASS} version and citation
+\item \code{\link[=grassStarted]{grassStarted()}}: Has a connection \strong{GRASS} been made within the current \strong{R} session?
 \item \code{\link[=mow]{mow()}}: Remove unused rasters and vectors from the \strong{GRASS} cache
 \item \code{\link[=reorient]{reorient()}}: Convert degrees between 'north-orientation' and 'east orientation'
 \item \code{\link[=replaceNAs]{replaceNAs()}}: Replace \code{NA}s in columns of a \code{data.table} or \code{data.frame}, or in a vector
 \item \code{\link[=seqToSQL]{seqToSQL()}}: Format a numeric series into an SQL value call
+\item \code{\link[=workDir]{workDir()}}:
 \item \code{\link[=update]{update()}}: Refresh metadata in a \code{GRaster} or \code{GVector} object
 }
 }
 
 \subsection{Data objects}{
 \itemize{
+\item \code{\link[=fastData]{fastData()}}: Helper function to quickly obtain example rasters and vectors
 \item \link{appFunsTable} (see also \code{\link[=appFuns]{appFuns()}}): Functions usable by the \code{\link[=app]{app()}} function
 \item \link{madChelsa}: Climate rasters for of a portion of eastern Madagascar
 \item \link{madCoast0}, \link{madCoast4}, and \link{madCoast}: Borders of an eastern portion of Madagascar
@@ -347,7 +359,16 @@ The assign operators, \code{\link[fasterRaster]{$<-}}, \code{\link[fasterRaster]
 \item Vignette on \strong{GRASS} "projects/locations" and "mapsets": \code{vignette("projects_mapsets", package = "fasterRaster")}
 \item Vignette on \strong{GRASS} "regions": \code{vignette("regions", package = "fasterRaster")}
 \item Vignette on \strong{fasteRaster} hidden functions: \code{vignette("hidden_functions", package = "fasterRaster")}
-\item \code{\link[=grassStarted]{grassStarted()}}: Has a connection \strong{GRASS} been made within the current \strong{R} session?
+}
+}
+
+\subsection{Classes}{
+\itemize{
+\item \code{\link{GLocation}}: Fundamental class; points to a "location/project" in \strong{GRASS}
+\item \code{\link{GSpatial}}: Basic class of any spatial object
+\item \code{\link{GRegion}}: Points to a "region" of a "location/project" in \strong{GRASS}
+\item \code{\link{GRaster}}: Raster class
+\item \code{\link{GVector}}: Spatial vector class
 }
 }
 }
