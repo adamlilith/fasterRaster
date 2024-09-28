@@ -33,7 +33,7 @@
 #' * [nonnacell()]: Number of non-`NA` cells
 #' * [nrow()]: Number of rows
 #' * [nlevels()]: Number of categories
-#' * [res()], [xres()], [yres()], and [zres()]: Spatial resolution
+#' * [res()], [res3d()], [xres()], [yres()], and [zres()]: Spatial resolution
 #' * [sources()]: Name of the `GRaster` in **GRASS**
 #' * [topology()]: Dimensionality (2D or 3D)
 #' * [zext()]: Vertical extent
@@ -44,14 +44,14 @@
 #' * [Logical comparisons][Compare-methods]: `<`, `<=`, `==`, `!=`, `>=`, and `>`, plus \code{\link[fasterRaster]{%in%}} and \code{\link[fasterRaster]{%notin%}} (for categorical rasters only)
 #' * [Logical operators][Logic-methods]: `|`and `&`
 #'
-#' Single-layer mathematical functions (applied to each layer of a `GRaster`):
+#' Mathematical functions that are applied to each layer of a `GRaster`:
 #' - Working with `NA`s: [is.na()], [not.na()], and [maskNA()] 
 #' - Trigonometry: [sin()], [cos()], [tan()], [asin()], [acos()], [atan()], [atan2()] 
 #' - Logarithms and powers: [exp()], [log()], [ln()], [log1p()], [log2()], [log10()], [sqrt()] 
 #' - Rounding: [round()], [floor()], [ceiling()], [trunc()] 
 #' - Signs: [abs()] 
 #'
-#' Multi-layer functions (applied across layers of a "stack" of `GRaster`s):
+#' Mathematical functions that are applied across layers of a "stack" of `GRaster`s:
 #' - Numeration: [sum()], [count()] 
 #' - Central tendency: [mean()], [mmode()], [median()] 
 #' - Dispersion: [stdev()], [var()], [varpop()], [nunique()], [range()], [quantile()], [skewness()], [kurtosis()]
@@ -92,7 +92,7 @@
 #' * [maskNA()]: Mask all non-NA cells or all NA cells
 #' * [match()], \code{\link[fasterRaster]{%in%}}, and \code{\link[fasterRaster]{%notin%}}: Find which cells of a `GRaster` match or do not match certain values
 #' * [merge()]: Combine two or more rasters with different extents and fill in `NA`s
-#' \code{\link[fasterRaster]{names<-}}: Assign names to a `GRaster`
+#' * \code{\link[fasterRaster]{names<-}}: Assign names to a `GRaster`
 #' * [noise()]: Remove coarse-scale trends from a `GRaster`, leaving just fine-scale "noise"
 #' * [pairs()]: Plot correlations between `GRaster` layers
 #' * [pca()]: Apply a principal components analysis (PCA) to a `GRaster`
@@ -103,9 +103,11 @@
 #' * [predict()]: Make predictions to a `GRaster` from a linear model or generalized linear model
 #' * [resample()]: Change cell size
 #' * [reorient()]: Convert degrees between 'north-orientation' and 'east orientation'
+#' * [sampleRast()]: Randomly sample cells from a `GRaster`
 #' * [scale()], [scalepop()], and [unscale()]: Subtract means and divide by standard deviations, or inverse of that
 #' * [selectRange()]: Select values from rasters in a stack based on values in another `GRaster`
 #' * [spatSample()]: Randomly points from a `GRaster`
+#' * [stretch()]: Rescale values in a GRaster
 #' * [subst()]: Re-assign cell values
 #' * [thinLines()]: Reduce linear features on a `GRaster` so linear features are 1 cell wide
 #' * [tiles()]: Divide a `GRaster` into spatially exclusive subsets (though with possible overlap)
@@ -113,14 +115,14 @@
 #' * [zonal()]: Statistics (mean, sum, etc.) on areas of a `GRaster` defined by sets of cells with the same values in another `GRaster`, or by geometries in a `GVector`
 #' * [zonalGeog()]: Geographic statistics (area, perimeter, fractal dimension, etc.) for sets of cells with the same values
 #'
-#' ## Functions for creating `GRaster`s *de novo*
+#' ## Creating `GRaster`s *de novo*
 #' * [fractalRast()]: Create a fractal `GRaster`
 #' * [rnormRast()]: A random `GRaster` with values drawn from a normal distribution
 #' * [rSpatialDepRast()]: Create a random `GRaster` with or without spatial dependence
 #' * [runifRast()]: A random `GRaster` with values drawn from a uniform distribution
 #' * [sineRast()]: Sine wave rasters
 #' 
-#' ## Functions for analysis of terrain and flow of water across landscapes
+#' ## Analysis of terrain and hydrology
 #' * [as.contour()]: Contour lines from a `GRaster`
 #' * [flow()]: Identify watershed basins and direction and accumulation of flow
 #' * [flowPath()]: Path of water flow across a landscape
@@ -133,7 +135,7 @@
 #' * [terrain()]: Slope, aspect, curvature, and partial slopes
 #' * [wetness()]: Topographic wetness index
 #' 
-#' ## Functions operating on categorical (factor) rasters
+#' ## Operations on categorical (factor) `GRaster`s
 #' * \code{\link[fasterRaster]{%in%}}, and \code{\link[fasterRaster]{%notin%}}: Mask cells that match or do not match a given category
 #' * [activeCat()] and [activeCats()]: Column(s) that defines category labels
 #' \code{\link[fasterRaster]{activeCat<-}}: Set column that defines category labels
@@ -158,7 +160,7 @@
 #' * [subst()]: Re-assign category levels
 #' * [zonalGeog()]: Geographic statistics (area, perimeter, fractal dimension, etc.) for sets of cells with the same values
 #' 
-#' ## Functions for analysis of remote sensing rasters
+#' ## Analysis of remote sensing rasters
 #' * [compositeRGB()]: Combine red, green, and blue color bands to make a composite `GRaster`
 #' * [plotRGB()]: Display a multispectral `GRaster` using red, blue, green, and alpha channels
 #' * [vegIndex()]: Vegetation indices from surface reflectance
@@ -186,7 +188,7 @@
 #' * [topology()]: Dimensionality (2D or 3D)
 #' * [zext()]: Vertical extent
 #'
-#' ## Functions that operate on or create `GVector`s
+#' ## Operations on `GVector`s
 #' * The \code{\link[fasterRaster]{[}} operator can be used to subset geometries of a `GVector`.
 #' * The [$] and \code{\link[fasterRaster]{[[}} operators can be used to get columns of a `GVector`'s data table.
 #' * The \code{\link[fasterRaster]{$<-}} operator can be used to replace specific columns of a `GVector`'s data table or to add columns.
@@ -229,9 +231,13 @@
 #' * [tail()]: Last rows of a `GVector`'s data table
 #' * [thinPoints()]: Reduce number of points in same raster cell
 #' * [union()] or `+`: Combine two `GVector`s
+#' * [voronoi()]: Voronoi tessellation
 #' * [xor()] or `/`: Select parts of polygons not shared by two `GVector`s
 #'
-#' ## Functions for fixing issues with `GVector`s
+#' ## Creating `GVector`s *de novo*
+#' * [rvoronoi()]: Random Voronoi tesselation
+#'
+#' ## Fixing issues with `GVector`s
 #' (See also *Details* [fast()].)
 #' * [breakPolys()]: Break topologically clean areas
 #' * [fillHoles()]: Fill "holes" of a `GVector`
@@ -255,8 +261,8 @@
 #' * [as.float()]: Convert a `GRaster` to a floating-point raster (**GRASS** data type `FCELL`)
 #' * [as.int()]: Convert a `GRaster` to an integer raster (**GRASS** data type `CELL`)
 #' * [as.points()], [as.lines()], and [as.polygons()]: Convert a `GRaster` to a `GVector`
-#' * [fast()]: Convert a `SpatRaster` to a `GRaster`; a `SpatVector`, `sf` vector, numeric vector, `matrix`, `data.frame`, or `data.table` to a `GVector`; or load a vector or raster from a file
 #' * [categories()] and \code{\link[fasterRaster]{levels<-}}: Convert an integer raster to a categorical ("factor") raster.
+#' * [fast()]: Convert a `SpatRaster` to a `GRaster`; a `SpatVector`, `sf` vector, numeric vector, `matrix`, `data.frame`, or `data.table` to a `GVector`; or load a vector or raster from a file
 #' * [rast()]: Convert a `GRaster` to a `SpatRaster`
 #' * [rasterize()]: Convert a `GVector` to a `GRaster`
 #' * [st_as_sf()]: Convert a `GVector` to a `sf` vector
@@ -265,15 +271,18 @@
 #' ## General purpose functions
 #' * [compareGeom()]: Determine if geographic metadata is same between `GRaster`s and/or `GVector`s
 #' * [dropRows()]: Remove rows from a `data.frame` or `data.table`
-#' * [grassInfo()]: **GRASS** version and citation
 #' * [grass()]: Start the **GRASS** GUI (not recommended for most users!!!)
+#' * [grassInfo()]: **GRASS** version and citation
+#' * [grassStarted()]: Has a connection **GRASS** been made within the current **R** session?
 #' * [mow()]: Remove unused rasters and vectors from the **GRASS** cache
 #' * [reorient()]: Convert degrees between 'north-orientation' and 'east orientation'
 #' * [replaceNAs()]: Replace `NA`s in columns of a `data.table` or `data.frame`, or in a vector
 #' * [seqToSQL()]: Format a numeric series into an SQL value call
+#' * [workDir()]: 
 #' * [update()]: Refresh metadata in a `GRaster` or `GVector` object
 #'
 #' ## Data objects
+#' * [fastData()]: Helper function to quickly obtain example rasters and vectors
 #' * [appFunsTable][appFunsTable] (see also [appFuns()]): Functions usable by the [app()] function
 #' * [madChelsa][madChelsa]: Climate rasters for of a portion of eastern Madagascar
 #' * [madCoast0][madCoast0], [madCoast4][madCoast4], and [madCoast][madCoast]: Borders of an eastern portion of Madagascar
@@ -292,7 +301,13 @@
 #' * Vignette on **GRASS** "projects/locations" and "mapsets": `vignette("projects_mapsets", package = "fasterRaster")`
 #' * Vignette on **GRASS** "regions": `vignette("regions", package = "fasterRaster")`
 #' * Vignette on **fasteRaster** hidden functions: `vignette("hidden_functions", package = "fasterRaster")`
-#' * [grassStarted()]: Has a connection **GRASS** been made within the current **R** session?
+#'
+#' ## Classes
+#' * [`GLocation`]: Fundamental class; points to a "location/project" in **GRASS**
+#' * [`GSpatial`]: Basic class of any spatial object
+#' * [`GRegion`]: Points to a "region" of a "location/project" in **GRASS**
+#' * [`GRaster`]: Raster class
+#' * [`GVector`]: Spatial vector class
 #'
 #' @author Adam B. Smith
 #' @name fasterRaster
