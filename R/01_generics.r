@@ -300,9 +300,9 @@ methods::setGeneric(name = "vegIndex", def = function(x, ...) standardGeneric("v
 methods::setGeneric(name = "vect", package = "terra")
 methods::setGeneric(name = "voronoi", package = "terra")
 
+methods::setGeneric(name = ".workDir", def = function(x, ...) standardGeneric(".workDir"))
 methods::setGeneric(name = "W", def = function(x, ...) standardGeneric("W"))
 methods::setGeneric(name = "wetness", def = function(x, ...) standardGeneric("wetness"))
-methods::setGeneric(name = "workDir", def = function(x, ...) standardGeneric("workDir"))
 methods::setGeneric(name = "writeRaster", package = "terra")
 methods::setGeneric(name = "writeVector", package = "terra")
 

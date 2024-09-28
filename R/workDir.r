@@ -6,11 +6,12 @@
 #'
 #' @returns Character.
 #'
-#' @aliases workDir
+#' @aliases .workDir
 #' @rdname workDir
-#' @exportMethod workDir
+#' @exportMethod .workDir
+#' @keywords internal
 methods::setMethod(
-	f = "workDir",
+	f = ".workDir",
 	signature = c(x = "GLocation"),
 	function(x)	x@workDir
 )

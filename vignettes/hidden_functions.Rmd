@@ -23,8 +23,9 @@ fig.path = 'man/figures/'
 * `.addLocationProject()`: Add a "location" or "project" argument to a list to be passed to [rgrass::execGRASS()]
 * `.fileExt()`: Get file extension
 * `.ls()`: Lists the `sources` of all objects in the active **GRASS** "project/location"
-* `.message()`: Display a warning or message if the given warning has not been displayed since **fasterRaster** was attached or if a given number or hours has passed since then
+* `.message()`: Display a warning or message if the given warning has not been displayed since **fasterRaster** was attached or if a given number of hours has passed
 * `.quiet()`: Returns "quiet" if `faster("verbose")` is `TRUE`
+* `.workDir()`: Working directory of a `GLocation` object
 
 ## Rasters and vectors
 * `.copyGSpatial()`: Make a copy of the **GRASS** file pointed to by a `GRaster` or `GVector`
