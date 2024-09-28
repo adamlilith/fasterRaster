@@ -7,7 +7,7 @@
 #'
 #' @returns A `list`.
 #'
-#' @keywords external
+#' @keywords internal
 .addLocationProject <- function(args, locProj) {
 
 	ver <- grassInfo("versionNumber")
