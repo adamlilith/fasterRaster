@@ -16,5 +16,10 @@
 methods::setMethod(
 	f = "grass",
 	signature = c(x = "missing"),
-	function() rgrass::execGRASS("g.gui", ui = "wxpython", flags = c(.quiet(), "f"))
+	function() {
+		if (grassStarted()) {
+			rgrass::execGRASS("g.gui", ui = "wxpython", flags = c(.quiet(), "f"))
+		} else {
+			warning("GRASS needs to be started by using `fast()` at least once before starting the GUI.")
+		}
 )
