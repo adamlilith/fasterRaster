@@ -22,4 +22,5 @@ methods::setMethod(
 		} else {
 			warning("GRASS needs to be started by using `fast()` at least once before starting the GUI.")
 		}
+	}
 )
