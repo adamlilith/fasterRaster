@@ -34,7 +34,7 @@
 #' 
 #' * `verbose` (logical): If `TRUE`, show **GRASS** messages and otherwise hidden slots in classes. This is mainly used for debugging, so most users will want to keep this at its default, `FALSE`.
 #'
-#'  * `workDir` (character): The folder in which **GRASS** rasters, vectors, and other objects are created and manipulated. By default, this is given by [tempdir()].
+#'  * `workDir` (character): The folder in which **GRASS** rasters, vectors, and other objects are created and manipulated. By default, this is given by [tempdir()]. Note that on some systems, changing the default folder to somewhere else can cause problems with **fasterRaster** being able to find rasters in **GRASS** that have been created.
 #'
 #' @param restore Logical: If `TRUE`, the all options will be reset to their default values. The default is `FALSE`.
 #'
