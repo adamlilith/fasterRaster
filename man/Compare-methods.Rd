@@ -51,3 +51,53 @@ You can do comparative operations on \code{GRaster}s using normal operators in \
 
 You can also compare two \code{GRegion}s using the \code{==} and \code{!=} operators. Most users of \strong{fasterRaster} will not have to work much with "regions" (see \code{vignette("regions", package = "fasterRaster")}), so can ignore this functionality. \code{GRegion}s are the same if they have the same coordinate reference system, location/project and mapset (see \code{vignette("projects_mapsets", package = "fasterRaster")}), topology (2D or 3D), extent, and resolution. If both are 3D, then they must also have the same vertical extent and number of depths.
 }
+\examples{
+if (grassStarted()) {
+
+# Setup
+library(terra)
+
+# Example data
+madElev <- fastData("madElev")
+
+# Convert a SpatRaster to a GRaster
+elev <- fast(madElev)
+elevs <- c(elev, elev, log10(elev) - 1, sqrt(elev))
+names(elevs) <- c("elev1", "elev2", "log_elev", "sqrt_elev")
+
+elev
+elevs
+
+# Comparisons
+elev < 100
+elev <= 100
+elev == 100
+elev != 100
+elev > 100
+elev >= 100
+
+elev + 100 < 2 * elev
+
+elevs > 10
+10 > elevs
+
+# logic
+elev < 10 | elev > 200
+elev < 10 | cos(elev) > 0.9
+
+elev < 10 | TRUE
+TRUE | elev > 200
+
+elev < 10 | FALSE
+FALSE | elev > 200
+
+elev < 10 & cos(elev) > 0.9
+
+elev < 10 & TRUE
+TRUE & elev > 200
+
+elev < 10 & FALSE
+FALSE & elev > 200
+
+}
+}
