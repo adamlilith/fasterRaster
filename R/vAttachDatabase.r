@@ -118,7 +118,7 @@
 			flags = c(.quiet(), "overwrite")
 		)
 
-		if (grassInfo("versionNumber") <= 8.3) args$flags <- c(arges$flags, "o")
+		if (grassInfo("versionNumber") <= 8.3) args$flags <- c(args$flags, "o")
 
 		do.call(rgrass::execGRASS, args = args)
 
