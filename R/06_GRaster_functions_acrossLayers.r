@@ -6,6 +6,7 @@
 #' * Extremes: `min()`, `max()`, `which.min()` (index of raster with the minimum value), `which.max()` (index of the raster with the maximum value)
 #' * Dispersion: `range()`, `stdev()` (standard deviation), `var()` (sample variance), `varpop()` (population variance), `nunique()` (number of unique values), `quantile()` (use argument `probs`), `skewness()`, and `kurtosis()`.
 #' * Regression: Assuming we calculate a linear regression for each set of cells through all values of the cells, we can calculate its `slope()`, `intercept()`, `r2()`, and `tvalue()`.
+#' * `NA`s: `anyNA()` (any cells are `NA`?), `allNA()` (are all cells `NA`?)
 #'
 #' @param x A `GRaster`. Typically, this raster will have two or more layers. Values will be calculated within cells across rasters.
 #'
@@ -17,7 +18,7 @@
 #'
 #' @returns A `GRaster`.
 #'
-#' @example man/examples/ex_GRaster_arithmetic.r
+#' @example man/examples/ex_GRaster_arithmetic_across_layers.r
 #'
 #' @aliases mean
 #' @rdname functions
@@ -465,6 +466,54 @@ setMethod(
 		
 	} # EOF
 )
+
+#' @aliases anyNA
+#' @rdname functions
+#' @exportMethod anyNA
+setMethod(
+	"anyNA",
+	signature(x = "GRaster"),
+	function(x) {
+
+    .locationRestore(x)
+    .region(x)
+
+	src <- .makeSourceName("anyNA", "raster")
+
+	nl <- nlyr(x)
+	ex <- paste0("if(isnull(", sources(x), "))")
+	ex <- paste(ex, collapse = " | ")
+	ex <- paste0(src, " = ", ex)
+	rgrass::execGRASS("r.mapcalc", expression = ex, flags = c(.quiet(), "overwrite"))
+	.makeGRaster(src, "layer")
+
+	} # EOF
+)
+
+
+#' @aliases allNA
+#' @rdname functions
+#' @exportMethod allNA
+setMethod(
+	"allNA",
+	signature(x = "GRaster"),
+	function(x) {
+
+    .locationRestore(x)
+    .region(x)
+
+	src <- .makeSourceName("anyNA", "raster")
+
+	nl <- nlyr(x)
+	ex <- paste0("if(isnull(", sources(x), "))")
+	ex <- paste(ex, collapse = " & ")
+	ex <- paste0(src, " = ", ex)
+	rgrass::execGRASS("r.mapcalc", expression = ex, flags = c(.quiet(), "overwrite"))
+	.makeGRaster(src, "layer")
+
+	} # EOF
+)
+
 
 
 # generic function for multi-layer functions
