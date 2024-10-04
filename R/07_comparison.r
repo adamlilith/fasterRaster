@@ -13,7 +13,7 @@
 #'
 #' Comparing `GRegion`s: Output is logical.
 #'
-#' @example man/examples/ex_GRaster_arithmetic.r
+#' @example man/examples/ex_GRaster_comparison_logic.r
 #'
 #' @aliases Compare-methods
 #' @rdname Compare-methods

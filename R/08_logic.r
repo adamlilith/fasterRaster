@@ -13,7 +13,7 @@
 #'
 #' @returns A binary `GRaster` (1 ==> `TRUE`, 0 ==> `FALSE`, plus `NA` when comparison results in `NA`).
 #'
-#' @example man/examples/ex_GRaster_arithmetic.r
+#' @example man/examples/ex_GRaster_comparison_logic.r
 #'
 #' @aliases Logic-methods
 #' @rdname Logic-methods

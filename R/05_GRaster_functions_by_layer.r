@@ -41,7 +41,7 @@
 #'
 #' @returns A `GRaster`.
 #'
-#' @example man/examples/ex_GRaster_arithmetic.r
+#' @example man/examples/ex_GRaster_arithmetic_by_layer.r
 #'
 #' @aliases is.na
 #' @rdname math
