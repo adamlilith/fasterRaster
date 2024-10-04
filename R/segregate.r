@@ -1,6 +1,6 @@
 #' Create one GRaster layer per unique value in a GRaster
 #'
-#' @description This function creates a multi-layered `GRaster` for every unique values in an input `GRaster`. By default, the output will have a value of 1 wherever the input has the given value, and 0 elsewhere. This is useful for creating dummy variable `GRaster` layers for use with models that have factors, especially if the input `GRaster` is categorical.
+#' @description This function creates a multi-layered `GRaster` for every unique values in an input `GRaster`. By default, the output will have a value of 1 wherever the input has the given value, and 0 elsewhere. This is useful for creating dummy variable `GRaster` layers for use with models that have factors, especially if the input `GRaster` is categorical. Note that the [predict()] function in **fasterRaster** usually does not need this treatment of `GRaster`s since it can handle categorical rasters already.
 #'
 #' @param x A `GRaster`.
 #'
