@@ -1,19 +1,22 @@
 # fasterRaster 8.4.0.7027 (2024-09-XX)
 
 ### Main task for this version
-o Run all examples with **GRASS 8.4**!
-
-### Potentially code-breaking changes
-o `aggregate()` no longer has the `dissolve` argument for `GVector`s (polygons will always be dissolved).  
+o Test examples with **GRASS 8.4** and update functions as needed.  
 
 ### Updates for **GRASS 8.4**
 o `addLocationProject()` adds either a `project` or `location` argument to a `list` to be passed to `rgrass::execGRASS()`.  
 o `project()` work with **GRASS** 8.4.  
-o `.vAttachDatabase()` no longer has the `"o"` flag when calling `v.db.connect` when running **GRASS >=8.4**.  
+o `.vAttachDatabase()` no longer has the `"o"` flag when calling `v.db.connect` when running **GRASS** >=8.4.  
+
+### Potentially code-breaking changes
+o `aggregate()` no longer has the `dissolve` argument for `GVector`s (polygons will always be dissolved).  
 
 ### Enhanced functionality and new functions
 o `extract()` now automatically projects a `GVector` to match the CRS of a `GRaster` from which extraction is being made.  
 o `grass()` allows users to start the **GRASS** GUI.  
+o `layerIndex()` allows a `negate` argument to get the "opposite" indices of a `GRaster`.  
+o `init()` assigns to `GRaster` cells the value of their coordinates, rows, columns, or values in a regular or chessboard-like pattern.  
+o `subset()` subsets layers of a `GRaster` or rows/geometries of a `GVector`.  
 
 ### Bug fixes
 o `categories()` correctly assigns active category column.  
