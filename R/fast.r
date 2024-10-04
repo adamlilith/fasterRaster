@@ -247,7 +247,7 @@ methods::setMethod(
 			x <- terra::vect(x)
 			out <- fast(x, extent = extent, correct = correct, snap = snap, area = area, steps = steps, resolve = resolve, dropTable = dropTable, verbose = verbose, ...)
 
-		# x is a filename and xVect is present: we have come through a method for SpatVectors or sf objects
+		# x is a filename and xVect is present: we have come here through a method for SpatVectors or sf objects
 		} else {
 
 			if (!is.na(resolve)) resolve <- omnibus::pmatchSafe(resolve, c("aggregate", "disaggregate"), n = 1L)
@@ -315,7 +315,6 @@ methods::setMethod(
 			src <- .makeSourceName("fast_v_in_ogr", "vector")
 			if (is.null(snap) & is.null(area)) {
 
-
 				# slower if we need to record messages
 				suppressMessages(
 					run <- rgrass::execGRASS(
@@ -332,7 +331,11 @@ methods::setMethod(
 					)
 				)
 
-				valid <- !any(grepl(run, pattern = "WARNING: The output contains topological errors"))
+				valid <- !any(c(
+					grepl(run, pattern = "WARNING: The output contains topological errors"),
+					grepl(run, pattern = "Invalid argument")
+				))
+
 				if (valid) { # more thorough test... slower
 
 					info <- .vectInfo(src)
@@ -654,7 +657,7 @@ methods::setMethod(
 methods::setMethod(
 	"fast",
 	signature(x = "sf"),
-	function(x, extent = NULL, correct = TRUE, snap = NULL, area = NULL, steps = 10, dropTable = FALSE, resolve = NA, verbose = TRUE) .fastVector(x, correct = correct, snap = snap, area = area, steps = steps, extent = extent, dropTable = dropTable, resolve = resolve, verbose = verbose)
+	function(x, extent = NULL, correct = TRUE, snap = NULL, area = NULL, steps = 10, resolve = NA, dropTable = FALSE, verbose = TRUE) .fastVector(x, correct = correct, snap = snap, area = area, steps = steps, extent = extent, dropTable = dropTable, resolve = resolve, verbose = verbose)
 )
 
 #' @rdname fast
@@ -877,7 +880,7 @@ methods::setMethod(
 		# NB we ***need** a table with the GVector--otherwise, subset_single_bracket does not work as expected
 		if (is.null(table)) xVect$DUMMYDUMMY_ <- 1L:nrow(xVect)
 
-		vectFile <- tempfile(fileext = ".gpkg")
+		vectFile <- paste0(faster("workDir"), "/", omnibus::rstring(1L), ".gpkg")
 		terra::writeVector(xVect, filename = vectFile, filetype = "GPKG", overwrite = TRUE)
 	
 	} else {
