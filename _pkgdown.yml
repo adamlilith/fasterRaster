@@ -182,6 +182,7 @@ reference:
   - plotRGB
   - project
   - predict
+  - regress
   - resample
   - reorient
   - sampleRast

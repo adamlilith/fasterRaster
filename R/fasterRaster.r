@@ -105,6 +105,7 @@
 #' * [plotRGB()]: Display a multispectral `GRaster` using red, blue, green, and alpha channels
 #' * [project()]: Change coordinate reference system and cell size
 #' * [predict()]: Make predictions to a `GRaster` from a linear model or generalized linear model
+#' * [regress()]: Regression intercept, slope, r2, and t-value across each set of cells
 #' * [resample()]: Change cell size
 #' * [reorient()]: Convert degrees between 'north-orientation' and 'east orientation'
 #' * [sampleRast()]: Randomly sample cells from a `GRaster`
