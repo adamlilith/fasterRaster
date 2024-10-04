@@ -163,6 +163,7 @@
 #' * [missing.cases()]: Find rows of a categorical `GRaster`'s "levels" table that have at least one `NA` in them
 #' * [missingCats()]: Values that have no category assigned to them
 #' * [nlevels()]: Number of levels
+#' * [segregate()]: Create one GRaster layer per unique value in a GRaster
 #' * [subst()]: Re-assign category levels
 #' * [zonalGeog()]: Geographic statistics (area, perimeter, fractal dimension, etc.) for sets of cells with the same values
 #' 

@@ -192,6 +192,7 @@ Operations on \code{GRaster}s
 \item \code{\link[=missing.cases]{missing.cases()}}: Find rows of a categorical \code{GRaster}'s "levels" table that have at least one \code{NA} in them
 \item \code{\link[=missingCats]{missingCats()}}: Values that have no category assigned to them
 \item \code{\link[=nlevels]{nlevels()}}: Number of levels
+\item \code{\link[=segregate]{segregate()}}: Create one GRaster layer per unique value in a GRaster
 \item \code{\link[=subst]{subst()}}: Re-assign category levels
 \item \code{\link[=zonalGeog]{zonalGeog()}}: Geographic statistics (area, perimeter, fractal dimension, etc.) for sets of cells with the same values
 }
