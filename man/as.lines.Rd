@@ -14,7 +14,7 @@
 A \code{GVector}.
 }
 \description{
-\code{\link[=as.lines]{as.lines()}} converts a \code{GRaster} to a "lines" \code{GVector}. Before you apply this function, you may need to run \code{\link[=thinLines]{thinLines()}} on the raster to reduce linear features to a single-cell width. You may also need to use \link[=breakPolys]{clean geometry} (especially the "duplicated" and "removeDangles" \code{method}s) afterward to remove duplicated vertices and "dangling" lines.
+\code{\link[=as.lines]{as.lines()}} converts a \code{GRaster} to a "lines" \code{GVector}. Before you apply this function, you may need to run \code{\link[=thinLines]{thinLines()}} on the raster to reduce linear features to a single-cell width. You may also need to use \link[=breakPolys]{clean geometry} (especially the \code{\link[=removeDups]{removeDups()}} and \code{\link[=removeDangles]{removeDangles()}}) afterward to remove duplicated vertices and "dangling" lines.
 }
 \examples{
 if (grassStarted()) {

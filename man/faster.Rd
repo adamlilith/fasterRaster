@@ -28,7 +28,7 @@ Options include:
 \item \code{clean} (logical): If \code{TRUE} (default), remove temporary files created internally by functions. If not deleted, they can eventually fill up hard drive space, but deleting them takes a little bit of time (usually <1 second for each function). See also \code{\link[=mow]{mow()}}.
 \item \code{useDataTable} (logical): If \code{FALSE} (default), functions that return tabular output produce \code{data.frame}s. If \code{TRUE}, output will be \code{data.table}s from the \strong{data.table} package. This can be much faster, but it might require you to know how to use \code{data.table}s if you want to manipulate them in \strong{R}. You can always convert them to \code{data.frame}s using \code{\link[base:as.data.frame]{base::as.data.frame()}}.
 \item \code{verbose} (logical): If \code{TRUE}, show \strong{GRASS} messages and otherwise hidden slots in classes. This is mainly used for debugging, so most users will want to keep this at its default, \code{FALSE}.
-\item \code{workDir} (character): The folder in which \strong{GRASS} rasters, vectors, and other objects are created and manipulated. By default, this is given by \code{\link[=tempdir]{tempdir()}}.
+\item \code{workDir} (character): The folder in which \strong{GRASS} rasters, vectors, and other objects are created and manipulated. By default, this is given by \code{\link[=tempdir]{tempdir()}}. Note that on some systems, changing the default folder to somewhere else can cause problems with \strong{fasterRaster} being able to find rasters in \strong{GRASS} that have been created.
 }}
 
 \item{default}{Logical: Return the default value(s) of the option(s). The default value of \code{default} is \code{FALSE}.}

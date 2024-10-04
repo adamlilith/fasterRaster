@@ -49,8 +49,8 @@
   snap = NULL,
   area = NULL,
   steps = 10,
-  dropTable = FALSE,
   resolve = NA,
+  dropTable = FALSE,
   verbose = TRUE
 )
 

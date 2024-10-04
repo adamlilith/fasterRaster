@@ -68,7 +68,10 @@ rasts <- c(rasts, forest2014) # another way
 ### Subsetting GRaster layers
 
 # Subset:
+rasts <- c(elev, forest2000, forest2014)
 rasts[[2:3]]
+subset(rasts, 2:3)
+subset(rasts, c("madForest2000", "madElev"))
 rasts[[c("madForest2000", "madElev")]]
 rasts$madForest2000
 
@@ -127,5 +130,5 @@ dypsis$institutionCode[dypsis$institutionCode == "MO"] <-
 }
 }
 \seealso{
-\code{\link[fasterRaster]{[}}, \code{\link[fasterRaster]{[[}}
+\code{\link[=subset]{subset()}}, \code{\link[fasterRaster]{[}}, \code{\link[fasterRaster]{[[}}
 }
