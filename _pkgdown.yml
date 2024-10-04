@@ -108,6 +108,8 @@ reference:
   - trunc
 - title: Math across GRaster layers
 - contents:
+  - allNA
+  - anyNA
   - count
   - kurtosis
   - max
@@ -133,6 +135,7 @@ reference:
   - "`[<-`"
   - "`[[<-`"
   - add<-
+  - subset
 - title: Operations on GRasters
 - contents:
   - "`%in%`"
@@ -166,7 +169,6 @@ reference:
   - interpIDW
   - kernel
   - layerCor
-  - longlat
   - mask
   - maskNA
   - match
@@ -198,6 +200,8 @@ reference:
 - title: Creating GRasters *de novo*
 - contents:
   - fractalRast
+  - init
+  - longlat
   - rnormRast
   - rSpatialDepRast
   - runifRast
@@ -287,6 +291,7 @@ reference:
   - "`[[`"
   - addTable<-
   - dropTable
+  - subset
 - title: Operations on GVectors
 - contents:
   - aggregate
