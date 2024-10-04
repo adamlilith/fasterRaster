@@ -72,7 +72,7 @@ mow <- function(x, type = NULL, verbose = TRUE, ask = TRUE) {
 	if ("raster" %in% type & "raster" %in% names(grassObjs)) {
 	
 		toDelete <- grassObjs[names(grassObjs) == "raster"]
-		if (verbose) omnibus::say("Deleting ", length(toDelete), " rasters from the GRASS cache...")
+		if (verbose) omnibus::say("Deleting ", length(toDelete), " raster(s) from the GRASS cache...")
 		.rm(toDelete, type = "raster", warn = TRUE, verify = FALSE)
 		out$rasters <- out$rasters + length(toDelete)
 
@@ -81,7 +81,7 @@ mow <- function(x, type = NULL, verbose = TRUE, ask = TRUE) {
 	if ("vector" %in% type & "vector" %in% names(grassObjs)) {
 	
 		toDelete <- grassObjs[names(grassObjs) == "vector"]
-		if (verbose) omnibus::say("Deleting ", length(toDelete), " vectors from the GRASS cache...")
+		if (verbose) omnibus::say("Deleting ", length(toDelete), " vector(s) from the GRASS cache...")
 		.rm(toDelete, type = "vector", warn = TRUE, verify = FALSE)
 		out$vectors <- out$vectors + length(toDelete)
 
