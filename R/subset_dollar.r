@@ -8,7 +8,7 @@
 #'
 #' @example man/examples/ex_GRaster_GVector_subset_assign.r
 #' 
-#' @seealso \code{\link[fasterRaster]{[}}, \code{\link[fasterRaster]{[[}}
+#' @seealso [subset()], \code{\link[fasterRaster]{[}}, \code{\link[fasterRaster]{[[}}
 #' 
 #' @name $
 #' @aliases $,GRaster-method
