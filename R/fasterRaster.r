@@ -45,21 +45,27 @@
 #' * [Logical operators][Logic-methods]: `|`and `&`
 #'
 #' Mathematical functions that are applied to each layer of a `GRaster`:
-#' - Working with `NA`s: [is.na()], [not.na()], and [maskNA()] 
-#' - Trigonometry: [sin()], [cos()], [tan()], [asin()], [acos()], [atan()], [atan2()] 
-#' - Logarithms and powers: [exp()], [log()], [ln()], [log1p()], [log2()], [log10()], [sqrt()] 
-#' - Rounding: [round()], [floor()], [ceiling()], [trunc()] 
-#' - Signs: [abs()] 
+#' * Working with `NA`s: [is.na()], [not.na()], and [maskNA()] 
+#' * Trigonometry: [sin()], [cos()], [tan()], [asin()], [acos()], [atan()], [atan2()] 
+#' * Logarithms and powers: [exp()], [log()], [ln()], [log1p()], [log2()], [log10()], [sqrt()] 
+#' * Rounding: [round()], [floor()], [ceiling()], [trunc()] 
+#' * Signs: [abs()] 
 #'
 #' Mathematical functions that are applied across layers of a "stack" of `GRaster`s:
-#' - Numeration: [sum()], [count()] 
-#' - Central tendency: [mean()], [mmode()], [median()] 
-#' - Dispersion: [stdev()], [var()], [varpop()], [nunique()], [range()], [quantile()], [skewness()], [kurtosis()]
-#' - Extremes: [min()], [max()], [which.min()], [which.max()] 
+#' * Numeration: [sum()], [count()] 
+#' * Central tendency: [mean()], [mmode()], [median()] 
+#' * Dispersion: [stdev()], [var()], [varpop()], [nunique()], [range()], [quantile()], [skewness()], [kurtosis()]
+#' * Extremes: [min()], [max()], [which.min()], [which.max()] 
+#' * `NA`s: [allNA()], [anyNA()] 
 #' 
-#' The operators [$] and \code{\link[fasterRaster]{[[}} can be used to subset or remove specific layers of a `GRaster`.
-#' The \code{\link[fasterRaster]{[<-}} operator can be used to replace values of cells of a `GRaster`.
-#' The assign operators, \code{\link[fasterRaster]{$<-}}, \code{\link[fasterRaster]{[[<-}}, and \code{\link[fasterRaster]{add<-}}, can be used to replace specific layers of a `GRaster`.
+#' Subsetting, assigning, and replacing `GRaster` layers
+#' * : Subset or remove specific layers of a `GRaster`
+#' * [$], \code{\link[fasterRaster]{[[}}, or [subset()]: Subset or remove specific layers of a `GRaster`
+#' * \code{\link[fasterRaster]{[<-}}: Replace values of cells of a `GRaster`
+#' * \code{\link[fasterRaster]{[[<-}}: Replace specific layers of a `GRaster`
+#' * [fasterRaster]{add<-}}: Replace specific layers of a `GRaster`
+#'
+#' Operations on `GRaster`s
 #' * [as.int()], [as.float()], [as.doub()]: Change data type (integer/float/double)
 #' * [as.lines()]: Convert a `GRaster` to a "lines" vector
 #' * [as.points()]: Convert a `GRaster` to a "points" vector
@@ -87,7 +93,6 @@
 #' * [interpIDW()]: Interpolate values at points to a `GRaster`
 #' * [kernel()]: Kernel density estimator of points
 #' * [layerCor()]: Correlation or covariance between two or more `GRaster` layers
-#' * [longlat()]: Create longitude/latitude rasters
 #' * [mask()]: Remove values in a `GRaster` based on values in another `GRaster` or vector
 #' * [maskNA()]: Mask all non-NA cells or all NA cells
 #' * [match()], \code{\link[fasterRaster]{%in%}}, and \code{\link[fasterRaster]{%notin%}}: Find which cells of a `GRaster` match or do not match certain values
@@ -117,6 +122,8 @@
 #'
 #' ## Creating `GRaster`s *de novo*
 #' * [fractalRast()]: Create a fractal `GRaster`
+#' * [init()]: GRaster with values equal to row, column, coordinate, regular, or "chess"
+#' * [longlat()]: Create longitude/latitude rasters
 #' * [rnormRast()]: A random `GRaster` with values drawn from a normal distribution
 #' * [rSpatialDepRast()]: Create a random `GRaster` with or without spatial dependence
 #' * [runifRast()]: A random `GRaster` with values drawn from a uniform distribution
@@ -188,11 +195,14 @@
 #' * [topology()]: Dimensionality (2D or 3D)
 #' * [zext()]: Vertical extent
 #'
-#' ## Operations on `GVector`s
-#' * The \code{\link[fasterRaster]{[}} operator can be used to subset geometries of a `GVector`.
-#' * The [$] and \code{\link[fasterRaster]{[[}} operators can be used to get columns of a `GVector`'s data table.
-#' * The \code{\link[fasterRaster]{$<-}} operator can be used to replace specific columns of a `GVector`'s data table or to add columns.
+#' ## Subsetting and assigning geometries or rows and columns of `GVector`s
+#' * [$] or \code{\link[fasterRaster]{[[}}: Subset columns of a `GVector`'s data table
+#' * \code{\link[fasterRaster]{[}} or [subset()]: Subset geometries of a `GVector`
+#' * \code{\link[fasterRaster]{$<-}}: Replace specific columns of a `GVector`'s data table or add columns
 #' * \code{\link[fasterRaster]{addTable<-}}: Add a data table to a `GVector`
+#' * [dropTable()]: Remove a `GVector`s data table
+#'
+#' ## Operations on `GVector`s
 #' * [aggregate()]: Combine `GVector` geometries
 #' * [as.data.frame()]: Convert a `GVector`'s attribute table to a `data.frame`
 #' * [as.data.table()]: Convert a `GVector`'s attribute table to a `data.table`
@@ -208,7 +218,6 @@
 #' * [delaunay()]: Delaunay triangulation
 #' * [disagg()]: Separate multipart geometries into singlepart geometries
 #' * [distance()]: Distance between geometries in two `GVector`, or from a `GVector` to cells of a `GRaster`
-#' * [dropTable()]: Remove the data table from a `GVector`
 #' * [erase()] or `-`: Remove part of a `GVector` that overlaps with another
 #' * [expanse()]: Area of polygons or length of lines
 #' * [extract()]: Extract values from a `GVector` at specific points
@@ -217,8 +226,8 @@
 #' * [hexagons()]: Create a hexagonal grid
 #' * [interpIDW()]: Interpolate values at points to a `GRaster` using inverse-distance weighting
 #' * [interpSplines()]: Interpolate values at points to a `GRaster` using splines
-#' * [intersect()] or `*`: Intersection of two `GVectors`.
-#' * [kernel()]: Kernel density estimator of points.
+#' * [intersect()] or `*`: Intersection of two `GVectors`
+#' * [kernel()]: Kernel density estimator of points
 #' * [missing.cases()]: Find rows of a `GVector`'s data table that have at least `NA` in them
 #' \code{\link[fasterRaster]{names<-}}: Assign names to columns of a `GVector`s data table
 #' * [project()]: Change coordinate reference system
@@ -294,7 +303,7 @@
 #' * [madLANDSAT][madLANDSAT]: Surface reflectance in 2023
 #' * [madPpt][madPpt], [madTmin][madTmin], [madTmax][madTmax]: Rasters of mean monthly precipitation, and minimum and maximum temperature
 #' * [madRivers][madRivers]: Rivers vector
-#' * [vegIndices][vegIndices]: Vegetation indices that can be calculated using [vegIndex()].
+#' * [vegIndices][vegIndices]: Vegetation indices that can be calculated using [vegIndex()]
 #' 
 #' ## Esoteric tutorials and arcane notes
 #' * Comparisons between `GRegion`s can be performed using the `==` and `!=` operators.
