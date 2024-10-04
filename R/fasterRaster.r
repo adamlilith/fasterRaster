@@ -51,7 +51,7 @@
 #' * Rounding: [round()], [floor()], [ceiling()], [trunc()] 
 #' * Signs: [abs()] 
 #'
-#' Mathematical functions that are applied across layers of a "stack" of `GRaster`s:
+#' Mathematical functions that are applied across layers of multi-layered `GRaster`s:
 #' * Numeration: [sum()], [count()] 
 #' * Central tendency: [mean()], [mmode()], [median()] 
 #' * Dispersion: [stdev()], [var()], [varpop()], [nunique()], [range()], [quantile()], [skewness()], [kurtosis()]
@@ -59,11 +59,10 @@
 #' * `NA`s: [allNA()], [anyNA()] 
 #' 
 #' Subsetting, assigning, and replacing `GRaster` layers
-#' * : Subset or remove specific layers of a `GRaster`
 #' * [$], \code{\link[fasterRaster]{[[}}, or [subset()]: Subset or remove specific layers of a `GRaster`
 #' * \code{\link[fasterRaster]{[<-}}: Replace values of cells of a `GRaster`
 #' * \code{\link[fasterRaster]{[[<-}}: Replace specific layers of a `GRaster`
-#' * [fasterRaster]{add<-}}: Replace specific layers of a `GRaster`
+#' * \code{\link[fasterRaster]{add<-}}: Replace specific layers of a `GRaster`
 #'
 #' Operations on `GRaster`s
 #' * [as.int()], [as.float()], [as.doub()]: Change data type (integer/float/double)
