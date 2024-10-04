@@ -34,14 +34,6 @@
 \alias{skewness}
 \alias{kurtosis,GRaster-method}
 \alias{kurtosis}
-\alias{slope,GRaster-method}
-\alias{slope}
-\alias{intercept,GRaster-method}
-\alias{intercept}
-\alias{r2,GRaster-method}
-\alias{r2}
-\alias{tvalue,GRaster-method}
-\alias{tvalue}
 \alias{range,GRaster-method}
 \alias{range}
 \alias{quantile,GRaster-method}
@@ -86,14 +78,6 @@
 
 \S4method{kurtosis}{GRaster}(x, na.rm = FALSE)
 
-\S4method{slope}{GRaster}(x, na.rm = FALSE)
-
-\S4method{intercept}{GRaster}(x, na.rm = FALSE)
-
-\S4method{r2}{GRaster}(x, na.rm = FALSE)
-
-\S4method{tvalue}{GRaster}(x, na.rm = FALSE)
-
 \S4method{range}{GRaster}(x, na.rm = FALSE)
 
 \S4method{quantile}{GRaster}(x, prob, na.rm = FALSE)
@@ -121,7 +105,6 @@ These functions can be applied to a "stack" of \code{GRaster}s with two or more 
 \item Central tendency: \code{mean()}, \code{mmode()} (mode), \code{median()}.
 \item Extremes: \code{min()}, \code{max()}, \code{which.min()} (index of raster with the minimum value), \code{which.max()} (index of the raster with the maximum value)
 \item Dispersion: \code{range()}, \code{stdev()} (standard deviation), \code{var()} (sample variance), \code{varpop()} (population variance), \code{nunique()} (number of unique values), \code{quantile()} (use argument \code{probs}), \code{skewness()}, and \code{kurtosis()}.
-\item Regression: Assuming we calculate a linear regression for each set of cells through all values of the cells, we can calculate its \code{slope()}, \code{intercept()}, \code{r2()}, and \code{tvalue()}.
 \item \code{NA}s: \code{anyNA()} (any cells are \code{NA}?), \code{allNA()} (are all cells \code{NA}?)
 }
 }
@@ -164,10 +147,9 @@ which.min(chelsa)
 which.max(chelsa)
 
 # Regression
-slope(chelsa)
-intercept(chelsa)
-r2(chelsa)
-tvalue(chelsa)
+# Note the intercept is different for fasterRaster::regress().
+regress(chelsa)
+regress(madChelsa)
 
 # Note: To get quantiles for each layer, use
 # global(x, "quantile", probs = 0.2).

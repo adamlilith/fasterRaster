@@ -36,10 +36,9 @@ which.min(chelsa)
 which.max(chelsa)
 
 # Regression
-slope(chelsa)
-intercept(chelsa)
-r2(chelsa)
-tvalue(chelsa)
+# Note the intercept is different for fasterRaster::regress().
+regress(chelsa)
+regress(madChelsa)
 
 # Note: To get quantiles for each layer, use
 # global(x, "quantile", probs = 0.2).

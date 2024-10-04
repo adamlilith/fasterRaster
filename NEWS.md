@@ -10,12 +10,14 @@ o `.vAttachDatabase()` no longer has the `"o"` flag when calling `v.db.connect` 
 
 ### Potentially code-breaking changes
 o `aggregate()` no longer has the `dissolve` argument for `GVector`s (polygons will always be dissolved).  
+o `intercept()`, `slope()`, `r2()`, and `tvalue()` have been replaced by the single function `regress()`.  
 
 ### Enhanced functionality and new functions
 o `extract()` now automatically projects a `GVector` to match the CRS of a `GRaster` from which extraction is being made.  
 o `grass()` allows users to start the **GRASS** GUI.  
 o `layerIndex()` allows a `negate` argument to get the "opposite" indices of a `GRaster`.  
 o `init()` assigns to `GRaster` cells the value of their coordinates, rows, columns, or values in a regular or chessboard-like pattern.  
+o `regress()` replaces individual functions `intercept()`, `slope()`, `r2()`, and `tvalue()`.  
 o `subset()` subsets layers of a `GRaster` or rows/geometries of a `GVector`.  
 o `segregate()` creates one layer per unique value in an input `GRaster`, with values in the output coded 1 or 0 depending on whether cells in the input had the unique value or not.  
 

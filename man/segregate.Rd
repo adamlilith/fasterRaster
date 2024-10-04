@@ -24,7 +24,7 @@
 If the input \code{x} is a single-layered \code{GRaster}, the output will be a multi-layered \code{GRaster} with one layer per value in the input, or one layer per values in \code{classes}. If the input is a multi-layered \code{GRaster}, the output will be a \code{list} of multi-layered \code{GRaster}s.
 }
 \description{
-This function creates a multi-layered \code{GRaster} for every unique values in an input \code{GRaster}. By default, the output will have a value of 1 wherever the input has the given value, and 0 elsewhere. This is useful for creating dummy variable \code{GRaster} layers for use with models that have factors, especially if the input \code{GRaster} is categorical.
+This function creates a multi-layered \code{GRaster} for every unique values in an input \code{GRaster}. By default, the output will have a value of 1 wherever the input has the given value, and 0 elsewhere. This is useful for creating dummy variable \code{GRaster} layers for use with models that have factors, especially if the input \code{GRaster} is categorical. Note that the \code{\link[=predict]{predict()}} function in \strong{fasterRaster} usually does not need this treatment of \code{GRaster}s since it can handle categorical rasters already.
 }
 \examples{
 if (grassStarted()) {
