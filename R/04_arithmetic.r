@@ -12,7 +12,7 @@
 #'
 #' @return A `GRaster`.
 #'
-#' @example man/examples/ex_GRaster_arithmetic.r
+#' @example man/examples/ex_GRaster_arithmetic_single_layer.r
 #'
 #' @aliases Arith
 #' @rdname Arithmetic
