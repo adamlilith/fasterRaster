@@ -176,10 +176,10 @@ reference:
   - names<-
   - noise
   - pairs
-  - pca
   - pcs
   - plot
   - plotRGB
+  - princomp
   - project
   - predict
   - regress

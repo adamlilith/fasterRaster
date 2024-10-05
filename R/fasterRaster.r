@@ -99,12 +99,11 @@
 #' * \code{\link[fasterRaster]{names<-}}: Assign names to a `GRaster`
 #' * [noise()]: Remove coarse-scale trends from a `GRaster`, leaving just fine-scale "noise"
 #' * [pairs()]: Plot correlations between `GRaster` layers
-#' * [pca()]: Apply a principal components analysis (PCA) to a `GRaster`
-#' * [pcs()]: Retrieve a principal components model from a PCA `GRaster` generated using `pca()`
+#' * [pcs()]: Retrieve a principal components model from a PCA `GRaster` generated using `princomp()`
 #' * [plot()]: Display a `GRaster`
-#' * [plotRGB()]: Display a multispectral `GRaster` using red, blue, green, and alpha channels
 #' * [project()]: Change coordinate reference system and cell size
 #' * [predict()]: Make predictions to a `GRaster` from a linear model or generalized linear model
+#' * [princomp()]: Apply a principal components analysis (PCA) to a `GRaster`
 #' * [regress()]: Regression intercept, slope, r2, and t-value across each set of cells
 #' * [resample()]: Change cell size
 #' * [reorient()]: Convert degrees between 'north-orientation' and 'east orientation'

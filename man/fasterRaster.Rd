@@ -119,12 +119,11 @@ Operations on \code{GRaster}s
 \item \code{\link[fasterRaster]{names<-}}: Assign names to a \code{GRaster}
 \item \code{\link[=noise]{noise()}}: Remove coarse-scale trends from a \code{GRaster}, leaving just fine-scale "noise"
 \item \code{\link[=pairs]{pairs()}}: Plot correlations between \code{GRaster} layers
-\item \code{\link[=pca]{pca()}}: Apply a principal components analysis (PCA) to a \code{GRaster}
-\item \code{\link[=pcs]{pcs()}}: Retrieve a principal components model from a PCA \code{GRaster} generated using \code{pca()}
+\item \code{\link[=pcs]{pcs()}}: Retrieve a principal components model from a PCA \code{GRaster} generated using \code{princomp()}
 \item \code{\link[=plot]{plot()}}: Display a \code{GRaster}
-\item \code{\link[=plotRGB]{plotRGB()}}: Display a multispectral \code{GRaster} using red, blue, green, and alpha channels
 \item \code{\link[=project]{project()}}: Change coordinate reference system and cell size
 \item \code{\link[=predict]{predict()}}: Make predictions to a \code{GRaster} from a linear model or generalized linear model
+\item \code{\link[=princomp]{princomp()}}: Apply a principal components analysis (PCA) to a \code{GRaster}
 \item \code{\link[=regress]{regress()}}: Regression intercept, slope, r2, and t-value across each set of cells
 \item \code{\link[=resample]{resample()}}: Change cell size
 \item \code{\link[=reorient]{reorient()}}: Convert degrees between 'north-orientation' and 'east orientation'

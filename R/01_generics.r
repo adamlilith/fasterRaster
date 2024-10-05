@@ -221,11 +221,10 @@ methods::setGeneric(name = "nunique", def = function(x, ...) standardGeneric("nu
 methods::setGeneric(name = "reorient", def = function(x, ...) standardGeneric("reorient"))
 
 methods::setGeneric(name = "pairs", package = "terra")
-methods::setGeneric(name = "pca", def = function(x, ...) standardGeneric("pca"))
 methods::setGeneric(name = "plot", package = "terra")
 methods::setGeneric(name = "plotRGB", package = "terra")
 methods::setGeneric(name = "predict", package = "terra")
-# methods::setGeneric(name = "print", def = function(x, ...) standardGeneric("print")) # base
+methods::setGeneric(name = "princomp", package = "terra")
 methods::setGeneric(name = "print") # base
 methods::setGeneric(name = "project", package = "terra")
 
