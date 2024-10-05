@@ -25,7 +25,7 @@
 #'
 #' @example man/examples/ex_GRaster_categorical.r
 #'
-#' @seealso [combineLevels()], `vignette("GRasters", package = "fasterRaster")`
+#' @seealso [combineLevels()], `vignette("GRasters", package = "fasterRaster")`, [terra::crosstab()]
 #'
 #' @aliases combineCats
 #' @rdname combineCats
