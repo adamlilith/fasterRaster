@@ -4,7 +4,6 @@ note <- sprintf("R package version %s", meta$Version)
 doi <- "NA"
 title <- paste0(meta$Package, ": ", meta$Title)
 
-
 citHeader("To cite fasterRaster in publications use:")
 bibentry(bibtype = "Manual",
 	key = key,
@@ -16,4 +15,3 @@ bibentry(bibtype = "Manual",
 	note = note,
 	doi  = doi
 )
-		 

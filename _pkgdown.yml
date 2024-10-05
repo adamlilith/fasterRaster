@@ -154,7 +154,7 @@ reference:
   - cellSize
   - classify
   - clump
-  - combineCats
+  - combineLevels
   - concats
   - crop
   - denoise
