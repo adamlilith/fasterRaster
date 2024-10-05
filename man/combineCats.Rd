@@ -158,5 +158,5 @@ levels(combinedNA)
 }
 }
 \seealso{
-\code{\link[=combineLevels]{combineLevels()}}, \code{vignette("GRasters", package = "fasterRaster")}
+\code{\link[=combineLevels]{combineLevels()}}, \code{vignette("GRasters", package = "fasterRaster")}, \code{\link[terra:crosstab]{terra::crosstab()}}
 }
