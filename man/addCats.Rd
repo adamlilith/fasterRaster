@@ -145,12 +145,12 @@ levs <- data.frame(
 levels(elevCat) <- list(levs)
 
 # Combine levels:
-combined <- combineCats(cover, elevCat)
+combined <- concats(cover, elevCat)
 combined
 levels(combined)
 
 # Combine levels, treating value/NA combinations as new categories:
-combinedNA <- combineCats(cover, elevCat, na.rm = FALSE)
+combinedNA <- concats(cover, elevCat, na.rm = FALSE)
 combinedNA
 levels(combinedNA)
 

@@ -77,8 +77,8 @@
 #' * [cellSize()]: Cell area
 #' * [classify()]: Partition cell values into strata
 #' * [clump()]: Group adjacent cells with similar values
-#' * [combineCats()]: Combine values from two or more categorical and/or integer rasters
 #' * [combineLevels()]: Combine the "levels" tables of two or more categorical `GRaster`s
+#' * [concats()]: Combine values from two or more categorical and/or integer rasters by concatenating them
 #' * [crop()]: Remove parts of a `GRaster`
 #' * [denoise()]: Remove "noise" from a `GRaster` using a principal components analysis (PCA)
 #' * [distance()]: Distance to non-`NA` cells, or vice versa
@@ -150,9 +150,9 @@
 #' * [categories()]: Set "levels" table for specific layers of a categorical raster
 #' * [catNames()]: Column names of each "levels" table
 #' * [cats()]: "Levels" table of a categorical raster
-#' * [combineCats()]: Combine categories from two or more categorical rasters
 #' * [combineLevels()]: Combine the "levels" tables of two or more categorical `GRaster`s
 #' * [complete.cases()]: Find rows of a categorical `GRaster`'s "levels" table that have no `NA`s in them
+#' * [concats()]: Combine categories from two or more categorical rasters by concatenating them
 #' * [droplevels()]: Remove one or more levels
 #' * [freq()]: Frequency of each category across cells of a raster
 #' * [is.factor()]: Is a raster categorical?

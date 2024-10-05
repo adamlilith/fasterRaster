@@ -21,7 +21,7 @@ A \code{list} with a "levels" table (a \code{data.frame} or \code{data.table}), 
 \description{
 This function creates a single "levels" table from the levels tables of one or more categorical \code{GRaster}s.
 
-The difference between this function and \code{\link[=combineCats]{combineCats()}} is that \code{combineCats()} creates a "combined" \code{GRaster} with a combined levels table, whereas this one just merges the levels tables.
+The difference between this function and \code{\link[=concats]{concats()}} is that \code{concats()} creates a "combined" \code{GRaster} with a combined levels table, whereas this one just merges the levels tables.
 }
 \examples{
 if (grassStarted()) {
@@ -136,17 +136,17 @@ levs <- data.frame(
 levels(elevCat) <- list(levs)
 
 # Combine levels:
-combined <- combineCats(cover, elevCat)
+combined <- concats(cover, elevCat)
 combined
 levels(combined)
 
 # Combine levels, treating value/NA combinations as new categories:
-combinedNA <- combineCats(cover, elevCat, na.rm = FALSE)
+combinedNA <- concats(cover, elevCat, na.rm = FALSE)
 combinedNA
 levels(combinedNA)
 
 }
 }
 \seealso{
-\code{\link[=combineCats]{combineCats()}}, \code{vignette("GRasters", package = "fasterRaster")}
+\code{\link[=concats]{concats()}}, \link[terra:concats]{terra::concats}, \code{vignette("GRasters", package = "fasterRaster")}
 }

@@ -97,8 +97,8 @@ Operations on \code{GRaster}s
 \item \code{\link[=cellSize]{cellSize()}}: Cell area
 \item \code{\link[=classify]{classify()}}: Partition cell values into strata
 \item \code{\link[=clump]{clump()}}: Group adjacent cells with similar values
-\item \code{\link[=combineCats]{combineCats()}}: Combine values from two or more categorical and/or integer rasters
 \item \code{\link[=combineLevels]{combineLevels()}}: Combine the "levels" tables of two or more categorical \code{GRaster}s
+\item \code{\link[=concats]{concats()}}: Combine values from two or more categorical and/or integer rasters by concatenating them
 \item \code{\link[=crop]{crop()}}: Remove parts of a \code{GRaster}
 \item \code{\link[=denoise]{denoise()}}: Remove "noise" from a \code{GRaster} using a principal components analysis (PCA)
 \item \code{\link[=distance]{distance()}}: Distance to non-\code{NA} cells, or vice versa
@@ -179,9 +179,9 @@ Operations on \code{GRaster}s
 \item \code{\link[=categories]{categories()}}: Set "levels" table for specific layers of a categorical raster
 \item \code{\link[=catNames]{catNames()}}: Column names of each "levels" table
 \item \code{\link[=cats]{cats()}}: "Levels" table of a categorical raster
-\item \code{\link[=combineCats]{combineCats()}}: Combine categories from two or more categorical rasters
 \item \code{\link[=combineLevels]{combineLevels()}}: Combine the "levels" tables of two or more categorical \code{GRaster}s
 \item \code{\link[=complete.cases]{complete.cases()}}: Find rows of a categorical \code{GRaster}'s "levels" table that have no \code{NA}s in them
+\item \code{\link[=concats]{concats()}}: Combine categories from two or more categorical rasters by concatenating them
 \item \code{\link[=droplevels]{droplevels()}}: Remove one or more levels
 \item \code{\link[=freq]{freq()}}: Frequency of each category across cells of a raster
 \item \code{\link[=is.factor]{is.factor()}}: Is a raster categorical?
