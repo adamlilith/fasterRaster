@@ -47,9 +47,9 @@ Categorical rasters (also called "factor" rasters) are actually integer rasters,
 * [`addCats<-`](https://adamlilith.github.io/fasterRaster/reference/addCats.html) add new levels to a "levels" table.
 * [`catNames()`](https://adamlilith.github.io/fasterRaster/reference/catNames.html) reports the column names of the "levels" table of each layer of a raster.
 * [`cats()`](https://adamlilith.github.io/fasterRaster/reference/cats.html) returns the entire "levels" table of a categorical raster.
-* [`combineCats()`](https://adamlilith.github.io/fasterRaster/reference/combineCats.html) combines levels of two or more categorical or integer rasters.
 * [`combineLevels()`](https://adamlilith.github.io/fasterRaster/reference/combineLevels.html): Combine the "levels" tables of two or more categorical `GRaster`s.
 * [`complete.cases()`](https://adamlilith.github.io/fasterRaster/reference/complete.cases.html) finds rows in the levels table that have no `NA`s.
+* [`concats()`](https://adamlilith.github.io/fasterRaster/reference/combineCats.html) combines levels of two or more categorical or integer rasters by concatenating them.
 * [`droplevels()`](https://adamlilith.github.io/fasterRaster/reference/dropevels.html) removes "unused" levels in a "levels" table.
 * [`levels()`](https://adamlilith.github.io/fasterRaster/reference/levels.html) returns the "levels" table of a categorical raster (just the value column and the active column).
 * [`levels<-`](https://adamlilith.github.io/fasterRaster/reference/levels.html) and [`categories()`](https://adamlilith.github.io/fasterRaster/reference/categories.html) can be used to assign categories to an integer raster and make it categorical (i.e., a "factor" raster).

@@ -158,5 +158,5 @@ legend("bottom",
 }
 }
 \seealso{
-\code{\link[terra:topology]{terra::topology()}}, \code{\link[=fillHoles]{fillHoles()}}, \emph{Details} section in \code{\link[=fast]{fast()}}, \code{\link[=simplifyGeom]{simplifyGeom()}}, \code{\link[=smoothGeom]{smoothGeom()}}
+\code{\link[terra:topology]{terra::topology()}}, \code{\link[=fillHoles]{fillHoles()}}, \code{\link[terra:topology]{terra::removeDupNodes()}}, \emph{Details} section in \code{\link[=fast]{fast()}}, \code{\link[=simplifyGeom]{simplifyGeom()}}, \code{\link[=smoothGeom]{smoothGeom()}}
 }

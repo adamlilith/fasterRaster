@@ -14,7 +14,7 @@
 A \code{GVector}.
 }
 \description{
-The \code{xor()} function selects the area that does not overlap between two "polygon" \code{GVector}s. You can also use the \code{/} operator, as in \code{vect1 / vect2}.
+The \code{xor()} function selects the area that does \emph{not} overlap between two "polygon" \code{GVector}s. You can also use the \code{/} operator, as in \code{vect1 / vect2}.
 }
 \examples{
 if (grassStarted()) {
@@ -68,5 +68,5 @@ minus <- coast4 - hull # same as erase()
 }
 }
 \seealso{
-\code{\link[=c]{c()}}, \code{\link[=aggregate]{aggregate()}}, \code{\link[=crop]{crop()}}, \code{\link[=intersect]{intersect()}}, \code{\link[=union]{union()}}, \code{\link[=erase]{erase()}}
+\code{\link[=crop]{crop()}}, \code{\link[=intersect]{intersect()}}, \code{\link[=union]{union()}}, \code{\link[=erase]{erase()}}
 }

@@ -19,7 +19,7 @@
 #'
 #' @param tolerance Numeric or `NULL` (default): Minimum distance in map units (degrees for unprojected, usually meters for projected) or minimum area (in meters-squared, regardless of projection).
 #'
-#' @seealso [terra::topology()], [fillHoles()], *Details* section in [fast()], [simplifyGeom()], [smoothGeom()]
+#' @seealso [terra::topology()], [fillHoles()], [terra::removeDupNodes()], *Details* section in [fast()], [simplifyGeom()], [smoothGeom()]
 #'
 #' @returns A `GVector`.
 #'

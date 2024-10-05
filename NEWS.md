@@ -10,7 +10,9 @@ o `.vAttachDatabase()` no longer has the `"o"` flag when calling `v.db.connect` 
 
 ### Potentially code-breaking changes
 o `aggregate()` no longer has the `dissolve` argument for `GVector`s (polygons will always be dissolved).  
-o `intercept()`, `slope()`, `r2()`, and `tvalue()` have been replaced by the single function `regress()`.  
+o `combineCats()` has been renamed `concats()` to align with **terra**.  
+o `intercept()`, `slope()`, `r2()`, and `tvalue()` have been replaced by the single function `regress()` to align with **terra**.  
+o `pca()` has been renamed `princomp()`.  
 
 ### Enhanced functionality and new functions
 o `extract()` now automatically projects a `GVector` to match the CRS of a `GRaster` from which extraction is being made.  

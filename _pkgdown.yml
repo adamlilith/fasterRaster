@@ -155,7 +155,7 @@ reference:
   - classify
   - clump
   - combineCats
-  - combineLevels
+  - concats
   - crop
   - denoise
   - distance
@@ -232,9 +232,9 @@ reference:
   - categories
   - catNames
   - cats
-  - combineCats
   - combineLevels
   - complete.cases
+  - concats
   - droplevels
   - freq
   - is.factor
