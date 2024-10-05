@@ -186,6 +186,7 @@ reference:
   - resample
   - reorient
   - sampleRast
+  - segregate
   - stretch
   - scale
   - scalepop
@@ -245,6 +246,7 @@ reference:
   - missing.cases
   - missingCats
   - nlevels
+  - segregate
   - subst
   - zonalGeog
 - title: Remote sensing GRasters
