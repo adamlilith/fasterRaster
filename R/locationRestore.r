@@ -63,7 +63,7 @@ methods::setMethod(
 	index <- .locationFind(location, return = "index")
 
 	if (is.null(index)) {
-		stop("Location has not been created.")
+		stop("Location has not been created. You must use faster() to set the installation directory where GRASS is installed, then use fast() at least once to start GRASS.")
 	}
 
 	opts <- faster()
