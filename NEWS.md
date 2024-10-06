@@ -23,11 +23,13 @@ o `regress()` replaces individual functions `intercept()`, `slope()`, `r2()`, an
 o `subset()` subsets layers of a `GRaster` or rows/geometries of a `GVector`.  
 o `segregate()` creates one layer per unique value in an input `GRaster`, with values in the output coded 1 or 0 depending on whether cells in the input had the unique value or not.  
 
-### Bug fixes
+### Bug and issue fixes
+o `appFuns()` opens a a **shiny** table with `app()` functions.  
 o `categories()` correctly assigns active category column.  
 o `simplifyGeom()` works for 2-dimensional `GVector`s.  
 o `rasterize()` works when `by` is not `NULL`.  
-o `.layerIndex()` (called by `catergories()` and other functions related to catrgorical `GRaster`s) does not fail.  
+o `.layerIndex()` (called by `catergories()` and other functions related to categorical `GRaster`s) does not fail.  
+o Removed all instances of `sQuote()`.  
 
 # fasterRaster 8.3.0.7026 (2024-09-22)
 
