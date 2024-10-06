@@ -19,3 +19,5 @@ CODE_OF_CONDUCT.md
 ^\vignettes\^junk
 junk
 fasterRaster_workspace.code-workspace
+^doc$
+^Meta$
