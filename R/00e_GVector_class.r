@@ -31,9 +31,9 @@ methods::setValidity("GVector",
 		if (!info$catsValid) {
 			"Vector has invalid topology. See the *Details* section in `fast()` on how to correct topology."
 		} else if (!all(object@geometry %in% c(NA_character_, "points", "lines", "polygons"))) {
-			paste0("@geometry can only be NA, ", sQuote("points"), ", ", sQuote("lines"), ", or ", sQuote("polygons"), ".")
+			paste0("@geometry can only be NA, `points`, `lines`, or `polygons`.")
 		# } else if (length(unique(.vCats(object)) != object@nGeometries)) {
-			# "The number of @nGeometries is not the same as the number of unique ", sQuote("cat"), " values in the vector attribute table in GRASS."
+			# "The number of @nGeometries is not the same as the number of unique `cat` values in the vector attribute table in GRASS."
 		# } else if (object@nGeometries > object@nSubgeometries) {
 			# "The number of sub-geometries in @nSubgeometries must be <= the number of geometries in @nGeometries."
 		} else if (object@nGeometries == 0L) {

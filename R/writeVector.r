@@ -53,7 +53,7 @@ setMethod(
 	) {
 
 	### going to overwrite anything?
-	if (!overwrite && file.exists(filename)) stop(paste0("File already exists and ", sQuote("overwrite"), " is FALSE:\n ", filename))
+	if (!overwrite && file.exists(filename)) stop(paste0("File already exists and `overwrite` is FALSE:\n ", filename))
 
 	.locationRestore(x)
 

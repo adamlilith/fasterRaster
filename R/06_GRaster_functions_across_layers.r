@@ -491,7 +491,7 @@ setMethod(
 	} else if (return == "source") {
 		out <- src
 	} else {
-		stop("Invalid value for ", sQuote("return"), ".")
+		stop("Invalid value for `return`.")
 	}
 	out
 

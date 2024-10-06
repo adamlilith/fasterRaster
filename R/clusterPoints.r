@@ -31,7 +31,7 @@ methods::setMethod(
 	
 	if (!is.null(maxDist)) {
 	
-		if (is.infinite(maxDist)) stop("Argument ", sQuote("maxDist"), " cannot be infinite.")
+		if (is.infinite(maxDist)) stop("Argument `maxDist` cannot be infinite.")
 	
 	}
 

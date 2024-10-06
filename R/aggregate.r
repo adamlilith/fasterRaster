@@ -51,7 +51,7 @@ methods::setMethod(
 		na.rm = FALSE
 	) {
 
-	if (any(fact <= 0)) stop("Values of ", sQuote("fact"), " must be > 0.")
+	if (any(fact <= 0)) stop("Values of `fact` must be > 0.")
 
 	funs <- c("mean", "median", "mode", "min", "maximum", "range", "quantile", "sum", "varpop", "sdpop", "count", "diversity")
 	fun <- omnibus::pmatchSafe(tolower(fun), funs)
@@ -68,9 +68,9 @@ methods::setMethod(
 		fun <- "stdev"
 	} else if (fun == "quantile") {
 		
-		if (is.null(prob)) stop("A value must be specified for ", sQuote("prob"), " if the aggregating function is ", sQuote("quantile"), ".")
+		if (is.null(prob)) stop("A value must be specified for `prob` if the aggregating function is `quantile`.")
 		
-		if (prob < 0 | prob > 1) stop("Argument ", sQuote("prob"), " must be in the range [0, 1].")
+		if (prob < 0 | prob > 1) stop("Argument `prob` must be in the range [0, 1].")
 	
 	}
 	

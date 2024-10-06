@@ -51,11 +51,11 @@ methods::setMethod(
 
 	if (is.null(bits)) {
 
-		if (any(mm > 1)) stop("Raster values should be between 0 and 1 if ", sQuote("bits"), " is NULL.")
+		if (any(mm > 1)) stop("Raster values should be between 0 and 1 if `bits` is NULL.")
 
 	} else {
 
-		if (!all(is.int(x))) stop("If argument ", sQuote("bits"), " is defined, then rasters must be of type ", sQuote("integer"), ".")
+		if (!all(is.int(x))) stop("If argument `bits` is defined, then rasters must be of type `integer`.")
 
 		maxVal <- 2^bits
 		if (any(mm > maxVal)) stop("Maximum value for ", bits, " bits is ", maxVal, ".\n  At least one raster surpasses this.")

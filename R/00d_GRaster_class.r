@@ -113,7 +113,7 @@ GRaster <- methods::setClass(
 methods::setValidity("GRaster",
 	function(object) {
 		if (!all(object@datatypeGRASS %in% c("CELL", "FCELL", "DCELL"))) {
-			paste0("@datatypeGRASS can only be NA, ", sQuote("CELL"), ", ", sQuote("FCELL"), ", or ", sQuote("DCELL"), ".")
+			paste0("@datatypeGRASS can only be NA, ``CELL`, `FCELL`, or `DCELL`.")
 		} else if (!is.na(object@dimensions[3L]) && object@dimensions[3L] <= 0L) {
 			"Third value in @dimensions must be NA or a positive integer."
 		} else if (!is.na(object@resolution[3L]) && object@resolution[3L] <= 0) {

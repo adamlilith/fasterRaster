@@ -71,7 +71,7 @@ methods::setMethod(
 			} else if (out[i] == "DCELL") {
 				out[i] <- if (type == "GDAL") { "Float64" } else { "FLT8S" }
 			} else {
-				warning("Values are too small/large to represent. Assigning ", sQuote("double"), " type.")
+				warning("Values are too small/large to represent. Assigning `double` type.")
 				out[i] <- if (type == "GDAL") { "Float64" } else { "FLT8S" }
 			}
 
@@ -141,7 +141,7 @@ methods::setMethod(
 # # # 			} else if (min[i] > -1.79e+308 & max[i] < 1.79e+308) {
 # # # 				out[i] <- if (type == "GDAL") { "Float64" } else if (type == "terra") { "FLT8S" } else if (type == "GRASS") { "DCELL" } else if (type == "fasterRaster") { "double" }
 # # # 			} else {
-# # # 				warning("Values are too small/large to represent. Assigning ", sQuote("double"), " type.")
+# # # 				warning("Values are too small/large to represent. Assigning `double` type.")
 # # # 				out[i] <- if (type == "GDAL") { "Float64" } else if (type == "terra") { "FLT8S" } else if (type == "GRASS") { "DCELL"} else if (type == "fasterRaster") { "double" }
 # # # 			}
 # # # 		}

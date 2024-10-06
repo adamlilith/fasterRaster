@@ -19,9 +19,9 @@ methods::setMethod(
 	signature(x = "GVector", y = "GVector"),
 	function(x, y, minDist = NULL, maxDist = NULL) {
 
-	if (!is.null(minDist) && minDist < 0) stop("Argument ", sQuote("minDist"), " must be positive or NULL.")
-	if (!is.null(maxDist) && maxDist < 0) stop("Argument ", sQuote("maxDist"), " must be positive or NULL.")
-	if ((!is.null(maxDist) & !is.null(maxDist)) && (minDist > maxDist)) stop("Argument ", sQuote("minDist"), " is greater than ", sQuote("maxDist"), ".")
+	if (!is.null(minDist) && minDist < 0) stop("Argument `minDist` must be positive or NULL.")
+	if (!is.null(maxDist) && maxDist < 0) stop("Argument `maxDist` must be positive or NULL.")
+	if ((!is.null(maxDist) & !is.null(maxDist)) && (minDist > maxDist)) stop("Argument `minDist` is greater than `maxDist`.")
 
 	compareGeom(x, y)
 	.locationRestore(x)

@@ -90,14 +90,14 @@ methods::setMethod(
     if (inherits(y, "numeric")) {
 
         if (!(length(y) %in% c(1L, 2L, 4L))) {
-            stop("Argument ", sQuote("y"), " is invalid.")
+            stop("Argument `y` is invalid.")
         } else if (length(y) == 1L) {
             y <- rep(y, 4L)
         } else if (length(y) == 2L) {
             y <- rep(y, each = 2L)
         }
         
-        if (any(!omnibus::is.wholeNumber(y))) stop("Values of ", sQuote("y"), " must be numeric integers.")
+        if (any(!omnibus::is.wholeNumber(y))) stop("Values of `y` must be numeric integers.")
         if (any(y < 0L)) y[y < 0L] <- 0L
 
     } else {
@@ -108,7 +108,7 @@ methods::setMethod(
         } else if (inherits(y, "GSpatial")) {
             extent <- ext(y, vector = TRUE)
         } else {
-            stop("Argument ", sQuote("y"), " is invalid.")
+            stop("Argument `y` is invalid.")
         }
 
         # by how many rows and columns do we grow?

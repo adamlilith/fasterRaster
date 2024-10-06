@@ -22,7 +22,7 @@ methods::setMethod(
     signature = c(x = "GRaster"),
     function(x, minDiff = 0, minClumpSize = 1, diagonal = TRUE) {
 
-    if (minDiff < 0 | minDiff >= 1) stop(sQuote("minDiff"), " must be >= 0 and < 1.")
+    if (minDiff < 0 | minDiff >= 1) stop("Argument `minDiff` must be >= 0 and < 1.")
 
     .locationRestore(x)
     .region(x)

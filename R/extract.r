@@ -145,8 +145,8 @@ methods::setMethod(
 
             if (any(fun == "quantile")) {
                 
-                if (length(prob) > 1L) stop("Argument ", sQuote("prob"), " can only have one value.")
-                if (prob > 1 | prob < 0) stop("Argument ", sQuote("prob"), " must be in the range [0, 1].")
+                if (length(prob) > 1L) stop("Argument `prob` can only have one value.")
+                if (prob > 1 | prob < 0) stop("Argument `prob` must be in the range [0, 1].")
                 prob <- round(100 * prob)
             
             }
@@ -374,8 +374,8 @@ methods::setMethod(
         cats = TRUE
     ) {
 
-    if (ncol(y) < 2L) stop("Argument ", sQuote("y"), " must have at least two columns. The first must represent longitude and the second latitude.")
-    if (ncol(y) > 2L) warning("Argument ", sQuote("y"), " has more than two columns. The first will be assumed to represent longitude and the second latitude.")
+    if (ncol(y) < 2L) stop("Argument `y` must have at least two columns. The first must represent longitude and the second latitude.")
+    if (ncol(y) > 2L) warning("Argument `y` has more than two columns. The first will be assumed to represent longitude and the second latitude.")
 
     y <- terra::vect(y, geom = colnames(y)[1L:2L], crs = crs(x), keepgeom = FALSE)
     y <- fast(y)
@@ -435,7 +435,7 @@ methods::setMethod(
         cats = TRUE
     ) {
 
-    if (length(y) != 2L) stop("Argument ", sQuote("y"), " must have two values, longitude and latitude.")
+    if (length(y) != 2L) stop("Argument `y` must have two values, longitude and latitude.")
     y <- cbind(y)
     colnames(y) <- c("x", "y")
     extract(x = x, y = y, xy = xy, cats = cats)
@@ -451,7 +451,7 @@ methods::setMethod(
     signature = c(x = "GVector", y = "GVector"),
     function(x, y, xy = FALSE) {
 
-    if (geomtype(y) != "points") stop("Argument", sQuote("y"), " must be a points vector.")
+    if (geomtype(y) != "points") stop("Argument`y` must be a points vector.")
     if (is.3d(y)) warning("Coordinates in the z-dimension will be ignored.")
 
     .locationRestore(x)

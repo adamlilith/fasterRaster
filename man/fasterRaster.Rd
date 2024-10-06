@@ -389,7 +389,7 @@ Operations on \code{GRaster}s
 \seealso{
 Useful links:
 \itemize{
-  \item \url{http://www.earthSkySea.org}
+  \item \url{https://github.com/adamlilith/fasterRaster}
   \item \url{https://adamlilith.github.io/fasterRaster/}
   \item Report bugs at \url{https://github.com/adamlilith/fasterRaster/issues}
 }

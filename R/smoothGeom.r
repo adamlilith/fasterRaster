@@ -35,7 +35,7 @@ methods::setMethod(
 		zext <- diff(zext)
 		dist <- 0.02 * min(xext, yext, zext, na.rm=TRUE)
 	} else {
-		if (dist < 0) stop("Argument ", sQuote("dist"), " must be > 0.")
+		if (dist < 0) stop("Argument `dist` must be > 0.")
 	}
 
 	.locationRestore(x)
@@ -43,7 +43,7 @@ methods::setMethod(
 	method <- tolower(method)
 	method <- omnibus::pmatchSafe(method, c("hermite", "chaiken"))
 	
-	if (method == "hermite" && angle < 0) stop("Argument ", sQuote("angle"), " must be >0.")
+	if (method == "hermite" && angle < 0) stop("Argument `angle` must be >0.")
 	
 	src <- .makeSourceName("generalized", "vect")
 	args <- list(

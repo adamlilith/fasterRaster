@@ -60,7 +60,7 @@ methods::setMethod(
 		"reumann"
 	}
 	
-	if (method == "reumann" && (prop < 0 | prop > 1)) stop("Argument ", sQuote("prop"), " must be in the range [0, 1].")
+	if (method == "reumann" && (prop < 0 | prop > 1)) stop("Argument `prop` must be in the range [0, 1].")
 	
 	src <- .makeSourceName("generalized", "vect")
 	args <- list(

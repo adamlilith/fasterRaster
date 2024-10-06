@@ -40,9 +40,9 @@ methods::setMethod(
 	if (length(max) < nLayers) max <- rep(max, length.out = nLayers)
 
 	mm <- minmax(x)
-	if (any(min > mm["min", ])) warning("The ", sQuote("min"), " value is greater than the actual minimum value in at least one raster layer.\n  Observed values will be truncated.")
+	if (any(min > mm["min", ])) warning("The `min` value is greater than the actual minimum value in at least one raster layer.\n  Observed values will be truncated.")
 
-	if (any(max > mm["max", ])) warning("The ", sQuote("max"), " value is less than the actual maximum value in at least one raster layer.\n  Observed values will be truncated.")
+	if (any(max > mm["max", ])) warning("The `max` value is less than the actual maximum value in at least one raster layer.\n  Observed values will be truncated.")
 
 	srcs <- .makeSourceName("r_fillnulls", "raster", nLayers)
 

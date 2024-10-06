@@ -117,16 +117,16 @@ methods::setMethod(
 ) {
 
 	if (!is.null(lambda)) {
-		if (lambda <= 0) stop("Argument ", sQuote("lambda"), " must be NULL or > 0.")
+		if (lambda <= 0) stop("Argument `lambda` must be NULL or > 0.")
 	}
 
 	if (!is.null(lambda)) interpolate <- TRUE
 
-	if (geomtype(x, grass = TRUE) != "point") stop("Argument ", sQuote("x"), " must be a points GVector.")
+	if (geomtype(x, grass = TRUE) != "point") stop("Argument `x` must be a points GVector.")
 
 	if (inherits(y, "GVector")) {
 	
-		if (geomtype(y, grass = TRUE) != "point") stop("Argument ", sQuote("y"), " must be a points GVector or a GRaster.")
+		if (geomtype(y, grass = TRUE) != "point") stop("Argument `y` must be a points GVector or a GRaster.")
 	
 	}
 
@@ -139,14 +139,14 @@ methods::setMethod(
 
 	# copy values field to x
 	if (is.null(field) & is.2d(x)) {
-		stop("Argument ", sQuote("field"), " cannot be NULL if ", sQuote("x"), " is a 2-dimensional points GVector.")
+		stop("Argument `field` cannot be NULL if `x` is a 2-dimensional points GVector.")
 	} else if (is.numeric(field) | is.integer(field)) {
 		field <- names(x)[field]
 	}
 
 	if (!is.null(field)) {
 
-		if (anyNA(x@table[[field]])) stop("The column ", sQuote(field), " has at least one NA in it. NAs are not permissible.")
+		if (anyNA(x@table[[field]])) stop("The column `field` has at least one NA in it. NAs are not permissible.")
 
 		cats <- .vCats(x, db = FALSE)
 		db <- data.table::data.table(frid = cats, TEMPTEMP_ = x@table[[field]])

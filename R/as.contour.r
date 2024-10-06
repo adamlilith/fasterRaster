@@ -24,8 +24,8 @@ setMethod(
 	.locationRestore(x)
 	.region(x)
 
-	if (!missing(nlevels) & !missing(levels)) stop("Please specify either ", sQuote("nlevels"), " or ", sQuote("levels"), ", but not both.")
-	if (missing(nlevels) & missing(levels)) stop("Please specify either ", sQuote("nlevels"), " or ", sQuote("levels"), ".")
+	if (!missing(nlevels) & !missing(levels)) stop("Please specify either `nlevels` or `levels`, but not both.")
+	if (missing(nlevels) & missing(levels)) stop("Please specify either `nlevels` or `levels`.")
 
 	if (!missing(nlevels)) {
 		mm <- minmax(x)

@@ -49,7 +49,7 @@ methods::setMethod(
 
 	# calculate cell number and re-calibrate GRASS region
 	if (is.null(nx) & is.null(ny)) {
-		stop("At least one of ", sQuote("nx"), " or ", sQuote("ny"), " must be defined.")
+		stop("At least one of `nx` or `ny` must be defined.")
 	} else if (!is.null(nx) & is.null(ny)) {
 
 		if (use == "number") {
