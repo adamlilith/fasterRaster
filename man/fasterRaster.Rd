@@ -337,7 +337,8 @@ Operations on \code{GRaster}s
 \itemize{
 \item \code{\link[=compareGeom]{compareGeom()}}: Determine if geographic metadata is same between \code{GRaster}s and/or \code{GVector}s
 \item \code{\link[=dropRows]{dropRows()}}: Remove rows from a \code{data.frame} or \code{data.table}
-\item \code{\link[=grass]{grass()}}: Start the \strong{GRASS} GUI (not recommended for most users!!!)
+\item \code{\link[=grassGUI]{grassGUI()}}: Start the \strong{GRASS} GUI (not recommended for most users!!!)
+\item \code{\link[=grassHelp]{grassHelp()}}: Open the help page for a \strong{GRASS} module.
 \item \code{\link[=grassInfo]{grassInfo()}}: \strong{GRASS} version and citation
 \item \code{\link[=grassStarted]{grassStarted()}}: Has a connection \strong{GRASS} been made within the current \strong{R} session?
 \item \code{\link[=mow]{mow()}}: Remove unused rasters and vectors from the \strong{GRASS} cache

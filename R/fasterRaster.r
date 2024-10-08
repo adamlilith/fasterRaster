@@ -280,7 +280,8 @@
 #' ## General purpose functions
 #' * [compareGeom()]: Determine if geographic metadata is same between `GRaster`s and/or `GVector`s
 #' * [dropRows()]: Remove rows from a `data.frame` or `data.table`
-#' * [grass()]: Start the **GRASS** GUI (not recommended for most users!!!)
+#' * [grassGUI()]: Start the **GRASS** GUI (not recommended for most users!!!)
+#' * [grassHelp()]: Open the help page for a **GRASS** module.
 #' * [grassInfo()]: **GRASS** version and citation
 #' * [grassStarted()]: Has a connection **GRASS** been made within the current **R** session?
 #' * [mow()]: Remove unused rasters and vectors from the **GRASS** cache

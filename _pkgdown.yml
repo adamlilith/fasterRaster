@@ -377,7 +377,8 @@ reference:
 - contents:
   - compareGeom
   - dropRows
-  - grass
+  - grassGUI
+  - grassHelp
   - grassInfo
   - grassStarted
   - mow
