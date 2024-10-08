@@ -79,7 +79,6 @@ methods::setMethod(
 		### reconnect to location
 		emptyRast <- terra::rast(matrix(1L), crs = coordRef)
 
-		### start the GRASS session
 		suppressWarnings(
 			session <- rgrass::initGRASS(
 				gisBase = grassDir,
@@ -95,7 +94,7 @@ methods::setMethod(
 			)
 		)
 
-		.fasterRaster$activeLocation <- location
+		.fasterRaster$activeLocation <<- location
 
 	}
 
