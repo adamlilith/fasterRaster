@@ -467,8 +467,8 @@ methods::setMethod(
 #' @exportMethod extract
 methods::setMethod(
     f = "extract",
-    signature = c(x = "GVector", y = "data.frame", verbose = TRUE),
-    function(x, y, xy = FALSE) .extractFromVect(x, y[ , 1L:2L], xy, verbose = verbose)
+    signature = c(x = "GVector", y = "data.frame"),
+    function(x, y, xy = FALSE, verbose = TRUE) .extractFromVect(x, y[ , 1L:2L], xy, verbose = verbose)
 )
 
 #' @aliases extract
@@ -490,8 +490,8 @@ methods::setMethod(
 #' @exportMethod extract
 methods::setMethod(
     f = "extract",
-    signature = c(x = "GVector", y = "matrix", verbose = TRUE),
-    function(x, y, xy = FALSE) .extractFromVect(x, y[ , 1L:2L], xy, verbose = verbose)
+    signature = c(x = "GVector", y = "matrix"),
+    function(x, y, xy = FALSE, verbose = TRUE) .extractFromVect(x, y[ , 1L:2L], xy, verbose = verbose)
 )
 
 #' @aliases extract

@@ -34,13 +34,13 @@
 
 \S4method{extract}{GRaster,numeric}(x, y, xy = FALSE, cats = TRUE)
 
-\S4method{extract}{GVector,GVector}(x, y, xy = FALSE)
+\S4method{extract}{GVector,GVector}(x, y, xy = FALSE, verbose = TRUE)
 
-\S4method{extract}{GVector,data.frame}(x, y, xy = FALSE)
+\S4method{extract}{GVector,data.frame}(x, y, xy = FALSE, verbose = TRUE)
 
-\S4method{extract}{GVector,data.table}(x, y, xy = FALSE)
+\S4method{extract}{GVector,data.table}(x, y, xy = FALSE, verbose = TRUE)
 
-\S4method{extract}{GVector,matrix}(x, y, xy = FALSE)
+\S4method{extract}{GVector,matrix}(x, y, xy = FALSE, verbose = TRUE)
 
 \S4method{extract}{GVector,numeric}(x, y, xy = FALSE)
 }
@@ -76,7 +76,7 @@
 
 \item{cats}{Logical (extracting from a raster): If \code{TRUE} (default) and \code{x} is a categorical \code{GRaster}, then return the category labels instead of the values.}
 
-\item{verbose}{Logical: If \code{TRUE}, display progress (will only function when extracting from points on a \code{GRaster} when the number of \code{GRaster}s is large).}
+\item{verbose}{Logical: If \code{TRUE}, display progress (will only function when extracting from points on a \code{GRaster} when the number of \code{GRaster}s is large, or when extracting using a "points" \code{GVector} with lots of points).}
 
 \item{...}{Arguments to pass to \code{\link[=project]{project()}}. This is used only if extracting from a \code{GRaster} at locations specified by a \code{GVector}, and they have a different coordinate reference system. In this case, users should specify the \code{wrap} argument to \code{\link[=project]{project()}}.}
 }
