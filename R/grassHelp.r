@@ -23,6 +23,7 @@ grassHelp <- function(x, online = FALSE) {
 	
 	args <- list(
 		cmd = "g.manual",
+		entry = x,
 		flags = .quiet()
 	)
 	
