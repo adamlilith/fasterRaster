@@ -8,7 +8,7 @@
 #'
 #' @param type Either `NULL` or a character vector. If `NULL`, all rasters and vectors in the **GRASS** cache are candidates for deletion. Otherwise, this can be either `"raster"`, `"vector"`, or both.
 #'
-#' @param keeps Either `NULL` (default) or a `list()` of `GRaster`s and/or `GVector`s that you want to retain. The rasters and vectors in **GRASS** pointed to by these objects will not be deleted.
+#' @param keep Either `NULL` (default) or a `list()` of `GRaster`s and/or `GVector`s that you want to retain. The rasters and vectors in **GRASS** pointed to by these objects will not be deleted.
 #'
 #' @param verbose Logical: If `TRUE` (default), report progress.
 #'
@@ -23,15 +23,15 @@
 #' @aliases mow
 #' @rdname mow
 #' @export mow
-mow <- function(x, type = NULL, keeps = NULL, verbose = TRUE, ask = TRUE) {
+mow <- function(x, type = NULL, keep = NULL, verbose = TRUE, ask = TRUE) {
 	
 	if (ask) {
 		response <- readline("Are you sure you want to clean the GRASS cache? (y/n) ")
 		if (response != "y") return(invisible(list(rasters = 0, vectors = 0)))
 	}
 
-	if (!is.null(keeps)) {
-		if (!is.list(keeps)) stop("Argument `keeps` must be a list or NULL.")
+	if (!is.null(keep)) {
+		if (!is.list(keep)) stop("Argument `keeps` must be a list or NULL.")
 	}
 
 	if (missing(x)) {
@@ -62,7 +62,9 @@ mow <- function(x, type = NULL, keeps = NULL, verbose = TRUE, ask = TRUE) {
 	} # next object in environment
 
 	if (!is.null(GSpatials)) {
-		GSpatials <- GSpatials[!(GSpatials$rObject %in% keeps)]
+		for (i in seq_along(keep)) {
+			GSpatials <- GSpatials[!(GSpatials$rObject %in% keep[[i]])]
+		}
 	}
 
 	if (nrow(GSpatials) == 0L) return(invisible(list(rasters = 0, vectors = 0)))
