@@ -4,14 +4,14 @@
 \alias{mow}
 \title{Remove unused rasters and vectors from the GRASS cache}
 \usage{
-mow(x, type = NULL, keeps = NULL, verbose = TRUE, ask = TRUE)
+mow(x, type = NULL, keep = NULL, verbose = TRUE, ask = TRUE)
 }
 \arguments{
 \item{x}{Either missing (default) or an environment.}
 
 \item{type}{Either \code{NULL} or a character vector. If \code{NULL}, all rasters and vectors in the \strong{GRASS} cache are candidates for deletion. Otherwise, this can be either \code{"raster"}, \code{"vector"}, or both.}
 
-\item{keeps}{Either \code{NULL} (default) or a \code{list()} of \code{GRaster}s and/or \code{GVector}s that you want to retain. The rasters and vectors in \strong{GRASS} pointed to by these objects will not be deleted.}
+\item{keep}{Either \code{NULL} (default) or a \code{list()} of \code{GRaster}s and/or \code{GVector}s that you want to retain. The rasters and vectors in \strong{GRASS} pointed to by these objects will not be deleted.}
 
 \item{verbose}{Logical: If \code{TRUE} (default), report progress.}
 
