@@ -8,13 +8,13 @@
 #'
 #' @seealso [mow()]
 #'
-#' @example man/examples/ex_grass.r
+#' @example man/examples/ex_grassGUI.r
 #'
-#' @aliases grass
-#' @rdname grass
-#' @exportMethod grass
+#' @aliases grassGUI
+#' @rdname grassGUI
+#' @exportMethod grassGUI
 methods::setMethod(
-	f = "grass",
+	f = "grassGUI",
 	signature = c(x = "missing"),
 	function() {
 		if (grassStarted()) {
