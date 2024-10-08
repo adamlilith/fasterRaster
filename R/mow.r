@@ -1,14 +1,14 @@
 #' Remove unused rasters and vectors from the GRASS cache
 #'
-#' @description **fasterRaster** attempts to remove intermediate rasters and vectors from the **GRASS** cache as they are not needed, but files can still accumulate, especially if you remove `GRaster`s or `GVector`s from the **R** working environment (e.g., by using [rm()] or simply using the same variable name for different rasters/vectors). This function will a) search the **GRASS** cache for all rasters/vectors there; and b) remove any of them that are not pointed to by an object in the active **R** environment.
+#' @description **fasterRaster** attempts to delete rasters and vectors in the **GRASS** cache. This function will a) search the current **GRASS** "project/location" cache for all rasters/vectors there; and b) remove any of them that are not pointed to by an object in the active **R** environment. Only objects in the currently active **GRASS** project/location will be removed (see `vignette("project_mapset", package = "fasterRaster")`).
 #'
-#' Note that calling this function inside another function's environment can be very dangerous, as it will only be able to see objects in that environment, and thus delete any rasters/vectors outside that environment.
-#'
-#' Note also that this function will only clean the current **GRASS** "project"/"location" (see `vignette("projects_mapsets", package = "fasterRaster")`).
+#' Note that calling this function inside another function's environment without providing an argument for `x` can be very **dangerous**, as it will detect objects outside that environment, and thus delete any rasters/vectors outside that environment.
 #'
 #' @param x Either missing (default) or an environment.
 #'
 #' @param type Either `NULL` or a character vector. If `NULL`, all rasters and vectors in the **GRASS** cache are candidates for deletion. Otherwise, this can be either `"raster"`, `"vector"`, or both.
+#'
+#' @param keeps Either `NULL` (default) or a `list()` of `GRaster`s and/or `GVector`s that you want to retain. The rasters and vectors in **GRASS** pointed to by these objects will not be deleted.
 #'
 #' @param verbose Logical: If `TRUE` (default), report progress.
 #'
@@ -23,11 +23,15 @@
 #' @aliases mow
 #' @rdname mow
 #' @export mow
-mow <- function(x, type = NULL, verbose = TRUE, ask = TRUE) {
+mow <- function(x, type = NULL, keeps = NULL, verbose = TRUE, ask = TRUE) {
 	
 	if (ask) {
 		response <- readline("Are you sure you want to clean the GRASS cache? (y/n) ")
 		if (response != "y") return(invisible(list(rasters = 0, vectors = 0)))
+	}
+
+	if (!is.null(keeps)) {
+		if (!is.list(keeps)) stop("Argument `keeps` must be a list or NULL.")
 	}
 
 	if (missing(x)) {
@@ -56,6 +60,10 @@ mow <- function(x, type = NULL, verbose = TRUE, ask = TRUE) {
 		} # is GSpatial
 
 	} # next object in environment
+
+	if (!is.null(GSpatials)) {
+		GSpatials <- GSpatials[!(GSpatials$rObject %in% keeps)]
+	}
 
 	if (nrow(GSpatials) == 0L) return(invisible(list(rasters = 0, vectors = 0)))
 
