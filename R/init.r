@@ -30,7 +30,7 @@ methods::setMethod(
 	signature = c(x = "GRaster"),
 	function(x, fun, odd = TRUE, vals = c(0, 1)) {
 
-	funs <- c("x", "y", "row", "col", "chess")
+	funs <- c("x", "y", "row", "col", "chess", "regular")
 	fun <- omnibus::pmatchSafe(fun, funs, n = 1)
 
 	# if (fun %in% c("chess", "regular") && (!omnibus::is.wholeNumber(every) | every < 1)) stop("The value of `every` must be a whole number > 0.")
@@ -45,11 +45,7 @@ methods::setMethod(
 	srcs <- .makeSourceName(paste0("init_", fun), "raster", nLayers)
 	for (i in seq_len(nLayers)) {
 	
-		if (fun != "chess") {
-		
-			ex <- paste0(srcs[i], " = ", fun, "()")
-		
-		} else if (fun == "chess") {
+		if (fun == "chess") {
 		
 			if (odd) {
 				ex <- paste0(srcs[i], " = if((row() % 2 == 1 & col() % 2 == 1) | (row() % 2 == 0 & col() % 2 == 0), ", vals[1L], ", ", vals[2L], ")")
@@ -65,8 +61,11 @@ methods::setMethod(
 				ex <- paste0(srcs[i], " = if(row() % 2 == 0 | col() % 2 == 0, ", vals[1L], ", ", vals[2L], ")")
 			}
 		
-		}
+		} else if (fun != "chess") {
+		
+			ex <- paste0(srcs[i], " = ", fun, "()")
 
+		}
 		rgrass::execGRASS("r.mapcalc", expression = ex, flags = c(.quiet(), "overwrite"))
 
 	}
