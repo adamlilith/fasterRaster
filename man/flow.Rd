@@ -10,7 +10,7 @@
   direction = "multi",
   return = "accumulation",
   dirThreshold = Inf,
-  scratchDir = tempdir()
+  scratchDir = NULL
 )
 }
 \arguments{
@@ -30,7 +30,7 @@
 
 \item{dirThreshold}{Numeric (default is \code{Inf}): For the multi-direction flow model, this indicates the amount of accumulated flow above which the single-direction flow rule is used to locate the egress of water from a cell. This is the \code{d8cut} parameter in \code{r.stream.extract}.}
 
-\item{scratchDir}{Character: Directory in which to store temporary files. The \strong{GRASS} module \code{r.terraflow} makes a lot of temporary files. The default is given by \code{\link[=tempdir]{tempdir()}}.}
+\item{scratchDir}{Character or \code{NULL} (default): Directory in which to store temporary files. The \strong{GRASS} module \code{r.terraflow} makes a lot of temporary files. If this is \code{NULL}, then a temporary folder in the user's working directory will be used (see \code{\link[=getwd]{getwd()}}).}
 }
 \value{
 A \code{GRaster}.
