@@ -28,7 +28,7 @@ methods::setMethod(
 	function(..., levels = TRUE) {
 	
 	dots <- list(...)
-	if (length(dots) != 1L) stop("Can only assess complete cases for a single GRaster at a time (though it can be multi-layered).")
+	if (length(dots) != 1L) stop("This function only assess complete cases for a single GRaster at a time (though it can be multi-layered).")
 	x <- dots[[1L]]
 	
 	if (levels) {
@@ -63,7 +63,7 @@ methods::setMethod(
 	function(...) {
 	
 	dots <- list(...)
-	if (length(dots) != 1L) stop("Can only assess complete cases for a single GVector at a time.")
+	if (length(dots) != 1L) stop("Tis function can only assess complete cases for a single GVector at a time.")
 	x <- dots[[1L]]
 	
 	table <- x@table
@@ -86,7 +86,7 @@ methods::setMethod(
 	function(..., levels = TRUE) {
 
 	dots <- list(...)
-	if (length(dots) != 1L) stop("Can only assess complete cases for a single GRaster at a time (though it can be multi-layered).")
+	if (length(dots) != 1L) stop("This function can only assess complete cases for a single GRaster at a time (though it can be multi-layered).")
 	x <- dots[[1L]]
 	
 	if (levels) {
@@ -121,7 +121,7 @@ methods::setMethod(
 	function(...) {
 
 	dots <- list(...)
-	if (length(dots) != 1L) stop("Can only assess missing cases for a single GVector at a time.")
+	if (length(dots) != 1L) stop("This function can only assess missing cases for a single GVector at a time.")
 	x <- dots[[1L]]
 	
 	table <- x@table
