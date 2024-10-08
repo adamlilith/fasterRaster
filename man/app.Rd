@@ -23,7 +23,7 @@ appFuns(warn = TRUE)
 \item The \code{\link[=names]{names()}} of the rasters do not match any of the functions in the \code{appFuns(TRUE)} table. Note that \code{x} and \code{y} are forbidden names :(
 }
 
-The help page for \strong{GRASS} module \href{https://grass.osgeo.org/grass84/manuals/r.mapcalc.html}{\code{r.mapcalc}} will be especially helpful.}
+The help page for \strong{GRASS} module \code{r.mapcalc} will be especially helpful. You can see this page using \code{grassHelp("r.mapcalc")}.}
 
 \item{datatype}{Character: This ensures that rasters are treated as a certain type before they are operated on. This is useful when using rasters that have all integer values, which \strong{GRASS} can assume represent integers, even if they are not supposed to. In this case, the output of operations on this raster might be an integer if otherwise not corrected. Partial matching is used, and options include:
 \itemize{
@@ -129,5 +129,5 @@ freq(rand) # cell frequencies
 }
 }
 \seealso{
-\code{\link[terra:app]{terra::app()}}, \code{\link[terra:lapp]{terra::lapp()}}, \code{\link[=subst]{subst()}}, \code{\link[=classify]{classify()}}, and modules \href{https://grass.osgeo.org/grass84/manuals/r.mapcalc.html}{\code{r.mapcalc}} and \code{r.mapcalc.simple} in \strong{GRASS}.
+\code{\link[terra:app]{terra::app()}}, \code{\link[terra:lapp]{terra::lapp()}}, \code{\link[=subst]{subst()}}, \code{\link[=classify]{classify()}}, and modules \code{r.mapcalc} in \strong{GRASS} (viewable using \code{grassHelp("r.mapcalc")})
 }

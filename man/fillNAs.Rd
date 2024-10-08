@@ -71,5 +71,5 @@ plot(maps)
 }
 }
 \seealso{
-\code{\link[terra:interpNear]{terra::interpNear()}}; module \href{https://grass.osgeo.org/grass84/manuals/r.fillnulls.html}{r.fillnulls} in \strong{GRASS}
+\code{\link[terra:interpNear]{terra::interpNear()}}, \strong{GRASS} module \code{r.fillnulls} (see \code{grassHelp("r.fillnulls")})
 }

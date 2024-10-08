@@ -80,7 +80,6 @@ reg <- c(regOdd, regEven)
 names(reg) <- c("odd", "even")
 plot(reg)
 
-
 }
 }
 \seealso{

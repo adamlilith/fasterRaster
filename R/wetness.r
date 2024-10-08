@@ -6,7 +6,7 @@
 #'
 #' @returns A `GRaster`.
 #'
-#' @seealso [terrain()], [ruggedness()], [geomorphons()], module [`r.topidx`](https://grass.osgeo.org/grass84/manuals/r.topidx.html) in **GRASS**
+#' @seealso [terrain()], [ruggedness()], [geomorphons()], **GRASS** module `r.topidx` (see `grassHelp("r.topidx")`)
 #'
 #' @example man/examples/ex_ruggedness_wetness.r
 #'

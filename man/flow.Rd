@@ -45,7 +45,7 @@ The \code{flow()} function uses a raster representing elevation to compute other
 \item Topographic convergence (log of flow accumulation divided by local slope).
 }
 
-More details about the computations can be found at the help page for the \href{https://grass.osgeo.org/grass84/manuals/r.terraflow.html}{\code{r.terraflow}} module for \strong{GRASS}.
+More details about the computations can be found at the help page for the \strong{GRASS} module \code{r.terraflow}] (see \code{grassHelp("r.terraflow")})
 }
 \examples{
 if (grassStarted()) {
@@ -67,5 +67,5 @@ plot(elevWater)
 }
 }
 \seealso{
-\code{\link[=flowPath]{flowPath()}}, \code{\link[=streams]{streams()}}, the \href{https://grass.osgeo.org/grass84/manuals/r.terraflow.html}{\code{r.terraflow}} module for \strong{GRASS}
+\code{\link[=flowPath]{flowPath()}}, \code{\link[=streams]{streams()}}, the \strong{GRASS} module \code{r.terraflow} (see \code{grassHelp("r.terraflow")})
 }

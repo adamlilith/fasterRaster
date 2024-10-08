@@ -62,33 +62,37 @@ elev <- fast(madElev)
 chelsa1 <- fast(madChelsa1)
 
 # Name of the currently active location
-.location()
-.location(elev)
-.location(chelsa1)
+if (FALSE) {
+   
+   .location()
+   .location(elev)
+   .location(chelsa1)
 
-# All available GRASS locations
-.locations()
+   # All available GRASS locations
+   .locations()
 
-# Find location of an object among all active locations
-.locationFind(elev)
-.locationFind(chelsa1)
-.locationFind(chelsa1, return = "index")
-.locationFind(chelsa1, return = "crs")
+   # Find location of an object among all active locations
+   .locationFind(elev)
+   .locationFind(chelsa1)
+   .locationFind(chelsa1, return = "index")
+   .locationFind(chelsa1, return = "crs")
 
-# Switch between locations
-.locationRestore(elev)
-.locationRestore(chelsa1)
+   # Switch between locations
+   .locationRestore(elev)
+   .locationRestore(chelsa1)
 
-loc <- .location(elev)
-.locationRestore(loc)
+   loc <- .location(elev)
+   .locationRestore(loc)
 
-# We could use .locationDelete(elev) to delete
-# the location where "elev" is stored.
+   # Delete the location where "elev" is stored.
+   if (FALSE) .locationDelete(elev) # dangerous!
 
-# Mapsets are always "PERMANENT" in fasterRaster
-.mapset()
-.mapset(elev)
-.mapset(chelsa1)
+   # Mapsets are always "PERMANENT" in fasterRaster
+   .mapset()
+   .mapset(elev)
+   .mapset(chelsa1)
+
+}
 
 }
 }

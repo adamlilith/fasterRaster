@@ -18,7 +18,7 @@
 #'
 #' @example man/examples/ex_fillNAs.r
 #'
-#' @seealso [terra::interpNear()]; module [r.fillnulls](https://grass.osgeo.org/grass84/manuals/r.fillnulls.html) in **GRASS**
+#' @seealso [terra::interpNear()], **GRASS** module `r.fillnulls` (see `grassHelp("r.fillnulls")`)
 #'
 #' @aliases fillNAs
 #' @rdname fillNAs

@@ -14,7 +14,7 @@
 A \code{GRaster} stack.
 }
 \description{
-\code{longlat()} creates two rasters, one with cell values equal to the longitude of the cell centers, and one with cell values equal to the latitude of the cell centers. Values will be in decimal degrees, regardless of the projection of the raster.
+\code{longlat()} creates two rasters, one with cell values equal to the longitude of the cell centers, and one with cell values equal to the latitude of the cell centers. Values will be in decimal degrees, regardless of the projection of the raster. If you want projected coordinates, use \code{\link[=init]{init()}}.
 }
 \examples{
 if (grassStarted()) {
@@ -33,4 +33,7 @@ ll <- longlat(elev)
 ll # note units of cell values!
 
 }
+}
+\seealso{
+\code{\link[=init]{init()}}
 }

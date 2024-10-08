@@ -4,7 +4,7 @@
 #'
 #' @param x A "points" `GVector`.
 #'
-#' @param method Character: Method used to identify clusters. Explanations of methods are provided in the help page for the **GRASS** module [https://grass.osgeo.org/grass84/manuals/v.cluster.html](v.cluster).
+#' @param method Character: Method used to identify clusters. Explanations of methods are provided in the help page for the **GRASS** module `v.cluster`, available using `grassHelp("v.cluster")`.
 #' * `"DBSCAN"` (default): Density-Based Spatial Clustering of Applications with Noise. 
 #' * `"DBSCAN2"`: A modification of DBSCAN.
 #' * `"density"`: Cluster points by relative density.
@@ -30,9 +30,7 @@ methods::setMethod(
 	if (geomtype(x) != "points") stop("Only points GVectors can be clustered.")
 	
 	if (!is.null(maxDist)) {
-	
 		if (is.infinite(maxDist)) stop("Argument `maxDist` cannot be infinite.")
-	
 	}
 
 	method <- tolower(method)

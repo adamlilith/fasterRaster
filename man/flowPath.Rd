@@ -44,7 +44,7 @@ ant <- coast4[coast4$NAME_4 == "Antanambe"]
 elevAnt <- crop(elev, ant)
 
 # Create a set of random points to serve as starting points:
-starts <- spatSample(elevAnt, 10, as.points = TRUE, seed = 1)
+starts <- spatSample(elevAnt, 10, as.points = TRUE, seed = 2)
 
 # Remove points in water:
 starts <- starts[complete.cases(starts)]
@@ -53,14 +53,16 @@ starts <- starts[complete.cases(starts)]
 paths <- flowPath(elevAnt, starts)
 paths
 
-plot(paths)
+plot(elevAnt, legend = FALSE, main = "Flow path for each point")
+plot(paths, add = TRUE)
 plot(starts, pch = 1, add = TRUE)
 
 # Calculate flow paths with cell values indicating the number
 # of cells from each start:
 seqs <- flowPath(elevAnt, starts, return = "seq")
 
-plot(seqs)
+plot(elevAnt, legend = FALSE, main = "Sequentially-numbered flow paths")
+plot(seqs, add = TRUE)
 plot(starts, pch = 1, add = TRUE)
 
 # We can convert flow paths to lines:
@@ -71,5 +73,5 @@ seqLines
 }
 }
 \seealso{
-\code{\link[=flow]{flow()}}, \code{\link[=streams]{streams()}}, the \href{https://grass.osgeo.org/grass84/manuals/r.drain.html}{\code{r.drain}} module for \strong{GRASS}
+\code{\link[=flow]{flow()}}, \code{\link[=streams]{streams()}}, the \strong{GRASS} module \code{r.drain} (see \code{grassHelp("r.drain")})
 }
