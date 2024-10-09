@@ -7,7 +7,7 @@
 #' * `"type"`: Display a page wherein modules are classified by types.
 #' * `"topics"`: Display an index of topics.
 #'
-#' @param online If `FALSE` (default), show the manual page that is included with your installation of **GRASS**.  If `FALSE`, show the manual page online (requires an Internet connection).
+#' @param online Logical: If `FALSE` (default), show the manual page that was included with your installation of **GRASS** on your computer.  If `FALSE`, show the manual page online (requires an Internet connection). In either case, the manual page will display for the version of **GRASS** you have installed.
 #'
 #' @returns Nothing (opens a web page).
 #'
