@@ -21,6 +21,7 @@ fig.path = 'man/figures/'
 
 ## General
 * `.addLocationProject()`: Add a "location" or "project" argument to a list to be passed to [rgrass::execGRASS()]
+* `.backdoor()`: Calls [faster()] and sets **GRASS** folder to "C:/Program Files/GRASS GIS X.Y", plus other options useful for development.
 * `.fileExt()`: Get file extension
 * `.ls()`: Lists the `sources` of all objects in the active **GRASS** "project/location"
 * `.message()`: Display a warning or message if the given warning has not been displayed since **fasterRaster** was attached or if a given number of hours has passed
