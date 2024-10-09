@@ -44,7 +44,7 @@
 		}
 
 		# if table does not have a "cat" column
-		if (!any(names(table) %in% "cat")) {
+		if (!any("cat" %in% names(table))) {
 		
 			if (is.null(cats)) cats <- .vCats(src, db = FALSE, integer = TRUE)
 			catsRenum <- omnibus::renumSeq(cats)
