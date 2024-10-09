@@ -8,8 +8,8 @@ madRivers <- fastData("madRivers")
 madDypsis <- fastData("madDypsis")
 
 # Convert sf's to GVectors:
-rivers <- fast(madRivers)
 dypsis <- fast(madDypsis)
+rivers <- fast(madRivers)
 
 ### Connections from each point to nearest river
 consFromDypsis <- connectors(dypsis, rivers)
