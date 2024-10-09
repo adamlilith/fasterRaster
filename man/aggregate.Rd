@@ -108,19 +108,19 @@ agg2x3
 madCoast4 <- fastData("madCoast4")
 
 # Convert:
-coast <- fast(madCoast4)
+coast4 <- fast(madCoast4)
 
 # Aggregate and disaggregate:
-aggCoast <- aggregate(coast)
-disaggCoast <- disagg(coast)
+aggCoast <- aggregate(coast4)
+disaggCoast <- disagg(coast4)
 
-ngeom(coast)
+ngeom(coast4)
 ngeom(aggCoast)
 ngeom(disaggCoast)
 
 # plot
 oldpar <- par(mfrow = c(1, 3))
-plot(coast, main = "Original", col = 1:nrow(coast))
+plot(coast4, main = "Original", col = 1:nrow(coast4))
 plot(aggCoast, main = "Aggregated", col = 1:nrow(aggCoast))
 plot(disaggCoast, main = "Disaggregated", col = 1:nrow(disaggCoast))
 par(oldpar)
