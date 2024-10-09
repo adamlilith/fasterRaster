@@ -27,6 +27,10 @@
 		intern = TRUE
 	)
 
-	length(info) > 0L
+	if (length(info) > 1L) {
+		any(grepl(info, pattern = "is connected by"))
+	} else {
+		!grepl(info, pattern = "is not connected to a database")
+	}
 
 }
