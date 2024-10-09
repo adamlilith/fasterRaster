@@ -14,7 +14,7 @@ grassHelp(x, online = FALSE)
 \item \code{"topics"}: Display an index of topics.
 }}
 
-\item{online}{If \code{FALSE} (default), show the manual page that is included with your installation of \strong{GRASS}.  If \code{FALSE}, show the manual page online (requires an Internet connection).}
+\item{online}{Logical: If \code{FALSE} (default), show the manual page that was included with your installation of \strong{GRASS} on your computer.  If \code{FALSE}, show the manual page online (requires an Internet connection). In either case, the manual page will display for the version of \strong{GRASS} you have installed.}
 }
 \value{
 Nothing (opens a web page).
