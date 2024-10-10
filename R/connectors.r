@@ -58,7 +58,7 @@ methods::setMethod(
 
 	table <- .vAsDataTable(x)
 	table <- table[ , "TEMPTEMP_minDist_meters"]
-	names(table) <- "distance_x_to_y_meters"
+	names(table) <- "length_meters"
 	.makeGVector(src, table = table)
 
 	} # EOF
