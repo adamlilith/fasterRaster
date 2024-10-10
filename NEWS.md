@@ -27,6 +27,7 @@ o `segregate()` creates one layer per unique value in an input `GRaster`, with v
 ### Bug and issue fixes
 o `appFuns()` succeds in opening a **shiny** table with `app()` functions.  
 o `categories()` correctly assigns active category column.  
+o `crds()` correctly returns coordinates from a "points" `GVector`.  
 o `distance()` correctly parses distance matrix.  
 o `simplifyGeom()` works for 2-dimensional `GVector`s.  
 o `rasterize()` works when `by` is not `NULL`.  
