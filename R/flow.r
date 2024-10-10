@@ -57,6 +57,12 @@ methods::setMethod(
 	.locationRestore(x)
 	.region(x)
 
+	if (is.null(scratchDir)) {
+		scratchDir <- paste0(getwd(), "/flow_temporary_files")
+		omnibus::dirCreate(scratchDir)
+		on.exit(unlink(scratchDir, recursive = TRUE, force = TRUE))
+	}
+
 	args <- list(
 		cmd = "r.terraflow",
 		elevation = sources(x),
