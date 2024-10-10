@@ -217,6 +217,7 @@ methods::setMethod(
 	)
 
 	info <- info[-1L]
+	info <- info[grepl(info, pattern = "\\|")]
 	info <- strsplit(info, split="\\|")
 	info <- lapply(info, as.numeric)
 	info <- do.call(rbind, info)
@@ -273,6 +274,7 @@ methods::setMethod(
 	)
 
 	out <- out[-1L]
+	out <- out[grepl(out, pattern = "\\|")]
 	out <- strsplit(out, split = "\\|")
 	out <- do.call(rbind, out)
 	n <- nrow(out)
