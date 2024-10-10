@@ -31,6 +31,7 @@ o `crds()` correctly returns coordinates from a "points" `GVector`.
 o `distance()` correctly parses distance matrix.  
 o `simplifyGeom()` works for 2-dimensional `GVector`s.  
 o `flow()` creates a scratch folder when none is provided.  
+o `global()` does not fail when multiple values of `fun` and `probs` are used and `fun` includes `quantile`.  
 o `rasterize()` works when `by` is not `NULL`.  
 o `.layerIndex()` (called by `categories()` and other functions related to categorical `GRaster`s) does not fail.  
 o `.vHasDatabase()` correctly detects if a vector has a database attached to it.  
