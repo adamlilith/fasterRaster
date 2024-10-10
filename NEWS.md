@@ -16,7 +16,8 @@ o `pca()` has been renamed `princomp()`.
 
 ### Enhanced functionality and new functions
 o `extract()` now automatically projects a `GVector` to match the CRS of a `GRaster` from which extraction is being made.  
-o `grass()` allows users to start the **GRASS** GUI.  
+o `grassGUI()` allows users to start the **GRASS** GUI.  
+o `grassHelp()` shows teh manual page for a **GRASS** module.  
 o `layerIndex()` allows a `negate` argument to get the "opposite" indices of a `GRaster`.  
 o `init()` assigns to `GRaster` cells the value of their coordinates, rows, columns, or values in a regular or chessboard-like pattern.  
 o `regress()` replaces individual functions `intercept()`, `slope()`, `r2()`, and `tvalue()`.  
@@ -24,11 +25,13 @@ o `subset()` subsets layers of a `GRaster` or rows/geometries of a `GVector`.
 o `segregate()` creates one layer per unique value in an input `GRaster`, with values in the output coded 1 or 0 depending on whether cells in the input had the unique value or not.  
 
 ### Bug and issue fixes
-o `appFuns()` opens a a **shiny** table with `app()` functions.  
+o `appFuns()` succeds in opening a **shiny** table with `app()` functions.  
 o `categories()` correctly assigns active category column.  
+o `distance()` correctly parses distance matrix.  
 o `simplifyGeom()` works for 2-dimensional `GVector`s.  
 o `rasterize()` works when `by` is not `NULL`.  
-o `.layerIndex()` (called by `catergories()` and other functions related to categorical `GRaster`s) does not fail.  
+o `.layerIndex()` (called by `categories()` and other functions related to categorical `GRaster`s) does not fail.  
+o `.vHasDatabase()` correctly detects if a vector has a database attached to it.  
 o Removed all instances of `sQuote()`.  
 
 # fasterRaster 8.3.0.7026 (2024-09-22)
