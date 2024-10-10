@@ -40,11 +40,11 @@ plot(distTo3)
 distToVect <- distance(elev, rivers)
 
 plot(distToVect)
-plot(st_geometry(madRivers), add = TRUE)
+plot(rivers, add = TRUE)
 
 ### Case 3: GVector vs GVector
-plot(st_geometry(madRivers))
-plot(st_geometry(madDypsis), add = TRUE)
+plot(rivers)
+plot(dypsis, add = TRUE)
 
 distToRivers <- distance(dypsis, rivers, unit = "yd")
 distToPlants <- distance(rivers, dypsis)
