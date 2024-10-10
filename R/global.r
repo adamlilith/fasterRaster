@@ -145,12 +145,15 @@ methods::setMethod(
 			colNames <- fun
 			isQuant <- which(colNames == "quantile")
 			quantNames <- paste0("quantile_", probs)
+			nCols <- length(colNames)
 			if (length(fun) == 1L & fun[1L] == "quantile") {
 				colNames <- quantNames
 			} else if (colNames[1L] == "quantile") {
-				colNames <- c(quantNames, colNames[2L:length(colNames)])
-			} else if (colNames[length(colNames)] == "quantile") {
-				colNames <- c(colNames[1L:(length(colNames) - 1L)], quantNames)
+				colNames <- c(quantNames, colNames[2L:nCols])
+			} else if (colNames[nCols] == "quantile") {
+				colNames <- c(colNames[1L:(nCols - 1L)], quantNames)
+			} else {
+				colNames <- c(colNames[(1L:(isQuant) - 1L)], quantNames, colNames[(isQuant + 1L):nCols])
 			}
 			names(thisOut) <- colNames
 			
@@ -213,6 +216,7 @@ methods::setMethod(
 					# this <- strsplit(this, split=":")[[1L]][2L]
 					# this <- as.numeric(this)
 
+					quantInfo <- quantInfo[seq_along(probs)]
 					this <- strsplit(quantInfo, split = ":")
 					this <- lapply(this, as.numeric)
 					this <- do.call(rbind, this)
