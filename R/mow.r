@@ -26,8 +26,8 @@
 mow <- function(x, type = NULL, keep = NULL, verbose = TRUE, ask = TRUE) {
 	
 	if (ask) {
-		response <- readline("Are you sure you want to clean the GRASS cache? (y/n) ")
-		if (response != "y") return(invisible(list(rasters = 0, vectors = 0)))
+		response <- readline("Are you sure you want to clean the GRASS cache? (Y/n) ")
+		if (response != "Y") return(invisible(list(rasters = 0, vectors = 0)))
 	}
 
 	if (!is.null(keep)) {
