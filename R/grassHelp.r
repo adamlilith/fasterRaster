@@ -18,21 +18,32 @@
 #' @export
 grassHelp <- function(x, online = FALSE) {
 
-	x <- tolower(x)
-	if (length(x) != 1L) stop("Only one help page can be opened at a time.")
-	
-	args <- list(
-		cmd = "g.manual",
-		entry = x,
-		flags = .quiet()
-	)
-	
-	if (x == "type") {
-		args$flags <- c(args$flags, "i")
-	} else if (x == "index") {
-		args$flags <- c(args$flags, "t")
-	}
+	if (interactive()) {
 
-	do.call(rgrass::execGRASS, args = args)
+		if (!grassStarted()) {
+			omnibus::say("You must start GRASS first by using fast() at least once before opening a manual page.")
+			return()
+		}
+
+		x <- tolower(x)
+		if (length(x) != 1L) stop("Only one help page can be opened at a time.")
+		
+		args <- list(
+			cmd = "g.manual",
+			entry = x,
+			flags = .quiet()
+		)
+		
+		if (x == "type") {
+			args$flags <- c(args$flags, "i")
+		} else if (x == "index") {
+			args$flags <- c(args$flags, "t")
+		}
+
+		do.call(rgrass::execGRASS, args = args)
+
+	} else {
+		warning("You can only open GRASS manual pages in an interactive R session.")
+	}
 
 }
