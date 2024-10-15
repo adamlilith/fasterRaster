@@ -26,15 +26,15 @@
 \itemize{
 \item Missing: Returns names and coordinate reference system strings of all "locations".
 \item A character representing a coordinate reference system in WKT format
-\item A \code{SpatRaster}, \code{SpatVector}, or \code{sf} vector
+\item A \code{SpatRaster}, \code{SpatVector}, or \code{sf} vector with a coordinate reference system
 \item A \code{GSpatial} object (usually a \code{GRaster} or \code{GVector})
 }}
 
 \item{return}{Either:
 \itemize{
 \item \code{"name"} (default): Returns the name of the "location" with a coordinate reference system the same as \code{x}.
-\item \code{"index"}: Returns the index of this "location".
-\item \code{"crs"}: Returns the coordinate reference system of this "location".
+\item \code{"index"}: Returns the index of this "location" in \code{.fasterRaster$locations} of the \code{.fasterRaster} environment.
+\item \code{"crs"}: Returns the coordinate reference system of this "project/location".
 }}
 
 \item{match}{Character: Method used to find the location. If \code{match} is "\code{name}"" (default), then the name of the location is used. If \code{match} is "\code{crs}", then the coordinate reference system of each location is checked for a match.}
@@ -43,7 +43,7 @@
 Character, integer, or \code{NULL} (if no match is found).
 }
 \description{
-The function searches the set of available \strong{GRASS} "locations" for one that has a coordinate reference system matching a \code{GSpatial} object. If none are found, or if no connection with \strong{GRASS} has yet been made, then it returns \code{NULL}. Otherwise, it returns either the index or the name of the matching location.
+The function searches the set of available \strong{GRASS} "projects" (previously known as "locations") for one that has a coordinate reference system matching a \code{GSpatial} object. If none are found, or if no connection with \strong{GRASS} has yet been made, then it returns \code{NULL}. Otherwise, it returns either the index or the name of the matching location.
 }
 \examples{
 if (grassStarted()) {
