@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">fasterRaster</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">8.3.0.7026</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">8.3.0.7027</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -70,11 +70,11 @@
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>A <code>GVector</code>.</p>
+    <p>A <code>GVector</code> with a data table that has the length of each connecting line in meters.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p>Module <code>v.distance</code> in <strong>GRASS</strong></p></div>
+    <div class="dont-index"><p><strong>GRASS</strong> module <code>v.distance</code> (see <code>grassHelp("v.distance")</code>).</p></div>
     </div>
 
     <div class="section level2">
@@ -89,8 +89,8 @@
 <span class="r-in"><span><span class="va">madDypsis</span> <span class="op">&lt;-</span> <span class="fu"><a href="fastData.html">fastData</a></span><span class="op">(</span><span class="st">"madDypsis"</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Convert sf's to GVectors:</span></span></span>
-<span class="r-in"><span><span class="va">rivers</span> <span class="op">&lt;-</span> <span class="fu"><a href="fast.html">fast</a></span><span class="op">(</span><span class="va">madRivers</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">dypsis</span> <span class="op">&lt;-</span> <span class="fu"><a href="fast.html">fast</a></span><span class="op">(</span><span class="va">madDypsis</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">rivers</span> <span class="op">&lt;-</span> <span class="fu"><a href="fast.html">fast</a></span><span class="op">(</span><span class="va">madRivers</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">### Connections from each point to nearest river</span></span></span>
 <span class="r-in"><span><span class="va">consFromDypsis</span> <span class="op">&lt;-</span> <span class="fu">connectors</span><span class="op">(</span><span class="va">dypsis</span>, <span class="va">rivers</span><span class="op">)</span></span></span>

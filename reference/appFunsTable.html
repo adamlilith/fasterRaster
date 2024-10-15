@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">fasterRaster</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">8.3.0.7026</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">8.3.0.7027</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -47,7 +47,7 @@
     </div>
 
     <div class="ref-description section level2">
-    <p>This is a table of functions that can be used in the <code><a href="https://rspatial.github.io/terra/reference/app.html" class="external-link">app()</a></code> function, their <strong>R</strong> equivalents, and the <code><a href="datatype.html">datatype()</a></code> they return. You can view this table using <code>?appFunsTable</code> or as a searchable, sortable <strong>Shiny</strong> table using <code><a href="app.html">appFuns()</a></code>.</p>
+    <p>This is a table of functions that can be used in the <code><a href="app.html">app()</a></code> function, their <strong>R</strong> equivalents, and the <code><a href="datatype.html">datatype()</a></code> they return. You can view this table using <code>?appFunsTable</code> or as a searchable, sortable <strong>Shiny</strong> table using <code><a href="app.html">appFuns()</a></code>.</p>
     </div>
 
 
@@ -85,7 +85,7 @@
 <span class="r-in"><span><span class="fu"><a href="names.html">names</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="c.html">c</a></span><span class="op">(</span><span class="st">"x1"</span>, <span class="st">"x2"</span>, <span class="st">"x3"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">fun</span> <span class="op">&lt;-</span> <span class="st">"= (x1 / x2) + x3"</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="app.html">appCheck</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">fun</span>, failOnBad <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rspatial.github.io/terra/reference/app.html" class="external-link">app</a></span><span class="op">(</span><span class="va">x</span>, fun <span class="op">=</span> <span class="va">fun</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="app.html">app</a></span><span class="op">(</span><span class="va">x</span>, fun <span class="op">=</span> <span class="va">fun</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># This is the same as:</span></span></span>
 <span class="r-in"><span><span class="op">(</span><span class="va">x</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span> <span class="op">/</span> <span class="va">x</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span><span class="op">)</span> <span class="op">+</span> <span class="va">x</span><span class="op">[[</span><span class="fl">3</span><span class="op">]</span><span class="op">]</span></span></span>
@@ -98,27 +98,27 @@
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Apply other functions:</span></span></span>
 <span class="r-in"><span><span class="va">fun</span> <span class="op">&lt;-</span> <span class="st">"= median(x1 / x2, x3, x1 * 2, cos(x2))"</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rspatial.github.io/terra/reference/app.html" class="external-link">app</a></span><span class="op">(</span><span class="va">x</span>, fun <span class="op">=</span> <span class="va">fun</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="app.html">app</a></span><span class="op">(</span><span class="va">x</span>, fun <span class="op">=</span> <span class="va">fun</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">fun</span> <span class="op">&lt;-</span> <span class="st">"= round(x1) * tan(x2) + log(x3, 10)"</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rspatial.github.io/terra/reference/app.html" class="external-link">app</a></span><span class="op">(</span><span class="va">x</span>, fun <span class="op">=</span> <span class="va">fun</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="app.html">app</a></span><span class="op">(</span><span class="va">x</span>, fun <span class="op">=</span> <span class="va">fun</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Demonstrate effects of data type. The "+" sign does not guarantee</span></span></span>
 <span class="r-in"><span><span class="co"># output is of a given type, and the rasters are coerced to integers before</span></span></span>
 <span class="r-in"><span><span class="co"># the operation is conducted in the second function.</span></span></span>
 <span class="r-in"><span><span class="va">fun</span> <span class="op">&lt;-</span> <span class="st">"= x1 + x3"</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rspatial.github.io/terra/reference/app.html" class="external-link">app</a></span><span class="op">(</span><span class="va">x</span>, fun <span class="op">=</span> <span class="va">fun</span>, datatype <span class="op">=</span> <span class="st">"float"</span><span class="op">)</span> <span class="co"># output is floating-point</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rspatial.github.io/terra/reference/app.html" class="external-link">app</a></span><span class="op">(</span><span class="va">x</span>, fun <span class="op">=</span> <span class="va">fun</span>, da <span class="op">=</span> <span class="st">"integer"</span><span class="op">)</span> <span class="co"># output is integer</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="app.html">app</a></span><span class="op">(</span><span class="va">x</span>, fun <span class="op">=</span> <span class="va">fun</span>, datatype <span class="op">=</span> <span class="st">"float"</span><span class="op">)</span> <span class="co"># output is floating-point</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="app.html">app</a></span><span class="op">(</span><span class="va">x</span>, fun <span class="op">=</span> <span class="va">fun</span>, da <span class="op">=</span> <span class="st">"integer"</span><span class="op">)</span> <span class="co"># output is integer</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Some functions override the "datatype" argument. In this case, the output will</span></span></span>
 <span class="r-in"><span><span class="co"># not be an integer because the sin() function returns a float value.</span></span></span>
 <span class="r-in"><span><span class="va">fun</span> <span class="op">&lt;-</span> <span class="st">"= sin(x2)"</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rspatial.github.io/terra/reference/app.html" class="external-link">app</a></span><span class="op">(</span><span class="va">x</span>, fun <span class="op">=</span> <span class="va">fun</span>, datatype <span class="op">=</span> <span class="st">"integer"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="app.html">app</a></span><span class="op">(</span><span class="va">x</span>, fun <span class="op">=</span> <span class="va">fun</span>, datatype <span class="op">=</span> <span class="st">"integer"</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Make a raster with random numbers between 1 and 4, with equal probability</span></span></span>
 <span class="r-in"><span><span class="co"># of each:</span></span></span>
 <span class="r-in"><span><span class="va">fun</span> <span class="op">&lt;-</span> <span class="st">"= round(rand(0.5, 4.5))"</span></span></span>
-<span class="r-in"><span><span class="va">rand</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/app.html" class="external-link">app</a></span><span class="op">(</span><span class="va">elev</span>, fun <span class="op">=</span> <span class="va">fun</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">rand</span> <span class="op">&lt;-</span> <span class="fu"><a href="app.html">app</a></span><span class="op">(</span><span class="va">elev</span>, fun <span class="op">=</span> <span class="va">fun</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">rand</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="freq.html">freq</a></span><span class="op">(</span><span class="va">rand</span><span class="op">)</span> <span class="co"># cell frequencies</span></span></span>

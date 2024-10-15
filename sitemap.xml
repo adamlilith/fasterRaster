@@ -39,11 +39,11 @@
 <url><loc>https://github.com/adamlilith/fasterRaster/reference/clump.html</loc></url>
 <url><loc>https://github.com/adamlilith/fasterRaster/reference/clusterPoints.html</loc></url>
 <url><loc>https://github.com/adamlilith/fasterRaster/reference/colbind.html</loc></url>
-<url><loc>https://github.com/adamlilith/fasterRaster/reference/combineCats.html</loc></url>
 <url><loc>https://github.com/adamlilith/fasterRaster/reference/combineLevels.html</loc></url>
 <url><loc>https://github.com/adamlilith/fasterRaster/reference/compareGeom.html</loc></url>
 <url><loc>https://github.com/adamlilith/fasterRaster/reference/complete.cases.html</loc></url>
 <url><loc>https://github.com/adamlilith/fasterRaster/reference/compositeRGB.html</loc></url>
+<url><loc>https://github.com/adamlilith/fasterRaster/reference/concats.html</loc></url>
 <url><loc>https://github.com/adamlilith/fasterRaster/reference/connectors.html</loc></url>
 <url><loc>https://github.com/adamlilith/fasterRaster/reference/convHull.html</loc></url>
 <url><loc>https://github.com/adamlilith/fasterRaster/reference/copyGSpatial.html</loc></url>
@@ -56,6 +56,8 @@
 <url><loc>https://github.com/adamlilith/fasterRaster/reference/dim.html</loc></url>
 <url><loc>https://github.com/adamlilith/fasterRaster/reference/disagg.html</loc></url>
 <url><loc>https://github.com/adamlilith/fasterRaster/reference/distance.html</loc></url>
+<url><loc>https://github.com/adamlilith/fasterRaster/reference/dot-addLocationProject.html</loc></url>
+<url><loc>https://github.com/adamlilith/fasterRaster/reference/dot-backdoor.html</loc></url>
 <url><loc>https://github.com/adamlilith/fasterRaster/reference/dot-ext.html</loc></url>
 <url><loc>https://github.com/adamlilith/fasterRaster/reference/dot-geomtype.html</loc></url>
 <url><loc>https://github.com/adamlilith/fasterRaster/reference/dot-layerIndex.html</loc></url>
@@ -97,6 +99,8 @@
 <url><loc>https://github.com/adamlilith/fasterRaster/reference/geomorphons.html</loc></url>
 <url><loc>https://github.com/adamlilith/fasterRaster/reference/geomtype.html</loc></url>
 <url><loc>https://github.com/adamlilith/fasterRaster/reference/global.html</loc></url>
+<url><loc>https://github.com/adamlilith/fasterRaster/reference/grassGUI.html</loc></url>
+<url><loc>https://github.com/adamlilith/fasterRaster/reference/grassHelp.html</loc></url>
 <url><loc>https://github.com/adamlilith/fasterRaster/reference/grassInfo.html</loc></url>
 <url><loc>https://github.com/adamlilith/fasterRaster/reference/grassStarted.html</loc></url>
 <url><loc>https://github.com/adamlilith/fasterRaster/reference/grid.html</loc></url>
@@ -106,6 +110,7 @@
 <url><loc>https://github.com/adamlilith/fasterRaster/reference/hist.html</loc></url>
 <url><loc>https://github.com/adamlilith/fasterRaster/reference/horizonHeight.html</loc></url>
 <url><loc>https://github.com/adamlilith/fasterRaster/reference/index.html</loc></url>
+<url><loc>https://github.com/adamlilith/fasterRaster/reference/init.html</loc></url>
 <url><loc>https://github.com/adamlilith/fasterRaster/reference/interpIDW.html</loc></url>
 <url><loc>https://github.com/adamlilith/fasterRaster/reference/interpSplines.html</loc></url>
 <url><loc>https://github.com/adamlilith/fasterRaster/reference/intersect.html</loc></url>
@@ -152,11 +157,11 @@
 <url><loc>https://github.com/adamlilith/fasterRaster/reference/ngeom.html</loc></url>
 <url><loc>https://github.com/adamlilith/fasterRaster/reference/nlevels.html</loc></url>
 <url><loc>https://github.com/adamlilith/fasterRaster/reference/pairs.html</loc></url>
-<url><loc>https://github.com/adamlilith/fasterRaster/reference/pca.html</loc></url>
 <url><loc>https://github.com/adamlilith/fasterRaster/reference/pcs.html</loc></url>
 <url><loc>https://github.com/adamlilith/fasterRaster/reference/plot.html</loc></url>
 <url><loc>https://github.com/adamlilith/fasterRaster/reference/plotRGB.html</loc></url>
 <url><loc>https://github.com/adamlilith/fasterRaster/reference/predict.html</loc></url>
+<url><loc>https://github.com/adamlilith/fasterRaster/reference/princomp.html</loc></url>
 <url><loc>https://github.com/adamlilith/fasterRaster/reference/project.html</loc></url>
 <url><loc>https://github.com/adamlilith/fasterRaster/reference/quiet.html</loc></url>
 <url><loc>https://github.com/adamlilith/fasterRaster/reference/rSpatialDepRast.html</loc></url>
@@ -164,6 +169,7 @@
 <url><loc>https://github.com/adamlilith/fasterRaster/reference/rasterize.html</loc></url>
 <url><loc>https://github.com/adamlilith/fasterRaster/reference/rbind.html</loc></url>
 <url><loc>https://github.com/adamlilith/fasterRaster/reference/region.html</loc></url>
+<url><loc>https://github.com/adamlilith/fasterRaster/reference/regress.html</loc></url>
 <url><loc>https://github.com/adamlilith/fasterRaster/reference/reorient.html</loc></url>
 <url><loc>https://github.com/adamlilith/fasterRaster/reference/replaceNAs.html</loc></url>
 <url><loc>https://github.com/adamlilith/fasterRaster/reference/replace_dollar.html</loc></url>
@@ -178,6 +184,7 @@
 <url><loc>https://github.com/adamlilith/fasterRaster/reference/rvoronoi.html</loc></url>
 <url><loc>https://github.com/adamlilith/fasterRaster/reference/sampleRast.html</loc></url>
 <url><loc>https://github.com/adamlilith/fasterRaster/reference/scale.html</loc></url>
+<url><loc>https://github.com/adamlilith/fasterRaster/reference/segregate.html</loc></url>
 <url><loc>https://github.com/adamlilith/fasterRaster/reference/selectRange.html</loc></url>
 <url><loc>https://github.com/adamlilith/fasterRaster/reference/seqToSQL.html</loc></url>
 <url><loc>https://github.com/adamlilith/fasterRaster/reference/show.html</loc></url>
@@ -188,6 +195,7 @@
 <url><loc>https://github.com/adamlilith/fasterRaster/reference/spatSample.html</loc></url>
 <url><loc>https://github.com/adamlilith/fasterRaster/reference/streams.html</loc></url>
 <url><loc>https://github.com/adamlilith/fasterRaster/reference/stretch.html</loc></url>
+<url><loc>https://github.com/adamlilith/fasterRaster/reference/subset.html</loc></url>
 <url><loc>https://github.com/adamlilith/fasterRaster/reference/subset_dollar.html</loc></url>
 <url><loc>https://github.com/adamlilith/fasterRaster/reference/subset_double_square_brackets.html</loc></url>
 <url><loc>https://github.com/adamlilith/fasterRaster/reference/subset_single_bracket.html</loc></url>

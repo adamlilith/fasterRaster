@@ -20,7 +20,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">fasterRaster</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">8.3.0.7026</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">8.3.0.7027</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -71,7 +71,7 @@
                         <h4 data-toc-skip class="author">Adam B.
 Smith</h4>
             
-            <h4 data-toc-skip class="date">2024-09-23</h4>
+            <h4 data-toc-skip class="date">2024-10-15</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/adamlilith/fasterRaster/blob/master/vignettes/faster_fasterRaster.Rmd"><code>vignettes/faster_fasterRaster.Rmd</code></a></small>
       <div class="d-none name"><code>faster_fasterRaster.Rmd</code></div>
@@ -114,15 +114,16 @@ files. However, if you are not creating a lot of very big
 <code>GRaster</code>s or <code>GVector</code>s, you can skip this
 time-taking step by setting the <code>clean</code> option to
 <code>FALSE</code> using <code>faster(clean = FALSE)</code>. By default,
-this setting is <code>TRUE</code>.</p></li>
-<li><p><strong>Do operation on <code>GRaster</code>s and
+this setting is <code>TRUE</code>. This can save a few seconds of
+runtime for functions that create temporary files.</p></li>
+<li><p><strong>Do operations on <code>GRaster</code>s and
 <code>GVector</code>s in the same coordinate reference system
 together:</strong> Every time you switch between using a
 <code>GRaster</code> or <code>GVector</code> with a different coordinate
-reference system (CRS), <code>GRASS</code> has to spend a few second
-changing to that CRS. So, you can save some time by doing as much work
-as possible with objects in one CRS, then switching to work on objects
-in another CRS.</p></li>
+reference system (CRS), <code>GRASS</code> has to spend a few seconds
+changing to that CRS. You can save some time by doing as much work as
+possible with objects in one CRS, then switching to work on objects in
+another CRS.</p></li>
 </ol>
 <p>~ FINIS ~</p>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

@@ -9,7 +9,7 @@ This function deletes a GRASS "project"/"location", rasters, and vectors therein
 
     <a class="navbar-brand me-2" href="../index.html">fasterRaster</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">8.3.0.7026</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">8.3.0.7027</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -114,33 +114,37 @@ This function deletes a GRASS "project"/"location", rasters, and vectors therein
 <span class="r-in"><span><span class="va">chelsa1</span> <span class="op">&lt;-</span> <span class="fu"><a href="fast.html">fast</a></span><span class="op">(</span><span class="va">madChelsa1</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Name of the currently active location</span></span></span>
-<span class="r-in"><span><span class="fu">.location</span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu">.location</span><span class="op">(</span><span class="va">elev</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu">.location</span><span class="op">(</span><span class="va">chelsa1</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span>   </span></span>
+<span class="r-in"><span>   <span class="fu">.location</span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span>   <span class="fu">.location</span><span class="op">(</span><span class="va">elev</span><span class="op">)</span></span></span>
+<span class="r-in"><span>   <span class="fu">.location</span><span class="op">(</span><span class="va">chelsa1</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># All available GRASS locations</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="locations.html">.locations</a></span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span>   <span class="co"># All available GRASS locations</span></span></span>
+<span class="r-in"><span>   <span class="fu"><a href="locations.html">.locations</a></span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># Find location of an object among all active locations</span></span></span>
-<span class="r-in"><span><span class="fu">.locationFind</span><span class="op">(</span><span class="va">elev</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu">.locationFind</span><span class="op">(</span><span class="va">chelsa1</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu">.locationFind</span><span class="op">(</span><span class="va">chelsa1</span>, return <span class="op">=</span> <span class="st">"index"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu">.locationFind</span><span class="op">(</span><span class="va">chelsa1</span>, return <span class="op">=</span> <span class="st">"crs"</span><span class="op">)</span></span></span>
+<span class="r-in"><span>   <span class="co"># Find location of an object among all active locations</span></span></span>
+<span class="r-in"><span>   <span class="fu">.locationFind</span><span class="op">(</span><span class="va">elev</span><span class="op">)</span></span></span>
+<span class="r-in"><span>   <span class="fu">.locationFind</span><span class="op">(</span><span class="va">chelsa1</span><span class="op">)</span></span></span>
+<span class="r-in"><span>   <span class="fu">.locationFind</span><span class="op">(</span><span class="va">chelsa1</span>, return <span class="op">=</span> <span class="st">"index"</span><span class="op">)</span></span></span>
+<span class="r-in"><span>   <span class="fu">.locationFind</span><span class="op">(</span><span class="va">chelsa1</span>, return <span class="op">=</span> <span class="st">"crs"</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># Switch between locations</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="locationRestore.html">.locationRestore</a></span><span class="op">(</span><span class="va">elev</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="locationRestore.html">.locationRestore</a></span><span class="op">(</span><span class="va">chelsa1</span><span class="op">)</span></span></span>
+<span class="r-in"><span>   <span class="co"># Switch between locations</span></span></span>
+<span class="r-in"><span>   <span class="fu"><a href="locationRestore.html">.locationRestore</a></span><span class="op">(</span><span class="va">elev</span><span class="op">)</span></span></span>
+<span class="r-in"><span>   <span class="fu"><a href="locationRestore.html">.locationRestore</a></span><span class="op">(</span><span class="va">chelsa1</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">loc</span> <span class="op">&lt;-</span> <span class="fu">.location</span><span class="op">(</span><span class="va">elev</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="locationRestore.html">.locationRestore</a></span><span class="op">(</span><span class="va">loc</span><span class="op">)</span></span></span>
+<span class="r-in"><span>   <span class="va">loc</span> <span class="op">&lt;-</span> <span class="fu">.location</span><span class="op">(</span><span class="va">elev</span><span class="op">)</span></span></span>
+<span class="r-in"><span>   <span class="fu"><a href="locationRestore.html">.locationRestore</a></span><span class="op">(</span><span class="va">loc</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># We could use .locationDelete(elev) to delete</span></span></span>
-<span class="r-in"><span><span class="co"># the location where "elev" is stored.</span></span></span>
+<span class="r-in"><span>   <span class="co"># Delete the location where "elev" is stored.</span></span></span>
+<span class="r-in"><span>   <span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="fu">.locationDelete</span><span class="op">(</span><span class="va">elev</span><span class="op">)</span> <span class="co"># dangerous!</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># Mapsets are always "PERMANENT" in fasterRaster</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="mapset.html">.mapset</a></span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="mapset.html">.mapset</a></span><span class="op">(</span><span class="va">elev</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="mapset.html">.mapset</a></span><span class="op">(</span><span class="va">chelsa1</span><span class="op">)</span></span></span>
+<span class="r-in"><span>   <span class="co"># Mapsets are always "PERMANENT" in fasterRaster</span></span></span>
+<span class="r-in"><span>   <span class="fu"><a href="mapset.html">.mapset</a></span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span>   <span class="fu"><a href="mapset.html">.mapset</a></span><span class="op">(</span><span class="va">elev</span><span class="op">)</span></span></span>
+<span class="r-in"><span>   <span class="fu"><a href="mapset.html">.mapset</a></span><span class="op">(</span><span class="va">chelsa1</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="op">}</span></span></span>
 <span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="grassStarted.html">grassStarted</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span></span>
@@ -159,33 +163,37 @@ This function deletes a GRASS "project"/"location", rasters, and vectors therein
 <span class="r-in"><span><span class="va">chelsa1</span> <span class="op">&lt;-</span> <span class="fu"><a href="fast.html">fast</a></span><span class="op">(</span><span class="va">madChelsa1</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Name of the currently active location</span></span></span>
-<span class="r-in"><span><span class="fu">.location</span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu">.location</span><span class="op">(</span><span class="va">elev</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu">.location</span><span class="op">(</span><span class="va">chelsa1</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span>   </span></span>
+<span class="r-in"><span>   <span class="fu">.location</span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span>   <span class="fu">.location</span><span class="op">(</span><span class="va">elev</span><span class="op">)</span></span></span>
+<span class="r-in"><span>   <span class="fu">.location</span><span class="op">(</span><span class="va">chelsa1</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># All available GRASS locations</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="locations.html">.locations</a></span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span>   <span class="co"># All available GRASS locations</span></span></span>
+<span class="r-in"><span>   <span class="fu"><a href="locations.html">.locations</a></span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># Find location of an object among all active locations</span></span></span>
-<span class="r-in"><span><span class="fu">.locationFind</span><span class="op">(</span><span class="va">elev</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu">.locationFind</span><span class="op">(</span><span class="va">chelsa1</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu">.locationFind</span><span class="op">(</span><span class="va">chelsa1</span>, return <span class="op">=</span> <span class="st">"index"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu">.locationFind</span><span class="op">(</span><span class="va">chelsa1</span>, return <span class="op">=</span> <span class="st">"crs"</span><span class="op">)</span></span></span>
+<span class="r-in"><span>   <span class="co"># Find location of an object among all active locations</span></span></span>
+<span class="r-in"><span>   <span class="fu">.locationFind</span><span class="op">(</span><span class="va">elev</span><span class="op">)</span></span></span>
+<span class="r-in"><span>   <span class="fu">.locationFind</span><span class="op">(</span><span class="va">chelsa1</span><span class="op">)</span></span></span>
+<span class="r-in"><span>   <span class="fu">.locationFind</span><span class="op">(</span><span class="va">chelsa1</span>, return <span class="op">=</span> <span class="st">"index"</span><span class="op">)</span></span></span>
+<span class="r-in"><span>   <span class="fu">.locationFind</span><span class="op">(</span><span class="va">chelsa1</span>, return <span class="op">=</span> <span class="st">"crs"</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># Switch between locations</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="locationRestore.html">.locationRestore</a></span><span class="op">(</span><span class="va">elev</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="locationRestore.html">.locationRestore</a></span><span class="op">(</span><span class="va">chelsa1</span><span class="op">)</span></span></span>
+<span class="r-in"><span>   <span class="co"># Switch between locations</span></span></span>
+<span class="r-in"><span>   <span class="fu"><a href="locationRestore.html">.locationRestore</a></span><span class="op">(</span><span class="va">elev</span><span class="op">)</span></span></span>
+<span class="r-in"><span>   <span class="fu"><a href="locationRestore.html">.locationRestore</a></span><span class="op">(</span><span class="va">chelsa1</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">loc</span> <span class="op">&lt;-</span> <span class="fu">.location</span><span class="op">(</span><span class="va">elev</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="locationRestore.html">.locationRestore</a></span><span class="op">(</span><span class="va">loc</span><span class="op">)</span></span></span>
+<span class="r-in"><span>   <span class="va">loc</span> <span class="op">&lt;-</span> <span class="fu">.location</span><span class="op">(</span><span class="va">elev</span><span class="op">)</span></span></span>
+<span class="r-in"><span>   <span class="fu"><a href="locationRestore.html">.locationRestore</a></span><span class="op">(</span><span class="va">loc</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># We could use .locationDelete(elev) to delete</span></span></span>
-<span class="r-in"><span><span class="co"># the location where "elev" is stored.</span></span></span>
+<span class="r-in"><span>   <span class="co"># Delete the location where "elev" is stored.</span></span></span>
+<span class="r-in"><span>   <span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="fu">.locationDelete</span><span class="op">(</span><span class="va">elev</span><span class="op">)</span> <span class="co"># dangerous!</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># Mapsets are always "PERMANENT" in fasterRaster</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="mapset.html">.mapset</a></span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="mapset.html">.mapset</a></span><span class="op">(</span><span class="va">elev</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="mapset.html">.mapset</a></span><span class="op">(</span><span class="va">chelsa1</span><span class="op">)</span></span></span>
+<span class="r-in"><span>   <span class="co"># Mapsets are always "PERMANENT" in fasterRaster</span></span></span>
+<span class="r-in"><span>   <span class="fu"><a href="mapset.html">.mapset</a></span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span>   <span class="fu"><a href="mapset.html">.mapset</a></span><span class="op">(</span><span class="va">elev</span><span class="op">)</span></span></span>
+<span class="r-in"><span>   <span class="fu"><a href="mapset.html">.mapset</a></span><span class="op">(</span><span class="va">chelsa1</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="op">}</span></span></span>
 </code></pre></div>

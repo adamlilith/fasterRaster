@@ -4,14 +4,14 @@ Numeration: count() (number of non-NA cells), sum().
 Central tendency: mean(), mmode() (mode), median().
 Extremes: min(), max(), which.min() (index of raster with the minimum value), which.max() (index of the raster with the maximum value)
 Dispersion: range(), stdev() (standard deviation), var() (sample variance), varpop() (population variance), nunique() (number of unique values), quantile() (use argument probs), skewness(), and kurtosis().
-Regression: Assuming we calculate a linear regression for each set of cells through all values of the cells, we can calculate its slope(), intercept(), r2(), and tvalue().
+NAs: anyNA() (any cells are NA?), allNA() (are all cells NA?)
 
 '><meta property="og:description" content='These functions can be applied to a "stack" of GRasters with two or more layers. They return a single-layered GRaster.  If you want to summarize across cells in a raster (e.g., calculate the mean value of all cells on a raster), use global(). Options include:
 Numeration: count() (number of non-NA cells), sum().
 Central tendency: mean(), mmode() (mode), median().
 Extremes: min(), max(), which.min() (index of raster with the minimum value), which.max() (index of the raster with the maximum value)
 Dispersion: range(), stdev() (standard deviation), var() (sample variance), varpop() (population variance), nunique() (number of unique values), quantile() (use argument probs), skewness(), and kurtosis().
-Regression: Assuming we calculate a linear regression for each set of cells through all values of the cells, we can calculate its slope(), intercept(), r2(), and tvalue().
+NAs: anyNA() (any cells are NA?), allNA() (are all cells NA?)
 
 '><meta property="og:image" content="https://github.com/adamlilith/fasterRaster/logo.png"></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -21,7 +21,7 @@ Regression: Assuming we calculate a linear regression for each set of cells thro
 
     <a class="navbar-brand me-2" href="../index.html">fasterRaster</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">8.3.0.7026</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">8.3.0.7027</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -56,7 +56,7 @@ Regression: Assuming we calculate a linear regression for each set of cells thro
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Mathematical operations on two or more GRasters</h1>
-      <small class="dont-index">Source: <a href="https://github.com/adamlilith/fasterRaster/blob/master/R/06_GRaster_functions_acrossLayers.r"><code>R/06_GRaster_functions_acrossLayers.r</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/adamlilith/fasterRaster/blob/master/R/06_GRaster_functions_across_layers.r"><code>R/06_GRaster_functions_across_layers.r</code></a></small>
       <div class="d-none name"><code>functions.Rd</code></div>
     </div>
 
@@ -65,7 +65,7 @@ Regression: Assuming we calculate a linear regression for each set of cells thro
 <li><p>Central tendency: <code>mean()</code>, <code>mmode()</code> (mode), <code>median()</code>.</p></li>
 <li><p>Extremes: <code>min()</code>, <code>max()</code>, <code>which.min()</code> (index of raster with the minimum value), <code>which.max()</code> (index of the raster with the maximum value)</p></li>
 <li><p>Dispersion: <code>range()</code>, <code>stdev()</code> (standard deviation), <code>var()</code> (sample variance), <code>varpop()</code> (population variance), <code>nunique()</code> (number of unique values), <code>quantile()</code> (use argument <code>probs</code>), <code>skewness()</code>, and <code>kurtosis()</code>.</p></li>
-<li><p>Regression: Assuming we calculate a linear regression for each set of cells through all values of the cells, we can calculate its <code>slope()</code>, <code>intercept()</code>, <code>r2()</code>, and <code>tvalue()</code>.</p></li>
+<li><p><code>NA</code>s: <code>anyNA()</code> (any cells are <code>NA</code>?), <code>allNA()</code> (are all cells <code>NA</code>?)</p></li>
 </ul></div>
 
     <div class="section level2">
@@ -122,22 +122,16 @@ Regression: Assuming we calculate a linear regression for each set of cells thro
 <span><span class="fu">kurtosis</span><span class="op">(</span><span class="va">x</span>, na.rm <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S4 method for class 'GRaster'</span></span>
-<span><span class="fu">slope</span><span class="op">(</span><span class="va">x</span>, na.rm <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S4 method for class 'GRaster'</span></span>
-<span><span class="fu">intercept</span><span class="op">(</span><span class="va">x</span>, na.rm <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S4 method for class 'GRaster'</span></span>
-<span><span class="fu">r2</span><span class="op">(</span><span class="va">x</span>, na.rm <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S4 method for class 'GRaster'</span></span>
-<span><span class="fu">tvalue</span><span class="op">(</span><span class="va">x</span>, na.rm <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S4 method for class 'GRaster'</span></span>
 <span><span class="fu">range</span><span class="op">(</span><span class="va">x</span>, na.rm <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S4 method for class 'GRaster'</span></span>
-<span><span class="fu">quantile</span><span class="op">(</span><span class="va">x</span>, <span class="va">prob</span>, na.rm <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">quantile</span><span class="op">(</span><span class="va">x</span>, <span class="va">prob</span>, na.rm <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S4 method for class 'GRaster'</span></span>
+<span><span class="fu">anyNA</span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S4 method for class 'GRaster'</span></span>
+<span><span class="fu">allNA</span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -174,157 +168,57 @@ Regression: Assuming we calculate a linear regression for each set of cells thro
 <span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://rspatial.org/" class="external-link">terra</a></span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Example data</span></span></span>
-<span class="r-in"><span><span class="va">madElev</span> <span class="op">&lt;-</span> <span class="fu"><a href="fastData.html">fastData</a></span><span class="op">(</span><span class="st">"madElev"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">madChelsa</span> <span class="op">&lt;-</span> <span class="fu"><a href="fastData.html">fastData</a></span><span class="op">(</span><span class="st">"madChelsa"</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Convert a SpatRaster to a GRaster</span></span></span>
-<span class="r-in"><span><span class="va">elev</span> <span class="op">&lt;-</span> <span class="fu"><a href="fast.html">fast</a></span><span class="op">(</span><span class="va">madElev</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">elevs</span> <span class="op">&lt;-</span> <span class="fu"><a href="c.html">c</a></span><span class="op">(</span><span class="va">elev</span>, <span class="va">elev</span>, <span class="fu"><a href="math.html">log10</a></span><span class="op">(</span><span class="va">elev</span><span class="op">)</span> <span class="op">-</span> <span class="fl">1</span>, <span class="fu"><a href="math.html">sqrt</a></span><span class="op">(</span><span class="va">elev</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="names.html">names</a></span><span class="op">(</span><span class="va">elevs</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="c.html">c</a></span><span class="op">(</span><span class="st">"elev1"</span>, <span class="st">"elev2"</span>, <span class="st">"log_elev"</span>, <span class="st">"sqrt_elev"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">chelsa</span> <span class="op">&lt;-</span> <span class="fu"><a href="fast.html">fast</a></span><span class="op">(</span><span class="va">madChelsa</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">chelsa</span> <span class="co"># 4 layers</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">elev</span></span></span>
-<span class="r-in"><span><span class="va">elevs</span></span></span>
+<span class="r-in"><span><span class="co"># Central tendency</span></span></span>
+<span class="r-in"><span><span class="fu">mean</span><span class="op">(</span><span class="va">chelsa</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">mmode</span><span class="op">(</span><span class="va">chelsa</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">median</span><span class="op">(</span><span class="va">chelsa</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># do some math</span></span></span>
-<span class="r-in"><span><span class="va">elev</span> <span class="op">+</span> <span class="fl">100</span></span></span>
-<span class="r-in"><span><span class="va">elev</span> <span class="op">-</span> <span class="fl">100</span></span></span>
-<span class="r-in"><span><span class="va">elev</span> <span class="op">*</span> <span class="fl">100</span></span></span>
-<span class="r-in"><span><span class="va">elev</span> <span class="op">/</span> <span class="fl">100</span></span></span>
-<span class="r-in"><span><span class="va">elev</span> <span class="op">^</span> <span class="fl">2</span></span></span>
-<span class="r-in"><span><span class="va">elev</span> <span class="op"><a href="https://rdrr.io/r/base/Arithmetic.html" class="external-link">%/%</a></span> <span class="fl">100</span> <span class="co"># divide then round down</span></span></span>
-<span class="r-in"><span><span class="va">elev</span> <span class="op"><a href="https://rdrr.io/r/base/Arithmetic.html" class="external-link">%%</a></span> <span class="fl">100</span> <span class="co"># modulus</span></span></span>
+<span class="r-in"><span><span class="co"># Statistics</span></span></span>
+<span class="r-in"><span><span class="fu">nunique</span><span class="op">(</span><span class="va">chelsa</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">sum</span><span class="op">(</span><span class="va">chelsa</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">count</span><span class="op">(</span><span class="va">chelsa</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">min</span><span class="op">(</span><span class="va">chelsa</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">max</span><span class="op">(</span><span class="va">chelsa</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">range</span><span class="op">(</span><span class="va">chelsa</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">skewness</span><span class="op">(</span><span class="va">chelsa</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">kurtosis</span><span class="op">(</span><span class="va">chelsa</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="fl">100</span> <span class="op">+</span> <span class="va">elev</span></span></span>
-<span class="r-in"><span><span class="fl">100</span> <span class="op"><a href="https://rdrr.io/r/base/Arithmetic.html" class="external-link">%/%</a></span> <span class="va">elev</span></span></span>
-<span class="r-in"><span><span class="fl">100</span> <span class="op"><a href="https://rdrr.io/r/base/Arithmetic.html" class="external-link">%%</a></span> <span class="va">elev</span></span></span>
+<span class="r-in"><span><span class="fu">stdev</span><span class="op">(</span><span class="va">chelsa</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">stdev</span><span class="op">(</span><span class="va">chelsa</span>, pop <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">var</span><span class="op">(</span><span class="va">chelsa</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">varpop</span><span class="op">(</span><span class="va">chelsa</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">elevs</span> <span class="op">+</span> <span class="fl">100</span></span></span>
-<span class="r-in"><span><span class="fl">100</span> <span class="op">+</span> <span class="va">elevs</span></span></span>
+<span class="r-in"><span><span class="co"># Which layers have maximum/minimum?</span></span></span>
+<span class="r-in"><span><span class="fu">which.min</span><span class="op">(</span><span class="va">chelsa</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">which.max</span><span class="op">(</span><span class="va">chelsa</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># math with logicals</span></span></span>
-<span class="r-in"><span><span class="va">elev</span> <span class="op">+</span> <span class="cn">TRUE</span></span></span>
-<span class="r-in"><span><span class="va">elev</span> <span class="op">-</span> <span class="cn">TRUE</span></span></span>
-<span class="r-in"><span><span class="va">elev</span> <span class="op">*</span> <span class="cn">TRUE</span></span></span>
-<span class="r-in"><span><span class="va">elev</span> <span class="op">/</span> <span class="cn">TRUE</span></span></span>
-<span class="r-in"><span><span class="va">elev</span> <span class="op">^</span> <span class="cn">TRUE</span></span></span>
-<span class="r-in"><span><span class="va">elev</span> <span class="op"><a href="https://rdrr.io/r/base/Arithmetic.html" class="external-link">%/%</a></span> <span class="cn">TRUE</span> <span class="co"># divide then round down</span></span></span>
-<span class="r-in"><span><span class="va">elev</span> <span class="op"><a href="https://rdrr.io/r/base/Arithmetic.html" class="external-link">%%</a></span> <span class="cn">TRUE</span> <span class="co"># modulus</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">elevs</span> <span class="op">+</span> <span class="cn">TRUE</span></span></span>
-<span class="r-in"><span><span class="cn">TRUE</span> <span class="op">+</span> <span class="va">elevs</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># Raster interacting with raster(s):</span></span></span>
-<span class="r-in"><span><span class="va">elev</span> <span class="op">+</span> <span class="va">elev</span></span></span>
-<span class="r-in"><span><span class="va">elev</span> <span class="op">-</span> <span class="va">elev</span></span></span>
-<span class="r-in"><span><span class="va">elev</span> <span class="op">*</span> <span class="va">elev</span></span></span>
-<span class="r-in"><span><span class="va">elev</span> <span class="op">/</span> <span class="va">elev</span></span></span>
-<span class="r-in"><span><span class="va">elev</span> <span class="op">^</span> <span class="fu"><a href="math.html">log</a></span><span class="op">(</span><span class="va">elev</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">elev</span> <span class="op"><a href="https://rdrr.io/r/base/Arithmetic.html" class="external-link">%/%</a></span> <span class="fu"><a href="math.html">sqrt</a></span><span class="op">(</span><span class="va">elev</span><span class="op">)</span> <span class="co"># divide then round down</span></span></span>
-<span class="r-in"><span><span class="va">elev</span> <span class="op"><a href="https://rdrr.io/r/base/Arithmetic.html" class="external-link">%%</a></span> <span class="fu"><a href="math.html">sqrt</a></span><span class="op">(</span><span class="va">elev</span><span class="op">)</span> <span class="co"># modulus</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">elevs</span> <span class="op">+</span> <span class="va">elev</span></span></span>
-<span class="r-in"><span><span class="va">elev</span> <span class="op">*</span> <span class="va">elevs</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># sign</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="math.html">abs</a></span><span class="op">(</span><span class="op">-</span><span class="fl">1</span> <span class="op">*</span> <span class="va">elev</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="math.html">abs</a></span><span class="op">(</span><span class="va">elevs</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># powers</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="math.html">sqrt</a></span><span class="op">(</span><span class="va">elevs</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># trigonometry</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="math.html">sin</a></span><span class="op">(</span><span class="va">elev</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="math.html">cos</a></span><span class="op">(</span><span class="va">elev</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="math.html">tan</a></span><span class="op">(</span><span class="va">elev</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="fu"><a href="math.html">asin</a></span><span class="op">(</span><span class="va">elev</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="math.html">acos</a></span><span class="op">(</span><span class="va">elev</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="math.html">atan</a></span><span class="op">(</span><span class="va">elev</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="fu"><a href="math.html">atan</a></span><span class="op">(</span><span class="va">elevs</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="math.html">atan2</a></span><span class="op">(</span><span class="va">elev</span>, <span class="va">elev</span><span class="op">^</span><span class="fl">1.2</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="math.html">atan2</a></span><span class="op">(</span><span class="va">elevs</span>, <span class="va">elev</span><span class="op">^</span><span class="fl">1.2</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="math.html">atan2</a></span><span class="op">(</span><span class="va">elev</span>, <span class="va">elevs</span><span class="op">^</span><span class="fl">1.2</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="math.html">atan2</a></span><span class="op">(</span><span class="va">elevs</span>, <span class="va">elevs</span><span class="op">^</span><span class="fl">1.2</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># logarithms</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="math.html">exp</a></span><span class="op">(</span><span class="va">elev</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="math.html">log</a></span><span class="op">(</span><span class="va">elev</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="math.html">ln</a></span><span class="op">(</span><span class="va">elev</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="math.html">log2</a></span><span class="op">(</span><span class="va">elev</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="math.html">log1p</a></span><span class="op">(</span><span class="va">elev</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="math.html">log10</a></span><span class="op">(</span><span class="va">elev</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="math.html">log10p</a></span><span class="op">(</span><span class="va">elev</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="math.html">log</a></span><span class="op">(</span><span class="va">elev</span>, <span class="fl">3</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="fu"><a href="math.html">log</a></span><span class="op">(</span><span class="va">elevs</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># rounding</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="math.html">round</a></span><span class="op">(</span><span class="va">elev</span> <span class="op">+</span> <span class="fl">0.5</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="math.html">floor</a></span><span class="op">(</span><span class="va">elev</span> <span class="op">+</span> <span class="fl">0.5</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="math.html">ceiling</a></span><span class="op">(</span><span class="va">elev</span> <span class="op">+</span> <span class="fl">0.5</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="math.html">trunc</a></span><span class="op">(</span><span class="va">elev</span> <span class="op">+</span> <span class="fl">0.5</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># comparison</span></span></span>
-<span class="r-in"><span><span class="va">elev</span> <span class="op">&lt;</span> <span class="fl">100</span></span></span>
-<span class="r-in"><span><span class="va">elev</span> <span class="op">&lt;=</span> <span class="fl">100</span></span></span>
-<span class="r-in"><span><span class="va">elev</span> <span class="op">==</span> <span class="fl">100</span></span></span>
-<span class="r-in"><span><span class="va">elev</span> <span class="op">!=</span> <span class="fl">100</span></span></span>
-<span class="r-in"><span><span class="va">elev</span> <span class="op">&gt;</span> <span class="fl">100</span></span></span>
-<span class="r-in"><span><span class="va">elev</span> <span class="op">&gt;=</span> <span class="fl">100</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">elev</span> <span class="op">+</span> <span class="fl">100</span> <span class="op">&lt;</span> <span class="fl">2</span> <span class="op">*</span> <span class="va">elev</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">elevs</span> <span class="op">&gt;</span> <span class="fl">10</span></span></span>
-<span class="r-in"><span><span class="fl">10</span> <span class="op">&gt;</span> <span class="va">elevs</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># logic</span></span></span>
-<span class="r-in"><span><span class="va">elev</span> <span class="op">&lt;</span> <span class="fl">10</span> <span class="op">|</span> <span class="va">elev</span> <span class="op">&gt;</span> <span class="fl">200</span></span></span>
-<span class="r-in"><span><span class="va">elev</span> <span class="op">&lt;</span> <span class="fl">10</span> <span class="op">|</span> <span class="fu"><a href="math.html">cos</a></span><span class="op">(</span><span class="va">elev</span><span class="op">)</span> <span class="op">&gt;</span> <span class="fl">0.9</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">elev</span> <span class="op">&lt;</span> <span class="fl">10</span> <span class="op">|</span> <span class="cn">TRUE</span></span></span>
-<span class="r-in"><span><span class="cn">TRUE</span> <span class="op">|</span> <span class="va">elev</span> <span class="op">&gt;</span> <span class="fl">200</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">elev</span> <span class="op">&lt;</span> <span class="fl">10</span> <span class="op">|</span> <span class="cn">FALSE</span></span></span>
-<span class="r-in"><span><span class="cn">FALSE</span> <span class="op">|</span> <span class="va">elev</span> <span class="op">&gt;</span> <span class="fl">200</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">elev</span> <span class="op">&lt;</span> <span class="fl">10</span> <span class="op">&amp;</span> <span class="fu"><a href="math.html">cos</a></span><span class="op">(</span><span class="va">elev</span><span class="op">)</span> <span class="op">&gt;</span> <span class="fl">0.9</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">elev</span> <span class="op">&lt;</span> <span class="fl">10</span> <span class="op">&amp;</span> <span class="cn">TRUE</span></span></span>
-<span class="r-in"><span><span class="cn">TRUE</span> <span class="op">&amp;</span> <span class="va">elev</span> <span class="op">&gt;</span> <span class="fl">200</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">elev</span> <span class="op">&lt;</span> <span class="fl">10</span> <span class="op">&amp;</span> <span class="cn">FALSE</span></span></span>
-<span class="r-in"><span><span class="cn">FALSE</span> <span class="op">&amp;</span> <span class="va">elev</span> <span class="op">&gt;</span> <span class="fl">200</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># Mathematical functions on GRasters with &gt;= 2 layers:</span></span></span>
-<span class="r-in"><span><span class="fu">mean</span><span class="op">(</span><span class="va">elevs</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu">mmode</span><span class="op">(</span><span class="va">elevs</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu">median</span><span class="op">(</span><span class="va">elevs</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu">nunique</span><span class="op">(</span><span class="va">elevs</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="fu">sum</span><span class="op">(</span><span class="va">elevs</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu">count</span><span class="op">(</span><span class="va">elevs</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu">min</span><span class="op">(</span><span class="va">elevs</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu">max</span><span class="op">(</span><span class="va">elevs</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu">range</span><span class="op">(</span><span class="va">elevs</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu">skewness</span><span class="op">(</span><span class="va">elevs</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu">kurtosis</span><span class="op">(</span><span class="va">elevs</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="fu">which.min</span><span class="op">(</span><span class="va">elevs</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu">which.max</span><span class="op">(</span><span class="va">elevs</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="fu">slope</span><span class="op">(</span><span class="va">elevs</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu">intercept</span><span class="op">(</span><span class="va">elevs</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu">r2</span><span class="op">(</span><span class="va">elevs</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu">tvalue</span><span class="op">(</span><span class="va">elevs</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="fu">stdev</span><span class="op">(</span><span class="va">elevs</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu">stdev</span><span class="op">(</span><span class="va">elevs</span>, pop <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu">var</span><span class="op">(</span><span class="va">elevs</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu">varpop</span><span class="op">(</span><span class="va">elevs</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># Regression</span></span></span>
+<span class="r-in"><span><span class="co"># Note the intercept is different for fasterRaster::regress().</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="regress.html">regress</a></span><span class="op">(</span><span class="va">chelsa</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="regress.html">regress</a></span><span class="op">(</span><span class="va">madChelsa</span>, <span class="fl">1</span><span class="op">:</span><span class="fu"><a href="dim.html">nlyr</a></span><span class="op">(</span><span class="va">madChelsa</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Note: To get quantiles for each layer, use</span></span></span>
 <span class="r-in"><span><span class="co"># global(x, "quantile", probs = 0.2).</span></span></span>
-<span class="r-in"><span><span class="fu">quantile</span><span class="op">(</span><span class="va">elevs</span>, <span class="fl">0.1</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">quantile</span><span class="op">(</span><span class="va">chelsa</span>, <span class="fl">0.1</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># NAs</span></span></span>
+<span class="r-in"><span><span class="va">madForest2000</span> <span class="op">&lt;-</span> <span class="fu"><a href="fastData.html">fastData</a></span><span class="op">(</span><span class="st">"madForest2000"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">forest2000</span> <span class="op">&lt;-</span> <span class="fu"><a href="fast.html">fast</a></span><span class="op">(</span><span class="va">madForest2000</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">forest2000</span> <span class="op">&lt;-</span> <span class="fu"><a href="project.html">project</a></span><span class="op">(</span><span class="va">forest2000</span>, <span class="va">chelsa</span>, method <span class="op">=</span> <span class="st">"near"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">chelsaForest</span> <span class="op">&lt;-</span> <span class="fu"><a href="c.html">c</a></span><span class="op">(</span><span class="va">chelsa</span>, <span class="va">forest2000</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">nas</span> <span class="op">&lt;-</span> <span class="fu">anyNA</span><span class="op">(</span><span class="va">chelsaForest</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="plot.html">plot</a></span><span class="op">(</span><span class="va">nas</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">allNas</span> <span class="op">&lt;-</span> <span class="fu">allNA</span><span class="op">(</span><span class="va">chelsaForest</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="plot.html">plot</a></span><span class="op">(</span><span class="va">allNas</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="op">}</span></span></span>
 </code></pre></div>

@@ -21,7 +21,7 @@ Note that whenever a points GVector is allowed for y, a data.frame, data.table, 
 
     <a class="navbar-brand me-2" href="../index.html">fasterRaster</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">8.3.0.7026</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">8.3.0.7027</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -79,7 +79,8 @@ Note that whenever a points <code>GVector</code> is allowed for <code>y</code>, 
 <span>  overlap <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  xy <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  cats <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  verbose <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span>  verbose <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S4 method for class 'GRaster,data.frame'</span></span>
@@ -95,16 +96,16 @@ Note that whenever a points <code>GVector</code> is allowed for <code>y</code>, 
 <span><span class="fu">extract</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, xy <span class="op">=</span> <span class="cn">FALSE</span>, cats <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S4 method for class 'GVector,GVector'</span></span>
-<span><span class="fu">extract</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, xy <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span><span class="fu">extract</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, xy <span class="op">=</span> <span class="cn">FALSE</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S4 method for class 'GVector,data.frame'</span></span>
-<span><span class="fu">extract</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, xy <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span><span class="fu">extract</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, xy <span class="op">=</span> <span class="cn">FALSE</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S4 method for class 'GVector,data.table'</span></span>
-<span><span class="fu">extract</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, xy <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span><span class="fu">extract</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, xy <span class="op">=</span> <span class="cn">FALSE</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S4 method for class 'GVector,matrix'</span></span>
-<span><span class="fu">extract</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, xy <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span><span class="fu">extract</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, xy <span class="op">=</span> <span class="cn">FALSE</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S4 method for class 'GVector,numeric'</span></span>
 <span><span class="fu">extract</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, xy <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
@@ -158,7 +159,11 @@ Note that whenever a points <code>GVector</code> is allowed for <code>y</code>, 
 
 
 <dt id="arg-verbose">verbose<a class="anchor" aria-label="anchor" href="#arg-verbose"></a></dt>
-<dd><p>Logical: If <code>TRUE</code>, display progress (will only function when extracting from points on a <code>GRaster</code> when the number of <code>GRaster</code>s is large).</p></dd>
+<dd><p>Logical: If <code>TRUE</code>, display progress (will only function when extracting from points on a <code>GRaster</code> when the number of <code>GRaster</code>s is large, or when extracting using a "points" <code>GVector</code> with lots of points).</p></dd>
+
+
+<dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
+<dd><p>Arguments to pass to <code><a href="project.html">project()</a></code>. This is used only if extracting from a <code>GRaster</code> at locations specified by a <code>GVector</code>, and they have a different coordinate reference system. In this case, users should specify the <code>wrap</code> argument to <code><a href="project.html">project()</a></code>.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -196,9 +201,8 @@ Note that whenever a points <code>GVector</code> is allowed for <code>y</code>, 
 <span class="r-in"><span><span class="fu">extract</span><span class="op">(</span><span class="va">elev</span>, <span class="va">dypsis</span>, xy <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Extract from categorical raster at points:</span></span></span>
-<span class="r-in"><span><span class="va">dypsisWGS84</span> <span class="op">&lt;-</span> <span class="fu"><a href="project.html">project</a></span><span class="op">(</span><span class="va">dypsis</span>, <span class="va">cover</span><span class="op">)</span> <span class="co"># Convert to same CRS</span></span></span>
-<span class="r-in"><span><span class="va">categories</span> <span class="op">&lt;-</span> <span class="fu">extract</span><span class="op">(</span><span class="va">cover</span>, <span class="va">dypsisWGS84</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">categoryValues</span> <span class="op">&lt;-</span> <span class="fu">extract</span><span class="op">(</span><span class="va">cover</span>, <span class="va">dypsisWGS84</span>, cats <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">categories</span> <span class="op">&lt;-</span> <span class="fu">extract</span><span class="op">(</span><span class="va">cover</span>, <span class="va">dypsis</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">categoryValues</span> <span class="op">&lt;-</span> <span class="fu">extract</span><span class="op">(</span><span class="va">cover</span>, <span class="va">dypsis</span>, cats <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">categories</span></span></span>
 <span class="r-in"><span><span class="va">categoryValues</span></span></span>
 <span class="r-in"><span></span></span>
@@ -209,8 +213,8 @@ Note that whenever a points <code>GVector</code> is allowed for <code>y</code>, 
 <span class="r-in"><span><span class="fu">extract</span><span class="op">(</span><span class="va">elev</span>, <span class="va">rivers</span>, fun <span class="op">=</span> <span class="fu"><a href="c.html">c</a></span><span class="op">(</span><span class="st">"sum"</span>, <span class="st">"mean"</span>, <span class="st">"countNonNA"</span><span class="op">)</span>, overlap <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Extract from a polygons vector at a points vector:</span></span></span>
-<span class="r-in"><span><span class="va">table</span> <span class="op">&lt;-</span> <span class="fu">extract</span><span class="op">(</span><span class="va">coast</span>, <span class="va">dypsis</span>, xy <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="head.html">head</a></span><span class="op">(</span><span class="va">table</span><span class="op">)</span> <span class="co"># first 3 are outside polygons vector, next 3 are inside</span></span></span>
+<span class="r-in"><span><span class="va">polysFromPoints</span> <span class="op">&lt;-</span> <span class="fu">extract</span><span class="op">(</span><span class="va">coast</span>, <span class="va">dypsis</span>, xy <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="head.html">head</a></span><span class="op">(</span><span class="va">polysFromPoints</span><span class="op">)</span> <span class="co"># first 3 are outside polygons vector, next 3 are inside</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="op">}</span></span></span>
 </code></pre></div>

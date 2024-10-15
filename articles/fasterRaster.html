@@ -20,7 +20,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">fasterRaster</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">8.3.0.7026</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">8.3.0.7027</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -71,7 +71,7 @@
                         <h4 data-toc-skip class="author">Adam B.
 Smith</h4>
             
-            <h4 data-toc-skip class="date">2024-09-23</h4>
+            <h4 data-toc-skip class="date">2024-10-15</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/adamlilith/fasterRaster/blob/master/vignettes/fasterRaster.Rmd"><code>vignettes/fasterRaster.Rmd</code></a></small>
       <div class="d-none name"><code>fasterRaster.Rmd</code></div>
@@ -117,7 +117,7 @@ conflicts. The <strong>data.table</strong> package is not required, but
 you most surely will use at least one of the other two.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://rspatial.org/" class="external-link">terra</a></span><span class="op">)</span></span>
-<span><span class="co">#&gt; terra 1.7.78</span></span>
+<span><span class="co">#&gt; terra 1.7.83</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-spatial.github.io/sf/" class="external-link">sf</a></span><span class="op">)</span></span>
 <span><span class="co">#&gt; Linking to GEOS 3.10.2, GDAL 3.4.1, PROJ 8.2.1; sf_use_s2() is TRUE</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-datatable.com" class="external-link">data.table</a></span><span class="op">)</span></span>
@@ -126,9 +126,9 @@ you most surely will use at least one of the other two.</p>
 <span><span class="co">#&gt; The following object is masked from 'package:terra':</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;     shift</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="http://www.earthSkySea.org" class="external-link">fasterRaster</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/adamlilith/fasterRaster">fasterRaster</a></span><span class="op">)</span></span>
 <span><span class="co">#&gt; Warning: no DISPLAY variable so Tk is not available</span></span>
-<span><span class="co">#&gt; fasterRaster 8.3.0.7026</span></span>
+<span><span class="co">#&gt; fasterRaster 8.3.0.7027</span></span>
 <span><span class="co">#&gt; To avoid conflicts between functions, please attach the `terra`, `sf`,</span></span>
 <span><span class="co">#&gt; and `data.table` packages before attaching `fasterRaster` using, for</span></span>
 <span><span class="co">#&gt; example, `library(terra)`.</span></span>
@@ -271,7 +271,9 @@ plot them as if the were any other spatial object:</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/plot.html">plot</a></span><span class="op">(</span><span class="va">elev</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/plot.html">plot</a></span><span class="op">(</span><span class="va">rivers</span>, col <span class="op">=</span> <span class="st">'lightblue'</span>, add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
-<p><img src="reference/figures/elev_rivers.png"></p>
+<div class="float">
+<img src="images%2Felev_rivers.png" alt="Elevation and rivers"><div class="figcaption">Elevation and rivers</div>
+</div>
 <p>You can use mathematical operators and functions:</p>
 <div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a>elev_feet <span class="ot">&lt;-</span> elev <span class="sc">*</span> <span class="fl">3.28084</span></span>
 <span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a>elev_feet</span>
@@ -308,8 +310,8 @@ same output. Much care has been taken to ensure they do, but sometimes
 there are multiple ways to do the same task, so choices made by the
 authors of <strong>terra</strong> and <strong>GRASS</strong> can lead to
 differences.</p>
-<p>The following code creates a a) raster where cell values reflect the
-distance between them and the nearest river; b) creates a buffer around
+<p>The following code 1) creates a raster where cell values reflect the
+distance between them and the nearest river; b) makes a buffer around
 the rivers; then c) plots the output:</p>
 <div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a>dist <span class="ot">&lt;-</span> <span class="fu">distance</span>(elev, rivers)</span>
 <span id="cb14-2"><a href="#cb14-2" tabindex="-1"></a>dist</span>
@@ -337,7 +339,10 @@ the rivers; then c) plots the output:</p>
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/plot.html">plot</a></span><span class="op">(</span><span class="va">dist</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/plot.html">plot</a></span><span class="op">(</span><span class="va">rivers</span>, col <span class="op">=</span> <span class="st">'lightblue'</span>, add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/plot.html">plot</a></span><span class="op">(</span><span class="va">river_buff</span>, border <span class="op">=</span> <span class="st">'white'</span>, add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
-<p><img src="reference/figures/dist_to_rivers.png"></p>
+<div class="float">
+<img src="images%2Fdist_to_rivers.png" alt="Distance between each cell and nearest major river"><div class="figcaption">Distance between each cell and nearest major
+river</div>
+</div>
 <p>And that’s how you get started! Now that you have a raster and a
 vector in your <strong>fasterRaster</strong> “location”, you can start
 doing manipulations and analyses using any of the

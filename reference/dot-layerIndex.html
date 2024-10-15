@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">fasterRaster</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">8.3.0.7026</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">8.3.0.7027</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -52,7 +52,7 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">.layerIndex</span><span class="op">(</span><span class="va">layer</span>, <span class="va">x</span>, recycle <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">.layerIndex</span><span class="op">(</span><span class="va">layer</span>, <span class="va">x</span>, recycle <span class="op">=</span> <span class="cn">TRUE</span>, negate <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -69,6 +69,10 @@
 
 <dt id="arg-recycle">recycle<a class="anchor" aria-label="anchor" href="#arg-recycle"></a></dt>
 <dd><p>Logical: If <code>TRUE</code> (default), and <code>layer</code> is logical and smaller in number than the number of layers, then recycle the vector of <code>layer</code>.</p></dd>
+
+
+<dt id="arg-negate">negate<a class="anchor" aria-label="anchor" href="#arg-negate"></a></dt>
+<dd><p>Logical: If <code>TRUE</code>, return indices of all layers <em>not</em> identified in <code>layer</code>.</p></dd>
 
 </dl></div>
     <div class="section level2">

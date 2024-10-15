@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">fasterRaster</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">8.3.0.7026</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">8.3.0.7027</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -45,6 +45,52 @@
       <small>Source: <a href="https://github.com/adamlilith/fasterRaster/blob/master/NEWS.md"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="8.4.0.7027" id="fasterraster-8407027-2024-10-15">fasterRaster 8.4.0.7027 (2024-10-15)<a class="anchor" aria-label="anchor" href="#fasterraster-8407027-2024-10-15"></a></h2>
+<div class="section level4">
+<h4 id="main-task-for-this-version-8-4-0-7027">Main task for this version<a class="anchor" aria-label="anchor" href="#main-task-for-this-version-8-4-0-7027"></a></h4>
+<p>o Test examples with <strong>GRASS 8.4</strong> and update functions as needed. Upgrade to <strong>fasterRaster</strong> 8.4.X.X.</p>
+</div>
+<div class="section level4">
+<h4 id="updates-for-grass-8-4-0-7027">Updates for <strong>GRASS 8.4</strong>
+<a class="anchor" aria-label="anchor" href="#updates-for-grass-8-4-0-7027"></a></h4>
+<p>o <code>addLocationProject()</code> adds either a <code>project</code> or <code>location</code> argument to a <code>list</code> to be passed to <code><a href="https://rsbivand.github.io/rgrass/reference/execGRASS.html" class="external-link">rgrass::execGRASS()</a></code>.<br>
+o <code><a href="../reference/project.html">project()</a></code> work with <strong>GRASS</strong> 8.4.<br>
+o <code><a href="../reference/vAttachDatabase.html">.vAttachDatabase()</a></code> no longer has the <code>"o"</code> flag when calling <code>v.db.connect</code> when running <strong>GRASS</strong> &gt;=8.4.</p>
+</div>
+<div class="section level4">
+<h4 id="potentially-code-breaking-changes-8-4-0-7027">Potentially code-breaking changes<a class="anchor" aria-label="anchor" href="#potentially-code-breaking-changes-8-4-0-7027"></a></h4>
+<p>o <code><a href="../reference/aggregate.html">aggregate()</a></code> no longer has the <code>dissolve</code> argument for <code>GVector</code>s (polygons will always be dissolved).<br>
+o <code>combineCats()</code> has been renamed <code><a href="../reference/concats.html">concats()</a></code> to align with <strong>terra</strong>.<br>
+o <code>intercept()</code>, <code>slope()</code>, <code>r2()</code>, and <code>tvalue()</code> have been replaced by the single function <code><a href="../reference/regress.html">regress()</a></code> to align with <strong>terra</strong>.<br>
+o <code>pca()</code> has been renamed <code><a href="../reference/princomp.html">princomp()</a></code>.</p>
+</div>
+<div class="section level4">
+<h4 id="enhanced-functionality-and-new-functions-8-4-0-7027">Enhanced functionality and new functions<a class="anchor" aria-label="anchor" href="#enhanced-functionality-and-new-functions-8-4-0-7027"></a></h4>
+<p>o <code><a href="../reference/extract.html">extract()</a></code> now automatically projects a <code>GVector</code> to match the CRS of a <code>GRaster</code> from which extraction is being made.<br>
+o <code><a href="../reference/grassGUI.html">grassGUI()</a></code> allows users to start the <strong>GRASS</strong> GUI.<br>
+o <code><a href="../reference/grassHelp.html">grassHelp()</a></code> shows the manual page for a <strong>GRASS</strong> module.<br>
+o <code>layerIndex()</code> allows a <code>negate</code> argument to get the “opposite” indices of a <code>GRaster</code>.<br>
+o <code><a href="../reference/init.html">init()</a></code> assigns to <code>GRaster</code> cells the value of their coordinates, rows, columns, or values in a regular or chessboard-like pattern.<br>
+o <code><a href="../reference/regress.html">regress()</a></code> replaces individual functions <code>intercept()</code>, <code>slope()</code>, <code>r2()</code>, and <code>tvalue()</code>.<br>
+o <code><a href="../reference/subset.html">subset()</a></code> subsets layers of a <code>GRaster</code> or rows/geometries of a <code>GVector</code>.<br>
+o <code><a href="../reference/segregate.html">segregate()</a></code> creates one layer per unique value in an input <code>GRaster</code>, with values in the output coded 1 or 0 depending on whether cells in the input had the unique value or not.</p>
+</div>
+<div class="section level4">
+<h4 id="bug-and-issue-fixes-8-4-0-7027">Bug and issue fixes<a class="anchor" aria-label="anchor" href="#bug-and-issue-fixes-8-4-0-7027"></a></h4>
+<p>o <code><a href="../reference/app.html">appFuns()</a></code> succeeds in opening a <strong>shiny</strong> table with <code><a href="../reference/app.html">app()</a></code> functions.<br>
+o <code><a href="../reference/levels.html">categories()</a></code> correctly assigns active category column.<br>
+o <code><a href="../reference/crds.html">crds()</a></code> correctly returns coordinates from a “points” <code>GVector</code>.<br>
+o <code><a href="../reference/distance.html">distance()</a></code> correctly parses distance matrix.<br>
+o <code><a href="../reference/simplifyGeom.html">simplifyGeom()</a></code> works for 2-dimensional <code>GVector</code>s.<br>
+o <code><a href="../reference/flow.html">flow()</a></code> creates a scratch folder when none is provided.<br>
+o <code><a href="../reference/global.html">global()</a></code> does not fail when multiple values of <code>fun</code> and <code>probs</code> are used and <code>fun</code> includes <code>quantile</code>.<br>
+o <code><a href="../reference/rasterize.html">rasterize()</a></code> works when <code>by</code> is not <code>NULL</code>.<br>
+o <code><a href="../reference/dot-layerIndex.html">.layerIndex()</a></code> (called by <code><a href="../reference/levels.html">categories()</a></code> and other functions related to categorical <code>GRaster</code>s) does not fail.<br>
+o <code><a href="../reference/vHasDatabase.html">.vHasDatabase()</a></code> correctly detects if a vector has a database attached to it.<br>
+o Removed all instances of <code><a href="https://rdrr.io/r/base/sQuote.html" class="external-link">sQuote()</a></code>.</p>
+</div>
+</div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="8.3.0.7026" id="fasterraster-8307026-2024-09-22">fasterRaster 8.3.0.7026 (2024-09-22)<a class="anchor" aria-label="anchor" href="#fasterraster-8307026-2024-09-22"></a></h2>
 <p>o Recompile <code>pkgdown</code></p>

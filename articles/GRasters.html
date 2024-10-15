@@ -20,7 +20,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">fasterRaster</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">8.3.0.7026</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">8.3.0.7027</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -71,7 +71,7 @@
                         <h4 data-toc-skip class="author">Adam B.
 Smith</h4>
             
-            <h4 data-toc-skip class="date">2024-09-23</h4>
+            <h4 data-toc-skip class="date">2024-10-15</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/adamlilith/fasterRaster/blob/master/vignettes/GRasters.Rmd"><code>vignettes/GRasters.Rmd</code></a></small>
       <div class="d-none name"><code>GRasters.Rmd</code></div>
@@ -80,9 +80,10 @@ Smith</h4>
     
     
 <p><strong>fasterRaster</strong> <code>GRaster</code>s can represent
-double-floating point numeric values, integers, or categorical data.</p>
+double-floating point numeric values, integers, or categorical/factor
+data.</p>
 <div class="section level2">
-<h2 id="double-floating-point-values">Double-floating point values<a class="anchor" aria-label="anchor" href="#double-floating-point-values"></a>
+<h2 id="double-floating-point-value">Double-floating point value<a class="anchor" aria-label="anchor" href="#double-floating-point-value"></a>
 </h2>
 <p>Double-floating point values are accurate to about the 15th to 17th
 decimal place. These are called “double” rasters in
@@ -92,7 +93,7 @@ All <code>numeric</code> values in <strong>R</strong> are
 double-floating point values.</p>
 </div>
 <div class="section level2">
-<h2 id="floating-point-values">Floating point values<a class="anchor" aria-label="anchor" href="#floating-point-values"></a>
+<h2 id="floating-point-value">Floating point value<a class="anchor" aria-label="anchor" href="#floating-point-value"></a>
 </h2>
 <p>Less common that double-floating point rasters, floating point
 rasters are accurate to about the 7th decimal place. These are called
@@ -101,7 +102,7 @@ rasters in <strong>GRASS</strong>. These rasters typically take less
 memory than double-floating point rasters.</p>
 </div>
 <div class="section level2">
-<h2 id="integers">Integers<a class="anchor" aria-label="anchor" href="#integers"></a>
+<h2 id="integer">Integer<a class="anchor" aria-label="anchor" href="#integer"></a>
 </h2>
 <p>Rasters that represent integers are called “integer” rasters in
 <strong>fasterRaster</strong> and <code>CELL</code> rasters in
@@ -111,7 +112,7 @@ function will also return integer-type rasters. Integer rasters
 typically take the least memory.</p>
 </div>
 <div class="section level2">
-<h2 id="categories">Categories<a class="anchor" aria-label="anchor" href="#categories"></a>
+<h2 id="categoricalfactor">Categorical/factor<a class="anchor" aria-label="anchor" href="#categoricalfactor"></a>
 </h2>
 <p>Categorical rasters (also called “factor” rasters) are actually
 integer rasters, but have an associated attribute table that maps each
@@ -175,15 +176,16 @@ raster.</li>
 <a href="https://adamlilith.github.io/fasterRaster/reference/cats.html" class="external-link"><code>cats()</code></a>
 returns the entire “levels” table of a categorical raster.</li>
 <li>
-<a href="https://adamlilith.github.io/fasterRaster/reference/combineCats.html" class="external-link"><code>combineCats()</code></a>
-combines levels of two or more categorical or integer rasters.</li>
-<li>
 <a href="https://adamlilith.github.io/fasterRaster/reference/combineLevels.html" class="external-link"><code>combineLevels()</code></a>:
 Combine the “levels” tables of two or more categorical
 <code>GRaster</code>s.</li>
 <li>
 <a href="https://adamlilith.github.io/fasterRaster/reference/complete.cases.html" class="external-link"><code>complete.cases()</code></a>
 finds rows in the levels table that have no <code>NA</code>s.</li>
+<li>
+<a href="https://adamlilith.github.io/fasterRaster/reference/combineCats.html" class="external-link"><code>concats()</code></a>
+combines levels of two or more categorical or integer rasters by
+concatenating them.</li>
 <li>
 <a href="https://adamlilith.github.io/fasterRaster/reference/dropevels.html" class="external-link"><code>droplevels()</code></a>
 removes “unused” levels in a “levels” table.</li>

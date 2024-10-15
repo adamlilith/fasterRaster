@@ -20,7 +20,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">fasterRaster</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">8.3.0.7026</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">8.3.0.7027</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -71,7 +71,7 @@
                         <h4 data-toc-skip class="author">Adam B.
 Smith</h4>
             
-            <h4 data-toc-skip class="date">2024-09-23</h4>
+            <h4 data-toc-skip class="date">2024-10-15</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/adamlilith/fasterRaster/blob/master/vignettes/hidden_functions.Rmd"><code>vignettes/hidden_functions.Rmd</code></a></small>
       <div class="d-none name"><code>hidden_functions.Rmd</code></div>
@@ -92,18 +92,44 @@ creating the <code>GRaster</code> or <code>GVector</code> pointer before
 calling the function. “Period” functions will, though, often work on
 <code>GRaster</code>s or <code>GVector</code>s, though some
 error-checking and region re-definition is not conducted.</p>
+<div class="section level2">
+<h2 id="general">General<a class="anchor" aria-label="anchor" href="#general"></a>
+</h2>
 <ul>
 <li>
-<code>.aggDisaggVect()</code>: Aggregate or disaggregate a vector
-using its <a href="https://adamlilith.github.io/fasterRaster/reference/sources.html" class="external-link"><code>sources()</code></a>
-name.</li>
+<code><a href="../reference/dot-addLocationProject.html">.addLocationProject()</a></code>: Add a “location” or “project”
+argument to a list to be passed to [rgrass::execGRASS()]</li>
+<li>
+<code><a href="../reference/dot-backdoor.html">.backdoor()</a></code>: Calls [faster()] and sets
+<strong>GRASS</strong> folder to “C:/Program Files/GRASS GIS X.Y”, plus
+other options useful for development.</li>
+<li>
+<code>.fileExt()</code>: Get file extension</li>
+<li>
+<code><a href="../reference/ls.html">.ls()</a></code>: Lists the <code>sources</code> of all objects in
+the active <strong>GRASS</strong> “project/location”</li>
+<li>
+<code><a href="../reference/message.html">.message()</a></code>: Display a warning or message if the given
+warning has not been displayed since <strong>fasterRaster</strong> was
+attached or if a given number of hours has passed</li>
+<li>
+<code><a href="../reference/quiet.html">.quiet()</a></code>: Returns “quiet” if
+<code>faster("verbose")</code> is <code>TRUE</code>
+</li>
+<li>
+<code><a href="../reference/workDir.html">.workDir()</a></code>: Working directory of a
+<code>GLocation</code> object</li>
+</ul>
+</div>
+<div class="section level2">
+<h2 id="rasters-and-vectors">Rasters and vectors<a class="anchor" aria-label="anchor" href="#rasters-and-vectors"></a>
+</h2>
+<ul>
 <li>
 <code><a href="../reference/copyGSpatial.html">.copyGSpatial()</a></code>: Make a copy of the
 <strong>GRASS</strong> file pointed to by a <code>GRaster</code> or
 <code>GVector</code>
 </li>
-<li>
-<code>.fileExt()</code>: Get file extension</li>
 <li>
 <code><a href="../reference/exists.html">.exists()</a></code>: Does the <strong>GRASS</strong> file of a
 <code>GRaster</code> or <code>GVector</code> exist?</li>
@@ -112,60 +138,10 @@ name.</li>
 name of a <code>GRaster</code> or <code>GVector</code>
 </li>
 <li>
-<code><a href="../reference/dot-geomtype.html">.geomtype()</a></code>: Geometry type (“point”, “line”, or “area”)
-from the <a href="https://adamlilith.github.io/fasterRaster/reference/sources.html" class="external-link"><code>sources()</code></a>
-name of a <code>GVector</code>
-</li>
-<li>
-<code><a href="../reference/dot-layerIndex.html">.layerIndex()</a></code>: Gets the index of <code>GRaster</code>
-layers from a numeric, integer, character, or logical vector</li>
-<li>
-<code><a href="../reference/locationCreate.html">.locationCreate()</a></code> Make a connection to
-<strong>GRASS</strong> (i.e., start <strong>GRASS</strong> from within
-<strong>R</strong>) and create a location</li>
-<li>
-<code><a href="../reference/location.html">.locationDelete()</a></code> Deletes all files associated with a
-<strong>GRASS</strong> “location” and mapset</li>
-<li>
-<code>.locationFind()</code>: Find a specific <strong>GRASS</strong>
-“location” that already exists</li>
-<li>
-<code><a href="../reference/locationRestore.html">.locationRestore()</a></code> Reconnect <strong>GRASS</strong> to
-a previously-created <strong>GRASS</strong> “location”</li>
-<li>
-<code><a href="../reference/locations.html">.locations()</a></code>: List of all available “locations”</li>
-<li>
-<code><a href="../reference/ls.html">.ls()</a></code>: Lists the <code>sources</code> of all objects in
-the active <strong>GRASS</strong> “location”</li>
-<li>
-<code><a href="../reference/dot-makeGRaster.html">.makeGRaster()</a></code> and <code><a href="../reference/dot-makeGVector.html">.makeGVector()</a></code>: Make
-<code>GRaster</code>s or <code>GVector</code>s from a vector of
-<code>sources</code>, which are pointers to files in
-<strong>GRASS</strong>
-</li>
-<li>
 <code>.makeSourceNames()</code>: Makes one or more statistically
 unique strings that can be used as file names to represent rasters or
 vectors in <strong>GRASS</strong>
 </li>
-<li>
-<code><a href="../reference/mapset.html">.mapset()</a></code>: <strong>GRASS</strong> “mapset” of an object
-or the active session</li>
-<li>
-<code><a href="../reference/message.html">.message()</a></code>: Display a warning or message if the given
-warning has not been displayed since <strong>fasterRaster</strong> was
-attached or if a given number or hours has passed since then</li>
-<li>
-<code><a href="../reference/dot-minVal.html">.minVal()</a></code> and <code><a href="../reference/dot-maxVal.html">.maxVal()</a></code>: Values in the
-<code>@minVal</code> and <code>@maxVal</code> slots in a
-<code>GRaster</code>
-</li>
-<li>
-<code><a href="../reference/dot-nlevels.html">.nlevels()</a></code>: Number of levels in a
-<code>SpatVector</code>, <code>data.frame</code>,
-<code>data.table</code>, empty string, or a list of
-<code>data.frame</code>s, <code>data.table</code>s, and/or empty
-strings.</li>
 <li>
 <code><a href="../reference/dot-plot.html">.plot()</a></code>: Plot using the <a href="https://adamlilith.github.io/fasterRaster/reference/sources.html" class="external-link"><code>sources()</code></a>
 name of a <code>GRaster</code> or <code>GVector</code>
@@ -175,33 +151,29 @@ name of a <code>GRaster</code> or <code>GVector</code>
 slot in a <code>GRaster</code> or <code>GVector</code>
 </li>
 <li>
-<code><a href="../reference/quiet.html">.quiet()</a></code>: Returns “quiet” if
-<code>faster("verbose")</code> is <code>TRUE</code>
-</li>
-<li>
 <code><a href="../reference/dot-rastInfo.html">.rastInfo()</a></code> and <code><a href="../reference/dot-vectInfo.html">.vectInfo()</a></code>: Metadata for
 a <strong>GRASS</strong> raster or vector</li>
-<li>
-<code><a href="../reference/region.html">.region()</a></code>: Change or report the active region’s extent
-and resolution</li>
-<li>
-<code>.regionDim()]</code>: Change or report the active region’s
-resolution (also <a href="https://adamlilith.github.io/fasterRaster/reference/dim.html" class="external-link"><code>dim()</code></a>
-and related functions, with no arguments)</li>
-<li>
-<code><a href="../reference/region.html">.regionExt()</a></code>: Change or report the active region’s
-extent (also <a href="https://adamlilith.github.io/fasterRaster/reference/ext.html" class="external-link"><code>ext()</code></a>
-and related functions, with no arguments)</li>
-<li>
-<code><a href="../reference/region.html">.regionRes()</a></code>: Change or report the active region’s
-dimensions (also <a href="https://adamlilith.github.io/fasterRaster/reference/res.html" class="external-link"><code>res()</code></a>
-and related functions, with no arguments)</li>
 <li>
 <code><a href="../reference/dot-rename.html">.rename()</a></code>: Rename a <strong>GRASS</strong> raster or
 vector</li>
 <li>
 <code><a href="../reference/rm.html">.rm()</a></code>: Delete rasters or vectors in
 <strong>GRASS</strong>
+</li>
+</ul>
+</div>
+<div class="section level2">
+<h2 id="vectors">Vectors<a class="anchor" aria-label="anchor" href="#vectors"></a>
+</h2>
+<ul>
+<li>
+<code>.aggDisaggVect()</code>: Aggregate or disaggregate a vector
+using its <a href="https://adamlilith.github.io/fasterRaster/reference/sources.html" class="external-link"><code>sources()</code></a>
+name.</li>
+<li>
+<code><a href="../reference/dot-geomtype.html">.geomtype()</a></code>: Geometry type (“point”, “line”, or “area”)
+from the <a href="https://adamlilith.github.io/fasterRaster/reference/sources.html" class="external-link"><code>sources()</code></a>
+name of a <code>GVector</code>
 </li>
 <li>
 <code>.validVector()</code>: Test if a <code>GVector</code> is
@@ -240,7 +212,81 @@ indices of a <strong>GRASS</strong> vector</li>
 <code><a href="../reference/dot-vValidCats.html">.vValidCats()</a></code>: Are category values of a vector
 valid?</li>
 </ul>
+</div>
+<div class="section level2">
+<h2 id="rasters">Rasters<a class="anchor" aria-label="anchor" href="#rasters"></a>
+</h2>
+<ul>
+<li>
+<code><a href="../reference/dot-layerIndex.html">.layerIndex()</a></code>: Gets the index of <code>GRaster</code>
+layers from a numeric, integer, character, or logical vector</li>
+<li>
+<code><a href="../reference/dot-makeGRaster.html">.makeGRaster()</a></code> and <code><a href="../reference/dot-makeGVector.html">.makeGVector()</a></code>: Make
+<code>GRaster</code>s or <code>GVector</code>s from a vector of
+<code>sources</code>, which are pointers to files in
+<strong>GRASS</strong>
+</li>
+<li>
+<code><a href="../reference/dot-minVal.html">.minVal()</a></code> and <code><a href="../reference/dot-maxVal.html">.maxVal()</a></code>: Values in the
+<code>@minVal</code> and <code>@maxVal</code> slots in a
+<code>GRaster</code>
+</li>
+<li>
+<code><a href="../reference/dot-nlevels.html">.nlevels()</a></code>: Number of levels in a
+<code>SpatVector</code>, <code>data.frame</code>,
+<code>data.table</code>, empty string, or a list of
+<code>data.frame</code>s, <code>data.table</code>s, and/or empty
+strings.</li>
+</ul>
+</div>
+<div class="section level2">
+<h2 id="gras-projects-locations-and-mapsets">
+<strong>GRAS</strong> “Projects” (“locations”) and “mapsets”<a class="anchor" aria-label="anchor" href="#gras-projects-locations-and-mapsets"></a>
+</h2>
+<ul>
+<li>
+<code><a href="../reference/locationCreate.html">.locationCreate()</a></code> Make a connection to
+<strong>GRASS</strong> (i.e., start <strong>GRASS</strong> from within
+<strong>R</strong>) and create a location</li>
+<li>
+<code><a href="../reference/location.html">.locationDelete()</a></code> Deletes all files associated with a
+<strong>GRASS</strong> “location” and mapset</li>
+<li>
+<code>.locationFind()</code>: Find a specific <strong>GRASS</strong>
+“location” that already exists</li>
+<li>
+<code><a href="../reference/locationRestore.html">.locationRestore()</a></code> Reconnect <strong>GRASS</strong> to
+a previously-created <strong>GRASS</strong> “location”</li>
+<li>
+<code><a href="../reference/locations.html">.locations()</a></code>: List of all available “locations”</li>
+<li>
+<code><a href="../reference/mapset.html">.mapset()</a></code>: <strong>GRASS</strong> “mapset” of an object
+or the active session</li>
+</ul>
+</div>
+<div class="section level2">
+<h2 id="grass-regions">
+<strong>GRASS</strong> “regions”<a class="anchor" aria-label="anchor" href="#grass-regions"></a>
+</h2>
+<ul>
+<li>
+<code><a href="../reference/region.html">.region()</a></code>: Change or report the active region’s extent
+and resolution</li>
+<li>
+<code>.regionDim()]</code>: Change or report the active region’s
+resolution (also <a href="https://adamlilith.github.io/fasterRaster/reference/dim.html" class="external-link"><code>dim()</code></a>
+and related functions, with no arguments)</li>
+<li>
+<code><a href="../reference/region.html">.regionExt()</a></code>: Change or report the active region’s
+extent (also <a href="https://adamlilith.github.io/fasterRaster/reference/ext.html" class="external-link"><code>ext()</code></a>
+and related functions, with no arguments)</li>
+<li>
+<code><a href="../reference/region.html">.regionRes()</a></code>: Change or report the active region’s
+dimensions (also <a href="https://adamlilith.github.io/fasterRaster/reference/res.html" class="external-link"><code>res()</code></a>
+and related functions, with no arguments)</li>
+</ul>
 <p>~ FINIS ~</p>
+</div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>
 </div>
