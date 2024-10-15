@@ -145,7 +145,7 @@ methods::setMethod(
 		dissolve = TRUE
 	) {
 
-	# .message(msg = "buffer", message = "As of GRASS 8.4, terra's buffer() function is much faster, even for very large vectors.")
+	# .message(msg = "buffer", message = "As of GRASS 8.3, terra's buffer() function is much faster, even for very large vectors.")
 	
 	.locationRestore(x)
 

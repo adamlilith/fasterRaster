@@ -20,7 +20,7 @@ methods::setMethod(
 	signature = c(x = "data.frame"),
 	function(x, replace, cols = NULL) {
 	
-	if (length(replace) != 1L) stop("Argument ", sQuote("replace"), " must be a single value.")
+	if (length(replace) != 1L) stop("Argument `replace` must be a single value.")
 
 	if (is.null(cols)) cols <- seq_len(ncol(x))
 
@@ -49,7 +49,7 @@ methods::setMethod(
 	signature = c(x = "matrix"),
 	function(x, replace, cols = NULL) {
 	
-	if (length(replace) != 1L) stop("Argument ", sQuote("replace"), " must be a single value.")
+	if (length(replace) != 1L) stop("Argument `replace` must be a single value.")
 
 	if (is.null(cols)) cols <- seq_len(ncol(x))
 
@@ -78,7 +78,7 @@ methods::setMethod(
     signature = c(x = "data.table"),
     function(x, replace, cols = NULL) {
 
-		if (length(replace) != 1L) stop("Argument ", sQuote("replace"), " must be a single value.")
+		if (length(replace) != 1L) stop("Argument `replace` must be a single value.")
 
 		if (is.null(cols)) cols <- seq_len(ncol(x))
         
@@ -151,7 +151,7 @@ methods::setMethod(
 #' @noRd
 .replaceNAsAtomic <- function(x, replace) {
 
-	if (length(replace) != 1L) stop("Argument ", sQuote("replace"), " must be a single value.")
+	if (length(replace) != 1L) stop("Argument `replace` must be a single value.")
 	x[is.na(x)] <- replace
 	x
 

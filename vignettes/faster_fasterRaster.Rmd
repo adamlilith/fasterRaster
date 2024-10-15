@@ -14,6 +14,7 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
+fig.path = 'man/figures/'
 ```
 
 There are several ways to speed up **fasterRaster** functions. These are listed below in order of their most likely gains, with the first few being potentially the largest.
@@ -24,8 +25,8 @@ There are several ways to speed up **fasterRaster** functions. These are listed 
 
 3. **Increase memory and the number of cores usable by GRASS:** By default, `fasterRaster` use 2 cores and 2048 MB (2 GB) of memory for `GRASS` modules that allow users to specify these values. You can set these to higher values using [`faster()`](https://adamlilith.github.io/fasterRaster/reference/faster.html) and thus potentially speed up some calculations. Functions in newer versions of `GRASS` have more capacity to use these options, so updating `GRASS` to the latest version can help, too.
 
-4. **Turn off automatic removal of temporary files in the disk cache:** To obviate problems with disk space filling up, by default most **fasterRaster** functions delete intermediate files. However, if you are not creating a lot of very big `GRaster`s or `GVector`s, you can skip this time-taking step by setting the `clean` option to `FALSE` using `faster(clean = FALSE)`. By default, this setting is `TRUE`.
+4. **Turn off automatic removal of temporary files in the disk cache:** To obviate problems with disk space filling up, by default most **fasterRaster** functions delete intermediate files. However, if you are not creating a lot of very big `GRaster`s or `GVector`s, you can skip this time-taking step by setting the `clean` option to `FALSE` using `faster(clean = FALSE)`. By default, this setting is `TRUE`. This can save a few seconds of runtime for functions that create temporary files.
 
-5. **Do operation on `GRaster`s and `GVector`s in the same coordinate reference system together:** Every time you switch between using a `GRaster` or `GVector` with a different coordinate reference system (CRS), `GRASS` has to spend a few second changing to that CRS. So, you can save some time by doing as much work as possible with objects in one CRS, then switching to work on objects in another CRS.
+5. **Do operations on `GRaster`s and `GVector`s in the same coordinate reference system together:** Every time you switch between using a `GRaster` or `GVector` with a different coordinate reference system (CRS), `GRASS` has to spend a few seconds changing to that CRS. You can save some time by doing as much work as possible with objects in one CRS, then switching to work on objects in another CRS.
 
 ~ FINIS ~

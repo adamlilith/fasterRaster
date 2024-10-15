@@ -30,7 +30,7 @@ methods::setMethod(
         seed = NULL
 	) {
 
-    if (!is.null(seed)) if (length(seed) != n) stop("You must provide one value of ", sQuote("seed"), " per raster, or set it to NULL.")
+    if (!is.null(seed)) if (length(seed) != n) stop("You must provide one value of `seed` per raster, or set it to NULL.")
 
     .locationRestore(x)
     .region(x)

@@ -10,6 +10,8 @@
 #'
 #' @returns A `GRaster` or `GVector`.
 #'
+#' @seealso [subset()]
+#'
 #' @example man/examples/ex_GRaster_GVector_subset_assign.r
 #'
 #' @name [[

@@ -1,4 +1,4 @@
-#' @title Classes for "fasterRaster" locations, rasters, and vectors#'
+#' @title Classes for "fasterRaster" locations, rasters, and vectors
 #'
 #' @aliases GRegion
 #' @rdname GLocation

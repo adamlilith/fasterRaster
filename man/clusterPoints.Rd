@@ -10,7 +10,7 @@
 \arguments{
 \item{x}{A "points" \code{GVector}.}
 
-\item{method}{Character: Method used to identify clusters. Explanations of methods are provided in the help page for the \strong{GRASS} module \href{v.cluster}{https://grass.osgeo.org/grass84/manuals/v.cluster.html}.
+\item{method}{Character: Method used to identify clusters. Explanations of methods are provided in the help page for the \strong{GRASS} module \code{v.cluster}, available using \code{grassHelp("v.cluster")}.
 \itemize{
 \item \code{"DBSCAN"} (default): Density-Based Spatial Clustering of Applications with Noise.
 \item \code{"DBSCAN2"}: A modification of DBSCAN.

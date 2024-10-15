@@ -2,7 +2,7 @@
 #'
 #' @description `fast()` creates a `GRaster` or `GVector` from 1) a file; 2) from a `SpatRaster`, `SpatVector`, or `sf` vector; or 3) from a numeric vector, `matrix`, `data.frame`, or `data.table`. Behind the scenes, this function will also create a connection to **GRASS** if none has yet been made yet.
 #'
-#' **GRASS** supports loading from disk a variety of raster formats (see the **GRASS** manual page for [`r.in.gdal`](https://grass.osgeo.org/grass84/manuals/r.in.gdal.html)) and vector formats ([`v.in.ogr`](https://grass.osgeo.org/grass84/manuals/v.in.ogr.html)), though not all of them will work with this function.
+#' **GRASS** supports loading from disk a variety of raster formats (see the **GRASS** manual page for `r.in.gdal` (see `grassHelp("r.in.gdal")`) and vector formats `v.in.ogr` (see grassHelp("v.in.ogr")`), though not all of them will work with this function.
 #'
 #' Note that `GVectors` may fail to be created if they contain issues that do not coincide with the topological data model used by **GRASS**. The most common of these is overlapping polygons. See *Details* on how to fix these kinds of issues.
 #'
@@ -69,7 +69,7 @@
 #' * **Correction outside of *fasterRaster***: Before you convert the vector into **fasterRaster**'s `GVector` format, you can also try using the [terra::makeValid()] or [sf::st_make_valid()] tools to fix issues, then use `fast()`.
 #' * **Post-conversion to a `GVector`**: If you do get a vector loaded into `GVector` format, you can also use a set of **fasterRaster** vector-manipulation [tools][breakPolys] or [fillHoles()] to fix issues.
 #'
-#' @seealso [rgrass::read_RAST()] and [rgrass::read_VECT()], [vector cleaning][breakPolys], [fillHoles()], plus modules [`v.in.ogr`](https://grass.osgeo.org/grass84/manuals/v.in.ogr.html) and [`r.import`](https://grass.osgeo.org/grass84/manuals/r.import.html) in **GRASS**.
+#' @seealso [rgrass::read_RAST()] and [rgrass::read_VECT()], [vector cleaning][breakPolys], [fillHoles()], plus **GRASS** modules `v.in.ogr` (see `grassHelp("v.in.ogr")`) and `r.import` (see `grassHelp("r.import")`)
 #'
 #' @returns A `GRaster` or `GVector`.
 #'
@@ -241,13 +241,13 @@ methods::setMethod(
 	
 	} else if (rastOrVect == "vector") {
 
-		# x is a filename and xVect is missing: we have not come through methods for SpatVectors or sf objects
+		# x is a filename and xVect is missing: we have NOT come through methods for SpatVectors or sf objects
 		if (!any(dotNames == "xVect")) {
 			
 			x <- terra::vect(x)
 			out <- fast(x, extent = extent, correct = correct, snap = snap, area = area, steps = steps, resolve = resolve, dropTable = dropTable, verbose = verbose, ...)
 
-		# x is a filename and xVect is present: we have come through a method for SpatVectors or sf objects
+		# x is a filename and xVect is present: we HAVE come here through a method for SpatVectors or sf objects
 		} else {
 
 			if (!is.na(resolve)) resolve <- omnibus::pmatchSafe(resolve, c("aggregate", "disaggregate"), n = 1L)
@@ -313,8 +313,7 @@ methods::setMethod(
 			#}
 
 			src <- .makeSourceName("fast_v_in_ogr", "vector")
-			if (is.null(snap) & is.null(area)) {
-
+			if (is.null(snap) & (is.null(area) || area == 0)) {
 
 				# slower if we need to record messages
 				suppressMessages(
@@ -332,7 +331,11 @@ methods::setMethod(
 					)
 				)
 
-				valid <- !any(grepl(run, pattern = "WARNING: The output contains topological errors"))
+				valid <- !any(c(
+					grepl(run, pattern = "WARNING: The output contains topological errors"),
+					grepl(run, pattern = "Invalid argument")
+				))
+
 				if (valid) { # more thorough test... slower
 
 					info <- .vectInfo(src)
@@ -654,7 +657,7 @@ methods::setMethod(
 methods::setMethod(
 	"fast",
 	signature(x = "sf"),
-	function(x, extent = NULL, correct = TRUE, snap = NULL, area = NULL, steps = 10, dropTable = FALSE, resolve = NA, verbose = TRUE) .fastVector(x, correct = correct, snap = snap, area = area, steps = steps, extent = extent, dropTable = dropTable, resolve = resolve, verbose = verbose)
+	function(x, extent = NULL, correct = TRUE, snap = NULL, area = NULL, steps = 10, resolve = NA, dropTable = FALSE, verbose = TRUE) .fastVector(x, correct = correct, snap = snap, area = area, steps = steps, extent = extent, dropTable = dropTable, resolve = resolve, verbose = verbose)
 )
 
 #' @rdname fast
@@ -877,7 +880,7 @@ methods::setMethod(
 		# NB we ***need** a table with the GVector--otherwise, subset_single_bracket does not work as expected
 		if (is.null(table)) xVect$DUMMYDUMMY_ <- 1L:nrow(xVect)
 
-		vectFile <- tempfile(fileext = ".gpkg")
+		vectFile <- paste0(faster("workDir"), "/", omnibus::rstring(1L), ".gpkg")
 		terra::writeVector(xVect, filename = vectFile, filetype = "GPKG", overwrite = TRUE)
 	
 	} else {

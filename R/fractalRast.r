@@ -28,7 +28,7 @@ methods::setMethod(
         sigma = 1,
         dimension = 2.05) {
 
-    if (any(dimension <= 2) | any(dimension >= 3)) stop("Argument ", sQuote("dimension"), " must be in the range (2, 3).")
+    if (any(dimension <= 2) | any(dimension >= 3)) stop("Argument `dimension` must be in the range (2, 3).")
 
     mu <- rep(mu, length.out = n)
     sigma <- rep(sigma, length.out = n)

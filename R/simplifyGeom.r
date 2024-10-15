@@ -31,13 +31,18 @@ methods::setMethod(
 
 	# automatic distance
 	if (is.null(tolerance)) {
-		extent <- ext(x, vector=TRUE)
+		extent <- ext(x, vector = TRUE)
 		xext <- extent[2L] - extent[1L]
 		yext <- extent[4L] - extent[3L]
-		zext <- diff(zext)
-		tolerance <- 0.02 * min(xext, yext, zext, na.rm=TRUE)
+		if (is.3d(x)) {
+			zext <- zext(x)
+			zext <- diff(zext)
+		} else {
+			zext <- NULL
+		}
+		tolerance <- 0.02 * min(xext, yext, zext, na.rm = TRUE)
 	} else {
-		if (tolerance < 0) stop("Argument ", sQuote("tolerance"), " must be > 0.")
+		if (tolerance < 0) stop("Argument `tolerance` must be > 0.")
 	}
 
 
@@ -55,7 +60,7 @@ methods::setMethod(
 		"reumann"
 	}
 	
-	if (method == "reumann" && (prop < 0 | prop > 1)) stop("Argument ", sQuote("prop"), " must be in the range [0, 1].")
+	if (method == "reumann" && (prop < 0 | prop > 1)) stop("Argument `prop` must be in the range [0, 1].")
 	
 	src <- .makeSourceName("generalized", "vect")
 	args <- list(

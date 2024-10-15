@@ -6,10 +6,12 @@
 #'
 #' @param recycle Logical: If `TRUE` (default), and `layer` is logical and smaller in number than the number of layers, then recycle the vector of `layer`.
 #'
+#' @param negate Logical: If `TRUE`, return indices of all layers *not* identified in `layer`.
+#'
 #' @returns An integer vector.
 #'
 #' @keywords internal
-.layerIndex <- function(layer, x, recycle = TRUE) {
+.layerIndex <- function(layer, x, recycle = TRUE, negate = FALSE) {
 
 	nx <- nlyr(x)
 
@@ -23,6 +25,9 @@
 		if (any(layer > nx) | any(layer < 1L)) stop("Index out of bounds.")
 	}
 	if (any(!(layer %in% seq_len(nx)))) stop("Raster only contains ", nlyr(x), " layer(s).")
+	
+	if (negate) layer <- seq_len(nx)[-layer]
+
 	layer
 
 }

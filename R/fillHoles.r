@@ -4,7 +4,7 @@
 #'
 #' @param x A `GVector`.
 #'
-#' @param fail Logical: If `TRUE` (default), and **GRASS 8.4** or higher is not installed, cause an error. If `FALSE`, a warning will be displayed and a `NULL` value will be returned. This function requires **GRASS 8.4** or higher to be installed.
+#' @param fail Logical: If `TRUE` (default), and **GRASS 8.3** or higher is not installed, cause an error. If `FALSE`, a warning will be displayed and a `NULL` value will be returned. This function requires **GRASS 8.3** or higher to be installed.
 #'
 #' @returns A `GVector`.
 #'

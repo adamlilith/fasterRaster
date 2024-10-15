@@ -14,7 +14,7 @@
 #'
 #' @example man/examples/ex_GRaster_GVector_subset_assign.r
 #'
-#' @seealso [$], \code{\link[fasterRaster]{[[}}
+#' @seealso [subset()], [$], \code{\link[fasterRaster]{[[}}
 #'
 #' @name [
 #' @aliases [,GVector,ANY,ANY-method
@@ -336,7 +336,7 @@ methods::setMethod(
 		rgrass::execGRASS("r.mapcalc", expression = ex, flags = c(.quiet(), "overwrite"))
 	
 	}
-	.makeGRaster(srcs, names(x))
+	.makeGRaster(srcs, names(x), levels = cats(x), ac = activeCats(x))
 
 	} # EOF
 )

@@ -13,7 +13,7 @@
 #' @keywords internal
 .makeSourceName <- function(x = NULL, type = NULL, n = 1L, name = NULL) {
 
-	if (is.null(x) & is.null(type)) stop("Both ", sQuote("x"), " and ", sQuote("type"), " cannot be ", dQuote("NULL"), " at the same time.")
+	if (is.null(x) & is.null(type)) stop("Both `x` and `type` cannot be NULL at the same time.")
 
  	type <- tolower(type)
 

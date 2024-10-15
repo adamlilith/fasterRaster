@@ -24,7 +24,7 @@ methods::setMethod(
 	signature(r = "GRaster"),
 	function(r, g = NULL, b = NULL, levels = 256, dither = FALSE) {
 
-	msg <- paste0("Argument ", sQuote("r"), " must have 1 band (in which case arguments ", sQuote("g"), " and ", sQuote("b"), " must also be single-layer GRasters),\n  or ", sQuote("r"), " must have 3 bands (and ", sQuote("g"), " and ", sQuote("b"), " must be NULL).")
+	msg <- paste0("Argument `r` must have 1 band (in which case arguments `g` and `b` must also be single-layer GRasters),\n  or `r` must have 3 bands (and `g` and `b` must be NULL).")
 
 	if (!(nlyr(r) %in% c(1L, 3L))) stop(msg)
 
@@ -42,7 +42,7 @@ methods::setMethod(
 	.locationRestore(r)
 	.region(r)
 
-	if (!(length(levels %in% c(1L, 3L)))) stop("Argument ", sQuote("levels"), " must have 1 or 3 values.")
+	if (!(length(levels %in% c(1L, 3L)))) stop("Argument `levels` must have 1 or 3 values.")
 	if (length(levels) == 1L) levels <- rep(levels, 3L)
 
  	src <- .makeSourceName("r_composite", "raster")

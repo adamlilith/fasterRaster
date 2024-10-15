@@ -1,13 +1,13 @@
 #' Add a database table to a GRASS attribute table
 #'
-#' @description `.vAttachDatabase()` adds a table to a **GRASS** vector. This table is meant to be "invisible" to most users--they should use interact with attribute tables using the `GVector` slot `@table``. Some functions require tables (e.g., [extract()] and [spatSample()]). **This function is mostly of use to developers.**
+#' @description `.vAttachDatabase()` adds a table to a **GRASS** vector. This table is meant to be "invisible" to most users--they should use interact with attribute tables using the `GVector` slot `@table`. Some functions require tables (e.g., [extract()] and [spatSample()]). **This function is mostly of use to developers.**
 #'
 #' @param x A `GVector` or the name of a vector in **GRASS**.
 #' 
 #' @param table Either `NULL` (default), or a `data.frame` or `data.table`, or a numeric or integer vector:
-#' * If `NULL`, then a bare minimal table will be created with a column named `frid`, holding sequential integer values.
-#' * If a `data.frame` or `data.table` and no column is named `frid`, one will be created with sequential integer values. If the table does have a column named `frid`, then it should have integer (not just numeric) values.
-#' * If a `vector`, then these are coerced to type `integer` and used to define the `frid` column.
+#' * If `NULL`, then a bare minimal table will be created with a column named `cat`, holding sequential integer values.
+#' * If a `data.frame` or `data.table` and no column is named `cat`, one will be created with sequential integer values. If the table does have a column named `cat`, then it should have integer (not just numeric) values.
+#' * If a `vector`, then these are coerced to type `integer` and used to define the `cat` column.
 #'
 #' There should be one row/value per geometry in `x`.
 #'
@@ -44,7 +44,7 @@
 		}
 
 		# if table does not have a "cat" column
-		if (!any(names(table) %in% "cat")) {
+		if (!any("cat" %in% names(table))) {
 		
 			if (is.null(cats)) cats <- .vCats(src, db = FALSE, integer = TRUE)
 			catsRenum <- omnibus::renumSeq(cats)
@@ -107,15 +107,20 @@
 		}
 
 		# connect database to vector
-		rgrass::execGRASS(
+		args <- list(
 			cmd = "v.db.connect",
 			map = sources(x),
 			table = srcTable,
 			layer = "1",
 			# key = "frid",
 			key = "cat_", # adds an underscore, for some reason
-			flags = c(.quiet(), "overwrite", "o")
+			# flags = c(.quiet(), "overwrite", "o")
+			flags = c(.quiet(), "overwrite")
 		)
+
+		if (grassInfo("versionNumber") <= 8.3) args$flags <- c(args$flags, "o")
+
+		do.call(rgrass::execGRASS, args = args)
 
 		# args <- list(
 		# 	cmd = "v.db.addtable",

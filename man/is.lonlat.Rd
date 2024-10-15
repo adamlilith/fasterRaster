@@ -20,7 +20,7 @@
 Logical (\code{TRUE} if unprojected, \code{FALSE} otherwise).
 }
 \description{
-\code{is.lonlat()} attempst to determine if a coordinate reference system is unprojected (e.g., WGS84, NAD83, NAD27, etc.). For \code{GRaster}s and \code{GVector}s, the function should always be correct. For WKT character strings and \code{sf} vectors, it does this by looking for the "CONVERSION[" tag in the WKT string (or the object's WKT string), and if it finds one, returns \code{FALSE}. This may not be truthful in all cases.
+\code{is.lonlat()} attempts to determine if a coordinate reference system is unprojected (e.g., WGS84, NAD83, NAD27, etc.). For \code{GRaster}s and \code{GVector}s, the function should always be correct. For WKT character strings and \code{sf} vectors, it does this by looking for the "CONVERSION[" tag in the WKT string (or the object's WKT string), and if it finds one, returns \code{FALSE}. This may not be truthful in all cases.
 }
 \seealso{
 \code{\link[terra:is.lonlat]{terra::is.lonlat()}}

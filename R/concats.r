@@ -25,13 +25,13 @@
 #'
 #' @example man/examples/ex_GRaster_categorical.r
 #'
-#' @seealso [combineLevels()], `vignette("GRasters", package = "fasterRaster")`
+#' @seealso [combineLevels()], [terra::concats()], `vignette("GRasters", package = "fasterRaster")`
 #'
-#' @aliases combineCats
-#' @rdname combineCats
-#' @exportMethod combineCats
+#' @aliases concats
+#' @rdname concats
+#' @exportMethod concats
 methods::setMethod(
-	f = "combineCats",
+	f = "concats",
 	signature = c(x = "GRaster"),
 	function(x, ..., na.rm = TRUE) {
 

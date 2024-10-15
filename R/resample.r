@@ -18,7 +18,7 @@
 #'
 #' @returns A `GRaster`.
 #' 
-#' @seealso [terra::resample()], modules [`r.resample`](https://grass.osgeo.org/grass84/manuals/r.resample.html) and [`r.resamp.interp`](https://grass.osgeo.org/grass84/manuals/r.resamp.interp.html) in **GRASS**
+#' @seealso [terra::resample()], **GRASS** modules `r.resample` and `r.resamp.interp` (see `grassHelp("`r.resample`") and `grassHelp("`r.resamp.interp`")`)
 #'
 #' @example man/examples/ex_resample.r
 #'
@@ -165,7 +165,7 @@ methods::setMethod(
 				memory = faster("memory"),
 				flags = c(.quiet(), "overwrite")
 			)
-			if (versionNumber >= 8.3) args$nprocs <- faster("cores")
+			if (versionNumber >= 8.4) args$nprocs <- faster("cores")
 			do.call(rgrass::execGRASS, args = args)
 
 		}
@@ -181,6 +181,7 @@ methods::setMethod(
 				memory = faster("memory"),
 				flags = c(.quiet(), "overwrite")
 			)
+			# nprocs became available with GRASS eight point three
 			if (versionNumber >= 8.3) args$nprocs <- faster("cores")
 			do.call(rgrass::execGRASS, args = args)
 
@@ -197,6 +198,7 @@ methods::setMethod(
 				memory = faster("memory"),
 				flags = c(.quiet(), "overwrite")
 			)
+			# nprocs became available with GRASS eight point three
 			if (versionNumber > 8.3) args$nprocs <- faster("cores")
 			do.call(rgrass::execGRASS, args = args)
 

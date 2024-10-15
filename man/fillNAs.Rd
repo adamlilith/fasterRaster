@@ -21,7 +21,7 @@
 
 \item{method}{Character: Type of spline, either "\code{bilinear}" (default), "\code{bicubic}", or "\code{RST}" (regularized splines with tension). Partial matching is used and case is ignored.
 
-\strong{Note}: The RST method will often display warnings, but thesecan be ignored.}
+\strong{Note}: The RST method will often display warnings, but these can be ignored.}
 
 \item{min, max}{Numeric: Lowest and highest values allowed in the interpolated values. Values outside these bounds will be truncated to the minimum/maximum value(s) allowed. The default imposes no constraints. For multi-layered rasters, you can supply a single value for \code{min} and/or \code{max}, or multiple values (one per layer). Values will be recycled if there are fewer than one or them per layer in the raster.}
 
@@ -71,5 +71,5 @@ plot(maps)
 }
 }
 \seealso{
-\code{\link[terra:interpNear]{terra::interpNear()}}; module \href{https://grass.osgeo.org/grass84/manuals/r.fillnulls.html}{r.fillnulls} in \strong{GRASS}
+\code{\link[terra:interpNear]{terra::interpNear()}}, \strong{GRASS} module \code{r.fillnulls} (see \code{grassHelp("r.fillnulls")})
 }

@@ -8,7 +8,7 @@
 #'
 #' @param method Character: Type of spline, either "`bilinear`" (default), "`bicubic`", or "`RST`" (regularized splines with tension). Partial matching is used and case is ignored.
 #'
-#' **Note**: The RST method will often display warnings, but thesecan be ignored.
+#' **Note**: The RST method will often display warnings, but these can be ignored.
 #'
 #' @param min,max Numeric: Lowest and highest values allowed in the interpolated values. Values outside these bounds will be truncated to the minimum/maximum value(s) allowed. The default imposes no constraints. For multi-layered rasters, you can supply a single value for `min` and/or `max`, or multiple values (one per layer). Values will be recycled if there are fewer than one or them per layer in the raster.
 #'
@@ -18,7 +18,7 @@
 #'
 #' @example man/examples/ex_fillNAs.r
 #'
-#' @seealso [terra::interpNear()]; module [r.fillnulls](https://grass.osgeo.org/grass84/manuals/r.fillnulls.html) in **GRASS**
+#' @seealso [terra::interpNear()], **GRASS** module `r.fillnulls` (see `grassHelp("r.fillnulls")`)
 #'
 #' @aliases fillNAs
 #' @rdname fillNAs
@@ -40,9 +40,9 @@ methods::setMethod(
 	if (length(max) < nLayers) max <- rep(max, length.out = nLayers)
 
 	mm <- minmax(x)
-	if (any(min > mm["min", ])) warning("The ", sQuote("min"), " value is greater than the actual minimum value in at least one raster layer.\n  Observed values will be truncated.")
+	if (any(min > mm["min", ])) warning("The `min` value is greater than the actual minimum value in at least one raster layer.\n  Observed values will be truncated.")
 
-	if (any(max > mm["max", ])) warning("The ", sQuote("max"), " value is less than the actual maximum value in at least one raster layer.\n  Observed values will be truncated.")
+	if (any(max > mm["max", ])) warning("The `max` value is less than the actual maximum value in at least one raster layer.\n  Observed values will be truncated.")
 
 	srcs <- .makeSourceName("r_fillnulls", "raster", nLayers)
 

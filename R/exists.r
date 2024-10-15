@@ -18,7 +18,7 @@ methods::setMethod(
 	
 	.locationRestore(x)
 	src <- sources(x)
-	src %in% .ls()
+	src %in% .ls(type = "raster")
 	
 	} # EOF
 )
@@ -33,7 +33,7 @@ methods::setMethod(
 	
 	.locationRestore(x)
 	src <- sources(x)
-	src %in% .ls()
+	src %in% .ls(type = "vector")
 	
 	} # EOF
 )

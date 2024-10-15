@@ -17,6 +17,7 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
+fig.path = 'man/figures/'
 ```
 **fasterRaster** interfaces with **GRASS GIS** to process rasters and spatial vector data. It is intended as an add-on to the **terra** and **sf** packages, and relies heavily upon them. For most rasters and vectors that are small or medium-sized in memory/disk, those packages will almost always be faster. They may also be faster for very large objects.  But when they aren't, **fasterRaster** can step in.
 
@@ -152,7 +153,7 @@ You can do operations on `GRaster`s and `GVector`s as if they were `SpatRaster`s
 plot(elev)
 plot(rivers, col = 'lightblue', add = TRUE)
 ```
-![](man/figures/elev_rivers.png)
+![Elevation and rivers](./images/elev_rivers.png)
 
 You can use mathematical operators and functions:
 
@@ -190,7 +191,7 @@ max. value  : 2.75587485567249
 
 You can also use the many **fasterRaster** functions. In general, these functions have the same names as their **terra** counterparts and often the same arguments. Note that even many **terra** and **fasterRaster** functions have the same name, they do not necessarily produce the exact same output. Much care has been taken to ensure they do, but sometimes there are multiple ways to do the same task, so choices made by the authors of **terra** and **GRASS** can lead to differences.
 
-The following code creates a a) raster where cell values reflect the distance between them and the nearest river; b) creates a buffer around the rivers; then c) plots the output:
+The following code 1) creates a raster where cell values reflect the distance between them and the nearest river; b) makes a buffer around the rivers; then c) plots the output:
 ```{r distance_buffers, eval = FALSE}
 dist <- distance(elev, rivers)
 dist
@@ -223,7 +224,7 @@ plot(dist)
 plot(rivers, col = 'lightblue', add = TRUE)
 plot(river_buff, border = 'white', add = TRUE)
 ```
-![](man/figures/dist_to_rivers.png)
+![Distance between each cell and nearest major river](./images/dist_to_rivers.png)
 
 And that's how you get started! Now that you have a raster and a vector in your **fasterRaster** "location", you can start doing manipulations and analyses using any of the **fasterRaster** functions!  To see an annotated list of these functions, use `?fasterRaster`.
 

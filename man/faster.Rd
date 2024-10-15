@@ -2,7 +2,7 @@
 % Please edit documentation in R/03_options.r
 \name{faster}
 \alias{faster}
-\title{Set or get options shared across "fasterRaster" functions}
+\title{Set or get options shared across fasterRaster functions}
 \usage{
 faster(..., default = FALSE, restore = FALSE)
 }
@@ -18,17 +18,17 @@ Options include:
 \itemize{
 \item \code{grassDir} (character): The folder in which \strong{GRASS} is installed on your computer. Typically, this option is set when you run \code{\link[=faster]{faster()}}. Depending on your operating system, your install directory will look something like this:
 \itemize{
-\item Windows: \code{"C:/Program Files/GRASS GIS 8.3"}
-\item Mac OS: \code{"/Applications/GRASS-8.3.app/Contents/Resources"}
+\item Windows: \code{"C:/Program Files/GRASS GIS 8.4"}
+\item Mac OS: \code{"/Applications/GRASS-8.4.app/Contents/Resources"}
 \item Linux: \code{"/usr/local/grass"}
 }
 \item \code{addonsDir} (character): Folder in which \strong{GRASS} addons are stored. If \code{NA} and \code{grassDir} is not \code{NA}, this will be assumed to be \code{file.path(grassDir, "addons")}. The default values is \code{NA}.
 \item \code{cores} (integer/numeric integer): Number of processor cores to use on a task. The default is 2. Some \strong{GRASS} modules are parallelized.
 \item \code{memory} (integer/numeric): The amount of memory to allocate to a task, in GB, for \strong{GRASS}. The default is 2048 MB (i.e., 2 GB). Some \strong{GRASS} modules can take advantage of more memory.
-\item \code{clean} (logical): If \code{TRUE} (default), remove temporary files created internally by functions. If not deleted, they can eventually fill up hard drive space, but deleting them takes a little bit of time (usually <1 second for each function).
+\item \code{clean} (logical): If \code{TRUE} (default), remove temporary files created internally by functions. If not deleted, they can eventually fill up hard drive space, but deleting them takes a little bit of time (usually <1 second for each function). See also \code{\link[=mow]{mow()}}.
 \item \code{useDataTable} (logical): If \code{FALSE} (default), functions that return tabular output produce \code{data.frame}s. If \code{TRUE}, output will be \code{data.table}s from the \strong{data.table} package. This can be much faster, but it might require you to know how to use \code{data.table}s if you want to manipulate them in \strong{R}. You can always convert them to \code{data.frame}s using \code{\link[base:as.data.frame]{base::as.data.frame()}}.
 \item \code{verbose} (logical): If \code{TRUE}, show \strong{GRASS} messages and otherwise hidden slots in classes. This is mainly used for debugging, so most users will want to keep this at its default, \code{FALSE}.
-\item \code{workDir} (character): The folder in which \strong{GRASS} rasters, vectors, and other objects are created and manipulated. By default, this is given by \code{\link[=tempdir]{tempdir()}}.
+\item \code{workDir} (character): The folder in which \strong{GRASS} rasters, vectors, and other objects are created and manipulated. By default, this is given by \code{\link[=tempdir]{tempdir()}}. Note that on some systems, changing the default folder to somewhere else can cause problems with \strong{fasterRaster} being able to find rasters in \strong{GRASS} that have been created.
 }}
 
 \item{default}{Logical: Return the default value(s) of the option(s). The default value of \code{default} is \code{FALSE}.}

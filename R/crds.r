@@ -106,7 +106,7 @@ st_coordinates <- function(x) {
 
 	} else if (gtype == "points") {
 		
-		data <- rgrass::execGRASS(
+		info <- rgrass::execGRASS(
 			cmd = "v.to.db",
 			map = src,
 			flags = c(.quiet(), "p"),
@@ -115,13 +115,14 @@ st_coordinates <- function(x) {
 			intern = TRUE
 		)
 		
-		# data <- data[-1L]
-		cutAt <- which(data == "Reading features...")
-		if (length(cutAt) > 0L) data <- data[1L:(cutAt - 1L)]
+		info <- info[!grepl(info, pattern = "cat|x|y|z")]
+		info <- info[grepl(info, pattern = "\\|")]
+		# cutAt <- which(info == "Reading features...")
+		# if (length(cutAt) > 0L) info <- info[1L:(cutAt - 1L)]
 		
-		data <- strsplit(data, split="\\|")
-		data <- lapply(data, as.numeric)
-		out <- do.call(rbind, data)
+		info <- strsplit(info, split = "\\|")
+		info <- lapply(info, as.numeric)
+		out <- do.call(rbind, info)
 		
 		if (z) {
 			out <- out[ , 2L:4L, drop = FALSE]

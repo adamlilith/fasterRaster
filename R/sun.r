@@ -1,6 +1,6 @@
 #' Solar radiance and irradiance
 #'
-#' The `sun()` function calculates beam (direct), diffuse and ground reflected solar irradiation for a given day and set of topographic and atmospheric conditions. The function relies on the **GRASS** module [`r.sun`](https://grass.osgeo.org/grass84/manuals/r.sun.html), which contains a detailed explanation.
+#' The `sun()` function calculates beam (direct), diffuse and ground reflected solar irradiation for a given day and set of topographic and atmospheric conditions. The function relies on the **GRASS** module `r.sun`, the manual page for which contains a detailed explanation (see `grassHelp("r.sun")`)
 #'
 #' @param elevation A `GRaster` with values representing elevation (typically in meters).
 #'
@@ -18,7 +18,7 @@
 #'
 #' @param albedo A `GRaster` or a numeric value: This is either a raster with values of ground albedo or a numeric value (in which case albedo is assumed to be the same everywhere). Albedo is unit-less, and the default value is 0.2.
 #'
-#' @param linke A `GRaster` or a numeric value: This is either a raster with values of the Linke atmospheric turbidity coefficient or a numeric value (in which case the same value is assumed for all locations). The Linke coefficient is unit-less. The default value is 3, but see also the **GRASS** manual page for module [`r.sun`](https://grass.osgeo.org/grass84/manuals/r.sun.html).
+#' @param linke A `GRaster` or a numeric value: This is either a raster with values of the Linke atmospheric turbidity coefficient or a numeric value (in which case the same value is assumed for all locations). The Linke coefficient is unit-less. The default value is 3, but see also the **GRASS** manual page for module `r.sun` (`grassHelp("r.sun")`).
 #'
 #' @param day Positive integer between 1 to 365, inclusive: Day of year for which to calculate ir/radiation. Default is 1 (January 1st).
 #'
@@ -51,7 +51,7 @@
 #' * `glob_rad`: Global radiation (Watt-hours/m2/day)
 #' * `insol_time`: Insolation duration (hours)
 #' 
-#' @seealso [terrain()], [horizonHeight()], module [`r.sun`](https://grass.osgeo.org/grass84/manuals/r.sun.html) in **GRASS**
+#' @seealso [terrain()], [horizonHeight()], **GRASS** module `r.sun`(see `grassHelp("r.sun")`)
 #'
 #' @example man/examples/ex_sun.r
 #'

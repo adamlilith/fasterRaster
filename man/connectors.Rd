@@ -13,7 +13,7 @@
 \item{minDist, maxDist}{Either \code{NULL} (default) or numeric values: Ignore features separated by less than or greater than these distances.}
 }
 \value{
-A \code{GVector}.
+A \code{GVector} with a data table that has the length of each connecting line in meters.
 }
 \description{
 \code{connectors()} creates a lines \code{GVector} which represent the shortest (Great Circle) paths between each feature of one \code{GVector} and the nearest feature of another \code{GVector}.
@@ -29,8 +29,8 @@ madRivers <- fastData("madRivers")
 madDypsis <- fastData("madDypsis")
 
 # Convert sf's to GVectors:
-rivers <- fast(madRivers)
 dypsis <- fast(madDypsis)
+rivers <- fast(madRivers)
 
 ### Connections from each point to nearest river
 consFromDypsis <- connectors(dypsis, rivers)
@@ -49,5 +49,5 @@ plot(consFromRivers, col = "red", add = TRUE)
 }
 }
 \seealso{
-Module \code{v.distance} in \strong{GRASS}
+\strong{GRASS} module \code{v.distance} (see \code{grassHelp("v.distance")}).
 }

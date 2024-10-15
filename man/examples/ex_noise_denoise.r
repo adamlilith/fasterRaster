@@ -10,7 +10,7 @@ madChelsa <- fastData("madChelsa")
 chelsa <- fast(madChelsa)
 
 # Generate raster with layers representing principal component predictions:
-pcRast <- pca(chelsa, scale = TRUE)
+pcRast <- princomp(chelsa, scale = TRUE)
 plot(pcRast)
 
 # Get information on the PCA:

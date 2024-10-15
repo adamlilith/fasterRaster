@@ -1,12 +1,12 @@
 #' Select parts of polygons not shared between two GVectors
 #'
-#' @description The `xor()` function selects the area that does not overlap between two "polygon" `GVector`s. You can also use the `/` operator, as in `vect 1 / vect2`.
+#' @description The `xor()` function selects the area that does *not* overlap between two "polygon" `GVector`s. You can also use the `/` operator, as in `vect1 / vect2`.
 #'
 #' @param x,y `GVector`s.
 #'
 #' @returns A `GVector`.
 #'
-#' @seealso [c()], [aggregate()], [crop()], [intersect()], [union()], [erase()]
+#' @seealso [crop()], [intersect()], [union()], [erase()]
 #' 
 #' @example man/examples/ex_union_intersect_xor_erase.r
 #'

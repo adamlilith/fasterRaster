@@ -25,5 +25,5 @@ A \code{GRaster}.
 This function interpolates values from a set of points to a raster using inverse distance weighting (IDW).
 }
 \seealso{
-\code{\link[terra:interpIDW]{terra::interpIDW()}}, \code{\link[=interpSplines]{interpSplines()}}, \code{\link[=fillNAs]{fillNAs()}}, module \href{https://grass.osgeo.org/grass84/manuals/v.surf.idw.html}{\code{v.surf.idw}} in \strong{GRASS}
+\code{\link[terra:interpIDW]{terra::interpIDW()}}, \code{\link[=interpSplines]{interpSplines()}}, \code{\link[=fillNAs]{fillNAs()}}, \strong{GRASS} module \code{v.surf.idw} (se \code{grasshelp("v.surf.idw")})
 }

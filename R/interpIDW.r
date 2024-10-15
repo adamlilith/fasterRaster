@@ -14,7 +14,7 @@
 #'
 #' @returns A `GRaster`.
 #'
-#' @seealso [terra::interpIDW()], [interpSplines()], [fillNAs()], module [`v.surf.idw`](https://grass.osgeo.org/grass84/manuals/v.surf.idw.html) in **GRASS**
+#' @seealso [terra::interpIDW()], [interpSplines()], [fillNAs()], **GRASS** module `v.surf.idw` (se `grasshelp("v.surf.idw")`)
 #'
 #' @aliases interpIDW
 #' @rdname interpIDW
@@ -24,7 +24,7 @@ methods::setMethod(
 	signature = c(x = "GVector", y = "GRaster"),
 	function(x, y, field, nPoints = Inf, power = 2) {
 
-	if (geomtype(x, grass = TRUE) != "point") stop("Argument ", sQuote("x"), " must be a points GVector.")
+	if (geomtype(x, grass = TRUE) != "point") stop("Argument `x` must be a points GVector.")
 
 	compareGeom(x, y)
 	.locationRestore(x)
@@ -34,14 +34,14 @@ methods::setMethod(
 
 	# copy values field to x
 	if (is.null(field) & is.2d(x)) {
-		stop("Argument ", sQuote("field"), " cannot be NULL if ", sQuote("x"), " is a 2-dimensional points GVector.")
+		stop("Argument `field` cannot be NULL if `x` is a 2-dimensional points GVector.")
 	} else if (is.numeric(field) | is.integer(field)) {
 		field <- names(x)[field]
 	}
 
 	if (!is.null(field)) {
 
-		if (anyNA(x@table[[field]])) stop("The column ", sQuote(field), " has at least one NA in it. NAs are not permissible.")
+		if (anyNA(x@table[[field]])) stop("The column `field` has at least one NA in it. NAs are not permissible.")
 
 		cats <- .vCats(x, db = FALSE)
 		db <- data.table::data.table(frid = cats, TEMPTEMP_ = x@table[[field]])

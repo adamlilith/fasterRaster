@@ -42,7 +42,7 @@ methods::setMethod(
 	function(x, w = 3, undet = "undetermined", none = NA, na.rm = TRUE, cores = faster("cores"), verbose = TRUE) {
 
 	# errors?
-	if (!omnibus::is.wholeNumber(w) || w < 1L || w %% 2 == 0) stop("Argument ", sQuote("w"), " must be an odd, positive integer.")
+	if (!omnibus::is.wholeNumber(w) || w < 1L || w %% 2 == 0) stop("Argument `w` must be an odd, positive integer.")
 	undet <- omnibus::pmatchSafe(undet, c("undetermined", "perforated", "edge"), nmax = 1L)
 
 	# setup

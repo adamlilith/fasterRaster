@@ -29,9 +29,9 @@ methods::setValidity("GSpatial",
 		} else if (length(object@crs) != 1L) {
 			"@crs can only be a single character string."
 		} else if (!all(object@topology %in% c(NA_character_, "2D", "3D"))) {
-			paste0("@topology can only be a NA, ", sQuote("2D"), ", or ", sQuite("3D"), ".")
+			paste0("@topology can only be a NA, `2D` or `3D`.")
 		} else if (object@topology == "3D" && any(is.na(object@zextent))) {
-			paste0("@topology is ", sQuote("3D"), " but @zextent has at least one NA value.")
+			paste0("@topology is `3D` but @zextent has at least one NA value.")
 		} else if (!anyNA(object@zextent[1L]) & is.na(object@zextent[2L]) | (is.na(object@zextent[1L]) & !is.na(object@zextent[2L]))) {
 			"Both values of @zextent must be NA or must be numeric values."
 		} else if (!anyNA(object@zextent) && object@zextent[2L] < object@zextent[1L]) {

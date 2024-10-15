@@ -1,3 +1,42 @@
+# fasterRaster 8.4.0.7027 (2024-10-15)
+
+### Main task for this version
+o Test examples with **GRASS 8.4** and update functions as needed. Upgrade to **fasterRaster** 8.4.X.X.  
+
+### Updates for **GRASS 8.4**
+o `addLocationProject()` adds either a `project` or `location` argument to a `list` to be passed to `rgrass::execGRASS()`.  
+o `project()` work with **GRASS** 8.4.  
+o `.vAttachDatabase()` no longer has the `"o"` flag when calling `v.db.connect` when running **GRASS** >=8.4.  
+
+### Potentially code-breaking changes
+o `aggregate()` no longer has the `dissolve` argument for `GVector`s (polygons will always be dissolved).  
+o `combineCats()` has been renamed `concats()` to align with **terra**.  
+o `intercept()`, `slope()`, `r2()`, and `tvalue()` have been replaced by the single function `regress()` to align with **terra**.  
+o `pca()` has been renamed `princomp()`.  
+
+### Enhanced functionality and new functions
+o `extract()` now automatically projects a `GVector` to match the CRS of a `GRaster` from which extraction is being made.  
+o `grassGUI()` allows users to start the **GRASS** GUI.  
+o `grassHelp()` shows the manual page for a **GRASS** module.  
+o `layerIndex()` allows a `negate` argument to get the "opposite" indices of a `GRaster`.  
+o `init()` assigns to `GRaster` cells the value of their coordinates, rows, columns, or values in a regular or chessboard-like pattern.  
+o `regress()` replaces individual functions `intercept()`, `slope()`, `r2()`, and `tvalue()`.  
+o `subset()` subsets layers of a `GRaster` or rows/geometries of a `GVector`.  
+o `segregate()` creates one layer per unique value in an input `GRaster`, with values in the output coded 1 or 0 depending on whether cells in the input had the unique value or not.  
+
+### Bug and issue fixes
+o `appFuns()` succeeds in opening a **shiny** table with `app()` functions.  
+o `categories()` correctly assigns active category column.  
+o `crds()` correctly returns coordinates from a "points" `GVector`.  
+o `distance()` correctly parses distance matrix.  
+o `simplifyGeom()` works for 2-dimensional `GVector`s.  
+o `flow()` creates a scratch folder when none is provided.  
+o `global()` does not fail when multiple values of `fun` and `probs` are used and `fun` includes `quantile`.  
+o `rasterize()` works when `by` is not `NULL`.  
+o `.layerIndex()` (called by `categories()` and other functions related to categorical `GRaster`s) does not fail.  
+o `.vHasDatabase()` correctly detects if a vector has a database attached to it.  
+o Removed all instances of `sQuote()`.  
+
 # fasterRaster 8.3.0.7026 (2024-09-22)
 
 o Recompile `pkgdown`  

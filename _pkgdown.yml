@@ -26,3 +26,389 @@ articles:
   - projects_mapsets
   - regions
   - hidden_functions
+
+reference:
+- title: Where to start
+- desc: The most commonly-used functions.
+- contents:
+  - faster
+  - fast
+  - rast
+  - vect
+  - st_as_sf
+  - writeRaster
+  - writeVector
+- title: GRaster properties
+- contents:
+  - crs
+  - datatype
+  - dim
+  - dim3d
+  - E
+  - ext
+  - freq
+  - is.2d
+  - is.3d
+  - is.cell
+  - is.doub
+  - is.factor
+  - is.float
+  - is.int
+  - is.lonlat
+  - levels
+  - minmax
+  - 'N'
+  - names
+  - ncol
+  - nacell
+  - ncell
+  - ncell3d
+  - ndepth
+  - nlyr
+  - nonnacell
+  - nrow
+  - nlevels
+  - res
+  - res3d
+  - S
+  - sources
+  - topology
+  - xres
+  - yres
+  - zext
+  - zres
+- title: Math, comparison, and logic
+- contents:
+  - Arith
+  - Compare-methods
+  - Logic-methods
+- title: Math layer-by-layer on GRasters
+- contents:
+  - abs
+  - acos
+  - asin
+  - atan
+  - atan2
+  - ceiling
+  - cos
+  - exp
+  - floor
+  - is.na
+  - log
+  - ln
+  - log1p
+  - log2
+  - log10
+  - maskNA
+  - not.na
+  - round
+  - sin
+  - sqrt
+  - tan
+  - trunc
+- title: Math across GRaster layers
+- contents:
+  - allNA
+  - anyNA
+  - count
+  - kurtosis
+  - max
+  - mean
+  - median
+  - min
+  - mmode
+  - nunique
+  - quantile
+  - range
+  - skewness
+  - stdev
+  - sum
+  - var
+  - varpop
+  - which.max
+  - which.min
+- title: Subsetting and replacing GRasters
+- contents:
+  - "`$`"
+  - "`$<-`"
+  - "`[`"
+  - "`[<-`"
+  - "`[[<-`"
+  - add<-
+  - subset
+- title: Operations on GRasters
+- contents:
+  - "`%in%`"
+  - "`%notin%`"
+  - as.doub
+  - as.int
+  - as.float
+  - as.lines
+  - as.points
+  - as.polygons
+  - aggregate
+  - bioclims
+  - buffer
+  - app
+  - c
+  - cellSize
+  - classify
+  - clump
+  - combineLevels
+  - concats
+  - crop
+  - denoise
+  - distance
+  - extend
+  - extract
+  - fillNAs
+  - focal
+  - fragmentation
+  - global
+  - hist
+  - interpIDW
+  - kernel
+  - layerCor
+  - mask
+  - maskNA
+  - match
+  - merge
+  - names<-
+  - noise
+  - pairs
+  - pcs
+  - plot
+  - plotRGB
+  - princomp
+  - project
+  - predict
+  - regress
+  - resample
+  - reorient
+  - sampleRast
+  - segregate
+  - stretch
+  - scale
+  - scalepop
+  - selectRange
+  - spatSample
+  - subst
+  - thinLines
+  - tiles
+  - trim
+  - unscale
+  - zonal
+  - zonalGeog
+- title: Creating GRasters *de novo*
+- contents:
+  - fractalRast
+  - init
+  - longlat
+  - rnormRast
+  - rSpatialDepRast
+  - runifRast
+  - sineRast
+- title: Terrain and hydrology
+- contents:
+  - as.contour
+  - flow
+  - flowPath
+  - geomorphons
+  - hillshade
+  - horizonHeight
+  - sun
+  - ruggedness
+  - streams
+  - terrain
+  - wetness
+- title: Categorical GRasters
+- contents:
+  - "`%in%`"
+  - "`%notin%`"
+  - activeCat
+  - activeCat<-
+  - activeCats
+  - addCats
+  - addCats<-
+  - categories
+  - catNames
+  - cats
+  - combineLevels
+  - complete.cases
+  - concats
+  - droplevels
+  - freq
+  - is.factor
+  - levels
+  - levels<-
+  - match
+  - minmax
+  - missing.cases
+  - missingCats
+  - nlevels
+  - segregate
+  - subst
+  - zonalGeog
+- title: Remote sensing GRasters
+- contents:
+  - compositeRGB
+  - plotRGB
+  - vegIndex
+- titles: SpatRasters
+- contents:
+  - bioclims
+  - fragmentation
+- title: GVectors Properties
+- contents:
+  - bottom
+  - crs
+  - datatype
+  - dim
+  - E
+  - expanse
+  - ext
+  - geomtype
+  - is.2d
+  - is.3d
+  - is.lines
+  - is.lonlat
+  - is.points
+  - is.polygons
+  - 'N'
+  - names
+  - ncol
+  - ngeom
+  - nrow
+  - nsubgeom
+  - S
+  - sources
+  - top
+  - topology
+  - W
+  - zext
+- title: Subsetting and assignment of GVectors
+- contents:
+  - "`$`"
+  - "`$<-`"
+  - "`[`"
+  - "`[[`"
+  - addTable<-
+  - dropTable
+  - subset
+- title: Operations on GVectors
+- contents:
+  - aggregate
+  - as.data.frame
+  - as.data.table
+  - as.points
+  - buffer
+  - clusterPoints
+  - colbind
+  - complete.cases
+  - connectors
+  - convHull
+  - crds
+  - crop
+  - delaunay
+  - disagg
+  - distance
+  - dropTable
+  - erase
+  - expanse
+  - extract
+  - grid
+  - head
+  - hexagons
+  - interpIDW
+  - interpSplines
+  - intersect
+  - kernel
+  - missing.cases
+  - names<-
+  - project
+  - rasterize
+  - rbind
+  - simplifyGeom
+  - smoothGeom
+  - st_as_sf
+  - st_buffer
+  - tail
+  - thinPoints
+  - union
+  - voronoi
+  - xor
+- title: Creating GVectors *de novo*
+- contents:
+  - rvoronoi
+- title: Fixing GVector issues
+- contents:
+  - breakPolys
+  - fillHoles
+  - fixBridges
+  - fixDangles
+  - fixLines
+  - remove0
+  - removeAngles
+  - removeBridges
+  - removeDangles
+  - removeDupCentroids
+  - removeDups
+  - removeSmallPolys
+  - snap
+- title: Converting between data types
+- contents:
+  - as.contour
+  - as.doub
+  - as.data.frame
+  - as.data.table
+  - as.float
+  - as.int
+  - as.lines
+  - as.points
+  - as.polygons
+  - categories
+  - fast
+  - levels<-
+  - rast
+  - rasterize
+  - st_as_sf
+  - vect
+- title: General functions
+- contents:
+  - compareGeom
+  - dropRows
+  - grassGUI
+  - grassHelp
+  - grassInfo
+  - grassStarted
+  - mow
+  - replaceNAs
+  - seqToSQL
+  - update
+- title: Example data
+- contents:
+  - appFunsTable
+  - fastData
+  - madChelsa
+  - madCoast
+  - madCoast0
+  - madCoast4
+  - madCover
+  - madCoverCats
+  - madDypsis
+  - madElev
+  - madForest2000
+  - madForest2014
+  - madLANDSAT
+  - madPpt
+  - madTmax
+  - madTmin
+  - madRivers
+  - vegIndices
+- title: Classes
+- contents:
+  - GLocation
+  - GSpatial
+  - GRegion
+  - GRaster
+  - GVector

@@ -314,10 +314,10 @@ methods::setMethod(
 	if (!is.null(trim)) {
 	
 		trimToTopo <- topology(trim)
-		if (any(!(topo %in% trimToTopo))) stop("Topology of ", sQuote("trim"), " does not match topology of ", sQuote("x"), ".")
+		if (any(!(topo %in% trimToTopo))) stop("Topology of `trim` does not match topology of `x`.")
 		
 		trim <- sources(trim)
-		if (length(trim) != 1L) stop("Argument ", sQuote("trim"), " can have only one layer.")
+		if (length(trim) != 1L) stop("Argument `trim` can have only one layer.")
 	
 	}
 

@@ -48,7 +48,7 @@ A numeric vector. For both \code{res()} and \code{res3d()}, the first value is t
 Spatial resolution of a \code{GRaster}:
 \itemize{
 \item \code{res()}: 2-dimensional resolution (x and y).\cr\cr
-\item \code{res3d()}: 3-dimensinal resolution (z, y, and z).\cr\cr
+\item \code{res3d()}: 3-dimensional resolution (z, y, and z).\cr\cr
 \item \code{xres()}, \code{yres()}, and \code{zres()}: East-west resolution, north-south resolution, and top-bottom resolution.
 }
 }
@@ -176,3 +176,4 @@ layerCor(landsat, fun = 'cov') # covariance
 \seealso{
 \code{\link[terra:dimensions]{terra::res()}}
 }
+\keyword{res}

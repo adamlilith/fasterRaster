@@ -12,8 +12,6 @@ madCover <- fastData("madCover")
 dypsis <- fast(madDypsis)
 cover <- fast(madCover)
 
-levels(cover)
-
 ### GVector
 
 # Look at the data table:

@@ -1,8 +1,8 @@
 Package: fasterRaster
 Type: Package
 Title: Faster Raster and Spatial Vector Processing Using 'GRASS GIS'
-Version: 8.3.0.7026
-Date: 2024-09-22
+Version: 8.3.0.7027
+Date: 2024-10-15
 Authors@R: 
 	c(
 		person(
@@ -41,10 +41,10 @@ Suggests:
 Roxygen: list(markdown = TRUE)
 License: GPL (>=3) + file LICENSE
 SystemRequirements: GRASS (>= 8)
-URL: http://www.earthSkySea.org, https://adamlilith.github.io/fasterRaster/
+URL: https://github.com/adamlilith/fasterRaster, https://adamlilith.github.io/fasterRaster/
 BugReports: https://github.com/adamlilith/fasterRaster/issues
 VignetteBuilder: knitr
 Encoding: UTF-8
 LazyData: true
 LazyLoad: yes
-RoxygenNote: 7.3.1
+RoxygenNote: 7.3.2

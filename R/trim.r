@@ -22,7 +22,7 @@ methods::setMethod(
 	signature = c(x = "GRaster"),
 	function(x, pad = 0) {
 	
-	if (pad < 0) stop("Argument ", sQuote("pad"), " must be >= 0.")
+	if (pad < 0) stop("Argument `pad` must be >= 0.")
 
 	.locationRestore(x)
 	.region(x)

@@ -22,7 +22,7 @@
 \item "\code{mean}" (default)
 \item "\code{median}"
 \item "\code{mode}"
-\item "\code{min}" or "\code{max}": Minumum or maximum. Should not use a weights matrix.
+\item "\code{min}" or "\code{max}": Minimum or maximum. Should not use a weights matrix.
 \item "\code{range}": Difference between the maximum and minimum.  Should not use a weights matrix.
 \item "\code{sd}": Sample standard deviation.  NB: This is the same as the \code{\link[stats:sd]{stats::sd()}} function.
 \item "\code{sdpop}": Population standard deviation. NB: This is the same as the function "stddev" in the \strong{GRASS} module \code{r.neighbors}.

@@ -2,7 +2,7 @@
 #'
 #' @description Spatial resolution of a `GRaster`:
 #' * `res()`: 2-dimensional resolution (x and y).\cr\cr
-#' * `res3d()`: 3-dimensinal resolution (z, y, and z).\cr\cr
+#' * `res3d()`: 3-dimensional resolution (z, y, and z).\cr\cr
 #' * `xres()`, `yres()`, and `zres()`: East-west resolution, north-south resolution, and top-bottom resolution.
 #'
 #' @param x A `GRaster`, `GRegion`, or missing. If missing, the resolution of the currently active "region" is returned (see `vignette("regions", package = "fasterRaster")`).
@@ -16,6 +16,7 @@
 #' @aliases res
 #' @rdname res
 #' @exportMethod res
+#' @keywords res
 setMethod(
 	f = "res",
 	signature = "missing",

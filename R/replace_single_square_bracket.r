@@ -1,6 +1,6 @@
 #' Replace values of a GRaster
 #'
-#' @description The `[<-` operator can be used to replace all of the values of a `GRaster`, or specific values depending on the expression in `i`. For example, you could use `rast[] <- 10` to assign 10 to all cells, or `rast[rast > 0] <- 10` to assign all cells with values >0 to 10.
+#' @description The `[<-` operator can be used to replace all of the values of a `GRaster`, or specific values depending on the expression in `i`. For example, you could use `rast[] <- 10` to assign 10 to all cells, or `rast[rast > 0] <- 10` to assign all cells with values >0 to 10. You can also use one raster to set values in another, as in `rast1[rast2 > 0] <- 10`.
 #'
 #' @param x A `GRaster`.
 #' @param i Either missing or a conditional statement that resolves to a `GRaster`.

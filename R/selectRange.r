@@ -22,7 +22,7 @@ methods::setMethod(
 	.region(x)
 
 	if (nlyr(y) > 1L) {
-		warning("The ", sQuote("y"), " raster has more than one layer. On the first will be used.")
+		warning("The`y` raster has more than one layer. On the first will be used.")
 		y <- y[[1L]]
 	}
 	if (datatype(y, "GRASS") != "CELL") y <- round(y)

@@ -16,7 +16,7 @@
 #'
 #' @returns A `GRaster`.
 #'
-#' @seealso [terra::rasterize()], module [`v.to.rast`](https://grass.osgeo.org/grass84/manuals/v.to.rast.html) in **GRASS**
+#' @seealso [terra::rasterize()], **GRASS** module `v.to.rast` (see `grassHelp("v.to.rast")`)
 #'
 #' @example man/examples/ex_rasterize.r
 #'
@@ -66,7 +66,7 @@ methods::setMethod(
 		nBys <- length(bys)
 		src <- rep(NA_character_, nBys)
 		levels <- list()
-		if (verbose & nBys > 1L) pb <- utils::txtProgressBar(min = 0, max = nBys, initial = 0, style = 3)
+		if (verbose & nBys > 1L) pb <- utils::txtProgressBar(min = 0, max = nBys, initial = 0, style = 3, width = 30)
 
 		for (i in seq_len(nBys)) {
 
@@ -78,7 +78,7 @@ methods::setMethod(
 			index <- which(x@table[[by]] == bys[i])
 			xx <- x[index]
 
-			thisOut <- .rasterize(xx, y, field = field, background = background, by = NULL, verbose = FALSE)
+			thisOut <- .rasterize(xx, y, gtype = gtype, field = field, background = background, by = NULL, verbose = FALSE)
 			src[i] <- thisOut$src
 			levels[[i]] <- thisOut$levels
 		

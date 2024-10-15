@@ -1,4 +1,4 @@
-#' Rescale values in a raster
+#' Rescale values in a GRaster
 #' 
 #' @description `stretch()` rescales the values in a `GRaster`. All values can be rescaled, or just values in a user-defined range. This range can be given by specifying either the lower and upper bounds of the range using `smin` and `smax`, and/or by the quantiles (across all cells of the raster) using `minq` and `maxq`.
 #' 
@@ -67,6 +67,7 @@ methods::setMethod(
                     percentile = minq * 100
                 )
 
+                # nprocs became available with GRASS eight point three
                 if (versionNumber >= 8.3) args$nprocs <- faster("cores")
 
                 info <- do.call(rgrass::execGRASS, args)
@@ -98,6 +99,7 @@ methods::setMethod(
                     percentile = maxq * 100
                 )
 
+                # nprocs became available with GRASS eight point three
                 if (versionNumber >= 8.3) args$nprocs <- faster("cores")
 
                 info <- do.call(rgrass::execGRASS, args)

@@ -49,8 +49,8 @@
   snap = NULL,
   area = NULL,
   steps = 10,
-  dropTable = FALSE,
   resolve = NA,
+  dropTable = FALSE,
   verbose = TRUE
 )
 
@@ -124,7 +124,7 @@ A \code{GRaster} or \code{GVector}.
 \description{
 \code{fast()} creates a \code{GRaster} or \code{GVector} from 1) a file; 2) from a \code{SpatRaster}, \code{SpatVector}, or \code{sf} vector; or 3) from a numeric vector, \code{matrix}, \code{data.frame}, or \code{data.table}. Behind the scenes, this function will also create a connection to \strong{GRASS} if none has yet been made yet.
 
-\strong{GRASS} supports loading from disk a variety of raster formats (see the \strong{GRASS} manual page for \href{https://grass.osgeo.org/grass84/manuals/r.in.gdal.html}{\code{r.in.gdal}}) and vector formats (\href{https://grass.osgeo.org/grass84/manuals/v.in.ogr.html}{\code{v.in.ogr}}), though not all of them will work with this function.
+\strong{GRASS} supports loading from disk a variety of raster formats (see the \strong{GRASS} manual page for \code{r.in.gdal} (see \code{grassHelp("r.in.gdal")}) and vector formats \code{v.in.ogr} (see grassHelp("v.in.ogr")`), though not all of them will work with this function.
 
 Note that \code{GVectors} may fail to be created if they contain issues that do not coincide with the topological data model used by \strong{GRASS}. The most common of these is overlapping polygons. See \emph{Details} on how to fix these kinds of issues.
 
@@ -231,5 +231,5 @@ mat <- fast(mat, crs = "epsg:4326", keepgeom = TRUE) # WGS84
 }
 }
 \seealso{
-\code{\link[rgrass:readRAST]{rgrass::read_RAST()}} and \code{\link[rgrass:readVECT]{rgrass::read_VECT()}}, \link[=breakPolys]{vector cleaning}, \code{\link[=fillHoles]{fillHoles()}}, plus modules \href{https://grass.osgeo.org/grass84/manuals/v.in.ogr.html}{\code{v.in.ogr}} and \href{https://grass.osgeo.org/grass84/manuals/r.import.html}{\code{r.import}} in \strong{GRASS}.
+\code{\link[rgrass:readRAST]{rgrass::read_RAST()}} and \code{\link[rgrass:readVECT]{rgrass::read_VECT()}}, \link[=breakPolys]{vector cleaning}, \code{\link[=fillHoles]{fillHoles()}}, plus \strong{GRASS} modules \code{v.in.ogr} (see \code{grassHelp("v.in.ogr")}) and \code{r.import} (see \code{grassHelp("r.import")})
 }

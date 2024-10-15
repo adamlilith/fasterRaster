@@ -24,7 +24,7 @@
 A \code{GRaster}.
 }
 \description{
-The \verb{[<-} operator can be used to replace all of the values of a \code{GRaster}, or specific values depending on the expression in \code{i}. For example, you could use \code{rast[] <- 10} to assign 10 to all cells, or \code{rast[rast > 0] <- 10} to assign all cells with values >0 to 10.
+The \verb{[<-} operator can be used to replace all of the values of a \code{GRaster}, or specific values depending on the expression in \code{i}. For example, you could use \code{rast[] <- 10} to assign 10 to all cells, or \code{rast[rast > 0] <- 10} to assign all cells with values >0 to 10. You can also use one raster to set values in another, as in \code{rast1[rast2 > 0] <- 10}.
 }
 \examples{
 if (grassStarted()) {
@@ -72,7 +72,10 @@ rasts <- c(rasts, forest2014) # another way
 ### Subsetting GRaster layers
 
 # Subset:
+rasts <- c(elev, forest2000, forest2014)
 rasts[[2:3]]
+subset(rasts, 2:3)
+subset(rasts, c("madForest2000", "madElev"))
 rasts[[c("madForest2000", "madElev")]]
 rasts$madForest2000
 

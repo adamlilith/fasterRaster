@@ -27,9 +27,6 @@ This function takes as its main argument a \code{GRaster} with at least three la
 \examples{
 if (grassStarted()) {
 
-# Setup
-library(terra)
-
 # Example data
 madElev <- fastData("madElev") # elevation raster
 madLANDSAT <- fastData("madLANDSAT") # multi-layer raster

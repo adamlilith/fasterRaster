@@ -36,7 +36,9 @@
 #'
 #' @param cats Logical (extracting from a raster): If `TRUE` (default) and `x` is a categorical `GRaster`, then return the category labels instead of the values.
 #'
-#' @param verbose Logical: If `TRUE`, display progress (will only function when extracting from points on a `GRaster` when the number of `GRaster`s is large).
+#' @param verbose Logical: If `TRUE`, display progress (will only function when extracting from points on a `GRaster` when the number of `GRaster`s is large, or when extracting using a "points" `GVector` with lots of points).
+#'
+#' @param ... Arguments to pass to [project()]. This is used only if extracting from a `GRaster` at locations specified by a `GVector`, and they have a different coordinate reference system. In this case, users should specify the `wrap` argument to [project()].
 #'
 #' @returns A `data.frame` or `data.table`.
 #'
@@ -58,10 +60,27 @@ methods::setMethod(
         overlap = TRUE,
         xy = FALSE,
         cats = TRUE,
-        verbose = FALSE
+        verbose = FALSE,
+        ...
     ) {
 
     .locationRestore(x)
+
+    sameCRS <- compareGeom(x, y, stopOnError = FALSE, messages = FALSE)
+    if (!sameCRS) {
+    
+        warning("The GVector has a different coordinate reference system than the GRaster.\n  The GVector was projected to the CRS of the GRaster. If the GVector spans\n  the international date line, you may need to specify `wrap = TRUE` when\n  using this function.", immediate. = TRUE)
+
+        dots <- list(...)
+        if (any(names(dots) == "wrap")) {
+            wrap <- dots$wrap
+        } else {
+            wrap = FALSE
+        }
+        y <- project(y, x, wrap = wrap)
+
+    }
+
     compareGeom(x, y)
 
     nLayers <- nlyr(x)
@@ -126,8 +145,8 @@ methods::setMethod(
 
             if (any(fun == "quantile")) {
                 
-                if (length(prob) > 1L) stop("Argument ", sQuote("prob"), " can only have one value.")
-                if (prob > 1 | prob < 0) stop("Argument ", sQuote("prob"), " must be in the range [0, 1].")
+                if (length(prob) > 1L) stop("Argument `prob` can only have one value.")
+                if (prob > 1 | prob < 0) stop("Argument `prob` must be in the range [0, 1].")
                 prob <- round(100 * prob)
             
             }
@@ -355,8 +374,8 @@ methods::setMethod(
         cats = TRUE
     ) {
 
-    if (ncol(y) < 2L) stop("Argument ", sQuote("y"), " must have at least two columns. The first must represent longitude and the second latitude.")
-    if (ncol(y) > 2L) warning("Argument ", sQuote("y"), " has more than two columns. The first will be assumed to represent longitude and the second latitude.")
+    if (ncol(y) < 2L) stop("Argument `y` must have at least two columns. The first must represent longitude and the second latitude.")
+    if (ncol(y) > 2L) warning("Argument `y` has more than two columns. The first will be assumed to represent longitude and the second latitude.")
 
     y <- terra::vect(y, geom = colnames(y)[1L:2L], crs = crs(x), keepgeom = FALSE)
     y <- fast(y)
@@ -416,7 +435,7 @@ methods::setMethod(
         cats = TRUE
     ) {
 
-    if (length(y) != 2L) stop("Argument ", sQuote("y"), " must have two values, longitude and latitude.")
+    if (length(y) != 2L) stop("Argument `y` must have two values, longitude and latitude.")
     y <- cbind(y)
     colnames(y) <- c("x", "y")
     extract(x = x, y = y, xy = xy, cats = cats)
@@ -430,14 +449,14 @@ methods::setMethod(
 methods::setMethod(
     f = "extract",
     signature = c(x = "GVector", y = "GVector"),
-    function(x, y, xy = FALSE) {
+    function(x, y, xy = FALSE, verbose = TRUE) {
 
-    if (geomtype(y) != "points") stop("Argument", sQuote("y"), " must be a points vector.")
+    if (geomtype(y) != "points") stop("Argument`y` must be a points vector.")
     if (is.3d(y)) warning("Coordinates in the z-dimension will be ignored.")
 
     .locationRestore(x)
     coords <- crds(y, z = FALSE)
-    .extractFromVect(x, coords, xy)
+    .extractFromVect(x, coords, xy, verbose = verbose)
 
     } # EOF
 
@@ -449,7 +468,7 @@ methods::setMethod(
 methods::setMethod(
     f = "extract",
     signature = c(x = "GVector", y = "data.frame"),
-    function(x, y, xy = FALSE) .extractFromVect(x, y[ , 1L:2L], xy)
+    function(x, y, xy = FALSE, verbose = TRUE) .extractFromVect(x, y[ , 1L:2L], xy, verbose = verbose)
 )
 
 #' @aliases extract
@@ -458,10 +477,10 @@ methods::setMethod(
 methods::setMethod(
     f = "extract",
     signature = c(x = "GVector", y = "data.table"),
-    function(x, y, xy = FALSE) {
+    function(x, y, xy = FALSE, verbose = TRUE) {
 
     y <- as.data.frame(y)
-    .extractFromVect(x, y[ , 1L:2L], xy)
+    .extractFromVect(x, y[ , 1L:2L], xy, verbose = verbose)
 
     } # EOF
 )
@@ -472,7 +491,7 @@ methods::setMethod(
 methods::setMethod(
     f = "extract",
     signature = c(x = "GVector", y = "matrix"),
-    function(x, y, xy = FALSE) .extractFromVect(x, y[ , 1L:2L], xy)
+    function(x, y, xy = FALSE, verbose = TRUE) .extractFromVect(x, y[ , 1L:2L], xy, verbose = verbose)
 )
 
 #' @aliases extract
@@ -484,7 +503,7 @@ methods::setMethod(
     function(x, y, xy = FALSE) {
         
     y <- cbind(y)
-    .extractFromVect(x, y, xy)
+    .extractFromVect(x, y, xy, verbose = FALSE)
 
     } # EOF
 )
@@ -497,9 +516,9 @@ methods::setMethod(
 # methods::setMethod(
 #     f = "extract",
 #     signature = c(x = "GVector", y = "character"),
-#     function(x, y, xy = FALSE) {
+#     function(x, y, xy = FALSE, verbose = TRUE) {
 
-#     y <- .crdsVect(y, z = FALSE, gm = "points")
+#     y <- .crdsVect(y, z = FALSE, gm = "points", verbose = verbose)
 #     .extractFromVect(x, y, xy)
 
 #     } # EOF
@@ -510,9 +529,10 @@ methods::setMethod(
 #' @param xy T/F: Return coordinates
 #' @param nperSet Number of points to extract... too large throws an error. 1000 seems to break, so going with 900.
 #' @param data.table return as `data.table`
+#' @param verbose Logical.
 #' 
 #' @noRd
-.extractFromVect <- function(x, y, xy, nPerSet = 900L, data.table = TRUE) {
+.extractFromVect <- function(x, y, xy, nPerSet = 900L, data.table = TRUE, verbose = FALSE) {
 
     .locationRestore(x)
 
@@ -523,17 +543,24 @@ methods::setMethod(
 
 	if (n > nPerSet) {
 
+
 		sets <- ceiling(n / nPerSet)
+        if (verbose | faster("verbose")) {
+            pb <- utils::txtProgressBar(min = 0, max = sets, initial = 0, style = 3, width = 30)
+        }
+
 		out <- data.table::data.table()
 		for (set in seq_len(sets)) {
-			
-			omnibus::say(set)
+
+            if (verbose | faster("verbose")) utils::setTxtProgressBar(pb, set)
 			
 			yy <- y[(1L + (set - 1L) * nPerSet):min(set * nPerSet, n)]
-			thisOut <- .extractFromVect(x, y = yy, xy = xy, data.table = TRUE)
+			thisOut <- .extractFromVect(x, y = yy, xy = xy, data.table = TRUE, verbose = FALSE)
 			out <- rbind(out, thisOut)
 		
 		}
+
+        if (verbose | faster("verbose")) close(pb)
 		
 	} else {
 
@@ -585,9 +612,7 @@ methods::setMethod(
 		if (nrow(x) == 0L) {
 
 			id.x <- NULL
-
 			out <- data.table::data.table(id.y = 1L:n, id.x = NA_integer_)
-
 			if (lenNonnas > 0L) out[nonnasIndex, id.x := nons]
 
 		# vector has data table

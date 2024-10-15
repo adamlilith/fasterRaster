@@ -4,12 +4,14 @@
 \alias{mow}
 \title{Remove unused rasters and vectors from the GRASS cache}
 \usage{
-mow(x, type = NULL, verbose = TRUE, ask = TRUE)
+mow(x, type = NULL, keep = NULL, verbose = TRUE, ask = TRUE)
 }
 \arguments{
 \item{x}{Either missing (default) or an environment.}
 
 \item{type}{Either \code{NULL} or a character vector. If \code{NULL}, all rasters and vectors in the \strong{GRASS} cache are candidates for deletion. Otherwise, this can be either \code{"raster"}, \code{"vector"}, or both.}
+
+\item{keep}{Either \code{NULL} (default) or a \code{list()} of \code{GRaster}s and/or \code{GVector}s that you want to retain. The rasters and vectors in \strong{GRASS} pointed to by these objects will not be deleted.}
 
 \item{verbose}{Logical: If \code{TRUE} (default), report progress.}
 
@@ -19,11 +21,9 @@ mow(x, type = NULL, verbose = TRUE, ask = TRUE)
 Invisibly returns a list with the number of rasters and vectors deleted.
 }
 \description{
-\strong{fasterRaster} attempts to remove intermediate rasters and vectors from the \strong{GRASS} cache as they are not needed, but files can still accumulate, especially if you remove \code{GRaster}s or \code{GVector}s from the \strong{R} working environment (e.g., by using \code{\link[=rm]{rm()}} or simply using the same variable name for different rasters/vectors). This function will a) search the \strong{GRASS} cache for all rasters/vectors there; and b) remove any of them that are not pointed to by an object in the active \strong{R} environment.
+\strong{fasterRaster} attempts to delete rasters and vectors in the \strong{GRASS} cache. This function will a) search the current \strong{GRASS} "project/location" cache for all rasters/vectors there; and b) remove any of them that are not pointed to by an object in the active \strong{R} environment. Only objects in the currently active \strong{GRASS} project/location will be removed (see \code{vignette("project_mapset", package = "fasterRaster")}).
 
-Note that calling this function inside another function's environment can be very dangerous, as it will only be able to see objects in that environment, and thus delete any rasters/vectors outside that environment.
-
-Note also that this function will only clean the current \strong{GRASS} "project"/"location" (see \code{vignette("projects_mapsets", package = "fasterRaster")}).
+Note that calling this function inside another function's environment without providing an argument for \code{x} can be very \strong{dangerous}, as it will detect objects outside that environment, and thus delete any rasters/vectors outside that environment.
 }
 \examples{
 if (grassStarted()) {
@@ -33,5 +33,5 @@ if (FALSE) mow()
 }
 }
 \seealso{
-Option \code{clean} in \code{\link[=faster]{faster()}}
+Option \code{clean} in \code{\link[=faster]{faster()}}; \code{\link[=grass]{grass()}}
 }

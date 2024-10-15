@@ -28,11 +28,11 @@ methods::setMethod(
 
 	# if (percent %% 1 != 0) {
 	if (!omnibus::is.wholeNumber(percent)) {
-		warning("Argument ", sQuote("percent"), " must be an integer. Value will be rounded.")
+		warning("Argument `percent` must be an integer. Value will be rounded.")
 		percent <- round(percent)
 	}
 
-	if (percent < 50 | percent > 99) stop("Argument ", sQuote("percent"), " must be an integer in the range [50, 99].")
+	if (percent < 50 | percent > 99) stop("Argument `percent` must be an integer in the range [50, 99].")
 
 	.locationRestore(x)
 	.region(x)

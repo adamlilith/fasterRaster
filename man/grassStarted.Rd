@@ -10,7 +10,7 @@ grassStarted()
 Logical.
 }
 \description{
-Returns \code{TRUE} or \code{FALSE}, depending on whether a \strong{GRASS} connection has been made or not within the current \strong{R} session. Usually used only by developers.
+Returns \code{TRUE} or \code{FALSE}, depending on whether a \strong{GRASS} connection has been made or not within the current \strong{R} session. Usually used only by developers. \strong{GRASS} is started the first time \code{\link[=fast]{fast()}} is used.
 }
 \examples{
 

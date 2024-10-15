@@ -66,14 +66,14 @@ methods::setMethod(
 		maxDist = NULL
 	) {
 	
-	if (!is.null(minDist) && minDist < 0) stop("Argument ", sQuote("minDist"), " must be positive or NULL.")
-	if (!is.null(maxDist) && maxDist < 0) stop("Argument ", sQuote("maxDist"), " must be positive or NULL.")
-	if ((!is.null(maxDist) & !is.null(maxDist)) && (minDist > maxDist)) stop("Argument ", sQuote("minDist"), " is greater than ", sQuote("maxDist"), ".")
+	if (!is.null(minDist) && minDist < 0) stop("Argument `minDist` must be positive or NULL.")
+	if (!is.null(maxDist) && maxDist < 0) stop("Argument `maxDist` must be positive or NULL.")
+	if ((!is.null(maxDist) & !is.null(maxDist)) && (minDist > maxDist)) stop("Argument `minDist` is greater than `maxDist`.")
 
 	method <- tolower(method)
 	methods <- c("euclidean", "squared", "maximum", "manhattan", "geodesic")
 	method <- omnibus::pmatchSafe(method, methods)
-	if (is.lonlat(x) & method != "geodesic") warning("Argument ", sQuote("method"), " should be ", sQuote("geodesic"), " for rasters with longitude/latitude coordinate reference systems.")
+	if (is.lonlat(x) & method != "geodesic") warning("Argument `method` should be `geodesic` for rasters with longitude/latitude coordinate reference systems.")
 
 	.locationRestore(x)
 	.region(x)
@@ -134,13 +134,13 @@ methods::setMethod(
 		maxDist = NULL
 	) {
 	
-	if (!is.null(minDist) && minDist < 0) stop("Argument ", sQuote("minDist"), " must be positive or NULL.")
-	if (!is.null(maxDist) && maxDist < 0) stop("Argument ", sQuote("maxDist"), " must be positive or NULL.")
-	if ((!is.null(maxDist) & !is.null(maxDist)) && (minDist > maxDist)) stop("Argument ", sQuote("minDist"), " is greater than ", sQuote("maxDist"), ".")
+	if (!is.null(minDist) && minDist < 0) stop("Argument `minDist` must be positive or NULL.")
+	if (!is.null(maxDist) && maxDist < 0) stop("Argument `maxDist` must be positive or NULL.")
+	if ((!is.null(maxDist) & !is.null(maxDist)) && (minDist > maxDist)) stop("Argument `minDist` is greater than `maxDist`.")
 
 	methods <- c("euclidean", "squared", "maximum", "manhattan", "geodesic")
 	method <- omnibus::pmatchSafe(method, methods)
-	if (is.lonlat(x) & method != "geodesic") warning("Argument ", sQuote("method"), " should be ", sQuote("geodesic"), " for rasters with longitude/latitude coordinate reference systems.")
+	if (is.lonlat(x) & method != "geodesic") warning("Argument `method` should be `geodesic` for rasters with longitude/latitude coordinate reference systems.")
 
 	compareGeom(x, y)
 	.locationRestore(x)
@@ -195,8 +195,8 @@ methods::setMethod(
 		maxDist = NULL
 	) {
 	
-	if (!is.null(minDist) && minDist < 0) stop("Argument ", sQuote("minDist"), " must be positive or NULL.")
-	if (!is.null(maxDist) && maxDist < 0) stop("Argument ", sQuote("maxDist"), " must be positive or NULL.")
+	if (!is.null(minDist) && minDist < 0) stop("Argument `minDist` must be positive or NULL.")
+	if (!is.null(maxDist) && maxDist < 0) stop("Argument `maxDist` must be positive or NULL.")
 	if ((!is.null(maxDist) & !is.null(maxDist)) && (minDist > maxDist)) stop("Argument `minDist` is greater than `maxDist`.")
 
 	compareGeom(x, y)
@@ -217,6 +217,7 @@ methods::setMethod(
 	)
 
 	info <- info[-1L]
+	info <- info[grepl(info, pattern = "\\|")]
 	info <- strsplit(info, split="\\|")
 	info <- lapply(info, as.numeric)
 	info <- do.call(rbind, info)
@@ -273,6 +274,7 @@ methods::setMethod(
 	)
 
 	out <- out[-1L]
+	out <- out[grepl(out, pattern = "\\|")]
 	out <- strsplit(out, split = "\\|")
 	out <- do.call(rbind, out)
 	n <- nrow(out)

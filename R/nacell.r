@@ -75,6 +75,7 @@ methods::setMethod(
             intern = TRUE
         )
 
+        # Should be GRASS eight point three!
         if (grassInfo("versionNumber") >= 8.3) args$nprocs <- faster("cores")
         info <- do.call(rgrass::execGRASS, args = args)
 

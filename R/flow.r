@@ -7,7 +7,7 @@
 #' * Flooded areas; and/or
 #' * Topographic convergence (log of flow accumulation divided by local slope).
 #'
-#' More details about the computations can be found at the help page for the [`r.terraflow`](https://grass.osgeo.org/grass84/manuals/r.terraflow.html) module for **GRASS**.
+#' More details about the computations can be found at the help page for the **GRASS** module `r.terraflow`] (see `grassHelp("r.terraflow")`)
 #'
 #' @param x A `GRaster` with a single layer, typically representing elevation.
 #'
@@ -23,9 +23,9 @@
 #' * `"TCI"`: Topographic convergence index
 #' * `"*"`: All of the above
 #'
-#' @seealso [flowPath()], [streams()], the [`r.terraflow`](https://grass.osgeo.org/grass84/manuals/r.terraflow.html) module for **GRASS**
+#' @seealso [flowPath()], [streams()], the **GRASS** module `r.terraflow` (see `grassHelp("r.terraflow")`)
 #'
-#' @param scratchDir Character: Directory in which to store temporary files. The **GRASS** module `r.terraflow` makes a lot of temporary files. The default is given by [tempdir()].
+#' @param scratchDir Character or `NULL` (default): Directory in which to store temporary files. The **GRASS** module `r.terraflow` makes a lot of temporary files. If this is `NULL`, then a temporary folder in the user's working directory will be used (see [getwd()]).
 #'
 #' @returns A `GRaster`.
 #'
@@ -42,8 +42,10 @@ methods::setMethod(
 		direction = "multi",
 		return = "accumulation",
 		dirThreshold = Inf,
-		scratchDir = tempdir()
+		scratchDir = NULL
 	) {
+
+	if (nlyr(x) > 1L) stop("This function can only use a single-layered GRaster as input.")
 
 	returns <- c("accumulation", "basins", "direction", "flooded", "TCI")
 	if (any(return == "*")) return <- returns
@@ -52,10 +54,14 @@ methods::setMethod(
 
 	direction <- omnibus::pmatchSafe(direction, c("single", "multi"), nmax = 1L)
 
-	if (nlyr(x) > 1L) stop("This function can only use a single-layered GRaster as input.")
-
 	.locationRestore(x)
 	.region(x)
+
+	if (is.null(scratchDir)) {
+		scratchDir <- paste0(getwd(), "/flow_temporary_files")
+		omnibus::dirCreate(scratchDir)
+		on.exit(unlink(scratchDir, recursive = TRUE, force = TRUE))
+	}
 
 	args <- list(
 		cmd = "r.terraflow",
@@ -73,6 +79,13 @@ methods::setMethod(
 	if (any(return == "basins")) args$swatershed <- .makeSourceName("r_flow_swatershed", "raster")
 	if (any(return == "flooded")) args$filled <- .makeSourceName("r_flow_filled", "raster")
 	if (any(return == "TCI")) args$tci <- .makeSourceName("r_flow_tci", "raster")
+
+	if (is.null(scratchDir)) {
+		scratchDir <- getwd()
+		scratchDir <- paste0(scratchDir, '/flow_temp_files')
+		omnibus::dirCreate(scratchDir)
+		on.exit(unlink(scratchDir, recursive = TRUE, force = TRUE, expand = TRUE), add = TRUE)
+	}
 
 	do.call(rgrass::execGRASS, args = args)
 

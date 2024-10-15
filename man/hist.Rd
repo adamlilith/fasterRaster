@@ -29,9 +29,6 @@ This function creates a histogram of values in \code{GRaster}. The function is m
 \examples{
 if (grassStarted()) {
 
-# Setup
-library(terra)
-
 # Example data
 madElev <- fastData("madElev") # elevation raster
 madLANDSAT <- fastData("madLANDSAT") # multi-layer raster

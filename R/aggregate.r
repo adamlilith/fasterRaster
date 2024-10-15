@@ -30,8 +30,6 @@
 #'
 #' @param weight Logical (rasters only): If `FALSE`, each source cell that has its center in the destination cell will be counted equally. If `TRUE`, the value of each source will be weighted the proportion of the destination cell the source cell covers.
 #' 
-#' @param dissolve Logical (vectors only): If `TRUE` (default), then aggregated geometries will have their borders dissolved. This is ignored if the input `GVector` is not a "polygons" vector.
-#' 
 #' @returns A `GRaster` or `GVector`.
 #' 
 #' @seealso [stats::aggregate()], [terra::aggregate()], [disagg()], [terra::disagg()]
@@ -53,7 +51,7 @@ methods::setMethod(
 		na.rm = FALSE
 	) {
 
-	if (any(fact <= 0)) stop("Values of ", sQuote("fact"), " must be > 0.")
+	if (any(fact <= 0)) stop("Values of `fact` must be > 0.")
 
 	funs <- c("mean", "median", "mode", "min", "maximum", "range", "quantile", "sum", "varpop", "sdpop", "count", "diversity")
 	fun <- omnibus::pmatchSafe(tolower(fun), funs)
@@ -70,9 +68,9 @@ methods::setMethod(
 		fun <- "stdev"
 	} else if (fun == "quantile") {
 		
-		if (is.null(prob)) stop("A value must be specified for ", sQuote("prob"), " if the aggregating function is ", sQuote("quantile"), ".")
+		if (is.null(prob)) stop("A value must be specified for `prob` if the aggregating function is `quantile`.")
 		
-		if (prob < 0 | prob > 1) stop("Argument ", sQuote("prob"), " must be in the range [0, 1].")
+		if (prob < 0 | prob > 1) stop("Argument `prob` must be in the range [0, 1].")
 	
 	}
 	
@@ -157,11 +155,12 @@ methods::setMethod(
 methods::setMethod(
 	f = "aggregate",
 	signature = c(x = "GVector"),
-	function(x, dissolve = TRUE) {
+	function(x) {
 
 	.locationRestore(x)
 	gtype <- geomtype(x)
-	src <- .aggregate(x, dissolve = dissolve, gtype = gtype, copy = TRUE)
+	# src <- .aggregate(x, dissolve = dissolve, gtype = gtype, copy = TRUE)
+	src <- .aggregate(x, dissolve = TRUE, gtype = gtype, copy = TRUE)
 
 	# aggregate data table
 	if (nrow(x) == 0L) {
@@ -221,7 +220,7 @@ methods::setMethod(
 #' @param dissolve Logical
 #' @param copy Logical: If TRUE, make copy of vector before operations
 #' @noRd
-.aggregate <- function(x, gtype, dissolve, copy) {
+.aggregate <- function(x, dissolve, gtype, copy) {
 
 	if (inherits(x, "GVector")) {
 		.locationRestore(x)
@@ -235,8 +234,8 @@ methods::setMethod(
 	oldcats <- .vCats(src, db = FALSE)
 	if (length(oldcats) > 1L) {
 
-		table <- data.table::data.table(fr = rep(1L, length(oldcats)))
-		.vAttachDatabase(src, table = table, replace = TRUE)
+		table <- data.table::data.table(frid = rep(1L, length(oldcats)))
+		.vAttachDatabase(src, table = table, replace = TRUE, cats = oldcats)
 
 		# newcats <- data.frame(oldfr = oldcats, fr = rep(1L, length(oldcats)))
 		

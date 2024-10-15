@@ -2,7 +2,7 @@
 #'
 #' @description This function creates a single "levels" table from the levels tables of one or more categorical `GRaster`s.
 #'
-#' The difference between this function and [combineCats()] is that `combineCats()` creates a "combined" `GRaster` with a combined levels table, whereas this one just merges the levels tables.
+#' The difference between this function and [concats()] is that `concats()` creates a "combined" `GRaster` with a combined levels table, whereas this one just merges the levels tables.
 #'
 #' @param x A `GRaster` or a `list` of `GRaster`s.
 #' @param ... Arguments to pass to [data.table::merge()].
@@ -11,7 +11,7 @@
 #'
 #' @example man/examples/ex_GRaster_categorical.r
 #'
-#' @seealso [combineCats()], `vignette("GRasters", package = "fasterRaster")`
+#' @seealso [concats()], [terra::concats], `vignette("GRasters", package = "fasterRaster")`
 #'
 #' @aliases combineLevels
 #' @rdname combineLevels

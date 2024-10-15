@@ -3,7 +3,7 @@
 #' @description
 #' This function saves a `GRaster` to disk directly from a **GRASS** session. It is faster than using [rast()], then saving the output of that to disk (because `rast()` actually save the raster to disk, anyway).
 #'
-#' The function will attempt to ascertain the file type to be ascertained from the file extension, but you can specify the format using the `format` argument (see entry for `...`). You can see a list of supported formats by simply using this function with no arguments, as in `writeRaster()`, or by consulting the online help page for the **GRASS** module [`r.out.gdal`](https://grass.osgeo.org/grass84/manuals/r.out.gdal.html). Only the `GeoTIFF` file format is guaranteed to work for multi-layered rasters.
+#' The function will attempt to ascertain the file type to be ascertained from the file extension, but you can specify the format using the `format` argument (see entry for `...`). You can see a list of supported formats by simply using this function with no arguments, as in `writeRaster()`, or by consulting the online help page for the **GRASS** module `r.out.gdal` (see `grassHelp("r.out.gdal")`). Only the `GeoTIFF` file format is guaranteed to work for multi-layered rasters.
 #'
 #' The function will attempt to optimize the `datatype` argument, but this can take a long time. You can speed this up by setting `datatype` manually. Note that if you are saving a "stack" of `GRaster`s with different `datatype`s, the one with the highest information density will be used (e.g., low-bit integer < high-bit integer < floating-point < double-floating point). This can make rasters with lower datatypes much larger on disk. In these cases, it make be best to save rasters with similar `datatype`s together.
 #'
@@ -51,7 +51,7 @@
 #'
 #' @returns A `GRaster` (invisibly). A raster is also saved to disk.
 #'
-#' @seealso [terra::writeRaster()], module [`r.out.gdal`](https://grass.osgeo.org/grass84/manuals/r.out.gdal.html) in **GRASS**
+#' @seealso [terra::writeRaster()], **GRASS** module `r.out.gdal` (see `grassHelp("r.out.gdal")`)
 #'
 #' @example man/examples/ex_writeRaster.r
 #'
@@ -112,7 +112,7 @@ setMethod(
 
 		### going to overwrite anything?
 		if (!overwrite) {
-			if (file.exists(filename)) stop("File already exists and ", sQuote("overwrite"), " is FALSE:\n  ", filename)
+			if (file.exists(filename)) stop("File already exists and `overwrite` is FALSE:\n  ", filename)
 		}
 
 		### format
@@ -235,7 +235,7 @@ setMethod(
 
 			# if (any(!(datatype(x, "GDAL") %in% datatype))) {
 			# 	flags <- c(flags, "f")
-			# 	if (warn) warning("Argument ", sQuote("datatype"), " does not match the data type of the raster. Data may be lost.")
+			# 	if (warn) warning("Argument `datatype` does not match the data type of the raster. Data may be lost.")
 			# }
 
 			if (!("createopt" %in% names(dots))) createopt <- NULL

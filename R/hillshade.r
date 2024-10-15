@@ -24,8 +24,8 @@ methods::setMethod(
     signature = c(x = "GRaster"),
     definition = function(x, angle = 45, direction = 0, zscale = 1) {
 
-    if (angle < 0 | angle > 90) stop("Argument ", sQuote("angle"), " must be in the range [0, 90].")
-    if (direction < 0 | direction > 360) stop("Argument ", sQuote("angle"), " must be in the range [0, 360].")
+    if (angle < 0 | angle > 90) stop("Argument `angle` must be in the range [0, 90].")
+    if (direction < 0 | direction > 360) stop("Argument `angle` must be in the range [0, 360].")
 
     .locationRestore(x)
     .region(x)

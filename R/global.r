@@ -122,7 +122,7 @@ methods::setMethod(
 				intern = TRUE
 			)
 
-			if (versionNumber >= 8.3) args$nprocs <- faster("cores")
+			if (versionNumber >= 8.4) args$nprocs <- faster("cores")
 			if (any(fun == "median")) args$flags <- c(args$flags, "e")
 
 			info <- do.call(rgrass::execGRASS, args)
@@ -145,12 +145,15 @@ methods::setMethod(
 			colNames <- fun
 			isQuant <- which(colNames == "quantile")
 			quantNames <- paste0("quantile_", probs)
+			nCols <- length(colNames)
 			if (length(fun) == 1L & fun[1L] == "quantile") {
 				colNames <- quantNames
 			} else if (colNames[1L] == "quantile") {
-				colNames <- c(quantNames, colNames[2L:length(colNames)])
-			} else if (colNames[length(colNames)] == "quantile") {
-				colNames <- c(colNames[1L:(length(colNames) - 1L)], quantNames)
+				colNames <- c(quantNames, colNames[2L:nCols])
+			} else if (colNames[nCols] == "quantile") {
+				colNames <- c(colNames[1L:(nCols - 1L)], quantNames)
+			} else {
+				colNames <- c(colNames[(1L:(isQuant) - 1L)], quantNames, colNames[(isQuant + 1L):nCols])
 			}
 			names(thisOut) <- colNames
 			
@@ -213,6 +216,7 @@ methods::setMethod(
 					# this <- strsplit(this, split=":")[[1L]][2L]
 					# this <- as.numeric(this)
 
+					quantInfo <- quantInfo[seq_along(probs)]
 					this <- strsplit(quantInfo, split = ":")
 					this <- lapply(this, as.numeric)
 					this <- do.call(rbind, this)
@@ -280,7 +284,7 @@ methods::setMethod(
 						intern = TRUE
 					)
 
-					if (versionNumber >= 8.3) args$nprocs <- faster("cores")
+					if (versionNumber >= 8.4) args$nprocs <- faster("cores")
 
 					thisInfo <- do.call(rgrass::execGRASS, args = args)
 					if (faster("clean")) on.exit(.rm(srcSS, type = "raster", warn = FALSE), add = TRUE)
@@ -331,7 +335,7 @@ methods::setMethod(
 						intern = TRUE
 					)
 
-					if (grassInfo("versionNumber") >= 8.3) args$nprocs <- faster("cores")
+					if (grassInfo("versionNumber") >= 8.4) args$nprocs <- faster("cores")
 
 					thisInfo <- do.call(rgrass::execGRASS, args = args)
 					if (faster("clean")) on.exit(.rm(srcSS, type = "raster", warn = FALSE), add = TRUE)
