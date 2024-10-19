@@ -41,7 +41,7 @@
 #' 
 #' @returns A `GRaster` or `GVector`.
 #' 
-#' @seealso [terra::project()], [sf::st_transform()], modules `r.proj`, `r.import`, and `v.proj` in **GRASS**
+#' @seealso [terra::project()], [sf::st_transform()], **GRASS** manual pages for modules `r.proj` and `v.proj` (see `grassHelp("r.proj")` and `grassHelp("v.proj")`)
 #'
 #' @example man/examples/ex_project.r
 #'

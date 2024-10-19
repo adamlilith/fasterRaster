@@ -129,5 +129,5 @@ freq(rand) # cell frequencies
 }
 }
 \seealso{
-\code{\link[terra:app]{terra::app()}}, \code{\link[terra:lapp]{terra::lapp()}}, \code{\link[=subst]{subst()}}, \code{\link[=classify]{classify()}}, and modules \code{r.mapcalc} in \strong{GRASS} (viewable using \code{grassHelp("r.mapcalc")})
+\code{\link[terra:app]{terra::app()}}, \code{\link[terra:lapp]{terra::lapp()}}, \code{\link[=subst]{subst()}}, \code{\link[=classify]{classify()}}, and especially \strong{GRASS} manual page for module \code{r.mapcalc} (see \code{grassHelp("r.mapcalc")})
 }

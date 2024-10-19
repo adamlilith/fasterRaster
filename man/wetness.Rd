@@ -39,5 +39,5 @@ plot(c(elev, twi))
 }
 }
 \seealso{
-\code{\link[=terrain]{terrain()}}, \code{\link[=ruggedness]{ruggedness()}}, \code{\link[=geomorphons]{geomorphons()}}, \strong{GRASS} module \code{r.topidx} (see \code{grassHelp("r.topidx")})
+\code{\link[=terrain]{terrain()}}, \code{\link[=ruggedness]{ruggedness()}}, \code{\link[=geomorphons]{geomorphons()}}, \strong{GRASS} manual for module \code{r.topidx} (see \code{grassHelp("r.topidx")})
 }

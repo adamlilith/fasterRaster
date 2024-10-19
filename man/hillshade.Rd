@@ -47,5 +47,5 @@ plot(hs)
 }
 }
 \seealso{
-\code{\link[terra:shade]{terra::shade()}}, module \code{r.relief} in \strong{GRASS}
+\code{\link[terra:shade]{terra::shade()}}
 }

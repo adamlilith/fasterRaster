@@ -18,7 +18,7 @@
 #'
 #' @returns A `GRaster` with one or more layers. The layers will be named `height_`*xyz*, where *xyz* is degrees from north or from east, depending on whether north or east orientation is used.
 #'
-#' @seealso The **GRASS** module `r.horizon`.
+#' @seealso **GRASS** manual page for module `r.horizon` (see `grassHelp("r.horizon")`)
 #'
 #' @example man/examples/ex_horizonHeight.r
 #' 

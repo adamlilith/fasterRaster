@@ -20,14 +20,14 @@ A \code{GRaster}.
 \description{
 This version of the \code{predict()} function make predictions to a set of \code{GRaster}s from a model object.
 
-The model must be either a linear model, which is of class \code{lm} and typically created using the \code{\link[stats:lm]{stats::lm()}} function or a generalized linear model (GLM), which is class \code{glm} and typically created using \code{\link[stats:glm]{stats::glm()}}. Other packages can also create \code{lm} or \code{glm} objects, but they may not work in this function. For example, generalized additive models, which can be created using the \code{gam()} function in the \strong{mgcv} package, inherit the \code{glm} class, but cannot be used in this function, but ones created with the \strong{speedglm} package can.
+The model must be either a linear model, which is of class \code{lm} and typically created using the \code{\link[stats:lm]{stats::lm()}} function or a generalized linear model (GLM), which is class \code{glm} and typically created using \code{\link[stats:glm]{stats::glm()}}. Other packages can also create \code{lm} or \code{glm} objects, but they may not work in this function. For example, generalized additive models, which can be created using the \code{gam()} function in the \strong{mgcv} package, inherit the \code{glm} class, but cannot be used in this function. However, \code{glm} objects created with the \strong{speedglm} package should work with this function.
 
 This \code{predict()} function can handle:
 \itemize{
-\item Linear predictors and intercepts like \code{y ~ 1 + x};
-\item Quadratic terms like \code{y ~ x^2} (or, in \strong{R} formula notation, \code{y ~ I(x^2)});
-\item Two-way interaction terms between scalars like \code{y ~ x1:x2} and \code{y ~ x1 * x2};
-\item Categorical predictors (i.e., categorical \code{GRaster}s; see \code{vignette("GRasters", package = "fasterRaster")}));
+\item Linear predictors and intercepts like \code{1 + x};
+\item Quadratic terms like \code{x^2} (or, in \strong{R} formula notation, \code{I(x^2)});
+\item Two-way interaction terms between scalars like \code{x1:x2} and \code{x1 * x2};
+\item Categorical predictors (i.e., categorical \code{GRaster}s; see \code{vignette("GRasters", package = "fasterRaster")});
 \item Two-way interactions between a categorical predictor and a scalar predictor; and
 \item Two-way interactions between categorical predictors.
 }

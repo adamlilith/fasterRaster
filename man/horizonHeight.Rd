@@ -61,5 +61,5 @@ plot(hhEast)
 }
 }
 \seealso{
-The \strong{GRASS} module \code{r.horizon}.
+\strong{GRASS} manual page for module \code{r.horizon} (see \code{grassHelp("r.horizon")})
 }

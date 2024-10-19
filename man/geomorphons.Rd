@@ -76,5 +76,5 @@ plot(geos, col = col)
 }
 }
 \seealso{
-\strong{GRASS} module \code{r.geomorphon} (see \code{grassHelp("r.geomorphon")})
+\strong{GRASS} manual for module \code{r.geomorphon} (see \code{grassHelp("r.geomorphon")})
 }

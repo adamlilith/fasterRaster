@@ -29,7 +29,7 @@
 #'
 #' @returns A categorical `GRaster` where each geomorphon is a category (see `vignette("GRasters", package = "fasterRaster")`).
 #'
-#' @seealso **GRASS** module `r.geomorphon` (see `grassHelp("r.geomorphon")`)
+#' @seealso **GRASS** manual for module `r.geomorphon` (see `grassHelp("r.geomorphon")`)
 #'
 #' @example man/examples/ex_geomorphons.r
 #'

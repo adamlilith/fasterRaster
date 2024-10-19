@@ -26,6 +26,8 @@
 #'
 #' @param byLayer Logical: If `FALSE` (default), multi-layer rasters will be saved in one file. If `TRUE`, the each layer will be saved in a separate file. The filename from `filename` will be amended so that it ends with `_<name>` (then the file extension), where `<name>` is give by [names()]. Note that if any characters in raster names will not work in a file name, then the function will fail (e.g., a backslash or question mark).
 #'
+#' @param names Logical: If `TRUE` (default), save a file with raster layer names. The file will have the same name as the raster file but end with "`_names.csv`". Currently, the [names()] attribute of rasters cannot be saved in the raster, which can create confusion when multi-layered rasters are saved. Turning on this option will save the ancillary file with layer names. If it exists, this file will be read by [fast()] so layer names are assigned when the raster is read by that function. The absence of a "names" file will not create any issues with this function or [fast()], other than not having the metadata on layer names.
+#' 
 #' @param levelsExt Character, logical, or `NULL` (default): Name of the file extension for the "levels" file that accompanies a categorical `GRaster`. When saving categorical rasters, the raster file is accompanied with a "levels" file that contain information on the levels of the raster. This file is the same as `filename`, except it has a different extension. Valid values depend on how many raster layers are saved at a time (case is ignored):
 #' * DefaultOne raster layer: `".csv"`
 #' * Two or more layers, with at least one categorical raster: `".rds"`, `".rda"`, `".rdat"`, `".rdata"`
@@ -67,6 +69,7 @@ setMethod(
 		overwrite = FALSE,
 		datatype = NULL,
 		byLayer = FALSE,
+		names = TRUE,
 		levelsExt = NULL,
 		compress = "LZW",
 		warn = TRUE,
@@ -95,7 +98,7 @@ setMethod(
 			extension <- .fileExt(filename)
 			fn <- substr(filename, 1L, nchar(filename) - nchar(extension) - 1L)
 			fn <- paste0(fn, "_", names(xx), ".", extension)
-			writeRaster(xx, filename = fn, overwrite = overwrite, datatype = datatype, byLayer = FALSE, levelsExt = levelsExt, compress = compress, warn = warn, ...)
+			writeRaster(xx, filename = fn, overwrite = overwrite, datatype = datatype, byLayer = FALSE, names = names, levelsExt = levelsExt, compress = compress, warn = warn, ...)
 		
 		}
 	
@@ -139,6 +142,8 @@ setMethod(
 				flags = flags,
 				...
 			)
+
+			if (names) .saveNames(x = x, filename = filename)
 
 		} else {
 
@@ -281,6 +286,8 @@ setMethod(
 				flags = thisFlags
 			)
 
+			if (names) .saveNames(x = x, filename = filename)
+
 		}
 		
 		isFact <- is.factor(x)
@@ -379,3 +386,23 @@ setMethod(
 	
 	} # EOF
 )
+
+### save "names" file for each layer of a raster
+.saveNames <- function(x, filename) {
+
+	namesFile <- filename
+	n <- nchar(filename)
+	ne <- nchar(.fileExt(filename))
+	namesFile <- substr(namesFile, 1L, n - ne - 1L)
+	namesFile <- paste0(namesFile, '_names.csv')
+
+	namesDf <- data.table::data.table(
+		layer = 1:nlyr(x),
+		name = names(x)
+	)
+
+	data.table::fwrite(namesDf, namesFile, row.names = FALSE)
+
+}
+
+

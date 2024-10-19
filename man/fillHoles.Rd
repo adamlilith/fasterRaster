@@ -124,3 +124,6 @@ filled <- fillHoles(holes, fail = FALSE)
 
 }
 }
+\seealso{
+\code{\link[terra:fill]{terra::fillHoles()}}, \strong{GRASS} manual page for module \code{v.fill.holes} (see \code{grassHelp("v.fill.holes")})
+}

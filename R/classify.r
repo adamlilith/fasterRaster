@@ -1,6 +1,6 @@
 #' Classify GRaster cell values
 #'
-#' @description This function classifies a raster so that cells that have values within a given range are assigned a new value. The [subst()] function is a simpler method for replacing specific values or category levels.
+#' @description This function classifies a `GRaster`` so that cells that have values within a given range are assigned a new value. The [subst()] function is a simpler method for replacing specific values or category levels.
 #'
 #' @param x A `GRaster`.
 #' @param rcl Reclassification system:

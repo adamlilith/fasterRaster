@@ -112,5 +112,5 @@ cat(crs(riversWGS84))
 }
 }
 \seealso{
-\code{\link[terra:project]{terra::project()}}, \code{\link[sf:st_transform]{sf::st_transform()}}, modules \code{r.proj}, \code{r.import}, and \code{v.proj} in \strong{GRASS}
+\code{\link[terra:project]{terra::project()}}, \code{\link[sf:st_transform]{sf::st_transform()}}, \strong{GRASS} manual pages for modules \code{r.proj} and \code{v.proj} (see \code{grassHelp("r.proj")} and \code{grassHelp("v.proj")})
 }

@@ -77,5 +77,5 @@ hist(fractal)
 }
 }
 \seealso{
-\code{\link[=rnormRast]{rnormRast()}}, \code{\link[=fractalRast]{fractalRast()}}, \code{\link[=runifRast]{runifRast()}}, and \strong{GRASS} module \code{r.random.surface}
+\code{\link[=rnormRast]{rnormRast()}}, \code{\link[=fractalRast]{fractalRast()}}, \code{\link[=runifRast]{runifRast()}}, \strong{GRASS} manual page for module \code{r.random.surface} (see \code{grassHelp("r.random.surface")})
 }

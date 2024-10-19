@@ -32,7 +32,7 @@
 A \code{GRaster}. The raster will be a categorical \code{GRaster} if the original values were continuous (i.e., a single- or double-precision raster), or of type "integer" if the input was an integer. See \code{vignette("GRasters", package = "fasterRaster")}.
 }
 \description{
-This function classifies a raster so that cells that have values within a given range are assigned a new value. The \code{\link[=subst]{subst()}} function is a simpler method for replacing specific values or category levels.
+This function classifies a `GRaster`` so that cells that have values within a given range are assigned a new value. The \code{\link[=subst]{subst()}} function is a simpler method for replacing specific values or category levels.
 }
 \examples{
 if (grassStarted()) {
