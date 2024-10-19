@@ -185,7 +185,7 @@ methods::setGeneric(name = "kurtosis", def = function(x, ...) standardGeneric("k
 # levels<- (in base) is primitive
 methods::setGeneric(name = "layerCor", package = "terra")
 methods::setGeneric(name = "ln", def = function(x, ...) standardGeneric("ln"))
-methods::setGeneric(name = "longlat", def = function(x) standardGeneric("longlat"))
+methods::setGeneric(name = "longlat", def = function(x, ...) standardGeneric("longlat"))
 methods::setGeneric(name = "log10p", def = function(x) standardGeneric("log10p"))
 
 methods::setGeneric(name = "mask", package = "terra")
