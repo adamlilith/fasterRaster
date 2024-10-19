@@ -1,3 +1,12 @@
+# fasterRaster 8.4.0.7028 (2024-10-XX)
+
+### Main task
+o Clear for CRAN submission
+
+### Enhanced functionality and new functions
+o `longlat()` can now return rasters with cell values equal to their coordinates in map units (previously, only coordinates in degrees were returned).  
+o For functions that are complicated or have extended references, added a note to the `@seealso` tag to see the respective **GRASS** manual page using `grassHelp()`.  
+
 # fasterRaster 8.4.0.7027 (2024-10-15)
 
 ### Main task for this version
