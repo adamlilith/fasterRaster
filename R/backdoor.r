@@ -1,6 +1,6 @@
 #' Setup fasterRaster for ABS
 #'
-#' This is a secret function to be used for faster development of **fasterRaster**. It assume development is on a Windows machine.
+#' This is a secret function to be used for faster development of **fasterRaster**. It calls [faster()] to set the install directory for **GRASS**, increases default memory, and number of cores. The function assumes development is on a Windows machine.
 #'
 #' @param ver Character: **GRASS**: e.g., "83" or "84".
 #'
