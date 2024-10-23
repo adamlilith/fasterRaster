@@ -4,8 +4,8 @@
 #'
 #' @param x Character: Any of:
 #' * The name of a **GRASS** module (e.g., `"r.mapcalc"`).
-#' * `"type"`: Display a page wherein modules are classified by types.
-#' * `"topics"`: Display an index of topics.
+#' * `"toc"`: **GRASS** manual table of contents.
+#' * `"index"`: Display an index of topics.
 #'
 #' @param online Logical: If `FALSE` (default), show the manual page that was included with your installation of **GRASS** on your computer.  If `FALSE`, show the manual page online (requires an Internet connection). In either case, the manual page will display for the version of **GRASS** you have installed.
 #'
@@ -34,10 +34,10 @@ grassHelp <- function(x, online = FALSE) {
 			flags = .quiet()
 		)
 		
-		if (x == "type") {
-			args$flags <- c(args$flags, "i")
-		} else if (x == "index") {
+		if (x == "index") {
 			args$flags <- c(args$flags, "t")
+		} else if (x == "toc") {
+			args$flags <- c(args$flags, "i")
 		}
 
 		do.call(rgrass::execGRASS, args = args)
