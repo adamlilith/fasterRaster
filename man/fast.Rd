@@ -200,13 +200,13 @@ class(madRivers)
 rivers <- fast(madRivers)
 rivers
 
-# Create a GVector from a vector on disk
+# Create a GVector from a vector on disk:
 vectFile <- system.file("extdata/shapes", "madCoast.shp",
    package = "fasterRaster")
 coast0 <- fast(vectFile)
 coast0
 
-# Import only Dypsis occurrences in a restricted area
+# Import only Dypsis occurrences in a restricted area:
 ant <- coast4[coast4$NAME_4 == "Antanambe"]
 dypsisRestrict <- fast(madDypsis, extent = ant)
 dypsis <- fast(madDypsis)
@@ -216,7 +216,7 @@ plot(ant, col = "gray80", add = TRUE)
 plot(dypsis, add = TRUE)
 plot(dypsisRestrict, col = "red", add = TRUE)
 
-# Create a generic GVector that spans the world
+# Create a generic GVector that spans the world:
 wallToWall <- fast(rastOrVect = "vector", crs = "epsg:4326") # WGS84
 wallToWall
 
@@ -224,7 +224,7 @@ wallToWall
 pts <- c(-90.2, 38.6, -122.3, 37.9)
 pts <- fast(pts, crs = "epsg:4326") # WGS84
 
-# Create a GVector from a matrix (can also use data.frame or data.table)
+# Create a GVector from a matrix (can also use data.frame or data.table):
 mat <- matrix(c(-90.2, 38.6, -122.3, 37.9), ncol = 2, byrow = TRUE)
 mat <- fast(mat, crs = "epsg:4326", keepgeom = TRUE) # WGS84
 

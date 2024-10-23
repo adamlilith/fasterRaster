@@ -4,10 +4,10 @@ if (grassStarted() & interactive()) {
 grassHelp("r.mapcalc")
 grassHelp("r.sun")
 
-# Open topics page:
-grassHelp("topics")
+# GRASS table of contents:
+grassHelp("toc")
 
-# Open index page:
+# Index page:
 grassHelp("index")
 
 }
