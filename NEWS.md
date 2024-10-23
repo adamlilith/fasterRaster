@@ -4,6 +4,7 @@
 o Clear for CRAN submission
 
 ### Enhanced functionality and new functions
+o `grassHelp()` can show the **GRASS** manual "table of contents" (argument `"toc"`).  
 o `longlat()` can now return rasters with cell values equal to their coordinates in map units (previously, only coordinates in degrees were returned).  
 o For functions that are complicated or have extended references, added a note to the `@seealso` tag to see the respective **GRASS** manual page using `grassHelp()`.  
 
