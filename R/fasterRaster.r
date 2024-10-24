@@ -288,7 +288,6 @@
 #' * [reorient()]: Convert degrees between 'north-orientation' and 'east orientation'
 #' * [replaceNAs()]: Replace `NA`s in columns of a `data.table` or `data.frame`, or in a vector
 #' * [seqToSQL()]: Format a numeric series into an SQL value call
-#' * [workDir()]: 
 #' * [update()]: Refresh metadata in a `GRaster` or `GVector` object
 #'
 #' ## Data objects
