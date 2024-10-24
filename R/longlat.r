@@ -29,7 +29,7 @@ methods::setMethod(
 )
 
 #' @noRd
-.longlat <- function(x) {
+.longlat <- function(x, degrees) {
 
     if (inherits(x, "GRaster")) {
         src <- sources(x)
