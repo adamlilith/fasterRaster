@@ -22,7 +22,7 @@ Faster raster processing in `R` using `GRASS GIS`
 `fasterRaster` makes heavy use of the <a href="https://cran.r-project.org/package=rgrass">`rgrass`</a> package by Roger Bivand and others, the <a href="https://cran.r-project.org/package=rgrass">`terra`</a> package by Robert Hijmans, the <a href="https://cran.r-project.org/package=sf">`sf`</a> package by Edzer Pebesma, Roger Bivand, and others, and of course <a href="https://grass.osgeo.org/">`GRASS GIS`</a>, so is greatly indebted to all of these creators!
 
 # Where we are
-As of 2024/10/18, a new version of this package, `fasterRaster 8.4`, is in alpha release (i.e., near final release) and can run with **GRASS** 8.3 or 8.4. There are known issues and unknown issues. If you encounter one of the latter, please file an <a href="https://github.com/adamlilith/fasterRaster/issues">issue</a> report.
+As of 2024/10/24, a new version of this package, `fasterRaster 8.4`, is in alpha release (i.e., near final release) and can run with **GRASS** 8.3 or 8.4. There are known issues and unknown issues. If you encounter one of the latter, please file an <a href="https://github.com/adamlilith/fasterRaster/issues">issue</a> report.
 
 **Special announcement #1**: We now have a **pkgdown** <a href="https://adamlilith.github.io/fasterRaster/">site</a> with all the package documentation--plus vignettes!
 
