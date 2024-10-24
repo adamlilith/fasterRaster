@@ -42,7 +42,7 @@ methods::setMethod(
 			name <- paste0(names(e1)[i], "_", names(e2)[i])
 			src <- .makeSourceName("comparison", "raster")
 
-			ex <- paste0(src, "= int(if(", sources(e1)[i], " ", oper, " ", sources(e2)[i], "))")
+			ex <- paste0(src, "= int(if(", sources(e1)[i], oper, sources(e2)[i], "))")
 			this <- .genericArithRast(name = name, src = src, ex = ex)
 			
 			if (i == 1L) {
