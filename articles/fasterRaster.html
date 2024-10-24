@@ -20,7 +20,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">fasterRaster</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">8.3.0.7027</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">8.4.0.7028</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -71,7 +71,7 @@
                         <h4 data-toc-skip class="author">Adam B.
 Smith</h4>
             
-            <h4 data-toc-skip class="date">2024-10-15</h4>
+            <h4 data-toc-skip class="date">2024-10-24</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/adamlilith/fasterRaster/blob/master/vignettes/fasterRaster.Rmd"><code>vignettes/fasterRaster.Rmd</code></a></small>
       <div class="d-none name"><code>fasterRaster.Rmd</code></div>
@@ -86,9 +86,9 @@ packages, and relies heavily upon them. For most rasters and vectors
 that are small or medium-sized in memory/disk, those packages will
 almost always be faster. They may also be faster for very large objects.
 But when they aren’t, <strong>fasterRaster</strong> can step in.</p>
-<div class="section level2">
-<h2 id="installing-fasterraster">Installing <strong>fasterRaster</strong><a class="anchor" aria-label="anchor" href="#installing-fasterraster"></a>
-</h2>
+<div class="section level3">
+<h3 id="installing-fasterraster">Installing <strong>fasterRaster</strong><a class="anchor" aria-label="anchor" href="#installing-fasterraster"></a>
+</h3>
 <p>You probably already have <strong>fasterRaster</strong> installed on
 your computer, but if not, you can install the latest release version
 from CRAN using:</p>
@@ -99,17 +99,17 @@ from CRAN using:</p>
 <code class="sourceCode R"><span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"adamlilith/fasterRaster"</span>, dependencies <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <p>(You may need to install the <code>remotes</code> package first.)</p>
 </div>
-<div class="section level2">
-<h2 id="installing-grass-gis">Installing <strong>GRASS GIS</strong><a class="anchor" aria-label="anchor" href="#installing-grass-gis"></a>
-</h2>
+<div class="section level3">
+<h3 id="installing-grass-gis">Installing <strong>GRASS GIS</strong><a class="anchor" aria-label="anchor" href="#installing-grass-gis"></a>
+</h3>
 <p><strong>fasterRaster</strong> uses <strong>GRASS</strong> to do its
 operations. You will need to install <strong>GRASS</strong> using the
 “stand-alone” installer, available through the <a href="https://grass.osgeo.org/" class="external-link">GRASS GIS</a>. <em>Be sure to use the
 “stand-alone” installer, not the “OSGeo4W” installer!</em></p>
 </div>
-<div class="section level2">
-<h2 id="starting-a-fasterraster-session">Starting a <strong>fasterRaster</strong> session<a class="anchor" aria-label="anchor" href="#starting-a-fasterraster-session"></a>
-</h2>
+<div class="section level3">
+<h3 id="starting-a-fasterraster-session">Starting a <strong>fasterRaster</strong> session<a class="anchor" aria-label="anchor" href="#starting-a-fasterraster-session"></a>
+</h3>
 <p>I recommend attaching the <strong>data.table</strong>,
 <strong>terra</strong>, and <strong>sf</strong> packages before
 attaching <strong>fasterRaster</strong> package to avoid function
@@ -128,7 +128,7 @@ you most surely will use at least one of the other two.</p>
 <span><span class="co">#&gt;     shift</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/adamlilith/fasterRaster">fasterRaster</a></span><span class="op">)</span></span>
 <span><span class="co">#&gt; Warning: no DISPLAY variable so Tk is not available</span></span>
-<span><span class="co">#&gt; fasterRaster 8.3.0.7027</span></span>
+<span><span class="co">#&gt; fasterRaster 8.4.0.7028</span></span>
 <span><span class="co">#&gt; To avoid conflicts between functions, please attach the `terra`, `sf`,</span></span>
 <span><span class="co">#&gt; and `data.table` packages before attaching `fasterRaster` using, for</span></span>
 <span><span class="co">#&gt; example, `library(terra)`.</span></span>
@@ -169,10 +169,10 @@ function to set options that affect how <strong>fasterRaster</strong>
 functions run. This includes setting the amount of maximum memory and
 number of computer cores allocated to operations.</p>
 </div>
-<div class="section level2">
-<h2 id="importing-spatial-objects-into-fasterraster-grasters-and-gvectors">Importing spatial objects into <strong>fasterRaster</strong>
+<div class="section level3">
+<h3 id="importing-spatial-objects-into-fasterraster-grasters-and-gvectors">Importing spatial objects into <strong>fasterRaster</strong>
 <code>GRaster</code>s and <code>GVector</code>s<a class="anchor" aria-label="anchor" href="#importing-spatial-objects-into-fasterraster-grasters-and-gvectors"></a>
-</h2>
+</h3>
 <p>In <strong>fasterRaster</strong>, rasters are called
 <code>GRaster</code>s and vectors are called <code>GVector</code>s. The
 easiest (but not always fastest) way to start using a
@@ -261,9 +261,9 @@ file name of a vector file (e.g., a GeoPackage file or a shapefile).</p>
 <span id="cb10-13"><a href="#cb10-13" tabindex="-1"></a>              River<span class="sc">/</span>Stream Perennial<span class="sc">/</span>Perm<span class="sc">~</span>      UNK   MDG Madagascar </span>
 <span id="cb10-14"><a href="#cb10-14" tabindex="-1"></a>              (and <span class="dv">8</span> more rows) </span></code></pre></div>
 </div>
-<div class="section level2">
-<h2 id="operations-on-grasters-and-gvectors">Operations on <code>GRaster</code>s and <code>GVector</code>s<a class="anchor" aria-label="anchor" href="#operations-on-grasters-and-gvectors"></a>
-</h2>
+<div class="section level3">
+<h3 id="operations-on-grasters-and-gvectors">Operations on <code>GRaster</code>s and <code>GVector</code>s<a class="anchor" aria-label="anchor" href="#operations-on-grasters-and-gvectors"></a>
+</h3>
 <p>You can do operations on <code>GRaster</code>s and
 <code>GVector</code>s as if they were <code>SpatRaster</code>s,
 <code>SpatVector</code>s, and <code>sf</code> objects. For example, you
@@ -349,10 +349,10 @@ doing manipulations and analyses using any of the
 <strong>fasterRaster</strong> functions! To see an annotated list of
 these functions, use <code><a href="../reference/fasterRaster.html">?fasterRaster</a></code>.</p>
 </div>
-<div class="section level2">
-<h2 id="converting-and-saving-grasters-and-gvectors">Converting and saving <code>GRaster</code>s and
+<div class="section level3">
+<h3 id="converting-and-saving-grasters-and-gvectors">Converting and saving <code>GRaster</code>s and
 <code>GVector</code>s<a class="anchor" aria-label="anchor" href="#converting-and-saving-grasters-and-gvectors"></a>
-</h2>
+</h3>
 <p>You can convert a <code>GRaster</code> to a <code>SpatRaster</code>
 raster using <a href="https://adamlilith.github.io/fasterRaster/reference/rast.html" class="external-link"><code>rast()</code></a>:</p>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
@@ -376,6 +376,42 @@ from those functions.</p>
 <span></span>
 <span><span class="va">vect_temp_file</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempfile</a></span><span class="op">(</span>fileext <span class="op">=</span> <span class="st">".shp"</span><span class="op">)</span> <span class="co"># save as shapefile</span></span>
 <span><span class="fu"><a href="../reference/writeVector.html">writeVector</a></span><span class="op">(</span><span class="va">rivers</span>, <span class="va">vect_temp_file</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="known-issues">Known issues<a class="anchor" aria-label="anchor" href="#known-issues"></a>
+</h2>
+<ul>
+<li><p>Comparability between <strong>terra</strong> and
+<strong>fasterRaster</strong>: As much as possible,
+<strong>fasterRaster</strong> functions were written to recreate the
+output that functions in <strong>terra</strong> produce. However, owing
+to implementation choices made by the respective developers of
+<strong>terra</strong> and <strong>GRASS</strong>, outputs are not
+always the same.</p></li>
+<li><p><strong>fasterRaster</strong> can crash when the temporary folder
+is cleaned: Some operating systems have automated procedures that clean
+out the system’s temporary folders when they get too large. This can
+remove files <strong>GRASS</strong> is using and
+<strong>fasterRaster</strong> is pointing to, rendering them broken. In
+Windows, this setting can be changed by going to <code>Settings</code>,
+then <code>Storage</code>, then <code>Storage Sense</code>. Turn off the
+setting “Keep Windows running smoothly by automatically cleaning up
+temporary system and app files”.</p></li>
+<li><p>Disk space fills up: As counter to the previous issue, prolonged
+use of <strong>fasterRaster</strong> by the same <strong>R</strong>
+process can create a lot of temporary files in the
+<strong>GRASS</strong> cache that fills your hard drive.
+<strong>fasterRaster</strong> does its best to remove these files when
+they are not needed, so long as the setting <code>faster('clean')</code>
+is <code>TRUE</code> (which it is by default). However, temporary files
+can still accumulate. For example, the operation
+<code>new_raster &lt;- 2 * old_raster^3</code> creates a raster file
+with the <code>^3</code> operation, which is then multipled by 2 to get
+the desired output. But the raster from the <code>^3</code> operation is
+still left in the disk cache, even though it does not have a “name” in
+<strong>R</strong>. Again, judicious use of the [mow()] function can
+remove these temporary files.</p></li>
+</ul>
 <p>~ FINIS ~</p>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

@@ -23,7 +23,7 @@
 
     <a class="navbar-brand me-2" href="index.html">fasterRaster</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">8.3.0.7027</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">8.4.0.7028</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -75,7 +75,7 @@
 <!-- badges: end -->
 <p>Faster raster processing in <code>R</code> using <code>GRASS GIS</code></p>
 <p><a href="https://adamlilith.github.io/fasterRaster/" class="external-link"><img src="reference/figures/logo.png" align="right" height="232" alt="fasterRaster website"></a></p>
-<p><code>fasterRaster</code> is a package designed specifically to handle large-in-memory/large-on-disk spatial rasters and vectors. <code>fasterRaster</code> does this using Open Source Geospatial’s <a href="https://grass.osgeo.org/rgrass/" class="external-link"><code>GRASS GIS</code></a></p>
+<p><code>fasterRaster</code> is an <strong>R</strong> package designed specifically to handle large-in-memory/large-on-disk spatial rasters and vectors. <code>fasterRaster</code> does this using Open Source Geospatial’s <a href="https://grass.osgeo.org/rgrass/" class="external-link"><code>GRASS GIS</code></a></p>
 <p><code>fasterRaster</code> was created with five design principles:</p>
 <ul>
 <li>
@@ -88,17 +88,17 @@
 <strong>Comparability</strong>: To the degree possible, outputs from <code>fasterRaster</code> are the same as those from functions in <code>terra</code> with the same name.<br>
 </li>
 <li>
-<strong>Simplicity</strong>: <code>GRASS</code> requires users to track things like “locations”, “mapsets”, and “regions” for which there is no comparable analog in the <code>terra</code> or <code>sf</code> packages. <code>fasterRaster</code> handles these behind the scenes so you don’t need to.<br>
+<strong>Simplicity</strong>: <code>GRASS</code> requires users to track things like “locations” or “projects”, “mapsets”, and “regions” for which there is no comparable analog in the <code>terra</code> or <code>sf</code> packages. <code>fasterRaster</code> handles these behind the scenes so you don’t need to.<br>
 </li>
 <li>
-<strong>It’s R</strong>: The <code>rgrass</code> package provides a powerful conduit through which you can run <code>GRASS</code> modules from <code>R</code>. As such, it provides much more flexibility than <code>fasterRaster</code>. However, to use <code>rgrass</code>, you need to know what <code>GRASS</code> modules you need and be familiar with <code>GRASS</code> syntax. <code>fasterRaster</code> obviates this step but uses <code>rgrass</code> as a backend, allowing you to focus on <code>R</code> syntax and look up help for functions the normal way you do in <code>R</code>. You don’t need to know <code>GRASS</code>!</li>
+<strong>It’s R</strong>: The <code>rgrass</code> package provides a powerful conduit through which you can run <code>GRASS</code> modules from <code>R</code>. As such, it provides much more flexibility than <code>fasterRaster</code>. However, to use <code>rgrass</code>, you need to know what <code>GRASS</code> modules you want to use and be familiar with <code>GRASS</code> syntax. <code>fasterRaster</code> obviates this step but uses <code>rgrass</code> as a backend, allowing you to focus on <code>R</code> syntax and look up help for functions the normal way you do in <code>R</code>. You don’t need to know <code>GRASS</code>!</li>
 </ul>
-<p><code>fasterRaster</code> makes heavy use of the <a href="https://cran.r-project.org/package=rgrass" class="external-link"><code>rgrass</code></a> package by Roger Bivand and others, the <a href="https://cran.r-project.org/package=rgrass" class="external-link"><code>terra</code></a> package by Robert Hijmans, the <a href="https://cran.r-project.org/package=sf" class="external-link"><code>sf</code></a> package by Edzer Pebesma Roger Bivand, and of course <a href="https://grass.osgeo.org/" class="external-link"><code>GRASS GIS</code></a>, so is greatly indebted to all of these creators!</p>
+<p><code>fasterRaster</code> makes heavy use of the <a href="https://cran.r-project.org/package=rgrass" class="external-link"><code>rgrass</code></a> package by Roger Bivand and others, the <a href="https://cran.r-project.org/package=rgrass" class="external-link"><code>terra</code></a> package by Robert Hijmans, the <a href="https://cran.r-project.org/package=sf" class="external-link"><code>sf</code></a> package by Edzer Pebesma, Roger Bivand, and others, and of course <a href="https://grass.osgeo.org/" class="external-link"><code>GRASS GIS</code></a>, so is greatly indebted to all of these creators!</p>
 </div>
 <div class="section level1">
 <h1 id="where-we-are">Where we are<a class="anchor" aria-label="anchor" href="#where-we-are"></a>
 </h1>
-<p>As of 2024/09/15, a new version of this package, <code>fasterRaster 8.3</code>, is in alpha release (i.e., near final release). There are known issues and unknown issues. If you encounter one of the latter, please file an <a href="https://github.com/adamlilith/fasterRaster/issues">issue</a> report.</p>
+<p>As of 2024/10/18, a new version of this package, <code>fasterRaster 8.4</code>, is in alpha release (i.e., near final release) and can run with <strong>GRASS</strong> 8.3 or 8.4. There are known issues and unknown issues. If you encounter one of the latter, please file an <a href="https://github.com/adamlilith/fasterRaster/issues">issue</a> report.</p>
 <p><strong>Special announcement #1</strong>: We now have a <strong>pkgdown</strong> <a href="https://adamlilith.github.io/fasterRaster/" class="external-link">site</a> with all the package documentation–plus vignettes!</p>
 <p><strong>Special announcement #2</strong>: The new <code><a href="reference/bioclims.html">bioclims()</a></code> function creates the “classic” set of BIOCLIM variables, plus an optional “extended” set. The function works on <strong>fasterRaster</strong> <code>GRaster</code>s and on <strong>terra</strong> <code>SpatRaster</code>s!</p>
 </div>
@@ -114,7 +114,7 @@
 <p><code>remotes::install_github('adamlilith/fasterRaster', dependencies = TRUE)</code></p>
 <p>Alternatively, you can install the development version from:</p>
 <p><code>remotes::install_github('adamlilith/fasterRaster@intuitive_fasterRaster', dependencies = TRUE)</code></p>
-<p>To use <code>fasterRaster</code> you must install <a href="https://grass.osgeo.org/" class="external-link">GRASS version 8+</a> on your operating system. <strong>You will need to use the stand-alone installer, not the Open Source Geospatial (OS Geo) installer.</strong></p>
+<p>To use <code>fasterRaster</code> you must install <a href="https://grass.osgeo.org/" class="external-link">GRASS version 8.3+</a> on your operating system. <strong>You will need to use the stand-alone installer, not the Open Source Geospatial (OS Geo) installer.</strong></p>
 <div class="section level2">
 <h2 id="an-example">An example<a class="anchor" aria-label="anchor" href="#an-example"></a>
 </h2>
