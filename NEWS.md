@@ -8,6 +8,9 @@ o `grassHelp()` can show the **GRASS** manual "table of contents" (argument `"to
 o `longlat()` can now return rasters with cell values equal to their coordinates in map units (previously, only coordinates in degrees were returned).  
 o For functions that are complicated or have extended references, added a note to the `@seealso` tag to see the respective **GRASS** manual page using `grassHelp()`.  
 
+### Bug and issue fixes
+o `project()` correctly restores the user's "location" to that of the newly projected `GRaster`.  
+
 # fasterRaster 8.4.0.7027 (2024-10-15)
 
 ### Main task for this version
