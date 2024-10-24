@@ -33,5 +33,5 @@ if (FALSE) mow()
 }
 }
 \seealso{
-Option \code{clean} in \code{\link[=faster]{faster()}}; \code{\link[=grass]{grass()}}
+Option \code{clean} in \code{\link[=faster]{faster()}}
 }
