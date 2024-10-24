@@ -1,4 +1,4 @@
-# fasterRaster 8.4.0.7028 (2024-10-XX)
+# fasterRaster 8.4.0.7028 (2024-10-24)
 
 ### Main task
 o Clear for CRAN submission
