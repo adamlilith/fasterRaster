@@ -4,6 +4,7 @@
 .Ruserdata
 docs
 \pkgdown
+\articles
 inst/doc
 junk
 /vignettes/junk

@@ -99,5 +99,5 @@ writeVector(rivers, filename)
 \seealso{
 \code{\link[terra:writeVector]{terra::writeVector()}}, \code{\link[sf:st_write]{sf::st_write()}}, \strong{GRASS} module \code{v.out.ogr} (see \code{grassHelp("v.out.ogr")})
 
-\code{\link[terra:writeVector]{terra::writeVector()}}
+\code{\link[terra:writeVector]{terra::writeVector()}}, the \strong{GRASS} module manual page for \code{v.out.ogr} (see \code{grassHelp("v.out.ogr")})
 }

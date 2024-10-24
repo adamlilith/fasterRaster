@@ -158,5 +158,5 @@ levels(combinedNA)
 }
 }
 \seealso{
-\code{\link[=combineLevels]{combineLevels()}}, \code{\link[terra:concats]{terra::concats()}}, \code{vignette("GRasters", package = "fasterRaster")}
+\code{\link[=combineLevels]{combineLevels()}}, \code{\link[terra:concats]{terra::concats()}}, \code{vignette("GRasters", package = "fasterRaster")}, \strong{GRASS} manual page for module \code{r.cross} (see \code{grassHelp("r.cross")})
 }

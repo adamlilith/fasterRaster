@@ -51,7 +51,7 @@
 #' * `glob_rad`: Global radiation (Watt-hours/m2/day)
 #' * `insol_time`: Insolation duration (hours)
 #' 
-#' @seealso [terrain()], [horizonHeight()], **GRASS** module `r.sun`(see `grassHelp("r.sun")`)
+#' @seealso [terrain()], [horizonHeight()], **GRASS** manual page for module `r.sun` (see `grassHelp("r.sun")`)
 #'
 #' @example man/examples/ex_sun.r
 #'

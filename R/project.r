@@ -41,7 +41,7 @@
 #' 
 #' @returns A `GRaster` or `GVector`.
 #' 
-#' @seealso [terra::project()], [sf::st_transform()], modules `r.proj`, `r.import`, and `v.proj` in **GRASS**
+#' @seealso [terra::project()], [sf::st_transform()], **GRASS** manual pages for modules `r.proj` and `v.proj` (see `grassHelp("r.proj")` and `grassHelp("v.proj")`)
 #'
 #' @example man/examples/ex_project.r
 #'
@@ -387,11 +387,12 @@ methods::setMethod(
 		}
 
 	} # project next raster
-	
-	if (verbose | faster("verbose")) close(pb)
+
+	.locationRestore(y)
 
 	# if using y as extent to which to crop
 	if (!align & inherits(y, "GRaster")) out <- crop(out, y)
+	if (verbose | faster("verbose")) close(pb)
 	out
 
 }

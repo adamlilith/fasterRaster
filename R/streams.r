@@ -20,7 +20,7 @@
 #'
 #' @example man/examples/ex_streams.r
 #'
-#' @seealso [flow()], [flowPath()], **GRASS** module `r.stream.extract` (see `grassHelp("r.stream.extract")`)
+#' @seealso [flow()], [flowPath()], **GRASS** manual for module `r.stream.extract` (see `grassHelp("r.stream.extract")`)
 #'
 #' @aliases streams
 #' @rdname streams

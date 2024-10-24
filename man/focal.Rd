@@ -83,5 +83,5 @@ minmax(s)
 }
 }
 \seealso{
-\code{\link[terra:focal]{terra::focal()}}, \strong{GRASS} module \code{r.neighbors}
+\code{\link[terra:focal]{terra::focal()}}, \strong{GRASS} manual page for module \code{r.neighbors} (see \code{grassHelp("r.neighbors")})
 }

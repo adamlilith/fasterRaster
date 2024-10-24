@@ -19,6 +19,8 @@
 #'
 #' @returns A vector of integers indicating the cluster to which each point belongs.
 #'
+#' @seealso **GRASS** manual page for module `v.cluster` (see `grassHelp("v.cluster")`)
+#'
 #' @aliases clusterPoints
 #' @rdname clusterPoints
 #' @exportMethod clusterPoints

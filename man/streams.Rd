@@ -55,5 +55,5 @@ plot(streams)
 }
 }
 \seealso{
-\code{\link[=flow]{flow()}}, \code{\link[=flowPath]{flowPath()}}, \strong{GRASS} module \code{r.stream.extract} (see \code{grassHelp("r.stream.extract")})
+\code{\link[=flow]{flow()}}, \code{\link[=flowPath]{flowPath()}}, \strong{GRASS} manual for module \code{r.stream.extract} (see \code{grassHelp("r.stream.extract")})
 }

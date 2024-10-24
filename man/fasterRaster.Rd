@@ -345,7 +345,6 @@ Operations on \code{GRaster}s
 \item \code{\link[=reorient]{reorient()}}: Convert degrees between 'north-orientation' and 'east orientation'
 \item \code{\link[=replaceNAs]{replaceNAs()}}: Replace \code{NA}s in columns of a \code{data.table} or \code{data.frame}, or in a vector
 \item \code{\link[=seqToSQL]{seqToSQL()}}: Format a numeric series into an SQL value call
-\item \code{\link[=workDir]{workDir()}}:
 \item \code{\link[=update]{update()}}: Refresh metadata in a \code{GRaster} or \code{GVector} object
 }
 }

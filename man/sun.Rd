@@ -146,5 +146,5 @@ solar
 }
 }
 \seealso{
-\code{\link[=terrain]{terrain()}}, \code{\link[=horizonHeight]{horizonHeight()}}, \strong{GRASS} module \code{r.sun}(see \code{grassHelp("r.sun")})
+\code{\link[=terrain]{terrain()}}, \code{\link[=horizonHeight]{horizonHeight()}}, \strong{GRASS} manual page for module \code{r.sun} (see \code{grassHelp("r.sun")})
 }

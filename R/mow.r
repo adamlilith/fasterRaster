@@ -16,7 +16,7 @@
 #'
 #' @returns Invisibly returns a list with the number of rasters and vectors deleted.
 #'
-#' @seealso Option `clean` in [faster()]; [grass()]
+#' @seealso Option `clean` in [faster()]
 #'
 #' @example man/examples/ex_mow.r
 #'

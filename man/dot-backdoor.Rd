@@ -13,6 +13,6 @@
 \code{TRUE} (invisibly).
 }
 \description{
-This is a secret function to be used for faster development of \strong{fasterRaster}. It assume development is on a Windows machine.
+This is a secret function to be used for faster development of \strong{fasterRaster}. It calls \code{\link[=faster]{faster()}} to set the install directory for \strong{GRASS}, increases default memory, and number of cores. The function assumes development is on a Windows machine.
 }
 \keyword{internal}

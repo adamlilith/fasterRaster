@@ -33,7 +33,7 @@
 #'
 #' @returns A `GRaster`.
 #' 
-#' @seealso [terra::focal()], **GRASS** module `r.neighbors`
+#' @seealso [terra::focal()], **GRASS** manual page for module `r.neighbors` (see `grassHelp("r.neighbors")`)
 #' 
 #' @example man/examples/ex_focal.r
 #' 

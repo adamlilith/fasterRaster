@@ -49,5 +49,5 @@ plot(consFromRivers, col = "red", add = TRUE)
 }
 }
 \seealso{
-\strong{GRASS} module \code{v.distance} (see \code{grassHelp("v.distance")}).
+\strong{GRASS} manual for module \code{v.distance} (see \code{grassHelp("v.distance")}).
 }

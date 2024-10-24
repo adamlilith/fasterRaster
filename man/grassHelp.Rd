@@ -10,8 +10,8 @@ grassHelp(x, online = FALSE)
 \item{x}{Character: Any of:
 \itemize{
 \item The name of a \strong{GRASS} module (e.g., \code{"r.mapcalc"}).
-\item \code{"type"}: Display a page wherein modules are classified by types.
-\item \code{"topics"}: Display an index of topics.
+\item \code{"toc"}: \strong{GRASS} manual table of contents.
+\item \code{"index"}: Display an index of topics.
 }}
 
 \item{online}{Logical: If \code{FALSE} (default), show the manual page that was included with your installation of \strong{GRASS} on your computer.  If \code{FALSE}, show the manual page online (requires an Internet connection). In either case, the manual page will display for the version of \strong{GRASS} you have installed.}
@@ -29,10 +29,10 @@ if (grassStarted() & interactive()) {
 grassHelp("r.mapcalc")
 grassHelp("r.sun")
 
-# Open topics page:
-grassHelp("topics")
+# GRASS table of contents:
+grassHelp("toc")
 
-# Open index page:
+# Index page:
 grassHelp("index")
 
 }

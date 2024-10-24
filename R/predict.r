@@ -2,13 +2,13 @@
 #'
 #' @description This version of the `predict()` function make predictions to a set of `GRaster`s from a model object.
 #'
-#' The model must be either a linear model, which is of class `lm` and typically created using the [stats::lm()] function or a generalized linear model (GLM), which is class `glm` and typically created using [stats::glm()]. Other packages can also create `lm` or `glm` objects, but they may not work in this function. For example, generalized additive models, which can be created using the `gam()` function in the **mgcv** package, inherit the `glm` class, but cannot be used in this function, but ones created with the **speedglm** package can.
+#' The model must be either a linear model, which is of class `lm` and typically created using the [stats::lm()] function or a generalized linear model (GLM), which is class `glm` and typically created using [stats::glm()]. Other packages can also create `lm` or `glm` objects, but they may not work in this function. For example, generalized additive models, which can be created using the `gam()` function in the **mgcv** package, inherit the `glm` class, but cannot be used in this function. However, `glm` objects created with the **speedglm** package should work with this function.
 #'
 #' This `predict()` function can handle:
-#' * Linear predictors and intercepts like `y ~ 1 + x`;
-#' * Quadratic terms like `y ~ x^2` (or, in **R** formula notation, `y ~ I(x^2)`);
-#' * Two-way interaction terms between scalars like `y ~ x1:x2` and `y ~ x1 * x2`;
-#' * Categorical predictors (i.e., categorical `GRaster`s; see `vignette("GRasters", package = "fasterRaster")`));
+#' * Linear predictors and intercepts like `1 + x`;
+#' * Quadratic terms like `x^2` (or, in **R** formula notation, `I(x^2)`);
+#' * Two-way interaction terms between scalars like `x1:x2` and `x1 * x2`;
+#' * Categorical predictors (i.e., categorical `GRaster`s; see `vignette("GRasters", package = "fasterRaster")`);
 #' * Two-way interactions between a categorical predictor and a scalar predictor; and
 #' * Two-way interactions between categorical predictors.
 #'

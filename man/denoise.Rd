@@ -59,5 +59,5 @@ plot(compare2)
 }
 }
 \seealso{
-\code{\link[=pca]{pca()}}; \code{\link[stats:prcomp]{stats::prcomp()}}; module \code{i.pca} in \strong{GRASS}
+\code{\link[=princomp]{princomp()}}, \code{\link[stats:prcomp]{stats::prcomp()}}, \strong{GRASS} manual page for module \code{i.pca} (see \code{grassHelp("i.pca")})
 }

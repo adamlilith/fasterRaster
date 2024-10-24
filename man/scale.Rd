@@ -55,7 +55,7 @@ chelsa <- fast(madChelsa)
 chScaled <- scale(chelsa)
 chScaled
 
-# Scale with using sample SD:
+# Scale with using population SD:
 chScaledPop <- scalepop(chelsa)
 chScaledPop
 

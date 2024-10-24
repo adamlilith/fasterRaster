@@ -12,8 +12,6 @@
 #'
 #' @param odd Logical: If `TRUE` (default), and `fun` is `"chess"`, then the top left cell in the raster will be a "negative" cell. If `FALSE`, then the top left cell with be "positive".
 #'
-#' @param every Numeric or integer: If `fun` is `"regular"`, then make every `every` cell a "positive" cell, and interstitial cells "negative." The default is 2 (every other cell).
-#'
 #' @param vals Vector of two numeric values: If `fun` is `"chess"` or `"regular"`, then assign the first value to "positive" cells and the second value to "negative" cells. The default is `c(1, 0)`
 #'
 #' @returns A `GRaster` with as many layers as `x`.
@@ -69,7 +67,7 @@ methods::setMethod(
 		rgrass::execGRASS("r.mapcalc", expression = ex, flags = c(.quiet(), "overwrite"))
 
 	}
-	.makeGRaster(srcs, "layer")
+	.makeGRaster(srcs, fun)
 
 	} # EOF
 )

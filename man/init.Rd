@@ -21,8 +21,6 @@
 \item{odd}{Logical: If \code{TRUE} (default), and \code{fun} is \code{"chess"}, then the top left cell in the raster will be a "negative" cell. If \code{FALSE}, then the top left cell with be "positive".}
 
 \item{vals}{Vector of two numeric values: If \code{fun} is \code{"chess"} or \code{"regular"}, then assign the first value to "positive" cells and the second value to "negative" cells. The default is \code{c(1, 0)}}
-
-\item{every}{Numeric or integer: If \code{fun} is \code{"regular"}, then make every \code{every} cell a "positive" cell, and interstitial cells "negative." The default is 2 (every other cell).}
 }
 \value{
 A \code{GRaster} with as many layers as \code{x}.

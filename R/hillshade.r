@@ -12,7 +12,7 @@
 #'
 #' @returns A `GRaster`.
 #'
-#' @seealso [terra::shade()], module `r.relief` in **GRASS**
+#' @seealso [terra::shade()]
 #' 
 #' @example man/examples/ex_terrain.r
 #' 

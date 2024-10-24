@@ -12,6 +12,7 @@
   overwrite = FALSE,
   datatype = NULL,
   byLayer = FALSE,
+  names = TRUE,
   levelsExt = NULL,
   compress = "LZW",
   warn = TRUE,
@@ -42,6 +43,8 @@
 \code{*} Depends on the integers (signed/unsigned, range of values). Categorical rasters will have an associated file saved with them that has category values and labels. The file name will be the same as the raster's file name, but end with the extension given by \code{levelsExt} (\code{.csv} by default).}
 
 \item{byLayer}{Logical: If \code{FALSE} (default), multi-layer rasters will be saved in one file. If \code{TRUE}, the each layer will be saved in a separate file. The filename from \code{filename} will be amended so that it ends with \verb{_<name>} (then the file extension), where \verb{<name>} is give by \code{\link[=names]{names()}}. Note that if any characters in raster names will not work in a file name, then the function will fail (e.g., a backslash or question mark).}
+
+\item{names}{Logical: If \code{TRUE} (default), save a file with raster layer names. The file will have the same name as the raster file but end with "\verb{_names.csv}". Currently, the \code{\link[=names]{names()}} attribute of rasters cannot be saved in the raster, which can create confusion when multi-layered rasters are saved. Turning on this option will save the ancillary file with layer names. If it exists, this file will be read by \code{\link[=fast]{fast()}} so layer names are assigned when the raster is read by that function. The absence of a "names" file will not create any issues with this function or \code{\link[=fast]{fast()}}, other than not having the metadata on layer names.}
 
 \item{levelsExt}{Character, logical, or \code{NULL} (default): Name of the file extension for the "levels" file that accompanies a categorical \code{GRaster}. When saving categorical rasters, the raster file is accompanied with a "levels" file that contain information on the levels of the raster. This file is the same as \code{filename}, except it has a different extension. Valid values depend on how many raster layers are saved at a time (case is ignored):
 \itemize{

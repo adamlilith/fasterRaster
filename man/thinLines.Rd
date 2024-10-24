@@ -47,5 +47,5 @@ plot(cleanLines, add = TRUE)
 }
 }
 \seealso{
-\code{\link[=as.lines]{as.lines()}}
+\code{\link[=as.lines]{as.lines()}}, \strong{GRASS} manual page for module \code{r.thin} (see \code{grassHelp("r.thin")})
 }

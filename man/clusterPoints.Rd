@@ -31,3 +31,6 @@ A vector of integers indicating the cluster to which each point belongs.
 \description{
 \code{clusterPoints()} partitions points in a "points" \code{GVector} into clusters.
 }
+\seealso{
+\strong{GRASS} manual page for module \code{v.cluster} (see \code{grassHelp("v.cluster")})
+}

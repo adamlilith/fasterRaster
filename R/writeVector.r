@@ -35,7 +35,7 @@
 #'
 #' @example man/examples/ex_writeVector.r
 #'
-#' @seealso [terra::writeVector()]
+#' @seealso [terra::writeVector()], the **GRASS** module manual page for `v.out.ogr` (see `grassHelp("v.out.ogr")`)
 #'
 #' @aliases writeVector
 #' @rdname writeVector
