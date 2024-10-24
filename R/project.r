@@ -387,11 +387,12 @@ methods::setMethod(
 		}
 
 	} # project next raster
-	
-	if (verbose | faster("verbose")) close(pb)
+
+	.locationRestore(y)
 
 	# if using y as extent to which to crop
 	if (!align & inherits(y, "GRaster")) out <- crop(out, y)
+	if (verbose | faster("verbose")) close(pb)
 	out
 
 }
