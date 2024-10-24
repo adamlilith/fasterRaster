@@ -69,7 +69,7 @@ methods::setMethod(
 		rgrass::execGRASS("r.mapcalc", expression = ex, flags = c(.quiet(), "overwrite"))
 
 	}
-	.makeGRaster(srcs, "layer")
+	.makeGRaster(srcs, fun)
 
 	} # EOF
 )
