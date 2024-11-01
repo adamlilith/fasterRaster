@@ -10,6 +10,9 @@ madCover <- fastData("madCover")
 ### Substitution within an integer/numeric raster
 #################################################
 
+# Convert SpatRaster to GRaster
+elev <- fast(madElev)
+
 # Simple substitution of one value, keeping all other values
 newElev <- elev
 newElev[newElev == 100] <- -100

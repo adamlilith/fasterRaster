@@ -15,7 +15,7 @@ madCover <- fastData("madCover")
 madRivers <- fastData("madRivers")
 madDypsis <- fastData("madDypsis")
 
-# Convert SpatRasters to GRasters and sf vector to GVector:
+# Convert SpatRasters to GRasters and sf vectors to GVectors:
 elev <- fast(madElev)
 forest <- fast(madForest2000)
 cover <- fast(madCover)
