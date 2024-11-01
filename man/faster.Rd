@@ -16,7 +16,7 @@ faster(..., default = FALSE, restore = FALSE)
 
 Options include:
 \itemize{
-\item \code{grassDir} (character): The folder in which \strong{GRASS} is installed on your computer. Typically, this option is set when you run \code{\link[=faster]{faster()}}. Depending on your operating system, your install directory will look something like this:
+\item \code{grassDir} (character): The folder in which \strong{GRASS} is installed on your computer. You must set this option to run most \strong{fasterRaster} functions. Depending on your operating system, your install directory will look something like this:
 \itemize{
 \item Windows: \code{"C:/Program Files/GRASS GIS 8.4"}
 \item Mac OS: \code{"/Applications/GRASS-8.4.app/Contents/Resources"}
@@ -52,19 +52,16 @@ If option values are requested, a named list with option values is returned (not
 }
 
 You cannot simultaneously get and set options.
+
+To run most \strong{fasterRaster} functions, you must set the \code{grassDir} option.
 }
 \examples{
-if (grassStarted()) {
 
 # See current values for options:
 faster("grassDir")
-faster("addonsDir")
-faster("clean")
 faster("cores")
 faster("memory")
 faster("useDataTable")
-faster("verbose")
-faster("workDir")
 faster() # all options
 
 # See default values for options:
@@ -74,16 +71,14 @@ faster(default = TRUE) # all options
 # Set options (change accordingly for your system!!!)
 if (FALSE) {
 
-opts. <- faster() # remember starting values of options
+   opts. <- faster() # remember starting values of options
 
-faster(grassDir = "C:/Program Files/GRASS GIS 8.4")
-faster(verbose = TRUE, memory = 1024, cores = 1)
+   faster(grassDir = "C:/Program Files/GRASS GIS 8.4")
+   faster(verbose = TRUE, memory = 1024, cores = 1)
 
-faster(c("grassDir", "verbose", "memory", "cores"))
+   faster(c("grassDir", "verbose", "memory", "cores"))
 
-faster(opts.) # reset options to starting values
-
-}
+   faster(opts.) # reset options to starting values
 
 }
 }
