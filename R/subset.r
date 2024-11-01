@@ -38,6 +38,8 @@ methods::setMethod(
 	signature = c(x = "GVector"),
 	function(x, subset, negate = FALSE) {
 
+	nr <- nrow(x)
+
 	# turn subset into integer
 	if (is.logical(subset)) {
 		if (length(subset) < nr) subset <- rep(subset, length.out = nr)
