@@ -10,6 +10,8 @@
 #'
 #' You cannot simultaneously get and set options.
 #'
+#' To run most **fasterRaster** functions, you must set the `grassDir` option.
+#'
 #' @param ... Either:
 #' * A character vector: Name(s) of option(s) to get values of;
 #' * An option and the value of the option using an `option = value` pattern; or
@@ -17,7 +19,7 @@
 #'
 #' Options include:
 #'
-#' * `grassDir` (character): The folder in which **GRASS** is installed on your computer. Typically, this option is set when you run [faster()]. Depending on your operating system, your install directory will look something like this:
+#' * `grassDir` (character): The folder in which **GRASS** is installed on your computer. You must set this option to run most **fasterRaster** functions. Depending on your operating system, your install directory will look something like this:
 #'     * Windows: `"C:/Program Files/GRASS GIS 8.4"`
 #'     * Mac OS: `"/Applications/GRASS-8.4.app/Contents/Resources"`
 #'     * Linux: `"/usr/local/grass"`
