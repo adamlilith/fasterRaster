@@ -1,7 +1,12 @@
-# fasterRaster 8.4.0.7028 (2024-10-24)
+# fasterRaster 8.4.0.7029 (2024-10-31)
 
-### Main task
-o Clear for CRAN submission
+### Enhanced functionality and new functions
+o `project()` is now much faster when projecting a `GRaster` using the `terra` or `fallback` values for `res`.  
+
+### Bug and issue fixes
+o `subset()` no longer fails.  
+
+# fasterRaster 8.4.0.7028 (2024-10-24)
 
 ### Enhanced functionality and new functions
 o `grassHelp()` can show the **GRASS** manual "table of contents" (argument `"toc"`).  
