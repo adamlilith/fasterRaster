@@ -59,12 +59,14 @@ fig.path = 'man/figures/'
 * `.minVal()` and `.maxVal()`: Values in the `@minVal` and `@maxVal` slots in a `GRaster`
 * `.nlevels()`: Number of levels in a `SpatVector`, `data.frame`, `data.table`, empty string, or a list of `data.frame`s, `data.table`s, and/or empty strings.
 
-## **GRAS** "Projects" ("locations") and "mapsets"
+## **GRASS** "Projects" ("locations") and "mapsets"
 * `.locationCreate()` Make a connection to **GRASS** (i.e., start **GRASS** from within **R**) and create a location
 * `.locationDelete()` Deletes all files associated with a **GRASS** "location" and mapset
 * `.locationFind()`: Find a specific **GRASS** "location" that already exists
 * `.locationRestore()` Reconnect **GRASS** to a previously-created **GRASS** "location"
 * `.locations()`: List of all available "locations"
+* `.g.proj()`: Runs **GRASS** `g.proj` module to display projection of current "project"
+* `.g.region()`: Runs **GRASS** `g.region` module to display region of current "project"
 * `.mapset()`: **GRASS** "mapset" of an object or the active session
 
 ## **GRASS** "regions"
