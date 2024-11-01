@@ -101,6 +101,7 @@ methods::setMethod(
 
 	### dots
 	########
+	
 	dots <- list(...)
 	dotNames <- names(dots)
 
@@ -161,15 +162,25 @@ methods::setMethod(
 			xNames <- names(xRast)
 			
 			location <- .locationFind(xRast, match = "crs")
-			
-			if (is.null(location) | !grassStarted()) {
 
+# omnibus::say('---raster:fast -- .locationFind(xRast, match = "crs")', pre = 1)
+# print(.g.proj())
+# omnibus::say(.fasterRaster$activeLocation)
+# omnibus::say(location, post = 2)
+
+			if (is.null(location) | !grassStarted()) {
+# omnibus::say('---in new location if/then', pre = 1)
 				.locationCreate(x = xRast)
 				location <- .location()
-
+# omnibus::say(location, post = 2)
 			}
 
 			.locationRestore(x = location)
+
+# omnibus::say('---raster:fast -- .locationRestore(x = location)', pre = 1)
+# print(.g.proj())
+# omnibus::say(.fasterRaster$activeLocation)
+# omnibus::say(location, post = 2)
 
 			src <- .makeSourceName("fast_r_external", type = "raster", n = 1L)
 			rgrass::execGRASS(
@@ -270,6 +281,12 @@ methods::setMethod(
 
 			# location, location, location...
 			location <- .locationFind(xVect, return = "name", match = "crs")
+
+omnibus::say('---raster:fast -- .locationFind(xRast, match = "crs")', pre = 1)
+print(.g.proj())
+omnibus::say(.fasterRaster$activeLocation)
+omnibus::say(location, post = 2)
+
 			if (is.null(location) | !grassStarted()) {
 
 				.locationCreate(x = xVect)
@@ -277,6 +294,11 @@ methods::setMethod(
 
 			}
 			.locationRestore(x = location)
+
+omnibus::say('---raster:fast -- .locationFind(xRast, match = "crs")', pre = 1)
+print(.g.proj())
+omnibus::say(.fasterRaster$activeLocation)
+omnibus::say(location, post = 2)
 
 			# correct topology?
 			if (correct) {
