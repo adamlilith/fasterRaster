@@ -168,24 +168,25 @@ writeVector(rivers, vect_temp_gpkg)
 ```
 
 # Tips for making `fasterRaster` faster
+There are several ways to speed up **fasterRaster**. Below, they are classified by approximately how much time you can save when operating on large rasters and vectors.
 
-1. Loading rasters and vectors directly from disk using `fast()`, rather than converting `terra` or `sf` objects is faster. Why? Because if the object does not have a file to which the `R` object points, `fast()` has to save it to disk first as a GeoTIFF or GeoPackage file, then load it into `GRASS`.
+1. Save minutes: Loading rasters and vectors directly from disk using `fast()`, rather than converting `terra` or `sf` objects is faster. Why? Because if the object does not have a file to which the `R` object points, `fast()` has to save it to disk first as a GeoTIFF or GeoPackage file, then load it into `GRASS`.
 
-2. Similarly, saving `GRaster`s and `GVector`s directly to disk will always be faster than converting them to `SpatRaster`s or `SpatVector` using `rast()` or `vect()`, then saving them. Why? Because these functions actually save the file to disk then uses the respective function from the respective package to connect to the file.
+2. Save minutes: Similarly, saving `GRaster`s and `GVector`s directly to disk will always be faster than converting them to `SpatRaster`s or `SpatVector` using `rast()` or `vect()`, then saving them. Why? Because these functions actually save the file to disk then uses the respective function from the respective package to connect to the file.
 
-3. Every time you switch between using a `GRaster` or `GVector` with a different coordinate reference system (CRS), `GRASS` has to spend a few second changing to that CRS. So, you can save some time by doing as much work as possible with objects in one CRS, then switching to work on objects in another CRS.
+3. Save seconds: Every time you switch between using a `GRaster` or `GVector` with a different coordinate reference system (CRS), `GRASS` has to spend a few second changing to that CRS. So, you can save some time by doing as much work as possible with objects in one CRS, then switching to work on objects in another CRS.
 
-4. By default, `fasterRaster` use 2 cores and 2048 MB (2 GB) of memory for `GRASS` modules that allow users to specify these values. You can set these to higher values using `faster()` and thus potentially speed up some calculations. Functions in newer versions of `GRASS` have more capacity to use these options, so updating `GRASS` to the latest version can help, too.
+4. Save minutes: By default, `fasterRaster` use 2 cores and 2048 MB (2 GB) of memory for `GRASS` modules that allow users to specify these values. You can set these to higher values using `faster()` and thus potentially speed up some calculations. Functions in newer versions of `GRASS` have more capacity to use these options, so updating `GRASS` to the latest version can help, too.
 
-5. Compared to `terra` and `sf`, `fasterRaster` is *not* faster with large vector operations, so if have large vectors, do vector processing with those packages first if you can.
+5. Save minutes: Compared to `terra` and `sf`, `fasterRaster` is *not* faster with large vector operations, so if have large vectors, do vector processing with those packages first if you can.
 
-6. To obviate problems with disk space filling up, by default most **fasterRaster** functions delete intermediate files. However, if you are not creating a lot of very big `GRaster`s or `GVector`s, you can skip this time-taking step by setting the `clean` option to `FALSE` using `faster(clean = FALSE)`.
+6. Save seconds: To obviate problems with disk space filling up, by default most **fasterRaster** functions delete intermediate files. However, if you are not creating a lot of very big `GRaster`s or `GVector`s, you can skip this time-taking step by setting the `clean` option to `FALSE` using `faster(clean = FALSE)`.
 
 # Versioning
 
-`fasterRaster` versions will look something like `8.3.1.2`, or more generally, `M1.M2.S1.S2`. Here, `M1.M2` will mirror the version of `GRASS` for which `fasterRaster` was built and tested. For example, `fasterRaster` version 8.3 will work using `GRASS` 8.3 (and any earlier versions starting from 8.0). The values in `S1.S2` refer to "major" and "minor" versions of `fasterRaster`.  That is, a change in the value of `S1` (e.g., from `8.3.1.0` to `8.3.2.0`) indicates changes that potentially break older code developed with a prior version of `fasterRaster`.  A change in `S2` refers to a bug fix, additional functionality in an existing function, or the addition of an entirely new function.
+`fasterRaster` versions will look something like `8.3.1.2`, or more generally, `M1.M2.S1.S2`. Here, `M1.M2` will mirror the version of `GRASS` for which `fasterRaster` was built and tested. For example, `fasterRaster` version 8.4.x.x will work using `GRASS` 8.4 (and version 8.3). The values in `S1.S2` refer to "major" and "minor" versions of `fasterRaster`.  That is, a change in the value of `S1` (e.g., from `x.x.1.0` to `x.x.2.0`) indicates changes that potentially break older code developed with a prior version of `fasterRaster`.  A change in `S2` refers to a bug fix, additional functionality in an existing function, or the addition of an entirely new function.
 
-Note that the `M1.M2` and `S1.S2` increment independently. For example, if the version changes from `8.3.1.5` to `8.4.1.5`, then the new version has been tested on `GRASS` 8.4, but code developed with version `8.3.1.X` of `fasterRaster` should still work.
+Note that the `M1.M2` and `S1.S2` increment independently. For example, if the version changes from `8.3.1.5` to `8.4.1.5`, then the new version has been tested on `GRASS` 8.4, but code developed with version `8.3.1.x` of `fasterRaster` should still work.
 
 **NOTE**: While `fasterRaster` is still in beta/alpha release, the version will look something like `8.3.0.7XXX`, following Hadley Wickham's guidelines for versioning under development.
 
