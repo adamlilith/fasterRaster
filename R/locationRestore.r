@@ -95,6 +95,7 @@ methods::setMethod(
 		)
 
 		.fasterRaster$activeLocation <<- location
+		# Sys.sleep(0.5)
 
 	}
 
