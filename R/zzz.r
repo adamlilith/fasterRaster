@@ -10,6 +10,7 @@
 
 .onUnattach <- function(lib, pkg) {
 
+	# if (faster("clean")) mow(verbose = FALSE, ask = FALSE)
 	rm(.fasterRaster)
 
 	rgrass::unset.GIS_LOCK()
