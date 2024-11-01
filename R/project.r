@@ -30,7 +30,7 @@
 #' * Two numeric values: Values for the new resolution (x- and y-dimensions).
 #' * `"center"`: This method locates the centroid of the raster to be projected (in the same CRS as the original raster). It then creates four points north, south, east, and west of the centroid, each spaced one cell's width from the centroid. This set of points is then projected to the new CRS. The new cell size in the x-dimension will be the average of the distance between the east and west points from the centroid, and in the y-dimension the average from the centroid to the north and south points.
 #' * `"fallback"` (default): This applies the `terra` method first, but if that fails, then tries `template`, then `center`. This process can take a long time for large rasters.
-#' 
+#'
 #' @param wrap Logical:
 #' * `GRaster`s: When projecting rasters that "wrap around" (i.e., whole-world rasters or rasters that have edges that actually circle around to meet on the globe), `wrap` should be `TRUE` to avoid removing rows and columns from the "edge" of the map. The default is `FALSE`.
 #' * `GVector`s: When projecting vectors that span the international date line at 180E/W, `wrap` should be `TRUE` to avoid an issue where the coordinates are incorrectly mapped to the range -180 to 180.
@@ -86,7 +86,7 @@ methods::setMethod(
 		j <- 0L
 		n <- length(res)
 		try <- c("terra", "template", "center")
-		while (inherits(out, "logical") & j <= n) {
+		while (is.logical(out) & j <= n) {
 		
 			j <- j + 1L
 			thisRes <- try[j]
@@ -95,6 +95,8 @@ methods::setMethod(
 				.projectRaster(x = x, y = y, align = align, method = method, fallback = fallback, res = thisRes, wrap = wrap, verbose = verbose),
 				error = function(cond) FALSE
 			)
+
+			if (verbose & is.logical(out)) omnibus::say("The ", try, " `res` method failed. Trying `", try[j + 1L], "`.")
 		
 		}
 	
@@ -136,12 +138,14 @@ methods::setMethod(
 	
 		if (yLocation == xLocation) {
 			warning("Object is already in the desired coordinate reference system.")
-			return()
+			return(x)
 		}
 	
 	} else if (is.null(yLocation)) {
+	
 		yLocation <- .locationCreate(y)
 		yLocation <- .location(yLocation)
+	
 	}
 	
 	# method
@@ -161,7 +165,7 @@ methods::setMethod(
 	}
 
 	nSteps <- nLayers + (res == "terra")
-	if (verbose | faster("verbose")) {
+	if (verbose & nLayers > 1L) {
 		pb <- utils::txtProgressBar(min = 0, max = nSteps, initial = 0, style = 3, width = 30)
 		steps <- 0
 	}
@@ -177,26 +181,27 @@ methods::setMethod(
 		# resample as per terra::project()
 		} else if (res == "terra") {
 
-			if (verbose | faster("verbose")) {
+			if (verbose & nLayers > 1L) {
 				utils::setTxtProgressBar(pb, steps)
 				steps <- steps + 1
 			}
 
 			# Use a SpatRaster as template for resampling region. We do this so we can set the "region" resolution and extent correctly.
 			extent <- ext(x, vector = TRUE)
-			xRast <- matrix(NA_real_, nrow = nrow(x), ncol = ncol(x))
-			xRast <- terra::rast(xRast, crs = crs(x), extent = extent)
+			# xRast <- matrix(NA_real_, nrow = nrow(x), ncol = ncol(x))
+			xRast <- terra::rast(nrows = nrow(x), ncols = ncol(x), crs = crs(x), extent = extent)
 			
 			extent <- ext(y, vector = TRUE)
-			yRast <- matrix(NA_real_, nrow = nrow(y), ncol = ncol(y))
-			yRast <- terra::rast(yRast, crs = crs(y), extent = extent)
+			# yRast <- matrix(NA_real_, nrow = nrow(y), ncol = ncol(y))
+			# yRast <- terra::rast(yRast, crs = crs(y), extent = extent)
+			yRast <- terra::rast(nrows = nrow(y), ncols = ncol(y), crs = crs(y), extent = extent)
 
-			xRast <- terra::project(xRast, yRast, align = TRUE)
-			xRast <- terra::project(xRast, crs(x))
+			xRast <- terra::project(xRast, yRast, align = align, threads = faster("cores") > 1)
+			xRast <- terra::project(xRast, crs(x), threads = faster("cores") > 1)
 			
 			xSR <- xRast
 
-			xRast[] <- 1L
+			xRast <- terra::init(xRast, fun = "chess")
 			xRast <- fast(xRast)
 
 			# resample x in its native location to the resolution it will have in the target location
@@ -207,7 +212,7 @@ methods::setMethod(
 				fallback = fallback
 			)
 
-			xRast <- terra::project(xSR, yRast, method = "near", align = align)
+			xRast <- terra::project(xSR, yRast, method = "near", align = align, threads = faster("cores") > 1)
 
 			# reshape region
 			.locationRestore(yLocation)
@@ -329,7 +334,7 @@ methods::setMethod(
 			xRast <- matrix(NA_integer_, nrow = nrow(x), ncol = ncol(x))
 			xSR <- terra::rast(xRast, crs = crs(x), extent = extent)
 			
-			xRast <- terra::project(xSR, crs(y), method = "near", align = align)
+			xRast <- terra::project(xSR, crs(y), method = "near", align = align, threads = faster("cores") > 1)
 
 			# reshape region
 			.locationRestore(yLocation)
@@ -355,7 +360,7 @@ methods::setMethod(
 	srcs <- .makeSourceName("project", "raster", nlyr(x))
 	for (i in seq_len(nlyr(x))) {
 		
-		if (verbose | faster("verbose")) {
+		if (verbose & nLayers > 1L) {
 			utils::setTxtProgressBar(pb, steps)
 			steps <- steps + 1
 		}
@@ -388,7 +393,7 @@ methods::setMethod(
 
 	} # project next raster
 
-	.locationRestore(y)
+	.locationRestore(out)
 
 	# if using y as extent to which to crop
 	if (!align & inherits(y, "GRaster")) out <- crop(out, y)
