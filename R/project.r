@@ -127,7 +127,7 @@ methods::setMethod(
 	if (unproj & !wrap) {
 
 		extent <- ext(x, vector = TRUE)
-		if ((extent[1L] == -180 & extent[2L] == 180) | (extent[3L] == -90 & extent[4L] == 90)) warning("This GRaster seems to wrap around the globe to meet at the international\n  date line and/or the poles. Should `wrap` be `TRUE`?")
+		if ((extent[1L] == -180 & extent[2L] == 180) | (extent[3L] == -90 & extent[4L] == 90)) warning("This GRaster seems to wrap around the globe to meet at the international\n  date line and/or the poles. Should `wrap` be TRUE?")
 
 	}
 	
@@ -374,11 +374,18 @@ methods::setMethod(
 			memory = faster("memory"),
 			flags = c(.quiet(), "overwrite")
 		)
-		args <- .addLocationProject(args, .location(x))
+
+		ver <- grassInfo("versionNumber")
+		if (ver <= 8.3) {
+			args$location <- .location(x)
+		} else {
+			args$project <- .location(x)
+		}
 
 		if (wrap) args$flags <- c(args$flags, "n")
 
-		do.call(rgrass::execGRASS, args=args)
+		do.call(rgrass::execGRASS, args = args)
+
 		if (is.factor(x)[i] & method == "nearest") {
 			levels <- cats(x)[[i]]
 		} else {
@@ -457,7 +464,13 @@ methods::setMethod(
 		output = src,
 		flags = c(.quiet(), "overwrite")
 	)
-	args <- .addLocationProject(args, .location(x))
+
+	ver <- grassInfo("versionNumber")
+	if (ver <= 8.3) {
+		args$location <- .location(x)
+	} else {
+		args$project <- .location(x)
+	}
  
 	if (wrap) args$flags <- c(args$flags, "w") # if crosses international date line
 	# if (geomtype(x, grass = TRUE) == "point") args$flags <- c(args$flags, "b") # disable topology build for points
