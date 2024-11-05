@@ -87,7 +87,7 @@ presEnv <- extract(covariateRasters, dypsis, cats = TRUE)
 presEnv$presBg <- 1
 head(presEnv)
 
-# Extract elevation and forest cover at background 2000 sites:
+# Extract elevation and forest cover at 2000 background sites:
 bgEnv <- spatSample(covariateRasters, size = 3000, values = TRUE, cats = TRUE)
 bgEnv <- bgEnv[stats::complete.cases(bgEnv), ]
 bgEnv <- bgEnv[1:2000, ]
@@ -99,8 +99,8 @@ env <- rbind(presEnv, bgEnv)
 
 # Calibrate model:
 form <- presBg ~ elevation + distToForest +
-I(distToForest^2) + elevation * distToForest +
-madCover + nearRiver
+  I(distToForest^2) + elevation * distToForest +
+  madCover + nearRiver
 
 model <- stats::glm(form, data = env, family = stats::binomial)
 summary(model)
