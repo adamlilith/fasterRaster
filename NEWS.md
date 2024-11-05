@@ -4,6 +4,7 @@
 o `project()` is now much faster when projecting a `GRaster` using the `terra` or `fallback` values for `res`.  
 
 ### Bug and issue fixes
+o `segregate()` works when setting `useDataTable` is `FALSE`.  
 o `subset()` no longer fails.  
 
 # fasterRaster 8.4.0.7028 (2024-10-24)
