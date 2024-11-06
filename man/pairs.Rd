@@ -80,6 +80,7 @@ names(elev)
 # coordinate reference system
 crs(elev)
 st_crs(elev)
+coordRef(elev)
 
 # extent (bounding box)
 ext(elev)

@@ -49,6 +49,8 @@ dypsis <- fast(madDypsis)
 # Geographic properties:
 ext(rivers) # extent
 crs(rivers) # coordinate reference system
+st_crs(rivers) # coordinate reference system
+coordRef(rivers) # coordinate reference system
 
 # Column names and data types:
 names(coast)

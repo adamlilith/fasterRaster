@@ -22,6 +22,7 @@
 \subsection{Properties of \code{GRasters}}{
 \itemize{
 \item \code{\link[=crs]{crs()}}: Coordinate reference system
+\item \code{\link[=coordRef]{coordRef()}}: Coordinate reference system
 \item \code{\link[=datatype]{datatype()}}: Data type
 \item \code{\link[=dim]{dim()}} and \code{\link[=dim3d]{dim3d()}}: Number of rows, columns, and depths
 \item \code{\link[=ext]{ext()}}, \code{\link[=N]{N()}}, \code{\link[=S]{S()}}, \code{\link[=E]{E()}}, \code{\link[=W]{W()}}, \code{\link[=top]{top()}}, and \code{\link[=bottom]{bottom()}}: Spatial extent
@@ -216,6 +217,7 @@ Operations on \code{GRaster}s
 \subsection{Properties of \code{GVector}s}{
 \itemize{
 \item \code{\link[=crs]{crs()}}: Coordinate reference system
+\item \code{\link[=coordRef]{coordRef()}}: Coordinate reference system
 \item \code{\link[=datatype]{datatype()}}: Data type of fields
 \item \code{\link[=dim]{dim()}}: Number of geometries and columns
 \item \code{\link[=expanse]{expanse()}}: Area of polygons or length of lines
