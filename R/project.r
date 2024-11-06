@@ -83,12 +83,11 @@ methods::setMethod(
 	} else if (res == "fallback") {
 	
 		out <- FALSE
-		j <- 0L
-		n <- length(res)
+		j <- 1L
 		try <- c("terra", "template", "center")
+		n <- length(try)
 		while (is.logical(out) & j <= n) {
 		
-			j <- j + 1L
 			thisRes <- try[j]
 
 			out <- tryCatch(
@@ -96,8 +95,10 @@ methods::setMethod(
 				error = function(cond) FALSE
 			)
 
-			if (verbose & is.logical(out)) omnibus::say("The ", try, " `res` method failed. Trying `", try[j + 1L], "`.")
+			if (verbose & is.logical(out)) omnibus::say("The ", try, " `res` method failed. Trying method `", try[j + 1L], "`.")
 		
+			j <- j + 1L
+
 		}
 	
 	}
@@ -124,6 +125,7 @@ methods::setMethod(
 	# imperfect catch for cases where `wrap` should be `TRUE` but is not
 	unproj <- .projection(x) %in%
 		c("Latitude-Longitude", "WGS84", "WGS 84", "NAD83", "NAD 83", "NAD27", "NAD 27")
+
 	if (unproj & !wrap) {
 
 		extent <- ext(x, vector = TRUE)
@@ -188,16 +190,13 @@ methods::setMethod(
 
 			# Use a SpatRaster as template for resampling region. We do this so we can set the "region" resolution and extent correctly.
 			extent <- ext(x, vector = TRUE)
-			# xRast <- matrix(NA_real_, nrow = nrow(x), ncol = ncol(x))
 			xRast <- terra::rast(nrows = nrow(x), ncols = ncol(x), crs = crs(x), extent = extent)
 			
 			extent <- ext(y, vector = TRUE)
-			# yRast <- matrix(NA_real_, nrow = nrow(y), ncol = ncol(y))
-			# yRast <- terra::rast(yRast, crs = crs(y), extent = extent)
 			yRast <- terra::rast(nrows = nrow(y), ncols = ncol(y), crs = crs(y), extent = extent)
 
-			xRast <- terra::project(xRast, yRast, align = align, threads = faster("cores") > 1)
-			xRast <- terra::project(xRast, crs(x), threads = faster("cores") > 1)
+			xRast <- terra::project(xRast, yRast, align = align, threads = faster("cores") > 1) # resample/project
+			xRast <- terra::project(xRast, crs(x), threads = faster("cores") > 1) # project back to start
 			
 			xSR <- xRast
 
@@ -215,7 +214,10 @@ methods::setMethod(
 			xRast <- terra::project(xSR, yRast, method = "near", align = align, threads = faster("cores") > 1)
 
 			# reshape region
+
+	say('&&&&&&& start at .locationRestore in project()')
 			.locationRestore(yLocation)
+	say('&&&&&&& stop at .locationRestore in project()')
 			.region(xRast)
 
 		# } else if (res == "dimensions") {
@@ -400,7 +402,9 @@ methods::setMethod(
 
 	} # project next raster
 
+	say('4444444444 start locationRestore out')
 	.locationRestore(out)
+	say('4444444444 stop locationRestore out')
 
 	# if using y as extent to which to crop
 	if (!align & inherits(y, "GRaster")) out <- crop(out, y)
