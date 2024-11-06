@@ -107,6 +107,7 @@ methods::setGeneric(name = "compositeRGB", def = function(r, ...) standardGeneri
 methods::setGeneric(name = "combineLevels", def = function(x, ...) standardGeneric("combineLevels"))
 methods::setGeneric(name = "concats", def = function(x, ...) standardGeneric("concats"))
 methods::setGeneric(name = "connectors", def = function(x, y, ...) standardGeneric("connectors"))
+methods::setGeneric(name = "coordRef", def = function(x, ...) standardGeneric("coordRef"))
 methods::setGeneric(name = "convHull", package = "terra")
 methods::setGeneric(name = "count", def = function(x, ...) standardGeneric("count"))
 methods::setGeneric(name = "crds", package = "terra")

@@ -1,6 +1,7 @@
 # fasterRaster 8.4.0.7029 (2024-10-31)
 
 ### Enhanced functionality and new functions
+o `coordRef()` returns information about an object's coordinate refernce system.  
 o `project()` is now much faster when projecting a `GRaster` using the `terra` or `fallback` values for `res`.  
 
 ### Bug and issue fixes

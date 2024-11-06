@@ -41,6 +41,7 @@ reference:
 - title: GRaster properties
 - contents:
   - crs
+  - coordRef
   - datatype
   - dim
   - dim3d
@@ -262,6 +263,7 @@ reference:
 - contents:
   - bottom
   - crs
+  - coordRef
   - datatype
   - dim
   - E

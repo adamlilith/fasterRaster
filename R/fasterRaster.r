@@ -13,6 +13,7 @@
 #'
 #' ## Properties of `GRasters`
 #' * [crs()]: Coordinate reference system
+#' * [coordRef()]: Coordinate reference system
 #' * [datatype()]: Data type
 #' * [dim()] and [dim3d()]: Number of rows, columns, and depths
 #' * [ext()], [N()], [S()], [E()], [W()], [top()], and [bottom()]: Spatial extent
@@ -178,6 +179,7 @@
 #'
 #' ## Properties of `GVector`s
 #' * [crs()]: Coordinate reference system
+#' * [coordRef()]: Coordinate reference system
 #' * [datatype()]: Data type of fields
 #' * [dim()]: Number of geometries and columns
 #' * [expanse()]: Area of polygons or length of lines
