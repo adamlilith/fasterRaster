@@ -34,6 +34,11 @@ methods::setMethod(
 			if (is.null(level)) {
 
 			    freqs <- freq(x[[i]])
+				
+				if (!faster("useDataTable")) {
+					freqs <- data.table::as.data.table(freqs)
+					levs[[i]] <- data.table::as.data.table(levs[[i]])
+				}
 
 				data.table::setkeyv(freqs, names(freqs)[1L])
 				data.table::setkeyv(levs[[i]], names(levs[[i]])[1L])
