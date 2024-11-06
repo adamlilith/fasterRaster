@@ -282,11 +282,6 @@ methods::setMethod(
 			# location, location, location...
 			location <- .locationFind(xVect, return = "name", match = "crs")
 
-omnibus::say('---raster:fast -- .locationFind(xRast, match = "crs")', pre = 1)
-print(.g.proj())
-omnibus::say(.fasterRaster$activeLocation)
-omnibus::say(location, post = 2)
-
 			if (is.null(location) | !grassStarted()) {
 
 				.locationCreate(x = xVect)
@@ -294,11 +289,6 @@ omnibus::say(location, post = 2)
 
 			}
 			.locationRestore(x = location)
-
-omnibus::say('---raster:fast -- .locationFind(xRast, match = "crs")', pre = 1)
-print(.g.proj())
-omnibus::say(.fasterRaster$activeLocation)
-omnibus::say(location, post = 2)
 
 			# correct topology?
 			if (correct) {
