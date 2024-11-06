@@ -5,6 +5,8 @@ o `coordRef()` returns information about an object's coordinate refernce system.
 o `project()` is now much faster when projecting a `GRaster` using the `terra` or `fallback` values for `res`.  
 
 ### Bug and issue fixes
+o `droplevels()` does not fail when `faster('useDataTable`)` is `FALSE`.  
+o `levels()` does not fail when `faster('useDataTable`)` is `FALSE`.  
 o `segregate()` works when setting `useDataTable` is `FALSE`.  
 o `subset()` no longer fails.  
 
