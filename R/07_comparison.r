@@ -184,7 +184,7 @@ methods::setMethod(
 			name <- names(e1)[i]
 			src <- .makeSourceName("comparison", "raster")
 
-			ex <- paste(src, "= int(if(", sources(e1)[i], " ", oper, " ", e2, "))")
+			ex <- paste0(src, "= int(if(", sources(e1)[i], " ", oper, " ", e2, "))")
 			this <- .genericArithRast(name = name, src = src, ex = ex)
 			
 			if (i == 1L) {
