@@ -215,9 +215,9 @@ methods::setMethod(
 
 			# reshape region
 
-	say('&&&&&&& start at .locationRestore in project()')
+	omnibus::say('&&&&&&& start at .locationRestore in project()')
 			.locationRestore(yLocation)
-	say('&&&&&&& stop at .locationRestore in project()')
+	omnibus::say('&&&&&&& stop at .locationRestore in project()')
 			.region(xRast)
 
 		# } else if (res == "dimensions") {
@@ -402,13 +402,13 @@ methods::setMethod(
 
 	} # project next raster
 
-	say('4444444444 start locationRestore out')
+	omnibus::say('4444444444 start locationRestore out')
 	.locationRestore(out)
-	say('4444444444 stop locationRestore out')
+	omnibus::say('4444444444 stop locationRestore out')
 
 	# if using y as extent to which to crop
 	if (!align & inherits(y, "GRaster")) out <- crop(out, y)
-	if (verbose | faster("verbose")) close(pb)
+	if (verbose & nLayers > 1) close(pb)
 	out
 
 }

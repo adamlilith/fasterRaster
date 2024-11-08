@@ -184,7 +184,7 @@ methods::setValidity("GRaster",
 	}
 
 	# levels: convert empty strings to NULL data.tables and data.frames to data.tables
-	if (is.null(levels) || levels == "") levels <- data.table::data.table(NULL)
+	if (is.null(levels) || all(levels == "")) levels <- data.table::data.table(NULL)
 	if (!inherits(levels, "list")) levels <- list(levels)
 	levels <- lapply(levels, data.table::as.data.table)
 	if (length(levels) == 1L & length(src) > 1L) for (i in 2L:length(src)) levels[[i]] <- levels[[1L]]
