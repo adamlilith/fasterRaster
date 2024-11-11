@@ -107,7 +107,6 @@ methods::setMethod(
 		ys[ys < extent[3L]] <- extent[3L]
 		ys[ys > extent[4L]] <- extent[4L]
 
-
 		### use v.in.ascii to ingest each subset of points
 		nAtATime <- 2E5 # optimal-ish size based on manual checks
 		sets <- ceiling(size / nAtATime)
