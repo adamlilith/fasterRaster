@@ -75,7 +75,7 @@ prediction <- predict(covariateRasters, model, type = "response")
 prediction
 
 # Not a great model!
-plot(prediction)
+plot(prediction, main = "Predicted")
 plot(dypsis, pch = 1, add = TRUE)
 
 }
