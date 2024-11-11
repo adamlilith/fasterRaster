@@ -780,10 +780,12 @@ methods::setMethod(
             factName <- xNames[fact]
 
             levs <- levels[[fact]]
+            if (!inherits(levs, "data.table")) levs <- data.table::as.data.table(levs)
             this <- levs[match(out[[fact]], levs[[1L]]), 2L]
             # names(this) <- names(xx)[fact]
             # this <- this[ , lapply(.SD, as.factor)] # convert to factor... do we want this?
-            out[ , (factName) := this[[1L]]]
+            # out[ , (factName) := this[[1L]]]
+            out[ , (factName) := this[[1]]]
 
         }
 
