@@ -55,7 +55,11 @@ methods::setMethod(
 			# `from` is a character vector
 			if (is.character(from)) {
 
-				thisFrom <- thisLev[[1L]][match(from, thisLev[[ac + 1L]])]
+				if (faster("useDataTable")) {
+					thisFrom <- thisLev[[1L]][match(from, thisLev[[ac + 1L]])]
+				} else {
+					thisFrom <- thisLev[ , 1L][match(from, thisLev[  , ac + 1L, drop = TRUE])]
+				}
 				if (any(is.na(thisFrom) & !is.na(from))) {
 					stop("Argument `from` contains one or more values that do not appear in the GRaster's levels table.\n  These will be added ")
 				}
@@ -68,7 +72,11 @@ methods::setMethod(
 		
 			if (any(is.character(to))) {
 
-				thisTo <- thisLev[[1L]][match(to, thisLev[[ac + 1L]])]
+				if (faster("useDataTable")) {
+					thisTo <- thisLev[[1L]][match(to, thisLev[[ac + 1L]])]
+				} else {
+					thisTo <- thisLev[ , 1L][match(to, thisLev[  , ac + 1L, drop = TRUE])]
+				}
 
 				# create new levels
 				if (any(is.na(thisTo) & !is.na(to))) {
@@ -110,7 +118,11 @@ methods::setMethod(
 			# if (length(removes) > 0L) levs[[i]] <- levs[[i]][!(levs[[i]][[1L]] %in% removes)]
 
 			# remove duplicates
-			levs[[i]] <- thisLev[!duplicated(thisLev[ , c(1L, ac + 1L), with = FALSE])]
+			if (faster("useDataTable")) {
+				levs[[i]] <- thisLev[!duplicated(thisLev[ , c(1L, ac + 1L), with = FALSE])]
+			} else {
+				levs[[i]] <- thisLev[!duplicated(thisLev[ , c(1L, ac + 1L), drop = FALSE]), , drop = FALSE]
+			}
 
 		} else {
 
