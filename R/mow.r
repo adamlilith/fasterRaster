@@ -1,10 +1,10 @@
-#' Remove unused rasters and vectors from the GRASS cache
+#' Remove rasters and vectors from the GRASS cache
 #'
-#' @description **fasterRaster** attempts to delete rasters and vectors in the **GRASS** cache. This function will a) search the current **GRASS** "project/location" cache for all rasters/vectors there; and b) remove any of them that are not pointed to by an object in the active **R** environment. Only objects in the currently active **GRASS** project/location will be removed (see `vignette("project_mapset", package = "fasterRaster")`).
+#' @description **fasterRaster** functions attempt to delete rasters and vectors in the **GRASS** cache, but not all intermediate files can be removed. This function will a) search the current **GRASS** "project/location" cache for all rasters/vectors there; and b) remove any of them that are not pointed to by an object in the active **R** environment. Only objects in the currently active **GRASS** project/location will be removed (see `vignette("project_mapset", package = "fasterRaster")`). This is a *very powerful function* that can "disconnect" **R** objects from the **GRASS** objects to which they point.
 #'
-#' Note that calling this function inside another function's environment without providing an argument for `x` can be very **dangerous**, as it will detect objects outside that environment, and thus delete any rasters/vectors outside that environment.
+#' Calling this function inside another function's environment without providing an argument for `x` can be very **dangerous**, as it will detect objects outside of that environment, and thus delete any rasters/vectors outside that environment.
 #'
-#' @param x Either missing (default) or an environment.
+#' @param x Either missing (default) or an environment. If left as missing, the environment in which this function was called will be searched for `GRaster`s and `GVector`s for removal of their associated **GRASS** rasters and vectors. Otherwise, the named environment will be searched.
 #'
 #' @param type Either `NULL` or a character vector. If `NULL`, all rasters and vectors in the **GRASS** cache are candidates for deletion. Otherwise, this can be either `"raster"`, `"vector"`, or both.
 #'
@@ -27,11 +27,14 @@ mow <- function(x, type = NULL, keep = NULL, verbose = TRUE, ask = TRUE) {
 	
 	if (ask) {
 		response <- readline("Are you sure you want to clean the GRASS cache? (Y/n) ")
-		if (response != "Y") return(invisible(list(rasters = 0, vectors = 0)))
+		if (response != "Y") {
+			if (verbose) omnibus::say("Nothing deleted.")
+			return(invisible(list(rasters = 0, vectors = 0)))
+		}
 	}
 
 	if (!is.null(keep)) {
-		if (!is.list(keep)) stop("Argument `keeps` must be a list or NULL.")
+		if (!is.list(keep)) stop("Argument `keep` must be a list or NULL.")
 	}
 
 	if (missing(x)) {
@@ -61,9 +64,9 @@ mow <- function(x, type = NULL, keep = NULL, verbose = TRUE, ask = TRUE) {
 
 	} # next object in environment
 
-	if (!is.null(GSpatials)) {
+	if (nrow(GSpatials) > 0L & length(keep) > 0L) {
 		for (i in seq_along(keep)) {
-			GSpatials <- GSpatials[!(GSpatials$rObject %in% keep[[i]])]
+			GSpatials <- GSpatials[!(GSpatials$rObject %in% sources(keep[[i]]))]
 		}
 	}
 
@@ -74,7 +77,10 @@ mow <- function(x, type = NULL, keep = NULL, verbose = TRUE, ask = TRUE) {
 
 	# any GRASS objects not in the calling environment?
 	grassObjs <- grassObjs[!(grassObjs %in% GSpatials$sources)]
-	if (length(grassObjs) == 0L) return(invisible(list(rasters = 0, vectors = 0)))
+	if (length(grassObjs) == 0L) {
+		if (verbose) omnibus::say("Nothing deleted.")
+		return(invisible(list(rasters = 0, vectors = 0)))
+	}
 
 	### delete
 	out <- list(rasters = 0L, vectors = 0L)
