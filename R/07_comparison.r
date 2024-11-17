@@ -291,8 +291,13 @@ methods::setMethod(
 
 		# get value of this category
 		ac <- acs[i]
-		thisVal <- eval(parse(text = paste0("levs[[", i, "]][", ac, " == e2]")))
-		thisVal <- thisVal[[1L]]
+		if (faster("useDataTable")) {
+			thisVal <- eval(parse(text = paste0("levs[[", i, "]][", ac, " == e2]")))
+			thisVal <- thisVal[[1L]]
+		} else {
+			thisVal <- eval(parse(text = paste0("levs[[", i, "]][levs[[", i, "]]$", ac, " == e2, 1L]")))
+		}
+		
 
 		if (length(thisVal) == 0L) {
 			this <- 0L * not.na(e1)
