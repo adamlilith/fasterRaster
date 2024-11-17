@@ -156,7 +156,7 @@ methods::setMethod(
 		
 		}
 
-		if (!faster("useDataTable")) freqs <- as.data.frame(freqs)
+		# if (!faster("useDataTable")) freqs <- as.data.frame(freqs)
 		out[[i]] <- freqs
 		names(out)[i] <- names(x)[i]
 
