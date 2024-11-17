@@ -152,8 +152,13 @@ methods::setMethod(
 		} else if (is.character(others) & is.factor(x)[i]) {
 
 			# get new value for `others`
-			thisOthers <- levs[[i]][levs[[i]][[ac + 1]] == others, 1L]
-			thisOthers <- thisOthers[[1L]]
+			if (faster("useDataTable")) {
+				thisOthers <- levs[[i]][levs[[i]][[ac + 1]] == others, 1L]
+				thisOthers <- thisOthers[[1L]]
+			} else {
+				# thisOthers <- levs[[i]][ , ac + 1L, drop = TRUE] == others, 1L]
+				thisOthers <- levs[[i]][levs[[i]][ , ac + 1L, drop = TRUE] == others, 1L]
+			}
 	
 			if (length(thisOthers) == 0L) {
 				
