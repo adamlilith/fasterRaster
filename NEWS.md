@@ -5,11 +5,13 @@ o `coordRef()` returns information about an object's coordinate refernce system.
 o `project()` is now much faster when projecting a `GRaster` using the `terra` or `fallback` values for `res`.  
 
 ### Bug and issue fixes
+o `[GVector]` does not fail when all geometries are selected.  
 o Comparison with categorical `GRaster`s (e.g., `<`, `==`, etc.) does not fail when `faster('useDataTable')` is `FALSE`.  
 o `droplevels()` does not fail when `faster('useDataTable')` is `FALSE`.  
 o `levels()` does not fail when `faster('useDataTable')` is `FALSE`.  
 o `segregate()` works when setting `useDataTable` is `FALSE`.  
 o `subset()` no longer fails.  
+o `subst()` does not fail when `faster('useDataTable')` is `FALSE`.  
 
 # fasterRaster 8.4.0.7028 (2024-10-24)
 
