@@ -247,6 +247,7 @@ methods::setMethod(
 		out <- c(out, list(proj_unit = y))
 
 	}
+	out$crs <- crs()
 	out
 
 	} # EOF
