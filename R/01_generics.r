@@ -114,7 +114,6 @@ methods::setGeneric(name = "crds", package = "terra")
 methods::setGeneric(name = "crs", package = "terra")
 methods::setGeneric(name = "crop", package = "terra")
 
-
 # dim() is primitive
 methods::setGeneric(name = "datatype", def = function(x, ...) standardGeneric("datatype"))
 methods::setGeneric(name = "delaunay", package = "terra")
