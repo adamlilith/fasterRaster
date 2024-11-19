@@ -30,8 +30,6 @@
 #'
 #' * `memory` (integer/numeric): The amount of memory to allocate to a task, in GB, for **GRASS**. The default is 2048 MB (i.e., 2 GB). Some **GRASS** modules can take advantage of more memory.
 #'
-#' * `clean` (logical): If `TRUE` (default), remove temporary files created internally by functions. If not deleted, they can eventually fill up hard drive space, but deleting them takes a little bit of time (usually <1 second for each function). See also [mow()].
-#'
 #' * `useDataTable` (logical): If `FALSE` (default), functions that return tabular output produce `data.frame`s. If `TRUE`, output will be `data.table`s from the **data.table** package. This can be much faster, but it might require you to know how to use `data.table`s if you want to manipulate them in **R**. You can always convert them to `data.frame`s using [base::as.data.frame()].
 #' 
 #' * `verbose` (logical): If `TRUE`, show **GRASS** messages and otherwise hidden slots in classes. This is mainly used for debugging, so most users will want to keep this at its default, `FALSE`.
@@ -141,9 +139,9 @@ faster <- function(
 		if (!inherits(opts$cores, c("integer", "numeric")) || opts$cores <= 0 || !omnibus::is.wholeNumber(opts$cores)) stop("Option `cores` must be an integer >= 1. The default is ", .coresDefault(), ".")
 	}
 
-	if (any(names(opts) %in% "clean")) {
-  		if (is.na(opts$clean) || !is.logical(opts$clean)) stop("Option `clean` must be a logical. The default is ", .cleanDefault(), ".")
-	}
+	# if (any(names(opts) %in% "clean")) {
+  	# 	if (is.na(opts$clean) || !is.logical(opts$clean)) stop("Option `clean` must be a logical. The default is ", .cleanDefault(), ".")
+	# }
 
 	if (any(names(opts) %in% "verbose")) {
   		if (is.na(opts$verbose) || !is.logical(opts$verbose)) stop("Option `verbose` must be a logical. The default is ", .verboseDefault(), ".")
