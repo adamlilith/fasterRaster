@@ -28,10 +28,7 @@ As of 2024/10/24, a new version of this package, `fasterRaster 8.4`, is in alpha
 
 **Special announcement #2**: The new `bioclims()` function creates the "classic" set of BIOCLIM variables, plus an optional "extended" set. The function works on **fasterRaster** `GRaster`s and on **terra** `SpatRaster`s!
 
-# Functions
-To see a detailed list of functions available in `fasterRaster`, attach the package and use `?fasterRaster`. Note the additional tutorials linked from there!
-
-# Getting started
+# Installation
 
 To install `fasterRaster`, please use:
 
@@ -43,7 +40,17 @@ Alternatively, you can install the development version from:
 
 To use `fasterRaster` you must install [GRASS version 8.3+](https://grass.osgeo.org/) on your operating system. **You will need to use the stand-alone installer, not the Open Source Geospatial (OS Geo) installer.**
 
-## An example
+# Vignettes
+
+**fasterRaster** comes with three user-oriented vignettes:
+* ["Getting started"](https://adamlilith.github.io/fasterRaster/articles/fasterRaster.html)
+* [Types of `GRaster`s](https://adamlilith.github.io/fasterRaster/articles/GRasters.html)
+* [Making **fasterRaster** faster](https://adamlilith.github.io/fasterRaster/articles/faster_fasterRaster.html)
+
+
+# An example
+
+The example presented here is the same as that presented in the the ["getting started"](https://adamlilith.github.io/fasterRaster/articles/fasterRaster.html) vignette.
 
 We'll do a simple operation in which we:
 
@@ -54,8 +61,8 @@ We'll do a simple operation in which we:
 To do this, we'll be using maps representing the middle of the eastern coast of Madagascar. We will also use the `terra` and `sf` packages.
 
 ```
-library(terra)
-library(sf)
+library(terra) # GIS for rasters and vectors
+library(sf) # GIS for vectors
 library(fasterRaster)
 
 # Get example elevation raster and rivers vector:
@@ -71,8 +78,9 @@ plot(st_geometry(madRivers), col = "lightblue", add = TRUE)
 Before you use nearly any function in the package, you need to tell `fasterRaster` where `GRASS` is installed on your system. The installation folder will vary by operating system and maybe `GRASS` version, but will look something like this:  
 
 ```
-grassDir <- "C:/Program Files/GRASS GIS 8.3" # Windows
-grassDir <- "/Applications/GRASS-8.2.app/Contents/Resources" # Mac OS
+# Choose the appropriate one, and modify as needed:
+grassDir <- "C:/Program Files/GRASS GIS 8.4" # Windows
+grassDir <- "/Applications/GRASS-8.4.app/Contents/Resources" # Mac OS
 grassDir <- "/usr/local/grass" # Linux
 ```
 
@@ -166,21 +174,6 @@ vect_temp_gpkg <- tempfile(fileext = ".gpkg") # save as GeoPackage
 writeVector(rivers, vect_temp_shp)
 writeVector(rivers, vect_temp_gpkg)
 ```
-
-# Tips for making `fasterRaster` faster
-There are several ways to speed up **fasterRaster**. Below, they are classified by approximately how much time you can save when operating on large rasters and vectors.
-
-1. Save minutes: Loading rasters and vectors directly from disk using `fast()`, rather than converting `terra` or `sf` objects is faster. Why? Because if the object does not have a file to which the `R` object points, `fast()` has to save it to disk first as a GeoTIFF or GeoPackage file, then load it into `GRASS`.
-
-2. Save minutes: Similarly, saving `GRaster`s and `GVector`s directly to disk will always be faster than converting them to `SpatRaster`s or `SpatVector` using `rast()` or `vect()`, then saving them. Why? Because these functions actually save the file to disk then uses the respective function from the respective package to connect to the file.
-
-3. Save seconds: Every time you switch between using a `GRaster` or `GVector` with a different coordinate reference system (CRS), `GRASS` has to spend a few second changing to that CRS. So, you can save some time by doing as much work as possible with objects in one CRS, then switching to work on objects in another CRS.
-
-4. Save minutes: By default, `fasterRaster` use 2 cores and 2048 MB (2 GB) of memory for `GRASS` modules that allow users to specify these values. You can set these to higher values using `faster()` and thus potentially speed up some calculations. Functions in newer versions of `GRASS` have more capacity to use these options, so updating `GRASS` to the latest version can help, too.
-
-5. Save minutes: Compared to `terra` and `sf`, `fasterRaster` is *not* faster with large vector operations, so if have large vectors, do vector processing with those packages first if you can.
-
-6. Save seconds: To obviate problems with disk space filling up, by default most **fasterRaster** functions delete intermediate files. However, if you are not creating a lot of very big `GRaster`s or `GVector`s, you can skip this time-taking step by setting the `clean` option to `FALSE` using `faster(clean = FALSE)`.
 
 # Versioning
 
