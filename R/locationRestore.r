@@ -74,13 +74,6 @@ methods::setMethod(
 	mapset <- "PERMANENT"
 
 	coordRef <- .fasterRaster$locations[[index]]
-
-print('before change')
-print('.location()')
-print(.location())
-print('.g.proj()')
-print(.g.proj())
-
 	if (location != .fasterRaster$activeLocation) {
 
 		### reconnect to location
@@ -101,9 +94,8 @@ print(.g.proj())
 		# 	)
 		# )
 
-print('successful change')
 		if (grassInfo("versionNumber") >= 8.4) {
-print('try change 8.4')
+			
 			rgrass::execGRASS(
 				cmd = "g.mapset",
 				mapset = mapset,
@@ -111,10 +103,9 @@ print('try change 8.4')
 				flags = c(.quiet(), "overwrite")#,
 				# dbase = workDir
 			)
-print('did change 8.4')
+		
 		} else {
-print('try change 8.3')
-print(location)
+			
 			rgrass::execGRASS(
 				cmd = "g.mapset",
 				mapset = mapset,
@@ -122,18 +113,12 @@ print(location)
 				flags = c(.quiet(), "overwrite")#,
 				# dbase = workDir
 			)
-print('did change 8.3')
+		
 		}
 
 		# .fasterRaster$activeLocation <<- location
 		assign(x = "activeLocation", value = location, pos = .fasterRaster)
-		# Sys.sleep(0.5) # obviates failures to switch locations(?)
-
-		print('after change')
-		print('.location()')
-		print(.location())
-		print('.g.proj()')
-		print(.g.proj())
+		Sys.sleep(0.1) # obviates failures to switch locations(?)
 
 	}
 
