@@ -287,7 +287,7 @@ methods::setMethod(
 					if (versionNumber >= 8.4) args$nprocs <- faster("cores")
 
 					thisInfo <- do.call(rgrass::execGRASS, args = args)
-					if (faster("clean")) on.exit(.rm(srcSS, type = "raster", warn = FALSE), add = TRUE)
+					on.exit(.rm(srcSS, type = "raster", warn = FALSE), add = TRUE)
 
 					pattern <- "sum: "
 					ss <- thisInfo[grepl(info, pattern=pattern)]
@@ -338,7 +338,7 @@ methods::setMethod(
 					if (grassInfo("versionNumber") >= 8.4) args$nprocs <- faster("cores")
 
 					thisInfo <- do.call(rgrass::execGRASS, args = args)
-					if (faster("clean")) on.exit(.rm(srcSS, type = "raster", warn = FALSE), add = TRUE)
+					on.exit(.rm(srcSS, type = "raster", warn = FALSE), add = TRUE)
 
 					pattern <- "sum: "
 					ss <- thisInfo[grepl(info, pattern=pattern)]

@@ -141,7 +141,7 @@ methods::setMethod(
 			ex <- paste0(src, " = if(isnull(", srcIn, "), ", background, ", ", srcIn, ")")
 
 			rgrass::execGRASS("r.mapcalc", expression  = ex, flags = c(.quiet(), "overwrite"))
-			if (faster("clean")) .rm(srcIn, type = "raster", warn = FALSE)
+			.rm(srcIn, type = "raster", warn = FALSE)
 
 			if (nrow(levels) > 0L) {
 			

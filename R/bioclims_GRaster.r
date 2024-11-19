@@ -184,7 +184,7 @@ methods::setMethod(
 			rgrass::execGRASS("r.mapcalc", expression = ex, flags = c(.quiet(), "overwrite"))
 
 		}
-		if (faster("clean")) on.exit(.rm(tmean, type = "raster", warn = FALSE, verify = FALSE), add = TRUE)
+		on.exit(.rm(tmean, type = "raster", warn = FALSE, verify = FALSE), add = TRUE)
 
 		tasks <- tasks + 1
 		if (verbose | faster("verbose")) utils::setTxtProgressBar(pb, tasks)
@@ -196,7 +196,7 @@ methods::setMethod(
 
 
 		tmeanByQuarter <- .calcQuarterGR(tmean, fun = "mean", quarter = quarter)
-		if (faster("clean")) on.exit(.rm(tmeanByQuarter, type = "raster", warn = FALSE, verify = FALSE), add = TRUE)
+		on.exit(.rm(tmeanByQuarter, type = "raster", warn = FALSE, verify = FALSE), add = TRUE)
 
 		tasks <- tasks + 1
 		if (verbose | faster("verbose")) utils::setTxtProgressBar(pb, tasks)
@@ -207,7 +207,7 @@ methods::setMethod(
 	if (any(bios %in% quarterPrecipBios)) {
 
 		pptByQuarter <- .calcQuarterGR(ppt, fun = "sum", quarter = quarter)
-		if (faster("clean")) on.exit(.rm(pptByQuarter, type = "raster", warn = FALSE, verify = FALSE), add = TRUE)
+		on.exit(.rm(pptByQuarter, type = "raster", warn = FALSE, verify = FALSE), add = TRUE)
 
 		tasks <- tasks + 1
 		if (verbose | faster("verbose")) utils::setTxtProgressBar(pb, tasks)
@@ -235,7 +235,7 @@ methods::setMethod(
 			flags = c(.quiet(), "overwrite", "n")
 		)
 
-		if (faster("clean")) on.exit(.rm(bio53Minus1, type = "raster", warn = FALSE, verify = FALSE), add = TRUE)
+		on.exit(.rm(bio53Minus1, type = "raster", warn = FALSE, verify = FALSE), add = TRUE)
 
 		ex <- paste0(bio53, " = ", bio53Minus1, " + 1")
 		rgrass::execGRASS("r.mapcalc", expression = ex, flags = c(.quiet(), "overwrite"))
@@ -270,7 +270,7 @@ methods::setMethod(
 			flags = c(.quiet(), "overwrite", "n")
 		)
 
-		if (faster("clean")) on.exit(.rm(bio54Plus1, type = "raster", warn = FALSE, verify = FALSE), add = TRUE)
+		on.exit(.rm(bio54Plus1, type = "raster", warn = FALSE, verify = FALSE), add = TRUE)
 
 		ex <- paste0(bio54, " = ", bio54Plus1, " + 1")
 		rgrass::execGRASS("r.mapcalc", expression = ex, flags = c(.quiet(), "overwrite"))
@@ -305,7 +305,7 @@ methods::setMethod(
 			flags = c(.quiet(), "overwrite", "n")
 		)
 
-		if (faster("clean")) on.exit(.rm(bio55Plus1, type = "raster", warn = FALSE, verify = FALSE), add = TRUE)
+		on.exit(.rm(bio55Plus1, type = "raster", warn = FALSE, verify = FALSE), add = TRUE)
 
 		# increment index (first is 0)
 		ex <- paste0(bio55, " = ", bio55Plus1, " + 1")
@@ -341,7 +341,7 @@ methods::setMethod(
 			flags = c(.quiet(), "overwrite", "n")
 		)
 
-		if (faster("clean")) on.exit(.rm(bio56Plus1, type = "raster", warn = FALSE, verify = FALSE), add = TRUE)
+		on.exit(.rm(bio56Plus1, type = "raster", warn = FALSE, verify = FALSE), add = TRUE)
 
 		ex <- paste0(bio56, " = ", bio56Plus1, " + 1")
 		rgrass::execGRASS("r.mapcalc", expression = ex, flags = c(.quiet(), "overwrite"))
@@ -414,7 +414,7 @@ methods::setMethod(
 		# bio2
 		ex <- paste0(bio2, " = ", meanMaxSrc, " - ", meanMinSrc)
 
-		if (faster("clean")) on.exit(.rm(c(meanMaxSrc, meanMinSrc), type = "raster", warn = FALSE, verify = FALSE), add = TRUE)
+		on.exit(.rm(c(meanMaxSrc, meanMinSrc), type = "raster", warn = FALSE, verify = FALSE), add = TRUE)
 
 		rgrass::execGRASS("r.mapcalc", expression = ex, flags = c(.quiet(), "overwrite"))
 
@@ -543,7 +543,7 @@ methods::setMethod(
 			ex <- paste0(bio4, " = 100 * sqrt((", nLayers, " * (", srcIn, "^2)) / (", nLayers, " - 1))")
 			
 			rgrass::execGRASS("r.mapcalc", expression = ex, flags = c(.quiet(), "overwrite"))
-			if (faster("clean")) on.exit(.rm(c(srcIn), type = "raster", warn = FALSE, verify = FALSE), add = TRUE)
+			on.exit(.rm(c(srcIn), type = "raster", warn = FALSE, verify = FALSE), add = TRUE)
 		
 		}
 
@@ -761,7 +761,7 @@ methods::setMethod(
 			ex <- paste0(sdSrc, " = sqrt((", nLayers, " * (", sdSrcIn, "^2)) / (", nLayers, " - 1))")
 			rgrass::execGRASS("r.mapcalc", expression = ex, flags = c(.quiet(), "overwrite"))
 		
-			if (faster("clean")) on.exit(.rm(c(sdSrcIn), type = "raster", warn = FALSE, verify = FALSE), add = TRUE)
+			on.exit(.rm(c(sdSrcIn), type = "raster", warn = FALSE, verify = FALSE), add = TRUE)
 
 			tasks <- tasks + 1
 			if (verbose | faster("verbose")) utils::setTxtProgressBar(pb, tasks)
@@ -1125,7 +1125,7 @@ methods::setMethod(
 			flags = c(.quiet(), "overwrite", "n")
 		)
 
-		if (faster("clean")) on.exit(.rm(bio49Minus1, type = "raster", warn = FALSE, verify = FALSE), add = TRUE)
+		on.exit(.rm(bio49Minus1, type = "raster", warn = FALSE, verify = FALSE), add = TRUE)
 
 		ex <- paste0(bio49, " = ", bio49Minus1, " + 1")
 		rgrass::execGRASS("r.mapcalc", expression = ex, flags = c(.quiet(), "overwrite"))
@@ -1155,7 +1155,7 @@ methods::setMethod(
 			flags = c(.quiet(), "overwrite", "n")
 		)
 
-		if (faster("clean")) on.exit(.rm(bio50Minus1, type = "raster", warn = FALSE, verify = FALSE), add = TRUE)
+		on.exit(.rm(bio50Minus1, type = "raster", warn = FALSE, verify = FALSE), add = TRUE)
 
 		ex <- paste0(bio50, " = ", bio50Minus1, " + 1")
 		rgrass::execGRASS("r.mapcalc", expression = ex, flags = c(.quiet(), "overwrite"))
@@ -1185,7 +1185,7 @@ methods::setMethod(
 			flags = c(.quiet(), "overwrite", "n")
 		)
 
-		if (faster("clean")) on.exit(.rm(bio51Minus1, type = "raster", warn = FALSE, verify = FALSE), add = TRUE)
+		on.exit(.rm(bio51Minus1, type = "raster", warn = FALSE, verify = FALSE), add = TRUE)
 
 		ex <- paste0(bio51, " = ", bio51Minus1, " + 1")
 		rgrass::execGRASS("r.mapcalc", expression = ex, flags = c(.quiet(), "overwrite"))
@@ -1215,7 +1215,7 @@ methods::setMethod(
 			flags = c(.quiet(), "overwrite", "n")
 		)
 
-		if (faster("clean")) on.exit(.rm(bio52Minus1, type = "raster", warn = FALSE, verify = FALSE), add = TRUE)
+		on.exit(.rm(bio52Minus1, type = "raster", warn = FALSE, verify = FALSE), add = TRUE)
 
 		ex <- paste0(bio52, " = ", bio52Minus1, " + 1")
 		rgrass::execGRASS("r.mapcalc", expression = ex, flags = c(.quiet(), "overwrite"))
@@ -1240,7 +1240,7 @@ methods::setMethod(
 			rgrass::execGRASS("r.mapcalc", expression = ex, flags = c(.quiet(), "overwrite"))
 
 		}
-		if (faster("clean")) on.exit(.rm(deltaTmeanSrcs, type = "raster", warn = FALSE, verify = FALSE), add = TRUE)
+		on.exit(.rm(deltaTmeanSrcs, type = "raster", warn = FALSE, verify = FALSE), add = TRUE)
 
 		tasks <- tasks + 1
 		if (verbose | faster("verbose")) utils::setTxtProgressBar(pb, tasks)
@@ -1306,7 +1306,7 @@ methods::setMethod(
 			ex <- paste0(deltaPptSrcs[i], " = ", ppt[i], " - ", ppt[iNext])
 			rgrass::execGRASS("r.mapcalc", expression = ex, flags = c(.quiet(), "overwrite"))
 		}
-		if (faster("clean")) on.exit(.rm(deltaPptSrcs, type = "raster", warn = FALSE, verify = FALSE), add = TRUE)
+		on.exit(.rm(deltaPptSrcs, type = "raster", warn = FALSE, verify = FALSE), add = TRUE)
 
 		tasks <- tasks + 1
 		if (verbose | faster("verbose")) utils::setTxtProgressBar(pb, tasks)

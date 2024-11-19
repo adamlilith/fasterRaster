@@ -116,7 +116,7 @@ methods::setMethod(
 
 	if (gtype == "line") args$flags <- c(args$flags, "d")
 	do.call(rgrass::execGRASS, args = args)
-	if (faster("clean")) on.exit(.rm(zonalSrc, type = "raster", warn = FALSE), add = TRUE)
+	on.exit(.rm(zonalSrc, type = "raster", warn = FALSE), add = TRUE)
 	
 	zones <- .freq(zonalSrc, dtype = "CELL")
 	zones <- zones[["value"]]

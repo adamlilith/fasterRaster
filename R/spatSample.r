@@ -195,7 +195,7 @@ methods::setMethod(
 			
 		}
 
-		if (faster("clean")) .rm(srcs, type = "vector", warn = FALSE)
+		.rm(srcs, type = "vector", warn = FALSE)
 		if ((verbose | faster("verbose")) & sets > 1)  close(pb)
 
 	# if strata is not NULL
