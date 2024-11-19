@@ -1,7 +1,12 @@
 # fasterRaster 8.4.0.7029 (2024-10-31)
 
+### Potentially code-breaking changes
+o By default, **fasterRaster** now uses `data.frames`, not `data.table`s from the `data.table` package (see `?faster`).  
+o Removed option `clean` from `faster()`. Files are now removed from the **GRASS** cache as needed.  
+o `mow()` can delete a single `GRaster` or `GVector`, a list of rasters and/or vectors, or all objects in a particular environment.  
+
 ### Enhanced functionality and new functions
-o `coordRef()` returns information about an object's coordinate refernce system.  
+o `coordRef()` returns information about an object's coordinate reference system.  
 o `project()` is now much faster when projecting a `GRaster` using the `terra` or `fallback` values for `res`.  
 
 ### Bug and issue fixes
