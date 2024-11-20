@@ -63,6 +63,8 @@ faster(grassDir = grassDir)
 ```
 You can also use the [`faster()`](https://adamlilith.github.io/fasterRaster/reference/faster.html) function to set options that affect how **fasterRaster** functions run. This includes setting the amount of maximum memory and number of computer cores allocated to operations.
 
+Importantly, some **fasterRaster** functions require addons (**GRASS** modules that are optional and are not included with teh **GRASS** download). To see how to set up addons so functions that use them can operate, see `vignette("addons", package = "fasterRaster").
+
 ## Importing spatial objects into **fasterRaster** `GRaster`s and `GVector`s
 
 In **fasterRaster**, rasters are called `GRaster`s and vectors are called `GVector`s. The easiest (but not always fastest) way to start using a `GRaster` or `GVector` is to convert it from one already in **R**. In the example below, we use a raster that comes with the **fasterRaster** package. The raster represents elevation of a portion of eastern Madagascar. We first load the `SpatRaster` using [`fastData()`](https://adamlilith.github.io/fasterRaster/reference/fastData.html), a helper function for loading example data objects that come with the **fasterRaster** package.
@@ -257,6 +259,6 @@ writeVector(rivers, vect_temp_file)
 
 * **fasterRaster** can crash when the temporary folder is cleaned: Some operating systems have automated procedures that clean out the system's temporary folders when they get too large. This can remove files **GRASS** is using and **fasterRaster** is pointing to, rendering them broken. In Windows, this setting can be changed by going to `Settings`, then `Storage`, then `Storage Sense`. Turn off the setting "Keep Windows running smoothly by automatically cleaning up temporary system and app files".
 
-* Disk space fills up: As counter to the previous issue, prolonged use of **fasterRaster** by the same **R** process can create a lot of temporary files in the **GRASS** cache that fills your hard drive. **fasterRaster** does its best to remove these files when they are not needed. However, temporary files can still accumulate. For example, the operation `new_raster <- 2 * old_raster^3` creates a raster file with the `^3` operation, which is then multipled by 2 to get the desired output. But the raster from the `^3` operation is still left in the disk cache, even though it does not have a "name" in **R**. Judicious use of the [`mow()`](https://adamlilith.github.io/fasterRaster/reference/mow.html) function can remove these temporary files (especially with the argument `mow(unlinked = TRUE)`).
+* Disk space fills up: As counter to the previous issue, prolonged use of **fasterRaster** by the same **R** process can create a lot of temporary files in the **GRASS** cache that fills your hard drive. **fasterRaster** does its best to remove these files when they are not needed. However, temporary files can still accumulate. For example, the operation `new_raster <- 2 * old_raster^3` creates a raster file with the `^3` operation, which is then multiplied by 2 to get the desired output. But the raster from the `^3` operation is still left in the disk cache, even though it does not have a "name" in **R**. Judicious use of the [`mow()`](https://adamlilith.github.io/fasterRaster/reference/mow.html) function can remove these temporary files.
 
 ~ FINIS ~
