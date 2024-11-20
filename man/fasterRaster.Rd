@@ -9,13 +9,15 @@
 \strong{fasterRaster}: Processing of large-in-memory/-on disk rasters and spatial vectors in using \strong{GRASS GIS}. Most functions in the \strong{terra} and \strong{sf} packages are recreated. Processing of medium-sized and smaller spatial objects will nearly always be faster using \strong{terra} or \strong{sf}. To use most of the functions you must have the stand-alone version of \strong{GRASS GIS} version 8.3 or higher (not the \strong{OSGeoW4} installer version). Note that due to differences in how \strong{GRASS}, \strong{terra}, and \strong{sf} were implemented, results will not always be strictly comparable between functions for the same operation.
 \subsection{Most useful tutorials and functions:}{
 \itemize{
-\item The quick-start guide to getting started with \strong{fasterRaster}, accessible using \code{vignette("fasterRaster", package = "fasterRaster")}
-\item Types of \code{GRaster}s, accessible using \code{vignette("GRasters", package = "fasterRaster")}
-\item How to speed up \strong{fasterRaster}, accessible using \code{vignette("faster_fasterRaster", package = "fasterRaster")}
+\item vignette("fasterRaster", package = "fasterRaster"): The quick-start guide to getting started with \strong{fasterRaster}
+\item \verb{vignette("GRasters", package = "fasterRaster"): Types of }GRaster`s
+\item \code{vignette("addons", package = "fasterRaster")}: Using functions that depend on \strong{GRASS} addons
+\item \code{vignette("faster_fasterRaster", package = "fasterRaster")}: How to speed up \strong{fasterRaster}
 \item \code{\link[=faster]{faster()}}: Set the directory where \strong{GRASS} is installed on your system, and set or get other package-wide options. This function must be run once before using most \strong{fasterRaster} functions.
 \item \code{\link[=fast]{fast()}}: Convert a \code{SpatRaster}, \code{SpatVector}, or \code{sf} vector to \strong{fasterRaster}'s raster format (\code{GRaster}s) or vector format (\code{GVector}s), or load one from a file
 \item \code{\link[=rast]{rast()}}, \code{\link[=vect]{vect()}}, and \code{\link[=st_as_sf]{st_as_sf()}}: Convert \code{GRaster}s and \code{GVector}s to \code{SpatRaster}s, \code{SpatVector}s, or \code{sf} vectors
 \item \code{\link[=writeRaster]{writeRaster()}} and \code{\link[=writeVector]{writeVector()}}: Save \code{GRaster}s or \code{GVector}s to disk
+\item \code{\link[=addons]{addons()}}: Test to see if the \code{addons} directory is correct and if a particular addon is installed.
 }
 }
 
@@ -255,6 +257,7 @@ Operations on \code{GRaster}s
 \item \code{\link[=as.points]{as.points()}}: Extract vertex coordinates from a "lines" or "polygons" \code{GVector}
 \item \code{\link[=buffer]{buffer()}}: Create a polygon around/inside a \code{GVector}
 \item \code{\link[=clusterPoints]{clusterPoints()}}: Identify clusters of points
+\item \code{\link[=centroids]{centroids()}}: Centroid(s) of a \code{GVector}
 \item \code{\link[=colbind]{colbind()}}: Add columns to the data table of a \code{GVector}
 \item \code{\link[=complete.cases]{complete.cases()}}: Find rows of a \code{GVector}'s data table that have no \code{NA}s in them
 \item \code{\link[=connectors]{connectors()}}: Create lines connecting nearest features of two \code{GVector}s

@@ -304,6 +304,7 @@ reference:
   - as.data.table
   - as.points
   - buffer
+  - centroids
   - clusterPoints
   - colbind
   - complete.cases

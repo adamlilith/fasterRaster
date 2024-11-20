@@ -6,8 +6,10 @@ o Removed option `clean` from `faster()`. Files are now removed from the **GRASS
 o `mow()` can delete a single `GRaster` or `GVector`, a list of rasters and/or vectors, or all objects in a particular environment.  
 
 ### Enhanced functionality and new functions
+o `centroids()` locates the center of `GVector`s.  
 o `coordRef()` returns information about an object's coordinate reference system.  
 o `project()` is now much faster when projecting a `GRaster` using the `terra` or `fallback` values for `res`.  
+o Support for **GRASS** addons and methods based on them!!!  
 
 ### Bug and issue fixes
 o `[GVector]` does not fail when all geometries are selected.  
