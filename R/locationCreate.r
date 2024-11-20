@@ -67,7 +67,7 @@ methods::setMethod(
 		x <- madElev
 		location <- NULL
 		overwrite <- TRUE
-		warn <= TRUE
+		warn <- TRUE
 	
 	}
 
