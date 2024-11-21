@@ -1,3 +1,4 @@
+if (grassStarted()) {
 
 # See current values for options:
 faster("grassDir")
@@ -21,5 +22,7 @@ if (FALSE) {
    faster(c("grassDir", "verbose", "memory", "cores"))
 
    faster(opts.) # reset options to starting values
+
+}
 
 }
