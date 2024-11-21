@@ -22,7 +22,7 @@ Faster raster processing in `R` using `GRASS GIS`
 `fasterRaster` makes heavy use of the <a href="https://cran.r-project.org/package=rgrass">`rgrass`</a> package by Roger Bivand and others, the <a href="https://cran.r-project.org/package=rgrass">`terra`</a> package by Robert Hijmans, the <a href="https://cran.r-project.org/package=sf">`sf`</a> package by Edzer Pebesma, Roger Bivand, and others, and of course <a href="https://grass.osgeo.org/">`GRASS GIS`</a>, so is greatly indebted to all of these creators!
 
 # Where we are
-As of 2024/10/24, a new version of this package, `fasterRaster 8.4`, is in alpha release (i.e., near final release) and can run with **GRASS** 8.3 or 8.4. There are known issues and unknown issues. If you encounter one of the latter, please file an <a href="https://github.com/adamlilith/fasterRaster/issues">issue</a> report.
+As of 2024/11/20, a new version of this package, `fasterRaster 8.4`, is in alpha release (i.e., near final release) and can run with **GRASS** 8.3 or 8.4. There are known issues and unknown issues. If you encounter one of the latter, please file an <a href="https://github.com/adamlilith/fasterRaster/issues">issue</a> report.
 
 **Special announcement #1**: We now have a **pkgdown** <a href="https://adamlilith.github.io/fasterRaster/">site</a> with all the package documentation--plus vignettes!
 
@@ -46,7 +46,7 @@ To use `fasterRaster` you must install [GRASS version 8.3+](https://grass.osgeo.
 * ["Getting started"](https://adamlilith.github.io/fasterRaster/articles/fasterRaster.html)
 * [Types of `GRaster`s](https://adamlilith.github.io/fasterRaster/articles/GRasters.html)
 * [Making **fasterRaster** faster](https://adamlilith.github.io/fasterRaster/articles/faster_fasterRaster.html)
-
+* [Installing addons](https://adamlilith.github.io/fasterRaster/articles/addons.html)
 
 # An example
 
