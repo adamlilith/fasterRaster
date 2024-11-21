@@ -47,7 +47,7 @@ To use `fasterRaster` you must install [GRASS version 8.3+](https://grass.osgeo.
 * ["Getting started"](https://adamlilith.github.io/fasterRaster/articles/fasterRaster.html)
 * [Types of `GRaster`s](https://adamlilith.github.io/fasterRaster/articles/GRasters.html)
 * [Making **fasterRaster** faster](https://adamlilith.github.io/fasterRaster/articles/faster_fasterRaster.html)
-* [Installing addons](https://adamlilith.github.io/fasterRaster/articles/addons.html)
+* [Installing addons](https://adamlilith.github.io/fasterRaster/articles/fasterRaster_addons.html)
 
 # An example
 
