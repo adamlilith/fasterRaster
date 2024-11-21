@@ -1,4 +1,4 @@
-# fasterRaster 8.4.0.7029 (2024-10-31)
+# fasterRaster 8.4.0.0 (2024-11-20)
 
 ### Potentially code-breaking changes
 o By default, **fasterRaster** now uses `data.frames`, not `data.table`s from the `data.table` package (see `?faster`).  
@@ -12,7 +12,7 @@ o `project()` is now much faster when projecting a `GRaster` using the `terra` o
 o Support for **GRASS** addons and methods based on them!!!  
 
 ### Bug and issue fixes
-o `[GVector]` does not fail when all geometries are selected.  
+o `GVector[i]` does not fail when all geometries are selected.  
 o Comparison with categorical `GRaster`s (e.g., `<`, `==`, etc.) does not fail when `faster('useDataTable')` is `FALSE`.  
 o `droplevels()` does not fail when `faster('useDataTable')` is `FALSE`.  
 o `levels()` does not fail when `faster('useDataTable')` is `FALSE`.  
