@@ -215,12 +215,16 @@ faster <- function(
 		out <- list()
 		# we have no options :(
 		if (length(opts) == 0L) {
-			out <- .fasterRaster$options
+			# out <- .fasterRaster$options
+			out <- get("options", .fasterRaster)
 		# we have options, people!
 		} else {
 			out <- list()
 			for (opt in opts) {
-				out[[length(out) + 1L]] <- .fasterRaster$options[[opt]]
+				
+				# out[[length(out) + 1L]] <- .fasterRaster$options[[opt]]
+				out[[length(out) + 1L]] <- get(opt, .fasterRaster$options)
+			
 			}
 			names(out) <- opts
 		}
