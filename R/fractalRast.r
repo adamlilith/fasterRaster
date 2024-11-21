@@ -62,7 +62,7 @@ methods::setMethod(
 
     } # next raster
     
-    if (faster("clean")) on.exit(.rm(srcFracts, type = "raster", warn = FALSE), add = TRUE)
+    on.exit(.rm(srcFracts, type = "raster", warn = FALSE), add = TRUE)
     .makeGRaster(srcs, "fractal")
 
     } # EOF

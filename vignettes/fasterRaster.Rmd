@@ -37,6 +37,8 @@ remotes::install_github("adamlilith/fasterRaster", dependencies = TRUE)
 
 **fasterRaster** uses **GRASS** to do its operations. You will need to install **GRASS** using the "stand-alone" installer, available through the [GRASS GIS](https://grass.osgeo.org/). *Be sure to use the "stand-alone" installer, not the "OSGeo4W" installer!*
 
+Optional: A few functions in **fasterRaster** require **GRASS** "addon" modules, which do not come bundled with **GRASS**. You do not need to install these addons if you do not use functions that call them. A list of functions that require addons can be seen in the "addons" vignette (in **R**, use `vignette("addons", package = "fasterRaster")). This vignette also explains how to install addons.
+
 ## Starting a **fasterRaster** session
 
 I recommend attaching the **data.table**, **terra**, and **sf** packages before attaching **fasterRaster** package to avoid function conflicts. The **data.table** package is not required, but you most surely will use at least one of the other two.
@@ -62,6 +64,8 @@ To tell **fasterRaster** where **GRASS** is installed, use the `faster()` functi
 faster(grassDir = grassDir)
 ```
 You can also use the [`faster()`](https://adamlilith.github.io/fasterRaster/reference/faster.html) function to set options that affect how **fasterRaster** functions run. This includes setting the amount of maximum memory and number of computer cores allocated to operations.
+
+Importantly, some **fasterRaster** functions require addons (**GRASS** modules that are optional and are not included with teh **GRASS** download). To see how to set up addons so functions that use them can operate, see `vignette("addons", package = "fasterRaster").
 
 ## Importing spatial objects into **fasterRaster** `GRaster`s and `GVector`s
 
@@ -257,6 +261,6 @@ writeVector(rivers, vect_temp_file)
 
 * **fasterRaster** can crash when the temporary folder is cleaned: Some operating systems have automated procedures that clean out the system's temporary folders when they get too large. This can remove files **GRASS** is using and **fasterRaster** is pointing to, rendering them broken. In Windows, this setting can be changed by going to `Settings`, then `Storage`, then `Storage Sense`. Turn off the setting "Keep Windows running smoothly by automatically cleaning up temporary system and app files".
 
-* Disk space fills up: As counter to the previous issue, prolonged use of **fasterRaster** by the same **R** process can create a lot of temporary files in the **GRASS** cache that fills your hard drive. **fasterRaster** does its best to remove these files when they are not needed, so long as the setting `faster('clean')` is `TRUE` (which it is by default). However, temporary files can still accumulate. For example, the operation `new_raster <- 2 * old_raster^3` creates a raster file with the `^3` operation, which is then multipled by 2 to get the desired output. But the raster from the `^3` operation is still left in the disk cache, even though it does not have a "name" in **R**. Again, judicious use of the [mow()] function can remove these temporary files.
+* Disk space fills up: As counter to the previous issue, prolonged use of **fasterRaster** by the same **R** process can create a lot of temporary files in the **GRASS** cache that fills your hard drive. **fasterRaster** does its best to remove these files when they are not needed. However, temporary files can still accumulate. For example, the operation `new_raster <- 2 * old_raster^3` creates a raster file with the `^3` operation, which is then multiplied by 2 to get the desired output. But the raster from the `^3` operation is still left in the disk cache, even though it does not have a "name" in **R**. Judicious use of the [`mow()`](https://adamlilith.github.io/fasterRaster/reference/mow.html) function can remove these temporary files.
 
 ~ FINIS ~

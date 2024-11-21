@@ -41,7 +41,7 @@ methods::setMethod(
 		# unique values
 		dtype <- datatype(x, type = "GRASS")[i]
 		freqs <- freq(x[[i]], digits = digits, bins = bins)
-		freqs <- freqs[count > 0]
+		freqs <- freqs[freqs$count > 0, ]
 		vals <- freqs$value
 
 		nVals <- length(vals)

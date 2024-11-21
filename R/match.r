@@ -102,8 +102,12 @@ methods::setMethod(
 	
 		levs <- .freq(srcs, dtype = rep("CELL", length(srcs)))
 
-  		if (!inherits(levs, "list")) levs <- list(levs)
 		acs <- activeCat(x, names = TRUE)
+
+  		if (!inherits(levs, "list")) levs <- list(levs)
+		if (!faster("useDataTable")) {
+			for (i in seq_along(levs)) levs[[i]] <- data.table::as.data.table(levs[[i]])
+		}
 
 		for (i in seq_along(acs)) {
 

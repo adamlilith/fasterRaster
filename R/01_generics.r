@@ -98,6 +98,7 @@ methods::setGeneric(name = "cats", package = "terra")
 # methods::setGeneric(name = "cbind", signature = "...")
 methods::setGeneric(name = "colbind", def = function(x, ...) standardGeneric("colbind"))
 methods::setGeneric(name = "cellSize", package = "terra")
+methods::setGeneric(name = "centroids", package = "terra")
 methods::setGeneric(name = "classify", package = "terra")
 methods::setGeneric(name = "clump", def = function(x, ...) standardGeneric("clump"))
 methods::setGeneric(name = "clusterPoints", def = function(x, ...) standardGeneric("clusterPoints"))
@@ -107,12 +108,12 @@ methods::setGeneric(name = "compositeRGB", def = function(r, ...) standardGeneri
 methods::setGeneric(name = "combineLevels", def = function(x, ...) standardGeneric("combineLevels"))
 methods::setGeneric(name = "concats", def = function(x, ...) standardGeneric("concats"))
 methods::setGeneric(name = "connectors", def = function(x, y, ...) standardGeneric("connectors"))
+methods::setGeneric(name = "coordRef", def = function(x, ...) standardGeneric("coordRef"))
 methods::setGeneric(name = "convHull", package = "terra")
 methods::setGeneric(name = "count", def = function(x, ...) standardGeneric("count"))
 methods::setGeneric(name = "crds", package = "terra")
 methods::setGeneric(name = "crs", package = "terra")
 methods::setGeneric(name = "crop", package = "terra")
-
 
 # dim() is primitive
 methods::setGeneric(name = "datatype", def = function(x, ...) standardGeneric("datatype"))

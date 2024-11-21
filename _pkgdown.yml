@@ -19,6 +19,7 @@ articles:
   contents:
   - GRasters
   - faster_fasterRaster
+  - fasterRaster_addons
 
 - title: For Developers
   desc: Vignettes for developers
@@ -38,9 +39,11 @@ reference:
   - st_as_sf
   - writeRaster
   - writeVector
+  - addons
 - title: GRaster properties
 - contents:
   - crs
+  - coordRef
   - datatype
   - dim
   - dim3d
@@ -262,6 +265,7 @@ reference:
 - contents:
   - bottom
   - crs
+  - coordRef
   - datatype
   - dim
   - E
@@ -302,6 +306,7 @@ reference:
   - as.data.table
   - as.points
   - buffer
+  - centroids
   - clusterPoints
   - colbind
   - complete.cases

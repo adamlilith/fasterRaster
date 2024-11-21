@@ -58,6 +58,7 @@ methods::setMethod(
 		location <- names(.fasterRaster$locations)[x]
 	} else if (inherits(x, "GSpatial")) {
 		location <- x@location
+		mapset <- x@mapset
 	}
 
 	index <- .locationFind(location, return = "index")
@@ -73,28 +74,51 @@ methods::setMethod(
 	mapset <- "PERMANENT"
 
 	coordRef <- .fasterRaster$locations[[index]]
-
 	if (location != .fasterRaster$activeLocation) {
 
 		### reconnect to location
 		emptyRast <- terra::rast(matrix(1L), crs = coordRef)
 
-		suppressWarnings(
-			session <- rgrass::initGRASS(
-				gisBase = grassDir,
-				addon_base = addonsDir,
-				home = workDir,
-				gisDbase = workDir, # ?
-				SG = emptyRast,
-				location = location,
-				mapset = mapset,
-				override = TRUE, # must be TRUE to restart, even in different location/mapset
-				remove_GISRC = FALSE, # ???
-				ignore.stderr = TRUE
-			)
-		)
+		# suppressWarnings(
+		# 	session <- rgrass::initGRASS(
+		# 		gisBase = grassDir,
+		# 		addon_base = addonsDir,
+		# 		home = workDir,
+		# 		gisDbase = workDir, # ?
+		# 		SG = emptyRast,
+		# 		location = location,
+		# 		mapset = mapset,
+		# 		override = TRUE, # must be TRUE to restart, even in different location/mapset
+		# 		remove_GISRC = FALSE, # ???
+		# 		ignore.stderr = TRUE
+		# 	)
+		# )
 
-		.fasterRaster$activeLocation <<- location
+		if (grassInfo("versionNumber") >= 8.4) {
+			
+			rgrass::execGRASS(
+				cmd = "g.mapset",
+				mapset = mapset,
+				project = location,
+				flags = c(.quiet(), "overwrite")#,
+				# dbase = workDir
+			)
+		
+		} else {
+			
+			rgrass::execGRASS(
+				cmd = "g.mapset",
+				mapset = mapset,
+				location = location,
+				flags = c(.quiet(), "overwrite")#,
+				# dbase = workDir
+			)
+		
+		}
+
+		# .fasterRaster$activeLocation <<- location
+		assign(x = "activeLocation", value = location, pos = .fasterRaster)
+		Sys.sleep(0.1) # obviates failures to switch locations(?)
 
 	}
 

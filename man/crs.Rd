@@ -7,6 +7,10 @@
 \alias{st_crs,missing-method}
 \alias{st_crs}
 \alias{st_crs,GLocation-method}
+\alias{coordRef,missing-method}
+\alias{coordRef}
+\alias{coordRef,GRaster-method}
+\alias{coordRef,GVector-method}
 \title{Coordinate reference system of a GRaster or GVector}
 \usage{
 \S4method{crs}{missing}(x)
@@ -18,6 +22,12 @@
 \S4method{st_crs}{GLocation}(x, ...)
 
 st_crs(x, ...)
+
+\S4method{coordRef}{missing}(x)
+
+\S4method{coordRef}{GRaster}(x)
+
+\S4method{coordRef}{GVector}(x)
 }
 \arguments{
 \item{x}{An object that inherits from a \code{GLocation} (i.e., a \code{GRaster} or \code{GVector}) or missing. If missing, the coordinate reference system of the currently active \strong{GRASS} "project/location" is reported.}
@@ -25,10 +35,15 @@ st_crs(x, ...)
 \item{...}{Other arguments (generally unused).}
 }
 \value{
-Character.
+Function \code{crs()} returns a \code{character} object, \code{st_crs()} returns \code{crs} object, and \code{coordRef()} a \code{list}.
 }
 \description{
-Get the coordinate reference system (CRS) of a \code{GLocation} object, or any that contain it (especially \code{GRaster}s and \code{GVector}s), or from the currently active \strong{GRASS} "project/location" (see \code{vignette("projects_mapsets", package = "fasterRaster")}).
+Get the coordinate reference system (CRS) of a \code{GRaster} or \code{GVector}s, or from the currently active \strong{GRASS} "project/location" (see \code{vignette("projects_mapsets", package = "fasterRaster")}):
+\itemize{
+\item \code{crs()}: Return a WKT string (an object of class \code{character}).
+\item \code{st_crs()}: Return a \code{crs} object (from the \strong{sf} package).
+\item \code{coordRef()}: Return a \code{list}.
+}
 }
 \examples{
 if (grassStarted()) {
@@ -85,6 +100,7 @@ names(elev)
 # coordinate reference system
 crs(elev)
 st_crs(elev)
+coordRef(elev)
 
 # extent (bounding box)
 ext(elev)

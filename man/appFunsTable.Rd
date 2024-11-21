@@ -43,9 +43,9 @@ app(x, fun = fun)
 (x[[1]] / x[[2]]) + x[[3]]
 
 # We can view a table of app() functions using appFuns():
-appFuns(FALSE) # Change to TRUE to see a Shiny version.
+appFuns()
 
-# We can also get the table using:
+# We can also get the same table using:
 data(appFunsTable)
 
 # Apply other functions:
@@ -73,7 +73,8 @@ fun <- "= round(rand(0.5, 4.5))"
 rand <- app(elev, fun = fun)
 rand
 
-freq(rand) # cell frequencies
+freqs <- freq(rand) # cell frequencies
+print(freqs)
 
 }
 }

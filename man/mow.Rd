@@ -2,36 +2,66 @@
 % Please edit documentation in R/mow.r
 \name{mow}
 \alias{mow}
-\title{Remove unused rasters and vectors from the GRASS cache}
+\title{Remove rasters and vectors from the GRASS cache}
 \usage{
-mow(x, type = NULL, keep = NULL, verbose = TRUE, ask = TRUE)
+mow(
+  x = "unlinked",
+  pos = NULL,
+  type = NULL,
+  keep = NULL,
+  verbose = TRUE,
+  ask = TRUE
+)
 }
 \arguments{
-\item{x}{Either missing (default) or an environment.}
+\item{x}{Any of:
+\itemize{
+\item \code{"unlinked"} (default): Delete \strong{GRASS} rasters and/or vectors that are unlinked to \code{GRaster}s or \code{GVector}s in the environment in which the function was called, or the environment named in \code{pos}.
+\item A \code{GRaster} or \code{GVector}: Delete the \strong{GRASS} raster or vector pointed to by this object.
+\item A \code{list} of \code{GRaster}s and/or \code{GVector}s: Delete the \strong{GRASS} raster(s) and/or vector(s) pointed to by these objects.
+\item \code{"*"}: Delete \emph{all} \strong{GRASS} rasters and/or vectors pointed to by objects in the environment named in \code{pos}. Only objects in \code{keep} will not be deleted.
+}}
 
-\item{type}{Either \code{NULL} or a character vector. If \code{NULL}, all rasters and vectors in the \strong{GRASS} cache are candidates for deletion. Otherwise, this can be either \code{"raster"}, \code{"vector"}, or both.}
+\item{pos}{Either \code{NULL} (default), or an environment. This is used only if \code{x} is \code{"unlinked"} or \code{"*"}. In that case, if \code{pos} is \code{NULL}, the environment in which this function was called will be searched for \code{GRaster}s and \code{GVector}s for removal of their associated \strong{GRASS} rasters and vectors. Otherwise, the named environment will be searched.}
 
-\item{keep}{Either \code{NULL} (default) or a \code{list()} of \code{GRaster}s and/or \code{GVector}s that you want to retain. The rasters and vectors in \strong{GRASS} pointed to by these objects will not be deleted.}
+\item{type}{Either \code{NULL} or a character vector. This is used only if \code{x} is \code{"unlinked"} or \code{"*"}. If \code{NULL}, all rasters and vectors in the \strong{GRASS} cache are candidates for deletion. Otherwise, this can be either \code{"rasters"}, \code{"vectors"}, or both.}
+
+\item{keep}{Either \code{NULL} (default) or a \code{list()} of \code{GRaster}s and/or \code{GVector}s that you want to retain. This is used only if \code{x} is \code{"unlinked"} or \code{"*"}. The rasters and vectors in \strong{GRASS} pointed to by these objects will not be deleted.}
 
 \item{verbose}{Logical: If \code{TRUE} (default), report progress.}
 
-\item{ask}{Logical: If \code{TRUE} (default), prompt for reassurance.}
+\item{ask}{Logical: If \code{TRUE} (default), prompt for reassurance. This is used only if \code{x} is \code{"unlinked"} or \code{"*"}.}
 }
 \value{
-Invisibly returns a list with the number of rasters and vectors deleted.
+Invisibly returns a named vector with the number of rasters and vectors deleted.
 }
 \description{
-\strong{fasterRaster} attempts to delete rasters and vectors in the \strong{GRASS} cache. This function will a) search the current \strong{GRASS} "project/location" cache for all rasters/vectors there; and b) remove any of them that are not pointed to by an object in the active \strong{R} environment. Only objects in the currently active \strong{GRASS} project/location will be removed (see \code{vignette("project_mapset", package = "fasterRaster")}).
+\strong{fasterRaster} functions attempt to delete rasters and vectors in the \strong{GRASS} cache, but not all intermediate files can be removed. This function can be used to clear the cache of extraneous rasters and vectors.
 
-Note that calling this function inside another function's environment without providing an argument for \code{x} can be very \strong{dangerous}, as it will detect objects outside that environment, and thus delete any rasters/vectors outside that environment.
+Calling this function inside another function's environment and defining \code{x} as \code{"*"} can be very \strong{dangerous}, as it will detect objects outside of that environment, and thus delete any rasters/vectors outside that environment. Here is a guide:
+\itemize{
+\item To delete files associated with a single \code{GRaster} or \code{GVector}, use \code{mow(GRaster_to_unlink)} or \code{mow(GVector_to_unlink)}.
+To remove all rasters, all vectors, or all rasters and vectors in the \strong{GRASS} cache that are not linked to a \code{GRaster} or \code{GVector}, use \code{mow("*")}.
+To remove all rasters or all vectors in the \strong{GRASS} cache, use \code{mow("*", type = "rasters")} or \code{mow("*", type = "vectors")}.
+To remove all rasters or all vectors in the \strong{GRASS} cache \emph{except} for certain ones, use \code{mow("*", unlinked = FALSE, keep = list(GRaster_to_keep, GVector_to_keep))}. You can combine this with the \code{keep} argument to retain specific rasters or vectors. For example, you can use \code{mow("*", unlinked = FALSE, type = "rasters", keep = list(GRaster_to_keep))}.
+}
 }
 \examples{
 if (grassStarted()) {
 
-if (FALSE) mow()
+# Setup
+madElev <- fastData("madElev")
+elev <- fast(madElev)
+
+# delete GRASS raster attached to `elev`
+if (FALSE) {
+	mow(elev)
+	elev # useless R object still exists, though
+	elev * 2 # will fail because raster has been deleted from GRASS
+}
 
 }
 }
 \seealso{
-Option \code{clean} in \code{\link[=faster]{faster()}}
+\code{\link[terra:tmpFile]{terra::tmpFiles()}}
 }

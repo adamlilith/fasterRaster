@@ -45,7 +45,11 @@ methods::setMethod(
 
 			cols <- c(value, active)
 
-			out[[i]] <- out[[i]][ , ..cols]
+			if (faster("useDataTable")) {
+				out[[i]] <- out[[i]][ , ..cols]
+			} else {
+				out[[i]] <- out[[i]][ , cols, drop = FALSE]
+			}
 
 		}
 	}

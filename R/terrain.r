@@ -103,7 +103,7 @@ methods::setMethod(
 			slopeSrc <- .makeSourceName("terrain_r_mapcalc_slope", "raster")
 			ex <- paste0(slopeSrc, " = ", pi, " * ", oldSlopeSrc, " / 180")
 			rgrass::execGRASS("r.mapcalc", expression = ex, flags = c(.quiet(), "overwrite"))
-			if (faster("clean")) on.exit(.rm(oldSlopeSrc, type = "raster", warn = FALSE), add = TRUE)
+			on.exit(.rm(oldSlopeSrc, type = "raster", warn = FALSE), add = TRUE)
 		
 		} else {
 			slopeSrc <- args$slope
@@ -123,7 +123,7 @@ methods::setMethod(
 			ex <- paste0(aspectSrc, " = if(", oldAspectSrc1, " < 0, ", undefinedAspect, ", ", oldAspectSrc1, ")")
 		}
 		rgrass::execGRASS("r.mapcalc", expression = ex, flags = c(.quiet(), "overwrite"))
-		if (faster("clean")) on.exit(.rm(oldAspectSrc1, type = "raster", warn = FALSE), add = TRUE)
+		on.exit(.rm(oldAspectSrc1, type = "raster", warn = FALSE), add = TRUE)
 	
 		# convert to radians
 		if (unitRadians) {
@@ -132,7 +132,7 @@ methods::setMethod(
 			aspectSrc <- .makeSourceName("terrain_r_mapcalc_radians", "raster")
 			ex <- paste0(aspectSrc, " = ", pi, " * ", oldAspectSrc2, " / 180")
 			rgrass::execGRASS("r.mapcalc", expression = ex, flags = c(.quiet(), "overwrite"))
-			if (faster("clean")) on.exit(.rm(oldAspectSrc2, type = "raster", warn = FALSE), add = TRUE)
+			on.exit(.rm(oldAspectSrc2, type = "raster", warn = FALSE), add = TRUE)
 		
 		}
 

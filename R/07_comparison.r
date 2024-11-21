@@ -184,7 +184,7 @@ methods::setMethod(
 			name <- names(e1)[i]
 			src <- .makeSourceName("comparison", "raster")
 
-			ex <- paste(src, "= int(if(", sources(e1)[i], " ", oper, " ", e2, "))")
+			ex <- paste0(src, "= int(if(", sources(e1)[i], " ", oper, " ", e2, "))")
 			this <- .genericArithRast(name = name, src = src, ex = ex)
 			
 			if (i == 1L) {
@@ -291,8 +291,13 @@ methods::setMethod(
 
 		# get value of this category
 		ac <- acs[i]
-		thisVal <- eval(parse(text = paste0("levs[[", i, "]][", ac, " == e2]")))
-		thisVal <- thisVal[[1L]]
+		if (faster("useDataTable")) {
+			thisVal <- eval(parse(text = paste0("levs[[", i, "]][", ac, " == e2]")))
+			thisVal <- thisVal[[1L]]
+		} else {
+			thisVal <- eval(parse(text = paste0("levs[[", i, "]][levs[[", i, "]]$", ac, " == e2, 1L]")))
+		}
+		
 
 		if (length(thisVal) == 0L) {
 			this <- 0L * not.na(e1)

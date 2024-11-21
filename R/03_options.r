@@ -10,6 +10,8 @@
 #'
 #' You cannot simultaneously get and set options.
 #'
+#' To run most **fasterRaster** functions, you must set the `grassDir` option.
+#'
 #' @param ... Either:
 #' * A character vector: Name(s) of option(s) to get values of;
 #' * An option and the value of the option using an `option = value` pattern; or
@@ -17,7 +19,7 @@
 #'
 #' Options include:
 #'
-#' * `grassDir` (character): The folder in which **GRASS** is installed on your computer. Typically, this option is set when you run [faster()]. Depending on your operating system, your install directory will look something like this:
+#' * `grassDir` (character): The folder in which **GRASS** is installed on your computer. You must set this option to run most **fasterRaster** functions. Depending on your operating system, your install directory will look something like this:
 #'     * Windows: `"C:/Program Files/GRASS GIS 8.4"`
 #'     * Mac OS: `"/Applications/GRASS-8.4.app/Contents/Resources"`
 #'     * Linux: `"/usr/local/grass"`
@@ -27,8 +29,6 @@
 #' * `cores` (integer/numeric integer): Number of processor cores to use on a task. The default is 2. Some **GRASS** modules are parallelized.
 #'
 #' * `memory` (integer/numeric): The amount of memory to allocate to a task, in GB, for **GRASS**. The default is 2048 MB (i.e., 2 GB). Some **GRASS** modules can take advantage of more memory.
-#'
-#' * `clean` (logical): If `TRUE` (default), remove temporary files created internally by functions. If not deleted, they can eventually fill up hard drive space, but deleting them takes a little bit of time (usually <1 second for each function). See also [mow()].
 #'
 #' * `useDataTable` (logical): If `FALSE` (default), functions that return tabular output produce `data.frame`s. If `TRUE`, output will be `data.table`s from the **data.table** package. This can be much faster, but it might require you to know how to use `data.table`s if you want to manipulate them in **R**. You can always convert them to `data.frame`s using [base::as.data.frame()].
 #' 
@@ -139,9 +139,9 @@ faster <- function(
 		if (!inherits(opts$cores, c("integer", "numeric")) || opts$cores <= 0 || !omnibus::is.wholeNumber(opts$cores)) stop("Option `cores` must be an integer >= 1. The default is ", .coresDefault(), ".")
 	}
 
-	if (any(names(opts) %in% "clean")) {
-  		if (is.na(opts$clean) || !is.logical(opts$clean)) stop("Option `clean` must be a logical. The default is ", .cleanDefault(), ".")
-	}
+	# if (any(names(opts) %in% "clean")) {
+  	# 	if (is.na(opts$clean) || !is.logical(opts$clean)) stop("Option `clean` must be a logical. The default is ", .cleanDefault(), ".")
+	# }
 
 	if (any(names(opts) %in% "verbose")) {
   		if (is.na(opts$verbose) || !is.logical(opts$verbose)) stop("Option `verbose` must be a logical. The default is ", .verboseDefault(), ".")
@@ -215,12 +215,16 @@ faster <- function(
 		out <- list()
 		# we have no options :(
 		if (length(opts) == 0L) {
-			out <- .fasterRaster$options
+			# out <- .fasterRaster$options
+			out <- get("options", .fasterRaster)
 		# we have options, people!
 		} else {
 			out <- list()
 			for (opt in opts) {
-				out[[length(out) + 1L]] <- .fasterRaster$options[[opt]]
+				
+				# out[[length(out) + 1L]] <- .fasterRaster$options[[opt]]
+				out[[length(out) + 1L]] <- get(opt, .fasterRaster$options)
+			
 			}
 			names(out) <- opts
 		}

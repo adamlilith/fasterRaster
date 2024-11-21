@@ -113,7 +113,7 @@ methods::setMethod(
 				flags = c(.quiet(), "overwrite")
 			)
 
-			if (faster("clean")) .rm(srcIn, type = "raster", warn = FALSE)
+			.rm(srcIn, type = "raster", warn = FALSE)
 		
 		}
 

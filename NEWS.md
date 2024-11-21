@@ -1,7 +1,26 @@
-# fasterRaster 8.4.0.7028 (2024-10-24)
+# fasterRaster 8.4.0.0 (2024-11-20)
 
-### Main task
-o Clear for CRAN submission
+### Potentially code-breaking changes
+o By default, **fasterRaster** now uses `data.frames`, not `data.table`s from the `data.table` package (see `?faster`).  
+o Removed option `clean` from `faster()`. Files are now removed from the **GRASS** cache as needed.  
+o `mow()` can delete a single `GRaster` or `GVector`, a list of rasters and/or vectors, or all objects in a particular environment.  
+
+### Enhanced functionality and new functions
+o `centroids()` locates the center of `GVector`s.  
+o `coordRef()` returns information about an object's coordinate reference system.  
+o `project()` is now much faster when projecting a `GRaster` using the `terra` or `fallback` values for `res`.  
+o Support for **GRASS** addons and methods based on them!!!  
+
+### Bug and issue fixes
+o `GVector[i]` does not fail when all geometries are selected.  
+o Comparison with categorical `GRaster`s (e.g., `<`, `==`, etc.) does not fail when `faster('useDataTable')` is `FALSE`.  
+o `droplevels()` does not fail when `faster('useDataTable')` is `FALSE`.  
+o `levels()` does not fail when `faster('useDataTable')` is `FALSE`.  
+o `segregate()` works when setting `useDataTable` is `FALSE`.  
+o `subset()` no longer fails.  
+o `subst()` does not fail when `faster('useDataTable')` is `FALSE`.  
+
+# fasterRaster 8.4.0.7028 (2024-10-24)
 
 ### Enhanced functionality and new functions
 o `grassHelp()` can show the **GRASS** manual "table of contents" (argument `"toc"`).  

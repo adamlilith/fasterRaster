@@ -246,7 +246,7 @@ setMethod(
 			flags = c(.quiet(), "overwrite")
 		)
 
-		if (faster("clean")) .rm(c(srcSS, srcCount), type = "raster", warn = FALSE)
+		.rm(c(srcSS, srcCount), type = "raster", warn = FALSE)
 
 		out <- .makeGRaster(src, "sd")
 
@@ -306,7 +306,7 @@ setMethod(
 		flags = c(.quiet(), "overwrite")
 	)
 	
-	if (faster("clean")) .rm(c(srcSS, srcCount), type = "raster", warn = FALSE)
+	.rm(c(srcSS, srcCount), type = "raster", warn = FALSE)
 	.makeGRaster(src, "var")
 		
 	} # EOF

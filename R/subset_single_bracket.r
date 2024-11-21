@@ -65,7 +65,7 @@ methods::setMethod(
 		if (removeAll) {
 			out <- NULL # removed all
 		} else if (all(1L:nGeoms %in% i) & missing(j)) {
-			out <- x
+			return(x)
 		} else {
 
 			# # # # will be deleting geometries from this copy
@@ -224,7 +224,6 @@ methods::setMethod(
 
 			# renumber cats so they start from 1 and are sequential
 			
-		
 		} # not removing all and not removing nothing
 
 		### select data table rows and columns

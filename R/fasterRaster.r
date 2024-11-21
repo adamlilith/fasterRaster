@@ -3,16 +3,19 @@
 #' @description **fasterRaster**: Processing of large-in-memory/-on disk rasters and spatial vectors in using **GRASS GIS**. Most functions in the **terra** and **sf** packages are recreated. Processing of medium-sized and smaller spatial objects will nearly always be faster using **terra** or **sf**. To use most of the functions you must have the stand-alone version of **GRASS GIS** version 8.3 or higher (not the **OSGeoW4** installer version). Note that due to differences in how **GRASS**, **terra**, and **sf** were implemented, results will not always be strictly comparable between functions for the same operation.
 #'
 #' ## Most useful tutorials and functions:
-#' * The quick-start guide to getting started with **fasterRaster**, accessible using `vignette("fasterRaster", package = "fasterRaster")`
-#' * Types of `GRaster`s, accessible using `vignette("GRasters", package = "fasterRaster")`
-#' * How to speed up **fasterRaster**, accessible using `vignette("faster_fasterRaster", package = "fasterRaster")`
+#' * The quick-start guide to getting started with **fasterRaster**: `vignette("fasterRaster", package = "fasterRaster")`: 
+#' * Types of `GRaster`s: `vignette("GRasters", package = "fasterRaster")`
+#' * How to speed up **fasterRaster**: `vignette("faster_fasterRaster", package = "fasterRaster")`
+#' * Using functions that depend on **GRASS** addons: `vignette("fasterRaster_addons", package = "fasterRaster")`
 #' * [faster()]: Set the directory where **GRASS** is installed on your system, and set or get other package-wide options. This function must be run once before using most **fasterRaster** functions.
 #' * [fast()]: Convert a `SpatRaster`, `SpatVector`, or `sf` vector to **fasterRaster**'s raster format (`GRaster`s) or vector format (`GVector`s), or load one from a file
 #' * [rast()], [vect()], and [st_as_sf()]: Convert `GRaster`s and `GVector`s to `SpatRaster`s, `SpatVector`s, or `sf` vectors
 #' * [writeRaster()] and [writeVector()]: Save `GRaster`s or `GVector`s to disk
+#' * [addons()]: Test to see if the `addons` directory is correct and if a particular addon **GRASS** module is installed.
 #'
 #' ## Properties of `GRasters`
 #' * [crs()]: Coordinate reference system
+#' * [coordRef()]: Coordinate reference system
 #' * [datatype()]: Data type
 #' * [dim()] and [dim3d()]: Number of rows, columns, and depths
 #' * [ext()], [N()], [S()], [E()], [W()], [top()], and [bottom()]: Spatial extent
@@ -178,6 +181,7 @@
 #'
 #' ## Properties of `GVector`s
 #' * [crs()]: Coordinate reference system
+#' * [coordRef()]: Coordinate reference system
 #' * [datatype()]: Data type of fields
 #' * [dim()]: Number of geometries and columns
 #' * [expanse()]: Area of polygons or length of lines
@@ -209,6 +213,7 @@
 #' * [as.points()]: Extract vertex coordinates from a "lines" or "polygons" `GVector`
 #' * [buffer()]: Create a polygon around/inside a `GVector`
 #' * [clusterPoints()]: Identify clusters of points
+#' * [centroids()]: Centroid(s) of a `GVector`
 #' * [colbind()]: Add columns to the data table of a `GVector`
 #' * [complete.cases()]: Find rows of a `GVector`'s data table that have no `NA`s in them
 #' * [connectors()]: Create lines connecting nearest features of two `GVector`s

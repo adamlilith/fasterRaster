@@ -18,7 +18,7 @@ init(elev, "row")
 init(elev, "col")
 
 # Chess
-elevAgg <- aggregate(elev, 32) # make cells bigger so we can see
+elevAgg <- aggregate(elev, 32) # make cells bigger so we can see them
 
 chessOdd <- init(elevAgg, "chess")
 chessEven <- init(elevAgg, "chess", odd = FALSE)
