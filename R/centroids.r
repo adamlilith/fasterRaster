@@ -1,6 +1,6 @@
 #' Centroid(s) of a vector
 #'
-#' @description This function locates the centroid of each geometry of a `GVector`. **To use this function, you must a) have correctly specified the `addonsDir` option using [faster()], and b) installed the **GRASS** addon `v.centerpoints`.** See `vignette("addons", package = "fasterRaster")`.
+#' @description This function locates the centroid of each geometry of a `GVector`. **To use this function, you must a) have correctly specified the `addonsDir` option using [faster()], and b) installed the **GRASS** addon `v.centerpoint`.** See [addons()] and `vignette("addons", package = "fasterRaster")`.
 #'
 #' @param x A `GVector`.
 #' @param method Character or `NULL` (default): Method used for calculating centroids. The method of calculation depends on whether the input is a `points`, `lines`, or `polygons` `GVector`. If the value is `NULL`, then the default method will be chosen, depending on the geometry type of the `GVector`:
@@ -13,7 +13,7 @@
 #'    * `"mean"`: Center of gravity of all line segments; may not fall on the line.
 #'    * `"median`: Geometric median; may not fall on the line.
 #' * `polygons`:
-#'    * `"mean"` (default): Center of gravity (area), calculated using area triangulation.
+#'    * `"mean"` (default for `polygons`): Center of gravity (area), calculated using area triangulation.
 #'    * `"median"`: Geometric mean; may not fall inside the polygon.
 #'    * `"bmedian"`: Geometric mean; minimum distance to boundaries; may not fall inside the polygon.
 #' 
