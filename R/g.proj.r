@@ -6,7 +6,11 @@
 #'
 #' @examples
 #'
+#' if (grassStarted()) {
+#'
 #' .g.proj()
+#'
+#' }
 #'
 #' @export
 #' @keywords internal

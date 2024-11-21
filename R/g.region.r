@@ -6,7 +6,11 @@
 #'
 #' @examples
 #'
+#' if (grassStarted()) {
+#'
 #' .g.region()
+#'
+#' }
 #'
 #' @export
 #' @keywords internal
