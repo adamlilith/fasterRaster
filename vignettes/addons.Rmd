@@ -16,7 +16,7 @@ knitr::opts_chunk$set(
 )
 fig.path = 'man/figures/'
 ```
-# Setting up addons
+## Setting up addons
 
 **GRASS GIS** comes with a default set of modules (functions), but users can download and install "addon" modules to extend its capabilities. Some of the functions in **fasterRaster** rely on these addon modules. To make these functions work, you must find the folder in which addons are stored and install the desired module.
 
@@ -30,15 +30,15 @@ C:/Users/your_windows_user_name/AppData/Roaming/GRASS8/addons
 
 You can set the addons folder using `faster(addonsDir = "C:/Users/your_windows_user_name/AppData/Roaming/GRASS8/addons")`.
 
-# Validating
+## Validating
 You can test to see if the `addons` folder is correct using [addons()]. You can also see if a particular addon module was installed correctly using the same function.
 
-# **fasterRaster** functions that need addons
+## **fasterRaster** functions that need addons
 These functions must have the specified addon to work.
 
    | **Function**              | **addon**          |
    | --------------------------|--------------------|
-   | [centroids()]             | `v.centerpoints`   |
+   | `centroids()`             | `v.centerpoints`   |
 
 
 
