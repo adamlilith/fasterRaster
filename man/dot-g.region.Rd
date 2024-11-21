@@ -14,7 +14,11 @@ This function calls the \strong{GRASS} module \code{g.region} to display informa
 }
 \examples{
 
+if (grassStarted()) {
+
 .g.region()
+
+}
 
 }
 \keyword{internal}

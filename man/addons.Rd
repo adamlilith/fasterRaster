@@ -7,7 +7,7 @@
 addons(x = NULL, onFail = "fail", verbose = TRUE)
 }
 \arguments{
-\item{x}{Either \code{NULL} or a character specifying the name of a \strong{GRASS} addons module. If \code{NULL}, the existence of the \code{addonsDir} (see \code{\link[=faster]{faster()}}) will be tested. If the module name is provided, the existence of the folder will be tested, and if this test passes, the existence of the module will be tested.}
+\item{x}{Either \code{NULL} or a character specifying the name of a \strong{GRASS} addons module. If \code{NULL}, the existence of the \code{addonsDir} (see \code{\link[=faster]{faster()}}) will be tested. If the module name is provided, the existence of the folder and module will be tested.}
 
 \item{onFail}{Character: What to do if the addons folder is not found:
 \itemize{
@@ -24,6 +24,15 @@ Logical.
 This function tests to see if the "addons" directory specified using \code{\link[=faster]{faster()}} actually exists, and if a particular \strong{GRASS} \verb{addons module is available. The }addons\verb{folder and module must exists for methods that rely on particular **GRASS**}addons` to work.
 }
 \examples{
-man/examples/ex_addons.r
+if (grassStarted()) {
 
+ao <- addons(onFail = "warning")
+if (ao) print("Addons is folder is correctly specified.")
+
+addon <- "v.centerpoints"
+exten <- addons(addon, onFail = "warning")
+
+if (exten) print("Extension `v.centerpoints` is installed.")
+
+}
 }

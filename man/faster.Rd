@@ -55,6 +55,7 @@ You cannot simultaneously get and set options.
 To run most \strong{fasterRaster} functions, you must set the \code{grassDir} option.
 }
 \examples{
+if (grassStarted()) {
 
 # See current values for options:
 faster("grassDir")
@@ -78,6 +79,8 @@ if (FALSE) {
    faster(c("grassDir", "verbose", "memory", "cores"))
 
    faster(opts.) # reset options to starting values
+
+}
 
 }
 }
