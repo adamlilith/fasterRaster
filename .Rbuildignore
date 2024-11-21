@@ -6,6 +6,7 @@ CODE_OF_CONDUCT.md
 ^cran-comments\.md$
 ^fasterRaster.png
 ^.*\.Rproj$
+^\articles$
 ^\.Rproj\.user$
 ^\.github
 ^\.vscode
@@ -21,4 +22,3 @@ junk
 fasterRaster_workspace.code-workspace
 ^doc$
 ^Meta$
-^\articles
