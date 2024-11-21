@@ -19,6 +19,7 @@ articles:
   contents:
   - GRasters
   - faster_fasterRaster
+  - addons
 
 - title: For Developers
   desc: Vignettes for developers
@@ -38,6 +39,7 @@ reference:
   - st_as_sf
   - writeRaster
   - writeVector
+  - addons
 - title: GRaster properties
 - contents:
   - crs
