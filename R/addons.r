@@ -12,6 +12,8 @@
 #'
 #' @returns Logical.
 #'
+#' @seealso `vignette("fasterRaster_addons", package = "fasterRaster")`
+#'
 #' @example man/examples/ex_addons.r
 #'
 #' @aliases addons
