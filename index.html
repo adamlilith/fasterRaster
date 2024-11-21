@@ -8,8 +8,8 @@
 <title>Faster Raster and Spatial Vector Processing Using 'GRASS GIS' • fasterRaster</title>
 <script src="lightswitch.js"></script><script src="deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="deps/font-awesome-6.4.2/css/all.min.css" rel="stylesheet">
-<link href="deps/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet">
+<script src="deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="deps/headroom-0.11.0/headroom.min.js"></script><script src="deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="deps/search-1.0.0/fuse.min.js"></script><script src="deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="Faster Raster and Spatial Vector Processing Using 'GRASS GIS'">
 <meta name="description" content="Processing of large-in-memory/large-on disk rasters.">
 <meta property="og:description" content="Processing of large-in-memory/large-on disk rasters.">
@@ -23,7 +23,7 @@
 
     <a class="navbar-brand me-2" href="index.html">fasterRaster</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">8.4.0.7028</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">8.4.0.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -39,6 +39,7 @@
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
 <li><a class="dropdown-item" href="articles/GRasters.html">Types of GRasters</a></li>
     <li><a class="dropdown-item" href="articles/faster_fasterRaster.html">Making fasterRaster faster</a></li>
+    <li><a class="dropdown-item" href="articles/fasterRaster_addons.html">fasterRaster addons</a></li>
     <li><hr class="dropdown-divider"></li>
     <li><a class="dropdown-item" href="articles/index.html">More articles...</a></li>
   </ul>
@@ -98,34 +99,42 @@
 <div class="section level1">
 <h1 id="where-we-are">Where we are<a class="anchor" aria-label="anchor" href="#where-we-are"></a>
 </h1>
-<p>As of 2024/10/18, a new version of this package, <code>fasterRaster 8.4</code>, is in alpha release (i.e., near final release) and can run with <strong>GRASS</strong> 8.3 or 8.4. There are known issues and unknown issues. If you encounter one of the latter, please file an <a href="https://github.com/adamlilith/fasterRaster/issues">issue</a> report.</p>
+<p>As of 2024/11/20, a new version of this package, <code>fasterRaster 8.4</code>, is in alpha release (i.e., near final release) and can run with <strong>GRASS</strong> 8.3 or 8.4. There are known issues and unknown issues. If you encounter one of the latter, please file an <a href="https://github.com/adamlilith/fasterRaster/issues">issue</a> report.</p>
 <p><strong>Special announcement #1</strong>: We now have a <strong>pkgdown</strong> <a href="https://adamlilith.github.io/fasterRaster/" class="external-link">site</a> with all the package documentation–plus vignettes!</p>
 <p><strong>Special announcement #2</strong>: The new <code><a href="reference/bioclims.html">bioclims()</a></code> function creates the “classic” set of BIOCLIM variables, plus an optional “extended” set. The function works on <strong>fasterRaster</strong> <code>GRaster</code>s and on <strong>terra</strong> <code>SpatRaster</code>s!</p>
 </div>
 <div class="section level1">
-<h1 id="functions">Functions<a class="anchor" aria-label="anchor" href="#functions"></a>
-</h1>
-<p>To see a detailed list of functions available in <code>fasterRaster</code>, attach the package and use <code><a href="reference/fasterRaster.html">?fasterRaster</a></code>. Note the additional tutorials linked from there!</p>
-</div>
-<div class="section level1">
-<h1 id="getting-started">Getting started<a class="anchor" aria-label="anchor" href="#getting-started"></a>
+<h1 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h1>
 <p>To install <code>fasterRaster</code>, please use:</p>
 <p><code>remotes::install_github('adamlilith/fasterRaster', dependencies = TRUE)</code></p>
 <p>Alternatively, you can install the development version from:</p>
 <p><code>remotes::install_github('adamlilith/fasterRaster@intuitive_fasterRaster', dependencies = TRUE)</code></p>
 <p>To use <code>fasterRaster</code> you must install <a href="https://grass.osgeo.org/" class="external-link">GRASS version 8.3+</a> on your operating system. <strong>You will need to use the stand-alone installer, not the Open Source Geospatial (OS Geo) installer.</strong></p>
-<div class="section level2">
-<h2 id="an-example">An example<a class="anchor" aria-label="anchor" href="#an-example"></a>
-</h2>
+</div>
+<div class="section level1">
+<h1 id="vignettes">Vignettes<a class="anchor" aria-label="anchor" href="#vignettes"></a>
+</h1>
+<p><strong>fasterRaster</strong> comes with four user-oriented vignettes:</p>
+<ul>
+<li><a href="https://adamlilith.github.io/fasterRaster/articles/fasterRaster.html" class="external-link">“Getting started”</a></li>
+<li><a href="https://adamlilith.github.io/fasterRaster/articles/GRasters.html" class="external-link">Types of <code>GRaster</code>s</a></li>
+<li><a href="https://adamlilith.github.io/fasterRaster/articles/faster_fasterRaster.html" class="external-link">Making <strong>fasterRaster</strong> faster</a></li>
+<li><a href="https://adamlilith.github.io/fasterRaster/articles/fasterRaster_addons.html" class="external-link">Installing addons</a></li>
+</ul>
+</div>
+<div class="section level1">
+<h1 id="an-example">An example<a class="anchor" aria-label="anchor" href="#an-example"></a>
+</h1>
+<p>The example presented here is the same as that presented in the the <a href="https://adamlilith.github.io/fasterRaster/articles/fasterRaster.html" class="external-link">“getting started”</a> vignette.</p>
 <p>We’ll do a simple operation in which we:</p>
 <ol style="list-style-type: decimal">
 <li><p>Add a buffer to lines representing rivers, then</p></li>
 <li><p>Calculate the distance to from each cell to the closest buffer and burn the distance values into a raster.</p></li>
 </ol>
 <p>To do this, we’ll be using maps representing the middle of the eastern coast of Madagascar. We will also use the <code>terra</code> and <code>sf</code> packages.</p>
-<pre><code><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://rspatial.org/" class="external-link">terra</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-spatial.github.io/sf/" class="external-link">sf</a></span><span class="op">)</span></span>
+<pre><code><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://rspatial.org/" class="external-link">terra</a></span><span class="op">)</span> <span class="co"># GIS for rasters and vectors</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-spatial.github.io/sf/" class="external-link">sf</a></span><span class="op">)</span> <span class="co"># GIS for vectors</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/adamlilith/fasterRaster">fasterRaster</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Get example elevation raster and rivers vector:</span></span>
@@ -137,8 +146,9 @@
 <span><span class="fu"><a href="reference/plot.html">plot</a></span><span class="op">(</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_geometry.html" class="external-link">st_geometry</a></span><span class="op">(</span><span class="va">madRivers</span><span class="op">)</span>, col <span class="op">=</span> <span class="st">"lightblue"</span>, add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre>
 <p><img src="reference/figures/elev_rivers.png"></p>
 <p>Before you use nearly any function in the package, you need to tell <code>fasterRaster</code> where <code>GRASS</code> is installed on your system. The installation folder will vary by operating system and maybe <code>GRASS</code> version, but will look something like this:</p>
-<pre><code><span><span class="va">grassDir</span> <span class="op">&lt;-</span> <span class="st">"C:/Program Files/GRASS GIS 8.3"</span> <span class="co"># Windows</span></span>
-<span><span class="va">grassDir</span> <span class="op">&lt;-</span> <span class="st">"/Applications/GRASS-8.2.app/Contents/Resources"</span> <span class="co"># Mac OS</span></span>
+<pre><code><span><span class="co"># Choose the appropriate one, and modify as needed:</span></span>
+<span><span class="va">grassDir</span> <span class="op">&lt;-</span> <span class="st">"C:/Program Files/GRASS GIS 8.4"</span> <span class="co"># Windows</span></span>
+<span><span class="va">grassDir</span> <span class="op">&lt;-</span> <span class="st">"/Applications/GRASS-8.4.app/Contents/Resources"</span> <span class="co"># Mac OS</span></span>
 <span><span class="va">grassDir</span> <span class="op">&lt;-</span> <span class="st">"/usr/local/grass"</span> <span class="co"># Linux</span></span></code></pre>
 <p>Now, use the <code><a href="reference/faster.html">faster()</a></code> function to tell <code>fasterRaster</code> where <code>GRASS</code> is installed:</p>
 <pre><code><span><span class="fu"><a href="reference/faster.html">faster</a></span><span class="op">(</span>grassDir <span class="op">=</span> <span class="va">grassDir</span><span class="op">)</span></span></code></pre>
@@ -183,7 +193,6 @@ values      : River/Stream Perennial/Permanent MANANARA   MDG Madagascar
 <span><span class="fu"><a href="reference/plot.html">plot</a></span><span class="op">(</span><span class="va">rivers</span>, col <span class="op">=</span> <span class="st">"lightblue"</span>, add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre>
 <p><img src="reference/figures/dist_to_rivers.png"></p>
 <p>And that’s how it’s done! You can do almost anything in <code>fasterRaster</code> you can do with <code>terra</code>. The examples above do not show the advantage of <code>fasterRaster</code> because the they do not use in large-in-memory/large-on-disk spatial datasets. For very large datasets, <code>fasterRaster</code> can be much faster! For example, for a large raster (many cells), the <code><a href="reference/distance.html">distance()</a></code> function in <code>terra</code> can take many days to run and even crash <code>R</code>, whereas in <code>fasterRaster</code>, it could take just a few minutes or hours.</p>
-</div>
 <div class="section level2">
 <h2 id="exporting-grasters-and-gvectors-from-a-grass-session">Exporting <code>GRaster</code>s and <code>GVector</code>s from a <code>GRASS</code> session<a class="anchor" aria-label="anchor" href="#exporting-grasters-and-gvectors-from-a-grass-session"></a>
 </h2>
@@ -202,22 +211,10 @@ values      : River/Stream Perennial/Permanent MANANARA   MDG Madagascar
 </div>
 </div>
 <div class="section level1">
-<h1 id="tips-for-making-fasterraster-faster">Tips for making <code>fasterRaster</code> faster<a class="anchor" aria-label="anchor" href="#tips-for-making-fasterraster-faster"></a>
-</h1>
-<ol style="list-style-type: decimal">
-<li><p>Loading rasters and vectors directly from disk using <code><a href="reference/fast.html">fast()</a></code>, rather than converting <code>terra</code> or <code>sf</code> objects is faster. Why? Because if the object does not have a file to which the <code>R</code> object points, <code><a href="reference/fast.html">fast()</a></code> has to save it to disk first as a GeoTIFF or GeoPackage file, then load it into <code>GRASS</code>.</p></li>
-<li><p>Similarly, saving <code>GRaster</code>s and <code>GVector</code>s directly to disk will always be faster than converting them to <code>SpatRaster</code>s or <code>SpatVector</code> using <code><a href="reference/rast.html">rast()</a></code> or <code><a href="reference/vect.html">vect()</a></code>, then saving them. Why? Because these functions actually save the file to disk then uses the respective function from the respective package to connect to the file.</p></li>
-<li><p>Every time you switch between using a <code>GRaster</code> or <code>GVector</code> with a different coordinate reference system (CRS), <code>GRASS</code> has to spend a few second changing to that CRS. So, you can save some time by doing as much work as possible with objects in one CRS, then switching to work on objects in another CRS.</p></li>
-<li><p>By default, <code>fasterRaster</code> use 2 cores and 2048 MB (2 GB) of memory for <code>GRASS</code> modules that allow users to specify these values. You can set these to higher values using <code><a href="reference/faster.html">faster()</a></code> and thus potentially speed up some calculations. Functions in newer versions of <code>GRASS</code> have more capacity to use these options, so updating <code>GRASS</code> to the latest version can help, too.</p></li>
-<li><p>Compared to <code>terra</code> and <code>sf</code>, <code>fasterRaster</code> is <em>not</em> faster with large vector operations, so if have large vectors, do vector processing with those packages first if you can.</p></li>
-<li><p>To obviate problems with disk space filling up, by default most <strong>fasterRaster</strong> functions delete intermediate files. However, if you are not creating a lot of very big <code>GRaster</code>s or <code>GVector</code>s, you can skip this time-taking step by setting the <code>clean</code> option to <code>FALSE</code> using <code>faster(clean = FALSE)</code>.</p></li>
-</ol>
-</div>
-<div class="section level1">
 <h1 id="versioning">Versioning<a class="anchor" aria-label="anchor" href="#versioning"></a>
 </h1>
-<p><code>fasterRaster</code> versions will look something like <code>8.3.1.2</code>, or more generally, <code>M1.M2.S1.S2</code>. Here, <code>M1.M2</code> will mirror the version of <code>GRASS</code> for which <code>fasterRaster</code> was built and tested. For example, <code>fasterRaster</code> version 8.3 will work using <code>GRASS</code> 8.3 (and any earlier versions starting from 8.0). The values in <code>S1.S2</code> refer to “major” and “minor” versions of <code>fasterRaster</code>. That is, a change in the value of <code>S1</code> (e.g., from <code>8.3.1.0</code> to <code>8.3.2.0</code>) indicates changes that potentially break older code developed with a prior version of <code>fasterRaster</code>. A change in <code>S2</code> refers to a bug fix, additional functionality in an existing function, or the addition of an entirely new function.</p>
-<p>Note that the <code>M1.M2</code> and <code>S1.S2</code> increment independently. For example, if the version changes from <code>8.3.1.5</code> to <code>8.4.1.5</code>, then the new version has been tested on <code>GRASS</code> 8.4, but code developed with version <code>8.3.1.X</code> of <code>fasterRaster</code> should still work.</p>
+<p><code>fasterRaster</code> versions will look something like <code>8.3.1.2</code>, or more generally, <code>M1.M2.S1.S2</code>. Here, <code>M1.M2</code> will mirror the version of <code>GRASS</code> for which <code>fasterRaster</code> was built and tested. For example, <code>fasterRaster</code> version 8.4.x.x will work using <code>GRASS</code> 8.4 (and version 8.3). The values in <code>S1.S2</code> refer to “major” and “minor” versions of <code>fasterRaster</code>. That is, a change in the value of <code>S1</code> (e.g., from <code>x.x.1.0</code> to <code>x.x.2.0</code>) indicates changes that potentially break older code developed with a prior version of <code>fasterRaster</code>. A change in <code>S2</code> refers to a bug fix, additional functionality in an existing function, or the addition of an entirely new function.</p>
+<p>Note that the <code>M1.M2</code> and <code>S1.S2</code> increment independently. For example, if the version changes from <code>8.3.1.5</code> to <code>8.4.1.5</code>, then the new version has been tested on <code>GRASS</code> 8.4, but code developed with version <code>8.3.1.x</code> of <code>fasterRaster</code> should still work.</p>
 <p><strong>NOTE</strong>: While <code>fasterRaster</code> is still in beta/alpha release, the version will look something like <code>8.3.0.7XXX</code>, following Hadley Wickham’s guidelines for versioning under development.</p>
 </div>
 <div class="section level1">

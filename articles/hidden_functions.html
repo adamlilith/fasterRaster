@@ -8,8 +8,8 @@
 <title>For developers: Hidden fasterRaster functions • fasterRaster</title>
 <script src="../lightswitch.js"></script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.4.2/css/all.min.css" rel="stylesheet">
-<link href="../deps/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="For developers: Hidden fasterRaster functions">
 </head>
 <body>
@@ -20,7 +20,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">fasterRaster</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">8.4.0.7028</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">8.4.0.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -36,6 +36,7 @@
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
 <li><a class="dropdown-item" href="../articles/GRasters.html">Types of GRasters</a></li>
     <li><a class="dropdown-item" href="../articles/faster_fasterRaster.html">Making fasterRaster faster</a></li>
+    <li><a class="dropdown-item" href="../articles/fasterRaster_addons.html">fasterRaster addons</a></li>
     <li><hr class="dropdown-divider"></li>
     <li><a class="dropdown-item" href="../articles/index.html">More articles...</a></li>
   </ul>
@@ -71,7 +72,7 @@
                         <h4 data-toc-skip class="author">Adam B.
 Smith</h4>
             
-            <h4 data-toc-skip class="date">2024-10-24</h4>
+            <h4 data-toc-skip class="date">2024-11-21</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/adamlilith/fasterRaster/blob/master/vignettes/hidden_functions.Rmd"><code>vignettes/hidden_functions.Rmd</code></a></small>
       <div class="d-none name"><code>hidden_functions.Rmd</code></div>
@@ -96,9 +97,6 @@ error-checking and region re-definition is not conducted.</p>
 <h2 id="general">General<a class="anchor" aria-label="anchor" href="#general"></a>
 </h2>
 <ul>
-<li>
-<code><a href="../reference/dot-addLocationProject.html">.addLocationProject()</a></code>: Add a “location” or “project”
-argument to a list to be passed to [rgrass::execGRASS()]</li>
 <li>
 <code><a href="../reference/dot-backdoor.html">.backdoor()</a></code>: Calls [faster()] and sets
 <strong>GRASS</strong> folder to “C:/Program Files/GRASS GIS X.Y”, plus
@@ -240,8 +238,8 @@ strings.</li>
 </ul>
 </div>
 <div class="section level2">
-<h2 id="gras-projects-locations-and-mapsets">
-<strong>GRAS</strong> “Projects” (“locations”) and “mapsets”<a class="anchor" aria-label="anchor" href="#gras-projects-locations-and-mapsets"></a>
+<h2 id="grass-projects-locations-and-mapsets">
+<strong>GRASS</strong> “Projects” (“locations”) and “mapsets”<a class="anchor" aria-label="anchor" href="#grass-projects-locations-and-mapsets"></a>
 </h2>
 <ul>
 <li>
@@ -259,6 +257,13 @@ strings.</li>
 a previously-created <strong>GRASS</strong> “location”</li>
 <li>
 <code><a href="../reference/locations.html">.locations()</a></code>: List of all available “locations”</li>
+<li>
+<code><a href="../reference/dot-g.proj.html">.g.proj()</a></code>: Runs <strong>GRASS</strong>
+<code>g.proj</code> module to display projection of current
+“project”</li>
+<li>
+<code><a href="../reference/dot-g.region.html">.g.region()</a></code>: Runs <strong>GRASS</strong>
+<code>g.region</code> module to display region of current “project”</li>
 <li>
 <code><a href="../reference/mapset.html">.mapset()</a></code>: <strong>GRASS</strong> “mapset” of an object
 or the active session</li>

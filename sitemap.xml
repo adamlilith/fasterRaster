@@ -4,6 +4,7 @@
 <url><loc>https://github.com/adamlilith/fasterRaster/LICENSE-text.html</loc></url>
 <url><loc>https://github.com/adamlilith/fasterRaster/articles/GRasters.html</loc></url>
 <url><loc>https://github.com/adamlilith/fasterRaster/articles/fasterRaster.html</loc></url>
+<url><loc>https://github.com/adamlilith/fasterRaster/articles/fasterRaster_addons.html</loc></url>
 <url><loc>https://github.com/adamlilith/fasterRaster/articles/faster_fasterRaster.html</loc></url>
 <url><loc>https://github.com/adamlilith/fasterRaster/articles/hidden_functions.html</loc></url>
 <url><loc>https://github.com/adamlilith/fasterRaster/articles/index.html</loc></url>
@@ -20,6 +21,7 @@
 <url><loc>https://github.com/adamlilith/fasterRaster/reference/add.html</loc></url>
 <url><loc>https://github.com/adamlilith/fasterRaster/reference/addCats.html</loc></url>
 <url><loc>https://github.com/adamlilith/fasterRaster/reference/addTable.html</loc></url>
+<url><loc>https://github.com/adamlilith/fasterRaster/reference/addons.html</loc></url>
 <url><loc>https://github.com/adamlilith/fasterRaster/reference/aggregate.html</loc></url>
 <url><loc>https://github.com/adamlilith/fasterRaster/reference/app.html</loc></url>
 <url><loc>https://github.com/adamlilith/fasterRaster/reference/appFunsTable.html</loc></url>
@@ -35,6 +37,7 @@
 <url><loc>https://github.com/adamlilith/fasterRaster/reference/c.html</loc></url>
 <url><loc>https://github.com/adamlilith/fasterRaster/reference/catNames.html</loc></url>
 <url><loc>https://github.com/adamlilith/fasterRaster/reference/cellSize.html</loc></url>
+<url><loc>https://github.com/adamlilith/fasterRaster/reference/centroids.html</loc></url>
 <url><loc>https://github.com/adamlilith/fasterRaster/reference/classify.html</loc></url>
 <url><loc>https://github.com/adamlilith/fasterRaster/reference/clump.html</loc></url>
 <url><loc>https://github.com/adamlilith/fasterRaster/reference/clusterPoints.html</loc></url>
@@ -56,9 +59,10 @@
 <url><loc>https://github.com/adamlilith/fasterRaster/reference/dim.html</loc></url>
 <url><loc>https://github.com/adamlilith/fasterRaster/reference/disagg.html</loc></url>
 <url><loc>https://github.com/adamlilith/fasterRaster/reference/distance.html</loc></url>
-<url><loc>https://github.com/adamlilith/fasterRaster/reference/dot-addLocationProject.html</loc></url>
 <url><loc>https://github.com/adamlilith/fasterRaster/reference/dot-backdoor.html</loc></url>
 <url><loc>https://github.com/adamlilith/fasterRaster/reference/dot-ext.html</loc></url>
+<url><loc>https://github.com/adamlilith/fasterRaster/reference/dot-g.proj.html</loc></url>
+<url><loc>https://github.com/adamlilith/fasterRaster/reference/dot-g.region.html</loc></url>
 <url><loc>https://github.com/adamlilith/fasterRaster/reference/dot-geomtype.html</loc></url>
 <url><loc>https://github.com/adamlilith/fasterRaster/reference/dot-layerIndex.html</loc></url>
 <url><loc>https://github.com/adamlilith/fasterRaster/reference/dot-makeGRaster.html</loc></url>
