@@ -2,7 +2,7 @@
 #'
 #' @description This function tests to see if the "addons" directory specified using [faster()] actually exists, and if a particular **GRASS** `addons module is available. The `addons` folder and module must exists for methods that rely on particular **GRASS** `addons` to work.
 #'
-#' @param x Either `NULL` or a character specifying the name of a **GRASS** addons module. If `NULL`, the existence of the `addonsDir` (see [faster()]) will be tested. If the module name is provided, the existence of the folder will be tested, and if this test passes, the existence of the module will be tested.
+#' @param x Either `NULL` or a character specifying the name of a **GRASS** addons module. If `NULL`, the existence of the `addonsDir` (see [faster()]) will be tested. If the module name is provided, the existence of the folder and module will be tested.
 #'
 #' @param onFail Character: What to do if the addons folder is not found:
 #' * `"fail"` (default): Fail with a message.
@@ -12,7 +12,7 @@
 #'
 #' @returns Logical.
 #'
-#' @examples man/examples/ex_addons.r
+#' @example man/examples/ex_addons.r
 #'
 #' @aliases addons
 #' @rdname addons
@@ -62,12 +62,13 @@ addons <- function(x = NULL, onFail = "fail", verbose = TRUE) {
 		if (is.null(x)) {
 			omnibus::say("Addons directory exists.")
 		} else {
-			omnibus::say("Addon `", x, "` is installed.")
+			if (out) {
+				omnibus::say("Addon `", x, "` is installed.")
+			} else {
+				omnibus::say("Addon `", x, "` is *not* installed.")
+			}
 		}
-		invisible(out)
-	} else {
-		invisible(out)
 	}
-
+	invisible(out)
 
 }
