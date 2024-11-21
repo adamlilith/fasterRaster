@@ -42,7 +42,8 @@ To use `fasterRaster` you must install [GRASS version 8.3+](https://grass.osgeo.
 
 # Vignettes
 
-**fasterRaster** comes with three user-oriented vignettes:
+**fasterRaster** comes with four user-oriented vignettes:
+
 * ["Getting started"](https://adamlilith.github.io/fasterRaster/articles/fasterRaster.html)
 * [Types of `GRaster`s](https://adamlilith.github.io/fasterRaster/articles/GRasters.html)
 * [Making **fasterRaster** faster](https://adamlilith.github.io/fasterRaster/articles/faster_fasterRaster.html)
