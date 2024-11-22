@@ -56,193 +56,231 @@ methods::setMethod(
 	.locationRestore(x)
 	.region(x)
 	
-	# fast point location... use R
-	if (is.null(strata)) {
+	# ### fast point location... use R
+	# ### v.random is REALLY slow for even moderately large sample sizes
+	# if (is.null(strata)) {
 
-		# for unprojected, we want to adjust for smaller cells near poles, so we oversample, then subsample
-		extent <- ext(x, vector = TRUE)
-		if (is.lonlat(x)) {
+	# 	# for unprojected, we want to adjust for smaller cells near poles, so we oversample, then subsample
+	# 	extent <- ext(x, vector = TRUE)
+	# 	if (is.lonlat(x)) {
 
-			# sampling scheme for latitude:
-			# divide y extent into large number of bins
-			# weight each bin by cos(latitude)
-			# sample with replacement from bin y values
-			# add a uniform random number +- half bin width
+	# 		# sampling scheme for latitude:
+	# 		# divide y extent into large number of bins
+	# 		# weight each bin by cos(latitude)
+	# 		# sample with replacement from bin y values
+	# 		# add a uniform random number +- half bin width
 
-			yres <- yres(x)
-			yLower <- extent[3L] + 0.5 * yres
-			yUpper <- extent[4L] - 0.5 * yres
-			ydim <- dim(x)[2L]
-			nMarks <- 100 * ydim
-			halfDelta <- 0.5 * (yUpper - yLower) / (nMarks - 1)
-			yMarks <- seq(yLower, yUpper, length.out = nMarks)
-			w <- abs(cos(pi * yMarks / 180))
-			ys <- sample(yMarks, size, prob = w, replace = TRUE)
-			ys <- ys + stats::runif(size, -halfDelta, halfDelta)
+	# 		yres <- yres(x)
+	# 		yLower <- extent[3L] + 0.5 * yres
+	# 		yUpper <- extent[4L] - 0.5 * yres
+	# 		ydim <- dim(x)[2L]
+	# 		nMarks <- 100 * ydim
+	# 		halfDelta <- 0.5 * (yUpper - yLower) / (nMarks - 1)
+	# 		yMarks <- seq(yLower, yUpper, length.out = nMarks)
+	# 		w <- abs(cos(pi * yMarks / 180))
+	# 		ys <- sample(yMarks, size, prob = w, replace = TRUE)
+	# 		ys <- ys + stats::runif(size, -halfDelta, halfDelta)
 		
-		} else {
-			# if not long/lat, just sample uniformly
-			ys <- stats::runif(size, extent[3L], extent[4L])
-		}
+	# 	} else {
+	# 		# if not long/lat, just sample uniformly
+	# 		ys <- stats::runif(size, extent[3L], extent[4L])
+	# 	}
 
-		xs <- stats::runif(size, extent[1L], extent[2L])
-		if (!is.null(zlim)) zs <- stats::runif(size, zlim[1L], zlim[2L])
+	# 	xs <- stats::runif(size, extent[1L], extent[2L])
+	# 	if (!is.null(zlim)) zs <- stats::runif(size, zlim[1L], zlim[2L])
 
-		if (xy) {
-			if (is.null(zlim)) {
-				out <- data.table::data.table(x = xs, y = ys)
-			} else {
-				out <- data.table::data.table(x = xs, y = ys, z = zs)
-			}
-		}
+	# 	if (xy) {
+	# 		if (is.null(zlim)) {
+	# 			out <- data.table::data.table(x = xs, y = ys)
+	# 		} else {
+	# 			out <- data.table::data.table(x = xs, y = ys, z = zs)
+	# 		}
+	# 	}
 
-		### NB The script below ingests points in chunks be that has proven faster than doing all at once for larger numbers of points.
+	# 	### NB The script below ingests points in chunks bc that has proven faster than doing all at once for larger numbers of points.
 
-		xs <- round(xs, 7L)
-		ys <- round(ys, 7L)
-		if (!is.null(zlim)) zs <- round(zs, 7L)
+	# 	xs <- round(xs, 7L)
+	# 	ys <- round(ys, 7L)
+	# 	if (!is.null(zlim)) zs <- round(zs, 7L)
 
-		xs[xs < extent[1L]] <- extent[1L]
-		xs[xs > extent[2L]] <- extent[2L]
-		ys[ys < extent[3L]] <- extent[3L]
-		ys[ys > extent[4L]] <- extent[4L]
+	# 	xs[xs < extent[1L]] <- extent[1L]
+	# 	xs[xs > extent[2L]] <- extent[2L]
+	# 	ys[ys < extent[3L]] <- extent[3L]
+	# 	ys[ys > extent[4L]] <- extent[4L]
 
-		### use v.in.ascii to ingest each subset of points
-		nAtATime <- 2E5 # optimal-ish size based on manual checks
-		sets <- ceiling(size / nAtATime)
-		srcs <- .makeSourceName("spatSample_v_in_ascii", "vector", n = sets)
+	# 	### use v.in.ascii to ingest each subset of points
+	# 	##################################################
 
-		if ((verbose | faster("verbose")) & sets > 1)  {
-			omnibus::say("Ingesting points...")
-			pb <- utils::txtProgressBar(min = 0, max = sets, initial = 0, style = 3, width = 30)
-		}
+	# 	nAtATime <- 2E5 # optimal-ish size based on manual checks
+	# 	sets <- ceiling(size / nAtATime)
+	# 	srcs <- .makeSourceName("spatSample_v_in_ascii", "vector", n = sets)
 
-		for (set in seq_len(sets)) {
+	# 	if ((verbose | faster("verbose")) & sets > 1)  {
+	# 		omnibus::say("Ingesting points...")
+	# 		pb <- utils::txtProgressBar(min = 0, max = sets, initial = 0, style = 3, width = 30)
+	# 	}
 
-			if ((verbose | faster("verbose")) & sets > 1) utils::setTxtProgressBar(pb, set)
+	# 	for (set in seq_len(sets)) {
 
-			index <- (nAtATime * (set - 1) + 1):(min(nAtATime * set, size))
-			thisXs <- xs[index]
-			thisYs <- ys[index]
-			if (!is.null(zlim)) thisZs <- zs[index]
+	# 		if ((verbose | faster("verbose")) & sets > 1) utils::setTxtProgressBar(pb, set)
 
-			if (is.null(zlim)) {
-				coords <- data.table::data.table(cat = index, x = thisXs, y = thisYs)
-			} else {
-				coords <- data.table::data.table(cat = index, x = thisXs, y = thisYs, z = thisZs)
-			}
-			coords[ , coords := do.call(paste, c(.SD, sep = "|"))]
-			coords <- coords[ , "coords", drop = FALSE]
+	# 		index <- (nAtATime * (set - 1) + 1):(min(nAtATime * set, size))
+	# 		thisXs <- xs[index]
+	# 		thisYs <- ys[index]
+	# 		if (!is.null(zlim)) thisZs <- zs[index]
 
-			tf <- tempfile(fileext = ".txt")
-			data.table::fwrite(coords, tf, col.names = FALSE, quote = FALSE, scipen = 20L)
+	# 		if (is.null(zlim)) {
+	# 			coords <- data.table::data.table(cat = index, x = thisXs, y = thisYs)
+	# 		} else {
+	# 			coords <- data.table::data.table(cat = index, x = thisXs, y = thisYs, z = thisZs)
+	# 		}
+	# 		coords[ , coords := do.call(paste, c(.SD, sep = "|"))]
+	# 		coords <- coords[ , "coords", drop = FALSE]
 
-			args <- list(
-				"v.in.ascii",
-				input = tf,
-				output = srcs[set],
-				format = "point",
-				separator = "pipe",
-				cat = 1, x = 2, y = 3,
-				flags = c(.quiet(), "overwrite", "t", "n")
-			)
-			if (!is.null(zlim)) {
-				args$flags <- c(args$flags, "z")	
-				args$z <- 4
-			}
-			do.call(rgrass::execGRASS, args = args)
+	# 		tf <- tempfile(fileext = ".txt")
+	# 		data.table::fwrite(coords, tf, col.names = FALSE, quote = FALSE, scipen = 20L)
 
-			# if (set > 1) {
+	# 		args <- list(
+	# 			"v.in.ascii",
+	# 			input = tf,
+	# 			output = srcs[set],
+	# 			format = "point",
+	# 			separator = "pipe",
+	# 			cat = 1, x = 2, y = 3,
+	# 			flags = c(.quiet(), "overwrite", "t", "n", "b") # "b" --> no topology
+	# 			# flags = c(.quiet(), "overwrite", "t", "n") # "b" --> no topology
+	# 		)
+	# 		if (!is.null(zlim)) {
+	# 			args$flags <- c(args$flags, "z")	
+	# 			args$z <- 4
+	# 		}
+	# 		do.call(rgrass::execGRASS, args = args)
+	# 		unlink(tf)
+
+	# 		# if (set > 1) {
 				
-			# 	topCat <- min(nAtATime * set, size)
-			# 	srcs[set] <- .vIncrementCats(srcs[set], add = topCat)
+	# 		# 	topCat <- min(nAtATime * set, size)
+	# 		# 	srcs[set] <- .vIncrementCats(srcs[set], add = topCat)
 
-			# }
+	# 		# }
 
-		}
+	# 	} # next set
 
-		if ((verbose | faster("verbose")) & sets > 1)  close(pb)
+	# 	if ((verbose | faster("verbose")) & sets > 1)  close(pb)
 
-		### use v.patch to combine subsets of points
-		# seems like we can combine at least 11 vectors at a time, but not a lot at a time
-		srcsAtATime <- 10L # number of sources to combine at a time (plus the running `x` source)
+	# 	### use v.patch to combine subsets of points
+	# 	############################################
 
-		nSrcs <- length(srcs)
-		sets <- ceiling(nSrcs / srcsAtATime)
-		
-		if ((verbose | faster("verbose")) & sets > 1)  {
-			omnibus::say("Collapsing points...")
-			pb <- utils::txtProgressBar(min = 0, max = sets, initial = 0, style = 3, width = 30)
-		}
+	# 	# seems like we can combine at least 11 vectors at a time, but not too many more
+	# 	srcsAtATime <- 10L # number of sources to combine at a time (plus the running `x` source)
 
-		for (set in seq_len(sets)) {
+	# 	nSrcs <- length(srcs)
+	# 	sets <- ceiling(nSrcs / srcsAtATime)
 
-			if ((verbose | faster("verbose")) & sets > 1)  utils::setTxtProgressBar(pb, set)
+	# 	if ((verbose | faster("verbose")) & sets > 1)  {
+	# 		omnibus::say("Collapsing points...")
+	# 		pb <- utils::txtProgressBar(min = 0, max = sets, initial = 0, style = 3, width = 30)
+	# 	}
 
-			index <- (1 + srcsAtATime * (set - 1)) : min(nSrcs, set * srcsAtATime)
-			srcIn <- srcs[index]
-			input <- paste(srcIn, collapse = ",")
-			if (set > 1) input <- paste0(src, ",", input)
-		
-			src <- .makeSourceName("spatSample_v_patch", "vector")
-
-			rgrass::execGRASS(
-				cmd = "v.patch",
-				input = input,
-				output = src,
-				flags = c(.quiet(), "overwrite")
-			)
+	# 	if (nSrcs == 1L) {
+	# 		src <- srcs
+	# 	} else {
 			
-		}
+	# 		for (set in seq_len(sets)) {
 
-		.rm(srcs, type = "vector", warn = FALSE)
-		if ((verbose | faster("verbose")) & sets > 1)  close(pb)
+	# 			if ((verbose | faster("verbose")) & sets > 1L)  utils::setTxtProgressBar(pb, set)
 
-	# if strata is not NULL
-	} else {
+	# 			index <- (1 + srcsAtATime * (set - 1)) : min(nSrcs, set * srcsAtATime)
+	# 			srcIn <- srcs[index]
+	# 			input <- paste(srcIn, collapse = ",")
+	# 			if (set > 1) input <- paste0(src, ",", input)
+			
+	# 			src <- .makeSourceName("spatSample_v_patch", "vector")
+
+	# 			rgrass::execGRASS(
+	# 				cmd = "v.patch",
+	# 				input = input,
+	# 				output = src,
+	# 				flags = c(.quiet(), "overwrite", "b", "n") # "n" ==> no topology
+	# 				# flags = c(.quiet(), "overwrite") # "n" ==> input has topology, "b" ==> don't build topology
+	# 			)
+				
+	# 			.rm(srcIn, type = "vector", warn = FALSE)
+
+	# 		}
+
+	# 		if ((verbose | faster("verbose")) & sets > 1)  close(pb)
+
+	# 	} # if > 1 set
+
+	# # if strata is not NULL
+	# } else {
 		
-		if (size > 200000) .message("spatSample_strata", "Using `strata` when selecting a large number of points can take a long time.")
+	# 	if (size > 200000) .message("spatSample_strata", "Using `strata` when selecting a large number of points can take a long time.")
 
-		src <- .makeSourceName("spatSample_v_random", "vector")
+	# 	src <- .makeSourceName("spatSample_v_random", "vector")
 
-		args <- list(
-			cmd = "v.random",
-			output = src,
-			npoints = size,
-			flags = c(.quiet(), "overwrite")
-		)
+	# 	args <- list(
+	# 		cmd = "v.random",
+	# 		output = src,
+	# 		npoints = size,
+	# 		flags = c(.quiet(), "overwrite")
+	# 	)
 
-		if (!is.null(seed)) {
-			seed <- round(seed)
-			args$seed <- seed
-		}
+	# 	if (!is.null(seed)) {
+	# 		seed <- round(seed)
+	# 		args$seed <- seed
+	# 	}
 
-		if (!is.null(strata)) {
-			args$restrict <- sources(strata)
-			if (byStratum) args$flags <- c(args$flags, "a")
-		}
+	# 	if (!is.null(strata)) {
+	# 		args$restrict <- sources(strata)
+	# 		if (byStratum) args$flags <- c(args$flags, "a")
+	# 	}
 
-		if (!is.null(zlim)) {
-			args$zmin <- zlim[1L]
-			args$zmax <- zlim[2L]
-			args$flags <- c(args$flags, "z")
-		}
+	# 	if (!is.null(zlim)) {
+	# 		args$zmin <- zlim[1L]
+	# 		args$zmax <- zlim[2L]
+	# 		args$flags <- c(args$flags, "z")
+	# 	}
 
-		# if (!is.null(seed)) args$seed <- seed
-		args$seed <- round(1E9 * stats::runif(1))
+	# 	# if (!is.null(seed)) args$seed <- seed
+	# 	args$seed <- round(1E9 * stats::runif(1))
 
-		# args$flags <- c(args$flags, "b") ### do not create topology... problems? YES!
-		do.call(rgrass::execGRASS, args = args)
+	# 	# args$flags <- c(args$flags, "b") ### do not create topology... problems? YES!
+	# 	do.call(rgrass::execGRASS, args = args)
 
-		# return coordinates
-		if (xy) {
-			out <- .crdsVect(src, z = is.3d(x), gtype = "points")
-		}
+	# 	# return coordinates
+	# 	if (xy) {
+	# 		out <- .crdsVect(src, z = is.3d(x), gtype = "points")
+	# 	}
 
-	} # if strata is not NULL
+	# } # if strata is not NULL
+
+	if (verbose) omnibus::say("Placing points...")
+	src <- .makeSourceName("spatSample", "vector")
+	args <- list(
+		cmd = "v.random",
+		output = src,
+		npoints = size,
+		flags = c(.quiet(), "overwrite", "b")
+	)
+
+	if (!is.null(seed)) {
+		seed <- round(seed)
+		args$seed <- seed
+	}
+
+	do.call(rgrass::execGRASS, args = args)
+	if (xy) out <- .crdsVect(src, z = !is.null(zlim), gtype = "points")
 
 	# extract values from raster
 	if (values | cats) {
+
+		# rgrass::execGRASS(
+		# 	cmd = "v.build",
+		# 	map = src,
+		# 	flags = c(.quiet(), "overwrite")
+		# )
 
 		vals <- .extractFromRasterAtPoints(x = x, y = src, cats = cats, verbose = verbose)
 
@@ -255,13 +293,22 @@ methods::setMethod(
 	}
 
 	if (as.points) {
+
+		# build topology
+		rgrass::execGRASS(
+			"v.build",
+			map = src,
+			option = "build",
+			flags = c(.quiet(), "overwrite")
+		)
+
 		.vAttachDatabase(src)
 		if (exists("out", inherits = FALSE)) {
 			# info <- .vectInfo(src)
 			# nGeometries <- info$nGeometries
 			# n <- nGeometries / size
 			# out <- .makeGVector(src, table = out, cats = rep(1:size, each = n))
-			out <- .makeGVector(src, table = out)
+			out <- .makeGVector(src, table = out, cats = 1:size)
 		} else {
 			out <- .makeGVector(src, cats = 1:size)
 		}
