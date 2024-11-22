@@ -9,6 +9,7 @@ o `mow()` can delete a single `GRaster` or `GVector`, a list of rasters and/or v
 o `centroids()` locates the center of `GVector`s.  
 o `coordRef()` returns information about an object's coordinate reference system.  
 o `project()` is now much faster when projecting a `GRaster` using the `terra` or `fallback` values for `res`.  
+o `spatSample()` is faster.  
 o Support for **GRASS** addons and methods based on them!!!  
 
 ### Bug and issue fixes
