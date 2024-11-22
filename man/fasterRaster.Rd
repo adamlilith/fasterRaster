@@ -17,7 +17,7 @@
 \item \code{\link[=fast]{fast()}}: Convert a \code{SpatRaster}, \code{SpatVector}, or \code{sf} vector to \strong{fasterRaster}'s raster format (\code{GRaster}s) or vector format (\code{GVector}s), or load one from a file
 \item \code{\link[=rast]{rast()}}, \code{\link[=vect]{vect()}}, and \code{\link[=st_as_sf]{st_as_sf()}}: Convert \code{GRaster}s and \code{GVector}s to \code{SpatRaster}s, \code{SpatVector}s, or \code{sf} vectors
 \item \code{\link[=writeRaster]{writeRaster()}} and \code{\link[=writeVector]{writeVector()}}: Save \code{GRaster}s or \code{GVector}s to disk
-\item \code{\link[=addons]{addons()}}: Test to see if the \code{addons} directory is correct and if a particular addon \strong{GRASS} module is installed.
+\item \code{\link[=addons]{addons()}}: Test if the \code{addons} directory is correct and if a particular addon \strong{GRASS} module is installed.
 }
 }
 

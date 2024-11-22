@@ -19,7 +19,7 @@ articles:
   contents:
   - GRasters
   - faster_fasterRaster
-  - fasterRaster_addons
+  - addons
 
 - title: For Developers
   desc: Vignettes for developers

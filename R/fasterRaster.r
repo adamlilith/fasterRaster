@@ -6,12 +6,12 @@
 #' * The quick-start guide to getting started with **fasterRaster**: `vignette("fasterRaster", package = "fasterRaster")`: 
 #' * Types of `GRaster`s: `vignette("GRasters", package = "fasterRaster")`
 #' * How to speed up **fasterRaster**: `vignette("faster_fasterRaster", package = "fasterRaster")`
-#' * Using functions that depend on **GRASS** addons: `vignette("fasterRaster_addons", package = "fasterRaster")`
+#' * Using functions that depend on **GRASS** addons: `vignette("addons", package = "fasterRaster")`
 #' * [faster()]: Set the directory where **GRASS** is installed on your system, and set or get other package-wide options. This function must be run once before using most **fasterRaster** functions.
 #' * [fast()]: Convert a `SpatRaster`, `SpatVector`, or `sf` vector to **fasterRaster**'s raster format (`GRaster`s) or vector format (`GVector`s), or load one from a file
 #' * [rast()], [vect()], and [st_as_sf()]: Convert `GRaster`s and `GVector`s to `SpatRaster`s, `SpatVector`s, or `sf` vectors
 #' * [writeRaster()] and [writeVector()]: Save `GRaster`s or `GVector`s to disk
-#' * [addons()]: Test to see if the `addons` directory is correct and if a particular addon **GRASS** module is installed.
+#' * [addons()]: Test if the `addons` directory is correct and if a particular addon **GRASS** module is installed.
 #'
 #' ## Properties of `GRasters`
 #' * [crs()]: Coordinate reference system

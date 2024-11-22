@@ -40,6 +40,8 @@ Alternatively, you can install the development version from:
 
 To use `fasterRaster` you must install [GRASS version 8.3+](https://grass.osgeo.org/) on your operating system. **You will need to use the stand-alone installer, not the Open Source Geospatial (OS Geo) installer.**
 
+Optional: A few functions in **fasterRaster** require **GRASS** "addon" modules, which do not come bundled with **GRASS**. You do not need to install these addons if you do not use functions that call them. A list of functions that require addons can be seen in the "addons" vignette (in **R**, use `vignette("addons", package = "fasterRaster")`). This vignette also explains how to install addons.
+
 # Vignettes
 
 **fasterRaster** comes with four user-oriented vignettes:
@@ -47,7 +49,7 @@ To use `fasterRaster` you must install [GRASS version 8.3+](https://grass.osgeo.
 * ["Getting started"](https://adamlilith.github.io/fasterRaster/articles/fasterRaster.html)
 * [Types of `GRaster`s](https://adamlilith.github.io/fasterRaster/articles/GRasters.html)
 * [Making **fasterRaster** faster](https://adamlilith.github.io/fasterRaster/articles/faster_fasterRaster.html)
-* [Installing addons](https://adamlilith.github.io/fasterRaster/articles/fasterRaster_addons.html)
+* [Installing addons](https://adamlilith.github.io/fasterRaster/articles/addons.html)
 
 # An example
 
