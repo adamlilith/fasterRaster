@@ -745,7 +745,7 @@ methods::setMethod(
 
         vals <- strsplit(vals, split = "\\|")
         vals <- do.call(rbind, vals)
-        vals <- vals[ , 4:ncol(vals)]
+        vals <- vals[ , 4L:ncol(vals)]
         vals <- data.table::as.data.table(vals)
         names(vals) <- xNames[index]
 
