@@ -1,6 +1,8 @@
 #' Centroid(s) of a vector
 #'
-#' @description This function locates the centroid of each geometry of a `GVector`. **To use this function, you must a) have correctly specified the `addonsDir` option using [faster()], and b) installed the **GRASS** addon `v.centerpoint`.** See [addons()] and `vignette("addons", package = "fasterRaster")`.
+#' @description This function locates the centroid of each geometry of a `GVector`.
+#' 
+#' **To use this function**, you must a) have correctly specified the `addonsDir` option using [faster()], and b) installed the **GRASS** addon `v.centerpoint`. See [addons()] and `vignette("addons", package = "fasterRaster")`.
 #'
 #' @param x A `GVector`.
 #' @param method Character or `NULL` (default): Method used for calculating centroids. The method of calculation depends on whether the input is a `points`, `lines`, or `polygons` `GVector`. If the value is `NULL`, then the default method will be chosen, depending on the geometry type of the `GVector`:
