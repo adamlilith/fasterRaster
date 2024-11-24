@@ -37,7 +37,7 @@
 #' * [nrow()]: Number of rows
 #' * [nlevels()]: Number of categories
 #' * [res()], [res3d()], [xres()], [yres()], and [zres()]: Spatial resolution
-#' * [sources()]: Name of the `GRaster` in **GRASS**
+#' * [sources()]: Name of `GRaster` file in the **GRASS** cache
 #' * [topology()]: Dimensionality (2D or 3D)
 #' * [zext()]: Vertical extent
 #' * [zres()]: Vertical resolution
@@ -234,7 +234,7 @@
 #' * [intersect()] or `*`: Intersection of two `GVectors`
 #' * [kernel()]: Kernel density estimator of points
 #' * [missing.cases()]: Find rows of a `GVector`'s data table that have at least `NA` in them
-#' \code{\link[fasterRaster]{names<-}}: Assign names to columns of a `GVector`s data table
+#' * \code{\link[fasterRaster]{names<-}}: Assign names to columns of a `GVector`s data table
 #' * [project()]: Change coordinate reference system
 #' * [rasterize()]: Convert a `GVector` to a `GRaster`
 #' * [rbind()]: Combine `GVectors`
