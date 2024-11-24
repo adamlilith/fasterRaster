@@ -46,7 +46,7 @@
 \item \code{\link[=nrow]{nrow()}}: Number of rows
 \item \code{\link[=nlevels]{nlevels()}}: Number of categories
 \item \code{\link[=res]{res()}}, \code{\link[=res3d]{res3d()}}, \code{\link[=xres]{xres()}}, \code{\link[=yres]{yres()}}, and \code{\link[=zres]{zres()}}: Spatial resolution
-\item \code{\link[=sources]{sources()}}: Name of the \code{GRaster} in \strong{GRASS}
+\item \code{\link[=sources]{sources()}}: Name of \code{GRaster} file in the \strong{GRASS} cache
 \item 
 \item \code{\link[=zext]{zext()}}: Vertical extent
 \item \code{\link[=zres]{zres()}}: Vertical resolution
@@ -278,7 +278,7 @@ Operations on \code{GRaster}s
 \item \code{\link[=intersect]{intersect()}} or \code{*}: Intersection of two \code{GVectors}
 \item \code{\link[=kernel]{kernel()}}: Kernel density estimator of points
 \item \code{\link[=missing.cases]{missing.cases()}}: Find rows of a \code{GVector}'s data table that have at least \code{NA} in them
-\code{\link[fasterRaster]{names<-}}: Assign names to columns of a \code{GVector}s data table
+\item \code{\link[fasterRaster]{names<-}}: Assign names to columns of a \code{GVector}s data table
 \item \code{\link[=project]{project()}}: Change coordinate reference system
 \item \code{\link[=rasterize]{rasterize()}}: Convert a \code{GVector} to a \code{GRaster}
 \item \code{\link[=rbind]{rbind()}}: Combine \code{GVectors}
