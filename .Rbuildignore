@@ -6,7 +6,7 @@ CODE_OF_CONDUCT.md
 ^cran-comments\.md$
 ^fasterRaster.png
 ^.*\.Rproj$
-^\articles$
+^articles$
 ^\.Rproj\.user$
 ^\.github
 ^\.vscode
