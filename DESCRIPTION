@@ -1,18 +1,19 @@
 Package: fasterRaster
 Type: Package
 Title: Faster Raster and Spatial Vector Processing Using 'GRASS GIS'
-Version: 8.4.0.0
-Date: 2024-11-23
+Version: 8.4.0.1
+Date: 2024-12-03
 Authors@R: 
 	c(
 		person(
 			given = c('Adam', 'B.'),
 			family = 'Smith',
-			role = c('aut', 'cre'),
+			role = c('cre', 'aut'),
 			email = 'adam.smith@mobot.org',
 			comment = c(ORCID = '0000-0002-6420-1659')
 		)
 	)
+Maintainer: Adam B. Smith <adam.smith@mobot.org>
 Description: Processing of large-in-memory/large-on disk rasters and spatial
 	vectors using 'GRASS GIS'. Most functions in the 'terra' package are
 	recreated. Processing of medium-sized and smaller spatial objects will
