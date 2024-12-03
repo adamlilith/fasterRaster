@@ -37,8 +37,8 @@
 #' * [nrow()]: Number of rows
 #' * [nlevels()]: Number of categories
 #' * [res()], [res3d()], [xres()], [yres()], and [zres()]: Spatial resolution
-#' * [sources()]: Name of `GRaster` file in the **GRASS** cache
-#' * [topology()]: Dimensionality (2D or 3D)
+#' * [sources()]: Name of the raster file in the **GRASS** cache
+#' * [`topology()`][topology]: Dimensionally (2D or 3D)
 #' * [zext()]: Vertical extent
 #' * [zres()]: Vertical resolution
 #' 
@@ -136,7 +136,7 @@
 #' * [flow()]: Identify watershed basins and direction and accumulation of flow
 #' * [flowPath()]: Path of water flow across a landscape
 #' * [geomorphons()]: Identify terrain feature types
-#' * [`hillshade()`][shade]: Create a hillshade `GRaster`
+#' * [`hillshade()`][hillshade]: Create a hillshade `GRaster`
 #' * [horizonHeight()]: Horizon height
 #' * [sun()]: Solar radiance and irradiance
 #' * [ruggedness()]: Terrain Ruggedness Index
@@ -194,9 +194,9 @@
 #' * [ncol()]: Number of fields
 #' * [ngeom()]: Number of geometries (points, lines, polygons)
 #' * [nrow()]: Number of rows in a vector data table
-#' * [nsubgeom()]: Number of subgeometries (points, lines, polygons that make up single- and multipart geometries)
-#' * [sources()]: Name of the vector in **GRASS**
-#' * [topology()]: Dimensionality (2D or 3D)
+#' * [nsubgeom()]: Number of sub-geometries (points, lines, polygons that make up single- and multipart geometries)
+#' * [`sources()`][sources]: Name of the vector file in the **GRASS** cache
+#' * [`topology()`][topology]: Dimensionally (2D or 3D)
 #' * [zext()]: Vertical extent
 #'
 #' ## Subsetting and assigning geometries or rows and columns of `GVector`s
