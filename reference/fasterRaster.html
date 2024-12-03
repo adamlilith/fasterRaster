@@ -11,7 +11,7 @@ faster(): Set the directory where GRASS is installed on your system, and set or 
 fast(): Convert a SpatRaster, SpatVector, or sf vector to fasterRaster's raster format (GRasters) or vector format (GVectors), or load one from a file
 rast(), vect(), and st_as_sf(): Convert GRasters and GVectors to SpatRasters, SpatVectors, or sf vectors
 writeRaster() and writeVector(): Save GRasters or GVectors to disk
-addons(): Test to see if the addons directory is correct and if a particular addon GRASS module is installed.
+addons(): Test if the addons directory is correct and if a particular addon GRASS module is installed.
 
 
 
@@ -43,8 +43,8 @@ nonnacell(): Number of non-NA cells
 nrow(): Number of rows
 nlevels(): Number of categories
 res(), res3d(), xres(), yres(), and zres(): Spatial resolution
-sources(): Name of the GRaster in GRASS
-
+sources(): Name of the raster file in the GRASS cache
+topology(): Dimensionally (2D or 3D)
 zext(): Vertical extent
 zres(): Vertical resolution
 
@@ -246,9 +246,9 @@ names(): Names of GVector fields
 ncol(): Number of fields
 ngeom(): Number of geometries (points, lines, polygons)
 nrow(): Number of rows in a vector data table
-nsubgeom(): Number of subgeometries (points, lines, polygons that make up single- and multipart geometries)
-sources(): Name of the vector in GRASS
-
+nsubgeom(): Number of sub-geometries (points, lines, polygons that make up single- and multipart geometries)
+sources(): Name of the vector file in the GRASS cache
+topology(): Dimensionally (2D or 3D)
 zext(): Vertical extent
 
 
@@ -443,7 +443,7 @@ faster(): Set the directory where GRASS is installed on your system, and set or 
 fast(): Convert a SpatRaster, SpatVector, or sf vector to fasterRaster's raster format (GRasters) or vector format (GVectors), or load one from a file
 rast(), vect(), and st_as_sf(): Convert GRasters and GVectors to SpatRasters, SpatVectors, or sf vectors
 writeRaster() and writeVector(): Save GRasters or GVectors to disk
-addons(): Test to see if the addons directory is correct and if a particular addon GRASS module is installed.
+addons(): Test if the addons directory is correct and if a particular addon GRASS module is installed.
 
 
 
@@ -475,8 +475,8 @@ nonnacell(): Number of non-NA cells
 nrow(): Number of rows
 nlevels(): Number of categories
 res(), res3d(), xres(), yres(), and zres(): Spatial resolution
-sources(): Name of the GRaster in GRASS
-
+sources(): Name of the raster file in the GRASS cache
+topology(): Dimensionally (2D or 3D)
 zext(): Vertical extent
 zres(): Vertical resolution
 
@@ -678,9 +678,9 @@ names(): Names of GVector fields
 ncol(): Number of fields
 ngeom(): Number of geometries (points, lines, polygons)
 nrow(): Number of rows in a vector data table
-nsubgeom(): Number of subgeometries (points, lines, polygons that make up single- and multipart geometries)
-sources(): Name of the vector in GRASS
-
+nsubgeom(): Number of sub-geometries (points, lines, polygons that make up single- and multipart geometries)
+sources(): Name of the vector file in the GRASS cache
+topology(): Dimensionally (2D or 3D)
 zext(): Vertical extent
 
 
@@ -871,7 +871,7 @@ GVector: Spatial vector class
 
     <a class="navbar-brand me-2" href="../index.html">fasterRaster</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">8.4.0.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">8.4.0.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -885,7 +885,7 @@ GVector: Spatial vector class
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/GRasters.html">Types of GRasters</a></li>
     <li><a class="dropdown-item" href="../articles/faster_fasterRaster.html">Making fasterRaster faster</a></li>
-    <li><a class="dropdown-item" href="../articles/fasterRaster_addons.html">fasterRaster addons</a></li>
+    <li><a class="dropdown-item" href="../articles/addons.html">fasterRaster addons</a></li>
     <li><hr class="dropdown-divider"></li>
     <li><a class="dropdown-item" href="../articles/index.html">More articles...</a></li>
   </ul></li>
@@ -918,12 +918,12 @@ GVector: Spatial vector class
 <ul><li><p>The quick-start guide to getting started with <strong>fasterRaster</strong>: <code><a href="../articles/fasterRaster.html">vignette("fasterRaster", package = "fasterRaster")</a></code>:</p></li>
 <li><p>Types of <code>GRaster</code>s: <code><a href="../articles/GRasters.html">vignette("GRasters", package = "fasterRaster")</a></code></p></li>
 <li><p>How to speed up <strong>fasterRaster</strong>: <code><a href="../articles/faster_fasterRaster.html">vignette("faster_fasterRaster", package = "fasterRaster")</a></code></p></li>
-<li><p>Using functions that depend on <strong>GRASS</strong> addons: <code>vignette("addons", package = "fasterRaster")</code></p></li>
+<li><p>Using functions that depend on <strong>GRASS</strong> addons: <code><a href="../articles/addons.html">vignette("addons", package = "fasterRaster")</a></code></p></li>
 <li><p><code><a href="faster.html">faster()</a></code>: Set the directory where <strong>GRASS</strong> is installed on your system, and set or get other package-wide options. This function must be run once before using most <strong>fasterRaster</strong> functions.</p></li>
 <li><p><code><a href="fast.html">fast()</a></code>: Convert a <code>SpatRaster</code>, <code>SpatVector</code>, or <code>sf</code> vector to <strong>fasterRaster</strong>'s raster format (<code>GRaster</code>s) or vector format (<code>GVector</code>s), or load one from a file</p></li>
 <li><p><code><a href="rast.html">rast()</a></code>, <code><a href="vect.html">vect()</a></code>, and <code><a href="vect.html">st_as_sf()</a></code>: Convert <code>GRaster</code>s and <code>GVector</code>s to <code>SpatRaster</code>s, <code>SpatVector</code>s, or <code>sf</code> vectors</p></li>
 <li><p><code><a href="writeRaster.html">writeRaster()</a></code> and <code><a href="writeVector.html">writeVector()</a></code>: Save <code>GRaster</code>s or <code>GVector</code>s to disk</p></li>
-<li><p><code><a href="addons.html">addons()</a></code>: Test to see if the <code>addons</code> directory is correct and if a particular addon <strong>GRASS</strong> module is installed.</p></li>
+<li><p><code><a href="addons.html">addons()</a></code>: Test if the <code>addons</code> directory is correct and if a particular addon <strong>GRASS</strong> module is installed.</p></li>
 </ul></div>
 
 <div class="section">
@@ -952,8 +952,8 @@ GVector: Spatial vector class
 <li><p><code><a href="dim.html">nrow()</a></code>: Number of rows</p></li>
 <li><p><code><a href="nlevels.html">nlevels()</a></code>: Number of categories</p></li>
 <li><p><code><a href="res.html">res()</a></code>, <code><a href="res.html">res3d()</a></code>, <code><a href="res.html">xres()</a></code>, <code><a href="res.html">yres()</a></code>, and <code><a href="res.html">zres()</a></code>: Spatial resolution</p></li>
-<li><p><code><a href="sources.html">sources()</a></code>: Name of the <code>GRaster</code> in <strong>GRASS</strong></p></li>
-<li><p></p></li>
+<li><p><code><a href="sources.html">sources()</a></code>: Name of the raster file in the <strong>GRASS</strong> cache</p></li>
+<li><p><code><a href="topology-GSpatial-method.html">topology()</a></code>: Dimensionally (2D or 3D)</p></li>
 <li><p><code><a href="ext.html">zext()</a></code>: Vertical extent</p></li>
 <li><p><code><a href="res.html">zres()</a></code>: Vertical resolution</p></li>
 </ul></div>
@@ -1052,7 +1052,7 @@ GVector: Spatial vector class
 <li><p><code><a href="flow.html">flow()</a></code>: Identify watershed basins and direction and accumulation of flow</p></li>
 <li><p><code><a href="flowPath.html">flowPath()</a></code>: Path of water flow across a landscape</p></li>
 <li><p><code><a href="geomorphons.html">geomorphons()</a></code>: Identify terrain feature types</p></li>
-<li><p><code><a href="https://rspatial.github.io/terra/reference/shade.html" class="external-link">hillshade()</a></code>: Create a hillshade <code>GRaster</code></p></li>
+<li><p><code><a href="hillshade.html">hillshade()</a></code>: Create a hillshade <code>GRaster</code></p></li>
 <li><p><code><a href="horizonHeight.html">horizonHeight()</a></code>: Horizon height</p></li>
 <li><p><code><a href="sun.html">sun()</a></code>: Solar radiance and irradiance</p></li>
 <li><p><code><a href="ruggedness.html">ruggedness()</a></code>: Terrain Ruggedness Index</p></li>
@@ -1122,9 +1122,9 @@ GVector: Spatial vector class
 <li><p><code><a href="dim.html">ncol()</a></code>: Number of fields</p></li>
 <li><p><code><a href="ngeom.html">ngeom()</a></code>: Number of geometries (points, lines, polygons)</p></li>
 <li><p><code><a href="dim.html">nrow()</a></code>: Number of rows in a vector data table</p></li>
-<li><p><code><a href="ngeom.html">nsubgeom()</a></code>: Number of subgeometries (points, lines, polygons that make up single- and multipart geometries)</p></li>
-<li><p><code><a href="sources.html">sources()</a></code>: Name of the vector in <strong>GRASS</strong></p></li>
-<li><p></p></li>
+<li><p><code><a href="ngeom.html">nsubgeom()</a></code>: Number of sub-geometries (points, lines, polygons that make up single- and multipart geometries)</p></li>
+<li><p><code><a href="sources.html">sources()</a></code>: Name of the vector file in the <strong>GRASS</strong> cache</p></li>
+<li><p><code><a href="topology-GSpatial-method.html">topology()</a></code>: Dimensionally (2D or 3D)</p></li>
 <li><p><code><a href="ext.html">zext()</a></code>: Vertical extent</p></li>
 </ul></div>
 
@@ -1167,8 +1167,8 @@ GVector: Spatial vector class
 <li><p><code><a href="interpSplines.html">interpSplines()</a></code>: Interpolate values at points to a <code>GRaster</code> using splines</p></li>
 <li><p><code><a href="intersect.html">intersect()</a></code> or <code>*</code>: Intersection of two <code>GVectors</code></p></li>
 <li><p><code><a href="kernel.html">kernel()</a></code>: Kernel density estimator of points</p></li>
-<li><p><code><a href="complete.cases.html">missing.cases()</a></code>: Find rows of a <code>GVector</code>'s data table that have at least <code>NA</code> in them
-<code>names&lt;-</code>: Assign names to columns of a <code>GVector</code>s data table</p></li>
+<li><p><code><a href="complete.cases.html">missing.cases()</a></code>: Find rows of a <code>GVector</code>'s data table that have at least <code>NA</code> in them</p></li>
+<li><p><code>names&lt;-</code>: Assign names to columns of a <code>GVector</code>s data table</p></li>
 <li><p><code><a href="project.html">project()</a></code>: Change coordinate reference system</p></li>
 <li><p><code><a href="rasterize.html">rasterize()</a></code>: Convert a <code>GVector</code> to a <code>GRaster</code></p></li>
 <li><p><code><a href="rbind.html">rbind()</a></code>: Combine <code>GVectors</code></p></li>

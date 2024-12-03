@@ -23,7 +23,7 @@
 
     <a class="navbar-brand me-2" href="index.html">fasterRaster</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">8.4.0.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">8.4.0.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -39,7 +39,7 @@
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
 <li><a class="dropdown-item" href="articles/GRasters.html">Types of GRasters</a></li>
     <li><a class="dropdown-item" href="articles/faster_fasterRaster.html">Making fasterRaster faster</a></li>
-    <li><a class="dropdown-item" href="articles/fasterRaster_addons.html">fasterRaster addons</a></li>
+    <li><a class="dropdown-item" href="articles/addons.html">fasterRaster addons</a></li>
     <li><hr class="dropdown-divider"></li>
     <li><a class="dropdown-item" href="articles/index.html">More articles...</a></li>
   </ul>
@@ -111,6 +111,7 @@
 <p>Alternatively, you can install the development version from:</p>
 <p><code>remotes::install_github('adamlilith/fasterRaster@intuitive_fasterRaster', dependencies = TRUE)</code></p>
 <p>To use <code>fasterRaster</code> you must install <a href="https://grass.osgeo.org/" class="external-link">GRASS version 8.3+</a> on your operating system. <strong>You will need to use the stand-alone installer, not the Open Source Geospatial (OS Geo) installer.</strong></p>
+<p>Optional: A few functions in <strong>fasterRaster</strong> require <strong>GRASS</strong> “addon” modules, which do not come bundled with <strong>GRASS</strong>. You do not need to install these addons if you do not use functions that call them. A list of functions that require addons can be seen in the “addons” vignette (in <strong>R</strong>, use <code><a href="articles/addons.html">vignette("addons", package = "fasterRaster")</a></code>). This vignette also explains how to install addons.</p>
 </div>
 <div class="section level1">
 <h1 id="vignettes">Vignettes<a class="anchor" aria-label="anchor" href="#vignettes"></a>
@@ -120,7 +121,7 @@
 <li><a href="https://adamlilith.github.io/fasterRaster/articles/fasterRaster.html" class="external-link">“Getting started”</a></li>
 <li><a href="https://adamlilith.github.io/fasterRaster/articles/GRasters.html" class="external-link">Types of <code>GRaster</code>s</a></li>
 <li><a href="https://adamlilith.github.io/fasterRaster/articles/faster_fasterRaster.html" class="external-link">Making <strong>fasterRaster</strong> faster</a></li>
-<li><a href="https://adamlilith.github.io/fasterRaster/articles/fasterRaster_addons.html" class="external-link">Installing addons</a></li>
+<li><a href="https://adamlilith.github.io/fasterRaster/articles/addons.html" class="external-link">Installing addons</a></li>
 </ul>
 </div>
 <div class="section level1">
@@ -272,7 +273,7 @@ values      : River/Stream Perennial/Permanent MANANARA   MDG Madagascar
 <div class="developers">
 <h2 data-toc-skip>Developers</h2>
 <ul class="list-unstyled">
-<li>Adam B. Smith <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0000-0002-6420-1659" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
+<li>Adam B. Smith <br><small class="roles"> Maintainer, author </small> <a href="https://orcid.org/0000-0002-6420-1659" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
 </ul>
 </div>
 
