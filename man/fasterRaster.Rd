@@ -46,8 +46,8 @@
 \item \code{\link[=nrow]{nrow()}}: Number of rows
 \item \code{\link[=nlevels]{nlevels()}}: Number of categories
 \item \code{\link[=res]{res()}}, \code{\link[=res3d]{res3d()}}, \code{\link[=xres]{xres()}}, \code{\link[=yres]{yres()}}, and \code{\link[=zres]{zres()}}: Spatial resolution
-\item \code{\link[=sources]{sources()}}: Name of \code{GRaster} file in the \strong{GRASS} cache
-\item 
+\item \code{\link[=sources]{sources()}}: Name of the raster file in the \strong{GRASS} cache
+\item \code{\link[=topology]{topology()}}: Dimensionally (2D or 3D)
 \item \code{\link[=zext]{zext()}}: Vertical extent
 \item \code{\link[=zres]{zres()}}: Vertical resolution
 }
@@ -162,7 +162,7 @@ Operations on \code{GRaster}s
 \item \code{\link[=flow]{flow()}}: Identify watershed basins and direction and accumulation of flow
 \item \code{\link[=flowPath]{flowPath()}}: Path of water flow across a landscape
 \item \code{\link[=geomorphons]{geomorphons()}}: Identify terrain feature types
-\item \code{\link[=shade]{hillshade()}}: Create a hillshade \code{GRaster}
+\item \code{\link[=hillshade]{hillshade()}}: Create a hillshade \code{GRaster}
 \item \code{\link[=horizonHeight]{horizonHeight()}}: Horizon height
 \item \code{\link[=sun]{sun()}}: Solar radiance and irradiance
 \item \code{\link[=ruggedness]{ruggedness()}}: Terrain Ruggedness Index
@@ -232,9 +232,9 @@ Operations on \code{GRaster}s
 \item \code{\link[=ncol]{ncol()}}: Number of fields
 \item \code{\link[=ngeom]{ngeom()}}: Number of geometries (points, lines, polygons)
 \item \code{\link[=nrow]{nrow()}}: Number of rows in a vector data table
-\item \code{\link[=nsubgeom]{nsubgeom()}}: Number of subgeometries (points, lines, polygons that make up single- and multipart geometries)
-\item \code{\link[=sources]{sources()}}: Name of the vector in \strong{GRASS}
-\item 
+\item \code{\link[=nsubgeom]{nsubgeom()}}: Number of sub-geometries (points, lines, polygons that make up single- and multipart geometries)
+\item \code{\link[=sources]{sources()}}: Name of the vector file in the \strong{GRASS} cache
+\item \code{\link[=topology]{topology()}}: Dimensionally (2D or 3D)
 \item \code{\link[=zext]{zext()}}: Vertical extent
 }
 }
