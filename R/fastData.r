@@ -12,17 +12,17 @@
 #'
 #' Rasters (objects of class `SpatRaster` from the **terra** package, saved as GeoTIFF files):
 #' * [madChelsa]: Bioclimatic variables
-#' * [madCover]: Land cover (also see `madCoverCats`)
-#' * [madElev]: Elevation
+#' * [madCover]: Land cover
+#' * [`madElev`][madElev]: Elevation
 #' * [madForest2000]: Forest cover in year 2000
 #' * [madForest2014]: Forest cover in year 2014
 #' * [madLANDSAT]: Surface reflectance in 2023
 #' * [madPpt], [madTmin], [madTmax]: Rasters of mean monthly precipitation, and minimum and maximum temperature.
 #'
 #' Data frames
-#' * [appFunsTable]: Table of functions usable by [app()].
-#' * [madCoverCats]: Land cover values and categories.
-#' * [vegIndices]: Vegetation indices that can be calculated with [vegIndex()].
+#' * [appFunsTable]: Table of functions usable by [app()]
+#' * [madCoverCats]: Land cover values and categories for [madCover]
+#' * [vegIndices]: Vegetation indices that can be calculated with [vegIndex()]
 #'
 #' @return A `SpatRaster`, `sf` spatial vector, or a `data.frame`.
 #'

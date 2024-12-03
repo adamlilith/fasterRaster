@@ -21,7 +21,7 @@ addons(x = NULL, onFail = "fail", verbose = TRUE)
 Logical.
 }
 \description{
-This function tests to see if the "addons" directory specified using \code{\link[=faster]{faster()}} actually exists, and if a particular \strong{GRASS} \verb{addons module is available. The }addons\verb{folder and module must exists for methods that rely on particular **GRASS**}addons` to work.
+This function tests to see if the "addons" directory specified using \code{\link[=faster]{faster()}} actually exists, and if a particular \strong{GRASS} \verb{addons module is available. The }addons\verb{folder and module must exists for methods that rely on particular **GRASS**}addons\verb{to work. See}vignette("addons", package = "fasterRaster")`.
 }
 \examples{
 if (grassStarted()) {
@@ -35,4 +35,7 @@ exten <- addons(addon, onFail = "warning")
 if (exten) print("Extension `v.centerpoints` is installed.")
 
 }
+}
+\seealso{
+\code{vignette("addons", package = "fasterRaster")}
 }

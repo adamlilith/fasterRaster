@@ -38,7 +38,9 @@ Partial matching is used and case is ignored.}
 A points \code{GVector}.
 }
 \description{
-This function locates the centroid of each geometry of a \code{GVector}. \strong{To use this function, you must a) have correctly specified the \code{addonsDir} option using \code{\link[=faster]{faster()}}, and b) installed the \strong{GRASS} addon \code{v.centerpoint}.} See \code{\link[=addons]{addons()}} and \code{vignette("addons", package = "fasterRaster")}.
+This function locates the centroid of each geometry of a \code{GVector}.
+
+\strong{To use this function}, you must a) have correctly specified the \code{addonsDir} option using \code{\link[=faster]{faster()}}, and b) installed the \strong{GRASS} addon \code{v.centerpoint}. See \code{\link[=addons]{addons()}} and \code{vignette("addons", package = "fasterRaster")}.
 }
 \examples{
 if (grassStarted()) {

@@ -46,6 +46,3 @@ plot(hs)
 
 }
 }
-\seealso{
-\code{\link[terra:shade]{terra::shade()}}
-}

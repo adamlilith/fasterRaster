@@ -20,8 +20,8 @@ Spatial vectors (objects of class \code{sf} from the \strong{sf} package):
 Rasters (objects of class \code{SpatRaster} from the \strong{terra} package, saved as GeoTIFF files):
 \itemize{
 \item \link{madChelsa}: Bioclimatic variables
-\item \link{madCover}: Land cover (also see \code{madCoverCats})
-\item 
+\item \link{madCover}: Land cover
+\item \code{\link{madElev}}: Elevation
 \item \link{madForest2000}: Forest cover in year 2000
 \item \link{madForest2014}: Forest cover in year 2014
 \item \link{madLANDSAT}: Surface reflectance in 2023
@@ -30,9 +30,9 @@ Rasters (objects of class \code{SpatRaster} from the \strong{terra} package, sav
 
 Data frames
 \itemize{
-\item \link{appFunsTable}: Table of functions usable by \code{\link[=app]{app()}}.
-\item \link{madCoverCats}: Land cover values and categories.
-\item \link{vegIndices}: Vegetation indices that can be calculated with \code{\link[=vegIndex]{vegIndex()}}.
+\item \link{appFunsTable}: Table of functions usable by \code{\link[=app]{app()}}
+\item \link{madCoverCats}: Land cover values and categories for \link{madCover}
+\item \link{vegIndices}: Vegetation indices that can be calculated with \code{\link[=vegIndex]{vegIndex()}}
 }}
 }
 \value{

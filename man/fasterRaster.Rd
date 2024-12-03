@@ -17,7 +17,7 @@
 \item \code{\link[=fast]{fast()}}: Convert a \code{SpatRaster}, \code{SpatVector}, or \code{sf} vector to \strong{fasterRaster}'s raster format (\code{GRaster}s) or vector format (\code{GVector}s), or load one from a file
 \item \code{\link[=rast]{rast()}}, \code{\link[=vect]{vect()}}, and \code{\link[=st_as_sf]{st_as_sf()}}: Convert \code{GRaster}s and \code{GVector}s to \code{SpatRaster}s, \code{SpatVector}s, or \code{sf} vectors
 \item \code{\link[=writeRaster]{writeRaster()}} and \code{\link[=writeVector]{writeVector()}}: Save \code{GRaster}s or \code{GVector}s to disk
-\item \code{\link[=addons]{addons()}}: Test to see if the \code{addons} directory is correct and if a particular addon \strong{GRASS} module is installed.
+\item \code{\link[=addons]{addons()}}: Test if the \code{addons} directory is correct and if a particular addon \strong{GRASS} module is installed.
 }
 }
 
@@ -46,8 +46,8 @@
 \item \code{\link[=nrow]{nrow()}}: Number of rows
 \item \code{\link[=nlevels]{nlevels()}}: Number of categories
 \item \code{\link[=res]{res()}}, \code{\link[=res3d]{res3d()}}, \code{\link[=xres]{xres()}}, \code{\link[=yres]{yres()}}, and \code{\link[=zres]{zres()}}: Spatial resolution
-\item \code{\link[=sources]{sources()}}: Name of the \code{GRaster} in \strong{GRASS}
-\item 
+\item \code{\link[=sources]{sources()}}: Name of the raster file in the \strong{GRASS} cache
+\item \code{\link[=topology]{topology()}}: Dimensionally (2D or 3D)
 \item \code{\link[=zext]{zext()}}: Vertical extent
 \item \code{\link[=zres]{zres()}}: Vertical resolution
 }
@@ -162,7 +162,7 @@ Operations on \code{GRaster}s
 \item \code{\link[=flow]{flow()}}: Identify watershed basins and direction and accumulation of flow
 \item \code{\link[=flowPath]{flowPath()}}: Path of water flow across a landscape
 \item \code{\link[=geomorphons]{geomorphons()}}: Identify terrain feature types
-\item \code{\link[=shade]{hillshade()}}: Create a hillshade \code{GRaster}
+\item \code{\link[=hillshade]{hillshade()}}: Create a hillshade \code{GRaster}
 \item \code{\link[=horizonHeight]{horizonHeight()}}: Horizon height
 \item \code{\link[=sun]{sun()}}: Solar radiance and irradiance
 \item \code{\link[=ruggedness]{ruggedness()}}: Terrain Ruggedness Index
@@ -232,9 +232,9 @@ Operations on \code{GRaster}s
 \item \code{\link[=ncol]{ncol()}}: Number of fields
 \item \code{\link[=ngeom]{ngeom()}}: Number of geometries (points, lines, polygons)
 \item \code{\link[=nrow]{nrow()}}: Number of rows in a vector data table
-\item \code{\link[=nsubgeom]{nsubgeom()}}: Number of subgeometries (points, lines, polygons that make up single- and multipart geometries)
-\item \code{\link[=sources]{sources()}}: Name of the vector in \strong{GRASS}
-\item 
+\item \code{\link[=nsubgeom]{nsubgeom()}}: Number of sub-geometries (points, lines, polygons that make up single- and multipart geometries)
+\item \code{\link[=sources]{sources()}}: Name of the vector file in the \strong{GRASS} cache
+\item \code{\link[=topology]{topology()}}: Dimensionally (2D or 3D)
 \item \code{\link[=zext]{zext()}}: Vertical extent
 }
 }
@@ -278,7 +278,7 @@ Operations on \code{GRaster}s
 \item \code{\link[=intersect]{intersect()}} or \code{*}: Intersection of two \code{GVectors}
 \item \code{\link[=kernel]{kernel()}}: Kernel density estimator of points
 \item \code{\link[=missing.cases]{missing.cases()}}: Find rows of a \code{GVector}'s data table that have at least \code{NA} in them
-\code{\link[fasterRaster]{names<-}}: Assign names to columns of a \code{GVector}s data table
+\item \code{\link[fasterRaster]{names<-}}: Assign names to columns of a \code{GVector}s data table
 \item \code{\link[=project]{project()}}: Change coordinate reference system
 \item \code{\link[=rasterize]{rasterize()}}: Convert a \code{GVector} to a \code{GRaster}
 \item \code{\link[=rbind]{rbind()}}: Combine \code{GVectors}

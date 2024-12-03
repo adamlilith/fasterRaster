@@ -1,6 +1,6 @@
 #' Test if addons directory exists and if an addon is installed
 #'
-#' @description This function tests to see if the "addons" directory specified using [faster()] actually exists, and if a particular **GRASS** `addons module is available. The `addons` folder and module must exists for methods that rely on particular **GRASS** `addons` to work.
+#' @description This function tests to see if the "addons" directory specified using [faster()] actually exists, and if a particular **GRASS** `addons module is available. The `addons` folder and module must exists for methods that rely on particular **GRASS** `addons` to work. See `vignette("addons", package = "fasterRaster")`.
 #'
 #' @param x Either `NULL` or a character specifying the name of a **GRASS** addons module. If `NULL`, the existence of the `addonsDir` (see [faster()]) will be tested. If the module name is provided, the existence of the folder and module will be tested.
 #'
@@ -12,7 +12,7 @@
 #'
 #' @returns Logical.
 #'
-#' @seealso `vignette("fasterRaster_addons", package = "fasterRaster")`
+#' @seealso `vignette("addons", package = "fasterRaster")`
 #'
 #' @example man/examples/ex_addons.r
 #'

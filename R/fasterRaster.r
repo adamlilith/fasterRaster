@@ -6,12 +6,12 @@
 #' * The quick-start guide to getting started with **fasterRaster**: `vignette("fasterRaster", package = "fasterRaster")`: 
 #' * Types of `GRaster`s: `vignette("GRasters", package = "fasterRaster")`
 #' * How to speed up **fasterRaster**: `vignette("faster_fasterRaster", package = "fasterRaster")`
-#' * Using functions that depend on **GRASS** addons: `vignette("fasterRaster_addons", package = "fasterRaster")`
+#' * Using functions that depend on **GRASS** addons: `vignette("addons", package = "fasterRaster")`
 #' * [faster()]: Set the directory where **GRASS** is installed on your system, and set or get other package-wide options. This function must be run once before using most **fasterRaster** functions.
 #' * [fast()]: Convert a `SpatRaster`, `SpatVector`, or `sf` vector to **fasterRaster**'s raster format (`GRaster`s) or vector format (`GVector`s), or load one from a file
 #' * [rast()], [vect()], and [st_as_sf()]: Convert `GRaster`s and `GVector`s to `SpatRaster`s, `SpatVector`s, or `sf` vectors
 #' * [writeRaster()] and [writeVector()]: Save `GRaster`s or `GVector`s to disk
-#' * [addons()]: Test to see if the `addons` directory is correct and if a particular addon **GRASS** module is installed.
+#' * [addons()]: Test if the `addons` directory is correct and if a particular addon **GRASS** module is installed.
 #'
 #' ## Properties of `GRasters`
 #' * [crs()]: Coordinate reference system
@@ -37,8 +37,8 @@
 #' * [nrow()]: Number of rows
 #' * [nlevels()]: Number of categories
 #' * [res()], [res3d()], [xres()], [yres()], and [zres()]: Spatial resolution
-#' * [sources()]: Name of the `GRaster` in **GRASS**
-#' * [topology()]: Dimensionality (2D or 3D)
+#' * [sources()]: Name of the raster file in the **GRASS** cache
+#' * [`topology()`][topology]: Dimensionally (2D or 3D)
 #' * [zext()]: Vertical extent
 #' * [zres()]: Vertical resolution
 #' 
@@ -136,7 +136,7 @@
 #' * [flow()]: Identify watershed basins and direction and accumulation of flow
 #' * [flowPath()]: Path of water flow across a landscape
 #' * [geomorphons()]: Identify terrain feature types
-#' * [`hillshade()`][shade]: Create a hillshade `GRaster`
+#' * [`hillshade()`][hillshade]: Create a hillshade `GRaster`
 #' * [horizonHeight()]: Horizon height
 #' * [sun()]: Solar radiance and irradiance
 #' * [ruggedness()]: Terrain Ruggedness Index
@@ -194,9 +194,9 @@
 #' * [ncol()]: Number of fields
 #' * [ngeom()]: Number of geometries (points, lines, polygons)
 #' * [nrow()]: Number of rows in a vector data table
-#' * [nsubgeom()]: Number of subgeometries (points, lines, polygons that make up single- and multipart geometries)
-#' * [sources()]: Name of the vector in **GRASS**
-#' * [topology()]: Dimensionality (2D or 3D)
+#' * [nsubgeom()]: Number of sub-geometries (points, lines, polygons that make up single- and multipart geometries)
+#' * [`sources()`][sources]: Name of the vector file in the **GRASS** cache
+#' * [`topology()`][topology]: Dimensionally (2D or 3D)
 #' * [zext()]: Vertical extent
 #'
 #' ## Subsetting and assigning geometries or rows and columns of `GVector`s
@@ -234,7 +234,7 @@
 #' * [intersect()] or `*`: Intersection of two `GVectors`
 #' * [kernel()]: Kernel density estimator of points
 #' * [missing.cases()]: Find rows of a `GVector`'s data table that have at least `NA` in them
-#' \code{\link[fasterRaster]{names<-}}: Assign names to columns of a `GVector`s data table
+#' * \code{\link[fasterRaster]{names<-}}: Assign names to columns of a `GVector`s data table
 #' * [project()]: Change coordinate reference system
 #' * [rasterize()]: Convert a `GVector` to a `GRaster`
 #' * [rbind()]: Combine `GVectors`

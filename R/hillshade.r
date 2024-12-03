@@ -12,8 +12,6 @@
 #'
 #' @returns A `GRaster`.
 #'
-#' @seealso [terra::shade()]
-#' 
 #' @example man/examples/ex_terrain.r
 #' 
 #' @aliases hillshade
