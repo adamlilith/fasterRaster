@@ -12,7 +12,7 @@
 #'
 #' @keywords Madagascar
 #'
-#' @source [DIVA-GIS](http://www.diva-gis.org/gdata)
+#' @source [DIVA-GIS](https://diva-gis.org/)
 #'
 #' @example man/examples/ex_fastData.r
 #'

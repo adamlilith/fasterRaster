@@ -9,7 +9,7 @@ Faster raster processing in `R` using `GRASS GIS`
  
 <a href="https://adamlilith.github.io/fasterRaster/"><img src="man/figures/logo.png" align="right" height="232" alt="fasterRaster website" /></a>
 
-`fasterRaster` is an **R** package designed specifically to handle large-in-memory/large-on-disk spatial rasters and vectors. `fasterRaster` does this using Open Source Geospatial's <a href="https://grass.osgeo.org/rgrass/">`GRASS GIS`</a>
+`fasterRaster` is an **R** package designed specifically to handle large-in-memory/large-on-disk spatial rasters and vectors. `fasterRaster` does this using Open Source Geospatial's <a href="https://grass.osgeo.org/">`GRASS GIS`</a>
 
 `fasterRaster` was created with five design principles:
 
@@ -21,35 +21,31 @@ Faster raster processing in `R` using `GRASS GIS`
 
 `fasterRaster` makes heavy use of the <a href="https://cran.r-project.org/package=rgrass">`rgrass`</a> package by Roger Bivand and others, the <a href="https://cran.r-project.org/package=rgrass">`terra`</a> package by Robert Hijmans, the <a href="https://cran.r-project.org/package=sf">`sf`</a> package by Edzer Pebesma, Roger Bivand, and others, and of course <a href="https://grass.osgeo.org/">`GRASS GIS`</a>, so is greatly indebted to all of these creators!
 
-# Where we are
-As of 2024/11/20, a new version of this package, `fasterRaster 8.4`, is in alpha release (i.e., near final release) and can run with **GRASS** 8.3 or 8.4. There are known issues and unknown issues. If you encounter one of the latter, please file an <a href="https://github.com/adamlilith/fasterRaster/issues">issue</a> report.
+# Vignettes & documentation
+**fasterRaster** comes with four user-oriented vignettes:
 
-**Special announcement #1**: We now have a **pkgdown** <a href="https://adamlilith.github.io/fasterRaster/">site</a> with all the package documentation--plus vignettes!
-
-**Special announcement #2**: The new `bioclims()` function creates the "classic" set of BIOCLIM variables, plus an optional "extended" set. The function works on **fasterRaster** `GRaster`s and on **terra** `SpatRaster`s!
+o <a href="https://adamlilith.github.io/fasterRaster/articles/fasterRaster.html">Getting started</a> (also reproduced below)
+o <a href="https://adamlilith.github.io/fasterRaster/articles/GRasters.html">Types of `GRaster`s</a>
+o <a href="https://adamlilith.github.io/fasterRaster/articles/faster_fasterRaster.html">Making **fasterRaster** faster</a>
+o <a href="https://adamlilith.github.io/fasterRaster/articles/addons.html">Addons</a>
+o <a href="https://adamlilith.github.io/fasterRaster/">Documentation</a>
 
 # Installation
-
 To install `fasterRaster`, please use:
+
+`install_packages('fasterRaster', dependencies = TRUE)`  
+
+You can get the latest stable release using:
 
 `remotes::install_github('adamlilith/fasterRaster', dependencies = TRUE)`  
 
-Alternatively, you can install the development version from:
+...and the development version from:
 
 `remotes::install_github('adamlilith/fasterRaster@intuitive_fasterRaster', dependencies = TRUE)`  
 
 To use `fasterRaster` you must install [GRASS version 8.3+](https://grass.osgeo.org/) on your operating system. **You will need to use the stand-alone installer, not the Open Source Geospatial (OS Geo) installer.**
 
-Optional: A few functions in **fasterRaster** require **GRASS** "addon" modules, which do not come bundled with **GRASS**. You do not need to install these addons if you do not use functions that call them. A list of functions that require addons can be seen in the "addons" vignette (in **R**, use `vignette("addons", package = "fasterRaster")`). This vignette also explains how to install addons.
-
-# Vignettes
-
-**fasterRaster** comes with four user-oriented vignettes:
-
-* ["Getting started"](https://adamlilith.github.io/fasterRaster/articles/fasterRaster.html)
-* [Types of `GRaster`s](https://adamlilith.github.io/fasterRaster/articles/GRasters.html)
-* [Making **fasterRaster** faster](https://adamlilith.github.io/fasterRaster/articles/faster_fasterRaster.html)
-* [Installing addons](https://adamlilith.github.io/fasterRaster/articles/addons.html)
+**Optional**: A few functions in **fasterRaster** require **GRASS** "addon" modules, which do not come bundled with **GRASS**. You do not need to install these addons if you do not use functions that call them. A list of functions that require addons can be seen in the "addons" vignette (in **R**, use `vignette("addons", package = "fasterRaster")`). This vignette also explains how to install addons.
 
 # An example
 
