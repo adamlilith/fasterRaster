@@ -1,7 +1,7 @@
 # fasterRaster
 <!-- badges: start -->
 
-[![cran version](https://www.r-pkg.org/badges/version/enmSdmX)](https://cran.r-project.org/package=fasterRaster) [![GPLv3 license](https://img.shields.io/badge/License-GPLv3-blue.svg)](http://perso.crans.org/besson/LICENSE.html) [![R-CMD-check](https://github.com/adamlilith/fasterRaster/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/adamlilith/fasterRaster/actions/workflows/R-CMD-check.yaml)
+[![cran version](https://www.r-pkg.org/badges/version/fasterRaster)](https://cran.r-project.org/package=fasterRaster) [![R-CMD-check](https://github.com/adamlilith/fasterRaster/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/adamlilith/fasterRaster/actions/workflows/R-CMD-check.yaml) [![GPLv3 license](https://img.shields.io/badge/License-GPLv3-blue.svg)](http://perso.crans.org/besson/LICENSE.html)
 
 <!-- badges: end -->
 Faster raster processing in `R` using `GRASS GIS`
