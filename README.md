@@ -21,13 +21,13 @@ Faster raster processing in `R` using `GRASS GIS`
 `fasterRaster` makes heavy use of the <a href="https://cran.r-project.org/package=rgrass">`rgrass`</a> package by Roger Bivand and others, the <a href="https://cran.r-project.org/package=rgrass">`terra`</a> package by Robert Hijmans, the <a href="https://cran.r-project.org/package=sf">`sf`</a> package by Edzer Pebesma, Roger Bivand, and others, and of course <a href="https://grass.osgeo.org/">`GRASS GIS`</a>, so is greatly indebted to all of these creators!
 
 # Vignettes & documentation
-**fasterRaster** comes with four user-oriented vignettes:
+**fasterRaster** comes with four user-oriented vignettes, plus a `pkgdown` site with full documentation:
 
-o <a href="https://adamlilith.github.io/fasterRaster/articles/fasterRaster.html">Getting started</a> (also reproduced below)
-o <a href="https://adamlilith.github.io/fasterRaster/articles/GRasters.html">Types of `GRaster`s</a>
-o <a href="https://adamlilith.github.io/fasterRaster/articles/faster_fasterRaster.html">Making **fasterRaster** faster</a>
-o <a href="https://adamlilith.github.io/fasterRaster/articles/addons.html">Addons</a>
-o <a href="https://adamlilith.github.io/fasterRaster/">Documentation</a>
+o <a href="https://adamlilith.github.io/fasterRaster/articles/fasterRaster.html">Getting started</a> (also reproduced below)  
+o <a href="https://adamlilith.github.io/fasterRaster/articles/GRasters.html">Types of `GRaster`s</a>  
+o <a href="https://adamlilith.github.io/fasterRaster/articles/faster_fasterRaster.html">Making **fasterRaster** faster</a>  
+o <a href="https://adamlilith.github.io/fasterRaster/articles/addons.html">Addons</a>  
+o <a href="https://adamlilith.github.io/fasterRaster/">Documentation</a>  
 
 # Installation
 To install `fasterRaster`, please use:
