@@ -8,7 +8,7 @@
 An object of class \code{sf}.
 }
 \source{
-\href{http://www.diva-gis.org/gdata}{DIVA-GIS}
+\href{https://diva-gis.org/}{DIVA-GIS}
 }
 \usage{
 data(madRivers)

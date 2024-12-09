@@ -1,7 +1,6 @@
 key <- paste0("R-", meta$Package)
 year <- sub("-.*", "", meta$Date)
 note <- sprintf("R package version %s", meta$Version)
-doi <- "NA"
 title <- paste0(meta$Package, ": ", meta$Title)
 
 citHeader("To cite fasterRaster in publications use:")
@@ -12,6 +11,5 @@ bibentry(bibtype = "Manual",
 				 family = "Smith",
 				 comment = c(ORCID = "0000-0002-8215-2053")),
 	year = year,
-	note = note,
-	doi  = doi
+	note = note
 )

@@ -18,7 +18,7 @@
 \item \code{"fasterRaster"} (default): Reports the \strong{fasterRaster} type (factor, integer, float, or double)
 \item \code{"terra"}: Report the (inferred) \strong{terra} data type (e.g., INT2U, FLT4S). Please see the table in the documentation for [writeRaster()` for an explanation of these codes.
 \item \code{"GRASS"}: Will return "CELL" (integer), "FCELL" (floating-point value), or "DCELL" (double-floating point value)
-\item \code{"GDAL"}: See \href{https://gdal.org/user/raster_data_model.html#raster-band}{GDAL: Raster Band}. Please also see the table in the \code{\link[=writeRaster]{writeRaster()}} help file.
+\item \code{"GDAL"}: See \href{https://gdal.org/user/raster_data_model.html}{GDAL: Raster Band}. Please also see the table in the \code{\link[=writeRaster]{writeRaster()}} help page.
 }}
 
 \item{forceDouble}{Logical (\code{GRaster}s and \code{SpatRaster}s only): If \code{TRUE} (default), and the raster appears to represent non-integer values, then the raster will be assumed to represent double-floating point values (\strong{GRASS}: type "DCELL", \strong{terra}: type "FLT8S", \strong{fasterRaster}: type "double", and \strong{GDAL}: type "Float64"). \code{forceDouble} reports the actual datatype if \code{type = "fasterRaster"} (i.e., the type is not forced to "double").}

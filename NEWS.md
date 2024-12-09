@@ -1,3 +1,6 @@
+# fasterRaster 8.4.0.2 (2024-12-09)
+o Fixed issues from CRAN precheck.  
+
 # fasterRaster 8.4.0.0 (2024-11-20)
 
 ### Potentially code-breaking changes
