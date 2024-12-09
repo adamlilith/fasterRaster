@@ -23,7 +23,7 @@
 
     <a class="navbar-brand me-2" href="index.html">fasterRaster</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">8.4.0.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">8.4.0.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -76,7 +76,7 @@
 <!-- badges: end -->
 <p>Faster raster processing in <code>R</code> using <code>GRASS GIS</code></p>
 <p><a href="https://adamlilith.github.io/fasterRaster/" class="external-link"><img src="reference/figures/logo.png" align="right" height="232" alt="fasterRaster website"></a></p>
-<p><code>fasterRaster</code> is an <strong>R</strong> package designed specifically to handle large-in-memory/large-on-disk spatial rasters and vectors. <code>fasterRaster</code> does this using Open Source Geospatial’s <a href="https://grass.osgeo.org/rgrass/" class="external-link"><code>GRASS GIS</code></a></p>
+<p><code>fasterRaster</code> is an <strong>R</strong> package designed specifically to handle large-in-memory/large-on-disk spatial rasters and vectors. <code>fasterRaster</code> does this using Open Source Geospatial’s <a href="https://grass.osgeo.org/" class="external-link"><code>GRASS GIS</code></a></p>
 <p><code>fasterRaster</code> was created with five design principles:</p>
 <ul>
 <li>
@@ -97,32 +97,22 @@
 <p><code>fasterRaster</code> makes heavy use of the <a href="https://cran.r-project.org/package=rgrass" class="external-link"><code>rgrass</code></a> package by Roger Bivand and others, the <a href="https://cran.r-project.org/package=rgrass" class="external-link"><code>terra</code></a> package by Robert Hijmans, the <a href="https://cran.r-project.org/package=sf" class="external-link"><code>sf</code></a> package by Edzer Pebesma, Roger Bivand, and others, and of course <a href="https://grass.osgeo.org/" class="external-link"><code>GRASS GIS</code></a>, so is greatly indebted to all of these creators!</p>
 </div>
 <div class="section level1">
-<h1 id="where-we-are">Where we are<a class="anchor" aria-label="anchor" href="#where-we-are"></a>
+<h1 id="vignettes--documentation">Vignettes &amp; documentation<a class="anchor" aria-label="anchor" href="#vignettes--documentation"></a>
 </h1>
-<p>As of 2024/11/20, a new version of this package, <code>fasterRaster 8.4</code>, is in alpha release (i.e., near final release) and can run with <strong>GRASS</strong> 8.3 or 8.4. There are known issues and unknown issues. If you encounter one of the latter, please file an <a href="https://github.com/adamlilith/fasterRaster/issues">issue</a> report.</p>
-<p><strong>Special announcement #1</strong>: We now have a <strong>pkgdown</strong> <a href="https://adamlilith.github.io/fasterRaster/" class="external-link">site</a> with all the package documentation–plus vignettes!</p>
-<p><strong>Special announcement #2</strong>: The new <code><a href="reference/bioclims.html">bioclims()</a></code> function creates the “classic” set of BIOCLIM variables, plus an optional “extended” set. The function works on <strong>fasterRaster</strong> <code>GRaster</code>s and on <strong>terra</strong> <code>SpatRaster</code>s!</p>
+<p><strong>fasterRaster</strong> comes with four user-oriented vignettes:</p>
+<p>o <a href="https://adamlilith.github.io/fasterRaster/articles/fasterRaster.html" class="external-link">Getting started</a> (also reproduced below) o <a href="https://adamlilith.github.io/fasterRaster/articles/GRasters.html" class="external-link">Types of <code>GRaster</code>s</a> o <a href="https://adamlilith.github.io/fasterRaster/articles/faster_fasterRaster.html" class="external-link">Making <strong>fasterRaster</strong> faster</a> o <a href="https://adamlilith.github.io/fasterRaster/articles/addons.html" class="external-link">Addons</a> o <a href="https://adamlilith.github.io/fasterRaster/" class="external-link">Documentation</a></p>
 </div>
 <div class="section level1">
 <h1 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h1>
 <p>To install <code>fasterRaster</code>, please use:</p>
+<p><code>install_packages('fasterRaster', dependencies = TRUE)</code></p>
+<p>You can get the latest stable release using:</p>
 <p><code>remotes::install_github('adamlilith/fasterRaster', dependencies = TRUE)</code></p>
-<p>Alternatively, you can install the development version from:</p>
+<p>…and the development version from:</p>
 <p><code>remotes::install_github('adamlilith/fasterRaster@intuitive_fasterRaster', dependencies = TRUE)</code></p>
 <p>To use <code>fasterRaster</code> you must install <a href="https://grass.osgeo.org/" class="external-link">GRASS version 8.3+</a> on your operating system. <strong>You will need to use the stand-alone installer, not the Open Source Geospatial (OS Geo) installer.</strong></p>
-<p>Optional: A few functions in <strong>fasterRaster</strong> require <strong>GRASS</strong> “addon” modules, which do not come bundled with <strong>GRASS</strong>. You do not need to install these addons if you do not use functions that call them. A list of functions that require addons can be seen in the “addons” vignette (in <strong>R</strong>, use <code><a href="articles/addons.html">vignette("addons", package = "fasterRaster")</a></code>). This vignette also explains how to install addons.</p>
-</div>
-<div class="section level1">
-<h1 id="vignettes">Vignettes<a class="anchor" aria-label="anchor" href="#vignettes"></a>
-</h1>
-<p><strong>fasterRaster</strong> comes with four user-oriented vignettes:</p>
-<ul>
-<li><a href="https://adamlilith.github.io/fasterRaster/articles/fasterRaster.html" class="external-link">“Getting started”</a></li>
-<li><a href="https://adamlilith.github.io/fasterRaster/articles/GRasters.html" class="external-link">Types of <code>GRaster</code>s</a></li>
-<li><a href="https://adamlilith.github.io/fasterRaster/articles/faster_fasterRaster.html" class="external-link">Making <strong>fasterRaster</strong> faster</a></li>
-<li><a href="https://adamlilith.github.io/fasterRaster/articles/addons.html" class="external-link">Installing addons</a></li>
-</ul>
+<p><strong>Optional</strong>: A few functions in <strong>fasterRaster</strong> require <strong>GRASS</strong> “addon” modules, which do not come bundled with <strong>GRASS</strong>. You do not need to install these addons if you do not use functions that call them. A list of functions that require addons can be seen in the “addons” vignette (in <strong>R</strong>, use <code><a href="articles/addons.html">vignette("addons", package = "fasterRaster")</a></code>). This vignette also explains how to install addons.</p>
 </div>
 <div class="section level1">
 <h1 id="an-example">An example<a class="anchor" aria-label="anchor" href="#an-example"></a>
@@ -280,8 +270,9 @@ values      : River/Stream Perennial/Permanent MANANARA   MDG Madagascar
 <div class="dev-status">
 <h2 data-toc-skip>Dev status</h2>
 <ul class="list-unstyled">
-<li><a href="http://perso.crans.org/besson/LICENSE.html" class="external-link"><img src="https://img.shields.io/badge/License-GPLv3-blue.svg" alt="GPLv3 license"></a></li>
+<li><a href="https://cran.r-project.org/package=fasterRaster" class="external-link"><img src="https://www.r-pkg.org/badges/version/fasterRaster" alt="cran version"></a></li>
 <li><a href="https://github.com/adamlilith/fasterRaster/actions/workflows/R-CMD-check.yaml"><img src="https://github.com/adamlilith/fasterRaster/actions/workflows/R-CMD-check.yaml/badge.svg" alt="R-CMD-check"></a></li>
+<li><a href="http://perso.crans.org/besson/LICENSE.html" class="external-link"><img src="https://img.shields.io/badge/License-GPLv3-blue.svg" alt="GPLv3 license"></a></li>
 </ul>
 </div>
 
