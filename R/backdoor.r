@@ -15,7 +15,8 @@
 		grassDir = paste0("C:/Program Files/GRASS GIS ", verNice),
 		memory = 1024 * 8,
 		cores = 2,
-		verbose = TRUE
+		useDataTable = TRUE,
+		verbose = FALSE
 	)
 	invisible(TRUE)
 }
