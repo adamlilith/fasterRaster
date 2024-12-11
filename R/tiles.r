@@ -80,7 +80,7 @@ methods::setMethod(
 #' @param res Numeric vector with two values: size of a cell in the x-dimension and the y-dimension in map units.
 #' @param overlap Number of rows/columns by which to overlap tiles.
 #'
-#' @returns Character vector: The [sources()] names of the tiles.
+#' @returns Character vector: The [sources()] names of the tiles. Each has a `list` attribute with its extent and dimensions.
 #' 
 #' @noRd
 .tiles <- function(x, n, dims, extent, res, overlap = 0) {
@@ -118,6 +118,7 @@ methods::setMethod(
 
 	out <- rep(NA_character_, nTiles) # vector storing `sources` names of raster tiles
 	i <- 1L
+	spatial <- list() # hold spatial attributes, one element per tile
 	for (row in seq_len(n[1L])) {
 		for (col in seq_len(n[2L])) {
 
@@ -195,28 +196,33 @@ methods::setMethod(
 			nrows <- as.integer(nrows)
 			ncols <- as.integer(ncols)
 			
-			west <- as.character(west)
-			east <- as.character(east)
-			south <- as.character(south)
-			north <- as.character(north)
+			westChar <- as.character(west)
+			eastChar <- as.character(east)
+			southChar <- as.character(south)
+			northChar <- as.character(north)
 
 			rgrass::execGRASS(
 				cmd = "g.region",
-				n = north,
-				s = south,
-				e = east,
-				w = west,
+				n = northChar,
+				s = southChar,
+				e = eastChar,
+				w = westChar,
 				rows = nrows,
 				cols = ncols,
 				flags= c("o", .quiet())
 			)
 
 			out[i] <- .copyGSpatial(x, reshapeRegion = FALSE)
+			spatial[[i]] <- list(
+				extent = c(west, east, south, north),
+				dim = c(nrows, ncols)
+			)
 			i <- i + 1L
 
 		} # next column
 
 	} # next row
+	attr(out, "spatial") <- spatial
 	out
 
 }
