@@ -16,10 +16,10 @@
 #'
 #' @param trim A `GRaster` or `NULL` (default). If a `GRaster`, then the region will be trimmed to the non-`NA` cells in this raster. `trim` can only be non-`NULL` if `x` is a `GRaster`. Ignored if `NULL`.
 #' 
-#' @param respect Character or `GRaster`: Indicates what aspect(s) of the current region to retain. Different functions allow for different aspect to be retained. Partial matching is used.
-#' * `.regionDim()`: `"extent"` or `"resolution"`.
-#' * `.regionExt()`: `"dimensions"` or `"resolution"`.
-#' * `.regionRes()`: `"extent"` or `"dimensions"`.
+#' @param respect Character or `GRaster`: Indicates what aspect(s) of the current region to retain. Different functions allow for a different aspect to be retained. Partial matching is used.
+#' * `.regionDim()`: `"extent"` (extent unchanged, resolution may be changed) or `"resolution"` (resolution unchanged, extent may be changed).
+#' * `.regionExt()`: `"dimensions"` (dimensions unchanged, extent may be changed) or `"resolution"` (resolution unchanged, extent may be changed).
+#' * `.regionRes()`: `"extent"` (extent may be changed and/or dimensions may be changed to accommodate desired cell size) or `"dimensions"` (extent may be changed, dimensions unchanged).
 #' Alternatively, a `GRaster` can be supplied:
 #' * `.regionDim()`: New region will have same extent and resolution.
 #' * `.regionExt()`: New region will have same dimensions and resolution.
