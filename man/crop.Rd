@@ -21,6 +21,7 @@
 \itemize{
 \item If \code{y} is a "points" \code{GVector}: Use the convex hull around \code{y} to crop \code{x}.
 \item If \code{y} is a "lines" or "polygons" \code{GVector}: If \code{TRUE}, use the extent of \code{y} to crop \code{x}.
+\item if \code{y} is a \code{GVector}, \code{x} will be cropped to the extent of \code{y} (\code{extent} is ignored).
 }}
 }
 \value{
