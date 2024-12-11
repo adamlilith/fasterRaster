@@ -8,19 +8,19 @@
 \S4method{tiles}{GRaster}(x, n, overlap = 0, verbose = FALSE)
 }
 \arguments{
-\item{x}{A \code{GRaster}.}
+\item{x}{A \code{GRaster} with one or more layers.}
 
 \item{n}{Numeric vector: Number of tiles to create. This can be a single number, in which case \code{x} is divided into \code{n} × \code{n} tiles, or two values in which case it is divided into \code{n[1]} × \code{n[2]} tiles (rows x columns).}
 
 \item{overlap}{Numeric vector (default is 0): Number of rows/columns by which to expand the size of tiles so they overlap. This can be a single value or two values. If just one is provided, the tiles will be expanded by \code{overlap} rows and \code{overlaps} columns. If two numbers are provided, the tiles will be expanded by \code{overlap[1]} rows and \code{overlap[2]} columns.}
 
-\item{verbose}{Logical: If \code{TRUE}, display progress. Default is \code{FALSE}.}
+\item{verbose}{Logical: If \code{TRUE}, display progress. Default is \code{FALSE}. Progress is only displayed if \code{x} is a multi-layer \code{GRaster}.}
 }
 \value{
-A \code{list} with one element per tile. The \code{\link[=lapply]{lapply()}} and \code{\link[=sapply]{sapply()}} functions can be used to apply functions to each tile in the list.
+If \code{x} has just one layer, then the output is a \code{list} with one element per tile. The \code{\link[=lapply]{lapply()}} and \code{\link[=sapply]{sapply()}} functions can be used to apply functions to each tile in the list. If \code{x} has more than one layer, then the output will be a \code{list} of \code{list}s, with each sub-\code{list} containing the tiles for one \code{GRaster} layer.
 }
 \description{
-This function divides a raster into "tiles" or spatial subsets which can be used for speeding some raster calculations. Tiles can be mutually exclusive or overlap by a user-defined amount.
+This function divides a \code{GRaster} into "tiles" or spatial subsets which can be used for speeding some raster calculations. Tiles can be mutually exclusive or overlap by a user-defined number of cells.
 }
 \examples{
 if (grassStarted()) {
