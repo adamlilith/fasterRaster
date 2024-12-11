@@ -163,25 +163,16 @@ methods::setMethod(
 			
 			location <- .locationFind(xRast, match = "crs")
 
-# omnibus::say('---raster:fast -- .locationFind(xRast, match = "crs")', pre = 1)
-# print(.g.proj())
-# omnibus::say(.fasterRaster$activeLocation)
-# omnibus::say(location, post = 2)
-
 			if (is.null(location) | !grassStarted()) {
-# omnibus::say('---in new location if/then', pre = 1)
+
 				.locationCreate(x = xRast)
 				location <- .location()
-# omnibus::say(location, post = 2)
+
 			}
 
 			.locationRestore(x = location)
 
-# omnibus::say('---raster:fast -- .locationRestore(x = location)', pre = 1)
-# print(.g.proj())
-# omnibus::say(.fasterRaster$activeLocation)
-# omnibus::say(location, post = 2)
-
+			.region(xRast)
 			src <- .makeSourceName("fast_r_external", type = "raster", n = 1L)
 			rgrass::execGRASS(
 				cmd = "r.external",
