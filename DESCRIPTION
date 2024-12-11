@@ -40,7 +40,7 @@ Suggests:
     knitr,
     rmarkdown
 Roxygen: list(markdown = TRUE)
-License: GPL (>=3) + file LICENSE
+License: GPL (>=3)
 SystemRequirements: GRASS (>= 8)
 URL: https://github.com/adamlilith/fasterRaster, https://adamlilith.github.io/fasterRaster/
 BugReports: https://github.com/adamlilith/fasterRaster/issues
