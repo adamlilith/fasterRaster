@@ -1,3 +1,8 @@
+# fasterRaster 8.4.0.3 (2024-12-XX)
+o `.rbind()` is a hidden function which accepts a `cats` argument that concatenates vectors faster than `rbind()` did.   
+o `crds()` now works for `GVector`s that lacked an internal **GRASS** database.  
+o `fast()` correctly defines region on import of raster.  
+
 # fasterRaster 8.4.0.2 (2024-12-09)
 o Fixed issues from CRAN precheck.  
 
