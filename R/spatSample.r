@@ -50,6 +50,21 @@ methods::setMethod(
 		verbose = FALSE
 	) {
 
+	# for debugging
+	if (FALSE) {
+	
+		as.points <- FALSE
+		values <- TRUE
+		cats <- TRUE
+		xy <- FALSE
+		strata <- NULL
+		byStratum <- FALSE
+		zlim <- NULL
+		seed <- NULL
+		verbose <- FALSE
+	
+	}
+
 	if (!is.null(zlim) & (values | cats)) stop("You cannot at present extract values or categories using 3D points.")
 	if (!xy & !as.points & !values & !cats) stop("At least one of `xy`, `as.points`, `values`, or `cats` must be TRUE.")
 
@@ -219,8 +234,6 @@ methods::setMethod(
 	### locating by stratum
 	if (!is.null(strata)) {
 
-		if (!is.null(tiles)) warning("The `tiles` argument is ignored when locating points by strata.")
-
 		if (size > 250000) .message("spatSample_strata", "Using `strata` when selecting a large number of points can take a long time.")
 
 		src <- .makeSourceName("spatSample_v_random", "vector")
@@ -250,9 +263,6 @@ methods::setMethod(
 
 		# build topology... needed for GVector or for extraction/coordinates
 		if (!xy & !(values | cats)) args$flags <- c(args$flags, "b")
-
-		if (!is.null(seed)) args$seed <- round(seed)
-		# args$seed <- round(1E9 * stats::runif(1L))
 
 		# args$flags <- c(args$flags, "b") ### do not create topology... problems? YES!
 		do.call(rgrass::execGRASS, args = args)
@@ -311,14 +321,15 @@ methods::setMethod(
 
 		theseCats <- 1:size
 		.vAttachDatabase(src, cats = theseCats)
+		thisCats <- if (byStratum) { 1:size } else { NULL }
 		if (exists("out", inherits = FALSE)) {
 			# info <- .vectInfo(src)
 			# nGeometries <- info$nGeometries
 			# n <- nGeometries / size
 			# out <- .makeGVector(src, table = out, cats = rep(1:size, each = n))
-			out <- .makeGVector(src, table = out, cats = 1:size)
+			out <- .makeGVector(src, table = out, cats = thisCats)
 		} else {
-			out <- .makeGVector(src, cats = 1:size)
+			out <- .makeGVector(src, cats = thisCats)
 		}
 	} else {
 		if (!faster("useDataTable")) out <- as.data.frame(out)
