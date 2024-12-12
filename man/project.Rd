@@ -76,7 +76,6 @@ When projecting a raster, the "fallback" methods in \strong{GRASS} module \code{
 if (grassStarted()) {
 
 ### Setup for all examples
-##########################
 
 library(sf)
 library(terra)

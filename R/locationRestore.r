@@ -11,8 +11,6 @@
 #'
 #' @return An object of class `GLocation` (invisibly) if successful. An error will likely result if not.
 #'
-#' @example man/examples/ex_location_mapset.r
-#'
 #' @aliases .locationRestore
 #' @rdname locationRestore
 #' @keywords internal

@@ -6,8 +6,6 @@
 #' 
 #' @returns Character vector.
 #'
-#' @example man/examples/ex_vFunctions.r
-#' 
 #' @aliases .vNames
 #' @rdname vNames
 #' @keywords internal

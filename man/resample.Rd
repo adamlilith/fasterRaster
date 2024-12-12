@@ -49,7 +49,6 @@ elev
 elev120
 
 ### Resample using another raster as a template
-###############################################
 
 template <- aggregate(elev, 4)
 

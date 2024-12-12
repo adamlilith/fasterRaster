@@ -34,8 +34,7 @@ madDypsis <- fastData("madDypsis")
 elev <- fast(madElev)
 dypsis <- fast(madDypsis)
 
-# Aggregate cells of the raster so they are bigger (otherwise, in this
-# example, we'd have no cells with > 1 point):
+# Aggregate cells of the raster so they are bigger
 elevAgg <- aggregate(elev, 32)
 
 # Remove all but one or two points per cell

@@ -19,7 +19,6 @@ Spatial points vector of herbarium specimens and observations of plants in the g
 \examples{
 
 ### vector data
-###############
 
 library(sf)
 
@@ -42,7 +41,6 @@ madDypsis
 plot(st_geometry(madDypsis), col = "red", add = TRUE)
 
 ### raster data
-###############
 
 library(terra)
 

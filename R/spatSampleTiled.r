@@ -1,6 +1,6 @@
 #' Sample random points from a GRaster or GVector
 #'
-#' @description `spatSample()` randomly locates points across a `GRaster` or `GVector`. It can return a `GVector`, the coordinates, values associated with the points, or all of these. If you want to generate a raster with randomly-sampled cells, see [sampleRast()].
+#' @description `spatSample()` randomly locates points across a `GRaster` or `GVector`. It can return a `GVector`, the coordinates, values associated with the points, or all of these. If you want to generate a raster with randomly-sampled cells, see [sampleRast()]. The `tiles` argument can be useful for speeding up creation of random points when the number of points is very large and you wish to extract values from the rasters (`values` or `cats` is `TRUE`).
 #' 
 #' @param x A `GRaster` or `GVector`.
 #' 
@@ -11,12 +11,14 @@
 #' @param values Logical: If `TRUE` (default), values of the `GRaster` at points are returned.
 #' 
 #' @param cats Logical: If `TRUE` (default) and the `GRaster` is categorical, then return the category label of each cell. If `values` is also `TRUE`, then the cell value will also be returned.
-#' 
+#'
 #' @param xy Logical: If `TRUE`, return the longitude and latitude of each point. Default is `FALSE`.
 #'
 #' @param strata Either `NULL` (default), or a `GVector` defining strata. If supplied, the `size` argument will be interpreted as number of points to place per geometry in `strata`. Note that using strata can dramatically slow the process.
 #'
 #' @param byStratum Logical: If `FALSE` (default), then `size` number of points will be placed within the entire area delineated by `strata`. If `TRUE`, then `size` points will be placed within each subgeometry of `strata`.
+#'
+#' @param tiles Numeric/integer vector (only used if `x` is a `GRaster`): Number of tiles into which to divide `x` before randomly placing points. This can be a single number, in which case `x` is divided into `n` × `n` tiles, or two values in which case it is divided into `n[1]` × `n[2]` tiles (rows x columns). Random points are allocated across tiles with probabilities proportionate to the total area of each tile. The default value is 1, meaning the raster is used as-is (no tiling).
 #'
 #' @param zlim Either `NULL` (default), or a vector of two numbers defining the lower and upper altitudinal bounds of coordinates. This cannot be combined with `values = TRUE` or `cats = TRUE`.
 #'
@@ -30,11 +32,11 @@
 #'
 #' @example man/examples/ex_sampleRast_spatSample.r
 #'
-#' @aliases spatSample
-#' @rdname spatSample
-#' @exportMethod spatSample
+#' @aliases spatSampleTiled
+#' @rdname spatSampleTiled
+#' @exportMethod spatSampleTiled
 methods::setMethod(
-	f = "spatSample",
+	f = "spatSampleTiled",
 	signature = "GRaster",
 	function(
 		x,
@@ -45,10 +47,28 @@ methods::setMethod(
 		xy = FALSE,
 		strata = NULL,
 		byStratum = FALSE,
+		tiles = 1,
 		zlim = NULL,
 		seed = NULL,
 		verbose = FALSE
 	) {
+
+	if (FALSE) {
+	
+		size <- 20
+		as.points <- FALSE
+		values <- TRUE
+		cats <- TRUE
+		xy <- FALSE
+		strata <- NULL
+		byStratum <- FALSE
+		tiles <- 1
+		zlim <- NULL
+		seed <- NULL
+		verbose <- FALSE
+	
+	
+	}
 
 	if (!is.null(zlim) & (values | cats)) stop("You cannot at present extract values or categories using 3D points.")
 	if (!xy & !as.points & !values & !cats) stop("At least one of `xy`, `as.points`, `values`, or `cats` must be TRUE.")
@@ -216,49 +236,241 @@ methods::setMethod(
 	# # if strata is not NULL
 	# } else {
 		
-	### locating by stratum
-	if (!is.null(strata)) {
+	# 	if (size > 200000) .message("spatSample_strata", "Using `strata` when selecting a large number of points can take a long time.")
 
-		if (!is.null(tiles)) warning("The `tiles` argument is ignored when locating points by strata.")
+	# 	src <- .makeSourceName("spatSample_v_random", "vector")
 
-		if (size > 250000) .message("spatSample_strata", "Using `strata` when selecting a large number of points can take a long time.")
+	# 	args <- list(
+	# 		cmd = "v.random",
+	# 		output = src,
+	# 		npoints = size,
+	# 		flags = c(.quiet(), "overwrite")
+	# 	)
 
-		src <- .makeSourceName("spatSample_v_random", "vector")
+	# 	if (!is.null(seed)) {
+	# 		seed <- round(seed)
+	# 		args$seed <- seed
+	# 	}
 
-		args <- list(
-			cmd = "v.random",
-			output = src,
-			npoints = size,
-			flags = c(.quiet(), "overwrite")
-		)
+	# 	if (!is.null(strata)) {
+	# 		args$restrict <- sources(strata)
+	# 		if (byStratum) args$flags <- c(args$flags, "a")
+	# 	}
 
-		if (!is.null(seed)) {
-			seed <- round(seed)
-			args$seed <- seed
+	# 	if (!is.null(zlim)) {
+	# 		args$zmin <- zlim[1L]
+	# 		args$zmax <- zlim[2L]
+	# 		args$flags <- c(args$flags, "z")
+	# 	}
+
+	# 	# if (!is.null(seed)) args$seed <- seed
+	# 	args$seed <- round(1E9 * stats::runif(1))
+
+	# 	# args$flags <- c(args$flags, "b") ### do not create topology... problems? YES!
+	# 	do.call(rgrass::execGRASS, args = args)
+
+	# 	# return coordinates
+	# 	if (xy) {
+	# 		out <- .crdsVect(src, z = is.3d(x), gtype = "points")
+	# 	}
+
+	# } # if strata is not NULL
+
+	### select points by raster tile
+	################################
+	
+	if (length(tiles) == 1L) tiles <- c(tiles, tiles)
+	nTiles <- prod(tiles)
+	if (nTiles > 1L) {
+
+		# create tiles from 1st raster layer
+		dims <- dim(x)
+		extent <- ext(x, vector = TRUE)
+		res <- res(x)
+		tileSrcs <- .tiles(x = x[[1L]], n = tiles, dims = dims, extent = extent, res = res, overlap = 0)
+		on.exit(.rm(tileSrcs, type = "rasters", warn = FALSE, verify = FALSE), add = TRUE)
+
+		# calculate each tile's relative area
+		tileAreas <- rep(NA_real_, nTiles)
+		spatial <- attr(tileSrcs, "spatial")
+		if (is.lonlat(x)) {
+
+			for (i in 1L:nTiles) {
+			
+				lats <- spatial[[i]]$extent[c(3L, 4L)]
+				meanLat <- mean(lats)
+				cols <- spatial[[i]]$dim[ , 2L]
+				rows <- spatial[[i]]$dim[ , 1L]
+				tileAreas <- abs(cos(pi * meanLat / 180)) * rows * cols
+			
+			}
+
+		} else {
+			for (i in 1L:nTiles) tileAreas[i] <- prod(spatial[[i]]$dim)
 		}
 
-		if (!is.null(strata)) {
-			args$restrict <- sources(strata)
-			if (byStratum) args$flags <- c(args$flags, "a")
-		}
+		selectedTile <- sample(1L:nTiles, size, prob = tileAreas, replace = TRUE)
+		sizeByTile <- table(selectedTile)
 
-		if (!is.null(zlim)) {
-			args$zmin <- zlim[1L]
-			args$zmax <- zlim[2L]
-			args$flags <- c(args$flags, "z")
-		}
-
-		# build topology... needed for GVector or for extraction/coordinates
-		if (!xy & !(values | cats)) args$flags <- c(args$flags, "b")
-
-		if (!is.null(seed)) args$seed <- round(seed)
-		# args$seed <- round(1E9 * stats::runif(1L))
-
-		# args$flags <- c(args$flags, "b") ### do not create topology... problems? YES!
-		do.call(rgrass::execGRASS, args = args)
-
-	} else {
+		# select random points
+		ptSrcs <- .makeSourceName("spatSample", "vector", n = nTiles)
+		for (i in 1L:nTiles) {
 		
+			extent <- spatial[[i]]$extent
+			.regionExt(extent, respect = "dimensions")
+					
+			args <- list(
+				cmd = "v.random",
+				output = ptSrcs[i],
+				npoints = sizeByTile[i],
+				flags = c(.quiet(), "overwrite")
+			)
+		
+			# build topology... need if we want to return the points or extract coordinates
+		    if (!as.points & !xy) args$flags <- c(args$flags, "b")
+
+			if (!is.null(seed)) {
+				seed <- round(seed)
+				args$seed <- seed
+			}
+
+			do.call(rgrass::execGRASS, args = args)
+			on.exit(.rm(ptSrcs, type = "vectors", warn = FALSE, verify = FALSE), add = TRUE)
+		
+		}
+
+		# coordinates of points
+		if (xy) {
+		
+			for (i in 1L:nTiles) {
+				
+				thisCats <- 1:sizeByTile[i]
+				thisCoords <- .crdsVect(ptSrcs[i], z = !is.null(zlim), gtype = "points", cats = thisCats)
+				if (i == 1L) {
+					coords <- thisCoords
+				} else {
+					coords <- rbind(coords, thisCoords)
+				}
+
+			}
+
+		}
+	
+		### extract by tile
+		if (values | cats) {
+
+			# extract for first layer... we already have these as tiles
+			xNames <- names(x)[1L]
+			dtype <- datatype(x)[1L]
+			levs <- levels(x)[[1L]]
+			.region(x)
+			for (i in 1L:nTiles) {
+
+				thisVals <- .extractFromRasterAtPoints(x = tileSrcs[i], y = ptSrcs[i], xNames = xNames, dtype = dtype, levels = levs, cats = cats, verbose = FALSE)
+
+				if (i == 1L) {
+					vals <- thisVals
+				} else {
+					vals <- rbind(vals, thisVals)
+				}
+
+			}
+
+			# extract from subsequent rasters... tile them
+			if (nlyr(x) > 1L) {
+			
+				dims <- dim(x)
+				extent <- ext(x, vector = TRUE)
+				res <- res(x)
+
+				# for each layer
+				for (i in 2L:nlyr(x)) {
+				
+					tileSrcs <- .tiles(x = x[[i]], n = tiles, dims = dims, extent = extent, res = res, overlap = 0)
+				
+					xNames <- names(x)[i]
+					dtype <- datatype(x, type = "grass")[i]
+					levs <- levels(x)[[i]]
+
+					# extract from tile
+					for (tile in 1L:nTiles) {
+
+						thisVals <- .extractFromRasterAtPoints(x = tileSrcs[tile], y = ptSrcs[tile], xNames = xNames, dtype = dtype, levels = levs, cats = cats, verbose = FALSE)
+
+						if (tile == 1L) {
+							theseVals <- thisVals
+						} else {
+							theseVals <- rbind(theseVals, thisVals)
+						}
+
+					} # next tile
+
+					vals <- cbind(vals, theseVals)
+				
+				} # next layer
+			
+			} # if >1 raster layer
+
+		} # if extracting values/cats
+
+		### combine points for output
+		if (as.points | xy) {
+
+			# thisCats <- .vCats(ptSrcs[1L], db = FALSE)
+			# topCat <- max(thisCats)
+			
+			# for (i in 2L:nTiles) {
+
+			# 	ptSrcs[i] <- .vIncrementCats(ptSrcs[i], add = topCat)
+			# 	thisCats <- .vCats(srcs[i], db = FALSE)
+			# 	topCat <- max(thisCats)
+			
+			# }
+
+			# ### combine vectors
+			# # seems like we can combine at least 11 vectors at a time, but not a lot at a time
+			# srcsAtATime <- 10L # number of sources to combine at a time (plus the running `x` source)
+
+			# nSrcs <- length(srcs)
+			# sets <- ceiling(nSrcs / srcsAtATime)
+			
+			# for (set in seq_len(sets)) {
+
+			# 	index <- (1L + srcsAtATime * (set - 1L)) : min(nSrcs, set * srcsAtATime)
+			# 	srcIn <- srcs[index]
+			# 	input <- paste(srcIn, collapse = ",")
+			# 	input <- paste0(src, ",", input)
+			
+			# 	src <- .makeSourceName("v_patch", "vector")
+
+			# 	rgrass::execGRASS(
+			# 		cmd = "v.patch",
+			# 		input = input,
+			# 		output = src,
+			# 		flags = c(.quiet(), "overwrite")
+			# 	)
+				
+			# }
+
+			src <- .rbind(ptSrcs)
+
+		} # combine points for output
+		
+		# combine everything
+		if (!xy & !values & !cats) {
+			out <- data.table::data.table(NULL)
+		} else if (xy & !(values | cats)) {
+			out <- coords
+		} else if (!xy & (values | cats)) {
+			out <- vals
+		} else if (xy & (values | cats)) {
+			out <- cbind(coords, vals)
+		}
+
+	### if NOT tiling
+	#################
+	} else {
+
 		if (verbose | faster("verbose")) omnibus::say("Placing points...")
 		src <- .makeSourceName("spatSample", "vector")
 		args <- list(
@@ -268,38 +480,8 @@ methods::setMethod(
 			flags = c(.quiet(), "overwrite")
 		)
 
-		# build topology... needed for GVector or for extraction/coordinates
-		if (!xy & !(values | cats)) args$flags <- c(args$flags, "b")
-
-		if (!is.null(seed)) args$seed <- round(seed)
-
-		do.call(rgrass::execGRASS, args = args)
-
-	}
-
-	if (xy) out <- .crdsVect(src, z = !is.null(zlim), gtype = "points")
-
-	# extract values from raster
-	if (values | cats) {
-
-		# rgrass::execGRASS(
-		# 	cmd = "v.build",
-		# 	map = src,
-		# 	flags = c(.quiet(), "overwrite")
-		# )
-
-		if (faster("verbose")) omnibus::say("Extracting values...")
-		vals <- .extractFromRasterAtPoints(x = x, y = src, cats = cats, verbose = verbose)
-
-		if (exists("out", inherits = FALSE)) {
-			out <- cbind(out, vals)
-		} else {
-			out <- vals
-		}
-
-	}
-
-	if (as.points) {
+		# build topology... need if we want to return the points or extract coordinates
+		if (!as.points & !xy) args$flags <- c(args$flags, "b")
 
 		# # build topology
 		# rgrass::execGRASS(
@@ -309,8 +491,40 @@ methods::setMethod(
 		# 	flags = c(.quiet(), "overwrite")
 		# )
 
-		theseCats <- 1:size
-		.vAttachDatabase(src, cats = theseCats)
+		if (!is.null(seed)) {
+			seed <- round(seed)
+			args$seed <- seed
+		}
+
+		do.call(rgrass::execGRASS, args = args)
+
+		# point coordinates
+		if (xy) out <- .crdsVect(src, z = !is.null(zlim), gtype = "points", cats = 1:size)
+
+		# extract values from raster
+		if (values | cats) {
+
+			# rgrass::execGRASS(
+			# 	cmd = "v.build",
+			# 	map = src,
+			# 	flags = c(.quiet(), "overwrite")
+			# )
+
+			vals <- .extractFromRasterAtPoints(x = x, y = src, cats = cats, verbose = verbose)
+
+			if (exists("out", inherits = FALSE)) {
+				out <- cbind(out, vals)
+			} else {
+				out <- vals
+			}
+
+		}
+
+	} # if not tiling
+
+	if (as.points) {
+
+		.vAttachDatabase(src)
 		if (exists("out", inherits = FALSE)) {
 			# info <- .vectInfo(src)
 			# nGeometries <- info$nGeometries

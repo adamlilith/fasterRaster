@@ -6,8 +6,6 @@
 #'
 #' @returns Logical.
 #'
-#' @example man/examples/ex_GRaster_GVector.r
-#'
 #' @aliases .exists
 #' @rdname exists
 #' @keywords internal

@@ -95,7 +95,7 @@ methods::setMethod(
 				error = function(cond) FALSE
 			)
 
-			if (verbose & is.logical(out)) omnibus::say("The ", try, " `res` method failed. Trying method `", try[j + 1L], "`.")
+			if ((verbose | faster("verbose")) & is.logical(out)) omnibus::say("The ", try, " `res` method failed. Trying method `", try[j + 1L], "`.")
 		
 			j <- j + 1L
 
@@ -167,7 +167,7 @@ methods::setMethod(
 	}
 
 	nSteps <- nLayers + (res == "terra")
-	if (verbose & nLayers > 1L) {
+	if ((verbose | faster("verbose")) & nLayers > 1L) {
 		pb <- utils::txtProgressBar(min = 0, max = nSteps, initial = 0, style = 3, width = 30)
 		steps <- 0
 	}
@@ -183,7 +183,7 @@ methods::setMethod(
 		# resample as per terra::project()
 		} else if (res == "terra") {
 
-			if (verbose & nLayers > 1L) {
+			if ((verbose | faster("verbose")) & nLayers > 1L) {
 				utils::setTxtProgressBar(pb, steps)
 				steps <- steps + 1
 			}
@@ -362,7 +362,7 @@ methods::setMethod(
 	srcs <- .makeSourceName("project", "raster", nlyr(x))
 	for (i in seq_len(nlyr(x))) {
 		
-		if (verbose & nLayers > 1L) {
+		if ((verbose | faster("verbose")) & nLayers > 1L) {
 			utils::setTxtProgressBar(pb, steps)
 			steps <- steps + 1
 		}
@@ -408,7 +408,7 @@ methods::setMethod(
 
 	# if using y as extent to which to crop
 	if (!align & inherits(y, "GRaster")) out <- crop(out, y)
-	if (verbose & nLayers > 1) close(pb)
+	if ((verbose | faster("verbose")) & nLayers > 1) close(pb)
 	out
 
 }
@@ -557,7 +557,7 @@ methods::setMethod(
 # #' @param y `GRaster` or `GVector`.
 # #' @param align Logical.
 # #'
-# #' @noRD
+# #' @noRd
 # .regionRespectsDims <- function(x, y, align) {
 
 	# # get new extent in y location

@@ -16,7 +16,6 @@ Rasters of minimum temperature for an eastern portion of Madagascar from WorldCl
 \examples{
 
 ### vector data
-###############
 
 library(sf)
 
@@ -39,7 +38,6 @@ madDypsis
 plot(st_geometry(madDypsis), col = "red", add = TRUE)
 
 ### raster data
-###############
 
 library(terra)
 

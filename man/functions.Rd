@@ -147,12 +147,12 @@ which.min(chelsa)
 which.max(chelsa)
 
 # Regression
+
 # Note the intercept is different for fasterRaster::regress().
 regress(chelsa)
 regress(madChelsa, 1:nlyr(madChelsa))
 
-# Note: To get quantiles for each layer, use
-# global(x, "quantile", probs = 0.2).
+# Note: To get quantiles for each layer, use global().
 quantile(chelsa, 0.1)
 
 # NAs

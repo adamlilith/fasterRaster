@@ -46,26 +46,20 @@ v2 <- classify(elev, rcl = rcl, others = -1)
 v2
 plot(v2)
 
-# Left-open/right-closed (default)
-# Cells with a value of 1 are converted to the "others" value because
-# they are not "inside" the bins of `rcl`.
+### Left-open/right-closed (default)
 minmax(elev) # note min/max values
 rcl <- c(1, 200, 570)
 v3 <- classify(elev, rcl = rcl, others = 10)
 levels(v3)
 plot(v3)
 
-# Left-closed/right-open
-# Cells with a value of 570 are converted to the "others" value because
-# they are not "inside" the bins of `rcl`. There is only 1 cell with a
-# value of 570, so it probably won't be visible when plotted.
+### Left-closed/right-open
 minmax(elev) # note min/max values
 rcl <- c(1, 200, 570)
 v4 <- classify(elev, rcl = rcl, others = 10, right = FALSE)
 levels(v4)
 
 # Left-open except for lowest bin/right-closed
-# All values will be in bins, and none assigned to "others".
 minmax(elev) # note min/max values
 rcl <- c(1, 200, 570)
 v5 <- classify(elev, rcl = rcl, others = 10, include.lowest = TRUE)
@@ -73,7 +67,6 @@ v5 <- droplevels(v5)
 levels(v5)
 
 # Left-closed/right-open except for highest bin
-# All values will be in bins, and none assigned to "others".
 minmax(elev) # note min/max values
 rcl <- c(1, 200, 570)
 v6 <- classify(elev, rcl = rcl, others = 10,

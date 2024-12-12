@@ -62,11 +62,11 @@
 
 \item{trim}{A \code{GRaster} or \code{NULL} (default). If a \code{GRaster}, then the region will be trimmed to the non-\code{NA} cells in this raster. \code{trim} can only be non-\code{NULL} if \code{x} is a \code{GRaster}. Ignored if \code{NULL}.}
 
-\item{respect}{Character or \code{GRaster}: Indicates what aspect(s) of the current region to retain. Different functions allow for different aspect to be retained. Partial matching is used.
+\item{respect}{Character or \code{GRaster}: Indicates what aspect(s) of the current region to retain. Different functions allow for a different aspect to be retained. Partial matching is used.
 \itemize{
-\item \code{.regionDim()}: \code{"extent"} or \code{"resolution"}.
-\item \code{.regionExt()}: \code{"dimensions"} or \code{"resolution"}.
-\item \code{.regionRes()}: \code{"extent"} or \code{"dimensions"}.
+\item \code{.regionDim()}: \code{"extent"} (extent unchanged, resolution may be changed) or \code{"resolution"} (resolution unchanged, extent may be changed).
+\item \code{.regionExt()}: \code{"dimensions"} (dimensions unchanged, extent may be changed) or \code{"resolution"} (resolution unchanged, extent may be changed).
+\item \code{.regionRes()}: \code{"extent"} (extent may be changed and/or dimensions may be changed to accommodate desired cell size) or \code{"dimensions"} (extent may be changed, dimensions unchanged).
 Alternatively, a \code{GRaster} can be supplied:
 \item \code{.regionDim()}: New region will have same extent and resolution.
 \item \code{.regionExt()}: New region will have same dimensions and resolution.
@@ -96,38 +96,5 @@ These functions either change the extent, dimensions, and/or resolution of a \st
 }
 \details{
 When resizing extent, \strong{terra} keeps the \code{xmin} (west) and \code{ymax} (north) the fixed and shifts \code{xmax} (east) and \code{ymin} (south) as needed. To retain as much fidelity between \strong{fasterRaster} and \strong{terra} as possible, these functions do the same to the region.
-}
-\examples{
-if (grassStarted()) {
-
-# Setup
-library(terra)
-
-# Example data
-madElev <- fastData("madElev")
-madRivers <- fastData("madRivers")
-
-# Report information on current region:
-dim3d()
-nrow()
-ncol()
-ndepth()
-ncell()
-ncell3d()
-
-ext()
-W()
-E()
-S()
-N()
-
-res()
-res3d()
-xres()
-yres()
-zres()
-
-
-}
 }
 \keyword{internal}

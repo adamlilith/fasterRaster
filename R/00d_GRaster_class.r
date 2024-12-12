@@ -158,8 +158,6 @@ methods::setValidity("GRaster",
 #'
 #' @seealso [.makeGVector()]
 #'
-#' @example man/examples/ex_GRaster_GVector.r
-#'
 #' @keywords internal
 .makeGRaster <- function(src, names = "raster", levels = "", ac = NULL, fail = TRUE) {
 

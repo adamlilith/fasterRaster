@@ -16,7 +16,6 @@ Rasters of precipitation for an eastern portion of Madagascar from WorldClim 2.1
 \examples{
 
 ### vector data
-###############
 
 library(sf)
 
@@ -39,7 +38,6 @@ madDypsis
 plot(st_geometry(madDypsis), col = "red", add = TRUE)
 
 ### raster data
-###############
 
 library(terra)
 

@@ -16,7 +16,6 @@ This data frame corresponds to the \link{madCover} raster, which represents land
 \examples{
 
 ### vector data
-###############
 
 library(sf)
 
@@ -39,7 +38,6 @@ madDypsis
 plot(st_geometry(madDypsis), col = "red", add = TRUE)
 
 ### raster data
-###############
 
 library(terra)
 

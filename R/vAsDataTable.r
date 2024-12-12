@@ -10,8 +10,6 @@
 #'
 #' @returns A `data.table` or `NULL` if the vector is not attached to a database.
 #'
-#' @example man/examples/ex_vFunctions.r
-#'
 #' @aliases .vAsDataTable
 #' @rdname vAsDataTable
 #' @keywords internal

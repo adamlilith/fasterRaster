@@ -23,7 +23,6 @@ The rasters have been resampled to 90-m resolution to reduce their size, then re
 \examples{
 
 ### vector data
-###############
 
 library(sf)
 
@@ -46,7 +45,6 @@ madDypsis
 plot(st_geometry(madDypsis), col = "red", add = TRUE)
 
 ### raster data
-###############
 
 library(terra)
 

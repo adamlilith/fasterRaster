@@ -91,7 +91,6 @@ legend("bottomright",
    xpd = NA
 )
 
-
 # Polygon centroids:
 coast4Mean <- centroids(coast4)
 coast4Median <- centroids(coast4, method = "median")

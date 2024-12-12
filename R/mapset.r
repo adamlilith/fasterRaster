@@ -10,8 +10,6 @@
 #'
 #' @seealso **GRASS** [locations and mapsets](https://grass.osgeo.org/grass82/manuals/grass_database.html)
 #'
-#' @example man/examples/ex_location_mapset.r
-#'
 #' @aliases .mapset
 #' @rdname mapset
 #' @keywords internal

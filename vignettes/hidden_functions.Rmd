@@ -24,7 +24,7 @@ fig.path = 'man/figures/'
 * `.fileExt()`: Get file extension
 * `.ls()`: Lists the `sources` of all objects in the active **GRASS** "project/location"
 * `.message()`: Display a warning or message if the given warning has not been displayed since **fasterRaster** was attached or if a given number of hours has passed
-* `.quiet()`: Returns "quiet" if `faster("verbose")` is `TRUE`
+* `.quiet()`: Returns "quiet" if `faster("debug")` is `TRUE`
 * `.workDir()`: Working directory of a `GLocation` object
 
 ## Rasters and vectors
@@ -58,7 +58,7 @@ fig.path = 'man/figures/'
 * `.minVal()` and `.maxVal()`: Values in the `@minVal` and `@maxVal` slots in a `GRaster`
 * `.nlevels()`: Number of levels in a `SpatVector`, `data.frame`, `data.table`, empty string, or a list of `data.frame`s, `data.table`s, and/or empty strings.
 
-## **GRASS** "Projects" ("locations") and "mapsets"
+## **GRASS** "Projects/locations" and "mapsets"
 * `.locationCreate()` Make a connection to **GRASS** (i.e., start **GRASS** from within **R**) and create a location
 * `.locationDelete()` Deletes all files associated with a **GRASS** "location" and mapset
 * `.locationFind()`: Find a specific **GRASS** "location" that already exists

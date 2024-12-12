@@ -24,7 +24,6 @@ if (grassStarted()) {
 library(terra)
 
 ### GRasters
-############
 
 # Example data
 madElev <- fastData("madElev") # elevation raster
@@ -36,22 +35,22 @@ elev <- fast(madElev)
 forest2000 <- fast(madForest2000)
 forest2014 <- fast(madForest2014)
 
-### Re-assigning values of a GRaster
+# Re-assigning values of a GRaster
 constant <- elev
 constant[] <- pi
 names(constant) <- "pi_raster"
 constant
 
-### Re-assigning specific values of a raster
+# Re-assigning specific values of a raster
 replace <- elev
 replace[replace == 1] <- -20
 replace
 
-### Subsetting specific values of a raster based on another raster
+# Subsetting specific values of a raster based on another raster
 elevInForest <- elev[forest2000 == 1]
 plot(c(elev, forest2000, elevInForest), nr = 1)
 
-### Adding and replacing layers of a GRaster
+# Adding and replacing layers of a GRaster
 rasts <- c(elev, constant, forest2000)
 
 # Combine with another layer:
@@ -86,7 +85,6 @@ rasts[[3]] <- forest2000
 rasts
 
 ### GVectors
-############
 
 # example data
 madDypsis <- fastData("madDypsis") # vector of points

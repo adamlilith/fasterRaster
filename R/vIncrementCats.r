@@ -8,8 +8,6 @@
 #'
 #' @returns The [sources()] name of a **GRASS** vector with category values incremented.
 #'
-#' @example man/examples/ex_vFunctions.r
-#'
 #' @aliases .vIncrementCats
 #' @rdname vIncrementCats
 #' @keywords internal

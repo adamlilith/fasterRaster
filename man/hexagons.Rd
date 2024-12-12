@@ -38,7 +38,6 @@ madCoast0 <- fastData("madCoast0")
 coast <- fast(madCoast0)
 
 ### grid
-########
 
 # grid specified by number of cells in x-dimension
 g1 <- grid(coast, nx = 10)
@@ -56,7 +55,6 @@ plot(coast, col = "cornflowerblue")
 plot(g3, add = TRUE)
 
 ### hexagons
-############
 
 hexes <- hexagons(coast, ny = 10)
 plot(hexes)

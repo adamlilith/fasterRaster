@@ -22,7 +22,7 @@
 
 \item{warn}{Logical: If \code{TRUE} (default), display warning if no matches or if everything in \strong{GRASS} is to be deleted.}
 
-\item{verify}{Logical: If \code{TRUE} (default), the function will search for the item(s) to be deleted first to verify they exist. If this is \code{FALSE}, then \code{x} and MUST be specified and \code{type} must be '\code{raster}' or \code{'vector'} (one value per value in \code{x}). This has no effect if \code{x} is a \code{GSpatial} object. It's main use is to save a bit of time.}
+\item{verify}{Logical: If \code{TRUE} (default), the function will search for the item(s) to be deleted first to verify they exist. If this is \code{FALSE}, then \code{x} MUST be specified and \code{type} must be '\code{raster}' or \code{'vector'} (one value per value in \code{x}). This has no effect if \code{x} is a \code{GSpatial} object. It's main use is to save a bit of time.}
 }
 \value{
 \code{TRUE} (invisibly).

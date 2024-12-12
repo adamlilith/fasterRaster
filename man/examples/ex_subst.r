@@ -8,7 +8,6 @@ madElev <- fastData("madElev")
 madCover <- fastData("madCover")
 
 ### Substitution within an integer/numeric raster
-#################################################
 
 # Convert SpatRaster to GRaster
 elev <- fast(madElev)
@@ -44,7 +43,6 @@ names(substituteds) <- c("original", "substituted")
 plot(substituteds)
 
 ### Substitution within a factor/categorical raster
-###################################################
 
 # Convert a SpatRaster to a GRaster:
 cover <- fast(madCover)

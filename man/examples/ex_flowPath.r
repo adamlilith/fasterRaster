@@ -27,8 +27,7 @@ plot(elevAnt, legend = FALSE, main = "Flow path for each point")
 plot(paths, add = TRUE)
 plot(starts, pch = 1, add = TRUE)
 
-# Calculate flow paths with cell values indicating the number
-# of cells from each start:
+# Flow paths with cell values indicating number of cells from each start:
 seqs <- flowPath(elevAnt, starts, return = "seq")
 
 plot(elevAnt, legend = FALSE, main = "Sequentially-numbered flow paths")

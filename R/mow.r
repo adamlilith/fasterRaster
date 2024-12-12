@@ -86,7 +86,7 @@ mow <- function(
 		if (any(GSpatials$class == "GRaster")) {
 
 			projs <- unique(GSpatials$project[GSpatials$class == "GRaster"])
-			if (verbose) omnibus::say("Deleting ", sum(GSpatials$class == "GRaster"), " raster(s) from the GRASS cache...")
+			if (verbose | faster("verbose")) omnibus::say("Deleting ", sum(GSpatials$class == "GRaster"), " raster(s) from the GRASS cache...")
 			
 			for (proj in projs) {
 			
@@ -104,7 +104,7 @@ mow <- function(
 		if (any(GSpatials$class == "GVector")) {
 
 			projs <- unique(GSpatials$project[GSpatials$class == "GVector"])
-			if (verbose) omnibus::say("Deleting ", sum(GSpatials$class == "GVector"), " vector(s) from the GRASS cache...")
+			if (verbose | faster("verbose")) omnibus::say("Deleting ", sum(GSpatials$class == "GVector"), " vector(s) from the GRASS cache...")
 			
 			for (proj in projs) {
 			
@@ -135,7 +135,7 @@ mow <- function(
 		
 			response <- readline("This action will break any existing GRasters and GVectors.\nAre you sure you want to empty the entire GRASS cache? (Y/n) ")
 			if (response != "Y") {
-				if (verbose) omnibus::say("Nothing deleted.")
+				if (verbose | faster("verbose")) omnibus::say("Nothing deleted.")
 				return(invisible(c(rasters = 0, vectors = 0)))
 			}
 		
@@ -155,7 +155,7 @@ mow <- function(
 		}
 
 		if (all(sapply(grassObjs, length) == 0L)) {
-			if (verbose) omnibus::say("Nothing deleted.")
+			if (verbose | faster("verbose")) omnibus::say("Nothing deleted.")
 			return(invisible(c(rasters = 0, vectors = 0)))
 		}
 
@@ -208,11 +208,11 @@ mow <- function(
 		}
 
 		if (all(sapply(grassObjs, length) == 0)) {
-			if (verbose) omnibus::say("Nothing deleted.")
+			if (verbose | faster("verbose")) omnibus::say("Nothing deleted.")
 			return(invisible(out))
 		} else {
 
-			if (verbose) omnibus::say("Deleting ", out[["rasters"]], " raster(s) and ", out[["vectors"]], " vector(s)...")
+			if (verbose | faster("verbose")) omnibus::say("Deleting ", out[["rasters"]], " raster(s) and ", out[["vectors"]], " vector(s)...")
 					
 			for (proj in projs) {
 				if (length(grassObjs[[proj]]) > 0L) {

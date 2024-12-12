@@ -23,57 +23,6 @@ A character string.
 \description{
 \strong{GRASS} "locations" are sets of one or more rasters and/or vectors with the same coordinate reference systems, and may or may not represent the same actual location on Earth. \strong{GRASS} "mapsets" are like subfolders of locations, and are collections of rasters and/or vectors typically related to the same general project. This function returns the mapset of an object or the current mapset. This said, \strong{fasterRaster} always uses the "PERMANENT" mapset, so there is very little reason to use this function as-is. See \code{vignette("projects_mapsets", package = "fasterRaster")}.
 }
-\examples{
-if (grassStarted()) {
-
-# Setup
-library(terra)
-
-# Example data
-madElev <- fastData("madElev")
-madChelsa <- fastData("madChelsa")
-madChelsa1 <- madChelsa[[1]]
-
-# Convert SpatRasters to GRasters.
-# Each raster has a different CRS so will be put into a different location.
-elev <- fast(madElev)
-chelsa1 <- fast(madChelsa1)
-
-# Name of the currently active location
-if (FALSE) {
-   
-   .location()
-   .location(elev)
-   .location(chelsa1)
-
-   # All available GRASS locations
-   .locations()
-
-   # Find location of an object among all active locations
-   .locationFind(elev)
-   .locationFind(chelsa1)
-   .locationFind(chelsa1, return = "index")
-   .locationFind(chelsa1, return = "crs")
-
-   # Switch between locations
-   .locationRestore(elev)
-   .locationRestore(chelsa1)
-
-   loc <- .location(elev)
-   .locationRestore(loc)
-
-   # Delete the location where "elev" is stored.
-   if (FALSE) .locationDelete(elev) # dangerous!
-
-   # Mapsets are always "PERMANENT" in fasterRaster
-   .mapset()
-   .mapset(elev)
-   .mapset(chelsa1)
-
-}
-
-}
-}
 \seealso{
 \strong{GRASS} \href{https://grass.osgeo.org/grass82/manuals/grass_database.html}{locations and mapsets}
 }

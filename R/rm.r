@@ -13,7 +13,7 @@
 #'
 #' @param warn Logical: If `TRUE` (default), display warning if no matches or if everything in **GRASS** is to be deleted.
 #'
-#' @param verify Logical: If `TRUE` (default), the function will search for the item(s) to be deleted first to verify they exist. If this is `FALSE`, then `x` and MUST be specified and `type` must be '`raster`' or `'vector'` (one value per value in `x`). This has no effect if `x` is a `GSpatial` object. It's main use is to save a bit of time.
+#' @param verify Logical: If `TRUE` (default), the function will search for the item(s) to be deleted first to verify they exist. If this is `FALSE`, then `x` MUST be specified and `type` must be '`raster`' or `'vector'` (one value per value in `x`). This has no effect if `x` is a `GSpatial` object. It's main use is to save a bit of time.
 #'
 #' @return `TRUE` (invisibly).
 #'

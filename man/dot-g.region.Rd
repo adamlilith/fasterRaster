@@ -12,13 +12,4 @@ Displays current region information for the active "project/location" in \strong
 \description{
 This function calls the \strong{GRASS} module \code{g.region} to display information on the region of the current \strong{GRASS} "project".
 }
-\examples{
-
-if (grassStarted()) {
-
-.g.region()
-
-}
-
-}
 \keyword{internal}

@@ -16,6 +16,9 @@
 
 \item{retain}{Logical: If \code{invert} is \code{TRUE} and \code{retain} is \code{FALSE} (default), non-\code{NA} cells will retain their value. This argument is ignored if \code{invert} is \code{FALSE}.}
 }
+\value{
+A \code{GRaster}.
+}
 \description{
 This function converts all non-\code{NA} cells in a \code{GRaster} to a single user-defined value, leaving \code{NA} cells as \code{NA}. Alternatively, it can convert \code{NA} cells to a user-defined value, and all non-\code{NA} cells to \code{NA.}
 }

@@ -29,7 +29,6 @@ madCover <- fastData("madCover")
 cover <- fast(madCover)
 
 ### Properties of categorical rasters
-#####################################
 
 cover # note categories
 is.factor(cover) # Is the raster categorical?
@@ -44,7 +43,6 @@ freq(cover) # frequency of each category (number of cells)
 zonalGeog(cover) # geometric statistics
 
 ### Active column
-#################
 
 # Which column sets the category labels?
 activeCat(cover)
@@ -58,7 +56,6 @@ activeCat(cover) <- 2
 levels(cover)
 
 ### Managing levels tables
-##########################
 
 # Remove unused levels:
 nlevels(cover)
@@ -98,7 +95,6 @@ cover <- addCats(cover, landType, merge = TRUE)
 cats(cover)
 
 ### Logical operations on categorical rasters
-#############################################
 
 cover < "Forest" # 1 for cells with a value < 40, 0 otherwise
 cover <= "Forest" # 1 for cells with a value < 120, 0 otherwise
@@ -110,10 +106,8 @@ cover >= "Forest" # 1 for cells with a value >= 120, 0 otherwise
 cover \%in\% c("Cropland", "Forest") # 1 for cropland/forest cells, 0 otherwise
 
 ### Combine categories from different rasters
-#############################################
 
-# NB We only have one categorical raster ships with fasterRaster, so we
-# will create a second one from the elevation raster.
+# For the example, will create a second categorical raster fromm elevation.
 
 # Divide elevation raster into "low/medium/high" levels:
 madElev <- fastData("madElev")

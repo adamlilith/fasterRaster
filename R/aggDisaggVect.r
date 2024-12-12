@@ -37,7 +37,7 @@
 
 	} else if (resolve == "aggregate") {
 
-		if (verbose) omnibus::say("Fixing invalid vector by aggregating polygons. This will remove any data table.")
+		if (verbose | faster("verbose")) omnibus::say("Fixing invalid vector by aggregating polygons. This will remove any data table.")
 
 		srcIn <- src
 		src <- .makeSourceName("fast_v_extract")

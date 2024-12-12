@@ -15,8 +15,6 @@
 #'
 #' @return A [GLocation] object (invisibly).
 #'
-#' @example man/examples/ex_location_mapset.r
-#'
 #' @aliases .locationCreate
 #' @rdname locationCreate
 #' @keywords internal
@@ -71,7 +69,7 @@ methods::setMethod(
 	
 	}
 
-	# rgrass::set.ignore.stderrOption(!faster("verbose"))
+	# rgrass::set.ignore.stderrOption(!faster("debug"))
 
 	### CRS
 	if (inherits(x, c("SpatRaster", "SpatVector", "SpatExtent"))) {
@@ -158,7 +156,7 @@ methods::setMethod(
 		)
 	)
 
-	rgrass::set.ignore.stderrOption(!faster("verbose"))
+	rgrass::set.ignore.stderrOption(!faster("debug"))
 	.fasterRaster$grassStarted <- TRUE
 	.fasterRaster$grassVersion <- grassInfo("versionNumber")
 	

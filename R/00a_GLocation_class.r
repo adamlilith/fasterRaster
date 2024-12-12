@@ -1,6 +1,6 @@
 #' Classes for fasterRaster sessions, regions, rasters, and vectors
 #'
-#' @description The `G` suite of S4 classes contain pointers to **GRASS** objects or metadata about the current **GRASS** session. Most users will manipulate objects using these classes, but do not need to know the details.
+#' @description The `G`-suite of S4 classes contain pointers to **GRASS** objects or metadata about the current **GRASS** session. Most users will manipulate objects using these classes, but do not need to know the details.
 #'
 #' * The `GLocation` class stores information about the **GRASS** "project"/"location"(see `vignette("projects_mapsets", package = "fasterRaster")`), and coordinate reference system. Contained by all the rest.
 #'

@@ -8,7 +8,6 @@ madElev <- fastData("madElev")
 madCover <- fastData("madCover")
 
 ### match() with an integer raster:
-###################################
 
 elev <- fast(madElev)
 
@@ -21,7 +20,6 @@ elevIndexNeg <- match(elev, table, nomatch = -100)
 plot(c(elevIndex, elevIndexNeg))
 
 ### Using %in% and %notin% on an integer GRaster:
-#################################################
 
 elev <- fast(madElev)
 table <- c(10, 20, 30, 40, 50)
@@ -32,7 +30,6 @@ notins <- elev %notin% table
 plot(c(ins, notins))
 
 ### match() with a categorical raster:
-######################################
 
 cover <- fast(madCover)
 cover <- droplevels(cover)
@@ -54,7 +51,6 @@ plot(forestNoMatch)
 levels(forestNoMatch)
 
 ### Using %in% and %notin% on a categorical GRaster:
-####################################################
 
 cover <- fast(madCover)
 cover <- droplevels(cover)

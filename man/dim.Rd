@@ -110,7 +110,6 @@ madRivers <- fastData("madRivers")
 madDypsis <- fastData("madDypsis")
 
 ### GRaster properties
-######################
 
 # convert SpatRasters to GRasters
 elev <- fast(madElev)
@@ -180,7 +179,6 @@ names(rasts) <- c("elev_meters", "forest", "ln_elev", "high_elevation")
 rasts
 
 ### GVector properties
-######################
 
 # convert sf vectors to GVectors
 coast <- fast(madCoast4)
@@ -240,7 +238,6 @@ is.3d(elev) # is it 3D?
 coast <- update(coast)
 
 ### operations on GVectors
-##########################
 
 # convert to data frame
 as.data.frame(rivers)

@@ -309,9 +309,9 @@ methods::setMethod(
 				thisAreaNice <- paste0("removal of polygons of <", thisArea, " m2")
 			}
 
-			if (verbose & gtype == "area") {
+			if ((verbose | faster("verbose")) & gtype == "area") {
 				omnibus::say("Creating GVector with ", thisSnapNice, " snapping and ", thisAreaNice, "...")
-			}# else if (verbose) {
+			}# else if (verbose | faster("verbose")) {
 			#	omnibus::say("Creating GVector with ", thisSnapNice, " snapping of vertices/points...")
 			#}
 
@@ -437,7 +437,7 @@ methods::setMethod(
 						thisSnap <- snaps[step]
 						thisArea <- snaps[step]^2
 
-						if (verbose & gtype == "area") {
+						if ((verbose | faster("verbose")) & gtype == "area") {
 							
 							thisSnapNice <- round(thisSnap, digits)
 							thisAreaNice <- round(thisArea, digits)
@@ -489,7 +489,7 @@ methods::setMethod(
 						thisSnap <- snaps[step]
 						thisArea <- area
 
-						if (verbose & gtype == "area") {
+						if ((verbose | faster("verbose")) & gtype == "area") {
 							
 							thisSnapNice <- round(thisSnap, digits)
 							omnibus::say("Iteration ", step, ": Snapping at ", thisSnapNice, " map-units...")
@@ -542,7 +542,7 @@ methods::setMethod(
 						}
 						thisArea <- snaps[step]^2
 						
-						if (verbose & gtype == "area") {
+						if ((verbose | faster("verbose")) & gtype == "area") {
 						
 							thisAreaNice <- round(thisArea, digits)
 							omnibus::say("Iteration ", step, ": Removing polygons of <", thisAreaNice, " m2...")
@@ -596,7 +596,7 @@ methods::setMethod(
 
 			}
 			out <- .makeGVector(src = src, table = table)
-			if (verbose & geomtype(out) == "polygons") omnibus::say("Topologically valid vector created.")
+			if ((verbose | faster("verbose")) & geomtype(out) == "polygons") omnibus::say("Topologically valid vector created.")
 
 		} # x is a filename and xVect supplied
 

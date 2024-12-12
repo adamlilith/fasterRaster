@@ -20,7 +20,6 @@ Rasters of bioclimatic variables for an eastern portion of Madagascar from CHELS
 \examples{
 
 ### vector data
-###############
 
 library(sf)
 
@@ -43,7 +42,6 @@ madDypsis
 plot(st_geometry(madDypsis), col = "red", add = TRUE)
 
 ### raster data
-###############
 
 library(terra)
 

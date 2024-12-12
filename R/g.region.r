@@ -4,14 +4,6 @@
 #'
 #' @returns Displays current region information for the active "project/location" in **GRASS**.
 #'
-#' @examples
-#'
-#' if (grassStarted()) {
-#'
-#' .g.region()
-#'
-#' }
-#'
 #' @export
 #' @keywords internal
 .g.region <- function() {

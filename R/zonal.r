@@ -100,7 +100,7 @@ methods::setMethod(
 	cats <- .vCats(z)
 	uniCats <- unique(cats)
 	db <- data.table::data.table(cat = uniCats, recats = uniCats)
-	.vAttachDatabase(z, db)
+	.vAttachDatabase(z, db, cats = cats)
 
 	zonalSrc <- .makeSourceName("zonal_v_to_rast", "raster")
 	args <- list(

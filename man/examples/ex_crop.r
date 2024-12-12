@@ -4,11 +4,16 @@ if (grassStarted()) {
 library(sf)
 library(terra)
 
-# Elevation raster, plant specimen collections, rivers vector,
-# outline of area vector
+# Elevation raster
 madElev <- fastData("madElev")
+
+# Plant specimen points vector
 madDypsis <- fastData("madDypsis")
+
+# Rivers lines vector
 madRivers <- fastData("madRivers")
+
+# Polygons vector
 madCoast4 <- fastData("madCoast4")
 madAnt <- madCoast4[madCoast4$NAME_4 == "Antanambe", ]
 
@@ -26,8 +31,8 @@ plot(rastByVect, add = TRUE)
 plot(ant, add = TRUE)
 
 ### Crop raster by raster:
-# To illustrate, we'll make the SpatRaster smaller in R, then crop the
-# raster by this.
+
+# For this example, make the SpatRaster smaller, then crop by this.
 templateRast <- crop(madElev, madAnt)
 
 template <- fast(templateRast)
@@ -37,8 +42,8 @@ plot(elev, col = "gray", legend = FALSE)
 plot(rastByRast, add = TRUE)
 
 ### Crop vector by raster:
-# To illustrate, we'll make the SpatRaster smaller in R, then crop the
-# raster by this.
+
+# For this example, make the SpatRaster smaller, then crop by this.
 templateRast <- crop(madElev, madAnt)
 
 template <- fast(templateRast)

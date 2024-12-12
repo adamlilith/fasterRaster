@@ -35,7 +35,6 @@ madElev <- fastData("madElev")
 elev <- fast(madElev)
 
 ### Stretch based on user-defined range
-#######################################
 
 #  fasterRaster
 fr <- stretch(elev, smin=1, smax=100)
@@ -51,7 +50,6 @@ fr <- extend(fr, tr)
 fr - tr
 
 ### Stretch values in a certain quantile range
-##############################################
 
 #  fasterRaster
 fr <- stretch(elev, minq = 0.25, maxq = 0.75)

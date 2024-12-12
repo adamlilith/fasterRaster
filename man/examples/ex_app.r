@@ -39,20 +39,16 @@ app(x, fun = fun)
 fun <- "= round(x1) * tan(x2) + log(x3, 10)"
 app(x, fun = fun)
 
-# Demonstrate effects of data type. The "+" sign does not guarantee
-# output is of a given type, and the rasters are coerced to integers before
-# the operation is conducted in the second function.
+# Demonstrate effects of data type:
 fun <- "= x1 + x3"
 app(x, fun = fun, datatype = "float") # output is floating-point
-app(x, fun = fun, da = "integer") # output is integer
+app(x, fun = fun, datatype = "integer") # output is integer
 
-# Some functions override the "datatype" argument. In this case, the output will
-# not be an integer because the sin() function returns a float value.
+# Some functions override the "datatype" argument:
 fun <- "= sin(x2)"
 app(x, fun = fun, datatype = "integer")
 
-# Make a raster with random numbers between 1 and 4, with equal probability
-# of each:
+# Make a raster with random values [1:4], with equal probability of each:
 fun <- "= round(rand(0.5, 4.5))"
 rand <- app(elev, fun = fun)
 rand

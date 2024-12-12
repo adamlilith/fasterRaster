@@ -11,7 +11,6 @@ madElev <- fastData("madElev") # raster
 elev <- fast(madElev)
 
 ### spatSample()
-################
 
 # Random points as data.frame or data.table:
 randVals <- spatSample(elev, size = 20, values = TRUE)
@@ -52,7 +51,6 @@ randCover <- spatSample(cover, size = 20, values = TRUE,
 randCover
 
 ### sampleRast()
-################
 
 # Random cells in non-NA cells:
 rand <- sampleRast(elev, 10000)

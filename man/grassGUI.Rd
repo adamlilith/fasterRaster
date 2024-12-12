@@ -18,9 +18,8 @@ One aspect of the GUI that is useful but will not change objects is to use it to
 \examples{
 if (grassStarted()) {
 
-# Starting the GRASS GUI and making changes to rasters or vectors can "break"
-# the GRasters and GVectors they are associated with in R.
-if (interactive() & FALSE) grassGUI()
+# DANGER: Making changes to rasters/vectors in the GUI can "break" them in R.
+if (interactive()) grassGUI()
 
 }
 }

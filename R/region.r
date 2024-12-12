@@ -36,8 +36,6 @@
 #' 
 #' @details When resizing extent, **terra** keeps the `xmin` (west) and `ymax` (north) the fixed and shifts `xmax` (east) and `ymin` (south) as needed. To retain as much fidelity between **fasterRaster** and **terra** as possible, these functions do the same to the region.
 #'
-#' @example man/examples/ex_regions.r
-#'
 #' @aliases .region
 #' @rdname region
 #' @keywords internal

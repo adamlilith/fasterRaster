@@ -31,7 +31,6 @@ elev <- fast(madElev)
 forest <- fast(madForest2000)
 
 ### GRaster properties
-######################
 
 # plotting
 plot(elev)

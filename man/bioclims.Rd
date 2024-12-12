@@ -136,8 +136,7 @@ ppt <- fast(madPpt)
 tmin <- fast(madTmin)
 tmax <- fast(madTmax)
 
-# Takes longer to run compared to SpatRaster version for small rasters, so
-# just calculate select BIOCLIMs:
+# For small rasters, takes longer to run compared to SpatRaster version:
 bc <- bioclims(ppt, tmin, tmax, bios = c(1, 5, 12))
 bc
 plot(bc)
