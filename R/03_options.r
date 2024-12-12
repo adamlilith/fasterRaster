@@ -24,7 +24,7 @@
 #'     * Mac OS: `"/Applications/GRASS-8.4.app/Contents/Resources"`
 #'     * Linux: `"/usr/local/grass"`
 #'
-#' *  `addonsDir` (character): Folder in which **GRASS** addons are stored. If `NA` and `grassDir` is not `NA`, this will be assumed to be `file.path(grassDir, "addons")`. The default values is `NA`.
+#' * `addonsDir` (character): Folder in which **GRASS** addons are stored. If `NA` and `grassDir` is not `NA`, this will be assumed to be `file.path(grassDir, "addons")`. The default values is `NA`.
 #'
 #' * `cores` (integer/numeric integer): Number of processor cores to use on a task. The default is 2. Some **GRASS** modules are parallelized.
 #'
@@ -32,9 +32,11 @@
 #'
 #' * `useDataTable` (logical): If `FALSE` (default), functions that return tabular output produce `data.frame`s. If `TRUE`, output will be `data.table`s from the **data.table** package. This can be much faster, but it might require you to know how to use `data.table`s if you want to manipulate them in **R**. You can always convert them to `data.frame`s using [base::as.data.frame()].
 #' 
-#' * `verbose` (logical): If `TRUE`, show **GRASS** messages and otherwise hidden slots in classes. This is mainly used for debugging, so most users will want to keep this at its default, `FALSE`.
+#' * `verbose` (logical): If `TRUE`, show progress during function operations and other messages. Default is `FALSE`. This overrides the value of any `verbose` argument in a function.
 #'
-#'  * `workDir` (character): The folder in which **GRASS** rasters, vectors, and other objects are created and manipulated. By default, this is given by [tempdir()]. Note that on some systems, changing the default folder to somewhere else can cause problems with **fasterRaster** being able to find rasters in **GRASS** that have been created.
+#' * `debug` (logical): If `TRUE`, show **GRASS** messages and otherwise hidden slots in classes. This is mainly used for debugging, so most users will want to keep this at its default, `FALSE`.
+#'
+#' * `workDir` (character): The folder in which **GRASS** rasters, vectors, and other objects are created and manipulated. By default, this is given by [tempdir()]. Note that on some systems, changing the default folder to somewhere else can cause problems with **fasterRaster** being able to find rasters in **GRASS** that have been created.
 #'
 #' @param restore Logical: If `TRUE`, the all options will be reset to their default values. The default is `FALSE`.
 #'
@@ -143,6 +145,10 @@ faster <- function(
   	# 	if (is.na(opts$clean) || !is.logical(opts$clean)) stop("Option `clean` must be a logical. The default is ", .cleanDefault(), ".")
 	# }
 
+	if (any(names(opts) %in% "debug")) {
+  		if (is.na(opts$debug) || !is.logical(opts$debug)) stop("Option `debug` must be a logical. The default is ", .debugDefault(), ".")
+	}
+
 	if (any(names(opts) %in% "verbose")) {
   		if (is.na(opts$verbose) || !is.logical(opts$verbose)) stop("Option `verbose` must be a logical. The default is ", .verboseDefault(), ".")
 	}
@@ -177,8 +183,8 @@ faster <- function(
 
 	}
 
-	if (any(names(opts) %in% "verbose")) {
-		info <- rgrass::set.echoCmdOption(.fasterRaster$options$verbose)
+	if (any(names(opts) %in% "debug")) {
+		info <- rgrass::set.echoCmdOption(.fasterRaster$options$debug)
 	}
 
 	invisible(out)
