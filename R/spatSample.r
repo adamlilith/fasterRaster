@@ -242,18 +242,18 @@ methods::setMethod(
 			cmd = "v.random",
 			output = src,
 			npoints = size,
+			restrict = sources(strata),
 			flags = c(.quiet(), "overwrite")
 		)
+
+		if (byStratum) args$flags <- c(args$flags, "a")
 
 		if (!is.null(seed)) {
 			seed <- round(seed)
 			args$seed <- seed
 		}
 
-		if (!is.null(strata)) {
-			args$restrict <- sources(strata)
-			if (byStratum) args$flags <- c(args$flags, "a")
-		}
+		args$restrict <- sources(strata)
 
 		if (!is.null(zlim)) {
 			args$zmin <- zlim[1L]
@@ -262,7 +262,7 @@ methods::setMethod(
 		}
 
 		# build topology... needed for GVector or for extraction/coordinates
-		if (!xy & !(values | cats)) args$flags <- c(args$flags, "b")
+		if (!as.points & !xy & !(values | cats)) args$flags <- c(args$flags, "b")
 
 		# args$flags <- c(args$flags, "b") ### do not create topology... problems? YES!
 		do.call(rgrass::execGRASS, args = args)
@@ -319,9 +319,8 @@ methods::setMethod(
 		# 	flags = c(.quiet(), "overwrite")
 		# )
 
-		theseCats <- 1:size
-		.vAttachDatabase(src, cats = theseCats)
-		thisCats <- if (byStratum) { 1:size } else { NULL }
+		thisCats <- if (!byStratum) { 1:size } else { NULL }
+		.vAttachDatabase(src, cats = thisCats)
 		if (exists("out", inherits = FALSE)) {
 			# info <- .vectInfo(src)
 			# nGeometries <- info$nGeometries
