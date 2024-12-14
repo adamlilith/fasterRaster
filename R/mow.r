@@ -131,7 +131,7 @@ mow <- function(
 		if (is.null(type)) type <- c("rasters", "vectors")
 		type <- omnibus::pmatchSafe(type, c("rasters", "vectors"), nmax = 2L)
 
-		if (ask & x == "*") {
+		if (ask & x %in% c("*", "unlinked")) {
 		
 			response <- readline("This action will break any existing GRasters and GVectors.\nAre you sure you want to empty the entire GRASS cache? (Y/n) ")
 			if (response != "Y") {
