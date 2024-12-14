@@ -271,7 +271,6 @@ methods::setGeneric(name = "skewness", def = function(x, ...) standardGeneric("s
 methods::setGeneric(name = "snap", package = "terra")
 methods::setGeneric(name = "sources", package = "terra")
 methods::setGeneric(name = "spatSample", package = "terra")
-methods::setGeneric(name = "spatSampleTiled", def = function(x, ...) standardGeneric("spatSampleTiled"))
 methods::setGeneric(name = "rSpatialDepRast", def = function(x, ...) standardGeneric("rSpatialDepRast"))
 
 methods::setGeneric(name = "streams", def = function(x, ...) standardGeneric("streams"))
