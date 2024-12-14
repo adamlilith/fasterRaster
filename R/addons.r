@@ -2,11 +2,9 @@
 #'
 #' @description This function tests to see if the "addons" directory specified using [faster()] actually exists, and if a particular **GRASS** `addons module is available. The `addons` folder and module must exists for methods that rely on particular **GRASS** `addons` to work. See `vignette("addons", package = "fasterRaster")`.
 #'
-#' @param x Either `NULL` or a character specifying the name of a **GRASS** addons module. If `NULL`, the existence of the `addonsDir` (see [faster()]) will be tested. If the module name is provided, the existence of the folder and module will be tested.
+#' @param x Either `NULL` or a character specifying the name of a **GRASS** addons module. If `NULL`, the existence of the `addonsDir` (see [faster()]) will be tested. If the module name is provided, the existence of the folder and module will be tested. The "`/bin`" subfolder should not be included.
 #'
-#' @param onFail Character: What to do if the addons folder is not found:
-#' * `"fail"` (default): Fail with a message.
-#' * `"warning"`: Warn with a message.
+#' @param fail Logical: If `TRUE` (default), and the addons folder is not correctly specified, the exit the function with an error. If `FALSE`, then `NULL` will be returned with a warning.
 #'
 #' @param verbose Logical: If `TRUE` (default), display a message on success or warning (the `fail` option always displays a message).
 #'
@@ -19,9 +17,7 @@
 #' @aliases addons
 #' @rdname addons
 #' @export
-addons <- function(x = NULL, onFail = "fail", verbose = TRUE) {
-
-	onFail <- omnibus::pmatchSafe(onFail, c("fail", "warning"), nmax = 1L)
+addons <- function(x = NULL, fail = TRUE, verbose = TRUE) {
 
 	out <- TRUE
 
@@ -30,9 +26,9 @@ addons <- function(x = NULL, onFail = "fail", verbose = TRUE) {
 		
 		msg <- paste0("The `addons` folder is incorrect. See `faster()` and `vignette(", dQuote("addons", q = FALSE), ", package = ", dQuote("fasterRaster", q = FALSE), ").")
 
-		if (onFail == "fail") {
+		if (fail) {
 			stop(msg)
-		} else if (onFail == "warning" & verbose) {
+		} else if (!fail & verbose) {
 			warning(msg)
 		}
 
@@ -49,9 +45,9 @@ addons <- function(x = NULL, onFail = "fail", verbose = TRUE) {
 		if (!(x %in% extensions)) {
 
 			msg <- paste0("The addon extension `", x, "` cannot be found. See `vignette(", dQuote("addons", q = FALSE), ", package = ", dQuote("fasterRaster", q = FALSE), ").")
-			if (onFail == "fail") {
+			if (fail) {
 				stop(msg)
-			} else if (onFail == "warning" & verbose) {
+			} else if (!fail & verbose) {
 				warning(msg)
 			}
 		
@@ -67,7 +63,7 @@ addons <- function(x = NULL, onFail = "fail", verbose = TRUE) {
 			if (out) {
 				omnibus::say("Addon `", x, "` is installed.")
 			} else {
-				omnibus::say("Addon `", x, "` is *not* installed.")
+				omnibus::say("Addon `", x, "` cannot be found.")
 			}
 		}
 	}
