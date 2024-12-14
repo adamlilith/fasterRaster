@@ -2,9 +2,11 @@
 
 ### Bug and issue fixes
 o Many hidden fixes for CRAN submission!  
+o Comparison between a string and a categorical `GRaster` using logical operators like `<` or `==` returns a categorical raster.  
 o `as.factor()` is now properly exported.  
 o `crds()` now works for `GVector`s that lacked an internal **GRASS** database. Hidden function `.crds()` accepts a `cats` argument, making it potentially faster.   
 o `fast()` correctly defines region on import of raster.  
+o `mow()` example works.  
 o `spatSample()` works when sampling by `stratum`.  
 o `.rbind()` is a hidden function which accepts a `cats` argument that concatenates vectors faster than `rbind()`.   
 
