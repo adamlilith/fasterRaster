@@ -13,7 +13,7 @@ elev <- fast(madElev)
 geos <- geomorphons(elev)
 geos
 levels(geos) # levels
-freq(geos) # frequencies
+freq(geos) # frequencies across cells
 
 col <- c("gray90", "red", "orange", "blue", "green", "pink", "firebrick",
   "purple", "gray50", "black")
