@@ -21,7 +21,7 @@
 methods::setMethod(
 	f = ".locationCreate",
 	signature = c(x = "character"),
-	function(x, location = NULL, overwrite = FALSE, warn = TRUE) ..connectToGRASS(x = x, location = location, overwrite = overwrite, warn = warn)
+	function(x, location = NULL, overwrite = FALSE, warn = TRUE) ..locationCreate(x = x, location = location, overwrite = overwrite, warn = warn)
 )
 
 #' @aliases .locationCreate
@@ -30,7 +30,7 @@ methods::setMethod(
 methods::setMethod(
 	f = ".locationCreate",
 	signature = c(x = "SpatRaster"),
-	function(x, location = NULL, overwrite = FALSE, warn = TRUE) ..connectToGRASS(x = x, location = location, overwrite = overwrite, warn = warn)
+	function(x, location = NULL, overwrite = FALSE, warn = TRUE) ..locationCreate(x = x, location = location, overwrite = overwrite, warn = warn)
 )
 
 #' @aliases .locationCreate
@@ -39,7 +39,7 @@ methods::setMethod(
 methods::setMethod(
 	f = ".locationCreate",
 	signature = c(x = "SpatVector"),
-	function(x, location = NULL, overwrite = FALSE, warn = TRUE) ..connectToGRASS(x = x, location = location, overwrite = overwrite, warn = warn)
+	function(x, location = NULL, overwrite = FALSE, warn = TRUE) ..locationCreate(x = x, location = location, overwrite = overwrite, warn = warn)
 )
 
 #' @aliases .locationCreate
@@ -48,11 +48,11 @@ methods::setMethod(
 methods::setMethod(
 	f = ".locationCreate",
 	signature = c(x = "sf"),
-	function(x, location = NULL, overwrite = FALSE, warn = TRUE) ..connectToGRASS(x = x, location = location, overwrite = overwrite, warn = warn)
+	function(x, location = NULL, overwrite = FALSE, warn = TRUE) ..locationCreate(x = x, location = location, overwrite = overwrite, warn = warn)
 )
 
 #' @noRd
-..connectToGRASS <- function(
+..locationCreate <- function(
 	x,
 	location = NULL,
 	overwrite = FALSE,
