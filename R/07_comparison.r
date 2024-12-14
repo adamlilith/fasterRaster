@@ -354,7 +354,9 @@ methods::setMethod(
 		}
 
 	} # next layer
-	.makeGRaster(srcs, "logical")
+	out <- .makeGRaster(srcs, "logical", levels = cats(x), ac = activeCats(x))
+	out <- droplevels(out, layer = 1L:nlyr(out))
+	out
 	
 	} # EOF
 )
@@ -445,7 +447,9 @@ methods::setMethod(
 		}
 
 	} # next layer
-	.makeGRaster(srcs, "logical")
+	out <- .makeGRaster(srcs, "logical", levels = cats(x), ac = activeCats(x))
+	out <- droplevels(out, layer = 1L:nlyr(out))
+	out
 		
 	} # EOF
 )
