@@ -1,7 +1,7 @@
 # fasterRaster 8.4.0.3 (2024-12-XX)
 
 ### Bug and issue fixes
-o Many hidden fixes for CRAN submission!  
+o Many minor fixes for CRAN submission!  
 o Comparison between a string and a categorical `GRaster` using logical operators like `<` or `==` returns a categorical raster.  
 o `as.factor()` is now properly exported.  
 o `centroids()` has the option to exit gracefully if the `addons` check fails.  
