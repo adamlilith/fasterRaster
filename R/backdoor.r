@@ -13,10 +13,11 @@
 	
 	faster(
 		grassDir = paste0("C:/Program Files/GRASS GIS ", verNice),
+		addonsDir = 'C:/Users/adame/AppData/Roaming/GRASS8/addons',
 		memory = 1024 * 8,
 		cores = 2,
 		useDataTable = TRUE,
-		verbose = FALSE
+		verbose = TRUE
 	)
 	invisible(TRUE)
 }
