@@ -151,7 +151,7 @@ methods::setValidity("GRaster",
 #' @param src Character (name of the raster in **GRASS) or a `rastInfo` object.
 #' @param names Character: Name of the raster.
 #' @param levels `NULL` (default), a `data.frame`, `data.table`, an empty string (`""`), or a list of `data.frame`s, `data.table`s, and/or empty strings: These become the raster's [levels()]. If `""`, then no levels are defined.
-#' @param ac vector of numeric or integer values >=1, or `NULL` (default): Active category column (offset by 1, so 1 really means the second column, 2 means the third, etc.). A value of `NULL` uses an automated procedure to figure it out.
+#' @param ac Vector of numeric/integer values >=1, or `NULL` (default): Active category column (offset by 1, so 1 really means the second column, 2 means the third, etc.). A value of `NULL` uses an automated procedure to figure it out.
 #' @param fail Logical: If `TRUE` (default), and the raster either has a 0 east-west or north-south extent, then exit the function with an error. If `fail` is `FALSE`, then display a warning and return `NULL`.
 #'
 #' @returns A `GRaster`.
@@ -171,7 +171,7 @@ methods::setValidity("GRaster",
 	if (!all(.exists(src))) stop("No raster was created in GRASS. The error is likely in the calling function.")
 
 	# test for zero extent
-	if (any((info$west - info$east) == 0) | any((info$north - info$south) == 0)) {
+	if (abs(info$west - info$east) < omnibus::eps() | abs(info$north - info$south) < omnibus::eps()) {
 		msg <- "Raster has 0 east-west extent and/or north-south extent."
 		if (fail) {
 			stop(msg)
