@@ -13,7 +13,7 @@
 
 \item{levels}{\code{NULL} (default), a \code{data.frame}, \code{data.table}, an empty string (\code{""}), or a list of \code{data.frame}s, \code{data.table}s, and/or empty strings: These become the raster's \code{\link[=levels]{levels()}}. If \code{""}, then no levels are defined.}
 
-\item{ac}{vector of numeric or integer values >=1, or \code{NULL} (default): Active category column (offset by 1, so 1 really means the second column, 2 means the third, etc.). A value of \code{NULL} uses an automated procedure to figure it out.}
+\item{ac}{Vector of numeric/integer values >=1, or \code{NULL} (default): Active category column (offset by 1, so 1 really means the second column, 2 means the third, etc.). A value of \code{NULL} uses an automated procedure to figure it out.}
 
 \item{fail}{Logical: If \code{TRUE} (default), and the raster either has a 0 east-west or north-south extent, then exit the function with an error. If \code{fail} is \code{FALSE}, then display a warning and return \code{NULL}.}
 }
