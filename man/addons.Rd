@@ -4,16 +4,12 @@
 \alias{addons}
 \title{Test if addons directory exists and if an addon is installed}
 \usage{
-addons(x = NULL, onFail = "fail", verbose = TRUE)
+addons(x = NULL, fail = TRUE, verbose = TRUE)
 }
 \arguments{
-\item{x}{Either \code{NULL} or a character specifying the name of a \strong{GRASS} addons module. If \code{NULL}, the existence of the \code{addonsDir} (see \code{\link[=faster]{faster()}}) will be tested. If the module name is provided, the existence of the folder and module will be tested.}
+\item{x}{Either \code{NULL} or a character specifying the name of a \strong{GRASS} addons module. If \code{NULL}, the existence of the \code{addonsDir} (see \code{\link[=faster]{faster()}}) will be tested. If the module name is provided, the existence of the folder and module will be tested. The "\verb{/bin}" subfolder should not be included.}
 
-\item{onFail}{Character: What to do if the addons folder is not found:
-\itemize{
-\item \code{"fail"} (default): Fail with a message.
-\item \code{"warning"}: Warn with a message.
-}}
+\item{fail}{Logical: If \code{TRUE} (default), and the addons folder is not correctly specified, the exit the function with an error. If \code{FALSE}, then \code{NULL} will be returned with a warning.}
 
 \item{verbose}{Logical: If \code{TRUE} (default), display a message on success or warning (the \code{fail} option always displays a message).}
 }
@@ -26,11 +22,13 @@ This function tests to see if the "addons" directory specified using \code{\link
 \examples{
 if (grassStarted()) {
 
-ao <- addons(onFail = "warning")
-if (ao) print("Addons is folder is correctly specified.")
+# Does the addons folder exist?
+ao <- addons(fail = "warning")
+if (ao) print("Addons is folder is probably correctly specified.")
 
-addon <- "v.centerpoints"
-exten <- addons(addon, onFail = "warning")
+# Does this particular module exist?
+addon <- "v.centerpoint"
+exten <- addons(addon, fail = FALSE)
 
 if (exten) print("Extension `v.centerpoints` is installed.")
 
