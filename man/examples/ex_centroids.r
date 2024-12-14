@@ -59,7 +59,7 @@ coastMean <- centroids(coast4, fail = FALSE)
 coastMedian <- centroids(coast4, method = "median", fail = FALSE)
 coastBMedian <- centroids(coast4, method = "bmedian", fail = FALSE)
 
-if (!is.null(coast4Mean)) {
+if (!is.null(coastMean)) {
 
 plot(coast4)
 plot(coastMean, col = "red", add = TRUE)
