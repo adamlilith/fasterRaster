@@ -1,0 +1,41 @@
+---
+title: "3-dimensional objects"
+output: rmarkdown::html_vignette
+author: "Adam B. Smith"
+date: "`r Sys.Date()`"
+vignette: >
+  %\VignetteIndexEntry{3-dimensional objects}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+fig.path = 'man/figures/'
+```
+**fasterRaster** has limited support for 3-dimensional `GRaster`s and `GVector`s. A `GRaster` is like a multi-layered raster, except that layers contain values in "voxels" (3-dimensional pixels), where each layer has a z-resolution, in addition to its normal x- and y-resolutions. These layers are called "depths". A 3-dimensional vector has a z-dimension, so any point (i.e., an actual point, or points that together define a line or polygon) has a third dimension. You can test if an object is 3-dimensional using `topology()`, `is.2d()`, or `is.3d()`, or by looking at its metadata (i.e., just enter the name of the object in **R** and look at what is displayed).
+
+Thus far, *no functions that handle 3-dimensional `GRaster`s or `GVector`s have been tested.* Some functions like `spatSample()` have arguments that allow you to do something with a z-component. Also, some of the "getter" functions can report information about the third dimension of a `GRaster` or `GVector`.
+
+Three-dimensional `GRaster`s and `GVector`s should (?... remember, no testing yet!) work with most functions. In some cases, the third dimension will be ignored or removed. You should get a warning in these cases.
+
+## **fasterRaster** functions that specifically work with 3-dimensional objects
+
+   | **Function**              | **Object type**          |
+   | --------------------------|------------------------- |
+   | `bottom()`                | `GRaster` or `GVector`   |
+   | `dim3d()`                 | `GRaster`                |
+   | `is.2d()`                 | `GRaster` or `GVector`   |
+   | `is.3d()`                 | `GRaster` or `GVector`   |
+   | `ncell3d()`               | `GRaster`                |
+   | `ndepth()`                | `GRaster`                |
+   | `res3d()`                 | `GRaster`                |
+   | `top()`                   | `GRaster` or `GVector`   |
+   | `topology()`              | `GRaster` or `GVector`   |
+   | `zext()`                  | `GRaster` or `GVector`   |
+   | `zres()`                  | `GRaster`                |
+
+~ FINIS ~

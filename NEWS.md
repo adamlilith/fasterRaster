@@ -1,4 +1,7 @@
-# fasterRaster 8.4.0.3 (2024-12-XX)
+# fasterRaster 8.4.0.4 (2024-12-XX)
+o Added vignette "3-dimensional objects".  
+
+# fasterRaster 8.4.0.3 (2024-12-15)
 
 ### Bug and issue fixes
 o Many minor fixes for CRAN submission!  
