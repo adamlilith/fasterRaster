@@ -31,7 +31,7 @@ If the inputs are all categorical rasters, then a levels() table will also be re
 
     <a class="navbar-brand me-2" href="../index.html">fasterRaster</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">8.4.0.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">8.4.0.4</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -46,6 +46,7 @@ If the inputs are all categorical rasters, then a levels() table will also be re
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/GRasters.html">Types of GRasters</a></li>
     <li><a class="dropdown-item" href="../articles/faster_fasterRaster.html">Making fasterRaster faster</a></li>
     <li><a class="dropdown-item" href="../articles/addons.html">fasterRaster addons</a></li>
+    <li><a class="dropdown-item" href="../articles/3d_objects.html">3-dimensional objects</a></li>
     <li><hr class="dropdown-divider"></li>
     <li><a class="dropdown-item" href="../articles/index.html">More articles...</a></li>
   </ul></li>
@@ -122,7 +123,6 @@ If the inputs are all categorical rasters, then a levels() table will also be re
 <span class="r-in"><span><span class="va">cover</span> <span class="op">&lt;-</span> <span class="fu"><a href="fast.html">fast</a></span><span class="op">(</span><span class="va">madCover</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">### Properties of categorical rasters</span></span></span>
-<span class="r-in"><span><span class="co">#####################################</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">cover</span> <span class="co"># note categories</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="is.int.html">is.factor</a></span><span class="op">(</span><span class="va">cover</span><span class="op">)</span> <span class="co"># Is the raster categorical?</span></span></span>
@@ -137,7 +137,6 @@ If the inputs are all categorical rasters, then a levels() table will also be re
 <span class="r-in"><span><span class="fu"><a href="zonalGeog.html">zonalGeog</a></span><span class="op">(</span><span class="va">cover</span><span class="op">)</span> <span class="co"># geometric statistics</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">### Active column</span></span></span>
-<span class="r-in"><span><span class="co">#################</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Which column sets the category labels?</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="activeCat.html">activeCat</a></span><span class="op">(</span><span class="va">cover</span><span class="op">)</span></span></span>
@@ -151,7 +150,6 @@ If the inputs are all categorical rasters, then a levels() table will also be re
 <span class="r-in"><span><span class="fu"><a href="levels.html">levels</a></span><span class="op">(</span><span class="va">cover</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">### Managing levels tables</span></span></span>
-<span class="r-in"><span><span class="co">##########################</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Remove unused levels:</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="nlevels.html">nlevels</a></span><span class="op">(</span><span class="va">cover</span><span class="op">)</span></span></span>
@@ -191,7 +189,6 @@ If the inputs are all categorical rasters, then a levels() table will also be re
 <span class="r-in"><span><span class="fu"><a href="levels.html">cats</a></span><span class="op">(</span><span class="va">cover</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">### Logical operations on categorical rasters</span></span></span>
-<span class="r-in"><span><span class="co">#############################################</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">cover</span> <span class="op">&lt;</span> <span class="st">"Forest"</span> <span class="co"># 1 for cells with a value &lt; 40, 0 otherwise</span></span></span>
 <span class="r-in"><span><span class="va">cover</span> <span class="op">&lt;=</span> <span class="st">"Forest"</span> <span class="co"># 1 for cells with a value &lt; 120, 0 otherwise</span></span></span>
@@ -203,10 +200,8 @@ If the inputs are all categorical rasters, then a levels() table will also be re
 <span class="r-in"><span><span class="va">cover</span> <span class="op"><a href="match.html">%in%</a></span> <span class="fu"><a href="c.html">c</a></span><span class="op">(</span><span class="st">"Cropland"</span>, <span class="st">"Forest"</span><span class="op">)</span> <span class="co"># 1 for cropland/forest cells, 0 otherwise</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">### Combine categories from different rasters</span></span></span>
-<span class="r-in"><span><span class="co">#############################################</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># NB We only have one categorical raster ships with fasterRaster, so we</span></span></span>
-<span class="r-in"><span><span class="co"># will create a second one from the elevation raster.</span></span></span>
+<span class="r-in"><span><span class="co"># For the example, will create a second categorical raster fromm elevation.</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Divide elevation raster into "low/medium/high" levels:</span></span></span>
 <span class="r-in"><span><span class="va">madElev</span> <span class="op">&lt;-</span> <span class="fu"><a href="fastData.html">fastData</a></span><span class="op">(</span><span class="st">"madElev"</span><span class="op">)</span></span></span>

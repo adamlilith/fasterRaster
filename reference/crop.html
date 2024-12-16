@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">fasterRaster</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">8.4.0.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">8.4.0.4</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -22,6 +22,7 @@
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/GRasters.html">Types of GRasters</a></li>
     <li><a class="dropdown-item" href="../articles/faster_fasterRaster.html">Making fasterRaster faster</a></li>
     <li><a class="dropdown-item" href="../articles/addons.html">fasterRaster addons</a></li>
+    <li><a class="dropdown-item" href="../articles/3d_objects.html">3-dimensional objects</a></li>
     <li><hr class="dropdown-divider"></li>
     <li><a class="dropdown-item" href="../articles/index.html">More articles...</a></li>
   </ul></li>
@@ -79,6 +80,7 @@
 <dt id="arg-extent">extent<a class="anchor" aria-label="anchor" href="#arg-extent"></a></dt>
 <dd><p>Logical:</p><ul><li><p>If <code>y</code> is a "points" <code>GVector</code>: Use the convex hull around <code>y</code> to crop <code>x</code>.</p></li>
 <li><p>If <code>y</code> is a "lines" or "polygons" <code>GVector</code>: If <code>TRUE</code>, use the extent of <code>y</code> to crop <code>x</code>.</p></li>
+<li><p>if <code>y</code> is a <code>GVector</code>, <code>x</code> will be cropped to the extent of <code>y</code> (<code>extent</code> is ignored).</p></li>
 </ul></dd>
 
 </dl></div>
@@ -104,11 +106,16 @@
 <span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-spatial.github.io/sf/" class="external-link">sf</a></span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://rspatial.org/" class="external-link">terra</a></span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># Elevation raster, plant specimen collections, rivers vector,</span></span></span>
-<span class="r-in"><span><span class="co"># outline of area vector</span></span></span>
+<span class="r-in"><span><span class="co"># Elevation raster</span></span></span>
 <span class="r-in"><span><span class="va">madElev</span> <span class="op">&lt;-</span> <span class="fu"><a href="fastData.html">fastData</a></span><span class="op">(</span><span class="st">"madElev"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Plant specimen points vector</span></span></span>
 <span class="r-in"><span><span class="va">madDypsis</span> <span class="op">&lt;-</span> <span class="fu"><a href="fastData.html">fastData</a></span><span class="op">(</span><span class="st">"madDypsis"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Rivers lines vector</span></span></span>
 <span class="r-in"><span><span class="va">madRivers</span> <span class="op">&lt;-</span> <span class="fu"><a href="fastData.html">fastData</a></span><span class="op">(</span><span class="st">"madRivers"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Polygons vector</span></span></span>
 <span class="r-in"><span><span class="va">madCoast4</span> <span class="op">&lt;-</span> <span class="fu"><a href="fastData.html">fastData</a></span><span class="op">(</span><span class="st">"madCoast4"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">madAnt</span> <span class="op">&lt;-</span> <span class="va">madCoast4</span><span class="op">[</span><span class="va">madCoast4</span><span class="op">$</span><span class="va">NAME_4</span> <span class="op">==</span> <span class="st">"Antanambe"</span>, <span class="op">]</span></span></span>
 <span class="r-in"><span></span></span>
@@ -126,8 +133,8 @@
 <span class="r-in"><span><span class="fu"><a href="plot.html">plot</a></span><span class="op">(</span><span class="va">ant</span>, add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">### Crop raster by raster:</span></span></span>
-<span class="r-in"><span><span class="co"># To illustrate, we'll make the SpatRaster smaller in R, then crop the</span></span></span>
-<span class="r-in"><span><span class="co"># raster by this.</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># For this example, make the SpatRaster smaller, then crop by this.</span></span></span>
 <span class="r-in"><span><span class="va">templateRast</span> <span class="op">&lt;-</span> <span class="fu">crop</span><span class="op">(</span><span class="va">madElev</span>, <span class="va">madAnt</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">template</span> <span class="op">&lt;-</span> <span class="fu"><a href="fast.html">fast</a></span><span class="op">(</span><span class="va">templateRast</span><span class="op">)</span></span></span>
@@ -137,8 +144,8 @@
 <span class="r-in"><span><span class="fu"><a href="plot.html">plot</a></span><span class="op">(</span><span class="va">rastByRast</span>, add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">### Crop vector by raster:</span></span></span>
-<span class="r-in"><span><span class="co"># To illustrate, we'll make the SpatRaster smaller in R, then crop the</span></span></span>
-<span class="r-in"><span><span class="co"># raster by this.</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># For this example, make the SpatRaster smaller, then crop by this.</span></span></span>
 <span class="r-in"><span><span class="va">templateRast</span> <span class="op">&lt;-</span> <span class="fu">crop</span><span class="op">(</span><span class="va">madElev</span>, <span class="va">madAnt</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">template</span> <span class="op">&lt;-</span> <span class="fu"><a href="fast.html">fast</a></span><span class="op">(</span><span class="va">templateRast</span><span class="op">)</span></span></span>

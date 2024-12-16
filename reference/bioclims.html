@@ -107,7 +107,7 @@ BIOCLIMs 49 through 60 are not bioclimatic variables per se, but useful for asse
 
     <a class="navbar-brand me-2" href="../index.html">fasterRaster</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">8.4.0.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">8.4.0.4</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -122,6 +122,7 @@ BIOCLIMs 49 through 60 are not bioclimatic variables per se, but useful for asse
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/GRasters.html">Types of GRasters</a></li>
     <li><a class="dropdown-item" href="../articles/faster_fasterRaster.html">Making fasterRaster faster</a></li>
     <li><a class="dropdown-item" href="../articles/addons.html">fasterRaster addons</a></li>
+    <li><a class="dropdown-item" href="../articles/3d_objects.html">3-dimensional objects</a></li>
     <li><hr class="dropdown-divider"></li>
     <li><a class="dropdown-item" href="../articles/index.html">More articles...</a></li>
   </ul></li>
@@ -298,8 +299,7 @@ The units reported below assume that input rasters are in mm (precipitation) and
 <span class="r-in"><span><span class="va">tmin</span> <span class="op">&lt;-</span> <span class="fu"><a href="fast.html">fast</a></span><span class="op">(</span><span class="va">madTmin</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">tmax</span> <span class="op">&lt;-</span> <span class="fu"><a href="fast.html">fast</a></span><span class="op">(</span><span class="va">madTmax</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># Takes longer to run compared to SpatRaster version for small rasters, so</span></span></span>
-<span class="r-in"><span><span class="co"># just calculate select BIOCLIMs:</span></span></span>
+<span class="r-in"><span><span class="co"># For small rasters, takes longer to run compared to SpatRaster version:</span></span></span>
 <span class="r-in"><span><span class="va">bc</span> <span class="op">&lt;-</span> <span class="fu">bioclims</span><span class="op">(</span><span class="va">ppt</span>, <span class="va">tmin</span>, <span class="va">tmax</span>, bios <span class="op">=</span> <span class="fu"><a href="c.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">5</span>, <span class="fl">12</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">bc</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="plot.html">plot</a></span><span class="op">(</span><span class="va">bc</span><span class="op">)</span></span></span>

@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">fasterRaster</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">8.4.0.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">8.4.0.4</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -22,6 +22,7 @@
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/GRasters.html">Types of GRasters</a></li>
     <li><a class="dropdown-item" href="../articles/faster_fasterRaster.html">Making fasterRaster faster</a></li>
     <li><a class="dropdown-item" href="../articles/addons.html">fasterRaster addons</a></li>
+    <li><a class="dropdown-item" href="../articles/3d_objects.html">3-dimensional objects</a></li>
     <li><hr class="dropdown-divider"></li>
     <li><a class="dropdown-item" href="../articles/index.html">More articles...</a></li>
   </ul></li>
@@ -138,8 +139,7 @@
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="plot.html">plot</a></span><span class="op">(</span><span class="va">extended3</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># Note that when exporting a raster (including plotting it), NA rows and</span></span></span>
-<span class="r-in"><span><span class="co"># columns are removed.</span></span></span>
+<span class="r-in"><span><span class="co"># When exporting a raster, NA rows and columns are removed.</span></span></span>
 <span class="r-in"><span><span class="va">extended4</span> <span class="op">&lt;-</span> <span class="fu">extend</span><span class="op">(</span><span class="va">elev</span>, <span class="fl">100</span>, fill<span class="op">=</span><span class="fl">1</span><span class="op">)</span> <span class="co"># default fill is NA</span></span></span>
 <span class="r-in"><span><span class="va">extended4terra</span> <span class="op">&lt;-</span> <span class="fu"><a href="rast.html">rast</a></span><span class="op">(</span><span class="va">extended4</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
@@ -148,9 +148,9 @@
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="plot.html">plot</a></span><span class="op">(</span><span class="va">extended4</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># Extend the raster by another object with a wider extent. We will crop the</span></span></span>
-<span class="r-in"><span><span class="co"># raster so that it is smaller than the object we use to extend it,</span></span></span>
-<span class="r-in"><span><span class="co"># then extend it.</span></span></span>
+<span class="r-in"><span><span class="co"># Extend the raster by another object with a wider extent.</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># For tis example, first crop the raster, then extend it.</span></span></span>
 <span class="r-in"><span><span class="va">elevCrop</span> <span class="op">&lt;-</span> <span class="fu"><a href="crop.html">crop</a></span><span class="op">(</span><span class="va">elev</span>, <span class="va">rivers</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">uncrop</span> <span class="op">&lt;-</span> <span class="fu">extend</span><span class="op">(</span><span class="va">elevCrop</span>, <span class="va">elev</span>, fill <span class="op">=</span> <span class="fl">900</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="plot.html">plot</a></span><span class="op">(</span><span class="va">uncrop</span><span class="op">)</span></span></span>

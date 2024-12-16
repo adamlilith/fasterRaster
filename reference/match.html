@@ -13,7 +13,7 @@ The %notin% operator returns 1 for cells with values that are not found in the v
 
     <a class="navbar-brand me-2" href="../index.html">fasterRaster</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">8.4.0.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">8.4.0.4</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -28,6 +28,7 @@ The %notin% operator returns 1 for cells with values that are not found in the v
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/GRasters.html">Types of GRasters</a></li>
     <li><a class="dropdown-item" href="../articles/faster_fasterRaster.html">Making fasterRaster faster</a></li>
     <li><a class="dropdown-item" href="../articles/addons.html">fasterRaster addons</a></li>
+    <li><a class="dropdown-item" href="../articles/3d_objects.html">3-dimensional objects</a></li>
     <li><hr class="dropdown-divider"></li>
     <li><a class="dropdown-item" href="../articles/index.html">More articles...</a></li>
   </ul></li>
@@ -109,7 +110,6 @@ The %notin% operator returns 1 for cells with values that are not found in the v
 <span class="r-in"><span><span class="va">madCover</span> <span class="op">&lt;-</span> <span class="fu"><a href="fastData.html">fastData</a></span><span class="op">(</span><span class="st">"madCover"</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">### match() with an integer raster:</span></span></span>
-<span class="r-in"><span><span class="co">###################################</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">elev</span> <span class="op">&lt;-</span> <span class="fu"><a href="fast.html">fast</a></span><span class="op">(</span><span class="va">madElev</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
@@ -122,7 +122,6 @@ The %notin% operator returns 1 for cells with values that are not found in the v
 <span class="r-in"><span><span class="fu"><a href="plot.html">plot</a></span><span class="op">(</span><span class="fu"><a href="c.html">c</a></span><span class="op">(</span><span class="va">elevIndex</span>, <span class="va">elevIndexNeg</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">### Using %in% and %notin% on an integer GRaster:</span></span></span>
-<span class="r-in"><span><span class="co">#################################################</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">elev</span> <span class="op">&lt;-</span> <span class="fu"><a href="fast.html">fast</a></span><span class="op">(</span><span class="va">madElev</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">table</span> <span class="op">&lt;-</span> <span class="fu"><a href="c.html">c</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fl">20</span>, <span class="fl">30</span>, <span class="fl">40</span>, <span class="fl">50</span><span class="op">)</span></span></span>
@@ -133,7 +132,6 @@ The %notin% operator returns 1 for cells with values that are not found in the v
 <span class="r-in"><span><span class="fu"><a href="plot.html">plot</a></span><span class="op">(</span><span class="fu"><a href="c.html">c</a></span><span class="op">(</span><span class="va">ins</span>, <span class="va">notins</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">### match() with a categorical raster:</span></span></span>
-<span class="r-in"><span><span class="co">######################################</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">cover</span> <span class="op">&lt;-</span> <span class="fu"><a href="fast.html">fast</a></span><span class="op">(</span><span class="va">madCover</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">cover</span> <span class="op">&lt;-</span> <span class="fu"><a href="droplevels.html">droplevels</a></span><span class="op">(</span><span class="va">cover</span><span class="op">)</span></span></span>
@@ -155,7 +153,6 @@ The %notin% operator returns 1 for cells with values that are not found in the v
 <span class="r-in"><span><span class="fu"><a href="levels.html">levels</a></span><span class="op">(</span><span class="va">forestNoMatch</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">### Using %in% and %notin% on a categorical GRaster:</span></span></span>
-<span class="r-in"><span><span class="co">####################################################</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">cover</span> <span class="op">&lt;-</span> <span class="fu"><a href="fast.html">fast</a></span><span class="op">(</span><span class="va">madCover</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">cover</span> <span class="op">&lt;-</span> <span class="fu"><a href="droplevels.html">droplevels</a></span><span class="op">(</span><span class="va">cover</span><span class="op">)</span></span></span>

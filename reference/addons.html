@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">fasterRaster</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">8.4.0.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">8.4.0.4</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -22,6 +22,7 @@
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/GRasters.html">Types of GRasters</a></li>
     <li><a class="dropdown-item" href="../articles/faster_fasterRaster.html">Making fasterRaster faster</a></li>
     <li><a class="dropdown-item" href="../articles/addons.html">fasterRaster addons</a></li>
+    <li><a class="dropdown-item" href="../articles/3d_objects.html">3-dimensional objects</a></li>
     <li><hr class="dropdown-divider"></li>
     <li><a class="dropdown-item" href="../articles/index.html">More articles...</a></li>
   </ul></li>
@@ -53,7 +54,7 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">addons</span><span class="op">(</span>x <span class="op">=</span> <span class="cn">NULL</span>, onFail <span class="op">=</span> <span class="st">"fail"</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">addons</span><span class="op">(</span>x <span class="op">=</span> <span class="cn">NULL</span>, fail <span class="op">=</span> <span class="cn">TRUE</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -61,13 +62,11 @@
 
 
 <dl><dt id="arg-x">x<a class="anchor" aria-label="anchor" href="#arg-x"></a></dt>
-<dd><p>Either <code>NULL</code> or a character specifying the name of a <strong>GRASS</strong> addons module. If <code>NULL</code>, the existence of the <code>addonsDir</code> (see <code><a href="faster.html">faster()</a></code>) will be tested. If the module name is provided, the existence of the folder and module will be tested.</p></dd>
+<dd><p>Either <code>NULL</code> or a character specifying the name of a <strong>GRASS</strong> addons module. If <code>NULL</code>, the existence of the <code>addonsDir</code> (see <code><a href="faster.html">faster()</a></code>) will be tested. If the module name is provided, the existence of the folder and module will be tested. The "<code>/bin</code>" subfolder should not be included.</p></dd>
 
 
-<dt id="arg-onfail">onFail<a class="anchor" aria-label="anchor" href="#arg-onfail"></a></dt>
-<dd><p>Character: What to do if the addons folder is not found:</p><ul><li><p><code>"fail"</code> (default): Fail with a message.</p></li>
-<li><p><code>"warning"</code>: Warn with a message.</p></li>
-</ul></dd>
+<dt id="arg-fail">fail<a class="anchor" aria-label="anchor" href="#arg-fail"></a></dt>
+<dd><p>Logical: If <code>TRUE</code> (default), and the addons folder is not correctly specified, the exit the function with an error. If <code>FALSE</code>, then <code>NULL</code> will be returned with a warning.</p></dd>
 
 
 <dt id="arg-verbose">verbose<a class="anchor" aria-label="anchor" href="#arg-verbose"></a></dt>
@@ -87,11 +86,13 @@
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="grassStarted.html">grassStarted</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">ao</span> <span class="op">&lt;-</span> <span class="fu">addons</span><span class="op">(</span>onFail <span class="op">=</span> <span class="st">"warning"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="va">ao</span><span class="op">)</span> <span class="fu"><a href="show.html">print</a></span><span class="op">(</span><span class="st">"Addons is folder is correctly specified."</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># Does the addons folder exist?</span></span></span>
+<span class="r-in"><span><span class="va">ao</span> <span class="op">&lt;-</span> <span class="fu">addons</span><span class="op">(</span>fail <span class="op">=</span> <span class="st">"warning"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="va">ao</span><span class="op">)</span> <span class="fu"><a href="show.html">print</a></span><span class="op">(</span><span class="st">"Addons is folder is probably correctly specified."</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">addon</span> <span class="op">&lt;-</span> <span class="st">"v.centerpoints"</span></span></span>
-<span class="r-in"><span><span class="va">exten</span> <span class="op">&lt;-</span> <span class="fu">addons</span><span class="op">(</span><span class="va">addon</span>, onFail <span class="op">=</span> <span class="st">"warning"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># Does this particular module exist?</span></span></span>
+<span class="r-in"><span><span class="va">addon</span> <span class="op">&lt;-</span> <span class="st">"v.centerpoint"</span></span></span>
+<span class="r-in"><span><span class="va">exten</span> <span class="op">&lt;-</span> <span class="fu">addons</span><span class="op">(</span><span class="va">addon</span>, fail <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="va">exten</span><span class="op">)</span> <span class="fu"><a href="show.html">print</a></span><span class="op">(</span><span class="st">"Extension `v.centerpoints` is installed."</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>

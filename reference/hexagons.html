@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">fasterRaster</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">8.4.0.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">8.4.0.4</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -22,6 +22,7 @@
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/GRasters.html">Types of GRasters</a></li>
     <li><a class="dropdown-item" href="../articles/faster_fasterRaster.html">Making fasterRaster faster</a></li>
     <li><a class="dropdown-item" href="../articles/addons.html">fasterRaster addons</a></li>
+    <li><a class="dropdown-item" href="../articles/3d_objects.html">3-dimensional objects</a></li>
     <li><hr class="dropdown-divider"></li>
     <li><a class="dropdown-item" href="../articles/index.html">More articles...</a></li>
   </ul></li>
@@ -103,7 +104,6 @@
 <span class="r-in"><span><span class="va">coast</span> <span class="op">&lt;-</span> <span class="fu"><a href="fast.html">fast</a></span><span class="op">(</span><span class="va">madCoast0</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">### grid</span></span></span>
-<span class="r-in"><span><span class="co">########</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># grid specified by number of cells in x-dimension</span></span></span>
 <span class="r-in"><span><span class="va">g1</span> <span class="op">&lt;-</span> <span class="fu"><a href="grid.html">grid</a></span><span class="op">(</span><span class="va">coast</span>, nx <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span></span>
@@ -121,7 +121,6 @@
 <span class="r-in"><span><span class="fu"><a href="plot.html">plot</a></span><span class="op">(</span><span class="va">g3</span>, add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">### hexagons</span></span></span>
-<span class="r-in"><span><span class="co">############</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">hexes</span> <span class="op">&lt;-</span> <span class="fu">hexagons</span><span class="op">(</span><span class="va">coast</span>, ny <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="plot.html">plot</a></span><span class="op">(</span><span class="va">hexes</span><span class="op">)</span></span></span>

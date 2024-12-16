@@ -19,7 +19,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">fasterRaster</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">8.4.0.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">8.4.0.4</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -34,6 +34,7 @@
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/GRasters.html">Types of GRasters</a></li>
     <li><a class="dropdown-item" href="../articles/faster_fasterRaster.html">Making fasterRaster faster</a></li>
     <li><a class="dropdown-item" href="../articles/addons.html">fasterRaster addons</a></li>
+    <li><a class="dropdown-item" href="../articles/3d_objects.html">3-dimensional objects</a></li>
     <li><hr class="dropdown-divider"></li>
     <li><a class="dropdown-item" href="../articles/index.html">More articles...</a></li>
   </ul></li>
@@ -130,9 +131,9 @@
 
 
 <dt id="arg-respect">respect<a class="anchor" aria-label="anchor" href="#arg-respect"></a></dt>
-<dd><p>Character or <code>GRaster</code>: Indicates what aspect(s) of the current region to retain. Different functions allow for different aspect to be retained. Partial matching is used.</p><ul><li><p><code>.regionDim()</code>: <code>"extent"</code> or <code>"resolution"</code>.</p></li>
-<li><p><code>.regionExt()</code>: <code>"dimensions"</code> or <code>"resolution"</code>.</p></li>
-<li><p><code>.regionRes()</code>: <code>"extent"</code> or <code>"dimensions"</code>.
+<dd><p>Character or <code>GRaster</code>: Indicates what aspect(s) of the current region to retain. Different functions allow for a different aspect to be retained. Partial matching is used.</p><ul><li><p><code>.regionDim()</code>: <code>"extent"</code> (extent unchanged, resolution may be changed) or <code>"resolution"</code> (resolution unchanged, extent may be changed).</p></li>
+<li><p><code>.regionExt()</code>: <code>"dimensions"</code> (dimensions unchanged, extent may be changed) or <code>"resolution"</code> (resolution unchanged, extent may be changed).</p></li>
+<li><p><code>.regionRes()</code>: <code>"extent"</code> (extent may be changed and/or dimensions may be changed to accommodate desired cell size) or <code>"dimensions"</code> (extent may be changed, dimensions unchanged).
 Alternatively, a <code>GRaster</code> can be supplied:</p></li>
 <li><p><code>.regionDim()</code>: New region will have same extent and resolution.</p></li>
 <li><p><code>.regionExt()</code>: New region will have same dimensions and resolution.</p></li>
@@ -152,41 +153,6 @@ Alternatively, a <code>GRaster</code> can be supplied:</p></li>
     <p>When resizing extent, <strong>terra</strong> keeps the <code>xmin</code> (west) and <code>ymax</code> (north) the fixed and shifts <code>xmax</code> (east) and <code>ymin</code> (south) as needed. To retain as much fidelity between <strong>fasterRaster</strong> and <strong>terra</strong> as possible, these functions do the same to the region.</p>
     </div>
 
-    <div class="section level2">
-    <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="grassStarted.html">grassStarted</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># Setup</span></span></span>
-<span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://rspatial.org/" class="external-link">terra</a></span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># Example data</span></span></span>
-<span class="r-in"><span><span class="va">madElev</span> <span class="op">&lt;-</span> <span class="fu"><a href="fastData.html">fastData</a></span><span class="op">(</span><span class="st">"madElev"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">madRivers</span> <span class="op">&lt;-</span> <span class="fu"><a href="fastData.html">fastData</a></span><span class="op">(</span><span class="st">"madRivers"</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># Report information on current region:</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="dim.html">dim3d</a></span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="dim.html">nrow</a></span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="dim.html">ncol</a></span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="dim.html">ndepth</a></span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="dim.html">ncell</a></span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="dim.html">ncell3d</a></span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="fu"><a href="ext.html">ext</a></span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="ext.html">W</a></span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="ext.html">E</a></span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="ext.html">S</a></span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="ext.html">N</a></span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="fu"><a href="res.html">res</a></span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="res.html">res3d</a></span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="res.html">xres</a></span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="res.html">yres</a></span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="res.html">zres</a></span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="op">}</span></span></span>
-</code></pre></div>
-    </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside></div>
 

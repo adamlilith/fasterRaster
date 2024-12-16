@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">fasterRaster</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">8.4.0.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">8.4.0.4</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -22,6 +22,7 @@
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/GRasters.html">Types of GRasters</a></li>
     <li><a class="dropdown-item" href="../articles/faster_fasterRaster.html">Making fasterRaster faster</a></li>
     <li><a class="dropdown-item" href="../articles/addons.html">fasterRaster addons</a></li>
+    <li><a class="dropdown-item" href="../articles/3d_objects.html">3-dimensional objects</a></li>
     <li><hr class="dropdown-divider"></li>
     <li><a class="dropdown-item" href="../articles/index.html">More articles...</a></li>
   </ul></li>
@@ -100,187 +101,6 @@
     <div class="dont-index"><p><code><a href="dot-makeGRaster.html">.makeGRaster()</a></code></p></div>
     </div>
 
-    <div class="section level2">
-    <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="grassStarted.html">grassStarted</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># Setup</span></span></span>
-<span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-spatial.github.io/sf/" class="external-link">sf</a></span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://rspatial.org/" class="external-link">terra</a></span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># Example data</span></span></span>
-<span class="r-in"><span><span class="va">madElev</span> <span class="op">&lt;-</span> <span class="fu"><a href="fastData.html">fastData</a></span><span class="op">(</span><span class="st">"madElev"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">madForest2000</span> <span class="op">&lt;-</span> <span class="fu"><a href="fastData.html">fastData</a></span><span class="op">(</span><span class="st">"madForest2000"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">madCoast0</span> <span class="op">&lt;-</span> <span class="fu"><a href="fastData.html">fastData</a></span><span class="op">(</span><span class="st">"madCoast0"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">madRivers</span> <span class="op">&lt;-</span> <span class="fu"><a href="fastData.html">fastData</a></span><span class="op">(</span><span class="st">"madRivers"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">madDypsis</span> <span class="op">&lt;-</span> <span class="fu"><a href="fastData.html">fastData</a></span><span class="op">(</span><span class="st">"madDypsis"</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co">### GRaster properties</span></span></span>
-<span class="r-in"><span><span class="co">######################</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># convert SpatRasters to GRasters</span></span></span>
-<span class="r-in"><span><span class="va">elev</span> <span class="op">&lt;-</span> <span class="fu"><a href="fast.html">fast</a></span><span class="op">(</span><span class="va">madElev</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">forest</span> <span class="op">&lt;-</span> <span class="fu"><a href="fast.html">fast</a></span><span class="op">(</span><span class="va">madForest2000</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># plot</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="plot.html">plot</a></span><span class="op">(</span><span class="va">elev</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="fu"><a href="dim.html">dim</a></span><span class="op">(</span><span class="va">elev</span><span class="op">)</span> <span class="co"># rows, columns, depths, layers</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="dim.html">nrow</a></span><span class="op">(</span><span class="va">elev</span><span class="op">)</span> <span class="co"># rows</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="dim.html">ncol</a></span><span class="op">(</span><span class="va">elev</span><span class="op">)</span> <span class="co"># columns</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="dim.html">ndepth</a></span><span class="op">(</span><span class="va">elev</span><span class="op">)</span> <span class="co"># depths</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="dim.html">nlyr</a></span><span class="op">(</span><span class="va">elev</span><span class="op">)</span> <span class="co"># layers</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="fu"><a href="res.html">res</a></span><span class="op">(</span><span class="va">elev</span><span class="op">)</span> <span class="co"># resolution</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="fu"><a href="dim.html">ncell</a></span><span class="op">(</span><span class="va">elev</span><span class="op">)</span> <span class="co"># cells</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="dim.html">ncell3d</a></span><span class="op">(</span><span class="va">elev</span><span class="op">)</span> <span class="co"># cells (3D rasters only)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="fu"><a href="topology-GSpatial-method.html">topology</a></span><span class="op">(</span><span class="va">elev</span><span class="op">)</span> <span class="co"># number of dimensions</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="is.2d.html">is.2d</a></span><span class="op">(</span><span class="va">elev</span><span class="op">)</span> <span class="co"># is it 2D?</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="is.2d.html">is.3d</a></span><span class="op">(</span><span class="va">elev</span><span class="op">)</span> <span class="co"># is it 3D?</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="fu"><a href="minmax.html">minmax</a></span><span class="op">(</span><span class="va">elev</span><span class="op">)</span> <span class="co"># min/max values</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># name of object in GRASS</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="sources.html">sources</a></span><span class="op">(</span><span class="va">elev</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># "names" of the object</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="names.html">names</a></span><span class="op">(</span><span class="va">elev</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># coordinate reference system</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="crs.html">crs</a></span><span class="op">(</span><span class="va">elev</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># extent (bounding box)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="ext.html">ext</a></span><span class="op">(</span><span class="va">elev</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># data type</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="datatype.html">datatype</a></span><span class="op">(</span><span class="va">elev</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># assigning</span></span></span>
-<span class="r-in"><span><span class="va">copy</span> <span class="op">&lt;-</span> <span class="va">elev</span></span></span>
-<span class="r-in"><span><span class="va">copy</span><span class="op">[</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="va">pi</span> <span class="co"># assign all cells to the value of pi</span></span></span>
-<span class="r-in"><span><span class="va">copy</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># concatenating multiple GRasters</span></span></span>
-<span class="r-in"><span><span class="va">rasts</span> <span class="op">&lt;-</span> <span class="fu"><a href="c.html">c</a></span><span class="op">(</span><span class="va">elev</span>, <span class="va">forest</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">rasts</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># adding a raster "in place"</span></span></span>
-<span class="r-in"><span><span class="fu">add</span><span class="op">(</span><span class="va">rasts</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="math.html">ln</a></span><span class="op">(</span><span class="va">elev</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">rasts</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># subsetting</span></span></span>
-<span class="r-in"><span><span class="va">rasts</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></span></span>
-<span class="r-in"><span><span class="va">rasts</span><span class="op">[[</span><span class="st">"madForest2000"</span><span class="op">]</span><span class="op">]</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># assigning</span></span></span>
-<span class="r-in"><span><span class="va">rasts</span><span class="op">[[</span><span class="fl">4</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="va">elev</span> <span class="op">&gt;</span> <span class="fl">500</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># number of layers</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="dim.html">nlyr</a></span><span class="op">(</span><span class="va">rasts</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># names</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="names.html">names</a></span><span class="op">(</span><span class="va">rasts</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="names.html">names</a></span><span class="op">(</span><span class="va">rasts</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="c.html">c</a></span><span class="op">(</span><span class="st">"elev_meters"</span>, <span class="st">"forest"</span>, <span class="st">"ln_elev"</span>, <span class="st">"high_elevation"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">rasts</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co">### GVector properties</span></span></span>
-<span class="r-in"><span><span class="co">######################</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># convert sf vectors to GVectors</span></span></span>
-<span class="r-in"><span><span class="va">coast</span> <span class="op">&lt;-</span> <span class="fu"><a href="fast.html">fast</a></span><span class="op">(</span><span class="va">madCoast4</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">rivers</span> <span class="op">&lt;-</span> <span class="fu"><a href="fast.html">fast</a></span><span class="op">(</span><span class="va">madRivers</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">dypsis</span> <span class="op">&lt;-</span> <span class="fu"><a href="fast.html">fast</a></span><span class="op">(</span><span class="va">madDypsis</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># extent</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="ext.html">ext</a></span><span class="op">(</span><span class="va">rivers</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="fu"><a href="ext.html">W</a></span><span class="op">(</span><span class="va">rivers</span><span class="op">)</span> <span class="co"># western extent</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="ext.html">E</a></span><span class="op">(</span><span class="va">rivers</span><span class="op">)</span> <span class="co"># eastern extent</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="ext.html">S</a></span><span class="op">(</span><span class="va">rivers</span><span class="op">)</span> <span class="co"># southern extent</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="ext.html">N</a></span><span class="op">(</span><span class="va">rivers</span><span class="op">)</span> <span class="co"># northern extent</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="ext.html">top</a></span><span class="op">(</span><span class="va">rivers</span><span class="op">)</span> <span class="co"># top extent (NA for 2D rasters like this one)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="ext.html">bottom</a></span><span class="op">(</span><span class="va">rivers</span><span class="op">)</span> <span class="co"># bottom extent (NA for 2D rasters like this one)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># coordinate reference system</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="crs.html">crs</a></span><span class="op">(</span><span class="va">rivers</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="crs.html">st_crs</a></span><span class="op">(</span><span class="va">rivers</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># column names and data types</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="names.html">names</a></span><span class="op">(</span><span class="va">coast</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="datatype.html">datatype</a></span><span class="op">(</span><span class="va">coast</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># name of object in GRASS</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="sources.html">sources</a></span><span class="op">(</span><span class="va">rivers</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># points, lines, or polygons?</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="geomtype.html">geomtype</a></span><span class="op">(</span><span class="va">dypsis</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="geomtype.html">geomtype</a></span><span class="op">(</span><span class="va">rivers</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="geomtype.html">geomtype</a></span><span class="op">(</span><span class="va">coast</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="fu"><a href="geomtype.html">is.points</a></span><span class="op">(</span><span class="va">dypsis</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="geomtype.html">is.points</a></span><span class="op">(</span><span class="va">coast</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="fu"><a href="geomtype.html">is.lines</a></span><span class="op">(</span><span class="va">rivers</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="geomtype.html">is.lines</a></span><span class="op">(</span><span class="va">dypsis</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="fu"><a href="geomtype.html">is.polygons</a></span><span class="op">(</span><span class="va">coast</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="geomtype.html">is.polygons</a></span><span class="op">(</span><span class="va">dypsis</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># dimensions</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="dim.html">nrow</a></span><span class="op">(</span><span class="va">rivers</span><span class="op">)</span> <span class="co"># how many spatial features</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="dim.html">ncol</a></span><span class="op">(</span><span class="va">rivers</span><span class="op">)</span> <span class="co"># hay many columns in the data frame</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># number of geometries and sub-geometries</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="ngeom.html">ngeom</a></span><span class="op">(</span><span class="va">coast</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="ngeom.html">nsubgeom</a></span><span class="op">(</span><span class="va">coast</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># 2- or 3D</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="topology-GSpatial-method.html">topology</a></span><span class="op">(</span><span class="va">rivers</span><span class="op">)</span> <span class="co"># dimensionality</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="is.2d.html">is.2d</a></span><span class="op">(</span><span class="va">elev</span><span class="op">)</span> <span class="co"># is it 2D?</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="is.2d.html">is.3d</a></span><span class="op">(</span><span class="va">elev</span><span class="op">)</span> <span class="co"># is it 3D?</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># Update values from GRASS</span></span></span>
-<span class="r-in"><span><span class="co"># (Reads values from GRASS... will not appear to do anything in this case)</span></span></span>
-<span class="r-in"><span><span class="va">coast</span> <span class="op">&lt;-</span> <span class="fu"><a href="update.html">update</a></span><span class="op">(</span><span class="va">coast</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co">### operations on GVectors</span></span></span>
-<span class="r-in"><span><span class="co">##########################</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># convert to data frame</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="as.data.frame.html">as.data.frame</a></span><span class="op">(</span><span class="va">rivers</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="as.data.frame.html">as.data.table</a></span><span class="op">(</span><span class="va">rivers</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># subsetting</span></span></span>
-<span class="r-in"><span><span class="va">rivers</span><span class="op">[</span><span class="fu"><a href="c.html">c</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">2</span>, <span class="fl">5</span><span class="op">)</span><span class="op">]</span> <span class="co"># select 3 rows/geometries</span></span></span>
-<span class="r-in"><span><span class="va">rivers</span><span class="op">[</span><span class="op">-</span><span class="fl">5</span><span class="op">:</span><span class="op">-</span><span class="fl">11</span><span class="op">]</span> <span class="co"># remove rows/geometries 5 through 11</span></span></span>
-<span class="r-in"><span><span class="va">rivers</span><span class="op">[</span> , <span class="fl">1</span><span class="op">]</span> <span class="co"># column 1</span></span></span>
-<span class="r-in"><span><span class="va">rivers</span><span class="op">[</span> , <span class="st">"NAM"</span><span class="op">]</span> <span class="co"># select column</span></span></span>
-<span class="r-in"><span><span class="va">rivers</span><span class="op">[[</span><span class="st">"NAM"</span><span class="op">]</span><span class="op">]</span> <span class="co"># select column</span></span></span>
-<span class="r-in"><span><span class="va">rivers</span><span class="op">[</span><span class="fl">1</span>, <span class="fl">2</span><span class="op">:</span><span class="fl">3</span><span class="op">]</span> <span class="co"># row/geometry 1 and column 2 and 3</span></span></span>
-<span class="r-in"><span><span class="va">rivers</span><span class="op">[</span><span class="fu"><a href="c.html">c</a></span><span class="op">(</span><span class="cn">TRUE</span>, <span class="cn">FALSE</span><span class="op">)</span><span class="op">]</span> <span class="co"># select every other geometry (T/F vector is recycled)</span></span></span>
-<span class="r-in"><span><span class="va">rivers</span><span class="op">[</span> , <span class="fu"><a href="c.html">c</a></span><span class="op">(</span><span class="cn">TRUE</span>, <span class="cn">FALSE</span><span class="op">)</span><span class="op">]</span> <span class="co"># select every other column (T/F vector is recycled)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># removing data table</span></span></span>
-<span class="r-in"><span><span class="va">noTable</span> <span class="op">&lt;-</span> <span class="fu"><a href="addTable.html">dropTable</a></span><span class="op">(</span><span class="va">rivers</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">noTable</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="dim.html">nrow</a></span><span class="op">(</span><span class="va">rivers</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="dim.html">nrow</a></span><span class="op">(</span><span class="va">noTable</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># Refresh values from GRASS</span></span></span>
-<span class="r-in"><span><span class="co"># (Reads values from GRASS... will not appear to do anything in this case</span></span></span>
-<span class="r-in"><span><span class="co"># since the rivers object is up-to-date):</span></span></span>
-<span class="r-in"><span><span class="va">rivers</span> <span class="op">&lt;-</span> <span class="fu"><a href="update.html">update</a></span><span class="op">(</span><span class="va">rivers</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># Concatenating multiple vectors</span></span></span>
-<span class="r-in"><span><span class="va">rivers2</span> <span class="op">&lt;-</span> <span class="fu"><a href="rbind.html">rbind</a></span><span class="op">(</span><span class="va">rivers</span>, <span class="va">rivers</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="dim.html">dim</a></span><span class="op">(</span><span class="va">rivers</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="dim.html">dim</a></span><span class="op">(</span><span class="va">rivers2</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="op">}</span></span></span>
-</code></pre></div>
-    </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside></div>
 

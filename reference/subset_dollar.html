@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">fasterRaster</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">8.4.0.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">8.4.0.4</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -22,6 +22,7 @@
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/GRasters.html">Types of GRasters</a></li>
     <li><a class="dropdown-item" href="../articles/faster_fasterRaster.html">Making fasterRaster faster</a></li>
     <li><a class="dropdown-item" href="../articles/addons.html">fasterRaster addons</a></li>
+    <li><a class="dropdown-item" href="../articles/3d_objects.html">3-dimensional objects</a></li>
     <li><hr class="dropdown-divider"></li>
     <li><a class="dropdown-item" href="../articles/index.html">More articles...</a></li>
   </ul></li>
@@ -89,7 +90,6 @@
 <span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://rspatial.org/" class="external-link">terra</a></span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">### GRasters</span></span></span>
-<span class="r-in"><span><span class="co">############</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Example data</span></span></span>
 <span class="r-in"><span><span class="va">madElev</span> <span class="op">&lt;-</span> <span class="fu"><a href="fastData.html">fastData</a></span><span class="op">(</span><span class="st">"madElev"</span><span class="op">)</span> <span class="co"># elevation raster</span></span></span>
@@ -101,22 +101,22 @@
 <span class="r-in"><span><span class="va">forest2000</span> <span class="op">&lt;-</span> <span class="fu"><a href="fast.html">fast</a></span><span class="op">(</span><span class="va">madForest2000</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">forest2014</span> <span class="op">&lt;-</span> <span class="fu"><a href="fast.html">fast</a></span><span class="op">(</span><span class="va">madForest2014</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co">### Re-assigning values of a GRaster</span></span></span>
+<span class="r-in"><span><span class="co"># Re-assigning values of a GRaster</span></span></span>
 <span class="r-in"><span><span class="va">constant</span> <span class="op">&lt;-</span> <span class="va">elev</span></span></span>
 <span class="r-in"><span><span class="va">constant</span><span class="op">[</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="va">pi</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="names.html">names</a></span><span class="op">(</span><span class="va">constant</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="st">"pi_raster"</span></span></span>
 <span class="r-in"><span><span class="va">constant</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co">### Re-assigning specific values of a raster</span></span></span>
+<span class="r-in"><span><span class="co"># Re-assigning specific values of a raster</span></span></span>
 <span class="r-in"><span><span class="va">replace</span> <span class="op">&lt;-</span> <span class="va">elev</span></span></span>
 <span class="r-in"><span><span class="va">replace</span><span class="op">[</span><span class="va">replace</span> <span class="op">==</span> <span class="fl">1</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="op">-</span><span class="fl">20</span></span></span>
 <span class="r-in"><span><span class="va">replace</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co">### Subsetting specific values of a raster based on another raster</span></span></span>
+<span class="r-in"><span><span class="co"># Subsetting specific values of a raster based on another raster</span></span></span>
 <span class="r-in"><span><span class="va">elevInForest</span> <span class="op">&lt;-</span> <span class="va">elev</span><span class="op">[</span><span class="va">forest2000</span> <span class="op">==</span> <span class="fl">1</span><span class="op">]</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="plot.html">plot</a></span><span class="op">(</span><span class="fu"><a href="c.html">c</a></span><span class="op">(</span><span class="va">elev</span>, <span class="va">forest2000</span>, <span class="va">elevInForest</span><span class="op">)</span>, nr <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co">### Adding and replacing layers of a GRaster</span></span></span>
+<span class="r-in"><span><span class="co"># Adding and replacing layers of a GRaster</span></span></span>
 <span class="r-in"><span><span class="va">rasts</span> <span class="op">&lt;-</span> <span class="fu"><a href="c.html">c</a></span><span class="op">(</span><span class="va">elev</span>, <span class="va">constant</span>, <span class="va">forest2000</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Combine with another layer:</span></span></span>
@@ -151,7 +151,6 @@
 <span class="r-in"><span><span class="va">rasts</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">### GVectors</span></span></span>
-<span class="r-in"><span><span class="co">############</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># example data</span></span></span>
 <span class="r-in"><span><span class="va">madDypsis</span> <span class="op">&lt;-</span> <span class="fu"><a href="fastData.html">fastData</a></span><span class="op">(</span><span class="st">"madDypsis"</span><span class="op">)</span> <span class="co"># vector of points</span></span></span>

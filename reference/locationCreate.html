@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">fasterRaster</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">8.4.0.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">8.4.0.4</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -22,6 +22,7 @@
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/GRasters.html">Types of GRasters</a></li>
     <li><a class="dropdown-item" href="../articles/faster_fasterRaster.html">Making fasterRaster faster</a></li>
     <li><a class="dropdown-item" href="../articles/addons.html">fasterRaster addons</a></li>
+    <li><a class="dropdown-item" href="../articles/3d_objects.html">3-dimensional objects</a></li>
     <li><hr class="dropdown-divider"></li>
     <li><a class="dropdown-item" href="../articles/index.html">More articles...</a></li>
   </ul></li>
@@ -94,59 +95,6 @@
     <p>A <a href="GLocation.html">GLocation</a> object (invisibly).</p>
     </div>
 
-    <div class="section level2">
-    <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="grassStarted.html">grassStarted</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># Setup</span></span></span>
-<span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://rspatial.org/" class="external-link">terra</a></span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># Example data</span></span></span>
-<span class="r-in"><span><span class="va">madElev</span> <span class="op">&lt;-</span> <span class="fu"><a href="fastData.html">fastData</a></span><span class="op">(</span><span class="st">"madElev"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">madChelsa</span> <span class="op">&lt;-</span> <span class="fu"><a href="fastData.html">fastData</a></span><span class="op">(</span><span class="st">"madChelsa"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">madChelsa1</span> <span class="op">&lt;-</span> <span class="va">madChelsa</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># Convert SpatRasters to GRasters.</span></span></span>
-<span class="r-in"><span><span class="co"># Each raster has a different CRS so will be put into a different location.</span></span></span>
-<span class="r-in"><span><span class="va">elev</span> <span class="op">&lt;-</span> <span class="fu"><a href="fast.html">fast</a></span><span class="op">(</span><span class="va">madElev</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">chelsa1</span> <span class="op">&lt;-</span> <span class="fu"><a href="fast.html">fast</a></span><span class="op">(</span><span class="va">madChelsa1</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># Name of the currently active location</span></span></span>
-<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
-<span class="r-in"><span>   </span></span>
-<span class="r-in"><span>   <span class="fu"><a href="location.html">.location</a></span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-in"><span>   <span class="fu"><a href="location.html">.location</a></span><span class="op">(</span><span class="va">elev</span><span class="op">)</span></span></span>
-<span class="r-in"><span>   <span class="fu"><a href="location.html">.location</a></span><span class="op">(</span><span class="va">chelsa1</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span>   <span class="co"># All available GRASS locations</span></span></span>
-<span class="r-in"><span>   <span class="fu"><a href="locations.html">.locations</a></span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span>   <span class="co"># Find location of an object among all active locations</span></span></span>
-<span class="r-in"><span>   <span class="fu">.locationFind</span><span class="op">(</span><span class="va">elev</span><span class="op">)</span></span></span>
-<span class="r-in"><span>   <span class="fu">.locationFind</span><span class="op">(</span><span class="va">chelsa1</span><span class="op">)</span></span></span>
-<span class="r-in"><span>   <span class="fu">.locationFind</span><span class="op">(</span><span class="va">chelsa1</span>, return <span class="op">=</span> <span class="st">"index"</span><span class="op">)</span></span></span>
-<span class="r-in"><span>   <span class="fu">.locationFind</span><span class="op">(</span><span class="va">chelsa1</span>, return <span class="op">=</span> <span class="st">"crs"</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span>   <span class="co"># Switch between locations</span></span></span>
-<span class="r-in"><span>   <span class="fu"><a href="locationRestore.html">.locationRestore</a></span><span class="op">(</span><span class="va">elev</span><span class="op">)</span></span></span>
-<span class="r-in"><span>   <span class="fu"><a href="locationRestore.html">.locationRestore</a></span><span class="op">(</span><span class="va">chelsa1</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span>   <span class="va">loc</span> <span class="op">&lt;-</span> <span class="fu"><a href="location.html">.location</a></span><span class="op">(</span><span class="va">elev</span><span class="op">)</span></span></span>
-<span class="r-in"><span>   <span class="fu"><a href="locationRestore.html">.locationRestore</a></span><span class="op">(</span><span class="va">loc</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span>   <span class="co"># Delete the location where "elev" is stored.</span></span></span>
-<span class="r-in"><span>   <span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="fu"><a href="location.html">.locationDelete</a></span><span class="op">(</span><span class="va">elev</span><span class="op">)</span> <span class="co"># dangerous!</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span>   <span class="co"># Mapsets are always "PERMANENT" in fasterRaster</span></span></span>
-<span class="r-in"><span>   <span class="fu"><a href="mapset.html">.mapset</a></span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-in"><span>   <span class="fu"><a href="mapset.html">.mapset</a></span><span class="op">(</span><span class="va">elev</span><span class="op">)</span></span></span>
-<span class="r-in"><span>   <span class="fu"><a href="mapset.html">.mapset</a></span><span class="op">(</span><span class="va">chelsa1</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="op">}</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="op">}</span></span></span>
-</code></pre></div>
-    </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside></div>
 

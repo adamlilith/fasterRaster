@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">fasterRaster</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">8.4.0.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">8.4.0.4</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -22,6 +22,7 @@
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/GRasters.html">Types of GRasters</a></li>
     <li><a class="dropdown-item" href="../articles/faster_fasterRaster.html">Making fasterRaster faster</a></li>
     <li><a class="dropdown-item" href="../articles/addons.html">fasterRaster addons</a></li>
+    <li><a class="dropdown-item" href="../articles/3d_objects.html">3-dimensional objects</a></li>
     <li><hr class="dropdown-divider"></li>
     <li><a class="dropdown-item" href="../articles/index.html">More articles...</a></li>
   </ul></li>
@@ -144,26 +145,20 @@
 <span class="r-in"><span><span class="va">v2</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="plot.html">plot</a></span><span class="op">(</span><span class="va">v2</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># Left-open/right-closed (default)</span></span></span>
-<span class="r-in"><span><span class="co"># Cells with a value of 1 are converted to the "others" value because</span></span></span>
-<span class="r-in"><span><span class="co"># they are not "inside" the bins of `rcl`.</span></span></span>
+<span class="r-in"><span><span class="co">### Left-open/right-closed (default)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="minmax.html">minmax</a></span><span class="op">(</span><span class="va">elev</span><span class="op">)</span> <span class="co"># note min/max values</span></span></span>
 <span class="r-in"><span><span class="va">rcl</span> <span class="op">&lt;-</span> <span class="fu"><a href="c.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">200</span>, <span class="fl">570</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">v3</span> <span class="op">&lt;-</span> <span class="fu">classify</span><span class="op">(</span><span class="va">elev</span>, rcl <span class="op">=</span> <span class="va">rcl</span>, others <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="levels.html">levels</a></span><span class="op">(</span><span class="va">v3</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="plot.html">plot</a></span><span class="op">(</span><span class="va">v3</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># Left-closed/right-open</span></span></span>
-<span class="r-in"><span><span class="co"># Cells with a value of 570 are converted to the "others" value because</span></span></span>
-<span class="r-in"><span><span class="co"># they are not "inside" the bins of `rcl`. There is only 1 cell with a</span></span></span>
-<span class="r-in"><span><span class="co"># value of 570, so it probably won't be visible when plotted.</span></span></span>
+<span class="r-in"><span><span class="co">### Left-closed/right-open</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="minmax.html">minmax</a></span><span class="op">(</span><span class="va">elev</span><span class="op">)</span> <span class="co"># note min/max values</span></span></span>
 <span class="r-in"><span><span class="va">rcl</span> <span class="op">&lt;-</span> <span class="fu"><a href="c.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">200</span>, <span class="fl">570</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">v4</span> <span class="op">&lt;-</span> <span class="fu">classify</span><span class="op">(</span><span class="va">elev</span>, rcl <span class="op">=</span> <span class="va">rcl</span>, others <span class="op">=</span> <span class="fl">10</span>, right <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="levels.html">levels</a></span><span class="op">(</span><span class="va">v4</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Left-open except for lowest bin/right-closed</span></span></span>
-<span class="r-in"><span><span class="co"># All values will be in bins, and none assigned to "others".</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="minmax.html">minmax</a></span><span class="op">(</span><span class="va">elev</span><span class="op">)</span> <span class="co"># note min/max values</span></span></span>
 <span class="r-in"><span><span class="va">rcl</span> <span class="op">&lt;-</span> <span class="fu"><a href="c.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">200</span>, <span class="fl">570</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">v5</span> <span class="op">&lt;-</span> <span class="fu">classify</span><span class="op">(</span><span class="va">elev</span>, rcl <span class="op">=</span> <span class="va">rcl</span>, others <span class="op">=</span> <span class="fl">10</span>, include.lowest <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
@@ -171,7 +166,6 @@
 <span class="r-in"><span><span class="fu"><a href="levels.html">levels</a></span><span class="op">(</span><span class="va">v5</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Left-closed/right-open except for highest bin</span></span></span>
-<span class="r-in"><span><span class="co"># All values will be in bins, and none assigned to "others".</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="minmax.html">minmax</a></span><span class="op">(</span><span class="va">elev</span><span class="op">)</span> <span class="co"># note min/max values</span></span></span>
 <span class="r-in"><span><span class="va">rcl</span> <span class="op">&lt;-</span> <span class="fu"><a href="c.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">200</span>, <span class="fl">570</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">v6</span> <span class="op">&lt;-</span> <span class="fu">classify</span><span class="op">(</span><span class="va">elev</span>, rcl <span class="op">=</span> <span class="va">rcl</span>, others <span class="op">=</span> <span class="fl">10</span>,</span></span>

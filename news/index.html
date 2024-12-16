@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">fasterRaster</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">8.4.0.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">8.4.0.4</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -22,6 +22,7 @@
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/GRasters.html">Types of GRasters</a></li>
     <li><a class="dropdown-item" href="../articles/faster_fasterRaster.html">Making fasterRaster faster</a></li>
     <li><a class="dropdown-item" href="../articles/addons.html">fasterRaster addons</a></li>
+    <li><a class="dropdown-item" href="../articles/3d_objects.html">3-dimensional objects</a></li>
     <li><hr class="dropdown-divider"></li>
     <li><a class="dropdown-item" href="../articles/index.html">More articles...</a></li>
   </ul></li>
@@ -47,8 +48,28 @@
     </div>
 
     <div class="section level2">
+<h2 class="pkg-version" data-toc-text="8.4.0.4" id="fasterraster-8404-2024-12-xx">fasterRaster 8.4.0.4 (2024-12-XX)<a class="anchor" aria-label="anchor" href="#fasterraster-8404-2024-12-xx"></a></h2>
+<p>o Added vignette “3-dimensional objects”.</p>
+</div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="8.4.0.3" id="fasterraster-8403-2024-12-15">fasterRaster 8.4.0.3 (2024-12-15)<a class="anchor" aria-label="anchor" href="#fasterraster-8403-2024-12-15"></a></h2>
+<div class="section level4">
+<h4 id="bug-and-issue-fixes-8-4-0-3">Bug and issue fixes<a class="anchor" aria-label="anchor" href="#bug-and-issue-fixes-8-4-0-3"></a></h4>
+<p>o Many minor fixes for CRAN submission!<br>
+o Comparison between a string and a categorical <code>GRaster</code> using logical operators like <code>&lt;</code> or <code>==</code> returns a categorical raster.<br>
+o <code><a href="https://rspatial.github.io/terra/reference/is.bool.html" class="external-link">as.factor()</a></code> is now properly exported.<br>
+o <code><a href="../reference/centroids.html">centroids()</a></code> has the option to exit gracefully if the <code>addons</code> check fails.<br>
+o <code><a href="../reference/crds.html">crds()</a></code> now works for <code>GVector</code>s that lacked an internal <strong>GRASS</strong> database. Hidden function <code>.crds()</code> accepts a <code>cats</code> argument, making it potentially faster.<br>
+o <code><a href="../reference/fast.html">fast()</a></code> correctly defines region on import of raster.<br>
+o <code><a href="../reference/mow.html">mow()</a></code> example works.<br>
+o <code><a href="../reference/spatSample.html">spatSample()</a></code> works when sampling by <code>stratum</code>.<br>
+o <code>.rbind()</code> is a hidden function which accepts a <code>cats</code> argument that concatenates vectors faster than <code><a href="../reference/rbind.html">rbind()</a></code>.<br>
+o Issues with some examples were fixed.</p>
+</div>
+</div>
+    <div class="section level2">
 <h2 class="pkg-version" data-toc-text="8.4.0.2" id="fasterraster-8402-2024-12-09">fasterRaster 8.4.0.2 (2024-12-09)<a class="anchor" aria-label="anchor" href="#fasterraster-8402-2024-12-09"></a></h2>
-<p>o Fixed issues from CRAN precheck.</p>
+<p>o Fixed issues from CRAN R CMD precheck.</p>
 </div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="8.4.0.0" id="fasterraster-8400-2024-11-20">fasterRaster 8.4.0.0 (2024-11-20)<a class="anchor" aria-label="anchor" href="#fasterraster-8400-2024-11-20"></a></h2>

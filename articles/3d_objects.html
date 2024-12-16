@@ -5,12 +5,12 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>Making fasterRaster faster • fasterRaster</title>
+<title>3-dimensional objects • fasterRaster</title>
 <script src="../lightswitch.js"></script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
 <script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
-<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Making fasterRaster faster">
+<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="3-dimensional objects">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -69,56 +69,110 @@
 
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
-      <img src="../logo.png" class="logo" alt=""><h1>Making fasterRaster faster</h1>
+      <img src="../logo.png" class="logo" alt=""><h1>3-dimensional objects</h1>
                         <h4 data-toc-skip class="author">Adam B.
 Smith</h4>
             
             <h4 data-toc-skip class="date">2024-12-16</h4>
       
-      <small class="dont-index">Source: <a href="https://github.com/adamlilith/fasterRaster/blob/master/vignettes/faster_fasterRaster.Rmd"><code>vignettes/faster_fasterRaster.Rmd</code></a></small>
-      <div class="d-none name"><code>faster_fasterRaster.Rmd</code></div>
+      <small class="dont-index">Source: <a href="https://github.com/adamlilith/fasterRaster/blob/master/vignettes/3d_objects.Rmd"><code>vignettes/3d_objects.Rmd</code></a></small>
+      <div class="d-none name"><code>3d_objects.Rmd</code></div>
     </div>
 
     
     
-<p>There are several ways to speed up <strong>fasterRaster</strong>
-functions. These are listed below in order of their most likely gains,
-with the first few being potentially the largest.</p>
-<ol style="list-style-type: decimal">
-<li><p><strong>Load rasters and vectors directly from disk</strong>: Use
-<a href="https://adamlilith.github.io/fasterRaster/reference/fast.html" class="external-link"><code>fast()</code></a>
-to load rasters and vectrors directly from disk. Converting
-<code>terra</code> or <code>sf</code> objects to <code>GRaster</code>s
-and <code>GVector</code>s can be slower. Why? Because if the object does
-not have a file to which the <code>R</code> object points, Use <a href="https://adamlilith.github.io/fasterRaster/reference/fast.html" class="external-link"><code>fast()</code></a>
-has to save it to disk first as a GeoTIFF or GeoPackage file, then load
-it into <code>GRASS</code>.</p></li>
-<li><p><strong>Save <code>GRaster</code>s and <code>GVector</code>s
-directly to disk</strong>: Converting <code>GRaster</code>s and
-<code>GVector</code>s to <code>SpatRaster</code>s or
-<code>SpatVector</code> using <a href="https://adamlilith.github.io/fasterRaster/reference/rast.html" class="external-link"><code>rast()</code></a>
-or <a href="https://adamlilith.github.io/fasterRaster/reference/vect.html" class="external-link"><code>vect()</code></a>,
-then saving them is much slower than just saving them. Why? Because
-these functions actually save the file to disk then uses the respective
-function from the respective package to connect to the file.</p></li>
-<li><p><strong>Increase memory and the number of cores usable by
-GRASS:</strong> By default, <code>fasterRaster</code> use 2 cores and
-2048 MB (2 GB) of memory for <code>GRASS</code> modules that allow users
-to specify these values. You can set these to higher values using <a href="https://adamlilith.github.io/fasterRaster/reference/faster.html" class="external-link"><code>faster()</code></a>
-and thus potentially speed up some calculations. Functions in newer
-versions of <code>GRASS</code> have more capacity to use these options,
-so updating <code>GRASS</code> to the latest version can help,
-too.</p></li>
-<li><p><strong>Do operations on <code>GRaster</code>s and
-<code>GVector</code>s in the same coordinate reference system
-together:</strong> Every time you switch between using a
-<code>GRaster</code> or <code>GVector</code> with a different coordinate
-reference system (CRS), <code>GRASS</code> has to spend a few seconds
-changing to that CRS. You can save some time by doing as much work as
-possible with objects in one CRS, then switching to work on objects in
-another CRS.</p></li>
-</ol>
+<p><strong>fasterRaster</strong> has limited support for 3-dimensional
+<code>GRaster</code>s and <code>GVector</code>s. A <code>GRaster</code>
+is like a multi-layered raster, except that layers contain values in
+“voxels” (3-dimensional pixels), where each layer has a z-resolution, in
+addition to its normal x- and y-resolutions. These layers are called
+“depths”. A 3-dimensional vector has a z-dimension, so any point (i.e.,
+an actual point, or points that together define a line or polygon) has a
+third dimension. You can test if an object is 3-dimensional using
+<code><a href="../reference/topology-GSpatial-method.html">topology()</a></code>, <code><a href="../reference/is.2d.html">is.2d()</a></code>, or <code><a href="../reference/is.2d.html">is.3d()</a></code>,
+or by looking at its metadata (i.e., just enter the name of the object
+in <strong>R</strong> and look at what is displayed).</p>
+<p>Thus far, <em>no functions that handle 3-dimensional
+<code>GRaster</code>s or <code>GVector</code>s have been tested.</em>
+Some functions like <code><a href="../reference/spatSample.html">spatSample()</a></code> have arguments that allow
+you to do something with a z-component. Also, some of the “getter”
+functions can report information about the third dimension of a
+<code>GRaster</code> or <code>GVector</code>.</p>
+<p>Three-dimensional <code>GRaster</code>s and <code>GVector</code>s
+should (?… remember, no testing yet!) work with most functions. In some
+cases, the third dimension will be ignored or removed. You should get a
+warning in these cases.</p>
+<div class="section level2">
+<h2 id="fasterraster-functions-that-specifically-work-with-3-dimensional-objects">
+<strong>fasterRaster</strong> functions that specifically work with
+3-dimensional objects<a class="anchor" aria-label="anchor" href="#fasterraster-functions-that-specifically-work-with-3-dimensional-objects"></a>
+</h2>
+<table class="table">
+<thead><tr class="header">
+<th><strong>Function</strong></th>
+<th><strong>Object type</strong></th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td><code><a href="../reference/ext.html">bottom()</a></code></td>
+<td>
+<code>GRaster</code> or <code>GVector</code>
+</td>
+</tr>
+<tr class="even">
+<td><code><a href="../reference/dim.html">dim3d()</a></code></td>
+<td><code>GRaster</code></td>
+</tr>
+<tr class="odd">
+<td><code><a href="../reference/is.2d.html">is.2d()</a></code></td>
+<td>
+<code>GRaster</code> or <code>GVector</code>
+</td>
+</tr>
+<tr class="even">
+<td><code><a href="../reference/is.2d.html">is.3d()</a></code></td>
+<td>
+<code>GRaster</code> or <code>GVector</code>
+</td>
+</tr>
+<tr class="odd">
+<td><code><a href="../reference/dim.html">ncell3d()</a></code></td>
+<td><code>GRaster</code></td>
+</tr>
+<tr class="even">
+<td><code><a href="../reference/dim.html">ndepth()</a></code></td>
+<td><code>GRaster</code></td>
+</tr>
+<tr class="odd">
+<td><code><a href="../reference/res.html">res3d()</a></code></td>
+<td><code>GRaster</code></td>
+</tr>
+<tr class="even">
+<td><code><a href="../reference/ext.html">top()</a></code></td>
+<td>
+<code>GRaster</code> or <code>GVector</code>
+</td>
+</tr>
+<tr class="odd">
+<td><code><a href="../reference/topology-GSpatial-method.html">topology()</a></code></td>
+<td>
+<code>GRaster</code> or <code>GVector</code>
+</td>
+</tr>
+<tr class="even">
+<td><code><a href="../reference/ext.html">zext()</a></code></td>
+<td>
+<code>GRaster</code> or <code>GVector</code>
+</td>
+</tr>
+<tr class="odd">
+<td><code><a href="../reference/res.html">zres()</a></code></td>
+<td><code>GRaster</code></td>
+</tr>
+</tbody>
+</table>
 <p>~ FINIS ~</p>
+</div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>
 </div>

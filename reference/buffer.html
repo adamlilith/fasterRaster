@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">fasterRaster</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">8.4.0.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">8.4.0.4</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -22,6 +22,7 @@
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/GRasters.html">Types of GRasters</a></li>
     <li><a class="dropdown-item" href="../articles/faster_fasterRaster.html">Making fasterRaster faster</a></li>
     <li><a class="dropdown-item" href="../articles/addons.html">fasterRaster addons</a></li>
+    <li><a class="dropdown-item" href="../articles/3d_objects.html">3-dimensional objects</a></li>
     <li><hr class="dropdown-divider"></li>
     <li><a class="dropdown-item" href="../articles/index.html">More articles...</a></li>
   </ul></li>
@@ -118,12 +119,16 @@ Partial matching is used and case is ignored.</p></li>
 
 </dl></div>
     <div class="section level2">
+    <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
+    <p>A <code>GRaster</code> or a <code>GVector</code>.</p>
+    </div>
+    <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>Note that in some cases, topologically incorrect vectors can be created when buffering. This can arise when buffers intersect to create intersections that technically belong to two or more geometries. This issue can be resolved by dissolving borders between buffered geometries using <code>dissolve = TRUE</code>, but as of now, there is no fix if you do not want to dissolve geometries. A workaround would be to create a different <code>GVector</code> for each geometry, and then buffer each individually :(.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p><code><a href="https://rspatial.github.io/terra/reference/buffer.html" class="external-link">terra::buffer()</a></code>, <code><a href="https://r-spatial.github.io/sf/reference/geos_unary.html" class="external-link">sf::st_buffer()</a></code>, and modules <code>r.buffer</code>, <code>r.grow</code>, and <code>v.buffer</code> in <strong>GRASS</strong></p></div>
+    <div class="dont-index"><p><code><a href="https://rspatial.github.io/terra/reference/buffer.html" class="external-link">terra::buffer()</a></code>, <code><a href="https://r-spatial.github.io/sf/reference/geos_unary.html" class="external-link">sf::st_buffer()</a></code></p></div>
     </div>
 
     <div class="section level2">

@@ -21,7 +21,7 @@ NAs: anyNA() (any cells are NA?), allNA() (are all cells NA?)
 
     <a class="navbar-brand me-2" href="../index.html">fasterRaster</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">8.4.0.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">8.4.0.4</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -36,6 +36,7 @@ NAs: anyNA() (any cells are NA?), allNA() (are all cells NA?)
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/GRasters.html">Types of GRasters</a></li>
     <li><a class="dropdown-item" href="../articles/faster_fasterRaster.html">Making fasterRaster faster</a></li>
     <li><a class="dropdown-item" href="../articles/addons.html">fasterRaster addons</a></li>
+    <li><a class="dropdown-item" href="../articles/3d_objects.html">3-dimensional objects</a></li>
     <li><hr class="dropdown-divider"></li>
     <li><a class="dropdown-item" href="../articles/index.html">More articles...</a></li>
   </ul></li>
@@ -200,12 +201,12 @@ NAs: anyNA() (any cells are NA?), allNA() (are all cells NA?)
 <span class="r-in"><span><span class="fu">which.max</span><span class="op">(</span><span class="va">chelsa</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Regression</span></span></span>
+<span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Note the intercept is different for fasterRaster::regress().</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="regress.html">regress</a></span><span class="op">(</span><span class="va">chelsa</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="regress.html">regress</a></span><span class="op">(</span><span class="va">madChelsa</span>, <span class="fl">1</span><span class="op">:</span><span class="fu"><a href="dim.html">nlyr</a></span><span class="op">(</span><span class="va">madChelsa</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># Note: To get quantiles for each layer, use</span></span></span>
-<span class="r-in"><span><span class="co"># global(x, "quantile", probs = 0.2).</span></span></span>
+<span class="r-in"><span><span class="co"># Note: To get quantiles for each layer, use global().</span></span></span>
 <span class="r-in"><span><span class="fu">quantile</span><span class="op">(</span><span class="va">chelsa</span>, <span class="fl">0.1</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># NAs</span></span></span>
