@@ -2,7 +2,7 @@
 title: "Making fasterRaster faster"
 output: rmarkdown::html_vignette
 author: "Adam B. Smith"
-date: "`r Sys.Date()`"
+date: '`r format(Sys.Date())`'
 vignette: >
   %\VignetteIndexEntry{Making fasterRaster faster}
   %\VignetteEngine{knitr::rmarkdown}

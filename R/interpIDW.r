@@ -46,7 +46,7 @@ methods::setMethod(
 		cats <- .vCats(x, db = FALSE)
 		db <- data.table::data.table(frid = cats, TEMPTEMP_ = x@table[[field]])
 		names(db)[2L] <- field
-		.vAttachDatabase(x, table = db, replace = TRUE)
+		.vAttachDatabase(x, table = db, replace = TRUE, cats = cats)
 
 	}
 

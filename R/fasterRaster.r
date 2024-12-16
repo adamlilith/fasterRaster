@@ -314,7 +314,8 @@
 #' * Comparisons between `GRegion`s can be performed using the `==` and `!=` operators.
 #' * Vignette on **GRASS** "projects/locations" and "mapsets": `vignette("projects_mapsets", package = "fasterRaster")`
 #' * Vignette on **GRASS** "regions": `vignette("regions", package = "fasterRaster")`
-#' * Vignette on **fasteRaster** hidden functions: `vignette("hidden_functions", package = "fasterRaster")`
+#' * Vignette on **GRASS** 3-dimensional `GRaster`s and `GVector`s: `vignette("3d_objects", package = "fasterRaster")`
+#' * Vignette on **fasterRaster** hidden functions: `vignette("hidden_functions", package = "fasterRaster")`
 #'
 #' ## Classes
 #' * [`GLocation`]: Fundamental class; points to a "location/project" in **GRASS**

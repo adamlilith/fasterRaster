@@ -26,7 +26,8 @@ Options include:
 \item \code{cores} (integer/numeric integer): Number of processor cores to use on a task. The default is 2. Some \strong{GRASS} modules are parallelized.
 \item \code{memory} (integer/numeric): The amount of memory to allocate to a task, in GB, for \strong{GRASS}. The default is 2048 MB (i.e., 2 GB). Some \strong{GRASS} modules can take advantage of more memory.
 \item \code{useDataTable} (logical): If \code{FALSE} (default), functions that return tabular output produce \code{data.frame}s. If \code{TRUE}, output will be \code{data.table}s from the \strong{data.table} package. This can be much faster, but it might require you to know how to use \code{data.table}s if you want to manipulate them in \strong{R}. You can always convert them to \code{data.frame}s using \code{\link[base:as.data.frame]{base::as.data.frame()}}.
-\item \code{verbose} (logical): If \code{TRUE}, show \strong{GRASS} messages and otherwise hidden slots in classes. This is mainly used for debugging, so most users will want to keep this at its default, \code{FALSE}.
+\item \code{verbose} (logical): If \code{TRUE}, show progress during function operations and other messages. Default is \code{FALSE}. This overrides the value of any \code{verbose} argument in a function.
+\item \code{debug} (logical): If \code{TRUE}, show \strong{GRASS} messages and otherwise hidden slots in classes. This is mainly used for debugging, so most users will want to keep this at its default, \code{FALSE}.
 \item \code{workDir} (character): The folder in which \strong{GRASS} rasters, vectors, and other objects are created and manipulated. By default, this is given by \code{\link[=tempdir]{tempdir()}}. Note that on some systems, changing the default folder to somewhere else can cause problems with \strong{fasterRaster} being able to find rasters in \strong{GRASS} that have been created.
 }}
 

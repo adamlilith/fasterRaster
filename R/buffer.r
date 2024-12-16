@@ -33,7 +33,9 @@
 #'
 #' @param dissolve Logical (`GVector`s): If `TRUE` (default), dissolve all buffers after creation. If `FALSE`, construct a buffer for each geometry. Note that overlapping buffers can cause this function to fail because it creates a topologically ambiguous polygon. Thus, using `dissolve = TRUE` is recommended.
 #'
-#' @seealso [terra::buffer()], [sf::st_buffer()], and modules `r.buffer`, `r.grow`, and `v.buffer` in **GRASS**
+#' @seealso [terra::buffer()], [sf::st_buffer()]
+#'
+#' @returns A `GRaster` or a `GVector`.
 #'
 #' @example man/examples/ex_buffer.R
 #'

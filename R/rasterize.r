@@ -66,11 +66,11 @@ methods::setMethod(
 		nBys <- length(bys)
 		src <- rep(NA_character_, nBys)
 		levels <- list()
-		if (verbose & nBys > 1L) pb <- utils::txtProgressBar(min = 0, max = nBys, initial = 0, style = 3, width = 30)
+		if ((verbose | faster("verbose")) & nBys > 1L) pb <- utils::txtProgressBar(min = 0, max = nBys, initial = 0, style = 3, width = 30)
 
 		for (i in seq_len(nBys)) {
 
-			if (verbose) {
+			if (verbose | faster("verbose")) {
 				utils::setTxtProgressBar(pb, i)
 				utils::flush.console()
 			}
@@ -83,7 +83,7 @@ methods::setMethod(
 			levels[[i]] <- thisOut$levels
 		
 		}
-		if (verbose) close(pb)
+		if (verbose | faster("verbose")) close(pb)
 
 	} else {
 
@@ -116,7 +116,7 @@ methods::setMethod(
 			names(levels)[2L] <- field
 			levels <- levels[order(levels$value)]
 			db <- data.table::data.table(cat = uniCats, DUMMYDUMMY_ = renums)
-			.vAttachDatabase(x, db)
+			.vAttachDatabase(x, db, cats = cats)
 
 			args <- list(
 				cmd = "v.to.rast",

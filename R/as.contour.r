@@ -11,6 +11,8 @@
 #'
 #' @seealso [terra::as.contour()], **GRASS** manual page for module `r.contour` (see `grassHelp("r.contour")`)
 #'
+#' @returns A `GVector` representing contour lines.
+#'
 #' @example man/examples/ex_asContour.r
 #'
 #' @aliases as.contour

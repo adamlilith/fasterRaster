@@ -118,9 +118,9 @@ plot(sameAsXor)
 expanse(coast, unit = "km") # polygons areas
 expanse(rivers, unit = "km") # river lengths
 
-# Fill holes
-# First, we will make some holes by creating buffers around points, then
-# removing them from a polygons GVector.
+### Fill holes
+
+# First, we will make some holes by creating buffers around points.
 buffs <- buffer(dypsis, 500)
 
 holes <- coast - buffs

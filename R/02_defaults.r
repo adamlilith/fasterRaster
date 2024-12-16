@@ -11,6 +11,7 @@
 
 .coresDefault <- function() 2
 .verboseDefault <- function() FALSE
+.debugDefault <- function() FALSE
 # .cleanDefault <- function() TRUE
 .memoryDefault <- function() 2048 # in MB
 # .nAtATimeDefault <- function() 1000000 # number of indices to select at a time
@@ -28,6 +29,7 @@
 			"addonsDir",
 			# "clean",
 			"verbose",
+			"debug",
 			"cores",
 			"memory",
 			"location",
@@ -39,6 +41,7 @@
 			"character",
 			"character",
 			# "logical",
+			"logical",
 			"logical",
 			"numeric",
 			"numeric",

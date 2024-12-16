@@ -15,15 +15,13 @@
 #'
 #' @return A [GLocation] object (invisibly).
 #'
-#' @example man/examples/ex_location_mapset.r
-#'
 #' @aliases .locationCreate
 #' @rdname locationCreate
 #' @keywords internal
 methods::setMethod(
 	f = ".locationCreate",
 	signature = c(x = "character"),
-	function(x, location = NULL, overwrite = FALSE, warn = TRUE) ..connectToGRASS(x = x, location = location, overwrite = overwrite, warn = warn)
+	function(x, location = NULL, overwrite = FALSE, warn = TRUE) ..locationCreate(x = x, location = location, overwrite = overwrite, warn = warn)
 )
 
 #' @aliases .locationCreate
@@ -32,7 +30,7 @@ methods::setMethod(
 methods::setMethod(
 	f = ".locationCreate",
 	signature = c(x = "SpatRaster"),
-	function(x, location = NULL, overwrite = FALSE, warn = TRUE) ..connectToGRASS(x = x, location = location, overwrite = overwrite, warn = warn)
+	function(x, location = NULL, overwrite = FALSE, warn = TRUE) ..locationCreate(x = x, location = location, overwrite = overwrite, warn = warn)
 )
 
 #' @aliases .locationCreate
@@ -41,7 +39,7 @@ methods::setMethod(
 methods::setMethod(
 	f = ".locationCreate",
 	signature = c(x = "SpatVector"),
-	function(x, location = NULL, overwrite = FALSE, warn = TRUE) ..connectToGRASS(x = x, location = location, overwrite = overwrite, warn = warn)
+	function(x, location = NULL, overwrite = FALSE, warn = TRUE) ..locationCreate(x = x, location = location, overwrite = overwrite, warn = warn)
 )
 
 #' @aliases .locationCreate
@@ -50,11 +48,11 @@ methods::setMethod(
 methods::setMethod(
 	f = ".locationCreate",
 	signature = c(x = "sf"),
-	function(x, location = NULL, overwrite = FALSE, warn = TRUE) ..connectToGRASS(x = x, location = location, overwrite = overwrite, warn = warn)
+	function(x, location = NULL, overwrite = FALSE, warn = TRUE) ..locationCreate(x = x, location = location, overwrite = overwrite, warn = warn)
 )
 
 #' @noRd
-..connectToGRASS <- function(
+..locationCreate <- function(
 	x,
 	location = NULL,
 	overwrite = FALSE,
@@ -71,7 +69,7 @@ methods::setMethod(
 	
 	}
 
-	# rgrass::set.ignore.stderrOption(!faster("verbose"))
+	# rgrass::set.ignore.stderrOption(!faster("debug"))
 
 	### CRS
 	if (inherits(x, c("SpatRaster", "SpatVector", "SpatExtent"))) {
@@ -158,7 +156,7 @@ methods::setMethod(
 		)
 	)
 
-	rgrass::set.ignore.stderrOption(!faster("verbose"))
+	rgrass::set.ignore.stderrOption(!faster("debug"))
 	.fasterRaster$grassStarted <- TRUE
 	.fasterRaster$grassVersion <- grassInfo("versionNumber")
 	

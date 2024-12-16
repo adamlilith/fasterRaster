@@ -98,7 +98,6 @@ madElev <- fastData("madElev")
 elev <- fast(madElev)
 
 ### Calculate input rasters
-###########################
 
 # Values below are just a guess
 coeff_bh <- coeff_dh <- elev
@@ -112,7 +111,6 @@ horizon_step <- 90
 hh <- horizonHeight(elev, step = horizon_step, northIs0 = FALSE)
 
 ### calculate solar ir/radiance
-###############################
 
 solar <- sun(
 	elevation = elev,

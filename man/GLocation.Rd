@@ -18,7 +18,7 @@
 An object of class \code{GLocation}, \code{GSpatial}, \code{GRegion}, \code{GRaster}, or \code{GVector}.
 }
 \description{
-The \code{G} suite of S4 classes contain pointers to \strong{GRASS} objects or metadata about the current \strong{GRASS} session. Most users will manipulate objects using these classes, but do not need to know the details.
+The \code{G}-suite of S4 classes contain pointers to \strong{GRASS} objects or metadata about the current \strong{GRASS} session. Most users will manipulate objects using these classes, but do not need to know the details.
 \itemize{
 \item The \code{GLocation} class stores information about the \strong{GRASS} "project"/"location"(see \code{vignette("projects_mapsets", package = "fasterRaster")}), and coordinate reference system. Contained by all the rest.
 \item The \code{GSpatial} class contains the \code{GLocation} class and stores information about spatial objects (extent, topology) plus the name of the file representing it in \strong{GRASS} (its \code{source}). Contained by \code{GRegion}, \code{GRaster}, and \code{GVector}.

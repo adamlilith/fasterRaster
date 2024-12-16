@@ -8,8 +8,6 @@
 #'
 #' @returns A named `list`. The names are the "location's" names and the values are the coordinate reference strings.
 #'
-#' @example man/examples/ex_location_mapset.r
-#'
 #' @aliases .locations
 #' @rdname locations
 #' @keywords internal

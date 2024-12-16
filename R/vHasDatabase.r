@@ -6,8 +6,6 @@
 #'
 #' @returns Logical.
 #'
-#' @example man/examples/ex_vFunctions.r
-#'
 #' @aliases .vHasDatabase
 #' @rdname vHasDatabase
 #' @keywords internal

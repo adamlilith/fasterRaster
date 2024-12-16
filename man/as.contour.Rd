@@ -14,6 +14,9 @@
 
 \item{levels}{Numeric vector: A numeric vector of values at which to calculate contour lines. Either \code{nlevels} or \code{levels} must be specified.}
 }
+\value{
+A \code{GVector} representing contour lines.
+}
 \description{
 Create a \code{GVector} of contour lines from a \code{GRaster}.
 }

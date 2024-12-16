@@ -17,8 +17,6 @@
 #'
 #' @returns Character, integer, or `NULL` (if no match is found).
 #'
-#' @example man/examples/ex_location_mapset.r
-#'
 #' @aliases .locationFind,missing-method
 #' @rdname locationFind
 #' @keywords internal

@@ -12,13 +12,4 @@ Displays current projection information for the active "project/location" in \st
 \description{
 This function calls the \strong{GRASS} module \code{g.region} to display information on the projection of the current \strong{GRASS} "project".
 }
-\examples{
-
-if (grassStarted()) {
-
-.g.proj()
-
-}
-
-}
 \keyword{internal}

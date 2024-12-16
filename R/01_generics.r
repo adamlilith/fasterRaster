@@ -165,7 +165,7 @@ methods::setGeneric(name = "interpIDW", package = "terra")
 methods::setGeneric(name = "interpSplines", def = function(x, y, ...) standardGeneric("interpSplines"))
 methods::setGeneric(name = "is.2d", def = function(x) standardGeneric("is.2d"))
 methods::setGeneric(name = "is.3d", def = function(x) standardGeneric("is.3d"))
-if (!isGeneric("is.factor")) { methods::setGeneric(name = "is.factor", def = function(x) standardGeneric("is.factor")) }
+methods::setGeneric(name = "is.factor", def = function(x) standardGeneric("is.factor"))
 # is.double() is primitive and cannot be made generic
 methods::setGeneric(name = "is.cell", def = function(x) standardGeneric("is.cell"))
 methods::setGeneric(name = "is.doub", def = function(x) standardGeneric("is.doub"))

@@ -44,7 +44,6 @@ This function is a simple way to get example rasters or spatial vector datasets 
 \examples{
 
 ### vector data
-###############
 
 library(sf)
 
@@ -67,7 +66,6 @@ madDypsis
 plot(st_geometry(madDypsis), col = "red", add = TRUE)
 
 ### raster data
-###############
 
 library(terra)
 

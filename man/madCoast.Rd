@@ -16,7 +16,6 @@ Borders of a selected portion of Madagascar
 \examples{
 
 ### vector data
-###############
 
 library(sf)
 
@@ -39,7 +38,6 @@ madDypsis
 plot(st_geometry(madDypsis), col = "red", add = TRUE)
 
 ### raster data
-###############
 
 library(terra)
 

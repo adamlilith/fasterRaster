@@ -30,8 +30,7 @@ madElev <- fastData("madElev")
 # Convert to GRaster:
 elev <- fast(madElev)
 
-# Thin elevation raster. In this case, we need to run 300 thinning iterations
-# for the function to reduce the raster to linear features.
+# Thin elevation raster:
 thinned <- thinLines(elev, iter = 300)
 plot(thinned)
 

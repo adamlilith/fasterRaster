@@ -55,7 +55,6 @@ madElev <- fastData("madElev")
 elev <- fast(madElev)
 
 ### Calculate zonal statistics using a GRaster as zones
-#######################################################
 
 # Generate a "zones" GRaster by dividing raster into areas based on
 # high/low elevation.
@@ -72,7 +71,6 @@ elev2 <- c(elev, log10(elev))
 zonal(elev2, zones, fun = c("mean", "sum", "sdpop"))
 
 ### Calculate zonal statistics using a GVector as zones
-#######################################################
 
 madCoast4 <- fastData("madCoast4")
 coast <- fast(madCoast4)

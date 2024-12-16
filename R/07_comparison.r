@@ -300,7 +300,7 @@ methods::setMethod(
 		
 
 		if (length(thisVal) == 0L) {
-			this <- 0L * not.na(e1)
+			return(0L * not.na(e1))
 		} else {
 
 			if (oper == "<") {
@@ -354,7 +354,8 @@ methods::setMethod(
 		}
 
 	} # next layer
-	.makeGRaster(srcs, "logical")
+	out <- .makeGRaster(srcs, "logical", levels = cats(e1), ac = activeCats(e1))
+	out
 	
 	} # EOF
 )
@@ -445,7 +446,8 @@ methods::setMethod(
 		}
 
 	} # next layer
-	.makeGRaster(srcs, "logical")
+	out <- .makeGRaster(srcs, "logical", levels = cats(e2), ac = activeCats(e2))
+	out
 		
 	} # EOF
 )

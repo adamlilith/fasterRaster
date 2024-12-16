@@ -66,8 +66,6 @@ methods::setValidity("GVector",
 #'
 #' @seealso [.makeGRaster()]
 #'
-#' @example man/examples/ex_GRaster_GVector.r
-#'
 #' @keywords internal
 .makeGVector <- function(src, table = NULL, build = TRUE, extensive = FALSE, cats = NULL, fail = TRUE) {
 

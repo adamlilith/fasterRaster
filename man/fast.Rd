@@ -167,7 +167,6 @@ madRivers <- fastData("madRivers") # lines vector
 madDypsis <- fastData("madDypsis") # points vector
 
 ### Create GRasters from SpatRasters
-####################################
 
 # Create an integer raster:
 elev <- fast(madElev)
@@ -188,7 +187,6 @@ ones <- fast(rastOrVect = "raster", crs = "epsg:4326")
 ones
 
 ### Create GVectors
-###################
 
 # Create a GVector from an sf vector:
 coast4 <- fast(madCoast4)

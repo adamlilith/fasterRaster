@@ -15,7 +15,6 @@ dypsis <- fast(madDypsis)
 hull <- convHull(dypsis)
 
 ### union()
-###########
 
 unioned <- union(coast4, hull)
 plot(unioned)
@@ -23,7 +22,6 @@ plot(unioned)
 plus <- coast4 + hull # same as union()
 
 ### intersect
-#############
 
 inter <- intersect(coast4, hull)
 plot(coast4)
@@ -31,14 +29,12 @@ plot(hull, border = "red", add = TRUE)
 plot(inter, border = "blue", add = TRUE)
 
 ### xor
-#######
 
 xr <- xor(coast4, hull)
 plot(coast4)
 plot(xr, border = "blue", add = TRUE)
 
 ### erase
-#########
 
 erased <- erase(coast4, hull)
 plot(coast4)

@@ -56,6 +56,9 @@ Partial matching is used and case is ignored.}
 
 \item{dist}{Vectors -- Same as \code{width}.}
 }
+\value{
+A \code{GRaster} or a \code{GVector}.
+}
 \description{
 Buffers can be constructed for \code{GRaster}s or \code{GVector}s. For rasters, the \code{buffer()} function creates a buffer around non-\code{NA} cells. The output will be a raster. For vectors, the \code{buffer()} and \code{st_buffer()} functions create a vector polygon larger or smaller than the focal vector.
 }
@@ -95,5 +98,5 @@ plot(st_geometry(madRivers), col = "blue", add = TRUE)
 }
 }
 \seealso{
-\code{\link[terra:buffer]{terra::buffer()}}, \code{\link[sf:geos_unary]{sf::st_buffer()}}, and modules \code{r.buffer}, \code{r.grow}, and \code{v.buffer} in \strong{GRASS}
+\code{\link[terra:buffer]{terra::buffer()}}, \code{\link[sf:geos_unary]{sf::st_buffer()}}
 }

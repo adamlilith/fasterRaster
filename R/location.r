@@ -10,8 +10,6 @@
 #'
 #' @seealso [.mapset()]
 #'
-#' @example man/examples/ex_location_mapset.r
-#'
 #' @aliases .location
 #' @rdname location
 #' @keywords internal

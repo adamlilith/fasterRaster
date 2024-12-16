@@ -37,45 +37,48 @@ methods::setMethod(
 	# v.patch does not increment cat numbers, so different geometries will have the same cat.
 	# This step increases cat numbers in each subsequent vector so conflicts do not happen.
 
-	x <- dots[[1L]]
-	src <- sources(x)
 	srcs <- sapply(dots, sources)
+	src <- .rbind(srcs)
 
-	cats <- .vCats(src, db = FALSE)
-	topCat <- max(cats)
+	# x <- dots[[1L]]
+	# src <- sources(x)
+	# srcs <- sapply(dots, sources)
+
+	# cats <- .vCats(src, db = FALSE)
+	# topCat <- max(cats)
 	
-	for (i in 2L:nDots) {
+	# for (i in 2L:nDots) {
 
-		srcs[i] <- .vIncrementCats(srcs[i], add = topCat)
-		cats <- .vCats(srcs[i], db = FALSE)
-		topCat <- max(cats)
+	# 	srcs[i] <- .vIncrementCats(srcs[i], add = topCat)
+	# 	cats <- .vCats(srcs[i], db = FALSE)
+	# 	topCat <- max(cats)
 	
-	}
+	# }
 
-	### combine vectors
-	# seems like we can combine at least 11 vectors at a time, but not a lot at a time
-	srcsAtATime <- 10L # number of sources to combine at a time (plus the running `x` source)
+	# ### combine vectors
+	# # seems like we can combine at least 11 vectors at a time, but not a lot at a time
+	# srcsAtATime <- 10L # number of sources to combine at a time (plus the running `x` source)
 
-	nSrcs <- length(srcs)
-	sets <- ceiling(nSrcs / srcsAtATime)
+	# nSrcs <- length(srcs)
+	# sets <- ceiling(nSrcs / srcsAtATime)
 	
-	for (set in seq_len(sets)) {
+	# for (set in seq_len(sets)) {
 
-		index <- (1L + srcsAtATime * (set - 1L)) : min(nSrcs, set * srcsAtATime)
-		srcIn <- srcs[index]
-		input <- paste(srcIn, collapse = ",")
-		input <- paste0(src, ",", input)
+	# 	index <- (1L + srcsAtATime * (set - 1L)) : min(nSrcs, set * srcsAtATime)
+	# 	srcIn <- srcs[index]
+	# 	input <- paste(srcIn, collapse = ",")
+	# 	input <- paste0(src, ",", input)
 	
-		src <- .makeSourceName("v_patch", "vector")
+	# 	src <- .makeSourceName("v_patch", "vector")
 
-		rgrass::execGRASS(
-			cmd = "v.patch",
-			input = input,
-			output = src,
-			flags = c(.quiet(), "overwrite")
-		)
+	# 	rgrass::execGRASS(
+	# 		cmd = "v.patch",
+	# 		input = input,
+	# 		output = src,
+	# 		flags = c(.quiet(), "overwrite")
+	# 	)
 		
-	}
+	# }
 
 	tables <- lapply(dots, as.data.table)
 	table <- tryCatch(
@@ -94,5 +97,55 @@ methods::setMethod(
 	
 	} # EOF
 )
+
+#' Merge vectors in GRASS
+#'
+#' This function combines vectors with the same geometry in **GRASS**.
+#'
+#' @param srcs Character vector: The [sources()] names of vectors to combine. They must have the same [geomtype()].
+#' @returns Character: [sources()] name of the combined vector in **GRASS**.
+#'
+#' @noRd
+.rbind <- function(srcs) {
+
+	thisCats <- .vCats(srcs[1L], db = FALSE)
+	topCat <- max(thisCats)
+	
+	nSrcs <- length(srcs)
+	for (i in 2L:nSrcs) {
+
+		srcs[i] <- .vIncrementCats(srcs[i], add = topCat)
+		thisCats <- .vCats(srcs[i], db = FALSE)
+		topCat <- max(thisCats)
+	
+	}
+
+	### combine vectors
+	# seems like we can combine at least 11 vectors at a time, but not a lot at a time
+	srcsAtATime <- 10L # number of sources to combine at a time (plus the running `x` source)
+
+	sets <- ceiling(nSrcs / srcsAtATime)
+	
+	src <- srcs[1L]
+	for (set in seq_len(sets)) {
+
+		index <- (1L + srcsAtATime * (set - 1L)) : min(nSrcs, set * srcsAtATime)
+		srcIn <- srcs[index]
+		input <- paste(srcIn, collapse = ",")
+		input <- paste0(src, ",", input)
+	
+		src <- .makeSourceName("v_patch", "vector")
+
+		rgrass::execGRASS(
+			cmd = "v.patch",
+			input = input,
+			output = src,
+			flags = c(.quiet(), "overwrite")
+		)
+		
+	}
+	src
+
+}
 
 # rbind <- function(...) UseMethod("rbind")

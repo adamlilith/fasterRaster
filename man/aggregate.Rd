@@ -65,7 +65,6 @@ madElev <- fastData("madElev")
 madCoast4 <- fastData("madCoast4")
 
 ### aggregating a GRaster
-#########################
 
 # Convert:
 elev <- fast(madElev)
@@ -103,7 +102,6 @@ agg2x3 <- aggregate(elev, c(2, 3), "mean")
 agg2x3
 
 ### aggregating a GVector
-#########################
 
 madCoast4 <- fastData("madCoast4")
 

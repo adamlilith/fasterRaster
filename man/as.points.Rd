@@ -42,8 +42,7 @@ elev <- fast(madElev)
 coast <- fast(madCoast0)
 rivers <- fast(madRivers)
 
-# Extract points from raster. To make this fast, we will first crop the raster
-# to a small extent defined by a single river.
+# For this example, we will first crop to a small extent.
 river <- rivers[1]
 elevCrop <- crop(elev, river)
 elevPoints <- as.points(elevCrop)

@@ -89,7 +89,6 @@ rivers <- fast(madRivers)
 soam <- rivers[rivers$NAM == "SOAMIANINA"] # select one river for illustration
 
 ### Simplify geometry (remove nodes)
-####################################
 
 vr <- simplifyGeom(soam, tolerance = 2000)
 dp <- simplifyGeom(soam, tolerance = 2000, method = "dp")
@@ -116,7 +115,6 @@ legend("bottom",
 )
 
 ### Smooth geometry
-###################
 
 hermite <- smoothGeom(soam, dist = 2000, angle = 3)
 chaiken <- smoothGeom(soam, method = "Chaiken", dist = 2000)
@@ -137,7 +135,6 @@ legend("bottom",
 )
 
 ### Clean geometry
-##################
 
 # Has no effect on this vector!
 noDangs <- removeDangles(soam, tolerance = 10000)

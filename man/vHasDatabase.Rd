@@ -15,25 +15,4 @@ Logical.
 \description{
 \strong{GRASS} vectors can be lined to one or more attribute tables, or "databases.". This function tests to see if the vector does indeed have a database. This function is typically used by developers.
 }
-\examples{
-if (grassStarted()) {
-
-madRivers <- fastData("madRivers")
-rivers <- fast(madRivers)
-
-.vCats(rivers)
-.vHasDatabase(rivers)
-.vAsDataTable(rivers)
-.vRecat(rivers) # dangerous--re-categorizes geometries!
-.vValidCats(rivers)
-
-.vDetachDatabase(rivers) # dangerous--detaches database!
-.vAttachDatabase(rivers)
-
-# Ensure we don't use this for other examples!
-.rm(rivers) # delete in GRASS
-rm(rivers) # delete in R
-
-}
-}
 \keyword{internal}

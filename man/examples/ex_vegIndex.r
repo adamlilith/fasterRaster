@@ -20,8 +20,7 @@ plot(vi)
 # All indices using R and NIR:
 rnir <- vegIndex(landsat, index = "rnir", r = 1, nir = 4, bits = 8)
 
-# Note: Some values are highly skewed, likely due to cloud cover and other
-# anomalies that should be corrected.
+# Note: Some values are highly skewed
 plot(rnir)
 
 }

@@ -12,8 +12,6 @@
 #'
 #' @returns A vector.
 #'
-#' @example man/examples/ex_vFunctions.r
-#'
 #' @aliases .vCats
 #' @rdname vCats
 #' @keywords internal

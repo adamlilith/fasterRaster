@@ -7,6 +7,7 @@
 #' @param extent Logical:
 #' * If `y` is a "points" `GVector`: Use the convex hull around `y` to crop `x`.
 #' * If `y` is a "lines" or "polygons" `GVector`: If `TRUE`, use the extent of `y` to crop `x`.
+#' * if `y` is a `GVector`, `x` will be cropped to the extent of `y` (`extent` is ignored).
 #' @param fail Logical: If `TRUE` (default), and the cropped object would have zero extent in at least one dimension, then exit the function with an error. If `FALSE`, then display a warning and return `NULL`.
 #'  
 #' @details Known differences from [terra::crop()]:
@@ -155,13 +156,13 @@ methods::setMethod(
 
 	} else if (inherits(y, "GRaster")) {
 
+		.region(y)
 		args <- list(
 			cmd = "v.clip",
 			input = sources(x),
 			clip = sources(y),
 			output = src,
-			flags = c("r", .quiet(), "overwrite"),
-			intern = TRUE
+			flags = c("r", .quiet(), "overwrite")
 		)
 
 	}

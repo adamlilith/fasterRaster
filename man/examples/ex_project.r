@@ -1,7 +1,6 @@
 if (grassStarted()) {
 
 ### Setup for all examples
-##########################
 
 library(sf)
 library(terra)

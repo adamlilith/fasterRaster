@@ -21,6 +21,8 @@
 #' 
 #' Partial matching is used and case is ignored.
 #'
+#' @param fail Logical: If `TRUE` (default), and the addons folder is not correctly specified, the exit the function with an error. If `FALSE`, then `NULL` will be returned with a warning.
+#'
 #' @returns A points `GVector`.
 #'
 #' @example man/examples/ex_centroids.r
@@ -33,9 +35,10 @@
 methods::setMethod(
 	f = "centroids",
 	signature = c(x = "GVector"),
-	function(x, method = NULL) {
+	function(x, method = NULL, fail = TRUE) {
 	
-	addons("v.centerpoint", verbose = FALSE)
+	ok <- addons("v.centerpoint", verbose = TRUE, fail = fail)
+	if (!ok) return(NULL)
 
 	gtype <- geomtype(x)
 	

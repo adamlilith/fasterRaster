@@ -16,7 +16,6 @@ Raster of land cover for an eastern portion of Madagascar. Note that the land co
 \examples{
 
 ### vector data
-###############
 
 library(sf)
 
@@ -39,7 +38,6 @@ madDypsis
 plot(st_geometry(madDypsis), col = "red", add = TRUE)
 
 ### raster data
-###############
 
 library(terra)
 

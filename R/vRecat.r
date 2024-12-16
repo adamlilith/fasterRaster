@@ -52,7 +52,7 @@
 	src <- .makeSourceName("vRecat_v_reclass", "vector")
 
 	reCats <- as.character(cats)
-	.vAttachDatabase(srcIn, table = data.frame(reCat = reCats))
+	.vAttachDatabase(srcIn, table = data.frame(reCat = reCats), cats = cats)
 
 	rgrass::execGRASS(
 		cmd = "v.reclass",

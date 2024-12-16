@@ -11,6 +11,8 @@
 #'
 #' @example man/examples/ex_maskNA.r
 #'
+#' @returns A `GRaster`.
+#'
 #' @aliases maskNA
 #' @rdname maskNA
 #' @exportMethod maskNA

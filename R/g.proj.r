@@ -4,14 +4,6 @@
 #'
 #' @returns Displays current projection information for the active "project/location" in **GRASS**.
 #'
-#' @examples
-#'
-#' if (grassStarted()) {
-#'
-#' .g.proj()
-#'
-#' }
-#'
 #' @export
 #' @keywords internal
 .g.proj <- function() {

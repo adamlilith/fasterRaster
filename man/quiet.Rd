@@ -10,16 +10,6 @@
 A string (.quiet()) or \code{NULL}.
 }
 \description{
-A function for developers used for setting the "quiet' argument in \code{flags} arguments passed to \code{\link[rgrass:execGRASS]{rgrass::execGRASS()}}. If \code{faster("verbose")} is \code{TRUE}, the string "quiet" is returned. If \code{FALSE}, then \code{NULL} is returned.
-}
-\examples{
-
-if (grassStarted()) {
-
-faster("verbose")
-.quiet()
-
-}
-
+A function for developers used for setting the "quiet' argument in \code{flags} arguments passed to \code{\link[rgrass:execGRASS]{rgrass::execGRASS()}}. If \code{faster("debug")} is \code{TRUE}, the string "quiet" is returned. If \code{FALSE}, then \code{NULL} is returned.
 }
 \keyword{internal}

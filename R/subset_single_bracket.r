@@ -177,7 +177,7 @@ methods::setMethod(
 				qid[keepCats] <- 1L
 
 				db <- data.table::data.table(cat = cats, qid = qid)
-				.vAttachDatabase(x, db)
+				.vAttachDatabase(x, db, cats = cats)
 
 				args$where <- "qid = 1" # will not work with inequalities
 

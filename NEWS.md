@@ -1,5 +1,22 @@
+# fasterRaster 8.4.0.4 (2024-12-XX)
+o Added vignette "3-dimensional objects".  
+
+# fasterRaster 8.4.0.3 (2024-12-15)
+
+### Bug and issue fixes
+o Many minor fixes for CRAN submission!  
+o Comparison between a string and a categorical `GRaster` using logical operators like `<` or `==` returns a categorical raster.  
+o `as.factor()` is now properly exported.  
+o `centroids()` has the option to exit gracefully if the `addons` check fails.  
+o `crds()` now works for `GVector`s that lacked an internal **GRASS** database. Hidden function `.crds()` accepts a `cats` argument, making it potentially faster.   
+o `fast()` correctly defines region on import of raster.  
+o `mow()` example works.  
+o `spatSample()` works when sampling by `stratum`.  
+o `.rbind()` is a hidden function which accepts a `cats` argument that concatenates vectors faster than `rbind()`.   
+o Issues with some examples were fixed.  
+
 # fasterRaster 8.4.0.2 (2024-12-09)
-o Fixed issues from CRAN precheck.  
+o Fixed issues from CRAN R CMD precheck.  
 
 # fasterRaster 8.4.0.0 (2024-11-20)
 
