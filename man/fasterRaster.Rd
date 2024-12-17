@@ -377,7 +377,7 @@ Operations on \code{GRaster}s
 \item Comparisons between \code{GRegion}s can be performed using the \code{==} and \code{!=} operators.
 \item Vignette on \strong{GRASS} "projects/locations" and "mapsets": \code{vignette("projects_mapsets", package = "fasterRaster")}
 \item Vignette on \strong{GRASS} "regions": \code{vignette("regions", package = "fasterRaster")}
-\item Vignette on \strong{GRASS} 3-dimensional \code{GRaster}s and \code{GVector}s: \code{vignette("3d_objects", package = "fasterRaster")}
+\item Vignette on \strong{GRASS} 3-dimensional \code{GRaster}s and \code{GVector}s: \code{vignette("three_d_objects", package = "fasterRaster")}
 \item Vignette on \strong{fasterRaster} hidden functions: \code{vignette("hidden_functions", package = "fasterRaster")}
 }
 }

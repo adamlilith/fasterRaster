@@ -20,7 +20,7 @@ articles:
   - GRasters
   - faster_fasterRaster
   - addons
-  - 3d_objects
+  - three_d_objects
 
 - title: For Developers
   desc: Vignettes for developers
