@@ -724,7 +724,7 @@ methods::setMethod(
     }
 
     # # don't know why, but having this here obviates extraction of all NAs on first extract attempt
-    if (inherits(x, "GRaster")) x <- x + 0
+    # if (inherits(x, "GRaster")) x[[1L]] <- x[[1L]] + 0
 
     for (set in seq_len(sets)) {
 
