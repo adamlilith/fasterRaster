@@ -1,5 +1,6 @@
 # fasterRaster 8.4.0.4 (2024-12-XX)
 o Added vignette "3-dimensional objects".  
+o `spatSample()` is faster when `values` or `cats` is `TRUE`.  
 
 # fasterRaster 8.4.0.3 (2024-12-15)
 
