@@ -298,7 +298,6 @@ methods::setMethod(
 		# 	flags = c(.quiet(), "overwrite")
 		# )
 
-		if (faster("verbose")) omnibus::say("Extracting values...")
 		vals <- .extractFromRasterAtPoints(x = x, y = src, cats = cats, verbose = verbose)
 
 		if (exists("out", inherits = FALSE)) {
