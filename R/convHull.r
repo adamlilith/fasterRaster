@@ -7,7 +7,7 @@
 #'
 #' @return A `GVector`.
 #'
-#' @seealso [terra::convHull()], [sf::st_convex_hull()], module `v.hull` in **GRASS**
+#' @seealso \code{link[terra]{convHull}}, \code{link[sf]{st_convex_hull}}, module `v.hull` in **GRASS** (see `grassHelp("v.hull")`)
 #'
 #' @example man/examples/ex_convHull.r
 #'
@@ -81,7 +81,7 @@ methods::setMethod(
 			# concatenate
 			args <- list(x = vects[[1L]])
 			if (length(vects) > 1L) args <- c(args, list(vects[2:length(vects)]))
-			out <- do.call("c", args)
+			out <- do.call("c", args = args)
 
 		}
 	

@@ -48,5 +48,5 @@ for (i in 1:n) {
 }
 }
 \seealso{
-\code{\link[terra:convhull]{terra::convHull()}}, \code{\link[sf:geos_unary]{sf::st_convex_hull()}}, module \code{v.hull} in \strong{GRASS}
+\code{link[terra]{convHull}}, \code{link[sf]{st_convex_hull}}, module \code{v.hull} in \strong{GRASS} (see \code{grassHelp("v.hull")})
 }
