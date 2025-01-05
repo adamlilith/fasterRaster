@@ -69,7 +69,7 @@
 #' * **Correction outside of *fasterRaster***: Before you convert the vector into **fasterRaster**'s `GVector` format, you can also try using the [terra::makeValid()] or [sf::st_make_valid()] tools to fix issues, then use `fast()`.
 #' * **Post-conversion to a `GVector`**: If you do get a vector loaded into `GVector` format, you can also use a set of **fasterRaster** vector-manipulation [tools][breakPolys] or [fillHoles()] to fix issues.
 #'
-#' @seealso [rgrass::read_RAST()] and [rgrass::read_VECT()], [vector cleaning][breakPolys], [fillHoles()], plus **GRASS** modules `v.in.ogr` (see `grassHelp("v.in.ogr")`) and `r.import` (see `grassHelp("r.import")`)
+#' @seealso \code{\link[rgrass]{read_RAST}} and \code{\link[rgrass]{read_VECT}}, [vector cleaning][breakPolys], [fillHoles()], plus **GRASS** modules `v.in.ogr` (see `grassHelp("v.in.ogr")`) and `r.import` (`grassHelp("r.import")`)
 #'
 #' @returns A `GRaster` or `GVector`.
 #'

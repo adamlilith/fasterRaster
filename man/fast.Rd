@@ -229,5 +229,5 @@ mat <- fast(mat, crs = "epsg:4326", keepgeom = TRUE) # WGS84
 }
 }
 \seealso{
-\code{\link[rgrass:readRAST]{rgrass::read_RAST()}} and \code{\link[rgrass:readVECT]{rgrass::read_VECT()}}, \link[=breakPolys]{vector cleaning}, \code{\link[=fillHoles]{fillHoles()}}, plus \strong{GRASS} modules \code{v.in.ogr} (see \code{grassHelp("v.in.ogr")}) and \code{r.import} (see \code{grassHelp("r.import")})
+\code{\link[rgrass]{read_RAST}} and \code{\link[rgrass]{read_VECT}}, \link[=breakPolys]{vector cleaning}, \code{\link[=fillHoles]{fillHoles()}}, plus \strong{GRASS} modules \code{v.in.ogr} (see \code{grassHelp("v.in.ogr")}) and \code{r.import} (\code{grassHelp("r.import")})
 }
