@@ -2,6 +2,7 @@
 o Added vignette "3-dimensional objects".  
 o `extract()` is faster.  
 o `spatSample()` is faster when `values` or `cats` is `TRUE`.  
+o Hopefully fixed some issues when liking to `rgrass` and `terra` noted by R Bivand and R Hijmans.  
 
 # fasterRaster 8.4.0.3 (2024-12-15)
 
