@@ -179,7 +179,7 @@ methods::setMethod(
 				db <- data.table::data.table(cat = cats, qid = qid)
 				.vAttachDatabase(x, db, cats = cats)
 
-				args$where <- "qid = 1" # will not work with inequalities
+				args$where <- "qid = 1" # will not work with inequalities!
 
 			} else if (gtype %in% c("area", "line")) {
 			
@@ -290,7 +290,8 @@ methods::setMethod(
 			out <- NULL
 		} else {
 			# out <- .makeGVector(src, table = table, cats = newCats)
-			out <- .makeGVector(src, table = table)
+			# out <- .makeGVector(src, table = table)
+			out <- .makeGVector(src, table = table, cats = keepCats)
 		}
 
 	}
