@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">fasterRaster</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">8.4.0.4</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">8.4.0.5</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -44,12 +44,17 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Changelog</h1>
-      <small>Source: <a href="https://github.com/adamlilith/fasterRaster/blob/v8.4.0.3/NEWS.md"><code>NEWS.md</code></a></small>
+      <small>Source: <a href="https://github.com/adamlilith/fasterRaster/blob/master/NEWS.md"><code>NEWS.md</code></a></small>
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="8.4.0.4" id="fasterraster-8404-2024-12-xx">fasterRaster 8.4.0.4 (2024-12-XX)<a class="anchor" aria-label="anchor" href="#fasterraster-8404-2024-12-xx"></a></h2>
-<p>o Added vignette “3-dimensional objects”.</p>
+<h2 class="pkg-version" data-toc-text="8.4.0.5" id="fasterraster-8405-2025-02-17">fasterRaster 8.4.0.5 (2025-02-17)<a class="anchor" aria-label="anchor" href="#fasterraster-8405-2025-02-17"></a></h2>
+<p>o Added vignette “3-dimensional objects”.<br>
+o <code>[</code> is faster.<br>
+o <code>%in%</code> and <code><a href="../reference/match.html">match()</a></code> work when <code>faster(useDataTable = FALSE)</code> and <code>table</code> argument is a character.<br>
+o <code><a href="../reference/extract.html">extract()</a></code> is faster.<br>
+o <code><a href="../reference/spatSample.html">spatSample()</a></code> is faster when <code>values</code> or <code>cats</code> is <code>TRUE</code>.<br>
+o Hopefully fixed some issues when linking to <code>rgrass</code> and <code>terra</code> documentation noted by R Bivand and R Hijmans.</p>
 </div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="8.4.0.3" id="fasterraster-8403-2024-12-15">fasterRaster 8.4.0.3 (2024-12-15)<a class="anchor" aria-label="anchor" href="#fasterraster-8403-2024-12-15"></a></h2><p class="text-muted">CRAN release: 2024-12-17</p>
@@ -120,7 +125,7 @@ o For functions that are complicated or have extended references, added a note t
 <div class="section level4">
 <h4 id="updates-for-grass-8-4-0-7027">Updates for <strong>GRASS 8.4</strong>
 <a class="anchor" aria-label="anchor" href="#updates-for-grass-8-4-0-7027"></a></h4>
-<p>o <code>addLocationProject()</code> adds either a <code>project</code> or <code>location</code> argument to a <code>list</code> to be passed to <code><a href="https://rsbivand.github.io/rgrass/reference/execGRASS.html" class="external-link">rgrass::execGRASS()</a></code>.<br>
+<p>o <code>addLocationProject()</code> adds either a <code>project</code> or <code>location</code> argument to a <code>list</code> to be passed to <code><a href="https://osgeo.github.io/rgrass/reference/execGRASS.html" class="external-link">rgrass::execGRASS()</a></code>.<br>
 o <code><a href="../reference/project.html">project()</a></code> work with <strong>GRASS</strong> 8.4.<br>
 o <code><a href="../reference/vAttachDatabase.html">.vAttachDatabase()</a></code> no longer has the <code>"o"</code> flag when calling <code>v.db.connect</code> when running <strong>GRASS</strong> &gt;=8.4.</p>
 </div>
