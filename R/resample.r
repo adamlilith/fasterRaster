@@ -62,7 +62,7 @@ methods::setMethod(
 		} else {
 			tbres <- t <- b <- NA_real_
 		}
-		
+### NEED TO EXTENT TO ENCOMPASS x IF ITS EXTENT IS OUTSIDE THIS		
 		w <- W(y)
 		e <- E(y)
 		s <- S(y)
@@ -114,9 +114,9 @@ methods::setMethod(
 		ewres = ewres, nsres = nsres,
 		flags = c("o", .quiet())
 	)
-	if (!is.na(t)) args <- c(args, t=t)
-	if (!is.na(b)) args <- c(args, t=b)
-	if (!is.na(tbres)) args <- c(args, tbres=tbres)
+	if (!is.na(t)) args <- c(args, t = t)
+	if (!is.na(b)) args <- c(args, t = b)
+	if (!is.na(tbres)) args <- c(args, tbres = tbres)
 
 	do.call(rgrass::execGRASS, args=args)
 	

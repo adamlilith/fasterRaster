@@ -10,7 +10,7 @@
 .quiet <- function() {
 
 	if (faster("debug")) {
-		out <- NULL
+		out <- 'verbose'
 	} else {
 		out <- "quiet"
 	}

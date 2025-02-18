@@ -61,7 +61,7 @@ methods::setMethod(
 		byStratum <- FALSE
 		zlim <- NULL
 		seed <- NULL
-		verbose <- FALSE
+		verbose <- TRUE
 	
 	}
 
@@ -270,7 +270,7 @@ methods::setMethod(
 	} else {
 		
 		if (verbose | faster("verbose")) omnibus::say("Placing points...")
-		src <- .makeSourceName("spatSample", "vector")
+		src <- .makeSourceName("spatSample_v_random", "vector")
 		args <- list(
 			cmd = "v.random",
 			output = src,
@@ -298,8 +298,7 @@ methods::setMethod(
 		# 	flags = c(.quiet(), "overwrite")
 		# )
 
-		if (faster("verbose")) omnibus::say("Extracting values...")
-		vals <- .extractFromRasterAtPoints(x = x, y = src, cats = cats, verbose = verbose)
+		vals <- .extractFromRasterAtPoints(x = x, y = src, xNames = names(x), dtype = datatype(x), levels = levels(x), cats = cats, verbose = verbose)
 
 		if (exists("out", inherits = FALSE)) {
 			out <- cbind(out, vals)

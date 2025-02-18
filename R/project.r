@@ -204,7 +204,7 @@ methods::setMethod(
 			xRast <- fast(xRast)
 
 			# resample x in its native location to the resolution it will have in the target location
-			x <- resample(
+			x <- .resample(
 				x = x,
 				y = xRast,
 				method = method,

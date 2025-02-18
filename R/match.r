@@ -42,11 +42,18 @@ methods::setMethod(
 	
 		if (is.character(table)) {
 
-			levs <- levels(x)[[i]]
+			levs <- cats(x)[[i]]
 			ac <- activeCat(x)[i]
-			labels <- levs[[ac + 1L]]
-			matches <- match(table, labels)
-			vals <- levs[[1L]][matches]
+
+			if (faster("useDataTable")) {
+				labels <- levs[[ac + 1L]]
+				matches <- match(table, labels)
+				vals <- levs[[1L]][matches]
+			} else {
+				labels <- levs[ , ac + 1L, drop = TRUE]
+				matches <- match(table, labels)
+				vals <- levs[ , 1L, drop = TRUE][matches]
+			}
 
 		} else {
 			vals <- table
@@ -159,11 +166,22 @@ methods::setMethod(
 	
 		if (is.character(table)) {
 
-			levs <- levels(x)[[i]]
+			levs <- cats(x)[[i]]
 			ac <- activeCat(x)[i]
-			labels <- levs[[ac + 1L]]
-			matches <- match(table, labels)
-			vals <- levs[[1L]][matches]
+
+			# labels <- levs[[ac + 1L]]
+			# matches <- match(table, labels)
+			# vals <- levs[[1L]][matches]
+
+			if (faster("useDataTable")) {
+				labels <- levs[[ac + 1L]]
+				matches <- match(table, labels)
+				vals <- levs[[1L]][matches]
+			} else {
+				labels <- levs[ , ac + 1L, drop = TRUE]
+				matches <- match(table, labels)
+				vals <- levs[ , 1L, drop = TRUE][matches]
+			}
 
 		} else {
 			vals <- table

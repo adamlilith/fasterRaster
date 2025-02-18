@@ -1,5 +1,10 @@
-# fasterRaster 8.4.0.4 (2024-12-XX)
+# fasterRaster 8.4.0.5 (2025-02-17)
 o Added vignette "3-dimensional objects".  
+o `[` is faster.  
+o `%in%` and `match()` work when `faster(useDataTable = FALSE)` and `table` argument is a character.  
+o `extract()` is faster.  
+o `spatSample()` is faster when `values` or `cats` is `TRUE`.  
+o Hopefully fixed some issues when linking to `rgrass` and `terra` documentation noted by R Bivand and R Hijmans.  
 
 # fasterRaster 8.4.0.3 (2024-12-15)
 
