@@ -29,13 +29,16 @@
 For vectors, distance from the object to place the buffer. Negative values create "inside" buffers. Units are in the same units as the current coordinate reference system (e.g., degrees for WGS84 or NAD83, often meters for projected systems).}
 
 \item{unit}{Character: Rasters -- Indicates the units of \code{width}. Can be one of:
-
-\if{html}{\out{<div class="sourceCode">}}\preformatted{* `"cells"`: Units are numbers of cells.
-}\if{html}{\out{</div>}}
 \itemize{
-\item \code{"meters"} (default), \code{"metres"}, or \code{"m"}; \code{"kilometers"} or \code{"km"}; \code{"feet"} or \code{"ft"}; \code{"miles"} or \code{"mi"}; \code{"nautical miles"} or \code{"nmi"}.
-Partial matching is used and case is ignored.
-}}
+\item \code{"cells"}: Units are numbers of cells.
+\item \code{"meters"} (default), \code{"metres"}, or \code{"m"}
+\item \code{"kilometers"} or \code{"km"}
+\item \code{"feet"} or \code{"ft"}
+\item \code{"miles"} or \code{"mi"}
+\item \code{"nautical miles"} or \code{"nmi"}
+}
+
+Partial matching is used and case is ignored.}
 
 \item{method}{Character: Rasters -- Only used if \code{units} is \code{"cells"}. Indicates the manner in which distances are calculated for adding of cells:
 \itemize{
@@ -48,7 +51,7 @@ Partial matching is used and case is ignored.}
 
 \item{background}{Numeric: Rasters -- Value to assign to cells that are not \code{NA} and not part of the buffer (default is 0).}
 
-\item{lowMemory}{Logical: Rasters -- Only used if buffering a raster and \code{units} is not \code{"meters"}. If \code{FALSE} (default) use faster, memory-intensive procedure. If \code{TRUE} then use the slower, low-memory version. To help decide which to use, consider using the low-memory version on a system with 1 GB of RAM for a raster larger than about 32000x32000 cells, or for a system with  with 8 GB of RAM a raster larger than about 90000x90000 cells.}
+\item{lowMemory}{Logical: Rasters -- Only used if buffering a raster and \code{units} is not \code{"meters"}. If \code{FALSE} (default) use faster, memory-intensive procedure. If \code{TRUE} then use the slower, low-memory version. To help decide which to use, consider using the low-memory version on a system with 1 GB of RAM for a raster larger than about 32000 x 32000 cells, or for a system with  with 8 GB of RAM a raster larger than about 90000 x 90000 cells.}
 
 \item{capstyle, endCapStyle}{Character: Vectors -- Style for ending the "cap" of buffers around lines. Valid options include \code{"rounded"}, \code{"square"}, and "\code{flat}".}
 
