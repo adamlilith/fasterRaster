@@ -85,10 +85,13 @@
 
 
 <dt id="arg-unit">unit<a class="anchor" aria-label="anchor" href="#arg-unit"></a></dt>
-<dd><p>Character: Rasters – Indicates the units of <code>width</code>. Can be one of:</p>
-<p></p><div class="sourceCode"><pre><code><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="sc">*</span> <span class="st">`</span><span class="at">"cells"</span><span class="st">`</span><span class="sc">:</span> Units are numbers of cells.</span></code></pre><p></p></div><ul><li><p><code>"meters"</code> (default), <code>"metres"</code>, or <code>"m"</code>; <code>"kilometers"</code> or <code>"km"</code>; <code>"feet"</code> or <code>"ft"</code>; <code>"miles"</code> or <code>"mi"</code>; <code>"nautical miles"</code> or <code>"nmi"</code>.
-Partial matching is used and case is ignored.</p></li>
-</ul></dd>
+<dd><p>Character: Rasters – Indicates the units of <code>width</code>. Can be one of:</p><ul><li><p><code>"cells"</code>: Units are numbers of cells.</p></li>
+<li><p><code>"meters"</code> (default), <code>"metres"</code>, or <code>"m"</code></p></li>
+<li><p><code>"kilometers"</code> or <code>"km"</code></p></li>
+<li><p><code>"feet"</code> or <code>"ft"</code></p></li>
+<li><p><code>"miles"</code> or <code>"mi"</code></p></li>
+<li><p><code>"nautical miles"</code> or <code>"nmi"</code></p></li>
+</ul><p>Partial matching is used and case is ignored.</p></dd>
 
 
 <dt id="arg-method">method<a class="anchor" aria-label="anchor" href="#arg-method"></a></dt>
@@ -103,7 +106,7 @@ Partial matching is used and case is ignored.</p></li>
 
 
 <dt id="arg-lowmemory">lowMemory<a class="anchor" aria-label="anchor" href="#arg-lowmemory"></a></dt>
-<dd><p>Logical: Rasters – Only used if buffering a raster and <code>units</code> is not <code>"meters"</code>. If <code>FALSE</code> (default) use faster, memory-intensive procedure. If <code>TRUE</code> then use the slower, low-memory version. To help decide which to use, consider using the low-memory version on a system with 1 GB of RAM for a raster larger than about 32000x32000 cells, or for a system with  with 8 GB of RAM a raster larger than about 90000x90000 cells.</p></dd>
+<dd><p>Logical: Rasters – Only used if buffering a raster and <code>units</code> is not <code>"meters"</code>. If <code>FALSE</code> (default) use faster, memory-intensive procedure. If <code>TRUE</code> then use the slower, low-memory version. To help decide which to use, consider using the low-memory version on a system with 1 GB of RAM for a raster larger than about 32000 x 32000 cells, or for a system with  with 8 GB of RAM a raster larger than about 90000 x 90000 cells.</p></dd>
 
 
 <dt id="arg-capstyle-endcapstyle">capstyle, endCapStyle<a class="anchor" aria-label="anchor" href="#arg-capstyle-endcapstyle"></a></dt>
