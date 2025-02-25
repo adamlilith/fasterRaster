@@ -16,8 +16,13 @@
 #' 
 #' @param unit Character: Rasters -- Indicates the units of \code{width}. Can be one of:
 #'
-#' 	* `"cells"`: Units are numbers of cells.
-#'	* `"meters"` (default), `"metres"`, or `"m"`; `"kilometers"` or `"km"`; `"feet"` or `"ft"`; `"miles"` or `"mi"`; `"nautical miles"` or `"nmi"`.
+#' * `"cells"`: Units are numbers of cells.
+#' * `"meters"` (default), `"metres"`, or `"m"`
+#' * `"kilometers"` or `"km"`
+#' * `"feet"` or `"ft"`
+#' * `"miles"` or `"mi"`
+#' * `"nautical miles"` or `"nmi"`
+#'
 #' Partial matching is used and case is ignored.
 #'
 #' @param method Character: Rasters -- Only used if `units` is `"cells"`. Indicates the manner in which distances are calculated for adding of cells:
@@ -27,7 +32,7 @@
 #'
 #' Partial matching is used and case is ignored.
 #'
-#' @param lowMemory Logical: Rasters -- Only used if buffering a raster and `units` is not `"meters"`. If `FALSE` (default) use faster, memory-intensive procedure. If `TRUE` then use the slower, low-memory version. To help decide which to use, consider using the low-memory version on a system with 1 GB of RAM for a raster larger than about 32000x32000 cells, or for a system with  with 8 GB of RAM a raster larger than about 90000x90000 cells.
+#' @param lowMemory Logical: Rasters -- Only used if buffering a raster and `units` is not `"meters"`. If `FALSE` (default) use faster, memory-intensive procedure. If `TRUE` then use the slower, low-memory version. To help decide which to use, consider using the low-memory version on a system with 1 GB of RAM for a raster larger than about 32000 x 32000 cells, or for a system with  with 8 GB of RAM a raster larger than about 90000 x 90000 cells.
 #'
 #' @param capstyle,endCapStyle Character: Vectors -- Style for ending the "cap" of buffers around lines. Valid options include `"rounded"`, `"square"`, and "`flat`".
 #'
@@ -74,7 +79,7 @@ methods::setMethod(
 		
 			methods <- c("euclidean", "manhattan", "maximum")
 			method <- tolower(method)
-			method <- omnibus::pmatchSafe(method, method)
+			method <- omnibus::pmatchSafe(method, method, nmax = 1L)
 
 			args <- list(
 				cmd = "r.grow",
@@ -90,14 +95,8 @@ methods::setMethod(
 		### buffering by distance
 		} else {
 		
-			if (lowMemory) {
-				fx <- "r.buffer.lowmem"
-			} else {
-				fx <- "r.buffer"
-			}
-
 			args <- list(
-				cmd = ifelse (lowMemory, "r.buffer.lowmem", "r.buffer"),
+				cmd = ifelse(lowMemory, "r.buffer.lowmem", "r.buffer"),
 				input = sources(x)[i],
 				output = srcBuffer,
 				distances = width,
