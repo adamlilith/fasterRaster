@@ -4,10 +4,10 @@
 #'
 #' Calling this function inside another function's environment and defining `x` as `"*"` can be very **dangerous**, as it will detect objects outside of that environment, and thus delete any rasters/vectors outside that environment. Here is a guide:
 #' * To delete files associated with a single `GRaster` or `GVector`, use `mow(GRaster_to_unlink)` or `mow(GVector_to_unlink)`.
-# * To delete files associated with more than one `GRaster`s and/or `GVector`s, provide them as a list. For example, use `mow(list(GRaster_to_unlink, GVector_to_unlink))`.
-#' To remove all rasters, all vectors, or all rasters and vectors in the **GRASS** cache that are not linked to a `GRaster` or `GVector`, use `mow("*")`.
-#' To remove all rasters or all vectors in the **GRASS** cache, use `mow("*", type = "rasters")` or `mow("*", type = "vectors")`.
-#' To remove all rasters or all vectors in the **GRASS** cache *except* for certain ones, use `mow("*", unlinked = FALSE, keep = list(GRaster_to_keep, GVector_to_keep))`. You can combine this with the `keep` argument to retain specific rasters or vectors. For example, you can use `mow("*", unlinked = FALSE, type = "rasters", keep = list(GRaster_to_keep))`.
+#' * To delete files associated with more than one `GRaster`s and/or `GVector`s, provide them as a list. For example, use `mow(list(GRaster_to_unlink, GVector_to_unlink))`.
+#' * To remove all rasters, all vectors, or all rasters and vectors in the **GRASS** cache that are not linked to a `GRaster` or `GVector`, use `mow("*")`.
+#' * To remove all rasters or all vectors in the **GRASS** cache, use `mow("*", type = "rasters")` or `mow("*", type = "vectors")`.
+#' * To remove all rasters or all vectors in the **GRASS** cache *except* for certain ones, use `mow("*", keep = list(GRaster_to_keep, GVector_to_keep))`. You can combine this with the `keep` argument to retain specific rasters or vectors. For example, you can use `mow("*", type = "rasters", keep = list(GRaster_to_keep))`.
 #'
 #' @param x Any of:
 #' * `"unlinked"` (default): Delete **GRASS** rasters and/or vectors that are unlinked to `GRaster`s or `GVector`s in the environment in which the function was called, or the environment named in `pos`.
