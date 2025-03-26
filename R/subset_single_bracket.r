@@ -190,7 +190,8 @@ methods::setMethod(
 			}
 
 			do.call(rgrass::execGRASS, args = args)
-			src <- .vRecat(src, gtype = gtype, cats = keepCats)
+			# src <- .vRecat(src, gtype = gtype, cats = keepCats) # using cats argument removes some point geometries!!!
+			src <- .vRecat(src, gtype = gtype) # retains all point geometries
 
 # 				srcs <- character()
 # 				trim <- TRUE
