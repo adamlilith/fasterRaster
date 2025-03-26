@@ -37,6 +37,17 @@ methods::setMethod(
 	} # EOF
 )
 
+
+## Error on install: "the method for function 'dim' and signature x="missing" is sealed and cannot be re-defined"
+# #' @aliases dim
+# #' @rdname dim
+# #' @exportMethod dim
+# methods::setMethod(
+	# f = "dim",
+	# signature = "missing",
+	# definition = function(x) .region()@dimensions[1L:2L]
+# )
+
 #' @aliases dim3d
 #' @rdname dim
 #' @exportMethod dim3d
