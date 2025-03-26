@@ -41,9 +41,10 @@ Invisibly returns a named vector with the number of rasters and vectors deleted.
 Calling this function inside another function's environment and defining \code{x} as \code{"*"} can be very \strong{dangerous}, as it will detect objects outside of that environment, and thus delete any rasters/vectors outside that environment. Here is a guide:
 \itemize{
 \item To delete files associated with a single \code{GRaster} or \code{GVector}, use \code{mow(GRaster_to_unlink)} or \code{mow(GVector_to_unlink)}.
-To remove all rasters, all vectors, or all rasters and vectors in the \strong{GRASS} cache that are not linked to a \code{GRaster} or \code{GVector}, use \code{mow("*")}.
-To remove all rasters or all vectors in the \strong{GRASS} cache, use \code{mow("*", type = "rasters")} or \code{mow("*", type = "vectors")}.
-To remove all rasters or all vectors in the \strong{GRASS} cache \emph{except} for certain ones, use \code{mow("*", unlinked = FALSE, keep = list(GRaster_to_keep, GVector_to_keep))}. You can combine this with the \code{keep} argument to retain specific rasters or vectors. For example, you can use \code{mow("*", unlinked = FALSE, type = "rasters", keep = list(GRaster_to_keep))}.
+\item To delete files associated with more than one \code{GRaster}s and/or \code{GVector}s, provide them as a list. For example, use \code{mow(list(GRaster_to_unlink, GVector_to_unlink))}.
+\item To remove all rasters, all vectors, or all rasters and vectors in the \strong{GRASS} cache that are not linked to a \code{GRaster} or \code{GVector}, use \code{mow("*")}.
+\item To remove all rasters or all vectors in the \strong{GRASS} cache, use \code{mow("*", type = "rasters")} or \code{mow("*", type = "vectors")}.
+\item To remove all rasters or all vectors in the \strong{GRASS} cache \emph{except} for certain ones, use \code{mow("*", keep = list(GRaster_to_keep, GVector_to_keep))}. You can combine this with the \code{keep} argument to retain specific rasters or vectors. For example, you can use \code{mow("*", type = "rasters", keep = list(GRaster_to_keep))}.
 }
 }
 \examples{
