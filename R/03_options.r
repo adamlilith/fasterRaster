@@ -185,6 +185,7 @@ faster <- function(
 
 	if (any(names(opts) %in% "debug")) {
 		info <- rgrass::set.echoCmdOption(.fasterRaster$options$debug)
+		info <- rgrass::set.echoCmdOption(value = .fasterRaster$options$debug)
 	}
 
 	invisible(out)
