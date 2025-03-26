@@ -17,7 +17,7 @@ GRasters can represent categorical data (see vignette(&quot;GRasters&quot;, pack
 
     <a class="navbar-brand me-2" href="../index.html">fasterRaster</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">8.4.0.5</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">8.4.0.6</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -59,7 +59,7 @@ GRasters can represent categorical data (see vignette(&quot;GRasters&quot;, pack
     </div>
 
     <div class="ref-description section level2">
-    <p><code>addCats()</code> and <code>addCats()&lt;-</code> add information to a categorical`GRaster's "levels" table.</p><ul><li><p>addCats()` uses <code><a href="https://rdrr.io/pkg/data.table/man/merge.html" class="external-link">data.table::merge()</a></code> or <code><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind()</a></code> to do this–it does not add new rows, but rather new columns.</p></li>
+    <p><code>addCats()</code> and <code>addCats()&lt;-</code> add information to a categorical`GRaster's "levels" table.</p><ul><li><p>addCats()` uses <code><a href="https://rdatatable.gitlab.io/data.table/reference/merge.html" class="external-link">data.table::merge()</a></code> or <code><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind()</a></code> to do this–it does not add new rows, but rather new columns.</p></li>
 <li><p><code>addCats()&lt;-</code> uses <code><a href="rbind.html">rbind()</a></code> to add new categories (rows) to the "levels" table.</p></li>
 </ul><p>GRaster<code>s can represent categorical data (see </code>vignette("GRasters", package = "fasterRaster")<code>). Cell values are actually integers, each corresponding to a category, such as "desert" or "wetland." A categorical raster is associated with a "levels" table that matches each value to a category name. The table must be </code>NULL` (i.e., no categories–so not a categorical raster), or have at least two columns. The first column must have integers and represent raster values. One or more subsequent columns must have category labels. The column with these labels is the "active category".</p>
     </div>
@@ -86,7 +86,7 @@ GRasters can represent categorical data (see vignette(&quot;GRasters&quot;, pack
 
 
 <dt id="arg-merge">merge<a class="anchor" aria-label="anchor" href="#arg-merge"></a></dt>
-<dd><p>Logical (function <code>addCats()</code>): If <code>FALSE</code> (default), columns will be combined with the existing "levels" table using <code><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind()</a></code>. If <code>TRUE</code>, they will be combined using <code><a href="https://rdrr.io/pkg/data.table/man/merge.html" class="external-link">data.table::merge()</a></code>.</p></dd>
+<dd><p>Logical (function <code>addCats()</code>): If <code>FALSE</code> (default), columns will be combined with the existing "levels" table using <code><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind()</a></code>. If <code>TRUE</code>, they will be combined using <code><a href="https://rdatatable.gitlab.io/data.table/reference/merge.html" class="external-link">data.table::merge()</a></code>.</p></dd>
 
 
 <dt id="arg-layer">layer<a class="anchor" aria-label="anchor" href="#arg-layer"></a></dt>
