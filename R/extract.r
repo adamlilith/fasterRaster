@@ -689,7 +689,7 @@ methods::setMethod(
     dtype = NULL,
     levels = NULL,
     cats = TRUE,
-    verbose = TRUE
+    verbose = FALSE
 ) {
 
     if (inherits(x, "GRaster")) {
