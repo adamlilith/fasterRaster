@@ -1,3 +1,8 @@
+# fasterRaster 8.4.0.6 (2025-03-26)
+o `faster(debug = TRUE)` displays the **GRASS** command for each **GRASS** module called in a **fasterRaster** function.  
+o `GVector[i]` works for cases with long `i`s.  
+o Fixes to help pages.  
+
 # fasterRaster 8.4.0.5 (2025-02-25)
 o Added vignette "3-dimensional objects".  
 o `[` is faster.  
