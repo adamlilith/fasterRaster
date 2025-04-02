@@ -198,7 +198,7 @@ methods::setMethod(
 				flags = c(.quiet(), "overwrite", "o") # overriding projection check!
 			)
 			
-			if (!.exists(src)) stop("Raster not loaded. You may need to use an absolute (not relative) file path.")
+			if (!.exists(src)) stop("Raster not loaded. Check the file name. You may need to use an absolute (not relative) file path.")
 			if (nLayers > 1L) src <- paste0(src, ".", seq_len(nLayers))
 
 			### raster levels
@@ -217,15 +217,16 @@ methods::setMethod(
 					levelsFileExt <- .fileExt(x)
 					levelsFileName <- substr(levelsFileName, 1L, nchar(x) - nchar(levelsFileExt))
 
-					extensions <- c("rds", "RDS", "rdata", "RData", "rda", "RDa", "Rda", "Rdat", "rdat", "RDat", "csv", "CSV", "tab", "TAB")
+					# extensions <- c("rds", "RDS", "rdata", "RData", "rda", "RDa", "Rda", "Rdat", "rdat", "RDat", "csv", "CSV", "tab", "TAB")
+					extensions <- c("rds", "rdata", "rda", "rdat", "csv", "tab")
 					levelsFileNames <- paste0(levelsFileName, extensions)
 
 					fileExists <- file.exists(levelsFileNames)
 					if (any(fileExists)) {
 					
-						if (sum(fileExists) > 1L) warning("More than one `levels` file found. Only the first will be used.")
-						levelsFileName <- levelsFileNames[fileExists[1L]]
-						extension <- .fileExt(x)
+						# if (sum(fileExists) > 1L) warning("More than one `levels` file found. Only the first will be used.")
+						levelsFileName <- levelsFileNames[fileExists]
+						extension <- extensions[fileExists]
 
 						if (tolower(extension) == "rds") {
 							levels <- readRDS(levelsFileName)
