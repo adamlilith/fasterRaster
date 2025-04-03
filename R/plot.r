@@ -18,8 +18,6 @@
 #'
 #' @seealso [terra::plot()]
 #'
-#' @importFrom rpanel rp.screenresolution
-#'
 #' @example man/examples/ex_plot.r
 #'
 #' @aliases plot
@@ -33,9 +31,10 @@ methods::setMethod(
 	# simplify
 	if (simplify & !is.3d(x)) {
 		
-		screenRes <- rpanel::rp.screenresolution()
-		screenWidth <- screenRes$width
-		screenHeight <- screenRes$height
+		# screenRes <- rpanel::rp.screenresolution()
+		screenRes <- omnibus::screenRes()
+		screenWidth <- screenRes[["width"]]
+		screenHeight <- screenRes[["width"]]
 
 		rows <- nrow(x)
 		cols <- ncol(x)
