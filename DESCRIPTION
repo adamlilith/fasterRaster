@@ -1,8 +1,8 @@
 Package: fasterRaster
 Type: Package
 Title: Faster Raster and Spatial Vector Processing Using 'GRASS GIS'
-Version: 8.4.0.6
-Date: 2025-03-26
+Version: 8.4.0.7
+Date: 2025-04-24
 Authors@R: 
 	c(
 		person(
@@ -29,9 +29,8 @@ Imports:
 	graphics,
 	grDevices,
 	methods,
-	omnibus (>= 1.2.11),
+	omnibus (>= 1.2.15),
 	rgrass (>= 0.3-9),
-	rpanel,
 	sf,
 	shiny,
 	terra (>= 1.7),
