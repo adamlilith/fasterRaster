@@ -333,7 +333,7 @@ methods::setMethod(
 
 	# maximum number of fields to show
 	maxFieldsToShow <- 8L
-  	maxColWidth <- 15L
+  	maxColWidth <- 17L
 	maxDigits <- 5L
 
 	debug <- faster("debug")
