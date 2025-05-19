@@ -3,7 +3,7 @@
 #' @description
 #' This function saves a `GRaster` to disk directly from a **GRASS** session. It is faster than using [rast()], then saving the output of that to disk (because `rast()` actually save the raster to disk, anyway).
 #'
-#' The function will attempt to ascertain the file type to be ascertained from the file extension, but you can specify the format using the `format` argument (see entry for `...`). You can see a list of supported formats by simply using this function with no arguments, as in `writeRaster()`, or by consulting the online help page for the **GRASS** module `r.out.gdal` (see `grassHelp("r.out.gdal")`). Only the `GeoTIFF` file format is guaranteed to work for multi-layered rasters.
+#' The function will attempt to ascertain the file type to be ascertained from the file extension, but you can specify the format using the `format` argument (see entry for `...`). You can see a list of supported formats by simply using this function with no arguments, as in `writeRaster()`, or by consulting the online help page for the **GRASS** tool `r.out.gdal` (see `grassHelp("r.out.gdal")`). Only the `GeoTIFF` file format is guaranteed to work for multi-layered rasters.
 #'
 #' The function will attempt to optimize the `datatype` argument, but this can take a long time. You can speed this up by setting `datatype` manually. Note that if you are saving a "stack" of `GRaster`s with different `datatype`s, the one with the highest information density will be used (e.g., low-bit integer < high-bit integer < floating-point < double-floating point). This can make rasters with lower datatypes much larger on disk. In these cases, it make be best to save rasters with similar `datatype`s together.
 #'
@@ -45,7 +45,7 @@
 #'
 #' @param ... Additional arguments. These can include:
 #' * `bigTiff`: Logical: If `TRUE`, and the file format is a GeoTIFF and would be larger than 4 GB (regardless of compression), then the file will be saved in BIGTIFF format.
-#' * `format`: Character, indicating file format. This is usually ascertained from the file extension, but in case this fails, it can be stated explicitly. When using other formats, you may have to specify the `createopts` argument, too (see help page for **GRASS** module `r.out.gdal`). Two common formats include:
+#' * `format`: Character, indicating file format. This is usually ascertained from the file extension, but in case this fails, it can be stated explicitly. When using other formats, you may have to specify the `createopts` argument, too (see help page for **GRASS** tool `r.out.gdal`). Two common formats include:
 #'    * `"GTiff"` (default): GeoTIFF `filename` ends in `.tif`.
 #'    * `"ASC"`: ASCII `filename` ends in `.asc`
 #' * Additional arguments to send to **GRASS** modules `r.out.gdal` and `r.out.ascii`.
@@ -53,7 +53,7 @@
 #'
 #' @returns A `GRaster` (invisibly). A raster is also saved to disk.
 #'
-#' @seealso [terra::writeRaster()], **GRASS** module `r.out.gdal` (see `grassHelp("r.out.gdal")`)
+#' @seealso [terra::writeRaster()], **GRASS** tool `r.out.gdal` (see `grassHelp("r.out.gdal")`)
 #'
 #' @example man/examples/ex_writeRaster.r
 #'

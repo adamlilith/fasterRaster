@@ -1,6 +1,6 @@
 #' Create stream network
 #'
-#' @description This function estimates the course of streams and rivers from an elevation raster. It is based on the **GRASS** module `r.stream.extract`, where more details can be found (see `grassHelp("r.stream.extract")`)
+#' @description This function estimates the course of streams and rivers from an elevation raster. It is based on the **GRASS** tool `r.stream.extract`, where more details can be found (see `grassHelp("r.stream.extract")`)
 #'
 #' @param x A `GRaster` representing elevation.
 #'
@@ -20,7 +20,7 @@
 #'
 #' @example man/examples/ex_streams.r
 #'
-#' @seealso [flow()], [flowPath()], **GRASS** manual for module `r.stream.extract` (see `grassHelp("r.stream.extract")`)
+#' @seealso [flow()], [flowPath()], **GRASS** manual for tool `r.stream.extract` (see `grassHelp("r.stream.extract")`)
 #'
 #' @aliases streams
 #' @rdname streams

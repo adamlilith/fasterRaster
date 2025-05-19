@@ -20,7 +20,7 @@
 #'
 #' @example man/examples/ex_randRast.r
 #' 
-#' @seealso [rnormRast()], [fractalRast()], [runifRast()], **GRASS** manual page for module `r.random.surface` (see `grassHelp("r.random.surface")`)
+#' @seealso [rnormRast()], [fractalRast()], [runifRast()], **GRASS** manual page for tool `r.random.surface` (see `grassHelp("r.random.surface")`)
 #'
 #' @aliases rSpatialDepRast
 #' @rdname rSpatialDepRast

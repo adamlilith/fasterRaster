@@ -16,7 +16,7 @@ knitr::opts_chunk$set(
 )
 fig.path = 'man/figures/'
 ```
-**GRASS** comes with a default set of modules (functions), but users can download and install "addon" modules to extend its capabilities. Some of the functions in **fasterRaster** rely on these addon modules. To make these functions work, you must find the folder in which addons are stored and install the desired module.
+**GRASS** comes with a default set of modules (functions), but users can download and install "addon" modules to extend its capabilities. Some of the functions in **fasterRaster** rely on these addon modules. To make these functions work, you must find the folder in which addons are stored and install the desired tool.
 
 1. Installing modules: The easiest (only?) way to do this is to start **GRASS** (not in **R** through **fasterRaster**, but actually start **GRASS**), then use the `Settings` menu's `Addon extensions` option, then select `Install extensions from addons [g.extension]`. **GRASS** should display a list of addons you can install.
 
@@ -29,7 +29,7 @@ C:/Users/your_windows_user_name/AppData/Roaming/GRASS8/addons
 You can set the addons folder using `faster(addonsDir = "C:/Users/your_windows_user_name/AppData/Roaming/GRASS8/addons")`.
 
 ## Validating addons
-You can test to see if the `addons` folder is correct using `addons()`. You can also see if a particular addon module was installed correctly using the same function using, for example, `addons("v.centerpoint")`.
+You can test to see if the `addons` folder is correct using `addons()`. You can also see if a particular addon tool was installed correctly using the same function using, for example, `addons("v.centerpoint")`.
 
 ## **fasterRaster** functions that need addons
 These functions must have the specified addon to work.

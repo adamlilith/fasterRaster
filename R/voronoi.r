@@ -7,7 +7,7 @@
 #'
 #' @returns A `GVector`.
 #'
-#' @seealso [terra::voronoi()], [sf::st_voronoi()], module `v.voronoi` in **GRASS**
+#' @seealso [terra::voronoi()], [sf::st_voronoi()], tool `v.voronoi` in **GRASS**
 #'
 #' @example man/examples/ex_delaunay_voronoi.r
 #'

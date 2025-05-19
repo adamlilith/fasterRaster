@@ -7,7 +7,7 @@
 #'
 #' @returns A `GVector` with a data table that has the length of each connecting line in meters.
 #' 
-#' @seealso **GRASS** manual for module `v.distance` (see `grassHelp("v.distance")`).
+#' @seealso **GRASS** manual for tool `v.distance` (see `grassHelp("v.distance")`).
 #'
 #' @example man/examples/ex_connectors.r
 #'

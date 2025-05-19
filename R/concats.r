@@ -25,7 +25,7 @@
 #'
 #' @example man/examples/ex_GRaster_categorical.r
 #'
-#' @seealso [combineLevels()], [terra::concats()], `vignette("GRasters", package = "fasterRaster")`, **GRASS** manual page for module `r.cross` (see `grassHelp("r.cross")`)
+#' @seealso [combineLevels()], [terra::concats()], `vignette("GRasters", package = "fasterRaster")`, **GRASS** manual page for tool `r.cross` (see `grassHelp("r.cross")`)
 #'
 #' @aliases concats
 #' @rdname concats

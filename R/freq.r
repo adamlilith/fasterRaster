@@ -12,7 +12,7 @@
 #'
 #' @returns A `data.frame` or a named `list` of `data.frame`s, one per layer in `x`.
 #'
-#' @seealso [terra::freq()], module `r.stats` in **GRASS**
+#' @seealso [terra::freq()], tool `r.stats` in **GRASS**
 #'
 #' @example man/examples/ex_freq.r
 #'

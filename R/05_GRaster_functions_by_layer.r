@@ -383,7 +383,7 @@ setMethod(
 )
 
 #' Generic trigonometry function
-#' @param fx	Character: Name of the function in **GRASS** module `r.series`.
+#' @param fx	Character: Name of the function in **GRASS** tool `r.series`.
 #' @param x		A `GRaster`.
 #' @noRd
 .genericTrig <- function(fx, x) {
@@ -409,7 +409,7 @@ setMethod(
 }
 
 #' Generic "arc"-trigonometry function
-#' @param fx	Character: Name of the function in **GRASS** module `r.series`.
+#' @param fx	Character: Name of the function in **GRASS** tool `r.series`.
 #' @param x		A `GRaster`.
 #' @noRd
 .genericArcTrig <- function(fx, x) {
@@ -435,7 +435,7 @@ setMethod(
 }
 
 #' Generic function with one input (the GRaster)
-#' @param fx	Character: Name of the function in **GRASS** module `r.series`.
+#' @param fx	Character: Name of the function in **GRASS** tool `r.series`.
 #' @param x		A `GRaster`.
 #' @noRd
 .genericRastFx <- function(fx, x) {
@@ -464,7 +464,7 @@ setMethod(
 }
 
 #' Generic function with two inputs (GRaster and a numeric)
-#' @param fx	Character: Name of the function in **GRASS** module `r.series`.
+#' @param fx	Character: Name of the function in **GRASS** tool `r.series`.
 #' @param x		A `GRaster`.
 #' @param y		A numeric.
 #' @noRd

@@ -125,7 +125,7 @@ methods::setMethod(
 #' 
 #' @returns An object of class `prcomp`.
 #' 
-#' @seealso [princomp()], [terra::princomp()], module `i.pca` in **GRASS**
+#' @seealso [princomp()], [terra::princomp()], tool `i.pca` in **GRASS**
 #' 
 #' @example man/examples/ex_princomp.r
 #'

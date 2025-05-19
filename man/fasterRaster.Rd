@@ -4,9 +4,9 @@
 \name{fasterRaster}
 \alias{fasterRaster-package}
 \alias{fasterRaster}
-\title{"fasterRaster": Faster raster and spatial vector processing using "GRASS GIS"}
+\title{"fasterRaster": Faster raster and spatial vector processing using "GRASS"}
 \description{
-\strong{fasterRaster}: Processing of large-in-memory/-on disk rasters and spatial vectors in using \strong{GRASS GIS}. Most functions in the \strong{terra} and \strong{sf} packages are recreated. Processing of medium-sized and smaller spatial objects will nearly always be faster using \strong{terra} or \strong{sf}. To use most of the functions you must have the stand-alone version of \strong{GRASS GIS} version 8.3 or higher (not the \strong{OSGeoW4} installer version). Note that due to differences in how \strong{GRASS}, \strong{terra}, and \strong{sf} were implemented, results will not always be strictly comparable between functions for the same operation.
+\strong{fasterRaster}: Processing of large-in-memory/-on disk rasters and spatial vectors in using \strong{GRASS}. Most functions in the \strong{terra} and \strong{sf} packages are recreated. Processing of medium-sized and smaller spatial objects will nearly always be faster using \strong{terra} or \strong{sf}. To use most of the functions you must have the stand-alone version of \strong{GRASS} version 8.3 or higher (not the \strong{OSGeoW4} installer version). Note that due to differences in how \strong{GRASS}, \strong{terra}, and \strong{sf} were implemented, results will not always be strictly comparable between functions for the same operation.
 \subsection{Most useful tutorials and functions:}{
 \itemize{
 \item The quick-start guide to getting started with \strong{fasterRaster}: \code{vignette("fasterRaster", package = "fasterRaster")}:

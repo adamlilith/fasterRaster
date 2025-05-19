@@ -14,7 +14,7 @@
 #'
 #' @example man/examples/ex_plot.r
 #'
-#' @seealso [plotRGB()], [terra::plotRGB()], **GRASS** manual page for module `r.composite` (see `grassHelp("r.composite")`)
+#' @seealso [plotRGB()], [terra::plotRGB()], **GRASS** manual page for tool `r.composite` (see `grassHelp("r.composite")`)
 #'
 #' @aliases compositeRGB
 #' @rdname compositeRGB

@@ -4,7 +4,7 @@ if (grassStarted()) {
 ao <- addons(fail = "warning")
 if (ao) print("Addons is folder is probably correctly specified.")
 
-# Does this particular module exist?
+# Does this particular tool exist?
 addon <- "v.centerpoint"
 exten <- addons(addon, fail = FALSE)
 

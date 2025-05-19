@@ -14,7 +14,7 @@
 #'
 #' @returns A `GRaster`.
 #'
-#' @seealso [terra::interpIDW()], [interpSplines()], [fillNAs()], **GRASS** module `v.surf.idw` (se `grassHelp("v.surf.idw")`)
+#' @seealso [terra::interpIDW()], [interpSplines()], [fillNAs()], **GRASS** tool `v.surf.idw` (se `grassHelp("v.surf.idw")`)
 #'
 #' @aliases interpIDW
 #' @rdname interpIDW

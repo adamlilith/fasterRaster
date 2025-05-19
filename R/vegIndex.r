@@ -21,7 +21,7 @@
 #' 
 #' @returns A `GRaster`.
 #' 
-#' @seealso **GRASS** manual page for module `i.vi` (see `grassHelp("i.vi")`)
+#' @seealso **GRASS** manual page for tool `i.vi` (see `grassHelp("i.vi")`)
 #' 
 #' @example man/examples/ex_vegIndex.r
 #' 

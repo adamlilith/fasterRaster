@@ -10,7 +10,7 @@
 #'
 #' @returns A `GRaster`.
 #'
-#' @seealso [terra::trim()], [extend()], and **GRASS** module `g.region`
+#' @seealso [terra::trim()], [extend()], and **GRASS** tool `g.region`
 #'
 #' @example man/examples/ex_trim.r
 #'

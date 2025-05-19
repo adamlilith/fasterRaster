@@ -27,7 +27,7 @@
 #'
 #' @example man/examples/ex_centroids.r
 #' 
-#' @seealso [terra::centroids()]; **GRASS** addon module `v.centerpoint`.
+#' @seealso [terra::centroids()]; **GRASS** addon tool `v.centerpoint`.
 #'
 #' @aliases centroids
 #' @rdname centroids

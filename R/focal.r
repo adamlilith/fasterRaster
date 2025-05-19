@@ -16,13 +16,13 @@
 #' * "`min`" or "`max`": Minimum or maximum. Should not use a weights matrix.
 #' * "`range`": Difference between the maximum and minimum.  Should not use a weights matrix.
 #' * "`sd`": Sample standard deviation.  NB: This is the same as the [stats::sd()] function.
-#' * "`sdpop`": Population standard deviation. NB: This is the same as the function "stddev" in the **GRASS** module `r.neighbors`.
+#' * "`sdpop`": Population standard deviation. NB: This is the same as the function "stddev" in the **GRASS** tool `r.neighbors`.
 #' * "`sum`": Sum of non-`NA`` cells.
 #' * "`count`": Number of non-`NA cells. Should not use a weights matrix.
 #' * "`var`": Sample variance.  NB: This is the same as the [stats::var()] function.
-#' * "`varpop`": Population variance. NB: This is the same as the function "variance" in the **GRASS** module `r.neighbors`.
+#' * "`varpop`": Population variance. NB: This is the same as the function "variance" in the **GRASS** tool `r.neighbors`.
 #' * "`nunique`": Number of unique values. Should not use a weights matrix.
-#' * "`interspersion`": Proportion of cells with values different from focal cell (e.g., if 6 of 8 cells have different values, then the interspersion is 6/8 = 0.75). NB: This is slightly different from how it is defined in the **GRASS** module `r.neighbors`. Should not use a weights matrix.
+#' * "`interspersion`": Proportion of cells with values different from focal cell (e.g., if 6 of 8 cells have different values, then the interspersion is 6/8 = 0.75). NB: This is slightly different from how it is defined in the **GRASS** tool `r.neighbors`. Should not use a weights matrix.
 #' * "`quantile`": Quantile of values. The value in argument `quantile` is used to specify the quantile.
 #' 
 #' The center cell value is always included in the calculations, and all calculations ignore `NA` cells (i.e., they do not count as cells in the focal neighborhood).
@@ -33,7 +33,7 @@
 #'
 #' @returns A `GRaster`.
 #' 
-#' @seealso [terra::focal()], **GRASS** manual page for module `r.neighbors` (see `grassHelp("r.neighbors")`)
+#' @seealso [terra::focal()], **GRASS** manual page for tool `r.neighbors` (see `grassHelp("r.neighbors")`)
 #' 
 #' @example man/examples/ex_focal.r
 #' 

@@ -4,7 +4,7 @@
 #'
 #' @param x A "points" `GVector`.
 #'
-#' @param method Character: Method used to identify clusters. Explanations of methods are provided in the help page for the **GRASS** module `v.cluster`, available using `grassHelp("v.cluster")`.
+#' @param method Character: Method used to identify clusters. Explanations of methods are provided in the help page for the **GRASS** tool `v.cluster`, available using `grassHelp("v.cluster")`.
 #' * `"DBSCAN"` (default): Density-Based Spatial Clustering of Applications with Noise. 
 #' * `"DBSCAN2"`: A modification of DBSCAN.
 #' * `"density"`: Cluster points by relative density.
@@ -19,7 +19,7 @@
 #'
 #' @returns A vector of integers indicating the cluster to which each point belongs.
 #'
-#' @seealso **GRASS** manual page for module `v.cluster` (see `grassHelp("v.cluster")`)
+#' @seealso **GRASS** manual page for tool `v.cluster` (see `grassHelp("v.cluster")`)
 #'
 #' @aliases clusterPoints
 #' @rdname clusterPoints

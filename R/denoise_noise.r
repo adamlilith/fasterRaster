@@ -12,7 +12,7 @@
 #' 
 #' @returns A multi-layer `GRaster` with one layer per input.
 #' 
-#' @seealso [princomp()], [stats::prcomp()], **GRASS** manual page for module `i.pca` (see `grassHelp("i.pca")`)
+#' @seealso [princomp()], [stats::prcomp()], **GRASS** manual page for tool `i.pca` (see `grassHelp("i.pca")`)
 #' 
 #' @example man/examples/ex_denoise_noise.r
 #' 

@@ -11,7 +11,7 @@
 #' * [fast()]: Convert a `SpatRaster`, `SpatVector`, or `sf` vector to **fasterRaster**'s raster format (`GRaster`s) or vector format (`GVector`s), or load one from a file
 #' * [rast()], [vect()], and [st_as_sf()]: Convert `GRaster`s and `GVector`s to `SpatRaster`s, `SpatVector`s, or `sf` vectors
 #' * [writeRaster()] and [writeVector()]: Save `GRaster`s or `GVector`s to disk
-#' * [addons()]: Test if the `addons` directory is correct and if a particular addon **GRASS** module is installed.
+#' * [addons()]: Test if the `addons` directory is correct and if a particular addon **GRASS** tool is installed.
 #'
 #' ## Properties of `GRasters`
 #' * [crs()]: Coordinate reference system
@@ -286,7 +286,7 @@
 #' * [compareGeom()]: Determine if geographic metadata is same between `GRaster`s and/or `GVector`s
 #' * [dropRows()]: Remove rows from a `data.frame` or `data.table`
 #' * [grassGUI()]: Start the **GRASS** GUI (not recommended for most users!!!)
-#' * [grassHelp()]: Open the help page for a **GRASS** module.
+#' * [grassHelp()]: Open the help page for a **GRASS** tool.
 #' * [grassInfo()]: **GRASS** version and citation
 #' * [grassStarted()]: Has a connection **GRASS** been made within the current **R** session?
 #' * [mow()]: Remove unused rasters and vectors from the **GRASS** cache

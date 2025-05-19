@@ -2,7 +2,7 @@
 o Removed dependency on **rpanel** because its dependency on **tclk** did not work with **Docker** images. Replaced with version dependency on **omnibus**'s `screenRes()` function.  
 
 # fasterRaster 8.4.0.6 (2025-03-26)
-o `faster(debug = TRUE)` displays the **GRASS** command for each **GRASS** module called in a **fasterRaster** function.  
+o `faster(debug = TRUE)` displays the **GRASS** command for each **GRASS** tool called in a **fasterRaster** function.  
 o `GVector[i]` works for cases with long `i`s.  
 o Fixes to help pages.  
 
@@ -84,7 +84,7 @@ o `pca()` has been renamed `princomp()`.
 ### Enhanced functionality and new functions
 o `extract()` now automatically projects a `GVector` to match the CRS of a `GRaster` from which extraction is being made.  
 o `grassGUI()` allows users to start the **GRASS** GUI.  
-o `grassHelp()` shows the manual page for a **GRASS** module.  
+o `grassHelp()` shows the manual page for a **GRASS** tool.  
 o `layerIndex()` allows a `negate` argument to get the "opposite" indices of a `GRaster`.  
 o `init()` assigns to `GRaster` cells the value of their coordinates, rows, columns, or values in a regular or chessboard-like pattern.  
 o `regress()` replaces individual functions `intercept()`, `slope()`, `r2()`, and `tvalue()`.  
@@ -238,8 +238,8 @@ o `activeCat()`: Correct output when `names = TRUE`.
 o `expanse()`: Expanded list of units; correct assignation of units to **GRASS** unit format.  
 o `extract()`: Extracting from a `GRaster` to a `lines` or `polygons` `GVector` works.  
 o `fast()`: Fixed bug arising when reading vector saved by `writeRaster()`.  
-o + `global()`: Removed functions `"countNA"` and `"countNonNA"` from `global()` since **GRASS** module `r.report` can be mistaken.  
-o `nacell()` and `nonnacell()`: Correct (but slow~~~) reporting of `NA` and non-`NA` cells (workaround of error in **GRASS**'s `r.report` module).
+o + `global()`: Removed functions `"countNA"` and `"countNonNA"` from `global()` since **GRASS** tool `r.report` can be mistaken.  
+o `nacell()` and `nonnacell()`: Correct (but slow~~~) reporting of `NA` and non-`NA` cells (workaround of error in **GRASS**'s `r.report` tool).
 
 # fasterRaster 8.3.0.7016 (2024-05-27)
 

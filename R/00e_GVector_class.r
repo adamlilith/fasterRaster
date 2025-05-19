@@ -54,7 +54,7 @@ methods::setValidity("GVector",
 #'
 #' @param table A `data.table`, `data.frame`, `GVector` with a table, or character. This can be `data.table(NULL)` or `data.frame(NULL)` if there is no table associated with the vector. If a character, this is interpreted as the name of the table in **GRASS**.
 #'
-#' @param build Logical: If `TRUE` (default), build topology using **GRASS** module `v.build`.
+#' @param build Logical: If `TRUE` (default), build topology using **GRASS** tool `v.build`.
 #'
 #' @param extensive Logical: If `TRUE`, do extensive topological checks using `v.build`. The default is `FALSE`.
 #'

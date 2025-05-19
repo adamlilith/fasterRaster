@@ -64,8 +64,8 @@ fig.path = 'man/figures/'
 * `.locationFind()`: Find a specific **GRASS** "location" that already exists
 * `.locationRestore()` Reconnect **GRASS** to a previously-created **GRASS** "location"
 * `.locations()`: List of all available "locations"
-* `.g.proj()`: Runs **GRASS** `g.proj` module to display projection of current "project"
-* `.g.region()`: Runs **GRASS** `g.region` module to display region of current "project"
+* `.g.proj()`: Runs **GRASS** `g.proj` tool to display projection of current "project"
+* `.g.region()`: Runs **GRASS** `g.region` tool to display region of current "project"
 * `.mapset()`: **GRASS** "mapset" of an object or the active session
 
 ## **GRASS** "regions"

@@ -28,7 +28,7 @@
 #'
 #' Otherwise, if `h` is `NULL`, then the value will be arbitrarily set at 1/5th of the shorter of the distance of the x- and y-extent of the points.
 #'
-#' @seealso **GRASS** manual page for module `v.kernel` (see `grassHelp("v.kernel")`)
+#' @seealso **GRASS** manual page for tool `v.kernel` (see `grassHelp("v.kernel")`)
 #'
 #' @returns A `GRaster`.
 #'

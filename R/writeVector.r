@@ -2,7 +2,7 @@
 #'
 #' @description This function saves a `GVector` to disk directly from a **GRASS** session.
 #'
-#' By default, files will be of OGC GeoPackage format (extension "`.gpkg`"), but this can be changed with the `format` argument. You can see a list of supported formats by simply using this function with no arguments, as in `writeVector()`, or by consulting the online help page for **GRASS** module `v.out.ogr` (see `grassHelp("v.out.ogr")`).
+#' By default, files will be of OGC GeoPackage format (extension "`.gpkg`"), but this can be changed with the `format` argument. You can see a list of supported formats by simply using this function with no arguments, as in `writeVector()`, or by consulting the online help page for **GRASS** tool `v.out.ogr` (see `grassHelp("v.out.ogr")`).
 #'
 #' Note that if the vector has a data table attached and at least one numeric or integer column has an `NA` or `NaN` value, the function will yield a warning like:
 #' ```
@@ -27,15 +27,15 @@
 #'
 #' @param attachTable Logical: If `TRUE` (default), attach the attribute to table to the vector before saving it. If `FALSE`, the attribute table will not be attached.
 #'
-#' @param ... Additional arguments to send to **GRASS** module `v.out.ogr` (see `grassHelp("v.out.ogr")`).
+#' @param ... Additional arguments to send to **GRASS** tool `v.out.ogr` (see `grassHelp("v.out.ogr")`).
 #'
 #' @returns Invisibly returns a `GRaster` (the input, `x`). Also saves the vector to disk.
 #'
-#' @seealso [terra::writeVector()], [sf::st_write()], **GRASS** module `v.out.ogr` (see `grassHelp("v.out.ogr")`)
+#' @seealso [terra::writeVector()], [sf::st_write()], **GRASS** tool `v.out.ogr` (see `grassHelp("v.out.ogr")`)
 #'
 #' @example man/examples/ex_writeVector.r
 #'
-#' @seealso [terra::writeVector()], the **GRASS** module manual page for `v.out.ogr` (see `grassHelp("v.out.ogr")`)
+#' @seealso [terra::writeVector()], the **GRASS** tool manual page for `v.out.ogr` (see `grassHelp("v.out.ogr")`)
 #'
 #' @aliases writeVector
 #' @rdname writeVector

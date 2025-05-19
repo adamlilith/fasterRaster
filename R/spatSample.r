@@ -26,7 +26,7 @@
 #'
 #' @returns A `data.frame`, `data.table`, or `GVector`.
 #' 
-#' @seealso [sampleRast()], [terra::spatSample()], module `v.random` in **GRASS**
+#' @seealso [sampleRast()], [terra::spatSample()], tool `v.random` in **GRASS**
 #'
 #' @example man/examples/ex_sampleRast_spatSample.r
 #'

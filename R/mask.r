@@ -14,7 +14,7 @@
 #' 
 #' @returns A `GRaster`.
 #' 
-#' @seealso [terra::mask()], **GRASS** module `r.mask` 
+#' @seealso [terra::mask()], **GRASS** tool `r.mask` 
 #'
 #' @example man/examples/ex_mask.r
 #' 
