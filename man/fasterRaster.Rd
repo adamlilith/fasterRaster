@@ -17,7 +17,7 @@
 \item \code{\link[=fast]{fast()}}: Convert a \code{SpatRaster}, \code{SpatVector}, or \code{sf} vector to \strong{fasterRaster}'s raster format (\code{GRaster}s) or vector format (\code{GVector}s), or load one from a file
 \item \code{\link[=rast]{rast()}}, \code{\link[=vect]{vect()}}, and \code{\link[=st_as_sf]{st_as_sf()}}: Convert \code{GRaster}s and \code{GVector}s to \code{SpatRaster}s, \code{SpatVector}s, or \code{sf} vectors
 \item \code{\link[=writeRaster]{writeRaster()}} and \code{\link[=writeVector]{writeVector()}}: Save \code{GRaster}s or \code{GVector}s to disk
-\item \code{\link[=addons]{addons()}}: Test if the \code{addons} directory is correct and if a particular addon \strong{GRASS} module is installed.
+\item \code{\link[=addons]{addons()}}: Test if the \code{addons} directory is correct and if a particular addon \strong{GRASS} tool is installed.
 }
 }
 
@@ -343,7 +343,7 @@ Operations on \code{GRaster}s
 \item \code{\link[=compareGeom]{compareGeom()}}: Determine if geographic metadata is same between \code{GRaster}s and/or \code{GVector}s
 \item \code{\link[=dropRows]{dropRows()}}: Remove rows from a \code{data.frame} or \code{data.table}
 \item \code{\link[=grassGUI]{grassGUI()}}: Start the \strong{GRASS} GUI (not recommended for most users!!!)
-\item \code{\link[=grassHelp]{grassHelp()}}: Open the help page for a \strong{GRASS} module.
+\item \code{\link[=grassHelp]{grassHelp()}}: Open the help page for a \strong{GRASS} tool.
 \item \code{\link[=grassInfo]{grassInfo()}}: \strong{GRASS} version and citation
 \item \code{\link[=grassStarted]{grassStarted()}}: Has a connection \strong{GRASS} been made within the current \strong{R} session?
 \item \code{\link[=mow]{mow()}}: Remove unused rasters and vectors from the \strong{GRASS} cache

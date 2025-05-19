@@ -7,7 +7,7 @@
 addons(x = NULL, fail = TRUE, verbose = TRUE)
 }
 \arguments{
-\item{x}{Either \code{NULL} or a character specifying the name of a \strong{GRASS} addons module. If \code{NULL}, the existence of the \code{addonsDir} (see \code{\link[=faster]{faster()}}) will be tested. If the module name is provided, the existence of the folder and module will be tested. The "\verb{/bin}" subfolder should not be included.}
+\item{x}{Either \code{NULL} or a character specifying the name of a \strong{GRASS} addons tool. If \code{NULL}, the existence of the \code{addonsDir} (see \code{\link[=faster]{faster()}}) will be tested. If the tool name is provided, the existence of the folder and tool will be tested. The "\verb{/bin}" subfolder should not be included.}
 
 \item{fail}{Logical: If \code{TRUE} (default), and the addons folder is not correctly specified, the exit the function with an error. If \code{FALSE}, then \code{NULL} will be returned with a warning.}
 
@@ -17,7 +17,7 @@ addons(x = NULL, fail = TRUE, verbose = TRUE)
 Logical.
 }
 \description{
-This function tests to see if the "addons" directory specified using \code{\link[=faster]{faster()}} actually exists, and if a particular \strong{GRASS} \verb{addons module is available. The }addons\verb{folder and module must exists for methods that rely on particular **GRASS**}addons\verb{to work. See}vignette("addons", package = "fasterRaster")`.
+This function tests to see if the "addons" directory specified using \code{\link[=faster]{faster()}} actually exists, and if a particular \strong{GRASS} \verb{addons tool is available. The }addons\verb{folder and tool must exists for methods that rely on particular **GRASS**}addons\verb{to work. See}vignette("addons", package = "fasterRaster")`.
 }
 \examples{
 if (grassStarted()) {
@@ -26,7 +26,7 @@ if (grassStarted()) {
 ao <- addons(fail = "warning")
 if (ao) print("Addons is folder is probably correctly specified.")
 
-# Does this particular module exist?
+# Does this particular tool exist?
 addon <- "v.centerpoint"
 exten <- addons(addon, fail = FALSE)
 

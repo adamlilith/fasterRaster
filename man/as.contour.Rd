@@ -41,5 +41,5 @@ plot(conts, add = TRUE)
 }
 }
 \seealso{
-\code{\link[terra:contour]{terra::as.contour()}}, \strong{GRASS} manual page for module \code{r.contour} (see \code{grassHelp("r.contour")})
+\code{\link[terra:contour]{terra::as.contour()}}, \strong{GRASS} manual page for tool \code{r.contour} (see \code{grassHelp("r.contour")})
 }

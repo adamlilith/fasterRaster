@@ -65,5 +65,5 @@ global(elev, "*") # calculate all available functions
 }
 }
 \seealso{
-\code{\link[terra:global]{terra::global()}} and \strong{GRASS} module \code{r.univar}
+\code{\link[terra:global]{terra::global()}} and \strong{GRASS} tool \code{r.univar}
 }

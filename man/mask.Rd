@@ -82,5 +82,5 @@ plot(c(elev, byRastAll))
 }
 }
 \seealso{
-\code{\link[terra:mask]{terra::mask()}}, \strong{GRASS} module \code{r.mask}
+\code{\link[terra:mask]{terra::mask()}}, \strong{GRASS} tool \code{r.mask}
 }

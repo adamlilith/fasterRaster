@@ -62,5 +62,5 @@ hist(fractal)
 }
 }
 \seealso{
-\code{\link[=rSpatialDepRast]{rSpatialDepRast()}}, \code{\link[=rnormRast]{rnormRast()}}, \code{\link[=runifRast]{runifRast()}}, \strong{GRASS} manual page for module \code{r.surf.fractal} (see \code{grassHelp("r.surf.fractal")})
+\code{\link[=rSpatialDepRast]{rSpatialDepRast()}}, \code{\link[=rnormRast]{rnormRast()}}, \code{\link[=runifRast]{runifRast()}}, \strong{GRASS} manual page for tool \code{r.surf.fractal} (see \code{grassHelp("r.surf.fractal")})
 }

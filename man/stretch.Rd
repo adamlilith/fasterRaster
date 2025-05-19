@@ -67,5 +67,5 @@ fr - tr
 }
 }
 \seealso{
-\code{\link[terra:stretch]{terra::stretch()}} and module \code{r.rescale} in \strong{GRASS} (not used on this function)
+\code{\link[terra:stretch]{terra::stretch()}} and tool \code{r.rescale} in \strong{GRASS} (not used on this function)
 }

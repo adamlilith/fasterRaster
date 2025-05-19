@@ -67,5 +67,5 @@ plot(coast, lwd = 2, add = TRUE)
 }
 }
 \seealso{
-\code{\link[=grid]{grid()}}, module \code{v.mkgrid} in \strong{GRASS}
+\code{\link[=grid]{grid()}}, tool \code{v.mkgrid} in \strong{GRASS}
 }

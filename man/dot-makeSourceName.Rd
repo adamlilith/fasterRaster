@@ -7,7 +7,7 @@
 .makeSourceName(x = NULL, type = NULL, n = 1L, name = NULL)
 }
 \arguments{
-\item{x}{Character or \code{NULL}: Descriptive string. \strong{Developers, please note}: To assist with debugging, \strong{GRASS} objects created by a \strong{GRASS} module have the module named in this argument (with underscores). Example: "v_in_ogr" or "r_resample".}
+\item{x}{Character or \code{NULL}: Descriptive string. \strong{Developers, please note}: To assist with debugging, \strong{GRASS} objects created by a \strong{GRASS} tool have the tool named in this argument (with underscores). Example: "v_in_ogr" or "r_resample".}
 
 \item{type}{Character: \code{raster}, \code{raster3D}, \code{vector}, or \code{table}.}
 

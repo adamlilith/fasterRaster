@@ -34,7 +34,7 @@
 A \code{GRaster}.
 }
 \description{
-This function estimates the course of streams and rivers from an elevation raster. It is based on the \strong{GRASS} module \code{r.stream.extract}, where more details can be found (see \code{grassHelp("r.stream.extract")})
+This function estimates the course of streams and rivers from an elevation raster. It is based on the \strong{GRASS} tool \code{r.stream.extract}, where more details can be found (see \code{grassHelp("r.stream.extract")})
 }
 \examples{
 if (grassStarted()) {
@@ -55,5 +55,5 @@ plot(streams)
 }
 }
 \seealso{
-\code{\link[=flow]{flow()}}, \code{\link[=flowPath]{flowPath()}}, \strong{GRASS} manual for module \code{r.stream.extract} (see \code{grassHelp("r.stream.extract")})
+\code{\link[=flow]{flow()}}, \code{\link[=flowPath]{flowPath()}}, \strong{GRASS} manual for tool \code{r.stream.extract} (see \code{grassHelp("r.stream.extract")})
 }

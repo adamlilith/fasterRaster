@@ -50,5 +50,5 @@ plot(antMan, main = "Antman!")
 }
 }
 \seealso{
-\code{\link[terra:merge]{terra::merge()}}, \code{\link[terra:mosaic]{terra::mosaic()}}, and \strong{GRASS} module \code{r.patch}
+\code{\link[terra:merge]{terra::merge()}}, \code{\link[terra:mosaic]{terra::mosaic()}}, and \strong{GRASS} tool \code{r.patch}
 }

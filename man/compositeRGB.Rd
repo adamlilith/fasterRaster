@@ -57,5 +57,5 @@ plot(comp, col = grays)
 }
 }
 \seealso{
-\code{\link[=plotRGB]{plotRGB()}}, \code{\link[terra:plotRGB]{terra::plotRGB()}}, \strong{GRASS} manual page for module \code{r.composite} (see \code{grassHelp("r.composite")})
+\code{\link[=plotRGB]{plotRGB()}}, \code{\link[terra:plotRGB]{terra::plotRGB()}}, \strong{GRASS} manual page for tool \code{r.composite} (see \code{grassHelp("r.composite")})
 }

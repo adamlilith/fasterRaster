@@ -46,7 +46,7 @@ sun(
 
 \item{albedo}{A \code{GRaster} or a numeric value: This is either a raster with values of ground albedo or a numeric value (in which case albedo is assumed to be the same everywhere). Albedo is unit-less, and the default value is 0.2.}
 
-\item{linke}{A \code{GRaster} or a numeric value: This is either a raster with values of the Linke atmospheric turbidity coefficient or a numeric value (in which case the same value is assumed for all locations). The Linke coefficient is unit-less. The default value is 3, but see also the \strong{GRASS} manual page for module \code{r.sun} (\code{grassHelp("r.sun")}).}
+\item{linke}{A \code{GRaster} or a numeric value: This is either a raster with values of the Linke atmospheric turbidity coefficient or a numeric value (in which case the same value is assumed for all locations). The Linke coefficient is unit-less. The default value is 3, but see also the \strong{GRASS} manual page for tool \code{r.sun} (\code{grassHelp("r.sun")}).}
 
 \item{day}{Positive integer between 1 to 365, inclusive: Day of year for which to calculate ir/radiation. Default is 1 (January 1st).}
 
@@ -60,17 +60,17 @@ sun(
 
 \item{npartitions}{Positive numeric. Number of chunks in which to read input files. Default is 1.}
 
-\item{beam_rad}{Logical: If \code{TRUE} (default), generate a raster with beam irradiation with units of Wh / m^2 / day ("mode 2" of the \code{r.sun} \strong{GRASS} module).}
+\item{beam_rad}{Logical: If \code{TRUE} (default), generate a raster with beam irradiation with units of Wh / m^2 / day ("mode 2" of the \code{r.sun} \strong{GRASS} tool).}
 
 \item{diff_rad}{Logical: If \code{TRUE} (default), generate a raster representing irradiation in Wh / m^2 /day}
 
-\item{refl_rad}{Logical: If \code{TRUE} (default), generate a raster with ground-reflected irradiation with units of Wh / m^2 / day ("mode 2" of the \code{r.sun} \strong{GRASS} module).}
+\item{refl_rad}{Logical: If \code{TRUE} (default), generate a raster with ground-reflected irradiation with units of Wh / m^2 / day ("mode 2" of the \code{r.sun} \strong{GRASS} tool).}
 
-\item{glob_rad}{Logical:. If \code{TRUE} (default), generate a raster with total irradiance/irradiation with units of Wh / m^2 / day ("mode 2" of the \code{r.sun} \strong{GRASS} module).}
+\item{glob_rad}{Logical:. If \code{TRUE} (default), generate a raster with total irradiance/irradiation with units of Wh / m^2 / day ("mode 2" of the \code{r.sun} \strong{GRASS} tool).}
 
-\item{insol_time}{Logical: If \code{TRUE} (default), generate a raster with total insolation time in hours ("mode 2" of the \code{r.sun} \strong{GRASS} module).}
+\item{insol_time}{Logical: If \code{TRUE} (default), generate a raster with total insolation time in hours ("mode 2" of the \code{r.sun} \strong{GRASS} tool).}
 
-\item{lowMemory}{Logical: If \code{TRUE}, use the low-memory version of the \code{r.sun} \strong{GRASS} module. The default is \code{FALSE}.}
+\item{lowMemory}{Logical: If \code{TRUE}, use the low-memory version of the \code{r.sun} \strong{GRASS} tool. The default is \code{FALSE}.}
 }
 \value{
 A raster or raster stack stack with the same extent, resolution, and coordinate reference system as \code{elevation}. Assuming all possible rasters are generated they represent:
@@ -83,7 +83,7 @@ A raster or raster stack stack with the same extent, resolution, and coordinate 
 }
 }
 \description{
-The \code{sun()} function calculates beam (direct), diffuse and ground reflected solar irradiation for a given day and set of topographic and atmospheric conditions. The function relies on the \strong{GRASS} module \code{r.sun}, the manual page for which contains a detailed explanation (see \code{grassHelp("r.sun")})
+The \code{sun()} function calculates beam (direct), diffuse and ground reflected solar irradiation for a given day and set of topographic and atmospheric conditions. The function relies on the \strong{GRASS} tool \code{r.sun}, the manual page for which contains a detailed explanation (see \code{grassHelp("r.sun")})
 }
 \examples{
 if (grassStarted()) {
@@ -144,5 +144,5 @@ solar
 }
 }
 \seealso{
-\code{\link[=terrain]{terrain()}}, \code{\link[=horizonHeight]{horizonHeight()}}, \strong{GRASS} manual page for module \code{r.sun} (see \code{grassHelp("r.sun")})
+\code{\link[=terrain]{terrain()}}, \code{\link[=horizonHeight]{horizonHeight()}}, \strong{GRASS} manual page for tool \code{r.sun} (see \code{grassHelp("r.sun")})
 }

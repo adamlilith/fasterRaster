@@ -37,7 +37,7 @@
 
 \item{attachTable}{Logical: If \code{TRUE} (default), attach the attribute to table to the vector before saving it. If \code{FALSE}, the attribute table will not be attached.}
 
-\item{...}{Additional arguments to send to \strong{GRASS} module \code{v.out.ogr} (see \code{grassHelp("v.out.ogr")}).}
+\item{...}{Additional arguments to send to \strong{GRASS} tool \code{v.out.ogr} (see \code{grassHelp("v.out.ogr")}).}
 }
 \value{
 Invisibly returns a \code{GRaster} (the input, \code{x}). Also saves the vector to disk.
@@ -45,7 +45,7 @@ Invisibly returns a \code{GRaster} (the input, \code{x}). Also saves the vector 
 \description{
 This function saves a \code{GVector} to disk directly from a \strong{GRASS} session.
 
-By default, files will be of OGC GeoPackage format (extension "\code{.gpkg}"), but this can be changed with the \code{format} argument. You can see a list of supported formats by simply using this function with no arguments, as in \code{writeVector()}, or by consulting the online help page for \strong{GRASS} module \code{v.out.ogr} (see \code{grassHelp("v.out.ogr")}).
+By default, files will be of OGC GeoPackage format (extension "\code{.gpkg}"), but this can be changed with the \code{format} argument. You can see a list of supported formats by simply using this function with no arguments, as in \code{writeVector()}, or by consulting the online help page for \strong{GRASS} tool \code{v.out.ogr} (see \code{grassHelp("v.out.ogr")}).
 
 Note that if the vector has a data table attached and at least one numeric or integer column has an \code{NA} or \code{NaN} value, the function will yield a warning like:
 
@@ -97,7 +97,7 @@ writeVector(rivers, filename)
 }
 }
 \seealso{
-\code{\link[terra:writeVector]{terra::writeVector()}}, \code{\link[sf:st_write]{sf::st_write()}}, \strong{GRASS} module \code{v.out.ogr} (see \code{grassHelp("v.out.ogr")})
+\code{\link[terra:writeVector]{terra::writeVector()}}, \code{\link[sf:st_write]{sf::st_write()}}, \strong{GRASS} tool \code{v.out.ogr} (see \code{grassHelp("v.out.ogr")})
 
-\code{\link[terra:writeVector]{terra::writeVector()}}, the \strong{GRASS} module manual page for \code{v.out.ogr} (see \code{grassHelp("v.out.ogr")})
+\code{\link[terra:writeVector]{terra::writeVector()}}, the \strong{GRASS} tool manual page for \code{v.out.ogr} (see \code{grassHelp("v.out.ogr")})
 }

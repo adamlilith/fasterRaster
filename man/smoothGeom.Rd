@@ -105,5 +105,5 @@ legend("bottom",
 }
 }
 \seealso{
-\code{\link[=simplifyGeom]{simplifyGeom()}}, \code{\link[terra:simplify]{terra::simplifyGeom()}}, \link[=breakPolys]{geometry cleaning}, \strong{GRASS} manual page for module \code{v.generalize} (see \code{grassHelp("v.generalize")})
+\code{\link[=simplifyGeom]{simplifyGeom()}}, \code{\link[terra:simplify]{terra::simplifyGeom()}}, \link[=breakPolys]{geometry cleaning}, \strong{GRASS} manual page for tool \code{v.generalize} (see \code{grassHelp("v.generalize")})
 }

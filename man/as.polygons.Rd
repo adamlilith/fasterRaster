@@ -42,5 +42,5 @@ plot(rastToPolys)
 }
 }
 \seealso{
-\code{\link[=as.points]{as.points()}}, \code{\link[=as.lines]{as.lines()}}, \code{\link[terra:as.polygons]{terra::as.polygons()}}, \link[=breakPolys]{geometry cleaning}, and \strong{GRASS} module \code{r.to.vect}
+\code{\link[=as.points]{as.points()}}, \code{\link[=as.lines]{as.lines()}}, \code{\link[terra:as.polygons]{terra::as.polygons()}}, \link[=breakPolys]{geometry cleaning}, and \strong{GRASS} tool \code{r.to.vect}
 }

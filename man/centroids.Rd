@@ -124,5 +124,5 @@ legend("bottomright",
 }
 }
 \seealso{
-\code{\link[terra:centroids]{terra::centroids()}}; \strong{GRASS} addon module \code{v.centerpoint}.
+\code{\link[terra:centroids]{terra::centroids()}}; \strong{GRASS} addon tool \code{v.centerpoint}.
 }

@@ -72,5 +72,5 @@ seqLines
 }
 }
 \seealso{
-\code{\link[=flow]{flow()}}, \code{\link[=streams]{streams()}}, the \strong{GRASS} module \code{r.drain} (see \code{grassHelp("r.drain")})
+\code{\link[=flow]{flow()}}, \code{\link[=streams]{streams()}}, the \strong{GRASS} tool \code{r.drain} (see \code{grassHelp("r.drain")})
 }

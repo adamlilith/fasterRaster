@@ -55,5 +55,5 @@ print(f)
 }
 }
 \seealso{
-\code{\link[terra:freq]{terra::freq()}}, module \code{r.stats} in \strong{GRASS}
+\code{\link[terra:freq]{terra::freq()}}, tool \code{r.stats} in \strong{GRASS}
 }

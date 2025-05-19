@@ -59,5 +59,5 @@ dim(trimmedElevs)
 }
 }
 \seealso{
-\code{\link[terra:trim]{terra::trim()}}, \code{\link[=extend]{extend()}}, and \strong{GRASS} module \code{g.region}
+\code{\link[terra:trim]{terra::trim()}}, \code{\link[=extend]{extend()}}, and \strong{GRASS} tool \code{g.region}
 }
