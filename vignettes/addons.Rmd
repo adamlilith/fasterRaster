@@ -16,7 +16,7 @@ knitr::opts_chunk$set(
 )
 fig.path = 'man/figures/'
 ```
-**GRASS GIS** comes with a default set of modules (functions), but users can download and install "addon" modules to extend its capabilities. Some of the functions in **fasterRaster** rely on these addon modules. To make these functions work, you must find the folder in which addons are stored and install the desired module.
+**GRASS** comes with a default set of modules (functions), but users can download and install "addon" modules to extend its capabilities. Some of the functions in **fasterRaster** rely on these addon modules. To make these functions work, you must find the folder in which addons are stored and install the desired module.
 
 1. Installing modules: The easiest (only?) way to do this is to start **GRASS** (not in **R** through **fasterRaster**, but actually start **GRASS**), then use the `Settings` menu's `Addon extensions` option, then select `Install extensions from addons [g.extension]`. **GRASS** should display a list of addons you can install.
 

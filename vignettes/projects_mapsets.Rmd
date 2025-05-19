@@ -17,7 +17,7 @@ knitr::opts_chunk$set(
 fig.path = 'man/figures/'
 ```
 
-**GRASS GIS** uses "projects" (which used to be called "locations" before **GRASS** 8.4), and "mapsets" to store files (rasters, vectors, etc.). **fasterRaster** uses projects and mapsets, too, but in a manner that is invisibly to most users. Thus, this tutorial is mostly of interest to developers and other curious people.
+**GRASS** uses "projects" (which used to be called "locations" before **GRASS** 8.4), and "mapsets" to store files (rasters, vectors, etc.). **fasterRaster** uses projects and mapsets, too, but in a manner that is invisibly to most users. Thus, this tutorial is mostly of interest to developers and other curious people.
 
 ## **GRASS** locations/projects
 Upon starting, **GRASS** creates (or loads) a project, which corresponds to a folder on the user's system. Importantly, all rasters and vectors in a project must have the same coordinate reference system (CRS). Confusingly, rasters and vectors in the same **GRASS** location do not necessarily have to represent the same place on Earth (this the renaming to "project"). In general, rasters and vectors can only interact with one another if they are in the same project and mapset.  **GRASS** can only have a connection to a single project at a time.

@@ -1,5 +1,5 @@
 home:
-  title: Faster Raster and Spatial Vector Processing Using 'GRASS GIS'
+  title: Faster Raster and Spatial Vector Processing Using 'GRASS'
   description: Processing of large-in-memory/large-on disk rasters.
 
 url: https://github.com/adamlilith/fasterRaster
