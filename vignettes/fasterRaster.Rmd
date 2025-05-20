@@ -27,7 +27,7 @@ You probably already have **fasterRaster** installed on your computer, but if no
 ```{r install, eval = FALSE}
 install.packages("fasterRaster")
 ```
-and the latest development version using:
+or the latest development version using:
 ```{r install_dev, eval = FALSE}
 remotes::install_github("adamlilith/fasterRaster", dependencies = TRUE)
 ```
