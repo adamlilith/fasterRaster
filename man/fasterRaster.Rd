@@ -12,12 +12,10 @@
 \item The quick-start guide to getting started with \strong{fasterRaster}: \code{vignette("fasterRaster", package = "fasterRaster")}:
 \item Types of \code{GRaster}s: \code{vignette("GRasters", package = "fasterRaster")}
 \item How to speed up \strong{fasterRaster}: \code{vignette("faster_fasterRaster", package = "fasterRaster")}
-\item Using functions that depend on \strong{GRASS} addons: \code{vignette("addons", package = "fasterRaster")}
 \item \code{\link[=faster]{faster()}}: Set the directory where \strong{GRASS} is installed on your system, and set or get other package-wide options. This function must be run once before using most \strong{fasterRaster} functions.
 \item \code{\link[=fast]{fast()}}: Convert a \code{SpatRaster}, \code{SpatVector}, or \code{sf} vector to \strong{fasterRaster}'s raster format (\code{GRaster}s) or vector format (\code{GVector}s), or load one from a file
 \item \code{\link[=rast]{rast()}}, \code{\link[=vect]{vect()}}, and \code{\link[=st_as_sf]{st_as_sf()}}: Convert \code{GRaster}s and \code{GVector}s to \code{SpatRaster}s, \code{SpatVector}s, or \code{sf} vectors
 \item \code{\link[=writeRaster]{writeRaster()}} and \code{\link[=writeVector]{writeVector()}}: Save \code{GRaster}s or \code{GVector}s to disk
-\item \code{\link[=addons]{addons()}}: Test if the \code{addons} directory is correct and if a particular addon \strong{GRASS} tool is installed.
 }
 }
 
@@ -340,15 +338,18 @@ Operations on \code{GRaster}s
 
 \subsection{General purpose functions}{
 \itemize{
+\item \code{\link[=addon]{addon()}}: Show installed \strong{GRASS} addons
 \item \code{\link[=compareGeom]{compareGeom()}}: Determine if geographic metadata is same between \code{GRaster}s and/or \code{GVector}s
 \item \code{\link[=dropRows]{dropRows()}}: Remove rows from a \code{data.frame} or \code{data.table}
 \item \code{\link[=grassGUI]{grassGUI()}}: Start the \strong{GRASS} GUI (not recommended for most users!!!)
 \item \code{\link[=grassHelp]{grassHelp()}}: Open the help page for a \strong{GRASS} tool.
 \item \code{\link[=grassInfo]{grassInfo()}}: \strong{GRASS} version and citation
 \item \code{\link[=grassStarted]{grassStarted()}}: Has a connection \strong{GRASS} been made within the current \strong{R} session?
+\item \code{\link[=installAddon]{installAddon()}}: Install a \strong{GRASS} addon
 \item \code{\link[=mow]{mow()}}: Remove unused rasters and vectors from the \strong{GRASS} cache
 \item \code{\link[=reorient]{reorient()}}: Convert degrees between 'north-orientation' and 'east orientation'
 \item \code{\link[=replaceNAs]{replaceNAs()}}: Replace \code{NA}s in columns of a \code{data.table} or \code{data.frame}, or in a vector
+\item \code{\link[=removeAddon]{removeAddon()}}: Delete \strong{GRASS} addon from your system
 \item \code{\link[=seqToSQL]{seqToSQL()}}: Format a numeric series into an SQL value call
 \item \code{\link[=update]{update()}}: Refresh metadata in a \code{GRaster} or \code{GVector} object
 }

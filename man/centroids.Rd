@@ -5,7 +5,7 @@
 \alias{centroids}
 \title{Centroid(s) of a vector}
 \usage{
-\S4method{centroids}{GVector}(x, method = NULL, fail = TRUE)
+\S4method{centroids}{GVector}(x, method = NULL, check = TRUE)
 }
 \arguments{
 \item{x}{A \code{GVector}.}
@@ -34,7 +34,7 @@
 
 Partial matching is used and case is ignored.}
 
-\item{fail}{Logical: If \code{TRUE} (default), and the addons folder is not correctly specified, the exit the function with an error. If \code{FALSE}, then \code{NULL} will be returned with a warning.}
+\item{check}{Logical: If \code{TRUE} (default), check to see if the \code{v.centerpoint} addon is installed.}
 }
 \value{
 A points \code{GVector}.
@@ -42,7 +42,7 @@ A points \code{GVector}.
 \description{
 This function locates the centroid of each geometry of a \code{GVector}.
 
-\strong{To use this function}, you must a) have correctly specified the \code{addonsDir} option using \code{\link[=faster]{faster()}}, and b) installed the \strong{GRASS} addon \code{v.centerpoint}. See \code{\link[=addons]{addons()}} and \code{vignette("addons", package = "fasterRaster")}.
+\strong{To use this function}, you must have installed the \code{v.centerpoint} addon using \code{installAddons("v.centerpoint")}. If you are not sure if this is already installed, you can use \code{addons("v.centerpoint")}. This should be all you need to do, but see \code{\link[=installAddons]{installAddons()}} and \code{\link[=addons]{addons()}} for more details are needed.
 }
 \examples{
 if (grassStarted()) {
@@ -52,74 +52,63 @@ library(sf)
 library(terra)
 
 # Points, lines, and polygons
-madDypsis <- fastData("madDypsis")
-madRivers <- fastData("madRivers")
-madCoast4 <- fastData("madCoast4")
-
-# Convert to  GVectors:
-dypsis <- fast(madDypsis)
-rivers <- fast(madRivers)
-coast4 <- fast(madCoast4)
 
 # Point centroids:
-dypMean <- centroids(dypsis, fail = FALSE)
-dypMedian <- centroids(dypsis, method = "median", fail = FALSE)
-dypPMedian <- centroids(dypsis, method = "pmedian", fail = FALSE)
+madDypsis <- fastData("madDypsis")
+dypsis <- fast(madDypsis)
 
-if (!is.null(dypMean)) {
+dypMean <- centroids(dypsis)
+dypMedian <- centroids(dypsis, method = "median")
+dypPMedian <- centroids(dypsis, method = "pmedian")
 
 plot(dypsis)
 plot(dypMean, col = "red", add = TRUE)
 plot(dypMedian, col = "green", pch = 2, add = TRUE)
-plot(dypPMedian, col = "orange", pch = 1, add = TRUE)
+plot(dypPMedian, col = "blue", pch = 3, add = TRUE)
 legend("bottomright",
    legend = c("mean", "median", "pmedian"),
-   col = c("red", "green", "orange"),
-   pch = c(16, 2, 1),
+   col = c("red", "green", "blue"),
+   pch = c(16, 2, 3),
    xpd = NA
 )
 
-}
-
 # Line centroids:
-riversMid <- centroids(rivers, fail = FALSE)
-riversMean <- centroids(rivers, method = "mean", fail = FALSE)
-riversMedian <- centroids(rivers, method = "median", fail = FALSE)
+madRivers <- fastData("madRivers")
+rivers <- fast(madRivers)
 
-if (!is.null(riversMid)) {
+riversMid <- centroids(rivers)
+riversMean <- centroids(rivers, method = "mean")
+riversMedian <- centroids(rivers, method = "median")
 
 plot(rivers)
 plot(riversMid, col = "red", add = TRUE)
 plot(riversMean, col = "green", pch = 2, add = TRUE)
-plot(riversMedian, col = "orange", pch = 1, add = TRUE)
+plot(riversMedian, col = "blue", pch = 3, add = TRUE)
 legend("bottomright",
    legend = c("mid", "mean", "median"),
-   col = c("red", "green", "orange"),
-   pch = c(16, 2, 1),
+   col = c("red", "green", "blue"),
+   pch = c(16, 2, 3),
    xpd = NA
 )
 
-}
-
 # Polygon centroids:
-coastMean <- centroids(coast4, fail = FALSE)
-coastMedian <- centroids(coast4, method = "median", fail = FALSE)
-coastBMedian <- centroids(coast4, method = "bmedian", fail = FALSE)
+madCoast4 <- fastData("madCoast4")
+coast4 <- fast(madCoast4)
 
-if (!is.null(coastMean)) {
+coastMean <- centroids(coast4)
+coastMedian <- centroids(coast4, method = "median")
+coastBMedian <- centroids(coast4, method = "bmedian")
 
 plot(coast4)
 plot(coastMean, col = "red", add = TRUE)
 plot(coastMedian, col = "green", pch = 2, add = TRUE)
-plot(coastBMedian, col = "orange", pch = 1, add = TRUE)
+plot(coastBMedian, col = "blue", pch = 3, add = TRUE)
 legend("bottomright",
    legend = c("mean", "median", "bmedian"),
-   col = c("red", "green", "orange"),
+   col = c("red", "green", "blue"),
    pch = c(16, 2, 1),
    xpd = NA
 )
-
-}
 
 }
 }
