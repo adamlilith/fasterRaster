@@ -2,7 +2,7 @@
 #'
 #' @description This function locates the centroid of each geometry of a `GVector`.
 #' 
-#' **To use this function**, you must a) have correctly specified the `addonsDir` option using [faster()], and b) installed the **GRASS** addon `v.centerpoint`. See [addons()] and `vignette("addons", package = "fasterRaster")`.
+#' **To use this function**, you must have installed the `v.centerpoint` addon using `installAddons("v.centerpoint")`. If you are not sure if this is already installed, you can use `addons("v.centerpoint")`. This should be all you need to do, but see [installAddons()] and [addons()] for more details are needed.
 #'
 #' @param x A `GVector`.
 #' @param method Character or `NULL` (default): Method used for calculating centroids. The method of calculation depends on whether the input is a `points`, `lines`, or `polygons` `GVector`. If the value is `NULL`, then the default method will be chosen, depending on the geometry type of the `GVector`:
@@ -21,7 +21,7 @@
 #' 
 #' Partial matching is used and case is ignored.
 #'
-#' @param fail Logical: If `TRUE` (default), and the addons folder is not correctly specified, the exit the function with an error. If `FALSE`, then `NULL` will be returned with a warning.
+#' @param check Logical: If `TRUE` (default), check to see if the `v.centerpoint` addon is installed.
 #'
 #' @returns A points `GVector`.
 #'
@@ -35,10 +35,14 @@
 methods::setMethod(
 	f = "centroids",
 	signature = c(x = "GVector"),
-	function(x, method = NULL, fail = TRUE) {
+	function(x, method = NULL, check = TRUE) {
 	
-	ok <- addons("v.centerpoint", verbose = TRUE, fail = fail)
-	if (!ok) return(NULL)
+	if (check) {
+	
+		ok <- addons("v.centerpoint")
+		if (!ok) stop("The `v.centerpoint` addon is not installed. You can install it using `installAddon()`.")
+
+	}
 
 	gtype <- geomtype(x)
 	
