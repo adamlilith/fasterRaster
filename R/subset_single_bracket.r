@@ -179,7 +179,7 @@ methods::setMethod(
 				output = src,
 				type = gtype,
 				# flags = c(.quiet(), "overwrite")
-				flags = c(.quiet(), "overwrite", "t")
+				flags = c(.quiet(), "overwrite", "t") # "t" ==> Do not copy attributes
 			)
 
 			if (gtype == "point") {
