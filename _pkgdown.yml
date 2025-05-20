@@ -19,7 +19,6 @@ articles:
   contents:
   - GRasters
   - faster_fasterRaster
-  - addons
   - three_d_objects
 
 - title: For Developers
@@ -40,7 +39,6 @@ reference:
   - st_as_sf
   - writeRaster
   - writeVector
-  - addons
 - title: GRaster properties
 - contents:
   - crs
@@ -381,13 +379,16 @@ reference:
   - vect
 - title: General functions
 - contents:
+  - addons
   - compareGeom
   - dropRows
   - grassGUI
   - grassHelp
   - grassInfo
   - grassStarted
+  - installAddon
   - mow
+  - removeAddon
   - replaceNAs
   - seqToSQL
   - update
