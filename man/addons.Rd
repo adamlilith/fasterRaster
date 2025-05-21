@@ -4,6 +4,7 @@
 \alias{addons}
 \alias{installAddon}
 \alias{removeAddon}
+\alias{.addons}
 \title{Test if addons directory exists and if an addon is installed}
 \usage{
 addons(x = NULL)
@@ -11,6 +12,8 @@ addons(x = NULL)
 installAddon(x, check = TRUE)
 
 removeAddon(x, check = TRUE)
+
+.addons(x)
 }
 \arguments{
 \item{x}{Either \code{NULL} or a character specifying the name of a \strong{GRASS} addons tool. If \code{NULL}, a vector of installed addons is returned. If a character vector is provided, a logical vector is returned, one per value in \code{x} that indicates if the respective addon is installed.}
@@ -39,6 +42,4 @@ addons(c("v.centerpoint", "fake.addon"))
 
 }
 }
-\seealso{
-\code{vignette("addons", package = "fasterRaster")}
-}
+\keyword{internal}

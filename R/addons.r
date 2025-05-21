@@ -12,8 +12,6 @@
 #'
 #' @returns `addons()`: Logical. The other functions invisibly return a logical value indicating if the operation succeeded or not.
 #'
-#' @seealso `vignette("addons", package = "fasterRaster")`
-#'
 #' @example man/examples/ex_addons.r
 #'
 #' @aliases addons
@@ -26,7 +24,7 @@ addons <- function(x = NULL) {
 		out <- NULL
 	} else {
 
-		out <- rgrass::execGRASS("g.extension", flags = c("a", .quiet()), intern = TRUE)
+		out <- rgrass::execGRASS("g.extension", flags = c("a"), intern = TRUE)
 		if (is.null(x)) {
 			out <- sort(out)
 		} else if (!is.null(x)) {
@@ -71,6 +69,22 @@ removeAddon <- function(x, check = TRUE) {
 	invisible(TRUE)
 
 }
+
+#' Test to see if a given addon is installed, and if not, installs it.
+#'
+#' @aliases .addons
+#' @rdname addons
+#' @keywords internal
+.addons <- function(x) {
+
+	installed <- addons(x)
+	if (!installed) {
+		installAddon(x, check = FALSE)
+	}
+
+}
+
+
 
 # # Tests if addons folder is installed
 # addons <- function(xx = NULL, fail = TRUE, verbose = TRUE) {
