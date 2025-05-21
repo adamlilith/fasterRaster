@@ -1,9 +1,8 @@
 #' Create raster representing one or more random walks
 #'
-#' This function creates a raster where the cell values represent the number of times one or more random "walkers" traverse the cell.
+#' This function creates a raster where the cell values represent the number of times one or more random "walkers" traverse the cell. If you simulate multiple random walkers, you can do computation in parallel, which can be controlled by allowing **fasterRaster** to use multiple cores and more memory, which are options set by the [faster()] function.
 #'
-#' **Note**: To use this function, you must have installed the `r.random.walk` addon using `installAddons("r.random.walk")`. If you are not sure if this is already installed, the function will try to do this. You can also do it manually using `addons("r.random.walk")`.
-#'
+#' This function needs the **GRASS** addon `r.random.walk`. If it is not installed, it will try to install it.#'
 #' @param x A `GRaster` to serve as a template.
 #'
 #' @param n Numeric: Number of walkers. Default  is 1.
@@ -64,10 +63,10 @@ methods::setMethod(
 
 	do.call(rgrass::execGRASS, args = args)
 
-	srcIn <- src
-	src <- .makeSourceName("rRandWalk_r_mapcalc", "raster")
-	ex <- paste0(src, " = int(", srcIn, ")")
-	rgrass::execGRASS("r.mapcalc", expression = ex, flags = c(.quiet(), "overwrite"))
+	# srcIn <- src
+	# src <- .makeSourceName("rRandWalk_r_mapcalc", "raster")
+	# ex <- paste0(src, " = int(", srcIn, ")")
+	# rgrass::execGRASS("r.mapcalc", expression = ex, flags = c(.quiet(), "overwrite"))
 
 	.makeGRaster(src, "randomWalk")
 

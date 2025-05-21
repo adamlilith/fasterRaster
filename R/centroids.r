@@ -2,7 +2,7 @@
 #'
 #' @description This function locates the centroid of each geometry of a `GVector`.
 #' 
-#' **Note**: To use this function, you must have installed the `v.centerpoint` addon using `installAddons("v.centerpoint")`. If you are not sure if this is already installed, the function will try to do this. You can also do it manually using `addons("v.centerpoint")`.
+#' This function needs the **GRASS** addon `v.centerpoint`. If it is not installed, it will try to install it.
 #'
 #' @param x A `GVector`.
 #' @param method Character or `NULL` (default): Method used for calculating centroids. The method of calculation depends on whether the input is a `points`, `lines`, or `polygons` `GVector`. If the value is `NULL`, then the default method will be chosen, depending on the geometry type of the `GVector`:
