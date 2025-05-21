@@ -42,7 +42,7 @@ A points \code{GVector}.
 \description{
 This function locates the centroid of each geometry of a \code{GVector}.
 
-\strong{To use this function}, you must have installed the \code{v.centerpoint} addon using \code{installAddons("v.centerpoint")}. If you are not sure if this is already installed, you can use \code{addons("v.centerpoint")}. This should be all you need to do, but see \code{\link[=installAddons]{installAddons()}} and \code{\link[=addons]{addons()}} for more details are needed.
+\strong{Note}: To use this function, you must have installed the \code{v.centerpoint} addon using \code{installAddons("v.centerpoint")}. If you are not sure if this is already installed, the function will try to do this. You can also do it manually using \code{addons("v.centerpoint")}.
 }
 \examples{
 if (grassStarted()) {
