@@ -2,7 +2,7 @@
 #'
 #' @description This function locates the centroid of each geometry of a `GVector`.
 #' 
-#' **To use this function**, you must have installed the `v.centerpoint` addon using `installAddons("v.centerpoint")`. If you are not sure if this is already installed, you can use `addons("v.centerpoint")`. This should be all you need to do, but see [installAddons()] and [addons()] for more details are needed.
+#' **Note**: To use this function, you must have installed the `v.centerpoint` addon using `installAddons("v.centerpoint")`. If you are not sure if this is already installed, the function will try to do this. You can also do it manually using `addons("v.centerpoint")`.
 #'
 #' @param x A `GVector`.
 #' @param method Character or `NULL` (default): Method used for calculating centroids. The method of calculation depends on whether the input is a `points`, `lines`, or `polygons` `GVector`. If the value is `NULL`, then the default method will be chosen, depending on the geometry type of the `GVector`:
@@ -37,12 +37,7 @@ methods::setMethod(
 	signature = c(x = "GVector"),
 	function(x, method = NULL, check = TRUE) {
 	
-	if (check) {
-	
-		ok <- addons("v.centerpoint")
-		if (!ok) stop("The `v.centerpoint` addon is not installed. You can install it using `installAddon()`.")
-
-	}
+	if (check) .addons("v.centerpoint")
 
 	gtype <- geomtype(x)
 	
