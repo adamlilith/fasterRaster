@@ -207,6 +207,7 @@ reference:
   - init
   - longlat
   - rnormRast
+  - rRandWalk
   - rSpatialDepRast
   - runifRast
   - sineRast

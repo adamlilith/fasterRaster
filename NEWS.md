@@ -1,3 +1,12 @@
+# fasterRaster 8.4.0.8 (2025-XX-XX)
+o `addons()` now reports whether a given addon is installed or the names of all installed addons.  
+o `installAddon()` installs an addon.  
+o `removeAddon()` deletes an addon.  
+o `rRandWalk()` creates a raster with the path of random walkers.
+o Minor fixes to help.  
+o Rebranding as per **GRASS** re-brand (haromonized logo with **GRASS** April 2025 branding guidelines, "GRASS GIS" --> just "GRASS", "modules" --> "tools).  
+
+
 # fasterRaster 8.4.0.7 (2025-04-24)
 o Removed dependency on **rpanel** because its dependency on **tclk** did not work with **Docker** images. Replaced with version dependency on **omnibus**'s `screenRes()` function.  
 

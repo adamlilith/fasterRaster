@@ -125,6 +125,7 @@
 #' * [init()]: GRaster with values equal to row, column, coordinate, regular, or "chess"
 #' * [longlat()]: Create longitude/latitude rasters
 #' * [rnormRast()]: A random `GRaster` with values drawn from a normal distribution
+#' * [rRandWalk()]: Paths of random walker
 #' * [rSpatialDepRast()]: Create a random `GRaster` with or without spatial dependence
 #' * [runifRast()]: A random `GRaster` with values drawn from a uniform distribution
 #' * [sineRast()]: Sine wave rasters

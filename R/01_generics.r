@@ -231,6 +231,7 @@ methods::setGeneric(name = "project", package = "terra")
 
 methods::setGeneric(name = "quantile", package = "terra")
 
+methods::setGeneric(name = "rRandWalk", def = function(x, ...) standardGeneric("rRandWalk"))
 methods::setGeneric(name = "rast", package = "terra")
 methods::setGeneric(name = "rasterize", package = "terra")
 # methods::setGeneric(name = "rbind")

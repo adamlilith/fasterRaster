@@ -148,6 +148,7 @@ Operations on \code{GRaster}s
 \item \code{\link[=init]{init()}}: GRaster with values equal to row, column, coordinate, regular, or "chess"
 \item \code{\link[=longlat]{longlat()}}: Create longitude/latitude rasters
 \item \code{\link[=rnormRast]{rnormRast()}}: A random \code{GRaster} with values drawn from a normal distribution
+\item \code{\link[=rRandWalk]{rRandWalk()}}: Paths of random walker
 \item \code{\link[=rSpatialDepRast]{rSpatialDepRast()}}: Create a random \code{GRaster} with or without spatial dependence
 \item \code{\link[=runifRast]{runifRast()}}: A random \code{GRaster} with values drawn from a uniform distribution
 \item \code{\link[=sineRast]{sineRast()}}: Sine wave rasters
