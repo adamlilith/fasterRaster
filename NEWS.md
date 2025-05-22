@@ -1,4 +1,4 @@
-# fasterRaster 8.4.0.8 (2025-XX-XX)
+# fasterRaster 8.4.1.0 (2025-XX-XX)
 
 ### Code-breaking changes
 o `rnormRast()` is now `rNormRast()`.  
