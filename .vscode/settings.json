@@ -4,6 +4,7 @@
         "CRS",
         "Dypsis",
         "Epanechnikov",
+        "geostatistical",
         "mapset",
         "unprojected"
     ]

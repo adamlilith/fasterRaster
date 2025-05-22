@@ -1,9 +1,19 @@
 # fasterRaster 8.4.0.8 (2025-XX-XX)
+
+### Code-breaking changes
+o `rnormRast()` is now `rNormRast()`.  
+o `runifRast()` is now `rUnifRast()`.  
+
+### New functions and functionality
 o `addons()` now reports whether a given addon is installed or the names of all installed addons.  
 o `installAddon()` installs an addon.  
 o `removeAddon()` deletes an addon.  
-o `rRandWalk()` creates a raster with the path of random walkers.
-o Minor fixes to help.  
+o `multivarEnvSim()` calculates multivariate environmental similarity (MESS).  
+o `neighborhoodMatrix()` calculates a neighborhood matrix from a polygons `GVector`.  
+o `rRandWalkRast()` creates a raster with the path of random walkers.  
+o `ruggedness()` now allows for calculation of the terrain ruggedness index across user-defined windows with distance-based weighting.  
+
+### Minor fixes
 o Rebranding as per **GRASS** re-brand (haromonized logo with **GRASS** April 2025 branding guidelines, "GRASS GIS" --> just "GRASS", "modules" --> "tools).  
 
 # fasterRaster 8.4.0.7 (2025-04-24)

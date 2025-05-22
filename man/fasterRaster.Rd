@@ -117,6 +117,7 @@ Operations on \code{GRaster}s
 \item \code{\link[=maskNA]{maskNA()}}: Mask all non-NA cells or all NA cells
 \item \code{\link[=match]{match()}}, \code{\link[fasterRaster]{\%in\%}}, and \code{\link[fasterRaster]{\%notin\%}}: Find which cells of a \code{GRaster} match or do not match certain values
 \item \code{\link[=merge]{merge()}}: Combine two or more rasters with different extents and fill in \code{NA}s
+\item \code{\link[=multivarEnvSim]{multivarEnvSim()}}: Multivariate environmental similarity surface (MESS)
 \item \code{\link[fasterRaster]{names<-}}: Assign names to a \code{GRaster}
 \item \code{\link[=noise]{noise()}}: Remove coarse-scale trends from a \code{GRaster}, leaving just fine-scale "noise"
 \item \code{\link[=pairs]{pairs()}}: Plot correlations between \code{GRaster} layers
@@ -147,10 +148,10 @@ Operations on \code{GRaster}s
 \item \code{\link[=fractalRast]{fractalRast()}}: Create a fractal \code{GRaster}
 \item \code{\link[=init]{init()}}: GRaster with values equal to row, column, coordinate, regular, or "chess"
 \item \code{\link[=longlat]{longlat()}}: Create longitude/latitude rasters
-\item \code{\link[=rnormRast]{rnormRast()}}: A random \code{GRaster} with values drawn from a normal distribution
-\item \code{\link[=rRandWalk]{rRandWalk()}}: Paths of random walker
+\item \code{\link[=rNormRast]{rNormRast()}}: A random \code{GRaster} with values drawn from a normal distribution
+\item \code{\link[=rRandWalkRast]{rRandWalkRast()}}: Paths of random walkers
 \item \code{\link[=rSpatialDepRast]{rSpatialDepRast()}}: Create a random \code{GRaster} with or without spatial dependence
-\item \code{\link[=runifRast]{runifRast()}}: A random \code{GRaster} with values drawn from a uniform distribution
+\item \code{\link[=rUnifRast]{rUnifRast()}}: A random \code{GRaster} with values drawn from a uniform distribution
 \item \code{\link[=sineRast]{sineRast()}}: Sine wave rasters
 }
 }
@@ -278,6 +279,7 @@ Operations on \code{GRaster}s
 \item \code{\link[=kernel]{kernel()}}: Kernel density estimator of points
 \item \code{\link[=missing.cases]{missing.cases()}}: Find rows of a \code{GVector}'s data table that have at least \code{NA} in them
 \item \code{\link[fasterRaster]{names<-}}: Assign names to columns of a \code{GVector}s data table
+\item \code{\link[=neighborhoodMatrix]{neighborhoodMatrix()}} and \code{\link[=neighbourhoodMatrix]{neighbourhoodMatrix()}}: Neighborhood matrix of a polygons \code{GVector}
 \item \code{\link[=project]{project()}}: Change coordinate reference system
 \item \code{\link[=rasterize]{rasterize()}}: Convert a \code{GVector} to a \code{GRaster}
 \item \code{\link[=rbind]{rbind()}}: Combine \code{GVectors}

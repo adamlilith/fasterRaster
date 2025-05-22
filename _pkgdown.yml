@@ -175,6 +175,7 @@ reference:
   - maskNA
   - match
   - merge
+  - multivarEnvSim
   - names<-
   - noise
   - pairs
@@ -206,10 +207,10 @@ reference:
   - fractalRast
   - init
   - longlat
-  - rnormRast
-  - rRandWalk
+  - rNormRast
+  - rRandWalkRast
   - rSpatialDepRast
-  - runifRast
+  - rUnifRast
   - sineRast
 - title: Terrain and hydrology
 - contents:
@@ -330,6 +331,8 @@ reference:
   - kernel
   - missing.cases
   - names<-
+  - neighborhoodMatrix
+  - neighbourhoodMatrix
   - project
   - rasterize
   - rbind

@@ -95,7 +95,7 @@
 
 \item{stopOnError}{Logical: If \code{TRUE} (default), throw an error with an explanation if the objects are not comparable. If \code{FALSE} (default), return \code{TRUE} or \code{FALSE}.}
 
-\item{messages}{Logical: If \verb{TRUE (default), display a warning if a condition is not met. This only comes into effect if }stopOnError\code{is}FALSE`.}
+\item{messages}{Logical: If \code{TRUE} (default), display a warning if a condition is not met. This only comes into effect if \code{stopOnError} is \code{FALSE}.}
 
 \item{geometry}{Logical (vector-vector comparison only): Compare geometry. Default is \code{FALSE}.}
 }
