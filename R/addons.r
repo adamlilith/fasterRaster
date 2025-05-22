@@ -19,18 +19,12 @@
 #' @export
 addons <- function(x = NULL) {
 
-	if (!grassStarted()) {
-		warning("GRASS has not been started. Use fast() to create a GRaster or GVector to start GRASS.")
-		out <- NULL
-	} else {
-
-		out <- rgrass::execGRASS("g.extension", flags = c("a"), intern = TRUE)
-		if (is.null(x)) {
-			out <- sort(out)
-		} else if (!is.null(x)) {
-			out <- x %in% out
-			names(out) <- x
-		}
+	out <- rgrass::execGRASS("g.extension", flags = "a", intern = TRUE)
+	if (is.null(x)) {
+		out <- sort(out)
+	} else if (!is.null(x)) {
+		out <- x %in% out
+		names(out) <- x
 	}
 	out
 	
@@ -42,7 +36,7 @@ addons <- function(x = NULL) {
 installAddon <- function(x, check = TRUE) {
 
 	if (check) {
-		avails <- rgrass::execGRASS("g.extension", flags = c("l", .quiet()))
+		avails <- rgrass::execGRASS("g.extension", flags = c("l", .quiet()), intern = TRUE)
 		if (!(x %in% avails)) {
 			warning("The addon is not available on the official GRASS addon repository.")
 			return(invisible(FALSE))
