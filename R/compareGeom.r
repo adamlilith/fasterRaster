@@ -28,7 +28,7 @@
 #'
 #' @param stopOnError Logical: If `TRUE` (default), throw an error with an explanation if the objects are not comparable. If `FALSE` (default), return `TRUE` or `FALSE`.
 #'
-#' @param messages Logical: If `TRUE (default), display a warning if a condition is not met. This only comes into effect if `stopOnError` is `FALSE`.
+#' @param messages Logical: If `TRUE` (default), display a warning if a condition is not met. This only comes into effect if `stopOnError` is `FALSE`.
 #'
 #' @returns Logical (invisibly): `TRUE` for no mismatches detected, `FALSE` for incompatibility), or side effect of throwing an error.
 #'
