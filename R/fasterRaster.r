@@ -97,6 +97,7 @@
 #' * [maskNA()]: Mask all non-NA cells or all NA cells
 #' * [match()], \code{\link[fasterRaster]{%in%}}, and \code{\link[fasterRaster]{%notin%}}: Find which cells of a `GRaster` match or do not match certain values
 #' * [merge()]: Combine two or more rasters with different extents and fill in `NA`s
+#' * [multivarEnvSim()]: Multivariate environmental similarity surface (MESS)
 #' * \code{\link[fasterRaster]{names<-}}: Assign names to a `GRaster`
 #' * [noise()]: Remove coarse-scale trends from a `GRaster`, leaving just fine-scale "noise"
 #' * [pairs()]: Plot correlations between `GRaster` layers
@@ -124,10 +125,10 @@
 #' * [fractalRast()]: Create a fractal `GRaster`
 #' * [init()]: GRaster with values equal to row, column, coordinate, regular, or "chess"
 #' * [longlat()]: Create longitude/latitude rasters
-#' * [rnormRast()]: A random `GRaster` with values drawn from a normal distribution
-#' * [rRandWalk()]: Paths of random walker
+#' * [rNormRast()]: A random `GRaster` with values drawn from a normal distribution
+#' * [rRandWalkRast()]: Paths of random walkers
 #' * [rSpatialDepRast()]: Create a random `GRaster` with or without spatial dependence
-#' * [runifRast()]: A random `GRaster` with values drawn from a uniform distribution
+#' * [rUnifRast()]: A random `GRaster` with values drawn from a uniform distribution
 #' * [sineRast()]: Sine wave rasters
 #' 
 #' ## Analysis of terrain and hydrology
@@ -234,6 +235,7 @@
 #' * [kernel()]: Kernel density estimator of points
 #' * [missing.cases()]: Find rows of a `GVector`'s data table that have at least `NA` in them
 #' * \code{\link[fasterRaster]{names<-}}: Assign names to columns of a `GVector`s data table
+#' * [neighborhoodMatrix()] and [neighbourhoodMatrix()]: Neighborhood matrix of a polygons `GVector`
 #' * [project()]: Change coordinate reference system
 #' * [rasterize()]: Convert a `GVector` to a `GRaster`
 #' * [rbind()]: Combine `GVectors`
