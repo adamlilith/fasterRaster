@@ -1,6 +1,6 @@
 #' Create raster representing one or more random walks
 #'
-#' This function creates a raster where the cell values represent the number of times one or more random "walkers" traverse the cell. If you simulate multiple random walkers, you can do computation in parallel, which can be controlled by allowing **fasterRaster** to use multiple cores and more memory, which are options set by the [faster()] function.
+#' This function creates a raster where the cell values represent the number of times one or more random "walkers" traverse the cell. If you simulate multiple random walkers, you can do computation in parallel, which can be controlled by allowing **fasterRaster** to use multiple cores and more memory using the "cores" and "memory" arguments in the [faster()] function.
 #'
 #' This function needs the **GRASS** addon `r.random.walk`. If it is not installed, it will try to install it.#'
 #' @param x A `GRaster` to serve as a template.
@@ -21,13 +21,15 @@
 #'
 #' @returns A `GRaster` with cell values representing the number of times one or more walkers traversed the cell.
 #'
-#' @examples man/examples/ex_rRandWalk/r
+#' @seealso [rNormRast()], [rUnifRast()], [rSpatialDepRast()], [fractalRast()]
+
+#' @example man/examples/ex_randRast.r
 #'
-#' @aliases rRandWalk
-#' @rdname rRandWalk
-#' @exportMethod rRandWalk
+#' @aliases rRandWalkRast
+#' @rdname rRandWalkRast
+#' @exportMethod rRandWalkRast
 methods::setMethod(
-	f = "rRandWalk",
+	f = "rRandWalkRast",
 	signature = c(x = "GRaster"),
 	function(x, n = 1, steps = 100000, directions = 8, avoid = FALSE, sameStart = FALSE, seed = NULL, check = TRUE) {
 
