@@ -5,11 +5,11 @@ o `rnormRast()` is now `rNormRast()`.
 o `runifRast()` is now `rUnifRast()`.  
 
 ### New functions and functionality
-o `addons()` now reports whether a given addon is installed or the names of all installed addons.  
+o `addons()` now reports the names of all installed addons or whether a given addon is installed.  
 o `installAddon()` installs an addon.  
 o `removeAddon()` deletes an addon.  
 o `multivarEnvSim()` calculates multivariate environmental similarity (MESS).  
-o `neighborhoodMatrix()` calculates a neighborhood matrix from a polygons `GVector`.  
+o `neighborhoodMatrix()` generates a neighborhood matrix from a polygons `GVector`.  
 o `rRandWalkRast()` creates a raster with the path of random walkers.  
 o `ruggedness()` now allows for calculation of the terrain ruggedness index across user-defined windows with distance-based weighting.  
 
