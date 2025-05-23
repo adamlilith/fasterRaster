@@ -6,9 +6,9 @@
 #' * `data.frame` or `data.table`: There must be one column per layer in `proj`, and the columns must have the same names as the layers in `proj`.
 #' * `GRaster` with one or more layers: Must have the same [names()] as the `GRaster`s in `proj`. Values are assumed to be continuous (not categorical/factors).
 #'
-#' @param proj A `GRaster` with one or more layers. Values are assumed to be continuous (not categorical/factors).
+#' @param proj A `GRaster` or missing. If a `GRaster`, it must have the same layers as can have with one or more layers as `ref`. Values are assumed to be continuous (not categorical/factors). If missing, then `ref` is used, in which case the output represents the relative difference of each cell from the overall layer median.
 #'
-#' @returns A `GRaster` "stack". There will be one layer per layer in `ref`, indicating the MESS score for that variable. There will also be an layer named "MESS" which represents the MESS value across all variables (the minimum value of each of the individual MESS rasters). A final layer represents the layer which is most different (has the lowest MESS value).
+#' @returns A `GRaster` "stack". There will be one layer per layer in `ref`, indicating the MESS score for that variable. There will also be a layer named "MESS" which represents the MESS value across all variables (the minimum value of each of the individual MESS rasters). A final layer represents the layer which is most different (has the lowest MESS value).
 #'
 #' @references Elith, J, Kearney, M, and Phillips, S. 2010. The art of modelling range-shifting species. *Methods in Ecology and Evolution* 1:330-342. \doi{10.1111/j.2041-210X.2010.00036.x} (see especially the Supplement)
 #' 
@@ -79,6 +79,7 @@ methods::setMethod(
 		flags = c(.quiet(), "overwrite")
 	)
 
+	# add 1 bc "r.series::min_raster" returns 0 for the first raster
 	srcMostDiffFrom1 <- .makeSourceName("mess_r_mapcalc", "raster")
 	ex <- paste0(srcMostDiffFrom1, " = int(", srcMostDiffFrom0, " + 1)")
 	rgrass::execGRASS("r.mapcalc", expression = ex, flags = c(.quiet(), "overwrite"))
@@ -93,3 +94,14 @@ methods::setMethod(
 
 	} # EOF
 )
+
+#' @aliases multivarEnvSim
+#' @rdname multivarEnvSim
+#' @exportMethod multivarEnvSim
+methods::setMethod(
+	f = "multivarEnvSim",
+	signature = c(ref = "GRaster", proj = "missing"),
+	definition = function(ref, proj) multivarEnvSim(ref = ref, proj = ref)
+)
+
+

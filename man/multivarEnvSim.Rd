@@ -3,9 +3,12 @@
 \name{multivarEnvSim,GRaster,GRaster-method}
 \alias{multivarEnvSim,GRaster,GRaster-method}
 \alias{multivarEnvSim}
+\alias{multivarEnvSim,GRaster,missing-method}
 \title{Multivariate environmental similarity surface (MESS)}
 \usage{
 \S4method{multivarEnvSim}{GRaster,GRaster}(ref, proj)
+
+\S4method{multivarEnvSim}{GRaster,missing}(ref, proj)
 }
 \arguments{
 \item{ref}{A \code{data.frame}, \code{data.table}, a points \code{GVector}, or "stack" of \code{GRasters}: This represents the set of "reference" environmental conditions:
@@ -14,10 +17,10 @@
 \item \code{GRaster} with one or more layers: Must have the same \code{\link[=names]{names()}} as the \code{GRaster}s in \code{proj}. Values are assumed to be continuous (not categorical/factors).
 }}
 
-\item{proj}{A \code{GRaster} with one or more layers. Values are assumed to be continuous (not categorical/factors).}
+\item{proj}{A \code{GRaster} or missing. If a \code{GRaster}, it must have the same layers as can have with one or more layers as \code{ref}. Values are assumed to be continuous (not categorical/factors). If missing, then \code{ref} is used, in which case the output represents the relative difference of each cell from the overall layer median.}
 }
 \value{
-A \code{GRaster} "stack". There will be one layer per layer in \code{ref}, indicating the MESS score for that variable. There will also be an layer named "MESS" which represents the MESS value across all variables (the minimum value of each of the individual MESS rasters). A final layer represents the layer which is most different (has the lowest MESS value).
+A \code{GRaster} "stack". There will be one layer per layer in \code{ref}, indicating the MESS score for that variable. There will also be a layer named "MESS" which represents the MESS value across all variables (the minimum value of each of the individual MESS rasters). A final layer represents the layer which is most different (has the lowest MESS value).
 }
 \description{
 The multivariate environmental similarity surface (MESS) indicates the degree to which a set of "projection" environmental conditions fall inside or outside a set of "reference" conditions. Values of 1 indicate a location falls at the exact median of all variables. Values of 0 indicate that the location has at least one environmental covariate that is at the upper or lower end of the range of reference conditions, and values <1 indicate that at least one variable falls above or below the reference conditions. MESS can be used, for example, to indicate the degree to which a model constructed in one time period and/or location must extrapolate when projected to another time period and/or location.
