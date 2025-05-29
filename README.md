@@ -4,11 +4,11 @@
 [![cran version](https://www.r-pkg.org/badges/version/fasterRaster)](https://cran.r-project.org/package=fasterRaster) [![R-CMD-check](https://github.com/adamlilith/fasterRaster/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/adamlilith/fasterRaster/actions/workflows/R-CMD-check.yaml) [![GPLv3 license](https://img.shields.io/badge/License-GPLv3-blue.svg)](http://perso.crans.org/besson/LICENSE.html)
 
 <!-- badges: end -->
-Faster raster processing in `R` using `GRASS GIS`
+Faster raster processing in `R` using `GRASS`
 
 <a href="https://github.com/adamlilith/fasterRaster"><img src="man/figures/logo.png" align="right" height="130" alt="fasterRaster website" /></a>
 
-`fasterRaster` is an **R** package designed specifically to handle large-in-memory/large-on-disk spatial rasters and vectors. `fasterRaster` does this using Open Source Geospatial's <a href="https://grass.osgeo.org/">`GRASS GIS`</a>
+`fasterRaster` is an **R** package designed specifically to handle large-in-memory/large-on-disk spatial rasters and vectors. `fasterRaster` does this using Open Source Geospatial's <a href="https://grass.osgeo.org/">`GRASS`</a>
 
 `fasterRaster` was created with five design principles:
 
@@ -185,7 +185,7 @@ Note that the `M1.M2` and `S1.S2` increment independently. For example, if the v
 
 * Robert Hijman's [`terra`](https://cran.r-project.org/package=terra) package and Edzer Pebesma's [`sf`](https://cran.r-project.org/package=sf) package are good places to start if you are not familiar with doing GIS in `R`.  
 * Roger Bivand's [`rgrass`](https://cran.r-project.org/package=rgrass) package allows users to call any `GRASS` function with all of its functionality, which in some cases is far beyond what is allowed by `fasterRaster`.  
-* The [GRASS GIS](https://grass.osgeo.org/) website is authoritative and contains the manual on all the `GRASS` functions used in this package and more.  
+* The [GRASS](https://grass.osgeo.org/) website is authoritative and contains the manual on all the `GRASS` functions used in this package and more.  
 * The Wiki on [how to run `GRASS` in `R` or `R` in `GRASS`](https://grasswiki.osgeo.org/wiki/R_statistics/rgrass) will help you to become a power-user of `GRASS` in `R`.
 
 # Citation
