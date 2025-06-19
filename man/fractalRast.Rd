@@ -81,5 +81,5 @@ plot(walkSame10)
 }
 }
 \seealso{
-\code{\link[=rSpatialDepRast]{rSpatialDepRast()}}, \code{\link[=rNormRast]{rNormRast()}}, \code{\link[=rUnifRast]{rUnifRast()}}, \code{\link[=rRandWalkRast]{rRandWalkRast()}}, \strong{GRASS} manual page for tool \code{r.surf.fractal} (see \code{grassHelp("r.surf.fractal")})
+\code{\link[=rSpatialDepRast]{rSpatialDepRast()}}, \code{\link[=rNormRast]{rNormRast()}}, \code{\link[=rUnifRast]{rUnifRast()}}, \code{\link[=rWalkRast]{rWalkRast()}}, \strong{GRASS} manual page for tool \code{r.surf.fractal} (see \code{grassHelp("r.surf.fractal")})
 }
