@@ -44,5 +44,5 @@ plot(cleanLines, add = TRUE)
 }
 }
 \seealso{
-\code{\link[=as.points]{as.points()}}, \code{\link[=as.polygons]{as.polygons()}}, \code{\link[terra:as.lines]{terra::as.lines()}}, \code{\link[=thinLines]{thinLines()}}, \link[=breakPolys]{geometry cleaning}, and \strong{GRASS} module \code{r.to.vect}
+\code{\link[=as.points]{as.points()}}, \code{\link[=as.polygons]{as.polygons()}}, \code{\link[terra:as.lines]{terra::as.lines()}}, \code{\link[=thinLines]{thinLines()}}, \link[=breakPolys]{geometry cleaning}, and \strong{GRASS} tool \code{r.to.vect}
 }

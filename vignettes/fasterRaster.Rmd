@@ -19,7 +19,7 @@ knitr::opts_chunk$set(
 )
 fig.path = 'man/figures/'
 ```
-**fasterRaster** interfaces with **GRASS GIS** to process rasters and spatial vector data. It is intended as an add-on to the **terra** and **sf** packages, and relies heavily upon them. For most rasters and vectors that are small or medium-sized in memory/disk, those packages will almost always be faster. They may also be faster for very large objects.  But when they aren't, **fasterRaster** can step in.
+**fasterRaster** interfaces with **GRASS** to process rasters and spatial vector data. It is intended as an add-on to the **terra** and **sf** packages, and relies heavily upon them. For most rasters and vectors that are small or medium-sized in memory/disk, those packages will almost always be faster. They may also be faster for very large objects.  But when they aren't, **fasterRaster** can step in.
 
 ## Installing **fasterRaster**
 
@@ -27,15 +27,15 @@ You probably already have **fasterRaster** installed on your computer, but if no
 ```{r install, eval = FALSE}
 install.packages("fasterRaster")
 ```
-and the latest development version using:
+or the latest development version using:
 ```{r install_dev, eval = FALSE}
 remotes::install_github("adamlilith/fasterRaster", dependencies = TRUE)
 ```
 (You may need to install the `remotes` package first.)
 
-## Installing **GRASS GIS**
+## Installing **GRASS**
 
-**fasterRaster** uses **GRASS** to do its operations. You will need to install **GRASS** using the "stand-alone" installer, available through the [GRASS GIS](https://grass.osgeo.org/). *Be sure to use the "stand-alone" installer, not the "OSGeo4W" installer!*
+**fasterRaster** uses **GRASS** to do its operations. You will need to install **GRASS** using the "stand-alone" installer, available through the [GRASS](https://grass.osgeo.org/). *Be sure to use the "stand-alone" installer, not the "OSGeo4W" installer!*
 
 Optional: A few functions in **fasterRaster** require **GRASS** "addon" modules, which do not come bundled with **GRASS**. You do not need to install these addons if you do not use functions that call them. A list of functions that require addons can be seen in the "addons" vignette (in **R**, use `vignette("addons", package = "fasterRaster")`). This vignette also explains how to install addons.
 
@@ -51,12 +51,12 @@ library(fasterRaster)
 To begin, you need to tell **fasterRaster** the full file path of the folder where **GRASS** is installed on your system. Where this is well depend on your operating system and the version of **GRASS** installed.  Three examples below show you what this might look like, but you may need to change the file path to match your case:
 
 ```{r grassDir_examples, eval = FALSE}
-grassDir <- "C:/Program Files/GRASS GIS 8.3" # Windows
-grassDir <- "/Applications/GRASS-8.3.app/Contents/Resources" # Mac OS
+grassDir <- "C:/Program Files/GRASS GIS 8.4" # Windows
+grassDir <- "/Applications/GRASS-8.4.app/Contents/Resources" # Mac OS
 grassDir <- "/usr/local/grass" # Linux
 ```
 ```{r grassDir, echo = FALSE}
-grassDir <- "C:/Program Files/GRASS GIS 8.3" # Windows
+grassDir <- "C:/Program Files/GRASS GIS 8.4" # Windows
 ```
 To tell **fasterRaster** where **GRASS** is installed, use the `faster()` function:
 

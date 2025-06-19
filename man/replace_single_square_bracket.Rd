@@ -97,6 +97,7 @@ rasts
 
 # example data
 madDypsis <- fastData("madDypsis") # vector of points
+madDypsis <- vect(madDypsis)
 
 # Convert SpatVector to GVector
 dypsis <- fast(madDypsis)
@@ -105,14 +106,20 @@ dypsis <- fast(madDypsis)
 
 dypsis$species # Returns the column
 
-dypsis[[c("year", "species")]] # Returns a GRaster with these columns
+dypsis[[c("year", "species")]] # Returns a GVector with these columns
 dypsis[ , c("year", "species")] # Same as above
 
 ### Subsetting GVector geometries
 
-# Subset first three geometries
-dypsis[1:3]
-dypsis[1:3, "species"]
+# Subset three geometries
+dypsis[c(1, 4, 10)]
+
+# Subset three geometries and one column. Note order will always be the same
+# in the output and may differ in order from terra subsetting.
+dypsis[c(1, 4, 10), "species"]
+dypsis[c(10, 4, 1), "species"] # fasterRaster: Same order as previous.
+madDypsis[c(1, 4, 10), "species"]
+madDypsis[c(10, 4, 1), "species"] # terra: different order as previous.
 
 # Get geometries by data table condition
 dypsis[dypsis$species == "Dypsis betsimisarakae"]
@@ -121,9 +128,11 @@ dypsis[dypsis$species == "Dypsis betsimisarakae"]
 
 # New column
 dypsis$pi <- pi
+head(dypsis)
 
 # Re-assign values
 dypsis$pi <- "pie"
+head(dypsis)
 
 # Re-assign specific values
 dypsis$institutionCode[dypsis$institutionCode == "MO"] <-

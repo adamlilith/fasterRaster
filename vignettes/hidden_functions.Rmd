@@ -20,7 +20,8 @@ fig.path = 'man/figures/'
 **fasterRaster** contains a set of "private" functions that users can access using `fasterRaster:::functionName`. These functions are useful for power users and developers. Not all hidden functions are listed here. Often, a method will have a hidden function of the same name that starts with a period (e.g., `.plot()`). This "period" function is intended to be supplied the [`sources()`](https://adamlilith.github.io/fasterRaster/reference/sources.html) name of a `GRaster` or `GVector` from other functions so that the calling function does not need to spend the time creating the `GRaster` or `GVector` pointer before calling the function. "Period" functions will, though, often work on `GRaster`s or `GVector`s, though some error-checking and region re-definition is not conducted.
 
 ## General
-* `.backdoor()`: Calls [faster()] and sets **GRASS** folder to "C:/Program Files/GRASS GIS X.Y", plus other options useful for development.
+* `.addons()`: Tests if an addon is installed, and if not, attempts to install it.
+* `.backdoor()`: Calls [faster()] and sets **GRASS** folder to "`C:/Program Files/GRASS GIS X.Y`", plus other options useful for development.
 * `.fileExt()`: Get file extension
 * `.ls()`: Lists the `sources` of all objects in the active **GRASS** "project/location"
 * `.message()`: Display a warning or message if the given warning has not been displayed since **fasterRaster** was attached or if a given number of hours has passed
@@ -58,14 +59,14 @@ fig.path = 'man/figures/'
 * `.minVal()` and `.maxVal()`: Values in the `@minVal` and `@maxVal` slots in a `GRaster`
 * `.nlevels()`: Number of levels in a `SpatVector`, `data.frame`, `data.table`, empty string, or a list of `data.frame`s, `data.table`s, and/or empty strings.
 
-## **GRASS** "Projects/locations" and "mapsets"
+## **GRASS** "projects/locations" and "mapsets"
 * `.locationCreate()` Make a connection to **GRASS** (i.e., start **GRASS** from within **R**) and create a location
 * `.locationDelete()` Deletes all files associated with a **GRASS** "location" and mapset
 * `.locationFind()`: Find a specific **GRASS** "location" that already exists
 * `.locationRestore()` Reconnect **GRASS** to a previously-created **GRASS** "location"
 * `.locations()`: List of all available "locations"
-* `.g.proj()`: Runs **GRASS** `g.proj` module to display projection of current "project"
-* `.g.region()`: Runs **GRASS** `g.region` module to display region of current "project"
+* `.g.proj()`: Runs **GRASS** `g.proj` tool to display projection of current "project"
+* `.g.region()`: Runs **GRASS** `g.region` tool to display region of current "project"
 * `.mapset()`: **GRASS** "mapset" of an object or the active session
 
 ## **GRASS** "regions"

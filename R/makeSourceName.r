@@ -1,6 +1,6 @@
 #' Make unique GRASS name for rasters, vectors, etc.
 #'
-#' @param x Character or `NULL`: Descriptive string. **Developers, please note**: To assist with debugging, **GRASS** objects created by a **GRASS** module have the module named in this argument (with underscores). Example: "v_in_ogr" or "r_resample".
+#' @param x Character or `NULL`: Descriptive string. **Developers, please note**: To assist with debugging, **GRASS** objects created by a **GRASS** tool have the tool named in this argument (with underscores). Example: "v_in_ogr" or "r_resample".
 #' 
 #' @param type Character: `raster`, `raster3D`, `vector`, or `table`.
 #' 

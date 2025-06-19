@@ -80,7 +80,7 @@ methods::setMethod(
 		# suppressWarnings(
 		# 	session <- rgrass::initGRASS(
 		# 		gisBase = grassDir,
-		# 		addon_base = addonsDir,
+		# # 		addon_base = addonsDir,
 		# 		home = workDir,
 		# 		gisDbase = workDir, # ?
 		# 		SG = emptyRast,

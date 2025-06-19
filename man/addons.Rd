@@ -2,38 +2,44 @@
 % Please edit documentation in R/addons.r
 \name{addons}
 \alias{addons}
+\alias{installAddon}
+\alias{removeAddon}
+\alias{.addons}
 \title{Test if addons directory exists and if an addon is installed}
 \usage{
-addons(x = NULL, fail = TRUE, verbose = TRUE)
+addons(x = NULL)
+
+installAddon(x, check = TRUE)
+
+removeAddon(x, check = TRUE)
+
+.addons(x)
 }
 \arguments{
-\item{x}{Either \code{NULL} or a character specifying the name of a \strong{GRASS} addons module. If \code{NULL}, the existence of the \code{addonsDir} (see \code{\link[=faster]{faster()}}) will be tested. If the module name is provided, the existence of the folder and module will be tested. The "\verb{/bin}" subfolder should not be included.}
+\item{x}{Either \code{NULL} or a character specifying the name of a \strong{GRASS} addons tool. If \code{NULL}, a vector of installed addons is returned. If a character vector is provided, a logical vector is returned, one per value in \code{x} that indicates if the respective addon is installed.}
 
-\item{fail}{Logical: If \code{TRUE} (default), and the addons folder is not correctly specified, the exit the function with an error. If \code{FALSE}, then \code{NULL} will be returned with a warning.}
-
-\item{verbose}{Logical: If \code{TRUE} (default), display a message on success or warning (the \code{fail} option always displays a message).}
+\item{check}{Logical: If \code{TRUE}, check to see if the addon is available (\code{installAddon()})or if it is installed (\code{removeAddon()}).}
 }
 \value{
-Logical.
+\code{addons()}: Logical. The other functions invisibly return a logical value indicating if the operation succeeded or not.
 }
 \description{
-This function tests to see if the "addons" directory specified using \code{\link[=faster]{faster()}} actually exists, and if a particular \strong{GRASS} \verb{addons module is available. The }addons\verb{folder and module must exists for methods that rely on particular **GRASS**}addons\verb{to work. See}vignette("addons", package = "fasterRaster")`.
+These functions handle \strong{GRASS} addons, which are optional tools that can be installed. Most functions in \strong{fasterRaster} rely on "base" \strong{GRASS} tools (not addons), but a few do.
+\itemize{
+\item \code{addons()}: Either lists all installed addons or verifies if one or more specific addons are installed.
+\item \code{installAddon()}: Installs a \strong{GRASS} addon. An addon typically only needs installed once. You can install an addon, quit and restart \strong{R}, attach \strong{fasterRaster}, and any installed addons can be used without using this function again.
+\item \code{removeAddon()}: Delete an installed addon from your system.
+}
 }
 \examples{
 if (grassStarted()) {
 
-# Does the addons folder exist?
-ao <- addons(fail = "warning")
-if (ao) print("Addons is folder is probably correctly specified.")
+# What addons are installed?
+addons()
 
-# Does this particular module exist?
-addon <- "v.centerpoint"
-exten <- addons(addon, fail = FALSE)
-
-if (exten) print("Extension `v.centerpoints` is installed.")
+# Is a specific addon installed?
+addons(c("v.centerpoint", "fake.addon"))
 
 }
 }
-\seealso{
-\code{vignette("addons", package = "fasterRaster")}
-}
+\keyword{internal}

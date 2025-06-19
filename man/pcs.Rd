@@ -41,5 +41,5 @@ plot(prinComp)
 }
 }
 \seealso{
-\code{\link[=princomp]{princomp()}}, \code{\link[terra:princomp]{terra::princomp()}}, module \code{i.pca} in \strong{GRASS}
+\code{\link[=princomp]{princomp()}}, \code{\link[terra:princomp]{terra::princomp()}}, tool \code{i.pca} in \strong{GRASS}
 }

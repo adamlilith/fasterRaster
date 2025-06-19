@@ -18,7 +18,7 @@
 #' 
 #' @returns A `GRaster`.
 #' 
-#' @seealso [spatSample()]; [terra::spatSample()], module `r.random` in **GRASS**
+#' @seealso [spatSample()]; [terra::spatSample()], tool `r.random` in **GRASS**
 #' 
 #' @example man/examples/ex_sampleRast_spatSample.r
 #' 

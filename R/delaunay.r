@@ -6,7 +6,7 @@
 #'
 #' @returns A `GVector`.
 #'
-#' @seealso [terra::delaunay()], module `v.delaunay` in **GRASS**
+#' @seealso [terra::delaunay()], tool `v.delaunay` in **GRASS**
 #'
 #' @example man/examples/ex_delaunay_voronoi.r
 #'

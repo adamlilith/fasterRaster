@@ -7,7 +7,7 @@
 #' * Flooded areas; and/or
 #' * Topographic convergence (log of flow accumulation divided by local slope).
 #'
-#' More details about the computations can be found at the help page for the **GRASS** module `r.terraflow`] (see `grassHelp("r.terraflow")`)
+#' More details about the computations can be found at the help page for the **GRASS** tool `r.terraflow`] (see `grassHelp("r.terraflow")`)
 #'
 #' @param x A `GRaster` with a single layer, typically representing elevation.
 #'
@@ -23,9 +23,9 @@
 #' * `"TCI"`: Topographic convergence index
 #' * `"*"`: All of the above
 #'
-#' @seealso [flowPath()], [streams()], the **GRASS** module `r.terraflow` (see `grassHelp("r.terraflow")`)
+#' @seealso [flowPath()], [streams()], the **GRASS** tool `r.terraflow` (see `grassHelp("r.terraflow")`)
 #'
-#' @param scratchDir Character or `NULL` (default): Directory in which to store temporary files. The **GRASS** module `r.terraflow` makes a lot of temporary files. If this is `NULL`, then a temporary folder in the user's working directory will be used (see [getwd()]).
+#' @param scratchDir Character or `NULL` (default): Directory in which to store temporary files. The **GRASS** tool `r.terraflow` makes a lot of temporary files. If this is `NULL`, then a temporary folder in the user's working directory will be used (see [getwd()]).
 #'
 #' @returns A `GRaster`.
 #'

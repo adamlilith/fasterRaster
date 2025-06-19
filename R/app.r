@@ -24,7 +24,7 @@
 #' * It must use typical arithmetic operators like `+`, `-`, `*`, `/` and/or functions that can be seen using `appFuns(TRUE)`.
 #' * The [names()] of the rasters do not match any of the functions in the `appFuns(TRUE)` table. Note that `x` and `y` are forbidden names :(
 #'
-#' The help page for **GRASS** module `r.mapcalc` will be especially helpful. You can see this page using `grassHelp("r.mapcalc")`.
+#' The help page for **GRASS** tool `r.mapcalc` will be especially helpful. You can see this page using `grassHelp("r.mapcalc")`.
 #' 
 #' @param datatype Character: This ensures that rasters are treated as a certain type before they are operated on. This is useful when using rasters that have all integer values, which **GRASS** can assume represent integers, even if they are not supposed to. In this case, the output of operations on this raster might be an integer if otherwise not corrected. Partial matching is used, and options include:
 #' * `"integer"`: Force all rasters to integers by truncating their values. The output may still be of type `float` if the operation creates non-integer values.
@@ -42,7 +42,7 @@
 #'
 #' @returns A `GRaster`.
 #'
-#' @seealso [terra::app()], [terra::lapp()], [subst()], [classify()], and especially the **GRASS** manual page for module `r.mapcalc` (see `grassHelp("r.mapcalc")`)
+#' @seealso [terra::app()], [terra::lapp()], [subst()], [classify()], and especially the **GRASS** manual page for tool `r.mapcalc` (see `grassHelp("r.mapcalc")`)
 #'
 #' @example man/examples/ex_app.r
 #'

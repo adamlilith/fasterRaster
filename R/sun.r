@@ -1,6 +1,6 @@
 #' Solar radiance and irradiance
 #'
-#' The `sun()` function calculates beam (direct), diffuse and ground reflected solar irradiation for a given day and set of topographic and atmospheric conditions. The function relies on the **GRASS** module `r.sun`, the manual page for which contains a detailed explanation (see `grassHelp("r.sun")`)
+#' The `sun()` function calculates beam (direct), diffuse and ground reflected solar irradiation for a given day and set of topographic and atmospheric conditions. The function relies on the **GRASS** tool `r.sun`, the manual page for which contains a detailed explanation (see `grassHelp("r.sun")`)
 #'
 #' @param elevation A `GRaster` with values representing elevation (typically in meters).
 #'
@@ -18,7 +18,7 @@
 #'
 #' @param albedo A `GRaster` or a numeric value: This is either a raster with values of ground albedo or a numeric value (in which case albedo is assumed to be the same everywhere). Albedo is unit-less, and the default value is 0.2.
 #'
-#' @param linke A `GRaster` or a numeric value: This is either a raster with values of the Linke atmospheric turbidity coefficient or a numeric value (in which case the same value is assumed for all locations). The Linke coefficient is unit-less. The default value is 3, but see also the **GRASS** manual page for module `r.sun` (`grassHelp("r.sun")`).
+#' @param linke A `GRaster` or a numeric value: This is either a raster with values of the Linke atmospheric turbidity coefficient or a numeric value (in which case the same value is assumed for all locations). The Linke coefficient is unit-less. The default value is 3, but see also the **GRASS** manual page for tool `r.sun` (`grassHelp("r.sun")`).
 #'
 #' @param day Positive integer between 1 to 365, inclusive: Day of year for which to calculate ir/radiation. Default is 1 (January 1st).
 #'
@@ -32,17 +32,17 @@
 #'
 #' @param npartitions Positive numeric. Number of chunks in which to read input files. Default is 1.
 #'
-#' @param beam_rad Logical: If `TRUE` (default), generate a raster with beam irradiation with units of Wh / m^2 / day ("mode 2" of the `r.sun` **GRASS** module).
+#' @param beam_rad Logical: If `TRUE` (default), generate a raster with beam irradiation with units of Wh / m^2 / day ("mode 2" of the `r.sun` **GRASS** tool).
 #'
 #' @param diff_rad Logical: If `TRUE` (default), generate a raster representing irradiation in Wh / m^2 /day
 #'
-#' @param refl_rad Logical: If `TRUE` (default), generate a raster with ground-reflected irradiation with units of Wh / m^2 / day ("mode 2" of the `r.sun` **GRASS** module).
+#' @param refl_rad Logical: If `TRUE` (default), generate a raster with ground-reflected irradiation with units of Wh / m^2 / day ("mode 2" of the `r.sun` **GRASS** tool).
 #'
-#' @param glob_rad Logical:. If `TRUE` (default), generate a raster with total irradiance/irradiation with units of Wh / m^2 / day ("mode 2" of the `r.sun` **GRASS** module).
+#' @param glob_rad Logical:. If `TRUE` (default), generate a raster with total irradiance/irradiation with units of Wh / m^2 / day ("mode 2" of the `r.sun` **GRASS** tool).
 #'
-#' @param insol_time Logical: If `TRUE` (default), generate a raster with total insolation time in hours ("mode 2" of the `r.sun` **GRASS** module).
+#' @param insol_time Logical: If `TRUE` (default), generate a raster with total insolation time in hours ("mode 2" of the `r.sun` **GRASS** tool).
 #'
-#' @param lowMemory Logical: If `TRUE`, use the low-memory version of the `r.sun` **GRASS** module. The default is `FALSE`.
+#' @param lowMemory Logical: If `TRUE`, use the low-memory version of the `r.sun` **GRASS** tool. The default is `FALSE`.
 #'
 #' @returns A raster or raster stack stack with the same extent, resolution, and coordinate reference system as `elevation`. Assuming all possible rasters are generated they represent:
 #' * `beam_rad`: Beam radiation (Watt-hours/m2/day)
@@ -51,7 +51,7 @@
 #' * `glob_rad`: Global radiation (Watt-hours/m2/day)
 #' * `insol_time`: Insolation duration (hours)
 #' 
-#' @seealso [terrain()], [horizonHeight()], **GRASS** manual page for module `r.sun` (see `grassHelp("r.sun")`)
+#' @seealso [terrain()], [horizonHeight()], **GRASS** manual page for tool `r.sun` (see `grassHelp("r.sun")`)
 #'
 #' @example man/examples/ex_sun.r
 #'

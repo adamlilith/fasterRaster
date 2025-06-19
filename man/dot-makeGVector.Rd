@@ -18,7 +18,7 @@
 
 \item{table}{A \code{data.table}, \code{data.frame}, \code{GVector} with a table, or character. This can be \code{data.table(NULL)} or \code{data.frame(NULL)} if there is no table associated with the vector. If a character, this is interpreted as the name of the table in \strong{GRASS}.}
 
-\item{build}{Logical: If \code{TRUE} (default), build topology using \strong{GRASS} module \code{v.build}.}
+\item{build}{Logical: If \code{TRUE} (default), build topology using \strong{GRASS} tool \code{v.build}.}
 
 \item{extensive}{Logical: If \code{TRUE}, do extensive topological checks using \code{v.build}. The default is \code{FALSE}.}
 

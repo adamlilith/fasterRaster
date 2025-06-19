@@ -35,7 +35,7 @@
 A \code{GRaster}.
 }
 \description{
-\code{rSpatialDepRast()} creates a raster with random values in cells. Across the raster, values are approximately normally distributed, though a raster with a "true" normal distribution can be made with \code{\link[=rnormRast]{rnormRast()}}. Spatial dependence can be introduced, though all together the values will still be approximately normally distributed.
+\code{rSpatialDepRast()} creates a raster with random values in cells. Across the raster, values are approximately normally distributed, though a raster with a "true" normal distribution can be made with \code{\link[=rNormRast]{rNormRast()}}. Spatial dependence can be introduced, though all together the values will still be approximately normally distributed.
 }
 \examples{
 if (grassStarted()) {
@@ -51,11 +51,11 @@ madElev <- fastData("madElev")
 elev <- fast(madElev)
 
 ### Create a raster with values drawn from a uniform distribution:
-unif <- runifRast(elev)
+unif <- rUnifRast(elev)
 plot(unif)
 
 ### Create a raster with values drawn from a normal distribution:
-norms <- rnormRast(elev, n = 2, mu = c(5, 10), sigma = c(2, 1))
+norms <- rNormRast(elev, n = 2, mu = c(5, 10), sigma = c(2, 1))
 plot(norms)
 hist(norms, bins = 100)
 
@@ -74,8 +74,27 @@ fractal <- fractalRast(elev, n = 2, dimension = c(2.1, 2.8))
 plot(fractal)
 hist(fractal)
 
+### Random walker rasters
+
+# One random walker
+walk <- rWalkRast(elev)
+plot(walk)
+
+# Random walker with self-avoidance:
+walkAvoid <- rWalkRast(elev, steps = 1000, avoid = TRUE, seed = 1)
+plot(walkAvoid)
+
+# 10 random walkers:
+walk10 <- rWalkRast(elev, n = 10)
+plot(walk10)
+
+# 10 random walkers starting in same place:
+walkSame10 <- rWalkRast(elev, n = 10, sameStart = TRUE)
+plot(walkSame10)
+
+
 }
 }
 \seealso{
-\code{\link[=rnormRast]{rnormRast()}}, \code{\link[=fractalRast]{fractalRast()}}, \code{\link[=runifRast]{runifRast()}}, \strong{GRASS} manual page for module \code{r.random.surface} (see \code{grassHelp("r.random.surface")})
+\code{\link[=rNormRast]{rNormRast()}}, \code{\link[=fractalRast]{fractalRast()}}, \code{\link[=rUnifRast]{rUnifRast()}}, \code{\link[=rWalkRast]{rWalkRast()}}, \strong{GRASS} manual page for tool \code{r.random.surface} (see \code{grassHelp("r.random.surface")})
 }

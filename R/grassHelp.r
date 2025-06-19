@@ -1,9 +1,9 @@
-#' Open the help page for a GRASS module
+#' Open the help page for a GRASS tool
 #'
-#' @description This function opens the manual page for a **GRASS** module (function) in your browser.
+#' @description This function opens the manual page for a **GRASS** tool (function) in your browser.
 #'
 #' @param x Character: Any of:
-#' * The name of a **GRASS** module (e.g., `"r.mapcalc"`).
+#' * The name of a **GRASS** tool (e.g., `"r.mapcalc"`).
 #' * `"toc"`: **GRASS** manual table of contents.
 #' * `"index"`: Display an index of topics.
 #'

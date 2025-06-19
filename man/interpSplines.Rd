@@ -54,5 +54,5 @@ If you receive the error, "No data within this subregion. Consider increasing sp
 If cross-validation takes too long, or other warnings/errors persist, you can randomly subsample \code{x} to ~100 points to get an optimum value of \code{lambda} (using \code{interpolate = FALSE}), then use this value in the same function again without cross-validation (setting \code{lambda} equal to this value and \code{interpolate = TRUE}).
 }
 \seealso{
-\code{\link[=interpIDW]{interpIDW()}}, \code{\link[=fillNAs]{fillNAs()}}, \strong{GRASS} module \code{v.surf.bspline} (see \code{grassHelp("v.surf.bspline")})
+\code{\link[=interpIDW]{interpIDW()}}, \code{\link[=fillNAs]{fillNAs()}}, \strong{GRASS} tool \code{v.surf.bspline} (see \code{grassHelp("v.surf.bspline")})
 }

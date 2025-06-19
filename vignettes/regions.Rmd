@@ -16,7 +16,7 @@ knitr::opts_chunk$set(
 )
 fig.path = 'man/figures/'
 ```
-A **GRASS** *region* is a data structure like a raster in that it is composed of a grid, but different in that "cells" in this grid do not contain values. Rather, their resolution and the extent of the region influence how rasters are imported, created, processed, and exported. In most cases, whenever a raster undergoes one of these processes using a **GRASS** module, the raster will be resampled and/or crop/extend it so that matches the region"s extent and resolution. If ignored, this can cause unintended side effects if the region's geometry doesn't match the raster being processed.
+A **GRASS** *region* is a data structure like a raster in that it is composed of a grid, but different in that "cells" in this grid do not contain values. Rather, their resolution and the extent of the region influence how rasters are imported, created, processed, and exported. In most cases, whenever a raster undergoes one of these processes using a **GRASS** tool, the raster will be resampled and/or crop/extend it so that matches the region"s extent and resolution. If ignored, this can cause unintended side effects if the region's geometry doesn't match the raster being processed.
 
 Generally, most users of **fasterRaster** will not need to know how regions work because their management is handled automatically.  This help page is provided to assist power users who may wish to use regions explicitly or develop their own applications based on **fasterRaster**.
 

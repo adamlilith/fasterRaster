@@ -1,17 +1,15 @@
-#' "fasterRaster": Faster raster and spatial vector processing using "GRASS GIS"
+#' "fasterRaster": Faster raster and spatial vector processing using "GRASS"
 #'
-#' @description **fasterRaster**: Processing of large-in-memory/-on disk rasters and spatial vectors in using **GRASS GIS**. Most functions in the **terra** and **sf** packages are recreated. Processing of medium-sized and smaller spatial objects will nearly always be faster using **terra** or **sf**. To use most of the functions you must have the stand-alone version of **GRASS GIS** version 8.3 or higher (not the **OSGeoW4** installer version). Note that due to differences in how **GRASS**, **terra**, and **sf** were implemented, results will not always be strictly comparable between functions for the same operation.
+#' @description **fasterRaster**: Processing of large-in-memory/-on disk rasters and spatial vectors in using **GRASS**. Most functions in the **terra** and **sf** packages are recreated. Processing of medium-sized and smaller spatial objects will nearly always be faster using **terra** or **sf**. To use most of the functions you must have the stand-alone version of **GRASS** version 8.3 or higher (not the **OSGeoW4** installer version). Note that due to differences in how **GRASS**, **terra**, and **sf** were implemented, results will not always be strictly comparable between functions for the same operation.
 #'
 #' ## Most useful tutorials and functions:
 #' * The quick-start guide to getting started with **fasterRaster**: `vignette("fasterRaster", package = "fasterRaster")`: 
 #' * Types of `GRaster`s: `vignette("GRasters", package = "fasterRaster")`
 #' * How to speed up **fasterRaster**: `vignette("faster_fasterRaster", package = "fasterRaster")`
-#' * Using functions that depend on **GRASS** addons: `vignette("addons", package = "fasterRaster")`
 #' * [faster()]: Set the directory where **GRASS** is installed on your system, and set or get other package-wide options. This function must be run once before using most **fasterRaster** functions.
 #' * [fast()]: Convert a `SpatRaster`, `SpatVector`, or `sf` vector to **fasterRaster**'s raster format (`GRaster`s) or vector format (`GVector`s), or load one from a file
 #' * [rast()], [vect()], and [st_as_sf()]: Convert `GRaster`s and `GVector`s to `SpatRaster`s, `SpatVector`s, or `sf` vectors
 #' * [writeRaster()] and [writeVector()]: Save `GRaster`s or `GVector`s to disk
-#' * [addons()]: Test if the `addons` directory is correct and if a particular addon **GRASS** module is installed.
 #'
 #' ## Properties of `GRasters`
 #' * [crs()]: Coordinate reference system
@@ -99,6 +97,7 @@
 #' * [maskNA()]: Mask all non-NA cells or all NA cells
 #' * [match()], \code{\link[fasterRaster]{%in%}}, and \code{\link[fasterRaster]{%notin%}}: Find which cells of a `GRaster` match or do not match certain values
 #' * [merge()]: Combine two or more rasters with different extents and fill in `NA`s
+#' * [multivarEnvSim()]: Multivariate environmental similarity surface (MESS)
 #' * \code{\link[fasterRaster]{names<-}}: Assign names to a `GRaster`
 #' * [noise()]: Remove coarse-scale trends from a `GRaster`, leaving just fine-scale "noise"
 #' * [pairs()]: Plot correlations between `GRaster` layers
@@ -126,9 +125,10 @@
 #' * [fractalRast()]: Create a fractal `GRaster`
 #' * [init()]: GRaster with values equal to row, column, coordinate, regular, or "chess"
 #' * [longlat()]: Create longitude/latitude rasters
-#' * [rnormRast()]: A random `GRaster` with values drawn from a normal distribution
+#' * [rNormRast()]: A random `GRaster` with values drawn from a normal distribution
 #' * [rSpatialDepRast()]: Create a random `GRaster` with or without spatial dependence
-#' * [runifRast()]: A random `GRaster` with values drawn from a uniform distribution
+#' * [rUnifRast()]: A random `GRaster` with values drawn from a uniform distribution
+#' * [rWalkRast()]: Paths of random walkers
 #' * [sineRast()]: Sine wave rasters
 #' 
 #' ## Analysis of terrain and hydrology
@@ -235,6 +235,7 @@
 #' * [kernel()]: Kernel density estimator of points
 #' * [missing.cases()]: Find rows of a `GVector`'s data table that have at least `NA` in them
 #' * \code{\link[fasterRaster]{names<-}}: Assign names to columns of a `GVector`s data table
+#' * [neighborhoodMatrix()] and [neighbourhoodMatrix()]: Neighborhood matrix of a polygons `GVector`
 #' * [project()]: Change coordinate reference system
 #' * [rasterize()]: Convert a `GVector` to a `GRaster`
 #' * [rbind()]: Combine `GVectors`
@@ -283,15 +284,18 @@
 #' * [vect()]: Convert a `GVector` to a `SpatVector`
 #'
 #' ## General purpose functions
+#' * [addons()]: Show installed **GRASS** addons
 #' * [compareGeom()]: Determine if geographic metadata is same between `GRaster`s and/or `GVector`s
 #' * [dropRows()]: Remove rows from a `data.frame` or `data.table`
 #' * [grassGUI()]: Start the **GRASS** GUI (not recommended for most users!!!)
-#' * [grassHelp()]: Open the help page for a **GRASS** module.
+#' * [grassHelp()]: Open the help page for a **GRASS** tool.
 #' * [grassInfo()]: **GRASS** version and citation
 #' * [grassStarted()]: Has a connection **GRASS** been made within the current **R** session?
+#' * [installAddon()]: Install a **GRASS** addon
 #' * [mow()]: Remove unused rasters and vectors from the **GRASS** cache
 #' * [reorient()]: Convert degrees between 'north-orientation' and 'east orientation'
 #' * [replaceNAs()]: Replace `NA`s in columns of a `data.table` or `data.frame`, or in a vector
+#' * [removeAddon()]: Delete **GRASS** addon from your system
 #' * [seqToSQL()]: Format a numeric series into an SQL value call
 #' * [update()]: Refresh metadata in a `GRaster` or `GVector` object
 #'

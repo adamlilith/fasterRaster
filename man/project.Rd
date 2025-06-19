@@ -70,7 +70,7 @@ A \code{GRaster} or \code{GVector}.
 }
 }
 \details{
-When projecting a raster, the "fallback" methods in \strong{GRASS} module \code{r.import} are actually used, even though the \code{method} argument takes the strings specifying non-fallback methods. See the manual page for the \code{r.import} \strong{GRASS} module.
+When projecting a raster, the "fallback" methods in \strong{GRASS} tool \code{r.import} are actually used, even though the \code{method} argument takes the strings specifying non-fallback methods. See the manual page for the \code{r.import} \strong{GRASS} tool.
 }
 \examples{
 if (grassStarted()) {

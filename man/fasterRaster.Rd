@@ -4,20 +4,18 @@
 \name{fasterRaster}
 \alias{fasterRaster-package}
 \alias{fasterRaster}
-\title{"fasterRaster": Faster raster and spatial vector processing using "GRASS GIS"}
+\title{"fasterRaster": Faster raster and spatial vector processing using "GRASS"}
 \description{
-\strong{fasterRaster}: Processing of large-in-memory/-on disk rasters and spatial vectors in using \strong{GRASS GIS}. Most functions in the \strong{terra} and \strong{sf} packages are recreated. Processing of medium-sized and smaller spatial objects will nearly always be faster using \strong{terra} or \strong{sf}. To use most of the functions you must have the stand-alone version of \strong{GRASS GIS} version 8.3 or higher (not the \strong{OSGeoW4} installer version). Note that due to differences in how \strong{GRASS}, \strong{terra}, and \strong{sf} were implemented, results will not always be strictly comparable between functions for the same operation.
+\strong{fasterRaster}: Processing of large-in-memory/-on disk rasters and spatial vectors in using \strong{GRASS}. Most functions in the \strong{terra} and \strong{sf} packages are recreated. Processing of medium-sized and smaller spatial objects will nearly always be faster using \strong{terra} or \strong{sf}. To use most of the functions you must have the stand-alone version of \strong{GRASS} version 8.3 or higher (not the \strong{OSGeoW4} installer version). Note that due to differences in how \strong{GRASS}, \strong{terra}, and \strong{sf} were implemented, results will not always be strictly comparable between functions for the same operation.
 \subsection{Most useful tutorials and functions:}{
 \itemize{
 \item The quick-start guide to getting started with \strong{fasterRaster}: \code{vignette("fasterRaster", package = "fasterRaster")}:
 \item Types of \code{GRaster}s: \code{vignette("GRasters", package = "fasterRaster")}
 \item How to speed up \strong{fasterRaster}: \code{vignette("faster_fasterRaster", package = "fasterRaster")}
-\item Using functions that depend on \strong{GRASS} addons: \code{vignette("addons", package = "fasterRaster")}
 \item \code{\link[=faster]{faster()}}: Set the directory where \strong{GRASS} is installed on your system, and set or get other package-wide options. This function must be run once before using most \strong{fasterRaster} functions.
 \item \code{\link[=fast]{fast()}}: Convert a \code{SpatRaster}, \code{SpatVector}, or \code{sf} vector to \strong{fasterRaster}'s raster format (\code{GRaster}s) or vector format (\code{GVector}s), or load one from a file
 \item \code{\link[=rast]{rast()}}, \code{\link[=vect]{vect()}}, and \code{\link[=st_as_sf]{st_as_sf()}}: Convert \code{GRaster}s and \code{GVector}s to \code{SpatRaster}s, \code{SpatVector}s, or \code{sf} vectors
 \item \code{\link[=writeRaster]{writeRaster()}} and \code{\link[=writeVector]{writeVector()}}: Save \code{GRaster}s or \code{GVector}s to disk
-\item \code{\link[=addons]{addons()}}: Test if the \code{addons} directory is correct and if a particular addon \strong{GRASS} module is installed.
 }
 }
 
@@ -119,6 +117,7 @@ Operations on \code{GRaster}s
 \item \code{\link[=maskNA]{maskNA()}}: Mask all non-NA cells or all NA cells
 \item \code{\link[=match]{match()}}, \code{\link[fasterRaster]{\%in\%}}, and \code{\link[fasterRaster]{\%notin\%}}: Find which cells of a \code{GRaster} match or do not match certain values
 \item \code{\link[=merge]{merge()}}: Combine two or more rasters with different extents and fill in \code{NA}s
+\item \code{\link[=multivarEnvSim]{multivarEnvSim()}}: Multivariate environmental similarity surface (MESS)
 \item \code{\link[fasterRaster]{names<-}}: Assign names to a \code{GRaster}
 \item \code{\link[=noise]{noise()}}: Remove coarse-scale trends from a \code{GRaster}, leaving just fine-scale "noise"
 \item \code{\link[=pairs]{pairs()}}: Plot correlations between \code{GRaster} layers
@@ -149,9 +148,10 @@ Operations on \code{GRaster}s
 \item \code{\link[=fractalRast]{fractalRast()}}: Create a fractal \code{GRaster}
 \item \code{\link[=init]{init()}}: GRaster with values equal to row, column, coordinate, regular, or "chess"
 \item \code{\link[=longlat]{longlat()}}: Create longitude/latitude rasters
-\item \code{\link[=rnormRast]{rnormRast()}}: A random \code{GRaster} with values drawn from a normal distribution
+\item \code{\link[=rNormRast]{rNormRast()}}: A random \code{GRaster} with values drawn from a normal distribution
 \item \code{\link[=rSpatialDepRast]{rSpatialDepRast()}}: Create a random \code{GRaster} with or without spatial dependence
-\item \code{\link[=runifRast]{runifRast()}}: A random \code{GRaster} with values drawn from a uniform distribution
+\item \code{\link[=rUnifRast]{rUnifRast()}}: A random \code{GRaster} with values drawn from a uniform distribution
+\item \code{\link[=rWalkRast]{rWalkRast()}}: Paths of random walkers
 \item \code{\link[=sineRast]{sineRast()}}: Sine wave rasters
 }
 }
@@ -279,6 +279,7 @@ Operations on \code{GRaster}s
 \item \code{\link[=kernel]{kernel()}}: Kernel density estimator of points
 \item \code{\link[=missing.cases]{missing.cases()}}: Find rows of a \code{GVector}'s data table that have at least \code{NA} in them
 \item \code{\link[fasterRaster]{names<-}}: Assign names to columns of a \code{GVector}s data table
+\item \code{\link[=neighborhoodMatrix]{neighborhoodMatrix()}} and \code{\link[=neighbourhoodMatrix]{neighbourhoodMatrix()}}: Neighborhood matrix of a polygons \code{GVector}
 \item \code{\link[=project]{project()}}: Change coordinate reference system
 \item \code{\link[=rasterize]{rasterize()}}: Convert a \code{GVector} to a \code{GRaster}
 \item \code{\link[=rbind]{rbind()}}: Combine \code{GVectors}
@@ -340,15 +341,18 @@ Operations on \code{GRaster}s
 
 \subsection{General purpose functions}{
 \itemize{
+\item \code{\link[=addons]{addons()}}: Show installed \strong{GRASS} addons
 \item \code{\link[=compareGeom]{compareGeom()}}: Determine if geographic metadata is same between \code{GRaster}s and/or \code{GVector}s
 \item \code{\link[=dropRows]{dropRows()}}: Remove rows from a \code{data.frame} or \code{data.table}
 \item \code{\link[=grassGUI]{grassGUI()}}: Start the \strong{GRASS} GUI (not recommended for most users!!!)
-\item \code{\link[=grassHelp]{grassHelp()}}: Open the help page for a \strong{GRASS} module.
+\item \code{\link[=grassHelp]{grassHelp()}}: Open the help page for a \strong{GRASS} tool.
 \item \code{\link[=grassInfo]{grassInfo()}}: \strong{GRASS} version and citation
 \item \code{\link[=grassStarted]{grassStarted()}}: Has a connection \strong{GRASS} been made within the current \strong{R} session?
+\item \code{\link[=installAddon]{installAddon()}}: Install a \strong{GRASS} addon
 \item \code{\link[=mow]{mow()}}: Remove unused rasters and vectors from the \strong{GRASS} cache
 \item \code{\link[=reorient]{reorient()}}: Convert degrees between 'north-orientation' and 'east orientation'
 \item \code{\link[=replaceNAs]{replaceNAs()}}: Replace \code{NA}s in columns of a \code{data.table} or \code{data.frame}, or in a vector
+\item \code{\link[=removeAddon]{removeAddon()}}: Delete \strong{GRASS} addon from your system
 \item \code{\link[=seqToSQL]{seqToSQL()}}: Format a numeric series into an SQL value call
 \item \code{\link[=update]{update()}}: Refresh metadata in a \code{GRaster} or \code{GVector} object
 }

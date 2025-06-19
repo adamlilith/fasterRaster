@@ -2,14 +2,14 @@
 % Please edit documentation in R/grassHelp.r
 \name{grassHelp}
 \alias{grassHelp}
-\title{Open the help page for a GRASS module}
+\title{Open the help page for a GRASS tool}
 \usage{
 grassHelp(x, online = FALSE)
 }
 \arguments{
 \item{x}{Character: Any of:
 \itemize{
-\item The name of a \strong{GRASS} module (e.g., \code{"r.mapcalc"}).
+\item The name of a \strong{GRASS} tool (e.g., \code{"r.mapcalc"}).
 \item \code{"toc"}: \strong{GRASS} manual table of contents.
 \item \code{"index"}: Display an index of topics.
 }}
@@ -20,7 +20,7 @@ grassHelp(x, online = FALSE)
 Nothing (opens a web page).
 }
 \description{
-This function opens the manual page for a \strong{GRASS} module (function) in your browser.
+This function opens the manual page for a \strong{GRASS} tool (function) in your browser.
 }
 \examples{
 if (grassStarted() & interactive()) {

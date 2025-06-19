@@ -16,7 +16,7 @@
 #'
 #' @returns A `GRaster`.
 #'
-#' @seealso [terra::rasterize()], **GRASS** module `v.to.rast` (see `grassHelp("v.to.rast")`)
+#' @seealso [terra::rasterize()], **GRASS** tool `v.to.rast` (see `grassHelp("v.to.rast")`)
 #'
 #' @example man/examples/ex_rasterize.r
 #'

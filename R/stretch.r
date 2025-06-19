@@ -12,7 +12,7 @@
 #' 
 #' @returns A `GRaster`.
 #' 
-#' @seealso [terra::stretch()] and module `r.rescale` in **GRASS** (not used on this function)
+#' @seealso [terra::stretch()] and tool `r.rescale` in **GRASS** (not used on this function)
 #' 
 #' @example man/examples/ex_stretch.r
 #' 

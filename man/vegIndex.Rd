@@ -75,5 +75,5 @@ plot(rnir)
 }
 }
 \seealso{
-\strong{GRASS} manual page for module \code{i.vi} (see \code{grassHelp("i.vi")})
+\strong{GRASS} manual page for tool \code{i.vi} (see \code{grassHelp("i.vi")})
 }

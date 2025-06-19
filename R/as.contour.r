@@ -9,7 +9,7 @@
 #'
 #' @param levels Numeric vector: A numeric vector of values at which to calculate contour lines. Either `nlevels` or `levels` must be specified.
 #'
-#' @seealso [terra::as.contour()], **GRASS** manual page for module `r.contour` (see `grassHelp("r.contour")`)
+#' @seealso [terra::as.contour()], **GRASS** manual page for tool `r.contour` (see `grassHelp("r.contour")`)
 #'
 #' @returns A `GVector` representing contour lines.
 #'

@@ -68,7 +68,7 @@
 \item{...}{Additional arguments. These can include:
 \itemize{
 \item \code{bigTiff}: Logical: If \code{TRUE}, and the file format is a GeoTIFF and would be larger than 4 GB (regardless of compression), then the file will be saved in BIGTIFF format.
-\item \code{format}: Character, indicating file format. This is usually ascertained from the file extension, but in case this fails, it can be stated explicitly. When using other formats, you may have to specify the \code{createopts} argument, too (see help page for \strong{GRASS} module \code{r.out.gdal}). Two common formats include:
+\item \code{format}: Character, indicating file format. This is usually ascertained from the file extension, but in case this fails, it can be stated explicitly. When using other formats, you may have to specify the \code{createopts} argument, too (see help page for \strong{GRASS} tool \code{r.out.gdal}). Two common formats include:
 \itemize{
 \item \code{"GTiff"} (default): GeoTIFF \code{filename} ends in \code{.tif}.
 \item \code{"ASC"}: ASCII \code{filename} ends in \code{.asc}
@@ -83,7 +83,7 @@ A \code{GRaster} (invisibly). A raster is also saved to disk.
 \description{
 This function saves a \code{GRaster} to disk directly from a \strong{GRASS} session. It is faster than using \code{\link[=rast]{rast()}}, then saving the output of that to disk (because \code{rast()} actually save the raster to disk, anyway).
 
-The function will attempt to ascertain the file type to be ascertained from the file extension, but you can specify the format using the \code{format} argument (see entry for \code{...}). You can see a list of supported formats by simply using this function with no arguments, as in \code{writeRaster()}, or by consulting the online help page for the \strong{GRASS} module \code{r.out.gdal} (see \code{grassHelp("r.out.gdal")}). Only the \code{GeoTIFF} file format is guaranteed to work for multi-layered rasters.
+The function will attempt to ascertain the file type to be ascertained from the file extension, but you can specify the format using the \code{format} argument (see entry for \code{...}). You can see a list of supported formats by simply using this function with no arguments, as in \code{writeRaster()}, or by consulting the online help page for the \strong{GRASS} tool \code{r.out.gdal} (see \code{grassHelp("r.out.gdal")}). Only the \code{GeoTIFF} file format is guaranteed to work for multi-layered rasters.
 
 The function will attempt to optimize the \code{datatype} argument, but this can take a long time. You can speed this up by setting \code{datatype} manually. Note that if you are saving a "stack" of \code{GRaster}s with different \code{datatype}s, the one with the highest information density will be used (e.g., low-bit integer < high-bit integer < floating-point < double-floating point). This can make rasters with lower datatypes much larger on disk. In these cases, it make be best to save rasters with similar \code{datatype}s together.
 }
@@ -131,5 +131,5 @@ chelsaBio1
 }
 }
 \seealso{
-\code{\link[terra:writeRaster]{terra::writeRaster()}}, \strong{GRASS} module \code{r.out.gdal} (see \code{grassHelp("r.out.gdal")})
+\code{\link[terra:writeRaster]{terra::writeRaster()}}, \strong{GRASS} tool \code{r.out.gdal} (see \code{grassHelp("r.out.gdal")})
 }

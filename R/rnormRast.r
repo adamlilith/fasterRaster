@@ -1,6 +1,6 @@
 #' Create a raster with random values drawn from a normal distribution
 #'
-#' @description `rnormRast()` creates a raster with values drawn from a normal distribution.
+#' @description `rNormRast()` creates a raster with values drawn from a normal distribution.
 #'
 #' @param x A `GRaster`: The output will have the same extent and dimensions as this raster.
 #'
@@ -14,13 +14,13 @@
 #'
 #' @example man/examples/ex_randRast.r
 #' 
-#' @seealso [rSpatialDepRast()], [fractalRast()], [runifRast()], **GRASS** manual page for module `r.random.surface` (see `grassHelp("r.random.surface")`)
+#' @seealso [rSpatialDepRast()], [fractalRast()], [rUnifRast()], [rWalkRast()], **GRASS** manual page for tool `r.random.surface` (see `grassHelp("r.random.surface")`)
 #'
-#' @aliases rnormRast
-#' @rdname rnormRast
-#' @exportMethod rnormRast
+#' @aliases rNormRast
+#' @rdname rNormRast
+#' @exportMethod rNormRast
 methods::setMethod(
-    f = "rnormRast",
+    f = "rNormRast",
     signature = c(x = "GRaster"),
     function(x,
         n = 1,

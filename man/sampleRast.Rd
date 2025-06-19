@@ -111,5 +111,5 @@ plot(randAll)
 }
 }
 \seealso{
-\code{\link[=spatSample]{spatSample()}}; \code{\link[terra:sample]{terra::spatSample()}}, module \code{r.random} in \strong{GRASS}
+\code{\link[=spatSample]{spatSample()}}; \code{\link[terra:sample]{terra::spatSample()}}, tool \code{r.random} in \strong{GRASS}
 }

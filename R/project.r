@@ -37,7 +37,7 @@
 #'
 #' @param verbose Logical (for projecting `GRaster`s only): If `TRUE`, display progress. Default is `FALSE`.
 #'
-#' @details When projecting a raster, the "fallback" methods in **GRASS** module `r.import` are actually used, even though the `method` argument takes the strings specifying non-fallback methods. See the manual page for the `r.import` **GRASS** module.
+#' @details When projecting a raster, the "fallback" methods in **GRASS** tool `r.import` are actually used, even though the `method` argument takes the strings specifying non-fallback methods. See the manual page for the `r.import` **GRASS** tool.
 #' 
 #' @returns A `GRaster` or `GVector`.
 #' 

@@ -5,16 +5,22 @@
 \alias{ruggedness}
 \title{Terrain ruggedness index}
 \usage{
-\S4method{ruggedness}{GRaster}(x)
+\S4method{ruggedness}{GRaster}(x, size = 3, exponent = 0)
 }
 \arguments{
 \item{x}{A \code{GRaster}.}
+
+\item{size}{Integer (default is 3): Size of the moving window. Must be an odd integer >= 3.}
+
+\item{exponent}{Numeric >= 0 and <= 4. Used to reduce the influence of cells farther from the focal cell (larger areas can yield noisier results if the exponent small). All cells are weighted equally when \code{exponent = 0}.}
 }
 \value{
 A \code{GRaster}.
 }
 \description{
-For a given focal grid cell, the terrain ruggedness index (TRI) is calculated by taking the square root of the average of the squared difference between the focal cell's elevation and the elevations of the 8 surrounding cells, or \deqn{\sqrt(\sum_{i = 1}^{8}(m_i - m_0)^2 / 8)} where \eqn{m_0} is the elevation of the focal cell and \eqn{m_i} is the elevation of the \emph{i}th grid cell.
+For a given focal grid cell, the terrain ruggedness index (TRI) is calculated by taking the square root of the average of the squared difference between the focal cell's elevation and the elevations of the 8 surrounding cells, or \deqn{\sqrt(\sum_{i = 1}^{8}(m_i - m_0)^2 / 8)} where \eqn{m_0} is the elevation of the focal cell and \eqn{m_i} is the elevation of the \emph{i}th grid cell. Areas that are entirely flat will have a value of \code{NA} assigned to them.
+
+By default, TRI is calculated for a 3x3 moving window around each focal cell. However, you can use a larger-sized window. In this case, the window size must be an odd number >= 3, and you must have the \code{r.tri} \strong{GRASS} addon installed. If it is not installed, the function will try to install it.
 }
 \examples{
 if (grassStarted()) {
@@ -28,13 +34,19 @@ madElev <- fastData("madElev")
 # Convert to GRaster:
 elev <- fast(madElev)
 
-# Terrain ruggedness index:
-tri <- ruggedness(elev)
-plot(c(elev, tri))
-
 # Topographic wetness index:
 twi <- wetness(elev)
+names(twi) <- 'TWI'
 plot(c(elev, twi))
+
+# Terrain ruggedness index:
+tri <- ruggedness(elev)
+tri7 <- ruggedness(elev, size = 7)
+triSmooth7 <- ruggedness(elev, size = 7, exponent = 4)
+
+tris <- c(elev, tri, tri7, triSmooth7)
+names(tris) <- c("elevation", "TRI in 3x3", "TRI in 7x7", "Smoothed TRIin 7x7")
+plot(tris)
 
 }
 }

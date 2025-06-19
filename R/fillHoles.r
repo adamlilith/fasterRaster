@@ -10,7 +10,7 @@
 #'
 #' @example man/examples/ex_GVector.r
 #'
-#' @seealso [terra::fillHoles()], **GRASS** manual page for module `v.fill.holes` (see `grassHelp("v.fill.holes")`)
+#' @seealso [terra::fillHoles()], **GRASS** manual page for tool `v.fill.holes` (see `grassHelp("v.fill.holes")`)
 #'
 #' @aliases fillHoles
 #' @rdname fillHoles

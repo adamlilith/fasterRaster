@@ -69,5 +69,5 @@ plot(byRiver)
 }
 }
 \seealso{
-\code{\link[terra:rasterize]{terra::rasterize()}}, \strong{GRASS} module \code{v.to.rast} (see \code{grassHelp("v.to.rast")})
+\code{\link[terra:rasterize]{terra::rasterize()}}, \strong{GRASS} tool \code{v.to.rast} (see \code{grassHelp("v.to.rast")})
 }

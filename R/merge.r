@@ -6,7 +6,7 @@
 #'
 #' @returns A `GRaster`.
 #' 
-#' @seealso [terra::merge()], [terra::mosaic()], and **GRASS** module `r.patch`
+#' @seealso [terra::merge()], [terra::mosaic()], and **GRASS** tool `r.patch`
 #'
 #' @example man/examples/ex_merge.r
 #'

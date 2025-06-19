@@ -62,12 +62,12 @@
 #' Issues can also arise due to:
 #'
 #' * **Data table-vector mismatching**: If your vector has a data table ("attribute table") associated with it, errors can occur if there are more/fewer geometries (or multi-geometries) per row in the table. If you do not really need the data table to do your analysis, you can remove it (and thus obviate this error) using `dropTable = TRUE`.
-#' * **Dissolving or aggregating "invalid" geometries**: Using the `resolve` argument, you can create a topologically valid vector by either coercing all overlapping portions of polygons into their own geometries (`resolve = "disaggregate"`), or by coercing them into a single, combined geometry (`resolve = "aggregate"`). Aggregation/disaggregation will be implemented after loading the vector into **GRASS** using the settings given by `snap` and `area`. Aggregation/disaggregation will cause any associated data table to be dropped (it forces `dropTable` to be `TRUE`). The default action is to do neither aggregation nor disaggregation (`resolve = NA`).
+#' * **Dissolving or aggregating "invalid" geometries**: Using the `resolve` argument, you can create a topologically valid vector by either coercing all overlapping portions of polygons into their own geometries (`resolve = "disaggregate"`), or by coercing them into a single, combined geometry (`resolve = "aggregate"`). Aggregation/disaggregation will be implemented after loading the vector into **GRASS** using the settings given by `snap` and `area`. Aggregation/disaggregation will cause any associated data table to be dropped (it forces `dropTable` to be `TRUE`). The default action is to do neither aggregation nor disaggregation (`resolve = NA`). You can also do this outside **fasterRaster** using [terra::aggregate()] or [terra::disagg()].
 #'
 #' If none of these fixes work, you can try:
 #'
-#' * **Correction outside of *fasterRaster***: Before you convert the vector into **fasterRaster**'s `GVector` format, you can also try using the [terra::makeValid()] or [sf::st_make_valid()] tools to fix issues, then use `fast()`.
-#' * **Post-conversion to a `GVector`**: If you do get a vector loaded into `GVector` format, you can also use a set of **fasterRaster** vector-manipulation [tools][breakPolys] or [fillHoles()] to fix issues.
+#' * **Correction outside of *fasterRaster***: Before you convert the vector into **fasterRaster**'s `GVector` format, you can also try using the [terra::makeValid()] or [sf::st_make_valid()] tools to fix issues, then use `fast()`. You can also use [terra::aggregate()] or [terra::disagg()] to combine/split problematic geometries.
+#' * **Post-load correction**: If you do get a vector loaded into `GVector` format, you can also use a set of **fasterRaster** vector-manipulation [tools][breakPolys] or [fillHoles()] to fix issues.
 #'
 #' @seealso \code{\link[rgrass]{read_RAST}} and \code{\link[rgrass]{read_VECT}}, [vector cleaning][breakPolys], [fillHoles()], plus **GRASS** modules `v.in.ogr` (see `grassHelp("v.in.ogr")`) and `r.import` (`grassHelp("r.import")`)
 #'
@@ -115,6 +115,9 @@ methods::setMethod(
 	}
 
 	if (is.na(faster("grassDir"))) stop("You must specify the folder in which GRASS is installed using faster().")
+
+	# Error for cases where there are fewer geometries than rows in the data table. Topology correction using `snap` or `area` can only the number of geometries, so if the number of geometries is larger than the number of table rows, then iteratively trying larger values of `snap` or `area` will continue to create a mismatch between the number of geometries and table rows. In this case, just throw an error to obviate wasting time.
+	nGeometriesVsTableRowsError <- "Since the data table has more rows than there are vector geometries,\n  increasing `snap` and/or `area` can only decrease the number of geometries.\n  Try smaller values of `snap` and/or `area`, or remove the table using\n  `dropTable = TRUE`."
 
 	### dots
 	########
@@ -329,16 +332,14 @@ methods::setMethod(
 
 			if ((verbose | faster("verbose")) & gtype == "area") {
 				omnibus::say("Creating GVector with ", thisSnapNice, " snapping and ", thisAreaNice, "...")
-			}# else if (verbose | faster("verbose")) {
-			#	omnibus::say("Creating GVector with ", thisSnapNice, " snapping of vertices/points...")
-			#}
+			}
 
 			src <- .makeSourceName("fast_v_in_ogr", "vector")
 			if (is.null(snap) & (is.null(area) || area == 0)) {
 
 				# slower if we need to record messages
 				suppressMessages(
-					run <- rgrass::execGRASS(
+					assessment <- rgrass::execGRASS(
 						cmd = "v.in.ogr",
 						input = x,
 						output = src,
@@ -353,9 +354,9 @@ methods::setMethod(
 				)
 
 				valid <- !any(c(
-					grepl(run, pattern = "WARNING: The output contains topological errors"),
-					grepl(run, pattern = "Invalid argument"),
-					run == "1"
+					grepl(assessment, pattern = "WARNING: The output contains topological errors"),
+					grepl(assessment, pattern = "Invalid argument"),
+					assessment == "1"
 				))
 
 				if (valid) { # more thorough test... slower
@@ -376,6 +377,9 @@ methods::setMethod(
 
 					if (!valid & verbose & !dropTable) {
 						omnibus::say("   Vector has ", info$nGeometries, " valid geometries, ", sum(is.na(info$cats)), " invalid geometries, and ", nrow(table), " rows in its data table.")
+						if (info$nGeometries < nrow(table)) {
+							stop(nGeometriesVsTableRowsError)
+						}
 					} else if (!valid & verbose) {
 						omnibus::say("   Vector has ", info$nGeometries, " valid geometries and ", sum(is.na(info$cats)), " invalid geometries.")
 					}
@@ -411,6 +415,9 @@ methods::setMethod(
 
 				if (!valid & verbose & !dropTable) {
 					omnibus::say("   Vector has ", info$nGeometries, " valid geometries, ", sum(is.na(info$cats)), " invalid geometries, and ", nrow(table), " rows in its data table.")
+						if (info$nGeometries < nrow(table)) {
+							stop(nGeometriesVsTableRowsError)
+						}
 				} else if (!valid & verbose) {
 					omnibus::say("   Vector has ", info$nGeometries, " valid geometries and ", sum(is.na(info$cats)), " invalid geometries.")
 				}
@@ -420,8 +427,27 @@ methods::setMethod(
 			### automated vector topology correction
 			if (!valid & (is.null(snap) | is.null(area))) {
 			
+				if (!exists("assessment", inherits = FALSE)) {
+				
+					suppressMessages(
+						assessment <- rgrass::execGRASS(
+							cmd = "v.in.ogr",
+							input = x,
+							output = src,
+							snap = thisSnap,
+							min_area = thisArea,
+							flags = c("verbose", "overwrite", "t", "o", correctTopoFlag),
+							ignore.stderr = FALSE,
+							Sys_show.output.on.console = FALSE,
+							echoCmd = FALSE, # displays GRASS command
+							intern = TRUE
+						)
+					)
+				
+				}
+
 				stepsMinus1 <- steps - 1L
-				snapRange <- run[grepl(run, pattern = "Estimated range of snapping threshold:")]
+				snapRange <- assessment[grepl(assessment, pattern = "Estimated range of snapping threshold:")]
 
 				# generic snap range
 				if (length(snapRange) == 0L) {
@@ -496,6 +522,9 @@ methods::setMethod(
 
 						if (made & !valid & verbose & !dropTable) {
 							omnibus::say("   Vector has ", info$nGeometries, " valid geometries, ", sum(is.na(info$cats)), " invalid geometries, and ", nrow(table), " rows in its data table.")
+							if (info$nGeometries < nrow(table)) {
+								stop(nGeometriesVsTableRowsError)
+							}
 						} else if (made & !valid & verbose) {
 							omnibus::say("   Vector has ", info$nGeometries, " valid geometries and ", sum(is.na(info$cats)), " invalid geometries.")
 						} else if (!made) {
@@ -554,6 +583,9 @@ methods::setMethod(
 
 						if (made & !valid & verbose & !dropTable) {
 							omnibus::say("   Vector has ", info$nGeometries, " valid geometries, ", sum(is.na(info$cats)), " invalid geometries, and ", nrow(table), " rows in its data table.")
+							if (info$nGeometries < nrow(table)) {
+								stop(nGeometriesVsTableRowsError)
+							}
 						} else if (made & !valid & verbose) {
 							omnibus::say("   Vector has ", info$nGeometries, " valid geometries and ", sum(is.na(info$cats)), " invalid geometries.")
 						} else if (!made) {
@@ -615,6 +647,9 @@ methods::setMethod(
 
 						if (made & !valid & verbose & !dropTable) {
 							omnibus::say("   Vector has ", info$nGeometries, " valid geometries, ", sum(is.na(info$cats)), " invalid geometries, and ", nrow(table), " rows in its data table.")
+							if (info$nGeometries < nrow(table)) {
+								stop(nGeometriesVsTableRowsError)
+							}
 						} else if (made & !valid & verbose) {
 							omnibus::say("   Vector has ", info$nGeometries, " valid geometries and ", sum(is.na(info$cats)), " invalid geometries.")
 						} else if (!made) {
@@ -635,7 +670,40 @@ methods::setMethod(
 				stop(msg)
 
 			}
+
 			out <- .makeGVector(src = src, table = table)
+			
+			# # save/reload vector... seems to fix errors with subset_single_bracket on polygon vectors later on
+			# if (reload & geomtype(out) == "polygons") {
+
+			# 	if (verbose | faster("verbose")) omnibus::say('Reloading GVector...')
+			# 	tempVect <- tempfile(fileext = ".gpkg")
+
+			# 	args <- list(
+			# 		cmd = "v.out.ogr",
+			# 		input = sources(out),
+			# 		output = tempVect,
+			# 		format = "GPKG",
+			# 		flags = c(.quiet(), "s", "overwrite")
+			# 		# flags = c(.quiet(), "s", "c") # "c" ==> save geometries lacking a cat number
+			# 	)
+			# 	do.call(rgrass::execGRASS, args)
+
+			# 	Sys.sleep(0.5)
+			# 	src <- .makeSourceName("v_in_ogr", "vector")
+			# 	rgrass::execGRASS(
+			# 		cmd = "v.in.ogr",
+			# 		input = tempVect,
+			# 		output = src,
+			# 		flags = c(.quiet(), "overwrite", "t", "c")
+			# 	)
+			# 	out <- .makeGVector(src, table = table)
+
+			# 	# writeVector(out, filename = tempVect, overwrite = TRUE)
+			# 	# out <- fast(tempVect, reload = FALSE, table = table) # cannot use vect() on this... weird!
+			
+			# }
+
 			if ((verbose | faster("verbose")) & geomtype(out) == "polygons") omnibus::say("Topologically valid vector created.")
 
 		} # x is a filename and xVect supplied

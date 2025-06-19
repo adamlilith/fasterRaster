@@ -1,8 +1,8 @@
 Package: fasterRaster
 Type: Package
-Title: Faster Raster and Spatial Vector Processing Using 'GRASS GIS'
-Version: 8.4.0.7
-Date: 2025-04-24
+Title: Faster Raster and Spatial Vector Processing Using 'GRASS'
+Version: 8.4.1.0
+Date: 2025-06-19
 Authors@R: 
 	c(
 		person(
@@ -15,12 +15,12 @@ Authors@R:
 	)
 Maintainer: Adam B. Smith <adam.smith@mobot.org>
 Description: Processing of large-in-memory/large-on disk rasters and spatial
-	vectors using 'GRASS GIS' <https://grass.osgeo.org/>. Most functions in
-	the 'terra' package are	recreated. Processing of medium-sized and smaller
+	vectors using 'GRASS' <https://grass.osgeo.org/>. Most functions in the
+	'terra' package are	recreated. Processing of medium-sized and smaller
 	spatial objects will nearly always be faster using 'terra' or 'sf', but
 	for large-in-memory/large-on-disk objects, 'fasterRaster' may be faster.
 	To use most of the functions, you must have the stand-alone version (not
-	the 'OSGeoW4' installer version) of 'GRASS GIS' 8.0 or higher.
+	the 'OSGeoW4' installer version) of 'GRASS' 8.0 or higher.
 Depends:
 	R (>= 4.0.0)
 Imports:

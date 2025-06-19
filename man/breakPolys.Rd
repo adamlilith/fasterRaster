@@ -155,5 +155,5 @@ legend("bottom",
 }
 }
 \seealso{
-\code{\link[terra:topology]{terra::topology()}}, \code{\link[=fillHoles]{fillHoles()}}, \code{\link[terra:topology]{terra::removeDupNodes()}}, \emph{Details} section in \code{\link[=fast]{fast()}}, \code{\link[=simplifyGeom]{simplifyGeom()}}, \code{\link[=smoothGeom]{smoothGeom()}}, \strong{GRASS} manual page for module \code{v.clean} (see \code{grassHelp("v.clean")})
+\code{\link[terra:topology]{terra::topology()}}, \code{\link[=fillHoles]{fillHoles()}}, \code{\link[terra:topology]{terra::removeDupNodes()}}, \emph{Details} section in \code{\link[=fast]{fast()}}, \code{\link[=simplifyGeom]{simplifyGeom()}}, \code{\link[=smoothGeom]{smoothGeom()}}, \strong{GRASS} manual page for tool \code{v.clean} (see \code{grassHelp("v.clean")})
 }

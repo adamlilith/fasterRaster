@@ -66,5 +66,5 @@ plot(dypsis, add = TRUE, pch = 1)
 }
 }
 \seealso{
-\strong{GRASS} manual page for module \code{v.kernel} (see \code{grassHelp("v.kernel")})
+\strong{GRASS} manual page for tool \code{v.kernel} (see \code{grassHelp("v.kernel")})
 }

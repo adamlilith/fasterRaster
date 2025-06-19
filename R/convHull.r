@@ -7,7 +7,7 @@
 #'
 #' @return A `GVector`.
 #'
-#' @seealso \code{link[terra]{convHull}}, \code{link[sf]{st_convex_hull}}, module `v.hull` in **GRASS** (see `grassHelp("v.hull")`)
+#' @seealso \code{link[terra]{convHull}}, \code{link[sf]{st_convex_hull}}, tool `v.hull` in **GRASS** (see `grassHelp("v.hull")`)
 #'
 #' @example man/examples/ex_convHull.r
 #'

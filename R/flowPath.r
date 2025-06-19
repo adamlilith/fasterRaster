@@ -17,7 +17,7 @@
 #'
 #' @example man/examples/ex_flowPath.r
 #'
-#' @seealso [flow()], [streams()], the **GRASS** module `r.drain` (see `grassHelp("r.drain")`)
+#' @seealso [flow()], [streams()], the **GRASS** tool `r.drain` (see `grassHelp("r.drain")`)
 #'
 #' @aliases flowPath
 #' @rdname flowPath

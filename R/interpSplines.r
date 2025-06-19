@@ -29,7 +29,7 @@
 #' * `lambda` is `NULL` and `interpolate` is `FALSE`: A `data.frame` with values of `lambdas` that were assessed, plus `mean` (mean residual value) and `rms` (root mean square error). You can see the table using `attr(output_raster, "lambdas", exact = TRUE)`.
 #' * `lambda` is a number (`interpolate` is ignored): A `GRaster`.
 #'
-#' @seealso [interpIDW()], [fillNAs()], **GRASS** module `v.surf.bspline` (see `grassHelp("v.surf.bspline")`)
+#' @seealso [interpIDW()], [fillNAs()], **GRASS** tool `v.surf.bspline` (see `grassHelp("v.surf.bspline")`)
 #'
 #' @aliases interpSplines
 #' @rdname interpSplines

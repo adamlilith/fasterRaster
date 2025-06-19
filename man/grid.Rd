@@ -71,5 +71,5 @@ plot(coast, lwd = 2, add = TRUE)
 }
 }
 \seealso{
-\code{\link[=hexagons]{hexagons()}}, module \code{v.mkgrid} in \strong{GRASS}
+\code{\link[=hexagons]{hexagons()}}, tool \code{v.mkgrid} in \strong{GRASS}
 }

@@ -10,7 +10,7 @@
 \arguments{
 \item{x}{A "points" \code{GVector}.}
 
-\item{method}{Character: Method used to identify clusters. Explanations of methods are provided in the help page for the \strong{GRASS} module \code{v.cluster}, available using \code{grassHelp("v.cluster")}.
+\item{method}{Character: Method used to identify clusters. Explanations of methods are provided in the help page for the \strong{GRASS} tool \code{v.cluster}, available using \code{grassHelp("v.cluster")}.
 \itemize{
 \item \code{"DBSCAN"} (default): Density-Based Spatial Clustering of Applications with Noise.
 \item \code{"DBSCAN2"}: A modification of DBSCAN.
@@ -32,5 +32,5 @@ A vector of integers indicating the cluster to which each point belongs.
 \code{clusterPoints()} partitions points in a "points" \code{GVector} into clusters.
 }
 \seealso{
-\strong{GRASS} manual page for module \code{v.cluster} (see \code{grassHelp("v.cluster")})
+\strong{GRASS} manual page for tool \code{v.cluster} (see \code{grassHelp("v.cluster")})
 }

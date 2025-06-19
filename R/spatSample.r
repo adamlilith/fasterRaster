@@ -26,7 +26,7 @@
 #'
 #' @returns A `data.frame`, `data.table`, or `GVector`.
 #' 
-#' @seealso [sampleRast()], [terra::spatSample()], module `v.random` in **GRASS**
+#' @seealso [sampleRast()], [terra::spatSample()], tool `v.random` in **GRASS** (see `grassHelp("v.random")`)
 #'
 #' @example man/examples/ex_sampleRast_spatSample.r
 #'
@@ -267,6 +267,7 @@ methods::setMethod(
 		# args$flags <- c(args$flags, "b") ### do not create topology... problems? YES!
 		do.call(rgrass::execGRASS, args = args)
 
+	### not loacting by stratum
 	} else {
 		
 		if (verbose | faster("verbose")) omnibus::say("Placing points...")
@@ -282,7 +283,6 @@ methods::setMethod(
 		if (!xy & !(values | cats)) args$flags <- c(args$flags, "b")
 
 		if (!is.null(seed)) args$seed <- round(seed)
-
 		do.call(rgrass::execGRASS, args = args)
 
 	}

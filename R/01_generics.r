@@ -128,8 +128,8 @@ methods::setGeneric(name = "dropTable", def = function(x, ...) standardGeneric("
 
 methods::setGeneric(name = "E", def = function(x, ...) standardGeneric("E"))
 # methods::setGeneric(name = "elide", def = function(x, ...) standardGeneric("elide"))
-methods::setGeneric(name = "erase", package = "terra") 
-methods::setGeneric(name = "ext", package = "terra") 
+methods::setGeneric(name = "erase", package = "terra")
+methods::setGeneric(name = "ext", package = "terra")
 methods::setGeneric(name = "extend", package = "terra")
 methods::setGeneric(name = "expanse", package = "terra")
 methods::setGeneric(name = "extract", package = "terra")
@@ -199,6 +199,7 @@ methods::setGeneric(name = "merge", package = "terra")
 #' @importFrom terra median
 methods::setGeneric(name = "median", def = function(x, na.rm) standardGeneric("median"))
 methods::setGeneric(name = "mmode", def = function(x, ...) package = "omnibus")
+methods::setGeneric(name = "multivarEnvSim", def = function(ref, proj, ...) standardGeneric("multivarEnvSim"))
 
 # "names" (in base) is primitive
 methods::setGeneric(name = "N", def = function(x, ...) standardGeneric("N"))
@@ -206,7 +207,9 @@ methods::setGeneric(name = "ncell", package = "terra")
 methods::setGeneric(name = "ncell3d", def = function(x) standardGeneric("ncell3d"))
 methods::setGeneric(name = "ncol", def = function(x) standardGeneric("ncol")) # in base
 methods::setGeneric(name = "ndepth", def = function(x) standardGeneric("ndepth"))
-methods::setGeneric(name = "new", package = "methods") 
+methods::setGeneric(name = "neighborhoodMatrix", def = function(x, ...) standardGeneric("neighborhoodMatrix"))
+methods::setGeneric(name = "neighbourhoodMatrix", def = function(x, ...) standardGeneric("neighbourhoodMatrix"))
+methods::setGeneric(name = "new", package = "methods")
 methods::setGeneric(name = "nlyr", package = "terra")
 methods::setGeneric(name = "nacell", def = function(x, ...) standardGeneric("nacell"))
 methods::setGeneric(name = "ngeom", def = function(x, ...) standardGeneric("ngeom"))
@@ -238,7 +241,6 @@ methods::setGeneric(name = "rasterize", package = "terra")
 # from https://stackoverflow.com/questions/27886535/proper-way-to-use-cbind-rbind-with-s4-classes-in-package
 methods::getGeneric("rbind")
 methods::setGeneric(name = "rbind", signature = "...")
-
 methods::setGeneric(name = "regress", package = "terra")
 methods::setGeneric(name = "remove0", def = function(x, ...) standardGeneric("remove0"))
 methods::setGeneric(name = "removeAngles", def = function(x, ...) standardGeneric("removeAngles"))
@@ -251,10 +253,11 @@ methods::setGeneric(name = "replaceNAs", def = function(x, ...) standardGeneric(
 methods::setGeneric(name = "res", package = "terra")
 methods::setGeneric(name = "res3d", def = function(x) standardGeneric("res3d"))
 methods::setGeneric(name = "resample", package = "terra")
-methods::setGeneric(name = "rnormRast", def = function(x, ...) standardGeneric("rnormRast"))
+methods::setGeneric(name = "rNormRast", def = function(x, ...) standardGeneric("rNormRast"))
 methods::setGeneric(name = "ruggedness", def = function(x, ...) standardGeneric("ruggedness"))
-methods::setGeneric(name = "runifRast", def = function(x, ...) standardGeneric("runifRast"))
+methods::setGeneric(name = "rUnifRast", def = function(x, ...) standardGeneric("rUnifRast"))
 methods::setGeneric(name = "rvoronoi", def = function(x, ...) standardGeneric("rvoronoi"))
+methods::setGeneric(name = "rWalkRast", def = function(x, ...) standardGeneric("rWalkRast"))
 
 methods::setGeneric(name = "S", def = function(x, ...) standardGeneric("S"))
 methods::setGeneric(name = "sampleRast", def = function(x, ...) standardGeneric("sampleRast"))

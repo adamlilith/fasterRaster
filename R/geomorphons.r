@@ -1,6 +1,6 @@
 #' Identify terrain feature types
 #'
-#' @description Geomorphons are idealized terrain types calculated from an elevator raster based on a moving window of a given size. The window is a torus (which can have an inner radius of 0, so can also be a circle), which allows it to identify geomorphons of a given size while ignoring ones larger or smaller. There are 10 basic geomorphons. Consult the the manual for **GRASS** module `r.geomorphon` using `grassHelp("r.geomorphon")` for more details and diagrams of each type of geomorphon. Geomorphon types include:
+#' @description Geomorphons are idealized terrain types calculated from an elevator raster based on a moving window of a given size. The window is a torus (which can have an inner radius of 0, so can also be a circle), which allows it to identify geomorphons of a given size while ignoring ones larger or smaller. There are 10 basic geomorphons. Consult the the manual for **GRASS** tool `r.geomorphon` using `grassHelp("r.geomorphon")` for more details and diagrams of each type of geomorphon. Geomorphon types include:
 #' 1. Flat areas: Focal area has approximately the same elevation as surrounding areas
 #' 2. Pits: An area is lower than all other surrounding areas
 #' 3. Valley: Focal area has elevation similar to two opposing side of the window but lower than the other two opposing sides
@@ -23,13 +23,13 @@
 #' @param flatDist Numeric: Distance (in meters) to correct for the effect of large distances on the diminished capacity to identify "flat" geomorphons. If the distance between the focal area and a surrounding area surpasses this distance, then the effective value of `flat` will be reduced
 #'
 #' @param mode Character: Method for implementing the zenith/line-of-site search. Partial matching is used:
-#' * `"1"` (default): The "original" geomorphon mode (in **GRASS** module `r.geomorphon`, the "anglev1" method)
+#' * `"1"` (default): The "original" geomorphon mode (in **GRASS** tool `r.geomorphon`, the "anglev1" method)
 #' * `"2"`: Better handling of cases with equal zenith/nadir angles (the "anglev2" method)
 #' * `"2d"`: As `"2"`, but takes into account zenith/nadir distance ("anglev2_distance" method)
 #'
 #' @returns A categorical `GRaster` where each geomorphon is a category (see `vignette("GRasters", package = "fasterRaster")`).
 #'
-#' @seealso **GRASS** manual for module `r.geomorphon` (see `grassHelp("r.geomorphon")`)
+#' @seealso **GRASS** manual for tool `r.geomorphon` (see `grassHelp("r.geomorphon")`)
 #'
 #' @example man/examples/ex_geomorphons.r
 #'

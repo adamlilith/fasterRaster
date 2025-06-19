@@ -1,13 +1,9 @@
 if (grassStarted()) {
 
-# Does the addons folder exist?
-ao <- addons(fail = "warning")
-if (ao) print("Addons is folder is probably correctly specified.")
+# What addons are installed?
+addons()
 
-# Does this particular module exist?
-addon <- "v.centerpoint"
-exten <- addons(addon, fail = FALSE)
-
-if (exten) print("Extension `v.centerpoints` is installed.")
+# Is a specific addon installed?
+addons(c("v.centerpoint", "fake.addon"))
 
 }

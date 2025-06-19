@@ -6,7 +6,7 @@
 #'
 #' @returns A `GVector`.
 #' 
-#' @seealso [as.points()], [as.polygons()], [terra::as.lines()], [thinLines()], [geometry cleaning][breakPolys], and **GRASS** module `r.to.vect`
+#' @seealso [as.points()], [as.polygons()], [terra::as.lines()], [thinLines()], [geometry cleaning][breakPolys], and **GRASS** tool `r.to.vect`
 #' 
 #' @example man/examples/ex_asLines.r
 #' 

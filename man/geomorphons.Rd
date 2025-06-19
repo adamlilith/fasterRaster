@@ -28,7 +28,7 @@
 
 \item{mode}{Character: Method for implementing the zenith/line-of-site search. Partial matching is used:
 \itemize{
-\item \code{"1"} (default): The "original" geomorphon mode (in \strong{GRASS} module \code{r.geomorphon}, the "anglev1" method)
+\item \code{"1"} (default): The "original" geomorphon mode (in \strong{GRASS} tool \code{r.geomorphon}, the "anglev1" method)
 \item \code{"2"}: Better handling of cases with equal zenith/nadir angles (the "anglev2" method)
 \item \code{"2d"}: As \code{"2"}, but takes into account zenith/nadir distance ("anglev2_distance" method)
 }}
@@ -37,7 +37,7 @@
 A categorical \code{GRaster} where each geomorphon is a category (see \code{vignette("GRasters", package = "fasterRaster")}).
 }
 \description{
-Geomorphons are idealized terrain types calculated from an elevator raster based on a moving window of a given size. The window is a torus (which can have an inner radius of 0, so can also be a circle), which allows it to identify geomorphons of a given size while ignoring ones larger or smaller. There are 10 basic geomorphons. Consult the the manual for \strong{GRASS} module \code{r.geomorphon} using \code{grassHelp("r.geomorphon")} for more details and diagrams of each type of geomorphon. Geomorphon types include:
+Geomorphons are idealized terrain types calculated from an elevator raster based on a moving window of a given size. The window is a torus (which can have an inner radius of 0, so can also be a circle), which allows it to identify geomorphons of a given size while ignoring ones larger or smaller. There are 10 basic geomorphons. Consult the the manual for \strong{GRASS} tool \code{r.geomorphon} using \code{grassHelp("r.geomorphon")} for more details and diagrams of each type of geomorphon. Geomorphon types include:
 \enumerate{
 \item Flat areas: Focal area has approximately the same elevation as surrounding areas
 \item Pits: An area is lower than all other surrounding areas
@@ -76,5 +76,5 @@ plot(geos, col = col)
 }
 }
 \seealso{
-\strong{GRASS} manual for module \code{r.geomorphon} (see \code{grassHelp("r.geomorphon")})
+\strong{GRASS} manual for tool \code{r.geomorphon} (see \code{grassHelp("r.geomorphon")})
 }

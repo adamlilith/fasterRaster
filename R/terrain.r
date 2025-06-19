@@ -24,7 +24,7 @@
 #'
 #' @returns A `GRaster` with one or more layers.
 #' 
-#' @seealso [terra::terrain()], [ruggedness()], [wetness()], [geomorphons()], module `r.slope.aspect` in **GRASS**
+#' @seealso [terra::terrain()], [ruggedness()], [wetness()], [geomorphons()], tool `r.slope.aspect` in **GRASS**
 #'
 #' @example man/examples/ex_terrain.r
 #'

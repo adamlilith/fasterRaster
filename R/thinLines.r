@@ -8,7 +8,7 @@
 #' 
 #' @returns A `GRaster`.
 #'
-#' @seealso [as.lines()], **GRASS** manual page for module `r.thin` (see `grassHelp("r.thin")`)
+#' @seealso [as.lines()], **GRASS** manual page for tool `r.thin` (see `grassHelp("r.thin")`)
 #' 
 #' @example man/examples/ex_asLines.r
 #' 

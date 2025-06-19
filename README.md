@@ -4,11 +4,11 @@
 [![cran version](https://www.r-pkg.org/badges/version/fasterRaster)](https://cran.r-project.org/package=fasterRaster) [![R-CMD-check](https://github.com/adamlilith/fasterRaster/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/adamlilith/fasterRaster/actions/workflows/R-CMD-check.yaml) [![GPLv3 license](https://img.shields.io/badge/License-GPLv3-blue.svg)](http://perso.crans.org/besson/LICENSE.html)
 
 <!-- badges: end -->
-Faster raster processing in `R` using `GRASS GIS`
+Faster raster processing in `R` using `GRASS`
 
-<a href="https://github.com/adamlilith/fasterRaster"><img src="man/figures/logo.png" align="right" height="130" alt="fasterRaster website" /></a>
+<a href="https://adamlilith.github.io/fasterRaster/index.html"><img src="man/figures/logo.png" align="right" height="130" alt="fasterRaster website" /></a>
 
-`fasterRaster` is an **R** package designed specifically to handle large-in-memory/large-on-disk spatial rasters and vectors. `fasterRaster` does this using Open Source Geospatial's <a href="https://grass.osgeo.org/">`GRASS GIS`</a>
+`fasterRaster` is an **R** package designed specifically to handle large-in-memory/large-on-disk spatial rasters and vectors. `fasterRaster` does this using Open Source Geospatial's <a href="https://grass.osgeo.org/">`GRASS`</a>
 
 `fasterRaster` was created with five design principles:
 
@@ -16,12 +16,12 @@ Faster raster processing in `R` using `GRASS GIS`
 * **Familiarity**: If you know how to use `terra`, you basically know how to use `fasterRaster`! That's because most of the functions have the same name and almost the same arguments as `terra` functions.  
 * **Comparability**: To the degree possible, outputs from `fasterRaster` are the same as those from functions in `terra` with the same name.  
 * **Simplicity**: `GRASS` requires users to track things like "locations" or "projects", "mapsets", and "regions" for which there is no comparable analog in the `terra` or `sf` packages. `fasterRaster` handles these behind the scenes so you don't need to.  
-* **It's R**: The `rgrass` package provides a powerful conduit through which you can run `GRASS` modules from `R`. As such, it provides much more flexibility than `fasterRaster`. However, to use `rgrass`, you need to know what `GRASS` modules you want to use and be familiar with `GRASS` syntax. `fasterRaster` obviates this step but uses `rgrass` as a backend, allowing you to focus on `R` syntax and look up help for functions the normal way you do in `R`. You don't need to know `GRASS`!
+* **It's R**: The `rgrass` package provides a powerful conduit through which you can run `GRASS` tools from `R`. As such, it provides much more flexibility than `fasterRaster`. However, to use `rgrass`, you need to know what `GRASS` tools you want to use and be familiar with `GRASS` syntax. `fasterRaster` obviates this step but uses `rgrass` as a backend, allowing you to focus on `R` syntax and look up help for functions the normal way you do in `R`. You don't need to know `GRASS`!
 
-`fasterRaster` makes heavy use of the <a href="https://cran.r-project.org/package=rgrass">`rgrass`</a> package by Roger Bivand and others, the <a href="https://cran.r-project.org/package=rgrass">`terra`</a> package by Robert Hijmans, the <a href="https://cran.r-project.org/package=sf">`sf`</a> package by Edzer Pebesma, Roger Bivand, and others, and of course <a href="https://grass.osgeo.org/">`GRASS GIS`</a>, so is greatly indebted to all of these creators!
+`fasterRaster` makes heavy use of the <a href="https://cran.r-project.org/package=rgrass">`rgrass`</a> package by Roger Bivand and others, the <a href="https://cran.r-project.org/package=rgrass">`terra`</a> package by Robert Hijmans, the <a href="https://cran.r-project.org/package=sf">`sf`</a> package by Edzer Pebesma, Roger Bivand, and others, and of course <a href="https://grass.osgeo.org/">`GRASS`</a>, so is greatly indebted to all of these creators!
 
 # Vignettes & documentation
-**fasterRaster** comes with four user-oriented vignettes, plus a `pkgdown` site with full documentation:
+**fasterRaster** comes with four user-oriented vignettes, plus a `pkgdown` <a href="https://adamlilith.github.io/fasterRaster/index.html">site</a> with full documentation:
 
 o <a href="https://adamlilith.github.io/fasterRaster/articles/fasterRaster.html">Getting started</a> (also reproduced below)  
 o <a href="https://adamlilith.github.io/fasterRaster/articles/GRasters.html">Types of `GRaster`s</a>  
@@ -44,7 +44,7 @@ You can get the latest stable release using:
 
 To use `fasterRaster` you must install [GRASS version 8.3+](https://grass.osgeo.org/) on your operating system. **You will need to use the stand-alone installer, not the Open Source Geospatial (OS Geo) installer.**
 
-**Optional**: A few functions in **fasterRaster** require **GRASS** "addon" modules, which do not come bundled with **GRASS**. You do not need to install these addons if you do not use functions that call them. A list of functions that require addons can be seen in the "addons" vignette (in **R**, use `vignette("addons", package = "fasterRaster")`). This vignette also explains how to install addons.
+**Optional**: A few functions in **fasterRaster** require **GRASS** "addon" tools, which do not come bundled with **GRASS**. You do not need to install these addons if you do not use functions that call them. A list of functions that require addons can be seen in the "addons" vignette (in **R**, use `vignette("addons", package = "fasterRaster")`). This vignette also explains how to install addons.
 
 # An example
 
@@ -185,12 +185,12 @@ Note that the `M1.M2` and `S1.S2` increment independently. For example, if the v
 
 * Robert Hijman's [`terra`](https://cran.r-project.org/package=terra) package and Edzer Pebesma's [`sf`](https://cran.r-project.org/package=sf) package are good places to start if you are not familiar with doing GIS in `R`.  
 * Roger Bivand's [`rgrass`](https://cran.r-project.org/package=rgrass) package allows users to call any `GRASS` function with all of its functionality, which in some cases is far beyond what is allowed by `fasterRaster`.  
-* The [GRASS GIS](https://grass.osgeo.org/) website is authoritative and contains the manual on all the `GRASS` functions used in this package and more.  
+* The [GRASS](https://grass.osgeo.org/) website is authoritative and contains the manual on all the `GRASS` functions used in this package and more.  
 * The Wiki on [how to run `GRASS` in `R` or `R` in `GRASS`](https://grasswiki.osgeo.org/wiki/R_statistics/rgrass) will help you to become a power-user of `GRASS` in `R`.
 
 # Citation
 A publication is forthcoming! In the meantime, please cite:
 
-Smith, A.B. 2024. `fasterRaster`: Faster raster processing in `R` using `GRASS GIS`. URL: https://cran.r-project.org/package=fasterRaster.
+Smith, A.B. 2024. `fasterRaster`: Faster raster processing in `R` using `GRASS`. URL: https://cran.r-project.org/package=fasterRaster.
 
 ~ Adam

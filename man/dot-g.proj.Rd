@@ -2,7 +2,7 @@
 % Please edit documentation in R/g.proj.r
 \name{.g.proj}
 \alias{.g.proj}
-\title{Call GRASS \code{g.proj} module}
+\title{Call GRASS \code{g.proj} tool}
 \usage{
 .g.proj()
 }
@@ -10,6 +10,6 @@
 Displays current projection information for the active "project/location" in \strong{GRASS}.
 }
 \description{
-This function calls the \strong{GRASS} module \code{g.region} to display information on the projection of the current \strong{GRASS} "project".
+This function calls the \strong{GRASS} tool \code{g.region} to display information on the projection of the current \strong{GRASS} "project".
 }
 \keyword{internal}

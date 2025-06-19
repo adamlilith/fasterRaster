@@ -1,5 +1,5 @@
 home:
-  title: Faster Raster and Spatial Vector Processing Using 'GRASS GIS'
+  title: Faster Raster and Spatial Vector Processing Using 'GRASS'
   description: Processing of large-in-memory/large-on disk rasters.
 
 url: https://github.com/adamlilith/fasterRaster
@@ -19,7 +19,6 @@ articles:
   contents:
   - GRasters
   - faster_fasterRaster
-  - addons
   - three_d_objects
 
 - title: For Developers
@@ -40,7 +39,6 @@ reference:
   - st_as_sf
   - writeRaster
   - writeVector
-  - addons
 - title: GRaster properties
 - contents:
   - crs
@@ -156,6 +154,7 @@ reference:
   - app
   - c
   - cellSize
+  - centroids
   - classify
   - clump
   - combineLevels
@@ -177,6 +176,7 @@ reference:
   - maskNA
   - match
   - merge
+  - multivarEnvSim
   - names<-
   - noise
   - pairs
@@ -208,9 +208,10 @@ reference:
   - fractalRast
   - init
   - longlat
-  - rnormRast
+  - rNormRast
   - rSpatialDepRast
-  - runifRast
+  - rUnifRast
+  - rWalkRast
   - sineRast
 - title: Terrain and hydrology
 - contents:
@@ -331,6 +332,8 @@ reference:
   - kernel
   - missing.cases
   - names<-
+  - neighborhoodMatrix
+  - neighbourhoodMatrix
   - project
   - rasterize
   - rbind
@@ -381,13 +384,16 @@ reference:
   - vect
 - title: General functions
 - contents:
+  - addons
   - compareGeom
   - dropRows
   - grassGUI
   - grassHelp
   - grassInfo
   - grassStarted
+  - installAddon
   - mow
+  - removeAddon
   - replaceNAs
   - seqToSQL
   - update

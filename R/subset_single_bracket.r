@@ -39,6 +39,16 @@ methods::setMethod(
 		out <- x
 	} else if (!missing(i)) {
 
+		if (nrow(x) > 0 & ((is.numeric(i) | is.integer(i)) & any(i != order(i)))) {
+
+			.message(
+				msg = "subset_square_bracket",
+				message =
+"The GVector returned by `[` (subset_single_bracket) may have the order of items in\n  its data table changed from the order they appear in the index used to select features.\n  For example, if you use `vector[3:1]`, the results will be as per`vector[1:3]`. If this\n  message appeared after you called a function other than `[`, you can probably ignore it."
+			)
+
+		}
+
 		if (is.logical(i)) {
 			if (length(i) < nGeoms) i <- rep(i, length.out = nGeoms)
 			i <- which(i)
@@ -46,7 +56,7 @@ methods::setMethod(
 
 		if (any(i > 0L) & any(i < 0L)) stop("Cannot mix positive and negative indices.")
 
-		# negative indices
+		# negative indices... removing features
 		if (all(i < 0L)) {
 
 			reverseRowSelect <- TRUE
@@ -56,11 +66,12 @@ methods::setMethod(
 			removeAll <- length(i) == 0L
 
 		} else {
+			# positive indices... keeping features
 			reverseRowSelect <- removeAll <- FALSE
 		}
 		
 		if (any(i > nGeoms) | any(i == 0L)) stop("Index out of bounds.")
-		i <- sort(i)
+		i <- sort(i) # NB MUST have this, or data table will be mis-matched to features!!!!!
 
 		if (removeAll) {
 			out <- NULL # removed all
@@ -167,7 +178,8 @@ methods::setMethod(
 				input = sources(x),
 				output = src,
 				type = gtype,
-				flags = c(.quiet(), "overwrite")
+				# flags = c(.quiet(), "overwrite")
+				flags = c(.quiet(), "overwrite", "t") # "t" ==> Do not copy attributes
 			)
 
 			if (gtype == "point") {
@@ -236,6 +248,7 @@ methods::setMethod(
 
 			# select columns
 			if (missing(j)) {
+				# not removing all columns
 				removeAllCols <- FALSE
 			} else {
 				

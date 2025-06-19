@@ -15,7 +15,7 @@
 #'
 #' @param prop Positive value between 0 and 1: Proportion of points that will be retained for each geometry when the Douglas-Peucker algorithm with reduction is applied (ignored otherwise). Default is 0.5 (retain 50% of vertices).
 #'
-#' @seealso [smoothGeom()], [geometry cleaning][breakPolys], [terra::simplifyGeom()], **GRASS** manual page for module `v.generalize` (see `grassHelp("v.generalize")`)
+#' @seealso [smoothGeom()], [geometry cleaning][breakPolys], [terra::simplifyGeom()], **GRASS** manual page for tool `v.generalize` (see `grassHelp("v.generalize")`)
 #'
 #' @returns A `GVector`.
 #'

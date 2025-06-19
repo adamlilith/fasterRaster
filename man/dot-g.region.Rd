@@ -2,7 +2,7 @@
 % Please edit documentation in R/g.region.r
 \name{.g.region}
 \alias{.g.region}
-\title{Call GRASS \code{g.region} module}
+\title{Call GRASS \code{g.region} tool}
 \usage{
 .g.region()
 }
@@ -10,6 +10,6 @@
 Displays current region information for the active "project/location" in \strong{GRASS}.
 }
 \description{
-This function calls the \strong{GRASS} module \code{g.region} to display information on the region of the current \strong{GRASS} "project".
+This function calls the \strong{GRASS} tool \code{g.region} to display information on the region of the current \strong{GRASS} "project".
 }
 \keyword{internal}

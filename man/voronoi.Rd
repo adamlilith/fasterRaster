@@ -50,5 +50,5 @@ plot(rand)
 }
 }
 \seealso{
-\code{\link[terra:voronoi]{terra::voronoi()}}, \code{\link[sf:geos_unary]{sf::st_voronoi()}}, module \code{v.voronoi} in \strong{GRASS}
+\code{\link[terra:voronoi]{terra::voronoi()}}, \code{\link[sf:geos_unary]{sf::st_voronoi()}}, tool \code{v.voronoi} in \strong{GRASS}
 }

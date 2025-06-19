@@ -39,7 +39,7 @@ A categorical \code{SpatRaster} or \code{GRaster}. The values assigned to each c
 \description{
 Riitters et al. (2020) propose a classification scheme for forest fragmentation (which can be applied to any habitat type). The scheme relies on calculating density (e.g., number of forested cells in a window around a focal cell) and connectivity (number of cases where neighboring cells are both forested). This function calculates these classes from a \code{GRaster} or \code{SpatRaster} in which the focal habitat type has cell values of 1, and non-focal habitat type has cell values of 0 or \code{NA}.
 
-Note that by default, the \code{SpatRaster} and \code{GRaster} versions will create different results around the border of the raster. The \code{SpatRaster} version uses the \code{\link[terra:focal]{terra::focal()}} function, which will not return an \code{NA} value when its window overlaps the raster border if the \code{na.rm} argument is \code{TRUE}. However, the \code{GRaster} version uses the \strong{GRASS} module \code{r.neighbors}, which does return \code{NA} values in these cases.
+Note that by default, the \code{SpatRaster} and \code{GRaster} versions will create different results around the border of the raster. The \code{SpatRaster} version uses the \code{\link[terra:focal]{terra::focal()}} function, which will not return an \code{NA} value when its window overlaps the raster border if the \code{na.rm} argument is \code{TRUE}. However, the \code{GRaster} version uses the \strong{GRASS} tool \code{r.neighbors}, which does return \code{NA} values in these cases.
 
 The fragmentation classes are:
 \itemize{

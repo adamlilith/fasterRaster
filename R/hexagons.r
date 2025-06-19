@@ -14,7 +14,7 @@
 #'
 #' @example man/examples/ex_grid_hexagons.r
 #'
-#' @seealso [grid()], module `v.mkgrid` in **GRASS**
+#' @seealso [grid()], tool `v.mkgrid` in **GRASS**
 #'
 #' @aliases hexagons
 #' @rdname hexagons

@@ -19,7 +19,7 @@
 #'
 #' @param tolerance Numeric or `NULL` (default): Minimum distance in map units (degrees for unprojected, usually meters for projected) or minimum area (in meters-squared, regardless of projection).
 #'
-#' @seealso [terra::topology()], [fillHoles()], [terra::removeDupNodes()], *Details* section in [fast()], [simplifyGeom()], [smoothGeom()], **GRASS** manual page for module `v.clean` (see `grassHelp("v.clean")`)
+#' @seealso [terra::topology()], [fillHoles()], [terra::removeDupNodes()], *Details* section in [fast()], [simplifyGeom()], [smoothGeom()], **GRASS** manual page for tool `v.clean` (see `grassHelp("v.clean")`)
 #'
 #' @returns A `GVector`.
 #'

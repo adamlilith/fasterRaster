@@ -1,6 +1,6 @@
 #' Create a raster with random values drawn from a uniform distribution
 #'
-#' @description `runifRast()` creates a raster with values drawn from a uniform (flat) distribution.
+#' @description `rUnifRast()` creates a raster with values drawn from a uniform (flat) distribution.
 #'
 #' @param x A `GRaster`. The output will have the same extent and dimensions as this raster.
 #'
@@ -14,13 +14,13 @@
 #'
 #' @example man/examples/ex_randRast.r
 #' 
-#' @seealso [rnormRast()], [rSpatialDepRast()], [fractalRast()], **GRASS** manual page for module `r.random.surface` (see `grassHelp("r.random.surface")`)
+#' @seealso [rNormRast()], [rSpatialDepRast()], [fractalRast()], [rWalkRast()], **GRASS** manual page for tool `r.random.surface` (see `grassHelp("r.random.surface")`)
 #'
-#' @aliases runifRast
-#' @rdname runifRast
-#' @exportMethod runifRast
+#' @aliases rUnifRast
+#' @rdname rUnifRast
+#' @exportMethod rUnifRast
 methods::setMethod(
-    f = "runifRast",
+    f = "rUnifRast",
     signature = c(x = "GRaster"),
     function(
 		x,
