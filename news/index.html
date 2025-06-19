@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">fasterRaster</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">8.4.0.7</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">8.4.1.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -21,7 +21,6 @@
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/GRasters.html">Types of GRasters</a></li>
     <li><a class="dropdown-item" href="../articles/faster_fasterRaster.html">Making fasterRaster faster</a></li>
-    <li><a class="dropdown-item" href="../articles/addons.html">fasterRaster addons</a></li>
     <li><a class="dropdown-item" href="../articles/three_d_objects.html">3-dimensional objects</a></li>
     <li><hr class="dropdown-divider"></li>
     <li><a class="dropdown-item" href="../articles/index.html">More articles...</a></li>
@@ -48,12 +47,35 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="8.4.0.7" id="fasterraster-8407-2025-04-24">fasterRaster 8.4.0.7 (2025-04-24)<a class="anchor" aria-label="anchor" href="#fasterraster-8407-2025-04-24"></a></h2>
+<h2 class="pkg-version" data-toc-text="8.4.1.0" id="fasterraster-8410-2025-06-17">fasterRaster 8.4.1.0 (2025-06-17)<a class="anchor" aria-label="anchor" href="#fasterraster-8410-2025-06-17"></a></h2>
+<div class="section level4">
+<h4 id="code-breaking-changes-8-4-1-0">Code-breaking changes<a class="anchor" aria-label="anchor" href="#code-breaking-changes-8-4-1-0"></a></h4>
+<p>o <code>rnormRast()</code> is now <code><a href="../reference/rnormRast.html">rNormRast()</a></code>.<br>
+o <code>runifRast()</code> is now <code><a href="../reference/runifRast.html">rUnifRast()</a></code>.</p>
+</div>
+<div class="section level4">
+<h4 id="new-functions-and-functionality-8-4-1-0">New functions and functionality<a class="anchor" aria-label="anchor" href="#new-functions-and-functionality-8-4-1-0"></a></h4>
+<p>o <code><a href="../reference/addons.html">addons()</a></code> now reports the names of all installed addons or whether a given addon is installed.<br>
+o <code><a href="../reference/addons.html">installAddon()</a></code> installs an addon.<br>
+o <code><a href="../reference/addons.html">removeAddon()</a></code> deletes an addon.<br>
+o <code><a href="../reference/centroids.html">centroids()</a></code> now calculates centroids of clumps in a <code>GRaster</code>.<br>
+o <code><a href="../reference/multivarEnvSim.html">multivarEnvSim()</a></code> calculates multivariate environmental similarity (MESS).<br>
+o <code><a href="../reference/neighborhoodMatrix.html">neighborhoodMatrix()</a></code> generates a neighborhood matrix from a polygons <code>GVector</code>.<br>
+o <code><a href="../reference/rWalkRast.html">rWalkRast()</a></code> creates a raster with the path of random walkers.<br>
+o <code><a href="../reference/ruggedness.html">ruggedness()</a></code> now allows for calculation of the terrain ruggedness index across user-defined windows with distance-based weighting.</p>
+</div>
+<div class="section level4">
+<h4 id="minor-fixes-8-4-1-0">Minor fixes<a class="anchor" aria-label="anchor" href="#minor-fixes-8-4-1-0"></a></h4>
+<p>o Rebranding as per <strong>GRASS</strong> re-brand (haromonized logo with <strong>GRASS</strong> April 2025 branding guidelines, “GRASS GIS” –&gt; just “GRASS”, “modules” –&gt; “tools).</p>
+</div>
+</div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="8.4.0.7" id="fasterraster-8407-2025-04-24">fasterRaster 8.4.0.7 (2025-04-24)<a class="anchor" aria-label="anchor" href="#fasterraster-8407-2025-04-24"></a></h2><p class="text-muted">CRAN release: 2025-04-25</p>
 <p>o Removed dependency on <strong>rpanel</strong> because its dependency on <strong>tclk</strong> did not work with <strong>Docker</strong> images. Replaced with version dependency on <strong>omnibus</strong>’s <code>screenRes()</code> function.</p>
 </div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="8.4.0.6" id="fasterraster-8406-2025-03-26">fasterRaster 8.4.0.6 (2025-03-26)<a class="anchor" aria-label="anchor" href="#fasterraster-8406-2025-03-26"></a></h2>
-<p>o <code>faster(debug = TRUE)</code> displays the <strong>GRASS</strong> command for each <strong>GRASS</strong> module called in a <strong>fasterRaster</strong> function.<br>
+<p>o <code>faster(debug = TRUE)</code> displays the <strong>GRASS</strong> command for each <strong>GRASS</strong> tool called in a <strong>fasterRaster</strong> function.<br>
 o <code>GVector[i]</code> works for cases with long <code>i</code>s.<br>
 o Fixes to help pages.</p>
 </div>
@@ -151,7 +173,7 @@ o <code>pca()</code> has been renamed <code><a href="../reference/princomp.html"
 <h4 id="enhanced-functionality-and-new-functions-8-4-0-7027">Enhanced functionality and new functions<a class="anchor" aria-label="anchor" href="#enhanced-functionality-and-new-functions-8-4-0-7027"></a></h4>
 <p>o <code><a href="../reference/extract.html">extract()</a></code> now automatically projects a <code>GVector</code> to match the CRS of a <code>GRaster</code> from which extraction is being made.<br>
 o <code><a href="../reference/grassGUI.html">grassGUI()</a></code> allows users to start the <strong>GRASS</strong> GUI.<br>
-o <code><a href="../reference/grassHelp.html">grassHelp()</a></code> shows the manual page for a <strong>GRASS</strong> module.<br>
+o <code><a href="../reference/grassHelp.html">grassHelp()</a></code> shows the manual page for a <strong>GRASS</strong> tool.<br>
 o <code>layerIndex()</code> allows a <code>negate</code> argument to get the “opposite” indices of a <code>GRaster</code>.<br>
 o <code><a href="../reference/init.html">init()</a></code> assigns to <code>GRaster</code> cells the value of their coordinates, rows, columns, or values in a regular or chessboard-like pattern.<br>
 o <code><a href="../reference/regress.html">regress()</a></code> replaces individual functions <code>intercept()</code>, <code>slope()</code>, <code>r2()</code>, and <code>tvalue()</code>.<br>
@@ -331,8 +353,8 @@ o <code><a href="../reference/activeCat.html">activeCat()</a></code>: Correct ou
 o <code><a href="../reference/expanse.html">expanse()</a></code>: Expanded list of units; correct assignation of units to <strong>GRASS</strong> unit format.<br>
 o <code><a href="../reference/extract.html">extract()</a></code>: Extracting from a <code>GRaster</code> to a <code>lines</code> or <code>polygons</code> <code>GVector</code> works.<br>
 o <code><a href="../reference/fast.html">fast()</a></code>: Fixed bug arising when reading vector saved by <code><a href="../reference/writeRaster.html">writeRaster()</a></code>.<br>
-o + <code><a href="../reference/global.html">global()</a></code>: Removed functions <code>"countNA"</code> and <code>"countNonNA"</code> from <code><a href="../reference/global.html">global()</a></code> since <strong>GRASS</strong> module <code>r.report</code> can be mistaken.<br>
-o <code><a href="../reference/nacell.html">nacell()</a></code> and <code><a href="../reference/nacell.html">nonnacell()</a></code>: Correct (but slow~~~) reporting of <code>NA</code> and non-<code>NA</code> cells (workaround of error in <strong>GRASS</strong>’s <code>r.report</code> module).</p>
+o + <code><a href="../reference/global.html">global()</a></code>: Removed functions <code>"countNA"</code> and <code>"countNonNA"</code> from <code><a href="../reference/global.html">global()</a></code> since <strong>GRASS</strong> tool <code>r.report</code> can be mistaken.<br>
+o <code><a href="../reference/nacell.html">nacell()</a></code> and <code><a href="../reference/nacell.html">nonnacell()</a></code>: Correct (but slow~~~) reporting of <code>NA</code> and non-<code>NA</code> cells (workaround of error in <strong>GRASS</strong>’s <code>r.report</code> tool).</p>
 </div>
 </div>
     <div class="section level2">
@@ -508,7 +530,7 @@ o Removed <code><a href="../reference/datatype.html">datatype()</a></code> metho
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
 </div>
 
     </footer></div>

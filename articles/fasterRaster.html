@@ -20,7 +20,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">fasterRaster</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">8.4.0.7</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">8.4.1.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -36,7 +36,6 @@
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
 <li><a class="dropdown-item" href="../articles/GRasters.html">Types of GRasters</a></li>
     <li><a class="dropdown-item" href="../articles/faster_fasterRaster.html">Making fasterRaster faster</a></li>
-    <li><a class="dropdown-item" href="../articles/addons.html">fasterRaster addons</a></li>
     <li><a class="dropdown-item" href="../articles/three_d_objects.html">3-dimensional objects</a></li>
     <li><hr class="dropdown-divider"></li>
     <li><a class="dropdown-item" href="../articles/index.html">More articles...</a></li>
@@ -73,7 +72,7 @@
                         <h4 data-toc-skip class="author">Adam B.
 Smith</h4>
             
-            <h4 data-toc-skip class="date">2025-04-25</h4>
+            <h4 data-toc-skip class="date">2025-06-19</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/adamlilith/fasterRaster/blob/master/vignettes/fasterRaster.Rmd"><code>vignettes/fasterRaster.Rmd</code></a></small>
       <div class="d-none name"><code>fasterRaster.Rmd</code></div>
@@ -81,13 +80,13 @@ Smith</h4>
 
     
     
-<p><strong>fasterRaster</strong> interfaces with <strong>GRASS
-GIS</strong> to process rasters and spatial vector data. It is intended
-as an add-on to the <strong>terra</strong> and <strong>sf</strong>
-packages, and relies heavily upon them. For most rasters and vectors
-that are small or medium-sized in memory/disk, those packages will
-almost always be faster. They may also be faster for very large objects.
-But when they aren’t, <strong>fasterRaster</strong> can step in.</p>
+<p><strong>fasterRaster</strong> interfaces with <strong>GRASS</strong>
+to process rasters and spatial vector data. It is intended as an add-on
+to the <strong>terra</strong> and <strong>sf</strong> packages, and
+relies heavily upon them. For most rasters and vectors that are small or
+medium-sized in memory/disk, those packages will almost always be
+faster. They may also be faster for very large objects. But when they
+aren’t, <strong>fasterRaster</strong> can step in.</p>
 <div class="section level3">
 <h3 id="installing-fasterraster">Installing <strong>fasterRaster</strong><a class="anchor" aria-label="anchor" href="#installing-fasterraster"></a>
 </h3>
@@ -96,24 +95,24 @@ your computer, but if not, you can install the latest release version
 from CRAN using:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"fasterRaster"</span><span class="op">)</span></span></code></pre></div>
-<p>and the latest development version using:</p>
+<p>or the latest development version using:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"adamlilith/fasterRaster"</span>, dependencies <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <p>(You may need to install the <code>remotes</code> package first.)</p>
 </div>
 <div class="section level3">
-<h3 id="installing-grass-gis">Installing <strong>GRASS GIS</strong><a class="anchor" aria-label="anchor" href="#installing-grass-gis"></a>
+<h3 id="installing-grass">Installing <strong>GRASS</strong><a class="anchor" aria-label="anchor" href="#installing-grass"></a>
 </h3>
 <p><strong>fasterRaster</strong> uses <strong>GRASS</strong> to do its
 operations. You will need to install <strong>GRASS</strong> using the
-“stand-alone” installer, available through the <a href="https://grass.osgeo.org/" class="external-link">GRASS GIS</a>. <em>Be sure to use the
+“stand-alone” installer, available through the <a href="https://grass.osgeo.org/" class="external-link">GRASS</a>. <em>Be sure to use the
 “stand-alone” installer, not the “OSGeo4W” installer!</em></p>
 <p>Optional: A few functions in <strong>fasterRaster</strong> require
 <strong>GRASS</strong> “addon” modules, which do not come bundled with
 <strong>GRASS</strong>. You do not need to install these addons if you
 do not use functions that call them. A list of functions that require
 addons can be seen in the “addons” vignette (in <strong>R</strong>, use
-<code><a href="../articles/addons.html">vignette("addons", package = "fasterRaster")</a></code>). This
+<code>vignette("addons", package = "fasterRaster")</code>). This
 vignette also explains how to install addons.</p>
 </div>
 <div class="section level3">
@@ -126,7 +125,7 @@ conflicts. The <strong>data.table</strong> package is not required, but
 you most surely will use at least one of the other two.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://rspatial.org/" class="external-link">terra</a></span><span class="op">)</span></span>
-<span><span class="co">#&gt; terra 1.8.42</span></span>
+<span><span class="co">#&gt; terra 1.8.54</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-spatial.github.io/sf/" class="external-link">sf</a></span><span class="op">)</span></span>
 <span><span class="co">#&gt; Linking to GEOS 3.12.1, GDAL 3.8.4, PROJ 9.4.0; sf_use_s2() is TRUE</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-datatable.com" class="external-link">data.table</a></span><span class="op">)</span></span>
@@ -136,7 +135,7 @@ you most surely will use at least one of the other two.</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;     shift</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/adamlilith/fasterRaster">fasterRaster</a></span><span class="op">)</span></span>
-<span><span class="co">#&gt; fasterRaster 8.4.0.7</span></span>
+<span><span class="co">#&gt; fasterRaster 8.4.1.0</span></span>
 <span><span class="co">#&gt; To avoid conflicts between functions, please attach the `terra`, `sf`,</span></span>
 <span><span class="co">#&gt; and `data.table` packages before attaching `fasterRaster` using, for</span></span>
 <span><span class="co">#&gt; example, `library(terra)`.</span></span>
@@ -168,8 +167,8 @@ version of <strong>GRASS</strong> installed. Three examples below show
 you what this might look like, but you may need to change the file path
 to match your case:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">grassDir</span> <span class="op">&lt;-</span> <span class="st">"C:/Program Files/GRASS GIS 8.3"</span> <span class="co"># Windows</span></span>
-<span><span class="va">grassDir</span> <span class="op">&lt;-</span> <span class="st">"/Applications/GRASS-8.3.app/Contents/Resources"</span> <span class="co"># Mac OS</span></span>
+<code class="sourceCode R"><span><span class="va">grassDir</span> <span class="op">&lt;-</span> <span class="st">"C:/Program Files/GRASS GIS 8.4"</span> <span class="co"># Windows</span></span>
+<span><span class="va">grassDir</span> <span class="op">&lt;-</span> <span class="st">"/Applications/GRASS-8.4.app/Contents/Resources"</span> <span class="co"># Mac OS</span></span>
 <span><span class="va">grassDir</span> <span class="op">&lt;-</span> <span class="st">"/usr/local/grass"</span> <span class="co"># Linux</span></span></code></pre></div>
 <p>To tell <strong>fasterRaster</strong> where <strong>GRASS</strong> is
 installed, use the <code><a href="../reference/faster.html">faster()</a></code> function:</p>
@@ -288,7 +287,7 @@ plot them as if the were any other spatial object:</p>
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/plot.html">plot</a></span><span class="op">(</span><span class="va">elev</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/plot.html">plot</a></span><span class="op">(</span><span class="va">rivers</span>, col <span class="op">=</span> <span class="st">'lightblue'</span>, add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <div class="float">
-<img src="images%2Felev_rivers.png" alt="Elevation and rivers"><div class="figcaption">Elevation and rivers</div>
+<img src="images/elev_rivers.png" alt="Elevation and rivers"><div class="figcaption">Elevation and rivers</div>
 </div>
 <p>You can use mathematical operators and functions:</p>
 <div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a>elev_feet <span class="ot">&lt;-</span> elev <span class="sc">*</span> <span class="fl">3.28084</span></span>
@@ -356,7 +355,7 @@ the rivers; then c) plots the output:</p>
 <span><span class="fu"><a href="../reference/plot.html">plot</a></span><span class="op">(</span><span class="va">rivers</span>, col <span class="op">=</span> <span class="st">'lightblue'</span>, add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/plot.html">plot</a></span><span class="op">(</span><span class="va">river_buff</span>, border <span class="op">=</span> <span class="st">'white'</span>, add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <div class="float">
-<img src="images%2Fdist_to_rivers.png" alt="Distance between each cell and nearest major river"><div class="figcaption">Distance between each cell and nearest major
+<img src="images/dist_to_rivers.png" alt="Distance between each cell and nearest major river"><div class="figcaption">Distance between each cell and nearest major
 river</div>
 </div>
 <p>And that’s how you get started! Now that you have a raster and a
@@ -439,7 +438,7 @@ function can remove these temporary files.</p></li>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
 </div>
 
     </footer>

@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">fasterRaster</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">8.4.0.7</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">8.4.1.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -21,7 +21,6 @@
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/GRasters.html">Types of GRasters</a></li>
     <li><a class="dropdown-item" href="../articles/faster_fasterRaster.html">Making fasterRaster faster</a></li>
-    <li><a class="dropdown-item" href="../articles/addons.html">fasterRaster addons</a></li>
     <li><a class="dropdown-item" href="../articles/three_d_objects.html">3-dimensional objects</a></li>
     <li><hr class="dropdown-divider"></li>
     <li><a class="dropdown-item" href="../articles/index.html">More articles...</a></li>
@@ -93,12 +92,6 @@
 
         </dt>
         <dd>Save a GVector to disk</dd>
-      </dl><dl><dt>
-
-          <code><a href="addons.html">addons()</a></code>
-
-        </dt>
-        <dd>Test if addons directory exists and if an addon is installed</dd>
       </dl></div><div class="section level2">
       <h2 id="graster-properties">GRaster properties<a class="anchor" aria-label="anchor" href="#graster-properties"></a></h2>
 
@@ -407,6 +400,12 @@
         <dd>Area of GRaster cells</dd>
       </dl><dl><dt>
 
+          <code><a href="centroids.html">centroids(<i>&lt;GVector&gt;</i>)</a></code> <code><a href="centroids.html">centroids(<i>&lt;GRaster&gt;</i>)</a></code>
+
+        </dt>
+        <dd>Centroid(s) of a vector or clumps in a raster</dd>
+      </dl><dl><dt>
+
           <code><a href="classify.html">classify(<i>&lt;GRaster&gt;</i>)</a></code>
 
         </dt>
@@ -525,6 +524,12 @@
 
         </dt>
         <dd>Combine two or more rasters with different extents and fill in NAs</dd>
+      </dl><dl><dt>
+
+          <code><a href="multivarEnvSim.html">multivarEnvSim(<i>&lt;GRaster&gt;</i>,<i>&lt;GRaster&gt;</i>)</a></code> <code><a href="multivarEnvSim.html">multivarEnvSim(<i>&lt;GRaster&gt;</i>,<i>&lt;missing&gt;</i>)</a></code> <code><a href="multivarEnvSim.html">multivarEnvSim(<i>&lt;data.frame&gt;</i>,<i>&lt;GRaster&gt;</i>)</a></code> <code><a href="multivarEnvSim.html">multivarEnvSim(<i>&lt;data.table&gt;</i>,<i>&lt;GRaster&gt;</i>)</a></code> <code><a href="multivarEnvSim.html">multivarEnvSim(<i>&lt;matrix&gt;</i>,<i>&lt;GRaster&gt;</i>)</a></code>
+
+        </dt>
+        <dd>Multivariate environmental similarity surface (MESS)</dd>
       </dl><dl><dt>
 
           <code><a href="names.html">names(<i>&lt;GRaster&gt;</i>)</a></code> <code><a href="names.html">`names&lt;-`(<i>&lt;GRaster&gt;</i>)</a></code> <code><a href="names.html">names(<i>&lt;GVector&gt;</i>)</a></code> <code><a href="names.html">`names&lt;-`(<i>&lt;GVector&gt;</i>)</a></code>
@@ -694,7 +699,7 @@
         <dd>Create longitude/latitude rasters</dd>
       </dl><dl><dt>
 
-          <code><a href="rnormRast.html">rnormRast(<i>&lt;GRaster&gt;</i>)</a></code>
+          <code><a href="rnormRast.html">rNormRast(<i>&lt;GRaster&gt;</i>)</a></code>
 
         </dt>
         <dd>Create a raster with random values drawn from a normal distribution</dd>
@@ -706,10 +711,16 @@
         <dd>Create a random raster with or without spatial dependence</dd>
       </dl><dl><dt>
 
-          <code><a href="runifRast.html">runifRast(<i>&lt;GRaster&gt;</i>)</a></code>
+          <code><a href="runifRast.html">rUnifRast(<i>&lt;GRaster&gt;</i>)</a></code>
 
         </dt>
         <dd>Create a raster with random values drawn from a uniform distribution</dd>
+      </dl><dl><dt>
+
+          <code><a href="rWalkRast.html">rWalkRast(<i>&lt;GRaster&gt;</i>)</a></code>
+
+        </dt>
+        <dd>Create raster representing one or more random walks</dd>
       </dl><dl><dt>
 
           <code><a href="sineRast.html">sineRast(<i>&lt;GRaster&gt;</i>)</a></code>
@@ -1119,10 +1130,10 @@
         <dd>Increase/decrease the size of a vector or around non-NA cells of a raster</dd>
       </dl><dl><dt>
 
-          <code><a href="centroids.html">centroids(<i>&lt;GVector&gt;</i>)</a></code>
+          <code><a href="centroids.html">centroids(<i>&lt;GVector&gt;</i>)</a></code> <code><a href="centroids.html">centroids(<i>&lt;GRaster&gt;</i>)</a></code>
 
         </dt>
-        <dd>Centroid(s) of a vector</dd>
+        <dd>Centroid(s) of a vector or clumps in a raster</dd>
       </dl><dl><dt>
 
           <code><a href="clusterPoints.html">clusterPoints(<i>&lt;GVector&gt;</i>)</a></code>
@@ -1255,6 +1266,12 @@
 
         </dt>
         <dd>Name(s) of a GRaster or columns of a GVector's data table</dd>
+      </dl><dl><dt>
+
+          <code><a href="neighborhoodMatrix.html">neighborhoodMatrix(<i>&lt;GVector&gt;</i>)</a></code> <code><a href="neighborhoodMatrix.html">neighbourhoodMatrix(<i>&lt;GVector&gt;</i>)</a></code>
+
+        </dt>
+        <dd>Neighborhood matrix from a polygons GVector</dd>
       </dl><dl><dt>
 
           <code><a href="project.html">project(<i>&lt;GRaster&gt;</i>)</a></code> <code><a href="project.html">project(<i>&lt;GVector&gt;</i>)</a></code>
@@ -1445,6 +1462,12 @@
 
       <dl><dt>
 
+          <code><a href="addons.html">addons()</a></code> <code><a href="addons.html">installAddon()</a></code> <code><a href="addons.html">removeAddon()</a></code> <code><a href="addons.html">.addons()</a></code>
+
+        </dt>
+        <dd>Test if addons directory exists and if an addon is installed</dd>
+      </dl><dl><dt>
+
           <code><a href="compareGeom.html">compareGeom(<i>&lt;GRaster&gt;</i>,<i>&lt;GRaster&gt;</i>)</a></code> <code><a href="compareGeom.html">compareGeom(<i>&lt;GVector&gt;</i>,<i>&lt;GVector&gt;</i>)</a></code> <code><a href="compareGeom.html">compareGeom(<i>&lt;GRaster&gt;</i>,<i>&lt;GVector&gt;</i>)</a></code> <code><a href="compareGeom.html">compareGeom(<i>&lt;GVector&gt;</i>,<i>&lt;GRaster&gt;</i>)</a></code>
 
         </dt>
@@ -1466,7 +1489,7 @@
           <code><a href="grassHelp.html">grassHelp()</a></code>
 
         </dt>
-        <dd>Open the help page for a GRASS module</dd>
+        <dd>Open the help page for a GRASS tool</dd>
       </dl><dl><dt>
 
           <code><a href="grassInfo.html">grassInfo()</a></code>
@@ -1649,7 +1672,7 @@
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
 </div>
 
     </footer></div>

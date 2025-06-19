@@ -21,7 +21,7 @@ The rasters have been resampled to 90-m resolution to reduce their size, then re
 
     <a class="navbar-brand me-2" href="../index.html">fasterRaster</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">8.4.0.7</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">8.4.1.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -35,7 +35,6 @@ The rasters have been resampled to 90-m resolution to reduce their size, then re
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/GRasters.html">Types of GRasters</a></li>
     <li><a class="dropdown-item" href="../articles/faster_fasterRaster.html">Making fasterRaster faster</a></li>
-    <li><a class="dropdown-item" href="../articles/addons.html">fasterRaster addons</a></li>
     <li><a class="dropdown-item" href="../articles/three_d_objects.html">3-dimensional objects</a></li>
     <li><hr class="dropdown-divider"></li>
     <li><a class="dropdown-item" href="../articles/index.html">More articles...</a></li>
@@ -221,7 +220,7 @@ The rasters have been resampled to 90-m resolution to reduce their size, then re
 <span class="r-in"><span><span class="va">madElev</span> <span class="op">&lt;-</span> <span class="fu"><a href="fastData.html">fastData</a></span><span class="op">(</span><span class="st">"madElev"</span><span class="op">)</span> <span class="co"># same as previous two lines</span></span></span>
 <span class="r-in"><span><span class="va">madElev</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> class       : SpatRaster </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> dimensions  : 512, 313, 1  (nrow, ncol, nlyr)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> size        : 512, 313, 1  (nrow, ncol, nlyr)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> resolution  : 119.7031, 119.7031  (x, y)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> extent      : 731581.6, 769048.6, 1024437, 1085725  (xmin, xmax, ymin, ymax)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> coord. ref. : Tananarive (Paris) / Laborde Grid </span>
@@ -235,7 +234,7 @@ The rasters have been resampled to 90-m resolution to reduce their size, then re
 <span class="r-in"><span><span class="va">madForest2000</span> <span class="op">&lt;-</span> <span class="fu"><a href="fastData.html">fastData</a></span><span class="op">(</span><span class="st">"madForest2000"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">madForest2000</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> class       : SpatRaster </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> dimensions  : 512, 313, 1  (nrow, ncol, nlyr)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> size        : 512, 313, 1  (nrow, ncol, nlyr)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> resolution  : 119.7031, 119.7031  (x, y)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> extent      : 731581.6, 769048.6, 1024437, 1085725  (xmin, xmax, ymin, ymax)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> coord. ref. : Tananarive (Paris) / Laborde Grid </span>
@@ -249,7 +248,7 @@ The rasters have been resampled to 90-m resolution to reduce their size, then re
 <span class="r-in"><span><span class="va">madForest2014</span> <span class="op">&lt;-</span> <span class="fu"><a href="fastData.html">fastData</a></span><span class="op">(</span><span class="st">"madForest2014"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">madForest2014</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> class       : SpatRaster </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> dimensions  : 512, 313, 1  (nrow, ncol, nlyr)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> size        : 512, 313, 1  (nrow, ncol, nlyr)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> resolution  : 119.7031, 119.7031  (x, y)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> extent      : 731581.6, 769048.6, 1024437, 1085725  (xmin, xmax, ymin, ymax)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> coord. ref. : Tananarive (Paris) / Laborde Grid </span>
@@ -264,7 +263,7 @@ The rasters have been resampled to 90-m resolution to reduce their size, then re
 <span class="r-in"><span><span class="va">madChelsa</span> <span class="op">&lt;-</span> <span class="fu"><a href="fastData.html">fastData</a></span><span class="op">(</span><span class="st">"madChelsa"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">madChelsa</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> class       : SpatRaster </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> dimensions  : 67, 42, 4  (nrow, ncol, nlyr)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> size        : 67, 42, 4  (nrow, ncol, nlyr)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> resolution  : 0.008333333, 0.008333333  (x, y)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> extent      : 49.54153, 49.89153, -16.85014, -16.29181  (xmin, xmax, ymin, ymax)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> coord. ref. : lon/lat WGS 84 (EPSG:4326) </span>
@@ -280,7 +279,7 @@ The rasters have been resampled to 90-m resolution to reduce their size, then re
 <span class="r-in"><span><span class="va">madTmax</span> <span class="op">&lt;-</span> <span class="fu"><a href="fastData.html">fastData</a></span><span class="op">(</span><span class="st">"madTmax"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">madPpt</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> class       : SpatRaster </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> dimensions  : 9, 6, 12  (nrow, ncol, nlyr)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> size        : 9, 6, 12  (nrow, ncol, nlyr)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> resolution  : 6082.837, 6082.837  (x, y)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> extent      : 726346.3, 762843.4, 1026783, 1081528  (xmin, xmax, ymin, ymax)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> coord. ref. : Tananarive (Paris) / Laborde Grid </span>
@@ -290,7 +289,7 @@ The rasters have been resampled to 90-m resolution to reduce their size, then re
 <span class="r-out co"><span class="r-pr">#&gt;</span> max values  :   379,   401,   442,   395,   265,   261, ... </span>
 <span class="r-in"><span><span class="va">madTmin</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> class       : SpatRaster </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> dimensions  : 9, 6, 12  (nrow, ncol, nlyr)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> size        : 9, 6, 12  (nrow, ncol, nlyr)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> resolution  : 6082.837, 6082.837  (x, y)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> extent      : 726346.3, 762843.4, 1026783, 1081528  (xmin, xmax, ymin, ymax)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> coord. ref. : Tananarive (Paris) / Laborde Grid </span>
@@ -300,7 +299,7 @@ The rasters have been resampled to 90-m resolution to reduce their size, then re
 <span class="r-out co"><span class="r-pr">#&gt;</span> max values  :     23,     23,     23,     22,     20,     19, ... </span>
 <span class="r-in"><span><span class="va">madTmax</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> class       : SpatRaster </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> dimensions  : 9, 6, 12  (nrow, ncol, nlyr)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> size        : 9, 6, 12  (nrow, ncol, nlyr)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> resolution  : 6082.837, 6082.837  (x, y)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> extent      : 726346.3, 762843.4, 1026783, 1081528  (xmin, xmax, ymin, ymax)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> coord. ref. : Tananarive (Paris) / Laborde Grid </span>
@@ -314,7 +313,7 @@ The rasters have been resampled to 90-m resolution to reduce their size, then re
 <span class="r-in"><span><span class="va">madLANDSAT</span> <span class="op">&lt;-</span> <span class="fu"><a href="fastData.html">fastData</a></span><span class="op">(</span><span class="st">"madLANDSAT"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">madLANDSAT</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> class       : SpatRaster </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> dimensions  : 344, 209, 4  (nrow, ncol, nlyr)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> size        : 344, 209, 4  (nrow, ncol, nlyr)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> resolution  : 180, 180  (x, y)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> extent      : 344055, 381675, -1863345, -1801425  (xmin, xmax, ymin, ymax)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> coord. ref. : WGS 84 / UTM zone 39N (EPSG:32639) </span>
@@ -329,7 +328,7 @@ The rasters have been resampled to 90-m resolution to reduce their size, then re
 <span class="r-in"><span><span class="va">madCover</span> <span class="op">&lt;-</span> <span class="fu"><a href="fastData.html">fastData</a></span><span class="op">(</span><span class="st">"madCover"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">madCover</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> class       : SpatRaster </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> dimensions  : 201, 126, 1  (nrow, ncol, nlyr)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> size        : 201, 126, 1  (nrow, ncol, nlyr)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> resolution  : 0.002777778, 0.002777778  (x, y)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> extent      : 49.54028, 49.89028, -16.85139, -16.29306  (xmin, xmax, ymin, ymax)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> coord. ref. : lon/lat WGS 84 (EPSG:4326) </span>
@@ -372,7 +371,7 @@ The rasters have been resampled to 90-m resolution to reduce their size, then re
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
 </div>
 
     </footer></div>

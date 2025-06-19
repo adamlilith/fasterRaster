@@ -2,7 +2,6 @@
 <url><loc>https://github.com/adamlilith/fasterRaster/404.html</loc></url>
 <url><loc>https://github.com/adamlilith/fasterRaster/CODE_OF_CONDUCT.html</loc></url>
 <url><loc>https://github.com/adamlilith/fasterRaster/articles/GRasters.html</loc></url>
-<url><loc>https://github.com/adamlilith/fasterRaster/articles/addons.html</loc></url>
 <url><loc>https://github.com/adamlilith/fasterRaster/articles/fasterRaster.html</loc></url>
 <url><loc>https://github.com/adamlilith/fasterRaster/articles/faster_fasterRaster.html</loc></url>
 <url><loc>https://github.com/adamlilith/fasterRaster/articles/hidden_functions.html</loc></url>
@@ -156,8 +155,10 @@
 <url><loc>https://github.com/adamlilith/fasterRaster/reference/minmax.html</loc></url>
 <url><loc>https://github.com/adamlilith/fasterRaster/reference/missingCats.html</loc></url>
 <url><loc>https://github.com/adamlilith/fasterRaster/reference/mow.html</loc></url>
+<url><loc>https://github.com/adamlilith/fasterRaster/reference/multivarEnvSim.html</loc></url>
 <url><loc>https://github.com/adamlilith/fasterRaster/reference/nacell.html</loc></url>
 <url><loc>https://github.com/adamlilith/fasterRaster/reference/names.html</loc></url>
+<url><loc>https://github.com/adamlilith/fasterRaster/reference/neighborhoodMatrix.html</loc></url>
 <url><loc>https://github.com/adamlilith/fasterRaster/reference/ngeom.html</loc></url>
 <url><loc>https://github.com/adamlilith/fasterRaster/reference/nlevels.html</loc></url>
 <url><loc>https://github.com/adamlilith/fasterRaster/reference/pairs.html</loc></url>
@@ -169,6 +170,7 @@
 <url><loc>https://github.com/adamlilith/fasterRaster/reference/project.html</loc></url>
 <url><loc>https://github.com/adamlilith/fasterRaster/reference/quiet.html</loc></url>
 <url><loc>https://github.com/adamlilith/fasterRaster/reference/rSpatialDepRast.html</loc></url>
+<url><loc>https://github.com/adamlilith/fasterRaster/reference/rWalkRast.html</loc></url>
 <url><loc>https://github.com/adamlilith/fasterRaster/reference/rast.html</loc></url>
 <url><loc>https://github.com/adamlilith/fasterRaster/reference/rasterize.html</loc></url>
 <url><loc>https://github.com/adamlilith/fasterRaster/reference/rbind.html</loc></url>

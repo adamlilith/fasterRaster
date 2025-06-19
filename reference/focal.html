@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">fasterRaster</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">8.4.0.7</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">8.4.1.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -21,7 +21,6 @@
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/GRasters.html">Types of GRasters</a></li>
     <li><a class="dropdown-item" href="../articles/faster_fasterRaster.html">Making fasterRaster faster</a></li>
-    <li><a class="dropdown-item" href="../articles/addons.html">fasterRaster addons</a></li>
     <li><a class="dropdown-item" href="../articles/three_d_objects.html">3-dimensional objects</a></li>
     <li><hr class="dropdown-divider"></li>
     <li><a class="dropdown-item" href="../articles/index.html">More articles...</a></li>
@@ -80,13 +79,13 @@
 <li><p>"<code>min</code>" or "<code>max</code>": Minimum or maximum. Should not use a weights matrix.</p></li>
 <li><p>"<code>range</code>": Difference between the maximum and minimum.  Should not use a weights matrix.</p></li>
 <li><p>"<code>sd</code>": Sample standard deviation.  NB: This is the same as the <code><a href="https://rdrr.io/r/stats/sd.html" class="external-link">stats::sd()</a></code> function.</p></li>
-<li><p>"<code>sdpop</code>": Population standard deviation. NB: This is the same as the function "stddev" in the <strong>GRASS</strong> module <code>r.neighbors</code>.</p></li>
+<li><p>"<code>sdpop</code>": Population standard deviation. NB: This is the same as the function "stddev" in the <strong>GRASS</strong> tool <code>r.neighbors</code>.</p></li>
 <li><p>"<code>sum</code>": Sum of non-`NA“ cells.</p></li>
 <li><p>"<code>count</code>": Number of non-`NA cells. Should not use a weights matrix.</p></li>
 <li><p>"<code>var</code>": Sample variance.  NB: This is the same as the <code><a href="https://rdrr.io/r/stats/cor.html" class="external-link">stats::var()</a></code> function.</p></li>
-<li><p>"<code>varpop</code>": Population variance. NB: This is the same as the function "variance" in the <strong>GRASS</strong> module <code>r.neighbors</code>.</p></li>
+<li><p>"<code>varpop</code>": Population variance. NB: This is the same as the function "variance" in the <strong>GRASS</strong> tool <code>r.neighbors</code>.</p></li>
 <li><p>"<code>nunique</code>": Number of unique values. Should not use a weights matrix.</p></li>
-<li><p>"<code>interspersion</code>": Proportion of cells with values different from focal cell (e.g., if 6 of 8 cells have different values, then the interspersion is 6/8 = 0.75). NB: This is slightly different from how it is defined in the <strong>GRASS</strong> module <code>r.neighbors</code>. Should not use a weights matrix.</p></li>
+<li><p>"<code>interspersion</code>": Proportion of cells with values different from focal cell (e.g., if 6 of 8 cells have different values, then the interspersion is 6/8 = 0.75). NB: This is slightly different from how it is defined in the <strong>GRASS</strong> tool <code>r.neighbors</code>. Should not use a weights matrix.</p></li>
 <li><p>"<code>quantile</code>": Quantile of values. The value in argument <code>quantile</code> is used to specify the quantile.</p></li>
 </ul><p>The center cell value is always included in the calculations, and all calculations ignore <code>NA</code> cells (i.e., they do not count as cells in the focal neighborhood).</p></dd>
 
@@ -105,7 +104,7 @@
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p><code><a href="https://rspatial.github.io/terra/reference/focal.html" class="external-link">terra::focal()</a></code>, <strong>GRASS</strong> manual page for module <code>r.neighbors</code> (see <code>grassHelp("r.neighbors")</code>)</p></div>
+    <div class="dont-index"><p><code><a href="https://rspatial.github.io/terra/reference/focal.html" class="external-link">terra::focal()</a></code>, <strong>GRASS</strong> manual page for tool <code>r.neighbors</code> (see <code>grassHelp("r.neighbors")</code>)</p></div>
     </div>
 
     <div class="section level2">
@@ -154,7 +153,7 @@
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
 </div>
 
     </footer></div>
