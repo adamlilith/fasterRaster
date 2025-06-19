@@ -3,14 +3,17 @@
 \name{centroids,GVector-method}
 \alias{centroids,GVector-method}
 \alias{centroids}
-\title{Centroid(s) of a vector}
+\alias{centroids,GRaster-method}
+\title{Centroid(s) of a vector or clumps in a raster}
 \usage{
-\S4method{centroids}{GVector}(x, method = NULL, check = TRUE)
+\S4method{centroids}{GVector}(x, method = NULL)
+
+\S4method{centroids}{GRaster}(x)
 }
 \arguments{
-\item{x}{A \code{GVector}.}
+\item{x}{A \code{GVector} or \code{GRaster}.}
 
-\item{method}{Character or \code{NULL} (default): Method used for calculating centroids. The method of calculation depends on whether the input is a \code{points}, \code{lines}, or \code{polygons} \code{GVector}. If the value is \code{NULL}, then the default method will be chosen, depending on the geometry type of the \code{GVector}:
+\item{method}{\code{GVector}s: Character or \code{NULL} (default): Method used for calculating centroids. The method of calculation depends on whether the input is a \code{points}, \code{lines}, or \code{polygons} \code{GVector}. If the value is \code{NULL}, then the default method will be chosen, depending on the geometry type of the \code{GVector}:
 \itemize{
 \item \code{points}:
 \itemize{
@@ -33,16 +36,14 @@
 }
 
 Partial matching is used and case is ignored.}
-
-\item{check}{Logical: If \code{TRUE} (default), check to see if the \code{v.centerpoint} addon is installed.}
 }
 \value{
-A points \code{GVector}.
+If the input is a \code{GVector}, the output will be a "points" \code{GVector}. If the input is a \code{GRaster}, the output will be a "points" \code{GVector} with a table with statistics on each clump. If the input is a \code{GRaster} with more than one layer, the output will be a \code{list} of \code{GVector}s, with one \code{GVector} per layer.
 }
 \description{
-This function locates the centroid of each geometry of a \code{GVector}.
+This function locates the centroid of each geometry of a \code{GVector}, or the centroid of each "clump" of same-valued cells in an integer/categorical raster (for information on types of \code{GRaster}s, see \code{vignette("GRasters", package = "fasterRaster")}).
 
-This function needs the \strong{GRASS} addon \code{v.centerpoint}. If it is not installed, it will try to install it.
+To use this function with a \code{GVector}, you need the \strong{GRASS} \code{v.centerpoint} addon. To use the function with a \code{GRaster}, you need the addon \code{r.centroids}. In either case, the function will try to install the respective addon (i.e., you need to have an internet connection). Once installed, a tool will not need to be installed again.
 }
 \examples{
 if (grassStarted()) {
@@ -51,7 +52,7 @@ if (grassStarted()) {
 library(sf)
 library(terra)
 
-# Points, lines, and polygons
+### Points, line, and polygon centroids
 
 # Point centroids:
 madDypsis <- fastData("madDypsis")
@@ -110,8 +111,25 @@ legend("bottomright",
    xpd = NA
 )
 
+### Centroids of integer GRaster "clumps"
+
+# Load elevation raster
+madElev <- fastData("madElev")
+elev <- fast(madElev)
+
+# Create clumps of similarly-valued cells
+clumps <- clump(elev, minDiff = 0.01, minClumpSize = 1000)
+
+# Centroids:
+clumpCents <- centroids(clumps)
+clumpCents
+
+plot(clumps)
+plot(clumpCents, add = TRUE)
+
+
 }
 }
 \seealso{
-\code{\link[terra:centroids]{terra::centroids()}}; \strong{GRASS} addon tool \code{v.centerpoint}.
+\code{\link[terra:centroids]{terra::centroids()}}; \strong{GRASS} addon tools \code{v.centerpoint} and \code{r.centroids}.
 }

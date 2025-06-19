@@ -4,7 +4,7 @@ if (grassStarted()) {
 library(sf)
 library(terra)
 
-# Points, lines, and polygons
+### Points, line, and polygon centroids
 
 # Point centroids:
 madDypsis <- fastData("madDypsis")
@@ -62,5 +62,22 @@ legend("bottomright",
    pch = c(16, 2, 1),
    xpd = NA
 )
+
+### Centroids of integer GRaster "clumps"
+
+# Load elevation raster
+madElev <- fastData("madElev")
+elev <- fast(madElev)
+
+# Create clumps of similarly-valued cells
+clumps <- clump(elev, minDiff = 0.01, minClumpSize = 1000)
+
+# Centroids:
+clumpCents <- centroids(clumps)
+clumpCents
+
+plot(clumps)
+plot(clumpCents, add = TRUE)
+
 
 }

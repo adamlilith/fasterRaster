@@ -3,9 +3,13 @@
 \name{neighborhoodMatrix,GVector-method}
 \alias{neighborhoodMatrix,GVector-method}
 \alias{neighborhoodMatrix}
+\alias{neighbourhoodMatrix,GVector-method}
+\alias{neighbourhoodMatrix}
 \title{Neighborhood matrix from a polygons GVector}
 \usage{
 \S4method{neighborhoodMatrix}{GVector}(x)
+
+\S4method{neighbourhoodMatrix}{GVector}(x)
 }
 \arguments{
 \item{x}{A polygons `GVector.}

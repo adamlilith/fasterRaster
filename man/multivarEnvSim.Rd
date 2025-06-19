@@ -4,11 +4,20 @@
 \alias{multivarEnvSim,GRaster,GRaster-method}
 \alias{multivarEnvSim}
 \alias{multivarEnvSim,GRaster,missing-method}
+\alias{multivarEnvSim,data.frame,GRaster-method}
+\alias{multivarEnvSim,data.table,GRaster-method}
+\alias{multivarEnvSim,matrix,GRaster-method}
 \title{Multivariate environmental similarity surface (MESS)}
 \usage{
 \S4method{multivarEnvSim}{GRaster,GRaster}(ref, proj)
 
 \S4method{multivarEnvSim}{GRaster,missing}(ref, proj)
+
+\S4method{multivarEnvSim}{data.frame,GRaster}(ref, proj, na.rm = FALSE)
+
+\S4method{multivarEnvSim}{data.table,GRaster}(ref, proj, na.rm = FALSE)
+
+\S4method{multivarEnvSim}{matrix,GRaster}(ref, proj, na.rm = FALSE)
 }
 \arguments{
 \item{ref}{A \code{data.frame}, \code{data.table}, a points \code{GVector}, or "stack" of \code{GRasters}: This represents the set of "reference" environmental conditions:
@@ -18,6 +27,8 @@
 }}
 
 \item{proj}{A \code{GRaster} or missing. If a \code{GRaster}, it must have the same layers as can have with one or more layers as \code{ref}. Values are assumed to be continuous (not categorical/factors). If missing, then \code{ref} is used, in which case the output represents the relative difference of each cell from the overall layer median.}
+
+\item{na.rm}{Logical: If \code{FALSE} (default), and \code{ref} is a \code{data.frame}, \code{data.table}, or \code{matrix}, and has \code{NA}s in it, then the function will likely fail.}
 }
 \value{
 A \code{GRaster} "stack". There will be one layer per layer in \code{ref}, indicating the MESS score for that variable. There will also be a layer named "MESS" which represents the MESS value across all variables (the minimum value of each of the individual MESS rasters). A final layer represents the layer which is most different (has the lowest MESS value).
@@ -44,8 +55,17 @@ plot(messes)
 
 # Where is at least one variable outside the reference range?
 extrap <- messes[["MESS"]] < 0
-names(extrap) <- "outside"
+levs <- data.frame(value = 0:1, labels = c('no extrapolation', 'extrapolation'))
+levels(extrap) <- levs
 plot(extrap)
+
+# Using a data frame as "reference" conditions:
+madDypsis <- fastData("madDypsis") # Dypsis occurrences
+dypsis <- fast(madDypsis)
+
+dypEnv <- extract(chelsa, dypsis)
+dypMess <- multivarEnvSim(ref = dypEnv, proj = proj)
+plot(dypMess)
 
 }
 }

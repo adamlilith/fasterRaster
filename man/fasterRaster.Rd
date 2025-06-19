@@ -341,7 +341,7 @@ Operations on \code{GRaster}s
 
 \subsection{General purpose functions}{
 \itemize{
-\item \code{\link[=addon]{addon()}}: Show installed \strong{GRASS} addons
+\item \code{\link[=addons]{addons()}}: Show installed \strong{GRASS} addons
 \item \code{\link[=compareGeom]{compareGeom()}}: Determine if geographic metadata is same between \code{GRaster}s and/or \code{GVector}s
 \item \code{\link[=dropRows]{dropRows()}}: Remove rows from a \code{data.frame} or \code{data.table}
 \item \code{\link[=grassGUI]{grassGUI()}}: Start the \strong{GRASS} GUI (not recommended for most users!!!)
