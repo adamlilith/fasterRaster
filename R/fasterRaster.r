@@ -284,7 +284,7 @@
 #' * [vect()]: Convert a `GVector` to a `SpatVector`
 #'
 #' ## General purpose functions
-#' * [addon()]: Show installed **GRASS** addons
+#' * [addons()]: Show installed **GRASS** addons
 #' * [compareGeom()]: Determine if geographic metadata is same between `GRaster`s and/or `GVector`s
 #' * [dropRows()]: Remove rows from a `data.frame` or `data.table`
 #' * [grassGUI()]: Start the **GRASS** GUI (not recommended for most users!!!)
