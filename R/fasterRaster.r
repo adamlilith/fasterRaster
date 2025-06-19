@@ -126,9 +126,9 @@
 #' * [init()]: GRaster with values equal to row, column, coordinate, regular, or "chess"
 #' * [longlat()]: Create longitude/latitude rasters
 #' * [rNormRast()]: A random `GRaster` with values drawn from a normal distribution
-#' * [rRandWalkRast()]: Paths of random walkers
 #' * [rSpatialDepRast()]: Create a random `GRaster` with or without spatial dependence
 #' * [rUnifRast()]: A random `GRaster` with values drawn from a uniform distribution
+#' * [rWalkRast()]: Paths of random walkers
 #' * [sineRast()]: Sine wave rasters
 #' 
 #' ## Analysis of terrain and hydrology

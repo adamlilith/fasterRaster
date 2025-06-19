@@ -62,24 +62,24 @@ hist(fractal)
 ### Random walker rasters
 
 # One random walker
-walk <- rRandWalkRast(elev)
+walk <- rWalkRast(elev)
 plot(walk)
 
 # Random walker with self-avoidance:
-walkAvoid <- rRandWalkRast(elev, steps = 1000, avoid = TRUE, seed = 1)
+walkAvoid <- rWalkRast(elev, steps = 1000, avoid = TRUE, seed = 1)
 plot(walkAvoid)
 
 # 10 random walkers:
-walk10 <- rRandWalkRast(elev, n = 10)
+walk10 <- rWalkRast(elev, n = 10)
 plot(walk10)
 
 # 10 random walkers starting in same place:
-walkSame10 <- rRandWalkRast(elev, n = 10, sameStart = TRUE)
+walkSame10 <- rWalkRast(elev, n = 10, sameStart = TRUE)
 plot(walkSame10)
 
 
 }
 }
 \seealso{
-\code{\link[=rSpatialDepRast]{rSpatialDepRast()}}, \code{\link[=fractalRast]{fractalRast()}}, \code{\link[=rUnifRast]{rUnifRast()}}, \code{\link[=rRandWalkRast]{rRandWalkRast()}}, \strong{GRASS} manual page for tool \code{r.random.surface} (see \code{grassHelp("r.random.surface")})
+\code{\link[=rSpatialDepRast]{rSpatialDepRast()}}, \code{\link[=fractalRast]{fractalRast()}}, \code{\link[=rUnifRast]{rUnifRast()}}, \code{\link[=rWalkRast]{rWalkRast()}}, \strong{GRASS} manual page for tool \code{r.random.surface} (see \code{grassHelp("r.random.surface")})
 }

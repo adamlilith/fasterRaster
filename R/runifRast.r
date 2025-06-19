@@ -14,7 +14,7 @@
 #'
 #' @example man/examples/ex_randRast.r
 #' 
-#' @seealso [rNormRast()], [rSpatialDepRast()], [fractalRast()], [rRandWalkRast()], **GRASS** manual page for tool `r.random.surface` (see `grassHelp("r.random.surface")`)
+#' @seealso [rNormRast()], [rSpatialDepRast()], [fractalRast()], [rWalkRast()], **GRASS** manual page for tool `r.random.surface` (see `grassHelp("r.random.surface")`)
 #'
 #' @aliases rUnifRast
 #' @rdname rUnifRast

@@ -25,11 +25,11 @@
 
 #' @example man/examples/ex_randRast.r
 #'
-#' @aliases rRandWalkRast
-#' @rdname rRandWalkRast
-#' @exportMethod rRandWalkRast
+#' @aliases rWalkRast
+#' @rdname rWalkRast
+#' @exportMethod rWalkRast
 methods::setMethod(
-	f = "rRandWalkRast",
+	f = "rWalkRast",
 	signature = c(x = "GRaster"),
 	function(x, n = 1, steps = 100000, directions = 8, avoid = FALSE, sameStart = FALSE, seed = NULL, check = TRUE) {
 

@@ -209,9 +209,9 @@ reference:
   - init
   - longlat
   - rNormRast
-  - rRandWalkRast
   - rSpatialDepRast
   - rUnifRast
+  - rWalkRast
   - sineRast
 - title: Terrain and hydrology
 - contents:

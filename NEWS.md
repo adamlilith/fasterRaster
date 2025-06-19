@@ -11,7 +11,7 @@ o `removeAddon()` deletes an addon.
 o `centroids()` now calculates centroids of clumps in a `GRaster`.  
 o `multivarEnvSim()` calculates multivariate environmental similarity (MESS).  
 o `neighborhoodMatrix()` generates a neighborhood matrix from a polygons `GVector`.  
-o `rRandWalkRast()` creates a raster with the path of random walkers.  
+o `rWalkRast()` creates a raster with the path of random walkers.  
 o `ruggedness()` now allows for calculation of the terrain ruggedness index across user-defined windows with distance-based weighting.  
 
 ### Minor fixes
