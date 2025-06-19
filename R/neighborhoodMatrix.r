@@ -55,6 +55,10 @@ methods::setMethod(
 )
 
 #' @aliases neighbourhoodMatrix
-#' @rdname dim
+#' @rdname neighborhoodMatrix
 #' @exportMethod neighbourhoodMatrix
-neighbourhoodMatrix <- function(x) neighborhoodMatrix(x)
+methods::setMethod(
+	f = "neighbourhoodMatrix",
+	signature = c(x = "GVector"),
+	definition = function(x) neighborhoodMatrix(x)
+)
