@@ -1,4 +1,4 @@
-# fasterRaster 8.4.1.0 (2025-XX-XX)
+# fasterRaster 8.4.1.0 (2025-06-17)
 
 ### Code-breaking changes
 o `rnormRast()` is now `rNormRast()`.  
@@ -8,6 +8,7 @@ o `runifRast()` is now `rUnifRast()`.
 o `addons()` now reports the names of all installed addons or whether a given addon is installed.  
 o `installAddon()` installs an addon.  
 o `removeAddon()` deletes an addon.  
+o `centroids()` now calculates centroids of clumps in a `GRaster`.  
 o `multivarEnvSim()` calculates multivariate environmental similarity (MESS).  
 o `neighborhoodMatrix()` generates a neighborhood matrix from a polygons `GVector`.  
 o `rRandWalkRast()` creates a raster with the path of random walkers.  
