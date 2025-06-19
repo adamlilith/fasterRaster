@@ -8,6 +8,8 @@
 #'
 #' @param proj A `GRaster` or missing. If a `GRaster`, it must have the same layers as can have with one or more layers as `ref`. Values are assumed to be continuous (not categorical/factors). If missing, then `ref` is used, in which case the output represents the relative difference of each cell from the overall layer median.
 #'
+#' @param na.rm Logical: If `FALSE` (default), and `ref` is a `data.frame`, `data.table`, or `matrix`, and has `NA`s in it, then the function will likely fail.
+#'
 #' @returns A `GRaster` "stack". There will be one layer per layer in `ref`, indicating the MESS score for that variable. There will also be a layer named "MESS" which represents the MESS value across all variables (the minimum value of each of the individual MESS rasters). A final layer represents the layer which is most different (has the lowest MESS value).
 #'
 #' @references Elith, J, Kearney, M, and Phillips, S. 2010. The art of modelling range-shifting species. *Methods in Ecology and Evolution* 1:330-342. \doi{10.1111/j.2041-210X.2010.00036.x} (see especially the Supplement)
@@ -39,15 +41,114 @@ methods::setMethod(
 	.locationRestore(proj)
 	.region(proj)
 
+	.multivarEnvSim(ref = ref, proj = proj, medians = medians, mm = mm)
+
+	} # EOF
+)
+
+#' @aliases multivarEnvSim
+#' @rdname multivarEnvSim
+#' @exportMethod multivarEnvSim
+methods::setMethod(
+	f = "multivarEnvSim",
+	signature = c(ref = "GRaster", proj = "missing"),
+	definition = function(ref, proj) multivarEnvSim(ref = ref, proj = ref)
+)
+
+#' @aliases multivarEnvSim
+#' @rdname multivarEnvSim
+#' @exportMethod multivarEnvSim
+methods::setMethod(
+	f = "multivarEnvSim",
+	signature = c(ref = "data.frame", proj = "GRaster"),
+	definition = function(ref, proj, na.rm = FALSE) {
+	
+	names2 <- names(proj) %in% names(ref)
+	if (!all(names2)) stop("Not all layer names in `proj` appear in `ref.")
+
+	.locationRestore(proj)
+	.region(proj)
+
+	ref <- ref[ , names(proj), drop = FALSE]
+
+	medians <- matrix(apply(ref, 2, "median", na.rm = na.rm), ncol = 1)
+	rownames(medians) <- colnames(ref)
+	colnames(medians) <- "median"
+
+	mins <- apply(ref, 2, "min", na.rm = na.rm)
+	maxs <- apply(ref, 2, "max", na.rm = na.rm)
+
+	mm <- matrix(c(mins, maxs), nrow = 2, byrow = TRUE)
+	rownames(mm) <- c("min", "max")
+	colnames(mm) <- names(ref)
+
+	.multivarEnvSim(ref = ref, proj = proj, medians = medians, mm = mm)
+	
+	} # EOF
+)
+
+#' @aliases multivarEnvSim
+#' @rdname multivarEnvSim
+#' @exportMethod multivarEnvSim
+methods::setMethod(
+	f = "multivarEnvSim",
+	signature = c(ref = "data.table", proj = "GRaster"),
+	definition = function(ref, proj, na.rm = FALSE) {
+	
+	names2 <- names(proj) %in% names(ref)
+	if (!all(names2)) stop("Not all layer names in `proj` appear in `ref.")
+
+	.locationRestore(proj)
+	.region(proj)
+
+	cols <- names(proj)
+	ref <- ref[ , ..cols]
+
+	medians <- matrix(apply(ref, 2, "median", na.rm = na.rm), ncol = 1)
+	rownames(medians) <- colnames(ref)
+	colnames(medians) <- "median"
+
+	mins <- apply(ref, 2, "min", na.rm = na.rm)
+	maxs <- apply(ref, 2, "max", na.rm = na.rm)
+
+	mm <- matrix(c(mins, maxs), nrow = 2, byrow = TRUE)
+	rownames(mm) <- c("min", "max")
+	colnames(mm) <- names(ref)
+
+	.multivarEnvSim(ref = ref, proj = proj, medians = medians, mm = mm)
+	
+	} # EOF
+)
+
+#' @aliases multivarEnvSim
+#' @rdname multivarEnvSim
+#' @exportMethod multivarEnvSim
+methods::setMethod(
+	f = "multivarEnvSim",
+	signature = c(ref = "matrix", proj = "GRaster"),
+	definition = function(ref, proj, na.rm = FALSE) {
+
+	ref <- data.table::as.data.table(ref)
+	multivarEnvSim(ref = ref, proj = proj, na.rm = na.rm)
+	
+	} # EOF
+)
+
+# Hidden function for multivariate environmental similarity surface (MESS)
+#
+# ref `GRaster`, `data.frame`, `data.table`, or `matrix`
+# proj `GRaster`
+# medians Numeric: Vector of median values of `ref`
+# mm Numeric matrix of minium/maximum values of `ref`. Top rows is miniums and bottom is maximums. Columns must have same names as `ref`.
+.multivarEnvSim <- function(ref, proj, medians, mm) {
+
 	### MESS values for each variable
 	nLayers <- nlyr(proj)
 	srcs <- .makeSourceName("mess_r_mapcalc", "raster", nLayers)
 	for (i in seq_len(nLayers)) {
 	
 		layer <- names(proj)[i]
-		x <- ref[[i]]
-		y <- proj[[names(x)]]
-		ySrc <- sources(y)
+		ySrc <- sources(proj)[i]
 
 		thisMedian <- medians[layer, "median"]
 		thisMin <- mm["min", layer]
@@ -90,18 +191,7 @@ methods::setMethod(
 
 	srcsAll <- c(srcs, srcOverall, srcMostDiffFrom1)
 	outNames <- c(names(proj), "MESS", "mostDifferent")
-	.makeGRaster(srcsAll, names = outNames)
-
-	} # EOF
-)
-
-#' @aliases multivarEnvSim
-#' @rdname multivarEnvSim
-#' @exportMethod multivarEnvSim
-methods::setMethod(
-	f = "multivarEnvSim",
-	signature = c(ref = "GRaster", proj = "missing"),
-	definition = function(ref, proj) multivarEnvSim(ref = ref, proj = ref)
-)
+	.makeGRaster(srcsAll, names = outNames, levels = levs)
 
 
+}
