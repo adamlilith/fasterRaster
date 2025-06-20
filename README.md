@@ -1,12 +1,12 @@
 # fasterRaster
 <!-- badges: start -->
 
-[![cran version](https://www.r-pkg.org/badges/version/fasterRaster)](https://cran.r-project.org/package=fasterRaster) [![R-CMD-check](https://github.com/adamlilith/fasterRaster/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/adamlilith/fasterRaster/actions/workflows/R-CMD-check.yaml) [![GPLv3 license](https://img.shields.io/badge/License-GPLv3-blue.svg)](http://perso.crans.org/besson/LICENSE.html)
+[![cran version](https://www.r-pkg.org/badges/version/fasterRaster)](https://cran.r-project.org/package=fasterRaster) [![R-CMD-check](https://github.com/adamlilith/fasterRaster/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/adamlilith/fasterRaster/actions/workflows/R-CMD-check.yaml) [![GPLv3 license](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://perso.crans.org/besson/LICENSE.html)
 
 <!-- badges: end -->
 Faster raster processing in `R` using `GRASS`
 
-<a href="https://adamlilith.github.io/fasterRaster/index.html"><img src="man/figures/logo.png" align="right" height="130" alt="fasterRaster website" /></a>
+<a href="https://adamlilith.github.io/fasterRaster/index.html"><img src="man/figures/logo.png" align="right" height="200" alt="fasterRaster website" /></a>
 
 `fasterRaster` is an **R** package designed specifically to handle large-in-memory/large-on-disk spatial rasters and vectors. `fasterRaster` does this using Open Source Geospatial's <a href="https://grass.osgeo.org/">`GRASS`</a>
 
