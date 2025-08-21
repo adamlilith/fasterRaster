@@ -1,3 +1,11 @@
+# fasterRaster 8.4.1.1 (2025-XX-X)
+### New functions and functionality
+o `+` can now combine any two `GVector`s with the same geometry type (points, lines, polygons).  
+
+### Bug fixes and fixes
+o `sun()` has corrections in its documentation.  
+o `sf` example data objects (`madCoast0`, `madCoast4`, and `madRivers`) have had their CRSs harmonized with the example raster objects. This had caused some of the examples not to work.  
+
 # fasterRaster 8.4.1.0 (2025-06-17)
 
 ### Code-breaking changes
