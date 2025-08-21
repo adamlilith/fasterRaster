@@ -8,13 +8,13 @@
 #'
 #' @param coeff_dh A `GRaster`: A raster with values of the real-sky diffuse radiation coefficient. Valid values are between 0 and 1.
 #'
-#' @param slope A `GRaster`: This is a raster representing topographic slope in radians. It can be generated using [terrain()].
+#' @param slope A `GRaster`: This is a raster representing topographic slope in degrees. It can be generated using [terrain()].
 #'
 #' @param aspect A `GRaster`: This is a raster representing topographic aspect in degrees. It can be generated using [terrain()]. If generated with that function, "east orientation" *must* be used (i.e., argument `northIs0` must be `FALSE`).
 #'
 #' @param hh A "stack" of `GRaster`s: This represents height of the horizon in radians in particular directions. Horizon height can be calculated using [horizonHeight()]. The directions *must* be in "east orientation" (i.e., argument `northIs0` in `horzionHeight()` must be `FALSE`). The directions must correspond with the sequence given by `horizon_step` (see next argument). For example, if `horizon_step` is 90, then `hh` must contain rasters representing horizon height at 0 (east), 90 (north), 180 (west), and 270 (south) aspects.
-#'#' 
-#' @param horizon_step Numeric >0: Difference between angular steps in which horizon height is measured. One horizon height raster will be made per value from 0 to 360 - `horizon_step` degrees.
+#'
+#' @param horizon_step Numeric >0: Difference between angular steps in which horizon height is measured. One horizon height raster will be made per value from 0 to (360 - `horizon_step`) degrees.
 #'
 #' @param albedo A `GRaster` or a numeric value: This is either a raster with values of ground albedo or a numeric value (in which case albedo is assumed to be the same everywhere). Albedo is unit-less, and the default value is 0.2.
 #'
