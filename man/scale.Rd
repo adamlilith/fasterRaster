@@ -20,13 +20,21 @@
 
 \item{center}{Value depends on the function:
 \itemize{
-\item \code{scale()}: Logical: If \code{TRUE} (default), subtract from each raster layer its mean.
+\item \code{scale()}:
+\itemize{
+\item Logical: If \code{TRUE} (default), subtract from each raster layer its mean. If \code{FALSE}, do not.
+\item Numeric: A single value, in which case the same value will be used across all layers of \code{x}, or one value per layer in \code{x}.
+}
 \item \code{unscale()}: Numeric vector or \code{NULL} (default): This can be a single value, which will be recycled if there is more than one layer in the raster, or one value per raster layer. If a value is \code{NA}, then no un-centering will be performed on the relevant raster layer. If \code{NULL}, then no un-centering is done.
 }}
 
 \item{scale}{Value depends on the function:
 \itemize{
-\item \code{scale()}: Logical: If \code{TRUE} (default), divide each layer by its standard deviation.
+\item \code{scale()}:
+\itemize{
+\item Logical: If \code{TRUE} (default), divide each raster layer by its standard deviation. If \code{FALSE}, do not.
+\item Numeric: A single value, in which case the same value will be used across all layers of \code{x}, or one value per layer in \code{x}.
+}
 \item \code{unscale()}: Numeric vector or \code{NULL} (default): This can be a single value, which will be recycled if there is more than one layer in the raster, or one value per raster layer. If a value is \code{NA}, then no unscaling will be done on the relevant raster layer. If \code{NULL}, then no un-scaling is done.
 }}
 }

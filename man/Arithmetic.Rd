@@ -29,7 +29,7 @@
 \S4method{Arith}{GVector,GVector}(e1, e2)
 }
 \arguments{
-\item{e1, e2}{\code{GRaster}s, \code{numeric}s, \code{integer}s, or \code{logical}s.}
+\item{e1, e2}{\code{GRaster}s, \code{GVector}s, \code{numeric}s, \code{integer}s, or \code{logical}s.}
 }
 \value{
 A \code{GRaster}.

@@ -11,28 +11,28 @@ fastData(x)
 
 Spatial vectors (objects of class \code{sf} from the \strong{sf} package):
 \itemize{
-\item \link{madCoast0}: Outline of the region (polygon)
-\item \link{madCoast4}: Outlines of the Fokontanies (Communes) of the region (polygons)
-\item \link{madDypsis}: Records of plants of the genus \emph{Dypsis} (points)
-\item \link{madRivers}: Major rivers (lines)
+\item \link[=`madCoast0`]{madCoast0}: Outline of the region (polygon)
+\item \link[=`madCoast4`]{madCoast4}: Outlines of the Fokontanies (Communes) of the region (polygons)
+\item \link[=`madDypsis`]{madDypsis}: Records of plants of the genus \emph{Dypsis} (points)
+\item \link[=`madRivers`]{madRivers}: Major rivers (lines)
 }
 
 Rasters (objects of class \code{SpatRaster} from the \strong{terra} package, saved as GeoTIFF files):
 \itemize{
-\item \link{madChelsa}: Bioclimatic variables
-\item \link{madCover}: Land cover
-\item \code{\link{madElev}}: Elevation
-\item \link{madForest2000}: Forest cover in year 2000
-\item \link{madForest2014}: Forest cover in year 2014
-\item \link{madLANDSAT}: Surface reflectance in 2023
-\item \link{madPpt}, \link{madTmin}, \link{madTmax}: Rasters of mean monthly precipitation, and minimum and maximum temperature.
+\item \link[=`madChelsa`]{madChelsa}: Bioclimatic variables
+\item \link[=`madCover`]{madCover}: Land cover
+\item \link[=`madElev`]{madElev}: Elevation
+\item \link[=`madForest2000`]{madForest2000}: Forest cover in year 2000
+\item \link[=`madForest2014`]{madForest2014}: Forest cover in year 2014
+\item \link[=`madLANDSAT`]{madLANDSAT}: Surface reflectance in 2023
+\item \link[=`madPpt`]{madPpt}, \link[=`madTmin`]{madTmin}, \link[=`madTmax`]{madTmax}: Rasters of mean monthly precipitation, and minimum and maximum temperature.
 }
 
 Data frames
 \itemize{
-\item \link{appFunsTable}: Table of functions usable by \code{\link[=app]{app()}}
-\item \link{madCoverCats}: Land cover values and categories for \link{madCover}
-\item \link{vegIndices}: Vegetation indices that can be calculated with \code{\link[=vegIndex]{vegIndex()}}
+\item \link[=`appFunsTable`]{appFunsTable}: Table of functions usable by \code{\link[=app]{app()}}
+\item \link[=`madCoverCats`]{madCoverCats}: Land cover values and categories for \code{madCover}
+\item \link[=`vegIndices`]{vegIndices}: Vegetation indices that can be calculated with \code{\link[=vegIndex]{vegIndex()}}
 }}
 }
 \value{
