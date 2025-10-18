@@ -189,8 +189,8 @@ Note that the `M1.M2` and `S1.S2` increment independently. For example, if the v
 * The Wiki on [how to run `GRASS` in `R` or `R` in `GRASS`](https://grasswiki.osgeo.org/wiki/R_statistics/rgrass) will help you to become a power-user of `GRASS` in `R`.
 
 # Citation
-A publication is forthcoming! In the meantime, please cite:
+A publication is forthcoming! In the meantime, please see and cite:
 
-Smith, A.B. 2024. `fasterRaster`: Faster raster processing in `R` using `GRASS`. URL: https://cran.r-project.org/package=fasterRaster.
+Smith, A.B. 2025. `fasterRaster`: GIS in `R` using `GRASS` for large vectors and rasters. EarthArXiv preprint doi: <href = "https://doi.org/10.31223/X52R0M">10.31223/X52R0M</href>
 
 ~ Adam
