@@ -7,11 +7,15 @@
 #' @param x A `GRaster`.
 #'
 #' @param center Value depends on the function:
-#' * `scale()`: Logical: If `TRUE` (default), subtract from each raster layer its mean.
+#' * `scale()`:
+#'     * Logical: If `TRUE` (default), subtract from each raster layer its mean. If `FALSE`, do not.
+#'     * Numeric: A single value, in which case the same value will be used across all layers of `x`, or one value per layer in `x`.
 #' * `unscale()`: Numeric vector or `NULL` (default): This can be a single value, which will be recycled if there is more than one layer in the raster, or one value per raster layer. If a value is `NA`, then no un-centering will be performed on the relevant raster layer. If `NULL`, then no un-centering is done.
 #'
 #' @param scale Value depends on the function:
-#' * `scale()`: Logical: If `TRUE` (default), divide each layer by its standard deviation.
+#' * `scale()`:
+#'     * Logical: If `TRUE` (default), divide each raster layer by its standard deviation. If `FALSE`, do not.
+#'     * Numeric: A single value, in which case the same value will be used across all layers of `x`, or one value per layer in `x`.
 #' * `unscale()`: Numeric vector or `NULL` (default): This can be a single value, which will be recycled if there is more than one layer in the raster, or one value per raster layer. If a value is `NA`, then no unscaling will be done on the relevant raster layer. If `NULL`, then no un-scaling is done.
 #'
 #' @returns All functions return a `GRaster`. The output of `scale()` and `scalepop()` will have two attributes, "center" and "scale", which have the means and standard deviations of the original rasters (if `center` and `scale` are `TRUE`, otherwise, they will be `NA`). These can be obtained using `attributes(output_raster)$center` and `attributes(output_raster)$scale`.
@@ -53,65 +57,165 @@ methods::setMethod(
 #' @noRd
 .scale <- function(x, center, scale, sample) {
 
-	if (!center & !scale) {
-	
-		warning("No scaling performed because neither `center` nor `scale` are TRUE.")
-		return(x)
-
-	}
-	
 	.locationRestore(x)
 	.region(x)
 
-	if (center) {
-		fx <- "mean"
-	} else {
-		fx <- NULL
-	}
+	#### calculate centers and scales then center and scale
+	#######################################################
+	if (is.logical(center) & is.logical(scale)) {
 
-	if (scale) {
-		if (sample) {
-			sdfx <- "sd"
-		} else{
-			sdfx <- "sdpop"
+		if (!center & !scale) {
+			warning("No scaling performed because neither `center` nor `scale` are TRUE.")
+			return(x)
 		}
-	} else {
-		sdfx <- NULL
-	}
-	fx <- c(fx, sdfx)
-
-	stats <- global(x, fx)
-
-	nLayers <- nlyr(x)
-	srcs <- .makeSourceName("scale_r_mapcalc", "raster", n = nLayers)
-	for (i in seq_len(nLayers)) {
-	
-		if (center) mu <- stats[i, "mean"]
-		if (scale) sigma <- stats[i, sdfx]
-
-		if (center & scale) {
-			ex <- paste0(srcs[i], " = (", sources(x)[i], " - ", mu, ") / ", sigma)
-		} else if (center & !scale) {
-			ex <- paste0(srcs[i], " = ", sources(x)[i], " - ", mu)
-		} else if (!center & scale) {
-			ex <- paste0(srcs[i], " = ", sources(x)[i], " / ", sigma)
+		
+		if (center) {
+			fx <- "mean"
+		} else {
+			fx <- NULL
 		}
 
-		rgrass::execGRASS("r.mapcalc", expression = ex, flags = c(.quiet(), "overwrite"))
+		if (scale) {
+			if (sample) {
+				sdfx <- "sd"
+			} else{
+				sdfx <- "sdpop"
+			}
+		} else {
+			sdfx <- NULL
+		}
+		fx <- c(fx, sdfx)
+
+		stats <- global(x, fx)
+
+		nLayers <- nlyr(x)
+		srcs <- .makeSourceName("scale_r_mapcalc", "raster", n = nLayers)
+		for (i in seq_len(nLayers)) {
+		
+			if (center) mu <- stats[i, "mean"]
+			if (scale) sigma <- stats[i, sdfx]
+
+			if (center & scale) {
+				ex <- paste0(srcs[i], " = (", sources(x)[i], " - ", mu, ") / ", sigma)
+			} else if (center & !scale) {
+				ex <- paste0(srcs[i], " = ", sources(x)[i], " - ", mu)
+			} else if (!center & scale) {
+				ex <- paste0(srcs[i], " = ", sources(x)[i], " / ", sigma)
+			}
+
+			rgrass::execGRASS("r.mapcalc", expression = ex, flags = c(.quiet(), "overwrite"))
+		
+		} # next layer
+		out <- .makeGRaster(srcs, names(x))
+
+		if (center) {
+			attr(out, "center") <- stats[ , "mean"]
+		} else {
+			attr(out, "center") <- NA_real_
+		}
+
+		if (scale) {
+			attr(out, "scale") <- stats[ , sdfx]
+		} else {
+			attr(out, "scale") <- NA_real_
+		}
+
+	### user provides centers but not scales
+	########################################
+	} else if (!is.logical(center) & is.logical(scale)) {
 	
-	} # next layer
-	out <- .makeGRaster(srcs, names(x))
+		nl <- nlyr(x)
+		len <- length(center)
+		if (len != nl) {
+			if (len == 1) {
+				center <- rep(center, nl)
+				warning("Using the same center for all rasters.")
+			} else {
+				stop("Argument `center` must be TRUE, FALSE, a single numeric value, or have the same number of numeric values as `x` has layers.")
+			}
+		}
+		
+		if (scale) {
+			if (sample) {
+				sdfx <- "sd"
+			} else{
+				sdfx <- "sdpop"
+			}
+			stats <- global(x, sdfx)
+		}
 
-	if (center) {
-		attr(out, "center") <- stats[ , "mean"]
-	} else {
-		attr(out, "center") <- NA_real_
-	}
+		nLayers <- nlyr(x)
+		srcs <- .makeSourceName("scale_r_mapcalc", "raster", n = nLayers)
+		for (i in seq_len(nLayers)) {
+		
+			mu <- center[i]
+			if (scale) sigma <- stats[i, sdfx]
 
-	if (scale) {
-		attr(out, "scale") <- stats[ , sdfx]
-	} else {
-		attr(out, "scale") <- NA_real_
+			if (scale) {
+				ex <- paste0(srcs[i], " = (", sources(x)[i], " - ", mu, ") / ", sigma)
+			} else if (!scale) {
+				ex <- paste0(srcs[i], " = ", sources(x)[i], " - ", mu)
+			}
+
+			rgrass::execGRASS("r.mapcalc", expression = ex, flags = c(.quiet(), "overwrite"))
+		
+		} # next layer
+		out <- .makeGRaster(srcs, names(x))
+
+		attr(out, "center") <- center
+
+		if (scale) {
+			attr(out, "scale") <- stats[ , sdfx]
+		} else {
+			attr(out, "scale") <- NA_real_
+		}
+	
+	### calculate centers but user supplies scales
+	##############################################
+	} else if (is.logical(center) & !is.logical(scale)) {
+	
+		nl <- nlyr(x)
+		len <- length(scale)
+		if (len != nl) {
+			if (len == 1) {
+				scale <- rep(scale, nl)
+				warning("Using the same scale for all rasters.")
+			} else {
+				stop("Argument `scale` must be TRUE, FALSE, a single numeric value, or have the same number of numeric values as `x` has layers.")
+			}
+		}
+
+		if (center) {
+			fx <- "mean"
+			stats <- global(x, fx)
+		}
+
+		nLayers <- nlyr(x)
+		srcs <- .makeSourceName("scale_r_mapcalc", "raster", n = nLayers)
+		for (i in seq_len(nLayers)) {
+		
+			if (center) mu <- stats[i, fx]
+			sigma <- scale[i]
+
+			if (center) {
+				ex <- paste0(srcs[i], " = (", sources(x)[i], " - ", mu, ") / ", sigma)
+			} else if (!center) {
+				ex <- paste0(srcs[i], " = ", sources(x)[i], " / ", sigma)
+			}
+
+			rgrass::execGRASS("r.mapcalc", expression = ex, flags = c(.quiet(), "overwrite"))
+		
+		} # next layer
+		out <- .makeGRaster(srcs, names(x))
+
+		if (center) {
+			attr(out, "center") <- stats[ , fx]
+		} else {
+			attr(out, "center") <- NA_real_
+		}
+
+		attr(out, "scale") <- scale
+
 	}
 
 	out
