@@ -1,10 +1,17 @@
 # fasterRaster 8.4.1.1 (2025-XX-X)
 ### New functions and functionality
 o `+` can now combine any two `GVector`s with the same geometry type (points, lines, polygons).  
+o `installAddon()` checks to see if addon is already installed, and if so, uninstalls it before re-installing.  
+o Minor documentation updates.  
 
-### Bug fixes and fixes
-o `sun()` has corrections in its documentation.  
+### Bug fixes
+o `geomorphons()` now works when `mode = '2'`.  
+o `scale()` works when `center` and/or `scale` are numeric.  
 o `sf` example data objects (`madCoast0`, `madCoast4`, and `madRivers`) have had their CRSs harmonized with the example raster objects. This had caused some of the examples not to work.  
+o Corrected errors in `sun()` documentation.  
+
+### Other
+o Added error checking in `fragmentation()` related to limits on size of window `w` for calculation of fragmentation indices.  
 
 # fasterRaster 8.4.1.0 (2025-06-17)
 
