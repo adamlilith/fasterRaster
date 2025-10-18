@@ -36,15 +36,24 @@ addons <- function(x = NULL) {
 installAddon <- function(x, check = TRUE) {
 
 	if (check) {
+
+		# is it available?
 		avails <- rgrass::execGRASS("g.extension", flags = c("l", .quiet()), intern = TRUE)
 		if (!(x %in% avails)) {
+
 			warning("The addon is not available on the official GRASS addon repository.")
 			return(invisible(FALSE))
+
 		}
 	}
 
+	# remove addon before re-installing
+	if (addons(x)) removeAddon(x, check = FALSE)
+
 	rgrass::execGRASS("g.extension", operation = "add", extension = x, flags = .quiet())
-	invisible(TRUE)
+	success <- addons(x)
+	if (!success) warning("Addon could not be installed.")
+	invisible(success)
 
 }
 
