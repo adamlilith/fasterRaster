@@ -60,6 +60,8 @@ methods::setMethod(
 	.locationRestore(x)
 	.region(x)
 
+	nLayers <- nlyr(x)
+
 	#### calculate centers and scales then center and scale
 	#######################################################
 	if (is.logical(center) & is.logical(scale)) {
@@ -88,7 +90,6 @@ methods::setMethod(
 
 		stats <- global(x, fx)
 
-		nLayers <- nlyr(x)
 		srcs <- .makeSourceName("scale_r_mapcalc", "raster", n = nLayers)
 		for (i in seq_len(nLayers)) {
 		
@@ -109,13 +110,17 @@ methods::setMethod(
 		out <- .makeGRaster(srcs, names(x))
 
 		if (center) {
-			attr(out, "center") <- stats[ , "mean"]
+			vals <- stats[ , "mean"]
+			names(vals) <- names(x)
+			attr(out, "center") <- vals
 		} else {
 			attr(out, "center") <- NA_real_
 		}
 
 		if (scale) {
-			attr(out, "scale") <- stats[ , sdfx]
+			vals <- stats[ , sdfx]
+			names(vals) <- names(x)
+			attr(out, "scale") <- vals
 		} else {
 			attr(out, "scale") <- NA_real_
 		}
@@ -124,11 +129,10 @@ methods::setMethod(
 	########################################
 	} else if (!is.logical(center) & is.logical(scale)) {
 	
-		nl <- nlyr(x)
 		len <- length(center)
-		if (len != nl) {
+		if (len != nLayers) {
 			if (len == 1) {
-				center <- rep(center, nl)
+				center <- rep(center, nLayers)
 				warning("Using the same center for all rasters.")
 			} else {
 				stop("Argument `center` must be TRUE, FALSE, a single numeric value, or have the same number of numeric values as `x` has layers.")
@@ -162,21 +166,23 @@ methods::setMethod(
 		} # next layer
 		out <- .makeGRaster(srcs, names(x))
 
+		names(center) <- names(x)
 		attr(out, "center") <- center
 
 		if (scale) {
-			attr(out, "scale") <- stats[ , sdfx]
+			vals <- stats[ , sdfx]
+			names(vals) <- names(x)
+			attr(out, "scale") <- vals
 		} else {
 			attr(out, "scale") <- NA_real_
 		}
 	
-	### calculate centers but user supplies scales
+	### calculate centers but user supplied scales
 	##############################################
 	} else if (is.logical(center) & !is.logical(scale)) {
 	
-		nl <- nlyr(x)
 		len <- length(scale)
-		if (len != nl) {
+		if (len != nLayers) {
 			if (len == 1) {
 				scale <- rep(scale, nl)
 				warning("Using the same scale for all rasters.")
@@ -190,7 +196,6 @@ methods::setMethod(
 			stats <- global(x, fx)
 		}
 
-		nLayers <- nlyr(x)
 		srcs <- .makeSourceName("scale_r_mapcalc", "raster", n = nLayers)
 		for (i in seq_len(nLayers)) {
 		
@@ -204,20 +209,62 @@ methods::setMethod(
 			}
 
 			rgrass::execGRASS("r.mapcalc", expression = ex, flags = c(.quiet(), "overwrite"))
-		
+
 		} # next layer
-		out <- .makeGRaster(srcs, names(x))
 
 		if (center) {
-			attr(out, "center") <- stats[ , fx]
+			vals <- stats[ , "mean"]
+			names(vals) <- names(x)
+			attr(out, "center") <- vals
 		} else {
 			attr(out, "center") <- NA_real_
 		}
 
+		names(scale) <- names(x)
+		attr(out, "scale") <- scale
+
+	### user supplied centers and scales
+	####################################
+	} else if (!is.logical(center) & !is.logical(scale)) {
+	
+		len <- length(center)
+		if (len != nLayers) {
+			if (len == 1) {
+				center <- rep(center, nLayers)
+				warning("Using the same center for all rasters.")
+			} else {
+				stop("Argument `center` must be TRUE, FALSE, a single numeric value, or have the same number of numeric values as `x` has layers.")
+			}
+		}
+
+		len <- length(scale)
+		if (len != nLayers) {
+			if (len == 1) {
+				scale <- rep(scale, nLayers)
+				warning("Using the same scale for all rasters.")
+			} else {
+				stop("Argument `scale` must be TRUE, FALSE, a single numeric value, or have the same number of numeric values as `x` has layers.")
+			}
+		}
+
+		srcs <- .makeSourceName("scale_r_mapcalc", "raster", n = nLayers)
+		for (i in seq_len(nLayers)) {
+		
+			mu <- center[i]
+			sigma <- scale[i]
+
+			ex <- paste0(srcs[i], " = (", sources(x)[i], " - ", mu, ") / ", sigma)
+			rgrass::execGRASS("r.mapcalc", expression = ex, flags = c(.quiet(), "overwrite"))
+		
+		} # next layer
+		out <- .makeGRaster(srcs, names(x))
+
+		names(center) <- names(x)
+		names(scale) <- names(x)
+		attr(out, "center") <- center
 		attr(out, "scale") <- scale
 
 	}
-
 	out
 
 } # EOF

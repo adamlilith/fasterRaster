@@ -6,7 +6,7 @@ o Minor documentation updates.
 
 ### Bug fixes
 o `geomorphons()` now works when `mode = '2'`.  
-o `scale()` works when `center` and/or `scale` are numeric.  
+o `scale()` and `scalepop()` work when `center` and/or `scale` are numeric.  
 o `sf` example data objects (`madCoast0`, `madCoast4`, and `madRivers`) have had their CRSs harmonized with the example raster objects. This had caused some of the examples not to work.  
 o Corrected errors in `sun()` documentation.  
 
