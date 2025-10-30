@@ -179,7 +179,16 @@ methods::setMethod(
 
 			xRast <- terra::rast(x)
 			nLayers <- terra::nlyr(xRast)
+			
 			xNames <- names(xRast)
+			fileExtension <- .fileExt(x)
+			nc <- nchar(fileExtension) + 1
+			namesFile <- substr(x, 1, nchar(x) - nc)
+			namesFile <- paste0(namesFile, '_names.csv')
+			if (file.exists(namesFile)) {
+				xNames <- read.csv(namesFile)
+				xNames <- xNames$name
+			}
 			
 			location <- .locationFind(xRast, match = "crs")
 

@@ -5,7 +5,9 @@ o `installAddon()` checks to see if addon is already installed, and if so, unins
 o Minor documentation updates.  
 
 ### Bug fixes
+o `fast()` correctly adds names to `GRaster`s loaded from disk when a `_names.csv` file exists.  
 o `geomorphons()` now works when `mode = '2'`.  
+o `rbind()` combines `GVector` data tables when each vecto has the same number of rows in its table as geometries.  
 o `scale()` and `scalepop()` work when `center` and/or `scale` are numeric.  
 o `sf` example data objects (`madCoast0`, `madCoast4`, and `madRivers`) have had their CRSs harmonized with the example raster objects. This had caused some of the examples not to work.  
 o Corrected errors in `sun()` documentation.  
