@@ -8,7 +8,7 @@
 #' `*` operator: Same as [intersect()]\cr
 #' `/` operator: Same as [xor()]\cr
 #' 
-#' @param e1,e2 `GRaster`s, `numeric`s, `integer`s, or `logical`s.
+#' @param e1,e2 `GRaster`s, `GVector`s, `numeric`s, `integer`s, or `logical`s.
 #'
 #' @return A `GRaster`.
 #'
@@ -428,13 +428,21 @@ methods::setMethod(
 	signature(e1 = "GVector", e2 = "GVector"),
     function(e1, e2) {
 	
+		gtype1 <- geomtype(e1)
+		gtype2 <- geomtype(e2)
+		if (gtype1 != gtype2) stop("Vectors must be of the same type (polygons, lines, or points).")
+
 		compareGeom(e1, e2)
 		.locationRestore(e1)
 
 		oper <- as.vector(.Generic)[1L]
 
 		if (oper == "+") {
-			out <- union(e1, e2)
+			if (gtype1 == "polygons" & gtype2 == "polygons") {
+				out <- union(e1, e2)
+			} else {
+				out <- rbind(e1, e2)
+			}
 		} else if (oper == "-") {
 			out <- erase(e1, e2)
 		} else if (oper == "*") {

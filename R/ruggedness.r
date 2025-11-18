@@ -6,7 +6,7 @@
 #'
 #' @param x A `GRaster`.
 #' @param size Integer (default is 3): Size of the moving window. Must be an odd integer >= 3.
-#' @param exponent Numeric >= 0 and <= 4. Used to reduce the influence of cells farther from the focal cell (larger areas can yield noisier results if the exponent small). All cells are weighted equally when `exponent = 0`.
+#' @param exponent Numeric >= 0 and <= 4. Used to reduce the influence of cells farther from the focal cell (larger areas can yield noisier results if the exponent is small). All cells are weighted equally when `exponent = 0`.
 #'
 #' @returns A `GRaster`.
 #'

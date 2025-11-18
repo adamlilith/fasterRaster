@@ -50,13 +50,15 @@ methods::setMethod(
 	) {
 	
 	unit <- omnibus::pmatchSafe(unit, c("cells", "meters"), nmax = 1L)
-	comparison <- omnibus::pmatchSafe(mode, c("1", "2", "2d"), nmax = 1L)
-	comparison <-if (comparison == "1") {
-		"anglev1"
-	} else if (comparison == "2") {
-		"anglev2"
-	} else if (comparison == "2d") {
-		 "anglev2_distance"
+	mode <- as.character(mode)
+	if (mode == "1") {
+		comparison <- "anglev1"
+	} else if (mode == "2") {
+		comparison <- "anglev2"
+	} else if (mode == "2d") {
+		 comparison <- "anglev2_distance"
+	} else {
+		stop("Argument `mode` can only be `1`, `2`, or `2d`.")
 	}
 
 	if (nlyr(x) > 1L) stop("This function requires `x` to have just one layer.")

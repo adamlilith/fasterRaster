@@ -12,7 +12,7 @@
 
 \item{size}{Integer (default is 3): Size of the moving window. Must be an odd integer >= 3.}
 
-\item{exponent}{Numeric >= 0 and <= 4. Used to reduce the influence of cells farther from the focal cell (larger areas can yield noisier results if the exponent small). All cells are weighted equally when \code{exponent = 0}.}
+\item{exponent}{Numeric >= 0 and <= 4. Used to reduce the influence of cells farther from the focal cell (larger areas can yield noisier results if the exponent is small). All cells are weighted equally when \code{exponent = 0}.}
 }
 \value{
 A \code{GRaster}.

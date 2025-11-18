@@ -13,9 +13,9 @@
 #' * 5: Undetermined (not possible to obtain when `w = 3`)
 #' * 6: Interior
 #'
-#' @param x A `SpatRaster` or `GRaster`.
+#' @param x A `SpatRaster` or `GRaster` wherein the habitat type has cell values of 1, and non-focal habitat type has cell values of 0 or `NA`
 #'
-#' @param w An odd, positive integer: Size of the window across which fragmentation is calculated (in units of "rows" and "columns"). The default is 3, meaning the function uses a 3x3 moving window to calculate fragmentation. For large rasters, compute time is ~*O*(`N`) + *O*(`N * w^2`), where `N` is the number of cells in the raster. So, even a small increase in `w` can increase compute time by a lot.
+#' @param w An odd integer between 3 and 25: Size of the window across which fragmentation is calculated (in units of "rows" and "columns"). The default is 3, meaning the function uses a 3x3 moving window to calculate fragmentation. For large rasters, compute time is ~*O*(`N`) + *O*(`N * w^2`), where `N` is the number of cells in the raster. So, even a small increase in `w` can increase compute time by a lot. Values >25 will fail. A workaround might be to use [aggregate()] with `fun = 'mode'`, apply `fragmentation()`, then `resample()` to the original resolution.
 #'
 #' @param undet Character: How to assign the "undetermined" case. Valid values are `"perforated"` (default), `"edge"`, and `"undetermined"`. Partial matching is used. If `Pf` is the proportional density raster cell value and `Pff` the proportional connectivity raster cell value, the undetermined case occurs when `Pf` > 0.6 and `Pf == Pff`.
 #'
@@ -42,7 +42,7 @@ methods::setMethod(
 	function(x, w = 3, undet = "undetermined", none = NA, na.rm = TRUE, cores = faster("cores"), verbose = TRUE) {
 
 	# errors?
-	if (!omnibus::is.wholeNumber(w) || w < 1L || w %% 2 == 0) stop("Argument `w` must be an odd, positive integer.")
+	if (w > 25 | !omnibus::is.wholeNumber(w) | w < 1L | w %% 2 == 0) stop("Argument `w` must be an odd, positive integer in the range from 3 to 25.")
 	undet <- omnibus::pmatchSafe(undet, c("undetermined", "perforated", "edge"), nmax = 1L)
 
 	# setup
@@ -307,7 +307,7 @@ methods::setMethod(
 	}
 
 	# for each layer
-	nSteps <- nLayers * (1 + length(offsets) + 6)
+	nSteps <- nLayers * (2 + length(offsets) + 6) + 1
 	if (verbose | faster("verbose")) {
 		pb <- utils::txtProgressBar(min = 0, max = nSteps, initial = 0, style = 3, width = 30)
 	}
@@ -330,13 +330,14 @@ methods::setMethod(
 		created <- c(created, srcXZeros)
 
 		### connectivities (for Pff)
-		srcConnectivities <- .makeSourceName("fragmentation_connectivities", "raster", n = length(offsets))
-		srcEither <- .makeSourceName("fragmentation_either", "raster", n = length(offsets))
-		srcBoth <- .makeSourceName("fragmentation_both", n = length(offsets))
+		n <- length(offsets)
+		srcConnectivities <- paste0('c', 1:n) # .makeSourceName("frag_connect", "raster", n = length(offsets))
+		srcEither <- paste0('e', 1:n) # .makeSourceName("frag_either", "raster", n = length(offsets))
+		srcBoth <- paste0('b', 1:n) # .makeSourceName("frag_both", n = length(offsets))
 		for (j in seq_along(offsets)) {
 
 			steps <- steps + 1
-			if (verbose | faster("verbose")) utils::setTxtProgressBar(pb, steps)
+			if (verbose || faster("verbose")) utils::setTxtProgressBar(pb, steps)
 
 			# tally occurrences of habitat in each pair of cells		
 			y1 <- offsets[[j]][1L]
@@ -346,26 +347,25 @@ methods::setMethod(
 			x2 <- offsets[[j]][4L]
 
 			# sum of pairs of cells
-			ex <- paste0(srcConnectivities[j], " = ", srcXZeros, "[", y1, ",", x1, "] + ", srcXZeros, "[", y2, ",", x2, "]")
+			ex <- paste0(srcConnectivities[j], " = ", srcXZeros, "[", y1, ",", x1, "]+", srcXZeros, "[", y2, ",", x2, "]")
 			rgrass::execGRASS("r.mapcalc", expression = ex, flags = c(.quiet(), "overwrite"))
 
 			# does either cell in a pair have habitat?
-			ex <- paste0(srcEither[j], " = if(", srcConnectivities[j], " >= 1)")
+			ex <- paste0(srcEither[j], " = if(", srcConnectivities[j], ">= 1)")
 			rgrass::execGRASS("r.mapcalc", expression = ex, flags = c(.quiet(), "overwrite"))
 
 			# do both cells have habitat?
-			ex <- paste0(srcBoth[j], " = if(", srcConnectivities[j], " == 2)")
+			ex <- paste0(srcBoth[j], " = if(", srcConnectivities[j], "==2)")
 			rgrass::execGRASS("r.mapcalc", expression = ex, flags = c(.quiet(), "overwrite"))
 
 		}
 		created <- c(created, srcConnectivities, srcEither, srcBoth)
 
-
 		# number of neighbor cell pairs with at least one with habitat
 		steps <- steps + 1
 		if (verbose | faster("verbose")) utils::setTxtProgressBar(pb, steps)
 		srcNumEithers <- .makeSourceName("fragmentation_sum_eithers", "raster")
-		ex <- paste0(srcNumEithers, " = ", paste(srcEither, collapse = " + "))
+		ex <- paste0(srcNumEithers, " = ", paste(srcEither, collapse = "+"))
 		rgrass::execGRASS("r.mapcalc", expression = ex, flags = c(.quiet(), "overwrite"))
 
 		created <- c(created, srcNumEithers)
@@ -486,13 +486,17 @@ methods::setMethod(
 
 		# }
 
-		srcs[i] <- src
-
+		steps <- steps + 1
+		if (verbose | faster("verbose")) utils::setTxtProgressBar(pb, steps)
 		.rm(created, type = "raster", warn = FALSE)
 		created <- character()
 
+		srcs[i] <- src
+
 	} # next layer
 
+	steps <- steps + 1
+	if (verbose | faster("verbose")) utils::setTxtProgressBar(pb, steps)
 	if (verbose | faster("verbose")) close(pb)
 
 	levs <- .fragmentationLevels(undet = undet, none = none)

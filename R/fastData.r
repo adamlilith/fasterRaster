@@ -5,24 +5,24 @@
 #' @param x The name of the raster or spatial vector to get. All of these represent a portion of the eastern coast of Madagascar.
 #'
 #' Spatial vectors (objects of class `sf` from the **sf** package):
-#' * [madCoast0]: Outline of the region (polygon)
-#' * [madCoast4]: Outlines of the Fokontanies (Communes) of the region (polygons)
-#' * [madDypsis]: Records of plants of the genus *Dypsis* (points)
-#' * [madRivers]: Major rivers (lines)
+#' * [madCoast0][madCoast0]: Outline of the region (polygon)
+#' * [madCoast4][madCoast4]: Outlines of the Fokontanies (Communes) of the region (polygons)
+#' * [madDypsis][madDypsis]: Records of plants of the genus *Dypsis* (points)
+#' * [madRivers][madRivers]: Major rivers (lines)
 #'
 #' Rasters (objects of class `SpatRaster` from the **terra** package, saved as GeoTIFF files):
-#' * [madChelsa]: Bioclimatic variables
-#' * [madCover]: Land cover
-#' * [`madElev`][madElev]: Elevation
-#' * [madForest2000]: Forest cover in year 2000
-#' * [madForest2014]: Forest cover in year 2014
-#' * [madLANDSAT]: Surface reflectance in 2023
-#' * [madPpt], [madTmin], [madTmax]: Rasters of mean monthly precipitation, and minimum and maximum temperature.
+#' * [madChelsa][madChelsa]: Bioclimatic variables
+#' * [madCover][madCover]: Land cover
+#' * [madElev][madElev]: Elevation
+#' * [madForest2000][madForest2000]: Forest cover in year 2000
+#' * [madForest2014][madForest2014]: Forest cover in year 2014
+#' * [madLANDSAT][madLANDSAT]: Surface reflectance in 2023
+#' * [madPpt][madPpt], [madTmin][madTmin], [madTmax][madTmax]: Rasters of mean monthly precipitation, and minimum and maximum temperature.
 #'
 #' Data frames
-#' * [appFunsTable]: Table of functions usable by [app()]
-#' * [madCoverCats]: Land cover values and categories for [madCover]
-#' * [vegIndices]: Vegetation indices that can be calculated with [vegIndex()]
+#' * [appFunsTable][appFunsTable]: Table of functions usable by [app()]
+#' * [madCoverCats][madCoverCats]: Land cover values and categories for `madCover`
+#' * [vegIndices][vegIndices]: Vegetation indices that can be calculated with [vegIndex()]
 #'
 #' @return A `SpatRaster`, `sf` spatial vector, or a `data.frame`.
 #'

@@ -19,9 +19,9 @@
 \S4method{fragmentation}{GRaster}(x, w = 3, undet = "undetermined", none = NA, verbose = TRUE)
 }
 \arguments{
-\item{x}{A \code{SpatRaster} or \code{GRaster}.}
+\item{x}{A \code{SpatRaster} or \code{GRaster} wherein the habitat type has cell values of 1, and non-focal habitat type has cell values of 0 or \code{NA}}
 
-\item{w}{An odd, positive integer: Size of the window across which fragmentation is calculated (in units of "rows" and "columns"). The default is 3, meaning the function uses a 3x3 moving window to calculate fragmentation. For large rasters, compute time is ~\emph{O}(\code{N}) + \emph{O}(\code{N * w^2}), where \code{N} is the number of cells in the raster. So, even a small increase in \code{w} can increase compute time by a lot.}
+\item{w}{An odd integer between 3 and 25: Size of the window across which fragmentation is calculated (in units of "rows" and "columns"). The default is 3, meaning the function uses a 3x3 moving window to calculate fragmentation. For large rasters, compute time is ~\emph{O}(\code{N}) + \emph{O}(\code{N * w^2}), where \code{N} is the number of cells in the raster. So, even a small increase in \code{w} can increase compute time by a lot. Values >25 will fail. A workaround might be to use \code{\link[=aggregate]{aggregate()}} with \code{fun = 'mode'}, apply \code{fragmentation()}, then \code{resample()} to the original resolution.}
 
 \item{undet}{Character: How to assign the "undetermined" case. Valid values are \code{"perforated"} (default), \code{"edge"}, and \code{"undetermined"}. Partial matching is used. If \code{Pf} is the proportional density raster cell value and \code{Pff} the proportional connectivity raster cell value, the undetermined case occurs when \code{Pf} > 0.6 and \code{Pf == Pff}.}
 

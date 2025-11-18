@@ -322,11 +322,11 @@
 #' * Vignette on **fasterRaster** hidden functions: `vignette("hidden_functions", package = "fasterRaster")`
 #'
 #' ## Classes
-#' * [`GLocation`]: Fundamental class; points to a "location/project" in **GRASS**
-#' * [`GSpatial`]: Basic class of any spatial object
-#' * [`GRegion`]: Points to a "region" of a "location/project" in **GRASS**
-#' * [`GRaster`]: Raster class
-#' * [`GVector`]: Spatial vector class
+#' * [GLocation][GLocation]: Fundamental class; points to a "location/project" in **GRASS**
+#' * [GSpatial][GSpatial]: Basic class of any spatial object
+#' * [GRegion][GRegion]: Points to a "region" of a "location/project" in **GRASS**
+#' * [GRaster][GRaster]: Raster class
+#' * [GVector][GVector]: Spatial vector class
 #'
 #' @author Adam B. Smith
 #' @name fasterRaster

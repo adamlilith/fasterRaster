@@ -35,14 +35,13 @@ sun(
 
 \item{coeff_dh}{A \code{GRaster}: A raster with values of the real-sky diffuse radiation coefficient. Valid values are between 0 and 1.}
 
-\item{slope}{A \code{GRaster}: This is a raster representing topographic slope in radians. It can be generated using \code{\link[=terrain]{terrain()}}.}
+\item{slope}{A \code{GRaster}: This is a raster representing topographic slope in degrees. It can be generated using \code{\link[=terrain]{terrain()}}.}
 
 \item{aspect}{A \code{GRaster}: This is a raster representing topographic aspect in degrees. It can be generated using \code{\link[=terrain]{terrain()}}. If generated with that function, "east orientation" \emph{must} be used (i.e., argument \code{northIs0} must be \code{FALSE}).}
 
-\item{hh}{A "stack" of \code{GRaster}s: This represents height of the horizon in radians in particular directions. Horizon height can be calculated using \code{\link[=horizonHeight]{horizonHeight()}}. The directions \emph{must} be in "east orientation" (i.e., argument \code{northIs0} in \code{horzionHeight()} must be \code{FALSE}). The directions must correspond with the sequence given by \code{horizon_step} (see next argument). For example, if \code{horizon_step} is 90, then \code{hh} must contain rasters representing horizon height at 0 (east), 90 (north), 180 (west), and 270 (south) aspects.
-#'}
+\item{hh}{A "stack" of \code{GRaster}s: This represents height of the horizon in radians in particular directions. Horizon height can be calculated using \code{\link[=horizonHeight]{horizonHeight()}}. The directions \emph{must} be in "east orientation" (i.e., argument \code{northIs0} in \code{horzionHeight()} must be \code{FALSE}). The directions must correspond with the sequence given by \code{horizon_step} (see next argument). For example, if \code{horizon_step} is 90, then \code{hh} must contain rasters representing horizon height at 0 (east), 90 (north), 180 (west), and 270 (south) aspects.}
 
-\item{horizon_step}{Numeric >0: Difference between angular steps in which horizon height is measured. One horizon height raster will be made per value from 0 to 360 - \code{horizon_step} degrees.}
+\item{horizon_step}{Numeric >0: Difference between angular steps in which horizon height is measured. One horizon height raster will be made per value from 0 to (360 - \code{horizon_step}) degrees.}
 
 \item{albedo}{A \code{GRaster} or a numeric value: This is either a raster with values of ground albedo or a numeric value (in which case albedo is assumed to be the same everywhere). Albedo is unit-less, and the default value is 0.2.}
 

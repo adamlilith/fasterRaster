@@ -1,12 +1,12 @@
 # fasterRaster
 <!-- badges: start -->
 
-[![cran version](https://www.r-pkg.org/badges/version/fasterRaster)](https://cran.r-project.org/package=fasterRaster) [![R-CMD-check](https://github.com/adamlilith/fasterRaster/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/adamlilith/fasterRaster/actions/workflows/R-CMD-check.yaml) [![GPLv3 license](https://img.shields.io/badge/License-GPLv3-blue.svg)](http://perso.crans.org/besson/LICENSE.html)
+[![cran version](https://www.r-pkg.org/badges/version/fasterRaster)](https://cran.r-project.org/package=fasterRaster) [![R-CMD-check](https://github.com/adamlilith/fasterRaster/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/adamlilith/fasterRaster/actions/workflows/R-CMD-check.yaml) [![GPLv3 license](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://perso.crans.org/besson/LICENSE.html)
 
 <!-- badges: end -->
 Faster raster processing in `R` using `GRASS`
 
-<a href="https://adamlilith.github.io/fasterRaster/index.html"><img src="man/figures/logo.png" align="right" height="130" alt="fasterRaster website" /></a>
+<a href="https://adamlilith.github.io/fasterRaster/index.html"><img src="man/figures/logo.png" align="right" height="200" alt="fasterRaster website" /></a>
 
 `fasterRaster` is an **R** package designed specifically to handle large-in-memory/large-on-disk spatial rasters and vectors. `fasterRaster` does this using Open Source Geospatial's <a href="https://grass.osgeo.org/">`GRASS`</a>
 
@@ -189,8 +189,8 @@ Note that the `M1.M2` and `S1.S2` increment independently. For example, if the v
 * The Wiki on [how to run `GRASS` in `R` or `R` in `GRASS`](https://grasswiki.osgeo.org/wiki/R_statistics/rgrass) will help you to become a power-user of `GRASS` in `R`.
 
 # Citation
-A publication is forthcoming! In the meantime, please cite:
+A publication is forthcoming! In the meantime, please see and cite:
 
-Smith, A.B. 2024. `fasterRaster`: Faster raster processing in `R` using `GRASS`. URL: https://cran.r-project.org/package=fasterRaster.
+Smith, A.B. 2025. `fasterRaster`: GIS in `R` using `GRASS` for large vectors and rasters. EarthArXiv preprint doi: <href = "https://doi.org/10.31223/X52R0M">10.31223/X52R0M</href>
 
 ~ Adam

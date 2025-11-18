@@ -80,11 +80,20 @@ methods::setMethod(
 		
 	# }
 
-	tables <- lapply(dots, as.data.table)
-	table <- tryCatch(
-		do.call(rbind, tables),
-		error = function(cond) FALSE
-	)
+	### combine data tables if possible
+	tables <- lapply(dots, as.data.frame)
+	tables <- lapply(tables, data.table::as.data.table)
+	
+	nRows <- sapply(tables, nrow)
+	nGeoms <- sapply(dots, ngeom)
+	if (all(nRows == nGeoms)) {
+		table <- tryCatch(
+			do.call(rbind, tables),
+			error = function(cond) FALSE
+		)
+	} else {
+		table <- FALSE
+	}
 
 	if (is.logical(table)) {
 

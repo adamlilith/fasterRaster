@@ -4,9 +4,11 @@
 \alias{.backdoor}
 \title{Setup fasterRaster for ABS}
 \usage{
-.backdoor(ver = "84")
+.backdoor(start = FALSE, ver = "84")
 }
 \arguments{
+\item{start}{Logical: If \code{TRUE}, start the \strong{GRASS} session by creating the \code{madElev} \code{GRaster}.}
+
 \item{ver}{Character: \strong{GRASS}: e.g., "83" or "84".}
 }
 \value{

@@ -125,12 +125,15 @@ methods::setMethod(
         args$raster <- maskSrc
     
     ### mask is a vector
+    ####################
     } else if (maskType == "vector") {
+
         args <- list(
             cmd = "r.mask",
             flags = c(.quiet(), "overwrite")
         )
         args$vector <- mask
+
     }
 
     if (inverse) args$flags <- c(args$flags, "i")
