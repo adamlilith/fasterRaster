@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">fasterRaster</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">8.4.1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">8.4.1.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -47,7 +47,28 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="8.4.1.0" id="fasterraster-8410-2025-06-17">fasterRaster 8.4.1.0 (2025-06-17)<a class="anchor" aria-label="anchor" href="#fasterraster-8410-2025-06-17"></a></h2>
+<h2 class="pkg-version" data-toc-text="8.4.1.1" id="fasterraster-8411-2025-11-18">fasterRaster 8.4.1.1 (2025-11-18)<a class="anchor" aria-label="anchor" href="#fasterraster-8411-2025-11-18"></a></h2><p class="text-muted">CRAN release: 2025-11-18</p>
+<div class="section level4">
+<h4 id="new-functions-and-functionality-8-4-1-1">New functions and functionality<a class="anchor" aria-label="anchor" href="#new-functions-and-functionality-8-4-1-1"></a></h4>
+<p>o <code>+</code> can now combine any two <code>GVector</code>s with the same geometry type (points, lines, polygons).<br>
+o <code><a href="../reference/addons.html">installAddon()</a></code> checks to see if addon is already installed, and if so, uninstalls it before re-installing.<br>
+o Minor documentation updates.</p>
+</div>
+<div class="section level4">
+<h4 id="bug-fixes-8-4-1-1">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-8-4-1-1"></a></h4>
+<p>o <code><a href="../reference/fast.html">fast()</a></code> correctly adds names to <code>GRaster</code>s loaded from disk when a <code>_names.csv</code> file exists.<br>
+o <code><a href="../reference/geomorphons.html">geomorphons()</a></code> now works when <code>mode = '2'</code>.<br>
+o <code><a href="../reference/rbind.html">rbind()</a></code> combines <code>GVector</code> data tables when each vecto has the same number of rows in its table as geometries.<br>
+o <code><a href="../reference/scale.html">scale()</a></code> and <code><a href="../reference/scale.html">scalepop()</a></code> work when <code>center</code> and/or <code>scale</code> are numeric.<br>
+o <code>sf</code> example data objects (<code>madCoast0</code>, <code>madCoast4</code>, and <code>madRivers</code>) have had their CRSs harmonized with the example raster objects. This had caused some of the examples not to work.</p>
+</div>
+<div class="section level4">
+<h4 id="other-8-4-1-1">Other<a class="anchor" aria-label="anchor" href="#other-8-4-1-1"></a></h4>
+<p>o Added error checking in <code><a href="../reference/fragmentation.html">fragmentation()</a></code> related to limits on size of window <code>w</code> for calculation of fragmentation indices.</p>
+</div>
+</div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="8.4.1.0" id="fasterraster-8410-2025-06-17">fasterRaster 8.4.1.0 (2025-06-17)<a class="anchor" aria-label="anchor" href="#fasterraster-8410-2025-06-17"></a></h2><p class="text-muted">CRAN release: 2025-06-20</p>
 <div class="section level4">
 <h4 id="code-breaking-changes-8-4-1-0">Code-breaking changes<a class="anchor" aria-label="anchor" href="#code-breaking-changes-8-4-1-0"></a></h4>
 <p>o <code>rnormRast()</code> is now <code><a href="../reference/rnormRast.html">rNormRast()</a></code>.<br>
@@ -530,7 +551,7 @@ o Removed <code><a href="../reference/datatype.html">datatype()</a></code> metho
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
     </footer></div>

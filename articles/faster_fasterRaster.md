@@ -1,0 +1,43 @@
+# Making fasterRaster faster
+
+There are several ways to speed up **fasterRaster** functions. These are
+listed below in order of their most likely gains, with the first few
+being potentially the largest.
+
+1.  **Load rasters and vectors directly from disk**: Use
+    [`fast()`](https://adamlilith.github.io/fasterRaster/reference/fast.html)
+    to load rasters and vectrors directly from disk. Converting `terra`
+    or `sf` objects to `GRaster`s and `GVector`s can be slower. Why?
+    Because if the object does not have a file to which the `R` object
+    points, Use
+    [`fast()`](https://adamlilith.github.io/fasterRaster/reference/fast.html)
+    has to save it to disk first as a GeoTIFF or GeoPackage file, then
+    load it into `GRASS`.
+
+2.  **Save `GRaster`s and `GVector`s directly to disk**: Converting
+    `GRaster`s and `GVector`s to `SpatRaster`s or `SpatVector` using
+    [`rast()`](https://adamlilith.github.io/fasterRaster/reference/rast.html)
+    or
+    [`vect()`](https://adamlilith.github.io/fasterRaster/reference/vect.html),
+    then saving them is much slower than just saving them. Why? Because
+    these functions actually save the file to disk then uses the
+    respective function from the respective package to connect to the
+    file.
+
+3.  **Increase memory and the number of cores usable by GRASS:** By
+    default, `fasterRaster` use 2 cores and 2048 MB (2 GB) of memory for
+    `GRASS` modules that allow users to specify these values. You can
+    set these to higher values using
+    [`faster()`](https://adamlilith.github.io/fasterRaster/reference/faster.html)
+    and thus potentially speed up some calculations. Functions in newer
+    versions of `GRASS` have more capacity to use these options, so
+    updating `GRASS` to the latest version can help, too.
+
+4.  **Do operations on `GRaster`s and `GVector`s in the same coordinate
+    reference system together:** Every time you switch between using a
+    `GRaster` or `GVector` with a different coordinate reference system
+    (CRS), `GRASS` has to spend a few seconds changing to that CRS. You
+    can save some time by doing as much work as possible with objects in
+    one CRS, then switching to work on objects in another CRS.
+
+~ FINIS ~

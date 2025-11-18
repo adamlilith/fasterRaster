@@ -1,0 +1,934 @@
+# Package index
+
+## Where to start
+
+- [`faster()`](https://github.com/adamlilith/fasterRaster/reference/faster.md)
+  : Set or get options shared across fasterRaster functions
+- [`fast(`*`<character>`*`)`](https://github.com/adamlilith/fasterRaster/reference/fast.md)
+  [`fast(`*`<SpatRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/fast.md)
+  [`fast(`*`<SpatVector>`*`)`](https://github.com/adamlilith/fasterRaster/reference/fast.md)
+  [`fast(`*`<sf>`*`)`](https://github.com/adamlilith/fasterRaster/reference/fast.md)
+  [`fast(`*`<missing>`*`)`](https://github.com/adamlilith/fasterRaster/reference/fast.md)
+  [`fast(`*`<numeric>`*`)`](https://github.com/adamlilith/fasterRaster/reference/fast.md)
+  [`fast(`*`<data.frame>`*`)`](https://github.com/adamlilith/fasterRaster/reference/fast.md)
+  [`fast(`*`<data.table>`*`)`](https://github.com/adamlilith/fasterRaster/reference/fast.md)
+  [`fast(`*`<matrix>`*`)`](https://github.com/adamlilith/fasterRaster/reference/fast.md)
+  : Create a GRaster or GVector
+- [`rast(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/rast.md)
+  : Convert a GRaster to a SpatRaster
+- [`vect(`*`<GVector>`*`)`](https://github.com/adamlilith/fasterRaster/reference/vect.md)
+  [`st_as_sf(`*`<GVector>`*`)`](https://github.com/adamlilith/fasterRaster/reference/vect.md)
+  : Convert a GVector to a SpatVector or sf vector
+- [`writeRaster(`*`<GRaster>`*`,`*`<character>`*`)`](https://github.com/adamlilith/fasterRaster/reference/writeRaster.md)
+  [`writeRaster(`*`<missing>`*`,`*`<missing>`*`)`](https://github.com/adamlilith/fasterRaster/reference/writeRaster.md)
+  : Save a GRaster to disk
+- [`writeVector(`*`<GVector>`*`,`*`<character>`*`)`](https://github.com/adamlilith/fasterRaster/reference/writeVector.md)
+  [`writeVector(`*`<missing>`*`,`*`<missing>`*`)`](https://github.com/adamlilith/fasterRaster/reference/writeVector.md)
+  : Save a GVector to disk
+
+## GRaster properties
+
+- [`crs(`*`<missing>`*`)`](https://github.com/adamlilith/fasterRaster/reference/crs.md)
+  [`crs(`*`<GLocation>`*`)`](https://github.com/adamlilith/fasterRaster/reference/crs.md)
+  [`st_crs()`](https://github.com/adamlilith/fasterRaster/reference/crs.md)
+  [`coordRef(`*`<missing>`*`)`](https://github.com/adamlilith/fasterRaster/reference/crs.md)
+  [`coordRef(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/crs.md)
+  [`coordRef(`*`<GVector>`*`)`](https://github.com/adamlilith/fasterRaster/reference/crs.md)
+  : Coordinate reference system of a GRaster or GVector
+- [`datatype(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/datatype.md)
+  [`datatype(`*`<GVector>`*`)`](https://github.com/adamlilith/fasterRaster/reference/datatype.md)
+  : Get the datatype of a GRaster or of GVector columns
+- [`dim(`*`<GRegion>`*`)`](https://github.com/adamlilith/fasterRaster/reference/dim.md)
+  [`dim3d(`*`<missing>`*`)`](https://github.com/adamlilith/fasterRaster/reference/dim.md)
+  [`dim3d(`*`<GRegion>`*`)`](https://github.com/adamlilith/fasterRaster/reference/dim.md)
+  [`nrow(`*`<missing>`*`)`](https://github.com/adamlilith/fasterRaster/reference/dim.md)
+  [`nrow(`*`<GRegion>`*`)`](https://github.com/adamlilith/fasterRaster/reference/dim.md)
+  [`ncol(`*`<missing>`*`)`](https://github.com/adamlilith/fasterRaster/reference/dim.md)
+  [`ncol(`*`<GRegion>`*`)`](https://github.com/adamlilith/fasterRaster/reference/dim.md)
+  [`ndepth(`*`<missing>`*`)`](https://github.com/adamlilith/fasterRaster/reference/dim.md)
+  [`ndepth(`*`<GRegion>`*`)`](https://github.com/adamlilith/fasterRaster/reference/dim.md)
+  [`ncell(`*`<missing>`*`)`](https://github.com/adamlilith/fasterRaster/reference/dim.md)
+  [`ncell(`*`<GRegion>`*`)`](https://github.com/adamlilith/fasterRaster/reference/dim.md)
+  [`ncell3d(`*`<missing>`*`)`](https://github.com/adamlilith/fasterRaster/reference/dim.md)
+  [`ncell3d(`*`<GRegion>`*`)`](https://github.com/adamlilith/fasterRaster/reference/dim.md)
+  [`dim(`*`<GVector>`*`)`](https://github.com/adamlilith/fasterRaster/reference/dim.md)
+  [`nrow(`*`<GVector>`*`)`](https://github.com/adamlilith/fasterRaster/reference/dim.md)
+  [`ncol(`*`<GVector>`*`)`](https://github.com/adamlilith/fasterRaster/reference/dim.md)
+  [`nlyr(`*`<missing>`*`)`](https://github.com/adamlilith/fasterRaster/reference/dim.md)
+  [`nlyr(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/dim.md)
+  : Number of rows, columns, depths, cells, and layers
+- [`ext(`*`<missing>`*`)`](https://github.com/adamlilith/fasterRaster/reference/ext.md)
+  [`ext(`*`<GSpatial>`*`)`](https://github.com/adamlilith/fasterRaster/reference/ext.md)
+  [`zext(`*`<missing>`*`)`](https://github.com/adamlilith/fasterRaster/reference/ext.md)
+  [`zext(`*`<GSpatial>`*`)`](https://github.com/adamlilith/fasterRaster/reference/ext.md)
+  [`W(`*`<missing>`*`)`](https://github.com/adamlilith/fasterRaster/reference/ext.md)
+  [`W(`*`<GSpatial>`*`)`](https://github.com/adamlilith/fasterRaster/reference/ext.md)
+  [`E(`*`<missing>`*`)`](https://github.com/adamlilith/fasterRaster/reference/ext.md)
+  [`E(`*`<GSpatial>`*`)`](https://github.com/adamlilith/fasterRaster/reference/ext.md)
+  [`N(`*`<missing>`*`)`](https://github.com/adamlilith/fasterRaster/reference/ext.md)
+  [`N(`*`<GSpatial>`*`)`](https://github.com/adamlilith/fasterRaster/reference/ext.md)
+  [`S(`*`<missing>`*`)`](https://github.com/adamlilith/fasterRaster/reference/ext.md)
+  [`S(`*`<GSpatial>`*`)`](https://github.com/adamlilith/fasterRaster/reference/ext.md)
+  [`top(`*`<missing>`*`)`](https://github.com/adamlilith/fasterRaster/reference/ext.md)
+  [`top(`*`<GSpatial>`*`)`](https://github.com/adamlilith/fasterRaster/reference/ext.md)
+  [`bottom(`*`<GSpatial>`*`)`](https://github.com/adamlilith/fasterRaster/reference/ext.md)
+  : Spatial bounds of a GRaster or GVector
+- [`freq(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/freq.md)
+  : Frequencies of cell values in a raster
+- [`is.2d(`*`<GSpatial>`*`)`](https://github.com/adamlilith/fasterRaster/reference/is.2d.md)
+  [`is.3d(`*`<GSpatial>`*`)`](https://github.com/adamlilith/fasterRaster/reference/is.2d.md)
+  : Test if a GRaster or GVector is 2- or 3-dimensional
+- [`is.int(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/is.int.md)
+  [`is.cell(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/is.int.md)
+  [`is.float(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/is.int.md)
+  [`is.doub(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/is.int.md)
+  [`is.factor(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/is.int.md)
+  : Data type of a raster
+- [`is.lonlat(`*`<character>`*`)`](https://github.com/adamlilith/fasterRaster/reference/is.lonlat.md)
+  [`is.lonlat(`*`<GLocation>`*`)`](https://github.com/adamlilith/fasterRaster/reference/is.lonlat.md)
+  [`is.lonlat(`*`<sf>`*`)`](https://github.com/adamlilith/fasterRaster/reference/is.lonlat.md)
+  : Test if a coordinate reference system is unprojected
+- [`levels(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/levels.md)
+  [`cats(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/levels.md)
+  [`categories(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/levels.md)
+  [`` `levels<-`( ``*`<GRaster>`*`,`*`<data.frame>`*`)`](https://github.com/adamlilith/fasterRaster/reference/levels.md)
+  [`` `levels<-`( ``*`<GRaster>`*`,`*`<data.table>`*`)`](https://github.com/adamlilith/fasterRaster/reference/levels.md)
+  [`` `levels<-`( ``*`<GRaster>`*`,`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/levels.md)
+  [`` `levels<-`( ``*`<GRaster>`*`,`*`<list>`*`)`](https://github.com/adamlilith/fasterRaster/reference/levels.md)
+  : Set and get categories for categorical rasters
+- [`minmax(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/minmax.md)
+  : Minimum and maximum values or categories of a GRaster
+- [`names(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/names.md)
+  [`` `names<-`( ``*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/names.md)
+  [`names(`*`<GVector>`*`)`](https://github.com/adamlilith/fasterRaster/reference/names.md)
+  [`` `names<-`( ``*`<GVector>`*`)`](https://github.com/adamlilith/fasterRaster/reference/names.md)
+  : Name(s) of a GRaster or columns of a GVector's data table
+- [`nacell(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/nacell.md)
+  [`nonnacell(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/nacell.md)
+  : Number of NA or non-NA cells in a raster
+- [`nlevels(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/nlevels.md)
+  : Number of categories in a categorical raster
+- [`res(`*`<missing>`*`)`](https://github.com/adamlilith/fasterRaster/reference/res.md)
+  [`res(`*`<GRegion>`*`)`](https://github.com/adamlilith/fasterRaster/reference/res.md)
+  [`xres(`*`<missing>`*`)`](https://github.com/adamlilith/fasterRaster/reference/res.md)
+  [`xres(`*`<GRegion>`*`)`](https://github.com/adamlilith/fasterRaster/reference/res.md)
+  [`yres(`*`<missing>`*`)`](https://github.com/adamlilith/fasterRaster/reference/res.md)
+  [`yres(`*`<GRegion>`*`)`](https://github.com/adamlilith/fasterRaster/reference/res.md)
+  [`zres(`*`<missing>`*`)`](https://github.com/adamlilith/fasterRaster/reference/res.md)
+  [`zres(`*`<GRegion>`*`)`](https://github.com/adamlilith/fasterRaster/reference/res.md)
+  [`res3d(`*`<missing>`*`)`](https://github.com/adamlilith/fasterRaster/reference/res.md)
+  [`res3d(`*`<GRegion>`*`)`](https://github.com/adamlilith/fasterRaster/reference/res.md)
+  : Spatial resolution
+- [`sources(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/sources.md)
+  [`sources(`*`<GVector>`*`)`](https://github.com/adamlilith/fasterRaster/reference/sources.md)
+  [`sources(`*`<character>`*`)`](https://github.com/adamlilith/fasterRaster/reference/sources.md)
+  : Name of a raster or vector in a GRASS session
+- [`topology(`*`<GSpatial>`*`)`](https://github.com/adamlilith/fasterRaster/reference/topology-GSpatial-method.md)
+  : Topology (2- or 3-dimensions) of a GRaster or GVector
+
+## Math, comparison, and logic
+
+- [`Arith(`*`<GRaster>`*`,`*`<logical>`*`)`](https://github.com/adamlilith/fasterRaster/reference/Arithmetic.md)
+  [`Arith(`*`<logical>`*`,`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/Arithmetic.md)
+  [`Arith(`*`<GRaster>`*`,`*`<numeric>`*`)`](https://github.com/adamlilith/fasterRaster/reference/Arithmetic.md)
+  [`Arith(`*`<GRaster>`*`,`*`<integer>`*`)`](https://github.com/adamlilith/fasterRaster/reference/Arithmetic.md)
+  [`Arith(`*`<numeric>`*`,`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/Arithmetic.md)
+  [`Arith(`*`<integer>`*`,`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/Arithmetic.md)
+  [`Arith(`*`<GRaster>`*`,`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/Arithmetic.md)
+  [`Arith(`*`<GVector>`*`,`*`<GVector>`*`)`](https://github.com/adamlilith/fasterRaster/reference/Arithmetic.md)
+  : Arithmetic operations on GRasters
+- [`Compare(`*`<GRaster>`*`,`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/Compare-methods.md)
+  [`Compare(`*`<logical>`*`,`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/Compare-methods.md)
+  [`Compare(`*`<GRaster>`*`,`*`<logical>`*`)`](https://github.com/adamlilith/fasterRaster/reference/Compare-methods.md)
+  [`Compare(`*`<numeric>`*`,`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/Compare-methods.md)
+  [`Compare(`*`<GRaster>`*`,`*`<numeric>`*`)`](https://github.com/adamlilith/fasterRaster/reference/Compare-methods.md)
+  [`Compare(`*`<GRaster>`*`,`*`<integer>`*`)`](https://github.com/adamlilith/fasterRaster/reference/Compare-methods.md)
+  [`Compare(`*`<integer>`*`,`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/Compare-methods.md)
+  [`Compare(`*`<GRaster>`*`,`*`<character>`*`)`](https://github.com/adamlilith/fasterRaster/reference/Compare-methods.md)
+  [`Compare(`*`<character>`*`,`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/Compare-methods.md)
+  [`Compare(`*`<GRegion>`*`,`*`<GRegion>`*`)`](https://github.com/adamlilith/fasterRaster/reference/Compare-methods.md)
+  : Compare-methods operations on GRasters and GRegions
+- [`Logic(`*`<GRaster>`*`,`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/Logic-methods.md)
+  [`Logic(`*`<logical>`*`,`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/Logic-methods.md)
+  [`Logic(`*`<GRaster>`*`,`*`<logical>`*`)`](https://github.com/adamlilith/fasterRaster/reference/Logic-methods.md)
+  [`Logic(`*`<GRaster>`*`,`*`<numeric>`*`)`](https://github.com/adamlilith/fasterRaster/reference/Logic-methods.md)
+  [`Logic(`*`<numeric>`*`,`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/Logic-methods.md)
+  [`Logic(`*`<GRaster>`*`,`*`<integer>`*`)`](https://github.com/adamlilith/fasterRaster/reference/Logic-methods.md)
+  [`Logic(`*`<integer>`*`,`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/Logic-methods.md)
+  : Logic-methods operations on GRasters
+
+## Math layer-by-layer on GRasters
+
+- [`is.na(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/math.md)
+  [`not.na(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/math.md)
+  [`abs(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/math.md)
+  [`sin(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/math.md)
+  [`cos(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/math.md)
+  [`tan(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/math.md)
+  [`asin(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/math.md)
+  [`acos(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/math.md)
+  [`atan(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/math.md)
+  [`atan2(`*`<GRaster>`*`,`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/math.md)
+  [`exp(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/math.md)
+  [`log1p(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/math.md)
+  [`log10p(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/math.md)
+  [`log(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/math.md)
+  [`ln(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/math.md)
+  [`log2(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/math.md)
+  [`log10(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/math.md)
+  [`sqrt(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/math.md)
+  [`round(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/math.md)
+  [`floor(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/math.md)
+  [`ceiling(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/math.md)
+  [`trunc(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/math.md)
+  : Mathematical operations on each layer of a GRasters
+- [`maskNA(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/maskNA.md)
+  : Mask all non-NA cells or all NA cells
+
+## Math across GRaster layers
+
+- [`mean(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/functions.md)
+  [`mmode(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/functions.md)
+  [`median(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/functions.md)
+  [`count(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/functions.md)
+  [`sum(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/functions.md)
+  [`min(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/functions.md)
+  [`max(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/functions.md)
+  [`which.min(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/functions.md)
+  [`which.max(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/functions.md)
+  [`sdpop(`*`<numeric>`*`)`](https://github.com/adamlilith/fasterRaster/reference/functions.md)
+  [`varpop(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/functions.md)
+  [`varpop(`*`<numeric>`*`)`](https://github.com/adamlilith/fasterRaster/reference/functions.md)
+  [`stdev(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/functions.md)
+  [`var(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/functions.md)
+  [`nunique(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/functions.md)
+  [`skewness(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/functions.md)
+  [`kurtosis(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/functions.md)
+  [`range(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/functions.md)
+  [`quantile(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/functions.md)
+  [`anyNA(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/functions.md)
+  [`allNA(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/functions.md)
+  : Mathematical operations on two or more GRasters
+
+## Subsetting and replacing GRasters
+
+- [`` `$`( ``*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/subset_dollar.md)
+  [`` `$`( ``*`<GVector>`*`)`](https://github.com/adamlilith/fasterRaster/reference/subset_dollar.md)
+  : Subset a GRaster layer, or return values from a column of a
+  GVector's table
+- [`` `$<-`( ``*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/replace_dollar.md)
+  [`` `$<-`( ``*`<GVector>`*`)`](https://github.com/adamlilith/fasterRaster/reference/replace_dollar.md)
+  : Replace a raster layer or a column from a vector's data table
+- [`` `[`( ``*`<GVector>`*`,`*`<ANY>`*`,`*`<ANY>`*`)`](https://github.com/adamlilith/fasterRaster/reference/subset_single_bracket.md)
+  [`` `[`( ``*`<GRaster>`*`,`*`<GRaster>`*`,`*`<ANY>`*`)`](https://github.com/adamlilith/fasterRaster/reference/subset_single_bracket.md)
+  : Subset geometries of a GVector
+- [`` `[<-`( ``*`<GRaster>`*`,`*`<missing>`*`,`*`<ANY>`*`)`](https://github.com/adamlilith/fasterRaster/reference/replace_single_square_bracket.md)
+  [`` `[<-`( ``*`<GRaster>`*`,`*`<GRaster>`*`,`*`<ANY>`*`)`](https://github.com/adamlilith/fasterRaster/reference/replace_single_square_bracket.md)
+  : Replace values of a GRaster
+- [`` `[[<-`( ``*`<GRaster>`*`,`*`<ANY>`*`)`](https://github.com/adamlilith/fasterRaster/reference/replace_double_square_brackets.md)
+  : Replace layers of a GRaster
+- [`` `add<-`( ``*`<GRaster>`*`,`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/add.md)
+  : "Stack" a GRaster
+- [`subset(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/subset.md)
+  [`subset(`*`<GVector>`*`)`](https://github.com/adamlilith/fasterRaster/reference/subset.md)
+  : Subset layers from a GRaster, or specific rows from a GVector
+
+## Operations on GRasters
+
+- [`match(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/match.md)
+  [`` `%in%`( ``*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/match.md)
+  [`` `%notin%`( ``*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/match.md)
+  : Find which cells of a GRaster match certain values
+- [`as.int(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/as.int.md)
+  [`as.float(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/as.int.md)
+  [`as.doub(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/as.int.md)
+  : Coerce raster to integer, float, or double precision
+- [`as.lines(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/as.lines.md)
+  : Convert a raster to a lines vector
+- [`as.points(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/as.points.md)
+  [`as.points(`*`<GVector>`*`)`](https://github.com/adamlilith/fasterRaster/reference/as.points.md)
+  : Convert a GRaster, or lines or polygons GVector to a points vector
+- [`as.polygons(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/as.polygons.md)
+  : Convert a raster to a polygons vector
+- [`aggregate(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/aggregate.md)
+  [`aggregate(`*`<GVector>`*`)`](https://github.com/adamlilith/fasterRaster/reference/aggregate.md)
+  : Aggregate raster cells into larger cells or combine geometries of a
+  vector
+- [`bioclims(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/bioclims.md)
+  [`bioclims(`*`<SpatRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/bioclims.md)
+  : BIOCLIM rasters
+- [`buffer(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/buffer.md)
+  [`buffer(`*`<GVector>`*`)`](https://github.com/adamlilith/fasterRaster/reference/buffer.md)
+  [`st_buffer(`*`<GVector>`*`)`](https://github.com/adamlilith/fasterRaster/reference/buffer.md)
+  : Increase/decrease the size of a vector or around non-NA cells of a
+  raster
+- [`app(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/app.md)
+  [`appFuns()`](https://github.com/adamlilith/fasterRaster/reference/app.md)
+  [`appCheck(`*`<GRaster>`*`,`*`<character>`*`)`](https://github.com/adamlilith/fasterRaster/reference/app.md)
+  : Apply a function to a set of rasters
+- [`c(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/c.md)
+  : "Stack" GRasters
+- [`cellSize(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/cellSize.md)
+  : Area of GRaster cells
+- [`centroids(`*`<GVector>`*`)`](https://github.com/adamlilith/fasterRaster/reference/centroids.md)
+  [`centroids(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/centroids.md)
+  : Centroid(s) of a vector or clumps in a raster
+- [`classify(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/classify.md)
+  : Classify GRaster cell values
+- [`clump(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/clump.md)
+  : Group adjacent cells with similar values
+- [`combineLevels(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/combineLevels.md)
+  [`combineLevels(`*`<list>`*`)`](https://github.com/adamlilith/fasterRaster/reference/combineLevels.md)
+  : Combine levels table from multiple categorical GRasters
+- [`concats(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/concats.md)
+  : Combine values/categories of multiple GRasters into a single GRaster
+- [`crop(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/crop.md)
+  [`crop(`*`<GVector>`*`)`](https://github.com/adamlilith/fasterRaster/reference/crop.md)
+  : Remove parts of a GRaster or GVector
+- [`denoise(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/denoise.md)
+  [`noise(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/denoise.md)
+  : Remove or retain "noise" in a raster using PCA
+- [`distance(`*`<GRaster>`*`,`*`<missing>`*`)`](https://github.com/adamlilith/fasterRaster/reference/distance.md)
+  [`distance(`*`<GRaster>`*`,`*`<GVector>`*`)`](https://github.com/adamlilith/fasterRaster/reference/distance.md)
+  [`distance(`*`<GVector>`*`,`*`<GVector>`*`)`](https://github.com/adamlilith/fasterRaster/reference/distance.md)
+  [`distance(`*`<GVector>`*`,`*`<missing>`*`)`](https://github.com/adamlilith/fasterRaster/reference/distance.md)
+  : Geographic distance
+- [`extend(`*`<GRaster>`*`,`*`<numeric>`*`)`](https://github.com/adamlilith/fasterRaster/reference/extend.md)
+  [`extend(`*`<GRaster>`*`,`*`<SpatRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/extend.md)
+  [`extend(`*`<GRaster>`*`,`*`<SpatVector>`*`)`](https://github.com/adamlilith/fasterRaster/reference/extend.md)
+  [`extend(`*`<GRaster>`*`,`*`<SpatExtent>`*`)`](https://github.com/adamlilith/fasterRaster/reference/extend.md)
+  [`extend(`*`<GRaster>`*`,`*`<sf>`*`)`](https://github.com/adamlilith/fasterRaster/reference/extend.md)
+  [`extend(`*`<GRaster>`*`,`*`<GSpatial>`*`)`](https://github.com/adamlilith/fasterRaster/reference/extend.md)
+  : Add rows and columns around a writeRaster
+- [`extract(`*`<GRaster>`*`,`*`<GVector>`*`)`](https://github.com/adamlilith/fasterRaster/reference/extract.md)
+  [`extract(`*`<GRaster>`*`,`*`<data.frame>`*`)`](https://github.com/adamlilith/fasterRaster/reference/extract.md)
+  [`extract(`*`<GRaster>`*`,`*`<data.table>`*`)`](https://github.com/adamlilith/fasterRaster/reference/extract.md)
+  [`extract(`*`<GRaster>`*`,`*`<matrix>`*`)`](https://github.com/adamlilith/fasterRaster/reference/extract.md)
+  [`extract(`*`<GRaster>`*`,`*`<numeric>`*`)`](https://github.com/adamlilith/fasterRaster/reference/extract.md)
+  [`extract(`*`<GVector>`*`,`*`<GVector>`*`)`](https://github.com/adamlilith/fasterRaster/reference/extract.md)
+  [`extract(`*`<GVector>`*`,`*`<data.frame>`*`)`](https://github.com/adamlilith/fasterRaster/reference/extract.md)
+  [`extract(`*`<GVector>`*`,`*`<data.table>`*`)`](https://github.com/adamlilith/fasterRaster/reference/extract.md)
+  [`extract(`*`<GVector>`*`,`*`<matrix>`*`)`](https://github.com/adamlilith/fasterRaster/reference/extract.md)
+  [`extract(`*`<GVector>`*`,`*`<numeric>`*`)`](https://github.com/adamlilith/fasterRaster/reference/extract.md)
+  : Extract values from a GRaster at locations in a points GVector
+- [`fillNAs(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/fillNAs.md)
+  : Fill NA cells in a raster using interpolation
+- [`focal(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/focal.md)
+  : Calculate cell values based on values of nearby cells
+- [`fragmentation(`*`<SpatRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/fragmentation.md)
+  [`fragmentation(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/fragmentation.md)
+  : Landscape fragmentation class following Riitters et al. (2020)
+- [`global(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/global.md)
+  [`global(`*`<missing>`*`)`](https://github.com/adamlilith/fasterRaster/reference/global.md)
+  : Summary statistics for GRasters
+- [`hist(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/hist.md)
+  : Plot a histogram of raster values
+- [`interpIDW(`*`<GVector>`*`,`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/interpIDW.md)
+  : Interpolate values at points to a GRaster using inverse-distance
+  weighting
+- [`kernel(`*`<GVector>`*`)`](https://github.com/adamlilith/fasterRaster/reference/kernel.md)
+  : Kernel density estimator of points
+- [`layerCor(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/layerCor.md)
+  : Correlation between GRasters
+- [`mask(`*`<GRaster>`*`,`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/mask.md)
+  [`mask(`*`<GRaster>`*`,`*`<GVector>`*`)`](https://github.com/adamlilith/fasterRaster/reference/mask.md)
+  : Mask values in a raster
+- [`maskNA(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/maskNA.md)
+  : Mask all non-NA cells or all NA cells
+- [`merge(`*`<GRaster>`*`,`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/merge.md)
+  : Combine two or more rasters with different extents and fill in NAs
+- [`multivarEnvSim(`*`<GRaster>`*`,`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/multivarEnvSim.md)
+  [`multivarEnvSim(`*`<GRaster>`*`,`*`<missing>`*`)`](https://github.com/adamlilith/fasterRaster/reference/multivarEnvSim.md)
+  [`multivarEnvSim(`*`<data.frame>`*`,`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/multivarEnvSim.md)
+  [`multivarEnvSim(`*`<data.table>`*`,`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/multivarEnvSim.md)
+  [`multivarEnvSim(`*`<matrix>`*`,`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/multivarEnvSim.md)
+  : Multivariate environmental similarity surface (MESS)
+- [`names(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/names.md)
+  [`` `names<-`( ``*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/names.md)
+  [`names(`*`<GVector>`*`)`](https://github.com/adamlilith/fasterRaster/reference/names.md)
+  [`` `names<-`( ``*`<GVector>`*`)`](https://github.com/adamlilith/fasterRaster/reference/names.md)
+  : Name(s) of a GRaster or columns of a GVector's data table
+- [`pairs(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/pairs.md)
+  : Scatterplot of values in each GRaster layer against the others
+- [`pcs()`](https://github.com/adamlilith/fasterRaster/reference/pcs.md)
+  : Retrieve a principal components model from a PCA GRaster
+- [`plot(`*`<GRaster>`*`,`*`<missing>`*`)`](https://github.com/adamlilith/fasterRaster/reference/plot.md)
+  [`plot(`*`<GVector>`*`,`*`<missing>`*`)`](https://github.com/adamlilith/fasterRaster/reference/plot.md)
+  : Display a raster or vector
+- [`plotRGB(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/plotRGB.md)
+  : Create red-green-blue plot from a raster with RGB layers
+- [`princomp(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/princomp.md)
+  : Apply a principal component analysis (PCA) to layers of a GRaster
+- [`project(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/project.md)
+  [`project(`*`<GVector>`*`)`](https://github.com/adamlilith/fasterRaster/reference/project.md)
+  : Change the coordinate reference system of a GRaster or GVector
+- [`predict(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/predict.md)
+  : Make predictions from a linear or generalized linear model to a
+  GRaster
+- [`regress(`*`<GRaster>`*`,`*`<missing>`*`)`](https://github.com/adamlilith/fasterRaster/reference/regress.md)
+  : Regression intercept, slope, r2, and t-value across each set of
+  cells
+- [`resample(`*`<GRaster>`*`,`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/resample.md)
+  [`resample(`*`<GRaster>`*`,`*`<numeric>`*`)`](https://github.com/adamlilith/fasterRaster/reference/resample.md)
+  : Change the cell size of a GRaster
+- [`reorient(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/reorient.md)
+  [`reorient(`*`<numeric>`*`)`](https://github.com/adamlilith/fasterRaster/reference/reorient.md)
+  : Convert degrees between 'north-orientation' and 'east orientation'
+- [`sampleRast(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/sampleRast.md)
+  : Randomly sample cells from a GRaster
+- [`segregate(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/segregate.md)
+  : Create one GRaster layer per unique value in a GRaster
+- [`stretch(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/stretch.md)
+  : Rescale values in a GRaster
+- [`scale(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/scale.md)
+  [`scalepop(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/scale.md)
+  [`unscale(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/scale.md)
+  : Center and scale a GRaster, or the opposite
+- [`selectRange(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/selectRange.md)
+  : Select values from rasters in a stack based on values in another
+  raster
+- [`spatSample(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/spatSample.md)
+  [`spatSample(`*`<GVector>`*`)`](https://github.com/adamlilith/fasterRaster/reference/spatSample.md)
+  : Sample random points from a GRaster or GVector
+- [`subst(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/subst.md)
+  : Replace a specific value(s) in a GRaster
+- [`thinLines(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/thinLines.md)
+  : Reduce linear features on a raster so linear features are 1 cell
+  wide
+- [`tiles(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/tiles.md)
+  : Divide a GRaster into spatially exclusive subsets
+- [`trim(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/trim.md)
+  : Remove rows and columns from a raster that are all NA
+- [`zonal(`*`<GRaster>`*`,`*`<ANY>`*`)`](https://github.com/adamlilith/fasterRaster/reference/zonal.md)
+  : Statistics on cells of a GRaster stratified by cells of another
+  raster
+- [`zonalGeog(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/zonalGeog.md)
+  : Geographic statistics for sets of cells with the same values
+
+## Creating GRasters *de novo*
+
+- [`fractalRast(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/fractalRast.md)
+  : Create fractal raster
+- [`init(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/init.md)
+  : GRaster with values equal to row, column, coordinate, regular, or
+  "chess"
+- [`longlat(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/longlat.md)
+  : Create longitude/latitude rasters
+- [`rNormRast(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/rnormRast.md)
+  : Create a raster with random values drawn from a normal distribution
+- [`rSpatialDepRast(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/rSpatialDepRast.md)
+  : Create a random raster with or without spatial dependence
+- [`rUnifRast(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/runifRast.md)
+  : Create a raster with random values drawn from a uniform distribution
+- [`rWalkRast(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/rWalkRast.md)
+  : Create raster representing one or more random walks
+- [`sineRast(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/sineRast.md)
+  : Sine wave rasters
+
+## Terrain and hydrology
+
+- [`as.contour(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/as.contour.md)
+  : Contour lines from a "GRaster"
+- [`flow(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/flow.md)
+  : Identify watershed basins and direction and accumulation of flow
+- [`flowPath(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/flowPath.md)
+  : Path of water flow across a landscape
+- [`geomorphons(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/geomorphons.md)
+  : Identify terrain feature types
+- [`hillshade(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/hillshade.md)
+  : Hillshading
+- [`horizonHeight(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/horizonHeight.md)
+  : Horizon height
+- [`sun()`](https://github.com/adamlilith/fasterRaster/reference/sun.md)
+  : Solar radiance and irradiance
+- [`ruggedness(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/ruggedness.md)
+  : Terrain ruggedness index
+- [`streams(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/streams.md)
+  : Create stream network
+- [`terrain(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/terrain.md)
+  : Slope, aspect, curvature, and partial slopes
+- [`wetness(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/wetness.md)
+  : Topographic wetness index
+
+## Categorical GRasters
+
+- [`match(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/match.md)
+  [`` `%in%`( ``*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/match.md)
+  [`` `%notin%`( ``*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/match.md)
+  : Find which cells of a GRaster match certain values
+- [`activeCat(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/activeCat.md)
+  [`activeCats(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/activeCat.md)
+  [`` `activeCat<-`( ``*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/activeCat.md)
+  : Get or set the column with category labels in a categorical raster
+- [`addCats(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/addCats.md)
+  [`` `addCats<-`( ``*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/addCats.md)
+  : Add rows or columns to the "levels" table of a categorical raster
+- [`levels(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/levels.md)
+  [`cats(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/levels.md)
+  [`categories(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/levels.md)
+  [`` `levels<-`( ``*`<GRaster>`*`,`*`<data.frame>`*`)`](https://github.com/adamlilith/fasterRaster/reference/levels.md)
+  [`` `levels<-`( ``*`<GRaster>`*`,`*`<data.table>`*`)`](https://github.com/adamlilith/fasterRaster/reference/levels.md)
+  [`` `levels<-`( ``*`<GRaster>`*`,`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/levels.md)
+  [`` `levels<-`( ``*`<GRaster>`*`,`*`<list>`*`)`](https://github.com/adamlilith/fasterRaster/reference/levels.md)
+  : Set and get categories for categorical rasters
+- [`catNames(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/catNames.md)
+  [`catNames(`*`<SpatRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/catNames.md)
+  : Names of columns of the levels table of a categorical raster
+- [`combineLevels(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/combineLevels.md)
+  [`combineLevels(`*`<list>`*`)`](https://github.com/adamlilith/fasterRaster/reference/combineLevels.md)
+  : Combine levels table from multiple categorical GRasters
+- [`complete.cases(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/complete.cases.md)
+  [`complete.cases(`*`<GVector>`*`)`](https://github.com/adamlilith/fasterRaster/reference/complete.cases.md)
+  [`missing.cases(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/complete.cases.md)
+  [`missing.cases(`*`<GVector>`*`)`](https://github.com/adamlilith/fasterRaster/reference/complete.cases.md)
+  : Rows of a GRaster or GVector's table that have no NAs or that have
+  NAs
+- [`concats(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/concats.md)
+  : Combine values/categories of multiple GRasters into a single GRaster
+- [`droplevels(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/droplevels.md)
+  : Remove rows from the "levels" table of a categorical raster
+- [`freq(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/freq.md)
+  : Frequencies of cell values in a raster
+- [`is.int(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/is.int.md)
+  [`is.cell(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/is.int.md)
+  [`is.float(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/is.int.md)
+  [`is.doub(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/is.int.md)
+  [`is.factor(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/is.int.md)
+  : Data type of a raster
+- [`minmax(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/minmax.md)
+  : Minimum and maximum values or categories of a GRaster
+- [`missingCats(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/missingCats.md)
+  : Values in a categorical raster with no assigned category
+- [`nlevels(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/nlevels.md)
+  : Number of categories in a categorical raster
+- [`segregate(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/segregate.md)
+  : Create one GRaster layer per unique value in a GRaster
+- [`subst(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/subst.md)
+  : Replace a specific value(s) in a GRaster
+- [`zonalGeog(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/zonalGeog.md)
+  : Geographic statistics for sets of cells with the same values
+
+## Remote sensing GRasters
+
+- [`compositeRGB(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/compositeRGB.md)
+  : Combine red, green, and blue color bands to make a composite GRaster
+- [`plotRGB(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/plotRGB.md)
+  : Create red-green-blue plot from a raster with RGB layers
+- [`vegIndex(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/vegIndex.md)
+  : Vegetation indices from surface reflectance
+
+- [`bioclims(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/bioclims.md)
+  [`bioclims(`*`<SpatRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/bioclims.md)
+  : BIOCLIM rasters
+- [`fragmentation(`*`<SpatRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/fragmentation.md)
+  [`fragmentation(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/fragmentation.md)
+  : Landscape fragmentation class following Riitters et al. (2020)
+
+## GVectors Properties
+
+- [`ext(`*`<missing>`*`)`](https://github.com/adamlilith/fasterRaster/reference/ext.md)
+  [`ext(`*`<GSpatial>`*`)`](https://github.com/adamlilith/fasterRaster/reference/ext.md)
+  [`zext(`*`<missing>`*`)`](https://github.com/adamlilith/fasterRaster/reference/ext.md)
+  [`zext(`*`<GSpatial>`*`)`](https://github.com/adamlilith/fasterRaster/reference/ext.md)
+  [`W(`*`<missing>`*`)`](https://github.com/adamlilith/fasterRaster/reference/ext.md)
+  [`W(`*`<GSpatial>`*`)`](https://github.com/adamlilith/fasterRaster/reference/ext.md)
+  [`E(`*`<missing>`*`)`](https://github.com/adamlilith/fasterRaster/reference/ext.md)
+  [`E(`*`<GSpatial>`*`)`](https://github.com/adamlilith/fasterRaster/reference/ext.md)
+  [`N(`*`<missing>`*`)`](https://github.com/adamlilith/fasterRaster/reference/ext.md)
+  [`N(`*`<GSpatial>`*`)`](https://github.com/adamlilith/fasterRaster/reference/ext.md)
+  [`S(`*`<missing>`*`)`](https://github.com/adamlilith/fasterRaster/reference/ext.md)
+  [`S(`*`<GSpatial>`*`)`](https://github.com/adamlilith/fasterRaster/reference/ext.md)
+  [`top(`*`<missing>`*`)`](https://github.com/adamlilith/fasterRaster/reference/ext.md)
+  [`top(`*`<GSpatial>`*`)`](https://github.com/adamlilith/fasterRaster/reference/ext.md)
+  [`bottom(`*`<GSpatial>`*`)`](https://github.com/adamlilith/fasterRaster/reference/ext.md)
+  : Spatial bounds of a GRaster or GVector
+- [`crs(`*`<missing>`*`)`](https://github.com/adamlilith/fasterRaster/reference/crs.md)
+  [`crs(`*`<GLocation>`*`)`](https://github.com/adamlilith/fasterRaster/reference/crs.md)
+  [`st_crs()`](https://github.com/adamlilith/fasterRaster/reference/crs.md)
+  [`coordRef(`*`<missing>`*`)`](https://github.com/adamlilith/fasterRaster/reference/crs.md)
+  [`coordRef(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/crs.md)
+  [`coordRef(`*`<GVector>`*`)`](https://github.com/adamlilith/fasterRaster/reference/crs.md)
+  : Coordinate reference system of a GRaster or GVector
+- [`datatype(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/datatype.md)
+  [`datatype(`*`<GVector>`*`)`](https://github.com/adamlilith/fasterRaster/reference/datatype.md)
+  : Get the datatype of a GRaster or of GVector columns
+- [`dim(`*`<GRegion>`*`)`](https://github.com/adamlilith/fasterRaster/reference/dim.md)
+  [`dim3d(`*`<missing>`*`)`](https://github.com/adamlilith/fasterRaster/reference/dim.md)
+  [`dim3d(`*`<GRegion>`*`)`](https://github.com/adamlilith/fasterRaster/reference/dim.md)
+  [`nrow(`*`<missing>`*`)`](https://github.com/adamlilith/fasterRaster/reference/dim.md)
+  [`nrow(`*`<GRegion>`*`)`](https://github.com/adamlilith/fasterRaster/reference/dim.md)
+  [`ncol(`*`<missing>`*`)`](https://github.com/adamlilith/fasterRaster/reference/dim.md)
+  [`ncol(`*`<GRegion>`*`)`](https://github.com/adamlilith/fasterRaster/reference/dim.md)
+  [`ndepth(`*`<missing>`*`)`](https://github.com/adamlilith/fasterRaster/reference/dim.md)
+  [`ndepth(`*`<GRegion>`*`)`](https://github.com/adamlilith/fasterRaster/reference/dim.md)
+  [`ncell(`*`<missing>`*`)`](https://github.com/adamlilith/fasterRaster/reference/dim.md)
+  [`ncell(`*`<GRegion>`*`)`](https://github.com/adamlilith/fasterRaster/reference/dim.md)
+  [`ncell3d(`*`<missing>`*`)`](https://github.com/adamlilith/fasterRaster/reference/dim.md)
+  [`ncell3d(`*`<GRegion>`*`)`](https://github.com/adamlilith/fasterRaster/reference/dim.md)
+  [`dim(`*`<GVector>`*`)`](https://github.com/adamlilith/fasterRaster/reference/dim.md)
+  [`nrow(`*`<GVector>`*`)`](https://github.com/adamlilith/fasterRaster/reference/dim.md)
+  [`ncol(`*`<GVector>`*`)`](https://github.com/adamlilith/fasterRaster/reference/dim.md)
+  [`nlyr(`*`<missing>`*`)`](https://github.com/adamlilith/fasterRaster/reference/dim.md)
+  [`nlyr(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/dim.md)
+  : Number of rows, columns, depths, cells, and layers
+- [`expanse(`*`<GVector>`*`)`](https://github.com/adamlilith/fasterRaster/reference/expanse.md)
+  : Area of polygons or length of lines
+- [`geomtype(`*`<GVector>`*`)`](https://github.com/adamlilith/fasterRaster/reference/geomtype.md)
+  [`is.points(`*`<GVector>`*`)`](https://github.com/adamlilith/fasterRaster/reference/geomtype.md)
+  [`is.lines(`*`<GVector>`*`)`](https://github.com/adamlilith/fasterRaster/reference/geomtype.md)
+  [`is.polygons(`*`<GVector>`*`)`](https://github.com/adamlilith/fasterRaster/reference/geomtype.md)
+  : Geometry of a GVector (points, lines, or polygons)
+- [`is.2d(`*`<GSpatial>`*`)`](https://github.com/adamlilith/fasterRaster/reference/is.2d.md)
+  [`is.3d(`*`<GSpatial>`*`)`](https://github.com/adamlilith/fasterRaster/reference/is.2d.md)
+  : Test if a GRaster or GVector is 2- or 3-dimensional
+- [`is.lonlat(`*`<character>`*`)`](https://github.com/adamlilith/fasterRaster/reference/is.lonlat.md)
+  [`is.lonlat(`*`<GLocation>`*`)`](https://github.com/adamlilith/fasterRaster/reference/is.lonlat.md)
+  [`is.lonlat(`*`<sf>`*`)`](https://github.com/adamlilith/fasterRaster/reference/is.lonlat.md)
+  : Test if a coordinate reference system is unprojected
+- [`names(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/names.md)
+  [`` `names<-`( ``*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/names.md)
+  [`names(`*`<GVector>`*`)`](https://github.com/adamlilith/fasterRaster/reference/names.md)
+  [`` `names<-`( ``*`<GVector>`*`)`](https://github.com/adamlilith/fasterRaster/reference/names.md)
+  : Name(s) of a GRaster or columns of a GVector's data table
+- [`ngeom(`*`<GVector>`*`)`](https://github.com/adamlilith/fasterRaster/reference/ngeom.md)
+  [`nsubgeom(`*`<GVector>`*`)`](https://github.com/adamlilith/fasterRaster/reference/ngeom.md)
+  : Number of geometries and subgeometries in a vector
+- [`sources(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/sources.md)
+  [`sources(`*`<GVector>`*`)`](https://github.com/adamlilith/fasterRaster/reference/sources.md)
+  [`sources(`*`<character>`*`)`](https://github.com/adamlilith/fasterRaster/reference/sources.md)
+  : Name of a raster or vector in a GRASS session
+- [`topology(`*`<GSpatial>`*`)`](https://github.com/adamlilith/fasterRaster/reference/topology-GSpatial-method.md)
+  : Topology (2- or 3-dimensions) of a GRaster or GVector
+
+## Subsetting and assignment of GVectors
+
+- [`` `$`( ``*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/subset_dollar.md)
+  [`` `$`( ``*`<GVector>`*`)`](https://github.com/adamlilith/fasterRaster/reference/subset_dollar.md)
+  : Subset a GRaster layer, or return values from a column of a
+  GVector's table
+- [`` `$<-`( ``*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/replace_dollar.md)
+  [`` `$<-`( ``*`<GVector>`*`)`](https://github.com/adamlilith/fasterRaster/reference/replace_dollar.md)
+  : Replace a raster layer or a column from a vector's data table
+- [`` `[`( ``*`<GVector>`*`,`*`<ANY>`*`,`*`<ANY>`*`)`](https://github.com/adamlilith/fasterRaster/reference/subset_single_bracket.md)
+  [`` `[`( ``*`<GRaster>`*`,`*`<GRaster>`*`,`*`<ANY>`*`)`](https://github.com/adamlilith/fasterRaster/reference/subset_single_bracket.md)
+  : Subset geometries of a GVector
+- [`` `[[`( ``*`<GRaster>`*`,`*`<ANY>`*`,`*`<ANY>`*`)`](https://github.com/adamlilith/fasterRaster/reference/subset_double_square_brackets.md)
+  [`` `[[`( ``*`<GVector>`*`,`*`<ANY>`*`,`*`<ANY>`*`)`](https://github.com/adamlilith/fasterRaster/reference/subset_double_square_brackets.md)
+  : Subset layers from a GRaster, or specific columns from a GVector
+- [`` `addTable<-`( ``*`<GVector>`*`,`*`<data.frame>`*`)`](https://github.com/adamlilith/fasterRaster/reference/addTable.md)
+  [`` `addTable<-`( ``*`<GVector>`*`,`*`<data.table>`*`)`](https://github.com/adamlilith/fasterRaster/reference/addTable.md)
+  [`` `addTable<-`( ``*`<GVector>`*`,`*`<matrix>`*`)`](https://github.com/adamlilith/fasterRaster/reference/addTable.md)
+  [`dropTable(`*`<GVector>`*`)`](https://github.com/adamlilith/fasterRaster/reference/addTable.md)
+  : Attach or detach GVector's data table
+- [`subset(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/subset.md)
+  [`subset(`*`<GVector>`*`)`](https://github.com/adamlilith/fasterRaster/reference/subset.md)
+  : Subset layers from a GRaster, or specific rows from a GVector
+
+## Operations on GVectors
+
+- [`aggregate(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/aggregate.md)
+  [`aggregate(`*`<GVector>`*`)`](https://github.com/adamlilith/fasterRaster/reference/aggregate.md)
+  : Aggregate raster cells into larger cells or combine geometries of a
+  vector
+- [`as.data.frame(`*`<GVector>`*`)`](https://github.com/adamlilith/fasterRaster/reference/as.data.frame.md)
+  [`as.data.table(`*`<GVector>`*`)`](https://github.com/adamlilith/fasterRaster/reference/as.data.frame.md)
+  : Convert GVector to a data frame
+- [`as.points(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/as.points.md)
+  [`as.points(`*`<GVector>`*`)`](https://github.com/adamlilith/fasterRaster/reference/as.points.md)
+  : Convert a GRaster, or lines or polygons GVector to a points vector
+- [`buffer(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/buffer.md)
+  [`buffer(`*`<GVector>`*`)`](https://github.com/adamlilith/fasterRaster/reference/buffer.md)
+  [`st_buffer(`*`<GVector>`*`)`](https://github.com/adamlilith/fasterRaster/reference/buffer.md)
+  : Increase/decrease the size of a vector or around non-NA cells of a
+  raster
+- [`centroids(`*`<GVector>`*`)`](https://github.com/adamlilith/fasterRaster/reference/centroids.md)
+  [`centroids(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/centroids.md)
+  : Centroid(s) of a vector or clumps in a raster
+- [`clusterPoints(`*`<GVector>`*`)`](https://github.com/adamlilith/fasterRaster/reference/clusterPoints.md)
+  : Identify clusters of points
+- [`colbind(`*`<GVector>`*`)`](https://github.com/adamlilith/fasterRaster/reference/colbind.md)
+  : Add columns to the data table of a GVector
+- [`complete.cases(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/complete.cases.md)
+  [`complete.cases(`*`<GVector>`*`)`](https://github.com/adamlilith/fasterRaster/reference/complete.cases.md)
+  [`missing.cases(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/complete.cases.md)
+  [`missing.cases(`*`<GVector>`*`)`](https://github.com/adamlilith/fasterRaster/reference/complete.cases.md)
+  : Rows of a GRaster or GVector's table that have no NAs or that have
+  NAs
+- [`connectors(`*`<GVector>`*`,`*`<GVector>`*`)`](https://github.com/adamlilith/fasterRaster/reference/connectors.md)
+  : Create lines connecting nearest features of two GVectors
+- [`convHull(`*`<GVector>`*`)`](https://github.com/adamlilith/fasterRaster/reference/convHull.md)
+  : Minimum convex hull around a spatial vector
+- [`crds(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/crds.md)
+  [`crds(`*`<GVector>`*`)`](https://github.com/adamlilith/fasterRaster/reference/crds.md)
+  [`st_coordinates()`](https://github.com/adamlilith/fasterRaster/reference/crds.md)
+  : Coordinates of a vector"s features or a raster"s cell centers
+- [`crop(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/crop.md)
+  [`crop(`*`<GVector>`*`)`](https://github.com/adamlilith/fasterRaster/reference/crop.md)
+  : Remove parts of a GRaster or GVector
+- [`delaunay(`*`<GVector>`*`)`](https://github.com/adamlilith/fasterRaster/reference/delaunay.md)
+  : Delaunay triangulation for points
+- [`disagg(`*`<GVector>`*`)`](https://github.com/adamlilith/fasterRaster/reference/disagg.md)
+  : Coerce as multipart GVector to a singlepart GVector
+- [`distance(`*`<GRaster>`*`,`*`<missing>`*`)`](https://github.com/adamlilith/fasterRaster/reference/distance.md)
+  [`distance(`*`<GRaster>`*`,`*`<GVector>`*`)`](https://github.com/adamlilith/fasterRaster/reference/distance.md)
+  [`distance(`*`<GVector>`*`,`*`<GVector>`*`)`](https://github.com/adamlilith/fasterRaster/reference/distance.md)
+  [`distance(`*`<GVector>`*`,`*`<missing>`*`)`](https://github.com/adamlilith/fasterRaster/reference/distance.md)
+  : Geographic distance
+- [`` `addTable<-`( ``*`<GVector>`*`,`*`<data.frame>`*`)`](https://github.com/adamlilith/fasterRaster/reference/addTable.md)
+  [`` `addTable<-`( ``*`<GVector>`*`,`*`<data.table>`*`)`](https://github.com/adamlilith/fasterRaster/reference/addTable.md)
+  [`` `addTable<-`( ``*`<GVector>`*`,`*`<matrix>`*`)`](https://github.com/adamlilith/fasterRaster/reference/addTable.md)
+  [`dropTable(`*`<GVector>`*`)`](https://github.com/adamlilith/fasterRaster/reference/addTable.md)
+  : Attach or detach GVector's data table
+- [`erase(`*`<GVector>`*`,`*`<GVector>`*`)`](https://github.com/adamlilith/fasterRaster/reference/erase.md)
+  : Select parts of a polygon GVector erase shared by another polygon
+  GVector
+- [`expanse(`*`<GVector>`*`)`](https://github.com/adamlilith/fasterRaster/reference/expanse.md)
+  : Area of polygons or length of lines
+- [`extract(`*`<GRaster>`*`,`*`<GVector>`*`)`](https://github.com/adamlilith/fasterRaster/reference/extract.md)
+  [`extract(`*`<GRaster>`*`,`*`<data.frame>`*`)`](https://github.com/adamlilith/fasterRaster/reference/extract.md)
+  [`extract(`*`<GRaster>`*`,`*`<data.table>`*`)`](https://github.com/adamlilith/fasterRaster/reference/extract.md)
+  [`extract(`*`<GRaster>`*`,`*`<matrix>`*`)`](https://github.com/adamlilith/fasterRaster/reference/extract.md)
+  [`extract(`*`<GRaster>`*`,`*`<numeric>`*`)`](https://github.com/adamlilith/fasterRaster/reference/extract.md)
+  [`extract(`*`<GVector>`*`,`*`<GVector>`*`)`](https://github.com/adamlilith/fasterRaster/reference/extract.md)
+  [`extract(`*`<GVector>`*`,`*`<data.frame>`*`)`](https://github.com/adamlilith/fasterRaster/reference/extract.md)
+  [`extract(`*`<GVector>`*`,`*`<data.table>`*`)`](https://github.com/adamlilith/fasterRaster/reference/extract.md)
+  [`extract(`*`<GVector>`*`,`*`<matrix>`*`)`](https://github.com/adamlilith/fasterRaster/reference/extract.md)
+  [`extract(`*`<GVector>`*`,`*`<numeric>`*`)`](https://github.com/adamlilith/fasterRaster/reference/extract.md)
+  : Extract values from a GRaster at locations in a points GVector
+- [`grid(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/grid.md)
+  [`grid(`*`<GVector>`*`)`](https://github.com/adamlilith/fasterRaster/reference/grid.md)
+  : Create a grid GVector
+- [`head(`*`<GVector>`*`)`](https://github.com/adamlilith/fasterRaster/reference/head.md)
+  [`tail(`*`<GVector>`*`)`](https://github.com/adamlilith/fasterRaster/reference/head.md)
+  : Return first or last part of the data frame of a GVector
+- [`hexagons(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/hexagons.md)
+  [`hexagons(`*`<GVector>`*`)`](https://github.com/adamlilith/fasterRaster/reference/hexagons.md)
+  : Create a hexagonal grid
+- [`interpIDW(`*`<GVector>`*`,`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/interpIDW.md)
+  : Interpolate values at points to a GRaster using inverse-distance
+  weighting
+- [`interpSplines(`*`<GVector>`*`,`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/interpSplines.md)
+  : Interpolate values at points to a GRaster using splines
+- [`intersect(`*`<GVector>`*`,`*`<GVector>`*`)`](https://github.com/adamlilith/fasterRaster/reference/intersect.md)
+  : Intersection of two GVectors
+- [`kernel(`*`<GVector>`*`)`](https://github.com/adamlilith/fasterRaster/reference/kernel.md)
+  : Kernel density estimator of points
+- [`names(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/names.md)
+  [`` `names<-`( ``*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/names.md)
+  [`names(`*`<GVector>`*`)`](https://github.com/adamlilith/fasterRaster/reference/names.md)
+  [`` `names<-`( ``*`<GVector>`*`)`](https://github.com/adamlilith/fasterRaster/reference/names.md)
+  : Name(s) of a GRaster or columns of a GVector's data table
+- [`neighborhoodMatrix(`*`<GVector>`*`)`](https://github.com/adamlilith/fasterRaster/reference/neighborhoodMatrix.md)
+  [`neighbourhoodMatrix(`*`<GVector>`*`)`](https://github.com/adamlilith/fasterRaster/reference/neighborhoodMatrix.md)
+  : Neighborhood matrix from a polygons GVector
+- [`project(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/project.md)
+  [`project(`*`<GVector>`*`)`](https://github.com/adamlilith/fasterRaster/reference/project.md)
+  : Change the coordinate reference system of a GRaster or GVector
+- [`rasterize(`*`<GVector>`*`,`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/rasterize.md)
+  : Convert a GVector to a GRaster
+- [`rbind(`*`<GVector>`*`)`](https://github.com/adamlilith/fasterRaster/reference/rbind.md)
+  : Combine one or more GVectors
+- [`simplifyGeom(`*`<GVector>`*`)`](https://github.com/adamlilith/fasterRaster/reference/simplifyGeom.md)
+  : Simplify the geometry of a vector
+- [`smoothGeom(`*`<GVector>`*`)`](https://github.com/adamlilith/fasterRaster/reference/smoothGeom.md)
+  : Smooth the geometry of a vector
+- [`vect(`*`<GVector>`*`)`](https://github.com/adamlilith/fasterRaster/reference/vect.md)
+  [`st_as_sf(`*`<GVector>`*`)`](https://github.com/adamlilith/fasterRaster/reference/vect.md)
+  : Convert a GVector to a SpatVector or sf vector
+- [`thinPoints(`*`<GVector>`*`,`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/thinPoints.md)
+  : Reduce number of points in same raster cell
+- [`union(`*`<GVector>`*`,`*`<GVector>`*`)`](https://github.com/adamlilith/fasterRaster/reference/union.md)
+  : Combine two GVectors
+- [`voronoi(`*`<GVector>`*`)`](https://github.com/adamlilith/fasterRaster/reference/voronoi.md)
+  : Voronoi tessellation
+- [`xor(`*`<GVector>`*`,`*`<GVector>`*`)`](https://github.com/adamlilith/fasterRaster/reference/xor.md)
+  : Select parts of polygons not shared between two GVectors
+
+## Creating GVectors *de novo*
+
+- [`rvoronoi(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/rvoronoi.md)
+  [`rvoronoi(`*`<GVector>`*`)`](https://github.com/adamlilith/fasterRaster/reference/rvoronoi.md)
+  : Create a randomly-positioned tesselation
+
+## Fixing GVector issues
+
+- [`breakPolys(`*`<GVector>`*`)`](https://github.com/adamlilith/fasterRaster/reference/breakPolys.md)
+  [`fixBridges(`*`<GVector>`*`)`](https://github.com/adamlilith/fasterRaster/reference/breakPolys.md)
+  [`fixDangles(`*`<GVector>`*`)`](https://github.com/adamlilith/fasterRaster/reference/breakPolys.md)
+  [`fixLines(`*`<GVector>`*`)`](https://github.com/adamlilith/fasterRaster/reference/breakPolys.md)
+  [`remove0(`*`<GVector>`*`)`](https://github.com/adamlilith/fasterRaster/reference/breakPolys.md)
+  [`removeAngles(`*`<GVector>`*`)`](https://github.com/adamlilith/fasterRaster/reference/breakPolys.md)
+  [`removeBridges(`*`<GVector>`*`)`](https://github.com/adamlilith/fasterRaster/reference/breakPolys.md)
+  [`removeDangles(`*`<GVector>`*`)`](https://github.com/adamlilith/fasterRaster/reference/breakPolys.md)
+  [`removeDupCentroids(`*`<GVector>`*`)`](https://github.com/adamlilith/fasterRaster/reference/breakPolys.md)
+  [`removeDups(`*`<GVector>`*`)`](https://github.com/adamlilith/fasterRaster/reference/breakPolys.md)
+  [`removeSmallPolys(`*`<GVector>`*`)`](https://github.com/adamlilith/fasterRaster/reference/breakPolys.md)
+  [`snap(`*`<GVector>`*`)`](https://github.com/adamlilith/fasterRaster/reference/breakPolys.md)
+  : Fix issues with geometries of a vector
+- [`fillHoles(`*`<GVector>`*`)`](https://github.com/adamlilith/fasterRaster/reference/fillHoles.md)
+  : Fill holes in a GVector
+
+## Converting between data types
+
+- [`as.contour(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/as.contour.md)
+  : Contour lines from a "GRaster"
+- [`as.int(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/as.int.md)
+  [`as.float(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/as.int.md)
+  [`as.doub(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/as.int.md)
+  : Coerce raster to integer, float, or double precision
+- [`as.data.frame(`*`<GVector>`*`)`](https://github.com/adamlilith/fasterRaster/reference/as.data.frame.md)
+  [`as.data.table(`*`<GVector>`*`)`](https://github.com/adamlilith/fasterRaster/reference/as.data.frame.md)
+  : Convert GVector to a data frame
+- [`as.lines(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/as.lines.md)
+  : Convert a raster to a lines vector
+- [`as.points(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/as.points.md)
+  [`as.points(`*`<GVector>`*`)`](https://github.com/adamlilith/fasterRaster/reference/as.points.md)
+  : Convert a GRaster, or lines or polygons GVector to a points vector
+- [`as.polygons(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/as.polygons.md)
+  : Convert a raster to a polygons vector
+- [`levels(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/levels.md)
+  [`cats(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/levels.md)
+  [`categories(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/levels.md)
+  [`` `levels<-`( ``*`<GRaster>`*`,`*`<data.frame>`*`)`](https://github.com/adamlilith/fasterRaster/reference/levels.md)
+  [`` `levels<-`( ``*`<GRaster>`*`,`*`<data.table>`*`)`](https://github.com/adamlilith/fasterRaster/reference/levels.md)
+  [`` `levels<-`( ``*`<GRaster>`*`,`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/levels.md)
+  [`` `levels<-`( ``*`<GRaster>`*`,`*`<list>`*`)`](https://github.com/adamlilith/fasterRaster/reference/levels.md)
+  : Set and get categories for categorical rasters
+- [`fast(`*`<character>`*`)`](https://github.com/adamlilith/fasterRaster/reference/fast.md)
+  [`fast(`*`<SpatRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/fast.md)
+  [`fast(`*`<SpatVector>`*`)`](https://github.com/adamlilith/fasterRaster/reference/fast.md)
+  [`fast(`*`<sf>`*`)`](https://github.com/adamlilith/fasterRaster/reference/fast.md)
+  [`fast(`*`<missing>`*`)`](https://github.com/adamlilith/fasterRaster/reference/fast.md)
+  [`fast(`*`<numeric>`*`)`](https://github.com/adamlilith/fasterRaster/reference/fast.md)
+  [`fast(`*`<data.frame>`*`)`](https://github.com/adamlilith/fasterRaster/reference/fast.md)
+  [`fast(`*`<data.table>`*`)`](https://github.com/adamlilith/fasterRaster/reference/fast.md)
+  [`fast(`*`<matrix>`*`)`](https://github.com/adamlilith/fasterRaster/reference/fast.md)
+  : Create a GRaster or GVector
+- [`rast(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/rast.md)
+  : Convert a GRaster to a SpatRaster
+- [`rasterize(`*`<GVector>`*`,`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/rasterize.md)
+  : Convert a GVector to a GRaster
+- [`vect(`*`<GVector>`*`)`](https://github.com/adamlilith/fasterRaster/reference/vect.md)
+  [`st_as_sf(`*`<GVector>`*`)`](https://github.com/adamlilith/fasterRaster/reference/vect.md)
+  : Convert a GVector to a SpatVector or sf vector
+
+## General functions
+
+- [`addons()`](https://github.com/adamlilith/fasterRaster/reference/addons.md)
+  [`installAddon()`](https://github.com/adamlilith/fasterRaster/reference/addons.md)
+  [`removeAddon()`](https://github.com/adamlilith/fasterRaster/reference/addons.md)
+  [`.addons()`](https://github.com/adamlilith/fasterRaster/reference/addons.md)
+  : Test if addons directory exists and if an addon is installed
+- [`compareGeom(`*`<GRaster>`*`,`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/compareGeom.md)
+  [`compareGeom(`*`<GVector>`*`,`*`<GVector>`*`)`](https://github.com/adamlilith/fasterRaster/reference/compareGeom.md)
+  [`compareGeom(`*`<GRaster>`*`,`*`<GVector>`*`)`](https://github.com/adamlilith/fasterRaster/reference/compareGeom.md)
+  [`compareGeom(`*`<GVector>`*`,`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/compareGeom.md)
+  : Determine if GRasters and/or GVectors are geographically comparable
+- [`dropRows(`*`<data.table>`*`)`](https://github.com/adamlilith/fasterRaster/reference/dropRows.md)
+  [`dropRows(`*`<data.frame>`*`)`](https://github.com/adamlilith/fasterRaster/reference/dropRows.md)
+  [`dropRows(`*`<matrix>`*`)`](https://github.com/adamlilith/fasterRaster/reference/dropRows.md)
+  : Remove rows in a data.table, data.frame, or matrix.
+- [`grassGUI(`*`<missing>`*`)`](https://github.com/adamlilith/fasterRaster/reference/grassGUI.md)
+  : Start the GRASS GUI (potentially dangerous!)
+- [`grassHelp()`](https://github.com/adamlilith/fasterRaster/reference/grassHelp.md)
+  : Open the help page for a GRASS tool
+- [`grassInfo()`](https://github.com/adamlilith/fasterRaster/reference/grassInfo.md)
+  : GRASS citation, version, and copyright information
+- [`grassStarted()`](https://github.com/adamlilith/fasterRaster/reference/grassStarted.md)
+  : Has "GRASS" been started or not?
+- [`mow()`](https://github.com/adamlilith/fasterRaster/reference/mow.md)
+  : Remove rasters and vectors from the GRASS cache
+- [`replaceNAs(`*`<data.frame>`*`)`](https://github.com/adamlilith/fasterRaster/reference/replaceNAs.md)
+  [`replaceNAs(`*`<matrix>`*`)`](https://github.com/adamlilith/fasterRaster/reference/replaceNAs.md)
+  [`replaceNAs(`*`<data.table>`*`)`](https://github.com/adamlilith/fasterRaster/reference/replaceNAs.md)
+  [`replaceNAs(`*`<numeric>`*`)`](https://github.com/adamlilith/fasterRaster/reference/replaceNAs.md)
+  [`replaceNAs(`*`<integer>`*`)`](https://github.com/adamlilith/fasterRaster/reference/replaceNAs.md)
+  [`replaceNAs(`*`<logical>`*`)`](https://github.com/adamlilith/fasterRaster/reference/replaceNAs.md)
+  [`replaceNAs(`*`<character>`*`)`](https://github.com/adamlilith/fasterRaster/reference/replaceNAs.md)
+  : Replace NAs in a data.table or data.frame column, or in a vector
+- [`seqToSQL()`](https://github.com/adamlilith/fasterRaster/reference/seqToSQL.md)
+  : Format a numeric series into an SQL value call
+- [`update(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/update.md)
+  [`update(`*`<GVector>`*`)`](https://github.com/adamlilith/fasterRaster/reference/update.md)
+  : Refresh metadata in a GRaster or GVector
+
+## Example data
+
+- [`appFunsTable`](https://github.com/adamlilith/fasterRaster/reference/appFunsTable.md)
+  : Functions that can be used in app()
+
+- [`fastData()`](https://github.com/adamlilith/fasterRaster/reference/fastData.md)
+  : Get one of the example rasters or spatial vectors
+
+- [`madChelsa`](https://github.com/adamlilith/fasterRaster/reference/madChelsa.md)
+  : Rasters of bioclimatic variables for an eastern portion of
+  Madagascar
+
+- [`madCoast`](https://github.com/adamlilith/fasterRaster/reference/madCoast.md)
+  : Shapefile of a portion of the coastline of Madagascar
+
+- [`madCoast4`](https://github.com/adamlilith/fasterRaster/reference/madCoast0.md)
+  : Spatial vector of a portion of the coastline of Madagascar
+
+- [`madCoast4`](https://github.com/adamlilith/fasterRaster/reference/madCoast4.md)
+  : Spatial vector of a portion of the coastline of Madagascar
+
+- [`madCover`](https://github.com/adamlilith/fasterRaster/reference/madCover.md)
+  : Raster of land cover for an eastern portion of Madagascar
+
+- [`madCoverCats`](https://github.com/adamlilith/fasterRaster/reference/madCoverCats.md)
+  : Table of land cover classes for an eastern portion of Madagascar
+
+- [`madDypsis`](https://github.com/adamlilith/fasterRaster/reference/madDypsis.md)
+  : Spatial points vector of records of Dypsis in eastern Madagascar
+
+- [`madElev`](https://github.com/adamlilith/fasterRaster/reference/madElev.md)
+  : Elevation raster for an eastern portion of Madagascar
+
+- [`madForest2000`](https://github.com/adamlilith/fasterRaster/reference/madForest2000.md)
+  : Forest cover in year 2000 for a portion of Madagascar
+
+- [`madForest2014`](https://github.com/adamlilith/fasterRaster/reference/madForest2014.md)
+  : Forest cover in year 2014 for a portion of Madagascar
+
+- [`madLANDSAT`](https://github.com/adamlilith/fasterRaster/reference/madLANDSAT.md)
+  : Rasters of surface reflectance for an eastern portion of Madagascar
+
+- [`madPpt`](https://github.com/adamlilith/fasterRaster/reference/madPpt.md)
+  : Rasters of average monthly precipitation for an eastern portion of
+  Madagascar
+
+- [`madTmax`](https://github.com/adamlilith/fasterRaster/reference/madTmax.md)
+  : Rasters of average monthly maximum temperature for an eastern
+  portion of Madagascar
+
+- [`madTmin`](https://github.com/adamlilith/fasterRaster/reference/madTmin.md)
+  : Rasters of average monthly minimum temperature for an eastern
+  portion of Madagascar
+
+- [`madRivers`](https://github.com/adamlilith/fasterRaster/reference/madRivers.md)
+  : Major rivers in a selected portion of Madagascar
+
+- [`vegIndices`](https://github.com/adamlilith/fasterRaster/reference/vegIndices.md)
+  :
+
+  Table of vegetation indices that can be calculated from remote sensing
+  surface reflectance data using
+  [`vegIndex()`](https://github.com/adamlilith/fasterRaster/reference/vegIndex.md).
+  A near-comprehensive table of indices can be found on the [Index
+  Database: A Database for Remote Sensing
+  Indices](https://www.indexdatabase.de).
+
+## Classes
+
+- [`GLocation-class`](https://github.com/adamlilith/fasterRaster/reference/GLocation.md)
+  [`GLocation`](https://github.com/adamlilith/fasterRaster/reference/GLocation.md)
+  [`GSpatial-class`](https://github.com/adamlilith/fasterRaster/reference/GLocation.md)
+  [`GSpatial`](https://github.com/adamlilith/fasterRaster/reference/GLocation.md)
+  [`GRegion-class`](https://github.com/adamlilith/fasterRaster/reference/GLocation.md)
+  [`GRegion`](https://github.com/adamlilith/fasterRaster/reference/GLocation.md)
+  [`GRaster-class`](https://github.com/adamlilith/fasterRaster/reference/GLocation.md)
+  [`GRaster`](https://github.com/adamlilith/fasterRaster/reference/GLocation.md)
+  [`GVector-class`](https://github.com/adamlilith/fasterRaster/reference/GLocation.md)
+  [`GVector`](https://github.com/adamlilith/fasterRaster/reference/GLocation.md)
+  : Classes for fasterRaster sessions, regions, rasters, and vectors

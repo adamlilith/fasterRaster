@@ -1,0 +1,140 @@
+# Find which cells of a GRaster match certain values
+
+The `match()` function takes a `GRaster` and a numeric, integer or
+character vector as inputs and returns a `GRaster` with cell values that
+correspond to the index of each element in the vector that matched the
+original cell value. For example, if a 4-cell raster had values 3, `NA`,
+5, 4, and the vector was `c(3, 4)`, then the output would be a 4-cell
+raster with values 1, `NA`, `NA`, 2 because the first value in the
+vector was 3 (so the cell with 3 is assigned 1), and because the second
+value in the vector was 4 (so the cell with 4 was assigned 2). The other
+two values had no matches.
+
+If the `GRaster` is categorical, then the vector can be category labels
+instead of numeric values.
+
+The `%in%` operator returns a `GRaster` with cell values that are 1 if
+their original values appeared in the vector, and 0 if not (or `NA` if
+the original value was `NA`). If the `GRaster` is categorical, then the
+vector can be category labels instead of numeric values.
+
+The `%notin%` operator returns 1 for cells with values that are *not*
+found in the vector, and 0 otherwise. If the `GRaster` is categorical,
+then the vector can be category labels instead of numeric values.
+
+## Usage
+
+``` r
+# S4 method for class 'GRaster'
+match(x, table, nomatch = NA)
+
+# S4 method for class 'GRaster'
+x %in% table
+
+# S4 method for class 'GRaster'
+x %notin% table
+```
+
+## Arguments
+
+- x:
+
+  A `GRaster`: Note that any kind of `GRaster` is acceptable (integer,
+  float, double, or categorical), but matching may not work as intended
+  for float and double rasters because of problems with comparing
+  floating-point values.
+
+- table:
+
+  A numeric, integer, or character vector.
+
+- nomatch:
+
+  Numeric or integer: Value to return when no match is found.
+
+## Value
+
+A `GRaster`.
+
+## See also
+
+[`terra::match()`](https://rspatial.github.io/terra/reference/match.html),
+`match()`,
+[`omnibus::notIn()`](https://adamlilith.github.io/omnibus/reference/notIn.html)
+
+## Examples
+
+``` r
+if (grassStarted()) {
+
+# Setup
+library(terra)
+
+# Example data: Elevation and land cover rasters
+madElev <- fastData("madElev")
+madCover <- fastData("madCover")
+
+### match() with an integer raster:
+
+elev <- fast(madElev)
+
+# Cells in elevation raster replaced with index in which they appear
+# in the table:
+table <- c(10, 20, 30, 40, 50)
+elevIndex <- match(elev, table)
+elevIndexNeg <- match(elev, table, nomatch = -100)
+
+plot(c(elevIndex, elevIndexNeg))
+
+### Using %in% and %notin% on an integer GRaster:
+
+elev <- fast(madElev)
+table <- c(10, 20, 30, 40, 50)
+
+ins <- elev %in% table
+notins <- elev %notin% table
+
+plot(c(ins, notins))
+
+### match() with a categorical raster:
+
+cover <- fast(madCover)
+cover <- droplevels(cover)
+levels(cover)
+
+forestLabels <- c(
+   "Sparse broadleaved evergreen/semi-deciduous forest",
+   "Broadleaved deciduous forest",
+   "Grassland with mosaic forest",
+   "Flooded forest"
+)
+
+forestClasses <- match(cover, forestLabels)
+plot(forestClasses)
+levels(forestClasses)
+
+forestNoMatch <- match(cover, forestLabels, nomatch = -100)
+plot(forestNoMatch)
+levels(forestNoMatch)
+
+### Using %in% and %notin% on a categorical GRaster:
+
+cover <- fast(madCover)
+cover <- droplevels(cover)
+levels(cover)
+
+forestLabels <- c(
+   "Sparse broadleaved evergreen/semi-deciduous forest",
+   "Broadleaved deciduous forest",
+   "Grassland with mosaic forest",
+   "Flooded forest"
+)
+
+forest <- cover %in% forestLabels
+plot(forest)
+
+notForest <- cover %notin% forestLabels
+plot(notForest)
+
+}
+```

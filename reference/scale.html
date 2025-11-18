@@ -9,7 +9,7 @@ The unscale() function does the opposite of scale() and scalepop(): it multiples
 
     <a class="navbar-brand me-2" href="../index.html">fasterRaster</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">8.4.1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">8.4.1.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -75,13 +75,17 @@ The unscale() function does the opposite of scale() and scalepop(): it multiples
 
 
 <dt id="arg-center">center<a class="anchor" aria-label="anchor" href="#arg-center"></a></dt>
-<dd><p>Value depends on the function:</p><ul><li><p><code>scale()</code>: Logical: If <code>TRUE</code> (default), subtract from each raster layer its mean.</p></li>
+<dd><p>Value depends on the function:</p><ul><li><p><code>scale()</code>:</p><ul><li><p>Logical: If <code>TRUE</code> (default), subtract from each raster layer its mean. If <code>FALSE</code>, do not.</p></li>
+<li><p>Numeric: A single value, in which case the same value will be used across all layers of <code>x</code>, or one value per layer in <code>x</code>.</p></li>
+</ul></li>
 <li><p><code>unscale()</code>: Numeric vector or <code>NULL</code> (default): This can be a single value, which will be recycled if there is more than one layer in the raster, or one value per raster layer. If a value is <code>NA</code>, then no un-centering will be performed on the relevant raster layer. If <code>NULL</code>, then no un-centering is done.</p></li>
 </ul></dd>
 
 
 <dt id="arg-scale">scale<a class="anchor" aria-label="anchor" href="#arg-scale"></a></dt>
-<dd><p>Value depends on the function:</p><ul><li><p><code>scale()</code>: Logical: If <code>TRUE</code> (default), divide each layer by its standard deviation.</p></li>
+<dd><p>Value depends on the function:</p><ul><li><p><code>scale()</code>:</p><ul><li><p>Logical: If <code>TRUE</code> (default), divide each raster layer by its standard deviation. If <code>FALSE</code>, do not.</p></li>
+<li><p>Numeric: A single value, in which case the same value will be used across all layers of <code>x</code>, or one value per layer in <code>x</code>.</p></li>
+</ul></li>
 <li><p><code>unscale()</code>: Numeric vector or <code>NULL</code> (default): This can be a single value, which will be recycled if there is more than one layer in the raster, or one value per raster layer. If a value is <code>NA</code>, then no unscaling will be done on the relevant raster layer. If <code>NULL</code>, then no un-scaling is done.</p></li>
 </ul></dd>
 
@@ -142,7 +146,7 @@ The unscale() function does the opposite of scale() and scalepop(): it multiples
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
     </footer></div>

@@ -1,0 +1,160 @@
+# Number of geometries and subgeometries in a vector
+
+`GVector`s represent two types of "geometries". In "singlepart"
+geometries, each point, set of connected line segments, or polygon is
+treated like its own feature and has its own row in an attribute table.
+For example, a province might be composed of islands. In this case, each
+island would be represented as its own feature and could have its own
+row in the attribute indicating, say, the name and area of each island.
+
+In "multipart" geometries, features are collected together and thu
+manipulated as if they were a single feature and have a singe line in an
+attribute table. Each multipart feature can contain one or more
+singlepart features. For example, all of the islands comprising province
+would be collated together and have a single row in the attribute table
+indicating the name of the province and the area of the entire province.
+
+`ngeom()` returns the number of geometries. Singlepart features are
+treated as one geometry each, and multipart features are treated as one
+geometry each.
+
+`nsubgeom()` Returns the number of subgeometries. Singlepart geometries
+each represent a single subgeometry. Multipart geometries represent one
+or more subgeometries. The number of subgeometries will thus always be
+the same as or more than the number of geometries.
+
+## Usage
+
+``` r
+# S4 method for class 'GVector'
+ngeom(x)
+
+# S4 method for class 'GVector'
+nsubgeom(x)
+```
+
+## Arguments
+
+- x:
+
+  A `GVector`.
+
+## Value
+
+An integer.
+
+## See also
+
+[`nrow()`](https://github.com/adamlilith/fasterRaster/reference/dim.md),
+[`dim()`](https://github.com/adamlilith/fasterRaster/reference/dim.md)
+
+## Examples
+
+``` r
+if (grassStarted()) {
+
+# Setup
+library(sf)
+
+# Example data:
+madCoast4 <- fastData("madCoast4")
+madRivers <- fastData("madRivers")
+madDypsis <- fastData("madDypsis")
+
+# Convert sf vectors to GVectors:
+coast <- fast(madCoast4)
+rivers <- fast(madRivers)
+dypsis <- fast(madDypsis)
+
+# Geographic properties:
+ext(rivers) # extent
+crs(rivers) # coordinate reference system
+st_crs(rivers) # coordinate reference system
+coordRef(rivers) # coordinate reference system
+
+# Column names and data types:
+names(coast)
+datatype(coast)
+
+# Points, lines, or polygons?
+geomtype(dypsis)
+geomtype(rivers)
+geomtype(coast)
+
+is.points(dypsis)
+is.points(coast)
+
+is.lines(rivers)
+is.lines(dypsis)
+
+is.polygons(coast)
+is.polygons(dypsis)
+
+# Number of dimensions:
+topology(rivers)
+is.2d(rivers) # 2-dimensional?
+is.3d(rivers) # 3-dimensional?
+
+# Just the data table:
+as.data.frame(rivers)
+as.data.table(rivers)
+
+# Top/bottom of the data table:
+head(rivers)
+tail(rivers)
+
+# Vector or table with just selected columns:
+names(rivers)
+rivers$NAME
+rivers[[c("NAM", "NAME_0")]]
+rivers[[c(3, 5)]]
+
+# Select geometries/rows of the vector:
+nrow(rivers)
+selected <- rivers[2:6]
+nrow(selected)
+
+# Plot:
+plot(coast)
+plot(rivers, col = "blue", add = TRUE)
+plot(selected, col = "red", lwd = 2, add = TRUE)
+
+# Vector math:
+hull <- convHull(dypsis)
+
+un <- union(coast, hull)
+sameAsUnion <- coast + hull
+plot(un)
+plot(sameAsUnion)
+
+inter <- intersect(coast, hull)
+sameAsIntersect <- coast * hull
+plot(inter)
+plot(sameAsIntersect)
+
+er <- erase(coast, hull)
+sameAsErase <- coast - hull
+plot(er)
+plot(sameAsErase)
+
+xr <- xor(coast, hull)
+sameAsXor <- coast / hull
+plot(xr)
+plot(sameAsXor)
+
+# Vector area and length:
+expanse(coast, unit = "km") # polygons areas
+expanse(rivers, unit = "km") # river lengths
+
+### Fill holes
+
+# First, we will make some holes by creating buffers around points.
+buffs <- buffer(dypsis, 500)
+
+holes <- coast - buffs
+plot(holes)
+
+filled <- fillHoles(holes, fail = FALSE)
+
+}
+```

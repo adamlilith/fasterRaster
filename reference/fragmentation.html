@@ -29,7 +29,7 @@ Value provided by none: None (i.e., no forest; default is NA).
 
     <a class="navbar-brand me-2" href="../index.html">fasterRaster</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">8.4.1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">8.4.1.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -103,11 +103,11 @@ Value provided by none: None (i.e., no forest; default is NA).
 
 
 <dl><dt id="arg-x">x<a class="anchor" aria-label="anchor" href="#arg-x"></a></dt>
-<dd><p>A <code>SpatRaster</code> or <code>GRaster</code>.</p></dd>
+<dd><p>A <code>SpatRaster</code> or <code>GRaster</code> wherein the habitat type has cell values of 1, and non-focal habitat type has cell values of 0 or <code>NA</code></p></dd>
 
 
 <dt id="arg-w">w<a class="anchor" aria-label="anchor" href="#arg-w"></a></dt>
-<dd><p>An odd, positive integer: Size of the window across which fragmentation is calculated (in units of "rows" and "columns"). The default is 3, meaning the function uses a 3x3 moving window to calculate fragmentation. For large rasters, compute time is ~<em>O</em>(<code>N</code>) + <em>O</em>(<code>N * w^2</code>), where <code>N</code> is the number of cells in the raster. So, even a small increase in <code>w</code> can increase compute time by a lot.</p></dd>
+<dd><p>An odd integer between 3 and 25: Size of the window across which fragmentation is calculated (in units of "rows" and "columns"). The default is 3, meaning the function uses a 3x3 moving window to calculate fragmentation. For large rasters, compute time is ~<em>O</em>(<code>N</code>) + <em>O</em>(<code>N * w^2</code>), where <code>N</code> is the number of cells in the raster. So, even a small increase in <code>w</code> can increase compute time by a lot. Values &gt;25 will fail. A workaround might be to use <code><a href="aggregate.html">aggregate()</a></code> with <code>fun = 'mode'</code>, apply <code>fragmentation()</code>, then <code><a href="resample.html">resample()</a></code> to the original resolution.</p></dd>
 
 
 <dt id="arg-undet">undet<a class="anchor" aria-label="anchor" href="#arg-undet"></a></dt>
@@ -179,7 +179,7 @@ Value provided by none: None (i.e., no forest; default is NA).
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
     </footer></div>

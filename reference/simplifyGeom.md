@@ -1,0 +1,153 @@
+# Simplify the geometry of a vector
+
+`simplifyGeom()` reduces the number of vertices used to represent a
+vector (i.e., to save memory or disk space). There are several methods
+available.
+
+## Usage
+
+``` r
+# S4 method for class 'GVector'
+simplifyGeom(x, tolerance = NULL, method = "VR", prop = 0.5)
+```
+
+## Arguments
+
+- x:
+
+  A `GVector`.
+
+- tolerance:
+
+  Numeric \>= 0: Threshold distance in map units (degrees for
+  unprojected, usually meters for projected). If `NULL`, then 2% of the
+  minimum of the x-, y-, and z-extent will be used.
+
+- method:
+
+  Character: Method used to reduce the number of vertices. Partial
+  matching is used, and case does not matter:
+
+  - `"VR"`: Vertex reduction (default, simplest): If two points p1 and
+    p2 on the same line are closer than the threshold, remove p2. The
+    `tolerance` argument represents this threshold distance.
+
+  - `"DP"`: Douglas-Peucker (AKA Ramer-Douglas-Peucker) algorithm:
+    Simply stated, for points p1, p2, and p3 on a line, this method
+    constructs a line segment between p1 and p3. If p2 is closer than
+    the threshold to the line segment, it is removed. In this example,
+    the `tolerance` argument refers to the maximum distance between p2
+    and the line segment.
+
+  - `"DPR"`: Douglas-Peucker algorithm with reduction: As the
+    Douglas-Pueker method, but each geometry is thinned so that in the
+    end it has only a given proportion of the starting number of points.
+    The `prop` argument refers to this proportion of remaining points.
+
+  - `"RW`: Reumann-Witkam algorithm: For points p1, p2, p3, and p4 on a
+    line, constructs two line segments parallel to the line segment
+    defined by p1 and p4. These are placed `tolerance` distance one
+    either side of the p1-p4 line segment. If the line segment p1-p2 or
+    p3-p4 falls entirely within the bounds of the two outer parallel
+    segments, p2 and p3 are removed, leaving just p1 and p4.
+
+- prop:
+
+  Positive value between 0 and 1: Proportion of points that will be
+  retained for each geometry when the Douglas-Peucker algorithm with
+  reduction is applied (ignored otherwise). Default is 0.5 (retain 50%
+  of vertices).
+
+## Value
+
+A `GVector`.
+
+## See also
+
+[`smoothGeom()`](https://github.com/adamlilith/fasterRaster/reference/smoothGeom.md),
+[geometry
+cleaning](https://github.com/adamlilith/fasterRaster/reference/breakPolys.md),
+[`terra::simplifyGeom()`](https://rspatial.github.io/terra/reference/simplify.html),
+**GRASS** manual page for tool `v.generalize` (see
+`grassHelp("v.generalize")`)
+
+## Examples
+
+``` r
+if (grassStarted()) {
+
+# Setup
+library(sf)
+library(terra)
+
+# Example data
+madRivers <- fastData("madRivers")
+rivers <- fast(madRivers)
+soam <- rivers[rivers$NAM == "SOAMIANINA"] # select one river for illustration
+
+### Simplify geometry (remove nodes)
+
+vr <- simplifyGeom(soam, tolerance = 2000)
+dp <- simplifyGeom(soam, tolerance = 2000, method = "dp")
+dpr <- simplifyGeom(soam, tolerance = 2000, method = "dpr", prop = 0.5)
+rw <- simplifyGeom(soam, tolerance = 2000, method = "rw")
+
+plot(soam, col = "black", lwd = 3)
+plot(vr, col = "blue", add = TRUE)
+plot(dp, col = "red", add = TRUE)
+plot(dpr, col = "chartreuse", add = TRUE)
+plot(rw, col = "orange", add = TRUE)
+
+legend("bottom",
+   xpd = NA,
+   legend = c(
+    "Original",
+      "Vertex reduction",
+      "Douglas-Peucker",
+      "Douglas-Peucker reduction",
+      "Reumann-Witkam"
+  ),
+  col = c("black", "blue", "red", "chartreuse", "orange"),
+  lwd = c(3, 1, 1, 1, 1)
+)
+
+### Smooth geometry
+
+hermite <- smoothGeom(soam, dist = 2000, angle = 3)
+chaiken <- smoothGeom(soam, method = "Chaiken", dist = 2000)
+
+plot(soam, col = "black", lwd = 2)
+plot(hermite, col = "blue", add = TRUE)
+plot(chaiken, col = "red", add = TRUE)
+
+legend("bottom",
+   xpd = NA,
+   legend = c(
+    "Original",
+      "Hermite",
+      "Chaiken"
+  ),
+  col = c("black", "blue", "red"),
+  lwd = c(2, 1, 1, 1, 1)
+)
+
+### Clean geometry
+
+# Has no effect on this vector!
+noDangs <- removeDangles(soam, tolerance = 10000)
+
+plot(soam, col = "black", lwd = 2)
+plot(noDangs, col = "red", add = TRUE)
+
+legend("bottom",
+   xpd = NA,
+   legend = c(
+    "Original",
+      "No dangles"
+  ),
+  lwd = c(2, 1),
+  col = c("black", "red")
+)
+
+}
+```

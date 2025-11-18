@@ -1,0 +1,81 @@
+# Functions that can be used in app()
+
+This is a table of functions that can be used in the
+[`app()`](https://github.com/adamlilith/fasterRaster/reference/app.md)
+function, their **R** equivalents, and the
+[`datatype()`](https://github.com/adamlilith/fasterRaster/reference/datatype.md)
+they return. You can view this table using `?appFunsTable` or as a
+searchable, sortable **Shiny** table using
+[`appFuns()`](https://github.com/adamlilith/fasterRaster/reference/app.md).
+
+## Format
+
+A `data.frame`.
+
+## Source
+
+[OSGeo](https://grass.osgeo.org)
+
+## Examples
+
+``` r
+if (grassStarted()) {
+
+# Setup
+library(terra)
+
+# Elevation raster
+madElev <- fastData("madElev")
+
+# Convert SpatRaster to a GRaster:
+elev <- fast(madElev)
+
+# Create a "stack" of rasters for us to operate on:
+x <- c(elev, elev^2, sqrt(elev))
+
+# Demonstrate check for badly-named rasters:
+names(x) <- c("cos", "asin", "exp")
+fun <- "= cos / asin + exp"
+appCheck(x, fun, failOnBad = FALSE)
+
+# Rename rasters acceptable names and run the function:
+names(x) <- c("x1", "x2", "x3")
+fun <- "= (x1 / x2) + x3"
+appCheck(x, fun, failOnBad = FALSE)
+app(x, fun = fun)
+
+# This is the same as:
+(x[[1]] / x[[2]]) + x[[3]]
+
+# We can view a table of app() functions using appFuns():
+appFuns()
+
+# We can also get the same table using:
+data(appFunsTable)
+
+# Apply other functions:
+fun <- "= median(x1 / x2, x3, x1 * 2, cos(x2))"
+app(x, fun = fun)
+
+fun <- "= round(x1) * tan(x2) + log(x3, 10)"
+app(x, fun = fun)
+
+# Demonstrate effects of data type:
+fun <- "= x1 + x3"
+app(x, fun = fun, datatype = "float") # output is floating-point
+app(x, fun = fun, datatype = "integer") # output is integer
+
+# Some functions override the "datatype" argument:
+fun <- "= sin(x2)"
+app(x, fun = fun, datatype = "integer")
+
+# Make a raster with random values [1:4], with equal probability of each:
+fun <- "= round(rand(0.5, 4.5))"
+rand <- app(elev, fun = fun)
+rand
+
+freqs <- freq(rand) # cell frequencies
+print(freqs)
+
+}
+```

@@ -1,0 +1,243 @@
+# Get the datatype of a GRaster or of GVector columns
+
+For `GRaster`s, `datatype()` returns the data type (see
+[`vignette("GRasters", package = "fasterRaster")`](https://github.com/adamlilith/fasterRaster/articles/GRasters.md)).
+For `GVector`s, `datatype()` returns the class of each column of the
+attribute table.
+
+## Usage
+
+``` r
+# S4 method for class 'GRaster'
+datatype(x, type = "fasterRaster", forceDouble = TRUE)
+
+# S4 method for class 'GVector'
+datatype(x)
+```
+
+## Arguments
+
+- x:
+
+  A `GRaster` or `GVector`.
+
+- type:
+
+  (`GRaster`s only) `NULL` or character: Type of datatype to report
+  (`GRaster` only):
+
+  - `"fasterRaster"` (default): Reports the **fasterRaster** type
+    (factor, integer, float, or double)
+
+  - `"terra"`: Report the (inferred) **terra** data type (e.g., INT2U,
+    FLT4S). Please see the table in the documentation for
+    \[writeRaster()\` for an explanation of these codes.
+
+  - `"GRASS"`: Will return "CELL" (integer), "FCELL" (floating-point
+    value), or "DCELL" (double-floating point value)
+
+  - `"GDAL"`: See [GDAL: Raster
+    Band](https://gdal.org/en/stable/user/raster_data_model.html).
+    Please also see the table in the
+    [`writeRaster()`](https://github.com/adamlilith/fasterRaster/reference/writeRaster.md)
+    help page.
+
+- forceDouble:
+
+  Logical (`GRaster`s and `SpatRaster`s only): If `TRUE` (default), and
+  the raster appears to represent non-integer values, then the raster
+  will be assumed to represent double-floating point values (**GRASS**:
+  type "DCELL", **terra**: type "FLT8S", **fasterRaster**: type
+  "double", and **GDAL**: type "Float64"). `forceDouble` reports the
+  actual datatype if `type = "fasterRaster"` (i.e., the type is not
+  forced to "double").
+
+## Value
+
+`datatype()` for a `GRaster` returns a character. `datatype()` for a
+`GVector` returns a data frame, with one row per field. If the `GVector`
+has no attribute table, the function returns `NULL`.
+
+## See also
+
+[`terra::datatype()`](https://rspatial.github.io/terra/reference/datatype.html),
+[`vignette("GRasters", package = "fasterRaster")`](https://github.com/adamlilith/fasterRaster/articles/GRasters.md)
+
+## Examples
+
+``` r
+if (grassStarted()) {
+
+# Setup
+library(sf)
+library(terra)
+
+# Example data
+madElev <- fastData("madElev")
+madForest2000 <- fastData("madForest2000")
+madCoast0 <- fastData("madCoast0")
+madRivers <- fastData("madRivers")
+madDypsis <- fastData("madDypsis")
+
+### GRaster properties
+
+# convert SpatRasters to GRasters
+elev <- fast(madElev)
+forest <- fast(madForest2000)
+
+# plot
+plot(elev)
+
+dim(elev) # rows, columns, depths, layers
+nrow(elev) # rows
+ncol(elev) # columns
+ndepth(elev) # depths
+nlyr(elev) # layers
+
+res(elev) # resolution
+
+ncell(elev) # cells
+ncell3d(elev) # cells (3D rasters only)
+
+topology(elev) # number of dimensions
+is.2d(elev) # is it 2D?
+is.3d(elev) # is it 3D?
+
+minmax(elev) # min/max values
+
+# name of object in GRASS
+sources(elev)
+
+# "names" of the object
+names(elev)
+
+# coordinate reference system
+crs(elev)
+
+# extent (bounding box)
+ext(elev)
+
+# data type
+datatype(elev)
+
+# assigning
+copy <- elev
+copy[] <- pi # assign all cells to the value of pi
+copy
+
+# concatenating multiple GRasters
+rasts <- c(elev, forest)
+rasts
+
+# adding a raster "in place"
+add(rasts) <- ln(elev)
+rasts
+
+# subsetting
+rasts[[1]]
+rasts[["madForest2000"]]
+
+# assigning
+rasts[[4]] <- elev > 500
+
+# number of layers
+nlyr(rasts)
+
+# names
+names(rasts)
+names(rasts) <- c("elev_meters", "forest", "ln_elev", "high_elevation")
+rasts
+
+### GVector properties
+
+# convert sf vectors to GVectors
+coast <- fast(madCoast4)
+rivers <- fast(madRivers)
+dypsis <- fast(madDypsis)
+
+# extent
+ext(rivers)
+
+W(rivers) # western extent
+E(rivers) # eastern extent
+S(rivers) # southern extent
+N(rivers) # northern extent
+top(rivers) # top extent (NA for 2D rasters like this one)
+bottom(rivers) # bottom extent (NA for 2D rasters like this one)
+
+# coordinate reference system
+crs(rivers)
+st_crs(rivers)
+
+# column names and data types
+names(coast)
+datatype(coast)
+
+# name of object in GRASS
+sources(rivers)
+
+# points, lines, or polygons?
+geomtype(dypsis)
+geomtype(rivers)
+geomtype(coast)
+
+is.points(dypsis)
+is.points(coast)
+
+is.lines(rivers)
+is.lines(dypsis)
+
+is.polygons(coast)
+is.polygons(dypsis)
+
+# dimensions
+nrow(rivers) # how many spatial features
+ncol(rivers) # hay many columns in the data frame
+
+# number of geometries and sub-geometries
+ngeom(coast)
+nsubgeom(coast)
+
+# 2- or 3D
+topology(rivers) # dimensionality
+is.2d(elev) # is it 2D?
+is.3d(elev) # is it 3D?
+
+# Update values from GRASS
+# (Reads values from GRASS... will not appear to do anything in this case)
+coast <- update(coast)
+
+### operations on GVectors
+
+# convert to data frame
+as.data.frame(rivers)
+as.data.table(rivers)
+
+# subsetting
+rivers[c(1:2, 5)] # select 3 rows/geometries
+rivers[-5:-11] # remove rows/geometries 5 through 11
+rivers[ , 1] # column 1
+rivers[ , "NAM"] # select column
+rivers[["NAM"]] # select column
+rivers[1, 2:3] # row/geometry 1 and column 2 and 3
+rivers[c(TRUE, FALSE)] # select every other geometry (T/F vector is recycled)
+rivers[ , c(TRUE, FALSE)] # select every other column (T/F vector is recycled)
+
+# removing data table
+noTable <- dropTable(rivers)
+noTable
+nrow(rivers)
+nrow(noTable)
+
+# Refresh values from GRASS
+# (Reads values from GRASS... will not appear to do anything in this case
+# since the rivers object is up-to-date):
+rivers <- update(rivers)
+
+# Concatenating multiple vectors
+rivers2 <- rbind(rivers, rivers)
+dim(rivers)
+dim(rivers2)
+
+}
+```

@@ -1,0 +1,111 @@
+# Horizon height
+
+`horizonHeight()` uses a raster representing elevation to calculate the
+height of the horizon in a particular direction from each cell on a
+raster. Height is expressed in radians or degrees from the horizontal.
+
+## Usage
+
+``` r
+# S4 method for class 'GRaster'
+horizonHeight(
+  x,
+  units = "radians",
+  step = 90,
+  northIs0 = TRUE,
+  bufferZone = 0,
+  distance = 1,
+  maxDist = NULL
+)
+```
+
+## Arguments
+
+- x:
+
+  A `GRaster`.
+
+- units:
+
+  Character: Units of the height. Either `radians` (default) or
+  `degrees`. Partial matching is used.
+
+- step:
+
+  Numeric integer between 0 and 360, inclusive: Angle step size (in
+  degrees) for calculating horizon height. The direction in which
+  horizon height is calculated is incremented from 0 to 360, with the
+  last value excluded.
+
+- northIs0:
+
+  Logical: If `TRUE` (default), horizon height calculated in the
+  0-degree direction will be facing north, and proceed clockwise So,
+  under "north orientation", 0 is north, 90 east, 180 south, and 270
+  west. If `FALSE`, angles are in "east orientation", and proceed
+  counterclockwise from east. So, east is 0, north 90, west 180, and
+  south 270. North orientation is the default for this function in
+  **R**, but east orientation is the default in the **GRASS** tool
+  `r.horizon`. **Note:** The
+  [`sun()`](https://github.com/adamlilith/fasterRaster/reference/sun.md)
+  function requires aspect to be in east orientation.
+
+- bufferZone:
+
+  Numeric \>= 0 (default is 0): A buffer of the specified width will be
+  generated around the raster before calculation of horizon angle. If
+  the coordinate system is in longitude/latitude (e.g., WGS84 or NAD83),
+  then this is specified in degrees. Otherwise units are map units
+  (usually meters).
+
+- distance:
+
+  Numeric between 0.5 and 1.5, inclusive (default is 1): This determines
+  the step size when searching for the horizon from a given point. The
+  default value of 1 goes cell-by-cell (i.e., search distance step size
+  is one cell width).
+
+- maxDist:
+
+  Either `NULL` (default) or numeric \>= 0: Maximum distance to consider
+  when finding horizon height in meters. If `NULL`, the maximum distance
+  is the full extent of the raster. Smaller values can decrease run time
+  but also reduce accuracy.
+
+## Value
+
+A `GRaster` with one or more layers. The layers will be named
+`height_`*xyz*, where *xyz* is degrees from north or from east,
+depending on whether north or east orientation is used.
+
+## See also
+
+**GRASS** manual page for tool `r.horizon` (see
+`grassHelp("r.horizon")`)
+
+## Examples
+
+``` r
+if (grassStarted()) {
+
+# Setup
+library(terra)
+
+# Example data
+madElev <- fastData("madElev")
+
+# convert a SpatRaster to a GRaster
+elev <- fast(madElev)
+
+# calculate horizon height in north and east directions
+hhNorth <- horizonHeight(elev)
+hhNorth
+plot(hhNorth)
+
+# calculate horizon height in east and north directions
+hhEast <- horizonHeight(elev, northIs0 = FALSE)
+hhEast
+plot(hhEast)
+
+}
+```

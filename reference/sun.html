@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">fasterRaster</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">8.4.1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">8.4.1.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -95,7 +95,7 @@
 
 
 <dt id="arg-slope">slope<a class="anchor" aria-label="anchor" href="#arg-slope"></a></dt>
-<dd><p>A <code>GRaster</code>: This is a raster representing topographic slope in radians. It can be generated using <code><a href="terrain.html">terrain()</a></code>.</p></dd>
+<dd><p>A <code>GRaster</code>: This is a raster representing topographic slope in degrees. It can be generated using <code><a href="terrain.html">terrain()</a></code>.</p></dd>
 
 
 <dt id="arg-aspect">aspect<a class="anchor" aria-label="anchor" href="#arg-aspect"></a></dt>
@@ -103,12 +103,11 @@
 
 
 <dt id="arg-hh">hh<a class="anchor" aria-label="anchor" href="#arg-hh"></a></dt>
-<dd><p>A "stack" of <code>GRaster</code>s: This represents height of the horizon in radians in particular directions. Horizon height can be calculated using <code><a href="horizonHeight.html">horizonHeight()</a></code>. The directions <em>must</em> be in "east orientation" (i.e., argument <code>northIs0</code> in <code>horzionHeight()</code> must be <code>FALSE</code>). The directions must correspond with the sequence given by <code>horizon_step</code> (see next argument). For example, if <code>horizon_step</code> is 90, then <code>hh</code> must contain rasters representing horizon height at 0 (east), 90 (north), 180 (west), and 270 (south) aspects.
-#'</p></dd>
+<dd><p>A "stack" of <code>GRaster</code>s: This represents height of the horizon in radians in particular directions. Horizon height can be calculated using <code><a href="horizonHeight.html">horizonHeight()</a></code>. The directions <em>must</em> be in "east orientation" (i.e., argument <code>northIs0</code> in <code>horzionHeight()</code> must be <code>FALSE</code>). The directions must correspond with the sequence given by <code>horizon_step</code> (see next argument). For example, if <code>horizon_step</code> is 90, then <code>hh</code> must contain rasters representing horizon height at 0 (east), 90 (north), 180 (west), and 270 (south) aspects.</p></dd>
 
 
 <dt id="arg-horizon-step">horizon_step<a class="anchor" aria-label="anchor" href="#arg-horizon-step"></a></dt>
-<dd><p>Numeric &gt;0: Difference between angular steps in which horizon height is measured. One horizon height raster will be made per value from 0 to 360 - <code>horizon_step</code> degrees.</p></dd>
+<dd><p>Numeric &gt;0: Difference between angular steps in which horizon height is measured. One horizon height raster will be made per value from 0 to (360 - <code>horizon_step</code>) degrees.</p></dd>
 
 
 <dt id="arg-albedo">albedo<a class="anchor" aria-label="anchor" href="#arg-albedo"></a></dt>
@@ -249,7 +248,7 @@
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
     </footer></div>
