@@ -388,11 +388,11 @@ Operations on \code{GRaster}s
 
 \subsection{Classes}{
 \itemize{
-\item \code{\link{GLocation}}: Fundamental class; points to a "location/project" in \strong{GRASS}
-\item \code{\link{GSpatial}}: Basic class of any spatial object
-\item \code{\link{GRegion}}: Points to a "region" of a "location/project" in \strong{GRASS}
-\item \code{\link{GRaster}}: Raster class
-\item \code{\link{GVector}}: Spatial vector class
+\item \link{GLocation}: Fundamental class; points to a "location/project" in \strong{GRASS}
+\item \link{GSpatial}: Basic class of any spatial object
+\item \link{GRegion}: Points to a "region" of a "location/project" in \strong{GRASS}
+\item \link{GRaster}: Raster class
+\item \link{GVector}: Spatial vector class
 }
 }
 }

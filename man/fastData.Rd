@@ -21,7 +21,7 @@ Rasters (objects of class \code{SpatRaster} from the \strong{terra} package, sav
 \itemize{
 \item \link{madChelsa}: Bioclimatic variables
 \item \link{madCover}: Land cover
-\item 
+\item \link{madElev}: Elevation
 \item \link{madForest2000}: Forest cover in year 2000
 \item \link{madForest2014}: Forest cover in year 2014
 \item \link{madLANDSAT}: Surface reflectance in 2023
