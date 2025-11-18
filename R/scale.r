@@ -184,7 +184,7 @@ methods::setMethod(
 		len <- length(scale)
 		if (len != nLayers) {
 			if (len == 1) {
-				scale <- rep(scale, nl)
+				scale <- rep(scale, len)
 				warning("Using the same scale for all rasters.")
 			} else {
 				stop("Argument `scale` must be TRUE, FALSE, a single numeric value, or have the same number of numeric values as `x` has layers.")

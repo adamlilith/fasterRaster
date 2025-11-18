@@ -186,7 +186,7 @@ methods::setMethod(
 			namesFile <- substr(x, 1, nchar(x) - nc)
 			namesFile <- paste0(namesFile, '_names.csv')
 			if (file.exists(namesFile)) {
-				xNames <- read.csv(namesFile)
+				xNames <- utils::read.csv(namesFile)
 				xNames <- xNames$name
 			}
 			

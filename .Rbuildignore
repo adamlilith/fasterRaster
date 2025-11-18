@@ -12,13 +12,12 @@ CODE_OF_CONDUCT.md
 ^\.vscode
 ^README\.Rmd$
 ^.lintr$
-^fasterRaster.code-workspace
 ^_pkgdown\.yml$
 ^docs$
 ^pkgdown$
 ^\.github$
 ^\vignettes\^junk
 junk
-fasterRaster_workspace.code-workspace
+workspace_fasterRaster.code-workspace
 ^doc$
 ^Meta$

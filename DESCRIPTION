@@ -2,7 +2,7 @@ Package: fasterRaster
 Type: Package
 Title: Faster Raster and Spatial Vector Processing Using 'GRASS'
 Version: 8.4.1.1
-Date: 2025-08-20
+Date: 2025-11-18
 Authors@R: 
 	c(
 		person(
@@ -47,4 +47,4 @@ VignetteBuilder: knitr
 Encoding: UTF-8
 LazyData: true
 LazyLoad: yes
-RoxygenNote: 7.3.2
+RoxygenNote: 7.3.3
