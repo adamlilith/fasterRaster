@@ -71,7 +71,7 @@ column can be changed using
   associated with a categorical raster is used as category labels.
 - [`addCats()`](https://adamlilith.github.io/fasterRaster/reference/addCats.html)
   adds information to the “levels” table using
-  [`data.table::merge()`](https://rdatatable.gitlab.io/data.table/reference/merge.html)
+  [`data.table::merge()`](https://rdrr.io/pkg/data.table/man/merge.html)
   (same as
   [`merge()`](https://github.com/adamlilith/fasterRaster/reference/merge.md)).
 - [`addCats<-`](https://adamlilith.github.io/fasterRaster/reference/addCats.html)

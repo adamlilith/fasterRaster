@@ -4,7 +4,7 @@
 categorical\`GRaster's "levels" table.
 
 - addCats()\` uses
-  [`data.table::merge()`](https://rdatatable.gitlab.io/data.table/reference/merge.html)
+  [`data.table::merge()`](https://rdrr.io/pkg/data.table/man/merge.html)
   or [`cbind()`](https://rdrr.io/r/base/cbind.html) to do this–it does
   not add new rows, but rather new columns.
 
@@ -50,7 +50,7 @@ addCats(x, layer = 1) <- value
   combined with the existing "levels" table using
   [`cbind()`](https://rdrr.io/r/base/cbind.html). If `TRUE`, they will
   be combined using
-  [`data.table::merge()`](https://rdatatable.gitlab.io/data.table/reference/merge.html).
+  [`data.table::merge()`](https://rdrr.io/pkg/data.table/man/merge.html).
 
 - layer:
 

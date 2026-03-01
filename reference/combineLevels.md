@@ -29,7 +29,7 @@ combineLevels(x, ...)
 - ...:
 
   Arguments to pass to
-  [`data.table::merge()`](https://rdatatable.gitlab.io/data.table/reference/merge.html).
+  [`data.table::merge()`](https://rdrr.io/pkg/data.table/man/merge.html).
 
 ## Value
 

@@ -213,7 +213,7 @@ plot(st_geometry(madDypsis), col = "red", add = TRUE)
 ### raster data
 
 library(terra)
-#> terra 1.8.80
+#> terra 1.8.93
 #> 
 #> Attaching package: ‘terra’
 #> The following object is masked from ‘package:data.table’:

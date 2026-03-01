@@ -47,7 +47,7 @@ at least one of the other two.
 
 ``` r
 library(terra)
-#> terra 1.8.80
+#> terra 1.8.93
 library(sf)
 #> Linking to GEOS 3.12.1, GDAL 3.8.4, PROJ 9.4.0; sf_use_s2() is TRUE
 library(data.table)

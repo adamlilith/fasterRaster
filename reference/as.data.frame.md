@@ -25,7 +25,7 @@ A `data.frame` or `NULL` (if the `GRaster` has no data table).
 ## See also
 
 [`terra::as.data.frame()`](https://rspatial.github.io/terra/reference/as.data.frame.html),
-[`data.table::as.data.table()`](https://rdatatable.gitlab.io/data.table/reference/as.data.table.html)
+[`data.table::as.data.table()`](https://rdrr.io/pkg/data.table/man/as.data.table.html)
 
 ## Examples
 
