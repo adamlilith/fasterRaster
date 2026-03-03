@@ -148,7 +148,7 @@ methods::setValidity("GRaster",
 #'
 #' @description Create a `GRaster` from a raster existing in the current **GRASS** session.
 #'
-#' @param src Character (name of the raster in **GRASS) or a `rastInfo` object.
+#' @param src Character (name of the raster in **GRASS**) or a `rastInfo` object.
 #' @param names Character: Name of the raster.
 #' @param levels `NULL` (default), a `data.frame`, `data.table`, an empty string (`""`), or a list of `data.frame`s, `data.table`s, and/or empty strings: These become the raster's [levels()]. If `""`, then no levels are defined.
 #' @param ac Vector of numeric/integer values >=1, or `NULL` (default): Active category column (offset by 1, so 1 really means the second column, 2 means the third, etc.). A value of `NULL` uses an automated procedure to figure it out.
