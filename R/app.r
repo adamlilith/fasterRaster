@@ -16,6 +16,7 @@
 #' * If you want to calculate values using while ignoring `NA` (or `null`) values, see the functions that begin with `n` (like `nmean`).
 #' * Be mindful of the data type that a function returns. In **GRASS**, these are `CELL` (integer), `FCELL` (floating point values--precise to about the 7th decimal place), and `DCELL` (double-floating point values--precise to about the 15th decimal place; commensurate with the **R** `numeric` type). In cases where you want a `GRaster` to be treated like a float or double type raster, wrap the name of the `GRaster` in the `float()` or `double()` functions. This is especially useful if the `GRaster` might be assumed to be the `CELL` type because it only contains integer values. You can get the data type of a raster using [datatype()] with the `type` argument set to `GRASS`. You can change the data type of a `GRaster` using [as.int()], [as.float()], and [as.doub()]. Note that categorical rasters are really `CELL` (integer) rasters with an associated "levels" table. You can also change a `CELL` raster to a `FCELL` raster by adding then subtracting a decimal value, as in `x - 0.1 + 0.1`. See `vignette("GRasters", package = "fasterRaster")`.
 #' * The `rand()` function returns integer values by default. If you want non-integer values, use the tricks mentioned above to datatype non-integer values. For example, if you want uniform random values in the range between 0 and 1, use something like `= float(rand(0 + 0.1, 1 + 0.1) - 0.1)`.
+#' * `GRaster`s with short names can cause the function to mis-specify the formula in **GRASS**. This happens when, for example, the `fun` argument contains an "if" statement, and the raster name is "i" or "f", which would incorrectly replace those letters in the "if" with the **GRASS** name of the raster. To avoid this, avoid using short raster names that could be part of longer operators using by `app()` (see [appFuns()] for a list of these operators).
 #'
 #' @param x A `GRaster` with one or more named layers.
 #'
@@ -66,35 +67,50 @@ methods::setMethod(
 
     # replace raster names with sources
     # replacing from longest to shortest to avoid issues with nestedness
-    xn <- names(x)
-    nchars <- nchar(xn)
-    xn <- xn[order(nchars, decreasing = TRUE)]
 
     datatype <- omnibus::pmatchSafe(datatype, c("integer", "float", "double", "auto"))
     if (datatype == "integer") datatype = "int"
 
-    for (name in xn) {
+    # table with GRASS name, R name, and the "stub" string that will temporarily represent it in "fun"
+    # later, we replace all values of "rname" with the corresponding values of "datatypeSrc"
+    xwalk <- data.table(
+        src = sources(x),
+        datatypeSrc = NA_character_,
+        rname = names(x),
+        stub = NA_character_
+    )
+    xwalk <- xwalk[rev(order(nchar(xwalk$rname)))]
 
-        i <- which(name == names(x))
-        src <- sources(x)[i]
-
-        # datatype data type  
-        dt <- datatype(x, "GRASS")[i]
-        if (datatype == "auto") {
-            src <- if (dt == "CELL") {
-                paste0("int(", src, ")")
-            } else if (dt == "FCELL") {
-                paste0("float(", src, ")")
-            } else if (dt == "DCELL") {
-                paste0("double(", src, ")")
-            }
-        } else {
-            if (dt != "FCELL") {
-                src <- paste0(datatype, "(", src, ")")
-            }
+    # datatype  
+    dt <- datatype(x, "GRASS")[i]
+    if (datatype == "auto") {
+        srcs <- if (dt == "CELL") {
+            paste0("int(", xwalk$src, ")")
+        } else if (dt == "FCELL") {
+            paste0("float(", xwalk$src, ")")
+        } else if (dt == "DCELL") {
+            paste0("double(", xwalk$src, ")")
         }
+    } else {
+        if (dt != "FCELL") {
+            srcs <- paste0(datatype, "(", xwalk$src, ")")
+        }
+    }
 
-        fun <- gsub(fun, pattern = name, replacement = src)
+    xwalk$datatypeSrc <- srcs
+
+    for (i in 1:nrow(xwalk)) {
+
+        rname <- xwalk$rname[i]
+        stub <- paste0('#', i, '#')
+        xwalk$stub[i] <- stub
+
+        fun <- gsub(fun, pattern = rname, replacement = stub, fixed = TRUE)
+
+    }
+
+    for (i in 1:nrow(xwalk)) {
+        fun <- gsub(x = fun, pattern = xwalk$stub[i], replacement = xwalk$datatypeSrc[i], fixed = TRUE)
     }
 
     src <- .makeSourceName("app", "raster")
@@ -112,7 +128,7 @@ methods::setMethod(
 		args$seed <- seed
 	}
     do.call(rgrass::execGRASS, args = args)
-    .makeGRaster(src, "layer")
+    makeGRaster(src, "layer")
 
     } # EOF
 )
@@ -201,7 +217,12 @@ methods::setMethod(
                 return(realBads)
             }
         } else if (msgOnGood) {
-            msg <- "The GRasters have one or more forbidden names, but they do not seem to appear in\n  the equation. Use the equation with caution, or rename your GRasters."
+            if (any(nchar(ns) <= 3L)) {
+                msg <-
+                "The GRasters have one or more forbidden names, but the forbidden names do not seem to appear in\n  the equation. Use the equation with caution, or rename the GRasters. Also, consider renaming rasters\n  with very names with <=3 characters (e.g., 'a', 'a1', 'f_t', 'egg') to avoid potential issues."
+            } else {
+                msg <- "The GRasters have one or more forbidden names, but they do not seem to appear in\n  the equation. Use the equation with caution, or rename the GRasters."
+            }
             warning(msg)
         }
     }
