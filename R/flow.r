@@ -115,7 +115,7 @@ methods::setMethod(
 	srcs <- srcs[order]
 	names <- names[order]
 
-	.makeGRaster(srcs, names)
+	makeGRaster(srcs, names)
 
 	} # EOF
 )

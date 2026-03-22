@@ -109,7 +109,7 @@ methods::setMethod(
 			slopeSrc <- args$slope
 		}
 
-		out <- .makeGRaster(slopeSrc, "slope")
+		out <- makeGRaster(slopeSrc, "slope")
 	}
 	
 	if ("aspect" %in% v) {
@@ -136,7 +136,7 @@ methods::setMethod(
 		
 		}
 
-		this <- .makeGRaster(aspectSrc, "aspect")
+		this <- makeGRaster(aspectSrc, "aspect")
 		if (exists("out", inherits = FALSE)) {
 			out <- c(out, this)
 		} else {
@@ -145,7 +145,7 @@ methods::setMethod(
 	}
 
 	if ("profileCurve" %in% v) {
-		this <- .makeGRaster(args$pcurvature, "profileCurve")
+		this <- makeGRaster(args$pcurvature, "profileCurve")
 		if (exists("out", inherits = FALSE)) {
 			out <- c(out, this)
 		} else {
@@ -154,7 +154,7 @@ methods::setMethod(
 	}
 
 	if ("tanCurve" %in% v) {
-		this <- .makeGRaster(args$tcurvature, "tanCurve")
+		this <- makeGRaster(args$tcurvature, "tanCurve")
 		if (exists("out", inherits = FALSE)) {
 			out <- c(out, this)
 		} else {
@@ -163,7 +163,7 @@ methods::setMethod(
 	}
 
 	if ("dx" %in% v) {
-		this <- .makeGRaster(args$dx, "dx")
+		this <- makeGRaster(args$dx, "dx")
 		if (exists("out", inherits = FALSE)) {
 			out <- c(out, this)
 		} else {
@@ -172,7 +172,7 @@ methods::setMethod(
 	}
 
 	if ("dy" %in% v) {
-		this <- .makeGRaster(args$dy, "dy")
+		this <- makeGRaster(args$dy, "dy")
 		if (exists("out", inherits = FALSE)) {
 			out <- c(out, this)
 		} else {
@@ -181,7 +181,7 @@ methods::setMethod(
 	}
 
 	if ("dxx" %in% v) {
-		this <- .makeGRaster(args$dxx, "dxx")
+		this <- makeGRaster(args$dxx, "dxx")
 		if (exists("out", inherits = FALSE)) {
 			out <- c(out, this)
 		} else {
@@ -190,7 +190,7 @@ methods::setMethod(
 	}
 
 	if ("dyy" %in% v) {
-		this <- .makeGRaster(args$dyy, "dyy")
+		this <- makeGRaster(args$dyy, "dyy")
 		if (exists("out", inherits = FALSE)) {
 			out <- c(out, this)
 		} else {
@@ -199,7 +199,7 @@ methods::setMethod(
 	}
 
 	if ("dxy" %in% v) {
-		this <- .makeGRaster(args$dxy, "dxy")
+		this <- makeGRaster(args$dxy, "dxy")
 		if (exists("out", inherits = FALSE)) {
 			out <- c(out, this)
 		} else {

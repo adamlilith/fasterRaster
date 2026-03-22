@@ -86,7 +86,7 @@ methods::setMethod(
 	if (optimize & kernFx == "gaussian") args$flags <- c(args$flags, "o")
 	do.call(rgrass::execGRASS, args = args)
 
-	.makeGRaster(src, "kernelDensity")
+	makeGRaster(src, "kernelDensity")
 	
 	} # EOF
 )

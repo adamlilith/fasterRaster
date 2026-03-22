@@ -147,9 +147,9 @@ methods::setMethod(
 	files <- .ls()
 	what <- names(files)[files == x]
 	if (what == "raster") {
-		x <- .makeGRaster(x)
+		x <- makeGRaster(x)
 	} else if (what == "vector") {
-		x <- .makeGVector(x)
+		x <- makeGVector(x)
 	}
 	plot(x, ...)
 }

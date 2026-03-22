@@ -148,27 +148,27 @@ sun <- function(
 	out <- elevation
 	
 	if (beam_rad) {
-		this <- .makeGRaster(args$beam_rad, "beam_rad")
+		this <- makeGRaster(args$beam_rad, "beam_rad")
 		out <- c(out, this)
 	}
 	
 	if (diff_rad) {
-		this <- .makeGRaster(args$diff_rad, "diff_rad")
+		this <- makeGRaster(args$diff_rad, "diff_rad")
 		out <- c(out, this)
 	}
 	
 	if (refl_rad) {
-		this <- .makeGRaster(args$refl_rad, "refl_rad")
+		this <- makeGRaster(args$refl_rad, "refl_rad")
 		out <- c(out, this)
 	}
 	
 	if (glob_rad) {
-		this <- .makeGRaster(args$glob_rad, "glob_rad")
+		this <- makeGRaster(args$glob_rad, "glob_rad")
 		out <- c(out, this)
 	}
 	
 	if (insol_time) {
-		this <- .makeGRaster(args$insol_time, "insol_time")
+		this <- makeGRaster(args$insol_time, "insol_time")
 		out <- c(out, this)
 	}
 	

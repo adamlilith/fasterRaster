@@ -55,7 +55,7 @@ fig.path = 'man/figures/'
 
 ## Rasters
 * `.layerIndex()`: Gets the index of `GRaster` layers from a numeric, integer, character, or logical vector
-* `.makeGRaster()` and `.makeGVector()`: Make `GRaster`s or `GVector`s from a vector of `sources`, which are pointers to files in **GRASS**
+* `makeGRaster()` and `makeGVector()`: Make `GRaster`s or `GVector`s from a vector of `sources`, which are pointers to files in **GRASS**
 * `.minVal()` and `.maxVal()`: Values in the `@minVal` and `@maxVal` slots in a `GRaster`
 * `.nlevels()`: Number of levels in a `SpatVector`, `data.frame`, `data.table`, empty string, or a list of `data.frame`s, `data.table`s, and/or empty strings.
 

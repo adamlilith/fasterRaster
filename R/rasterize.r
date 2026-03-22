@@ -41,7 +41,7 @@ methods::setMethod(
 
 	gtype <- geomtype(x, grass = TRUE)
 	out <- .rasterize(x = x, y = y, field = field, background = background, by = by, gtype = gtype, verbose = verbose)
-	.makeGRaster(out$src, levels = out$levels)
+	makeGRaster(out$src, levels = out$levels)
 
 	} # EOF
 )

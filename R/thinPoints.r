@@ -45,7 +45,7 @@ methods::setMethod(
 		table <- NULL
 	}
 
-	.makeGVector(src, table = table)
+	makeGVector(src, table = table)
 	
 	} # EOF
 )

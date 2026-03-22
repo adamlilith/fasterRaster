@@ -59,7 +59,7 @@ methods::setMethod(
 	if (geomtype(x) == "polygons") args$flags <- c(args$flags, "a")
 
 	do.call(rgrass::execGRASS, args = args)
-	.makeGVector(src)
+	makeGVector(src)
 	
 	} # EOF
 )

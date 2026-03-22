@@ -67,7 +67,7 @@ methods::setMethod(
 			} else {
 				as.character(vals)
 			}
-			thisOut <- .makeGRaster(thisSrcs, names = names)
+			thisOut <- makeGRaster(thisSrcs, names = names)
 
 		}
 	

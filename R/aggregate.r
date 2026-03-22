@@ -136,7 +136,7 @@ methods::setMethod(
 			levs <- NULL
 		}
 
-		this <- .makeGRaster(srcs[i], names = names(x)[i], levels = levs)
+		this <- makeGRaster(srcs[i], names = names(x)[i], levels = levs)
 		if (i == 1L) {
 			out <- this
 		} else {
@@ -210,7 +210,7 @@ methods::setMethod(
 
 	} # if data table has >= 2 rows
 
-	.makeGVector(src, table = aggTable)
+	makeGVector(src, table = aggTable)
 
 	} # EOF
 )

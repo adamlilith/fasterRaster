@@ -191,7 +191,7 @@ methods::setMethod(
 	if (!is.null(tolerance)) args$threshold <- tolerance
 	do.call(rgrass::execGRASS, args = args)
 
-	out <- .makeGVector(src)
+	out <- makeGVector(src)
 	if (!is.null(table)) {
 	
 		if (ngeom(out) == nrow(table)) out@table <- table

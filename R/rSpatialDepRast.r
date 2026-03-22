@@ -81,7 +81,7 @@ methods::setMethod(
         )
         
     } # next raster
-    .makeGRaster(srcs, "rnorm")
+    makeGRaster(srcs, "rnorm")
 
     } # EOF
 )

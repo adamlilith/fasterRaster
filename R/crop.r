@@ -112,7 +112,7 @@ methods::setMethod(
 
 	### crop by creating copy of focal raster
 	srcs <- .copyGSpatial(x, reshapeRegion = FALSE)
-	.makeGRaster(srcs, names(x), levels = cats(x), ac = activeCats(x), fail = fail)
+	makeGRaster(srcs, names(x), levels = cats(x), ac = activeCats(x), fail = fail)
 
 	} # EOF
 )
@@ -168,7 +168,7 @@ methods::setMethod(
 	}
 
 	do.call(rgrass::execGRASS, args = args)
-	.makeGVector(src, fail = fail)
+	makeGVector(src, fail = fail)
 
 	} # EOF
 )

@@ -46,7 +46,7 @@ methods::setMethod(
 	)
 	do.call(rgrass::execGRASS, args = args)
 
-	.makeGRaster(src, "selectRange")
+	makeGRaster(src, "selectRange")
 
 	} # EOF
 )

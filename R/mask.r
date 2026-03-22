@@ -39,7 +39,7 @@ methods::setMethod(
     mask <- sources(mask)[1L]
 
     srcs <- .mask(x = x, mask = mask, maskType = "raster", inverse = inverse, maskvalues = maskvalues, updatevalue = updatevalue)
-    .makeGRaster(srcs, xname, levels = cats, ac = ac)
+    makeGRaster(srcs, xname, levels = cats, ac = ac)
 
     } # EOF
 )
@@ -63,7 +63,7 @@ methods::setMethod(
     mask <- sources(mask)
 
     srcs <- .mask(x = x, mask = mask, maskType = "vector", inverse = inverse, maskvalues = NA, updatevalue = updatevalue)
-    .makeGRaster(srcs, xname, levels = cats, ac = ac)
+    makeGRaster(srcs, xname, levels = cats, ac = ac)
     
     } # EOF
 )

@@ -76,7 +76,7 @@ methods::setMethod(
 	if (method == "reumann") args$reduction <- 100 * prop
 	
 	do.call(rgrass::execGRASS, args=args)
-	.makeGVector(src)
+	makeGVector(src)
 
 	} # EOF
 )

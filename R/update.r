@@ -14,7 +14,7 @@
 methods::setMethod(
     f = "update",
     signature = c(object = "GRaster"),
-    definition = function(object) .makeGRaster(sources(object), levels = cats(object), ac = activeCats(object))
+    definition = function(object) makeGRaster(sources(object), levels = cats(object), ac = activeCats(object))
 )
 
 #' @aliases update
@@ -23,5 +23,5 @@ methods::setMethod(
 methods::setMethod(
     f = "update",
     signature = c(object = "GVector"),
-    definition = function(object) .makeGVector(sources(object), table = as.data.table(object))
+    definition = function(object) makeGVector(sources(object), table = as.data.table(object))
 )

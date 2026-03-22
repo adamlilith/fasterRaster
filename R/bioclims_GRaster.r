@@ -1374,7 +1374,7 @@ methods::setMethod(
 	
 	# return
 	names <- names(out)
-	out <- .makeGRaster(out, names = names)
+	out <- makeGRaster(out, names = names)
 
 	if (verbose | faster("verbose")) {
 		tasks <- tasks + 1

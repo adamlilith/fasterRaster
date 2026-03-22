@@ -53,7 +53,7 @@ setMethod(
 		)
 
 	} # next raster
-	.makeGRaster(srcs, names(x))
+	makeGRaster(srcs, names(x))
 	
 	} # EOF
 )
@@ -115,7 +115,7 @@ setMethod(
 		)
 
 	} # next raster
-	.makeGRaster(srcs, names(x))
+	makeGRaster(srcs, names(x))
 	
 	} # EOF
 )

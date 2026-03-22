@@ -133,7 +133,7 @@ methods::setMethod(
 	if ((verbose | faster("verbose")) & nRastsToMake > 1)  close(pb)
 
 	names <- paste0("ns", ns, "_ew", ew, "_nsOffset", nsOffset, "_ewOffset", ewOffset, "_nsAmp", nsAmp, "_ewAmp", ewAmp)
-	.makeGRaster(srcs, names)
+	makeGRaster(srcs, names)
 
 	} # EOF
 )

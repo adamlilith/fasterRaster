@@ -1,4 +1,5 @@
 {
+    "editor.wordWrap": "on",
     "cSpell.words": [
         "bioclimatic",
         "CRS",

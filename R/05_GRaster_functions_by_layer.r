@@ -65,7 +65,7 @@ setMethod(
 		)
 	
 	}
-	.makeGRaster(srcs, names(x))
+	makeGRaster(srcs, names(x))
 
 	} # EOF
 )
@@ -101,7 +101,7 @@ methods::setMethod(
 		)
 	
 	}
-	.makeGRaster(srcs, names(x))
+	makeGRaster(srcs, names(x))
 
 	}
 )
@@ -251,7 +251,7 @@ setMethod(
 		)
 
 	}
-	.makeGRaster(srcs, names(x))
+	makeGRaster(srcs, names(x))
 		
 	} # EOF
 )
@@ -278,7 +278,7 @@ setMethod(
 		)
 
 	}
-	.makeGRaster(srcs, names(x))
+	makeGRaster(srcs, names(x))
 		
 	} # EOF
 )
@@ -404,7 +404,7 @@ setMethod(
 		)
 		
 	}
-	.makeGRaster(srcs, names(x))
+	makeGRaster(srcs, names(x))
 
 }
 
@@ -430,7 +430,7 @@ setMethod(
 		)
 	}
 
-	.makeGRaster(srcs, names(x))
+	makeGRaster(srcs, names(x))
 
 }
 
@@ -459,7 +459,7 @@ setMethod(
 		)
 		
 	}
-	.makeGRaster(srcs, names(x))
+	makeGRaster(srcs, names(x))
 
 }
 
@@ -488,6 +488,6 @@ setMethod(
 			flags = c(.quiet(), "overwrite")
 		)
 	}
-	.makeGRaster(srcs, fx)
+	makeGRaster(srcs, fx)
 
 }

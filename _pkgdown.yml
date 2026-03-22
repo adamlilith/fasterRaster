@@ -392,6 +392,8 @@ reference:
   - grassInfo
   - grassStarted
   - installAddon
+  - makeGRaster
+  - makeGVector
   - mow
   - removeAddon
   - replaceNAs

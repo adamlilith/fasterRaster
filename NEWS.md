@@ -1,3 +1,9 @@
+# fasterRaster 8.4.1.2 (2026-XX-XX)
+### New functions and functionality
+o `makeGRaster()` and `makeGVector()` allow users to create rasters or vectors from the **GRASS** name of a raster/vector. These were previously hidden from users.  
+o `app()` is less prone to mis-specifying formula internally.  
+o Better error message when a `GRASS` raster file cannot be found.  
+
 # fasterRaster 8.4.1.1 (2025-11-18)
 ### New functions and functionality
 o `+` can now combine any two `GVector`s with the same geometry type (points, lines, polygons).  
@@ -261,7 +267,7 @@ o `rast()`: Attaches the `GRaster`'s levels table to the `SpatRaster` output.
 o **+** `rasterize()`: Rewritten to perform (nearly) the same as `terra::rasterize()`.  
 o `predict()`: Can accommodate models with two-way interactions between categorical rasters and between a categorical predictor and a scalar.  
 o `scalepop()`: Scales `GRaster`s by population standard deviation.  
-o Stops with a somewhat informative error when a `GRaster` fails to be created (in hidden function `.makeGRaster()`)
+o Stops with a somewhat informative error when a `GRaster` fails to be created (in hidden function `makeGRaster()`)
 
 ### Issues
 o `writeRaster()`: Correctly assign `datatype` to `CELL` rasters.  
@@ -315,7 +321,7 @@ o Updated `README` for 8.3.0.7013!
 
 ### Bug fixes
 o `[` works consistently for `GVector`s!!!!!  
-o Hidden function `.makeGVector()` now catches cases with zero extent for polygons.  
+o Hidden function `makeGVector()` now catches cases with zero extent for polygons.  
 o Fixed installation issue related to `activeCat()<-` and `addCats()<-` (thank you, `@kbondo1`!)  
 o Fixed bug in `arithmetic` when determining data type of an input raster.  
 o `crds()` works when the **GRASS** vector has an attribute table.  

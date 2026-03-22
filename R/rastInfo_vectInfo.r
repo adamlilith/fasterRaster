@@ -37,6 +37,7 @@
 
 		rasters <- .ls(c("rasters", "rasters3d"))
 		type <- names(rasters[rasters == src])
+		if (is.na(type)) stop(paste("GRASS raster", src, "not found. Some systems may automatically remove temporary\n  files to save disk space. If the system's `tmpfile()` is being used as the GRASS\n  project folder, this may have happened. To obviate this issue, turn off automatic\n  disk-space saving on your system, or use `faster()` to specify a non-temporary folder\n  for the GRASS project."))
 
 		### 2D raster
 		if (type == "raster") {

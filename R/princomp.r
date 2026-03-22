@@ -45,7 +45,7 @@ methods::setMethod(
 	info <- do.call(rgrass::execGRASS, args = args)
 	layers <- 1L:nlyr(x)
 	srcs <- paste0(src, ".", layers)
-	out <- .makeGRaster(srcs, paste0("PC", layers))
+	out <- makeGRaster(srcs, paste0("PC", layers))
 
 	### get PCA information
 	#######################

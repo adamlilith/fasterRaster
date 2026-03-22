@@ -63,7 +63,7 @@ methods::setMethod(
     } # next raster
     
     on.exit(.rm(srcFracts, type = "raster", warn = FALSE), add = TRUE)
-    .makeGRaster(srcs, "fractal")
+    makeGRaster(srcs, "fractal")
 
     } # EOF
 )

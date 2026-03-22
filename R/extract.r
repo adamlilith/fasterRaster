@@ -98,7 +98,7 @@ methods::setMethod(
             
                 yy <- y[i]
                 yy <- .aggregate(yy, gtype = "polygons", dissolve = FALSE)
-                yy <- .makeGVector(yy)
+                yy <- makeGVector(yy)
                 
                 thisOut <- extract(
                     x = x, y = yy,

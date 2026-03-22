@@ -292,6 +292,8 @@
 #' * [grassInfo()]: **GRASS** version and citation
 #' * [grassStarted()]: Has a connection **GRASS** been made within the current **R** session?
 #' * [installAddon()]: Install a **GRASS** addon
+#' * [makeGRaster()]: Create a `GRaster` from a raster in **GRASS**
+#' * [makeGVector()]: Create a `GVector` from a vector in **GRASS**
 #' * [mow()]: Remove unused rasters and vectors from the **GRASS** cache
 #' * [reorient()]: Convert degrees between 'north-orientation' and 'east orientation'
 #' * [replaceNAs()]: Replace `NA`s in columns of a `data.table` or `data.frame`, or in a vector

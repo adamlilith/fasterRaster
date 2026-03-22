@@ -56,7 +56,7 @@ methods::setMethod(
 	info <- do.call(rgrass::execGRASS, args = args)
 	layers <- 1L:nlyr(x)
 	srcs <- paste0(src, ".", layers)
-	.makeGRaster(srcs, names(x))
+	makeGRaster(srcs, names(x))
 
 	} # EOF
 )

@@ -23,7 +23,7 @@ methods::setMethod(
     .locationRestore(x)
     .region(x)
     srcs <- .longlat(x, degrees = degrees)
-   .makeGRaster(srcs, c("longitude", "latitude"))
+   makeGRaster(srcs, c("longitude", "latitude"))
 
     } # EOF
 )

@@ -4,7 +4,7 @@
 #'
 #' @param x Either:
 #' * Missing: Reports location of currently active project/location.
-#'  * A `GLocation` object or an object that contains the `GLocation` class (i.e., a `GSpatial` object: a `GRaster` or `GVector`).
+#' * A `GLocation` object or an object that contains the `GLocation` class (i.e., a `GSpatial` object: a `GRaster` or `GVector`).
 #'
 #' @return A character string.
 #'

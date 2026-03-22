@@ -36,7 +36,7 @@ methods::setMethod(
 		)
 	
 	}
-	.makeGRaster(srcs, paste0(names(x), "_twi"))
+	makeGRaster(srcs, paste0(names(x), "_twi"))
 
 	} # EOF
 )

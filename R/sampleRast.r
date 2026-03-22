@@ -116,12 +116,12 @@ methods::setMethod(
             rgrass::execGRASS("r.mapcalc", expression = ex, flags = c(.quiet(), "overwrite"), intern = TRUE)
 
         } # next raster
-        out <- .makeGRaster(srcsUpdate, names(x))
+        out <- makeGRaster(srcsUpdate, names(x))
 
     } else {
         levels <- cats(x)
         ac <- activeCats(x)
-        out <- .makeGRaster(srcs, names(x), levels = levels, ac = ac)
+        out <- makeGRaster(srcs, names(x), levels = levels, ac = ac)
     }
     out
 

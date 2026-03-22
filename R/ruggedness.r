@@ -64,7 +64,7 @@ methods::setMethod(
 		}
 
 	} # next layer
-	.makeGRaster(srcs, names = paste0(names(x), "_TRI"))
+	makeGRaster(srcs, names = paste0(names(x), "_TRI"))
 
 	} # EOF
 )
