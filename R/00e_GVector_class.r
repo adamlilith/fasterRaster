@@ -52,22 +52,24 @@ methods::setValidity("GVector",
 #'
 #' @param src Character: The name of the vector in **GRASS**.
 #'
-#' @param table A `data.table`, `data.frame`, `GVector` with a table, or character. This can be `data.table(NULL)` or `data.frame(NULL)` if there is no table associated with the vector. If a character, this is interpreted as the name of the table in **GRASS**.
+#' @param table If the `GVector` has a data table this can be any of `data.table`, `data.frame`, or another `GVector` with a table. If it has no table, this can be any of `NULL` (default), `data.table(NULL)`, or `data.frame(NULL)`. If a character is provided, this is interpreted as the name of the table in **GRASS** and used as the `GVector` table.
 #'
 #' @param build Logical: If `TRUE` (default), build topology using **GRASS** tool `v.build`.
 #'
 #' @param extensive Logical: If `TRUE`, do extensive topological checks using `v.build`. The default is `FALSE`.
 #'
-#' @param cats `NULL` (default) or an integer vector: Values of the "cats" (categories) of the vector in **GRASS**. This is useful *only* for speeding up the `GVector` creation process when the "cats" have already been ascertained.
+#' @param cats `NULL` (default) or an integer vector: Values of the "cats" (categories) of the vector in **GRASS**. This is useful *only* for speeding up the `GVector` creation process when the categories are pre-defined. Moet users should leave this ias `NULL`.
 #'
 #' @param fail Logical: If `TRUE` (default), and the vector either has a 0 east-west or north-south extent, then exit the function with an error. If `fail` is `FALSE`, then display a warning and return `NULL`.
 #'
 #' @returns A `GVector` (or `NULL` if `fail` is `TRUE` and the `GVector` would be invalid).
 #'
-#' @seealso [.makeGRaster()]
+#' @seealso [makeGRaster()], [rgrass::read_VECT()], and `grassHelp("v.build")`
 #'
-#' @keywords internal
-.makeGVector <- function(src, table = NULL, build = TRUE, extensive = FALSE, cats = NULL, fail = TRUE) {
+#' @name makeGVector
+#' @rdname makeGVector
+#' @export
+makeGVector <- function(src, table = NULL, build = TRUE, extensive = FALSE, cats = NULL, fail = TRUE) {
 
 	if (inherits(table, "GVector")) table <- table@table
 	if (is.null(table)) table <- data.table::data.table(NULL)

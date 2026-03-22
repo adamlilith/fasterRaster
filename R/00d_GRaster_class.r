@@ -148,18 +148,20 @@ methods::setValidity("GRaster",
 #'
 #' @description Create a `GRaster` from a raster existing in the current **GRASS** session.
 #'
-#' @param src Character (name of the raster in **GRASS**) or a `rastInfo` object.
+#' @param src Character (name of the raster in **GRASS**) or a `rastInfo` object. This is not the "name" of a raster given by [names()], but the name that **GRASS** uses for the raster. For an existing `GRaster` or `GVector`, you can get the name using [sources()].
 #' @param names Character: Name of the raster.
-#' @param levels `NULL` (default), a `data.frame`, `data.table`, an empty string (`""`), or a list of `data.frame`s, `data.table`s, and/or empty strings: These become the raster's [levels()]. If `""`, then no levels are defined.
-#' @param ac Vector of numeric/integer values >=1, or `NULL` (default): Active category column (offset by 1, so 1 really means the second column, 2 means the third, etc.). A value of `NULL` uses an automated procedure to figure it out.
+#' @param levels `NULL` (default), a `data.frame`, `data.table`, an empty string (`""`), or a list of `data.frame`s, `data.table`s, and/or empty strings: These become the raster's [levels()]. If `""`, then no levels are defined. The first column is typically integer values and represent cell values. The second and successive columns can be level labels.
+#' @param ac Vector or numeric/integer values >=1, or `NULL` (default): Active category column (offset by 1, so 1 really means the second column, 2 means the third, etc.). A value of `NULL` uses an automated procedure to figure it out.
 #' @param fail Logical: If `TRUE` (default), and the raster either has a 0 east-west or north-south extent, then exit the function with an error. If `fail` is `FALSE`, then display a warning and return `NULL`.
 #'
 #' @returns A `GRaster`.
 #'
-#' @seealso [.makeGVector()]
+#' @seealso [makeGVector()], [rgrass::read_RAST()]
 #'
-#' @keywords internal
-.makeGRaster <- function(src, names = "raster", levels = "", ac = NULL, fail = TRUE) {
+#' @name makeGRaster
+#' @rdname makeGRaster
+#' @export
+makeGRaster <- function(src, names = "raster", levels = "", ac = NULL, fail = TRUE) {
 
 	if (inherits(src, "rastInfo")) {
 		info <- src
