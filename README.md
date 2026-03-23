@@ -13,7 +13,7 @@ Faster raster processing in `R` using `GRASS`
 `fasterRaster` was created with five design principles:
 
 * **Value added**: `fasterRaster` complements `terra` and `sf`, and is highly dependent on them! It is useful for analyzing large-in-memory/large-on-disk rasters and vectors that those packages struggle to handle. For medium- and small-size objects, `terra` and `sf` will almost always be faster.  
-* **Familiarity**: If you know how to use `terra`, you basically know how to use `fasterRaster`! That's because most of the functions have the same name and almost the same arguments as `terra` functions.  
+* **Interoperability**: If you know how to use `terra`, you basically know how to use `fasterRaster`! That's because most of the functions have the same name and almost the same arguments as `terra` functions.  
 * **Comparability**: To the degree possible, outputs from `fasterRaster` are the same as those from functions in `terra` with the same name.  
 * **Simplicity**: `GRASS` requires users to track things like "locations" or "projects", "mapsets", and "regions" for which there is no comparable analog in the `terra` or `sf` packages. `fasterRaster` handles these behind the scenes so you don't need to.  
 * **It's R**: The `rgrass` package provides a powerful conduit through which you can run `GRASS` tools from `R`. As such, it provides much more flexibility than `fasterRaster`. However, to use `rgrass`, you need to know what `GRASS` tools you want to use and be familiar with `GRASS` syntax. `fasterRaster` obviates this step but uses `rgrass` as a backend, allowing you to focus on `R` syntax and look up help for functions the normal way you do in `R`. You don't need to know `GRASS`!
