@@ -1,15 +1,13 @@
-key <- paste0("R-", meta$Package)
-year <- sub("-.*", "", meta$Date)
-note <- sprintf("R package version %s", meta$Version)
-title <- paste0(meta$Package, ": ", meta$Title)
-
-citHeader("To cite fasterRaster in publications use:")
-bibentry(bibtype = "Manual",
-	key = key,
-	title = title,
-	author = person(given = "Adam B.",
-				 family = "Smith",
-				 comment = c(ORCID = "0000-0002-8215-2053")),
-	year = year,
-	note = note
+version <- sprintf("R package version %s", meta$Version)
+bibentry(
+  bibtype  = "Article",
+  title    = "fasterRaster: GIS in R using GRASS for large vectors and rasters",
+  author   = c(
+  person("Adam B.","Smith", email = "adam.smith@mobot.org"), 
+  journal  = "Transactions in GIS",
+  year     = "2026",
+  volume   = "30",
+  pages    = "e70238",
+  doi      = "10.1111/tgis.70238",
+  version = version
 )
