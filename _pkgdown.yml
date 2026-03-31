@@ -20,6 +20,7 @@ articles:
   - GRasters
   - faster_fasterRaster
   - three_d_objects
+  - accessing_grass_directly
 
 - title: For Developers
   desc: Vignettes for developers
@@ -392,8 +393,6 @@ reference:
   - grassInfo
   - grassStarted
   - installAddon
-  - makeGRaster
-  - makeGVector
   - mow
   - removeAddon
   - replaceNAs
@@ -426,3 +425,22 @@ reference:
   - GRegion
   - GRaster
   - GVector
+- title: Interacting with GRASS directly
+- contents:
+  - g.proj
+  - grassCopy
+  - grassCreateProject
+  - grassDeleteProject
+  - grassExists
+  - grassLs
+  - .mapset
+  - grassProject
+  - grassRegion
+  - grassRegionDim
+  - grassRegionExt
+  - grassRegionRes
+  - grassRename
+  - .restoreProject
+  - grassRm
+  - makeGRaster
+  - makeGVector
