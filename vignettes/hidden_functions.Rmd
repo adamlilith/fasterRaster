@@ -32,7 +32,7 @@ fig.path = 'man/figures/'
 * `.copyGSpatial()`: Make a copy of the **GRASS** file pointed to by a `GRaster` or `GVector`
 * `.exists()`: Does the **GRASS** file of a `GRaster` or `GVector` exist?
 * `.ext()`: Extent from the [`sources()`](https://adamlilith.github.io/fasterRaster/reference/sources.html) name of a `GRaster` or `GVector`
-* `.makeSourceNames()`: Makes one or more statistically unique strings that can be used as file names to represent rasters or vectors in **GRASS**
+* `.makeSourceName()`: Makes one or more statistically unique strings that can be used as file names to represent rasters or vectors in **GRASS**
 * `.plot()`: Plot using the [`sources()`](https://adamlilith.github.io/fasterRaster/reference/sources.html) name of a `GRaster` or `GVector`
 * `.projection()`: Value of the `@projection` slot in a `GRaster` or `GVector`
 * `.rastInfo()` and `.vectInfo()`: Metadata for a **GRASS** raster or vector
