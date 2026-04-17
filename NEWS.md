@@ -1,4 +1,4 @@
-# fasterRaster 8.4.1.2 (2026-XX-XX)
+# fasterRaster 8.4.1.2 (2026-04-17)
 ### New functions and functionality
 o `makeGRaster()` and `makeGVector()` are now public and allow users to create `G`-objects from files in **GRASS**. (feature request https://github.com/adamlilith/fasterRaster/issues/137 -- thank you, @JacobusS!)  
 o Updated citation to peer-reviewed journal article  
