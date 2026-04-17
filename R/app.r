@@ -112,7 +112,7 @@ methods::setMethod(
 		args$seed <- seed
 	}
     do.call(rgrass::execGRASS, args = args)
-    .makeGRaster(src, "layer")
+    makeGRaster(src, "layer")
 
     } # EOF
 )

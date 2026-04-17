@@ -70,7 +70,7 @@ methods::setMethod(
 	# ex <- paste0(src, " = int(", srcIn, ")")
 	# rgrass::execGRASS("r.mapcalc", expression = ex, flags = c(.quiet(), "overwrite"))
 
-	.makeGRaster(src, "randomWalk")
+	makeGRaster(src, "randomWalk")
 
 	} # EOF
 )

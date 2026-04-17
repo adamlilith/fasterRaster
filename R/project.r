@@ -391,7 +391,7 @@ methods::setMethod(
 		} else {
 			levels <- NULL
 		}
-		thisOut <- .makeGRaster(srcs[i], names(x)[i], levels = levels, ac = activeCat(x, layer = i))
+		thisOut <- makeGRaster(srcs[i], names(x)[i], levels = levels, ac = activeCat(x, layer = i))
 		if (i == 1L) {
 			out <- thisOut
 		} else {
@@ -476,7 +476,7 @@ methods::setMethod(
 	# if (geomtype(x, grass = TRUE) == "point") args$flags <- c(args$flags, "b") # disable topology build for points
 	do.call(rgrass::execGRASS, args = args)
 
-	out <- .makeGVector(src, table = x@table)
+	out <- makeGVector(src, table = x@table)
 	out
 
 	} # EOF

@@ -107,7 +107,7 @@ st_coordinates <- function(x) {
 	
 		# src <- .makeSourceName("points", "vect")
 		# rgrass::execGRASS("v.to.points", input=sources(x), output=src, use="vertex", flags=c(.quiet(), "overwrite"), intern=TRUE)
-		# pts <- .makeGVector(src)
+		# pts <- makeGVector(src)
 		# pts <- vect(pts)
 
 		# out <- terra::crds(pts)

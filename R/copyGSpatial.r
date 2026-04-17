@@ -1,6 +1,6 @@
 #' @title Make a copy of an object in GRASS
 #'
-#' @description Create a copy of a `GRaster` or `GVector` in **GRASS**.  This function is used internally and is of little use to most users.  This only creates a copy of the object in the **GRASS** session--to make a `GRaster` or `GVector`, [.makeGRaster()] or [.makeGVector()] need to be called after making the copy. Note that if the object is multi-layered, then a copy is made of each layer.
+#' @description Create a copy of a `GRaster` or `GVector` in **GRASS**.  This function is used internally and is of little use to most users.  This only creates a copy of the object in the **GRASS** session--to make a `GRaster` or `GVector`, [makeGRaster()] or [makeGVector()] need to be called after making the copy. Note that if the object is multi-layered, then a copy is made of each layer.
 #'
 #' @param x `GRaster`, `GVector`, or character: The object or the [sources()] name(s) of the object(s) to be copied. Can take multi-layered objects or multiple `sources`.
 #'

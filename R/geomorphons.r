@@ -88,7 +88,7 @@ methods::setMethod(
 		geomorphon = c("flat", "peak", "ridge", "shoulder", "spur", "slope", "hollow", "footslope", "valley", "pit")
 	)
 
-	.makeGRaster(src, levels = levels)
+	makeGRaster(src, levels = levels)
 
 	} # EOF
 )

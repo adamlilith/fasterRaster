@@ -120,9 +120,9 @@ methods::setMethod(
 		on.exit(.rm(srcBuffer, type = "raster", warn = FALSE), add = TRUE)
 		
 		if (nlyr(x) > 1L) {
-			group[[i]] <- .makeGRaster(src, names(x[[i]]))
+			group[[i]] <- makeGRaster(src, names(x[[i]]))
 		} else {
-			out <- .makeGRaster(src, names(x[[i]]))
+			out <- makeGRaster(src, names(x[[i]]))
 		}
 		
 	} # next layer
@@ -193,7 +193,7 @@ methods::setMethod(
 
 	# # # }
 
-	.makeGVector(src)
+	makeGVector(src)
 	
 	} # EOF
 )

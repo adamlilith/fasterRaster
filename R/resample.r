@@ -211,13 +211,13 @@ methods::setMethod(
 			} else {
 				cats <- ac <- NULL
 			}
-			thisOut <- .makeGRaster(srcNearest, names(x)[i], levels = cats, ac = ac)
+			thisOut <- makeGRaster(srcNearest, names(x)[i], levels = cats, ac = ac)
 		} else if (thisMethod == "bilinear" & !fallback) {
-			thisOut <- .makeGRaster(srcBilinear, names(x)[i])
+			thisOut <- makeGRaster(srcBilinear, names(x)[i])
 		} else if (thisMethod == "bicubic" & !fallback) {
-			thisOut <- .makeGRaster(srcBicubic, names(x)[i])
+			thisOut <- makeGRaster(srcBicubic, names(x)[i])
 		} else if (thisMethod == "lanczos" & !fallback) {
-			thisOut <- .makeGRaster(srcLanczos, names(x)[i])
+			thisOut <- makeGRaster(srcLanczos, names(x)[i])
 		} else if (fallback) {
 			
 			src <- .makeSourceName("resample_fallback", "raster")
@@ -247,7 +247,7 @@ methods::setMethod(
 				flags = c(.quiet(), "overwrite")
 			)
 			do.call(rgrass::execGRASS, args=args)
-			thisOut <- .makeGRaster(src, names = names(x)[i])
+			thisOut <- makeGRaster(src, names = names(x)[i])
 
 		} # next layer
 

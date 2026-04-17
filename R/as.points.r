@@ -75,7 +75,7 @@ methods::setMethod(
         
         # } # next layer
 
-        .makeGVector(src, table = table)
+        makeGVector(src, table = table)
 
     } # EOF
 )
@@ -106,7 +106,7 @@ methods::setMethod(
         flags = c(.quiet(), "overwrite")
     )
     do.call(rgrass::execGRASS, args = args)
-    .makeGVector(src, table = NULL)
+    makeGVector(src, table = NULL)
 
     } # E#OF
 )

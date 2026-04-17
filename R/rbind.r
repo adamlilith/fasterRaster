@@ -102,7 +102,7 @@ methods::setMethod(
 
 	}
 
-	.makeGVector(src, table = table)
+	makeGVector(src, table = table)
 	
 	} # EOF
 )

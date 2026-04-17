@@ -55,7 +55,7 @@ methods::setMethod(
         ex <- paste0(src, " = ", fx, "(", sources(x)[i], ")")
         rgrass::execGRASS(cmd = "r.mapcalc", expression = ex, flags = c(.quiet(), "overwrite"))
 
-        this <- .makeGRaster(src, names(x)[i])
+        this <- makeGRaster(src, names(x)[i])
         if (i == 1L) {
             out <- this
         } else {

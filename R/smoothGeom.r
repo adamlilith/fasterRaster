@@ -59,7 +59,7 @@ methods::setMethod(
 	if (method == "hermite") args$angle_thresh <- angle
 	
 	do.call(rgrass::execGRASS, args=args)
-	.makeGVector(src)
+	makeGVector(src)
 
 	} # EOF
 )

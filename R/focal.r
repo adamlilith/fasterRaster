@@ -248,7 +248,7 @@ methods::setMethod(
 			levels <- NULL
 		}
 	
-        this <- .makeGRaster(src, names(x)[i], levels = levels)
+        this <- makeGRaster(src, names(x)[i], levels = levels)
         if (i == 1L) {
             out <- this
         } else {

@@ -42,7 +42,7 @@ methods::setMethod(
     )
     if (smooth) args$flags <- c(args$flags, "s")
     do.call(rgrass::execGRASS, args = args)
-    .makeGVector(src)
+    makeGVector(src)
 
     } # EOF
 )

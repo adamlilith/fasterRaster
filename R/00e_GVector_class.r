@@ -46,7 +46,7 @@ methods::setValidity("GVector",
 	} # EOF
 )
 
-#' Create a GVector
+#' Create a GVector from a GRASS vector
 #'
 #' @description Create a `GVector` from a vector existing in the current **GRASS** session.
 #'
@@ -58,16 +58,20 @@ methods::setValidity("GVector",
 #'
 #' @param extensive Logical: If `TRUE`, do extensive topological checks using `v.build`. The default is `FALSE`.
 #'
-#' @param cats `NULL` (default) or an integer vector: Values of the "cats" (categories) of the vector in **GRASS**. This is useful *only* for speeding up the `GVector` creation process when the "cats" have already been ascertained.
+#' @param cats `NULL` (default) or an integer vector: Values of the "cats" (categories) of the vector in **GRASS**. This is useful *only* for speeding up the `GVector` creation process when the "cats" have already been ascertained. For most users, this will be better left as `NULL`.
 #'
 #' @param fail Logical: If `TRUE` (default), and the vector either has a 0 east-west or north-south extent, then exit the function with an error. If `fail` is `FALSE`, then display a warning and return `NULL`.
 #'
 #' @returns A `GVector` (or `NULL` if `fail` is `TRUE` and the `GVector` would be invalid).
 #'
-#' @seealso [.makeGRaster()]
+#' @seealso [makeGRaster()]
 #'
-#' @keywords internal
-.makeGVector <- function(src, table = NULL, build = TRUE, extensive = FALSE, cats = NULL, fail = TRUE) {
+#' @example man/examples/ex_fast.r
+#'
+#' @aliases makeGVector
+#' @rdname makeGVector
+#' @exportMethod makeGVector
+makeGVector <- function(src, table = NULL, build = TRUE, extensive = FALSE, cats = NULL, fail = TRUE) {
 
 	if (inherits(table, "GVector")) table <- table@table
 	if (is.null(table)) table <- data.table::data.table(NULL)

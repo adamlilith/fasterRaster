@@ -303,9 +303,9 @@ methods::setMethod(
 		if (removeAll) {
 			out <- NULL
 		} else {
-			# out <- .makeGVector(src, table = table, cats = newCats)
-			# out <- .makeGVector(src, table = table)
-			out <- .makeGVector(src, table = table, cats = keepCats)
+			# out <- makeGVector(src, table = table, cats = newCats)
+			# out <- makeGVector(src, table = table)
+			out <- makeGVector(src, table = table, cats = keepCats)
 		}
 
 	}
@@ -350,7 +350,7 @@ methods::setMethod(
 		rgrass::execGRASS("r.mapcalc", expression = ex, flags = c(.quiet(), "overwrite"))
 	
 	}
-	.makeGRaster(srcs, names(x), levels = cats(x), ac = activeCats(x))
+	makeGRaster(srcs, names(x), levels = cats(x), ac = activeCats(x))
 
 	} # EOF
 )

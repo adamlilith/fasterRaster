@@ -131,7 +131,7 @@ methods::setMethod(
 		do.call(rgrass::execGRASS, args = args)
 
 	} # next metric
-	.makeGRaster(srcs, toupper(index))
+	makeGRaster(srcs, toupper(index))
 
 	} #OF
 )

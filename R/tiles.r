@@ -48,7 +48,7 @@ methods::setMethod(
 			out[[i]] <- list()
 			for (j in seq_along(srcs)) {
 
-				out[[i]][[j]] <- .makeGRaster(srcs[j], names(x)[i], levels = cats(x, layer = i), ac = activeCat(x, layer = i), fail = TRUE)
+				out[[i]][[j]] <- makeGRaster(srcs[j], names(x)[i], levels = cats(x, layer = i), ac = activeCat(x, layer = i), fail = TRUE)
 
 			} # next tile
 		} # next layer
@@ -62,7 +62,7 @@ methods::setMethod(
 		srcs <- .tiles(x = x, n = n, dims = dims, extent = extent, res = res, overlap = 0)
 		for (i in seq_along(srcs)) {
 
-			out[[i]] <- .makeGRaster(srcs[i], names(x), levels = cats(x), ac = activeCat(x), fail = TRUE)
+			out[[i]] <- makeGRaster(srcs[i], names(x), levels = cats(x), ac = activeCat(x), fail = TRUE)
 
 		} # next tile
 

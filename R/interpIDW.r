@@ -61,7 +61,7 @@ methods::setMethod(
 		power = power,
 		flags = c(.quiet(), "overwrite")
 	)
-	.makeGRaster(src, "interpolation")
+	makeGRaster(src, "interpolation")
 
 	} # EOF
 )

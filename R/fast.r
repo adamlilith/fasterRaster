@@ -261,9 +261,9 @@ methods::setMethod(
 			}
 
 			if (exists("info", inherits = FALSE)) {
-				out <- .makeGRaster(info, names = xNames, levels = levels)
+				out <- makeGRaster(info, names = xNames, levels = levels)
 			} else {
-				out <- .makeGRaster(src, names = xNames, levels = levels)
+				out <- makeGRaster(src, names = xNames, levels = levels)
 			}
 			
 		}
@@ -680,7 +680,7 @@ methods::setMethod(
 
 			}
 
-			out <- .makeGVector(src = src, table = table)
+			out <- makeGVector(src = src, table = table)
 			
 			# # save/reload vector... seems to fix errors with subset_single_bracket on polygon vectors later on
 			# if (reload & geomtype(out) == "polygons") {
@@ -706,7 +706,7 @@ methods::setMethod(
 			# 		output = src,
 			# 		flags = c(.quiet(), "overwrite", "t", "c")
 			# 	)
-			# 	out <- .makeGVector(src, table = table)
+			# 	out <- makeGVector(src, table = table)
 
 			# 	# writeVector(out, filename = tempVect, overwrite = TRUE)
 			# 	# out <- fast(tempVect, reload = FALSE, table = table) # cannot use vect() on this... weird!

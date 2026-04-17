@@ -107,7 +107,7 @@ methods::setMethod(
 			rgrass::execGRASS("r.mapcalc", expression = ex, flags = c(.quiet(), "overwrite"))
 		
 		} # next layer
-		out <- .makeGRaster(srcs, names(x))
+		out <- makeGRaster(srcs, names(x))
 
 		if (center) {
 			vals <- stats[ , "mean"]
@@ -164,7 +164,7 @@ methods::setMethod(
 			rgrass::execGRASS("r.mapcalc", expression = ex, flags = c(.quiet(), "overwrite"))
 		
 		} # next layer
-		out <- .makeGRaster(srcs, names(x))
+		out <- makeGRaster(srcs, names(x))
 
 		names(center) <- names(x)
 		attr(out, "center") <- center
@@ -257,7 +257,7 @@ methods::setMethod(
 			rgrass::execGRASS("r.mapcalc", expression = ex, flags = c(.quiet(), "overwrite"))
 		
 		} # next layer
-		out <- .makeGRaster(srcs, names(x))
+		out <- makeGRaster(srcs, names(x))
 
 		names(center) <- names(x)
 		names(scale) <- names(x)
@@ -351,7 +351,7 @@ methods::setMethod(
 		}
 	
 	} # next layer
-	.makeGRaster(srcs, names(x))
+	makeGRaster(srcs, names(x))
 
 	} # EOF
 )

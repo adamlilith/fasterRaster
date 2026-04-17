@@ -354,7 +354,7 @@ methods::setMethod(
 		}
 
 	} # next layer
-	out <- .makeGRaster(srcs, "logical", levels = cats(e1), ac = activeCats(e1))
+	out <- makeGRaster(srcs, "logical", levels = cats(e1), ac = activeCats(e1))
 	out
 	
 	} # EOF
@@ -446,7 +446,7 @@ methods::setMethod(
 		}
 
 	} # next layer
-	out <- .makeGRaster(srcs, "logical", levels = cats(e2), ac = activeCats(e2))
+	out <- makeGRaster(srcs, "logical", levels = cats(e2), ac = activeCats(e2))
 	out
 		
 	} # EOF

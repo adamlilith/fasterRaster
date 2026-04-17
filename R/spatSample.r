@@ -324,10 +324,10 @@ methods::setMethod(
 			# info <- .vectInfo(src)
 			# nGeometries <- info$nGeometries
 			# n <- nGeometries / size
-			# out <- .makeGVector(src, table = out, cats = rep(1:size, each = n))
-			out <- .makeGVector(src, table = out, cats = thisCats)
+			# out <- makeGVector(src, table = out, cats = rep(1:size, each = n))
+			out <- makeGVector(src, table = out, cats = thisCats)
 		} else {
-			out <- .makeGVector(src, cats = thisCats)
+			out <- makeGVector(src, cats = thisCats)
 		}
 	} else {
 		if (!faster("useDataTable")) out <- as.data.frame(out)
@@ -427,7 +427,7 @@ methods::setMethod(
 	}
 
 	if (as.points) {
-		out <- .makeGVector(src, table = out)
+		out <- makeGVector(src, table = out)
 	} else {
 		if (!faster("useDataTable")) out <- as.data.frame(out)
 	}

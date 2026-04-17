@@ -71,7 +71,7 @@ methods::setMethod(
 
 	}
 
-	.makeGRaster(src, names = "flowPath")
+	makeGRaster(src, names = "flowPath")
 
 	} # EOF
 )
