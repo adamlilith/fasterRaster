@@ -62,7 +62,7 @@ methods::setMethod(
 		} else {
 			tbres <- t <- b <- NA_real_
 		}
-### NEED TO EXTENT TO ENCOMPASS x IF ITS EXTENT IS OUTSIDE THIS		
+### NEED TO EXTEND TO ENCOMPASS x IF ITS EXTENT IS OUTSIDE THIS		
 		w <- W(y)
 		e <- E(y)
 		s <- S(y)
@@ -92,7 +92,7 @@ methods::setMethod(
 	rows <- (n - s) / nsres
 
 	if (!omnibus::is.wholeNumber(cols)) cols <- ceiling(cols)
-	if (!omnibus::is.wholeNumber(rows)) cols <- ceiling(rows)
+	if (!omnibus::is.wholeNumber(rows)) rows <- ceiling(rows)
 
 	e <- w + cols * ewres
 	s <- n - rows * nsres
