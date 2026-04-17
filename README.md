@@ -191,6 +191,6 @@ Note that the `M1.M2` and `S1.S2` increment independently. For example, if the v
 # Citation
 Please see and cite:
 
-Smith, A.B. 2025. `fasterRaster`: GIS in `R` using `GRASS` for large vectors and rasters. *Transactions in GIS* 30:e70238. <href = "https://doi.org/10.1111/tgis.70238">10.1111/tgis.70238</href>, EarthArXiv open-access preprint doi: <href = "https://doi.org/10.31223/X52R0M">10.31223/X52R0M</href>
+Smith, A.B. 2025. `fasterRaster`: GIS in `R` using `GRASS` for large vectors and rasters. *Transactions in GIS* 30:e70238. DOI: [10.1111/tgis.70238](https://doi.org/10.1111/tgis.70238), Open-access preprint: [10.31223/X52R0M](https://doi.org/10.31223/X52R0M)
 
 ~ Adam
