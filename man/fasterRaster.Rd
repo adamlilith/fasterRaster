@@ -148,6 +148,8 @@ Operations on \code{GRaster}s
 \item \code{\link[=fractalRast]{fractalRast()}}: Create a fractal \code{GRaster}
 \item \code{\link[=init]{init()}}: GRaster with values equal to row, column, coordinate, regular, or "chess"
 \item \code{\link[=longlat]{longlat()}}: Create longitude/latitude rasters
+\item \code{\link[=makeGRaster]{makeGRaster()}}: Create a \code{GRaster} from a \strong{GRASS} raster file
+\item \code{\link[=makeGVector]{makeGVector()}}: Create a \code{GVector} from a \strong{GRASS} vector file
 \item \code{\link[=rNormRast]{rNormRast()}}: A random \code{GRaster} with values drawn from a normal distribution
 \item \code{\link[=rSpatialDepRast]{rSpatialDepRast()}}: Create a random \code{GRaster} with or without spatial dependence
 \item \code{\link[=rUnifRast]{rUnifRast()}}: A random \code{GRaster} with values drawn from a uniform distribution
