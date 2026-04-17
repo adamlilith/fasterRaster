@@ -70,7 +70,7 @@ methods::setValidity("GVector",
 #'
 #' @aliases makeGVector
 #' @rdname makeGVector
-#' @exportMethod makeGVector
+#' @export makeGVector
 makeGVector <- function(src, table = NULL, build = TRUE, extensive = FALSE, cats = NULL, fail = TRUE) {
 
 	if (inherits(table, "GVector")) table <- table@table

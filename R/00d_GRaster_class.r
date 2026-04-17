@@ -162,7 +162,7 @@ methods::setValidity("GRaster",
 #'
 #' @aliases makeGRaster
 #' @rdname makeGRaster
-#' @exportMethod makeGRaster
+#' @export makeGRaster
 makeGRaster <- function(src, names = "raster", levels = "", ac = NULL, fail = TRUE) {
 
 	if (inherits(src, "rastInfo")) {
