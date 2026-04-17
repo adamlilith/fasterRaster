@@ -122,7 +122,7 @@ methods::setMethod(
 	
 	### number of tasks (used for progress bar
 	nTasks <- 2 + length(bios) +
-		(any(meanTempBios %in% bios) & !is.null(tmean)) +
+		(any(meanTempBios %in% bios) & is.null(tmean)) +
 		any(quarterTempBios %in% bios) +
 		any(quarterPrecipBios %in% bios) +
 		any(wettestQuarterBios %in% bios) +
