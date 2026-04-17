@@ -48,7 +48,7 @@ setMethod(
 	)
 	
 	do.call(rgrass::execGRASS, args=args)
-	.makeGVector(src)
+	makeGVector(src)
 	
 	} # EOF
 )

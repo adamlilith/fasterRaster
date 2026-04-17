@@ -61,7 +61,7 @@ methods::setMethod(
 	if (dither) args$flags <- c(args$flags, "d")
 
 	do.call(rgrass::execGRASS, args = args)
-	.makeGRaster(src, "compositeRGB")
+	makeGRaster(src, "compositeRGB")
 	
 	} # EOF
 )

@@ -300,7 +300,7 @@ methods::setMethod(
 
 	}
 
-	.makeGRaster(src, names = "prediction")
+	makeGRaster(src, names = "prediction")
 
 	} # EOF
 )

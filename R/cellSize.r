@@ -93,7 +93,7 @@ methods::setMethod(
 
 	} # next raster layer
 
-	.makeGRaster(srcs, paste0("area_", unit, "_", seq_len(nLayers)))
+	makeGRaster(srcs, paste0("area_", unit, "_", seq_len(nLayers)))
 		
 	} # EOF
 )

@@ -248,7 +248,7 @@ setMethod(
 
 		.rm(c(srcSS, srcCount), type = "raster", warn = FALSE)
 
-		out <- .makeGRaster(src, "sd")
+		out <- makeGRaster(src, "sd")
 
 	# population standard deviation
 	} else {
@@ -307,7 +307,7 @@ setMethod(
 	)
 	
 	.rm(c(srcSS, srcCount), type = "raster", warn = FALSE)
-	.makeGRaster(src, "var")
+	makeGRaster(src, "var")
 		
 	} # EOF
 )
@@ -401,7 +401,7 @@ setMethod(
 	if (na.rm) args$flags <- c(args$flags, "n")
 	
 	do.call(rgrass::execGRASS, args = args)
-	.makeGRaster(src, fxName)
+	makeGRaster(src, fxName)
 		
 	} # EOF
 )
@@ -424,7 +424,7 @@ setMethod(
 	ex <- paste(ex, collapse = " | ")
 	ex <- paste0(src, " = ", ex)
 	rgrass::execGRASS("r.mapcalc", expression = ex, flags = c(.quiet(), "overwrite"))
-	.makeGRaster(src, "layer")
+	makeGRaster(src, "layer")
 
 	} # EOF
 )
@@ -448,7 +448,7 @@ setMethod(
 	ex <- paste(ex, collapse = " & ")
 	ex <- paste0(src, " = ", ex)
 	rgrass::execGRASS("r.mapcalc", expression = ex, flags = c(.quiet(), "overwrite"))
-	.makeGRaster(src, "layer")
+	makeGRaster(src, "layer")
 
 	} # EOF
 )
@@ -487,7 +487,7 @@ setMethod(
 		} else {
 			levels <- NULL
 		}
-		out <- .makeGRaster(src, fxName, levels = levels)
+		out <- makeGRaster(src, fxName, levels = levels)
 	} else if (return == "source") {
 		out <- src
 	} else {

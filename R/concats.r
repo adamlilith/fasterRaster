@@ -134,7 +134,7 @@ methods::setMethod(
 		table <- NULL
 	}
 
-	.makeGRaster(src, names = "combineCats", levels = table)
+	makeGRaster(src, names = "combineCats", levels = table)
 	
 	} # EOF
 )

@@ -79,7 +79,7 @@ methods::setMethod(
 	
 	if (northIs0) niceDirections <- sort(niceDirections)
 
-	.makeGRaster(srcs, names = paste0("horizonHeight_", niceDirections, "deg"))
+	makeGRaster(srcs, names = paste0("horizonHeight_", niceDirections, "deg"))
 
 	} # EOF
 )

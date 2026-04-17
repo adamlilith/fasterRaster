@@ -86,7 +86,7 @@ methods::setMethod(
 		table <- as.data.table(x)
 	}
 
-	.makeGVector(src, table = table)
+	makeGVector(src, table = table)
 	
 	} # EOF
 )
@@ -140,7 +140,7 @@ methods::setMethod(
 		
 		}
 
-		out[[i]] <- .makeGVector(srcs[i], table = table)
+		out[[i]] <- makeGVector(srcs[i], table = table)
 
 	}
 

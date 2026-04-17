@@ -44,7 +44,7 @@ methods::setMethod(
 			.message(
 				msg = "subset_square_bracket",
 				message =
-"The GVector returned by `[` (subset_single_bracket) may have the order of items in\n  its data table changed from the order they appear in the index used to select features.\n  For example, if you use `vector[3:1]`, the results will be as per`vector[1:3]`. If this\n  message appeared after you called a function other than `[`, you can probably ignore it."
+"The GVector returned by `[` (subset_single_bracket) may have the order of items in\n  its data table changed from the order they appear in the index used to select features.\n  For example, if you use `vector[3:1]`,  `vector[1:3]`. If this\n  message appeared after you called a function other than `[`, you can probably ignore it."
 			)
 
 		}
@@ -303,9 +303,9 @@ methods::setMethod(
 		if (removeAll) {
 			out <- NULL
 		} else {
-			# out <- .makeGVector(src, table = table, cats = newCats)
-			# out <- .makeGVector(src, table = table)
-			out <- .makeGVector(src, table = table, cats = keepCats)
+			# out <- makeGVector(src, table = table, cats = newCats)
+			# out <- makeGVector(src, table = table)
+			out <- makeGVector(src, table = table, cats = keepCats)
 		}
 
 	}
@@ -350,7 +350,7 @@ methods::setMethod(
 		rgrass::execGRASS("r.mapcalc", expression = ex, flags = c(.quiet(), "overwrite"))
 	
 	}
-	.makeGRaster(srcs, names(x), levels = cats(x), ac = activeCats(x))
+	makeGRaster(srcs, names(x), levels = cats(x), ac = activeCats(x))
 
 	} # EOF
 )

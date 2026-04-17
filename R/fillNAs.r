@@ -118,7 +118,7 @@ methods::setMethod(
 		}
 
 	}
-	.makeGRaster(srcs, names(x))
+	makeGRaster(srcs, names(x))
 
 	} # EOF
 )

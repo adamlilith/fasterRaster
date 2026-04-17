@@ -125,6 +125,8 @@
 #' * [fractalRast()]: Create a fractal `GRaster`
 #' * [init()]: GRaster with values equal to row, column, coordinate, regular, or "chess"
 #' * [longlat()]: Create longitude/latitude rasters
+#' * [makeGRaster()]: Create a `GRaster` from a **GRASS** raster file
+#' * [makeGVector()]: Create a `GVector` from a **GRASS** vector file
 #' * [rNormRast()]: A random `GRaster` with values drawn from a normal distribution
 #' * [rSpatialDepRast()]: Create a random `GRaster` with or without spatial dependence
 #' * [rUnifRast()]: A random `GRaster` with values drawn from a uniform distribution

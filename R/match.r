@@ -139,7 +139,7 @@ methods::setMethod(
 	} else {
 		levs <- NULL
 	}
-	.makeGRaster(srcs, names(x), levels = levs)
+	makeGRaster(srcs, names(x), levels = levs)
 	
 	} # EOF
 )
@@ -213,7 +213,7 @@ methods::setMethod(
 		
 	} # next raster
 
-	.makeGRaster(srcs, names(x))
+	makeGRaster(srcs, names(x))
 
 	} # EOF
 )
@@ -268,7 +268,7 @@ methods::setMethod(
 	
 	} # next raster
 
-	.makeGRaster(srcs, names(x))
+	makeGRaster(srcs, names(x))
 	
 	} # EOF
 )

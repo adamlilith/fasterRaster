@@ -52,7 +52,7 @@ methods::setMethod(
         do.call(rgrass::execGRASS, args = args)
 
     } # next raster
-    .makeGRaster(srcs, "rnorm")
+    makeGRaster(srcs, "rnorm")
 
     } # EOF
 )

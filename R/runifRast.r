@@ -59,7 +59,7 @@ methods::setMethod(
         do.call(rgrass::execGRASS, args = args)
 
     } # next raster
-    .makeGRaster(srcs, rep("runif", n))
+    makeGRaster(srcs, rep("runif", n))
 
     } # EOF
 )

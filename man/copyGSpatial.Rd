@@ -34,6 +34,6 @@ Character vector representing the \code{\link[=sources]{sources()}} names of the
 \code{\link[=sources]{sources()}} names of copied rasters.
 }
 \description{
-Create a copy of a \code{GRaster} or \code{GVector} in \strong{GRASS}.  This function is used internally and is of little use to most users.  This only creates a copy of the object in the \strong{GRASS} session--to make a \code{GRaster} or \code{GVector}, \code{\link[=.makeGRaster]{.makeGRaster()}} or \code{\link[=.makeGVector]{.makeGVector()}} need to be called after making the copy. Note that if the object is multi-layered, then a copy is made of each layer.
+Create a copy of a \code{GRaster} or \code{GVector} in \strong{GRASS}.  This function is used internally and is of little use to most users.  This only creates a copy of the object in the \strong{GRASS} session--to make a \code{GRaster} or \code{GVector}, \code{\link[=makeGRaster]{makeGRaster()}} or \code{\link[=makeGVector]{makeGVector()}} need to be called after making the copy. Note that if the object is multi-layered, then a copy is made of each layer.
 }
 \keyword{internal}

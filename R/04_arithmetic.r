@@ -462,7 +462,7 @@ methods::setMethod(
 .genericArithRast <- function(name, src, ex) {
 
 	rgrass::execGRASS(cmd = "r.mapcalc", expression = ex, flags = c(.quiet(), "overwrite"))
-	.makeGRaster(src, name)
+	makeGRaster(src, name)
 	
 }
 

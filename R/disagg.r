@@ -103,7 +103,7 @@ methods::setMethod(
 	# 	flags = c(.quiet(), "overwrite", "o")
 	# )
 
-	.makeGVector(src, table = table)
+	makeGVector(src, table = table)
 
 	} # EOF
 )

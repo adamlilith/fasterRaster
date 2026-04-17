@@ -241,9 +241,9 @@ methods::setMethod(
 
 	} else if (inherits(y, "GVector")) {
 		table <- .vAsDataTable(src)
-		out <- .makeGVector(src)
+		out <- makeGVector(src)
 	} else if (inherits(y, "GRaster")) {
-		out <- .makeGRaster(src, "interpolation")
+		out <- makeGRaster(src, "interpolation")
 	}
 	out
 

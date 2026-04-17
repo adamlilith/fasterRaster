@@ -47,7 +47,7 @@ methods::setMethod(
         args$output <- srcs[i]
 
         do.call(rgrass::execGRASS, args=args)
-        this <- .makeGRaster(srcs[i])
+        this <- makeGRaster(srcs[i])
 
         if (i == 1L) {
             out <- this

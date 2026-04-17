@@ -208,6 +208,8 @@ reference:
   - fractalRast
   - init
   - longlat
+  - makeGRaster
+  - makeGVector
   - rNormRast
   - rSpatialDepRast
   - rUnifRast

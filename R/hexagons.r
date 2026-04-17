@@ -90,6 +90,6 @@ methods::setMethod(
 	if (!(angle %in% c(0, 360))) args$angle <- angle
 
 	do.call(rgrass::execGRASS, args = args)
-	.makeGVector(src)
+	makeGVector(src)
 
 }

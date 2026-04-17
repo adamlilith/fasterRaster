@@ -144,22 +144,26 @@ methods::setValidity("GRaster",
 	} # EOF
 )
 
-#' Create a GRaster
+#' Create a GRaster from a GRASS raster
 #'
 #' @description Create a `GRaster` from a raster existing in the current **GRASS** session.
 #'
-#' @param src Character (name of the raster in **GRASS) or a `rastInfo` object.
-#' @param names Character: Name of the raster.
+#' @param src Character: The name of the raster in **GRASS**.
+#' @param names Character: Name of the raster (cf. [names()]).
 #' @param levels `NULL` (default), a `data.frame`, `data.table`, an empty string (`""`), or a list of `data.frame`s, `data.table`s, and/or empty strings: These become the raster's [levels()]. If `""`, then no levels are defined.
 #' @param ac Vector of numeric/integer values >=1, or `NULL` (default): Active category column (offset by 1, so 1 really means the second column, 2 means the third, etc.). A value of `NULL` uses an automated procedure to figure it out.
 #' @param fail Logical: If `TRUE` (default), and the raster either has a 0 east-west or north-south extent, then exit the function with an error. If `fail` is `FALSE`, then display a warning and return `NULL`.
 #'
 #' @returns A `GRaster`.
 #'
-#' @seealso [.makeGVector()]
+#' @seealso [makeGVector()]
 #'
-#' @keywords internal
-.makeGRaster <- function(src, names = "raster", levels = "", ac = NULL, fail = TRUE) {
+#' @example man/examples/ex_fast.r
+#'
+#' @aliases makeGRaster
+#' @rdname makeGRaster
+#' @export makeGRaster
+makeGRaster <- function(src, names = "raster", levels = "", ac = NULL, fail = TRUE) {
 
 	if (inherits(src, "rastInfo")) {
 		info <- src

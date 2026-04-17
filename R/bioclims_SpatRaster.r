@@ -54,7 +54,7 @@ methods::setMethod(
 
 	### number of tasks (used for progress bar
 	nTasks <- length(bios) +
-		(any(meanTempBios %in% bios) & !is.null(tmean)) +
+		(any(meanTempBios %in% bios) & is.null(tmean)) +
 		any(bios %in% quarterTempBios) +
 		any(bios %in% quarterPrecipBios) +
 		(any(bios %in% warmestQuarterBios) & !(53 %in% warmestQuarterBios)) +

@@ -505,7 +505,7 @@ methods::setMethod(
 		levels[[i]] <- levs
 	}
 
-	.makeGRaster(srcs, names = "fragmentation", levels = levels)
+	makeGRaster(srcs, names = "fragmentation", levels = levels)
 
 	} # EOF
 	

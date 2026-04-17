@@ -122,7 +122,7 @@ methods::setMethod(
 	
 	### number of tasks (used for progress bar
 	nTasks <- 2 + length(bios) +
-		(any(meanTempBios %in% bios) & !is.null(tmean)) +
+		(any(meanTempBios %in% bios) & is.null(tmean)) +
 		any(quarterTempBios %in% bios) +
 		any(quarterPrecipBios %in% bios) +
 		any(wettestQuarterBios %in% bios) +
@@ -1374,7 +1374,7 @@ methods::setMethod(
 	
 	# return
 	names <- names(out)
-	out <- .makeGRaster(out, names = names)
+	out <- makeGRaster(out, names = names)
 
 	if (verbose | faster("verbose")) {
 		tasks <- tasks + 1

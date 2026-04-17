@@ -191,7 +191,7 @@ methods::setMethod(
 
 	srcsAll <- c(srcs, srcOverall, srcMostDiffFrom1)
 	outNames <- c(names(proj), "MESS", "mostDifferent")
-	.makeGRaster(srcsAll, names = outNames, levels = levs)
+	makeGRaster(srcsAll, names = outNames, levels = levs)
 
 
 }

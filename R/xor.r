@@ -32,7 +32,7 @@ methods::setMethod(
 		snap = -1,
 		flags = c(.quiet(), "overwrite")
 	)
-	.makeGVector(src)
+	makeGVector(src)
 	
 	} # EOF
 )

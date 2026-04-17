@@ -34,7 +34,7 @@ methods::setMethod(
 		flags = c(.quiet(), "overwrite")
 	)
 
-	.makeGVector(src)
+	makeGVector(src)
 	
 	} # EOF
 )

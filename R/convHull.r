@@ -30,7 +30,7 @@ methods::setMethod(
 			flags = c(.quiet(), "overwrite")
 		)
 
-		out <- .makeGVector(src)
+		out <- makeGVector(src)
 		
 	} else {
 	
@@ -65,7 +65,7 @@ methods::setMethod(
 				)
 				
 				do.call(rgrass::execGRASS, args=args)
-				vects[[i]] <- .makeGVector(srcs[i])
+				vects[[i]] <- makeGVector(srcs[i])
 
 			}
 				

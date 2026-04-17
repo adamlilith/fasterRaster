@@ -169,7 +169,7 @@ methods::setMethod(
 
 	}
 
-	out <- .makeGRaster(srcs, names = names(x), levels = levs, ac = 1L)
+	out <- makeGRaster(srcs, names = names(x), levels = levs, ac = 1L)
 	out
 	
 	} # EOF

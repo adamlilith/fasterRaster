@@ -112,7 +112,7 @@ methods::setMethod(
 	
 	# convert units
 	src <- .convertRastFromMeters(srcOut, unit)
-	.makeGRaster(src, "distance")
+	makeGRaster(src, "distance")
 	
 	} # EOF
 )
@@ -176,7 +176,7 @@ methods::setMethod(
 	
 	# convert units
 	src <- .convertRastFromMeters(src = src, unit = unit)
-	.makeGRaster(src, "distance")
+	makeGRaster(src, "distance")
 	
 	} # EOF
 )
