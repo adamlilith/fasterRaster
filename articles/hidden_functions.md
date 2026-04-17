@@ -46,9 +46,9 @@ error-checking and region re-definition is not conducted.
   Extent from the
   [`sources()`](https://adamlilith.github.io/fasterRaster/reference/sources.html)
   name of a `GRaster` or `GVector`
-- `.makeSourceNames()`: Makes one or more statistically unique strings
-  that can be used as file names to represent rasters or vectors in
-  **GRASS**
+- [`.makeSourceName()`](https://github.com/adamlilith/fasterRaster/reference/dot-makeSourceName.md):
+  Makes one or more statistically unique strings that can be used as
+  file names to represent rasters or vectors in **GRASS**
 - [`.plot()`](https://github.com/adamlilith/fasterRaster/reference/dot-plot.md):
   Plot using the
   [`sources()`](https://adamlilith.github.io/fasterRaster/reference/sources.html)
@@ -101,11 +101,6 @@ error-checking and region re-definition is not conducted.
 - [`.layerIndex()`](https://github.com/adamlilith/fasterRaster/reference/dot-layerIndex.md):
   Gets the index of `GRaster` layers from a numeric, integer, character,
   or logical vector
-- [`.makeGRaster()`](https://github.com/adamlilith/fasterRaster/reference/dot-makeGRaster.md)
-  and
-  [`.makeGVector()`](https://github.com/adamlilith/fasterRaster/reference/dot-makeGVector.md):
-  Make `GRaster`s or `GVector`s from a vector of `sources`, which are
-  pointers to files in **GRASS**
 - [`.minVal()`](https://github.com/adamlilith/fasterRaster/reference/dot-minVal.md)
   and
   [`.maxVal()`](https://github.com/adamlilith/fasterRaster/reference/dot-maxVal.md):

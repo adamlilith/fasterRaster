@@ -8,14 +8,20 @@
 ## Citation
 
 Source:
-[`inst/CITATION`](https://github.com/adamlilith/fasterRaster/blob/v8.4.1.1/inst/CITATION)
+[`inst/CITATION`](https://github.com/adamlilith/fasterRaster/blob/master/inst/CITATION)
 
-Smith A (2025). *fasterRaster: Faster Raster and Spatial Vector
-Processing Using 'GRASS'*. R package version 8.4.1.1.
+Smith A (2026). “fasterRaster: GIS in R using GRASS for large vectors
+and rasters.” *Transactions in GIS*, **30**, e70238.
+[doi:10.1111/tgis.70238](https://doi.org/10.1111/tgis.70238), R package
+version 8.4.1.2.
 
-    @Manual{R-fasterRaster,
-      title = {fasterRaster: Faster Raster and Spatial Vector Processing Using 'GRASS'},
+    @Article{,
+      title = {fasterRaster: GIS in R using GRASS for large vectors and rasters},
       author = {Adam B. Smith},
-      year = {2025},
-      note = {R package version 8.4.1.1},
+      journal = {Transactions in GIS},
+      year = {2026},
+      volume = {30},
+      pages = {e70238},
+      doi = {10.1111/tgis.70238},
+      note = {R package version 8.4.1.2},
     }

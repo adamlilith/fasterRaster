@@ -288,10 +288,11 @@ Wickham’s guidelines for versioning under development.
 
 # Citation
 
-A publication is forthcoming! In the meantime, please see and cite:
+Please see and cite:
 
-- Smith, A.B. 2025. `fasterRaster`: GIS in `R` using `GRASS` for large
-  vectors and rasters. EarthArXiv preprint doi: \<href =
-  “<https://doi.org/10.31223/X52R0M>”\>10.31223/X52R0M:
+Smith, A.B. 2025. `fasterRaster`: GIS in `R` using `GRASS` for large
+vectors and rasters. *Transactions in GIS* 30:e70238. DOI:
+[10.1111/tgis.70238](https://doi.org/10.1111/tgis.70238), Open-access
+preprint: [10.31223/X52R0M](https://doi.org/10.31223/X52R0M)
 
-  Adam
+`~` Adam

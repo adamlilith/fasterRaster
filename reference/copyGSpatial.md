@@ -4,9 +4,9 @@ Create a copy of a `GRaster` or `GVector` in **GRASS**. This function is
 used internally and is of little use to most users. This only creates a
 copy of the object in the **GRASS** session–to make a `GRaster` or
 `GVector`,
-[`.makeGRaster()`](https://github.com/adamlilith/fasterRaster/reference/dot-makeGRaster.md)
+[`makeGRaster()`](https://github.com/adamlilith/fasterRaster/reference/makeGRaster.md)
 or
-[`.makeGVector()`](https://github.com/adamlilith/fasterRaster/reference/dot-makeGVector.md)
+[`makeGVector()`](https://github.com/adamlilith/fasterRaster/reference/makeGVector.md)
 need to be called after making the copy. Note that if the object is
 multi-layered, then a copy is made of each layer.
 

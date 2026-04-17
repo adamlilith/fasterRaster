@@ -74,6 +74,14 @@ Tips:
   the range between 0 and 1, use something like
   `= float(rand(0 + 0.1, 1 + 0.1) - 0.1)`.
 
+- `GRaster`s with short names can cause the function to mis-specify the
+  formula in **GRASS**. This happens when, for example, the `fun`
+  argument contains an "if" statement, and the raster name is "i" or
+  "f", which would incorrectly replace those letters in the "if" with
+  the **GRASS** name of the raster. To avoid this, avoid using short
+  raster names that could be part of longer operators using by `app()`
+  (see `appFuns()` for a list of these operators).
+
 ## Usage
 
 ``` r

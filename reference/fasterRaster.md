@@ -444,6 +444,12 @@ Operations on `GRaster`s
 - [`longlat()`](https://github.com/adamlilith/fasterRaster/reference/longlat.md):
   Create longitude/latitude rasters
 
+- [`makeGRaster()`](https://github.com/adamlilith/fasterRaster/reference/makeGRaster.md):
+  Create a `GRaster` from a **GRASS** raster file
+
+- [`makeGVector()`](https://github.com/adamlilith/fasterRaster/reference/makeGVector.md):
+  Create a `GVector` from a **GRASS** vector file
+
 - [`rNormRast()`](https://github.com/adamlilith/fasterRaster/reference/rnormRast.md):
   A random `GRaster` with values drawn from a normal distribution
 

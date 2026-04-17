@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">fasterRaster</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">8.4.1.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">8.4.1.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -43,9 +43,23 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Changelog</h1>
-      <small>Source: <a href="https://github.com/adamlilith/fasterRaster/blob/v8.4.1.1/NEWS.md"><code>NEWS.md</code></a></small>
+      <small>Source: <a href="https://github.com/adamlilith/fasterRaster/blob/master/NEWS.md"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="8.4.1.2" id="fasterraster-8412-2026-04-17">fasterRaster 8.4.1.2 (2026-04-17)<a class="anchor" aria-label="anchor" href="#fasterraster-8412-2026-04-17"></a></h2>
+<div class="section level4">
+<h4 id="new-functions-and-functionality-8-4-1-2">New functions and functionality<a class="anchor" aria-label="anchor" href="#new-functions-and-functionality-8-4-1-2"></a></h4>
+<p>o <code><a href="../reference/makeGRaster.html">makeGRaster()</a></code> and <code><a href="../reference/makeGVector.html">makeGVector()</a></code> are now public and allow users to create <code>G</code>-objects from files in <strong>GRASS</strong>. (feature request <a href="https://github.com/adamlilith/fasterRaster/issues/137" class="uri">https://github.com/adamlilith/fasterRaster/issues/137</a> – thank you, <a href="https://github.com/JacobusS" class="external-link">@JacobusS</a>!)<br>
+o Updated citation to peer-reviewed journal article</p>
+</div>
+<div class="section level4">
+<h4 id="bug-fixes-8-4-1-2">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-8-4-1-2"></a></h4>
+<p>o <code><a href="../reference/app.html">app()</a></code> is more robust. Previously, short raster could have caused improper function. (issue <a href="https://github.com/adamlilith/fasterRaster/issues/138" class="uri">https://github.com/adamlilith/fasterRaster/issues/138</a> – thank you, <a href="https://github.com/laurapoggio-sptools" class="external-link">@laurapoggio-sptools</a>!)<br>
+o <code><a href="../reference/bioclims.html">bioclims()</a></code> properly calculates progress bar width so you know how long you have to go get a coffee.<br>
+o <code><a href="../reference/resample.html">resample()</a></code> correctly calculates number of rows in output raster.</p>
+</div>
+</div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="8.4.1.1" id="fasterraster-8411-2025-11-18">fasterRaster 8.4.1.1 (2025-11-18)<a class="anchor" aria-label="anchor" href="#fasterraster-8411-2025-11-18"></a></h2><p class="text-muted">CRAN release: 2025-11-18</p>
 <div class="section level4">
@@ -360,7 +374,7 @@ o <code><a href="../reference/freq.html">freq()</a></code>: Added `function-spec
 o <strong>+</strong> <code><a href="../reference/rasterize.html">rasterize()</a></code>: Rewritten to perform (nearly) the same as <code><a href="https://rspatial.github.io/terra/reference/rasterize.html" class="external-link">terra::rasterize()</a></code>.<br>
 o <code><a href="../reference/predict.html">predict()</a></code>: Can accommodate models with two-way interactions between categorical rasters and between a categorical predictor and a scalar.<br>
 o <code><a href="../reference/scale.html">scalepop()</a></code>: Scales <code>GRaster</code>s by population standard deviation.<br>
-o Stops with a somewhat informative error when a <code>GRaster</code> fails to be created (in hidden function <code><a href="../reference/dot-makeGRaster.html">.makeGRaster()</a></code>)</p>
+o Stops with a somewhat informative error when a <code>GRaster</code> fails to be created (in hidden function <code><a href="../reference/makeGRaster.html">makeGRaster()</a></code>)</p>
 </div>
 <div class="section level4">
 <h4 id="issues-8-3-0-7017">Issues<a class="anchor" aria-label="anchor" href="#issues-8-3-0-7017"></a></h4>
@@ -424,7 +438,7 @@ o Updated <code>README</code> for 8.3.0.7013!</p>
 <div class="section level4">
 <h4 id="bug-fixes-8-3-0-7014">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-8-3-0-7014"></a></h4>
 <p>o <code>[</code> works consistently for <code>GVector</code>s!!!!!<br>
-o Hidden function <code><a href="../reference/dot-makeGVector.html">.makeGVector()</a></code> now catches cases with zero extent for polygons.<br>
+o Hidden function <code><a href="../reference/makeGVector.html">makeGVector()</a></code> now catches cases with zero extent for polygons.<br>
 o Fixed installation issue related to <code>activeCat()&lt;-</code> and <code>addCats()&lt;-</code> (thank you, <code>@kbondo1</code>!)<br>
 o Fixed bug in <code>arithmetic</code> when determining data type of an input raster.<br>
 o <code><a href="../reference/crds.html">crds()</a></code> works when the <strong>GRASS</strong> vector has an attribute table.<br>

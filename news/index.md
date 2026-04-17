@@ -1,5 +1,34 @@
 # Changelog
 
+## fasterRaster 8.4.1.2 (2026-04-17)
+
+#### New functions and functionality
+
+o
+[`makeGRaster()`](https://github.com/adamlilith/fasterRaster/reference/makeGRaster.md)
+and
+[`makeGVector()`](https://github.com/adamlilith/fasterRaster/reference/makeGVector.md)
+are now public and allow users to create `G`-objects from files in
+**GRASS**. (feature request
+<https://github.com/adamlilith/fasterRaster/issues/137> – thank you,
+[@JacobusS](https://github.com/JacobusS)!)  
+o Updated citation to peer-reviewed journal article
+
+#### Bug fixes
+
+o [`app()`](https://github.com/adamlilith/fasterRaster/reference/app.md)
+is more robust. Previously, short raster could have caused improper
+function. (issue <https://github.com/adamlilith/fasterRaster/issues/138>
+– thank you,
+[@laurapoggio-sptools](https://github.com/laurapoggio-sptools)!)  
+o
+[`bioclims()`](https://github.com/adamlilith/fasterRaster/reference/bioclims.md)
+properly calculates progress bar width so you know how long you have to
+go get a coffee.  
+o
+[`resample()`](https://github.com/adamlilith/fasterRaster/reference/resample.md)
+correctly calculates number of rows in output raster.
+
 ## fasterRaster 8.4.1.1 (2025-11-18)
 
 CRAN release: 2025-11-18
@@ -621,7 +650,7 @@ o
 Scales `GRaster`s by population standard deviation.  
 o Stops with a somewhat informative error when a `GRaster` fails to be
 created (in hidden function
-[`.makeGRaster()`](https://github.com/adamlilith/fasterRaster/reference/dot-makeGRaster.md))
+[`makeGRaster()`](https://github.com/adamlilith/fasterRaster/reference/makeGRaster.md))
 
 #### Issues
 
@@ -758,7 +787,7 @@ o Updated `README` for 8.3.0.7013!
 
 o `[` works consistently for `GVector`s!!!!!  
 o Hidden function
-[`.makeGVector()`](https://github.com/adamlilith/fasterRaster/reference/dot-makeGVector.md)
+[`makeGVector()`](https://github.com/adamlilith/fasterRaster/reference/makeGVector.md)
 now catches cases with zero extent for polygons.  
 o Fixed installation issue related to `activeCat()<-` and `addCats()<-`
 (thank you, `@kbondo1`!)  

@@ -64,8 +64,6 @@
 <url><loc>https://github.com/adamlilith/fasterRaster/reference/dot-g.region.html</loc></url>
 <url><loc>https://github.com/adamlilith/fasterRaster/reference/dot-geomtype.html</loc></url>
 <url><loc>https://github.com/adamlilith/fasterRaster/reference/dot-layerIndex.html</loc></url>
-<url><loc>https://github.com/adamlilith/fasterRaster/reference/dot-makeGRaster.html</loc></url>
-<url><loc>https://github.com/adamlilith/fasterRaster/reference/dot-makeGVector.html</loc></url>
 <url><loc>https://github.com/adamlilith/fasterRaster/reference/dot-makeSourceName.html</loc></url>
 <url><loc>https://github.com/adamlilith/fasterRaster/reference/dot-maxVal.html</loc></url>
 <url><loc>https://github.com/adamlilith/fasterRaster/reference/dot-minVal.html</loc></url>
@@ -145,6 +143,8 @@
 <url><loc>https://github.com/adamlilith/fasterRaster/reference/madRivers.html</loc></url>
 <url><loc>https://github.com/adamlilith/fasterRaster/reference/madTmax.html</loc></url>
 <url><loc>https://github.com/adamlilith/fasterRaster/reference/madTmin.html</loc></url>
+<url><loc>https://github.com/adamlilith/fasterRaster/reference/makeGRaster.html</loc></url>
+<url><loc>https://github.com/adamlilith/fasterRaster/reference/makeGVector.html</loc></url>
 <url><loc>https://github.com/adamlilith/fasterRaster/reference/mapset.html</loc></url>
 <url><loc>https://github.com/adamlilith/fasterRaster/reference/mask.html</loc></url>
 <url><loc>https://github.com/adamlilith/fasterRaster/reference/maskNA.html</loc></url>
