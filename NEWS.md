@@ -1,3 +1,7 @@
+# fasterRaster 8.4.1.3 (2026-04-XX)
+### Issues
+o `.copyGRaster()` now uses **GRASS** tool `g.copy`. Should make functions like `mask()` more reliable.  
+
 # fasterRaster 8.4.1.2 (2026-04-17)
 ### New functions and functionality
 o `makeGRaster()` and `makeGVector()` are now public and allow users to create `G`-objects from files in **GRASS**. (feature request https://github.com/adamlilith/fasterRaster/issues/137 -- thank you, @JacobusS!)  
