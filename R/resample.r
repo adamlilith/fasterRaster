@@ -48,6 +48,8 @@ methods::setMethod(
 
 	versionNumber <- grassInfo("versionNumber")
 
+	if (inherits(x, "GRaster")) .locationRestore(x)
+
 	# reshape region
 	if (inherits(y, "GRaster")) {
 
@@ -115,7 +117,7 @@ methods::setMethod(
 		flags = c("o", .quiet())
 	)
 	if (!is.na(t)) args <- c(args, t = t)
-	if (!is.na(b)) args <- c(args, t = b)
+	if (!is.na(b)) args <- c(args, b = b)
 	if (!is.na(tbres)) args <- c(args, tbres = tbres)
 
 	do.call(rgrass::execGRASS, args=args)
@@ -143,7 +145,7 @@ methods::setMethod(
 		### resample
 		if (thisMethod == "nearest" | fallback) {
 
-			srcNearest <- .makeSourceName("resample", "raster")
+			srcNearest <- .makeSourceName("r_resample", "raster")
 			rgrass::execGRASS(
 				cmd = "r.resample",
 				input = sources(x)[i],
