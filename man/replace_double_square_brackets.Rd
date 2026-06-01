@@ -6,7 +6,7 @@
 \alias{[[<-,GRaster,ANY-method}
 \title{Replace layers of a GRaster}
 \usage{
-\S4method{[[}{GRaster,ANY}(x, i) <- value
+\S4method{[[}{GRaster,ANY,ANY}(x, i) <- value
 }
 \arguments{
 \item{x}{A \code{GRaster}.}

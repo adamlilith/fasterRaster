@@ -112,6 +112,7 @@ Operations on \code{GRaster}s
 \item \code{\link[=hist]{hist()}}: Histogram of \code{GRaster} values
 \item \code{\link[=interpIDW]{interpIDW()}}: Interpolate values at points to a \code{GRaster}
 \item \code{\link[=kernel]{kernel()}}: Kernel density estimator of points
+\item \code{\link[=layerChiSq]{layerChiSq()}}: Chi-squared test for two or more integer or categorical \code{GRaster} layers
 \item \code{\link[=layerCor]{layerCor()}}: Correlation or covariance between two or more \code{GRaster} layers
 \item \code{\link[=mask]{mask()}}: Remove values in a \code{GRaster} based on values in another \code{GRaster} or vector
 \item \code{\link[=maskNA]{maskNA()}}: Mask all non-NA cells or all NA cells
