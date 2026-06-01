@@ -1,4 +1,8 @@
 # fasterRaster 8.4.1.3 (2026-04-XX)
+
+### New functions and functionality
+o `writeRaster` now allows users to forgo appending the raster name to the file name when `byLayer` is `TRUE` if the raster has only a single layer.  
+
 ### Issues
 o `.copyGRaster()` now uses **GRASS** tool `g.copy`. Should make functions like `mask()` more reliable.  
 
