@@ -54,7 +54,7 @@ methods::setMethod(
 
 #' Combine "levels" tables
 #'
-#' @param x A list of `data.frame`s or `data.table`s.
+#' @param x A `list` of `data.frame`s or `data.table`s.
 #'
 #' @noRd
 .combineLevels <- function(x, ...) {
@@ -75,12 +75,12 @@ methods::setMethod(
 	if (i <= length(x)) {
 		
 		by.x <- names(out)[1L]
-		for (j in i:length(x)) {
+		for (j in (i + 1L):length(x)) {
 			cats2 <- x[[j]]
 			if (nrow(cats2) > 0L) {
 				by.y <- names(cats2)[1L]
-				# out <- merge(out, cats2, by.x = by.x, by.y = by.y)
-				out <- merge(out, cats2, all = TRUE, ...)
+				out <- merge(out, cats2, by.x = by.x, by.y = by.y, all = TRUE)
+				# out <- merge(out, cats2, all = TRUE, ...)
 			}
 		}
 		
