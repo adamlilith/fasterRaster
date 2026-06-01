@@ -92,6 +92,7 @@
 #' * [hist()]: Histogram of `GRaster` values
 #' * [interpIDW()]: Interpolate values at points to a `GRaster`
 #' * [kernel()]: Kernel density estimator of points
+#' * [layerChiSq()]: Chi-squared test for two or more integer or categorical `GRaster` layers
 #' * [layerCor()]: Correlation or covariance between two or more `GRaster` layers
 #' * [mask()]: Remove values in a `GRaster` based on values in another `GRaster` or vector
 #' * [maskNA()]: Mask all non-NA cells or all NA cells
