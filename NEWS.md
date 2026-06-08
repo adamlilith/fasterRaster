@@ -1,7 +1,8 @@
 # fasterRaster 8.4.1.3 (2026-04-XX)
 
 ### New functions and functionality
-o `layerChiSq()` calculates a chi-squared text between two or more integer or categorical `GRaster`s.  
+o `as.data.frame()` and `as.data.table()` now work on `GRaster`s.  
+o `layerCor()` now can compare `GRaster`s using a chi-squared test and Kramer's *V*, or the Kruskal-Wallis *H*.  
 o `writeRaster()` now allows users to forgo appending the raster name to the file name when `byLayer` is `TRUE` if the raster has only a single layer.  
 
 ### Issues

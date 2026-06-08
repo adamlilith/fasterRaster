@@ -171,7 +171,6 @@ reference:
   - hist
   - interpIDW
   - kernel
-  - layerChiSq
   - layerCor
   - mask
   - maskNA

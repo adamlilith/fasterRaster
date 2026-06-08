@@ -66,6 +66,8 @@
 #' * \code{\link[fasterRaster]{add<-}}: Replace specific layers of a `GRaster`
 #'
 #' Operations on `GRaster`s
+#' * [as.data.frame()]: Convert a `GRaster` to a `data.frame`
+#' * [as.data.table()]: Convert a `GRaster` to a `data.table`
 #' * [as.int()], [as.float()], [as.doub()]: Change data type (integer/float/double)
 #' * [as.lines()]: Convert a `GRaster` to a "lines" vector
 #' * [as.points()]: Convert a `GRaster` to a "points" vector
@@ -92,8 +94,7 @@
 #' * [hist()]: Histogram of `GRaster` values
 #' * [interpIDW()]: Interpolate values at points to a `GRaster`
 #' * [kernel()]: Kernel density estimator of points
-#' * [layerChiSq()]: Chi-squared test for two or more integer or categorical `GRaster` layers
-#' * [layerCor()]: Correlation or covariance between two or more `GRaster` layers
+#' * [layerCor()]: Correlation, covariance, Chi-squared, Cramer's *V*, or Kruskal-Wallis test between two or more `GRaster` layers
 #' * [mask()]: Remove values in a `GRaster` based on values in another `GRaster` or vector
 #' * [maskNA()]: Mask all non-NA cells or all NA cells
 #' * [match()], \code{\link[fasterRaster]{%in%}}, and \code{\link[fasterRaster]{%notin%}}: Find which cells of a `GRaster` match or do not match certain values
