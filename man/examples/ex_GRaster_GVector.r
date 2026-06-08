@@ -52,14 +52,19 @@ ext(elev)
 # data type
 datatype(elev)
 
+### operations on GRasters
+
 # assigning
-copy <- elev
-copy[] <- pi # assign all cells to the value of pi
-copy
+pie <- elev
+pie[] <- pi # assign all cells to the value of pi
+pie
 
 # concatenating multiple GRasters
 rasts <- c(elev, forest)
 rasts
+
+# number of layers
+nlyr(elev)
 
 # adding a raster "in place"
 add(rasts) <- ln(elev)
@@ -72,13 +77,14 @@ rasts[["madForest2000"]]
 # assigning
 rasts[[4]] <- elev > 500
 
-# number of layers
-nlyr(rasts)
-
 # names
 names(rasts)
 names(rasts) <- c("elev_meters", "forest", "ln_elev", "high_elevation")
 rasts
+
+# converting to data.tables/data.frames
+as.data.table(rasts)
+head(as.data.frame(rasts))
 
 ### GVector properties
 
