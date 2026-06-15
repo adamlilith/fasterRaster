@@ -1,6 +1,8 @@
 #' "fasterRaster": Faster raster and spatial vector processing using "GRASS"
 #'
 #' @description **fasterRaster**: Processing of large-in-memory/-on disk rasters and spatial vectors in using **GRASS**. Most functions in the **terra** and **sf** packages are recreated. Processing of medium-sized and smaller spatial objects will nearly always be faster using **terra** or **sf**. To use most of the functions you must have the stand-alone version of **GRASS** version 8.3 or higher (not the **OSGeoW4** installer version). Note that due to differences in how **GRASS**, **terra**, and **sf** were implemented, results will not always be strictly comparable between functions for the same operation.
+#' 
+#' Please see and cite: Smith, A.B. 2025. fasterRaster: GIS in R using GRASS for large vectors and rasters. *Transactions in GIS* 30:e70238. DOI: https://doi.org/10.1111/tgis.70238, Open-access preprint: https://doi.org/10.31223/X52R0M
 #'
 #' ## Most useful tutorials and functions:
 #' * The quick-start guide to getting started with **fasterRaster**: `vignette("fasterRaster", package = "fasterRaster")`: 
