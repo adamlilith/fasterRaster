@@ -12,9 +12,9 @@
 #'
 #' @returns A `data.frame` or a named `list` of `data.frame`s, one per layer in `x`.
 #'
-#' @seealso [terra::freq()], tool `r.stats` in **GRASS**
+#' @seealso [terra::freq()], [crossFreq()], **GRASS** tool `r.stats` (see `grassHelp("r.stats")`)
 #'
-#' @example man/examples/ex_freq.r
+#' @example man/examples/ex_freq_crossFreq.r
 #'
 #' @aliases freq
 #' @rdname freq
@@ -95,7 +95,47 @@ methods::setMethod(
 			freqs <- data.table::as.data.table(freqs)
 			names(freqs) <- c("value", "count")
 
-			freqs[ , c("value", "count") := lapply(.SD, as.integer), .SDcols = c("value", "count")]
+			freqs[ , c("value", "count") := lapply(.SD, as.numeric), .SDcols = c("value", "count")]
+
+			### if any counts are <0, count cells value-by-value
+			# We have to do this because of a bug in r.stats reported on https://github.com/OSGeo/grass/issues/7769
+			# which occurs because of an integer overflow in Windows
+
+			if (any(freqs$count < 0)) {
+
+				# say("Some counts are negative. Counting cells value-by-value...")
+				bads <- which(freqs$count < 0)
+				for (j in bads) {
+
+					thisValue <- freqs$value[j]
+					matchSrc <- .makeSourceName("r_mapcalc", "raster")
+					ex <- paste0(matchSrc, " = if(", src[i], " == ", thisValue, ", 1, null())")
+					do.call(rgrass::execGRASS, args = list(cmd = "r.mapcalc", expression = ex, flags = c(.quiet(), "overwrite")))
+
+					args <- list(
+						cmd = "r.univar",
+						flags = c("r", .quiet()),
+						map = matchSrc,
+						nprocs = faster("cores"),
+						Sys_show.output.on.console = FALSE,
+						echoCmd = FALSE,
+						intern = TRUE
+					)
+
+					thisInfo <- do.call(rgrass::execGRASS, args = args)
+
+					pattern <- "sum: "
+					thisCount <- thisInfo[grepl(thisInfo, pattern = pattern)]
+					thisCount <- sub(thisCount, pattern = pattern, replacement = "")
+					thisCount <- as.numeric(thisCount)
+
+					freqs$count[j] <- thisCount
+					.rm(matchSrc, type = "raster", warn = FALSE, verify = FALSE)
+				
+				}
+				freqs <- newFreqs
+
+			}
 
 			data.table::setkeyv(freqs, "value")
 
@@ -162,32 +202,33 @@ methods::setMethod(
 
 	} # next layer
 	
-	# # add factor labels
-	# facts <- is.factor(x)
-	# if (any(facts)) {
+	# add factor labels
+	facts <- is.factor(x)
+	if (any(facts)) {
 	
-	# 	for (i in which(facts)) {
+		for (i in which(facts)) {
 		
-	# 		xx <- x[[i]]
-	# 		ac <- activeCat(xx)
-	# 		catName <- names(levels(xx)[[1L]])[ac + 1L]
+			xx <- x[[i]]
+			ac <- activeCat(xx)
+			catName <- names(levels(xx)[[1L]])[ac + 1L]
 			
-	# 		labels <- levels(xx)[[1L]][[ac + 1L]]
-	# 		vals <- levels(xx)[[1L]][[1L]]
+			labels <- levels(xx)[[1L]][[ac + 1L]]
+			vals <- levels(xx)[[1L]][[1L]]
 			
-	# 		out[[i]] <- cbind(
-	# 			out[[i]][ , 1L],
-	# 			data.table::data.table(
-	# 				DUMMY = labels[match(out[[i]][["value"]], vals)]
-	# 			),
-	# 			out[[i]][ , 2L]
-	# 		)
+			out[[i]] <- cbind(
+				out[[i]][ , 1L],
+				data.table::data.table(
+					DUMMY = labels[match(out[[i]][["value"]], vals)]
+				),
+				out[[i]][ , 2L]
+			)
 			
-	# 		names(out[[i]])[2L] <- catName
+			names(out[[i]])[2L] <- catName
 		
-	# 	}
+		}
+		if (!is.null(value)) out <- out[count > 0]
 	
-	# }
+	}
 	
 	if (length(out) == 1L) out <- out[[1L]]
 	out
