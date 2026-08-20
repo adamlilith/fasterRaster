@@ -234,6 +234,8 @@ methods::setMethod(
 	
 	if (length(value) != nlyr(x)) stop("The number of level tables is not the same as the number of raster layers.\n  If you want to change the level table of specifc layers, use categories().")
 
+	hasLevs <- rep(FALSE, length(value))
+
 	for (i in seq_along(value)) {
 
 		# convert empty strings to NULL data.tables
@@ -243,8 +245,17 @@ methods::setMethod(
 
 		# convert to data.table
 		} else if (!inherits(value[[i]], "data.table")) {
-			
+
 			value[[i]] <- data.table::as.data.table(value[[i]])
+			hasLevs[i] <- TRUE
+
+		} else if (inherits(value[[i]], "data.table")) {
+
+			# do nothing
+
+		} else {
+
+			stop("Each element of the list must be a data.frame or data.table.")
 
 		}
 
@@ -252,19 +263,23 @@ methods::setMethod(
 		valueCol <- names[1L]
 
 		# convert first column to integer
-		value[[i]][ , (valueCol) := lapply(.SD, as.integer), .SDcols = valueCol]
+		if (!is.na(valueCol)) {
+			
+			value[[i]][ , (valueCol) := lapply(.SD, as.integer), .SDcols = valueCol]
 
-		# detect non-unique values
-		unis <- unique(value[[i]][ , 1L])
-		numUnis <- nrow(unis)
-		if (numUnis < nrow(value[[i]])) stop("The value column (the first column) must have unique values.")
+			# detect non-unique values
+			unis <- unique(value[[i]][ , 1L])
+			numUnis <- nrow(unis)
+			if (numUnis < nrow(value[[i]])) stop("The value column (the first column) must have unique values.")
 
-		# sort by first column
-		data.table::setorderv(value[[i]], col = valueCol)
+			# sort by first column
+			data.table::setorderv(value[[i]], col = valueCol)
+
+		}
 
 	}
 
-	x@activeCat <- rep(2L, nlyr(x))
+	x@activeCat <- ifelse(hasLevs, 2L, 1L)
 	x@levels <- value
  	a <- methods::validObject(x)
 	x
