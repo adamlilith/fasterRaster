@@ -2,11 +2,19 @@
 
 ### New functions and functionality
 o `as.data.frame()` and `as.data.table()` now work on `GRaster`s.  
-o `layerCor()` now can compare `GRaster`s using a chi-squared test and Kramer's *V*, or the Kruskal-Wallis *H*.  
+o `crossFreq()` tabulates a table of joint frequencies of cells across two or more `GRaster`s.  
+o `layerCor()` now can compare `GRaster`s using a chi-squared test and Kramer's *V*, or the Kruskal-Wallis *H*, or an "`auto`" option that selects the appropriate test based on the raster data types.  
+o `prod()` calculates the product across cells of a stack of `GRaster`s.  
 o `writeRaster()` now allows users to forgo appending the raster name to the file name when `byLayer` is `TRUE` if the raster has only a single layer.  
 
-### Issues
+### Potentially code-breaking changes
+o Arithmetical operators (e.g., `log()`, `round()`, etc.) return `GRaster`s with the same name as the input (previously, they had returned rasters with the name of the function that was applied).  
+
+### Bug fixes and issues
 o `.copyGRaster()` now uses **GRASS** tool `g.copy` to make functions like `mask()` more reliable.  
+o `freq()` applies a brute-force method of counting integer cells when an overflow error occurs on Windows systems.  
+o `levels<-` now correctly assigns levels when the object to the right of `<-` is a `list`.  
+o New versions of example data objects that had been in Madagascar-specific coordinate reference system now in Africa Lambert: `madCoast0`, `madCoast4`, `madRivers`, `madDypsis`, `madPpt`, `madTmax`, and `madTmin`.  
 
 # fasterRaster 8.4.1.2 (2026-04-17)
 ### New functions and functionality
