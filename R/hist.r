@@ -4,7 +4,7 @@
 #'
 #' @param x A `GRaster`.
 #'
-#' @param layer Character, numeric, or integer: Indicates which layer of a multi-layer `GRaster` for which to plot a histogram. The layer can be identified using its [name()] (character) or index (numeric or integer). If this is missing, then up to `maxnl` layers are plotted.
+#' @param layer Character, numeric, or integer: Indicates which layer of a multi-layer `GRaster` for which to plot a histogram. The layer can be identified using its [names()] (character) or index (numeric or integer). If this is missing, then up to `maxnl` layers are plotted.
 #'
 #' @param maxnl Maximum number of layers for which to create histograms. This is 16 by default, but ignored if `layer` is defined.
 #'
