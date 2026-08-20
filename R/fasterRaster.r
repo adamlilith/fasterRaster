@@ -85,6 +85,7 @@
 #' * [combineLevels()]: Combine the "levels" tables of two or more categorical `GRaster`s
 #' * [concats()]: Combine values from two or more categorical and/or integer rasters by concatenating them
 #' * [crop()]: Remove parts of a `GRaster`
+#' * [crossFreq()]: Remove parts of a `GRaster`
 #' * [denoise()]: Remove "noise" from a `GRaster` using a principal components analysis (PCA)
 #' * [distance()]: Distance to non-`NA` cells, or vice versa
 #' * [extend()]: Add rows and columns to a `GRaster`

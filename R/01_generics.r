@@ -113,6 +113,7 @@ methods::setGeneric(name = "convHull", package = "terra")
 methods::setGeneric(name = "count", def = function(x, ...) standardGeneric("count"))
 methods::setGeneric(name = "crds", package = "terra")
 methods::setGeneric(name = "crs", package = "terra")
+methods::setGeneric(name = "crossFreq", def = function(x, ...) standardGeneric("crossFreq"))
 methods::setGeneric(name = "crop", package = "terra")
 
 # dim() is primitive

@@ -160,6 +160,7 @@ reference:
   - combineLevels
   - concats
   - crop
+  - crossFreq
   - denoise
   - distance
   - extend
