@@ -42,13 +42,48 @@ You can get the latest stable release using:
 
 `remotes::install_github('adamlilith/fasterRaster@intuitive_fasterRaster', dependencies = TRUE)`  
 
-To use `fasterRaster` you must install [GRASS version 8.3+](https://grass.osgeo.org/) on your operating system. **You will need to use the stand-alone installer, not the Open Source Geospatial (OS Geo) installer.**
+# Connecting to `GRASS` installed using the stand-alone installer
 
-**Optional**: A few functions in **fasterRaster** require **GRASS** "addon" tools, which do not come bundled with **GRASS**. You do not need to install these addons if you do not use functions that call them. A list of functions that require addons can be seen in the "addons" vignette (in **R**, use `vignette("addons", package = "fasterRaster")`). This vignette also explains how to install addons.
+If you have installed `GRASS` using the stand-alone OSGeo installer, then the `GRASS` installation path will look something like this, depending on your operating system:
 
-# An example
+Simply start `R`, attach `fasterRaster`, then tell `fasterRaster` where `GRASS` is installed:
+```
+library(terra) # GIS for rasters and vectors
+library(sf) # GIS for vectors
+library(fasterRaster)
 
-The example presented here is the same as that presented in the the ["getting started"](https://adamlilith.github.io/fasterRaster/articles/fasterRaster.html) vignette.
+faster(grassDir = grassDir)
+```
+where `grassDir` is one of the following, depending on your operating system:
+```
+grassDir <- "C:/Program Files/GRASS GIS 8.4" # Windows
+grassDir <- "/Applications/GRASS-8.4.app/Contents/Resources" # Mac OS
+grassDir <- "/usr/local/grass" # Linux
+```
+
+
+You can now start using `GRASS` via `fasterRaster`.
+
+# Connecting to `GRASS` installed using OSGeo installer
+
+If you installed `GRASS` using the OSGeo installer, you will need to run `R` within the OSGeo shell. To do this, start the shell (a link should have been installed when you installed `GRASS` through the installer). Then, start `R`. You may be able to do this simply by entering `R` or `Rgui`, but if that does not work, you can start `R` by calling the entire path. On a Windows system, this would look something like:
+```
+"C:/Program Files/R/R-4.6.1/bin/R.exe"
+```
+(include the quotes).
+
+Once `R` is started, you can attach `fasterRaster` and tell it where `GRASS` is installed. Again, what this looks like will depend on you operating system:
+```
+library(terra) # GIS for rasters and vectors
+library(sf) # GIS for vectors
+library(fasterRaster)
+
+grassDir <- "C:/OSGeo4W/apps/grass/grass85" # for a Windows system
+faster(grassDir = grassDir)
+```
+# A worked example
+
+The example presented here is the same as that presented in the the ["getting started"](https://adamlilith.github.io/fasterRaster/articles/fasterRaster.html) vignette. We assume that you have started `R`, attached `fasterRaster`, and told it where `GRASS` is installed.
 
 We'll do a simple operation in which we:
 
@@ -59,10 +94,6 @@ We'll do a simple operation in which we:
 To do this, we'll be using maps representing the middle of the eastern coast of Madagascar. We will also use the `terra` and `sf` packages.
 
 ```
-library(terra) # GIS for rasters and vectors
-library(sf) # GIS for vectors
-library(fasterRaster)
-
 # Get example elevation raster and rivers vector:
 madElev <- fastData('madElev') # SpatRaster with elevation
 madRivers <- fastData('madRivers') # sp vector with rivers
@@ -72,20 +103,6 @@ plot(madElev)
 plot(st_geometry(madRivers), col = "lightblue", add = TRUE)
 ```
 <img src="man/figures/elev_rivers.png"/>  
-
-Before you use nearly any function in the package, you need to tell `fasterRaster` where `GRASS` is installed on your system. The installation folder will vary by operating system and maybe `GRASS` version, but will look something like this:  
-
-```
-# Choose the appropriate one, and modify as needed:
-grassDir <- "C:/Program Files/GRASS GIS 8.4" # Windows
-grassDir <- "/Applications/GRASS-8.4.app/Contents/Resources" # Mac OS
-grassDir <- "/usr/local/grass" # Linux
-```
-
-Now, use the `faster()` function to tell `fasterRaster` where `GRASS` is installed:
-```
-faster(grassDir = grassDir)
-```
 
 The `fast()` function is the key function for loading a raster or vector into `fasterRaster` format. Rasters in this package are called `GRaster`s and vectors `GVector`s (the "G" stands for `GRASS`). We will now convert the `madElev` raster, which is a `SpatRaster` from the `terra` package, into a `GRaster`.
 ```
