@@ -29,7 +29,7 @@ o <a href="https://adamlilith.github.io/fasterRaster/articles/faster_fasterRaste
 o <a href="https://adamlilith.github.io/fasterRaster/articles/addons.html">Addons</a>  
 o <a href="https://adamlilith.github.io/fasterRaster/">Documentation</a>  
 
-# Installation
+# Installing `fasterRaster`
 To install `fasterRaster`, please use:
 
 `install_packages('fasterRaster', dependencies = TRUE)`  
@@ -44,7 +44,7 @@ You can get the latest stable release using:
 
 # Connecting to `GRASS` installed using the stand-alone installer
 
-If you have installed `GRASS` using the stand-alone OSGeo installer, then the `GRASS` installation path will look something like this, depending on your operating system:
+I suggest you use the stand-alone installer (versus the OSGeo installer) if it is available. Assuming this is the case, then the `GRASS` installation path will look something like this, depending on your operating system:
 
 Simply start `R`, attach `fasterRaster`, then tell `fasterRaster` where `GRASS` is installed:
 ```
@@ -60,8 +60,6 @@ grassDir <- "C:/Program Files/GRASS GIS 8.4" # Windows
 grassDir <- "/Applications/GRASS-8.4.app/Contents/Resources" # Mac OS
 grassDir <- "/usr/local/grass" # Linux
 ```
-
-
 You can now start using `GRASS` via `fasterRaster`.
 
 # Connecting to `GRASS` installed using OSGeo installer
