@@ -59,7 +59,8 @@
 #' * Central tendency: [mean()], [mmode()], [median()] 
 #' * Dispersion: [stdev()], [var()], [varpop()], [nunique()], [range()], [quantile()], [skewness()], [kurtosis()]
 #' * Extremes: [min()], [max()], [which.min()], [which.max()] 
-#' * `NA`s: [allNA()], [anyNA()] 
+#' * `NA`s: [allNA()], [anyNA()], [omit.na()]
+#' * Masking: [maskNA()]
 #' 
 #' Subsetting, assigning, and replacing `GRaster` layers
 #' * [$], \code{\link[fasterRaster]{[[}}, or [subset()]: Subset or remove specific layers of a `GRaster`
@@ -99,7 +100,7 @@
 #' * [kernel()]: Kernel density estimator of points
 #' * [layerCor()]: Correlation, covariance, Chi-squared, Cramer's *V*, or Kruskal-Wallis test between two or more `GRaster` layers
 #' * [mask()]: Remove values in a `GRaster` based on values in another `GRaster` or vector
-#' * [maskNA()]: Mask all non-NA cells or all NA cells
+#' * [maskNA()]: Mask all non-`NA` cells or all `NA` cells
 #' * [match()], \code{\link[fasterRaster]{%in%}}, and \code{\link[fasterRaster]{%notin%}}: Find which cells of a `GRaster` match or do not match certain values
 #' * [merge()]: Combine two or more rasters with different extents and fill in `NA`s
 #' * [multivarEnvSim()]: Multivariate environmental similarity surface (MESS)

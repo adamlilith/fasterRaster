@@ -205,6 +205,7 @@ methods::setGeneric(name = "multivarEnvSim", def = function(ref, proj, ...) stan
 
 # "names" (in base) is primitive
 methods::setGeneric(name = "N", def = function(x, ...) standardGeneric("N"))
+methods::setGeneric(name = "na.omit", package = "terra")
 methods::setGeneric(name = "ncell", package = "terra")
 methods::setGeneric(name = "ncell3d", def = function(x) standardGeneric("ncell3d"))
 methods::setGeneric(name = "ncol", def = function(x) standardGeneric("ncol")) # in base

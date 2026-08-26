@@ -119,6 +119,7 @@ reference:
   - median
   - min
   - mmode
+  - na.omit
   - nunique
   - prod
   - quantile
