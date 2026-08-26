@@ -5,6 +5,7 @@
 #' @param x A stack of integer/categorical `GRaster`s.
 #' @param na.rm Logical: If `TRUE` (default), then only cells that are not `NA` across all rasters will be used. If `FALSE`, then for each pair of `GRaster`s, all cells that are not `NA` in both rasters will be used.
 #' @param cats Logical: If `TRUE` (default), then replace the values of categorical rasters with their category names in the output.
+#' @param verbose Logical: If `TRUE`, display progress messages.
 #'
 #' @returns A `data.frame` or a named `list` of `data.frame`s, one per each pair of rasters in `x`.
 #'
@@ -18,27 +19,24 @@
 methods::setMethod(
 	f = "crossFreq",
 	signature = c(x = "GRaster"),
-	definition = function(x, na.rm = TRUE, cats = TRUE) {
+	definition = function(x, na.rm = TRUE, cats = TRUE, verbose = FALSE) {
 
 	dtype <- datatype(x, type = "GRASS")
 	if (any(dtype != "CELL")) stop("Only integer data types are supported.")
+
+	.locationRestore(x)
+	.region(x)
 		
 	nLayers <- nlyr(x)
 
 	# mask to non-NA cells
 	if (na.rm) {
-			
-		naMask <- maskNA(x, value = 0)
-		naMask <- sum(naMask)
-		naMask <- as.int(naMask)
-		nms <- names(x)
-		acs <- activeCats(x)
-		levs <- levels(x)
-		x <- x + naMask
-		names(x) <- nms
-		levels(x) <- levs
-		for (i in 1L:nLayers) if (is.factor(x[[i]])) activeCat(x, layer = i) <- acs[i]
+	
+		if (verbose | faster("verbose")) omnibus::say("Masking rasters to remove cells with NA values in any raster...")
 
+		x <- na.omit(x)
+		on.exit(.rm(x, type = "raster", warn = FALSE, verify = FALSE), add = TRUE)
+	
 	}
 
 	# calculate cross-frequencies for each pair of rasters
