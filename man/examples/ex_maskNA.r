@@ -3,6 +3,8 @@ if (grassStarted()) {
 # Setup
 library(terra)
 
+### Mask layer-by-layer
+
 # Elevation raster
 madElev <- fastData("madElev")
 
@@ -23,5 +25,19 @@ plot(c(elev, elevInvertMask))
 elevInvertRetain <- maskNA(elev, value = 200, invert = TRUE, retain = TRUE)
 elevInvertRetain
 plot(c(elev, elevInvertRetain))
+
+### Mask *across* layers
+
+# Load forest raster, which has many NAs
+madForest2000 <- fastData("madForest2000")
+forest2000 <- fast(madForest2000)
+
+x <- c(elev, forest2000)
+
+maskByLayer <- maskNA(x)
+maskAcrossLayers <- maskNA(x, byLayer = FALSE)
+
+maskByLayer
+maskAcrossLayers
 
 }
