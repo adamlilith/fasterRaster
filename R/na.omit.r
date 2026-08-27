@@ -19,8 +19,8 @@ methods::setMethod(
 	signature = c(object = "GRaster"),
 	definition = function(object, verbose = FALSE) {
 
-	.locationRestore(x)
-	.region(x)
+	.locationRestore(object)
+	.region(object)
 
 	nLayers <- nlyr(object)
 	if (verbose | faster("verbose")) {
