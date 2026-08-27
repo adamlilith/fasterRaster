@@ -9,23 +9,25 @@ madChelsa <- fastData("madChelsa")
 # Convert a SpatRaster to a GRaster:
 chelsa <- fast(madChelsa)
 
-# For categorical tests, force two layers to be of type integer
-chelsa[[1:2]] <- as.int(chelsa[[1:2]])
-
 # Correlation
-layerCor(chelsa, "cor") # Pearson correlation
-layerCor(chelsa, "cor", cor = "spearman") # Spearman correlation
+layerCor(chelsa, "cor", na.rm = FALSE) # Pearson correlation
+layerCor(chelsa, "cor", cor = "spearman", na.rm = FALSE) # Spearman correlation
 
 # Covariance
-layerCor(chelsa, "cov")
+layerCor(chelsa, "cov", na.rm = FALSE)
+
+# To illustrate categorical tests, force two layers to be of type integer
+chelsa[[1:2]] <- as.int(chelsa[[1:2]])
 
 # Chi-^2 and Cramer's V (integer vs integer)
-layerCor(chelsa[[1:2]], "chisq")
+layerCor(chelsa[[1:2]], "chisq", na.rm = FALSE)
 
 # Kruskal-Wallis test (integer vs continuous)
-layerCor(chelsa[[c(1, 3)]], "kw")
+integerCont <- c(chelsa[[1]], chelsa[[3]])
+layerCor(integerCont, "kw", na.rm = FALSE)
 
 # automatic by data type
-layerCor(chelsa, "auto", cor = "spear", verbose = TRUE)
+layerCor(chelsa, "auto", cor = "spear", na.rm = FALSE,
+   verbose = TRUE, integerAsNumeric = FALSE)
 
 }
