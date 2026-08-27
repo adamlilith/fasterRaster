@@ -3,7 +3,7 @@
 ### New functions and functionality
 o `as.data.frame()` and `as.data.table()` now work on `GRaster`s.  
 o `crossFreq()` tabulates a table of joint frequencies of cells across two or more `GRaster`s.  
-o `layerCor()` now can compare `GRaster`s using a chi-squared test and Kramer's *V*, or the Kruskal-Wallis *H*, or an "`auto`" option that selects the appropriate test based on the raster data types.  
+o `layerCor()` can now compare `GRaster`s using a chi-squared test and Kramer's *V*, or the Kruskal-Wallis *H*, or an "`auto`" option that selects the appropriate test based on raster data types.  
 o `maskNA()` can now also create a mask across layers (versus layer-by-layer).  
 o `na.omit()` assigns `NA` to a cell if any cell in a stack of `GRaster`s has an `NA`.  
 o `prod()` calculates the product across cells of a stack of `GRaster`s.  
