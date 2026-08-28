@@ -10,3 +10,4 @@ junk
 /vignettes/junk
 /doc/
 /Meta/
+*.code-workspace
