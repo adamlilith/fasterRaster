@@ -37,10 +37,23 @@
 	} else if (inherits(x, c("GSpatial"))) {
 		dels <- sources(x)
 		type <- if (inherits(x, "GRaster")) {
-			"raster"
+			rep("raster", nlyr(x))
 		} else if (inherits(x, "GVector")) {
 			"vector"
 		}
+
+		if (verify) {
+				
+			inGrass <- .ls()
+			if (!all(sources(x) %in% inGrass)) {
+				if (warn) warning("Objects are not in GRASS. Nothing deleted")
+				return(invisible(FALSE))
+			} else if (!any(sources(x) %in% inGrass)) {
+				if (warn) warning("Some objects are not in GRASS. They will not be deleted")
+			}
+
+		}
+
 	} else if (inherits(x, "character")) {
 		
 		if (verify) {
@@ -58,7 +71,7 @@
 			type <- rep(type, length(dels))
 		}
 	}
-
+	
 	for (i in seq_along(dels)) {
 		
 		del <- dels[i]
