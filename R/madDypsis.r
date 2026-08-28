@@ -2,7 +2,7 @@
 #'
 #' @title Spatial points vector of records of Dypsis in eastern Madagascar
 #'
-#' @description Spatial points vector of herbarium specimens and observations of plants in the genus *Dypsis* (slender, evergreen palms) from a portion of eastern Madagascar.
+#' @description An `sf` points vector containing herbarium specimens and observations of plants in the genus *Dypsis* (slender, evergreen palms) from a portion of eastern Madagascar.
 #'
 #' @docType data
 #'
@@ -12,7 +12,7 @@
 #'
 #' @keywords Dypsis Madagascar
 #'
-#' @source [Global Biodiversity Information Facility (GBIF)](https://gbif.org)
+#' @source [Global Biodiversity Information Facility (GBIF)](https://gbif.org) Occurrence Data Download [https://doi.org/10.15468/dl.dq942k](https://doi.org/10.15468/dl.dq942k)
 #'
 #' @example man/examples/ex_fastData.r
 #'
