@@ -59,7 +59,7 @@
 #' * Central tendency: [mean()], [mmode()], [median()] 
 #' * Dispersion: [stdev()], [var()], [varpop()], [nunique()], [range()], [quantile()], [skewness()], [kurtosis()]
 #' * Extremes: [min()], [max()], [which.min()], [which.max()] 
-#' * `NA`s: [allNA()], [anyNA()], [omit.na()]
+#' * `NA`s: [allNA()], [anyNA()], [na.omit()]
 #' * Masking: [maskNA()]
 #' 
 #' Subsetting, assigning, and replacing `GRaster` layers
