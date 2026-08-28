@@ -47,4 +47,4 @@ VignetteBuilder: knitr
 Encoding: UTF-8
 LazyData: true
 LazyLoad: yes
-Config/roxygen2/version: 8.0.0
+Config/roxygen2/version: 8.1.0
