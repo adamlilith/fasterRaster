@@ -88,9 +88,9 @@ methods::setMethod(
 
 	} else {
 
-		srcs <- x
 		if (reshapeRegion) {
 
+			srcs <- x
 			args <- list(
 				cmd = "g.region",
 				flags = .quiet()
@@ -121,21 +121,22 @@ methods::setMethod(
 
 	for (i in seq_len(nLayers)) {
 
-		# ex <- paste0(out[i], " = ", srcs[i])
-
-		# rgrass::execGRASS(
-			# cmd = "r.mapcalc",
-			# expression = ex,
-			# flags = c(.quiet(), "overwrite")
-		# )
-		
-		inOut <- paste0(srcs[i], ',', out[i])
+		ex <- paste0(out[i], " = ", srcs[i])
 
 		rgrass::execGRASS(
-			cmd = "g.copy",
-			raster = inOut,
+			cmd = "r.mapcalc",
+			expression = ex,
 			flags = c(.quiet(), "overwrite")
 		)
+
+		# # NB g.copy does NOT respect regions or a MASK raster!!!		
+		# inOut <- paste0(srcs[i], ',', out[i])
+
+		# rgrass::execGRASS(
+		# 	cmd = "g.copy",
+		# 	raster = inOut,
+		# 	flags = c(.quiet(), "overwrite")
+		# )
 
 	}
 
