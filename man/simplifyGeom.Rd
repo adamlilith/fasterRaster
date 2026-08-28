@@ -26,7 +26,7 @@
 A \code{GVector}.
 }
 \description{
-\code{simplifyGeom()} reduces the number of vertices used to represent a vector (i.e., to save memory or disk space). There are several methods available.
+\code{simplifyGeom()} reduces the number of vertices used to represent a lines of polygons vector (i.e., to save memory or disk space). It has no effect on a points vector.
 }
 \examples{
 if (grassStarted()) {
@@ -107,5 +107,5 @@ legend("bottom",
 }
 }
 \seealso{
-\code{\link[=smoothGeom]{smoothGeom()}}, \link[=breakPolys]{geometry cleaning}, \code{\link[terra:simplify]{terra::simplifyGeom()}}, \strong{GRASS} manual page for tool \code{v.generalize} (see \code{grassHelp("v.generalize")})
+\code{\link[=smoothGeom]{smoothGeom()}}, \link[=breakPolys]{geometry cleaning}, \code{\link[terra:simplifyGeom]{terra::simplifyGeom()}}, \strong{GRASS} manual page for tool \code{v.generalize} (see \code{grassHelp("v.generalize")})
 }

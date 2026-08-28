@@ -7,6 +7,8 @@
 \title{"fasterRaster": Faster raster and spatial vector processing using "GRASS"}
 \description{
 \strong{fasterRaster}: Processing of large-in-memory/-on disk rasters and spatial vectors in using \strong{GRASS}. Most functions in the \strong{terra} and \strong{sf} packages are recreated. Processing of medium-sized and smaller spatial objects will nearly always be faster using \strong{terra} or \strong{sf}. To use most of the functions you must have the stand-alone version of \strong{GRASS} version 8.3 or higher (not the \strong{OSGeoW4} installer version). Note that due to differences in how \strong{GRASS}, \strong{terra}, and \strong{sf} were implemented, results will not always be strictly comparable between functions for the same operation.
+
+Please see and cite: Smith, A.B. 2025. fasterRaster: GIS in R using GRASS for large vectors and rasters. \emph{Transactions in GIS} 30:e70238. DOI: https://doi.org/10.1111/tgis.70238, Open-access preprint: https://doi.org/10.31223/X52R0M
 \subsection{Most useful tutorials and functions:}{
 \itemize{
 \item The quick-start guide to getting started with \strong{fasterRaster}: \code{vignette("fasterRaster", package = "fasterRaster")}:
@@ -73,7 +75,8 @@ Mathematical functions that are applied across layers of multi-layered \code{GRa
 \item Central tendency: \code{\link[=mean]{mean()}}, \code{\link[=mmode]{mmode()}}, \code{\link[=median]{median()}}
 \item Dispersion: \code{\link[=stdev]{stdev()}}, \code{\link[=var]{var()}}, \code{\link[=varpop]{varpop()}}, \code{\link[=nunique]{nunique()}}, \code{\link[=range]{range()}}, \code{\link[=quantile]{quantile()}}, \code{\link[=skewness]{skewness()}}, \code{\link[=kurtosis]{kurtosis()}}
 \item Extremes: \code{\link[=min]{min()}}, \code{\link[=max]{max()}}, \code{\link[=which.min]{which.min()}}, \code{\link[=which.max]{which.max()}}
-\item \code{NA}s: \code{\link[=allNA]{allNA()}}, \code{\link[=anyNA]{anyNA()}}
+\item \code{NA}s: \code{\link[=allNA]{allNA()}}, \code{\link[=anyNA]{anyNA()}}, \code{\link[=na.omit]{na.omit()}}
+\item Masking: \code{\link[=maskNA]{maskNA()}}
 }
 
 Subsetting, assigning, and replacing \code{GRaster} layers
@@ -86,6 +89,8 @@ Subsetting, assigning, and replacing \code{GRaster} layers
 
 Operations on \code{GRaster}s
 \itemize{
+\item \code{\link[=as.data.frame]{as.data.frame()}}: Convert a \code{GRaster} to a \code{data.frame}
+\item \code{\link[=as.data.table]{as.data.table()}}: Convert a \code{GRaster} to a \code{data.table}
 \item \code{\link[=as.int]{as.int()}}, \code{\link[=as.float]{as.float()}}, \code{\link[=as.doub]{as.doub()}}: Change data type (integer/float/double)
 \item \code{\link[=as.lines]{as.lines()}}: Convert a \code{GRaster} to a "lines" vector
 \item \code{\link[=as.points]{as.points()}}: Convert a \code{GRaster} to a "points" vector
@@ -101,6 +106,7 @@ Operations on \code{GRaster}s
 \item \code{\link[=combineLevels]{combineLevels()}}: Combine the "levels" tables of two or more categorical \code{GRaster}s
 \item \code{\link[=concats]{concats()}}: Combine values from two or more categorical and/or integer rasters by concatenating them
 \item \code{\link[=crop]{crop()}}: Remove parts of a \code{GRaster}
+\item \code{\link[=crossFreq]{crossFreq()}}: Remove parts of a \code{GRaster}
 \item \code{\link[=denoise]{denoise()}}: Remove "noise" from a \code{GRaster} using a principal components analysis (PCA)
 \item \code{\link[=distance]{distance()}}: Distance to non-\code{NA} cells, or vice versa
 \item \code{\link[=extend]{extend()}}: Add rows and columns to a \code{GRaster}
@@ -112,10 +118,9 @@ Operations on \code{GRaster}s
 \item \code{\link[=hist]{hist()}}: Histogram of \code{GRaster} values
 \item \code{\link[=interpIDW]{interpIDW()}}: Interpolate values at points to a \code{GRaster}
 \item \code{\link[=kernel]{kernel()}}: Kernel density estimator of points
-\item \code{\link[=layerChiSq]{layerChiSq()}}: Chi-squared test for two or more integer or categorical \code{GRaster} layers
-\item \code{\link[=layerCor]{layerCor()}}: Correlation or covariance between two or more \code{GRaster} layers
+\item \code{\link[=layerCor]{layerCor()}}: Correlation, covariance, Chi-squared, Cramer's \emph{V}, or Kruskal-Wallis test between two or more \code{GRaster} layers
 \item \code{\link[=mask]{mask()}}: Remove values in a \code{GRaster} based on values in another \code{GRaster} or vector
-\item \code{\link[=maskNA]{maskNA()}}: Mask all non-NA cells or all NA cells
+\item \code{\link[=maskNA]{maskNA()}}: Mask all non-\code{NA} cells or all \code{NA} cells
 \item \code{\link[=match]{match()}}, \code{\link[fasterRaster]{\%in\%}}, and \code{\link[fasterRaster]{\%notin\%}}: Find which cells of a \code{GRaster} match or do not match certain values
 \item \code{\link[=merge]{merge()}}: Combine two or more rasters with different extents and fill in \code{NA}s
 \item \code{\link[=multivarEnvSim]{multivarEnvSim()}}: Multivariate environmental similarity surface (MESS)

@@ -10,7 +10,7 @@
 \arguments{
 \item{x}{A \code{GRaster}.}
 
-\item{layer}{Character, numeric, or integer: Indicates which layer of a multi-layer \code{GRaster} for which to plot a histogram. The layer can be identified using its \code{\link[terra:names]{terra::name()}} (character) or index (numeric or integer). If this is missing, then up to \code{maxnl} layers are plotted.}
+\item{layer}{Character, numeric, or integer: Indicates which layer of a multi-layer \code{GRaster} for which to plot a histogram. The layer can be identified using its \code{\link[=names]{names()}} (character) or index (numeric or integer). If this is missing, then up to \code{maxnl} layers are plotted.}
 
 \item{maxnl}{Maximum number of layers for which to create histograms. This is 16 by default, but ignored if \code{layer} is defined.}
 

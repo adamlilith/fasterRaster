@@ -139,5 +139,5 @@ levels(combinedNA)
 }
 }
 \seealso{
-\code{\link[=missingCats]{missingCats()}}, \code{\link[=missing.cases]{missing.cases()}}, \code{\link[terra:factors]{terra::droplevels()}}, \code{vignette("GRasters", package = "fasterRaster")}
+\code{\link[=missingCats]{missingCats()}}, \code{\link[=missing.cases]{missing.cases()}}, \code{\link[terra:droplevels]{terra::droplevels()}}, \code{vignette("GRasters", package = "fasterRaster")}
 }

@@ -43,8 +43,10 @@ coast <- fast(madCoast0)
 rivers <- fast(madRivers)
 
 # For this example, we will first crop to a small extent.
-river <- rivers[1]
+river <- rivers[3]
 elevCrop <- crop(elev, river)
+print(NON)
+
 elevPoints <- as.points(elevCrop)
 elevPoints
 

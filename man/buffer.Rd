@@ -101,5 +101,5 @@ plot(st_geometry(madRivers), col = "blue", add = TRUE)
 }
 }
 \seealso{
-\code{\link[terra:buffer]{terra::buffer()}}, \code{\link[sf:geos_unary]{sf::st_buffer()}}
+\code{\link[terra:buffer]{terra::buffer()}}, \code{\link[sf:st_buffer]{sf::st_buffer()}}
 }

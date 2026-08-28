@@ -12,7 +12,7 @@
 
 \item{n}{A numeric integer, integer, or \code{NULL} (default): Number of cells to sample. If \code{NULL}, 50\% of the total number of cells will be used.}
 
-\item{...}{Arguments to send to \code{\link[graphics:pairs]{graphics::pairs()}} (which typically sends them to \code{\link[graphics:plot.default]{graphics::plot()}}). Special arguments for affecting certain panels include:
+\item{...}{Arguments to send to \code{\link[graphics:pairs]{graphics::pairs()}} (which typically sends them to \code{\link[graphics:plot]{graphics::plot()}}). Special arguments for affecting certain panels include:
 \itemize{
 \item Correlation panels -- \code{cor.cex}: Size of the values of the correlation coefficients.
 \item Histogram panels -- \code{hist.col}: Histogram color.

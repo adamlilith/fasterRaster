@@ -8,7 +8,7 @@
 An object of class \code{sf}.
 }
 \source{
-\href{https://diva-gis.org/}{DIVA-GIS}
+\href{https://iwmi.africageoportal.com/}{International Water Management Institute}, "Streams of Madagascar"
 }
 \usage{
 data(madRivers)

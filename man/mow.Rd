@@ -59,5 +59,5 @@ mow(elev, ask = TRUE) # delete GRASS raster attached to `elev`
 }
 }
 \seealso{
-\code{\link[terra:tmpFile]{terra::tmpFiles()}}
+\code{\link[terra:tmpFiles]{terra::tmpFiles()}}
 }

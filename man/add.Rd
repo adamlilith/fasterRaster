@@ -132,5 +132,5 @@ dypsis$institutionCode[dypsis$institutionCode == "MO"] <-
 }
 }
 \seealso{
-\code{\link[=c]{c()}}, \link[terra:add]{terra::add<-}, \code{\link[terra:c]{terra::c()}}
+\code{\link[=c]{c()}}, \link[terra:add<-]{terra::add<-}, \code{\link[terra:c]{terra::c()}}
 }
