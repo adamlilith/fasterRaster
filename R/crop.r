@@ -3,7 +3,7 @@
 #' `crop()` removes parts of a `GRaster` or `GVector` that fall "outside" another raster or vector. You cannot make the `GRaster` or `GVector` larger than it already is (see [extend()]). Rasters may not be cropped to the exact extent, as the extent will be enlarged to encompass an integer number of cells. If you wish to remove certain cells of a raster, see [mask()].
 #'
 #' @param x A `GRaster` or `GVector` to be cropped.
-#' @param y A `GRaster` or `GVector` to serve as a template for cropping.
+#' @param y A `GRaster`, `GVector` to serve as a template for cropping, or a numeric vector with 4 numeric values representing the extent to which to crop (west, east, south, north), or a `SpatExtent` object.
 #' @param extent Logical:
 #' * If `y` is a "points" `GVector`: Use the convex hull around `y` to crop `x`.
 #' * If `y` is a "lines" or "polygons" `GVector`: If `TRUE`, use the extent of `y` to crop `x`.
@@ -30,16 +30,33 @@ methods::setMethod(
 	
 	if (inherits(y, "GVector")) {
 		compareGeom(x, y)
-	} else {
+		yW <- W(y)
+		yE <- E(y)
+		yS <- S(y)
+		yN <- N(y)
+	} else if (inherits(y, "GRaster")) {
 		if (crs(x) != crs(y)) stop("Rasters have different coordinate references systems.")
+		yW <- W(y)
+		yE <- E(y)
+		yS <- S(y)
+		yN <- N(y)
+	} else if (inherits(y, c("numeric", "SpatExtent"))) {
+
+		if (inherits(y, "SpatExtent")) y <- as.vector(y)
+		if (length(y) != 4L) stop("`y` must be a GRaster, GVector, numeric vector with 4 values, or a SpatExtent.")
+		yW <- y[1L]
+		yE <- y[2L]
+		yS <- y[3L]
+		yN <- y[4L]
+
 	}
 	.locationRestore(x)
 
 	### change region to match the extent of y but have the same resolution and registration as x
-	if (W(y) <= W(x)) {
-		w <- W(y)
+	if (yW <= W(x)) {
+		w <- yW
 	} else {
-  		cells <- (W(y) - W(x)) / xres(x)
+  		cells <- (yW - W(x)) / xres(x)
   		if (!omnibus::is.wholeNumber(cells)) {
 			cells <- ceiling(cells)
 		} else {
@@ -48,10 +65,10 @@ methods::setMethod(
   		w <- W(x) + cells * xres(x)
 	}
 
-	if (E(y) >= E(x)) {
+	if (yE >= E(x)) {
 		e <- E(x)
 	} else {
-  		cells <- (E(x) - E(y)) / xres(x)
+  		cells <- (E(x) - yE) / xres(x)
 		if (inherits(y, "GVector")) {
 			cells <- floor(cells)
 		} else if (inherits(y, "GRaster")) {
@@ -64,10 +81,10 @@ methods::setMethod(
   		e <- E(x) - cells * xres(x) # !!!???
 	}
 
-	if (S(y) <= S(x)) {
+	if (yS <= S(x)) {
 		s <- S(x)
 	} else {
-  		cells <- (S(y) - S(x)) / yres(x)
+  		cells <- (yS - S(x)) / yres(x)
   		if (inherits(y, "GVector")) {
 			cells <- floor(cells)
 		} else if (inherits(y, "GRaster")) {
@@ -80,10 +97,10 @@ methods::setMethod(
   		s <- S(x) + cells * yres(x) # !!!???
 	}
 
-	if (N(y) >= N(x)) {
+	if (yN >= N(x)) {
 		n <- N(x)
 	} else {
-  		cells <- (N(x) - N(y)) / yres(x)
+  		cells <- (N(x) - yN) / yres(x)
 		if (inherits(y, "GVector")) {
 			cells <- floor(cells)
 		} else if (inherits(y, "GRaster")) {
@@ -112,6 +129,7 @@ methods::setMethod(
 
 	### crop by creating copy of focal raster
 	srcs <- .copyGSpatial(x, reshapeRegion = FALSE)
+	if (!.exists(srcs)) return(NULL) # assume there's no intersection between the cropped and the extent to crop to
 	makeGRaster(srcs, names(x), levels = cats(x), ac = activeCats(x), fail = fail)
 
 	} # EOF
@@ -125,7 +143,7 @@ methods::setMethod(
 	signature = c(x = "GVector"),
 	definition = function(x, y, extent = FALSE, fail = TRUE) {
 
-	compareGeom(x, y)
+	if (inherits(y, c("GRaster", "GVector"))) compareGeom(x, y)
 	.locationRestore(x)
 
 	### crop
@@ -165,9 +183,23 @@ methods::setMethod(
 			flags = c("r", .quiet(), "overwrite")
 		)
 
+	} else if (inherits(y, c("numeric", "SpatExtent"))) {
+
+		if (inherits(y, "SpatExtent")) y <- as.vector(y)
+		if (length(y) != 4L) stop("`y` must be a GRaster, GVector, numeric vector with 4 values, or a SpatExtent.")
+		.regionExt(y, respect = "dimensions")
+
+		args <- list(
+			cmd = "v.clip",
+			input = sources(x),
+			output = src,
+			flags = c("r", .quiet(), "overwrite")
+		)
+
 	}
 
 	do.call(rgrass::execGRASS, args = args)
+	if (!.exists(src)) return(NULL) # assume there's no intersection between the cropped and the extent to crop to
 	makeGVector(src, fail = fail)
 
 	} # EOF
