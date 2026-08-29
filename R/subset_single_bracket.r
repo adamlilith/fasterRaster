@@ -44,7 +44,7 @@ methods::setMethod(
 			.message(
 				msg = "subset_square_bracket",
 				message =
-"The GVector returned by `[` (subset_single_bracket) may have the order of items in\n  its data table changed from the order they appear in the index used to select features.\n  For example, if you use `vector[3:1]`,  `vector[1:3]`. If this\n  message appeared after you called a function other than `[`, you can probably ignore it."
+"The GVector returned by `[` (subset_single_bracket) may have the order of items in\n  its data table changed from the order they appear in the index used to select features.\n  For example, if you use `vector[3:1]`, `vector[1:3]`. If this\n  message appeared after you called a function other than `[`, you can probably ignore it."
 			)
 
 		}
