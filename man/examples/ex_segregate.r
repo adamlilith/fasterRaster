@@ -12,11 +12,11 @@ elev <- fast(madElev)
 cover <- fast(madCover)
 
 # Subset elevation raster to just a few values to make example faster:
-elevSubset <- elev[elev <= 3]
-segregate(elevSubset)
-segregate(elevSubset, keep = TRUE, other = -1)
+lowElev <- elev[elev <= 10]
+segregate(lowElev)
+segregate(lowElev, keep = TRUE, other = -1)
 
-# Segregate the factor raster
+# Segregate the factor raster:
 segregate(cover)
 
 classes <- c("Grassland with mosaic forest", "Mosaic cropland/vegetation")
