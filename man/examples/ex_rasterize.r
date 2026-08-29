@@ -34,7 +34,7 @@ polysNeg1 <- rasterize(coast4, elev, background = -1)
 plot(polysNeg1)
 
 # Make one layer per river:
-byRiver <- rasterize(rivers, elev, field = "NAM", by = "NAM")
+byRiver <- rasterize(rivers, elev, field = "TopElev", by = "TopElev")
 plot(byRiver)
 
 }
