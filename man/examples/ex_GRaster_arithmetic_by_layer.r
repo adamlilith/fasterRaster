@@ -72,10 +72,10 @@ acos(elev)
 atan(elev)
 
 atan(elevs)
-atan2(elev, elev^1.2)
-atan2(elevs, elev^1.2)
-atan2(elev, elevs^1.2)
-atan2(elevs, elevs^1.2)
+atan2(elev, elev^1.2) # single/single
+atan2(elevs, elev^1.2) # stack/single
+atan2(elev, elevs^1.2) # single/stack
+atan2(elevs, elevs^1.2) # stack/stack
 
 # logarithms
 exp(elev)
