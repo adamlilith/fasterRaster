@@ -86,34 +86,30 @@ methods::setMethod(
 		if (reshapeRegion) .region(x)
 		srcs <- sources(x)
 
-	} else {
+	} else if (reshapeRegion) {
 
-		if (reshapeRegion) {
+		srcs <- x
+		args <- list(
+			cmd = "g.region",
+			flags = .quiet()
+		)
 
-			srcs <- x
-			args <- list(
-				cmd = "g.region",
-				flags = .quiet()
-			)
+		if (is.null(topo)) {
 
-			if (is.null(topo)) {
+			topo <- "2D" # guessing!
+			if (!is.null(.quiet)) warning("Assuming raster is 2D.")
+			args$raster <- srcs[1L]
 
-				topo <- "2D" # guessing!
-				
-				if (!is.null(.quiet)) warning("Assuming raster is 2D.")
-
-				args$raster <- srcs[1L]
-
-			} else if (topo == "2D") {
-				args$raster <- srcs[1L]
-			} else if (topo == "3D") {
-				args$raster_3d <- srcs[1L]
-			}
-
-			do.call(rgrass::execGRASS, args = args)
-
+		} else if (topo == "2D") {
+			args$raster <- srcs[1L]
+		} else if (topo == "3D") {
+			args$raster_3d <- srcs[1L]
 		}
 
+		do.call(rgrass::execGRASS, args = args)
+
+	} else {
+		srcs <- x
 	}
 
 	nLayers <- length(srcs)
