@@ -25,11 +25,11 @@ plot(rw, col = "orange", add = TRUE)
 legend("top",
    xpd = NA,
    legend = c(
-	"Original",
-      "Vertex reduction",
-      "Douglas-Peucker",
-      "Douglas-Peucker reduction",
-      "Reumann-Witkam"
+            "Original",
+            "Vertex reduction",
+            "Douglas-Peucker",
+            "Douglas-Peucker reduction",
+            "Reumann-Witkam"
 	),
 	col = c("black", "blue", "red", "chartreuse", "orange"),
 	lwd = c(3, 1, 1, 1, 1)
@@ -47,9 +47,9 @@ plot(chaiken, col = "red", add = TRUE)
 legend("bottom",
    xpd = NA,
    legend = c(
-	  "Original",
-      "Hermite",
-      "Chaiken"
+            "Original",
+            "Hermite",
+            "Chaiken"
 	),
 	col = c("black", "blue", "red"),
 	lwd = c(2, 1, 1, 1, 1)
@@ -58,19 +58,19 @@ legend("bottom",
 ### Clean geometry
 
 # Has no effect on this vector!
-noDangs <- removeDangles(soam, tolerance = 10000)
+noDangs <- removeDangles(river, tolerance = 10000)
 
-plot(soam, col = "black", lwd = 2)
+plot(river, col = "black", lwd = 2)
 plot(noDangs, col = "red", add = TRUE)
 
 legend("bottom",
-   xpd = NA,
-   legend = c(
-	  "Original",
-      "No dangles"
-	),
-	lwd = c(2, 1),
-	col = c("black", "red")
+      xpd = NA,
+      legend = c(
+            "Original",
+            "No dangles"
+      ),
+      lwd = c(2, 1),
+      col = c("black", "red")
 )
 
 }
