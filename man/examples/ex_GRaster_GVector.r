@@ -152,11 +152,11 @@ as.data.frame(rivers)
 as.data.table(rivers)
 
 # subsetting
-rivers[c(1:2, 5)] # select 3 rows/geometries
-rivers[-5:-11] # remove rows/geometries 5 through 11
+rivers[c(1, 3)] # select 2 rows/geometries
+rivers[-3] # remove row/geometry 3
 rivers[ , 1] # column 1
-rivers[ , "NAM"] # select column
-rivers[["NAM"]] # select column
+rivers[ , "TopElev"] # select column
+rivers[["TopElev"]] # select column
 rivers[1, 2:3] # row/geometry 1 and column 2 and 3
 rivers[c(TRUE, FALSE)] # select every other geometry (T/F vector is recycled)
 rivers[ , c(TRUE, FALSE)] # select every other column (T/F vector is recycled)
