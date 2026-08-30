@@ -69,7 +69,7 @@ methods::setMethod(
 			names <- if (is.factor(x)[i]) {
 				as.character(freqs[[2L]])
 			} else {
-				freqs[["count"]]
+				as.character(freqs[["count"]])
 			}
 
 			thisOut <- makeGRaster(thisSrcs, names = names)
