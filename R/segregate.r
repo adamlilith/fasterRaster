@@ -26,7 +26,14 @@
 methods::setMethod(
 	f = "segregate",
 	signature = c(x = "GRaster"),
-	function(x, classes = NULL, keep = FALSE, other = 0, bins = 100, digits = 3) {
+	function(
+		x,
+		classes = NULL,
+		keep = FALSE,
+		other = 0,
+		bins = 100,
+		digits = 3
+	) {
 
 	.locationRestore(x)
 	.region(x)
@@ -39,15 +46,12 @@ methods::setMethod(
 	for (i in seq_len(nLayers)) {
 	
 		# unique values
-		dtype <- datatype(x, type = "GRASS")[i]
 		freqs <- freq(x[[i]], digits = digits, bins = bins)
 		freqs <- freqs[freqs$count > 0, ]
 		vals <- freqs$value
 
 		nVals <- length(vals)
-		if (nVals == 0) {
-			thisOut <- NA
-		} else {
+		if (nVals > 0) {
 			
 			thisSrcs <- .makeSourceName("segregate", "raster", nVals)
 			for (j in seq_len(nVals)) {
@@ -63,15 +67,15 @@ methods::setMethod(
 			}
 
 			names <- if (is.factor(x)[i]) {
-				freqs[[3]]
+				as.character(freqs[[2L]])
 			} else {
-				as.character(vals)
+				freqs[["count"]]
 			}
+
 			thisOut <- makeGRaster(thisSrcs, names = names)
+			out[[i]] <- thisOut
 
 		}
-	
-		out[[i]] <- thisOut
 	
 	}
 
