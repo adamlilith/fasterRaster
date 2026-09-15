@@ -14,11 +14,12 @@ o `writeRaster()` now allows users to forgo appending the raster name to the fil
 o Arithmetical operators (e.g., `log()`, `round()`, etc.) return `GRaster`s with the same name as the input (previously, they had returned rasters with the name of the function that was applied).  
 
 ### Bug fixes and issues
-o Big fix in hidden function `.copyGRaster()` to use **GRASS** tool `g.copy` to make functions like `mask()` more reliable.  
-o Bug fix in `droplevels()` arising from new version of `data.table`.  
-o Big fix in `freq()` to account for negative cell counts when integer overflow happens on Windows system (a hack for a *GRASS* bug).  
-o Bug fix in `levels<-` to correctly assign levels when the object to the right of `<-` is a `list`.  
-o Bug fix in `simplifyGeom()` so it does nothing to a points vector (i.e., returns the input).  
+o `[` for `GVector`s now returns the proper data table.  
+o Hidden function `.copyGRaster()` uses **GRASS** tool `g.copy` to make functions like `mask()` more reliable.  
+o `droplevels()` uses syntax for new version of `data.table` package.  
+o `freq()` tries to self-correct for negative cell counts when integer overflow happens on Windows system (a hack for a *GRASS* bug).  
+o `levels<-` correctly assign levels when the object to the right of `<-` is a `list`.  
+o `simplifyGeom()` does nothing to a points vector (i.e., returns the input).  
 o New versions of example data objects that had been in Madagascar-specific coordinate reference system now in Africa Lambert: `madCoast0`, `madCoast4`, `madRivers`, `madDypsis`, `madPpt`, `madTmax`, and `madTmin`.  
 
 # fasterRaster 8.4.1.2 (2026-04-17)
