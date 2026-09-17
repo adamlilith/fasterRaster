@@ -24,45 +24,27 @@ bilinearNoFB <- resample(elev, template, method = "bilinear", fallback = FALSE)
 bicubic <- resample(elev, template, method = "bicubic")
 bicubicNoFB <- resample(elev, template, method = "bicubic", fallback = FALSE)
 
-lanczos <- resample(elev, template, method = "lanczos")
-lanczosNoFB <- resample(elev, template, method = "lanczos", fallback = FALSE)
+# lanczos <- resample(elev, template, method = "lanczos")
+# lanczosNoFB <- resample(elev, template, method = "lanczos", fallback = FALSE)
 
 # rasters resampled without fallback have fewer non-NA cells
-resampled <- c(nearest, bilinear, bilinearNoFB, bicubic, bicubicNoFB, lanczos,
-    lanczosNoFB)
+resampled <- c(nearest, bilinear, bilinearNoFB, bicubic, bicubicNoFB)
 names(resampled) <- c("nearest", "bilinear", "bilinearNoFB", "bicubic",
-    "bicubicNoFB", "lanczos", "lanczosNoFB")
+    "bicubicNoFB")
 ones <- resampled * 0 + 1
-global(ones, "sum") # number of non-NA cells
+nonnacell(ones) # number of non-NA cells
 global(resampled, c("mean", "sd", "min", "max")) # other statistics
 
-# Compare fallback to no fallback
-frLanczos <- rast(lanczos)
-frLanczosNoFB <- rast(lanczosNoFB)
-
-plot(frLanczos, col = "red",
-    main = "Red: Cells in fallback not non-fallback", legend = FALSE)
-plot(frLanczosNoFB, add=TRUE)
-
 # Compare fasterRaster with terra
-coarserTerra <- aggregate(madElev, 4)
-terraLanczos <- resample(madElev, coarserTerra, method = "lanczos")
+terraTemplate <- aggregate(madElev, 4)
+terraBicubic <- resample(madElev, terraTemplate, method = "cubic")
 
-frLanczos <- extend(frLanczos, terraLanczos)
-frLanczosNoFB <- extend(frLanczosNoFB, terraLanczos)
+frBicubicNoFB <- extend(bicubicNoFB, terraTemplate)
 
-frLanczos - terraLanczos
-frLanczosNoFB - terraLanczos
+terraBicubic <- fast(terraBicubic)
+delta <- frBicubicNoFB - terraBicubic
 
-plot(frLanczos - terraLanczos, main = "Difference")
-plot(frLanczosNoFB - terraLanczos, main = "Difference")
-
-plot(terraLanczos, col = "red",
-    main = "Red: Cells in terra not in FR", legend = FALSE)
-plot(frLanczos, add=TRUE)
-
-plot(frLanczos, col = "red",
-    main = "Red: Cells in FR not in terra", legend = FALSE)
-plot(terraLanczos, add=TRUE)
+plot(terraBicubic, col = 'red', legend = FALSE)
+plot(delta, add = TRUE)
 
 }
