@@ -199,8 +199,8 @@ methods::setMethod(
 				memory = faster("memory"),
 				flags = c(.quiet(), "overwrite")
 			)
-			# nprocs became available with GRASS eight point three
-			if (versionNumber > 8.3) args$nprocs <- faster("cores")
+			# nprocs became available with GRASS 8.3
+			if (versionNumber >= 8.3) args$nprocs <- faster("cores")
 			do.call(rgrass::execGRASS, args = args)
 
 		}
