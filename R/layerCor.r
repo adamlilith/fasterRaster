@@ -1,6 +1,6 @@
 #' Correlation between GRasters
 #'
-#' @description Calculate the correlation, covariance, or chi-squared, Cramer's *V*, or Kruskal-Wallis's *H* between two or more rasters. Note that cells that are `NA` for any raster are ignored across all rasters.
+#' @description Calculate the correlation, covariance, or chi-squared, Cramer's *V*, or Kruskal-Wallis's *H* between two or more rasters.
 #' 
 #' @param x A `GRaster` with two or more layers. Partial matching is used and capitalization ignored.
 #' @param fun Character: Name of the statistic(s) to calculate:
@@ -329,6 +329,7 @@ methods::setMethod(
 				columnNames <- if (datatype(x[[i]]) %in% c("factor", "integer")) c("discrete", "continuous") else c("continuous", "discrete")
 				vals <- data.table::fread(outFile, col.names = columnNames)
 
+				discrete <- NULL # obviate CRAN check NOTE
 				vals[ , "discrete" := as.factor(discrete)]
 
 				# KW test
