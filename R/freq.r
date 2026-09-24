@@ -133,7 +133,6 @@ methods::setMethod(
 					.rm(matchSrc, type = "raster", warn = FALSE, verify = FALSE)
 				
 				}
-				freqs <- newFreqs
 
 			}
 
