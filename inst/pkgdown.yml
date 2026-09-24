@@ -1,5 +1,5 @@
 pandoc: 3.6.2
-pkgdown: 2.2.0
+pkgdown: 2.2.1
 pkgdown_sha: ~
 articles:
   faster_fasterRaster: faster_fasterRaster.html
@@ -9,7 +9,7 @@ articles:
   projects_mapsets: projects_mapsets.html
   regions: regions.html
   three_d_objects: three_d_objects.html
-last_built: 2026-04-17T20:49Z
+last_built: 2026-09-24T04:35Z
 urls:
   reference: https://github.com/adamlilith/fasterRaster/reference
   article: https://github.com/adamlilith/fasterRaster/articles
