@@ -56,6 +56,7 @@ A `data.table`, `data.frame`, `matrix`, or vector.
 ## Examples
 
 ``` r
+
 library(data.table)
 
 dt <- data.table(

@@ -77,7 +77,7 @@ most users.
     and related functions with missing arguments.
 
   - A `GSpatial`, `GRegion`, `GRaster`, `GVector` object: Sets the
-    region"s extent, dimensions, and/or resolution to those of the
+    region's extent, dimensions, and/or resolution to those of the
     object.
 
   - A `numeric` vector. This will resize the region's extent, resample
@@ -119,7 +119,7 @@ most users.
 
   - `.regionRes()`: New region will have same extent and dimensions.
 
-  In this case, the new region"s registration will be the same as this
+  In this case, the new region's registration will be the same as this
   raster, and cell resolution will be the same
 
   Note: In most cases extent cannot be retained exactly if the

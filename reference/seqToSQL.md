@@ -47,6 +47,7 @@ represented by the output.
 ## Examples
 
 ``` r
+
 x <- 1:5
 seqToSQL(x)
 #> [1] "1-5"

@@ -77,6 +77,7 @@ A `SpatRaster`, `sf` spatial vector, or a `data.frame`.
 ## Examples
 
 ``` r
+
 ### vector data
 
 library(sf)
@@ -91,129 +92,91 @@ library(sf)
 data(madCoast0) # same as next line
 madCoast0 <- fastData("madCoast0") # same as previous
 madCoast0
-#> Simple feature collection with 1 feature and 68 fields
+#> Simple feature collection with 1 feature and 3 fields
 #> Geometry type: MULTIPOLYGON
 #> Dimension:     XY
-#> Bounding box:  xmin: 731581.6 ymin: 1024473 xmax: 768721.2 ymax: 1085686
-#> Projected CRS: Tananarive (Paris) / Laborde Grid
-#>   OBJECTID ID_0 ISO NAME_ENGLISH   NAME_ISO   NAME_FAO NAME_LOCAL NAME_OBSOLETE
-#> 1        1  134 MDG   Madagascar MADAGASCAR Madagascar Madagascar              
-#>       NAME_VARIANTS NAME_NONLATIN NAME_FRENCH NAME_SPANISH NAME_RUSSIAN
-#> 1 Malagasy Republic               Madagascar   Madagascar    Мадагаскар
-#>   NAME_ARABIC NAME_CHINESE WASPARTOF CONTAINS  SOVEREIGN ISO2 WWW FIPS ISON
-#> 1      مدغشقر  马达加斯加                     Madagascar   MG       MA  450
-#>    VALIDFR VALIDTO  POP2000       SQKM            POPSQKM      UNREGION1
-#> 1 19581014 Present 15970364 594856.375 26.847428507427527 Eastern Africa
-#>   UNREGION2 DEVELOPING CIS Transition OECD           WBREGION   WBINCOME
-#> 1    Africa          1                     Sub-Saharan Africa Low income
-#>                WBDEBT WBOTHER CEEAC CEMAC CEPLG COMESA EAC ECOWAS IGAD IOC MRU
-#> 1 Moderately indebted    HIPC                        1                   1    
-#>   SACU UEMOA UMA PALOP PARTA CACM EurAsEC Agadir SAARC ASEAN NAFTA GCC CSN
-#> 1                                                                         
-#>   CARICOM EU CAN ACP Landlocked AOSIS SIDS Islands LDC
-#> 1                  1                             1   1
-#>                         geometry
-#> 1 MULTIPOLYGON (((755432.2 10...
+#> Bounding box:  xmin: 2524653 ymin: -1767812 xmax: 2560090 ymax: -1709191
+#> Projected CRS: Africa_Lambert_Conformal_Conic
+#>      COUNTRY    NAME_1       NAME_2                       geometry
+#> 1 Madagascar Toamasina Analanjirofo MULTIPOLYGON (((2524653 -17...
 plot(st_geometry(madCoast0))
 
 madCoast4 <- fastData("madCoast4")
 madCoast4
-#> Simple feature collection with 2 features and 17 fields
+#> Simple feature collection with 2 features and 5 fields
 #> Geometry type: MULTIPOLYGON
 #> Dimension:     XY
-#> Bounding box:  xmin: 731811.7 ymin: 1024542 xmax: 768726.5 ymax: 1085485
-#> Projected CRS: Tananarive (Paris) / Laborde Grid
-#>   OBJECTID ID_0 ISO     NAME_0 ID_1    NAME_1 ID_2       NAME_2 ID_3
-#> 1     1070  134 MDG Madagascar    5 Toamasina   17 Analanjirofo   79
-#> 2     1098  134 MDG Madagascar    5 Toamasina   17 Analanjirofo   82
-#>              NAME_3 ID_4    NAME_4 VARNAME_4 CCN_4 CCA_4    TYPE_4 ENGTYPE_4
-#> 1          Mananara 1070 Antanambe              NA       Fokontany   Commune
-#> 2 Soanierana-Ivongo 1098 Manompana              NA       Fokontany   Commune
+#> Bounding box:  xmin: 2524653 ymin: -1767812 xmax: 2560140 ymax: -1709141
+#> Projected CRS: Africa_Lambert_Conformal_Conic
+#>      COUNTRY    NAME_1       NAME_2            NAME_3    NAME_4
+#> 1 Madagascar Toamasina Analanjirofo          Mananara Antanambe
+#> 2 Madagascar Toamasina Analanjirofo Soanierana-Ivongo Manompana
 #>                         geometry
-#> 1 MULTIPOLYGON (((760305.9 10...
-#> 2 MULTIPOLYGON (((754786.8 10...
+#> 1 MULTIPOLYGON (((2558667 -17...
+#> 2 MULTIPOLYGON (((2533558 -17...
 plot(st_geometry(madCoast4), add = TRUE)
 
 madRivers <- fastData("madRivers")
 madRivers
-#> Simple feature collection with 11 features and 5 fields
+#> Simple feature collection with 3 features and 3 fields
 #> Geometry type: LINESTRING
 #> Dimension:     XY
-#> Bounding box:  xmin: 731627.1 ymin: 1024541 xmax: 762990.1 ymax: 1085580
-#> Projected CRS: Tananarive (Paris) / Laborde Grid
-#> First 10 features:
-#>      F_CODE_DES          HYC_DESCRI      NAM ISO     NAME_0
-#> 1  River/Stream Perennial/Permanent MANANARA MDG Madagascar
-#> 2  River/Stream Perennial/Permanent MANANARA MDG Madagascar
-#> 3  River/Stream Perennial/Permanent      UNK MDG Madagascar
-#> 4  River/Stream Perennial/Permanent      UNK MDG Madagascar
-#> 5  River/Stream Perennial/Permanent      UNK MDG Madagascar
-#> 6  River/Stream Perennial/Permanent      UNK MDG Madagascar
-#> 7  River/Stream Perennial/Permanent      UNK MDG Madagascar
-#> 8  River/Stream Perennial/Permanent      UNK MDG Madagascar
-#> 9  River/Stream Perennial/Permanent      UNK MDG Madagascar
-#> 10 River/Stream Perennial/Permanent      UNK MDG Madagascar
-#>                          geometry
-#> 1  LINESTRING (739818.2 108005...
-#> 2  LINESTRING (739818.2 108005...
-#> 3  LINESTRING (747857.8 108558...
-#> 4  LINESTRING (739818.2 108005...
-#> 5  LINESTRING (762990.1 105737...
-#> 6  LINESTRING (742334.2 106858...
-#> 7  LINESTRING (731803.7 105391...
-#> 8  LINESTRING (755911.6 104957...
-#> 9  LINESTRING (731871 1044531,...
-#> 10 LINESTRING (750186.1 103441...
+#> Bounding box:  xmin: 2524653 ymin: -1767812 xmax: 2550723 ymax: -1709191
+#> Projected CRS: Africa_Lambert_Conformal_Conic
+#>   TopElev BotElev       Slope                       geometry
+#> 1     495       2 0.005781444 LINESTRING (2524653 -173852...
+#> 2     652       4 0.005808253 LINESTRING (2524653 -171484...
+#> 3      24       0 0.001063664 LINESTRING (2524653 -176531...
 plot(st_geometry(madRivers), col = "blue", add = TRUE)
 
 madDypsis <- fastData("madDypsis")
 madDypsis
-#> Simple feature collection with 42 features and 9 fields
+#> Simple feature collection with 13 features and 13 fields
 #> Geometry type: POINT
 #> Dimension:     XY
-#> Bounding box:  xmin: 735228.4 ymin: 1026056 xmax: 762442 ymax: 1085002
-#> Projected CRS: Tananarive (Paris) / Laborde Grid
+#> Bounding box:  xmin: 2513925 ymin: -1763063 xmax: 2550698 ymax: -1718803
+#> Projected CRS: Africa_Lambert_Conformal_Conic
 #> First 10 features:
-#>        gbifID      license                  rightsHolder institutionCode year
-#> 1  2397516155 CC_BY_NC_4_0                  vononarbgkew     iNaturalist 2019
-#> 2  2397516017 CC_BY_NC_4_0                  vononarbgkew     iNaturalist 2019
-#> 3  2397515145 CC_BY_NC_4_0                  vononarbgkew     iNaturalist 2019
-#> 4  2268865622    CC_BY_4_0     Missouri Botanical Garden              MO 2006
-#> 5  2268863965    CC_BY_4_0     Missouri Botanical Garden              MO 1991
-#> 6  2268862328    CC_BY_4_0     Missouri Botanical Garden              MO 1994
-#> 7  2268862230    CC_BY_4_0     Missouri Botanical Garden              MO 1991
-#> 8  1928075921      CC0_1_0 The New York Botanical Garden              NY 2006
-#> 9  1677261542 CC_BY_NC_4_0                    Landy Rita     iNaturalist 2016
-#> 10 1453257920 CC_BY_NC_4_0              mamy_andriamahay     iNaturalist 2016
-#>    month day coordinateUncertaintyInMeters               species
-#> 1      8  11                             4       Dypsis nodifera
-#> 2      8  11                             3       Dypsis nodifera
-#> 3      8  11                             3       Dypsis nodifera
-#> 4      9  14                            NA Dypsis betsimisarakae
-#> 5     10  10                            NA       Dypsis nodifera
-#> 6     10  23                            NA       Dypsis nodifera
-#> 7     10  11                            NA       Dypsis nodifera
-#> 8      9  15                            NA        Dypsis integra
-#> 9      6  11                            17    Dypsis lastelliana
-#> 10    11  29                            21    Dypsis lastelliana
-#>                    geometry
-#> 1  POINT (744929.8 1028994)
-#> 2  POINT (745240.1 1029239)
-#> 3  POINT (745067.4 1029098)
-#> 4  POINT (737649.4 1044160)
-#> 5  POINT (760879.5 1071766)
-#> 6  POINT (748297.4 1064593)
-#> 7  POINT (747876.6 1038768)
-#> 8  POINT (737901.5 1044806)
-#> 9  POINT (749428.6 1033303)
-#> 10 POINT (745272.7 1032050)
+#>        gbifID             species    country stateProvince  latitude longitude
+#> 1  1258262878   Dypsis boiviniana Madagascar     Toamasina -16.50000  49.80000
+#> 2  1258261855 Dypsis forficifolia Madagascar     Toamasina -16.50000  49.72000
+#> 3  4031635203       Dypsis faneva Madagascar     Toamasina -16.43333  49.44166
+#> 4  4032077789      Dypsis fanjana Madagascar     Toamasina -16.45000  49.76667
+#> 5  1258261866     Dypsis paludosa Madagascar     Toamasina -16.45000  49.76666
+#> 6  4032047806   Dypsis ramentacea Madagascar     Toamasina -16.41667  49.75000
+#> 7  4032124261  Dypsis fasciculata Madagascar     Toamasina -16.38333  49.73333
+#> 8  4031363900     Dypsis paludosa Madagascar     Toamasina -16.53333  49.71667
+#> 9  4032132562 Dypsis pinnatifrons Madagascar     Toamasina -16.77694  49.71611
+#> 10 4032072554 Dypsis heterophylla Madagascar     Toamasina -16.78416  49.68555
+#>    day month year               institution   license              rightsHolder
+#> 1   16     4 1992 Missouri Botanical Garden CC_BY_4_0 Missouri Botanical Garden
+#> 2   NA    NA   NA Missouri Botanical Garden CC_BY_4_0 Missouri Botanical Garden
+#> 3   NA    10 1991 Missouri Botanical Garden CC_BY_4_0 Missouri Botanical Garden
+#> 4    5    10 1991 Missouri Botanical Garden CC_BY_4_0 Missouri Botanical Garden
+#> 5   21     4 1992 Missouri Botanical Garden CC_BY_4_0 Missouri Botanical Garden
+#> 6    7    10 1991 Missouri Botanical Garden CC_BY_4_0 Missouri Botanical Garden
+#> 7   NA     4 1992 Missouri Botanical Garden CC_BY_4_0 Missouri Botanical Garden
+#> 8   26     2 1987 Missouri Botanical Garden CC_BY_4_0 Missouri Botanical Garden
+#> 9   29     6 2007 Missouri Botanical Garden CC_BY_4_0 Missouri Botanical Garden
+#> 10   4     7 2007 Missouri Botanical Garden CC_BY_4_0 Missouri Botanical Garden
+#>                      recordedBy                 geometry
+#> 1              H.J. Beentje;al. POINT (2550698 -1731317)
+#> 2                               POINT (2542470 -1731222)
+#> 3                  H.J. Beentje POINT (2513925 -1723786)
+#> 4                  H.J. Beentje POINT (2547331 -1725948)
+#> 5              H.J. Beentje;al. POINT (2547331 -1725948)
+#> 6                  H.J. Beentje POINT (2545658 -1722375)
+#> 7  H.J. Beentje;John Dransfield POINT (2543985 -1718803)
+#> 8              Marion F. Nicoll POINT (2542086 -1734771)
+#> 9          Adolphe Lehavana;al. POINT (2541728 -1760759)
+#> 10       Honoré Andriamiarinoro POINT (2538576 -1761493)
 plot(st_geometry(madDypsis), col = "red", add = TRUE)
 
 
 ### raster data
 
 library(terra)
-#> terra 1.9.11
+#> terra 1.9.50
 #> 
 #> Attaching package: ‘terra’
 #> The following object is masked from ‘package:data.table’:
@@ -229,58 +192,58 @@ madElev <- terra::rast(rastFile)
 
 madElev <- fastData("madElev") # same as previous two lines
 madElev
-#> class       : SpatRaster 
-#> size        : 512, 313, 1  (nrow, ncol, nlyr)
-#> resolution  : 119.7031, 119.7031  (x, y)
-#> extent      : 731581.6, 769048.6, 1024437, 1085725  (xmin, xmax, ymin, ymax)
-#> coord. ref. : Tananarive (Paris) / Laborde Grid 
-#> source      : madElev.tif 
-#> name        : madElev 
-#> min value   :       1 
-#> max value   :     570 
+#> class       : SpatRaster
+#> size        : 1090, 667, 1  (nrow, ncol, nlyr)
+#> resolution  : 54.99431, 54.99431  (x, y)
+#> extent      : 2523700, 2560381, -1768756, -1708812  (xmin, xmax, ymin, ymax)
+#> coord. ref. : Africa_Lambert_Conformal_Conic
+#> source      : madElev.tif
+#> name        : madElev
+#> min value   :       4
+#> max value   :     520
 plot(madElev)
 
 
 madForest2000 <- fastData("madForest2000")
 madForest2000
-#> class       : SpatRaster 
-#> size        : 512, 313, 1  (nrow, ncol, nlyr)
-#> resolution  : 119.7031, 119.7031  (x, y)
-#> extent      : 731581.6, 769048.6, 1024437, 1085725  (xmin, xmax, ymin, ymax)
-#> coord. ref. : Tananarive (Paris) / Laborde Grid 
-#> source      : madForest2000.tif 
-#> name        : madForest2000 
-#> min value   :             1 
-#> max value   :             1 
+#> class       : SpatRaster
+#> size        : 1090, 667, 1  (nrow, ncol, nlyr)
+#> resolution  : 54.99431, 54.99431  (x, y)
+#> extent      : 2523700, 2560381, -1768756, -1708812  (xmin, xmax, ymin, ymax)
+#> coord. ref. : Africa_Lambert_Conformal_Conic
+#> source      : madForest2000.tif
+#> name        : madForest2000
+#> min value   :             1
+#> max value   :             1
 plot(madForest2000)
 
 
 madForest2014 <- fastData("madForest2014")
 madForest2014
-#> class       : SpatRaster 
-#> size        : 512, 313, 1  (nrow, ncol, nlyr)
-#> resolution  : 119.7031, 119.7031  (x, y)
-#> extent      : 731581.6, 769048.6, 1024437, 1085725  (xmin, xmax, ymin, ymax)
-#> coord. ref. : Tananarive (Paris) / Laborde Grid 
-#> source      : madForest2014.tif 
-#> name        : madForest2014 
-#> min value   :             1 
-#> max value   :             1 
+#> class       : SpatRaster
+#> size        : 1090, 667, 1  (nrow, ncol, nlyr)
+#> resolution  : 54.99431, 54.99431  (x, y)
+#> extent      : 2523700, 2560381, -1768756, -1708812  (xmin, xmax, ymin, ymax)
+#> coord. ref. : Africa_Lambert_Conformal_Conic
+#> source      : madForest2014.tif
+#> name        : madForest2014
+#> min value   :             1
+#> max value   :             1
 plot(madForest2014)
 
 
 # multi-layer rasters
 madChelsa <- fastData("madChelsa")
 madChelsa
-#> class       : SpatRaster 
+#> class       : SpatRaster
 #> size        : 67, 42, 4  (nrow, ncol, nlyr)
 #> resolution  : 0.008333333, 0.008333333  (x, y)
 #> extent      : 49.54153, 49.89153, -16.85014, -16.29181  (xmin, xmax, ymin, ymax)
-#> coord. ref. : lon/lat WGS 84 (EPSG:4326) 
-#> source      : madChelsa.tif 
-#> names       :  bio1, bio7,  bio12, bio15 
-#> min values  : 20.85,  6.2, 3230.9,  32.2 
-#> max values  : 24.45, 11.9, 4608.9,  43.2 
+#> coord. ref. : lon/lat WGS 84 (EPSG:4326)
+#> source      : madChelsa.tif
+#> names       :      bio1, bio7,       bio12,     bio15
+#> min values  :     20.85,  6.2, 3230.899902, 32.200001
+#> max values  : 24.450001, 11.9, 4608.899902, 43.200001
 plot(madChelsa)
 
 
@@ -288,65 +251,65 @@ madPpt <- fastData("madPpt")
 madTmin <- fastData("madTmin")
 madTmax <- fastData("madTmax")
 madPpt
-#> class       : SpatRaster 
-#> size        : 9, 6, 12  (nrow, ncol, nlyr)
-#> resolution  : 6082.837, 6082.837  (x, y)
-#> extent      : 726346.3, 762843.4, 1026783, 1081528  (xmin, xmax, ymin, ymax)
-#> coord. ref. : Tananarive (Paris) / Laborde Grid 
-#> source      : madPpt.tif 
-#> names       : ppt01, ppt02, ppt03, ppt04, ppt05, ppt06, ... 
-#> min values  :   344,   343,   343,   246,   146,   161, ... 
-#> max values  :   379,   401,   442,   395,   265,   261, ... 
+#> class       : SpatRaster
+#> size        : 91, 65, 12  (nrow, ncol, nlyr)
+#> resolution  : 877.8452, 877.8452  (x, y)
+#> extent      : 2514147, 2571207, -1778842, -1698958  (xmin, xmax, ymin, ymax)
+#> coord. ref. : Africa_Lambert_Conformal_Conic
+#> source      : madPpt.tif
+#> names       : ppt01, ppt02, ppt03, ppt04, ppt05, ppt06, ...
+#> min values  :   311,   421,   400,   289,   235,   229, ...
+#> max values  :   474,   591,   574,   492,   442,   409, ...
 madTmin
-#> class       : SpatRaster 
-#> size        : 9, 6, 12  (nrow, ncol, nlyr)
-#> resolution  : 6082.837, 6082.837  (x, y)
-#> extent      : 726346.3, 762843.4, 1026783, 1081528  (xmin, xmax, ymin, ymax)
-#> coord. ref. : Tananarive (Paris) / Laborde Grid 
-#> source      : madTmin.tif 
-#> names       : tmin01, tmin02, tmin03, tmin04, tmin05, tmin06, ... 
-#> min values  :     21,     21,     20,     19,     17,     16, ... 
-#> max values  :     23,     23,     23,     22,     20,     19, ... 
+#> class       : SpatRaster
+#> size        : 91, 65, 12  (nrow, ncol, nlyr)
+#> resolution  : 877.8452, 877.8452  (x, y)
+#> extent      : 2514147, 2571207, -1778842, -1698958  (xmin, xmax, ymin, ymax)
+#> coord. ref. : Africa_Lambert_Conformal_Conic
+#> source      : madTmin.tif
+#> names       : tmin01, tmin02, tmin03, tmin04, tmin05, tmin06, ...
+#> min values  :     20,     20,     20,     19,     18,     16, ...
+#> max values  :     25,     26,     25,     25,     24,     23, ...
 madTmax
-#> class       : SpatRaster 
-#> size        : 9, 6, 12  (nrow, ncol, nlyr)
-#> resolution  : 6082.837, 6082.837  (x, y)
-#> extent      : 726346.3, 762843.4, 1026783, 1081528  (xmin, xmax, ymin, ymax)
-#> coord. ref. : Tananarive (Paris) / Laborde Grid 
-#> source      : madTmax.tif 
-#> names       : tmax01, tmax02, tmax03, tmax04, tmax05, tmax06, ... 
-#> min values  :     29,     29,     29,     28,     27,     25, ... 
-#> max values  :     31,     31,     30,     30,     28,     27, ... 
+#> class       : SpatRaster
+#> size        : 91, 65, 12  (nrow, ncol, nlyr)
+#> resolution  : 877.8452, 877.8452  (x, y)
+#> extent      : 2514147, 2571207, -1778842, -1698958  (xmin, xmax, ymin, ymax)
+#> coord. ref. : Africa_Lambert_Conformal_Conic
+#> source      : madTmax.tif
+#> names       : tmax01, tmax02, tmax03, tmax04, tmax05, tmax06, ...
+#> min values  :     26,     26,     25,     24,     23,     21, ...
+#> max values  :     29,     29,     28,     27,     26,     24, ...
 
 
 # RGB raster
 madLANDSAT <- fastData("madLANDSAT")
 madLANDSAT
-#> class       : SpatRaster 
+#> class       : SpatRaster
 #> size        : 344, 209, 4  (nrow, ncol, nlyr)
 #> resolution  : 180, 180  (x, y)
 #> extent      : 344055, 381675, -1863345, -1801425  (xmin, xmax, ymin, ymax)
-#> coord. ref. : WGS 84 / UTM zone 39N (EPSG:32639) 
-#> source      : madLANDSAT.tif 
-#> names       : band2, band3, band4, band5 
-#> min values  :    15,    23,    22,    25 
-#> max values  :   157,   154,   158,   166 
+#> coord. ref. : WGS 84 / UTM zone 39N (EPSG:32639)
+#> source      : madLANDSAT.tif
+#> names       : band2, band3, band4, band5
+#> min values  :    15,    23,    22,    25
+#> max values  :   157,   154,   158,   166
 plotRGB(madLANDSAT, 4, 1, 2, stretch = "lin")
 
 
 # categorical raster
 madCover <- fastData("madCover")
 madCover
-#> class       : SpatRaster 
+#> class       : SpatRaster
 #> size        : 201, 126, 1  (nrow, ncol, nlyr)
 #> resolution  : 0.002777778, 0.002777778  (x, y)
 #> extent      : 49.54028, 49.89028, -16.85139, -16.29306  (xmin, xmax, ymin, ymax)
-#> coord. ref. : lon/lat WGS 84 (EPSG:4326) 
-#> source      : madCover.tif 
-#> categories  : Short, Long 
-#> name        :        Short 
-#> min value   : Mosaic crops 
-#> max value   :        Water 
+#> coord. ref. : lon/lat WGS 84 (EPSG:4326)
+#> source      : madCover.tif
+#> categories  : Short, Long
+#> name        :        Short
+#> min value   : Mosaic crops
+#> max value   :        Water
 madCover <- droplevels(madCover)
 levels(madCover) # levels in the raster
 #> [[1]]

@@ -23,7 +23,7 @@ hist(x, layer, maxnl = 16, bins = 30, freq = TRUE, ...)
   Character, numeric, or integer: Indicates which layer of a multi-layer
   `GRaster` for which to plot a histogram. The layer can be identified
   using its
-  [`terra::name()`](https://rspatial.github.io/terra/reference/names.html)
+  [`names()`](https://github.com/adamlilith/fasterRaster/reference/names.md)
   (character) or index (numeric or integer). If this is missing, then up
   to `maxnl` layers are plotted.
 

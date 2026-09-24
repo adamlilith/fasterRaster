@@ -29,18 +29,18 @@ cases.
 
 ## **fasterRaster** functions that specifically work with 3-dimensional objects
 
-| **Function**                                                                                     | **Object type**        |
-|--------------------------------------------------------------------------------------------------|------------------------|
-| [`bottom()`](https://github.com/adamlilith/fasterRaster/reference/ext.md)                        | `GRaster` or `GVector` |
-| [`dim3d()`](https://github.com/adamlilith/fasterRaster/reference/dim.md)                         | `GRaster`              |
-| [`is.2d()`](https://github.com/adamlilith/fasterRaster/reference/is.2d.md)                       | `GRaster` or `GVector` |
-| [`is.3d()`](https://github.com/adamlilith/fasterRaster/reference/is.2d.md)                       | `GRaster` or `GVector` |
-| [`ncell3d()`](https://github.com/adamlilith/fasterRaster/reference/dim.md)                       | `GRaster`              |
-| [`ndepth()`](https://github.com/adamlilith/fasterRaster/reference/dim.md)                        | `GRaster`              |
-| [`res3d()`](https://github.com/adamlilith/fasterRaster/reference/res.md)                         | `GRaster`              |
-| [`top()`](https://github.com/adamlilith/fasterRaster/reference/ext.md)                           | `GRaster` or `GVector` |
+| **Function** | **Object type** |
+|----|----|
+| [`bottom()`](https://github.com/adamlilith/fasterRaster/reference/ext.md) | `GRaster` or `GVector` |
+| [`dim3d()`](https://github.com/adamlilith/fasterRaster/reference/dim.md) | `GRaster` |
+| [`is.2d()`](https://github.com/adamlilith/fasterRaster/reference/is.2d.md) | `GRaster` or `GVector` |
+| [`is.3d()`](https://github.com/adamlilith/fasterRaster/reference/is.2d.md) | `GRaster` or `GVector` |
+| [`ncell3d()`](https://github.com/adamlilith/fasterRaster/reference/dim.md) | `GRaster` |
+| [`ndepth()`](https://github.com/adamlilith/fasterRaster/reference/dim.md) | `GRaster` |
+| [`res3d()`](https://github.com/adamlilith/fasterRaster/reference/res.md) | `GRaster` |
+| [`top()`](https://github.com/adamlilith/fasterRaster/reference/ext.md) | `GRaster` or `GVector` |
 | [`topology()`](https://github.com/adamlilith/fasterRaster/reference/topology-GSpatial-method.md) | `GRaster` or `GVector` |
-| [`zext()`](https://github.com/adamlilith/fasterRaster/reference/ext.md)                          | `GRaster` or `GVector` |
-| [`zres()`](https://github.com/adamlilith/fasterRaster/reference/res.md)                          | `GRaster`              |
+| [`zext()`](https://github.com/adamlilith/fasterRaster/reference/ext.md) | `GRaster` or `GVector` |
+| [`zres()`](https://github.com/adamlilith/fasterRaster/reference/res.md) | `GRaster` |
 
 ~ FINIS ~

@@ -13,12 +13,14 @@ You probably already have **fasterRaster** installed on your computer,
 but if not, you can install the latest release version from CRAN using:
 
 ``` r
+
 install.packages("fasterRaster")
 ```
 
 or the latest development version using:
 
 ``` r
+
 remotes::install_github("adamlilith/fasterRaster", dependencies = TRUE)
 ```
 
@@ -46,8 +48,9 @@ The **data.table** package is not required, but you most surely will use
 at least one of the other two.
 
 ``` r
+
 library(terra)
-#> terra 1.9.11
+#> terra 1.9.50
 library(sf)
 #> Linking to GEOS 3.12.1, GDAL 3.8.4, PROJ 9.4.0; sf_use_s2() is TRUE
 library(data.table)
@@ -56,8 +59,11 @@ library(data.table)
 #> The following object is masked from 'package:terra':
 #> 
 #>     shift
+#> The following object is masked from 'package:base':
+#> 
+#>     %notin%
 library(fasterRaster)
-#> fasterRaster 8.4.1.2
+#> fasterRaster 8.4.1.3
 #> To avoid conflicts between functions, please attach the `terra`, `sf`,
 #> and `data.table` packages before attaching `fasterRaster` using, for
 #> example, `library(terra)`.
@@ -81,7 +87,7 @@ library(fasterRaster)
 #>     grid
 #> The following objects are masked from 'package:base':
 #> 
-#>     rbind, xor
+#>     %notin%, rbind, xor
 ```
 
 To begin, you need to tell **fasterRaster** the full file path of the
@@ -91,6 +97,7 @@ Three examples below show you what this might look like, but you may
 need to change the file path to match your case:
 
 ``` r
+
 grassDir <- "C:/Program Files/GRASS GIS 8.4" # Windows
 grassDir <- "/Applications/GRASS-8.4.app/Contents/Resources" # Mac OS
 grassDir <- "/usr/local/grass" # Linux
@@ -101,6 +108,7 @@ To tell **fasterRaster** where **GRASS** is installed, use the
 function:
 
 ``` r
+
 faster(grassDir = grassDir)
 ```
 
@@ -171,6 +179,7 @@ with a string representing the folder path and file name of the raster
 you want to load into the session. For example, you can do:
 
 ``` r
+
 rastFile <- system.file("extdata", "madElev.tif", package = "fasterRaster")
 elev2 <- fast(rastFile)
 ```
@@ -228,6 +237,7 @@ You can do operations on `GRaster`s and `GVector`s as if they were
 them as if the were any other spatial object:
 
 ``` r
+
 plot(elev)
 plot(rivers, col = 'lightblue', add = TRUE)
 ```
@@ -299,6 +309,7 @@ max. value  : 21310.9411762729
 ```
 
 ``` r
+
 river_buff <- buffer(rivers, 2000)
 river_buff
 
@@ -310,6 +321,7 @@ coord ref.  : Tananarive (Paris) / Laborde Grid
 ```
 
 ``` r
+
 plot(dist)
 plot(rivers, col = 'lightblue', add = TRUE)
 plot(river_buff, border = 'white', add = TRUE)
@@ -332,6 +344,7 @@ You can convert a `GRaster` to a `SpatRaster` raster using
 [`rast()`](https://adamlilith.github.io/fasterRaster/reference/rast.html):
 
 ``` r
+
 terra_elev <- rast(elev)
 ```
 
@@ -342,6 +355,7 @@ or
 [`st_as_sf()`](https://adamlilith.github.io/fasterRaster/reference/st_as_sf.html):
 
 ``` r
+
 terra_rivers <- vect(rivers)
 sf_rivers <- st_as_sf(rivers)
 ```
@@ -359,6 +373,7 @@ or
 then saving the result from those functions.
 
 ``` r
+
 elev_temp_file <- tempfile(fileext = ".tif") # save as GeoTIFF
 writeRaster(elev, elev_temp_file)
 

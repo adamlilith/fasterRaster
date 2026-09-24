@@ -22,8 +22,8 @@ An object of class `prcomp`.
 ## See also
 
 [`princomp()`](https://github.com/adamlilith/fasterRaster/reference/princomp.md),
-[`terra::princomp()`](https://rspatial.github.io/terra/reference/princomp.html),
-tool `i.pca` in **GRASS**
+[`stats::princomp()`](https://rdrr.io/r/stats/princomp.html), tool
+`i.pca` in **GRASS**
 
 ## Examples
 

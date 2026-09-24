@@ -38,12 +38,16 @@ A `data.table` or `data.frame`.
 ## Examples
 
 ``` r
+
 library(data.table)
 #> 
 #> Attaching package: ‘data.table’
 #> The following objects are masked from ‘package:fasterRaster’:
 #> 
 #>     %notin%, as.data.table
+#> The following object is masked from ‘package:base’:
+#> 
+#>     %notin%
 
 dt <- data.table(
    x = 1:10,

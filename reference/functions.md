@@ -42,6 +42,9 @@ count(x)
 sum(x, na.rm = FALSE)
 
 # S4 method for class 'GRaster'
+prod(x, na.rm = FALSE)
+
+# S4 method for class 'GRaster'
 min(x, na.rm = FALSE)
 
 # S4 method for class 'GRaster'

@@ -34,6 +34,7 @@ writeRaster(
   overwrite = FALSE,
   datatype = NULL,
   byLayer = FALSE,
+  appendNameToSingleLayer = TRUE,
   names = TRUE,
   levelsExt = NULL,
   compress = "LZW",
@@ -72,16 +73,16 @@ writeRaster(x, filename)
   of those shown below under the first four columns, but whatever is
   used, it will be converted to the **GDAL** version.
 
-  |                  |           |           |           |                                                               |
-  |------------------|-----------|-----------|-----------|---------------------------------------------------------------|
-  | **fasterRaster** | **terra** | **GRASS** | **GDAL**  | **Values**                                                    |
-  | `integer`        | `INT1U`   | `CELL`    | `Byte`    | Integer values from 0 to 255                                  |
-  | `integer`        | `INT2U`   | `CELL`    | `UInt16`  | Integer values from 0 to 65,534                               |
-  | `integer`        | `INT2S`   | `CELL`    | `Int16`   | Integer values from -32,767 to -32,767                        |
-  | `integer`        | `INT4S`   | `CELL`    | `Int32`   | Integer values from -2,147,483,647 to 2,147,483,647           |
-  | `float`          | `FLT4S`   | `FCELL`   | `Float32` | Values from -3.4E+38 to 3.4E+38, including decimal values     |
-  | `double`         | `FLT8S`   | `DCELL`   | `Float64` | Values from -1.79E+308 to 1.79E+308, including decimal values |
-  | `factor`         | `INT`\*   | `CELL`    | `INT*`    | Integer values corresponding to categories                    |
+  |  |  |  |  |  |
+  |----|----|----|----|----|
+  | **fasterRaster** | **terra** | **GRASS** | **GDAL** | **Values** |
+  | `integer` | `INT1U` | `CELL` | `Byte` | Integer values from 0 to 255 |
+  | `integer` | `INT2U` | `CELL` | `UInt16` | Integer values from 0 to 65,534 |
+  | `integer` | `INT2S` | `CELL` | `Int16` | Integer values from -32,767 to -32,767 |
+  | `integer` | `INT4S` | `CELL` | `Int32` | Integer values from -2,147,483,647 to 2,147,483,647 |
+  | `float` | `FLT4S` | `FCELL` | `Float32` | Values from -3.4E+38 to 3.4E+38, including decimal values |
+  | `double` | `FLT8S` | `DCELL` | `Float64` | Values from -1.79E+308 to 1.79E+308, including decimal values |
+  | `factor` | `INT`\* | `CELL` | `INT*` | Integer values corresponding to categories |
 
   `*` Depends on the integers (signed/unsigned, range of values).
   Categorical rasters will have an associated file saved with them that
@@ -99,6 +100,15 @@ writeRaster(x, filename)
   Note that if any characters in raster names will not work in a file
   name, then the function will fail (e.g., a backslash or question
   mark).
+
+- appendNameToSingleLayer:
+
+  Logical: If `TRUE` (default), `byLayer` is `TRUE`, and the raster has
+  a single layer, then the layer name will be appended to the file name,
+  as in `filename_layerName.ext`. If `FALSE`, the layer name will not be
+  appended to the file name. If the raster has \>1 layer and `byLayer`
+  is `TRUE`, then the raster name will always be appended to the file
+  name, regardless of the value of this argument.
 
 - names:
 

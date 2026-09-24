@@ -42,6 +42,7 @@ north orientation.
 ## Examples
 
 ``` r
+
 ### Re-orient numeric values:
 facings <- c(0, 90, 180, 270, 360)
 reorient(facings)

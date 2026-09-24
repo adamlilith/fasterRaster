@@ -10,6 +10,11 @@ Note that due to differences in how **GRASS**, **terra**, and **sf**
 were implemented, results will not always be strictly comparable between
 functions for the same operation.
 
+Please see and cite: Smith, A.B. 2025. fasterRaster: GIS in R using
+GRASS for large vectors and rasters. *Transactions in GIS* 30:e70238.
+DOI: https://doi.org/10.1111/tgis.70238, Open-access preprint:
+https://doi.org/10.31223/X52R0M
+
 ### Most useful tutorials and functions:
 
 - The quick-start guide to getting started with **fasterRaster**:
@@ -228,7 +233,11 @@ Mathematical functions that are applied across layers of multi-layered
 
 - `NA`s:
   [`allNA()`](https://github.com/adamlilith/fasterRaster/reference/functions.md),
-  [`anyNA()`](https://github.com/adamlilith/fasterRaster/reference/functions.md)
+  [`anyNA()`](https://github.com/adamlilith/fasterRaster/reference/functions.md),
+  [`na.omit()`](https://github.com/adamlilith/fasterRaster/reference/na.omit.md)
+
+- Masking:
+  [`maskNA()`](https://github.com/adamlilith/fasterRaster/reference/maskNA.md)
 
 Subsetting, assigning, and replacing `GRaster` layers
 
@@ -245,6 +254,12 @@ Subsetting, assigning, and replacing `GRaster` layers
 - `add<-`: Replace specific layers of a `GRaster`
 
 Operations on `GRaster`s
+
+- [`as.data.frame()`](https://github.com/adamlilith/fasterRaster/reference/as.data.frame.md):
+  Convert a `GRaster` to a `data.frame`
+
+- [`as.data.table()`](https://github.com/adamlilith/fasterRaster/reference/as.data.frame.md):
+  Convert a `GRaster` to a `data.table`
 
 - [`as.int()`](https://github.com/adamlilith/fasterRaster/reference/as.int.md),
   [`as.float()`](https://github.com/adamlilith/fasterRaster/reference/as.int.md),
@@ -298,6 +313,9 @@ Operations on `GRaster`s
 - [`crop()`](https://github.com/adamlilith/fasterRaster/reference/crop.md):
   Remove parts of a `GRaster`
 
+- [`crossFreq()`](https://github.com/adamlilith/fasterRaster/reference/crossFreq.md):
+  Remove parts of a `GRaster`
+
 - [`denoise()`](https://github.com/adamlilith/fasterRaster/reference/denoise.md):
   Remove "noise" from a `GRaster` using a principal components analysis
   (PCA)
@@ -333,14 +351,15 @@ Operations on `GRaster`s
   Kernel density estimator of points
 
 - [`layerCor()`](https://github.com/adamlilith/fasterRaster/reference/layerCor.md):
-  Correlation or covariance between two or more `GRaster` layers
+  Correlation, covariance, Chi-squared, Cramer's *V*, or Kruskal-Wallis
+  test between two or more `GRaster` layers
 
 - [`mask()`](https://github.com/adamlilith/fasterRaster/reference/mask.md):
   Remove values in a `GRaster` based on values in another `GRaster` or
   vector
 
 - [`maskNA()`](https://github.com/adamlilith/fasterRaster/reference/maskNA.md):
-  Mask all non-NA cells or all NA cells
+  Mask all non-`NA` cells or all `NA` cells
 
 - [`match()`](https://github.com/adamlilith/fasterRaster/reference/match.md),
   [`%in%`](https://github.com/adamlilith/fasterRaster/reference/match.md),

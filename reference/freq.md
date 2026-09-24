@@ -43,7 +43,8 @@ A `data.frame` or a named `list` of `data.frame`s, one per layer in `x`.
 ## See also
 
 [`terra::freq()`](https://rspatial.github.io/terra/reference/freq.html),
-tool `r.stats` in **GRASS**
+[`crossFreq()`](https://github.com/adamlilith/fasterRaster/reference/crossFreq.md),
+**GRASS** tool `r.stats` (see `grassHelp("r.stats")`)
 
 ## Examples
 
@@ -58,24 +59,31 @@ madElev <- fastData("madElev") # raster
 madCover <- fastData("madCover") # categorical raster
 
 # Convert to GRasters
-elev <- fast(madElev) # raster
+elev <- fast(madElev) # integer raster
 cover <- fast(madCover) # categorical raster
 
 # Frequencies of integer raster values
-f <- freq(elev)
-print(f) # have to do this sometimes if output is a data table
+f1 <- freq(elev)
+print(f1) # have to do this sometimes if output is a data table
 
 # Frequencies of categorical raster values
-f <- freq(cover)
-print(f) # have to do this sometimes if output is a data table
+f2 <- freq(cover)
+print(f2) # have to do this sometimes if output is a data table
 
 # Frequencies of given values
-f <- freq(elev, value = 1)
-print(f) # have to do this sometimes if output is a data table
+f3 <- freq(elev, value = 4)
+print(f3) # have to do this sometimes if output is a data table
 
 # When a GRaster has non-integer values, they will be binned:
-f <- freq(elev + 0.1, bins = 10)
-print(f)
+f4 <- freq(elev + 0.1, bins = 10)
+print(f4)
+
+# Calculate cross frequencies between rasters... both need to be integer.
+elevWgs84 <- project(elev, cover)
+elevClasses <- clump(elevWgs84, minDiff = 0.13) # bin elevations
+names(elevClasses) <- 'elevClass'
+f5 <- crossFreq(c(elevClasses, cover), na.rm = FALSE)
+print(f5) # have to do this sometimes if output is a data table
 
 }
 ```

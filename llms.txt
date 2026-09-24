@@ -61,7 +61,7 @@ o
 [Addons](https://adamlilith.github.io/fasterRaster/articles/addons.html)  
 o [Documentation](https://adamlilith.github.io/fasterRaster/)
 
-# Installation
+# Installing `fasterRaster`
 
 To install `fasterRaster`, please use:
 
@@ -75,24 +75,62 @@ You can get the latest stable release using:
 
 `remotes::install_github('adamlilith/fasterRaster@intuitive_fasterRaster', dependencies = TRUE)`
 
-To use `fasterRaster` you must install [GRASS version
-8.3+](https://grass.osgeo.org/) on your operating system. **You will
-need to use the stand-alone installer, not the Open Source Geospatial
-(OS Geo) installer.**
+# Connecting to `GRASS` installed using the stand-alone installer
 
-**Optional**: A few functions in **fasterRaster** require **GRASS**
-“addon” tools, which do not come bundled with **GRASS**. You do not need
-to install these addons if you do not use functions that call them. A
-list of functions that require addons can be seen in the “addons”
-vignette (in **R**, use `vignette("addons", package = "fasterRaster")`).
-This vignette also explains how to install addons.
+I suggest you use the stand-alone installer (versus the OSGeo installer)
+if it is available. Assuming this is the case, then the `GRASS`
+installation path will look something like this, depending on your
+operating system:
 
-# An example
+Simply start `R`, attach `fasterRaster`, then tell `fasterRaster` where
+`GRASS` is installed:
+
+    library(terra) # GIS for rasters and vectors
+    library(sf) # GIS for vectors
+    library(fasterRaster)
+
+    faster(grassDir = grassDir)
+
+where `grassDir` is one of the following, depending on your operating
+system:
+
+    grassDir <- "C:/Program Files/GRASS GIS 8.4" # Windows
+    grassDir <- "/Applications/GRASS-8.4.app/Contents/Resources" # Mac OS
+    grassDir <- "/usr/local/grass" # Linux
+
+You can now start using `GRASS` via `fasterRaster`.
+
+# Connecting to `GRASS` installed using OSGeo installer
+
+If you installed `GRASS` using the OSGeo installer, you will need to run
+`R` within the OSGeo shell. To do this, start the shell (a link should
+have been installed when you installed `GRASS` through the installer).
+Then, start `R`. You may be able to do this simply by entering `R` or
+`Rgui`, but if that does not work, you can start `R` by calling the
+entire path. On a Windows system, this would look something like:
+
+    "C:/Program Files/R/R-4.6.1/bin/R.exe"
+
+(include the quotes).
+
+Once `R` is started, you can attach `fasterRaster` and tell it where
+`GRASS` is installed. Again, what this looks like will depend on you
+operating system:
+
+    library(terra) # GIS for rasters and vectors
+    library(sf) # GIS for vectors
+    library(fasterRaster)
+
+    grassDir <- "C:/OSGeo4W/apps/grass/grass85" # for a Windows system
+    faster(grassDir = grassDir)
+
+# A worked example
 
 The example presented here is the same as that presented in the the
 [“getting
 started”](https://adamlilith.github.io/fasterRaster/articles/fasterRaster.html)
-vignette.
+vignette. We assume that you have started `R`, attached `fasterRaster`,
+and told it where `GRASS` is installed.
 
 We’ll do a simple operation in which we:
 
@@ -104,10 +142,6 @@ We’ll do a simple operation in which we:
 To do this, we’ll be using maps representing the middle of the eastern
 coast of Madagascar. We will also use the `terra` and `sf` packages.
 
-    library(terra) # GIS for rasters and vectors
-    library(sf) # GIS for vectors
-    library(fasterRaster)
-
     # Get example elevation raster and rivers vector:
     madElev <- fastData('madElev') # SpatRaster with elevation
     madRivers <- fastData('madRivers') # sp vector with rivers
@@ -117,22 +151,6 @@ coast of Madagascar. We will also use the `terra` and `sf` packages.
     plot(st_geometry(madRivers), col = "lightblue", add = TRUE)
 
 ![](reference/figures/elev_rivers.png)
-
-Before you use nearly any function in the package, you need to tell
-`fasterRaster` where `GRASS` is installed on your system. The
-installation folder will vary by operating system and maybe `GRASS`
-version, but will look something like this:
-
-    # Choose the appropriate one, and modify as needed:
-    grassDir <- "C:/Program Files/GRASS GIS 8.4" # Windows
-    grassDir <- "/Applications/GRASS-8.4.app/Contents/Resources" # Mac OS
-    grassDir <- "/usr/local/grass" # Linux
-
-Now, use the
-[`faster()`](https://github.com/adamlilith/fasterRaster/reference/faster.md)
-function to tell `fasterRaster` where `GRASS` is installed:
-
-    faster(grassDir = grassDir)
 
 The
 [`fast()`](https://github.com/adamlilith/fasterRaster/reference/fast.md)
@@ -491,6 +509,7 @@ preprint: [10.31223/X52R0M](https://doi.org/10.31223/X52R0M)
   [`median(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/functions.md)
   [`count(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/functions.md)
   [`sum(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/functions.md)
+  [`prod(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/functions.md)
   [`min(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/functions.md)
   [`max(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/functions.md)
   [`which.min(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/functions.md)
@@ -508,6 +527,8 @@ preprint: [10.31223/X52R0M](https://doi.org/10.31223/X52R0M)
   [`anyNA(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/functions.md)
   [`allNA(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/functions.md)
   : Mathematical operations on two or more GRasters
+- [`na.omit(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/na.omit.md)
+  : Force cells with NA in any layer of a GRaster stack to NA
 
 ## Subsetting and replacing GRasters
 
@@ -584,6 +605,8 @@ preprint: [10.31223/X52R0M](https://doi.org/10.31223/X52R0M)
 - [`crop(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/crop.md)
   [`crop(`*`<GVector>`*`)`](https://github.com/adamlilith/fasterRaster/reference/crop.md)
   : Remove parts of a GRaster or GVector
+- [`crossFreq(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/crossFreq.md)
+  : Frequencies of combinations of cells across two or more rasters
 - [`denoise(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/denoise.md)
   [`noise(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/denoise.md)
   : Remove or retain "noise" in a raster using PCA
@@ -933,9 +956,11 @@ preprint: [10.31223/X52R0M](https://doi.org/10.31223/X52R0M)
   [`aggregate(`*`<GVector>`*`)`](https://github.com/adamlilith/fasterRaster/reference/aggregate.md)
   : Aggregate raster cells into larger cells or combine geometries of a
   vector
-- [`as.data.frame(`*`<GVector>`*`)`](https://github.com/adamlilith/fasterRaster/reference/as.data.frame.md)
+- [`as.data.table(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/as.data.frame.md)
+  [`as.data.frame(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/as.data.frame.md)
+  [`as.data.frame(`*`<GVector>`*`)`](https://github.com/adamlilith/fasterRaster/reference/as.data.frame.md)
   [`as.data.table(`*`<GVector>`*`)`](https://github.com/adamlilith/fasterRaster/reference/as.data.frame.md)
-  : Convert GVector to a data frame
+  : Convert GRaster or GVector to a data frame
 - [`as.points(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/as.points.md)
   [`as.points(`*`<GVector>`*`)`](https://github.com/adamlilith/fasterRaster/reference/as.points.md)
   : Convert a GRaster, or lines or polygons GVector to a points vector
@@ -1079,9 +1104,11 @@ preprint: [10.31223/X52R0M](https://doi.org/10.31223/X52R0M)
   [`as.float(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/as.int.md)
   [`as.doub(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/as.int.md)
   : Coerce raster to integer, float, or double precision
-- [`as.data.frame(`*`<GVector>`*`)`](https://github.com/adamlilith/fasterRaster/reference/as.data.frame.md)
+- [`as.data.table(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/as.data.frame.md)
+  [`as.data.frame(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/as.data.frame.md)
+  [`as.data.frame(`*`<GVector>`*`)`](https://github.com/adamlilith/fasterRaster/reference/as.data.frame.md)
   [`as.data.table(`*`<GVector>`*`)`](https://github.com/adamlilith/fasterRaster/reference/as.data.frame.md)
-  : Convert GVector to a data frame
+  : Convert GRaster or GVector to a data frame
 - [`as.lines(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/as.lines.md)
   : Convert a raster to a lines vector
 - [`as.points(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/as.points.md)

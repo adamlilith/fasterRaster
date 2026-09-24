@@ -1,10 +1,17 @@
-# Convert GVector to a data frame
+# Convert GRaster or GVector to a data frame
 
-Convert a `GVector`'s data table to a `data.frame` or `data.table`.
+Convert a `GRaster` to a table, or a `GVector`'s data table to a
+`data.frame` or `data.table`.
 
 ## Usage
 
 ``` r
+# S4 method for class 'GRaster'
+as.data.table(x, na.rm = TRUE, labels = TRUE, xy = FALSE, cells = FALSE)
+
+# S4 method for class 'GRaster'
+as.data.frame(x, na.rm = TRUE, labels = TRUE, xy = FALSE, cells = FALSE)
+
 # S4 method for class 'GVector'
 as.data.frame(x)
 
@@ -16,11 +23,34 @@ as.data.table(x)
 
 - x:
 
-  A `GVector`.
+  A `GRaster` or `GVector`.
+
+- na.rm:
+
+  Logical: Indicates whether to remove `NA` values (default is `TRUE`;
+  `GRaster`s only)\`.
+
+- labels:
+
+  Logical: If `TRUE`, a "factor" (categorical) `GRaster` will have its
+  factor level labels returned. If `FALSE`, the integer codes are
+  returned. Default is `TRUE` (for `GRaster`s only, and only has an
+  effect if the `GRaster` is of type "factor").
+
+- xy:
+
+  Logical: If `TRUE`, return coordinates of cell centers (default is
+  `FALSE`, for `GRaster`s only).
+
+- cells:
+
+  Logical: If `TRUE`, return cell columns and rows (default is `FALSE`,
+  for `GRaster`s only).
 
 ## Value
 
-A `data.frame` or `NULL` (if the `GRaster` has no data table).
+A `data.frame` or `NULL` (if the `GVector` has no data table, or if
+`GRaster`'s values are all `NA`).
 
 ## See also
 
@@ -84,14 +114,19 @@ ext(elev)
 # data type
 datatype(elev)
 
+### operations on GRasters
+
 # assigning
-copy <- elev
-copy[] <- pi # assign all cells to the value of pi
-copy
+pie <- elev
+pie[] <- pi # assign all cells to the value of pi
+pie
 
 # concatenating multiple GRasters
 rasts <- c(elev, forest)
 rasts
+
+# number of layers
+nlyr(elev)
 
 # adding a raster "in place"
 add(rasts) <- ln(elev)
@@ -104,13 +139,14 @@ rasts[["madForest2000"]]
 # assigning
 rasts[[4]] <- elev > 500
 
-# number of layers
-nlyr(rasts)
-
 # names
 names(rasts)
 names(rasts) <- c("elev_meters", "forest", "ln_elev", "high_elevation")
 rasts
+
+# converting to data.tables/data.frames
+as.data.table(rasts)
+head(as.data.frame(rasts))
 
 ### GVector properties
 
@@ -178,11 +214,11 @@ as.data.frame(rivers)
 as.data.table(rivers)
 
 # subsetting
-rivers[c(1:2, 5)] # select 3 rows/geometries
-rivers[-5:-11] # remove rows/geometries 5 through 11
+rivers[c(1, 3)] # select 2 rows/geometries
+rivers[-3] # remove row/geometry 3
 rivers[ , 1] # column 1
-rivers[ , "NAM"] # select column
-rivers[["NAM"]] # select column
+rivers[ , "TopElev"] # select column
+rivers[["TopElev"]] # select column
 rivers[1, 2:3] # row/geometry 1 and column 2 and 3
 rivers[c(TRUE, FALSE)] # select every other geometry (T/F vector is recycled)
 rivers[ , c(TRUE, FALSE)] # select every other column (T/F vector is recycled)

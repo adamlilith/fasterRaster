@@ -1,6 +1,6 @@
 # Combine values/categories of multiple GRasters into a single GRaster
 
-This function takes from 2 to 10 integer or categorical (factor)
+This function takes from 2 to 30 integer or categorical (factor)
 `GRaster`s and creates a single `GRaster` that has one value per
 combination of values in the inputs. For example, say that there were
 two input rasters, with values 1 and 2 in the one raster, and 3 and 4 in
@@ -8,13 +8,14 @@ the other. If the following combinations of values occurred between the
 two rasters, then the output raster would be re-coded with the new
 values:
 
-|                 |                 |                 |
-|-----------------|-----------------|-----------------|
+|  |  |  |
+|----|----|----|
 | `input_raster1` | `input_raster2` | `output_raster` |
-| 1               | 3               | 0               |
-| 1               | 4               | 1               |
-| 2               | 3               | 2               |
-| 2               | 4               | 3               |
+| 1 | 3 | 0 |
+| 1 | 4 | 1 |
+| 2 | 3 | 2 |
+| 2 | 4 | 3 |
+| 2 | NA | NA (if `na.rm = TRUE`) or 4 (if `na.rm = FALSE`) |
 
 If the argument `na.rm` is set to `TRUE` (which it is, by default), then
 whenever at least one cell has an `NA` value, then the output will also

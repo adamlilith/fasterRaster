@@ -1,6 +1,79 @@
 # Changelog
 
+## fasterRaster 8.4.1.3 (2026-09-23)
+
+#### New functions and functionality
+
+o
+[`as.data.frame()`](https://github.com/adamlilith/fasterRaster/reference/as.data.frame.md)
+and
+[`as.data.table()`](https://github.com/adamlilith/fasterRaster/reference/as.data.frame.md)
+now work on `GRaster`s.  
+o
+[`crop()`](https://github.com/adamlilith/fasterRaster/reference/crop.md)
+can now crop rasters or vectors by an extent supplied as a numeric
+vector or a `SpatExtent` object.  
+o
+[`crossFreq()`](https://github.com/adamlilith/fasterRaster/reference/crossFreq.md)
+tabulates a table of joint frequencies of cells across two or more
+`GRaster`s.  
+o
+[`layerCor()`](https://github.com/adamlilith/fasterRaster/reference/layerCor.md)
+can now compare `GRaster`s using a chi-squared test and Kramer’s *V*, or
+the Kruskal-Wallis *H*, or an “`auto`” option that selects the
+appropriate test based on raster data types.  
+o
+[`maskNA()`](https://github.com/adamlilith/fasterRaster/reference/maskNA.md)
+can now also create a mask across layers (versus layer-by-layer).  
+o
+[`na.omit()`](https://github.com/adamlilith/fasterRaster/reference/na.omit.md)
+assigns `NA` to a cell if any cell in a stack of `GRaster`s has an
+`NA`.  
+o
+[`prod()`](https://github.com/adamlilith/fasterRaster/reference/functions.md)
+calculates the product across cells of a stack of `GRaster`s.  
+o
+[`writeRaster()`](https://github.com/adamlilith/fasterRaster/reference/writeRaster.md)
+now allows users to forgo appending the raster name to the file name
+when `byLayer` is `TRUE` if the raster has only a single layer.
+
+#### Potentially code-breaking changes
+
+o Arithmetical operators (e.g.,
+[`log()`](https://github.com/adamlilith/fasterRaster/reference/math.md),
+[`round()`](https://github.com/adamlilith/fasterRaster/reference/math.md),
+etc.) return `GRaster`s with the same name as the input (previously,
+they had returned rasters with the name of the function that was
+applied).
+
+#### Bug fixes and issues
+
+o `[` for `GVector`s now selects the proper geometries.  
+o Hidden function
+[`.copyGRaster()`](https://github.com/adamlilith/fasterRaster/reference/copyGSpatial.md)
+uses **GRASS** tool `g.copy` to make functions like
+[`mask()`](https://github.com/adamlilith/fasterRaster/reference/mask.md)
+more reliable.  
+o
+[`droplevels()`](https://github.com/adamlilith/fasterRaster/reference/droplevels.md)
+uses syntax for new version of `data.table` package.  
+o
+[`freq()`](https://github.com/adamlilith/fasterRaster/reference/freq.md)
+tries to self-correct for negative cell counts when integer overflow
+happens on Windows system (a hack for a **GRASS** bug).  
+o `levels<-` correctly assign levels when the object to the right of
+`<-` is a `list`.  
+o
+[`simplifyGeom()`](https://github.com/adamlilith/fasterRaster/reference/simplifyGeom.md)
+does nothing to a points vector (i.e., returns the input).  
+o New versions of example data objects that had been in
+Madagascar-specific coordinate reference system now in Africa Lambert:
+`madCoast0`, `madCoast4`, `madRivers`, `madDypsis`, `madPpt`, `madTmax`,
+and `madTmin`.
+
 ## fasterRaster 8.4.1.2 (2026-04-17)
+
+CRAN release: 2026-04-17
 
 #### New functions and functionality
 
@@ -693,8 +766,8 @@ o
 [`nacell()`](https://github.com/adamlilith/fasterRaster/reference/nacell.md)
 and
 [`nonnacell()`](https://github.com/adamlilith/fasterRaster/reference/nacell.md):
-Correct (but slow\~\~~) reporting of `NA` and non-`NA` cells (workaround
-of error in **GRASS**’s `r.report` tool).
+Correct (but slow~) reporting of `NA` and non-`NA` cells (workaround of
+error in **GRASS**’s `r.report` tool).
 
 ## fasterRaster 8.3.0.7016 (2024-05-27)
 

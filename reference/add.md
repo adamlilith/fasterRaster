@@ -24,7 +24,7 @@ A `GRaster`.
 ## See also
 
 [`c()`](https://github.com/adamlilith/fasterRaster/reference/c.md),
-terra::add\<-,
+[terra::add\<-](https://rspatial.github.io/terra/reference/add.html),
 [`terra::c()`](https://rspatial.github.io/terra/reference/c.html)
 
 ## Examples

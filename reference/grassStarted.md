@@ -19,6 +19,7 @@ Logical.
 ## Examples
 
 ``` r
+
 grassStarted()
 #> [1] FALSE
 ```

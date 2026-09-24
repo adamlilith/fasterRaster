@@ -41,8 +41,8 @@ variance explained.
 
 ## See also
 
-[`terra::princomp()`](https://rspatial.github.io/terra/reference/princomp.html),
-[`terra::prcomp()`](https://rspatial.github.io/terra/reference/prcomp.html)
+[`stats::princomp()`](https://rdrr.io/r/stats/princomp.html),
+[`stats::prcomp()`](https://rdrr.io/r/stats/prcomp.html)
 
 ## Examples
 

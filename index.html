@@ -7,8 +7,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>Faster Raster and Spatial Vector Processing Using 'GRASS' • fasterRaster</title>
 <script src="lightswitch.js"></script><script src="deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
+<script src="deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="deps/headroom-0.11.0/headroom.min.js"></script><script src="deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="deps/search-1.0.0/fuse.min.js"></script><script src="deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="Faster Raster and Spatial Vector Processing Using 'GRASS'">
 <meta name="description" content="Processing of large-in-memory/large-on disk rasters.">
@@ -23,7 +23,7 @@
 
     <a class="navbar-brand me-2" href="index.html">fasterRaster</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">8.4.1.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">8.4.1.3</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -107,7 +107,8 @@ o <a href="https://adamlilith.github.io/fasterRaster/articles/addons.html" class
 o <a href="https://adamlilith.github.io/fasterRaster/" class="external-link">Documentation</a></p>
 </div>
 <div class="section level1">
-<h1 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
+<h1 id="installing-fasterraster">Installing <code>fasterRaster</code>
+<a class="anchor" aria-label="anchor" href="#installing-fasterraster"></a>
 </h1>
 <p>To install <code>fasterRaster</code>, please use:</p>
 <p><code>install_packages('fasterRaster', dependencies = TRUE)</code></p>
@@ -115,24 +116,48 @@ o <a href="https://adamlilith.github.io/fasterRaster/" class="external-link">Doc
 <p><code>remotes::install_github('adamlilith/fasterRaster', dependencies = TRUE)</code></p>
 <p>…and the development version from:</p>
 <p><code>remotes::install_github('adamlilith/fasterRaster@intuitive_fasterRaster', dependencies = TRUE)</code></p>
-<p>To use <code>fasterRaster</code> you must install <a href="https://grass.osgeo.org/" class="external-link">GRASS version 8.3+</a> on your operating system. <strong>You will need to use the stand-alone installer, not the Open Source Geospatial (OS Geo) installer.</strong></p>
-<p><strong>Optional</strong>: A few functions in <strong>fasterRaster</strong> require <strong>GRASS</strong> “addon” tools, which do not come bundled with <strong>GRASS</strong>. You do not need to install these addons if you do not use functions that call them. A list of functions that require addons can be seen in the “addons” vignette (in <strong>R</strong>, use <code>vignette("addons", package = "fasterRaster")</code>). This vignette also explains how to install addons.</p>
 </div>
 <div class="section level1">
-<h1 id="an-example">An example<a class="anchor" aria-label="anchor" href="#an-example"></a>
+<h1 id="connecting-to-grass-installed-using-the-stand-alone-installer">Connecting to <code>GRASS</code> installed using the stand-alone installer<a class="anchor" aria-label="anchor" href="#connecting-to-grass-installed-using-the-stand-alone-installer"></a>
 </h1>
-<p>The example presented here is the same as that presented in the the <a href="https://adamlilith.github.io/fasterRaster/articles/fasterRaster.html" class="external-link">“getting started”</a> vignette.</p>
+<p>I suggest you use the stand-alone installer (versus the OSGeo installer) if it is available. Assuming this is the case, then the <code>GRASS</code> installation path will look something like this, depending on your operating system:</p>
+<p>Simply start <code>R</code>, attach <code>fasterRaster</code>, then tell <code>fasterRaster</code> where <code>GRASS</code> is installed:</p>
+<pre><code><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://rspatial.org/" class="external-link">terra</a></span><span class="op">)</span> <span class="co"># GIS for rasters and vectors</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-spatial.github.io/sf/" class="external-link">sf</a></span><span class="op">)</span> <span class="co"># GIS for vectors</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/adamlilith/fasterRaster">fasterRaster</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="reference/faster.html">faster</a></span><span class="op">(</span>grassDir <span class="op">=</span> <span class="va">grassDir</span><span class="op">)</span></span></code></pre>
+<p>where <code>grassDir</code> is one of the following, depending on your operating system:</p>
+<pre><code><span><span class="va">grassDir</span> <span class="op">&lt;-</span> <span class="st">"C:/Program Files/GRASS GIS 8.4"</span> <span class="co"># Windows</span></span>
+<span><span class="va">grassDir</span> <span class="op">&lt;-</span> <span class="st">"/Applications/GRASS-8.4.app/Contents/Resources"</span> <span class="co"># Mac OS</span></span>
+<span><span class="va">grassDir</span> <span class="op">&lt;-</span> <span class="st">"/usr/local/grass"</span> <span class="co"># Linux</span></span></code></pre>
+<p>You can now start using <code>GRASS</code> via <code>fasterRaster</code>.</p>
+</div>
+<div class="section level1">
+<h1 id="connecting-to-grass-installed-using-osgeo-installer">Connecting to <code>GRASS</code> installed using OSGeo installer<a class="anchor" aria-label="anchor" href="#connecting-to-grass-installed-using-osgeo-installer"></a>
+</h1>
+<p>If you installed <code>GRASS</code> using the OSGeo installer, you will need to run <code>R</code> within the OSGeo shell. To do this, start the shell (a link should have been installed when you installed <code>GRASS</code> through the installer). Then, start <code>R</code>. You may be able to do this simply by entering <code>R</code> or <code>Rgui</code>, but if that does not work, you can start <code>R</code> by calling the entire path. On a Windows system, this would look something like:</p>
+<pre><code><span><span class="st">"C:/Program Files/R/R-4.6.1/bin/R.exe"</span></span></code></pre>
+<p>(include the quotes).</p>
+<p>Once <code>R</code> is started, you can attach <code>fasterRaster</code> and tell it where <code>GRASS</code> is installed. Again, what this looks like will depend on you operating system:</p>
+<pre><code><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://rspatial.org/" class="external-link">terra</a></span><span class="op">)</span> <span class="co"># GIS for rasters and vectors</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-spatial.github.io/sf/" class="external-link">sf</a></span><span class="op">)</span> <span class="co"># GIS for vectors</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/adamlilith/fasterRaster">fasterRaster</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">grassDir</span> <span class="op">&lt;-</span> <span class="st">"C:/OSGeo4W/apps/grass/grass85"</span> <span class="co"># for a Windows system</span></span>
+<span><span class="fu"><a href="reference/faster.html">faster</a></span><span class="op">(</span>grassDir <span class="op">=</span> <span class="va">grassDir</span><span class="op">)</span></span></code></pre>
+</div>
+<div class="section level1">
+<h1 id="a-worked-example">A worked example<a class="anchor" aria-label="anchor" href="#a-worked-example"></a>
+</h1>
+<p>The example presented here is the same as that presented in the the <a href="https://adamlilith.github.io/fasterRaster/articles/fasterRaster.html" class="external-link">“getting started”</a> vignette. We assume that you have started <code>R</code>, attached <code>fasterRaster</code>, and told it where <code>GRASS</code> is installed.</p>
 <p>We’ll do a simple operation in which we:</p>
 <ol style="list-style-type: decimal">
 <li><p>Add a buffer to lines representing rivers, then</p></li>
 <li><p>Calculate the distance to from each cell to the closest buffer and burn the distance values into a raster.</p></li>
 </ol>
 <p>To do this, we’ll be using maps representing the middle of the eastern coast of Madagascar. We will also use the <code>terra</code> and <code>sf</code> packages.</p>
-<pre><code><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://rspatial.org/" class="external-link">terra</a></span><span class="op">)</span> <span class="co"># GIS for rasters and vectors</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-spatial.github.io/sf/" class="external-link">sf</a></span><span class="op">)</span> <span class="co"># GIS for vectors</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/adamlilith/fasterRaster">fasterRaster</a></span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># Get example elevation raster and rivers vector:</span></span>
+<pre><code><span><span class="co"># Get example elevation raster and rivers vector:</span></span>
 <span><span class="va">madElev</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/fastData.html">fastData</a></span><span class="op">(</span><span class="st">'madElev'</span><span class="op">)</span> <span class="co"># SpatRaster with elevation</span></span>
 <span><span class="va">madRivers</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/fastData.html">fastData</a></span><span class="op">(</span><span class="st">'madRivers'</span><span class="op">)</span> <span class="co"># sp vector with rivers</span></span>
 <span></span>
@@ -140,13 +165,6 @@ o <a href="https://adamlilith.github.io/fasterRaster/" class="external-link">Doc
 <span><span class="fu"><a href="reference/plot.html">plot</a></span><span class="op">(</span><span class="va">madElev</span><span class="op">)</span></span>
 <span><span class="fu"><a href="reference/plot.html">plot</a></span><span class="op">(</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_geometry.html" class="external-link">st_geometry</a></span><span class="op">(</span><span class="va">madRivers</span><span class="op">)</span>, col <span class="op">=</span> <span class="st">"lightblue"</span>, add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre>
 <p><img src="reference/figures/elev_rivers.png"></p>
-<p>Before you use nearly any function in the package, you need to tell <code>fasterRaster</code> where <code>GRASS</code> is installed on your system. The installation folder will vary by operating system and maybe <code>GRASS</code> version, but will look something like this:</p>
-<pre><code><span><span class="co"># Choose the appropriate one, and modify as needed:</span></span>
-<span><span class="va">grassDir</span> <span class="op">&lt;-</span> <span class="st">"C:/Program Files/GRASS GIS 8.4"</span> <span class="co"># Windows</span></span>
-<span><span class="va">grassDir</span> <span class="op">&lt;-</span> <span class="st">"/Applications/GRASS-8.4.app/Contents/Resources"</span> <span class="co"># Mac OS</span></span>
-<span><span class="va">grassDir</span> <span class="op">&lt;-</span> <span class="st">"/usr/local/grass"</span> <span class="co"># Linux</span></span></code></pre>
-<p>Now, use the <code><a href="reference/faster.html">faster()</a></code> function to tell <code>fasterRaster</code> where <code>GRASS</code> is installed:</p>
-<pre><code><span><span class="fu"><a href="reference/faster.html">faster</a></span><span class="op">(</span>grassDir <span class="op">=</span> <span class="va">grassDir</span><span class="op">)</span></span></code></pre>
 <p>The <code><a href="reference/fast.html">fast()</a></code> function is the key function for loading a raster or vector into <code>fasterRaster</code> format. Rasters in this package are called <code>GRaster</code>s and vectors <code>GVector</code>s (the “G” stands for <code>GRASS</code>). We will now convert the <code>madElev</code> raster, which is a <code>SpatRaster</code> from the <code>terra</code> package, into a <code>GRaster</code>.</p>
 <pre><code><span><span class="va">elev</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/fast.html">fast</a></span><span class="op">(</span><span class="va">madElev</span><span class="op">)</span></span>
 <span><span class="va">elev</span></span></code></pre>
@@ -288,7 +306,7 @@ values      : River/Stream Perennial/Permanent MANANARA   MDG Madagascar
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.</p>
 </div>
 
     </footer>

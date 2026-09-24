@@ -192,6 +192,7 @@
   [`median(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/functions.md)
   [`count(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/functions.md)
   [`sum(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/functions.md)
+  [`prod(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/functions.md)
   [`min(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/functions.md)
   [`max(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/functions.md)
   [`which.min(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/functions.md)
@@ -209,6 +210,8 @@
   [`anyNA(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/functions.md)
   [`allNA(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/functions.md)
   : Mathematical operations on two or more GRasters
+- [`na.omit(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/na.omit.md)
+  : Force cells with NA in any layer of a GRaster stack to NA
 
 ## Subsetting and replacing GRasters
 
@@ -285,6 +288,8 @@
 - [`crop(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/crop.md)
   [`crop(`*`<GVector>`*`)`](https://github.com/adamlilith/fasterRaster/reference/crop.md)
   : Remove parts of a GRaster or GVector
+- [`crossFreq(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/crossFreq.md)
+  : Frequencies of combinations of cells across two or more rasters
 - [`denoise(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/denoise.md)
   [`noise(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/denoise.md)
   : Remove or retain "noise" in a raster using PCA
@@ -634,9 +639,11 @@
   [`aggregate(`*`<GVector>`*`)`](https://github.com/adamlilith/fasterRaster/reference/aggregate.md)
   : Aggregate raster cells into larger cells or combine geometries of a
   vector
-- [`as.data.frame(`*`<GVector>`*`)`](https://github.com/adamlilith/fasterRaster/reference/as.data.frame.md)
+- [`as.data.table(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/as.data.frame.md)
+  [`as.data.frame(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/as.data.frame.md)
+  [`as.data.frame(`*`<GVector>`*`)`](https://github.com/adamlilith/fasterRaster/reference/as.data.frame.md)
   [`as.data.table(`*`<GVector>`*`)`](https://github.com/adamlilith/fasterRaster/reference/as.data.frame.md)
-  : Convert GVector to a data frame
+  : Convert GRaster or GVector to a data frame
 - [`as.points(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/as.points.md)
   [`as.points(`*`<GVector>`*`)`](https://github.com/adamlilith/fasterRaster/reference/as.points.md)
   : Convert a GRaster, or lines or polygons GVector to a points vector
@@ -780,9 +787,11 @@
   [`as.float(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/as.int.md)
   [`as.doub(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/as.int.md)
   : Coerce raster to integer, float, or double precision
-- [`as.data.frame(`*`<GVector>`*`)`](https://github.com/adamlilith/fasterRaster/reference/as.data.frame.md)
+- [`as.data.table(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/as.data.frame.md)
+  [`as.data.frame(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/as.data.frame.md)
+  [`as.data.frame(`*`<GVector>`*`)`](https://github.com/adamlilith/fasterRaster/reference/as.data.frame.md)
   [`as.data.table(`*`<GVector>`*`)`](https://github.com/adamlilith/fasterRaster/reference/as.data.frame.md)
-  : Convert GVector to a data frame
+  : Convert GRaster or GVector to a data frame
 - [`as.lines(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/as.lines.md)
   : Convert a raster to a lines vector
 - [`as.points(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/as.points.md)

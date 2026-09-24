@@ -158,7 +158,7 @@ plot(madElev, add = TRUE)
 ### Buffer a vector:
 buffRivers <- buffer(rivers, width = 2000, dissolve = TRUE) # 2000-m buffer
 plot(buffRivers)
-plot(st_geometry(madRivers), col = "blue", add = TRUE)
+plot(rivers, col = "blue", add = TRUE)
 
 }
 ```

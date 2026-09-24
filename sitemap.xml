@@ -51,6 +51,7 @@
 <url><loc>https://github.com/adamlilith/fasterRaster/reference/copyGSpatial.html</loc></url>
 <url><loc>https://github.com/adamlilith/fasterRaster/reference/crds.html</loc></url>
 <url><loc>https://github.com/adamlilith/fasterRaster/reference/crop.html</loc></url>
+<url><loc>https://github.com/adamlilith/fasterRaster/reference/crossFreq.html</loc></url>
 <url><loc>https://github.com/adamlilith/fasterRaster/reference/crs.html</loc></url>
 <url><loc>https://github.com/adamlilith/fasterRaster/reference/datatype.html</loc></url>
 <url><loc>https://github.com/adamlilith/fasterRaster/reference/delaunay.html</loc></url>
@@ -156,6 +157,7 @@
 <url><loc>https://github.com/adamlilith/fasterRaster/reference/missingCats.html</loc></url>
 <url><loc>https://github.com/adamlilith/fasterRaster/reference/mow.html</loc></url>
 <url><loc>https://github.com/adamlilith/fasterRaster/reference/multivarEnvSim.html</loc></url>
+<url><loc>https://github.com/adamlilith/fasterRaster/reference/na.omit.html</loc></url>
 <url><loc>https://github.com/adamlilith/fasterRaster/reference/nacell.html</loc></url>
 <url><loc>https://github.com/adamlilith/fasterRaster/reference/names.html</loc></url>
 <url><loc>https://github.com/adamlilith/fasterRaster/reference/neighborhoodMatrix.html</loc></url>

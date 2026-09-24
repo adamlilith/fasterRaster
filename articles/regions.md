@@ -6,7 +6,7 @@ contain values. Rather, their resolution and the extent of the region
 influence how rasters are imported, created, processed, and exported. In
 most cases, whenever a raster undergoes one of these processes using a
 **GRASS** tool, the raster will be resampled and/or crop/extend it so
-that matches the region”s extent and resolution. If ignored, this can
+that matches the region’s extent and resolution. If ignored, this can
 cause unintended side effects if the region’s geometry doesn’t match the
 raster being processed.
 
