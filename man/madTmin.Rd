@@ -8,10 +8,10 @@
 An object of class \code{SpatRaster}.
 }
 \source{
-\doi{https://dx.doi.org/10.1002/joc.5086}
+https://www.chelsa-climate.org/
 }
 \description{
-Rasters of minimum temperature for an eastern portion of Madagascar from WorldClim 2.1 at ~3.33 arcminute resolution projected to the Tananarive (Paris)/Laborde Grid coordinate reference system. Values represent monthly averages across 1970-2000. Units are in degrees C. These should not be used for formal analysis.
+Rasters of minimum temperature for an eastern portion of Madagascar from WorldClim 2.1 at ~3.33 arcminute resolution projected to the Africa Lambert coordinate reference system. Values represent monthly averages across 1970-2000. Units are in degrees C. These should not be used for formal analysis.
 }
 \examples{
 
@@ -86,7 +86,7 @@ catNames(madCover) # names of categories table
 plot(madCover)
 }
 \references{
-Fick, S.E. and Hijmans, R.J.  2017.  WorldClim 2: New 1-km spatial resolution climate surfaces for global land areas.  International Journal of Climatology 37:4302-4315. \doi{10.1002/joc.5086}
+Karger, D.N., Conrad, O., Böhner, J., Kawohl, T., Kreft, H., Soria-Auza, R.W., Zimmermann, N.E., Linder, H.P., and Kessler, M.  2017.  Climatologies at high resolution for the earth’s land surface areas.  \emph{Scientific Data} 4:170122.. \doi{10.1038/sdata.2017.122}
 }
 \keyword{Madagascar}
 \keyword{climate}

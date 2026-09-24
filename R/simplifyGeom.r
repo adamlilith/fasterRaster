@@ -1,6 +1,6 @@
 #' Simplify the geometry of a vector
 #'
-#' @description `simplifyGeom()` reduces the number of vertices used to represent a vector (i.e., to save memory or disk space). There are several methods available.
+#' @description `simplifyGeom()` reduces the number of vertices used to represent a lines of polygons vector (i.e., to save memory or disk space). It has no effect on a points vector.
 #'
 #' @param x A `GVector`.
 #'
@@ -28,7 +28,9 @@ methods::setMethod(
 	f = "simplifyGeom",
 	signature = c(x = "GVector"),
 	function(x, tolerance = NULL, method = "VR", prop = 0.5) {
-
+	
+	if (geomtype(x) == "points") return(x)
+	
 	# automatic distance
 	if (is.null(tolerance)) {
 		extent <- ext(x, vector = TRUE)

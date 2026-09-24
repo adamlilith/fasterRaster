@@ -12,7 +12,7 @@
 #'
 #' @keywords Madagascar
 #'
-#' @source [DIVA-GIS](https://diva-gis.org/)
+#' @source [International Water Management Institute](https://iwmi.africageoportal.com/), "Streams of Madagascar"
 #'
 #' @example man/examples/ex_fastData.r
 #'

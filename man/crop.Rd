@@ -13,7 +13,7 @@
 \arguments{
 \item{x}{A \code{GRaster} or \code{GVector} to be cropped.}
 
-\item{y}{A \code{GRaster} or \code{GVector} to serve as a template for cropping.}
+\item{y}{A \code{GRaster}, \code{GVector} to serve as a template for cropping, or a numeric vector with 4 numeric values representing the extent to which to crop (west, east, south, north), or a \code{SpatExtent} object.}
 
 \item{fail}{Logical: If \code{TRUE} (default), and the cropped object would have zero extent in at least one dimension, then exit the function with an error. If \code{FALSE}, then display a warning and return \code{NULL}.}
 
@@ -80,6 +80,11 @@ rastByRast <- crop(elev, template)
 
 plot(elev, col = "gray", legend = FALSE)
 plot(rastByRast, add = TRUE)
+
+### Crop raster by manual extent:
+manualRast <- crop(elev, c(2523700, 2542041, -1718812, -1708812))
+plot(elev, col = "gray", legend = FALSE)
+plot(manualRast, add = TRUE)
 
 ### Crop vector by raster:
 
@@ -171,6 +176,22 @@ legend("topleft",
     lwd = c(NA, NA, 1),
     col = c("black", "red", "blue"),
     lty = c(NA, NA, "solid"),
+    xpd = NA,
+    bg = "white"
+)
+
+# Crop points vector by numeric vector:
+extent <- c(2523700, 2550000, -1740000, -1710000)
+ptsByNumeric <- crop(dypsis, extent)
+plot(dypsis)
+plot(ext(extent), border = "blue", xpd = NA, lty = "dashed", add = TRUE)
+plot(ptsByNumeric, col = "red", add = TRUE)
+legend("bottomleft",
+    legend = c("Dypsis", "Selected", "Extent"),
+    pch = c(16, 16, NA),
+    lwd = c(NA, NA, 1),
+    col = c("black", "red", "blue"),
+    lty = c(NA, NA, "dashed"),
     xpd = NA,
     bg = "white"
 )

@@ -46,5 +46,5 @@ plot(prinComp)
 }
 }
 \seealso{
-\code{\link[terra:princomp]{terra::princomp()}}, \code{\link[terra:prcomp]{terra::prcomp()}}
+\code{\link[stats:princomp]{stats::princomp()}}, \code{\link[stats:prcomp]{stats::prcomp()}}
 }

@@ -18,12 +18,13 @@
 A \code{GRaster}. If the inputs are all categorical (factor) rasters, then a levels table will also be returned with the new combined levels.
 }
 \description{
-This function takes from 2 to 10 integer or categorical (factor) \code{GRaster}s and creates a single \code{GRaster} that has one value per combination of values in the inputs. For example, say that there were two input rasters, with values 1 and 2 in the one raster, and 3 and 4 in the other. If the following combinations of values occurred between the two rasters, then the output raster would be re-coded with the new values:\tabular{lll}{
+This function takes from 2 to 30 integer or categorical (factor) \code{GRaster}s and creates a single \code{GRaster} that has one value per combination of values in the inputs. For example, say that there were two input rasters, with values 1 and 2 in the one raster, and 3 and 4 in the other. If the following combinations of values occurred between the two rasters, then the output raster would be re-coded with the new values:\tabular{lll}{
    \code{input_raster1} \tab \code{input_raster2} \tab \code{output_raster} \cr
    1 \tab 3 \tab 0 \cr
    1 \tab 4 \tab 1 \cr
    2 \tab 3 \tab 2 \cr
    2 \tab 4 \tab 3 \cr
+   2 \tab NA \tab NA (if \code{na.rm = TRUE}) or 4 (if \code{na.rm = FALSE}) \cr
 }
 
 

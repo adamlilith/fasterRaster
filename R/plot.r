@@ -61,47 +61,10 @@ methods::setMethod(
 
 	}
 
-	# nc <- ncell(x)
-	# if (nc > maxcell) {
-
-	# 	rows <- nrow(x)
-	# 	cols <- ncol(x)
-	# 	rescale <- ceiling(nc / (2 * maxcell))
-
-	# 	if (all(datatype(x) %in% c("integer", "factor"))) {
-	# 		fun <- "mode"
-	# 	} else {
-	# 		fun <- "mean"
-	# 	}
-
-	# 	if (rescale != 1L) x <- aggregate(x, fact = rescale, fun = fun)
-
-	# }
-	
-	# # dtype <- datatype(x, "GRASS")
-	# # if (all(dtype %in% "CELL")) {
-	
-	# # 	if (all(.minVal(x) >= 0L & .maxVal(x) <= 255L)) {
-	# # 		dtype <- "Byte"
-	# # 	} else if (all(.minVal(x) >= 0L & .maxVal(x) <= 65534L)) {
-	# # 		dtype <- "UInt16"
-	# # 	} else if (all(.minVal(x) >= -32767L & .maxVal(x) <= 32767L)) {
-	# # 		dtype <- "Int16"
-	# # 	} else if (all(.minVal(x) >= -2147483647L & .maxVal(x) <= 2147483647L)) {
-	# # 		dtype <- "Int32"
-	# # 	} else if (all(.minVal(x) >= -3.4E+38 & .maxVal(x) <= 3.4E+38)) {
-	# # 		dtype <- "Float32"
-	# # 	} else {
-	# # 		dtype <- "Float64"
-	# # 	}
-
-	# # } else {
-	# # 	dtype <- "Float64"
-	# # }
-
+	# save temporary file
 	tf <- tempfile(fileext = ".tif")
 	writeRaster(x, filename = tf, format = "GeoTIFF", bigTiff = TRUE, overwrite = TRUE, warn = FALSE, ...)
-	out <- terra::rast(tf)
+	out <- terra::rast(tf, lyrs = 1L:nlyr(x))
 	
 	facts <- is.factor(x)
 	if (any(facts)) {

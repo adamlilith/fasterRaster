@@ -26,7 +26,8 @@ methods::setMethod(
         n = 1,
         mu = 0,
         sigma = 1,
-        dimension = 2.05) {
+        dimension = 2.05
+    ) {
 
     if (any(dimension <= 2) | any(dimension >= 3)) stop("Argument `dimension` must be in the range (2, 3).")
 

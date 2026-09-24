@@ -5,7 +5,7 @@
 \alias{maskNA}
 \title{Mask all non-NA cells or all NA cells}
 \usage{
-\S4method{maskNA}{GRaster}(x, value = 1, invert = FALSE, retain = FALSE)
+\S4method{maskNA}{GRaster}(x, value = 1, invert = FALSE, retain = FALSE, byLayer = TRUE)
 }
 \arguments{
 \item{x}{A \code{GRaster}.}
@@ -14,19 +14,27 @@
 
 \item{invert}{Logical: If \code{FALSE} (default), convert non-\code{NA} cells to \code{value}, and leave \code{NA} cells as-is. If \code{TRUE}, convert all \code{NA} cells to \code{value}, and non-\code{NA} cells to \code{NA}.}
 
-\item{retain}{Logical: If \code{invert} is \code{TRUE} and \code{retain} is \code{FALSE} (default), non-\code{NA} cells will retain their value. This argument is ignored if \code{invert} is \code{FALSE}.}
+\item{retain}{Logical: If \code{invert} is \code{TRUE} and \code{retain} is \code{FALSE} (default), non-\code{NA} cells will retain their value. This argument is ignored if \code{invert} is \code{FALSE}. Ignored if \code{byLayer = FALSE}.}
+
+\item{byLayer}{Logical: If \code{TRUE} (default), implement the masking layer-by-layer. If \code{x} is a stack of raster, it will return a stack with the same number of layers. If \code{FALSE}, return a single raster layer with \code{NA} in all cells that had at least one \code{NA} across all layers, and \code{value} in all cells that had no \code{NA}s across all layers. If \code{invert = TRUE}, it will return a single raster layer with \code{value} in all cells that had at least one \code{NA} across all layers, and \code{NA} in all cells that had no \code{NA}s across all layers.}
 }
 \value{
 A \code{GRaster}.
 }
 \description{
-This function converts all non-\code{NA} cells in a \code{GRaster} to a single user-defined value, leaving \code{NA} cells as \code{NA}. Alternatively, it can convert \code{NA} cells to a user-defined value, and all non-\code{NA} cells to \code{NA.}
+This function work in two ways:
+\itemize{
+\item If \code{byLayer = TRUE} (default), it will convert all non-\code{NA} cells in a \code{GRaster} to a single user-defined value, leaving \code{NA} cells as \code{NA}. Alternatively, it can convert \code{NA} cells to a user-defined value, and all non-\code{NA} cells to \code{NA.} Regardless, if the input is a "stack" of \code{GRaster}s, it will return a stack with the same number of raster layers.
+\item If \code{byLayer = FALSE} and \code{x} is a "stack" of \code{GRaster}s,, it will return a single \code{GRaster} layer. This layer will have a user-defined value in all cells that had no \code{NA}s across all rasters, and \code{NA}s in cells where at least one raster had an \code{NA}. This is useful for masking out areas where data are missing in any of the rasters. If \code{invert = TRUE}, it will return a single \code{GRaster} layer with a user-defined value in all cells that had at least one \code{NA} across all rasters, and \code{NA}s in cells where all rasters had non-\code{NA} values.
+}
 }
 \examples{
 if (grassStarted()) {
 
 # Setup
 library(terra)
+
+### Mask layer-by-layer
 
 # Elevation raster
 madElev <- fastData("madElev")
@@ -48,6 +56,20 @@ plot(c(elev, elevInvertMask))
 elevInvertRetain <- maskNA(elev, value = 200, invert = TRUE, retain = TRUE)
 elevInvertRetain
 plot(c(elev, elevInvertRetain))
+
+### Mask *across* layers
+
+# Load forest raster, which has many NAs
+madForest2000 <- fastData("madForest2000")
+forest2000 <- fast(madForest2000)
+
+x <- c(elev, forest2000)
+
+maskByLayer <- maskNA(x)
+maskAcrossLayers <- maskNA(x, byLayer = FALSE)
+
+maskByLayer
+maskAcrossLayers
 
 }
 }

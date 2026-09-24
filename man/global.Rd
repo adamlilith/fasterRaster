@@ -27,7 +27,7 @@
 \item \code{"sd"}: Sample standard deviation (same as \code{\link[stats:sd]{stats::sd()}}).
 \item \code{"sdpop"}: Population standard deviation.
 \item \code{"sum"}: Sum.
-\item \code{"var"}: Sample variance (same as \code{\link[stats:cor]{stats::var()}}).
+\item \code{"var"}: Sample variance (same as \code{\link[stats:var]{stats::var()}}).
 \item \code{"varpop"}: Population variance.
 }}
 

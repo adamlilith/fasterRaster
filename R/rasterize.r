@@ -39,6 +39,9 @@ methods::setMethod(
 	.locationRestore(x)
 	.region(y)
 
+	if (field != "") if (!(field %in% names(x))) stop("Field '", field, "' is not found in data table of x.")
+	if (!is.null(by)) if (!(by %in% names(x))) stop("Field '", by, "' is not found in data table of x.")
+
 	gtype <- geomtype(x, grass = TRUE)
 	out <- .rasterize(x = x, y = y, field = field, background = background, by = by, gtype = gtype, verbose = verbose)
 	makeGRaster(out$src, levels = out$levels)

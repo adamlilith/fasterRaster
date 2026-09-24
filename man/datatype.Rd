@@ -84,14 +84,19 @@ ext(elev)
 # data type
 datatype(elev)
 
+### operations on GRasters
+
 # assigning
-copy <- elev
-copy[] <- pi # assign all cells to the value of pi
-copy
+pie <- elev
+pie[] <- pi # assign all cells to the value of pi
+pie
 
 # concatenating multiple GRasters
 rasts <- c(elev, forest)
 rasts
+
+# number of layers
+nlyr(elev)
 
 # adding a raster "in place"
 add(rasts) <- ln(elev)
@@ -104,13 +109,14 @@ rasts[["madForest2000"]]
 # assigning
 rasts[[4]] <- elev > 500
 
-# number of layers
-nlyr(rasts)
-
 # names
 names(rasts)
 names(rasts) <- c("elev_meters", "forest", "ln_elev", "high_elevation")
 rasts
+
+# converting to data.tables/data.frames
+as.data.table(rasts)
+head(as.data.frame(rasts))
 
 ### GVector properties
 
@@ -178,11 +184,11 @@ as.data.frame(rivers)
 as.data.table(rivers)
 
 # subsetting
-rivers[c(1:2, 5)] # select 3 rows/geometries
-rivers[-5:-11] # remove rows/geometries 5 through 11
+rivers[c(1, 3)] # select 2 rows/geometries
+rivers[-3] # remove row/geometry 3
 rivers[ , 1] # column 1
-rivers[ , "NAM"] # select column
-rivers[["NAM"]] # select column
+rivers[ , "TopElev"] # select column
+rivers[["TopElev"]] # select column
 rivers[1, 2:3] # row/geometry 1 and column 2 and 3
 rivers[c(TRUE, FALSE)] # select every other geometry (T/F vector is recycled)
 rivers[ , c(TRUE, FALSE)] # select every other column (T/F vector is recycled)

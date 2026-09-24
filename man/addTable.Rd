@@ -50,7 +50,7 @@ as.data.table(rivers)
 
 # Subset rivers vector
 rivers1 <- rivers[1:2]
-rivers2 <- rivers[10:11]
+rivers2 <- rivers[2:3]
 
 # Concatenate rivers
 riversCombo <- rbind(rivers1, rivers2)
@@ -68,7 +68,7 @@ riversCopy <- dropTable(riversCopy)
 riversCopy # no data table
 
 # Add a new table
-newTable <- data.frame(num = 1:11, letters = letters[1:11])
+newTable <- data.frame(num = 1:3, letters = letters[1:3])
 addTable(riversCopy) <- newTable
 riversCopy
 

@@ -8,13 +8,13 @@
 An object of class \code{sf}.
 }
 \source{
-\href{https://gbif.org}{Global Biodiversity Information Facility (GBIF)}
+\href{https://gbif.org}{Global Biodiversity Information Facility (GBIF)} Occurrence Data Download \url{https://doi.org/10.15468/dl.dq942k}
 }
 \usage{
 data(madDypsis)
 }
 \description{
-Spatial points vector of herbarium specimens and observations of plants in the genus \emph{Dypsis} (slender, evergreen palms) from a portion of eastern Madagascar.
+An \code{sf} points vector containing herbarium specimens and observations of plants in the genus \emph{Dypsis} (slender, evergreen palms) from a portion of eastern Madagascar.
 }
 \examples{
 

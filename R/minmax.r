@@ -32,8 +32,7 @@ setMethod(
 			if (numLevels[i] > 0L) {
 				
 				ac <- x@activeCat[[i]]
-    			cats <- x@levels[[i]][ , ..ac]
-				cats <- cats[[1L]]
+    			cats <- x@levels[[i]][[ac]]
 				thisMin <- cats[1L]
 				thisMax <- tail(cats, 1L)
 

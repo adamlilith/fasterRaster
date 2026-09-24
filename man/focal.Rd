@@ -28,7 +28,7 @@
 \item "\code{sdpop}": Population standard deviation. NB: This is the same as the function "stddev" in the \strong{GRASS} tool \code{r.neighbors}.
 \item "\code{sum}": Sum of non-`NA`` cells.
 \item "\code{count}": Number of non-`NA cells. Should not use a weights matrix.
-\item "\code{var}": Sample variance.  NB: This is the same as the \code{\link[stats:cor]{stats::var()}} function.
+\item "\code{var}": Sample variance.  NB: This is the same as the \code{\link[stats:var]{stats::var()}} function.
 \item "\code{varpop}": Population variance. NB: This is the same as the function "variance" in the \strong{GRASS} tool \code{r.neighbors}.
 \item "\code{nunique}": Number of unique values. Should not use a weights matrix.
 \item "\code{interspersion}": Proportion of cells with values different from focal cell (e.g., if 6 of 8 cells have different values, then the interspersion is 6/8 = 0.75). NB: This is slightly different from how it is defined in the \strong{GRASS} tool \code{r.neighbors}. Should not use a weights matrix.

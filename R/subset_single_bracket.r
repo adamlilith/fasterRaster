@@ -44,7 +44,7 @@ methods::setMethod(
 			.message(
 				msg = "subset_square_bracket",
 				message =
-"The GVector returned by `[` (subset_single_bracket) may have the order of items in\n  its data table changed from the order they appear in the index used to select features.\n  For example, if you use `vector[3:1]`,  `vector[1:3]`. If this\n  message appeared after you called a function other than `[`, you can probably ignore it."
+"The GVector returned by `[` (subset_single_bracket) may have the order of items in\n  its data table changed from the order they appear in the index used to select features.\n  For example, if you use `vector[3:1]`, you may get  in return `vector[1:3]`. If this\n  message appeared after you called a function other than `[`, you can probably ignore it."
 			)
 
 		}
@@ -171,7 +171,9 @@ methods::setMethod(
 			src <- .makeSourceName("subset_single_bracket_v_extract", "vector")
 			cats <- .vCats(sources(x))
 			cats <- unique(cats)
-			keepCats <- cats[cats %in% i] # selects same as GVector but wrong geometry
+			# keepCats <- cats[seq_along(cats) %in% i] # selects same as GVector but wrong geometry
+			# keepCats <- cats[cats %in% i] # selects same as GVector but wrong geometry
+			keepCats <- cats[order(cats) %in% i] # selects same as GVector but wrong geometry
 
 			args <- list(
 				cmd = "v.extract",
@@ -182,28 +184,29 @@ methods::setMethod(
 				flags = c(.quiet(), "overwrite", "t") # "t" ==> Do not copy attributes
 			)
 
-			if (gtype == "point") {
+			# if (gtype == "point") {
 
-				# selecting geometries using database method
-				qid <- rep(0L, nGeoms)
-				qid[keepCats] <- 1L
+			# 	# selecting geometries using database method
+			# 	qid <- rep(0L, nGeoms)
+			# 	qid[cats %in% keepCats] <- 1L
 
-				db <- data.table::data.table(cat = cats, qid = qid)
-				.vAttachDatabase(x, db, cats = cats)
+			# 	db <- data.table::data.table(cat = cats, qid = qid)
+			# 	.vAttachDatabase(x, db, cats = cats)
 
-				args$where <- "qid = 1" # will not work with inequalities!
+			# 	args$where <- "qid = 1" # will not work with inequalities!
 
-			} else if (gtype %in% c("area", "line")) {
+			# } else if (gtype %in% c("area", "line")) {
 			
 				sqlCats <- seqToSQL(keepCats)
 				sqlCats <- as.character(sqlCats)
 				args$cats <- sqlCats
 			
-			}
+			# }
 
 			do.call(rgrass::execGRASS, args = args)
+			# tableOrder <- .vCats(src) # for re-ordering table rows if there is a table
 			# src <- .vRecat(src, gtype = gtype, cats = keepCats) # using cats argument removes some point geometries!!!
-			src <- .vRecat(src, gtype = gtype) # retains all point geometries
+			# src <- .vRecat(src, gtype = gtype) # retains all point geometries
 
 # 				srcs <- character()
 # 				trim <- TRUE
@@ -295,6 +298,7 @@ methods::setMethod(
 					table <- table[iRev]
 				} else {
 					table <- table[i]
+					# table <- table[tableOrder]
 				}
 			}
 

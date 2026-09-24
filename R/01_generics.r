@@ -113,6 +113,7 @@ methods::setGeneric(name = "convHull", package = "terra")
 methods::setGeneric(name = "count", def = function(x, ...) standardGeneric("count"))
 methods::setGeneric(name = "crds", package = "terra")
 methods::setGeneric(name = "crs", package = "terra")
+methods::setGeneric(name = "crossFreq", def = function(x, ...) standardGeneric("crossFreq"))
 methods::setGeneric(name = "crop", package = "terra")
 
 # dim() is primitive
@@ -184,6 +185,7 @@ methods::setGeneric(name = "kurtosis", def = function(x, ...) standardGeneric("k
 
 # levels (in base) is generic
 # levels<- (in base) is primitive
+methods::setGeneric(name = "layerChiSq", def = function(x, ...) standardGeneric("layerChiSq"))
 methods::setGeneric(name = "layerCor", package = "terra")
 methods::setGeneric(name = "ln", def = function(x, ...) standardGeneric("ln"))
 methods::setGeneric(name = "longlat", def = function(x, ...) standardGeneric("longlat"))
@@ -203,6 +205,7 @@ methods::setGeneric(name = "multivarEnvSim", def = function(ref, proj, ...) stan
 
 # "names" (in base) is primitive
 methods::setGeneric(name = "N", def = function(x, ...) standardGeneric("N"))
+methods::setGeneric(name = "na.omit", package = "terra")
 methods::setGeneric(name = "ncell", package = "terra")
 methods::setGeneric(name = "ncell3d", def = function(x) standardGeneric("ncell3d"))
 methods::setGeneric(name = "ncol", def = function(x) standardGeneric("ncol")) # in base

@@ -11,6 +11,8 @@
 \alias{count}
 \alias{sum,GRaster-method}
 \alias{sum}
+\alias{prod,GRaster-method}
+\alias{prod}
 \alias{min,GRaster-method}
 \alias{min}
 \alias{max,GRaster-method}
@@ -53,6 +55,8 @@
 \S4method{count}{GRaster}(x)
 
 \S4method{sum}{GRaster}(x, na.rm = FALSE)
+
+\S4method{prod}{GRaster}(x, na.rm = FALSE)
 
 \S4method{min}{GRaster}(x, na.rm = FALSE)
 

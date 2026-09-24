@@ -404,7 +404,7 @@ setMethod(
 		)
 		
 	}
-	makeGRaster(srcs, names(x))
+	makeGRaster(srcs, names = names(x))
 
 }
 
@@ -430,7 +430,7 @@ setMethod(
 		)
 	}
 
-	makeGRaster(srcs, names(x))
+	makeGRaster(srcs, names = names(x))
 
 }
 
@@ -459,7 +459,7 @@ setMethod(
 		)
 		
 	}
-	makeGRaster(srcs, names(x))
+	makeGRaster(srcs, names = names(x))
 
 }
 
@@ -488,6 +488,6 @@ setMethod(
 			flags = c(.quiet(), "overwrite")
 		)
 	}
-	makeGRaster(srcs, fx)
+	makeGRaster(srcs, names = names(x))
 
 }

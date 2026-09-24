@@ -53,7 +53,7 @@
 \item{x}{Any of:
 \itemize{
 \item Missing (default): Reports the extent, resolution, and dimensions of the current region. All other arguments will be ignored. You can also use \code{\link[=ext]{ext()}}, \code{\link[=dim]{dim()}}, and \code{\link[=res]{res()}} and related functions with missing arguments.
-\item A \code{GSpatial}, \code{GRegion}, \code{GRaster}, \code{GVector} object: Sets the region"s extent, dimensions, and/or resolution to those of the object.
+\item A \code{GSpatial}, \code{GRegion}, \code{GRaster}, \code{GVector} object: Sets the region's extent, dimensions, and/or resolution to those of the object.
 \item A \code{numeric} vector. This will resize the region's extent, resample the region's resolution/dimensions, or both, to ensure the desired dimensions or resolution are retained:
 * 2 values for \code{.regionDim()}: Number of rows and columns
 * 4 values for \code{.regionExt()}: Westernmost and easternmost easting (longitude), and southernmost and northernmost northing (latitude)
@@ -73,7 +73,7 @@ Alternatively, a \code{GRaster} can be supplied:
 \item \code{.regionRes()}: New region will have same extent and dimensions.
 }
 
-In this case, the new region"s registration will be the same as this raster, and cell resolution will be the same
+In this case, the new region's registration will be the same as this raster, and cell resolution will be the same
 
 Note: In most cases extent cannot be retained exactly if the resolution is changed. When resolution is changed, the actual extent will be the user-supplied extent expanded by zero to one rows or zero to one columns to accommodate an integer number of cells of the desired size. The western and northern limits of the extent will be retained, while the eastern and southern limits of the extent will be moved to accommodate an integer number of columns and rows.}
 }

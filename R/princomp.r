@@ -10,7 +10,7 @@
 #' 
 #' @returns A multi-layer `GRaster` with one layer per principal component axis. The [pcs()] function can be used on the output raster to retrieve a `prcomp` object from the raster, which includes rotations (loadings) and proportions of variance explained.
 #' 
-#' @seealso [terra::princomp()], [terra::prcomp()]
+#' @seealso [stats::princomp()], [stats::prcomp()]
 #' 
 #' @example man/examples/ex_princomp.r
 #' 
@@ -125,7 +125,7 @@ methods::setMethod(
 #' 
 #' @returns An object of class `prcomp`.
 #' 
-#' @seealso [princomp()], [terra::princomp()], tool `i.pca` in **GRASS**
+#' @seealso [princomp()], [stats::princomp()], tool `i.pca` in **GRASS**
 #' 
 #' @example man/examples/ex_princomp.r
 #'

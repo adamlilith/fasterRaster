@@ -119,7 +119,9 @@ reference:
   - median
   - min
   - mmode
+  - na.omit
   - nunique
+  - prod
   - quantile
   - range
   - skewness
@@ -160,6 +162,7 @@ reference:
   - combineLevels
   - concats
   - crop
+  - crossFreq
   - denoise
   - distance
   - extend

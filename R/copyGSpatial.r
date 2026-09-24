@@ -86,34 +86,30 @@ methods::setMethod(
 		if (reshapeRegion) .region(x)
 		srcs <- sources(x)
 
-	} else {
+	} else if (reshapeRegion) {
 
 		srcs <- x
-		if (reshapeRegion) {
+		args <- list(
+			cmd = "g.region",
+			flags = .quiet()
+		)
 
-			args <- list(
-				cmd = "g.region",
-				flags = .quiet()
-			)
+		if (is.null(topo)) {
 
-			if (is.null(topo)) {
+			topo <- "2D" # guessing!
+			if (!is.null(.quiet)) warning("Assuming raster is 2D.")
+			args$raster <- srcs[1L]
 
-				topo <- "2D" # guessing!
-				
-				if (!is.null(.quiet)) warning("Assuming raster is 2D.")
-
-				args$raster <- srcs[1L]
-
-			} else if (topo == "2D") {
-				args$raster <- srcs[1L]
-			} else if (topo == "3D") {
-				args$raster_3d <- srcs[1L]
-			}
-
-			do.call(rgrass::execGRASS, args = args)
-
+		} else if (topo == "2D") {
+			args$raster <- srcs[1L]
+		} else if (topo == "3D") {
+			args$raster_3d <- srcs[1L]
 		}
 
+		do.call(rgrass::execGRASS, args = args)
+
+	} else {
+		srcs <- x
 	}
 
 	nLayers <- length(srcs)
@@ -128,6 +124,15 @@ methods::setMethod(
 			expression = ex,
 			flags = c(.quiet(), "overwrite")
 		)
+
+		# # NB g.copy does NOT respect regions or a MASK raster!!!		
+		# inOut <- paste0(srcs[i], ',', out[i])
+
+		# rgrass::execGRASS(
+		# 	cmd = "g.copy",
+		# 	raster = inOut,
+		# 	flags = c(.quiet(), "overwrite")
+		# )
 
 	}
 

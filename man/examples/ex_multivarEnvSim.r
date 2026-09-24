@@ -25,6 +25,7 @@ madDypsis <- fastData("madDypsis") # Dypsis occurrences
 dypsis <- fast(madDypsis)
 
 dypEnv <- extract(chelsa, dypsis)
+dypEnv <- dypEnv[complete.cases(dypEnv), ]
 dypMess <- multivarEnvSim(ref = dypEnv, proj = proj)
 plot(dypMess)
 

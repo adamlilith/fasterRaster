@@ -173,5 +173,5 @@ levels(combinedNA)
 }
 }
 \seealso{
-\code{\link[terra:factors]{terra::levels()}}, \code{\link[fasterRaster]{levels<-}}, \code{\link[terra:factors]{terra::cats()}}, \code{\link[terra:factors]{terra::categories()}}, see \code{vignette("GRasters", package = "fasterRaster")}
+\code{\link[terra:levels]{terra::levels()}}, \code{\link[fasterRaster]{levels<-}}, \code{\link[terra:cats]{terra::cats()}}, \code{\link[terra:categories]{terra::categories()}}, see \code{vignette("GRasters", package = "fasterRaster")}
 }

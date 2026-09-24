@@ -48,5 +48,5 @@ plot(rand)
 }
 }
 \seealso{
-\code{\link[terra:voronoi]{terra::delaunay()}}, tool \code{v.delaunay} in \strong{GRASS}
+\code{\link[terra:delaunay]{terra::delaunay()}}, tool \code{v.delaunay} in \strong{GRASS}
 }

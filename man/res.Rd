@@ -174,6 +174,6 @@ layerCor(landsat, fun = 'cov') # covariance
 }
 }
 \seealso{
-\code{\link[terra:dimensions]{terra::res()}}
+\code{\link[terra:res]{terra::res()}}
 }
 \keyword{res}

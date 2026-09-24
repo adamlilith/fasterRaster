@@ -25,6 +25,8 @@
 #' `*` Depends on the integers (signed/unsigned, range of values). Categorical rasters will have an associated file saved with them that has category values and labels. The file name will be the same as the raster's file name, but end with the extension given by `levelsExt` (`.csv` by default).
 #'
 #' @param byLayer Logical: If `FALSE` (default), multi-layer rasters will be saved in one file. If `TRUE`, the each layer will be saved in a separate file. The filename from `filename` will be amended so that it ends with `_<name>` (then the file extension), where `<name>` is give by [names()]. Note that if any characters in raster names will not work in a file name, then the function will fail (e.g., a backslash or question mark).
+#' 
+#' @param appendNameToSingleLayer Logical: If `TRUE` (default), `byLayer` is `TRUE`, and the raster has a single layer, then the layer name will be appended to the file name, as in `filename_layerName.ext`. If `FALSE`, the layer name will not be appended to the file name. If the raster has >1 layer and `byLayer` is `TRUE`, then the raster name will always be appended to the file name, regardless of the value of this argument.
 #'
 #' @param names Logical: If `TRUE` (default), save a file with raster layer names. The file will have the same name as the raster file but end with "`_names.csv`". Currently, the [names()] attribute of rasters cannot be saved in the raster, which can create confusion when multi-layered rasters are saved. Turning on this option will save the ancillary file with layer names. If it exists, this file will be read by [fast()] so layer names are assigned when the raster is read by that function. The absence of a "names" file will not create any issues with this function or [fast()], other than not having the metadata on layer names.
 #' 
@@ -69,6 +71,7 @@ setMethod(
 		overwrite = FALSE,
 		datatype = NULL,
 		byLayer = FALSE,
+		appendNameToSingleLayer = TRUE,
 		names = TRUE,
 		levelsExt = NULL,
 		compress = "LZW",
@@ -97,7 +100,7 @@ setMethod(
 			xx <- x[[i]]
 			extension <- .fileExt(filename)
 			fn <- substr(filename, 1L, nchar(filename) - nchar(extension) - 1L)
-			fn <- paste0(fn, "_", names(xx), ".", extension)
+			if (appendNameToSingleLayer || nLayers > 1L) fn <- paste0(fn, "_", names(xx), ".", extension) # append raster name to filename
 			writeRaster(xx, filename = fn, overwrite = overwrite, datatype = datatype, byLayer = FALSE, names = names, levelsExt = levelsExt, compress = compress, warn = warn, ...)
 		
 		}

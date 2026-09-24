@@ -81,13 +81,14 @@ tail(rivers)
 
 # Vector or table with just selected columns:
 names(rivers)
-rivers$NAME
-rivers[[c("NAM", "NAME_0")]]
-rivers[[c(3, 5)]]
+rivers
+rivers$TopElev
+rivers[[c("TopElev", "BotElev")]]
+rivers[[1:2]]
 
 # Select geometries/rows of the vector:
 nrow(rivers)
-selected <- rivers[2:6]
+selected <- rivers[c(1, 3)]
 nrow(selected)
 
 # Plot:

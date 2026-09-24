@@ -94,6 +94,23 @@ setMethod(
 	} # EOF
 )
 
+#' @aliases prod
+#' @rdname functions
+#' @exportMethod prod
+setMethod(
+	"prod",
+	signature(x = "GRaster"),
+	function(x, na.rm = FALSE) {
+
+	srcs <- sources(x)
+	src <- .makeSourceName("prod", "rast")
+	ex <- paste0(src, " = ", paste0("(", srcs, ")", collapse = " * "))
+	rgrass::execGRASS(cmd = "r.mapcalc", expression = ex, flags = c(.quiet(), "overwrite"))
+	makeGRaster(src, "product")
+	
+	} # EOF
+)
+
 #' @aliases min
 #' @rdname functions
 #' @exportMethod min

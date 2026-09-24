@@ -5,18 +5,68 @@
 \alias{layerCor}
 \title{Correlation between GRasters}
 \usage{
-\S4method{layerCor}{GRaster}(x, fun = "cor")
+\S4method{layerCor}{GRaster}(
+  x,
+  fun = "cor",
+  cor = "Pearson",
+  correct = TRUE,
+  simulate = FALSE,
+  nSim = 2000,
+  integerAsNumeric = TRUE,
+  na.rm = TRUE,
+  verbose = FALSE
+)
 }
 \arguments{
-\item{x}{A \code{GRaster} with two or more layers.}
+\item{x}{A \code{GRaster} with two or more layers. Partial matching is used and capitalization ignored.}
 
-\item{fun}{Character: Name of the statistic to calculate; either \code{"cor"} (default) or \code{"cov"}.}
+\item{fun}{Character: Name of the statistic(s) to calculate:
+\itemize{
+\item \code{"cor"} (default): Pearson sample correlation (i.e., the denominator is \code{n - 1}). Appropriate for numeric-numeric raster comparisons.
+\item \code{"cov"}: Covariance.
+\item \code{"chisq"}: Chi-squared test and Cramer's \emph{V}. Default for integer-integer, factor-factor, or integer-factor raster comparisons.
+\item \code{"kw"}: Kruskal-Wallis \emph{H} statistic. Appropriate for integer-numeric or factor-numeric raster comparisons.
+\item \code{"auto"}: Automatically select the appropriate statistic based on the data types of the rasters and calculates the (approximate) effect size and (where necessary) rescale to the range from 0 to 1. If any two rasters are numeric, then the absolute value of the Pearson or Spearman correlation will be calculated (depending on argument \code{cor}). If any two rasters are integer or factor, then Cramer's \emph{V} will be returned. If any two are numeric and factor/integer, then the square root of the proportion of variance explained by the Kruskal-Wallis test will be returned. This is \verb{sqrt(H / (N - 1)}, where \code{H} is the KW test statistic and \code{N} the number of non-\code{NA} cells.
+}}
+
+\item{cor}{Either 'pearson' (default) or 'spearman'. Only used if \code{fun = "cor"} or \code{fun = "auto"} and any two rasters are numeric. Indicates the type of correlation statistic to calculate. Capitalization is ignored and partial matching is used.}
+
+\item{correct}{Logical (only used if \code{fun = "chisq"}): If \code{TRUE} (default), then apply continuity correction when computing the test statistic for 2 by 2 tables: one half is subtracted from all |\emph{O - E}| differences; however, the correction will not be bigger than the differences themselves. No correction is performed if \code{simulate = TRUE}.}
+
+\item{simulate}{Logical (only used if \code{fun = "chisq"}): If \code{TRUE}, then the \emph{p}-value will be estimated by Monte Carlo simulation, using \code{\link[stats:chisq.test]{stats::chisq.test()}}]. This is recommended when there are many categories, because the chi-squared distribution is not a good approximation of the distribution of the test statistic in this case. The default is \code{FALSE} because simulating \emph{p}-values can be time-consuming.}
+
+\item{nSim}{Numeric or integer (only used if \code{fun = "chisq"}): Number of replicates for Monte Carlo simulation when \code{simulate} is \code{TRUE}. The default is 2000.}
+
+\item{integerAsNumeric}{Logical: If \code{TRUE} (default), then treat integer rasters as numeric. This is useful for rasters that are stored as integers but are actually continuous variables. If \code{FALSE}, then treat integer rasters as categorical variables. Only applicable for Kruskal-Wallis test or when \code{cor = 'auto'}.}
+
+\item{na.rm}{Logical: If \code{TRUE} (default), then remove cells with \code{NA} values in any raster. If \code{FALSE}, then pairwise comparisons of rasters will use all pairs of non-\code{NA} cells, even if they are \code{NA} in other \code{GRaster}s.}
+
+\item{verbose}{Logical: If \code{TRUE}, then display progress. Default is \code{FALSE}. Ignored for some values of \code{fun}.}
 }
 \value{
-A numeric \code{matrix}.
+The output depends on the selected statistic:
+\itemize{
+\item \code{"cor"}: A correlation \code{matrix}. An attribute "\code{n}" gives the number of cells used in each pairwise correlation.
+\item \code{"cov"}: A covariance \code{matrix}.
+\item \code{"chisq"}: A \code{list} with five or six elements:
+\itemize{
+\item \code{chisq}: A \code{matrix} of chi-squared values for each pairwise comparison;
+\item \code{df}: A \code{matrix} of degrees of freedom for each pairwise comparison (only included if \code{simulate = FALSE});
+\item \code{p.value}: A \code{matrix} of \emph{p}-values for each pairwise comparison. Note that most rasters have so many cells that even very small differences create very small \emph{p}-values, so do not get too excited;
+\item \code{nCats1}: A \code{matrix} with the number of categories/integer values for each raster in each pairwise comparison;
+\item \code{nCats2}: A \code{matrix} with the number of categories/integer values for each raster in each pairwise comparison;
+\item \code{nCells}: A \code{matrix} with the number of cells used in each pairwise comparison.
+}
+\item \code{"kw"}: A matrix with \emph{H} values for each comparison.
+\item \code{"auto"}: A \code{list} with these elements:
+\itemize{
+\item \code{stat}: A character vector with the name of the statistic calculated for each pairwise comparison.
+\item \code{relative.effect.size}: A numeric matrix with the relative effect size of each comparison. Values are in the range of 0 to 1.
+}
+}
 }
 \description{
-This function returns a correlation or covariance matrix between two or more \code{GRaster} layers. This function returns the sample correlation and covariance (i.e., the denominator is n - 1).
+Calculate the correlation, covariance, or chi-squared, Cramer's \emph{V}, or Kruskal-Wallis's \emph{H} between two or more rasters. Note that cells that are \code{NA} for any raster are ignored across all rasters.
 }
 \examples{
 if (grassStarted()) {
@@ -31,13 +81,28 @@ madChelsa <- fastData("madChelsa")
 chelsa <- fast(madChelsa)
 
 # Correlation
-layerCor(chelsa, "cor")
+layerCor(chelsa, "cor", na.rm = FALSE) # Pearson correlation
+layerCor(chelsa, "cor", cor = "spearman", na.rm = FALSE) # Spearman correlation
 
 # Covariance
-layerCor(chelsa, "cov")
+layerCor(chelsa, "cov", na.rm = FALSE)
+
+# To illustrate categorical tests, force two layers to be of type integer
+chelsa[[1:2]] <- as.int(chelsa[[1:2]])
+
+# Chi-^2 and Cramer's V (integer vs integer)
+layerCor(chelsa[[1:2]], "chisq", na.rm = FALSE)
+
+# Kruskal-Wallis test (integer vs continuous)
+integerCont <- c(chelsa[[1]], chelsa[[3]])
+layerCor(integerCont, "kw", na.rm = FALSE)
+
+# automatic by data type
+layerCor(chelsa, "auto", cor = "spear", na.rm = FALSE,
+   verbose = TRUE, integerAsNumeric = FALSE)
 
 }
 }
 \seealso{
-\code{\link[terra:layerCor]{terra::layerCor()}}, \code{\link[stats:cor]{stats::cor()}}, \code{\link[stats:cor]{stats::cov()}}
+\code{\link[terra:layerCor]{terra::layerCor()}}, \code{\link[stats:cor]{stats::cor()}}, \code{\link[stats:cov]{stats::cov()}}
 }

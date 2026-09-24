@@ -60,7 +60,7 @@
 \item \code{"range"}: Maximum - minimum.
 \item \code{"sd"}: Sample standard deviation (same as \code{\link[stats:sd]{stats::sd()}}).
 \item \code{"sdpop"}: Population standard deviation.
-\item \code{"var"}: Sample variance (same as \code{\link[stats:cor]{stats::var()}}).
+\item \code{"var"}: Sample variance (same as \code{\link[stats:var]{stats::var()}}).
 \item \code{"varpop"}: Population variance.
 \item \code{"cv"}: Coefficient of variation.
 \item \code{"cvpop"}: Population coefficient of variation.

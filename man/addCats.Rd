@@ -151,5 +151,5 @@ levels(combinedNA)
 }
 }
 \seealso{
-\code{\link[terra:factors]{terra::addCats()}}, \code{\link[=concats]{concats()}}, \code{\link[=combineLevels]{combineLevels()}}, \code{\link[=droplevels]{droplevels()}}, \verb{vignette("GRasters", package = "fasterRaster"}
+\code{\link[terra:addCats]{terra::addCats()}}, \code{\link[=concats]{concats()}}, \code{\link[=combineLevels]{combineLevels()}}, \code{\link[=droplevels]{droplevels()}}, \verb{vignette("GRasters", package = "fasterRaster"}
 }

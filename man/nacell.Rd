@@ -144,5 +144,5 @@ layerCor(landsat, fun = 'cov') # covariance
 }
 }
 \seealso{
-\code{\link[=ncell]{ncell()}}, \code{\link[=ncell3d]{ncell3d()}}, \code{\link[terra:dimensions]{terra::ncell()}}, \code{\link[=dim]{dim()}}, \code{\link[terra:dimensions]{terra::dim()}}
+\code{\link[=ncell]{ncell()}}, \code{\link[=ncell3d]{ncell3d()}}, \code{\link[terra:ncell]{terra::ncell()}}, \code{\link[=dim]{dim()}}, \code{\link[terra:dim]{terra::dim()}}
 }

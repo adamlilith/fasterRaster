@@ -1,6 +1,8 @@
 #' "fasterRaster": Faster raster and spatial vector processing using "GRASS"
 #'
 #' @description **fasterRaster**: Processing of large-in-memory/-on disk rasters and spatial vectors in using **GRASS**. Most functions in the **terra** and **sf** packages are recreated. Processing of medium-sized and smaller spatial objects will nearly always be faster using **terra** or **sf**. To use most of the functions you must have the stand-alone version of **GRASS** version 8.3 or higher (not the **OSGeoW4** installer version). Note that due to differences in how **GRASS**, **terra**, and **sf** were implemented, results will not always be strictly comparable between functions for the same operation.
+#' 
+#' Please see and cite: Smith, A.B. 2025. fasterRaster: GIS in R using GRASS for large vectors and rasters. *Transactions in GIS* 30:e70238. DOI: https://doi.org/10.1111/tgis.70238, Open-access preprint: https://doi.org/10.31223/X52R0M
 #'
 #' ## Most useful tutorials and functions:
 #' * The quick-start guide to getting started with **fasterRaster**: `vignette("fasterRaster", package = "fasterRaster")`: 
@@ -57,7 +59,8 @@
 #' * Central tendency: [mean()], [mmode()], [median()] 
 #' * Dispersion: [stdev()], [var()], [varpop()], [nunique()], [range()], [quantile()], [skewness()], [kurtosis()]
 #' * Extremes: [min()], [max()], [which.min()], [which.max()] 
-#' * `NA`s: [allNA()], [anyNA()] 
+#' * `NA`s: [allNA()], [anyNA()], [na.omit()]
+#' * Masking: [maskNA()]
 #' 
 #' Subsetting, assigning, and replacing `GRaster` layers
 #' * [$], \code{\link[fasterRaster]{[[}}, or [subset()]: Subset or remove specific layers of a `GRaster`
@@ -66,6 +69,8 @@
 #' * \code{\link[fasterRaster]{add<-}}: Replace specific layers of a `GRaster`
 #'
 #' Operations on `GRaster`s
+#' * [as.data.frame()]: Convert a `GRaster` to a `data.frame`
+#' * [as.data.table()]: Convert a `GRaster` to a `data.table`
 #' * [as.int()], [as.float()], [as.doub()]: Change data type (integer/float/double)
 #' * [as.lines()]: Convert a `GRaster` to a "lines" vector
 #' * [as.points()]: Convert a `GRaster` to a "points" vector
@@ -81,6 +86,7 @@
 #' * [combineLevels()]: Combine the "levels" tables of two or more categorical `GRaster`s
 #' * [concats()]: Combine values from two or more categorical and/or integer rasters by concatenating them
 #' * [crop()]: Remove parts of a `GRaster`
+#' * [crossFreq()]: Remove parts of a `GRaster`
 #' * [denoise()]: Remove "noise" from a `GRaster` using a principal components analysis (PCA)
 #' * [distance()]: Distance to non-`NA` cells, or vice versa
 #' * [extend()]: Add rows and columns to a `GRaster`
@@ -92,9 +98,9 @@
 #' * [hist()]: Histogram of `GRaster` values
 #' * [interpIDW()]: Interpolate values at points to a `GRaster`
 #' * [kernel()]: Kernel density estimator of points
-#' * [layerCor()]: Correlation or covariance between two or more `GRaster` layers
+#' * [layerCor()]: Correlation, covariance, Chi-squared, Cramer's *V*, or Kruskal-Wallis test between two or more `GRaster` layers
 #' * [mask()]: Remove values in a `GRaster` based on values in another `GRaster` or vector
-#' * [maskNA()]: Mask all non-NA cells or all NA cells
+#' * [maskNA()]: Mask all non-`NA` cells or all `NA` cells
 #' * [match()], \code{\link[fasterRaster]{%in%}}, and \code{\link[fasterRaster]{%notin%}}: Find which cells of a `GRaster` match or do not match certain values
 #' * [merge()]: Combine two or more rasters with different extents and fill in `NA`s
 #' * [multivarEnvSim()]: Multivariate environmental similarity surface (MESS)

@@ -33,8 +33,8 @@ methods::setMethod(
 			# remove all non-extant levels
 			if (is.null(level)) {
 
-			    freqs <- freq(x[[i]])
-				
+			    freqs <- .freq(x = sources(x), dtype = "CELL")
+
 				if (!faster("useDataTable")) {
 					freqs <- data.table::as.data.table(freqs)
 					levs[[i]] <- data.table::as.data.table(levs[[i]])
@@ -45,8 +45,7 @@ methods::setMethod(
 
 				cols <- names(levs[[i]])
 
-    			# x@levels[[i]] <- levs[[i]][unique(levs[[i]][freqs$value != 0L, which = TRUE]), ]
-    			x@levels[[i]] <- levs[[i]][freqs$count != 0L]
+    			x@levels[[i]] <- levs[[i]][levs[[i]][[1L]] %in% freqs$value]
 
 			} else if (is.character(level)) {
 			

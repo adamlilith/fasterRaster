@@ -39,7 +39,9 @@
 		type <- names(rasters[rasters == src])
 
 		### 2D raster
-		if (type == "raster") {
+		if (length(type) == 0L) {
+			stop("Raster or vector was not created.")
+		} else if (type == "raster") {
 
 			suppressMessages(
 				niceInfo <- rgrass::execGRASS(
