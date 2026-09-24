@@ -8,7 +8,7 @@
 ## Citation
 
 Source:
-[`inst/CITATION`](https://github.com/adamlilith/fasterRaster/blob/master/inst/CITATION)
+[`inst/CITATION`](https://github.com/adamlilith/fasterRaster/blob/v8.4.1.3/inst/CITATION)
 
 Smith A (2026). “fasterRaster: GIS in R using GRASS for large vectors
 and rasters.” *Transactions in GIS*, **30**, e70238.
