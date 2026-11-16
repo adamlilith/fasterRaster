@@ -64,6 +64,7 @@ methods::setMethod(
         }
     }
 
+    file.remove(outputFile)
     out
 
     } # EOF
