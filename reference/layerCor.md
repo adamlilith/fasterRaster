@@ -1,8 +1,7 @@
 # Correlation between GRasters
 
 Calculate the correlation, covariance, or chi-squared, Cramer's *V*, or
-Kruskal-Wallis's *H* between two or more rasters. Note that cells that
-are `NA` for any raster are ignored across all rasters.
+Kruskal-Wallis's *H* between two or more rasters.
 
 ## Usage
 

@@ -129,7 +129,7 @@ madElev
 #> size        : 1090, 667, 1  (nrow, ncol, nlyr)
 #> resolution  : 54.99431, 54.99431  (x, y)
 #> extent      : 2523700, 2560381, -1768756, -1708812  (xmin, xmax, ymin, ymax)
-#> coord. ref. : Africa_Lambert_Conformal_Conic
+#> coord. ref. : Africa_Lambert_Conformal_Conic (ESRI:102024)
 #> source      : madElev.tif
 #> name        : madElev
 #> min value   :       4
@@ -143,7 +143,7 @@ madForest2000
 #> size        : 1090, 667, 1  (nrow, ncol, nlyr)
 #> resolution  : 54.99431, 54.99431  (x, y)
 #> extent      : 2523700, 2560381, -1768756, -1708812  (xmin, xmax, ymin, ymax)
-#> coord. ref. : Africa_Lambert_Conformal_Conic
+#> coord. ref. : Africa_Lambert_Conformal_Conic (ESRI:102024)
 #> source      : madForest2000.tif
 #> name        : madForest2000
 #> min value   :             1
@@ -157,7 +157,7 @@ madForest2014
 #> size        : 1090, 667, 1  (nrow, ncol, nlyr)
 #> resolution  : 54.99431, 54.99431  (x, y)
 #> extent      : 2523700, 2560381, -1768756, -1708812  (xmin, xmax, ymin, ymax)
-#> coord. ref. : Africa_Lambert_Conformal_Conic
+#> coord. ref. : Africa_Lambert_Conformal_Conic (ESRI:102024)
 #> source      : madForest2014.tif
 #> name        : madForest2014
 #> min value   :             1
@@ -188,7 +188,7 @@ madPpt
 #> size        : 91, 65, 12  (nrow, ncol, nlyr)
 #> resolution  : 877.8452, 877.8452  (x, y)
 #> extent      : 2514147, 2571207, -1778842, -1698958  (xmin, xmax, ymin, ymax)
-#> coord. ref. : Africa_Lambert_Conformal_Conic
+#> coord. ref. : Africa_Lambert_Conformal_Conic (ESRI:102024)
 #> source      : madPpt.tif
 #> names       : ppt01, ppt02, ppt03, ppt04, ppt05, ppt06, ...
 #> min values  :   311,   421,   400,   289,   235,   229, ...
@@ -198,7 +198,7 @@ madTmin
 #> size        : 91, 65, 12  (nrow, ncol, nlyr)
 #> resolution  : 877.8452, 877.8452  (x, y)
 #> extent      : 2514147, 2571207, -1778842, -1698958  (xmin, xmax, ymin, ymax)
-#> coord. ref. : Africa_Lambert_Conformal_Conic
+#> coord. ref. : Africa_Lambert_Conformal_Conic (ESRI:102024)
 #> source      : madTmin.tif
 #> names       : tmin01, tmin02, tmin03, tmin04, tmin05, tmin06, ...
 #> min values  :     20,     20,     20,     19,     18,     16, ...
@@ -208,7 +208,7 @@ madTmax
 #> size        : 91, 65, 12  (nrow, ncol, nlyr)
 #> resolution  : 877.8452, 877.8452  (x, y)
 #> extent      : 2514147, 2571207, -1778842, -1698958  (xmin, xmax, ymin, ymax)
-#> coord. ref. : Africa_Lambert_Conformal_Conic
+#> coord. ref. : Africa_Lambert_Conformal_Conic (ESRI:102024)
 #> source      : madTmax.tif
 #> names       : tmax01, tmax02, tmax03, tmax04, tmax05, tmax06, ...
 #> min values  :     26,     26,     25,     24,     23,     21, ...
