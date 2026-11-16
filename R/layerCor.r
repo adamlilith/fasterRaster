@@ -137,7 +137,7 @@ methods::setMethod(
 				intern = TRUE
 			)
 
-			if (fun == "cor") args$flags <- c(args$flags, "r")
+			# if (fun == "cor") args$flags <- c(args$flags, "r")
 			info <- do.call(rgrass::execGRASS, args = args)
 
 			n <- substr(info[1L], 5L, nchar(info[1L]))
@@ -340,6 +340,8 @@ methods::setMethod(
 				p.value[i, j] <- p.value[j, i] <- kw_result$p.value
 				nCells[i, j] <- nCells[j, i] <- nrow(vals)
 				effectSize[i, j] <- effectSize[j, i] <- kw_result$statistic / (nrow(vals) - 1)
+
+				file.remove(outFile)
 			
 			}
 		}
@@ -394,7 +396,7 @@ methods::setMethod(
 					tasks <- tasks + 1
 					utils::setTxtProgressBar(pb, tasks)
 				}
-
+				
 				dt <- c(datatype(x[[i]]), datatype(x[[j]]))
 
 				if (all(dt %in% numericSet)) {
