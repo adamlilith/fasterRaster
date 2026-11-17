@@ -178,6 +178,35 @@ methods::setMethod(
 				# for each secondary raster
 				for (j in seq(i + 1L, nLayers)) {
 
+					outputFile <- paste0(.workDir(), '/cell_values_', omnibus::rstring(1L), '.csv')
+
+					args <- list(
+						cmd = "r.stats",
+						input = sources(x),
+						output = outputFile,
+						separator = "comma",
+						null_value = "NA",
+						flags = c(.quiet(), "overwrite", "1")
+					)
+					do.call(rgrass::execGRASS, args = args)
+
+					con <- DBI::dbConnect(duckdb::duckdb())
+
+					DBI::dbExecute(con, paste0("SET threads = ", faster("cores")))
+					DBI::dbExecute(con, sprintf("SET temp_directory = '%s'", faster("workDir")))
+
+					if (verbose) omnibus::say("Reading raster values...")
+					duckdb::duckdb_read_csv(con, 'raw', outputFile, na.strings = 'NA')
+
+					colNames <- DBI::dbGetQuery(con, "PRAGMA table_info('raw')")
+					col1 <- colNames$Name[1L]
+					col2 <- colNames$Name[2L]
+
+					cor_query <- paste0('SELECT corr(CAST(', col1, '  AS DOUBLE), CAST(', col2, ' AS DOUBLE)) AS pearson_r FROM raw'
+					corr <- DBI::dbGetQuery(con, cor_query)
+					corr <- corr[1L, 1L]
+
+
 					vals <- as.data.table(x[[c(i, j)]], xy = FALSE, na.rm = TRUE)
 					out[i, j] <- out[j, i] <- stats::cor(vals[[1L]], vals[[2L]], method = "spearman")
 
@@ -394,22 +423,25 @@ methods::setMethod(
 					tasks <- tasks + 1
 					utils::setTxtProgressBar(pb, tasks)
 				}
+				
+	omnibus::say('i = ', i, ' | j = ', j)
+	omnibus::say(names(x[[i]]), ' ', names(x[[j]]))
 
 				dt <- c(datatype(x[[i]]), datatype(x[[j]]))
 
 				if (all(dt %in% numericSet)) {
-
+omnibus::say('cor')
 					stat[i, j] <- stat[j, i] <- "cor"
 					val <- layerCor(x[[c(i, j)]], fun = "cor", verbose = FALSE)[1L, 2L]
 					val <- abs(val)
 
 				} else if (all(dt %in% factorSet)) {
-
+omnibus::say('chisq')
 					stat[i, j] <- stat[j, i] <- "chisq"
 					val <- layerCor(x[[c(i, j)]], fun = "chisq", correct = correct, simulate = simulate, nSim = nSim, verbose = FALSE)$cramer.v[1L, 2L]
 
 				} else if (any(dt %in% numericSet) & any(dt %in% factorSet)) {
-
+omnibus::say('kw')
 					stat[i, j] <- stat[j, i] <- "kw"
 					val <- layerCor(x[[c(i, j)]], fun = "kw", integerAsNumeric = integerAsNumeric, verbose = FALSE)$effectSize[1L, 2L]
 					val <- sqrt(val)
