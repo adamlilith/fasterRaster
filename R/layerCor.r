@@ -1,4 +1,4 @@
-#' Correlation between GRasters
+#' Correlation, covariance, Kruskal-Wallis, and Chi-Squared between GRasters
 #'
 #' @description Calculate the correlation, covariance, or chi-squared, Cramer's *V*, or Kruskal-Wallis's *H* between two or more rasters.
 #' 
@@ -137,7 +137,7 @@ methods::setMethod(
 				intern = TRUE
 			)
 
-			if (fun == "cor") args$flags <- c(args$flags, "r")
+			# if (fun == "cor") args$flags <- c(args$flags, "r")
 			info <- do.call(rgrass::execGRASS, args = args)
 
 			n <- substr(info[1L], 5L, nchar(info[1L]))
@@ -369,6 +369,8 @@ methods::setMethod(
 				p.value[i, j] <- p.value[j, i] <- kw_result$p.value
 				nCells[i, j] <- nCells[j, i] <- nrow(vals)
 				effectSize[i, j] <- effectSize[j, i] <- kw_result$statistic / (nrow(vals) - 1)
+
+				file.remove(outFile)
 			
 			}
 		}
@@ -424,24 +426,21 @@ methods::setMethod(
 					utils::setTxtProgressBar(pb, tasks)
 				}
 				
-	omnibus::say('i = ', i, ' | j = ', j)
-	omnibus::say(names(x[[i]]), ' ', names(x[[j]]))
-
 				dt <- c(datatype(x[[i]]), datatype(x[[j]]))
 
 				if (all(dt %in% numericSet)) {
-omnibus::say('cor')
+
 					stat[i, j] <- stat[j, i] <- "cor"
 					val <- layerCor(x[[c(i, j)]], fun = "cor", verbose = FALSE)[1L, 2L]
 					val <- abs(val)
 
 				} else if (all(dt %in% factorSet)) {
-omnibus::say('chisq')
+
 					stat[i, j] <- stat[j, i] <- "chisq"
 					val <- layerCor(x[[c(i, j)]], fun = "chisq", correct = correct, simulate = simulate, nSim = nSim, verbose = FALSE)$cramer.v[1L, 2L]
 
 				} else if (any(dt %in% numericSet) & any(dt %in% factorSet)) {
-omnibus::say('kw')
+
 					stat[i, j] <- stat[j, i] <- "kw"
 					val <- layerCor(x[[c(i, j)]], fun = "kw", integerAsNumeric = integerAsNumeric, verbose = FALSE)$effectSize[1L, 2L]
 					val <- sqrt(val)

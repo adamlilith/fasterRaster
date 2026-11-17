@@ -66,7 +66,7 @@ The output depends on the selected statistic:
 }
 }
 \description{
-Calculate the correlation, covariance, or chi-squared, Cramer's \emph{V}, or Kruskal-Wallis's \emph{H} between two or more rasters. Note that cells that are \code{NA} for any raster are ignored across all rasters.
+Calculate the correlation, covariance, or chi-squared, Cramer's \emph{V}, or Kruskal-Wallis's \emph{H} between two or more rasters.
 }
 \examples{
 if (grassStarted()) {
