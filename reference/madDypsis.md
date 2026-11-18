@@ -17,7 +17,8 @@ An object of class `sf`.
 ## Source
 
 [Global Biodiversity Information Facility (GBIF)](https://gbif.org)
-Occurrence Data Download <https://doi.org/10.15468/dl.dq942k>
+Occurrence Data Download
+[doi:10.15468/dl.dq942k](https://doi.org/10.15468/dl.dq942k)
 
 ## Examples
 

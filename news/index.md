@@ -1,6 +1,8 @@
 # Changelog
 
-## fasterRaster 8.4.1.3 (2026-11-15)
+## fasterRaster 8.4.1.3 (2026-11-16)
+
+CRAN release: 2026-11-17
 
 #### New functions and functionality
 

@@ -12,13 +12,15 @@ An object of class `data.frame`.
 
 ## Source
 
-<http://due.esrin.esa.int>
+[GlobCover: The most detailed portrait of
+Earth](https://www.researchgate.net/publication/280017262_GLOBCOVER_the_most_detailed_portrait_of_Earth)
 
 ## References
 
 Arino O., P. Bicheron, F. Achard, J. Latham, R. Witt and J.-L. Weber.
-2008. GlobCover: The most detailed portrait of Earth. European Space
-Agency Bulletin 136:25-31. <http://due.esrin.esa.int>.
+2008. GlobCover: The most detailed portrait of Earth. *European Space
+Agency Bulletin* 136:25-31.
+[article](https://www.researchgate.net/publication/280017262_GLOBCOVER_the_most_detailed_portrait_of_Earth).
 
 ## See also
 

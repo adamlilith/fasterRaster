@@ -12,8 +12,9 @@ functions for the same operation.
 
 Please see and cite: Smith, A.B. 2025. fasterRaster: GIS in R using
 GRASS for large vectors and rasters. *Transactions in GIS* 30:e70238.
-DOI: https://doi.org/10.1111/tgis.70238, Open-access preprint:
-https://doi.org/10.31223/X52R0M
+[doi:10.1111/tgis.70238](https://doi.org/10.1111/tgis.70238) ,
+Open-access preprint:
+[doi:10.31223/X52R0M](https://doi.org/10.31223/X52R0M) .
 
 ### Most useful tutorials and functions:
 

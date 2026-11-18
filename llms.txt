@@ -150,7 +150,8 @@ coast of Madagascar. We will also use the `terra` and `sf` packages.
     plot(madElev)
     plot(st_geometry(madRivers), col = "lightblue", add = TRUE)
 
-![](reference/figures/elev_rivers.png)
+![Elevation raster and river vector
+example](reference/figures/elev_rivers.png)
 
 The
 [`fast()`](https://github.com/adamlilith/fasterRaster/reference/fast.md)
@@ -222,7 +223,8 @@ Finally, let’s plot the output.
     plot(river_buffers, border = 'white', add = TRUE)
     plot(rivers, col = "lightblue", add = TRUE)
 
-![](reference/figures/dist_to_rivers.png)
+![Distance to rivers raster
+example](reference/figures/dist_to_rivers.png)
 
 And that’s how it’s done! You can do almost anything in `fasterRaster`
 you can do with `terra`. The examples above do not show the advantage of
@@ -651,7 +653,8 @@ preprint: [10.31223/X52R0M](https://doi.org/10.31223/X52R0M)
 - [`kernel(`*`<GVector>`*`)`](https://github.com/adamlilith/fasterRaster/reference/kernel.md)
   : Kernel density estimator of points
 - [`layerCor(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/layerCor.md)
-  : Correlation between GRasters
+  : Correlation, covariance, Kruskal-Wallis, and Chi-squared between
+  GRasters
 - [`mask(`*`<GRaster>`*`,`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/mask.md)
   [`mask(`*`<GRaster>`*`,`*`<GVector>`*`)`](https://github.com/adamlilith/fasterRaster/reference/mask.md)
   : Mask values in a raster

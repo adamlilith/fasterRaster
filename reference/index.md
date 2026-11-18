@@ -334,7 +334,8 @@
 - [`kernel(`*`<GVector>`*`)`](https://github.com/adamlilith/fasterRaster/reference/kernel.md)
   : Kernel density estimator of points
 - [`layerCor(`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/layerCor.md)
-  : Correlation between GRasters
+  : Correlation, covariance, Kruskal-Wallis, and Chi-squared between
+  GRasters
 - [`mask(`*`<GRaster>`*`,`*`<GRaster>`*`)`](https://github.com/adamlilith/fasterRaster/reference/mask.md)
   [`mask(`*`<GRaster>`*`,`*`<GVector>`*`)`](https://github.com/adamlilith/fasterRaster/reference/mask.md)
   : Mask values in a raster
