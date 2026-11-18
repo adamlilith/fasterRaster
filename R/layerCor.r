@@ -1,4 +1,4 @@
-#' Correlation between GRasters
+#' Correlation, covariance, Kruskal-Wallis, and Chi-squared between GRasters
 #'
 #' @description Calculate the correlation, covariance, or chi-squared, Cramer's *V*, or Kruskal-Wallis's *H* between two or more rasters.
 #' 

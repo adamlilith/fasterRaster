@@ -82,5 +82,5 @@ freq(frag)
 }
 }
 \references{
-Riitters, K., J. Wickham, R. O'Neill, B. Jones, and E. Smith. 2000. Global-scale patterns of forest fragmentation. \emph{Conservation Ecology} 4:3. URL: \url{http://www.consecol.org/vol4/iss2/art3/}. Also note the \href{https://www.ecologyandsociety.org/vol4/iss2/art3/errata/january26.2001.html}{errata}.
+Riitters, K., J. Wickham, R. O'Neill, B. Jones, and E. Smith. 2000. Global-scale patterns of forest fragmentation. \emph{Conservation Ecology} 4:3. URL: \url{https://consecol.org/vol4/iss2/art3/}. Also note the \href{https://ecologyandsociety.org/vol4/iss2/art3/errata/january26.2001.html}{errata}.
 }

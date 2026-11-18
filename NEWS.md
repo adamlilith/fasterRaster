@@ -1,4 +1,4 @@
-# fasterRaster 8.4.1.3 (2026-11-15)
+# fasterRaster 8.4.1.3 (2026-11-16)
 
 ### New functions and functionality
 o `as.data.frame()` and `as.data.table()` now work on `GRaster`s.  

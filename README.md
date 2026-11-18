@@ -100,7 +100,7 @@ madRivers <- fastData('madRivers') # sp vector with rivers
 plot(madElev)
 plot(st_geometry(madRivers), col = "lightblue", add = TRUE)
 ```
-<img src="man/figures/elev_rivers.png"/>  
+<img src="man/figures/elev_rivers.png" alt="Elevation raster and river vector example"/>  
 
 The `fast()` function is the key function for loading a raster or vector into `fasterRaster` format. Rasters in this package are called `GRaster`s and vectors `GVector`s (the "G" stands for `GRASS`). We will now convert the `madElev` raster, which is a `SpatRaster` from the `terra` package, into a `GRaster`.
 ```
@@ -161,7 +161,7 @@ plot(river_buffers, border = 'white', add = TRUE)
 plot(rivers, col = "lightblue", add = TRUE)
 ```
 
-<img src="man/figures/dist_to_rivers.png"/>  
+<img src="man/figures/dist_to_rivers.png" alt="Distance to rivers raster example"/>  
 
 And that's how it's done!  You can do almost anything in `fasterRaster`  you can do with `terra`. The examples above do not show the advantage of `fasterRaster` because the they do not use in large-in-memory/large-on-disk spatial datasets. For very large datasets, `fasterRaster` can be much faster! For example, for a large raster (many cells), the `distance()` function in `terra` can take many days to run and even crash `R`, whereas in `fasterRaster`, it could take just a few minutes or hours.
 

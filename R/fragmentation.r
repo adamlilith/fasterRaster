@@ -29,7 +29,7 @@
 #'
 #' @returns A categorical `SpatRaster` or `GRaster`. The values assigned to each class can be seen with [levels()].
 #'
-#' @references Riitters, K., J. Wickham, R. O'Neill, B. Jones, and E. Smith. 2000. Global-scale patterns of forest fragmentation. *Conservation Ecology* 4:3. URL: [http://www.consecol.org/vol4/iss2/art3/](http://www.consecol.org/vol4/iss2/art3/). Also note the [errata](https://www.ecologyandsociety.org/vol4/iss2/art3/errata/january26.2001.html).
+#' @references Riitters, K., J. Wickham, R. O'Neill, B. Jones, and E. Smith. 2000. Global-scale patterns of forest fragmentation. *Conservation Ecology* 4:3. URL: [https://consecol.org/vol4/iss2/art3/](https://consecol.org/vol4/iss2/art3/). Also note the [errata](https://ecologyandsociety.org/vol4/iss2/art3/errata/january26.2001.html).
 #' 
 #' @example man/examples/ex_fragmentation.r
 #'
