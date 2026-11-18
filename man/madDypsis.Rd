@@ -8,7 +8,7 @@
 An object of class \code{sf}.
 }
 \source{
-\href{https://gbif.org}{Global Biodiversity Information Facility (GBIF)} Occurrence Data Download \url{https://doi.org/10.15468/dl.dq942k}
+\href{https://gbif.org}{Global Biodiversity Information Facility (GBIF)} Occurrence Data Download \doi{10.15468/dl.dq942k}
 }
 \usage{
 data(madDypsis)

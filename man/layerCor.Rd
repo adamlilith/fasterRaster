@@ -3,7 +3,7 @@
 \name{layerCor,GRaster-method}
 \alias{layerCor,GRaster-method}
 \alias{layerCor}
-\title{Correlation between GRasters}
+\title{Correlation, covariance, Kruskal-Wallis, and Chi-squared between GRasters}
 \usage{
 \S4method{layerCor}{GRaster}(
   x,
