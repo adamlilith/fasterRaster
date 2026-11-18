@@ -59,7 +59,7 @@ methods::setMethod(
 		na.rm = TRUE,
 		verbose = FALSE
 	) {
-
+ 
 	# for debugging
 	if (FALSE) {
 
