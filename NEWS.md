@@ -1,3 +1,6 @@
+# fasterRaster 8.4.1.3 (2026-11-24)
+o Small update to `import` to fix issue on some Linux systems.  
+
 # fasterRaster 8.4.1.3 (2026-11-16)
 
 ### New functions and functionality
