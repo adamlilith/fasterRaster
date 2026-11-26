@@ -199,7 +199,7 @@ methods::setGeneric(name = "missing.cases", def = function(...) standardGeneric(
 methods::setGeneric(name = "missingCats", def = function(x, ...) standardGeneric("missingCats"))
 methods::setGeneric(name = "merge", package = "terra")
 #' @importFrom terra median
-methods::setGeneric(name = "median", def = function(x, na.rm) standardGeneric("median"))
+## methods::setGeneric(name = "median", def = function(x, na.rm) standardGeneric("median")) # including @importFrom terra median and this causes WARNING
 methods::setGeneric(name = "mmode", def = function(x, ...) package = "omnibus")
 methods::setGeneric(name = "multivarEnvSim", def = function(ref, proj, ...) standardGeneric("multivarEnvSim"))
 
