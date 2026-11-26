@@ -13,7 +13,7 @@ Source:
 Smith A (2026). “fasterRaster: GIS in R using GRASS for large vectors
 and rasters.” *Transactions in GIS*, **30**, e70238.
 [doi:10.1111/tgis.70238](https://doi.org/10.1111/tgis.70238). R package
-version 8.4.1.3.
+version 8.4.1.4.
 
     @Article{,
       title = {fasterRaster: GIS in R using GRASS for large vectors and rasters},
@@ -23,5 +23,5 @@ version 8.4.1.3.
       volume = {30},
       pages = {e70238},
       doi = {10.1111/tgis.70238},
-      note = {R package version 8.4.1.3},
+      note = {R package version 8.4.1.4},
     }

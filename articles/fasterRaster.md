@@ -50,7 +50,6 @@ at least one of the other two.
 ``` r
 
 library(terra)
-#> terra 1.9.50
 library(sf)
 #> Linking to GEOS 3.14.1, GDAL 3.12.2, PROJ 9.7.1; sf_use_s2() is TRUE
 library(data.table)
@@ -63,7 +62,7 @@ library(data.table)
 #> 
 #>     %notin%
 library(fasterRaster)
-#> fasterRaster 8.4.1.3
+#> fasterRaster 8.4.1.4
 #> To avoid conflicts between functions, please attach the `terra`, `sf`,
 #> and `data.table` packages before attaching `fasterRaster` using, for
 #> example, `library(terra)`.
